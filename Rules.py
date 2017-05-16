@@ -1,10 +1,21 @@
-def set_rules(world, logic, mode):
+def set_rules(world):
     global_rules(world)
 
-    if logic == 'no-glitches' and mode in ['open', 'standard']:
-        no_glitches_rules(world, mode)
+    if world.logic == 'no-glitches':
+        no_glitches_rules(world)
     else:
         raise NotImplementedError('Not implemented yet')
+
+    if world.mode == 'open':
+        open_rules(world)
+    elif world.mode == 'standard':
+        standard_rules(world)
+    else:
+        raise NotImplementedError('Not implemented yet')
+
+    if world.goal == 'all dungeons':
+        # require altar for ganon to enforce getting everything
+        add_rule(world.get_location('Ganon'), lambda state: state.can_reach('Altar', 'Location'))
 
 
 def set_rule(spot, rule):
@@ -111,9 +122,8 @@ def global_rules(world):
     set_rule(world.get_entrance('Turtle Rock'), lambda state: state.has_Pearl() and state.has_sword() and state.has_turtle_rock_medallion())  # sword required to cast magic (!)
     set_rule(world.get_location('[cave-013] Mimic Cave'), lambda state: state.has('Hammer'))
 
-    set_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [left chest]'), lambda state: state.can_lift_rocks())  # ToDo fix this up for shuffling, need access to drop into escape
-    set_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [middle chest]'), lambda state: state.can_lift_rocks())
-    set_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [right chest]'), lambda state: state.can_lift_rocks())
+    set_rule(world.get_entrance('Sewers Door'), lambda state: state.can_collect('Small Key (Escape)'))
+    set_rule(world.get_entrance('Sewers Back Door'), lambda state: state.can_collect('Small Key (Escape)'))
 
     set_rule(world.get_location('[dungeon-L1-1F] Eastern Palace - Big Chest'), lambda state: state.can_collect('Big Key (Eastern Palace)'))
     set_rule(world.get_location('Armos - Heart Container'), lambda state: state.has('Bow') and state.can_collect('Big Key (Eastern Palace)'))
@@ -151,24 +161,25 @@ def global_rules(world):
         forbid_item(world.get_location(location), 'Big Key (Swamp Palace)')
 
     set_rule(world.get_entrance('Thieves Town Big Key Door'), lambda state: state.can_collect('Big Key (Thieves Town)'))
-    set_rule(world.get_entrance('Blind Fight'), lambda state: state.has_blunt_weapon() or state.has('Cane of Somaria'))
+    set_rule(world.get_entrance('Blind Fight'), lambda state: state.can_collect('Small Key (Thieves Town)') and (state.has_blunt_weapon() or state.has('Cane of Somaria')))
     set_rule(world.get_location('[dungeon-D4-B2] Thieves Town - Big Chest'), lambda state: state.can_collect('Small Key (Thieves Town)') and state.has('Hammer'))
     set_rule(world.get_location('[dungeon-D4-1F] Thieves Town - Room above Boss'), lambda state: state.can_collect('Small Key (Thieves Town)'))
     for location in ['[dungeon-D4-1F] Thieves Town - Room above Boss', '[dungeon-D4-B2] Thieves Town - Big Chest', '[dungeon-D4-B2] Thieves Town - Chest next to Blind', 'Blind - Heart Container']:
         forbid_item(world.get_location(location), 'Big Key (Thieves Town)')
 
     set_rule(world.get_location('[dungeon-D3-B1] Skull Woods - Big Chest'), lambda state: state.can_collect('Big Key (Skull Woods)'))
-    set_rule(world.get_entrance('Skull Woods Torch Room'), lambda state: state.can_collect('Small Key (Skull Woods)', 3) and state.has('Fire Rod') and
-                                                                         (state.has_blunt_weapon() or state.has('Bottle') or state.has('Half Magic') or state.has('Quarter Magic')))
+    set_rule(world.get_entrance('Skull Woods Torch Room'), lambda state: state.can_collect('Small Key (Skull Woods)', 3) and state.has('Fire Rod') and state.has_sword())  # sword required for curtain
     for location in ['[dungeon-D3-B1] Skull Woods - Big Chest']:
         forbid_item(world.get_location(location), 'Big Key (Skull Woods)')
 
-    set_rule(world.get_entrance('Ice Palace Entrance Room'), lambda state: state.has('Fire Rod') or state.has('Bombos'))  # ToDo Rework key logic for Ice Palace for non-bombjump routes, will impose more restrictions
+    set_rule(world.get_entrance('Ice Palace Entrance Room'), lambda state: state.has('Fire Rod') or state.has('Bombos'))
     set_rule(world.get_location('[dungeon-D5-B5] Ice Palace - Big Chest'), lambda state: state.can_collect('Big Key (Ice Palace)'))
-    set_rule(world.get_entrance('Ice Palace (Kholdstare)'), lambda state: state.can_lift_rocks() and state.has('Hammer'))
-    set_rule(world.get_entrance('Ice Palace (East)'), lambda state: state.has('Hookshot'))  # as one can be stupid and waste all keys but the guaranteed one on the East Wing, The Small Key Door access can never be required
+    set_rule(world.get_entrance('Ice Palace (Kholdstare)'), lambda state: state.can_lift_rocks() and state.has('Hammer') and state.can_collect('Big Key (Ice Palace)') and state.can_collect('Small Key (Ice Palace)', 2))
+    set_rule(world.get_entrance('Ice Palace (East)'), lambda state: state.has('Hookshot') or (state.can_collect('Small Key(Ice Palace)', 1) and ((state.world.get_location('[dungeon-D5-B3] Ice Palace - Spike Room').item is not None and state.world.get_location('[dungeon-D5-B3] Ice Palace - Spike Room').item.name in ['Big Key (Ice Palace)']) or
+                                                                                                                                                 (state.world.get_location('[dungeon-D5-B1] Ice Palace - Big Key Room').item is not None and state.world.get_location('[dungeon-D5-B1] Ice Palace - Big Key Room').item.name in ['Big Key (Ice Palace)']) or
+                                                                                                                                                 (state.world.get_location('[dungeon-D5-B2] Ice Palace - Map Room').item is not None and state.world.get_location('[dungeon-D5-B2] Ice Palace - Map Room').item.name in ['Big Key (Ice Palace)']))))  # if you do ipbj and waste SKs in the basement, you have to BJ over the hookshot room to fix your mess potentially. This seems fair
     set_rule(world.get_entrance('Ice Palace (East Top)'), lambda state: state.can_lift_rocks() and state.has('Hammer'))
-    for location in ['[dungeon-D5-B5] Ice Palace - Big Chest']:
+    for location in ['[dungeon-D5-B5] Ice Palace - Big Chest', 'Kholdstare - Heart Container']:
         forbid_item(world.get_location(location), 'Big Key (Ice Palace)')
 
     set_rule(world.get_entrance('Misery Mire Entrance Gap'), lambda state: state.has_Boots() or state.has('Hookshot'))
@@ -201,7 +212,6 @@ def global_rules(world):
                      '[dungeon-D7-B2] Turtle Rock - Eye Bridge Room [bottom right chest]', '[dungeon-D7-B2] Turtle Rock - Eye Bridge Room [top left chest]', '[dungeon-D7-B2] Turtle Rock - Eye Bridge Room [top right chest]']:  # ToDo Big Key can be elsewhere if we have an entrance shuffle
         forbid_item(world.get_location(location), 'Big Key (Turtle Rock)')
 
-    # this key logic sucks ToDo
     set_rule(world.get_entrance('Dark Palace Bonk Wall'), lambda state: state.has('Bow'))
     set_rule(world.get_entrance('Dark Palace Hammer Peg Drop'), lambda state: state.has('Hammer'))
     set_rule(world.get_entrance('Dark Palace Bridge Room'), lambda state: state.can_collect('Small Key (Palace of Darkness)', 1))  # If we can reach any other small key door, we already have back door access to this area
@@ -238,8 +248,7 @@ def global_rules(world):
     set_rule(world.get_location('Ganon'), lambda state: state.has_beam_sword() and state.has_fire_source() and (state.has('Tempered Sword') or state.has('Golden Sword') or state.has('Silver Arrows') or state.has('Lamp') or state.has('Bottle') or state.has('Half Magic') or state.has('Quarter Magic')))  # need to light torch a sufficient amount of times
 
 
-def no_glitches_rules(world, mode):
-    # overworld requirements
+def no_glitches_rules(world):
     set_rule(world.get_entrance('Zoras River'), lambda state: state.has('Flippers') or state.can_lift_rocks())
     set_rule(world.get_entrance('Hobo Bridge'), lambda state: state.has('Flippers'))
     add_rule(world.get_entrance('Ice Palace'), lambda state: state.has_Pearl() and state.has('Flippers'))
@@ -253,7 +262,7 @@ def no_glitches_rules(world, mode):
     set_rule(world.get_location('[dungeon-D1-B1] Dark Palace - Dark Room [right chest]'), lambda state: state.has('Lamp'))
     add_rule(world.get_entrance('Ganons Tower (Hookshot Room)'), lambda state: state.has('Hookshot'))
 
-    if mode == 'open':
+    if world.mode == 'open':
         add_rule(world.get_entrance('Aghanim 1'), lambda state: state.has('Lamp'))
         set_rule(world.get_location('Old Mountain Man'), lambda state: state.has('Lamp'))
         set_rule(world.get_entrance('Old Man Cave Exit'), lambda state: state.has('Lamp'))
@@ -261,8 +270,20 @@ def no_glitches_rules(world, mode):
         add_rule(world.get_location('Armos - Heart Container'), lambda state: state.has('Lamp'))
         add_rule(world.get_location('Armos - Pendant'), lambda state: state.has('Lamp'))
         add_rule(world.get_location('[dungeon-C-B1] Escape - First B1 Room'), lambda state: state.has('Lamp'))
-    elif mode == 'standard':
-        add_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [left chest]'), lambda state: state.can_collect('Small Key (Escape)'))
-        add_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [middle chest]'), lambda state: state.can_collect('Small Key (Escape)'))
-        add_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [right chest]'), lambda state: state.can_collect('Small Key (Escape)'))
-        add_rule(world.get_location('[dungeon-C-1F] Sanctuary'), lambda state: state.can_collect('Small Key (Escape)'))
+
+
+def open_rules(world):
+    pass
+
+
+def standard_rules(world):
+    # easiest way to enforce key placement not relevant for open
+    forbid_item(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [left chest]'), 'Small Key (Escape)')
+    forbid_item(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [middle chest]'), 'Small Key (Escape)')
+    forbid_item(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [right chest]'), 'Small Key (Escape)')
+    forbid_item(world.get_location('[dungeon-C-1F] Sanctuary'), 'Small Key (Escape)')
+    add_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [left chest]'), lambda state: state.can_reach('Sewer Drop'))
+    add_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [middle chest]'), lambda state: state.can_reach('Sewer Drop'))
+    add_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [right chest]'), lambda state: state.can_reach('Sewer Drop'))
+    add_rule(world.get_location('[dungeon-C-B1] Escape - First B1 Room'), lambda state: state.can_reach('Sewer Drop') or (state.world.get_location('[dungeon-C-B1] Escape - First B1 Room').item is not None and state.world.get_location('[dungeon-C-B1] Escape - First B1 Room').item.name in ['Small Key (Escape)']))  # you could skip this chest and be unable to go back until you can drop into escape
+

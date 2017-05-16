@@ -1,10 +1,10 @@
-def link_entrances(world, shuffle):
+def link_entrances(world):
     # setup mandatory connections
     for exitname, regionname in mandatory_connections:
         connect(world, exitname, regionname)
 
     # if we do not shuffle, set default connections
-    if shuffle=='Default':
+    if world.shuffle == 'Default':
         for exitname, regionname in default_connections:
             connect(world, exitname, regionname)
         return
@@ -27,6 +27,11 @@ mandatory_connections = [('Zoras River', 'Zoras River'),
                          ('Lumberjack Tree (top to bottom)', 'Lumberjack Tree (bottom)'),
                          ('Desert Palace Stairs', 'Desert Palace Stairs'),
                          ('Desert Palace Entrance (North) Rocks', 'Desert Palace Entrance (North) Spot'),
+                         ('Throne Room', 'Sewers (Dark)'),
+                         ('Sewers Door', 'Sewers'),
+                         ('Sanctuary Push Door', 'Sanctuary'),
+                         ('Sewer Drop', 'Sewers'),
+                         ('Sewers Back Door', 'Sewers (Dark)'),
                          ('Aghanim 1', 'Aghanim 1'),
                          ('Flute Spot 1', 'Death Mountain'),
                          ('Spectacle Rock Cave Drop', 'Spectacle Rock Cave (Bottom)'),
@@ -174,8 +179,9 @@ default_connections = [("Thiefs Hut", "Thiefs Hut"),
                        ('Hyrule Castle Exit (West)', 'Hyrule Castle Ledge'),
                        ('Hyrule Castle Exit (East)', 'Hyrule Castle Ledge'),
                        ('Aghanims Tower', 'Aghanims Tower'),
-                       ('Sanctuary', 'Hyrule Castle'),  # this set of two exits can be randomized together!
-                       ('Sanctuary Grave', 'Hyrule Castle'),
+                       ('Sanctuary', 'Sanctuary'),
+                       ('Sanctuary Grave', 'Sewer Drop'),
+                       ('Sanctuary Exit', 'Light World'),
 
                        ('Old Man Cave (West)', 'Old Man Cave'),
                        ('Old Man Cave (East)', 'Old Man Cave'),

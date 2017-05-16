@@ -1,9 +1,15 @@
 import copy
+import logging
 
 
 class World(object):
 
-    def __init__(self):
+    def __init__(self, shuffle, logic, mode, difficulty, goal):
+        self.shuffle = shuffle
+        self.logic = logic
+        self.mode = mode
+        self.difficulty = difficulty
+        self.goal = goal
         self.regions = []
         self.itempool = []
         self.state = CollectionState(self)
@@ -66,7 +72,7 @@ class World(object):
             if collect:
                 self.state.collect(item)
 
-            print('Placed %s at %s' % (item, location))
+            logging.getLogger('').debug('Placed %s at %s' % (item, location))
         else:
             raise RuntimeError('Cannot assign item %s to location %s.' % (item, location))
 
@@ -96,11 +102,34 @@ class World(object):
         temp_state.collect(item)
         return len(self.get_placeable_locations()) < len(self.get_placeable_locations(temp_state))
 
+    def can_beat_game(self):
+        prog_locations = [location for location in self.get_locations() if location.item is not None and location.item.advancement]
+
+        state = CollectionState(self)
+        while prog_locations:
+            sphere = []
+            # build up spheres of collection radius. Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
+            for location in prog_locations:
+                if state.can_reach(location):
+                    if location.item.name == 'Triforce':
+                        return True
+                    sphere.append(location)
+
+            if not sphere:
+                # ran out of places and did not find triforce yet, quit
+                return False
+
+            for location in sphere:
+                prog_locations.remove(location)
+                state.collect(location.item)
+
+        return False
+
 
 class CollectionState(object):
 
     def __init__(self, parent, has_everything=False):
-        self.prog_items = set()
+        self.prog_items = []
         self.world = parent
         self.has_everything = has_everything
         self.changed = False
@@ -233,31 +262,67 @@ class CollectionState(object):
                 if self.has('Golden Sword'):
                     return
                 elif self.has('Tempered Sword'):
-                    self.prog_items.add('Golden Sword')
+                    self.prog_items.append('Golden Sword')
                     self.changed = True
                 elif self.has('Master Sword'):
-                    self.prog_items.add('Tempered Sword')
+                    self.prog_items.append('Tempered Sword')
                     self.changed = True
                 elif self.has('Fighter Sword'):
-                    self.prog_items.add('Master Sword')
+                    self.prog_items.append('Master Sword')
                     self.changed = True
                 else:
-                    self.prog_items.add('Fighter Sword')
+                    self.prog_items.append('Fighter Sword')
                     self.changed = True
             elif 'Glove' in item.name:
                 if self.has('Titans Mitts'):
                     return
                 elif self.has('Power Glove'):
-                    self.prog_items.add('Titans Mitts')
+                    self.prog_items.append('Titans Mitts')
                     self.changed = True
                 else:
-                    self.prog_items.add('Power Glove')
+                    self.prog_items.append('Power Glove')
                     self.changed = True
             return
 
         if item.advancement:
-            self.prog_items.add(item.name)
+            self.prog_items.append(item.name)
             self.changed = True
+
+    def remove(self, item):
+        if item.advancement:
+            to_remove = item.name
+            if to_remove.startswith('Progressive '):
+                if 'Sword' in to_remove:
+                    if self.has('Golden Sword'):
+                        to_remove = 'Golden Sword'
+                    elif self.has('Tempered Sword'):
+                        to_remove = 'Tempered Sword'
+                    elif self.has('Master Sword'):
+                        to_remove = 'Master Sword'
+                    elif self.has('Fighter Sword'):
+                        to_remove = 'Fighter Sword'
+                    else:
+                        to_remove = None
+                elif 'Glove' in item.name:
+                    if self.has('Titans Mitts'):
+                        to_remove = 'Titans Mitts'
+                    elif self.has('Power Glove'):
+                        to_remove = 'Power Glove'
+                    else:
+                        to_remove = None
+
+            if to_remove is not None:
+                try:
+                    self.prog_items.remove(to_remove)
+                except IndexError:
+                    return
+
+                # invalidate caches, nothing can be trusted anymore now
+                self.region_cache = {}
+                self.location_cache = {}
+                self.entrance_cache = {}
+                self.recursion_cache = []
+                self.changed = False
 
     def __getattr__(self, item):
         if item.startswith('can_reach_'):
@@ -340,10 +405,7 @@ class Location(object):
         return True
 
     def item_rule(self, item):
-        if item.name != 'Triforce':
-            return True
-        else:
-            return False
+        return True
 
     def can_reach(self, state):
         if self.parent_region:
@@ -372,4 +434,3 @@ class Item(object):
 
     def __unicode__(self):
         return '%s' % self.name
-
