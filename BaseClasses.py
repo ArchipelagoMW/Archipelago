@@ -12,6 +12,7 @@ class World(object):
         self.goal = goal
         self.regions = []
         self.itempool = []
+        self.seed = None
         self.state = CollectionState(self)
         self.required_medallions = ['Ether', 'Quake']
         self._cached_locations = None
@@ -20,6 +21,10 @@ class World(object):
         self._entrance_cache = {}
         self._location_cache = {}
         self._item_cache = {}
+        self.spoiler = ''
+        self.place_dungeon_items = True  # configurable in future
+        self.aghanim_fix_required = False
+        self.swamp_patch_required = False
 
     def get_region(self, regionname):
         if isinstance(regionname, Region):
@@ -164,13 +169,17 @@ class CollectionState(object):
         if spot in self.recursion_cache:
             return False
 
-        if isinstance(spot, Region):
-            correct_cache = self.region_cache
-        elif isinstance(spot, Location):
-            correct_cache = self.location_cache
-        elif isinstance(spot, Entrance):
-            correct_cache = self.entrance_cache
-        else:
+        try:
+            spot_type = spot.spot_type
+            if spot_type == 'Region':
+                correct_cache = self.region_cache
+            elif spot_type == 'Location':
+                correct_cache = self.location_cache
+            elif spot_type == 'Entrance':
+                correct_cache = self.entrance_cache
+            else:
+                raise AttributeError
+        except AttributeError:
             # try to resolve a name
             if resolution_hint == 'Location':
                 spot = self.world.get_location(spot)
@@ -212,7 +221,7 @@ class CollectionState(object):
                     self.world._item_cache[item] = cached
                 else:
                     # this should probably not happen, wonky item distribution?
-                    len([location for location in candidates if self.can_reach(location)]) >= 1
+                    return len([location for location in candidates if self.can_reach(location)]) >= 1
             return self.can_reach(cached)
 
         return len([location for location in self.world.find_items(item) if self.can_reach(location)]) >= count
@@ -340,6 +349,7 @@ class Region(object):
         self.entrances = []
         self.exits = []
         self.locations = []
+        self.spot_type = 'Region'
 
     def can_reach(self, state):
         for entrance in self.entrances:
@@ -368,19 +378,21 @@ class Entrance(object):
         self.name = name
         self.parent_region = parent
         self.connected_region = None
+        self.target = None
+        self.spot_type = 'Entrance'
 
     def access_rule(self, state):
         return True
 
     def can_reach(self, state):
-        if self.parent_region:
-            if not state.can_reach(self.parent_region):
-                return False
+        if self.access_rule(state) and state.can_reach(self.parent_region):
+            return True
 
-        return self.access_rule(state)
+        return False
 
-    def connect(self, region):
+    def connect(self, region, target=None):
         self.connected_region = region
+        self.target = target
         region.entrances.append(self)
 
     def __str__(self):
@@ -396,6 +408,7 @@ class Location(object):
         self.name = name
         self.parent_region = parent
         self.item = None
+        self.spot_type = 'Location'
         if access is not None:
             self.access_rule = access
         if item_rule is not None:
@@ -408,11 +421,9 @@ class Location(object):
         return True
 
     def can_reach(self, state):
-        if self.parent_region:
-            if not state.can_reach(self.parent_region):
-                return False
-
-        return self.access_rule(state)
+        if self.access_rule(state) and state.can_reach(self.parent_region):
+            return True
+        return False
 
     def __str__(self):
         return str(self.__unicode__())
@@ -423,14 +434,20 @@ class Location(object):
 
 class Item(object):
 
-    def __init__(self, name='', advancement=False, key=False):
+    def __init__(self, name='', advancement=False, key=False, code=None):
         self.name = name
         self.advancement = advancement
         self.key = key
         self.location = None
+        self.code = code
 
     def __str__(self):
         return str(self.__unicode__())
 
     def __unicode__(self):
         return '%s' % self.name
+
+
+# have 6 address that need to be filled
+class Crystal(Item):
+    pass
