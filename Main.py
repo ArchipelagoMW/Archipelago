@@ -1,27 +1,82 @@
 from BaseClasses import World, CollectionState
-from Regions import create_regions
-from EntranceShuffle import link_entrances
+from Regions import create_regions, location_addresses, crystal_locations, dungeon_music_addresses
+from EntranceShuffle import link_entrances, door_addresses, single_doors
+from Text import string_to_alttp_text, text_addresses, altar_text
 from Rules import set_rules
 from Dungeons import fill_dungeons
 from Items import *
 import random
-import cProfile
 import time
 import logging
+import argparse
+
+__version__ = '0.1-dev'
 
 
-def main(seed=None, shuffle='Default', logic='no-glitches', mode='standard', difficulty='normal', goal='defeat ganon'):
+def main(seed=None, shuffle='default', logic='noglitches', mode='standard', difficulty='normal', goal='ganon', algo='regular', spoiler=True, open_base_rom='Open_Base_Rom.sfc', standard_base_rom='Standard_Base_Rom.sfc'):
+    start = time.clock()
+
     # initialize the world
     world = World(shuffle, logic, mode, difficulty, goal)
+    logger = logging.getLogger('')
+
+    if seed is None:
+        random.seed(None)
+        world.seed = random.randint(0, 999999999)
+    else:
+        world.seed = seed
+    random.seed(world.seed)
+
+    world.spoiler += 'ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n' % (__version__, world.seed)
+    world.spoiler += 'Logic: %s  Mode: %s  Goal: %s  Entrance Shuffle: %s  Filling Algorithm: %s\n\n' % (logic, mode, goal, shuffle, algo)  # todo
+
+    logger.info(world.spoiler)
+
     create_regions(world)
 
-    random.seed(seed)
+    logger.info('Shuffling the World about.')
 
-    link_entrances(world)
-    set_rules(world)
-    generate_itempool(world)
-    distribute_items(world)
-    # flood_items(world)  # different algo, biased towards early game progress items
+    world.spoiler += link_entrances(world)
+
+    logger.info('Calculating Access Rules.')
+
+    world.spoiler += set_rules(world)
+
+    logger.info('Generating Item Pool and placing Dungeon Items.')
+
+    world.spoiler += generate_itempool(world)
+
+    logger.info('Fill the world.')
+
+    if algo == 'flood':
+        flood_items(world)  # different algo, biased towards early game progress items
+    else:
+        distribute_items(world)
+    world.spoiler += print_location_spoiler(world)
+
+    logger.info('Calculating playthrough.')
+
+    world.spoiler += create_playthrough(world)
+
+    logger.info('Patching ROM.')
+
+    if world.mode == 'open':
+        rom = bytearray(open(open_base_rom, 'rb').read())
+    else:
+        rom = bytearray(open(standard_base_rom, 'rb').read())
+    patched_rom = patch_rom(world, rom)
+
+    outfilebase = 'ER_%s_%s_%s_%s' % (world.mode, world.goal, world.shuffle, world.seed)
+
+    with open('%s.sfc' % outfilebase, 'wb') as outfile:
+        outfile.write(patched_rom)
+    if spoiler:
+        with open('%s_Spoiler.txt' % outfilebase, 'w') as outfile:
+            outfile.write(world.spoiler)
+
+    logger.info('Done. Enjoy.')
+    logger.debug('Total Time: %s' % (time.clock() - start))
+
     return world
 
 
@@ -142,7 +197,7 @@ def flood_items(world):
 
 
 def generate_itempool(world):
-    if world.difficulty != 'normal' or world.goal not in ['defeat ganon', 'pedestal', 'all dungeons'] or world.mode not in ['open', 'standard']:
+    if world.difficulty != 'normal' or world.goal not in ['ganon', 'pedestal', 'dungeons'] or world.mode not in ['open', 'standard']:
         raise NotImplementedError('Not supported yet')
 
     world.push_item('Ganon', Triforce(), False)
@@ -237,18 +292,21 @@ def generate_itempool(world):
     # push dungeon items
     fill_dungeons(world)
 
+    return 'Misery Mire Medallion: %s\nTurtle Rock Medallion: %s\n\n' % (mm_medallion, tr_medallion)
+
 
 def copy_world(world):
     # ToDo: Not good yet
     ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal)
     ret.required_medallions = list(world.required_medallions)
     create_regions(ret)
-    set_rules(ret)
 
     # connect copied world
     for region in world.regions:
         for entrance in region.entrances:
             ret.get_entrance(entrance.name).connect(ret.get_region(region.name))
+
+    set_rules(ret)
 
     # fill locations
     for location in world.get_locations():
@@ -313,37 +371,133 @@ def create_playthrough(world):
     collection_spheres = [sphere for sphere in collection_spheres if sphere]
 
     # we can finally output our playthrough
-    return ''.join(['%s: {\n%s}\n' % (i + 1, ''.join(['  %s: %s\n' % (location, location.item) for location in sphere])) for i, sphere in enumerate(collection_spheres)])
+    return 'Playthrough:\n' + ''.join(['%s: {\n%s}\n' % (i + 1, ''.join(['  %s: %s\n' % (location, location.item) for location in sphere])) for i, sphere in enumerate(collection_spheres)]) + '\n'
 
 
-profiler = cProfile.Profile()
+def print_location_spoiler(world):
+    return 'Locations:\n\n' + '\n'.join(['%s: %s' % (location, location.item if location.item is not None else 'Nothing') for location in world.get_locations()]) + '\n\n'
 
-profiler.enable()
-tally = {}
-iterations = 10
-start = time.clock()
-for i in range(iterations):
-    print('Seed %s\n\n' % i)
-    w = main(mode='open')
-    print(create_playthrough(w))
-    for location in w.get_locations():
-        if location.item is not None:
-            old_sk, old_bk, old_prog = tally.get(location.name, (0, 0, 0))
-            if location.item.advancement:
-                old_prog += 1
-            elif 'Small Key' in location.item.name:
-                old_sk += 1
-            elif 'Big Key' in location.item.name:
-                old_bk += 1
-            tally[location.name] = (old_sk, old_bk, old_prog)
 
-diff = time.clock() - start
-print('Duration: %s, Average: %s' % (diff, diff/float(iterations)))
+def patch_rom(world, rom):
+    # patch items
+    for location in world.get_locations():
+        if location.name == 'Ganon':
+            # cannot shuffle this yet
+            continue
 
-print('\n\n\n')
+        itemid = location.item.code if location.item is not None else 0x5A
 
-for location, stats in tally.items():
-    print('%s, %s, %s, %s, %s, %s, %s, %s' % (location, stats[0], stats[0]/float(iterations), stats[1], stats[1]/float(iterations), stats[2], stats[2]/float(iterations), 0 if iterations - stats[0] - stats[1] == 0 else stats[2]/float(iterations - stats[0] - stats[1])))
+        try:
+            # regular items
+            locationaddress = location_addresses[location.name]
+            write_byte(rom, locationaddress, itemid)
+        except KeyError:
+            # crystals
+            locationaddress = crystal_locations[location.name]
+            for address, value in zip(locationaddress, itemid):
+                write_byte(rom, address, value)
 
-profiler.disable()
-profiler.print_stats()
+            # patch music
+            music_addresses = dungeon_music_addresses[location.name]
+            music = 0x11 if 'Pendant' in location.item.name else 0x16
+            for music_address in music_addresses:
+                write_byte(rom, music_address, music)
+
+    # patch entrances
+    for region in world.regions:
+        for exit in region.exits:
+            if exit.target is not None:
+                try:
+                    addresses = door_addresses[exit.name]
+                    write_byte(rom, addresses[0], exit.target[0])
+                    write_byte(rom, addresses[1], exit.target[1])
+                except KeyError:
+                    # probably cave
+                    addresses = single_doors[exit.name]
+                    if not isinstance(addresses, tuple):
+                        addresses = (addresses,)
+                    for address in addresses:
+                        write_byte(rom, address, exit.target)
+
+    # patch medallion requirements
+    if world.required_medallions[0] == 'Bombos':
+        write_byte(rom, 0x180022, 0x00)  # requirement
+        write_byte(rom, 0x4FF2, 0x31)  # sprite
+        write_byte(rom, 0x50D1, 0x80)
+        write_byte(rom, 0x51B0, 0x00)
+    elif world.required_medallions[0] == 'Quake':
+        write_byte(rom, 0x180022, 0x02)  # requirement
+        write_byte(rom, 0x4FF2, 0x31)  # sprite
+        write_byte(rom, 0x50D1, 0x88)
+        write_byte(rom, 0x51B0, 0x00)
+    if world.required_medallions[1] == 'Bombos':
+        write_byte(rom, 0x180023, 0x00)  # requirement
+        write_byte(rom, 0x5020, 0x31)  # sprite
+        write_byte(rom, 0x50FF, 0x90)
+        write_byte(rom, 0x51DE, 0x00)
+    elif world.required_medallions[1] == 'Ether':
+        write_byte(rom, 0x180023, 0x01)  # requirement
+        write_byte(rom, 0x5020, 0x31)  # sprite
+        write_byte(rom, 0x50FF, 0x98)
+        write_byte(rom, 0x51DE, 0x00)
+
+    if world.swamp_patch_required:
+        # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
+        rom = rom.replace(bytearray([0xAF, 0xBB, 0xF2, 0x7E, 0x29, 0xDF, 0x8F, 0xBB, 0xF2, 0x7E]), bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA]))
+        rom = rom.replace(bytearray([0xAF, 0xFB, 0xF2, 0x7E, 0x29, 0xDF, 0x8F, 0xFB, 0xF2, 0x7E]), bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA]))
+        rom = rom.replace(bytearray([0xAF, 0x16, 0xF2, 0x7E, 0x29, 0x7F, 0x8F, 0x16, 0xF2, 0x7E]), bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA]))
+        rom = rom.replace(bytearray([0xAF, 0x51, 0xF0, 0x7E, 0x29, 0xFE, 0x8F, 0x51, 0xF0, 0x7E]), bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA]))
+
+    # write strings
+    write_string_to_rom(rom, 'Ganon2', 'Did you find the silver arrows in Hyrule?')
+    write_string_to_rom(rom, 'Uncle', 'Good Luck!\nYou will need it.')
+
+    altaritem = world.get_location('Altar').item.name if world.get_location('Altar').item is not None else 'Nothing'
+    write_string_to_rom(rom, 'Altar', altar_text.get(altaritem, 'Unknown Item.'))
+
+    return rom
+
+
+def write_byte(rom, address, value):
+    rom[address] = value
+
+
+def write_string_to_rom(rom, target, string):
+    address, maxbytes = text_addresses[target]
+    for i, byte in enumerate(string_to_alttp_text(string, maxbytes)):
+        write_byte(rom, address + i, byte)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--create_spoiler', help='Output a Spoiler File', action='store_true')
+    parser.add_argument('--logic', default='noglitches', const='noglitches', nargs='?', choices=['noglitches', 'minorglitches'],
+                        help='Select Enforcement of Item Requirements. Minor Glitches may require Fake Flippers, Bunny Revival and Dark Room Navigation.')
+    parser.add_argument('--mode', default='open', const='open', nargs='?', choices=['standard', 'open'],
+                        help='Select game mode. Standard fixes Hyrule Castle Secret Entrance and Front Door, but may lead to weird rain state issues if you exit through the Hyrule Castle side exits before rescuing Zelda in a full shuffle.')
+    parser.add_argument('--goal', default='ganon', const='ganon', nargs='?', choices=['ganon', 'pedestal', 'dungeons'],
+                        help='Select completion goal. Pedestal places a second Triforce at the Master Sword Pedestal, the playthrough may still deem Ganon to be the easier goal. All dungeons is not enforced ingame but considered in the rules.')
+    parser.add_argument('--difficulty', default='normal', const='normal', nargs='?', choices=['normal'], help='Select game difficulty. Affects available itempool.')
+    parser.add_argument('--algorithm', default='regular', const='regular', nargs='?', choices=['regular', 'flood'],
+                        help='Select item filling algorithm. Regular is the ordinary VT algorithm. Flood pushes out items starting from Link\'s House and is slightly biased to placing progression items with less restrictions.')
+    parser.add_argument('--shuffle', default='full', const='full', nargs='?', choices=['default', 'simple', 'full', 'dungeonsfull', 'dungeonssimple'],
+                        help='Select Entrance Shuffling Algorithm. Default is the Vanilla layout. Simple shuffles Dungeon Entrances/Exits between each other and keeps all 4-entrance dungeons confined to one location.'
+                             'Full mixes cave and dungeon entrances freely. The dungeon variants only mix up dungeons and keep the rest of the overworld vanilla.')
+    parser.add_argument('--openrom', default='Open_Base_Rom.sfc', help='Path to a VT21 open normal difficulty rom to use as a base.')
+    parser.add_argument('--standardrom', default='Standard_Base_Rom.sfc', help='Path to a VT21 standard normal difficulty rom to use as a base.')
+    parser.add_argument('--loglevel', default='info', const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
+    parser.add_argument('--seed', help='Define seed number to generate.', type=int)
+    parser.add_argument('--count', help='Use to batch generate multiple seeds with same settings. If --seed is provided, it will be used for the first seed, then used to derive the next seed (i.e. generating 10 seeds with --seed given will produce the same 10 (different) roms each time).', type=int)
+    args = parser.parse_args()
+
+    # set up logger
+    loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[args.loglevel]
+    logging.basicConfig(format='%(message)s', level=loglevel)
+
+    if args.count is not None:
+        seed = args.seed
+        for i in range(args.count):
+            main(seed=seed, logic=args.logic, mode=args.mode, goal=args.goal, difficulty=args.difficulty, algo=args.algorithm, shuffle=args.shuffle, open_base_rom=args.openrom, standard_base_rom=args.standardrom, spoiler=args.create_spoiler)
+            seed = random.randint(0, 999999999)
+    else:
+        main(seed=args.seed, logic=args.logic, mode=args.mode, goal=args.goal, difficulty=args.difficulty, algo=args.algorithm, shuffle=args.shuffle, open_base_rom=args.openrom, standard_base_rom=args.standardrom, spoiler=args.create_spoiler)
