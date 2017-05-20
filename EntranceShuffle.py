@@ -37,12 +37,15 @@ def link_entrances(world):
         if world.mode == 'standard':
             # must connect front of hyrule castle to do escape
             ret.append(connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)'))
-            dungeon_exits.append(('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
         else:
             dungeon_exits.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
             lw_entrances.append('Hyrule Castle Entrance (South)')
 
-        ret.append(connect_mandatory_exits(world, lw_entrances, dungeon_exits, list(LW_Dungeon_Entrances_Must_Exit)))
+        if world.mode == 'standard':
+            # rest of hyrule castle must be in light world to avoid fake darkworld stuff, so it has to be the one connected to east exit of desert
+            ret.append(connect_mandatory_exits(world, lw_entrances, [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')], list(LW_Dungeon_Entrances_Must_Exit)))
+        else:
+            ret.append(connect_mandatory_exits(world, lw_entrances, dungeon_exits, list(LW_Dungeon_Entrances_Must_Exit)))
         ret.append(connect_mandatory_exits(world, dw_entrances, dungeon_exits, list(DW_Dungeon_Entrances_Must_Exit)))
         ret.append(connect_caves(world, lw_entrances, [], list(LW_Dungeon_Exits)))  # Aghanim must be light world
         ret.append(connect_caves(world, lw_entrances, dw_entrances, dungeon_exits))
@@ -122,13 +125,15 @@ def link_entrances(world):
         if world.mode == 'standard':
             # must connect front of hyrule castle to do escape
             ret.append(connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)'))
-            caves.append(('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
         else:
             caves.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
             lw_entrances.append('Hyrule Castle Entrance (South)')
 
         ret.append(connect_mandatory_exits(world, lw_entrances, caves, lw_must_exits))
         ret.append(connect_mandatory_exits(world, dw_entrances, caves, dw_must_exits))
+        if world.mode == 'standard':
+            # rest of hyrule castle must be in light world to avoid fake darkworld stuff
+            ret.append(connect_caves(world, lw_entrances, [], [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')]))
         ret.append(connect_caves(world, lw_entrances, [], list(LW_Dungeon_Exits)))  # Aghanim must be light world
 
         # place old man, has limited options
