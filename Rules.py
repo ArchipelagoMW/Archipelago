@@ -87,6 +87,7 @@ def global_rules(world):
     set_rule(world.get_location('Purple Chest'), lambda state: state.can_reach('Blacksmiths', 'Location'))
 
     set_rule(world.get_location('Piece of Heart (Zoras River)'), lambda state: state.has('Flippers'))
+    set_rule(world.get_entrance('Waterfall of Wishing'), lambda state: state.has('Flippers'))  # can be fake flippered into, but is in weird state inside that might prevent you from doing things. Can be improved in future Todo
     set_rule(world.get_location('Blacksmiths'), lambda state: state.can_lift_heavy_rocks() and state.has_Mirror() and state.can_reach('West Dark World'))
     set_rule(world.get_location('Magic Bat'), lambda state: state.has('Magic Powder'))
     set_rule(world.get_location('Sick Kid'), lambda state: state.has('Bottle'))
@@ -224,9 +225,9 @@ def global_rules(world):
     set_rule(world.get_entrance('Ice Palace Entrance Room'), lambda state: state.has('Fire Rod') or state.has('Bombos'))
     set_rule(world.get_location('[dungeon-D5-B5] Ice Palace - Big Chest'), lambda state: state.can_collect('Big Key (Ice Palace)'))
     set_rule(world.get_entrance('Ice Palace (Kholdstare)'), lambda state: state.can_lift_rocks() and state.has('Hammer') and state.can_collect('Big Key (Ice Palace)') and state.can_collect('Small Key (Ice Palace)', 2))
-    set_rule(world.get_entrance('Ice Palace (East)'), lambda state: state.has('Hookshot') or (state.can_collect('Small Key(Ice Palace)', 1) and ((state.world.get_location('[dungeon-D5-B3] Ice Palace - Spike Room').item is not None and state.world.get_location('[dungeon-D5-B3] Ice Palace - Spike Room').item.name in ['Big Key (Ice Palace)']) or
-                                                                                                                                                 (state.world.get_location('[dungeon-D5-B1] Ice Palace - Big Key Room').item is not None and state.world.get_location('[dungeon-D5-B1] Ice Palace - Big Key Room').item.name in ['Big Key (Ice Palace)']) or
-                                                                                                                                                 (state.world.get_location('[dungeon-D5-B2] Ice Palace - Map Room').item is not None and state.world.get_location('[dungeon-D5-B2] Ice Palace - Map Room').item.name in ['Big Key (Ice Palace)']))))  # if you do ipbj and waste SKs in the basement, you have to BJ over the hookshot room to fix your mess potentially. This seems fair
+    set_rule(world.get_entrance('Ice Palace (East)'), lambda state: state.has('Hookshot') or (state.can_collect('Small Key (Ice Palace)', 1) and ((state.world.get_location('[dungeon-D5-B3] Ice Palace - Spike Room').item is not None and state.world.get_location('[dungeon-D5-B3] Ice Palace - Spike Room').item.name in ['Big Key (Ice Palace)']) or
+                                                                                                                                                  (state.world.get_location('[dungeon-D5-B1] Ice Palace - Big Key Room').item is not None and state.world.get_location('[dungeon-D5-B1] Ice Palace - Big Key Room').item.name in ['Big Key (Ice Palace)']) or
+                                                                                                                                                  (state.world.get_location('[dungeon-D5-B2] Ice Palace - Map Room').item is not None and state.world.get_location('[dungeon-D5-B2] Ice Palace - Map Room').item.name in ['Big Key (Ice Palace)']))))  # if you do ipbj and waste SKs in the basement, you have to BJ over the hookshot room to fix your mess potentially. This seems fair
     set_rule(world.get_entrance('Ice Palace (East Top)'), lambda state: state.can_lift_rocks() and state.has('Hammer'))
     for location in ['[dungeon-D5-B5] Ice Palace - Big Chest', 'Kholdstare - Heart Container']:
         forbid_item(world.get_location(location), 'Big Key (Ice Palace)')
@@ -300,7 +301,6 @@ def global_rules(world):
 
 def no_glitches_rules(world):
     set_rule(world.get_entrance('Zoras River'), lambda state: state.has('Flippers') or state.can_lift_rocks())
-    set_rule(world.get_entrance('Waterfall of Wishing'), lambda state: state.has('Flippers'))  # can be fake flippered into
     set_rule(world.get_entrance('Capacity Upgrade'), lambda state: state.has('Flippers'))  # can be fake flippered to
     set_rule(world.get_entrance('Hobo Bridge'), lambda state: state.has('Flippers'))
     add_rule(world.get_entrance('Ice Palace'), lambda state: state.has_Pearl() and state.has('Flippers'))
@@ -313,22 +313,8 @@ def no_glitches_rules(world):
 
     # Light cones in standard depend on which world we actually are in, not which one the location would normally be
     # We add Lamp requirements only to those locations which lie in the dark world (or everything if open
-    DW_Entrances = ['Bumper Cave (Bottom)',
-                    'Dark Death Mountain Climb (Top)',
-                    'Dark Death Mountain Climb (Bottom)',
-                    'Hookshot Cave',
-                    'Bumper Cave (Top)',
-                    'Hookshot Cave Back Entrance',
-                    'Dark Death Mountain Ledge (East)',
-                    'Turtle Rock Isolated Ledge Entrance',
-                    'Thieves Town',
-                    'Skull Woods Final Section',
-                    'Ice Palace',
-                    'Misery Mire',
-                    'Palace of Darkness',
-                    'Swamp Palace',
-                    'Turtle Rock',
-                    'Dark Death Mountain Ledge (West)']
+    DW_Entrances = ['Bumper Cave (Bottom)', 'Dark Death Mountain Climb (Top)', 'Dark Death Mountain Climb (Bottom)', 'Hookshot Cave', 'Bumper Cave (Top)', 'Hookshot Cave Back Entrance', 'Dark Death Mountain Ledge (East)',
+                    'Turtle Rock Isolated Ledge Entrance', 'Thieves Town', 'Skull Woods Final Section', 'Ice Palace', 'Misery Mire', 'Palace of Darkness', 'Swamp Palace', 'Turtle Rock', 'Dark Death Mountain Ledge (West)']
 
     def check_is_dark_world(region):
         for entrance in region.entrances:
@@ -393,5 +379,5 @@ def set_blacksmith_rules(world):
 def set_big_bomb_rules(world):
     # this is a mess and needs to be worked out properly ToDo
     # very broad restrictions so can always get there
-    set_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has_Mirror() and state.can_reach('Big Bomb Shop', 'Region') and state.can_collect('Crystal 5') and state.can_collect('Crystal 6') and
+    set_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has_Mirror() and state.has_Pearl() and state.can_reach('Big Bomb Shop', 'Region') and state.can_collect('Crystal 5') and state.can_collect('Crystal 6') and
              state.has('Ocarina') and state.has('Hammer') and state.can_lift_rocks())

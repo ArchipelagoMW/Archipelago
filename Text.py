@@ -9,8 +9,7 @@ text_addresses = {'Altar': (0x180300, 256),
                   'Sahasrahla2': (0x180B00, 256),
                   'BombShop1': (0x180E00, 256),
                   'BombShop2': (0x180D00, 256),
-                  'PyramidFairy': (0x180900, 256),
-                  }
+                  'PyramidFairy': (0x180900, 256)}
 
 
 altar_text = {'Fighter Sword': 'A pathetic\nsword rests\nhere!',
@@ -119,8 +118,10 @@ def string_to_alttp_text(s, maxbytes=256):
     # check for max length
     if len(outbuf) > maxbytes - 1:
         outbuf = outbuf[:maxbytes - 1]
+        # make sure we interpret the end of box character
+        if outbuf[-1] == 0x00:
+            outbuf[-1] = 0x73
 
-    outbuf[-1] = 0x73
     outbuf.append(0x7F)
     return outbuf
 
@@ -139,7 +140,7 @@ char_map = {' ': 0xFF,
             '.': 0xCD,
             '~': 0xCE,
             '～': 0xCE,
-            '\'': 0xD8,
+            "'": 0xD8,
             '’': 0xD8,
             '↑': 0xE0,
             '↓': 0xE1,
@@ -308,7 +309,7 @@ char_map = {' ': 0xFF,
 
 def char_to_alttp_char(char):
     if 0x30 <= ord(char) <= 0x39:
-        return ord(char) + 0x80
+        return ord(char) + 0x70
 
     if 0x41 <= ord(char) <= 0x5A:
         return ord(char) + 0x69

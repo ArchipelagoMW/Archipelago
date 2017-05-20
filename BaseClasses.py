@@ -62,7 +62,7 @@ class World(object):
                     if r_location.name == location:
                         self._location_cache[location] = r_location
                         return r_location
-        raise RuntimeError('No such entrance %s' % location)
+        raise RuntimeError('No such location %s' % location)
 
     def find_items(self, item):
         return [location for location in self.get_locations() if location.item is not None and location.item.name == item]

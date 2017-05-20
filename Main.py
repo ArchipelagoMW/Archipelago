@@ -451,6 +451,15 @@ def patch_rom(world, rom):
     # write strings
     write_string_to_rom(rom, 'Ganon2', 'Did you find the silver arrows in Hyrule?')
     write_string_to_rom(rom, 'Uncle', 'Good Luck!\nYou will need it.')
+    write_string_to_rom(rom, 'Triforce', 'Product has Hole in center. Bad seller, 0 out of 5.')
+    write_string_to_rom(rom, 'BombShop1', 'Big Bomb?\nI Uh … Never heard of that. Move along.')
+    write_string_to_rom(rom, 'BombShop2', 'Bombs!\nBombs!\nBiggest!\nBestest!\nGreatest!\nBoomest!')
+    write_string_to_rom(rom, 'PyramidFairy', 'May I talk to you about our lord and savior, Ganon?')
+    write_string_to_rom(rom, 'Sahasrahla1', 'How Did you Find me?')
+    write_string_to_rom(rom, 'Sahasrahla2', 'You already got my item, idiot.')
+    write_string_to_rom(rom, 'Blind', 'I bet you expected a vision related pun?\n\nNot Today.\n Didn\'t see that coming, did you?')
+    write_string_to_rom(rom, 'Ganon1', '\n\n\n\n\n\n\n\n\nWhy are you reading an empty textbox?')
+    write_string_to_rom(rom, 'TavernMan', 'Did you know that talking to random NPCs wastes time in a race? I hope this information may be of use to you in the future.')
 
     altaritem = world.get_location('Altar').item.name if world.get_location('Altar').item is not None else 'Nothing'
     write_string_to_rom(rom, 'Altar', altar_text.get(altaritem, 'Unknown Item.'))
