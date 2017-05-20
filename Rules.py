@@ -44,6 +44,10 @@ def add_rule(spot, rule, combine='and'):
         spot.access_rule = lambda state: rule(state) and old_rule(state)
 
 
+def add_lamp_requirement(spot):
+    add_rule(spot, lambda state: state.has('Lamp'))
+
+
 def forbid_item(location, item):
     old_rule = location.item_rule
     location.item_rule = lambda i: i.name != item and old_rule(i)
@@ -56,6 +60,10 @@ def global_rules(world):
     # these are default save&quit points and always accessible
     world.get_region('Links House').can_reach = lambda state: True
     world.get_region('Sanctuary').can_reach = lambda state: True
+
+    # we can s&q to the old man house after we rescue him. This may be somewhere completely different if caves are shuffled!
+    old_rule = world.get_region('Old Man House').can_reach
+    world.get_region('Old Man House').can_reach = lambda state: state.can_reach('Old Mountain Man', 'Location') or old_rule(state)
 
     # overworld requirements
     set_rule(world.get_entrance('Kings Grave'), lambda state: state.has_Boots() and (state.can_lift_heavy_rocks() or (state.has_Mirror() and state.can_reach('West Dark World'))))
@@ -299,28 +307,63 @@ def no_glitches_rules(world):
     set_rule(world.get_entrance('Dark Lake Hylia Drop (East)'), lambda state: state.has_Pearl() and state.has('Flippers'))
     set_rule(world.get_entrance('Dark Lake Hylia Teleporter'), lambda state: state.has_Pearl() and state.has('Flippers') and (state.has('Hammer') or state.can_lift_rocks()))
     set_rule(world.get_entrance('Dark Lake Hylia Ledge Drop'), lambda state: state.has('Flippers'))
-    add_rule(world.get_entrance('Misery Mire (Vitreous)'), lambda state: state.has('Lamp'))
-    add_rule(world.get_entrance('Turtle Rock (Dark Room) (North)'), lambda state: state.has('Lamp'))
-    add_rule(world.get_entrance('Turtle Rock (Dark Room) (South)'), lambda state: state.has('Lamp'))
-    add_rule(world.get_entrance('Dark Palace Big Key Door'), lambda state: state.has('Lamp'))
-    add_rule(world.get_entrance('Dark Palace Maze Door'), lambda state: state.has('Lamp'))
-    set_rule(world.get_location('[dungeon-D1-B1] Dark Palace - Dark Room [left chest]'), lambda state: state.has('Lamp'))
-    set_rule(world.get_location('[dungeon-D1-B1] Dark Palace - Dark Room [right chest]'), lambda state: state.has('Lamp'))
     add_rule(world.get_entrance('Ganons Tower (Hookshot Room)'), lambda state: state.has('Hookshot'))
     set_rule(world.get_entrance('Death Mountain Climb Push Block Reverse'), lambda state: False)  # no glitches does not require block override
     set_rule(world.get_entrance('Death Mountain Climb Bomb Jump'), lambda state: False)
 
-    if world.mode == 'open':
-        add_rule(world.get_entrance('Aghanim 1'), lambda state: state.has('Lamp'))
-        set_rule(world.get_location('Old Mountain Man'), lambda state: state.has('Lamp'))
-        set_rule(world.get_entrance('Old Man Cave Exit (East)'), lambda state: state.has('Lamp'))
-        set_rule(world.get_entrance('Old Man House Exit (Bottom)'), lambda state: state.has('Lamp'))
-        set_rule(world.get_entrance('Old Man House Exit (Top)'), lambda state: state.has('Lamp'))
-        set_rule(world.get_entrance('Death Mountain Return Cave Exit (East)'), lambda state: state.has('Lamp'))
-        set_rule(world.get_entrance('Death Mountain Return Cave Exit (West)'), lambda state: state.has('Lamp'))
-        set_rule(world.get_location('[dungeon-L1-1F] Eastern Palace - Big Key Room'), lambda state: state.has('Lamp'))
-        add_rule(world.get_location('Armos - Heart Container'), lambda state: state.has('Lamp'))
-        add_rule(world.get_location('Armos - Pendant'), lambda state: state.has('Lamp'))
+    # Light cones in standard depend on which world we actually are in, not which one the location would normally be
+    # We add Lamp requirements only to those locations which lie in the dark world (or everything if open
+    DW_Entrances = ['Bumper Cave (Bottom)',
+                    'Dark Death Mountain Climb (Top)',
+                    'Dark Death Mountain Climb (Bottom)',
+                    'Hookshot Cave',
+                    'Bumper Cave (Top)',
+                    'Hookshot Cave Back Entrance',
+                    'Dark Death Mountain Ledge (East)',
+                    'Turtle Rock Isolated Ledge Entrance',
+                    'Thieves Town',
+                    'Skull Woods Final Section',
+                    'Ice Palace',
+                    'Misery Mire',
+                    'Palace of Darkness',
+                    'Swamp Palace',
+                    'Turtle Rock',
+                    'Dark Death Mountain Ledge (West)']
+
+    def check_is_dark_world(region):
+        for entrance in region.entrances:
+            if entrance.name in DW_Entrances:
+                return True
+        return False
+
+    def add_conditional_lamp(spot, region, spottype='Location'):
+        if spottype == 'Location':
+            spot = world.get_location(spot)
+        else:
+            spot = world.get_entrance(spot)
+        if world.state == 'open' or check_is_dark_world(world.get_region(region)):
+            add_lamp_requirement(spot)
+
+    add_conditional_lamp('Misery Mire (Vitreous)', 'Misery Mire (Entrance)', 'Entrance')
+    add_conditional_lamp('Turtle Rock (Dark Room) (North)', 'Turtle Rock (Entrance)', 'Entrance')
+    add_conditional_lamp('Turtle Rock (Dark Room) (South)', 'Turtle Rock (Entrance)', 'Entrance')
+    add_conditional_lamp('Dark Palace Big Key Door', 'Dark Palace (Entrance)', 'Entrance')
+    add_conditional_lamp('Dark Palace Maze Door', 'Dark Palace (Entrance)', 'Entrance')
+    add_conditional_lamp('[dungeon-D1-B1] Dark Palace - Dark Room [left chest]', 'Dark Palace (Entrance)', 'Location')
+    add_conditional_lamp('[dungeon-D1-B1] Dark Palace - Dark Room [right chest]', 'Dark Palace (Entrance)', 'Location')
+    add_conditional_lamp('Aghanim 1', 'Aghanims Tower', 'Entrance')
+    add_conditional_lamp('Old Mountain Man', 'Old Man Cave', 'Location')
+    add_conditional_lamp('Old Man Cave Exit (East)', 'Old Man Cave', 'Entrance')
+    add_conditional_lamp('Death Mountain Return Cave Exit (East)', 'Death Mountain Return Cave', 'Entrance')
+    add_conditional_lamp('Death Mountain Return Cave Exit (West)', 'Death Mountain Return Cave', 'Entrance')
+    add_conditional_lamp('Old Man House Front to Back', 'Old Man House', 'Entrance')
+    add_conditional_lamp('Old Man House Back to Front', 'Old Man House', 'Entrance')
+    add_conditional_lamp('[dungeon-L1-1F] Eastern Palace - Big Key Room', 'Eastern Palace', 'Location')
+    add_conditional_lamp('Armos - Heart Container', 'Eastern Palace', 'Location')
+    add_conditional_lamp('Armos - Pendant', 'Eastern Palace', 'Location')
+
+    if world.state == 'open':
+        # standard mode always has light cone in sewers and Hyrule Castle in Light world
         add_rule(world.get_location('[dungeon-C-B1] Escape - First B1 Room'), lambda state: state.has('Lamp'))
 
 
@@ -342,7 +385,7 @@ def standard_rules(world):
 
 def set_blacksmith_rules(world):
     blacksmith_entrance = world.get_region('Blacksmiths Hut').entrances[0]
-    # some special handling if shuffled
+    # some special handling if shuffled as we cannot use connected caves to take the smith up to death mountain
     if blacksmith_entrance.name == 'Hookshot Fairy':
         add_rule(world.get_location('Blacksmiths'), lambda state: state.has('Ocarina') and (state.has('Hammer') or state.has('Hookshot')))
 
