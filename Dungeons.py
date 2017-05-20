@@ -23,7 +23,7 @@ def fill_dungeons(world):
     # this key is in a fixed location (for now)
     world.push_item(world.get_location('[dungeon - D3 - B1] Skull Woods - South of Big Chest'), SWSmallKey(), False)
 
-    for dungeon_regions, big_key, small_keys, dungeon_items in [ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, TR, GT]:
+    for dungeon_regions, big_key, small_keys, dungeon_items in [TR, ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, GT]:
         # this is what we need to fill
         dungeon_locations = [location for location in world.get_unfilled_locations() if location.parent_region.name in dungeon_regions]
         random.shuffle(dungeon_locations)
@@ -61,7 +61,7 @@ def fill_dungeons(world):
             all_state._clear_cache()
 
         # next place dungeon items
-        if True:  # optional in future
+        if world.place_dungeon_items:
             for dungeon_item in dungeon_items:
                 di_location = dungeon_locations.pop()
                 world.push_item(di_location, dungeon_item, False)
