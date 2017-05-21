@@ -149,7 +149,9 @@ def create_regions(world):
         create_region('Bumper Cave', None, ['Bumper Cave Exit (Bottom)', 'Bumper Cave Exit (Top)']),
         create_region('Bumper Cave Ledge', ['Piece of Heart (Bumper Cave)'], ['Bumper Cave Ledge Drop', 'Bumper Cave (Top)', 'Bumper Cave Ledge Mirror Spot']),
         create_region('Skull Woods Forest', None, ['Skull Woods First Section Hole (East)', 'Skull Woods First Section Hole (West)', 'Skull Woods First Section Hole (North)', 'Skull Woods First Section Door',
-                                                   'Skull Woods Second Section Hole', 'Skull Woods Second Section Door (East)', 'Skull Woods Second Section Door (West)', 'Skull Woods Final Section']),  # may need to be split up if we start moving about entrances
+                                                   'Skull Woods Second Section Door (East)']),
+        create_region('Skull Woods Forest (West)', None, ['Skull Woods Second Section Hole', 'Skull Woods Second Section Door (West)', 'Skull Woods Burn Skull']),
+        create_region('Skull Woods Skull', None, ['Skull Woods Skull Reverse', 'Skull Woods Final Section']),
         create_region('Dark Desert', None, ['Misery Mire', 'Dark Desert Cave', 'Desert Ledge (West) Mirror Spot', 'Desert Ledge Mirror Spot', 'Desert Palace Stairs Mirror Spot', 'Desert Palace Entrance (North) Mirror Spot',
                                             'Dark Desert Hint', 'Dark Desert Fairy']),
         create_region('Dark Desert Cave', ['[cave-071] Misery Mire West Area [left chest]', '[cave-071] Misery Mire West Area [right chest]']),
@@ -166,7 +168,8 @@ def create_regions(world):
         create_region('Hookshot Cave', ['[cave-056] Hookshot Cave [top right chest]', '[cave-056] Hookshot Cave [top left chest]', '[cave-056] Hookshot Cave [bottom right chest]', '[cave-056] Hookshot Cave [bottom left chest]'],
                       ['Hookshot Cave Exit (South)', 'Hookshot Cave Exit (North)']),
         create_region('Death Mountain Floating Island', ['Piece of Heart (Death Mountain - Floating Island)'], ['Floating Island Drop', 'Hookshot Cave Back Entrance']),
-        create_region('Turtle Rock (Top)', None, ['Turtle Rock', 'Turtle Rock Drop']),
+        create_region('Turtle Rock (Top)', None, ['Turtle Rock Open Skull', 'Turtle Rock Drop']),
+        create_region('Turtle Rock Skull', None, ['Turtle Rock', 'Turtle Rock Skull Reverse', 'Turtle Rock Skull Mirror Spot']),
         create_region('Mimic Cave', ['[cave-013] Mimic Cave']),
 
         create_region('Swamp Palace (Entrance)', None, ['Swamp Palace Moat', 'Swamp Palace Exit']),
