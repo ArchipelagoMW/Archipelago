@@ -77,7 +77,7 @@ def create_regions(world):
                                          '[dungeon-L1-1F] Eastern Palace - Big Key Room', '[dungeon-L1-1F] Eastern Palace - Map Room', 'Armos - Heart Container', 'Armos - Pendant'], ['Eastern Palace Exit']),
         create_region('Master Sword Meadow', ['Altar']),
         create_region('Lost Woods Gamble'),
-        create_region('Hyrule Castle Ledge', None, ['Hyrule Castle Entrance (East)', 'Hyrule Castle Entrance (West)', 'Aghanims Tower']),
+        create_region('Hyrule Castle Ledge', None, ['Hyrule Castle Entrance (East)', 'Hyrule Castle Entrance (West)', 'Agahnims Tower']),
         create_region('Hyrule Castle', ['[dungeon-C-B1] Hyrule Castle - Boomerang Room', '[dungeon-C-B1] Hyrule Castle - Map Room', '[dungeon-C-B1] Hyrule Castle - Next To Zelda'],
                       ['Hyrule Castle Exit (East)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (South)', 'Throne Room']),
         create_region('Sewer Drop', None, ['Sewer Drop']),  # This exists only to be referenced for access checks
@@ -85,8 +85,8 @@ def create_regions(world):
         create_region('Sewers', ['[dungeon-C-B1] Escape - Final Basement Room [left chest]', '[dungeon-C-B1] Escape - Final Basement Room [middle chest]',
                                  '[dungeon-C-B1] Escape - Final Basement Room [right chest]'], ['Sanctuary Push Door', 'Sewers Back Door']),
         create_region('Sanctuary', ['[dungeon-C-1F] Sanctuary'], ['Sanctuary Exit']),
-        create_region('Aghanims Tower', ['[dungeon-A1-2F] Hyrule Castle Tower - 2 Knife Guys Room', '[dungeon-A1-3F] Hyrule Castle Tower - Maze Room'], ['Aghanim 1', 'Aghanims Tower Exit']),
-        create_region('Aghanim 1', None, ['Top of Pyramid']),
+        create_region('Agahnims Tower', ['[dungeon-A1-2F] Hyrule Castle Tower - 2 Knife Guys Room', '[dungeon-A1-3F] Hyrule Castle Tower - Maze Room'], ['Agahnim 1', 'Agahnims Tower Exit']),
+        create_region('Agahnim 1', None, ['Top of Pyramid']),
         create_region('Old Man Cave', ['Old Mountain Man'], ['Old Man Cave Exit (East)', 'Old Man Cave Exit (West)']),
         create_region('Old Man House', None, ['Old Man House Exit (Bottom)', 'Old Man House Front to Back']),
         create_region('Old Man House Back', None, ['Old Man House Exit (Top)', 'Old Man House Back to Front']),
@@ -250,7 +250,7 @@ def create_regions(world):
         create_region('Ganons Tower (Before Moldorm)', ['[dungeon-A2-6F] Ganons Tower - Mini Helmasaur Room [left chest]', '[dungeon-A2-6F] Ganons Tower - Mini Helmasaur Room [right chest]',
                                                         '[dungeon-A2-6F] Ganons Tower - Room before Moldorm'], ['Ganons Tower Moldorm Door']),
         create_region('Ganons Tower (Moldorm)', None, ['Ganons Tower Moldorm Gap']),
-        create_region('Aghanim 2', ['[dungeon-A2-6F] Ganons Tower - Moldorm Room'], ['Pyramid Hole']),
+        create_region('Agahnim 2', ['[dungeon-A2-6F] Ganons Tower - Moldorm Room'], ['Pyramid Hole']),
         create_region('Pyramid', ['Ganon'])
         ]
 

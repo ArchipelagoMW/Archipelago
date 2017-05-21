@@ -23,7 +23,7 @@ class World(object):
         self._item_cache = {}
         self.spoiler = ''
         self.place_dungeon_items = True  # configurable in future
-        self.aghanim_fix_required = False
+        self.agahnim_fix_required = False
         self.swamp_patch_required = False
 
     def get_region(self, regionname):

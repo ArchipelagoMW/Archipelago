@@ -98,8 +98,8 @@ def global_rules(world):
     set_rule(world.get_entrance('Desert Cave'), lambda state: state.can_lift_rocks())
     set_rule(world.get_location('Altar'), lambda state: state.can_collect('Red Pendant') and state.can_collect('Blue Pendant') and state.can_collect('Green Pendant'))
     set_rule(world.get_location('Sahasrahla'), lambda state: state.can_collect('Green Pendant'))
-    set_rule(world.get_entrance('Aghanims Tower'), lambda state: state.has('Cape') or state.has_beam_sword() or state.can_reach('Aghanim 1'))  # barrier gets removed after killing aghanim, relevant for entrance shuffle
-    set_rule(world.get_entrance('Aghanim 1'), lambda state: state.has_sword())
+    set_rule(world.get_entrance('Agahnims Tower'), lambda state: state.has('Cape') or state.has_beam_sword() or state.can_reach('Agahnim 1'))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
+    set_rule(world.get_entrance('Agahnim 1'), lambda state: state.has_sword())
     set_rule(world.get_entrance('Old Man Cave Exit (West)'), lambda state: False)  # drop cannott be climbed up
     set_rule(world.get_entrance('Broken Bridge (West)'), lambda state: state.has('Hookshot'))
     set_rule(world.get_entrance('Broken Bridge (East)'), lambda state: state.has('Hookshot'))
@@ -342,7 +342,7 @@ def no_glitches_rules(world):
     add_conditional_lamp('Dark Palace Maze Door', 'Dark Palace (Entrance)', 'Entrance')
     add_conditional_lamp('[dungeon-D1-B1] Dark Palace - Dark Room [left chest]', 'Dark Palace (Entrance)', 'Location')
     add_conditional_lamp('[dungeon-D1-B1] Dark Palace - Dark Room [right chest]', 'Dark Palace (Entrance)', 'Location')
-    add_conditional_lamp('Aghanim 1', 'Aghanims Tower', 'Entrance')
+    add_conditional_lamp('Agahnim 1', 'Agahnims Tower', 'Entrance')
     add_conditional_lamp('Old Mountain Man', 'Old Man Cave', 'Location')
     add_conditional_lamp('Old Man Cave Exit (East)', 'Old Man Cave', 'Entrance')
     add_conditional_lamp('Death Mountain Return Cave Exit (East)', 'Death Mountain Return Cave', 'Entrance')

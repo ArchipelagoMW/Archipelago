@@ -8,7 +8,7 @@ def fill_dungeons(world):
     EP = (['Eastern Palace'], EPBigKey(), [], [EPMap(), EPCompass()])
     DP = (['Desert Palace Main', 'Desert Palace East', 'Desert Palace North'], DPBigKey(), [DPSmallKey()], [DPCompass(), DPMap()])
     ToH = (['Tower of Hera (Bottom)', 'Tower of Hera (Basement)', 'Tower of Hera (Top)'], THBigKey(), [THSmallKey()], [THCompass(), THMap()])
-    AT = (['Aghanims Tower', 'Aghanim 1'], None, [ATSmallKey(), ATSmallKey()], [])
+    AT = (['Agahnims Tower', 'Agahnim 1'], None, [ATSmallKey(), ATSmallKey()], [])
     PoD = (['Dark Palace (Entrance)', 'Dark Palace (Center)', 'Dark Palace (Big Key Chest)', 'Dark Palace (Bonk Section)', 'Dark Palace (North)', 'Dark Palace (Maze)', 'Dark Palace (Spike Statue Room)', 'Dark Palace (Final Section)'], PDBigKey(), [PDSmallKey(), PDSmallKey(), PDSmallKey(), PDSmallKey(), PDSmallKey(), PDSmallKey()], [PDCompass(), PDMap()])
     TT = (['Thieves Town (Entrance)', 'Thieves Town (Deep)', 'Blind Fight'], TTBigKey(), [TTSmallKey()], [TTCompass(), TTMap()])
     SW = (['Skull Woods First Section', 'Skull Woods Second Section', 'Skull Woods Final Section (Entrance)', 'Skull Woods Final Section (Mothula)'], SWBigKey(), [SWSmallKey(), SWSmallKey()], [SWCompass(), SWMap()])
@@ -16,7 +16,7 @@ def fill_dungeons(world):
     IP = (['Ice Palace (Entrance)', 'Ice Palace (Main)', 'Ice Palace (East)', 'Ice Palace (East Top)', 'Ice Palace (Kholdstare)'], IPBigKey(), [IPSmallKey(), IPSmallKey()], [IPMap(), IPCompass()])
     MM = (['Misery Mire (Entrance)', 'Misery Mire (Main)', 'Misery Mire (West)', 'Misery Mire (Final Area)', 'Misery Mire (Vitreous)'], MMBigKey(), [MMSmallKey(), MMSmallKey(), MMSmallKey()], [MMCompass(), MMMap()])
     TR = (['Turtle Rock (Entrance)', 'Turtle Rock (First Section)', 'Turtle Rock (Chain Chomp Room)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Turtle Rock (Roller Switch Room)', 'Turtle Rock (Dark Room)', 'Turtle Rock (Eye Bridge)', 'Turtle Rock (Trinexx)'], TRBigKey(), [TRSmallKey(), TRSmallKey(), TRSmallKey(), TRSmallKey()], [TRMap(), TRCompass()])
-    GT = (['Ganons Tower (Entrance)', 'Ganons Tower (Tile Room)', 'Ganons Tower (Compass Room)', 'Ganons Tower (Hookshot Room)', 'Ganons Tower (Map Room)', 'Ganons Tower (Firesnake Room)', 'Ganons Tower (Teleport Room)', 'Ganons Tower (Bottom)', 'Ganons Tower (Top)', 'Ganons Tower (Before Moldorm)', 'Ganons Tower (Moldorm)', 'Aghanim 2'], GTBigKey(), [GTSmallKey(), GTSmallKey(), GTSmallKey(), GTSmallKey()], [GTMap(), GTCompass()])
+    GT = (['Ganons Tower (Entrance)', 'Ganons Tower (Tile Room)', 'Ganons Tower (Compass Room)', 'Ganons Tower (Hookshot Room)', 'Ganons Tower (Map Room)', 'Ganons Tower (Firesnake Room)', 'Ganons Tower (Teleport Room)', 'Ganons Tower (Bottom)', 'Ganons Tower (Top)', 'Ganons Tower (Before Moldorm)', 'Ganons Tower (Moldorm)', 'Agahnim 2'], GTBigKey(), [GTSmallKey(), GTSmallKey(), GTSmallKey(), GTSmallKey()], [GTMap(), GTCompass()])
 
     freebes = ['[dungeon-A2-1F] Ganons Tower - Map Room', '[dungeon-D1-1F] Dark Palace - Spike Statue Room', '[dungeon-D1-1F] Dark Palace - Big Key Room']
 

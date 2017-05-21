@@ -47,7 +47,7 @@ def link_entrances(world):
         else:
             ret.append(connect_mandatory_exits(world, lw_entrances, dungeon_exits, list(LW_Dungeon_Entrances_Must_Exit)))
         ret.append(connect_mandatory_exits(world, dw_entrances, dungeon_exits, list(DW_Dungeon_Entrances_Must_Exit)))
-        ret.append(connect_caves(world, lw_entrances, [], list(LW_Dungeon_Exits)))  # Aghanim must be light world
+        ret.append(connect_caves(world, lw_entrances, [], list(LW_Dungeon_Exits)))  # Agahnim must be light world
         ret.append(connect_caves(world, lw_entrances, dw_entrances, dungeon_exits))
 
     elif world.shuffle == 'simple':
@@ -221,7 +221,7 @@ def link_entrances(world):
         if world.mode == 'standard':
             # rest of hyrule castle must be in light world to avoid fake darkworld stuff
             ret.append(connect_caves(world, lw_entrances, [], [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')]))
-        ret.append(connect_caves(world, lw_entrances, [], list(LW_Dungeon_Exits)))  # Aghanim must be light world
+        ret.append(connect_caves(world, lw_entrances, [], list(LW_Dungeon_Exits)))  # Agahnim must be light world
 
         # place old man, has limited options
         # exit has to come from specific set of doors, the entrance is free to move about
@@ -287,7 +287,7 @@ def link_entrances(world):
         lw_entrances_must_exits = list(LW_Dungeon_Entrances_Must_Exit)
         old_man_entrances = list(Old_Man_Entrances)
 
-        mandatory_light_world = ['Aghanims Tower Exit', 'Old Man House Exit (Bottom)', 'Old Man House Exit (Top)']
+        mandatory_light_world = ['Agahnims Tower Exit', 'Old Man House Exit (Bottom)', 'Old Man House Exit (Top)']
         mandatory_dark_world = []
         caves = list(Cave_Exits + Dungeon_Exits + Cave_Three_Exits)
 
@@ -499,12 +499,12 @@ def link_entrances(world):
     else:
         raise NotImplementedError('Shuffling not supported yet')
 
-    if world.aghanim_fix_required:
-        # need to swap contents of Mimic Cave and TRock Ledge Right so Aghanim 1 is in Light World!
-        ret.append('Fix to prevent Aghanim Softlock: Swap Contents of Turtle Rock Ledge (East) and Mimic Cave:')
+    if world.agahnim_fix_required:
+        # need to swap contents of Mimic Cave and TRock Ledge Right so Agahnim 1 is in Light World!
+        ret.append('Fix to prevent Agahnim Softlock: Swap Contents of Turtle Rock Ledge (East) and Mimic Cave:')
         mimic_cave_target = world.get_entrance('Mimic Cave Mirror Spot').connected_region
         ret.append(connect_one_way(world, 'Dark Death Mountain Ledge (East)', mimic_cave_target))
-        ret.append(connect_one_way(world, 'Mimic Cave Mirror Spot', 'Aghanims Tower'))
+        ret.append(connect_one_way(world, 'Mimic Cave Mirror Spot', 'Agahnims Tower'))
 
     # check for swamp palace fix
     if world.get_entrance('Dam').connected_region.name != 'Dam' or world.get_entrance('Swamp Palace').connected_region.name != 'Swamp Palace (Entrance)':
@@ -712,24 +712,24 @@ def simple_shuffle_dungeons(world):
         ret.append(connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)'))
         ret.append(connect_two_way(world, 'Hyrule Castle Entrance (East)', 'Hyrule Castle Exit (East)'))
         ret.append(connect_two_way(world, 'Hyrule Castle Entrance (West)', 'Hyrule Castle Exit (West)'))
-        ret.append(connect_two_way(world, 'Aghanims Tower', 'Aghanims Tower Exit'))
+        ret.append(connect_two_way(world, 'Agahnims Tower', 'Agahnims Tower Exit'))
     elif hc_target == 'Desert':
         ret.append(connect_two_way(world, 'Desert Palace Entrance (South)', 'Hyrule Castle Exit (South)'))
         ret.append(connect_two_way(world, 'Desert Palace Entrance (East)', 'Hyrule Castle Exit (East)'))
         ret.append(connect_two_way(world, 'Desert Palace Entrance (West)', 'Hyrule Castle Exit (West)'))
-        ret.append(connect_two_way(world, 'Desert Palace Entrance (North)', 'Aghanims Tower Exit'))
+        ret.append(connect_two_way(world, 'Desert Palace Entrance (North)', 'Agahnims Tower Exit'))
     elif hc_target == 'Turtle Rock':
         ret.append(connect_two_way(world, 'Turtle Rock', 'Hyrule Castle Exit (South)'))
         ret.append(connect_two_way(world, 'Turtle Rock Isolated Ledge Entrance', 'Hyrule Castle Exit (East)'))
         ret.append(connect_two_way(world, 'Dark Death Mountain Ledge (West)', 'Hyrule Castle Exit (West)'))
-        ret.append(connect_two_way(world, 'Dark Death Mountain Ledge (East)', 'Aghanims Tower Exit'))
-        world.aghanim_fix_required = True  # need this for now
+        ret.append(connect_two_way(world, 'Dark Death Mountain Ledge (East)', 'Agahnims Tower Exit'))
+        world.agahnim_fix_required = True  # need this for now
 
     if dp_target == 'Hyrule Castle':
         ret.append(connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Desert Palace Exit (South)'))
         ret.append(connect_two_way(world, 'Hyrule Castle Entrance (East)', 'Desert Palace Exit (East)'))
         ret.append(connect_two_way(world, 'Hyrule Castle Entrance (West)', 'Desert Palace Exit (West)'))
-        ret.append(connect_two_way(world, 'Aghanims Tower', 'Desert Palace Exit (North)'))
+        ret.append(connect_two_way(world, 'Agahnims Tower', 'Desert Palace Exit (North)'))
     elif dp_target == 'Desert':
         ret.append(connect_two_way(world, 'Desert Palace Entrance (South)', 'Desert Palace Exit (South)'))
         ret.append(connect_two_way(world, 'Desert Palace Entrance (East)', 'Desert Palace Exit (East)'))
@@ -745,7 +745,7 @@ def simple_shuffle_dungeons(world):
         ret.append(connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Turtle Rock Exit (Front)'))
         ret.append(connect_two_way(world, 'Hyrule Castle Entrance (East)', 'Turtle Rock Ledge Exit (East)'))
         ret.append(connect_two_way(world, 'Hyrule Castle Entrance (West)', 'Turtle Rock Ledge Exit (West)'))
-        ret.append(connect_two_way(world, 'Aghanims Tower', 'Turtle Rock Isolated Ledge Exit'))
+        ret.append(connect_two_way(world, 'Agahnims Tower', 'Turtle Rock Isolated Ledge Exit'))
     elif tr_target == 'Desert':
         ret.append(connect_two_way(world, 'Desert Palace Entrance (South)', 'Turtle Rock Exit (Front)'))
         ret.append(connect_two_way(world, 'Desert Palace Entrance (North)', 'Turtle Rock Ledge Exit (East)'))
@@ -767,7 +767,7 @@ LW_Dungeon_Entrances = ['Desert Palace Entrance (South)',
                         'Tower of Hera',
                         'Hyrule Castle Entrance (West)',
                         'Hyrule Castle Entrance (East)',
-                        'Aghanims Tower']
+                        'Agahnims Tower']
 
 LW_Dungeon_Entrances_Must_Exit = ['Desert Palace Entrance (East)']
 
@@ -783,7 +783,7 @@ DW_Dungeon_Entrances = ['Thieves Town',
 DW_Dungeon_Entrances_Must_Exit = ['Dark Death Mountain Ledge (East)',
                                   'Turtle Rock Isolated Ledge Entrance']
 
-LW_Dungeon_Exits = ['Aghanims Tower Exit']
+LW_Dungeon_Exits = ['Agahnims Tower Exit']
 
 Dungeon_Exits = [('Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)'),
                  'Desert Palace Exit (North)',
@@ -1004,7 +1004,7 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Sanctuary Push Door', 'Sanctuary'),
                          ('Sewer Drop', 'Sewers'),
                          ('Sewers Back Door', 'Sewers (Dark)'),
-                         ('Aghanim 1', 'Aghanim 1'),
+                         ('Agahnim 1', 'Agahnim 1'),
                          ('Flute Spot 1', 'Death Mountain'),
                          ('Spectacle Rock Cave Drop', 'Spectacle Rock Cave (Bottom)'),
                          ('Spectacle Rock Cave Peak Drop', 'Spectacle Rock Cave (Bottom)'),
@@ -1125,7 +1125,7 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Ganons Tower Big Key Door', 'Ganons Tower (Top)'),
                          ('Ganons Tower Torch Rooms', 'Ganons Tower (Before Moldorm)'),
                          ('Ganons Tower Moldorm Door', 'Ganons Tower (Moldorm)'),
-                         ('Ganons Tower Moldorm Gap', 'Aghanim 2'),
+                         ('Ganons Tower Moldorm Gap', 'Agahnim 2'),
                          ('Pyramid Hole', 'Pyramid')  # not shuffled, for now
                          ]
 
@@ -1298,8 +1298,8 @@ default_dungeon_connections = [('Desert Palace Entrance (South)', 'Desert Palace
                                ('Hyrule Castle Exit (South)', 'Light World'),
                                ('Hyrule Castle Exit (West)', 'Hyrule Castle Ledge'),
                                ('Hyrule Castle Exit (East)', 'Hyrule Castle Ledge'),
-                               ('Aghanims Tower', 'Aghanims Tower'),
-                               ('Aghanims Tower Exit', 'Hyrule Castle Ledge'),
+                               ('Agahnims Tower', 'Agahnims Tower'),
+                               ('Agahnims Tower Exit', 'Hyrule Castle Ledge'),
 
                                ('Thieves Town', 'Thieves Town (Entrance)'),
                                ('Thieves Town Exit', 'West Dark World'),
@@ -1349,7 +1349,7 @@ door_addresses = {'Desert Palace Entrance (South)': (0xDBB7B, 0x15B02),
                   'Hyrule Castle Entrance (South)': (0xDBB76, 0x15AF4),
                   'Hyrule Castle Entrance (West)': (0xDBB75, 0x15AF2),
                   'Hyrule Castle Entrance (East)': (0xDBB77, 0x15AF6),
-                  'Aghanims Tower': (0xDBB96, 0x15B38),
+                  'Agahnims Tower': (0xDBB96, 0x15B38),
                   'Thieves Town': (0xDBBA6, 0x15B58),
                   'Skull Woods First Section Door': (0xDBB9C, 0x15B44),
                   'Skull Woods Second Section Door (East)': (0xDBB9B, 0x15B42),
@@ -1406,7 +1406,7 @@ exit_ids = {'Desert Palace Exit (South)': (0x09, 0x84),
             'Hyrule Castle Exit (South)': (0x04, 0x61),
             'Hyrule Castle Exit (West)': (0x03, 0x60),
             'Hyrule Castle Exit (East)': (0x05, 0x62),
-            'Aghanims Tower Exit': (0x24, 0xE0),
+            'Agahnims Tower Exit': (0x24, 0xE0),
             'Thieves Town Exit': (0x34, 0xDB),
             'Skull Woods First Section Exit': (0x2A, 0x58),
             'Skull Woods Second Section Exit (East)': (0x29, 0x57),

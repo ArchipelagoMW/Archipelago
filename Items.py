@@ -441,7 +441,7 @@ class ESMap(Item):
 
 class ATSmallKey(Item):
     def __init__(self):
-        super(ATSmallKey, self).__init__('Small Key (Aghanims Tower)', False, True, code=0x24)
+        super(ATSmallKey, self).__init__('Small Key (Agahnims Tower)', False, True, code=0x24)
 
 
 class PDSmallKey(Item):
