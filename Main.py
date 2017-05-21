@@ -489,9 +489,9 @@ if __name__ == '__main__':
     parser.add_argument('--difficulty', default='normal', const='normal', nargs='?', choices=['normal'], help='Select game difficulty. Affects available itempool.')
     parser.add_argument('--algorithm', default='regular', const='regular', nargs='?', choices=['regular', 'flood'],
                         help='Select item filling algorithm. Regular is the ordinary VT algorithm. Flood pushes out items starting from Link\'s House and is slightly biased to placing progression items with less restrictions.')
-    parser.add_argument('--shuffle', default='full', const='full', nargs='?', choices=['default', 'simple', 'full', 'dungeonsfull', 'dungeonssimple'],
-                        help='Select Entrance Shuffling Algorithm. Default is the Vanilla layout. Simple shuffles Dungeon Entrances/Exits between each other and keeps all 4-entrance dungeons confined to one location.'
-                             'Full mixes cave and dungeon entrances freely. The dungeon variants only mix up dungeons and keep the rest of the overworld vanilla.')
+    parser.add_argument('--shuffle', default='full', const='full', nargs='?', choices=['default', 'simple', 'restricted', 'full', 'madness', 'dungeonsfull', 'dungeonssimple'],
+                        help='Select Entrance Shuffling Algorithm. Default is the Vanilla layout. Simple shuffles Dungeon Entrances/Exits between each other and keeps all 4-entrance dungeons confined to one location. All caves outside of death mountain are shuffled in pairs.'
+                             'Restricted uses Dungeons shuffling from Simple but freely connects remaining entrances. Full mixes cave and dungeon entrances freely. The dungeon variants only mix up dungeons and keep the rest of the overworld vanilla.')
     parser.add_argument('--openrom', default='Open_Base_Rom.sfc', help='Path to a VT21 open normal difficulty rom to use as a base.')
     parser.add_argument('--standardrom', default='Standard_Base_Rom.sfc', help='Path to a VT21 standard normal difficulty rom to use as a base.')
     parser.add_argument('--loglevel', default='info', const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
