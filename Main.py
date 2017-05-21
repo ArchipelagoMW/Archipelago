@@ -446,6 +446,12 @@ def patch_rom(world, rom):
         rom = rom.replace(bytearray([0xAF, 0x16, 0xF2, 0x7E, 0x29, 0x7F, 0x8F, 0x16, 0xF2, 0x7E]), bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA]))
         rom = rom.replace(bytearray([0xAF, 0x51, 0xF0, 0x7E, 0x29, 0xFE, 0x8F, 0x51, 0xF0, 0x7E]), bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA]))
 
+    # set correct flag for hera basement item
+    if world.get_location('[dungeon-L3-1F] Tower of Hera - Freestanding Key').item is not None and world.get_location('[dungeon-L3-1F] Tower of Hera - Freestanding Key').item.name == 'Small Key (Tower of Hera)':
+        write_byte(rom, 0x4E3BB, 0xE4)
+    else:
+        write_byte(rom, 0x4E3BB, 0xEB)
+
     # write strings
     write_string_to_rom(rom, 'Ganon2', 'Did you find the silver arrows in Hyrule?')
     write_string_to_rom(rom, 'Uncle', 'Good Luck!\nYou will need it.')
