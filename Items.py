@@ -104,12 +104,12 @@ class Mitts(Item):
 
 class Ether(Item):
     def __init__(self):
-        super(Ether, self).__init__('Ether', True, code=0x0F)
+        super(Ether, self).__init__('Ether', True, code=0x10)
 
 
 class Bombos(Item):
     def __init__(self):
-        super(Bombos, self).__init__('Bombos', True, code=0x10)
+        super(Bombos, self).__init__('Bombos', True, code=0x0F)
 
 
 class Quake(Item):
