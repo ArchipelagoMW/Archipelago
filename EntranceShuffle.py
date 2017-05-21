@@ -1082,6 +1082,9 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Skull Woods Torch Room', 'Skull Woods Final Section (Mothula)'),
                          ('Skull Woods Burn Skull', 'Skull Woods Skull'),
                          ('Skull Woods Skull Reverse', 'Skull Woods Forest (West)'),
+                         ('Skull Woods First Section (Right)', 'Skull Woods First Section'),   # exist only for unique hole reference points
+                         ('Skull Woods First Section (Left)', 'Skull Woods First Section'),
+                         ('Skull Woods First Section (Top)', 'Skull Woods First Section'),
                          ('Blind Fight', 'Blind Fight'),
                          ('Ice Palace Entrance Room', 'Ice Palace (Main)'),
                          ('Ice Palace (East)', 'Ice Palace (East)'),
@@ -1306,9 +1309,6 @@ default_dungeon_connections = [('Desert Palace Entrance (South)', 'Desert Palace
                                ('Skull Woods First Section Hole (East)', 'Skull Woods First Section (Right)'),
                                ('Skull Woods First Section Hole (West)', 'Skull Woods First Section (Left)'),
                                ('Skull Woods First Section Hole (North)', 'Skull Woods First Section (Top)'),
-                               ('Skull Woods First Section (Right)', 'Skull Woods First Section'),   # exist only for unique hole reference points
-                               ('Skull Woods First Section (Left)', 'Skull Woods First Section'),
-                               ('Skull Woods First Section (Top)', 'Skull Woods First Section'),
                                ('Skull Woods First Section Door', 'Skull Woods First Section'),
                                ('Skull Woods First Section Exit', 'Skull Woods Forest'),
                                ('Skull Woods Second Section Hole', 'Skull Woods Second Section'),
