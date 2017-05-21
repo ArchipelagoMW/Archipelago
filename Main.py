@@ -9,11 +9,12 @@ import random
 import time
 import logging
 import argparse
+import os
 
 __version__ = '0.1-dev'
 
 
-def main(seed=None, shuffle='default', logic='noglitches', mode='standard', difficulty='normal', goal='ganon', algo='regular', spoiler=True, open_base_rom='Open_Base_Rom.sfc', standard_base_rom='Standard_Base_Rom.sfc'):
+def main(seed=None, shuffle='default', logic='noglitches', mode='standard', difficulty='normal', goal='ganon', algo='regular', spoiler=True, base_rom='Open_Base_Rom.sfc'):
     start = time.clock()
 
     # initialize the world
@@ -60,10 +61,7 @@ def main(seed=None, shuffle='default', logic='noglitches', mode='standard', diff
 
     logger.info('Patching ROM.')
 
-    if world.mode == 'open':
-        rom = bytearray(open(open_base_rom, 'rb').read())
-    else:
-        rom = bytearray(open(standard_base_rom, 'rb').read())
+    rom = bytearray(open(base_rom, 'rb').read())
     patched_rom = patch_rom(world, rom)
 
     outfilebase = 'ER_%s_%s_%s_%s' % (world.mode, world.goal, world.shuffle, world.seed)
@@ -478,7 +476,7 @@ def write_string_to_rom(rom, target, string):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--create_spoiler', help='Output a Spoiler File', action='store_true')
     parser.add_argument('--logic', default='noglitches', const='noglitches', nargs='?', choices=['noglitches', 'minorglitches'],
                         help='Select Enforcement of Item Requirements. Minor Glitches may require Fake Flippers, Bunny Revival and Dark Room Navigation.')
@@ -490,14 +488,31 @@ if __name__ == '__main__':
     parser.add_argument('--algorithm', default='regular', const='regular', nargs='?', choices=['regular', 'flood'],
                         help='Select item filling algorithm. Regular is the ordinary VT algorithm. Flood pushes out items starting from Link\'s House and is slightly biased to placing progression items with less restrictions.')
     parser.add_argument('--shuffle', default='full', const='full', nargs='?', choices=['default', 'simple', 'restricted', 'full', 'madness', 'dungeonsfull', 'dungeonssimple'],
-                        help='Select Entrance Shuffling Algorithm. Default is the Vanilla layout. Simple shuffles Dungeon Entrances/Exits between each other and keeps all 4-entrance dungeons confined to one location. All caves outside of death mountain are shuffled in pairs.'
-                             'Restricted uses Dungeons shuffling from Simple but freely connects remaining entrances. Full mixes cave and dungeon entrances freely. The dungeon variants only mix up dungeons and keep the rest of the overworld vanilla.')
+                        help='Select Entrance Shuffling Algorithm. Default is the Vanilla layout. Simple shuffles Dungeon Entrances/Exits between each other and keeps all 4-entrance dungeons confined to one location. All caves outside of death mountain are shuffled in pairs. '
+                             'Restricted uses Dungeons shuffling from Simple but freely connects remaining entrances. Full mixes cave and dungeon entrances freely. Madness decouples entrances and exits from each other and shuffles them freely, only ensuring that no fake Light/Dark World happens and '
+                             'all locations are reachable. The dungeon variants only mix up dungeons and keep the rest of the overworld vanilla.')
     parser.add_argument('--openrom', default='Open_Base_Rom.sfc', help='Path to a VT21 open normal difficulty rom to use as a base.')
     parser.add_argument('--standardrom', default='Standard_Base_Rom.sfc', help='Path to a VT21 standard normal difficulty rom to use as a base.')
     parser.add_argument('--loglevel', default='info', const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--count', help='Use to batch generate multiple seeds with same settings. If --seed is provided, it will be used for the first seed, then used to derive the next seed (i.e. generating 10 seeds with --seed given will produce the same 10 (different) roms each time).', type=int)
     args = parser.parse_args()
+
+    # check if rom for patching is available
+    rom_to_use = None
+    expected_name = ''
+    if args.mode == 'open':
+        if os.path.isfile(args.openrom):
+            rom_to_use = args.openrom  # ToDo check checksum or some such in future when common base rom is in use
+            expected_name = args.openrom
+    elif args.mode == 'standard':
+        if os.path.isfile(args.standardrom):
+            rom_to_use = args.standardrom  # ToDo check checksum or some such in future when common base rom is in use
+            expected_name = args.standardrom
+
+    if rom_to_use is None:
+        input('Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % expected_name)
+        exit(1)
 
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[args.loglevel]
@@ -506,7 +521,7 @@ if __name__ == '__main__':
     if args.count is not None:
         seed = args.seed
         for i in range(args.count):
-            main(seed=seed, logic=args.logic, mode=args.mode, goal=args.goal, difficulty=args.difficulty, algo=args.algorithm, shuffle=args.shuffle, open_base_rom=args.openrom, standard_base_rom=args.standardrom, spoiler=args.create_spoiler)
+            main(seed=seed, logic=args.logic, mode=args.mode, goal=args.goal, difficulty=args.difficulty, algo=args.algorithm, shuffle=args.shuffle, base_rom=rom_to_use, spoiler=args.create_spoiler)
             seed = random.randint(0, 999999999)
     else:
-        main(seed=args.seed, logic=args.logic, mode=args.mode, goal=args.goal, difficulty=args.difficulty, algo=args.algorithm, shuffle=args.shuffle, open_base_rom=args.openrom, standard_base_rom=args.standardrom, spoiler=args.create_spoiler)
+        main(seed=args.seed, logic=args.logic, mode=args.mode, goal=args.goal, difficulty=args.difficulty, algo=args.algorithm, shuffle=args.shuffle, base_rom=rom_to_use, spoiler=args.create_spoiler)
