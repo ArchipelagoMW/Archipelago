@@ -484,6 +484,10 @@ def patch_rom(world, rom):
     write_string_to_rom(rom, 'Ganon1', '\n\n\n\n\n\n\n\n\nWhy are you reading an empty textbox?')
     write_string_to_rom(rom, 'TavernMan', 'Did you know that talking to random NPCs wastes time in a race? I hope this information may be of use to you in the future.')
 
+    # disable open door sprites when exiting caves
+    for i in range(0x85):
+        write_byte(rom, 0x15274 + i, 0x00)
+
     altaritem = world.get_location('Altar').item.name if world.get_location('Altar').item is not None else 'Nothing'
     write_string_to_rom(rom, 'Altar', altar_text.get(altaritem, 'Unknown Item.'))
 
