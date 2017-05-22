@@ -406,11 +406,24 @@ def patch_rom(world, rom):
         for exit in region.exits:
             if exit.target is not None:
                 try:
+                    # ugly fix for agahnim fix in simple dungeon shuffle mode
+                    if world.agahnim_fix_required and exit.name == 'Dark Death Mountain Ledge (East)':
+                        write_byte(rom, door_addresses[exit.name][0], exit.target)
+                        continue
+
+                    # toDo consider aga tower fix
                     addresses = door_addresses[exit.name]
                     write_byte(rom, addresses[0], exit.target[0])
                     write_byte(rom, addresses[1], exit.target[1])
                 except KeyError:
                     # probably cave
+
+                    # ugly fix for agahnim fix in simple dungeon shuffle mode
+                    if world.agahnim_fix_required and exit.name == 'Mimic Cave Mirror Spot':
+                        write_byte(rom, single_doors[exit.name], exit.target[0])
+                        write_byte(rom, door_addresses['Dark Death Mountain Ledge (East)'][1], exit.target[1])
+                        continue
+
                     addresses = single_doors[exit.name]
                     if not isinstance(addresses, tuple):
                         addresses = (addresses,)
