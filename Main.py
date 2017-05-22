@@ -114,7 +114,8 @@ def distribute_items(world):
                 # we placed all available progress items. Maybe the game can be beaten anyway?
                 if world.can_beat_game():
                     logging.getLogger('').warning('Not all locations reachable. Game beatable anyway.')
-                    break
+                    progress_done = True
+                    continue
                 raise RuntimeError('No more progress items left to place.')
 
         spot_to_fill = None
