@@ -332,7 +332,7 @@ def no_glitches_rules(world):
             spot = world.get_location(spot)
         else:
             spot = world.get_entrance(spot)
-        if world.state == 'open' or check_is_dark_world(world.get_region(region)):
+        if world.mode == 'open' or check_is_dark_world(world.get_region(region)):
             add_lamp_requirement(spot)
 
     add_conditional_lamp('Misery Mire (Vitreous)', 'Misery Mire (Entrance)', 'Entrance')
