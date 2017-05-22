@@ -231,10 +231,8 @@ def generate_itempool(world):
         IceRod(),
         Lamp(),
         Cape(),
-        Mirror(),
         Powder(),
         RedBoomerang(),
-        Pearl(),
         Mushroom(),
         Rupees100(),
         Rupee(), Rupee(),
@@ -256,6 +254,13 @@ def generate_itempool(world):
         world.push_item('Uncle', ProgressiveSword())
     else:
         world.itempool.append(ProgressiveSword())
+
+    # provide mirror and pearl so you can avoid fake DW/LW and do dark world exploration as intended by algorithm, for now
+    if world.shuffle == 'insanity':
+        world.push_item('[cave-040] Links House', Mirror())
+        world.push_item('[dungeon-C-1F] Sanctuary', Pearl())
+    else:
+        world.itempool.extend([Mirror(), Pearl()])
 
     if world.goal == 'pedestal':
         world.push_item('Altar', Triforce())
@@ -506,10 +511,14 @@ if __name__ == '__main__':
     parser.add_argument('--difficulty', default='normal', const='normal', nargs='?', choices=['normal'], help='Select game difficulty. Affects available itempool.')
     parser.add_argument('--algorithm', default='regular', const='regular', nargs='?', choices=['regular', 'flood'],
                         help='Select item filling algorithm. Regular is the ordinary VT algorithm. Flood pushes out items starting from Link\'s House and is slightly biased to placing progression items with less restrictions.')
-    parser.add_argument('--shuffle', default='full', const='full', nargs='?', choices=['default', 'simple', 'restricted', 'full', 'madness', 'dungeonsfull', 'dungeonssimple'],
-                        help='Select Entrance Shuffling Algorithm. Default is the Vanilla layout. Simple shuffles Dungeon Entrances/Exits between each other and keeps all 4-entrance dungeons confined to one location. All caves outside of death mountain are shuffled in pairs. '
-                             'Restricted uses Dungeons shuffling from Simple but freely connects remaining entrances. Full mixes cave and dungeon entrances freely. Madness decouples entrances and exits from each other and shuffles them freely, only ensuring that no fake Light/Dark World happens and '
-                             'all locations are reachable. The dungeon variants only mix up dungeons and keep the rest of the overworld vanilla.')
+    parser.add_argument('--shuffle', default='full', const='full', nargs='?', choices=['default', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'],
+                        help='Select Entrance Shuffling Algorithm. Default is the Vanilla layout. \n'
+                             'Simple shuffles Dungeon Entrances/Exits between each other and keeps all 4-entrance dungeons confined to one location. All caves outside of death mountain are shuffled in pairs.\n'
+                             'Restricted uses Dungeons shuffling from Simple but freely connects remaining entrances.\n'
+                             'Full mixes cave and dungeon entrances freely.\n'
+                             'Madness decouples entrances and exits from each other and shuffles them freely, only ensuring that no fake Light/Dark World happens and all locations are reachable.\n'
+                             'Insanity is Madness without the world restrictions. Mirror and Pearl are provided early to ensure Filling algorithm works properly. Deal with Fake LW/DW at your discretion. Experimental.\n'
+                             'The dungeon variants only mix up dungeons and keep the rest of the overworld vanilla.')
     parser.add_argument('--openrom', default='Open_Base_Rom.sfc', help='Path to a VT21 open normal difficulty rom to use as a base.')
     parser.add_argument('--standardrom', default='Standard_Base_Rom.sfc', help='Path to a VT21 standard normal difficulty rom to use as a base.')
     parser.add_argument('--loglevel', default='info', const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')

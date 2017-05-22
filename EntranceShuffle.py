@@ -496,6 +496,157 @@ def link_entrances(world):
         # place remaining doors
         ret.append(connect_doors(world, single_doors, door_targets))
 
+    elif world.shuffle == 'insanity':
+        # beware ye who enter here
+        ret.append('Mixed Entrances:\n\n')
+
+        entrances = LW_Entrances + LW_Dungeon_Entrances + DW_Entrances + DW_Dungeon_Entrances + ['Skull Woods Second Section Door (East)', 'Skull Woods First Section Door', 'Kakariko Well Cave', 'Bat Cave Cave', 'North Fairy Cave', 'Sanctuary', 'Thieves Forest Hideout Stump', 'Lumberjack Tree Cave', 'Hyrule Castle Entrance (South)']
+        entrances_must_exits = DW_Entrances_Must_Exit + DW_Dungeon_Entrances_Must_Exit + LW_Dungeon_Entrances_Must_Exit + ['Skull Woods Second Section Door (West)']
+
+        doors = LW_Entrances + LW_Dungeon_Entrances + LW_Dungeon_Entrances_Must_Exit + ['Kakariko Well Cave', 'Bat Cave Cave', 'North Fairy Cave', 'Sanctuary', 'Thieves Forest Hideout Stump', 'Lumberjack Tree Cave', 'Hyrule Castle Secret Entrance Stairs'] + Old_Man_Entrances +\
+                DW_Entrances + DW_Dungeon_Entrances + DW_Entrances_Must_Exit + DW_Dungeon_Entrances_Must_Exit + ['Skull Woods First Section Door', 'Skull Woods Second Section Door (East)', 'Skull Woods Second Section Door (West)']
+
+        random.shuffle(doors)
+
+        old_man_entrances = list(Old_Man_Entrances)
+
+        caves = Cave_Exits + Dungeon_Exits + Cave_Three_Exits + ['Old Man House Exit (Bottom)', 'Old Man House Exit (Top)', 'Skull Woods First Section Exit', 'Skull Woods Second Section Exit (East)', 'Skull Woods Second Section Exit (West)',
+                                                                 'Kakariko Well Exit', 'Bat Cave Exit', 'North Fairy Cave Exit', 'Thieves Forest Hideout Exit', 'Lumberjack Tree Exit', 'Sanctuary Exit']
+
+        # shuffle up holes
+
+        hole_entrances = ['Kakariko Well Drop', 'Bat Cave Drop', 'North Fairy Cave Drop', 'Thieves Forest Hideout Drop', 'Lumberjack Tree Tree', 'Sanctuary Grave',
+                          'Skull Woods First Section Hole (East)', 'Skull Woods First Section Hole (West)', 'Skull Woods First Section Hole (North)', 'Skull Woods Second Section Hole']
+
+        hole_targets = ['Kakariko Well (top)', 'Bat Cave (right)', 'North Fairy Cave', 'Thieves Forest Hideout (top)', 'Lumberjack Tree (top)', 'Sewer Drop', 'Skull Woods Second Section',
+                        'Skull Woods First Section (Left)', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Top)']
+
+        if world.mode == 'standard':
+            # cannot move uncle cave
+            ret.append(connect_one_way(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance'))
+            ret.append(connect_exit(world, 'Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance Stairs'))
+            ret.append(connect_entrance(world, doors.pop(), 'Hyrule Castle Secret Entrance Exit'))
+        else:
+            hole_entrances.append('Hyrule Castle Secret Entrance Drop')
+            hole_targets.append('Hyrule Castle Secret Entrance')
+            entrances.append('Hyrule Castle Secret Entrance Stairs')
+            caves.append('Hyrule Castle Secret Entrance Exit')
+
+        random.shuffle(hole_entrances)
+        random.shuffle(hole_targets)
+        random.shuffle(entrances)
+
+        # fill up holes
+        for hole in hole_entrances:
+            ret.append(connect_one_way(world, hole, hole_targets.pop()))
+
+        # hyrule castle handling
+        if world.mode == 'standard':
+            # must connect front of hyrule castle to do escape
+            ret.append(connect_entrance(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)'))
+            ret.append(connect_exit(world, 'Hyrule Castle Exit (South)', entrances.pop()))
+            caves.append(('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
+        else:
+            doors.append('Hyrule Castle Entrance (South)')
+            caves.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
+
+        # now let's deal with mandatory reachable stuff
+        def extract_reachable_exit(cavelist):
+            random.shuffle(cavelist)
+            candidate = None
+            for cave in cavelist:
+                if isinstance(cave, tuple) and len(cave) > 1:
+                    # special handling: TRock has two entries that we should consider entrance only
+                    if cave[0] == 'Turtle Rock Exit (Front)' and len(cave) == 2:
+                        continue
+                    candidate = cave
+                    break
+            if candidate is None:
+                raise RuntimeError('No suitable cave.')
+            cavelist.remove(candidate)
+            return candidate
+
+        def connect_reachable_exit(entrance, caves, doors):
+            cave = extract_reachable_exit(caves)
+
+            exit = cave[-1]
+            cave = cave[:-1]
+            ret.append(connect_exit(world, exit, entrance))
+            ret.append(connect_entrance(world, doors.pop(), exit))
+            # rest of cave now is forced to be in this world
+            caves.append(cave)
+
+        # connect mandatory exits
+        for entrance in entrances_must_exits:
+            connect_reachable_exit(entrance, caves, doors)
+
+        # place old man, has limited options
+        # exit has to come from specific set of doors, the entrance is free to move about
+        random.shuffle(old_man_entrances)
+        old_man_exit = old_man_entrances.pop()
+        entrances.extend(old_man_entrances)
+        random.shuffle(entrances)
+
+        ret.append(connect_exit(world, 'Old Man Cave Exit (East)', old_man_exit))
+        ret.append(connect_entrance(world, doors.pop(), 'Old Man Cave Exit (East)'))
+        caves.append('Old Man Cave Exit (West)')
+
+        # Aghanim needs to be Light World to spawn
+        # find suitable LW Entrance
+        lw_entrances = LW_Entrances + LW_Dungeon_Entrances + LW_Dungeon_Entrances_Must_Exit + Old_Man_Entrances + \
+                       ['Kakariko Well Cave', 'Bat Cave Cave', 'North Fairy Cave', 'Sanctuary', 'Thieves Forest Hideout Stump', 'Lumberjack Tree Cave', 'Hyrule Castle Entrance (South)', 'Hyrule Castle Secret Entrance Stairs']
+
+        candidate = None
+        for entrance in entrances:
+            if entrance in lw_entrances:
+                candidate = entrance
+                break
+
+        # should always have enough candidates left here, should never happen
+        if candidate is None:
+            raise RuntimeError('Your Algorithm is broken.')
+
+        entrances.remove(candidate)
+        ret.append(connect_exit(world, 'Agahnims Tower Exit', candidate))
+        ret.append(connect_entrance(world, doors.pop(), 'Agahnims Tower Exit'))
+
+        # handle remaining caves
+        for cave in caves:
+            if isinstance(cave, str):
+                cave = (cave,)
+
+            for exit in cave:
+                ret.append(connect_exit(world, exit, entrances.pop()))
+                ret.append(connect_entrance(world, doors.pop(), exit))
+
+        # handle simple doors
+
+        single_doors = list(Single_Cave_Doors)
+        bomb_shop_doors = list(Bomb_Shop_Single_Cave_Doors)
+        blacksmith_doors = list(Blacksmith_Single_Cave_Doors)
+        door_targets = list(Single_Cave_Targets)
+
+        # place blacksmith, has limited options
+        random.shuffle(blacksmith_doors)
+        blacksmith_hut = blacksmith_doors.pop()
+        ret.append(connect_one_way(world, blacksmith_hut, 'Blacksmiths Hut'))
+        bomb_shop_doors.extend(blacksmith_doors)
+
+        # place dam and pyramid fairy, have limited options
+        # ToDo Dam might be behind fat fairy if we later check for this when placing crystal 5 and 6
+        random.shuffle(bomb_shop_doors)
+        bomb_shop = bomb_shop_doors.pop()
+        ret.append(connect_one_way(world, bomb_shop, 'Big Bomb Shop'))
+        dam = bomb_shop_doors.pop()
+        ret.append(connect_one_way(world, dam, 'Dam'))
+        single_doors.extend(bomb_shop_doors)
+
+        # tavern back door cannot be shuffled yet
+        ret.append(connect_doors(world, ['Tavern North'], ['Tavern']))
+
+        # place remaining doors
+        ret.append(connect_doors(world, single_doors, door_targets))
+
     else:
         raise NotImplementedError('Shuffling not supported yet')
 
@@ -1074,6 +1225,8 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Isolated Ledge Mirror Spot', 'Death Mountain Fairy Drop Ledge'),
                          ('Spiral Cave Mirror Spot', 'Spiral Cave Ledge'),
 
+                         ('Palace of Darkness Pay Kiki', 'Palace of Darkness Kiki Door'),
+                         ('Palace of Darkness Kiki Door Reverse', 'East Dark World'),
                          ('Swamp Palace Moat', 'Swamp Palace (First Room)'),
                          ('Swamp Palace Small Key Door', 'Swamp Palace (Starting Area)'),
                          ('Swamp Palace (Center)', 'Swamp Palace (Center)'),
