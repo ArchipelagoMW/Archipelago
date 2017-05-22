@@ -360,8 +360,9 @@ def link_entrances(world):
             candidate = None
             for cave in cavelist:
                 if isinstance(cave, tuple) and len(cave) > 1:
-                    # special handling: TRock has two entries that we should consider entrance only
-                    if cave[0] == 'Turtle Rock Exit (Front)' and len(cave) == 2:
+                    # special handling: TRock and Spectracle Rock cave have two entries that we should consider entrance only
+                    # ToDo this should be handled in a more sensible manner
+                    if cave[0] in ['Turtle Rock Exit (Front)', 'Spectacle Rock Cave Exit (Peak)'] and len(cave) == 2:
                         continue
                     candidate = cave
                     break
