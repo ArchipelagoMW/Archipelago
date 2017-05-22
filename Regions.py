@@ -121,8 +121,9 @@ def create_regions(world):
         create_region('Tower of Hera (Basement)', ['[dungeon-L3-1F] Tower of Hera - Basement']),
         create_region('Tower of Hera (Top)', ['[dungeon-L3-1F] Tower of Hera - 4F [small chest]', '[dungeon-L3-1F] Tower of Hera - Big Chest', 'Moldorm - Heart Container', 'Moldorm - Pendant']),
 
-        create_region('East Dark World', ['Piece of Heart (Pyramid)', 'Catfish'], ['Pyramid Fairy', 'South Dark World Bridge', 'West Dark World Gap', 'Palace of Darkness', 'Dark Lake Hylia Drop (East)', 'Dark Lake Hylia Teleporter',
+        create_region('East Dark World', ['Piece of Heart (Pyramid)', 'Catfish'], ['Pyramid Fairy', 'South Dark World Bridge', 'West Dark World Gap', 'Palace of Darkness Pay Kiki', 'Dark Lake Hylia Drop (East)', 'Dark Lake Hylia Teleporter',
                                                                                    'Hyrule Castle Ledge Mirror Spot', 'Dark Lake Hylia Fairy', 'Palace of Darkness Hint', 'East Dark World Hint', 'Dark World Potion Shop']),
+        create_region('Palace of Darkness Kiki Door', None, ['Palace of Darkness', 'Palace of Darkness Kiki Door Reverse']),
         create_region('Palace of Darkness Hint'),
         create_region('East Dark World Hint'),
         create_region('South Dark World', ['Flute Boy', 'Piece of Heart (Digging Game)', 'Bombos Tablet'], ['Dark Lake Hylia Drop (South)', 'Dark Swamp Cave', 'Swamp Palace', 'Village of Outcasts Heavy Rock',

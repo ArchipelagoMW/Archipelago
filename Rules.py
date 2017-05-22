@@ -119,7 +119,8 @@ def global_rules(world):
     set_rule(world.get_entrance('South Dark World Bridge'), lambda state: state.has('Hammer') and state.has_Pearl())
     set_rule(world.get_entrance('Bonk Fairy (Dark)'), lambda state: state.has_Boots())
     set_rule(world.get_entrance('West Dark World Gap'), lambda state: state.has_Pearl() and state.has('Hookshot') and (state.has('Flippers') or state.has('Hammer') or state.can_lift_rocks()))
-    set_rule(world.get_entrance('Palace of Darkness'), lambda state: state.has_Pearl())  # ToDo Not sure if required
+    set_rule(world.get_entrance('Palace of Darkness'), lambda state: state.has_Pearl() and state.can_reach('Palace of Darkness Pay Kiki', 'Entrance'))  # ToDo Not sure if required
+    set_rule(world.get_entrance('Palace of Darkness Kiki Door Reverse'), lambda state: state.can_reach('Palace of Darkness Pay Kiki', 'Entrance'))  # prevent soft lock when coming from behind, not required
     set_rule(world.get_entrance('Hyrule Castle Ledge Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Dark Lake Hylia Drop (East)'), lambda state: (state.has_Pearl() and state.has('Flippers') or state.has_Mirror()))  # Overworld Bunny Revival
     set_rule(world.get_location('Bombos Tablet'), lambda state: state.has('Book of Mudora') and state.has_beam_sword() and state.has_Mirror())
