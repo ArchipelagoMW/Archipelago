@@ -238,7 +238,7 @@ def global_rules(world):
     for location in ['[dungeon-D5-B5] Ice Palace - Big Chest', 'Kholdstare - Heart Container']:
         forbid_item(world.get_location(location), 'Big Key (Ice Palace)')
 
-    set_rule(world.get_entrance('Misery Mire Entrance Gap'), lambda state: state.has_Boots() or state.has('Hookshot'))
+    set_rule(world.get_entrance('Misery Mire Entrance Gap'), lambda state: (state.has_Boots() or state.has('Hookshot')) and (state.has_sword() or state.has('Fire Rod') or state.has('Ice Rod') or state.has('Hammer') or state.has('Cane of Somaria') or state.has('Bow')))  # need to defeat wizzrobes, bombs don't work ...
     set_rule(world.get_location('[dungeon-D6-B1] Misery Mire - Big Chest'), lambda state: state.can_collect('Big Key (Misery Mire)'))
     set_rule(world.get_entrance('Misery Mire Big Key Door'), lambda state: state.can_collect('Big Key (Misery Mire)'))
     # we can place a small key in the West wing iff it also contains/blocks the Big Key, as we cannot reach and softlock with the basement key door yet
@@ -247,7 +247,7 @@ def global_rules(world):
     for location in ['[dungeon-D6-B1] Misery Mire - Big Chest', 'Vitreous - Heart Container']:
         forbid_item(world.get_location(location), 'Big Key (Misery Mire)')
 
-    # This should be okay
+    # ToDo: This needs a complete overhaul
     set_rule(world.get_entrance('Turtle Rock Entrance Gap'), lambda state: state.has('Cane of Somaria'))
     set_rule(world.get_entrance('Turtle Rock Entrance Gap Reverse'), lambda state: state.has('Cane of Somaria'))
     set_rule(world.get_location('[dungeon-D7-1F] Turtle Rock - Compass Room'), lambda state: state.has('Cane of Somaria'))  # We could get here from the middle section without Cane as we don't cross the entrance gap!
