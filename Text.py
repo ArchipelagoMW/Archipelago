@@ -11,68 +11,72 @@ text_addresses = {'Altar': (0x180300, 256),
                   'BombShop2': (0x180D00, 256),
                   'PyramidFairy': (0x180900, 256)}
 
+credits_addresses = {'KingsReturn': (0x76928, 22),
+                     'Sanctuary': (0x76964, 16),
+                     'Kakariko': (0x76997, 23),
+                     'DesertPalace': (0x769D4, 24),
+                     'MountainTower': (0x76A12, 24),
+                     'LinksHouse': (0x76A52, 19),
+                     'Zora': (0x76A85, 20),
+                     'MagicShop': (0x76AC5, 23),
+                     'Lumberjacks': (0x76AFC, 16),
+                     'FluteBoy': (0x76B34, 23),
+                     'WishingWell': (0x76B71, 23),
+                     'Blacksmiths': (0x76BAC, 23),
+                     'SickKid': (0x76BDF, 20),
+                     'DeathMountain': (0x76C19, 16),
+                     'LostWoods': (0x76C51, 16),
+                     'Altar': (0x76C81, 20)}
 
-altar_text = {'Fighter Sword': 'A pathetic\nsword rests\nhere!',
-              'Master Sword': 'I thought this\nwas meant to\nbe randomized?',
-              'Tempered Sword': 'I stole the\nblacksmith\'s\njob!',
-              'Golden Sword': 'The butter\nsword rests\nhere!',
-              'Blue Shield': 'Now you can\ndefend against\npebbles!',
-              'Red Shield': 'Now you can\ndefend against\nfireballs!',
-              'Mirror Shield': 'Now you can\ndefend against\nlasers!',
-              'Fir eRod': 'I\'m the hot\nrod. I make\nthings burn!',
-              'Ice Rod': 'I\'m the cold\nrod. I make\nthings freeze!',
-              'Hammer': 'stop\nhammer time!',
-              'Hookshot': 'BOING!!!\nBOING!!!\nBOING!!!',
-              'Bow': 'You have\nchosen the\narcher class.',
-              'Blue Boomerang': 'No matter what\nyou do, blue\nreturns to you',
-              'Red Boomerang': 'No matter what\nyou do, red\nreturns to you',
-              'Magic Powder': 'you can turn\nanti-faeries\ninto fairies',
-              'Bombos': 'Burn, baby,\nburn! Fear my\nring of fire!',
-              'Ether': 'Zero Kelvin!\nAbsolute zero!\nFear the cold!',
-              'Quake': 'Maxing out the\nRichter scale\nis what I do!',
-              'Lamp': 'Baby, baby,\nbaby.\nLight my way!',
-              'Shovel': 'Can\n   You\n      Dig it?',
-              'Cane of Somaria': 'I make blocks\nto hold down\nswitches!',
-              'Cane of Byrna': 'Use this to\nbecome\ninvincible!',
-              'Cape': 'Wear this to\nbecome\ninvisible!',
-              'Magic Mirror': 'Isn\'t your\nreflection so\npretty?',
-              'Power Glove': 'Now you can\nlift weak\nstuff!',
-              'Titans Mitt': 'Now you can\nlift heavy\nstuff!',
-              'Book of Mudora': 'This is a\nparadox?!',
-              'Flippers': 'fancy a swim?',
-              'Moon Pearl': '  Bunny Link\n      be\n     gone!',
-              'Bug Catching Net': 'Let\'s catch\nsome bees and\nfaeries!',
-              'Blue Mail': 'Now you\'re a\nblue elf!',
-              'Red Mail': 'Now you\'re a\nred elf!',
-              'Piece of Heart': 'Just a little\npiece of love!',
-              'Boss Heart Container': 'Maximum health\nincreased!\nYeah!',
-              'Single Bomb': 'I make things\ngo BOOM! But\njust once.',
-              'Bombs (3)': 'I make things\ngo triple\nBOOM!!!',
-              'Mushroom': 'I\'m a fun guy!\n\nI\'m a funghi!',
-              'Bottle': 'Now you can\nstore potions\nand stuff!',
-              'Single Arrow': 'a lonely arrow\nsits here.',
-              'Arrows (10)': 'This will give\nyou ten shots\nwith your bow!',
-              'Rupee (1)': 'Just pocket\nchange. Move\nright along.',
-              'Rupees (5)': 'Just pocket\nchange. Move\nright along.',
-              'Rupees (20)': 'Just couch\ncash. Move\nright along.',
-              'Rupees (50)': 'Just couch\ncash. Move\nright along.',
-              'Rupees (100)': 'A rupee stash!\nHell yeah!',
-              'Rupees (300)': 'A rupee hoard!\nHell yeah!',
-              'Ocarina': 'Save the duck\nand fly to\nfreedom!',
-              'Pegasus Boots': 'Gotta go fast!',
-              'Bomb Upgrade (+5)': 'increase bomb\nstorage, low\nlow price',
-              'Bomb Upgrade (+10)': 'increase bomb\nstorage, low\nlow price',
-              'Arrow Upgrade (+5)': 'increase arrow\nstorage, low\nlow price',
-              'Arrow Upgrade (+10)': 'increase arrow\nstorage, low\nlow price',
-              'Silver Arrows': 'Do you fancy\nsilver tipped\narrows?',
-              'Magic Upgrade (1/2)': 'Your magic\npower has been\ndoubled!',
-              'Magic Upgrade (1/4)': 'Your magic\npower has been\nquadrupled!',
-              'Progressive Sword': 'a better copy\nof your sword\nfor your time',
-              'Progressive Shield': 'have a better\nblocker in\nfront of you',
-              'Progressive Armor': 'time for a\nchange of\nclothes?',
-              'Progressive Glove': 'a way to lift\nheavier things',
-              'Triforce': '\n   YOU WIN!',
-              'Nothing': 'Some Hot Air'}
+Uncle_texts = ['Good Luck!\nYou will need it.']
+Triforce_texts = ['Product has Hole in center. Bad seller, 0 out of 5.']
+BombShop2_texts = ['Bombs!\nBombs!\nBiggest!\nBestest!\nGreatest!\nBoomest!']
+PyramidFairy_texts = ['May I talk to you about our lord and savior, Ganon?']
+Sahasrahla2_texts = ['You already got my item, idiot.']
+Blind_texts = ['I bet you expected a vision related pun?\n\nNot Today.\n Didn\'t see that coming, did you?']
+Ganon1_texts = ['\n\n\n\n\n\n\n\n\nWhy are you reading an empty textbox?']
+TavernMan_texts = ['Did you know that talking to random NPCs wastes time in a race? I hope this information may be of use to you in the future.']
+
+KingsReturn_texts = ['Who is this even']
+Sanctuary_texts = ['A Priest\'s love']
+Kakariko_texts = ['Shasschahshahsahahrahsashsa']
+Blacksmiths_texts = ['frogs for bread']
+DeathMountain_texts = ['lost again']
+LostWoods_texts = ['thieve\'s stump']
+WishingWell_texts = ['Bottle for Bottle']
+DesertPalace_texts = ['literacy moves']
+MountainTower_texts = ['up up and away']
+LinksHouse_texts = ['Home Sweet Home']
+Lumberjacks_texts = ['agahnim\'s axes']
+SickKid_texts = ['Next Time Stay Down']
+Zora_texts = ['Splashes For Sale']
+MagicShop_texts = ['Drug deal']
+FluteBoy_texts = ['Stumped']
+
+
+def write_texts_to_rom(rom, world):
+    pass
+
+
+def write_credits_to_rom(rom, world):
+    pass
+
+
+def string_to_credits(s, length):
+    buf = bytearray()
+
+    if len(s) > length:
+        s = s[:length]
+
+    padding = length - len(s)
+    leftpadding = padding // 2
+    rightpadding = padding - leftpadding
+    s = ' '*leftpadding + s + ' '*rightpadding
+
+    for char in s.lower():
+        buf.append(char_to_credit_char(char))
+
+    return buf
 
 
 def string_to_alttp_text(s, maxbytes=256):
@@ -306,6 +310,12 @@ char_map = {' ': 0xFF,
             'ェ': 0x9E,
             'ォ': 0x9F}
 
+credit_char_map = {' ': 0x9F,
+                   ',': 0x37,
+                   '.': 0x37,
+                   '-': 0x36,
+                   "'": 0x35}
+
 
 def char_to_alttp_char(char):
     if 0x30 <= ord(char) <= 0x39:
@@ -315,4 +325,11 @@ def char_to_alttp_char(char):
         return ord(char) + 0x69
 
     return char_map.get(char, 0xFF)
+
+
+def char_to_credit_char(char):
+    if 0x61 <= ord(char) <= 0x7A:
+        return ord(char) - 0x47
+
+    return credit_char_map.get(char, 0x9F)
 

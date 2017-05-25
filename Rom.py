@@ -1,6 +1,8 @@
 from Regions import location_addresses, crystal_locations, dungeon_music_addresses
 from EntranceShuffle import door_addresses, single_doors
-from Text import string_to_alttp_text, text_addresses, altar_text
+from Text import string_to_alttp_text, text_addresses, credits_addresses, string_to_credits
+from Text import Uncle_texts, Ganon1_texts, PyramidFairy_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts
+from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts
 import random
 
 
@@ -167,7 +169,7 @@ def patch_rom(world, rom, quickswap=False):
     random.shuffle(droprates)
     write_bytes(rom, 0x37A62, droprates)
 
-    # deal with sprize prize packs (ToDo: figure out what this ACTUALLY does Probably assigns sprites to drop classes
+    # shuffle enemies to prize packs
     for i in range(243):
         if rom[0x6B632 + i] & 0x0F != 0x00:
             rom[0x6B632 + i] = (rom[0x6B632 + i] & 0xF0) | random.randint(1, 7)
@@ -217,21 +219,7 @@ def patch_rom(world, rom, quickswap=False):
                                    0xF3, 0x7E, 0xA2, 0x10, 0x80, 0xE0, 0xA2, 0x0F, 0x80, 0xD6, 0x60, 0xA9, 0x20, 0x8D, 0x2F, 0x01,
                                    0x8E, 0x02, 0x02, 0x22, 0x7F, 0xDB, 0x0D, 0xFA, 0x60, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])
 
-    # write strings
-    write_string_to_rom(rom, 'Ganon2', 'Did you find the silver arrows in Hyrule?')
-    write_string_to_rom(rom, 'Uncle', 'Good Luck!\nYou will need it.')
-    write_string_to_rom(rom, 'Triforce', 'Product has Hole in center. Bad seller, 0 out of 5.')
-    write_string_to_rom(rom, 'BombShop1', 'Big Bomb?\nI Uh … Never heard of that. Move along.')
-    write_string_to_rom(rom, 'BombShop2', 'Bombs!\nBombs!\nBiggest!\nBestest!\nGreatest!\nBoomest!')
-    write_string_to_rom(rom, 'PyramidFairy', 'May I talk to you about our lord and savior, Ganon?')
-    write_string_to_rom(rom, 'Sahasrahla1', 'How Did you Find me?')
-    write_string_to_rom(rom, 'Sahasrahla2', 'You already got my item, idiot.')
-    write_string_to_rom(rom, 'Blind', 'I bet you expected a vision related pun?\n\nNot Today.\n Didn\'t see that coming, did you?')
-    write_string_to_rom(rom, 'Ganon1', '\n\n\n\n\n\n\n\n\nWhy are you reading an empty textbox?')
-    write_string_to_rom(rom, 'TavernMan', 'Did you know that talking to random NPCs wastes time in a race? I hope this information may be of use to you in the future.')
-
-    altaritem = world.get_location('Altar').item.name if world.get_location('Altar').item is not None else 'Nothing'
-    write_string_to_rom(rom, 'Altar', altar_text.get(altaritem, 'Unknown Item.'))
+    write_strings(rom, world)
 
     return rom
 
@@ -248,3 +236,58 @@ def write_bytes(rom, startaddress, values):
 def write_string_to_rom(rom, target, string):
     address, maxbytes = text_addresses[target]
     write_bytes(rom, address, string_to_alttp_text(string, maxbytes))
+
+
+def write_credits_string_to_rom(rom, target, string):
+    address, length = credits_addresses[target]
+    write_bytes(rom, address, string_to_credits(string, length))
+
+
+def write_strings(rom, world):
+    # ToDo should read location of items and give hint
+    write_string_to_rom(rom, 'Ganon2', 'Did you find the silver arrows in Hyrule?')
+    write_string_to_rom(rom, 'BombShop1', 'Big Bomb?\nI Uh … Never heard of that. Move along.')
+    write_string_to_rom(rom, 'Sahasrahla1', 'How Did you Find me?')
+
+    write_string_to_rom(rom, 'Uncle', Uncle_texts[random.randint(0, len(Uncle_texts) - 1)])
+    write_string_to_rom(rom, 'Triforce', Triforce_texts[random.randint(0, len(Triforce_texts) - 1)])
+    write_string_to_rom(rom, 'BombShop2', BombShop2_texts[random.randint(0, len(BombShop2_texts) - 1)])
+    write_string_to_rom(rom, 'PyramidFairy', PyramidFairy_texts[random.randint(0, len(PyramidFairy_texts) - 1)])
+    write_string_to_rom(rom, 'Sahasrahla2', Sahasrahla2_texts[random.randint(0, len(Sahasrahla2_texts) - 1)])
+    write_string_to_rom(rom, 'Blind', Blind_texts[random.randint(0, len(Blind_texts) - 1)])
+    write_string_to_rom(rom, 'Ganon1', Ganon1_texts[random.randint(0, len(Ganon1_texts) - 1)])
+    write_string_to_rom(rom, 'TavernMan', TavernMan_texts[random.randint(0, len(TavernMan_texts) - 1)])
+
+    altaritem = world.get_location('Altar').item
+    altar_text = 'Some Hot Air' if altaritem is None else altaritem.altar_hint_text if altaritem.altar_hint_text is not None else 'Unknown Item.'
+    write_string_to_rom(rom, 'Altar', altar_text)
+    altar_credit_text = 'and the Hot Air' if altaritem is None else altaritem.altar_credit_text if altaritem.altar_credit_text is not None else ' and the Unknown Item.'
+    write_credits_string_to_rom(rom, 'Altar', altar_credit_text)
+
+    write_credits_string_to_rom(rom, 'KingsReturn', KingsReturn_texts[random.randint(0, len(KingsReturn_texts) - 1)])
+    write_credits_string_to_rom(rom, 'Sanctuary', Sanctuary_texts[random.randint(0, len(Sanctuary_texts) - 1)])
+    write_credits_string_to_rom(rom, 'Kakariko', Kakariko_texts[random.randint(0, len(Kakariko_texts) - 1)])
+    write_credits_string_to_rom(rom, 'Blacksmiths', Blacksmiths_texts[random.randint(0, len(Blacksmiths_texts) - 1)])
+    write_credits_string_to_rom(rom, 'DeathMountain', DeathMountain_texts[random.randint(0, len(DeathMountain_texts) - 1)])
+    write_credits_string_to_rom(rom, 'LostWoods', LostWoods_texts[random.randint(0, len(LostWoods_texts) - 1)])
+    write_credits_string_to_rom(rom, 'WishingWell', WishingWell_texts[random.randint(0, len(WishingWell_texts) - 1)])
+    write_credits_string_to_rom(rom, 'DesertPalace', DesertPalace_texts[random.randint(0, len(DesertPalace_texts) - 1)])
+    write_credits_string_to_rom(rom, 'MountainTower', MountainTower_texts[random.randint(0, len(MountainTower_texts) - 1)])
+    write_credits_string_to_rom(rom, 'LinksHouse', LinksHouse_texts[random.randint(0, len(LinksHouse_texts) - 1)])
+    write_credits_string_to_rom(rom, 'Lumberjacks', Lumberjacks_texts[random.randint(0, len(Lumberjacks_texts) - 1)])
+
+    sickkiditem = world.get_location('Sick Kid').item
+    sickkiditem_text = SickKid_texts[random.randint(0, len(SickKid_texts) - 1)] if sickkiditem is None or sickkiditem.sickkid_credit_text is None else sickkiditem.sickkid_credit_text
+    write_credits_string_to_rom(rom, 'SickKid', sickkiditem_text) 
+    
+    zoraitem = world.get_location('King Zora').item
+    zoraitem_text = Zora_texts[random.randint(0, len(Zora_texts) - 1)] if zoraitem is None or zoraitem.zora_credit_text is None else zoraitem.zora_credit_text
+    write_credits_string_to_rom(rom, 'Zora', zoraitem_text) 
+    
+    magicshopitem = world.get_location('Witch').item
+    magicshopitem_text = MagicShop_texts[random.randint(0, len(MagicShop_texts) - 1)] if magicshopitem is None or magicshopitem.magicshop_credit_text is None else magicshopitem.magicshop_credit_text
+    write_credits_string_to_rom(rom, 'MagicShop', magicshopitem_text) 
+    
+    fluteboyitem = world.get_location('Flute Boy').item
+    fluteboyitem_text = FluteBoy_texts[random.randint(0, len(FluteBoy_texts) - 1)] if fluteboyitem is None or fluteboyitem.fluteboy_credit_text is None else fluteboyitem.fluteboy_credit_text
+    write_credits_string_to_rom(rom, 'FluteBoy', fluteboyitem_text)

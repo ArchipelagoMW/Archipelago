@@ -4,7 +4,7 @@ import logging
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, goal):
+    def __init__(self, shuffle, logic, mode, difficulty, goal, place_dungeon_items):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
@@ -22,7 +22,7 @@ class World(object):
         self._location_cache = {}
         self._item_cache = {}
         self.spoiler = ''
-        self.place_dungeon_items = True  # configurable in future
+        self.place_dungeon_items = place_dungeon_items  # configurable in future
         self.agahnim_fix_required = False
         self.swamp_patch_required = False
 
@@ -432,14 +432,21 @@ class Location(object):
         return '%s' % self.name
 
 
-class Item(object):
+class Item(object):    
 
-    def __init__(self, name='', advancement=False, key=False, code=None):
+    def __init__(self, name='', advancement=False, key=False, crystal=False, code=None, altar_hint=None, altar_credit=None, sickkid_credit=None, zora_credit=None, witch_credit=None, fluteboy_credit=None):
         self.name = name
         self.advancement = advancement
         self.key = key
-        self.location = None
+        self.crystal = crystal
+        self.altar_hint_text = altar_hint
+        self.altar_credit_text = altar_credit
+        self.sickkid_credit_text = sickkid_credit
+        self.zora_credit_text = zora_credit
+        self.magicshop_credit_text = witch_credit
+        self.fluteboy_credit_text = fluteboy_credit
         self.code = code
+        self.location = None
 
     def __str__(self):
         return str(self.__unicode__())

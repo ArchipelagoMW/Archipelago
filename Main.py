@@ -1,10 +1,10 @@
-from BaseClasses import World, CollectionState
+from BaseClasses import World, CollectionState, Item
 from Regions import create_regions
 from EntranceShuffle import link_entrances
 from Rom import patch_rom
 from Rules import set_rules
 from Dungeons import fill_dungeons
-from Items import *
+from Items import ItemFactory
 import random
 import time
 import logging
@@ -14,11 +14,11 @@ import os
 __version__ = '0.1-dev'
 
 
-def main(seed=None, shuffle='default', logic='noglitches', mode='standard', difficulty='normal', goal='ganon', algo='regular', spoiler=True, base_rom='Base_Rom.sfc', quickswap=False):
+def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World(shuffle, logic, mode, difficulty, goal)
+    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.goal, not args.nodungeonitems)
     logger = logging.getLogger('')
 
     if seed is None:
@@ -29,7 +29,7 @@ def main(seed=None, shuffle='default', logic='noglitches', mode='standard', diff
     random.seed(world.seed)
 
     world.spoiler += 'ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n' % (__version__, world.seed)
-    world.spoiler += 'Logic: %s  Mode: %s  Goal: %s  Entrance Shuffle: %s  Filling Algorithm: %s\n\n' % (logic, mode, goal, shuffle, algo)  # todo
+    world.spoiler += 'Logic: %s  Mode: %s  Goal: %s  Entrance Shuffle: %s  Filling Algorithm: %s\n\n' % (args.logic, args.mode, args.goal, args.shuffle, args.algorithm)  # todo
 
     logger.info(world.spoiler)
 
@@ -49,7 +49,7 @@ def main(seed=None, shuffle='default', logic='noglitches', mode='standard', diff
 
     logger.info('Fill the world.')
 
-    if algo == 'flood':
+    if args.algorithm == 'flood':
         flood_items(world)  # different algo, biased towards early game progress items
     else:
         distribute_items(world)
@@ -61,14 +61,14 @@ def main(seed=None, shuffle='default', logic='noglitches', mode='standard', diff
 
     logger.info('Patching ROM.')
 
-    rom = bytearray(open(base_rom, 'rb').read())
-    patched_rom = patch_rom(world, rom, quickswap)
+    rom = bytearray(open(args.rom, 'rb').read())
+    patched_rom = patch_rom(world, rom, args.quickswap)
 
     outfilebase = 'ER_%s_%s_%s_%s' % (world.mode, world.goal, world.shuffle, world.seed)
 
     with open('%s.sfc' % outfilebase, 'wb') as outfile:
         outfile.write(patched_rom)
-    if spoiler:
+    if args.create_spoiler:
         with open('%s_Spoiler.txt' % outfilebase, 'w') as outfile:
             outfile.write(world.spoiler)
 
@@ -199,72 +199,33 @@ def generate_itempool(world):
     if world.difficulty != 'normal' or world.goal not in ['ganon', 'pedestal', 'dungeons'] or world.mode not in ['open', 'standard']:
         raise NotImplementedError('Not supported yet')
 
-    world.push_item('Ganon', Triforce(), False)
+    world.push_item('Ganon', ItemFactory('Triforce'), False)
 
     # set up item pool
-    world.itempool = [
-        ArrowUpgrade5(), ArrowUpgrade5(), ArrowUpgrade5(), ArrowUpgrade5(), ArrowUpgrade5(), ArrowUpgrade5(),
-        ArrowUpgrade10(),
-        SingleArrow(),
-        ProgressiveArmor(), ProgressiveArmor(),
-        BombUpgrade5(), BombUpgrade5(), BombUpgrade5(), BombUpgrade5(), BombUpgrade5(), BombUpgrade5(),
-        BombUpgrade10(),
-        Bombos(),
-        Book(),
-        BlueBoomerang(),
-        Bottle(), Bottle(), Bottle(), Bottle(),
-        Bow(),
-        Net(),
-        Byrna(),
-        Somaria(),
-        Ether(),
-        Rupees50(), Rupees50(), Rupees50(), Rupees50(), Rupees50(), Rupees50(), Rupees50(),
-        ProgressiveShield(), ProgressiveShield(), ProgressiveShield(),
-        ProgressiveSword(), ProgressiveSword(), ProgressiveSword(),
-        FireRod(),
-        Rupees5(), Rupees5(), Rupees5(), Rupees5(),
-        Flippers(),
-        Ocarina(),
-        Hammer(),
-        SancHeart(),
-        HeartContainer(), HeartContainer(), HeartContainer(), HeartContainer(), HeartContainer(), HeartContainer(), HeartContainer(), HeartContainer(), HeartContainer(), HeartContainer(),
-        Hookshot(),
-        IceRod(),
-        Lamp(),
-        Cape(),
-        Powder(),
-        RedBoomerang(),
-        Mushroom(),
-        Rupees100(),
-        Rupee(), Rupee(),
-        Boots(),
-        PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(),
-        PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(), PieceOfHeart(),
-        ProgressiveGlove(), ProgressiveGlove(),
-        Quake(),
-        Shovel(),
-        SilverArrows(),
-        Arrows10(), Arrows10(), Arrows10(), Arrows10(),
-        Bombs3(), Bombs3(), Bombs3(), Bombs3(), Bombs3(), Bombs3(), Bombs3(), Bombs3(), Bombs3(), Bombs3(),
-        Rupees300(), Rupees300(), Rupees300(), Rupees300(),
-        Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(),
-        Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20(), Rupees20()
-    ]
+    world.itempool = ItemFactory(['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6 + ['Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] +
+                                 ['Progressive Armor'] * 2 + ['Progressive Shield'] * 3 + ['Progressive Sword'] * 3 + ['Progressive Glove'] * 2 +
+                                 ['Bottle'] * 4 +
+                                 ['Bombos', 'Book of Mudora', 'Blue Boomerang', 'Bow', 'Bug Catching Net', 'Cane of Byrna', 'Cane of Somaria',
+                                  'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp', 'Cape', 'Magic Powder',
+                                  'Red Boomerang', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Silver Arrows'] +
+                                 ['Single Arrow', 'Sanctuary Heart Container', 'Rupees (100)'] + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24 +
+                                 ['Rupees (50)'] * 7 + ['Rupees (5)'] * 4 + ['Rupee (1)'] * 2 + ['Rupees (300)'] * 4 + ['Rupees (20)'] * 28 +
+                                 ['Arrows (10)'] * 4 + ['Bombs (3)'] * 10)
 
     if world.mode == 'standard':
-        world.push_item('Uncle', ProgressiveSword())
+        world.push_item('Uncle', ItemFactory('Progressive Sword'))
     else:
-        world.itempool.append(ProgressiveSword())
+        world.itempool.append(ItemFactory('Progressive Sword'))
 
     # provide mirror and pearl so you can avoid fake DW/LW and do dark world exploration as intended by algorithm, for now
     if world.shuffle == 'insanity':
-        world.push_item('[cave-040] Links House', Mirror())
-        world.push_item('[dungeon-C-1F] Sanctuary', Pearl())
+        world.push_item('[cave-040] Links House', ItemFactory('Magic Mirror'))
+        world.push_item('[dungeon-C-1F] Sanctuary', ItemFactory('Moon Pearl'))
     else:
-        world.itempool.extend([Mirror(), Pearl()])
+        world.itempool.extend(ItemFactory(['Magic Mirror', 'Moon Pearl']))
 
     if world.goal == 'pedestal':
-        world.push_item('Altar', Triforce())
+        world.push_item('Altar', ItemFactory('Triforce'))
         items = list(world.itempool)
         random.shuffle(items)
         for item in items:
@@ -275,12 +236,12 @@ def generate_itempool(world):
                 # ToDo what to do if EVERYTHING is a progress item?
 
     if random.randint(0, 3) == 0:
-        world.itempool.append(QuarterMagic())
+        world.itempool.append(ItemFactory('Magic Upgrade (1/4)'))
     else:
-        world.itempool.append(HalfMagic())
+        world.itempool.append(ItemFactory('Magic Upgrade (1/2)'))
 
     # distribute crystals
-    crystals = [GreenPendant(), RedPendant(), BluePendant(), Crystal1(), Crystal2(), Crystal3(), Crystal4(), Crystal5(), Crystal6(), Crystal7()]
+    crystals = ItemFactory(['Green Pendant', 'Red Pendant', 'Blue Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7'])
     crystal_locations = [world.get_location('Armos - Pendant'), world.get_location('Lanmolas - Pendant'), world.get_location('Moldorm - Pendant'), world.get_location('Helmasaur - Crystal'),
                          world.get_location('Blind - Crystal'), world.get_location('Mothula - Crystal'), world.get_location('Arrghus - Crystal'), world.get_location('Kholdstare - Crystal'),
                          world.get_location('Vitreous - Crystal'), world.get_location('Trinexx - Crystal')]
@@ -301,7 +262,7 @@ def generate_itempool(world):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal)
+    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal, world.place_dungeon_items)
     ret.required_medallions = list(world.required_medallions)
     create_regions(ret)
 
@@ -407,6 +368,7 @@ if __name__ == '__main__':
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--count', help='Use to batch generate multiple seeds with same settings. If --seed is provided, it will be used for the first seed, then used to derive the next seed (i.e. generating 10 seeds with --seed given will produce the same 10 (different) roms each time).', type=int)
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
+    parser.add_argument('--nodungeonitems', help='Remove Maps and Compasses from Itempool, replacing them by empty slots.', action='store_true')
     args = parser.parse_args()
 
     if not os.path.isfile(args.rom):
@@ -420,7 +382,7 @@ if __name__ == '__main__':
     if args.count is not None:
         seed = args.seed
         for i in range(args.count):
-            main(seed=seed, logic=args.logic, mode=args.mode, goal=args.goal, difficulty=args.difficulty, algo=args.algorithm, shuffle=args.shuffle, base_rom=args.rom, spoiler=args.create_spoiler, quickswap=args.quickswap)
+            main(seed=seed, args=args)
             seed = random.randint(0, 999999999)
     else:
-        main(seed=args.seed, logic=args.logic, mode=args.mode, goal=args.goal, difficulty=args.difficulty, algo=args.algorithm, shuffle=args.shuffle, base_rom=args.rom, spoiler=args.create_spoiler, quickswap=args.quickswap)
+        main(seed=args.seed, args=args)
