@@ -11,7 +11,7 @@ import logging
 import argparse
 import os
 
-__version__ = '0.1-dev'
+__version__ = '0.2-dev'
 
 
 def main(args, seed=None):

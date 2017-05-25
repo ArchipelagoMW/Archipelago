@@ -184,6 +184,10 @@ def patch_rom(world, rom, quickswap=False, beep='normal'):
     for prize, address in zip(bonk_prizes, bonk_addresses):
         write_byte(rom, address, prize)
 
+    # set Fountain bottle exchange items
+    write_byte(rom, 0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)])
+    write_byte(rom, 0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)])
+
     if world.swamp_patch_required:
         # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
         rom = rom.replace(bytearray([0xAF, 0xBB, 0xF2, 0x7E, 0x29, 0xDF, 0x8F, 0xBB, 0xF2, 0x7E]), bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA]))
