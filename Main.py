@@ -1,7 +1,7 @@
 from BaseClasses import World, CollectionState
-from Regions import create_regions, location_addresses, crystal_locations, dungeon_music_addresses
-from EntranceShuffle import link_entrances, door_addresses, single_doors
-from Text import string_to_alttp_text, text_addresses, altar_text
+from Regions import create_regions
+from EntranceShuffle import link_entrances
+from Rom import patch_rom
 from Rules import set_rules
 from Dungeons import fill_dungeons
 from Items import *
@@ -382,128 +382,6 @@ def print_location_spoiler(world):
     return 'Locations:\n\n' + '\n'.join(['%s: %s' % (location, location.item if location.item is not None else 'Nothing') for location in world.get_locations()]) + '\n\n'
 
 
-def patch_rom(world, rom):
-    # patch items
-    for location in world.get_locations():
-        if location.name == 'Ganon':
-            # cannot shuffle this yet
-            continue
-
-        itemid = location.item.code if location.item is not None else 0x5A
-
-        try:
-            # regular items
-            locationaddress = location_addresses[location.name]
-            write_byte(rom, locationaddress, itemid)
-        except KeyError:
-            # crystals
-            locationaddress = crystal_locations[location.name]
-            for address, value in zip(locationaddress, itemid):
-                write_byte(rom, address, value)
-
-            # patch music
-            music_addresses = dungeon_music_addresses[location.name]
-            music = 0x11 if 'Pendant' in location.item.name else 0x16
-            for music_address in music_addresses:
-                write_byte(rom, music_address, music)
-
-    # patch entrances
-    for region in world.regions:
-        for exit in region.exits:
-            if exit.target is not None:
-                try:
-                    # ugly fix for agahnim fix in simple dungeon shuffle mode
-                    if world.agahnim_fix_required and exit.name == 'Dark Death Mountain Ledge (East)':
-                        write_byte(rom, door_addresses[exit.name][0], exit.target)
-                        continue
-
-                    # toDo consider aga tower fix
-                    addresses = door_addresses[exit.name]
-                    write_byte(rom, addresses[0], exit.target[0])
-                    write_byte(rom, addresses[1], exit.target[1])
-                except KeyError:
-                    # probably cave
-
-                    # ugly fix for agahnim fix in simple dungeon shuffle mode
-                    if world.agahnim_fix_required and exit.name == 'Mimic Cave Mirror Spot':
-                        write_byte(rom, single_doors[exit.name], exit.target[0])
-                        write_byte(rom, door_addresses['Dark Death Mountain Ledge (East)'][1], exit.target[1])
-                        continue
-
-                    addresses = single_doors[exit.name]
-                    if not isinstance(addresses, tuple):
-                        addresses = (addresses,)
-                    for address in addresses:
-                        write_byte(rom, address, exit.target)
-
-    # patch medallion requirements
-    if world.required_medallions[0] == 'Bombos':
-        write_byte(rom, 0x180022, 0x00)  # requirement
-        write_byte(rom, 0x4FF2, 0x31)  # sprite
-        write_byte(rom, 0x50D1, 0x80)
-        write_byte(rom, 0x51B0, 0x00)
-    elif world.required_medallions[0] == 'Quake':
-        write_byte(rom, 0x180022, 0x02)  # requirement
-        write_byte(rom, 0x4FF2, 0x31)  # sprite
-        write_byte(rom, 0x50D1, 0x88)
-        write_byte(rom, 0x51B0, 0x00)
-    if world.required_medallions[1] == 'Bombos':
-        write_byte(rom, 0x180023, 0x00)  # requirement
-        write_byte(rom, 0x5020, 0x31)  # sprite
-        write_byte(rom, 0x50FF, 0x90)
-        write_byte(rom, 0x51DE, 0x00)
-    elif world.required_medallions[1] == 'Ether':
-        write_byte(rom, 0x180023, 0x01)  # requirement
-        write_byte(rom, 0x5020, 0x31)  # sprite
-        write_byte(rom, 0x50FF, 0x98)
-        write_byte(rom, 0x51DE, 0x00)
-
-    if world.swamp_patch_required:
-        # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
-        rom = rom.replace(bytearray([0xAF, 0xBB, 0xF2, 0x7E, 0x29, 0xDF, 0x8F, 0xBB, 0xF2, 0x7E]), bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA]))
-        rom = rom.replace(bytearray([0xAF, 0xFB, 0xF2, 0x7E, 0x29, 0xDF, 0x8F, 0xFB, 0xF2, 0x7E]), bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA]))
-        rom = rom.replace(bytearray([0xAF, 0x16, 0xF2, 0x7E, 0x29, 0x7F, 0x8F, 0x16, 0xF2, 0x7E]), bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA]))
-        rom = rom.replace(bytearray([0xAF, 0x51, 0xF0, 0x7E, 0x29, 0xFE, 0x8F, 0x51, 0xF0, 0x7E]), bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA]))
-
-    # set correct flag for hera basement item
-    if world.get_location('[dungeon-L3-1F] Tower of Hera - Freestanding Key').item is not None and world.get_location('[dungeon-L3-1F] Tower of Hera - Freestanding Key').item.name == 'Small Key (Tower of Hera)':
-        write_byte(rom, 0x4E3BB, 0xE4)
-    else:
-        write_byte(rom, 0x4E3BB, 0xEB)
-
-    # write strings
-    write_string_to_rom(rom, 'Ganon2', 'Did you find the silver arrows in Hyrule?')
-    write_string_to_rom(rom, 'Uncle', 'Good Luck!\nYou will need it.')
-    write_string_to_rom(rom, 'Triforce', 'Product has Hole in center. Bad seller, 0 out of 5.')
-    write_string_to_rom(rom, 'BombShop1', 'Big Bomb?\nI Uh … Never heard of that. Move along.')
-    write_string_to_rom(rom, 'BombShop2', 'Bombs!\nBombs!\nBiggest!\nBestest!\nGreatest!\nBoomest!')
-    write_string_to_rom(rom, 'PyramidFairy', 'May I talk to you about our lord and savior, Ganon?')
-    write_string_to_rom(rom, 'Sahasrahla1', 'How Did you Find me?')
-    write_string_to_rom(rom, 'Sahasrahla2', 'You already got my item, idiot.')
-    write_string_to_rom(rom, 'Blind', 'I bet you expected a vision related pun?\n\nNot Today.\n Didn\'t see that coming, did you?')
-    write_string_to_rom(rom, 'Ganon1', '\n\n\n\n\n\n\n\n\nWhy are you reading an empty textbox?')
-    write_string_to_rom(rom, 'TavernMan', 'Did you know that talking to random NPCs wastes time in a race? I hope this information may be of use to you in the future.')
-
-    # disable open door sprites when exiting caves
-    for i in range(0x85):
-        write_byte(rom, 0x15274 + i, 0x00)
-
-    altaritem = world.get_location('Altar').item.name if world.get_location('Altar').item is not None else 'Nothing'
-    write_string_to_rom(rom, 'Altar', altar_text.get(altaritem, 'Unknown Item.'))
-
-    return rom
-
-
-def write_byte(rom, address, value):
-    rom[address] = value
-
-
-def write_string_to_rom(rom, target, string):
-    address, maxbytes = text_addresses[target]
-    for i, byte in enumerate(string_to_alttp_text(string, maxbytes)):
-        write_byte(rom, address + i, byte)
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--create_spoiler', help='Output a Spoiler File', action='store_true')
@@ -524,27 +402,14 @@ if __name__ == '__main__':
                              'Madness decouples entrances and exits from each other and shuffles them freely, only ensuring that no fake Light/Dark World happens and all locations are reachable.\n'
                              'Insanity is Madness without the world restrictions. Mirror and Pearl are provided early to ensure Filling algorithm works properly. Deal with Fake LW/DW at your discretion. Experimental.\n'
                              'The dungeon variants only mix up dungeons and keep the rest of the overworld vanilla.')
-    parser.add_argument('--openrom', default='Open_Base_Rom.sfc', help='Path to a VT21 open normal difficulty rom to use as a base.')
-    parser.add_argument('--standardrom', default='Standard_Base_Rom.sfc', help='Path to a VT21 standard normal difficulty rom to use as a base.')
+    parser.add_argument('--rom', default='Base_Rom.sfc', help='Path to a VT21 standard normal difficulty rom to use as a base.')
     parser.add_argument('--loglevel', default='info', const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--count', help='Use to batch generate multiple seeds with same settings. If --seed is provided, it will be used for the first seed, then used to derive the next seed (i.e. generating 10 seeds with --seed given will produce the same 10 (different) roms each time).', type=int)
     args = parser.parse_args()
 
-    # check if rom for patching is available
-    rom_to_use = None
-    expected_name = ''
-    if args.mode == 'open':
-        if os.path.isfile(args.openrom):
-            rom_to_use = args.openrom  # ToDo check checksum or some such in future when common base rom is in use
-            expected_name = args.openrom
-    elif args.mode == 'standard':
-        if os.path.isfile(args.standardrom):
-            rom_to_use = args.standardrom  # ToDo check checksum or some such in future when common base rom is in use
-            expected_name = args.standardrom
-
-    if rom_to_use is None:
-        input('Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % expected_name)
+    if not os.path.isfile(args.rom):
+        input('Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
         exit(1)
 
     # set up logger
@@ -554,7 +419,7 @@ if __name__ == '__main__':
     if args.count is not None:
         seed = args.seed
         for i in range(args.count):
-            main(seed=seed, logic=args.logic, mode=args.mode, goal=args.goal, difficulty=args.difficulty, algo=args.algorithm, shuffle=args.shuffle, base_rom=rom_to_use, spoiler=args.create_spoiler)
+            main(seed=seed, logic=args.logic, mode=args.mode, goal=args.goal, difficulty=args.difficulty, algo=args.algorithm, shuffle=args.shuffle, base_rom=args.rom, spoiler=args.create_spoiler)
             seed = random.randint(0, 999999999)
     else:
-        main(seed=args.seed, logic=args.logic, mode=args.mode, goal=args.goal, difficulty=args.difficulty, algo=args.algorithm, shuffle=args.shuffle, base_rom=rom_to_use, spoiler=args.create_spoiler)
+        main(seed=args.seed, logic=args.logic, mode=args.mode, goal=args.goal, difficulty=args.difficulty, algo=args.algorithm, shuffle=args.shuffle, base_rom=args.rom, spoiler=args.create_spoiler)

@@ -228,7 +228,7 @@ def global_rules(world):
     for location in ['[dungeon-D3-B1] Skull Woods - Big Chest']:
         forbid_item(world.get_location(location), 'Big Key (Skull Woods)')
 
-    set_rule(world.get_entrance('Ice Palace Entrance Room'), lambda state: state.has('Fire Rod') or state.has('Bombos'))
+    set_rule(world.get_entrance('Ice Palace Entrance Room'), lambda state: state.has('Fire Rod') or (state.has('Bombos') and state.has_sword()))
     set_rule(world.get_location('[dungeon-D5-B5] Ice Palace - Big Chest'), lambda state: state.can_collect('Big Key (Ice Palace)'))
     set_rule(world.get_entrance('Ice Palace (Kholdstare)'), lambda state: state.can_lift_rocks() and state.has('Hammer') and state.can_collect('Big Key (Ice Palace)') and state.can_collect('Small Key (Ice Palace)', 2))
     set_rule(world.get_entrance('Ice Palace (East)'), lambda state: state.has('Hookshot') or (state.can_collect('Small Key (Ice Palace)', 1) and ((state.world.get_location('[dungeon-D5-B3] Ice Palace - Spike Room').item is not None and state.world.get_location('[dungeon-D5-B3] Ice Palace - Spike Room').item.name in ['Big Key (Ice Palace)']) or
