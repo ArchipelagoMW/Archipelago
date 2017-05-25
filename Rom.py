@@ -6,7 +6,7 @@ from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths
 import random
 
 
-def patch_rom(world, rom, quickswap=False, beep='normal'):
+def patch_rom(world, rom, hashtable, quickswap=False, beep='normal'):
     # patch items
     for location in world.get_locations():
         if location.name == 'Ganon':
@@ -229,6 +229,9 @@ def patch_rom(world, rom, quickswap=False, beep='normal'):
 
     # set heart beep rate
     write_byte(rom, 0x180033, {'off': 0x00, 'half': 0x40, 'quarter': 0x80, 'normal': 0x20}[beep])
+
+    # store hash table for main menu hash
+    write_bytes(rom, 0x181000, hashtable)
 
     return rom
 
