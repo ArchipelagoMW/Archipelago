@@ -1,4 +1,4 @@
-from Regions import location_addresses, crystal_locations, dungeon_music_addresses
+from Dungeons import dungeon_music_addresses
 from EntranceShuffle import door_addresses, single_doors
 from Text import string_to_alttp_text, text_addresses, credits_addresses, string_to_credits
 from Text import Uncle_texts, Ganon1_texts, PyramidFairy_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts
@@ -6,7 +6,7 @@ from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths
 import random
 
 
-def patch_rom(world, rom, quickswap=False):
+def patch_rom(world, rom, quickswap=False, beep='normal'):
     # patch items
     for location in world.get_locations():
         if location.name == 'Ganon':
@@ -15,13 +15,12 @@ def patch_rom(world, rom, quickswap=False):
 
         itemid = location.item.code if location.item is not None else 0x5A
 
-        try:
+        locationaddress = location.address
+        if not location.crystal:
             # regular items
-            locationaddress = location_addresses[location.name]
             write_byte(rom, locationaddress, itemid)
-        except KeyError:
+        else:
             # crystals
-            locationaddress = crystal_locations[location.name]
             for address, value in zip(locationaddress, itemid):
                 write_byte(rom, address, value)
 
@@ -221,6 +220,12 @@ def patch_rom(world, rom, quickswap=False):
 
     write_strings(rom, world)
 
+    # set rom name
+    write_bytes(rom, 0x7FC0, [0x45, 0x6E, 0x74, 0x72, 0x61, 0x6E, 0x63, 0x65, 0x52, 0x61, 0x6E, 0x64, 0x6F, 0x6D, 0x69, 0x7A, 0x65, 0x72, 0x00, 0x00, 0x00])
+
+    # set heart beep rate
+    write_byte(rom, 0x180033, {'off': 0x00, 'half': 0x40, 'quarter': 0x80, 'normal': 0x20}[beep])
+
     return rom
 
 
@@ -244,10 +249,16 @@ def write_credits_string_to_rom(rom, target, string):
 
 
 def write_strings(rom, world):
-    # ToDo should read location of items and give hint
-    write_string_to_rom(rom, 'Ganon2', 'Did you find the silver arrows in Hyrule?')
-    write_string_to_rom(rom, 'BombShop1', 'Big Bomb?\nI Uh … Never heard of that. Move along.')
-    write_string_to_rom(rom, 'Sahasrahla1', 'How Did you Find me?')
+    silverarrows = world.find_items('Silver Arrows')
+    silverarrow_hint = ('in %s?' % silverarrows[0].hint_text) if silverarrows else '?\nI think not!'
+    write_string_to_rom(rom, 'Ganon2', 'Did you find the silver arrows %s' % silverarrow_hint)
+
+    crystal5 = world.find_items('Crystal 5')[0]
+    crystal6 = world.find_items('Crystal 6')[0]
+    write_string_to_rom(rom, 'BombShop1', 'Big Bomb?\nMy supply is blocked until you clear %s and %s.' % (crystal5.hint_text, crystal6.hint_text))
+
+    greenpendant = world.find_items('Green Pendant')[0]
+    write_string_to_rom(rom, 'Sahasrahla1', 'I lost my family heirloom in %s' % greenpendant.hint_text)
 
     write_string_to_rom(rom, 'Uncle', Uncle_texts[random.randint(0, len(Uncle_texts) - 1)])
     write_string_to_rom(rom, 'Triforce', Triforce_texts[random.randint(0, len(Triforce_texts) - 1)])

@@ -62,7 +62,7 @@ def main(args, seed=None):
     logger.info('Patching ROM.')
 
     rom = bytearray(open(args.rom, 'rb').read())
-    patched_rom = patch_rom(world, rom, args.quickswap)
+    patched_rom = patch_rom(world, rom, args.quickswap, args.heartbeep)
 
     outfilebase = 'ER_%s_%s_%s_%s' % (world.mode, world.goal, world.shuffle, world.seed)
 
@@ -369,6 +369,8 @@ if __name__ == '__main__':
     parser.add_argument('--count', help='Use to batch generate multiple seeds with same settings. If --seed is provided, it will be used for the first seed, then used to derive the next seed (i.e. generating 10 seeds with --seed given will produce the same 10 (different) roms each time).', type=int)
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--nodungeonitems', help='Remove Maps and Compasses from Itempool, replacing them by empty slots.', action='store_true')
+    parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['normal', 'half', 'quarter', 'off'],
+                        help='Select the rate at which the heart beep sound is played at low health.')
     args = parser.parse_args()
 
     if not os.path.isfile(args.rom):

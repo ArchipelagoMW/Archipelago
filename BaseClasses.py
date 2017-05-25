@@ -350,20 +350,13 @@ class Region(object):
         self.exits = []
         self.locations = []
         self.spot_type = 'Region'
+        self.hint_text = 'Hyrule'
 
     def can_reach(self, state):
         for entrance in self.entrances:
             if state.can_reach(entrance):
                 return True
         return False
-
-    def add_locations(self, *locations):
-        for location in locations:
-            self.locations.append(Location(location, self))
-
-    def add_exits(self, *exits):
-        for exit in exits:
-            self.exits.append(Entrance(exit, self))
 
     def __str__(self):
         return str(self.__unicode__())
@@ -404,15 +397,14 @@ class Entrance(object):
 
 class Location(object):
 
-    def __init__(self, name='', parent=None, access=None, item_rule=None):
+    def __init__(self, name='', address=None, crystal=False, hint_text=None, parent=None):
         self.name = name
         self.parent_region = parent
         self.item = None
+        self.crystal = crystal
+        self.address = address
         self.spot_type = 'Location'
-        if access is not None:
-            self.access_rule = access
-        if item_rule is not None:
-            self.item_rule = item_rule
+        self.hint_text = hint_text if hint_text is not None else 'Hyrule'
 
     def access_rule(self, state):
         return True

@@ -67,3 +67,15 @@ def fill_dungeons(world):
                 world.push_item(di_location, dungeon_item, False)
 
     world.state._clear_cache()
+
+
+dungeon_music_addresses = {'Armos - Pendant': [0x1559A],
+                           'Lanmolas - Pendant': [0x1559B, 0x1559C, 0x1559D, 0x1559E],
+                           'Moldorm - Pendant': [0x155C5, 0x1107A, 0x10B8C],
+                           'Helmasaur - Crystal': [0x155B8],
+                           'Arrghus - Crystal': [0x155B7],
+                           'Blind - Crystal': [0x155C6],
+                           'Mothula - Crystal': [0x155BA, 0x155BB, 0x155BC, 0x155BD, 0x15608, 0x15609, 0x1560A, 0x1560B],
+                           'Kholdstare - Crystal': [0x155BF],
+                           'Vitreous - Crystal': [0x155B9],
+                           'Trinexx - Crystal': [0x155C7, 0x155A7, 0x155AA, 0x155AB]}

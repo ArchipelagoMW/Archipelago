@@ -28,13 +28,16 @@ credits_addresses = {'KingsReturn': (0x76928, 22),
                      'LostWoods': (0x76C51, 16),
                      'Altar': (0x76C81, 20)}
 
-Uncle_texts = ['Good Luck!\nYou will need it.']
-Triforce_texts = ['Product has Hole in center. Bad seller, 0 out of 5.']
+Uncle_texts = ['Good Luck!\nYou will need it.',
+               '10\n9\n8\n7\n6\n5\n4\n3\n2\n1\nGo!']
+Triforce_texts = ['Product has Hole in center. Bad seller, 0 out of 5.',
+                  '\n  Well Done!']
 BombShop2_texts = ['Bombs!\nBombs!\nBiggest!\nBestest!\nGreatest!\nBoomest!']
 PyramidFairy_texts = ['May I talk to you about our lord and savior, Ganon?']
 Sahasrahla2_texts = ['You already got my item, idiot.']
 Blind_texts = ['I bet you expected a vision related pun?\n\nNot Today.\n Didn\'t see that coming, did you?']
-Ganon1_texts = ['\n\n\n\n\n\n\n\n\nWhy are you reading an empty textbox?']
+Ganon1_texts = ['\n\n\n\n\n\n\n\n\nWhy are you reading an empty textbox?',
+                'Hi']
 TavernMan_texts = ['Did you know that talking to random NPCs wastes time in a race? I hope this information may be of use to you in the future.']
 
 KingsReturn_texts = ['Who is this even']
@@ -52,14 +55,6 @@ SickKid_texts = ['Next Time Stay Down']
 Zora_texts = ['Splashes For Sale']
 MagicShop_texts = ['Drug deal']
 FluteBoy_texts = ['Stumped']
-
-
-def write_texts_to_rom(rom, world):
-    pass
-
-
-def write_credits_to_rom(rom, world):
-    pass
 
 
 def string_to_credits(s, length):
