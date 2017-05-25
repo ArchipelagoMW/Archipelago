@@ -14,7 +14,7 @@ import os
 __version__ = '0.1-dev'
 
 
-def main(seed=None, shuffle='default', logic='noglitches', mode='standard', difficulty='normal', goal='ganon', algo='regular', spoiler=True, base_rom='Open_Base_Rom.sfc'):
+def main(seed=None, shuffle='default', logic='noglitches', mode='standard', difficulty='normal', goal='ganon', algo='regular', spoiler=True, base_rom='Base_Rom.sfc', quickswap=False):
     start = time.clock()
 
     # initialize the world
@@ -62,7 +62,7 @@ def main(seed=None, shuffle='default', logic='noglitches', mode='standard', diff
     logger.info('Patching ROM.')
 
     rom = bytearray(open(base_rom, 'rb').read())
-    patched_rom = patch_rom(world, rom)
+    patched_rom = patch_rom(world, rom, quickswap)
 
     outfilebase = 'ER_%s_%s_%s_%s' % (world.mode, world.goal, world.shuffle, world.seed)
 
@@ -406,6 +406,7 @@ if __name__ == '__main__':
     parser.add_argument('--loglevel', default='info', const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--count', help='Use to batch generate multiple seeds with same settings. If --seed is provided, it will be used for the first seed, then used to derive the next seed (i.e. generating 10 seeds with --seed given will produce the same 10 (different) roms each time).', type=int)
+    parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     args = parser.parse_args()
 
     if not os.path.isfile(args.rom):
@@ -419,7 +420,7 @@ if __name__ == '__main__':
     if args.count is not None:
         seed = args.seed
         for i in range(args.count):
-            main(seed=seed, logic=args.logic, mode=args.mode, goal=args.goal, difficulty=args.difficulty, algo=args.algorithm, shuffle=args.shuffle, base_rom=args.rom, spoiler=args.create_spoiler)
+            main(seed=seed, logic=args.logic, mode=args.mode, goal=args.goal, difficulty=args.difficulty, algo=args.algorithm, shuffle=args.shuffle, base_rom=args.rom, spoiler=args.create_spoiler, quickswap=args.quickswap)
             seed = random.randint(0, 999999999)
     else:
-        main(seed=args.seed, logic=args.logic, mode=args.mode, goal=args.goal, difficulty=args.difficulty, algo=args.algorithm, shuffle=args.shuffle, base_rom=args.rom, spoiler=args.create_spoiler)
+        main(seed=args.seed, logic=args.logic, mode=args.mode, goal=args.goal, difficulty=args.difficulty, algo=args.algorithm, shuffle=args.shuffle, base_rom=args.rom, spoiler=args.create_spoiler, quickswap=args.quickswap)
