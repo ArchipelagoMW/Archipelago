@@ -17,7 +17,8 @@ def ItemFactory(items):
                 code = [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)]
             ret.append(Item(item, advancement, key, crystal, code, altar_hint, altar_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit))
         else:
-            logging.getLogger('').warning('Unknown Items: %s' % item)
+            logging.getLogger('').warning('Unknown Item: %s' % item)
+            return None
     
     if singleton:
         return ret[0]
@@ -52,7 +53,7 @@ item_table = {'Bow': (True, False, False, 0x0B, 'You have\nchosen the\narcher cl
               'Master Sword': (True, False, False, 0x50, 'I thought this\nwas meant to\nbe randomized?', None, None, None, None, None),
               'Tempered Sword': (True, False, False, 0x02, 'I stole the\nblacksmith\'s\njob!', None, None, None, None, None),
               'Fighter Sword': (True, False, False, 0x49, 'A pathetic\nsword rests\nhere!', None, None, None, None, None),
-              'GoldenSword': (True, False, False, 0x03, 'The butter\nsword rests\nhere!', None, None, None, None, None),
+              'Golden Sword': (True, False, False, 0x03, 'The butter\nsword rests\nhere!', None, None, None, None, None),
               'Progressive Sword': (True, False, False, 0x5E, 'a better copy\nof your sword\nfor your time', None, None, None, None, None),
               'Progressive Glove': (True, False, False, 0x61, 'a way to lift\nheavier things', None, None, None, None, None),
               'Silver Arrows': (True, False, False, 0x58, 'Do you fancy\nsilver tipped\narrows?', None, None, None, None, None),
@@ -145,4 +146,5 @@ item_table = {'Bow': (True, False, False, 0x0B, 'You have\nchosen the\narcher cl
               'Small Key (Ganons Tower)': (False, True, False, 0x24, None, None, None, None, None, None),
               'Big Key (Ganons Tower)': (False, True, False, 0x32, None, None, None, None, None, None),
               'Compass (Ganons Tower)': (False, False, False, 0x25, None, None, None, None, None, None),
-              'Map (Ganons Tower)': (False, False, False, 0x33, None, None, None, None, None, None)}
+              'Map (Ganons Tower)': (False, False, False, 0x33, None, None, None, None, None, None),
+              'Nothing': (False, False, False, 0x5A, 'Some Hot Air', None, None, None, None, None)}
