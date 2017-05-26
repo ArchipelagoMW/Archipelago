@@ -273,6 +273,8 @@ def copy_world(world):
     # ToDo: Not good yet
     ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal, world.place_dungeon_items)
     ret.required_medallions = list(world.required_medallions)
+    ret.agahnim_fix_required = world.agahnim_fix_required
+    ret.swamp_patch_required = world.swamp_patch_required
     create_regions(ret)
 
     # connect copied world
