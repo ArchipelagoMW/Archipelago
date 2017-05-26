@@ -144,7 +144,7 @@ def distribute_items(world):
         itempool.remove(item_to_place)
         fill_locations.remove(spot_to_fill)
 
-    logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s' % (itempool, fill_locations))
+    logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s' % ([item.name for item in itempool], [location.name for location in fill_locations]))
 
 
 def flood_items(world):
@@ -315,6 +315,7 @@ def create_playthrough(world):
     collection_spheres = []
     state = CollectionState(world)
     sphere_candidates = list(prog_locations)
+    logging.getLogger('').debug('Building up collection spheres.')
     while sphere_candidates:
         sphere = []
         # build up spheres of collection radius. Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
@@ -328,11 +329,18 @@ def create_playthrough(world):
 
         collection_spheres.append(sphere)
 
+        logging.getLogger('').debug('Calculated sphere %i, containing %i of %i progress items.' % (len(collection_spheres), len(sphere), len(prog_locations)))
+
+        if not sphere:
+            logging.getLogger('').debug('The following items could not be placed: %s' % ['%s at %s' % (location.item.name, location.name) for location in sphere_candidates])
+            raise RuntimeError('Not all progression items reachable. Something went terribly wrong here.')
+
     # in the second phase, we cull each sphere such that the game is still beatable, reducing each range of influence to the bare minimum required inside it
     for sphere in reversed(collection_spheres):
         to_delete = []
         for location in sphere:
             # we remove the item at location and check if game is still beatable
+            logging.getLogger('').debug('Checking if %s is required to beat the game.' % location.item.name)
             old_item = location.item
             location.item = None
             state.remove(old_item)
