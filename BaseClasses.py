@@ -105,7 +105,12 @@ class World(object):
         temp_state = self.state.copy()
         temp_state._clear_cache()
         temp_state.collect(item)
-        return len(self.get_placeable_locations()) < len(self.get_placeable_locations(temp_state))
+
+        for location in self.get_unfilled_locations():
+            if temp_state.can_reach(location) and not self.state.can_reach(location):
+                return True
+
+        return False
 
     def can_beat_game(self):
         prog_locations = [location for location in self.get_locations() if location.item is not None and location.item.advancement]
@@ -137,44 +142,32 @@ class CollectionState(object):
         self.prog_items = []
         self.world = parent
         self.has_everything = has_everything
-        self.changed = False
         self.region_cache = {}
         self.location_cache = {}
         self.entrance_cache = {}
-        # use to avoid cycle dependencies during resolution
-        self.recursion_cache = []
+        self.recursion_count = 0
 
     def _clear_cache(self):
         # we only need to invalidate results which were False, places we could reach before we can still reach after adding more items
         self.region_cache = {k: v for k, v in self.region_cache.items() if v}
         self.location_cache = {k: v for k, v in self.location_cache.items() if v}
         self.entrance_cache = {k: v for k, v in self.entrance_cache.items() if v}
-        self.recursion_cache = []
-        self.changed = False
 
     def copy(self):
         ret = CollectionState(self.world, self.has_everything)
         ret.prog_items = copy.copy(self.prog_items)
-        ret.changed = self.changed
         ret.region_cache = copy.copy(self.region_cache)
         ret.location_cache = copy.copy(self.location_cache)
         ret.entrance_cache = copy.copy(self.entrance_cache)
-        ret.recursion_cache = copy.copy(self.recursion_cache)
         return ret
 
     def can_reach(self, spot, resolution_hint=None):
-        if self.changed:
-            self._clear_cache()
-
-        if spot in self.recursion_cache:
-            return False
-
         try:
             spot_type = spot.spot_type
-            if spot_type == 'Region':
-                correct_cache = self.region_cache
-            elif spot_type == 'Location':
+            if spot_type == 'Location':
                 correct_cache = self.location_cache
+            elif spot_type == 'Region':
+                correct_cache = self.region_cache
             elif spot_type == 'Entrance':
                 correct_cache = self.entrance_cache
             else:
@@ -192,15 +185,20 @@ class CollectionState(object):
                 spot = self.world.get_region(spot)
                 correct_cache = self.region_cache
 
+        if spot.recursion_count > 0:
+            return False
+
         if spot not in correct_cache:
             # for the purpose of evaluating results, recursion is resolved by always denying recursive access (as that ia what we are trying to figure out right now in the first place
-            self.recursion_cache.append(spot)
+            spot.recursion_count += 1
+            self.recursion_count += 1
             can_reach = spot.can_reach(self)
-            self.recursion_cache.pop()
+            spot.recursion_count -= 1
+            self.recursion_count -= 1
 
             # we only store qualified false results (i.e. ones not inside a hypothetical)
             if not can_reach:
-                if not self.recursion_cache:
+                if self.recursion_count == 0:
                     correct_cache[spot] = can_reach
             else:
                 correct_cache[spot] = can_reach
@@ -221,10 +219,25 @@ class CollectionState(object):
                     self.world._item_cache[item] = cached
                 else:
                     # this should probably not happen, wonky item distribution?
-                    return len([location for location in candidates if self.can_reach(location)]) >= 1
+                    return self._can_reach_n(self.world.find_items(item), 1)
             return self.can_reach(cached)
 
-        return len([location for location in self.world.find_items(item) if self.can_reach(location)]) >= count
+        return self._can_reach_n(self.world.find_items(item), count)
+
+    def _can_reach_n(self, candidates, count):
+        maxfail = len(candidates) - count
+        fail = 0
+        success = 0
+        for candidate in candidates:
+            if self.can_reach(candidate):
+                success += 1
+            else:
+                fail += 1
+            if fail > maxfail:
+                return False
+            if success >= count:
+                return True
+        return False
 
     def has(self, item):
         if self.has_everything:
@@ -266,36 +279,39 @@ class CollectionState(object):
         return self.has(self.world.required_medallions[1])
 
     def collect(self, item):
+        changed = False
         if item.name.startswith('Progressive '):
             if 'Sword' in item.name:
                 if self.has('Golden Sword'):
-                    return
+                    pass
                 elif self.has('Tempered Sword'):
                     self.prog_items.append('Golden Sword')
-                    self.changed = True
+                    changed = True
                 elif self.has('Master Sword'):
                     self.prog_items.append('Tempered Sword')
-                    self.changed = True
+                    changed = True
                 elif self.has('Fighter Sword'):
                     self.prog_items.append('Master Sword')
-                    self.changed = True
+                    changed = True
                 else:
                     self.prog_items.append('Fighter Sword')
-                    self.changed = True
+                    changed = True
             elif 'Glove' in item.name:
                 if self.has('Titans Mitts'):
-                    return
+                    pass
                 elif self.has('Power Glove'):
                     self.prog_items.append('Titans Mitts')
-                    self.changed = True
+                    changed = True
                 else:
                     self.prog_items.append('Power Glove')
-                    self.changed = True
-            return
+                    changed = True
 
-        if item.advancement:
+        elif item.advancement:
             self.prog_items.append(item.name)
-            self.changed = True
+            changed = True
+
+        if changed:
+            self._clear_cache()
 
     def remove(self, item):
         if item.advancement:
@@ -330,8 +346,7 @@ class CollectionState(object):
                 self.region_cache = {}
                 self.location_cache = {}
                 self.entrance_cache = {}
-                self.recursion_cache = []
-                self.changed = False
+                self.recursion_count = 0
 
     def __getattr__(self, item):
         if item.startswith('can_reach_'):
@@ -351,6 +366,7 @@ class Region(object):
         self.locations = []
         self.spot_type = 'Region'
         self.hint_text = 'Hyrule'
+        self.recursion_count = 0
 
     def can_reach(self, state):
         for entrance in self.entrances:
@@ -373,6 +389,7 @@ class Entrance(object):
         self.connected_region = None
         self.target = None
         self.spot_type = 'Entrance'
+        self.recursion_count = 0
 
     def access_rule(self, state):
         return True
@@ -405,6 +422,7 @@ class Location(object):
         self.address = address
         self.spot_type = 'Location'
         self.hint_text = hint_text if hint_text is not None else 'Hyrule'
+        self.recursion_count = 0
 
     def access_rule(self, state):
         return True
