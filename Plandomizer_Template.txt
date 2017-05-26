@@ -1,0 +1,244 @@
+# Lines starting with a # are comments and ignored by the parsers
+# Lines without a : are also ignored
+
+# These are special instructions for setting the medallion requirements to enter the dungeons
+!mm_medallion: Bombos
+!tr_medallion: Quake
+
+# This sets the game mode
+!mode: open
+
+# This sets the logic (for verification purposes)
+!logic: noglitches
+
+# This sets the goal (only used for generating the spoiler log)
+!goal: ganon
+
+# Now we fill in all locations
+
+Mushroom: Mushroom
+Bottle Vendor: Bottle
+Haunted Grove: Ocarina
+Piece of Heart (Dam): Nothing
+Purple Chest: Nothing
+[cave-022-B1] Thiefs hut [top chest]: Nothing
+[cave-022-B1] Thiefs hut [top left chest]: Nothing
+[cave-022-B1] Thiefs hut [top right chest]: Nothing
+[cave-022-B1] Thiefs hut [bottom left chest]: Nothing
+[cave-022-B1] Thiefs hut [bottom right chest]: Nothing
+Uncle: Fighter Sword
+[cave-034] Hyrule Castle Secret Entrance: Nothing
+King Zora: Flippers
+Piece of Heart (Zoras River): Nothing
+[cave-018] Graveyard - top right grave: Cape
+[cave-047] Dam: Nothing
+[cave-040] Links House: Lamp
+[cave-031] Tavern: Nothing
+[cave-026] Chicken House: Nothing
+[cave-044] Aginahs Cave: Nothing
+[cave-035] Sahasrahlas Hut [left chest]: Nothing
+[cave-035] Sahasrahlas Hut [center chest]: Nothing
+[cave-035] Sahasrahlas Hut [right chest]: Nothing
+Sahasrahla: Pegasus Boots
+[cave-021] Kakariko Well [top chest]: Nothing
+[cave-021] Kakariko Well [left chest row of 3]: Nothing
+[cave-021] Kakariko Well [center chest row of 3]: Nothing
+[cave-021] Kakariko Well [right chest row of 3]: Nothing
+[cave-021] Kakariko Well [bottom chest]: Nothing
+Blacksmiths: Tempered Sword
+Magic Bat: Magic Upgrade (1/2)
+Sick Kid: Bug Catching Net
+Hobo: Bottle
+Piece of Heart (Thieves Forest Hideout): Nothing
+Piece of Heart (Lumberjack Tree): Nothing
+Piece of Heart (Cave South of Haunted Grove): Nothing
+Piece of Heart (Graveyard Cave): Nothing
+Piece of Heart (Desert Cave): Nothing
+[cave-050] Lake Hylia Cave [bottom left chest]: Nothing
+[cave-050] Lake Hylia Cave [top left chest]: Nothing
+[cave-050] Lake Hylia Cave [top right chest]: Nothing
+[cave-050] Lake Hylia Cave [bottom right chest]: Nothing
+[cave-050] Lake Hylia Cave [generous guy]: Nothing
+[cave-051] Ice Cave: Ice Rod
+[cave-016] Bonk Rock Cave: Nothing
+Library: Book of Mudora
+Witch: Magic Powder
+Piece of Heart (Lake Hylia): Nothing
+Piece of Heart (Maze Race): Nothing
+Piece of Heart (Desert - west side): Nothing
+[dungeon-L2-B1] Desert Palace - Big Chest: Power Glove
+[dungeon-L2-B1] Desert Palace - Torch: Small Key (Desert Palace)
+[dungeon-L2-B1] Desert Palace - Map Room: Nothing
+[dungeon-L2-B1] Desert Palace - Compass Room: Nothing
+[dungeon-L2-B1] Desert Palace - Big Key Room: Big Key (Desert Palace)
+Lanmolas - Heart Container: Nothing
+Lanmolas - Pendant: Blue Pendant
+[dungeon-L1-1F] Eastern Palace - Compass Room: Nothing
+[dungeon-L1-1F] Eastern Palace - Big Chest: Bow
+[dungeon-L1-1F] Eastern Palace - Big Ball Room: Nothing
+[dungeon-L1-1F] Eastern Palace - Big Key Room: Big Key (Eastern Palace)
+[dungeon-L1-1F] Eastern Palace - Map Room: Nothing
+Armos - Heart Container: Nothing
+Armos - Pendant: Green Pendant
+Altar: Master Sword
+[dungeon-C-B1] Hyrule Castle - Boomerang Room: Nothing
+[dungeon-C-B1] Hyrule Castle - Map Room: Nothing
+[dungeon-C-B1] Hyrule Castle - Next To Zelda: Nothing
+[dungeon-C-B1] Escape - First B1 Room: Small Key (Escape)
+[dungeon-C-B1] Escape - Final Basement Room [left chest]: Nothing
+[dungeon-C-B1] Escape - Final Basement Room [middle chest]: Nothing
+[dungeon-C-B1] Escape - Final Basement Room [right chest]: Nothing
+[dungeon-C-1F] Sanctuary: Sanctuary Heart Container
+[dungeon-A1-2F] Hyrule Castle Tower - 2 Knife Guys Room: Small Key (Agahnims Tower)
+[dungeon-A1-3F] Hyrule Castle Tower - Maze Room: Small Key (Agahnims Tower)
+Old Mountain Man: Magic Mirror
+Piece of Heart (Spectacle Rock Cave): Nothing
+[cave-009-1F] Death Mountain - right cave [top left chest]: Nothing
+[cave-009-1F] Death Mountain - right cave [top left middle chest]: Nothing
+[cave-009-1F] Death Mountain - right cave [top right middle chest]: Nothing
+[cave-009-1F] Death Mountain - right cave [top right chest]: Nothing
+[cave-009-1F] Death Mountain - right cave [bottom chest]: Nothing
+[cave-009-B1] Death Mountain - right cave [left chest]: Nothing
+[cave-009-B1] Death Mountain - right cave [right chest]: Nothing
+[cave-012-1F] Death Mountain - left cave]: Nothing
+Ether Tablet: Ether
+Piece of Heart (Spectacle Rock): Nothing
+[dungeon-L3-1F] Tower of Hera - Freestanding Key: Small Key (Tower of Hera)
+[dungeon-L3-1F] Tower of Hera - Entrance: Nothing
+[dungeon-L3-1F] Tower of Hera - Basement: Big Key (Tower of Hera)
+[dungeon-L3-1F] Tower of Hera - 4F [small chest]: Nothing
+[dungeon-L3-1F] Tower of Hera - Big Chest: Moon Pearl
+Moldorm - Heart Container: Nothing
+Moldorm - Pendant: Red Pendant
+Piece of Heart (Pyramid): Nothing
+Catfish: Quake
+Flute Boy: Shovel
+Piece of Heart (Digging Game): Nothing
+Bombos Tablet: Bombos
+[cave-073] Cave Northeast of Swamp Palace [top chest]: Nothing
+[cave-073] Cave Northeast of Swamp Palace [top middle chest]: Nothing
+[cave-073] Cave Northeast of Swamp Palace [bottom middle chest]: Nothing
+[cave-073] Cave Northeast of Swamp Palace [bottom chest]: Nothing
+[cave-073] Cave Northeast of Swamp Palace [generous guy]: Nothing
+Piece of Heart (Dark World Blacksmith Pegs): Nothing
+Pyramid Fairy [left chest]: Golden Sword
+Pyramid Fairy [right chest]: Silver Arrows
+[cave-063] Doorless Hut: Nothing
+[cave-062] C-Shaped House: Nothing
+Piece of Heart (Treasure Chest Game): Nothing
+Piece of Heart (Bumper Cave): Nothing
+[cave-071] Misery Mire West Area [left chest]: Nothing
+[cave-071] Misery Mire West Area [right chest]: Nothing
+[cave-057-1F] Dark World Death Mountain Climb [top chest]: Nothing
+[cave-057-1F] Dark World Death Mountain Climb [bottom chest]: Nothing
+[cave-055] Spike Cave: Cane of Byrna
+[cave-056] Hookshot Cave [top right chest]: Nothing
+[cave-056] Hookshot Cave [top left chest]: Nothing
+[cave-056] Hookshot Cave [bottom right chest]: Nothing
+[cave-056] Hookshot Cave [bottom left chest]: Nothing
+Piece of Heart (Death Mountain - Floating Island): Nothing
+[cave-013] Mimic Cave: Nothing
+[dungeon-D2-1F] Swamp Palace - First Room: Small Key (Swamp Palace)
+[dungeon-D2-1F] Swamp Palace - Map Room: Nothing
+[dungeon-D2-B1] Swamp Palace - Big Chest: Hookshot
+[dungeon-D2-B1] Swamp Palace - South of Hookshot Room: Nothing
+[dungeon-D2-B1] Swamp Palace - Big Key Chest: Big Key (Swamp Palace)
+[dungeon-D2-B1] Swamp Palace - Compass Chest: Nothing
+[dungeon-D2-B2] Swamp Palace - Flooded Room [left chest]: Nothing
+[dungeon-D2-B2] Swamp Palace - Flooded Room [right chest]: Nothing
+[dungeon-D2-B2] Swamp Palace - Waterfall Room: Nothing
+Arrghus - Heart Container: Nothing
+Arrghus - Crystal: Crystal 2
+[dungeon-D4-B1] Thieves Town - Bottom Left of Huge Room [bottom right chest]: Big Key (Thieves Town)
+[dungeon-D4-B1] Thieves Town - Bottom Left of Huge Room [top left chest]: Nothing
+[dungeon-D4-B1] Thieves Town - Bottom Right of Huge Room: Nothing
+[dungeon-D4-B1] Thieves Town - Top Left of Huge Room: Nothing
+[dungeon-D4-1F] Thieves Town - Room above Boss: Nothing
+[dungeon-D4-B2] Thieves Town - Big Chest: Titans Mitts
+[dungeon-D4-B2] Thieves Town - Chest next to Blind: Small Key (Thieves Town)
+Blind - Heart Container: Nothing
+Blind - Crystal: Crystal 4
+[dungeon-D3-B1] Skull Woods - Compass Room: Nothing
+[dungeon-D3-B1] Skull Woods - East of Big Chest: Nothing
+[dungeon-D3-B1] Skull Woods - Big Chest: Fire Rod
+[dungeon-D3-B1] Skull Woods - Push Statue Room: Small Key (Skull Woods)
+[dungeon-D3-B1] Skull Woods - South of Big Chest: Small Key (Skull Woods)
+[dungeon-D3-B1] Skull Woods - Big Key Room: Big Key (Skull Woods)
+[dungeon-D3-B1] Skull Woods - Final Section Entrance: Small Key (Skull Woods)
+Mothula - Heart Container: Nothing
+Mothula - Crystal: Crystal 3
+[dungeon-D5-B1] Ice Palace - Compass Room: Nothing
+[dungeon-D5-B4] Ice Palace - Above Big Chest: Nothing
+[dungeon-D5-B5] Ice Palace - Big Chest: Blue Mail
+[dungeon-D5-B5] Ice Palace - Jellyfish Room: Small Key (Ice Palace)
+[dungeon-D5-B3] Ice Palace - Spike Room: Small Key (Ice Palace)
+[dungeon-D5-B1] Ice Palace - Big Key Room: Big Key (Ice Palace)
+[dungeon-D5-B2] Ice Palace - Map Room: Nothing
+Kholdstare - Heart Container: Nothing
+Kholdstare - Crystal: Crystal 5
+[dungeon-D6-B1] Misery Mire - Big Chest: Cane of Somaria
+[dungeon-D6-B1] Misery Mire - Map Room: Nothing
+[dungeon-D6-B1] Misery Mire - Hub Room: Small Key (Misery Mire)
+[dungeon-D6-B1] Misery Mire - End of Bridge: Small Key (Misery Mire)
+[dungeon-D6-B1] Misery Mire - Spike Room: Small Key (Misery Mire)
+[dungeon-D6-B1] Misery Mire - Compass Room: Nothing
+[dungeon-D6-B1] Misery Mire - Big Key Room: Big Key (Misery Mire)
+Vitreous - Heart Container: Nothing
+Vitreous - Crystal: Crystal 6
+[dungeon-D7-1F] Turtle Rock - Compass Room: Nothing
+[dungeon-D7-1F] Turtle Rock - Map Room [left chest]: Nothing
+[dungeon-D7-1F] Turtle Rock - Map Room [right chest]: Small Key (Turtle Rock)
+[dungeon-D7-1F] Turtle Rock - Chain Chomp Room: Small Key (Turtle Rock)
+[dungeon-D7-B1] Turtle Rock - Big Key Room: Big Key (Turtle Rock)
+[dungeon-D7-B1] Turtle Rock - Big Chest: Mirror Shield
+[dungeon-D7-B1] Turtle Rock - Roller Switch Room: Small Key (Turtle Rock)
+[dungeon-D7-B2] Turtle Rock - Eye Bridge Room [bottom left chest]: Small Key (Turtle Rock)
+[dungeon-D7-B2] Turtle Rock - Eye Bridge Room [bottom right chest]: Nothing
+[dungeon-D7-B2] Turtle Rock - Eye Bridge Room [top left chest]: Nothing
+[dungeon-D7-B2] Turtle Rock - Eye Bridge Room [top right chest]: Nothing
+Trinexx - Heart Container: Nothing
+Trinexx - Crystal: Crystal 7
+[dungeon-D1-B1] Dark Palace - Shooter Room: Small Key (Palace of Darkness)
+[dungeon-D1-1F] Dark Palace - Jump Room [left chest]: Small Key (Palace of Darkness)
+[dungeon-D1-B1] Dark Palace - Turtle Stalfos Room: Small Key (Palace of Darkness)
+[dungeon-D1-1F] Dark Palace - Big Key Room: Big Key (Palace of Darkness)
+[dungeon-D1-1F] Dark Palace - Jump Room [right chest]: Small Key (Palace of Darkness)
+[dungeon-D1-1F] Dark Palace - Statue Push Room: Nothing
+[dungeon-D1-1F] Dark Palace - Compass Room: Nothing
+# logic cannot account for hammer and small key in maze
+[dungeon-D1-B1] Dark Palace - Dark Room [left chest]: Small Key (Palace of Darkness)
+[dungeon-D1-B1] Dark Palace - Dark Room [right chest]: Small Key (Palace of Darkness)
+[dungeon-D1-1F] Dark Palace - Maze Room [top chest]: Nothing
+[dungeon-D1-1F] Dark Palace - Maze Room [bottom chest]: Nothing
+[dungeon-D1-1F] Dark Palace - Big Chest: Hammer
+[dungeon-D1-1F] Dark Palace - Spike Statue Room: Nothing
+Helmasaur - Heart Container: Nothing
+Helmasaur - Crystal: Crystal 1
+[dungeon-A2-1F] Ganons Tower - Torch: Small Key (Ganons Tower)
+[dungeon-A2-1F] Ganons Tower - Right Staircase [left chest]: Nothing
+[dungeon-A2-1F] Ganons Tower - Right Staircase [right chest]: Nothing
+[dungeon-A2-1F] Ganons Tower - Tile Room: Small Key (Ganons Tower)
+[dungeon-A2-1F] Ganons Tower - Compass Room [top left chest]: Nothing
+[dungeon-A2-1F] Ganons Tower - Compass Room [top right chest]: Nothing
+[dungeon-A2-1F] Ganons Tower - Compass Room [bottom left chest]: Nothing
+[dungeon-A2-1F] Ganons Tower - Compass Room [bottom right chest]: Nothing
+[dungeon-A2-1F] Ganons Tower - North of Hookshot Room [top left chest]: Nothing
+[dungeon-A2-1F] Ganons Tower - North of Hookshot Room [top right chest]: Nothing
+[dungeon-A2-1F] Ganons Tower - North of Hookshot Room [bottom left chest]: Nothing
+[dungeon-A2-1F] Ganons Tower - North of Hookshot Room [bottom right chest]: Nothing
+[dungeon-A2-1F] Ganons Tower - Map Room: Nothing
+[dungeon-A2-1F] Ganons Tower - Firesnake Room: Small Key (Ganons Tower)
+[dungeon-A2-1F] Ganons Tower - Teleport Room [top left chest]: Nothing
+[dungeon-A2-1F] Ganons Tower - Teleport Room [top right chest]: Nothing
+[dungeon-A2-1F] Ganons Tower - Teleport Room [bottom left chest]: Nothing
+[dungeon-A2-1F] Ganons Tower - Teleport Room [bottom right chest]: Nothing
+[dungeon-A2-1F] Ganons Tower - above Armos: Nothing
+[dungeon-A2-1F] Ganons Tower - Big Chest: Red Mail
+[dungeon-A2-B1] Ganons Tower - Armos Room [left chest]: Nothing
+[dungeon-A2-B1] Ganons Tower - Armos Room [right chest]: Nothing
+[dungeon-A2-B1] Ganons Tower - Armos Room [bottom chest]: Big Key (Ganons Tower)
+[dungeon-A2-6F] Ganons Tower - Mini Helmasaur Room [left chest]: Nothing
+[dungeon-A2-6F] Ganons Tower - Mini Helmasaur Room [right chest]: Nothing
+[dungeon-A2-6F] Ganons Tower - Room before Moldorm: Small Key (Ganons Tower)
+[dungeon-A2-6F] Ganons Tower - Moldorm Room: Nothing
+Ganon: Triforce
