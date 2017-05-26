@@ -305,6 +305,10 @@ def create_playthrough(world):
     # create a copy as we will modify it
     world = copy_world(world)
 
+    # if we do pedestal%, ganon should not be a viable option as far as the playthrough is concerned
+    if world.goal == 'pedestal':
+        world.get_location('Ganon').item = None
+
     # get locations containing progress items
     prog_locations = [location for location in world.get_locations() if location.item is not None and location.item.advancement]
 
