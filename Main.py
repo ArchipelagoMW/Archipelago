@@ -70,8 +70,13 @@ def main(args, seed=None):
 
     logger.info('Patching ROM.')
 
+    if args.sprite is not None:
+        sprite = bytearray(open(args.sprite, 'rb').read())
+    else:
+        sprite = None
+
     rom = bytearray(open(args.rom, 'rb').read())
-    patched_rom = patch_rom(world, rom, logic_hash, args.quickswap, args.heartbeep)
+    patched_rom = patch_rom(world, rom, logic_hash, args.quickswap, args.heartbeep, sprite)
 
     outfilebase = 'ER_%s_%s_%s_%s' % (world.mode, world.goal, world.shuffle, world.seed)
 
@@ -394,10 +399,15 @@ if __name__ == '__main__':
     parser.add_argument('--nodungeonitems', help='Remove Maps and Compasses from Itempool, replacing them by empty slots.', action='store_true')
     parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['normal', 'half', 'quarter', 'off'],
                         help='Select the rate at which the heart beep sound is played at low health.')
+    parser.add_argument('--sprite', help='Path to a sprite sheet to use for Link. Needs to be in binary format and have a length of 0x7000 (28672) bytes.')
     args = parser.parse_args()
 
+    # ToDo: Validate files further than mere existance
     if not os.path.isfile(args.rom):
         input('Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
+        exit(1)
+    if args.sprite is not None and not os.path.isfile(args.rom):
+        input('Could not find link sprite sheet at given location. \nPress Enter to exit.' % args.sprite)
         exit(1)
 
     # set up logger

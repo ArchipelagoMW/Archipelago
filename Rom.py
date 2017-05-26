@@ -6,7 +6,7 @@ from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths
 import random
 
 
-def patch_rom(world, rom, hashtable, quickswap=False, beep='normal'):
+def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None):
     # patch items
     for location in world.get_locations():
         if location.name == 'Ganon':
@@ -232,6 +232,10 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal'):
 
     # store hash table for main menu hash
     write_bytes(rom, 0x181000, hashtable)
+
+    # write link sprite if required
+    if sprite is not None:
+        write_bytes(rom, 0x80000, sprite)
 
     return rom
 
