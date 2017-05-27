@@ -78,7 +78,7 @@ def global_rules(world):
     set_rule(world.get_entrance('50 Rupee Cave'), lambda state: state.can_lift_rocks())
     set_rule(world.get_entrance('Old Man Cave (West)'), lambda state: state.can_lift_rocks())
     set_rule(world.get_entrance('Flute Spot 1'), lambda state: state.has('Ocarina'))
-    set_rule(world.get_entrance('Ice Palace'), lambda state: state.can_lift_heavy_rocks())
+    set_rule(world.get_entrance('Lake Hylia Central Island Teleporter'), lambda state: state.can_lift_heavy_rocks())
     set_rule(world.get_entrance('Dark Desert Teleporter'), lambda state: state.has('Ocarina') and state.can_lift_heavy_rocks())
     set_rule(world.get_entrance('East Hyrule Teleporter'), lambda state: state.has('Hammer') and state.can_lift_rocks() and state.has_Pearl())
     set_rule(world.get_entrance('South Hyrule Teleporter'), lambda state: state.has('Hammer') and state.can_lift_rocks() and state.has_Pearl())
@@ -115,11 +115,15 @@ def global_rules(world):
     set_rule(world.get_entrance('East Death Mountain (Top)'), lambda state: state.has('Hammer'))
 
     set_rule(world.get_location('Catfish'), lambda state: state.has_Pearl() and state.can_lift_rocks())
+    set_rule(world.get_entrance('Dark Lake Hylia Fairy'), lambda state: state.has_Pearl())
+    set_rule(world.get_entrance('Palace of Darkness Hint'), lambda state: state.has_Pearl())
+    set_rule(world.get_entrance('East Dark World Hint'), lambda state: state.has_Pearl())
     set_rule(world.get_entrance('Dark World Potion Shop'), lambda state: state.has_Pearl() and (state.can_lift_rocks() or state.has('Hammer') or state.has('Flippers')))
     set_rule(world.get_entrance('South Dark World Bridge'), lambda state: state.has('Hammer') and state.has_Pearl())
     set_rule(world.get_entrance('Bonk Fairy (Dark)'), lambda state: state.has_Boots())
     set_rule(world.get_entrance('West Dark World Gap'), lambda state: state.has_Pearl() and state.has('Hookshot') and (state.has('Flippers') or state.has('Hammer') or state.can_lift_rocks()))
-    set_rule(world.get_entrance('Palace of Darkness'), lambda state: state.has_Pearl() and state.can_reach('Palace of Darkness Pay Kiki', 'Entrance'))  # ToDo Not sure if required
+    set_rule(world.get_entrance('Palace of Darkness Pay Kiki'), lambda state: state.has_Pearl())
+    set_rule(world.get_entrance('Palace of Darkness'), lambda state: state.can_reach('Palace of Darkness Pay Kiki', 'Entrance'))
     set_rule(world.get_entrance('Palace of Darkness Kiki Door Reverse'), lambda state: state.can_reach('Palace of Darkness Pay Kiki', 'Entrance'))  # prevent soft lock when coming from behind, not required
     set_rule(world.get_entrance('Hyrule Castle Ledge Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Dark Lake Hylia Drop (East)'), lambda state: (state.has_Pearl() and state.has('Flippers') or state.has_Mirror()))  # Overworld Bunny Revival
@@ -133,6 +137,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Cave South of Haunted Grove'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('East Dark World Bridge'), lambda state: state.has('Hammer'))
     set_rule(world.get_entrance('Lake Hylia Island Mirror Spot'), lambda state: state.has_Mirror() and state.has('Flippers'))
+    set_rule(world.get_entrance('Lake Hylia Central Island Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('East Dark World River Pier'), lambda state: state.has('Flippers'))  # ToDo any fake flipper set up?
     set_rule(world.get_entrance('Graveyard Cave'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Bumper Cave (Bottom)'), lambda state: state.can_lift_rocks())
@@ -307,9 +312,9 @@ def global_rules(world):
 
 def no_glitches_rules(world):
     set_rule(world.get_entrance('Zoras River'), lambda state: state.has('Flippers') or state.can_lift_rocks())
-    set_rule(world.get_entrance('Capacity Upgrade'), lambda state: state.has('Flippers'))  # can be fake flippered to
+    set_rule(world.get_entrance('Lake Hylia Central Island Pier'), lambda state: state.has('Flippers'))  # can be fake flippered to
     set_rule(world.get_entrance('Hobo Bridge'), lambda state: state.has('Flippers'))
-    add_rule(world.get_entrance('Ice Palace'), lambda state: state.has_Pearl() and state.has('Flippers'))
+    add_rule(world.get_entrance('Ice Palace'), lambda state: state.has_Pearl())
     set_rule(world.get_entrance('Dark Lake Hylia Drop (East)'), lambda state: state.has_Pearl() and state.has('Flippers'))
     set_rule(world.get_entrance('Dark Lake Hylia Teleporter'), lambda state: state.has_Pearl() and state.has('Flippers') and (state.has('Hammer') or state.can_lift_rocks()))
     set_rule(world.get_entrance('Dark Lake Hylia Ledge Drop'), lambda state: state.has('Flippers'))

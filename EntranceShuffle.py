@@ -1139,6 +1139,8 @@ Single_Cave_Targets = ['Thiefs Hut',
 mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Links House Exit', 'Light World'),
 
+                         ('Lake Hylia Central Island Pier', 'Lake Hylia Central Island'),
+                         ('Lake Hylia Central Island Teleporter', 'Dark Lake Hylia Central Island'),
                          ('Zoras River', 'Zoras River'),
                          ('Kakariko Well (top to bottom)', 'Kakariko Well (bottom)'),
                          ('Master Sword Meadow', 'Master Sword Meadow'),
@@ -1183,6 +1185,7 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Dark Lake Hylia Ledge Drop', 'Dark Lake Hylia'),
                          ('East Dark World Pier', 'East Dark World'),
                          ('Lake Hylia Island Mirror Spot', 'Lake Hylia Island'),
+                         ('Lake Hylia Central Island Mirror Spot', 'Lake Hylia Central Island'),
                          ('Hyrule Castle Ledge Mirror Spot', 'Hyrule Castle Ledge'),
                          ('South Dark World Bridge', 'South Dark World'),
                          ('East Dark World Bridge', 'East Dark World'),
@@ -1474,7 +1477,7 @@ default_dungeon_connections = [('Desert Palace Entrance (South)', 'Desert Palace
                                ('Skull Woods Final Section', 'Skull Woods Final Section (Entrance)'),
                                ('Skull Woods Final Section Exit', 'Skull Woods Skull'),
                                ('Ice Palace', 'Ice Palace (Entrance)'),
-                               ('Ice Palace Exit', 'Light World'),  # this is kind of wrong, but completely unimportantly so
+                               ('Ice Palace Exit', 'Dark Lake Hylia Central Island'),
                                ('Misery Mire', 'Misery Mire (Entrance)'),
                                ('Misery Mire Exit', 'Dark Desert'),
                                ('Palace of Darkness', 'Dark Palace (Entrance)'),
