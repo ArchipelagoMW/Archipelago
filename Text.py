@@ -28,32 +28,34 @@ credits_addresses = {'KingsReturn': (0x76928, 22),
                      'LostWoods': (0x76C51, 16),
                      'Altar': (0x76C81, 20)}
 
-Uncle_texts = ['Good Luck!\nYou will need it.',
-               '10\n9\n8\n7\n6\n5\n4\n3\n2\n1\nGo!']
-Triforce_texts = ['Product has Hole in center. Bad seller, 0 out of 5.',
-                  '\n  Well Done!']
+Uncle_texts = ['Good Luck!\nYou will need it.', 'Forward this message to 10 other people or this seed will be awful.', 'I hope you like your seeds bootless and fluteless.',
+               '10\n9\n8\n7\n6\n5\n4\n3\n2\n1\nGo!', 'I have crippling depression.', 'I\'m off to visit cousin Fritzl.']
+Triforce_texts = ['Product has Hole in center. Bad seller, 0 out of 5.', 'Who stole the fourth triangle?', 'Trifource?\nMore Like Tritrice, am I right?'
+                  '\n  Well Done!', 'You just wasted 2 hours of your life.', 'This was meant to be a trapezoid']
 BombShop2_texts = ['Bombs!\nBombs!\nBiggest!\nBestest!\nGreatest!\nBoomest!']
 PyramidFairy_texts = ['May I talk to you about our lord and savior, Ganon?']
-Sahasrahla2_texts = ['You already got my item, idiot.']
-Blind_texts = ['I bet you expected a vision related pun?\n\nNot Today.\n Didn\'t see that coming, did you?']
-Ganon1_texts = ['\n\n\n\n\n\n\n\n\nWhy are you reading an empty textbox?',
-                'Hi']
+Sahasrahla2_texts = ['You already got my item, idiot.', 'Why are you still talking to me?', 'This text won\'t change.', 'Have you met my brother, Hasarahshla?']
+Blind_texts = ['I bet you expected a vision related pun?\n\nNot Today.\n Didn\'t see that coming, did you?', 'What do you call a blind dinosaur?\n A Doyouthinkhe-saurus',
+               'A blind man walks into a bar...\n\n\n and a table\n\n\n and a door.',
+               'Why can\'t blind people eat fish?\n Because it\'s see food']
+Ganon1_texts = ['\n\n\n\n\n\n\n\n\nWhy are you reading an empty textbox?', 'Hi', 'Hey, can you turn off the lights?', 'Oink Oink',
+                'Uncle: How do you like my Ganon cosplay?', 'I\'ll try spinning - that\'s a good trick!', 'Did you ever hear the tragedy of Darth Plagueis the Wise?']
 TavernMan_texts = ['Did you know that talking to random NPCs wastes time in a race? I hope this information may be of use to you in the future.']
 
-KingsReturn_texts = ['Who is this even']
+KingsReturn_texts = ['Who is this even', 'The Harem']
 Sanctuary_texts = ['A Priest\'s love']
-Kakariko_texts = ['Shasschahshahsahahrahsashsa']
-Blacksmiths_texts = ['frogs for bread']
-DeathMountain_texts = ['lost again']
-LostWoods_texts = ['thieves\' stump']
+Kakariko_texts = ['Shasschahshahsahahrahsashsa', 'Schaschlik']
+Blacksmiths_texts = ['frogs for bread', 'That\'s not a sword', 'The Rupeesmiths']
+DeathMountain_texts = ['lost again', 'Alzheimer']
+LostWoods_texts = ['thieves\' stump', 'He\'s got wood', 'Dancing pickles']
 WishingWell_texts = ['Bottle for Bottle']
 DesertPalace_texts = ['literacy moves']
 MountainTower_texts = ['up up and away']
-LinksHouse_texts = ['Home Sweet Home']
+LinksHouse_texts = ['Home Sweet Home', 'Only one bed']
 Lumberjacks_texts = ['agahnim\'s axes']
 SickKid_texts = ['Next Time Stay Down']
-Zora_texts = ['Splashes For Sale']
-MagicShop_texts = ['Drug deal']
+Zora_texts = ['Splashes For Sale', 'Slippery when wet']
+MagicShop_texts = ['Drug deal', 'Shrooms for days']
 FluteBoy_texts = ['Stumped']
 
 
