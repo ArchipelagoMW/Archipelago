@@ -1,0 +1,6 @@
+*.pyc
+dist
+build
+.idea
+*.sfc
+*_Spoiler.txt
