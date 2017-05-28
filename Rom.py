@@ -206,6 +206,12 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
         for i in range(0x85):
             write_byte(rom, 0x15274 + i, 0x00)
 
+    # fix trock doors for reverse entrances
+    if world.shuffle != 'default':
+        write_byte(rom, 0xFED31, 0x0E)  # preopen bombable exit
+        write_byte(rom, 0xFEE41, 0x0E)  # preopen bombable exit
+        write_byte(rom, 0xFE465, 0x1E)  # remove small key door on backside of big key door
+
     # enable quick item swapping with L and R (ported by Amazing Ampharos)
     if quickswap:
         write_bytes(rom, 0x107fb, [0x22, 0x50, 0xFF, 0x1F])

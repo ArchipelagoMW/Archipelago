@@ -1260,6 +1260,7 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Turtle Rock Chain Chomp Staircase', 'Turtle Rock (Chain Chomp Room)'),
                          ('Turtle Rock (Big Chest) (North)', 'Turtle Rock (Second Section)'),
                          ('Turtle Rock Big Key Door', 'Turtle Rock (Roller Switch Room)'),
+                         ('Turtle Rock Big Key Door Reverse', 'Turtle Rock (Second Section)'),
                          ('Turtle Rock Dark Room Staircase', 'Turtle Rock (Dark Room)'),
                          ('Turtle Rock (Dark Room) (North)', 'Turtle Rock (Roller Switch Room)'),
                          ('Turtle Rock (Dark Room) (South)', 'Turtle Rock (Eye Bridge)'),

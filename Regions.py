@@ -226,7 +226,7 @@ def create_regions(world):
         create_region('Turtle Rock (Chain Chomp Room)', ['[dungeon-D7-1F] Turtle Rock - Chain Chomp Room'], ['Turtle Rock (Chain Chomp Room) (North)', 'Turtle Rock (Chain Chomp Room) (South)']),
         create_region('Turtle Rock (Second Section)', ['[dungeon-D7-B1] Turtle Rock - Big Key Room'], ['Turtle Rock Ledge Exit (West)', 'Turtle Rock Chain Chomp Staircase', 'Turtle Rock Big Key Door']),
         create_region('Turtle Rock (Big Chest)', ['[dungeon-D7-B1] Turtle Rock - Big Chest'], ['Turtle Rock (Big Chest) (North)', 'Turtle Rock Ledge Exit (East)']),
-        create_region('Turtle Rock (Roller Switch Room)', ['[dungeon-D7-B1] Turtle Rock - Roller Switch Room'], ['Turtle Rock Dark Room Staircase']),
+        create_region('Turtle Rock (Roller Switch Room)', ['[dungeon-D7-B1] Turtle Rock - Roller Switch Room'], ['Turtle Rock Dark Room Staircase', 'Turtle Rock Big Key Door Reverse']),
         create_region('Turtle Rock (Dark Room)', None, ['Turtle Rock (Dark Room) (North)', 'Turtle Rock (Dark Room) (South)']),
         create_region('Turtle Rock (Eye Bridge)', ['[dungeon-D7-B2] Turtle Rock - Eye Bridge Room [bottom left chest]', '[dungeon-D7-B2] Turtle Rock - Eye Bridge Room [bottom right chest]',
                                                    '[dungeon-D7-B2] Turtle Rock - Eye Bridge Room [top left chest]', '[dungeon-D7-B2] Turtle Rock - Eye Bridge Room [top right chest]'],
