@@ -655,9 +655,20 @@ def link_entrances(world):
     if world.agahnim_fix_required:
         # need to swap contents of Mimic Cave and TRock Ledge Right so Agahnim 1 is in Light World!
         ret.append('Fix to prevent Agahnim Softlock: Swap Contents of Turtle Rock Ledge (East) and Mimic Cave:')
-        mimic_cave_target = world.get_entrance('Mimic Cave Mirror Spot').connected_region
-        ret.append(connect_one_way(world, 'Dark Death Mountain Ledge (East)', mimic_cave_target))
-        ret.append(connect_one_way(world, 'Mimic Cave Mirror Spot', 'Agahnims Tower'))
+
+        mimic_cave_entrance = world.get_entrance('Mimic Cave Mirror Spot')
+        mimic_cave_target = mimic_cave_entrance.connected_region
+        ddmle_entrance = world.get_entrance('Dark Death Mountain Ledge (East)')
+        ddmle_entrance.connected_region = mimic_cave_target
+        mimic_cave_target.entrances.remove(mimic_cave_entrance)
+        mimic_cave_target.entrances.append(ddmle_entrance)
+        ret.append('Dark Death Mountain Ledge (East) => %s' % mimic_cave_target)
+
+        aga_tower = world.get_region('Agahnims Tower')
+        mimic_cave_entrance.connected_region = aga_tower
+        aga_tower.entrances.remove(ddmle_entrance)
+        aga_tower.entrances.append(mimic_cave_entrance)
+        ret.append('Mimic Cave Mirror Spot => Agahnims Tower Exit')
 
     # check for swamp palace fix
     if world.get_entrance('Dam').connected_region.name != 'Dam' or world.get_entrance('Swamp Palace').connected_region.name != 'Swamp Palace (Entrance)':

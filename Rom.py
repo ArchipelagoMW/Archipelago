@@ -37,7 +37,7 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
                 try:
                     # ugly fix for agahnim fix in simple dungeon shuffle mode
                     if world.agahnim_fix_required and exit.name == 'Dark Death Mountain Ledge (East)':
-                        write_byte(rom, door_addresses[exit.name][0], exit.target)
+                        write_byte(rom, door_addresses[exit.name][0], world.get_entrance('Mimic Cave Mirror Spot').target)
                         continue
 
                     addresses = door_addresses[exit.name]
@@ -48,8 +48,8 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
 
                     # ugly fix for agahnim fix in simple dungeon shuffle mode
                     if world.agahnim_fix_required and exit.name == 'Mimic Cave Mirror Spot':
-                        write_byte(rom, single_doors[exit.name], exit.target[0])
-                        write_byte(rom, door_addresses['Dark Death Mountain Ledge (East)'][1], exit.target[1])
+                        write_byte(rom, single_doors[exit.name], world.get_entrance('Dark Death Mountain Ledge (East)').target[0])
+                        write_byte(rom, door_addresses['Dark Death Mountain Ledge (East)'][1], world.get_entrance('Dark Death Mountain Ledge (East)').target[1])
                         continue
 
                     addresses = single_doors[exit.name]
