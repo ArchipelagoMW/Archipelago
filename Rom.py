@@ -231,7 +231,8 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     write_strings(rom, world)
 
     # set rom name
-    write_bytes(rom, 0x7FC0, [0x45, 0x6E, 0x74, 0x72, 0x61, 0x6E, 0x63, 0x65, 0x52, 0x61, 0x6E, 0x64, 0x6F, 0x6D, 0x69, 0x7A, 0x65, 0x72, 0x00, 0x00, 0x00])
+    # 21 bytes
+    write_bytes(rom, 0x7FC0, bytearray('ER_020_%09d_%04d' % (world.seed, world.option_identifier), 'utf8'))
 
     # set heart beep rate
     write_byte(rom, 0x180033, {'off': 0x00, 'half': 0x40, 'quarter': 0x80, 'normal': 0x20}[beep])

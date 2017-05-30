@@ -135,6 +135,15 @@ class World(object):
 
         return False
 
+    @property
+    def option_identifier(self):
+        logic = 0 if self.logic == 'noglitches' else 1
+        mode = 0 if self.mode == 'open' else 1
+        goal = 0 if self.goal == 'ganon' else 1 if self.goal == 'pedestal' else 2
+        shuffle = ['default', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'].index(self.shuffle)
+        dungeonitems = 0 if self.place_dungeon_items else 1
+        return logic | (mode << 1) | (goal << 2) | (shuffle << 4) | (dungeonitems << 8)
+
 
 class CollectionState(object):
 
