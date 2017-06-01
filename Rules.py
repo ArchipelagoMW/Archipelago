@@ -104,7 +104,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Broken Bridge (West)'), lambda state: state.has('Hookshot'))
     set_rule(world.get_entrance('Broken Bridge (East)'), lambda state: state.has('Hookshot'))
     set_rule(world.get_entrance('East Death Mountain Teleporter'), lambda state: state.can_lift_heavy_rocks())
-    set_rule(world.get_entrance('Death Mountain Fairy Drop Area Rocks'), lambda state: state.can_lift_rocks())
+    set_rule(world.get_entrance('Death Mountain Fairy Drop Area Rocks'), lambda state: state.can_lift_heavy_rocks())
     set_rule(world.get_entrance('Death Mountain Climb Push Block Reverse'), lambda state: state.has('Mirror'))  # can erase block
     set_rule(world.get_entrance('Death Mountain (Top)'), lambda state: state.has('Hammer'))
     set_rule(world.get_entrance('Turtle Rock Teleporter'), lambda state: state.can_lift_heavy_rocks() and state.has('Hammer'))
