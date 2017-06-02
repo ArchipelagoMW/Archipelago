@@ -1044,7 +1044,10 @@ Blacksmith_Single_Cave_Doors = ['Thiefs Hut',
                                 'Hookshot Fairy',
                                 'Waterfall of Wishing',
                                 'Capacity Upgrade',
-                                'Dam']
+                                'Dam',
+                                'Lumberjack House',
+                                'Lake Hylia Fortune Teller',
+                                'Kakariko Gamble Game']
 
 Bomb_Shop_Single_Cave_Doors = ['East Dark World Hint',
                                'Palace of Darkness Hint',
@@ -1073,10 +1076,7 @@ Bomb_Shop_Single_Cave_Doors = ['East Dark World Hint',
                                'Dark Death Mountain Fairy',
                                'Mimic Cave Mirror Spot',
                                'Big Bomb Shop',
-                               'Dark Lake Hylia Shop',
-                               'Lumberjack House',
-                               'Lake Hylia Fortune Teller',
-                               'Kakariko Gamble Game']
+                               'Dark Lake Hylia Shop']
 
 Single_Cave_Doors = ['Pyramid Fairy']
 
