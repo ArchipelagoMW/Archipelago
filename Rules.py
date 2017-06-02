@@ -388,7 +388,84 @@ def set_blacksmith_rules(world):
 
 
 def set_big_bomb_rules(world):
-    # this is a mess and needs to be worked out properly ToDo
-    # very broad restrictions so can always get there
-    set_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has_Mirror() and state.has_Pearl() and state.can_reach('Big Bomb Shop', 'Region') and state.can_collect('Crystal 5') and state.can_collect('Crystal 6') and
-             state.has('Ocarina') and state.has('Hammer') and state.can_lift_rocks())
+    # this is a mess
+    bombshop_entrance = world.get_region('Big Bomb Shop').entrances[0]
+    Normal_LW_entrances = ['Thiefs Hut',
+                           'Bonk Fairy (Light)',
+                           'Lake Hylia Fairy',
+                           'Swamp Fairy',
+                           'Desert Fairy',
+                           'Chicken House',
+                           'Aginahs Cave',
+                           'Sahasrahlas Hut',
+                           'Cave Shop (Lake Hylia)',
+                           'Blacksmiths Hut',
+                           'Sick Kids House',
+                           'Lost Woods Gamble',
+                           'Fortune Teller (Light)',
+                           'Snitch Lady (East)',
+                           'Snitch Lady (West)',
+                           'Bush Covered House',
+                           'Tavern (Front)',
+                           'Light World Bomb Hut',
+                           'Kakariko Shop',
+                           'Lake Hylia Cave',
+                           'Long Fairy Cave',
+                           'Good Bee Cave',
+                           '20 Rupee Cave',
+                           '50 Rupee Cave',
+                           'Ice Cave',
+                           'Bonk Rock Cave',
+                           'Library',
+                           'Witch Hut',
+                           'Waterfall of Wishing',
+                           'Dam',
+                           'Lumberjack House',
+                           'Lake Hylia Fortune Teller',
+                           'Kakariko Gamble Game']
+    LW_walkable_entrances = ['Dark Lake Hylia Ledge Fairy',
+                             'Dark Lake Hylia Ledge Spike Cave',
+                             'Dark Lake Hylia Ledge Hint',
+                             'Dark Desert Cave',
+                             'Dark Desert Hint',
+                             'Dark Desert Fairy',
+                             'Desert Cave']
+    Northern_DW_entrances = ['Doorless Hut',
+                             'C-Shaped House',
+                             'Chest Game',
+                             'Dark World Hammer Peg Cave',
+                             'Red Shield Shop',
+                             'Dark Sanctuary Hint',
+                             'Fortune Teller (Dark)',
+                             'Dark World Shop',
+                             'Dark World Lumberjack Shop',
+                             'Graveyard Cave']
+    Southern_DW_entrances = ['Dark Swamp Cave',
+                             'Bonk Fairy (Dark)',
+                             'Archery Game',
+                             'Big Bomb Shop',
+                             'Dark Lake Hylia Shop',
+                             'Cave South of Haunted Grove']
+    Isolated_DW_entrances = ['Spike Cave',
+                             'Cave Shop (Dark Death Mountain)',
+                             'Dark Death Mountain Fairy',
+                             'Mimic Cave Mirror Spot']
+    Isolated_LW_entrances =['Capacity Upgrade',
+                            'Hookshot Fairy']
+    set_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has_Pearl() and state.can_reach('Big Bomb Shop', 'Region') and state.can_collect('Crystal 5') and state.can_collect('Crystal 6'))
+    if bombshop_entrance.name in Normal_LW_entrances:
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.can_lift_rocks()) or state.has_Mirror())
+    elif bombshop_entrance.name in LW_walkable_entrances:
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has_Mirror() and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.can_lift_rocks())))
+    elif bombshop_entrance.name in Northern_DW_entrances:
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.can_lift_heavy_rocks() and state.has('Hammer')) or (state.has_Mirror() and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.can_lift_rocks()))))
+    elif bombshop_entrance.name in Southern_DW_entrances:
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has('Hammer') or (state.has_Mirror() and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.can_lift_rocks()))))
+    elif bombshop_entrance.name in Isolated_DW_entrances:
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has_Mirror() and state.has('Ocarina') and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.can_lift_rocks())))
+    elif bombshop_entrance.name in Isolated_LW_entrances:
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has('Ocarina') and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.can_lift_rocks())))
+    elif bombshop_entrance.name == 'Dark World Potion Shop':
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has('Hammer') or state.can_lift_rocks() or (state.has_Mirror() and state.can_reach('Top of Pyramid', 'Entrance')))
+    elif bombshop_entrance.name == 'Kings Grave':
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.can_reach('Top of Pyramid', 'Entrance') or (state.can_lift_rocks() and state.has('Hammer')) or (state.can_lift_heavy_rocks() and state.has_Mirror()))
