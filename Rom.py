@@ -128,7 +128,7 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     write_byte(rom, 0xEFBD5, prizes.pop())
     write_byte(rom, 0xEFBD6, prizes.pop())
     # in open mode with shuffled caves, cannot guarantee access to rupees or a shop. Make 4 kill tree pull single bombs always to give guaranteed access
-    if world.shuffle not in ['default', 'dungeonsfull', 'dungeonssimple']:
+    if world.shuffle not in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
         write_byte(rom, 0xEFBD6, 0xDC)
 
     # rupee crab prizes
@@ -203,12 +203,12 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
 
     # disable open door sprites when exiting caves
     # this does not seem to work completely yet
-    if world.shuffle not in ['default', 'dungeonssimple', 'dungeonsfull']:
+    if world.shuffle not in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
         for i in range(0x85):
             write_byte(rom, 0x15274 + i, 0x00)
 
     # fix trock doors for reverse entrances
-    if world.shuffle != 'default':
+    if world.shuffle != 'vanilla':
         write_byte(rom, 0xFED31, 0x0E)  # preopen bombable exit
         write_byte(rom, 0xFEE41, 0x0E)  # preopen bombable exit
         write_byte(rom, 0xFE465, 0x1E)  # remove small key door on backside of big key door

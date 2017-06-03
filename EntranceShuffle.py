@@ -8,7 +8,7 @@ def link_entrances(world):
         connect_simple(world, exitname, regionname)
 
     # if we do not shuffle, set default connections
-    if world.shuffle == 'default':
+    if world.shuffle == 'vanilla':
         for exitname, regionname in default_connections:
             connect_simple(world, exitname, regionname)
         for exitname, regionname in default_dungeon_connections:

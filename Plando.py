@@ -27,7 +27,7 @@ def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World('default', 'noglitches', 'standard', 'normal', 'ganon', False)
+    world = World('vanilla', 'noglitches', 'standard', 'normal', 'ganon', False)
     logger = logging.getLogger('')
 
     hasher = hashlib.md5()
