@@ -95,7 +95,7 @@ def global_rules(world):
     set_rule(world.get_location('Witch'), lambda state: state.has('Mushroom'))
     set_rule(world.get_entrance('Desert Palace Entrance (North) Rocks'), lambda state: state.can_lift_rocks())
     set_rule(world.get_entrance('Desert Ledge Return Rocks'), lambda state: state.can_lift_rocks())  # should we decide to place something that is not a dungeon end up there at some point
-    set_rule(world.get_entrance('Desert Cave'), lambda state: state.can_lift_rocks())
+    set_rule(world.get_entrance('Checkerboard Cave'), lambda state: state.can_lift_rocks())
     set_rule(world.get_location('Altar'), lambda state: state.can_collect('Red Pendant') and state.can_collect('Blue Pendant') and state.can_collect('Green Pendant'))
     set_rule(world.get_location('Sahasrahla'), lambda state: state.can_collect('Green Pendant'))
     set_rule(world.get_entrance('Agahnims Tower'), lambda state: state.has('Cape') or state.has_beam_sword() or state.can_reach('Agahnim 1'))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
@@ -104,8 +104,8 @@ def global_rules(world):
     set_rule(world.get_entrance('Broken Bridge (West)'), lambda state: state.has('Hookshot'))
     set_rule(world.get_entrance('Broken Bridge (East)'), lambda state: state.has('Hookshot'))
     set_rule(world.get_entrance('East Death Mountain Teleporter'), lambda state: state.can_lift_heavy_rocks())
-    set_rule(world.get_entrance('Death Mountain Fairy Drop Area Rocks'), lambda state: state.can_lift_heavy_rocks())
-    set_rule(world.get_entrance('Death Mountain Climb Push Block Reverse'), lambda state: state.has('Mirror'))  # can erase block
+    set_rule(world.get_entrance('Fairy Ascension Rocks'), lambda state: state.can_lift_heavy_rocks())
+    set_rule(world.get_entrance('7 Chest Cave Push Block Reverse'), lambda state: state.has('Mirror'))  # can erase block
     set_rule(world.get_entrance('Death Mountain (Top)'), lambda state: state.has('Hammer'))
     set_rule(world.get_entrance('Turtle Rock Teleporter'), lambda state: state.can_lift_heavy_rocks() and state.has('Hammer'))
     set_rule(world.get_entrance('Turtle Rock Skull Mirror Spot'), lambda state: state.has_Mirror() and state.has('Hammer'))  # if stuck, can mirror and hammer the pegs
@@ -165,15 +165,13 @@ def global_rules(world):
     set_rule(world.get_entrance('Hookshot Cave'), lambda state: state.can_lift_rocks() and state.has_Pearl())
     set_rule(world.get_entrance('East Death Mountain (Top) Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Mimic Cave Mirror Spot'), lambda state: state.has_Mirror())
-    set_rule(world.get_entrance('Death Mountain Fairy Drop Area Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Spiral Cave Mirror Spot'), lambda state: state.has_Mirror())
-    set_rule(world.get_entrance('Death Mountain Fairy Drop Area Rocks'), lambda state: state.can_lift_rocks())
-    set_rule(world.get_entrance('Death Mountain Fairy Drop Area Mirror Spot'), lambda state: state.has_Mirror() and state.has_Pearl())  # need to lift flowers
+    set_rule(world.get_entrance('Fairy Ascension Mirror Spot'), lambda state: state.has_Mirror() and state.has_Pearl())  # need to lift flowers
     set_rule(world.get_entrance('Isolated Ledge Mirror Spot'), lambda state: state.has_Mirror())
-    set_rule(world.get_entrance('Dark Death Mountain Climb (Top)'), lambda state: state.has_Pearl())  # Chests inside could be  collected with super bunny, but may be shuffled. rather limit access for now ToDo
-    set_rule(world.get_entrance('Dark Death Mountain Climb (Bottom)'), lambda state: state.has_Pearl())
+    set_rule(world.get_entrance('Dark Death Mountain Ascend (Top)'), lambda state: state.has_Pearl())  # Chests inside could be  collected with super bunny, but may be shuffled. rather limit access for now ToDo
+    set_rule(world.get_entrance('Dark Death Mountain Ascend (Bottom)'), lambda state: state.has_Pearl())
     set_rule(world.get_entrance('Cave Shop (Dark Death Mountain)'), lambda state: state.has_Pearl())  # just for save bunny algo for now
-    set_rule(world.get_entrance('Dark Death Mountain Climb Exit (Bottom)'), lambda state: False)  # Cannot get to bottom exit from top. Just exists for shuffling
+    set_rule(world.get_entrance('Dark Death Mountain Ascend Exit (Bottom)'), lambda state: False)  # Cannot get to bottom exit from top. Just exists for shuffling
     set_rule(world.get_location('[cave-055] Spike Cave'), lambda state: state.has('Hammer') and state.can_lift_rocks())  # damage should be survivable always somehow. MAY need more logic ToDo
     set_rule(world.get_location('[cave-056] Hookshot Cave [top right chest]'), lambda state: state.has('Hookshot'))
     set_rule(world.get_location('[cave-056] Hookshot Cave [top left chest]'), lambda state: state.has('Hookshot'))
@@ -319,12 +317,12 @@ def no_glitches_rules(world):
     set_rule(world.get_entrance('Dark Lake Hylia Teleporter'), lambda state: state.has_Pearl() and state.has('Flippers') and (state.has('Hammer') or state.can_lift_rocks()))
     set_rule(world.get_entrance('Dark Lake Hylia Ledge Drop'), lambda state: state.has('Flippers'))
     add_rule(world.get_entrance('Ganons Tower (Hookshot Room)'), lambda state: state.has('Hookshot'))
-    set_rule(world.get_entrance('Death Mountain Climb Push Block Reverse'), lambda state: False)  # no glitches does not require block override
-    set_rule(world.get_entrance('Death Mountain Climb Bomb Jump'), lambda state: False)
+    set_rule(world.get_entrance('7 Chest Cave Push Block Reverse'), lambda state: False)  # no glitches does not require block override
+    set_rule(world.get_entrance('7 Chest Cave Bomb Jump'), lambda state: False)
 
     # Light cones in standard depend on which world we actually are in, not which one the location would normally be
     # We add Lamp requirements only to those locations which lie in the dark world (or everything if open
-    DW_Entrances = ['Bumper Cave (Bottom)', 'Dark Death Mountain Climb (Top)', 'Dark Death Mountain Climb (Bottom)', 'Hookshot Cave', 'Bumper Cave (Top)', 'Hookshot Cave Back Entrance', 'Dark Death Mountain Ledge (East)',
+    DW_Entrances = ['Bumper Cave (Bottom)', 'Dark Death Mountain Ascend (Top)', 'Dark Death Mountain Ascend (Bottom)', 'Hookshot Cave', 'Bumper Cave (Top)', 'Hookshot Cave Back Entrance', 'Dark Death Mountain Ledge (East)',
                     'Turtle Rock Isolated Ledge Entrance', 'Thieves Town', 'Skull Woods Final Section', 'Ice Palace', 'Misery Mire', 'Palace of Darkness', 'Swamp Palace', 'Turtle Rock', 'Dark Death Mountain Ledge (West)']
 
     def check_is_dark_world(region):
@@ -409,7 +407,7 @@ def set_big_bomb_rules(world):
                            'Tavern (Front)',
                            'Light World Bomb Hut',
                            'Kakariko Shop',
-                           'Lake Hylia Cave',
+                           'Mini Moldorm Cave',
                            'Long Fairy Cave',
                            'Good Bee Cave',
                            '20 Rupee Cave',
@@ -429,7 +427,7 @@ def set_big_bomb_rules(world):
                              'Dark Desert Cave',
                              'Dark Desert Hint',
                              'Dark Desert Fairy',
-                             'Desert Cave']
+                             'Checkerboard Cave']
     Northern_DW_entrances = ['Doorless Hut',
                              'C-Shaped House',
                              'Chest Game',
