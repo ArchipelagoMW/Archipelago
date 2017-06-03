@@ -437,6 +437,7 @@ class Location(object):
         self.spot_type = 'Location'
         self.hint_text = hint_text if hint_text is not None else 'Hyrule'
         self.recursion_count = 0
+        self.staleness_count = 0
 
     def access_rule(self, state):
         return True

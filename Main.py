@@ -11,17 +11,16 @@ import logging
 import argparse
 import os
 
-__version__ = '0.2-dev'
+__version__ = '0.3-dev'
 
-logic_hash = [102, 208, 240, 103, 170, 178, 182, 42, 44, 146, 141, 72, 177, 138, 38, 113, 10, 107, 213, 157, 68, 87, 181, 252, 125, 85, 1, 225,
-              43, 186, 159, 196, 149, 71, 165, 203, 105, 109, 58, 12, 80, 216, 222, 153, 241, 189, 247, 21, 35, 76, 248, 90, 36, 86, 163, 77,
-              115, 131, 9, 169, 4, 50, 75, 98, 54, 13, 99, 221, 158, 129, 229, 133, 40, 174, 234, 227, 96, 193, 207, 101, 172, 110, 194, 233,
-              120, 148, 243, 25, 190, 173, 6, 180, 119, 37, 61, 95, 118, 51, 79, 136, 15, 152, 147, 217, 5, 242, 11, 17, 83, 231, 18, 117, 228,
-              63, 34, 156, 33, 128, 62, 237, 88, 249, 224, 219, 167, 122, 46, 65, 26, 235, 106, 55, 130, 226, 114, 211, 39, 137, 206, 59, 176,
-              3, 30, 89, 201, 245, 116, 127, 41, 154, 23, 8, 100, 150, 188, 183, 195, 0, 14, 134, 53, 78, 70, 69, 160, 126, 139, 214, 192, 205,
-              82, 60, 49, 244, 168, 121, 191, 104, 124, 92, 73, 251, 91, 22, 175, 236, 47, 204, 198, 19, 123, 166, 27, 52, 7, 24, 253, 215, 84,
-              239, 254, 97, 45, 48, 202, 132, 143, 199, 212, 112, 250, 20, 171, 223, 64, 218, 161, 111, 144, 145, 230, 140, 31, 81, 2, 238, 246,
-              155, 142, 185, 28, 164, 210, 16, 255, 232, 74, 200, 108, 135, 220, 57, 209, 184, 179, 187, 197, 162, 93, 67, 66, 151, 94, 32, 56, 29]
+logic_hash = [169, 242, 143, 206, 16, 22, 49, 159, 94, 18, 202, 249, 155, 198, 75, 55, 122, 166, 239, 175, 62, 4, 118, 13, 149, 70, 26, 11, 141, 173, 168, 252,
+              100, 152, 221, 248, 112, 58, 80, 158, 87, 162, 190, 99, 219, 184, 178, 101, 43, 73, 164, 226, 63, 185, 54, 107, 38, 17, 68, 32, 148, 209, 181, 146,
+              85, 156, 127, 7, 182, 37, 113, 66, 59, 41, 78, 189, 20, 180, 144, 9, 231, 161, 88, 46, 1, 24, 53, 167, 213, 220, 115, 81, 194, 205, 163, 14,
+              42, 64, 183, 104, 79, 71, 50, 98, 138, 233, 240, 96, 23, 31, 67, 251, 217, 232, 236, 250, 238, 218, 201, 151, 200, 28, 150, 65, 2, 103, 223, 5,
+              72, 93, 176, 243, 177, 40, 197, 52, 132, 56, 212, 227, 136, 147, 135, 188, 29, 19, 51, 142, 120, 225, 8, 137, 92, 154, 196, 241, 215, 171, 133, 131,
+              186, 117, 130, 210, 69, 106, 145, 110, 214, 15, 124, 157, 57, 191, 121, 255, 170, 237, 229, 105, 30, 134, 235, 102, 119, 139, 83, 153, 47, 82, 114, 160,
+              211, 108, 216, 10, 203, 39, 77, 123, 207, 140, 230, 90, 27, 244, 116, 21, 179, 165, 245, 95, 12, 253, 6, 60, 25, 74, 76, 91, 126, 195, 224, 246,
+              125, 61, 33, 44, 187, 222, 0, 45, 86, 34, 129, 174, 111, 35, 84, 128, 208, 247, 234, 48, 97, 199, 204, 192, 228, 89, 172, 109, 36, 254, 3, 193]
 
 
 def main(args, seed=None):
@@ -61,8 +60,13 @@ def main(args, seed=None):
 
     if args.algorithm == 'flood':
         flood_items(world)  # different algo, biased towards early game progress items
-    else:
-        distribute_items(world)
+    elif args.algorithm == 'vt21':
+        distribute_items_cutoff(world, 1)
+    elif args.algorithm == 'vt22':
+        distribute_items_cutoff(world, 0.33)
+    elif args.algorithm == 'freshness':
+        distribute_items_staleness(world)
+
     world.spoiler += print_location_spoiler(world)
 
     logger.info('Calculating playthrough.')
@@ -94,7 +98,72 @@ def main(args, seed=None):
     return world
 
 
-def distribute_items(world):
+def distribute_items_cutoff(world, cutoffrate=0.33):
+    # get list of locations to fill in
+    fill_locations = world.get_unfilled_locations()
+    random.shuffle(fill_locations)
+
+    # get items to distribute
+    random.shuffle(world.itempool)
+    itempool = world.itempool
+
+    total_advancement_items = len([item for item in itempool if item.advancement])
+    placed_advancement_items = 0
+
+    progress_done = False
+
+    while itempool and fill_locations:
+        candidate_item_to_place = None
+        item_to_place = None
+        for item in itempool:
+            if progress_done:
+                item_to_place = item
+                break
+            if item.advancement:
+                candidate_item_to_place = item
+                if world.unlocks_new_location(item):
+                    item_to_place = item
+                    placed_advancement_items += 1
+                    break
+
+        if item_to_place is None:
+            # check if we can reach all locations and that is why we find no new locations to place
+            if len(world.get_reachable_locations()) == len(world.get_locations()):
+                progress_done = True
+                continue
+            # we might be in a situation where all new locations require multiple items to reach. If that is the case, just place any advancement item we've found and continue trying
+            if candidate_item_to_place is not None:
+                item_to_place = candidate_item_to_place
+                placed_advancement_items += 1
+            else:
+                # we placed all available progress items. Maybe the game can be beaten anyway?
+                if world.can_beat_game():
+                    logging.getLogger('').warning('Not all locations reachable. Game beatable anyway.')
+                    progress_done = True
+                    continue
+                raise RuntimeError('No more progress items left to place.')
+
+        spot_to_fill = None
+        for location in (fill_locations if placed_advancement_items/total_advancement_items < cutoffrate else reversed(fill_locations)):
+            if world.state.can_reach(location) and location.item_rule(item_to_place):
+                spot_to_fill = location
+                break
+
+        if spot_to_fill is None:
+            # we filled all reachable spots. Maybe the game can be beaten anyway?
+            if world.can_beat_game():
+                logging.getLogger('').warning('Not all items placed. Game beatable anyway.')
+                break
+            raise RuntimeError('No more spots to place %s' % item_to_place)
+
+        world.push_item(spot_to_fill, item_to_place, True)
+        itempool.remove(item_to_place)
+        fill_locations.remove(spot_to_fill)
+
+    logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s' % ([item.name for item in itempool], [location.name for location in fill_locations]))
+
+
+def distribute_items_staleness(world):
     # get list of locations to fill in
     fill_locations = world.get_unfilled_locations()
     random.shuffle(fill_locations)
@@ -136,9 +205,22 @@ def distribute_items(world):
 
         spot_to_fill = None
         for location in fill_locations:
+            # increase likelyhood of skipping a location if it has been found stale
+            if not progress_done and random.randint(0, location.staleness_count) > 2:
+                continue
+
             if world.state.can_reach(location) and location.item_rule(item_to_place):
                 spot_to_fill = location
                 break
+            else:
+                location.staleness_count += 1
+
+        # might have skipped too many locations due to potential staleness. Do not check for staleness now to find a candidate
+        if spot_to_fill is None:
+            for location in fill_locations:
+                if world.state.can_reach(location) and location.item_rule(item_to_place):
+                    spot_to_fill = location
+                    break
 
         if spot_to_fill is None:
             # we filled all reachable spots. Maybe the game can be beaten anyway?
@@ -383,8 +465,11 @@ if __name__ == '__main__':
     parser.add_argument('--goal', default='ganon', const='ganon', nargs='?', choices=['ganon', 'pedestal', 'dungeons'],
                         help='Select completion goal. Pedestal places a second Triforce at the Master Sword Pedestal, the playthrough may still deem Ganon to be the easier goal. All dungeons is not enforced ingame but considered in the rules.')
     parser.add_argument('--difficulty', default='normal', const='normal', nargs='?', choices=['normal'], help='Select game difficulty. Affects available itempool.')
-    parser.add_argument('--algorithm', default='regular', const='regular', nargs='?', choices=['regular', 'flood'],
-                        help='Select item filling algorithm. Regular is the ordinary VT algorithm. Flood pushes out items starting from Link\'s House and is slightly biased to placing progression items with less restrictions.')
+    parser.add_argument('--algorithm', default='freshness', const='freshness', nargs='?', choices=['freshness', 'flood', 'vt21', 'vt22'],
+                        help='Select item filling algorithm. vt21 is unbiased in its selection, but has tendency to put Ice Rod in Turtle Rock.\n'
+                             'vt22 drops off stale locations after 1/3 of progress items were placed to try to circumvent vt21\'s shortcomings.\n'
+                             'freshness keeps track of stale locations (ones that cannot be reached yet) and decreases likeliness of selecting them the more often they were found unreachable.\n'
+                             'flood pushes out items starting from Link\'s House and is slightly biased to placing progression items with less restrictions.')
     parser.add_argument('--shuffle', default='full', const='full', nargs='?', choices=['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'],
                         help='Select Entrance Shuffling Algorithm.\n'
                              'Simple shuffles Dungeon Entrances/Exits between each other and keeps all 4-entrance dungeons confined to one location. All caves outside of death mountain are shuffled in pairs.\n'
