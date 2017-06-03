@@ -84,11 +84,11 @@ def global_rules(world):
     set_rule(world.get_entrance('South Hyrule Teleporter'), lambda state: state.has('Hammer') and state.can_lift_rocks() and state.has_Pearl())
     set_rule(world.get_entrance('Kakariko Teleporter'), lambda state: ((state.has('Hammer') and state.can_lift_rocks()) or state.can_lift_heavy_rocks()) and state.has_Pearl())
     set_rule(world.get_location('Haunted Grove'), lambda state: state.has('Shovel'))
-    set_rule(world.get_location('Purple Chest'), lambda state: state.can_reach('Blacksmiths', 'Location') and state.has_Mirror())  # ToDo check if can S&Q with chest to avoid mirror
+    set_rule(world.get_location('Purple Chest'), lambda state: state.can_reach('Blacksmiths', 'Location'))  # Can S&Q with chest
 
     set_rule(world.get_location('Piece of Heart (Zoras River)'), lambda state: state.has('Flippers'))
     set_rule(world.get_entrance('Waterfall of Wishing'), lambda state: state.has('Flippers'))  # can be fake flippered into, but is in weird state inside that might prevent you from doing things. Can be improved in future Todo
-    set_rule(world.get_location('Blacksmiths'), lambda state: state.can_lift_heavy_rocks() and state.can_reach('West Dark World'))
+    set_rule(world.get_location('Blacksmiths'), lambda state: state.can_lift_heavy_rocks() and state.can_reach('West Dark World'))  # Can S&Q with smith
     set_rule(world.get_location('Magic Bat'), lambda state: state.has('Magic Powder'))
     set_rule(world.get_location('Sick Kid'), lambda state: state.has('Bottle'))
     set_rule(world.get_location('Library'), lambda state: state.has_Boots())
