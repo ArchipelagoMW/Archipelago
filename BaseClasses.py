@@ -397,6 +397,7 @@ class Entrance(object):
         self.parent_region = parent
         self.connected_region = None
         self.target = None
+        self.addresses = None
         self.spot_type = 'Entrance'
         self.recursion_count = 0
 
@@ -409,9 +410,10 @@ class Entrance(object):
 
         return False
 
-    def connect(self, region, target=None):
+    def connect(self, region, addresses=None, target=None):
         self.connected_region = region
         self.target = target
+        self.addresses = addresses
         region.entrances.append(self)
 
     def __str__(self):

@@ -1,5 +1,4 @@
 from Dungeons import dungeon_music_addresses
-from EntranceShuffle import door_addresses, single_doors
 from Text import string_to_alttp_text, text_addresses, credits_addresses, string_to_credits
 from Text import Uncle_texts, Ganon1_texts, PyramidFairy_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts
 from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts
@@ -40,29 +39,9 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     for region in world.regions:
         for exit in region.exits:
             if exit.target is not None:
-                try:
-                    # ugly fix for agahnim fix in simple dungeon shuffle mode
-                    if world.agahnim_fix_required and exit.name == 'Dark Death Mountain Ledge (East)':
-                        write_byte(rom, door_addresses[exit.name][0], world.get_entrance('Mimic Cave Mirror Spot').target)
-                        continue
-
-                    addresses = door_addresses[exit.name]
-                    write_byte(rom, addresses[0], exit.target[0])
-                    write_byte(rom, addresses[1], exit.target[1])
-                except KeyError:
-                    # probably cave
-
-                    # ugly fix for agahnim fix in simple dungeon shuffle mode
-                    if world.agahnim_fix_required and exit.name == 'Mimic Cave Mirror Spot':
-                        write_byte(rom, single_doors[exit.name], world.get_entrance('Dark Death Mountain Ledge (East)').target[0])
-                        write_byte(rom, door_addresses['Dark Death Mountain Ledge (East)'][1], world.get_entrance('Dark Death Mountain Ledge (East)').target[1])
-                        continue
-
-                    addresses = single_doors[exit.name]
-                    if not isinstance(addresses, tuple):
-                        addresses = (addresses,)
-                    for address in addresses:
-                        write_byte(rom, address, exit.target)
+                addresses = [exit.addresses] if isinstance(exit.addresses, int) else exit.addresses
+                for address in addresses:
+                    write_byte(rom, address, exit.target)
 
     # patch medallion requirements
     if world.required_medallions[0] == 'Bombos':

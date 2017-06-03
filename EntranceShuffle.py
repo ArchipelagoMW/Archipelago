@@ -109,16 +109,16 @@ def link_entrances(world):
         # place blacksmith, has limited options
         random.shuffle(blacksmith_doors)
         blacksmith_hut = blacksmith_doors.pop()
-        ret.append(connect_one_way(world, blacksmith_hut, 'Blacksmiths Hut'))
+        ret.append(connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut'))
         bomb_shop_doors.extend(blacksmith_doors)
 
         # place dam and pyramid fairy, have limited options
         # ToDo Dam might be behind fat fairy if we later check for this when placing crystal 5 and 6
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
-        ret.append(connect_one_way(world, bomb_shop, 'Big Bomb Shop'))
+        ret.append(connect_entrance(world, bomb_shop, 'Big Bomb Shop'))
         dam = bomb_shop_doors.pop()
-        ret.append(connect_one_way(world, dam, 'Dam'))
+        ret.append(connect_entrance(world, dam, 'Dam'))
         single_doors.extend(bomb_shop_doors)
 
         # tavern back door cannot be shuffled yet
@@ -170,16 +170,16 @@ def link_entrances(world):
         # place blacksmith, has limited options
         random.shuffle(blacksmith_doors)
         blacksmith_hut = blacksmith_doors.pop()
-        ret.append(connect_one_way(world, blacksmith_hut, 'Blacksmiths Hut'))
+        ret.append(connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut'))
         bomb_shop_doors.extend(blacksmith_doors)
 
         # place dam and pyramid fairy, have limited options
         # ToDo Dam might be behind fat fairy if we later check for this when placing crystal 5 and 6
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
-        ret.append(connect_one_way(world, bomb_shop, 'Big Bomb Shop'))
+        ret.append(connect_entrance(world, bomb_shop, 'Big Bomb Shop'))
         dam = bomb_shop_doors.pop()
-        ret.append(connect_one_way(world, dam, 'Dam'))
+        ret.append(connect_entrance(world, dam, 'Dam'))
         single_doors.extend(bomb_shop_doors)
 
         # tavern back door cannot be shuffled yet
@@ -245,16 +245,16 @@ def link_entrances(world):
         # place blacksmith, has limited options
         random.shuffle(blacksmith_doors)
         blacksmith_hut = blacksmith_doors.pop()
-        ret.append(connect_one_way(world, blacksmith_hut, 'Blacksmiths Hut'))
+        ret.append(connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut'))
         bomb_shop_doors.extend(blacksmith_doors)
 
         # place dam and pyramid fairy, have limited options
         # ToDo Dam might be behind fat fairy if we later check for this when placing crystal 5 and 6
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
-        ret.append(connect_one_way(world, bomb_shop, 'Big Bomb Shop'))
+        ret.append(connect_entrance(world, bomb_shop, 'Big Bomb Shop'))
         dam = bomb_shop_doors.pop()
-        ret.append(connect_one_way(world, dam, 'Dam'))
+        ret.append(connect_entrance(world, dam, 'Dam'))
         single_doors.extend(bomb_shop_doors)
 
         # tavern back door cannot be shuffled yet
@@ -305,7 +305,7 @@ def link_entrances(world):
 
         if world.mode == 'standard':
             # cannot move uncle cave
-            ret.append(connect_one_way(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance'))
+            ret.append(connect_entrance(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance'))
             ret.append(connect_exit(world, 'Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance Stairs'))
             ret.append(connect_entrance(world, lw_doors.pop(), 'Hyrule Castle Secret Entrance Exit'))
         else:
@@ -326,22 +326,22 @@ def link_entrances(world):
             sw_hole_pool = dw_hole_entrances
             mandatory_dark_world.append('Skull Woods First Section Exit')
         for target in ['Skull Woods First Section (Left)', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Top)']:
-            ret.append(connect_one_way(world, sw_hole_pool.pop(), target))
+            ret.append(connect_entrance(world, sw_hole_pool.pop(), target))
 
         # sanctuary has to be in light world
-        ret.append(connect_one_way(world, lw_hole_entrances.pop(), 'Sewer Drop'))
+        ret.append(connect_entrance(world, lw_hole_entrances.pop(), 'Sewer Drop'))
         mandatory_light_world.append('Sanctuary Exit')
 
         # fill up remaining holes
         for hole in dw_hole_entrances:
             exits, target = hole_targets.pop()
             mandatory_dark_world.append(exits)
-            ret.append(connect_one_way(world, hole, target))
+            ret.append(connect_entrance(world, hole, target))
 
         for hole in lw_hole_entrances:
             exits, target = hole_targets.pop()
             mandatory_light_world.append(exits)
-            ret.append(connect_one_way(world, hole, target))
+            ret.append(connect_entrance(world, hole, target))
 
         # hyrule castle handling
         if world.mode == 'standard':
@@ -479,16 +479,16 @@ def link_entrances(world):
         # place blacksmith, has limited options
         random.shuffle(blacksmith_doors)
         blacksmith_hut = blacksmith_doors.pop()
-        ret.append(connect_one_way(world, blacksmith_hut, 'Blacksmiths Hut'))
+        ret.append(connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut'))
         bomb_shop_doors.extend(blacksmith_doors)
 
         # place dam and pyramid fairy, have limited options
         # ToDo Dam might be behind fat fairy if we later check for this when placing crystal 5 and 6
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
-        ret.append(connect_one_way(world, bomb_shop, 'Big Bomb Shop'))
+        ret.append(connect_entrance(world, bomb_shop, 'Big Bomb Shop'))
         dam = bomb_shop_doors.pop()
-        ret.append(connect_one_way(world, dam, 'Dam'))
+        ret.append(connect_entrance(world, dam, 'Dam'))
         single_doors.extend(bomb_shop_doors)
 
         # tavern back door cannot be shuffled yet
@@ -524,7 +524,7 @@ def link_entrances(world):
 
         if world.mode == 'standard':
             # cannot move uncle cave
-            ret.append(connect_one_way(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance'))
+            ret.append(connect_entrance(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance'))
             ret.append(connect_exit(world, 'Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance Stairs'))
             ret.append(connect_entrance(world, doors.pop(), 'Hyrule Castle Secret Entrance Exit'))
         else:
@@ -539,7 +539,7 @@ def link_entrances(world):
 
         # fill up holes
         for hole in hole_entrances:
-            ret.append(connect_one_way(world, hole, hole_targets.pop()))
+            ret.append(connect_entrance(world, hole, hole_targets.pop()))
 
         # hyrule castle handling
         if world.mode == 'standard':
@@ -631,16 +631,16 @@ def link_entrances(world):
         # place blacksmith, has limited options
         random.shuffle(blacksmith_doors)
         blacksmith_hut = blacksmith_doors.pop()
-        ret.append(connect_one_way(world, blacksmith_hut, 'Blacksmiths Hut'))
+        ret.append(connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut'))
         bomb_shop_doors.extend(blacksmith_doors)
 
         # place dam and pyramid fairy, have limited options
         # ToDo Dam might be behind fat fairy if we later check for this when placing crystal 5 and 6
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
-        ret.append(connect_one_way(world, bomb_shop, 'Big Bomb Shop'))
+        ret.append(connect_entrance(world, bomb_shop, 'Big Bomb Shop'))
         dam = bomb_shop_doors.pop()
-        ret.append(connect_one_way(world, dam, 'Dam'))
+        ret.append(connect_entrance(world, dam, 'Dam'))
         single_doors.extend(bomb_shop_doors)
 
         # tavern back door cannot be shuffled yet
@@ -657,17 +657,15 @@ def link_entrances(world):
         ret.append('Fix to prevent Agahnim Softlock: Swap Contents of Turtle Rock Ledge (East) and Mimic Cave:')
 
         mimic_cave_entrance = world.get_entrance('Mimic Cave Mirror Spot')
-        mimic_cave_target = mimic_cave_entrance.connected_region
         ddmle_entrance = world.get_entrance('Dark Death Mountain Ledge (East)')
-        ddmle_entrance.connected_region = mimic_cave_target
-        mimic_cave_target.entrances.remove(mimic_cave_entrance)
-        mimic_cave_target.entrances.append(ddmle_entrance)
-        ret.append('Dark Death Mountain Ledge (East) => %s' % mimic_cave_target)
-
         aga_tower = world.get_region('Agahnims Tower')
-        mimic_cave_entrance.connected_region = aga_tower
+        mimic_cave_target = mimic_cave_entrance.connected_region
+        mimic_cave_target.entrances.remove(mimic_cave_entrance)
         aga_tower.entrances.remove(ddmle_entrance)
-        aga_tower.entrances.append(mimic_cave_entrance)
+
+        ddmle_entrance.connect(mimic_cave_target, door_addresses['Dark Death Mountain Ledge (East)'][0], exit_ids[mimic_cave_target.name])
+        ret.append('Dark Death Mountain Ledge (East) => %s' % mimic_cave_target.name)
+        mimic_cave_entrance.connect(aga_tower, door_addresses['Mimic Cave Mirror Spot'], exit_ids['Agahnims Tower Exit'][0])
         ret.append('Mimic Cave Mirror Spot => Agahnims Tower Exit')
 
     # check for swamp palace fix
@@ -681,36 +679,51 @@ def connect_simple(world, exitname, regionname):
     world.get_entrance(exitname).connect(world.get_region(regionname))
 
 
-def connect_one_way(world, exitname, regionname):
-    entrance = world.get_entrance(exitname)
-    region = world.get_region(regionname)
-    target = cave_codes.get(region.name, None)
-    entrance.connect(region, target)
-    return '%s => %s' % (entrance.name, region.name)
-
-
 def connect_entrance(world, entrancename, exitname):
     entrance = world.get_entrance(entrancename)
-    exit = world.get_entrance(exitname)
-    target = (exit_ids[exit.name][0], entrance.target[1] if entrance.target is not None else None)
-    entrance.connect(exit.parent_region, target)
-    return '%s => %s' % (entrance.name, exit.name)
+    # check if we got an entrance or a region to connect to
+    try:
+        region = world.get_region(exitname)
+        exit = None
+    except RuntimeError:
+        exit = world.get_entrance(exitname)
+        region = exit.parent_region
+
+    # if this was already connected somewhere, remove the backreference
+    if entrance.connected_region is not None:
+        entrance.connected_region.entrances.remove(entrance)
+    
+    target = exit_ids[exit.name][0] if exit is not None else exit_ids.get(region.name, None)
+    addresses = door_addresses[entrance.name][0] if exit is not None else door_addresses[entrance.name]
+    
+    entrance.connect(region, addresses, target)
+    return '%s => %s' % (entrance.name, exit.name if exit is not None else region.name)
 
 
 def connect_exit(world, exitname, entrancename):
     entrance = world.get_entrance(entrancename)
     exit = world.get_entrance(exitname)
-    target = (entrance.target[0] if entrance.target is not None else None, exit_ids[exit.name][1])
-    entrance.target = target
-    exit.connect(entrance.parent_region)
+
+    # if this was already connected somewhere, remove the backreference
+    if exit.connected_region is not None:
+        exit.connected_region.entrances.remove(exit)
+
+    exit.connect(entrance.parent_region, door_addresses[entrance.name][1], exit_ids[exit.name][1])
     return '%s <= %s' % (entrance.name, exit.name)
 
 
 def connect_two_way(world, entrancename, exitname):
     entrance = world.get_entrance(entrancename)
     exit = world.get_entrance(exitname)
-    entrance.connect(exit.parent_region, exit_ids[exit.name])
-    exit.connect(entrance.parent_region)
+
+    # if these were already connected somewhere, remove the backreference
+    if entrance.connected_region is not None:
+        entrance.connected_region.entrances.remove(entrance)
+    if exit.connected_region is not None:
+        exit.connected_region.entrances.remove(exit)
+
+    entrance.connect(exit.parent_region, door_addresses[entrance.name][0], exit_ids[exit.name][0])
+    exit.connect(entrance.parent_region, door_addresses[entrance.name][1], exit_ids[exit.name][1])
     return '%s <=> %s' % (entrance.name, exit.name)
 
 
@@ -733,7 +746,7 @@ def scramble_holes(world):
     if world.mode == 'standard':
         # cannot move uncle cave
         ret.append(connect_two_way(world, 'Hyrule Castle Secret Entrance Stairs', 'Hyrule Castle Secret Entrance Exit'))
-        ret.append(connect_one_way(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance'))
+        ret.append(connect_entrance(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance'))
     else:
         hole_entrances.append(('Hyrule Castle Secret Entrance Stairs', 'Hyrule Castle Secret Entrance Drop'))
         hole_targets.append(('Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance'))
@@ -742,7 +755,7 @@ def scramble_holes(world):
     for entrance, drop in hole_entrances:
         exit, target = hole_targets.pop()
         ret.append(connect_two_way(world, entrance, exit))
-        ret.append(connect_one_way(world, drop, target))
+        ret.append(connect_entrance(world, drop, target))
 
     return '\n'.join(ret)
 
@@ -757,7 +770,7 @@ def connect_random(world, exitlist, targetlist, two_way=False):
         if two_way:
             ret.append(connect_two_way(world, exit, target))
         else:
-            ret.append(connect_one_way(world, exit, target))
+            ret.append(connect_entrance(world, exit, target))
 
     return '\n'.join(ret)
 
@@ -836,7 +849,7 @@ def connect_doors(world, doors, targets):
     while doors:
         door = doors.pop()
         target = targets.pop()
-        ret.append(connect_one_way(world, door, target))
+        ret.append(connect_entrance(world, door, target))
 
     return '\n'.join(ret)
 
@@ -1565,7 +1578,87 @@ door_addresses = {'Desert Palace Entrance (South)': (0xDBB7B, 0x15B02),
                   'Dark Death Mountain Ascend (Top)': (0xDBB86, 0x15B18),
                   'Dark Death Mountain Ascend (Bottom)': (0xDBB85, 0x15B16),
                   'Hookshot Cave': (0xDBBAC, 0x15B64),
-                  'Hookshot Cave Back Entrance': (0xDBBAD, 0x15B66)}
+                  'Hookshot Cave Back Entrance': (0xDBBAD, 0x15B66),
+                  'Skull Woods First Section Hole (East)': (0xDB84D, 0xDB84E),
+                  'Skull Woods First Section Hole (West)': (0xDB84F, 0xDB850),
+                  'Skull Woods First Section Hole (North)': 0xDB84C,
+                  'Skull Woods Second Section Hole': (0xDB851, 0xDB852),
+                  'Waterfall of Wishing': 0xDBBCE,
+                  'Dam': 0xDBBC0,
+                  'Thiefs Hut': 0xDBBD3,
+                  'Hyrule Castle Secret Entrance Drop': 0xDB858,
+                  'Bonk Fairy (Light)': 0xDBBE9,
+                  'Lake Hylia Fairy': 0xDBBD0,
+                  'Swamp Fairy': 0xDBBDE,
+                  'Desert Fairy': 0xDBBE4,
+                  'Kings Grave': 0xDBBCD,
+                  'Tavern North': 0xDBBB5,  # do not use, buggy
+                  'Chicken House': 0xDBBBD,
+                  'Aginahs Cave': 0xDBBE3,
+                  'Sahasrahlas Hut': 0xDBBB7,
+                  'Cave Shop (Lake Hylia)': 0xDBBCA,
+                  'Capacity Upgrade': 0xDBBCF,
+                  'Kakariko Well Drop': (0xDB85C, 0xDB85D),
+                  'Blacksmiths Hut': 0xDBBD6,
+                  'Bat Cave Drop': (0xDB859, 0xDB85A),
+                  'Sick Kids House': 0xDBBB2,
+                  'North Fairy Cave Drop': 0xDB857,
+                  'Lost Woods Gamble': 0xDBBAE,
+                  'Fortune Teller (Light)': 0xDBBD7,
+                  'Snitch Lady (East)': 0xDBBB0,
+                  'Snitch Lady (West)': 0xDBBB1,
+                  'Bush Covered House': 0xDBBB6,
+                  'Tavern (Front)': 0xDBBB4,
+                  'Light World Bomb Hut': 0xDBBBC,
+                  'Kakariko Shop': 0xDBBB8,
+                  'Thieves Forest Hideout Drop': 0xDB853,
+                  'Lumberjack Tree Tree': 0xDB85B,
+                  'Cave South of Haunted Grove': 0xDBBC3,
+                  'Graveyard Cave': 0xDBBC4,
+                  'Checkerboard Cave': 0xDBBF0,
+                  'Mini Moldorm Cave': 0xDBBEF,
+                  'Long Fairy Cave': 0xDBBC7,
+                  'Good Bee Cave': 0xDBBDD,
+                  '20 Rupee Cave': 0xDBBED,
+                  '50 Rupee Cave': 0xDBBEB,
+                  'Ice Cave': 0xDBBF2,
+                  'Bonk Rock Cave': 0xDBBEC,
+                  'Library': 0xDBBBB,
+                  'Witch Hut': 0xDBBBE,
+                  'Sanctuary Grave': 0xDB85E,
+                  'Hookshot Fairy': 0xDBBC2,
+                  'Pyramid Fairy': 0xDBBD5,
+                  'East Dark World Hint': 0xDBBDB,
+                  'Palace of Darkness Hint': 0xDBBDA,
+                  'Dark Lake Hylia Fairy': 0xDBBDF,
+                  'Dark Lake Hylia Ledge Fairy': 0xDBBF3,
+                  'Dark Lake Hylia Ledge Spike Cave': 0xDBBEE,
+                  'Dark Lake Hylia Ledge Hint': 0xDBBDC,
+                  'Dark Swamp Cave': 0xDBBAF,
+                  'Bonk Fairy (Dark)': 0xDBBEA,
+                  'Doorless Hut': 0xDBBBA,
+                  'C-Shaped House': 0xDBBC6,
+                  'Chest Game': 0xDBBB9,
+                  'Dark World Hammer Peg Cave': 0xDBBF1,
+                  'Red Shield Shop': 0xDBBE7,
+                  'Dark Sanctuary Hint': 0xDBBCC,
+                  'Fortune Teller (Dark)': 0xDBBD8,
+                  'Dark World Shop': 0xDBBD2,
+                  'Dark World Lumberjack Shop': 0xDBBC9,
+                  'Dark World Potion Shop': 0xDBBE1,
+                  'Archery Game': 0xDBBCB,
+                  'Dark Desert Cave': 0xDBBD1,
+                  'Dark Desert Hint': 0xDBBD4,
+                  'Dark Desert Fairy': 0xDBBC8,
+                  'Spike Cave': 0xDBBB3,
+                  'Cave Shop (Dark Death Mountain)': 0xDBBE0,
+                  'Dark Death Mountain Fairy': 0xDBBE2,
+                  'Mimic Cave Mirror Spot': 0xDBBC1,
+                  'Big Bomb Shop': 0xDBBC5,
+                  'Dark Lake Hylia Shop': 0xDBBE6,
+                  'Lumberjack House': 0xDBBE8,
+                  'Lake Hylia Fortune Teller': 0xDBBE5,
+                  'Kakariko Gamble Game': 0xDBBD9}
 
 exit_ids = {'Desert Palace Exit (South)': (0x09, 0x84),
             'Desert Palace Exit (West)': (0x0B, 0x83),
@@ -1622,155 +1715,72 @@ exit_ids = {'Desert Palace Exit (South)': (0x09, 0x84),
             'Dark Death Mountain Ascend Exit (Top)': (0x14, 0xE8),
             'Dark Death Mountain Ascend Exit (Bottom)': (0x13, 0xF8),
             'Hookshot Cave Exit (South)': (0x3A, 0x3C),
-            'Hookshot Cave Exit (North)': (0x3B, 0x2C)}
-
-single_doors = {'Skull Woods First Section Hole (East)': (0xDB84D, 0xDB84E),
-                'Skull Woods First Section Hole (West)': (0xDB84F, 0xDB850),
-                'Skull Woods First Section Hole (North)': 0xDB84C,
-                'Skull Woods Second Section Hole': (0xDB851, 0xDB852),
-                'Waterfall of Wishing': 0xDBBCE,
-                'Dam': 0xDBBC0,
-                'Thiefs Hut': 0xDBBD3,
-                'Hyrule Castle Secret Entrance Drop': 0xDB858,
-                'Bonk Fairy (Light)': 0xDBBE9,
-                'Lake Hylia Fairy': 0xDBBD0,
-                'Swamp Fairy': 0xDBBDE,
-                'Desert Fairy': 0xDBBE4,
-                'Kings Grave': 0xDBBCD,
-                'Tavern North': 0xDBBB5,   # do not use, buggy
-                'Chicken House': 0xDBBBD,
-                'Aginahs Cave': 0xDBBE3,
-                'Sahasrahlas Hut': 0xDBBB7,
-                'Cave Shop (Lake Hylia)': 0xDBBCA,
-                'Capacity Upgrade': 0xDBBCF,
-                'Kakariko Well Drop': (0xDB85C, 0xDB85D),
-                'Blacksmiths Hut': 0xDBBD6,
-                'Bat Cave Drop': (0xDB859, 0xDB85A),
-                'Sick Kids House': 0xDBBB2,
-                'North Fairy Cave Drop': 0xDB857,
-                'Lost Woods Gamble': 0xDBBAE,
-                'Fortune Teller (Light)': 0xDBBD7,
-                'Snitch Lady (East)': 0xDBBB0,
-                'Snitch Lady (West)': 0xDBBB1,
-                'Bush Covered House': 0xDBBB6,
-                'Tavern (Front)': 0xDBBB4,
-                'Light World Bomb Hut': 0xDBBBC,
-                'Kakariko Shop': 0xDBBB8,
-                'Thieves Forest Hideout Drop': 0xDB853,
-                'Lumberjack Tree Tree': 0xDB85B,
-                'Cave South of Haunted Grove': 0xDBBC3,
-                'Graveyard Cave': 0xDBBC4,
-                'Checkerboard Cave': 0xDBBF0,
-                'Mini Moldorm Cave': 0xDBBEF,
-                'Long Fairy Cave': 0xDBBC7,
-                'Good Bee Cave': 0xDBBDD,
-                '20 Rupee Cave': 0xDBBED,
-                '50 Rupee Cave': 0xDBBEB,
-                'Ice Cave': 0xDBBF2,
-                'Bonk Rock Cave': 0xDBBEC,
-                'Library': 0xDBBBB,
-                'Witch Hut': 0xDBBBE,
-                'Sanctuary Grave': 0xDB85E,
-                'Hookshot Fairy': 0xDBBC2,
-                'Pyramid Fairy': 0xDBBD5,
-                'East Dark World Hint': 0xDBBDB,
-                'Palace of Darkness Hint': 0xDBBDA,
-                'Dark Lake Hylia Fairy': 0xDBBDF,
-                'Dark Lake Hylia Ledge Fairy': 0xDBBF3,
-                'Dark Lake Hylia Ledge Spike Cave': 0xDBBEE,
-                'Dark Lake Hylia Ledge Hint': 0xDBBDC,
-                'Dark Swamp Cave': 0xDBBAF,
-                'Bonk Fairy (Dark)': 0xDBBEA,
-                'Doorless Hut': 0xDBBBA,
-                'C-Shaped House': 0xDBBC6,
-                'Chest Game': 0xDBBB9,
-                'Dark World Hammer Peg Cave': 0xDBBF1,
-                'Red Shield Shop': 0xDBBE7,
-                'Dark Sanctuary Hint': 0xDBBCC,
-                'Fortune Teller (Dark)': 0xDBBD8,
-                'Dark World Shop': 0xDBBD2,
-                'Dark World Lumberjack Shop': 0xDBBC9,
-                'Dark World Potion Shop': 0xDBBE1,
-                'Archery Game': 0xDBBCB,
-                'Dark Desert Cave': 0xDBBD1,
-                'Dark Desert Hint': 0xDBBD4,
-                'Dark Desert Fairy': 0xDBBC8,
-                'Spike Cave': 0xDBBB3,
-                'Cave Shop (Dark Death Mountain)': 0xDBBE0,
-                'Dark Death Mountain Fairy': 0xDBBE2,
-                'Mimic Cave Mirror Spot': 0xDBBC1,
-                'Big Bomb Shop': 0xDBBC5,
-                'Dark Lake Hylia Shop': 0xDBBE6,
-                'Lumberjack House': 0xDBBE8,
-                'Lake Hylia Fortune Teller': 0xDBBE5,
-                'Kakariko Gamble Game': 0xDBBD9}
-
-
-cave_codes = {'Waterfall of Wishing': 0x5C,
-              'Dam': 0x4E,
-              'Thiefs Hut': 0x61,
-              'Lumberjack House': 0x6B,
-              'Bonk Fairy': 0x71,
-              'Healer Fairy': 0x5E,
-              'Fortune Teller (Light)': 0x65,
-              'Kings Grave': 0x5B,
-              'Tavern': 0x43,
-              'Chicken House': 0x4B,
-              'Aginahs Cave': 0x4D,
-              'Sahasrahlas Hut': 0x45,
-              'Cave Shop': 0x58,
-              'Capacity Upgrade': 0x5D,
-              'Blacksmiths Hut': 0x64,
-              'Sick Kids House': 0x40,
-              'Lost Woods Gamble': 0x3C,
-              'Snitch Lady (East)': 0x3E,
-              'Snitch Lady (West)': 0x3F,
-              'Bush Covered House': 0x44,
-              'Tavern (Front)': 0x42,
-              'Light World Bomb Hut': 0x4A,
-              'Kakariko Shop': 0x46,
-              'Cave South of Haunted Grove': 0x51,
-              'Graveyard Cave': 0x52,
-              'Checkerboard Cave': 0x72,
-              'Mini Moldorm Cave': 0x6C,
-              'Long Fairy Cave': 0x55,
-              'Good Bee Cave': 0x56,
-              '20 Rupee Cave': 0x6F,
-              '50 Rupee Cave': 0x6D,
-              'Ice Cave': 0x84,
-              'Bonk Rock Cave': 0x6E,
-              'Library': 0x49,
-              'Kakariko Gamble Game': 0x67,
-              'Witch Hut': 0x4C,
-              'Hookshot Fairy': 0x50,
-              'Pyramid Fairy': 0x63,
-              'East Dark World Hint': 0x69,
-              'Palace of Darkness Hint': 0x68,
-              'Big Bomb Shop': 0x53,
-              'Dark World Shop': 0x60,
-              'Dark Lake Hylia Ledge Spike Cave': 0x70,
-              'Dark Lake Hylia Ledge Hint': 0x6A,
-              'Dark Swamp Cave': 0x3D,
-              'Doorless Hut': 0x48,
-              'C-Shaped House': 0x54,
-              'Chest Game': 0x47,
-              'Dark World Hammer Peg Cave': 0x83,
-              'Red Shield Shop': 0x57,
-              'Dark Sanctuary Hint': 0x5A,
-              'Fortune Teller (Dark)': 0x66,
-              'Archery Game': 0x59,
-              'Dark Desert Cave': 0x5F,
-              'Dark Desert Hint': 0x62,
-              'Spike Cave': 0x41,
-              'Mimic Cave': 0x4F,
-              'Kakariko Well (top)': 0x80,
-              'Hyrule Castle Secret Entrance': 0x7D,
-              'Bat Cave (right)': 0x7E,
-              'North Fairy Cave': 0x7C,
-              'Thieves Forest Hideout (top)': 0x7A,
-              'Lumberjack Tree (top)': 0x7F,
-              'Sewer Drop': 0x81,
-              'Skull Woods Second Section': 0x79,
-              'Skull Woods First Section (Left)': 0x77,
-              'Skull Woods First Section (Right)': 0x78,
-              'Skull Woods First Section (Top)': 0x76}
+            'Hookshot Cave Exit (North)': (0x3B, 0x2C),
+            'Waterfall of Wishing': 0x5C,
+            'Dam': 0x4E,
+            'Thiefs Hut': 0x61,
+            'Lumberjack House': 0x6B,
+            'Bonk Fairy': 0x71,
+            'Healer Fairy': 0x5E,
+            'Fortune Teller (Light)': 0x65,
+            'Kings Grave': 0x5B,
+            'Tavern': 0x43,
+            'Chicken House': 0x4B,
+            'Aginahs Cave': 0x4D,
+            'Sahasrahlas Hut': 0x45,
+            'Cave Shop': 0x58,
+            'Capacity Upgrade': 0x5D,
+            'Blacksmiths Hut': 0x64,
+            'Sick Kids House': 0x40,
+            'Lost Woods Gamble': 0x3C,
+            'Snitch Lady (East)': 0x3E,
+            'Snitch Lady (West)': 0x3F,
+            'Bush Covered House': 0x44,
+            'Tavern (Front)': 0x42,
+            'Light World Bomb Hut': 0x4A,
+            'Kakariko Shop': 0x46,
+            'Cave South of Haunted Grove': 0x51,
+            'Graveyard Cave': 0x52,
+            'Checkerboard Cave': 0x72,
+            'Mini Moldorm Cave': 0x6C,
+            'Long Fairy Cave': 0x55,
+            'Good Bee Cave': 0x56,
+            '20 Rupee Cave': 0x6F,
+            '50 Rupee Cave': 0x6D,
+            'Ice Cave': 0x84,
+            'Bonk Rock Cave': 0x6E,
+            'Library': 0x49,
+            'Kakariko Gamble Game': 0x67,
+            'Witch Hut': 0x4C,
+            'Hookshot Fairy': 0x50,
+            'Pyramid Fairy': 0x63,
+            'East Dark World Hint': 0x69,
+            'Palace of Darkness Hint': 0x68,
+            'Big Bomb Shop': 0x53,
+            'Dark World Shop': 0x60,
+            'Dark Lake Hylia Ledge Spike Cave': 0x70,
+            'Dark Lake Hylia Ledge Hint': 0x6A,
+            'Dark Swamp Cave': 0x3D,
+            'Doorless Hut': 0x48,
+            'C-Shaped House': 0x54,
+            'Chest Game': 0x47,
+            'Dark World Hammer Peg Cave': 0x83,
+            'Red Shield Shop': 0x57,
+            'Dark Sanctuary Hint': 0x5A,
+            'Fortune Teller (Dark)': 0x66,
+            'Archery Game': 0x59,
+            'Dark Desert Cave': 0x5F,
+            'Dark Desert Hint': 0x62,
+            'Spike Cave': 0x41,
+            'Mimic Cave': 0x4F,
+            'Kakariko Well (top)': 0x80,
+            'Hyrule Castle Secret Entrance': 0x7D,
+            'Bat Cave (right)': 0x7E,
+            'North Fairy Cave': 0x7C,
+            'Thieves Forest Hideout (top)': 0x7A,
+            'Lumberjack Tree (top)': 0x7F,
+            'Sewer Drop': 0x81,
+            'Skull Woods Second Section': 0x79,
+            'Skull Woods First Section (Left)': 0x77,
+            'Skull Woods First Section (Right)': 0x78,
+            'Skull Woods First Section (Top)': 0x76}
