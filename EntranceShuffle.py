@@ -1312,7 +1312,11 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Ganons Tower Torch Rooms', 'Ganons Tower (Before Moldorm)'),
                          ('Ganons Tower Moldorm Door', 'Ganons Tower (Moldorm)'),
                          ('Ganons Tower Moldorm Gap', 'Agahnim 2'),
-                         ('Pyramid Hole', 'Pyramid')  # not shuffled, for now
+                         ('Pyramid Hole', 'Pyramid'),  # not shuffled, for now
+                         ('Ganon Drop', 'Bottom of Pyramid'),
+                         ('Pyramid Exit', 'Pyramid Ledge'),
+                         ('Pyramid Entrance', 'Bottom of Pyramid'),
+                         ('Pyramid Drop', 'East Dark World')
                          ]
 
 # non-shuffled entrance links
@@ -1579,10 +1583,13 @@ door_addresses = {'Desert Palace Entrance (South)': (0xDBB7B, 0x15B02),
                   'Dark Death Mountain Ascend (Bottom)': (0xDBB85, 0x15B16),
                   'Hookshot Cave': (0xDBBAC, 0x15B64),
                   'Hookshot Cave Back Entrance': (0xDBBAD, 0x15B66),
+                  'Ganons Tower': (0xDBBA9, 0x15B5E),
+                  'Pyramid Entrance': (0xDBBA8, 0x15B5C),
                   'Skull Woods First Section Hole (East)': (0xDB84D, 0xDB84E),
                   'Skull Woods First Section Hole (West)': (0xDB84F, 0xDB850),
                   'Skull Woods First Section Hole (North)': 0xDB84C,
                   'Skull Woods Second Section Hole': (0xDB851, 0xDB852),
+                  'Pyramid Hole': (0xDB854, 0xDB855, 0xDB856),
                   'Waterfall of Wishing': 0xDBBCE,
                   'Dam': 0xDBBC0,
                   'Thiefs Hut': 0xDBBD3,
@@ -1716,6 +1723,8 @@ exit_ids = {'Desert Palace Exit (South)': (0x09, 0x84),
             'Dark Death Mountain Ascend Exit (Bottom)': (0x13, 0xF8),
             'Hookshot Cave Exit (South)': (0x3A, 0x3C),
             'Hookshot Cave Exit (North)': (0x3B, 0x2C),
+            'Ganons Tower Exit': (0x37, 0x0C),
+            'Pyramid Exit': (0x36, 0x10),
             'Waterfall of Wishing': 0x5C,
             'Dam': 0x4E,
             'Thiefs Hut': 0x61,
@@ -1783,4 +1792,5 @@ exit_ids = {'Desert Palace Exit (South)': (0x09, 0x84),
             'Skull Woods Second Section': 0x79,
             'Skull Woods First Section (Left)': 0x77,
             'Skull Woods First Section (Right)': 0x78,
-            'Skull Woods First Section (Top)': 0x76}
+            'Skull Woods First Section (Top)': 0x76,
+            'Pyramid': 0x7B}

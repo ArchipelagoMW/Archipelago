@@ -263,7 +263,9 @@ def create_regions(world):
                                                         '[dungeon-A2-6F] Ganons Tower - Room before Moldorm'], ['Ganons Tower Moldorm Door']),
         create_region('Ganons Tower (Moldorm)', None, ['Ganons Tower Moldorm Gap']),
         create_region('Agahnim 2', ['[dungeon-A2-6F] Ganons Tower - Moldorm Room'], ['Pyramid Hole']),
-        create_region('Pyramid', ['Ganon'])
+        create_region('Pyramid', ['Ganon'], ['Ganon Drop']),
+        create_region('Bottom of Pyramid', None, ['Pyramid Exit']),
+        create_region('Pyramid Ledge', None, ['Pyramid Entrance', 'Pyramid Drop'])
         ]
 
 
