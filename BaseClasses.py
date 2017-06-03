@@ -25,6 +25,9 @@ class World(object):
         self.place_dungeon_items = place_dungeon_items  # configurable in future
         self.agahnim_fix_required = False
         self.swamp_patch_required = False
+        self.sewer_light_cone = mode == 'standard'
+        self.light_world_light_cone = mode == 'standard'  # to be changed for v22 ToDo
+        self.dark_world_light_cone = False
 
     def get_region(self, regionname):
         if isinstance(regionname, Region):

@@ -336,7 +336,7 @@ def no_glitches_rules(world):
             spot = world.get_location(spot)
         else:
             spot = world.get_entrance(spot)
-        if world.mode == 'open' or check_is_dark_world(world.get_region(region)):
+        if (not world.dark_world_light_cone and check_is_dark_world(world.get_region(region))) or (not world.light_world_light_cone and not check_is_dark_world(world.get_region(region))):
             add_lamp_requirement(spot)
 
     add_conditional_lamp('Misery Mire (Vitreous)', 'Misery Mire (Entrance)', 'Entrance')
@@ -357,8 +357,7 @@ def no_glitches_rules(world):
     add_conditional_lamp('Armos - Heart Container', 'Eastern Palace', 'Location')
     add_conditional_lamp('Armos - Pendant', 'Eastern Palace', 'Location')
 
-    if world.state == 'open':
-        # standard mode always has light cone in sewers and Hyrule Castle in Light world
+    if not world.sewer_light_cone:
         add_rule(world.get_location('[dungeon-C-B1] Escape - First B1 Room'), lambda state: state.has('Lamp'))
 
 

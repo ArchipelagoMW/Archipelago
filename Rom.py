@@ -68,9 +68,6 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     # set open mode:
     if world.mode == 'open':
         write_byte(rom, 0x180032, 0x01)  # open mode
-        write_byte(rom, 0x180038, 0x00)  # sewers light cone disable
-        write_byte(rom, 0x180039, 0x00)  # light world light cone disable
-        write_byte(rom, 0x18003A, 0x00)  # dark world light cone disable
 
         # disable sword sprite from uncle
         write_bytes(rom, 0x6D263, [0x00, 0x00, 0xf6, 0xff, 0x00, 0x0E])
@@ -85,9 +82,11 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
         write_bytes(rom, 0x6D323, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
     else:
         write_byte(rom, 0x180032, 0x00)  # standard mode
-        write_byte(rom, 0x180038, 0x01)  # sewers light cone enabled
-        write_byte(rom, 0x180039, 0x01)  # light world light cone enabled
-        write_byte(rom, 0x18003A, 0x00)  # dark world light cone disable
+
+    # set light cones
+    write_byte(rom, 0x180038, 0x01 if world.sewer_light_cone else 0x00)
+    write_byte(rom, 0x180039, 0x01 if world.light_world_light_cone else 0x00)
+    write_byte(rom, 0x18003A, 0x01 if world.dark_world_light_cone else 0x00)
 
     # disable light world cane in minor glitches
     if world.logic == 'minorglitches':
