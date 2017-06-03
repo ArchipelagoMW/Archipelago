@@ -1,7 +1,7 @@
 from BaseClasses import World, CollectionState, Item
 from Regions import create_regions
-from EntranceShuffle import link_entrances
-from Rom import patch_rom
+from EntranceShuffle import link_entrances, connect_entrance, connect_two_way, connect_exit
+from Rom import patch_rom, patch_base_rom
 from Rules import set_rules
 from Items import ItemFactory
 import random
@@ -58,7 +58,13 @@ def main(args, seed=None):
 
     logger.info('Calculating playthrough.')
 
-    world.spoiler += create_playthrough(world)
+    try:
+        world.spoiler += create_playthrough(world)
+    except RuntimeError:
+        if args.ignore_unsolvable:
+            pass
+        else:
+            raise
 
     logger.info('Patching ROM.')
 
@@ -68,6 +74,7 @@ def main(args, seed=None):
         sprite = None
 
     rom = bytearray(open(args.rom, 'rb').read())
+    patch_base_rom(rom)
     patched_rom = patch_rom(world, rom, logic_hash, args.quickswap, args.heartbeep, sprite)
 
     outfilebase = 'Plando_%s_%s' % (os.path.splitext(os.path.basename(args.plando))[0], world.seed)
@@ -85,6 +92,7 @@ def main(args, seed=None):
 
 
 def fill_world(world, plando):
+    ret = []
     mm_medallion = 'Ether'
     tr_medallion = 'Quake'
     logger = logging.getLogger('')
@@ -122,9 +130,21 @@ def fill_world(world, plando):
                     item = ItemFactory(itemstr.strip())
                     if item is not None:
                         world.push_item(location, item)
+            elif '<=>' in line:
+                entrance, exit = line.split('<=>', 1)
+                ret.append(connect_two_way(world, entrance.strip(), exit.strip()))
+            elif '=>' in line:
+                entrance, exit = line.split('=>', 1)
+                ret.append(connect_entrance(world, entrance.strip(), exit.strip()))
+            elif '<=' in line:
+                entrance, exit = line.split('<=', 1)
+                ret.append(connect_exit(world, entrance.strip(), exit.strip()))
 
     world.required_medallions = (mm_medallion, tr_medallion)
-    return 'Misery Mire Medallion: %s\nTurtle Rock Medallion: %s\n\n' % (mm_medallion, tr_medallion)
+    ret.append('\nMisery Mire Medallion: %s' % mm_medallion)
+    ret.append('Turtle Rock Medallion: %s' % tr_medallion)
+    ret.append('\n')
+    return '\n'.join(ret)
 
 
 def copy_world(world):
@@ -227,7 +247,8 @@ def print_location_spoiler(world):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--create_spoiler', help='Output a Spoiler File', action='store_true')
-    parser.add_argument('--rom', default='Base_Rom.sfc', help='Path to a VT21 standard normal difficulty rom to use as a base.')
+    parser.add_argument('--ignore_unsolvable', help='Do not abort if seed is deemed unsolvable.', action='store_true')
+    parser.add_argument('--rom', default='Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', help='Path to an ALttP JAP(1.0) rom to use as a base.')
     parser.add_argument('--loglevel', default='info', const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')

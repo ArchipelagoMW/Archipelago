@@ -53,12 +53,12 @@ Piece of Heart (Thieves Forest Hideout): Nothing
 Piece of Heart (Lumberjack Tree): Nothing
 Piece of Heart (Cave South of Haunted Grove): Nothing
 Piece of Heart (Graveyard Cave): Nothing
-Piece of Heart (Desert Cave): Nothing
-[cave-050] Lake Hylia Cave [bottom left chest]: Nothing
-[cave-050] Lake Hylia Cave [top left chest]: Nothing
-[cave-050] Lake Hylia Cave [top right chest]: Nothing
-[cave-050] Lake Hylia Cave [bottom right chest]: Nothing
-[cave-050] Lake Hylia Cave [generous guy]: Nothing
+Piece of Heart (Checkerboard Cave): Nothing
+[cave-050] Mini Moldorm Cave [bottom left chest]: Nothing
+[cave-050] Mini Moldorm Cave [top left chest]: Nothing
+[cave-050] Mini Moldorm Cave [top right chest]: Nothing
+[cave-050] Mini Moldorm Cave [bottom right chest]: Nothing
+[cave-050] Mini Moldorm Cave [generous guy]: Nothing
 [cave-051] Ice Cave: Ice Rod
 [cave-016] Bonk Rock Cave: Nothing
 Library: Book of Mudora
