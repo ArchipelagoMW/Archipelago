@@ -46,7 +46,7 @@ item_table = {'Bow': (True, False, False, 0x0B, 'You have\nchosen the\narcher cl
               'Flippers': (True, False, False, 0x1E, 'fancy a swim?', None, None, None, None, None),
               'Ice Rod': (True, False, False, 0x08, 'I\'m the cold\nrod. I make\nthings freeze!', None, None, None, None, None),
               'Titans Mitts': (True, False, False, 0x1C, 'Now you can\nlift heavy\nstuff!', None, None, None, None, None),
-              'Ether': (True, False, False, 0x10, 'Zero Kelvin!\nAbsolute zero!\nFear the cold!', None, None, None, None, None),
+              'Ether': (True, False, False, 0x10, 'This magic\ncoin freezes\neverything!', None, None, None, None, None),
               'Bombos': (True, False, False, 0x0F, 'Burn, baby,\nburn! Fear my\nring of fire!', None, None, None, None, None),
               'Quake': (True, False, False, 0x11, 'Maxing out the\nRichter scale\nis what I do!', None, None, None, None, None),
               'Bottle': (True, False, False, 0xFF, 'Now you can\nstore potions\nand stuff!', None, None, None, None, None),  # specific content written on creation

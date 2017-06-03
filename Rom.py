@@ -8,7 +8,7 @@ import hashlib
 import logging
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = 'de0100dc53a8e755a0fa9a3f15f1d100'
+RANDOMIZERBASEHASH = 'ab6634609335a28e99bd915c7b1f3906'
 
 
 def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None):
@@ -178,6 +178,8 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     # assorted fixes
     write_byte(rom, 0x180030, 0x00)  # Disable SRAM trace
     write_byte(rom, 0x180036, 0x0A)  # Rupoor negative value
+    if world.goal == 'pedestal':
+        write_byte(rom, 0x18003E, 0x01)  # make ganon invincible
 
     # remove shield from uncle
     write_bytes(rom, 0x6D253, [0x00, 0x00, 0xf6, 0xff, 0x00, 0x0E])
@@ -190,10 +192,7 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
 
     if world.swamp_patch_required:
         # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
-        rom = rom.replace(bytearray([0xAF, 0xBB, 0xF2, 0x7E, 0x29, 0xDF, 0x8F, 0xBB, 0xF2, 0x7E]), bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA]))
-        rom = rom.replace(bytearray([0xAF, 0xFB, 0xF2, 0x7E, 0x29, 0xDF, 0x8F, 0xFB, 0xF2, 0x7E]), bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA]))
-        rom = rom.replace(bytearray([0xAF, 0x16, 0xF2, 0x7E, 0x29, 0x7F, 0x8F, 0x16, 0xF2, 0x7E]), bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA]))
-        rom = rom.replace(bytearray([0xAF, 0x51, 0xF0, 0x7E, 0x29, 0xFE, 0x8F, 0x51, 0xF0, 0x7E]), bytearray([0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA]))
+        write_byte(rom, 0x1800A1, 0x01)
 
     # set correct flag for hera basement item
     if world.get_location('[dungeon-L3-1F] Tower of Hera - Freestanding Key').item is not None and world.get_location('[dungeon-L3-1F] Tower of Hera - Freestanding Key').item.name == 'Small Key (Tower of Hera)':
@@ -285,7 +284,10 @@ def write_strings(rom, world):
     write_string_to_rom(rom, 'PyramidFairy', PyramidFairy_texts[random.randint(0, len(PyramidFairy_texts) - 1)])
     write_string_to_rom(rom, 'Sahasrahla2', Sahasrahla2_texts[random.randint(0, len(Sahasrahla2_texts) - 1)])
     write_string_to_rom(rom, 'Blind', Blind_texts[random.randint(0, len(Blind_texts) - 1)])
-    write_string_to_rom(rom, 'Ganon1', Ganon1_texts[random.randint(0, len(Ganon1_texts) - 1)])
+    if world.goal == 'pedestal':
+        write_string_to_rom(rom, 'Ganon1', 'Why are you even here?\n You can\'t even hurt me!')
+    else:
+        write_string_to_rom(rom, 'Ganon1', Ganon1_texts[random.randint(0, len(Ganon1_texts) - 1)])
     write_string_to_rom(rom, 'TavernMan', TavernMan_texts[random.randint(0, len(TavernMan_texts) - 1)])
 
     altaritem = world.get_location('Altar').item
@@ -334,7 +336,7 @@ def patch_base_rom(rom):
     rom.extend(bytearray([0x00]*(2097152 - len(rom))))
 
     # load randomizer patches
-    patches = json.load(open('romreset.json', 'r')) + json.load(open('base2current.json', 'r'))
+    patches = json.load(open('base2current.json', 'r'))
     for patch in patches:
         if isinstance(patch, dict):
             for baseaddress, values in patch.items():
