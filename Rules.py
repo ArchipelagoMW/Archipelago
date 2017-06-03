@@ -372,6 +372,12 @@ def standard_rules(world):
     forbid_item(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [middle chest]'), 'Small Key (Escape)')
     forbid_item(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [right chest]'), 'Small Key (Escape)')
     forbid_item(world.get_location('[dungeon-C-1F] Sanctuary'), 'Small Key (Escape)')
+
+    # don't put gloves in link's house or someone could escape in rain state ...
+    forbid_item(world.get_location('[cave-040] Links House'), 'Power Glove')
+    forbid_item(world.get_location('[cave-040] Links House'), 'Titans Mitts')
+    forbid_item(world.get_location('[cave-040] Links House'), 'Progressive Glove')
+
     add_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [left chest]'), lambda state: state.can_reach('Sewer Drop'))
     add_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [middle chest]'), lambda state: state.can_reach('Sewer Drop'))
     add_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [right chest]'), lambda state: state.can_reach('Sewer Drop'))
