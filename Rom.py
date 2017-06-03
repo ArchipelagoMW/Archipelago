@@ -4,6 +4,12 @@ from Text import string_to_alttp_text, text_addresses, credits_addresses, string
 from Text import Uncle_texts, Ganon1_texts, PyramidFairy_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts
 from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts
 import random
+import json
+import hashlib
+import logging
+
+JAP10HASH = '03a63945398191337e896e5771f77173'
+RANDOMIZERBASEHASH = 'de0100dc53a8e755a0fa9a3f15f1d100'
 
 
 def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None):
@@ -187,6 +193,22 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     # set Fountain bottle exchange items
     write_byte(rom, 0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)])
     write_byte(rom, 0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)])
+    # set Fat Fairy Bow/Sword prizes to be disappointing
+    write_byte(rom, 0x34914, 0x3A)  # Bow and Arrow
+    write_byte(rom, 0x180028, 0x49)  # Fighter Sword
+
+    # assorted fixes
+    write_byte(rom, 0x180030, 0x00)  # Disable SRAM trace
+    write_byte(rom, 0x180036, 0x0A)  # Rupoor negative value
+
+    # remove shield from uncle
+    write_bytes(rom, 0x6D253, [0x00, 0x00, 0xf6, 0xff, 0x00, 0x0E])
+    write_bytes(rom, 0x6D25B, [0x00, 0x00, 0xf6, 0xff, 0x00, 0x0E])
+    write_bytes(rom, 0x6D283, [0x00, 0x00, 0xf6, 0xff, 0x00, 0x0E])
+    write_bytes(rom, 0x6D28B, [0x00, 0x00, 0xf7, 0xff, 0x00, 0x0E])
+    write_bytes(rom, 0x6D2CB, [0x00, 0x00, 0xf6, 0xff, 0x02, 0x0E])
+    write_bytes(rom, 0x6D2FB, [0x00, 0x00, 0xf7, 0xff, 0x02, 0x0E])
+    write_bytes(rom, 0x6D313, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
 
     if world.swamp_patch_required:
         # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
@@ -202,6 +224,7 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
         write_byte(rom, 0x4E3BB, 0xEB)
 
     # disable open door sprites when exiting caves
+    # this does not seem to work completely yet
     if world.shuffle not in ['default', 'dungeonssimple', 'dungeonsfull']:
         for i in range(0x85):
             write_byte(rom, 0x15274 + i, 0x00)
@@ -268,8 +291,8 @@ def write_credits_string_to_rom(rom, target, string):
 
 def write_strings(rom, world):
     silverarrows = world.find_items('Silver Arrows')
-    silverarrow_hint = ('in %s?' % silverarrows[0].hint_text) if silverarrows else '?\nI think not!'
-    write_string_to_rom(rom, 'Ganon2', 'Did you find the silver arrows %s' % silverarrow_hint)
+    silverarrow_hint = (' %s?' % silverarrows[0].hint_text) if silverarrows else '?\nI think not!'
+    write_string_to_rom(rom, 'Ganon2', 'Did you find the silver arrows%s' % silverarrow_hint)
 
     crystal5 = world.find_items('Crystal 5')[0]
     crystal6 = world.find_items('Crystal 6')[0]
@@ -320,3 +343,27 @@ def write_strings(rom, world):
     fluteboyitem = world.get_location('Flute Boy').item
     fluteboyitem_text = FluteBoy_texts[random.randint(0, len(FluteBoy_texts) - 1)] if fluteboyitem is None or fluteboyitem.fluteboy_credit_text is None else fluteboyitem.fluteboy_credit_text
     write_credits_string_to_rom(rom, 'FluteBoy', fluteboyitem_text)
+
+
+def patch_base_rom(rom):
+    # verify correct checksum of baserom
+    basemd5 = hashlib.md5()
+    basemd5.update(rom)
+    if not JAP10HASH == basemd5.hexdigest():
+        logging.getLogger('').warning('Supplied Base Rom does not match known MD5 for JAP(1.0) release. Will try to patch anyway.')
+
+    # extend to 2MB
+    rom.extend(bytearray([0x00]*(2097152 - len(rom))))
+
+    # load randomizer patches
+    patches = json.load(open('romreset.json', 'r')) + json.load(open('base2current.json', 'r'))
+    for patch in patches:
+        if isinstance(patch, dict):
+            for baseaddress, values in patch.items():
+                write_bytes(rom, int(baseaddress), values)
+
+    # verify md5
+    patchedmd5 = hashlib.md5()
+    patchedmd5.update(rom)
+    if not RANDOMIZERBASEHASH == patchedmd5.hexdigest():
+        raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')

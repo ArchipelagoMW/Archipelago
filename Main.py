@@ -1,7 +1,7 @@
 from BaseClasses import World, CollectionState, Item
 from Regions import create_regions
 from EntranceShuffle import link_entrances
-from Rom import patch_rom
+from Rom import patch_rom, patch_base_rom
 from Rules import set_rules
 from Dungeons import fill_dungeons
 from Items import ItemFactory
@@ -77,6 +77,7 @@ def main(args, seed=None):
         sprite = None
 
     rom = bytearray(open(args.rom, 'rb').read())
+    patch_base_rom(rom)
     patched_rom = patch_rom(world, rom, bytearray(logic_hash), args.quickswap, args.heartbeep, sprite)
 
     outfilebase = 'ER_%s_%s_%s_%s' % (world.mode, world.goal, world.shuffle, world.seed)
@@ -392,7 +393,7 @@ if __name__ == '__main__':
                              'Madness decouples entrances and exits from each other and shuffles them freely, only ensuring that no fake Light/Dark World happens and all locations are reachable.\n'
                              'Insanity is Madness without the world restrictions. Mirror and Pearl are provided early to ensure Filling algorithm works properly. Deal with Fake LW/DW at your discretion. Experimental.\n'
                              'The dungeon variants only mix up dungeons and keep the rest of the overworld vanilla.')
-    parser.add_argument('--rom', default='Base_Rom.sfc', help='Path to a VT21 standard normal difficulty rom to use as a base.')
+    parser.add_argument('--rom', default='Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', help='Path to an ALttP JAP(1.0) rom to use as a base.')
     parser.add_argument('--loglevel', default='info', const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--count', help='Use to batch generate multiple seeds with same settings. If --seed is provided, it will be used for the first seed, then used to derive the next seed (i.e. generating 10 seeds with --seed given will produce the same 10 (different) roms each time).', type=int)
