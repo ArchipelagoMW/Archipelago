@@ -381,6 +381,11 @@ def copy_world(world):
     ret.required_medallions = list(world.required_medallions)
     ret.agahnim_fix_required = world.agahnim_fix_required
     ret.swamp_patch_required = world.swamp_patch_required
+    ret.treasure_hunt_count = world.treasure_hunt_count
+    ret.treasure_hunt_icon = world.treasure_hunt_icon
+    ret.sewer_light_cone = world.sewer_light_cone
+    ret.light_world_light_cone = world.light_world_light_cone
+    ret.dark_world_light_cone = world.dark_world_light_cone
     create_regions(ret)
 
     # connect copied world

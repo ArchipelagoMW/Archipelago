@@ -8,7 +8,7 @@ import hashlib
 import logging
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = 'ab6634609335a28e99bd915c7b1f3906'
+RANDOMIZERBASEHASH = 'fd9d7a9ff91c4f09544203d3bb6fb7fe'
 
 
 def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None):
@@ -175,9 +175,41 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     write_byte(rom, 0x34914, 0x3A)  # Bow and Arrow
     write_byte(rom, 0x180028, 0x49)  # Fighter Sword
 
+    # set up clocks for timed modes
+    if world.clock_mode == 'off':
+        write_bytes(rom, 0x180190, [0x00, 0x00, 0x00])  # turn off clock mode
+        write_bytes(rom, 0x180200, [0x00, 0x00, 0x00, 0x00])  # red clock adjustment time (in frames, uint32)
+        write_bytes(rom, 0x180204, [0x00, 0x00, 0x00, 0x00])  # blue clock adjustment time (in frames, uint32)
+        write_bytes(rom, 0x180208, [0x00, 0x00, 0x00, 0x00])  # green clock adjustment time (in frames, uint32)
+        write_bytes(rom, 0x18020C, [0x00, 0x00, 0x00, 0x00])  # starting time (in frames, uint32)
+    elif world.clock_mode == 'ohko':
+        write_bytes(rom, 0x180190, [0x01, 0x02, 0x01])  # ohko timer with resetable timer functionality
+        write_bytes(rom, 0x180200, [0x00, 0x00, 0x00, 0x00])  # red clock adjustment time (in frames, uint32)
+        write_bytes(rom, 0x180204, [0x00, 0x00, 0x00, 0x00])  # blue clock adjustment time (in frames, uint32)
+        write_bytes(rom, 0x180208, [0x50, 0x46, 0x00, 0x00])  # green clock adjustment time (in frames, uint32)
+        write_bytes(rom, 0x18020C, [0xA0, 0x8C, 0x00, 0x00])  # starting time (in frames, uint32)
+    if world.clock_mode == 'stopwatch':
+        write_bytes(rom, 0x180190, [0x02, 0x01, 0x00])  # set stopwatch mode
+        write_bytes(rom, 0x180200, [0x1C, 0x20, 0x00, 0x00])  # red clock adjustment time (in frames, uint32)
+        write_bytes(rom, 0x180204, [0x1C, 0x20, 0x00, 0x00])  # blue clock adjustment time (in frames, uint32)
+        write_bytes(rom, 0x180208, [0x38, 0x40, 0x00, 0x00])  # green clock adjustment time (in frames, uint32)
+        write_bytes(rom, 0x18020C, [0x00, 0x00, 0x00, 0x00])  # starting time (in frames, uint32)
+    if world.clock_mode == 'countdown':
+        write_bytes(rom, 0x180190, [0x01, 0x01, 0x00])  # set countdown, with no reset available
+        write_bytes(rom, 0x180200, [0x1C, 0x20, 0x00, 0x00])  # red clock adjustment time (in frames, uint32)
+        write_bytes(rom, 0x180204, [0x1C, 0x20, 0x00, 0x00])  # blue clock adjustment time (in frames, uint32)
+        write_bytes(rom, 0x180208, [0x38, 0x40, 0x00, 0x00])  # green clock adjustment time (in frames, uint32)
+        write_bytes(rom, 0x18020C, [0x80, 0x32, 0x02, 0x00])  # starting time (in frames, uint32)
+
+    # set up goals for treasure hunt
+    write_bytes(rom, 0x180165, [0x0E, 0x28] if world.treasure_hunt_icon == 'Triforce' else [0x0D, 0x28])
+    write_byte(rom, 0x180167, world.treasure_hunt_count % 256)
+
     # assorted fixes
     write_byte(rom, 0x180030, 0x00)  # Disable SRAM trace
     write_byte(rom, 0x180036, 0x0A)  # Rupoor negative value
+    write_byte(rom, 0x180169, 0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
+    write_byte(rom, 0x180086, 0x00 if world.aga_randomness == 'vanilla' else 0x02 if world.aga_randomness == 'table' else 0x01)  # set blue ball and ganon warp randomness
     if world.goal == 'pedestal':
         write_byte(rom, 0x18003E, 0x01)  # make ganon invincible
 

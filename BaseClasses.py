@@ -28,6 +28,11 @@ class World(object):
         self.sewer_light_cone = mode == 'standard'
         self.light_world_light_cone = False
         self.dark_world_light_cone = False
+        self.treasure_hunt_count = 0
+        self.treasure_hunt_icon = 'Power Star'
+        self.clock_mode = 'off'
+        self.aga_randomness = 'off'
+        self.lock_aga_door_in_escape = False
 
     def get_region(self, regionname):
         if isinstance(regionname, Region):

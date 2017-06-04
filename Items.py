@@ -61,6 +61,8 @@ item_table = {'Bow': (True, False, False, 0x0B, 'You have\nchosen the\narcher cl
               'Red Pendant': (True, False, True, [0x02, 0x34, 0x60, 0x00, 0x69, 0x02], None, None, None, None, None, None),
               'Blue Pendant': (True, False, True, [0x01, 0x32, 0x60, 0x00, 0x69, 0x03], None, None, None, None, None, None),
               'Triforce': (True, False, False, 0x6A, '\n   YOU WIN!', None, None, None, None, None),
+              'Power Star': (True, False, False, 0x6B, 'a small victory', None, None, None, None, None),
+              'Triforce Piece': (True, False, False, 0x6C, 'a small victory', None, None, None, None, None),
               'Crystal 1': (True, False, True, [0x02, 0x34, 0x64, 0x40, 0x7F, 0x06], None, None, None, None, None, None),
               'Crystal 2': (True, False, True, [0x10, 0x34, 0x64, 0x40, 0x79, 0x06], None, None, None, None, None, None),
               'Crystal 3': (True, False, True, [0x40, 0x34, 0x64, 0x40, 0x6C, 0x06], None, None, None, None, None, None),
@@ -96,6 +98,12 @@ item_table = {'Bow': (True, False, False, 0x0B, 'You have\nchosen the\narcher cl
               'Rupees (50)': (False, False, False, 0x41, 'Just couch\ncash. Move\nright along.', None, None, None, None, None),
               'Rupees (100)': (False, False, False, 0x40, 'A rupee stash!\nHell yeah!', None, None, None, None, None),
               'Rupees (300)': (False, False, False, 0x46, 'A rupee hoard!\nHell yeah!', None, None, None, None, None),
+              'Rupoor': (False, False, False, 0x59, 'a debt collector', None, None, None, None, None),
+              'Red Clock': (False, False, False, 0x5B, 'a waste of time', None, None, None, None, None),
+              'Blue Clock': (False, False, False, 0x5C, 'a bit of time', None, None, None, None, None),
+              'Green Clock': (False, False, False, 0x5D, 'a lot of time', None, None, None, None, None),
+              'Single RNG': (False, False, False, 0x62, 'something you don\'t yet have', None, None, None, None, None),
+              'Multi RNG': (False, False, False, 0x63, 'something you may already have', None, None, None, None, None),
               'Magic Upgrade (1/2)': (True, False, False, 0x4E, 'Your magic\npower has been\ndoubled!', None, None, None, None, None),  # can be required to beat mothula in an open seed in very very rare circumstance
               'Magic Upgrade (1/4)': (True, False, False, 0x4F, 'Your magic\npower has been\nquadrupled!', None, None, None, None, None),  # can be required to beat mothula in an open seed in very very rare circumstance
               # ToDo Use dungeons specific items once they work correctly
