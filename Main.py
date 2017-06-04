@@ -259,7 +259,7 @@ def flood_items(world):
         random.shuffle(location_list)
         spot_to_fill = None
         for location in location_list:
-            if world.state.can_reach(location):
+            if world.state.can_reach(location) and location.item_rule(itempool[0]):
                 spot_to_fill = location
                 break
 
