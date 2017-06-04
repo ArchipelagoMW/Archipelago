@@ -118,13 +118,10 @@ def distribute_items_cutoff(world, cutoffrate=0.33):
         candidate_item_to_place = None
         item_to_place = None
         for item in itempool:
-            if advancement_placed:
+            if advancement_placed or (progress_done and (item.advancement or item.priority)):
                 item_to_place = item
                 break
             if item.advancement:
-                if progress_done:
-                    item_to_place = item
-                    break
                 candidate_item_to_place = item
                 if world.unlocks_new_location(item):
                     item_to_place = item
@@ -188,13 +185,10 @@ def distribute_items_staleness(world):
         candidate_item_to_place = None
         item_to_place = None
         for item in itempool:
-            if advancement_placed:
+            if advancement_placed or (progress_done and (item.advancement or item.priority)):
                 item_to_place = item
                 break
             if item.advancement:
-                if progress_done:
-                    item_to_place = item
-                    break
                 candidate_item_to_place = item
                 if world.unlocks_new_location(item):
                     item_to_place = item
@@ -300,7 +294,7 @@ def flood_items(world):
         location_list = world.get_reachable_locations()
         random.shuffle(location_list)
         for location in location_list:
-            if location.item is not None and not location.item.advancement and not location.item.key and 'Map' not in location.item.name and 'Compass' not in location.item.name:
+            if location.item is not None and not location.item.advancement and not location.item.priority and not location.item.key:
                 # safe to replace
                 replace_item = location.item
                 replace_item.location = None
@@ -398,13 +392,13 @@ def copy_world(world):
     # fill locations
     for location in world.get_locations():
         if location.item is not None:
-            item = Item(location.item.name, location.item.advancement, location.item.key)
+            item = Item(location.item.name, location.item.advancement, location.item.priority, location.item.key)
             ret.get_location(location.name).item = item
             item.location = ret.get_location(location.name)
 
     # copy remaining itempool. No item in itempool should have an assigned location
     for item in world.itempool:
-        ret.itempool.append(Item(item.name, item.advancement, item.key))
+        ret.itempool.append(Item(item.name, item.advancement, item.priority, item.key))
 
     # copy progress items in state
     ret.state.prog_items = list(world.state.prog_items)

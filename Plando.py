@@ -165,13 +165,13 @@ def copy_world(world):
     # fill locations
     for location in world.get_locations():
         if location.item is not None:
-            item = Item(location.item.name, location.item.advancement, location.item.key)
+            item = Item(location.item.name, location.item.advancement, location.item.priority, location.item.key)
             ret.get_location(location.name).item = item
             item.location = ret.get_location(location.name)
 
     # copy remaining itempool. No item in itempool should have an assigned location
     for item in world.itempool:
-        ret.itempool.append(Item(item.name, item.advancement, item.key))
+        ret.itempool.append(Item(item.name, item.advancement, item.priority, item.key))
 
     # copy progress items in state
     ret.state.prog_items = list(world.state.prog_items)

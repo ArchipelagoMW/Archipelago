@@ -464,9 +464,10 @@ class Location(object):
 
 class Item(object):    
 
-    def __init__(self, name='', advancement=False, key=False, crystal=False, code=None, altar_hint=None, altar_credit=None, sickkid_credit=None, zora_credit=None, witch_credit=None, fluteboy_credit=None):
+    def __init__(self, name='', advancement=False, priority=False, key=False, crystal=False, code=None, altar_hint=None, altar_credit=None, sickkid_credit=None, zora_credit=None, witch_credit=None, fluteboy_credit=None):
         self.name = name
         self.advancement = advancement
+        self.priority = priority
         self.key = key
         self.crystal = crystal
         self.altar_hint_text = altar_hint
