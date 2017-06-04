@@ -8,7 +8,7 @@ import hashlib
 import logging
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = 'fd9d7a9ff91c4f09544203d3bb6fb7fe'
+RANDOMIZERBASEHASH = '526f716b20ac27c086c68289cb377b35'
 
 
 def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None):
