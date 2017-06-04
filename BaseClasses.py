@@ -4,12 +4,13 @@ import logging
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, goal, place_dungeon_items):
+    def __init__(self, shuffle, logic, mode, difficulty, goal, algorithm, place_dungeon_items):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
         self.difficulty = difficulty
         self.goal = goal
+        self.algorithm = algorithm
         self.regions = []
         self.itempool = []
         self.seed = None
@@ -152,10 +153,12 @@ class World(object):
     def option_identifier(self):
         logic = 0 if self.logic == 'noglitches' else 1
         mode = 0 if self.mode == 'open' else 1
-        goal = 0 if self.goal == 'ganon' else 1 if self.goal == 'pedestal' else 2
-        shuffle = ['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'].index(self.shuffle)
         dungeonitems = 0 if self.place_dungeon_items else 1
-        return logic | (mode << 1) | (goal << 2) | (shuffle << 4) | (dungeonitems << 8)
+        goal = ['ganon', 'pedestal', 'dungeons', 'starhunt', 'triforcehunt'].index(self.goal)
+        shuffle = ['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'].index(self.shuffle)
+        difficulty = ['normal', 'timed', 'timed-ohko', 'timed-countdown'].index(self.difficulty)
+        algorithm = ['freshness', 'flood', 'vt21', 'vt22'].index(self.algorithm)
+        return logic | (mode << 1) | (dungeonitems << 2) | (goal << 3) | (shuffle << 6) | (difficulty << 10) | (algorithm << 12)
 
 
 class CollectionState(object):

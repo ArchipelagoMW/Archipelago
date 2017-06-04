@@ -27,7 +27,7 @@ def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World('vanilla', 'noglitches', 'standard', 'normal', 'ganon', False)
+    world = World('vanilla', 'noglitches', 'standard', 'normal', 'ganon', 'freshness', False)
     logger = logging.getLogger('')
 
     hasher = hashlib.md5()
@@ -149,7 +149,7 @@ def fill_world(world, plando):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal, world.place_dungeon_items)
+    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal, world.algorithm, world.place_dungeon_items)
     ret.required_medallions = list(world.required_medallions)
     ret.agahnim_fix_required = world.agahnim_fix_required
     ret.swamp_patch_required = world.swamp_patch_required

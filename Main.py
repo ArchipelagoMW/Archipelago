@@ -27,7 +27,7 @@ def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.goal, not args.nodungeonitems)
+    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.goal, args.algorithm, not args.nodungeonitems)
     logger = logging.getLogger('')
 
     if seed is None:
@@ -80,7 +80,7 @@ def main(args, seed=None):
     else:
         sprite = None
 
-    outfilebase = 'ER_%s_%s_%s_%s' % (world.mode, world.goal, world.shuffle, world.seed)
+    outfilebase = 'ER_%s_%s_%s_%s_%s_%s' % (world.mode, world.goal, world.shuffle, world.difficulty, world.algorithm, world.seed)
 
     if not args.suppress_rom:
         rom = bytearray(open(args.rom, 'rb').read())
@@ -394,7 +394,7 @@ def generate_itempool(world):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal, world.place_dungeon_items)
+    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal, world.algorithm, world.place_dungeon_items)
     ret.required_medallions = list(world.required_medallions)
     ret.agahnim_fix_required = world.agahnim_fix_required
     ret.swamp_patch_required = world.swamp_patch_required
