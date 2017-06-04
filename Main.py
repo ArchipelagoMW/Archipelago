@@ -111,15 +111,19 @@ def distribute_items_cutoff(world, cutoffrate=0.33):
     placed_advancement_items = 0
 
     progress_done = False
+    advancement_placed = False
 
     while itempool and fill_locations:
         candidate_item_to_place = None
         item_to_place = None
         for item in itempool:
-            if progress_done:
+            if advancement_placed:
                 item_to_place = item
                 break
             if item.advancement:
+                if progress_done:
+                    item_to_place = item
+                    break
                 candidate_item_to_place = item
                 if world.unlocks_new_location(item):
                     item_to_place = item
@@ -128,8 +132,12 @@ def distribute_items_cutoff(world, cutoffrate=0.33):
 
         if item_to_place is None:
             # check if we can reach all locations and that is why we find no new locations to place
-            if len(world.get_reachable_locations()) == len(world.get_locations()):
+            if not progress_done and len(world.get_reachable_locations()) == len(world.get_locations()):
                 progress_done = True
+                continue
+            # check if we have now placed all advancement items
+            if progress_done:
+                advancement_placed = True
                 continue
             # we might be in a situation where all new locations require multiple items to reach. If that is the case, just place any advancement item we've found and continue trying
             if candidate_item_to_place is not None:
@@ -173,15 +181,19 @@ def distribute_items_staleness(world):
     itempool = world.itempool
 
     progress_done = False
+    advancement_placed = False
 
     while itempool and fill_locations:
         candidate_item_to_place = None
         item_to_place = None
         for item in itempool:
-            if progress_done:
+            if advancement_placed:
                 item_to_place = item
                 break
             if item.advancement:
+                if progress_done:
+                    item_to_place = item
+                    break
                 candidate_item_to_place = item
                 if world.unlocks_new_location(item):
                     item_to_place = item
@@ -189,8 +201,12 @@ def distribute_items_staleness(world):
 
         if item_to_place is None:
             # check if we can reach all locations and that is why we find no new locations to place
-            if len(world.get_reachable_locations()) == len(world.get_locations()):
+            if not progress_done and len(world.get_reachable_locations()) == len(world.get_locations()):
                 progress_done = True
+                continue
+            # check if we have now placed all advancement items
+            if progress_done:
+                advancement_placed = True
                 continue
             # we might be in a situation where all new locations require multiple items to reach. If that is the case, just place any advancement item we've found and continue trying
             if candidate_item_to_place is not None:
