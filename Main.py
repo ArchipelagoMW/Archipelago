@@ -80,14 +80,15 @@ def main(args, seed=None):
     else:
         sprite = None
 
-    rom = bytearray(open(args.rom, 'rb').read())
-    patch_base_rom(rom)
-    patched_rom = patch_rom(world, rom, bytearray(logic_hash), args.quickswap, args.heartbeep, sprite)
-
     outfilebase = 'ER_%s_%s_%s_%s' % (world.mode, world.goal, world.shuffle, world.seed)
 
-    with open('%s.sfc' % outfilebase, 'wb') as outfile:
-        outfile.write(patched_rom)
+    if not args.suppress_rom:
+        rom = bytearray(open(args.rom, 'rb').read())
+        patch_base_rom(rom)
+        patched_rom = patch_rom(world, rom, bytearray(logic_hash), args.quickswap, args.heartbeep, sprite)
+        with open('%s.sfc' % outfilebase, 'wb') as outfile:
+            outfile.write(patched_rom)
+
     if args.create_spoiler:
         with open('%s_Spoiler.txt' % outfilebase, 'w') as outfile:
             outfile.write(world.spoiler)
@@ -503,6 +504,7 @@ if __name__ == '__main__':
     parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['normal', 'half', 'quarter', 'off'],
                         help='Select the rate at which the heart beep sound is played at low health.')
     parser.add_argument('--sprite', help='Path to a sprite sheet to use for Link. Needs to be in binary format and have a length of 0x7000 (28672) bytes.')
+    parser.add_argument('--suppress_rom', help='Do not create an output rom file.', action='store_true')
     args = parser.parse_args()
 
     # ToDo: Validate files further than mere existance
