@@ -22,7 +22,6 @@ def set_rules(world):
         # require altar for ganon to enforce getting everything
         add_rule(world.get_location('Ganon'), lambda state: state.can_reach('Altar', 'Location'))
 
-    set_blacksmith_rules(world)
     set_big_bomb_rules(world)
 
     # if swamp and dam have not been moved we require mirror for swamp palace
@@ -382,13 +381,6 @@ def standard_rules(world):
     add_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [middle chest]'), lambda state: state.can_reach('Sewer Drop'))
     add_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [right chest]'), lambda state: state.can_reach('Sewer Drop'))
     add_rule(world.get_location('[dungeon-C-B1] Escape - First B1 Room'), lambda state: state.can_reach('Sewer Drop') or (state.world.get_location('[dungeon-C-B1] Escape - First B1 Room').item is not None and state.world.get_location('[dungeon-C-B1] Escape - First B1 Room').item.name in ['Small Key (Escape)']))  # you could skip this chest and be unable to go back until you can drop into escape
-
-
-def set_blacksmith_rules(world):
-    blacksmith_entrance = world.get_region('Blacksmiths Hut').entrances[0]
-    # some special handling if shuffled as we cannot use connected caves to take the smith up to death mountain
-    if blacksmith_entrance.name == 'Hookshot Fairy':
-        add_rule(world.get_location('Blacksmiths'), lambda state: state.has('Ocarina') and (state.has('Hookshot') or (state.has('Hammer') and state.has('Mirror'))))
 
 
 def set_big_bomb_rules(world):
