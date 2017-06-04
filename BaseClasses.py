@@ -124,12 +124,17 @@ class World(object):
         prog_locations = [location for location in self.get_locations() if location.item is not None and location.item.advancement]
 
         state = CollectionState(self)
+        treasure_pieces_collected = 0
         while prog_locations:
             sphere = []
             # build up spheres of collection radius. Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
             for location in prog_locations:
                 if state.can_reach(location):
                     if location.item.name == 'Triforce':
+                        return True
+                    elif location.item.name in ['Triforce Piece', 'Power Star']:
+                        treasure_pieces_collected += 1
+                    if self.goal in ['starhunt', 'triforcehunt'] and treasure_pieces_collected >= self.treasure_hunt_count:
                         return True
                     sphere.append(location)
 

@@ -94,16 +94,7 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
         write_byte(rom, 0x18003A, 0x00)  # dark world light cone disable
 
     # handle difficulty
-    if world.difficulty == 'normal':
-        # Spike Cave Damage
-        write_byte(rom, 0x180168, 0x08)
-        # Powdered Fairies Prize
-        write_byte(rom, 0x36DD0, 0xE3)  # fairy
-        # potion heal amount
-        write_byte(rom, 0x180084, 0xA0)  # full
-        # potion magic restore amount
-        write_byte(rom, 0x180085, 0x80)  # full
-    elif world.difficulty == 'hard':
+    if world.difficulty == 'hard':
         # Spike Cave Damage
         write_byte(rom, 0x180168, 0x02)
         # Powdered Fairies Prize
@@ -112,6 +103,15 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
         write_byte(rom, 0x180084, 0x08)  # One Heart
         # potion magic restore amount
         write_byte(rom, 0x180085, 0x20)  # Quarter Magic
+    else:
+        # Spike Cave Damage
+        write_byte(rom, 0x180168, 0x08)
+        # Powdered Fairies Prize
+        write_byte(rom, 0x36DD0, 0xE3)  # fairy
+        # potion heal amount
+        write_byte(rom, 0x180084, 0xA0)  # full
+        # potion magic restore amount
+        write_byte(rom, 0x180085, 0x80)  # full
 
     # set up game internal RNG seed
     for i in range(1024):
@@ -145,10 +145,11 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     write_bytes(rom, 0x37A78, prizes)
 
     # prize pack drop chances
-    if world.difficulty == 'normal':
-        droprates = [0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01]  # 50%
-    else:
+    if world.difficulty == 'hard':
         droprates = [0x01, 0x02, 0x03, 0x03, 0x03, 0x04, 0x04]  # 50%, 25%, 3* 12.5%, 2* 6.25%
+    else:
+        droprates = [0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01]  # 50%
+
     random.shuffle(droprates)
     write_bytes(rom, 0x37A62, droprates)
 
@@ -178,31 +179,31 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     # set up clocks for timed modes
     if world.clock_mode == 'off':
         write_bytes(rom, 0x180190, [0x00, 0x00, 0x00])  # turn off clock mode
-        write_bytes(rom, 0x180200, [0x00, 0x00, 0x00, 0x00])  # red clock adjustment time (in frames, uint32)
-        write_bytes(rom, 0x180204, [0x00, 0x00, 0x00, 0x00])  # blue clock adjustment time (in frames, uint32)
-        write_bytes(rom, 0x180208, [0x00, 0x00, 0x00, 0x00])  # green clock adjustment time (in frames, uint32)
-        write_bytes(rom, 0x18020C, [0x00, 0x00, 0x00, 0x00])  # starting time (in frames, uint32)
+        write_bytes(rom, 0x180200, [0x00, 0x00, 0x00, 0x00])  # red clock adjustment time (in frames, sint32)
+        write_bytes(rom, 0x180204, [0x00, 0x00, 0x00, 0x00])  # blue clock adjustment time (in frames, sint32)
+        write_bytes(rom, 0x180208, [0x00, 0x00, 0x00, 0x00])  # green clock adjustment time (in frames, sint32)
+        write_bytes(rom, 0x18020C, [0x00, 0x00, 0x00, 0x00])  # starting time (in frames, sint32)
     elif world.clock_mode == 'ohko':
         write_bytes(rom, 0x180190, [0x01, 0x02, 0x01])  # ohko timer with resetable timer functionality
-        write_bytes(rom, 0x180200, [0x00, 0x00, 0x00, 0x00])  # red clock adjustment time (in frames, uint32)
-        write_bytes(rom, 0x180204, [0x00, 0x00, 0x00, 0x00])  # blue clock adjustment time (in frames, uint32)
-        write_bytes(rom, 0x180208, [0x50, 0x46, 0x00, 0x00])  # green clock adjustment time (in frames, uint32)
-        write_bytes(rom, 0x18020C, [0xA0, 0x8C, 0x00, 0x00])  # starting time (in frames, uint32)
+        write_bytes(rom, 0x180200, [0x00, 0x00, 0x00, 0x00])  # red clock adjustment time (in frames, sint32)
+        write_bytes(rom, 0x180204, [0x00, 0x00, 0x00, 0x00])  # blue clock adjustment time (in frames, sint32)
+        write_bytes(rom, 0x180208, [0x50, 0x46, 0x00, 0x00])  # green clock adjustment time (in frames, sint32)
+        write_bytes(rom, 0x18020C, [0xA0, 0x8C, 0x00, 0x00])  # starting time (in frames, sint32)
     if world.clock_mode == 'stopwatch':
         write_bytes(rom, 0x180190, [0x02, 0x01, 0x00])  # set stopwatch mode
-        write_bytes(rom, 0x180200, [0x1C, 0x20, 0x00, 0x00])  # red clock adjustment time (in frames, uint32)
-        write_bytes(rom, 0x180204, [0x1C, 0x20, 0x00, 0x00])  # blue clock adjustment time (in frames, uint32)
-        write_bytes(rom, 0x180208, [0x38, 0x40, 0x00, 0x00])  # green clock adjustment time (in frames, uint32)
-        write_bytes(rom, 0x18020C, [0x00, 0x00, 0x00, 0x00])  # starting time (in frames, uint32)
+        write_bytes(rom, 0x180200, [0xE0, 0xE3, 0xFF, 0xFF])  # red clock adjustment time (in frames, sint32)
+        write_bytes(rom, 0x180204, [0x20, 0x1C, 0x00, 0x00])  # blue clock adjustment time (in frames, sint32)
+        write_bytes(rom, 0x180208, [0x40, 0x38, 0x00, 0x00])  # green clock adjustment time (in frames, sint32)
+        write_bytes(rom, 0x18020C, [0x00, 0x00, 0x00, 0x00])  # starting time (in frames, sint32)
     if world.clock_mode == 'countdown':
         write_bytes(rom, 0x180190, [0x01, 0x01, 0x00])  # set countdown, with no reset available
-        write_bytes(rom, 0x180200, [0x1C, 0x20, 0x00, 0x00])  # red clock adjustment time (in frames, uint32)
-        write_bytes(rom, 0x180204, [0x1C, 0x20, 0x00, 0x00])  # blue clock adjustment time (in frames, uint32)
-        write_bytes(rom, 0x180208, [0x38, 0x40, 0x00, 0x00])  # green clock adjustment time (in frames, uint32)
-        write_bytes(rom, 0x18020C, [0x80, 0x32, 0x02, 0x00])  # starting time (in frames, uint32)
+        write_bytes(rom, 0x180200, [0xE0, 0xE3, 0xFF, 0xFF])  # red clock adjustment time (in frames, sint32)
+        write_bytes(rom, 0x180204, [0x20, 0x1C, 0x00, 0x00])  # blue clock adjustment time (in frames, sint32)
+        write_bytes(rom, 0x180208, [0x40, 0x38, 0x00, 0x00])  # green clock adjustment time (in frames, sint32)
+        write_bytes(rom, 0x18020C, [0x80, 0x32, 0x02, 0x00])  # starting time (in frames, sint32)
 
     # set up goals for treasure hunt
-    write_bytes(rom, 0x180165, [0x0E, 0x28] if world.treasure_hunt_icon == 'Triforce' else [0x0D, 0x28])
+    write_bytes(rom, 0x180165, [0x0E, 0x28] if world.treasure_hunt_icon == 'Triforce Piece' else [0x0D, 0x28])
     write_byte(rom, 0x180167, world.treasure_hunt_count % 256)
 
     # assorted fixes
@@ -210,7 +211,7 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     write_byte(rom, 0x180036, 0x0A)  # Rupoor negative value
     write_byte(rom, 0x180169, 0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
     write_byte(rom, 0x180086, 0x00 if world.aga_randomness == 'vanilla' else 0x02 if world.aga_randomness == 'table' else 0x01)  # set blue ball and ganon warp randomness
-    if world.goal == 'pedestal':
+    if world.goal in ['pedestal', 'starhunt', 'triforcehunt']:
         write_byte(rom, 0x18003E, 0x01)  # make ganon invincible
 
     # remove shield from uncle
@@ -316,7 +317,7 @@ def write_strings(rom, world):
     write_string_to_rom(rom, 'PyramidFairy', PyramidFairy_texts[random.randint(0, len(PyramidFairy_texts) - 1)])
     write_string_to_rom(rom, 'Sahasrahla2', Sahasrahla2_texts[random.randint(0, len(Sahasrahla2_texts) - 1)])
     write_string_to_rom(rom, 'Blind', Blind_texts[random.randint(0, len(Blind_texts) - 1)])
-    if world.goal == 'pedestal':
+    if world.goal in ['pedestal', 'starhunt', 'triforcehunt']:
         write_string_to_rom(rom, 'Ganon1', 'Why are you even here?\n You can\'t even hurt me!')
     else:
         write_string_to_rom(rom, 'Ganon1', Ganon1_texts[random.randint(0, len(Ganon1_texts) - 1)])

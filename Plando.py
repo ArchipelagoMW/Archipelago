@@ -183,8 +183,8 @@ def create_playthrough(world):
     # create a copy as we will modify it
     world = copy_world(world)
 
-    # if we do pedestal%, ganon should not be a viable option as far as the playthrough is concerned
-    if world.goal == 'pedestal':
+    # in treasure hunt and pedestal goals, ganon is invincible
+    if world.goal in ['pedestal', 'starhunt', 'triforcehunt']:
         world.get_location('Ganon').item = None
 
     # get locations containing progress items

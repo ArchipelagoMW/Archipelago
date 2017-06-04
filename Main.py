@@ -305,21 +305,44 @@ def flood_items(world):
 
 
 def generate_itempool(world):
-    if world.difficulty != 'normal' or world.goal not in ['ganon', 'pedestal', 'dungeons'] or world.mode not in ['open', 'standard']:
+    if world.difficulty not in ['normal', 'timed', 'timed-ohko', 'timed-countdown'] or world.goal not in ['ganon', 'pedestal', 'dungeons', 'starhunt', 'triforcehunt'] or world.mode not in ['open', 'standard']:
         raise NotImplementedError('Not supported yet')
 
     world.push_item('Ganon', ItemFactory('Triforce'), False)
 
     # set up item pool
-    world.itempool = ItemFactory(['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6 + ['Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] +
-                                 ['Progressive Armor'] * 2 + ['Progressive Shield'] * 3 + ['Progressive Sword'] * 3 + ['Progressive Glove'] * 2 +
-                                 ['Bottle'] * 4 +
-                                 ['Bombos', 'Book of Mudora', 'Blue Boomerang', 'Bow', 'Bug Catching Net', 'Cane of Byrna', 'Cane of Somaria',
-                                  'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp', 'Cape', 'Magic Powder',
-                                  'Red Boomerang', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Silver Arrows'] +
-                                 ['Single Arrow', 'Sanctuary Heart Container', 'Rupees (100)'] + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24 +
-                                 ['Rupees (50)'] * 7 + ['Rupees (5)'] * 4 + ['Rupee (1)'] * 2 + ['Rupees (300)'] * 4 + ['Rupees (20)'] * 28 +
-                                 ['Arrows (10)'] * 4 + ['Bombs (3)'] * 10)
+    if world.difficulty in ['timed', 'timed-countdown']:
+        world.itempool = ItemFactory(['Arrow Upgrade (+5)'] * 2 + ['Bomb Upgrade (+5)'] * 2 + ['Arrow Upgrade (+10)'] * 3 + ['Bomb Upgrade (+10)'] * 3 +
+                                     ['Progressive Armor'] * 2 + ['Progressive Shield'] * 3 + ['Progressive Sword'] * 3 + ['Progressive Glove'] * 2 +
+                                     ['Bottle'] * 4 +
+                                     ['Bombos', 'Book of Mudora', 'Blue Boomerang', 'Bow', 'Bug Catching Net', 'Cane of Byrna', 'Cane of Somaria',
+                                      'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp', 'Cape', 'Magic Powder',
+                                      'Red Boomerang', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Silver Arrows'] +
+                                     ['Sanctuary Heart Container'] + ['Rupees (100)'] * 2 + ['Boss Heart Container'] * 12 + ['Piece of Heart'] * 16 +
+                                     ['Rupees (50)'] * 8 + ['Rupees (300)'] * 5 + ['Rupees (20)'] * 4 +
+                                     ['Arrows (10)'] * 2 + ['Bombs (3)'] * 10 + ['Red Clock'] * 10 + ['Blue Clock'] * 10 + ['Green Clock'] * 20)
+        world.clock_mode = 'stopwatch' if world.difficulty == 'timed' else 'countdown'
+    elif world.difficulty == 'timed-ohko':
+        world.itempool = ItemFactory(['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6 + ['Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] +
+                                     ['Progressive Armor'] * 2 + ['Progressive Shield'] * 3 + ['Progressive Sword'] * 3 + ['Progressive Glove'] * 2 +
+                                     ['Bottle'] * 4 +
+                                     ['Bombos', 'Book of Mudora', 'Blue Boomerang', 'Bow', 'Bug Catching Net', 'Cane of Byrna', 'Cane of Somaria',
+                                      'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp', 'Cape', 'Magic Powder',
+                                      'Red Boomerang', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Silver Arrows'] +
+                                     ['Single Arrow', 'Sanctuary Heart Container'] + ['Rupees (100)'] * 3 + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24 +
+                                     ['Rupees (50)'] * 7 + ['Rupees (300)'] * 6 + ['Rupees (20)'] * 5 +
+                                     ['Arrows (10)'] * 4 + ['Bombs (3)'] * 10 + ['Green Clock'] * 25)
+        world.clock_mode = 'ohko'
+    else:
+        world.itempool = ItemFactory(['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6 + ['Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] +
+                                     ['Progressive Armor'] * 2 + ['Progressive Shield'] * 3 + ['Progressive Sword'] * 3 + ['Progressive Glove'] * 2 +
+                                     ['Bottle'] * 4 +
+                                     ['Bombos', 'Book of Mudora', 'Blue Boomerang', 'Bow', 'Bug Catching Net', 'Cane of Byrna', 'Cane of Somaria',
+                                      'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp', 'Cape', 'Magic Powder',
+                                      'Red Boomerang', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Silver Arrows'] +
+                                     ['Single Arrow', 'Sanctuary Heart Container', 'Rupees (100)'] + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24 +
+                                     ['Rupees (50)'] * 7 + ['Rupees (5)'] * 4 + ['Rupee (1)'] * 2 + ['Rupees (300)'] * 4 + ['Rupees (20)'] * 28 +
+                                     ['Arrows (10)'] * 4 + ['Bombs (3)'] * 10)
 
     if world.mode == 'standard':
         world.push_item('Uncle', ItemFactory('Progressive Sword'))
@@ -335,14 +358,14 @@ def generate_itempool(world):
 
     if world.goal == 'pedestal':
         world.push_item('Altar', ItemFactory('Triforce'))
-        items = list(world.itempool)
-        random.shuffle(items)
-        for item in items:
-            if not item.advancement:
-                # save to remove
-                world.itempool.remove(item)
-                break
-                # ToDo what to do if EVERYTHING is a progress item?
+    elif world.goal == 'starhunt':
+        world.treasure_hunt_count = 10
+        world.treasure_hunt_icon = 'Power Star'
+        world.itempool.extend(ItemFactory(['Power Star'] * 15))
+    elif world.goal == 'triforcehunt':
+        world.treasure_hunt_count = 3
+        world.treasure_hunt_icon = 'Triforce Piece'
+        world.itempool.extend(ItemFactory(['Triforce Piece'] * 3))
 
     if random.randint(0, 3) == 0:
         world.itempool.append(ItemFactory('Magic Upgrade (1/4)'))
@@ -410,8 +433,8 @@ def create_playthrough(world):
     # create a copy as we will modify it
     world = copy_world(world)
 
-    # if we do pedestal%, ganon should not be a viable option as far as the playthrough is concerned
-    if world.goal == 'pedestal':
+    # in treasure hunt and pedestal goals, ganon is invincible
+    if world.goal in ['pedestal', 'starhunt', 'triforcehunt']:
         world.get_location('Ganon').item = None
 
     # get locations containing progress items
@@ -478,9 +501,16 @@ if __name__ == '__main__':
                         help='Select Enforcement of Item Requirements. Minor Glitches may require Fake Flippers, Bunny Revival and Dark Room Navigation.')
     parser.add_argument('--mode', default='open', const='open', nargs='?', choices=['standard', 'open'],
                         help='Select game mode. Standard fixes Hyrule Castle Secret Entrance and Front Door, but may lead to weird rain state issues if you exit through the Hyrule Castle side exits before rescuing Zelda in a full shuffle.')
-    parser.add_argument('--goal', default='ganon', const='ganon', nargs='?', choices=['ganon', 'pedestal', 'dungeons'],
-                        help='Select completion goal. Pedestal places a second Triforce at the Master Sword Pedestal, the playthrough may still deem Ganon to be the easier goal. All dungeons is not enforced ingame but considered in the rules.')
-    parser.add_argument('--difficulty', default='normal', const='normal', nargs='?', choices=['normal'], help='Select game difficulty. Affects available itempool.')
+    parser.add_argument('--goal', default='ganon', const='ganon', nargs='?', choices=['ganon', 'pedestal', 'dungeons', 'starhunt', 'triforcehunt'],
+                        help='Select completion goal. Pedestal places the Triforce at the Master Sword Pedestal. All dungeons is not enforced ingame but considered in the playthrough. \n'
+                             'Star Hunt places 15 Power Stars pieces in the world, collect 10 of them to beat the game.\n'
+                             'Triforce Hunt places 3 Triforce Pieces in the world, collect them all to beat the game.')
+    parser.add_argument('--difficulty', default='normal', const='normal', nargs='?', choices=['normal', 'timed', 'timed-ohko', 'timed-countdown'],
+                        help='Select game difficulty. Affects available itempool.\n'
+                             'Timed modes replace low value items with clocks, the overall rupee count in the pool stays roughly the same.\n'
+                             'Timed starts with clock at zero. Green Clocks subtract 4 minutes (Total: 20), Blue Clocks subtract 2 minutes (Total: 10), Red Clocks add 2 minutes (Total: 10). Winner is player with lowest time at the end.\n'
+                             'Timed OHKO starts clock at 10 minutes. Green Clocks add 5 minutes (Total: 25). As long as clock is at 0, Link will die in one hit.\n'
+                             'Timed Countdown starts with clock at 40 minutes. Same clocks as Timed mode. If time runs out, you lose (but can still keep playing).')
     parser.add_argument('--algorithm', default='freshness', const='freshness', nargs='?', choices=['freshness', 'flood', 'vt21', 'vt22'],
                         help='Select item filling algorithm. vt21 is unbiased in its selection, but has tendency to put Ice Rod in Turtle Rock.\n'
                              'vt22 drops off stale locations after 1/3 of progress items were placed to try to circumvent vt21\'s shortcomings.\n'
