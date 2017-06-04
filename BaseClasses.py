@@ -23,6 +23,7 @@ class World(object):
         self._location_cache = {}
         self._item_cache = {}
         self.spoiler = ''
+        self.required_locations = []
         self.place_dungeon_items = place_dungeon_items  # configurable in future
         self.agahnim_fix_required = False
         self.swamp_patch_required = False

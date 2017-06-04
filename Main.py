@@ -63,7 +63,7 @@ def main(args, seed=None):
     elif args.algorithm == 'vt21':
         distribute_items_cutoff(world, 1)
     elif args.algorithm == 'vt22':
-        distribute_items_cutoff(world, 0.33)
+        distribute_items_cutoff(world, 0.66)
     elif args.algorithm == 'freshness':
         distribute_items_staleness(world)
 
@@ -431,6 +431,7 @@ def copy_world(world):
 
 def create_playthrough(world):
     # create a copy as we will modify it
+    old_world = world
     world = copy_world(world)
 
     # in treasure hunt and pedestal goals, ganon is invincible
@@ -485,6 +486,9 @@ def create_playthrough(world):
 
     # we are now down to just the required progress items in collection_spheres in a minimum number of spheres. As a cleanup, we right trim empty spheres (can happen if we have multiple triforces)
     collection_spheres = [sphere for sphere in collection_spheres if sphere]
+
+    # store the required locations for statistical analysis
+    old_world.required_locations = [location.name for sphere in collection_spheres for location in sphere]
 
     # we can finally output our playthrough
     return 'Playthrough:\n' + ''.join(['%s: {\n%s}\n' % (i + 1, ''.join(['  %s: %s\n' % (location, location.item) for location in sphere])) for i, sphere in enumerate(collection_spheres)]) + '\n'
