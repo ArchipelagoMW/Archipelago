@@ -295,7 +295,7 @@ def global_rules(world):
     set_rule(world.get_location('[dungeon-A2-B1] Ganons Tower - Armos Room [left chest]'), lambda state: state.has('Bow') or state.has_blunt_weapon())
     set_rule(world.get_location('[dungeon-A2-B1] Ganons Tower - Armos Room [bottom chest]'), lambda state: state.has('Bow') or state.has_blunt_weapon())
     set_rule(world.get_location('[dungeon-A2-B1] Ganons Tower - Armos Room [right chest]'), lambda state: state.has('Bow') or state.has_blunt_weapon())
-    set_rule(world.get_entrance('Ganons Tower Big Key Door'), lambda state: state.can_collect('Big Key (Ganons Tower)'))
+    set_rule(world.get_entrance('Ganons Tower Big Key Door'), lambda state: state.can_collect('Big Key (Ganons Tower)') and state.has('Bow'))
     set_rule(world.get_entrance('Ganons Tower Torch Rooms'), lambda state: state.has_fire_source())
     set_rule(world.get_entrance('Ganons Tower Moldorm Door'), lambda state: state.can_collect('Small Key (Ganons Tower)', 4))
     set_rule(world.get_entrance('Ganons Tower Moldorm Gap'), lambda state: state.has('Hookshot'))
@@ -304,7 +304,7 @@ def global_rules(world):
                      '[dungeon-A2-6F] Ganons Tower - Room before Moldorm', '[dungeon-A2-6F] Ganons Tower - Moldorm Room']:
         forbid_item(world.get_location(location), 'Big Key (Ganons Tower)')
 
-    set_rule(world.get_location('Ganon'), lambda state: state.has_beam_sword() and state.has_fire_source() and (state.has('Tempered Sword') or state.has('Golden Sword') or state.has('Silver Arrows') or state.has('Lamp') or state.has('Bottle') or state.has('Half Magic') or state.has('Quarter Magic')))  # need to light torch a sufficient amount of times
+    set_rule(world.get_location('Ganon'), lambda state: state.has_beam_sword() and state.has_fire_source() and (state.has('Tempered Sword') or state.has('Golden Sword') or (state.has('Silver Arrows') and state.has('Bow')) or state.has('Lamp') or state.has('Bottle') or state.has('Half Magic') or state.has('Quarter Magic')))  # need to light torch a sufficient amount of times
     set_rule(world.get_entrance('Ganon Drop'), lambda state: state.has_beam_sword())  # need to damage ganon to get tiles to drop
 
 
