@@ -211,6 +211,7 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     write_byte(rom, 0x180036, 0x0A)  # Rupoor negative value
     write_byte(rom, 0x180169, 0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
     write_byte(rom, 0x180086, 0x00 if world.aga_randomness == 'vanilla' else 0x02 if world.aga_randomness == 'table' else 0x01)  # set blue ball and ganon warp randomness
+    write_byte(rom, 0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
     if world.goal in ['pedestal', 'starhunt', 'triforcehunt']:
         write_byte(rom, 0x18003E, 0x01)  # make ganon invincible
 
@@ -225,7 +226,7 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
 
     if world.swamp_patch_required:
         # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
-        write_byte(rom, 0x1800A1, 0x01)
+        write_byte(rom, 0x18003D, 0x01)
 
     # set correct flag for hera basement item
     if world.get_location('[dungeon-L3-1F] Tower of Hera - Freestanding Key').item is not None and world.get_location('[dungeon-L3-1F] Tower of Hera - Freestanding Key').item.name == 'Small Key (Tower of Hera)':
