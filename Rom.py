@@ -135,9 +135,6 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     write_byte(rom, 0xEFBD4, prizes.pop())
     write_byte(rom, 0xEFBD5, prizes.pop())
     write_byte(rom, 0xEFBD6, prizes.pop())
-    # in open mode with shuffled caves, cannot guarantee access to rupees or a shop. Make 4 kill tree pull single bombs always to give guaranteed access
-    if world.shuffle not in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
-        write_byte(rom, 0xEFBD6, 0xDC)
 
     # rupee crab prizes
     write_byte(rom, 0x329C8, prizes.pop())  # first prize
