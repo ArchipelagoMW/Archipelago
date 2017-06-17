@@ -14,11 +14,10 @@ RANDOMIZERBASEHASH = 'd5b61947feef1972e0f546ba43180e62'
 def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None):
     # patch items
     for location in world.get_locations():
-        if location.name == 'Ganon':
-            # cannot shuffle this yet
-            continue
-
         itemid = location.item.code if location.item is not None else 0x5A
+
+        if itemid is None or location.address is None:
+            continue
 
         locationaddress = location.address
         if not location.crystal:

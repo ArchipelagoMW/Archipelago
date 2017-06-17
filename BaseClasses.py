@@ -76,6 +76,39 @@ class World(object):
                         return r_location
         raise RuntimeError('No such location %s' % location)
 
+    def get_all_state(self):
+        ret = CollectionState(self)
+        
+        def soft_collect(item):
+            if item.name.startswith('Progressive '):
+                if 'Sword' in item.name:
+                    if ret.has('Golden Sword'):
+                        pass
+                    elif ret.has('Tempered Sword'):
+                        ret.prog_items.append('Golden Sword')
+                    elif ret.has('Master Sword'):
+                        ret.prog_items.append('Tempered Sword')
+                    elif ret.has('Fighter Sword'):
+                        ret.prog_items.append('Master Sword')
+                    else:
+                        ret.prog_items.append('Fighter Sword')
+                elif 'Glove' in item.name:
+                    if ret.has('Titans Mitts'):
+                        pass
+                    elif ret.has('Power Glove'):
+                        ret.prog_items.append('Titans Mitts')
+                    else:
+                        ret.prog_items.append('Power Glove')
+
+            elif item.advancement:
+                ret.prog_items.append(item.name)
+
+        for location in self.get_filled_locations():
+            soft_collect(location.item)
+        for item in self.itempool:
+            soft_collect(item)
+        return ret
+
     def find_items(self, item):
         return [location for location in self.get_locations() if location.item is not None and location.item.name == item]
 
@@ -87,7 +120,7 @@ class World(object):
             location.item = item
             item.location = location
             if collect:
-                self.state.collect(item)
+                self.state.collect(item, location.event)
 
             logging.getLogger('').debug('Placed %s at %s' % (item, location))
         else:
@@ -103,6 +136,9 @@ class World(object):
     def get_unfilled_locations(self):
         return [location for location in self.get_locations() if location.item is None]
 
+    def get_filled_locations(self):
+        return [location for location in self.get_locations() if location.item is not None]
+
     def get_reachable_locations(self, state=None):
         if state is None:
             state = self.state
@@ -116,7 +152,7 @@ class World(object):
     def unlocks_new_location(self, item):
         temp_state = self.state.copy()
         temp_state._clear_cache()
-        temp_state.collect(item)
+        temp_state.collect(item, True)
 
         for location in self.get_unfilled_locations():
             if temp_state.can_reach(location) and not self.state.can_reach(location):
@@ -125,7 +161,7 @@ class World(object):
         return False
 
     def can_beat_game(self):
-        prog_locations = [location for location in self.get_locations() if location.item is not None and location.item.advancement]
+        prog_locations = [location for location in self.get_locations() if location.item is not None and (location.item.advancement or location.event)]
 
         state = CollectionState(self)
         treasure_pieces_collected = 0
@@ -148,7 +184,7 @@ class World(object):
 
             for location in sphere:
                 prog_locations.remove(location)
-                state.collect(location.item)
+                state.collect(location.item, True)
 
         return False
 
@@ -166,14 +202,14 @@ class World(object):
 
 class CollectionState(object):
 
-    def __init__(self, parent, has_everything=False):
+    def __init__(self, parent):
         self.prog_items = []
         self.world = parent
-        self.has_everything = has_everything
         self.region_cache = {}
         self.location_cache = {}
         self.entrance_cache = {}
         self.recursion_count = 0
+        self.events = []
 
     def _clear_cache(self):
         # we only need to invalidate results which were False, places we could reach before we can still reach after adding more items
@@ -182,11 +218,12 @@ class CollectionState(object):
         self.entrance_cache = {k: v for k, v in self.entrance_cache.items() if v}
 
     def copy(self):
-        ret = CollectionState(self.world, self.has_everything)
+        ret = CollectionState(self.world)
         ret.prog_items = copy.copy(self.prog_items)
         ret.region_cache = copy.copy(self.region_cache)
         ret.location_cache = copy.copy(self.location_cache)
         ret.entrance_cache = copy.copy(self.entrance_cache)
+        ret.events = copy.copy(self.events)
         return ret
 
     def can_reach(self, spot, resolution_hint=None):
@@ -233,45 +270,24 @@ class CollectionState(object):
             return can_reach
         return correct_cache[spot]
 
-    def can_collect(self, item, count=None):
-        if isinstance(item, Item):
-            item = item.name
-        if count is None:
-            cached = self.world._item_cache.get(item, None)
-            if cached is None:
-                candidates = self.world.find_items(item)
-                if not candidates:
-                    return False
-                elif len(candidates) == 1:
-                    cached = candidates[0]
-                    self.world._item_cache[item] = cached
-                else:
-                    # this should probably not happen, wonky item distribution?
-                    return self._can_reach_n(self.world.find_items(item), 1)
-            return self.can_reach(cached)
+    def sweep_for_events(self, key_only=False):
+        # this may need improvement
+        new_locations = True
+        checked_locations = 0
+        while new_locations:
+            reachable_events = [location for location in self.world.get_filled_locations() if location.event and (not key_only or location.item.key) and self.can_reach(location)]
+            for event in reachable_events:
+                if event.name not in self.events:
+                    self.events.append(event.name)
+                    self.collect(event.item, True)
+            new_locations = len(reachable_events) > checked_locations
+            checked_locations = len(reachable_events)
 
-        return self._can_reach_n(self.world.find_items(item), count)
-
-    def _can_reach_n(self, candidates, count):
-        maxfail = len(candidates) - count
-        fail = 0
-        success = 0
-        for candidate in candidates:
-            if self.can_reach(candidate):
-                success += 1
-            else:
-                fail += 1
-            if fail > maxfail:
-                return False
-            if success >= count:
-                return True
-        return False
-
-    def has(self, item):
-        if self.has_everything:
-            return True
-        else:
+    def has(self, item, count=1):
+        if count == 1:
             return item in self.prog_items
+        else:
+            return len([pritem for pritem in self.prog_items if pritem == item]) >= count
 
     def can_lift_rocks(self):
         return self.has('Power Glove') or self.has('Titans Mitts')
@@ -306,7 +322,7 @@ class CollectionState(object):
     def has_turtle_rock_medallion(self):
         return self.has(self.world.required_medallions[1])
 
-    def collect(self, item):
+    def collect(self, item, event=False):
         changed = False
         if item.name.startswith('Progressive '):
             if 'Sword' in item.name:
@@ -334,12 +350,15 @@ class CollectionState(object):
                     self.prog_items.append('Power Glove')
                     changed = True
 
-        elif item.advancement:
+        elif event or item.advancement:
             self.prog_items.append(item.name)
             changed = True
 
         if changed:
             self._clear_cache()
+            if not event:
+                self.sweep_for_events()
+                self._clear_cache()
 
     def remove(self, item):
         if item.advancement:
@@ -456,6 +475,7 @@ class Location(object):
         self.hint_text = hint_text if hint_text is not None else 'Hyrule'
         self.recursion_count = 0
         self.staleness_count = 0
+        self.event = False
 
     def access_rule(self, state):
         return True

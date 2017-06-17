@@ -309,6 +309,10 @@ def generate_itempool(world):
         raise NotImplementedError('Not supported yet')
 
     world.push_item('Ganon', ItemFactory('Triforce'), False)
+    world.push_item('Agahnim 1', ItemFactory('Beat Agahnim 1'), False)
+    world.get_location('Agahnim 1').event = True
+    world.push_item('Agahnim 2', ItemFactory('Beat Agahnim 2'), False)
+    world.get_location('Agahnim 2').event = True
 
     # set up item pool
     if world.difficulty in ['timed', 'timed-countdown']:
@@ -380,6 +384,7 @@ def generate_itempool(world):
     random.shuffle(crystals)
     for location, crystal in zip(crystal_locations, crystals):
         world.push_item(location, crystal, False)
+        location.event = True
 
     # shuffle medallions
     mm_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
@@ -418,6 +423,8 @@ def copy_world(world):
             item = Item(location.item.name, location.item.advancement, location.item.priority, location.item.key)
             ret.get_location(location.name).item = item
             item.location = ret.get_location(location.name)
+        if location.event:
+            ret.get_location(location.name).event = True
 
     # copy remaining itempool. No item in itempool should have an assigned location
     for item in world.itempool:
@@ -454,7 +461,9 @@ def create_playthrough(world):
 
         for location in sphere:
             sphere_candidates.remove(location)
-            state.collect(location.item)
+            state.collect(location.item, True)
+
+        state.sweep_for_events(key_only=True)
 
         collection_spheres.append(sphere)
 

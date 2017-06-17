@@ -20,15 +20,18 @@ def fill_dungeons(world):
 
     freebes = ['[dungeon-A2-1F] Ganons Tower - Map Room', '[dungeon-D1-1F] Dark Palace - Spike Statue Room', '[dungeon-D1-1F] Dark Palace - Big Key Room']
 
+    all_state_base = world.get_all_state()
+
     # this key is in a fixed location (for now)
     world.push_item(world.get_location('[dungeon-D3-B1] Skull Woods - South of Big Chest'), ItemFactory('Small Key (Skull Woods)'), False)
+    world.get_location('[dungeon-D3-B1] Skull Woods - South of Big Chest').event = True
 
     for dungeon_regions, big_key, small_keys, dungeon_items in [TR, ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, GT]:
         # this is what we need to fill
         dungeon_locations = [location for location in world.get_unfilled_locations() if location.parent_region.name in dungeon_regions]
         random.shuffle(dungeon_locations)
 
-        all_state = CollectionState(world, True)
+        all_state = all_state_base.copy()
 
         # first place big key
         if big_key is not None:
@@ -42,11 +45,13 @@ def fill_dungeons(world):
                 raise RuntimeError('No suitable location for %s' % big_key)
 
             world.push_item(bk_location, big_key, False)
+            bk_location.event = True
             dungeon_locations.remove(bk_location)
             all_state._clear_cache()
 
         # next place small keys
         for small_key in small_keys:
+            all_state.sweep_for_events()
             sk_location = None
             for location in dungeon_locations:
                 if location.name in freebes or location.can_reach(all_state):
@@ -57,6 +62,7 @@ def fill_dungeons(world):
                 raise RuntimeError('No suitable location for %s' % small_key)
 
             world.push_item(sk_location, small_key, False)
+            sk_location.event = True
             dungeon_locations.remove(sk_location)
             all_state._clear_cache()
 

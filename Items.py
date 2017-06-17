@@ -155,4 +155,6 @@ item_table = {'Bow': (True, False, False, False, 0x0B, 'You have\nchosen the\nar
               'Big Key (Ganons Tower)': (False, False, True, False, 0x32, None, None, None, None, None, None),
               'Compass (Ganons Tower)': (False, True, False, False, 0x25, None, None, None, None, None, None),
               'Map (Ganons Tower)': (False, True, False, False, 0x33, None, None, None, None, None, None),
-              'Nothing': (False, False, False, False, 0x5A, 'Some Hot Air', None, None, None, None, None)}
+              'Nothing': (False, False, False, False, 0x5A, 'Some Hot Air', None, None, None, None, None),
+              'Beat Agahnim 1': (True, False, False, False, None, None, None, None, None, None, None),
+              'Beat Agahnim 2': (True, False, False, False, None, None, None, None, None, None, None)}
