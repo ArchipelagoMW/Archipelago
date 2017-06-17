@@ -243,8 +243,13 @@ def global_rules(world):
     set_rule(world.get_entrance('Misery Mire Entrance Gap'), lambda state: (state.has_Boots() or state.has('Hookshot')) and (state.has_sword() or state.has('Fire Rod') or state.has('Ice Rod') or state.has('Hammer') or state.has('Cane of Somaria') or state.has('Bow')))  # need to defeat wizzrobes, bombs don't work ...
     set_rule(world.get_location('[dungeon-D6-B1] Misery Mire - Big Chest'), lambda state: state.can_collect('Big Key (Misery Mire)'))
     set_rule(world.get_entrance('Misery Mire Big Key Door'), lambda state: state.can_collect('Big Key (Misery Mire)'))
+    # you can squander the free small key from the pot by opening the south door to the north west switch room, locking you out of accessing a color switch ...
+    set_rule(world.get_location('[dungeon-D6-B1] Misery Mire - Hub Room'), lambda state: state.can_collect('Small Key (Misery Mire)', 1) or state.can_collect('Big Key (Misery Mire)'))
+    set_rule(world.get_location('[dungeon-D6-B1] Misery Mire - Map Room'), lambda state: state.can_collect('Small Key (Misery Mire)', 1) or state.can_collect('Big Key (Misery Mire)'))
     # we can place a small key in the West wing iff it also contains/blocks the Big Key, as we cannot reach and softlock with the basement key door yet
     set_rule(world.get_entrance('Misery Mire (West)'), lambda state: state.can_collect('Small Key (Misery Mire)', 3) if state.can_reach('Misery Mire (Final Area)') else state.can_collect('Small Key (Misery Mire)', 2))
+    set_rule(world.get_location('[dungeon-D6-B1] Misery Mire - Compass Room'), lambda state: state.has_fire_source())
+    set_rule(world.get_location('[dungeon-D6-B1] Misery Mire - Big Key Room'), lambda state: state.has_fire_source())
     set_rule(world.get_entrance('Misery Mire (Vitreous)'), lambda state: state.has('Cane of Somaria') and (state.has('Bow') or state.has_blunt_weapon()))
     for location in ['[dungeon-D6-B1] Misery Mire - Big Chest', 'Vitreous - Heart Container']:
         forbid_item(world.get_location(location), 'Big Key (Misery Mire)')
