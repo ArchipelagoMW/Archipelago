@@ -1,7 +1,7 @@
 from BaseClasses import World, CollectionState, Item
 from Regions import create_regions
 from EntranceShuffle import link_entrances, connect_entrance, connect_two_way, connect_exit
-from Rom import patch_rom, patch_base_rom
+from Rom import patch_rom, patch_base_rom, write_string_to_rom, write_credits_string_to_rom
 from Rules import set_rules
 from Items import ItemFactory
 import random
@@ -11,7 +11,7 @@ import argparse
 import os
 import hashlib
 
-__version__ = '0.1-dev'
+__version__ = '0.2-dev'
 
 logic_hash = [182, 244, 144, 92, 149, 200, 93, 183, 124, 169, 226, 46, 111, 163, 5, 193, 13, 112, 125, 101, 128, 84, 31, 67, 107, 94, 184, 100, 189, 18, 8, 171,
               142, 57, 173, 38, 37, 211, 253, 131, 98, 239, 167, 116, 32, 186, 70, 148, 66, 151, 143, 86, 59, 83, 16, 51, 240, 152, 60, 242, 190, 117, 76, 122,
@@ -52,9 +52,14 @@ def main(args, seed=None):
 
     logger.info('Fill the world.')
 
-    world.spoiler += fill_world(world, args.plando)
+    text_patches = []
+
+    world.spoiler += fill_world(world, args.plando, text_patches)
 
     world.spoiler += print_location_spoiler(world)
+
+    if world.get_entrance('Dam').connected_region.name != 'Dam' or world.get_entrance('Swamp Palace').connected_region.name != 'Swamp Palace (Entrance)':
+        world.swamp_patch_required = True
 
     logger.info('Calculating playthrough.')
 
@@ -77,6 +82,12 @@ def main(args, seed=None):
     patch_base_rom(rom)
     patched_rom = patch_rom(world, rom, logic_hash, args.quickswap, args.heartbeep, sprite)
 
+    for textname, texttype, text in text_patches:
+        if texttype == 'text':
+            write_string_to_rom(rom, textname, text)
+        elif texttype == 'credit':
+            write_credits_string_to_rom(rom, textname, text)
+
     outfilebase = 'Plando_%s_%s' % (os.path.splitext(os.path.basename(args.plando))[0], world.seed)
 
     with open('%s.sfc' % outfilebase, 'wb') as outfile:
@@ -91,18 +102,18 @@ def main(args, seed=None):
     return world
 
 
-def fill_world(world, plando):
+def fill_world(world, plando, text_patches):
     ret = []
     mm_medallion = 'Ether'
     tr_medallion = 'Quake'
     logger = logging.getLogger('')
     with open(plando, 'r') as plandofile:
         for line in plandofile.readlines():
+            if line.startswith('#'):
+                continue
             if ':' in line:
                 line = line.lstrip()
 
-                if line.startswith('#'):
-                    continue
                 if line.startswith('!'):
                     if line.startswith('!mm_medallion'):
                         _, medallionstr = line.split(':', 1)
@@ -119,6 +130,27 @@ def fill_world(world, plando):
                     elif line.startswith('!goal'):
                         _, goalstr = line.split(':', 1)
                         world.goal = goalstr.strip()
+                    elif line.startswith('!light_cone_sewers'):
+                        _, sewerstr = line.split(':', 1)
+                        world.sewer_light_cone = sewerstr.strip().lower() == 'true'
+                    elif line.startswith('!light_cone_lw'):
+                        _, lwconestr = line.split(':', 1)
+                        world.light_world_light_cone = lwconestr.strip().lower() == 'true'
+                    elif line.startswith('!light_cone_dw'):
+                        _, dwconestr = line.split(':', 1)
+                        world.dark_world_light_cone = dwconestr.strip().lower() == 'true'
+                    elif line.startswith('!fix_door_frames'):
+                        _, dfstring = line.split(':', 1)
+                        world.fix_door_frames = dfstring.strip().lower() == 'true'
+                    elif line.startswith('!fix_trock_doors'):
+                        _, trdstr = line.split(':', 1)
+                        world.fix_trock_doors = trdstr.strip().lower() == 'true'
+                    elif line.startswith('!text_'):
+                        textname, text = line.split(':', 1)
+                        text_patches.append([textname.lstrip('!text_').strip(), 'text', text.strip()])
+                    elif line.startswith('!credits_'):
+                        textname, text = line.split(':', 1)
+                        text_patches.append([textname.lstrip('!credits_').strip(), 'credits', text.strip()])
                     continue
 
                 locationstr, itemstr = line.split(':', 1)
@@ -153,6 +185,9 @@ def copy_world(world):
     ret.required_medallions = list(world.required_medallions)
     ret.agahnim_fix_required = world.agahnim_fix_required
     ret.swamp_patch_required = world.swamp_patch_required
+    ret.sewer_light_cone = world.sewer_light_cone
+    ret.light_world_light_cone = world.light_world_light_cone
+    ret.dark_world_light_cone = world.dark_world_light_cone
     create_regions(ret)
 
     # connect copied world
