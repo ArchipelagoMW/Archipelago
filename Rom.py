@@ -35,6 +35,9 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
             for music_address in music_addresses:
                 write_byte(rom, music_address, music)
 
+    # store old door overlay table
+    door_overlays = bytearray(rom[0x15488:0x15488+0x10A])
+
     # patch entrances
     for region in world.regions:
         for exit in region.exits:
@@ -42,6 +45,12 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
                 addresses = [exit.addresses] if isinstance(exit.addresses, int) else exit.addresses
                 for address in addresses:
                     write_byte(rom, address, exit.target)
+
+                # this does not yet seem to fix our door headaches ...
+                if world.fix_door_frames and exit.vanilla is not None:
+                    # patch door overlay table. The value of where this now leads is patched into the location where this entrance would lead in vanilla
+                    write_byte(rom, 0x15488 + (2*exit.vanilla), door_overlays[2*exit.target])
+                    write_byte(rom, 0x15489 + (2 * exit.vanilla), door_overlays[(2 * exit.target) + 1])
 
     # patch medallion requirements
     if world.required_medallions[0] == 'Bombos':
@@ -236,12 +245,17 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
 
     # disable open door sprites when exiting caves
     # this does not seem to work completely yet
-    if world.shuffle not in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+    if world.fix_door_frames:
         for i in range(0x85):
             write_byte(rom, 0x15274 + i, 0x00)
+        for i in range(0x86):
+            write_byte(rom, 0x15488 + i, 0x02)
+        # leave the entry marking tavern north a north facing exit
+        for i in range(0x82):
+            write_byte(rom, 0x15510 + i, 0x02)
 
     # fix trock doors for reverse entrances
-    if world.shuffle != 'vanilla':
+    if world.fix_trock_doors:
         write_byte(rom, 0xFED31, 0x0E)  # preopen bombable exit
         write_byte(rom, 0xFEE41, 0x0E)  # preopen bombable exit
         write_byte(rom, 0xFE465, 0x1E)  # remove small key door on backside of big key door

@@ -35,6 +35,8 @@ class World(object):
         self.clock_mode = 'off'
         self.aga_randomness = 'off'
         self.lock_aga_door_in_escape = False
+        self.fix_door_frames = self.shuffle not in ['vanilla', 'dungeonssimple', 'dungeonsfull']
+        self.fix_trock_doors = self.shuffle != 'vanilla'
 
     def get_region(self, regionname):
         if isinstance(regionname, Region):
@@ -417,6 +419,7 @@ class Entrance(object):
         self.addresses = None
         self.spot_type = 'Entrance'
         self.recursion_count = 0
+        self.vanilla = None
 
     def access_rule(self, state):
         return True
@@ -427,10 +430,11 @@ class Entrance(object):
 
         return False
 
-    def connect(self, region, addresses=None, target=None):
+    def connect(self, region, addresses=None, target=None, vanilla=None):
         self.connected_region = region
         self.target = target
         self.addresses = addresses
+        self.vanilla = vanilla
         region.entrances.append(self)
 
     def __str__(self):
