@@ -1,9 +1,10 @@
-from BaseClasses import World, CollectionState, Item
+from BaseClasses import World
 from Regions import create_regions
 from EntranceShuffle import link_entrances, connect_entrance, connect_two_way, connect_exit
 from Rom import patch_rom, patch_base_rom, write_string_to_rom, write_credits_string_to_rom
 from Rules import set_rules
 from Items import ItemFactory
+from Main import create_playthrough
 import random
 import time
 import logging
@@ -162,6 +163,8 @@ def fill_world(world, plando, text_patches):
                     item = ItemFactory(itemstr.strip())
                     if item is not None:
                         world.push_item(location, item)
+                    if item.key:
+                        location.event = True
             elif '<=>' in line:
                 entrance, exit = line.split('<=>', 1)
                 ret.append(connect_two_way(world, entrance.strip(), exit.strip()))
@@ -173,106 +176,17 @@ def fill_world(world, plando, text_patches):
                 ret.append(connect_exit(world, entrance.strip(), exit.strip()))
 
     world.required_medallions = (mm_medallion, tr_medallion)
+
+    # set up Agahnim Events
+    world.get_location('Agahnim 1').event = True
+    world.get_location('Agahnim 1').item = ItemFactory('Beat Agahnim 1')
+    world.get_location('Agahnim 2').event = True
+    world.get_location('Agahnim 2').item = ItemFactory('Beat Agahnim 2')
+
     ret.append('\nMisery Mire Medallion: %s' % mm_medallion)
     ret.append('Turtle Rock Medallion: %s' % tr_medallion)
     ret.append('\n')
     return '\n'.join(ret)
-
-
-def copy_world(world):
-    # ToDo: Not good yet
-    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal, world.algorithm, world.place_dungeon_items)
-    ret.required_medallions = list(world.required_medallions)
-    ret.agahnim_fix_required = world.agahnim_fix_required
-    ret.swamp_patch_required = world.swamp_patch_required
-    ret.sewer_light_cone = world.sewer_light_cone
-    ret.light_world_light_cone = world.light_world_light_cone
-    ret.dark_world_light_cone = world.dark_world_light_cone
-    create_regions(ret)
-
-    # connect copied world
-    for region in world.regions:
-        for entrance in region.entrances:
-            ret.get_entrance(entrance.name).connect(ret.get_region(region.name))
-
-    set_rules(ret)
-
-    # fill locations
-    for location in world.get_locations():
-        if location.item is not None:
-            item = Item(location.item.name, location.item.advancement, location.item.priority, location.item.key)
-            ret.get_location(location.name).item = item
-            item.location = ret.get_location(location.name)
-
-    # copy remaining itempool. No item in itempool should have an assigned location
-    for item in world.itempool:
-        ret.itempool.append(Item(item.name, item.advancement, item.priority, item.key))
-
-    # copy progress items in state
-    ret.state.prog_items = list(world.state.prog_items)
-
-    return ret
-
-
-def create_playthrough(world):
-    # create a copy as we will modify it
-    world = copy_world(world)
-
-    # in treasure hunt and pedestal goals, ganon is invincible
-    if world.goal in ['pedestal', 'starhunt', 'triforcehunt']:
-        world.get_location('Ganon').item = None
-
-    # get locations containing progress items
-    prog_locations = [location for location in world.get_locations() if location.item is not None and location.item.advancement]
-
-    collection_spheres = []
-    state = CollectionState(world)
-    sphere_candidates = list(prog_locations)
-    logging.getLogger('').debug('Building up collection spheres.')
-    while sphere_candidates:
-        sphere = []
-        # build up spheres of collection radius. Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
-        for location in sphere_candidates:
-            if state.can_reach(location):
-                sphere.append(location)
-
-        for location in sphere:
-            sphere_candidates.remove(location)
-            state.collect(location.item)
-
-        collection_spheres.append(sphere)
-
-        logging.getLogger('').debug('Calculated sphere %i, containing %i of %i progress items.' % (len(collection_spheres), len(sphere), len(prog_locations)))
-
-        if not sphere:
-            logging.getLogger('').debug('The following items could not be placed: %s' % ['%s at %s' % (location.item.name, location.name) for location in sphere_candidates])
-            raise RuntimeError('Not all progression items reachable. Something went terribly wrong here.')
-
-    # in the second phase, we cull each sphere such that the game is still beatable, reducing each range of influence to the bare minimum required inside it
-    for sphere in reversed(collection_spheres):
-        to_delete = []
-        for location in sphere:
-            # we remove the item at location and check if game is still beatable
-            logging.getLogger('').debug('Checking if %s is required to beat the game.' % location.item.name)
-            old_item = location.item
-            location.item = None
-            state.remove(old_item)
-            world._item_cache = {}  # need to invalidate
-            if world.can_beat_game():
-                to_delete.append(location)
-            else:
-                # still required, got to keep it around
-                location.item = old_item
-
-        # cull entries in spheres for spoiler walkthrough at end
-        for location in to_delete:
-            sphere.remove(location)
-
-    # we are now down to just the required progress items in collection_spheres in a minimum number of spheres. As a cleanup, we right trim empty spheres (can happen if we have multiple triforces)
-    collection_spheres = [sphere for sphere in collection_spheres if sphere]
-
-    # we can finally output our playthrough
-    return 'Playthrough:\n' + ''.join(['%s: {\n%s}\n' % (i + 1, ''.join(['  %s: %s\n' % (location, location.item) for location in sphere])) for i, sphere in enumerate(collection_spheres)]) + '\n'
 
 
 def print_location_spoiler(world):
