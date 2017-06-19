@@ -66,6 +66,8 @@ def main(args, seed=None):
         distribute_items_cutoff(world, 0.66)
     elif args.algorithm == 'freshness':
         distribute_items_staleness(world)
+    elif args.algorithm == 'restrictive':
+        distribute_items_restrictive(world)
 
     world.spoiler += print_location_spoiler(world)
 
@@ -247,6 +249,59 @@ def distribute_items_staleness(world):
     logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s' % ([item.name for item in itempool], [location.name for location in fill_locations]))
 
 
+def distribute_items_restrictive(world):
+    # get list of locations to fill in
+    fill_locations = world.get_unfilled_locations()
+    random.shuffle(fill_locations)
+
+    # get items to distribute
+    random.shuffle(world.itempool)
+    progitempool = [item for item in world.itempool if item.advancement]
+    prioitempool = [item for item in world.itempool if not item.advancement and item.priority]
+    restitempool = [item for item in world.itempool if not item.advancement and not item.priority]
+
+    def sweep_from_pool(excluded_item):
+        new_state = world.state.copy()
+        for item in progitempool:
+            new_state.collect(item, True)
+        new_state.remove(excluded_item)
+        new_state.sweep_for_events()
+        return new_state
+
+    while progitempool and fill_locations:
+        item_to_place = progitempool.pop()
+        maximum_exploration_state = sweep_from_pool(item_to_place)
+
+        spot_to_fill = None
+        for location in fill_locations:
+            if maximum_exploration_state.can_reach(location) and location.item_rule(item_to_place):
+                spot_to_fill = location
+                break
+
+        if spot_to_fill is None:
+            # we filled all reachable spots. Maybe the game can be beaten anyway?
+            if world.can_beat_game():
+                logging.getLogger('').warning('Not all items placed. Game beatable anyway.')
+                break
+            raise RuntimeError('No more spots to place %s' % item_to_place)
+
+        world.push_item(spot_to_fill, item_to_place, False)
+        fill_locations.remove(spot_to_fill)
+        spot_to_fill.event = True
+
+    while prioitempool and fill_locations:
+        spot_to_fill = fill_locations.pop()
+        item_to_place = prioitempool.pop()
+        world.push_item(spot_to_fill, item_to_place, False)
+
+    while restitempool and fill_locations:
+        spot_to_fill = fill_locations.pop()
+        item_to_place = restitempool.pop()
+        world.push_item(spot_to_fill, item_to_place, False)
+
+    logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s' % ([item.name for item in progitempool + prioitempool + restitempool], [location.name for location in fill_locations]))
+
+
 def flood_items(world):
     # get items to distribute
     random.shuffle(world.itempool)
@@ -408,6 +463,7 @@ def copy_world(world):
     ret.sewer_light_cone = world.sewer_light_cone
     ret.light_world_light_cone = world.light_world_light_cone
     ret.dark_world_light_cone = world.dark_world_light_cone
+    ret.seed = world.seed
     create_regions(ret)
 
     # connect copied world
@@ -524,11 +580,12 @@ if __name__ == '__main__':
                              'Timed starts with clock at zero. Green Clocks subtract 4 minutes (Total: 20), Blue Clocks subtract 2 minutes (Total: 10), Red Clocks add 2 minutes (Total: 10). Winner is player with lowest time at the end.\n'
                              'Timed OHKO starts clock at 10 minutes. Green Clocks add 5 minutes (Total: 25). As long as clock is at 0, Link will die in one hit.\n'
                              'Timed Countdown starts with clock at 40 minutes. Same clocks as Timed mode. If time runs out, you lose (but can still keep playing).')
-    parser.add_argument('--algorithm', default='freshness', const='freshness', nargs='?', choices=['freshness', 'flood', 'vt21', 'vt22'],
+    parser.add_argument('--algorithm', default='freshness', const='freshness', nargs='?', choices=['freshness', 'flood', 'vt21', 'vt22', 'restrictive'],
                         help='Select item filling algorithm. vt21 is unbiased in its selection, but has tendency to put Ice Rod in Turtle Rock.\n'
                              'vt22 drops off stale locations after 1/3 of progress items were placed to try to circumvent vt21\'s shortcomings.\n'
                              'freshness keeps track of stale locations (ones that cannot be reached yet) and decreases likeliness of selecting them the more often they were found unreachable.\n'
-                             'flood pushes out items starting from Link\'s House and is slightly biased to placing progression items with less restrictions.')
+                             'flood pushes out items starting from Link\'s House and is slightly biased to placing progression items with less restrictions.\n'
+                             'restrictive shuffles items and then places them in a random location that it is not impossible to be in.')
     parser.add_argument('--shuffle', default='full', const='full', nargs='?', choices=['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'],
                         help='Select Entrance Shuffling Algorithm.\n'
                              'Simple shuffles Dungeon Entrances/Exits between each other and keeps all 4-entrance dungeons confined to one location. All caves outside of death mountain are shuffled in pairs.\n'

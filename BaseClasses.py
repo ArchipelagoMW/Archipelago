@@ -196,7 +196,7 @@ class World(object):
         goal = ['ganon', 'pedestal', 'dungeons', 'starhunt', 'triforcehunt'].index(self.goal)
         shuffle = ['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'].index(self.shuffle)
         difficulty = ['normal', 'timed', 'timed-ohko', 'timed-countdown'].index(self.difficulty)
-        algorithm = ['freshness', 'flood', 'vt21', 'vt22'].index(self.algorithm)
+        algorithm = ['freshness', 'flood', 'vt21', 'vt22', 'restrictive'].index(self.algorithm)
         return logic | (mode << 1) | (dungeonitems << 2) | (goal << 3) | (shuffle << 6) | (difficulty << 10) | (algorithm << 12)
 
 
@@ -386,7 +386,7 @@ class CollectionState(object):
             if to_remove is not None:
                 try:
                     self.prog_items.remove(to_remove)
-                except IndexError:
+                except ValueError:
                     return
 
                 # invalidate caches, nothing can be trusted anymore now
