@@ -4,7 +4,7 @@ import logging
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, goal, algorithm, place_dungeon_items):
+    def __init__(self, shuffle, logic, mode, difficulty, goal, algorithm, place_dungeon_items, check_beatable_only):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
@@ -37,6 +37,7 @@ class World(object):
         self.fix_door_frames = self.shuffle not in ['vanilla', 'dungeonssimple', 'dungeonsfull']
         self.fix_trock_doors = self.shuffle != 'vanilla'
         self.save_and_quite_from_boss = False
+        self.check_beatable_only = check_beatable_only
 
     def get_region(self, regionname):
         if isinstance(regionname, Region):
@@ -160,10 +161,13 @@ class World(object):
 
         return False
 
-    def can_beat_game(self):
+    def can_beat_game(self, starting_state=None):
         prog_locations = [location for location in self.get_locations() if location.item is not None and (location.item.advancement or location.event)]
 
-        state = CollectionState(self)
+        if starting_state:
+            state = starting_state.copy()
+        else:
+            state = CollectionState(self)
         treasure_pieces_collected = 0
         while prog_locations:
             sphere = []

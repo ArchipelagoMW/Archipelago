@@ -11,23 +11,23 @@ import logging
 import argparse
 import os
 
-__version__ = '0.3-dev'
+__version__ = '0.4-dev'
 
-logic_hash = [169, 242, 143, 206, 16, 22, 49, 159, 94, 18, 202, 249, 155, 198, 75, 55, 122, 166, 239, 175, 62, 4, 118, 13, 149, 70, 26, 11, 141, 173, 168, 252,
-              100, 152, 221, 248, 112, 58, 80, 158, 87, 162, 190, 99, 219, 184, 178, 101, 43, 73, 164, 226, 63, 185, 54, 107, 38, 17, 68, 32, 148, 209, 181, 146,
-              85, 156, 127, 7, 182, 37, 113, 66, 59, 41, 78, 189, 20, 180, 144, 9, 231, 161, 88, 46, 1, 24, 53, 167, 213, 220, 115, 81, 194, 205, 163, 14,
-              42, 64, 183, 104, 79, 71, 50, 98, 138, 233, 240, 96, 23, 31, 67, 251, 217, 232, 236, 250, 238, 218, 201, 151, 200, 28, 150, 65, 2, 103, 223, 5,
-              72, 93, 176, 243, 177, 40, 197, 52, 132, 56, 212, 227, 136, 147, 135, 188, 29, 19, 51, 142, 120, 225, 8, 137, 92, 154, 196, 241, 215, 171, 133, 131,
-              186, 117, 130, 210, 69, 106, 145, 110, 214, 15, 124, 157, 57, 191, 121, 255, 170, 237, 229, 105, 30, 134, 235, 102, 119, 139, 83, 153, 47, 82, 114, 160,
-              211, 108, 216, 10, 203, 39, 77, 123, 207, 140, 230, 90, 27, 244, 116, 21, 179, 165, 245, 95, 12, 253, 6, 60, 25, 74, 76, 91, 126, 195, 224, 246,
-              125, 61, 33, 44, 187, 222, 0, 45, 86, 34, 129, 174, 111, 35, 84, 128, 208, 247, 234, 48, 97, 199, 204, 192, 228, 89, 172, 109, 36, 254, 3, 193]
+logic_hash = [215, 18, 94, 177, 161, 252, 45, 4, 29, 231, 99, 158, 70, 55, 74, 39, 12, 134, 142, 189, 61, 105, 10, 254, 137, 44, 72, 154, 145, 167, 98, 225,
+              100, 217, 126, 187, 13, 255, 138, 51, 64, 130, 139, 233, 168, 69, 175, 25, 58, 160, 1, 27, 206, 169, 223, 210, 188, 111, 186, 240, 133, 26, 41, 241,
+              204, 89, 78, 63, 96, 218, 198, 224, 219, 35, 82, 181, 121, 243, 0, 155, 91, 120, 221, 178, 162, 80, 66, 97, 118, 103, 86, 191, 135, 122, 104, 40,
+              183, 9, 230, 110, 14, 87, 143, 249, 90, 75, 232, 157, 238, 196, 23, 248, 2, 101, 159, 108, 201, 73, 34, 15, 179, 92, 226, 60, 222, 32, 109, 119,
+              49, 56, 16, 6, 22, 209, 190, 21, 136, 113, 205, 192, 146, 30, 212, 43, 200, 193, 185, 242, 71, 163, 102, 239, 24, 220, 166, 228, 208, 47, 3, 112,
+              203, 50, 216, 214, 107, 106, 57, 67, 88, 42, 176, 129, 144, 54, 237, 165, 116, 141, 125, 128, 172, 171, 152, 83, 38, 93, 148, 151, 207, 236, 131, 85,
+              170, 124, 28, 251, 194, 250, 8, 164, 65, 20, 150, 182, 77, 17, 202, 253, 173, 229, 46, 140, 76, 95, 117, 174, 79, 84, 36, 244, 199, 37, 211, 7,
+              247, 213, 31, 62, 59, 153, 197, 19, 48, 114, 53, 115, 149, 81, 5, 184, 147, 68, 227, 234, 52, 156, 132, 127, 235, 245, 11, 33, 123, 180, 246, 195]
 
 
 def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.goal, args.algorithm, not args.nodungeonitems)
+    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly)
     logger = logging.getLogger('')
 
     if seed is None:
@@ -71,7 +71,7 @@ def main(args, seed=None):
     elif args.algorithm == 'freshness':
         distribute_items_staleness(world)
     elif args.algorithm == 'restrictive':
-        distribute_items_restrictive(world)
+        distribute_items_restrictive(world, 10 if world.goal is not 'starhunt' else 0)
 
     world.spoiler += print_location_spoiler(world)
 
@@ -253,7 +253,7 @@ def distribute_items_staleness(world):
     logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s' % ([item.name for item in itempool], [location.name for location in fill_locations]))
 
 
-def distribute_items_restrictive(world, gftower_trash_count=10):
+def distribute_items_restrictive(world, gftower_trash_count=0):
     # get list of locations to fill in
     fill_locations = world.get_unfilled_locations()
 
@@ -289,14 +289,28 @@ def distribute_items_restrictive(world, gftower_trash_count=10):
 
         spot_to_fill = None
         for location in fill_locations:
-            if maximum_exploration_state.can_reach(location) and location.item_rule(item_to_place):
-                spot_to_fill = location
-                break
+            if location.item_rule(item_to_place):
+                if world.check_beatable_only:
+                    starting_state = world.state.copy()
+                    for item in progitempool:
+                        starting_state.collect(item, True)
+
+                if maximum_exploration_state.can_reach(location):
+                    if world.check_beatable_only:
+                        starting_state.collect(item_to_place, True)
+                    else:
+                        spot_to_fill = location
+                        break
+
+                if world.check_beatable_only and world.can_beat_game(starting_state):
+                    spot_to_fill = location
+                    break
 
         if spot_to_fill is None:
             # we filled all reachable spots. Maybe the game can be beaten anyway?
             if world.can_beat_game():
-                logging.getLogger('').warning('Not all items placed. Game beatable anyway.')
+                if not world.check_beatable_only:
+                    logging.getLogger('').warning('Not all items placed. Game beatable anyway.')
                 break
             raise RuntimeError('No more spots to place %s' % item_to_place)
 
@@ -468,7 +482,7 @@ def generate_itempool(world):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal, world.algorithm, world.place_dungeon_items)
+    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only)
     ret.required_medallions = list(world.required_medallions)
     ret.swamp_patch_required = world.swamp_patch_required
     ret.treasure_hunt_count = world.treasure_hunt_count
@@ -514,6 +528,10 @@ def create_playthrough(world):
     if world.goal in ['pedestal', 'starhunt', 'triforcehunt']:
         world.get_location('Ganon').item = None
 
+    # if we only check for beatable, we can do this sanity check first before writing down spheres
+    if world.check_beatable_only and not world.can_beat_game():
+        raise RuntimeError('Cannot beat game. Something went terribly wrong here!')
+
     # get locations containing progress items
     prog_locations = [location for location in world.get_locations() if location.item is not None and location.item.advancement]
 
@@ -539,8 +557,11 @@ def create_playthrough(world):
         logging.getLogger('').debug('Calculated sphere %i, containing %i of %i progress items.' % (len(collection_spheres), len(sphere), len(prog_locations)))
 
         if not sphere:
-            logging.getLogger('').debug('The following items could not be placed: %s' % ['%s at %s' % (location.item.name, location.name) for location in sphere_candidates])
-            raise RuntimeError('Not all progression items reachable. Something went terribly wrong here.')
+            logging.getLogger('').debug('The following items could not be reached: %s' % ['%s at %s' % (location.item.name, location.name) for location in sphere_candidates])
+            if not world.check_beatable_only:
+                raise RuntimeError('Not all progression items reachable. Something went terribly wrong here.')
+            else:
+                break
 
     # in the second phase, we cull each sphere such that the game is still beatable, reducing each range of influence to the bare minimum required inside it
     for sphere in reversed(collection_spheres):
@@ -613,6 +634,7 @@ if __name__ == '__main__':
     parser.add_argument('--count', help='Use to batch generate multiple seeds with same settings. If --seed is provided, it will be used for the first seed, then used to derive the next seed (i.e. generating 10 seeds with --seed given will produce the same 10 (different) roms each time).', type=int)
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--nodungeonitems', help='Remove Maps and Compasses from Itempool, replacing them by empty slots.', action='store_true')
+    parser.add_argument('--beatableonly', help='Only check if the game is beatable with placement. Do not ensure all locations are reachable. This only has an effect on the restrictive algorithm currently.', action='store_true')
     parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['normal', 'half', 'quarter', 'off'],
                         help='Select the rate at which the heart beep sound is played at low health.')
     parser.add_argument('--sprite', help='Path to a sprite sheet to use for Link. Needs to be in binary format and have a length of 0x7000 (28672) bytes.')
