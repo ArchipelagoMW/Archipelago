@@ -614,7 +614,7 @@ if __name__ == '__main__':
                              'Timed starts with clock at zero. Green Clocks subtract 4 minutes (Total: 20), Blue Clocks subtract 2 minutes (Total: 10), Red Clocks add 2 minutes (Total: 10). Winner is player with lowest time at the end.\n'
                              'Timed OHKO starts clock at 10 minutes. Green Clocks add 5 minutes (Total: 25). As long as clock is at 0, Link will die in one hit.\n'
                              'Timed Countdown starts with clock at 40 minutes. Same clocks as Timed mode. If time runs out, you lose (but can still keep playing).')
-    parser.add_argument('--algorithm', default='restrictive', const='freshness', nargs='?', choices=['freshness', 'flood', 'vt21', 'vt22', 'restrictive'],
+    parser.add_argument('--algorithm', default='restrictive', const='restrictive', nargs='?', choices=['freshness', 'flood', 'vt21', 'vt22', 'restrictive'],
                         help='Select item filling algorithm. vt21 is unbiased in its selection, but has tendency to put Ice Rod in Turtle Rock.\n'
                              'vt22 drops off stale locations after 1/3 of progress items were placed to try to circumvent vt21\'s shortcomings.\n'
                              'freshness keeps track of stale locations (ones that cannot be reached yet) and decreases likeliness of selecting them the more often they were found unreachable.\n'
