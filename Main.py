@@ -48,13 +48,17 @@ def main(args, seed=None):
 
     world.spoiler += link_entrances(world)
 
+    logger.info('Generating Item Pool.')
+
+    world.spoiler += generate_itempool(world)
+
     logger.info('Calculating Access Rules.')
 
     world.spoiler += set_rules(world)
 
-    logger.info('Generating Item Pool and placing Dungeon Items.')
+    logger.info('Placing Dungeon Items.')
 
-    world.spoiler += generate_itempool(world)
+    world.spoiler += fill_dungeons(world)
 
     logger.info('Fill the world.')
 
@@ -417,19 +421,19 @@ def generate_itempool(world):
                                      ['Arrows (10)'] * 4 + ['Bombs (3)'] * 10)
 
     if world.mode == 'standard':
-        world.push_item('Uncle', ItemFactory('Progressive Sword'))
+        world.push_item('Uncle', ItemFactory('Progressive Sword'), do_not_sweep=True)
     else:
         world.itempool.append(ItemFactory('Progressive Sword'))
 
     # provide mirror and pearl so you can avoid fake DW/LW and do dark world exploration as intended by algorithm, for now
     if world.shuffle == 'insanity':
-        world.push_item('[cave-040] Links House', ItemFactory('Magic Mirror'))
-        world.push_item('[dungeon-C-1F] Sanctuary', ItemFactory('Moon Pearl'))
+        world.push_item('[cave-040] Links House', ItemFactory('Magic Mirror'), do_not_sweep=True)
+        world.push_item('[dungeon-C-1F] Sanctuary', ItemFactory('Moon Pearl'), do_not_sweep=True)
     else:
         world.itempool.extend(ItemFactory(['Magic Mirror', 'Moon Pearl']))
 
     if world.goal == 'pedestal':
-        world.push_item('Altar', ItemFactory('Triforce'))
+        world.push_item('Altar', ItemFactory('Triforce'), False)
     elif world.goal == 'starhunt':
         world.treasure_hunt_count = 10
         world.treasure_hunt_icon = 'Power Star'
@@ -458,9 +462,6 @@ def generate_itempool(world):
     mm_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
     tr_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
     world.required_medallions = (mm_medallion, tr_medallion)
-
-    # push dungeon items
-    fill_dungeons(world)
 
     return 'Misery Mire Medallion: %s\nTurtle Rock Medallion: %s\n\n' % (mm_medallion, tr_medallion)
 

@@ -18,7 +18,7 @@ def fill_dungeons(world):
     TR = (['Turtle Rock (Entrance)', 'Turtle Rock (First Section)', 'Turtle Rock (Chain Chomp Room)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Turtle Rock (Roller Switch Room)', 'Turtle Rock (Dark Room)', 'Turtle Rock (Eye Bridge)', 'Turtle Rock (Trinexx)'], ItemFactory('Big Key (Turtle Rock)'), ItemFactory(['Small Key (Turtle Rock)'] * 4), ItemFactory(['Map (Turtle Rock)', 'Compass (Turtle Rock)']))
     GT = (['Ganons Tower (Entrance)', 'Ganons Tower (Tile Room)', 'Ganons Tower (Compass Room)', 'Ganons Tower (Hookshot Room)', 'Ganons Tower (Map Room)', 'Ganons Tower (Firesnake Room)', 'Ganons Tower (Teleport Room)', 'Ganons Tower (Bottom)', 'Ganons Tower (Top)', 'Ganons Tower (Before Moldorm)', 'Ganons Tower (Moldorm)', 'Agahnim 2'], ItemFactory('Big Key (Ganons Tower)'), ItemFactory(['Small Key (Ganons Tower)'] * 4), ItemFactory(['Map (Ganons Tower)', 'Compass (Ganons Tower)']))
 
-    freebes = ['[dungeon-A2-1F] Ganons Tower - Map Room', '[dungeon-D1-1F] Dark Palace - Spike Statue Room', '[dungeon-D1-1F] Dark Palace - Big Key Room']
+    freebes = ['[dungeon-A2-1F] Ganons Tower - Map Room', '[dungeon-D1-1F] Dark Palace - Spike Statue Room', '[dungeon-D1-1F] Dark Palace - Big Key Room', '[dungeon-D7-B1] Turtle Rock - Big Key Room']
 
     all_state_base = world.get_all_state()
 
@@ -75,6 +75,8 @@ def fill_dungeons(world):
                 world.push_item(di_location, dungeon_item, False)
 
     world.state._clear_cache()
+
+    return ''
 
 
 dungeon_music_addresses = {'Armos - Pendant': [0x1559A],
