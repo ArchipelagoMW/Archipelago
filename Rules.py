@@ -373,15 +373,6 @@ def standard_rules(world):
     forbid_item(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [right chest]'), 'Small Key (Escape)')
     forbid_item(world.get_location('[dungeon-C-1F] Sanctuary'), 'Small Key (Escape)')
 
-    # don't put gloves in link's house or someone could escape in rain state ...
-    forbid_item(world.get_location('[cave-040] Links House'), 'Power Glove')
-    forbid_item(world.get_location('[cave-040] Links House'), 'Titans Mitts')
-    forbid_item(world.get_location('[cave-040] Links House'), 'Progressive Glove')
-
-    add_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [left chest]'), lambda state: state.can_reach('Sewer Drop'))
-    add_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [middle chest]'), lambda state: state.can_reach('Sewer Drop'))
-    add_rule(world.get_location('[dungeon-C-B1] Escape - Final Basement Room [right chest]'), lambda state: state.can_reach('Sewer Drop'))
-    add_rule(world.get_location('[dungeon-C-B1] Escape - First B1 Room'), lambda state: state.can_reach('Sewer Drop') or (state.world.get_location('[dungeon-C-B1] Escape - First B1 Room').item is not None and state.world.get_location('[dungeon-C-B1] Escape - First B1 Room').item.name in ['Small Key (Escape)']))  # you could skip this chest and be unable to go back until you can drop into escape
 
 def set_trock_key_rules(world):
     # this is good enough to allow even key distribution but may still prevent certain valid item combinations from being placed

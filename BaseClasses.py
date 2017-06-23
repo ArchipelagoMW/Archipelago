@@ -25,7 +25,6 @@ class World(object):
         self.spoiler = ''
         self.required_locations = []
         self.place_dungeon_items = place_dungeon_items  # configurable in future
-        self.agahnim_fix_required = False
         self.swamp_patch_required = False
         self.sewer_light_cone = mode == 'standard'
         self.light_world_light_cone = False
@@ -33,10 +32,11 @@ class World(object):
         self.treasure_hunt_count = 0
         self.treasure_hunt_icon = 'Power Star'
         self.clock_mode = 'off'
-        self.aga_randomness = 'off'
+        self.aga_randomness = False
         self.lock_aga_door_in_escape = False
         self.fix_door_frames = self.shuffle not in ['vanilla', 'dungeonssimple', 'dungeonsfull']
         self.fix_trock_doors = self.shuffle != 'vanilla'
+        self.save_and_quite_from_boss = False
 
     def get_region(self, regionname):
         if isinstance(regionname, Region):

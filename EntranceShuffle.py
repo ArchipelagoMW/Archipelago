@@ -287,7 +287,7 @@ def link_entrances(world):
         lw_entrances_must_exits = list(LW_Dungeon_Entrances_Must_Exit)
         old_man_entrances = list(Old_Man_Entrances)
 
-        mandatory_light_world = ['Agahnims Tower Exit', 'Old Man House Exit (Bottom)', 'Old Man House Exit (Top)']
+        mandatory_light_world = ['Old Man House Exit (Bottom)', 'Old Man House Exit (Top)']
         mandatory_dark_world = []
         caves = list(Cave_Exits + Dungeon_Exits + Cave_Three_Exits)
 
@@ -512,7 +512,7 @@ def link_entrances(world):
         old_man_entrances = list(Old_Man_Entrances)
 
         caves = Cave_Exits + Dungeon_Exits + Cave_Three_Exits + ['Old Man House Exit (Bottom)', 'Old Man House Exit (Top)', 'Skull Woods First Section Exit', 'Skull Woods Second Section Exit (East)', 'Skull Woods Second Section Exit (West)',
-                                                                 'Kakariko Well Exit', 'Bat Cave Exit', 'North Fairy Cave Exit', 'Thieves Forest Hideout Exit', 'Lumberjack Tree Exit', 'Sanctuary Exit']
+                                                                 'Kakariko Well Exit', 'Bat Cave Exit', 'North Fairy Cave Exit', 'Thieves Forest Hideout Exit', 'Lumberjack Tree Exit', 'Sanctuary Exit', 'Agahnims Tower Exit']
 
         # shuffle up holes
 
@@ -593,25 +593,6 @@ def link_entrances(world):
         ret.append(connect_entrance(world, doors.pop(), 'Old Man Cave Exit (East)'))
         caves.append('Old Man Cave Exit (West)')
 
-        # Aghanim needs to be Light World to spawn
-        # find suitable LW Entrance
-        lw_entrances = LW_Entrances + LW_Dungeon_Entrances + LW_Dungeon_Entrances_Must_Exit + Old_Man_Entrances + \
-                       ['Kakariko Well Cave', 'Bat Cave Cave', 'North Fairy Cave', 'Sanctuary', 'Thieves Forest Hideout Stump', 'Lumberjack Tree Cave', 'Hyrule Castle Entrance (South)', 'Hyrule Castle Secret Entrance Stairs']
-
-        candidate = None
-        for entrance in entrances:
-            if entrance in lw_entrances:
-                candidate = entrance
-                break
-
-        # should always have enough candidates left here, should never happen
-        if candidate is None:
-            raise RuntimeError('Your Algorithm is broken.')
-
-        entrances.remove(candidate)
-        ret.append(connect_exit(world, 'Agahnims Tower Exit', candidate))
-        ret.append(connect_entrance(world, doors.pop(), 'Agahnims Tower Exit'))
-
         # handle remaining caves
         for cave in caves:
             if isinstance(cave, str):
@@ -651,22 +632,6 @@ def link_entrances(world):
 
     else:
         raise NotImplementedError('Shuffling not supported yet')
-
-    if world.agahnim_fix_required:
-        # need to swap contents of Mimic Cave and TRock Ledge Right so Agahnim 1 is in Light World!
-        ret.append('Fix to prevent Agahnim Softlock: Swap Contents of Turtle Rock Ledge (East) and Mimic Cave:')
-
-        mimic_cave_entrance = world.get_entrance('Mimic Cave Mirror Spot')
-        ddmle_entrance = world.get_entrance('Dark Death Mountain Ledge (East)')
-        aga_tower = world.get_region('Agahnims Tower')
-        mimic_cave_target = mimic_cave_entrance.connected_region
-        mimic_cave_target.entrances.remove(mimic_cave_entrance)
-        aga_tower.entrances.remove(ddmle_entrance)
-
-        ddmle_entrance.connect(mimic_cave_target, door_addresses['Dark Death Mountain Ledge (East)'][0], exit_ids[mimic_cave_target.name])
-        ret.append('Dark Death Mountain Ledge (East) => %s' % mimic_cave_target.name)
-        mimic_cave_entrance.connect(aga_tower, door_addresses['Mimic Cave Mirror Spot'], exit_ids['Agahnims Tower Exit'][0])
-        ret.append('Mimic Cave Mirror Spot => Agahnims Tower Exit')
 
     # check for swamp palace fix
     if world.get_entrance('Dam').connected_region.name != 'Dam' or world.get_entrance('Swamp Palace').connected_region.name != 'Swamp Palace (Entrance)':
@@ -905,7 +870,6 @@ def simple_shuffle_dungeons(world):
         ret.append(connect_two_way(world, 'Turtle Rock Isolated Ledge Entrance', 'Hyrule Castle Exit (East)'))
         ret.append(connect_two_way(world, 'Dark Death Mountain Ledge (West)', 'Hyrule Castle Exit (West)'))
         ret.append(connect_two_way(world, 'Dark Death Mountain Ledge (East)', 'Agahnims Tower Exit'))
-        world.agahnim_fix_required = True  # need this for now
 
     if dp_target == 'Hyrule Castle':
         ret.append(connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Desert Palace Exit (South)'))
@@ -965,7 +929,7 @@ DW_Dungeon_Entrances = ['Thieves Town',
 DW_Dungeon_Entrances_Must_Exit = ['Dark Death Mountain Ledge (East)',
                                   'Turtle Rock Isolated Ledge Entrance']
 
-LW_Dungeon_Exits = ['Agahnims Tower Exit']
+LW_Dungeon_Exits = []
 
 Dungeon_Exits = [('Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)'),
                  'Desert Palace Exit (North)',
@@ -977,6 +941,7 @@ Dungeon_Exits = [('Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'De
                  'Misery Mire Exit',
                  'Dark Palace Exit',
                  'Swamp Palace Exit',
+                 'Agahnims Tower Exit',
                  ('Turtle Rock Exit (Front)', 'Turtle Rock Ledge Exit (East)', 'Turtle Rock Ledge Exit (West)', 'Turtle Rock Isolated Ledge Exit')]
 
 DW_Entrances_Must_Exit = ['Bumper Cave (Top)', 'Hookshot Cave Back Entrance']

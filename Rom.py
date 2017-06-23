@@ -8,7 +8,7 @@ import hashlib
 import logging
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = 'd5b61947feef1972e0f546ba43180e62'
+RANDOMIZERBASEHASH = '89fcdb48446bd858878f14e8a994d0b8'
 
 
 def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None):
@@ -181,6 +181,12 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     write_byte(rom, 0x34914, 0x3A)  # Bow and Arrow
     write_byte(rom, 0x180028, 0x49)  # Fighter Sword
 
+    # set swordless mode settings
+    write_byte(rom, 0x18003F, 0x01 if world.mode == 'swordless' else 0x00)  # hammer can harm ganon
+    write_byte(rom, 0x180040, 0x01 if world.mode == 'swordless' else 0x00)  # open curtains
+    write_byte(rom, 0x180041, 0x01 if world.mode == 'swordless' else 0x00)  # swordless medallions
+    write_byte(rom, 0x180042, 0xFF if world.mode == 'swordless' else 0x00)  # starting sword for link
+
     # set up clocks for timed modes
     if world.clock_mode == 'off':
         write_bytes(rom, 0x180190, [0x00, 0x00, 0x00])  # turn off clock mode
@@ -215,10 +221,20 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     write_byte(rom, 0x180030, 0x00)  # Disable SRAM trace
     write_byte(rom, 0x180036, 0x0A)  # Rupoor negative value
     write_byte(rom, 0x180169, 0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
-    write_byte(rom, 0x180086, 0x00 if world.aga_randomness == 'vanilla' else 0x02 if world.aga_randomness == 'table' else 0x01)  # set blue ball and ganon warp randomness
+    write_byte(rom, 0x180086, 0x00 if world.aga_randomness else 0x01)  # set blue ball and ganon warp randomness
     write_byte(rom, 0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
     if world.goal in ['pedestal', 'starhunt', 'triforcehunt']:
         write_byte(rom, 0x18003E, 0x01)  # make ganon invincible
+    elif world.goal in ['dungeons']:
+        write_byte(rom, 0x18003E, 0x02)  # make ganon invincible until all dungeons are beat
+    write_byte(rom, 0x18016A, 0x00)  # disable free roaming item text boxes
+    write_byte(rom, 0x18003B, 0x00)  # disable maps showing crystals on overworld
+    write_byte(rom, 0x18003C, 0x00)  # disable compasses showing dungeon count
+    digging_game_rng = random.randint(1, 30)  # set rng for digging game
+    write_byte(rom, 0x180020, digging_game_rng)
+    write_byte(rom, 0xEFD95, digging_game_rng)
+    write_byte(rom, 0x1800A3, 0x01)  # enable correct world setting behaviour after agahnim kills
+    write_byte(rom, 0x180042, 0x01 if world.save_and_quite_from_boss else 0x00)  # Allow Save and Quite after boss kill
 
     # remove shield from uncle
     write_bytes(rom, 0x6D253, [0x00, 0x00, 0xf6, 0xff, 0x00, 0x0E])
