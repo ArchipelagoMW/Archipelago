@@ -201,7 +201,8 @@ class World(object):
         shuffle = ['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'].index(self.shuffle)
         difficulty = ['normal', 'timed', 'timed-ohko', 'timed-countdown'].index(self.difficulty)
         algorithm = ['freshness', 'flood', 'vt21', 'vt22', 'restrictive'].index(self.algorithm)
-        return logic | (mode << 1) | (dungeonitems << 2) | (goal << 3) | (shuffle << 6) | (difficulty << 10) | (algorithm << 12)
+        beatableonly = 1 if self.check_beatable_only else 0
+        return logic | (mode << 1) | (dungeonitems << 2) | (goal << 3) | (shuffle << 6) | (difficulty << 10) | (algorithm << 12) | (beatableonly << 15)
 
 
 class CollectionState(object):
