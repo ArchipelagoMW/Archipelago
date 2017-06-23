@@ -23,8 +23,10 @@ def fill_dungeons(world):
     all_state_base = world.get_all_state()
 
     # this key is in a fixed location (for now)
-    world.push_item(world.get_location('[dungeon-D3-B1] Skull Woods - South of Big Chest'), ItemFactory('Small Key (Skull Woods)'), False)
-    world.get_location('[dungeon-D3-B1] Skull Woods - South of Big Chest').event = True
+    mandatory_sw_key_location = random.choice(['[dungeon-D3-B1] Skull Woods - South of Big Chest'] if world.shuffle != 'vanilla' else ['[dungeon-D3-B1] Skull Woods - South of Big Chest', '[dungeon-D3-B1] Skull Woods - Push Statue Room', '[dungeon-D3-B1] Skull Woods - Compass Room'])
+
+    world.push_item(world.get_location(mandatory_sw_key_location), ItemFactory('Small Key (Skull Woods)'), False)
+    world.get_location(mandatory_sw_key_location).event = True
 
     for dungeon_regions, big_key, small_keys, dungeon_items in [TR, ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, GT]:
         # this is what we need to fill

@@ -249,10 +249,9 @@ def distribute_items_staleness(world):
     logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s' % ([item.name for item in itempool], [location.name for location in fill_locations]))
 
 
-def distribute_items_restrictive(world):
+def distribute_items_restrictive(world, gftower_trash_count=10):
     # get list of locations to fill in
     fill_locations = world.get_unfilled_locations()
-    random.shuffle(fill_locations)
 
     # get items to distribute
     random.shuffle(world.itempool)
@@ -260,17 +259,29 @@ def distribute_items_restrictive(world):
     prioitempool = [item for item in world.itempool if not item.advancement and item.priority]
     restitempool = [item for item in world.itempool if not item.advancement and not item.priority]
 
-    def sweep_from_pool(excluded_item):
+    # fill in gtower locations with trash first
+    gtower_locations = [location for location in fill_locations if 'Ganons Tower' in location.name]
+    random.shuffle(gtower_locations)
+    trashcnt = 0
+    while gtower_locations and restitempool and trashcnt < gftower_trash_count:
+        spot_to_fill = gtower_locations.pop()
+        item_to_place = restitempool.pop()
+        world.push_item(spot_to_fill, item_to_place, False)
+        fill_locations.remove(spot_to_fill)
+        trashcnt += 1
+
+    random.shuffle(fill_locations)
+
+    def sweep_from_pool():
         new_state = world.state.copy()
         for item in progitempool:
             new_state.collect(item, True)
-        new_state.remove(excluded_item)
         new_state.sweep_for_events()
         return new_state
 
     while progitempool and fill_locations:
         item_to_place = progitempool.pop()
-        maximum_exploration_state = sweep_from_pool(item_to_place)
+        maximum_exploration_state = sweep_from_pool()
 
         spot_to_fill = None
         for location in fill_locations:
@@ -288,6 +299,8 @@ def distribute_items_restrictive(world):
         world.push_item(spot_to_fill, item_to_place, False)
         fill_locations.remove(spot_to_fill)
         spot_to_fill.event = True
+
+    random.shuffle(fill_locations)
 
     while prioitempool and fill_locations:
         spot_to_fill = fill_locations.pop()

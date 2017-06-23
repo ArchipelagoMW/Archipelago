@@ -248,7 +248,8 @@ def global_rules(world):
     set_rule(world.get_location('[dungeon-D6-B1] Misery Mire - Hub Room'), lambda state: state.has('Small Key (Misery Mire)', 1) or state.has('Big Key (Misery Mire)'))
     set_rule(world.get_location('[dungeon-D6-B1] Misery Mire - Map Room'), lambda state: state.has('Small Key (Misery Mire)', 1) or state.has('Big Key (Misery Mire)'))
     # we can place a small key in the West wing iff it also contains/blocks the Big Key, as we cannot reach and softlock with the basement key door yet
-    set_rule(world.get_entrance('Misery Mire (West)'), lambda state: state.has('Small Key (Misery Mire)', 3) if state.can_reach('Misery Mire (Final Area)') else state.has('Small Key (Misery Mire)', 2))
+    set_rule(world.get_entrance('Misery Mire (West)'), lambda state: state.has('Small Key (Misery Mire)', 2) if ((state.world.get_location('[dungeon-D6-B1] Misery Mire - Compass Room').item is not None and state.world.get_location('[dungeon-D6-B1] Misery Mire - Compass Room').item.name in ['Big Key (Misery Mire)']) or
+                                                                                                                (state.world.get_location('[dungeon-D6-B1] Misery Mire - Big Key Room').item is not None and state.world.get_location('[dungeon-D6-B1] Misery Mire - Big Key Room').item.name in ['Big Key (Misery Mire)'])) else state.has('Small Key (Misery Mire)', 3))
     set_rule(world.get_location('[dungeon-D6-B1] Misery Mire - Compass Room'), lambda state: state.has_fire_source())
     set_rule(world.get_location('[dungeon-D6-B1] Misery Mire - Big Key Room'), lambda state: state.has_fire_source())
     set_rule(world.get_entrance('Misery Mire (Vitreous)'), lambda state: state.has('Cane of Somaria') and (state.has('Bow') or state.has_blunt_weapon()))
