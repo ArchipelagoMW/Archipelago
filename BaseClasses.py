@@ -195,14 +195,14 @@ class World(object):
     @property
     def option_identifier(self):
         logic = 0 if self.logic == 'noglitches' else 1
-        mode = 0 if self.mode == 'open' else 1
+        mode = ['standard', 'open', 'swordless'].index(self.mode)
         dungeonitems = 0 if self.place_dungeon_items else 1
         goal = ['ganon', 'pedestal', 'dungeons', 'starhunt', 'triforcehunt'].index(self.goal)
         shuffle = ['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'].index(self.shuffle)
         difficulty = ['normal', 'timed', 'timed-ohko', 'timed-countdown'].index(self.difficulty)
         algorithm = ['freshness', 'flood', 'vt21', 'vt22', 'restrictive'].index(self.algorithm)
         beatableonly = 1 if self.check_beatable_only else 0
-        return logic | (mode << 1) | (dungeonitems << 2) | (goal << 3) | (shuffle << 6) | (difficulty << 10) | (algorithm << 12) | (beatableonly << 15)
+        return logic | (beatableonly << 1) | (dungeonitems << 2) | (goal << 3) | (shuffle << 6) | (difficulty << 10) | (algorithm << 12) | (mode << 15)
 
 
 class CollectionState(object):

@@ -400,7 +400,7 @@ def flood_items(world):
 
 
 def generate_itempool(world):
-    if world.difficulty not in ['normal', 'timed', 'timed-ohko', 'timed-countdown'] or world.goal not in ['ganon', 'pedestal', 'dungeons', 'starhunt', 'triforcehunt'] or world.mode not in ['open', 'standard']:
+    if world.difficulty not in ['normal', 'timed', 'timed-ohko', 'timed-countdown'] or world.goal not in ['ganon', 'pedestal', 'dungeons', 'starhunt', 'triforcehunt'] or world.mode not in ['open', 'standard', 'swordless']:
         raise NotImplementedError('Not supported yet')
 
     world.push_item('Ganon', ItemFactory('Triforce'), False)
@@ -412,7 +412,7 @@ def generate_itempool(world):
     # set up item pool
     if world.difficulty in ['timed', 'timed-countdown']:
         world.itempool = ItemFactory(['Arrow Upgrade (+5)'] * 2 + ['Bomb Upgrade (+5)'] * 2 + ['Arrow Upgrade (+10)'] * 3 + ['Bomb Upgrade (+10)'] * 3 +
-                                     ['Progressive Armor'] * 2 + ['Progressive Shield'] * 3 + ['Progressive Sword'] * 3 + ['Progressive Glove'] * 2 +
+                                     ['Progressive Armor'] * 2 + ['Progressive Shield'] * 3 + ['Progressive Glove'] * 2 +
                                      ['Bottle'] * 4 +
                                      ['Bombos', 'Book of Mudora', 'Blue Boomerang', 'Bow', 'Bug Catching Net', 'Cane of Byrna', 'Cane of Somaria',
                                       'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp', 'Cape', 'Magic Powder',
@@ -423,7 +423,7 @@ def generate_itempool(world):
         world.clock_mode = 'stopwatch' if world.difficulty == 'timed' else 'countdown'
     elif world.difficulty == 'timed-ohko':
         world.itempool = ItemFactory(['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6 + ['Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] +
-                                     ['Progressive Armor'] * 2 + ['Progressive Shield'] * 3 + ['Progressive Sword'] * 3 + ['Progressive Glove'] * 2 +
+                                     ['Progressive Armor'] * 2 + ['Progressive Shield'] * 3 + ['Progressive Glove'] * 2 +
                                      ['Bottle'] * 4 +
                                      ['Bombos', 'Book of Mudora', 'Blue Boomerang', 'Bow', 'Bug Catching Net', 'Cane of Byrna', 'Cane of Somaria',
                                       'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp', 'Cape', 'Magic Powder',
@@ -434,7 +434,7 @@ def generate_itempool(world):
         world.clock_mode = 'ohko'
     else:
         world.itempool = ItemFactory(['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6 + ['Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] +
-                                     ['Progressive Armor'] * 2 + ['Progressive Shield'] * 3 + ['Progressive Sword'] * 3 + ['Progressive Glove'] * 2 +
+                                     ['Progressive Armor'] * 2 + ['Progressive Shield'] * 3 + ['Progressive Glove'] * 2 +
                                      ['Bottle'] * 4 +
                                      ['Bombos', 'Book of Mudora', 'Blue Boomerang', 'Bow', 'Bug Catching Net', 'Cane of Byrna', 'Cane of Somaria',
                                       'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp', 'Cape', 'Magic Powder',
@@ -443,11 +443,16 @@ def generate_itempool(world):
                                      ['Rupees (50)'] * 7 + ['Rupees (5)'] * 4 + ['Rupee (1)'] * 2 + ['Rupees (300)'] * 4 + ['Rupees (20)'] * 28 +
                                      ['Arrows (10)'] * 4 + ['Bombs (3)'] * 10)
 
-    if world.mode == 'standard':
+    if world.mode == 'swordless':
+        world.push_item('Ether Tablet', ItemFactory('Rupees (20)'), False)
+        world.push_item('Bombos Tablet', ItemFactory('Rupees (20)'), False)
+        world.itempool.extend(ItemFactory(['Rupees (20)', 'Rupees (20)']))
+    elif world.mode == 'standard':
         world.push_item('Uncle', ItemFactory('Progressive Sword'), False)
         world.get_location('Uncle').event = True
+        world.itempool.extend(ItemFactory(['Progressive Sword'] * 3))
     else:
-        world.itempool.append(ItemFactory('Progressive Sword'))
+        world.itempool.extend(ItemFactory(['Progressive Sword'] * 4))
 
     # provide mirror and pearl so you can avoid fake DW/LW and do dark world exploration as intended by algorithm, for now
     if world.shuffle == 'insanity':
@@ -614,8 +619,10 @@ if __name__ == '__main__':
     parser.add_argument('--create_spoiler', help='Output a Spoiler File', action='store_true')
     parser.add_argument('--logic', default='noglitches', const='noglitches', nargs='?', choices=['noglitches', 'minorglitches'],
                         help='Select Enforcement of Item Requirements. Minor Glitches may require Fake Flippers, Bunny Revival and Dark Room Navigation.')
-    parser.add_argument('--mode', default='open', const='open', nargs='?', choices=['standard', 'open'],
-                        help='Select game mode. Standard fixes Hyrule Castle Secret Entrance and Front Door, but may lead to weird rain state issues if you exit through the Hyrule Castle side exits before rescuing Zelda in a full shuffle.')
+    parser.add_argument('--mode', default='open', const='open', nargs='?', choices=['standard', 'open', 'swordless'],
+                        help='Select game mode. Standard fixes Hyrule Castle Secret Entrance and Front Door, but may lead to weird rain state issues if you exit through the Hyrule Castle side exits before rescuing Zelda in a full shuffle.\n'
+                             'Swordless mode is like open, but with no swords. Curtains in Skull Woods and Agahnims Tower are removed, Agahnims Tower barrier can be destroyed with hammer. Misery Mire and Turtle Rock can be opened without a sword.\n'
+                             'Hammer damages Ganon. Ether and Bombos Tablet are unreachable but contain trash items always.')
     parser.add_argument('--goal', default='ganon', const='ganon', nargs='?', choices=['ganon', 'pedestal', 'dungeons', 'starhunt', 'triforcehunt'],
                         help='Select completion goal. Pedestal places the Triforce at the Master Sword Pedestal. All dungeons is not enforced ingame but considered in the playthrough. \n'
                              'Star Hunt places 15 Power Stars pieces in the world, collect 10 of them to beat the game.\n'

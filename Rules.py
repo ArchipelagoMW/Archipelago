@@ -15,12 +15,14 @@ def set_rules(world):
         open_rules(world)
     elif world.mode == 'standard':
         standard_rules(world)
+    elif world.mode == 'swordless':
+        swordless_rules(world)
     else:
         raise NotImplementedError('Not implemented yet')
 
     if world.goal == 'dungeons':
         # require altar for ganon to enforce getting everything
-        add_rule(world.get_location('Ganon'), lambda state: state.can_reach('Altar', 'Location'))
+        add_rule(world.get_location('Ganon'), lambda state: state.can_reach('Altar', 'Location') and state.has('Beat Agahnim 1'))
 
     set_big_bomb_rules(world)
 
@@ -97,10 +99,10 @@ def global_rules(world):
     set_rule(world.get_entrance('Checkerboard Cave'), lambda state: state.can_lift_rocks())
     set_rule(world.get_location('Altar'), lambda state: state.has('Red Pendant') and state.has('Blue Pendant') and state.has('Green Pendant'))
     set_rule(world.get_location('Sahasrahla'), lambda state: state.has('Green Pendant'))
-    set_rule(world.get_entrance('Agahnims Tower'), lambda state: state.has('Cape') or state.has_beam_sword() or state.can_reach('Agahnim 1'))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
+    set_rule(world.get_entrance('Agahnims Tower'), lambda state: state.has('Cape') or state.has_beam_sword() or state.has('Beat Agahnim 1'))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
     set_rule(world.get_entrance('Agahnim 1'), lambda state: state.has_sword())
     set_rule(world.get_entrance('Top of Pyramid'), lambda state: state.has('Beat Agahnim 1'))
-    set_rule(world.get_entrance('Old Man Cave Exit (West)'), lambda state: False)  # drop cannott be climbed up
+    set_rule(world.get_entrance('Old Man Cave Exit (West)'), lambda state: False)  # drop cannot be climbed up
     set_rule(world.get_entrance('Broken Bridge (West)'), lambda state: state.has('Hookshot'))
     set_rule(world.get_entrance('Broken Bridge (East)'), lambda state: state.has('Hookshot'))
     set_rule(world.get_entrance('East Death Mountain Teleporter'), lambda state: state.can_lift_heavy_rocks())
@@ -364,6 +366,19 @@ def no_glitches_rules(world):
 
 def open_rules(world):
     pass
+
+
+def swordless_rules(world):
+    set_rule(world.get_entrance('Agahnims Tower'), lambda state: state.has('Cape') or state.has('Hammer') or state.has('Beat Agahnim 1'))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
+    set_rule(world.get_entrance('Agahnim 1'), lambda state: state.has('Hammer') or state.has('Bug Catching Net'))
+    set_rule(world.get_location('Ether Tablet'), lambda state: True)  # will have fixed rupee drop, unobtainable
+    set_rule(world.get_location('Bombos Tablet'), lambda state: True)  # will have fixed rupee drop, unobtainable
+    set_rule(world.get_entrance('Misery Mire'), lambda state: state.has_Pearl() and state.has_misery_mire_medallion())  # sword not required to use medallion for opening in swordless (!)
+    set_rule(world.get_entrance('Turtle Rock'), lambda state: state.has_Pearl() and state.has_turtle_rock_medallion() and state.can_reach('Turtle Rock (Top)', 'Region'))   # sword not required to use medallion for opening in swordless (!)
+    set_rule(world.get_entrance('Skull Woods Torch Room'), lambda state: state.has('Small Key (Skull Woods)', 3) and state.has('Fire Rod'))  # no curtain
+    set_rule(world.get_location('Agahnim 2'), lambda state: state.has('Hammer') or state.has('Bug Catching Net'))
+    set_rule(world.get_location('Ganon'), lambda state: state.has('Hammer') and state.has_fire_source() and state.has('Silver Arrows') and state.has('Bow'))
+    set_rule(world.get_entrance('Ganon Drop'), lambda state: state.has('Hammer'))  # need to damage ganon to get tiles to drop
 
 
 def standard_rules(world):

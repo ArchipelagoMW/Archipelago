@@ -74,7 +74,7 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
         write_byte(rom, 0x51DE, 0x00)
 
     # set open mode:
-    if world.mode == 'open':
+    if world.mode in ['open', 'swordless']:
         write_byte(rom, 0x180032, 0x01)  # open mode
 
         # disable sword sprite from uncle
