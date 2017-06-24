@@ -247,8 +247,10 @@ def global_rules(world):
     set_rule(world.get_location('[dungeon-D6-B1] Misery Mire - Big Chest'), lambda state: state.has('Big Key (Misery Mire)'))
     set_rule(world.get_entrance('Misery Mire Big Key Door'), lambda state: state.has('Big Key (Misery Mire)'))
     # you can squander the free small key from the pot by opening the south door to the north west switch room, locking you out of accessing a color switch ...
-    set_rule(world.get_location('[dungeon-D6-B1] Misery Mire - Hub Room'), lambda state: state.has('Small Key (Misery Mire)', 1) or state.has('Big Key (Misery Mire)'))
+    # big key gives backdoor access to that from the teleporter in the north west
     set_rule(world.get_location('[dungeon-D6-B1] Misery Mire - Map Room'), lambda state: state.has('Small Key (Misery Mire)', 1) or state.has('Big Key (Misery Mire)'))
+    # in addition, you can open the door to the map room before getting access to a color switch, so this is locked behing 2 small keys or the big key...
+    set_rule(world.get_location('[dungeon-D6-B1] Misery Mire - Hub Room'), lambda state: state.has('Small Key (Misery Mire)', 2) or state.has('Big Key (Misery Mire)'))
     # we can place a small key in the West wing iff it also contains/blocks the Big Key, as we cannot reach and softlock with the basement key door yet
     set_rule(world.get_entrance('Misery Mire (West)'), lambda state: state.has('Small Key (Misery Mire)', 2) if ((state.world.get_location('[dungeon-D6-B1] Misery Mire - Compass Room').item is not None and state.world.get_location('[dungeon-D6-B1] Misery Mire - Compass Room').item.name in ['Big Key (Misery Mire)']) or
                                                                                                                 (state.world.get_location('[dungeon-D6-B1] Misery Mire - Big Key Room').item is not None and state.world.get_location('[dungeon-D6-B1] Misery Mire - Big Key Room').item.name in ['Big Key (Misery Mire)'])) else state.has('Small Key (Misery Mire)', 3))
