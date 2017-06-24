@@ -512,7 +512,7 @@ def link_entrances(world):
         old_man_entrances = list(Old_Man_Entrances)
 
         caves = Cave_Exits + Dungeon_Exits + Cave_Three_Exits + ['Old Man House Exit (Bottom)', 'Old Man House Exit (Top)', 'Skull Woods First Section Exit', 'Skull Woods Second Section Exit (East)', 'Skull Woods Second Section Exit (West)',
-                                                                 'Kakariko Well Exit', 'Bat Cave Exit', 'North Fairy Cave Exit', 'Thieves Forest Hideout Exit', 'Lumberjack Tree Exit', 'Sanctuary Exit', 'Agahnims Tower Exit']
+                                                                 'Kakariko Well Exit', 'Bat Cave Exit', 'North Fairy Cave Exit', 'Thieves Forest Hideout Exit', 'Lumberjack Tree Exit', 'Sanctuary Exit']
 
         # shuffle up holes
 
