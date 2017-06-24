@@ -120,6 +120,9 @@ def distribute_items_cutoff(world, cutoffrate=0.33):
     progress_done = False
     advancement_placed = False
 
+    # sweep once to pick up preplaced items
+    world.state.sweep_for_events()
+
     while itempool and fill_locations:
         candidate_item_to_place = None
         item_to_place = None
@@ -186,6 +189,9 @@ def distribute_items_staleness(world):
 
     progress_done = False
     advancement_placed = False
+
+    # sweep once to pick up preplaced items
+    world.state.sweep_for_events()
 
     while itempool and fill_locations:
         candidate_item_to_place = None
@@ -339,6 +345,9 @@ def flood_items(world):
     itempool = world.itempool
     progress_done = False
 
+    # sweep once to pick up preplaced items
+    world.state.sweep_for_events()
+
     # fill world from top of itempool while we can
     while not progress_done:
         location_list = world.get_unfilled_locations()
@@ -435,14 +444,17 @@ def generate_itempool(world):
                                      ['Arrows (10)'] * 4 + ['Bombs (3)'] * 10)
 
     if world.mode == 'standard':
-        world.push_item('Uncle', ItemFactory('Progressive Sword'), do_not_sweep=True)
+        world.push_item('Uncle', ItemFactory('Progressive Sword'), False)
+        world.get_location('Uncle').event = True
     else:
         world.itempool.append(ItemFactory('Progressive Sword'))
 
     # provide mirror and pearl so you can avoid fake DW/LW and do dark world exploration as intended by algorithm, for now
     if world.shuffle == 'insanity':
-        world.push_item('[cave-040] Links House', ItemFactory('Magic Mirror'), do_not_sweep=True)
-        world.push_item('[dungeon-C-1F] Sanctuary', ItemFactory('Moon Pearl'), do_not_sweep=True)
+        world.push_item('[cave-040] Links House', ItemFactory('Magic Mirror'), False)
+        world.get_location('[cave-040] Links House').event = True
+        world.push_item('[dungeon-C-1F] Sanctuary', ItemFactory('Moon Pearl'), False)
+        world.get_location('[dungeon-C-1F] Sanctuary').event = True
     else:
         world.itempool.extend(ItemFactory(['Magic Mirror', 'Moon Pearl']))
 
@@ -540,6 +552,8 @@ def create_playthrough(world):
     sphere_candidates = list(prog_locations)
     logging.getLogger('').debug('Building up collection spheres.')
     while sphere_candidates:
+        state.sweep_for_events(key_only=True)
+
         sphere = []
         # build up spheres of collection radius. Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
         for location in sphere_candidates:
@@ -549,8 +563,6 @@ def create_playthrough(world):
         for location in sphere:
             sphere_candidates.remove(location)
             state.collect(location.item, True)
-
-        state.sweep_for_events(key_only=True)
 
         collection_spheres.append(sphere)
 

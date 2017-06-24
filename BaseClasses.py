@@ -113,7 +113,7 @@ class World(object):
     def find_items(self, item):
         return [location for location in self.get_locations() if location.item is not None and location.item.name == item]
 
-    def push_item(self, location, item, collect=True, do_not_sweep=False):
+    def push_item(self, location, item, collect=True):
         if not isinstance(location, Location):
             location = self.get_location(location)
 
@@ -121,7 +121,7 @@ class World(object):
             location.item = item
             item.location = location
             if collect:
-                self.state.collect(item, True if do_not_sweep else location.event)
+                self.state.collect(item, location.event)
 
             logging.getLogger('').debug('Placed %s at %s' % (item, location))
         else:
