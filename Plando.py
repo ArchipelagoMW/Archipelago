@@ -28,7 +28,7 @@ def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World('vanilla', 'noglitches', 'standard', 'normal', 'ganon', 'freshness', False)
+    world = World('vanilla', 'noglitches', 'standard', 'normal', 'ganon', 'freshness', False, False)
     logger = logging.getLogger('')
 
     hasher = hashlib.md5()
@@ -146,6 +146,21 @@ def fill_world(world, plando, text_patches):
                     elif line.startswith('!fix_trock_doors'):
                         _, trdstr = line.split(':', 1)
                         world.fix_trock_doors = trdstr.strip().lower() == 'true'
+                    elif line.startswith('!fix_trock_exit'):
+                        _, trfstr = line.split(':', 1)
+                        world.fix_trock_exit = trfstr.strip().lower() == 'true'
+                    elif line.startswith('!fix_pod_exit'):
+                        _, podestr = line.split(':', 1)
+                        world.fix_palaceofdarkness_exit = podestr.strip().lower() == 'true'
+                    elif line.startswith('!fix_skullwoods_exit'):
+                        _, swestr = line.split(':', 1)
+                        world.fix_skullwoods_exit = swestr.strip().lower() == 'true'
+                    elif line.startswith('!check_beatable_only'):
+                        _, chkbtstr = line.split(':', 1)
+                        world.check_beatable_only = chkbtstr.strip().lower() == 'true'
+                    elif line.startswith('!save_quit_boss'):
+                        _, sqbstr = line.split(':', 1)
+                        world.save_and_quite_from_boss = sqbstr.strip().lower() == 'true'
                     elif line.startswith('!text_'):
                         textname, text = line.split(':', 1)
                         text_patches.append([textname.lstrip('!text_').strip(), 'text', text.strip()])
@@ -173,7 +188,7 @@ def fill_world(world, plando, text_patches):
                 ret.append(connect_entrance(world, entrance.strip(), exit.strip()))
             elif '<=' in line:
                 entrance, exit = line.split('<=', 1)
-                ret.append(connect_exit(world, entrance.strip(), exit.strip()))
+                ret.append(connect_exit(world, exit.strip(), entrance.strip()))
 
     world.required_medallions = (mm_medallion, tr_medallion)
 
