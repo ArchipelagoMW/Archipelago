@@ -110,9 +110,6 @@ def global_rules(world):
     set_rule(world.get_entrance('7 Chest Cave Push Block Reverse'), lambda state: state.has('Mirror'))  # can erase block
     set_rule(world.get_entrance('Death Mountain (Top)'), lambda state: state.has('Hammer'))
     set_rule(world.get_entrance('Turtle Rock Teleporter'), lambda state: state.can_lift_heavy_rocks() and state.has('Hammer'))
-    set_rule(world.get_entrance('Turtle Rock Skull Mirror Spot'), lambda state: state.has_Mirror() and state.has('Hammer'))  # if stuck, can mirror and hammer the pegs
-    set_rule(world.get_entrance('Turtle Rock'), lambda state: state.can_reach('Turtle Rock Open Skull', 'Entrance'))
-    set_rule(world.get_entrance('Turtle Rock Skull Reverse'), lambda state: state.can_reach('Turtle Rock Open Skull', 'Entrance'))
     set_rule(world.get_location('Ether Tablet'), lambda state: state.has('Book of Mudora') and state.has_beam_sword())
     set_rule(world.get_entrance('East Death Mountain (Top)'), lambda state: state.has('Hammer'))
 
@@ -124,9 +121,7 @@ def global_rules(world):
     set_rule(world.get_entrance('South Dark World Bridge'), lambda state: state.has('Hammer') and state.has_Pearl())
     set_rule(world.get_entrance('Bonk Fairy (Dark)'), lambda state: state.has_Boots())
     set_rule(world.get_entrance('West Dark World Gap'), lambda state: state.has_Pearl() and state.has('Hookshot') and (state.has('Flippers') or state.has('Hammer') or state.can_lift_rocks()))
-    set_rule(world.get_entrance('Palace of Darkness Pay Kiki'), lambda state: state.has_Pearl())
-    set_rule(world.get_entrance('Palace of Darkness'), lambda state: state.can_reach('Palace of Darkness Pay Kiki', 'Entrance'))
-    set_rule(world.get_entrance('Palace of Darkness Kiki Door Reverse'), lambda state: state.can_reach('Palace of Darkness Pay Kiki', 'Entrance'))  # prevent soft lock when coming from behind, not required
+    set_rule(world.get_entrance('Palace of Darkness'), lambda state: state.has_Pearl())
     set_rule(world.get_entrance('Hyrule Castle Ledge Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Dark Lake Hylia Drop (East)'), lambda state: (state.has_Pearl() and state.has('Flippers') or state.has_Mirror()))  # Overworld Bunny Revival
     set_rule(world.get_location('Bombos Tablet'), lambda state: state.has('Book of Mudora') and state.has_beam_sword() and state.has_Mirror())
@@ -149,9 +144,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Dark World Shop'), lambda state: state.has('Hammer'))
     set_rule(world.get_entrance('Bumper Cave Exit (Top)'), lambda state: state.has('Cape'))
     set_rule(world.get_entrance('Bumper Cave Exit (Bottom)'), lambda state: state.has('Cape') or state.has('Hookshot'))
-    set_rule(world.get_entrance('Skull Woods Burn Skull'), lambda state: state.has('Fire Rod'))
-    set_rule(world.get_entrance('Skull Woods Final Section'), lambda state: state.can_reach('Skull Woods Burn Skull', 'Entrance'))  # prevent soft lock when coming from behind, not required
-    set_rule(world.get_entrance('Skull Woods Skull Reverse'), lambda state: state.can_reach('Skull Woods Burn Skull', 'Entrance'))
+    set_rule(world.get_entrance('Skull Woods Final Section'), lambda state: state.has('Fire Rod'))
     set_rule(world.get_entrance('Misery Mire'), lambda state: state.has_Pearl() and state.has_sword() and state.has_misery_mire_medallion())  # sword required to cast magic (!)
     set_rule(world.get_entrance('Desert Ledge (West) Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Desert Ledge Mirror Spot'), lambda state: state.has_Mirror())
@@ -180,7 +173,7 @@ def global_rules(world):
     set_rule(world.get_location('[cave-056] Hookshot Cave [bottom right chest]'), lambda state: state.has('Hookshot') or state.has('Pegasus Boots'))
     set_rule(world.get_location('[cave-056] Hookshot Cave [bottom left chest]'), lambda state: state.has('Hookshot'))
     set_rule(world.get_location('Piece of Heart (Death Mountain - Floating Island)'), lambda state: state.has_Mirror())
-    set_rule(world.get_entrance('Turtle Rock'), lambda state: state.has_Pearl() and state.has_sword() and state.has_turtle_rock_medallion())  # sword required to cast magic (!)
+    set_rule(world.get_entrance('Turtle Rock'), lambda state: state.has_Pearl() and state.has_sword() and state.has_turtle_rock_medallion() and state.can_reach('Turtle Rock (Top)', 'Region'))  # sword required to cast magic (!)
     set_rule(world.get_location('[cave-013] Mimic Cave'), lambda state: state.has('Hammer'))
 
     set_rule(world.get_entrance('Sewers Door'), lambda state: state.has('Small Key (Escape)'))

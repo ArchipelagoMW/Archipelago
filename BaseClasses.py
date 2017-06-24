@@ -38,6 +38,9 @@ class World(object):
         self.fix_trock_doors = self.shuffle != 'vanilla'
         self.save_and_quite_from_boss = False
         self.check_beatable_only = check_beatable_only
+        self.fix_skullwoods_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
+        self.fix_palaceofdarkness_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
+        self.fix_trock_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
 
     def get_region(self, regionname):
         if isinstance(regionname, Region):
