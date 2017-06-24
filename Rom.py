@@ -261,10 +261,10 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
         for i in range(0x85):
             write_byte(rom, 0x15274 + i, 0x00)
         for i in range(0x86):
-            write_byte(rom, 0x15488 + i, 0x02)
+            write_byte(rom, 0x15488 + i, 0x00)
         # leave the entry marking tavern north a north facing exit
         for i in range(0x82):
-            write_byte(rom, 0x15510 + i, 0x02)
+            write_byte(rom, 0x15510 + i, 0x00)
 
     # fix trock doors for reverse entrances
     if world.fix_trock_doors:
