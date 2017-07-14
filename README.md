@@ -5,7 +5,11 @@ See http://vt.alttp.run for more details on the normal randomizer.
 
 ## Installation
 
-Clone this repository and then run ```Main.py``` (requires Python 3).
+Clone this repository and then run ```EntranceRandomizer.py``` (requires Python 3).
+
+Alternatively, run ```Gui.py``` for a simple graphical user interface.
+
+For releases, a Windows standalone executable is available for users without Python 3.
 
 ## Options
 
@@ -207,3 +211,9 @@ If set, will only ensure the goal can be achieved, but not necessarily that all 
 ```
 
 If set, will not produce a patched rom as output. Useful to batch generate spoilers for statistical analysis.
+
+```
+--gui
+```
+
+Open the graphical user interface. Preloads selections with set command line parameters.
