@@ -1,7 +1,7 @@
 from BaseClasses import World, CollectionState, Item
 from Regions import create_regions
 from EntranceShuffle import link_entrances
-from Rom import patch_rom, patch_base_rom
+from Rom import patch_rom, LocalRom, JsonRom
 from Rules import set_rules
 from Dungeons import fill_dungeons
 from Items import ItemFactory
@@ -87,11 +87,12 @@ def main(args, seed=None):
     outfilebase = 'ER_%s_%s_%s_%s_%s_%s' % (world.mode, world.goal, world.shuffle, world.difficulty, world.algorithm, world.seed)
 
     if not args.suppress_rom:
-        rom = bytearray(open(args.rom, 'rb').read())
-        patch_base_rom(rom)
-        patched_rom = patch_rom(world, rom, bytearray(logic_hash), args.quickswap, args.heartbeep, sprite)
-        with open('%s.sfc' % outfilebase, 'wb') as outfile:
-            outfile.write(patched_rom)
+        if args.jsonout:
+            rom = JsonRom()
+        else:
+            rom = LocalRom(args.rom)
+        patch_rom(world, rom, bytearray(logic_hash), args.quickswap, args.heartbeep, sprite)
+        rom.write_to_file(args.jsonout or '%s.sfc' % outfilebase)
 
     if args.create_spoiler:
         with open('%s_Spoiler.txt' % outfilebase, 'w') as outfile:

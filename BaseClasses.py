@@ -34,7 +34,6 @@ class World(object):
         self.clock_mode = 'off'
         self.aga_randomness = False
         self.lock_aga_door_in_escape = False
-        self.fix_door_frames = self.shuffle not in ['vanilla', 'dungeonssimple', 'dungeonsfull']
         self.fix_trock_doors = self.shuffle != 'vanilla'
         self.save_and_quite_from_boss = False
         self.check_beatable_only = check_beatable_only

@@ -1,7 +1,7 @@
 from BaseClasses import World
 from Regions import create_regions
 from EntranceShuffle import link_entrances, connect_entrance, connect_two_way, connect_exit
-from Rom import patch_rom, patch_base_rom, write_string_to_rom, write_credits_string_to_rom
+from Rom import patch_rom, LocalRom, write_string_to_rom, write_credits_string_to_rom
 from Rules import set_rules
 from Items import ItemFactory
 from Main import create_playthrough
@@ -79,9 +79,8 @@ def main(args, seed=None):
     else:
         sprite = None
 
-    rom = bytearray(open(args.rom, 'rb').read())
-    patch_base_rom(rom)
-    patched_rom = patch_rom(world, rom, logic_hash, args.quickswap, args.heartbeep, sprite)
+    rom = LocalRom(args.rom)
+    patch_rom(world, rom, logic_hash, args.quickswap, args.heartbeep, sprite)
 
     for textname, texttype, text in text_patches:
         if texttype == 'text':
@@ -91,8 +90,7 @@ def main(args, seed=None):
 
     outfilebase = 'Plando_%s_%s' % (os.path.splitext(os.path.basename(args.plando))[0], world.seed)
 
-    with open('%s.sfc' % outfilebase, 'wb') as outfile:
-        outfile.write(patched_rom)
+    rom.write_to_file('%s.sfc' % outfilebase)
     if args.create_spoiler:
         with open('%s_Spoiler.txt' % outfilebase, 'w') as outfile:
             outfile.write(world.spoiler)
@@ -140,9 +138,6 @@ def fill_world(world, plando, text_patches):
                     elif line.startswith('!light_cone_dw'):
                         _, dwconestr = line.split(':', 1)
                         world.dark_world_light_cone = dwconestr.strip().lower() == 'true'
-                    elif line.startswith('!fix_door_frames'):
-                        _, dfstring = line.split(':', 1)
-                        world.fix_door_frames = dfstring.strip().lower() == 'true'
                     elif line.startswith('!fix_trock_doors'):
                         _, trdstr = line.split(':', 1)
                         world.fix_trock_doors = trdstr.strip().lower() == 'true'
