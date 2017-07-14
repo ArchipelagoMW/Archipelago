@@ -158,6 +158,7 @@ def guiMain(args=None):
         guiargs.beatableonly = bool(beatableOnlyVar.get())
         guiargs.quickswap = bool(quickSwapVar.get())
         guiargs.rom = romVar.get()
+        guiargs.jsonout = None
         guiargs.sprite = spriteVar.get() if spriteVar.get() else None
         try:
             if guiargs.count is not None:
