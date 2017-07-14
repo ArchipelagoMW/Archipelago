@@ -331,6 +331,11 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     if world.fix_trock_exit:
         rom.write_byte(0x15E1D, 0x34)
 
+    # fix ganons tower exit point
+    if world.fix_gtower_exit:
+        rom.write_byte(0x15E25, 0xA4)
+        # todo fix screen scrolling
+
     # enable quick item swapping with L and R (ported by Amazing Ampharos)
     if quickswap:
         rom.write_bytes(0x107fb, [0x22, 0x50, 0xFF, 0x1F])

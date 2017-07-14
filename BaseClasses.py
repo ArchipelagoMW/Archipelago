@@ -41,6 +41,7 @@ class World(object):
         self.fix_skullwoods_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
         self.fix_palaceofdarkness_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
         self.fix_trock_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
+        self.fix_gtower_exit = self.goal != 'ganon'
 
     def get_region(self, regionname):
         if isinstance(regionname, Region):
