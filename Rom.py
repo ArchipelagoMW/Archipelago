@@ -362,7 +362,7 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     rom.write_byte(0x180033, {'off': 0x00, 'half': 0x40, 'quarter': 0x80, 'normal': 0x20}[beep])
 
     # store hash table for main menu hash
-    rom.write_bytes(0x181000, hashtable)
+    rom.write_bytes(0x187F00, hashtable)
 
     # write link sprite if required
     if sprite is not None:
@@ -430,6 +430,13 @@ def write_strings(rom, world):
     write_string_to_rom(rom, 'Altar', altar_text)
     altar_credit_text = 'and the Hot Air' if altaritem is None else altaritem.altar_credit_text if altaritem.altar_credit_text is not None else ' and the Unknown Item.'
     write_credits_string_to_rom(rom, 'Altar', altar_credit_text)
+
+    etheritem = world.get_location('Ether Tablet').item
+    ether_text = 'Some Hot Air' if etheritem is None else etheritem.altar_hint_text if etheritem.altar_hint_text is not None else 'Unknown Item.'
+    write_string_to_rom(rom, 'EtherTablet', ether_text)
+    bombositem = world.get_location('Bombos Tablet').item
+    bombos_text = 'Some Hot Air' if bombositem is None else bombositem.altar_hint_text if bombositem.altar_hint_text is not None else 'Unknown Item.'
+    write_string_to_rom(rom, 'BombosTablet', bombos_text)
 
     write_credits_string_to_rom(rom, 'KingsReturn', KingsReturn_texts[random.randint(0, len(KingsReturn_texts) - 1)])
     write_credits_string_to_rom(rom, 'Sanctuary', Sanctuary_texts[random.randint(0, len(Sanctuary_texts) - 1)])

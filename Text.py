@@ -9,7 +9,9 @@ text_addresses = {'Altar': (0x180300, 256),
                   'Sahasrahla2': (0x180B00, 256),
                   'BombShop1': (0x180E00, 256),
                   'BombShop2': (0x180D00, 256),
-                  'PyramidFairy': (0x180900, 256)}
+                  'PyramidFairy': (0x180900, 256),
+                  'EtherTablet': (0x180F00, 256),
+                  'BombosTablet': (0x181000, 256)}
 
 credits_addresses = {'KingsReturn': (0x76928, 22),
                      'Sanctuary': (0x76964, 16),
