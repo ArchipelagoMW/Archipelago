@@ -25,6 +25,7 @@ class World(object):
         self.spoiler = ''
         self.required_locations = []
         self.place_dungeon_items = place_dungeon_items  # configurable in future
+        self.shuffle_bonk_prizes = False
         self.swamp_patch_required = False
         self.sewer_light_cone = mode == 'standard'
         self.light_world_light_cone = False

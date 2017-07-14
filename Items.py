@@ -57,7 +57,7 @@ item_table = {'Bow': (True, False, False, False, 0x0B, 'You have\nchosen the\nar
               'Progressive Sword': (True, False, False, False, 0x5E, 'a better copy\nof your sword\nfor your time', None, None, None, None, None),
               'Progressive Glove': (True, False, False, False, 0x61, 'a way to lift\nheavier things', None, None, None, None, None),
               'Silver Arrows': (True, False, False, False, 0x58, 'Do you fancy\nsilver tipped\narrows?', None, None, None, None, None),
-              'Green Pendant': (True, False, False, True, [0x04, 0x38, 0x60, 0x00, 0x69, 0x01], None, None, None, None, None, None),
+              'Green Pendant': (True, False, False, True, [0x04, 0x38, 0x62, 0x00, 0x69, 0x01], None, None, None, None, None, None),
               'Red Pendant': (True, False, False, True, [0x02, 0x34, 0x60, 0x00, 0x69, 0x02], None, None, None, None, None, None),
               'Blue Pendant': (True, False, False, True, [0x01, 0x32, 0x60, 0x00, 0x69, 0x03], None, None, None, None, None, None),
               'Triforce': (True, False, False, False, 0x6A, '\n   YOU WIN!', None, None, None, None, None),
