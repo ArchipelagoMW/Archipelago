@@ -382,10 +382,13 @@ def write_sprite(rom, sprite):
         # sprite file with graphics and palette data
         rom.write_bytes(0x80000, sprite[:0x7000])
         rom.write_bytes(0xDD308, sprite[0x7000:])
+        rom.write_bytes(0xDEDF5, sprite[0x7036:0x7038])
+        rom.write_bytes(0xDEDF7, sprite[0x7054:0x7056])
     elif len(sprite) in [0x100000, 0x200000]:
         # full rom with patched sprite, extract it
         rom.write_bytes(0x80000, sprite[0x80000:0x87000])
         rom.write_bytes(0xDD308, sprite[0xDD308:0xDD380])
+        rom.write_bytes(0xDEDF5, sprite[0xDEDF5:0xDEDF9])
 
 
 def write_string_to_rom(rom, target, string):
