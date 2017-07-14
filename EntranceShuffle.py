@@ -41,6 +41,12 @@ def link_entrances(world):
             dungeon_exits.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
             lw_entrances.append('Hyrule Castle Entrance (South)')
 
+        if world.goal == 'ganon':
+            ret.append(connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit'))
+        else:
+            dw_entrances.append('Ganons Tower')
+            dungeon_exits.append('Ganons Tower Exit')
+
         if world.mode == 'standard':
             # rest of hyrule castle must be in light world to avoid fake darkworld stuff, so it has to be the one connected to east exit of desert
             ret.append(connect_mandatory_exits(world, lw_entrances, [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')], list(LW_Dungeon_Entrances_Must_Exit)))
@@ -211,6 +217,12 @@ def link_entrances(world):
             caves.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
             lw_entrances.append('Hyrule Castle Entrance (South)')
 
+        if world.goal == 'ganon':
+            ret.append(connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit'))
+        else:
+            dw_entrances.append('Ganons Tower')
+            caves.append('Ganons Tower Exit')
+
         # we randomize which world requirements we fulfill first so we get better dungeon distribution
         if random.randint(0, 1) == 0:
             ret.append(connect_mandatory_exits(world, lw_entrances, caves, lw_must_exits))
@@ -312,6 +324,18 @@ def link_entrances(world):
             lw_hole_entrances.append('Hyrule Castle Secret Entrance Drop')
             hole_targets.append(('Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance'))
             lw_entrances.append('Hyrule Castle Secret Entrance Stairs')
+
+        if world.goal == 'ganon':
+            ret.append(connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit'))
+            ret.append(connect_two_way(world, 'Pyramid Entrance', 'Pyramid Exit'))
+            ret.append(connect_entrance(world, 'Pyramid Hole', 'Pyramid'))
+        else:
+            dw_entrances.append('Ganons Tower')
+            caves.append('Ganons Tower Exit')
+            dw_hole_entrances.append('Pyramid Hole')
+            hole_targets.append(('Pyramid Exit', 'Pyramid'))
+            dw_entrances_must_exits.append('Pyramid Entrance')
+            dw_doors.extend(['Ganons Tower', 'Pyramid Entrance'])
 
         random.shuffle(lw_hole_entrances)
         random.shuffle(dw_hole_entrances)
@@ -533,6 +557,18 @@ def link_entrances(world):
             entrances.append('Hyrule Castle Secret Entrance Stairs')
             caves.append('Hyrule Castle Secret Entrance Exit')
 
+        if world.goal == 'ganon':
+            ret.append(connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit'))
+            ret.append(connect_two_way(world, 'Pyramid Entrance', 'Pyramid Exit'))
+            ret.append(connect_entrance(world, 'Pyramid Hole', 'Pyramid'))
+        else:
+            entrances.append('Ganons Tower')
+            caves.extend(['Ganons Tower Exit', 'Pyramid Exit'])
+            hole_entrances.append('Pyramid Hole')
+            hole_targets.append('Pyramid')
+            entrances_must_exits.append('Pyramid Entrance')
+            doors.extend(['Ganons Tower', 'Pyramid Entrance'])
+
         random.shuffle(hole_entrances)
         random.shuffle(hole_targets)
         random.shuffle(entrances)
@@ -699,6 +735,7 @@ def connect_two_way(world, entrancename, exitname):
 
 def scramble_holes(world):
     ret = []
+
     hole_entrances = [('Kakariko Well Cave', 'Kakariko Well Drop'),
                       ('Bat Cave Cave', 'Bat Cave Drop'),
                       ('North Fairy Cave', 'North Fairy Cave Drop'),
@@ -712,6 +749,13 @@ def scramble_holes(world):
                     ('Thieves Forest Hideout Exit', 'Thieves Forest Hideout (top)'),
                     ('Lumberjack Tree Exit', 'Lumberjack Tree (top)'),
                     ('Sanctuary Exit', 'Sewer Drop')]
+
+    if world.goal == 'ganon':
+        ret.append(connect_two_way(world, 'Pyramid Entrance', 'Pyramid Exit'))
+        ret.append(connect_entrance(world, 'Pyramid Hole', 'Pyramid'))
+    else:
+        hole_entrances.append(('Pyramid Entrance', 'Pyramid Hole'))
+        hole_targets.append(('Pyramid Exit', 'Pyramid'))
 
     if world.mode == 'standard':
         # cannot move uncle cave
@@ -836,9 +880,17 @@ def simple_shuffle_dungeons(world):
 
     ret.append(skull_woods_shuffle(world))
 
+    dungeon_entrances = ['Eastern Palace', 'Tower of Hera', 'Thieves Town', 'Skull Woods Final Section', 'Palace of Darkness', 'Ice Palace', 'Misery Mire', 'Swamp Palace']
+    dungeon_exits = ['Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Dark Palace Exit', 'Ice Palace Exit', 'Misery Mire Exit', 'Swamp Palace Exit']
+
+    if world.goal == 'ganon':
+        ret.append(connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit'))
+    else:
+        dungeon_entrances.append('Ganons Tower')
+        dungeon_exits.append('Ganons Tower Exit')
+
     # shuffle up single entrance dungeons
-    ret.append(connect_random(world, ['Eastern Palace', 'Tower of Hera', 'Thieves Town', 'Skull Woods Final Section', 'Palace of Darkness', 'Ice Palace', 'Misery Mire', 'Swamp Palace'],
-                   ['Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Dark Palace Exit', 'Ice Palace Exit', 'Misery Mire Exit', 'Swamp Palace Exit'], True))
+    ret.append(connect_random(world, dungeon_entrances, dungeon_exits, True))
 
     # mix up 4 door dungeons
     multi_dungeons = ['Desert', 'Turtle Rock']
@@ -1261,8 +1313,6 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Dark Palace Hammer Peg Drop', 'Dark Palace (Center)'),
                          ('Dark Palace Spike Statue Room Door', 'Dark Palace (Spike Statue Room)'),
                          ('Dark Palace Maze Door', 'Dark Palace (Maze)'),
-                         ('Ganons Tower', 'Ganons Tower (Entrance)'),  # not shuffled, for now
-                         ('Ganons Tower Exit', 'Dark Death Mountain (Top)'),
                          ('Ganons Tower (Tile Room)', 'Ganons Tower (Tile Room)'),
                          ('Ganons Tower (Tile Room) Key Door', 'Ganons Tower (Compass Room)'),
                          ('Ganons Tower (Bottom) (East)', 'Ganons Tower (Bottom)'),
@@ -1275,10 +1325,7 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Ganons Tower Torch Rooms', 'Ganons Tower (Before Moldorm)'),
                          ('Ganons Tower Moldorm Door', 'Ganons Tower (Moldorm)'),
                          ('Ganons Tower Moldorm Gap', 'Agahnim 2'),
-                         ('Pyramid Hole', 'Pyramid'),  # not shuffled, for now
                          ('Ganon Drop', 'Bottom of Pyramid'),
-                         ('Pyramid Exit', 'Pyramid Ledge'),
-                         ('Pyramid Entrance', 'Bottom of Pyramid'),
                          ('Pyramid Drop', 'East Dark World')
                          ]
 
@@ -1427,7 +1474,11 @@ default_connections = [('Waterfall of Wishing', 'Waterfall of Wishing'),
                        ('Hookshot Cave Exit (South)', 'Dark Death Mountain (Top)'),
                        ('Hookshot Cave Exit (North)', 'Death Mountain Floating Island'),
                        ('Hookshot Cave Back Entrance', 'Hookshot Cave'),
-                       ('Mimic Cave Mirror Spot', 'Mimic Cave')
+                       ('Mimic Cave Mirror Spot', 'Mimic Cave'),
+
+                       ('Pyramid Hole', 'Pyramid'),
+                       ('Pyramid Exit', 'Pyramid Ledge'),
+                       ('Pyramid Entrance', 'Bottom of Pyramid')
                        ]
 
 # non shuffled dungeons
@@ -1484,8 +1535,10 @@ default_dungeon_connections = [('Desert Palace Entrance (South)', 'Desert Palace
                                ('Dark Death Mountain Ledge (West)', 'Turtle Rock (Second Section)'),
                                ('Dark Death Mountain Ledge (East)', 'Turtle Rock (Big Chest)'),
                                ('Turtle Rock Isolated Ledge Exit', 'Dark Death Mountain Isolated Ledge'),
-                               ('Turtle Rock Isolated Ledge Entrance', 'Turtle Rock (Eye Bridge)')
+                               ('Turtle Rock Isolated Ledge Entrance', 'Turtle Rock (Eye Bridge)'),
 
+                               ('Ganons Tower', 'Ganons Tower (Entrance)'),
+                               ('Ganons Tower Exit', 'Dark Death Mountain (Top)')
                                ]
 
 

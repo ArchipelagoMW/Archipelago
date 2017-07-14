@@ -21,8 +21,9 @@ def set_rules(world):
         raise NotImplementedError('Not implemented yet')
 
     if world.goal == 'dungeons':
-        # require altar for ganon to enforce getting everything
-        add_rule(world.get_location('Ganon'), lambda state: state.can_reach('Altar', 'Location') and state.has('Beat Agahnim 1'))
+        # require all dungeons to beat ganon
+        add_rule(world.get_location('Ganon'), lambda state: state.can_reach('Altar', 'Location') and state.has('Beat Agahnim 1') and state.has('Beat Agahnim 2') and state.has('Crystal 1') and state.has('Crystal 2')
+                                                            and state.has('Crystal 3') and state.has('Crystal 4') and state.has('Crystal 5') and state.has('Crystal 6') and state.has('Crystal 7'))
 
     set_big_bomb_rules(world)
 
