@@ -303,7 +303,10 @@ def global_rules(world):
         forbid_item(world.get_location(location), 'Big Key (Ganons Tower)')
 
     set_rule(world.get_location('Ganon'), lambda state: state.has_beam_sword() and state.has_fire_source() and (state.has('Tempered Sword') or state.has('Golden Sword') or (state.has('Silver Arrows') and state.has('Bow')) or state.has('Lamp') or state.has('Bottle') or state.has('Half Magic') or state.has('Quarter Magic')))  # need to light torch a sufficient amount of times
-    set_rule(world.get_entrance('Ganon Drop'), lambda state: state.has_beam_sword())  # need to damage ganon to get tiles to drop
+    if world.goal == 'ganon':
+        set_rule(world.get_entrance('Ganon Drop'), lambda state: state.has_beam_sword())  # need to damage ganon to get tiles to drop
+    else:
+        set_rule(world.get_entrance('Ganon Drop'), lambda state: False)  # other game modes have ganon damage disabled until you can defeat him (and beat the game), so this transition is not available
 
 
 def no_glitches_rules(world):
