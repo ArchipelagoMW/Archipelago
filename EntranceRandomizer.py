@@ -144,8 +144,8 @@ if __name__ == '__main__':
                              ''')
     parser.add_argument('--suppress_rom', help='Do not create an output rom file.', action='store_true')
     parser.add_argument('--gui', help='Launch the GUI', action='store_true')
-    parser.add_argument('--jsonout', help='''\
-                            Output .json patch file instead of a patched rom. Used 
+    parser.add_argument('--jsonout', action='store_true', help='''\
+                            Output .json patch to stdout instead of a patched rom. Used 
                             for VT site integration, do not use otherwise.
                             ''')
     args = parser.parse_args()
@@ -154,9 +154,12 @@ if __name__ == '__main__':
     if not args.jsonout and not os.path.isfile(args.rom):
         input('Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
         exit(1)
-    if args.sprite is not None and not os.path.isfile(args.rom):
-        input('Could not find link sprite sheet at given location. \nPress Enter to exit.' % args.sprite)
-        exit(1)
+    if args.sprite is not None and not os.path.isfile(args.sprite):
+        if not args.jsonout:
+            input('Could not find link sprite sheet at given location. \nPress Enter to exit.' % args.sprite)
+            exit(1)
+        else:
+            raise IOError('Cannot find sprite file at %s' % args.sprite)
 
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[args.loglevel]

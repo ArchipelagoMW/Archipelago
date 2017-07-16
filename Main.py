@@ -8,6 +8,7 @@ from Items import ItemFactory
 import random
 import time
 import logging
+import json
 
 __version__ = '0.4.2-dev'
 
@@ -92,9 +93,12 @@ def main(args, seed=None):
         else:
             rom = LocalRom(args.rom)
         patch_rom(world, rom, bytearray(logic_hash), args.quickswap, args.heartbeep, sprite)
-        rom.write_to_file(args.jsonout or '%s.sfc' % outfilebase)
+        if args.jsonout:
+            print(json.dumps({'patch': rom.patches, 'spoiler': world.spoiler}))
+        else:
+            rom.write_to_file(args.jsonout or '%s.sfc' % outfilebase)
 
-    if args.create_spoiler:
+    if args.create_spoiler and not args.jsonout:
         with open('%s_Spoiler.txt' % outfilebase, 'w') as outfile:
             outfile.write(world.spoiler)
 
