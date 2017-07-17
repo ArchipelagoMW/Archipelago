@@ -26,7 +26,7 @@ if __name__ == '__main__':
     parser.add_argument('--mode', default='open', const='open', nargs='?', choices=['standard', 'open', 'swordless'],
                         help='''\
                              Select game mode. (default: %(default)s)
-                             Open:      
+                             Open:      World starts with Zelda rescued.
                              Standard:  Fixes Hyrule Castle Secret Entrance and Front Door
                                         but may lead to weird rain state issues if you exit
                                         through the Hyrule Castle side exits before rescuing
@@ -42,10 +42,11 @@ if __name__ == '__main__':
     parser.add_argument('--goal', default='ganon', const='ganon', nargs='?', choices=['ganon', 'pedestal', 'dungeons', 'starhunt', 'triforcehunt'],
                         help='''\
                              Select completion goal. (default: %(default)s)
-                             Ganon:         Defeat Ganon.
+                             Ganon:         Collect all crystals, beat Agahnim 2 then 
+                                            defeat Ganon.
                              Pedestal:      Places the Triforce at the Master Sword Pedestal.
-                             All Dungeons:  Not enforced ingame but considered in the
-                                            playthrough.
+                             All Dungeons:  Collect all crystals, pendants, beat both
+                                            Agahnim fights and then defeat Ganon.
                              Star Hunt:     Places 15 Power Stars in the world, collect 10 of
                                             them to beat the game.
                              Triforce Hunt: Places 3 Triforce Pieces in the world, collect
@@ -129,6 +130,10 @@ if __name__ == '__main__':
                              Only check if the game is beatable with placement. Do not
                              ensure all locations are reachable. This only has an effect
                              on the restrictive algorithm currently.                               
+                             ''', action='store_true')
+    parser.add_argument('--shuffleganon', help='''\
+                             If set, include the Pyramid Hole and Ganon's Tower in the 
+                             entrance shuffle pool.                                   
                              ''', action='store_true')
     parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['normal', 'half', 'quarter', 'off'],
                         help='''\

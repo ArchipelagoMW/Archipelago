@@ -207,6 +207,14 @@ Use to select a different sprite sheet to use for Link. Path to a binary file of
 If set, will only ensure the goal can be achieved, but not necessarily that all locations are reachable. Currently only affects restrictive algorithm.
 
 ```
+--shuffleganon
+```
+
+If set, Ganon's Tower is included in the dungeon shuffle pool and the Pyramid Hole/Exit pair is included in the Holes shuffle pool. Ganon can not be defeated until the primary goal is fulfilled.
+
+Note: This option is under development and may sometimes lead to dungeon and crystal distributions that cannot be solved. If this is the case, the generation will fail. Simply retry with a different seed number if you run into this issue.
+
+```
 --suppress_rom
 ```
 

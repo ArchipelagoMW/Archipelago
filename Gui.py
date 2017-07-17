@@ -23,12 +23,15 @@ def guiMain(args=None):
     dungeonItemsCheckbutton = Checkbutton(checkBoxFrame, text="Place Dungeon Items (Compasses/Maps)", onvalue=0, offvalue=1, variable=dungeonItemsVar)
     beatableOnlyVar = IntVar()
     beatableOnlyCheckbutton = Checkbutton(checkBoxFrame, text="Only ensure seed is beatable, not all items must be reachable", variable=beatableOnlyVar)
+    shuffleGanonVar = IntVar()
+    shuffleGanonCheckbutton = Checkbutton(checkBoxFrame, text="Include Ganon's Tower and Pyramid Hole in shuffle pool", variable=shuffleGanonVar)
 
     createSpoilerCheckbutton.pack(expand=True, anchor=W)
     suppressRomCheckbutton.pack(expand=True, anchor=W)
     quickSwapCheckbutton.pack(expand=True, anchor=W)
     dungeonItemsCheckbutton.pack(expand=True, anchor=W)
-    beatableOnlyCheckbutton.pack(expand=True, anchor=W)    
+    beatableOnlyCheckbutton.pack(expand=True, anchor=W)
+    shuffleGanonCheckbutton.pack(expand=True, anchor=W)
     
     fileDialogFrame = Frame(rightHalfFrame)
 
@@ -157,6 +160,7 @@ def guiMain(args=None):
         guiargs.nodungeonitems = bool(dungeonItemsVar.get())
         guiargs.beatableonly = bool(beatableOnlyVar.get())
         guiargs.quickswap = bool(quickSwapVar.get())
+        guiargs.shuffleganon = bool(shuffleGanonVar.get())
         guiargs.rom = romVar.get()
         guiargs.jsonout = None
         guiargs.sprite = spriteVar.get() if spriteVar.get() else None
@@ -206,6 +210,7 @@ def guiMain(args=None):
         heartbeepVar.set(args.heartbeep)
         logicVar.set(args.logic)
         romVar.set(args.rom)
+        shuffleGanonVar.set(args.shuffleganon)
         if args.sprite is not None:
             spriteVar.set(args.sprite)
 

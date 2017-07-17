@@ -4,7 +4,7 @@ import logging
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, goal, algorithm, place_dungeon_items, check_beatable_only):
+    def __init__(self, shuffle, logic, mode, difficulty, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
@@ -41,7 +41,8 @@ class World(object):
         self.fix_skullwoods_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
         self.fix_palaceofdarkness_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
         self.fix_trock_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
-        self.fix_gtower_exit = self.goal != 'ganon'
+        self.shuffle_ganon = shuffle_ganon
+        self.fix_gtower_exit = self.shuffle_ganon
 
     def get_region(self, regionname):
         if isinstance(regionname, Region):
