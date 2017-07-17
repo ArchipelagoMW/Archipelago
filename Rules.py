@@ -304,10 +304,7 @@ def global_rules(world):
         forbid_item(world.get_location(location), 'Big Key (Ganons Tower)')
 
     set_rule(world.get_location('Ganon'), lambda state: state.has_beam_sword() and state.has_fire_source() and (state.has('Tempered Sword') or state.has('Golden Sword') or (state.has('Silver Arrows') and state.has('Bow')) or state.has('Lamp') or state.has('Bottle') or state.has('Half Magic') or state.has('Quarter Magic')))  # need to light torch a sufficient amount of times
-    if world.goal == 'ganon':
-        set_rule(world.get_entrance('Ganon Drop'), lambda state: state.has_beam_sword())  # need to damage ganon to get tiles to drop
-    else:
-        set_rule(world.get_entrance('Ganon Drop'), lambda state: False)  # other game modes have ganon damage disabled until you can defeat him (and beat the game), so this transition is not available
+    set_rule(world.get_entrance('Ganon Drop'), lambda state: state.has_beam_sword())  # need to damage ganon to get tiles to drop
 
 
 def no_glitches_rules(world):
@@ -321,6 +318,11 @@ def no_glitches_rules(world):
     add_rule(world.get_entrance('Ganons Tower (Hookshot Room)'), lambda state: state.has('Hookshot'))
     set_rule(world.get_entrance('7 Chest Cave Push Block Reverse'), lambda state: False)  # no glitches does not require block override
     set_rule(world.get_entrance('7 Chest Cave Bomb Jump'), lambda state: False)
+
+    # if pyramid hole leads to big chest hole in skull woods, skull woods holds a crystal and ganon's tower is vanilla, the SW big chest cannot hold a small key
+    if world.get_entrance('Pyramid Hole').connected_region.name == 'Skull Woods First Section (Top)' and world.get_entrance('Ganons Tower').connected_region.name == 'Ganons Tower (Entrance)' and\
+        'Crystal' in world.get_location('Mothula - Crystal').item.name:
+            forbid_item(world.get_location('[dungeon-D3-B1] Skull Woods - Big Chest'), 'Small Key (Skull Woods')
 
     # Light cones in standard depend on which world we actually are in, not which one the location would normally be
     # We add Lamp requirements only to those locations which lie in the dark world (or everything if open
