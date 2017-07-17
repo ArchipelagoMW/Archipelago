@@ -494,6 +494,7 @@ def generate_itempool(world):
             if world.get_entrance('Ganons Tower').connected_region.name == region:
                 # can't place a crystal here
                 world.push_item(world.get_location(crystallocation), crystals.pop(), False)
+                crystallocation.event = True
             else:
                 crystal_locations.append(world.get_location(crystallocation))
     else:
@@ -508,6 +509,7 @@ def generate_itempool(world):
     if world.get_entrance('Pyramid Fairy').connected_region.name == 'Dam':
         crystallocation = crystal_locations.pop(crystal_locations.index(world.get_location('Arrghus - Crystal')))
         world.push_item(world.get_location(crystallocation), crystals.pop(), False)
+        crystallocation.event = True
 
     crystals.extend(ItemFactory(['Crystal 5', 'Crystal 6']))
     random.shuffle(crystals)
