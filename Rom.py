@@ -280,7 +280,9 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     rom.write_byte(0x180169, 0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
     rom.write_byte(0x180086, 0x00 if world.aga_randomness else 0x01)  # set blue ball and ganon warp randomness
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
-    if world.goal in ['pedestal', 'starhunt', 'triforcehunt']:
+    if world.goal in ['ganon']:
+        rom.write_byte(0x18003E, 0x03)  # make ganon invincible until all crystals are collected
+    elif world.goal in ['pedestal', 'starhunt', 'triforcehunt']:
         rom.write_byte(0x18003E, 0x01)  # make ganon invincible
     elif world.goal in ['dungeons']:
         rom.write_byte(0x18003E, 0x02)  # make ganon invincible until all dungeons are beat
@@ -420,9 +422,12 @@ def write_strings(rom, world):
     write_string_to_rom(rom, 'Sahasrahla2', Sahasrahla2_texts[random.randint(0, len(Sahasrahla2_texts) - 1)])
     write_string_to_rom(rom, 'Blind', Blind_texts[random.randint(0, len(Blind_texts) - 1)])
     if world.goal in ['pedestal', 'starhunt', 'triforcehunt']:
-        write_string_to_rom(rom, 'Ganon1', 'Why are you even here?\n You can\'t even hurt me!')
+        write_string_to_rom(rom, 'Ganon1Invincible', 'Why are you even here?\n You can\'t even hurt me!')
+        write_string_to_rom(rom, 'Ganon2Invincible', 'Seriously? Go Away, I will not Die.')
     else:
         write_string_to_rom(rom, 'Ganon1', Ganon1_texts[random.randint(0, len(Ganon1_texts) - 1)])
+        write_string_to_rom(rom, 'Ganon1Invincible', 'You cannot defeat me until you finish your goal!')
+        write_string_to_rom(rom, 'Ganon2Invincible', 'Got wax in\nyour ears?\nI can not die!')
     write_string_to_rom(rom, 'TavernMan', TavernMan_texts[random.randint(0, len(TavernMan_texts) - 1)])
 
     altaritem = world.get_location('Altar').item
