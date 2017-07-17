@@ -242,7 +242,7 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     rom.write_byte(0x18003F, 0x01 if world.mode == 'swordless' else 0x00)  # hammer can harm ganon
     rom.write_byte(0x180040, 0x01 if world.mode == 'swordless' else 0x00)  # open curtains
     rom.write_byte(0x180041, 0x01 if world.mode == 'swordless' else 0x00)  # swordless medallions
-    rom.write_byte(0x180042, 0xFF if world.mode == 'swordless' else 0x00)  # starting sword for link
+    rom.write_byte(0x180043, 0xFF if world.mode == 'swordless' else 0x00)  # starting sword for link
 
     # set up clocks for timed modes
     if world.clock_mode == 'off':
