@@ -28,7 +28,7 @@ def fill_dungeons(world):
     world.push_item(world.get_location(mandatory_sw_key_location), ItemFactory('Small Key (Skull Woods)'), False)
     world.get_location(mandatory_sw_key_location).event = True
 
-    dungeons = [TR, ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, GT]
+    dungeons = [TR, ES, EP, DP, ToH, AT, PoD, TT, SW, IP, MM, GT, SP]
     for dungeon in dungeons:
         if world.get_entrance('Ganons Tower').connected_region.name in dungeon[0]:
             dungeons.pop(dungeons.index(dungeon))
