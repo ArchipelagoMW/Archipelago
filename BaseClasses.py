@@ -43,6 +43,7 @@ class World(object):
         self.fix_trock_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
         self.shuffle_ganon = shuffle_ganon
         self.fix_gtower_exit = self.shuffle_ganon
+        self.can_access_trock_eyebridge = None
 
     def get_region(self, regionname):
         if isinstance(regionname, Region):

@@ -397,7 +397,8 @@ def set_trock_key_rules(world):
 
     # check if the back entrance into trock can be accessed. As no small keys are placed yet, the rule on the dark room staircase door
     # prevents us from reach the eye bridge from within the dungeon (!)
-    can_reach_back = all_state.can_reach(world.get_region('Turtle Rock (Eye Bridge)'))
+    can_reach_back = all_state.can_reach(world.get_region('Turtle Rock (Eye Bridge)')) if world.can_access_trock_eyebridge is None else world.can_access_trock_eyebridge
+    world.can_access_trock_eyebridge = can_reach_back
 
     # if we have backdoor access we can waste a key on the trinexx door, then have no lamp to reverse traverse the maze room. We simply require an additional key just to be super safe then. The backdoor access to the chest is otherwise free
     set_rule(world.get_entrance('Turtle Rock Pokey Room'), lambda state: state.has('Small Key (Turtle Rock)', 1)) if not can_reach_back else set_rule(world.get_entrance('Turtle Rock Pokey Room'), lambda state: state.has('Small Key (Turtle Rock)', 2))

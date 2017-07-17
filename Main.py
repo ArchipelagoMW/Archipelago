@@ -535,6 +535,7 @@ def copy_world(world):
     ret.light_world_light_cone = world.light_world_light_cone
     ret.dark_world_light_cone = world.dark_world_light_cone
     ret.seed = world.seed
+    ret.can_access_trock_eyebridge = world.can_access_trock_eyebridge
     create_regions(ret)
 
     # connect copied world
