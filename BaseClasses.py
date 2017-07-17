@@ -85,6 +85,8 @@ class World(object):
         ret = CollectionState(self)
         
         def soft_collect(item):
+            if 'Crystal' in item.name or 'Pendant' in item.name:
+                return
             if item.name.startswith('Progressive '):
                 if 'Sword' in item.name:
                     if ret.has('Golden Sword'):

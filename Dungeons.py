@@ -6,12 +6,12 @@ from BaseClasses import CollectionState
 def fill_dungeons(world):
     ES = (['Hyrule Castle'], None, [ItemFactory('Small Key (Escape)')], [ItemFactory('Map (Escape)')])
     EP = (['Eastern Palace'], ItemFactory('Big Key (Eastern Palace)'), [], ItemFactory(['Map (Eastern Palace)', 'Compass (Eastern Palace)']))
-    DP = (['Desert Palace Main', 'Desert Palace East', 'Desert Palace North'], ItemFactory('Big Key (Desert Palace)'), [ItemFactory('Small Key (Desert Palace)')], ItemFactory(['Map (Desert Palace)', 'Compass (Desert Palace)']))
+    DP = (['Desert Palace North', 'Desert Palace Main', 'Desert Palace East'], ItemFactory('Big Key (Desert Palace)'), [ItemFactory('Small Key (Desert Palace)')], ItemFactory(['Map (Desert Palace)', 'Compass (Desert Palace)']))
     ToH = (['Tower of Hera (Bottom)', 'Tower of Hera (Basement)', 'Tower of Hera (Top)'], ItemFactory('Big Key (Tower of Hera)'), [ItemFactory('Small Key (Tower of Hera)')], ItemFactory(['Map (Tower of Hera)', 'Compass (Tower of Hera)']))
     AT = (['Agahnims Tower', 'Agahnim 1'], None, ItemFactory(['Small Key (Agahnims Tower)'] * 2), [])
     PoD = (['Dark Palace (Entrance)', 'Dark Palace (Center)', 'Dark Palace (Big Key Chest)', 'Dark Palace (Bonk Section)', 'Dark Palace (North)', 'Dark Palace (Maze)', 'Dark Palace (Spike Statue Room)', 'Dark Palace (Final Section)'], ItemFactory('Big Key (Palace of Darkness)'), ItemFactory(['Small Key (Palace of Darkness)'] * 6), ItemFactory(['Map (Palace of Darkness)', 'Compass (Palace of Darkness)']))
     TT = (['Thieves Town (Entrance)', 'Thieves Town (Deep)', 'Blind Fight'], ItemFactory('Big Key (Thieves Town)'), [ItemFactory('Small Key (Thieves Town)')], ItemFactory(['Map (Thieves Town)', 'Compass (Thieves Town)']))
-    SW = (['Skull Woods First Section', 'Skull Woods Second Section', 'Skull Woods Final Section (Entrance)', 'Skull Woods Final Section (Mothula)'], ItemFactory('Big Key (Skull Woods)'), ItemFactory(['Small Key (Skull Woods)'] * 2), ItemFactory(['Map (Skull Woods)', 'Compass (Skull Woods)']))
+    SW = (['Skull Woods Final Section (Entrance)', 'Skull Woods First Section', 'Skull Woods Second Section', 'Skull Woods Final Section (Mothula)'], ItemFactory('Big Key (Skull Woods)'), ItemFactory(['Small Key (Skull Woods)'] * 2), ItemFactory(['Map (Skull Woods)', 'Compass (Skull Woods)']))
     SP = (['Swamp Palace (Entrance)', 'Swamp Palace (First Room)', 'Swamp Palace (Starting Area)', 'Swamp Palace (Center)', 'Swamp Palace (North)'], ItemFactory('Big Key (Swamp Palace)'), [ItemFactory('Small Key (Swamp Palace)')], ItemFactory(['Map (Swamp Palace)', 'Compass (Swamp Palace)']))
     IP = (['Ice Palace (Entrance)', 'Ice Palace (Main)', 'Ice Palace (East)', 'Ice Palace (East Top)', 'Ice Palace (Kholdstare)'], ItemFactory('Big Key (Ice Palace)'), ItemFactory(['Small Key (Ice Palace)'] * 2), ItemFactory(['Map (Ice Palace)', 'Compass (Ice Palace)']))
     MM = (['Misery Mire (Entrance)', 'Misery Mire (Main)', 'Misery Mire (West)', 'Misery Mire (Final Area)', 'Misery Mire (Vitreous)'], ItemFactory('Big Key (Misery Mire)'), ItemFactory(['Small Key (Misery Mire)'] * 3), ItemFactory(['Map (Misery Mire)', 'Compass (Misery Mire)']))
@@ -28,7 +28,14 @@ def fill_dungeons(world):
     world.push_item(world.get_location(mandatory_sw_key_location), ItemFactory('Small Key (Skull Woods)'), False)
     world.get_location(mandatory_sw_key_location).event = True
 
-    for dungeon_regions, big_key, small_keys, dungeon_items in [TR, ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, GT]:
+    dungeons = [TR, ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, GT]
+    for dungeon in dungeons:
+        if world.get_entrance('Ganons Tower').connected_region.name in dungeon[0]:
+            dungeons.pop(dungeons.index(dungeon))
+            dungeons.append(dungeon)
+            break
+
+    for dungeon_regions, big_key, small_keys, dungeon_items in dungeons:
         # this is what we need to fill
         dungeon_locations = [location for location in world.get_unfilled_locations() if location.parent_region.name in dungeon_regions]
         random.shuffle(dungeon_locations)
@@ -56,7 +63,7 @@ def fill_dungeons(world):
             all_state.sweep_for_events()
             sk_location = None
             for location in dungeon_locations:
-                if location.name in freebes or location.can_reach(all_state):
+                if location.name in freebes or (location.can_reach(all_state) and location.item_rule(small_key)):
                     sk_location = location
                     break
 
