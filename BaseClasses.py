@@ -87,8 +87,6 @@ class World(object):
         ret = CollectionState(self)
         
         def soft_collect(item):
-            if 'Crystal' in item.name or 'Pendant' in item.name:
-                return
             if item.name.startswith('Progressive '):
                 if 'Sword' in item.name:
                     if ret.has('Golden Sword'):
@@ -112,10 +110,10 @@ class World(object):
             elif item.advancement:
                 ret.prog_items.append(item.name)
 
-        for location in self.get_filled_locations():
-            soft_collect(location.item)
         for item in self.itempool:
             soft_collect(item)
+        ret.sweep_for_events()
+        ret._clear_cache()
         return ret
 
     def find_items(self, item):
