@@ -22,8 +22,7 @@ def set_rules(world):
 
     if world.goal == 'dungeons':
         # require all dungeons to beat ganon
-        add_rule(world.get_location('Ganon'), lambda state: state.can_reach('Altar', 'Location') and state.has('Beat Agahnim 1') and state.has('Beat Agahnim 2') and state.has('Crystal 1') and state.has('Crystal 2')
-                                                            and state.has('Crystal 3') and state.has('Crystal 4') and state.has('Crystal 5') and state.has('Crystal 6') and state.has('Crystal 7'))
+        add_rule(world.get_location('Ganon'), lambda state: state.can_reach('Altar', 'Location') and state.has('Beat Agahnim 1'))
 
     set_big_bomb_rules(world)
 
@@ -303,7 +302,9 @@ def global_rules(world):
                      '[dungeon-A2-6F] Ganons Tower - Room before Moldorm', '[dungeon-A2-6F] Ganons Tower - Moldorm Room']:
         forbid_item(world.get_location(location), 'Big Key (Ganons Tower)')
 
-    set_rule(world.get_location('Ganon'), lambda state: state.has_beam_sword() and state.has_fire_source() and (state.has('Tempered Sword') or state.has('Golden Sword') or (state.has('Silver Arrows') and state.has('Bow')) or state.has('Lamp') or state.has('Bottle') or state.has('Half Magic') or state.has('Quarter Magic')))  # need to light torch a sufficient amount of times
+    set_rule(world.get_location('Ganon'), lambda state: state.has_beam_sword() and state.has_fire_source() and state.has('Beat Agahnim 2') and state.has('Crystal 1') and state.has('Crystal 2')
+                                                        and state.has('Crystal 3') and state.has('Crystal 4') and state.has('Crystal 5') and state.has('Crystal 6') and state.has('Crystal 7')
+                                                        and (state.has('Tempered Sword') or state.has('Golden Sword') or (state.has('Silver Arrows') and state.has('Bow')) or state.has('Lamp') or state.has('Bottle') or state.has('Half Magic') or state.has('Quarter Magic')))  # need to light torch a sufficient amount of times
     set_rule(world.get_entrance('Ganon Drop'), lambda state: state.has_beam_sword())  # need to damage ganon to get tiles to drop
 
 
@@ -378,7 +379,8 @@ def swordless_rules(world):
     set_rule(world.get_entrance('Turtle Rock'), lambda state: state.has_Pearl() and state.has_turtle_rock_medallion() and state.can_reach('Turtle Rock (Top)', 'Region'))   # sword not required to use medallion for opening in swordless (!)
     set_rule(world.get_entrance('Skull Woods Torch Room'), lambda state: state.has('Small Key (Skull Woods)', 3) and state.has('Fire Rod'))  # no curtain
     set_rule(world.get_location('Agahnim 2'), lambda state: state.has('Hammer') or state.has('Bug Catching Net'))
-    set_rule(world.get_location('Ganon'), lambda state: state.has('Hammer') and state.has_fire_source() and state.has('Silver Arrows') and state.has('Bow'))
+    set_rule(world.get_location('Ganon'), lambda state: state.has('Hammer') and state.has_fire_source() and state.has('Silver Arrows') and state.has('Bow') and state.has('Beat Agahnim 2') and state.has('Crystal 1') and state.has('Crystal 2')
+                                                        and state.has('Crystal 3') and state.has('Crystal 4') and state.has('Crystal 5') and state.has('Crystal 6') and state.has('Crystal 7'))
     set_rule(world.get_entrance('Ganon Drop'), lambda state: state.has('Hammer'))  # need to damage ganon to get tiles to drop
 
 
