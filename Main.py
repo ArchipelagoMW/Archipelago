@@ -483,11 +483,35 @@ def generate_itempool(world):
         world.itempool.append(ItemFactory('Magic Upgrade (1/2)'))
 
     # distribute crystals
-    crystals = ItemFactory(['Green Pendant', 'Red Pendant', 'Blue Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7'])
-    crystal_locations = [world.get_location('Armos - Pendant'), world.get_location('Lanmolas - Pendant'), world.get_location('Moldorm - Pendant'), world.get_location('Helmasaur - Crystal'),
-                         world.get_location('Blind - Crystal'), world.get_location('Mothula - Crystal'), world.get_location('Arrghus - Crystal'), world.get_location('Kholdstare - Crystal'),
-                         world.get_location('Vitreous - Crystal'), world.get_location('Trinexx - Crystal')]
+    crystals = ItemFactory(['Green Pendant', 'Red Pendant', 'Blue Pendant'])
+    crystal_locations = [world.get_location('Trinexx - Crystal')]
     random.shuffle(crystals)
+    if world.shuffle_ganon:
+        # ensure that no crystal gets locked inside of ganons tower location as that is unsolvable
+        for region, crystallocation in [('Eastern Palace', 'Armos - Pendant'), ('Desert Palace North', 'Lanmolas - Pendant'), ('Tower of Hera (Bottom)', 'Moldorm - Pendant'),
+                                        ('Dark Palace (Entrance)', 'Helmasaur - Crystal'), ('Thieves Town (Entrance)', 'Blind - Crystal'), ('Skull Woods Final Section (Entrance)', 'Mothula - Crystal'),
+                                        ('Swamp Palace (Entrance)', 'Arrghus - Crystal'), ('Ice Palace (Entrance)', 'Kholdstare - Crystal'), ('Misery Mire (Entrance)', 'Vitreous - Crystal')]:
+            if world.get_entrance('Ganons Tower').connected_region.name == region:
+                # can't place a crystal here
+                world.push_item(world.get_location(crystallocation), crystals.pop(), False)
+            else:
+                crystal_locations.append(world.get_location(crystallocation))
+    else:
+        crystal_locations += [world.get_location('Armos - Pendant'), world.get_location('Lanmolas - Pendant'), world.get_location('Moldorm - Pendant'), world.get_location('Helmasaur - Crystal'),
+                             world.get_location('Blind - Crystal'), world.get_location('Mothula - Crystal'), world.get_location('Arrghus - Crystal'), world.get_location('Kholdstare - Crystal'),
+                             world.get_location('Vitreous - Crystal')]
+
+    crystals.extend(ItemFactory(['Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7']))
+    random.shuffle(crystals)
+
+    # check if dam is behind pyramid fairy, if so, swamp can't hold a crystal
+    if world.get_entrance('Pyramid Fairy').connected_region.name == 'Dam':
+        crystallocation = crystal_locations.pop(crystal_locations.index(world.get_location('Arrghus - Crystal')))
+        world.push_item(world.get_location(crystallocation), crystals.pop(), False)
+
+    crystals.extend(ItemFactory(['Crystal 5', 'Crystal 6']))
+    random.shuffle(crystals)
+
     for location, crystal in zip(crystal_locations, crystals):
         world.push_item(location, crystal, False)
         location.event = True
@@ -518,8 +542,6 @@ def copy_world(world):
         for entrance in region.entrances:
             ret.get_entrance(entrance.name).connect(ret.get_region(region.name))
 
-    set_rules(ret)
-
     # fill locations
     for location in world.get_locations():
         if location.item is not None:
@@ -535,6 +557,8 @@ def copy_world(world):
 
     # copy progress items in state
     ret.state.prog_items = list(world.state.prog_items)
+
+    set_rules(ret)
 
     return ret
 

@@ -1,5 +1,7 @@
 import random
 
+# ToDo: With shuffle_ganon option, prevent gtower from linking to an exit only location through a 2 entrance cave.
+
 
 def link_entrances(world):
     ret = []
@@ -41,7 +43,7 @@ def link_entrances(world):
             dungeon_exits.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
             lw_entrances.append('Hyrule Castle Entrance (South)')
 
-        if world.goal == 'ganon':
+        if not world.shuffle_ganon:
             ret.append(connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit'))
         else:
             dw_entrances.append('Ganons Tower')
@@ -119,12 +121,9 @@ def link_entrances(world):
         bomb_shop_doors.extend(blacksmith_doors)
 
         # place dam and pyramid fairy, have limited options
-        # ToDo Dam might be behind fat fairy if we later check for this when placing crystal 5 and 6
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
         ret.append(connect_entrance(world, bomb_shop, 'Big Bomb Shop'))
-        dam = bomb_shop_doors.pop()
-        ret.append(connect_entrance(world, dam, 'Dam'))
         single_doors.extend(bomb_shop_doors)
 
         # tavern back door cannot be shuffled yet
@@ -180,12 +179,9 @@ def link_entrances(world):
         bomb_shop_doors.extend(blacksmith_doors)
 
         # place dam and pyramid fairy, have limited options
-        # ToDo Dam might be behind fat fairy if we later check for this when placing crystal 5 and 6
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
         ret.append(connect_entrance(world, bomb_shop, 'Big Bomb Shop'))
-        dam = bomb_shop_doors.pop()
-        ret.append(connect_entrance(world, dam, 'Dam'))
         single_doors.extend(bomb_shop_doors)
 
         # tavern back door cannot be shuffled yet
@@ -217,7 +213,7 @@ def link_entrances(world):
             caves.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
             lw_entrances.append('Hyrule Castle Entrance (South)')
 
-        if world.goal == 'ganon':
+        if not world.shuffle_ganon:
             ret.append(connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit'))
         else:
             dw_entrances.append('Ganons Tower')
@@ -261,12 +257,9 @@ def link_entrances(world):
         bomb_shop_doors.extend(blacksmith_doors)
 
         # place dam and pyramid fairy, have limited options
-        # ToDo Dam might be behind fat fairy if we later check for this when placing crystal 5 and 6
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
         ret.append(connect_entrance(world, bomb_shop, 'Big Bomb Shop'))
-        dam = bomb_shop_doors.pop()
-        ret.append(connect_entrance(world, dam, 'Dam'))
         single_doors.extend(bomb_shop_doors)
 
         # tavern back door cannot be shuffled yet
@@ -325,7 +318,7 @@ def link_entrances(world):
             hole_targets.append(('Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance'))
             lw_entrances.append('Hyrule Castle Secret Entrance Stairs')
 
-        if world.goal == 'ganon':
+        if not world.shuffle_ganon:
             ret.append(connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit'))
             ret.append(connect_two_way(world, 'Pyramid Entrance', 'Pyramid Exit'))
             ret.append(connect_entrance(world, 'Pyramid Hole', 'Pyramid'))
@@ -507,12 +500,9 @@ def link_entrances(world):
         bomb_shop_doors.extend(blacksmith_doors)
 
         # place dam and pyramid fairy, have limited options
-        # ToDo Dam might be behind fat fairy if we later check for this when placing crystal 5 and 6
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
         ret.append(connect_entrance(world, bomb_shop, 'Big Bomb Shop'))
-        dam = bomb_shop_doors.pop()
-        ret.append(connect_entrance(world, dam, 'Dam'))
         single_doors.extend(bomb_shop_doors)
 
         # tavern back door cannot be shuffled yet
@@ -557,7 +547,7 @@ def link_entrances(world):
             entrances.append('Hyrule Castle Secret Entrance Stairs')
             caves.append('Hyrule Castle Secret Entrance Exit')
 
-        if world.goal == 'ganon':
+        if not world.shuffle_ganon:
             ret.append(connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit'))
             ret.append(connect_two_way(world, 'Pyramid Entrance', 'Pyramid Exit'))
             ret.append(connect_entrance(world, 'Pyramid Hole', 'Pyramid'))
@@ -652,12 +642,9 @@ def link_entrances(world):
         bomb_shop_doors.extend(blacksmith_doors)
 
         # place dam and pyramid fairy, have limited options
-        # ToDo Dam might be behind fat fairy if we later check for this when placing crystal 5 and 6
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
         ret.append(connect_entrance(world, bomb_shop, 'Big Bomb Shop'))
-        dam = bomb_shop_doors.pop()
-        ret.append(connect_entrance(world, dam, 'Dam'))
         single_doors.extend(bomb_shop_doors)
 
         # tavern back door cannot be shuffled yet
@@ -750,7 +737,7 @@ def scramble_holes(world):
                     ('Lumberjack Tree Exit', 'Lumberjack Tree (top)'),
                     ('Sanctuary Exit', 'Sewer Drop')]
 
-    if world.goal == 'ganon':
+    if not world.shuffle_ganon:
         ret.append(connect_two_way(world, 'Pyramid Entrance', 'Pyramid Exit'))
         ret.append(connect_entrance(world, 'Pyramid Hole', 'Pyramid'))
     else:
@@ -883,7 +870,7 @@ def simple_shuffle_dungeons(world):
     dungeon_entrances = ['Eastern Palace', 'Tower of Hera', 'Thieves Town', 'Skull Woods Final Section', 'Palace of Darkness', 'Ice Palace', 'Misery Mire', 'Swamp Palace']
     dungeon_exits = ['Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Dark Palace Exit', 'Ice Palace Exit', 'Misery Mire Exit', 'Swamp Palace Exit']
 
-    if world.goal == 'ganon':
+    if not world.shuffle_ganon:
         ret.append(connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit'))
     else:
         dungeon_entrances.append('Ganons Tower')
@@ -1179,7 +1166,8 @@ Single_Cave_Targets = ['Thiefs Hut',
                        'Dark World Shop',
                        'Lumberjack House',
                        'Fortune Teller (Light)',
-                       'Kakariko Gamble Game']
+                       'Kakariko Gamble Game',
+                       'Dam']
 
 # these are connections that cannot be shuffled and always exist. They link together separate parts of the world we need to divide into regions
 mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
