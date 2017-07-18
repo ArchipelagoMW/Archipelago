@@ -83,8 +83,6 @@ def fill_dungeons(world):
 
     world.state._clear_cache()
 
-    return ''
-
 
 dungeon_music_addresses = {'Armos - Pendant': [0x1559A],
                            'Lanmolas - Pendant': [0x1559B, 0x1559C, 0x1559D, 0x1559E],

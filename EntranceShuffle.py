@@ -4,7 +4,6 @@ import random
 
 
 def link_entrances(world):
-    ret = []
     # setup mandatory connections
     for exitname, regionname in mandatory_connections:
         connect_simple(world, exitname, regionname)
@@ -17,20 +16,16 @@ def link_entrances(world):
             connect_simple(world, exitname, regionname)
 
     elif world.shuffle == 'dungeonssimple':
-        ret.append('Mixed Entrances:\n\n')
-
         for exitname, regionname in default_connections:
             connect_simple(world, exitname, regionname)
 
-        ret.append(simple_shuffle_dungeons(world))
+        simple_shuffle_dungeons(world)
 
     elif world.shuffle == 'dungeonsfull':
-        ret.append('Mixed Entrances:\n\n')
-
         for exitname, regionname in default_connections:
             connect_simple(world, exitname, regionname)
 
-        ret.append(skull_woods_shuffle(world))
+        skull_woods_shuffle(world)
 
         dungeon_exits = list(Dungeon_Exits)
         lw_entrances = list(LW_Dungeon_Entrances)
@@ -38,30 +33,28 @@ def link_entrances(world):
 
         if world.mode == 'standard':
             # must connect front of hyrule castle to do escape
-            ret.append(connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)'))
+            connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)')
         else:
             dungeon_exits.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
             lw_entrances.append('Hyrule Castle Entrance (South)')
 
         if not world.shuffle_ganon:
-            ret.append(connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit'))
+            connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit')
         else:
             dw_entrances.append('Ganons Tower')
             dungeon_exits.append('Ganons Tower Exit')
 
         if world.mode == 'standard':
             # rest of hyrule castle must be in light world to avoid fake darkworld stuff, so it has to be the one connected to east exit of desert
-            ret.append(connect_mandatory_exits(world, lw_entrances, [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')], list(LW_Dungeon_Entrances_Must_Exit)))
+            connect_mandatory_exits(world, lw_entrances, [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')], list(LW_Dungeon_Entrances_Must_Exit))
         else:
-            ret.append(connect_mandatory_exits(world, lw_entrances, dungeon_exits, list(LW_Dungeon_Entrances_Must_Exit)))
-        ret.append(connect_mandatory_exits(world, dw_entrances, dungeon_exits, list(DW_Dungeon_Entrances_Must_Exit)))
-        ret.append(connect_caves(world, lw_entrances, [], list(LW_Dungeon_Exits)))  # Agahnim must be light world
-        ret.append(connect_caves(world, lw_entrances, dw_entrances, dungeon_exits))
+            connect_mandatory_exits(world, lw_entrances, dungeon_exits, list(LW_Dungeon_Entrances_Must_Exit))
+        connect_mandatory_exits(world, dw_entrances, dungeon_exits, list(DW_Dungeon_Entrances_Must_Exit))
+        connect_caves(world, lw_entrances, [], list(LW_Dungeon_Exits))  # Agahnim must be light world
+        connect_caves(world, lw_entrances, dw_entrances, dungeon_exits)
 
     elif world.shuffle == 'simple':
-        ret.append('Mixed Entrances:\n\n')
-
-        ret.append(simple_shuffle_dungeons(world))
+        simple_shuffle_dungeons(world)
 
         old_man_entrances = list(Old_Man_Entrances)
         caves = list(Cave_Exits)
@@ -80,8 +73,8 @@ def link_entrances(world):
         while two_door_caves:
             entrance1, entrance2 = two_door_caves.pop()
             exit1, exit2 = caves.pop()
-            ret.append(connect_two_way(world, entrance1, exit1))
-            ret.append(connect_two_way(world, entrance2, exit2))
+            connect_two_way(world, entrance1, exit1)
+            connect_two_way(world, entrance2, exit2)
 
         # now the remaining pairs
         two_door_caves = list(Two_Door_Caves)
@@ -89,8 +82,8 @@ def link_entrances(world):
         while two_door_caves:
             entrance1, entrance2 = two_door_caves.pop()
             exit1, exit2 = caves.pop()
-            ret.append(connect_two_way(world, entrance1, exit1))
-            ret.append(connect_two_way(world, entrance2, exit2))
+            connect_two_way(world, entrance1, exit1)
+            connect_two_way(world, entrance2, exit2)
 
         # at this point only Light World death mountain entrances remain
         # place old man, has limited options
@@ -101,41 +94,39 @@ def link_entrances(world):
         remaining_entrances.extend(old_man_entrances)
         random.shuffle(remaining_entrances)
         old_man_entrance = remaining_entrances.pop()
-        ret.append(connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)'))
-        ret.append(connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)'))
+        connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)')
+        connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)')
 
         # add old man house to ensure it is alwayxs somewhere on light death mountain
         caves.append(('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)'))
         caves.extend(list(three_exit_caves))
 
         # connect rest
-        ret.append(connect_caves(world, remaining_entrances, [], caves))
+        connect_caves(world, remaining_entrances, [], caves)
 
         # scramble holes
-        ret.append(scramble_holes(world))
+        scramble_holes(world)
 
         # place blacksmith, has limited options
         random.shuffle(blacksmith_doors)
         blacksmith_hut = blacksmith_doors.pop()
-        ret.append(connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut'))
+        connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut')
         bomb_shop_doors.extend(blacksmith_doors)
 
         # place dam and pyramid fairy, have limited options
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
-        ret.append(connect_entrance(world, bomb_shop, 'Big Bomb Shop'))
+        connect_entrance(world, bomb_shop, 'Big Bomb Shop')
         single_doors.extend(bomb_shop_doors)
 
         # tavern back door cannot be shuffled yet
-        ret.append(connect_doors(world, ['Tavern North'], ['Tavern']))
+        connect_doors(world, ['Tavern North'], ['Tavern'])
 
         # place remaining doors
-        ret.append(connect_doors(world, single_doors, door_targets))
+        connect_doors(world, single_doors, door_targets)
 
     elif world.shuffle == 'restricted':
-        ret.append('Mixed Entrances:\n\n')
-
-        ret.append(simple_shuffle_dungeons(world))
+        simple_shuffle_dungeons(world)
 
         lw_entrances = list(LW_Entrances)
         dw_entrances = list(DW_Entrances)
@@ -149,7 +140,7 @@ def link_entrances(world):
         door_targets = list(Single_Cave_Targets)
 
         # only use two exit caves to do mandatory dw connections
-        ret.append(connect_mandatory_exits(world, dw_entrances, caves, dw_must_exits))
+        connect_mandatory_exits(world, dw_entrances, caves, dw_must_exits)
         # add three exit doors to pool for remainder
         caves.extend(three_exit_caves)
 
@@ -160,40 +151,38 @@ def link_entrances(world):
         lw_entrances.extend(old_man_entrances)
         random.shuffle(lw_entrances)
         old_man_entrance = lw_entrances.pop()
-        ret.append(connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)'))
-        ret.append(connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)'))
+        connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)')
+        connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)')
 
         # place Old Man House in Light World, so using the s&q point does not cause fake dark world
-        ret.append(connect_caves(world, lw_entrances, [], [('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)')]))
+        connect_caves(world, lw_entrances, [], [('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)')])
 
         # connect rest. There's 2 dw entrances remaining, so we will not run into parity issue placing caves
-        ret.append(connect_caves(world, lw_entrances, dw_entrances, caves))
+        connect_caves(world, lw_entrances, dw_entrances, caves)
 
         # scramble holes
-        ret.append(scramble_holes(world))
+        scramble_holes(world)
 
         # place blacksmith, has limited options
         random.shuffle(blacksmith_doors)
         blacksmith_hut = blacksmith_doors.pop()
-        ret.append(connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut'))
+        connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut')
         bomb_shop_doors.extend(blacksmith_doors)
 
         # place dam and pyramid fairy, have limited options
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
-        ret.append(connect_entrance(world, bomb_shop, 'Big Bomb Shop'))
+        connect_entrance(world, bomb_shop, 'Big Bomb Shop')
         single_doors.extend(bomb_shop_doors)
 
         # tavern back door cannot be shuffled yet
-        ret.append(connect_doors(world, ['Tavern North'], ['Tavern']))
+        connect_doors(world, ['Tavern North'], ['Tavern'])
 
         # place remaining doors
-        ret.append(connect_doors(world, single_doors, door_targets))
+        connect_doors(world, single_doors, door_targets)
 
     elif world.shuffle == 'full':
-        ret.append('Mixed Entrances:\n\n')
-
-        ret.append(skull_woods_shuffle(world))
+        skull_woods_shuffle(world)
 
         lw_entrances = list(LW_Entrances + LW_Dungeon_Entrances)
         dw_entrances = list(DW_Entrances + DW_Dungeon_Entrances)
@@ -208,28 +197,28 @@ def link_entrances(world):
 
         if world.mode == 'standard':
             # must connect front of hyrule castle to do escape
-            ret.append(connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)'))
+            connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)')
         else:
             caves.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
             lw_entrances.append('Hyrule Castle Entrance (South)')
 
         if not world.shuffle_ganon:
-            ret.append(connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit'))
+            connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit')
         else:
             dw_entrances.append('Ganons Tower')
             caves.append('Ganons Tower Exit')
 
         # we randomize which world requirements we fulfill first so we get better dungeon distribution
         if random.randint(0, 1) == 0:
-            ret.append(connect_mandatory_exits(world, lw_entrances, caves, lw_must_exits))
-            ret.append(connect_mandatory_exits(world, dw_entrances, caves, dw_must_exits))
+            connect_mandatory_exits(world, lw_entrances, caves, lw_must_exits)
+            connect_mandatory_exits(world, dw_entrances, caves, dw_must_exits)
         else:
-            ret.append(connect_mandatory_exits(world, dw_entrances, caves, dw_must_exits))
-            ret.append(connect_mandatory_exits(world, lw_entrances, caves, lw_must_exits))
+            connect_mandatory_exits(world, dw_entrances, caves, dw_must_exits)
+            connect_mandatory_exits(world, lw_entrances, caves, lw_must_exits)
         if world.mode == 'standard':
             # rest of hyrule castle must be in light world to avoid fake darkworld stuff
-            ret.append(connect_caves(world, lw_entrances, [], [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')]))
-        ret.append(connect_caves(world, lw_entrances, [], list(LW_Dungeon_Exits)))  # Agahnim must be light world
+            connect_caves(world, lw_entrances, [], [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')])
+        connect_caves(world, lw_entrances, [], list(LW_Dungeon_Exits))  # Agahnim must be light world
 
         # place old man, has limited options
         # exit has to come from specific set of doors, the entrance is free to move about
@@ -238,40 +227,38 @@ def link_entrances(world):
         lw_entrances.extend(old_man_entrances)
         random.shuffle(lw_entrances)
         old_man_entrance = lw_entrances.pop()
-        ret.append(connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)'))
-        ret.append(connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)'))
+        connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)')
+        connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)')
 
         # place Old Man House in Light World, so using the s&q point does not cause fake dark world
-        ret.append(connect_caves(world, lw_entrances, [], [('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)')]))
+        connect_caves(world, lw_entrances, [], [('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)')])
 
         # now scramble the rest
-        ret.append(connect_caves(world, lw_entrances, dw_entrances, caves))
+        connect_caves(world, lw_entrances, dw_entrances, caves)
 
         # scramble holes
-        ret.append(scramble_holes(world))
+        scramble_holes(world)
 
         # place blacksmith, has limited options
         random.shuffle(blacksmith_doors)
         blacksmith_hut = blacksmith_doors.pop()
-        ret.append(connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut'))
+        connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut')
         bomb_shop_doors.extend(blacksmith_doors)
 
         # place dam and pyramid fairy, have limited options
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
-        ret.append(connect_entrance(world, bomb_shop, 'Big Bomb Shop'))
+        connect_entrance(world, bomb_shop, 'Big Bomb Shop')
         single_doors.extend(bomb_shop_doors)
 
         # tavern back door cannot be shuffled yet
-        ret.append(connect_doors(world, ['Tavern North'], ['Tavern']))
+        connect_doors(world, ['Tavern North'], ['Tavern'])
 
         # place remaining doors
-        ret.append(connect_doors(world, single_doors, door_targets))
+        connect_doors(world, single_doors, door_targets)
 
     elif world.shuffle == 'madness':
         # here lie dragons, connections are no longer two way
-        ret.append('Mixed Entrances:\n\n')
-
         lw_entrances = list(LW_Entrances + LW_Dungeon_Entrances)
         dw_entrances = list(DW_Entrances + DW_Dungeon_Entrances)
         dw_entrances_must_exits = list(DW_Entrances_Must_Exit + DW_Dungeon_Entrances_Must_Exit)
@@ -310,18 +297,18 @@ def link_entrances(world):
 
         if world.mode == 'standard':
             # cannot move uncle cave
-            ret.append(connect_entrance(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance'))
-            ret.append(connect_exit(world, 'Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance Stairs'))
-            ret.append(connect_entrance(world, lw_doors.pop(), 'Hyrule Castle Secret Entrance Exit'))
+            connect_entrance(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance')
+            connect_exit(world, 'Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance Stairs')
+            connect_entrance(world, lw_doors.pop(), 'Hyrule Castle Secret Entrance Exit')
         else:
             lw_hole_entrances.append('Hyrule Castle Secret Entrance Drop')
             hole_targets.append(('Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance'))
             lw_entrances.append('Hyrule Castle Secret Entrance Stairs')
 
         if not world.shuffle_ganon:
-            ret.append(connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit'))
-            ret.append(connect_two_way(world, 'Pyramid Entrance', 'Pyramid Exit'))
-            ret.append(connect_entrance(world, 'Pyramid Hole', 'Pyramid'))
+            connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit')
+            connect_two_way(world, 'Pyramid Entrance', 'Pyramid Exit')
+            connect_entrance(world, 'Pyramid Hole', 'Pyramid')
         else:
             dw_entrances.append('Ganons Tower')
             caves.append('Ganons Tower Exit')
@@ -343,29 +330,29 @@ def link_entrances(world):
             sw_hole_pool = dw_hole_entrances
             mandatory_dark_world.append('Skull Woods First Section Exit')
         for target in ['Skull Woods First Section (Left)', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Top)']:
-            ret.append(connect_entrance(world, sw_hole_pool.pop(), target))
+            connect_entrance(world, sw_hole_pool.pop(), target)
 
         # sanctuary has to be in light world
-        ret.append(connect_entrance(world, lw_hole_entrances.pop(), 'Sewer Drop'))
+        connect_entrance(world, lw_hole_entrances.pop(), 'Sewer Drop')
         mandatory_light_world.append('Sanctuary Exit')
 
         # fill up remaining holes
         for hole in dw_hole_entrances:
             exits, target = hole_targets.pop()
             mandatory_dark_world.append(exits)
-            ret.append(connect_entrance(world, hole, target))
+            connect_entrance(world, hole, target)
 
         for hole in lw_hole_entrances:
             exits, target = hole_targets.pop()
             mandatory_light_world.append(exits)
-            ret.append(connect_entrance(world, hole, target))
+            connect_entrance(world, hole, target)
 
         # hyrule castle handling
         if world.mode == 'standard':
             # must connect front of hyrule castle to do escape
-            ret.append(connect_entrance(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)'))
+            connect_entrance(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)')
             random.shuffle(lw_entrances)
-            ret.append(connect_exit(world, 'Hyrule Castle Exit (South)', lw_entrances.pop()))
+            connect_exit(world, 'Hyrule Castle Exit (South)', lw_entrances.pop())
             mandatory_light_world.append(('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
         else:
             lw_doors.append('Hyrule Castle Entrance (South)')
@@ -404,8 +391,8 @@ def link_entrances(world):
 
             exit = cave[-1]
             cave = cave[:-1]
-            ret.append(connect_exit(world, exit, entrance))
-            ret.append(connect_entrance(world, worldoors.pop(), exit))
+            connect_exit(world, exit, entrance)
+            connect_entrance(world, worldoors.pop(), exit)
             # rest of cave now is forced to be in this world
             worldspecific.append(cave)
 
@@ -428,8 +415,8 @@ def link_entrances(world):
         lw_entrances.extend(old_man_entrances)
         random.shuffle(lw_entrances)
 
-        ret.append(connect_exit(world, 'Old Man Cave Exit (East)', old_man_exit))
-        ret.append(connect_entrance(world, lw_doors.pop(), 'Old Man Cave Exit (East)'))
+        connect_exit(world, 'Old Man Cave Exit (East)', old_man_exit)
+        connect_entrance(world, lw_doors.pop(), 'Old Man Cave Exit (East)')
         mandatory_light_world.append('Old Man Cave Exit (West)')
 
         # we connect up the mandatory associations we have found
@@ -438,18 +425,18 @@ def link_entrances(world):
                 mandatory = (mandatory,)
             for exit in mandatory:
                 # point out somewhere
-                ret.append(connect_exit(world, exit, lw_entrances.pop()))
+                connect_exit(world, exit, lw_entrances.pop())
                 # point in from somewhere
-                ret.append(connect_entrance(world, lw_doors.pop(), exit))
+                connect_entrance(world, lw_doors.pop(), exit)
 
         for mandatory in mandatory_dark_world:
             if not isinstance(mandatory, tuple):
                 mandatory = (mandatory,)
             for exit in mandatory:
                 # point out somewhere
-                ret.append(connect_exit(world, exit, dw_entrances.pop()))
+                connect_exit(world, exit, dw_entrances.pop())
                 # point in from somewhere
-                ret.append(connect_entrance(world, dw_doors.pop(), exit))
+                connect_entrance(world, dw_doors.pop(), exit)
 
         # handle remaining caves
         while caves:
@@ -483,8 +470,8 @@ def link_entrances(world):
                     target_entrances = dw_entrances
 
             for exit in cave:
-                ret.append(connect_exit(world, exit, target_entrances.pop()))
-                ret.append(connect_entrance(world, target_doors.pop(), exit))
+                connect_exit(world, exit, target_entrances.pop())
+                connect_entrance(world, target_doors.pop(), exit)
 
         # handle simple doors
 
@@ -496,24 +483,23 @@ def link_entrances(world):
         # place blacksmith, has limited options
         random.shuffle(blacksmith_doors)
         blacksmith_hut = blacksmith_doors.pop()
-        ret.append(connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut'))
+        connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut')
         bomb_shop_doors.extend(blacksmith_doors)
 
         # place dam and pyramid fairy, have limited options
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
-        ret.append(connect_entrance(world, bomb_shop, 'Big Bomb Shop'))
+        connect_entrance(world, bomb_shop, 'Big Bomb Shop')
         single_doors.extend(bomb_shop_doors)
 
         # tavern back door cannot be shuffled yet
-        ret.append(connect_doors(world, ['Tavern North'], ['Tavern']))
+        connect_doors(world, ['Tavern North'], ['Tavern'])
 
         # place remaining doors
-        ret.append(connect_doors(world, single_doors, door_targets))
+        connect_doors(world, single_doors, door_targets)
 
     elif world.shuffle == 'insanity':
         # beware ye who enter here
-        ret.append('Mixed Entrances:\n\n')
 
         entrances = LW_Entrances + LW_Dungeon_Entrances + DW_Entrances + DW_Dungeon_Entrances + ['Skull Woods Second Section Door (East)', 'Skull Woods First Section Door', 'Kakariko Well Cave', 'Bat Cave Cave', 'North Fairy Cave', 'Sanctuary', 'Thieves Forest Hideout Stump', 'Lumberjack Tree Cave', 'Hyrule Castle Entrance (South)']
         entrances_must_exits = DW_Entrances_Must_Exit + DW_Dungeon_Entrances_Must_Exit + LW_Dungeon_Entrances_Must_Exit + ['Skull Woods Second Section Door (West)']
@@ -538,9 +524,9 @@ def link_entrances(world):
 
         if world.mode == 'standard':
             # cannot move uncle cave
-            ret.append(connect_entrance(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance'))
-            ret.append(connect_exit(world, 'Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance Stairs'))
-            ret.append(connect_entrance(world, doors.pop(), 'Hyrule Castle Secret Entrance Exit'))
+            connect_entrance(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance')
+            connect_exit(world, 'Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance Stairs')
+            connect_entrance(world, doors.pop(), 'Hyrule Castle Secret Entrance Exit')
         else:
             hole_entrances.append('Hyrule Castle Secret Entrance Drop')
             hole_targets.append('Hyrule Castle Secret Entrance')
@@ -548,9 +534,9 @@ def link_entrances(world):
             caves.append('Hyrule Castle Secret Entrance Exit')
 
         if not world.shuffle_ganon:
-            ret.append(connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit'))
-            ret.append(connect_two_way(world, 'Pyramid Entrance', 'Pyramid Exit'))
-            ret.append(connect_entrance(world, 'Pyramid Hole', 'Pyramid'))
+            connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit')
+            connect_two_way(world, 'Pyramid Entrance', 'Pyramid Exit')
+            connect_entrance(world, 'Pyramid Hole', 'Pyramid')
         else:
             entrances.append('Ganons Tower')
             caves.extend(['Ganons Tower Exit', 'Pyramid Exit'])
@@ -565,13 +551,13 @@ def link_entrances(world):
 
         # fill up holes
         for hole in hole_entrances:
-            ret.append(connect_entrance(world, hole, hole_targets.pop()))
+            connect_entrance(world, hole, hole_targets.pop())
 
         # hyrule castle handling
         if world.mode == 'standard':
             # must connect front of hyrule castle to do escape
-            ret.append(connect_entrance(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)'))
-            ret.append(connect_exit(world, 'Hyrule Castle Exit (South)', entrances.pop()))
+            connect_entrance(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)')
+            connect_exit(world, 'Hyrule Castle Exit (South)', entrances.pop())
             caves.append(('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
         else:
             doors.append('Hyrule Castle Entrance (South)')
@@ -599,8 +585,8 @@ def link_entrances(world):
 
             exit = cave[-1]
             cave = cave[:-1]
-            ret.append(connect_exit(world, exit, entrance))
-            ret.append(connect_entrance(world, doors.pop(), exit))
+            connect_exit(world, exit, entrance)
+            connect_entrance(world, doors.pop(), exit)
             # rest of cave now is forced to be in this world
             caves.append(cave)
 
@@ -615,8 +601,8 @@ def link_entrances(world):
         entrances.extend(old_man_entrances)
         random.shuffle(entrances)
 
-        ret.append(connect_exit(world, 'Old Man Cave Exit (East)', old_man_exit))
-        ret.append(connect_entrance(world, doors.pop(), 'Old Man Cave Exit (East)'))
+        connect_exit(world, 'Old Man Cave Exit (East)', old_man_exit)
+        connect_entrance(world, doors.pop(), 'Old Man Cave Exit (East)')
         caves.append('Old Man Cave Exit (West)')
 
         # handle remaining caves
@@ -625,8 +611,8 @@ def link_entrances(world):
                 cave = (cave,)
 
             for exit in cave:
-                ret.append(connect_exit(world, exit, entrances.pop()))
-                ret.append(connect_entrance(world, doors.pop(), exit))
+                connect_exit(world, exit, entrances.pop())
+                connect_entrance(world, doors.pop(), exit)
 
         # handle simple doors
 
@@ -638,20 +624,20 @@ def link_entrances(world):
         # place blacksmith, has limited options
         random.shuffle(blacksmith_doors)
         blacksmith_hut = blacksmith_doors.pop()
-        ret.append(connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut'))
+        connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut')
         bomb_shop_doors.extend(blacksmith_doors)
 
         # place dam and pyramid fairy, have limited options
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
-        ret.append(connect_entrance(world, bomb_shop, 'Big Bomb Shop'))
+        connect_entrance(world, bomb_shop, 'Big Bomb Shop')
         single_doors.extend(bomb_shop_doors)
 
         # tavern back door cannot be shuffled yet
-        ret.append(connect_doors(world, ['Tavern North'], ['Tavern']))
+        connect_doors(world, ['Tavern North'], ['Tavern'])
 
         # place remaining doors
-        ret.append(connect_doors(world, single_doors, door_targets))
+        connect_doors(world, single_doors, door_targets)
 
     else:
         raise NotImplementedError('Shuffling not supported yet')
@@ -659,8 +645,6 @@ def link_entrances(world):
     # check for swamp palace fix
     if world.get_entrance('Dam').connected_region.name != 'Dam' or world.get_entrance('Swamp Palace').connected_region.name != 'Swamp Palace (Entrance)':
         world.swamp_patch_required = True
-
-    return '\n'.join(ret) + '\n\n'
 
 
 def connect_simple(world, exitname, regionname):
@@ -690,7 +674,7 @@ def connect_entrance(world, entrancename, exitname):
         vanilla = None
     
     entrance.connect(region, addresses, target, vanilla)
-    return '%s => %s' % (entrance.name, exit.name if exit is not None else region.name)
+    world.spoiler.set_entrance(entrance.name, exit.name if exit is not None else region.name, 'entrance')
 
 
 def connect_exit(world, exitname, entrancename):
@@ -702,7 +686,7 @@ def connect_exit(world, exitname, entrancename):
         exit.connected_region.entrances.remove(exit)
 
     exit.connect(entrance.parent_region, door_addresses[entrance.name][0][1], exit_ids[exit.name][1])
-    return '%s <= %s' % (entrance.name, exit.name)
+    world.spoiler.set_entrance(entrance.name, exit.name, 'exit')
 
 
 def connect_two_way(world, entrancename, exitname):
@@ -717,12 +701,10 @@ def connect_two_way(world, entrancename, exitname):
 
     entrance.connect(exit.parent_region, door_addresses[entrance.name][0][0], exit_ids[exit.name][0])
     exit.connect(entrance.parent_region, door_addresses[entrance.name][0][1], exit_ids[exit.name][1])
-    return '%s <=> %s' % (entrance.name, exit.name)
+    world.spoiler.set_entrance(entrance.name, exit.name, 'both')
 
 
 def scramble_holes(world):
-    ret = []
-
     hole_entrances = [('Kakariko Well Cave', 'Kakariko Well Drop'),
                       ('Bat Cave Cave', 'Bat Cave Drop'),
                       ('North Fairy Cave', 'North Fairy Cave Drop'),
@@ -738,16 +720,16 @@ def scramble_holes(world):
                     ('Sanctuary Exit', 'Sewer Drop')]
 
     if not world.shuffle_ganon:
-        ret.append(connect_two_way(world, 'Pyramid Entrance', 'Pyramid Exit'))
-        ret.append(connect_entrance(world, 'Pyramid Hole', 'Pyramid'))
+        connect_two_way(world, 'Pyramid Entrance', 'Pyramid Exit')
+        connect_entrance(world, 'Pyramid Hole', 'Pyramid')
     else:
         hole_entrances.append(('Pyramid Entrance', 'Pyramid Hole'))
         hole_targets.append(('Pyramid Exit', 'Pyramid'))
 
     if world.mode == 'standard':
         # cannot move uncle cave
-        ret.append(connect_two_way(world, 'Hyrule Castle Secret Entrance Stairs', 'Hyrule Castle Secret Entrance Exit'))
-        ret.append(connect_entrance(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance'))
+        connect_two_way(world, 'Hyrule Castle Secret Entrance Stairs', 'Hyrule Castle Secret Entrance Exit')
+        connect_entrance(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance')
     else:
         hole_entrances.append(('Hyrule Castle Secret Entrance Stairs', 'Hyrule Castle Secret Entrance Drop'))
         hole_targets.append(('Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance'))
@@ -755,30 +737,23 @@ def scramble_holes(world):
     random.shuffle(hole_targets)
     for entrance, drop in hole_entrances:
         exit, target = hole_targets.pop()
-        ret.append(connect_two_way(world, entrance, exit))
-        ret.append(connect_entrance(world, drop, target))
-
-    return '\n'.join(ret)
+        connect_two_way(world, entrance, exit)
+        connect_entrance(world, drop, target)
 
 
 def connect_random(world, exitlist, targetlist, two_way=False):
     targetlist = list(targetlist)
     random.shuffle(targetlist)
 
-    ret = []
-
     for exit, target in zip(exitlist, targetlist):
         if two_way:
-            ret.append(connect_two_way(world, exit, target))
+            connect_two_way(world, exit, target)
         else:
-            ret.append(connect_entrance(world, exit, target))
-
-    return '\n'.join(ret)
+            connect_entrance(world, exit, target)
 
 
 def connect_mandatory_exits(world, entrances, caves, must_be_exits):
     """This works inplace"""
-    ret = []
     random.shuffle(entrances)
     random.shuffle(caves)
     while must_be_exits:
@@ -805,15 +780,12 @@ def connect_mandatory_exits(world, entrances, caves, must_be_exits):
                 entrances.append(entrance)
                 entrance = new_entrance
 
-            ret.append(connect_two_way(world, entrance, cave[i]))
-        ret.append(connect_two_way(world, exit, cave[-1]))
-
-    return '\n'.join(ret)
+            connect_two_way(world, entrance, cave[i])
+        connect_two_way(world, exit, cave[-1])
 
 
 def connect_caves(world, lw_entrances, dw_entrances, caves):
     """This works inplace"""
-    ret = []
     random.shuffle(lw_entrances)
     random.shuffle(dw_entrances)
     random.shuffle(caves)
@@ -837,47 +809,40 @@ def connect_caves(world, lw_entrances, dw_entrances, caves):
             target = lw_entrances if target is dw_entrances else dw_entrances
 
         for exit in cave:
-            ret.append(connect_two_way(world, target.pop(), exit))
-
-    return '\n'.join(ret)
+            connect_two_way(world, target.pop(), exit)
 
 
 def connect_doors(world, doors, targets):
     """This works inplace"""
-    ret = []
     random.shuffle(doors)
     random.shuffle(targets)
     while doors:
         door = doors.pop()
         target = targets.pop()
-        ret.append(connect_entrance(world, door, target))
-
-    return '\n'.join(ret)
+        connect_entrance(world, door, target)
 
 
 def skull_woods_shuffle(world):
-    ret = connect_random(world, ['Skull Woods First Section Hole (East)', 'Skull Woods First Section Hole (West)', 'Skull Woods First Section Hole (North)', 'Skull Woods Second Section Hole'],
-                         ['Skull Woods First Section (Left)', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Top)', 'Skull Woods Second Section'])
-    return ret + '\n' + connect_random(world, ['Skull Woods First Section Door', 'Skull Woods Second Section Door (East)', 'Skull Woods Second Section Door (West)'],
-                                       ['Skull Woods First Section Exit', 'Skull Woods Second Section Exit (East)', 'Skull Woods Second Section Exit (West)'], True)
+    connect_random(world, ['Skull Woods First Section Hole (East)', 'Skull Woods First Section Hole (West)', 'Skull Woods First Section Hole (North)', 'Skull Woods Second Section Hole'],
+                   ['Skull Woods First Section (Left)', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Top)', 'Skull Woods Second Section'])
+    connect_random(world, ['Skull Woods First Section Door', 'Skull Woods Second Section Door (East)', 'Skull Woods Second Section Door (West)'],
+                   ['Skull Woods First Section Exit', 'Skull Woods Second Section Exit (East)', 'Skull Woods Second Section Exit (West)'], True)
 
 
 def simple_shuffle_dungeons(world):
-    ret = []
-
-    ret.append(skull_woods_shuffle(world))
+    skull_woods_shuffle(world)
 
     dungeon_entrances = ['Eastern Palace', 'Tower of Hera', 'Thieves Town', 'Skull Woods Final Section', 'Palace of Darkness', 'Ice Palace', 'Misery Mire', 'Swamp Palace']
     dungeon_exits = ['Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Dark Palace Exit', 'Ice Palace Exit', 'Misery Mire Exit', 'Swamp Palace Exit']
 
     if not world.shuffle_ganon:
-        ret.append(connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit'))
+        connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit')
     else:
         dungeon_entrances.append('Ganons Tower')
         dungeon_exits.append('Ganons Tower Exit')
 
     # shuffle up single entrance dungeons
-    ret.append(connect_random(world, dungeon_entrances, dungeon_exits, True))
+    connect_random(world, dungeon_entrances, dungeon_exits, True)
 
     # mix up 4 door dungeons
     multi_dungeons = ['Desert', 'Turtle Rock']
@@ -895,54 +860,52 @@ def simple_shuffle_dungeons(world):
 
     # ToDo improve this?
     if hc_target == 'Hyrule Castle':
-        ret.append(connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)'))
-        ret.append(connect_two_way(world, 'Hyrule Castle Entrance (East)', 'Hyrule Castle Exit (East)'))
-        ret.append(connect_two_way(world, 'Hyrule Castle Entrance (West)', 'Hyrule Castle Exit (West)'))
-        ret.append(connect_two_way(world, 'Agahnims Tower', 'Agahnims Tower Exit'))
+        connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)')
+        connect_two_way(world, 'Hyrule Castle Entrance (East)', 'Hyrule Castle Exit (East)')
+        connect_two_way(world, 'Hyrule Castle Entrance (West)', 'Hyrule Castle Exit (West)')
+        connect_two_way(world, 'Agahnims Tower', 'Agahnims Tower Exit')
     elif hc_target == 'Desert':
-        ret.append(connect_two_way(world, 'Desert Palace Entrance (South)', 'Hyrule Castle Exit (South)'))
-        ret.append(connect_two_way(world, 'Desert Palace Entrance (East)', 'Hyrule Castle Exit (East)'))
-        ret.append(connect_two_way(world, 'Desert Palace Entrance (West)', 'Hyrule Castle Exit (West)'))
-        ret.append(connect_two_way(world, 'Desert Palace Entrance (North)', 'Agahnims Tower Exit'))
+        connect_two_way(world, 'Desert Palace Entrance (South)', 'Hyrule Castle Exit (South)')
+        connect_two_way(world, 'Desert Palace Entrance (East)', 'Hyrule Castle Exit (East)')
+        connect_two_way(world, 'Desert Palace Entrance (West)', 'Hyrule Castle Exit (West)')
+        connect_two_way(world, 'Desert Palace Entrance (North)', 'Agahnims Tower Exit')
     elif hc_target == 'Turtle Rock':
-        ret.append(connect_two_way(world, 'Turtle Rock', 'Hyrule Castle Exit (South)'))
-        ret.append(connect_two_way(world, 'Turtle Rock Isolated Ledge Entrance', 'Hyrule Castle Exit (East)'))
-        ret.append(connect_two_way(world, 'Dark Death Mountain Ledge (West)', 'Hyrule Castle Exit (West)'))
-        ret.append(connect_two_way(world, 'Dark Death Mountain Ledge (East)', 'Agahnims Tower Exit'))
+        connect_two_way(world, 'Turtle Rock', 'Hyrule Castle Exit (South)')
+        connect_two_way(world, 'Turtle Rock Isolated Ledge Entrance', 'Hyrule Castle Exit (East)')
+        connect_two_way(world, 'Dark Death Mountain Ledge (West)', 'Hyrule Castle Exit (West)')
+        connect_two_way(world, 'Dark Death Mountain Ledge (East)', 'Agahnims Tower Exit')
 
     if dp_target == 'Hyrule Castle':
-        ret.append(connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Desert Palace Exit (South)'))
-        ret.append(connect_two_way(world, 'Hyrule Castle Entrance (East)', 'Desert Palace Exit (East)'))
-        ret.append(connect_two_way(world, 'Hyrule Castle Entrance (West)', 'Desert Palace Exit (West)'))
-        ret.append(connect_two_way(world, 'Agahnims Tower', 'Desert Palace Exit (North)'))
+        connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Desert Palace Exit (South)')
+        connect_two_way(world, 'Hyrule Castle Entrance (East)', 'Desert Palace Exit (East)')
+        connect_two_way(world, 'Hyrule Castle Entrance (West)', 'Desert Palace Exit (West)')
+        connect_two_way(world, 'Agahnims Tower', 'Desert Palace Exit (North)')
     elif dp_target == 'Desert':
-        ret.append(connect_two_way(world, 'Desert Palace Entrance (South)', 'Desert Palace Exit (South)'))
-        ret.append(connect_two_way(world, 'Desert Palace Entrance (East)', 'Desert Palace Exit (East)'))
-        ret.append(connect_two_way(world, 'Desert Palace Entrance (West)', 'Desert Palace Exit (West)'))
-        ret.append(connect_two_way(world, 'Desert Palace Entrance (North)', 'Desert Palace Exit (North)'))
+        connect_two_way(world, 'Desert Palace Entrance (South)', 'Desert Palace Exit (South)')
+        connect_two_way(world, 'Desert Palace Entrance (East)', 'Desert Palace Exit (East)')
+        connect_two_way(world, 'Desert Palace Entrance (West)', 'Desert Palace Exit (West)')
+        connect_two_way(world, 'Desert Palace Entrance (North)', 'Desert Palace Exit (North)')
     elif dp_target == 'Turtle Rock':
-        ret.append(connect_two_way(world, 'Turtle Rock', 'Desert Palace Exit (South)'))
-        ret.append(connect_two_way(world, 'Turtle Rock Isolated Ledge Entrance', 'Desert Palace Exit (East)'))
-        ret.append(connect_two_way(world, 'Dark Death Mountain Ledge (West)', 'Desert Palace Exit (West)'))
-        ret.append(connect_two_way(world, 'Dark Death Mountain Ledge (East)', 'Desert Palace Exit (North)'))
+        connect_two_way(world, 'Turtle Rock', 'Desert Palace Exit (South)')
+        connect_two_way(world, 'Turtle Rock Isolated Ledge Entrance', 'Desert Palace Exit (East)')
+        connect_two_way(world, 'Dark Death Mountain Ledge (West)', 'Desert Palace Exit (West)')
+        connect_two_way(world, 'Dark Death Mountain Ledge (East)', 'Desert Palace Exit (North)')
 
     if tr_target == 'Hyrule Castle':
-        ret.append(connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Turtle Rock Exit (Front)'))
-        ret.append(connect_two_way(world, 'Hyrule Castle Entrance (East)', 'Turtle Rock Ledge Exit (East)'))
-        ret.append(connect_two_way(world, 'Hyrule Castle Entrance (West)', 'Turtle Rock Ledge Exit (West)'))
-        ret.append(connect_two_way(world, 'Agahnims Tower', 'Turtle Rock Isolated Ledge Exit'))
+        connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Turtle Rock Exit (Front)')
+        connect_two_way(world, 'Hyrule Castle Entrance (East)', 'Turtle Rock Ledge Exit (East)')
+        connect_two_way(world, 'Hyrule Castle Entrance (West)', 'Turtle Rock Ledge Exit (West)')
+        connect_two_way(world, 'Agahnims Tower', 'Turtle Rock Isolated Ledge Exit')
     elif tr_target == 'Desert':
-        ret.append(connect_two_way(world, 'Desert Palace Entrance (South)', 'Turtle Rock Exit (Front)'))
-        ret.append(connect_two_way(world, 'Desert Palace Entrance (North)', 'Turtle Rock Ledge Exit (East)'))
-        ret.append(connect_two_way(world, 'Desert Palace Entrance (West)', 'Turtle Rock Ledge Exit (West)'))
-        ret.append(connect_two_way(world, 'Desert Palace Entrance (East)', 'Turtle Rock Isolated Ledge Exit'))
+        connect_two_way(world, 'Desert Palace Entrance (South)', 'Turtle Rock Exit (Front)')
+        connect_two_way(world, 'Desert Palace Entrance (North)', 'Turtle Rock Ledge Exit (East)')
+        connect_two_way(world, 'Desert Palace Entrance (West)', 'Turtle Rock Ledge Exit (West)')
+        connect_two_way(world, 'Desert Palace Entrance (East)', 'Turtle Rock Isolated Ledge Exit')
     elif tr_target == 'Turtle Rock':
-        ret.append(connect_two_way(world, 'Turtle Rock', 'Turtle Rock Exit (Front)'))
-        ret.append(connect_two_way(world, 'Turtle Rock Isolated Ledge Entrance', 'Turtle Rock Isolated Ledge Exit'))
-        ret.append(connect_two_way(world, 'Dark Death Mountain Ledge (West)', 'Turtle Rock Ledge Exit (West)'))
-        ret.append(connect_two_way(world, 'Dark Death Mountain Ledge (East)', 'Turtle Rock Ledge Exit (East)'))
-
-    return '\n'.join(ret)
+        connect_two_way(world, 'Turtle Rock', 'Turtle Rock Exit (Front)')
+        connect_two_way(world, 'Turtle Rock Isolated Ledge Entrance', 'Turtle Rock Isolated Ledge Exit')
+        connect_two_way(world, 'Dark Death Mountain Ledge (West)', 'Turtle Rock Ledge Exit (West)')
+        connect_two_way(world, 'Dark Death Mountain Ledge (East)', 'Turtle Rock Ledge Exit (East)')
 
 
 LW_Dungeon_Entrances = ['Desert Palace Entrance (South)',

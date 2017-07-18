@@ -1,5 +1,7 @@
 import copy
 import logging
+import json
+from collections import OrderedDict
 
 
 class World(object):
@@ -22,7 +24,6 @@ class World(object):
         self._entrance_cache = {}
         self._location_cache = {}
         self._item_cache = {}
-        self.spoiler = ''
         self.required_locations = []
         self.place_dungeon_items = place_dungeon_items  # configurable in future
         self.shuffle_bonk_prizes = False
@@ -44,6 +45,7 @@ class World(object):
         self.shuffle_ganon = shuffle_ganon
         self.fix_gtower_exit = self.shuffle_ganon
         self.can_access_trock_eyebridge = None
+        self.spoiler = Spoiler(self)
 
     def get_region(self, regionname):
         if isinstance(regionname, Region):
@@ -533,3 +535,55 @@ class Item(object):
 # have 6 address that need to be filled
 class Crystal(Item):
     pass
+
+
+class Spoiler(object):
+
+    def __init__(self, world):
+        self.world = world
+        self.entrances = []
+        self.medallions = {}
+        self.playthrough = {}
+        self.locations = {}
+        self.metadata = {}
+
+    def set_entrance(self, entrance, exit, direction):
+        self.entrances.append(OrderedDict([('entrance', entrance), ('exit', exit), ('direction', direction)]))
+
+    def parse_data(self):
+        self.medallions = OrderedDict([('Misery Mire', self.world.required_medallions[0]), ('Turtle Rock', self.world.required_medallions[1])])
+        self.locations = {'other locations': OrderedDict([(str(location), str(location.item)) if location.item is not None else 'Nothing' for location in self.world.get_locations()])}
+        from Main import __version__ as ERVersion
+        self.metadata = {'version': ERVersion,
+                         'seed': self.world.seed,
+                         'logic': self.world.logic,
+                         'mode': self.world.mode,
+                         'goal': self.world.goal,
+                         'shuffle': self.world.shuffle,
+                         'algorithm': self.world.algorithm}
+
+    def to_json(self):
+        self.parse_data()
+        out = OrderedDict()
+        out['entrances'] = self.entrances
+        out.update(self.locations)
+        out['medallions'] = self.medallions
+        out['playthrough'] = self.playthrough
+        out['meta'] = self.metadata
+        return json.dumps(out)
+
+    def to_file(self, filename):
+        self.parse_data()
+        with open(filename, 'w') as outfile:
+            outfile.write('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n' % (self.metadata['version'], self.metadata['seed']))
+            outfile.write('Logic: %s  Mode: %s  Goal: %s  Entrance Shuffle: %s  Filling Algorithm: %s' % (self.metadata['logic'], self.metadata['mode'], self.metadata['goal'], self.metadata['shuffle'], self.metadata['algorithm']))
+            if self.entrances:
+                outfile.write('\n\nEntrances:\n\n')
+                outfile.write('\n'.join(['%s %s %s' % (entry['entrance'], '<=>' if entry['direction'] == 'both' else '<=' if entry['direction'] == 'exit' else '=>', entry['exit']) for entry in self.entrances]))
+            outfile.write('\n\nMedallions')
+            outfile.write('\n\nMisery Mire Medallion: %s' % self.medallions['Misery Mire'])
+            outfile.write('\nTurtle Rock Medallion: %s' % self.medallions['Turtle Rock'])
+            outfile.write('\n\nLocations:\n\n')
+            outfile.write('\n'.join(['%s: %s' % (location, item) for (location, item) in self.locations['other locations'].items()]))
+            outfile.write('\n\nPlaythrough:\n\n')
+            outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(['  %s: %s' % (location, item) for (location, item) in sphere.items()])) for (sphere_nr, sphere) in self.playthrough.items()]))

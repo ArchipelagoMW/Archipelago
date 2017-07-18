@@ -5,6 +5,7 @@ from Rom import patch_rom, LocalRom, JsonRom
 from Rules import set_rules
 from Dungeons import fill_dungeons
 from Items import ItemFactory
+from collections import OrderedDict
 import random
 import time
 import logging
@@ -36,28 +37,25 @@ def main(args, seed=None):
         world.seed = int(seed)
     random.seed(world.seed)
 
-    world.spoiler += 'ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n' % (__version__, world.seed)
-    world.spoiler += 'Logic: %s  Mode: %s  Goal: %s  Entrance Shuffle: %s  Filling Algorithm: %s\n\n' % (args.logic, args.mode, args.goal, args.shuffle, args.algorithm)  # todo
-
-    logger.info(world.spoiler)
+    logger.info('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n' % (__version__, world.seed))
 
     create_regions(world)
 
     logger.info('Shuffling the World about.')
 
-    world.spoiler += link_entrances(world)
+    link_entrances(world)
 
     logger.info('Generating Item Pool.')
 
-    world.spoiler += generate_itempool(world)
+    generate_itempool(world)
 
     logger.info('Calculating Access Rules.')
 
-    world.spoiler += set_rules(world)
+    set_rules(world)
 
     logger.info('Placing Dungeon Items.')
 
-    world.spoiler += fill_dungeons(world)
+    fill_dungeons(world)
 
     logger.info('Fill the world.')
 
@@ -72,11 +70,9 @@ def main(args, seed=None):
     elif args.algorithm == 'restrictive':
         distribute_items_restrictive(world, 10 if world.goal is not 'starhunt' else 0)
 
-    world.spoiler += print_location_spoiler(world)
-
     logger.info('Calculating playthrough.')
 
-    world.spoiler += create_playthrough(world)
+    create_playthrough(world)
 
     logger.info('Patching ROM.')
 
@@ -94,13 +90,12 @@ def main(args, seed=None):
             rom = LocalRom(args.rom)
         patch_rom(world, rom, bytearray(logic_hash), args.quickswap, args.heartbeep, sprite)
         if args.jsonout:
-            print(json.dumps({'patch': rom.patches, 'spoiler': world.spoiler}))
+            print(json.dumps({'patch': rom.patches, 'spoiler': world.spoiler.to_json()}))
         else:
             rom.write_to_file(args.jsonout or '%s.sfc' % outfilebase)
 
     if args.create_spoiler and not args.jsonout:
-        with open('%s_Spoiler.txt' % outfilebase, 'w') as outfile:
-            outfile.write(world.spoiler)
+        world.spoiler.to_file('%s_Spoiler.txt' % outfilebase)
 
     logger.info('Done. Enjoy.')
     logger.debug('Total Time: %s' % (time.clock() - start))
@@ -523,8 +518,6 @@ def generate_itempool(world):
     tr_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
     world.required_medallions = (mm_medallion, tr_medallion)
 
-    return 'Misery Mire Medallion: %s\nTurtle Rock Medallion: %s\n\n' % (mm_medallion, tr_medallion)
-
 
 def copy_world(world):
     # ToDo: Not good yet
@@ -637,8 +630,5 @@ def create_playthrough(world):
     old_world.required_locations = [location.name for sphere in collection_spheres for location in sphere]
 
     # we can finally output our playthrough
-    return 'Playthrough:\n' + ''.join(['%s: {\n%s}\n' % (i + 1, ''.join(['  %s: %s\n' % (location, location.item) for location in sphere])) for i, sphere in enumerate(collection_spheres)]) + '\n'
+    old_world.spoiler.playthrough = OrderedDict([(str(i + 1), {str(location): str(location.item) for location in sphere}) for i, sphere in enumerate(collection_spheres)])
 
-
-def print_location_spoiler(world):
-    return 'Locations:\n\n' + '\n'.join(['%s: %s' % (location, location.item if location.item is not None else 'Nothing') for location in world.get_locations()]) + '\n\n'

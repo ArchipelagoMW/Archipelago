@@ -30,8 +30,6 @@ def set_rules(world):
     if not world.swamp_patch_required:
         add_rule(world.get_entrance('Swamp Palace Moat'), lambda state: state.has_Mirror())
 
-    return ''
-
 
 def set_rule(spot, rule):
     spot.access_rule = rule
