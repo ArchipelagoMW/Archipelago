@@ -431,16 +431,16 @@ def write_strings(rom, world):
     write_string_to_rom(rom, 'TavernMan', TavernMan_texts[random.randint(0, len(TavernMan_texts) - 1)])
 
     altaritem = world.get_location('Altar').item
-    altar_text = 'Some Hot Air' if altaritem is None else altaritem.altar_hint_text if altaritem.altar_hint_text is not None else 'Unknown Item.'
+    altar_text = 'Some Hot Air' if altaritem is None else altaritem.altar_hint_text if altaritem.altar_hint_text is not None else 'Unknown Item'
     write_string_to_rom(rom, 'Altar', altar_text)
-    altar_credit_text = 'and the Hot Air' if altaritem is None else altaritem.altar_credit_text if altaritem.altar_credit_text is not None else ' and the Unknown Item.'
+    altar_credit_text = 'and the Hot Air' if altaritem is None else altaritem.altar_credit_text if altaritem.altar_credit_text is not None else 'and the Unknown Item'
     write_credits_string_to_rom(rom, 'Altar', altar_credit_text)
 
     etheritem = world.get_location('Ether Tablet').item
-    ether_text = 'Some Hot Air' if etheritem is None else etheritem.altar_hint_text if etheritem.altar_hint_text is not None else 'Unknown Item.'
+    ether_text = 'Some Hot Air' if etheritem is None else etheritem.altar_hint_text if etheritem.altar_hint_text is not None else 'Unknown Item'
     write_string_to_rom(rom, 'EtherTablet', ether_text)
     bombositem = world.get_location('Bombos Tablet').item
-    bombos_text = 'Some Hot Air' if bombositem is None else bombositem.altar_hint_text if bombositem.altar_hint_text is not None else 'Unknown Item.'
+    bombos_text = 'Some Hot Air' if bombositem is None else bombositem.altar_hint_text if bombositem.altar_hint_text is not None else 'Unknown Item'
     write_string_to_rom(rom, 'BombosTablet', bombos_text)
 
     write_credits_string_to_rom(rom, 'KingsReturn', KingsReturn_texts[random.randint(0, len(KingsReturn_texts) - 1)])
