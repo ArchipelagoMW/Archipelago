@@ -39,25 +39,21 @@ def main(args, seed=None):
 
     random.seed(world.seed)
 
-    world.spoiler += 'ALttP Plandomizer Version %s  -  Seed: %s\n\n' % (__version__, args.plando)
-
-    logger.info(world.spoiler)
+    logger.info('ALttP Plandomizer Version %s  -  Seed: %s\n\n' % (__version__, args.plando))
 
     create_regions(world)
 
-    world.spoiler += link_entrances(world)
+    link_entrances(world)
 
     logger.info('Calculating Access Rules.')
 
-    world.spoiler += set_rules(world)
+    set_rules(world)
 
     logger.info('Fill the world.')
 
     text_patches = []
 
-    world.spoiler += fill_world(world, args.plando, text_patches)
-
-    world.spoiler += print_location_spoiler(world)
+    fill_world(world, args.plando, text_patches)
 
     if world.get_entrance('Dam').connected_region.name != 'Dam' or world.get_entrance('Swamp Palace').connected_region.name != 'Swamp Palace (Entrance)':
         world.swamp_patch_required = True
@@ -65,7 +61,7 @@ def main(args, seed=None):
     logger.info('Calculating playthrough.')
 
     try:
-        world.spoiler += create_playthrough(world)
+        create_playthrough(world)
     except RuntimeError:
         if args.ignore_unsolvable:
             pass
@@ -92,8 +88,7 @@ def main(args, seed=None):
 
     rom.write_to_file('%s.sfc' % outfilebase)
     if args.create_spoiler:
-        with open('%s_Spoiler.txt' % outfilebase, 'w') as outfile:
-            outfile.write(world.spoiler)
+        world.spoiler.to_file('%s_Spoiler.txt' % outfilebase)
 
     logger.info('Done. Enjoy.')
     logger.debug('Total Time: %s' % (time.clock() - start))
@@ -102,7 +97,6 @@ def main(args, seed=None):
 
 
 def fill_world(world, plando, text_patches):
-    ret = []
     mm_medallion = 'Ether'
     tr_medallion = 'Quake'
     logger = logging.getLogger('')
@@ -180,13 +174,13 @@ def fill_world(world, plando, text_patches):
                         location.event = True
             elif '<=>' in line:
                 entrance, exit = line.split('<=>', 1)
-                ret.append(connect_two_way(world, entrance.strip(), exit.strip()))
+                connect_two_way(world, entrance.strip(), exit.strip())
             elif '=>' in line:
                 entrance, exit = line.split('=>', 1)
-                ret.append(connect_entrance(world, entrance.strip(), exit.strip()))
+                connect_entrance(world, entrance.strip(), exit.strip())
             elif '<=' in line:
                 entrance, exit = line.split('<=', 1)
-                ret.append(connect_exit(world, exit.strip(), entrance.strip()))
+                connect_exit(world, exit.strip(), entrance.strip())
 
     world.required_medallions = (mm_medallion, tr_medallion)
 
@@ -195,15 +189,6 @@ def fill_world(world, plando, text_patches):
     world.get_location('Agahnim 1').item = ItemFactory('Beat Agahnim 1')
     world.get_location('Agahnim 2').event = True
     world.get_location('Agahnim 2').item = ItemFactory('Beat Agahnim 2')
-
-    ret.append('\nMisery Mire Medallion: %s' % mm_medallion)
-    ret.append('Turtle Rock Medallion: %s' % tr_medallion)
-    ret.append('\n')
-    return '\n'.join(ret)
-
-
-def print_location_spoiler(world):
-    return 'Locations:\n\n' + '\n'.join(['%s: %s' % (location, location.item if location.item is not None else 'Nothing') for location in world.get_locations()]) + '\n\n'
 
 
 if __name__ == '__main__':
