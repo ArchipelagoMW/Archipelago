@@ -27,7 +27,7 @@ def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon)
+    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap)
     logger = logging.getLogger('')
 
     if seed is None:
@@ -88,7 +88,7 @@ def main(args, seed=None):
             rom = JsonRom()
         else:
             rom = LocalRom(args.rom)
-        patch_rom(world, rom, bytearray(logic_hash), args.quickswap, args.heartbeep, sprite)
+        patch_rom(world, rom, bytearray(logic_hash), args.heartbeep, sprite)
         if args.jsonout:
             print(json.dumps({'patch': rom.patches, 'spoiler': world.spoiler.to_json()}))
         else:
@@ -520,7 +520,7 @@ def generate_itempool(world):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon)
+    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap)
     ret.required_medallions = list(world.required_medallions)
     ret.swamp_patch_required = world.swamp_patch_required
     ret.ganon_at_pyramid = world.ganon_at_pyramid

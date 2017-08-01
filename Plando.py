@@ -28,7 +28,7 @@ def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World('vanilla', 'noglitches', 'standard', 'normal', 'ganon', 'freshness', False, False, False)
+    world = World('vanilla', 'noglitches', 'standard', 'normal', 'ganon', 'freshness', False, False, False, args.quickswap)
     logger = logging.getLogger('')
 
     hasher = hashlib.md5()
@@ -76,7 +76,7 @@ def main(args, seed=None):
         sprite = None
 
     rom = LocalRom(args.rom)
-    patch_rom(world, rom, logic_hash, args.quickswap, args.heartbeep, sprite)
+    patch_rom(world, rom, logic_hash, args.heartbeep, sprite)
 
     for textname, texttype, text in text_patches:
         if texttype == 'text':

@@ -6,7 +6,7 @@ from collections import OrderedDict
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon):
+    def __init__(self, shuffle, logic, mode, difficulty, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
@@ -46,6 +46,7 @@ class World(object):
         self.shuffle_ganon = shuffle_ganon
         self.fix_gtower_exit = self.shuffle_ganon
         self.can_access_trock_eyebridge = None
+        self.quickswap = quickswap
         self.spoiler = Spoiler(self)
 
     def get_region(self, regionname):
@@ -562,7 +563,11 @@ class Spoiler(object):
                          'mode': self.world.mode,
                          'goal': self.world.goal,
                          'shuffle': self.world.shuffle,
-                         'algorithm': self.world.algorithm}
+                         'algorithm': self.world.algorithm,
+                         'difficulty': self.world.difficulty,
+                         'completeable': not self.world.check_beatable_only,
+                         'dungeonitems': self.world.place_dungeon_items,
+                         'quickswap': self.world.quickswap}
 
     def to_json(self):
         self.parse_data()
@@ -578,7 +583,14 @@ class Spoiler(object):
         self.parse_data()
         with open(filename, 'w') as outfile:
             outfile.write('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n' % (self.metadata['version'], self.metadata['seed']))
-            outfile.write('Logic: %s  Mode: %s  Goal: %s  Entrance Shuffle: %s  Filling Algorithm: %s' % (self.metadata['logic'], self.metadata['mode'], self.metadata['goal'], self.metadata['shuffle'], self.metadata['algorithm']))
+            outfile.write('Logic:                           %s\n' % self.metadata['logic'])
+            outfile.write('Mode:                            %s\n' % self.metadata['mode'])
+            outfile.write('Goal:                            %s\n' % self.metadata['goal'])
+            outfile.write('Entrance Shuffle:                %s\n' % self.metadata['shuffle'])
+            outfile.write('Filling Algorithm:               %s\n' % self.metadata['algorithm'])
+            outfile.write('All Locations Accessible:        %s\n' % ('Yes' if self.metadata['completeable'] else 'No, some locations may be unreachable'))
+            outfile.write('Maps and Compasses in Dungeons:  %s\n' % ('Yes' if self.metadata['dungeonitems'] else 'No'))
+            outfile.write('L\\R Quickswap enabled:           %s' % ('Yes' if self.metadata['quickswap'] else 'No'))
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
                 outfile.write('\n'.join(['%s %s %s' % (entry['entrance'], '<=>' if entry['direction'] == 'both' else '<=' if entry['direction'] == 'exit' else '=>', entry['exit']) for entry in self.entrances]))

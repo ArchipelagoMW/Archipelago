@@ -73,7 +73,7 @@ class LocalRom(object):
         self.write_bytes(0x7FDC, [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF])
 
 
-def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None):
+def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     # patch items
     for location in world.get_locations():
         itemid = location.item.code if location.item is not None else 0x5A
@@ -346,7 +346,7 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
         # todo fix screen scrolling
 
     # enable quick item swapping with L and R (ported by Amazing Ampharos)
-    if quickswap:
+    if world.quickswap:
         rom.write_bytes(0x107fb, [0x22, 0x50, 0xFF, 0x1F])
         rom.write_bytes(0x12451, [0x22, 0x50, 0xFF, 0x1F])
         rom.write_bytes(0xfff50, [0x20, 0x58, 0xFF, 0xA5, 0xF6, 0x29, 0x40, 0x6B, 0xA5, 0xF6, 0x89, 0x10, 0xF0, 0x03, 0x4C, 0x69,
