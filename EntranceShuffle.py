@@ -716,14 +716,12 @@ def scramble_holes(world):
                     ('Bat Cave Exit', 'Bat Cave (right)'),
                     ('North Fairy Cave Exit', 'North Fairy Cave'),
                     ('Thieves Forest Hideout Exit', 'Thieves Forest Hideout (top)'),
-                    ('Lumberjack Tree Exit', 'Lumberjack Tree (top)'),
-                    ('Sanctuary Exit', 'Sewer Drop')]
+                    ('Lumberjack Tree Exit', 'Lumberjack Tree (top)')]
 
     if not world.shuffle_ganon:
         connect_two_way(world, 'Pyramid Entrance', 'Pyramid Exit')
         connect_entrance(world, 'Pyramid Hole', 'Pyramid')
     else:
-        hole_entrances.append(('Pyramid Entrance', 'Pyramid Hole'))
         hole_targets.append(('Pyramid Exit', 'Pyramid'))
 
     if world.mode == 'standard':
@@ -733,6 +731,14 @@ def scramble_holes(world):
     else:
         hole_entrances.append(('Hyrule Castle Secret Entrance Stairs', 'Hyrule Castle Secret Entrance Drop'))
         hole_targets.append(('Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance'))
+
+    # do not shuffle sanctuary into pyramid hole
+    if world.shuffle_ganon:
+        random.shuffle(hole_targets)
+        exit, target = hole_targets.pop()
+        connect_two_way(world, 'Pyramid Entrance', exit)
+        connect_entrance(world, 'Pyramid Hole', target)
+    hole_targets.append(('Sanctuary Exit', 'Sewer Drop'))
 
     random.shuffle(hole_targets)
     for entrance, drop in hole_entrances:
