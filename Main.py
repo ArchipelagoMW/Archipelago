@@ -81,7 +81,7 @@ def main(args, seed=None):
     else:
         sprite = None
 
-    outfilebase = 'ER_%s_%s_%s_%s_%s_%s' % (world.mode, world.goal, world.shuffle, world.difficulty, world.algorithm, world.seed)
+    outfilebase = 'ER_%s_%s-%s-%s_%s-%s%s%s_%s' % (world.logic, world.difficulty, world.mode, world.goal, world.shuffle, world.algorithm, "-quickswap" if world.quickswap else "", "-shuffleganon" if world.shuffle_ganon else "", world.seed)
 
     if not args.suppress_rom:
         if args.jsonout:
