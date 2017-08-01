@@ -34,7 +34,7 @@ class World(object):
         self.treasure_hunt_count = 0
         self.treasure_hunt_icon = 'Power Star'
         self.clock_mode = 'off'
-        self.aga_randomness = False
+        self.aga_randomness = True
         self.lock_aga_door_in_escape = False
         self.fix_trock_doors = self.shuffle != 'vanilla'
         self.save_and_quite_from_boss = False
