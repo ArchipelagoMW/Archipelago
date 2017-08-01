@@ -41,13 +41,16 @@ The game can be completed without knowing how to perform glitches of any kind.
 May require Fake Flippers, Bunny Revival. (default: noglitches)
 
 ```
---mode [{standard,open}]
+--mode [{standard,open,swordless}]
 ```
 
 Select game mode. (default: standard)
 
-### Standard 
+### Standard
+
 Fixes Hyrule Castle Secret Entrance and Front Door, but may lead to weird rain state issues if you exit through the Hyrule Castle side exits before rescuing Zelda in a full shuffle.
+
+Gives lightcone in Hyrule Castle Sewers even without the Lamp.
 
 ### Open
 
@@ -59,15 +62,26 @@ Special notes:
 - Sewers do not get a free light cone.
 - It may be a while before you find a sword, think of other ways to do damage to enemies. (bombs are a great tool, as well as picking up bushes in over world).
 
+### Swordless
+
+This mode removes all swords from the itempool. Otherwise just like open.
+
+Special notes:
+
+- The Medallions to open Misery Mire and Turtle Rock can be used without a sword if you stand on the symbol.
+- The curtains in Skull Woods and Hyrule Castle Tower that normally require a sword to cut have been removed.
+- Ganon takes damage from the Hammer.
+- The magic barrier to Hyrule Castle Tower can be broken with a Hammer.
+
 ```
---goal [{ganon,pedestal,dungeons,starhunt,triforcehunt}]
+--goal [{ganon,pedestal,dungeons,triforcehunt,crystals}]
 ```
 
 Select completion goal.
 
 ### Ganon (Default)
 
-Standard game completion requiring you to collect the 7 crystals and defeat Ganon.
+Standard game completion requiring you to collect the 7 crystals, defeat Agahnim 2 and then beat Ganon.
 
 ### Pedestal 
 
@@ -75,15 +89,17 @@ Places the Triforce at the Master Sword Pedestal. Ganon cannot be damaged.
 
 ### All Dungeons 
 
-Ganon cannot be damaged until all dungeons (including Hyrule Castle Tower) are cleared.
-
-### Star Hunt
-
-15 Power Stars are placed in the world. Find 10 of them to finish the game. Ganon cannot be damaged.
+Ganon cannot be damaged until all dungeons (including Hyrule Castle Tower and Ganons Tower) are cleared.
 
 ### Triforce Hunt
 
-The triforce is broken into 3 pieces. Can you find all of them? Ganon cannot be damaged.
+30 Power Stars are placed in the world. Find 20 of them to finish the game. Ganon cannot be damaged.
+
+### Crystals
+
+Standard game completion requiring you to collect the 7 crystals and then beat Ganon.
+
+This is only noticeably different if the --shuffleganon option is enabled.
 
 ```
 --difficulty [{normal}]
@@ -92,12 +108,12 @@ The triforce is broken into 3 pieces. Can you find all of them? Ganon cannot be 
 Select game difficulty. Affects available itempool. (default: normal)
 
 ```
---algorithm [{freshness,flood,vt21,vt22,restrictive}]
+--algorithm [{freshness,flood,vt21,vt22,vt25}]
 ```
 
 Select item filling algorithm. 
 
-### Restrictive (Default)
+### VT25 (Default)
 Items and locations are shuffled and placed from the top of the lists. The only thing preventing an item from being placed into a spot
 is if is absolutely impossible to be there given the previous made placement choices. Leads to very uniform but guaranteed solvable distributions.
 
@@ -204,7 +220,7 @@ Use to select a different sprite sheet to use for Link. Path to a binary file of
 --beatableonly
 ```
 
-If set, will only ensure the goal can be achieved, but not necessarily that all locations are reachable. Currently only affects restrictive algorithm.
+If set, will only ensure the goal can be achieved, but not necessarily that all locations are reachable. Currently only affects VT25 algorithm.
 
 ```
 --shuffleganon
