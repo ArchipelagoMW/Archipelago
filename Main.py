@@ -416,8 +416,8 @@ def generate_itempool(world):
                                       'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp', 'Cape', 'Magic Powder',
                                       'Red Boomerang', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Silver Arrows'] +
                                      ['Sanctuary Heart Container'] + ['Rupees (100)'] * 2 + ['Boss Heart Container'] * 12 + ['Piece of Heart'] * 16 +
-                                     ['Rupees (50)'] * 8 + ['Rupees (300)'] * 5 + ['Rupees (20)'] * 4 +
-                                     ['Arrows (10)'] * 2 + ['Bombs (3)'] * 10 + ['Red Clock'] * 10 + ['Blue Clock'] * 10 + ['Green Clock'] * 20)
+                                     ['Rupees (50)'] * 8 + ['Rupees (300)'] * 6 + ['Rupees (20)'] * 4 +
+                                     ['Arrows (10)'] * 3 + ['Bombs (3)'] * 10 + ['Red Clock'] * 10 + ['Blue Clock'] * 10 + ['Green Clock'] * 20)
         world.clock_mode = 'stopwatch' if world.difficulty == 'timed' else 'countdown'
     elif world.difficulty == 'timed-ohko':
         world.itempool = ItemFactory(['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6 + ['Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] +
@@ -427,8 +427,8 @@ def generate_itempool(world):
                                       'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp', 'Cape', 'Magic Powder',
                                       'Red Boomerang', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Silver Arrows'] +
                                      ['Single Arrow', 'Sanctuary Heart Container'] + ['Rupees (100)'] * 3 + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24 +
-                                     ['Rupees (50)'] * 7 + ['Rupees (300)'] * 6 + ['Rupees (20)'] * 5 +
-                                     ['Arrows (10)'] * 4 + ['Bombs (3)'] * 10 + ['Green Clock'] * 25)
+                                     ['Rupees (50)'] * 7 + ['Rupees (300)'] * 7 + ['Rupees (20)'] * 5 +
+                                     ['Arrows (10)'] * 5 + ['Bombs (3)'] * 10 + ['Green Clock'] * 25)
         world.clock_mode = 'ohko'
     else:
         world.itempool = ItemFactory(['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6 + ['Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] +
@@ -438,8 +438,8 @@ def generate_itempool(world):
                                       'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp', 'Cape', 'Magic Powder',
                                       'Red Boomerang', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Silver Arrows'] +
                                      ['Single Arrow', 'Sanctuary Heart Container', 'Rupees (100)'] + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24 +
-                                     ['Rupees (50)'] * 7 + ['Rupees (5)'] * 4 + ['Rupee (1)'] * 2 + ['Rupees (300)'] * 4 + ['Rupees (20)'] * 28 +
-                                     ['Arrows (10)'] * 4 + ['Bombs (3)'] * 10)
+                                     ['Rupees (50)'] * 7 + ['Rupees (5)'] * 4 + ['Rupee (1)'] * 2 + ['Rupees (300)'] * 5 + ['Rupees (20)'] * 28 +
+                                     ['Arrows (10)'] * 5 + ['Bombs (3)'] * 10)
 
     if world.mode == 'swordless':
         world.push_item('Ether Tablet', ItemFactory('Rupees (20)'), False)
