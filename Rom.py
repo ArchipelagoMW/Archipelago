@@ -240,6 +240,7 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     # enable Waterfall fairy chests
     rom.write_bytes(0xE9AE, [0x14, 0x01])
     rom.write_bytes(0xE9CF, [0x14, 0x01])
+    rom.write_bytes(0x1F74F, [0x29, 0xBE, 0xF9, 0x51, 0xBE, 0xF9])
 
     # set swordless mode settings
     rom.write_byte(0x18003F, 0x01 if world.mode == 'swordless' else 0x00)  # hammer can harm ganon
