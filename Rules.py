@@ -295,7 +295,8 @@ def global_rules(world):
     set_rule(world.get_entrance('Ganons Tower Moldorm Door'), lambda state: state.has('Small Key (Ganons Tower)', 4))
     set_rule(world.get_entrance('Ganons Tower Moldorm Gap'), lambda state: state.has('Hookshot'))
     set_rule(world.get_location('Agahnim 2'), lambda state: state.has_sword() or state.has('Hammer') or state.has('Bug Catching Net'))
-    set_rule(world.get_entrance('Pyramid Hole'), lambda state: state.has('Beat Agahnim 2'))
+    set_rule(world.get_entrance('Pyramid Hole'), lambda state: state.has('Beat Agahnim 2') and state.has_Pearl())
+    set_rule(world.get_entrance('Pyramid Entrance'), lambda state: state.has_Pearl())
     for location in ['[dungeon-A2-1F] Ganons Tower - Big Chest', '[dungeon-A2-6F] Ganons Tower - Mini Helmasaur Room [left chest]', '[dungeon-A2-6F] Ganons Tower - Mini Helmasaur Room [right chest]',
                      '[dungeon-A2-6F] Ganons Tower - Room before Moldorm', '[dungeon-A2-6F] Ganons Tower - Moldorm Room']:
         forbid_item(world.get_location(location), 'Big Key (Ganons Tower)')
