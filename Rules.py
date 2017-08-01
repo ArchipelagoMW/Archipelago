@@ -165,7 +165,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Dark Death Mountain Ascend (Bottom)'), lambda state: state.has_Pearl())
     set_rule(world.get_entrance('Cave Shop (Dark Death Mountain)'), lambda state: state.has_Pearl())  # just for save bunny algo for now
     set_rule(world.get_entrance('Dark Death Mountain Ascend Exit (Bottom)'), lambda state: False)  # Cannot get to bottom exit from top. Just exists for shuffling
-    set_rule(world.get_location('[cave-055] Spike Cave'), lambda state: state.has('Hammer') and state.can_lift_rocks())  # damage should be survivable always somehow. MAY need more logic ToDo
+    set_rule(world.get_location('[cave-055] Spike Cave'), lambda state: state.has('Hammer') and state.can_lift_rocks() and (state.has('Cane of Byrna') or state.has('Cape')))
     set_rule(world.get_location('[cave-056] Hookshot Cave [top right chest]'), lambda state: state.has('Hookshot'))
     set_rule(world.get_location('[cave-056] Hookshot Cave [top left chest]'), lambda state: state.has('Hookshot'))
     set_rule(world.get_location('[cave-056] Hookshot Cave [bottom right chest]'), lambda state: state.has('Hookshot') or state.has('Pegasus Boots'))
@@ -213,7 +213,7 @@ def global_rules(world):
         forbid_item(world.get_location(location), 'Big Key (Swamp Palace)')
 
     set_rule(world.get_entrance('Thieves Town Big Key Door'), lambda state: state.has('Big Key (Thieves Town)'))
-    set_rule(world.get_entrance('Blind Fight'), lambda state: state.has('Small Key (Thieves Town)') and (state.has_blunt_weapon() or state.has('Cane of Somaria')))
+    set_rule(world.get_entrance('Blind Fight'), lambda state: state.has('Small Key (Thieves Town)') and (state.has_blunt_weapon() or state.has('Cane of Somaria') or state.has('Cane of Byrna')))
     set_rule(world.get_location('[dungeon-D4-B2] Thieves Town - Big Chest'), lambda state: state.has('Small Key (Thieves Town)') and state.has('Hammer'))
     set_rule(world.get_location('[dungeon-D4-1F] Thieves Town - Room above Boss'), lambda state: state.has('Small Key (Thieves Town)'))
     for location in ['[dungeon-D4-1F] Thieves Town - Room above Boss', '[dungeon-D4-B2] Thieves Town - Big Chest', '[dungeon-D4-B2] Thieves Town - Chest next to Blind', 'Blind - Heart Container']:
@@ -236,6 +236,7 @@ def global_rules(world):
 
     set_rule(world.get_entrance('Misery Mire Entrance Gap'), lambda state: (state.has_Boots() or state.has('Hookshot')) and (state.has_sword() or state.has('Fire Rod') or state.has('Ice Rod') or state.has('Hammer') or state.has('Cane of Somaria') or state.has('Bow')))  # need to defeat wizzrobes, bombs don't work ...
     set_rule(world.get_location('[dungeon-D6-B1] Misery Mire - Big Chest'), lambda state: state.has('Big Key (Misery Mire)'))
+    set_rule(world.get_location('[dungeon-D6-B1] Misery Mire - Spike Room'), lambda state: state.has('Cane of Byrna') or state.has('Cape'))
     set_rule(world.get_entrance('Misery Mire Big Key Door'), lambda state: state.has('Big Key (Misery Mire)'))
     # you can squander the free small key from the pot by opening the south door to the north west switch room, locking you out of accessing a color switch ...
     # big key gives backdoor access to that from the teleporter in the north west
@@ -262,6 +263,10 @@ def global_rules(world):
     set_rule(world.get_entrance('Turtle Rock Dark Room Staircase'), lambda state: state.has('Small Key (Turtle Rock)', 3))
     set_rule(world.get_entrance('Turtle Rock (Dark Room) (North)'), lambda state: state.has('Cane of Somaria'))
     set_rule(world.get_entrance('Turtle Rock (Dark Room) (South)'), lambda state: state.has('Cane of Somaria'))
+    set_rule(world.get_location('[dungeon-D7-B2] Turtle Rock - Eye Bridge Room [bottom left chest]'), lambda state: state.has('Cane of Byrna') or state.has('Cape'))
+    set_rule(world.get_location('[dungeon-D7-B2] Turtle Rock - Eye Bridge Room [bottom right chest]'), lambda state: state.has('Cane of Byrna') or state.has('Cape'))
+    set_rule(world.get_location('[dungeon-D7-B2] Turtle Rock - Eye Bridge Room [top left chest]'), lambda state: state.has('Cane of Byrna') or state.has('Cape'))
+    set_rule(world.get_location('[dungeon-D7-B2] Turtle Rock - Eye Bridge Room [top right chest]'), lambda state: state.has('Cane of Byrna') or state.has('Cape'))
     set_rule(world.get_entrance('Turtle Rock (Trinexx)'), lambda state: state.has('Small Key (Turtle Rock)', 4) and state.has('Big Key (Turtle Rock)') and state.has('Cane of Somaria') and state.has('Fire Rod') and state.has('Ice Rod') and
                                                                         (state.has('Hammer') or state.has_beam_sword() or state.has('Bottle') or state.has('Half Magic') or state.has('Quarter Magic')))
     set_trock_key_rules(world)

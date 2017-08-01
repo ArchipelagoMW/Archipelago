@@ -88,7 +88,7 @@ item_table = {'Bow': (True, False, False, False, 0x0B, 'You have\nchosen the\nar
               'Mirror Shield': (False, True, False, False, 0x06, 'Now you can\ndefend against\nlasers!', 'and the laser blocker', None, None, None, None),
               'Progressive Shield': (False, True, False, False, 0x5F, 'have a better\nblocker in\nfront of you', 'and the new shield', None, None, None, None),
               'Bug Catching Net': (False, True, False, False, 0x21, 'Let\'s catch\nsome bees and\nfaeries!', 'and the bee catcher', None, None, None, None),
-              'Cane of Byrna': (False, True, False, False, 0x18, 'Use this to\nbecome\ninvincible!', 'and the bad cane', None, None, None, None),
+              'Cane of Byrna': (True, False, False, False, 0x18, 'Use this to\nbecome\ninvincible!', 'and the bad cane', None, None, None, None),
               'Boss Heart Container': (False, False, False, False, 0x3E, 'Maximum health\nincreased!\nYeah!', 'and the love', None, None, None, None),
               'Sanctuary Heart Container': (False, False, False, False, 0x3F, 'Maximum health\nincreased!\nYeah!', 'and the love', None, None, None, None),
               'Piece of Heart': (False, False, False, False, 0x17, 'Just a little\npiece of love!', 'and the love', None, None, None, None),
