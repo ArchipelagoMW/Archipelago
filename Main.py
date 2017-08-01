@@ -523,6 +523,7 @@ def copy_world(world):
     ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon)
     ret.required_medallions = list(world.required_medallions)
     ret.swamp_patch_required = world.swamp_patch_required
+    ret.ganon_at_pyramid = world.ganon_at_pyramid
     ret.treasure_hunt_count = world.treasure_hunt_count
     ret.treasure_hunt_icon = world.treasure_hunt_icon
     ret.sewer_light_cone = world.sewer_light_cone

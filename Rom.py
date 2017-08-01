@@ -282,6 +282,7 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     rom.write_byte(0x180030, 0x00)  # Disable SRAM trace
     rom.write_byte(0x180036, 0x0A)  # Rupoor negative value
     rom.write_byte(0x180169, 0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
+    rom.write_byte(0x180170, 0x01 if world.ganon_at_pyramid else 0x00)  # Enable respawning on pyramid after ganon death
     rom.write_byte(0x180086, 0x00 if world.aga_randomness else 0x01)  # set blue ball and ganon warp randomness
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
     if world.goal in ['ganon']:

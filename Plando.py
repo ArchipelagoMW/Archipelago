@@ -150,6 +150,9 @@ def fill_world(world, plando, text_patches):
                     elif line.startswith('!check_beatable_only'):
                         _, chkbtstr = line.split(':', 1)
                         world.check_beatable_only = chkbtstr.strip().lower() == 'true'
+                    elif line.startswith('!ganon_death_pyramid_respawn'):
+                        _, gnpstr = line.split(':', 1)
+                        world.ganon_at_pyramid = gnpstr.strip().lower() == 'true'
                     elif line.startswith('!save_quit_boss'):
                         _, sqbstr = line.split(':', 1)
                         world.save_and_quite_from_boss = sqbstr.strip().lower() == 'true'
