@@ -39,18 +39,17 @@ if __name__ == '__main__':
                                         Bombos Tablet are unreachable but contain trash items
                                         always.                             
                              ''')
-    parser.add_argument('--goal', default='ganon', const='ganon', nargs='?', choices=['ganon', 'pedestal', 'dungeons', 'starhunt', 'triforcehunt'],
+    parser.add_argument('--goal', default='ganon', const='ganon', nargs='?', choices=['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'],
                         help='''\
                              Select completion goal. (default: %(default)s)
                              Ganon:         Collect all crystals, beat Agahnim 2 then 
                                             defeat Ganon.
+                             Crystals:      Collect all crystals then defeat Ganon.
                              Pedestal:      Places the Triforce at the Master Sword Pedestal.
                              All Dungeons:  Collect all crystals, pendants, beat both
                                             Agahnim fights and then defeat Ganon.
-                             Star Hunt:     Places 15 Power Stars in the world, collect 10 of
-                                            them to beat the game.
-                             Triforce Hunt: Places 3 Triforce Pieces in the world, collect
-                                            them all to beat the game.                             
+                             Triforce Hunt: Places 30 Triforce Pieces in the world, collect 
+                                            20 of them to beat the game.                           
                              ''')
     parser.add_argument('--difficulty', default='normal', const='normal', nargs='?', choices=['normal', 'timed', 'timed-ohko', 'timed-countdown'],
                         help='''\
@@ -72,10 +71,10 @@ if __name__ == '__main__':
                                               Timed mode. If time runs out, you lose (but can
                                               still keep playing).                             
                              ''')
-    parser.add_argument('--algorithm', default='restrictive', const='restrictive', nargs='?', choices=['freshness', 'flood', 'vt21', 'vt22', 'restrictive'],
+    parser.add_argument('--algorithm', default='vt25', const='vt25', nargs='?', choices=['freshness', 'flood', 'vt21', 'vt22', 'vt25'],
                         help='''\
                              Select item filling algorithm. (default: %(default)s)
-                             Restrictive: Shuffle items and place them in a random location
+                             vt25:        Shuffle items and place them in a random location
                                           that it is not impossible to be in.
                              vt21:        Unbiased in its selection, but has tendency to put
                                           Ice Rod in Turtle Rock.

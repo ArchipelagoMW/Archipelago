@@ -32,7 +32,7 @@ class World(object):
         self.light_world_light_cone = False
         self.dark_world_light_cone = False
         self.treasure_hunt_count = 0
-        self.treasure_hunt_icon = 'Power Star'
+        self.treasure_hunt_icon = 'Triforce Piece'
         self.clock_mode = 'off'
         self.aga_randomness = True
         self.lock_aga_door_in_escape = False
@@ -186,7 +186,7 @@ class World(object):
                         return True
                     elif location.item.name in ['Triforce Piece', 'Power Star']:
                         treasure_pieces_collected += 1
-                    if self.goal in ['starhunt', 'triforcehunt'] and treasure_pieces_collected >= self.treasure_hunt_count:
+                    if self.goal in ['triforcehunt'] and treasure_pieces_collected >= self.treasure_hunt_count:
                         return True
                     sphere.append(location)
 
@@ -205,10 +205,10 @@ class World(object):
         logic = 0 if self.logic == 'noglitches' else 1
         mode = ['standard', 'open', 'swordless'].index(self.mode)
         dungeonitems = 0 if self.place_dungeon_items else 1
-        goal = ['ganon', 'pedestal', 'dungeons', 'starhunt', 'triforcehunt'].index(self.goal)
+        goal = ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'].index(self.goal)
         shuffle = ['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'].index(self.shuffle)
         difficulty = ['normal', 'timed', 'timed-ohko', 'timed-countdown'].index(self.difficulty)
-        algorithm = ['freshness', 'flood', 'vt21', 'vt22', 'restrictive'].index(self.algorithm)
+        algorithm = ['freshness', 'flood', 'vt21', 'vt22', 'vt25'].index(self.algorithm)
         beatableonly = 1 if self.check_beatable_only else 0
         shuffleganon = 1 if self.shuffle_ganon else 0
         return logic | (beatableonly << 1) | (dungeonitems << 2) | (shuffleganon << 3) | (goal << 4) | (shuffle << 7) | (difficulty << 11) | (algorithm << 13) | (mode << 16)

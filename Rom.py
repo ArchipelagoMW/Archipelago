@@ -285,11 +285,13 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
     rom.write_byte(0x180086, 0x00 if world.aga_randomness else 0x01)  # set blue ball and ganon warp randomness
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
     if world.goal in ['ganon']:
-        rom.write_byte(0x18003E, 0x03)  # make ganon invincible until all crystals are collected
-    elif world.goal in ['pedestal', 'starhunt', 'triforcehunt']:
+        rom.write_byte(0x18003E, 0x03)  # make ganon invincible until all crystals and aga 2 are collected
+    elif world.goal in ['pedestal', 'triforcehunt']:
         rom.write_byte(0x18003E, 0x01)  # make ganon invincible
     elif world.goal in ['dungeons']:
         rom.write_byte(0x18003E, 0x02)  # make ganon invincible until all dungeons are beat
+    elif world.goal in ['crystals']:
+        rom.write_byte(0x18003E, 0x04)  # make ganon invincible until all crystals
     rom.write_byte(0x18016A, 0x00)  # disable free roaming item text boxes
     rom.write_byte(0x18003B, 0x00)  # disable maps showing crystals on overworld
     rom.write_byte(0x18003C, 0x00)  # disable compasses showing dungeon count
@@ -425,7 +427,7 @@ def write_strings(rom, world):
     write_string_to_rom(rom, 'PyramidFairy', PyramidFairy_texts[random.randint(0, len(PyramidFairy_texts) - 1)])
     write_string_to_rom(rom, 'Sahasrahla2', Sahasrahla2_texts[random.randint(0, len(Sahasrahla2_texts) - 1)])
     write_string_to_rom(rom, 'Blind', Blind_texts[random.randint(0, len(Blind_texts) - 1)])
-    if world.goal in ['pedestal', 'starhunt', 'triforcehunt']:
+    if world.goal in ['pedestal', 'triforcehunt']:
         write_string_to_rom(rom, 'Ganon1Invincible', 'Why are you even here?\n You can\'t even hurt me!')
         write_string_to_rom(rom, 'Ganon2Invincible', 'Seriously? Go Away, I will not Die.')
     else:

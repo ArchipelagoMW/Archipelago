@@ -67,7 +67,7 @@ def main(args, seed=None):
         distribute_items_cutoff(world, 0.66)
     elif args.algorithm == 'freshness':
         distribute_items_staleness(world)
-    elif args.algorithm == 'restrictive':
+    elif args.algorithm == 'vt25':
         distribute_items_restrictive(world, 0)
 
     logger.info('Calculating playthrough.')
@@ -398,7 +398,7 @@ def flood_items(world):
 
 
 def generate_itempool(world):
-    if world.difficulty not in ['normal', 'timed', 'timed-ohko', 'timed-countdown'] or world.goal not in ['ganon', 'pedestal', 'dungeons', 'starhunt', 'triforcehunt'] or world.mode not in ['open', 'standard', 'swordless']:
+    if world.difficulty not in ['normal', 'timed', 'timed-ohko', 'timed-countdown'] or world.goal not in ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'] or world.mode not in ['open', 'standard', 'swordless']:
         raise NotImplementedError('Not supported yet')
 
     world.push_item('Ganon', ItemFactory('Triforce'), False)
@@ -463,14 +463,10 @@ def generate_itempool(world):
 
     if world.goal == 'pedestal':
         world.push_item('Altar', ItemFactory('Triforce'), False)
-    elif world.goal == 'starhunt':
-        world.treasure_hunt_count = 10
-        world.treasure_hunt_icon = 'Power Star'
-        world.itempool.extend(ItemFactory(['Power Star'] * 15))
     elif world.goal == 'triforcehunt':
-        world.treasure_hunt_count = 3
+        world.treasure_hunt_count = 20
         world.treasure_hunt_icon = 'Triforce Piece'
-        world.itempool.extend(ItemFactory(['Triforce Piece'] * 3))
+        world.itempool.extend(ItemFactory(['Triforce Piece'] * 30))
 
     if random.randint(0, 3) == 0:
         world.itempool.append(ItemFactory('Magic Upgrade (1/4)'))
@@ -568,7 +564,7 @@ def create_playthrough(world):
     world = copy_world(world)
 
     # in treasure hunt and pedestal goals, ganon is invincible
-    if world.goal in ['pedestal', 'starhunt', 'triforcehunt']:
+    if world.goal in ['pedestal', 'triforcehunt']:
         world.get_location('Ganon').item = None
 
     # if we only check for beatable, we can do this sanity check first before writing down spheres
