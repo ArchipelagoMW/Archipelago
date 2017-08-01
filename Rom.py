@@ -8,7 +8,7 @@ import hashlib
 import logging
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '25832b6a4a6f80543ee6eaa850682152'
+RANDOMIZERBASEHASH = '472a3b55c48688306774109a8ed53137'
 
 
 class JsonRom(object):
@@ -365,7 +365,7 @@ def patch_rom(world, rom, hashtable, quickswap=False, beep='normal', sprite=None
 
     # set rom name
     # 21 bytes
-    rom.write_bytes(0x7FC0, bytearray('ER_045_%09d_' % world.seed, 'utf8') + world.option_identifier.to_bytes(4, 'big'))
+    rom.write_bytes(0x7FC0, bytearray('ER_046_%09d_' % world.seed, 'utf8') + world.option_identifier.to_bytes(4, 'big'))
 
     # set heart beep rate
     rom.write_byte(0x180033, {'off': 0x00, 'half': 0x40, 'quarter': 0x80, 'normal': 0x20}[beep])
