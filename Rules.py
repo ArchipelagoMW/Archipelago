@@ -293,7 +293,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Ganons Tower (Map Room)'), lambda state: state.has('Small Key (Ganons Tower)', 3) or (state.world.get_location('[dungeon-A2-1F] Ganons Tower - Map Room').item is not None and state.world.get_location('[dungeon-A2-1F] Ganons Tower - Map Room').item.name == 'Small Key (Ganons Tower)'))
     set_rule(world.get_entrance('Ganons Tower (Double Switch Room)'), lambda state: state.has('Small Key (Ganons Tower)', 2))
     set_rule(world.get_entrance('Ganons Tower (Firesnake Room)'), lambda state: state.has('Small Key (Ganons Tower)', 3))
-    set_rule(world.get_entrance('Ganons Tower (Tile Room) Key Door'), lambda state: state.has('Small Key (Ganons Tower)', 3))  # possibly too pessimistic
+    set_rule(world.get_entrance('Ganons Tower (Tile Room) Key Door'), lambda state: state.has('Small Key (Ganons Tower)', 3) and state.has('Fire Rod'))  # possibly too pessimistic
     set_rule(world.get_location('[dungeon-A2-1F] Ganons Tower - Big Chest'), lambda state: state.has('Big Key (Ganons Tower)'))
     set_rule(world.get_location('[dungeon-A2-B1] Ganons Tower - Armos Room [left chest]'), lambda state: state.has('Bow') or state.has_blunt_weapon())
     set_rule(world.get_location('[dungeon-A2-B1] Ganons Tower - Armos Room [bottom chest]'), lambda state: state.has('Bow') or state.has_blunt_weapon())
