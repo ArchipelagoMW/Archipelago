@@ -371,6 +371,8 @@ def no_glitches_rules(world):
 
     if not world.sewer_light_cone:
         add_rule(world.get_location('[dungeon-C-B1] Escape - First B1 Room'), lambda state: state.has('Lamp'))
+        add_rule(world.get_entrance('Sewers Back Door'), lambda state: state.has('Lamp'))
+        add_rule(world.get_entrance('Throne Room'), lambda state: state.has('Lamp'))
 
 
 def open_rules(world):
