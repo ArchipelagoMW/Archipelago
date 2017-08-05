@@ -45,13 +45,13 @@ def main(args, seed=None):
 
     link_entrances(world)
 
-    logger.info('Generating Item Pool.')
-
-    generate_itempool(world)
-
     logger.info('Calculating Access Rules.')
 
     set_rules(world)
+
+    logger.info('Generating Item Pool.')
+
+    generate_itempool(world)
 
     logger.info('Placing Dungeon Items.')
 
@@ -257,6 +257,50 @@ def distribute_items_staleness(world):
     logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s' % ([item.name for item in itempool], [location.name for location in fill_locations]))
 
 
+def fill_restrictive(world, base_state, locations, itempool):
+    def sweep_from_pool():
+        new_state = base_state.copy()
+        for item in itempool:
+            new_state.collect(item, True)
+        new_state.sweep_for_events()
+        return new_state
+
+    while itempool and locations:
+        item_to_place = itempool.pop()
+        maximum_exploration_state = sweep_from_pool()
+
+        spot_to_fill = None
+        for location in locations:
+            if location.item_rule(item_to_place):
+                if world.check_beatable_only:
+                    starting_state = base_state.copy()
+                    for item in itempool:
+                        starting_state.collect(item, True)
+
+                if maximum_exploration_state.can_reach(location):
+                    if world.check_beatable_only:
+                        starting_state.collect(item_to_place, True)
+                    else:
+                        spot_to_fill = location
+                        break
+
+                if world.check_beatable_only and world.can_beat_game(starting_state):
+                    spot_to_fill = location
+                    break
+
+        if spot_to_fill is None:
+            # we filled all reachable spots. Maybe the game can be beaten anyway?
+            if world.can_beat_game():
+                if not world.check_beatable_only:
+                    logging.getLogger('').warning('Not all items placed. Game beatable anyway.')
+                break
+            raise RuntimeError('No more spots to place %s' % item_to_place)
+
+        world.push_item(spot_to_fill, item_to_place, False)
+        locations.remove(spot_to_fill)
+        spot_to_fill.event = True
+
+
 def distribute_items_restrictive(world, gftower_trash_count=0):
     # get list of locations to fill in
     fill_locations = world.get_unfilled_locations()
@@ -280,47 +324,7 @@ def distribute_items_restrictive(world, gftower_trash_count=0):
 
     random.shuffle(fill_locations)
 
-    def sweep_from_pool():
-        new_state = world.state.copy()
-        for item in progitempool:
-            new_state.collect(item, True)
-        new_state.sweep_for_events()
-        return new_state
-
-    while progitempool and fill_locations:
-        item_to_place = progitempool.pop()
-        maximum_exploration_state = sweep_from_pool()
-
-        spot_to_fill = None
-        for location in fill_locations:
-            if location.item_rule(item_to_place):
-                if world.check_beatable_only:
-                    starting_state = world.state.copy()
-                    for item in progitempool:
-                        starting_state.collect(item, True)
-
-                if maximum_exploration_state.can_reach(location):
-                    if world.check_beatable_only:
-                        starting_state.collect(item_to_place, True)
-                    else:
-                        spot_to_fill = location
-                        break
-
-                if world.check_beatable_only and world.can_beat_game(starting_state):
-                    spot_to_fill = location
-                    break
-
-        if spot_to_fill is None:
-            # we filled all reachable spots. Maybe the game can be beaten anyway?
-            if world.can_beat_game():
-                if not world.check_beatable_only:
-                    logging.getLogger('').warning('Not all items placed. Game beatable anyway.')
-                break
-            raise RuntimeError('No more spots to place %s' % item_to_place)
-
-        world.push_item(spot_to_fill, item_to_place, False)
-        fill_locations.remove(spot_to_fill)
-        spot_to_fill.event = True
+    fill_restrictive(world, world.state, fill_locations, progitempool)
 
     random.shuffle(fill_locations)
 
@@ -473,49 +477,20 @@ def generate_itempool(world):
     else:
         world.itempool.append(ItemFactory('Magic Upgrade (1/2)'))
 
-    # distribute crystals
-    crystals = ItemFactory(['Green Pendant', 'Red Pendant', 'Blue Pendant'])
-    crystal_locations = [world.get_location('Trinexx - Crystal')]
-    random.shuffle(crystals)
-    if world.shuffle_ganon:
-        # ensure that no crystal gets locked inside of ganons tower location as that is unsolvable
-        for region, crystallocation in [('Eastern Palace', 'Armos - Pendant'), ('Desert Palace North', 'Lanmolas - Pendant'), ('Tower of Hera (Bottom)', 'Moldorm - Pendant'),
-                                        ('Dark Palace (Entrance)', 'Helmasaur - Crystal'), ('Thieves Town (Entrance)', 'Blind - Crystal'), ('Skull Woods Final Section (Entrance)', 'Mothula - Crystal'),
-                                        ('Swamp Palace (Entrance)', 'Arrghus - Crystal'), ('Ice Palace (Entrance)', 'Kholdstare - Crystal'), ('Misery Mire (Entrance)', 'Vitreous - Crystal')]:
-            if world.get_entrance('Ganons Tower').connected_region.name == region:
-                # can't place a crystal here
-                world.push_item(world.get_location(crystallocation), crystals.pop(), False)
-                world.get_location(crystallocation).event = True
-            else:
-                crystal_locations.append(world.get_location(crystallocation))
-    else:
-        crystal_locations += [world.get_location('Armos - Pendant'), world.get_location('Lanmolas - Pendant'), world.get_location('Moldorm - Pendant'), world.get_location('Helmasaur - Crystal'),
-                             world.get_location('Blind - Crystal'), world.get_location('Mothula - Crystal'), world.get_location('Arrghus - Crystal'), world.get_location('Kholdstare - Crystal'),
-                             world.get_location('Vitreous - Crystal')]
-
-    crystals.extend(ItemFactory(['Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7']))
-    random.shuffle(crystals)
-
-    # check if dam is behind pyramid fairy, if so, swamp can't hold a crystal
-    if world.get_entrance('Pyramid Fairy').connected_region.name == 'Dam':
-        try:
-            crystallocation = crystal_locations.pop(crystal_locations.index(world.get_location('Arrghus - Crystal')))
-            world.push_item(world.get_location(crystallocation), crystals.pop(), False)
-            crystallocation.event = True
-        except ValueError:
-            pass
-
-    crystals.extend(ItemFactory(['Crystal 5', 'Crystal 6']))
-    random.shuffle(crystals)
-
-    for location, crystal in zip(crystal_locations, crystals):
-        world.push_item(location, crystal, False)
-        location.event = True
-
     # shuffle medallions
     mm_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
     tr_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
     world.required_medallions = (mm_medallion, tr_medallion)
+
+    # distribute crystals
+    crystals = ItemFactory(['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6'])
+    crystal_locations = [world.get_location('Trinexx - Crystal'), world.get_location('Armos - Pendant'), world.get_location('Lanmolas - Pendant'), world.get_location('Moldorm - Pendant'), world.get_location('Helmasaur - Crystal'),
+                         world.get_location('Blind - Crystal'), world.get_location('Mothula - Crystal'), world.get_location('Arrghus - Crystal'), world.get_location('Kholdstare - Crystal'),
+                         world.get_location('Vitreous - Crystal')]
+
+    random.shuffle(crystal_locations)
+
+    fill_restrictive(world, world.get_all_state(keys=True), crystal_locations, crystals)
 
 
 def copy_world(world):

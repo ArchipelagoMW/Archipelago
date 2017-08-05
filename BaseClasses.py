@@ -87,7 +87,7 @@ class World(object):
                         return r_location
         raise RuntimeError('No such location %s' % location)
 
-    def get_all_state(self):
+    def get_all_state(self, keys=False):
         ret = CollectionState(self)
         
         def soft_collect(item):
@@ -111,11 +111,17 @@ class World(object):
                     else:
                         ret.prog_items.append('Power Glove')
 
-            elif item.advancement:
+            elif item.advancement or item.key:
                 ret.prog_items.append(item.name)
 
         for item in self.itempool:
             soft_collect(item)
+        if keys:
+            from Items import ItemFactory
+            for item in ItemFactory(['Small Key (Escape)', 'Big Key (Eastern Palace)', 'Big Key (Desert Palace)', 'Small Key (Desert Palace)', 'Big Key (Tower of Hera)', 'Small Key (Tower of Hera)', 'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)',
+                                     'Big Key (Palace of Darkness)'] + ['Small Key (Palace of Darkness)'] * 6 + ['Big Key (Thieves Town)', 'Small Key (Thieves Town)', 'Big Key (Skull Woods)'] + ['Small Key (Skull Woods)'] * 3 + ['Big Key (Swamp Palace)',
+                                     'Small Key (Swamp Palace)', 'Big Key (Ice Palace)'] + ['Small Key (Ice Palace)'] * 2 + ['Big Key (Misery Mire)', 'Big Key (Turtle Rock)', 'Big Key (Ganons Tower)'] + ['Small Key (Misery Mire)'] * 3 + ['Small Key (Turtle Rock)'] * 4 + ['Small Key (Ganons Tower)'] * 4):
+                soft_collect(item)
         ret.sweep_for_events()
         ret._clear_cache()
         return ret
