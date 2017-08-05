@@ -1,10 +1,9 @@
 from Items import ItemFactory
 import random
-from BaseClasses import CollectionState
 
 
 def fill_dungeons(world):
-    ES = (['Hyrule Castle'], None, [ItemFactory('Small Key (Escape)')], [ItemFactory('Map (Escape)')])
+    ES = (['Hyrule Castle', 'Sewers', 'Sewers (Dark)', 'Sanctuary'], None, [ItemFactory('Small Key (Escape)')], [ItemFactory('Map (Escape)')])
     EP = (['Eastern Palace'], ItemFactory('Big Key (Eastern Palace)'), [], ItemFactory(['Map (Eastern Palace)', 'Compass (Eastern Palace)']))
     DP = (['Desert Palace North', 'Desert Palace Main', 'Desert Palace East'], ItemFactory('Big Key (Desert Palace)'), [ItemFactory('Small Key (Desert Palace)')], ItemFactory(['Map (Desert Palace)', 'Compass (Desert Palace)']))
     ToH = (['Tower of Hera (Bottom)', 'Tower of Hera (Basement)', 'Tower of Hera (Top)'], ItemFactory('Big Key (Tower of Hera)'), [ItemFactory('Small Key (Tower of Hera)')], ItemFactory(['Map (Tower of Hera)', 'Compass (Tower of Hera)']))
@@ -22,11 +21,8 @@ def fill_dungeons(world):
 
     all_state_base = world.get_all_state()
 
-    # this key is in a fixed location (for now)
-    mandatory_sw_key_location = random.choice(['[dungeon-D3-B1] Skull Woods - South of Big Chest'] if world.shuffle != 'vanilla' else ['[dungeon-D3-B1] Skull Woods - South of Big Chest', '[dungeon-D3-B1] Skull Woods - Push Statue Room', '[dungeon-D3-B1] Skull Woods - Compass Room'])
-
-    world.push_item(world.get_location(mandatory_sw_key_location), ItemFactory('Small Key (Skull Woods)'), False)
-    world.get_location(mandatory_sw_key_location).event = True
+    world.push_item(world.get_location('[dungeon-D3-B1] Skull Woods - South of Big Chest'), ItemFactory('Small Key (Skull Woods)'), False)
+    world.get_location('[dungeon-D3-B1] Skull Woods - South of Big Chest').event = True
 
     dungeons = [TR, ES, EP, DP, ToH, AT, PoD, TT, SW, IP, MM, GT, SP]
     for dungeon in dungeons:

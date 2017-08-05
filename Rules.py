@@ -327,10 +327,8 @@ def no_glitches_rules(world):
     set_rule(world.get_entrance('7 Chest Cave Push Block Reverse'), lambda state: False)  # no glitches does not require block override
     set_rule(world.get_entrance('7 Chest Cave Bomb Jump'), lambda state: False)
 
-    # if pyramid hole leads to big chest hole in skull woods, skull woods holds a crystal and ganon's tower is vanilla, the SW big chest cannot hold a small key
-    if world.get_entrance('Pyramid Hole').connected_region.name == 'Skull Woods First Section (Top)' and world.get_entrance('Ganons Tower').connected_region.name == 'Ganons Tower (Entrance)' and\
-        'Crystal' in world.get_location('Mothula - Crystal').item.name:
-            forbid_item(world.get_location('[dungeon-D3-B1] Skull Woods - Big Chest'), 'Small Key (Skull Woods')
+    # need to be able to drop into hole to reach big chest, bombjumps are not expected
+    add_rule(world.get_location('[dungeon-D3-B1] Skull Woods - Big Chest'), lambda state: state.can_reach('Skull Woods First Section (Top)', 'Region'))
 
     # Light cones in standard depend on which world we actually are in, not which one the location would normally be
     # We add Lamp requirements only to those locations which lie in the dark world (or everything if open
@@ -376,7 +374,9 @@ def no_glitches_rules(world):
 
 
 def open_rules(world):
-    pass
+    # softlock protection as you can reach the sewers small key door with a guard drop key
+    forbid_item(world.get_location('[dungeon-C-B1] Hyrule Castle - Boomerang Room'), 'Small Key (Escape)')
+    forbid_item(world.get_location('[dungeon-C-B1] Hyrule Castle - Next To Zelda'), 'Small Key (Escape)')
 
 
 def swordless_rules(world):
@@ -402,6 +402,8 @@ def standard_rules(world):
 
 
 def set_trock_key_rules(world):
+    # ToDo If only second section entrance is available, we may very well run out of valid key locations currently.
+
     # this is good enough to allow even key distribution but may still prevent certain valid item combinations from being placed
 
     all_state = world.get_all_state()
