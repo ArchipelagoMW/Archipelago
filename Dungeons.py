@@ -25,13 +25,11 @@ def fill_dungeons(world):
     world.get_location('[dungeon-D3-B1] Skull Woods - South of Big Chest').event = True
 
     dungeons = [TR, ES, EP, DP, ToH, AT, PoD, TT, SW, IP, MM, GT, SP]
-    for dungeon in dungeons:
-        if world.get_entrance('Ganons Tower').connected_region.name in dungeon[0]:
-            dungeons.pop(dungeons.index(dungeon))
-            dungeons.append(dungeon)
-            break
 
-    for dungeon_regions, big_key, small_keys, dungeon_items in dungeons:
+    loopcnt = 0
+    while dungeons:
+        loopcnt += 1
+        dungeon_regions, big_key, small_keys, dungeon_items = dungeons.pop(0)
         # this is what we need to fill
         dungeon_locations = [location for location in world.get_unfilled_locations() if location.parent_region.name in dungeon_regions]
         random.shuffle(dungeon_locations)
@@ -53,9 +51,11 @@ def fill_dungeons(world):
             bk_location.event = True
             dungeon_locations.remove(bk_location)
             all_state._clear_cache()
+            big_key = None
 
         # next place small keys
-        for small_key in small_keys:
+        while small_keys:
+            small_key = small_keys.pop()
             all_state.sweep_for_events()
             sk_location = None
             for location in dungeon_locations:
@@ -64,12 +64,23 @@ def fill_dungeons(world):
                     break
 
             if sk_location is None:
-                raise RuntimeError('No suitable location for %s' % small_key)
+                # need to retry this later
+                small_keys.append(small_key)
+                dungeons.append((dungeon_regions, big_key, small_keys, dungeon_items))
+                # infinite regression protection
+                if loopcnt < 30:
+                    break
+                else:
+                    raise RuntimeError('No suitable location for %s' % small_key)
 
             world.push_item(sk_location, small_key, False)
             sk_location.event = True
             dungeon_locations.remove(sk_location)
             all_state._clear_cache()
+
+        if small_keys:
+            # key placement not finished, loop again
+            continue
 
         # next place dungeon items
         if world.place_dungeon_items:
