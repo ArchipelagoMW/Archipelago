@@ -36,8 +36,7 @@ if __name__ == '__main__':
                                         Agahnim\'s Tower barrier can be destroyed with
                                         hammer. Misery Mire and Turtle Rock can be opened
                                         without a sword. Hammer damages Ganon. Ether and
-                                        Bombos Tablet are unreachable but contain trash items
-                                        always.                             
+                                        Bombos Tablet can be activated with Hammer (and Book).                             
                              ''')
     parser.add_argument('--goal', default='ganon', const='ganon', nargs='?', choices=['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'],
                         help='''\

@@ -252,12 +252,16 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
                               202, 33, 98, 255, 38, 131, 187, 35, 250, 195, 35, 250, 187, 43, 250, 195, 43, 250, 187, 83, 250, 195, 83, 250, 176, 160, 61, 152, 19, 192, 152, 82,
                               192, 136, 0, 96, 144, 0, 96, 232, 0, 96, 240, 0, 96, 152, 202, 192, 216, 202, 192, 216, 19, 192, 216, 82, 192, 252, 189, 133, 253, 29, 135, 255,
                               255, 255, 255, 240, 255, 128, 46, 97, 14, 129, 14, 255, 255])
+    # set Waterfall fairy prizes to be disappointing
+    rom.write_byte(0x348DB, 0x3A)  # Red Boomerang becomes Red Boomerang
+    rom.write_byte(0x348EB, 0x05)  # Blue Shield becomes Blue Shield
 
     # set swordless mode settings
     rom.write_byte(0x18003F, 0x01 if world.mode == 'swordless' else 0x00)  # hammer can harm ganon
     rom.write_byte(0x180040, 0x01 if world.mode == 'swordless' else 0x00)  # open curtains
     rom.write_byte(0x180041, 0x01 if world.mode == 'swordless' else 0x00)  # swordless medallions
     rom.write_byte(0x180043, 0xFF if world.mode == 'swordless' else 0x00)  # starting sword for link
+    rom.write_byte(0x180044, 0x01 if world.mode == 'swordless' else 0x00)  # hammer activates tablets
 
     # set up clocks for timed modes
     if world.clock_mode == 'off':

@@ -158,9 +158,7 @@ def generate_itempool(world):
                                      ['Arrows (10)'] * 5 + ['Bombs (3)'] * 10)
 
     if world.mode == 'swordless':
-        world.push_item('Ether Tablet', ItemFactory('Rupees (20)'), False)
-        world.push_item('Bombos Tablet', ItemFactory('Rupees (20)'), False)
-        world.itempool.extend(ItemFactory(['Rupees (20)', 'Rupees (20)']))
+        world.itempool.extend(ItemFactory(['Rupees (20)'] * 4))
     elif world.mode == 'standard':
         world.push_item('Uncle', ItemFactory('Progressive Sword'), False)
         world.get_location('Uncle').event = True
@@ -184,10 +182,7 @@ def generate_itempool(world):
         world.treasure_hunt_icon = 'Triforce Piece'
         world.itempool.extend(ItemFactory(['Triforce Piece'] * 30))
 
-    if random.randint(0, 3) == 0:
-        world.itempool.append(ItemFactory('Magic Upgrade (1/4)'))
-    else:
-        world.itempool.append(ItemFactory('Magic Upgrade (1/2)'))
+    world.itempool.append(ItemFactory('Magic Upgrade (1/2)'))   
 
     # shuffle medallions
     mm_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]

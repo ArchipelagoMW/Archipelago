@@ -372,6 +372,18 @@ class CollectionState(object):
                 else:
                     self.prog_items.append('Power Glove')
                     changed = True
+            elif 'Shield' in item.name:
+                if self.has('Mirror Shield'):
+                    pass
+                elif self.has('Red Shield'):
+                    self.prog_items.append('Mirror Shield')
+                    changed = True
+                elif self.has('Blue Shield'):
+                    self.prog_items.append('Red Shield')
+                    changed = True
+                else:
+                    self.prog_items.append('Blue Shield')
+                    changed = True
 
         elif event or item.advancement:
             self.prog_items.append(item.name)
