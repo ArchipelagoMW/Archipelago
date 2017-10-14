@@ -360,6 +360,14 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_byte(0x15E25, 0xA4)
         # todo fix screen scrolling
 
+    #enable instant item menu
+    if world.fastmenu: 
+        rom.write_byte(0x180048, 0x01)
+        # Sound twekas for fastmenu:
+        rom.write_byte(0x6DD9A, 0x20)
+        rom.write_byte(0x6DF2A, 0x20)
+        rom.write_byte(0x6E0E9, 0x20)
+    
     # enable quick item swapping with L and R (ported by Amazing Ampharos)
     if world.quickswap:
         rom.write_bytes(0x107fb, [0x22, 0x50, 0xFF, 0x1F])

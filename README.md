@@ -204,6 +204,12 @@ If --seed is provided, it will be used for the first seed, then used to derive t
 Use to enable quick item swap with L/R buttons. (default: False)
 
 ```
+--fastmenu
+```
+
+As an alternative to quickswap, opens menu instantly. (default: False)
+
+```
 --nodungeonitems
 ```
 

@@ -124,6 +124,7 @@ if __name__ == '__main__':
                              --seed given will produce the same 10 (different) roms each
                              time).                               
                              ''', type=int)
+    parser.add_argument('--fastmenu', help='Enable instant menu', action='store_true')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--nodungeonitems', help='''\
                              Remove Maps and Compasses from Itempool, replacing them by

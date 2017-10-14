@@ -19,6 +19,8 @@ def guiMain(args=None):
     suppressRomCheckbutton = Checkbutton(checkBoxFrame, text="Do not create patched Rom", variable=suppressRomVar)
     quickSwapVar = IntVar()
     quickSwapCheckbutton = Checkbutton(checkBoxFrame, text="Enabled L/R Item quickswapping", variable=quickSwapVar)
+    fastMenuVar = IntVar()
+    fastMenuCheckbutton = Checkbutton(checkBoxFrame, text="Enable instant menu", variable=fastMenuVar)
     dungeonItemsVar = IntVar()
     dungeonItemsCheckbutton = Checkbutton(checkBoxFrame, text="Place Dungeon Items (Compasses/Maps)", onvalue=0, offvalue=1, variable=dungeonItemsVar)
     beatableOnlyVar = IntVar()
@@ -29,6 +31,7 @@ def guiMain(args=None):
     createSpoilerCheckbutton.pack(expand=True, anchor=W)
     suppressRomCheckbutton.pack(expand=True, anchor=W)
     quickSwapCheckbutton.pack(expand=True, anchor=W)
+    fastMenuCheckbutton.pack(expand=True, anchor=W)
     dungeonItemsCheckbutton.pack(expand=True, anchor=W)
     beatableOnlyCheckbutton.pack(expand=True, anchor=W)
     shuffleGanonCheckbutton.pack(expand=True, anchor=W)
@@ -159,6 +162,7 @@ def guiMain(args=None):
         guiargs.suppress_rom = bool(suppressRomVar.get())
         guiargs.nodungeonitems = bool(dungeonItemsVar.get())
         guiargs.beatableonly = bool(beatableOnlyVar.get())
+        guiargs.fastmenu = bool(fastMenuVar.get())
         guiargs.quickswap = bool(quickSwapVar.get())
         guiargs.shuffleganon = bool(shuffleGanonVar.get())
         guiargs.rom = romVar.get()
@@ -197,6 +201,7 @@ def guiMain(args=None):
         if args.nodungeonitems:
             dungeonItemsVar.set(int(not args.nodungeonitems))
         beatableOnlyVar.set(int(args.beatableonly))
+        fastMenuVar.set(int(args.fastmenu))
         quickSwapVar.set(int(args.quickswap))
         if args.count:
             countVar.set(str(args.count))
