@@ -1,5 +1,6 @@
 from Items import ItemFactory
 from BaseClasses import Dungeon
+from Fill import fill_restrictive
 import random
 
 
@@ -103,7 +104,6 @@ def fill_dungeons(world):
 
 
 def fill_dungeons_restrictive(world):
-    from Main import fill_restrictive
     all_state_base = world.get_all_state()
 
     world.push_item(world.get_location('[dungeon-D3-B1] Skull Woods - South of Big Chest'), ItemFactory('Small Key (Skull Woods)'), False)
@@ -111,15 +111,15 @@ def fill_dungeons_restrictive(world):
 
     shuffled_locations=world.get_unfilled_locations()
     random.shuffle(shuffled_locations)
-    
+
     dungeon_items = [item for dungeon in world.dungeons for item in dungeon.all_items]
-    
-    #sort in the order Big Key, Small Key, Other before placing dungeon items
-    sort_order={"BigKey":3,"SmallKey":2};
-    dungeon_items.sort(key=lambda item:sort_order.get(item.type, 1) )
-    
+
+    # sort in the order Big Key, Small Key, Other before placing dungeon items
+    sort_order = {"BigKey": 3, "SmallKey": 2}
+    dungeon_items.sort(key=lambda item: sort_order.get(item.type, 1))
+
     fill_restrictive(world, all_state_base, shuffled_locations, dungeon_items)
-    
+
     world.state._clear_cache()
 
 
