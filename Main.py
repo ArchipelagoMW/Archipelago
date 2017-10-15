@@ -3,7 +3,7 @@ from Regions import create_regions
 from EntranceShuffle import link_entrances
 from Rom import patch_rom, LocalRom, JsonRom
 from Rules import set_rules
-from Dungeons import create_dungeons, fill_dungeons
+from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
 from Items import ItemFactory
 from collections import OrderedDict
 import random
@@ -56,7 +56,10 @@ def main(args, seed=None):
 
     logger.info('Placing Dungeon Items.')
 
-    fill_dungeons(world)
+    if args.algorithm == 'vt26':
+        fill_dungeons_restrictive(world)
+    else:
+        fill_dungeons(world)
 
     logger.info('Fill the world.')
 
@@ -70,6 +73,8 @@ def main(args, seed=None):
         distribute_items_staleness(world)
     elif args.algorithm == 'vt25':
         distribute_items_restrictive(world, 0)
+    elif args.algorithm == 'vt26':
+        distribute_items_restrictive(world, random.randint(0, 15))
 
     logger.info('Calculating playthrough.')
 

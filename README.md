@@ -113,7 +113,12 @@ Select game difficulty. Affects available itempool. (default: normal)
 
 Select item filling algorithm. 
 
-### VT25 (Default)
+### VT26 (Default)
+Items and locations are shuffled like in VT25, and dungeon items are now placed using the same algorithm. It includes 
+a slight deliberate bias against having too many desireable items in Ganon's Tower to help counterbalance the sheer number
+of chests in that single location.
+
+### VT25 
 Items and locations are shuffled and placed from the top of the lists. The only thing preventing an item from being placed into a spot
 is if is absolutely impossible to be there given the previous made placement choices. Leads to very uniform but guaranteed solvable distributions.
 

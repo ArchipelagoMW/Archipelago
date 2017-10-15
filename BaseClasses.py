@@ -217,7 +217,7 @@ class World(object):
         goal = ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'].index(self.goal)
         shuffle = ['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'].index(self.shuffle)
         difficulty = ['normal', 'timed', 'timed-ohko', 'timed-countdown'].index(self.difficulty)
-        algorithm = ['freshness', 'flood', 'vt21', 'vt22', 'vt25'].index(self.algorithm)
+        algorithm = ['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26'].index(self.algorithm)
         beatableonly = 1 if self.check_beatable_only else 0
         shuffleganon = 1 if self.shuffle_ganon else 0
         return logic | (beatableonly << 1) | (dungeonitems << 2) | (shuffleganon << 3) | (goal << 4) | (shuffle << 7) | (difficulty << 11) | (algorithm << 13) | (mode << 16)

@@ -71,9 +71,14 @@ if __name__ == '__main__':
                                               Timed mode. If time runs out, you lose (but can
                                               still keep playing).                             
                              ''')
-    parser.add_argument('--algorithm', default='vt25', const='vt25', nargs='?', choices=['freshness', 'flood', 'vt21', 'vt22', 'vt25'],
+    parser.add_argument('--algorithm', default='vt26', const='vt26', nargs='?', choices=['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26'],
                         help='''\
-                             Select item filling algorithm. (default: %(default)s)
+                             Select item filling algorithm. (default: %(default)s
+                             vt26:        Shuffle items and place them in a random location
+                                          that it is not impossible to be in. This includes
+                                          dungeon keys and items. Includes slight deliberate 
+                                          bias against having too many desireable items in 
+                                          Ganon's Tower.
                              vt25:        Shuffle items and place them in a random location
                                           that it is not impossible to be in.
                              vt21:        Unbiased in its selection, but has tendency to put

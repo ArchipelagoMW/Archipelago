@@ -26,7 +26,7 @@ def ItemFactory(items):
         return ret
 
 
-# Format: Name: (Advancement, Priority, Type, Crystal, ItemCode, Altar Hint Text, Altar Credit Text, Sick Kid Credit Text, Zora Credit Text, Witch Credit Text, Flute Boy Credit Text)
+# Format: Name: (Advancement, Priority, Type, ItemCode, Altar Hint Text, Altar Credit Text, Sick Kid Credit Text, Zora Credit Text, Witch Credit Text, Flute Boy Credit Text)
 item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher class.', 'and the D', 'Ex-Adventurer', None, None, None),
               'Book of Mudora': (True, False, None, 0x1D, 'This is a\nparadox?!', 'and the Paradox', 'Lazy Reader', None, None, None),
               'Hammer': (True, False, None, 0x09, 'stop\nhammer time!', 'and the blunt weapon', None, None, None, None),
