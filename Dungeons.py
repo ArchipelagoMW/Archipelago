@@ -103,14 +103,13 @@ def fill_dungeons(world):
     world.state._clear_cache()
 
 
-def fill_dungeons_restrictive(world):
+def fill_dungeons_restrictive(world, shuffled_locations):
     all_state_base = world.get_all_state()
 
-    world.push_item(world.get_location('[dungeon-D3-B1] Skull Woods - South of Big Chest'), ItemFactory('Small Key (Skull Woods)'), False)
-    world.get_location('[dungeon-D3-B1] Skull Woods - South of Big Chest').event = True
-
-    shuffled_locations=world.get_unfilled_locations()
-    random.shuffle(shuffled_locations)
+    skull_woods_big_chest = world.get_location('[dungeon-D3-B1] Skull Woods - South of Big Chest')
+    world.push_item(skull_woods_big_chest, ItemFactory('Small Key (Skull Woods)'), False)
+    skull_woods_big_chest.event = True
+    shuffled_locations.remove(skull_woods_big_chest)
 
     dungeon_items = [item for dungeon in world.dungeons for item in dungeon.all_items]
 

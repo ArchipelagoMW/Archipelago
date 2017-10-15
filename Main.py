@@ -57,8 +57,11 @@ def main(args, seed=None):
 
     logger.info('Placing Dungeon Items.')
 
+    shuffled_locations = None
     if args.algorithm == 'vt26':
-        fill_dungeons_restrictive(world)
+        shuffled_locations = world.get_unfilled_locations()
+        random.shuffle(shuffled_locations)
+        fill_dungeons_restrictive(world, shuffled_locations)
     else:
         fill_dungeons(world)
 
@@ -75,7 +78,7 @@ def main(args, seed=None):
     elif args.algorithm == 'vt25':
         distribute_items_restrictive(world, 0)
     elif args.algorithm == 'vt26':
-        distribute_items_restrictive(world, random.randint(0, 15))
+        distribute_items_restrictive(world, random.randint(0, 15), shuffled_locations)
 
     logger.info('Calculating playthrough.')
 

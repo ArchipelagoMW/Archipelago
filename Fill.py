@@ -199,9 +199,11 @@ def fill_restrictive(world, base_state, locations, itempool):
         spot_to_fill.event = True
 
 
-def distribute_items_restrictive(world, gftower_trash_count=0):
-    # get list of locations to fill in
-    fill_locations = world.get_unfilled_locations()
+def distribute_items_restrictive(world, gftower_trash_count=0,fill_locations=None):
+    # If not passed in, then get a shuffled list of locations to fill in
+    if not fill_locations:
+        fill_locations = world.get_unfilled_locations()
+        random.shuffle(fill_locations)
 
     # get items to distribute
     random.shuffle(world.itempool)
@@ -221,24 +223,26 @@ def distribute_items_restrictive(world, gftower_trash_count=0):
         trashcnt += 1
 
     random.shuffle(fill_locations)
+    fill_locations.reverse() 
 
     fill_restrictive(world, world.state, fill_locations, progitempool)
 
     random.shuffle(fill_locations)
 
-    while prioitempool and fill_locations:
-        spot_to_fill = fill_locations.pop()
-        item_to_place = prioitempool.pop()
-        world.push_item(spot_to_fill, item_to_place, False)
+    fast_fill(world, prioitempool, fill_locations)
 
-    while restitempool and fill_locations:
-        spot_to_fill = fill_locations.pop()
-        item_to_place = restitempool.pop()
-        world.push_item(spot_to_fill, item_to_place, False)
+    fast_fill(world, restitempool, fill_locations)
 
     logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s' % ([item.name for item in progitempool + prioitempool + restitempool], [location.name for location in fill_locations]))
 
 
+def fast_fill(world, item_pool, fill_locations):
+    while item_pool and fill_locations:
+        spot_to_fill = fill_locations.pop()
+        item_to_place = item_pool.pop()
+        world.push_item(spot_to_fill, item_to_place, False)
+
+        
 def flood_items(world):
     # get items to distribute
     random.shuffle(world.itempool)
