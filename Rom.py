@@ -83,7 +83,12 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
 
         locationaddress = location.address
         if not location.crystal:
-            # regular items
+            #Keys in their native dungeon should use the orignal item code for keys
+            if location.parent_region.dungeon:
+                dungeon=location.parent_region.dungeon
+                if location.item.key and dungeon.is_dungeon_item(location.item):
+                    if location.item.type == "BigKey": itemid = 0x32
+                    if location.item.type == "SmallKey": itemid = 0x24
             rom.write_byte(locationaddress, itemid)
         else:
             # crystals
