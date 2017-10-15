@@ -3,6 +3,7 @@ from Regions import create_regions
 from EntranceShuffle import link_entrances, connect_entrance, connect_two_way, connect_exit
 from Rom import patch_rom, LocalRom, write_string_to_rom, write_credits_string_to_rom
 from Rules import set_rules
+from Dungeons import create_dungeons
 from Items import ItemFactory
 from Main import create_playthrough
 import random
@@ -42,6 +43,7 @@ def main(args, seed=None):
     logger.info('ALttP Plandomizer Version %s  -  Seed: %s\n\n' % (__version__, args.plando))
 
     create_regions(world)
+    create_dungeons(world)
 
     link_entrances(world)
 

@@ -3,7 +3,7 @@ from Regions import create_regions
 from EntranceShuffle import link_entrances
 from Rom import patch_rom, LocalRom, JsonRom
 from Rules import set_rules
-from Dungeons import fill_dungeons
+from Dungeons import create_dungeons, fill_dungeons
 from Items import ItemFactory
 from collections import OrderedDict
 import random
@@ -29,7 +29,6 @@ def main(args, seed=None):
     # initialize the world
     world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap)
     logger = logging.getLogger('')
-
     if seed is None:
         random.seed(None)
         world.seed = random.randint(0, 999999999)
@@ -40,6 +39,8 @@ def main(args, seed=None):
     logger.info('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n' % (__version__, world.seed))
 
     create_regions(world)
+    
+    create_dungeons(world);
 
     logger.info('Shuffling the World about.')
 
@@ -158,7 +159,7 @@ def distribute_items_cutoff(world, cutoffrate=0.33):
 
         spot_to_fill = None
         for location in (fill_locations if placed_advancement_items/total_advancement_items < cutoffrate else reversed(fill_locations)):
-            if world.state.can_reach(location) and location.item_rule(item_to_place):
+            if world.state.can_reach(location) and location.can_fill(item_to_place):
                 spot_to_fill = location
                 break
 
@@ -230,7 +231,7 @@ def distribute_items_staleness(world):
             if not progress_done and random.randint(0, location.staleness_count) > 2:
                 continue
 
-            if world.state.can_reach(location) and location.item_rule(item_to_place):
+            if world.state.can_reach(location) and location.can_fill(item_to_place):
                 spot_to_fill = location
                 break
             else:
@@ -239,7 +240,7 @@ def distribute_items_staleness(world):
         # might have skipped too many locations due to potential staleness. Do not check for staleness now to find a candidate
         if spot_to_fill is None:
             for location in fill_locations:
-                if world.state.can_reach(location) and location.item_rule(item_to_place):
+                if world.state.can_reach(location) and location.can_fill(item_to_place):
                     spot_to_fill = location
                     break
 
@@ -271,7 +272,7 @@ def fill_restrictive(world, base_state, locations, itempool):
 
         spot_to_fill = None
         for location in locations:
-            if location.item_rule(item_to_place):
+            if location.can_fill(item_to_place):
                 if world.check_beatable_only:
                     starting_state = base_state.copy()
                     for item in itempool:
@@ -356,7 +357,7 @@ def flood_items(world):
         random.shuffle(location_list)
         spot_to_fill = None
         for location in location_list:
-            if world.state.can_reach(location) and location.item_rule(itempool[0]):
+            if world.state.can_reach(location) and location.can_fill(itempool[0]):
                 spot_to_fill = location
                 break
 
@@ -507,6 +508,7 @@ def copy_world(world):
     ret.seed = world.seed
     ret.can_access_trock_eyebridge = world.can_access_trock_eyebridge
     create_regions(ret)
+    create_dungeons(ret)
 
     # connect copied world
     for region in world.regions:
@@ -516,7 +518,7 @@ def copy_world(world):
     # fill locations
     for location in world.get_locations():
         if location.item is not None:
-            item = Item(location.item.name, location.item.advancement, location.item.priority, location.item.key)
+            item = Item(location.item.name, location.item.advancement, location.item.priority, location.item.type)
             ret.get_location(location.name).item = item
             item.location = ret.get_location(location.name)
         if location.event:
@@ -524,7 +526,7 @@ def copy_world(world):
 
     # copy remaining itempool. No item in itempool should have an assigned location
     for item in world.itempool:
-        ret.itempool.append(Item(item.name, item.advancement, item.priority, item.key))
+        ret.itempool.append(Item(item.name, item.advancement, item.priority, item.type))
 
     # copy progress items in state
     ret.state.prog_items = list(world.state.prog_items)

@@ -13,6 +13,7 @@ class World(object):
         self.difficulty = difficulty
         self.goal = goal
         self.algorithm = algorithm
+        self.dungeons = []
         self.regions = []
         self.itempool = []
         self.seed = None
@@ -133,7 +134,7 @@ class World(object):
         if not isinstance(location, Location):
             location = self.get_location(location)
 
-        if location.item_rule(item):
+        if location.can_fill(item):
             location.item = item
             item.location = location
             if collect:
@@ -433,6 +434,7 @@ class Region(object):
         self.entrances = []
         self.exits = []
         self.locations = []
+        self.dungeon = None
         self.spot_type = 'Region'
         self.hint_text = 'Hyrule'
         self.recursion_count = 0
@@ -442,6 +444,16 @@ class Region(object):
             if state.can_reach(entrance):
                 return True
         return False
+    
+    def can_fill(self, item):
+        if item.key or item.map or item.compass:
+            if self.dungeon and self.dungeon.is_dungeon_item(item):
+                return True
+            else:
+                return False
+        
+        return True
+        
 
     def __str__(self):
         return str(self.__unicode__())
@@ -484,6 +496,31 @@ class Entrance(object):
     def __unicode__(self):
         return '%s' % self.name
 
+class Dungeon(object):
+
+    def __init__(self, name, regions, big_key, small_keys, dungeon_items):
+        self.name = name
+        self.regions = regions
+        self.big_key = big_key
+        self.small_keys = small_keys
+        self.dungeon_items = dungeon_items
+    
+    @property
+    def keys(self):
+        return self.small_keys + ([self.big_key] if self.big_key else [])
+    
+    @property
+    def all_items(self):
+        return self.dungeon_items+self.keys
+    
+    def is_dungeon_item(self, item):
+        return item.name in [dungeon_item.name for dungeon_item in self.all_items]
+        
+    def __str__(self):
+        return str(self.__unicode__())
+
+    def __unicode__(self):
+        return '%s' % self.name
 
 class Location(object):
 
@@ -504,6 +541,9 @@ class Location(object):
 
     def item_rule(self, item):
         return True
+    
+    def can_fill(self, item):
+        return self.parent_region.can_fill(item) and self.item_rule(item)
 
     def can_reach(self, state):
         if self.access_rule(state) and state.can_reach(self.parent_region):
@@ -519,12 +559,11 @@ class Location(object):
 
 class Item(object):    
 
-    def __init__(self, name='', advancement=False, priority=False, key=False, crystal=False, code=None, altar_hint=None, altar_credit=None, sickkid_credit=None, zora_credit=None, witch_credit=None, fluteboy_credit=None):
+    def __init__(self, name='', advancement=False, priority=False, type=None, code=None, altar_hint=None, altar_credit=None, sickkid_credit=None, zora_credit=None, witch_credit=None, fluteboy_credit=None):
         self.name = name
         self.advancement = advancement
         self.priority = priority
-        self.key = key
-        self.crystal = crystal
+        self.type = type
         self.altar_hint_text = altar_hint
         self.altar_credit_text = altar_credit
         self.sickkid_credit_text = sickkid_credit
@@ -533,6 +572,22 @@ class Item(object):
         self.fluteboy_credit_text = fluteboy_credit
         self.code = code
         self.location = None
+        
+    @property    
+    def key(self):
+        return self.type == 'SmallKey' or self.type == 'BigKey'
+    
+    @property    
+    def crystal(self):
+        return self.type == 'Crystal'
+    
+    @property    
+    def map(self):
+        return self.type == 'Map'
+        
+    @property    
+    def compass(self):
+        return self.type == 'Compass'
 
     def __str__(self):
         return str(self.__unicode__())
