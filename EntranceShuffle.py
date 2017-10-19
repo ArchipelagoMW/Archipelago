@@ -1240,9 +1240,13 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Swamp Palace (North)', 'Swamp Palace (North)'),
                          ('Thieves Town Big Key Door', 'Thieves Town (Deep)'),
                          ('Skull Woods Torch Room', 'Skull Woods Final Section (Mothula)'),
-                         ('Skull Woods First Section (Right)', 'Skull Woods First Section'),   # exist only for unique hole reference points
-                         ('Skull Woods First Section (Left)', 'Skull Woods First Section'),
-                         ('Skull Woods First Section (Top)', 'Skull Woods First Section'),
+                         ('Skull Woods First Section Bomb Jump', 'Skull Woods First Section (Top)'),  # represents bomb jumping to big chest
+                         ('Skull Woods First Section South Door', 'Skull Woods First Section (Right)'),
+                         ('Skull Woods First Section West Door', 'Skull Woods First Section (Left)'),
+                         ('Skull Woods First Section (Right) North Door', 'Skull Woods First Section'),
+                         ('Skull Woods First Section (Left) Door to Right', 'Skull Woods First Section (Right)'),
+                         ('Skull Woods First Section (Left) Door to Exit', 'Skull Woods First Section'),
+                         ('Skull Woods First Section (Top) One-Way Path', 'Skull Woods First Section'),
                          ('Blind Fight', 'Blind Fight'),
                          ('Ice Palace Entrance Room', 'Ice Palace (Main)'),
                          ('Ice Palace (East)', 'Ice Palace (East)'),

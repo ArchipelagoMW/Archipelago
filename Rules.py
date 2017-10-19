@@ -110,7 +110,8 @@ def global_rules(world):
     set_rule(world.get_location('Altar'), lambda state: state.has('Red Pendant') and state.has('Blue Pendant') and state.has('Green Pendant'))
     set_rule(world.get_location('Sahasrahla'), lambda state: state.has('Green Pendant'))
     set_rule(world.get_entrance('Agahnims Tower'), lambda state: state.has('Cape') or state.has_beam_sword() or state.has('Beat Agahnim 1'))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
-    set_rule(world.get_entrance('Agahnim 1'), lambda state: state.has_sword())
+    set_rule(world.get_entrance('Agahnim 1'), lambda state: state.has_sword() and state.has('Small Key (Agahnims Tower)', 2))
+    set_rule(world.get_location('[dungeon-A1-3F] Hyrule Castle Tower - Maze Room'), lambda state: state.has('Small Key (Agahnims Tower)'))
     set_rule(world.get_entrance('Top of Pyramid'), lambda state: state.has('Beat Agahnim 1'))
     set_rule(world.get_entrance('Old Man Cave Exit (West)'), lambda state: False)  # drop cannot be climbed up
     set_rule(world.get_entrance('Broken Bridge (West)'), lambda state: state.has('Hookshot'))
@@ -204,8 +205,10 @@ def global_rules(world):
                                                                      (state.has_blunt_weapon() or state.has('Fire Rod') or state.has('Ice Rod') or state.has('Bow')))
     for location in ['Lanmolas - Heart Container', '[dungeon-L2-B1] Desert Palace - Big Chest']:
         forbid_item(world.get_location(location), 'Big Key (Desert Palace)')
+    
     for location in ['Lanmolas - Heart Container', '[dungeon-L2-B1] Desert Palace - Big Key Room', '[dungeon-L2-B1] Desert Palace - Compass Room']:
         forbid_item(world.get_location(location), 'Small Key (Desert Palace)')
+    
 
     set_rule(world.get_entrance('Tower of Hera Small Key Door'), lambda state: state.has('Small Key (Tower of Hera)'))
     set_rule(world.get_entrance('Tower of Hera Big Key Door'), lambda state: state.has('Big Key (Tower of Hera)'))
@@ -237,6 +240,10 @@ def global_rules(world):
     for location in ['[dungeon-D4-1F] Thieves Town - Room above Boss', '[dungeon-D4-B2] Thieves Town - Big Chest', 'Blind - Heart Container']:
         forbid_item(world.get_location(location), 'Small Key (Thieves Town)')
 
+    set_rule(world.get_entrance('Skull Woods First Section South Door'), lambda state: state.has('Small Key (Skull Woods)'))
+    set_rule(world.get_entrance('Skull Woods First Section (Right) North Door'), lambda state: state.has('Small Key (Skull Woods)'))
+    set_rule(world.get_entrance('Skull Woods First Section West Door'), lambda state: state.has('Small Key (Skull Woods)', 2)) #ideally would only be one key, but we may have spent thst key already on escaping the right section
+    set_rule(world.get_entrance('Skull Woods First Section (Left) Door to Exit'), lambda state: state.has('Small Key (Skull Woods)', 2))
     set_rule(world.get_location('[dungeon-D3-B1] Skull Woods - Big Chest'), lambda state: state.has('Big Key (Skull Woods)'))
     set_rule(world.get_entrance('Skull Woods Torch Room'), lambda state: state.has('Small Key (Skull Woods)', 3) and state.has('Fire Rod') and state.has_sword())  # sword required for curtain
     for location in ['[dungeon-D3-B1] Skull Woods - Big Chest']:
@@ -293,13 +300,14 @@ def global_rules(world):
     set_rule(world.get_entrance('Dark Palace Hammer Peg Drop'), lambda state: state.has('Hammer'))
     set_rule(world.get_entrance('Dark Palace Bridge Room'), lambda state: state.has('Small Key (Palace of Darkness)', 1))  # If we can reach any other small key door, we already have back door access to this area
     set_rule(world.get_entrance('Dark Palace Big Key Door'), lambda state: state.has('Small Key (Palace of Darkness)', 6) and state.has('Big Key (Palace of Darkness)') and state.has('Bow') and state.has('Hammer'))
-    set_rule(world.get_entrance('Dark Palace Big Key Chest Staircase'), lambda state: state.has('Small Key (Palace of Darkness)', 6) or (state.world.get_location('[dungeon-D1-1F] Dark Palace - Big Key Room').item is not None and (state.world.get_location('[dungeon-D1-1F] Dark Palace - Big Key Room').item.name in ['Small Key (Palace of Darkness)'])))
-    set_rule(world.get_entrance('Dark Palace Spike Statue Room Door'), lambda state: state.has('Small Key (Palace of Darkness)', 6) or (state.world.get_location('[dungeon-D1-1F] Dark Palace - Spike Statue Room').item is not None and (state.world.get_location('[dungeon-D1-1F] Dark Palace - Spike Statue Room').item.name in ['Small Key (Palace of Darkness)'])))
+    set_rule(world.get_entrance('Dark Palace Big Key Chest Staircase'), lambda state: state.has('Small Key (Palace of Darkness)', 5))
+    set_rule(world.get_entrance('Dark Palace Spike Statue Room Door'), lambda state: state.has('Small Key (Palace of Darkness)', 5))
     set_rule(world.get_entrance('Dark Palace (North)'), lambda state: state.has('Small Key (Palace of Darkness)', 4))
-    set_rule(world.get_entrance('Dark Palace Maze Door'), lambda state: state.has('Small Key (Palace of Darkness)', 6))
+    set_rule(world.get_entrance('Dark Palace Maze Door'), lambda state: state.has('Small Key (Palace of Darkness)', 5))
     set_rule(world.get_location('[dungeon-D1-1F] Dark Palace - Big Chest'), lambda state: state.has('Big Key (Palace of Darkness)'))
     for location in ['[dungeon-D1-1F] Dark Palace - Big Chest', 'Helmasaur - Heart Container']:
         forbid_item(world.get_location(location), 'Big Key (Palace of Darkness)')
+        
     for location in ['[dungeon-D1-1F] Dark Palace - Big Chest', '[dungeon-D1-1F] Dark Palace - Maze Room [top chest]', '[dungeon-D1-1F] Dark Palace - Maze Room [bottom chest]']:
         forbid_item(world.get_location(location), 'Small Key (Palace of Darkness)')
 
@@ -343,9 +351,7 @@ def no_glitches_rules(world):
     add_rule(world.get_entrance('Ganons Tower (Hookshot Room)'), lambda state: state.has('Hookshot'))
     set_rule(world.get_entrance('7 Chest Cave Push Block Reverse'), lambda state: False)  # no glitches does not require block override
     set_rule(world.get_entrance('7 Chest Cave Bomb Jump'), lambda state: False)
-
-    # need to be able to drop into hole to reach big chest, bombjumps are not expected
-    add_rule(world.get_location('[dungeon-D3-B1] Skull Woods - Big Chest'), lambda state: state.can_reach('Skull Woods First Section (Top)', 'Region'))
+    set_rule(world.get_entrance('Skull Woods First Section Bomb Jump'),  lambda state: False)
 
     # Light cones in standard depend on which world we actually are in, not which one the location would normally be
     # We add Lamp requirements only to those locations which lie in the dark world (or everything if open
@@ -374,6 +380,7 @@ def no_glitches_rules(world):
     add_conditional_lamp('[dungeon-D1-B1] Dark Palace - Dark Room [left chest]', 'Dark Palace (Entrance)', 'Location')
     add_conditional_lamp('[dungeon-D1-B1] Dark Palace - Dark Room [right chest]', 'Dark Palace (Entrance)', 'Location')
     add_conditional_lamp('Agahnim 1', 'Agahnims Tower', 'Entrance')
+    add_conditional_lamp('[dungeon-A1-3F] Hyrule Castle Tower - Maze Room', 'Agahnims Tower', 'Location')
     add_conditional_lamp('Old Mountain Man', 'Old Man Cave', 'Location')
     add_conditional_lamp('Old Man Cave Exit (East)', 'Old Man Cave', 'Entrance')
     add_conditional_lamp('Death Mountain Return Cave Exit (East)', 'Death Mountain Return Cave', 'Entrance')
@@ -398,7 +405,7 @@ def open_rules(world):
 
 def swordless_rules(world):
     set_rule(world.get_entrance('Agahnims Tower'), lambda state: state.has('Cape') or state.has('Hammer') or state.has('Beat Agahnim 1'))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
-    set_rule(world.get_entrance('Agahnim 1'), lambda state: state.has('Hammer') or state.has('Bug Catching Net'))
+    set_rule(world.get_entrance('Agahnim 1'), lambda state: state.has('Hammer') or state.has('Bug Catching Net') and state.has('Small Key (Agahnims Tower)', 2))
     set_rule(world.get_location('Ether Tablet'), lambda state: state.has('Book of Mudora') and state.has('Hammer'))
     set_rule(world.get_location('Bombos Tablet'), lambda state: state.has('Book of Mudora') and state.has('Hammer') and state.has_Mirror())
     set_rule(world.get_entrance('Misery Mire'), lambda state: state.has_Pearl() and state.has_misery_mire_medallion())  # sword not required to use medallion for opening in swordless (!)
