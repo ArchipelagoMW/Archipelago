@@ -3,14 +3,7 @@ import logging
 
 def set_rules(world):
     global_rules(world)
-
-    if world.logic == 'noglitches':
-        no_glitches_rules(world)
-    elif world.logic == 'minorglitches':
-        logging.getLogger('').info('Minor Glitches may be buggy still. No guarantee for proper logic checks.')
-    else:
-        raise NotImplementedError('Not implemented yet')
-
+    
     if world.mode == 'open':
         open_rules(world)
     elif world.mode == 'standard':
@@ -19,6 +12,15 @@ def set_rules(world):
         swordless_rules(world)
     else:
         raise NotImplementedError('Not implemented yet')
+
+    if world.logic == 'noglitches':
+        no_glitches_rules(world)
+    elif world.logic == 'minorglitches':
+        logging.getLogger('').info('Minor Glitches may be buggy still. No guarantee for proper logic checks.')
+    else:
+        raise NotImplementedError('Not implemented yet')
+
+
 
     if world.goal == 'dungeons':
         # require all dungeons to beat ganon
