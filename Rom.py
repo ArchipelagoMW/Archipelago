@@ -8,7 +8,7 @@ import hashlib
 import logging
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '7f112e52921bf72c67296848f3f4ad97'
+RANDOMIZERBASEHASH = '1deebb05eccefd2ab68297c6e9c0d25f'
 
 
 class JsonRom(object):
