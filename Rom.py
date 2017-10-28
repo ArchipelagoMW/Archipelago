@@ -64,7 +64,7 @@ class LocalRom(object):
         patchedmd5 = hashlib.md5()
         patchedmd5.update(self.buffer)
         if not RANDOMIZERBASEHASH == patchedmd5.hexdigest():
-            raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
+           raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
 
     def write_crc(self):
         # this does not seem to work
@@ -97,9 +97,15 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
 
             # patch music
             music_addresses = dungeon_music_addresses[location.name]
-            music = 0x11 if 'Pendant' in location.item.name else 0x16
+            if world.keysanity:
+                music = random.choice([0x11, 0x16])
+            else:
+                music = 0x11 if 'Pendant' in location.item.name else 0x16
             for music_address in music_addresses:
                 rom.write_byte(music_address, music)
+    
+    if world.keysanity:
+        rom.write_byte(0x155C9, random.choice([0x11, 0x16])) #Randomize GT music too in keysanity mode
 
     # patch entrances
     for region in world.regions:
@@ -308,9 +314,18 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_byte(0x18003E, 0x02)  # make ganon invincible until all dungeons are beat
     elif world.goal in ['crystals']:
         rom.write_byte(0x18003E, 0x04)  # make ganon invincible until all crystals
-    rom.write_byte(0x18016A, 0x00)  # disable free roaming item text boxes
-    rom.write_byte(0x18003B, 0x00)  # disable maps showing crystals on overworld
-    rom.write_byte(0x18003C, 0x00)  # disable compasses showing dungeon count
+    rom.write_byte(0x18016A, 0x01 if world.keysanity else 0x00)  # free roaming item text boxes
+    rom.write_byte(0x18003B, 0x01 if world.keysanity else 0x00)  # maps showing crystals on overworld
+    
+    # compasses showing dungeon count
+    if world.clock_mode != 'off':
+        rom.write_byte(0x18003C, 0x00) #Currently must be off if timer is on, because they use same HUD location
+    elif world.keysanity:
+        rom.write_byte(0x18003C, 0x01) #show on pickup
+    else:
+        rom.write_byte(0x18003C, 0x00)
+        
+    rom.write_byte(0x180045, 0x01 if world.keysanity else 0x00)  # free roaming items in menu
     digging_game_rng = random.randint(1, 30)  # set rng for digging game
     rom.write_byte(0x180020, digging_game_rng)
     rom.write_byte(0xEFD95, digging_game_rng)

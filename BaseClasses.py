@@ -6,7 +6,7 @@ from collections import OrderedDict
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu):
+    def __init__(self, shuffle, logic, mode, difficulty, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, keysanity):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
@@ -49,7 +49,12 @@ class World(object):
         self.can_access_trock_eyebridge = None
         self.quickswap = quickswap
         self.fastmenu = fastmenu
+        self.keysanity = keysanity
         self.spoiler = Spoiler(self)
+
+    def intialize_regions(self):
+        for region in self.regions:
+            region.world = self
 
     def get_region(self, regionname):
         if isinstance(regionname, Region):
@@ -221,7 +226,8 @@ class World(object):
         algorithm = ['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26'].index(self.algorithm)
         beatableonly = 1 if self.check_beatable_only else 0
         shuffleganon = 1 if self.shuffle_ganon else 0
-        return logic | (beatableonly << 1) | (dungeonitems << 2) | (shuffleganon << 3) | (goal << 4) | (shuffle << 7) | (difficulty << 11) | (algorithm << 13) | (mode << 16)
+        keysanity = 1 if self.keysanity else 0
+        return logic | (beatableonly << 1) | (dungeonitems << 2) | (shuffleganon << 3) | (goal << 4) | (shuffle << 7) | (difficulty << 11) | (algorithm << 13) | (mode << 16) | (keysanity << 18)
 
 
 class CollectionState(object):
@@ -448,6 +454,7 @@ class Region(object):
         self.exits = []
         self.locations = []
         self.dungeon = None
+        self.world = None
         self.spot_type = 'Region'
         self.hint_text = 'Hyrule'
         self.recursion_count = 0
@@ -457,16 +464,17 @@ class Region(object):
             if state.can_reach(entrance):
                 return True
         return False
-    
+
     def can_fill(self, item):
-        if item.key or item.map or item.compass:
+        is_dungeon_item = item.key or item.map or item.compass
+        sewer_hack = self.world.mode == 'standard' and item.name == 'Small Key (Escape)'
+        if sewer_hack or (is_dungeon_item and not self.world.keysanity):
             if self.dungeon and self.dungeon.is_dungeon_item(item):
                 return True
             else:
                 return False
-        
+
         return True
-        
 
     def __str__(self):
         return str(self.__unicode__())
@@ -509,6 +517,7 @@ class Entrance(object):
     def __unicode__(self):
         return '%s' % self.name
 
+
 class Dungeon(object):
 
     def __init__(self, name, regions, big_key, small_keys, dungeon_items):
@@ -517,23 +526,24 @@ class Dungeon(object):
         self.big_key = big_key
         self.small_keys = small_keys
         self.dungeon_items = dungeon_items
-    
+
     @property
     def keys(self):
         return self.small_keys + ([self.big_key] if self.big_key else [])
-    
+
     @property
     def all_items(self):
-        return self.dungeon_items+self.keys
-    
+        return self.dungeon_items + self.keys
+
     def is_dungeon_item(self, item):
         return item.name in [dungeon_item.name for dungeon_item in self.all_items]
-        
+
     def __str__(self):
         return str(self.__unicode__())
 
     def __unicode__(self):
         return '%s' % self.name
+
 
 class Location(object):
 
@@ -554,7 +564,7 @@ class Location(object):
 
     def item_rule(self, item):
         return True
-    
+
     def can_fill(self, item):
         return self.parent_region.can_fill(item) and self.item_rule(item)
 
@@ -570,7 +580,7 @@ class Location(object):
         return '%s' % self.name
 
 
-class Item(object):    
+class Item(object):
 
     def __init__(self, name='', advancement=False, priority=False, type=None, code=None, altar_hint=None, altar_credit=None, sickkid_credit=None, zora_credit=None, witch_credit=None, fluteboy_credit=None):
         self.name = name
@@ -585,20 +595,20 @@ class Item(object):
         self.fluteboy_credit_text = fluteboy_credit
         self.code = code
         self.location = None
-        
-    @property    
+
+    @property
     def key(self):
         return self.type == 'SmallKey' or self.type == 'BigKey'
-    
-    @property    
+
+    @property
     def crystal(self):
         return self.type == 'Crystal'
-    
-    @property    
+
+    @property
     def map(self):
         return self.type == 'Map'
-        
-    @property    
+
+    @property
     def compass(self):
         return self.type == 'Compass'
 
@@ -642,7 +652,8 @@ class Spoiler(object):
                          'completeable': not self.world.check_beatable_only,
                          'dungeonitems': self.world.place_dungeon_items,
                          'quickswap': self.world.quickswap,
-                         'fastmenu': self.world.fastmenu}
+                         'fastmenu': self.world.fastmenu,
+                         'keysanity': self.world.keysanity}
 
     def to_json(self):
         self.parse_data()
@@ -666,7 +677,8 @@ class Spoiler(object):
             outfile.write('All Locations Accessible:        %s\n' % ('Yes' if self.metadata['completeable'] else 'No, some locations may be unreachable'))
             outfile.write('Maps and Compasses in Dungeons:  %s\n' % ('Yes' if self.metadata['dungeonitems'] else 'No'))
             outfile.write('L\\R Quickswap enabled:           %s\n' % ('Yes' if self.metadata['quickswap'] else 'No'))
-            outfile.write('Fastmenu enabled:               %s' % ('Yes' if self.metadata['fastmenu'] else 'No'))
+            outfile.write('Fastmenu enabled:                %s\n' % ('Yes' if self.metadata['fastmenu'] else 'No'))
+            outfile.write('Keysanity enabled:               %s' % ('Yes' if self.metadata['keysanity'] else 'No'))
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
                 outfile.write('\n'.join(['%s %s %s' % (entry['entrance'], '<=>' if entry['direction'] == 'both' else '<=' if entry['direction'] == 'exit' else '=>', entry['exit']) for entry in self.entrances]))

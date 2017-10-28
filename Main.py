@@ -28,7 +28,7 @@ def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap, args.fastmenu)
+    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap, args.fastmenu, args.keysanity)
     logger = logging.getLogger('')
     if seed is None:
         random.seed(None)
@@ -91,7 +91,7 @@ def main(args, seed=None):
     else:
         sprite = None
 
-    outfilebase = 'ER_%s_%s-%s-%s_%s-%s%s%s%s_%s' % (world.logic, world.difficulty, world.mode, world.goal, world.shuffle, world.algorithm, "-fastmenu" if world.fastmenu else "","-quickswap" if world.quickswap else "", "-shuffleganon" if world.shuffle_ganon else "", world.seed)
+    outfilebase = 'ER_%s_%s-%s-%s_%s-%s%s%s%s%s_%s' % (world.logic, world.difficulty, world.mode, world.goal, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-fastmenu" if world.fastmenu else "","-quickswap" if world.quickswap else "", "-shuffleganon" if world.shuffle_ganon else "", world.seed)
 
     if not args.suppress_rom:
         if args.jsonout:
@@ -202,7 +202,7 @@ def generate_itempool(world):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap, world.fastmenu)
+    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap, world.fastmenu, world.keysanity)
     ret.required_medallions = list(world.required_medallions)
     ret.swamp_patch_required = world.swamp_patch_required
     ret.ganon_at_pyramid = world.ganon_at_pyramid
@@ -256,14 +256,15 @@ def create_playthrough(world):
         raise RuntimeError('Cannot beat game. Something went terribly wrong here!')
 
     # get locations containing progress items
-    prog_locations = [location for location in world.get_locations() if location.item is not None and location.item.advancement]
+    prog_locations = [location for location in world.get_locations() if location.item is not None and (location.item.advancement or (location.item.key and world.keysanity))]
 
     collection_spheres = []
     state = CollectionState(world)
     sphere_candidates = list(prog_locations)
     logging.getLogger('').debug('Building up collection spheres.')
     while sphere_candidates:
-        state.sweep_for_events(key_only=True)
+        if not world.keysanity:
+            state.sweep_for_events(key_only=True)
 
         sphere = []
         # build up spheres of collection radius. Everything in each sphere is independent from each other in dependencies and only depends on lower spheres

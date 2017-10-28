@@ -262,6 +262,8 @@ def create_regions(world):
         create_region('Bottom of Pyramid', None, ['Pyramid Exit']),
         create_region('Pyramid Ledge', None, ['Pyramid Entrance', 'Pyramid Drop'])
         ]
+        
+    world.intialize_regions()
 
 
 def create_region(name, locations=None, exits=None):

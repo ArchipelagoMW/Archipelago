@@ -21,6 +21,8 @@ def guiMain(args=None):
     quickSwapCheckbutton = Checkbutton(checkBoxFrame, text="Enabled L/R Item quickswapping", variable=quickSwapVar)
     fastMenuVar = IntVar()
     fastMenuCheckbutton = Checkbutton(checkBoxFrame, text="Enable instant menu", variable=fastMenuVar)
+    keysanityVar = IntVar()
+    keysanityCheckbutton = Checkbutton(checkBoxFrame, text="Keysanity (keys anywhere)", variable=keysanityVar)
     dungeonItemsVar = IntVar()
     dungeonItemsCheckbutton = Checkbutton(checkBoxFrame, text="Place Dungeon Items (Compasses/Maps)", onvalue=0, offvalue=1, variable=dungeonItemsVar)
     beatableOnlyVar = IntVar()
@@ -32,6 +34,7 @@ def guiMain(args=None):
     suppressRomCheckbutton.pack(expand=True, anchor=W)
     quickSwapCheckbutton.pack(expand=True, anchor=W)
     fastMenuCheckbutton.pack(expand=True, anchor=W)
+    keysanityCheckbutton.pack(expand=True, anchor=W)
     dungeonItemsCheckbutton.pack(expand=True, anchor=W)
     beatableOnlyCheckbutton.pack(expand=True, anchor=W)
     shuffleGanonCheckbutton.pack(expand=True, anchor=W)
@@ -160,6 +163,7 @@ def guiMain(args=None):
         guiargs.heartbeep = heartbeepVar.get()
         guiargs.create_spoiler = bool(createSpoilerVar.get())
         guiargs.suppress_rom = bool(suppressRomVar.get())
+        guiargs.keysanity = bool(keysanityVar.get())
         guiargs.nodungeonitems = bool(dungeonItemsVar.get())
         guiargs.beatableonly = bool(beatableOnlyVar.get())
         guiargs.fastmenu = bool(fastMenuVar.get())
@@ -198,6 +202,7 @@ def guiMain(args=None):
         # load values from commandline args
         createSpoilerVar.set(int(args.create_spoiler))
         suppressRomVar.set(int(args.suppress_rom))
+        keysanityVar.set(args.keysanity)
         if args.nodungeonitems:
             dungeonItemsVar.set(int(not args.nodungeonitems))
         beatableOnlyVar.set(int(args.beatableonly))
