@@ -160,23 +160,23 @@ def generate_itempool(world):
     if world.mode == 'swordless':
         world.itempool.extend(ItemFactory(['Rupees (20)'] * 4))
     elif world.mode == 'standard':
-        world.push_item('Uncle', ItemFactory('Progressive Sword'), False)
-        world.get_location('Uncle').event = True
+        world.push_item('Link\'s Uncle', ItemFactory('Progressive Sword'), False)
+        world.get_location('Link\'s Uncle').event = True
         world.itempool.extend(ItemFactory(['Progressive Sword'] * 3))
     else:
         world.itempool.extend(ItemFactory(['Progressive Sword'] * 4))
 
     # provide mirror and pearl so you can avoid fake DW/LW and do dark world exploration as intended by algorithm, for now
     if world.shuffle == 'insanity':
-        world.push_item('[cave-040] Links House', ItemFactory('Magic Mirror'), False)
-        world.get_location('[cave-040] Links House').event = True
-        world.push_item('[dungeon-C-1F] Sanctuary', ItemFactory('Moon Pearl'), False)
-        world.get_location('[dungeon-C-1F] Sanctuary').event = True
+        world.push_item('Links House', ItemFactory('Magic Mirror'), False)
+        world.get_location('Links House').event = True
+        world.push_item('Sanctuary', ItemFactory('Moon Pearl'), False)
+        world.get_location('Sanctuary').event = True
     else:
         world.itempool.extend(ItemFactory(['Magic Mirror', 'Moon Pearl']))
 
     if world.goal == 'pedestal':
-        world.push_item('Altar', ItemFactory('Triforce'), False)
+        world.push_item('Master Sword Pedestal', ItemFactory('Triforce'), False)
     elif world.goal == 'triforcehunt':
         world.treasure_hunt_count = 20
         world.treasure_hunt_icon = 'Triforce Piece'
@@ -191,9 +191,9 @@ def generate_itempool(world):
 
     # distribute crystals
     crystals = ItemFactory(['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6'])
-    crystal_locations = [world.get_location('Trinexx - Crystal'), world.get_location('Armos - Pendant'), world.get_location('Lanmolas - Pendant'), world.get_location('Moldorm - Pendant'), world.get_location('Helmasaur - Crystal'),
-                         world.get_location('Blind - Crystal'), world.get_location('Mothula - Crystal'), world.get_location('Arrghus - Crystal'), world.get_location('Kholdstare - Crystal'),
-                         world.get_location('Vitreous - Crystal')]
+    crystal_locations = [world.get_location('Turtle Rock - Prize'), world.get_location('Eastern Palace - Prize'), world.get_location('Desert Palace - Prize'), world.get_location('Moldorm - Pendant'), world.get_location('Palace of Darkness - Prize'),
+                         world.get_location('Thieves Town - Prize'), world.get_location('Skull Woods - Prize'), world.get_location('Swamp Palace - Prize'), world.get_location('Ice Palace - Prize'),
+                         world.get_location('Misery Mire - Prize')]
 
     random.shuffle(crystal_locations)
 

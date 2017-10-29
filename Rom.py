@@ -346,7 +346,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_byte(0x18003D, 0x01)
 
     # set correct flag for hera basement item
-    if world.get_location('[dungeon-L3-1F] Tower of Hera - Freestanding Key').item is not None and world.get_location('[dungeon-L3-1F] Tower of Hera - Freestanding Key').item.name == 'Small Key (Tower of Hera)':
+    if world.get_location('Tower of Hera - Basement Cage').item is not None and world.get_location('Tower of Hera - Basement Cage').item.name == 'Small Key (Tower of Hera)':
         rom.write_byte(0x4E3BB, 0xE4)
     else:
         rom.write_byte(0x4E3BB, 0xEB)
@@ -475,17 +475,17 @@ def write_strings(rom, world):
         write_string_to_rom(rom, 'Ganon2Invincible', 'Got wax in\nyour ears?\nI can not die!')
     write_string_to_rom(rom, 'TavernMan', TavernMan_texts[random.randint(0, len(TavernMan_texts) - 1)])
 
-    altaritem = world.get_location('Altar').item
-    altar_text = 'Some Hot Air' if altaritem is None else altaritem.altar_hint_text if altaritem.altar_hint_text is not None else 'Unknown Item'
-    write_string_to_rom(rom, 'Altar', altar_text)
-    altar_credit_text = 'and the Hot Air' if altaritem is None else altaritem.altar_credit_text if altaritem.altar_credit_text is not None else 'and the Unknown Item'
-    write_credits_string_to_rom(rom, 'Altar', altar_credit_text)
+    pedestalitem = world.get_location('Master Sword Pedestal').item
+    pedestal_text = 'Some Hot Air' if pedestalitem is None else pedestalitem.pedestal_hint_text if pedestalitem.pedestal_hint_text is not None else 'Unknown Item'
+    write_string_to_rom(rom, 'Pedestal', pedestal_text)
+    pedestal_credit_text = 'and the Hot Air' if pedestalitem is None else pedestalitem.pedestal_credit_text if pedestalitem.pedestal_credit_text is not None else 'and the Unknown Item'
+    write_credits_string_to_rom(rom, 'Pedestal', pedestal_credit_text)
 
     etheritem = world.get_location('Ether Tablet').item
-    ether_text = 'Some Hot Air' if etheritem is None else etheritem.altar_hint_text if etheritem.altar_hint_text is not None else 'Unknown Item'
+    ether_text = 'Some Hot Air' if etheritem is None else etheritem.pedestal_hint_text if etheritem.pedestal_hint_text is not None else 'Unknown Item'
     write_string_to_rom(rom, 'EtherTablet', ether_text)
     bombositem = world.get_location('Bombos Tablet').item
-    bombos_text = 'Some Hot Air' if bombositem is None else bombositem.altar_hint_text if bombositem.altar_hint_text is not None else 'Unknown Item'
+    bombos_text = 'Some Hot Air' if bombositem is None else bombositem.pedestal_hint_text if bombositem.pedestal_hint_text is not None else 'Unknown Item'
     write_string_to_rom(rom, 'BombosTablet', bombos_text)
 
     write_credits_string_to_rom(rom, 'KingsReturn', KingsReturn_texts[random.randint(0, len(KingsReturn_texts) - 1)])
@@ -508,10 +508,10 @@ def write_strings(rom, world):
     zoraitem_text = Zora_texts[random.randint(0, len(Zora_texts) - 1)] if zoraitem is None or zoraitem.zora_credit_text is None else zoraitem.zora_credit_text
     write_credits_string_to_rom(rom, 'Zora', zoraitem_text) 
     
-    magicshopitem = world.get_location('Witch').item
+    magicshopitem = world.get_location('Potion Shop').item
     magicshopitem_text = MagicShop_texts[random.randint(0, len(MagicShop_texts) - 1)] if magicshopitem is None or magicshopitem.magicshop_credit_text is None else magicshopitem.magicshop_credit_text
     write_credits_string_to_rom(rom, 'MagicShop', magicshopitem_text) 
     
-    fluteboyitem = world.get_location('Flute Boy').item
+    fluteboyitem = world.get_location('Stumpy').item
     fluteboyitem_text = FluteBoy_texts[random.randint(0, len(FluteBoy_texts) - 1)] if fluteboyitem is None or fluteboyitem.fluteboy_credit_text is None else fluteboyitem.fluteboy_credit_text
     write_credits_string_to_rom(rom, 'FluteBoy', fluteboyitem_text)

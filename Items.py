@@ -11,11 +11,11 @@ def ItemFactory(items):
         singleton = True
     for item in items:
         if item in item_table:
-            advancement, priority, type, code, altar_hint, altar_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit = item_table[item]
+            advancement, priority, type, code, pedestal_hint, pedestal_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit = item_table[item]
             if item == 'Bottle':
                 # randomly fill bottle
                 code = [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)]
-            ret.append(Item(item, advancement, priority, type, code, altar_hint, altar_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit))
+            ret.append(Item(item, advancement, priority, type, code, pedestal_hint, pedestal_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit))
         else:
             logging.getLogger('').warning('Unknown Item: %s' % item)
             return None
@@ -26,7 +26,7 @@ def ItemFactory(items):
         return ret
 
 
-# Format: Name: (Advancement, Priority, Type, ItemCode, Altar Hint Text, Altar Credit Text, Sick Kid Credit Text, Zora Credit Text, Witch Credit Text, Flute Boy Credit Text)
+# Format: Name: (Advancement, Priority, Type, ItemCode, Pedestal Hint Text, Pedestal Credit Text, Sick Kid Credit Text, Zora Credit Text, Witch Credit Text, Flute Boy Credit Text)
 item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher class.', 'and the D', 'Ex-Adventurer', None, None, None),
               'Book of Mudora': (True, False, None, 0x1D, 'This is a\nparadox?!', 'and the Paradox', 'Lazy Reader', None, None, None),
               'Hammer': (True, False, None, 0x09, 'stop\nhammer time!', 'and the blunt weapon', None, None, None, None),

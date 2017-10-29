@@ -1,4 +1,4 @@
-text_addresses = {'Altar': (0x180300, 256),
+text_addresses = {'Pedestal': (0x180300, 256),
                   'Triforce': (0x180400, 256),
                   'Uncle': (0x180500, 256),
                   'Ganon1': (0x180600, 256),
@@ -30,7 +30,7 @@ credits_addresses = {'KingsReturn': (0x76928, 22),
                      'SickKid': (0x76BDF, 20),
                      'DeathMountain': (0x76C19, 16),
                      'LostWoods': (0x76C51, 16),
-                     'Altar': (0x76C81, 20)}
+                     'Pedestal': (0x76C81, 20)}
 
 Uncle_texts = ['Good Luck!\nYou will need it.', 'Forward this message to 10 other people or this seed will be awful.', 'I hope you like your seeds bootless and fluteless.',
                '10\n9\n8\n7\n6\n5\n4\n3\n2\n1\nGo!', 'I have crippling depression.', 'I\'m off to visit cousin Fritzl.']

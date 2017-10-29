@@ -582,13 +582,13 @@ class Location(object):
 
 class Item(object):
 
-    def __init__(self, name='', advancement=False, priority=False, type=None, code=None, altar_hint=None, altar_credit=None, sickkid_credit=None, zora_credit=None, witch_credit=None, fluteboy_credit=None):
+    def __init__(self, name='', advancement=False, priority=False, type=None, code=None, pedestal_hint=None, pedestal_credit=None, sickkid_credit=None, zora_credit=None, witch_credit=None, fluteboy_credit=None):
         self.name = name
         self.advancement = advancement
         self.priority = priority
         self.type = type
-        self.altar_hint_text = altar_hint
-        self.altar_credit_text = altar_credit
+        self.pedestal_hint_text = pedestal_hint
+        self.pedestal_credit_text = pedestal_credit
         self.sickkid_credit_text = sickkid_credit
         self.zora_credit_text = zora_credit
         self.magicshop_credit_text = witch_credit
