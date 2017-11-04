@@ -1,6 +1,7 @@
 import random
 import logging
 
+
 def distribute_items_cutoff(world, cutoffrate=0.33):
     # get list of locations to fill in
     fill_locations = world.get_unfilled_locations()
@@ -55,7 +56,7 @@ def distribute_items_cutoff(world, cutoffrate=0.33):
                 raise RuntimeError('No more progress items left to place.')
 
         spot_to_fill = None
-        for location in (fill_locations if placed_advancement_items/total_advancement_items < cutoffrate else reversed(fill_locations)):
+        for location in (fill_locations if placed_advancement_items / total_advancement_items < cutoffrate else reversed(fill_locations)):
             if world.state.can_reach(location) and location.can_fill(item_to_place):
                 spot_to_fill = location
                 break
@@ -199,7 +200,7 @@ def fill_restrictive(world, base_state, locations, itempool):
         spot_to_fill.event = True
 
 
-def distribute_items_restrictive(world, gftower_trash_count=0,fill_locations=None):
+def distribute_items_restrictive(world, gftower_trash_count=0, fill_locations=None):
     # If not passed in, then get a shuffled list of locations to fill in
     if not fill_locations:
         fill_locations = world.get_unfilled_locations()
@@ -223,7 +224,7 @@ def distribute_items_restrictive(world, gftower_trash_count=0,fill_locations=Non
         trashcnt += 1
 
     random.shuffle(fill_locations)
-    fill_locations.reverse() 
+    fill_locations.reverse()
 
     fill_restrictive(world, world.state, fill_locations, progitempool)
 
@@ -242,7 +243,7 @@ def fast_fill(world, item_pool, fill_locations):
         item_to_place = item_pool.pop()
         world.push_item(spot_to_fill, item_to_place, False)
 
-        
+
 def flood_items(world):
     # get items to distribute
     random.shuffle(world.itempool)

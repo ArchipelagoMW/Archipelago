@@ -668,7 +668,7 @@ def connect_entrance(world, entrancename, exitname):
     # if this was already connected somewhere, remove the backreference
     if entrance.connected_region is not None:
         entrance.connected_region.entrances.remove(entrance)
-    
+
     target = exit_ids[exit.name][0] if exit is not None else exit_ids.get(region.name, None)
     addresses = door_addresses[entrance.name][0][0] if exit is not None else door_addresses[entrance.name][0]
     try:
@@ -676,7 +676,7 @@ def connect_entrance(world, entrancename, exitname):
         vanilla = exit_ids[vanilla_ref]
     except IndexError:
         vanilla = None
-    
+
     entrance.connect(region, addresses, target, vanilla)
     world.spoiler.set_entrance(entrance.name, exit.name if exit is not None else region.name, 'entrance')
 

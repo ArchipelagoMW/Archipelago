@@ -40,8 +40,8 @@ def main(args, seed=None):
     logger.info('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n' % (__version__, world.seed))
 
     create_regions(world)
-    
-    create_dungeons(world);
+
+    create_dungeons(world)
 
     logger.info('Shuffling the World about.')
 
@@ -91,7 +91,7 @@ def main(args, seed=None):
     else:
         sprite = None
 
-    outfilebase = 'ER_%s_%s-%s-%s_%s-%s%s%s%s%s_%s' % (world.logic, world.difficulty, world.mode, world.goal, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-fastmenu" if world.fastmenu else "","-quickswap" if world.quickswap else "", "-shuffleganon" if world.shuffle_ganon else "", world.seed)
+    outfilebase = 'ER_%s_%s-%s-%s_%s-%s%s%s%s%s_%s' % (world.logic, world.difficulty, world.mode, world.goal, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-fastmenu" if world.fastmenu else "", "-quickswap" if world.quickswap else "", "-shuffleganon" if world.shuffle_ganon else "", world.seed)
 
     if not args.suppress_rom:
         if args.jsonout:
@@ -182,7 +182,7 @@ def generate_itempool(world):
         world.treasure_hunt_icon = 'Triforce Piece'
         world.itempool.extend(ItemFactory(['Triforce Piece'] * 30))
 
-    world.itempool.append(ItemFactory('Magic Upgrade (1/2)'))   
+    world.itempool.append(ItemFactory('Magic Upgrade (1/2)'))
 
     # shuffle medallions
     mm_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
@@ -315,4 +315,3 @@ def create_playthrough(world):
 
     # we can finally output our playthrough
     old_world.spoiler.playthrough = OrderedDict([(str(i + 1), {str(location): str(location.item) for location in sphere}) for i, sphere in enumerate(collection_spheres)])
-

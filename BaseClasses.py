@@ -96,7 +96,7 @@ class World(object):
 
     def get_all_state(self, keys=False):
         ret = CollectionState(self)
-        
+
         def soft_collect(item):
             if item.name.startswith('Progressive '):
                 if 'Sword' in item.name:

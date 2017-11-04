@@ -16,10 +16,10 @@ def create_regions(world):
                        'Bonk Fairy (Light)', '50 Rupee Cave', 'Fortune Teller (Light)', 'Lake Hylia Fairy', 'Swamp Fairy', 'Desert Fairy', 'Lumberjack House', 'Lake Hylia Fortune Teller', 'Kakariko Gamble Game', 'Top of Pyramid']),
         create_region('Lake Hylia Central Island', None, ['Capacity Upgrade', 'Lake Hylia Central Island Teleporter']),
         create_region('Blinds Hideout', ["Blind\'s Hideout - Top",
-                                     "Blind\'s Hideout - Left",
-                                     "Blind\'s Hideout - Right",
-                                     "Blind\'s Hideout - Far Left",
-                                     "Blind\'s Hideout - Far Right"]),
+                                         "Blind\'s Hideout - Left",
+                                         "Blind\'s Hideout - Right",
+                                         "Blind\'s Hideout - Far Left",
+                                         "Blind\'s Hideout - Far Right"]),
         create_region('Hyrule Castle Secret Entrance', ['Link\'s Uncle', 'Secret Passage'], ['Hyrule Castle Secret Entrance Exit']),
         create_region('Zoras River', ['King Zora', 'Zora\'s Ledge']),
         create_region('Waterfall of Wishing', ['Waterfall Fairy - Left', 'Waterfall Fairy - Right']),
@@ -60,7 +60,7 @@ def create_regions(world):
         create_region('Checkerboard Cave', ['Checkerboard Cave']),
         create_region('Long Fairy Cave'),
         create_region('Mini Moldorm Cave', ['Mini Moldorm Cave - Far Left', 'Mini Moldorm Cave - Left', 'Mini Moldorm Cave - Right',
-                                          'Mini Moldorm Cave - Far Right', 'Mini Moldorm Cave - Generous Guy']),
+                                            'Mini Moldorm Cave - Far Right', 'Mini Moldorm Cave - Generous Guy']),
         create_region('Ice Rod Cave', ['Ice Rod Cave']),
         create_region('Good Bee Cave'),
         create_region('20 Rupee Cave'),
@@ -110,12 +110,12 @@ def create_regions(world):
         create_region('Hookshot Fairy'),
         create_region('Paradox Cave Front', None, ['Paradox Cave Push Block Reverse', 'Paradox Cave Exit (Bottom)']),
         create_region('Paradox Cave Chest Area', ['Paradox Cave Lower - Far Left',
-                                                               'Paradox Cave Lower - Left',
-                                                               'Paradox Cave Lower - Right',
-                                                               'Paradox Cave Lower - Far Right',
-                                                               'Paradox Cave Lower - Middle',
-                                                               'Paradox Cave Upper - Left',
-                                                               'Paradox Cave Upper - Right'],
+                                                  'Paradox Cave Lower - Left',
+                                                  'Paradox Cave Lower - Right',
+                                                  'Paradox Cave Lower - Far Right',
+                                                  'Paradox Cave Lower - Middle',
+                                                  'Paradox Cave Upper - Left',
+                                                  'Paradox Cave Upper - Right'],
                       ['Paradox Cave Push Block', 'Paradox Cave Bomb Jump']),
         create_region('Paradox Cave', None, ['Paradox Cave Exit (Middle)', 'Paradox Cave Exit (Top)', 'Paradox Cave Drop']),
         create_region('East Death Mountain (Top)', None, ['Paradox Cave (Top)', 'Death Mountain (Top)', 'Spiral Cave Ledge Access', 'East Death Mountain Drop', 'Turtle Rock Teleporter', 'Fairy Ascension Ledge']),
@@ -136,7 +136,7 @@ def create_regions(world):
         create_region('Palace of Darkness Hint'),
         create_region('East Dark World Hint'),
         create_region('South Dark World', ['Stumpy', 'Digging Game', 'Bombos Tablet'], ['Dark Lake Hylia Drop (South)', 'Dark Swamp Cave', 'Swamp Palace', 'Village of Outcasts Heavy Rock',
-                                                                                                            'Maze Race Mirror Spot', 'Cave 45', 'East Dark World Bridge', 'Big Bomb Shop', 'Archery Game', 'Bonk Fairy (Dark)', 'Dark Lake Hylia Shop']),
+                                                                                        'Maze Race Mirror Spot', 'Cave 45', 'East Dark World Bridge', 'Big Bomb Shop', 'Archery Game', 'Bonk Fairy (Dark)', 'Dark Lake Hylia Shop']),
         create_region('Big Bomb Shop'),
         create_region('Archery Game'),
         create_region('Dark Lake Hylia', None, ['Lake Hylia Island Mirror Spot', 'East Dark World Pier', 'Dark Lake Hylia Ledge']),
@@ -261,8 +261,8 @@ def create_regions(world):
         create_region('Pyramid', ['Ganon'], ['Ganon Drop']),
         create_region('Bottom of Pyramid', None, ['Pyramid Exit']),
         create_region('Pyramid Ledge', None, ['Pyramid Entrance', 'Pyramid Drop'])
-        ]
-        
+    ]
+
     world.intialize_regions()
 
 

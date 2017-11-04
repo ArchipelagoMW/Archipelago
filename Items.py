@@ -19,7 +19,7 @@ def ItemFactory(items):
         else:
             logging.getLogger('').warning('Unknown Item: %s' % item)
             return None
-    
+
     if singleton:
         return ret[0]
     else:

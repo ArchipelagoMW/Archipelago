@@ -38,18 +38,19 @@ def guiMain(args=None):
     dungeonItemsCheckbutton.pack(expand=True, anchor=W)
     beatableOnlyCheckbutton.pack(expand=True, anchor=W)
     shuffleGanonCheckbutton.pack(expand=True, anchor=W)
-    
+
     fileDialogFrame = Frame(rightHalfFrame)
 
     romDialogFrame = Frame(fileDialogFrame)
     baseRomLabel = Label(romDialogFrame, text='Base Rom')
     romVar = StringVar()
     romEntry = Entry(romDialogFrame, textvariable=romVar)
+
     def RomSelect():
         rom = filedialog.askopenfilename()
         romVar.set(rom)
     romSelectButton = Button(romDialogFrame, text='Select Rom', command=RomSelect)
-    
+
     baseRomLabel.pack(side=LEFT)
     romEntry.pack(side=LEFT)
     romSelectButton.pack(side=LEFT)
@@ -68,7 +69,7 @@ def guiMain(args=None):
     baseSpriteLabel.pack(side=LEFT)
     spriteEntry.pack(side=LEFT)
     spriteSelectButton.pack(side=LEFT)
-    
+
     romDialogFrame.pack()
     spriteDialogFrame.pack()
 
@@ -84,7 +85,7 @@ def guiMain(args=None):
     modeOptionMenu.pack(side=RIGHT)
     modeLabel = Label(modeFrame, text='Game Mode')
     modeLabel.pack(side=LEFT)
-    
+
     logicFrame = Frame(drowDownFrame)
     logicVar = StringVar()
     logicVar.set('noglitches')
@@ -92,7 +93,7 @@ def guiMain(args=None):
     logicOptionMenu.pack(side=RIGHT)
     logicLabel = Label(logicFrame, text='Game logic')
     logicLabel.pack(side=LEFT)
-    
+
     goalFrame = Frame(drowDownFrame)
     goalVar = StringVar()
     goalVar.set('ganon')
@@ -100,7 +101,7 @@ def guiMain(args=None):
     goalOptionMenu.pack(side=RIGHT)
     goalLabel = Label(goalFrame, text='Game goal')
     goalLabel.pack(side=LEFT)
-    
+
     difficultyFrame = Frame(drowDownFrame)
     difficultyVar = StringVar()
     difficultyVar.set('normal')
@@ -108,7 +109,7 @@ def guiMain(args=None):
     difficultyOptionMenu.pack(side=RIGHT)
     difficultyLabel = Label(difficultyFrame, text='Game difficulty')
     difficultyLabel.pack(side=LEFT)
-    
+
     algorithmFrame = Frame(drowDownFrame)
     algorithmVar = StringVar()
     algorithmVar.set('vt26')
@@ -116,7 +117,7 @@ def guiMain(args=None):
     algorithmOptionMenu.pack(side=RIGHT)
     algorithmLabel = Label(algorithmFrame, text='Item distribution algorithm')
     algorithmLabel.pack(side=LEFT)
-    
+
     shuffleFrame = Frame(drowDownFrame)
     shuffleVar = StringVar()
     shuffleVar.set('full')
@@ -124,7 +125,7 @@ def guiMain(args=None):
     shuffleOptionMenu.pack(side=RIGHT)
     shuffleLabel = Label(shuffleFrame, text='Entrance shuffle algorithm')
     shuffleLabel.pack(side=LEFT)
-    
+
     heartbeepFrame = Frame(drowDownFrame)
     heartbeepVar = StringVar()
     heartbeepVar.set('normal')
@@ -140,7 +141,7 @@ def guiMain(args=None):
     algorithmFrame.pack(expand=True, anchor=E)
     shuffleFrame.pack(expand=True, anchor=E)
     heartbeepFrame.pack(expand=True, anchor=E)
-    
+
     bottomFrame = Frame(mainWindow)
 
     seedLabel = Label(bottomFrame, text='Seed #')

@@ -3,7 +3,7 @@ import logging
 
 def set_rules(world):
     global_rules(world)
-    
+
     if world.mode == 'open':
         open_rules(world)
     elif world.mode == 'standard':
@@ -19,8 +19,6 @@ def set_rules(world):
         logging.getLogger('').info('Minor Glitches may be buggy still. No guarantee for proper logic checks.')
     else:
         raise NotImplementedError('Not implemented yet')
-
-
 
     if world.goal == 'dungeons':
         # require all dungeons to beat ganon
@@ -55,10 +53,11 @@ def add_lamp_requirement(spot):
 def forbid_item(location, item):
     old_rule = location.item_rule
     location.item_rule = lambda i: i.name != item and old_rule(i)
-    
+
+
 def item_in_locations(state, item, locations):
     for location in locations:
-        loc=state.world.get_location(location)
+        loc = state.world.get_location(location)
         if loc.item is not None and loc.item.name == item:
             return True
     return False
@@ -205,10 +204,9 @@ def global_rules(world):
                                                                      (state.has_blunt_weapon() or state.has('Fire Rod') or state.has('Ice Rod') or state.has('Bow')))
     for location in ['Desert Palace - Lanmolas', 'Desert Palace - Big Chest']:
         forbid_item(world.get_location(location), 'Big Key (Desert Palace)')
-    
+
     for location in ['Desert Palace - Lanmolas', 'Desert Palace - Big Key Chest', 'Desert Palace - Compass Chest']:
         forbid_item(world.get_location(location), 'Small Key (Desert Palace)')
-    
 
     set_rule(world.get_entrance('Tower of Hera Small Key Door'), lambda state: state.has('Small Key (Tower of Hera)'))
     set_rule(world.get_entrance('Tower of Hera Big Key Door'), lambda state: state.has('Big Key (Tower of Hera)'))
@@ -242,7 +240,7 @@ def global_rules(world):
 
     set_rule(world.get_entrance('Skull Woods First Section South Door'), lambda state: state.has('Small Key (Skull Woods)'))
     set_rule(world.get_entrance('Skull Woods First Section (Right) North Door'), lambda state: state.has('Small Key (Skull Woods)'))
-    set_rule(world.get_entrance('Skull Woods First Section West Door'), lambda state: state.has('Small Key (Skull Woods)', 2)) #ideally would only be one key, but we may have spent thst key already on escaping the right section
+    set_rule(world.get_entrance('Skull Woods First Section West Door'), lambda state: state.has('Small Key (Skull Woods)', 2))  # ideally would only be one key, but we may have spent thst key already on escaping the right section
     set_rule(world.get_entrance('Skull Woods First Section (Left) Door to Exit'), lambda state: state.has('Small Key (Skull Woods)', 2))
     set_rule(world.get_location('Skull Woods - Big Chest'), lambda state: state.has('Big Key (Skull Woods)'))
     set_rule(world.get_entrance('Skull Woods Torch Room'), lambda state: state.has('Small Key (Skull Woods)', 3) and state.has('Fire Rod') and state.has_sword())  # sword required for curtain
@@ -254,7 +252,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Ice Palace Entrance Room'), lambda state: state.has('Fire Rod') or (state.has('Bombos') and state.has_sword()))
     set_rule(world.get_location('Ice Palace - Big Chest'), lambda state: state.has('Big Key (Ice Palace)'))
     set_rule(world.get_entrance('Ice Palace (Kholdstare)'), lambda state: state.can_lift_rocks() and state.has('Hammer') and state.has('Big Key (Ice Palace)') and (state.has('Small Key (Ice Palace)', 2) or (state.has('Cane of Somaria') and state.has('Small Key (Ice Palace)', 1))))
-    set_rule(world.get_entrance('Ice Palace (East)'), lambda state: (state.has('Hookshot') or (item_in_locations(state,'Big Key (Ice Palace)',['Ice Palace - Spike Room','Ice Palace - Big Key Chest','Ice Palace - Map Chest']) and state.has('Small Key (Ice Palace)')) or state.has('Small Key (Ice Palace)',2)) and (state.has('Hookshot') or state.has('Cape') or state.has('Cane of Byrna')))
+    set_rule(world.get_entrance('Ice Palace (East)'), lambda state: (state.has('Hookshot') or (item_in_locations(state, 'Big Key (Ice Palace)', ['Ice Palace - Spike Room', 'Ice Palace - Big Key Chest', 'Ice Palace - Map Chest']) and state.has('Small Key (Ice Palace)')) or state.has('Small Key (Ice Palace)', 2)) and (state.has('Hookshot') or state.has('Cape') or state.has('Cane of Byrna')))
     set_rule(world.get_entrance('Ice Palace (East Top)'), lambda state: state.can_lift_rocks() and state.has('Hammer'))
     for location in ['Ice Palace - Big Chest', 'Ice Palace - Kholdstare']:
         forbid_item(world.get_location(location), 'Big Key (Ice Palace)')
@@ -270,7 +268,7 @@ def global_rules(world):
     set_rule(world.get_location('Misery Mire - Main Lobby'), lambda state: state.has('Small Key (Misery Mire)', 2) or state.has('Big Key (Misery Mire)'))
     # we can place a small key in the West wing iff it also contains/blocks the Big Key, as we cannot reach and softlock with the basement key door yet
     set_rule(world.get_entrance('Misery Mire (West)'), lambda state: state.has('Small Key (Misery Mire)', 2) if ((state.world.get_location('Misery Mire - Compass Chest').item is not None and state.world.get_location('Misery Mire - Compass Chest').item.name in ['Big Key (Misery Mire)']) or
-                                                                                                                (state.world.get_location('Misery Mire - Big Key Chest').item is not None and state.world.get_location('Misery Mire - Big Key Chest').item.name in ['Big Key (Misery Mire)'])) else state.has('Small Key (Misery Mire)', 3))
+                                                                                                                 (state.world.get_location('Misery Mire - Big Key Chest').item is not None and state.world.get_location('Misery Mire - Big Key Chest').item.name in ['Big Key (Misery Mire)'])) else state.has('Small Key (Misery Mire)', 3))
     set_rule(world.get_location('Misery Mire - Compass Chest'), lambda state: state.has_fire_source())
     set_rule(world.get_location('Misery Mire - Big Key Chest'), lambda state: state.has_fire_source())
     set_rule(world.get_entrance('Misery Mire (Vitreous)'), lambda state: state.has('Cane of Somaria') and (state.has('Bow') or state.has_blunt_weapon()))
@@ -293,7 +291,7 @@ def global_rules(world):
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Top Left'), lambda state: state.has('Cane of Byrna') or state.has('Cape') or state.has('Mirror Shield'))
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Top Right'), lambda state: state.has('Cane of Byrna') or state.has('Cape') or state.has('Mirror Shield'))
     set_rule(world.get_entrance('Turtle Rock (Trinexx)'), lambda state: state.has('Small Key (Turtle Rock)', 4) and state.has('Big Key (Turtle Rock)') and state.has('Cane of Somaria') and state.has('Fire Rod') and state.has('Ice Rod') and
-                                                                        (state.has('Hammer') or state.has_beam_sword() or state.has('Bottle') or state.has('Half Magic') or state.has('Quarter Magic')))
+             (state.has('Hammer') or state.has_beam_sword() or state.has('Bottle') or state.has('Half Magic') or state.has('Quarter Magic')))
     set_trock_key_rules(world)
 
     set_rule(world.get_entrance('Palace of Darkness Bonk Wall'), lambda state: state.has('Bow'))
@@ -307,7 +305,7 @@ def global_rules(world):
     set_rule(world.get_location('Palace of Darkness - Big Chest'), lambda state: state.has('Big Key (Palace of Darkness)'))
     for location in ['Palace of Darkness - Big Chest', 'Palace of Darkness - Helmasaur']:
         forbid_item(world.get_location(location), 'Big Key (Palace of Darkness)')
-        
+
     for location in ['Palace of Darkness - Big Chest', 'Palace of Darkness - Dark Maze - Top', 'Palace of Darkness - Dark Maze - Bottom']:
         forbid_item(world.get_location(location), 'Small Key (Palace of Darkness)')
 
@@ -351,7 +349,7 @@ def no_glitches_rules(world):
     add_rule(world.get_entrance('Ganons Tower (Hookshot Room)'), lambda state: state.has('Hookshot'))
     set_rule(world.get_entrance('Paradox Cave Push Block Reverse'), lambda state: False)  # no glitches does not require block override
     set_rule(world.get_entrance('Paradox Cave Bomb Jump'), lambda state: False)
-    set_rule(world.get_entrance('Skull Woods First Section Bomb Jump'),  lambda state: False)
+    set_rule(world.get_entrance('Skull Woods First Section Bomb Jump'), lambda state: False)
 
     # Light cones in standard depend on which world we actually are in, not which one the location would normally be
     # We add Lamp requirements only to those locations which lie in the dark world (or everything if open
@@ -462,7 +460,7 @@ def set_trock_key_rules(world):
 
     for location in non_big_key_locations:
         forbid_item(world.get_location(location), 'Big Key (Turtle Rock)')
-    
+
     # small key restriction
     for location in ['Turtle Rock - Trinexx']:
         forbid_item(world.get_location(location), 'Small Key (Turtle Rock)')
@@ -531,8 +529,8 @@ def set_big_bomb_rules(world):
                              'Cave Shop (Dark Death Mountain)',
                              'Dark Death Mountain Fairy',
                              'Mimic Cave Mirror Spot']
-    Isolated_LW_entrances =['Capacity Upgrade',
-                            'Hookshot Fairy']
+    Isolated_LW_entrances = ['Capacity Upgrade',
+                             'Hookshot Fairy']
     set_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has_Pearl() and state.can_reach('Big Bomb Shop', 'Region') and state.has('Crystal 5') and state.has('Crystal 6'))
     if bombshop_entrance.name in Normal_LW_entrances:
         add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.can_lift_rocks()) or state.has_Mirror())

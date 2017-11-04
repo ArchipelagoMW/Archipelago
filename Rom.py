@@ -64,7 +64,7 @@ class LocalRom(object):
         patchedmd5 = hashlib.md5()
         patchedmd5.update(self.buffer)
         if not RANDOMIZERBASEHASH == patchedmd5.hexdigest():
-           raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
+            raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
 
     def write_crc(self):
         # this does not seem to work
@@ -83,12 +83,14 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
 
         locationaddress = location.address
         if not location.crystal:
-            #Keys in their native dungeon should use the orignal item code for keys
+            # Keys in their native dungeon should use the orignal item code for keys
             if location.parent_region.dungeon:
-                dungeon=location.parent_region.dungeon
+                dungeon = location.parent_region.dungeon
                 if location.item.key and dungeon.is_dungeon_item(location.item):
-                    if location.item.type == "BigKey": itemid = 0x32
-                    if location.item.type == "SmallKey": itemid = 0x24
+                    if location.item.type == "BigKey":
+                        itemid = 0x32
+                    if location.item.type == "SmallKey":
+                        itemid = 0x24
             rom.write_byte(locationaddress, itemid)
         else:
             # crystals
@@ -103,9 +105,9 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
                 music = 0x11 if 'Pendant' in location.item.name else 0x16
             for music_address in music_addresses:
                 rom.write_byte(music_address, music)
-    
+
     if world.keysanity:
-        rom.write_byte(0x155C9, random.choice([0x11, 0x16])) #Randomize GT music too in keysanity mode
+        rom.write_byte(0x155C9, random.choice([0x11, 0x16]))  # Randomize GT music too in keysanity mode
 
     # patch entrances
     for region in world.regions:
@@ -316,15 +318,15 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_byte(0x18003E, 0x04)  # make ganon invincible until all crystals
     rom.write_byte(0x18016A, 0x01 if world.keysanity else 0x00)  # free roaming item text boxes
     rom.write_byte(0x18003B, 0x01 if world.keysanity else 0x00)  # maps showing crystals on overworld
-    
+
     # compasses showing dungeon count
     if world.clock_mode != 'off':
-        rom.write_byte(0x18003C, 0x00) #Currently must be off if timer is on, because they use same HUD location
+        rom.write_byte(0x18003C, 0x00)  # Currently must be off if timer is on, because they use same HUD location
     elif world.keysanity:
-        rom.write_byte(0x18003C, 0x01) #show on pickup
+        rom.write_byte(0x18003C, 0x01)  # show on pickup
     else:
         rom.write_byte(0x18003C, 0x00)
-        
+
     rom.write_byte(0x180045, 0x01 if world.keysanity else 0x00)  # free roaming items in menu
     digging_game_rng = random.randint(1, 30)  # set rng for digging game
     rom.write_byte(0x180020, digging_game_rng)
@@ -375,29 +377,29 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_byte(0x15E25, 0xA4)
         # todo fix screen scrolling
 
-    #enable instant item menu
-    if world.fastmenu: 
+    # enable instant item menu
+    if world.fastmenu:
         rom.write_byte(0x180048, 0x01)
         # Sound twekas for fastmenu:
         rom.write_byte(0x6DD9A, 0x20)
         rom.write_byte(0x6DF2A, 0x20)
         rom.write_byte(0x6E0E9, 0x20)
-    
+
     # enable quick item swapping with L and R (ported by Amazing Ampharos)
     if world.quickswap:
         rom.write_bytes(0x107fb, [0x22, 0x50, 0xFF, 0x1F])
         rom.write_bytes(0x12451, [0x22, 0x50, 0xFF, 0x1F])
         rom.write_bytes(0xfff50, [0x20, 0x58, 0xFF, 0xA5, 0xF6, 0x29, 0x40, 0x6B, 0xA5, 0xF6, 0x89, 0x10, 0xF0, 0x03, 0x4C, 0x69,
-                                   0xFF, 0x89, 0x20, 0xF0, 0x03, 0x4C, 0xAA, 0xFF, 0x60, 0xAD, 0x02, 0x02, 0xF0, 0x3B, 0xDA, 0xAA,
-                                   0xE0, 0x0F, 0xF0, 0x14, 0xE0, 0x10, 0xF0, 0x14, 0xE0, 0x14, 0xD0, 0x02, 0xA2, 0x00, 0xE8, 0xBF,
-                                   0x3F, 0xF3, 0x7E, 0xF0, 0xEB, 0x4C, 0xEB, 0xFF, 0xA2, 0x01, 0x80, 0x0A, 0xAF, 0x4F, 0xF3, 0x7E,
-                                   0xAA, 0xE0, 0x04, 0xF0, 0x10, 0xE8, 0xBF, 0x5B, 0xF3, 0x7E, 0xF0, 0xF5, 0x8A, 0x8F, 0x4F, 0xF3,
-                                   0x7E, 0xA2, 0x10, 0x80, 0xE0, 0xA2, 0x11, 0x80, 0xD6, 0x60, 0xAD, 0x02, 0x02, 0xF0, 0x3B, 0xDA,
-                                   0xAA, 0xE0, 0x11, 0xF0, 0x14, 0xE0, 0x10, 0xF0, 0x14, 0xE0, 0x01, 0xD0, 0x02, 0xA2, 0x15, 0xCA,
-                                   0xBF, 0x3F, 0xF3, 0x7E, 0xF0, 0xEB, 0x4C, 0xEB, 0xFF, 0xA2, 0x04, 0x80, 0x0A, 0xAF, 0x4F, 0xF3,
-                                   0x7E, 0xAA, 0xE0, 0x01, 0xF0, 0x10, 0xCA, 0xBF, 0x5B, 0xF3, 0x7E, 0xF0, 0xF5, 0x8A, 0x8F, 0x4F,
-                                   0xF3, 0x7E, 0xA2, 0x10, 0x80, 0xE0, 0xA2, 0x0F, 0x80, 0xD6, 0x60, 0xA9, 0x20, 0x8D, 0x2F, 0x01,
-                                   0x8E, 0x02, 0x02, 0x22, 0x7F, 0xDB, 0x0D, 0xFA, 0x60, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])
+                                  0xFF, 0x89, 0x20, 0xF0, 0x03, 0x4C, 0xAA, 0xFF, 0x60, 0xAD, 0x02, 0x02, 0xF0, 0x3B, 0xDA, 0xAA,
+                                  0xE0, 0x0F, 0xF0, 0x14, 0xE0, 0x10, 0xF0, 0x14, 0xE0, 0x14, 0xD0, 0x02, 0xA2, 0x00, 0xE8, 0xBF,
+                                  0x3F, 0xF3, 0x7E, 0xF0, 0xEB, 0x4C, 0xEB, 0xFF, 0xA2, 0x01, 0x80, 0x0A, 0xAF, 0x4F, 0xF3, 0x7E,
+                                  0xAA, 0xE0, 0x04, 0xF0, 0x10, 0xE8, 0xBF, 0x5B, 0xF3, 0x7E, 0xF0, 0xF5, 0x8A, 0x8F, 0x4F, 0xF3,
+                                  0x7E, 0xA2, 0x10, 0x80, 0xE0, 0xA2, 0x11, 0x80, 0xD6, 0x60, 0xAD, 0x02, 0x02, 0xF0, 0x3B, 0xDA,
+                                  0xAA, 0xE0, 0x11, 0xF0, 0x14, 0xE0, 0x10, 0xF0, 0x14, 0xE0, 0x01, 0xD0, 0x02, 0xA2, 0x15, 0xCA,
+                                  0xBF, 0x3F, 0xF3, 0x7E, 0xF0, 0xEB, 0x4C, 0xEB, 0xFF, 0xA2, 0x04, 0x80, 0x0A, 0xAF, 0x4F, 0xF3,
+                                  0x7E, 0xAA, 0xE0, 0x01, 0xF0, 0x10, 0xCA, 0xBF, 0x5B, 0xF3, 0x7E, 0xF0, 0xF5, 0x8A, 0x8F, 0x4F,
+                                  0xF3, 0x7E, 0xA2, 0x10, 0x80, 0xE0, 0xA2, 0x0F, 0x80, 0xD6, 0x60, 0xA9, 0x20, 0x8D, 0x2F, 0x01,
+                                  0x8E, 0x02, 0x02, 0x22, 0x7F, 0xDB, 0x0D, 0xFA, 0x60, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])
 
     write_strings(rom, world)
 
@@ -502,16 +504,16 @@ def write_strings(rom, world):
 
     sickkiditem = world.get_location('Sick Kid').item
     sickkiditem_text = SickKid_texts[random.randint(0, len(SickKid_texts) - 1)] if sickkiditem is None or sickkiditem.sickkid_credit_text is None else sickkiditem.sickkid_credit_text
-    write_credits_string_to_rom(rom, 'SickKid', sickkiditem_text) 
-    
+    write_credits_string_to_rom(rom, 'SickKid', sickkiditem_text)
+
     zoraitem = world.get_location('King Zora').item
     zoraitem_text = Zora_texts[random.randint(0, len(Zora_texts) - 1)] if zoraitem is None or zoraitem.zora_credit_text is None else zoraitem.zora_credit_text
-    write_credits_string_to_rom(rom, 'Zora', zoraitem_text) 
-    
+    write_credits_string_to_rom(rom, 'Zora', zoraitem_text)
+
     magicshopitem = world.get_location('Potion Shop').item
     magicshopitem_text = MagicShop_texts[random.randint(0, len(MagicShop_texts) - 1)] if magicshopitem is None or magicshopitem.magicshop_credit_text is None else magicshopitem.magicshop_credit_text
-    write_credits_string_to_rom(rom, 'MagicShop', magicshopitem_text) 
-    
+    write_credits_string_to_rom(rom, 'MagicShop', magicshopitem_text)
+
     fluteboyitem = world.get_location('Stumpy').item
     fluteboyitem_text = FluteBoy_texts[random.randint(0, len(FluteBoy_texts) - 1)] if fluteboyitem is None or fluteboyitem.fluteboy_credit_text is None else fluteboyitem.fluteboy_credit_text
     write_credits_string_to_rom(rom, 'FluteBoy', fluteboyitem_text)

@@ -13,6 +13,7 @@ class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
     def _get_help_string(self, action):
         return textwrap.dedent(action.help)
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument('--create_spoiler', help='Output a Spoiler File', action='store_true')
