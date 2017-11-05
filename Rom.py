@@ -1,5 +1,5 @@
 from Dungeons import dungeon_music_addresses
-from Text import string_to_alttp_text, text_addresses, credits_addresses, string_to_credits
+from Text import string_to_alttp_text, text_addresses, Credits
 from Text import Uncle_texts, Ganon1_texts, PyramidFairy_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts
 from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts
 import random
@@ -445,11 +445,6 @@ def write_string_to_rom(rom, target, string):
     rom.write_bytes(address, string_to_alttp_text(string, maxbytes))
 
 
-def write_credits_string_to_rom(rom, target, string):
-    address, length = credits_addresses[target]
-    rom.write_bytes(address, string_to_credits(string, length))
-
-
 def write_strings(rom, world):
     silverarrows = world.find_items('Silver Arrows')
     silverarrow_hint = (' %s?' % silverarrows[0].hint_text) if silverarrows else '?\nI think not!'
@@ -481,7 +476,6 @@ def write_strings(rom, world):
     pedestal_text = 'Some Hot Air' if pedestalitem is None else pedestalitem.pedestal_hint_text if pedestalitem.pedestal_hint_text is not None else 'Unknown Item'
     write_string_to_rom(rom, 'Pedestal', pedestal_text)
     pedestal_credit_text = 'and the Hot Air' if pedestalitem is None else pedestalitem.pedestal_credit_text if pedestalitem.pedestal_credit_text is not None else 'and the Unknown Item'
-    write_credits_string_to_rom(rom, 'Pedestal', pedestal_credit_text)
 
     etheritem = world.get_location('Ether Tablet').item
     ether_text = 'Some Hot Air' if etheritem is None else etheritem.pedestal_hint_text if etheritem.pedestal_hint_text is not None else 'Unknown Item'
@@ -490,30 +484,37 @@ def write_strings(rom, world):
     bombos_text = 'Some Hot Air' if bombositem is None else bombositem.pedestal_hint_text if bombositem.pedestal_hint_text is not None else 'Unknown Item'
     write_string_to_rom(rom, 'BombosTablet', bombos_text)
 
-    write_credits_string_to_rom(rom, 'KingsReturn', KingsReturn_texts[random.randint(0, len(KingsReturn_texts) - 1)])
-    write_credits_string_to_rom(rom, 'Sanctuary', Sanctuary_texts[random.randint(0, len(Sanctuary_texts) - 1)])
-    write_credits_string_to_rom(rom, 'Kakariko', Kakariko_texts[random.randint(0, len(Kakariko_texts) - 1)])
-    write_credits_string_to_rom(rom, 'Blacksmiths', Blacksmiths_texts[random.randint(0, len(Blacksmiths_texts) - 1)])
-    write_credits_string_to_rom(rom, 'DeathMountain', DeathMountain_texts[random.randint(0, len(DeathMountain_texts) - 1)])
-    write_credits_string_to_rom(rom, 'LostWoods', LostWoods_texts[random.randint(0, len(LostWoods_texts) - 1)])
-    write_credits_string_to_rom(rom, 'WishingWell', WishingWell_texts[random.randint(0, len(WishingWell_texts) - 1)])
-    write_credits_string_to_rom(rom, 'DesertPalace', DesertPalace_texts[random.randint(0, len(DesertPalace_texts) - 1)])
-    write_credits_string_to_rom(rom, 'MountainTower', MountainTower_texts[random.randint(0, len(MountainTower_texts) - 1)])
-    write_credits_string_to_rom(rom, 'LinksHouse', LinksHouse_texts[random.randint(0, len(LinksHouse_texts) - 1)])
-    write_credits_string_to_rom(rom, 'Lumberjacks', Lumberjacks_texts[random.randint(0, len(Lumberjacks_texts) - 1)])
+    credits = Credits()
 
     sickkiditem = world.get_location('Sick Kid').item
-    sickkiditem_text = SickKid_texts[random.randint(0, len(SickKid_texts) - 1)] if sickkiditem is None or sickkiditem.sickkid_credit_text is None else sickkiditem.sickkid_credit_text
-    write_credits_string_to_rom(rom, 'SickKid', sickkiditem_text)
+    sickkiditem_text = random.choice(SickKid_texts) if sickkiditem is None or sickkiditem.sickkid_credit_text is None else sickkiditem.sickkid_credit_text
 
     zoraitem = world.get_location('King Zora').item
-    zoraitem_text = Zora_texts[random.randint(0, len(Zora_texts) - 1)] if zoraitem is None or zoraitem.zora_credit_text is None else zoraitem.zora_credit_text
-    write_credits_string_to_rom(rom, 'Zora', zoraitem_text)
+    zoraitem_text = random.choice(Zora_texts) if zoraitem is None or zoraitem.zora_credit_text is None else zoraitem.zora_credit_text
 
     magicshopitem = world.get_location('Potion Shop').item
-    magicshopitem_text = MagicShop_texts[random.randint(0, len(MagicShop_texts) - 1)] if magicshopitem is None or magicshopitem.magicshop_credit_text is None else magicshopitem.magicshop_credit_text
-    write_credits_string_to_rom(rom, 'MagicShop', magicshopitem_text)
+    magicshopitem_text = random.choice(MagicShop_texts) if magicshopitem is None or magicshopitem.magicshop_credit_text is None else magicshopitem.magicshop_credit_text
 
     fluteboyitem = world.get_location('Stumpy').item
-    fluteboyitem_text = FluteBoy_texts[random.randint(0, len(FluteBoy_texts) - 1)] if fluteboyitem is None or fluteboyitem.fluteboy_credit_text is None else fluteboyitem.fluteboy_credit_text
-    write_credits_string_to_rom(rom, 'FluteBoy', fluteboyitem_text)
+    fluteboyitem_text = random.choice(FluteBoy_texts) if fluteboyitem is None or fluteboyitem.fluteboy_credit_text is None else fluteboyitem.fluteboy_credit_text
+
+    credits.update_credits_line('castle', 0, random.choice(KingsReturn_texts))
+    credits.update_credits_line('sancturary', 0, random.choice(Sanctuary_texts))
+    credits.update_credits_line('kakariko', 0, random.choice(Kakariko_texts))
+    credits.update_credits_line('desert', 0, random.choice(DesertPalace_texts))
+    credits.update_credits_line('hera', 0, random.choice(MountainTower_texts))
+    credits.update_credits_line('house', 0, random.choice(LinksHouse_texts))
+    credits.update_credits_line('zora', 0, zoraitem_text)
+    credits.update_credits_line('witch', 0, magicshopitem_text)
+    credits.update_credits_line('lumberjacks', 0, random.choice(Lumberjacks_texts))
+    credits.update_credits_line('grove', 0, fluteboyitem_text)
+    credits.update_credits_line('well', 0, random.choice(WishingWell_texts))
+    credits.update_credits_line('smithy', 0, random.choice(Blacksmiths_texts))
+    credits.update_credits_line('kakariko2', 0, sickkiditem_text)
+    credits.update_credits_line('bridge', 0, random.choice(DeathMountain_texts))
+    credits.update_credits_line('woods', 0, random.choice(LostWoods_texts))
+    credits.update_credits_line('pedestal', 0, pedestal_credit_text)
+
+    (pointers, data) = credits.get_bytes()
+    rom.write_bytes(0x181500, data)
+    rom.write_bytes(0x76CC0, [byte for p in pointers for byte in [p & 0xFF, p >> 8 & 0xFF]])

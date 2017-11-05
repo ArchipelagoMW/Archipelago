@@ -15,22 +15,6 @@ text_addresses = {'Pedestal': (0x180300, 256),
                   'Ganon1Invincible': (0x181100, 256),
                   'Ganon2Invincible': (0x181200, 256)}
 
-credits_addresses = {'KingsReturn': (0x76928, 22),
-                     'Sanctuary': (0x76964, 16),
-                     'Kakariko': (0x76997, 23),
-                     'DesertPalace': (0x769D4, 24),
-                     'MountainTower': (0x76A12, 24),
-                     'LinksHouse': (0x76A52, 19),
-                     'Zora': (0x76A85, 20),
-                     'MagicShop': (0x76AC5, 23),
-                     'Lumberjacks': (0x76AFC, 16),
-                     'FluteBoy': (0x76B34, 23),
-                     'WishingWell': (0x76B71, 23),
-                     'Blacksmiths': (0x76BAC, 23),
-                     'SickKid': (0x76BDF, 20),
-                     'DeathMountain': (0x76C19, 16),
-                     'LostWoods': (0x76C51, 16),
-                     'Pedestal': (0x76C81, 20)}
 
 Uncle_texts = ['Good Luck!\nYou will need it.', 'Forward this message to 10 other people or this seed will be awful.', 'I hope you like your seeds bootless and fluteless.',
                '10\n9\n8\n7\n6\n5\n4\n3\n2\n1\nGo!', 'I have crippling depression.', 'I\'m off to visit cousin Fritzl.']
@@ -63,23 +47,175 @@ MagicShop_texts = ['Drug deal', 'Shrooms for days']
 FluteBoy_texts = ['Stumped']
 
 
-def string_to_credits(s, length):
-    buf = bytearray()
+class Credits(object):
+    def __init__(self):
+        self.credit_scenes = {
+            'castle': [
+                SceneSmallCreditLine(19, 'The return of the King'),
+                SceneLargeCreditLine(23, 'Hyrule Castle'),
+            ],
+            'sancturary': [
+                SceneSmallCreditLine(19, 'The loyal priest'),
+                SceneLargeCreditLine(23, 'Sanctuary'),
+            ],
+            'kakariko': [
+                SceneSmallCreditLine(19, "Sahasralah's Homecoming"),
+                SceneLargeCreditLine(23, 'Kakariko Town'),
+            ],
+            'desert': [
+                SceneSmallCreditLine(19, 'vultures rule the desert'),
+                SceneLargeCreditLine(23, 'Desert Palace'),
+            ],
+            'hera': [
+                SceneSmallCreditLine(19, 'the bully makes a friend'),
+                SceneLargeCreditLine(23, 'Mountain Tower'),
+            ],
+            'house': [
+                SceneSmallCreditLine(19, 'your uncle recovers'),
+                SceneLargeCreditLine(23, 'Your House'),
+            ],
+            'zora': [
+                SceneSmallCreditLine(19, 'finger webs for sale'),
+                SceneLargeCreditLine(23, "Zora's Waterfall"),
+            ],
+            'witch': [
+                SceneSmallCreditLine(19, 'the witch and assistant'),
+                SceneLargeCreditLine(23, 'Magic Shop'),
+            ],
+            'lumberjacks': [
+                SceneSmallCreditLine(19, 'twin lumberjacks'),
+                SceneLargeCreditLine(23, "Woodsmen's Hut"),
+            ],
+            'grove': [
+                SceneSmallCreditLine(19, 'ocarina boy plays again'),
+                SceneLargeCreditLine(23, 'Haunted Grove'),
+            ],
+            'well': [
+                SceneSmallCreditLine(19, 'venus, queen of faeries'),
+                SceneLargeCreditLine(23, 'Wishing Well'),
+            ],
+            'smithy': [
+                SceneSmallCreditLine(19, 'the dwarven swordsmiths'),
+                SceneLargeCreditLine(23, 'Smithery'),
+            ],
+            'kakariko2': [
+                SceneSmallCreditLine(19, 'the bug-catching kid'),
+                SceneLargeCreditLine(23, 'Kakariko Town'),
+            ],
+            'bridge': [
+                SceneSmallCreditLine(19, 'the lost old man'),
+                SceneLargeCreditLine(23, 'Death Mountain'),
+            ],
+            'woods': [
+                SceneSmallCreditLine(19, 'the forest thief'),
+                SceneLargeCreditLine(23, 'Lost Woods'),
+            ],
+            'pedestal': [
+                SceneSmallCreditLine(19, 'and the master sword'),
+                SceneSmallAltCreditLine(21, 'sleeps again...'),
+                #SceneLargeCreditLine(23, 'Forever!'),
+                SceneLargeCreditLine(23, 'Forever!!!!!'),
+            ],
+        }
 
-    if len(s) > length:
-        s = s[:length]
+        self.scene_order = ['castle', 'sancturary', 'kakariko', 'desert', 'hera', 'house', 'zora', 'witch',
+                            'lumberjacks', 'grove', 'well', 'smithy', 'kakariko2', 'bridge', 'woods', 'pedestal']
 
-    padding = length - len(s)
-    leftpadding = padding // 2
-    rightpadding = padding - leftpadding
-    s = ' '*leftpadding + s + ' '*rightpadding
+    def update_credits_line(self, scene, line, text, align='center'):
+        scenes = self.credit_scenes
 
-    for char in s.lower():
-        buf.append(char_to_credit_char(char))
+        text = text[:32]
+        scenes[scene][line].text = text
 
-    return buf
+    def get_bytes(self):
+        pointers = []
+        data = bytearray()
+        for scene_name in self.scene_order:
+            scene = self.credit_scenes[scene_name]
+            pointers.append(len(data))
+
+            for part in scene:
+                data += part.as_bytes()
+
+        pointers.append(len(data))
+        return (pointers, data)
+
+class CreditLine(object):
+    """Base class of credit lines"""
+    
+    def __init__(self, text, align='center'):
+        self.text = text
+        self.align = align
+        
+    @property
+    def x(self):
+        x = 0
+        if self.align == 'left':
+            x = 0
+        elif self.align == 'right':
+            x = 32 - len(self.text)
+        else:  # center
+            x = (32 - len(self.text)) // 2
+        return x
+
+    
+class SceneCreditLine(CreditLine):
+    """Base class for credit lines for the scene portion of the credits"""
+    def __init__(self, y, text, align='center'):
+        self.y = y
+        super().__init__(text,align)
+
+    def header(self, x=None, y=None, length=None):
+        if x is None:
+            x = self.x
+        if y is None:
+            y = self.y
+        if length is None:
+            length = len(self.text)
+        header = (0x6000 | (y >> 5 << 11) | ((y & 0x1F) << 5) | (x >> 5 << 10) | (x & 0x1F)) << 16 | (length * 2 - 1)
+        return bytearray([header >> 24 & 0xFF, header >> 16 & 0xFF, header >> 8 & 0xFF, header & 0xFF])
 
 
+class SceneSmallCreditLine(SceneCreditLine):
+    def as_bytes(self):
+        buf = bytearray()
+        buf.extend(self.header())
+        buf.extend(GoldCreditMapper.convert(self.text))
+
+        # handle upper half of apostrophe character if present
+        if "'" in self.text:
+            apos = "".join([',' if x == "'" else ' ' for x in self.text])
+            buf.extend(self.header(self.x + apos.index(','), self.y - 1, len(apos.strip())))
+            buf.extend(GoldCreditMapper.convert(apos.strip()))
+
+        # handle lower half of comma character if present
+        if ',' in self.text:
+            commas = "".join(["'" if x == ',' else ' ' for x in self.text])
+            buf.extend(self.header(self.x + commas.index("'"), self.y + 1, len(commas.strip())))
+            buf.extend(GoldCreditMapper.convert(commas.strip()))
+
+        return buf
+
+
+class SceneSmallAltCreditLine(SceneCreditLine):
+    def as_bytes(self):
+        buf = bytearray()
+        buf += self.header()
+        buf += GreenCreditMapper.convert(self.text)
+        return buf
+
+
+class SceneLargeCreditLine(SceneCreditLine):
+    def as_bytes(self):
+        buf = bytearray()
+        buf += self.header()
+        buf += LargeCreditTopMapper.convert(self.text)
+
+        buf += self.header(self.x, self.y + 1)
+        buf += LargeCreditBottomMapper.convert(self.text)
+        return buf
+
+        
 def string_to_alttp_text(s, maxbytes=256):
     lines = s.upper().split('\n')
     outbuf = bytearray()
@@ -311,12 +447,6 @@ char_map = {' ': 0xFF,
             'ェ': 0x9E,
             'ォ': 0x9F}
 
-credit_char_map = {' ': 0x9F,
-                   ',': 0x37,
-                   '.': 0x37,
-                   '-': 0x36,
-                   "'": 0x35}
-
 
 def char_to_alttp_char(char):
     if 0x30 <= ord(char) <= 0x39:
@@ -328,9 +458,62 @@ def char_to_alttp_char(char):
     return char_map.get(char, 0xFF)
 
 
-def char_to_credit_char(char):
-    if 0x61 <= ord(char) <= 0x7A:
-        return ord(char) - 0x47
+class TextMapper(object):
+    number_offset = None
+    @classmethod
+    def map_char(cls, char):
+        if cls.number_offset is not None:
+            if  0x30 <= ord(char) <= 0x39:
+                return ord(char) + cls.number_offset
+        if 0x61 <= ord(char) <= 0x7A:
+            return ord(char) + cls.alpha_offset
+        return cls.char_map.get(char, cls.char_map[' '])
 
-    return credit_char_map.get(char, 0x9F)
+    @classmethod
+    def convert(cls, text):
+        buf = bytearray()
+        for char in text.lower():
+            buf.append(cls.map_char(char))
+        return buf
 
+
+class GoldCreditMapper(TextMapper):
+    char_map = {' ': 0x9F,
+                ',': 0x34,
+                '.': 0x37,
+                '-': 0x36,
+                "'": 0x35}
+    alpha_offset = -0x47
+
+
+class GreenCreditMapper(TextMapper):
+    char_map = {' ': 0x9F,
+                '.': 0x52}
+    alpha_offset = -0x29
+    
+class RedCreditMapper(TextMapper):
+    char_map = {' ': 0x9F} #fixme
+    alpha_offset= -0x61
+
+class LargeCreditTopMapper(TextMapper):
+    char_map = {' ': 0x9F,
+                "'": 0x77,
+                '!': 0x78,
+                '.': 0xA0,
+                '#': 0xA1,
+                '/': 0xA2,
+                ':': 0xA3}
+    alpha_offset = -0x04
+    number_offset = 0x23
+
+
+class LargeCreditBottomMapper(TextMapper):
+    char_map = {' ': 0x9F,
+                "'": 0x9D,
+                '!': 0x9E,
+                '.': 0xC0,
+                '#': 0xC1,
+                '/': 0xC2,
+                ':': 0xC3}
+    alpha_offset = 0x22
+    number_offset = 0x49
