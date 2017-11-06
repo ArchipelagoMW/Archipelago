@@ -183,6 +183,13 @@ class World(object):
                 return True
 
         return False
+        
+    def has_beaten_game(self, state):
+        if state.has('Triforce'): return True
+        if self.goal in ['triforcehunt']:
+            if state.item_count('Triforce Piece')+state.item_count('Power Star')> self.treasure_hunt_count:
+                return True
+        return False
 
     def can_beat_game(self, starting_state=None):
         prog_locations = [location for location in self.get_locations() if location.item is not None and (location.item.advancement or location.event)]
@@ -317,7 +324,10 @@ class CollectionState(object):
         if count == 1:
             return item in self.prog_items
         else:
-            return len([pritem for pritem in self.prog_items if pritem == item]) >= count
+            return self.item_count(item) >= count
+    
+    def item_count(self, item):
+        return len([pritem for pritem in self.prog_items if pritem == item])
 
     def can_lift_rocks(self):
         return self.has('Power Glove') or self.has('Titans Mitts')

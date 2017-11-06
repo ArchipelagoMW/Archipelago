@@ -118,6 +118,7 @@ def generate_itempool(world):
         raise NotImplementedError('Not supported yet')
 
     world.push_item('Ganon', ItemFactory('Triforce'), False)
+    world.get_location('Ganon').event = True
     world.push_item('Agahnim 1', ItemFactory('Beat Agahnim 1'), False)
     world.get_location('Agahnim 1').event = True
     world.push_item('Agahnim 2', ItemFactory('Beat Agahnim 2'), False)
@@ -177,6 +178,7 @@ def generate_itempool(world):
 
     if world.goal == 'pedestal':
         world.push_item('Master Sword Pedestal', ItemFactory('Triforce'), False)
+        world.get_location('Master Sword Pedestal').event = True
     elif world.goal == 'triforcehunt':
         world.treasure_hunt_count = 20
         world.treasure_hunt_icon = 'Triforce Piece'
