@@ -109,7 +109,7 @@ Tower of Hera - Big Key Chest: Big Key (Tower of Hera)
 Tower of Hera - Compass Chest: Nothing
 Tower of Hera - Big Chest: Moon Pearl
 Moldorm - Heart Container: Nothing
-Moldorm - Pendant: Red Pendant
+Tower of Hera - Prize: Red Pendant
 Pyramid: Nothing
 Catfish: Quake
 Stumpy: Shovel

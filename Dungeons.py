@@ -124,7 +124,7 @@ def fill_dungeons_restrictive(world, shuffled_locations):
 
 dungeon_music_addresses = {'Eastern Palace - Prize': [0x1559A],
                            'Desert Palace - Prize': [0x1559B, 0x1559C, 0x1559D, 0x1559E],
-                           'Moldorm - Pendant': [0x155C5, 0x1107A, 0x10B8C],
+                           'Tower of Hera - Prize': [0x155C5, 0x1107A, 0x10B8C],
                            'Palace of Darkness - Prize': [0x155B8],
                            'Swamp Palace - Prize': [0x155B7],
                            'Thieves Town - Prize': [0x155C6],

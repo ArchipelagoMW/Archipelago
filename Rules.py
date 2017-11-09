@@ -213,7 +213,7 @@ def global_rules(world):
     set_rule(world.get_location('Tower of Hera - Big Chest'), lambda state: state.has('Big Key (Tower of Hera)'))
     set_rule(world.get_location('Tower of Hera - Big Key Chest'), lambda state: state.has_fire_source())
     set_rule(world.get_location('Moldorm - Heart Container'), lambda state: state.has_blunt_weapon())
-    set_rule(world.get_location('Moldorm - Pendant'), lambda state: state.has_blunt_weapon())
+    set_rule(world.get_location('Tower of Hera - Prize'), lambda state: state.has_blunt_weapon())
     for location in ['Moldorm - Heart Container', 'Tower of Hera - Big Chest', 'Tower of Hera - Compass Chest']:
         forbid_item(world.get_location(location), 'Big Key (Tower of Hera)')
     for location in ['Tower of Hera - Big Key Chest']:
