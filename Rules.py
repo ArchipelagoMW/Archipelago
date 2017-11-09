@@ -427,6 +427,12 @@ def open_rules(world):
     # softlock protection as you can reach the sewers small key door with a guard drop key
     forbid_item(world.get_location('Hyrule Castle - Boomerang Chest'), 'Small Key (Escape)')
     forbid_item(world.get_location('Hyrule Castle - Zelda\'s Chest'), 'Small Key (Escape)')
+    
+    # to prevent key-lock in keysanity we need to prevent these chests from having an item that
+    # blocks the small key
+    if (world.keysanity):
+        set_rule(world.get_entrance('Hyrule Castle - Boomerang Chest'), lambda state: state.has('Small Key (Escape)'))
+        set_rule(world.get_entrance('Hyrule Castle - Zelda\'s Chest'), lambda state: state.has('Small Key (Escape)'))
 
 
 def swordless_rules(world):
