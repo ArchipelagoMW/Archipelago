@@ -7,6 +7,7 @@ from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
 from Items import ItemFactory
 from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, fill_restrictive, flood_items
 from collections import OrderedDict
+from ItemList import generate_itempool
 import random
 import time
 import logging
@@ -28,7 +29,7 @@ def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap, args.fastmenu, args.keysanity)
+    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap, args.fastmenu, args.keysanity)
     logger = logging.getLogger('')
     if seed is None:
         random.seed(None)
@@ -112,99 +113,9 @@ def main(args, seed=None):
 
     return world
 
-
-def generate_itempool(world):
-    if world.difficulty not in ['normal', 'timed', 'timed-ohko', 'timed-countdown'] or world.goal not in ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'] or world.mode not in ['open', 'standard', 'swordless']:
-        raise NotImplementedError('Not supported yet')
-
-    world.push_item('Ganon', ItemFactory('Triforce'), False)
-    world.get_location('Ganon').event = True
-    world.push_item('Agahnim 1', ItemFactory('Beat Agahnim 1'), False)
-    world.get_location('Agahnim 1').event = True
-    world.push_item('Agahnim 2', ItemFactory('Beat Agahnim 2'), False)
-    world.get_location('Agahnim 2').event = True
-
-    # set up item pool
-    if world.difficulty in ['timed', 'timed-countdown']:
-        world.itempool = ItemFactory(['Arrow Upgrade (+5)'] * 2 + ['Bomb Upgrade (+5)'] * 2 + ['Arrow Upgrade (+10)'] * 3 + ['Bomb Upgrade (+10)'] * 3 +
-                                     ['Progressive Armor'] * 2 + ['Progressive Shield'] * 3 + ['Progressive Glove'] * 2 +
-                                     ['Bottle'] * 4 +
-                                     ['Bombos', 'Book of Mudora', 'Blue Boomerang', 'Bow', 'Bug Catching Net', 'Cane of Byrna', 'Cane of Somaria',
-                                      'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp', 'Cape', 'Magic Powder',
-                                      'Red Boomerang', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Silver Arrows'] +
-                                     ['Sanctuary Heart Container'] + ['Rupees (100)'] * 2 + ['Boss Heart Container'] * 12 + ['Piece of Heart'] * 16 +
-                                     ['Rupees (50)'] * 8 + ['Rupees (300)'] * 6 + ['Rupees (20)'] * 4 +
-                                     ['Arrows (10)'] * 3 + ['Bombs (3)'] * 10 + ['Red Clock'] * 10 + ['Blue Clock'] * 10 + ['Green Clock'] * 20)
-        world.clock_mode = 'stopwatch' if world.difficulty == 'timed' else 'countdown'
-    elif world.difficulty == 'timed-ohko':
-        world.itempool = ItemFactory(['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6 + ['Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] +
-                                     ['Progressive Armor'] * 2 + ['Progressive Shield'] * 3 + ['Progressive Glove'] * 2 +
-                                     ['Bottle'] * 4 +
-                                     ['Bombos', 'Book of Mudora', 'Blue Boomerang', 'Bow', 'Bug Catching Net', 'Cane of Byrna', 'Cane of Somaria',
-                                      'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp', 'Cape', 'Magic Powder',
-                                      'Red Boomerang', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Silver Arrows'] +
-                                     ['Single Arrow', 'Sanctuary Heart Container'] + ['Rupees (100)'] * 3 + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24 +
-                                     ['Rupees (50)'] * 7 + ['Rupees (300)'] * 7 + ['Rupees (20)'] * 5 +
-                                     ['Arrows (10)'] * 5 + ['Bombs (3)'] * 10 + ['Green Clock'] * 25)
-        world.clock_mode = 'ohko'
-    else:
-        world.itempool = ItemFactory(['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6 + ['Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] +
-                                     ['Progressive Armor'] * 2 + ['Progressive Shield'] * 3 + ['Progressive Glove'] * 2 +
-                                     ['Bottle'] * 4 +
-                                     ['Bombos', 'Book of Mudora', 'Blue Boomerang', 'Bow', 'Bug Catching Net', 'Cane of Byrna', 'Cane of Somaria',
-                                      'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp', 'Cape', 'Magic Powder',
-                                      'Red Boomerang', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Silver Arrows'] +
-                                     ['Single Arrow', 'Sanctuary Heart Container', 'Rupees (100)'] + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24 +
-                                     ['Rupees (50)'] * 7 + ['Rupees (5)'] * 4 + ['Rupee (1)'] * 2 + ['Rupees (300)'] * 5 + ['Rupees (20)'] * 28 +
-                                     ['Arrows (10)'] * 5 + ['Bombs (3)'] * 10)
-
-    if world.mode == 'swordless':
-        world.itempool.extend(ItemFactory(['Rupees (20)'] * 4))
-    elif world.mode == 'standard':
-        world.push_item('Link\'s Uncle', ItemFactory('Progressive Sword'), False)
-        world.get_location('Link\'s Uncle').event = True
-        world.itempool.extend(ItemFactory(['Progressive Sword'] * 3))
-    else:
-        world.itempool.extend(ItemFactory(['Progressive Sword'] * 4))
-
-    # provide mirror and pearl so you can avoid fake DW/LW and do dark world exploration as intended by algorithm, for now
-    if world.shuffle == 'insanity':
-        world.push_item('Links House', ItemFactory('Magic Mirror'), False)
-        world.get_location('Links House').event = True
-        world.push_item('Sanctuary', ItemFactory('Moon Pearl'), False)
-        world.get_location('Sanctuary').event = True
-    else:
-        world.itempool.extend(ItemFactory(['Magic Mirror', 'Moon Pearl']))
-
-    if world.goal == 'pedestal':
-        world.push_item('Master Sword Pedestal', ItemFactory('Triforce'), False)
-        world.get_location('Master Sword Pedestal').event = True
-    elif world.goal == 'triforcehunt':
-        world.treasure_hunt_count = 20
-        world.treasure_hunt_icon = 'Triforce Piece'
-        world.itempool.extend(ItemFactory(['Triforce Piece'] * 30))
-
-    world.itempool.append(ItemFactory('Magic Upgrade (1/2)'))
-
-    # shuffle medallions
-    mm_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
-    tr_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
-    world.required_medallions = (mm_medallion, tr_medallion)
-
-    # distribute crystals
-    crystals = ItemFactory(['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6'])
-    crystal_locations = [world.get_location('Turtle Rock - Prize'), world.get_location('Eastern Palace - Prize'), world.get_location('Desert Palace - Prize'), world.get_location('Tower of Hera - Prize'), world.get_location('Palace of Darkness - Prize'),
-                         world.get_location('Thieves Town - Prize'), world.get_location('Skull Woods - Prize'), world.get_location('Swamp Palace - Prize'), world.get_location('Ice Palace - Prize'),
-                         world.get_location('Misery Mire - Prize')]
-
-    random.shuffle(crystal_locations)
-
-    fill_restrictive(world, world.get_all_state(keys=True), crystal_locations, crystals)
-
-
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap, world.fastmenu, world.keysanity)
+    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.timer, world.progressive, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap, world.fastmenu, world.keysanity)
     ret.required_medallions = list(world.required_medallions)
     ret.swamp_patch_required = world.swamp_patch_required
     ret.ganon_at_pyramid = world.ganon_at_pyramid
