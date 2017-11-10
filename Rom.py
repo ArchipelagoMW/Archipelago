@@ -67,8 +67,7 @@ class LocalRom(object):
             raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
 
     def write_crc(self):
-        # this does not seem to work
-        crc = sum(self.buffer[:0x7FEB] + self.buffer[0x7FF5:]) % 0xFFFF
+        crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
         inv = crc ^ 0xFFFF
         self.write_bytes(0x7FDC, [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF])
 
@@ -86,7 +85,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
             # Keys in their native dungeon should use the orignal item code for keys
             if location.parent_region.dungeon:
                 dungeon = location.parent_region.dungeon
-                if location.item.key and dungeon.is_dungeon_item(location.item):
+                if location.item is not None and location.item.key and dungeon.is_dungeon_item(location.item):
                     if location.item.type == "BigKey":
                         itemid = 0x32
                     if location.item.type == "SmallKey":
@@ -164,17 +163,46 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
 
     # handle difficulty
     if world.difficulty == 'hard':
-        # Spike Cave Damage
-        rom.write_byte(0x180168, 0x02)
         # Powdered Fairies Prize
-        rom.write_byte(0x36DD0, 0x79)  # Bee
+        rom.write_byte(0x36DD0, 0xD8)  # One Heart
+        # potion heal amount
+        rom.write_byte(0x180084, 0x28)  # Five Hearts
+        # potion magic restore amount
+        rom.write_byte(0x180085, 0x40)  # Half Magic
+        #Cape magic cost
+        rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
+        #Byrna residual magic cost
+        rom.write_bytes(0x3ADA7, [0x08, 0x08, 0x08])
+        #Disable catching fairies
+        rom.write_byte(0x34FD6, 0x80)
+        #To-do: Implement shield price hikes
+    elif world.difficulty == 'expert':
+        # Powdered Fairies Prize
+        rom.write_byte(0x36DD0, 0x79)  # Bees
         # potion heal amount
         rom.write_byte(0x180084, 0x08)  # One Heart
         # potion magic restore amount
         rom.write_byte(0x180085, 0x20)  # Quarter Magic
+        #Cape magic cost
+        rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
+        #Byrna residual magic cost
+        rom.write_bytes(0x3ADA7, [0x08, 0x08, 0x08])
+        #Disable catching fairies
+        rom.write_byte(0x34FD6, 0x80)
+    elif world.difficulty == 'insane':
+        # Powdered Fairies Prize
+        rom.write_byte(0x36DD0, 0x79)  # Bees
+        # potion heal amount
+        rom.write_byte(0x180084, 0x00)  # No healing
+        # potion magic restore amount
+        rom.write_byte(0x180085, 0x00)  # No healing
+        #Cape magic cost
+        rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
+        #Byrna residual magic cost
+        rom.write_bytes(0x3ADA7, [0x08, 0x08, 0x08])
+        #Disable catching fairies
+        rom.write_byte(0x34FD6, 0x80)
     else:
-        # Spike Cave Damage
-        rom.write_byte(0x180168, 0x08)
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xE3)  # fairy
         # potion heal amount
@@ -211,7 +239,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     rom.write_bytes(0x37A78, prizes)
 
     # prize pack drop chances
-    if world.difficulty == 'hard':
+    if world.difficulty in ['hard', 'expert', 'insane']:
         droprates = [0x01, 0x02, 0x03, 0x03, 0x03, 0x04, 0x04]  # 50%, 25%, 3* 12.5%, 2* 6.25%
     else:
         droprates = [0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01]  # 50%
@@ -305,7 +333,9 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     rom.write_byte(0x180030, 0x00)  # Disable SRAM trace
     rom.write_byte(0x180036, 0x0A)  # Rupoor negative value
     rom.write_byte(0x180169, 0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
-    rom.write_byte(0x180170, 0x01 if world.ganon_at_pyramid else 0x00)  # Enable respawning on pyramid after ganon death
+# This seems to correlate to 1/4 magic Cape cost in the spike cave in v27. Important: figure out where this hack moved.
+#    rom.write_byte(0x180170, 0x01 if world.ganon_at_pyramid else 0x00)  # Enable respawning on pyramid after ganon death
+    rom.write_byte(0x180168, 0x08)  # Spike Cave Damage
     rom.write_byte(0x180086, 0x00 if world.aga_randomness else 0x01)  # set blue ball and ganon warp randomness
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
     if world.goal in ['ganon']:
