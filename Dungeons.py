@@ -111,7 +111,7 @@ def fill_dungeons_restrictive(world, shuffled_locations):
     skull_woods_big_chest.event = True
     shuffled_locations.remove(skull_woods_big_chest)
 
-    dungeon_items = [item for dungeon in world.dungeons for item in dungeon.all_items]
+    dungeon_items = [item for dungeon in world.dungeons for item in dungeon.all_items if item.key or world.place_dungeon_items]
 
     # sort in the order Big Key, Small Key, Other before placing dungeon items
     sort_order = {"BigKey": 3, "SmallKey": 2}
