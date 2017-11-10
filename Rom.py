@@ -308,9 +308,9 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_bytes(0x18020C, [0x00, 0x00, 0x00, 0x00])  # starting time (in frames, sint32)
     elif world.clock_mode == 'ohko':
         rom.write_bytes(0x180190, [0x01, 0x02, 0x01])  # ohko timer with resetable timer functionality
-        rom.write_bytes(0x180200, [0x00, 0x00, 0x00, 0x00])  # red clock adjustment time (in frames, sint32)
-        rom.write_bytes(0x180204, [0x00, 0x00, 0x00, 0x00])  # blue clock adjustment time (in frames, sint32)
-        rom.write_bytes(0x180208, [0x50, 0x46, 0x00, 0x00])  # green clock adjustment time (in frames, sint32)
+        rom.write_bytes(0x180200, [0x00, 0x00, 0x00, 0x81])  # red clock adjustment time (in frames, sint32)
+        rom.write_bytes(0x180204, [0x20, 0x1C, 0x00, 0x00])  # blue clock adjustment time (in frames, sint32)
+        rom.write_bytes(0x180208, [0x40, 0x38, 0x00, 0x00])  # green clock adjustment time (in frames, sint32)
         rom.write_bytes(0x18020C, [0xA0, 0x8C, 0x00, 0x00])  # starting time (in frames, sint32)
     if world.clock_mode == 'stopwatch':
         rom.write_bytes(0x180190, [0x02, 0x01, 0x00])  # set stopwatch mode
@@ -352,6 +352,8 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     # compasses showing dungeon count
     if world.clock_mode != 'off':
         rom.write_byte(0x18003C, 0x00)  # Currently must be off if timer is on, because they use same HUD location
+    elif world.difficulty == 'easy':
+        rom.write_byte(0x18003C, 0x02)  # always on
     elif world.keysanity:
         rom.write_byte(0x18003C, 0x01)  # show on pickup
     else:
