@@ -51,14 +51,19 @@ if __name__ == '__main__':
                              Triforce Hunt: Places 30 Triforce Pieces in the world, collect 
                                             20 of them to beat the game.                           
                              ''')
-    parser.add_argument('--difficulty', default='normal', const='normal', nargs='?', choices=['normal', 'timed', 'timed-ohko', 'timed-countdown'],
+    parser.add_argument('--difficulty', default='normal', const='normal', nargs='?', choices=['easy', 'normal', 'hard', 'expert', 'insane'],
                         help='''\
                              Select game difficulty. Affects available itempool. (default: %(default)s)
+                             Easy:            An easy setting with extra equipment.
                              Normal:          Normal difficulty.
-                             
-                             Timed modes replace low value items with clocks, the overall
-                               rupee count in the pool stays roughly the same.
-                               
+                             Hard:            A harder setting with less equipment and reduced health.
+                             Expert:          A harder yet setting with minimum equipment and health.
+                             Insane:          A setting with the absolute minimum in equipment and no extra health.                           
+                             ''')
+    parser.add_argument('--timer', default='none', const='normal', nargs='?', choices=['none', 'hard', 'expert', 'insane'],
+                        help='''\
+                             Select game timer setting. Affects available itempool. (default: %(default)s)
+                             None:            No timer.
                              Timed:           Starts with clock at zero. Green Clocks
                                               subtract 4 minutes (Total: 20), Blue Clocks
                                               subtract 2 minutes (Total: 10), Red Clocks add
@@ -70,6 +75,20 @@ if __name__ == '__main__':
                              Timed Countdown: Starts with clock at 40 minutes. Same clocks as
                                               Timed mode. If time runs out, you lose (but can
                                               still keep playing).                             
+                             ''')
+    parser.add_argument('--progressive', default='on', const='normal', nargs='?', choices=['on', 'off', 'random'],
+                        help='''\
+                             Select progressive equipment setting. Affects available itempool. (default: %(default)s)
+                             On:              Swords, Shields, Armor, and Gloves will
+                                              all be progressive equipment. Each subsequent
+                                              item of the same type the player finds will
+                                              upgrade that piece of equipment by one stage.
+                             Off:             Swords, Shields, Armor, and Gloves will not
+                                              be progressive equipment. Higher level items may
+                                              be found at any time. Downgrades are not possible.
+                             Random:          Swords, Shields, Armor, and Gloves will, per
+                                              category, be randomly progressive or not.
+                                              Link will die in one hit.                           
                              ''')
     parser.add_argument('--algorithm', default='vt26', const='vt26', nargs='?', choices=['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26'],
                         help='''\
