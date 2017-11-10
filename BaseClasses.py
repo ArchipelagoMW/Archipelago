@@ -6,11 +6,13 @@ from collections import OrderedDict
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, keysanity):
+    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, keysanity):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
         self.difficulty = difficulty
+        self.timer = timer
+        self.progressive = progressive
         self.goal = goal
         self.algorithm = algorithm
         self.dungeons = []
@@ -229,12 +231,14 @@ class World(object):
         dungeonitems = 0 if self.place_dungeon_items else 1
         goal = ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'].index(self.goal)
         shuffle = ['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'].index(self.shuffle)
-        difficulty = ['normal', 'timed', 'timed-ohko', 'timed-countdown'].index(self.difficulty)
+        difficulty = ['easy', 'normal', 'hard', 'expert', 'insane'].index(self.difficulty)
+        timer = ['none', 'timed', 'timed-ohko', 'timed-countdown'].index(self.timer)
+        progressive = ['on', 'off', 'random'].index(self.progressive)
         algorithm = ['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26'].index(self.algorithm)
         beatableonly = 1 if self.check_beatable_only else 0
         shuffleganon = 1 if self.shuffle_ganon else 0
         keysanity = 1 if self.keysanity else 0
-        return logic | (beatableonly << 1) | (dungeonitems << 2) | (shuffleganon << 3) | (goal << 4) | (shuffle << 7) | (difficulty << 11) | (algorithm << 13) | (mode << 16) | (keysanity << 18)
+        return logic | (beatableonly << 1) | (dungeonitems << 2) | (shuffleganon << 3) | (goal << 4) | (shuffle << 7) | (difficulty << 11) | (algorithm << 13) | (mode << 16) | (keysanity << 18) | (timer << 19) | (progressive << 21)
 
 
 class CollectionState(object):
@@ -649,7 +653,7 @@ class Spoiler(object):
 
     def parse_data(self):
         self.medallions = OrderedDict([('Misery Mire', self.world.required_medallions[0]), ('Turtle Rock', self.world.required_medallions[1])])
-        self.locations = {'other locations': OrderedDict([(str(location), str(location.item)) if location.item is not None else 'Nothing' for location in self.world.get_locations()])}
+        self.locations = {'other locations': OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in self.world.get_locations()])}
         from Main import __version__ as ERVersion
         self.metadata = {'version': ERVersion,
                          'seed': self.world.seed,
@@ -659,6 +663,8 @@ class Spoiler(object):
                          'shuffle': self.world.shuffle,
                          'algorithm': self.world.algorithm,
                          'difficulty': self.world.difficulty,
+                         'timer': self.world.timer,
+                         'progressive': self.world.progressive,
                          'completeable': not self.world.check_beatable_only,
                          'dungeonitems': self.world.place_dungeon_items,
                          'quickswap': self.world.quickswap,
