@@ -108,15 +108,19 @@ This is only noticeably different if the --shuffleganon option is enabled.
 Select game difficulty. Affects available itempool. (default: normal)
 
 ```
---algorithm [{freshness,flood,vt21,vt22,vt25}]
+--algorithm [{freshness,flood,vt21,vt22,vt25,vt26,balanced}]
 ```
 
 Select item filling algorithm. 
 
+### Balanced (Default)
+This is a variation of vt26 that aims to strike a balance between the overworld heavy vt25 and the dungeon heavy vt26 algorithm.
+It does this by reshuffling the remaining locations after placing dungeon items.
+
 ### VT26 (Default)
-Items and locations are shuffled like in VT25, and dungeon items are now placed using the same algorithm. It includes 
-a slight deliberate bias against having too many desireable items in Ganon's Tower to help counterbalance the sheer number
-of chests in that single location.
+Items and locations are shuffled like in VT25, and dungeon items are now placed using the same algorithm. When gannon is not
+shuffled it includes a slight deliberate bias against having too many desireable items in Ganon's Tower to help counterbalance
+the sheer number of chests in that single location.
 
 ### VT25 
 Items and locations are shuffled and placed from the top of the lists. The only thing preventing an item from being placed into a spot
@@ -231,7 +235,7 @@ Use to select a different sprite sheet to use for Link. Path to a binary file of
 --beatableonly
 ```
 
-If set, will only ensure the goal can be achieved, but not necessarily that all locations are reachable. Currently only affects VT25 algorithm.
+If set, will only ensure the goal can be achieved, but not necessarily that all locations are reachable. Currently only affects VT25, VT26 and balanced algorithms.
 
 ```
 --shuffleganon

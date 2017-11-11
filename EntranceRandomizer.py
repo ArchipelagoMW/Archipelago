@@ -90,14 +90,15 @@ if __name__ == '__main__':
                                               category, be randomly progressive or not.
                                               Link will die in one hit.                           
                              ''')
-    parser.add_argument('--algorithm', default='vt26', const='vt26', nargs='?', choices=['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26'],
+    parser.add_argument('--algorithm', default='balanced', const='balanced', nargs='?', choices=['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26', 'balanced'],
                         help='''\
                              Select item filling algorithm. (default: %(default)s
+                             balanced:    vt26 derivitive that aims to strike a balance between
+                                          the overworld heavy vt25 and the dungeon heavy vt26
+                                          algorithm.
                              vt26:        Shuffle items and place them in a random location
                                           that it is not impossible to be in. This includes
-                                          dungeon keys and items. Includes slight deliberate 
-                                          bias against having too many desireable items in 
-                                          Ganon's Tower.
+                                          dungeon keys and items.
                              vt25:        Shuffle items and place them in a random location
                                           that it is not impossible to be in.
                              vt21:        Unbiased in its selection, but has tendency to put
