@@ -21,6 +21,12 @@ class JsonRom(object):
 
     def write_bytes(self, startaddress, values):
         self.patches[str(startaddress)] = list(values)
+        
+    def write_int16_to_rom(self, address, value):
+        self.write_bytes(address, int16_as_bytes(value))
+    
+    def write_int32_to_rom(self, address, value):
+        self.write_bytes(address, int32_as_bytes(value))
 
     def write_to_file(self, file):
         json.dump([self.patches], open(file, 'w'))
@@ -38,6 +44,12 @@ class LocalRom(object):
     def write_bytes(self, startaddress, values):
         for i, value in enumerate(values):
             self.write_byte(startaddress + i, value)
+
+    def write_int16_to_rom(self, address, value):
+        self.write_bytes(address, int16_as_bytes(value))
+    
+    def write_int32_to_rom(self, address, value):
+        self.write_bytes(address, int32_as_bytes(value))
 
     def write_to_file(self, file):
         with open(file, 'wb') as outfile:
@@ -71,6 +83,13 @@ class LocalRom(object):
         inv = crc ^ 0xFFFF
         self.write_bytes(0x7FDC, [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF])
 
+def int16_as_bytes(value):
+    value = value & 0xFFFF
+    return [value & 0xFF, (value >> 8) & 0xFF]
+    
+def int32_as_bytes(value):
+    value = value & 0xFFFFFFFF
+    return [value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF, (value >> 24) & 0xFF]
 
 def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     # patch items
@@ -175,7 +194,26 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_bytes(0x3ADA7, [0x08, 0x08, 0x08])
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
-        #To-do: Implement shield price hikes
+        #Set overflow items for progressive equipment
+        rom.write_bytes(0x180090, [0x03, 0x47, 0x02, 0x47, 0x01, 0x47, 0x02, 0x47])
+        #Make Blue Shield more expensive
+        rom.write_bytes(0xF73D2, [0xFC, 0xFF])
+        rom.write_bytes(0xF73DA, [0x04, 0x00])
+        rom.write_bytes(0xF73E2, [0x0C, 0x00])
+        rom.write_byte(0xF73D6, 0x31)
+        rom.write_byte(0xF73DE, 0x30)
+        rom.write_byte(0xF73E6, 0x30)
+        rom.write_byte(0xF7201, 0x00)
+        rom.write_byte(0xF71FF, 0x64)
+        #Make Red Shield more expensive
+        rom.write_bytes(0xF73FA, [0xFC, 0xFF])
+        rom.write_bytes(0xF7402, [0x04, 0x00])
+        rom.write_bytes(0xF740A, [0x0C, 0x00])
+        rom.write_byte(0xF73FE, 0x33)
+        rom.write_byte(0xF7406, 0x33)
+        rom.write_byte(0xF740E, 0x33)
+        rom.write_byte(0xF7241, 0x03)
+        rom.write_byte(0xF723F, 0xE7)
     elif world.difficulty == 'expert':
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0x79)  # Bees
@@ -189,6 +227,26 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_bytes(0x3ADA7, [0x08, 0x08, 0x08])
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
+        #Set overflow items for progressive equipment
+        rom.write_bytes(0x180090, [0x02, 0x47, 0x00, 0x47, 0x00, 0x47, 0x01, 0x47])
+        #Make Blue Shield more expensive
+        rom.write_bytes(0xF73D2, [0xFC, 0xFF])
+        rom.write_bytes(0xF73DA, [0x04, 0x00])
+        rom.write_bytes(0xF73E2, [0x0C, 0x00])
+        rom.write_byte(0xF73D6, 0x3C)
+        rom.write_byte(0xF73DE, 0x3C)
+        rom.write_byte(0xF73E6, 0x3C)
+        rom.write_byte(0xF7201, 0x27)
+        rom.write_byte(0xF71FF, 0x06)
+        #Make Red Shield more expensive
+        rom.write_bytes(0xF73FA, [0xFC, 0xFF])
+        rom.write_bytes(0xF7402, [0x04, 0x00])
+        rom.write_bytes(0xF740A, [0x0C, 0x00])
+        rom.write_byte(0xF73FE, 0x3C)
+        rom.write_byte(0xF7406, 0x3C)
+        rom.write_byte(0xF740E, 0x3C)
+        rom.write_byte(0xF7241, 0x27)
+        rom.write_byte(0xF723F, 0x06)
     elif world.difficulty == 'insane':
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0x79)  # Bees
@@ -202,6 +260,26 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_bytes(0x3ADA7, [0x08, 0x08, 0x08])
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
+        #Set overflow items for progressive equipment
+        rom.write_bytes(0x180090, [0x02, 0x47, 0x00, 0x47, 0x00, 0x47, 0x01, 0x47])
+        #Make Blue Shield more expensive
+        rom.write_bytes(0xF73D2, [0xFC, 0xFF])
+        rom.write_bytes(0xF73DA, [0x04, 0x00])
+        rom.write_bytes(0xF73E2, [0x0C, 0x00])
+        rom.write_byte(0xF73D6, 0x3C)
+        rom.write_byte(0xF73DE, 0x3C)
+        rom.write_byte(0xF73E6, 0x3C)
+        rom.write_byte(0xF7201, 0x27)
+        rom.write_byte(0xF71FF, 0x10)
+        #Make Red Shield more expensive
+        rom.write_bytes(0xF73FA, [0xFC, 0xFF])
+        rom.write_bytes(0xF7402, [0x04, 0x00])
+        rom.write_bytes(0xF740A, [0x0C, 0x00])
+        rom.write_byte(0xF73FE, 0x3C)
+        rom.write_byte(0xF7406, 0x3C)
+        rom.write_byte(0xF740E, 0x3C)
+        rom.write_byte(0xF7241, 0x27)
+        rom.write_byte(0xF723F, 0x10)
     else:
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xE3)  # fairy
@@ -209,6 +287,13 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_byte(0x180084, 0xA0)  # full
         # potion magic restore amount
         rom.write_byte(0x180085, 0x80)  # full
+        #Set overflow items for progressive equipment
+        if world.goal == 'triforcehunt':
+            rom.write_bytes(0x180090, [0x04, 0x6C, 0x03, 0x6C, 0x02, 0x6C, 0x04, 0x6C])
+        elif world.timer in ['timed', 'timed-countdown', 'timed-ohko']:
+            rom.write_bytes(0x180090, [0x04, 0x5D, 0x03, 0x5D, 0x02, 0x5D, 0x04, 0x5D])
+        else:
+            rom.write_bytes(0x180090, [0x04, 0x47, 0x03, 0x47, 0x02, 0x47, 0x04, 0x47])
 
     # set up game internal RNG seed
     for i in range(1024):
@@ -273,8 +358,12 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
             rom.write_byte(address, prize)
 
     # set Fountain bottle exchange items
-    rom.write_byte(0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)])
-    rom.write_byte(0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)])
+    if world.difficulty in ['hard', 'expert', 'insane']:
+        rom.write_byte(0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][random.randint(0, 5)])
+        rom.write_byte(0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][random.randint(0, 5)])
+    else:
+        rom.write_byte(0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)])
+        rom.write_byte(0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)])
     # set Fat Fairy Bow/Sword prizes to be disappointing
     rom.write_byte(0x34914, 0x3A)  # Bow and Arrow
     rom.write_byte(0x180028, 0x49)  # Fighter Sword
@@ -437,7 +526,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
 
     # set rom name
     # 21 bytes
-    rom.write_bytes(0x7FC0, bytearray('ER_047_%09d_' % world.seed, 'utf8') + world.option_identifier.to_bytes(4, 'big'))
+    rom.write_bytes(0x7FC0, bytearray('ER_047_%09d\0' % world.seed, 'utf8') + world.option_identifier.to_bytes(4, 'big'))
 
     # set heart beep rate
     rom.write_byte(0x180033, {'off': 0x00, 'half': 0x40, 'quarter': 0x80, 'normal': 0x20}[beep])
