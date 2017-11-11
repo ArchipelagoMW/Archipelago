@@ -48,24 +48,24 @@ easybasicshield = ['Blue Shield', 'Blue Shield', 'Red Shield', 'Red Shield', 'Mi
 easyprogressivearmor = ['Progressive Armor'] * 4
 easybasicarmor = ['Blue Mail', 'Blue Mail', 'Red Mail', 'Red Mail']
 
-hardbaseitems = (['Silver Arrows', 'Single Arrow'] + ['Bottle'] * 2 + ['Rupees (300)'] + ['Rupees (100)'] * 3 + ['Rupees (50)'] * 4 + ['Bombs (3)'] * 2 +
+hardbaseitems = (['Silver Arrows', 'Single Arrow'] + ['Bottle'] * 4 + ['Rupees (300)'] + ['Rupees (100)'] * 2 + ['Rupees (50)'] + ['Bombs (3)'] +
                 ['Boss Heart Container'] * 5 + ['Piece of Heart'] * 24)
-hardfirst20extra = ['Rupees (50)'] + ['Bombs (3)'] * 3 + ['Single Bomb'] * 4 + ['Rupees (5)'] * 5 + ['Rupees (20)']  * 5 + ['Rupee (1)'] * 2
+hardfirst20extra = ['Bombs (3)'] * 4 + ['Single Bomb'] * 4 + ['Rupees (5)'] * 5 + ['Rupee (1)'] * 2 + ['Rupees (100)'] + ['Rupees (50)'] * 4
 hardsecond20extra = ['Single Bomb'] * 4 + ['Rupees (5)'] * 10 + ['Rupees (20)']  * 2 + ['Rupee (1)'] * 3 + ['Arrows (10)']
 hardthird20extra = ['Arrows (10)'] * 4 + ['Rupees (20)']  * 3 + ['Rupees (5)'] * 3 + ['Single Bomb'] * 5 + ['Single Arrow'] * 5
 hardfinal20extra = ['Single Bomb'] * 4 + ['Rupees (5)'] * 2 + ['Single Arrow'] * 14
 hardtimedohko = ['Green Clock'] * 20
 hardtimedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10
 hardtriforcehunt = ['Triforce Piece'] * 40
-hardprogressivesword = ['Progressive Sword'] * 2
-hardbasicsword = ['Master Sword', 'Tempered Sword']
-hardswordless = ['Rupees (20)'] * 3
-hardprogressiveshield = ['Progressive Shield'] * 2
-hardbasicshield = ['Blue Shield', 'Red Shield']
-hardarmor = ['Blue Mail']
+hardprogressivesword = ['Progressive Sword'] * 3
+hardbasicsword = ['Master Sword', 'Master Sword', 'Tempered Sword']
+hardswordless = ['Rupees (20)'] * 4
+hardprogressiveshield = ['Progressive Shield'] * 3
+hardbasicshield = ['Blue Shield', 'Red Shield', 'Red Shield']
+hardarmor = ['Progressive Armor', 'Progressive Armor']
 
-expertbaseitems = (['Single Arrow', 'Bottle', 'Rupees (300)', 'Rupees (100)', 'Bombs (3)', 'Arrows (10)'] + ['Rupees (50)'] * 4 + ['Rupees (5)'] * 5 +
-                  ['Rupees (20)'] * 6 + ['Single Bomb'] * 2 + ['Piece of Heart'] * 24)
+expertbaseitems = (['Single Arrow', 'Rupees (300)', 'Rupees (100)', 'Bombs (3)', 'Arrows (10)'] + ['Rupees (50)'] * 4 + ['Rupees (5)'] * 5 +
+                  ['Bottle'] * 4 + ['Rupees (20)'] + ['Single Bomb'] * 2 + ['Piece of Heart'] * 24)
 expertfirst15extra = ['Single Bomb'] * 13 + ['Rupees (20)'] * 2
 expertsecond25extra = ['Single Bomb'] * 8 + ['Single Arrow'] * 9 + ['Rupees (20)']  * 3 + ['Rupee (1)'] * 5
 expertthird15extra = ['Rupees (5)'] * 5 + ['Single Bomb'] * 3 + ['Rupees (20)'] * 2 + ['Single Arrow'] * 5
@@ -73,12 +73,12 @@ expertfinal25extra = ['Single Bomb'] * 4 + ['Rupees (20)']  * 3 + ['Single Arrow
 experttimedohko = ['Green Clock'] * 20 + ['Red Clock'] * 5
 experttimedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10
 experttriforcehunt = ['Triforce Piece'] * 40
-expertprogressivesword = ['Progressive Sword']
-expertbasicsword = ['Master Sword']
-expertswordless = ['Rupees (20)', 'Silver Arrows']
+expertprogressivesword = ['Progressive Sword'] * 3
+expertbasicsword = ['Fighter Sword', 'Master Sword', 'Master Sword']
+expertswordless = ['Rupees (20)'] * 3 + ['Silver Arrows']
 
-insanebaseitems = (['Single Arrow', 'Bottle', 'Bombs (3)', 'Arrows (10)'] + ['Rupees (50)'] * 3 + ['Rupees (5)'] * 10 + ['Rupees (300)'] * 4 + ['Rupees (100)'] * 3 +
-                  ['Rupees (20)'] * 5 + ['Rupee (1)'] * 4 + ['Single Bomb'] * 4)
+insanebaseitems = (['Single Arrow', 'Bombs (3)', 'Arrows (10)'] + ['Rupees (50)'] * 3 + ['Rupees (5)'] * 10 + ['Rupees (300)'] * 4 + ['Rupees (100)'] * 3 +
+                  ['Bottle'] * 4 + ['Rupee (1)'] * 4 + ['Single Bomb'] * 4)
 insanefirst15extra = ['Single Bomb'] * 4 + ['Single Arrow'] * 4 + ['Rupee (1)'] * 4 + ['Rupees (300)'] + ['Rupees (100)'] + ['Rupees (50)']
 insanesecond25extra = ['Single Bomb'] * 7 + ['Single Arrow'] * 7 + ['Rupee (1)'] * 7 + ['Rupees (20)'] * 4
 insanethird10extra = ['Single Bomb'] * 3 + ['Single Arrow'] * 3 + ['Rupee (1)'] * 3 + ['Rupees (20)']
@@ -87,9 +87,9 @@ insanefinal25extra = ['Single Bomb'] * 2 + ['Single Arrow'] * 10 + ['Rupee (1)']
 insanetimedohko = ['Green Clock'] * 20 + ['Red Clock'] * 5
 insanetimedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10
 insanetriforcehunt = ['Triforce Piece'] * 50
-insaneprogressivesword = ['Progressive Sword']
-insanebasicsword = ['Master Sword']
-insaneswordless = ['Rupees (20)', 'Silver Arrows']
+insaneprogressivesword = ['Progressive Sword'] * 3
+insanebasicsword = ['Fighter Sword', 'Master Sword', 'Master Sword']
+insaneswordless = ['Rupees (20)'] * 3 + ['Silver Arrows']
 
 def generate_itempool(world):
     if (world.difficulty not in ['easy', 'normal', 'hard', 'expert', 'insane'] or world.goal not in ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals']
