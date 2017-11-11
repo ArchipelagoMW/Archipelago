@@ -5,11 +5,11 @@ def create_regions(world):
 
     world.regions = [
         create_region('Light World', ['Mushroom', 'Bottle Merchant', 'Flute Spot', 'Sunken Treasure', 'Purple Chest'],
-                      ["Blinds Hideout", "Hyrule Castle Secret Entrance Drop", "Hyrule Castle Secret Entrance Stairs", 'Zoras River', 'Kings Grave', 'Dam',
+                      ["Blinds Hideout", "Hyrule Castle Secret Entrance Drop", 'Zoras River', 'Kings Grave', 'Dam',
                        'Links House', 'Tavern North', 'Chicken House', 'Aginahs Cave', 'Sahasrahlas Hut', 'Kakariko Well Drop', 'Kakariko Well Cave',
                        'Blacksmiths Hut', 'Bat Cave Drop Ledge', 'Bat Cave Cave', 'Sick Kids House', 'Hobo Bridge', 'Lost Woods Hideout Drop', 'Lost Woods Hideout Stump',
                        'Lumberjack Tree Tree', 'Lumberjack Tree Cave', 'Mini Moldorm Cave', 'Ice Rod Cave', 'Lake Hylia Central Island Pier',
-                       'Bonk Rock Cave', 'Library', 'Potion Shop', 'Two Brothers House (East)', 'Desert Palace Stairs', 'Eastern Palace', 'Master Sword Meadow', 'Hyrule Castle Entrance (South)',
+                       'Bonk Rock Cave', 'Library', 'Potion Shop', 'Two Brothers House (East)', 'Desert Palace Stairs', 'Eastern Palace', 'Master Sword Meadow',
                        'Sanctuary', 'Sanctuary Grave', 'Old Man Cave (West)', 'Flute Spot 1', 'Dark Desert Teleporter', 'East Hyrule Teleporter', 'South Hyrule Teleporter', 'Kakariko Teleporter',
                        'Elder House (East)', 'Elder House (West)', 'North Fairy Cave', 'North Fairy Cave Drop', 'Lost Woods Gamble', 'Snitch Lady (East)', 'Snitch Lady (West)', 'Tavern (Front)',
                        'Bush Covered House', 'Light World Bomb Hut', 'Kakariko Shop', 'Long Fairy Cave', 'Good Bee Cave', '20 Rupee Cave', 'Cave Shop (Lake Hylia)', 'Waterfall of Wishing',
@@ -87,7 +87,8 @@ def create_regions(world):
                                          'Eastern Palace - Big Key Chest', 'Eastern Palace - Map Chest', 'Eastern Palace - Armos Knights', 'Eastern Palace - Prize'], ['Eastern Palace Exit']),
         create_region('Master Sword Meadow', ['Master Sword Pedestal']),
         create_region('Lost Woods Gamble'),
-        create_region('Hyrule Castle Ledge', None, ['Hyrule Castle Entrance (East)', 'Hyrule Castle Entrance (West)', 'Agahnims Tower']),
+        create_region('Hyrule Castle Courtyard', None, ['Hyrule Castle Secret Entrance Stairs', 'Hyrule Castle Entrance (South)']),
+        create_region('Hyrule Castle Ledge', None, ['Hyrule Castle Entrance (East)', 'Hyrule Castle Entrance (West)', 'Agahnims Tower', 'Hyrule Castle Ledge Courtyard Drop']),
         create_region('Hyrule Castle', ['Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest', 'Hyrule Castle - Zelda\'s Chest'],
                       ['Hyrule Castle Exit (East)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (South)', 'Throne Room']),
         create_region('Sewer Drop', None, ['Sewer Drop']),  # This exists only to be referenced for access checks

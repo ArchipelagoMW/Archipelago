@@ -1161,6 +1161,7 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Desert Palace Stairs Drop', 'Light World'),
                          ('Desert Palace Entrance (North) Rocks', 'Desert Palace Entrance (North) Spot'),
                          ('Desert Ledge Return Rocks', 'Desert Ledge'),
+                         ('Hyrule Castle Ledge Courtyard Drop', 'Hyrule Castle Courtyard'),
                          ('Throne Room', 'Sewers (Dark)'),
                          ('Sewers Door', 'Sewers'),
                          ('Sanctuary Push Door', 'Sanctuary'),
