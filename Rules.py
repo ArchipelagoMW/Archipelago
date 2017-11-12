@@ -173,10 +173,10 @@ def global_rules(world):
     set_rule(world.get_entrance('Spiral Cave Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Fairy Ascension Mirror Spot'), lambda state: state.has_Mirror() and state.has_Pearl())  # need to lift flowers
     set_rule(world.get_entrance('Isolated Ledge Mirror Spot'), lambda state: state.has_Mirror())
-    set_rule(world.get_entrance('Dark Death Mountain Ascend (Top)'), lambda state: state.has_Pearl())  # Chests inside could be  collected with super bunny, but may be shuffled. rather limit access for now ToDo
-    set_rule(world.get_entrance('Dark Death Mountain Ascend (Bottom)'), lambda state: state.has_Pearl())
+    set_rule(world.get_entrance('Superbunny Cave (Top)'), lambda state: state.has_Pearl())  # Chests inside could be  collected with super bunny, but may be shuffled. rather limit access for now ToDo
+    set_rule(world.get_entrance('Superbunny Cave (Bottom)'), lambda state: state.has_Pearl())
     set_rule(world.get_entrance('Cave Shop (Dark Death Mountain)'), lambda state: state.has_Pearl())  # just for save bunny algo for now
-    set_rule(world.get_entrance('Dark Death Mountain Ascend Exit (Bottom)'), lambda state: False)  # Cannot get to bottom exit from top. Just exists for shuffling
+    set_rule(world.get_entrance('Superbunny Cave Exit (Bottom)'), lambda state: False)  # Cannot get to bottom exit from top. Just exists for shuffling
     set_rule(world.get_location('Spike Cave'), lambda state: state.has('Hammer') and state.can_lift_rocks() and (state.has('Cane of Byrna') or state.has('Cape')) and (state.has('Bottle') or state.has('Half Magic') or state.has('Quarter Magic')))
     set_rule(world.get_location('Hookshot Cave - Top Right'), lambda state: state.has('Hookshot'))
     set_rule(world.get_location('Hookshot Cave - Top Left'), lambda state: state.has('Hookshot'))
@@ -212,9 +212,9 @@ def global_rules(world):
     set_rule(world.get_entrance('Tower of Hera Big Key Door'), lambda state: state.has('Big Key (Tower of Hera)'))
     set_rule(world.get_location('Tower of Hera - Big Chest'), lambda state: state.has('Big Key (Tower of Hera)'))
     set_rule(world.get_location('Tower of Hera - Big Key Chest'), lambda state: state.has_fire_source())
-    set_rule(world.get_location('Moldorm - Heart Container'), lambda state: state.has_blunt_weapon())
+    set_rule(world.get_location('Tower of Hera - Moldorm'), lambda state: state.has_blunt_weapon())
     set_rule(world.get_location('Tower of Hera - Prize'), lambda state: state.has_blunt_weapon())
-    for location in ['Moldorm - Heart Container', 'Tower of Hera - Big Chest', 'Tower of Hera - Compass Chest']:
+    for location in ['Tower of Hera - Moldorm', 'Tower of Hera - Big Chest', 'Tower of Hera - Compass Chest']:
         forbid_item(world.get_location(location), 'Big Key (Tower of Hera)')
     for location in ['Tower of Hera - Big Key Chest']:
         forbid_item(world.get_location(location), 'Small Key (Tower of Hera)')
@@ -383,7 +383,7 @@ def no_glitches_rules(world):
 
     # Light cones in standard depend on which world we actually are in, not which one the location would normally be
     # We add Lamp requirements only to those locations which lie in the dark world (or everything if open
-    DW_Entrances = ['Bumper Cave (Bottom)', 'Dark Death Mountain Ascend (Top)', 'Dark Death Mountain Ascend (Bottom)', 'Hookshot Cave', 'Bumper Cave (Top)', 'Hookshot Cave Back Entrance', 'Dark Death Mountain Ledge (East)',
+    DW_Entrances = ['Bumper Cave (Bottom)', 'Superbunny Cave (Top)', 'Superbunny Cave (Bottom)', 'Hookshot Cave', 'Bumper Cave (Top)', 'Hookshot Cave Back Entrance', 'Dark Death Mountain Ledge (East)',
                     'Turtle Rock Isolated Ledge Entrance', 'Thieves Town', 'Skull Woods Final Section', 'Ice Palace', 'Misery Mire', 'Palace of Darkness', 'Swamp Palace', 'Turtle Rock', 'Dark Death Mountain Ledge (West)']
 
     def check_is_dark_world(region):
@@ -505,7 +505,7 @@ def set_trock_key_rules(world):
     # set big key restrictions
     non_big_key_locations = ['Turtle Rock - Big Chest', 'Turtle Rock - Trinexx']
     if not can_reach_back:
-        non_big_key_locations += ['Turtle Rock - Crystaroller Roo', 'Turtle Rock - Eye Bridge - Bottom Left',
+        non_big_key_locations += ['Turtle Rock - Crystaroller Room', 'Turtle Rock - Eye Bridge - Bottom Left',
                                   'Turtle Rock - Eye Bridge - Bottom Right', 'Turtle Rock - Eye Bridge - Top Left',
                                   'Turtle Rock - Eye Bridge - Top Right']
 
@@ -570,7 +570,7 @@ def set_big_bomb_rules(world):
                              'Dark World Shop',
                              'Dark World Lumberjack Shop',
                              'Graveyard Cave']
-    Southern_DW_entrances = ['Dark Swamp Cave',
+    Southern_DW_entrances = ['Hype Cave',
                              'Bonk Fairy (Dark)',
                              'Archery Game',
                              'Big Bomb Shop',

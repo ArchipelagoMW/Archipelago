@@ -108,7 +108,7 @@ Tower of Hera - Map Chest: Nothing
 Tower of Hera - Big Key Chest: Big Key (Tower of Hera)
 Tower of Hera - Compass Chest: Nothing
 Tower of Hera - Big Chest: Moon Pearl
-Moldorm - Heart Container: Nothing
+Tower of Hera - Moldorm: Nothing
 Tower of Hera - Prize: Red Pendant
 Pyramid: Nothing
 Catfish: Quake
@@ -191,7 +191,7 @@ Turtle Rock - Roller Room - Right: Small Key (Turtle Rock)
 Turtle Rock - Chain Chomps: Small Key (Turtle Rock)
 Turtle Rock - Big Key Chest: Big Key (Turtle Rock)
 Turtle Rock - Big Chest: Mirror Shield
-Turtle Rock - Crystaroller Roo: Small Key (Turtle Rock)
+Turtle Rock - Crystaroller Room: Small Key (Turtle Rock)
 Turtle Rock - Eye Bridge - Bottom Left: Small Key (Turtle Rock)
 Turtle Rock - Eye Bridge - Bottom Right: Nothing
 Turtle Rock - Eye Bridge - Top Left: Nothing

@@ -113,8 +113,7 @@ class Credits(object):
             'pedestal': [
                 SceneSmallCreditLine(19, 'and the master sword'),
                 SceneSmallAltCreditLine(21, 'sleeps again...'),
-                #SceneLargeCreditLine(23, 'Forever!'),
-                SceneLargeCreditLine(23, 'Forever!!!!!'),
+                SceneLargeCreditLine(23, 'Forever!'),
             ],
         }
 
