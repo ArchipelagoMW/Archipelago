@@ -44,7 +44,7 @@ May require Fake Flippers, Bunny Revival. (default: noglitches)
 --mode [{standard,open,swordless}]
 ```
 
-Select game mode. (default: standard)
+Select game mode. (default: open)
 
 ### Standard
 
@@ -72,6 +72,7 @@ Special notes:
 - The curtains in Skull Woods and Hyrule Castle Tower that normally require a sword to cut have been removed.
 - Ganon takes damage from the Hammer.
 - The magic barrier to Hyrule Castle Tower can be broken with a Hammer.
+- The Hammer can be used to activate the Ether and Bombos tablets.
 
 ```
 --goal [{ganon,pedestal,dungeons,triforcehunt,crystals}]
@@ -93,7 +94,14 @@ Ganon cannot be damaged until all dungeons (including Hyrule Castle Tower and Ga
 
 ### Triforce Hunt
 
-30 Power Stars are placed in the world. Find 20 of them to finish the game. Ganon cannot be damaged.
+Triforce Pieces are added to the item pool, and some number of them being found will trigger game completion. Ganon cannot be damaged.
+Counts are based on the difficulty setting as well as the required number.
+Difficulty Need/Total
+Easy       10/30
+Normal     20/30
+Hard       30/40
+Expert     40/40
+Insane     50/50
 
 ### Crystals
 
@@ -102,10 +110,94 @@ Standard game completion requiring you to collect the 7 crystals and then beat G
 This is only noticeably different if the --shuffleganon option is enabled.
 
 ```
---difficulty [{normal}]
+--difficulty [{easy,normal,hard,expert,insane}]
 ```
 
 Select game difficulty. Affects available itempool. (default: normal)
+
+### Easy
+
+This setting doubles the number of swords, shields, armors, and bottles in the item pool.
+Within dungeons, the number of items found will be displayed on screen if there is no timer.
+
+### Normal (Default)
+
+This is the default setting that has an item pool most similar to the original
+The Legend of Zelda: A Link to the Past.
+
+### Hard
+
+This setting reduces the availability of a variety of minor helpful items, most notably
+limiting the player to two bottles, a Tempered Sword, and Blue Mail. Several minor game
+mechanics are adjusted to increase difficulty, most notably weakening potions and preventing
+the player from having fairies in bottles.
+
+### Expert
+
+This setting is a more extreme version of the Hard setting. Potions are further nerfed, the item
+pool is less helpful, and the player can find no armor, only a Master Sword, and only a single bottle.
+
+### Insane
+
+This setting is a modest step up from Expert. The main difference is that the player will never find any
+additional health.
+
+```
+--timer [{none,display,timed,timed-ohko,timed-countdown}]
+```
+
+Select the timer setting.
+
+### None (Default)
+
+Does not invoke a timer.
+
+### Display
+
+Displays a timer on-screen but does not alter the item pool.
+This will prevent the dungeon item count feature in Easy and Keysanity from working.
+
+### Timed
+
+Displays a count-up timer on screen that can be reduced with Green Clocks and Blue Clocks or
+increased with Red Clocks found in chests that will be added to the itempool.
+
+### Timed-OHKO
+
+Displays a countdown timer on screen that, when it hits zero, will put the player into a one hit
+knockout state until more time is added to the clock via some of the Green Clocks that will be added
+to the itempool.
+
+### Timed-countdown
+
+Displays a countdown timer on screen that can be increased with Green Clocks and Blue Clocks or
+increased with Red Clocks found in chests that will be added to the itempool. The goal of this mode
+is to finish the game without the timer reaching zero, but the game will continue uninterrupted if
+the player runs out of time.
+
+```
+--progressive [{on,off,random}]
+```
+
+Select the setting for progressive equipment.
+
+### On (Default)
+
+This setting makes swords, shields, armor, and gloves progressive. The first of any type of equipment found
+by the player will be the lowest level item, and each subsequent find of a category will upgrade that type of
+equipment.
+
+### Off
+
+This setting makes swords, shields, armor, and gloves non-progressive. All of the items of these types will be
+randomly placed in chests, and the player could find them in any order and thus instantly receive high level equipment.
+Downgrades are not possible; finding a lower level piece of equipment than what is already in the player's possession
+will simply do nothing.
+
+### Random
+
+This setting makes swords, shields, armor, and gloves randomly either progressive or not. Each category is independently
+randomized.
 
 ```
 --algorithm [{freshness,flood,vt21,vt22,vt25,vt26,balanced}]
@@ -117,8 +209,8 @@ Select item filling algorithm.
 This is a variation of vt26 that aims to strike a balance between the overworld heavy vt25 and the dungeon heavy vt26 algorithm.
 It does this by reshuffling the remaining locations after placing dungeon items.
 
-### VT26 (Default)
-Items and locations are shuffled like in VT25, and dungeon items are now placed using the same algorithm. When gannon is not
+### VT26
+Items and locations are shuffled like in VT25, and dungeon items are now placed using the same algorithm. When Ganon is not
 shuffled it includes a slight deliberate bias against having too many desireable items in Ganon's Tower to help counterbalance
 the sheer number of chests in that single location.
 
@@ -214,10 +306,20 @@ Use to enable quick item swap with L/R buttons. (default: False)
 As an alternative to quickswap, opens menu instantly. (default: False)
 
 ```
+--keysanity
+```
+
+This setting allows dungeon specific items (Small Key, Big Key, Map, Compass) to be distributed anywhere in the world and not just
+in their native dungeon. Small Keys dropped by enemies or found in pots are not affected. The chest in southeast Skull Woods that
+is traditionally a guaranteed Small Key still is. These items will be distributed according to the v26/balanced algorithm, but
+the rest of the itempool will respect the algorithm setting.
+
+```
 --nodungeonitems
 ```
 
-If set, Compasses and Maps are removed from the dungeon item pools and replaced by empty chests that may end up anywhere in the world. This may lead to different amount of itempool items being placed in a dungeon than you are used to. (default: False)
+If set, Compasses and Maps are removed from the dungeon item pools and replaced by empty chests that may end up anywhere in the world.
+This may lead to different amount of itempool items being placed in a dungeon than you are used to. (default: False)
 
 ```
 --heartbeep [{normal,half,quarter,off}]
@@ -242,6 +344,7 @@ If set, will only ensure the goal can be achieved, but not necessarily that all 
 ```
 
 If set, Ganon's Tower is included in the dungeon shuffle pool and the Pyramid Hole/Exit pair is included in the Holes shuffle pool. Ganon can not be defeated until the primary goal is fulfilled.
+This setting removes any bias against Ganon's Tower that some algorithms may have.
 
 Note: This option is under development and may sometimes lead to dungeon and crystal distributions that cannot be solved. If this is the case, the generation will fail. Simply retry with a different seed number if you run into this issue.
 
