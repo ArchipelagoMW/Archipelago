@@ -93,7 +93,7 @@ insaneswordless = ['Rupees (20)'] * 3 + ['Silver Arrows']
 
 def generate_itempool(world):
     if (world.difficulty not in ['easy', 'normal', 'hard', 'expert', 'insane'] or world.goal not in ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals']
-       or world.mode not in ['open', 'standard', 'swordless'] or world.timer not in ['none', 'timed', 'timed-ohko', 'timed-countdown'] or world.progressive not in ['on', 'off', 'random']):
+       or world.mode not in ['open', 'standard', 'swordless'] or world.timer not in ['none', 'display', 'timed', 'timed-ohko', 'timed-countdown'] or world.progressive not in ['on', 'off', 'random']):
         raise NotImplementedError('Not supported yet')
 
     world.push_item('Ganon', ItemFactory('Triforce'), False)
@@ -118,13 +118,16 @@ def generate_itempool(world):
 
     # insanity shuffle doesn't have fake LW/DW logic so for now guaranteed Mirror and Moon Pearl at the start
     if world.shuffle == 'insanity':
-        world.push_item('Links House', ItemFactory('Magic Mirror'), False)
-        world.get_location('Links House').event = True
+        world.push_item('Link\'s House', ItemFactory('Magic Mirror'), False)
+        world.get_location('Link\'s House').event = True
         world.push_item('Sanctuary', ItemFactory('Moon Pearl'), False)
         world.get_location('Sanctuary').event = True
     else:
         world.itempool.extend(ItemFactory(['Magic Mirror', 'Moon Pearl']))
-    
+
+    if world.timer == 'display':
+        world.clock_mode = 'stopwatch'
+
     if world.difficulty == 'normal':
         world.itempool.extend(ItemFactory(normalbaseitems))
         extraitems = 70
