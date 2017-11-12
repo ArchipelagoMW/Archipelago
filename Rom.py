@@ -400,7 +400,12 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_bytes(0x180200, [0x00, 0x00, 0x00, 0x81])  # red clock adjustment time (in frames, sint32)
         rom.write_bytes(0x180204, [0x20, 0x1C, 0x00, 0x00])  # blue clock adjustment time (in frames, sint32)
         rom.write_bytes(0x180208, [0x40, 0x38, 0x00, 0x00])  # green clock adjustment time (in frames, sint32)
-        rom.write_bytes(0x18020C, [0xA0, 0x8C, 0x00, 0x00])  # starting time (in frames, sint32)
+        if world.difficulty == 'easy':
+            rom.write_bytes(0x18020C, [0x40, 0x19, 0x01, 0x00])  # starting time (in frames, sint32)
+        elif world.difficulty == 'normal':
+            rom.write_bytes(0x18020C, [0xA0, 0x8C, 0x00, 0x00])  # starting time (in frames, sint32)
+        else:
+            rom.write_bytes(0x18020C, [0x50, 0x46, 0x00, 0x00])  # starting time (in frames, sint32)
     if world.clock_mode == 'stopwatch':
         rom.write_bytes(0x180190, [0x02, 0x01, 0x00])  # set stopwatch mode
         rom.write_bytes(0x180200, [0xE0, 0xE3, 0xFF, 0xFF])  # red clock adjustment time (in frames, sint32)
@@ -526,7 +531,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
 
     # set rom name
     # 21 bytes
-    rom.write_bytes(0x7FC0, bytearray('ER_047_%09d\0' % world.seed, 'utf8') + world.option_identifier.to_bytes(4, 'big'))
+    rom.write_bytes(0x7FC0, bytearray('ER_050_%09d\0' % world.seed, 'utf8') + world.option_identifier.to_bytes(4, 'big'))
 
     # set heart beep rate
     rom.write_byte(0x180033, {'off': 0x00, 'half': 0x40, 'quarter': 0x80, 'normal': 0x20}[beep])
