@@ -60,10 +60,12 @@ if __name__ == '__main__':
                              Expert:          A harder yet setting with minimum equipment and health.
                              Insane:          A setting with the absolute minimum in equipment and no extra health.                           
                              ''')
-    parser.add_argument('--timer', default='none', const='normal', nargs='?', choices=['none', 'hard', 'expert', 'insane'],
+    parser.add_argument('--timer', default='none', const='normal', nargs='?', choices=['none', 'display', 'timed', 'timed-ohko', 'timed-countdown'],
                         help='''\
                              Select game timer setting. Affects available itempool. (default: %(default)s)
                              None:            No timer.
+                             Display:         Displays a timer but does not affect
+                                              the itempool.
                              Timed:           Starts with clock at zero. Green Clocks
                                               subtract 4 minutes (Total: 20), Blue Clocks
                                               subtract 2 minutes (Total: 10), Red Clocks add

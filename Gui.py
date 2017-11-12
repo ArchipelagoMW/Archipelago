@@ -113,7 +113,7 @@ def guiMain(args=None):
     timerFrame = Frame(drowDownFrame)
     timerVar = StringVar()
     timerVar.set('none')
-    timerOptionMenu = OptionMenu(timerFrame, timerVar, 'none', 'timed', 'timed-ohko', 'timed-countdown')
+    timerOptionMenu = OptionMenu(timerFrame, timerVar, 'none', 'display', 'timed', 'timed-ohko', 'timed-countdown')
     timerOptionMenu.pack(side=RIGHT)
     timerLabel = Label(timerFrame, text='Timer setting')
     timerLabel.pack(side=LEFT)
