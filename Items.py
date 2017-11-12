@@ -14,7 +14,10 @@ def ItemFactory(items):
             advancement, priority, type, code, pedestal_hint, pedestal_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit = item_table[item]
             if item == 'Bottle':
                 # randomly fill bottle
-                code = [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)]
+                if world.difficulty in ['hard', 'expert', insane']:
+                    code = [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][random.randint(0, 5)]
+                else:
+                    code = [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)]
             ret.append(Item(item, advancement, priority, type, code, pedestal_hint, pedestal_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit))
         else:
             logging.getLogger('').warning('Unknown Item: %s' % item)
