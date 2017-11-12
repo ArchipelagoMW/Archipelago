@@ -80,6 +80,8 @@ def main(args, seed=None):
         distribute_items_restrictive(world, 0)
     elif args.algorithm == 'vt26':
         distribute_items_restrictive(world, random.randint(0, 15), shuffled_locations)
+    elif args.algorithm == 'balanced':
+        distribute_items_restrictive(world, random.randint(0, 15))
 
     logger.info('Calculating playthrough.')
 
@@ -92,7 +94,7 @@ def main(args, seed=None):
     else:
         sprite = None
 
-    outfilebase = 'ER_%s_%s-%s-%s_%s-%s%s%s%s%s_%s' % (world.logic, world.difficulty, world.mode, world.goal, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-fastmenu" if world.fastmenu else "", "-quickswap" if world.quickswap else "", "-shuffleganon" if world.shuffle_ganon else "", world.seed)
+    outfilebase = 'ER_%s_%s-%s-%s%s_%s-%s%s%s%s%s%s_%s' % (world.logic, world.difficulty, world.mode, world.goal, "" if world.timer in ['none', 'display'] else "-" + world.timer, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-progressives_" + world.progressive if world.progressive in ['off', 'random'] else "", "-fastmenu" if world.fastmenu else "", "-quickswap" if world.quickswap else "", "-shuffleganon" if world.shuffle_ganon else "", world.seed)
 
     if not args.suppress_rom:
         if args.jsonout:
@@ -153,7 +155,6 @@ def copy_world(world):
     set_rules(ret)
 
     return ret
-
 
 def create_playthrough(world):
     # create a copy as we will modify it
