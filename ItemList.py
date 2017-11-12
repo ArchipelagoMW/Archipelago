@@ -10,7 +10,10 @@ alwaysitems = ['Bombos', 'Book of Mudora', 'Bow', 'Cane of Somaria', 'Ether', 'F
 progressivegloves = ['Progressive Glove'] * 2
 basicgloves = ['Power Glove', 'Titans Mitts']
 
-normalbaseitems = (['Blue Boomerang', 'Red Boomerang', 'Silver Arrows', 'Magic Upgrade (1/2)'] + ['Bottle'] * 4 + ['Rupees (300)'] * 4 +
+normalbottles = ['Bottle', 'BottleRedPotion', 'BottleGreenPotion', 'BottleBluePotion', 'BottleFairy', 'BottleBee', 'BottleGoodBee']
+hardbottles = ['Bottle', 'BottleRedPotion', 'BottleGreenPotion', 'BottleBluePotion', 'BottleBee', 'BottleGoodBee']
+
+normalbaseitems = (['Blue Boomerang', 'Red Boomerang', 'Silver Arrows', 'Magic Upgrade (1/2)'] + ['Rupees (300)'] * 4 +
                   ['Single Arrow', 'Sanctuary Heart Container', 'Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24)
 normalfirst15extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6
 normalsecond15extra = ['Bombs (3)'] * 10 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupee (1)']
@@ -28,7 +31,7 @@ normalbasicshield = ['Blue Shield', 'Red Shield', 'Mirror Shield']
 normalprogressivearmor = ['Progressive Armor'] * 2
 normalbasicarmor = ['Blue Mail', 'Red Mail']
 
-easybaseitems = (['Blue Boomerang', 'Red Boomerang', 'Silver Arrows'] + ['Bottle'] * 8 + ['Rupees (300)'] * 4 + ['Magic Upgrade (1/2)'] * 2 +
+easybaseitems = (['Blue Boomerang', 'Red Boomerang', 'Silver Arrows'] + ['Rupees (300)'] * 4 + ['Magic Upgrade (1/2)'] * 2 +
                 ['Single Arrow', 'Sanctuary Heart Container', 'Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 12)
 easyextra = ['Piece of Heart'] * 12 + ['Rupees (300)']
 easylimitedextra = ['Boss Heart Container'] * 3
@@ -48,7 +51,7 @@ easybasicshield = ['Blue Shield', 'Blue Shield', 'Red Shield', 'Red Shield', 'Mi
 easyprogressivearmor = ['Progressive Armor'] * 4
 easybasicarmor = ['Blue Mail', 'Blue Mail', 'Red Mail', 'Red Mail']
 
-hardbaseitems = (['Silver Arrows', 'Single Arrow'] + ['Bottle'] * 4 + ['Rupees (300)'] + ['Rupees (100)'] * 2 + ['Rupees (50)'] + ['Bombs (3)'] +
+hardbaseitems = (['Silver Arrows', 'Single Arrow'] + ['Rupees (300)'] + ['Rupees (100)'] * 2 + ['Rupees (50)'] + ['Bombs (3)'] +
                 ['Boss Heart Container'] * 5 + ['Piece of Heart'] * 24)
 hardfirst20extra = ['Bombs (3)'] * 4 + ['Single Bomb'] * 4 + ['Rupees (5)'] * 5 + ['Rupee (1)'] * 2 + ['Rupees (100)'] + ['Rupees (50)'] * 4
 hardsecond20extra = ['Single Bomb'] * 4 + ['Rupees (5)'] * 10 + ['Rupees (20)']  * 2 + ['Rupee (1)'] * 3 + ['Arrows (10)']
@@ -65,7 +68,7 @@ hardbasicshield = ['Blue Shield', 'Red Shield', 'Red Shield']
 hardarmor = ['Progressive Armor', 'Progressive Armor']
 
 expertbaseitems = (['Single Arrow', 'Rupees (300)', 'Rupees (100)', 'Bombs (3)', 'Arrows (10)'] + ['Rupees (50)'] * 4 + ['Rupees (5)'] * 5 +
-                  ['Bottle'] * 4 + ['Rupees (20)'] + ['Single Bomb'] * 2 + ['Piece of Heart'] * 24)
+                  ['Rupees (20)'] + ['Single Bomb'] * 2 + ['Piece of Heart'] * 24)
 expertfirst15extra = ['Single Bomb'] * 13 + ['Rupees (20)'] * 2
 expertsecond25extra = ['Single Bomb'] * 8 + ['Single Arrow'] * 9 + ['Rupees (20)']  * 3 + ['Rupee (1)'] * 5
 expertthird15extra = ['Rupees (5)'] * 5 + ['Single Bomb'] * 3 + ['Rupees (20)'] * 2 + ['Single Arrow'] * 5
@@ -78,7 +81,7 @@ expertbasicsword = ['Fighter Sword', 'Master Sword', 'Master Sword']
 expertswordless = ['Rupees (20)'] * 3 + ['Silver Arrows']
 
 insanebaseitems = (['Single Arrow', 'Bombs (3)', 'Arrows (10)'] + ['Rupees (50)'] * 3 + ['Rupees (5)'] * 10 + ['Rupees (300)'] * 4 + ['Rupees (100)'] * 3 +
-                  ['Bottle'] * 4 + ['Rupee (1)'] * 4 + ['Single Bomb'] * 4)
+                  ['Rupee (1)'] * 4 + ['Single Bomb'] * 4)
 insanefirst15extra = ['Single Bomb'] * 4 + ['Single Arrow'] * 4 + ['Rupee (1)'] * 4 + ['Rupees (300)'] + ['Rupees (100)'] + ['Rupees (50)']
 insanesecond25extra = ['Single Bomb'] * 7 + ['Single Arrow'] * 7 + ['Rupee (1)'] * 7 + ['Rupees (20)'] * 4
 insanethird10extra = ['Single Bomb'] * 3 + ['Single Arrow'] * 3 + ['Rupee (1)'] * 3 + ['Rupees (20)']
@@ -130,6 +133,9 @@ def generate_itempool(world):
 
     if world.difficulty == 'normal':
         world.itempool.extend(ItemFactory(normalbaseitems))
+        for i in range (0, 4):
+            thisbottle = normalbottles[random.randint(0, 6)]
+            world.itempool.append(ItemFactory(thisbottle))
         extraitems = 70
         if world.timer in ['timed', 'timed-countdown']:
             world.itempool.extend(ItemFactory(normaltimedother))
@@ -214,6 +220,9 @@ def generate_itempool(world):
                     world.itempool.extend(ItemFactory(['Fighter Sword']))
     elif world.difficulty == 'easy':
         world.itempool.extend(ItemFactory(easybaseitems))
+        for i in range (0, 8):
+            thisbottle = normalbottles[random.randint(0, 6)]
+            world.itempool.append(ItemFactory(thisbottle))
         extraitems = 70
         if world.timer in ['timed', 'timed-countdown']:
             world.itempool.extend(ItemFactory(easytimedother))
@@ -303,6 +312,9 @@ def generate_itempool(world):
 
     elif world.difficulty == 'hard':
         world.itempool.extend(ItemFactory(hardbaseitems))
+        for i in range (0, 4):
+            thisbottle = hardbottles[random.randint(0, 5)]
+            world.itempool.append(ItemFactory(thisbottle))
         extraitems = 80
         if world.timer in ['timed', 'timed-countdown']:
             world.itempool.extend(ItemFactory(hardtimedother))
@@ -379,6 +391,9 @@ def generate_itempool(world):
 
     elif world.difficulty == 'expert':
         world.itempool.extend(ItemFactory(expertbaseitems))
+        thisbottle = hardbottles[random.randint(0, 5)]
+        for i in range (0, 4):
+            world.itempool.append(ItemFactory(thisbottle))
         extraitems = 80
         if world.timer in ['timed', 'timed-countdown']:
             world.itempool.extend(ItemFactory(experttimedother))
@@ -444,6 +459,9 @@ def generate_itempool(world):
 
     elif world.difficulty == 'insane':
         world.itempool.extend(ItemFactory(insanebaseitems))
+        thisbottle = hardbottles[random.randint(0, 5)]
+        for i in range (0, 4):
+            world.itempool.append(ItemFactory(thisbottle))
         extraitems = 90
         if world.timer in ['timed', 'timed-countdown']:
             world.itempool.extend(ItemFactory(insanetimedother))

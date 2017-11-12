@@ -1,4 +1,4 @@
-from BaseClasses import Item
+from BaseClasses import World, Item
 import random
 import logging
 
@@ -12,12 +12,6 @@ def ItemFactory(items):
     for item in items:
         if item in item_table:
             advancement, priority, type, code, pedestal_hint, pedestal_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit = item_table[item]
-            if item == 'Bottle':
-                # randomly fill bottle
-                if world.difficulty in ['hard', 'expert', insane']:
-                    code = [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][random.randint(0, 5)]
-                else:
-                    code = [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)]
             ret.append(Item(item, advancement, priority, type, code, pedestal_hint, pedestal_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit))
         else:
             logging.getLogger('').warning('Unknown Item: %s' % item)
@@ -52,7 +46,13 @@ item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher cla
               'Ether': (True, False, None, 0x10, 'This magic\ncoin freezes\neverything!', 'and the bolt coin', 'coin-collecting kid', 'bolt coin for sale', 'shrooms for bolt-coin', 'boy hides coin again'),
               'Bombos': (True, False, None, 0x0F, 'Burn, baby,\nburn! Fear my\nring of fire!', 'and the swirly coin', 'coin-collecting kid', 'swirly coin for sale', 'shrooms for swirly-coin', 'boy hides coin again'),
               'Quake': (True, False, None, 0x11, 'Maxing out the\nRichter scale\nis what I do!', 'and the wavy coin', 'coin-collecting kid', 'wavy coin for sale', 'shrooms for wavy-coin', 'boy hides coin again'),
-              'Bottle': (True, False, None, 0xFF, 'Now you can\nstore potions\nand stuff!', 'and the terrarium', 'the terrarium kid', 'terrarium for sale', 'special promotion', 'boy stores things again'),  # specific content written on creation
+              'Bottle': (True, False, None, 0x16, 'Now you can\nstore potions\nand stuff!', 'and the terrarium', 'the terrarium kid', 'terrarium for sale', 'special promotion', 'boy stores things again'),
+              'BottleRedPotion': (True, False, None, 0x2B, 'Hearty red goop!', 'and the red goo', 'the liquid kid', 'potion for sale', 'free samples', 'boy drinks again'),
+              'BottleGreenPotion': (True, False, None, 0x2C, 'Refreshing green goop!', 'and the green goo', 'the liquid kid', 'potion for sale', 'free samples', 'boy drinks again'),
+              'BottleBluePotion': (True, False, None, 0x2D, 'Delicious blue goop!', 'and the blue goo', 'the liquid kid', 'potion for sale', 'free samples', 'boy stores drinks again'),
+              'BottleFairy': (True, False, None, 0x3D, 'Save me and I will revive you', 'and the captive', 'the tingle kid', 'hostage for sale', 'fairy dust and shrooms', 'boy revives again'),
+              'BottleBee': (True, False, None, 0x3C, 'I will sting your foes a few times', 'and the sting buddy', 'the beekeeper kid', 'insect for sale', 'shroom pollenation', 'boy is stung again'),
+              'BottleGoodBee': (True, False, None, 0x48, 'I will sting your foes a whole lot!', 'and the sparkle sting', 'the beekeeper kid', 'insect for sale', 'shroom pollenation', 'boy is stung again'),
               'Master Sword': (True, False, None, 0x50, 'I beat barries and pigs alike', 'and the master sword', 'sword-wielding kid', 'glow sword for sale', 'fungus for blue slasher', 'boy fights again'),
               'Tempered Sword': (True, False, None, 0x02, 'I stole the\nblacksmith\'s\njob!', 'the tempered sword', 'sword-wielding kid', 'flame sword for sale', 'fungus for red slasher', 'boy fights again'),
               'Fighter Sword': (True, False, None, 0x49, 'A pathetic\nsword rests\nhere!', 'the tiny sword', 'sword-wielding kid', 'tiny sword for sale', 'fungus for tiny slasher', 'boy fights again'),

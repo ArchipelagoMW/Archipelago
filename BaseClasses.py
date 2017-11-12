@@ -336,6 +336,9 @@ class CollectionState(object):
     def can_lift_rocks(self):
         return self.has('Power Glove') or self.has('Titans Mitts')
 
+    def has_bottle(self):
+        return self.has('Bottle') or self.has('BottleRedPotion') or self.has('BottleGreenPotion') or self.has('BottleBluePotion') or self.has('BottleFairy') or self.has('BottleBee') or self.has('BottleGoodBee')
+
     def can_lift_heavy_rocks(self):
         return self.has('Titans Mitts')
 
