@@ -312,7 +312,8 @@ As an alternative to quickswap, opens menu instantly. (default: False)
 This setting allows dungeon specific items (Small Key, Big Key, Map, Compass) to be distributed anywhere in the world and not just
 in their native dungeon. Small Keys dropped by enemies or found in pots are not affected. The chest in southeast Skull Woods that
 is traditionally a guaranteed Small Key still is. These items will be distributed according to the v26/balanced algorithm, but
-the rest of the itempool will respect the algorithm setting.
+the rest of the itempool will respect the algorithm setting. Music for dungeons is randomized so it cannot be used as a tell
+for which dungeons contain pendants and crystals; finding a Map for a dungeon will allow the overworld map to display its prize.
 
 ```
 --nodungeonitems
