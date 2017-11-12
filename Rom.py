@@ -453,7 +453,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     else:
         rom.write_byte(0x18003C, 0x00)
 
-    rom.write_byte(0x180045, 0x01 if world.keysanity else 0x00)  # free roaming items in menu
+    rom.write_byte(0x180045, 0xFF if world.keysanity else 0x00)  # free roaming items in menu
     digging_game_rng = random.randint(1, 30)  # set rng for digging game
     rom.write_byte(0x180020, digging_game_rng)
     rom.write_byte(0xEFD95, digging_game_rng)
