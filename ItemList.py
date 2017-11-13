@@ -152,19 +152,24 @@ def generate_itempool(world):
             world.treasure_hunt_icon = 'Triforce Piece'
         if extraitems > 0:
             world.itempool.extend(ItemFactory(normalfirst15extra))
-            extraitems - 15
+            extraitems = extraitems - 15
+            print(extraitems)
         if extraitems > 0:
             world.itempool.extend(ItemFactory(normalsecond15extra))
-            extraitems - 15
+            extraitems = extraitems - 15
+            print(extraitems)
         if extraitems > 0:
             world.itempool.extend(ItemFactory(normalthird10extra))
-            extraitems - 10
+            extraitems = extraitems - 10
+            print(extraitems)
         if extraitems > 0:
             world.itempool.extend(ItemFactory(normalfourth5extra))
-            extraitems - 5
+            extraitems = extraitems - 5
+            print(extraitems)
         if extraitems > 0:
             world.itempool.extend(ItemFactory(normalfinal25extra))
-            extraitems - 25
+            extraitems = extraitems - 25
+            print(extraitems)
         if world.progressive == 'on':
             world.itempool.extend(ItemFactory(normalprogressiveshield))
             world.itempool.extend(ItemFactory(normalprogressivearmor))
@@ -218,6 +223,7 @@ def generate_itempool(world):
                 else:
                     world.itempool.extend(ItemFactory(normalbasicsword))
                     world.itempool.extend(ItemFactory(['Fighter Sword']))
+
     elif world.difficulty == 'easy':
         world.itempool.extend(ItemFactory(easybaseitems))
         for i in range (0, 8):
@@ -246,16 +252,16 @@ def generate_itempool(world):
         extraitems = extraitems - 15
         if extraitems > 0:
             world.itempool.extend(ItemFactory(easyfirst15extra))
-            extraitems - 15
+            extraitems = extraitems - 15
         if extraitems > 0:
             world.itempool.extend(ItemFactory(easysecond10extra))
-            extraitems - 10
+            extraitems = extraitems - 10
         if extraitems > 0:
             world.itempool.extend(ItemFactory(easythird5extra))
-            extraitems - 5
+            extraitems = extraitems - 5
         if extraitems > 0:
             world.itempool.extend(ItemFactory(easyfinal25extra))
-            extraitems - 25
+            extraitems = extraitems - 25
         if world.progressive == 'on':
             world.itempool.extend(ItemFactory(easyprogressiveshield))
             world.itempool.extend(ItemFactory(easyprogressivearmor))
@@ -331,16 +337,16 @@ def generate_itempool(world):
             world.treasure_hunt_icon = 'Triforce Piece'
         if extraitems > 0:
             world.itempool.extend(ItemFactory(hardfirst20extra))
-            extraitems - 20
+            extraitems = extraitems - 20
         if extraitems > 0:
             world.itempool.extend(ItemFactory(hardsecond20extra))
-            extraitems - 20
+            extraitems = extraitems - 20
         if extraitems > 0:
             world.itempool.extend(ItemFactory(hardthird20extra))
-            extraitems - 20
+            extraitems = extraitems - 20
         if extraitems > 0:
             world.itempool.extend(ItemFactory(hardfinal20extra))
-            extraitems - 20
+            extraitems = extraitems - 20
         world.itempool.extend(ItemFactory(hardarmor))
         if world.progressive == 'on':
             world.itempool.extend(ItemFactory(hardprogressiveshield))
@@ -410,16 +416,16 @@ def generate_itempool(world):
             world.treasure_hunt_icon = 'Triforce Piece'
         if extraitems > 0:
             world.itempool.extend(ItemFactory(expertfirst15extra))
-            extraitems - 15
+            extraitems = extraitems - 15
         if extraitems > 0:
             world.itempool.extend(ItemFactory(expertsecond25extra))
-            extraitems - 25
+            extraitems = extraitems - 25
         if extraitems > 0:
             world.itempool.extend(ItemFactory(expertthird15extra))
-            extraitems - 15
+            extraitems = extraitems - 15
         if extraitems > 0:
             world.itempool.extend(ItemFactory(expertfinal25extra))
-            extraitems - 25
+            extraitems = extraitems - 25
         if world.mode == 'swordless':
             world.itempool.extend(ItemFactory(expertswordless))
         elif world.mode == 'standard':
@@ -478,19 +484,19 @@ def generate_itempool(world):
             world.treasure_hunt_icon = 'Triforce Piece'
         if extraitems > 0:
             world.itempool.extend(ItemFactory(insanefirst15extra))
-            extraitems - 15
+            extraitems = extraitems - 15
         if extraitems > 0:
             world.itempool.extend(ItemFactory(insanesecond25extra))
-            extraitems - 25
+            extraitems = extraitems - 25
         if extraitems > 0:
             world.itempool.extend(ItemFactory(insanethird10extra))
-            extraitems - 10
+            extraitems = extraitems - 10
         if extraitems > 0:
             world.itempool.extend(ItemFactory(insanefourth15extra))
-            extraitems - 15
+            extraitems = extraitems - 15
         if extraitems > 0:
             world.itempool.extend(ItemFactory(insanefinal25extra))
-            extraitems - 25
+            extraitems = extraitems - 25
         if world.mode == 'swordless':
             world.itempool.extend(ItemFactory(insaneswordless))
         elif world.mode == 'standard':
