@@ -1,7 +1,7 @@
 from BaseClasses import World
 from Regions import create_regions
 from EntranceShuffle import link_entrances, connect_entrance, connect_two_way, connect_exit
-from Rom import patch_rom, LocalRom, write_string_to_rom
+from Rom import patch_rom, LocalRom, Sprite, write_string_to_rom
 from Rules import set_rules
 from Dungeons import create_dungeons
 from Items import ItemFactory
@@ -74,7 +74,7 @@ def main(args, seed=None):
     logger.info('Patching ROM.')
 
     if args.sprite is not None:
-        sprite = bytearray(open(args.sprite, 'rb').read())
+        sprite = Sprite(args.sprite)
     else:
         sprite = None
 

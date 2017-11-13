@@ -1,11 +1,12 @@
 from Main import main, __version__ as ESVersion
 from Utils import is_bundled, local_path, output_path, open_file
 from argparse import Namespace
+from Rom import Sprite
+from glob import glob
 import random
-import subprocess
 import os
-import sys
-from tkinter import Checkbutton, OptionMenu, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, Entry, Spinbox, Button, filedialog, messagebox, PhotoImage
+import shutil
+from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, Y, Entry, Spinbox, Button, filedialog, messagebox
 
 
 def guiMain(args=None):
@@ -69,8 +70,9 @@ def guiMain(args=None):
     spriteEntry = Entry(spriteDialogFrame, textvariable=spriteVar)
 
     def SpriteSelect():
-        sprite = filedialog.askopenfilename()
-        spriteVar.set(sprite)
+        #sprite = filedialog.askopenfilename()
+        #spriteVar.set(sprite)
+        SpriteSelector(Toplevel(mainWindow), spriteVar.set)
 
     spriteSelectButton = Button(spriteDialogFrame, text='Select Sprite', command=SpriteSelect)
 
@@ -279,6 +281,127 @@ def set_icon(window):
     er32 = PhotoImage(file=local_path('data/ER32.gif'))
     er48 = PhotoImage(file=local_path('data/ER32.gif'))
     window.tk.call('wm', 'iconphoto', window._w, er16, er32, er48)
+
+class SpriteSelector(object):
+    def __init__(self, parent, callback):
+        if is_bundled():
+            self.deploy_icons()
+        self.parent = parent
+        self.callback = callback
+        parent.wm_title("TAKE ANY ONE YOU WANT")
+        parent['padx']=5
+        parent['pady']=5
+
+        self.icon_section('Official Sprites', self.official_sprite_dir+'/*', 'Official Sprites not found. Click "Update Official Sprites" to download them.')
+        self.icon_section('Unofficial Sprites', self.unofficial_sprite_dir+'/*', 'Put sprites in the Sprites/Unofficial folder to have them appear here.')
+
+        frame = Frame(parent)
+        frame.pack(side=BOTTOM, fill=X, pady=5)
+
+        button = Button(frame, text="Browse for file...", command=self.browse_for_sprite)
+        button.pack(side=RIGHT, padx=(5,0))
+
+        # todo: Actually implement this. Requires a yet-to-be coded API from VT
+        button = Button(frame, text="Update Official Sprites")
+        button.pack(side=RIGHT, padx=(5,0))
+
+        button = Button(frame, text="Use Default Sprite", command=self.use_default_sprite)
+        button.pack(side=LEFT)
+
+        set_icon(parent)
+
+    def icon_section(self, frame_label, path, no_results_label):
+        frame = LabelFrame(self.parent, text=frame_label, padx=5, pady=5)
+        frame.pack(side=TOP, fill=X)
+
+        i=0
+        for file in glob(output_path(path)):
+            image = get_image_for_sprite(file)
+            if image is None: continue
+            button = Button(frame, image=image, command=lambda file=file:self.select_sprite(file))
+            button.image=image
+            button.grid(row=i//16, column=i%16)
+            i+=1
+
+        if i==0:
+            label = Label(frame, text="Put sprites in the Sprites/Unoffical folder to have them appear here.")
+            label.pack()
+
+    def browse_for_sprite(self):
+        sprite = filedialog.askopenfilename()
+        self.callback(sprite)
+        self.parent.destroy()
+
+    def use_default_sprite(self):
+        self.callback("")
+        self.parent.destroy()
+
+    def select_sprite(self, spritename):
+        self.callback(spritename)
+        self.parent.destroy()
+
+    def deploy_icons(self):
+        if not os.path.exists(self.unofficial_sprite_dir):
+            os.makedirs(self.unofficial_sprite_dir)
+        if not os.path.exists(self.official_sprite_dir):
+            shutil.copytree(self.local_official_sprite_dir, self.official_sprite_dir)
+
+    @property
+    def official_sprite_dir(self):
+        if is_bundled():
+            return output_path("sprites/official")
+        else:
+            return self.local_official_sprite_dir
+
+    @property
+    def local_official_sprite_dir(site):
+        return local_path("data/sprites/official")
+
+    @property
+    def unofficial_sprite_dir(self):
+        if is_bundled():
+            return output_path("sprites/unofficial")
+        else:
+            return self.local_unofficial_sprite_dir
+
+    @property
+    def local_unofficial_sprite_dir(site):
+        return local_path("data/sprites/unofficial")
+
+def get_image_for_sprite(filename):
+    sprite = Sprite(filename)
+    image = PhotoImage(height=24, width=16, palette="256/256/256")
+
+    def color_to_hex(color):
+        return "#{0:02X}{1:02X}{2:02X}".format(*color)
+
+    def drawsprite(spr, pal_as_colors, offset):
+        for y in range(len(spr)):
+            for x in range(len(spr[y])):
+                pal_index=spr[y][x]
+                if pal_index:
+                    color=pal_as_colors[pal_index-1]
+                    image.put(color_to_hex(color),to=(x+offset[0],y+offset[1]))
+
+    shadow_palette = [(40,40,40)]
+    shadow = [
+		[0,0,0,1,1,1,1,1,1,0,0,0],
+		[0,1,1,1,1,1,1,1,1,1,1,0],
+		[1,1,1,1,1,1,1,1,1,1,1,1],
+		[1,1,1,1,1,1,1,1,1,1,1,1],
+		[0,1,1,1,1,1,1,1,1,1,1,0],
+		[0,0,0,1,1,1,1,1,1,0,0,0],
+	]
+
+    drawsprite(shadow, shadow_palette, (2,17))
+
+    palettes = sprite.decode_palette()
+    body = sprite.decode16(0x4C0)
+    drawsprite(body, palettes[0], (0,8))
+    head = sprite.decode16(0x40)
+    drawsprite(head, palettes[0], (0,0))
+
+    return image.zoom(2)
 
 if __name__ == '__main__':
     guiMain()

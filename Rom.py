@@ -84,6 +84,83 @@ class LocalRom(object):
         inv = crc ^ 0xFFFF
         self.write_bytes(0x7FDC, [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF])
 
+class Sprite(object):
+    default_palette = [255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
+                       89, 71, 54, 104, 59, 74, 10, 239, 18, 92, 42, 113, 21, 24, 122,
+                       255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
+                       89, 128, 105, 145, 118, 184, 38, 127, 67, 92, 42, 153, 17, 24, 122,
+                       255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
+                       89, 87, 16, 126, 69, 243, 109, 185, 126, 92, 42, 39, 34, 24, 122,
+                       255, 127, 126, 35, 218, 17, 158, 54, 165, 20, 255, 1, 120, 16, 151,
+                       61, 71, 54, 104, 59, 74, 10, 239, 18, 126, 86, 114, 24, 24, 122]
+
+    default_glove_palette = [246, 82, 118, 3]
+
+    def __init__(self, filename):
+        filedata = bytearray(open(filename, 'rb').read())
+        self.valid=True
+        if len(filedata) == 0x7000:
+            # sprite file with graphics and without palette data
+            self.sprite = filedata[:0x7000]
+            self.palette = None
+            self.glove_palette = None
+        elif len(filedata) == 0x7078:
+            # sprite file with graphics and palette data
+            self.sprite = filedata[:0x7000]
+            self.palette = filedata[0x7000:]
+            self.glove_palette = filedata[0x7036:0x7038] + filedata[0x7054:0x7056]
+        elif len(filedata) in [0x100000, 0x200000]:
+            # full rom with patched sprite, extract it
+            self.sprite = filedata[0x80000:0x87000]
+            self.palette = filedata[0xDD308:0xDD380]
+            self.glove_palette = filedata[0xDEDF5:0xDEDF9]
+        else:
+           self.valid=False
+
+    def decode8(self, pos):
+        arr=[[0 for _ in range(8)] for _ in range(8)]
+        for y in range(8):
+            for x in range(8):
+                position = 1<<(7-x)
+                val=0;
+                if self.sprite[pos+2*y] & position: val += 1
+                if self.sprite[pos+2*y+1] & position: val += 2
+                if self.sprite[pos+2*y+16] & position: val += 4
+                if self.sprite[pos+2*y+17] & position: val += 8
+                arr[y][x]= val
+        return arr
+
+    def decode16(self, pos):
+        arr=[[0 for _ in range(16)] for _ in range(16)]
+        top_left = self.decode8(pos)
+        top_right = self.decode8(pos+0x20)
+        bottom_left = self.decode8(pos+0x200)
+        bottom_right = self.decode8(pos+0x220)
+        for x in range(8):
+            for y in range(8):
+                arr[y][x] = top_left[y][x]
+                arr[y][x+8] = top_right[y][x]
+                arr[y+8][x] = bottom_left[y][x]
+                arr[y+8][x+8] = bottom_right[y][x]
+        return arr
+
+    def decode_palette(self):
+        "Returns the palettes as an array of arrays of 15 colors"
+        def array_chunk(arr,size):
+            return list(zip(*[iter(arr)] * size))
+        def make_int16(pair):
+            return pair[1]<<8 | pair[0]
+        def expand_color(i):
+            return ( (i & 0x1F)*8, (i>>5 & 0x1F)*8, (i>>10 & 0x1F)*8)
+        raw_palette = self.palette
+        if raw_palette is None: raw_palette = Sprite.default_palette
+        # turn palette data into a list of RGB tuples with 8 bit values
+        palette_as_colors = [expand_color(make_int16(chnk)) for chnk in array_chunk(raw_palette, 2)]
+
+        # split into palettes of 15 colors
+        return array_chunk(palette_as_colors, 15)
+
+
 def int16_as_bytes(value):
     value = value & 0xFFFF
     return [value & 0xFF, (value >> 8) & 0xFF]
@@ -603,20 +680,12 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
 
 
 def write_sprite(rom, sprite):
-    if len(sprite) == 0x7000:
-        # sprite file with graphics and without palette data
-        rom.write_bytes(0x80000, sprite[:0x7000])
-    elif len(sprite) == 0x7078:
-        # sprite file with graphics and palette data
-        rom.write_bytes(0x80000, sprite[:0x7000])
-        rom.write_bytes(0xDD308, sprite[0x7000:])
-        rom.write_bytes(0xDEDF5, sprite[0x7036:0x7038])
-        rom.write_bytes(0xDEDF7, sprite[0x7054:0x7056])
-    elif len(sprite) in [0x100000, 0x200000]:
-        # full rom with patched sprite, extract it
-        rom.write_bytes(0x80000, sprite[0x80000:0x87000])
-        rom.write_bytes(0xDD308, sprite[0xDD308:0xDD380])
-        rom.write_bytes(0xDEDF5, sprite[0xDEDF5:0xDEDF9])
+    if not sprite.valid: return
+    rom.write_bytes(0x80000, sprite.sprite)
+    if sprite.palette is not None:
+        rom.write_bytes(0xDD308, sprite.palette)
+    if sprite.glove_palette is not None:
+        rom.write_bytes(0xDEDF5, sprite.glove_palette)
 
 
 def write_string_to_rom(rom, target, string):
