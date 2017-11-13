@@ -153,23 +153,18 @@ def generate_itempool(world):
         if extraitems > 0:
             world.itempool.extend(ItemFactory(normalfirst15extra))
             extraitems = extraitems - 15
-            print(extraitems)
         if extraitems > 0:
             world.itempool.extend(ItemFactory(normalsecond15extra))
             extraitems = extraitems - 15
-            print(extraitems)
         if extraitems > 0:
             world.itempool.extend(ItemFactory(normalthird10extra))
             extraitems = extraitems - 10
-            print(extraitems)
         if extraitems > 0:
             world.itempool.extend(ItemFactory(normalfourth5extra))
             extraitems = extraitems - 5
-            print(extraitems)
         if extraitems > 0:
             world.itempool.extend(ItemFactory(normalfinal25extra))
             extraitems = extraitems - 25
-            print(extraitems)
         if world.progressive == 'on':
             world.itempool.extend(ItemFactory(normalprogressiveshield))
             world.itempool.extend(ItemFactory(normalprogressivearmor))
