@@ -620,7 +620,7 @@ def write_strings(rom, world):
     magicshopitem = world.get_location('Potion Shop').item
     magicshopitem_text = random.choice(MagicShop_texts) if magicshopitem is None or magicshopitem.magicshop_credit_text is None else magicshopitem.magicshop_credit_text
 
-    fluteboyitem = world.get_location('Stumpy').item
+    fluteboyitem = world.get_location('Flute Spot').item
     fluteboyitem_text = random.choice(FluteBoy_texts) if fluteboyitem is None or fluteboyitem.fluteboy_credit_text is None else fluteboyitem.fluteboy_credit_text
 
     credits.update_credits_line('castle', 0, random.choice(KingsReturn_texts))
