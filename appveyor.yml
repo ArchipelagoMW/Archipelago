@@ -1,0 +1,32 @@
+version: '{build}'
+pull_requests:
+  do_not_increment_build_number: true
+environment:
+  ProjectVersion: build$(APPVEYOR_BUILD_VERSION)
+  matrix:
+  - PYTHON: C:\PYTHON36
+install:
+  - ps: 'if(Test-Path env:APPVEYOR_REPO_TAG_NAME) {$env:ProjectVersion=$env:APPVEYOR_REPO_TAG_NAME}'
+  - '%PYTHON%\python.exe --version'
+  - '%PYTHON%\Scripts\pip install pyinstaller'
+  - '%PYTHON%\Scripts\pip install markdown'
+  - '%PYTHON%\python.exe -m markdown README.md > README.html'
+  - 'copy LICENSE LICENSE.txt'
+  - '%PYTHON%\Scripts\pyinstaller bundle\EntranceRandomizer.spec'
+  - 'mkdir dist\EntranceRandomizer\ext'
+  - 'move dist\EntranceRandomizer\*.pyd dist\EntranceRandomizer\ext'
+  - 'move dist\EntranceRandomizer\tcl*.dll dist\EntranceRandomizer\ext'
+  - 'move dist\EntranceRandomizer\tk*.dll dist\EntranceRandomizer\ext'
+build: off
+artifacts:
+- path: dist/EntranceRandomizer/
+  name: EntranceRandomizer-$(ProjectVersion)-win32
+deploy:
+- provider: GitHub
+  tag: $(APPVEYOR_REPO_TAG_NAME)
+  auth_token:
+    secure: wQH+KnogyjYcDdo/srOQeoYEVIbH1uoYA5Iajdy/sR0Tbme7gOt15u2FBIkTg9/x
+  artifact: /.*-win32.zip/
+  force_update: false
+  on:
+    appveyor_repo_tag: true
