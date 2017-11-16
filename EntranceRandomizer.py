@@ -190,6 +190,14 @@ if __name__ == '__main__':
                             ''')
     args = parser.parse_args()
 
+    if hasattr(sys, 'frozen') and len(sys.argv) == 1 :
+        # for the Precompiled windows build, if we have no arguments, the user
+        # probably wants the gui. Users of the windows build who want the command line
+        # interface shouuld specify at least one option, possibly setting a value to a
+        # default if they like all the defaults
+        guiMain()
+        sys.exit(0)
+
     # ToDo: Validate files further than mere existance
     if not args.jsonout and not os.path.isfile(args.rom):
         input('Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
