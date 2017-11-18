@@ -3,9 +3,12 @@ from Utils import is_bundled, local_path, output_path, open_file
 from argparse import Namespace
 from Rom import Sprite
 from glob import glob
+import json
 import random
 import os
 import shutil
+from urllib.parse import urlparse
+from urllib.request import urlopen
 from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, Y, Entry, Spinbox, Button, filedialog, messagebox
 
 
@@ -70,9 +73,7 @@ def guiMain(args=None):
     spriteEntry = Entry(spriteDialogFrame, textvariable=spriteVar)
 
     def SpriteSelect():
-        #sprite = filedialog.askopenfilename()
-        #spriteVar.set(sprite)
-        SpriteSelector(Toplevel(mainWindow), spriteVar.set)
+        SpriteSelector(mainWindow, spriteVar.set)
 
     spriteSelectButton = Button(spriteDialogFrame, text='Select Sprite', command=SpriteSelect)
 
@@ -287,58 +288,82 @@ class SpriteSelector(object):
         if is_bundled():
             self.deploy_icons()
         self.parent = parent
+        self.window = Toplevel(parent)
         self.callback = callback
-        parent.wm_title("TAKE ANY ONE YOU WANT")
-        parent['padx']=5
-        parent['pady']=5
+
+        self.window.wm_title("TAKE ANY ONE YOU WANT")
+        self.window['padx'] = 5
+        self.window['pady'] = 5
 
         self.icon_section('Official Sprites', self.official_sprite_dir+'/*', 'Official Sprites not found. Click "Update Official Sprites" to download them.')
         self.icon_section('Unofficial Sprites', self.unofficial_sprite_dir+'/*', 'Put sprites in the Sprites/Unofficial folder to have them appear here.')
 
-        frame = Frame(parent)
+        frame = Frame(self.window)
         frame.pack(side=BOTTOM, fill=X, pady=5)
 
         button = Button(frame, text="Browse for file...", command=self.browse_for_sprite)
-        button.pack(side=RIGHT, padx=(5,0))
+        button.pack(side=RIGHT, padx=(5, 0))
 
-        # todo: Actually implement this. Requires a yet-to-be coded API from VT
-        button = Button(frame, text="Update Official Sprites")
-        button.pack(side=RIGHT, padx=(5,0))
+        button = Button(frame, text="Update Official Sprites", command=self.update_official_sprites)
+        button.pack(side=RIGHT, padx=(5, 0))
 
         button = Button(frame, text="Use Default Sprite", command=self.use_default_sprite)
         button.pack(side=LEFT)
 
-        set_icon(parent)
+        set_icon(self.window)
 
     def icon_section(self, frame_label, path, no_results_label):
-        frame = LabelFrame(self.parent, text=frame_label, padx=5, pady=5)
+        frame = LabelFrame(self.window, text=frame_label, padx=5, pady=5)
         frame.pack(side=TOP, fill=X)
 
-        i=0
+        i = 0
         for file in glob(output_path(path)):
             image = get_image_for_sprite(file)
             if image is None: continue
-            button = Button(frame, image=image, command=lambda file=file:self.select_sprite(file))
-            button.image=image
-            button.grid(row=i//16, column=i%16)
-            i+=1
+            button = Button(frame, image=image, command=lambda file=file: self.select_sprite(file))
+            button.image = image
+            button.grid(row=i // 16, column=i % 16)
+            i += 1
 
-        if i==0:
+        if i == 0:
             label = Label(frame, text="Put sprites in the Sprites/Unoffical folder to have them appear here.")
             label.pack()
+
+
+    def update_official_sprites(self):
+        # need to wrap in try catch. We don't want errors getting the json or downloading the files to break us.
+        sprites_arr = json.loads(temp_sprites_json)
+        current_sprites = [os.path.basename(file) for file in glob('sprites/official/*')]
+        official_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path)) for sprite in sprites_arr]
+        needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in official_sprites if filename not in current_sprites]
+
+        for (sprite_url, filename) in needed_sprites:
+            target = os.path.join('sprites/official',filename)
+            with urlopen(sprite_url) as response, open(target, 'wb') as out:
+                shutil.copyfileobj(response, out)
+
+        official_filenames = [filename for (_, filename) in official_sprites]
+        obsolete_sprites = [sprite for sprite in current_sprites if sprite not in official_filenames]
+        for sprite in obsolete_sprites:
+            os.remove(os.path.join('sprites/official', sprite))
+
+        self.window.destroy()
+        SpriteSelector(self.parent, self.callback)
+
 
     def browse_for_sprite(self):
         sprite = filedialog.askopenfilename()
         self.callback(sprite)
-        self.parent.destroy()
+        self.window.destroy()
 
     def use_default_sprite(self):
         self.callback("")
-        self.parent.destroy()
+        self.window.destroy()
 
     def select_sprite(self, spritename):
         self.callback(spritename)
-        self.parent.destroy()
+        self.window.destroy()
+
 
     def deploy_icons(self):
         if not os.path.exists(self.unofficial_sprite_dir):
@@ -378,30 +403,32 @@ def get_image_for_sprite(filename):
     def drawsprite(spr, pal_as_colors, offset):
         for y in range(len(spr)):
             for x in range(len(spr[y])):
-                pal_index=spr[y][x]
+                pal_index = spr[y][x]
                 if pal_index:
-                    color=pal_as_colors[pal_index-1]
-                    image.put(color_to_hex(color),to=(x+offset[0],y+offset[1]))
+                    color = pal_as_colors[pal_index - 1]
+                    image.put(color_to_hex(color), to=(x + offset[0], y + offset[1]))
 
-    shadow_palette = [(40,40,40)]
+    shadow_palette = [(40, 40, 40)]
     shadow = [
-		[0,0,0,1,1,1,1,1,1,0,0,0],
-		[0,1,1,1,1,1,1,1,1,1,1,0],
-		[1,1,1,1,1,1,1,1,1,1,1,1],
-		[1,1,1,1,1,1,1,1,1,1,1,1],
-		[0,1,1,1,1,1,1,1,1,1,1,0],
-		[0,0,0,1,1,1,1,1,1,0,0,0],
-	]
+        [0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+        [0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+    ]
 
-    drawsprite(shadow, shadow_palette, (2,17))
+    drawsprite(shadow, shadow_palette, (2, 17))
 
     palettes = sprite.decode_palette()
     body = sprite.decode16(0x4C0)
-    drawsprite(body, palettes[0], (0,8))
+    drawsprite(body, palettes[0], (0, 8))
     head = sprite.decode16(0x40)
-    drawsprite(head, palettes[0], (0,0))
+    drawsprite(head, palettes[0], (0, 0))
 
     return image.zoom(2)
+
+temp_sprites_json = '''[{"name":"Link","file":"http:\/\/spr.beegunslingers.com\/link.1.spr"},{"name":"Four Swords Link","file":"http:\/\/spr.beegunslingers.com\/4slink-armors.1.spr"},{"name":"Boo","file":"http:\/\/spr.beegunslingers.com\/boo.2.spr"},{"name":"Boy","file":"http:\/\/spr.beegunslingers.com\/boy.2.spr"},{"name":"Cactuar","file":"http:\/\/spr.beegunslingers.com\/cactuar.1.spr"},{"name":"Cat","file":"http:\/\/spr.beegunslingers.com\/cat.1.spr"},{"name":"Cat Boo","file":"http:\/\/spr.beegunslingers.com\/catboo.1.spr"},{"name":"Cirno","file":"http:\/\/spr.beegunslingers.com\/cirno.1.spr"},{"name":"Dark Boy","file":"http:\/\/spr.beegunslingers.com\/darkboy.2.spr"},{"name":"Dark Girl","file":"http:\/\/spr.beegunslingers.com\/darkgirl.1.spr"},{"name":"Dark Link","file":"http:\/\/spr.beegunslingers.com\/darklink.1.spr"},{"name":"Dark Maple Queen","file":"http:\/\/spr.beegunslingers.com\/shadowsaku.1.spr"},{"name":"Dark Swatchy","file":"http:\/\/spr.beegunslingers.com\/darkswatchy.1.spr"},{"name":"Dark Zelda","file":"http:\/\/spr.beegunslingers.com\/darkzelda.1.spr"},{"name":"Dark Zora","file":"http:\/\/spr.beegunslingers.com\/darkzora.2.spr"},{"name":"Decidueye","file":"http:\/\/spr.beegunslingers.com\/decidueye.1.spr"},{"name":"Demon Link","file":"http:\/\/spr.beegunslingers.com\/demonlink.1.spr"},{"name":"Frog","file":"http:\/\/spr.beegunslingers.com\/froglink.2.spr"},{"name":"Ganondorf","file":"http:\/\/spr.beegunslingers.com\/ganondorf.1.spr"},{"name":"Garfield","file":"http:\/\/spr.beegunslingers.com\/garfield.1.spr"},{"name":"Girl","file":"http:\/\/spr.beegunslingers.com\/girl.2.spr"},{"name":"Headless Link","file":"http:\/\/spr.beegunslingers.com\/headlesslink.1.spr"},{"name":"Invisible Man","file":"http:\/\/spr.beegunslingers.com\/invisibleman.1.spr"},{"name":"Inkling","file":"http:\/\/spr.beegunslingers.com\/inkling.1.spr"},{"name":"Kirby","file":"http:\/\/spr.beegunslingers.com\/kirby-meta.2.spr"},{"name":"Kore8","file":"http:\/\/spr.beegunslingers.com\/kore8.1.spr"},{"name":"Pony","file":"http:\/\/spr.beegunslingers.com\/littlepony.1.spr"},{"name":"Luigi","file":"http:\/\/spr.beegunslingers.com\/luigi.1.spr"},{"name":"Maiden","file":"http:\/\/spr.beegunslingers.com\/maiden.2.spr"},{"name":"Maple Queen","file":"http:\/\/spr.beegunslingers.com\/maplequeen.1.spr"},{"name":"Mario","file":"http:\/\/spr.beegunslingers.com\/mario-classic.1.spr"},{"name":"Marisa","file":"http:\/\/spr.beegunslingers.com\/marisa.1.spr"},{"name":"Mike Jones","file":"http:\/\/spr.beegunslingers.com\/mikejones.2.spr"},{"name":"Minish Cap Link","file":"http:\/\/spr.beegunslingers.com\/minishcaplink.3.spr"},{"name":"Modern Link","file":"http:\/\/spr.beegunslingers.com\/modernlink.1.spr"},{"name":"Mog","file":"http:\/\/spr.beegunslingers.com\/mog.1.spr"},{"name":"Mouse","file":"http:\/\/spr.beegunslingers.com\/mouse.1.spr"},{"name":"Nature Link","file":"http:\/\/spr.beegunslingers.com\/naturelink.1.spr"},{"name":"Negative Link","file":"http:\/\/spr.beegunslingers.com\/negativelink.1.spr"},{"name":"Neon Link","file":"http:\/\/spr.beegunslingers.com\/neonlink.1.spr"},{"name":"Old Man","file":"http:\/\/spr.beegunslingers.com\/oldman.1.spr"},{"name":"Pink Ribbon Link","file":"http:\/\/spr.beegunslingers.com\/pinkribbonlink.1.spr"},{"name":"Popoi","file":"http:\/\/spr.beegunslingers.com\/popoi.1.spr"},{"name":"Pug","file":"http:\/\/spr.beegunslingers.com\/pug.2.spr"},{"name":"Purple Chest","file":"http:\/\/spr.beegunslingers.com\/purplechest-bottle.2.spr"},{"name":"Roy Koopa","file":"http:\/\/spr.beegunslingers.com\/roykoopa.1.spr"},{"name":"Rumia","file":"http:\/\/spr.beegunslingers.com\/rumia.1.spr"},{"name":"Samus","file":"http:\/\/spr.beegunslingers.com\/samus.4.spr"},{"name":"Soda Can","file":"http:\/\/spr.beegunslingers.com\/sodacan.1.spr"},{"name":"Static Link","file":"http:\/\/spr.beegunslingers.com\/staticlink.1.spr"},{"name":"Santa Link","file":"http:\/\/spr.beegunslingers.com\/santalink.1.spr"},{"name":"Super Bunny","file":"http:\/\/spr.beegunslingers.com\/superbunny.1.spr"},{"name":"Swatchy","file":"http:\/\/spr.beegunslingers.com\/swatchy.1.spr"},{"name":"Tingle","file":"http:\/\/spr.beegunslingers.com\/tingle.1.spr"},{"name":"Toad","file":"http:\/\/spr.beegunslingers.com\/toad.1.spr"},{"name":"Valeera","file":"http:\/\/spr.beegunslingers.com\/valeera.1.spr"},{"name":"Vitreous","file":"http:\/\/spr.beegunslingers.com\/vitreous.1.spr"},{"name":"Vivi","file":"http:\/\/spr.beegunslingers.com\/vivi.1.spr"},{"name":"Will","file":"http:\/\/spr.beegunslingers.com\/will.1.spr"},{"name":"Wizzrobe","file":"http:\/\/spr.beegunslingers.com\/wizzrobe.4.spr"},{"name":"Yunica","file":"http:\/\/spr.beegunslingers.com\/yunica.1.spr"},{"name":"Zelda","file":"http:\/\/spr.beegunslingers.com\/zelda.2.spr"},{"name":"Zero Suit Samus","file":"http:\/\/spr.beegunslingers.com\/zerosuitsamus.1.spr"},{"name":"Zora","file":"http:\/\/spr.beegunslingers.com\/zora.1.spr"}]'''
 
 if __name__ == '__main__':
     guiMain()
