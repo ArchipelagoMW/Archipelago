@@ -178,7 +178,7 @@ difficulties= {
 
 def generate_itempool(world):
     if (world.difficulty not in ['easy', 'normal', 'hard', 'expert', 'insane'] or world.goal not in ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals']
-       or world.mode not in ['open', 'standard', 'swordless'] or world.timer not in ['none', 'display', 'timed', 'timed-ohko', 'timed-countdown'] or world.progressive not in ['on', 'off', 'random']):
+       or world.mode not in ['open', 'standard', 'swordless'] or world.timer not in ['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'] or world.progressive not in ['on', 'off', 'random']):
         raise NotImplementedError('Not supported yet')
 
     world.push_item('Ganon', ItemFactory('Triforce'), False)
@@ -243,6 +243,8 @@ def get_pool_core(progressive,shuffle,difficulty,timer, goal, mode):
 
     if timer == 'display':
         clock_mode = 'stopwatch'
+    elif timer == 'ohko':
+        clock_mode = 'ohko'
 
     diff = difficulties[difficulty]
     pool.extend(diff.baseitems)
@@ -292,7 +294,7 @@ def get_pool_core(progressive,shuffle,difficulty,timer, goal, mode):
     elif timer == 'timed-ohko':
         pool.extend(diff.timedohko)
         extraitems -= len(diff.timedohko)
-        clock_mode = 'ohko'
+        clock_mode = 'countdown-ohko'
     if goal == 'triforcehunt':
         pool.extend(diff.triforcehunt)
         extraitems -= len(diff.triforcehunt)
@@ -316,7 +318,7 @@ def get_pool_core(progressive,shuffle,difficulty,timer, goal, mode):
 if __name__ == '__main__':
     for difficulty in ['easy', 'normal', 'hard', 'expert', 'insane']:
         for goal in ['ganon', 'triforcehunt', 'pedestal']:
-            for timer in ['none', 'display', 'timed', 'timed-ohko', 'timed-countdown']:
+            for timer in ['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown']:
                 for mode in ['open', 'standard', 'swordless']:
                     for progressive in ['on','off']:
                         for shuffle in ['full','insane']:

@@ -60,7 +60,7 @@ if __name__ == '__main__':
                              Expert:          A harder yet setting with minimum equipment and health.
                              Insane:          A setting with the absolute minimum in equipment and no extra health.                           
                              ''')
-    parser.add_argument('--timer', default='none', const='normal', nargs='?', choices=['none', 'display', 'timed', 'timed-ohko', 'timed-countdown'],
+    parser.add_argument('--timer', default='none', const='normal', nargs='?', choices=['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'],
                         help='''\
                              Select game timer setting. Affects available itempool. (default: %(default)s)
                              None:            No timer.
@@ -74,6 +74,8 @@ if __name__ == '__main__':
                              Timed OHKO:      Starts clock at 10 minutes. Green Clocks add
                                               5 minutes (Total: 25). As long as clock is at 0,
                                               Link will die in one hit.
+                             OHKO:            Like Timed OHKO, but no clock items are present
+                                              and the clock is permenantly at zero.
                              Timed Countdown: Starts with clock at 40 minutes. Same clocks as
                                               Timed mode. If time runs out, you lose (but can
                                               still keep playing).                             

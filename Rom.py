@@ -391,33 +391,39 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     # set up clocks for timed modes
     if world.clock_mode == 'off':
         rom.write_bytes(0x180190, [0x00, 0x00, 0x00])  # turn off clock mode
-        rom.write_bytes(0x180200, [0x00, 0x00, 0x00, 0x00])  # red clock adjustment time (in frames, sint32)
-        rom.write_bytes(0x180204, [0x00, 0x00, 0x00, 0x00])  # blue clock adjustment time (in frames, sint32)
-        rom.write_bytes(0x180208, [0x00, 0x00, 0x00, 0x00])  # green clock adjustment time (in frames, sint32)
-        rom.write_bytes(0x18020C, [0x00, 0x00, 0x00, 0x00])  # starting time (in frames, sint32)
+        rom.write_int32_to_rom(0x180200, 0)  # red clock adjustment time (in frames, sint32)
+        rom.write_int32_to_rom(0x180204, 0)  # blue clock adjustment time (in frames, sint32)
+        rom.write_int32_to_rom(0x180208, 0)  # green clock adjustment time (in frames, sint32)
+        rom.write_int32_to_rom(0x18020C, 0)  # starting time (in frames, sint32)
     elif world.clock_mode == 'ohko':
         rom.write_bytes(0x180190, [0x01, 0x02, 0x01])  # ohko timer with resetable timer functionality
-        rom.write_bytes(0x180200, [0x00, 0x00, 0x00, 0x81])  # red clock adjustment time (in frames, sint32)
-        rom.write_bytes(0x180204, [0x20, 0x1C, 0x00, 0x00])  # blue clock adjustment time (in frames, sint32)
-        rom.write_bytes(0x180208, [0x40, 0x38, 0x00, 0x00])  # green clock adjustment time (in frames, sint32)
+        rom.write_int32_to_rom(0x180200, 0)  # red clock adjustment time (in frames, sint32)
+        rom.write_int32_to_rom(0x180204, 0)  # blue clock adjustment time (in frames, sint32)
+        rom.write_int32_to_rom(0x180208, 0)  # green clock adjustment time (in frames, sint32)
+        rom.write_int32_to_rom(0x18020C, 0)  # starting time (in frames, sint32)
+    elif world.clock_mode == 'countdown-ohko':
+        rom.write_bytes(0x180190, [0x01, 0x02, 0x01])  # ohko timer with resetable timer functionality
+        rom.write_int32_to_rom(0x180200, -100 * 60 * 60 * 60)  # red clock adjustment time (in frames, sint32)
+        rom.write_int32_to_rom(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
+        rom.write_int32_to_rom(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
         if world.difficulty == 'easy':
-            rom.write_bytes(0x18020C, [0x40, 0x19, 0x01, 0x00])  # starting time (in frames, sint32)
+            rom.write_int32_to_rom(0x18020C, 20 * 60 * 60)  # starting time (in frames, sint32)
         elif world.difficulty == 'normal':
-            rom.write_bytes(0x18020C, [0xA0, 0x8C, 0x00, 0x00])  # starting time (in frames, sint32)
+            rom.write_int32_to_rom(0x18020C, 10 * 60 * 60)  # starting time (in frames, sint32)
         else:
-            rom.write_bytes(0x18020C, [0x50, 0x46, 0x00, 0x00])  # starting time (in frames, sint32)
+            rom.write_int32_to_rom(0x18020C, 5 * 60 * 60)  # starting time (in frames, sint32)
     if world.clock_mode == 'stopwatch':
         rom.write_bytes(0x180190, [0x02, 0x01, 0x00])  # set stopwatch mode
-        rom.write_bytes(0x180200, [0xE0, 0xE3, 0xFF, 0xFF])  # red clock adjustment time (in frames, sint32)
-        rom.write_bytes(0x180204, [0x20, 0x1C, 0x00, 0x00])  # blue clock adjustment time (in frames, sint32)
-        rom.write_bytes(0x180208, [0x40, 0x38, 0x00, 0x00])  # green clock adjustment time (in frames, sint32)
-        rom.write_bytes(0x18020C, [0x00, 0x00, 0x00, 0x00])  # starting time (in frames, sint32)
+        rom.write_int32_to_rom(0x180200, -2 * 60 * 60)  # red clock adjustment time (in frames, sint32)
+        rom.write_int32_to_rom(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
+        rom.write_int32_to_rom(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
+        rom.write_int32_to_rom(0x18020C, 0)  # starting time (in frames, sint32)
     if world.clock_mode == 'countdown':
         rom.write_bytes(0x180190, [0x01, 0x01, 0x00])  # set countdown, with no reset available
-        rom.write_bytes(0x180200, [0xE0, 0xE3, 0xFF, 0xFF])  # red clock adjustment time (in frames, sint32)
-        rom.write_bytes(0x180204, [0x20, 0x1C, 0x00, 0x00])  # blue clock adjustment time (in frames, sint32)
-        rom.write_bytes(0x180208, [0x40, 0x38, 0x00, 0x00])  # green clock adjustment time (in frames, sint32)
-        rom.write_bytes(0x18020C, [0x80, 0x32, 0x02, 0x00])  # starting time (in frames, sint32)
+        rom.write_int32_to_rom(0x180200, -2 * 60 * 60)  # red clock adjustment time (in frames, sint32)
+        rom.write_int32_to_rom(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
+        rom.write_int32_to_rom(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
+        rom.write_int32_to_rom(0x18020C, 40 * 60 * 60)  # starting time (in frames, sint32)
 
     # set up goals for treasure hunt
     rom.write_bytes(0x180165, [0x0E, 0x28] if world.treasure_hunt_icon == 'Triforce Piece' else [0x0D, 0x28])

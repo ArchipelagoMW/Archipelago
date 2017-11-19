@@ -232,7 +232,7 @@ class World(object):
         goal = ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'].index(self.goal)
         shuffle = ['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'].index(self.shuffle)
         difficulty = ['easy', 'normal', 'hard', 'expert', 'insane'].index(self.difficulty)
-        timer = ['none', 'display', 'timed', 'timed-ohko', 'timed-countdown'].index(self.timer)
+        timer = ['none', 'display', 'timed', 'timed-ohko', 'timed-countdown','ohko'].index(self.timer)
         progressive = ['on', 'off', 'random'].index(self.progressive)
         algorithm = ['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26', 'balanced'].index(self.algorithm)
         beatableonly = 1 if self.check_beatable_only else 0
