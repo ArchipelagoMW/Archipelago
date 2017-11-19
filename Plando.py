@@ -1,7 +1,7 @@
 from BaseClasses import World
 from Regions import create_regions
 from EntranceShuffle import link_entrances, connect_entrance, connect_two_way, connect_exit
-from Rom import patch_rom, LocalRom, write_string_to_rom, write_credits_string_to_rom
+from Rom import patch_rom, LocalRom, write_string_to_rom
 from Rules import set_rules
 from Dungeons import create_dungeons
 from Items import ItemFactory
@@ -12,6 +12,7 @@ import logging
 import argparse
 import os
 import hashlib
+import sys
 
 __version__ = '0.2-dev'
 
@@ -161,9 +162,10 @@ def fill_world(world, plando, text_patches):
                     elif line.startswith('!text_'):
                         textname, text = line.split(':', 1)
                         text_patches.append([textname.lstrip('!text_').strip(), 'text', text.strip()])
-                    elif line.startswith('!credits_'):
-                        textname, text = line.split(':', 1)
-                        text_patches.append([textname.lstrip('!credits_').strip(), 'credits', text.strip()])
+                    #temporarilly removed. New credits system not ready to handle this.
+                    #elif line.startswith('!credits_'):
+                    #    textname, text = line.split(':', 1)
+                    #    text_patches.append([textname.lstrip('!credits_').strip(), 'credits', text.strip()])
                     continue
 
                 locationstr, itemstr = line.split(':', 1)
@@ -214,13 +216,13 @@ if __name__ == '__main__':
     # ToDo: Validate files further than mere existance
     if not os.path.isfile(args.rom):
         input('Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
-        exit(1)
+        sys.exit(1)
     if not os.path.isfile(args.plando):
         input('Could not find Plandomizer distribution at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.plando)
-        exit(1)
+        sys.exit(1)
     if args.sprite is not None and not os.path.isfile(args.rom):
         input('Could not find link sprite sheet at given location. \nPress Enter to exit.' % args.sprite)
-        exit(1)
+        sys.exit(1)
 
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[args.loglevel]

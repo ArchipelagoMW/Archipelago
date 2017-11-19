@@ -3,6 +3,7 @@ import os
 import logging
 import random
 import textwrap
+import sys
 
 from Main import main
 from Gui import guiMain
@@ -191,11 +192,11 @@ if __name__ == '__main__':
     # ToDo: Validate files further than mere existance
     if not args.jsonout and not os.path.isfile(args.rom):
         input('Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
-        exit(1)
+        sys.exit(1)
     if args.sprite is not None and not os.path.isfile(args.sprite):
         if not args.jsonout:
             input('Could not find link sprite sheet at given location. \nPress Enter to exit.' % args.sprite)
-            exit(1)
+            sys.exit(1)
         else:
             raise IOError('Cannot find sprite file at %s' % args.sprite)
 
