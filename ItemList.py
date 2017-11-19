@@ -11,8 +11,8 @@ alwaysitems = ['Bombos', 'Book of Mudora', 'Bow', 'Cane of Somaria', 'Ether', 'F
 progressivegloves = ['Progressive Glove'] * 2
 basicgloves = ['Power Glove', 'Titans Mitts']
 
-normalbottles = ['Bottle', 'BottleRedPotion', 'BottleGreenPotion', 'BottleBluePotion', 'BottleFairy', 'BottleBee', 'BottleGoodBee']
-hardbottles = ['Bottle', 'BottleRedPotion', 'BottleGreenPotion', 'BottleBluePotion', 'BottleBee', 'BottleGoodBee']
+normalbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Fairy)', 'Bottle (Bee)', 'Bottle (Good Bee)']
+hardbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Bee)', 'Bottle (Good Bee)']
 
 normalbaseitems = (['Blue Boomerang', 'Red Boomerang', 'Silver Arrows', 'Magic Upgrade (1/2)'] + ['Rupees (300)'] * 4 +
                   ['Single Arrow', 'Sanctuary Heart Container', 'Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24)
