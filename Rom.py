@@ -21,10 +21,10 @@ class JsonRom(object):
 
     def write_bytes(self, startaddress, values):
         self.patches[str(startaddress)] = list(values)
-        
+
     def write_int16_to_rom(self, address, value):
         self.write_bytes(address, int16_as_bytes(value))
-    
+
     def write_int32_to_rom(self, address, value):
         self.write_bytes(address, int32_as_bytes(value))
 
@@ -47,7 +47,7 @@ class LocalRom(object):
 
     def write_int16_to_rom(self, address, value):
         self.write_bytes(address, int16_as_bytes(value))
-    
+
     def write_int32_to_rom(self, address, value):
         self.write_bytes(address, int32_as_bytes(value))
 
@@ -86,7 +86,7 @@ class LocalRom(object):
 def int16_as_bytes(value):
     value = value & 0xFFFF
     return [value & 0xFF, (value >> 8) & 0xFF]
-    
+
 def int32_as_bytes(value):
     value = value & 0xFFFFFFFF
     return [value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF, (value >> 24) & 0xFF]

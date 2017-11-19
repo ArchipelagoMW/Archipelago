@@ -185,7 +185,7 @@ class World(object):
                 return True
 
         return False
-        
+
     def has_beaten_game(self, state):
         if state.has('Triforce'): return True
         if self.goal in ['triforcehunt']:
@@ -329,7 +329,7 @@ class CollectionState(object):
             return item in self.prog_items
         else:
             return self.item_count(item) >= count
-    
+
     def item_count(self, item):
         return len([pritem for pritem in self.prog_items if pritem == item])
 

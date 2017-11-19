@@ -209,7 +209,7 @@ randomized.
 --algorithm [{freshness,flood,vt21,vt22,vt25,vt26,balanced}]
 ```
 
-Select item filling algorithm. 
+Select item filling algorithm.
 
 ### Balanced (Default)
 This is a variation of vt26 that aims to strike a balance between the overworld heavy vt25 and the dungeon heavy vt26 algorithm.
@@ -220,7 +220,7 @@ Items and locations are shuffled like in VT25, and dungeon items are now placed 
 shuffled it includes a slight deliberate bias against having too many desireable items in Ganon's Tower to help counterbalance
 the sheer number of chests in that single location.
 
-### VT25 
+### VT25
 Items and locations are shuffled and placed from the top of the lists. The only thing preventing an item from being placed into a spot
 is if is absolutely impossible to be there given the previous made placement choices. Leads to very uniform but guaranteed solvable distributions.
 
@@ -243,7 +243,7 @@ staleness, decreasing the likelihood of receiving a progress item.
 --shuffle [{default,simple,restricted,full,madness,insanity,dungeonsfull,dungeonssimple}]
 ```
 
-Select Entrance Shuffling Algorithm. 
+Select Entrance Shuffling Algorithm.
 
 ### Default
 
@@ -256,7 +256,7 @@ on the overworld. On Death Mountain, entrances are connected more freely.
 
 ### Full (Default)
 
-Mixes cave and dungeon entrances freely. 
+Mixes cave and dungeon entrances freely.
 
 ### Restricted
 
@@ -296,7 +296,7 @@ Define seed number to generate. (default: None) Using the same seed with same se
 --count COUNT         
 ```
 
-Use to batch generate multiple seeds with same settings. 
+Use to batch generate multiple seeds with same settings.
 If --seed is provided, it will be used for the first seed, then used to derive the next seed (i.e. generating 10 seeds with --seed given will produce the same 10 (different) roms each time). (default: None)
 
 ```
