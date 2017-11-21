@@ -1,9 +1,9 @@
 # -*- mode: python -*-
-
+from PyInstaller.compat import is_win
 block_cipher = None
 
-
-a = Analysis(['..\\EntranceRandomizer.py'],
+# Todo: the runtime hooks should only be installed on windows
+a = Analysis(['../EntranceRandomizer.py'],
              pathex=['bundle'],
              binaries=[],
              datas=[('../data/', 'data/'), ('../README.html', '.'), ('../LICENSE.txt', '.')],
@@ -16,6 +16,7 @@ a = Analysis(['..\\EntranceRandomizer.py'],
              cipher=block_cipher)
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
+
 exe = EXE(pyz,
           a.scripts,
           exclude_binaries=True,
@@ -23,7 +24,7 @@ exe = EXE(pyz,
           debug=False,
           strip=False,
           upx=False,
-          console=True )
+          console=is_win )
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
@@ -31,3 +32,7 @@ coll = COLLECT(exe,
                strip=False,
                upx=False,
                name='EntranceRandomizer')
+app = BUNDLE(coll,
+             name ='EntranceRandomizer.app',
+             icon = None,
+             bundle_identifier = None)
