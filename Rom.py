@@ -66,7 +66,7 @@ class LocalRom(object):
         self.buffer.extend(bytearray([0x00] * (2097152 - len(self.buffer))))
 
         # load randomizer patches
-        patches = json.load(open('base2current.json', 'r'))
+        patches = json.load(open('data/base2current.json', 'r'))
         for patch in patches:
             if isinstance(patch, dict):
                 for baseaddress, values in patch.items():
