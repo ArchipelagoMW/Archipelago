@@ -30,13 +30,13 @@ Output a Spoiler File (default: False)
 --logic [{noglitches,minorglitches}]
 ```
 
-Select Enforcement of Item Requirements. 
+Select Enforcement of Item Requirements.
 
 ### No Glitches
 
 The game can be completed without knowing how to perform glitches of any kind.
 
-### Minor Glitches 
+### Minor Glitches
 
 May require Fake Flippers, Bunny Revival. (default: noglitches)
 
@@ -54,7 +54,7 @@ Gives lightcone in Hyrule Castle Sewers even without the Lamp.
 
 ### Open
 
-This mode starts with the option to start in your house or the sanctuary, you are free to explore. 
+This mode starts with the option to start in your house or the sanctuary, you are free to explore.
 
 Special notes:
 
@@ -84,11 +84,11 @@ Select completion goal.
 
 Standard game completion requiring you to collect the 7 crystals, defeat Agahnim 2 and then beat Ganon.
 
-### Pedestal 
+### Pedestal
 
 Places the Triforce at the Master Sword Pedestal. Ganon cannot be damaged.
 
-### All Dungeons 
+### All Dungeons
 
 Ganon cannot be damaged until all dungeons (including Hyrule Castle Tower and Ganons Tower) are cleared.
 
@@ -143,7 +143,7 @@ This setting is a modest step up from Expert. The main difference is that the pl
 additional health.
 
 ```
---timer [{none,display,timed,timed-ohko,timed-countdown}]
+--timer [{none,display,timed,timed-ohko,ohko,timed-countdown}]
 ```
 
 Select the timer setting.
@@ -168,10 +168,16 @@ Displays a countdown timer on screen that, when it hits zero, will put the playe
 knockout state until more time is added to the clock via some of the Green Clocks that will be added
 to the itempool.
 
+### OHKO
+
+The player into a one hit state the entire game. This is the same as Timed-OHKO,
+except that the clock starts at zero, and there are no Clock items, so it will
+always stay at zero, resulting in a permanent one hit knockout state.
+
 ### Timed-countdown
 
 Displays a countdown timer on screen that can be increased with Green Clocks and Blue Clocks or
-increased with Red Clocks found in chests that will be added to the itempool. The goal of this mode
+decreased with Red Clocks found in chests that will be added to the itempool. The goal of this mode
 is to finish the game without the timer reaching zero, but the game will continue uninterrupted if
 the player runs out of time.
 
@@ -203,7 +209,7 @@ randomized.
 --algorithm [{freshness,flood,vt21,vt22,vt25,vt26,balanced}]
 ```
 
-Select item filling algorithm. 
+Select item filling algorithm.
 
 ### Balanced (Default)
 This is a variation of vt26 that aims to strike a balance between the overworld heavy vt25 and the dungeon heavy vt26 algorithm.
@@ -214,7 +220,7 @@ Items and locations are shuffled like in VT25, and dungeon items are now placed 
 shuffled it includes a slight deliberate bias against having too many desireable items in Ganon's Tower to help counterbalance
 the sheer number of chests in that single location.
 
-### VT25 
+### VT25
 Items and locations are shuffled and placed from the top of the lists. The only thing preventing an item from being placed into a spot
 is if is absolutely impossible to be there given the previous made placement choices. Leads to very uniform but guaranteed solvable distributions.
 
@@ -237,7 +243,7 @@ staleness, decreasing the likelihood of receiving a progress item.
 --shuffle [{default,simple,restricted,full,madness,insanity,dungeonsfull,dungeonssimple}]
 ```
 
-Select Entrance Shuffling Algorithm. 
+Select Entrance Shuffling Algorithm.
 
 ### Default
 
@@ -250,7 +256,7 @@ on the overworld. On Death Mountain, entrances are connected more freely.
 
 ### Full (Default)
 
-Mixes cave and dungeon entrances freely. 
+Mixes cave and dungeon entrances freely.
 
 ### Restricted
 
@@ -290,7 +296,7 @@ Define seed number to generate. (default: None) Using the same seed with same se
 --count COUNT         
 ```
 
-Use to batch generate multiple seeds with same settings. 
+Use to batch generate multiple seeds with same settings.
 If --seed is provided, it will be used for the first seed, then used to derive the next seed (i.e. generating 10 seeds with --seed given will produce the same 10 (different) roms each time). (default: None)
 
 ```

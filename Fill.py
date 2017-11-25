@@ -167,7 +167,7 @@ def fill_restrictive(world, base_state, locations, itempool):
     while itempool and locations:
         item_to_place = itempool.pop()
         maximum_exploration_state = sweep_from_pool()
-        
+
         if world.check_beatable_only:
             can_beat_without = world.has_beaten_game(maximum_exploration_state)
 

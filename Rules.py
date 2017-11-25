@@ -301,7 +301,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Palace of Darkness Big Key Chest Staircase'), lambda state: state.has('Small Key (Palace of Darkness)', 5)  or (state.world.get_location('Palace of Darkness - Big Key Chest').item is not None and (state.world.get_location('Palace of Darkness - Big Key Chest').item.name in ['Small Key (Palace of Darkness)'])))
     set_rule(world.get_entrance('Palace of Darkness (North)'), lambda state: state.has('Small Key (Palace of Darkness)', 4))
     set_rule(world.get_location('Palace of Darkness - Big Chest'), lambda state: state.has('Big Key (Palace of Darkness)'))
-    
+
     if world.keysanity:
         set_rule(world.get_entrance('Palace of Darkness Spike Statue Room Door'), lambda state: state.has('Small Key (Palace of Darkness)', 6) or (state.world.get_location('Palace of Darkness - Harmless Hellway').item is not None and (state.world.get_location('Palace of Darkness - Harmless Hellway').item.name in ['Small Key (Palace of Darkness)'])))
         set_rule(world.get_entrance('Palace of Darkness Big Key Chest Staircase'), lambda state: state.has('Small Key (Palace of Darkness)', 6)  or (state.world.get_location('Palace of Darkness - Big Key Chest').item is not None and (state.world.get_location('Palace of Darkness - Big Key Chest').item.name in ['Small Key (Palace of Darkness)'])))
@@ -310,7 +310,7 @@ def global_rules(world):
         set_rule(world.get_entrance('Palace of Darkness Spike Statue Room Door'), lambda state: state.has('Small Key (Palace of Darkness)', 5) or (state.world.get_location('Palace of Darkness - Harmless Hellway').item is not None and (state.world.get_location('Palace of Darkness - Harmless Hellway').item.name in ['Small Key (Palace of Darkness)'])))
         set_rule(world.get_entrance('Palace of Darkness Big Key Chest Staircase'), lambda state: state.has('Small Key (Palace of Darkness)', 5)  or (state.world.get_location('Palace of Darkness - Big Key Chest').item is not None and (state.world.get_location('Palace of Darkness - Big Key Chest').item.name in ['Small Key (Palace of Darkness)'])))
         set_rule(world.get_entrance('Palace of Darkness Maze Door'), lambda state: state.has('Small Key (Palace of Darkness)', 5))
-    
+
     for location in ['Palace of Darkness - Big Chest', 'Palace of Darkness - Helmasaur']:
         forbid_item(world.get_location(location), 'Big Key (Palace of Darkness)')
 
@@ -320,7 +320,7 @@ def global_rules(world):
     # these key rules are conservative, you might be able to get away with more lenient rules
     randomizer_room_chests = ['Ganons Tower - Randomizer Room - Top Left', 'Ganons Tower - Randomizer Room - Top Right', 'Ganons Tower - Randomizer Room - Bottom Left', 'Ganons Tower - Randomizer Room - Bottom Right']
     compass_room_chests = ['Ganons Tower - Compass Room - Top Left', 'Ganons Tower - Compass Room - Top Right', 'Ganons Tower - Compass Room - Bottom Left', 'Ganons Tower - Compass Room - Bottom Right']
-    
+
     set_rule(world.get_location('Ganons Tower - Bob\'s Torch'), lambda state: state.has_Boots())
     set_rule(world.get_entrance('Ganons Tower (Tile Room)'), lambda state: state.has('Cane of Somaria'))
     set_rule(world.get_entrance('Ganons Tower (Hookshot Room)'), lambda state: state.has('Hammer'))
@@ -328,24 +328,24 @@ def global_rules(world):
         set_rule(world.get_entrance('Ganons Tower (Map Room)'), lambda state: state.has('Small Key (Ganons Tower)', 4) or (state.world.get_location('Ganons Tower - Map Chest').item is not None and state.world.get_location('Ganons Tower - Map Chest').item.name == 'Big Key (Ganons Tower)' and state.has('Small Key (Ganons Tower)', 3)) or (state.world.get_location('Ganons Tower - Map Chest').item is not None and state.world.get_location('Ganons Tower - Map Chest').item.name == 'Small Key (Ganons Tower)'))
     else:
         set_rule(world.get_entrance('Ganons Tower (Map Room)'), lambda state: state.has('Small Key (Ganons Tower)', 3) or (state.world.get_location('Ganons Tower - Map Chest').item is not None and state.world.get_location('Ganons Tower - Map Chest').item.name == 'Small Key (Ganons Tower)'))
-    
+
     # It is possible to need more than 2 keys to get through this entance if you spend keys elsewhere We reflect this in the chest requirements.
     # However we need to leave these at the lower values derive that with 3 keys it is always possible to reach Bob and Ice Armos.
     set_rule(world.get_entrance('Ganons Tower (Double Switch Room)'), lambda state: state.has('Small Key (Ganons Tower)', 2))
     # It is possible to need more than 3 keys ....
     set_rule(world.get_entrance('Ganons Tower (Firesnake Room)'), lambda state: state.has('Small Key (Ganons Tower)', 3))
-    
+
     #The actual requirements for these rooms to avoid key-lock
     set_rule(world.get_location('Ganons Tower - Firesnake Room'), lambda state: state.has('Small Key (Ganons Tower)', 3) or (item_in_locations(state, 'Big Key (Ganons Tower)', randomizer_room_chests) and state.has('Small Key (Ganons Tower)', 2)))
     for location in randomizer_room_chests:
         set_rule(world.get_location(location), lambda state: state.has('Small Key (Ganons Tower)', 4) or (item_in_locations(state, 'Big Key (Ganons Tower)', randomizer_room_chests) and state.has('Small Key (Ganons Tower)', 3)))
-    
+
     # Once again it is possible to need more than 3 keys...
     set_rule(world.get_entrance('Ganons Tower (Tile Room) Key Door'), lambda state: state.has('Small Key (Ganons Tower)', 3) and state.has('Fire Rod'))
     # Actual requirements
     for location in compass_room_chests:
         set_rule(world.get_location(location), lambda state: state.has('Fire Rod') and (state.has('Small Key (Ganons Tower)', 4) or (item_in_locations(state, 'Big Key (Ganons Tower)', compass_room_chests) and state.has('Small Key (Ganons Tower)', 3))))
-        
+
     set_rule(world.get_location('Ganons Tower - Big Chest'), lambda state: state.has('Big Key (Ganons Tower)'))
     set_rule(world.get_location('Ganons Tower - Big Key Room - Left'), lambda state: state.has('Bow') or state.has_blunt_weapon())
     set_rule(world.get_location('Ganons Tower - Big Key Chest'), lambda state: state.has('Bow') or state.has_blunt_weapon())
@@ -429,7 +429,7 @@ def open_rules(world):
     # softlock protection as you can reach the sewers small key door with a guard drop key
     forbid_item(world.get_location('Hyrule Castle - Boomerang Chest'), 'Small Key (Escape)')
     forbid_item(world.get_location('Hyrule Castle - Zelda\'s Chest'), 'Small Key (Escape)')
-    
+
     # to prevent key-lock in keysanity we need to prevent these chests from having an item that
     # blocks the small key
     if (world.keysanity):
@@ -443,7 +443,7 @@ def swordless_rules(world):
     # should there ever be fixes that apply to open mode but not swordless, this
     # can be revisited.
     open_rules(world)
-    
+
     set_rule(world.get_entrance('Agahnims Tower'), lambda state: state.has('Cape') or state.has('Hammer') or state.has('Beat Agahnim 1'))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
     set_rule(world.get_entrance('Agahnim 1'), lambda state: state.has('Hammer') or state.has('Bug Catching Net') and state.has('Small Key (Agahnims Tower)', 2))
     set_rule(world.get_location('Ether Tablet'), lambda state: state.has('Book of Mudora') and state.has('Hammer'))
@@ -479,7 +479,7 @@ def set_trock_key_rules(world):
 
     # if we have backdoor access we can waste a key on the trinexx door, then have no lamp to reverse traverse the maze room. We simply require an additional key just to be super safe then. The backdoor access to the chest is otherwise free
     if not can_reach_back:
-        set_rule(world.get_entrance('Turtle Rock Pokey Room'), lambda state: state.has('Small Key (Turtle Rock)', 1)) 
+        set_rule(world.get_entrance('Turtle Rock Pokey Room'), lambda state: state.has('Small Key (Turtle Rock)', 1))
     else:
         set_rule(world.get_entrance('Turtle Rock Pokey Room'), lambda state: state.has('Small Key (Turtle Rock)', 2))
 
@@ -496,8 +496,8 @@ def set_trock_key_rules(world):
     # however in keysanity being able to reach all other chests while only having three keys does not imply this contains
     # a key, so we again need all four keys unless it contains the big key
     if can_reach_back:
-        set_rule(world.get_location('Turtle Rock - Big Key Chest'), lambda state: state.has('Small Key (Turtle Rock)', 4) or (state.world.get_location('Turtle Rock - Big Key Chest').item is not None and (state.world.get_location('Turtle Rock - Big Key Chest').item.name in ['Small Key (Turtle Rock)']))) 
-    elif world.keysanity:    
+        set_rule(world.get_location('Turtle Rock - Big Key Chest'), lambda state: state.has('Small Key (Turtle Rock)', 4) or (state.world.get_location('Turtle Rock - Big Key Chest').item is not None and (state.world.get_location('Turtle Rock - Big Key Chest').item.name in ['Small Key (Turtle Rock)'])))
+    elif world.keysanity:
         set_rule(world.get_location('Turtle Rock - Big Key Chest'), lambda state: state.has('Small Key (Turtle Rock)', 2) if (state.world.get_location('Turtle Rock - Big Key Chest').item is not None and (state.world.get_location('Turtle Rock - Big Key Chest').item.name in ['Big Key (Turtle Rock)'])) else state.has('Small Key (Turtle Rock)', 4) or (state.world.get_location('Turtle Rock - Big Key Chest').item is not None and (state.world.get_location('Turtle Rock - Big Key Chest').item.name in ['Small Key (Turtle Rock)'])))
     else:
         set_rule(world.get_location('Turtle Rock - Big Key Chest'), lambda state: state.has('Small Key (Turtle Rock)', 2) if (state.world.get_location('Turtle Rock - Big Key Chest').item is not None and (state.world.get_location('Turtle Rock - Big Key Chest').item.name in ['Big Key (Turtle Rock)'])) else state.has('Small Key (Turtle Rock)', 3) or (state.world.get_location('Turtle Rock - Big Key Chest').item is not None and (state.world.get_location('Turtle Rock - Big Key Chest').item.name in ['Small Key (Turtle Rock)'])))
