@@ -18,11 +18,13 @@ install:
   - 'move dist\EntranceRandomizer\tk*.dll dist\EntranceRandomizer\ext'
   - '"%WIX%\bin\heat.exe" dir "dist\EntranceRandomizer" -sfrag -srd -suid -dr INSTALLDIR -cg ERFiles -ag -template fragment -t bundle\components.xslt -out build\components.wxs'
   - '"%WIX%\bin\candle.exe" -out build\ bundle\*.wxs build\*.wxs'
-  - '"%WIX%\bin\light.exe" -ext WixUIExtension build\*.wixobj -o dist\EntranceRandomizer.msi -b dist\EntranceRandomizer'
+  - '"%WIX%\bin\light.exe" -ext WixUIExtension build\*.wixobj -o dist\EntranceRandomizer-Installer-%ProjectVersion%-win32.msi -b dist\EntranceRandomizer'
 build: off
 artifacts:
-- path: dist/EntranceRandomizer.msi
-  name: EntranceRandomizer-$(ProjectVersion)-win32.msi
+- path: dist/EntranceRandomizer*.msi
+  name: EntranceRandomizer-Installer-$(ProjectVersion)-win32.msi
+- path: dist/EntranceRandomizer/
+  name: EntranceRandomizer-Raw-$(ProjectVersion)-win32.zip
 deploy:
 - provider: GitHub
   tag: $(APPVEYOR_REPO_TAG_NAME)
