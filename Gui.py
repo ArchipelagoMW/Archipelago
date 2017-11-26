@@ -1,13 +1,17 @@
-from Main import main, __version__ as ESVersion
+from Main import main, __version__ as ESVersion, get_output_path
 from argparse import Namespace
 import random
-
-from tkinter import Checkbutton, OptionMenu, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, Entry, Spinbox, Button, filedialog, messagebox
+import subprocess
+import os
+import sys
+from tkinter import Checkbutton, OptionMenu, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, Entry, Spinbox, Button, filedialog, messagebox, PhotoImage
 
 
 def guiMain(args=None):
     mainWindow = Tk()
     mainWindow.wm_title("Entrance Shuffle %s" % ESVersion)
+
+    set_icon(mainWindow)
 
     topFrame = Frame(mainWindow)
     rightHalfFrame = Frame(topFrame)
@@ -164,6 +168,7 @@ def guiMain(args=None):
     heartbeepFrame.pack(expand=True, anchor=E)
 
     bottomFrame = Frame(mainWindow)
+    farBottomFrame = Frame(mainWindow)
 
     seedLabel = Label(bottomFrame, text='Seed #')
     seedVar = StringVar()
@@ -212,15 +217,29 @@ def guiMain(args=None):
 
     generateButton = Button(bottomFrame, text='Generate Patched Rom', command=generateRom)
 
+    def open_output():
+        open_file(get_output_path())
+
+    openOutputButton = Button(farBottomFrame, text='Open Output Directory', command=open_output)
+
+    if os.path.exists('README.html'):
+        def open_readme():
+            open_file('README.html')
+        openReadmeButton = Button(farBottomFrame, text='Open Documentation', command=open_readme)
+        openReadmeButton.pack(side=LEFT)
+
     seedLabel.pack(side=LEFT)
     seedEntry.pack(side=LEFT)
-    countLabel.pack(side=LEFT)
+    countLabel.pack(side=LEFT, padx=(5,0))
     countSpinbox.pack(side=LEFT)
-    generateButton.pack(side=LEFT)
+    generateButton.pack(side=LEFT, padx=(5,0))
+
+    openOutputButton.pack(side=RIGHT)
 
     drowDownFrame.pack(side=LEFT)
     rightHalfFrame.pack(side=RIGHT)
     topFrame.pack(side=TOP)
+    farBottomFrame.pack(side=BOTTOM, fill=X, padx=5, pady=5)
     bottomFrame.pack(side=BOTTOM)
 
     if args is not None:
@@ -254,6 +273,18 @@ def guiMain(args=None):
 
     mainWindow.mainloop()
 
+def open_file(filename):
+    if sys.platform == 'win32':
+        os.startfile(filename)
+    else:
+        open_Command = 'open' if sys.plaform == 'darwin' else 'xdg-open'
+        subprocess.call([open_command, filename])
+
+def set_icon(window):
+    er16 = PhotoImage(file='data/ER16.gif')
+    er32 = PhotoImage(file='data/ER32.gif')
+    er48 = PhotoImage(file='data/ER32.gif')
+    window.tk.call('wm', 'iconphoto', window._w, er16, er32, er48)
 
 if __name__ == '__main__':
     guiMain()

@@ -11,22 +11,24 @@ install:
   - '%PYTHON%\Scripts\pip install pyinstaller'
   - '%PYTHON%\Scripts\pip install markdown'
   - '%PYTHON%\python.exe -m markdown README.md > README.html'
-  - 'copy LICENSE LICENSE.txt'
   - '%PYTHON%\Scripts\pyinstaller bundle\EntranceRandomizer.spec'
   - 'mkdir dist\EntranceRandomizer\ext'
   - 'move dist\EntranceRandomizer\*.pyd dist\EntranceRandomizer\ext'
   - 'move dist\EntranceRandomizer\tcl*.dll dist\EntranceRandomizer\ext'
   - 'move dist\EntranceRandomizer\tk*.dll dist\EntranceRandomizer\ext'
+  - '"%WIX%\bin\heat.exe" dir "dist\EntranceRandomizer" -sfrag -srd -suid -dr INSTALLDIR -cg ERFiles -ag -template fragment -t bundle\components.xslt -out build\components.wxs'
+  - '"%WIX%\bin\candle.exe" -out build\ bundle\*.wxs build\*.wxs'
+  - '"%WIX%\bin\light.exe" -ext WixUIExtension build\*.wixobj -o dist\EntranceRandomizer.msi -b dist\EntranceRandomizer'
 build: off
 artifacts:
-- path: dist/EntranceRandomizer/
-  name: EntranceRandomizer-$(ProjectVersion)-win32
+- path: dist/EntranceRandomizer.msi
+  name: EntranceRandomizer-$(ProjectVersion)-win32.msi
 deploy:
 - provider: GitHub
   tag: $(APPVEYOR_REPO_TAG_NAME)
   auth_token:
     secure: wQH+KnogyjYcDdo/srOQeoYEVIbH1uoYA5Iajdy/sR0Tbme7gOt15u2FBIkTg9/x
-  artifact: /.*-win32.zip/
+  artifact: /.*-win32.*/
   force_update: false
   on:
     appveyor_repo_tag: true
