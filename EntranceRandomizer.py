@@ -7,6 +7,7 @@ import sys
 
 from Main import main
 from Gui import guiMain
+from Utils import is_bundled
 
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
@@ -190,9 +191,9 @@ if __name__ == '__main__':
                             ''')
     args = parser.parse_args()
 
-    if hasattr(sys, 'frozen') and len(sys.argv) == 1 :
-        # for the Precompiled windows build, if we have no arguments, the user
-        # probably wants the gui. Users of the windows build who want the command line
+    if is_bundled and len(sys.argv) == 1 :
+        # for the bundled builds, if we have no arguments, the user
+        # probably wants the gui. Users of the bundled build who want the command line
         # interface shouuld specify at least one option, possibly setting a value to a
         # default if they like all the defaults
         guiMain()

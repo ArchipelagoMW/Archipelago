@@ -1,4 +1,5 @@
-from Main import main, __version__ as ESVersion, get_output_path
+from Main import main, __version__ as ESVersion
+from Utils import is_bundled, local_path, output_path, open_file
 from argparse import Namespace
 import random
 import subprocess
@@ -218,13 +219,13 @@ def guiMain(args=None):
     generateButton = Button(bottomFrame, text='Generate Patched Rom', command=generateRom)
 
     def open_output():
-        open_file(get_output_path())
+        open_file(output_path(''))
 
     openOutputButton = Button(farBottomFrame, text='Open Output Directory', command=open_output)
 
-    if os.path.exists('README.html'):
+    if os.path.exists(local_path('README.html')):
         def open_readme():
-            open_file('README.html')
+            open_file(local_path('README.html'))
         openReadmeButton = Button(farBottomFrame, text='Open Documentation', command=open_readme)
         openReadmeButton.pack(side=LEFT)
 
@@ -273,17 +274,10 @@ def guiMain(args=None):
 
     mainWindow.mainloop()
 
-def open_file(filename):
-    if sys.platform == 'win32':
-        os.startfile(filename)
-    else:
-        open_Command = 'open' if sys.plaform == 'darwin' else 'xdg-open'
-        subprocess.call([open_command, filename])
-
 def set_icon(window):
-    er16 = PhotoImage(file='data/ER16.gif')
-    er32 = PhotoImage(file='data/ER32.gif')
-    er48 = PhotoImage(file='data/ER32.gif')
+    er16 = PhotoImage(file=local_path('data/ER16.gif'))
+    er32 = PhotoImage(file=local_path('data/ER32.gif'))
+    er48 = PhotoImage(file=local_path('data/ER32.gif'))
     window.tk.call('wm', 'iconphoto', window._w, er16, er32, er48)
 
 if __name__ == '__main__':

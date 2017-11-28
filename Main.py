@@ -8,12 +8,11 @@ from Items import ItemFactory
 from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, fill_restrictive, flood_items
 from collections import OrderedDict
 from ItemList import generate_itempool
+from Utils import output_path
 import random
 import time
 import logging
 import json
-import sys
-import os
 
 __version__ = '0.5.0-dev'
 
@@ -107,52 +106,15 @@ def main(args, seed=None):
         if args.jsonout:
             print(json.dumps({'patch': rom.patches, 'spoiler': world.spoiler.to_json()}))
         else:
-            rom.write_to_file(args.jsonout or os.path.join(get_output_path(),'%s.sfc' % outfilebase))
+            rom.write_to_file(args.jsonout or output_path('%s.sfc' % outfilebase))
 
     if args.create_spoiler and not args.jsonout:
-        world.spoiler.to_file(os.path.join(get_output_path(),'%s_Spoiler.txt' % outfilebase))
+        world.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))
 
     logger.info('Done. Enjoy.')
     logger.debug('Total Time: %s' % (time.clock() - start))
 
     return world
-
-def get_output_path():
-    if get_output_path.cached_path is not None:
-        return get_output_path.cached_path
-
-    if not hasattr(sys, 'frozen'):
-        get_output_path.cached_path = '.'
-        return get_output_path.cached_path
-    else:
-        # has been packaged, so cannot use CWD for output.
-        if sys.platform == 'win32':
-            #windows
-            import ctypes.wintypes
-            CSIDL_PERSONAL = 5       # My Documents
-            SHGFP_TYPE_CURRENT = 0   # Get current, not default value
-
-            buf = ctypes.create_unicode_buffer(ctypes.wintypes.MAX_PATH)
-            ctypes.windll.shell32.SHGetFolderPathW(None, CSIDL_PERSONAL, None, SHGFP_TYPE_CURRENT, buf)
-
-            documents = buf.value
-
-        elif sys.platform == 'darwin':
-            from AppKit import NSSearchPathForDirectoriesInDomains
-            # http://developer.apple.com/DOCUMENTATION/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Functions/Reference/reference.html#//apple_ref/c/func/NSSearchPathForDirectoriesInDomains
-            NSDocumentDirectory = 9
-            NSUserDomainMask = 1
-            # True for expanding the tilde into a fully qualified path
-            documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, True)[0]
-        else:
-            raise NotImplementedError('Not supported yet')
-
-        get_output_path.cached_path = os.path.join(documents, 'ALttPEntranceRandomizer')
-        if not os.path.exists(get_output_path.cached_path):
-            os.mkdir(get_output_path.cached_path)
-        return get_output_path.cached_path
-
-get_output_path.cached_path = None
 
 def copy_world(world):
     # ToDo: Not good yet

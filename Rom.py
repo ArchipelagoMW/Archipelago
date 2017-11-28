@@ -2,6 +2,7 @@ from Dungeons import dungeon_music_addresses
 from Text import string_to_alttp_text, text_addresses, Credits
 from Text import Uncle_texts, Ganon1_texts, PyramidFairy_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts
 from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts
+from Utils import local_path
 import random
 import json
 import hashlib
@@ -66,7 +67,7 @@ class LocalRom(object):
         self.buffer.extend(bytearray([0x00] * (2097152 - len(self.buffer))))
 
         # load randomizer patches
-        patches = json.load(open('data/base2current.json', 'r'))
+        patches = json.load(open(local_path('data/base2current.json'), 'r'))
         for patch in patches:
             if isinstance(patch, dict):
                 for baseaddress, values in patch.items():
