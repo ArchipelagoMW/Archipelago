@@ -27,6 +27,8 @@ def guiMain(args=None):
     dungeonItemsCheckbutton = Checkbutton(checkBoxFrame, text="Place Dungeon Items (Compasses/Maps)", onvalue=0, offvalue=1, variable=dungeonItemsVar)
     beatableOnlyVar = IntVar()
     beatableOnlyCheckbutton = Checkbutton(checkBoxFrame, text="Only ensure seed is beatable, not all items must be reachable", variable=beatableOnlyVar)
+    disableMusicVar = IntVar()
+    disableMusicCheckbutton = Checkbutton(checkBoxFrame, text="Disable game music", variable=disableMusicVar)
     shuffleGanonVar = IntVar()
     shuffleGanonCheckbutton = Checkbutton(checkBoxFrame, text="Include Ganon's Tower and Pyramid Hole in shuffle pool", variable=shuffleGanonVar)
 
@@ -37,6 +39,7 @@ def guiMain(args=None):
     keysanityCheckbutton.pack(expand=True, anchor=W)
     dungeonItemsCheckbutton.pack(expand=True, anchor=W)
     beatableOnlyCheckbutton.pack(expand=True, anchor=W)
+    disableMusicCheckbutton.pack(expand=True, anchor=W)
     shuffleGanonCheckbutton.pack(expand=True, anchor=W)
 
     fileDialogFrame = Frame(rightHalfFrame)
@@ -189,6 +192,7 @@ def guiMain(args=None):
         guiargs.beatableonly = bool(beatableOnlyVar.get())
         guiargs.fastmenu = bool(fastMenuVar.get())
         guiargs.quickswap = bool(quickSwapVar.get())
+        guiargs.disablemusic = bool(disableMusicVar.get())
         guiargs.shuffleganon = bool(shuffleGanonVar.get())
         guiargs.rom = romVar.get()
         guiargs.jsonout = None
@@ -229,6 +233,7 @@ def guiMain(args=None):
         beatableOnlyVar.set(int(args.beatableonly))
         fastMenuVar.set(int(args.fastmenu))
         quickSwapVar.set(int(args.quickswap))
+        disableMusicVar.set(int(args.disablemusic))
         if args.count:
             countVar.set(str(args.count))
         if args.seed:

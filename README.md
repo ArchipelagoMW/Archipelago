@@ -170,9 +170,8 @@ to the itempool.
 
 ### OHKO
 
-The player into a one hit state the entire game. This is the same as Timed-OHKO,
-except that the clock starts at zero, and there are no Clock items, so it will
-always stay at zero, resulting in a permanent one hit knockout state.
+The player will be in a one hit knockout state the entire game. This is the same as Timed-OHKO except
+without the Clock items and the timer permanently at zero.
 
 ### Timed-countdown
 
@@ -310,6 +309,13 @@ Use to enable quick item swap with L/R buttons. (default: False)
 ```
 
 As an alternative to quickswap, opens menu instantly. (default: False)
+
+
+```
+--disablemusic
+```
+
+Disables game music, resulting in the game sound being just the SFX. (default: False)
 
 ```
 --keysanity

@@ -152,6 +152,7 @@ if __name__ == '__main__':
                              ''', type=int)
     parser.add_argument('--fastmenu', help='Enable instant menu', action='store_true')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
+    parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
     parser.add_argument('--keysanity', help='''\
                              Keys (and other dungeon items) are no longer restricted to
                              their dungeons, but can be anywhere

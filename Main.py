@@ -29,7 +29,7 @@ def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap, args.fastmenu, args.keysanity)
+    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.keysanity)
     logger = logging.getLogger('')
     if seed is None:
         random.seed(None)
@@ -117,7 +117,7 @@ def main(args, seed=None):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.timer, world.progressive, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap, world.fastmenu, world.keysanity)
+    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.timer, world.progressive, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.keysanity)
     ret.required_medallions = list(world.required_medallions)
     ret.swamp_patch_required = world.swamp_patch_required
     ret.ganon_at_pyramid = world.ganon_at_pyramid

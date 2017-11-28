@@ -30,7 +30,7 @@ def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World('vanilla', 'noglitches', 'standard', 'normal', 'none', 'on', 'ganon', 'freshness', False, False, False, args.quickswap, args.fastmenu, False)
+    world = World('vanilla', 'noglitches', 'standard', 'normal', 'none', 'on', 'ganon', 'freshness', False, False, False, args.quickswap, args.fastmenu, args.disablemusic, False)
     logger = logging.getLogger('')
 
     hasher = hashlib.md5()
@@ -207,6 +207,7 @@ if __name__ == '__main__':
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--fastmenu', help='Enable instant menu', action='store_true')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
+    parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
     parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['normal', 'half', 'quarter', 'off'],
                         help='Select the rate at which the heart beep sound is played at low health.')
     parser.add_argument('--sprite', help='Path to a sprite sheet to use for Link. Needs to be in binary format and have a length of 0x7000 (28672) bytes.')

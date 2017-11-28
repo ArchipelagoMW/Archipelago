@@ -6,7 +6,7 @@ from collections import OrderedDict
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, keysanity):
+    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
@@ -51,6 +51,7 @@ class World(object):
         self.can_access_trock_eyebridge = None
         self.quickswap = quickswap
         self.fastmenu = fastmenu
+        self.disable_music = disable_music
         self.keysanity = keysanity
         self.spoiler = Spoiler(self)
 
@@ -672,6 +673,7 @@ class Spoiler(object):
                          'dungeonitems': self.world.place_dungeon_items,
                          'quickswap': self.world.quickswap,
                          'fastmenu': self.world.fastmenu,
+                         'disable_music': self.world.disable_music,
                          'keysanity': self.world.keysanity}
 
     def to_json(self):
