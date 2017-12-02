@@ -4,3 +4,6 @@ build
 .idea
 *.sfc
 *_Spoiler.txt
+bundle/components.wxs
+*.wixobj
+README.html

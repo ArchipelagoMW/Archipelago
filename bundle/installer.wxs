@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <!-- Setting the product ID to "*" means all upgrades are treated as major upgrades, and will uninstall the old version 
+         before installing the new one. This is desireable because it means nothing breaks if we fail to follow the component rules precisely. -->
+    <Product Id="*" Name="ALttP Entrance Randomizer" Language="1033" Version="$(env.ER_Version)" Manufacturer="Randomizer Community" UpgradeCode="0229C621-5F8A-4D59-962A-5826C58B93DD" >
+        <Package Id="*" InstallerVersion="400" Compressed="yes" InstallScope="perMachine" />
+        <!-- Allowing downgrades will cause a harmless warning to be emitted. This wearning is not relevant here, allowing downgrades via a new major upgrade is safe for a simple standalone app like this-->
+        <MajorUpgrade AllowDowngrades="yes"/>
+        <Media Id="1" Cabinet="contents.cab" EmbedCab="yes" CompressionLevel="high"/>
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id='ProgramFilesFolder' Name='PFiles'>
+                <Directory Id='INSTALLDIR' Name='ALttP Entrance Randomizer'/>
+            </Directory>
+            <Directory Id="ProgramMenuFolder">
+                <Directory Id="ApplicationProgramsFolder" Name="ALttP Entrance Randomizer"/>
+            </Directory>
+        </Directory>
+        <DirectoryRef Id="ApplicationProgramsFolder">
+            <Component Id="ApplicationShortcut" Guid="0054698A-5A56-4B36-8176-8FEC1762EF2D">
+                <RemoveFolder Id="CleanUpShortCut" Directory="ApplicationProgramsFolder" On="uninstall"/>
+                <RegistryValue Root="HKCU" Key="Software\ALttPEntranceRandomizer" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+            </Component>
+        </DirectoryRef>
+        <Feature Id="Complete"
+             Title="ALttP Entrance Randomizer"
+             Description="ALttP Entrance Randomizer"
+             Level="1">
+            <ComponentGroupRef Id="ERFiles"/>
+            <ComponentRef Id="ApplicationShortcut"/>
+        </Feature>
+
+        <Icon Id="ER.ico" SourceFile="Data/ER.ico" />
+        <Property Id="DISABLEADVTSHORTCUTS" Secure="yes">1</Property>
+        <Property Id="ARPPRODUCTICON" Value="ER.ico" />
+        <Property Id="WIXUI_INSTALLDIR">INSTALLDIR</Property>
+        <UI>
+          <UIRef Id="WixUI_InstallDir" />
+          <UIRef Id="WixUI_ErrorProgressText" />
+          <!-- Skip license page -->
+          <Publish Dialog="WelcomeDlg"
+                    Control="Next"
+                    Event="NewDialog"
+                    Value="InstallDirDlg"
+                    Order="2">1</Publish>
+          <Publish Dialog="InstallDirDlg"
+                    Control="Back"
+                    Event="NewDialog"
+                    Value="WelcomeDlg"
+                    Order="2">1</Publish>
+        </UI>
+    </Product>
+</Wix>

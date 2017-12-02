@@ -3,7 +3,7 @@
 This is a entrance randomizer for _The Legend of Zelda: A Link to the Past_ for the SNES.
 See http://vt.alttp.run for more details on the normal randomizer.
 
-## Installation
+# Installation
 
 Clone this repository and then run ```EntranceRandomizer.py``` (requires Python 3).
 
@@ -11,40 +11,9 @@ Alternatively, run ```Gui.py``` for a simple graphical user interface.
 
 For releases, a Windows standalone executable is available for users without Python 3.
 
-## Options
+# Settings
 
-
-```
--h, --help            
-```
-
-Show the help message and exit.
-
-```
---create_spoiler      
-```
-
-Output a Spoiler File (default: False)
-
-```
---logic [{noglitches,minorglitches}]
-```
-
-Select Enforcement of Item Requirements.
-
-### No Glitches
-
-The game can be completed without knowing how to perform glitches of any kind.
-
-### Minor Glitches
-
-May require Fake Flippers, Bunny Revival. (default: noglitches)
-
-```
---mode [{standard,open,swordless}]
-```
-
-Select game mode. (default: open)
+## Game Mode
 
 ### Standard
 
@@ -74,13 +43,20 @@ Special notes:
 - The magic barrier to Hyrule Castle Tower can be broken with a Hammer.
 - The Hammer can be used to activate the Ether and Bombos tablets.
 
-```
---goal [{ganon,pedestal,dungeons,triforcehunt,crystals}]
-```
+## Game Logic
+This determines the Item Requirements for each location.
 
-Select completion goal.
+### No Glitches
 
-### Ganon (Default)
+The game can be completed without knowing how to perform glitches of any kind.
+
+### Minor Glitches
+
+May require Fake Flippers, Bunny Revival.
+
+## Game Goal
+
+### Ganon
 
 Standard game completion requiring you to collect the 7 crystals, defeat Agahnim 2 and then beat Ganon.
 
@@ -109,18 +85,14 @@ Standard game completion requiring you to collect the 7 crystals and then beat G
 
 This is only noticeably different if the --shuffleganon option is enabled.
 
-```
---difficulty [{easy,normal,hard,expert,insane}]
-```
-
-Select game difficulty. Affects available itempool. (default: normal)
+## Game Difficulty
 
 ### Easy
 
 This setting doubles the number of swords, shields, armors, and bottles in the item pool.
 Within dungeons, the number of items found will be displayed on screen if there is no timer.
 
-### Normal (Default)
+### Normal
 
 This is the default setting that has an item pool most similar to the original
 The Legend of Zelda: A Link to the Past.
@@ -142,13 +114,9 @@ pool is less helpful, and the player can find no armor, only a Master Sword, and
 This setting is a modest step up from Expert. The main difference is that the player will never find any
 additional health.
 
-```
---timer [{none,display,timed,timed-ohko,ohko,timed-countdown}]
-```
+## Timer Setting
 
-Select the timer setting.
-
-### None (Default)
+### None
 
 Does not invoke a timer.
 
@@ -180,11 +148,9 @@ decreased with Red Clocks found in chests that will be added to the itempool. Th
 is to finish the game without the timer reaching zero, but the game will continue uninterrupted if
 the player runs out of time.
 
-```
---progressive [{on,off,random}]
-```
+## Progressive equipment
 
-Select the setting for progressive equipment.
+Determines if Sword, Shield, and gloves are progressive (upgrading in sequence) or not.
 
 ### On (Default)
 
@@ -204,14 +170,12 @@ will simply do nothing.
 This setting makes swords, shields, armor, and gloves randomly either progressive or not. Each category is independently
 randomized.
 
-```
---algorithm [{freshness,flood,vt21,vt22,vt25,vt26,balanced}]
-```
+## Item Distribution Algorithm
 
-Select item filling algorithm.
+Determines how the items are shuffled.
 
-### Balanced (Default)
-This is a variation of vt26 that aims to strike a balance between the overworld heavy vt25 and the dungeon heavy vt26 algorithm.
+### Balanced
+This is a variation of VT26 that aims to strike a balance between the overworld heavy VT25 and the dungeon heavy VT26 algorithm.
 It does this by reshuffling the remaining locations after placing dungeon items.
 
 ### VT26
@@ -223,13 +187,13 @@ the sheer number of chests in that single location.
 Items and locations are shuffled and placed from the top of the lists. The only thing preventing an item from being placed into a spot
 is if is absolutely impossible to be there given the previous made placement choices. Leads to very uniform but guaranteed solvable distributions.
 
+### VT22
+The ordinary VT v8.22 algorithm. Fixes issues in placement in VT21 by discarding all previously skipped and unfilled locations
+after 2/3 of the progression items were placed to prevent stale late game locations from soaking up the same items all the time.
+
 ### VT21
 The ordinary VT v8.21 algorithm. Unbiased placement of items into unlocked locations, placing items that unlock new locations first.
 May lead to distributions that seem a bit wonky (high likelyhood of ice rod in Turtle Rock, for instance)
-
-### VT22
-The ordinary VT v8.21 algorithm. Fixes issues in placement in VT21 by discarding all previously skipped and unfilled locations
-after 2/3 of the progression items were placed to prevent stale late game locations from soaking up the same items all the time.
 
 ### Flood
 Pushes out items starting from Link's House and is slightly biased to placing progression items with less restrictions. Use for relatively simple distributions.
@@ -238,11 +202,9 @@ Pushes out items starting from Link's House and is slightly biased to placing pr
 Alternative approach to VT22 to improve on VT21 flaws. Locations that are skipped because they are currently unreachable increase in
 staleness, decreasing the likelihood of receiving a progress item.
 
-```
---shuffle [{default,simple,restricted,full,madness,insanity,dungeonsfull,dungeonssimple}]
-```
+## Entrance Shuffle Algorithm
 
-Select Entrance Shuffling Algorithm.
+Determines how locations are shuffled.
 
 ### Default
 
@@ -253,7 +215,7 @@ Is the Vanilla layout.
 Shuffles Dungeon Entrances/Exits between each other and keeps all 4-entrance dungeons confined to one location. Outside Light World Death Mountain, interiors are shuffled but still connect the same points
 on the overworld. On Death Mountain, entrances are connected more freely.
 
-### Full (Default)
+### Full
 
 Mixes cave and dungeon entrances freely.
 
@@ -273,6 +235,118 @@ Madness, but without the light/dark world restrictions. Gives access to Mirror a
 
 The dungeon variants only mix up dungeons and keep the rest of the overworld vanilla.
 
+## Heartbeep Sound Rate
+
+Select frequency of beeps when on low health. Can completely disable them.
+
+## Create Spoiler Log
+
+Output a Spoiler File.
+
+## Do not Create Patched Rom
+
+If set, will not produce a patched rom as output. Useful in conjunction with the spoiler log option to batch
+generate spoilers for statistical analysis.
+
+## Enable L/R button quickswapping
+
+Use to enable quick item swap with L/R buttons
+
+## Instant Menu
+
+As an alternative to quickswap, opens menu instantly.
+
+## Keysanity
+
+This setting allows dungeon specific items (Small Key, Big Key, Map, Compass) to be distributed anywhere in the world and not just
+in their native dungeon. Small Keys dropped by enemies or found in pots are not affected. The chest in southeast Skull Woods that
+is traditionally a guaranteed Small Key still is. These items will be distributed according to the v26/balanced algorithm, but
+the rest of the itempool will respect the algorithm setting. Music for dungeons is randomized so it cannot be used as a tell
+for which dungeons contain pendants and crystals; finding a Map for a dungeon will allow the overworld map to display its prize.
+
+## Place Dungeon Items
+
+If not set, Compasses and Maps are removed from the dungeon item pools and replaced by empty chests that may end up anywhere in the world.
+This may lead to different amount of itempool items being placed in a dungeon than you are used to.
+
+## Only Ensure Seed Beatable
+
+If set, will only ensure the goal can be achieved, but not necessarily that all locations are reachable. Currently only affects VT25, VT26 and balanced algorithms.
+
+## Include Ganon's Tower and Pyramid Hole in Shuffle pool
+
+If set, Ganon's Tower is included in the dungeon shuffle pool and the Pyramid Hole/Exit pair is included in the Holes shuffle pool. Ganon can not be defeated until the primary goal is fulfilled. This setting removes any bias against Ganon's Tower that some algorithms may have.
+
+## Seed
+
+Can be used to set a seed number to generate. Using the same seed with same settings on the same version of the entrance randomizer will always yield an identical output.
+
+## Count
+
+Use to batch generate multiple seeds with same settings. If a seed number is provided, it will be used for the first seed, then used to derive the next seed (i.e. generating 10 seeds with the same seed number given will produce the same 10 (different) roms each time).
+
+# Command Line Options
+
+```
+-h, --help            
+```
+
+Show the help message and exit.
+
+```
+--create_spoiler      
+```
+
+Output a Spoiler File (default: False)
+
+```
+--logic [{noglitches,minorglitches}]
+```
+
+Select the game logic (default: noglitches)
+
+```
+--mode [{standard,open,swordless}]
+```
+
+Select the game mode. (default: open)
+
+```
+--goal [{ganon,pedestal,dungeons,triforcehunt,crystals}]
+```
+
+Select the game completion goal. (default: ganon)
+
+```
+--difficulty [{easy,normal,hard,expert,insane}]
+```
+
+Select the game difficulty. Affects available itempool. (default: normal)
+
+```
+--timer [{none,display,timed,timed-ohko,ohko,timed-countdown}]
+```
+
+Select the timer setting. (default: none)
+
+```
+--progressive [{on,off,random}]
+```
+
+Select the setting for progressive equipment. (default: on)
+
+```
+--algorithm [{freshness,flood,vt21,vt22,vt25,vt26,balanced}]
+```
+
+Select item distribution algorithm. (default: balanced)
+
+```
+--shuffle [{default,simple,restricted,full,madness,insanity,dungeonsfull,dungeonssimple}]
+```
+
+Select entrance shuffle algorithm. (default: full)
+
 ```
 --rom ROM
 ```
@@ -289,14 +363,13 @@ Select level of logging for output. (default: info)
 --seed SEED           
 ```
 
-Define seed number to generate. (default: None) Using the same seed with same settings on the same version of the entrance randomizer will always yield an identical output.
+Define seed number to generate. (default: None)
 
 ```
 --count COUNT         
 ```
 
-Use to batch generate multiple seeds with same settings.
-If --seed is provided, it will be used for the first seed, then used to derive the next seed (i.e. generating 10 seeds with --seed given will produce the same 10 (different) roms each time). (default: None)
+Set the count option (default: None)
 
 ```
 --quickswap
@@ -321,11 +394,7 @@ Disables game music, resulting in the game sound being just the SFX. (default: F
 --keysanity
 ```
 
-This setting allows dungeon specific items (Small Key, Big Key, Map, Compass) to be distributed anywhere in the world and not just
-in their native dungeon. Small Keys dropped by enemies or found in pots are not affected. The chest in southeast Skull Woods that
-is traditionally a guaranteed Small Key still is. These items will be distributed according to the v26/balanced algorithm, but
-the rest of the itempool will respect the algorithm setting. Music for dungeons is randomized so it cannot be used as a tell
-for which dungeons contain pendants and crystals; finding a Map for a dungeon will allow the overworld map to display its prize.
+Enable Keysanity (default: False)
 
 ```
 --nodungeonitems
@@ -350,22 +419,19 @@ Use to select a different sprite sheet to use for Link. Path to a binary file of
 --beatableonly
 ```
 
-If set, will only ensure the goal can be achieved, but not necessarily that all locations are reachable. Currently only affects VT25, VT26 and balanced algorithms.
+Enables the "Only Ensure Seed Beatable" option (default: False)
 
 ```
 --shuffleganon
 ```
 
-If set, Ganon's Tower is included in the dungeon shuffle pool and the Pyramid Hole/Exit pair is included in the Holes shuffle pool. Ganon can not be defeated until the primary goal is fulfilled.
-This setting removes any bias against Ganon's Tower that some algorithms may have.
-
-Note: This option is under development and may sometimes lead to dungeon and crystal distributions that cannot be solved. If this is the case, the generation will fail. Simply retry with a different seed number if you run into this issue.
+Enables the "Include Ganon's Tower and Pyramid Hole in Shuffle pool" option. (default: false)
 
 ```
 --suppress_rom
 ```
 
-If set, will not produce a patched rom as output. Useful to batch generate spoilers for statistical analysis.
+Enables the "Do not Create Patched Rom" option. (default: False)
 
 ```
 --gui

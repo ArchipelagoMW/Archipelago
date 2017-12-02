@@ -7,6 +7,7 @@ import sys
 
 from Main import main
 from Gui import guiMain
+from Utils import is_bundled, close_console
 
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
@@ -189,6 +190,15 @@ if __name__ == '__main__':
                             for VT site integration, do not use otherwise.
                             ''')
     args = parser.parse_args()
+
+    if is_bundled and len(sys.argv) == 1 :
+        # for the bundled builds, if we have no arguments, the user
+        # probably wants the gui. Users of the bundled build who want the command line
+        # interface shouuld specify at least one option, possibly setting a value to a
+        # default if they like all the defaults
+        close_console()
+        guiMain()
+        sys.exit(0)
 
     # ToDo: Validate files further than mere existance
     if not args.jsonout and not os.path.isfile(args.rom):

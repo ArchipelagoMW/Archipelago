@@ -8,6 +8,7 @@ from Items import ItemFactory
 from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, fill_restrictive, flood_items
 from collections import OrderedDict
 from ItemList import generate_itempool
+from Utils import output_path
 import random
 import time
 import logging
@@ -105,10 +106,10 @@ def main(args, seed=None):
         if args.jsonout:
             print(json.dumps({'patch': rom.patches, 'spoiler': world.spoiler.to_json()}))
         else:
-            rom.write_to_file(args.jsonout or '%s.sfc' % outfilebase)
+            rom.write_to_file(args.jsonout or output_path('%s.sfc' % outfilebase))
 
     if args.create_spoiler and not args.jsonout:
-        world.spoiler.to_file('%s_Spoiler.txt' % outfilebase)
+        world.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))
 
     logger.info('Done. Enjoy.')
     logger.debug('Total Time: %s' % (time.clock() - start))
