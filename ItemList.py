@@ -26,7 +26,7 @@ normalfinal25extra = ['Rupees (20)'] * 23 + ['Rupees (5)'] * 2
 easybaseitems = (['Blue Boomerang', 'Red Boomerang', 'Silver Arrows'] + ['Rupees (300)'] * 4 + ['Magic Upgrade (1/2)'] * 2 +
                 ['Single Arrow', 'Sanctuary Heart Container', 'Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 12)
 easyextra = ['Piece of Heart'] * 12 + ['Rupees (300)']
-easylimitedextra = ['Boss Heart Container'] * 3 # collapsing down the 12 peices of heart
+easylimitedextra = ['Boss Heart Container'] * 3 # collapsing down the 12 pieces of heart
 easyfirst15extra = ['Rupees (100)'] + ['Rupees (50)'] + ['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6 + ['Bombs (3)']
 easysecond10extra = ['Bombs (3)'] * 9 + ['Rupee (1)']
 easythird5extra = ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupees (5)']
@@ -125,7 +125,7 @@ difficulties= {
         progressiveshield = ['Progressive Shield'] * 3,
         basicshield = ['Blue Shield', 'Red Shield', 'Red Shield'],
         progressivearmor = ['Progressive Armor'] * 2,
-        basicarmor = ['Progressive Armor'] * 2, #only the first one will upgrade, making this equivlent to two blue mail
+        basicarmor = ['Progressive Armor'] * 2, #only the first one will upgrade, making this equivalent to two blue mail
         swordless =  ['Rupees (20)'] * 4,
         progressivesword =  ['Progressive Sword'] * 3,
         basicsword = ['Master Sword', 'Master Sword', 'Tempered Sword'],
@@ -199,7 +199,7 @@ def generate_itempool(world):
     if treasure_hunt_count is not None:
         world.treasure_hunt_count = treasure_hunt_count
     if treasure_hunt_icon is not None:
-        wrold.treasure_hunt_icon = treasure_hunt_icon
+        world.treasure_hunt_icon = treasure_hunt_icon
 
     # shuffle medallions
     mm_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
