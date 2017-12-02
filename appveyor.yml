@@ -1,0 +1,28 @@
+version: '{build}'
+pull_requests:
+  do_not_increment_build_number: true
+environment:
+  ProjectVersion: build$(APPVEYOR_BUILD_VERSION)
+  matrix:
+  - PYTHON: C:\PYTHON36
+install:
+  - ps: 'if(Test-Path env:APPVEYOR_REPO_TAG_NAME) {$env:ProjectVersion=$env:APPVEYOR_REPO_TAG_NAME}'
+  - '%PYTHON%\python.exe --version'
+  - '%PYTHON%\Scripts\pip install pyinstaller'
+  - '%PYTHON%\Scripts\pip install markdown'
+  - '%PYTHON%\python.exe -m markdown README.md > README.html'
+  - '%PYTHON%\Scripts\pyinstaller bundle\EntranceRandomizer.spec'
+  - 'mkdir dist\EntranceRandomizer\ext'
+  - 'move dist\EntranceRandomizer\*.pyd dist\EntranceRandomizer\ext'
+  - 'move dist\EntranceRandomizer\tcl*.dll dist\EntranceRandomizer\ext'
+  - 'move dist\EntranceRandomizer\tk*.dll dist\EntranceRandomizer\ext'
+  - ps: '$env:ER_Version= &"$env:PYTHON\python.exe" -c "import Main; import re; print(re.match(''[0-9]+\\.[0-9]+\\.[0-9]+'',Main.__version__).group(0))"'
+  - '"%WIX%\bin\heat.exe" dir "dist\EntranceRandomizer" -sfrag -srd -suid -dr INSTALLDIR -cg ERFiles -ag -template fragment -t bundle\components.xslt -out build\components.wxs'
+  - '"%WIX%\bin\candle.exe" -out build\ bundle\*.wxs build\*.wxs'
+  - '"%WIX%\bin\light.exe" -ext WixUIExtension build\*.wixobj -o dist\EntranceRandomizer-Installer-%ProjectVersion%-win32.msi -b dist\EntranceRandomizer'
+build: off
+artifacts:
+- path: dist/EntranceRandomizer*.msi
+  name: EntranceRandomizer-Installer-$(ProjectVersion)-win32.msi
+- path: dist/EntranceRandomizer/
+  name: EntranceRandomizer-Raw-$(ProjectVersion)-win32.zip

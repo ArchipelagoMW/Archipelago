@@ -141,11 +141,11 @@ class Credits(object):
 
 class CreditLine(object):
     """Base class of credit lines"""
-    
+
     def __init__(self, text, align='center'):
         self.text = text
         self.align = align
-        
+
     @property
     def x(self):
         x = 0
@@ -157,7 +157,7 @@ class CreditLine(object):
             x = (32 - len(self.text)) // 2
         return x
 
-    
+
 class SceneCreditLine(CreditLine):
     """Base class for credit lines for the scene portion of the credits"""
     def __init__(self, y, text, align='center'):
@@ -214,7 +214,7 @@ class SceneLargeCreditLine(SceneCreditLine):
         buf += LargeCreditBottomMapper.convert(self.text)
         return buf
 
-        
+
 def string_to_alttp_text(s, maxbytes=256):
     lines = s.upper().split('\n')
     outbuf = bytearray()
@@ -489,7 +489,7 @@ class GreenCreditMapper(TextMapper):
     char_map = {' ': 0x9F,
                 '.': 0x52}
     alpha_offset = -0x29
-    
+
 class RedCreditMapper(TextMapper):
     char_map = {' ': 0x9F} #fixme
     alpha_offset= -0x61

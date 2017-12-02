@@ -6,7 +6,7 @@ from collections import OrderedDict
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, keysanity):
+    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
@@ -51,6 +51,7 @@ class World(object):
         self.can_access_trock_eyebridge = None
         self.quickswap = quickswap
         self.fastmenu = fastmenu
+        self.disable_music = disable_music
         self.keysanity = keysanity
         self.spoiler = Spoiler(self)
 
@@ -185,7 +186,7 @@ class World(object):
                 return True
 
         return False
-        
+
     def has_beaten_game(self, state):
         if state.has('Triforce'): return True
         if self.goal in ['triforcehunt']:
@@ -232,7 +233,7 @@ class World(object):
         goal = ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'].index(self.goal)
         shuffle = ['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'].index(self.shuffle)
         difficulty = ['easy', 'normal', 'hard', 'expert', 'insane'].index(self.difficulty)
-        timer = ['none', 'display', 'timed', 'timed-ohko', 'timed-countdown'].index(self.timer)
+        timer = ['none', 'display', 'timed', 'timed-ohko', 'timed-countdown','ohko'].index(self.timer)
         progressive = ['on', 'off', 'random'].index(self.progressive)
         algorithm = ['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26', 'balanced'].index(self.algorithm)
         beatableonly = 1 if self.check_beatable_only else 0
@@ -329,7 +330,7 @@ class CollectionState(object):
             return item in self.prog_items
         else:
             return self.item_count(item) >= count
-    
+
     def item_count(self, item):
         return len([pritem for pritem in self.prog_items if pritem == item])
 
@@ -337,7 +338,7 @@ class CollectionState(object):
         return self.has('Power Glove') or self.has('Titans Mitts')
 
     def has_bottle(self):
-        return self.has('Bottle') or self.has('BottleRedPotion') or self.has('BottleGreenPotion') or self.has('BottleBluePotion') or self.has('BottleFairy') or self.has('BottleBee') or self.has('BottleGoodBee')
+        return self.has('Bottle') or self.has('Bottle (Red Potion)') or self.has('Bottle (Green Potion)') or self.has('Bottle (Blue Potion)') or self.has('Bottle (Fairy)') or self.has('Bottle (Bee)') or self.has('Bottle (Good Bee)')
 
     def can_lift_heavy_rocks(self):
         return self.has('Titans Mitts')
@@ -672,6 +673,7 @@ class Spoiler(object):
                          'dungeonitems': self.world.place_dungeon_items,
                          'quickswap': self.world.quickswap,
                          'fastmenu': self.world.fastmenu,
+                         'disable_music': self.world.disable_music,
                          'keysanity': self.world.keysanity}
 
     def to_json(self):
