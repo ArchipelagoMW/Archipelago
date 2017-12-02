@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-    <Product Id="*" Name="ALttP Entrance Randomizer" Language="1033" Version="0.5.0" Manufacturer="Randomizer Community" UpgradeCode="0229C621-5F8A-4D59-962A-5826C58B93DD" >
+    <!-- Setting the product ID to "*" means all upgrades are treated as major upgrades, and will uninstall the old version 
+         before installing the new one. This is desireable because it means nothing breaks if we fail to follow the component rules precisely. -->
+    <Product Id="*" Name="ALttP Entrance Randomizer" Language="1033" Version="$(env.ER_Version)" Manufacturer="Randomizer Community" UpgradeCode="0229C621-5F8A-4D59-962A-5826C58B93DD" >
         <Package Id="*" InstallerVersion="400" Compressed="yes" InstallScope="perMachine" />
+        <!-- Allowing downgrades will cause a harmless warning to be emitted. This wearning is not relevant here, allowing downgrades via a new major upgrade is safe for a simple standalone app like this-->
         <MajorUpgrade AllowDowngrades="yes"/>
         <Media Id="1" Cabinet="contents.cab" EmbedCab="yes" CompressionLevel="high"/>
         <Directory Id="TARGETDIR" Name="SourceDir">

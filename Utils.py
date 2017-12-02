@@ -62,3 +62,12 @@ def open_file(filename):
     else:
         open_Command = 'open' if sys.platform == 'darwin' else 'xdg-open'
         subprocess.call([open_command, filename])
+
+def close_console():
+    if sys.platform == 'win32':
+        #windows
+        import ctypes.wintypes
+        try:
+            ctypes.windll.kernel32.FreeConsole()
+        except:
+            pass

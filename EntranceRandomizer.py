@@ -7,7 +7,7 @@ import sys
 
 from Main import main
 from Gui import guiMain
-from Utils import is_bundled
+from Utils import is_bundled, close_console
 
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
@@ -196,6 +196,7 @@ if __name__ == '__main__':
         # probably wants the gui. Users of the bundled build who want the command line
         # interface shouuld specify at least one option, possibly setting a value to a
         # default if they like all the defaults
+        close_console()
         guiMain()
         sys.exit(0)
 
