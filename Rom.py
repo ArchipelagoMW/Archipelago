@@ -7,6 +7,7 @@ import random
 import json
 import hashlib
 import logging
+import struct
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
 RANDOMIZERBASEHASH = '1deebb05eccefd2ab68297c6e9c0d25f'
@@ -97,8 +98,9 @@ class Sprite(object):
     default_glove_palette = [246, 82, 118, 3]
 
     def __init__(self, filename):
-        filedata = bytearray(open(filename, 'rb').read())
-        self.valid=True
+        with open(filename, 'rb') as file:
+            filedata = bytearray(file.read())
+        self.valid = True
         if len(filedata) == 0x7000:
             # sprite file with graphics and without palette data
             self.sprite = filedata[:0x7000]
@@ -109,13 +111,40 @@ class Sprite(object):
             self.sprite = filedata[:0x7000]
             self.palette = filedata[0x7000:]
             self.glove_palette = filedata[0x7036:0x7038] + filedata[0x7054:0x7056]
+        elif len(filedata) == 0x707C:
+            # sprite file with graphics and palette data including gloves
+            self.sprite = filedata[:0x7000]
+            self.palette = filedata[0x7000:0x7078]
+            self.glove_palette = filedata[0x7078:]
         elif len(filedata) in [0x100000, 0x200000]:
             # full rom with patched sprite, extract it
             self.sprite = filedata[0x80000:0x87000]
             self.palette = filedata[0xDD308:0xDD380]
             self.glove_palette = filedata[0xDEDF5:0xDEDF9]
+        elif filedata.startswith(b'ZSPR'):
+            result = self.parse_zspr(filedata,1)
+            print(result)
+            if result is None:
+                self.valid = False
+                return
+            (sprite, palette) = result
+            if len(sprite) != 0x7000:
+                self.valid = False
+                return
+            self.sprite = sprite
+            if len(palette) == 0:
+                self.palette = None
+                self.glove_palette = None
+            elif len(palette) == 0x78:
+                self.palette = palette
+                self.glove_palette = None
+            elif len(palette) == 0x7C:
+                self.palette = palette[:0x78]
+                self.glove_palette = palette[0x78:]
+            else:
+                self.valid = False
         else:
-           self.valid=False
+           self.valid = False
 
     def decode8(self, pos):
         arr=[[0 for _ in range(8)] for _ in range(8)]
@@ -143,6 +172,28 @@ class Sprite(object):
                 arr[y+8][x] = bottom_left[y][x]
                 arr[y+8][x+8] = bottom_right[y][x]
         return arr
+
+    def parse_zspr(self, filedata, expected_kind):
+        headerstr = "<4xBHHIHIHH6x"
+        headersize = struct.calcsize(headerstr)
+        if len(filedata) < headersize:
+            return None
+        (version, csum, icsum, sprite_offset, sprite_size, palette_offset, palette_size, kind) = struct.unpack_from(headerstr,filedata)
+        if version not in [1]:
+            #ZSPR Version not supported
+            return None
+        if kind != expected_kind:
+            return None
+
+        real_csum = sum(filedata) % 0x10000
+        if real_csum != csum or real_csum ^ 0xFFFF != icsum:
+            #invalid checksum
+            pass
+        sprite = filedata[sprite_offset:sprite_offset + sprite_size]
+        palette = filedata[palette_offset:palette_offset + palette_size]
+        #FIXME: Check lengths of those byte arrays against the _size values
+
+        return (sprite, palette)
 
     def decode_palette(self):
         "Returns the palettes as an array of arrays of 15 colors"
