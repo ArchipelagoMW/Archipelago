@@ -197,6 +197,8 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_byte(0x34FD6, 0x80)
         #Set overflow items for progressive equipment
         rom.write_bytes(0x180090, [0x03, 0x47, 0x02, 0x47, 0x01, 0x47, 0x02, 0x47])
+        # Rupoor negative value
+        rom.write_int16_to_rom(0x180036, 10)
         #Make Blue Shield more expensive
         rom.write_bytes(0xF73D2, [0xFC, 0xFF])
         rom.write_bytes(0xF73DA, [0x04, 0x00])
@@ -230,6 +232,8 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_byte(0x34FD6, 0x80)
         #Set overflow items for progressive equipment
         rom.write_bytes(0x180090, [0x02, 0x47, 0x00, 0x47, 0x00, 0x47, 0x01, 0x47])
+        # Rupoor negative value
+        rom.write_int16_to_rom(0x180036, 20)
         #Make Blue Shield more expensive
         rom.write_bytes(0xF73D2, [0xFC, 0xFF])
         rom.write_bytes(0xF73DA, [0x04, 0x00])
@@ -263,6 +267,8 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_byte(0x34FD6, 0x80)
         #Set overflow items for progressive equipment
         rom.write_bytes(0x180090, [0x02, 0x47, 0x00, 0x47, 0x00, 0x47, 0x01, 0x47])
+        # Rupoor negative value
+        rom.write_int16_to_rom(0x180036, 9999)
         #Make Blue Shield more expensive
         rom.write_bytes(0xF73D2, [0xFC, 0xFF])
         rom.write_bytes(0xF73DA, [0x04, 0x00])
@@ -288,6 +294,12 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_byte(0x180084, 0xA0)  # full
         # potion magic restore amount
         rom.write_byte(0x180085, 0x80)  # full
+        #Cape magic cost
+        rom.write_bytes(0x3ADA7, [0x04, 0x08, 0x10])
+        #Byrna residual magic cost
+        rom.write_bytes(0x3ADA7, [0x04, 0x02, 0x01])
+        #Enable catching fairies
+        rom.write_byte(0x34FD6, 0xF0)
         #Set overflow items for progressive equipment
         if world.goal == 'triforcehunt':
             rom.write_bytes(0x180090, [0x04, 0x6C, 0x03, 0x6C, 0x02, 0x6C, 0x04, 0x6C])
@@ -295,6 +307,8 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
             rom.write_bytes(0x180090, [0x04, 0x5D, 0x03, 0x5D, 0x02, 0x5D, 0x04, 0x5D])
         else:
             rom.write_bytes(0x180090, [0x04, 0x47, 0x03, 0x47, 0x02, 0x47, 0x04, 0x47])
+
+    # TODO: FIXME: need to set capcity upgrade fills (2,3,0,0) for easy, (0,0,0,0) otherwise
 
     # set up game internal RNG seed
     for i in range(1024):
@@ -347,16 +361,17 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
             rom.write_byte(0x6B632 + i, (vanilla_prize_pack_assignment[i] & 0xF0) | random.randint(1, 7))
 
     # set bonk prizes
+    bonk_prizes = [0x79, 0xE3, 0x79, 0xAC, 0xAC, 0xE0, 0xDC, 0xAC, 0xE3, 0xE3, 0xDA, 0xE3, 0xDA, 0xD8, 0xAC, 0xAC, 0xE3, 0xD8, 0xE3, 0xE3, 0xE3, 0xE3, 0xE3, 0xE3, 0xDC, 0xDB, 0xE3, 0xDA, 0x79, 0x79, 0xE3, 0xE3,
+                   0xDA, 0x79, 0xAC, 0xAC, 0x79, 0xE3, 0x79, 0xAC, 0xAC, 0xE0, 0xDC, 0xE3, 0x79, 0xDE, 0xE3, 0xAC, 0xDB, 0x79, 0xE3, 0xD8, 0xAC, 0x79, 0xE3, 0xDB, 0xDB, 0xE3, 0xE3, 0x79, 0xD8, 0xDD]
+    bonk_addresses = [0x4CF6C, 0x4CFBA, 0x4CFE0, 0x4CFFB, 0x4D018, 0x4D01B, 0x4D028, 0x4D03C, 0x4D059, 0x4D07A, 0x4D09E, 0x4D0A8, 0x4D0AB, 0x4D0AE, 0x4D0BE, 0x4D0DD,
+                      0x4D16A, 0x4D1E5, 0x4D1EE, 0x4D20B, 0x4CBBF, 0x4CBBF, 0x4CC17, 0x4CC1A, 0x4CC4A, 0x4CC4D, 0x4CC53, 0x4CC69, 0x4CC6F, 0x4CC7C, 0x4CCEF, 0x4CD51,
+                      0x4CDC0, 0x4CDC3, 0x4CDC6, 0x4CE37, 0x4D2DE, 0x4D32F, 0x4D355, 0x4D367, 0x4D384, 0x4D387, 0x4D397, 0x4D39E, 0x4D3AB, 0x4D3AE, 0x4D3D1, 0x4D3D7,
+                      0x4D3F8, 0x4D416, 0x4D420, 0x4D423, 0x4D42D, 0x4D449, 0x4D48C, 0x4D4D9, 0x4D4DC, 0x4D4E3, 0x4D504, 0x4D507, 0x4D55E, 0x4D56A]
     if world.shuffle_bonk_prizes:
-        bonk_prizes = [0x79, 0xE3, 0x79, 0xAC, 0xAC, 0xE0, 0xDC, 0xAC, 0xE3, 0xE3, 0xDA, 0xE3, 0xDA, 0xD8, 0xAC, 0xAC, 0xE3, 0xD8, 0xE3, 0xE3, 0xE3, 0xE3, 0xE3, 0xE3, 0xDC, 0xDB, 0xE3, 0xDA, 0x79, 0x79, 0xE3, 0xE3,
-                       0xDA, 0x79, 0xAC, 0xAC, 0x79, 0xE3, 0x79, 0xAC, 0xAC, 0xE0, 0xDC, 0xE3, 0x79, 0xDE, 0xE3, 0xAC, 0xDB, 0x79, 0xE3, 0xD8, 0xAC, 0x79, 0xE3, 0xDB, 0xDB, 0xE3, 0xE3, 0x79, 0xD8, 0xDD]
-        bonk_addresses = [0x4CF6C, 0x4CFBA, 0x4CFE0, 0x4CFFB, 0x4D018, 0x4D01B, 0x4D028, 0x4D03C, 0x4D059, 0x4D07A, 0x4D09E, 0x4D0A8, 0x4D0AB, 0x4D0AE, 0x4D0BE, 0x4D0DD,
-                          0x4D16A, 0x4D1E5, 0x4D1EE, 0x4D20B, 0x4CBBF, 0x4CBBF, 0x4CC17, 0x4CC1A, 0x4CC4A, 0x4CC4D, 0x4CC53, 0x4CC69, 0x4CC6F, 0x4CC7C, 0x4CCEF, 0x4CD51,
-                          0x4CDC0, 0x4CDC3, 0x4CDC6, 0x4CE37, 0x4D2DE, 0x4D32F, 0x4D355, 0x4D367, 0x4D384, 0x4D387, 0x4D397, 0x4D39E, 0x4D3AB, 0x4D3AE, 0x4D3D1, 0x4D3D7,
-                          0x4D3F8, 0x4D416, 0x4D420, 0x4D423, 0x4D42D, 0x4D449, 0x4D48C, 0x4D4D9, 0x4D4DC, 0x4D4E3, 0x4D504, 0x4D507, 0x4D55E, 0x4D56A]
         random.shuffle(bonk_prizes)
-        for prize, address in zip(bonk_prizes, bonk_addresses):
-            rom.write_byte(address, prize)
+    for prize, address in zip(bonk_prizes, bonk_addresses):
+        rom.write_byte(address, prize)
+
 
     # set Fountain bottle exchange items
     if world.difficulty in ['hard', 'expert', 'insane']:
@@ -365,6 +380,9 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     else:
         rom.write_byte(0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)])
         rom.write_byte(0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)])
+
+    #enable Fat Fairy Chests
+    rom.write_bytes(0x1FC16, [0xB1, 0xC6, 0xF9, 0xC9, 0xC6, 0xF9])
     # set Fat Fairy Bow/Sword prizes to be disappointing
     rom.write_byte(0x34914, 0x3A)  # Bow and Arrow
     rom.write_byte(0x180028, 0x49)  # Fighter Sword
@@ -381,6 +399,8 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     # set Waterfall fairy prizes to be disappointing
     rom.write_byte(0x348DB, 0x3A)  # Red Boomerang becomes Red Boomerang
     rom.write_byte(0x348EB, 0x05)  # Blue Shield becomes Blue Shield
+
+    rom.write_byte(0x180029, 0x01) # Smithy quick item give
 
     # set swordless mode settings
     rom.write_byte(0x18003F, 0x01 if world.mode == 'swordless' else 0x00)  # hammer can harm ganon
@@ -438,22 +458,37 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     rom.write_bytes(0x180165, [0x0E, 0x28] if world.treasure_hunt_icon == 'Triforce Piece' else [0x0D, 0x28])
     rom.write_byte(0x180167, world.treasure_hunt_count % 256)
 
+    # TODO: a proper race rom mode should be implemented, that changes the following flag, and rummages the table (or uses the future encryption feature, etc)
+    rom.write_bytes(0x180213, [0x00, 0x01]) # Not a Tournament Seed
+
     # assorted fixes
     rom.write_byte(0x180030, 0x00)  # Disable SRAM trace
-    rom.write_byte(0x180036, 0x0A)  # Rupoor negative value
+    rom.write_byte(0x1800A2, 0x01)  # remain in real dark world when dying in dark word dungion before killing aga1
     rom.write_byte(0x180169, 0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
     rom.write_byte(0x180171, 0x01 if world.ganon_at_pyramid else 0x00)  # Enable respawning on pyramid after ganon death
     rom.write_byte(0x180168, 0x08)  # Spike Cave Damage
+    rom.write_bytes(0x18016B, [0x04, 0x02, 0x01]) #Set spike cave and MM spike room Cape usage
+    rom.write_bytes(0x18016E, [0x04, 0x08, 0x10]) #Set spike cave and MM spike room Cape usage
+    rom.write_bytes(0x50563, [0x3F, 0x14]) # disable below ganon chest
+    rom.write_byte(0x50599, 0x00) # disable below ganon chest
+    rom.write_bytes(0xE9A5, [0x7E, 0x00, 0x24]) # disable below ganon chest
+    rom.write_byte(0xF5D73, 0x08) # bees are catchable
+    rom.write_byte(0xF5F10, 0x08) # bees are catchable
     rom.write_byte(0x180086, 0x00 if world.aga_randomness else 0x01)  # set blue ball and ganon warp randomness
+    rom.write_byte(0x1800A0, 0x01)  # return to light world on s+q without mirror
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
-    if world.goal in ['ganon']:
-        rom.write_byte(0x18003E, 0x03)  # make ganon invincible until all crystals and aga 2 are collected
-    elif world.goal in ['pedestal', 'triforcehunt']:
+    rom.write_byte(0x180034, 0x0A) # starting max bombs
+    rom.write_byte(0x180035, 30) # starting max bombs
+
+    if world.goal in ['pedestal', 'triforcehunt']:
         rom.write_byte(0x18003E, 0x01)  # make ganon invincible
     elif world.goal in ['dungeons']:
         rom.write_byte(0x18003E, 0x02)  # make ganon invincible until all dungeons are beat
     elif world.goal in ['crystals']:
         rom.write_byte(0x18003E, 0x04)  # make ganon invincible until all crystals
+    else:
+        rom.write_byte(0x18003E, 0x03)  # make ganon invincible until all crystals and aga 2 are collected
+
     rom.write_byte(0x18016A, 0x01 if world.keysanity else 0x00)  # free roaming item text boxes
     rom.write_byte(0x18003B, 0x01 if world.keysanity else 0x00)  # maps showing crystals on overworld
 
@@ -483,9 +518,9 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     rom.write_bytes(0x6D2FB, [0x00, 0x00, 0xf7, 0xff, 0x02, 0x0E])
     rom.write_bytes(0x6D313, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
 
-    if world.swamp_patch_required:
-        # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
-        rom.write_byte(0x18003D, 0x01)
+
+    # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
+    rom.write_byte(0x18003D, 0x01 if world.swamp_patch_required else 0x00)
 
     # set correct flag for hera basement item
     if world.get_location('Tower of Hera - Basement Cage').item is not None and world.get_location('Tower of Hera - Basement Cage').item.name == 'Small Key (Tower of Hera)':
@@ -497,33 +532,38 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     if world.fix_trock_doors:
         rom.write_byte(0xFED31, 0x0E)  # preopen bombable exit
         rom.write_byte(0xFEE41, 0x0E)  # preopen bombable exit
-        rom.write_byte(0xFE465, 0x1E)  # remove small key door on backside of big key door
+        # included unconditionally in base2current
+        #rom.write_byte(0xFE465, 0x1E)  # remove small key door on backside of big key door
+    else:
+        rom.write_byte(0xFED31, 0x2A)  # preopen bombable exit
+        rom.write_byte(0xFEE41, 0x2A)  # preopen bombable exit
 
     # Thanks to Zarby89 for finding these values
     # fix skull woods exit point
-    if world.fix_skullwoods_exit:
-        rom.write_byte(0x15E0D, 0xF8)
+    rom.write_byte(0x15E0D, 0xF8 if world.fix_skullwoods_exit else 0xB8)
 
     # fix palace of darkness exit point
-    if world.fix_palaceofdarkness_exit:
-        rom.write_byte(0x15E03, 0x40)
+    rom.write_byte(0x15E03, 0x40 if world.fix_palaceofdarkness_exit else 0x28)
 
     # fix turtle rock exit point
-    if world.fix_trock_exit:
-        rom.write_byte(0x15E1D, 0x34)
+    rom.write_byte(0x15E1D, 0x34 if world.fix_trock_exit else 0x28)
 
     # fix ganons tower exit point
-    if world.fix_gtower_exit:
-        rom.write_byte(0x15E25, 0xA4)
-        # todo fix screen scrolling
+    rom.write_byte(0x15E25, 0xA4 if world.fix_gtower_exit else 0x28)
+    # todo fix screen scrolling
 
     # enable instant item menu
     if world.fastmenu:
         rom.write_byte(0x180048, 0x01)
-        # Sound twekas for fastmenu:
+        # Sound tweaks for fastmenu:
         rom.write_byte(0x6DD9A, 0x20)
         rom.write_byte(0x6DF2A, 0x20)
         rom.write_byte(0x6E0E9, 0x20)
+    else
+        rom.write_byte(0x180048, 0x00)
+        rom.write_byte(0x6DD9A, 0x11)
+        rom.write_byte(0x6DF2A, 0x12)
+        rom.write_byte(0x6E0E9, 0x12)
 
     # enable quick item swapping with L and R (ported by Amazing Ampharos)
     if world.quickswap:

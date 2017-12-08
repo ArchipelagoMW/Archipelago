@@ -191,7 +191,7 @@ if __name__ == '__main__':
                             ''')
     args = parser.parse_args()
 
-    if is_bundled and len(sys.argv) == 1 :
+    if is_bundled() and len(sys.argv) == 1 :
         # for the bundled builds, if we have no arguments, the user
         # probably wants the gui. Users of the bundled build who want the command line
         # interface shouuld specify at least one option, possibly setting a value to a
