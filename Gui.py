@@ -1,15 +1,17 @@
-from Main import main, __version__ as ESVersion
-from Utils import is_bundled, local_path, output_path, open_file
 from argparse import Namespace
-from Rom import Sprite
 from glob import glob
 import json
 import random
 import os
 import shutil
+from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, Y, Entry, Spinbox, Button, filedialog, messagebox
 from urllib.parse import urlparse
 from urllib.request import urlopen
-from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, Y, Entry, Spinbox, Button, filedialog, messagebox
+
+from GuiUtils import ToolTips
+from Main import main, __version__ as ESVersion
+from Rom import Sprite
+from Utils import is_bundled, local_path, output_path, open_file
 
 
 def guiMain(args=None):
@@ -318,9 +320,11 @@ class SpriteSelector(object):
 
         i = 0
         for file in glob(output_path(path)):
-            image = get_image_for_sprite(file)
+            sprite = Sprite(file)
+            image = get_image_for_sprite(sprite)
             if image is None: continue
             button = Button(frame, image=image, command=lambda file=file: self.select_sprite(file))
+            ToolTips.register(button, sprite.name + ("\nBy: %s" % sprite.author_name if sprite.author_name is not None else ""))
             button.image = image
             button.grid(row=i // 16, column=i % 16)
             i += 1
@@ -394,8 +398,7 @@ class SpriteSelector(object):
         return local_path("data/sprites/unofficial")
 
 
-def get_image_for_sprite(filename):
-    sprite = Sprite(filename)
+def get_image_for_sprite(sprite):
     if not sprite.valid:
         return None
     height = 24

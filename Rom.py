@@ -4,9 +4,11 @@ from Text import Uncle_texts, Ganon1_texts, PyramidFairy_texts, TavernMan_texts,
 from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts
 from Utils import local_path
 import random
+import io
 import json
 import hashlib
 import logging
+import os
 import struct
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
@@ -100,6 +102,8 @@ class Sprite(object):
     def __init__(self, filename):
         with open(filename, 'rb') as file:
             filedata = bytearray(file.read())
+        self.name = os.path.basename(filename)
+        self.author_name = None
         self.valid = True
         if len(filedata) == 0x7000:
             # sprite file with graphics and without palette data
@@ -123,11 +127,10 @@ class Sprite(object):
             self.glove_palette = filedata[0xDEDF5:0xDEDF9]
         elif filedata.startswith(b'ZSPR'):
             result = self.parse_zspr(filedata,1)
-            print(result)
             if result is None:
                 self.valid = False
                 return
-            (sprite, palette) = result
+            (sprite, palette, self.name, self.author_name) = result
             if len(sprite) != 0x7000:
                 self.valid = False
                 return
@@ -174,26 +177,48 @@ class Sprite(object):
         return arr
 
     def parse_zspr(self, filedata, expected_kind):
+        logger = logging.getLogger('')
         headerstr = "<4xBHHIHIHH6x"
         headersize = struct.calcsize(headerstr)
         if len(filedata) < headersize:
             return None
         (version, csum, icsum, sprite_offset, sprite_size, palette_offset, palette_size, kind) = struct.unpack_from(headerstr,filedata)
         if version not in [1]:
-            #ZSPR Version not supported
+            logger.error('Error parsing ZSPR file: Version %g not supported', version)
             return None
         if kind != expected_kind:
             return None
 
+        stream = io.BytesIO(filedata)
+        stream.seek(headersize)
+
+        def read_utf16le(stream):
+            "Decodes a null-terminated UTF-16_LE string of unknown size from a stream"
+            raw = bytearray()
+            while True:
+                char = stream.read(2)
+                if char in [b'', b'\x00\x00']:
+                    break
+                raw += char
+            return raw.decode('utf-16_le')
+
+        sprite_name = read_utf16le(stream)
+        author_name = read_utf16le(stream)
+
+        # Ignoring the Author Rom name for the time being.
+
         real_csum = sum(filedata) % 0x10000
         if real_csum != csum or real_csum ^ 0xFFFF != icsum:
-            #invalid checksum
+            logger.warning('ZSPR file has incorrect checksum. It may be corrupted.')
             pass
         sprite = filedata[sprite_offset:sprite_offset + sprite_size]
         palette = filedata[palette_offset:palette_offset + palette_size]
-        #FIXME: Check lengths of those byte arrays against the _size values
 
-        return (sprite, palette)
+        if len(sprite) != sprite_size or len(palette) != palette_size:
+            logger.error('Error parsing ZSPR file: Unexpected end of file')
+            return None
+
+        return (sprite, palette, sprite_name, author_name)
 
     def decode_palette(self):
         "Returns the palettes as an array of arrays of 15 colors"
