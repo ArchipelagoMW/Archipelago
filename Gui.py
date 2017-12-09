@@ -350,19 +350,19 @@ class SpriteSelector(object):
     def update_official_sprites(self):
         # need to wrap in try catch. We don't want errors getting the json or downloading the files to break us.
         sprites_arr = json.loads(temp_sprites_json)
-        current_sprites = [os.path.basename(file) for file in glob('sprites/official/*')]
+        current_sprites = [os.path.basename(file) for file in glob('data/sprites/official/*')]
         official_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path)) for sprite in sprites_arr]
         needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in official_sprites if filename not in current_sprites]
 
         for (sprite_url, filename) in needed_sprites:
-            target = os.path.join('sprites/official',filename)
+            target = os.path.join('data/sprites/official',filename)
             with urlopen(sprite_url) as response, open(target, 'wb') as out:
                 shutil.copyfileobj(response, out)
 
         official_filenames = [filename for (_, filename) in official_sprites]
         obsolete_sprites = [sprite for sprite in current_sprites if sprite not in official_filenames]
         for sprite in obsolete_sprites:
-            os.remove(os.path.join('sprites/official', sprite))
+            os.remove(os.path.join('data/sprites/official', sprite))
 
         self.window.destroy()
         SpriteSelector(self.parent, self.callback)
