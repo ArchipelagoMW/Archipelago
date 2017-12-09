@@ -70,14 +70,27 @@ def guiMain(args=None):
     romSelectButton.pack(side=LEFT)
 
     spriteDialogFrame = Frame(fileDialogFrame)
-    baseSpriteLabel = Label(spriteDialogFrame, text='Link Sprite')
-    spriteVar = StringVar()
-    spriteEntry = Entry(spriteDialogFrame, textvariable=spriteVar)
+    baseSpriteLabel = Label(spriteDialogFrame, text='Link Sprite:')
+
+    spriteNameVar = StringVar()
+    sprite=None
+    def set_sprite(sprite_param):
+        nonlocal sprite
+        if sprite_param is None or not sprite_param.valid:
+            sprite = None
+            spriteNameVar.set('(default Link)')
+        else:
+            sprite = sprite_param
+            spriteNameVar.set(sprite.name)
+
+    set_sprite(None)
+    spriteNameVar.set('(default Link)')
+    spriteEntry = Label(spriteDialogFrame, textvariable=spriteNameVar)
 
     def SpriteSelect():
-        SpriteSelector(mainWindow, spriteVar.set)
+        SpriteSelector(mainWindow, set_sprite)
 
-    spriteSelectButton = Button(spriteDialogFrame, text='Select Sprite', command=SpriteSelect)
+    spriteSelectButton = Button(spriteDialogFrame, text='Open Sprite Picker', command=SpriteSelect)
 
     baseSpriteLabel.pack(side=LEFT)
     spriteEntry.pack(side=LEFT)
@@ -207,7 +220,7 @@ def guiMain(args=None):
         guiargs.shuffleganon = bool(shuffleGanonVar.get())
         guiargs.rom = romVar.get()
         guiargs.jsonout = None
-        guiargs.sprite = spriteVar.get() if spriteVar.get() else None
+        guiargs.sprite = sprite
         try:
             if guiargs.count is not None:
                 seed = guiargs.seed
@@ -275,7 +288,7 @@ def guiMain(args=None):
         romVar.set(args.rom)
         shuffleGanonVar.set(args.shuffleganon)
         if args.sprite is not None:
-            spriteVar.set(args.sprite)
+            set_sprite(Sprite(args.sprite))
 
     mainWindow.mainloop()
 
@@ -323,7 +336,7 @@ class SpriteSelector(object):
             sprite = Sprite(file)
             image = get_image_for_sprite(sprite)
             if image is None: continue
-            button = Button(frame, image=image, command=lambda file=file: self.select_sprite(file))
+            button = Button(frame, image=image, command=lambda sprite=sprite: self.select_sprite(sprite))
             ToolTips.register(button, sprite.name + ("\nBy: %s" % sprite.author_name if sprite.author_name is not None else ""))
             button.image = image
             button.grid(row=i // 16, column=i % 16)
@@ -357,11 +370,15 @@ class SpriteSelector(object):
 
     def browse_for_sprite(self):
         sprite = filedialog.askopenfilename()
-        self.callback(sprite)
+        try:
+            self.callback(Sprite(sprite))
+        except:
+            self.callback(None)
         self.window.destroy()
 
+
     def use_default_sprite(self):
-        self.callback("")
+        self.callback(None)
         self.window.destroy()
 
     def select_sprite(self, spritename):

@@ -91,7 +91,10 @@ def main(args, seed=None):
     logger.info('Patching ROM.')
 
     if args.sprite is not None:
-        sprite = Sprite(args.sprite)
+        if isinstance(args.sprite,Sprite):
+            sprite = args.sprite
+        else:
+            sprite = Sprite(args.sprite)
     else:
         sprite = None
 
