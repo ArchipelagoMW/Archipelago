@@ -8,7 +8,7 @@ from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, T
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
-from GuiUtils import ToolTips
+from GuiUtils import ToolTips, set_icon, BackgroundTaskProgress
 from Main import main, __version__ as ESVersion
 from Rom import Sprite
 from Utils import is_bundled, local_path, output_path, open_file
@@ -292,12 +292,6 @@ def guiMain(args=None):
 
     mainWindow.mainloop()
 
-def set_icon(window):
-    er16 = PhotoImage(file=local_path('data/ER16.gif'))
-    er32 = PhotoImage(file=local_path('data/ER32.gif'))
-    er48 = PhotoImage(file=local_path('data/ER32.gif'))
-    window.tk.call('wm', 'iconphoto', window._w, er16, er32, er48)
-
 class SpriteSelector(object):
     def __init__(self, parent, callback):
         if is_bundled():
@@ -326,6 +320,7 @@ class SpriteSelector(object):
         button.pack(side=LEFT)
 
         set_icon(self.window)
+        self.window.focus()
 
     def icon_section(self, frame_label, path, no_results_label):
         frame = LabelFrame(self.window, text=frame_label, padx=5, pady=5)
@@ -349,23 +344,72 @@ class SpriteSelector(object):
 
     def update_official_sprites(self):
         # need to wrap in try catch. We don't want errors getting the json or downloading the files to break us.
-        sprites_arr = json.loads(temp_sprites_json)
-        current_sprites = [os.path.basename(file) for file in glob('data/sprites/official/*')]
-        official_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path)) for sprite in sprites_arr]
-        needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in official_sprites if filename not in current_sprites]
-
-        for (sprite_url, filename) in needed_sprites:
-            target = os.path.join('data/sprites/official',filename)
-            with urlopen(sprite_url) as response, open(target, 'wb') as out:
-                shutil.copyfileobj(response, out)
-
-        official_filenames = [filename for (_, filename) in official_sprites]
-        obsolete_sprites = [sprite for sprite in current_sprites if sprite not in official_filenames]
-        for sprite in obsolete_sprites:
-            os.remove(os.path.join('data/sprites/official', sprite))
-
         self.window.destroy()
-        SpriteSelector(self.parent, self.callback)
+        self.parent.update()
+        def work(task):
+            resultmessage=""
+            successful = True
+
+            def finished():
+                task.close_window()
+                if successful:
+                    messagebox.showinfo("Sprite Updater", resultmessage)
+                else:
+                    messagebox.showerror("Sprite Updater", resultmessage)
+                SpriteSelector(self.parent, self.callback)
+
+            try:
+                task.update_status("Downloading official sprites list")
+                sprites_arr = json.loads(temp_sprites_json)
+            except Exception as e:
+                resultmessage = "Error getting list of official sprites. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
+                successful = False
+                task.queue_event(finished)
+                return
+
+            try:
+                task.update_status("Determining needed sprites")
+                current_sprites = [os.path.basename(file) for file in glob(self.official_sprite_dir+'/*')]
+                official_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path)) for sprite in sprites_arr]
+                needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in official_sprites if filename not in current_sprites]
+                bundled_sprites=[]
+
+                official_filenames = [filename for (_, filename) in official_sprites]
+                obsolete_sprites = [sprite for sprite in current_sprites if sprite not in official_filenames]
+            except Exception as e:
+                resultmessage = "Error Determining which sprites to update. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
+                successful = False
+                task.queue_event(finished)
+                return
+
+            updated = 0
+            for (sprite_url, filename) in needed_sprites:
+                try:
+                    task.update_status("Downloading needed sprite %g/%g" % (updated + 1, len(needed_sprites)))
+                    target = os.path.join(self.official_sprite_dir, filename)
+                    with urlopen(sprite_url) as response, open(target, 'wb') as out:
+                        shutil.copyfileobj(response, out)
+                except Exception as e:
+                    resultmessage = "Error downloading sprite. Not all sprites updated.\n\n%s: %s" % (type(e).__name__, e)
+                    successful = False
+                updated += 1
+
+            deleted = 0
+            for sprite in obsolete_sprites:
+                try:
+                    task.update_status("Removing obsolete sprite %g/%g" % (deleted + 1, len(obsolete_sprites)))
+                    os.remove(os.path.join(self.official_sprite_dir, sprite))
+                except Exception as e:
+                    resultmessage = "Error removing obsolete sprite. Not all sprites updated.\n\n%s: %s" % (type(e).__name__, e)
+                    successful = False
+                deleted += 1
+
+            if successful:
+                resultmessage = "official sprites updated sucessfully"
+
+            task.queue_event(finished)
+
+        BackgroundTaskProgress(self.parent, work, "Updating Sprites")
 
 
     def browse_for_sprite(self):

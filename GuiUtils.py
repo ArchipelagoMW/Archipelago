@@ -1,4 +1,78 @@
+import queue
+import threading
 import tkinter as tk
+
+from Utils import local_path
+
+def set_icon(window):
+    er16 = tk.PhotoImage(file=local_path('data/ER16.gif'))
+    er32 = tk.PhotoImage(file=local_path('data/ER32.gif'))
+    er48 = tk.PhotoImage(file=local_path('data/ER32.gif'))
+    window.tk.call('wm', 'iconphoto', window._w, er16, er32, er48)
+
+# Although tkinter is intended to be thread safe, there are many reports of issues
+# some which may be platform specific, or depend on if the TCL library was compiled without
+# multithreading support. Therefore I will assume it is not thread safe to avoid any possible problems
+class BackgroundTask(object):
+    def __init__(self, window, code_to_run):
+        self.window = window
+        self.queue = queue.Queue()
+        self.running = True
+        self.process_queue()
+        self.task=threading.Thread(target=code_to_run , args=(self,))
+        self.task.start()
+
+    def stop(self):
+        self.running = False
+
+    #safe to call from worker
+    def queue_event(self, event):
+        self.queue.put(event)
+
+    def process_queue(self):
+        try:
+            while True:
+                if not self.running:
+                    return
+                event = self.queue.get_nowait()
+                event()
+                if self.running:
+                    #if self is no longer running self.window may no longer be valid
+                    self.window.update_idletasks()
+        except queue.Empty:
+            pass
+        if self.running:
+            self.window.after(100, self.process_queue)
+
+class BackgroundTaskProgress(BackgroundTask):
+    def __init__(self, parent, code_to_run, title):
+        self.parent = parent
+        self.window = tk.Toplevel(parent)
+        self.window['padx'] = 5
+        self.window['pady'] = 5
+
+        self.window.attributes("-toolwindow",1)
+
+        self.window.wm_title(title)
+        self.labelVar = tk.StringVar()
+        self.labelVar.set("")
+        self.label = tk.Label(self.window, textvariable = self.labelVar, width=50)
+        self.label.pack()
+        self.window.resizable(width=False, height=False)
+
+        set_icon(self.window)
+        self.window.focus()
+        super().__init__(self.window, code_to_run)
+
+    #safe to call from worker thread
+    def update_status(self, text):
+        self.queue_event(lambda text=text: self.labelVar.set(text))
+
+    # only call this in an event callback
+    def close_window(self):
+        self.stop()
+        self.window.destroy()
+
 
 
 class ToolTips(object):
@@ -41,6 +115,7 @@ class ToolTips(object):
             widget.bind_class(cls.tag, "<Enter>", cls.enter)
             widget.bind_class(cls.tag, "<Leave>", cls.leave)
             widget.bind_class(cls.tag, "<Motion>", cls.motion)
+            widget.bind_class(cls.tag, "<Destroy>", cls.leave)
 
             # pick suitable colors for tooltips
             try:
