@@ -1,11 +1,12 @@
 from Main import main, __version__ as ESVersion
+from AdjusterMain import adjust
 from Utils import is_bundled, local_path, output_path, open_file
 from argparse import Namespace
 import random
 import subprocess
 import os
 import sys
-from tkinter import Checkbutton, OptionMenu, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, Entry, Spinbox, Button, filedialog, messagebox, PhotoImage
+from tkinter import Checkbutton, OptionMenu, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, Entry, Spinbox, Button, filedialog, messagebox, PhotoImage, ttk
 
 
 def guiMain(args=None):
@@ -14,7 +15,14 @@ def guiMain(args=None):
 
     set_icon(mainWindow)
 
-    topFrame = Frame(mainWindow)
+    notebook = ttk.Notebook(mainWindow)
+    randomizerWindow = ttk.Frame(notebook)
+    adjustWindow = ttk.Frame(notebook)
+    notebook.add(randomizerWindow, text='Randomize')
+    notebook.add(adjustWindow, text='Adjust')
+    notebook.pack()
+
+    topFrame = Frame(randomizerWindow)
     rightHalfFrame = Frame(topFrame)
     checkBoxFrame = Frame(rightHalfFrame)
 
@@ -168,8 +176,8 @@ def guiMain(args=None):
     shuffleFrame.pack(expand=True, anchor=E)
     heartbeepFrame.pack(expand=True, anchor=E)
 
-    bottomFrame = Frame(mainWindow)
-    farBottomFrame = Frame(mainWindow)
+    bottomFrame = Frame(randomizerWindow)
+    farBottomFrame = Frame(randomizerWindow)
 
     seedLabel = Label(bottomFrame, text='Seed #')
     seedVar = StringVar()
@@ -242,6 +250,96 @@ def guiMain(args=None):
     topFrame.pack(side=TOP)
     farBottomFrame.pack(side=BOTTOM, fill=X, padx=5, pady=5)
     bottomFrame.pack(side=BOTTOM)
+
+    topFrame2 = Frame(adjustWindow)
+    rightHalfFrame2 = Frame(topFrame2)
+    checkBoxFrame2 = Frame(rightHalfFrame2)
+
+    quickSwapVar2 = IntVar()
+    quickSwapCheckbutton2 = Checkbutton(checkBoxFrame2, text="Enabled L/R Item quickswapping", variable=quickSwapVar2)
+    fastMenuVar2 = IntVar()
+    fastMenuCheckbutton2 = Checkbutton(checkBoxFrame2, text="Enable instant menu", variable=fastMenuVar2)
+    disableMusicVar2 = IntVar()
+    disableMusicCheckbutton2 = Checkbutton(checkBoxFrame2, text="Disable game music", variable=disableMusicVar2)
+
+    quickSwapCheckbutton2.pack(expand=True, anchor=W)
+    fastMenuCheckbutton2.pack(expand=True, anchor=W)
+    disableMusicCheckbutton2.pack(expand=True, anchor=W)
+
+    fileDialogFrame2 = Frame(rightHalfFrame2)
+
+    romDialogFrame2 = Frame(fileDialogFrame2)
+    baseRomLabel2 = Label(romDialogFrame2, text='Rom to adjust')
+    romVar2 = StringVar()
+    romEntry2 = Entry(romDialogFrame2, textvariable=romVar2)
+
+    def RomSelect2():
+        rom = filedialog.askopenfilename()
+        romVar2.set(rom)
+    romSelectButton2 = Button(romDialogFrame2, text='Select Rom', command=RomSelect2)
+
+    baseRomLabel2.pack(side=LEFT)
+    romEntry2.pack(side=LEFT)
+    romSelectButton2.pack(side=LEFT)
+
+    spriteDialogFrame2 = Frame(fileDialogFrame2)
+    baseSpriteLabel2 = Label(spriteDialogFrame2, text='Link Sprite')
+    spriteVar2 = StringVar()
+    spriteEntry2 = Entry(spriteDialogFrame2, textvariable=spriteVar2)
+
+    def SpriteSelect2():
+        sprite = filedialog.askopenfilename()
+        spriteVar2.set(sprite)
+
+    spriteSelectButton2 = Button(spriteDialogFrame2, text='Select Sprite', command=SpriteSelect2)
+
+    baseSpriteLabel2.pack(side=LEFT)
+    spriteEntry2.pack(side=LEFT)
+    spriteSelectButton2.pack(side=LEFT)
+
+    romDialogFrame2.pack()
+    spriteDialogFrame2.pack()
+
+    checkBoxFrame2.pack()
+    fileDialogFrame2.pack()
+
+    drowDownFrame2 = Frame(topFrame2)
+
+    heartbeepFrame2 = Frame(drowDownFrame2)
+    heartbeepVar2 = StringVar()
+    heartbeepVar2.set('normal')
+    heartbeepOptionMenu2 = OptionMenu(heartbeepFrame2, heartbeepVar2, 'normal', 'half', 'quarter', 'off')
+    heartbeepOptionMenu2.pack(side=RIGHT)
+    heartbeepLabel2 = Label(heartbeepFrame2, text='Heartbeep sound rate')
+    heartbeepLabel2.pack(side=LEFT)
+
+    heartbeepFrame2.pack(expand=True, anchor=E)
+
+    bottomFrame2 = Frame(topFrame2)
+
+    def adjustRom():
+        guiargs = Namespace
+        guiargs.heartbeep = heartbeepVar2.get()
+        guiargs.fastmenu = bool(fastMenuVar2.get())
+        guiargs.quickswap = bool(quickSwapVar2.get())
+        guiargs.disablemusic = bool(disableMusicVar2.get())
+        guiargs.rom = romVar2.get()
+        guiargs.sprite = spriteVar2.get() if spriteVar2.get() else None
+        try:
+            adjust(args=guiargs)
+        except Exception as e:
+            messagebox.showerror(title="Error while creating seed", message=str(e))
+        else:
+            messagebox.showinfo(title="Success", message="Rom patched successfully")
+
+    adjustButton = Button(bottomFrame2, text='Adjust Rom', command=adjustRom)
+
+    adjustButton.pack(side=LEFT, padx=(5,0))
+
+    drowDownFrame2.pack(side=LEFT, pady=(0,40))
+    rightHalfFrame2.pack(side=RIGHT)
+    topFrame2.pack(side=TOP, pady=30)
+    bottomFrame2.pack(side=BOTTOM, pady=(180,0))
 
     if args is not None:
         # load values from commandline args
