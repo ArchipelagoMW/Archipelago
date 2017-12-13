@@ -1,5 +1,5 @@
 from BaseClasses import World, CollectionState, Item
-from Regions import create_regions
+from Regions import create_regions, mark_light_world_regions
 from EntranceShuffle import link_entrances
 from Rom import patch_rom, LocalRom, JsonRom
 from Rules import set_rules
@@ -48,6 +48,7 @@ def main(args, seed=None):
     logger.info('Shuffling the World about.')
 
     link_entrances(world)
+    mark_light_world_regions(world)
 
     logger.info('Calculating Access Rules.')
 
@@ -134,8 +135,10 @@ def copy_world(world):
 
     # connect copied world
     for region in world.regions:
+        copied_region = ret.get_region(region.name)
+        copied_region.is_light_world = region.is_light_world
         for entrance in region.entrances:
-            ret.get_entrance(entrance.name).connect(ret.get_region(region.name))
+            ret.get_entrance(entrance.name).connect(copied_region)
 
     # fill locations
     for location in world.get_locations():
