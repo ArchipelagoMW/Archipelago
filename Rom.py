@@ -390,6 +390,14 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     rom.write_byte(0x180044, 0x01 if world.mode == 'swordless' else 0x00)  # hammer activates tablets
 
     # set up clocks for timed modes
+    if world.shuffle == 'vanilla':
+        ERtimeincrease = 0
+    elif world.shuffle in ['dungeonssimple', 'dungeonsfull']:
+	    ERtimeincrease = 10
+    else:
+	    ERtimeincrease = 20
+    if world.keysanity:
+        ERtimeincrease = ERtimeincrease + 15
     if world.clock_mode == 'off':
         rom.write_bytes(0x180190, [0x00, 0x00, 0x00])  # turn off clock mode
         rom.write_int32_to_rom(0x180200, 0)  # red clock adjustment time (in frames, sint32)
@@ -408,11 +416,11 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_int32_to_rom(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
         rom.write_int32_to_rom(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
         if world.difficulty == 'easy':
-            rom.write_int32_to_rom(0x18020C, 20 * 60 * 60)  # starting time (in frames, sint32)
+            rom.write_int32_to_rom(0x18020C, (20 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
         elif world.difficulty == 'normal':
-            rom.write_int32_to_rom(0x18020C, 10 * 60 * 60)  # starting time (in frames, sint32)
+            rom.write_int32_to_rom(0x18020C, (10 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
         else:
-            rom.write_int32_to_rom(0x18020C, 5 * 60 * 60)  # starting time (in frames, sint32)
+            rom.write_int32_to_rom(0x18020C, int((5 + ERtimeincrease / 2) * 60 * 60))  # starting time (in frames, sint32)
     if world.clock_mode == 'stopwatch':
         rom.write_bytes(0x180190, [0x02, 0x01, 0x00])  # set stopwatch mode
         rom.write_int32_to_rom(0x180200, -2 * 60 * 60)  # red clock adjustment time (in frames, sint32)
@@ -424,7 +432,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_int32_to_rom(0x180200, -2 * 60 * 60)  # red clock adjustment time (in frames, sint32)
         rom.write_int32_to_rom(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
         rom.write_int32_to_rom(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
-        rom.write_int32_to_rom(0x18020C, 40 * 60 * 60)  # starting time (in frames, sint32)
+        rom.write_int32_to_rom(0x18020C, (40 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
 
     # set up goals for treasure hunt
     rom.write_bytes(0x180165, [0x0E, 0x28] if world.treasure_hunt_icon == 'Triforce Piece' else [0x0D, 0x28])
