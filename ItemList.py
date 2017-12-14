@@ -23,14 +23,14 @@ normalfourth5extra = ['Arrows (10)'] * 2 + ['Rupees (20)'] * 2 + ['Rupees (5)']
 normalfinal25extra = ['Rupees (20)'] * 23 + ['Rupees (5)'] * 2
 
 
-easybaseitems = (['Blue Boomerang', 'Red Boomerang', 'Silver Arrows'] + ['Rupees (300)'] * 4 + ['Magic Upgrade (1/2)'] * 2 +
-                ['Single Arrow', 'Sanctuary Heart Container', 'Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 12)
+easybaseitems = (['Blue Boomerang', 'Red Boomerang', 'Silver Arrows'] + ['Rupees (300)'] * 4 + ['Magic Upgrade (1/2)'] * 2 + ['Lamp'] * 2 +
+                ['Single Arrow', 'Sanctuary Heart Container'] + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 12)
 easyextra = ['Piece of Heart'] * 12 + ['Rupees (300)']
 easylimitedextra = ['Boss Heart Container'] * 3 # collapsing down the 12 pieces of heart
-easyfirst15extra = ['Rupees (100)'] + ['Rupees (50)'] + ['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6 + ['Bombs (3)']
-easysecond10extra = ['Bombs (3)'] * 9 + ['Rupee (1)']
-easythird5extra = ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupees (5)']
-easyfinal25extra = ['Rupees (50)'] * 4 + ['Rupees (20)'] * 14 + ['Rupee (1)'] + ['Arrows (10)'] * 3 + ['Rupees (5)'] * 3
+easyfirst15extra = ['Rupees (100)', 'Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] + ['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6
+easysecond10extra = ['Bombs (3)'] * 8 + ['Rupee (1)', 'Rupees (50)']
+easythird5extra = ['Rupees (50)'] * 2 + ['Bombs (3)'] * 2 + ['Arrows (10)']
+easyfinal25extra = ['Rupees (50)'] * 4 + ['Rupees (20)'] * 14 + ['Rupee (1)'] + ['Arrows (10)'] * 4 + ['Rupees (5)'] * 2
 easytimedotherextra = ['Red Clock'] * 5
 
 hardbaseitems = (['Silver Arrows', 'Single Arrow'] + ['Rupees (300)'] + ['Rupees (100)'] * 2 + ['Rupees (50)'] + ['Bombs (3)'] +
