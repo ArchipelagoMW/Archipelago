@@ -193,7 +193,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         #Cape magic cost
         rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
         #Byrna residual magic cost
-        rom.write_bytes(0x3ADA7, [0x08, 0x08, 0x08])
+        rom.write_bytes(0x45C42, [0x08, 0x08, 0x08])
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         #Set overflow items for progressive equipment
@@ -228,7 +228,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         #Cape magic cost
         rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
         #Byrna residual magic cost
-        rom.write_bytes(0x3ADA7, [0x08, 0x08, 0x08])
+        rom.write_bytes(0x45C42, [0x08, 0x08, 0x08])
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         #Set overflow items for progressive equipment
@@ -263,7 +263,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         #Cape magic cost
         rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
         #Byrna residual magic cost
-        rom.write_bytes(0x3ADA7, [0x08, 0x08, 0x08])
+        rom.write_bytes(0x45C42, [0x08, 0x08, 0x08])
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         #Set overflow items for progressive equipment
@@ -298,7 +298,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         #Cape magic cost
         rom.write_bytes(0x3ADA7, [0x04, 0x08, 0x10])
         #Byrna residual magic cost
-        rom.write_bytes(0x3ADA7, [0x04, 0x02, 0x01])
+        rom.write_bytes(0x45C42, [0x04, 0x02, 0x01])
         #Enable catching fairies
         rom.write_byte(0x34FD6, 0xF0)
         #Set overflow items for progressive equipment
@@ -473,8 +473,8 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     rom.write_bytes(0x50563, [0x3F, 0x14]) # disable below ganon chest
     rom.write_byte(0x50599, 0x00) # disable below ganon chest
     rom.write_bytes(0xE9A5, [0x7E, 0x00, 0x24]) # disable below ganon chest
-    rom.write_byte(0xF5D73, 0x08) # bees are catchable
-    rom.write_byte(0xF5F10, 0x08) # bees are catchable
+    rom.write_byte(0xF5D73, 0xF0) # bees are catchable
+    rom.write_byte(0xF5F10, 0xF0) # bees are catchable
     rom.write_byte(0x180086, 0x00 if world.aga_randomness else 0x01)  # set blue ball and ganon warp randomness
     rom.write_byte(0x1800A0, 0x01)  # return to light world on s+q without mirror
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
