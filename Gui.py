@@ -22,6 +22,25 @@ def guiMain(args=None):
     notebook.add(adjustWindow, text='Adjust')
     notebook.pack()
 
+    # Shared Controls
+
+    farBottomFrame = Frame(mainWindow)
+
+    def open_output():
+        open_file(output_path(''))
+
+    openOutputButton = Button(farBottomFrame, text='Open Output Directory', command=open_output)
+
+    if os.path.exists(local_path('README.html')):
+        def open_readme():
+            open_file(local_path('README.html'))
+        openReadmeButton = Button(farBottomFrame, text='Open Documentation', command=open_readme)
+        openReadmeButton.pack(side=LEFT)
+
+    farBottomFrame.pack(side=BOTTOM, fill=X, padx=5, pady=5)
+
+    # randomizer controls
+
     topFrame = Frame(randomizerWindow)
     rightHalfFrame = Frame(topFrame)
     checkBoxFrame = Frame(rightHalfFrame)
@@ -177,7 +196,6 @@ def guiMain(args=None):
     heartbeepFrame.pack(expand=True, anchor=E)
 
     bottomFrame = Frame(randomizerWindow)
-    farBottomFrame = Frame(randomizerWindow)
 
     seedLabel = Label(bottomFrame, text='Seed #')
     seedVar = StringVar()
@@ -226,17 +244,6 @@ def guiMain(args=None):
 
     generateButton = Button(bottomFrame, text='Generate Patched Rom', command=generateRom)
 
-    def open_output():
-        open_file(output_path(''))
-
-    openOutputButton = Button(farBottomFrame, text='Open Output Directory', command=open_output)
-
-    if os.path.exists(local_path('README.html')):
-        def open_readme():
-            open_file(local_path('README.html'))
-        openReadmeButton = Button(farBottomFrame, text='Open Documentation', command=open_readme)
-        openReadmeButton.pack(side=LEFT)
-
     seedLabel.pack(side=LEFT)
     seedEntry.pack(side=LEFT)
     countLabel.pack(side=LEFT, padx=(5,0))
@@ -248,19 +255,17 @@ def guiMain(args=None):
     drowDownFrame.pack(side=LEFT)
     rightHalfFrame.pack(side=RIGHT)
     topFrame.pack(side=TOP)
-    farBottomFrame.pack(side=BOTTOM, fill=X, padx=5, pady=5)
     bottomFrame.pack(side=BOTTOM)
+
+    # Adjuster Controls
 
     topFrame2 = Frame(adjustWindow)
     rightHalfFrame2 = Frame(topFrame2)
     checkBoxFrame2 = Frame(rightHalfFrame2)
 
-    quickSwapVar2 = IntVar()
-    quickSwapCheckbutton2 = Checkbutton(checkBoxFrame2, text="Enabled L/R Item quickswapping", variable=quickSwapVar2)
-    fastMenuVar2 = IntVar()
-    fastMenuCheckbutton2 = Checkbutton(checkBoxFrame2, text="Enable instant menu", variable=fastMenuVar2)
-    disableMusicVar2 = IntVar()
-    disableMusicCheckbutton2 = Checkbutton(checkBoxFrame2, text="Disable game music", variable=disableMusicVar2)
+    quickSwapCheckbutton2 = Checkbutton(checkBoxFrame2, text="Enabled L/R Item quickswapping", variable=quickSwapVar)
+    fastMenuCheckbutton2 = Checkbutton(checkBoxFrame2, text="Enable instant menu", variable=fastMenuVar)
+    disableMusicCheckbutton2 = Checkbutton(checkBoxFrame2, text="Disable game music", variable=disableMusicVar)
 
     quickSwapCheckbutton2.pack(expand=True, anchor=W)
     fastMenuCheckbutton2.pack(expand=True, anchor=W)
@@ -284,12 +289,11 @@ def guiMain(args=None):
 
     spriteDialogFrame2 = Frame(fileDialogFrame2)
     baseSpriteLabel2 = Label(spriteDialogFrame2, text='Link Sprite')
-    spriteVar2 = StringVar()
-    spriteEntry2 = Entry(spriteDialogFrame2, textvariable=spriteVar2)
+    spriteEntry2 = Entry(spriteDialogFrame2, textvariable=spriteVar)
 
     def SpriteSelect2():
         sprite = filedialog.askopenfilename()
-        spriteVar2.set(sprite)
+        spriteVar.set(sprite)
 
     spriteSelectButton2 = Button(spriteDialogFrame2, text='Select Sprite', command=SpriteSelect2)
 
@@ -304,11 +308,8 @@ def guiMain(args=None):
     fileDialogFrame2.pack()
 
     drowDownFrame2 = Frame(topFrame2)
-
     heartbeepFrame2 = Frame(drowDownFrame2)
-    heartbeepVar2 = StringVar()
-    heartbeepVar2.set('normal')
-    heartbeepOptionMenu2 = OptionMenu(heartbeepFrame2, heartbeepVar2, 'normal', 'half', 'quarter', 'off')
+    heartbeepOptionMenu2 = OptionMenu(heartbeepFrame2, heartbeepVar, 'normal', 'half', 'quarter', 'off')
     heartbeepOptionMenu2.pack(side=RIGHT)
     heartbeepLabel2 = Label(heartbeepFrame2, text='Heartbeep sound rate')
     heartbeepLabel2.pack(side=LEFT)
@@ -319,12 +320,12 @@ def guiMain(args=None):
 
     def adjustRom():
         guiargs = Namespace
-        guiargs.heartbeep = heartbeepVar2.get()
-        guiargs.fastmenu = bool(fastMenuVar2.get())
-        guiargs.quickswap = bool(quickSwapVar2.get())
-        guiargs.disablemusic = bool(disableMusicVar2.get())
+        guiargs.heartbeep = heartbeepVar.get()
+        guiargs.fastmenu = bool(fastMenuVar.get())
+        guiargs.quickswap = bool(quickSwapVar.get())
+        guiargs.disablemusic = bool(disableMusicVar.get())
         guiargs.rom = romVar2.get()
-        guiargs.sprite = spriteVar2.get() if spriteVar2.get() else None
+        guiargs.sprite = spriteVar.get() if spriteVar.get() else None
         try:
             adjust(args=guiargs)
         except Exception as e:
