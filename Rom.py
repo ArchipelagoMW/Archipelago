@@ -114,8 +114,8 @@ class Sprite(object):
         if len(filedata) == 0x7000:
             # sprite file with graphics and without palette data
             self.sprite = filedata[:0x7000]
-            self.palette = None
-            self.glove_palette = None
+            self.palette = list(self.default_palette)
+            self.glove_palette = list(self.default_glove_palette)
         elif len(filedata) == 0x7078:
             # sprite file with graphics and palette data
             self.sprite = filedata[:0x7000]
@@ -142,11 +142,11 @@ class Sprite(object):
                 return
             self.sprite = sprite
             if len(palette) == 0:
-                self.palette = None
-                self.glove_palette = None
+                self.palette = list(self.default_palette)
+                self.glove_palette = list(self.default_glove_palette)
             elif len(palette) == 0x78:
                 self.palette = palette
-                self.glove_palette = None
+                self.glove_palette = list(self.default_glove_palette)
             elif len(palette) == 0x7C:
                 self.palette = palette[:0x78]
                 self.glove_palette = palette[0x78:]
@@ -849,10 +849,8 @@ def write_sprite(rom, sprite):
     if not sprite.valid:
         return
     rom.write_bytes(0x80000, sprite.sprite)
-    if sprite.palette is not None:
-        rom.write_bytes(0xDD308, sprite.palette)
-    if sprite.glove_palette is not None:
-        rom.write_bytes(0xDEDF5, sprite.glove_palette)
+    rom.write_bytes(0xDD308, sprite.palette)
+    rom.write_bytes(0xDEDF5, sprite.glove_palette)
 
 
 def write_string_to_rom(rom, target, string):
