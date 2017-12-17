@@ -56,7 +56,7 @@ def distribute_items_cutoff(world, cutoffrate=0.33):
                 raise RuntimeError('No more progress items left to place.')
 
         spot_to_fill = None
-        for location in (fill_locations if placed_advancement_items / total_advancement_items < cutoffrate else reversed(fill_locations)):
+        for location in fill_locations if placed_advancement_items / total_advancement_items < cutoffrate else reversed(fill_locations):
             if world.state.can_reach(location) and location.can_fill(item_to_place):
                 spot_to_fill = location
                 break
@@ -72,7 +72,7 @@ def distribute_items_cutoff(world, cutoffrate=0.33):
         itempool.remove(item_to_place)
         fill_locations.remove(spot_to_fill)
 
-    logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s' % ([item.name for item in itempool], [location.name for location in fill_locations]))
+    logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s', [item.name for item in itempool], [location.name for location in fill_locations])
 
 
 def distribute_items_staleness(world):
@@ -153,7 +153,7 @@ def distribute_items_staleness(world):
         itempool.remove(item_to_place)
         fill_locations.remove(spot_to_fill)
 
-    logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s' % ([item.name for item in itempool], [location.name for location in fill_locations]))
+    logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s', [item.name for item in itempool], [location.name for location in fill_locations])
 
 
 def fill_restrictive(world, base_state, locations, itempool):
@@ -226,7 +226,7 @@ def distribute_items_restrictive(world, gftower_trash_count=0, fill_locations=No
 
     fast_fill(world, restitempool, fill_locations)
 
-    logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s' % ([item.name for item in progitempool + prioitempool + restitempool], [location.name for location in fill_locations]))
+    logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s', [item.name for item in progitempool + prioitempool + restitempool], [location.name for location in fill_locations])
 
 
 def fast_fill(world, item_pool, fill_locations):

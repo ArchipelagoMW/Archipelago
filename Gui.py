@@ -4,7 +4,7 @@ import json
 import random
 import os
 import shutil
-from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, Y, Entry, Spinbox, Button, filedialog, messagebox, ttk
+from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, Entry, Spinbox, Button, filedialog, messagebox, ttk
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
@@ -100,7 +100,7 @@ def guiMain(args=None):
     baseSpriteLabel = Label(spriteDialogFrame, text='Link Sprite:')
 
     spriteNameVar = StringVar()
-    sprite=None
+    sprite = None
     def set_sprite(sprite_param):
         nonlocal sprite
         if sprite_param is None or not sprite_param.valid:
@@ -250,7 +250,7 @@ def guiMain(args=None):
         try:
             if guiargs.count is not None:
                 seed = guiargs.seed
-                for i in range(guiargs.count):
+                for _ in range(guiargs.count):
                     main(seed=seed, args=guiargs)
                     seed = random.randint(0, 999999999)
             else:
@@ -264,9 +264,9 @@ def guiMain(args=None):
 
     seedLabel.pack(side=LEFT)
     seedEntry.pack(side=LEFT)
-    countLabel.pack(side=LEFT, padx=(5,0))
+    countLabel.pack(side=LEFT, padx=(5, 0))
     countSpinbox.pack(side=LEFT)
-    generateButton.pack(side=LEFT, padx=(5,0))
+    generateButton.pack(side=LEFT, padx=(5, 0))
 
     openOutputButton.pack(side=RIGHT)
 
@@ -349,12 +349,12 @@ def guiMain(args=None):
 
     adjustButton = Button(bottomFrame2, text='Adjust Rom', command=adjustRom)
 
-    adjustButton.pack(side=LEFT, padx=(5,0))
+    adjustButton.pack(side=LEFT, padx=(5, 0))
 
-    drowDownFrame2.pack(side=LEFT, pady=(0,40))
+    drowDownFrame2.pack(side=LEFT, pady=(0, 40))
     rightHalfFrame2.pack(side=RIGHT)
     topFrame2.pack(side=TOP, pady=30)
-    bottomFrame2.pack(side=BOTTOM, pady=(180,0))
+    bottomFrame2.pack(side=BOTTOM, pady=(180, 0))
 
     if args is not None:
         # load values from commandline args
@@ -425,15 +425,16 @@ class SpriteSelector(object):
         for file in glob(output_path(path)):
             sprite = Sprite(file)
             image = get_image_for_sprite(sprite)
-            if image is None: continue
-            button = Button(frame, image=image, command=lambda sprite=sprite: self.select_sprite(sprite))
+            if image is None:
+                continue
+            button = Button(frame, image=image, command=lambda spr=sprite: self.select_sprite(spr))
             ToolTips.register(button, sprite.name + ("\nBy: %s" % sprite.author_name if sprite.author_name is not None else ""))
             button.image = image
             button.grid(row=i // 16, column=i % 16)
             i += 1
 
         if i == 0:
-            label = Label(frame, text="Put sprites in the Sprites/Unoffical folder to have them appear here.")
+            label = Label(frame, text=no_results_label)
             label.pack()
 
 
@@ -442,7 +443,7 @@ class SpriteSelector(object):
         self.window.destroy()
         self.parent.update()
         def work(task):
-            resultmessage=""
+            resultmessage = ""
             successful = True
 
             def finished():
@@ -467,7 +468,7 @@ class SpriteSelector(object):
                 current_sprites = [os.path.basename(file) for file in glob(self.official_sprite_dir+'/*')]
                 official_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path)) for sprite in sprites_arr]
                 needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in official_sprites if filename not in current_sprites]
-                bundled_sprites=[]
+                bundled_sprites = []
 
                 official_filenames = [filename for (_, filename) in official_sprites]
                 obsolete_sprites = [sprite for sprite in current_sprites if sprite not in official_filenames]
@@ -511,7 +512,7 @@ class SpriteSelector(object):
         sprite = filedialog.askopenfilename()
         try:
             self.callback(Sprite(sprite))
-        except:
+        except Exception:
             self.callback(None)
         self.window.destroy()
 
@@ -535,22 +536,20 @@ class SpriteSelector(object):
     def official_sprite_dir(self):
         if is_bundled():
             return output_path("sprites/official")
-        else:
-            return self.local_official_sprite_dir
+        return self.local_official_sprite_dir
 
     @property
-    def local_official_sprite_dir(site):
+    def local_official_sprite_dir(self):
         return local_path("data/sprites/official")
 
     @property
     def unofficial_sprite_dir(self):
         if is_bundled():
             return output_path("sprites/unofficial")
-        else:
-            return self.local_unofficial_sprite_dir
+        return self.local_unofficial_sprite_dir
 
     @property
-    def local_unofficial_sprite_dir(site):
+    def local_unofficial_sprite_dir(self):
         return local_path("data/sprites/unofficial")
 
 
@@ -563,9 +562,8 @@ def get_image_for_sprite(sprite):
     def draw_sprite_into_gif(add_palette_color, set_pixel_color_index):
 
         def drawsprite(spr, pal_as_colors, offset):
-            for y in range(len(spr)):
-                for x in range(len(spr[y])):
-                    pal_index = spr[y][x]
+            for y, row in enumerate(spr):
+                for x, pal_index in enumerate(row):
                     if pal_index:
                         color = pal_as_colors[pal_index - 1]
                         set_pixel_color_index(x + offset[0], y + offset[1], color)

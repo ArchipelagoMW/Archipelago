@@ -8,7 +8,7 @@ def set_icon(window):
     er16 = tk.PhotoImage(file=local_path('data/ER16.gif'))
     er32 = tk.PhotoImage(file=local_path('data/ER32.gif'))
     er48 = tk.PhotoImage(file=local_path('data/ER32.gif'))
-    window.tk.call('wm', 'iconphoto', window._w, er16, er32, er48)
+    window.tk.call('wm', 'iconphoto', window._w, er16, er32, er48) # pylint: disable=protected-access
 
 # Although tkinter is intended to be thread safe, there are many reports of issues
 # some which may be platform specific, or depend on if the TCL library was compiled without
@@ -19,7 +19,7 @@ class BackgroundTask(object):
         self.queue = queue.Queue()
         self.running = True
         self.process_queue()
-        self.task=threading.Thread(target=code_to_run , args=(self,))
+        self.task = threading.Thread(target=code_to_run, args=(self,))
         self.task.start()
 
     def stop(self):
@@ -51,12 +51,12 @@ class BackgroundTaskProgress(BackgroundTask):
         self.window['padx'] = 5
         self.window['pady'] = 5
 
-        self.window.attributes("-toolwindow",1)
+        self.window.attributes("-toolwindow", 1)
 
         self.window.wm_title(title)
-        self.labelVar = tk.StringVar()
-        self.labelVar.set("")
-        self.label = tk.Label(self.window, textvariable = self.labelVar, width=50)
+        self.label_var = tk.StringVar()
+        self.label_var.set("")
+        self.label = tk.Label(self.window, textvariable=self.label_var, width=50)
         self.label.pack()
         self.window.resizable(width=False, height=False)
 
@@ -66,7 +66,7 @@ class BackgroundTaskProgress(BackgroundTask):
 
     #safe to call from worker thread
     def update_status(self, text):
-        self.queue_event(lambda text=text: self.labelVar.set(text))
+        self.queue_event(lambda: self.label_var.set(text))
 
     # only call this in an event callback
     def close_window(self):
@@ -123,7 +123,7 @@ class ToolTips(object):
                 cls.fg = "systeminfotext"
                 widget.winfo_rgb(cls.fg)  # make sure system colors exist
                 widget.winfo_rgb(cls.bg)
-            except:
+            except Exception:
                 cls.bg = "#ffffe0"
                 cls.fg = "black"
 
@@ -162,7 +162,6 @@ class ToolTips(object):
 
     @classmethod
     def motion(cls, event):
-        widget = event.widget
         cls.xy = event.x_root + 16, event.y_root + 10
         cls.event_xy = event.x, event.y
 

@@ -11,8 +11,7 @@ class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
     def _get_help_string(self, action):
         return textwrap.dedent(action.help)
 
-
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('--rom', default='ER_base.sfc', help='Path to an ALttP JAP(1.0) rom to use as a base.')
@@ -47,3 +46,6 @@ if __name__ == '__main__':
     logging.basicConfig(format='%(message)s', level=loglevel)
 
     adjust(args=args)
+
+if __name__ == '__main__':
+    main()

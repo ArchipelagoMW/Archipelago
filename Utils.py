@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 
 def is_bundled():
@@ -10,7 +11,7 @@ def local_path(path):
 
     if is_bundled():
         # we are running in a bundle
-        local_path.cached_path = sys._MEIPASS
+        local_path.cached_path = sys._MEIPASS # pylint: disable=protected-access,no-member
     else:
         # we are running in a normal Python environment
         local_path.cached_path = os.path.dirname(os.path.abspath(__file__))
@@ -40,7 +41,7 @@ def output_path(path):
             documents = buf.value
 
         elif sys.platform == 'darwin':
-            from AppKit import NSSearchPathForDirectoriesInDomains
+            from AppKit import NSSearchPathForDirectoriesInDomains # pylint: disable=import-error
             # http://developer.apple.com/DOCUMENTATION/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Functions/Reference/reference.html#//apple_ref/c/func/NSSearchPathForDirectoriesInDomains
             NSDocumentDirectory = 9
             NSUserDomainMask = 1
@@ -60,7 +61,7 @@ def open_file(filename):
     if sys.platform == 'win32':
         os.startfile(filename)
     else:
-        open_Command = 'open' if sys.platform == 'darwin' else 'xdg-open'
+        open_command = 'open' if sys.platform == 'darwin' else 'xdg-open'
         subprocess.call([open_command, filename])
 
 def close_console():
@@ -69,5 +70,5 @@ def close_console():
         import ctypes.wintypes
         try:
             ctypes.windll.kernel32.FreeConsole()
-        except:
+        except Exception:
             pass

@@ -1,18 +1,19 @@
+import argparse
+import hashlib
+import logging
+import os
+import random
+import time
+import sys
+
 from BaseClasses import World
 from Regions import create_regions
 from EntranceShuffle import link_entrances, connect_entrance, connect_two_way, connect_exit
-from Rom import patch_rom, LocalRom, Sprite, write_string_to_rom
+from Rom import patch_rom, LocalRom, write_string_to_rom
 from Rules import set_rules
 from Dungeons import create_dungeons
 from Items import ItemFactory
 from Main import create_playthrough
-import random
-import time
-import logging
-import argparse
-import os
-import hashlib
-import sys
 
 __version__ = '0.2-dev'
 
@@ -26,8 +27,8 @@ logic_hash = [182, 244, 144, 92, 149, 200, 93, 183, 124, 169, 226, 46, 111, 163,
               153, 217, 252, 158, 25, 205, 22, 133, 254, 138, 203, 118, 210, 204, 82, 97, 52, 164, 68, 139, 120, 109, 54, 3, 41, 179, 212, 42]
 
 
-def main(args, seed=None):
-    start = time.clock()
+def main(args):
+    start_time = time.clock()
 
     # initialize the world
     world = World('vanilla', 'noglitches', 'standard', 'normal', 'none', 'on', 'ganon', 'freshness', False, False, False, args.quickswap, args.fastmenu, args.disablemusic, False)
@@ -41,7 +42,7 @@ def main(args, seed=None):
 
     random.seed(world.seed)
 
-    logger.info('ALttP Plandomizer Version %s  -  Seed: %s\n\n' % (__version__, args.plando))
+    logger.info('ALttP Plandomizer Version %s  -  Seed: %s\n\n', __version__, args.plando)
 
     create_regions(world)
     create_dungeons(world)
@@ -74,7 +75,7 @@ def main(args, seed=None):
     logger.info('Patching ROM.')
 
     if args.sprite is not None:
-        sprite = Sprite(args.sprite)
+        sprite = bytearray(open(args.sprite, 'rb').read())
     else:
         sprite = None
 
@@ -84,8 +85,8 @@ def main(args, seed=None):
     for textname, texttype, text in text_patches:
         if texttype == 'text':
             write_string_to_rom(rom, textname, text)
-        elif texttype == 'credit':
-            write_credits_string_to_rom(rom, textname, text)
+        #elif texttype == 'credit':
+        #    write_credits_string_to_rom(rom, textname, text)
 
     outfilebase = 'Plando_%s_%s' % (os.path.splitext(os.path.basename(args.plando))[0], world.seed)
 
@@ -94,7 +95,7 @@ def main(args, seed=None):
         world.spoiler.to_file('%s_Spoiler.txt' % outfilebase)
 
     logger.info('Done. Enjoy.')
-    logger.debug('Total Time: %s' % (time.clock() - start))
+    logger.debug('Total Time: %s', time.clock() - start_time)
 
     return world
 
@@ -171,7 +172,7 @@ def fill_world(world, plando, text_patches):
                 locationstr, itemstr = line.split(':', 1)
                 location = world.get_location(locationstr.strip())
                 if location is None:
-                    logger.warn('Unknown location: %s' % locationstr)
+                    logger.warning('Unknown location: %s', locationstr)
                     continue
                 else:
                     item = ItemFactory(itemstr.strip())
@@ -198,7 +199,7 @@ def fill_world(world, plando, text_patches):
     world.get_location('Agahnim 2').item = ItemFactory('Beat Agahnim 2')
 
 
-if __name__ == '__main__':
+def start():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--create_spoiler', help='Output a Spoiler File', action='store_true')
     parser.add_argument('--ignore_unsolvable', help='Do not abort if seed is deemed unsolvable.', action='store_true')
@@ -230,3 +231,6 @@ if __name__ == '__main__':
     logging.basicConfig(format='%(message)s', level=loglevel)
 
     main(args=args)
+
+if __name__ == '__main__':
+    start()

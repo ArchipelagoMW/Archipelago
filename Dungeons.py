@@ -1,7 +1,8 @@
-from Items import ItemFactory
+import random
+
 from BaseClasses import Dungeon
 from Fill import fill_restrictive
-import random
+from Items import ItemFactory
 
 
 def create_dungeons(world):
@@ -62,7 +63,7 @@ def fill_dungeons(world):
             world.push_item(bk_location, big_key, False)
             bk_location.event = True
             dungeon_locations.remove(bk_location)
-            all_state._clear_cache()
+            all_state.clear_cached_unreachable()
             big_key = None
 
         # next place small keys
@@ -88,7 +89,7 @@ def fill_dungeons(world):
             world.push_item(sk_location, small_key, False)
             sk_location.event = True
             dungeon_locations.remove(sk_location)
-            all_state._clear_cache()
+            all_state.clear_cached_unreachable()
 
         if small_keys:
             # key placement not finished, loop again
@@ -100,7 +101,7 @@ def fill_dungeons(world):
                 di_location = dungeon_locations.pop()
                 world.push_item(di_location, dungeon_item, False)
 
-    world.state._clear_cache()
+    world.state.clear_cached_unreachable()
 
 
 def fill_dungeons_restrictive(world, shuffled_locations):
@@ -119,7 +120,7 @@ def fill_dungeons_restrictive(world, shuffled_locations):
 
     fill_restrictive(world, all_state_base, shuffled_locations, dungeon_items)
 
-    world.state._clear_cache()
+    world.state.clear_cached_unreachable()
 
 
 dungeon_music_addresses = {'Eastern Palace - Prize': [0x1559A],

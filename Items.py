@@ -1,6 +1,6 @@
-from BaseClasses import World, Item
-import random
 import logging
+
+from BaseClasses import Item
 
 
 def ItemFactory(items):
@@ -14,13 +14,12 @@ def ItemFactory(items):
             advancement, priority, type, code, pedestal_hint, pedestal_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit = item_table[item]
             ret.append(Item(item, advancement, priority, type, code, pedestal_hint, pedestal_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit))
         else:
-            logging.getLogger('').warning('Unknown Item: %s' % item)
+            logging.getLogger('').warning('Unknown Item: %s', item)
             return None
 
     if singleton:
         return ret[0]
-    else:
-        return ret
+    return ret
 
 
 # Format: Name: (Advancement, Priority, Type, ItemCode, Pedestal Hint Text, Pedestal Credit Text, Sick Kid Credit Text, Zora Credit Text, Witch Credit Text, Flute Boy Credit Text)

@@ -120,7 +120,7 @@ class Credits(object):
         self.scene_order = ['castle', 'sancturary', 'kakariko', 'desert', 'hera', 'house', 'zora', 'witch',
                             'lumberjacks', 'grove', 'well', 'smithy', 'kakariko2', 'bridge', 'woods', 'pedestal']
 
-    def update_credits_line(self, scene, line, text, align='center'):
+    def update_credits_line(self, scene, line, text):
         scenes = self.credit_scenes
 
         text = text[:32]
@@ -162,7 +162,7 @@ class SceneCreditLine(CreditLine):
     """Base class for credit lines for the scene portion of the credits"""
     def __init__(self, y, text, align='center'):
         self.y = y
-        super().__init__(text,align)
+        super().__init__(text, align)
 
     def header(self, x=None, y=None, length=None):
         if x is None:
@@ -456,9 +456,10 @@ def char_to_alttp_char(char):
 
     return char_map.get(char, 0xFF)
 
-
 class TextMapper(object):
     number_offset = None
+    alpha_offset = 0
+    char_map = {}
     @classmethod
     def map_char(cls, char):
         if cls.number_offset is not None:
@@ -492,7 +493,7 @@ class GreenCreditMapper(TextMapper):
 
 class RedCreditMapper(TextMapper):
     char_map = {' ': 0x9F} #fixme
-    alpha_offset= -0x61
+    alpha_offset = -0x61
 
 class LargeCreditTopMapper(TextMapper):
     char_map = {' ': 0x9F,

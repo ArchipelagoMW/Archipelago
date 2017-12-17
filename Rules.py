@@ -428,7 +428,7 @@ def open_rules(world):
 
     # to prevent key-lock in keysanity we need to prevent these chests from having an item that
     # blocks the small key
-    if (world.keysanity):
+    if world.keysanity:
         set_rule(world.get_location('Hyrule Castle - Boomerang Chest'), lambda state: state.has('Small Key (Escape)'))
         set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest'), lambda state: state.has('Small Key (Escape)'))
 
@@ -483,7 +483,10 @@ def set_trock_key_rules(world):
     set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (South)'), lambda state: state.has('Small Key (Turtle Rock)', 4))
 
     # this is just the pokey room with one more key
-    set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (North)'), lambda state: state.has('Small Key (Turtle Rock)', 2)) if not can_reach_back else set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (North)'), lambda state: state.has('Small Key (Turtle Rock)', 3))
+    if not can_reach_back:
+        set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (North)'), lambda state: state.has('Small Key (Turtle Rock)', 2))
+    else:
+        set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (North)'), lambda state: state.has('Small Key (Turtle Rock)', 3))
 
     # the most complicated one
     # if we have back entrance access, we could waste all keys before touching this

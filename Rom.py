@@ -1,15 +1,17 @@
-from Dungeons import dungeon_music_addresses
-from Text import string_to_alttp_text, text_addresses, Credits
-from Text import Uncle_texts, Ganon1_texts, PyramidFairy_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts
-from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts
-from Utils import local_path
-import random
 import io
 import json
 import hashlib
 import logging
 import os
 import struct
+import random
+
+from Dungeons import dungeon_music_addresses
+from Text import string_to_alttp_text, text_addresses, Credits
+from Text import Uncle_texts, Ganon1_texts, PyramidFairy_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts
+from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts
+from Utils import local_path
+
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
 RANDOMIZERBASEHASH = '1deebb05eccefd2ab68297c6e9c0d25f'
@@ -33,13 +35,15 @@ class JsonRom(object):
         self.write_bytes(address, int32_as_bytes(value))
 
     def write_to_file(self, file):
-        json.dump([self.patches], open(file, 'w'))
+        with open(file, 'w') as stream:
+            json.dump([self.patches], stream)
 
 
 class LocalRom(object):
 
     def __init__(self, file, patch=True):
-        self.buffer = bytearray(open(file, 'rb').read())
+        with open(file, 'rb') as stream:
+            self.buffer = bytearray(stream.read())
         if patch:
             self.patch_base_rom()
 
@@ -64,14 +68,15 @@ class LocalRom(object):
         # verify correct checksum of baserom
         basemd5 = hashlib.md5()
         basemd5.update(self.buffer)
-        if not JAP10HASH == basemd5.hexdigest():
+        if JAP10HASH != basemd5.hexdigest():
             logging.getLogger('').warning('Supplied Base Rom does not match known MD5 for JAP(1.0) release. Will try to patch anyway.')
 
         # extend to 2MB
         self.buffer.extend(bytearray([0x00] * (2097152 - len(self.buffer))))
 
         # load randomizer patches
-        patches = json.load(open(local_path('data/base2current.json'), 'r'))
+        with open(local_path('data/base2current.json'), 'r') as stream:
+            patches = json.load(stream)
         for patch in patches:
             if isinstance(patch, dict):
                 for baseaddress, values in patch.items():
@@ -80,7 +85,7 @@ class LocalRom(object):
         # verify md5
         patchedmd5 = hashlib.md5()
         patchedmd5.update(self.buffer)
-        if not RANDOMIZERBASEHASH == patchedmd5.hexdigest():
+        if RANDOMIZERBASEHASH != patchedmd5.hexdigest():
             raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
 
     def write_crc(self):
@@ -127,7 +132,7 @@ class Sprite(object):
             self.palette = filedata[0xDD308:0xDD380]
             self.glove_palette = filedata[0xDEDF5:0xDEDF9]
         elif filedata.startswith(b'ZSPR'):
-            result = self.parse_zspr(filedata,1)
+            result = self.parse_zspr(filedata, 1)
             if result is None:
                 self.valid = False
                 return
@@ -148,23 +153,27 @@ class Sprite(object):
             else:
                 self.valid = False
         else:
-           self.valid = False
+            self.valid = False
 
     def decode8(self, pos):
-        arr=[[0 for _ in range(8)] for _ in range(8)]
+        arr = [[0 for _ in range(8)] for _ in range(8)]
         for y in range(8):
             for x in range(8):
                 position = 1<<(7-x)
-                val=0;
-                if self.sprite[pos+2*y] & position: val += 1
-                if self.sprite[pos+2*y+1] & position: val += 2
-                if self.sprite[pos+2*y+16] & position: val += 4
-                if self.sprite[pos+2*y+17] & position: val += 8
-                arr[y][x]= val
+                val = 0
+                if self.sprite[pos+2*y] & position:
+                    val += 1
+                if self.sprite[pos+2*y+1] & position:
+                    val += 2
+                if self.sprite[pos+2*y+16] & position:
+                    val += 4
+                if self.sprite[pos+2*y+17] & position:
+                    val += 8
+                arr[y][x] = val
         return arr
 
     def decode16(self, pos):
-        arr=[[0 for _ in range(16)] for _ in range(16)]
+        arr = [[0 for _ in range(16)] for _ in range(16)]
         top_left = self.decode8(pos)
         top_right = self.decode8(pos+0x20)
         bottom_left = self.decode8(pos+0x200)
@@ -183,7 +192,7 @@ class Sprite(object):
         headersize = struct.calcsize(headerstr)
         if len(filedata) < headersize:
             return None
-        (version, csum, icsum, sprite_offset, sprite_size, palette_offset, palette_size, kind) = struct.unpack_from(headerstr,filedata)
+        (version, csum, icsum, sprite_offset, sprite_size, palette_offset, palette_size, kind) = struct.unpack_from(headerstr, filedata)
         if version not in [1]:
             logger.error('Error parsing ZSPR file: Version %g not supported', version)
             return None
@@ -211,7 +220,7 @@ class Sprite(object):
         real_csum = sum(filedata) % 0x10000
         if real_csum != csum or real_csum ^ 0xFFFF != icsum:
             logger.warning('ZSPR file has incorrect checksum. It may be corrupted.')
-            pass
+
         sprite = filedata[sprite_offset:sprite_offset + sprite_size]
         palette = filedata[palette_offset:palette_offset + palette_size]
 
@@ -223,14 +232,15 @@ class Sprite(object):
 
     def decode_palette(self):
         "Returns the palettes as an array of arrays of 15 colors"
-        def array_chunk(arr,size):
+        def array_chunk(arr, size):
             return list(zip(*[iter(arr)] * size))
         def make_int16(pair):
             return pair[1]<<8 | pair[0]
         def expand_color(i):
-            return ( (i & 0x1F)*8, (i>>5 & 0x1F)*8, (i>>10 & 0x1F)*8)
+            return ((i & 0x1F) * 8, (i>>5 & 0x1F) * 8, (i>>10 & 0x1F) * 8)
         raw_palette = self.palette
-        if raw_palette is None: raw_palette = Sprite.default_palette
+        if raw_palette is None:
+            raw_palette = Sprite.default_palette
         # turn palette data into a list of RGB tuples with 8 bit values
         palette_as_colors = [expand_color(make_int16(chnk)) for chnk in array_chunk(raw_palette, 2)]
 
@@ -567,9 +577,9 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     if world.shuffle == 'vanilla':
         ERtimeincrease = 0
     elif world.shuffle in ['dungeonssimple', 'dungeonsfull']:
-	    ERtimeincrease = 10
+        ERtimeincrease = 10
     else:
-	    ERtimeincrease = 20
+        ERtimeincrease = 20
     if world.keysanity:
         ERtimeincrease = ERtimeincrease + 15
     if world.clock_mode == 'off':
@@ -836,7 +846,8 @@ def apply_rom_settings(rom, beep, quickswap, fastmenu, disable_music, sprite):
 
 
 def write_sprite(rom, sprite):
-    if not sprite.valid: return
+    if not sprite.valid:
+        return
     rom.write_bytes(0x80000, sprite.sprite)
     if sprite.palette is not None:
         rom.write_bytes(0xDD308, sprite.palette)
