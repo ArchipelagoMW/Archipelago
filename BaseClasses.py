@@ -120,6 +120,15 @@ class World(object):
                         ret.prog_items.append('Titans Mitts')
                     else:
                         ret.prog_items.append('Power Glove')
+                elif 'Shield' in item.name:
+                    if ret.has('Mirror Shield'):
+                        pass
+                    elif ret.has('Red Shield'):
+                        ret.prog_items.append('Mirror Shield')
+                    elif ret.has('Blue Shield'):
+                        ret.prog_items.append('Red Shield')
+                    else:
+                        ret.prog_items.append('Blue Shield')
 
             elif item.advancement or item.key:
                 ret.prog_items.append(item.name)
@@ -473,6 +482,7 @@ class Region(object):
         self.locations = []
         self.dungeon = None
         self.world = None
+        self.is_light_world = False # will be set aftermaking connections.
         self.spot_type = 'Region'
         self.hint_text = 'Hyrule'
         self.recursion_count = 0

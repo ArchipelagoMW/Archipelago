@@ -4,10 +4,11 @@ import json
 import random
 import os
 import shutil
-from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, Y, Entry, Spinbox, Button, filedialog, messagebox
+from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, Y, Entry, Spinbox, Button, filedialog, messagebox, ttk
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
+from AdjusterMain import adjust
 from GuiUtils import ToolTips, set_icon, BackgroundTaskProgress
 from Main import main, __version__ as ESVersion
 from Rom import Sprite
@@ -20,7 +21,33 @@ def guiMain(args=None):
 
     set_icon(mainWindow)
 
-    topFrame = Frame(mainWindow)
+    notebook = ttk.Notebook(mainWindow)
+    randomizerWindow = ttk.Frame(notebook)
+    adjustWindow = ttk.Frame(notebook)
+    notebook.add(randomizerWindow, text='Randomize')
+    notebook.add(adjustWindow, text='Adjust')
+    notebook.pack()
+
+    # Shared Controls
+
+    farBottomFrame = Frame(mainWindow)
+
+    def open_output():
+        open_file(output_path(''))
+
+    openOutputButton = Button(farBottomFrame, text='Open Output Directory', command=open_output)
+
+    if os.path.exists(local_path('README.html')):
+        def open_readme():
+            open_file(local_path('README.html'))
+        openReadmeButton = Button(farBottomFrame, text='Open Documentation', command=open_readme)
+        openReadmeButton.pack(side=LEFT)
+
+    farBottomFrame.pack(side=BOTTOM, fill=X, padx=5, pady=5)
+
+    # randomizer controls
+
+    topFrame = Frame(randomizerWindow)
     rightHalfFrame = Frame(topFrame)
     checkBoxFrame = Frame(rightHalfFrame)
 
@@ -186,8 +213,7 @@ def guiMain(args=None):
     shuffleFrame.pack(expand=True, anchor=E)
     heartbeepFrame.pack(expand=True, anchor=E)
 
-    bottomFrame = Frame(mainWindow)
-    farBottomFrame = Frame(mainWindow)
+    bottomFrame = Frame(randomizerWindow)
 
     seedLabel = Label(bottomFrame, text='Seed #')
     seedVar = StringVar()
@@ -236,17 +262,6 @@ def guiMain(args=None):
 
     generateButton = Button(bottomFrame, text='Generate Patched Rom', command=generateRom)
 
-    def open_output():
-        open_file(output_path(''))
-
-    openOutputButton = Button(farBottomFrame, text='Open Output Directory', command=open_output)
-
-    if os.path.exists(local_path('README.html')):
-        def open_readme():
-            open_file(local_path('README.html'))
-        openReadmeButton = Button(farBottomFrame, text='Open Documentation', command=open_readme)
-        openReadmeButton.pack(side=LEFT)
-
     seedLabel.pack(side=LEFT)
     seedEntry.pack(side=LEFT)
     countLabel.pack(side=LEFT, padx=(5,0))
@@ -258,8 +273,88 @@ def guiMain(args=None):
     drowDownFrame.pack(side=LEFT)
     rightHalfFrame.pack(side=RIGHT)
     topFrame.pack(side=TOP)
-    farBottomFrame.pack(side=BOTTOM, fill=X, padx=5, pady=5)
     bottomFrame.pack(side=BOTTOM)
+
+    # Adjuster Controls
+
+    topFrame2 = Frame(adjustWindow)
+    rightHalfFrame2 = Frame(topFrame2)
+    checkBoxFrame2 = Frame(rightHalfFrame2)
+
+    quickSwapCheckbutton2 = Checkbutton(checkBoxFrame2, text="Enabled L/R Item quickswapping", variable=quickSwapVar)
+    fastMenuCheckbutton2 = Checkbutton(checkBoxFrame2, text="Enable instant menu", variable=fastMenuVar)
+    disableMusicCheckbutton2 = Checkbutton(checkBoxFrame2, text="Disable game music", variable=disableMusicVar)
+
+    quickSwapCheckbutton2.pack(expand=True, anchor=W)
+    fastMenuCheckbutton2.pack(expand=True, anchor=W)
+    disableMusicCheckbutton2.pack(expand=True, anchor=W)
+
+    fileDialogFrame2 = Frame(rightHalfFrame2)
+
+    romDialogFrame2 = Frame(fileDialogFrame2)
+    baseRomLabel2 = Label(romDialogFrame2, text='Rom to adjust')
+    romVar2 = StringVar()
+    romEntry2 = Entry(romDialogFrame2, textvariable=romVar2)
+
+    def RomSelect2():
+        rom = filedialog.askopenfilename()
+        romVar2.set(rom)
+    romSelectButton2 = Button(romDialogFrame2, text='Select Rom', command=RomSelect2)
+
+    baseRomLabel2.pack(side=LEFT)
+    romEntry2.pack(side=LEFT)
+    romSelectButton2.pack(side=LEFT)
+
+    spriteDialogFrame2 = Frame(fileDialogFrame2)
+    baseSpriteLabel2 = Label(spriteDialogFrame2, text='Link Sprite')
+    spriteEntry2 = Label(spriteDialogFrame2, textvariable=spriteNameVar)
+
+    spriteSelectButton2 = Button(spriteDialogFrame2, text='Select Sprite', command=SpriteSelect)
+
+    baseSpriteLabel2.pack(side=LEFT)
+    spriteEntry2.pack(side=LEFT)
+    spriteSelectButton2.pack(side=LEFT)
+
+    romDialogFrame2.pack()
+    spriteDialogFrame2.pack()
+
+    checkBoxFrame2.pack()
+    fileDialogFrame2.pack()
+
+    drowDownFrame2 = Frame(topFrame2)
+    heartbeepFrame2 = Frame(drowDownFrame2)
+    heartbeepOptionMenu2 = OptionMenu(heartbeepFrame2, heartbeepVar, 'normal', 'half', 'quarter', 'off')
+    heartbeepOptionMenu2.pack(side=RIGHT)
+    heartbeepLabel2 = Label(heartbeepFrame2, text='Heartbeep sound rate')
+    heartbeepLabel2.pack(side=LEFT)
+
+    heartbeepFrame2.pack(expand=True, anchor=E)
+
+    bottomFrame2 = Frame(topFrame2)
+
+    def adjustRom():
+        guiargs = Namespace
+        guiargs.heartbeep = heartbeepVar.get()
+        guiargs.fastmenu = bool(fastMenuVar.get())
+        guiargs.quickswap = bool(quickSwapVar.get())
+        guiargs.disablemusic = bool(disableMusicVar.get())
+        guiargs.rom = romVar2.get()
+        guiargs.sprite = sprite
+        try:
+            adjust(args=guiargs)
+        except Exception as e:
+            messagebox.showerror(title="Error while creating seed", message=str(e))
+        else:
+            messagebox.showinfo(title="Success", message="Rom patched successfully")
+
+    adjustButton = Button(bottomFrame2, text='Adjust Rom', command=adjustRom)
+
+    adjustButton.pack(side=LEFT, padx=(5,0))
+
+    drowDownFrame2.pack(side=LEFT, pady=(0,40))
+    rightHalfFrame2.pack(side=RIGHT)
+    topFrame2.pack(side=TOP, pady=30)
+    bottomFrame2.pack(side=BOTTOM, pady=(180,0))
 
     if args is not None:
         # load values from commandline args

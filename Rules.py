@@ -33,6 +33,8 @@ def set_rules(world):
     if not world.swamp_patch_required:
         add_rule(world.get_entrance('Swamp Palace Moat'), lambda state: state.has_Mirror())
 
+    set_bunny_rules(world)
+
 
 def set_rule(spot, rule):
     spot.access_rule = rule
@@ -76,7 +78,7 @@ def global_rules(world):
     world.get_region('Old Man House').can_reach = lambda state: state.can_reach('Old Man', 'Location') or old_rule(state)
 
     # overworld requirements
-    set_rule(world.get_entrance('Kings Grave'), lambda state: state.has_Boots() and (state.can_lift_heavy_rocks() or (state.has_Mirror() and state.can_reach('West Dark World'))))
+    set_rule(world.get_entrance('Kings Grave'), lambda state: state.has_Boots() and (state.can_lift_heavy_rocks() or (state.has_Pearl() and state.has_Mirror() and state.can_reach('West Dark World'))))
     set_rule(world.get_entrance('Bonk Fairy (Light)'), lambda state: state.has_Boots())
     set_rule(world.get_location('Sunken Treasure'), lambda state: state.can_reach('Dam'))
     set_rule(world.get_entrance('Bat Cave Drop Ledge'), lambda state: state.has('Hammer'))
@@ -90,9 +92,9 @@ def global_rules(world):
     set_rule(world.get_entrance('Flute Spot 1'), lambda state: state.has('Ocarina'))
     set_rule(world.get_entrance('Lake Hylia Central Island Teleporter'), lambda state: state.can_lift_heavy_rocks())
     set_rule(world.get_entrance('Dark Desert Teleporter'), lambda state: state.has('Ocarina') and state.can_lift_heavy_rocks())
-    set_rule(world.get_entrance('East Hyrule Teleporter'), lambda state: state.has('Hammer') and state.can_lift_rocks() and state.has_Pearl())
-    set_rule(world.get_entrance('South Hyrule Teleporter'), lambda state: state.has('Hammer') and state.can_lift_rocks() and state.has_Pearl())
-    set_rule(world.get_entrance('Kakariko Teleporter'), lambda state: ((state.has('Hammer') and state.can_lift_rocks()) or state.can_lift_heavy_rocks()) and state.has_Pearl())
+    set_rule(world.get_entrance('East Hyrule Teleporter'), lambda state: state.has('Hammer') and state.can_lift_rocks() and state.has_Pearl()) # bunny cannot use hammer
+    set_rule(world.get_entrance('South Hyrule Teleporter'), lambda state: state.has('Hammer') and state.can_lift_rocks() and state.has_Pearl()) # bunny cannot use hammer
+    set_rule(world.get_entrance('Kakariko Teleporter'), lambda state: ((state.has('Hammer') and state.can_lift_rocks()) or state.can_lift_heavy_rocks()) and state.has_Pearl()) # bunny cannot lift bushes
     set_rule(world.get_location('Flute Spot'), lambda state: state.has('Shovel'))
     set_rule(world.get_location('Purple Chest'), lambda state: state.can_reach('Blacksmith', 'Location'))  # Can S&Q with chest
 
@@ -123,66 +125,62 @@ def global_rules(world):
     set_rule(world.get_location('Ether Tablet'), lambda state: state.has('Book of Mudora') and state.has_beam_sword())
     set_rule(world.get_entrance('East Death Mountain (Top)'), lambda state: state.has('Hammer'))
 
-    set_rule(world.get_location('Catfish'), lambda state: state.has_Pearl() and state.can_lift_rocks())
-    set_rule(world.get_entrance('Dark Lake Hylia Fairy'), lambda state: state.has_Pearl())
-    set_rule(world.get_entrance('Palace of Darkness Hint'), lambda state: state.has_Pearl())
-    set_rule(world.get_entrance('East Dark World Hint'), lambda state: state.has_Pearl())
+    set_rule(world.get_location('Catfish'), lambda state: state.can_lift_rocks())
     set_rule(world.get_entrance('Dark World Potion Shop'), lambda state: state.has_Pearl() and (state.can_lift_rocks() or state.has('Hammer') or state.has('Flippers')))
     set_rule(world.get_entrance('South Dark World Bridge'), lambda state: state.has('Hammer') and state.has_Pearl())
-    set_rule(world.get_entrance('Bonk Fairy (Dark)'), lambda state: state.has_Boots())
+    set_rule(world.get_entrance('Bonk Fairy (Dark)'), lambda state: state.has_Pearl() and state.has_Boots())
     set_rule(world.get_entrance('West Dark World Gap'), lambda state: state.has_Pearl() and state.has('Hookshot') and (state.has('Flippers') or state.has('Hammer') or state.can_lift_rocks()))
-    set_rule(world.get_entrance('Palace of Darkness'), lambda state: state.has_Pearl())
+    set_rule(world.get_entrance('Palace of Darkness'), lambda state: state.has_Pearl()) # kiki needs pearl
     set_rule(world.get_entrance('Hyrule Castle Ledge Mirror Spot'), lambda state: state.has_Mirror())
+    set_rule(world.get_entrance('Hyrule Castle Main Gate'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Dark Lake Hylia Drop (East)'), lambda state: (state.has_Pearl() and state.has('Flippers') or state.has_Mirror()))  # Overworld Bunny Revival
     set_rule(world.get_location('Bombos Tablet'), lambda state: state.has('Book of Mudora') and state.has_beam_sword() and state.has_Mirror())
-    set_rule(world.get_entrance('Dark Lake Hylia Drop (South)'), lambda state: state.has('Flippers'))  # ToDo any fake flipper set up?
-    set_rule(world.get_entrance('Dark Lake Hylia Ledge Spike Cave'), lambda state: state.can_lift_rocks())
-    set_rule(world.get_entrance('Dark Lake Hylia Ledge'), lambda state: state.has_Pearl())  # To avoid Bunny nonsense for now
+    set_rule(world.get_entrance('Dark Lake Hylia Drop (South)'), lambda state: state.has_Pearl() and state.has('Flippers'))  # ToDo any fake flipper set up?
+    set_rule(world.get_entrance('Dark Lake Hylia Ledge Fairy'), lambda state: state.has_Pearl()) # bomb required
+    set_rule(world.get_entrance('Dark Lake Hylia Ledge Spike Cave'), lambda state: state.can_lift_rocks() and state.has_Pearl())
     set_rule(world.get_entrance('Dark Lake Hylia Teleporter'), lambda state: state.has_Pearl() and (state.has('Hammer') or state.can_lift_rocks()))  # Fake Flippers
-    set_rule(world.get_entrance('Village of Outcasts Heavy Rock'), lambda state: state.can_lift_heavy_rocks())
+    set_rule(world.get_entrance('Village of Outcasts Heavy Rock'), lambda state: state.has_Pearl() and state.can_lift_heavy_rocks())
+    set_rule(world.get_entrance('Hype Cave'), lambda state: state.has_Pearl()) # bomb required
+    set_rule(world.get_entrance('Brewery'), lambda state: state.has_Pearl()) # bomb required
+    set_rule(world.get_entrance('Thieves Town'), lambda state: state.has_Pearl()) # bunny cannot pull
+    set_rule(world.get_entrance('Skull Woods First Section Hole (North)'), lambda state: state.has_Pearl()) # bunny cannot lift bush
     set_rule(world.get_entrance('Maze Race Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Cave 45'), lambda state: state.has_Mirror())
-    set_rule(world.get_entrance('East Dark World Bridge'), lambda state: state.has('Hammer'))
-    set_rule(world.get_entrance('Lake Hylia Island Mirror Spot'), lambda state: state.has_Mirror() and state.has('Flippers'))
+    set_rule(world.get_entrance('East Dark World Bridge'), lambda state: state.has_Pearl() and state.has('Hammer'))
+    set_rule(world.get_entrance('Lake Hylia Island Mirror Spot'), lambda state: state.has_Pearl() and state.has_Mirror() and state.has('Flippers'))
     set_rule(world.get_entrance('Lake Hylia Central Island Mirror Spot'), lambda state: state.has_Mirror())
-    set_rule(world.get_entrance('East Dark World River Pier'), lambda state: state.has('Flippers'))  # ToDo any fake flipper set up?
-    set_rule(world.get_entrance('Graveyard Cave'), lambda state: state.has_Mirror())
-    set_rule(world.get_entrance('Bumper Cave (Bottom)'), lambda state: state.can_lift_rocks())
+    set_rule(world.get_entrance('East Dark World River Pier'), lambda state: state.has_Pearl() and state.has('Flippers'))  # ToDo any fake flipper set up?
+    set_rule(world.get_entrance('Graveyard Cave'), lambda state: state.has_Pearl() and state.has_Mirror())
+    set_rule(world.get_entrance('Bumper Cave (Bottom)'), lambda state: state.has_Pearl() and state.can_lift_rocks())
     set_rule(world.get_entrance('Bumper Cave Ledge Mirror Spot'), lambda state: state.has_Mirror())
-    set_rule(world.get_entrance('Bat Cave Drop Ledge Mirror Spot'), lambda state: state.can_lift_heavy_rocks() and state.has_Mirror())
-    set_rule(world.get_entrance('Dark World Hammer Peg Cave'), lambda state: state.can_lift_heavy_rocks() and state.has('Hammer'))
-    set_rule(world.get_entrance('Dark World Shop'), lambda state: state.has('Hammer'))
+    set_rule(world.get_entrance('Bat Cave Drop Ledge Mirror Spot'), lambda state: state.has_Pearl() and state.can_lift_heavy_rocks() and state.has_Mirror())
+    set_rule(world.get_entrance('Dark World Hammer Peg Cave'), lambda state: state.has_Pearl() and state.can_lift_heavy_rocks() and state.has('Hammer'))
+    set_rule(world.get_entrance('Dark World Shop'), lambda state: state.has_Pearl() and state.has('Hammer'))
     set_rule(world.get_entrance('Bumper Cave Exit (Top)'), lambda state: state.has('Cape'))
     set_rule(world.get_entrance('Bumper Cave Exit (Bottom)'), lambda state: state.has('Cape') or state.has('Hookshot'))
-    set_rule(world.get_entrance('Skull Woods Final Section'), lambda state: state.has('Fire Rod'))
+
+    set_rule(world.get_entrance('Skull Woods Final Section'), lambda state: state.has('Fire Rod') and state.has_Pearl()) # bunny cannot use fire rod
     set_rule(world.get_entrance('Misery Mire'), lambda state: state.has_Pearl() and state.has_sword() and state.has_misery_mire_medallion())  # sword required to cast magic (!)
     set_rule(world.get_entrance('Desert Ledge (West) Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Desert Ledge Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Desert Palace Stairs Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Desert Palace Entrance (North) Mirror Spot'), lambda state: state.has_Mirror())
-    set_rule(world.get_entrance('Mire Shed'), lambda state: state.has_Pearl())  # ToDo Bunny Revival can give access to this cave in super bunny state. Not sure how to deal with shuffled entrances, as much easier to block of cave entrances than individual shuffled chests
-    set_rule(world.get_entrance('Dark Desert Hint'), lambda state: state.has_Pearl())  # ToDo Bunny Revival can give access to this cave in super bunny state. Not sure how to deal with shuffled entrances, as much easier to block of cave entrances than individual shuffled chests
-    set_rule(world.get_entrance('Dark Desert Fairy'), lambda state: state.has_Pearl())  # ToDo Bunny Revival can give access to this cave in super bunny state. Not sure how to deal with shuffled entrances, as much easier to block of cave entrances than individual shuffled chests
-    set_rule(world.get_entrance('Spike Cave'), lambda state: state.has_Pearl())
-    set_rule(world.get_entrance('Dark Death Mountain Fairy'), lambda state: state.has_Pearl())
     set_rule(world.get_entrance('Spectacle Rock Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Ganons Tower'), lambda state: state.has('Crystal 1') and state.has('Crystal 2') and state.has('Crystal 3') and state.has('Crystal 4') and state.has('Crystal 5') and state.has('Crystal 6') and state.has('Crystal 7'))
     set_rule(world.get_entrance('Hookshot Cave'), lambda state: state.can_lift_rocks() and state.has_Pearl())
+
     set_rule(world.get_entrance('East Death Mountain (Top) Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Mimic Cave Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Spiral Cave Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Fairy Ascension Mirror Spot'), lambda state: state.has_Mirror() and state.has_Pearl())  # need to lift flowers
     set_rule(world.get_entrance('Isolated Ledge Mirror Spot'), lambda state: state.has_Mirror())
-    set_rule(world.get_entrance('Superbunny Cave (Top)'), lambda state: state.has_Pearl())  # Chests inside could be  collected with super bunny, but may be shuffled. rather limit access for now ToDo
-    set_rule(world.get_entrance('Superbunny Cave (Bottom)'), lambda state: state.has_Pearl())
-    set_rule(world.get_entrance('Cave Shop (Dark Death Mountain)'), lambda state: state.has_Pearl())  # just for save bunny algo for now
     set_rule(world.get_entrance('Superbunny Cave Exit (Bottom)'), lambda state: False)  # Cannot get to bottom exit from top. Just exists for shuffling
     set_rule(world.get_location('Spike Cave'), lambda state: state.has('Hammer') and state.can_lift_rocks() and (state.has('Cane of Byrna') or state.has('Cape')) and (state.has_bottle() or state.has('Half Magic') or state.has('Quarter Magic')))
     set_rule(world.get_location('Hookshot Cave - Top Right'), lambda state: state.has('Hookshot'))
     set_rule(world.get_location('Hookshot Cave - Top Left'), lambda state: state.has('Hookshot'))
     set_rule(world.get_location('Hookshot Cave - Bottom Right'), lambda state: state.has('Hookshot') or state.has('Pegasus Boots'))
     set_rule(world.get_location('Hookshot Cave - Bottom Left'), lambda state: state.has('Hookshot'))
-    set_rule(world.get_location('Floating Island'), lambda state: state.has_Mirror())
+    set_rule(world.get_entrance('Floating Island Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Turtle Rock'), lambda state: state.has_Pearl() and state.has_sword() and state.has_turtle_rock_medallion() and state.can_reach('Turtle Rock (Top)', 'Region'))  # sword required to cast magic (!)
     set_rule(world.get_location('Mimic Cave'), lambda state: state.has('Hammer'))
 
@@ -356,8 +354,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Ganons Tower Moldorm Door'), lambda state: state.has('Small Key (Ganons Tower)', 4))
     set_rule(world.get_entrance('Ganons Tower Moldorm Gap'), lambda state: state.has('Hookshot'))
     set_rule(world.get_location('Agahnim 2'), lambda state: state.has_sword() or state.has('Hammer') or state.has('Bug Catching Net'))
-    set_rule(world.get_entrance('Pyramid Hole'), lambda state: state.has('Beat Agahnim 2') and state.has_Pearl())
-    set_rule(world.get_entrance('Pyramid Entrance'), lambda state: state.has_Pearl())
+    set_rule(world.get_entrance('Pyramid Hole'), lambda state: state.has('Beat Agahnim 2'))
     for location in ['Ganons Tower - Big Chest', 'Ganons Tower - Mini Helmasaur Room - Left', 'Ganons Tower - Mini Helmasaur Room - Right',
                      'Ganons Tower - Pre-Moldorm Chest', 'Ganons Tower - Validation Chest']:
         forbid_item(world.get_location(location), 'Big Key (Ganons Tower)')
@@ -372,10 +369,9 @@ def no_glitches_rules(world):
     set_rule(world.get_entrance('Zoras River'), lambda state: state.has('Flippers') or state.can_lift_rocks())
     set_rule(world.get_entrance('Lake Hylia Central Island Pier'), lambda state: state.has('Flippers'))  # can be fake flippered to
     set_rule(world.get_entrance('Hobo Bridge'), lambda state: state.has('Flippers'))
-    add_rule(world.get_entrance('Ice Palace'), lambda state: state.has_Pearl())
     set_rule(world.get_entrance('Dark Lake Hylia Drop (East)'), lambda state: state.has_Pearl() and state.has('Flippers'))
     set_rule(world.get_entrance('Dark Lake Hylia Teleporter'), lambda state: state.has_Pearl() and state.has('Flippers') and (state.has('Hammer') or state.can_lift_rocks()))
-    set_rule(world.get_entrance('Dark Lake Hylia Ledge Drop'), lambda state: state.has('Flippers'))
+    set_rule(world.get_entrance('Dark Lake Hylia Ledge Drop'), lambda state: state.has_Pearl() and state.has('Flippers'))
     add_rule(world.get_entrance('Ganons Tower (Hookshot Room)'), lambda state: state.has('Hookshot'))
     set_rule(world.get_entrance('Paradox Cave Push Block Reverse'), lambda state: False)  # no glitches does not require block override
     set_rule(world.get_entrance('Paradox Cave Bomb Jump'), lambda state: False)
@@ -582,20 +578,75 @@ def set_big_bomb_rules(world):
                              'Mimic Cave Mirror Spot']
     Isolated_LW_entrances = ['Capacity Upgrade',
                              'Hookshot Fairy']
-    set_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has_Pearl() and state.can_reach('Big Bomb Shop', 'Region') and state.has('Crystal 5') and state.has('Crystal 6'))
+    set_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.can_reach('East Dark World', 'Region') and state.can_reach('Big Bomb Shop', 'Region') and state.has('Crystal 5') and state.has('Crystal 6'))
     if bombshop_entrance.name in Normal_LW_entrances:
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.can_lift_rocks()) or state.has_Mirror())
+        #1. Enter via gate: Needs Aga1
+        #2. south hyrule teleporter and cross peg bridge: Hammer and moon pearl
+        #3. Can reach Eastern dark world some other way, mirror, get bomb, return to mirror spot, walk to pyramid: Needs mirror
+        # -> A or (H and P)) or (M)
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.has_Pearl()) or state.has_Mirror())
     elif bombshop_entrance.name in LW_walkable_entrances:
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has_Mirror() and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.can_lift_rocks())))
+        #1. Mirror then gate: Needs mirror and Aga1
+        #2. Mirror then go to south hyrule teleporter and cross peg bridge: Needs Mirror and Hammer and moon pearl
+        # -> M and (A or (H and P))
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has_Mirror() and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.has_Pearl())))
     elif bombshop_entrance.name in Northern_DW_entrances:
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.can_lift_heavy_rocks() and state.has('Hammer')) or (state.has_Mirror() and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.can_lift_rocks()))))
+        #1. Mirror and enter via gate: Need mirror and Aga1
+        #2. Mirror and enter via south hyrule teleporter: Need mirror and hammer and moon pearl
+        #3. Go to south DW and then cross peg bridge: Need Mitts and hammer and moon pearl
+        # -> (Mitts and P and H) or (M and (A or (H and P)))
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.can_lift_heavy_rocks() and state.has_Pearl() and state.has('Hammer')) or (state.has_Mirror() and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.has_Pearl()))))
     elif bombshop_entrance.name in Southern_DW_entrances:
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has('Hammer') or (state.has_Mirror() and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.can_lift_rocks()))))
+        #1. Mirror and enter via gate: Need mirror and Aga1
+        #2. cross peg bridge: Need hammer and moon pearl
+        # -> (H and P) or (M and A)
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.has('Hammer') and state.has_Pearl()) or (state.has_Mirror() and state.can_reach('Top of Pyramid', 'Entrance')))
     elif bombshop_entrance.name in Isolated_DW_entrances:
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has_Mirror() and state.has('Ocarina') and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.can_lift_rocks())))
+        # 1. mirror then flute then enter via gate: Needs mirror and flute and Aga 1
+        # 2. mirror then flute then enter via south hyrule teleporter: Needs mirror and Flute and hammer and moon pearl
+        # -> M and Flute and (A or (H and P))
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has_Mirror() and state.has('Ocarina') and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.has_Pearl())))
     elif bombshop_entrance.name in Isolated_LW_entrances:
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has('Ocarina') and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.can_lift_rocks())))
+        # 1. flute then enter via gate: Needs flute and Aga 1
+        # 2. flute then enter via south hyrule teleporter: Needs Flute and hammer and moon pearl
+        # Prexisting mirror spot is not permitted, because mirror might have been needed to reach these isolated locations.
+        # -> Flute and (A or (H and P))
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has('Ocarina') and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.has_Pearl())))
     elif bombshop_entrance.name == 'Dark World Potion Shop':
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has('Hammer') or state.can_lift_rocks() or (state.has_Mirror() and state.can_reach('Top of Pyramid', 'Entrance')))
+        # 1. walk down by lifting rock: needs gloves and pearl`
+        # 2. walk down by hammering peg: needs hammer and pearl
+        # 3. mirror and eneter via gate: needs Mirror and Aga1
+        # (south hyrule teleporter would be redundant with #2)
+        # -> P and (H or H) or (M and A)
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.has_Pearl() and (state.has('Hammer') or state.can_lift_rocks())) or (state.has_Mirror() and state.can_reach('Top of Pyramid', 'Entrance')))
     elif bombshop_entrance.name == 'Kings Grave':
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.can_reach('Top of Pyramid', 'Entrance') or (state.can_lift_rocks() and state.has('Hammer')) or (state.can_lift_heavy_rocks() and state.has_Mirror()))
+        # same as the Normal_LW_entrances case except that the pre-existing mirror is only possible if you have mitts
+        # (because otherwise mirror was used to reach the grave, so would cancel a pre-existing mirror spot)
+        # -> A or (H and P) or (M and Mitts)
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.has_Pearl()) or (state.can_lift_heavy_rocks() and state.has_Mirror()))
+
+def set_bunny_rules(world):
+
+    # regions for the extis of multi-entrace caves/drops that bunny cannot pass
+    # Note spiral cave may be technically passible, but it would be too absurd to require since OHKO mode is a thing.
+    bunny_impassable_caves = ['Bumper Cave', 'Two Brothers House', 'Hookshot Cave', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)', 'Turtle Rock (Entrance)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Skull Woods Second Section (Drop)',
+                              'Turtle Rock (Eye Bridge)', 'Sewers', 'Pyramid', 'Spiral Cave (Top)']
+
+    bunny_accessible_locations = ['Link\'s Uncle', 'Sahasrahla', 'Sick Kid', 'Lost Woods Hideout', 'Lumberjack Tree', 'Checkerboard Cave', 'Potion Shop', 'Spectacle Rock Cave', 'Pyramid', 'Hype Cave - Generous Guy', 'Peg Cave', 'Bumper Cave Ledge']
+
+    # Add pearl requirements for bunny-impassible caves if they occur in the dark world
+    for region in [world.get_region(name) for name in bunny_impassable_caves]:
+
+        if region.is_light_world:
+            continue
+        for exit in region.exits:
+            add_rule(exit, lambda state: state.has_Pearl)
+
+    # Add a moon pearl requirement for all locations that are actually in the dark world, except those available to the bunny
+    for location in world.get_locations():
+        if not location.parent_region.is_light_world:
+
+            if location.name in bunny_accessible_locations:
+                continue
+
+            add_rule(location, lambda state: state.has_Pearl())
