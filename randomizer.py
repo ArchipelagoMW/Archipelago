@@ -81,7 +81,7 @@ class EdgeConstraint(object):
 class RandomizerData(object):
     # Attributes:
     #
-    # list: item_locations <-- may not be needed
+    # list: item_locations
     # list: locations  <-- may not be needed
     # list: graph_vertices
     # 
@@ -236,32 +236,36 @@ class Generator(object):
         unreached_pseudo_items = dict(data.pseudo_item_conditions())
 
         to_remove = []
+        items_to_remove = set()
+        exit_check_item_locations = set()
+
+        items_exiting_to_target = dict((item_location, set()) for item_location in data.item_locations)
 
         # Alternate between graph and pseudo items
-        hasChangesOuter = True
-        while hasChangesOuter:
-            hasChangesOuter = False
+        has_variable_changes = True
+        while has_variable_changes:
+            has_variable_changes = False
 
             # Graph loop
-            hasChanges = True
-            while hasChanges:
-                hasChanges = False
+            has_frontier_changes = True
+            while has_frontier_changes:
+                has_frontier_changes = False
 
                 to_remove.clear()
                 for condition, target in entry_frontier.items():
                     if target in enterable_nodes:
                         to_remove.append(condition)
                     elif condition(variables):
+                        # Note: This block is only run once per location.
                         to_remove.append(condition)
                         enterable_nodes.add(target)
                         entry_frontier.update(allocation.outgoing_conditions(target))
 
-                        if target in exitable_nodes:
-                            item = allocation.item_at_location[target]
-                            if item != None:
-                                variables[item] = True
-                                hasChanges = True
-                                hasChangesOuter = True
+                        item = allocation.item_at_location.get(target)
+                        if item != None:
+                            exit_check_item_locations[target] = item, {NO_CONDITION : target}, set()
+
+                        has_frontier_changes = True
 
                 for c in to_remove: del entry_frontier[c]
 
@@ -270,33 +274,85 @@ class Generator(object):
                     if target in exitable_nodes:
                         to_remove.append(condition)
                     elif condition(variables):
+                        # Note: This block is only run once per location.
                         to_remove.append(condition)
                         exitable_nodes.add(target)
                         exit_frontier.update(allocation.incoming_conditions(target))
 
-                        if target in enterable_nodes:
-                            item = allocation.item_at_location[target]
-                            if item != None:
+                        for item_location in items_exiting_to_target[target]:
+                            if item_location in exit_check_item_locations:
+                                # Can obtain item: When exitable_nodes meets Item Exit Loop
+                                del exit_check_item_locations[item_location]
+                                item = allocation.item_at_location.get(target)
+                                assert item != None
                                 variables[item] = True
-                                hasChanges = True
-                                hasChangesOuter = True
+
+                        has_frontier_changes = True
 
                 for c in to_remove: del exit_frontier[c]
 
             # Pseudo Item Loop
-            hasChanges = True
-            while hasChanges:
+            # TODO: Test whether removing this loop is faster!
+            has_frontier_changes = True
+            while has_frontier_changes:
+                has_frontier_changes = False
 
                 to_remove.clear()
                 for condition, target in unreached_pseudo_items.items():
                     if condition(variables):
                         to_remove.append(condition)
                         variables[target] = True
-                        hasChanges = True
-                        hasChangesOuter = True
+                        has_frontier_changes, has_variable_changes = True, True
 
                 for c in to_remove: del unreached_pseudo_items[c]
 
+
+            items_to_remove.clear()
+            # Item Exit Loops. For items that are enterable but not exitable.
+            for item_location, item_data in exit_check_item_locations.items():
+                item, item_frontier, item_reachable = item_data
+
+                assert not variables[item]:
+
+                item_reached = False
+                # Set variables[item] to True temporarily
+                variables[item] = True
+
+                has_frontier_changes = True
+                while has_frontier_changes:
+                    has_frontier_changes = False
+
+                    to_remove.clear()
+                    for condition, target in item_frontier.items():
+                        if target in item_reachable:
+                            to_remove.append(condition)
+                        elif condition(variables):
+                            # Note: This block is only run once per location per item.
+                            to_remove.append(condition)
+
+                            # visit target.
+                            if target in exitable_nodes:
+                                # Can obtain item: When Item Exit Loop meets exitable_nodes
+                                item_reached = True
+                                has_frontier_changes = False
+                                break
+                            else:
+                                items_exiting_to_target[target].add(item_location)
+
+                            item_reachable.add(target)
+                            exit_frontier.update(allocation.incoming_conditions(target))
+
+                            has_frontier_changes = True
+
+                    for c in to_remove: del item_frontier[c]
+
+                if item_reached:
+                    items_to_remove.add(item)
+                    #variables[item] = True # Already set
+                else:
+                    variables[item] = False
+
+            for item_location in items_to_remove: del exit_check_item_locations[item_location]
 
 
 class Analyzer(object):
