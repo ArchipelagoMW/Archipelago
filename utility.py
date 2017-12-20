@@ -20,3 +20,14 @@ def is_xx_up(item_name):
 
 def is_egg(item_name):
     return bool(item_name.startswith('EGG_'))
+
+
+
+# Error Handling
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+
+def fail(message):
+    eprint(message)
+    sys.exit(1)

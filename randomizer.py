@@ -27,7 +27,7 @@ def parse_edge_constraints():
     return {
     }
 
-def parse_warps():
+def parse_map_transitions():
     return [
     ]
 
@@ -52,23 +52,25 @@ Variable types:
 """
 Settings:
 - shuffle_items
+- shuffle_map_transitions
 """
 
-class Warp(object):
-    def __init__(self, origin_location, area_current, entry_current, area_target, entry_target, walking_left):
+class MapTransition(object):
+    def __init__(self, origin_location, area_current, entry_current, area_target, entry_target, walking_right):
         self.origin_location = origin_location
         self.area_current = area_current
         self.entry_current = entry_current
         self.area_target = area_target
         self.entry_target = entry_target
-        self.walking_left = walking_left
+        self.walking_right = walking_right
 
 
 class EdgeConstraint(object):
     def __init__(self, from_location, to_location, prereq_expression):
         self.from_location = from_location
         self.to_location = to_location
-        self.prereq_expression = prereq_expression
+        #self.prereq_expression = prereq_expression
+        self.prereq_lambda = lambda v : prereq_expression.evaluate(v)
 
     def __str__(self):
         return '\n'.join([
@@ -81,11 +83,25 @@ class EdgeConstraint(object):
 class RandomizerData(object):
     # Attributes:
     #
+    # Raw Information
+    #
+    # dict: setting_flags   (setting_name -> bool)
+    # dict: pseudo_items   (condition -> psuedo_item_name)
+    # dict: locations   (location -> location_type)
+    # list: items   (Item objects)
+    # list: edge_constraints   (Constraint objects)
+    # dict: additional_items   (item_name -> item_id)
+    # list: map_transitions   (MapTransition objects)
+    #
+    # Preprocessed Information
+    #
     # list: item_locations
-    # list: locations  <-- may not be needed
     # list: graph_vertices
     # 
     # list: items_to_allocate
+    #
+    # list: walking_left_transitions 
+    # list: walking_right_transitions 
     #
     # int: nLocations
     # int: nNormalItems
@@ -107,15 +123,13 @@ class RandomizerData(object):
         # dict, item_name -> item_id
         self.additional_items = parse_additional_items()
 
+        self.map_transitions = parse_map_transitions()
+
         self.preprocess_data()
 
     def preprocess_data(self):
         self.item_locations = [item.name for item in data.items]
-        self.locations = list(data.locations.keys())
-        self.graph_vertices = self.locations + self.item_locations
-
-
-
+        self.graph_vertices = list(data.locations.keys()) + self.item_locations
 
         ### For item shuffle
         normal_items = [item.name for item in data.items if not is_egg(item.name)]
@@ -131,12 +145,38 @@ class RandomizerData(object):
         self.nEggs = se.originalNEggs - self.nAdditionalItems
         self.items_to_allocate = normal_items + additional_items + eggs[:self.nEggs]
 
+        # map_transitions
+        walking_right_transitions = [tr for tr in self.map_transitions if tr.walking_right]
+        walking_right_transitions.sort(key=lambda tr : tr.origin_location)
+        walking_left_transitions = []
+
+        left_transition_dict = dict(( (tr.area_current, tr.entry_current), tr )
+            for tr in self.map_transitions if not tr.walking_right)
+
+        for rtr in walking_right_transitions:
+            key = (rtr.area_target, rtr.entry_target)
+            ltr = left_transition_dict.get(key)
+            if ltr == None:
+                fail('Matching map transition not found for %s' % rtr.origin_location)
+            if rtr.area_current != ltr.area_target or rtr.entry_current != ltr.entry_target:
+                fail("Map transitions don't match! %s vs %s" % (rtr.origin_location, ltr.origin_location))
+            walking_left_transitions.append(ltr)
+            del left_transition_dict[key]
+
+        for ltr in left_transition_dict.values():
+            fail('Matching map transition not found for %s' % ltr.origin_location)
+
+        self.walking_right_transitions = walking_right_transitions
+        self.walking_left_transitions = walking_left_transitions
+
 
     def generate_variables(self):
-        pass
+        variables = dict((name, False) for name in self.graph_vertices + list(pseudo_items.values()))
+        variables.update(setting_flags)
+        return variables
 
     def pseudo_item_conditions(self):
-        pass
+        return self.pseudo_items
 
 
 class Allocation(object):
@@ -145,9 +185,13 @@ class Allocation(object):
     # list: items_to_allocate
     #
     # dict: item_at_location  (location -> item at location)
+    #
+    # dict: outgoing_conditions  item_location -> list(condition -> item_location)
+    # dict: incoming_conditions  item_location -> list(condition -> item_location)
 
     def __init__(self, data, settings):
         self.items_to_allocate = list(data.items_to_allocate)
+        self.walking_left_transitions = list(data.walking_left_transitions)
 
 
     def shuffle(self, data, settings):
@@ -172,14 +216,26 @@ class Allocation(object):
 
 
     def construct_graph(self, data, settings):
-        pass
+        outgoing_conditions = dict((loc, []) for loc in data.graph_vertices)
+        incoming_conditions = dict((loc, []) for loc in data.graph_vertices)
 
+        # Constraints
+        for constraint in data.edge_constraints:
+            outgoing_conditions[constraint.from_location].append((constraint.prereq_lambda, constraint.to_location))
+            incoming_conditions[constraint.to_location].append((constraint.prereq_lambda, constraint.from_location))
 
-    def outgoing_conditions(self, location):
-        pass
+        # Map Transitions
+        if settings.shuffle_map_transitions:
+            random.shuffle(self.walking_left_transitions)
 
-    def incoming_conditions(self, location):
-        pass
+        for rtr, ltr in zip(data.walking_right_transitions, self.walking_left_transitions):
+            outgoing_conditions[rtr.origin_location].append((NO_CONDITIONS, ltr.origin_location]))
+            incoming_conditions[rtr.origin_location].append((NO_CONDITIONS, ltr.origin_location]))
+            outgoing_conditions[ltr.origin_location].append((NO_CONDITIONS, rtr.origin_location]))
+            incoming_conditions[ltr.origin_location].append((NO_CONDITIONS, rtr.origin_location]))
+
+        self.outgoing_conditions = outgoing_conditions
+        self.incoming_conditions = incoming_conditions
 
     def shift_eggs_to_hard_to_reach(self):
         difficulty_ratings = Analyzer.analyse(self)
@@ -259,7 +315,7 @@ class Generator(object):
                         # Note: This block is only run once per location.
                         to_remove.append(condition)
                         enterable_nodes.add(target)
-                        entry_frontier.update(allocation.outgoing_conditions(target))
+                        entry_frontier.update(allocation.outgoing_conditions[target])
 
                         item = allocation.item_at_location.get(target)
                         if item != None:
@@ -277,7 +333,7 @@ class Generator(object):
                         # Note: This block is only run once per location.
                         to_remove.append(condition)
                         exitable_nodes.add(target)
-                        exit_frontier.update(allocation.incoming_conditions(target))
+                        exit_frontier.update(allocation.incoming_conditions[target])
 
                         for item_location in items_exiting_to_target[target]:
                             if item_location in exit_check_item_locations:
