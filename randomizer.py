@@ -1,35 +1,177 @@
+import argparse
 import random
 from utility import *
 
 START_LOCATION = 'FOREST_START'
 
+def parse_args():
+    args = argparse.ArgumentParser(description='Rabi-Ribi Randomizer - %s' % VERSION_STRING)
+    return args.parse_args(sys.argv[1:])
+
+
 def define_setting_flags():
     return {
-
+        "TRUE": True,
+        "FALSE": False,
+        "ZIP_REQUIRED": False,
+        "SEMISOLID_CLIPS_REQUIRED": False,
+        "ADVANCED_TRICKS_REQUIRED": True,
+        "BLOCK_CLIPS_REQUIRED": True,
+        "POST_GAME_ALLOWED": True,
+        "POST_IRISU_ALLOWED": True,
+        "STUPID_HARD_TRICKS": False,
+        "HALLOWEEN_REACHABLE": False,
+        "PLURKWOOD_REACHABLE": True,
+        "WARP_DESTINATION_REACHABLE": False,
+        "DARKNESS_WITHOUT_LIGHT_ORB": True,
     }
 
 
+# The values can be either a expression constrant, which is expressed as a string,
+# or a lambda, that takes in a variables object and returns a bool.
 def define_pseudo_items():
     return {
-
+        "WALL_JUMP_LV2": "WALL_JUMP & SHOP",
+        "HAMMER_ROLL_LV3": "rHAMMER_ROLL & SHOP",
+        "AIR_DASH_LV3": "rAIR_DASH & SHOP",
+        "PIKO_HAMMER_LEVELED": "PIKO_HAMMER",
+        "SHOP": "NONE",
     }
 
+def define_alternate_conditions(variable_names_set, default_expressions):
+    d = {
+        "BUNNY_STRIKE": "SLIDING_POWDER & SHOP",
+        "SPEED_BOOST": "SHOP",
+    }
+
+    for key in d.keys():
+        if type(d[key]) == str:
+            d[key] = parse_expression_lambda(d[key], variable_names_set, default_expressions)
+    return d
+
+
+def get_default_areaids():
+    return list(range(10))
+
+def evaluate_pseudo_item_constraints(pseudo_items, variable_names_set, default_expressions):
+    for key in pseudo_items.keys():
+        if type(pseudo_items[key]) == str:
+            pseudo_items[key] = parse_expression_lambda(pseudo_items[key], variable_names_set, default_expressions)
 
 
 def parse_locations_and_items():
-    locations = set()
-    items = {}
-    return locations, items
+    locations = {}
+    items = []
+    additional_items = {}
 
+    lines = read_file_and_strip_comments('locations_items.txt')
 
-
-def parse_edge_constraints():
-    return {
+    type_map = {
+        "WARP" : LOCATION_WARP,
+        "MAJOR" : LOCATION_MAJOR,
+        "MINOR" : LOCATION_MINOR,
     }
 
-def parse_map_transitions():
+    READING_NOTHING = 0
+    READING_LOCATIONS = 1
+    READING_ADDITIONAL_ITEMS = 2
+    READING_ITEMS = 3
+
+    currently_reading = READING_NOTHING
+
+    for line in lines:
+        if line.startswith('===Locations==='):
+            currently_reading = READING_LOCATIONS
+        elif line.startswith('===AdditionalItems==='):
+            currently_reading = READING_ADDITIONAL_ITEMS
+        elif line.startswith('===Items==='):
+            currently_reading = READING_ITEMS
+        elif currently_reading == READING_LOCATIONS:
+            if len(line) > 0:
+                location, location_type = (x.strip() for x in line.split(':'))
+                location_type = type_map[location_type]
+                if location in locations:
+                    fail('Location %s already defined!' % location)
+                locations[location] = location_type
+        elif currently_reading == READING_ADDITIONAL_ITEMS:
+            if len(line) > 0:
+                item, item_id = (x.strip() for x in line.split(':'))
+                item_id = int(item_id)
+                if item in items:
+                    fail('Additional Item %s already defined!' % item)
+                items[item] = item_id
+        elif currently_reading == READING_ITEMS:
+            if len(line) > 0:
+                items.append(itemreader.parse_item_from_string(line))
+
+    return locations, items, additional_items
+
+# throws errors for invalid formats.
+def parse_edge_constraints(graph_vertices_set, variable_names_set, default_expressions):
+    lines = read_file_and_strip_comments('constraints.txt')
+    jsondata = ' '.join(lines)
+    jsondata = re.sub(',\s*}', '}', jsondata)
+    jsondata = '},{'.join(re.split('}\s*{', jsondata))
+    jsondata = '[' + jsondata + ']'
+    cdicts = parse_json(jsondata)
+
+    constraints = []
+
+    for cdict in cdicts:
+        from_location, to_location = (x.strip() for x in cdict['edge'].split('->'))
+        if from_location not in graph_vertices_set: fail('Unknown location: %s' % from_location)
+        if to_location not in graph_vertices_set: fail('Unknown location: %s' % to_location)
+        prereq = parse_expression(cdict['prereq'], variable_names_set, default_expressions)
+        constraints.append(EdgeConstraint(from_location, to_location, prereq))
+
+    return constraints
+
+
+def parse_map_transitions(graph_vertices_set):
     return [
     ]
+
+
+def read_config(variable_names_list, item_locations_set, setting_flags_set, predefined_additional_items_set):
+    lines = read_file_and_strip_comments(settings.config_file)
+    jsondata = ' '.join(lines)
+    jsondata = re.sub(',\s*]', ']', jsondata)
+    jsondata = re.sub(',\s*}', '}', jsondata)
+    config_dict = parse_json('{' + jsondata + '}')
+
+    to_shuffle = config_dict['to_shuffle']
+    must_be_reachable = set(config_dict['must_be_reachable'])
+    included_additional_items = config_dict['additional_items']
+    settings = config_dict['settings']
+
+
+    variables = dict((name, False) for name in variable_names_list)
+    for key, value in settings.items():
+        if key not in setting_flags_set:
+            fail('Undefined flag: %s' % key)
+        if not type(value) is bool:
+            fail('Flag %s does not map to a boolean variable in config.txt' % key)
+        variables[key] = value
+
+    if set(included_additional_items) - predefined_additional_items_set:
+        fail('\n'.join[
+            'Unknown additional items defined:',
+            '\n'.join(map(str, set(included_additional_items) - predefined_additional_items_set)),
+        ])
+
+    if set(to_shuffle) - item_locations_set:
+        fail('\n'.join[
+            'Unknown items defined in config:',
+            '\n'.join(map(str, set(to_shuffle) - item_locations_set)),
+        ])
+
+    if set(must_be_reachable) - item_locations_set:
+        fail('\n'.join[
+            'Unknown items defined in config:',
+            '\n'.join(map(str, set(must_be_reachable) - item_locations_set)),
+        ])
+
+    return variables, to_shuffle, must_be_reachable, included_additional_items
 
 
 ### Enums
@@ -46,7 +188,15 @@ Variable types:
     - Major locations - must have unconstrained path to warp stone
     - Minor locations - cannot have autosave or save points within
 2. Items (Item Locations)
-3. Pseudo Items
+3. Additional Items (Items without locations)
+4. Pseudo Items
+"""
+
+"""
+
+
+
+
 """
 
 """
@@ -93,11 +243,14 @@ class RandomizerData(object):
     # dict: additional_items   (item_name -> item_id)
     # list: map_transitions   (MapTransition objects)
     #
-    # Preprocessed Information
+    # Intermediate Information
     #
     # list: item_locations
     # list: graph_vertices
     # 
+    #
+    # Preprocessed Information
+    #
     # list: items_to_allocate
     #
     # list: walking_left_transitions 
@@ -113,23 +266,42 @@ class RandomizerData(object):
     def __init__(self):
         self.setting_flags = define_setting_flags()
         self.pseudo_items = define_pseudo_items()
+        self.additional_item_conditions = define_additional_item_conditions()
+        self.locations, self.items, self_additional_items = parse_locations_and_items()
 
-        # self.locations: dict, location_name -> location_type
-        # self.items: list, Item() objects
-        self.locations, self.items = parse_locations_and_items()
+        # Do some preprocessing of variable names        
+        self.item_locations = [item.name for item in data.items]
+        self.graph_vertices = list(data.locations.keys()) + self.item_locations
+        variable_names_list = list(self.locations.keys()) + \
+                              self.item_locations + \
+                              list(self.additional_items.keys()) + \
+                              list(self.pseudo_items.values()) + \
+                              list(self.setting_flags.keys())
+        variable_names_list.sort()
 
-        self.edge_constraints = parse_edge_constraints()
+        variable_names_set = set(variable_names_list)
+        if len(variable_names_set) < len(variable_names_list):
+            # Repeats detected! Fail.
+            repeat_names = [x for x in variable_names_set if variable_names_list.count(x) > 1]
+            fail('Repeat names detected: %s' % ','.join(repeat_names))
+        
+        graph_vertices_set = set(self.graph_vertices)
 
-        # dict, item_name -> item_id
-        self.additional_items = parse_additional_items()
 
-        self.map_transitions = parse_map_transitions()
+        # More config loading
+        self.variables, self.to_shuffle, self.must_be_reachable, self_included_additional_items = \
+            read_config(variable_names_list, set(self.item_locations), set(self.setting_flags.keys()), set(self.additional_item_conditions.keys()))
+
+        default_expressions = define_default_expressions(variable_names_set)
+        evaluate_pseudo_item_constraints(self.pseudo_items, variable_names_set, default_expressions)
+        self.alternate_conditions = define_alternate_conditions(variable_names_set, default_expressions)
+        self.edge_constraints = parse_edge_constraints(graph_vertices_set, variable_names_set, default_expressions)
+
+        self.map_transitions = parse_map_transitions(graph_vertices_set)
 
         self.preprocess_data()
 
     def preprocess_data(self):
-        self.item_locations = [item.name for item in data.items]
-        self.graph_vertices = list(data.locations.keys()) + self.item_locations
 
         ### For item shuffle
         normal_items = [item.name for item in data.items if not is_egg(item.name)]
@@ -171,7 +343,7 @@ class RandomizerData(object):
 
 
     def generate_variables(self):
-        variables = dict((name, False) for name in self.graph_vertices + list(pseudo_items.values()))
+        variables = dict((name, False) for name in self.variables)
         variables.update(setting_flags)
         return variables
 
@@ -237,18 +409,23 @@ class Allocation(object):
         self.outgoing_conditions = outgoing_conditions
         self.incoming_conditions = incoming_conditions
 
-    def shift_eggs_to_hard_to_reach(self):
-        difficulty_ratings = Analyzer.analyse(self)
+    def shift_eggs_to_hard_to_reach(self, data, settings):
+        analyzer = Analyzer(self, data, settings)
+        difficulty_ratings = analyzer.compute_difficulty_ratings()
         pass
 
 
 class Generator(object):
     def __init__(self, data, settings):
         self.data = data
+        self.settings = settings
         self.allocation = Allocation(data, settings)
 
     def shuffle(self):
-        self.allocation = Allocation(data, settings)
+        self.allocation.shuffle(self.data, self.settings)
+
+    def shuft_eggs_to_hard_to_reach(self):
+        self.allocation.shift_eggs_to_hard_to_reach(self, data, settings)
 
     def verify(self):
         if not self.verify_warps_reachable():
@@ -412,11 +589,78 @@ class Generator(object):
 
 
 class Analyzer(object):
-    pass
+    def __init__(self, allocation, data, settings):
+        self.allocation = allocation
+        self.data = data
+        self.settings = settings
+
+    def compute_difficulty_ratings(self):
+        pass
 
 
 
-def randomize():
+def run_item_randomizer(data, settings):
+    generator = Generator(data, settings)
+
+    attempts = 0
+    while True:
+        attempts += 1
+        generator.shuffle()
+        if generator.verify():
+            if settings.egg_goals:
+                generator.shift_eggs_to_hard_to_reach()
+                if generator.verify():
+                    break
+            else:
+                break
+
+    log('Computed after %d attempts' % attempts)
+    return generator.allocation
+
+
+def generate_randomized_maps(settings):
+        if write_to_map_files and not os.path.isdir(output_dir):
+        fail('Output directory %s does not exist' % output_dir)
+
     data = RandomizerData()
-    generator = Generator(data)
+    allocation = run_item_randomizer(data, settings)
+    analyzer = Analysis(allocation, data, settings)
 
+    areaids = get_default_areaids()
+    assert len(set(item.areaid for item in data.items) - set(areaids)) == 0
+
+    generate_analysis_file(allocation, analyzer, settings)
+    log('Analysis Generated.')
+
+    if not write_to_map_files:
+        log('No maps generated as no-write flag is on.')
+        return
+
+    if not itemreader.exists_map_files(areaids, source_dir):
+        fail('Maps not found in the directory %s! Place the original Rabi-Ribi maps '
+             'in this directory for the randomizer to work.' % source_dir)
+
+    itemreader.grab_original_maps(source_dir, output_dir)
+    log('Maps copied...')
+    mod = itemreader.ItemModifier(areaids, settings)
+    pre_modify_map_data(mod, settings)
+
+    mod.clear_items()
+    for item in items:
+        mod.add_item(item)
+    mod.save(output_dir)
+    log('Maps saved successfully to %s.' % output_dir)
+
+    hash_digest = hash_map_files(areaids, output_dir)
+    log('Hash: %s' % hash_digest)
+
+if __name__ == '__main__':
+    args = parse_args()
+    source_dir='original_maps'
+
+    if args.seed == None:
+        seed = None
+    else:
+        seed = string_to_integer_seed('%s_ha:%s_hd:%s' % (args.seed, args.hide_unreachable, args.hide_difficulty))
+    
+    pass
