@@ -126,7 +126,27 @@
 }
 
 {
+"edge": "SPECTRAL_UPPER -> CAVE_ENTRANCE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
 "edge": "SPECTRAL_UPPER -> SPECTRAL_WARP",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SPECTRAL_WARP -> SPECTRAL_UPPER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SPECTRAL_WARP -> SPECTRAL_CICINI_ROOM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SPECTRAL_CICINI_ROOM -> SPECTRAL_WARP",
 "prereq": "IMPOSSIBLE",
 }
 

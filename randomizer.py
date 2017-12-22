@@ -31,11 +31,38 @@ def define_setting_flags():
 def define_pseudo_items():
     return {
         "WALL_JUMP_LV2": "WALL_JUMP & SHOP",
-        "HAMMER_ROLL_LV3": "rHAMMER_ROLL & SHOP",
-        "AIR_DASH_LV3": "rAIR_DASH & SHOP",
+        "HAMMER_ROLL_LV3": "rHAMMER_ROLL & SHOP & CHAPTER_3",
+        "AIR_DASH_LV3": "rAIR_DASH & SHOP & CHAPTER_3",
         "SPEED_BOOST_LV3": "SPEED_BOOST & SHOP",
         "PIKO_HAMMER_LEVELED": "PIKO_HAMMER",
-        "SHOP": "NONE",
+        "SHOP": "TOWN_MAIN",
+
+        "COCOA": "FOREST_START & CAVE_COCOA",
+        "ASHURI": "RIVERBANK_MAIN & TOWN_MAIN & SPECTRAL_WEST",
+        "RITA": "SNOWLAND_EAST",
+        "RIBBON": "SPECTRAL_WARP",
+        "CICINI": "SPECTRAL_CICINI_ROOM",
+        "SAYA": "EVERNIGHT_SAYA & EVERNIGHT_EAST_OF_WARP",
+        "SYARO": "SYSTEM_INTERIOR_MAIN",
+        "PANDORA": "PYRAMID_MAIN",
+        "NIEVE": "PALACE_MAIN & ICY_SUMMIT_MAIN",
+        "NIXIE": "PALACE_MAIN & ICY_SUMMIT_MAIN",
+        "ARURAUNE": "FOREST_NIGHT_WEST",
+        "SEANA": "VANILLA & CHOCOLATE & CICINI & SYARO & NIEVE & NIXIE & AQUARIUM_MAIN & PARK_MAIN",
+        "LILITH": "SKY_ISLAND_MAIN",
+        "VANILLA": "SKY_BRIDGE_EAST",
+        "CHOCOLATE": "RAVINE_CHOCOLATE",
+        "KOTRI": "GRAVEYARD_MAIN & VOLCANIC_MAIN",
+        "KEKE_BUNNY": "PLURKWOOD_MAIN",
+
+        "2TM": lambda v: count_town_members(v) >= 2,
+        "3TM": lambda v: count_town_members(v) >= 3,
+        "4TM": lambda v: count_town_members(v) >= 4,
+        "SPEEDY": "CICINI & TOWN_MAIN & 3TM",
+
+        "CHAPTER_1": "TOWN_MAIN",
+        "CHAPTER_2": "TOWN_MAIN & 2TM",
+        "CHAPTER_3": "TOWN_MAIN & 4TM",
     }
 
 def define_alternate_conditions(variable_names_set, default_expressions):
