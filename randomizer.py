@@ -4,6 +4,25 @@ from utility import *
 
 START_LOCATION = 'FOREST_START'
 
+"""
+Knowledge levels:
+    BASIC
+    INTERMEDIATE
+    ADVANCED
+
+Difficulty levels:
+    NORMAL
+    HARD
+    V_HARD
+    STUPID
+"""
+
+KNOWLEDGE_INTERMEDIATE = 'KNOWLEDGE_INTERMEDIATE'
+KNOWLEDGE_ADVANCED = 'KNOWLEDGE_ADVANCED'
+DIFFICULTY_HARD = 'DIFFICULTY_HARD'
+DIFFICULTY_V_HARD = 'DIFFICULTY_V_HARD'
+DIFFICULTY_STUPID = 'DIFFICULTY_STUPID'
+
 def parse_args():
     args = argparse.ArgumentParser(description='Rabi-Ribi Randomizer - %s' % VERSION_STRING)
     return args.parse_args(sys.argv[1:])
@@ -26,18 +45,33 @@ def define_setting_flags():
         "DARKNESS_WITHOUT_LIGHT_ORB": True,
     }
 
+def define_difficulty_flags():
+    # Difficulty Flags
+    d.update({
+        KNOWLEDGE_INTERMEDIATE: False,
+        KNOWLEDGE_ADVANCED: False,
+        DIFFICULTY_HARD: False,
+        DIFFICULTY_V_HARD: False,
+        DIFFICULTY_STUPID: False,
+    })
+
 # The values can be either a expression constrant, which is expressed as a string,
 # or a lambda, that takes in a variables object and returns a bool.
 def define_pseudo_items():
     return {
         "WALL_JUMP_LV2": "WALL_JUMP & SHOP",
         "HAMMER_ROLL_LV3": "rHAMMER_ROLL & SHOP & CHAPTER_3",
-        "AIR_DASH_LV3": "rAIR_DASH & SHOP & CHAPTER_3",
+        "AIR_DASH_LV3": "rAIR_DASH & SHOP",
         "SPEED_BOOST_LV3": "SPEED_BOOST & SHOP",
+        "BUNNY_AMULET_LV2": "(BUNNY_AMULET & SHOP) | CHAPTER_3"
+        "BUNNY_AMULET_LV3": "(BUNNY_AMULET & SHOP) | CHAPTER_4"
         "PIKO_HAMMER_LEVELED": "PIKO_HAMMER",
         "SHOP": "TOWN_MAIN",
 
-        "COCOA": "FOREST_START & CAVE_COCOA",
+        "COCOA_1": "FOREST_START",
+        "KOTRI_1": "PARK_MAIN",
+
+        "COCOA": "COCOA_1 & KOTRI_1 & CAVE_COCOA",
         "ASHURI": "RIVERBANK_MAIN & TOWN_MAIN & SPECTRAL_WEST",
         "RITA": "SNOWLAND_EAST",
         "RIBBON": "SPECTRAL_WARP",
@@ -58,17 +92,29 @@ def define_pseudo_items():
         "2TM": lambda v: count_town_members(v) >= 2,
         "3TM": lambda v: count_town_members(v) >= 3,
         "4TM": lambda v: count_town_members(v) >= 4,
+        "7TM": lambda v: count_town_members(v) >= 7,
         "SPEEDY": "CICINI & TOWN_MAIN & 3TM",
 
         "CHAPTER_1": "TOWN_MAIN",
         "CHAPTER_2": "TOWN_MAIN & 2TM",
         "CHAPTER_3": "TOWN_MAIN & 4TM",
+        "CHAPTER_4": "TOWN_MAIN & 7TM",
     }
 
 def define_alternate_conditions(variable_names_set, default_expressions):
     d = {
-        "BUNNY_STRIKE": "SLIDING_POWDER & SHOP",
         "SPEED_BOOST": "SHOP",
+        "SOUL_HEART": "SHOP",
+        "BOOK_OF_CARROT": "SHOP",
+        "P_HAIRPIN": "KEKE_BUNNY & PLURKWOOD_MAIN",
+        "HEALING_STAFF": "SHOP",
+        "MAX_BRACELET": "SHOP",
+        "BUNNY_STRIKE": "SLIDING_POWDER & SHOP",
+        "STRANGE_BOX": "SYARO & TOWN_MAIN",
+        "BUNNY_AMULET": "CHAPTER_2",
+        "RUMI_DONUT": "SHOP",
+        "RUMI_CAKE": "SHOP",
+        "COCOA_BOMB": "COCOA & TOWN_MAIN",
     }
 
     for key in d.keys():
@@ -83,12 +129,16 @@ def define_default_expressions(variable_names_set):
     # however, the expressions parsed in define_default_expressions (just below) cannot use default expressions in their expressions.
     expr = lambda s : parse_expression(s, variables)
     def1 = {
+        "INTERMEDIATE": expr("KNOWLEDGE_INTERMEDIATE"),
+        "ADVANCED": expr("KNOWLEDGE_ADVANCED"),
+        "HARD": expr("DIFFICULTY_HARD"),
+        "V_HARD": expr("DIFFICULTY_V_HARD"),
+        "STUPID": expr("DIFFICULTY_STUPID"),
+
         "ZIP": expr("ZIP_REQUIRED"),
         "SEMISOLID_CLIP": expr("SEMISOLID_CLIPS_REQUIRED"),
         "BLOCK_CLIP": expr("BLOCK_CLIPS_REQUIRED"),
         "POST_GAME": expr("POST_GAME_ALLOWED"),
-        "STUPID": expr("STUPID_HARD_TRICKS"),
-        "ADVANCED": expr("ADVANCED_TRICKS_REQUIRED"),
         "POST_IRISU": expr("POST_IRISU_ALLOWED"),
         "HALLOWEEN": expr("HALLOWEEN_REACHABLE"),
         "PLURKWOOD": expr("PLURKWOOD_REACHABLE"),
@@ -104,7 +154,6 @@ def define_default_expressions(variable_names_set):
         "BOOST": expr("TRUE"),
         #"RIBBON": expr("TRUE"),
         #"WARP": expr("TRUE"),
-        #"EXIT_PROLOGUE": expr("TRUE"),
         "TRUE": expr("TRUE"),
         "FALSE": expr("FALSE"),
         "NONE": expr("TRUE"),
@@ -221,8 +270,45 @@ def read_config(variable_names_list, item_locations_set, setting_flags_set, pred
     must_be_reachable = set(config_dict['must_be_reachable'])
     included_additional_items = config_dict['additional_items']
     settings = config_dict['settings']
+    knowledge = config_dict['knowledge']
+    difficulty = config_dict['difficulty']
+
+    # Knowledge
+    if knowledge == 'BASIC':
+        variables[KNOWLEDGE_INTERMEDIATE] = False
+        variables[KNOWLEDGE_ADVANCED] = False
+    elif knowledge == 'INTERMEDIATE':
+        variables[KNOWLEDGE_INTERMEDIATE] = True
+        variables[KNOWLEDGE_ADVANCED] = False
+    elif knowledge == 'ADVANCED':
+        variables[KNOWLEDGE_INTERMEDIATE] = True
+        variables[KNOWLEDGE_ADVANCED] = True
+    else:
+        fail('Unknown knowledge level: %s. Either BASIC, INTERMEDIATE or ADVANCED.' % knowledge)
+
+    # Difficulty
+    if difficulty == 'NORMAL':
+        variables[DIFFICULTY_HARD] = False
+        variables[DIFFICULTY_V_HARD] = False
+        variables[DIFFICULTY_STUPID] = False
+    elif difficulty == 'HARD':
+        variables[DIFFICULTY_HARD] = True
+        variables[DIFFICULTY_V_HARD] = False
+        variables[DIFFICULTY_STUPID] = False
+    elif difficulty == 'V_HARD':
+        variables[DIFFICULTY_HARD] = True
+        variables[DIFFICULTY_V_HARD] = True
+        variables[DIFFICULTY_STUPID] = False
+    elif difficulty == 'STUPID':
+        variables[DIFFICULTY_HARD] = True
+        variables[DIFFICULTY_V_HARD] = True
+        variables[DIFFICULTY_STUPID] = True
+    else:
+        fail('Unknown difficulty level: %s. Either NORMAL, HARD, V_HARD or STUPID.' % difficulty)
 
 
+
+    # Settings
     variables = dict((name, False) for name in variable_names_list)
     for key, value in settings.items():
         if key not in setting_flags_set:
