@@ -90,7 +90,12 @@
 }
 
 {
-"edge": "FOREST_NIGHT_EAST -> FOREST_NIGHT_WEST",
+"edge": "FOREST_NIGHT_NORTH_EAST -> FOREST_NIGHT_WEST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "FOREST_NIGHT_WEST -> FOREST_NIGHT_NORTH_EAST",
 "prereq": "IMPOSSIBLE",
 }
 

@@ -161,12 +161,25 @@ def define_default_expressions(variable_names_set):
     }
     expr = lambda s : parse_expression(s, variables, def1)
     def2 = {
+        "IM_H": expr("INTERMEDIATE & HARD"),
+        "IM_VH": expr("INTERMEDIATE & HARD"),
+        "AD_H": expr("ADVANCED & HARD"),
+        "AD_VH": expr("ADVANCED & V_HARD"),
+        "AD_ST": expr("ADVANCED & STUPID"),
+
         "HAMMER_ROLL_ZIP": expr("ZIP & HAMMER_ROLL_LV3"),
         "SLIDE_ZIP": expr("ZIP & SLIDING_POWDER"),
+        "WHIRL_BONK": expr("BUNNY_WHIRL & IM_H"),
+        "WHIRL_BONK_CANCEL": expr("BUNNY_WHIRL & BUNNY_AMULET & IM_H"),
+        "SLIDE_JUMP_BUNSTRIKE": expr("BUNNY_STRIKE & INTERMEDIATE"),
+        "SLIDE_JUMP_BUNSTRIKE_CANCEL": expr("BUNNY_STRIKE & BUNNY_AMULET & IM_H"),
+
         "EXPLOSIVES": expr("CARROT_BOMB | (CARROT_SHOOTER & BOOST)"),
         "EXPLOSIVES_ENEMY": expr("CARROT_BOMB | CARROT_SHOOTER"),
         "SPEED": expr("SPEED_BOOST | SPEEDY"),
         "SUPER_SPEED": expr("SPEED_BOOST_LV3 & SPEEDY"),
+
+        "AMULET_FOOD": expr("BUNNY_AMULET | (TOWN_MAIN & (RUMI_DONUT | RUMI_CAKE | COCOA_BOMB | GOLD_CARROT))"),
     }
 
     def1.update(def2)
