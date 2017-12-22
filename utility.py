@@ -35,7 +35,7 @@ def parse_expression_lambda(line, variable_names_set, default_expressions):
 # !/~ - not
 # ( ) - parentheses
 # throws errors if parsing fails
-def parse_expression(line, variable_names_set, default_expressions):
+def parse_expression(line, variable_names_set, default_expressions={}):
     try:
         # the str(line) cast is used because sometimes <line> is a u'unicode string' on unix machines.
         return parse_expression_logic(str(line), variable_names_set, default_expressions)

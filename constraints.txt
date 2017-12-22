@@ -1,0 +1,3011 @@
+
+// .---------------------'
+// | Area 0 : Southern Woodland
+// '---------------------.
+
+// Starting Forest
+
+{
+"edge": "FOREST_START -> PIKO_HAMMER",
+"prereq": "NONE",
+}
+
+{
+"edge": "PIKO_HAMMER -> FOREST_START",
+"prereq": "NONE",
+}
+
+{
+"edge": "FOREST_UPPER_EAST -> LIGHT_ORB":
+"prereq": "CARROT_BOMB & SLIDING_POWDER"
+}
+
+{
+"edge": "LIGHT_ORB -> FOREST_UPPER_EAST",
+"prereq": "CARROT_BOMB & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
+}
+
+{
+"edge": "HP_UP_NORTH_FOREST -> LIGHT_ORB",
+"prereq": "CARROT_BOMB & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
+}
+
+{
+"edge": "LIGHT_ORB -> HP_UP_NORTH_FOREST",
+"prereq": "CARROT_BOMB & SLIDING_POWDER",
+}
+
+{
+"edge": "HP_UP_NORTH_FOREST -> FOREST_START",
+"prereq": "NONE",
+}
+
+{
+"edge": "FOREST_START -> HP_UP_NORTH_FOREST",
+"prereq": "(RABI_SLIPPERS | AIR_JUMP | BUNNY_STRIKE | AIR_DASH) & (SLIDING_POWDER | (HAMMER_ROLL_ZIP))",
+}
+
+{
+"edge": "FOREST_START -> FOREST_LOWER_RIVERBANK_EXIT",
+"prereq": "PIKO_HAMMER_LEVELED",
+}
+
+{
+"edge": "FOREST_LOWER_RIVERBANK_EXIT -> FOREST_START",
+"prereq": "NONE",
+}
+
+
+
+// Forest Night
+
+{
+"edge": "HP_UP_NORTH_FOREST -> FOREST_NIGHT_NORTH_EAST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "FOREST_NIGHT_NORTH_EAST -> HP_UP_NORTH_FOREST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "FOREST_START -> FOREST_NIGHT_NORTH_EAST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "FOREST_NIGHT_NORTH_EAST -> FOREST_START",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "FOREST_START -> FOREST_NIGHT_WEST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "FOREST_NIGHT_WEST -> FOREST_START",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "FOREST_NIGHT_EAST -> FOREST_NIGHT_WEST",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// Cave
+
+{
+"edge": "FOREST_START -> CAVE_ENTRANCE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "CAVE_ENTRANCE -> FOREST_START",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "CAVE_ENTRANCE -> CAVE_COCOA",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "CAVE_COCOA -> CAVE_ENTRANCE",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// Spectral
+
+{
+"edge": "CAVE_ENTRANCE -> SPECTRAL_UPPER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SPECTRAL_UPPER -> SPECTRAL_WARP",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SPECTRAL_UPPER -> SPECTRAL_MID",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SPECTRAL_MID -> SPECTRAL_UPPER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SPECTRAL_MID -> SPECTRAL_WARP",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SPECTRAL_WARP -> SPECTRAL_MID",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SPECTRAL_WEST -> SPECTRAL_MID",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SPECTRAL_MID -> SPECTRAL_WEST",
+"prereq": "IMPOSSIBLE",
+}
+
+
+
+// || Area 0 Items ||
+
+{
+"edge": "YYYYYY -> NATURE_ORB",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "NATURE_ORB -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PACK_UP_FOREST_NIGHT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PACK_UP_FOREST_NIGHT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_WEST_SPECTRAL",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_WEST_SPECTRAL -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_FOREST_NIGHT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_FOREST_NIGHT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PACK_UP_SPECTRAL",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PACK_UP_SPECTRAL -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_CAVE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_CAVE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_CAVE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_CAVE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> BLESSED",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "BLESSED -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> TOXIC_STRIKE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "TOXIC_STRIKE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PIKO_HAMMER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PIKO_HAMMER -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_FOREST_CAVE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_FOREST_CAVE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> TOUGH_SKIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "TOUGH_SKIN -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> REGEN_UP_CAVE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "REGEN_UP_CAVE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> WALL_JUMP",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "WALL_JUMP -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> REGEN_UP_MID_FOREST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "REGEN_UP_MID_FOREST -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_MID_SPECTRAL",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_MID_SPECTRAL -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_MID_SPECTRAL",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_MID_SPECTRAL -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> CARROT_BOMB",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "CARROT_BOMB -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> DEF_TRADE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "DEF_TRADE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_FOREST_POST_COCOA",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_FOREST_POST_COCOA -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> CHARGE_RING",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "CHARGE_RING -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ARM_STRENGTH",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ARM_STRENGTH -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> REGEN_UP_EAST_FOREST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "REGEN_UP_EAST_FOREST -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MANA_WAGER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MANA_WAGER -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_EAST_FOREST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_EAST_FOREST -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PACK_UP_EAST_FOREST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PACK_UP_EAST_FOREST -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_CICINI",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_CICINI -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_NORTHEAST_FOREST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_NORTHEAST_FOREST -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+// < Area 0 Eggs >
+
+{
+"edge": "YYYYYY -> EGG_RUMI",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_RUMI -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_FORESTNIGHT_ARURAUNE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_FORESTNIGHT_ARURAUNE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_SPECTRAL_WEST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_SPECTRAL_WEST -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_CAVE_UNDER_HAMMER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_CAVE_UNDER_HAMMER -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_FORESTNIGHT_EAST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_FORESTNIGHT_EAST -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_SPECTRAL_SLIDE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_SPECTRAL_SLIDE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_CAVE_COCOA",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_CAVE_COCOA -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_FOREST_NE_LEDGE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_FOREST_NE_LEDGE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_FOREST_NE_PEDESTAL",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_FOREST_NE_PEDESTAL -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// .---------------------'
+// | Area 1 : Western Coast
+// '---------------------.
+
+// Beach and Pyramid
+
+{
+"edge": "BEACH_MAIN -> BEACH_UNDERWATER_ENTRANCE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "BEACH_UNDERWATER_ENTRANCE -> BEACH_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "BEACH_MAIN -> BEACH_VOLCANIC_ENTRANCE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "BEACH_VOLCANIC_ENTRANCE -> BEACH_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "BEACH_MAIN -> PYRAMID_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PYRAMID_MAIN -> BEACH_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PYRAMID_MAIN -> PYRAMID_WARP_ROOM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PYRAMID_WARP_ROOM -> PYRAMID_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PYRAMID_WARP_ROOM -> PYRAMID_LOWER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PYRAMID_LOWER -> PYRAMID_WARP_ROOM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PYRAMID_LOWER -> CHAOS_ROD",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "CHAOS_ROD -> PYRAMID_LOWER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "CHAOS_ROD -> PYRAMID_SOUTHWEST_ROOM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PYRAMID_SOUTHWEST_ROOM -> CHAOS_ROD",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PYRAMID_SOUTHWEST_ROOM -> PYRAMID_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PYRAMID_MAIN -> PYRAMID_SOUTHWEST_ROOM",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// Graveyard and Sky Island
+
+{
+"edge": "GRAVEYARD_MAIN -> GRAVEYARD_UPPER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "GRAVEYARD_UPPER -> GRAVEYARD_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "GRAVEYARD_MAIN -> SKY_ISLAND_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SKY_ISLAND_MAIN -> GRAVEYARD_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SKY_ISLAND_MAIN -> SKY_ISLAND_UPPER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SKY_ISLAND_UPPER -> SKY_ISLAND_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// || Area 1 Items ||
+
+{
+"edge": "YYYYYY -> SURVIVAL",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SURVIVAL -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HEALTH_WAGER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HEALTH_WAGER -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_BEACH_CAVE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_BEACH_CAVE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_GRAVEYARD_WARP",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_GRAVEYARD_WARP -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_GRAVEYARD",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_GRAVEYARD -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> SUNNY_BEAM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SUNNY_BEAM -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_UPPER_GRAVEYARD",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_UPPER_GRAVEYARD -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> AUTO_EARRINGS",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "AUTO_EARRINGS -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> AUTO_TRIGGER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "AUTO_TRIGGER -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HEALTH_PLUS",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HEALTH_PLUS -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_PYRAMID_DARK_ROOM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_PYRAMID_DARK_ROOM -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> CRISIS_BOOST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "CRISIS_BOOST -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_GRAVEYARD",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_GRAVEYARD -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_INNER_PYRAMID",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_INNER_PYRAMID -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_BEACH",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_BEACH -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_PYRAMID",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_PYRAMID -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PACK_UP_PYRAMID",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PACK_UP_PYRAMID -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ARMORED",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ARMORED -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PACK_UP_BEACH",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PACK_UP_BEACH -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> TOP_FORM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "TOP_FORM -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_PYRAMID_ENTRANCE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_PYRAMID_ENTRANCE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HITBOX_DOWN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HITBOX_DOWN -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_PYRAMID_BOMBBLOCK_ROOM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_PYRAMID_BOMBBLOCK_ROOM -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> AIR_DASH",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "AIR_DASH -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> REGEN_UP_PYRAMID",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "REGEN_UP_PYRAMID -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PURE_LOVE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PURE_LOVE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_BEACH_TUNNEL",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_BEACH_TUNNEL -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HOURGLASS",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HOURGLASS -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_SKY_ISLAND",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_SKY_ISLAND -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PACK_UP_SKY_ISLAND",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PACK_UP_SKY_ISLAND -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> REGEN_UP_SKY_ISLAND",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "REGEN_UP_SKY_ISLAND -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_BEACH_PILLAR",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_BEACH_PILLAR -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+// < Area 1 Eggs >
+
+{
+"edge": "YYYYYY -> EGG_HALLOWEEN_WEST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_HALLOWEEN_WEST -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_BEACH_TO_AQUARIUM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_BEACH_TO_AQUARIUM -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_HALLOWEEN_MID",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_HALLOWEEN_MID -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_HALLOWEEN_SW_SLIDE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_HALLOWEEN_SW_SLIDE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_HALLOWEEN_NEAR_BOSS",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_HALLOWEEN_NEAR_BOSS -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_HALLOWEEN_WARP_ZONE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_HALLOWEEN_WARP_ZONE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_GRAVEYARD_NEAR_LIBRARY",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_GRAVEYARD_NEAR_LIBRARY -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_HALLOWEEN_CICINI_ROOM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_HALLOWEEN_CICINI_ROOM -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_LIBRARY",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_LIBRARY -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_PYRAMID_BEACH",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_PYRAMID_BEACH -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_HALLOWEEN_LEFT_PILLAR",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_HALLOWEEN_LEFT_PILLAR -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_HALLOWEEN_RIGHT_PILLAR",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_HALLOWEEN_RIGHT_PILLAR -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_PYRAMID_LOWER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_PYRAMID_LOWER -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_HALLOWEEN_PAST_PILLARS1",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_HALLOWEEN_PAST_PILLARS1 -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_HALLOWEEN_PAST_PILLARS2",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_HALLOWEEN_PAST_PILLARS2 -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_SKY_TOWN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_SKY_TOWN -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// .---------------------'
+// | Area 2 : Island Core
+// '---------------------.
+
+
+// Ravine
+
+{
+"edge": "RAVINE_BEACH_ENTRANCE -> RAVINE_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RAVINE_MAIN -> RAVINE_BEACH_ENTRANCE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RAVINE_MAIN -> RAVINE_TOWN_ENTRANCE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RAVINE_TOWN_ENTRANCE -> RAVINE_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RAVINE_MAIN -> RAVINE_UPPER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RAVINE_UPPER -> RAVINE_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RAVINE_UPPER -> RAVINE_CHOCOLATE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RAVINE_CHOCOLATE -> RAVINE_UPPER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RAVINE_CHOCOLATE -> RAVINE_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RAVINE_MAIN -> RAVINE_CHOCOLATE",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// Park and Sky Bridge
+
+{
+"edge": "PARK_MAIN -> UPRPRC_BASE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "UPRPRC_BASE -> PARK_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PARK_MAIN -> PARK_UPPER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PARK_UPPER -> PARK_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PARK_UPPER -> SKY_BRIDGE_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SKY_BRIDGE_MAIN -> PARK_UPPER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_EAST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SKY_BRIDGE_EAST -> SKY_BRIDGE_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_DARK_AREA",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SKY_BRIDGE_DARK_AREA -> SKY_BRIDGE_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SKY_BRIDGE_DARK_AREA -> SKY_BRIDGE_SLIDE_AREA",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SKY_BRIDGE_SLIDE_AREA -> SKY_BRIDGE_DARK_AREA",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_SLIDE_AREA",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SKY_BRIDGE_MAIN -> PARK_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SKY_BRIDGE_SLIDE_AREA -> PARK_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// || Area 2 Items ||
+
+{
+"edge": "YYYYYY -> DEF_GROW",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "DEF_GROW -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_PARK",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_PARK -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_TRADE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_TRADE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_PARK",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_PARK -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> RABI_SLIPPERS",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RABI_SLIPPERS -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> REGEN_UP_PARK",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "REGEN_UP_PARK -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HEALTH_SURGE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HEALTH_SURGE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_SKY_BRIDGE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_SKY_BRIDGE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_UPRPRC_HQ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_UPRPRC_HQ -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_PARK",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_PARK -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HEX_CANCEL",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HEX_CANCEL -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_SKY_BRIDGE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_SKY_BRIDGE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PACK_UP_SKY_BRIDGE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PACK_UP_SKY_BRIDGE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> REGEN_UP_SKY_BRIDGE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "REGEN_UP_SKY_BRIDGE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> LUCKY_SEVEN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "LUCKY_SEVEN -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_VANILLA",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_VANILLA -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HAMMER_WAVE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HAMMER_WAVE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_WEST_RAVINE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_WEST_RAVINE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_SOUTH_RAVINE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_SOUTH_RAVINE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_NORTH_RAVINE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_NORTH_RAVINE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> UNKNOWN_ITEM_1",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "UNKNOWN_ITEM_1 -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_MID_RAVINE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_MID_RAVINE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_RAVINE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_RAVINE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> REGEN_UP_RAVINE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "REGEN_UP_RAVINE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MANA_SURGE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MANA_SURGE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> UNKNOWN_ITEM_2",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "UNKNOWN_ITEM_2 -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// < Area 2 Eggs >
+
+{
+"edge": "YYYYYY -> EGG_PARK_SPIKES",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_PARK_SPIKES -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_PARK_GREEN_KOTRI",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_PARK_GREEN_KOTRI -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_UPRPRC_BASE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_UPRPRC_BASE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_SKY_BRIDGE_WARP",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_SKY_BRIDGE_WARP -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_SKY_BRIDGE_BY_VANILLA",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_SKY_BRIDGE_BY_VANILLA -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_RAVINE_ABOVE_CHOCOLATE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_RAVINE_ABOVE_CHOCOLATE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_RAVINE_MID",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_RAVINE_MID -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// .---------------------'
+// | Area 3 : Northern Tundra
+// '---------------------.
+
+// Snowland, Palace and Icy Summit
+
+{
+"edge": "SNOWLAND_EAST -> SNOWLAND_WEST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SNOWLAND_WEST -> SNOWLAND_EAST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SNOWLAND_EAST -> ICY_SUMMIT_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ICY_SUMMIT_MAIN -> SNOWLAND_EAST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SNOWLAND_WEST -> PALACE_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PALACE_MAIN -> SNOWLAND_WEST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SNOWLAND_WEST -> SNOWLAND_EVERNIGHT_ENTRANCE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SNOWLAND_EVERNIGHT_ENTRANCE -> SNOWLAND_WEST",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// Aquarium
+
+{
+"edge": "SNOWLAND_WEST -> AQUARIUM_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "AQUARIUM_MAIN -> SNOWLAND_WEST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SNOWLAND_EAST -> AQUARIUM_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "AQUARIUM_MAIN -> SNOWLAND_EAST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "AQUARIUM_MAIN -> AQUARIUM_BOMB_WALLED_AREA",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "AQUARIUM_MAIN -> AQUARIUM_ORB_SLIDE_MAZE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "AQUARIUM_ORB_SLIDE_MAZE -> AQUARIUM_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "AQUARIUM_ORB_SLIDE_MAZE -> AQUARIUM_BOMB_WALLED_AREA",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_ORB_SLIDE_MAZE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_BEACH_ENTRANCE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "AQUARIUM_BEACH_ENTRANCE -> AQUARIUM_BOMB_WALLED_AREA",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// || Area 3 Items ||
+
+{
+"edge": "YYYYYY -> HP_UP_PALACE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_PALACE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> WATER_ORB",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "WATER_ORB -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_WEST_AQUARIUM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_WEST_AQUARIUM -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MANA_PLUS",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MANA_PLUS -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_PALACE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_PALACE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_SNOWLAND",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_SNOWLAND -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> REGEN_UP_PALACE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "REGEN_UP_PALACE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> STAMINA_PLUS",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "STAMINA_PLUS -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_PALACE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_PALACE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> SELF_DEFENSE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SELF_DEFENSE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "AQUARIUM_MAIN -> HP_UP_UPPER_AQUARIUM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_UPPER_AQUARIUM -> AQUARIUM_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_UPPER_AQUARIUM -> ATK_UP_UPPER_AQUARIUM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_UPPER_AQUARIUM -> HP_UP_UPPER_AQUARIUM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> GOLD_CARROT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "GOLD_CARROT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PACK_UP_ICY_SUMMIT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PACK_UP_ICY_SUMMIT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_ICY_SUMMIT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_ICY_SUMMIT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_MID_AQUARIUM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_MID_AQUARIUM -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_ICY_SUMMIT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_ICY_SUMMIT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_SNOWLAND",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_SNOWLAND -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> QUICK_BARRETTE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "QUICK_BARRETTE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_ICY_SUMMIT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_ICY_SUMMIT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> SUPER_CARROT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SUPER_CARROT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> REGEN_UP_SNOWLAND_WATER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "REGEN_UP_SNOWLAND_WATER -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_AQUARIUM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_AQUARIUM -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_SNOWLAND",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_SNOWLAND -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> CARROT_BOOST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "CARROT_BOOST -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> REGEN_UP_AQUARIUM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "REGEN_UP_AQUARIUM -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PACK_UP_AQUARIUM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PACK_UP_AQUARIUM -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// < Area 3 Eggs >
+
+{
+"edge": "YYYYYY -> EGG_SNOWLAND_TO_EVERNIGHT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_SNOWLAND_TO_EVERNIGHT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_PALACE_BRIDGE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_PALACE_BRIDGE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_AQUARIUM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_AQUARIUM -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_PALACE_WALL",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_PALACE_WALL -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_SNOWLAND_WARP",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_SNOWLAND_WARP -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_ICY_SUMMIT_NIXIE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_ICY_SUMMIT_NIXIE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_ICY_SUMMIT_WARP",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_ICY_SUMMIT_WARP -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_SNOWLAND_LAKE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_SNOWLAND_LAKE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// .---------------------'
+// | Area 4 : Eastern Highlands
+// '---------------------.
+
+
+// Riverbank
+
+{
+"edge": "RIVERBANK_MAIN -> RIVERBANK_LOWER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RIVERBANK_LOWER -> RIVERBANK_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RIVERBANK_MAIN -> RIVERBANK_CROSS_PASSAGEWAY",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RIVERBANK_CROSS_PASSAGEWAY -> PACK_UP_RIVERBANK",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PACK_UP_RIVERBANK -> RIVERBANK_LOWER_FOREST_ENTRANCE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RIVERBANK_LOWER_FOREST_ENTRANCE -> PACK_UP_RIVERBANK",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RIVERBANK_CROSS_PASSAGEWAY -> RIVERBANK_LOWER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RIVERBANK_LOWER -> RIVERBANK_LOWER_FOREST_ENTRANCE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RIVERBANK_LOWER_FOREST_ENTRANCE -> RIVERBANK_LOWER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RIVERBANK_LOWER_FOREST_ENTRANCE -> MP_UP_SOUTHWEST_RIVERBANK",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_SOUTHWEST_RIVERBANK -> RIVERBANK_LOWER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_SOUTHWEST_RIVERBANK -> REGEN_UP_SOUTH_RIVERBANK",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "REGEN_UP_SOUTH_RIVERBANK -> MP_UP_SOUTHWEST_RIVERBANK",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// Evernight
+
+{
+"edge": "RIVERBANK_MAIN -> EVERNIGHT_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EVERNIGHT_MAIN -> RIVERBANK_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EVERNIGHT_MAIN -> EVERNIGHT_SAYA",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EVERNIGHT_SAYA -> EVERNIGHT_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EVERNIGHT_SAYA -> EVERNIGHT_CORRIDOR_BELOW_SAYA",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EVERNIGHT_CORRIDOR_BELOW_SAYA -> EVERNIGHT_SAYA",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EVERNIGHT_CORRIDOR_BELOW_SAYA -> EVERNIGHT_EAST_OF_WARP",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EVERNIGHT_EAST_OF_WARP -> EVERNIGHT_CORRIDOR_BELOW_SAYA",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EVERNIGHT_EAST_OF_WARP -> EVERNIGHT_LOWER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EVERNIGHT_LOWER -> EVERNIGHT_EAST_OF_WARP",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EVERNIGHT_MAIN -> EVERNIGHT_WARP",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EVERNIGHT_WARP -> EVERNIGHT_MAIN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EVERNIGHT_WARP -> EVERNIGHT_EAST_OF_WARP",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EVERNIGHT_EAST_OF_WARP -> EVERNIGHT_WARP",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EVERNIGHT_WARP -> EVERNIGHT_LOWER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EVERNIGHT_LOWER -> EVERNIGHT_WARP",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EVERNIGHT_LOWER -> RIVERBANK_LOWER",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// Lab
+
+{
+"edge": "RIVERBANK_LOWER -> LAB_ENTRANCE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "LAB_ENTRANCE -> RIVERBANK_LOWER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "LAB_ENTRANCE -> LAB_MID",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "LAB_MID -> LAB_ENTRANCE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "LAB_MID -> SLIDING_POWDER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SLIDING_POWDER -> LAB_MID",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SLIDING_POWDER -> LAB_WEST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "LAB_WEST -> SLIDING_POWDER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "LAB_WEST -> LAB_MID",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "LAB_MID -> LAB_WEST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "LAB_MID -> LAB_EAST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "LAB_EAST -> LAB_MID",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "LAB_EAST -> LAB_COMPUTER_ROOM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "LAB_COMPUTER_ROOM -> LAB_EAST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "LAB_ENTRANCE -> LAB_EAST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "LAB_EAST -> LAB_ENTRANCE",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// || Area 4 Items ||
+
+{
+"edge": "YYYYYY -> REGEN_UP_NORTHWEST_RIVERBANK",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "REGEN_UP_NORTHWEST_RIVERBANK -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_GROW",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_GROW -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_RIVERBANK_PIT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_RIVERBANK_PIT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> BUNNY_WHIRL",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "BUNNY_WHIRL -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EXPLODE_SHOT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EXPLODE_SHOT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_MID_RIVERBANK",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_MID_RIVERBANK -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_EAST_RIVERBANK",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_EAST_RIVERBANK -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> SPIKE_BARRIER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SPIKE_BARRIER -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> FRAME_CANCEL",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "FRAME_CANCEL -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_LAB_SLIDE_TUNNEL",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_LAB_SLIDE_TUNNEL -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_LAB",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_LAB -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_RIVERBANK",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_RIVERBANK -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_EVERNIGHT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_EVERNIGHT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_EVERNIGHT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_EVERNIGHT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_LAB_PIT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_LAB_PIT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> SLIDING_POWDER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SLIDING_POWDER -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_EVERNIGHT_UPRPRC",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_EVERNIGHT_UPRPRC -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> CASHBACK",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "CASHBACK -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PLUS_NECKLACE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PLUS_NECKLACE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> WEAKEN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "WEAKEN -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_LAB_COMPUTER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_LAB_COMPUTER -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PACK_UP_SOUTH_EVERNIGHT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PACK_UP_SOUTH_EVERNIGHT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PACK_UP_NORTH_EVERNIGHT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PACK_UP_NORTH_EVERNIGHT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> REGEN_UP_EVERNIGHT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "REGEN_UP_EVERNIGHT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_EVERNIGHT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_EVERNIGHT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_EAST_LAB",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_EAST_LAB -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PACK_UP_LAB",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PACK_UP_LAB -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HAMMER_ROLL",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HAMMER_ROLL -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// < Area 4 Eggs >
+
+{
+"edge": "YYYYYY -> EGG_RIVERBANK_SPIDER_SPIKE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_RIVERBANK_SPIDER_SPIKE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_RIVERBANK_WALL",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_RIVERBANK_WALL -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_LAB",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_LAB -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_EVERNIGHT_MID",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_EVERNIGHT_MID -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_EVERNIGHT_SAYA",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_EVERNIGHT_SAYA -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// .---------------------'
+// | Area 5 : Rabi Rabi Town
+// '---------------------.
+
+// || Area 5 Items ||
+
+{
+"edge": "YYYYYY -> RIBBON_BADGE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "RIBBON_BADGE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ERINA_BADGE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ERINA_BADGE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// < Area 5 Eggs >
+
+{
+"edge": "YYYYYY -> EGG_TOWN",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_TOWN -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// .---------------------'
+// | Area 6 : Plurkwood
+// '---------------------.
+
+
+// || Area 6 Items ||
+
+
+// < Area 6 Eggs >
+
+{
+"edge": "YYYYYY -> EGG_PLURK_EAST",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_PLURK_EAST -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_PLURK_CAVE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_PLURK_CAVE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_PLURK_CATS",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_PLURK_CATS -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// .---------------------'
+// | Area 7 : Subterranean Area
+// '---------------------.
+
+{
+"edge": "VOLCANIC_MAIN -> VOLCANIC_BEACH_ENTRANCE"
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "VOLCANIC_BEACH_ENTRANCE -> VOLCANIC_MAIN"
+"prereq": "IMPOSSIBLE",
+}
+
+
+// || Area 7 Items ||
+
+{
+"edge": "YYYYYY -> HP_UP_VOLCANIC",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_VOLCANIC -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> CARROT_SHOOTER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "CARROT_SHOOTER -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> UNKNOWN_ITEM_3",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "UNKNOWN_ITEM_3 -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> FIRE_ORB",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "FIRE_ORB -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PACK_UP_VOLCANIC",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PACK_UP_VOLCANIC -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// < Area 7 Eggs >
+
+{
+"edge": "YYYYYY -> EGG_VOLCANIC_BOMB_BUNNIES",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_VOLCANIC_BOMB_BUNNIES -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_MEMORIES_SYSINT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_MEMORIES_SYSINT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_MEMORIES_RAVINE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_MEMORIES_RAVINE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_VOLCANIC_FIRE_ORB",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_VOLCANIC_FIRE_ORB -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_VOLCANIC_NE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_VOLCANIC_NE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_VOLCANIC_BIG_DROP",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_VOLCANIC_BIG_DROP -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// .---------------------'
+// | Area 8 : Warp Destination
+// '---------------------.
+
+// || Area 8 Items ||
+
+
+// < Area 8 Eggs >
+
+{
+"edge": "YYYYYY -> EGG_CRESPIRIT",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_CRESPIRIT -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_HOSPITAL_WALL",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_HOSPITAL_WALL -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_HOSPITAL_BOX",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_HOSPITAL_BOX -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+// .---------------------'
+// | Area 9 : System Interior
+// '---------------------.
+
+// || Area 9 Items ||
+
+{
+"edge": "YYYYYY -> REGEN_UP_CYBERSPACE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "REGEN_UP_CYBERSPACE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> PACK_UP_CYBERSPACE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "PACK_UP_CYBERSPACE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> CYBER_FLOWER",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "CYBER_FLOWER -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> AIR_JUMP",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "AIR_JUMP -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> HP_UP_CYBERSPACE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "HP_UP_CYBERSPACE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> ATK_UP_CYBERSPACE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "ATK_UP_CYBERSPACE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> MP_UP_CYBERSPACE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "MP_UP_CYBERSPACE -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+
+// < Area 9 Eggs >
+
+{
+"edge": "YYYYYY -> EGG_SYSINT2",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_SYSINT2 -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "YYYYYY -> EGG_SYSINT1",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "EGG_SYSINT1 -> ZZZZZZ",
+"prereq": "IMPOSSIBLE",
+}

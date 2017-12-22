@@ -1,0 +1,9 @@
+
+{
+"name": "fire_orb_palace",
+"changes": [
+    {
+    "edge": ""
+    "prereq": "FIRE_ORB"
+    }
+]}

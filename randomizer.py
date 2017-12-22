@@ -26,7 +26,6 @@ def define_setting_flags():
         "DARKNESS_WITHOUT_LIGHT_ORB": True,
     }
 
-
 # The values can be either a expression constrant, which is expressed as a string,
 # or a lambda, that takes in a variables object and returns a bool.
 def define_pseudo_items():
@@ -34,6 +33,7 @@ def define_pseudo_items():
         "WALL_JUMP_LV2": "WALL_JUMP & SHOP",
         "HAMMER_ROLL_LV3": "rHAMMER_ROLL & SHOP",
         "AIR_DASH_LV3": "rAIR_DASH & SHOP",
+        "SPEED_BOOST_LV3": "SPEED_BOOST & SHOP",
         "PIKO_HAMMER_LEVELED": "PIKO_HAMMER",
         "SHOP": "NONE",
     }
@@ -50,8 +50,59 @@ def define_alternate_conditions(variable_names_set, default_expressions):
     return d
 
 
+def define_default_expressions(variable_names_set):
+    # Default expressions take priority over actual variables.
+    # so if we parse an expression that has AIR_DASH, the default expression AIR_DASH will be used instead of the variable AIR_DASH.
+    # however, the expressions parsed in define_default_expressions (just below) cannot use default expressions in their expressions.
+    expr = lambda s : parse_expression(s, variables)
+    def1 = {
+        "ZIP": expr("ZIP_REQUIRED"),
+        "SEMISOLID_CLIP": expr("SEMISOLID_CLIPS_REQUIRED"),
+        "BLOCK_CLIP": expr("BLOCK_CLIPS_REQUIRED"),
+        "POST_GAME": expr("POST_GAME_ALLOWED"),
+        "STUPID": expr("STUPID_HARD_TRICKS"),
+        "ADVANCED": expr("ADVANCED_TRICKS_REQUIRED"),
+        "POST_IRISU": expr("POST_IRISU_ALLOWED"),
+        "HALLOWEEN": expr("HALLOWEEN_REACHABLE"),
+        "PLURKWOOD": expr("PLURKWOOD_REACHABLE"),
+        "WARP_DESTINATION": expr("WARP_DESTINATION_REACHABLE"),
+        "BUNNY_STRIKE": expr("BUNNY_STRIKE & PIKO_HAMMER"),
+        "BUNNY_WHIRL": expr("BUNNY_WHIRL & PIKO_HAMMER"),
+        "AIR_DASH": expr("AIR_DASH & PIKO_HAMMER"),
+        "AIR_DASH_LV3": expr("AIR_DASH_LV3 & PIKO_HAMMER"),
+        "HAMMER_ROLL": expr("HAMMER_ROLL & BUNNY_WHIRL & PIKO_HAMMER"),
+        "HAMMER_ROLL_LV3": expr("HAMMER_ROLL_LV3 & BUNNY_WHIRL & PIKO_HAMMER"),
+        "DARKNESS": expr("DARKNESS_WITHOUT_LIGHT_ORB | LIGHT_ORB"),
+        "UNDERWATER": expr("TRUE"),
+        "BOOST": expr("TRUE"),
+        #"RIBBON": expr("TRUE"),
+        #"WARP": expr("TRUE"),
+        #"EXIT_PROLOGUE": expr("TRUE"),
+        "TRUE": expr("TRUE"),
+        "FALSE": expr("FALSE"),
+        "NONE": expr("TRUE"),
+        "IMPOSSIBLE": expr("FALSE"),
+    }
+    expr = lambda s : parse_expression(s, variables, def1)
+    def2 = {
+        "HAMMER_ROLL_ZIP": expr("ZIP & HAMMER_ROLL_LV3"),
+        "SLIDE_ZIP": expr("ZIP & SLIDING_POWDER"),
+        "EXPLOSIVES": expr("CARROT_BOMB | (CARROT_SHOOTER & BOOST)"),
+        "EXPLOSIVES_ENEMY": expr("CARROT_BOMB | CARROT_SHOOTER"),
+        "SPEED": expr("SPEED_BOOST | SPEEDY"),
+        "SUPER_SPEED": expr("SPEED_BOOST_LV3 & SPEEDY"),
+    }
+
+    def1.update(def2)
+    return def1
+
 def get_default_areaids():
     return list(range(10))
+
+TOWN_MEMBERS = []
+def count_town_members(variables):
+    return sum([1 for tm in TOWN_MEMBERS if variables[tm]])
+
 
 def evaluate_pseudo_item_constraints(pseudo_items, variable_names_set, default_expressions):
     for key in pseudo_items.keys():
