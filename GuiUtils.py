@@ -51,7 +51,10 @@ class BackgroundTaskProgress(BackgroundTask):
         self.window['padx'] = 5
         self.window['pady'] = 5
 
-        self.window.attributes("-toolwindow", 1)
+        try:
+            self.window.attributes("-toolwindow", 1)
+        except tk.TclError:
+            pass
 
         self.window.wm_title(title)
         self.label_var = tk.StringVar()

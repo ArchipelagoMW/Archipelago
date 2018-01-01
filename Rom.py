@@ -472,8 +472,6 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         else:
             rom.write_bytes(0x180090, [0x04, 0x47, 0x03, 0x47, 0x02, 0x47, 0x04, 0x47])
 
-    # TODO: FIXME: need to set capcity upgrade fills (2,3,0,0) for easy, (0,0,0,0) otherwise
-
     # set up game internal RNG seed
     for i in range(1024):
         rom.write_byte(0x178000 + i, random.randint(0, 255))
