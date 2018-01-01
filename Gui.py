@@ -105,13 +105,13 @@ def guiMain(args=None):
         nonlocal sprite
         if sprite_param is None or not sprite_param.valid:
             sprite = None
-            spriteNameVar.set('(default Link)')
+            spriteNameVar.set('(default)')
         else:
             sprite = sprite_param
             spriteNameVar.set(sprite.name)
 
     set_sprite(None)
-    spriteNameVar.set('(default Link)')
+    spriteNameVar.set('(default)')
     spriteEntry = Label(spriteDialogFrame, textvariable=spriteNameVar)
 
     def SpriteSelect():
@@ -399,8 +399,20 @@ class SpriteSelector(object):
         self.window['padx'] = 5
         self.window['pady'] = 5
 
-        self.icon_section('Official Sprites', self.official_sprite_dir+'/*', 'Official Sprites not found. Click "Update Official Sprites" to download them.')
-        self.icon_section('Unofficial Sprites', self.unofficial_sprite_dir+'/*', 'Put sprites in the Sprites/Unofficial folder to have them appear here.')
+        def open_unofficial_sprite_dir(_evt):
+            open_file(self.unofficial_sprite_dir)
+
+        official_frametitle = Label(self.window, text='Official Sprites')
+
+        unofficial_frametitle = Frame(self.window)
+        title_text = Label(unofficial_frametitle, text="Unofficial Sprites")
+        title_link = Label(unofficial_frametitle, text="(open)", fg="blue", cursor="hand2")
+        title_text.pack(side=LEFT)
+        title_link.pack(side=LEFT)
+        title_link.bind("<Button-1>", open_unofficial_sprite_dir)
+
+        self.icon_section(official_frametitle, self.official_sprite_dir+'/*', 'Official Sprites not found. Click "Update Official Sprites" to download them.')
+        self.icon_section(unofficial_frametitle, self.unofficial_sprite_dir+'/*', 'Put sprites in the unofficial sprites folder (see open link above) to have them appear here.')
 
         frame = Frame(self.window)
         frame.pack(side=BOTTOM, fill=X, pady=5)
@@ -418,7 +430,7 @@ class SpriteSelector(object):
         self.window.focus()
 
     def icon_section(self, frame_label, path, no_results_label):
-        frame = LabelFrame(self.window, text=frame_label, padx=5, pady=5)
+        frame = LabelFrame(self.window, labelwidget=frame_label, padx=5, pady=5)
         frame.pack(side=TOP, fill=X)
 
         i = 0
