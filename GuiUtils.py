@@ -109,6 +109,7 @@ class ToolTips(object):
     window = None
     active = 0
     tag = None
+    after_id = None
 
     @classmethod
     def getcontroller(cls, widget):
