@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from argparse import Namespace
 from glob import glob
 import json
