@@ -1,6 +1,7 @@
 import copy
 import logging
 import json
+from itertools import zip_longest
 from collections import OrderedDict
 
 
@@ -159,7 +160,7 @@ class World(object):
             location.item = item
             item.location = location
             if collect:
-                self.state.collect(item, location.event)
+                self.state.collect(item, location.event, location)
 
             logging.getLogger('').debug('Placed %s at %s', item, location)
         else:
@@ -208,13 +209,17 @@ class World(object):
         return False
 
     def can_beat_game(self, starting_state=None):
-        prog_locations = [location for location in self.get_locations() if location.item is not None and (location.item.advancement or location.event)]
-
         if starting_state:
             state = starting_state.copy()
         else:
             state = CollectionState(self)
-        treasure_pieces_collected = 0
+
+        if self.has_beaten_game(state):
+            return True
+
+        prog_locations = [location for location in self.get_locations() if location.item is not None and (location.item.advancement or location.event) and location not in state.locations_checked]
+
+        treasure_pieces_collected = state.item_count('Triforce Piece') + state.item_count('Power Star')
         while prog_locations:
             sphere = []
             # build up spheres of collection radius. Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
@@ -234,7 +239,7 @@ class World(object):
 
             for location in sphere:
                 prog_locations.remove(location)
-                state.collect(location.item, True)
+                state.collect(location.item, True, location)
 
         return False
 
@@ -265,6 +270,9 @@ class CollectionState(object):
         self.entrance_cache = {}
         self.recursion_count = 0
         self.events = []
+        self.path = {}
+        self.locations_checked = set()
+
 
     def clear_cached_unreachable(self):
         # we only need to invalidate results which were False, places we could reach before we can still reach after adding more items
@@ -279,6 +287,8 @@ class CollectionState(object):
         ret.location_cache = copy.copy(self.location_cache)
         ret.entrance_cache = copy.copy(self.entrance_cache)
         ret.events = copy.copy(self.events)
+        ret.path = copy.copy(self.path)
+        ret.locations_checked = copy.copy(self.locations_checked)
         return ret
 
     def can_reach(self, spot, resolution_hint=None):
@@ -334,7 +344,7 @@ class CollectionState(object):
             for event in reachable_events:
                 if event.name not in self.events:
                     self.events.append(event.name)
-                    self.collect(event.item, True)
+                    self.collect(event.item, True, event)
             new_locations = len(reachable_events) > checked_locations
             checked_locations = len(reachable_events)
 
@@ -393,7 +403,9 @@ class CollectionState(object):
     def has_turtle_rock_medallion(self):
         return self.has(self.world.required_medallions[1])
 
-    def collect(self, item, event=False):
+    def collect(self, item, event=False, location=None):
+        if location:
+            self.locations_checked.add(location)
         changed = False
         if item.name.startswith('Progressive '):
             if 'Sword' in item.name:
@@ -504,6 +516,8 @@ class Region(object):
     def can_reach(self, state):
         for entrance in self.entrances:
             if state.can_reach(entrance):
+                if not self in state.path:
+                    state.path[self] = (self.name, state.path.get(entrance, None))
                 return True
         return False
 
@@ -537,6 +551,8 @@ class Entrance(object):
 
     def can_reach(self, state):
         if self.access_rule(state) and state.can_reach(self.parent_region):
+            if not self in state.path:
+                state.path[self] = (self.name, state.path.get(self.parent_region, (self.parent_region.name, None)))
             return True
 
         return False
@@ -666,6 +682,7 @@ class Spoiler(object):
         self.medallions = {}
         self.playthrough = {}
         self.locations = {}
+        self.paths = {}
         self.metadata = {}
 
     def set_entrance(self, entrance, exit, direction):
@@ -699,6 +716,7 @@ class Spoiler(object):
         out.update(self.locations)
         out['medallions'] = self.medallions
         out['playthrough'] = self.playthrough
+        out['paths'] = self.paths
         out['meta'] = self.metadata
         return json.dumps(out)
 
@@ -726,3 +744,19 @@ class Spoiler(object):
             outfile.write('\n'.join(['%s: %s' % (location, item) for (location, item) in self.locations['other locations'].items()]))
             outfile.write('\n\nPlaythrough:\n\n')
             outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(['  %s: %s' % (location, item) for (location, item) in sphere.items()])) for (sphere_nr, sphere) in self.playthrough.items()]))
+            outfile.write('\n\nPaths:\n\n')
+
+            path_listings = []
+            for location, paths in self.paths.items():
+                path_lines = []
+                pathsiter = iter(paths)
+                pathpairs = zip_longest(pathsiter, pathsiter)
+                for region, exit in pathpairs:
+                    if exit is not None:
+                        path_lines.append("{} -> {}".format(region, exit))
+                    else:
+                        path_lines.append(region)
+                path_listings.append("{}\n        {}".format(location, "\n   =>   ".join(path_lines)))
+
+            #["%s: \n    %s" % (location, "\n => ".join(zip_longest(*[iter(path)]*2))) for location, path in self.paths.items()]
+            outfile.write('\n'.join(path_listings))

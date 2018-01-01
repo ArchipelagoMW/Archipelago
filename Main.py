@@ -179,7 +179,7 @@ def create_playthrough(world):
 
     # get locations containing progress items
     prog_locations = [location for location in world.get_filled_locations() if location.item.advancement]
-
+    state_cache = [None]
     collection_spheres = []
     state = CollectionState(world)
     sphere_candidates = list(prog_locations)
@@ -196,12 +196,13 @@ def create_playthrough(world):
 
         for location in sphere:
             sphere_candidates.remove(location)
-            state.collect(location.item, True)
+            state.collect(location.item, True, location)
 
         collection_spheres.append(sphere)
 
-        logging.getLogger('').debug('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres), len(sphere), len(prog_locations))
+        state_cache.append(state.copy())
 
+        logging.getLogger('').debug('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres), len(sphere), len(prog_locations))
         if not sphere:
             logging.getLogger('').debug('The following items could not be reached: %s', ['%s at %s' % (location.item.name, location.name) for location in sphere_candidates])
             if not world.check_beatable_only:
@@ -210,7 +211,7 @@ def create_playthrough(world):
                 break
 
     # in the second phase, we cull each sphere such that the game is still beatable, reducing each range of influence to the bare minimum required inside it
-    for sphere in reversed(collection_spheres):
+    for num, sphere in reversed(list(enumerate(collection_spheres))):
         to_delete = []
         for location in sphere:
             # we remove the item at location and check if game is still beatable
@@ -218,7 +219,7 @@ def create_playthrough(world):
             old_item = location.item
             location.item = None
             state.remove(old_item)
-            if world.can_beat_game():
+            if world.can_beat_game(state_cache[num]):
                 to_delete.append(location)
             else:
                 # still required, got to keep it around
@@ -233,6 +234,13 @@ def create_playthrough(world):
 
     # store the required locations for statistical analysis
     old_world.required_locations = [location.name for sphere in collection_spheres for location in sphere]
+
+    def flist_to_iter(node):
+        while node:
+            value, node = node
+            yield value
+
+    old_world.spoiler.paths = {location.name : list(reversed(list(map(str, flist_to_iter(state.path.get(location.parent_region, (location.parent_region, None))))))) for sphere in collection_spheres for location in sphere}
 
     # we can finally output our playthrough
     old_world.spoiler.playthrough = OrderedDict([(str(i + 1), {str(location): str(location.item) for location in sphere}) for i, sphere in enumerate(collection_spheres)])
