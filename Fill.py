@@ -57,7 +57,7 @@ def distribute_items_cutoff(world, cutoffrate=0.33):
 
         spot_to_fill = None
         for location in fill_locations if placed_advancement_items / total_advancement_items < cutoffrate else reversed(fill_locations):
-            if world.state.can_reach(location) and location.can_fill(item_to_place):
+            if location.can_fill(world.state, item_to_place):
                 spot_to_fill = location
                 break
 
@@ -129,7 +129,7 @@ def distribute_items_staleness(world):
             if not progress_done and random.randint(0, location.staleness_count) > 2:
                 continue
 
-            if world.state.can_reach(location) and location.can_fill(item_to_place):
+            if location.can_fill(world.state, item_to_place):
                 spot_to_fill = location
                 break
             else:
@@ -138,7 +138,7 @@ def distribute_items_staleness(world):
         # might have skipped too many locations due to potential staleness. Do not check for staleness now to find a candidate
         if spot_to_fill is None:
             for location in fill_locations:
-                if world.state.can_reach(location) and location.can_fill(item_to_place):
+                if location.can_fill(world.state, item_to_place):
                     spot_to_fill = location
                     break
 
@@ -168,15 +168,16 @@ def fill_restrictive(world, base_state, locations, itempool):
         item_to_place = itempool.pop()
         maximum_exploration_state = sweep_from_pool()
 
+        perform_access_check = True
         if world.check_beatable_only:
-            can_beat_without = world.has_beaten_game(maximum_exploration_state)
+            perform_access_check = not world.has_beaten_game(maximum_exploration_state)
+
 
         spot_to_fill = None
         for location in locations:
-            if location.can_fill(item_to_place):
-                if (world.check_beatable_only and can_beat_without) or maximum_exploration_state.can_reach(location):
-                    spot_to_fill = location
-                    break
+            if location.can_fill(maximum_exploration_state, item_to_place, perform_access_check):
+                spot_to_fill = location
+                break
 
         if spot_to_fill is None:
             # we filled all reachable spots. Maybe the game can be beaten anyway?
@@ -251,7 +252,7 @@ def flood_items(world):
         random.shuffle(location_list)
         spot_to_fill = None
         for location in location_list:
-            if world.state.can_reach(location) and location.can_fill(itempool[0]):
+            if location.can_fill(world.state, itempool[0]):
                 spot_to_fill = location
                 break
 

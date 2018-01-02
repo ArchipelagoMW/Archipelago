@@ -52,6 +52,7 @@ class World(object):
         self.fastmenu = fastmenu
         self.disable_music = disable_music
         self.keysanity = keysanity
+        self.can_take_damage = True
         self.spoiler = Spoiler(self)
 
     def intialize_regions(self):
@@ -151,7 +152,7 @@ class World(object):
         if not isinstance(location, Location):
             location = self.get_location(location)
 
-        if location.can_fill(item):
+        if location.can_fill(self.state, item, False):
             location.item = item
             item.location = location
             if collect:
@@ -350,6 +351,17 @@ class CollectionState(object):
 
     def can_lift_heavy_rocks(self):
         return self.has('Titans Mitts')
+
+    def can_extend_magic(self):
+        return self.has('Half Magic') or self.has('Quarter Magic') or self.has_bottle() # FIXME bottle should really also have a requirement that we can reach some shop that sells green or blue potions
+
+    def can_kill_most_things(self, enemies=5):
+        return (self.has_blunt_weapon()
+                or self.has('Cane of Somaria')
+                or (self.has('Cane of Byrna') and (enemies < 6 or self.can_extend_Magic()))
+                or self.has('Bow')
+                or self.has('Fire Rod')
+               )
 
     def has_sword(self):
         return self.has('Fighter Sword') or self.has('Master Sword') or self.has('Tempered Sword') or self.has('Golden Sword')
@@ -580,11 +592,12 @@ class Location(object):
         self.recursion_count = 0
         self.staleness_count = 0
         self.event = False
+        self.always_allow = lambda item, state: False
         self.access_rule = lambda state: True
-        self.item_rule = lambda state: True
+        self.item_rule = lambda item: True
 
-    def can_fill(self, item):
-        return self.parent_region.can_fill(item) and self.item_rule(item)
+    def can_fill(self, state, item, check_access=True):
+        return self.always_allow(item, self) or (self.parent_region.can_fill(item) and self.item_rule(item) and (not check_access or self.can_reach(state)))
 
     def can_reach(self, state):
         if self.access_rule(state) and state.can_reach(self.parent_region):

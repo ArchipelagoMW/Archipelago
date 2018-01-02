@@ -133,6 +133,7 @@ def copy_world(world):
     ret.dark_world_light_cone = world.dark_world_light_cone
     ret.seed = world.seed
     ret.can_access_trock_eyebridge = world.can_access_trock_eyebridge
+    ret.can_take_damage = world.can_take_damage
     create_regions(ret)
     create_dungeons(ret)
 

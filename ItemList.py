@@ -180,6 +180,9 @@ def generate_itempool(world):
             or world.mode not in ['open', 'standard', 'swordless'] or world.timer not in ['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'] or world.progressive not in ['on', 'off', 'random']):
         raise NotImplementedError('Not supported yet')
 
+    if world.timer in ['ohko', 'timed-ohko']:
+        world.can_take_damage = False
+
     world.push_item('Ganon', ItemFactory('Triforce'), False)
     world.get_location('Ganon').event = True
     world.push_item('Agahnim 1', ItemFactory('Beat Agahnim 1'), False)
