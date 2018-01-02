@@ -9,7 +9,7 @@ import random
 from Dungeons import dungeon_music_addresses
 from Text import string_to_alttp_text, text_addresses, Credits
 from Text import Uncle_texts, Ganon1_texts, PyramidFairy_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts
-from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts
+from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
 from Utils import local_path
 
 
@@ -911,7 +911,8 @@ def write_strings(rom, world):
 
     credits.update_credits_line('castle', 0, random.choice(KingsReturn_texts))
     credits.update_credits_line('sancturary', 0, random.choice(Sanctuary_texts))
-    credits.update_credits_line('kakariko', 0, random.choice(Kakariko_texts))
+
+    credits.update_credits_line('kakariko', 0, random.choice(Kakariko_texts).format(random.choice(Sahasrahla_names)))
     credits.update_credits_line('desert', 0, random.choice(DesertPalace_texts))
     credits.update_credits_line('hera', 0, random.choice(MountainTower_texts))
     credits.update_credits_line('house', 0, random.choice(LinksHouse_texts))
