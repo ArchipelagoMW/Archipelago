@@ -178,7 +178,7 @@ def create_playthrough(world):
         raise RuntimeError('Cannot beat game. Something went terribly wrong here!')
 
     # get locations containing progress items
-    prog_locations = [location for location in world.get_locations() if location.item is not None and (location.item.advancement or (location.item.key and world.keysanity))]
+    prog_locations = [location for location in world.get_filled_locations() if location.item.advancement]
 
     collection_spheres = []
     state = CollectionState(world)

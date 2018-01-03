@@ -3,6 +3,7 @@ import random
 
 from Items import ItemFactory
 from Fill import fill_restrictive
+from Dungeons import get_dungeon_item_pool
 
 #This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 #Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
@@ -202,6 +203,9 @@ def generate_itempool(world):
         world.treasure_hunt_count = treasure_hunt_count
     if treasure_hunt_icon is not None:
         world.treasure_hunt_icon = treasure_hunt_icon
+
+    if world.keysanity:
+        world.itempool.extend(get_dungeon_item_pool(world))
 
     # shuffle medallions
     mm_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]

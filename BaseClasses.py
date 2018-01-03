@@ -145,6 +145,9 @@ class World(object):
         ret.clear_cached_unreachable()
         return ret
 
+    def get_items(self):
+        return [loc.item for loc in self.get_filled_locations()] + self.itempool
+
     def find_items(self, item):
         return [location for location in self.get_locations() if location.item is not None and location.item.name == item]
 
