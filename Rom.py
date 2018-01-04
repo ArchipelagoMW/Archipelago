@@ -11,6 +11,7 @@ from Text import string_to_alttp_text, text_addresses, Credits
 from Text import Uncle_texts, Ganon1_texts, PyramidFairy_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts
 from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
 from Utils import local_path
+from Items import ItemFactory
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
@@ -345,6 +346,10 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     rom.write_byte(0x180039, 0x01 if world.light_world_light_cone else 0x00)
     rom.write_byte(0x18003A, 0x01 if world.dark_world_light_cone else 0x00)
 
+    GREEN_TWENTY_RUPEES = 0x47
+    TRIFORCE_PIECE = ItemFactory('Triforce Piece').code
+    GREEN_CLOCK = ItemFactory('Green Clock').code
+
     # handle difficulty
     if world.difficulty == 'hard':
         # Powdered Fairies Prize
@@ -359,8 +364,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_bytes(0x45C42, [0x08, 0x08, 0x08])
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
-        #Set overflow items for progressive equipment
-        rom.write_bytes(0x180090, [0x03, 0x47, 0x02, 0x47, 0x01, 0x47, 0x02, 0x47])
+        overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
         rom.write_int16_to_rom(0x180036, 10)
         #Make Blue Shield more expensive
@@ -394,8 +398,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_bytes(0x45C42, [0x08, 0x08, 0x08])
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
-        #Set overflow items for progressive equipment
-        rom.write_bytes(0x180090, [0x02, 0x47, 0x00, 0x47, 0x00, 0x47, 0x01, 0x47])
+        overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
         rom.write_int16_to_rom(0x180036, 20)
         #Make Blue Shield more expensive
@@ -429,8 +432,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_bytes(0x45C42, [0x08, 0x08, 0x08])
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
-        #Set overflow items for progressive equipment
-        rom.write_bytes(0x180090, [0x02, 0x47, 0x00, 0x47, 0x00, 0x47, 0x01, 0x47])
+        overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
         rom.write_int16_to_rom(0x180036, 9999)
         #Make Blue Shield more expensive
@@ -466,11 +468,19 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_byte(0x34FD6, 0xF0)
         #Set overflow items for progressive equipment
         if world.goal == 'triforcehunt':
-            rom.write_bytes(0x180090, [0x04, 0x6C, 0x03, 0x6C, 0x02, 0x6C, 0x04, 0x6C])
+            overflow_replacement = TRIFORCE_PIECE
         elif world.timer in ['timed', 'timed-countdown', 'timed-ohko']:
-            rom.write_bytes(0x180090, [0x04, 0x5D, 0x03, 0x5D, 0x02, 0x5D, 0x04, 0x5D])
+            overflow_replacement = GREEN_CLOCK
         else:
-            rom.write_bytes(0x180090, [0x04, 0x47, 0x03, 0x47, 0x02, 0x47, 0x04, 0x47])
+            overflow_replacement = GREEN_TWENTY_RUPEES
+
+    difficulty = world.difficulty_requirements
+    #Set overflow items for progressive equipment
+    rom.write_bytes(0x180090,
+                    [difficulty.progressive_sword_limit, overflow_replacement,
+                     difficulty.progressive_shield_limit, overflow_replacement,
+                     difficulty.progressive_armor_limit, overflow_replacement,
+                     difficulty.progressive_bottle_limit, overflow_replacement])
 
     # set up game internal RNG seed
     for i in range(1024):

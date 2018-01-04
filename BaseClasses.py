@@ -54,6 +54,7 @@ class World(object):
         self.disable_music = disable_music
         self.keysanity = keysanity
         self.can_take_damage = True
+        self.difficulty_requirements = None
         self.spoiler = Spoiler(self)
 
     def intialize_regions(self):
@@ -106,13 +107,13 @@ class World(object):
                 if 'Sword' in item.name:
                     if ret.has('Golden Sword'):
                         pass
-                    elif ret.has('Tempered Sword'):
+                    elif ret.has('Tempered Sword') and self.difficulty_requirements.progressive_sword_limit >= 4:
                         ret.prog_items.append('Golden Sword')
-                    elif ret.has('Master Sword'):
+                    elif ret.has('Master Sword') and self.difficulty_requirements.progressive_sword_limit >= 3:
                         ret.prog_items.append('Tempered Sword')
-                    elif ret.has('Fighter Sword'):
+                    elif ret.has('Fighter Sword') and self.difficulty_requirements.progressive_sword_limit >= 2:
                         ret.prog_items.append('Master Sword')
-                    else:
+                    elif self.difficulty_requirements.progressive_sword_limit >= 1:
                         ret.prog_items.append('Fighter Sword')
                 elif 'Glove' in item.name:
                     if ret.has('Titans Mitts'):
@@ -124,13 +125,15 @@ class World(object):
                 elif 'Shield' in item.name:
                     if ret.has('Mirror Shield'):
                         pass
-                    elif ret.has('Red Shield'):
+                    elif ret.has('Red Shield') and self.difficulty_requirements.progressive_shield_limit >= 3:
                         ret.prog_items.append('Mirror Shield')
-                    elif ret.has('Blue Shield'):
+                    elif ret.has('Blue Shield')  and self.difficulty_requirements.progressive_shield_limit >= 2:
                         ret.prog_items.append('Red Shield')
-                    else:
+                    elif self.difficulty_requirements.progressive_shield_limit >= 1:
                         ret.prog_items.append('Blue Shield')
-
+            elif item.name.startswith('Bottle'):
+                if ret.bottle_count() < self.difficulty_requirements.progressive_bottle_limit:
+                    ret.prog_items.append(item.name)
             elif item.advancement or item.key:
                 ret.prog_items.append(item.name)
 
@@ -360,7 +363,10 @@ class CollectionState(object):
         return self.has('Power Glove') or self.has('Titans Mitts')
 
     def has_bottle(self):
-        return self.has('Bottle') or self.has('Bottle (Red Potion)') or self.has('Bottle (Green Potion)') or self.has('Bottle (Blue Potion)') or self.has('Bottle (Fairy)') or self.has('Bottle (Bee)') or self.has('Bottle (Good Bee)')
+        return self.bottle_count() > 0
+
+    def bottle_count(self):
+        return len([pritem for pritem in self.prog_items if pritem.startswith('Bottle')])
 
     def can_lift_heavy_rocks(self):
         return self.has('Titans Mitts')
@@ -411,16 +417,16 @@ class CollectionState(object):
             if 'Sword' in item.name:
                 if self.has('Golden Sword'):
                     pass
-                elif self.has('Tempered Sword'):
+                elif self.has('Tempered Sword') and self.world.difficulty_requirements.progressive_sword_limit >= 4:
                     self.prog_items.append('Golden Sword')
                     changed = True
-                elif self.has('Master Sword'):
+                elif self.has('Master Sword') and self.world.difficulty_requirements.progressive_sword_limit >= 3:
                     self.prog_items.append('Tempered Sword')
                     changed = True
-                elif self.has('Fighter Sword'):
+                elif self.has('Fighter Sword') and self.world.difficulty_requirements.progressive_sword_limit >= 2:
                     self.prog_items.append('Master Sword')
                     changed = True
-                else:
+                elif self.world.difficulty_requirements.progressive_sword_limit >= 1:
                     self.prog_items.append('Fighter Sword')
                     changed = True
             elif 'Glove' in item.name:
@@ -435,16 +441,19 @@ class CollectionState(object):
             elif 'Shield' in item.name:
                 if self.has('Mirror Shield'):
                     pass
-                elif self.has('Red Shield'):
+                elif self.has('Red Shield') and self.world.difficulty_requirements.progressive_shield_limit >= 3:
                     self.prog_items.append('Mirror Shield')
                     changed = True
-                elif self.has('Blue Shield'):
+                elif self.has('Blue Shield')  and self.world.difficulty_requirements.progressive_shield_limit >= 2:
                     self.prog_items.append('Red Shield')
                     changed = True
-                else:
+                elif self.world.difficulty_requirements.progressive_shield_limit >= 1:
                     self.prog_items.append('Blue Shield')
                     changed = True
-
+        elif item.name.startswith('Bottle'):
+            if self.bottle_count() < self.world.difficulty_requirements.progressive_bottle_limit:
+                self.prog_items.append(item.name)
+                changed = True
         elif event or item.advancement:
             self.prog_items.append(item.name)
             changed = True
@@ -758,5 +767,4 @@ class Spoiler(object):
                         path_lines.append(region)
                 path_listings.append("{}\n        {}".format(location, "\n   =>   ".join(path_lines)))
 
-            #["%s: \n    %s" % (location, "\n => ".join(zip_longest(*[iter(path)]*2))) for location, path in self.paths.items()]
             outfile.write('\n'.join(path_listings))

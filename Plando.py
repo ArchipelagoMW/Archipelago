@@ -14,6 +14,7 @@ from Rom import patch_rom, LocalRom, Sprite, write_string_to_rom
 from Rules import set_rules
 from Dungeons import create_dungeons
 from Items import ItemFactory
+from ItemList import difficulties
 from Main import create_playthrough
 
 __version__ = '0.2-dev'
@@ -44,6 +45,8 @@ def main(args):
     random.seed(world.seed)
 
     logger.info('ALttP Plandomizer Version %s  -  Seed: %s\n\n', __version__, args.plando)
+
+    world.difficulty_requirements = difficulties[world.difficulty]
 
     create_regions(world)
     create_dungeons(world)

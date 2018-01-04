@@ -11,7 +11,7 @@ from Rom import patch_rom, Sprite, LocalRom, JsonRom
 from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
 from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, flood_items
-from ItemList import generate_itempool
+from ItemList import generate_itempool, difficulties
 from Utils import output_path
 
 __version__ = '0.5.1-dev'
@@ -40,6 +40,8 @@ def main(args, seed=None):
     random.seed(world.seed)
 
     logger.info('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n', __version__, world.seed)
+
+    world.difficulty_requirements = difficulties[world.difficulty]
 
     create_regions(world)
 
@@ -134,6 +136,7 @@ def copy_world(world):
     ret.seed = world.seed
     ret.can_access_trock_eyebridge = world.can_access_trock_eyebridge
     ret.can_take_damage = world.can_take_damage
+    ret.difficulty_requirements = world.difficulty_requirements
     create_regions(ret)
     create_dungeons(ret)
 
