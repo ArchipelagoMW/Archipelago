@@ -741,7 +741,7 @@ class Spoiler(object):
             outfile.write('All Locations Accessible:        %s\n' % ('Yes' if self.metadata['completeable'] else 'No, some locations may be unreachable'))
             outfile.write('Maps and Compasses in Dungeons:  %s\n' % ('Yes' if self.metadata['dungeonitems'] else 'No'))
             outfile.write('L\\R Quickswap enabled:           %s\n' % ('Yes' if self.metadata['quickswap'] else 'No'))
-            outfile.write('Fastmenu enabled:                %s\n' % ('Yes' if self.metadata['fastmenu'] else 'No'))
+            outfile.write('Menu speed:                      %s\n' % self.metadata['fastmenu'])
             outfile.write('Keysanity enabled:               %s' % ('Yes' if self.metadata['keysanity'] else 'No'))
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')

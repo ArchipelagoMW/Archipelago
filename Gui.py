@@ -58,8 +58,6 @@ def guiMain(args=None):
     suppressRomCheckbutton = Checkbutton(checkBoxFrame, text="Do not create patched Rom", variable=suppressRomVar)
     quickSwapVar = IntVar()
     quickSwapCheckbutton = Checkbutton(checkBoxFrame, text="Enabled L/R Item quickswapping", variable=quickSwapVar)
-    fastMenuVar = IntVar()
-    fastMenuCheckbutton = Checkbutton(checkBoxFrame, text="Enable instant menu", variable=fastMenuVar)
     keysanityVar = IntVar()
     keysanityCheckbutton = Checkbutton(checkBoxFrame, text="Keysanity (keys anywhere)", variable=keysanityVar)
     dungeonItemsVar = IntVar()
@@ -74,7 +72,6 @@ def guiMain(args=None):
     createSpoilerCheckbutton.pack(expand=True, anchor=W)
     suppressRomCheckbutton.pack(expand=True, anchor=W)
     quickSwapCheckbutton.pack(expand=True, anchor=W)
-    fastMenuCheckbutton.pack(expand=True, anchor=W)
     keysanityCheckbutton.pack(expand=True, anchor=W)
     dungeonItemsCheckbutton.pack(expand=True, anchor=W)
     beatableOnlyCheckbutton.pack(expand=True, anchor=W)
@@ -204,6 +201,15 @@ def guiMain(args=None):
     heartbeepLabel = Label(heartbeepFrame, text='Heartbeep sound rate')
     heartbeepLabel.pack(side=LEFT)
 
+
+    fastMenuFrame = Frame(drowDownFrame)
+    fastMenuVar = StringVar()
+    fastMenuVar.set('normal')
+    fastMenuOptionMenu = OptionMenu(fastMenuFrame, fastMenuVar, 'normal', 'instant', 'double', 'triple', 'quadruple', 'half')
+    fastMenuOptionMenu.pack(side=RIGHT)
+    fastMenuLabel = Label(fastMenuFrame, text='Menu speed')
+    fastMenuLabel.pack(side=LEFT)
+
     modeFrame.pack(expand=True, anchor=E)
     logicFrame.pack(expand=True, anchor=E)
     goalFrame.pack(expand=True, anchor=E)
@@ -213,6 +219,7 @@ def guiMain(args=None):
     algorithmFrame.pack(expand=True, anchor=E)
     shuffleFrame.pack(expand=True, anchor=E)
     heartbeepFrame.pack(expand=True, anchor=E)
+    fastMenuFrame.pack(expand=True, anchor=E)
 
     bottomFrame = Frame(randomizerWindow)
 
@@ -236,12 +243,12 @@ def guiMain(args=None):
         guiargs.algorithm = algorithmVar.get()
         guiargs.shuffle = shuffleVar.get()
         guiargs.heartbeep = heartbeepVar.get()
+        guiargs.fastmenu = fastMenuVar.get()
         guiargs.create_spoiler = bool(createSpoilerVar.get())
         guiargs.suppress_rom = bool(suppressRomVar.get())
         guiargs.keysanity = bool(keysanityVar.get())
         guiargs.nodungeonitems = bool(dungeonItemsVar.get())
         guiargs.beatableonly = bool(beatableOnlyVar.get())
-        guiargs.fastmenu = bool(fastMenuVar.get())
         guiargs.quickswap = bool(quickSwapVar.get())
         guiargs.disablemusic = bool(disableMusicVar.get())
         guiargs.shuffleganon = bool(shuffleGanonVar.get())
@@ -283,11 +290,9 @@ def guiMain(args=None):
     checkBoxFrame2 = Frame(rightHalfFrame2)
 
     quickSwapCheckbutton2 = Checkbutton(checkBoxFrame2, text="Enabled L/R Item quickswapping", variable=quickSwapVar)
-    fastMenuCheckbutton2 = Checkbutton(checkBoxFrame2, text="Enable instant menu", variable=fastMenuVar)
     disableMusicCheckbutton2 = Checkbutton(checkBoxFrame2, text="Disable game music", variable=disableMusicVar)
 
     quickSwapCheckbutton2.pack(expand=True, anchor=W)
-    fastMenuCheckbutton2.pack(expand=True, anchor=W)
     disableMusicCheckbutton2.pack(expand=True, anchor=W)
 
     fileDialogFrame2 = Frame(rightHalfFrame2)
@@ -332,7 +337,14 @@ def guiMain(args=None):
     heartbeepLabel2 = Label(heartbeepFrame2, text='Heartbeep sound rate')
     heartbeepLabel2.pack(side=LEFT)
 
+    fastMenuFrame2 = Frame(drowDownFrame2)
+    fastMenuOptionMenu2 = OptionMenu(fastMenuFrame2, fastMenuVar, 'normal', 'instant', 'double', 'triple', 'quadruple', 'half')
+    fastMenuOptionMenu2.pack(side=RIGHT)
+    fastMenuLabel2 = Label(fastMenuFrame2, text='Menu speed')
+    fastMenuLabel2.pack(side=LEFT)
+
     heartbeepFrame2.pack(expand=True, anchor=E)
+    fastMenuFrame2.pack(expand=True, anchor=E)
 
     bottomFrame2 = Frame(topFrame2)
 
@@ -368,7 +380,6 @@ def guiMain(args=None):
         if args.nodungeonitems:
             dungeonItemsVar.set(int(not args.nodungeonitems))
         beatableOnlyVar.set(int(args.beatableonly))
-        fastMenuVar.set(int(args.fastmenu))
         quickSwapVar.set(int(args.quickswap))
         disableMusicVar.set(int(args.disablemusic))
         if args.count:
@@ -383,6 +394,7 @@ def guiMain(args=None):
         algorithmVar.set(args.algorithm)
         shuffleVar.set(args.shuffle)
         heartbeepVar.set(args.heartbeep)
+        fastMenuVar.set(args.fastmenu)
         logicVar.set(args.logic)
         romVar.set(args.rom)
         shuffleGanonVar.set(args.shuffleganon)

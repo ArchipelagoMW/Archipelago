@@ -239,6 +239,10 @@ The dungeon variants only mix up dungeons and keep the rest of the overworld van
 
 Select frequency of beeps when on low health. Can completely disable them.
 
+## Menu Speed
+
+A setting that lets the player set the rate at which the menu opens and closes.
+
 ## Create Spoiler Log
 
 Output a Spoiler File.
@@ -251,10 +255,6 @@ generate spoilers for statistical analysis.
 ## Enable L/R button quickswapping
 
 Use to enable quick item swap with L/R buttons
-
-## Instant Menu
-
-As an alternative to quickswap, opens menu instantly.
 
 ## Keysanity
 
@@ -378,10 +378,10 @@ Set the count option (default: None)
 Use to enable quick item swap with L/R buttons. (default: False)
 
 ```
---fastmenu
+--fastmenu [{normal,instant,double,triple,quadruple,half}]
 ```
 
-As an alternative to quickswap, opens menu instantly. (default: False)
+Alters the rate at which the menu opens and closes. (default: normal)
 
 
 ```

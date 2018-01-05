@@ -744,17 +744,26 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
 def apply_rom_settings(rom, beep, quickswap, fastmenu, disable_music, sprite):
 
     # enable instant item menu
-    if fastmenu:
-        rom.write_byte(0x180048, 0x01)
-        # Sound tweaks for fastmenu:
+    if fastmenu == 'instant':
         rom.write_byte(0x6DD9A, 0x20)
         rom.write_byte(0x6DF2A, 0x20)
         rom.write_byte(0x6E0E9, 0x20)
     else:
-        rom.write_byte(0x180048, 0x00)
         rom.write_byte(0x6DD9A, 0x11)
         rom.write_byte(0x6DF2A, 0x12)
         rom.write_byte(0x6E0E9, 0x12)
+    if fastmenu == 'instant':
+        rom.write_byte(0x180048, 0xE8)
+    elif fastmenu == 'double':
+        rom.write_byte(0x180048, 0x10)
+    elif fastmenu == 'triple':
+        rom.write_byte(0x180048, 0x18)
+    elif fastmenu == 'quadruple':
+        rom.write_byte(0x180048, 0x20)
+    elif fastmenu == 'half':
+        rom.write_byte(0x180048, 0x04)
+    else:
+        rom.write_byte(0x180048, 0x08)
 
     # enable quick item swapping with L and R (ported by Amazing Ampharos)
     if quickswap:

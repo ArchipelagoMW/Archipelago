@@ -152,7 +152,11 @@ def start():
                              --seed given will produce the same 10 (different) roms each
                              time).
                              ''', type=int)
-    parser.add_argument('--fastmenu', help='Enable instant menu', action='store_true')
+    parser.add_argument('--fastmenu', default='normal', const='normal', nargs='?', choices=['normal', 'instant', 'double', 'triple', 'quadruple', 'half'],
+                        help='''\
+                             Select the rate at which the menu opens and closes.
+                             (default: %(default)s)
+                             ''')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
     parser.add_argument('--keysanity', help='''\
