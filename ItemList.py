@@ -62,7 +62,8 @@ Difficulty = namedtuple('Difficulty',
                          'basicshield', 'progressivearmor', 'basicarmor', 'swordless',
                          'progressivesword', 'basicsword', 'timedohko', 'timedother',
                          'triforcehunt', 'triforce_pieces_required', 'conditional_extras',
-                         'extras'])
+                         'extras', 'progressive_sword_limit', 'progressive_shield_limit',
+                         'progressive_armor_limit', 'progressive_bottle_limit'])
 
 total_items_to_place = 153
 
@@ -77,7 +78,7 @@ def easy_conditional_extras(timer, _goal, _mode, pool, placed_items):
 def no_conditonal_extras(*_args):
     return []
 
-# pylint: disable=
+
 difficulties = {
     'normal': Difficulty(
         baseitems = normalbaseitems,
@@ -96,7 +97,11 @@ difficulties = {
         triforcehunt = ['Triforce Piece'] * 30,
         triforce_pieces_required = 20,
         conditional_extras = no_conditonal_extras,
-        extras = [normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra]
+        extras = [normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
+        progressive_sword_limit = 4,
+        progressive_shield_limit = 3,
+        progressive_armor_limit = 2,
+        progressive_bottle_limit = 4,
     ),
     'easy': Difficulty(
         baseitems = easybaseitems,
@@ -116,6 +121,10 @@ difficulties = {
         triforce_pieces_required = 10,
         conditional_extras = easy_conditional_extras,
         extras = [easyextra, easyfirst15extra, easysecond10extra, easythird5extra, easyfinal25extra],
+        progressive_sword_limit = 4,
+        progressive_shield_limit = 3,
+        progressive_armor_limit = 2,
+        progressive_bottle_limit = 4,
     ),
     'hard': Difficulty(
         baseitems = hardbaseitems,
@@ -135,6 +144,10 @@ difficulties = {
         triforce_pieces_required = 30,
         conditional_extras = no_conditonal_extras,
         extras = [hardfirst20extra, hardsecond20extra, hardthird20extra, hardfinal20extra],
+        progressive_sword_limit = 3,
+        progressive_shield_limit = 2,
+        progressive_armor_limit = 1,
+        progressive_bottle_limit = 2,
     ),
     'expert': Difficulty(
         baseitems = expertbaseitems,
@@ -154,6 +167,10 @@ difficulties = {
         triforce_pieces_required = 40,
         conditional_extras = no_conditonal_extras,
         extras = [expertfirst15extra, expertsecond25extra, expertthird15extra, expertfinal25extra],
+        progressive_sword_limit = 2,
+        progressive_shield_limit = 0,
+        progressive_armor_limit = 0,
+        progressive_bottle_limit = 1,
     ),
     'insane': Difficulty(
         baseitems = insanebaseitems,
@@ -173,6 +190,10 @@ difficulties = {
         triforce_pieces_required = 50,
         conditional_extras = no_conditonal_extras,
         extras = [insanefirst15extra, insanesecond25extra, insanethird10extra, insanefourth15extra, insanefinal25extra],
+        progressive_sword_limit = 2,
+        progressive_shield_limit = 0,
+        progressive_armor_limit = 0,
+        progressive_bottle_limit = 1,
     ),
 }
 

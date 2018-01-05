@@ -187,7 +187,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Superbunny Cave Exit (Bottom)'), lambda state: False)  # Cannot get to bottom exit from top. Just exists for shuffling
     set_rule(world.get_location('Spike Cave'), lambda state: state.has('Hammer') and state.can_lift_rocks() and (state.has('Cane of Byrna') or state.has('Cape')) and state.can_extend_magic())
     # TODO: Current-VT logic is: hammer and lift_rocks and ((cape and extend) or (byrna and (can-take-damage OR canextend)))
-    # Is that really good enough? Can you really get through with byrna, single magic w/o refills and only 3 hearts? (answer: probnably but seems to requires tas-like timing.)
+    # Is that really good enough? Can you really get through with byrna, single magic w/o refills and only 3 hearts? (answer: probably but seems to requires tas-like timing.)
     set_rule(world.get_location('Hookshot Cave - Top Right'), lambda state: state.has('Hookshot'))
     set_rule(world.get_location('Hookshot Cave - Top Left'), lambda state: state.has('Hookshot'))
     set_rule(world.get_location('Hookshot Cave - Bottom Right'), lambda state: state.has('Hookshot') or state.has('Pegasus Boots'))
@@ -264,7 +264,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Ice Palace Entrance Room'), lambda state: state.has('Fire Rod') or (state.has('Bombos') and state.has_sword()))
     set_rule(world.get_location('Ice Palace - Big Chest'), lambda state: state.has('Big Key (Ice Palace)'))
     set_rule(world.get_entrance('Ice Palace (Kholdstare)'), lambda state: state.can_lift_rocks() and state.has('Hammer') and state.has('Big Key (Ice Palace)') and (state.has('Small Key (Ice Palace)', 2) or (state.has('Cane of Somaria') and state.has('Small Key (Ice Palace)', 1))))
-    set_rule(world.get_entrance('Ice Palace (East)'), lambda state: (state.has('Hookshot') or (item_in_locations(state, 'Big Key (Ice Palace)', ['Ice Palace - Spike Room', 'Ice Palace - Big Key Chest', 'Ice Palace - Map Chest']) and state.has('Small Key (Ice Palace)')) or state.has('Small Key (Ice Palace)', 2)) and (world.can_take_damage or state.has('Hookshot') or state.has('Cape') or state.has('Cane of Byrna')))
+    set_rule(world.get_entrance('Ice Palace (East)'), lambda state: (state.has('Hookshot') or (item_in_locations(state, 'Big Key (Ice Palace)', ['Ice Palace - Spike Room', 'Ice Palace - Big Key Chest', 'Ice Palace - Map Chest']) and state.has('Small Key (Ice Palace)'))) and (world.can_take_damage or state.has('Hookshot') or state.has('Cape') or state.has('Cane of Byrna')))
     set_rule(world.get_entrance('Ice Palace (East Top)'), lambda state: state.can_lift_rocks() and state.has('Hammer'))
     for location in ['Ice Palace - Big Chest', 'Ice Palace - Kholdstare']:
         forbid_item(world.get_location(location), 'Big Key (Ice Palace)')
@@ -298,7 +298,6 @@ def global_rules(world):
     set_rule(world.get_entrance('Turtle Rock Dark Room Staircase'), lambda state: state.has('Small Key (Turtle Rock)', 3))
     set_rule(world.get_entrance('Turtle Rock (Dark Room) (North)'), lambda state: state.has('Cane of Somaria'))
     set_rule(world.get_entrance('Turtle Rock (Dark Room) (South)'), lambda state: state.has('Cane of Somaria'))
-    # FIXME: should shield overflow count check to the progrssive logic stuff, so we don't get false mirror shields which would cause problems here
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Bottom Left'), lambda state: state.has('Cane of Byrna') or state.has('Cape') or state.has('Mirror Shield'))
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Bottom Right'), lambda state: state.has('Cane of Byrna') or state.has('Cape') or state.has('Mirror Shield'))
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Top Left'), lambda state: state.has('Cane of Byrna') or state.has('Cape') or state.has('Mirror Shield'))
@@ -312,17 +311,20 @@ def global_rules(world):
     set_rule(world.get_entrance('Palace of Darkness Hammer Peg Drop'), lambda state: state.has('Hammer'))
     set_rule(world.get_entrance('Palace of Darkness Bridge Room'), lambda state: state.has('Small Key (Palace of Darkness)', 1))  # If we can reach any other small key door, we already have back door access to this area
     set_rule(world.get_entrance('Palace of Darkness Big Key Door'), lambda state: state.has('Small Key (Palace of Darkness)', 6) and state.has('Big Key (Palace of Darkness)') and state.has('Bow') and state.has('Hammer'))
-    set_rule(world.get_entrance('Palace of Darkness Big Key Chest Staircase'), lambda state: state.has('Small Key (Palace of Darkness)', 5)  or (item_name(state.world.get_location('Palace of Darkness - Big Key Chest')) in ['Small Key (Palace of Darkness)']))
     set_rule(world.get_entrance('Palace of Darkness (North)'), lambda state: state.has('Small Key (Palace of Darkness)', 4))
     set_rule(world.get_location('Palace of Darkness - Big Chest'), lambda state: state.has('Big Key (Palace of Darkness)'))
 
     if world.keysanity:
         set_rule(world.get_entrance('Palace of Darkness Spike Statue Room Door'), lambda state: state.has('Small Key (Palace of Darkness)', 6) or (item_name(state.world.get_location('Palace of Darkness - Harmless Hellway')) in ['Small Key (Palace of Darkness)']))
+        # TODO: add an always_allow rule for this to permit key for a key
         set_rule(world.get_entrance('Palace of Darkness Big Key Chest Staircase'), lambda state: state.has('Small Key (Palace of Darkness)', 6)  or (item_name(state.world.get_location('Palace of Darkness - Big Key Chest')) in ['Small Key (Palace of Darkness)']))
+        # TODO: add an always_allow rule for this to permit key for a key
         set_rule(world.get_entrance('Palace of Darkness Maze Door'), lambda state: state.has('Small Key (Palace of Darkness)', 6))
     else:
         set_rule(world.get_entrance('Palace of Darkness Spike Statue Room Door'), lambda state: state.has('Small Key (Palace of Darkness)', 5) or (item_name(state.world.get_location('Palace of Darkness - Harmless Hellway')) in ['Small Key (Palace of Darkness)']))
+        # TODO: add an always_allow rule for this to permit key for a key
         set_rule(world.get_entrance('Palace of Darkness Big Key Chest Staircase'), lambda state: state.has('Small Key (Palace of Darkness)', 5)  or (item_name(state.world.get_location('Palace of Darkness - Big Key Chest')) in ['Small Key (Palace of Darkness)']))
+        # TODO: add an always_allow rule for this to permit key for a key
         set_rule(world.get_entrance('Palace of Darkness Maze Door'), lambda state: state.has('Small Key (Palace of Darkness)', 5))
 
     for location in ['Palace of Darkness - Big Chest', 'Palace of Darkness - Helmasaur']:
@@ -504,18 +506,21 @@ def set_trock_key_rules(world):
         set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (North)'), lambda state: state.has('Small Key (Turtle Rock)', 3))
 
     # the most complicated one
-    # if we have back entrance access, we could waste all keys before touching this
-    # if we don't, we have access to all chests by the time we can waste a key on trinexx door
-    # in that case, if it contains the big key, we can also not waste a key on the roller switch door
-    # however in keysanity being able to reach all other chests while only having three keys does not imply this contains
-    # a key, so we again need all four keys unless it contains the big key
-    if can_reach_back:
-        set_rule(world.get_location('Turtle Rock - Big Key Chest'), lambda state: state.has('Small Key (Turtle Rock)', 4) or (item_name(state.world.get_location('Turtle Rock - Big Key Chest')) in ['Small Key (Turtle Rock)']))
-    elif world.keysanity:
-        set_rule(world.get_location('Turtle Rock - Big Key Chest'), lambda state: state.has('Small Key (Turtle Rock)', 2) if (item_name(state.world.get_location('Turtle Rock - Big Key Chest')) in ['Big Key (Turtle Rock)']) else state.has('Small Key (Turtle Rock)', 4) or (item_name(state.world.get_location('Turtle Rock - Big Key Chest')) in ['Small Key (Turtle Rock)']))
-    else:
-        set_rule(world.get_location('Turtle Rock - Big Key Chest'), lambda state: state.has('Small Key (Turtle Rock)', 2) if (item_name(state.world.get_location('Turtle Rock - Big Key Chest')) in ['Big Key (Turtle Rock)']) else state.has('Small Key (Turtle Rock)', 3) or (item_name(state.world.get_location('Turtle Rock - Big Key Chest')) in ['Small Key (Turtle Rock)']))
-    # TODO add key-for-key logic to the above mess via always_allow rules. Ugh!
+    def tr_big_key_chest_keys_needed(state):
+        item = item_name(state.world.get_location('Turtle Rock - Big Key Chest'))
+        # handle key for a key situation in the usual way (by letting us logically open the door using the key locked inside it)
+        if item in ['Small Key (Turtle Rock)']:
+            return 3
+        # if we lack backdoor access and cannot reach the back before opening this chest because it contains the big key
+        # then that means there are two doors left that we cannot have spent a key on, (crystalroller and trinexx) so we only need
+        # two keys
+        if item in ['Big Key (Turtle Rock)'] and not can_reach_back:
+            return 2
+        # otherwise we could potentially have opened every other door already, so we need all 4 keys.
+        return 4
+
+    set_rule(world.get_location('Turtle Rock - Big Key Chest'), lambda state: state.has('Small Key (Turtle Rock)', tr_big_key_chest_keys_needed(state)))
+    set_always_allow(world.get_location('Turtle Rock - Big Key Chest'), lambda state, item: item.name == 'Small Key (Turtle Rock)' and state.has('Small Key (Turtle Rock)', 3))
 
     # set big key restrictions
     non_big_key_locations = ['Turtle Rock - Big Chest', 'Turtle Rock - Trinexx']
