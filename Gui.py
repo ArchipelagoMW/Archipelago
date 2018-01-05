@@ -106,13 +106,13 @@ def guiMain(args=None):
         nonlocal sprite
         if sprite_param is None or not sprite_param.valid:
             sprite = None
-            spriteNameVar.set('(default)')
+            spriteNameVar.set('(unchanged)')
         else:
             sprite = sprite_param
             spriteNameVar.set(sprite.name)
 
     set_sprite(None)
-    spriteNameVar.set('(default)')
+    spriteNameVar.set('(unchanged)')
     spriteEntry = Label(spriteDialogFrame, textvariable=spriteNameVar)
 
     def SpriteSelect():
@@ -310,7 +310,10 @@ def guiMain(args=None):
     baseSpriteLabel2 = Label(spriteDialogFrame2, text='Link Sprite')
     spriteEntry2 = Label(spriteDialogFrame2, textvariable=spriteNameVar)
 
-    spriteSelectButton2 = Button(spriteDialogFrame2, text='Select Sprite', command=SpriteSelect)
+    def SpriteSelectAdjuster():
+        SpriteSelector(mainWindow, set_sprite, adjuster=True)
+
+    spriteSelectButton2 = Button(spriteDialogFrame2, text='Select Sprite', command=SpriteSelectAdjuster)
 
     baseSpriteLabel2.pack(side=LEFT)
     spriteEntry2.pack(side=LEFT)
@@ -389,12 +392,13 @@ def guiMain(args=None):
     mainWindow.mainloop()
 
 class SpriteSelector(object):
-    def __init__(self, parent, callback):
+    def __init__(self, parent, callback, adjuster=False):
         if is_bundled():
             self.deploy_icons()
         self.parent = parent
         self.window = Toplevel(parent)
         self.callback = callback
+        self.adjuster = adjuster
 
         self.window.wm_title("TAKE ANY ONE YOU WANT")
         self.window['padx'] = 5
@@ -412,7 +416,7 @@ class SpriteSelector(object):
         title_link.pack(side=LEFT)
         title_link.bind("<Button-1>", open_unofficial_sprite_dir)
 
-        self.icon_section(official_frametitle, self.official_sprite_dir+'/*', 'Official Sprites not found. Click "Update Official Sprites" to download them.')
+        self.icon_section(official_frametitle, self.official_sprite_dir+'/*', 'Official sprites not found. Click "Update official sprites" to download them.')
         self.icon_section(unofficial_frametitle, self.unofficial_sprite_dir+'/*', 'Put sprites in the unofficial sprites folder (see open link above) to have them appear here.')
 
         frame = Frame(self.window)
@@ -421,11 +425,15 @@ class SpriteSelector(object):
         button = Button(frame, text="Browse for file...", command=self.browse_for_sprite)
         button.pack(side=RIGHT, padx=(5, 0))
 
-        button = Button(frame, text="Update Official Sprites", command=self.update_official_sprites)
+        button = Button(frame, text="Update official sprites", command=self.update_official_sprites)
         button.pack(side=RIGHT, padx=(5, 0))
 
-        button = Button(frame, text="Use Default Sprite", command=self.use_default_sprite)
-        button.pack(side=LEFT)
+        button = Button(frame, text="Use default Link sprite", command=self.use_default_link_sprite)
+        button.pack(side=LEFT, padx=(0, 5))
+
+        if adjuster:
+            button = Button(frame, text="Use current sprite from rom", command=self.use_default_sprite)
+            button.pack(side=LEFT, padx=(0, 5))
 
         set_icon(self.window)
         self.window.focus()
@@ -465,7 +473,7 @@ class SpriteSelector(object):
                     messagebox.showinfo("Sprite Updater", resultmessage)
                 else:
                     messagebox.showerror("Sprite Updater", resultmessage)
-                SpriteSelector(self.parent, self.callback)
+                SpriteSelector(self.parent, self.callback, self.adjuster)
 
             try:
                 task.update_status("Downloading official sprites list")
@@ -534,6 +542,10 @@ class SpriteSelector(object):
 
     def use_default_sprite(self):
         self.callback(None)
+        self.window.destroy()
+
+    def use_default_link_sprite(self):
+        self.callback(Sprite.default_link_sprite())
         self.window.destroy()
 
     def select_sprite(self, spritename):

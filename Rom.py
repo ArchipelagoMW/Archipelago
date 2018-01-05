@@ -156,6 +156,10 @@ class Sprite(object):
         else:
             self.valid = False
 
+    @staticmethod
+    def default_link_sprite():
+        return Sprite(local_path('data/default.zspr'))
+
     def decode8(self, pos):
         arr = [[0 for _ in range(8)] for _ in range(8)]
         for y in range(8):
