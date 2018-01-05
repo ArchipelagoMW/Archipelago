@@ -134,7 +134,7 @@ def create_regions(world):
         create_region('Tower of Hera (Top)', ['Tower of Hera - Compass Chest', 'Tower of Hera - Big Chest', 'Tower of Hera - Moldorm', 'Tower of Hera - Prize']),
 
         create_region('East Dark World', ['Pyramid', 'Catfish'], ['Pyramid Fairy', 'South Dark World Bridge', 'West Dark World Gap', 'Palace of Darkness', 'Dark Lake Hylia Drop (East)', 'Dark Lake Hylia Teleporter',
-                                                                                   'Hyrule Castle Ledge Mirror Spot', 'Dark Lake Hylia Fairy', 'Palace of Darkness Hint', 'East Dark World Hint', 'Dark World Potion Shop', 'Pyramid Hole']),
+                                                                  'Hyrule Castle Ledge Mirror Spot', 'Dark Lake Hylia Fairy', 'Palace of Darkness Hint', 'East Dark World Hint', 'Dark World Potion Shop', 'Pyramid Hole']),
         create_region('Palace of Darkness Hint'),
         create_region('East Dark World Hint'),
         create_region('South Dark World', ['Stumpy', 'Digging Game', 'Bombos Tablet'], ['Dark Lake Hylia Drop (South)', 'Hype Cave', 'Swamp Palace', 'Village of Outcasts Heavy Rock',
@@ -147,7 +147,7 @@ def create_regions(world):
         create_region('Dark Lake Hylia Ledge Hint'),
         create_region('Dark Lake Hylia Ledge Spike Cave'),
         create_region('Hype Cave', ['Hype Cave - Top', 'Hype Cave - Middle Right', 'Hype Cave - Middle Left',
-                                          'Hype Cave - Bottom', 'Hype Cave - Generous Guy']),
+                                    'Hype Cave - Bottom', 'Hype Cave - Generous Guy']),
         create_region('West Dark World', None, ['Village of Outcasts Drop', 'East Dark World River Pier', 'Brewery', 'C-Shaped House', 'Chest Game', 'Thieves Town', 'Graveyard Cave', 'Bumper Cave (Bottom)', 'Skull Woods Forest',
                                                 'Bat Cave Drop Ledge Mirror Spot', 'Dark World Hammer Peg Cave', 'Red Shield Shop', 'Dark Sanctuary Hint', 'Fortune Teller (Dark)', 'Dark World Shop', 'Dark World Lumberjack Shop']),
         create_region('Fortune Teller (Dark)'),
@@ -180,7 +180,7 @@ def create_regions(world):
         create_region('Hookshot Cave', ['Hookshot Cave - Top Right', 'Hookshot Cave - Top Left', 'Hookshot Cave - Bottom Right', 'Hookshot Cave - Bottom Left'],
                       ['Hookshot Cave Exit (South)', 'Hookshot Cave Exit (North)']),
         create_region('Death Mountain Floating Island (Dark World)', None, ['Floating Island Drop', 'Hookshot Cave Back Entrance', 'Floating Island Mirror Spot']),
-        create_region('Death Mountain Floating Island (Light World)', ['Floating Island'] ),
+        create_region('Death Mountain Floating Island (Light World)', ['Floating Island']),
         create_region('Turtle Rock (Top)', None, ['Turtle Rock Drop']),
         create_region('Mimic Cave', ['Mimic Cave']),
 
@@ -292,7 +292,7 @@ def mark_light_world_regions(world):
     # Exclude entrances that represent connections from the light world to the dark world
     excluded_entrances = set(['Top of Pyramid', 'Lake Hylia Central Island Teleporter', 'Dark Desert Teleporter', 'East Hyrule Teleporter', 'South Hyrule Teleporter', 'Kakariko Teleporter', 'Death Mountain Teleporter', 'East Death Mountain Teleporter', 'Turtle Rock Teleporter'])
 
-    starting_regions = ['Links House', 'Cave 45', 'Graveyard Cave','Mimic Cave', 'Death Mountain Floating Island (Light World)','Desert Ledge (West)', 'Lake Hylia Island', 'Spectacle Rock']
+    starting_regions = ['Links House', 'Cave 45', 'Graveyard Cave', 'Mimic Cave', 'Death Mountain Floating Island (Light World)', 'Desert Ledge (West)', 'Lake Hylia Island', 'Spectacle Rock']
     queue = collections.deque([world.get_region(region) for region in starting_regions])
     seen = set(queue)
     while queue:

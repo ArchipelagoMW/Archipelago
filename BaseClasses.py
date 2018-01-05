@@ -26,7 +26,6 @@ class World(object):
         self._region_cache = {}
         self._entrance_cache = {}
         self._location_cache = {}
-        self._item_cache = {}
         self.required_locations = []
         self.place_dungeon_items = place_dungeon_items  # configurable in future
         self.shuffle_bonk_prizes = False
@@ -53,6 +52,7 @@ class World(object):
         self.fastmenu = fastmenu
         self.disable_music = disable_music
         self.keysanity = keysanity
+        self.can_take_damage = True
         self.spoiler = Spoiler(self)
 
     def intialize_regions(self):
@@ -120,6 +120,15 @@ class World(object):
                         ret.prog_items.append('Titans Mitts')
                     else:
                         ret.prog_items.append('Power Glove')
+                elif 'Shield' in item.name:
+                    if ret.has('Mirror Shield'):
+                        pass
+                    elif ret.has('Red Shield'):
+                        ret.prog_items.append('Mirror Shield')
+                    elif ret.has('Blue Shield'):
+                        ret.prog_items.append('Red Shield')
+                    else:
+                        ret.prog_items.append('Blue Shield')
 
             elif item.advancement or item.key:
                 ret.prog_items.append(item.name)
@@ -133,8 +142,11 @@ class World(object):
                                      'Small Key (Swamp Palace)', 'Big Key (Ice Palace)'] + ['Small Key (Ice Palace)'] * 2 + ['Big Key (Misery Mire)', 'Big Key (Turtle Rock)', 'Big Key (Ganons Tower)'] + ['Small Key (Misery Mire)'] * 3 + ['Small Key (Turtle Rock)'] * 4 + ['Small Key (Ganons Tower)'] * 4):
                 soft_collect(item)
         ret.sweep_for_events()
-        ret._clear_cache()
+        ret.clear_cached_unreachable()
         return ret
+
+    def get_items(self):
+        return [loc.item for loc in self.get_filled_locations()] + self.itempool
 
     def find_items(self, item):
         return [location for location in self.get_locations() if location.item is not None and location.item.name == item]
@@ -143,13 +155,13 @@ class World(object):
         if not isinstance(location, Location):
             location = self.get_location(location)
 
-        if location.can_fill(item):
+        if location.can_fill(self.state, item, False):
             location.item = item
             item.location = location
             if collect:
                 self.state.collect(item, location.event)
 
-            logging.getLogger('').debug('Placed %s at %s' % (item, location))
+            logging.getLogger('').debug('Placed %s at %s', item, location)
         else:
             raise RuntimeError('Cannot assign item %s to location %s.' % (item, location))
 
@@ -178,7 +190,7 @@ class World(object):
 
     def unlocks_new_location(self, item):
         temp_state = self.state.copy()
-        temp_state._clear_cache()
+        temp_state.clear_cached_unreachable()
         temp_state.collect(item, True)
 
         for location in self.get_unfilled_locations():
@@ -188,9 +200,10 @@ class World(object):
         return False
 
     def has_beaten_game(self, state):
-        if state.has('Triforce'): return True
+        if state.has('Triforce'):
+            return True
         if self.goal in ['triforcehunt']:
-            if state.item_count('Triforce Piece')+state.item_count('Power Star')> self.treasure_hunt_count:
+            if state.item_count('Triforce Piece') + state.item_count('Power Star') > self.treasure_hunt_count:
                 return True
         return False
 
@@ -233,7 +246,7 @@ class World(object):
         goal = ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'].index(self.goal)
         shuffle = ['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'].index(self.shuffle)
         difficulty = ['easy', 'normal', 'hard', 'expert', 'insane'].index(self.difficulty)
-        timer = ['none', 'display', 'timed', 'timed-ohko', 'timed-countdown','ohko'].index(self.timer)
+        timer = ['none', 'display', 'timed', 'timed-ohko', 'timed-countdown', 'ohko'].index(self.timer)
         progressive = ['on', 'off', 'random'].index(self.progressive)
         algorithm = ['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26', 'balanced'].index(self.algorithm)
         beatableonly = 1 if self.check_beatable_only else 0
@@ -253,7 +266,7 @@ class CollectionState(object):
         self.recursion_count = 0
         self.events = []
 
-    def _clear_cache(self):
+    def clear_cached_unreachable(self):
         # we only need to invalidate results which were False, places we could reach before we can still reach after adding more items
         self.region_cache = {k: v for k, v in self.region_cache.items() if v}
         self.location_cache = {k: v for k, v in self.location_cache.items() if v}
@@ -328,8 +341,7 @@ class CollectionState(object):
     def has(self, item, count=1):
         if count == 1:
             return item in self.prog_items
-        else:
-            return self.item_count(item) >= count
+        return self.item_count(item) >= count
 
     def item_count(self, item):
         return len([pritem for pritem in self.prog_items if pritem == item])
@@ -342,6 +354,17 @@ class CollectionState(object):
 
     def can_lift_heavy_rocks(self):
         return self.has('Titans Mitts')
+
+    def can_extend_magic(self):
+        return self.has('Half Magic') or self.has('Quarter Magic') or self.has_bottle() # FIXME bottle should really also have a requirement that we can reach some shop that sells green or blue potions
+
+    def can_kill_most_things(self, enemies=5):
+        return (self.has_blunt_weapon()
+                or self.has('Cane of Somaria')
+                or (self.has('Cane of Byrna') and (enemies < 6 or self.can_extend_Magic()))
+                or self.has('Bow')
+                or self.has('Fire Rod')
+               )
 
     def has_sword(self):
         return self.has('Fighter Sword') or self.has('Master Sword') or self.has('Tempered Sword') or self.has('Golden Sword')
@@ -415,10 +438,10 @@ class CollectionState(object):
             changed = True
 
         if changed:
-            self._clear_cache()
+            self.clear_cached_unreachable()
             if not event:
                 self.sweep_for_events()
-                self._clear_cache()
+                self.clear_cached_unreachable()
 
     def remove(self, item):
         if item.advancement:
@@ -488,10 +511,7 @@ class Region(object):
         is_dungeon_item = item.key or item.map or item.compass
         sewer_hack = self.world.mode == 'standard' and item.name == 'Small Key (Escape)'
         if sewer_hack or (is_dungeon_item and not self.world.keysanity):
-            if self.dungeon and self.dungeon.is_dungeon_item(item):
-                return True
-            else:
-                return False
+            return self.dungeon and self.dungeon.is_dungeon_item(item)
 
         return True
 
@@ -513,9 +533,7 @@ class Entrance(object):
         self.spot_type = 'Entrance'
         self.recursion_count = 0
         self.vanilla = None
-
-    def access_rule(self, state):
-        return True
+        self.access_rule = lambda state: True
 
     def can_reach(self, state):
         if self.access_rule(state) and state.can_reach(self.parent_region):
@@ -577,15 +595,12 @@ class Location(object):
         self.recursion_count = 0
         self.staleness_count = 0
         self.event = False
+        self.always_allow = lambda item, state: False
+        self.access_rule = lambda state: True
+        self.item_rule = lambda item: True
 
-    def access_rule(self, state):
-        return True
-
-    def item_rule(self, item):
-        return True
-
-    def can_fill(self, item):
-        return self.parent_region.can_fill(item) and self.item_rule(item)
+    def can_fill(self, state, item, check_access=True):
+        return self.always_allow(item, self) or (self.parent_region.can_fill(item) and self.item_rule(item) and (not check_access or self.can_reach(state)))
 
     def can_reach(self, state):
         if self.access_rule(state) and state.can_reach(self.parent_region):

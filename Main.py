@@ -1,18 +1,18 @@
+from collections import OrderedDict
+import json
+import logging
+import random
+import time
+
 from BaseClasses import World, CollectionState, Item
 from Regions import create_regions, mark_light_world_regions
 from EntranceShuffle import link_entrances
-from Rom import patch_rom, LocalRom, JsonRom
+from Rom import patch_rom, Sprite, LocalRom, JsonRom
 from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
-from Items import ItemFactory
-from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, fill_restrictive, flood_items
-from collections import OrderedDict
+from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, flood_items
 from ItemList import generate_itempool
 from Utils import output_path
-import random
-import time
-import logging
-import json
 
 __version__ = '0.5.1-dev'
 
@@ -39,7 +39,7 @@ def main(args, seed=None):
         world.seed = int(seed)
     random.seed(world.seed)
 
-    logger.info('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n' % (__version__, world.seed))
+    logger.info('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n', __version__, world.seed)
 
     create_regions(world)
 
@@ -61,7 +61,7 @@ def main(args, seed=None):
     logger.info('Placing Dungeon Items.')
 
     shuffled_locations = None
-    if args.algorithm == 'vt26' or args.keysanity:
+    if args.algorithm in ['balanced', 'vt26'] or args.keysanity:
         shuffled_locations = world.get_unfilled_locations()
         random.shuffle(shuffled_locations)
         fill_dungeons_restrictive(world, shuffled_locations)
@@ -92,7 +92,10 @@ def main(args, seed=None):
     logger.info('Patching ROM.')
 
     if args.sprite is not None:
-        sprite = bytearray(open(args.sprite, 'rb').read())
+        if isinstance(args.sprite, Sprite):
+            sprite = args.sprite
+        else:
+            sprite = Sprite(args.sprite)
     else:
         sprite = None
 
@@ -113,7 +116,7 @@ def main(args, seed=None):
         world.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))
 
     logger.info('Done. Enjoy.')
-    logger.debug('Total Time: %s' % (time.clock() - start))
+    logger.debug('Total Time: %s', time.clock() - start)
 
     return world
 
@@ -130,6 +133,7 @@ def copy_world(world):
     ret.dark_world_light_cone = world.dark_world_light_cone
     ret.seed = world.seed
     ret.can_access_trock_eyebridge = world.can_access_trock_eyebridge
+    ret.can_take_damage = world.can_take_damage
     create_regions(ret)
     create_dungeons(ret)
 
@@ -174,7 +178,7 @@ def create_playthrough(world):
         raise RuntimeError('Cannot beat game. Something went terribly wrong here!')
 
     # get locations containing progress items
-    prog_locations = [location for location in world.get_locations() if location.item is not None and (location.item.advancement or (location.item.key and world.keysanity))]
+    prog_locations = [location for location in world.get_filled_locations() if location.item.advancement]
 
     collection_spheres = []
     state = CollectionState(world)
@@ -196,10 +200,10 @@ def create_playthrough(world):
 
         collection_spheres.append(sphere)
 
-        logging.getLogger('').debug('Calculated sphere %i, containing %i of %i progress items.' % (len(collection_spheres), len(sphere), len(prog_locations)))
+        logging.getLogger('').debug('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres), len(sphere), len(prog_locations))
 
         if not sphere:
-            logging.getLogger('').debug('The following items could not be reached: %s' % ['%s at %s' % (location.item.name, location.name) for location in sphere_candidates])
+            logging.getLogger('').debug('The following items could not be reached: %s', ['%s at %s' % (location.item.name, location.name) for location in sphere_candidates])
             if not world.check_beatable_only:
                 raise RuntimeError('Not all progression items reachable. Something went terribly wrong here.')
             else:
@@ -210,11 +214,10 @@ def create_playthrough(world):
         to_delete = []
         for location in sphere:
             # we remove the item at location and check if game is still beatable
-            logging.getLogger('').debug('Checking if %s is required to beat the game.' % location.item.name)
+            logging.getLogger('').debug('Checking if %s is required to beat the game.', location.item.name)
             old_item = location.item
             location.item = None
             state.remove(old_item)
-            world._item_cache = {}  # need to invalidate
             if world.can_beat_game():
                 to_delete.append(location)
             else:
