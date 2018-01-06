@@ -314,24 +314,12 @@ def global_rules(world):
     set_rule(world.get_entrance('Palace of Darkness (North)'), lambda state: state.has('Small Key (Palace of Darkness)', 4))
     set_rule(world.get_location('Palace of Darkness - Big Chest'), lambda state: state.has('Big Key (Palace of Darkness)'))
 
-    if world.keysanity:
-        set_rule(world.get_entrance('Palace of Darkness Spike Statue Room Door'), lambda state: state.has('Small Key (Palace of Darkness)', 6) or (item_name(state.world.get_location('Palace of Darkness - Harmless Hellway')) in ['Small Key (Palace of Darkness)']))
-        # TODO: add an always_allow rule for this to permit key for a key
-        set_rule(world.get_entrance('Palace of Darkness Big Key Chest Staircase'), lambda state: state.has('Small Key (Palace of Darkness)', 6)  or (item_name(state.world.get_location('Palace of Darkness - Big Key Chest')) in ['Small Key (Palace of Darkness)']))
-        # TODO: add an always_allow rule for this to permit key for a key
-        set_rule(world.get_entrance('Palace of Darkness Maze Door'), lambda state: state.has('Small Key (Palace of Darkness)', 6))
-    else:
-        set_rule(world.get_entrance('Palace of Darkness Spike Statue Room Door'), lambda state: state.has('Small Key (Palace of Darkness)', 5) or (item_name(state.world.get_location('Palace of Darkness - Harmless Hellway')) in ['Small Key (Palace of Darkness)']))
-        # TODO: add an always_allow rule for this to permit key for a key
-        set_rule(world.get_entrance('Palace of Darkness Big Key Chest Staircase'), lambda state: state.has('Small Key (Palace of Darkness)', 5)  or (item_name(state.world.get_location('Palace of Darkness - Big Key Chest')) in ['Small Key (Palace of Darkness)']))
-        # TODO: add an always_allow rule for this to permit key for a key
-        set_rule(world.get_entrance('Palace of Darkness Maze Door'), lambda state: state.has('Small Key (Palace of Darkness)', 5))
+    set_rule(world.get_entrance('Palace of Darkness Big Key Chest Staircase'), lambda state: state.has('Small Key (Palace of Darkness)', 6)  or (item_name(state.world.get_location('Palace of Darkness - Big Key Chest')) in ['Small Key (Palace of Darkness)'] and state.has('Small Key (Palace of Darkness)', 3)))
+    set_always_allow(world.get_location('Palace of Darkness - Big Key Chest'), lambda state, item: item.name == 'Small Key (Palace of Darkness)' and state.has('Small Key (Palace of Darkness)', 5))
 
-    for location in ['Palace of Darkness - Big Chest', 'Palace of Darkness - Helmasaur']:
-        forbid_item(world.get_location(location), 'Big Key (Palace of Darkness)')
-
-    for location in ['Palace of Darkness - Big Chest', 'Palace of Darkness - Dark Maze - Top', 'Palace of Darkness - Dark Maze - Bottom']:
-        forbid_item(world.get_location(location), 'Small Key (Palace of Darkness)')
+    set_rule(world.get_entrance('Palace of Darkness Spike Statue Room Door'), lambda state: state.has('Small Key (Palace of Darkness)', 6) or (item_name(state.world.get_location('Palace of Darkness - Harmless Hellway')) in ['Small Key (Palace of Darkness)'] and state.has('Small Key (Palace of Darkness)', 4)))
+    set_always_allow(world.get_location('Palace of Darkness - Harmless Hellway'), lambda state, item: item.name == 'Small Key (Palace of Darkness)' and state.has('Small Key (Palace of Darkness)', 5))
+    set_rule(world.get_entrance('Palace of Darkness Maze Door'), lambda state: state.has('Small Key (Palace of Darkness)', 6))
 
     # these key rules are conservative, you might be able to get away with more lenient rules
     randomizer_room_chests = ['Ganons Tower - Randomizer Room - Top Left', 'Ganons Tower - Randomizer Room - Top Right', 'Ganons Tower - Randomizer Room - Bottom Left', 'Ganons Tower - Randomizer Room - Bottom Right']
