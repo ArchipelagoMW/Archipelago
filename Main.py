@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from itertools import zip_longest
 import json
 import logging
 import random
@@ -257,7 +258,6 @@ def create_playthrough(world):
         if not sphere:
             raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
 
-
     # store the required locations for statistical analysis
     old_world.required_locations = [location.name for sphere in collection_spheres for location in sphere]
 
@@ -266,7 +266,18 @@ def create_playthrough(world):
             value, node = node
             yield value
 
-    old_world.spoiler.paths = {location.name : list(reversed(list(map(str, flist_to_iter(state.path.get(location.parent_region, (location.parent_region, None))))))) for sphere in collection_spheres for location in sphere}
+    def get_path(state, region):
+        reversed_path_as_flist = state.path.get(region, (region, None))
+        string_path_flat = reversed(list(map(str, flist_to_iter(reversed_path_as_flist))))
+        # Now we combine the flat string list into (region, exit) pairs
+        pathsiter = iter(string_path_flat)
+        pathpairs = zip_longest(pathsiter, pathsiter)
+        return list(pathpairs)
+
+    old_world.spoiler.paths = {location.name : get_path(state, location.parent_region) for sphere in collection_spheres for location in sphere}
+    if any(exit == 'Pyramid Fairy' for path in old_world.spoiler.paths.values() for (_, exit) in path):
+        old_world.spoiler.paths['Big Bomb Shop'] = get_path(state, world.get_region('Big Bomb Shop'))
+        print(world.seed)
 
     # we can finally output our playthrough
     old_world.spoiler.playthrough = OrderedDict([(str(i + 1), {str(location): str(location.item) for location in sphere}) for i, sphere in enumerate(collection_spheres)])
