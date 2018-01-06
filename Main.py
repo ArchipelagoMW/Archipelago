@@ -232,8 +232,31 @@ def create_playthrough(world):
         for location in to_delete:
             sphere.remove(location)
 
-    # we are now down to just the required progress items in collection_spheres in a minimum number of spheres. As a cleanup, we right trim empty spheres (can happen if we have multiple triforces)
-    collection_spheres = [sphere for sphere in collection_spheres if sphere]
+    # we are now down to just the required progress items in collection_spheres. Unfortunately
+    # the previous pruning stage could potentially have made certain items dependant on others
+    # in the same or later sphere (because the location had 2 ways to access but the item originally
+    # used to access it was deemed not required.) So we need to do one final sphere collection pass
+    # to build up the correct spheres
+
+    required_locations = [item for sphere in collection_spheres for item in sphere]
+    state = CollectionState(world)
+    collection_spheres = []
+    while required_locations:
+        if not world.keysanity:
+            state.sweep_for_events(key_only=True)
+
+        sphere = list(filter(state.can_reach, required_locations))
+
+        for location in sphere:
+            required_locations.remove(location)
+            state.collect(location.item, True, location)
+
+        collection_spheres.append(sphere)
+
+        logging.getLogger('').debug('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres), len(sphere), len(required_locations))
+        if not sphere:
+            raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
+
 
     # store the required locations for statistical analysis
     old_world.required_locations = [location.name for sphere in collection_spheres for location in sphere]
