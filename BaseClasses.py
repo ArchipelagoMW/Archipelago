@@ -368,6 +368,19 @@ class CollectionState(object):
     def bottle_count(self):
         return len([pritem for pritem in self.prog_items if pritem.startswith('Bottle')])
 
+    def has_hearts(self, count):
+        # Warning: This oncly considers items that are marked as advancement items
+        return self.heart_count() >= count
+
+    def heart_count(self):
+        # Warning: This oncly considers items that are marked as advancement items
+        return (
+            self.item_count('Boss Heart Container')
+            + self.item_count('Sanctuary Heart Container')
+            + self.item_count('Piece of Heart') // 4
+            + 3 # starting hearts
+        )
+
     def can_lift_heavy_rocks(self):
         return self.has('Titans Mitts')
 

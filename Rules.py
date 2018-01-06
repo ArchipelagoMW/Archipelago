@@ -185,9 +185,17 @@ def global_rules(world):
     set_rule(world.get_entrance('Fairy Ascension Mirror Spot'), lambda state: state.has_Mirror() and state.has_Pearl())  # need to lift flowers
     set_rule(world.get_entrance('Isolated Ledge Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Superbunny Cave Exit (Bottom)'), lambda state: False)  # Cannot get to bottom exit from top. Just exists for shuffling
-    set_rule(world.get_location('Spike Cave'), lambda state: state.has('Hammer') and state.can_lift_rocks() and (state.has('Cane of Byrna') or state.has('Cape')) and state.can_extend_magic())
-    # TODO: Current-VT logic is: hammer and lift_rocks and ((cape and extend) or (byrna and (can-take-damage OR canextend)))
-    # Is that really good enough? Can you really get through with byrna, single magic w/o refills and only 3 hearts? (answer: probably but seems to requires tas-like timing.)
+    set_rule(world.get_location('Spike Cave'), lambda state:
+             state.has('Hammer') and state.can_lift_rocks()
+             and ((state.has('Cape') and state.can_extend_magic())
+                  or (state.has('Cane of Byrna') and state.can_extend_magic())
+                  or (state.world.can_take_damage
+                      and state.has('Cane of Byrna')
+                      and (state.has_Boots() or state.has_hearts(4))
+                     )
+                 )
+            )
+
     set_rule(world.get_location('Hookshot Cave - Top Right'), lambda state: state.has('Hookshot'))
     set_rule(world.get_location('Hookshot Cave - Top Left'), lambda state: state.has('Hookshot'))
     set_rule(world.get_location('Hookshot Cave - Bottom Right'), lambda state: state.has('Hookshot') or state.has('Pegasus Boots'))
@@ -271,7 +279,7 @@ def global_rules(world):
 
     set_rule(world.get_entrance('Misery Mire Entrance Gap'), lambda state: (state.has_Boots() or state.has('Hookshot')) and (state.has_sword() or state.has('Fire Rod') or state.has('Ice Rod') or state.has('Hammer') or state.has('Cane of Somaria') or state.has('Bow')))  # need to defeat wizzrobes, bombs don't work ...
     set_rule(world.get_location('Misery Mire - Big Chest'), lambda state: state.has('Big Key (Misery Mire)'))
-    set_rule(world.get_location('Misery Mire - Spike Chest'), lambda state: state.world.can_take_damage or state.has('Cane of Byrna') or state.has('Cape'))
+    set_rule(world.get_location('Misery Mire - Spike Chest'), lambda state: (state.world.can_take_damage and state.has_hearts(4)) or state.has('Cane of Byrna') or state.has('Cape'))
     set_rule(world.get_entrance('Misery Mire Big Key Door'), lambda state: state.has('Big Key (Misery Mire)'))
     # you can squander the free small key from the pot by opening the south door to the north west switch room, locking you out of accessing a color switch ...
     # big key gives backdoor access to that from the teleporter in the north west
