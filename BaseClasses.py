@@ -781,7 +781,7 @@ class Spoiler(object):
             outfile.write('\n\nPaths:\n\n')
 
             path_listings = []
-            for location, path in self.paths.items():
+            for location, path in sorted(self.paths.items()):
                 path_lines = []
                 for region, exit in path:
                     if exit is not None:

@@ -26,7 +26,7 @@ def guiMain(args=None):
     randomizerWindow = ttk.Frame(notebook)
     adjustWindow = ttk.Frame(notebook)
     notebook.add(randomizerWindow, text='Randomize')
-    notebook.add(adjustWindow, text='Adjust')
+    notebook.add(adjustWindow, text='Adjust', sticky='NESW')
     notebook.pack()
 
     # Shared Controls
@@ -86,7 +86,7 @@ def guiMain(args=None):
     romEntry = Entry(romDialogFrame, textvariable=romVar)
 
     def RomSelect():
-        rom = filedialog.askopenfilename()
+        rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc")), ("All Files", "*")])
         romVar.set(rom)
     romSelectButton = Button(romDialogFrame, text='Select Rom', command=RomSelect)
 
@@ -303,7 +303,7 @@ def guiMain(args=None):
     romEntry2 = Entry(romDialogFrame2, textvariable=romVar2)
 
     def RomSelect2():
-        rom = filedialog.askopenfilename()
+        rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc")), ("All Files", "*")])
         romVar2.set(rom)
     romSelectButton2 = Button(romDialogFrame2, text='Select Rom', command=RomSelect2)
 
@@ -369,8 +369,8 @@ def guiMain(args=None):
 
     drowDownFrame2.pack(side=LEFT, pady=(0, 40))
     rightHalfFrame2.pack(side=RIGHT)
-    topFrame2.pack(side=TOP, pady=30)
-    bottomFrame2.pack(side=BOTTOM, pady=(180, 0))
+    topFrame2.pack(side=TOP, fill="both")
+    bottomFrame2.pack(side=BOTTOM)
 
     if args is not None:
         # load values from commandline args
@@ -454,14 +454,20 @@ class SpriteSelector(object):
         frame = LabelFrame(self.window, labelwidget=frame_label, padx=5, pady=5)
         frame.pack(side=TOP, fill=X)
 
-        i = 0
+        sprites = []
+
         for file in glob(output_path(path)):
-            sprite = Sprite(file)
+            sprites.append(Sprite(file))
+
+        sprites.sort(key=lambda s: str.lower(s.name or ""))
+
+        i = 0
+        for sprite in sprites:
             image = get_image_for_sprite(sprite)
             if image is None:
                 continue
             button = Button(frame, image=image, command=lambda spr=sprite: self.select_sprite(spr))
-            ToolTips.register(button, sprite.name + ("\nBy: %s" % sprite.author_name if sprite.author_name is not None else ""))
+            ToolTips.register(button, sprite.name + ("\nBy: %s" % sprite.author_name if sprite.author_name else ""))
             button.image = image
             button.grid(row=i // 16, column=i % 16)
             i += 1
@@ -544,7 +550,12 @@ class SpriteSelector(object):
 
 
     def browse_for_sprite(self):
-        sprite = filedialog.askopenfilename()
+        sprite = filedialog.askopenfilename(
+            filetypes=[("All Sprite Sources", (".zspr", ".spr", ".sfc", ".smc")),
+                       ("ZSprite files", ".zspr"),
+                       ("Sprite files", ".spr"),
+                       ("Rom Files", (".sfc", ".smc")),
+                       ("All Files", "*")])
         try:
             self.callback(Sprite(sprite))
         except Exception:
