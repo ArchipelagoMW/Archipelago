@@ -186,15 +186,19 @@ def global_rules(world):
     set_rule(world.get_entrance('Isolated Ledge Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Superbunny Cave Exit (Bottom)'), lambda state: False)  # Cannot get to bottom exit from top. Just exists for shuffling
     set_rule(world.get_location('Spike Cave'), lambda state:
-             state.has('Hammer') and state.can_lift_rocks()
-             and ((state.has('Cape') and
-                 (state.can_extend_magic(16)
-                 or (state.can_extend_magic(12) and (state.world.can_take_damage or state.has_Boots()))
-                 or (state.can_extend_magic(10) and state.world.can_take_damage and state.has_Boots())))
-             or (state.has('Cane of Byrna') and
-                 state.can_extend_magic(12)
-                 or (state.can_extend_magic(10) and (state.has_Boots() or state.world.can_take_damage))
-                 or (state.world.can_take_damage and (state.has_Boots() or state.has_hearts(4)))))
+             state.has('Hammer') and state.can_lift_rocks() and
+             (
+                 (
+                     state.has('Cape')
+                     and (state.can_extend_magic(16)
+                          or (state.can_extend_magic(12) and (state.world.can_take_damage or state.has_Boots()))
+                          or (state.can_extend_magic(10) and state.world.can_take_damage and state.has_Boots()))
+                 ) or (
+                     state.has('Cane of Byrna')
+                     and (state.can_extend_magic(12)
+                          or (state.can_extend_magic(10) and (state.has_Boots() or state.world.can_take_damage))
+                          or (state.world.can_take_damage and (state.has_Boots() or state.has_hearts(4)))))
+                 )
             )
 
     set_rule(world.get_location('Hookshot Cave - Top Right'), lambda state: state.has('Hookshot'))
