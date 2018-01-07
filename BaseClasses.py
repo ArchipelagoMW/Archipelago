@@ -383,8 +383,21 @@ class CollectionState(object):
     def can_lift_heavy_rocks(self):
         return self.has('Titans Mitts')
 
-    def can_extend_magic(self):
-        return self.has('Half Magic') or self.has('Quarter Magic') or self.has_bottle() # FIXME bottle should really also have a requirement that we can reach some shop that sells green or blue potions
+    def can_extend_magic(self, smallmagic=8): #This reflects the total magic Link has, not the total extra he has.
+        basemagic = 8
+        if self.has('Quarter Magic'):
+            basemagic = 32
+        elif self.has('Half Magic'):
+            basemagic = 16
+        if self.world.difficulty == 'hard':
+            basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count())
+        elif self.world.difficulty == 'expert':
+            basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count())
+        elif self.world.difficulty == 'insane':
+            basemagic = basemagic
+        else:
+            basemagic = basemagic + basemagic * self.bottle_count()
+        return basemagic >= smallmagic # FIXME bottle should really also have a requirement that we can reach some shop that sells green or blue potions
 
     def can_kill_most_things(self, enemies=5):
         return (self.has_blunt_weapon()

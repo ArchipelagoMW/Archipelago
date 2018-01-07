@@ -187,13 +187,14 @@ def global_rules(world):
     set_rule(world.get_entrance('Superbunny Cave Exit (Bottom)'), lambda state: False)  # Cannot get to bottom exit from top. Just exists for shuffling
     set_rule(world.get_location('Spike Cave'), lambda state:
              state.has('Hammer') and state.can_lift_rocks()
-             and ((state.has('Cape') and state.can_extend_magic())
-                  or (state.has('Cane of Byrna') and state.can_extend_magic())
-                  or (state.world.can_take_damage
-                      and state.has('Cane of Byrna')
-                      and (state.has_Boots() or state.has_hearts(4))
-                     )
-                 )
+             and ((state.has('Cape') and
+                 (state.can_extend_magic(16)
+                 or (state.can_extend_magic(12) and (state.world.can_take_damage or state.has_Boots()))
+                 or (state.can_extend_magic(10) and state.world.can_take_damage and state.has_Boots())))
+             or (state.has('Cane of Byrna') and
+                 state.can_extend_magic(12)
+                 or (state.can_extend_magic(10) and (state.has_Boots() or state.world.can_take_damage))
+                 or (state.world.can_take_damage and (state.has_Boots() or state.has_hearts(4)))))
             )
 
     set_rule(world.get_location('Hookshot Cave - Top Right'), lambda state: state.has('Hookshot'))
@@ -311,7 +312,7 @@ def global_rules(world):
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Top Left'), lambda state: state.has('Cane of Byrna') or state.has('Cape') or state.has('Mirror Shield'))
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Top Right'), lambda state: state.has('Cane of Byrna') or state.has('Cape') or state.has('Mirror Shield'))
     set_rule(world.get_entrance('Turtle Rock (Trinexx)'), lambda state: state.has('Small Key (Turtle Rock)', 4) and state.has('Big Key (Turtle Rock)') and state.has('Cane of Somaria') and state.has('Fire Rod') and state.has('Ice Rod') and
-             (state.has('Hammer') or state.has_beam_sword() or state.can_extend_magic()))
+             (state.has('Hammer') or state.has_beam_sword() or (state.has_sword and state.can_extend_magic(32))))
     # TODO: Per VT, possibly allow a regular sword with 4x extended magic (ie. quater magic, or half magic+bottle or 3 bottles)
     set_trock_key_rules(world)
 
@@ -374,7 +375,7 @@ def global_rules(world):
 
     set_rule(world.get_location('Ganon'), lambda state: state.has_beam_sword() and state.has_fire_source() and state.has('Crystal 1') and state.has('Crystal 2')
                                                         and state.has('Crystal 3') and state.has('Crystal 4') and state.has('Crystal 5') and state.has('Crystal 6') and state.has('Crystal 7')
-                                                        and (state.has('Tempered Sword') or state.has('Golden Sword') or (state.has('Silver Arrows') and state.has('Bow')) or state.has('Lamp') or state.can_extend_magic()))  # need to light torch a sufficient amount of times
+                                                        and (state.has('Tempered Sword') or state.has('Golden Sword') or (state.has('Silver Arrows') and state.has('Bow')) or state.has('Lamp') or state.can_extend_magic(12)))  # need to light torch a sufficient amount of times
     set_rule(world.get_entrance('Ganon Drop'), lambda state: state.has_beam_sword())  # need to damage ganon to get tiles to drop
 
 
@@ -451,7 +452,7 @@ def swordless_rules(world):
     open_rules(world)
 
     set_rule(world.get_entrance('Agahnims Tower'), lambda state: state.has('Cape') or state.has('Hammer') or state.has('Beat Agahnim 1'))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
-    set_rule(world.get_entrance('Agahnim 1'), lambda state: state.has('Hammer') or state.has('Bug Catching Net') and state.has('Small Key (Agahnims Tower)', 2))
+    set_rule(world.get_entrance('Agahnim 1'), lambda state: state.has('Hammer') or (state.has('Bug Catching Net') and (state.has('Fire Rod') or state.has('Bow') or state.has('Cane of Somaria'))) and state.has('Small Key (Agahnims Tower)', 2))
     set_rule(world.get_location('Ether Tablet'), lambda state: state.has('Book of Mudora') and state.has('Hammer'))
     set_rule(world.get_location('Bombos Tablet'), lambda state: state.has('Book of Mudora') and state.has('Hammer') and state.has_Mirror())
     set_rule(world.get_entrance('Misery Mire'), lambda state: state.has_Pearl() and state.has_misery_mire_medallion())  # sword not required to use medallion for opening in swordless (!)
