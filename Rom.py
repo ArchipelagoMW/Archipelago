@@ -732,7 +732,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
 
     # set rom name
     # 21 bytes
-    rom.write_bytes(0x7FC0, bytearray('ER_050_%09d\0' % world.seed, 'utf8') + world.option_identifier.to_bytes(4, 'big'))
+    rom.write_bytes(0x7FC0, bytearray('ER_052_%09d\0' % world.seed, 'utf8') + world.option_identifier.to_bytes(4, 'big'))
 
     # store hash table for main menu hash
     rom.write_bytes(0x187F00, hashtable)
