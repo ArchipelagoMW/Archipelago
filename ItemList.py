@@ -228,6 +228,16 @@ def generate_itempool(world):
     if world.keysanity:
         world.itempool.extend(get_dungeon_item_pool(world))
 
+    # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
+    # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
+    # We mark one random heart container as an advancement item (or 4 heart peices in expert mode)
+    if world.difficulty in ['easy', 'normal', 'hard']:
+        [item for item in world.itempool if item.name == 'Boss Heart Container'][0].advancement = True
+    elif world.difficulty in ['expert']:
+        adv_heart_pieces = [item for item in world.itempool if item.name == 'Piece of Heart'][0:4]
+        for hp in adv_heart_pieces:
+            hp.advancement = True
+
     # shuffle medallions
     mm_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
     tr_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]

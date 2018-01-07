@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from itertools import zip_longest
 import json
 import logging
 import random
@@ -232,8 +233,30 @@ def create_playthrough(world):
         for location in to_delete:
             sphere.remove(location)
 
-    # we are now down to just the required progress items in collection_spheres in a minimum number of spheres. As a cleanup, we right trim empty spheres (can happen if we have multiple triforces)
-    collection_spheres = [sphere for sphere in collection_spheres if sphere]
+    # we are now down to just the required progress items in collection_spheres. Unfortunately
+    # the previous pruning stage could potentially have made certain items dependant on others
+    # in the same or later sphere (because the location had 2 ways to access but the item originally
+    # used to access it was deemed not required.) So we need to do one final sphere collection pass
+    # to build up the correct spheres
+
+    required_locations = [item for sphere in collection_spheres for item in sphere]
+    state = CollectionState(world)
+    collection_spheres = []
+    while required_locations:
+        if not world.keysanity:
+            state.sweep_for_events(key_only=True)
+
+        sphere = list(filter(state.can_reach, required_locations))
+
+        for location in sphere:
+            required_locations.remove(location)
+            state.collect(location.item, True, location)
+
+        collection_spheres.append(sphere)
+
+        logging.getLogger('').debug('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres), len(sphere), len(required_locations))
+        if not sphere:
+            raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
 
     # store the required locations for statistical analysis
     old_world.required_locations = [location.name for sphere in collection_spheres for location in sphere]
@@ -243,7 +266,18 @@ def create_playthrough(world):
             value, node = node
             yield value
 
-    old_world.spoiler.paths = {location.name : list(reversed(list(map(str, flist_to_iter(state.path.get(location.parent_region, (location.parent_region, None))))))) for sphere in collection_spheres for location in sphere}
+    def get_path(state, region):
+        reversed_path_as_flist = state.path.get(region, (region, None))
+        string_path_flat = reversed(list(map(str, flist_to_iter(reversed_path_as_flist))))
+        # Now we combine the flat string list into (region, exit) pairs
+        pathsiter = iter(string_path_flat)
+        pathpairs = zip_longest(pathsiter, pathsiter)
+        return list(pathpairs)
+
+    old_world.spoiler.paths = {location.name : get_path(state, location.parent_region) for sphere in collection_spheres for location in sphere}
+    if any(exit == 'Pyramid Fairy' for path in old_world.spoiler.paths.values() for (_, exit) in path):
+        old_world.spoiler.paths['Big Bomb Shop'] = get_path(state, world.get_region('Big Bomb Shop'))
+        print(world.seed)
 
     # we can finally output our playthrough
     old_world.spoiler.playthrough = OrderedDict([(str(i + 1), {str(location): str(location.item) for location in sphere}) for i, sphere in enumerate(collection_spheres)])
