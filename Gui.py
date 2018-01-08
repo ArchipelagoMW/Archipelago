@@ -26,7 +26,7 @@ def guiMain(args=None):
     randomizerWindow = ttk.Frame(notebook)
     adjustWindow = ttk.Frame(notebook)
     notebook.add(randomizerWindow, text='Randomize')
-    notebook.add(adjustWindow, text='Adjust', sticky='NESW')
+    notebook.add(adjustWindow, text='Adjust')
     notebook.pack()
 
     # Shared Controls
@@ -369,8 +369,8 @@ def guiMain(args=None):
 
     drowDownFrame2.pack(side=LEFT, pady=(0, 40))
     rightHalfFrame2.pack(side=RIGHT)
-    topFrame2.pack(side=TOP, fill="both")
-    bottomFrame2.pack(side=BOTTOM)
+    topFrame2.pack(side=TOP, pady=30)
+    bottomFrame2.pack(side=BOTTOM, pady=(180, 0))
 
     if args is not None:
         # load values from commandline args
@@ -415,6 +415,7 @@ class SpriteSelector(object):
         self.window.wm_title("TAKE ANY ONE YOU WANT")
         self.window['padx'] = 5
         self.window['pady'] = 5
+        self.all_sprites = []
 
         def open_unofficial_sprite_dir(_evt):
             open_file(self.unofficial_sprite_dir)
@@ -440,11 +441,14 @@ class SpriteSelector(object):
         button = Button(frame, text="Update official sprites", command=self.update_official_sprites)
         button.pack(side=RIGHT, padx=(5, 0))
 
-        button = Button(frame, text="Use default Link sprite", command=self.use_default_link_sprite)
+        button = Button(frame, text="Default Link sprite", command=self.use_default_link_sprite)
+        button.pack(side=LEFT, padx=(0, 5))
+
+        button = Button(frame, text="Random sprite", command=self.use_random_sprite)
         button.pack(side=LEFT, padx=(0, 5))
 
         if adjuster:
-            button = Button(frame, text="Use current sprite from rom", command=self.use_default_sprite)
+            button = Button(frame, text="Current sprite from rom", command=self.use_default_sprite)
             button.pack(side=LEFT, padx=(0, 5))
 
         set_icon(self.window)
@@ -466,6 +470,7 @@ class SpriteSelector(object):
             image = get_image_for_sprite(sprite)
             if image is None:
                 continue
+            self.all_sprites.append(sprite)
             button = Button(frame, image=image, command=lambda spr=sprite: self.select_sprite(spr))
             ToolTips.register(button, sprite.name + ("\nBy: %s" % sprite.author_name if sprite.author_name else ""))
             button.image = image
@@ -569,6 +574,10 @@ class SpriteSelector(object):
 
     def use_default_link_sprite(self):
         self.callback(Sprite.default_link_sprite())
+        self.window.destroy()
+
+    def use_random_sprite(self):
+        self.callback(random.choice(self.all_sprites) if self.all_sprites else None)
         self.window.destroy()
 
     def select_sprite(self, spritename):
