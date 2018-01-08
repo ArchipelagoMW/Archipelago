@@ -26,7 +26,6 @@ class World(object):
         self._region_cache = {}
         self._entrance_cache = {}
         self._location_cache = {}
-        self._item_cache = {}
         self.required_locations = []
         self.place_dungeon_items = place_dungeon_items  # configurable in future
         self.shuffle_bonk_prizes = False
@@ -53,6 +52,8 @@ class World(object):
         self.fastmenu = fastmenu
         self.disable_music = disable_music
         self.keysanity = keysanity
+        self.can_take_damage = True
+        self.difficulty_requirements = None
         self.spoiler = Spoiler(self)
 
     def intialize_regions(self):
@@ -105,13 +106,13 @@ class World(object):
                 if 'Sword' in item.name:
                     if ret.has('Golden Sword'):
                         pass
-                    elif ret.has('Tempered Sword'):
+                    elif ret.has('Tempered Sword') and self.difficulty_requirements.progressive_sword_limit >= 4:
                         ret.prog_items.append('Golden Sword')
-                    elif ret.has('Master Sword'):
+                    elif ret.has('Master Sword') and self.difficulty_requirements.progressive_sword_limit >= 3:
                         ret.prog_items.append('Tempered Sword')
-                    elif ret.has('Fighter Sword'):
+                    elif ret.has('Fighter Sword') and self.difficulty_requirements.progressive_sword_limit >= 2:
                         ret.prog_items.append('Master Sword')
-                    else:
+                    elif self.difficulty_requirements.progressive_sword_limit >= 1:
                         ret.prog_items.append('Fighter Sword')
                 elif 'Glove' in item.name:
                     if ret.has('Titans Mitts'):
@@ -120,7 +121,18 @@ class World(object):
                         ret.prog_items.append('Titans Mitts')
                     else:
                         ret.prog_items.append('Power Glove')
-
+                elif 'Shield' in item.name:
+                    if ret.has('Mirror Shield'):
+                        pass
+                    elif ret.has('Red Shield') and self.difficulty_requirements.progressive_shield_limit >= 3:
+                        ret.prog_items.append('Mirror Shield')
+                    elif ret.has('Blue Shield')  and self.difficulty_requirements.progressive_shield_limit >= 2:
+                        ret.prog_items.append('Red Shield')
+                    elif self.difficulty_requirements.progressive_shield_limit >= 1:
+                        ret.prog_items.append('Blue Shield')
+            elif item.name.startswith('Bottle'):
+                if ret.bottle_count() < self.difficulty_requirements.progressive_bottle_limit:
+                    ret.prog_items.append(item.name)
             elif item.advancement or item.key:
                 ret.prog_items.append(item.name)
 
@@ -133,8 +145,11 @@ class World(object):
                                      'Small Key (Swamp Palace)', 'Big Key (Ice Palace)'] + ['Small Key (Ice Palace)'] * 2 + ['Big Key (Misery Mire)', 'Big Key (Turtle Rock)', 'Big Key (Ganons Tower)'] + ['Small Key (Misery Mire)'] * 3 + ['Small Key (Turtle Rock)'] * 4 + ['Small Key (Ganons Tower)'] * 4):
                 soft_collect(item)
         ret.sweep_for_events()
-        ret._clear_cache()
+        ret.clear_cached_unreachable()
         return ret
+
+    def get_items(self):
+        return [loc.item for loc in self.get_filled_locations()] + self.itempool
 
     def find_items(self, item):
         return [location for location in self.get_locations() if location.item is not None and location.item.name == item]
@@ -143,13 +158,13 @@ class World(object):
         if not isinstance(location, Location):
             location = self.get_location(location)
 
-        if location.can_fill(item):
+        if location.can_fill(self.state, item, False):
             location.item = item
             item.location = location
             if collect:
-                self.state.collect(item, location.event)
+                self.state.collect(item, location.event, location)
 
-            logging.getLogger('').debug('Placed %s at %s' % (item, location))
+            logging.getLogger('').debug('Placed %s at %s', item, location)
         else:
             raise RuntimeError('Cannot assign item %s to location %s.' % (item, location))
 
@@ -178,7 +193,7 @@ class World(object):
 
     def unlocks_new_location(self, item):
         temp_state = self.state.copy()
-        temp_state._clear_cache()
+        temp_state.clear_cached_unreachable()
         temp_state.collect(item, True)
 
         for location in self.get_unfilled_locations():
@@ -188,20 +203,25 @@ class World(object):
         return False
 
     def has_beaten_game(self, state):
-        if state.has('Triforce'): return True
+        if state.has('Triforce'):
+            return True
         if self.goal in ['triforcehunt']:
-            if state.item_count('Triforce Piece')+state.item_count('Power Star')> self.treasure_hunt_count:
+            if state.item_count('Triforce Piece') + state.item_count('Power Star') > self.treasure_hunt_count:
                 return True
         return False
 
     def can_beat_game(self, starting_state=None):
-        prog_locations = [location for location in self.get_locations() if location.item is not None and (location.item.advancement or location.event)]
-
         if starting_state:
             state = starting_state.copy()
         else:
             state = CollectionState(self)
-        treasure_pieces_collected = 0
+
+        if self.has_beaten_game(state):
+            return True
+
+        prog_locations = [location for location in self.get_locations() if location.item is not None and (location.item.advancement or location.event) and location not in state.locations_checked]
+
+        treasure_pieces_collected = state.item_count('Triforce Piece') + state.item_count('Power Star')
         while prog_locations:
             sphere = []
             # build up spheres of collection radius. Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
@@ -221,7 +241,7 @@ class World(object):
 
             for location in sphere:
                 prog_locations.remove(location)
-                state.collect(location.item, True)
+                state.collect(location.item, True, location)
 
         return False
 
@@ -233,7 +253,7 @@ class World(object):
         goal = ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'].index(self.goal)
         shuffle = ['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'].index(self.shuffle)
         difficulty = ['easy', 'normal', 'hard', 'expert', 'insane'].index(self.difficulty)
-        timer = ['none', 'display', 'timed', 'timed-ohko', 'timed-countdown','ohko'].index(self.timer)
+        timer = ['none', 'display', 'timed', 'timed-ohko', 'timed-countdown', 'ohko'].index(self.timer)
         progressive = ['on', 'off', 'random'].index(self.progressive)
         algorithm = ['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26', 'balanced'].index(self.algorithm)
         beatableonly = 1 if self.check_beatable_only else 0
@@ -252,8 +272,11 @@ class CollectionState(object):
         self.entrance_cache = {}
         self.recursion_count = 0
         self.events = []
+        self.path = {}
+        self.locations_checked = set()
 
-    def _clear_cache(self):
+
+    def clear_cached_unreachable(self):
         # we only need to invalidate results which were False, places we could reach before we can still reach after adding more items
         self.region_cache = {k: v for k, v in self.region_cache.items() if v}
         self.location_cache = {k: v for k, v in self.location_cache.items() if v}
@@ -266,6 +289,8 @@ class CollectionState(object):
         ret.location_cache = copy.copy(self.location_cache)
         ret.entrance_cache = copy.copy(self.entrance_cache)
         ret.events = copy.copy(self.events)
+        ret.path = copy.copy(self.path)
+        ret.locations_checked = copy.copy(self.locations_checked)
         return ret
 
     def can_reach(self, spot, resolution_hint=None):
@@ -321,15 +346,14 @@ class CollectionState(object):
             for event in reachable_events:
                 if event.name not in self.events:
                     self.events.append(event.name)
-                    self.collect(event.item, True)
+                    self.collect(event.item, True, event)
             new_locations = len(reachable_events) > checked_locations
             checked_locations = len(reachable_events)
 
     def has(self, item, count=1):
         if count == 1:
             return item in self.prog_items
-        else:
-            return self.item_count(item) >= count
+        return self.item_count(item) >= count
 
     def item_count(self, item):
         return len([pritem for pritem in self.prog_items if pritem == item])
@@ -338,10 +362,50 @@ class CollectionState(object):
         return self.has('Power Glove') or self.has('Titans Mitts')
 
     def has_bottle(self):
-        return self.has('Bottle') or self.has('Bottle (Red Potion)') or self.has('Bottle (Green Potion)') or self.has('Bottle (Blue Potion)') or self.has('Bottle (Fairy)') or self.has('Bottle (Bee)') or self.has('Bottle (Good Bee)')
+        return self.bottle_count() > 0
+
+    def bottle_count(self):
+        return len([pritem for pritem in self.prog_items if pritem.startswith('Bottle')])
+
+    def has_hearts(self, count):
+        # Warning: This oncly considers items that are marked as advancement items
+        return self.heart_count() >= count
+
+    def heart_count(self):
+        # Warning: This oncly considers items that are marked as advancement items
+        return (
+            self.item_count('Boss Heart Container')
+            + self.item_count('Sanctuary Heart Container')
+            + self.item_count('Piece of Heart') // 4
+            + 3 # starting hearts
+        )
 
     def can_lift_heavy_rocks(self):
         return self.has('Titans Mitts')
+
+    def can_extend_magic(self, smallmagic=8): #This reflects the total magic Link has, not the total extra he has.
+        basemagic = 8
+        if self.has('Quarter Magic'):
+            basemagic = 32
+        elif self.has('Half Magic'):
+            basemagic = 16
+        if self.world.difficulty == 'hard':
+            basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count())
+        elif self.world.difficulty == 'expert':
+            basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count())
+        elif self.world.difficulty == 'insane':
+            basemagic = basemagic
+        else:
+            basemagic = basemagic + basemagic * self.bottle_count()
+        return basemagic >= smallmagic # FIXME bottle should really also have a requirement that we can reach some shop that sells green or blue potions
+
+    def can_kill_most_things(self, enemies=5):
+        return (self.has_blunt_weapon()
+                or self.has('Cane of Somaria')
+                or (self.has('Cane of Byrna') and (enemies < 6 or self.can_extend_Magic()))
+                or self.has('Bow')
+                or self.has('Fire Rod')
+               )
 
     def has_sword(self):
         return self.has('Fighter Sword') or self.has('Master Sword') or self.has('Tempered Sword') or self.has('Golden Sword')
@@ -370,22 +434,24 @@ class CollectionState(object):
     def has_turtle_rock_medallion(self):
         return self.has(self.world.required_medallions[1])
 
-    def collect(self, item, event=False):
+    def collect(self, item, event=False, location=None):
+        if location:
+            self.locations_checked.add(location)
         changed = False
         if item.name.startswith('Progressive '):
             if 'Sword' in item.name:
                 if self.has('Golden Sword'):
                     pass
-                elif self.has('Tempered Sword'):
+                elif self.has('Tempered Sword') and self.world.difficulty_requirements.progressive_sword_limit >= 4:
                     self.prog_items.append('Golden Sword')
                     changed = True
-                elif self.has('Master Sword'):
+                elif self.has('Master Sword') and self.world.difficulty_requirements.progressive_sword_limit >= 3:
                     self.prog_items.append('Tempered Sword')
                     changed = True
-                elif self.has('Fighter Sword'):
+                elif self.has('Fighter Sword') and self.world.difficulty_requirements.progressive_sword_limit >= 2:
                     self.prog_items.append('Master Sword')
                     changed = True
-                else:
+                elif self.world.difficulty_requirements.progressive_sword_limit >= 1:
                     self.prog_items.append('Fighter Sword')
                     changed = True
             elif 'Glove' in item.name:
@@ -400,25 +466,28 @@ class CollectionState(object):
             elif 'Shield' in item.name:
                 if self.has('Mirror Shield'):
                     pass
-                elif self.has('Red Shield'):
+                elif self.has('Red Shield') and self.world.difficulty_requirements.progressive_shield_limit >= 3:
                     self.prog_items.append('Mirror Shield')
                     changed = True
-                elif self.has('Blue Shield'):
+                elif self.has('Blue Shield')  and self.world.difficulty_requirements.progressive_shield_limit >= 2:
                     self.prog_items.append('Red Shield')
                     changed = True
-                else:
+                elif self.world.difficulty_requirements.progressive_shield_limit >= 1:
                     self.prog_items.append('Blue Shield')
                     changed = True
-
+        elif item.name.startswith('Bottle'):
+            if self.bottle_count() < self.world.difficulty_requirements.progressive_bottle_limit:
+                self.prog_items.append(item.name)
+                changed = True
         elif event or item.advancement:
             self.prog_items.append(item.name)
             changed = True
 
         if changed:
-            self._clear_cache()
+            self.clear_cached_unreachable()
             if not event:
                 self.sweep_for_events()
-                self._clear_cache()
+                self.clear_cached_unreachable()
 
     def remove(self, item):
         if item.advancement:
@@ -473,6 +542,7 @@ class Region(object):
         self.locations = []
         self.dungeon = None
         self.world = None
+        self.is_light_world = False # will be set aftermaking connections.
         self.spot_type = 'Region'
         self.hint_text = 'Hyrule'
         self.recursion_count = 0
@@ -480,6 +550,8 @@ class Region(object):
     def can_reach(self, state):
         for entrance in self.entrances:
             if state.can_reach(entrance):
+                if not self in state.path:
+                    state.path[self] = (self.name, state.path.get(entrance, None))
                 return True
         return False
 
@@ -487,10 +559,7 @@ class Region(object):
         is_dungeon_item = item.key or item.map or item.compass
         sewer_hack = self.world.mode == 'standard' and item.name == 'Small Key (Escape)'
         if sewer_hack or (is_dungeon_item and not self.world.keysanity):
-            if self.dungeon and self.dungeon.is_dungeon_item(item):
-                return True
-            else:
-                return False
+            return self.dungeon and self.dungeon.is_dungeon_item(item)
 
         return True
 
@@ -512,12 +581,12 @@ class Entrance(object):
         self.spot_type = 'Entrance'
         self.recursion_count = 0
         self.vanilla = None
-
-    def access_rule(self, state):
-        return True
+        self.access_rule = lambda state: True
 
     def can_reach(self, state):
         if self.access_rule(state) and state.can_reach(self.parent_region):
+            if not self in state.path:
+                state.path[self] = (self.name, state.path.get(self.parent_region, (self.parent_region.name, None)))
             return True
 
         return False
@@ -576,15 +645,12 @@ class Location(object):
         self.recursion_count = 0
         self.staleness_count = 0
         self.event = False
+        self.always_allow = lambda item, state: False
+        self.access_rule = lambda state: True
+        self.item_rule = lambda item: True
 
-    def access_rule(self, state):
-        return True
-
-    def item_rule(self, item):
-        return True
-
-    def can_fill(self, item):
-        return self.parent_region.can_fill(item) and self.item_rule(item)
+    def can_fill(self, state, item, check_access=True):
+        return self.always_allow(item, self) or (self.parent_region.can_fill(item) and self.item_rule(item) and (not check_access or self.can_reach(state)))
 
     def can_reach(self, state):
         if self.access_rule(state) and state.can_reach(self.parent_region):
@@ -650,6 +716,7 @@ class Spoiler(object):
         self.medallions = {}
         self.playthrough = {}
         self.locations = {}
+        self.paths = {}
         self.metadata = {}
 
     def set_entrance(self, entrance, exit, direction):
@@ -683,6 +750,7 @@ class Spoiler(object):
         out.update(self.locations)
         out['medallions'] = self.medallions
         out['playthrough'] = self.playthrough
+        out['paths'] = self.paths
         out['meta'] = self.metadata
         return json.dumps(out)
 
@@ -698,7 +766,7 @@ class Spoiler(object):
             outfile.write('All Locations Accessible:        %s\n' % ('Yes' if self.metadata['completeable'] else 'No, some locations may be unreachable'))
             outfile.write('Maps and Compasses in Dungeons:  %s\n' % ('Yes' if self.metadata['dungeonitems'] else 'No'))
             outfile.write('L\\R Quickswap enabled:           %s\n' % ('Yes' if self.metadata['quickswap'] else 'No'))
-            outfile.write('Fastmenu enabled:                %s\n' % ('Yes' if self.metadata['fastmenu'] else 'No'))
+            outfile.write('Menu speed:                      %s\n' % self.metadata['fastmenu'])
             outfile.write('Keysanity enabled:               %s' % ('Yes' if self.metadata['keysanity'] else 'No'))
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
@@ -710,3 +778,16 @@ class Spoiler(object):
             outfile.write('\n'.join(['%s: %s' % (location, item) for (location, item) in self.locations['other locations'].items()]))
             outfile.write('\n\nPlaythrough:\n\n')
             outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(['  %s: %s' % (location, item) for (location, item) in sphere.items()])) for (sphere_nr, sphere) in self.playthrough.items()]))
+            outfile.write('\n\nPaths:\n\n')
+
+            path_listings = []
+            for location, path in sorted(self.paths.items()):
+                path_lines = []
+                for region, exit in path:
+                    if exit is not None:
+                        path_lines.append("{} -> {}".format(region, exit))
+                    else:
+                        path_lines.append(region)
+                path_listings.append("{}\n        {}".format(location, "\n   =>   ".join(path_lines)))
+
+            outfile.write('\n'.join(path_listings))

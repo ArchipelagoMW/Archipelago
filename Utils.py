@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 
 def is_bundled():
@@ -10,7 +11,7 @@ def local_path(path):
 
     if is_bundled():
         # we are running in a bundle
-        local_path.cached_path = sys._MEIPASS
+        local_path.cached_path = sys._MEIPASS # pylint: disable=protected-access,no-member
     else:
         # we are running in a normal Python environment
         local_path.cached_path = os.path.dirname(os.path.abspath(__file__))
@@ -40,7 +41,7 @@ def output_path(path):
             documents = buf.value
 
         elif sys.platform == 'darwin':
-            from AppKit import NSSearchPathForDirectoriesInDomains
+            from AppKit import NSSearchPathForDirectoriesInDomains # pylint: disable=import-error
             # http://developer.apple.com/DOCUMENTATION/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Functions/Reference/reference.html#//apple_ref/c/func/NSSearchPathForDirectoriesInDomains
             NSDocumentDirectory = 9
             NSUserDomainMask = 1
@@ -60,7 +61,7 @@ def open_file(filename):
     if sys.platform == 'win32':
         os.startfile(filename)
     else:
-        open_Command = 'open' if sys.platform == 'darwin' else 'xdg-open'
+        open_command = 'open' if sys.platform == 'darwin' else 'xdg-open'
         subprocess.call([open_command, filename])
 
 def close_console():
@@ -69,5 +70,39 @@ def close_console():
         import ctypes.wintypes
         try:
             ctypes.windll.kernel32.FreeConsole()
-        except:
+        except Exception:
             pass
+
+def new_logic_array():
+    import random
+    l = list(range(256))
+    random.SystemRandom().shuffle(l)
+    chunks = [l[i:i + 16] for i in range(0, len(l), 16)]
+    lines = [", ".join([str(j) for j in i]) for i in chunks]
+    print("logic_hash = ["+",\n              ".join(lines)+"]")
+
+def make_new_base2current(old_rom='Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', new_rom='working.sfc'):
+    from collections import OrderedDict
+    import json
+    import hashlib
+    with open(old_rom, 'rb') as stream:
+        old_rom_data = bytearray(stream.read())
+    with open(new_rom, 'rb') as stream:
+        new_rom_data = bytearray(stream.read())
+    # extend to 2 mb
+    old_rom_data.extend(bytearray([0x00] * (2097152 - len(old_rom_data))))
+
+    out_data = OrderedDict()
+    for idx, old in enumerate(old_rom_data):
+        new = new_rom_data[idx]
+        if old != new:
+            out_data[idx] = [int(new)]
+    for offset in reversed(list(out_data.keys())):
+        if offset - 1 in out_data:
+            out_data[offset-1].extend(out_data.pop(offset))
+    with open('data/base2current.json', 'wt') as outfile:
+        json.dump([{key:value} for key, value in out_data.items()], outfile, separators=(",", ":"))
+
+    basemd5 = hashlib.md5()
+    basemd5.update(new_rom_data)
+    return "New Rom Hash: " + basemd5.hexdigest()

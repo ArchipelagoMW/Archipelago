@@ -293,7 +293,7 @@ def link_entrances(world):
                         ('North Fairy Cave Exit', 'North Fairy Cave'),
                         ('Lost Woods Hideout Exit', 'Lost Woods Hideout (top)'),
                         ('Lumberjack Tree Exit', 'Lumberjack Tree (top)'),
-                        (('Skull Woods Second Section Exit (East)', 'Skull Woods Second Section Exit (West)'), 'Skull Woods Second Section')]
+                        (('Skull Woods Second Section Exit (East)', 'Skull Woods Second Section Exit (West)'), 'Skull Woods Second Section (Drop)')]
 
         if world.mode == 'standard':
             # cannot move uncle cave
@@ -519,7 +519,7 @@ def link_entrances(world):
         hole_entrances = ['Kakariko Well Drop', 'Bat Cave Drop', 'North Fairy Cave Drop', 'Lost Woods Hideout Drop', 'Lumberjack Tree Tree', 'Sanctuary Grave',
                           'Skull Woods First Section Hole (East)', 'Skull Woods First Section Hole (West)', 'Skull Woods First Section Hole (North)', 'Skull Woods Second Section Hole']
 
-        hole_targets = ['Kakariko Well (top)', 'Bat Cave (right)', 'North Fairy Cave', 'Lost Woods Hideout (top)', 'Lumberjack Tree (top)', 'Sewer Drop', 'Skull Woods Second Section',
+        hole_targets = ['Kakariko Well (top)', 'Bat Cave (right)', 'North Fairy Cave', 'Lost Woods Hideout (top)', 'Lumberjack Tree (top)', 'Sewer Drop', 'Skull Woods Second Section (Drop)',
                         'Skull Woods First Section (Left)', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Top)']
 
         if world.mode == 'standard':
@@ -834,7 +834,7 @@ def connect_doors(world, doors, targets):
 
 def skull_woods_shuffle(world):
     connect_random(world, ['Skull Woods First Section Hole (East)', 'Skull Woods First Section Hole (West)', 'Skull Woods First Section Hole (North)', 'Skull Woods Second Section Hole'],
-                   ['Skull Woods First Section (Left)', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Top)', 'Skull Woods Second Section'])
+                   ['Skull Woods First Section (Left)', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Top)', 'Skull Woods Second Section (Drop)'])
     connect_random(world, ['Skull Woods First Section Door', 'Skull Woods Second Section Door (East)', 'Skull Woods Second Section Door (West)'],
                    ['Skull Woods First Section Exit', 'Skull Woods Second Section Exit (East)', 'Skull Woods Second Section Exit (West)'], True)
 
@@ -1162,6 +1162,7 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Desert Palace Entrance (North) Rocks', 'Desert Palace Entrance (North) Spot'),
                          ('Desert Ledge Return Rocks', 'Desert Ledge'),
                          ('Hyrule Castle Ledge Courtyard Drop', 'Hyrule Castle Courtyard'),
+                         ('Hyrule Castle Main Gate', 'Hyrule Castle Courtyard'),
                          ('Throne Room', 'Sewers (Dark)'),
                          ('Sewers Door', 'Sewers'),
                          ('Sanctuary Push Door', 'Sanctuary'),
@@ -1172,6 +1173,8 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Spectacle Rock Cave Drop', 'Spectacle Rock Cave (Bottom)'),
                          ('Spectacle Rock Cave Peak Drop', 'Spectacle Rock Cave (Bottom)'),
                          ('Death Mountain Return Ledge Drop', 'Light World'),
+                         ('Old Man House Front to Back', 'Old Man House Back'),
+                         ('Old Man House Back to Front', 'Old Man House'),
                          ('Broken Bridge (West)', 'East Death Mountain (Bottom)'),
                          ('Broken Bridge (East)', 'Death Mountain'),
                          ('East Death Mountain Drop', 'East Death Mountain (Bottom)'),
@@ -1231,6 +1234,7 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Turtle Rock Teleporter', 'Turtle Rock (Top)'),
                          ('Turtle Rock Drop', 'Dark Death Mountain (Top)'),
                          ('Floating Island Drop', 'Dark Death Mountain (Top)'),
+                         ('Floating Island Mirror Spot', 'Death Mountain Floating Island (Light World)'),
                          ('East Death Mountain Teleporter', 'Dark Death Mountain (East Bottom)'),
                          ('Isolated Ledge Mirror Spot', 'Fairy Ascension Ledge'),
                          ('Spiral Cave Mirror Spot', 'Spiral Cave Ledge'),
@@ -1248,6 +1252,7 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Skull Woods First Section (Left) Door to Right', 'Skull Woods First Section (Right)'),
                          ('Skull Woods First Section (Left) Door to Exit', 'Skull Woods First Section'),
                          ('Skull Woods First Section (Top) One-Way Path', 'Skull Woods First Section'),
+                         ('Skull Woods Second Section (Drop)', 'Skull Woods Second Section'),
                          ('Blind Fight', 'Blind Fight'),
                          ('Ice Palace Entrance Room', 'Ice Palace (Main)'),
                          ('Ice Palace (East)', 'Ice Palace (East)'),
@@ -1293,7 +1298,7 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Ganons Tower Moldorm Gap', 'Agahnim 2'),
                          ('Ganon Drop', 'Bottom of Pyramid'),
                          ('Pyramid Drop', 'East Dark World')
-                         ]
+                        ]
 
 # non-shuffled entrance links
 default_connections = [('Waterfall of Wishing', 'Waterfall of Wishing'),
@@ -1438,14 +1443,14 @@ default_connections = [('Waterfall of Wishing', 'Waterfall of Wishing'),
                        ('Superbunny Cave Exit (Top)', 'Dark Death Mountain (Top)'),
                        ('Superbunny Cave Exit (Bottom)', 'Dark Death Mountain (East Bottom)'),
                        ('Hookshot Cave Exit (South)', 'Dark Death Mountain (Top)'),
-                       ('Hookshot Cave Exit (North)', 'Death Mountain Floating Island'),
+                       ('Hookshot Cave Exit (North)', 'Death Mountain Floating Island (Dark World)'),
                        ('Hookshot Cave Back Entrance', 'Hookshot Cave'),
                        ('Mimic Cave Mirror Spot', 'Mimic Cave'),
 
                        ('Pyramid Hole', 'Pyramid'),
                        ('Pyramid Exit', 'Pyramid Ledge'),
                        ('Pyramid Entrance', 'Bottom of Pyramid')
-                       ]
+                      ]
 
 # non shuffled dungeons
 default_dungeon_connections = [('Desert Palace Entrance (South)', 'Desert Palace Main'),
@@ -1478,7 +1483,7 @@ default_dungeon_connections = [('Desert Palace Entrance (South)', 'Desert Palace
                                ('Skull Woods First Section Hole (North)', 'Skull Woods First Section (Top)'),
                                ('Skull Woods First Section Door', 'Skull Woods First Section'),
                                ('Skull Woods First Section Exit', 'Skull Woods Forest'),
-                               ('Skull Woods Second Section Hole', 'Skull Woods Second Section'),
+                               ('Skull Woods Second Section Hole', 'Skull Woods Second Section (Drop)'),
                                ('Skull Woods Second Section Door (East)', 'Skull Woods Second Section'),
                                ('Skull Woods Second Section Door (West)', 'Skull Woods Second Section'),
                                ('Skull Woods Second Section Exit (East)', 'Skull Woods Forest'),
@@ -1505,7 +1510,7 @@ default_dungeon_connections = [('Desert Palace Entrance (South)', 'Desert Palace
 
                                ('Ganons Tower', 'Ganons Tower (Entrance)'),
                                ('Ganons Tower Exit', 'Dark Death Mountain (Top)')
-                               ]
+                              ]
 
 
 # ToDo somehow merge this with creation of the locations
@@ -1771,7 +1776,7 @@ exit_ids = {'Desert Palace Exit (South)': (0x09, 0x84),
             'Lost Woods Hideout (top)': 0x7A,
             'Lumberjack Tree (top)': 0x7F,
             'Sewer Drop': 0x81,
-            'Skull Woods Second Section': 0x79,
+            'Skull Woods Second Section (Drop)': 0x79,
             'Skull Woods First Section (Left)': 0x77,
             'Skull Woods First Section (Right)': 0x78,
             'Skull Woods First Section (Top)': 0x76,

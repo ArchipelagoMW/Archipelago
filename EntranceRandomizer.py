@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import argparse
 import os
 import logging
@@ -5,8 +6,8 @@ import random
 import textwrap
 import sys
 
-from Main import main
 from Gui import guiMain
+from Main import main
 from Utils import is_bundled, close_console
 
 
@@ -16,7 +17,7 @@ class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
         return textwrap.dedent(action.help)
 
 
-if __name__ == '__main__':
+def start():
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument('--create_spoiler', help='Output a Spoiler File', action='store_true')
     parser.add_argument('--logic', default='noglitches', const='noglitches', nargs='?', choices=['noglitches', 'minorglitches'],
@@ -151,7 +152,11 @@ if __name__ == '__main__':
                              --seed given will produce the same 10 (different) roms each
                              time).
                              ''', type=int)
-    parser.add_argument('--fastmenu', help='Enable instant menu', action='store_true')
+    parser.add_argument('--fastmenu', default='normal', const='normal', nargs='?', choices=['normal', 'instant', 'double', 'triple', 'quadruple', 'half'],
+                        help='''\
+                             Select the rate at which the menu opens and closes.
+                             (default: %(default)s)
+                             ''')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
     parser.add_argument('--keysanity', help='''\
@@ -191,7 +196,7 @@ if __name__ == '__main__':
                             ''')
     args = parser.parse_args()
 
-    if is_bundled and len(sys.argv) == 1 :
+    if is_bundled() and len(sys.argv) == 1:
         # for the bundled builds, if we have no arguments, the user
         # probably wants the gui. Users of the bundled build who want the command line
         # interface shouuld specify at least one option, possibly setting a value to a
@@ -219,8 +224,11 @@ if __name__ == '__main__':
         guiMain(args)
     elif args.count is not None:
         seed = args.seed
-        for i in range(args.count):
+        for _ in range(args.count):
             main(seed=seed, args=args)
             seed = random.randint(0, 999999999)
     else:
         main(seed=args.seed, args=args)
+
+if __name__ == '__main__':
+    start()
