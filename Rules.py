@@ -186,15 +186,19 @@ def global_rules(world):
     set_rule(world.get_entrance('Isolated Ledge Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Superbunny Cave Exit (Bottom)'), lambda state: False)  # Cannot get to bottom exit from top. Just exists for shuffling
     set_rule(world.get_location('Spike Cave'), lambda state:
-             state.has('Hammer') and state.can_lift_rocks()
-             and ((state.has('Cape') and
-                 (state.can_extend_magic(16)
-                 or (state.can_extend_magic(12) and (state.world.can_take_damage or state.has_Boots()))
-                 or (state.can_extend_magic(10) and state.world.can_take_damage and state.has_Boots())))
-             or (state.has('Cane of Byrna') and
-                 state.can_extend_magic(12)
-                 or (state.can_extend_magic(10) and (state.has_Boots() or state.world.can_take_damage))
-                 or (state.world.can_take_damage and (state.has_Boots() or state.has_hearts(4)))))
+             state.has('Hammer') and state.can_lift_rocks() and
+             (
+                 (
+                     state.has('Cape')
+                     and (state.can_extend_magic(16)
+                          or (state.can_extend_magic(12) and (state.world.can_take_damage or state.has_Boots()))
+                          or (state.can_extend_magic(10) and state.world.can_take_damage and state.has_Boots()))
+                 ) or (
+                     state.has('Cane of Byrna')
+                     and (state.can_extend_magic(12)
+                          or (state.can_extend_magic(10) and (state.has_Boots() or state.world.can_take_damage))
+                          or (state.world.can_take_damage and (state.has_Boots() or state.has_hearts(4)))))
+                 )
             )
 
     set_rule(world.get_location('Hookshot Cave - Top Right'), lambda state: state.has('Hookshot'))
@@ -458,6 +462,7 @@ def swordless_rules(world):
     set_rule(world.get_entrance('Misery Mire'), lambda state: state.has_Pearl() and state.has_misery_mire_medallion())  # sword not required to use medallion for opening in swordless (!)
     set_rule(world.get_entrance('Turtle Rock'), lambda state: state.has_Pearl() and state.has_turtle_rock_medallion() and state.can_reach('Turtle Rock (Top)', 'Region'))   # sword not required to use medallion for opening in swordless (!)
     set_rule(world.get_entrance('Skull Woods Torch Room'), lambda state: state.has('Small Key (Skull Woods)', 3) and state.has('Fire Rod'))  # no curtain
+    set_rule(world.get_entrance('Ice Palace Entrance Room'), lambda state: state.has('Fire Rod') or state.has('Bombos')) #in swordless mode bombos pads are present in the relevant parts of ice palace
     set_rule(world.get_location('Agahnim 2'), lambda state: state.has('Hammer') or state.has('Bug Catching Net'))
     set_rule(world.get_location('Ganon'), lambda state: state.has('Hammer') and state.has_fire_source() and state.has('Silver Arrows') and state.has('Bow') and state.has('Crystal 1') and state.has('Crystal 2')
                                                         and state.has('Crystal 3') and state.has('Crystal 4') and state.has('Crystal 5') and state.has('Crystal 6') and state.has('Crystal 7'))

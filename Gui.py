@@ -86,7 +86,7 @@ def guiMain(args=None):
     romEntry = Entry(romDialogFrame, textvariable=romVar)
 
     def RomSelect():
-        rom = filedialog.askopenfilename()
+        rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc")), ("All Files", "*")])
         romVar.set(rom)
     romSelectButton = Button(romDialogFrame, text='Select Rom', command=RomSelect)
 
@@ -303,7 +303,7 @@ def guiMain(args=None):
     romEntry2 = Entry(romDialogFrame2, textvariable=romVar2)
 
     def RomSelect2():
-        rom = filedialog.askopenfilename()
+        rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc")), ("All Files", "*")])
         romVar2.set(rom)
     romSelectButton2 = Button(romDialogFrame2, text='Select Rom', command=RomSelect2)
 
@@ -415,6 +415,7 @@ class SpriteSelector(object):
         self.window.wm_title("TAKE ANY ONE YOU WANT")
         self.window['padx'] = 5
         self.window['pady'] = 5
+        self.all_sprites = []
 
         def open_unofficial_sprite_dir(_evt):
             open_file(self.unofficial_sprite_dir)
@@ -440,11 +441,14 @@ class SpriteSelector(object):
         button = Button(frame, text="Update official sprites", command=self.update_official_sprites)
         button.pack(side=RIGHT, padx=(5, 0))
 
-        button = Button(frame, text="Use default Link sprite", command=self.use_default_link_sprite)
+        button = Button(frame, text="Default Link sprite", command=self.use_default_link_sprite)
+        button.pack(side=LEFT, padx=(0, 5))
+
+        button = Button(frame, text="Random sprite", command=self.use_random_sprite)
         button.pack(side=LEFT, padx=(0, 5))
 
         if adjuster:
-            button = Button(frame, text="Use current sprite from rom", command=self.use_default_sprite)
+            button = Button(frame, text="Current sprite from rom", command=self.use_default_sprite)
             button.pack(side=LEFT, padx=(0, 5))
 
         set_icon(self.window)
@@ -454,14 +458,21 @@ class SpriteSelector(object):
         frame = LabelFrame(self.window, labelwidget=frame_label, padx=5, pady=5)
         frame.pack(side=TOP, fill=X)
 
-        i = 0
+        sprites = []
+
         for file in glob(output_path(path)):
-            sprite = Sprite(file)
+            sprites.append(Sprite(file))
+
+        sprites.sort(key=lambda s: str.lower(s.name or ""))
+
+        i = 0
+        for sprite in sprites:
             image = get_image_for_sprite(sprite)
             if image is None:
                 continue
+            self.all_sprites.append(sprite)
             button = Button(frame, image=image, command=lambda spr=sprite: self.select_sprite(spr))
-            ToolTips.register(button, sprite.name + ("\nBy: %s" % sprite.author_name if sprite.author_name is not None else ""))
+            ToolTips.register(button, sprite.name + ("\nBy: %s" % sprite.author_name if sprite.author_name else ""))
             button.image = image
             button.grid(row=i // 16, column=i % 16)
             i += 1
@@ -544,7 +555,12 @@ class SpriteSelector(object):
 
 
     def browse_for_sprite(self):
-        sprite = filedialog.askopenfilename()
+        sprite = filedialog.askopenfilename(
+            filetypes=[("All Sprite Sources", (".zspr", ".spr", ".sfc", ".smc")),
+                       ("ZSprite files", ".zspr"),
+                       ("Sprite files", ".spr"),
+                       ("Rom Files", (".sfc", ".smc")),
+                       ("All Files", "*")])
         try:
             self.callback(Sprite(sprite))
         except Exception:
@@ -558,6 +574,10 @@ class SpriteSelector(object):
 
     def use_default_link_sprite(self):
         self.callback(Sprite.default_link_sprite())
+        self.window.destroy()
+
+    def use_random_sprite(self):
+        self.callback(random.choice(self.all_sprites) if self.all_sprites else None)
         self.window.destroy()
 
     def select_sprite(self, spritename):
