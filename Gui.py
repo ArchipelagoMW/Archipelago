@@ -351,7 +351,7 @@ def guiMain(args=None):
     def adjustRom():
         guiargs = Namespace
         guiargs.heartbeep = heartbeepVar.get()
-        guiargs.fastmenu = bool(fastMenuVar.get())
+        guiargs.fastmenu = fastMenuVar.get()
         guiargs.quickswap = bool(quickSwapVar.get())
         guiargs.disablemusic = bool(disableMusicVar.get())
         guiargs.rom = romVar2.get()
