@@ -297,13 +297,51 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     if world.keysanity:
         rom.write_byte(0x155C9, random.choice([0x11, 0x16]))  # Randomize GT music too in keysanity mode
 
-    # patch entrances
+    # patch entrance/exits/holess
     for region in world.regions:
         for exit in region.exits:
             if exit.target is not None:
-                addresses = [exit.addresses] if isinstance(exit.addresses, int) else exit.addresses
-                for address in addresses:
-                    rom.write_byte(address, exit.target)
+                if isinstance(exit.addresses, tuple):
+                    offset = exit.target
+                    room_id, ow_area, vram_loc, scroll_y, scroll_x, link_y, link_x, camera_y, camera_x, unknown_1, unknown_2, door_1, door_2 = exit.addresses
+                    #room id is deliberately not written
+
+
+                    rom.write_byte(0x15B8C + offset, ow_area)
+                    rom.write_int16_to_rom(0x15BDB + 2 * offset, vram_loc)
+                    rom.write_int16_to_rom(0x15C79 + 2 * offset, scroll_y)
+                    rom.write_int16_to_rom(0x15D17 + 2 * offset, scroll_x)
+
+                    # for positioning fixups we abuse the roomid as a way of identifying which exit data we are appling
+                    # Thanks to Zarby89 for originally finding these values
+                    # todo fix screen scrolling
+
+                    if room_id == 0x0059 and world.fix_skullwoods_exit:
+                        rom.write_int16_to_rom(0x15DB5 + 2 * offset, 0x00F8)
+                    elif room_id == 0x004a and world.fix_palaceofdarkness_exit:
+                        rom.write_int16_to_rom(0x15DB5 + 2 * offset, 0x0640)
+                    elif room_id == 0x00d6 and world.fix_trock_exit:
+                        rom.write_int16_to_rom(0x15DB5 + 2 * offset, 0x0134)
+                    elif room_id == 0x000c and world.fix_gtower_exit: # fix ganons tower exit point
+                        rom.write_byte(0x15DB5 + 2 * offset, 0x00A4)
+                    else:
+                        rom.write_int16_to_rom(0x15DB5 + 2 * offset, link_y)
+                        
+                    rom.write_int16_to_rom(0x15E53 + 2 * offset, link_x)
+                    rom.write_int16_to_rom(0x15EF1 + 2 * offset, camera_y)
+                    rom.write_int16_to_rom(0x15F8F + 2 * offset, camera_x)
+                    rom.write_byte(0x1602D + offset, unknown_1)
+                    rom.write_byte(0x1607C + offset, unknown_2)
+                    rom.write_int16_to_rom(0x160CB + 2 * offset, door_1)
+                    rom.write_int16_to_rom(0x16169 + 2 * offset, door_2)
+                elif isinstance(exit.addresses, list):
+                    # is hole
+                    for address in exit.addresses:
+                        rom.write_byte(address, exit.target)
+                else:
+                    # patch door table
+                    rom.write_byte(0xDBB73 + exit.addresses, exit.target)
+
 
     # patch medallion requirements
     if world.required_medallions[0] == 'Bombos':
@@ -720,20 +758,6 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     else:
         rom.write_byte(0xFED31, 0x2A)  # preopen bombable exit
         rom.write_byte(0xFEE41, 0x2A)  # preopen bombable exit
-
-    # Thanks to Zarby89 for finding these values
-    # fix skull woods exit point
-    rom.write_byte(0x15E0D, 0xF8 if world.fix_skullwoods_exit else 0xB8)
-
-    # fix palace of darkness exit point
-    rom.write_byte(0x15E03, 0x40 if world.fix_palaceofdarkness_exit else 0x28)
-
-    # fix turtle rock exit point
-    rom.write_byte(0x15E1D, 0x34 if world.fix_trock_exit else 0x28)
-
-    # fix ganons tower exit point
-    rom.write_byte(0x15E25, 0xA4 if world.fix_gtower_exit else 0x28)
-    # todo fix screen scrolling
 
     write_strings(rom, world)
 
