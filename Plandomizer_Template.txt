@@ -52,7 +52,7 @@ Hobo: Bottle
 Lost Woods Hideout: Nothing
 Lumberjack Tree: Nothing
 Cave 45: Nothing
-Graveyard Ledge: Nothing
+Graveyard Cave: Nothing
 Checkerboard Cave: Nothing
 Mini Moldorm Cave - Far Left: Nothing
 Mini Moldorm Cave - Left: Nothing

@@ -56,8 +56,10 @@ def create_regions(world):
         create_region('Lost Woods Hideout (bottom)', None, ['Lost Woods Hideout Exit']),
         create_region('Lumberjack Tree (top)', ['Lumberjack Tree'], ['Lumberjack Tree (top to bottom)']),
         create_region('Lumberjack Tree (bottom)', None, ['Lumberjack Tree Exit']),
+        create_region('Cave 45 Ledge', None, ['Cave 45']),
         create_region('Cave 45', ['Cave 45']),
-        create_region('Graveyard Cave', ['Graveyard Ledge']),
+        create_region('Graveyard Ledge', None, ['Graveyard Cave']),
+        create_region('Graveyard Cave', ['Graveyard Cave']),
         create_region('Checkerboard Cave', ['Checkerboard Cave']),
         create_region('Long Fairy Cave'),
         create_region('Mini Moldorm Cave', ['Mini Moldorm Cave - Far Left', 'Mini Moldorm Cave - Left', 'Mini Moldorm Cave - Right',
@@ -76,7 +78,7 @@ def create_regions(world):
         create_region('Maze Race Ledge', ['Maze Race'], ['Two Brothers House (West)']),
         create_region('50 Rupee Cave'),
         create_region('Desert Ledge', ['Desert Ledge'], ['Desert Palace Entrance (North) Rocks', 'Desert Palace Entrance (West)']),
-        create_region('Desert Ledge (West)', None, ['Checkerboard Cave']),
+        create_region('Desert Ledge (Northeast)', None, ['Checkerboard Cave']),
         create_region('Desert Palace Stairs', None, ['Desert Palace Entrance (South)']),
         create_region('Desert Palace Lone Stairs', None, ['Desert Palace Stairs Drop', 'Desert Palace Entrance (East)']),
         create_region('Desert Palace Entrance (North) Spot', None, ['Desert Palace Entrance (North)', 'Desert Ledge Return Rocks']),
@@ -138,7 +140,7 @@ def create_regions(world):
         create_region('Palace of Darkness Hint'),
         create_region('East Dark World Hint'),
         create_region('South Dark World', ['Stumpy', 'Digging Game', 'Bombos Tablet'], ['Dark Lake Hylia Drop (South)', 'Hype Cave', 'Swamp Palace', 'Village of Outcasts Heavy Rock',
-                                                                                        'Maze Race Mirror Spot', 'Cave 45', 'East Dark World Bridge', 'Big Bomb Shop', 'Archery Game', 'Bonk Fairy (Dark)', 'Dark Lake Hylia Shop']),
+                                                                                        'Maze Race Mirror Spot', 'Cave 45 Mirror Spot', 'East Dark World Bridge', 'Big Bomb Shop', 'Archery Game', 'Bonk Fairy (Dark)', 'Dark Lake Hylia Shop']),
         create_region('Big Bomb Shop'),
         create_region('Archery Game'),
         create_region('Dark Lake Hylia', None, ['Lake Hylia Island Mirror Spot', 'East Dark World Pier', 'Dark Lake Hylia Ledge']),
@@ -148,7 +150,7 @@ def create_regions(world):
         create_region('Dark Lake Hylia Ledge Spike Cave'),
         create_region('Hype Cave', ['Hype Cave - Top', 'Hype Cave - Middle Right', 'Hype Cave - Middle Left',
                                     'Hype Cave - Bottom', 'Hype Cave - Generous Guy']),
-        create_region('West Dark World', None, ['Village of Outcasts Drop', 'East Dark World River Pier', 'Brewery', 'C-Shaped House', 'Chest Game', 'Thieves Town', 'Graveyard Cave', 'Bumper Cave (Bottom)', 'Skull Woods Forest',
+        create_region('West Dark World', None, ['Village of Outcasts Drop', 'East Dark World River Pier', 'Brewery', 'C-Shaped House', 'Chest Game', 'Thieves Town', 'Graveyard Ledge Mirror Spot', 'Bumper Cave (Bottom)', 'Skull Woods Forest',
                                                 'Bat Cave Drop Ledge Mirror Spot', 'Dark World Hammer Peg Cave', 'Red Shield Shop', 'Dark Sanctuary Hint', 'Fortune Teller (Dark)', 'Dark World Shop', 'Dark World Lumberjack Shop']),
         create_region('Fortune Teller (Dark)'),
         create_region('Dark World Shop'),
@@ -164,7 +166,7 @@ def create_regions(world):
         create_region('Skull Woods Forest', None, ['Skull Woods First Section Hole (East)', 'Skull Woods First Section Hole (West)', 'Skull Woods First Section Hole (North)', 'Skull Woods First Section Door',
                                                    'Skull Woods Second Section Door (East)']),
         create_region('Skull Woods Forest (West)', None, ['Skull Woods Second Section Hole', 'Skull Woods Second Section Door (West)', 'Skull Woods Final Section']),
-        create_region('Dark Desert', None, ['Misery Mire', 'Mire Shed', 'Desert Ledge (West) Mirror Spot', 'Desert Ledge Mirror Spot', 'Desert Palace Stairs Mirror Spot', 'Desert Palace Entrance (North) Mirror Spot',
+        create_region('Dark Desert', None, ['Misery Mire', 'Mire Shed', 'Desert Ledge (Northeast) Mirror Spot', 'Desert Ledge Mirror Spot', 'Desert Palace Stairs Mirror Spot', 'Desert Palace Entrance (North) Mirror Spot',
                                             'Dark Desert Hint', 'Dark Desert Fairy']),
         create_region('Mire Shed', ['Mire Shed - Left', 'Mire Shed - Right']),
         create_region('Dark Desert Hint'),
@@ -182,6 +184,7 @@ def create_regions(world):
         create_region('Death Mountain Floating Island (Dark World)', None, ['Floating Island Drop', 'Hookshot Cave Back Entrance', 'Floating Island Mirror Spot']),
         create_region('Death Mountain Floating Island (Light World)', ['Floating Island']),
         create_region('Turtle Rock (Top)', None, ['Turtle Rock Drop']),
+        create_region('Mimic Cave Ledge', None, ['Mimic Cave']),
         create_region('Mimic Cave', ['Mimic Cave']),
 
         create_region('Swamp Palace (Entrance)', None, ['Swamp Palace Moat', 'Swamp Palace Exit']),
@@ -292,7 +295,7 @@ def mark_light_world_regions(world):
     # Exclude entrances that represent connections from the light world to the dark world
     excluded_entrances = set(['Top of Pyramid', 'Lake Hylia Central Island Teleporter', 'Dark Desert Teleporter', 'East Hyrule Teleporter', 'South Hyrule Teleporter', 'Kakariko Teleporter', 'Death Mountain Teleporter', 'East Death Mountain Teleporter', 'Turtle Rock Teleporter'])
 
-    starting_regions = ['Links House', 'Cave 45', 'Graveyard Cave', 'Mimic Cave', 'Death Mountain Floating Island (Light World)', 'Desert Ledge (West)', 'Lake Hylia Island', 'Spectacle Rock']
+    starting_regions = ['Links House', 'Cave 45 Ledge', 'Graveyard Ledge', 'Mimic Cave Ledge', 'Death Mountain Floating Island (Light World)', 'Desert Ledge', 'Desert Ledge (Northeast)', 'Lake Hylia Island', 'Spectacle Rock', 'Death Mountain Return Ledge', 'Hyrule Castle Ledge','Maze Race Ledge']
     queue = collections.deque([world.get_region(region) for region in starting_regions])
     seen = set(queue)
     while queue:
@@ -344,7 +347,7 @@ location_table = {'Mushroom': (0x180013, False, 'in the woods'),
                   'Lost Woods Hideout': (0x180000, False, 'near a thief'),
                   'Lumberjack Tree': (0x180001, False, 'in a hole'),
                   'Cave 45': (0x180003, False, 'alone in a cave'),
-                  'Graveyard Ledge': (0x180004, False, 'alone in a cave'),
+                  'Graveyard Cave': (0x180004, False, 'alone in a cave'),
                   'Checkerboard Cave': (0x180005, False, 'alone in a cave'),
                   'Mini Moldorm Cave - Far Left': (0xEB42, False, 'near Moldorms'),
                   'Mini Moldorm Cave - Left': (0xEB45, False, 'near Moldorms'),
