@@ -154,12 +154,12 @@ def global_rules(world):
     set_rule(world.get_entrance('Thieves Town'), lambda state: state.has_Pearl()) # bunny cannot pull
     set_rule(world.get_entrance('Skull Woods First Section Hole (North)'), lambda state: state.has_Pearl()) # bunny cannot lift bush
     set_rule(world.get_entrance('Maze Race Mirror Spot'), lambda state: state.has_Mirror())
-    set_rule(world.get_entrance('Cave 45'), lambda state: state.has_Mirror())
+    set_rule(world.get_entrance('Cave 45 Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('East Dark World Bridge'), lambda state: state.has_Pearl() and state.has('Hammer'))
     set_rule(world.get_entrance('Lake Hylia Island Mirror Spot'), lambda state: state.has_Pearl() and state.has_Mirror() and state.has('Flippers'))
     set_rule(world.get_entrance('Lake Hylia Central Island Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('East Dark World River Pier'), lambda state: state.has_Pearl() and state.has('Flippers'))  # ToDo any fake flipper set up?
-    set_rule(world.get_entrance('Graveyard Cave'), lambda state: state.has_Pearl() and state.has_Mirror())
+    set_rule(world.get_entrance('Graveyard Ledge Mirror Spot'), lambda state: state.has_Pearl() and state.has_Mirror())
     set_rule(world.get_entrance('Bumper Cave (Bottom)'), lambda state: state.has_Pearl() and state.can_lift_rocks())
     set_rule(world.get_entrance('Bumper Cave Ledge Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Bat Cave Drop Ledge Mirror Spot'), lambda state: state.has_Pearl() and state.can_lift_heavy_rocks() and state.has_Mirror())
@@ -170,7 +170,7 @@ def global_rules(world):
 
     set_rule(world.get_entrance('Skull Woods Final Section'), lambda state: state.has('Fire Rod') and state.has_Pearl()) # bunny cannot use fire rod
     set_rule(world.get_entrance('Misery Mire'), lambda state: state.has_Pearl() and state.has_sword() and state.has_misery_mire_medallion())  # sword required to cast magic (!)
-    set_rule(world.get_entrance('Desert Ledge (West) Mirror Spot'), lambda state: state.has_Mirror())
+    set_rule(world.get_entrance('Desert Ledge (Northeast) Mirror Spot'), lambda state: state.has_Mirror())
 
     set_rule(world.get_entrance('Desert Ledge Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Desert Palace Stairs Mirror Spot'), lambda state: state.has_Mirror())
@@ -601,7 +601,7 @@ def set_big_bomb_rules(world):
     Isolated_DW_entrances = ['Spike Cave',
                              'Cave Shop (Dark Death Mountain)',
                              'Dark Death Mountain Fairy',
-                             'Mimic Cave Mirror Spot']
+                             'Mimic Cave']
     Isolated_LW_entrances = ['Capacity Upgrade',
                              'Hookshot Fairy']
     set_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.can_reach('East Dark World', 'Region') and state.can_reach('Big Bomb Shop', 'Region') and state.has('Crystal 5') and state.has('Crystal 6'))
@@ -666,7 +666,7 @@ def set_bunny_rules(world):
         if region.is_light_world:
             continue
         for exit in region.exits:
-            add_rule(exit, lambda state: state.has_Pearl)
+            add_rule(exit, lambda state: state.has_Pearl())
 
     # Add a moon pearl requirement for all locations that are actually in the dark world, except those available to the bunny
     for location in world.get_locations():
