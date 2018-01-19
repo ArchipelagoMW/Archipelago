@@ -15,7 +15,7 @@ from Items import ItemFactory
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '214e4b2a50cb65cd13a8194bc88cb030'
+RANDOMIZERBASEHASH = 'fbd91e1eeaf168cff1a6d58c6e193761'
 
 
 class JsonRom(object):
@@ -326,7 +326,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
                         rom.write_byte(0x15DB5 + 2 * offset, 0x00A4)
                     else:
                         rom.write_int16_to_rom(0x15DB5 + 2 * offset, link_y)
-                        
+
                     rom.write_int16_to_rom(0x15E53 + 2 * offset, link_x)
                     rom.write_int16_to_rom(0x15EF1 + 2 * offset, camera_y)
                     rom.write_int16_to_rom(0x15F8F + 2 * offset, camera_x)
