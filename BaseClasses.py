@@ -1,4 +1,5 @@
 import copy
+from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict
@@ -536,11 +537,25 @@ class CollectionState(object):
 
         raise RuntimeError('Cannot parse %s.' % item)
 
+@unique
+class RegionType(Enum):
+    LightWorld = 1
+    DarkWorld = 2
+    Cave = 3 # Also includes Houses
+    Dungeon = 4
+
+    @property
+    def is_indoors(self):
+        """Shorthand for checking if Cave or Dungeon"""
+        return self in (RegionType.Cave, RegionType.Dungeon)
+
+
 
 class Region(object):
 
-    def __init__(self, name):
+    def __init__(self, name, type):
         self.name = name
+        self.type = type
         self.entrances = []
         self.exits = []
         self.locations = []
