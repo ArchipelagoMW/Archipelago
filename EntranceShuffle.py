@@ -188,11 +188,11 @@ def link_entrances(world):
     elif world.shuffle == 'full':
         skull_woods_shuffle(world)
 
-        lw_entrances = list(LW_Entrances + LW_Dungeon_Entrances + LW_Single_Cave_Doors)
+        lw_entrances = list(LW_Entrances + LW_Dungeon_Entrances + LW_Single_Cave_Doors + Old_Man_Entrances)
         dw_entrances = list(DW_Entrances + DW_Dungeon_Entrances + DW_Single_Cave_Doors)
         dw_must_exits = list(DW_Entrances_Must_Exit + DW_Dungeon_Entrances_Must_Exit)
         lw_must_exits = list(LW_Dungeon_Entrances_Must_Exit)
-        old_man_entrances = list(Old_Man_Entrances)
+        old_man_entrances = list(Old_Man_Entrances + ['Tower of Hera'])
         caves = list(Cave_Exits + Dungeon_Exits + Cave_Three_Exits)  # don't need to consider three exit caves, have one exit caves to avoid parity issues
         bomb_shop_doors = list(Bomb_Shop_Single_Cave_Doors + Bomb_Shop_Multi_Cave_Doors)
         blacksmith_doors = list(Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
@@ -228,15 +228,15 @@ def link_entrances(world):
 
         # place old man, has limited options
         # exit has to come from specific set of doors, the entrance is free to move about
+        old_man_entrances = [door for door in old_man_entrances if door in lw_entrances]
         random.shuffle(old_man_entrances)
         old_man_exit = old_man_entrances.pop()
         connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)')
-        lw_entrances.extend(old_man_entrances)
-
+        lw_entrances.remove(old_man_exit)
 
         # place blacksmith, has limited options
-        # cannot place it anywhere already taken
         all_entrances = lw_entrances + dw_entrances
+        # cannot place it anywhere already taken (or that are otherwise not eligable for placement)
         blacksmith_doors = [door for door in blacksmith_doors if door in all_entrances]
         random.shuffle(blacksmith_doors)
         blacksmith_hut = blacksmith_doors.pop()
@@ -249,6 +249,7 @@ def link_entrances(world):
 
         # place dam and pyramid fairy, have limited options
         all_entrances = lw_entrances + dw_entrances
+        # cannot place it anywhere already taken (or that are otherwise not eligable for placement)
         bomb_shop_doors = [door for door in bomb_shop_doors if door in all_entrances]
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
@@ -281,6 +282,8 @@ def link_entrances(world):
         raise NotImplementedError()
     elif world.shuffle == 'full_legacy':
         skull_woods_shuffle(world)
+
+        # TODO: add Hera to possible old_man locations in legacy Full mode
 
         lw_entrances = list(LW_Entrances + LW_Dungeon_Entrances)
         dw_entrances = list(DW_Entrances + DW_Dungeon_Entrances)
@@ -375,6 +378,7 @@ def link_entrances(world):
         lw_entrances.extend(['Kakariko Well Cave', 'Bat Cave Cave', 'North Fairy Cave', 'Sanctuary', 'Lost Woods Hideout Stump', 'Lumberjack Tree Cave', 'Hyrule Castle Entrance (South)'])
 
         lw_entrances_must_exits = list(LW_Dungeon_Entrances_Must_Exit)
+        # TODO: add Hera to possible old_man locations in legacy madness mode
         old_man_entrances = list(Old_Man_Entrances)
 
         mandatory_light_world = ['Old Man House Exit (Bottom)', 'Old Man House Exit (Top)']
@@ -610,6 +614,7 @@ def link_entrances(world):
 
         random.shuffle(doors)
 
+        # TODO: add Hera to possible old_man locations in legacy insanity mode
         old_man_entrances = list(Old_Man_Entrances)
 
         caves = Cave_Exits + Dungeon_Exits + Cave_Three_Exits + ['Old Man House Exit (Bottom)', 'Old Man House Exit (Top)', 'Skull Woods First Section Exit', 'Skull Woods Second Section Exit (East)', 'Skull Woods Second Section Exit (West)',
@@ -876,7 +881,6 @@ def connect_mandatory_exits(world, entrances, caves, must_be_exits):
             raise RuntimeError('No more caves left. Should not happen!')
         else:
             caves.remove(cave)
-
         # all caves are sorted so that the last exit is always reachable
         for i in range(len(cave) - 1):
             entrance = entrances.pop()
@@ -1101,11 +1105,64 @@ DW_Entrances = ['Bumper Cave (Bottom)',
                 'Superbunny Cave (Bottom)',
                 'Hookshot Cave']
 
-# TODO: Fill this in. Any entries added here must be properly accounted for in the special bomb shop logic rules
-Bomb_Shop_Multi_Cave_Doors = []
+Bomb_Shop_Multi_Cave_Doors = ['Hyrule Castle Entrance (South)',
+                              'Misery Mire',
+                              'Thieves Town',
+                              'Bumper Cave (Bottom)',
+                              'Swamp Palace',
+                              'Hyrule Castle Secret Entrance Stairs',
+                              'Skull Woods First Section Door',
+                              'Skull Woods Second Section Door (East)',
+                              'Skull Woods Second Section Door (West)',
+                              'Skull Woods Final Section',
+                              'Ice Palace',
+                              'Turtle Rock',
+                              'Dark Death Mountain Ledge (West)',
+                              'Dark Death Mountain Ledge (East)',
+                              'Superbunny Cave (Top)',
+                              'Superbunny Cave (Bottom)',
+                              'Hookshot Cave',
+                              'Ganons Tower',
+                              'Desert Palace Entrance (South)',
+                              'Tower of Hera',
+                              'Two Brothers House (West)',
+                              'Old Man Cave (East)',
+                              'Old Man House (Bottom)',
+                              'Old Man House (Top)',
+                              'Death Mountain Return Cave (East)',
+                              'Death Mountain Return Cave (West)',
+                              'Spectacle Rock Cave Peak',
+                              'Spectacle Rock Cave',
+                              'Spectacle Rock Cave (Bottom)',
+                              'Paradox Cave (Bottom)',
+                              'Paradox Cave (Middle)',
+                              'Paradox Cave (Top)',
+                              'Fairy Ascension Cave (Bottom)',
+                              'Fairy Ascension Cave (Top)',
+                              'Spiral Cave',
+                              'Spiral Cave (Bottom)',
+                              'Palace of Darkness',
+                              'Hyrule Castle Entrance (West)',
+                              'Hyrule Castle Entrance (East)',
+                              'Agahnims Tower',
+                              'Desert Palace Entrance (West)',
+                              'Desert Palace Entrance (North)',
+                              'Old Man Cave (West)',
+                              # all entrances below this line would be possible for blacksmith_hut
+                              # if it were not for dwarf checking multi-entrance caves
+                              'Eastern Palace',
+                              'Elder House (East)',
+                              'Elder House (West)',
+                              'Two Brothers House (East)',
+                              'Old Man Cave (West)',
+                              'Sanctuary',
+                              'Lumberjack Tree Cave',
+                              'Lost Woods Hideout Stump',
+                              'North Fairy Cave',
+                              'Bat Cave Cave',
+                              'Kakariko Well Cave']
 
-# TODO: Fill this in. Any entries added here must be properly accounted for in the special bomb shop logic rules
-# because any unused blacksmith shop location is rolled over as a possible bomb shop location
+#unfortunately blacksmith cannot occur in multi entrance caves, because the dwarf would refuse to enter.
 Blacksmith_Multi_Cave_Doors = []
 
 LW_Single_Cave_Doors = ['Blinds Hideout',
