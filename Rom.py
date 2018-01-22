@@ -370,7 +370,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
-        rom.write_int16_to_rom(0x180036, 10)
+        rom.write_int16_to_rom(0x180036, world.rupoor_cost)
         #Make Blue Shield more expensive
         rom.write_bytes(0xF73D2, [0xFC, 0xFF])
         rom.write_bytes(0xF73DA, [0x04, 0x00])

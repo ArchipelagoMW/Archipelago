@@ -6,7 +6,7 @@ from collections import OrderedDict
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity):
+    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, custom, customitemarray):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
@@ -37,6 +37,7 @@ class World(object):
         self.treasure_hunt_count = 0
         self.treasure_hunt_icon = 'Triforce Piece'
         self.clock_mode = 'off'
+        self.rupoor_cost = 10
         self.aga_randomness = True
         self.lock_aga_door_in_escape = False
         self.fix_trock_doors = self.shuffle != 'vanilla'
@@ -52,6 +53,8 @@ class World(object):
         self.fastmenu = fastmenu
         self.disable_music = disable_music
         self.keysanity = keysanity
+        self.custom = custom
+        self.customitemarray = customitemarray
         self.can_take_damage = True
         self.difficulty_requirements = None
         self.spoiler = Spoiler(self)
