@@ -232,7 +232,7 @@ def create_regions(world):
         create_region('Turtle Rock (Dark Room)', 'Inside', None, ['Turtle Rock (Dark Room) (North)', 'Turtle Rock (Dark Room) (South)']),
         create_region('Turtle Rock (Eye Bridge)', 'Inside', ['Turtle Rock - Eye Bridge - Bottom Left', 'Turtle Rock - Eye Bridge - Bottom Right',
                                                    'Turtle Rock - Eye Bridge - Top Left', 'Turtle Rock - Eye Bridge - Top Right'],
-                      ['Turtle Rock Dark Room (South)', 'Inside', 'Turtle Rock (Trinexx)', 'Turtle Rock Isolated Ledge Exit']),
+                      ['Turtle Rock Dark Room (South)', 'Turtle Rock (Trinexx)', 'Turtle Rock Isolated Ledge Exit']),
         create_region('Turtle Rock (Trinexx)', 'Inside', ['Turtle Rock - Trinexx', 'Turtle Rock - Prize']),
         create_region('Palace of Darkness (Entrance)', 'Inside', ['Palace of Darkness - Shooter Room'], ['Palace of Darkness Bridge Room', 'Palace of Darkness Bonk Wall', 'Palace of Darkness Exit']),
         create_region('Palace of Darkness (Center)', 'Inside', ['Palace of Darkness - The Arena - Bridge', 'Palace of Darkness - Stalfos Basement'],
