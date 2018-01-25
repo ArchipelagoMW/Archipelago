@@ -119,7 +119,6 @@ def global_rules(world):
     set_rule(world.get_location('Master Sword Pedestal'), lambda state: state.has('Red Pendant') and state.has('Blue Pendant') and state.has('Green Pendant'))
     set_rule(world.get_location('Sahasrahla'), lambda state: state.has('Green Pendant'))
     set_rule(world.get_entrance('Agahnims Tower'), lambda state: state.has('Cape') or state.has_beam_sword() or state.has('Beat Agahnim 1'))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
-    # FIXME: VT has a can_kill_most_things(8) call on Aga Tower's entrance. I think this is supposed to reflect that a better weapon than 10 bombs is needed to reach the two chests in this tower
     set_rule(world.get_entrance('Agahnim 1'), lambda state: state.has_sword() and state.has('Small Key (Agahnims Tower)', 2))
     set_rule(world.get_location('Castle Tower - Dark Maze'), lambda state: state.has('Small Key (Agahnims Tower)'))
     set_rule(world.get_entrance('Top of Pyramid'), lambda state: state.has('Beat Agahnim 1'))
@@ -185,6 +184,8 @@ def global_rules(world):
     set_rule(world.get_entrance('Fairy Ascension Mirror Spot'), lambda state: state.has_Mirror() and state.has_Pearl())  # need to lift flowers
     set_rule(world.get_entrance('Isolated Ledge Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Superbunny Cave Exit (Bottom)'), lambda state: False)  # Cannot get to bottom exit from top. Just exists for shuffling
+
+    # Todo: Update the below to reflect that latest ROM has full strengh potions in all difficulties in spike cave
     set_rule(world.get_location('Spike Cave'), lambda state:
              state.has('Hammer') and state.can_lift_rocks() and
              (
@@ -316,8 +317,8 @@ def global_rules(world):
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Top Left'), lambda state: state.has('Cane of Byrna') or state.has('Cape') or state.has('Mirror Shield'))
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Top Right'), lambda state: state.has('Cane of Byrna') or state.has('Cape') or state.has('Mirror Shield'))
     set_rule(world.get_entrance('Turtle Rock (Trinexx)'), lambda state: state.has('Small Key (Turtle Rock)', 4) and state.has('Big Key (Turtle Rock)') and state.has('Cane of Somaria') and state.has('Fire Rod') and state.has('Ice Rod') and
-             (state.has('Hammer') or state.has_beam_sword() or (state.has_sword and state.can_extend_magic(32))))
-    # TODO: Per VT, possibly allow a regular sword with 4x extended magic (ie. quater magic, or half magic+bottle or 3 bottles)
+             (state.has('Hammer') or state.has_beam_sword() or (state.has_sword() and state.can_extend_magic(32))))
+
     set_trock_key_rules(world)
 
     set_rule(world.get_entrance('Palace of Darkness Bonk Wall'), lambda state: state.has('Bow'))
@@ -659,6 +660,12 @@ def set_bunny_rules(world):
                               'Turtle Rock (Eye Bridge)', 'Sewers', 'Pyramid', 'Spiral Cave (Top)']
 
     bunny_accessible_locations = ['Link\'s Uncle', 'Sahasrahla', 'Sick Kid', 'Lost Woods Hideout', 'Lumberjack Tree', 'Checkerboard Cave', 'Potion Shop', 'Spectacle Rock Cave', 'Pyramid', 'Hype Cave - Generous Guy', 'Peg Cave', 'Bumper Cave Ledge']
+
+    if not world.get_region('Dam').is_light_world:
+        # if Dam is is dark world, then it is required to have the pearl to get the sunken item
+        add_rule(world.get_location('Sunken Treasure'), lambda state: state.has_Pearl())
+        # similarly we need perl to get across the swamp palace moat
+        add_rule(world.get_entrance('Swamp Palace Moat'), lambda state: state.has_Pearl())
 
     # Add pearl requirements for bunny-impassible caves if they occur in the dark world
     for region in [world.get_region(name) for name in bunny_impassable_caves]:
