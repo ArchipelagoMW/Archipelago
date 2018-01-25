@@ -655,6 +655,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
     rom.write_byte(0x180034, 0x0A) # starting max bombs
     rom.write_byte(0x180035, 30) # starting max bombs
+    rom.write_byte(0x180174, 0x01 if world.fix_fake_world else 0x00)
 
     if world.goal in ['pedestal', 'triforcehunt']:
         rom.write_byte(0x18003E, 0x01)  # make ganon invincible
