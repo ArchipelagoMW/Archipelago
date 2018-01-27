@@ -154,6 +154,7 @@ def copy_world(world):
     for region in world.regions:
         copied_region = ret.get_region(region.name)
         copied_region.is_light_world = region.is_light_world
+        copied_region.is_dark_world = region.is_dark_world
         for entrance in region.entrances:
             ret.get_entrance(entrance.name).connect(copied_region)
 

@@ -1,3 +1,4 @@
+import collections
 import logging
 
 
@@ -749,25 +750,65 @@ def set_bunny_rules(world):
 
     bunny_accessible_locations = ['Link\'s Uncle', 'Sahasrahla', 'Sick Kid', 'Lost Woods Hideout', 'Lumberjack Tree', 'Checkerboard Cave', 'Potion Shop', 'Spectacle Rock Cave', 'Pyramid', 'Hype Cave - Generous Guy', 'Peg Cave', 'Bumper Cave Ledge']
 
-    if not world.get_region('Dam').is_light_world:
+    if world.get_region('Dam').is_dark_world:
         # if Dam is is dark world, then it is required to have the pearl to get the sunken item
         add_rule(world.get_location('Sunken Treasure'), lambda state: state.has_Pearl())
         # similarly we need perl to get across the swamp palace moat
         add_rule(world.get_entrance('Swamp Palace Moat'), lambda state: state.has_Pearl())
 
-    # Add pearl requirements for bunny-impassible caves if they occur in the dark world
+    def path_to_access_rule(path, entrance):
+        return lambda state: state.can_reach(entrance) and all(rule(state) for rule in path)
+
+    def options_to_access_rule(options):
+        return lambda state: any(rule(state) for rule in options)
+
+    def get_rule_to_add(region):
+        if not region.is_light_world:
+            return lambda state: state.has_Pearl()
+        # in this case we are mixed region.
+        # we collect possible options.
+
+        # The base option is having the moon pearl
+        possible_options = [lambda state: state.has_Pearl()]
+
+        # We will search entrances recursively until we find
+        # one that leads to an exclusively light world region
+        # for each such entrance a new option ios aded that consist of:
+        #    a) being able to reach it, and
+        #    b) being able to access all entrances from there to `region`
+        seen = set([region])
+        queue = collections.deque([(region, [])])
+        while queue:
+            (current, path) = queue.popleft()
+            for entrance in current.entrances:
+                new_region = entrance.parent_region
+                if new_region in seen:
+                    continue
+                new_path = path + [entrance.access_rule]
+                seen.add(new_region)
+                if not new_region.is_light_world:
+                    continue # we don't care about pure dark world entrances
+                if new_region.is_dark_world:
+                    queue.append((new_region, new_path))
+                else:
+                    # we have reached pure light world, so we have a new possible option
+                    possible_options.append(path_to_access_rule(new_path, entrance))
+        return options_to_access_rule(possible_options)
+
+    # Add requirements for bunny-impassible caves if they occur in the dark world
     for region in [world.get_region(name) for name in bunny_impassable_caves]:
 
-        if region.is_light_world:
+        if not region.is_dark_world:
             continue
+        rule = get_rule_to_add(region)
         for exit in region.exits:
-            add_rule(exit, lambda state: state.has_Pearl())
+            add_rule(exit, rule)
 
-    # Add a moon pearl requirement for all locations that are actually in the dark world, except those available to the bunny
+    # Add requirements for all locations that are actually in the dark world, except those available to the bunny
     for location in world.get_locations():
-        if not location.parent_region.is_light_world:
+        if location.parent_region.is_dark_world:
 
             if location.name in bunny_accessible_locations:
                 continue
 
-            add_rule(location, lambda state: state.has_Pearl())
+            add_rule(location, get_rule_to_add(location.parent_region))

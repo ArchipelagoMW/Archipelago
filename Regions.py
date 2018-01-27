@@ -298,22 +298,30 @@ def _create_region(name, type, locations=None, exits=None):
         ret.locations.append(Location(location, address, crystal, hint_text, ret))
     return ret
 
-
 def mark_light_world_regions(world):
-    # Note that in "inanity" shuffle this code may mark some dark world locations as being in light world. That is fine because this flag
-    # is only used for bunny logic, and you start with a Moon pearl immediately availible in Insanity shuffle.
-
-    # Exclude entrances that represent connections from the light world to the dark world
-    excluded_entrances = set(['Top of Pyramid', 'Lake Hylia Central Island Teleporter', 'Dark Desert Teleporter', 'East Hyrule Teleporter', 'South Hyrule Teleporter', 'Kakariko Teleporter', 'Death Mountain Teleporter', 'East Death Mountain Teleporter', 'Turtle Rock Teleporter'])
-
-    starting_regions = ['Links House', 'Cave 45 Ledge', 'Graveyard Ledge', 'Mimic Cave Ledge', 'Death Mountain Floating Island (Light World)', 'Desert Ledge', 'Desert Ledge (Northeast)', 'Lake Hylia Island', 'Spectacle Rock', 'Death Mountain Return Ledge', 'Hyrule Castle Ledge', 'Maze Race Ledge']
-    queue = collections.deque([world.get_region(region) for region in starting_regions])
+    # cross world caves may have some sections marked as both in_light_world, and in_dark_work.
+    # That is ok. the bunny logic will check for this case and incorporate special rules.
+    queue = collections.deque(region for region in world.regions if region.type == RegionType.LightWorld)
     seen = set(queue)
     while queue:
         current = queue.popleft()
         current.is_light_world = True
         for exit in current.exits:
-            if exit.name in excluded_entrances:
+            if exit.connected_region.type == RegionType.DarkWorld:
+                # Don't venture into the dark world
+                continue
+            if exit.connected_region not in seen:
+                seen.add(exit.connected_region)
+                queue.append(exit.connected_region)
+
+    queue = collections.deque(region for region in world.regions if region.type == RegionType.DarkWorld)
+    seen = set(queue)
+    while queue:
+        current = queue.popleft()
+        current.is_dark_world = True
+        for exit in current.exits:
+            if exit.connected_region.type == RegionType.LightWorld:
+                # Don't venture into the light world
                 continue
             if exit.connected_region not in seen:
                 seen.add(exit.connected_region)

@@ -562,6 +562,7 @@ class Region(object):
         self.dungeon = None
         self.world = None
         self.is_light_world = False # will be set aftermaking connections.
+        self.is_dark_world = False
         self.spot_type = 'Region'
         self.hint_text = 'Hyrule'
         self.recursion_count = 0
