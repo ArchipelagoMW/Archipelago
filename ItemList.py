@@ -1,8 +1,9 @@
 from collections import namedtuple
+import logging
 import random
 
 from Items import ItemFactory
-from Fill import fill_restrictive
+from Fill import FillError, fill_restrictive
 from Dungeons import get_dungeon_item_pool
 
 #This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
@@ -248,14 +249,36 @@ def generate_itempool(world):
     world.required_medallions = (mm_medallion, tr_medallion)
 
     # distribute crystals
+    fill_prizes(world)
+
+def fill_prizes(world, attempts=15):
     crystals = ItemFactory(['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6'])
     crystal_locations = [world.get_location('Turtle Rock - Prize'), world.get_location('Eastern Palace - Prize'), world.get_location('Desert Palace - Prize'), world.get_location('Tower of Hera - Prize'), world.get_location('Palace of Darkness - Prize'),
                          world.get_location('Thieves Town - Prize'), world.get_location('Skull Woods - Prize'), world.get_location('Swamp Palace - Prize'), world.get_location('Ice Palace - Prize'),
                          world.get_location('Misery Mire - Prize')]
+    placed_prizes = [loc.item.name for loc in crystal_locations if loc.item is not None]
+    unplaced_prizes = [crystal for crystal in crystals if crystal.name not in placed_prizes]
+    empty_crystal_locations = [loc for loc in crystal_locations if loc.item is None]
 
-    random.shuffle(crystal_locations)
+    while attempts:
+        attempts -= 1
+        try:
+            prizepool = list(unplaced_prizes)
+            prize_locs = list(empty_crystal_locations)
+            random.shuffle(prizepool)
+            random.shuffle(prize_locs)
+            fill_restrictive(world, world.get_all_state(keys=True), prize_locs, prizepool)
+        except FillError:
+            logging.getLogger('').info("Failed to place dungeon prizes. Will retry %s more times", attempts)
+            for location in empty_crystal_locations:
+                location.item = None
+            continue
+        break
+    else:
+        raise FillError('Unable to place dungeon prizes')
 
-    fill_restrictive(world, world.get_all_state(keys=True), crystal_locations, crystals)
+
+
 
 def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode):
     pool = []

@@ -1,6 +1,8 @@
 import random
 import logging
 
+class FillError(RuntimeError):
+    pass
 
 def distribute_items_cutoff(world, cutoffrate=0.33):
     # get list of locations to fill in
@@ -53,7 +55,7 @@ def distribute_items_cutoff(world, cutoffrate=0.33):
                     logging.getLogger('').warning('Not all locations reachable. Game beatable anyway.')
                     progress_done = True
                     continue
-                raise RuntimeError('No more progress items left to place.')
+                raise FillError('No more progress items left to place.')
 
         spot_to_fill = None
         for location in fill_locations if placed_advancement_items / total_advancement_items < cutoffrate else reversed(fill_locations):
@@ -66,7 +68,7 @@ def distribute_items_cutoff(world, cutoffrate=0.33):
             if world.can_beat_game():
                 logging.getLogger('').warning('Not all items placed. Game beatable anyway.')
                 break
-            raise RuntimeError('No more spots to place %s' % item_to_place)
+            raise FillError('No more spots to place %s' % item_to_place)
 
         world.push_item(spot_to_fill, item_to_place, True)
         itempool.remove(item_to_place)
@@ -121,7 +123,7 @@ def distribute_items_staleness(world):
                     logging.getLogger('').warning('Not all locations reachable. Game beatable anyway.')
                     progress_done = True
                     continue
-                raise RuntimeError('No more progress items left to place.')
+                raise FillError('No more progress items left to place.')
 
         spot_to_fill = None
         for location in fill_locations:
@@ -147,7 +149,7 @@ def distribute_items_staleness(world):
             if world.can_beat_game():
                 logging.getLogger('').warning('Not all items placed. Game beatable anyway.')
                 break
-            raise RuntimeError('No more spots to place %s' % item_to_place)
+            raise FillError('No more spots to place %s' % item_to_place)
 
         world.push_item(spot_to_fill, item_to_place, True)
         itempool.remove(item_to_place)
@@ -185,7 +187,7 @@ def fill_restrictive(world, base_state, locations, itempool):
                 if not world.check_beatable_only:
                     logging.getLogger('').warning('Not all items placed. Game beatable anyway.')
                 break
-            raise RuntimeError('No more spots to place %s' % item_to_place)
+            raise FillError('No more spots to place %s' % item_to_place)
 
         world.push_item(spot_to_fill, item_to_place, False)
         locations.remove(spot_to_fill)
@@ -281,7 +283,7 @@ def flood_items(world):
             if candidate_item_to_place is not None:
                 item_to_place = candidate_item_to_place
             else:
-                raise RuntimeError('No more progress items left to place.')
+                raise FillError('No more progress items left to place.')
 
         # find item to replace with progress item
         location_list = world.get_reachable_locations()
