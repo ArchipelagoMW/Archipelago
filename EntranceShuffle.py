@@ -283,13 +283,11 @@ def link_entrances(world):
     elif world.shuffle == 'full_legacy':
         skull_woods_shuffle(world)
 
-        # TODO: add Hera to possible old_man locations in legacy Full mode
-
-        lw_entrances = list(LW_Entrances + LW_Dungeon_Entrances)
+        lw_entrances = list(LW_Entrances + LW_Dungeon_Entrances + Old_Man_Entrances)
         dw_entrances = list(DW_Entrances + DW_Dungeon_Entrances)
         dw_must_exits = list(DW_Entrances_Must_Exit + DW_Dungeon_Entrances_Must_Exit)
         lw_must_exits = list(LW_Dungeon_Entrances_Must_Exit)
-        old_man_entrances = list(Old_Man_Entrances)
+        old_man_entrances = list(Old_Man_Entrances + ['Tower of Hera'])
         caves = list(Cave_Exits + Dungeon_Exits + Cave_Three_Exits)  # don't need to consider three exit caves, have one exit caves to avoid parity issues
         single_doors = list(Single_Cave_Doors)
         bomb_shop_doors = list(Bomb_Shop_Single_Cave_Doors)
@@ -323,9 +321,11 @@ def link_entrances(world):
 
         # place old man, has limited options
         # exit has to come from specific set of doors, the entrance is free to move about
+        old_man_entrances = [door for door in old_man_entrances if door in lw_entrances]
         random.shuffle(old_man_entrances)
         old_man_exit = old_man_entrances.pop()
-        lw_entrances.extend(old_man_entrances)
+        lw_entrances.remove(old_man_exit)
+
         random.shuffle(lw_entrances)
         old_man_entrance = lw_entrances.pop()
         connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)')
@@ -360,7 +360,7 @@ def link_entrances(world):
 
     elif world.shuffle == 'madness':
         # here lie dragons, connections are no longer two way
-        lw_entrances = list(LW_Entrances + LW_Dungeon_Entrances)
+        lw_entrances = list(LW_Entrances + LW_Dungeon_Entrances + Old_Man_Entrances)
         dw_entrances = list(DW_Entrances + DW_Dungeon_Entrances)
         dw_entrances_must_exits = list(DW_Entrances_Must_Exit + DW_Dungeon_Entrances_Must_Exit)
 
@@ -378,8 +378,8 @@ def link_entrances(world):
         lw_entrances.extend(['Kakariko Well Cave', 'Bat Cave Cave', 'North Fairy Cave', 'Sanctuary', 'Lost Woods Hideout Stump', 'Lumberjack Tree Cave', 'Hyrule Castle Entrance (South)'])
 
         lw_entrances_must_exits = list(LW_Dungeon_Entrances_Must_Exit)
-        # TODO: add Hera to possible old_man locations in legacy madness mode
-        old_man_entrances = list(Old_Man_Entrances)
+
+        old_man_entrances = list(Old_Man_Entrances) + ['Tower of Hera']
 
         mandatory_light_world = ['Old Man House Exit (Bottom)', 'Old Man House Exit (Top)']
         mandatory_dark_world = []
@@ -512,10 +512,10 @@ def link_entrances(world):
 
         # place old man, has limited options
         # exit has to come from specific set of doors, the entrance is free to move about
+        old_man_entrances = [entrance for entrance in old_man_entrances if entrance in lw_entrances]
         random.shuffle(old_man_entrances)
         old_man_exit = old_man_entrances.pop()
-        lw_entrances.extend(old_man_entrances)
-        random.shuffle(lw_entrances)
+        lw_entrances.remove(old_man_exit)
 
         connect_exit(world, 'Old Man Cave Exit (East)', old_man_exit)
         connect_entrance(world, lw_doors.pop(), 'Old Man Cave Exit (East)')
@@ -606,7 +606,7 @@ def link_entrances(world):
         world.fix_fake_world = False
         # beware ye who enter here
 
-        entrances = LW_Entrances + LW_Dungeon_Entrances + DW_Entrances + DW_Dungeon_Entrances + ['Skull Woods Second Section Door (East)', 'Skull Woods First Section Door', 'Kakariko Well Cave', 'Bat Cave Cave', 'North Fairy Cave', 'Sanctuary', 'Lost Woods Hideout Stump', 'Lumberjack Tree Cave', 'Hyrule Castle Entrance (South)']
+        entrances = LW_Entrances + LW_Dungeon_Entrances + DW_Entrances + DW_Dungeon_Entrances + Old_Man_Entrances + ['Skull Woods Second Section Door (East)', 'Skull Woods First Section Door', 'Kakariko Well Cave', 'Bat Cave Cave', 'North Fairy Cave', 'Sanctuary', 'Lost Woods Hideout Stump', 'Lumberjack Tree Cave', 'Hyrule Castle Entrance (South)']
         entrances_must_exits = DW_Entrances_Must_Exit + DW_Dungeon_Entrances_Must_Exit + LW_Dungeon_Entrances_Must_Exit + ['Skull Woods Second Section Door (West)']
 
         doors = LW_Entrances + LW_Dungeon_Entrances + LW_Dungeon_Entrances_Must_Exit + ['Kakariko Well Cave', 'Bat Cave Cave', 'North Fairy Cave', 'Sanctuary', 'Lost Woods Hideout Stump', 'Lumberjack Tree Cave', 'Hyrule Castle Secret Entrance Stairs'] + Old_Man_Entrances +\
@@ -614,8 +614,7 @@ def link_entrances(world):
 
         random.shuffle(doors)
 
-        # TODO: add Hera to possible old_man locations in legacy insanity mode
-        old_man_entrances = list(Old_Man_Entrances)
+        old_man_entrances = list(Old_Man_Entrances) + ['Tower of Hera']
 
         caves = Cave_Exits + Dungeon_Exits + Cave_Three_Exits + ['Old Man House Exit (Bottom)', 'Old Man House Exit (Top)', 'Skull Woods First Section Exit', 'Skull Woods Second Section Exit (East)', 'Skull Woods Second Section Exit (West)',
                                                                  'Kakariko Well Exit', 'Bat Cave Exit', 'North Fairy Cave Exit', 'Lost Woods Hideout Exit', 'Lumberjack Tree Exit', 'Sanctuary Exit']
@@ -702,10 +701,10 @@ def link_entrances(world):
 
         # place old man, has limited options
         # exit has to come from specific set of doors, the entrance is free to move about
+        old_man_entrances = [entrance for entrance in old_man_entrances if entrance in entrances]
         random.shuffle(old_man_entrances)
         old_man_exit = old_man_entrances.pop()
-        entrances.extend(old_man_entrances)
-        random.shuffle(entrances)
+        entrances.remove(old_man_exit)
 
         connect_exit(world, 'Old Man Cave Exit (East)', old_man_exit)
         connect_entrance(world, doors.pop(), 'Old Man Cave Exit (East)')
@@ -775,7 +774,6 @@ def connect_entrance(world, entrancename, exitname):
     if entrance.connected_region is not None:
         entrance.connected_region.entrances.remove(entrance)
 
-    target = exit_ids[exit.name] if exit is not None else exit_ids.get(region.name, None)
     target = exit_ids[exit.name][0] if exit is not None else exit_ids.get(region.name, None)
     addresses = door_addresses[entrance.name][0]
 
