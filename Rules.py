@@ -597,51 +597,60 @@ def set_big_bomb_rules(world):
     Isolated_LW_entrances = ['Capacity Upgrade',
                              'Hookshot Fairy']
     set_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.can_reach('East Dark World', 'Region') and state.can_reach('Big Bomb Shop', 'Region') and state.has('Crystal 5') and state.has('Crystal 6'))
+
+    #crossing peg bridge starting from the southern dark world
+    def cross_peg_bridge(state):
+        return state.has('Hammer') and state.has_Pearl()
+
+    # returning via the eastern and southern teleporters needs the same items, so we use the southern teleporter for out routing.
+    # crossing preg bridge already requires hammer so we just add the gloves to the requirement
+    def southern_teleporter(state):
+        return state.can_lift_rocks() and cross_peg_bridge(state)
+
+    # the basic routes assume you can reach eastern light world with the bomb.
+    # you can then use the southern teleporter, or (if you have beaten Aga1) the hyrule castle gate warp
+    def basic_routes(state):
+        return southern_teleporter(state) or state.can_reach('Top of Pyramid', 'Entrance')
+
     if bombshop_entrance.name in Normal_LW_entrances:
-        #1. Enter via gate: Needs Aga1
-        #2. south hyrule teleporter and cross peg bridge: Hammer and moon pearl
-        #3. Can reach Eastern dark world some other way, mirror, get bomb, return to mirror spot, walk to pyramid: Needs mirror
-        # -> A or (H and P)) or (M)
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.has_Pearl()) or state.has_Mirror())
+        #1. basic routes
+        #2. Can reach Eastern dark world some other way, mirror, get bomb, return to mirror spot, walk to pyramid: Needs mirror
+        # -> M or BR
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: basic_routes(state) or state.has_Mirror())
     elif bombshop_entrance.name in LW_walkable_entrances:
-        #1. Mirror then gate: Needs mirror and Aga1
-        #2. Mirror then go to south hyrule teleporter and cross peg bridge: Needs Mirror and Hammer and moon pearl
-        # -> M and (A or (H and P))
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has_Mirror() and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.has_Pearl())))
+        #1. Mirror then basic routes
+        # -> M and BR
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has_Mirror() and basic_routes(state))
     elif bombshop_entrance.name in Northern_DW_entrances:
-        #1. Mirror and enter via gate: Need mirror and Aga1
-        #2. Mirror and enter via south hyrule teleporter: Need mirror and hammer and moon pearl
-        #3. Go to south DW and then cross peg bridge: Need Mitts and hammer and moon pearl
-        # -> (Mitts and P and H) or (M and (A or (H and P)))
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.can_lift_heavy_rocks() and state.has_Pearl() and state.has('Hammer')) or (state.has_Mirror() and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.has_Pearl()))))
+        #1. Mirror and basic routes
+        #2. Go to south DW and then cross peg bridge: Need Mitts and hammer and moon pearl
+        # -> (Mitts and P and H) or BR)
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.can_lift_heavy_rocks() and state.has_Pearl() and state.has('Hammer')) or basic_routes(state))
     elif bombshop_entrance.name in Southern_DW_entrances:
         #1. Mirror and enter via gate: Need mirror and Aga1
         #2. cross peg bridge: Need hammer and moon pearl
-        # -> (H and P) or (M and A)
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.has('Hammer') and state.has_Pearl()) or (state.has_Mirror() and state.can_reach('Top of Pyramid', 'Entrance')))
+        # -> CPB or (M and A)
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: cross_peg_bridge(state) or (state.has_Mirror() and state.can_reach('Top of Pyramid', 'Entrance')))
     elif bombshop_entrance.name in Isolated_DW_entrances:
-        # 1. mirror then flute then enter via gate: Needs mirror and flute and Aga 1
-        # 2. mirror then flute then enter via south hyrule teleporter: Needs mirror and Flute and hammer and moon pearl
-        # -> M and Flute and (A or (H and P))
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has_Mirror() and state.has('Ocarina') and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.has_Pearl())))
+        # 1. mirror then flute then basic routes
+        # -> M and Flute and BR
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has_Mirror() and state.has('Ocarina') and basic_routes(state))
     elif bombshop_entrance.name in Isolated_LW_entrances:
-        # 1. flute then enter via gate: Needs flute and Aga 1
-        # 2. flute then enter via south hyrule teleporter: Needs Flute and hammer and moon pearl
+        # 1. flute then basic_routes
         # Prexisting mirror spot is not permitted, because mirror might have been needed to reach these isolated locations.
-        # -> Flute and (A or (H and P))
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has('Ocarina') and (state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.has_Pearl())))
+        # -> Flute and BR
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has('Ocarina') and basic_routes(state))
     elif bombshop_entrance.name == 'Dark World Potion Shop':
         # 1. walk down by lifting rock: needs gloves and pearl`
         # 2. walk down by hammering peg: needs hammer and pearl
-        # 3. mirror and eneter via gate: needs Mirror and Aga1
-        # (south hyrule teleporter would be redundant with #2)
-        # -> P and (H or H) or (M and A)
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.has_Pearl() and (state.has('Hammer') or state.can_lift_rocks())) or (state.has_Mirror() and state.can_reach('Top of Pyramid', 'Entrance')))
+        # 3. mirror and basic routes
+        # -> (P and (H or Gloves)) or (M and BR)
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.has_Pearl() and (state.has('Hammer') or state.can_lift_rocks())) or (state.has_Mirror() and basic_routes(state)))
     elif bombshop_entrance.name == 'Kings Grave':
         # same as the Normal_LW_entrances case except that the pre-existing mirror is only possible if you have mitts
         # (because otherwise mirror was used to reach the grave, so would cancel a pre-existing mirror spot)
-        # -> A or (H and P) or (M and Mitts)
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.can_reach('Top of Pyramid', 'Entrance') or (state.has('Hammer') and state.has_Pearl()) or (state.can_lift_heavy_rocks() and state.has_Mirror()))
+        # -> (M and Mitts) or BR
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.can_lift_heavy_rocks() and state.has_Mirror()) or basic_routes(state))
 
 def set_bunny_rules(world):
 
