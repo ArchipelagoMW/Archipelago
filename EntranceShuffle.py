@@ -277,9 +277,83 @@ def link_entrances(world):
 
         # place remaining doors
         connect_doors(world, doors, door_targets)
-    elif world.shuffle == 'new_full_cross_worlds':
-        # TODO
-        raise NotImplementedError()
+    elif world.shuffle == 'full_cross_worlds':
+        skull_woods_shuffle(world)
+
+        entrances = list(LW_Entrances + LW_Dungeon_Entrances + LW_Single_Cave_Doors + Old_Man_Entrances + DW_Entrances + DW_Dungeon_Entrances + DW_Single_Cave_Doors)
+        must_exits = list(DW_Entrances_Must_Exit + DW_Dungeon_Entrances_Must_Exit + LW_Dungeon_Entrances_Must_Exit)
+
+        old_man_entrances = list(Old_Man_Entrances + ['Tower of Hera'])
+        caves = list(Cave_Exits + Dungeon_Exits + Cave_Three_Exits)  # don't need to consider three exit caves, have one exit caves to avoid parity issues
+        bomb_shop_doors = list(Bomb_Shop_Single_Cave_Doors + Bomb_Shop_Multi_Cave_Doors)
+        blacksmith_doors = list(Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
+        door_targets = list(Single_Cave_Targets)
+
+        # tavern back door cannot be shuffled yet
+        connect_doors(world, ['Tavern North'], ['Tavern'])
+
+        if world.mode == 'standard':
+            # must connect front of hyrule castle to do escape
+            connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)')
+        else:
+            caves.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
+            entrances.append('Hyrule Castle Entrance (South)')
+
+        if not world.shuffle_ganon:
+            connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit')
+        else:
+            entrances.append('Ganons Tower')
+            caves.append('Ganons Tower Exit')
+
+        connect_mandatory_exits(world, entrances, caves, must_exits)
+
+        if world.mode == 'standard':
+            # rest of hyrule castle must be in light world to avoid fake darkworld stuff
+            connect_caves(world, entrances, [], [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')])
+
+        # place old man, has limited options
+        # exit has to come from specific set of doors, the entrance is free to move about
+        old_man_entrances = [door for door in old_man_entrances if door in entrances]
+        random.shuffle(old_man_entrances)
+        old_man_exit = old_man_entrances.pop()
+        connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)')
+        entrances.remove(old_man_exit)
+
+        # place blacksmith, has limited options
+        # cannot place it anywhere already taken (or that are otherwise not eligable for placement)
+        blacksmith_doors = [door for door in blacksmith_doors if door in entrances]
+        random.shuffle(blacksmith_doors)
+        blacksmith_hut = blacksmith_doors.pop()
+        connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut')
+        entrances.remove(blacksmith_hut)
+        bomb_shop_doors.extend(blacksmith_doors)
+
+        # place dam and pyramid fairy, have limited options
+
+        # cannot place it anywhere already taken (or that are otherwise not eligable for placement)
+        bomb_shop_doors = [door for door in bomb_shop_doors if door in entrances]
+        random.shuffle(bomb_shop_doors)
+        bomb_shop = bomb_shop_doors.pop()
+        connect_entrance(world, bomb_shop, 'Big Bomb Shop')
+        entrances.remove(bomb_shop)
+
+
+        # place the old man cave's entrance somewhere in the light world
+        random.shuffle(entrances)
+        old_man_entrance = entrances.pop()
+        connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)')
+
+        # place Old Man House in Light World, so using the s&q point does not cause fake dark world
+        connect_caves(world, entrances, [], [('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)')])
+
+        # now scramble the rest
+        connect_caves(world, entrances, [], caves)
+
+        # scramble holes
+        scramble_holes(world)
+
+        # place remaining doors
+        connect_doors(world, entrances, door_targets)
     elif world.shuffle == 'full_legacy':
         skull_woods_shuffle(world)
 

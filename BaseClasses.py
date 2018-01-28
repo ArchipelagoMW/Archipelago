@@ -267,7 +267,7 @@ class World(object):
         marksequence(['standard', 'open', 'swordless'], self.mode)
         markbool(self.place_dungeon_items)
         marksequence(['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'], self.goal)
-        marksequence(['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'], self.shuffle)
+        marksequence(['vanilla', 'simple', 'restricted', 'full', 'full_cross_worlds','full_legacy', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'], self.shuffle)
         marksequence(['easy', 'normal', 'hard', 'expert', 'insane'], self.difficulty)
         marksequence(['none', 'display', 'timed', 'timed-ohko', 'timed-countdown', 'ohko'], self.timer)
         marksequence(['on', 'off', 'random'], self.progressive)
