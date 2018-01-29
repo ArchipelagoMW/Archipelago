@@ -16,7 +16,7 @@ def mean(values):
     values = tuple(values)
     return float(sum(values))/len(values)
 
-def is_xx_up(item_name):
+def is_potion(item_name):
     return bool(re.match('^[A-Z]*_UP', item_name))
 
 def is_egg(item_name):
@@ -83,7 +83,11 @@ def parse_expression_logic(line, variable_names_set, default_expressions):
             assert stack.pop() == '('
             tokens.append(exp)
         else: # string literal
-            if next in default_expressions:
+            # Literal parsing
+            if next.startswith('BACKTRACK_'):
+                nSteps = int(next[next.rfind('_')+1:])
+                tokens.append(OpBacktrack(nSteps))
+            elif next in default_expressions:
                 tokens.append(default_expressions[next])
             else:
                 if next.startswith('r'): next = next[1:]
@@ -134,6 +138,33 @@ class OpAnd(object):
     __repr__ = __str__
 
 
+class OpBacktrack(object):
+    def __init__(self, nSteps):
+        self.nSteps = nSteps
+    def evaluate(self, variables):
+        # Yes, we're cheating by putting backtrack data in variables lol.
+        if not variables['IS_BACKTRACKING']: return False
+        untraversable_edges, outgoing_edges, edges = variables['BACKTRACK_DATA']
+        current_node, target_node = variables['BACKTRACK_GOALS']
+        reachable = set()
+        frontier = set((current_node,))
+        frontier_next = set()
+        for i in range(self.nSteps):
+            for node in frontier:
+                for edge_id in outgoing_edges[node]:
+                    if edge_id not in untraversable_edges:
+                        target_location = edges[edge_id].to_location
+                        if target_location == target_node: return True
+                        if target_location not in reachable:
+                            frontier_next.add(target_location)
+                            reachable.add(target_location)
+            frontier.clear()
+            frontier, frontier_next = frontier_next, frontier
+        return False
+
+    def __str__(self):
+        return 'BACKTRACK_%d' % self.nSteps
+    __repr__ = __str__
 
 
 # Error Handling
