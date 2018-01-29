@@ -57,6 +57,7 @@ class World(object):
         self.customitemarray = customitemarray
         self.can_take_damage = True
         self.difficulty_requirements = None
+        self.fix_fake_world = True
         self.spoiler = Spoiler(self)
 
     def intialize_regions(self):

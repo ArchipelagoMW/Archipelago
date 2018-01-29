@@ -174,10 +174,12 @@ def start():
                              ensure all locations are reachable. This only has an effect
                              on the restrictive algorithm currently.
                              ''', action='store_true')
-    parser.add_argument('--shuffleganon', help='''\
-                             If set, include the Pyramid Hole and Ganon's Tower in the
-                             entrance shuffle pool.
-                             ''', action='store_true')
+    # included for backwards compatibility
+    parser.add_argument('--shuffleganon', help=argparse.SUPPRESS, action='store_true', default=True)
+    parser.add_argument('--no-shuffleganon', help='''\
+                             If set, the Pyramid Hole and Ganon's Tower are not
+                             included entrance shuffle pool.
+                             ''', action='store_false', dest='shuffleganon')
     parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['normal', 'half', 'quarter', 'off'],
                         help='''\
                              Select the rate at which the heart beep sound is played at

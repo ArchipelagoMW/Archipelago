@@ -83,7 +83,7 @@ Insane     50/50
 
 Standard game completion requiring you to collect the 7 crystals and then beat Ganon.
 
-This is only noticeably different if the --shuffleganon option is enabled.
+This is only noticeably different if the the Ganon shuffle option is enabled.
 
 ## Game Difficulty
 
@@ -422,10 +422,10 @@ Use to select a different sprite sheet to use for Link. Path to a binary file of
 Enables the "Only Ensure Seed Beatable" option (default: False)
 
 ```
---shuffleganon
+--no-shuffleganon
 ```
 
-Enables the "Include Ganon's Tower and Pyramid Hole in Shuffle pool" option. (default: false)
+Disables the "Include Ganon's Tower and Pyramid Hole in Shuffle pool" option. (default: Enabled)
 
 ```
 --suppress_rom
