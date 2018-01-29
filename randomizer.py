@@ -215,6 +215,7 @@ def parse_locations_and_items():
     locations = {}
     items = []
     additional_items = {}
+    map_transitions = []
 
     lines = read_file_and_strip_comments('locations_items.txt')
 
@@ -226,14 +227,17 @@ def parse_locations_and_items():
 
     READING_NOTHING = 0
     READING_LOCATIONS = 1
-    READING_ADDITIONAL_ITEMS = 2
-    READING_ITEMS = 3
+    READING_MAP_TRANSITIONS = 2
+    READING_ADDITIONAL_ITEMS = 3
+    READING_ITEMS = 4
 
     currently_reading = READING_NOTHING
 
     for line in lines:
         if line.startswith('===Locations==='):
             currently_reading = READING_LOCATIONS
+        elif line.startswith('===MapTransitions==='):
+            currently_reading = READING_MAP_TRANSITIONS
         elif line.startswith('===AdditionalItems==='):
             currently_reading = READING_ADDITIONAL_ITEMS
         elif line.startswith('===Items==='):
@@ -255,8 +259,30 @@ def parse_locations_and_items():
         elif currently_reading == READING_ITEMS:
             if len(line) > 0:
                 items.append(itemreader.parse_item_from_string(line))
+        elif currently_reading = READING_MAP_TRANSITIONS:
+            # Line format:
+            # origin_location : area_current : entry_current : area_target : entry_target : walking_direction
+            origin_location, area_current, entry_current, area_target, entry_target, walking_direction = [x.strip() for x in line.split(':')]
+            if walking_direction == 'Right': walking_right = True
+            elif walking_direction == 'Left': walking_right = False
+            else: fail('Undefined map transition direction: %s' % walking_direction)
 
-    return locations, items, additional_items
+            map_transitions.append(MapTransition(
+                origin_location = origin_location,
+                area_current = int(area_current),
+                entry_current = int(entry_current),
+                area_target = int(area_target),
+                entry_target = int(entry_target),
+                walking_right = walking_right,
+            ))
+
+    # Validate map transition locations
+    if set(mt.origin_location for mt in map_transitions) - set(locations.keys()):
+        print('Unknown locations: %s' % '\n'.join(
+            set(mt.origin_location for mt in map_transitions) - set(locations.keys())
+        ))
+
+    return locations, map_transitions, items, additional_items
 
 # throws errors for invalid formats.
 def parse_edge_constraints(locations_set, variable_names_set, default_expressions):
@@ -314,35 +340,6 @@ def parse_item_constraints(items_set, locations_set, variable_names_set, default
         fail('Duplicate item definition(s) in constraints!\n%s' % '\n'.join(duplicates))
 
     return item_constraints
-
-
-def parse_map_transitions(locations_set):
-    map_transitions = []
-
-    lines = read_file_and_strip_comments('map_transitions.txt')
-    for line in lines:
-        # Line format:
-        # origin_location : area_current : entry_current : area_target : entry_target : walking_direction
-        origin_location, area_current, entry_current, area_target, entry_target, walking_direction = [x.strip() for x in line.split(':')]
-        area_current = int(area_current)
-        entry_current = int(entry_current)
-        area_target = int(area_target)
-        entry_target = int(entry_target)
-        if walking_direction == 'Right': walking_right = True
-        elif walking_direction == 'Left': walking_right = False
-        else: fail('Undefined map transition direction: %s' % walking_direction)
-
-        map_transitions.append(MapTransition(
-            origin_location = origin_location,
-            area_current = area_current,
-            entry_current = entry_current,
-            area_target = area_target,
-            entry_target = entry_target,
-            walking_right = walking_right,
-        ))
-
-    return map_transitions
-
 
 def read_config(setting_flags, item_locations_set, setting_flags_set, predefined_additional_items_set):
     lines = read_file_and_strip_comments(settings.config_file)
@@ -537,7 +534,7 @@ class RandomizerData(object):
     def __init__(self):
         self.setting_flags = define_setting_flags()
         self.pseudo_items = define_pseudo_items()
-        self.locations, self.items, self.additional_items = parse_locations_and_items()
+        self.locations, self.map_transitions, self.items, self.additional_items = parse_locations_and_items()
 
         # Do some preprocessing of variable names        
         self.item_names = [item.name for item in data.items]
@@ -568,8 +565,6 @@ class RandomizerData(object):
         self.alternate_conditions = define_alternate_conditions(variable_names_set, default_expressions)
         self.edge_constraints = parse_edge_constraints(self.locations_set, variable_names_set, default_expressions)
         self.item_constraints = parse_item_constraints(items_set, self.locations_set, variable_names_set, default_expressions)
-
-        self.map_transitions = parse_map_transitions(self.locations_set)
 
         self.preprocess_data()
         self.preprocess_variables()
