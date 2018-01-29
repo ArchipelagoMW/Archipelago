@@ -35,26 +35,28 @@ easythird5extra = ['Rupees (50)'] * 2 + ['Bombs (3)'] * 2 + ['Arrows (10)']
 easyfinal25extra = ['Rupees (50)'] * 4 + ['Rupees (20)'] * 14 + ['Rupee (1)'] + ['Arrows (10)'] * 4 + ['Rupees (5)'] * 2
 easytimedotherextra = ['Red Clock'] * 5
 
-hardbaseitems = (['Silver Arrows', 'Single Arrow'] + ['Rupees (300)'] + ['Rupees (100)'] * 2 + ['Rupees (50)'] + ['Bombs (3)'] +
+hardbaseitems = (['Silver Arrows', 'Single Arrow', 'Single Bomb'] + ['Rupees (300)'] + ['Rupees (100)'] * 3 + ['Rupees (50)'] * 5 + ['Bombs (3)'] * 5 +
                  ['Boss Heart Container'] * 5 + ['Piece of Heart'] * 24)
-hardfirst20extra = ['Bombs (3)'] * 4 + ['Single Bomb'] * 4 + ['Rupees (5)'] * 5 + ['Rupee (1)'] * 2 + ['Rupees (100)'] + ['Rupees (50)'] * 4
-hardsecond20extra = ['Single Bomb'] * 4 + ['Rupees (5)'] * 10 + ['Rupees (20)']  * 2 + ['Rupee (1)'] * 3 + ['Arrows (10)']
-hardthird20extra = ['Arrows (10)'] * 4 + ['Rupees (20)']  * 3 + ['Rupees (5)'] * 3 + ['Single Bomb'] * 5 + ['Single Arrow'] * 5
+hardfirst20extra = ['Single Bomb'] * 7 + ['Rupees (5)'] * 8 + ['Rupee (1)'] * 2 + ['Rupees (20)']  * 2 + ['Arrows (10)']
+hardsecond10extra = ['Rupees (5)'] * 7 + ['Rupee (1)'] * 3
+hardthird10extra = ['Arrows (10)'] * 4 + ['Rupees (20)']  * 3 + ['Single Bomb'] * 3 
+hardfourth10extra = ['Rupees (5)'] * 3 + ['Single Arrow'] * 5 + ['Single Bomb'] * 2
 hardfinal20extra = ['Single Bomb'] * 4 + ['Rupees (5)'] * 2 + ['Single Arrow'] * 14
 
 expertbaseitems = (['Single Arrow', 'Rupees (300)', 'Rupees (100)', 'Bombs (3)', 'Arrows (10)'] + ['Rupees (50)'] * 4 + ['Rupees (5)'] * 5 +
-                   ['Rupees (20)'] + ['Single Bomb'] * 2 + ['Piece of Heart'] * 24)
-expertfirst15extra = ['Single Bomb'] * 13 + ['Rupees (20)'] * 2
-expertsecond25extra = ['Single Bomb'] * 8 + ['Single Arrow'] * 9 + ['Rupees (20)']  * 3 + ['Rupee (1)'] * 5
-expertthird15extra = ['Rupees (5)'] * 5 + ['Single Bomb'] * 3 + ['Rupees (20)'] * 2 + ['Single Arrow'] * 5
+                   ['Rupees (20)'] * 3 + ['Single Bomb'] * 10 + ['Piece of Heart'] * 24)
+expertfirst15extra = ['Single Bomb'] * 7 + ['Rupees (20)']  * 3 + ['Single Arrow'] * 5
+expertsecond15extra = ['Single Bomb'] * 6 + ['Single Arrow'] * 4 + ['Rupee (1)'] * 5
+expertthird10extra = ['Rupees (5)'] * 3 + ['Single Bomb'] * 3 + ['Rupees (20)'] * 2 + ['Single Arrow'] * 2
+expertfourth5extra = ['Rupees (5)'] * 2 + ['Single Arrow'] * 3
 expertfinal25extra = ['Single Bomb'] * 4 + ['Rupees (20)']  * 3 + ['Single Arrow'] * 18
 
-insanebaseitems = (['Single Arrow', 'Bombs (3)', 'Arrows (10)'] + ['Rupees (50)'] * 3 + ['Rupees (5)'] * 10 + ['Rupees (300)'] * 4 + ['Rupees (100)'] * 3 +
-                   ['Rupee (1)'] * 4 + ['Single Bomb'] * 4)
-insanefirst15extra = ['Single Bomb'] * 4 + ['Single Arrow'] * 4 + ['Rupee (1)'] * 4 + ['Rupees (300)'] + ['Rupees (100)'] + ['Rupees (50)']
-insanesecond25extra = ['Single Bomb'] * 7 + ['Single Arrow'] * 7 + ['Rupee (1)'] * 7 + ['Rupees (20)'] * 4
-insanethird10extra = ['Single Bomb'] * 3 + ['Single Arrow'] * 3 + ['Rupee (1)'] * 3 + ['Rupees (20)']
-insanefourth15extra = ['Single Bomb'] * 5 + ['Single Arrow'] * 5 + ['Rupee (1)'] * 5
+insanebaseitems = (['Bombs (3)', 'Arrows (10)'] + ['Rupees (50)'] * 4 + ['Rupees (5)'] * 10 + ['Rupees (300)'] * 5 + ['Rupees (100)'] * 4 +
+                   ['Rupee (1)'] * 8 + ['Rupees (20)'] * 4 + ['Single Bomb'] * 8 + ['Single Arrow'] * 6)
+insanefirst15extra = ['Single Bomb'] * 5 + ['Single Arrow'] * 4 + ['Rupee (1)'] * 5 + ['Rupees (20)']
+insanesecond15extra = ['Single Bomb'] * 5 + ['Single Arrow'] * 5 + ['Rupee (1)'] * 5
+insanethird10extra = ['Single Bomb'] * 4 + ['Single Arrow'] * 3 + ['Rupee (1)'] * 3
+insanefourth5extra = ['Single Bomb'] + ['Single Arrow'] * 2 + ['Rupee (1)'] * 2
 insanefinal25extra = ['Single Bomb'] * 2 + ['Single Arrow'] * 10 + ['Rupee (1)'] * 7 + ['Rupees (20)'] * 6
 
 Difficulty = namedtuple('Difficulty',
@@ -118,7 +120,7 @@ difficulties = {
         timedohko = ['Green Clock'] * 25,
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 5, # +5 more Red Clocks if there is room
         triforcehunt = ['Triforce Piece'] * 30,
-        triforce_pieces_required = 10,
+        triforce_pieces_required = 20,
         conditional_extras = easy_conditional_extras,
         extras = [easyextra, easyfirst15extra, easysecond10extra, easythird5extra, easyfinal25extra],
         progressive_sword_limit = 4,
@@ -140,10 +142,10 @@ difficulties = {
         basicsword = ['Master Sword', 'Master Sword', 'Tempered Sword'],
         timedohko = ['Green Clock'] * 20,
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
-        triforcehunt = ['Triforce Piece'] * 40,
-        triforce_pieces_required = 30,
+        triforcehunt = ['Triforce Piece'] * 30,
+        triforce_pieces_required = 20,
         conditional_extras = no_conditonal_extras,
-        extras = [hardfirst20extra, hardsecond20extra, hardthird20extra, hardfinal20extra],
+        extras = [hardfirst20extra, hardsecond10extra, hardthird10extra, hardfourth10extra, hardfinal20extra],
         progressive_sword_limit = 3,
         progressive_shield_limit = 2,
         progressive_armor_limit = 1,
@@ -163,10 +165,10 @@ difficulties = {
         basicsword = ['Fighter Sword', 'Master Sword', 'Master Sword'],
         timedohko = ['Green Clock'] * 20 + ['Red Clock'] * 5,
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
-        triforcehunt = ['Triforce Piece'] * 40,
-        triforce_pieces_required = 40,
+        triforcehunt = ['Triforce Piece'] * 30,
+        triforce_pieces_required = 20,
         conditional_extras = no_conditonal_extras,
-        extras = [expertfirst15extra, expertsecond25extra, expertthird15extra, expertfinal25extra],
+        extras = [expertfirst15extra, expertsecond15extra, expertthird10extra, expertfourth5extra, expertfinal25extra],
         progressive_sword_limit = 2,
         progressive_shield_limit = 0,
         progressive_armor_limit = 0,
@@ -186,10 +188,10 @@ difficulties = {
         basicsword = ['Fighter Sword', 'Master Sword', 'Master Sword'],
         timedohko = ['Green Clock'] * 20 + ['Red Clock'] * 5,
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
-        triforcehunt = ['Triforce Piece'] * 50,
-        triforce_pieces_required = 50,
+        triforcehunt = ['Triforce Piece'] * 30,
+        triforce_pieces_required = 20,
         conditional_extras = no_conditonal_extras,
-        extras = [insanefirst15extra, insanesecond25extra, insanethird10extra, insanefourth15extra, insanefinal25extra],
+        extras = [insanefirst15extra, insanesecond15extra, insanethird10extra, insanefourth5extra, insanefinal25extra],
         progressive_sword_limit = 2,
         progressive_shield_limit = 0,
         progressive_armor_limit = 0,
