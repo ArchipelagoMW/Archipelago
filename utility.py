@@ -147,17 +147,20 @@ class OpBacktrack(object):
         untraversable_edges, outgoing_edges, edges = variables['BACKTRACK_DATA']
         current_node, target_node = variables['BACKTRACK_GOALS']
         reachable = set()
-        frontier = set((current_node,))
+        frontier = set((current_node,0))
         frontier_next = set()
-        for i in range(self.nSteps):
-            for node in frontier:
+
+        while len(frontier) > 0:
+            for node, distance in frontier:
                 for edge_id in outgoing_edges[node]:
-                    if edge_id not in untraversable_edges:
-                        target_location = edges[edge_id].to_location
-                        if target_location == target_node: return True
-                        if target_location not in reachable:
-                            frontier_next.add(target_location)
-                            reachable.add(target_location)
+                    if edge_id in untraversable_edges: continue
+                    target_location = edges[edge_id].to_location
+                    new_cost = distance + edges[edge_id].backtrack_cost
+                    if new_cost > self.nSteps: continue
+                    if target_location == target_node: return True
+                    if target_location in reachable: continue
+                    frontier_next.add((target_location, new_cost))
+                    reachable.add(target_location)
             frontier.clear()
             frontier, frontier_next = frontier_next, frontier
         return False

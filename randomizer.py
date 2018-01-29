@@ -105,12 +105,6 @@ def define_pseudo_items():
         "CHAPTER_4": "TOWN_MAIN & 7TM",
     }
 
-def define_special_conditions():
-    return [
-        'BACKTRACK_1',
-        'BACKTRACK_2',
-        'BACKTRACK_3',
-    ]
 
 def define_alternate_conditions(variable_names_set, default_expressions):
     d = {
@@ -266,7 +260,7 @@ def parse_locations_and_items():
 
 # throws errors for invalid formats.
 def parse_edge_constraints(locations_set, variable_names_set, default_expressions):
-    lines = read_file_and_strip_comments('constraints.txt')
+    lines = read_file_and_strip_comments('constriants_graph.txt')
     jsondata = ' '.join(lines)
     jsondata = re.sub(',\s*}', '}', jsondata)
     jsondata = '},{'.join(re.split('}\s*{', jsondata))
@@ -282,12 +276,72 @@ def parse_edge_constraints(locations_set, variable_names_set, default_expression
         prereq = parse_expression(cdict['prereq'], variable_names_set, default_expressions)
         constraints.append(EdgeConstraintData(from_location, to_location, prereq))
 
+    # Validate that there are no duplicate edges defined
+    if len(constraints) != len(set(cdict['edge'] for cdict in cdicts)):
+        # Error: duplicate edge. Find the duplicate edge.
+        edge_names = [cdict['edge'] for cdict in cdicts]
+        duplicates = [edge for edge in set(edge_names) if edge_names.count(edge) > 1]
+        fail('Duplicate edge definition(s) in constraints!\n%s' % '\n'.join(duplicates))
+
     return constraints
+
+def parse_item_constraints(items_set, locations_set, variable_names_set, default_expressions):
+    lines = read_file_and_strip_comments('constriants.txt')
+    jsondata = ' '.join(lines)
+    jsondata = re.sub(',\s*}', '}', jsondata)
+    jsondata = '},{'.join(re.split('}\s*{', jsondata))
+    jsondata = '[' + jsondata + ']'
+    cdicts = parse_json(jsondata)
+
+    item_constraints = []
+
+    for cdict in cdicts:
+        item, from_location = cdict['item'], cdict['from_location']
+        if item not in items_set: fail('Unknown item: %s' % item)
+        if from_location not in locations_set: fail('Unknown location: %s' % from_location)
+        item_constraints.append(ItemConstraintData(
+            item = item,
+            from_location = from_location,
+            entry_prereq = parse_expression(cdict['entry_prereq'], variable_names_set, default_expressions),
+            exit_prereq = parse_expression(cdict['exit_prereq'], variable_names_set, default_expressions),
+        ))
+
+    # Validate that there are no duplicate items defined
+    if len(constraints) != len(set(cdict['item'] for cdict in cdicts)):
+        # Error: duplicate item. Find the duplicate item.
+        item_names = [cdict['item'] for cdict in cdicts]
+        duplicates = [item for item in set(item_names) if item_names.count(item) > 1]
+        fail('Duplicate item definition(s) in constraints!\n%s' % '\n'.join(duplicates))
+
+    return item_constraints
 
 
 def parse_map_transitions(locations_set):
-    return [
-    ]
+    map_transitions = []
+
+    lines = read_file_and_strip_comments('map_transitions.txt')
+    for line in lines:
+        # Line format:
+        # origin_location : area_current : entry_current : area_target : entry_target : walking_direction
+        origin_location, area_current, entry_current, area_target, entry_target, walking_direction = [x.strip() for x in line.split(':')]
+        area_current = int(area_current)
+        entry_current = int(entry_current)
+        area_target = int(area_target)
+        entry_target = int(entry_target)
+        if walking_direction == 'Right': walking_right = True
+        elif walking_direction == 'Left': walking_right = False
+        else: fail('Undefined map transition direction: %s' % walking_direction)
+
+        map_transitions.append(MapTransition(
+            origin_location = origin_location,
+            area_current = area_current,
+            entry_current = entry_current,
+            area_target = area_target,
+            entry_target = entry_target,
+            walking_right = walking_right,
+        ))
+
+    return map_transitions
 
 
 def read_config(setting_flags, item_locations_set, setting_flags_set, predefined_additional_items_set):
@@ -502,17 +556,18 @@ class RandomizerData(object):
             fail('Repeat names detected: %s' % ','.join(repeat_names))
         
         self.locations_set = set(self.locations_list)
+        items_set = set(self.item_names)
 
 
         # More config loading
         self.setting_flags, self.to_shuffle, self.must_be_reachable, self.included_additional_items = \
-            read_config(variable_names_list, set(self.item_names), set(self.setting_flags.keys()), set(self.additional_items.keys()))
+            read_config(variable_names_list, items_set, set(self.setting_flags.keys()), set(self.additional_items.keys()))
 
         default_expressions = define_default_expressions(variable_names_set)
         evaluate_pseudo_item_constraints(self.pseudo_items, variable_names_set, default_expressions)
         self.alternate_conditions = define_alternate_conditions(variable_names_set, default_expressions)
         self.edge_constraints = parse_edge_constraints(self.locations_set, variable_names_set, default_expressions)
-        self.item_constraints = parse_iteasdadasdasdasdasdxxxxxxxxxxxxxxxxxxxxxxxxxxx===
+        self.item_constraints = parse_item_constraints(items_set, self.locations_set, variable_names_set, default_expressions)
 
         self.map_transitions = parse_map_transitions(self.locations_set)
 
