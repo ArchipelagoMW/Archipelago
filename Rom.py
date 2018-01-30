@@ -653,9 +653,15 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     rom.write_byte(0x180086, 0x00 if world.aga_randomness else 0x01)  # set blue ball and ganon warp randomness
     rom.write_byte(0x1800A0, 0x01)  # return to light world on s+q without mirror
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
-    rom.write_byte(0x180034, 0x0A) # starting max bombs
-    rom.write_byte(0x180035, 30) # starting max bombs
     rom.write_byte(0x180174, 0x01 if world.fix_fake_world else 0x00)
+    rom.write_byte(0x180034, 0x0A) # starting max bombs
+    rom.write_byte(0x180035, 30) # starting max arrows
+    for x in range(0x183000, 0x18304F):
+        rom.write_byte(x, 0) # Zero the initial equipment array
+    rom.write_byte(0x18302C, 0x18) # starting max health
+    rom.write_byte(0x18302D, 0x18) # starting current health
+    rom.write_byte(0x183039, 0x68) # starting abilities, bit array
+
 
     if world.goal in ['pedestal', 'triforcehunt']:
         rom.write_byte(0x18003E, 0x01)  # make ganon invincible
