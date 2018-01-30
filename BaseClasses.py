@@ -387,17 +387,17 @@ class CollectionState(object):
     def can_lift_heavy_rocks(self):
         return self.has('Titans Mitts')
 
-    def can_extend_magic(self, smallmagic=8): #This reflects the total magic Link has, not the total extra he has.
+    def can_extend_magic(self, smallmagic=8, fullrefill=False): #This reflects the total magic Link has, not the total extra he has.
         basemagic = 8
         if self.has('Quarter Magic'):
             basemagic = 32
         elif self.has('Half Magic'):
             basemagic = 16
-        if self.world.difficulty == 'hard':
+        if self.world.difficulty == 'hard' and fullrefill == False:
             basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count())
-        elif self.world.difficulty == 'expert':
+        elif self.world.difficulty == 'expert' and fullrefill == False:
             basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count())
-        elif self.world.difficulty == 'insane':
+        elif self.world.difficulty == 'insane' and fullrefill == False:
             basemagic = basemagic
         else:
             basemagic = basemagic + basemagic * self.bottle_count()
