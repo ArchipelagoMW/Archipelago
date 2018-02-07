@@ -98,7 +98,8 @@ def global_rules(world):
     set_rule(world.get_entrance('Sanctuary Grave'), lambda state: state.can_lift_rocks())
     set_rule(world.get_entrance('20 Rupee Cave'), lambda state: state.can_lift_rocks())
     set_rule(world.get_entrance('50 Rupee Cave'), lambda state: state.can_lift_rocks())
-    set_rule(world.get_entrance('Old Man Cave (West)'), lambda state: state.can_lift_rocks() or (state.has_Mirror() and state.can_reach('West Dark World', 'Region')))
+    set_rule(world.get_entrance('Death Mountain Entrance Rock'), lambda state: state.can_lift_rocks())
+    set_rule(world.get_entrance('Bumper Cave Entrance Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Flute Spot 1'), lambda state: state.has('Ocarina'))
     set_rule(world.get_entrance('Lake Hylia Central Island Teleporter'), lambda state: state.can_lift_heavy_rocks())
     set_rule(world.get_entrance('Dark Desert Teleporter'), lambda state: state.has('Ocarina') and state.can_lift_heavy_rocks())
@@ -161,7 +162,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Lake Hylia Central Island Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('East Dark World River Pier'), lambda state: state.has_Pearl() and state.has('Flippers'))  # ToDo any fake flipper set up?
     set_rule(world.get_entrance('Graveyard Ledge Mirror Spot'), lambda state: state.has_Pearl() and state.has_Mirror())
-    set_rule(world.get_entrance('Bumper Cave (Bottom)'), lambda state: state.has_Pearl() and state.can_lift_rocks())
+    set_rule(world.get_entrance('Bumper Cave Entrance Rock'), lambda state: state.has_Pearl() and state.can_lift_rocks())
     set_rule(world.get_entrance('Bumper Cave Ledge Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Bat Cave Drop Ledge Mirror Spot'), lambda state: state.has_Pearl() and state.can_lift_heavy_rocks() and state.has_Mirror())
     set_rule(world.get_entrance('Dark World Hammer Peg Cave'), lambda state: state.has_Pearl() and state.can_lift_heavy_rocks() and state.has('Hammer'))
@@ -599,8 +600,7 @@ def set_big_bomb_rules(world):
                              'Dark World Lumberjack Shop',
                              'Thieves Town',
                              'Skull Woods First Section Door',
-                             'Skull Woods Second Section Door (East)',
-                             'Bumper Cave (Bottom)']
+                             'Skull Woods Second Section Door (East)']
     Southern_DW_entrances = ['Hype Cave',
                              'Bonk Fairy (Dark)',
                              'Archery Game',
@@ -685,8 +685,14 @@ def set_big_bomb_rules(world):
     elif bombshop_entrance.name in Northern_DW_entrances:
         #1. Mirror and basic routes
         #2. Go to south DW and then cross peg bridge: Need Mitts and hammer and moon pearl
-        # -> (Mitts and P and H) or BR)
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.can_lift_heavy_rocks() and state.has_Pearl() and state.has('Hammer')) or basic_routes(state))
+        # -> (Mitts and CPB) or (M and BR)
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.can_lift_heavy_rocks() and cross_peg_bridge(state)) or (state.has_Mirror() and basic_routes(state)))
+    elif bombshop_entrance.name == 'Bumper Cave (Bottom)':
+        #1. Mirror and Lift rock and basic_routes
+        #2. Mirror and Flute and basic routes (can make difference if accessed via insanity or w/ mirror from connector, and then via hyrule castle gate, because no gloves are needed in that case)
+        #3. Go to south DW and then cross peg bridge: Need Mitts and hammer and moon pearl
+        # -> (Mitts and CPB) or (((G or Flute) and M) and BR))
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.can_lift_heavy_rocks() and cross_peg_bridge(state)) or (((state.can_lift_rocks() or state.has('Ocarina')) and state.has_Mirror()) and basic_routes(state)))
     elif bombshop_entrance.name in Southern_DW_entrances:
         #1. Mirror and enter via gate: Need mirror and Aga1
         #2. cross peg bridge: Need hammer and moon pearl
@@ -714,14 +720,14 @@ def set_big_bomb_rules(world):
         add_rule(world.get_entrance('Pyramid Fairy'), lambda state: ((state.can_reach('Dark Desert', 'Region') and state.has_Mirror()) or state.has('Ocarina')) and basic_routes(state))
     elif bombshop_entrance.name == 'Old Man Cave (West)':
         # 1. Lift rock then basic_routes
-        # 2. use existing mirror spot, mirror again past rocks then basic routes (makes a difference for aga1 defeated basic route, as it avoids gloves requirement)
-        # -> (G or (M and West Dark World access)) and BR
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.can_lift_rocks() or (state.can_reach('West Dark World', 'Region') and state.has_Mirror())) and basic_routes(state))
+        # 2. flute then basic_routes
+        # -> (Flute or G) and BR
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.has('Ocarina') or state.can_lift_rocks()) and basic_routes(state))
     elif bombshop_entrance.name == 'Graveyard Cave':
         # 1. flute then basic routes
-        # 2. (has west dark world access) use existing mirror spot, mirror again off ledge
-        # -> (Flute or (M and West Dark World access) and BR
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.has('Ocarina') or (state.can_reach('West Dark World', 'Region') and state.has_Mirror())) and basic_routes(state))
+        # 2. (has west dark world access) use existing mirror spot (required Pearl), mirror again off ledge
+        # -> (Flute or (M and P and West Dark World access) and BR
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.has('Ocarina') or (state.can_reach('West Dark World', 'Region') and state.has_Pearl() and state.has_Mirror())) and basic_routes(state))
     elif bombshop_entrance.name in Mirror_from_SDW_entrances:
         # 1. flute then basic routes
         # 2. (has South dark world access) use existing mirror spot, mirror again off ledge
