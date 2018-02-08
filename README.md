@@ -71,13 +71,7 @@ Ganon cannot be damaged until all dungeons (including Hyrule Castle Tower and Ga
 ### Triforce Hunt
 
 Triforce Pieces are added to the item pool, and some number of them being found will trigger game completion. Ganon cannot be damaged.
-Counts are based on the difficulty setting as well as the required number.
-Difficulty Need/Total
-Easy       10/30
-Normal     20/30
-Hard       30/40
-Expert     40/40
-Insane     50/50
+By default 30 Triforce Pieces are placed while 20 are needed to beat the game. Both values can be adjusted with the custom item pool feature.
 
 ### Crystals
 
@@ -217,7 +211,15 @@ on the overworld. On Death Mountain, entrances are connected more freely.
 
 ### Full
 
-Mixes cave and dungeon entrances freely.
+Mixes cave and dungeon entrances freely. Caves and dungeons with multiple entrances will be confined to one world.
+
+### Full_Cross_Worlds
+
+Mixes cave and dungeon entrances freely, but now connector caves and dungeons can link Light World and Dark World.
+
+### Full_Legacy
+
+Mixes cave and dungeon entrances freely, but the distinction between single entrance and multi-entrance caves from older versions of the randomizer is maintained.
 
 ### Restricted
 
@@ -275,7 +277,13 @@ If set, will only ensure the goal can be achieved, but not necessarily that all 
 
 ## Include Ganon's Tower and Pyramid Hole in Shuffle pool
 
-If set, Ganon's Tower is included in the dungeon shuffle pool and the Pyramid Hole/Exit pair is included in the Holes shuffle pool. Ganon can not be defeated until the primary goal is fulfilled. This setting removes any bias against Ganon's Tower that some algorithms may have.
+If set, Ganon's Tower is included in the dungeon shuffle pool and the Pyramid Hole/Exit pair is included in the Holes shuffle pool. Ganon can not be defeated until the primary goal is fulfilled.
+This setting removes any bias against Ganon's Tower that some algorithms may have.
+
+## Use Custom Item pool
+
+If set, the item pool normally associated with your difficulty setting is replaced by the item pool specified in the custom tab. This feature is only supported when the randomizer is run
+via the GUI; attempting to set this via the command line does nothing.
 
 ## Seed
 
