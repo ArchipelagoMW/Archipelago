@@ -1565,6 +1565,8 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Skull Woods First Section (Top) One-Way Path', 'Skull Woods First Section'),
                          ('Skull Woods Second Section (Drop)', 'Skull Woods Second Section'),
                          ('Blind Fight', 'Blind Fight'),
+                         ('Desert Palace Pots (Outer)', 'Desert Palace Main (Inner)'),
+                         ('Desert Palace Pots (Inner)', 'Desert Palace Main (Outer)'),
                          ('Ice Palace Entrance Room', 'Ice Palace (Main)'),
                          ('Ice Palace (East)', 'Ice Palace (East)'),
                          ('Ice Palace (East Top)', 'Ice Palace (East Top)'),

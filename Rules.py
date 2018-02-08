@@ -445,7 +445,7 @@ def open_rules(world):
 
 def swordless_rules(world):
 
-    # for the time being swordless mode just inhierits all fixes from open mode.
+    # for the time being swordless mode just inherits all fixes from open mode.
     # should there ever be fixes that apply to open mode but not swordless, this
     # can be revisited.
     open_rules(world)
@@ -621,25 +621,27 @@ def set_big_bomb_rules(world):
                              'Superbunny Cave (Top)',
                              'Superbunny Cave (Bottom)',
                              'Hookshot Cave',
-                             'Ganons Tower']
+                             'Ganons Tower',
+                             'Turtle Rock Isolated Ledge Entrance',
+                             'Hookshot Cave Back Entrance']
     Isolated_LW_entrances = ['Capacity Upgrade',
-                             'Hookshot Fairy',
                              'Tower of Hera',
-                             'Old Man Cave (East)',
-                             'Old Man House (Bottom)',
-                             'Old Man House (Top)',
-                             'Death Mountain Return Cave (East)',
                              'Death Mountain Return Cave (West)',
-                             'Spectacle Rock Cave Peak',
-                             'Spectacle Rock Cave',
-                             'Spectacle Rock Cave (Bottom)',
-                             'Paradox Cave (Bottom)',
-                             'Paradox Cave (Middle)',
                              'Paradox Cave (Top)',
-                             'Fairy Ascension Cave (Bottom)',
                              'Fairy Ascension Cave (Top)',
                              'Spiral Cave',
-                             'Spiral Cave (Bottom)']
+                             'Desert Palace Entrance (East)']
+    West_LW_DM_entrances = ['Old Man Cave (East)',
+                            'Old Man House (Bottom)',
+                            'Old Man House (Top)',
+                            'Death Mountain Return Cave (East)',
+                            'Spectacle Rock Cave Peak',
+                            'Spectacle Rock Cave',
+                            'Spectacle Rock Cave (Bottom)']
+    East_LW_DM_entrances = ['Paradox Cave (Bottom)',
+                            'Paradox Cave (Middle)',
+                            'Hookshot Fairy',
+                            'Spiral Cave (Bottom)']
     Mirror_from_SDW_entrances = ['Two Brothers House (West)',
                                  'Cave 45']
     Castle_ledge_entrances = ['Hyrule Castle Entrance (West)',
@@ -707,6 +709,20 @@ def set_big_bomb_rules(world):
         # Prexisting mirror spot is not permitted, because mirror might have been needed to reach these isolated locations.
         # -> Flute and BR
         add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has('Ocarina') and basic_routes(state))
+    elif bombshop_entrance.name in West_LW_DM_entrances:
+        # 1. flute then basic routes or mirror
+        # Prexisting mirror spot is permitted, because flute can be used to reach west DM directly.
+        # -> Flute and (M or BR)
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has('Ocarina') and (state.has_Mirror() or basic_routes(state)))
+    elif bombshop_entrance.name in East_LW_DM_entrances:
+        # 1. flute then basic routes or mirror and hookshot
+        # Prexisting mirror spot is permitted, because flute can be used to reach west DM directly and then east DM via Hookshot
+        # -> Flute and ((M and Hookshot) or BR)
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has('Ocarina') and ((state.has_Mirror() and state.has('Hookshot')) or basic_routes(state)))
+    elif bombshop_entrance.name == 'Fairy Ascension Cave (Bottom)':
+        # Same as East_LW_DM_entrances except navigation without BR requires Mitts
+        # -> Flute and ((M and Hookshot and Mitts) or BR)
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: state.has('Ocarina') and ((state.has_Mirror() and state.has('Hookshot') and state.can_lift_heavy_rocks()) or basic_routes(state)))
     elif bombshop_entrance.name in Castle_ledge_entrances:
         # 1. mirror on pyramid to castle ledge, grab bomb, return through mirror spot: Needs mirror
         # 2. flute then basic routes
@@ -745,14 +761,12 @@ def set_big_bomb_rules(world):
         # -> (M and Mitts) or BR
         add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.can_lift_heavy_rocks() and state.has_Mirror()) or basic_routes(state))
 
-    #TODO: add logic for reaching the following locations via an exit from a multi-entrace cave in mixed cave insianity: 'Desert Palace Entrance (East)','Turtle Rock Isolated Ledge Entrance','Hookshot Cave Back Entrance'
-
 def set_bunny_rules(world):
 
-    # regions for the extis of multi-entrace caves/drops that bunny cannot pass
+    # regions for the exits of multi-entrace caves/drops that bunny cannot pass
     # Note spiral cave may be technically passible, but it would be too absurd to require since OHKO mode is a thing.
     bunny_impassable_caves = ['Bumper Cave', 'Two Brothers House', 'Hookshot Cave', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)', 'Turtle Rock (Entrance)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Skull Woods Second Section (Drop)',
-                              'Turtle Rock (Eye Bridge)', 'Sewers', 'Pyramid', 'Spiral Cave (Top)']
+                              'Turtle Rock (Eye Bridge)', 'Sewers', 'Pyramid', 'Spiral Cave (Top)', 'Desert Palace Main (Inner)']
 
     bunny_accessible_locations = ['Link\'s Uncle', 'Sahasrahla', 'Sick Kid', 'Lost Woods Hideout', 'Lumberjack Tree', 'Checkerboard Cave', 'Potion Shop', 'Spectacle Rock Cave', 'Pyramid', 'Hype Cave - Generous Guy', 'Peg Cave', 'Bumper Cave Ledge']
 
