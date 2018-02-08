@@ -194,7 +194,7 @@ def guiMain(args=None):
     shuffleFrame = Frame(drowDownFrame)
     shuffleVar = StringVar()
     shuffleVar.set('full')
-    shuffleOptionMenu = OptionMenu(shuffleFrame, shuffleVar, 'vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple')
+    shuffleOptionMenu = OptionMenu(shuffleFrame, shuffleVar, 'vanilla', 'simple', 'restricted', 'full', 'full_cross_worlds', 'full_legacy', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple')
     shuffleOptionMenu.pack(side=RIGHT)
     shuffleLabel = Label(shuffleFrame, text='Entrance shuffle algorithm')
     shuffleLabel.pack(side=LEFT)

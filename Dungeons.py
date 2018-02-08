@@ -12,7 +12,7 @@ def create_dungeons(world):
             world.get_region(region).dungeon = dungeon
         return dungeon
 
-    ES = make_dungeon('Hyrule Castle', ['Hyrule Castle', 'Sewers', 'Sewers (Dark)', 'Sanctuary'], None, [ItemFactory('Small Key (Escape)')], [ItemFactory('Map (Escape)')])
+    ES = make_dungeon('Hyrule Castle', ['Hyrule Castle', 'Sewers', 'Sewer Drop', 'Sewers (Dark)', 'Sanctuary'], None, [ItemFactory('Small Key (Escape)')], [ItemFactory('Map (Escape)')])
     EP = make_dungeon('Eastern Palace', ['Eastern Palace'], ItemFactory('Big Key (Eastern Palace)'), [], ItemFactory(['Map (Eastern Palace)', 'Compass (Eastern Palace)']))
     DP = make_dungeon('Desert Palace', ['Desert Palace North', 'Desert Palace Main', 'Desert Palace East'], ItemFactory('Big Key (Desert Palace)'), [ItemFactory('Small Key (Desert Palace)')], ItemFactory(['Map (Desert Palace)', 'Compass (Desert Palace)']))
     ToH = make_dungeon('Tower of Hera', ['Tower of Hera (Bottom)', 'Tower of Hera (Basement)', 'Tower of Hera (Top)'], ItemFactory('Big Key (Tower of Hera)'), [ItemFactory('Small Key (Tower of Hera)')], ItemFactory(['Map (Tower of Hera)', 'Compass (Tower of Hera)']))

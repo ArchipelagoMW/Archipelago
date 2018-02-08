@@ -1,4 +1,5 @@
 import copy
+from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict
@@ -251,19 +252,31 @@ class World(object):
 
     @property
     def option_identifier(self):
-        logic = 0 if self.logic == 'noglitches' else 1
-        mode = ['standard', 'open', 'swordless'].index(self.mode)
-        dungeonitems = 0 if self.place_dungeon_items else 1
-        goal = ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'].index(self.goal)
-        shuffle = ['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'].index(self.shuffle)
-        difficulty = ['easy', 'normal', 'hard', 'expert', 'insane'].index(self.difficulty)
-        timer = ['none', 'display', 'timed', 'timed-ohko', 'timed-countdown', 'ohko'].index(self.timer)
-        progressive = ['on', 'off', 'random'].index(self.progressive)
-        algorithm = ['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26', 'balanced'].index(self.algorithm)
-        beatableonly = 1 if self.check_beatable_only else 0
-        shuffleganon = 1 if self.shuffle_ganon else 0
-        keysanity = 1 if self.keysanity else 0
-        return logic | (beatableonly << 1) | (dungeonitems << 2) | (shuffleganon << 3) | (goal << 4) | (shuffle << 7) | (difficulty << 11) | (algorithm << 13) | (mode << 16) | (keysanity << 18) | (timer << 19) | (progressive << 21)
+        id_value = 0
+        id_value_max = 1
+
+        def markbool(value):
+            nonlocal id_value, id_value_max
+            id_value += id_value_max * bool(value)
+            id_value_max *= 2
+        def marksequence(options, value):
+            nonlocal id_value, id_value_max
+            id_value += id_value_max * options.index(value)
+            id_value_max *= len(options)
+        markbool(self.logic == 'noglitches')
+        marksequence(['standard', 'open', 'swordless'], self.mode)
+        markbool(self.place_dungeon_items)
+        marksequence(['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'], self.goal)
+        marksequence(['vanilla', 'simple', 'restricted', 'full', 'full_cross_worlds','full_legacy', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'], self.shuffle)
+        marksequence(['easy', 'normal', 'hard', 'expert', 'insane'], self.difficulty)
+        marksequence(['none', 'display', 'timed', 'timed-ohko', 'timed-countdown', 'ohko'], self.timer)
+        marksequence(['on', 'off', 'random'], self.progressive)
+        marksequence(['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26', 'balanced'], self.algorithm)
+        markbool(self.check_beatable_only)
+        markbool(self.shuffle_ganon)
+        markbool(self.keysanity)
+        assert id_value_max <= 0xFFFFFFFF
+        return id_value
 
 
 class CollectionState(object):
@@ -536,17 +549,32 @@ class CollectionState(object):
 
         raise RuntimeError('Cannot parse %s.' % item)
 
+@unique
+class RegionType(Enum):
+    LightWorld = 1
+    DarkWorld = 2
+    Cave = 3 # Also includes Houses
+    Dungeon = 4
+
+    @property
+    def is_indoors(self):
+        """Shorthand for checking if Cave or Dungeon"""
+        return self in (RegionType.Cave, RegionType.Dungeon)
+
+
 
 class Region(object):
 
-    def __init__(self, name):
+    def __init__(self, name, type):
         self.name = name
+        self.type = type
         self.entrances = []
         self.exits = []
         self.locations = []
         self.dungeon = None
         self.world = None
         self.is_light_world = False # will be set aftermaking connections.
+        self.is_dark_world = False
         self.spot_type = 'Region'
         self.hint_text = 'Hyrule'
         self.recursion_count = 0

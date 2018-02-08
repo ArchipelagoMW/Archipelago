@@ -146,6 +146,7 @@ def copy_world(world):
     ret.can_access_trock_eyebridge = world.can_access_trock_eyebridge
     ret.can_take_damage = world.can_take_damage
     ret.difficulty_requirements = world.difficulty_requirements
+    ret.fix_fake_world = ret.fix_fake_world
     create_regions(ret)
     create_dungeons(ret)
 
@@ -153,6 +154,7 @@ def copy_world(world):
     for region in world.regions:
         copied_region = ret.get_region(region.name)
         copied_region.is_light_world = region.is_light_world
+        copied_region.is_dark_world = region.is_dark_world
         for entrance in region.entrances:
             ret.get_entrance(entrance.name).connect(copied_region)
 
@@ -285,7 +287,6 @@ def create_playthrough(world):
     old_world.spoiler.paths = {location.name : get_path(state, location.parent_region) for sphere in collection_spheres for location in sphere}
     if any(exit == 'Pyramid Fairy' for path in old_world.spoiler.paths.values() for (_, exit) in path):
         old_world.spoiler.paths['Big Bomb Shop'] = get_path(state, world.get_region('Big Bomb Shop'))
-        print(world.seed)
 
     # we can finally output our playthrough
     old_world.spoiler.playthrough = OrderedDict([(str(i + 1), {str(location): str(location.item) for location in sphere}) for i, sphere in enumerate(collection_spheres)])
