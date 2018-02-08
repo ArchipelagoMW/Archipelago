@@ -33,7 +33,7 @@ def main(args):
     start_time = time.clock()
 
     # initialize the world
-    world = World('vanilla', 'noglitches', 'standard', 'normal', 'none', 'on', 'ganon', 'freshness', False, False, False, args.quickswap, args.fastmenu, args.disablemusic, False)
+    world = World('vanilla', 'noglitches', 'standard', 'normal', 'none', 'on', 'ganon', 'freshness', False, False, False, args.quickswap, args.fastmenu, args.disablemusic, False, False, None)
     logger = logging.getLogger('')
 
     hasher = hashlib.md5()
