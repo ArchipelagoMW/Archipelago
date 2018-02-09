@@ -137,8 +137,9 @@ def create_regions(world):
         create_dungeon_region('Tower of Hera (Basement)', ['Tower of Hera - Big Key Chest']),
         create_dungeon_region('Tower of Hera (Top)', ['Tower of Hera - Compass Chest', 'Tower of Hera - Big Chest', 'Tower of Hera - Moldorm', 'Tower of Hera - Prize']),
 
-        create_dw_region('East Dark World', ['Pyramid', 'Catfish'], ['Pyramid Fairy', 'South Dark World Bridge', 'West Dark World Gap', 'Palace of Darkness', 'Dark Lake Hylia Drop (East)', 'Dark Lake Hylia Teleporter',
-                                                                     'Hyrule Castle Ledge Mirror Spot', 'Dark Lake Hylia Fairy', 'Palace of Darkness Hint', 'East Dark World Hint', 'Dark World Potion Shop', 'Pyramid Hole']),
+        create_dw_region('East Dark World', ['Pyramid'], ['Pyramid Fairy', 'South Dark World Bridge', 'Palace of Darkness', 'Dark Lake Hylia Drop (East)', 'Dark Lake Hylia Teleporter',
+                                                          'Hyrule Castle Ledge Mirror Spot', 'Dark Lake Hylia Fairy', 'Palace of Darkness Hint', 'East Dark World Hint', 'Pyramid Hole', 'Northeast Dark World Broken Bridge Pass']),
+        create_dw_region('Northeast Dark World', ['Catfish'], ['West Dark World Gap', 'Dark World Potion Shop', 'East Dark World Broken Bridge Pass']),
         create_cave_region('Palace of Darkness Hint'),
         create_cave_region('East Dark World Hint'),
         create_dw_region('South Dark World', ['Stumpy', 'Digging Game', 'Bombos Tablet'], ['Dark Lake Hylia Drop (South)', 'Hype Cave', 'Swamp Palace', 'Village of Outcasts Heavy Rock',

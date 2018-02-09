@@ -1511,6 +1511,8 @@ mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
                          ('Bat Cave Drop Ledge Mirror Spot', 'Bat Cave Drop Ledge'),
                          ('East Dark World River Pier', 'East Dark World'),
                          ('West Dark World Gap', 'West Dark World'),
+                         ('East Dark World Broken Bridge Pass', 'East Dark World'),
+                         ('Northeast Dark World Broken Bridge Pass', 'Northeast Dark World'),
                          ('Bumper Cave Entrance Rock', 'Bumper Cave Entrance'),
                          ('Bumper Cave Entrance Drop', 'West Dark World'),
                          ('Bumper Cave Entrance Mirror Spot', 'Death Mountain Entrance'),
