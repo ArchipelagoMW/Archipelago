@@ -267,7 +267,7 @@ class World(object):
         marksequence(['standard', 'open', 'swordless'], self.mode)
         markbool(self.place_dungeon_items)
         marksequence(['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'], self.goal)
-        marksequence(['vanilla', 'simple', 'restricted', 'full', 'full_cross_worlds','full_legacy', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'], self.shuffle)
+        marksequence(['vanilla', 'simple', 'restricted', 'full', 'full_cross_worlds', 'full_legacy', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'], self.shuffle)
         marksequence(['easy', 'normal', 'hard', 'expert', 'insane'], self.difficulty)
         marksequence(['none', 'display', 'timed', 'timed-ohko', 'timed-countdown', 'ohko'], self.timer)
         marksequence(['on', 'off', 'random'], self.progressive)
@@ -406,11 +406,11 @@ class CollectionState(object):
             basemagic = 32
         elif self.has('Half Magic'):
             basemagic = 16
-        if self.world.difficulty == 'hard' and fullrefill == False:
+        if self.world.difficulty == 'hard' and not fullrefill:
             basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count())
-        elif self.world.difficulty == 'expert' and fullrefill == False:
+        elif self.world.difficulty == 'expert' and not fullrefill:
             basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count())
-        elif self.world.difficulty == 'insane' and fullrefill == False:
+        elif self.world.difficulty == 'insane' and not fullrefill:
             basemagic = basemagic
         else:
             basemagic = basemagic + basemagic * self.bottle_count()

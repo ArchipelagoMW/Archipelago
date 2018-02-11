@@ -15,7 +15,7 @@ from Items import ItemFactory
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '4027d54ccf5c3713dacf7c0d4ef72d75'
+RANDOMIZERBASEHASH = 'c2ee7540753ec0225372669f830b6edd'
 
 
 class JsonRom(object):
@@ -316,7 +316,11 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
                     # Thanks to Zarby89 for originally finding these values
                     # todo fix screen scrolling
 
-                    if room_id == 0x0059 and world.fix_skullwoods_exit:
+                    if exit.name in ['Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit',
+                                     'Palace of Darkness Exit', 'Swamp Palace Exit', 'Ganons Tower Exit', 'Desert Palace Exit (North)', 'Agahnims Tower Exit', 'Spiral Cave Exit (Top)']:
+                        # For exits that connot be reached from another, no need to apply offset fixes.
+                        rom.write_int16_to_rom(0x15DB5 + 2 * offset, link_y) # same as final else
+                    elif room_id == 0x0059 and world.fix_skullwoods_exit:
                         rom.write_int16_to_rom(0x15DB5 + 2 * offset, 0x00F8)
                     elif room_id == 0x004a and world.fix_palaceofdarkness_exit:
                         rom.write_int16_to_rom(0x15DB5 + 2 * offset, 0x0640)

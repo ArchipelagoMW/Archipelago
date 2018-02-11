@@ -137,10 +137,11 @@ def global_rules(world):
     set_rule(world.get_entrance('East Death Mountain (Top)'), lambda state: state.has('Hammer'))
 
     set_rule(world.get_location('Catfish'), lambda state: state.can_lift_rocks())
-    set_rule(world.get_entrance('Dark World Potion Shop'), lambda state: state.has_Pearl() and (state.can_lift_rocks() or state.has('Hammer') or state.has('Flippers')))
+    set_rule(world.get_entrance('Northeast Dark World Broken Bridge Pass'), lambda state: state.has_Pearl() and (state.can_lift_rocks() or state.has('Hammer') or state.has('Flippers')))
+    set_rule(world.get_entrance('East Dark World Broken Bridge Pass'), lambda state: state.has_Pearl() and (state.can_lift_rocks() or state.has('Hammer')))
     set_rule(world.get_entrance('South Dark World Bridge'), lambda state: state.has('Hammer') and state.has_Pearl())
     set_rule(world.get_entrance('Bonk Fairy (Dark)'), lambda state: state.has_Pearl() and state.has_Boots())
-    set_rule(world.get_entrance('West Dark World Gap'), lambda state: state.has_Pearl() and state.has('Hookshot') and (state.has('Flippers') or state.has('Hammer') or state.can_lift_rocks()))
+    set_rule(world.get_entrance('West Dark World Gap'), lambda state: state.has_Pearl() and state.has('Hookshot'))
     set_rule(world.get_entrance('Palace of Darkness'), lambda state: state.has_Pearl()) # kiki needs pearl
     set_rule(world.get_entrance('Hyrule Castle Ledge Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Hyrule Castle Main Gate'), lambda state: state.has_Mirror())
