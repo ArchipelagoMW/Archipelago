@@ -393,7 +393,7 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, c
     if customitemarray[66] > total_items_to_place:
         customitemarray[66] = total_items_to_place
     itemtotal = 0
-    for x in range(0, 64):
+    for x in range(0, 65):
         itemtotal = itemtotal + customitemarray[x]
     itemtotal = itemtotal + customitemarray[66]
 
