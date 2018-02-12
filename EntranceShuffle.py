@@ -825,6 +825,10 @@ def link_entrances(world):
     if world.get_entrance('Dam').connected_region.name != 'Dam' or world.get_entrance('Swamp Palace').connected_region.name != 'Swamp Palace (Entrance)':
         world.swamp_patch_required = True
 
+    # check for
+    if world.get_entrance('Potion Shop').connected_region.name != 'Potion Shop':
+        world.powder_patch_required = True
+
     # check for ganon location
     if world.get_entrance('Pyramid Hole').connected_region.name != 'Pyramid':
         world.ganon_at_pyramid = False
