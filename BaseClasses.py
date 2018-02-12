@@ -59,6 +59,7 @@ class World(object):
         self.can_take_damage = True
         self.difficulty_requirements = None
         self.fix_fake_world = True
+        self.powder_patch_required = self.shuffle not in ['vanilla', 'dungeonssimple', 'dungeonsfull']
         self.spoiler = Spoiler(self)
 
     def intialize_regions(self):

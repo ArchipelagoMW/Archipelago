@@ -317,7 +317,8 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
                     # todo fix screen scrolling
 
                     if exit.name in ['Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit',
-                                     'Palace of Darkness Exit', 'Swamp Palace Exit', 'Ganons Tower Exit', 'Desert Palace Exit (North)', 'Agahnims Tower Exit', 'Spiral Cave Exit (Top)']:
+                                     'Palace of Darkness Exit', 'Swamp Palace Exit', 'Ganons Tower Exit', 'Desert Palace Exit (North)', 'Agahnims Tower Exit', 'Spiral Cave Exit (Top)',
+                                     'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)']:
                         # For exits that connot be reached from another, no need to apply offset fixes.
                         rom.write_int16_to_rom(0x15DB5 + 2 * offset, link_y) # same as final else
                     elif room_id == 0x0059 and world.fix_skullwoods_exit:
@@ -746,6 +747,10 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
 
     # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
     rom.write_byte(0x18003D, 0x01 if world.swamp_patch_required else 0x00)
+
+    # powder patch: remove the need to leave the scrren after powder, since it causes problems for potion shop at race game
+    # temporarally we are just nopping out this check we will conver this to a rom fix soon.
+    rom.write_bytes(0x02F539,[0xEA,0xEA,0xEA,0xEA,0xEA] if world.powder_patch_required else [0xAD, 0xBF, 0x0A, 0xF0, 0x4F])
 
     # set correct flag for hera basement item
     if world.get_location('Tower of Hera - Basement Cage').item is not None and world.get_location('Tower of Hera - Basement Cage').item.name == 'Small Key (Tower of Hera)':
