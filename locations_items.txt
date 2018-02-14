@@ -101,6 +101,46 @@ RUMI_DONUT : 37
 RUMI_CAKE : 38
 COCOA_BOMB : 40
 
+===MapTransitions===
+// area : (x, y, w, h) : node : direction : map_event : trigger_id : entrance_id
+// Area 0: SOUTHERN_WOODLAND
+0 : (78, 88, 8, 13) : FOREST_START : MovingLeft : 162 : 200 : 228
+0 : (474, 66, 8, 13) : FOREST_START : MovingRight : 165 : 200 : 229
+0 : (467, 92, 16, 9) : FOREST_START : MovingRight : 165 : 201 : 230
+0 : (137, 157, 11, 14) : SPECTRAL_WEST : MovingLeft : 168 : 201 : 227
+// Area 1: WESTERN_COAST
+1 : (36, 45, 11, 13) : GRAVEYARD_MAIN : MovingLeft : 163 : 206 : 176
+1 : (36, 59, 11, 7) : GRAVEYARD_MAIN : MovingLeft : 163 : 202 : 229
+1 : (15, 116, 15, 19) : BEACH_MAIN : MovingLeft : 163 : 200 : 228
+1 : (488, 121, 12, 15) : BEACH_MAIN : MovingRight : 161 : 201 : 227
+1 : (137, 146, 13, 12) : BEACH_VOLCANIC_ENTRANCE : MovingLeft : 168 : 200 : 231
+1 : (38, 172, 11, 9) : BEACH_UNDERWATER_ENTRANCE : MovingLeft : 164 : 204 : 230
+// Area 2: ISLAND_CORE
+2 : (333, 32, 10, 14) : SKY_BRIDGE_EAST : MovingRight : 162 : 206 : 176
+2 : (329, 46, 14, 9) : SKY_BRIDGE_EAST : MovingRight : 162 : 202 : 229
+2 : (0, 158, 16, 22) : PARK_MAIN : MovingLeft : 164 : 200 : 228
+2 : (214, 181, 9, 9) : PARK_MAIN : MovingRight : 166 : 200 : 231
+2 : (237, 181, 10, 9) : RAVINE_MAIN : MovingLeft : 166 : 201 : 232
+2 : (423, 151, 22, 19) : RAVINE_MAIN : MovingRight : 162 : 201 : 227
+// Area 3: NORTHERN_TUNDRA
+3 : (0, 115, 14, 12) : SNOWLAND_WEST : MovingLeft : 165 : 207 : 177
+3 : (462, 114, 24, 24) : SNOWLAND_EAST : MovingRight : 163 : 201 : 227
+3 : (472, 171, 11, 10) : AQUARIUM_MAIN : MovingRight : 162 : 203 : 231
+// Area 4: EASTERN_HIGHLANDS
+4 : (472, 110, 10, 15) : EVERNIGHT_LOWER : MovingRight : 164 : 207 : 177
+4 : (16, 104, 19, 21) : RIVERBANK_MAIN : MovingLeft : 161 : 202 : 227
+4 : (16, 131, 17, 16) : RIVERBANK_LOWER_FOREST_ENTRANCE : MovingLeft : 161 : 203 : 228
+// Area 5: RABI_RABI_TOWN
+5 : (157, 137, 10, 9) : TOWN_MAIN : MovingLeft : 163 : 204 : 227
+5 : (333, 132, 10, 15) : TOWN_MAIN : MovingRight : 163 : 205 : 228
+// Area 6: PLURKWOOD
+// Area 7: SUBTERRANEAN_AREA
+7 : (94, 21, 10, 10) : VOLCANIC_BEACH_ENTRANCE : MovingRight : 162 : 204 : 227
+7 : (471, 20, 13, 14) : VOLCANIC_MAIN : MovingRight : 161 : 200 : 228
+// Area 8: WARP_DESTINATION
+// Area 9: SYSTEM_INTERIOR
+
+
 ===Items===
 // Area 0: SOUTHERN_WOODLAND
 (89,52) : 0 : 20 : NATURE_ORB

@@ -1,5 +1,6 @@
 import argparse
 import random
+import ast
 from utility import *
 
 START_LOCATION = 'FOREST_START'
@@ -64,8 +65,8 @@ def define_pseudo_items():
         "HAMMER_ROLL_LV3": "rHAMMER_ROLL & SHOP & CHAPTER_3",
         "AIR_DASH_LV3": "rAIR_DASH & SHOP",
         "SPEED_BOOST_LV3": "SPEED_BOOST & SHOP",
-        "BUNNY_AMULET_LV2": "(BUNNY_AMULET & SHOP) | CHAPTER_3"
-        "BUNNY_AMULET_LV3": "(BUNNY_AMULET & SHOP) | CHAPTER_4"
+        "BUNNY_AMULET_LV2": "(BUNNY_AMULET & SHOP) | CHAPTER_3",
+        "BUNNY_AMULET_LV3": "(BUNNY_AMULET & SHOP) | CHAPTER_4",
         "PIKO_HAMMER_LEVELED": "PIKO_HAMMER",
         "CARROT_BOMB_ENTRY": "CARROT_BOMB",
         "CARROT_SHOOTER_ENTRY": "CARROT_SHOOTER",
@@ -259,13 +260,18 @@ def parse_locations_and_items():
         elif currently_reading == READING_ITEMS:
             if len(line) > 0:
                 items.append(itemreader.parse_item_from_string(line))
-        elif currently_reading = READING_MAP_TRANSITIONS:
+        elif currently_reading == READING_MAP_TRANSITIONS:
             # Line format:
             # origin_location : area_current : entry_current : area_target : entry_target : walking_direction
             origin_location, area_current, entry_current, area_target, entry_target, walking_direction = [x.strip() for x in line.split(':')]
-            if walking_direction == 'Right': walking_right = True
-            elif walking_direction == 'Left': walking_right = False
+
+            # area : (x, y, w, h) : origin_location : direction : map_event : trigger_id : entrance_id
+            area_current, rect, origin_location, walking_direction, area_target, entry_target, entry_current = [x.strip() for x in line.split(':')]
+
+            if walking_direction == 'MovingRight': walking_right = True
+            elif walking_direction == 'MovingLeft': walking_right = False
             else: fail('Undefined map transition direction: %s' % walking_direction)
+
 
             map_transitions.append(MapTransition(
                 origin_location = origin_location,
@@ -274,7 +280,8 @@ def parse_locations_and_items():
                 area_target = int(area_target),
                 entry_target = int(entry_target),
                 walking_right = walking_right,
-            ))
+                rect = rect,
+             ))
 
     # Validate map transition locations
     if set(mt.origin_location for mt in map_transitions) - set(locations.keys()):
@@ -449,14 +456,20 @@ Settings:
 """
 
 class MapTransition(object):
-    def __init__(self, origin_location, area_current, entry_current, area_target, entry_target, walking_right):
+    def __init__(self, origin_location, area_current, entry_current, area_target,
+            entry_target, walking_right, rect):
         self.origin_location = origin_location
         self.area_current = area_current
         self.entry_current = entry_current
         self.area_target = area_target
         self.entry_target = entry_target
         self.walking_right = walking_right
-
+        self.rect = ast.literal_eval(rect)
+        rect_x, rect_y, rect_width, rect_height = self.rect
+        self.rect_x = rect_x
+        self.rect_y = rect_y
+        self.rect_width = rect_width
+        self.rect_height = rect_height
 
 class EdgeConstraintData(object):
     def __init__(self, from_location, to_location, prereq_expression):
@@ -652,9 +665,10 @@ class RandomizerData(object):
         self.nEggs = se.originalNEggs - self.nAdditionalItems
         self.items_to_allocate = normal_items + additional_items + eggs[:self.nEggs]
 
+        # XXXX CAN THIS THING HANDLE MULTIPLE TRANSITIONS WITH THE  SAME ORIGIN LOCATION?
         # map_transitions
         walking_right_transitions = [tr for tr in self.map_transitions if tr.walking_right]
-        walking_right_transitions.sort(key=lambda tr : tr.origin_location)
+        walking_right_transitions.sort(key=lambda tr : (tr.origin_location, tr.rect))
         walking_left_transitions = []
 
         left_transition_dict = dict(( (tr.area_current, tr.entry_current), tr )
@@ -713,7 +727,7 @@ def run_item_randomizer(data, settings):
 
 
 def generate_randomized_maps(settings):
-        if write_to_map_files and not os.path.isdir(output_dir):
+    if write_to_map_files and not os.path.isdir(output_dir):
         fail('Output directory %s does not exist' % output_dir)
 
     data = RandomizerData()
