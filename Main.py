@@ -1,4 +1,5 @@
 from collections import OrderedDict
+import copy
 from itertools import zip_longest
 import json
 import logging
@@ -156,6 +157,15 @@ def copy_world(world):
     ret.lamps_needed_for_dark_rooms = world.lamps_needed_for_dark_rooms
     create_regions(ret)
     create_dungeons(ret)
+
+    #TODO: copy_dynamic_regions_and_locations() # also adds some new shops
+
+    for shop in world.shops:
+        copied_shop = ret.get_region(shop.region.name).shop
+        copied_shop.active = shop.active
+        copied_shop.inventory = copy.copy(shop.inventory)
+
+
 
     # connect copied world
     for region in world.regions:

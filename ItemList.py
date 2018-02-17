@@ -262,6 +262,8 @@ def generate_itempool(world):
     tr_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
     world.required_medallions = (mm_medallion, tr_medallion)
 
+    set_up_shops(world)
+
     # distribute crystals
     fill_prizes(world)
 
@@ -292,7 +294,23 @@ def fill_prizes(world, attempts=15):
         raise FillError('Unable to place dungeon prizes')
 
 
+def set_up_shops(world):
+    # Changes to basic Shops
+    # TODO: move hard+ mode changes for sheilds here, utilizing the new shops
 
+    if world.retro:
+        rss = world.get_region('Red Shield Shop').shop
+        rss.active = True
+        rss.add_inventory(2, 'Single Arrow', 80)
+
+    # Randomized changes to Shops
+    if world.retro:
+        for shop in random.sample([s for s in world.shops if s.replaceable], 5):
+            shop.active = True
+            shop.add_inventory(0, 'Single Arrow', 80)
+            shop.add_inventory(1, 'Small Key (Universal)', 100)
+
+    #special shop types
 
 def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, retro):
     pool = []
@@ -566,17 +584,18 @@ def test():
                 for mode in ['open', 'standard', 'swordless']:
                     for progressive in ['on', 'off']:
                         for shuffle in ['full', 'insane']:
-                            out = get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, retro)
-                            count = len(out[0]) + len(out[1])
+                            for retro in [True, False]:
+                                out = get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, retro)
+                                count = len(out[0]) + len(out[1])
 
-                            correct_count = total_items_to_place
-                            if goal in ['pedestal']:
-                                # pedestal goals generate one extra item
-                                correct_count += 1
-                            if retro:
-                                correct_count += 28
+                                correct_count = total_items_to_place
+                                if goal in ['pedestal']:
+                                    # pedestal goals generate one extra item
+                                    correct_count += 1
+                                if retro:
+                                    correct_count += 28
 
-                            assert count == correct_count, "expected {0} items but found {1} items for {2}".format(correct_count, count, (progressive, shuffle, difficulty, timer, goal, mode))
+                                assert count == correct_count, "expected {0} items but found {1} items for {2}".format(correct_count, count, (progressive, shuffle, difficulty, timer, goal, mode, retro))
 
 if __name__ == '__main__':
     test()

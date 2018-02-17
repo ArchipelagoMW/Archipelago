@@ -6,16 +6,17 @@ import os
 import struct
 import random
 
+from BaseClasses import ShopType
 from Dungeons import dungeon_music_addresses
 from Text import MultiByteTextMapper, text_addresses, Credits
 from Text import Uncle_texts, Ganon1_texts, PyramidFairy_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts
 from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from Utils import local_path
+from Utils import local_path, int16_as_bytes, int32_as_bytes
 from Items import ItemFactory
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = 'dc5840f0d1ef7b51009c5625a054b3dd'
+RANDOMIZERBASEHASH = '354bad0d01b6284c89f05c9b414d48c1'
 
 
 class JsonRom(object):
@@ -259,15 +260,6 @@ class Sprite(object):
         # split into palettes of 15 colors
         return array_chunk(palette_as_colors, 15)
 
-
-def int16_as_bytes(value):
-    value = value & 0xFFFF
-    return [value & 0xFF, (value >> 8) & 0xFF]
-
-def int32_as_bytes(value):
-    value = value & 0xFFFFFFFF
-    return [value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF, (value >> 24) & 0xFF]
-
 def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     # patch items
     for location in world.get_locations():
@@ -355,6 +347,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
                     # patch door table
                     rom.write_byte(0xDBB73 + exit.addresses, exit.target)
 
+    write_custom_shops(rom, world)
 
     # patch medallion requirements
     if world.required_medallions[0] == 'Bombos':
@@ -567,6 +560,19 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     prizes = [0xD8, 0xD8, 0xD8, 0xD8, 0xD9, 0xD8, 0xD8, 0xD9, 0xDA, 0xD9, 0xDA, 0xDB, 0xDA, 0xD9, 0xDA, 0xDA, 0xE0, 0xDF, 0xDF, 0xDA, 0xE0, 0xDF, 0xD8, 0xDF,
               0xDC, 0xDC, 0xDC, 0xDD, 0xDC, 0xDC, 0xDE, 0xDC, 0xE1, 0xD8, 0xE1, 0xE2, 0xE1, 0xD8, 0xE1, 0xE2, 0xDF, 0xD9, 0xD8, 0xE1, 0xDF, 0xDC, 0xD9, 0xD8,
               0xD8, 0xE3, 0xE0, 0xDB, 0xDE, 0xD8, 0xDB, 0xE2, 0xD9, 0xDA, 0xDB, 0xD9, 0xDB, 0xD9, 0xDB]
+    dig_prizes = [0xB2, 0xD8, 0xD8, 0xD8, 0xD8, 0xD8, 0xD8, 0xD8, 0xD8,
+                  0xD9, 0xD9, 0xD9, 0xD9, 0xD9, 0xDA, 0xDA, 0xDA, 0xDA, 0xDA,
+                  0xDB, 0xDB, 0xDB, 0xDB, 0xDB, 0xDC, 0xDC, 0xDC, 0xDC, 0xDC,
+                  0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDE, 0xDE, 0xDE, 0xDE, 0xDE,
+                  0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xE0, 0xE0, 0xE0, 0xE0, 0xE0,
+                  0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE2, 0xE2, 0xE2, 0xE2, 0xE2,
+                  0xE3, 0xE3, 0xE3, 0xE3, 0xE3]
+    if world.retro:
+        prize_replacements = {0xE1: 0xDA, #5 Arrows -> Blue Rupee
+                              0xE2: 0xDB} #10 Arrows -> Red Rupee
+        prizes = [prize_replacements.get(prize,prize) for prize in prizes]
+        dig_prizes = [prize_replacements.get(prize,prize) for prize in dig_prizes]
+    rom.write_bytes(0x180100, dig_prizes)
     random.shuffle(prizes)
 
     # write tree pull prizes
@@ -808,15 +814,12 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_bytes(0x6D2FB, [0x00, 0x00, 0xf7, 0xff, 0x02, 0x0E])
     rom.write_bytes(0x6D313, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
 
-    # Shop table
-    rom.write_bytes(0x184800, [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])
-
     # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
     rom.write_byte(0x18003D, 0x01 if world.swamp_patch_required else 0x00)
 
     # powder patch: remove the need to leave the scrren after powder, since it causes problems for potion shop at race game
     # temporarally we are just nopping out this check we will conver this to a rom fix soon.
-    rom.write_bytes(0x02F539,[0xEA,0xEA,0xEA,0xEA,0xEA] if world.powder_patch_required else [0xAD, 0xBF, 0x0A, 0xF0, 0x4F])
+    rom.write_bytes(0x02F539, [0xEA, 0xEA, 0xEA, 0xEA, 0xEA] if world.powder_patch_required else [0xAD, 0xBF, 0x0A, 0xF0, 0x4F])
 
     # allow smith into multi-entrance caves in appropriate shuffles
     if world.shuffle in ['restricted', 'full', 'crossed', 'insanity']:
@@ -850,6 +853,38 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     apply_rom_settings(rom, beep, color, world.quickswap, world.fastmenu, world.disable_music, sprite)
 
     return rom
+
+def write_custom_shops(rom, world):
+    shops = [shop for shop in world.shops if shop.replaceable and shop.active]
+
+    shop_data = bytearray()
+    items_data = bytearray()
+    sram_offset = 0
+
+    for shop_id, shop in enumerate(shops):
+        if shop_id == len(shops) - 1:
+            shop_id = 0xFF
+        bytes = shop.get_bytes()
+        bytes[0] = shop_id
+        bytes[-1] = sram_offset
+        if shop.type == ShopType.TakeAny:
+            sram_offset += 1
+        else:
+            sram_offset += shop.item_count
+        shop_data.extend(bytes)
+        # [id][item][price-low][price-high][max][repl_id][repl_price-low][repl_price-high]
+        for item in shop.inventory:
+            if item is None:
+                break
+            item_data = [shop_id, ItemFactory(item['item']).code] + int16_as_bytes(item['price']) + [item['max'], ItemFactory(item['replacement']).code if item['replacement'] else 0xFF] + int16_as_bytes(item['replacement_price'])
+            items_data.extend(item_data)
+
+    rom.write_bytes(0x184800, shop_data)
+
+    items_data.extend([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])
+    rom.write_bytes(0x184900, items_data)
+
+
 
 def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite):
 

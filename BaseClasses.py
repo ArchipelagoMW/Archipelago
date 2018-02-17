@@ -3,7 +3,7 @@ from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict
-
+from Utils import int16_as_bytes
 
 class World(object):
 
@@ -18,6 +18,7 @@ class World(object):
         self.algorithm = algorithm
         self.dungeons = []
         self.regions = []
+        self.shops = []
         self.itempool = []
         self.seed = None
         self.state = CollectionState(self)
@@ -379,10 +380,16 @@ class CollectionState(object):
 
     def has_key(self, item, count=1):
         if self.world.retro:
-            return True   #FIXME: This needs to check for shop access to a small key shop
+            return self.can_buy_unlimited('Small Key (Universal)')
         if count == 1:
             return item in self.prog_items
         return self.item_count(item) >= count
+
+    def can_buy_unlimited(self, item):
+        for shop in self.world.shops:
+            if shop.has_unlimited(item) and shop.region.can_reach(self):
+                return True
+        return False
 
     def item_count(self, item):
         return len([pritem for pritem in self.prog_items if pritem == item])
@@ -424,17 +431,24 @@ class CollectionState(object):
             basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count())
         elif self.world.difficulty == 'insane' and not fullrefill:
             basemagic = basemagic
-        else:
+        elif self.can_buy_unlimited('Green Potion') or self.can_buy_unlimited('Red Potion'):
             basemagic = basemagic + basemagic * self.bottle_count()
-        return basemagic >= smallmagic # FIXME bottle should really also have a requirement that we can reach some shop that sells green or blue potions
+        return basemagic >= smallmagic
 
     def can_kill_most_things(self, enemies=5):
         return (self.has_blunt_weapon()
                 or self.has('Cane of Somaria')
                 or (self.has('Cane of Byrna') and (enemies < 6 or self.can_extend_Magic()))
-                or self.has('Bow')
+                or self.can_shoot_arrows()
                 or self.has('Fire Rod')
                )
+
+    def can_shoot_arrows(self):
+        if self.world.retro:
+            #TODO: need to decide how we want to handle wooden arrows  longer-term (a can-buy-a check, or via dynamic shop location)
+            #FIXME: Should do something about hard+ ganon only silvers. For the moment, i believe they effective grant wooden, so we are safe
+            return self.has('Bow') and (self.has('Silver Arrows') or self.can_buy_unlimited('Single Arrow'))
+        return self.has('Bow')
 
     def has_sword(self):
         return self.has('Fighter Sword') or self.has('Master Sword') or self.has('Tempered Sword') or self.has('Golden Sword')
@@ -574,7 +588,6 @@ class RegionType(Enum):
         return self in (RegionType.Cave, RegionType.Dungeon)
 
 
-
 class Region(object):
 
     def __init__(self, name, type):
@@ -584,6 +597,7 @@ class Region(object):
         self.exits = []
         self.locations = []
         self.dungeon = None
+        self.shop = None
         self.world = None
         self.is_light_world = False # will be set aftermaking connections.
         self.is_dark_world = False
@@ -750,6 +764,64 @@ class Item(object):
 # have 6 address that need to be filled
 class Crystal(Item):
     pass
+
+@unique
+class ShopType(Enum):
+    Shop = 0
+    TakeAny = 1
+
+class Shop(object):
+    def __init__(self, region, room_id, type, shopkeeper_config, replaceable):
+        self.region = region
+        self.room_id = room_id
+        self.type = type
+        self.inventory = [None, None, None]
+        self.shopkeeper_config = shopkeeper_config
+        self.replaceable = replaceable
+        self.active = False
+
+    @property
+    def item_count(self):
+        return (3 if self.inventory[2] else
+                2 if self.inventory[1] else
+                1 if self.inventory[0] else
+                0)
+
+    def get_bytes(self):
+        # [id][roomID-low][roomID-high][doorID][zero][shop_config][shopkeeper_config][sram_index]
+        entrances = self.region.entrances
+        config = self.item_count
+        if len(entrances) == 1 and entrances[0].addresses:
+            door_id = entrances[0].addresses+1
+        else:
+            door_id = 0
+            config |= 0x40 # ignore door id
+        if self.type == ShopType.TakeAny:
+            config |= 0x80
+        return [0x00]+int16_as_bytes(self.room_id)+[door_id, 0x00, config, self.shopkeeper_config, 0x00]
+
+    def has_unlimited(self, item):
+        for inv in self.inventory:
+            if inv is None:
+                continue
+            if inv['max'] != 0 and inv['replacement'] is not None and inv['replacement'] == item:
+                return True
+            elif inv['item'] is not None and inv['item'] == item:
+                return True
+        return False
+
+    def clear_inventory(self):
+        self.inventory = [None, None, None]
+
+    def add_inventory(self, slot, item, price, max=0, replacement=None, replacement_price=0, create_location=False):
+        self.inventory[slot] = {
+            'item': item,
+            'price': price,
+            'max': max,
+            'replacement': replacement,
+            'replacement_price': replacement_price,
+            'create_location': create_location
+        }
 
 
 class Spoiler(object):

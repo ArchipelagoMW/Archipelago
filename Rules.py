@@ -219,8 +219,8 @@ def global_rules(world):
     set_rule(world.get_entrance('Sewers Back Door'), lambda state: state.has_key('Small Key (Escape)'))
 
     set_rule(world.get_location('Eastern Palace - Big Chest'), lambda state: state.has('Big Key (Eastern Palace)'))
-    set_rule(world.get_location('Eastern Palace - Armos Knights'), lambda state: state.has('Bow') and state.has('Big Key (Eastern Palace)'))
-    set_rule(world.get_location('Eastern Palace - Prize'), lambda state: state.has('Bow') and state.has('Big Key (Eastern Palace)'))
+    set_rule(world.get_location('Eastern Palace - Armos Knights'), lambda state: state.can_shoot_arrows() and state.has('Big Key (Eastern Palace)'))
+    set_rule(world.get_location('Eastern Palace - Prize'), lambda state: state.can_shoot_arrows() and state.has('Big Key (Eastern Palace)'))
     for location in ['Eastern Palace - Armos Knights', 'Eastern Palace - Big Chest']:
         forbid_item(world.get_location(location), 'Big Key (Eastern Palace)')
 
@@ -228,9 +228,9 @@ def global_rules(world):
     set_rule(world.get_location('Desert Palace - Torch'), lambda state: state.has_Boots())
     set_rule(world.get_entrance('Desert Palace East Wing'), lambda state: state.has_key('Small Key (Desert Palace)'))
     set_rule(world.get_location('Desert Palace - Prize'), lambda state: state.has_key('Small Key (Desert Palace)') and state.has('Big Key (Desert Palace)') and state.has_fire_source() and
-                                                                     (state.has_blunt_weapon() or state.has('Fire Rod') or state.has('Ice Rod') or state.has('Bow')))
+                                                                     (state.has_blunt_weapon() or state.has('Fire Rod') or state.has('Ice Rod') or state.can_shoot_arrows()))
     set_rule(world.get_location('Desert Palace - Lanmolas'), lambda state: state.has_key('Small Key (Desert Palace)') and state.has('Big Key (Desert Palace)') and state.has_fire_source() and
-                                                                     (state.has_blunt_weapon() or state.has('Fire Rod') or state.has('Ice Rod') or state.has('Bow')))
+                                                                     (state.has_blunt_weapon() or state.has('Fire Rod') or state.has('Ice Rod') or state.can_shoot_arrows()))
     for location in ['Desert Palace - Lanmolas', 'Desert Palace - Big Chest']:
         forbid_item(world.get_location(location), 'Big Key (Desert Palace)')
 
@@ -290,7 +290,7 @@ def global_rules(world):
     for location in ['Ice Palace - Big Chest', 'Ice Palace - Kholdstare']:
         forbid_item(world.get_location(location), 'Big Key (Ice Palace)')
 
-    set_rule(world.get_entrance('Misery Mire Entrance Gap'), lambda state: (state.has_Boots() or state.has('Hookshot')) and (state.has_sword() or state.has('Fire Rod') or state.has('Ice Rod') or state.has('Hammer') or state.has('Cane of Somaria') or state.has('Bow')))  # need to defeat wizzrobes, bombs don't work ...
+    set_rule(world.get_entrance('Misery Mire Entrance Gap'), lambda state: (state.has_Boots() or state.has('Hookshot')) and (state.has_sword() or state.has('Fire Rod') or state.has('Ice Rod') or state.has('Hammer') or state.has('Cane of Somaria') or state.can_shoot_arrows()))  # need to defeat wizzrobes, bombs don't work ...
     set_rule(world.get_location('Misery Mire - Big Chest'), lambda state: state.has('Big Key (Misery Mire)'))
     set_rule(world.get_location('Misery Mire - Spike Chest'), lambda state: (state.world.can_take_damage and state.has_hearts(4)) or state.has('Cane of Byrna') or state.has('Cape'))
     set_rule(world.get_entrance('Misery Mire Big Key Door'), lambda state: state.has('Big Key (Misery Mire)'))
@@ -304,7 +304,7 @@ def global_rules(world):
                                                                                                                  (item_name(state, 'Misery Mire - Big Key Chest') in ['Big Key (Misery Mire)'])) else state.has_key('Small Key (Misery Mire)', 3))
     set_rule(world.get_location('Misery Mire - Compass Chest'), lambda state: state.has_fire_source())
     set_rule(world.get_location('Misery Mire - Big Key Chest'), lambda state: state.has_fire_source())
-    set_rule(world.get_entrance('Misery Mire (Vitreous)'), lambda state: state.has('Cane of Somaria') and (state.has('Bow') or state.has_blunt_weapon()))
+    set_rule(world.get_entrance('Misery Mire (Vitreous)'), lambda state: state.has('Cane of Somaria') and (state.can_shoot_arrows() or state.has_blunt_weapon()))
     for location in ['Misery Mire - Big Chest', 'Misery Mire - Vitreous']:
         forbid_item(world.get_location(location), 'Big Key (Misery Mire)')
 
@@ -328,10 +328,10 @@ def global_rules(world):
 
     set_trock_key_rules(world)
 
-    set_rule(world.get_entrance('Palace of Darkness Bonk Wall'), lambda state: state.has('Bow'))
+    set_rule(world.get_entrance('Palace of Darkness Bonk Wall'), lambda state: state.can_shoot_arrows())
     set_rule(world.get_entrance('Palace of Darkness Hammer Peg Drop'), lambda state: state.has('Hammer'))
     set_rule(world.get_entrance('Palace of Darkness Bridge Room'), lambda state: state.has_key('Small Key (Palace of Darkness)', 1))  # If we can reach any other small key door, we already have back door access to this area
-    set_rule(world.get_entrance('Palace of Darkness Big Key Door'), lambda state: state.has_key('Small Key (Palace of Darkness)', 6) and state.has('Big Key (Palace of Darkness)') and state.has('Bow') and state.has('Hammer'))
+    set_rule(world.get_entrance('Palace of Darkness Big Key Door'), lambda state: state.has_key('Small Key (Palace of Darkness)', 6) and state.has('Big Key (Palace of Darkness)') and state.can_shoot_arrows() and state.has('Hammer'))
     set_rule(world.get_entrance('Palace of Darkness (North)'), lambda state: state.has_key('Small Key (Palace of Darkness)', 4))
     set_rule(world.get_location('Palace of Darkness - Big Chest'), lambda state: state.has('Big Key (Palace of Darkness)'))
 
@@ -371,10 +371,10 @@ def global_rules(world):
         set_rule(world.get_location(location), lambda state: state.has('Fire Rod') and (state.has_key('Small Key (Ganons Tower)', 4) or (item_in_locations(state, 'Big Key (Ganons Tower)', compass_room_chests) and state.has_key('Small Key (Ganons Tower)', 3))))
 
     set_rule(world.get_location('Ganons Tower - Big Chest'), lambda state: state.has('Big Key (Ganons Tower)'))
-    set_rule(world.get_location('Ganons Tower - Big Key Room - Left'), lambda state: state.has('Bow') or state.has_blunt_weapon())
-    set_rule(world.get_location('Ganons Tower - Big Key Chest'), lambda state: state.has('Bow') or state.has_blunt_weapon())
-    set_rule(world.get_location('Ganons Tower - Big Key Room - Right'), lambda state: state.has('Bow') or state.has_blunt_weapon())
-    set_rule(world.get_entrance('Ganons Tower Big Key Door'), lambda state: state.has('Big Key (Ganons Tower)') and state.has('Bow'))
+    set_rule(world.get_location('Ganons Tower - Big Key Room - Left'), lambda state: state.can_shoot_arrows() or state.has_blunt_weapon())
+    set_rule(world.get_location('Ganons Tower - Big Key Chest'), lambda state: state.can_shoot_arrows() or state.has_blunt_weapon())
+    set_rule(world.get_location('Ganons Tower - Big Key Room - Right'), lambda state: state.can_shoot_arrows() or state.has_blunt_weapon())
+    set_rule(world.get_entrance('Ganons Tower Big Key Door'), lambda state: state.has('Big Key (Ganons Tower)') and state.can_shoot_arrows())
     set_rule(world.get_entrance('Ganons Tower Torch Rooms'), lambda state: state.has_fire_source())
     set_rule(world.get_location('Ganons Tower - Pre-Moldorm Chest'), lambda state: state.has_key('Small Key (Ganons Tower)', 3))
     set_rule(world.get_entrance('Ganons Tower Moldorm Door'), lambda state: state.has_key('Small Key (Ganons Tower)', 4))
@@ -387,7 +387,7 @@ def global_rules(world):
 
     set_rule(world.get_location('Ganon'), lambda state: state.has_beam_sword() and state.has_fire_source() and state.has('Crystal 1') and state.has('Crystal 2')
                                                         and state.has('Crystal 3') and state.has('Crystal 4') and state.has('Crystal 5') and state.has('Crystal 6') and state.has('Crystal 7')
-                                                        and (state.has('Tempered Sword') or state.has('Golden Sword') or (state.has('Silver Arrows') and state.has('Bow')) or state.has('Lamp') or state.can_extend_magic(12)))  # need to light torch a sufficient amount of times
+                                                        and (state.has('Tempered Sword') or state.has('Golden Sword') or (state.has('Silver Arrows') and state.can_shoot_arrows()) or state.has('Lamp') or state.can_extend_magic(12)))  # need to light torch a sufficient amount of times
     set_rule(world.get_entrance('Ganon Drop'), lambda state: state.has_beam_sword())  # need to damage ganon to get tiles to drop
 
 
@@ -464,7 +464,7 @@ def swordless_rules(world):
     open_rules(world)
 
     set_rule(world.get_entrance('Agahnims Tower'), lambda state: state.has('Cape') or state.has('Hammer') or state.has('Beat Agahnim 1'))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
-    set_rule(world.get_entrance('Agahnim 1'), lambda state: (state.has('Hammer') or (state.has('Bug Catching Net') and (state.has('Fire Rod') or state.has('Bow') or state.has('Cane of Somaria')))) and state.has_key('Small Key (Agahnims Tower)', 2))
+    set_rule(world.get_entrance('Agahnim 1'), lambda state: (state.has('Hammer') or (state.has('Bug Catching Net') and (state.has('Fire Rod') or state.can_shoot_arrows() or state.has('Cane of Somaria')))) and state.has_key('Small Key (Agahnims Tower)', 2))
     set_rule(world.get_location('Ether Tablet'), lambda state: state.has('Book of Mudora') and state.has('Hammer'))
     set_rule(world.get_location('Bombos Tablet'), lambda state: state.has('Book of Mudora') and state.has('Hammer') and state.has_Mirror())
     set_rule(world.get_entrance('Misery Mire'), lambda state: state.has_Pearl() and state.has_misery_mire_medallion())  # sword not required to use medallion for opening in swordless (!)
@@ -472,7 +472,7 @@ def swordless_rules(world):
     set_rule(world.get_entrance('Skull Woods Torch Room'), lambda state: state.has_key('Small Key (Skull Woods)', 3) and state.has('Fire Rod'))  # no curtain
     set_rule(world.get_entrance('Ice Palace Entrance Room'), lambda state: state.has('Fire Rod') or state.has('Bombos')) #in swordless mode bombos pads are present in the relevant parts of ice palace
     set_rule(world.get_location('Agahnim 2'), lambda state: state.has('Hammer') or state.has('Bug Catching Net'))
-    set_rule(world.get_location('Ganon'), lambda state: state.has('Hammer') and state.has_fire_source() and state.has('Silver Arrows') and state.has('Bow') and state.has('Crystal 1') and state.has('Crystal 2')
+    set_rule(world.get_location('Ganon'), lambda state: state.has('Hammer') and state.has_fire_source() and state.has('Silver Arrows') and state.can_shoot_arrows() and state.has('Crystal 1') and state.has('Crystal 2')
                                                         and state.has('Crystal 3') and state.has('Crystal 4') and state.has('Crystal 5') and state.has('Crystal 6') and state.has('Crystal 7'))
     set_rule(world.get_entrance('Ganon Drop'), lambda state: state.has('Hammer'))  # need to damage ganon to get tiles to drop
 
@@ -805,7 +805,7 @@ def set_bunny_rules(world):
 
         # We will search entrances recursively until we find
         # one that leads to an exclusively light world region
-        # for each such entrance a new option ios aded that consist of:
+        # for each such entrance a new option is added that consist of:
         #    a) being able to reach it, and
         #    b) being able to access all entrances from there to `region`
         seen = set([region])
@@ -835,6 +835,10 @@ def set_bunny_rules(world):
         rule = get_rule_to_add(region)
         for exit in region.exits:
             add_rule(exit, rule)
+
+    paradox_shop = world.get_region('Light World Death Mountain Shop')
+    if paradox_shop.is_dark_world:
+        add_rule(paradox_shop.entrances[0], get_rule_to_add(paradox_shop))
 
     # Add requirements for all locations that are actually in the dark world, except those available to the bunny
     for location in world.get_locations():
