@@ -1,5 +1,98 @@
 import hashlib
+import json
+import sys
 import random
+import re
+import ast
+
+### Enums
+LOCATION_WARP = 0
+LOCATION_MAJOR = 1
+LOCATION_MINOR = 2
+
+"""
+Variable types:
+1. Locations
+    - Warp locations - locations with a warp stone
+    - Major locations - must have unconstrained path to warp stone
+    - Minor locations - cannot have autosave or save points within
+2. Items (Item Locations)
+3. Additional Items (Items without locations)
+4. Pseudo Items
+"""
+
+# Structs
+
+class Item(object):
+    def __init__(self, position, areaid, itemid):
+        self.areaid = areaid
+        self.position = position
+        self.itemid = itemid
+        self.name = None
+
+    # XXXX: Delete if unneeded
+    def copy(self):
+        item = Item(self.position, self.areaid, self.itemid)
+        item.name = self.name
+        return item
+
+    # XXXX: Delete if unneeded
+    def set_location(self, item):
+        self.areaid = item.areaid
+        self.position = item.position
+
+    # XXXX: Delete if unneeded
+    def __str__(self):
+        x, y = self.position
+        return '(%d,%d) : %d : %d : %s' % (x, y, self.areaid, self.itemid, self.name)
+
+class MapTransition(object):
+    def __init__(self, origin_location, area_current, entry_current, area_target,
+            entry_target, walking_right, rect):
+        self.origin_location = origin_location
+        self.area_current = area_current
+        self.entry_current = entry_current
+        self.area_target = area_target
+        self.entry_target = entry_target
+        self.walking_right = walking_right
+        self.rect = ast.literal_eval(rect)
+        rect_x, rect_y, rect_width, rect_height = self.rect
+        self.rect_x = rect_x
+        self.rect_y = rect_y
+        self.rect_width = rect_width
+        self.rect_height = rect_height
+
+class EdgeConstraintData(object):
+    def __init__(self, from_location, to_location, prereq_expression):
+        self.from_location = from_location
+        self.to_location = to_location
+        #self.prereq_expression = prereq_expression
+        self.prereq_lambda = lambda v : prereq_expression.evaluate(v)
+
+    def __str__(self):
+        return '\n'.join([
+            'From: %s' % self.from_location,
+            'To: %s' % self.to_location,
+            'Prereq: %s' % self.prereq_expression,
+        ])
+
+class ItemConstraintData(object):
+    def __init__(self, item, from_location, entry_prereq, exit_prereq):
+        self.item = item
+        self.from_location = from_location
+        self.entry_prereq = entry_prereq
+        self.exit_prereq = exit_prereq
+
+class GraphEdge(object):
+    def __init__(self, edge_id, from_location, to_location, constraint, backtrack_cost):
+        self.edge_id = edge_id
+        self.from_location = from_location
+        self.to_location = to_location
+        self.satisfied = constraint
+        self.backtrack_cost = backtrack_cost
+
+
+# misc utility functions
 
 def merge_two_dicts(x, y):
     z = x.copy()
@@ -27,7 +120,7 @@ def is_egg(item_name):
 # Expression Parsing
 
 def parse_expression_lambda(line, variable_names_set, default_expressions):
-    expression = parse_expression(variable_names_set, default_expressions)
+    expression = parse_expression(line, variable_names_set, default_expressions)
     return lambda v : expression.evaluate(v)
 
 # & - and
@@ -44,6 +137,8 @@ def parse_expression(line, variable_names_set, default_expressions={}):
         eprint(line)
         raise e
 
+# Used in string parsing. We only have either strings or expressions
+isExpr = lambda s : not type(s) is str
 def parse_expression_logic(line, variable_names_set, default_expressions):
     pat = re.compile('[()&|~!]')
     line = line.replace('&&', '&').replace('||', '|')
@@ -186,6 +281,18 @@ def log(*args, **kwargs):
 
 # File Parsing
 
+def print_error(error, jsondata):
+    import re
+    pos = int(re.findall('char ([\\d]*)', error.__str__())[0])
+    VIEW_RANGE = 100
+    start = max(pos-VIEW_RANGE, 0)
+    end = min(pos+VIEW_RANGE, len(jsondata))
+    eprint('File parsing error')
+    eprint(error)
+    eprint('Error location:')
+    eprint(jsondata[start:pos])
+    eprint(jsondata[pos:end])
+
 def parse_json(jsondata):
     try:
         return json.loads(jsondata)
@@ -240,8 +347,8 @@ def hash_maps(output_dir):
 
 
 # Other Map Modification (shift to randomizer.py later)
-import musicrandomizer
-import backgroundrandomizer
+#import musicrandomizer
+#import backgroundrandomizer
 
 
 def apply_fixes_for_randomizer(areaid, data):

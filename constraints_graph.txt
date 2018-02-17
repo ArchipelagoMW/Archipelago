@@ -1,0 +1,1140 @@
+
+// .---------------------'
+// | Area 0 : Southern Woodland
+// '---------------------.
+
+// Starting Forest
+{
+"edge": "FOREST_START -> FOREST_UPPER_EAST",
+"prereq": "ITM_HARD | (SPEED1 & ITM) | AIR_DASH | AIR_JUMP",
+}
+
+{
+"edge": "FOREST_UPPER_EAST -> FOREST_START",
+"prereq": "NONE",
+}
+
+{
+"edge": "FOREST_UPPER_EAST -> FOREST_LIGHT_ORB_ROOM",
+"prereq": "EXPLOSIVES_ENEMY & SLIDING_POWDER",
+}
+
+{
+"edge": "FOREST_LIGHT_ORB_ROOM -> FOREST_UPPER_EAST",
+"prereq": "EXPLOSIVES & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
+}
+
+{
+"edge": "FOREST_NORTH_HP_UP_ROOM -> FOREST_LIGHT_ORB_ROOM",
+"prereq": "EXPLOSIVES_ENEMY & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
+}
+
+{
+"edge": "FOREST_LIGHT_ORB_ROOM -> FOREST_NORTH_HP_UP_ROOM",
+"prereq": "EXPLOSIVES & SLIDING_POWDER",
+}
+
+{
+"edge": "FOREST_NORTH_HP_UP_ROOM -> FOREST_START",
+"prereq": "NONE",
+}
+
+{
+"edge": "FOREST_START -> FOREST_NORTH_HP_UP_ROOM",
+"prereq": "
+(
+    RABI_SLIPPERS
+    | AIR_JUMP
+    | (SLIDING_POWDER & ADV_STUPID)
+    | BUNNY_STRIKE
+    | AIR_DASH
+    | BUNNY_WHIRL
+) & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
+}
+
+{
+"edge": "FOREST_START -> FOREST_LOWER_RIVERBANK_EXIT",
+"prereq": "DOWNDRILL_SEMISOLID_CLIP",
+}
+
+{
+"edge": "FOREST_LOWER_RIVERBANK_EXIT -> FOREST_START",
+"prereq": "NONE",
+}
+
+
+
+// Forest Night
+
+{
+"edge": "FOREST_START -> FOREST_NIGHT_ATK_UP_ROOM",
+"prereq": "
+    (AIR_JUMP & (RABI_SLIPPERS | WALL_JUMP))
+    | (WHIRL_BONK_CANCEL)
+    | (SLIDE_JUMP_BUNSTRIKE_CANCEL & AIR_JUMP)
+    | (SLIDE_JUMP_BUNSTRIKE_CANCEL & WALL_JUMP_LV2 & (AIR_DASH | STUPID))
+",
+}
+
+{
+"edge": "FOREST_NIGHT_ATK_UP_ROOM -> FOREST_START",
+"prereq": "NONE",
+}
+
+{
+"edge": "FOREST_NIGHT_WEST -> FOREST_NIGHT_ATK_UP_ROOM",
+"prereq": "EXPLOSIVES_ENEMY",
+}
+
+{
+"edge": "FOREST_NIGHT_ATK_UP_ROOM -> FOREST_NIGHT_WEST",
+"prereq": "DARKNESS & (CARROT_SHOOTER | (CARROT_BOMB & BACKTRACK_1))",
+}
+
+
+{
+"edge": "FOREST_NORTH_HP_UP_ROOM -> FOREST_NIGHT_NORTH_EAST",
+"prereq": "SLIDING_POWDER",
+}
+
+{
+"edge": "FOREST_NIGHT_NORTH_EAST -> FOREST_NORTH_HP_UP_ROOM",
+"prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
+}
+
+{
+"edge": "FOREST_START -> FOREST_NIGHT_NORTH_EAST",
+"prereq": "CHAPTER_1 | AIR_JUMP",
+}
+
+{
+"edge": "FOREST_NIGHT_NORTH_EAST -> FOREST_START",
+"prereq": "NONE",
+}
+
+{
+"edge": "FOREST_START -> FOREST_NIGHT_WEST",
+"prereq": "DARKNESS & CHAPTER_1",
+}
+
+{
+"edge": "FOREST_NIGHT_WEST -> FOREST_START",
+"prereq": "NONE",
+}
+
+{
+"edge": "FOREST_NIGHT_NORTH_EAST -> FOREST_NIGHT_WEST",
+"prereq": "DARKNESS & DOWNDRILL_SEMISOLID_CLIP",
+}
+
+{
+"edge": "FOREST_NIGHT_WEST -> FOREST_NIGHT_NORTH_EAST",
+"prereq": "NONE",
+}
+
+
+// Cave
+
+{
+"edge": "FOREST_START -> CAVE_ENTRANCE",
+"prereq": "NONE",
+}
+
+{
+"edge": "CAVE_ENTRANCE -> FOREST_START",
+"prereq": "NONE",
+}
+
+{
+"edge": "CAVE_ENTRANCE -> CAVE_COCOA",
+"prereq": "KOTRI_1 & COCOA_1",
+}
+
+{
+"edge": "CAVE_COCOA -> CAVE_ENTRANCE",
+"prereq": "NONE",
+}
+
+
+// Spectral
+
+{
+"edge": "CAVE_ENTRANCE -> SPECTRAL_UPPER",
+"prereq": "NONE",
+}
+
+{
+"edge": "SPECTRAL_UPPER -> CAVE_ENTRANCE",
+"prereq": "
+    SLIDING_POWDER
+    | HAMMER_ROLL_ZIP
+    | WHIRL_BONK_CANCEL
+    | (RABI_SLIPPERS & (WALL_JUMP_LV2 | AIR_JUMP))
+    | (AIR_JUMP & WALL_JUMP)
+",
+}
+
+{
+"edge": "SPECTRAL_UPPER -> SPECTRAL_WARP",
+"prereq": "NONE",
+}
+
+{
+"edge": "SPECTRAL_WARP -> SPECTRAL_UPPER",
+"prereq": "
+    (AIR_JUMP & (RABI_SLIPPERS | AIR_DASH | ITM_HARD))
+    | (BUNNY_STRIKE & ITM_HARD)
+    | AIR_DASH_LV3
+    | (BUNNY_WHIRL & ITM_HARD)
+",
+}
+
+{
+"edge": "SPECTRAL_WARP -> SPECTRAL_CICINI_ROOM",
+"prereq": "
+    (COCOA_1 & KOTRI_1) | RABI_SLIPPERS | AIR_JUMP | AIR_DASH
+    | (BUNNY_STRIKE & ITM)
+    | ADV_VHARD
+"
+}
+
+{
+"edge": "SPECTRAL_CICINI_ROOM -> SPECTRAL_WARP",
+"prereq": "NONE",
+}
+
+{
+"edge": "SPECTRAL_UPPER -> SPECTRAL_MID",
+"prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
+}
+
+{
+"edge": "SPECTRAL_MID -> SPECTRAL_UPPER",
+"prereq": "SLIDING_POWDER",
+}
+
+{
+"edge": "SPECTRAL_MID -> SPECTRAL_WARP",
+"prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
+}
+
+{
+"edge": "SPECTRAL_WARP -> SPECTRAL_MID",
+"prereq": "SLIDE_ZIP",
+}
+
+{
+"edge": "SPECTRAL_WEST_EGG_ROOM -> SPECTRAL_MID",
+"prereq": "
+    (AIR_JUMP &
+        (
+        AIR_DASH
+        | SPEED5
+        | (ADV_STUPID & AMULET_FOOD)
+        | (BUNNY_STRIKE & ITM_HARD)
+        )
+    )
+    | (RABI_SLIPPERS & AIR_DASH_LV3 & ADV_HARD)
+    | (BUNNY_STRIKE & RABI_SLIPPERS & AIR_DASH & ADV_VHARD)
+    | (SLIDE_JUMP_BUNSTRIKE_CANCEL & RABI_SLIPPERS & AIR_DASH_LV3)
+    | (SLIDE_JUMP_BUNSTRIKE & BUNNY_AMULET & ADV_STUPID)
+",
+}
+
+{
+"edge": "SPECTRAL_MID -> SPECTRAL_WEST_EGG_ROOM",
+"prereq": "AIR_DASH | SLIDE_JUMP_BUNSTRIKE | AIR_JUMP",
+}
+
+{
+"edge": "SPECTRAL_WEST_EGG_ROOM -> SPECTRAL_WEST",
+"prereq": "NONE",
+}
+
+{
+"edge": "SPECTRAL_WEST -> SPECTRAL_WEST_EGG_ROOM",
+"prereq": "AIR_JUMP | WHIRL_BONK_CANCEL | (SLIDE_JUMP_BUNSTRIKE_CANCEL & RABI_SLIPPERS)",
+}
+
+{
+"edge": "SPECTRAL_MID -> SPECTRAL_WEST",
+"prereq": "NONE",
+}
+
+// .---------------------'
+// | Area 1 : Western Coast
+// '---------------------.
+
+// Beach and Pyramid
+
+{
+"edge": "BEACH_MAIN -> BEACH_UNDERWATER_ENTRANCE",
+"prereq": "DOWNDRILL_SEMISOLID_CLIP | EXPLOSIVES_ENEMY",
+}
+
+{
+"edge": "BEACH_UNDERWATER_ENTRANCE -> BEACH_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "BEACH_MAIN -> BEACH_VOLCANIC_ENTRANCE",
+"prereq": "NONE",
+}
+
+{
+"edge": "BEACH_VOLCANIC_ENTRANCE -> BEACH_MAIN",
+"prereq": "WALL_JUMP | AIR_JUMP | RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL",
+}
+
+{
+"edge": "BEACH_MAIN -> PYRAMID_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "PYRAMID_MAIN -> BEACH_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "PYRAMID_MAIN -> PYRAMID_WARP_ROOM",
+"prereq": "CHAPTER_1",
+}
+
+{
+"edge": "PYRAMID_WARP_ROOM -> PYRAMID_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "PYRAMID_MAIN -> PYRAMID_HOURGLASS_ROOM",
+"prereq": "NONE",
+}
+
+{
+"edge": "PYRAMID_HOURGLASS_ROOM -> PYRAMID_MAIN",
+"prereq": "ITM_HARD | AIR_JUMP | WALL_JUMP | RABI_SLIPPERS",
+}
+
+{
+"edge": "PYRAMID_HOURGLASS_ROOM -> PYRAMID_WARP_ROOM",
+"prereq": "NONE",
+}
+
+{
+"edge": "PYRAMID_WARP_ROOM -> PYRAMID_HOURGLASS_ROOM",
+"prereq": "
+(AIR_JUMP & (
+    RABI_SLIPPERS
+    | SLIDE_JUMP_BUNSTRIKE_CANCEL
+    | WALL_JUMP_LV2
+)) | (RABI_SLIPPERS & WALL_JUMP_LV2 & SLIDE_JUMP_BUNSTRIKE_CANCEL)
+",
+}
+
+{
+"edge": "PYRAMID_WARP_ROOM -> PYRAMID_LOWER",
+"prereq": "
+    AIR_JUMP
+    | (AIR_DASH & (RABI_SLIPPERS | ITM_HARD))
+    | ADV_STUPID
+    | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)
+",
+}
+
+{
+"edge": "PYRAMID_LOWER -> PYRAMID_WARP_ROOM",
+"prereq": "NONE",
+}
+
+{
+"edge": "PYRAMID_LOWER -> PYRAMID_CHAOS_ROD_ROOM",
+"prereq": "
+    SLIDING_POWDER & (
+        AIR_JUMP
+        | (AIR_DASH & (RABI_SLIPPERS | ITM_HARD))
+        | ADV_STUPID
+    )
+",
+}
+
+{
+"edge": "PYRAMID_CHAOS_ROD_ROOM -> PYRAMID_LOWER",
+"prereq": "
+    SLIDING_POWDER &
+    (EXPLOSIVES | DOWNDRILL_SEMISOLID_CLIP)
+",
+}
+
+{
+"edge": "PYRAMID_CHAOS_ROD_ROOM -> PYRAMID_SOUTHWEST_ROOM",
+"prereq": "PANDORA & SLIDE_ZIP",
+}
+
+{
+"edge": "PYRAMID_SOUTHWEST_ROOM -> PYRAMID_CHAOS_ROD_ROOM",
+"prereq": "(PANDORA & SLIDING_POWDER) | SLIDE_ZIP | HAMMER_ROLL_ZIP",
+}
+
+{
+"edge": "PYRAMID_SOUTHWEST_ROOM -> PYRAMID_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "PYRAMID_MAIN -> PYRAMID_SOUTHWEST_ROOM",
+"prereq": "DOWNDRILL_SEMISOLID_CLIP | EXPLOSIVES",
+}
+
+
+// Graveyard and Sky Island
+
+{
+"edge": "GRAVEYARD_MAIN -> GRAVEYARD_UPPER",
+"prereq": "
+(
+// First jump
+    AIR_JUMP
+    | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)
+    | WHIRL_BONK_CANCEL
+    | (AIR_DASH & (ITM_HARD | RABI_SLIPPERS))
+    // slide bonk
+    | (SLIDING_POWDER & ADV_VHARD)
+    // damage boost
+    | ADV_STUPID
+) & (
+// Second jump
+    AIR_JUMP
+    | RABI_SLIPPERS
+    | WALL_JUMP
+    | WHIRL_BONK_CANCEL
+    | SLIDE_JUMP_BUNSTRIKE_CANCEL
+    // never ever slide bonk
+    | (SLIDING_POWDER & ADV_STUPID)
+)
+",
+}
+
+{
+"edge": "GRAVEYARD_UPPER -> GRAVEYARD_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "GRAVEYARD_MAIN -> SKY_ISLAND_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "SKY_ISLAND_MAIN -> GRAVEYARD_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "SKY_ISLAND_MAIN -> SKY_ISLAND_UPPER",
+"prereq": "
+    (BUNNY_STRIKE & ITM_HARD)
+    | (AIR_JUMP & (RABI_SLIPPERS | AIR_DASH | WALL_JUMP | ITM_HARD))
+    | (AIR_DASH & (WALL_JUMP | ADV_STUPID))
+",
+}
+
+{
+"edge": "SKY_ISLAND_UPPER -> SKY_ISLAND_MAIN",
+"prereq": "NONE",
+}
+
+// .---------------------'
+// | Area 2 : Island Core
+// '---------------------.
+
+
+// Ravine
+
+{
+"edge": "RAVINE_BEACH_ENTRANCE -> RAVINE_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "RAVINE_MAIN -> RAVINE_BEACH_ENTRANCE",
+"prereq": "NONE",
+}
+
+{
+"edge": "RAVINE_MAIN -> RAVINE_TOWN_ENTRANCE",
+"prereq": "NONE",
+}
+
+{
+"edge": "RAVINE_TOWN_ENTRANCE -> RAVINE_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "RAVINE_MAIN -> RAVINE_UPPER",
+"prereq": "CHAPTER_1",
+}
+
+{
+"edge": "RAVINE_UPPER -> RAVINE_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "RAVINE_UPPER -> RAVINE_CHOCOLATE",
+"prereq": "NONE",
+}
+
+{
+"edge": "RAVINE_CHOCOLATE -> RAVINE_UPPER",
+"prereq": "AIR_DASH | AIR_JUMP | RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE | ADV_STUPID",
+}
+
+{
+"edge": "RAVINE_CHOCOLATE -> RAVINE_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "RAVINE_MAIN -> RAVINE_CHOCOLATE",
+"prereq": "
+    (AIR_JUMP & (SPEED1 | AIR_DASH))
+    | WHIRL_BONK_CANCEL
+    | (ADV_STUPID & RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE_CANCEL & AIR_DASH & BUNNY_AMULET_LV2)
+    | (ADV_HARD & RABI_SLIPPERS & WALL_JUMP & AIR_DASH & (SLIDING_POWDER | SPEED5))
+",
+}
+
+
+// Park and Sky Bridge
+
+{
+"edge": "PARK_MAIN -> UPRPRC_BASE",
+"prereq": "NONE",
+}
+
+{
+"edge": "UPRPRC_BASE -> PARK_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "PARK_MAIN -> PARK_UPPER",
+"prereq": "NONE",
+}
+
+{
+"edge": "PARK_UPPER -> PARK_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "PARK_UPPER -> SKY_BRIDGE_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "SKY_BRIDGE_MAIN -> PARK_UPPER",
+"prereq": "NONE",
+}
+
+{
+"edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_EAST",
+"prereq": "NONE",
+}
+
+{
+"edge": "SKY_BRIDGE_EAST -> SKY_BRIDGE_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_DARK_AREA",
+"prereq": "DARKNESS",
+}
+
+{
+"edge": "SKY_BRIDGE_DARK_AREA -> SKY_BRIDGE_MAIN",
+"prereq": "DARKNESS",
+}
+
+{
+"edge": "SKY_BRIDGE_DARK_AREA -> SKY_BRIDGE_HEALTH_SURGE_ROOM",
+"prereq": "
+DARKNESS & (
+    EXPLOSIVES
+    | (ADV_STUPID & (
+        (BUNNY_WHIRL & WALL_JUMP) 
+        | (AIR_JUMP & (WALL_JUMP_LV2 | SLIDE_JUMP_BUNSTRIKE_CANCEL))
+    ))
+)
+",
+}
+
+{
+"edge": "SKY_BRIDGE_HEALTH_SURGE_ROOM -> SKY_BRIDGE_DARK_AREA",
+"prereq": "DARKNESS",
+}
+
+{
+"edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_HEALTH_SURGE_ROOM",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "SKY_BRIDGE_HEALTH_SURGE_ROOM -> SKY_BRIDGE_MAIN",
+"prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
+}
+
+{
+"edge": "SKY_BRIDGE_DARK_AREA -> SKY_BRIDGE_SLIDE_AREA",
+"prereq": "SLIDE_ZIP | HAMMER_ROLL_ZIP",
+}
+
+{
+"edge": "SKY_BRIDGE_SLIDE_AREA -> SKY_BRIDGE_DARK_AREA",
+"prereq": "SLIDING_POWDER",
+}
+
+{
+"edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_REGEN_UP_LEDGE",
+"prereq": "
+        AIR_DASH
+        | AIR_JUMP
+        | (ITM_HARD & (SLIDING_POWDER | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)))
+",
+}
+
+{
+"edge": "SKY_BRIDGE_REGEN_UP_LEDGE -> PARK_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "SKY_BRIDGE_SLIDE_AREA -> SKY_BRIDGE_REGEN_UP_LEDGE",
+"prereq": "DARKNESS & EXPLOSIVES",
+}
+
+{
+"edge": "SKY_BRIDGE_REGEN_UP_LEDGE -> SKY_BRIDGE_SLIDE_AREA",
+"prereq": "CARROT_BOMB & SLIDING_POWDER",
+}
+
+{
+"edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_SLIDE_AREA",
+"prereq": "DARKNESS & SLIDE_ZIP",
+}
+
+{
+"edge": "SKY_BRIDGE_MAIN -> PARK_MAIN",
+"prereq": "
+        AIR_DASH
+        | AIR_JUMP
+        | (ITM_HARD & (SLIDING_POWDER | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)))
+",
+}
+
+{
+"edge": "SKY_BRIDGE_SLIDE_AREA -> PARK_MAIN",
+// technically goes through SKY_BRIDGE_MAIN, but not really important
+"prereq": "SLIDING_POWDER",
+}
+
+{
+"edge": "PARK_UPPER -> SKY_BRIDGE_SLIDE_AREA",
+"prereq": "SLIDE_ZIP",
+}
+
+// .---------------------'
+// | Area 3 : Northern Tundra
+// '---------------------.
+
+// Snowland, Palace and Icy Summit
+
+{
+"edge": "SNOWLAND_EAST -> SNOWLAND_WEST",
+"prereq": "SLIDING_POWDER",
+}
+
+{
+"edge": "SNOWLAND_WEST -> SNOWLAND_EAST",
+"prereq": "NONE",
+}
+
+{
+"edge": "SNOWLAND_EAST -> SNOWLAND_CHRISTMAS_TREE",
+"prereq": "EXPLOSIVES & SLIDING_POWDER",
+}
+
+{
+"edge": "SNOWLAND_CHRISTMAS_TREE -> SNOWLAND_EAST",
+"prereq": "EXPLOSIVES & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
+}
+
+{
+"edge": "SNOWLAND_WEST -> SNOWLAND_CHRISTMAS_TREE",
+"prereq": "
+    (AIR_JUMP & AIR_DASH)
+    | (AIR_JUMP & SLIDE_JUMP_BUNSTRIKE_CANCEL)
+    | (ADV_STUPID & SLIDE_JUMP_BUNSTRIKE_CANCEL & BUNNY_AMULET_LV2 & WALL_JUMP & AIR_DASH)
+",
+}
+
+{
+"edge": "SNOWLAND_CHRISTMAS_TREE -> SNOWLAND_WEST",
+"prereq": "NONE",
+}
+
+{
+"edge": "SNOWLAND_EAST -> ICY_SUMMIT_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "ICY_SUMMIT_MAIN -> SNOWLAND_EAST",
+"prereq": "NONE",
+}
+
+{
+"edge": "SNOWLAND_WEST -> PALACE_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "PALACE_MAIN -> SNOWLAND_WEST",
+"prereq": "NONE",
+}
+
+{
+"edge": "PALACE_MAIN -> SNOWLAND_CHRISTMAS_TREE",
+"prereq": "NONE",
+}
+
+{
+"edge": "SNOWLAND_WEST -> SNOWLAND_EVERNIGHT_ENTRANCE",
+"prereq": "NONE",
+}
+
+{
+"edge": "SNOWLAND_EVERNIGHT_ENTRANCE -> SNOWLAND_WEST",
+"prereq": "NONE",
+}
+
+
+// Aquarium
+
+{
+"edge": "SNOWLAND_WEST -> AQUARIUM_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "AQUARIUM_MAIN -> SNOWLAND_WEST",
+"prereq": "NONE",
+}
+
+{
+"edge": "SNOWLAND_EAST -> AQUARIUM_MAIN",
+"prereq": "FIRE_ORB",
+}
+
+{
+"edge": "AQUARIUM_MAIN -> SNOWLAND_EAST",
+"prereq": "FIRE_ORB",
+}
+
+{
+"edge": "AQUARIUM_MAIN -> AQUARIUM_WATER_TOWER",
+"prereq": "
+    DARKNESS & WATER_ORB & EXPLOSIVES &
+    (
+        (WALL_JUMP_LV2 & RABI_SLIPPERS & ITM_HARD) // you need to disable speed boost
+        | (WALL_JUMP & RABI_SLIPPERS & AIR_JUMP)
+        | (WALL_JUMP_LV2 & AIR_JUMP)
+        | (WALL_JUMP_LV2 & WHIRL_BONK_CANCEL)
+        | (BUNNY_WHIRL & AIR_JUMP & RABI_SLIPPERS & ITM_HARD)
+        | (BUNNY_WHIRL & ADV_STUPID)
+    )
+",
+}
+
+{
+"edge": "AQUARIUM_WATER_TOWER -> AQUARIUM_MAIN",
+"prereq": "
+    WATER_ORB & (
+        WALL_JUMP_LV2
+        | (RABI_SLIPPERS & AIR_DASH_LV3 & ITM_HARD)
+        | (AIR_JUMP & (
+            WALL_JUMP
+            | RABI_SLIPPERS
+            // airdash to opposite wall and wallkick off it
+            | (AIR_DASH & ITM_HARD)
+            // aj, rwj, qd, amulet, wk
+            | ADV_HARD
+            // wimpy, bounce
+            | ADV_STUPID
+        ))
+    )
+",
+}
+
+{
+"edge": "AQUARIUM_MAIN -> AQUARIUM_BOMB_WALLED_AREA",
+"prereq": "EXPLOSIVES | (WATER_ORB & HAMMER_ROLL_ZIP)",
+}
+
+{
+"edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_MAIN",
+"prereq": "EXPLOSIVES",
+}
+
+{
+"edge": "AQUARIUM_MAIN -> AQUARIUM_ORB_SLIDE_MAZE",
+"prereq": "EXPLOSIVES_ENEMY",
+}
+
+{
+"edge": "AQUARIUM_ORB_SLIDE_MAZE -> AQUARIUM_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "AQUARIUM_ORB_SLIDE_MAZE -> AQUARIUM_BOMB_WALLED_AREA",
+"prereq": "EXPLOSIVES",
+}
+
+{
+"edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_ORB_SLIDE_MAZE",
+"prereq": "IMPOSSIBLE",
+}
+
+{
+"edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_BEACH_ENTRANCE",
+"prereq": "EXPLOSIVES",
+}
+
+{
+"edge": "AQUARIUM_BEACH_ENTRANCE -> AQUARIUM_BOMB_WALLED_AREA",
+"prereq": "CARROT_SHOOTER & BOOST",
+}
+
+// .---------------------'
+// | Area 4 : Eastern Highlands
+// '---------------------.
+
+
+// Riverbank
+
+{
+"edge": "RIVERBANK_MAIN -> RIVERBANK_LOWER",
+"prereq": "NONE",
+}
+
+{
+"edge": "RIVERBANK_LOWER -> RIVERBANK_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "RIVERBANK_MAIN -> RIVERBANK_PACK_UP_ROOM",
+"prereq": "SLIDING_POWDER & EXPLOSIVES",
+}
+
+{
+"edge": "RIVERBANK_PACK_UP_ROOM -> RIVERBANK_LOWER_FOREST_ENTRANCE",
+"prereq": "EXPLOSIVES",
+}
+
+{
+"edge": "RIVERBANK_LOWER_FOREST_ENTRANCE -> RIVERBANK_PACK_UP_ROOM",
+"prereq": "CARROT_SHOOTER & BOOST",
+}
+
+{
+"edge": "RIVERBANK_LOWER -> RIVERBANK_LOWER_FOREST_ENTRANCE",
+"prereq": "
+    SLIDING_POWDER
+    | AIR_JUMP
+    | (AIR_DASH & (RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL))
+    | (BUNNY_WHIRL & ITM_HARD)
+    | (RABI_SLIPPERS & ADV_STUPID) // damage boost off spider bullets
+",
+}
+
+{
+"edge": "RIVERBANK_LOWER_FOREST_ENTRANCE -> RIVERBANK_LOWER",
+"prereq": "
+    SLIDING_POWDER
+    | AIR_DASH
+    | AIR_JUMP
+    | (BUNNY_WHIRL & ITM_HARD)
+    | (RABI_SLIPPERS & ADV_STUPID)
+",
+}
+
+{
+"edge": "RIVERBANK_LOWER_FOREST_ENTRANCE -> RIVERBANK_UNDERGROUND",
+"prereq": "EXPLOSIVES",
+}
+
+{
+"edge": "RIVERBANK_UNDERGROUND -> RIVERBANK_LOWER",
+"prereq": "EXPLOSIVES",
+}
+
+// Evernight
+
+{
+"edge": "RIVERBANK_MAIN -> EVERNIGHT_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "EVERNIGHT_MAIN -> RIVERBANK_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "EVERNIGHT_MAIN -> EVERNIGHT_SPIKE_BARRIER_ROOM",
+"prereq": "
+    AIR_JUMP
+    | BUNNY_STRIKE
+    | AIR_DASH
+    | (BUNNY_WHIRL & ITM_HARD)
+    | (SLIDING_POWDER & (ITM_HARD | RABI_SLIPPERS))
+    | ADV_STUPID
+",
+}
+
+{
+"edge": "EVERNIGHT_SPIKE_BARRIER_ROOM -> EVERNIGHT_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "EVERNIGHT_SPIKE_BARRIER_ROOM -> RIVERBANK_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "EVERNIGHT_MAIN -> EVERNIGHT_SAYA",
+"prereq": "NONE",
+}
+
+{
+"edge": "EVERNIGHT_SAYA -> EVERNIGHT_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "EVERNIGHT_SAYA -> EVERNIGHT_CORRIDOR_BELOW_SAYA",
+"prereq": "NONE",
+}
+
+{
+"edge": "EVERNIGHT_CORRIDOR_BELOW_SAYA -> EVERNIGHT_SAYA",
+"prereq": "
+    FIRE_ORB
+    | WHIRL_BONK_CANCEL
+    | (AIR_JUMP & (HAMMER_ROLL | WALL_JUMP_LV2))
+    | (SLIDE_JUMP_BUNSTRIKE_CANCEL & RABI_SLIPPERS & WALL_JUMP_LV2)
+    | (SLIDE_JUMP_BUNSTRIKE_CANCEL & RABI_SLIPPERS & AIR_JUMP & (WALL_JUMP | SPEED1))
+",
+}
+
+{
+"edge": "EVERNIGHT_CORRIDOR_BELOW_SAYA -> EVERNIGHT_EAST_OF_WARP",
+"prereq": "NONE",
+}
+
+{
+"edge": "EVERNIGHT_EAST_OF_WARP -> EVERNIGHT_CORRIDOR_BELOW_SAYA",
+"prereq": "
+    (FIRE_ORB & (
+        RABI_SLIPPERS
+        | AIR_JUMP
+        | (ITM_HARD & (SLIDING_POWDER | AIR_DASH | SPEED1))
+    ))
+    | (AIR_JUMP & (
+        RABI_SLIPPERS
+        | SLIDE_JUMP_BUNSTRIKE_CANCEL
+        | (SLIDING_POWDER & ADV_STUPID)))
+    | WHIRL_BONK_CANCEL
+",
+}
+
+{
+"edge": "EVERNIGHT_EAST_OF_WARP -> EVERNIGHT_LOWER",
+"prereq": "NONE",
+}
+
+{
+"edge": "EVERNIGHT_LOWER -> EVERNIGHT_EAST_OF_WARP",
+"prereq": "
+    (AIR_JUMP & (ADV_HARD | AIR_DASH | SLIDE_JUMP_BUNSTRIKE))
+    | (AIR_DASH_LV3 & AMULET_FOOD & ITM_HARD)
+",
+}
+
+{
+"edge": "EVERNIGHT_MAIN -> EVERNIGHT_WARP",
+"prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP | EXPLOSIVES",
+}
+
+{
+"edge": "EVERNIGHT_WARP -> EVERNIGHT_MAIN",
+"prereq": "SLIDING_POWDER",
+}
+
+{
+"edge": "EVERNIGHT_WARP -> EVERNIGHT_EAST_OF_WARP",
+"prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP | FIRE_ORB",
+}
+
+{
+"edge": "EVERNIGHT_EAST_OF_WARP -> EVERNIGHT_WARP",
+"prereq": "SLIDING_POWDER | FIRE_ORB",
+}
+
+{
+"edge": "EVERNIGHT_WARP -> EVERNIGHT_LOWER",
+"prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP | DOWNDRILL_SEMISOLID_CLIP",
+}
+
+{
+"edge": "EVERNIGHT_LOWER -> EVERNIGHT_WARP",
+"prereq": "NONE",
+}
+
+{
+"edge": "EVERNIGHT_LOWER -> RIVERBANK_LOWER",
+"prereq": "NONE",
+}
+
+
+// Lab
+
+{
+"edge": "RIVERBANK_LOWER -> LAB_ENTRANCE",
+"prereq": "CICINI & CHAPTER_2",
+}
+
+{
+"edge": "LAB_ENTRANCE -> RIVERBANK_LOWER",
+"prereq": "NONE",
+}
+
+{
+"edge": "LAB_ENTRANCE -> LAB_MID",
+"prereq": "NONE",
+}
+
+{
+"edge": "LAB_MID -> LAB_ENTRANCE",
+"prereq": "DOWNDRILL_SEMISOLID_CLIP",
+}
+
+{
+"edge": "LAB_MID -> LAB_SLIDING_POWDER_ROOM",
+"prereq": "ITM_HARD | EXPLOSIVES_ENEMY",
+}
+
+{
+"edge": "LAB_SLIDING_POWDER_ROOM -> LAB_MID",
+"prereq": "
+    (AIR_JUMP & WALL_JUMP_LV2)
+    | (ITM_HARD & HAMMER_ROLL_ZIP & (CARROT_BOMB_ENTRY | (CARROT_SHOOTER_ENTRY & BOOST)))
+    | (ITM_HARD & AIR_JUMP & (RABI_SLIPPERS | BUNNY_STRIKE) & SPEED3)
+",
+}
+
+{
+"edge": "LAB_SLIDING_POWDER_ROOM -> LAB_WEST",
+"prereq": "SLIDING_POWDER",
+}
+
+{
+"edge": "LAB_WEST -> LAB_SLIDING_POWDER_ROOM",
+"prereq": "SLIDING_POWDER",
+}
+
+{
+"edge": "LAB_SLIDING_POWDER_ROOM -> LAB_EAST",
+// bomb attack up hole, go to sliding powder room and hammer roll zip out (backtrack)
+"prereq": "EXPLOSIVES & HAMMER_ROLL_ZIP & ADVANCED & BACKTRACK_1",
+}
+
+{
+"edge": "LAB_WEST -> LAB_MID",
+"prereq": "SLIDING_POWDER",
+}
+
+{
+"edge": "LAB_MID -> LAB_WEST",
+"prereq": "SLIDING_POWDER",
+}
+
+{
+"edge": "LAB_MID -> LAB_EAST",
+"prereq": "NONE",
+}
+
+{
+"edge": "LAB_EAST -> LAB_MID",
+"prereq": "NONE",
+}
+
+{
+"edge": "LAB_EAST -> LAB_COMPUTER_ROOM",
+"prereq": "NONE",
+}
+
+{
+"edge": "LAB_COMPUTER_ROOM -> LAB_EAST",
+"prereq": "NONE",
+}
+
+// XXX SEMISOLID_CLIP may need to have EXPLOSIVES too
+// XXX Need node for pack up room
+{
+"edge": "LAB_ENTRANCE -> LAB_EAST",
+"prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP | DOWNDRILL_SEMISOLID_CLIP",
+}
+
+{
+"edge": "LAB_EAST -> LAB_ENTRANCE",
+"prereq": "NONE",
+}
+
+// .---------------------'
+// | Area 5 : Rabi Rabi Town
+// '---------------------.
+
+// .---------------------'
+// | Area 6 : Plurkwood
+// '---------------------.
+
+// .---------------------'
+// | Area 7 : Subterranean Area
+// '---------------------.
+
+{
+"edge": "VOLCANIC_MAIN -> VOLCANIC_BEACH_ENTRANCE",
+"prereq": "NONE",
+}
+
+{
+"edge": "VOLCANIC_BEACH_ENTRANCE -> VOLCANIC_MAIN",
+"prereq": "NONE",
+}
+
+// .---------------------'
+// | Area 8 : Warp Destination
+// '---------------------.
+
+// .---------------------'
+// | Area 9 : System Interior
+// '---------------------.
+

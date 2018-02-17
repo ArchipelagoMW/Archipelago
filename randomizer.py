@@ -1,8 +1,8 @@
-import argparse
-import random
-import ast
+import argparse, random, ast, sys, re
 from utility import *
+from generator import Generator
 
+VERSION_STRING = '{PLACEHOLDER_VERSION}'
 START_LOCATION = 'FOREST_START'
 
 """
@@ -26,11 +26,34 @@ DIFFICULTY_STUPID = 'DIFFICULTY_STUPID'
 
 def parse_args():
     args = argparse.ArgumentParser(description='Rabi-Ribi Randomizer - %s' % VERSION_STRING)
+    args.add_argument('--version', action='store_true', help='Print Randomizer Version')
+    args.add_argument('-output_dir', default='generated_maps', help='Output directory for generated maps')
+    args.add_argument('-config_file', default='config.txt', help='Config file to use')
+    args.add_argument('-seed', default=None, type=str, help='Random seed')
+    args.add_argument('--no-write', dest='write', default=True, action='store_false', help='Flag to disable map generation, and do only map analysis')
+    args.add_argument('--no-fixes', dest='apply_fixes', default=True, action='store_false', help='Flag to disable randomizer-specific map fixes')
+    args.add_argument('--reset', action='store_true', help='Reset maps by copying the original maps to the output directory.')
+    args.add_argument('--hash', action='store_true', help='Generate a hash of the maps in the output directory.')
+    args.add_argument('--check-for-updates', action='store_true', help='Check for the latest version of randomizer.')
+    args.add_argument('--check-branch', action='store_true', help='Displays which branch the randomizer is currently on (D or M).')
+    args.add_argument('--shuffle-music', action='store_true', help='Shuffles the music in the map.')
+    args.add_argument('--shuffle-backgrounds', action='store_true', help='Shuffles the backgrounds in the map.')
+    args.add_argument('--shuffle-map-transitions', action='store_true', help='Shuffles map transitions between maps.')
+    args.add_argument('--no-laggy-backgrounds', action='store_true', help='Don\'t include laggy backgrounds in background shuffle.')
+    args.add_argument('--no-difficult-backgrounds', action='store_true', help='Don\'t include backgrounds in background shuffle that interfere with visibility.')
+    args.add_argument('--super-attack-mode', action='store_true', help='Start the game with a bunch of attack ups, so you do lots more damage.')
+    args.add_argument('--hyper-attack-mode', action='store_true', help='Like Super Attack Mode, but with 35 attack ups.')
+    args.add_argument('--open-mode', action='store_true', help='Removes prologue triggers that restrict exploration.')
+    args.add_argument('--hide-unreachable', action='store_true', help='Hide list of unreachable items. Affects seed.')
+    args.add_argument('--hide-difficulty', action='store_true', help='Hide difficulty rating. Affects seed.')
+    args.add_argument('--egg-goals', action='store_true', help='Egg goals mode. Hard-to-reach items are replaced with easter eggs. All other eggs are removed from the map.')
+    args.add_argument('-extra-eggs', default=None, type=int, help='Number of extra randomly-chosen eggs for egg-goals mode (in addition to the hard-to-reach eggs)')
+
     return args.parse_args(sys.argv[1:])
 
 
 def define_setting_flags():
-    return {
+    d = {
         "TRUE": True,
         "FALSE": False,
         "ZIP_REQUIRED": False,
@@ -46,16 +69,18 @@ def define_setting_flags():
         "DARKNESS_WITHOUT_LIGHT_ORB": True,
         "UNDERWATER_WITHOUT_WATER_ORB": True,
     }
+    d.update(define_difficulty_flags())
+    return d
 
 def define_difficulty_flags():
     # Difficulty Flags
-    d.update({
+    return {
         KNOWLEDGE_INTERMEDIATE: False,
         KNOWLEDGE_ADVANCED: False,
         DIFFICULTY_HARD: False,
         DIFFICULTY_V_HARD: False,
         DIFFICULTY_STUPID: False,
-    })
+    }
 
 # The values can be either a expression constrant, which is expressed as a string,
 # or a lambda, that takes in a variables object and returns a bool.
@@ -133,7 +158,7 @@ def define_default_expressions(variable_names_set):
     # Default expressions take priority over actual variables.
     # so if we parse an expression that has AIR_DASH, the default expression AIR_DASH will be used instead of the variable AIR_DASH.
     # however, the expressions parsed in define_default_expressions (just below) cannot use default expressions in their expressions.
-    expr = lambda s : parse_expression(s, variables)
+    expr = lambda s : parse_expression(s, variable_names_set)
     def1 = {
         "INTERMEDIATE": expr("KNOWLEDGE_INTERMEDIATE"),
         "ADVANCED": expr("KNOWLEDGE_ADVANCED"),
@@ -166,7 +191,8 @@ def define_default_expressions(variable_names_set):
         "NONE": expr("TRUE"),
         "IMPOSSIBLE": expr("FALSE"),
     }
-    expr = lambda s : parse_expression(s, variables, def1)
+
+    expr = lambda s : parse_expression(s, variable_names_set, def1)
     def2 = {
         "ITM": expr("INTERMEDIATE"),
         "ITM_HARD": expr("INTERMEDIATE & HARD"),
@@ -175,7 +201,11 @@ def define_default_expressions(variable_names_set):
         "ADV_HARD": expr("ADVANCED & HARD"),
         "ADV_VHARD": expr("ADVANCED & V_HARD"),
         "ADV_STUPID": expr("ADVANCED & STUPID"),
+    }
+    def1.update(def2)
 
+    expr = lambda s : parse_expression(s, variable_names_set, def1)
+    def3 = {
         "HAMMER_ROLL_ZIP": expr("ZIP & HAMMER_ROLL_LV3"),
         "SLIDE_ZIP": expr("ZIP & SLIDING_POWDER"),
         "WHIRL_BONK": expr("BUNNY_WHIRL & ITM_HARD"),
@@ -194,8 +224,7 @@ def define_default_expressions(variable_names_set):
 
         "AMULET_FOOD": expr("BUNNY_AMULET | (TOWN_MAIN & (RUMI_DONUT | RUMI_CAKE | COCOA_BOMB | GOLD_CARROT))"),
     }
-
-    def1.update(def2)
+    def1.update(def3)
     return def1
 
 def get_default_areaids():
@@ -244,44 +273,45 @@ def parse_locations_and_items():
         elif line.startswith('===Items==='):
             currently_reading = READING_ITEMS
         elif currently_reading == READING_LOCATIONS:
-            if len(line) > 0:
-                location, location_type = (x.strip() for x in line.split(':'))
-                location_type = type_map[location_type]
-                if location in locations:
-                    fail('Location %s already defined!' % location)
-                locations[location] = location_type
+            if len(line) <= 0: continue
+            location, location_type = (x.strip() for x in line.split(':'))
+            location_type = type_map[location_type]
+            if location in locations:
+                fail('Location %s already defined!' % location)
+            locations[location] = location_type
         elif currently_reading == READING_ADDITIONAL_ITEMS:
-            if len(line) > 0:
-                item, item_id = (x.strip() for x in line.split(':'))
-                item_id = int(item_id)
-                if item in items:
-                    fail('Additional Item %s already defined!' % item)
-                items[item] = item_id
+            if len(line) <= 0: continue
+            item_name, item_id = (x.strip() for x in line.split(':'))
+            item_id = int(item_id)
+            if item_name in items:
+                fail('Additional Item %s already defined!' % item)
+            additional_items[item_name] = item_id
         elif currently_reading == READING_ITEMS:
-            if len(line) > 0:
-                items.append(itemreader.parse_item_from_string(line))
+            if len(line) <= 0: continue
+            items.append(parse_item_from_string(line))
         elif currently_reading == READING_MAP_TRANSITIONS:
+            if len(line) <= 0: continue
             # Line format:
-            # origin_location : area_current : entry_current : area_target : entry_target : walking_direction
-            origin_location, area_current, entry_current, area_target, entry_target, walking_direction = [x.strip() for x in line.split(':')]
-
             # area : (x, y, w, h) : origin_location : direction : map_event : trigger_id : entrance_id
-            area_current, rect, origin_location, walking_direction, area_target, entry_target, entry_current = [x.strip() for x in line.split(':')]
+            area_current, rect, origin_location, walking_direction, area_target_ev, entry_target_ev, entry_current_ev = [x.strip() for x in line.split(':')]
 
             if walking_direction == 'MovingRight': walking_right = True
             elif walking_direction == 'MovingLeft': walking_right = False
             else: fail('Undefined map transition direction: %s' % walking_direction)
-
+            area_target = int(area_target_ev) - 161
+            entry_target = int(entry_target_ev) - 200
+            entry_current = (int(entry_current_ev)-227 if int(entry_current_ev) >= 227 else int(entry_current_ev)-176+6)
 
             map_transitions.append(MapTransition(
                 origin_location = origin_location,
                 area_current = int(area_current),
-                entry_current = int(entry_current),
-                area_target = int(area_target),
-                entry_target = int(entry_target),
+                entry_current = entry_current,
+                area_target = area_target,
+                entry_target = entry_target,
                 walking_right = walking_right,
                 rect = rect,
              ))
+
 
     # Validate map transition locations
     if set(mt.origin_location for mt in map_transitions) - set(locations.keys()):
@@ -293,7 +323,7 @@ def parse_locations_and_items():
 
 # throws errors for invalid formats.
 def parse_edge_constraints(locations_set, variable_names_set, default_expressions):
-    lines = read_file_and_strip_comments('constriants_graph.txt')
+    lines = read_file_and_strip_comments('constraints_graph.txt')
     jsondata = ' '.join(lines)
     jsondata = re.sub(',\s*}', '}', jsondata)
     jsondata = '},{'.join(re.split('}\s*{', jsondata))
@@ -319,7 +349,7 @@ def parse_edge_constraints(locations_set, variable_names_set, default_expression
     return constraints
 
 def parse_item_constraints(items_set, locations_set, variable_names_set, default_expressions):
-    lines = read_file_and_strip_comments('constriants.txt')
+    lines = read_file_and_strip_comments('constraints.txt')
     jsondata = ' '.join(lines)
     jsondata = re.sub(',\s*}', '}', jsondata)
     jsondata = '},{'.join(re.split('}\s*{', jsondata))
@@ -335,12 +365,12 @@ def parse_item_constraints(items_set, locations_set, variable_names_set, default
         item_constraints.append(ItemConstraintData(
             item = item,
             from_location = from_location,
-            entry_prereq = parse_expression(cdict['entry_prereq'], variable_names_set, default_expressions),
-            exit_prereq = parse_expression(cdict['exit_prereq'], variable_names_set, default_expressions),
+            entry_prereq = parse_expression_lambda(cdict['entry_prereq'], variable_names_set, default_expressions),
+            exit_prereq = parse_expression_lambda(cdict['exit_prereq'], variable_names_set, default_expressions),
         ))
 
     # Validate that there are no duplicate items defined
-    if len(constraints) != len(set(cdict['item'] for cdict in cdicts)):
+    if len(item_constraints) != len(set(cdict['item'] for cdict in cdicts)):
         # Error: duplicate item. Find the duplicate item.
         item_names = [cdict['item'] for cdict in cdicts]
         duplicates = [item for item in set(item_names) if item_names.count(item) > 1]
@@ -348,7 +378,7 @@ def parse_item_constraints(items_set, locations_set, variable_names_set, default
 
     return item_constraints
 
-def read_config(setting_flags, item_locations_set, setting_flags_set, predefined_additional_items_set):
+def read_config(setting_flags, item_locations_set, setting_flags_set, predefined_additional_items_set, settings):
     lines = read_file_and_strip_comments(settings.config_file)
     jsondata = ' '.join(lines)
     jsondata = re.sub(',\s*]', ']', jsondata)
@@ -360,7 +390,7 @@ def read_config(setting_flags, item_locations_set, setting_flags_set, predefined
     included_additional_items = config_dict['additional_items']
     settings = config_dict['settings']
     knowledge = config_dict['knowledge']
-    difficulty = config_dict['difficulty']
+    difficulty = config_dict['trick_difficulty']
 
     # Settings
     setting_flags = dict(setting_flags)
@@ -426,79 +456,15 @@ def read_config(setting_flags, item_locations_set, setting_flags_set, predefined
     return setting_flags, to_shuffle, must_be_reachable, included_additional_items
 
 
-### Enums
-LOCATION_WARP = 0
-LOCATION_MAJOR = 1
-LOCATION_MINOR = 2
-
-"""
-Variable types:
-1. Locations
-    - Warp locations - locations with a warp stone
-    - Major locations - must have unconstrained path to warp stone
-    - Minor locations - cannot have autosave or save points within
-2. Items (Item Locations)
-3. Additional Items (Items without locations)
-4. Pseudo Items
-"""
-
-"""
 
 
-
-
-"""
-
-"""
-Settings:
-- shuffle_items
-- shuffle_map_transitions
-"""
-
-class MapTransition(object):
-    def __init__(self, origin_location, area_current, entry_current, area_target,
-            entry_target, walking_right, rect):
-        self.origin_location = origin_location
-        self.area_current = area_current
-        self.entry_current = entry_current
-        self.area_target = area_target
-        self.entry_target = entry_target
-        self.walking_right = walking_right
-        self.rect = ast.literal_eval(rect)
-        rect_x, rect_y, rect_width, rect_height = self.rect
-        self.rect_x = rect_x
-        self.rect_y = rect_y
-        self.rect_width = rect_width
-        self.rect_height = rect_height
-
-class EdgeConstraintData(object):
-    def __init__(self, from_location, to_location, prereq_expression):
-        self.from_location = from_location
-        self.to_location = to_location
-        #self.prereq_expression = prereq_expression
-        self.prereq_lambda = lambda v : prereq_expression.evaluate(v)
-
-    def __str__(self):
-        return '\n'.join([
-            'From: %s' % self.from_location,
-            'To: %s' % self.to_location,
-            'Prereq: %s' % self.prereq_expression,
-        ])
-
-class ItemConstraintData(object):
-    def __init__(self, item, from_location, entry_prereq, exit_prereq):
-        self.item = item
-        self.from_location = from_location
-        self.entry_prereq = entry_prereq
-        self.exit_prereq = exit_prereq
-
-class GraphEdge(object):
-    def __init__(self, edge_id, from_location, to_location, constraint, backtrack_cost):
-        self.edge_id = edge_id
-        self.from_location = from_location
-        self.to_location = to_location
-        self.satisfied = constraint
-        self.backtrack_cost = backtrack_cost
+def parse_item_from_string(line):
+    pos, areaid, itemid, name = (s.strip() for s in line.split(':', 3))
+    import ast
+    item = Item(ast.literal_eval(pos), int(areaid), int(itemid))
+    if len(name) > 0 and name != 'None':
+        item.name = name
+    return item
 
 class RandomizerData(object):
     # Attributes:
@@ -544,34 +510,36 @@ class RandomizerData(object):
     # int: nEggs
 
 
-    def __init__(self):
+    def __init__(self, settings):
         self.setting_flags = define_setting_flags()
         self.pseudo_items = define_pseudo_items()
         self.locations, self.map_transitions, self.items, self.additional_items = parse_locations_and_items()
 
-        # Do some preprocessing of variable names        
-        self.item_names = [item.name for item in data.items]
-        self.location_list = sorted(list(data.locations.keys()))
-        variable_names_list = self.location_list + \
-                              self.item_names + \
-                              list(self.additional_items.keys()) + \
-                              list(self.pseudo_items.values()) + \
-                              list(self.setting_flags.keys())
-        variable_names_list.sort()
+        self.minHardToReachEggs = 2
+        self.maxHardToReachEggs = 5
 
-        variable_names_set = set(variable_names_list)
-        if len(variable_names_set) < len(variable_names_list):
+        # Do some preprocessing of variable names        
+        self.item_names = [item.name for item in self.items]
+        self.location_list = sorted(list(self.locations.keys()))
+        self.variable_names_list = self.location_list + \
+                                   self.item_names + \
+                                   list(self.additional_items.keys()) + \
+                                   list(self.pseudo_items.keys()) + \
+                                   list(self.setting_flags.keys())
+        self.variable_names_list.sort()
+
+        variable_names_set = set(self.variable_names_list)
+        if len(variable_names_set) < len(self.variable_names_list):
             # Repeats detected! Fail.
-            repeat_names = [x for x in variable_names_set if variable_names_list.count(x) > 1]
+            repeat_names = [x for x in variable_names_set if self.variable_names_list.count(x) > 1]
             fail('Repeat names detected: %s' % ','.join(repeat_names))
         
-        self.locations_set = set(self.locations_list)
+        self.locations_set = set(self.location_list)
         items_set = set(self.item_names)
-
 
         # More config loading
         self.setting_flags, self.to_shuffle, self.must_be_reachable, self.included_additional_items = \
-            read_config(variable_names_list, items_set, set(self.setting_flags.keys()), set(self.additional_items.keys()))
+            read_config(self.setting_flags, items_set, set(self.setting_flags.keys()), set(self.additional_items.keys()), settings)
 
         default_expressions = define_default_expressions(variable_names_set)
         evaluate_pseudo_item_constraints(self.pseudo_items, variable_names_set, default_expressions)
@@ -579,13 +547,13 @@ class RandomizerData(object):
         self.edge_constraints = parse_edge_constraints(self.locations_set, variable_names_set, default_expressions)
         self.item_constraints = parse_item_constraints(items_set, self.locations_set, variable_names_set, default_expressions)
 
-        self.preprocess_data()
-        self.preprocess_variables()
-        self.preprocess_graph()
+        self.preprocess_data(settings)
+        self.preprocess_variables(settings)
+        self.preprocess_graph(settings)
 
-    def preprocess_variables():
+    def preprocess_variables(self, settings):
         # Mark all unconstrained pseudo-items
-        variables = dict((name, False) for name in self.variables)
+        variables = dict((name, False) for name in self.variable_names_list)
         variables.update(self.setting_flags)
 
         to_remove = set()
@@ -605,7 +573,7 @@ class RandomizerData(object):
 
         self.default_variables = variables
 
-    def preprocess_graph():
+    def preprocess_graph(self, settings):
         default_variables = self.default_variables
 
         # Partial Graph Construction
@@ -639,31 +607,51 @@ class RandomizerData(object):
                 ))
 
         initial_outgoing_edges = dict((node, []) for node in graph_vertices)
+        initial_incoming_edges = dict((node, []) for node in graph_vertices)
 
         for edge in edges:
             initial_outgoing_edges[edge.from_location].append(edge.edge_id)
+            initial_outgoing_edges[edge.to_location].append(edge.edge_id)
 
         self.graph_vertices = graph_vertices
         self.item_locations_in_node = item_locations_in_node
         self.initial_edges = edges
         self.initial_outgoing_edges = initial_outgoing_edges
+        self.initial_incoming_edges = initial_incoming_edges
 
 
-    def preprocess_data(self):
-
+    def preprocess_data(self, settings):
         ### For item shuffle
-        normal_items = [item.name for item in data.items if not is_egg(item.name)]
-        additional_items = list(self.included_additional_items)
-        eggs = [item.name for item in data.items if is_egg(item.name)]
+        to_shuffle_set = set(self.to_shuffle)
+        do_not_shuffle = [item.name for item in self.items if not item.name in to_shuffle_set]
 
-        self.nLocations = len(item_locations)
-        self.nNormalItems = len(items)
-        self.nAdditionalItems = len(additional_items)
-        self.originalNEggs = len(eggs)
+        items_to_shuffle = [item_name for item_name in self.to_shuffle if not is_egg(item_name)]
+        unshuffled_items = [item_name for item_name in do_not_shuffle if not is_egg(item_name)]
+
+        eggs_to_shuffle = [item_name for item_name in self.to_shuffle if is_egg(item_name)]
+        unshuffled_eggs = [item_name for item_name in do_not_shuffle if is_egg(item_name)]
+
+        self.nItemSpots = len(self.to_shuffle)
+        self.nNormalItems = len(items_to_shuffle)
+        self.nAdditionalItems = len(self.included_additional_items)
+        self.nOriginalEggs = len(eggs_to_shuffle)
+
 
         # Remove eggs so that number of items to allocate == number of locations
-        self.nEggs = se.originalNEggs - self.nAdditionalItems
-        self.items_to_allocate = normal_items + additional_items + eggs[:self.nEggs]
+        self.nEggs = self.nOriginalEggs - self.nAdditionalItems
+        if self.nEggs < 0:
+            fail('Too few eggs to remove to make room for additional items.')
+
+        self.items_to_allocate = items_to_shuffle + self.included_additional_items + eggs_to_shuffle[:self.nEggs]
+        self.item_slots = items_to_shuffle
+        self.unshuffled_allocations = list(zip(unshuffled_items, unshuffled_items))
+        if settings.egg_goals:
+            minShuffledEggs = self.minHardToReachEggs + settings.extra_eggs
+            if self.nEggs < minShuffledEggs:
+                fail('Not enough shuffled eggs for egg goals. Needs at least %d.' % minShuffledEggs)
+            self.unshuffled_allocations += [(egg_loc, None) for egg_loc in unshuffled_eggs]
+        else:
+            self.unshuffled_allocations += list(zip(unshuffled_eggs, unshuffled_eggs))
 
         # XXXX CAN THIS THING HANDLE MULTIPLE TRANSITIONS WITH THE  SAME ORIGIN LOCATION?
         # map_transitions
@@ -673,7 +661,7 @@ class RandomizerData(object):
 
         left_transition_dict = dict(( (tr.area_current, tr.entry_current), tr )
             for tr in self.map_transitions if not tr.walking_right)
-
+        print(len(walking_right_transitions), len(left_transition_dict))
         for rtr in walking_right_transitions:
             key = (rtr.area_target, rtr.entry_target)
             ltr = left_transition_dict.get(key)
@@ -771,4 +759,10 @@ if __name__ == '__main__':
     else:
         seed = string_to_integer_seed('%s_ha:%s_hd:%s' % (args.seed, args.hide_unreachable, args.hide_difficulty))
     
-    pass
+    randomizer_data = RandomizerData(args)
+    generator = Generator(randomizer_data, args)
+    generator.shuffle()
+    result = generator.verify()
+    print(result)
+
+

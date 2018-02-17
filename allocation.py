@@ -1,3 +1,5 @@
+import random
+from utility import GraphEdge
 
 NO_CONDITIONS = lambda v : True
 INFTY = 99999
@@ -26,21 +28,23 @@ class Allocation(object):
 
 
     def allocate_items(self, data, settings):
-        item_locations = data.item_locations
+        item_slots = data.item_slots
 
-        if not settings.shuffle_items:
-            self.item_at_item_location = dict(zip(item_locations, item_locations))
-            return
+        #if not settings.shuffle_items:
+            #self.item_at_item_location = dict(zip(item_slots, item_slots))
+            #return
 
-        random.shuffle(items_to_allocate)
+        random.shuffle(self.items_to_allocate)
 
         # A map of location -> item at location
-        self.item_at_item_location = dict(zip(item_locations, items_to_allocate))
+        self.item_at_item_location = dict(zip(item_slots, self.items_to_allocate))
+        self.item_at_item_location.update(data.unshuffled_allocations)
 
 
     def construct_graph(self, data, settings):
         edges = list(data.initial_edges)
         outgoing_edges = dict((key, list(edge_ids)) for key, edge_ids in data.initial_outgoing_edges.items())
+        incoming_edges = dict((key, list(edge_ids)) for key, edge_ids in data.initial_incoming_edges.items())
 
         # Constraints
         for constraint in data.edge_constraints:
@@ -76,9 +80,13 @@ class Allocation(object):
             edges.append(edge2)
             outgoing_edges[edge1.from_location].append(edge1.edge_id)
             outgoing_edges[edge2.from_location].append(edge2.edge_id)
+            incoming_edges[edge1.to_location].append(edge1.edge_id)
+            incoming_edges[edge2.to_location].append(edge2.edge_id)
 
         self.edges = edges
         self.outgoing_edges = outgoing_edges
+        self.incoming_edges = incoming_edges
+
 
     def shift_eggs_to_hard_to_reach(self, data, settings):
         analyzer = Analyzer(self, data, settings)

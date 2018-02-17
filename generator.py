@@ -1,4 +1,5 @@
-
+from allocation import Allocation
+from utility import *
 
 class Generator(object):
     def __init__(self, data, settings):
@@ -9,7 +10,7 @@ class Generator(object):
     def shuffle(self):
         self.allocation.shuffle(self.data, self.settings)
 
-    def shuft_eggs_to_hard_to_reach(self):
+    def shift_eggs_to_hard_to_reach(self):
         self.allocation.shift_eggs_to_hard_to_reach(self, data, settings)
 
     def verify(self):
@@ -19,21 +20,25 @@ class Generator(object):
             return False
 
     def verify_warps_reachable(self):
+        # verify that every major location has an unconstrained path to the goal.
         variables = self.data.generate_variables()
+        allocation = self.allocation
+        edges = allocation.edges
 
         dfs_stack = [location for location, loc_type in self.data.locations.items() if loc_type == LOCATION_WARP]
         visited = set(dfs_stack)
 
         while len(dfs_stack) > 0:
             current = dfs_stack.pop()
-            for condition, target in allocation.incoming_conditions(target):
+            for edge_id in allocation.incoming_edges[current]:
+                target = edges[edge_id].from_location
                 if target in visited: continue
-                if condition(variables):
+                if edges[edge_id].satisfied(variables):
                     visited.add(target)
                     dfs_stack.append(target)
 
         major_locations = set(location for location, loc_type in self.data.locations.items() if loc_type == LOCATION_MAJOR)
-
+        print(major_locations - visited)
         return len(major_locations - visited) == 0
 
 
@@ -96,7 +101,7 @@ class Generator(object):
 
                 # 0 Part B: Handle alternate constraints for items
                 to_remove.clear()
-                for target, condition in unsatisfied_item_conditions.items()
+                for target, condition in unsatisfied_item_conditions.items():
                     if condition(variables):
                         if not variables[target]:
                             current_level_part1.append(target)
@@ -145,9 +150,9 @@ class Generator(object):
             new_backward_exitable = set()
             while len(backward_frontier) > 0:
                 for node in backward_frontier:
-                    for edge_id in outgoing_edges[node]:
+                    for edge_id in incoming_edges[node]:
                         if edge_id not in untraversable_edges:
-                            target_location = edges[edge_id].to_location
+                            target_location = edges[edge_id].from_location
                             if target_location not in backward_exitable:
                                 new_backward_exitable.add(target_location)
                                 backward_exitable.add(target_location)
@@ -197,7 +202,7 @@ class Generator(object):
                         if can_exit or node in backward_exitable:
                             can_exit = True
                             break
-                        for edge_id in outgoing_edges[node]
+                        for edge_id in outgoing_edges[node]:
                             edge = edges[edge_id]
                             if edge.to_location in locally_exitable: continue
                             variables['BACKTRACK_GOALS'] = edge.to_location, base_location

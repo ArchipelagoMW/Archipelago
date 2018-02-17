@@ -1,3036 +1,1904 @@
 
-// .---------------------'
-// | Area 0 : Southern Woodland
-// '---------------------.
-
-// Starting Forest
-
-{
-"edge": "FOREST_START -> PIKO_HAMMER",
-"prereq": "NONE",
-}
-
-{
-"edge": "PIKO_HAMMER -> FOREST_START",
-"prereq": "NONE",
-}
-
-{
-"edge": "FOREST_UPPER_EAST -> LIGHT_ORB":
-"prereq": "CARROT_BOMB & SLIDING_POWDER"
-}
-
-{
-"edge": "LIGHT_ORB -> FOREST_UPPER_EAST",
-"prereq": "CARROT_BOMB & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
-}
-
-{
-"edge": "HP_UP_NORTH_FOREST -> LIGHT_ORB",
-"prereq": "CARROT_BOMB & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
-}
-
-{
-"edge": "LIGHT_ORB -> HP_UP_NORTH_FOREST",
-"prereq": "CARROT_BOMB & SLIDING_POWDER",
-}
-
-{
-"edge": "HP_UP_NORTH_FOREST -> FOREST_START",
-"prereq": "NONE",
-}
-
-{
-"edge": "FOREST_START -> HP_UP_NORTH_FOREST",
-"prereq": "(RABI_SLIPPERS | AIR_JUMP | BUNNY_STRIKE | AIR_DASH) & (SLIDING_POWDER | (HAMMER_ROLL_ZIP))",
-}
-
-{
-"edge": "FOREST_START -> FOREST_LOWER_RIVERBANK_EXIT",
-"prereq": "PIKO_HAMMER_LEVELED",
-}
-
-{
-"edge": "FOREST_LOWER_RIVERBANK_EXIT -> FOREST_START",
-"prereq": "NONE",
-}
-
-
-
-// Forest Night
-
-{
-"edge": "HP_UP_NORTH_FOREST -> FOREST_NIGHT_NORTH_EAST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "FOREST_NIGHT_NORTH_EAST -> HP_UP_NORTH_FOREST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "FOREST_START -> FOREST_NIGHT_NORTH_EAST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "FOREST_NIGHT_NORTH_EAST -> FOREST_START",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "FOREST_START -> FOREST_NIGHT_WEST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "FOREST_NIGHT_WEST -> FOREST_START",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "FOREST_NIGHT_NORTH_EAST -> FOREST_NIGHT_WEST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "FOREST_NIGHT_WEST -> FOREST_NIGHT_NORTH_EAST",
-"prereq": "IMPOSSIBLE",
-}
-
-
-// Cave
-
-{
-"edge": "FOREST_START -> CAVE_ENTRANCE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "CAVE_ENTRANCE -> FOREST_START",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "CAVE_ENTRANCE -> CAVE_COCOA",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "CAVE_COCOA -> CAVE_ENTRANCE",
-"prereq": "IMPOSSIBLE",
-}
-
-
-// Spectral
-
-{
-"edge": "CAVE_ENTRANCE -> SPECTRAL_UPPER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SPECTRAL_UPPER -> CAVE_ENTRANCE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SPECTRAL_UPPER -> SPECTRAL_WARP",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SPECTRAL_WARP -> SPECTRAL_UPPER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SPECTRAL_WARP -> SPECTRAL_CICINI_ROOM",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SPECTRAL_CICINI_ROOM -> SPECTRAL_WARP",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SPECTRAL_UPPER -> SPECTRAL_MID",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SPECTRAL_MID -> SPECTRAL_UPPER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SPECTRAL_MID -> SPECTRAL_WARP",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SPECTRAL_WARP -> SPECTRAL_MID",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SPECTRAL_WEST -> SPECTRAL_MID",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SPECTRAL_MID -> SPECTRAL_WEST",
-"prereq": "IMPOSSIBLE",
-}
-
-
-
-// || Area 0 Items ||
-
-{
-"edge": "YYYYYY -> NATURE_ORB",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "NATURE_ORB -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> PACK_UP_FOREST_NIGHT",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PACK_UP_FOREST_NIGHT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HP_UP_WEST_SPECTRAL",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_WEST_SPECTRAL -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> ATK_UP_FOREST_NIGHT",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "ATK_UP_FOREST_NIGHT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> PACK_UP_SPECTRAL",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PACK_UP_SPECTRAL -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_CAVE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_CAVE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HP_UP_CAVE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_CAVE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> BLESSED",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "BLESSED -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> TOXIC_STRIKE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "TOXIC_STRIKE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> PIKO_HAMMER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PIKO_HAMMER -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_FOREST_CAVE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_FOREST_CAVE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> TOUGH_SKIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "TOUGH_SKIN -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> REGEN_UP_CAVE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "REGEN_UP_CAVE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> WALL_JUMP",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "WALL_JUMP -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> REGEN_UP_MID_FOREST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "REGEN_UP_MID_FOREST -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_MID_SPECTRAL",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_MID_SPECTRAL -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HP_UP_MID_SPECTRAL",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_MID_SPECTRAL -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> CARROT_BOMB",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "CARROT_BOMB -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> DEF_TRADE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "DEF_TRADE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HP_UP_FOREST_POST_COCOA",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_FOREST_POST_COCOA -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> CHARGE_RING",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "CHARGE_RING -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> ARM_STRENGTH",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "ARM_STRENGTH -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> REGEN_UP_EAST_FOREST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "REGEN_UP_EAST_FOREST -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MANA_WAGER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MANA_WAGER -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_EAST_FOREST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_EAST_FOREST -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> PACK_UP_EAST_FOREST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PACK_UP_EAST_FOREST -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_CICINI",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_CICINI -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_NORTHEAST_FOREST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_NORTHEAST_FOREST -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-// < Area 0 Eggs >
-
-{
-"edge": "YYYYYY -> EGG_RUMI",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_RUMI -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_FORESTNIGHT_ARURAUNE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_FORESTNIGHT_ARURAUNE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_SPECTRAL_WEST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_SPECTRAL_WEST -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_CAVE_UNDER_HAMMER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_CAVE_UNDER_HAMMER -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_FORESTNIGHT_EAST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_FORESTNIGHT_EAST -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_SPECTRAL_SLIDE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_SPECTRAL_SLIDE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_CAVE_COCOA",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_CAVE_COCOA -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_FOREST_NE_LEDGE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_FOREST_NE_LEDGE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_FOREST_NE_PEDESTAL",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_FOREST_NE_PEDESTAL -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-
-// .---------------------'
-// | Area 1 : Western Coast
-// '---------------------.
-
-// Beach and Pyramid
-
-{
-"edge": "BEACH_MAIN -> BEACH_UNDERWATER_ENTRANCE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "BEACH_UNDERWATER_ENTRANCE -> BEACH_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "BEACH_MAIN -> BEACH_VOLCANIC_ENTRANCE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "BEACH_VOLCANIC_ENTRANCE -> BEACH_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "BEACH_MAIN -> PYRAMID_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PYRAMID_MAIN -> BEACH_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PYRAMID_MAIN -> PYRAMID_WARP_ROOM",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PYRAMID_WARP_ROOM -> PYRAMID_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PYRAMID_WARP_ROOM -> PYRAMID_LOWER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PYRAMID_LOWER -> PYRAMID_WARP_ROOM",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PYRAMID_LOWER -> CHAOS_ROD",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "CHAOS_ROD -> PYRAMID_LOWER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "CHAOS_ROD -> PYRAMID_SOUTHWEST_ROOM",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PYRAMID_SOUTHWEST_ROOM -> CHAOS_ROD",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PYRAMID_SOUTHWEST_ROOM -> PYRAMID_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PYRAMID_MAIN -> PYRAMID_SOUTHWEST_ROOM",
-"prereq": "IMPOSSIBLE",
-}
-
-
-// Graveyard and Sky Island
-
-{
-"edge": "GRAVEYARD_MAIN -> GRAVEYARD_UPPER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "GRAVEYARD_UPPER -> GRAVEYARD_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "GRAVEYARD_MAIN -> SKY_ISLAND_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SKY_ISLAND_MAIN -> GRAVEYARD_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SKY_ISLAND_MAIN -> SKY_ISLAND_UPPER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SKY_ISLAND_UPPER -> SKY_ISLAND_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-
-// || Area 1 Items ||
-
-{
-"edge": "YYYYYY -> SURVIVAL",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SURVIVAL -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HEALTH_WAGER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HEALTH_WAGER -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> ATK_UP_BEACH_CAVE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "ATK_UP_BEACH_CAVE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_GRAVEYARD_WARP",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_GRAVEYARD_WARP -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HP_UP_GRAVEYARD",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_GRAVEYARD -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> SUNNY_BEAM",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SUNNY_BEAM -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_UPPER_GRAVEYARD",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_UPPER_GRAVEYARD -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> AUTO_EARRINGS",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "AUTO_EARRINGS -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> AUTO_TRIGGER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "AUTO_TRIGGER -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HEALTH_PLUS",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HEALTH_PLUS -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_PYRAMID_DARK_ROOM",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_PYRAMID_DARK_ROOM -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> CRISIS_BOOST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "CRISIS_BOOST -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> ATK_UP_GRAVEYARD",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "ATK_UP_GRAVEYARD -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HP_UP_INNER_PYRAMID",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_INNER_PYRAMID -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HP_UP_BEACH",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_BEACH -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> ATK_UP_PYRAMID",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "ATK_UP_PYRAMID -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> PACK_UP_PYRAMID",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PACK_UP_PYRAMID -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> ARMORED",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "ARMORED -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> PACK_UP_BEACH",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PACK_UP_BEACH -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> TOP_FORM",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "TOP_FORM -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HP_UP_PYRAMID_ENTRANCE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_PYRAMID_ENTRANCE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HITBOX_DOWN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HITBOX_DOWN -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_PYRAMID_BOMBBLOCK_ROOM",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_PYRAMID_BOMBBLOCK_ROOM -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> AIR_DASH",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "AIR_DASH -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> REGEN_UP_PYRAMID",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "REGEN_UP_PYRAMID -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> PURE_LOVE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PURE_LOVE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_BEACH_TUNNEL",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_BEACH_TUNNEL -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HOURGLASS",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HOURGLASS -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HP_UP_SKY_ISLAND",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_SKY_ISLAND -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> PACK_UP_SKY_ISLAND",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PACK_UP_SKY_ISLAND -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> REGEN_UP_SKY_ISLAND",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "REGEN_UP_SKY_ISLAND -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_BEACH_PILLAR",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_BEACH_PILLAR -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-// < Area 1 Eggs >
-
-{
-"edge": "YYYYYY -> EGG_HALLOWEEN_WEST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_HALLOWEEN_WEST -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_BEACH_TO_AQUARIUM",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_BEACH_TO_AQUARIUM -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_HALLOWEEN_MID",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_HALLOWEEN_MID -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_HALLOWEEN_SW_SLIDE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_HALLOWEEN_SW_SLIDE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_HALLOWEEN_NEAR_BOSS",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_HALLOWEEN_NEAR_BOSS -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_HALLOWEEN_WARP_ZONE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_HALLOWEEN_WARP_ZONE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_GRAVEYARD_NEAR_LIBRARY",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_GRAVEYARD_NEAR_LIBRARY -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_HALLOWEEN_CICINI_ROOM",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_HALLOWEEN_CICINI_ROOM -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_LIBRARY",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_LIBRARY -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_PYRAMID_BEACH",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_PYRAMID_BEACH -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_HALLOWEEN_LEFT_PILLAR",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_HALLOWEEN_LEFT_PILLAR -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_HALLOWEEN_RIGHT_PILLAR",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_HALLOWEEN_RIGHT_PILLAR -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_PYRAMID_LOWER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_PYRAMID_LOWER -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_HALLOWEEN_PAST_PILLARS1",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_HALLOWEEN_PAST_PILLARS1 -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_HALLOWEEN_PAST_PILLARS2",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_HALLOWEEN_PAST_PILLARS2 -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_SKY_TOWN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_SKY_TOWN -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-
-// .---------------------'
-// | Area 2 : Island Core
-// '---------------------.
-
-
-// Ravine
-
-{
-"edge": "RAVINE_BEACH_ENTRANCE -> RAVINE_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "RAVINE_MAIN -> RAVINE_BEACH_ENTRANCE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "RAVINE_MAIN -> RAVINE_TOWN_ENTRANCE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "RAVINE_TOWN_ENTRANCE -> RAVINE_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "RAVINE_MAIN -> RAVINE_UPPER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "RAVINE_UPPER -> RAVINE_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "RAVINE_UPPER -> RAVINE_CHOCOLATE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "RAVINE_CHOCOLATE -> RAVINE_UPPER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "RAVINE_CHOCOLATE -> RAVINE_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "RAVINE_MAIN -> RAVINE_CHOCOLATE",
-"prereq": "IMPOSSIBLE",
-}
-
-
-// Park and Sky Bridge
-
-{
-"edge": "PARK_MAIN -> UPRPRC_BASE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "UPRPRC_BASE -> PARK_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PARK_MAIN -> PARK_UPPER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PARK_UPPER -> PARK_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PARK_UPPER -> SKY_BRIDGE_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SKY_BRIDGE_MAIN -> PARK_UPPER",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_EAST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SKY_BRIDGE_EAST -> SKY_BRIDGE_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_DARK_AREA",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SKY_BRIDGE_DARK_AREA -> SKY_BRIDGE_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SKY_BRIDGE_DARK_AREA -> SKY_BRIDGE_SLIDE_AREA",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SKY_BRIDGE_SLIDE_AREA -> SKY_BRIDGE_DARK_AREA",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_SLIDE_AREA",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SKY_BRIDGE_MAIN -> PARK_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SKY_BRIDGE_SLIDE_AREA -> PARK_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-
-// || Area 2 Items ||
-
-{
-"edge": "YYYYYY -> DEF_GROW",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "DEF_GROW -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> ATK_UP_PARK",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "ATK_UP_PARK -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> ATK_TRADE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "ATK_TRADE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HP_UP_PARK",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_PARK -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> RABI_SLIPPERS",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "RABI_SLIPPERS -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> REGEN_UP_PARK",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "REGEN_UP_PARK -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HEALTH_SURGE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HEALTH_SURGE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_SKY_BRIDGE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_SKY_BRIDGE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_UPRPRC_HQ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_UPRPRC_HQ -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_PARK",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_PARK -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HEX_CANCEL",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HEX_CANCEL -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HP_UP_SKY_BRIDGE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_SKY_BRIDGE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> PACK_UP_SKY_BRIDGE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PACK_UP_SKY_BRIDGE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> REGEN_UP_SKY_BRIDGE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "REGEN_UP_SKY_BRIDGE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> LUCKY_SEVEN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "LUCKY_SEVEN -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> ATK_UP_VANILLA",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "ATK_UP_VANILLA -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HAMMER_WAVE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HAMMER_WAVE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> ATK_UP_WEST_RAVINE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "ATK_UP_WEST_RAVINE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HP_UP_SOUTH_RAVINE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_SOUTH_RAVINE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> ATK_UP_NORTH_RAVINE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "ATK_UP_NORTH_RAVINE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> UNKNOWN_ITEM_1",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "UNKNOWN_ITEM_1 -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HP_UP_MID_RAVINE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_MID_RAVINE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_RAVINE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_RAVINE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> REGEN_UP_RAVINE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "REGEN_UP_RAVINE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MANA_SURGE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MANA_SURGE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> UNKNOWN_ITEM_2",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "UNKNOWN_ITEM_2 -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-
-// < Area 2 Eggs >
-
-{
-"edge": "YYYYYY -> EGG_PARK_SPIKES",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_PARK_SPIKES -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_PARK_GREEN_KOTRI",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_PARK_GREEN_KOTRI -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_UPRPRC_BASE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_UPRPRC_BASE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_SKY_BRIDGE_WARP",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_SKY_BRIDGE_WARP -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_SKY_BRIDGE_BY_VANILLA",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_SKY_BRIDGE_BY_VANILLA -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_RAVINE_ABOVE_CHOCOLATE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_RAVINE_ABOVE_CHOCOLATE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> EGG_RAVINE_MID",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "EGG_RAVINE_MID -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-
-// .---------------------'
-// | Area 3 : Northern Tundra
-// '---------------------.
-
-// Snowland, Palace and Icy Summit
-
-{
-"edge": "SNOWLAND_EAST -> SNOWLAND_WEST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SNOWLAND_WEST -> SNOWLAND_EAST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SNOWLAND_EAST -> ICY_SUMMIT_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "ICY_SUMMIT_MAIN -> SNOWLAND_EAST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SNOWLAND_WEST -> PALACE_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "PALACE_MAIN -> SNOWLAND_WEST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SNOWLAND_WEST -> SNOWLAND_EVERNIGHT_ENTRANCE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SNOWLAND_EVERNIGHT_ENTRANCE -> SNOWLAND_WEST",
-"prereq": "IMPOSSIBLE",
-}
-
-
-// Aquarium
-
-{
-"edge": "SNOWLAND_WEST -> AQUARIUM_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "AQUARIUM_MAIN -> SNOWLAND_WEST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SNOWLAND_EAST -> AQUARIUM_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "AQUARIUM_MAIN -> SNOWLAND_EAST",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "AQUARIUM_MAIN -> AQUARIUM_BOMB_WALLED_AREA",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
 {
-"edge": "AQUARIUM_MAIN -> AQUARIUM_ORB_SLIDE_MAZE",
-"prereq": "IMPOSSIBLE",
+"item": "NATURE_ORB",
+"from_location": "FOREST_NIGHT_WEST",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "AQUARIUM_ORB_SLIDE_MAZE -> AQUARIUM_MAIN",
-"prereq": "IMPOSSIBLE",
+"item": "PACK_UP_FOREST_NIGHT",
+"from_location": "FOREST_NIGHT_WEST",
+"entry_prereq": "(EXPLOSIVES_ENEMY | BLOCK_CLIP)",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "AQUARIUM_ORB_SLIDE_MAZE -> AQUARIUM_BOMB_WALLED_AREA",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_WEST_SPECTRAL",
+"from_location": "SPECTRAL_UPPER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_ORB_SLIDE_MAZE",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_FOREST_NIGHT",
+"from_location": "FOREST_NIGHT_ATK_UP_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_BEACH_ENTRANCE",
-"prereq": "IMPOSSIBLE",
+"item": "PACK_UP_SPECTRAL",
+"from_location": "SPECTRAL_UPPER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "AQUARIUM_BEACH_ENTRANCE -> AQUARIUM_BOMB_WALLED_AREA",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_CAVE",
+"from_location": "CAVE_ENTRANCE",
+"entry_prereq": "SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER",
 }
 
-
-// || Area 3 Items ||
-
-{
-"edge": "YYYYYY -> HP_UP_PALACE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_PALACE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> WATER_ORB",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "WATER_ORB -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> HP_UP_WEST_AQUARIUM",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_WEST_AQUARIUM -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MANA_PLUS",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MANA_PLUS -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> ATK_UP_PALACE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "ATK_UP_PALACE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> ATK_UP_SNOWLAND",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "ATK_UP_SNOWLAND -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> REGEN_UP_PALACE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "REGEN_UP_PALACE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> STAMINA_PLUS",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "STAMINA_PLUS -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> MP_UP_PALACE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "MP_UP_PALACE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> SELF_DEFENSE",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "SELF_DEFENSE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "AQUARIUM_MAIN -> HP_UP_UPPER_AQUARIUM",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_UPPER_AQUARIUM -> AQUARIUM_MAIN",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "HP_UP_UPPER_AQUARIUM -> ATK_UP_UPPER_AQUARIUM",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "ATK_UP_UPPER_AQUARIUM -> HP_UP_UPPER_AQUARIUM",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "YYYYYY -> GOLD_CARROT",
-"prereq": "IMPOSSIBLE",
-}
-
-{
-"edge": "GOLD_CARROT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
-
 {
-"edge": "YYYYYY -> PACK_UP_ICY_SUMMIT",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_CAVE",
+"from_location": "CAVE_ENTRANCE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "PACK_UP_ICY_SUMMIT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "BLESSED",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> ATK_UP_ICY_SUMMIT",
-"prereq": "IMPOSSIBLE",
+"item": "TOXIC_STRIKE",
+"from_location": "FOREST_START",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "ATK_UP_ICY_SUMMIT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "PIKO_HAMMER",
+"from_location": "FOREST_START",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> ATK_UP_MID_AQUARIUM",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_FOREST_CAVE",
+"from_location": "CAVE_COCOA",
+"entry_prereq": "SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER",
 }
 
 {
-"edge": "ATK_UP_MID_AQUARIUM -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "TOUGH_SKIN",
+"from_location": "SPECTRAL_WEST",
+"entry_prereq": "ASHURI_2 & TOWN_MAIN",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> MP_UP_ICY_SUMMIT",
-"prereq": "IMPOSSIBLE",
+"item": "REGEN_UP_CAVE",
+"from_location": "CAVE_COCOA",
+"entry_prereq": "(EXPLOSIVES_ENEMY | ITM_HARD) & SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
 }
 
 {
-"edge": "MP_UP_ICY_SUMMIT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_NORTH_FOREST",
+"from_location": "FOREST_NORTH_HP_UP_ROOM",
+"entry_prereq": "
+    ((EXPLOSIVES_ENEMY & SLIDING_POWDER) | DOWNDRILL_SEMISOLID_CLIP)
+",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> MP_UP_SNOWLAND",
-"prereq": "IMPOSSIBLE",
+"item": "WALL_JUMP",
+"from_location": "SPECTRAL_MID",
+"entry_prereq": "NONE",
+"exit_prereq": "RABI_SLIPPERS | AIR_JUMP | WALL_JUMP | (ITM_HARD & (AIR_DASH | SLIDING_POWDER)) | (SPEED5 & ADV_STUPID)",
 }
 
 {
-"edge": "MP_UP_SNOWLAND -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "REGEN_UP_MID_FOREST",
+"from_location": "FOREST_START",
+"entry_prereq": "
+    (ITM_HARD & (WALL_JUMP_LV2 | BUNNY_WHIRL))
+    | AIR_JUMP
+    | ((RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL) & WALL_JUMP_LV2)
+",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> QUICK_BARRETTE",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_MID_SPECTRAL",
+"from_location": "SPECTRAL_UPPER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "QUICK_BARRETTE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_MID_SPECTRAL",
+"from_location": "SPECTRAL_UPPER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> HP_UP_ICY_SUMMIT",
-"prereq": "IMPOSSIBLE",
+"item": "CARROT_BOMB",
+"from_location": "FOREST_START",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "HP_UP_ICY_SUMMIT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "DEF_TRADE",
+"from_location": "FOREST_START",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> SUPER_CARROT",
-"prereq": "IMPOSSIBLE",
+"item": "LIGHT_ORB",
+"from_location": "FOREST_LIGHT_ORB_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "SUPER_CARROT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_FOREST_POST_COCOA",
+"from_location": "FOREST_START",
+"entry_prereq": "PIKO_HAMMER | EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> REGEN_UP_SNOWLAND_WATER",
-"prereq": "IMPOSSIBLE",
+"item": "CHARGE_RING",
+"from_location": "CAVE_COCOA",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "REGEN_UP_SNOWLAND_WATER -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "ARM_STRENGTH",
+"from_location": "SPECTRAL_WARP",
+"entry_prereq": "(BUNNY_STRIKE & ITM_HARD) | AIR_DASH | AIR_JUMP | ADV_STUPID",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> MP_UP_AQUARIUM",
-"prereq": "IMPOSSIBLE",
+"item": "REGEN_UP_EAST_FOREST",
+// XXX this exits to FOREST_START
+"from_location": "FOREST_UPPER_EAST",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "MP_UP_AQUARIUM -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "MANA_WAGER",
+"from_location": "FOREST_UPPER_EAST",
+"entry_prereq": "
+    (BUNNY_WHIRL & ITM_HARD)
+    | (AIR_JUMP & (RABI_SLIPPERS | ITM_HARD))
+    | (AIR_DASH & (RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL | ADV_VHARD))",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> HP_UP_SNOWLAND",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_EAST_FOREST",
+"from_location": "FOREST_START",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "HP_UP_SNOWLAND -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "PACK_UP_EAST_FOREST",
+"from_location": "FOREST_START",
+"entry_prereq": "(PIKO_HAMMER | EXPLOSIVES_ENEMY) & SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER",
 }
 
 {
-"edge": "YYYYYY -> CARROT_BOOST",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_CICINI",
+"from_location": "SPECTRAL_WARP",
+"entry_prereq": "COCOA_1 & KOTRI_1",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "CARROT_BOOST -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_NORTHEAST_FOREST",
+"from_location": "FOREST_UPPER_EAST",
+"entry_prereq": "EXPLOSIVES_ENEMY & SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER",
 }
 
 {
-"edge": "YYYYYY -> REGEN_UP_AQUARIUM",
-"prereq": "IMPOSSIBLE",
+"item": "SURVIVAL",
+"from_location": "GRAVEYARD_UPPER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "REGEN_UP_AQUARIUM -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "HEALTH_WAGER",
+"from_location": "GRAVEYARD_UPPER",
+"entry_prereq": "
+    (AIR_JUMP & AIR_DASH)
+    | ((AIR_JUMP | AIR_DASH) & (ITM_HARD | WALL_JUMP))
+    | (ADV_STUPID & BUNNY_STRIKE)
+",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> PACK_UP_AQUARIUM",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_BEACH_CAVE",
+"from_location": "BEACH_UNDERWATER_ENTRANCE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "PACK_UP_AQUARIUM -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_GRAVEYARD_WARP",
+"from_location": "GRAVEYARD_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
-
-// < Area 3 Eggs >
-
-{
-"edge": "YYYYYY -> EGG_SNOWLAND_TO_EVERNIGHT",
-"prereq": "IMPOSSIBLE",
-}
-
 {
-"edge": "EGG_SNOWLAND_TO_EVERNIGHT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_GRAVEYARD",
+"from_location": "GRAVEYARD_MAIN",
+// XXX coming from the top of the bridge is free
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_PALACE_BRIDGE",
-"prereq": "IMPOSSIBLE",
+"item": "SUNNY_BEAM",
+"from_location": "BEACH_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_PALACE_BRIDGE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_UPPER_GRAVEYARD",
+"from_location": "GRAVEYARD_UPPER",
+"entry_prereq": "
+// Getting onto the ledge
+    (AIR_JUMP | AIR_DASH | ITM_HARD)
+    & (CARROT_BOMB | BLOCK_CLIP)
+",
+// XXX exits to GRAVEYARD_MAIN
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_AQUARIUM",
-"prereq": "IMPOSSIBLE",
+"item": "AUTO_EARRINGS",
+"from_location": "GRAVEYARD_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_AQUARIUM -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "AUTO_TRIGGER",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME & IMPOSSIBLE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_PALACE_WALL",
-"prereq": "IMPOSSIBLE",
+"item": "HEALTH_PLUS",
+"from_location": "BEACH_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_PALACE_WALL -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_PYRAMID_DARK_ROOM",
+"from_location": "PYRAMID_SOUTHWEST_ROOM",
+"entry_prereq": "DARKNESS",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_SNOWLAND_WARP",
-"prereq": "IMPOSSIBLE",
+"item": "CRISIS_BOOST",
+"from_location": "GRAVEYARD_MAIN",
+"entry_prereq": "
+    (AIR_JUMP & (RABI_SLIPPERS | ITM_HARD))
+    | (AIR_DASH & (RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL))
+",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_SNOWLAND_WARP -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_GRAVEYARD",
+"from_location": "GRAVEYARD_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_ICY_SUMMIT_NIXIE",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_INNER_PYRAMID",
+"from_location": "PYRAMID_MAIN",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_ICY_SUMMIT_NIXIE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_BEACH",
+"from_location": "BEACH_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_ICY_SUMMIT_WARP",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_PYRAMID",
+"from_location": "PYRAMID_MAIN",
+"entry_prereq": "CARROT_BOMB",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_ICY_SUMMIT_WARP -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "PACK_UP_PYRAMID",
+"from_location": "PYRAMID_MAIN",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
+// entry_prereq was changed to NONE as the bunny can blow it up for you.
 {
-"edge": "YYYYYY -> EGG_SNOWLAND_LAKE",
-"prereq": "IMPOSSIBLE",
+"item": "ARMORED",
+"from_location": "PYRAMID_MAIN",
+"entry_prereq": "NONE",
+//"entry_prereq": "BLOCK_CLIP | CARROT_BOMB",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_SNOWLAND_LAKE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "CHAOS_ROD",
+"from_location": "PYRAMID_CHAOS_ROD_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
-
-
-// .---------------------'
-// | Area 4 : Eastern Highlands
-// '---------------------.
-
 
-// Riverbank
-
 {
-"edge": "RIVERBANK_MAIN -> RIVERBANK_LOWER",
-"prereq": "IMPOSSIBLE",
+"item": "PACK_UP_BEACH",
+"from_location": "BEACH_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY | BLOCK_CLIP",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "RIVERBANK_LOWER -> RIVERBANK_MAIN",
-"prereq": "IMPOSSIBLE",
+"item": "TOP_FORM",
+"from_location": "SKY_ISLAND_UPPER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "RIVERBANK_MAIN -> RIVERBANK_CROSS_PASSAGEWAY",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_PYRAMID_ENTRANCE",
+"from_location": "BEACH_MAIN",
+"entry_prereq": "CARROT_BOMB | (CARROT_SHOOTER & BOOST & ITM_HARD)",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "RIVERBANK_CROSS_PASSAGEWAY -> PACK_UP_RIVERBANK",
-"prereq": "IMPOSSIBLE",
+"item": "HITBOX_DOWN",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME & CARROT_BOMB & IMPOSSIBLE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "PACK_UP_RIVERBANK -> RIVERBANK_LOWER_FOREST_ENTRANCE",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_PYRAMID_BOMBBLOCK_ROOM",
+"from_location": "PYRAMID_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "RIVERBANK_LOWER_FOREST_ENTRANCE -> PACK_UP_RIVERBANK",
-"prereq": "IMPOSSIBLE",
+"item": "AIR_DASH",
+"from_location": "SKY_ISLAND_MAIN",
+"entry_prereq": "EXPLOSIVES & SLIDING_POWDER",
+"exit_prereq": "EXPLOSIVES",
 }
 
 {
-"edge": "RIVERBANK_CROSS_PASSAGEWAY -> RIVERBANK_LOWER",
-"prereq": "IMPOSSIBLE",
+"item": "REGEN_UP_PYRAMID",
+"from_location": "PYRAMID_WARP_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "RIVERBANK_LOWER -> RIVERBANK_LOWER_FOREST_ENTRANCE",
-"prereq": "IMPOSSIBLE",
+"item": "PURE_LOVE",
+"from_location": "SKY_ISLAND_UPPER",
+"entry_prereq": "EXPLOSIVES & SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER",
 }
 
 {
-"edge": "RIVERBANK_LOWER_FOREST_ENTRANCE -> RIVERBANK_LOWER",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_BEACH_TUNNEL",
+"from_location": "BEACH_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "RIVERBANK_LOWER_FOREST_ENTRANCE -> MP_UP_SOUTHWEST_RIVERBANK",
-"prereq": "IMPOSSIBLE",
+"item": "HOURGLASS",
+"from_location": "PYRAMID_HOURGLASS_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "MP_UP_SOUTHWEST_RIVERBANK -> RIVERBANK_LOWER",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_SKY_ISLAND",
+"from_location": "SKY_ISLAND_MAIN",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "MP_UP_SOUTHWEST_RIVERBANK -> REGEN_UP_SOUTH_RIVERBANK",
-"prereq": "IMPOSSIBLE",
+"item": "PACK_UP_SKY_ISLAND",
+"from_location": "SKY_ISLAND_UPPER",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "REGEN_UP_SOUTH_RIVERBANK -> MP_UP_SOUTHWEST_RIVERBANK",
-"prereq": "IMPOSSIBLE",
+"item": "REGEN_UP_SKY_ISLAND",
+"from_location": "SKY_ISLAND_MAIN",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
 }
-
 
-// Evernight
-
 {
-"edge": "RIVERBANK_MAIN -> EVERNIGHT_MAIN",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_BEACH_PILLAR",
+"from_location": "BEACH_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_MAIN -> RIVERBANK_MAIN",
-"prereq": "IMPOSSIBLE",
+"item": "DEF_GROW",
+"from_location": "PARK_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_MAIN -> EVERNIGHT_SAYA",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_PARK",
+"from_location": "PARK_UPPER",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_SAYA -> EVERNIGHT_MAIN",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_TRADE",
+"from_location": "PARK_MAIN",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_SAYA -> EVERNIGHT_CORRIDOR_BELOW_SAYA",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_PARK",
+"from_location": "PARK_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_CORRIDOR_BELOW_SAYA -> EVERNIGHT_SAYA",
-"prereq": "IMPOSSIBLE",
+"item": "RABI_SLIPPERS",
+"from_location": "PARK_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_CORRIDOR_BELOW_SAYA -> EVERNIGHT_EAST_OF_WARP",
-"prereq": "IMPOSSIBLE",
+"item": "REGEN_UP_PARK",
+"from_location": "PARK_UPPER",
+"entry_prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
+"exit_prereq": "SLIDING_POWDER",
 }
 
 {
-"edge": "EVERNIGHT_EAST_OF_WARP -> EVERNIGHT_CORRIDOR_BELOW_SAYA",
-"prereq": "IMPOSSIBLE",
+"item": "HEALTH_SURGE",
+"from_location": "SKY_BRIDGE_HEALTH_SURGE_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_EAST_OF_WARP -> EVERNIGHT_LOWER",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_SKY_BRIDGE",
+"from_location": "SKY_BRIDGE_MAIN",
+"entry_prereq": "EXPLOSIVES & SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
 }
 
 {
-"edge": "EVERNIGHT_LOWER -> EVERNIGHT_EAST_OF_WARP",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_UPRPRC_HQ",
+"from_location": "UPRPRC_BASE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_MAIN -> EVERNIGHT_WARP",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_PARK",
+"from_location": "PARK_MAIN",
+"entry_prereq": "RABI_SLIPPERS | SLIDING_POWDER | AIR_DASH | AIR_JUMP | (SPEED2 & ITM_HARD)",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_WARP -> EVERNIGHT_MAIN",
-"prereq": "IMPOSSIBLE",
+"item": "HEX_CANCEL",
+"from_location": "SKY_BRIDGE_SLIDE_AREA",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_WARP -> EVERNIGHT_EAST_OF_WARP",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_SKY_BRIDGE",
+"from_location": "SKY_BRIDGE_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_EAST_OF_WARP -> EVERNIGHT_WARP",
-"prereq": "IMPOSSIBLE",
+"item": "PACK_UP_SKY_BRIDGE",
+"from_location": "SKY_BRIDGE_SLIDE_AREA",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_WARP -> EVERNIGHT_LOWER",
-"prereq": "IMPOSSIBLE",
+"item": "REGEN_UP_SKY_BRIDGE",
+"from_location": "SKY_BRIDGE_REGEN_UP_LEDGE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_LOWER -> EVERNIGHT_WARP",
-"prereq": "IMPOSSIBLE",
+"item": "LUCKY_SEVEN",
+"from_location": "SKY_BRIDGE_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_LOWER -> RIVERBANK_LOWER",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_VANILLA",
+"from_location": "SKY_BRIDGE_EAST",
+"entry_prereq": "
+    (CARROT_BOMB | (CARROT_SHOOTER & BOOST & ITM_HARD)) &
+    SLIDING_POWDER
+",
+"exit_prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
 }
-
 
-// Lab
-
 {
-"edge": "RIVERBANK_LOWER -> LAB_ENTRANCE",
-"prereq": "IMPOSSIBLE",
+"item": "HAMMER_WAVE",
+"from_location": "RAVINE_UPPER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "LAB_ENTRANCE -> RIVERBANK_LOWER",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_WEST_RAVINE",
+"from_location": "RAVINE_UPPER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "LAB_ENTRANCE -> LAB_MID",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_SOUTH_RAVINE",
+"from_location": "RAVINE_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
+"exit_prereq": "(SLIDING_POWDER | HAMMER_ROLL_ZIP)",
 }
 
 {
-"edge": "LAB_MID -> LAB_ENTRANCE",
-"prereq": "IMPOSSIBLE",
-}
+"item": "ATK_UP_NORTH_RAVINE",
+"from_location": "RAVINE_UPPER",
+"entry_prereq": "
+    (
+        SLIDING_POWDER
+        | HAMMER_ROLL_ZIP
+        | (AIR_JUMP & WALL_JUMP_LV2 & SPEED5 & ADV_STUPID)
 
-{
-"edge": "LAB_MID -> SLIDING_POWDER",
-"prereq": "IMPOSSIBLE",
+// If going around and using slide is not an option:
+//        | (ADV_STUPID & (SPEED5 | SLIDING_POWDER) & (
+//            (SLIDE_JUMP_BUNSTRIKE_CANCEL & RABI_SLIPPERS & WALL_JUMP & AIR_JUMP)
+//            | (SLIDE_JUMP_BUNSTRIKE_CANCEL & RABI_SLIPPERS & WALL_JUMP_LV2)
+//            | (AIR_JUMP & WALL_JUMP_LV2)
+    )
+    & (EXPLOSIVES | BLOCK_CLIP)
+",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "SLIDING_POWDER -> LAB_MID",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_MID_RAVINE",
+"from_location": "RAVINE_MAIN",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "SLIDING_POWDER -> LAB_WEST",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_RAVINE",
+"from_location": "RAVINE_UPPER",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "LAB_WEST -> SLIDING_POWDER",
-"prereq": "IMPOSSIBLE",
+"item": "REGEN_UP_RAVINE",
+"from_location": "RAVINE_MAIN",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "LAB_WEST -> LAB_MID",
-"prereq": "IMPOSSIBLE",
+"item": "MANA_SURGE",
+"from_location": "RAVINE_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "LAB_MID -> LAB_WEST",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_PALACE",
+"from_location": "PALACE_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "LAB_MID -> LAB_EAST",
-"prereq": "IMPOSSIBLE",
+"item": "WATER_ORB",
+"from_location": "PALACE_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "LAB_EAST -> LAB_MID",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_WEST_AQUARIUM",
+"from_location": "AQUARIUM_MAIN",
+"entry_prereq": "DARKNESS & EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "LAB_EAST -> LAB_COMPUTER_ROOM",
-"prereq": "IMPOSSIBLE",
+"item": "MANA_PLUS",
+"from_location": "AQUARIUM_MAIN",
+"entry_prereq": "DARKNESS",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "LAB_COMPUTER_ROOM -> LAB_EAST",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_PALACE",
+"from_location": "PALACE_MAIN",
+"entry_prereq": "FIRE_ORB",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "LAB_ENTRANCE -> LAB_EAST",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_SNOWLAND",
+"from_location": "SNOWLAND_WEST",
+"entry_prereq": "EXPLOSIVES_ENEMY & (SLIDING_POWDER | HAMMER_ROLL | BLOCK_CLIP)",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "LAB_EAST -> LAB_ENTRANCE",
-"prereq": "IMPOSSIBLE",
+"item": "REGEN_UP_PALACE",
+"from_location": "PALACE_MAIN",
+"entry_prereq": "
+    DARKNESS &
+    (
+        (ITM_HARD & (BUNNY_STRIKE | BUNNY_WHIRL))
+        | AIR_DASH
+        | AIR_JUMP
+        // rwj left wall, wallkick overhang
+        | (RABI_SLIPPERS & ((ITM_HARD & SPEED2) | ADV_STUPID))
+        // wimpy right corner, bounce left wall, amulet (similar to spike barrier)
+        | ADV_STUPID
+    )
+",
+"exit_prereq": "NONE",
 }
-
 
-// || Area 4 Items ||
-
 {
-"edge": "YYYYYY -> REGEN_UP_NORTHWEST_RIVERBANK",
-"prereq": "IMPOSSIBLE",
+"item": "STAMINA_PLUS",
+"from_location": "PALACE_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "REGEN_UP_NORTHWEST_RIVERBANK -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_PALACE",
+"from_location": "PALACE_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> ATK_GROW",
-"prereq": "IMPOSSIBLE",
+"item": "SELF_DEFENSE",
+"from_location": "SNOWLAND_WEST",
+"entry_prereq": "SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER",
 }
 
 {
-"edge": "ATK_GROW -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_UPPER_AQUARIUM",
+"from_location": "AQUARIUM_WATER_TOWER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> ATK_UP_RIVERBANK_PIT",
-"prereq": "IMPOSSIBLE",
+"item": "GOLD_CARROT",
+"from_location": "ICY_SUMMIT_MAIN",
+"entry_prereq": "
+    AIR_JUMP | (
+        (BUNNY_WHIRL | AIR_DASH | ((SLIDING_POWDER | (SPEED1 & ITM_HARD)) & RABI_SLIPPERS) | BUNNY_STRIKE)
+        & WALL_JUMP_LV2
+    )",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "ATK_UP_RIVERBANK_PIT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_UPPER_AQUARIUM",
+"from_location": "AQUARIUM_WATER_TOWER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> BUNNY_WHIRL",
-"prereq": "IMPOSSIBLE",
+"item": "PACK_UP_ICY_SUMMIT",
+"from_location": "ICY_SUMMIT_MAIN",
+"entry_prereq": "AIR_JUMP | AIR_DASH | (BUNNY_WHIRL & ITM_HARD)",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "BUNNY_WHIRL -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_ICY_SUMMIT",
+"from_location": "ICY_SUMMIT_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EXPLODE_SHOT",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_MID_AQUARIUM",
+"from_location": "AQUARIUM_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EXPLODE_SHOT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_ICY_SUMMIT",
+"from_location": "ICY_SUMMIT_MAIN",
+"entry_prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP | RABI_SLIPPERS | AIR_JUMP | WALL_JUMP | (BUNNY_WHIRL & ITM_HARD) | (SPEED1 & ITM_VHARD)",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> MP_UP_MID_RIVERBANK",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_SNOWLAND",
+"from_location": "SNOWLAND_EAST",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "MP_UP_MID_RIVERBANK -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "QUICK_BARRETTE",
+"from_location": "SNOWLAND_EAST",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> ATK_UP_EAST_RIVERBANK",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_ICY_SUMMIT",
+"from_location": "ICY_SUMMIT_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "ATK_UP_EAST_RIVERBANK -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "SUPER_CARROT",
+"from_location": "ICY_SUMMIT_MAIN",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> SPIKE_BARRIER",
-"prereq": "IMPOSSIBLE",
+"item": "REGEN_UP_SNOWLAND_WATER",
+"from_location": "SNOWLAND_EAST",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "SPIKE_BARRIER -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_AQUARIUM",
+"from_location": "AQUARIUM_BOMB_WALLED_AREA",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> FRAME_CANCEL",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_SNOWLAND",
+"from_location": "SNOWLAND_EAST",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "FRAME_CANCEL -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "CARROT_BOOST",
+"from_location": "SNOWLAND_EAST",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> HP_UP_LAB_SLIDE_TUNNEL",
-"prereq": "IMPOSSIBLE",
+"item": "REGEN_UP_AQUARIUM",
+"from_location": "AQUARIUM_ORB_SLIDE_MAZE",
+"entry_prereq": "SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER",
 }
 
 {
-"edge": "HP_UP_LAB_SLIDE_TUNNEL -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "PACK_UP_AQUARIUM",
+"from_location": "AQUARIUM_BOMB_WALLED_AREA",
+"entry_prereq": "EXPLOSIVES | (HAMMER_ROLL_ZIP & WATER_ORB)",
+"exit_prereq": "EXPLOSIVES",
 }
 
 {
-"edge": "YYYYYY -> MP_UP_LAB",
-"prereq": "IMPOSSIBLE",
+"item": "REGEN_UP_NORTHWEST_RIVERBANK",
+"from_location": "RIVERBANK_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "MP_UP_LAB -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "PACK_UP_RIVERBANK",
+"from_location": "RIVERBANK_PACK_UP_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> HP_UP_RIVERBANK",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_SOUTHWEST_RIVERBANK",
+"from_location": "RIVERBANK_UNDERGROUND",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "HP_UP_RIVERBANK -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_GROW",
+"from_location": "RIVERBANK_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> MP_UP_EVERNIGHT",
-"prereq": "IMPOSSIBLE",
+"item": "REGEN_UP_SOUTH_RIVERBANK",
+"from_location": "RIVERBANK_UNDERGROUND",
+"entry_prereq": "DARKNESS & EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "MP_UP_EVERNIGHT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_RIVERBANK_PIT",
+"from_location": "RIVERBANK_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> HP_UP_EVERNIGHT",
-"prereq": "IMPOSSIBLE",
+"item": "BUNNY_WHIRL",
+"from_location": "RIVERBANK_LOWER",
+"entry_prereq": "
+    PIKO_HAMMER | (CARROT_SHOOTER & BOOST & ITM_HARD)
+    // slide zip from bomb block slide tunnel in room to the left
+    | SLIDE_ZIP
+",
+"exit_prereq": "BUNNY_WHIRL | AIR_DASH | (CARROT_SHOOTER_ENTRY & BOOST & ITM_HARD) | DOWNDRILL_SEMISOLID_CLIP",
 }
 
 {
-"edge": "HP_UP_EVERNIGHT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EXPLODE_SHOT",
+"from_location": "RIVERBANK_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> HP_UP_LAB_PIT",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_MID_RIVERBANK",
+"from_location": "RIVERBANK_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+// only relevant if boost is not obtained
+"exit_prereq": "
+    EXPLOSIVES
+    | SLIDE_ZIP
+    | AIR_JUMP
+    | WALL_JUMP_LV2
+    | (SLIDE_JUMP_BUNSTRIKE_CANCEL & (RABI_SLIPPERS | SPEED1))
+    | (RABI_SLIPPERS & ADV_HARD & (SPEED2 | (SPEED1 & WALL_JUMP)))
+",
 }
 
 {
-"edge": "HP_UP_LAB_PIT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_EAST_RIVERBANK",
+"from_location": "RIVERBANK_LOWER",
+"entry_prereq": "(EXPLOSIVES & SLIDING_POWDER) | DOWNDRILL_SEMISOLID_CLIP",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> SLIDING_POWDER",
-"prereq": "IMPOSSIBLE",
+"item": "SPIKE_BARRIER",
+"from_location": "EVERNIGHT_SPIKE_BARRIER_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "SLIDING_POWDER -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "FRAME_CANCEL",
+"from_location": "RIVERBANK_MAIN",
+"entry_prereq": " EXPLOSIVES_ENEMY & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
+"exit_prereq": "(CARROT_BOMB_ENTRY | CARROT_SHOOTER_ENTRY) & SLIDING_POWDER",
 }
 
 {
-"edge": "YYYYYY -> ATK_UP_EVERNIGHT_UPRPRC",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_LAB_SLIDE_TUNNEL",
+"from_location": "LAB_WEST",
+"entry_prereq": "SLIDING_POWDER",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "ATK_UP_EVERNIGHT_UPRPRC -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_LAB",
+"from_location": "LAB_WEST",
+"entry_prereq": "SLIDING_POWDER",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> CASHBACK",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_RIVERBANK",
+"from_location": "RIVERBANK_LOWER",
+"entry_prereq": "EXPLOSIVES_ENEMY | BUNNY_WHIRL | AIR_DASH | BLOCK_CLIP | PIKO_HAMMER_LEVELED",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "CASHBACK -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_EVERNIGHT",
+"from_location": "EVERNIGHT_WARP",
+"entry_prereq": "
+    DARKNESS & SLIDING_POWDER
+    & (
+        (AIR_JUMP & (RABI_SLIPPERS | AIR_DASH | ITM_HARD))
+        | (BUNNY_WHIRL & ITM_HARD)
+        | (RABI_SLIPPERS & AIR_DASH)
+        | (BUNNY_STRIKE & AIR_DASH & ITM_HARD)
+        | ADV_STUPID // wimpy, bounce, spam amulet (same as spike barrier jump)
+    )
+",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> PLUS_NECKLACE",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_EVERNIGHT",
+"from_location": "EVERNIGHT_MAIN",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "PLUS_NECKLACE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_LAB_PIT",
+"from_location": "LAB_MID",
+"entry_prereq": "CARROT_BOMB",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> WEAKEN",
-"prereq": "IMPOSSIBLE",
+"item": "SLIDING_POWDER",
+"from_location": "LAB_SLIDING_POWDER_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "WEAKEN -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_EVERNIGHT_UPRPRC",
+"from_location": "EVERNIGHT_MAIN",
+"entry_prereq": "SLIDING_POWDER & (EXPLOSIVES | DOWNDRILL_SEMISOLID_CLIP)",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> ATK_UP_LAB_COMPUTER",
-"prereq": "IMPOSSIBLE",
+"item": "CASHBACK",
+"from_location": "EVERNIGHT_LOWER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "ATK_UP_LAB_COMPUTER -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "PLUS_NECKLACE",
+"from_location": "EVERNIGHT_WARP",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> PACK_UP_SOUTH_EVERNIGHT",
-"prereq": "IMPOSSIBLE",
+"item": "WEAKEN",
+"from_location": "LAB_ENTRANCE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "PACK_UP_SOUTH_EVERNIGHT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_LAB_COMPUTER",
+"from_location": "LAB_EAST",
+"entry_prereq": "EXPLOSIVES | BLOCK_CLIP",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> PACK_UP_NORTH_EVERNIGHT",
-"prereq": "IMPOSSIBLE",
+"item": "PACK_UP_SOUTH_EVERNIGHT",
+"from_location": "EVERNIGHT_LOWER",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "PACK_UP_NORTH_EVERNIGHT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "PACK_UP_NORTH_EVERNIGHT",
+"from_location": "EVERNIGHT_MAIN",
+"entry_prereq": "AIR_DASH | AIR_JUMP | (BUNNY_STRIKE & ITM_HARD) | (RABI_SLIPPERS & ADV_STUPID) | (WALL_JUMP_LV2 & ADV_STUPID)",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> REGEN_UP_EVERNIGHT",
-"prereq": "IMPOSSIBLE",
+"item": "REGEN_UP_EVERNIGHT",
+"from_location": "EVERNIGHT_SAYA",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "REGEN_UP_EVERNIGHT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_EVERNIGHT",
+"from_location": "EVERNIGHT_CORRIDOR_BELOW_SAYA",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> ATK_UP_EVERNIGHT",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_EAST_LAB",
+"from_location": "LAB_EAST",
+"entry_prereq": "
+    EXPLOSIVES_ENEMY &
+    (
+        AIR_JUMP
+        | AIR_DASH
+        | (RABI_SLIPPERS & ADV_STUPID)
+        | HAMMER_ROLL_ZIP
+        | (RABI_SLIPPERS & BUNNY_STRIKE & ITM_HARD)
+    )
+",
+"exit_prereq": "NONE",
 }
 
+// XXX this is between LAB_EAST and LAB_ENTRANCE
 {
-"edge": "ATK_UP_EVERNIGHT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "PACK_UP_LAB",
+"from_location": "LAB_EAST",
+"entry_prereq": "EXPLOSIVES | DOWNDRILL_SEMISOLID_CLIP",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> ATK_UP_EAST_LAB",
-"prereq": "IMPOSSIBLE",
+"item": "HAMMER_ROLL",
+"from_location": "EVERNIGHT_EAST_OF_WARP",
+"entry_prereq": "BUNNY_WHIRL",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "ATK_UP_EAST_LAB -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "RIBBON_BADGE",
+"from_location": "TOWN_MAIN",
+"entry_prereq": "POST_IRISU & SLIDING_POWDER",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> PACK_UP_LAB",
-"prereq": "IMPOSSIBLE",
+"item": "ERINA_BADGE",
+"from_location": "TOWN_MAIN",
+"entry_prereq": "POST_IRISU & SLIDING_POWDER",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "PACK_UP_LAB -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_VOLCANIC",
+"from_location": "VOLCANIC_BEACH_ENTRANCE",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> HAMMER_ROLL",
-"prereq": "IMPOSSIBLE",
+"item": "CARROT_SHOOTER",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "HAMMER_ROLL -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "FIRE_ORB",
+"from_location": "VOLCANIC_MAIN",
+// 1.8 requirements
+"entry_prereq": "FIRE_ORB | CARROT_BOMB | (CARROT_SHOOTER & (BOOST | CHARGE_RING))",
+"exit_prereq": "FIRE_ORB | (RABI_SLIPPERS & AIR_JUMP & WALL_JUMP_LV2)",
+// 1.75 requirements
+//"entry_prereq": "CARROT_BOMB | (CARROT_SHOOTER & (BOOST | CHARGE_RING))",
+//"exit_prereq": "EXPLOSIVES_ENEMY | (RABI_SLIPPERS & AIR_JUMP & WALL_JUMP_LV2)",
 }
-
 
-// < Area 4 Eggs >
-
 {
-"edge": "YYYYYY -> EGG_RIVERBANK_SPIDER_SPIKE",
-"prereq": "IMPOSSIBLE",
+"item": "PACK_UP_VOLCANIC",
+"from_location": "VOLCANIC_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_RIVERBANK_SPIDER_SPIKE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "REGEN_UP_CYBERSPACE",
+"from_location": "SYSTEM_INTERIOR_MAIN",
+"entry_prereq": "(CARROT_BOMB | (CARROT_SHOOTER & BOOST & ADV_STUPID)) & (AIR_JUMP | AIR_DASH | (BUNNY_STRIKE & ITM_HARD) | ADV_STUPID)",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_RIVERBANK_WALL",
-"prereq": "IMPOSSIBLE",
+"item": "PACK_UP_CYBERSPACE",
+"from_location": "SYSTEM_INTERIOR_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_RIVERBANK_WALL -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "CYBER_FLOWER",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME & IMPOSSIBLE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_LAB",
-"prereq": "IMPOSSIBLE",
+"item": "AIR_JUMP",
+"from_location": "SYSTEM_INTERIOR_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "AIR_JUMP | AIR_DASH | BUNNY_STRIKE | DOWNDRILL_SEMISOLID_CLIP",
 }
 
 {
-"edge": "EGG_LAB -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "HP_UP_CYBERSPACE",
+"from_location": "SYSTEM_INTERIOR_MAIN",
+"entry_prereq": "SLIDING_POWDER & CARROT_BOMB & ((AIR_JUMP & (RABI_SLIPPERS | ADV_STUPID)) | (BUNNY_WHIRL & ADV_STUPID))",
+"exit_prereq": "SLIDING_POWDER",
 }
 
 {
-"edge": "YYYYYY -> EGG_EVERNIGHT_MID",
-"prereq": "IMPOSSIBLE",
+"item": "ATK_UP_CYBERSPACE",
+"from_location": "SYSTEM_INTERIOR_MAIN",
+"entry_prereq": "CARROT_BOMB | (CARROT_SHOOTER & BOOST & ADV_STUPID)",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_EVERNIGHT_MID -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "MP_UP_CYBERSPACE",
+"from_location": "SYSTEM_INTERIOR_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
-{
-"edge": "YYYYYY -> EGG_EVERNIGHT_SAYA",
-"prereq": "IMPOSSIBLE",
-}
+// EGGS
 
 {
-"edge": "EGG_EVERNIGHT_SAYA -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_CAVE_COCOA",
+"from_location": "CAVE_COCOA",
+"entry_prereq": "ADV_STUPID | EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
-
-
-// .---------------------'
-// | Area 5 : Rabi Rabi Town
-// '---------------------.
-
-// || Area 5 Items ||
 
 {
-"edge": "YYYYYY -> RIBBON_BADGE",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_CAVE_UNDER_HAMMER",
+"from_location": "CAVE_ENTRANCE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
+// XXX from FOREST_START: (AIR_JUMP & WALL_JUMP_LV2) | (BUNNY_WHIRL & WALL_JUMP_LV2)
+// maybe add another location between FOREST_START, FOREST_UPPER_EAST, FOREST_LIGHT_ORB_ROOM?
 {
-"edge": "RIBBON_BADGE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_FOREST_NE_LEDGE",
+"from_location": "FOREST_UPPER_EAST",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> ERINA_BADGE",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_FOREST_NE_PEDESTAL",
+"from_location": "FOREST_UPPER_EAST",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "ERINA_BADGE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_FORESTNIGHT_ARURAUNE",
+"from_location": "FOREST_NIGHT_WEST",
+"entry_prereq": "DARKNESS & EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
-
-// < Area 5 Eggs >
-
 {
-"edge": "YYYYYY -> EGG_TOWN",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_FORESTNIGHT_EAST",
+"from_location": "FOREST_NIGHT_NORTH_EAST",
+"entry_prereq": "DARKNESS & EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_TOWN -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_RUMI",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME",
+"exit_prereq": "NONE",
 }
-
-
-// .---------------------'
-// | Area 6 : Plurkwood
-// '---------------------.
-
-
-// || Area 6 Items ||
-
-
-// < Area 6 Eggs >
 
 {
-"edge": "YYYYYY -> EGG_PLURK_EAST",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_SPECTRAL_SLIDE",
+"from_location": "SPECTRAL_WARP",
+// XXX jumps instead of bosses...
+"entry_prereq": "COCOA_1 & KOTRI_1 & SLIDING_POWDER",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_PLURK_EAST -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_SPECTRAL_WEST",
+"from_location": "SPECTRAL_WEST_EGG_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_PLURK_CAVE",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_BEACH_TO_AQUARIUM",
+"from_location": "BEACH_UNDERWATER_ENTRANCE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_PLURK_CAVE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_GRAVEYARD_NEAR_LIBRARY",
+"from_location": "GRAVEYARD_UPPER",
+"entry_prereq": "
+    AIR_JUMP
+    | AIR_DASH
+    | BUNNY_STRIKE
+    // may degrade to v.hard (with speedboost) once v.hard is introduced
+    | (SLIDING_POWDER & (RABI_SLIPPERS | ADV_STUPID))
+",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_PLURK_CATS",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_HALLOWEEN_CICINI_ROOM",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "
+HALLOWEEN &
+EXPLOSIVES &
+(
+// The tall dark room
+    SLIDE_ZIP
+    | (DARKNESS & (BUNNY_WHIRL | (CARROT_SHOOTER & BOOST)) & (
+        (AIR_JUMP & WALL_JUMP_LV2)
+        | (AIR_JUMP & BUNNY_WHIRL & RABI_SLIPPERS)
+        | (AIR_JUMP & BUNNY_WHIRL & BUNNY_STRIKE & ITM_HARD)
+        | (AIR_JUMP & RABI_SLIPPERS & BUNNY_STRIKE & ITM_HARD)
+        | (BUNNY_WHIRL & ITM_HARD & WALL_JUMP_LV2)
+        | (BUNNY_WHIRL & ADV_STUPID)
+    ))
+) & (
+// The underwater rooms
+    (SLIDE_ZIP & (CARROT_BOMB | ADV_STUPID))
+    | HAMMER_ROLL_ZIP
+    | (SLIDING_POWDER & BUNNY_WHIRL)
+)
+",
+"exit_prereq": "
+SLIDING_POWDER &
+EXPLOSIVES &
+((
+// The infinite pumpkin room
+    (BUNNY_WHIRL | AIR_JUMP | BUNNY_STRIKE | (RABI_SLIPPERS & AIR_DASH)) &
+// Destroy the bomb and hammer blocks in the next room or zip by them
+    (ZIP | (CARROT_SHOOTER & BOOST) | (CARROT_BOMB & BUNNY_WHIRL))
+) | (
+// Leave through the entrance
+    (WALL_JUMP_LV2 | AIR_JUMP) &
+// 5 tile ledge, slide bonk is possible
+    (ITM_HARD | AIR_JUMP | AIR_DASH | (RABI_SLIPPERS & BUNNY_STRIKE))
+))
+",
 }
 
 {
-"edge": "EGG_PLURK_CATS -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_HALLOWEEN_LEFT_PILLAR",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "
+HALLOWEEN &
+// The pillars and low ceiling require some movement
+// to reach items but not eggs
+(AIR_JUMP | RABI_SLIPPERS | SLIDING_POWDER | BUNNY_WHIRL) &
+((
+    DOWNDRILL_SEMISOLID_CLIP
+) | (
+    EXPLOSIVES &
+    (
+// The tall dark room
+        SLIDE_ZIP
+        | (DARKNESS & (BUNNY_WHIRL | (CARROT_SHOOTER & BOOST)) & (
+            (AIR_JUMP & WALL_JUMP_LV2)
+            | (AIR_JUMP & BUNNY_WHIRL & RABI_SLIPPERS)
+            | (AIR_JUMP & BUNNY_WHIRL & BUNNY_STRIKE & ITM_HARD)
+            | (AIR_JUMP & RABI_SLIPPERS & BUNNY_STRIKE & ITM_HARD)
+            | (BUNNY_WHIRL & ITM_HARD & WALL_JUMP_LV2)
+            | (BUNNY_WHIRL & ADV_STUPID)
+        ))
+    ) & (
+// The underwater rooms
+        (SLIDE_ZIP & (CARROT_BOMB | ADV_STUPID))
+        | HAMMER_ROLL_ZIP
+        | (SLIDING_POWDER & BUNNY_WHIRL)
+    ) &
+// The infinite pumpkin room
+    (BUNNY_WHIRL | AIR_JUMP | BUNNY_STRIKE | (RABI_SLIPPERS & AIR_DASH)) &
+// Destroy the bomb and hammer blocks in the next room or zip by them
+    (ZIP | (CARROT_SHOOTER & BOOST) | (CARROT_BOMB & BUNNY_WHIRL))
+))
+",
+"exit_prereq": "NONE",
 }
 
-
-// .---------------------'
-// | Area 7 : Subterranean Area
-// '---------------------.
-
 {
-"edge": "VOLCANIC_MAIN -> VOLCANIC_BEACH_ENTRANCE"
-"prereq": "IMPOSSIBLE",
+"item": "EGG_HALLOWEEN_MID",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "
+HALLOWEEN &
+(
+// The tall dark room
+    SLIDE_ZIP
+    | (DARKNESS & (BUNNY_WHIRL | (CARROT_SHOOTER & BOOST)) & (
+        (AIR_JUMP & WALL_JUMP_LV2)
+        | (AIR_JUMP & BUNNY_WHIRL & RABI_SLIPPERS)
+        | (AIR_JUMP & BUNNY_WHIRL & BUNNY_STRIKE & ITM_HARD)
+        | (AIR_JUMP & RABI_SLIPPERS & BUNNY_STRIKE & ITM_HARD)
+        | (BUNNY_WHIRL & ITM_HARD & WALL_JUMP_LV2)
+        | (BUNNY_WHIRL & ADV_STUPID)
+    ))
+) &
+SLIDING_POWDER & BUNNY_WHIRL &
+EXPLOSIVES
+",
+"exit_prereq": "
+(HAMMER_ROLL_ZIP & WATER_ORB) |
+(
+    SLIDING_POWDER &
+    EXPLOSIVES &
+// Continuing through the halloween area requires whirl
+// Otherwise, one can leave through the entrance by sliding left
+    (BUNNY_WHIRL | (WALL_JUMP_LV2 & (ITM_HARD | AIR_DASH)) | AIR_JUMP)
+)
+",
 }
 
 {
-"edge": "VOLCANIC_BEACH_ENTRANCE -> VOLCANIC_MAIN"
-"prereq": "IMPOSSIBLE",
+"item": "EGG_HALLOWEEN_NEAR_BOSS",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "
+HALLOWEEN & EXPLOSIVES_ENEMY &
+(
+    (AIR_JUMP & (ITM_HARD | BUNNY_WHIRL | RABI_SLIPPERS | AIR_DASH))
+    | (BUNNY_WHIRL & ITM_HARD)
+    | (SLIDING_POWDER & ADV_STUPID)
+    | (BUNNY_STRIKE & ITM_HARD)
+)
+",
+"exit_prereq": "NONE",
 }
-
-
-// || Area 7 Items ||
 
 {
-"edge": "YYYYYY -> HP_UP_VOLCANIC",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_HALLOWEEN_PAST_PILLARS1",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "
+HALLOWEEN &
+((
+    DOWNDRILL_SEMISOLID_CLIP
+) | (
+    EXPLOSIVES &
+    (
+// The tall dark room
+        SLIDE_ZIP
+        | (DARKNESS & (BUNNY_WHIRL | (CARROT_SHOOTER & BOOST)) & (
+            (AIR_JUMP & WALL_JUMP_LV2)
+            | (AIR_JUMP & BUNNY_WHIRL & RABI_SLIPPERS)
+            | (AIR_JUMP & BUNNY_WHIRL & BUNNY_STRIKE & ITM_HARD)
+            | (AIR_JUMP & RABI_SLIPPERS & BUNNY_STRIKE & ITM_HARD)
+            | (BUNNY_WHIRL & ITM_HARD & WALL_JUMP_LV2)
+            | (BUNNY_WHIRL & ADV_STUPID)
+    ))
+    ) & (
+// The underwater rooms
+        (SLIDE_ZIP & (CARROT_BOMB | ADV_STUPID))
+        | HAMMER_ROLL_ZIP
+        | (SLIDING_POWDER & BUNNY_WHIRL)
+    ) &
+// The infinite pumpkin room
+    (BUNNY_WHIRL | AIR_JUMP | BUNNY_STRIKE | (RABI_SLIPPERS & AIR_DASH)) &
+// Destroy the bomb and hammer blocks in the next room or zip by them
+    (ZIP | (CARROT_SHOOTER & BOOST) | (CARROT_BOMB & BUNNY_WHIRL))
+))
+",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "HP_UP_VOLCANIC -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_HALLOWEEN_PAST_PILLARS2",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "
+HALLOWEEN &
+((
+    DOWNDRILL_SEMISOLID_CLIP
+) | (
+    EXPLOSIVES &
+    (
+// The tall dark room
+        SLIDE_ZIP
+        | (DARKNESS & (BUNNY_WHIRL | (CARROT_SHOOTER & BOOST)) & (
+            (AIR_JUMP & WALL_JUMP_LV2)
+            | (AIR_JUMP & BUNNY_WHIRL & RABI_SLIPPERS)
+            | (AIR_JUMP & BUNNY_WHIRL & BUNNY_STRIKE & ITM_HARD)
+            | (AIR_JUMP & RABI_SLIPPERS & BUNNY_STRIKE & ITM_HARD)
+            | (BUNNY_WHIRL & ITM_HARD & WALL_JUMP_LV2)
+            | (BUNNY_WHIRL & ADV_STUPID)
+    ))
+    ) & (
+// The underwater rooms
+        (SLIDE_ZIP & (CARROT_BOMB | ADV_STUPID))
+        | HAMMER_ROLL_ZIP
+        | (SLIDING_POWDER & BUNNY_WHIRL)
+    ) &
+// The infinite pumpkin room
+    (BUNNY_WHIRL | AIR_JUMP | BUNNY_STRIKE | (RABI_SLIPPERS & AIR_DASH)) &
+// Destroy the bomb and hammer blocks in the next room or zip by them
+    (ZIP | (CARROT_SHOOTER & BOOST) | (CARROT_BOMB & BUNNY_WHIRL))
+)) & (
+// Cross the gap in this egg's room
+    (
+// Bunstrike out of a one tile ceiling slide tunnel zip then either
+// amulet climb the right wall or use precise wall kicks to reach the egg
+        ADV_STUPID & SLIDE_ZIP &
+        EXPLOSIVES_ENEMY &
+        BUNNY_STRIKE & AIR_JUMP & WALL_JUMP_LV2 & AIR_DASH
+    ) | (
+// The intended route
+        (BUNNY_WHIRL & AIR_DASH_LV3 & (ITM_HARD | AIR_JUMP))
+        | (BUNNY_WHIRL & AIR_JUMP & WALL_JUMP)
+    )
+)
+",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> CARROT_SHOOTER",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_HALLOWEEN_RIGHT_PILLAR",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "
+HALLOWEEN &
+// The pillars and low ceiling require some movement
+// to reach items but not eggs
+(AIR_JUMP | RABI_SLIPPERS | SLIDING_POWDER | BUNNY_WHIRL) &
+((
+    DOWNDRILL_SEMISOLID_CLIP
+) | (
+    EXPLOSIVES &
+    (
+// The tall dark room
+        SLIDE_ZIP
+        | (DARKNESS & (BUNNY_WHIRL | (CARROT_SHOOTER & BOOST)) & (
+            (AIR_JUMP & WALL_JUMP_LV2)
+            | (AIR_JUMP & BUNNY_WHIRL & RABI_SLIPPERS)
+            | (AIR_JUMP & BUNNY_WHIRL & BUNNY_STRIKE & ITM_HARD)
+            | (AIR_JUMP & RABI_SLIPPERS & BUNNY_STRIKE & ITM_HARD)
+            | (BUNNY_WHIRL & ITM_HARD & WALL_JUMP_LV2)
+            | (BUNNY_WHIRL & ADV_STUPID)
+    ))
+    ) & (
+// The underwater rooms
+        (SLIDE_ZIP & (CARROT_BOMB | ADV_STUPID))
+        | HAMMER_ROLL_ZIP
+        | (SLIDING_POWDER & BUNNY_WHIRL)
+    ) &
+// The infinite pumpkin room
+    (BUNNY_WHIRL | AIR_JUMP | BUNNY_STRIKE | (RABI_SLIPPERS & AIR_DASH)) &
+// Destroy the bomb and hammer blocks in the next room or zip by them
+    (ZIP | (CARROT_SHOOTER & BOOST) | (CARROT_BOMB & BUNNY_WHIRL))
+))
+",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "CARROT_SHOOTER -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_HALLOWEEN_SW_SLIDE",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "
+HALLOWEEN &
+(
+// The tall dark room
+    SLIDE_ZIP
+    | (DARKNESS & (BUNNY_WHIRL | (CARROT_SHOOTER & BOOST)) & (
+        (AIR_JUMP & WALL_JUMP_LV2)
+        | (AIR_JUMP & BUNNY_WHIRL & RABI_SLIPPERS)
+        | (AIR_JUMP & BUNNY_WHIRL & BUNNY_STRIKE & ITM_HARD)
+        | (AIR_JUMP & RABI_SLIPPERS & BUNNY_STRIKE & ITM_HARD)
+        | (BUNNY_WHIRL & ITM_HARD & WALL_JUMP_LV2)
+        | (BUNNY_WHIRL & ADV_STUPID)
+    ))
+) &
+SLIDING_POWDER & BUNNY_WHIRL &
+EXPLOSIVES
+",
+"exit_prereq": "
+(HAMMER_ROLL_ZIP & WATER_ORB) |
+(
+    SLIDING_POWDER &
+    EXPLOSIVES &
+// Continuing through the halloween area requires whirl
+// Otherwise, one can leave through the entrance by sliding left
+    (BUNNY_WHIRL | (WALL_JUMP_LV2 & (ITM_HARD | AIR_DASH)) | AIR_JUMP)
+)
+",
 }
 
 {
-"edge": "YYYYYY -> UNKNOWN_ITEM_3",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_HALLOWEEN_WARP_ZONE",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "
+HALLOWEEN & EXPLOSIVES_ENEMY &
+(
+    (BUNNY_WHIRL & (ITM_HARD | AIR_JUMP))
+    | (AIR_JUMP & (AIR_DASH | ADV_STUPID))
+    | (ADV_STUPID & BUNNY_STRIKE & WALL_JUMP_LV2 & AIR_DASH)
+    | (ADV_STUPID & SLIDING_POWDER & RABI_SLIPPERS & WALL_JUMP_LV2 & AIR_DASH)
+)
+",
+"exit_prereq": "
+ADV_STUPID | RABI_SLIPPERS | AIR_JUMP | WALL_JUMP
+| (ITM_HARD & (BUNNY_WHIRL | SLIDING_POWDER))
+",
 }
 
 {
-"edge": "UNKNOWN_ITEM_3 -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_HALLOWEEN_WEST",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "
+HALLOWEEN &
+SLIDING_POWDER & DARKNESS &
+(
+// The tall dark room
+    SLIDE_ZIP
+    | (DARKNESS & EXPLOSIVES & (
+        (AIR_JUMP & WALL_JUMP_LV2)
+        | (AIR_JUMP & BUNNY_WHIRL & RABI_SLIPPERS)
+        | (AIR_JUMP & BUNNY_WHIRL & BUNNY_STRIKE & ITM_HARD)
+        | (AIR_JUMP & RABI_SLIPPERS & BUNNY_STRIKE & ITM_HARD)
+        | (BUNNY_WHIRL & ITM_HARD & WALL_JUMP_LV2)
+        | (BUNNY_WHIRL & ADV_STUPID)
+    ))
+) &
+// destroy the yellow blocks in the egg room itself
+(BUNNY_WHIRL | (CARROT_SHOOTER & BOOST & (CARROT_BOMB | PIKO_HAMMER)))
+",
+"exit_prereq": "
+EXPLOSIVES &
+(SLIDING_POWDER | HAMMER_ROLL_ZIP) &
+(
+// Leaving through the entrance is better as it requires fewer items
+// These requirements assume the bomb blocks have not been destroyed
+    (AIR_JUMP | WALL_JUMP_LV2 | (BUNNY_WHIRL & BUNNY_STRIKE & ITM_HARD) | (BUNNY_WHIRL & RABI_SLIPPERS)) &
+    (AIR_JUMP | AIR_DASH | BUNNY_WHIRL | (ITM_HARD & SLIDING_POWDER) | (RABI_SLIPPERS & BUNNY_STRIKE))
+)
+",
 }
 
 {
-"edge": "YYYYYY -> FIRE_ORB",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_LIBRARY",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME & IMPOSSIBLE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "FIRE_ORB -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_PYRAMID_LOWER",
+"from_location": "PYRAMID_LOWER",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> PACK_UP_VOLCANIC",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_PYRAMID_BEACH",
+"from_location": "BEACH_MAIN",
+"entry_prereq": "ADV_STUPID | EXPLOSIVES | AIR_JUMP | AIR_DASH",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "PACK_UP_VOLCANIC -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_SKY_TOWN",
+"from_location": "SKY_ISLAND_MAIN",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
-
-// < Area 7 Eggs >
-
 {
-"edge": "YYYYYY -> EGG_VOLCANIC_BOMB_BUNNIES",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_PARK_SPIKES",
+"from_location": "PARK_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_VOLCANIC_BOMB_BUNNIES -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_PARK_GREEN_KOTRI",
+"from_location": "PARK_MAIN",
+"entry_prereq": "(RABI_SLIPPERS & ADV_STUPID) | (RABI_SLIPPERS & BUNNY_STRIKE & ITM_HARD) | (BUNNY_WHIRL & ITM_HARD) | AIR_JUMP | AIR_DASH",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_MEMORIES_SYSINT",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_UPRPRC_BASE",
+"from_location": "UPRPRC_BASE",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_MEMORIES_SYSINT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_SKY_BRIDGE_WARP",
+"from_location": "SKY_BRIDGE_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_MEMORIES_RAVINE",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_SKY_BRIDGE_BY_VANILLA",
+"from_location": "SKY_BRIDGE_EAST",
+"entry_prereq": "CARROT_BOMB",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_MEMORIES_RAVINE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_RAVINE_ABOVE_CHOCOLATE",
+"from_location": "RAVINE_UPPER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_VOLCANIC_FIRE_ORB",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_RAVINE_MID",
+"from_location": "RAVINE_UPPER",
+"entry_prereq": "EXPLOSIVES & SLIDING_POWDER",
+"exit_prereq": "CARROT_BOMB | SLIDE_ZIP",
 }
 
 {
-"edge": "EGG_VOLCANIC_FIRE_ORB -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_SNOWLAND_TO_EVERNIGHT",
+"from_location": "SNOWLAND_WEST",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_VOLCANIC_NE",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_PALACE_BRIDGE",
+"from_location": "PALACE_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_VOLCANIC_NE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_AQUARIUM",
+"from_location": "AQUARIUM_MAIN",
+"entry_prereq": "DARKNESS | SLIDING_POWDER",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_VOLCANIC_BIG_DROP",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_PALACE_WALL",
+"from_location": "PALACE_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_VOLCANIC_BIG_DROP -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_SNOWLAND_WARP",
+"from_location": "SNOWLAND_CHRISTMAS_TREE",
+"entry_prereq": "RABI_SLIPPERS | AIR_JUMP | AIR_DASH | ITM_HARD",
+"exit_prereq": "NONE",
 }
-
-
-// .---------------------'
-// | Area 8 : Warp Destination
-// '---------------------.
 
-// || Area 8 Items ||
-
-
-// < Area 8 Eggs >
-
 {
-"edge": "YYYYYY -> EGG_CRESPIRIT",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_ICY_SUMMIT_NIXIE",
+"from_location": "ICY_SUMMIT_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_CRESPIRIT -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_ICY_SUMMIT_WARP",
+"from_location": "ICY_SUMMIT_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_HOSPITAL_WALL",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_SNOWLAND_LAKE",
+"from_location": "SNOWLAND_EAST",
+"entry_prereq": "ADV_STUPID | AIR_JUMP | WALL_JUMP | WATER_ORB | (BUNNY_WHIRL & ITM_HARD)",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_HOSPITAL_WALL -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_RIVERBANK_SPIDER_SPIKE",
+"from_location": "RIVERBANK_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_HOSPITAL_BOX",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_RIVERBANK_WALL",
+"from_location": "RIVERBANK_MAIN",
+"entry_prereq": "(RABI_SLIPPERS & ADV_STUPID) | (BUNNY_WHIRL & ITM_HARD) | AIR_JUMP | AIR_DASH | SLIDING_POWDER | (WALL_JUMP & ADV_STUPID)",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_HOSPITAL_BOX -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_LAB",
+"from_location": "LAB_MID",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
-
-// .---------------------'
-// | Area 9 : System Interior
-// '---------------------.
 
-// || Area 9 Items ||
-
 {
-"edge": "YYYYYY -> REGEN_UP_CYBERSPACE",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_EVERNIGHT_MID",
+"from_location": "EVERNIGHT_SAYA",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "REGEN_UP_CYBERSPACE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_EVERNIGHT_SAYA",
+"from_location": "EVERNIGHT_SAYA",
+"entry_prereq": "
+    ADV_STUPID
+    | AIR_JUMP
+    | ((BUNNY_WHIRL | BUNNY_STRIKE) & ITM_HARD)
+    | (RABI_SLIPPERS & (
+        AIR_DASH_LV3
+        | (AIR_DASH & ((SPEED2 & ITM_HARD) | (SPEED1 & ADV_VHARD)))
+      ))
+",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> PACK_UP_CYBERSPACE",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_TOWN",
+"from_location": "TOWN_MAIN",
+"entry_prereq": "(AIR_JUMP & RABI_SLIPPERS) | (AIR_JUMP & BUNNY_STRIKE & ITM_HARD)",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "PACK_UP_CYBERSPACE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_PLURK_EAST",
+"from_location": "PLURKWOOD_MAIN",
+"entry_prereq": "PLURKWOOD",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> CYBER_FLOWER",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_PLURK_CAVE",
+"from_location": "PLURKWOOD_MAIN",
+"entry_prereq": "PLURKWOOD & EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "CYBER_FLOWER -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_PLURK_CATS",
+"from_location": "PLURKWOOD_MAIN",
+"entry_prereq": "PLURKWOOD",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> AIR_JUMP",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_VOLCANIC_BOMB_BUNNIES",
+"from_location": "VOLCANIC_BEACH_ENTRANCE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "AIR_JUMP -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_MEMORIES_SYSINT",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME & EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> HP_UP_CYBERSPACE",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_MEMORIES_RAVINE",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME & EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "HP_UP_CYBERSPACE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_VOLCANIC_FIRE_ORB",
+"from_location": "VOLCANIC_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> ATK_UP_CYBERSPACE",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_VOLCANIC_NE",
+"from_location": "VOLCANIC_MAIN",
+"entry_prereq": "
+    AIR_JUMP | AIR_DASH | BUNNY_STRIKE |
+    // 0% ADV_STUPID jump: walljump off left wall, damage boost off dog, wallkick off left wall, amulet
+    ADV_STUPID |
+    (BUNNY_WHIRL & ITM_HARD) |
+    (SLIDING_POWDER & (RABI_SLIPPERS | WALL_JUMP | ITM_HARD)) |
+    (RABI_SLIPPERS & WALL_JUMP)
+",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "ATK_UP_CYBERSPACE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_VOLCANIC_BIG_DROP",
+"from_location": "VOLCANIC_MAIN",
+"entry_prereq": "ITM_HARD | AIR_JUMP | AIR_DASH",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> MP_UP_CYBERSPACE",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_CRESPIRIT",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "WARP_DESTINATION",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "MP_UP_CYBERSPACE -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_HOSPITAL_WALL",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "WARP_DESTINATION & POST_GAME & EXPLOSIVES",
+"exit_prereq": "NONE",
 }
-
 
-// < Area 9 Eggs >
-
 {
-"edge": "YYYYYY -> EGG_SYSINT2",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_HOSPITAL_BOX",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "WARP_DESTINATION & POST_GAME & EXPLOSIVES",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "EGG_SYSINT2 -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_SYSINT1",
+"from_location": "SYSTEM_INTERIOR_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
-"edge": "YYYYYY -> EGG_SYSINT1",
-"prereq": "IMPOSSIBLE",
+"item": "EGG_SYSINT2",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME & IMPOSSIBLE",
+"exit_prereq": "NONE",
 }
 
-{
-"edge": "EGG_SYSINT1 -> ZZZZZZ",
-"prereq": "IMPOSSIBLE",
-}
