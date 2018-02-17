@@ -328,7 +328,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
                     elif room_id == 0x00d6 and world.fix_trock_exit:
                         rom.write_int16_to_rom(0x15DB5 + 2 * offset, 0x0134)
                     elif room_id == 0x000c and world.fix_gtower_exit: # fix ganons tower exit point
-                        rom.write_byte(0x15DB5 + 2 * offset, 0x00A4)
+                        rom.write_int16_to_rom(0x15DB5 + 2 * offset, 0x00A4)
                     else:
                         rom.write_int16_to_rom(0x15DB5 + 2 * offset, link_y)
 
