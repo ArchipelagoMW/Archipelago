@@ -576,7 +576,7 @@ def set_big_bomb_rules(world):
                            'Dam',
                            'Lumberjack House',
                            'Lake Hylia Fortune Teller',
-                           'Eastern Palace'
+                           'Eastern Palace',
                            'Kakariko Gamble Game',
                            'Kakariko Well Cave',
                            'Bat Cave Cave',
@@ -618,7 +618,7 @@ def set_big_bomb_rules(world):
                              'Cave Shop (Dark Death Mountain)',
                              'Dark Death Mountain Fairy',
                              'Mimic Cave',
-                             'Skull Woods Second Section Door (West)'
+                             'Skull Woods Second Section Door (West)',
                              'Skull Woods Final Section',
                              'Ice Palace',
                              'Turtle Rock',
