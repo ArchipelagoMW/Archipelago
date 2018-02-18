@@ -108,7 +108,7 @@ COCOA_BOMB : 40
 // Area 0: SOUTHERN_WOODLAND
 0 : (78, 88, 8, 13) : FOREST_START : MovingLeft : 162 : 200 : 228
 0 : (474, 66, 8, 13) : FOREST_START : MovingRight : 165 : 200 : 229
-0 : (467, 92, 16, 9) : FOREST_START : MovingRight : 165 : 201 : 230
+0 : (467, 92, 16, 9) : FOREST_LOWER_RIVERBANK_EXIT : MovingRight : 165 : 201 : 230
 0 : (137, 157, 11, 14) : SPECTRAL_WEST : MovingLeft : 168 : 201 : 227
 // Area 1: WESTERN_COAST
 1 : (36, 45, 11, 13) : GRAVEYARD_MAIN : MovingLeft : 163 : 206 : 176

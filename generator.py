@@ -85,10 +85,13 @@ class Generator(object):
         variables['BACKTRACK_DATA'] = untraversable_edges, outgoing_edges, edges
         variables['BACKTRACK_GOALS'] = None, None
 
+        first_loop = True
         while True:
             new_reachable_locations.clear()
+            if first_loop: new_reachable_locations = forward_enterable.intersection(backward_exitable)
             current_level_part1 = []
             current_level_part2 = []
+            first_loop = False
 
             # STEP 0: Mark Pseudo-Items
             has_changes = True
@@ -192,7 +195,7 @@ class Generator(object):
                 # Temporarily Mark Variables
                 variables['IS_BACKTRACKING'] = True
                 temp_variable_storage.clear()
-                if location in locations_set:
+                if base_location in locations_set:
                     temp_variable_storage[base_location] = variables[base_location]
                     variables[base_location] = True
                 for item_location in data.item_locations_in_node[base_location]:

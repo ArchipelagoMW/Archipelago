@@ -99,30 +99,31 @@ def define_pseudo_items():
         "COCOA_1": "FOREST_START",
         "KOTRI_1": "PARK_MAIN",
         "ASHURI_2": "RIVERBANK_MAIN",
+        "BOSS_KEKE_BUNNY": "PLURKWOOD_MAIN",
 
-        "COCOA": "COCOA_1 & KOTRI_1 & CAVE_COCOA",
-        "ASHURI": "RIVERBANK_MAIN & TOWN_MAIN & SPECTRAL_WEST",
-        "RITA": "SNOWLAND_EAST",
-        "RIBBON": "SPECTRAL_WARP",
-        "CICINI": "SPECTRAL_CICINI_ROOM",
-        "SAYA": "EVERNIGHT_SAYA & EVERNIGHT_EAST_OF_WARP",
-        "SYARO": "SYSTEM_INTERIOR_MAIN",
-        "PANDORA": "PYRAMID_MAIN",
-        "NIEVE": "PALACE_MAIN & ICY_SUMMIT_MAIN",
-        "NIXIE": "PALACE_MAIN & ICY_SUMMIT_MAIN",
-        "ARURAUNE": "FOREST_NIGHT_WEST",
-        "SEANA": "VANILLA & CHOCOLATE & CICINI & SYARO & NIEVE & NIXIE & AQUARIUM_MAIN & PARK_MAIN",
-        "LILITH": "SKY_ISLAND_MAIN",
-        "VANILLA": "SKY_BRIDGE_EAST",
-        "CHOCOLATE": "CHAPTER_1 & RAVINE_CHOCOLATE",
-        "KOTRI": "GRAVEYARD_MAIN & VOLCANIC_MAIN",
-        "KEKE_BUNNY": "PLURKWOOD_MAIN",
+        "TM_COCOA": "COCOA_1 & KOTRI_1 & CAVE_COCOA",
+        "TM_ASHURI": "RIVERBANK_MAIN & TOWN_MAIN & SPECTRAL_WEST",
+        "TM_RITA": "SNOWLAND_EAST",
+        "TM_RIBBON": "SPECTRAL_WARP",
+        "TM_CICINI": "SPECTRAL_CICINI_ROOM",
+        "TM_SAYA": "EVERNIGHT_SAYA & EVERNIGHT_EAST_OF_WARP",
+        "TM_SYARO": "SYSTEM_INTERIOR_MAIN",
+        "TM_PANDORA": "PYRAMID_MAIN",
+        "TM_NIEVE": "PALACE_MAIN & ICY_SUMMIT_MAIN",
+        "TM_NIXIE": "PALACE_MAIN & ICY_SUMMIT_MAIN",
+        "TM_ARURAUNE": "FOREST_NIGHT_WEST",
+        "TM_SEANA": "TM_VANILLA & TM_CHOCOLATE & TM_CICINI & TM_SYARO & TM_NIEVE & TM_NIXIE & AQUARIUM_MAIN & PARK_MAIN",
+        "TM_LILITH": "SKY_ISLAND_MAIN",
+        "TM_VANILLA": "SKY_BRIDGE_EAST",
+        "TM_CHOCOLATE": "CHAPTER_1 & RAVINE_CHOCOLATE",
+        "TM_KOTRI": "GRAVEYARD_MAIN & VOLCANIC_MAIN",
+        "TM_KEKE_BUNNY": "BOSS_KEKE_BUNNY & PLURKWOOD_MAIN",
 
         "2TM": lambda v: count_town_members(v) >= 2,
         "3TM": lambda v: count_town_members(v) >= 3,
         "4TM": lambda v: count_town_members(v) >= 4,
         "7TM": lambda v: count_town_members(v) >= 7,
-        "SPEEDY": "CICINI & TOWN_MAIN & 3TM",
+        "SPEEDY": "TM_CICINI & TOWN_MAIN & 3TM",
 
         "CHAPTER_1": "TOWN_MAIN",
         "CHAPTER_2": "TOWN_MAIN & 2TM",
@@ -136,15 +137,15 @@ def define_alternate_conditions(variable_names_set, default_expressions):
         "SPEED_BOOST": "SHOP",
         "SOUL_HEART": "SHOP",
         "BOOK_OF_CARROT": "SHOP",
-        "P_HAIRPIN": "KEKE_BUNNY & PLURKWOOD_MAIN",
+        "P_HAIRPIN": "BOSS_KEKE_BUNNY & PLURKWOOD_MAIN",
         "HEALING_STAFF": "SHOP",
         "MAX_BRACELET": "SHOP",
         "BUNNY_STRIKE": "SLIDING_POWDER & SHOP",
-        "STRANGE_BOX": "SYARO & TOWN_MAIN",
+        "STRANGE_BOX": "TM_SYARO & TOWN_MAIN",
         "BUNNY_AMULET": "CHAPTER_2",
         "RUMI_DONUT": "SHOP",
         "RUMI_CAKE": "SHOP",
-        "COCOA_BOMB": "COCOA & TOWN_MAIN",
+        "COCOA_BOMB": "TM_COCOA & TOWN_MAIN",
     }
 
     for key in d.keys():
@@ -229,7 +230,7 @@ def define_default_expressions(variable_names_set):
 def get_default_areaids():
     return list(range(10))
 
-TOWN_MEMBERS = []
+TOWN_MEMBERS = ['TM_COCOA','TM_ASHURI','TM_RITA','TM_RIBBON','TM_CICINI','TM_SAYA','TM_SYARO','TM_PANDORA','TM_NIEVE','TM_NIXIE','TM_ARURAUNE','TM_SEANA','TM_LILITH','TM_VANILLA','TM_CHOCOLATE','TM_KOTRI','TM_KEKE_BUNNY',]
 def count_town_members(variables):
     return sum([1 for tm in TOWN_MEMBERS if variables[tm]])
 
