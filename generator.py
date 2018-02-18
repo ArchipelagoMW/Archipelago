@@ -1,6 +1,8 @@
 from allocation import Allocation
 from utility import *
 
+START_LOCATION = 'FOREST_START'
+
 class Generator(object):
     def __init__(self, data, settings):
         self.data = data
@@ -14,9 +16,10 @@ class Generator(object):
         self.allocation.shift_eggs_to_hard_to_reach(self, data, settings)
 
     def verify(self):
-        if not self.verify_warps_reachable():
+        result, backward_exitable = self.verify_warps_reachable()
+        if not result:
             return False
-        if not self.verify_reachable_items():
+        if not self.verify_reachable_items(backward_exitable):
             return False
 
     def verify_warps_reachable(self):
@@ -29,26 +32,31 @@ class Generator(object):
         visited = set(dfs_stack)
 
         while len(dfs_stack) > 0:
-            current = dfs_stack.pop()
-            for edge_id in allocation.incoming_edges[current]:
-                target = edges[edge_id].from_location
-                if target in visited: continue
+            current_dest = dfs_stack.pop()
+            for edge_id in allocation.incoming_edges[current_dest]:
+                target_src = edges[edge_id].from_location
+                if target_src in visited: continue
                 if edges[edge_id].satisfied(variables):
-                    visited.add(target)
-                    dfs_stack.append(target)
+                    visited.add(target_src)
+                    dfs_stack.append(target_src)
 
         major_locations = set(location for location, loc_type in self.data.locations.items() if loc_type == LOCATION_MAJOR)
-        print(major_locations - visited)
-        return len(major_locations - visited) == 0
+
+        return (len(major_locations - visited) == 0, visited)
 
 
-    def verify_reachable_items(self):
+    def verify_reachable_items(self, backward_exitable):
+        from visualizer import Visualization
+        vis = Visualization()
+        vis.load_graph(self.data, self.allocation)
+
         data = self.data
         allocation = self.allocation
 
         # Should not be modified:
         edges = allocation.edges
         outgoing_edges = allocation.outgoing_edges
+        incoming_edges = allocation.incoming_edges
         locations_set = data.locations_set
 
         # Persistent variables
@@ -57,8 +65,8 @@ class Generator(object):
         unreached_pseudo_items = dict(data.pseudo_items)
         unsatisfied_item_conditions = dict(data.alternate_conditions)
 
-        forward_enterable = set()
-        backward_exitable = set()
+        forward_enterable = set((START_LOCATION,))
+        backward_exitable = set(backward_exitable)
         pending_exit_locations = set()
         locally_exitable_locations = {}
 
@@ -170,7 +178,7 @@ class Generator(object):
                     if not variables[location]:
                         current_level_part2.append(location)
                         #variables[location] = True
-                for item_location in data.items_at_location(location):
+                for item_location in data.item_locations_in_node[location]:
                     item_name = allocation.item_at_item_location[item_location]
                     if not variables[item_name]:
                         current_level_part2.append(item_name)
@@ -187,7 +195,8 @@ class Generator(object):
                 if location in locations_set:
                     temp_variable_storage[base_location] = variables[base_location]
                     variables[base_location] = True
-                for item_name in data.items_at_location(base_location):
+                for item_location in data.item_locations_in_node[base_location]:
+                    item_name = allocation.item_at_item_location[item_location]
                     temp_variable_storage[item_name] = variables[item_name]
                     variables[item_name] = True
 
@@ -216,7 +225,7 @@ class Generator(object):
                         if not variables[base_location]:
                             current_level_part2.append(base_location)
                             #variables[base_location] = True
-                    for item_location in data.items_at_location(base_location):
+                    for item_location in data.item_locations_in_node[base_location]:
                         item_name = allocation.item_at_item_location[item_location]
                         if not variables[item_name]:
                             current_level_part2.append(item_name)
@@ -236,7 +245,10 @@ class Generator(object):
             if len(current_level_part1) == 0 and len(current_level_part2) == 0:
                 break
 
-
+        for loc in forward_enterable.intersection(backward_exitable):
+            vis.set_node_color(loc, (255,191,0))
+        vis.render()
+        print('done')
 
 
 

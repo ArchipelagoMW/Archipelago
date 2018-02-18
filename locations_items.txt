@@ -127,7 +127,7 @@ COCOA_BOMB : 40
 // Area 3: NORTHERN_TUNDRA
 3 : (0, 115, 14, 12) : SNOWLAND_WEST : MovingLeft : 165 : 207 : 177
 3 : (462, 114, 24, 24) : SNOWLAND_EAST : MovingRight : 163 : 201 : 227
-3 : (472, 171, 11, 10) : AQUARIUM_MAIN : MovingRight : 162 : 203 : 231
+3 : (472, 171, 11, 10) : AQUARIUM_BEACH_ENTRANCE : MovingRight : 162 : 203 : 231
 // Area 4: EASTERN_HIGHLANDS
 4 : (472, 110, 10, 15) : EVERNIGHT_LOWER : MovingRight : 164 : 207 : 177
 4 : (16, 104, 19, 21) : RIVERBANK_MAIN : MovingLeft : 161 : 202 : 227

@@ -12,6 +12,7 @@ class Allocation(object):
     # dict: item_at_item_location  (item location -> item at item location)
     #
     # dict: outgoing_edges  [location -> list(Edge)]
+    # dict: incoming_edges  [location -> list(Edge)]
     # list: edges  [list(Edge)]   <-- indexed by edge_id
 
     def __init__(self, data, settings):
@@ -43,6 +44,7 @@ class Allocation(object):
 
     def construct_graph(self, data, settings):
         edges = list(data.initial_edges)
+        originalNEdges = len(edges)
         outgoing_edges = dict((key, list(edge_ids)) for key, edge_ids in data.initial_outgoing_edges.items())
         incoming_edges = dict((key, list(edge_ids)) for key, edge_ids in data.initial_incoming_edges.items())
 
@@ -75,13 +77,13 @@ class Allocation(object):
                 constraint=NO_CONDITIONS,
                 backtrack_cost=INFTY,
             )
-
             edges.append(edge1)
             edges.append(edge2)
-            outgoing_edges[edge1.from_location].append(edge1.edge_id)
-            outgoing_edges[edge2.from_location].append(edge2.edge_id)
-            incoming_edges[edge1.to_location].append(edge1.edge_id)
-            incoming_edges[edge2.to_location].append(edge2.edge_id)
+
+        for edge in edges[originalNEdges:]:
+            outgoing_edges[edge.from_location].append(edge.edge_id)
+            incoming_edges[edge.to_location].append(edge.edge_id)
+
 
         self.edges = edges
         self.outgoing_edges = outgoing_edges

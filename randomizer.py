@@ -3,7 +3,6 @@ from utility import *
 from generator import Generator
 
 VERSION_STRING = '{PLACEHOLDER_VERSION}'
-START_LOCATION = 'FOREST_START'
 
 """
 Knowledge levels:
@@ -494,6 +493,7 @@ class RandomizerData(object):
     # dict: item_locations_in_node   (node_name -> list(item_name))
     # list: initial_edges             (edge_id -> GraphEdge)
     # dict: initial_outgoing_edges     (node_name -> list(edge_id))
+    # dict: initial_incoming_edges     (node_name -> list(edge_id))
     #
     #
     # Preprocessed Information
@@ -611,7 +611,7 @@ class RandomizerData(object):
 
         for edge in edges:
             initial_outgoing_edges[edge.from_location].append(edge.edge_id)
-            initial_outgoing_edges[edge.to_location].append(edge.edge_id)
+            initial_incoming_edges[edge.to_location].append(edge.edge_id)
 
         self.graph_vertices = graph_vertices
         self.item_locations_in_node = item_locations_in_node
@@ -643,7 +643,7 @@ class RandomizerData(object):
             fail('Too few eggs to remove to make room for additional items.')
 
         self.items_to_allocate = items_to_shuffle + self.included_additional_items + eggs_to_shuffle[:self.nEggs]
-        self.item_slots = items_to_shuffle
+        self.item_slots = items_to_shuffle + eggs_to_shuffle
         self.unshuffled_allocations = list(zip(unshuffled_items, unshuffled_items))
         if settings.egg_goals:
             minShuffledEggs = self.minHardToReachEggs + settings.extra_eggs
@@ -758,7 +758,8 @@ if __name__ == '__main__':
         seed = None
     else:
         seed = string_to_integer_seed('%s_ha:%s_hd:%s' % (args.seed, args.hide_unreachable, args.hide_difficulty))
-    
+
+    if seed != None: random.seed(seed)
     randomizer_data = RandomizerData(args)
     generator = Generator(randomizer_data, args)
     generator.shuffle()

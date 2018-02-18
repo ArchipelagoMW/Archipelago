@@ -1138,3 +1138,27 @@ DARKNESS & (
 // | Area 9 : System Interior
 // '---------------------.
 
+
+// .---------------------'
+// | Map Transition Constraints
+// '---------------------.
+
+{
+"edge": "FOREST_NIGHT_NORTH_EAST -> PLURKWOOD_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "PLURKWOOD_MAIN -> FOREST_NIGHT_NORTH_EAST",
+"prereq": "NONE",
+}
+
+{
+"edge": "LAB_COMPUTER_ROOM -> SYSTEM_INTERIOR_MAIN",
+"prereq": "CHAPTER_3",
+}
+
+{
+"edge": "SYSTEM_INTERIOR_MAIN -> LAB_COMPUTER_ROOM",
+"prereq": "NONE",
+}
