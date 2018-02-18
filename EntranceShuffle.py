@@ -14,13 +14,11 @@ def link_entrances(world):
             connect_simple(world, exitname, regionname)
         for exitname, regionname in default_dungeon_connections:
             connect_simple(world, exitname, regionname)
-
     elif world.shuffle == 'dungeonssimple':
         for exitname, regionname in default_connections:
             connect_simple(world, exitname, regionname)
 
         simple_shuffle_dungeons(world)
-
     elif world.shuffle == 'dungeonsfull':
         for exitname, regionname in default_connections:
             connect_simple(world, exitname, regionname)
@@ -52,7 +50,6 @@ def link_entrances(world):
         connect_mandatory_exits(world, dw_entrances, dungeon_exits, list(DW_Dungeon_Entrances_Must_Exit))
         connect_caves(world, lw_entrances, [], list(LW_Dungeon_Exits))  # Agahnim must be light world
         connect_caves(world, lw_entrances, dw_entrances, dungeon_exits)
-
     elif world.shuffle == 'simple':
         simple_shuffle_dungeons(world)
 
@@ -124,11 +121,9 @@ def link_entrances(world):
 
         # place remaining doors
         connect_doors(world, single_doors, door_targets)
-
     elif world.shuffle == 'new_restricted':
         # TODO
         raise NotImplementedError()
-    # TODO: decide if we need a new restricted cross_worlds mode
     elif world.shuffle == 'restricted':
         simple_shuffle_dungeons(world)
 
@@ -184,7 +179,6 @@ def link_entrances(world):
 
         # place remaining doors
         connect_doors(world, single_doors, door_targets)
-
     elif world.shuffle == 'full':
         skull_woods_shuffle(world)
 
@@ -431,8 +425,7 @@ def link_entrances(world):
 
         # place remaining doors
         connect_doors(world, single_doors, door_targets)
-
-    elif world.shuffle == 'madness':
+    elif world.shuffle == 'madness_legacy':
         # here lie dragons, connections are no longer two way
         lw_entrances = list(LW_Entrances + LW_Dungeon_Entrances + Old_Man_Entrances)
         dw_entrances = list(DW_Entrances + DW_Dungeon_Entrances)
@@ -673,10 +666,153 @@ def link_entrances(world):
 
         # place remaining doors
         connect_doors(world, single_doors, door_targets)
-    elif world.shuffle == 'new_insanity':
-        # TODO
-        raise NotImplementedError()
     elif world.shuffle == 'insanity':
+        world.fix_fake_world = False
+        # beware ye who enter here
+
+        entrances = LW_Entrances + LW_Dungeon_Entrances + DW_Entrances + DW_Dungeon_Entrances + Old_Man_Entrances + ['Skull Woods Second Section Door (East)', 'Skull Woods First Section Door', 'Kakariko Well Cave', 'Bat Cave Cave', 'North Fairy Cave', 'Sanctuary', 'Lost Woods Hideout Stump', 'Lumberjack Tree Cave', 'Hyrule Castle Entrance (South)']
+        entrances_must_exits = DW_Entrances_Must_Exit + DW_Dungeon_Entrances_Must_Exit + LW_Dungeon_Entrances_Must_Exit + ['Skull Woods Second Section Door (West)']
+
+        doors = LW_Entrances + LW_Dungeon_Entrances + LW_Dungeon_Entrances_Must_Exit + ['Kakariko Well Cave', 'Bat Cave Cave', 'North Fairy Cave', 'Sanctuary', 'Lost Woods Hideout Stump', 'Lumberjack Tree Cave', 'Hyrule Castle Secret Entrance Stairs'] + Old_Man_Entrances +\
+                DW_Entrances + DW_Dungeon_Entrances + DW_Entrances_Must_Exit + DW_Dungeon_Entrances_Must_Exit + ['Skull Woods First Section Door', 'Skull Woods Second Section Door (East)', 'Skull Woods Second Section Door (West)'] +\
+                LW_Single_Cave_Doors + DW_Single_Cave_Doors
+
+        # TODO: there are other possible entrances we could support here by way of exiting from a connector,
+        # and rentering to find bomb shop. However appended list here is all those that we currently have
+        # bomb shop logic for.
+        # Specifically we could potentially add: 'Dark Death Mountain Ledge (East)' and doors associated with pits
+        bomb_shop_doors = list(Bomb_Shop_Single_Cave_Doors + Bomb_Shop_Multi_Cave_Doors+['Desert Palace Entrance (East)', 'Turtle Rock Isolated Ledge Entrance', 'Bumper Cave (Top)', 'Hookshot Cave Back Entrance'])
+        blacksmith_doors = list(Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
+        door_targets = list(Single_Cave_Targets)
+
+        random.shuffle(doors)
+
+        old_man_entrances = list(Old_Man_Entrances) + ['Tower of Hera']
+
+        caves = Cave_Exits + Dungeon_Exits + Cave_Three_Exits + ['Old Man House Exit (Bottom)', 'Old Man House Exit (Top)', 'Skull Woods First Section Exit', 'Skull Woods Second Section Exit (East)', 'Skull Woods Second Section Exit (West)',
+                                                                 'Kakariko Well Exit', 'Bat Cave Exit', 'North Fairy Cave Exit', 'Lost Woods Hideout Exit', 'Lumberjack Tree Exit', 'Sanctuary Exit']
+
+
+        # shuffle up holes
+
+        hole_entrances = ['Kakariko Well Drop', 'Bat Cave Drop', 'North Fairy Cave Drop', 'Lost Woods Hideout Drop', 'Lumberjack Tree Tree', 'Sanctuary Grave',
+                          'Skull Woods First Section Hole (East)', 'Skull Woods First Section Hole (West)', 'Skull Woods First Section Hole (North)', 'Skull Woods Second Section Hole']
+
+        hole_targets = ['Kakariko Well (top)', 'Bat Cave (right)', 'North Fairy Cave', 'Lost Woods Hideout (top)', 'Lumberjack Tree (top)', 'Sewer Drop', 'Skull Woods Second Section (Drop)',
+                        'Skull Woods First Section (Left)', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Top)']
+
+        # tavern back door cannot be shuffled yet
+        connect_doors(world, ['Tavern North'], ['Tavern'])
+
+        if world.mode == 'standard':
+            # cannot move uncle cave
+            connect_entrance(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance')
+            connect_exit(world, 'Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance Stairs')
+            connect_entrance(world, doors.pop(), 'Hyrule Castle Secret Entrance Exit')
+        else:
+            hole_entrances.append('Hyrule Castle Secret Entrance Drop')
+            hole_targets.append('Hyrule Castle Secret Entrance')
+            entrances.append('Hyrule Castle Secret Entrance Stairs')
+            caves.append('Hyrule Castle Secret Entrance Exit')
+
+        if not world.shuffle_ganon:
+            connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit')
+            connect_two_way(world, 'Pyramid Entrance', 'Pyramid Exit')
+            connect_entrance(world, 'Pyramid Hole', 'Pyramid')
+        else:
+            entrances.append('Ganons Tower')
+            caves.extend(['Ganons Tower Exit', 'Pyramid Exit'])
+            hole_entrances.append('Pyramid Hole')
+            hole_targets.append('Pyramid')
+            entrances_must_exits.append('Pyramid Entrance')
+            doors.extend(['Ganons Tower', 'Pyramid Entrance'])
+
+        random.shuffle(hole_entrances)
+        random.shuffle(hole_targets)
+        random.shuffle(entrances)
+
+        # fill up holes
+        for hole in hole_entrances:
+            connect_entrance(world, hole, hole_targets.pop())
+
+        # hyrule castle handling
+        if world.mode == 'standard':
+            # must connect front of hyrule castle to do escape
+            connect_entrance(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)')
+            connect_exit(world, 'Hyrule Castle Exit (South)', entrances.pop())
+            caves.append(('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
+        else:
+            doors.append('Hyrule Castle Entrance (South)')
+            caves.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
+
+        # now let's deal with mandatory reachable stuff
+        def extract_reachable_exit(cavelist):
+            random.shuffle(cavelist)
+            candidate = None
+            for cave in cavelist:
+                if isinstance(cave, tuple) and len(cave) > 1:
+                    # special handling: TRock has two entries that we should consider entrance only
+                    # ToDo this should be handled in a more sensible manner
+                    if cave[0] in ['Turtle Rock Exit (Front)', 'Spectacle Rock Cave Exit (Peak)'] and len(cave) == 2:
+                        continue
+                    candidate = cave
+                    break
+            if candidate is None:
+                raise RuntimeError('No suitable cave.')
+            cavelist.remove(candidate)
+            return candidate
+
+        def connect_reachable_exit(entrance, caves, doors):
+            cave = extract_reachable_exit(caves)
+
+            exit = cave[-1]
+            cave = cave[:-1]
+            connect_exit(world, exit, entrance)
+            connect_entrance(world, doors.pop(), exit)
+            # rest of cave now is forced to be in this world
+            caves.append(cave)
+
+        # connect mandatory exits
+        for entrance in entrances_must_exits:
+            connect_reachable_exit(entrance, caves, doors)
+
+        # place old man, has limited options
+        # exit has to come from specific set of doors, the entrance is free to move about
+        old_man_entrances = [entrance for entrance in old_man_entrances if entrance in entrances]
+        random.shuffle(old_man_entrances)
+        old_man_exit = old_man_entrances.pop()
+        entrances.remove(old_man_exit)
+
+        connect_exit(world, 'Old Man Cave Exit (East)', old_man_exit)
+        connect_entrance(world, doors.pop(), 'Old Man Cave Exit (East)')
+        caves.append('Old Man Cave Exit (West)')
+
+        # place blacksmith, has limited options
+        blacksmith_doors = [door for door in blacksmith_doors if door in doors]
+        random.shuffle(blacksmith_doors)
+        blacksmith_hut = blacksmith_doors.pop()
+        connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut')
+        doors.remove(blacksmith_hut)
+
+        # place dam and pyramid fairy, have limited options
+        bomb_shop_doors = [door for door in bomb_shop_doors if door in doors]
+        random.shuffle(bomb_shop_doors)
+        bomb_shop = bomb_shop_doors.pop()
+        connect_entrance(world, bomb_shop, 'Big Bomb Shop')
+        doors.remove(bomb_shop)
+
+        # handle remaining caves
+        for cave in caves:
+            if isinstance(cave, str):
+                cave = (cave,)
+
+            for exit in cave:
+                connect_exit(world, exit, entrances.pop())
+                connect_entrance(world, doors.pop(), exit)
+
+        # place remaining doors
+        connect_doors(world, doors, door_targets)
+    elif world.shuffle == 'insanity_legacy':
         world.fix_fake_world = False
         # beware ye who enter here
 
@@ -817,7 +953,6 @@ def link_entrances(world):
 
         # place remaining doors
         connect_doors(world, single_doors, door_targets)
-
     else:
         raise NotImplementedError('Shuffling not supported yet')
 

@@ -300,7 +300,7 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode):
         pool.extend(basicgloves)
 
     # insanity shuffle doesn't have fake LW/DW logic so for now guaranteed Mirror and Moon Pearl at the start
-    if  shuffle == 'insanity':
+    if  shuffle == 'insanity_legacy':
         placed_items.append(('Link\'s House', 'Magic Mirror'))
         placed_items.append(('Sanctuary', 'Moon Pearl'))
     else:
@@ -503,7 +503,7 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, c
         pool.extend(['Fighter Sword'] * customitemarray[32])
         pool.extend(['Progressive Sword'] * customitemarray[36])
 
-    if shuffle == 'insanity':
+    if shuffle == 'insanity_legacy':
         placed_items.append(('Link\'s House', 'Magic Mirror'))
         placed_items.append(('Sanctuary', 'Moon Pearl'))
         pool.extend(['Magic Mirror'] * max((customitemarray[22] -1 ), 0))
