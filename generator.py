@@ -19,8 +19,9 @@ class Generator(object):
         result, backward_exitable = self.verify_warps_reachable()
         if not result:
             return False
-        if not self.verify_reachable_items(backward_exitable):
-            return False
+        reachable, unreachable, levels = self.verify_reachable_items(backward_exitable)
+        #print('Unreachable: ' + str(unreachable))
+        return False
 
     def verify_warps_reachable(self):
         # verify that every major location has an unconstrained path to the goal.
@@ -252,6 +253,10 @@ class Generator(object):
             vis.set_node_color(loc, (255,191,0))
         vis.render()
         print('done')
+        reachable = sorted(name for name, value in variables.items() if value)
+        unreachable = sorted(name for name, value in variables.items() if not value)
+
+        return reachable, unreachable, levels
 
 
 
