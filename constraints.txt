@@ -175,9 +175,13 @@
 
 {
 "item": "REGEN_UP_EAST_FOREST",
-"from_location": "FOREST_UPPER_EAST_REGEN_UP_LEDGE",
+"from_location": "FOREST_UPPER_EAST",
 "entry_prereq": "NONE",
-"exit_prereq": "NONE",
+"exit_prereq": "IMPOSSIBLE",
+
+"alternate_exits": {
+    "FOREST_START": "NONE",
+    },
 }
 
 {
@@ -270,10 +274,13 @@
 "entry_prereq": "
 // Getting onto the ledge
     (AIR_JUMP | AIR_DASH | ITM_HARD)
-    & (CARROT_BOMB | BLOCK_CLIP)
-",
-// XXX exits to GRAVEYARD_MAIN
-"exit_prereq": "NONE",
+    & (CARROT_BOMB | BLOCK_CLIP)",
+// Not bothering with the actual prereq to jump back up for now, since you can just drop down to GRAVEYARD_MAIN.
+"exit_prereq": "IMPOSSIBLE",
+
+"alternate_exits": {
+    "GRAVEYARD_MAIN": "NONE",
+    },
 }
 
 {

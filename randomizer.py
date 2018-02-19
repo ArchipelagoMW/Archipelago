@@ -365,7 +365,9 @@ def parse_item_constraints(items_set, locations_set, variable_names_set, default
 
     item_constraints = []
 
+    valid_keys = set(('item','from_location','to_location','entry_prereq','exit_prereq','alternate_entries','alternate_exits'))
     for cdict in cdicts:
+        if not valid_keys.issuperset(cdict.keys()): fail('Unknown keys in item constraint: \n' + str(cdict))
         item, from_location = cdict['item'], cdict['from_location']
         if item not in items_set: fail('Unknown item: %s' % item)
         if from_location not in locations_set: fail('Unknown location: %s' % from_location)

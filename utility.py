@@ -94,6 +94,14 @@ class GraphEdge(object):
         self.satisfied = constraint
         self.backtrack_cost = backtrack_cost
 
+    def __str__(self):
+        return '\n'.join([
+            'From: %s' % self.from_location,
+            'To: %s' % self.to_location,
+            'ID: %s' % self.edge_id,
+            'Cost: %s' % self.backtrack_cost,
+        ])
+
 
 # misc utility functions
 
