@@ -100,11 +100,11 @@ def define_pseudo_items():
         "KOTRI_1": "PARK_MAIN",
         "ASHURI_2": "RIVERBANK_MAIN",
         "BOSS_KEKE_BUNNY": "PLURKWOOD_MAIN",
+        "RIBBON": "SPECTRAL_WARP",
 
         "TM_COCOA": "COCOA_1 & KOTRI_1 & CAVE_COCOA",
         "TM_ASHURI": "RIVERBANK_MAIN & TOWN_MAIN & SPECTRAL_WEST",
         "TM_RITA": "SNOWLAND_EAST",
-        "TM_RIBBON": "SPECTRAL_WARP",
         "TM_CICINI": "SPECTRAL_CICINI_ROOM",
         "TM_SAYA": "EVERNIGHT_SAYA & EVERNIGHT_EAST_OF_WARP",
         "TM_SYARO": "SYSTEM_INTERIOR_MAIN",
@@ -123,12 +123,14 @@ def define_pseudo_items():
         "3TM": lambda v: count_town_members(v) >= 3,
         "4TM": lambda v: count_town_members(v) >= 4,
         "7TM": lambda v: count_town_members(v) >= 7,
+        "10TM": lambda v: count_town_members(v) >= 10,
         "SPEEDY": "TM_CICINI & TOWN_MAIN & 3TM",
 
         "CHAPTER_1": "TOWN_MAIN",
         "CHAPTER_2": "TOWN_MAIN & 2TM",
         "CHAPTER_3": "TOWN_MAIN & 4TM",
         "CHAPTER_4": "TOWN_MAIN & 7TM",
+        "CHAPTER_5": "TOWN_MAIN & 10TM",
     }
 
 
@@ -230,7 +232,7 @@ def define_default_expressions(variable_names_set):
 def get_default_areaids():
     return list(range(10))
 
-TOWN_MEMBERS = ['TM_COCOA','TM_ASHURI','TM_RITA','TM_RIBBON','TM_CICINI','TM_SAYA','TM_SYARO','TM_PANDORA','TM_NIEVE','TM_NIXIE','TM_ARURAUNE','TM_SEANA','TM_LILITH','TM_VANILLA','TM_CHOCOLATE','TM_KOTRI','TM_KEKE_BUNNY',]
+TOWN_MEMBERS = ('TM_COCOA','TM_ASHURI','TM_RITA','TM_CICINI','TM_SAYA','TM_SYARO','TM_PANDORA','TM_NIEVE','TM_NIXIE','TM_ARURAUNE','TM_SEANA','TM_LILITH','TM_VANILLA','TM_CHOCOLATE','TM_KOTRI','TM_KEKE_BUNNY',)
 def count_town_members(variables):
     return sum([1 for tm in TOWN_MEMBERS if variables[tm]])
 
