@@ -12,7 +12,7 @@ class Visualization(object):
             color = (255,0,0)
             size = 14
             if node_name not in data.locations_set:
-                color = (255,127,127)
+                color = (255,64,64)
                 size = 7
             self.define_node(node_name, NODE_POSITIONS[node_name], size=size, color=color)
 

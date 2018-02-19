@@ -177,6 +177,7 @@
 "item": "REGEN_UP_EAST_FOREST",
 "from_location": "FOREST_UPPER_EAST",
 "entry_prereq": "NONE",
+// It's not impossible. Just unimportant.
 "exit_prereq": "IMPOSSIBLE",
 
 "alternate_exits": {
