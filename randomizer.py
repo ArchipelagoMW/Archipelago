@@ -358,17 +358,25 @@ def parse_item_constraints(items_set, locations_set, variable_names_set, default
     jsondata = '[' + jsondata + ']'
     cdicts = parse_json(jsondata)
 
+    def parse_alternates(alts):
+        if alts == None: return {}
+        return dict((name, parse_expression_lambda(constraint, variable_names_set, default_expressions))
+            for name, constraint in alts.items())
+
     item_constraints = []
 
     for cdict in cdicts:
         item, from_location = cdict['item'], cdict['from_location']
         if item not in items_set: fail('Unknown item: %s' % item)
         if from_location not in locations_set: fail('Unknown location: %s' % from_location)
+
         item_constraints.append(ItemConstraintData(
             item = item,
             from_location = from_location,
             entry_prereq = parse_expression_lambda(cdict['entry_prereq'], variable_names_set, default_expressions),
             exit_prereq = parse_expression_lambda(cdict['exit_prereq'], variable_names_set, default_expressions),
+            alternate_entries = parse_alternates(cdict.get('alternate_entries')),
+            alternate_exits = parse_alternates(cdict.get('alternate_exits')),
         ))
 
     # Validate that there are no duplicate items defined
@@ -584,7 +592,9 @@ class RandomizerData(object):
         item_locations_in_node = dict((node, []) for node in graph_vertices)
         edges = []
         for item_constraint in self.item_constraints:
-            if item_constraint.entry_prereq(default_variables) and item_constraint.exit_prereq(default_variables):
+            if item_constraint.no_alternate_paths and \
+                    item_constraint.entry_prereq(default_variables) and \
+                    item_constraint.exit_prereq(default_variables):
                 # Unconstrained - Merge directly into from_location
                 item_locations_in_node[item_constraint.from_location].append(item_constraint.item)
             else:
@@ -608,6 +618,24 @@ class RandomizerData(object):
                     constraint=item_constraint.exit_prereq,
                     backtrack_cost=0,
                 ))
+
+                for entry_node, prereq in item_constraint.alternate_entries.items():
+                    edges.append(GraphEdge(
+                        edge_id=len(edges),
+                        from_location=entry_node,
+                        to_location=item_node_name,
+                        constraint=prereq,
+                        backtrack_cost=1,
+                    ))
+
+                for exit_node, prereq in item_constraint.alternate_exits.items():
+                    edges.append(GraphEdge(
+                        edge_id=len(edges),
+                        from_location=item_node_name,
+                        to_location=exit_node,
+                        constraint=prereq,
+                        backtrack_cost=1,
+                    ))
 
         initial_outgoing_edges = dict((node, []) for node in graph_vertices)
         initial_incoming_edges = dict((node, []) for node in graph_vertices)

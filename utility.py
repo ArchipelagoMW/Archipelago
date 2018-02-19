@@ -77,11 +77,14 @@ class EdgeConstraintData(object):
         ])
 
 class ItemConstraintData(object):
-    def __init__(self, item, from_location, entry_prereq, exit_prereq):
+    def __init__(self, item, from_location, entry_prereq, exit_prereq, alternate_entries, alternate_exits):
         self.item = item
         self.from_location = from_location
         self.entry_prereq = entry_prereq
         self.exit_prereq = exit_prereq
+        self.alternate_entries = alternate_entries
+        self.alternate_exits = alternate_exits
+        self.no_alternate_paths = (len(self.alternate_entries) + len(self.alternate_exits) == 0)
 
 class GraphEdge(object):
     def __init__(self, edge_id, from_location, to_location, constraint, backtrack_cost):

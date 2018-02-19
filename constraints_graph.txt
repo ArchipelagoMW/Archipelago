@@ -1167,34 +1167,8 @@ DARKNESS & (
 }
 
 {
-"edge": "LAB_ENTRANCE -> LAB_EAST_ATTACK_UP_ROOM",
-"prereq": "HAMMER_ROLL_ZIP",
-}
-
-{
 "edge": "LAB_COMPUTER_ROOM -> LAB_EAST",
 "prereq": "NONE",
-}
-
-{
-"edge": "LAB_EAST -> LAB_EAST_ATTACK_UP_ROOM",
-"prereq": "(
-    AIR_JUMP
-    | AIR_DASH
-    | (RABI_SLIPPERS & ADV_STUPID)
-    | HAMMER_ROLL_ZIP
-    | (RABI_SLIPPERS & BUNNY_STRIKE & ITM_HARD)
-)",
-}
-
-{
-"edge": "LAB_EAST_ATTACK_UP_ROOM -> LAB_EAST",
-"prereq": "NONE",
-}
-
-{
-"edge": "LAB_EAST_ATTACK_UP_ROOM -> LAB_EAST_PACK_UP_ROOM",
-"prereq": "EXPLOSIVES & SLIDE_ZIP",
 }
 
 {

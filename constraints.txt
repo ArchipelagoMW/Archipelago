@@ -1070,9 +1070,19 @@
 
 {
 "item": "ATK_UP_EAST_LAB",
-"from_location": "LAB_EAST_ATTACK_UP_ROOM",
-"entry_prereq": "EXPLOSIVES_ENEMY",
+"from_location": "LAB_EAST",
+"entry_prereq": "EXPLOSIVES_ENEMY & (
+    AIR_JUMP
+    | AIR_DASH
+    | (RABI_SLIPPERS & ADV_STUPID)
+    | HAMMER_ROLL_ZIP
+    | (RABI_SLIPPERS & BUNNY_STRIKE & ITM_HARD)
+)",
 "exit_prereq": "NONE",
+
+"alternate_entries": {
+    "LAB_ENTRANCE": "HAMMER_ROLL_ZIP",
+    },
 }
 
 {
