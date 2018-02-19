@@ -25,6 +25,56 @@
 }
 
 {
+"edge": "FOREST_UPPER_EAST -> FOREST_UPPER_EAST_EGG_LEDGE",
+"prereq": "EXPLOSIVES_ENEMY",
+}
+
+{
+"edge": "FOREST_UPPER_EAST_EGG_LEDGE -> FOREST_UPPER_EAST",
+"prereq": "
+EXPLOSIVES_ENEMY &
+    (ADV_VHARD
+    | (ITM_HARD & AMULET_FOOD)
+    | WHIRL_BONK | RABI_SLIPPERS | BUNNY_STRIKE | AIR_JUMP | AIR_DASH)
+",
+}
+
+{
+"edge": "FOREST_LIGHT_ORB_ROOM -> FOREST_UPPER_EAST_EGG_LEDGE",
+"prereq": "EXPLOSIVES_ENEMY",
+}
+
+{
+"edge": "FOREST_UPPER_EAST_EGG_LEDGE -> FOREST_LIGHT_ORB_ROOM",
+"prereq": "
+EXPLOSIVES_ENEMY &
+    (ADV_VHARD
+    | (ITM_HARD & (AMULET_FOOD | RABI_SLIPPERS))
+    | WHIRL_BONK | BUNNY_STRIKE | AIR_JUMP | AIR_DASH)
+",
+}
+
+{
+"edge": "FOREST_UPPER_EAST -> FOREST_UPPER_EAST_REGEN_UP_LEDGE",
+"prereq": "NONE",
+}
+
+{
+"edge": "FOREST_UPPER_EAST_REGEN_UP_LEDGE -> FOREST_START",
+"prereq": "NONE",
+}
+
+{
+"edge": "FOREST_START -> FOREST_UPPER_EAST_EGG_LEDGE",
+"prereq": "WALL_JUMP_LV2 & (AIR_JUMP | BUNNY_WHIRL)",
+}
+
+{
+"edge": "FOREST_UPPER_EAST_EGG_LEDGE -> FOREST_START",
+"prereq": "NONE",
+}
+
+{
 "edge": "FOREST_NORTH_HP_UP_ROOM -> FOREST_LIGHT_ORB_ROOM",
 "prereq": "EXPLOSIVES_ENEMY & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
 }
@@ -50,6 +100,16 @@
     | AIR_DASH
     | BUNNY_WHIRL
 ) & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
+}
+
+{
+"edge": "FOREST_START -> FOREST_UPPER_RIVERBANK_EXIT",
+"prereq": "CHAPTER_1",
+}
+
+{
+"edge": "FOREST_UPPER_RIVERBANK_EXIT -> FOREST_START",
+"prereq": "CHAPTER_1",
 }
 
 {
@@ -418,6 +478,16 @@
 
 {
 "edge": "GRAVEYARD_UPPER -> GRAVEYARD_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "GRAVEYARD_MAIN -> GRAVEYARD_TOP_OF_BRIDGE",
+"prereq": "WHIRL_BONK | (RABI_SLIPPERS & AIR_JUMP & (AIR_DASH | ADV_VHARD))",
+}
+
+{
+"edge": "GRAVEYARD_TOP_OF_BRIDGE -> GRAVEYARD_MAIN",
 "prereq": "NONE",
 }
 
@@ -1092,19 +1162,58 @@ DARKNESS & (
 }
 
 {
+"edge": "LAB_ENTRANCE -> LAB_EAST",
+"prereq": "SLIDING_POWDER",
+}
+
+{
+"edge": "LAB_ENTRANCE -> LAB_EAST_ATTACK_UP_ROOM",
+"prereq": "HAMMER_ROLL_ZIP",
+}
+
+{
 "edge": "LAB_COMPUTER_ROOM -> LAB_EAST",
 "prereq": "NONE",
 }
 
-// XXX SEMISOLID_CLIP may need to have EXPLOSIVES too
-// XXX Need node for pack up room
 {
-"edge": "LAB_ENTRANCE -> LAB_EAST",
-"prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP | DOWNDRILL_SEMISOLID_CLIP",
+"edge": "LAB_EAST -> LAB_EAST_ATTACK_UP_ROOM",
+"prereq": "(
+    AIR_JUMP
+    | AIR_DASH
+    | (RABI_SLIPPERS & ADV_STUPID)
+    | HAMMER_ROLL_ZIP
+    | (RABI_SLIPPERS & BUNNY_STRIKE & ITM_HARD)
+)",
 }
 
 {
-"edge": "LAB_EAST -> LAB_ENTRANCE",
+"edge": "LAB_EAST_ATTACK_UP_ROOM -> LAB_EAST",
+"prereq": "NONE",
+}
+
+{
+"edge": "LAB_EAST_ATTACK_UP_ROOM -> LAB_EAST_PACK_UP_ROOM",
+"prereq": "EXPLOSIVES & SLIDE_ZIP",
+}
+
+{
+"edge": "LAB_EAST -> LAB_EAST_PACK_UP_ROOM",
+"prereq": "EXPLOSIVES",
+}
+
+{
+"edge": "LAB_EAST_PACK_UP_ROOM -> LAB_EAST",
+"prereq": "EXPLOSIVES",
+}
+
+{
+"edge": "LAB_ENTRANCE -> LAB_EAST_PACK_UP_ROOM",
+"prereq": "DOWNDRILL_SEMISOLID_CLIP",
+}
+
+{
+"edge": "LAB_EAST_PACK_UP_ROOM -> LAB_ENTRANCE",
 "prereq": "NONE",
 }
 

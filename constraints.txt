@@ -175,8 +175,7 @@
 
 {
 "item": "REGEN_UP_EAST_FOREST",
-// XXX this exits to FOREST_START
-"from_location": "FOREST_UPPER_EAST",
+"from_location": "FOREST_UPPER_EAST_REGEN_UP_LEDGE",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
@@ -253,8 +252,7 @@
 
 {
 "item": "HP_UP_GRAVEYARD",
-"from_location": "GRAVEYARD_MAIN",
-// XXX coming from the top of the bridge is free
+"from_location": "GRAVEYARD_TOP_OF_BRIDGE",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
@@ -1072,25 +1070,15 @@
 
 {
 "item": "ATK_UP_EAST_LAB",
-"from_location": "LAB_EAST",
-"entry_prereq": "
-    EXPLOSIVES_ENEMY &
-    (
-        AIR_JUMP
-        | AIR_DASH
-        | (RABI_SLIPPERS & ADV_STUPID)
-        | HAMMER_ROLL_ZIP
-        | (RABI_SLIPPERS & BUNNY_STRIKE & ITM_HARD)
-    )
-",
+"from_location": "LAB_EAST_ATTACK_UP_ROOM",
+"entry_prereq": "EXPLOSIVES_ENEMY",
 "exit_prereq": "NONE",
 }
 
-// XXX this is between LAB_EAST and LAB_ENTRANCE
 {
 "item": "PACK_UP_LAB",
-"from_location": "LAB_EAST",
-"entry_prereq": "EXPLOSIVES | DOWNDRILL_SEMISOLID_CLIP",
+"from_location": "LAB_EAST_PACK_UP_ROOM",
+"entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
 
@@ -1212,12 +1200,10 @@
 "exit_prereq": "NONE",
 }
 
-// XXX from FOREST_START: (AIR_JUMP & WALL_JUMP_LV2) | (BUNNY_WHIRL & WALL_JUMP_LV2)
-// maybe add another location between FOREST_START, FOREST_UPPER_EAST, FOREST_LIGHT_ORB_ROOM?
 {
 "item": "EGG_FOREST_NE_LEDGE",
-"from_location": "FOREST_UPPER_EAST",
-"entry_prereq": "EXPLOSIVES_ENEMY",
+"from_location": "FOREST_UPPER_EAST_EGG_LEDGE",
+"entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
 
