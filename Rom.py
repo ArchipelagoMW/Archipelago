@@ -316,7 +316,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
                     # Thanks to Zarby89 for originally finding these values
                     # todo fix screen scrolling
 
-                    if world.mode not in ['insanity', 'insanity_legacy', 'madness_legacy'] and \
+                    if world.shuffle not in ['insanity', 'insanity_legacy', 'madness_legacy'] and \
                         exit.name in ['Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit',
                                       'Palace of Darkness Exit', 'Swamp Palace Exit', 'Ganons Tower Exit', 'Desert Palace Exit (North)', 'Agahnims Tower Exit', 'Spiral Cave Exit (Top)',
                                       'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)']:
