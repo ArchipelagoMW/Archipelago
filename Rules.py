@@ -159,6 +159,7 @@ def global_rules(world):
     set_rule(world.get_entrance('Brewery'), lambda state: state.has_Pearl()) # bomb required
     set_rule(world.get_entrance('Thieves Town'), lambda state: state.has_Pearl()) # bunny cannot pull
     set_rule(world.get_entrance('Skull Woods First Section Hole (North)'), lambda state: state.has_Pearl()) # bunny cannot lift bush
+    set_rule(world.get_entrance('Skull Woods Second Section Hole'), lambda state: state.has_Pearl()) # bunny cannot lift bush
     set_rule(world.get_entrance('Maze Race Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('Cave 45 Mirror Spot'), lambda state: state.has_Mirror())
     set_rule(world.get_entrance('East Dark World Bridge'), lambda state: state.has_Pearl() and state.has('Hammer'))
