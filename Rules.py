@@ -469,9 +469,12 @@ def swordless_rules(world):
 
 
 def standard_rules(world):
+    for loc in ['Sanctuary','Sewers - Secret Room - Left', 'Sewers - Secret Room - Middle',
+                'Sewers - Secret Room - Right']:
+        add_rule(world.get_location(loc), lambda state: state.can_kill_most_things() and state.has('Small Key (Escape)'))
+
     # easiest way to enforce key placement not relevant for open
     set_rule(world.get_location('Sewers - Dark Cross'), lambda state: state.can_kill_most_things())
-    add_rule(world.get_entrance('Sewers Door'), lambda state: state.can_kill_most_things())
 
     set_rule(world.get_location('Hyrule Castle - Boomerang Chest'), lambda state: state.can_kill_most_things())
     set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest'), lambda state: state.can_kill_most_things())
@@ -573,7 +576,7 @@ def set_big_bomb_rules(world):
                            'Dam',
                            'Lumberjack House',
                            'Lake Hylia Fortune Teller',
-                           'Eastern Palace'
+                           'Eastern Palace',
                            'Kakariko Gamble Game',
                            'Kakariko Well Cave',
                            'Bat Cave Cave',
@@ -615,7 +618,7 @@ def set_big_bomb_rules(world):
                              'Cave Shop (Dark Death Mountain)',
                              'Dark Death Mountain Fairy',
                              'Mimic Cave',
-                             'Skull Woods Second Section Door (West)'
+                             'Skull Woods Second Section Door (West)',
                              'Skull Woods Final Section',
                              'Ice Palace',
                              'Turtle Rock',
