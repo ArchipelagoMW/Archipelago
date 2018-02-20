@@ -46,7 +46,7 @@ def parse_args():
     args.add_argument('--hide-unreachable', action='store_true', help='Hide list of unreachable items. Affects seed.')
     args.add_argument('--hide-difficulty', action='store_true', help='Hide difficulty rating. Affects seed.')
     args.add_argument('--egg-goals', action='store_true', help='Egg goals mode. Hard-to-reach items are replaced with easter eggs. All other eggs are removed from the map.')
-    args.add_argument('-extra-eggs', default=None, type=int, help='Number of extra randomly-chosen eggs for egg-goals mode (in addition to the hard-to-reach eggs)')
+    args.add_argument('-extra-eggs', default=0, type=int, help='Number of extra randomly-chosen eggs for egg-goals mode (in addition to the hard-to-reach eggs)')
 
     return args.parse_args(sys.argv[1:])
 
@@ -678,7 +678,7 @@ class RandomizerData(object):
         self.item_slots = items_to_shuffle + eggs_to_shuffle
         self.unshuffled_allocations = list(zip(unshuffled_items, unshuffled_items))
         if settings.egg_goals:
-            minShuffledEggs = self.minHardToReachEggs + settings.extra_eggs
+            minShuffledEggs = self.nHardToReach + settings.extra_eggs
             if self.nEggs < minShuffledEggs:
                 fail('Not enough shuffled eggs for egg goals. Needs at least %d.' % minShuffledEggs)
             self.unshuffled_allocations += [(egg_loc, None) for egg_loc in unshuffled_eggs]
@@ -793,6 +793,7 @@ if __name__ == '__main__':
     if seed != None: random.seed(seed)
     randomizer_data = RandomizerData(args)
     generator = Generator(randomizer_data, args)
-    generator.generate_seed()
+    allocation, analyzer = generator.generate_seed()
+    print('done')
 
 

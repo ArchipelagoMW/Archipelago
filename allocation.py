@@ -95,7 +95,5 @@ class Allocation(object):
         self.incoming_edges = incoming_edges
 
 
-    def shift_eggs_to_hard_to_reach(self, data, settings):
-        analyzer = Analyzer(self, data, settings)
-        difficulty_ratings = analyzer.compute_difficulty_ratings()
+    def shift_eggs_to_hard_to_reach(self, data, settings, hard_to_reach_items):
         pass

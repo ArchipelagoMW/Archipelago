@@ -6,9 +6,10 @@ START_LOCATION = 'FOREST_START'
 class Analyzer(object):
     # -- Results --
     #
-    # result: bool (True if verification success, False otherwise)
-    # error_message: string (error message if result == False)
+    # success: bool (True if verification success, False otherwise)
+    # error_message: string (error message if success == False)
     #
+    # -- The following attributes will only be assigned if success == True. --
     # reachable
     # unreachable
     # levels
@@ -19,7 +20,7 @@ class Analyzer(object):
         self.allocation = allocation
 
         self.error_message = ''
-        self.result = self.run_verifier()
+        self.success = self.run_verifier()
 
     def run_verifier(self):
         result, backward_exitable = self.verify_warps_reachable()
@@ -93,10 +94,11 @@ class Analyzer(object):
         return (len(major_locations - visited) == 0, visited)
 
 
-    def verify_reachable_items(self, backward_exitable):
-        from visualizer import Visualization
-        vis = Visualization()
-        vis.load_graph(self.data, self.allocation)
+    def verify_reachable_items(self, backward_exitable, visualize=True):
+        if visualize:
+            from visualizer import Visualization
+            vis = Visualization()
+            vis.load_graph(self.data, self.allocation)
 
         data = self.data
         allocation = self.allocation
@@ -296,10 +298,14 @@ class Analyzer(object):
             levels.append(current_level_part1)
             levels.append(current_level_part2)
 
-        for loc in forward_enterable.intersection(backward_exitable):
-            vis.set_node_color(loc, (255,191,0))
-        vis.render()
-        print('done')
+        if visualize:
+            for edge_id in untraversable_edges:
+                edge = edges[edge_id]
+                vis.set_edge_color(edge.from_location, edge.to_location, color=(191,32,32))
+            for loc in forward_enterable.intersection(backward_exitable):
+                vis.set_node_color(loc, (255,191,0))
+            vis.render()
+
         reachable = sorted(name for name, value in variables.items() if value)
         unreachable = sorted(name for name, value in variables.items() if not value)
 
