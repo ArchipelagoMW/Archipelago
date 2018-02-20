@@ -87,7 +87,10 @@ def global_rules(world):
     world.get_region('Old Man House').can_reach = lambda state: state.can_reach('Old Man', 'Location') or old_rule(state)
 
     # overworld requirements
-    set_rule(world.get_entrance('Kings Grave'), lambda state: state.has_Boots() and (state.can_lift_heavy_rocks() or (state.has_Pearl() and state.has_Mirror() and state.can_reach('West Dark World', 'Region'))))
+    set_rule(world.get_entrance('Kings Grave'), lambda state: state.has_Boots())
+    set_rule(world.get_entrance('Kings Grave Outer Rocks'), lambda state: state.can_lift_heavy_rocks())
+    set_rule(world.get_entrance('Kings Grave Inner Rocks'), lambda state: state.can_lift_heavy_rocks())
+    set_rule(world.get_entrance('Kings Grave Mirror Spot'), lambda state: state.has_Pearl() and state.has_Mirror())
     # Caution: If king's grave is releaxed at all to account for reaching it via a two way cave's exit in insanity mode, then the bomb shop logic will need to be updated (that would involve create a small ledge-like Region for it)
     set_rule(world.get_entrance('Bonk Fairy (Light)'), lambda state: state.has_Boots())
     set_rule(world.get_location('Sunken Treasure'), lambda state: state.can_reach('Dam'))
@@ -765,8 +768,9 @@ def set_big_bomb_rules(world):
     elif bombshop_entrance.name == 'Kings Grave':
         # same as the Normal_LW_entrances case except that the pre-existing mirror is only possible if you have mitts
         # (because otherwise mirror was used to reach the grave, so would cancel a pre-existing mirror spot)
-        # -> (M and Mitts) or BR
-        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.can_lift_heavy_rocks() and state.has_Mirror()) or basic_routes(state))
+        # to account for insanity, must consider a way to escape without a cave for basic_routes
+        # -> (M and Mitts) or ((Mitts or Flute or (M and P and West Dark World access)) and BR)
+        add_rule(world.get_entrance('Pyramid Fairy'), lambda state: (state.can_lift_heavy_rocks() and state.has_Mirror()) or ((state.can_lift_heavy_rocks() or state.has('Ocarina') or (state.can_reach('West Dark World', 'Region') and state.has_Pearl() and state.has_Mirror())) and basic_routes(state)))
 
 def set_bunny_rules(world):
 

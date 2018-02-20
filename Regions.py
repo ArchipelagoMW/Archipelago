@@ -6,7 +6,7 @@ def create_regions(world):
 
     world.regions = [
         create_lw_region('Light World', ['Mushroom', 'Bottle Merchant', 'Flute Spot', 'Sunken Treasure', 'Purple Chest'],
-                         ["Blinds Hideout", "Hyrule Castle Secret Entrance Drop", 'Zoras River', 'Kings Grave', 'Dam',
+                         ["Blinds Hideout", "Hyrule Castle Secret Entrance Drop", 'Zoras River', 'Kings Grave Outer Rocks', 'Dam',
                           'Links House', 'Tavern North', 'Chicken House', 'Aginahs Cave', 'Sahasrahlas Hut', 'Kakariko Well Drop', 'Kakariko Well Cave',
                           'Blacksmiths Hut', 'Bat Cave Drop Ledge', 'Bat Cave Cave', 'Sick Kids House', 'Hobo Bridge', 'Lost Woods Hideout Drop', 'Lost Woods Hideout Stump',
                           'Lumberjack Tree Tree', 'Lumberjack Tree Cave', 'Mini Moldorm Cave', 'Ice Rod Cave', 'Lake Hylia Central Island Pier',
@@ -25,6 +25,7 @@ def create_regions(world):
         create_cave_region('Hyrule Castle Secret Entrance', ['Link\'s Uncle', 'Secret Passage'], ['Hyrule Castle Secret Entrance Exit']),
         create_lw_region('Zoras River', ['King Zora', 'Zora\'s Ledge']),
         create_cave_region('Waterfall of Wishing', ['Waterfall Fairy - Left', 'Waterfall Fairy - Right']),
+		create_lw_region('Kings Grave Area', None, ['Kings Grave', 'Kings Grave Inner Rocks']),
         create_cave_region('Kings Grave', ['King\'s Tomb']),
         create_cave_region('North Fairy Cave', None, ['North Fairy Cave Exit']),
         create_cave_region('Dam', ['Floodgate Chest']),
@@ -162,8 +163,8 @@ def create_regions(world):
         create_cave_region('Dark Lake Hylia Ledge Spike Cave'),
         create_cave_region('Hype Cave', ['Hype Cave - Top', 'Hype Cave - Middle Right', 'Hype Cave - Middle Left',
                                          'Hype Cave - Bottom', 'Hype Cave - Generous Guy']),
-        create_dw_region('West Dark World', None, ['Village of Outcasts Drop', 'East Dark World River Pier', 'Brewery', 'C-Shaped House', 'Chest Game', 'Thieves Town', 'Graveyard Ledge Mirror Spot', 'Bumper Cave Entrance Rock', 'Skull Woods Forest',
-                                                   'Village of Outcasts Pegs', 'Village of Outcasts Eastern Rocks', 'Red Shield Shop', 'Dark Sanctuary Hint', 'Fortune Teller (Dark)', 'Dark World Lumberjack Shop']),
+        create_dw_region('West Dark World', None, ['Village of Outcasts Drop', 'East Dark World River Pier', 'Brewery', 'C-Shaped House', 'Chest Game', 'Thieves Town', 'Graveyard Ledge Mirror Spot', 'Kings Grave Mirror Spot', 'Bumper Cave Entrance Rock',
+                                                   'Skull Woods Forest', 'Village of Outcasts Pegs', 'Village of Outcasts Eastern Rocks', 'Red Shield Shop', 'Dark Sanctuary Hint', 'Fortune Teller (Dark)', 'Dark World Lumberjack Shop']),
         create_dw_region('Dark Grassy Lawn', None, ['Grassy Lawn Pegs', 'Dark World Shop']),
         create_dw_region('Hammer Peg Area', None, ['Bat Cave Drop Ledge Mirror Spot', 'Dark World Hammer Peg Cave', 'Peg Area Rocks']),
         create_dw_region('Bumper Cave Entrance', None, ['Bumper Cave (Bottom)', 'Bumper Cave Entrance Mirror Spot', 'Bumper Cave Entrance Drop']),
