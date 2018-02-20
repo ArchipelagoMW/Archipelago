@@ -528,8 +528,7 @@ class RandomizerData(object):
         self.pseudo_items = define_pseudo_items()
         self.locations, self.map_transitions, self.items, self.additional_items = parse_locations_and_items()
 
-        self.minHardToReachEggs = 2
-        self.maxHardToReachEggs = 5
+        self.nHardToReach = 5
 
         # Do some preprocessing of variable names        
         self.item_names = [item.name for item in self.items]
@@ -686,7 +685,6 @@ class RandomizerData(object):
         else:
             self.unshuffled_allocations += list(zip(unshuffled_eggs, unshuffled_eggs))
 
-        # XXXX CAN THIS THING HANDLE MULTIPLE TRANSITIONS WITH THE  SAME ORIGIN LOCATION?
         # map_transitions
         walking_right_transitions = [tr for tr in self.map_transitions if tr.walking_right]
         walking_right_transitions.sort(key=lambda tr : (tr.origin_location, tr.rect))
@@ -795,8 +793,6 @@ if __name__ == '__main__':
     if seed != None: random.seed(seed)
     randomizer_data = RandomizerData(args)
     generator = Generator(randomizer_data, args)
-    generator.shuffle()
-    result = generator.verify()
-    print(result)
+    generator.generate_seed()
 
 
