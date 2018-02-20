@@ -121,10 +121,77 @@ def link_entrances(world):
 
         # place remaining doors
         connect_doors(world, single_doors, door_targets)
-    elif world.shuffle == 'new_restricted':
-        # TODO
-        raise NotImplementedError()
     elif world.shuffle == 'restricted':
+        simple_shuffle_dungeons(world)
+
+        lw_entrances = list(LW_Entrances + LW_Single_Cave_Doors + Old_Man_Entrances)
+        dw_entrances = list(DW_Entrances + DW_Single_Cave_Doors)
+        dw_must_exits = list(DW_Entrances_Must_Exit)
+        old_man_entrances = list(Old_Man_Entrances)
+        caves = list(Cave_Exits + Cave_Three_Exits)
+        single_doors = list(Single_Cave_Doors)
+        bomb_shop_doors = list(Bomb_Shop_Single_Cave_Doors + Bomb_Shop_Multi_Cave_Doors)
+        blacksmith_doors = list(Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
+        door_targets = list(Single_Cave_Targets)
+
+        # tavern back door cannot be shuffled yet
+        connect_doors(world, ['Tavern North'], ['Tavern'])
+
+        # in restricted, the only mandatory exits are in dark world
+        connect_mandatory_exits(world, dw_entrances, caves, dw_must_exits)
+
+        # place old man, has limited options
+        # exit has to come from specific set of doors, the entrance is free to move about
+        old_man_entrances = [door for door in old_man_entrances if door in lw_entrances]
+        random.shuffle(old_man_entrances)
+        old_man_exit = old_man_entrances.pop()
+        connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)')
+        lw_entrances.remove(old_man_exit)
+
+        # place blacksmith, has limited options
+        all_entrances = lw_entrances + dw_entrances
+        # cannot place it anywhere already taken (or that are otherwise not eligable for placement)
+        blacksmith_doors = [door for door in blacksmith_doors if door in all_entrances]
+        random.shuffle(blacksmith_doors)
+        blacksmith_hut = blacksmith_doors.pop()
+        connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut')
+        if blacksmith_hut in lw_entrances:
+            lw_entrances.remove(blacksmith_hut)
+        if blacksmith_hut in dw_entrances:
+            dw_entrances.remove(blacksmith_hut)
+        bomb_shop_doors.extend(blacksmith_doors)
+
+        # place dam and pyramid fairy, have limited options
+        all_entrances = lw_entrances + dw_entrances
+        # cannot place it anywhere already taken (or that are otherwise not eligable for placement)
+        bomb_shop_doors = [door for door in bomb_shop_doors if door in all_entrances]
+        random.shuffle(bomb_shop_doors)
+        bomb_shop = bomb_shop_doors.pop()
+        connect_entrance(world, bomb_shop, 'Big Bomb Shop')
+        if bomb_shop in lw_entrances:
+            lw_entrances.remove(bomb_shop)
+        if bomb_shop in dw_entrances:
+            dw_entrances.remove(bomb_shop)
+
+        # place the old man cave's entrance somewhere in the light world
+        random.shuffle(lw_entrances)
+        old_man_entrance = lw_entrances.pop()
+        connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)')
+
+        # place Old Man House in Light World, so using the s&q point does not cause fake dark world
+        connect_caves(world, lw_entrances, [], [('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)')])
+
+        # now scramble the rest
+        connect_caves(world, lw_entrances, dw_entrances, caves)
+
+        # scramble holes
+        scramble_holes(world)
+
+        doors = lw_entrances + dw_entrances
+
+        # place remaining doors
+        connect_doors(world, doors, door_targets)
+    elif world.shuffle == 'restricted_legacy':
         simple_shuffle_dungeons(world)
 
         lw_entrances = list(LW_Entrances)
@@ -271,7 +338,7 @@ def link_entrances(world):
 
         # place remaining doors
         connect_doors(world, doors, door_targets)
-    elif world.shuffle == 'full_cross_worlds':
+    elif world.shuffle == 'crossed':
         skull_woods_shuffle(world)
 
         entrances = list(LW_Entrances + LW_Dungeon_Entrances + LW_Single_Cave_Doors + Old_Man_Entrances + DW_Entrances + DW_Dungeon_Entrances + DW_Single_Cave_Doors)

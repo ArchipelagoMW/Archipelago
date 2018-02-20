@@ -120,25 +120,27 @@ def start():
                                           slightly biased to placing progression items with
                                           less restrictions.
                              ''')
-    parser.add_argument('--shuffle', default='full', const='full', nargs='?', choices=['vanilla', 'simple', 'restricted', 'full','full_cross_worlds','full_legacy', 'insanity_legacy', 'madness_legacy', 'insanity', 'dungeonsfull', 'dungeonssimple'],
+    parser.add_argument('--shuffle', default='full', const='full', nargs='?', choices=['vanilla', 'simple', 'restricted', 'full', 'crossed', 'insanity', 'restricted_legacy', 'full_legacy', 'madness_legacy', 'insanity_legacy', 'dungeonsfull', 'dungeonssimple'],
                         help='''\
                              Select Entrance Shuffling Algorithm. (default: %(default)s)
-                             Full:       Mix cave and dungeon entrances freely.
+                             Full:       Mix cave and dungeon entrances freely while limiting
+                                         multi-entrance caves to one world.
                              Simple:     Shuffle Dungeon Entrances/Exits between each other
                                          and keep all 4-entrance dungeons confined to one
                                          location. All caves outside of death mountain are
-                                         shuffled in pairs.
+                                         shuffled in pairs and matched by original type.
                              Restricted: Use Dungeons shuffling from Simple but freely
                                          connect remaining entrances.
-                             Madness:    Decouple entrances and exits from each other and
-                                         shuffle them freely, only ensuring that no fake
-                                         Light/Dark World happens and all locations are
-                                         reachable.
-                             Insanity:   Madness without the world restrictions. Mirror and
-                                         Pearl are provided early to ensure Filling algorithm
-                                         works properly. Deal with Fake LW/DW at your
-                                         discretion.
-                                         Experimental.
+                             Crossed:    Mix cave and dungeon entrances freely while allowing
+                                         caves to cross between worlds.
+                             Insanity:   Decouple entrances and exits from each other and
+                                         shuffle them freely. Caves that used to be single
+                                         entrance will still exit to the same location from
+                                         which they are entered.
+                             Vanilla:    All entrances are in the same locations they were
+                                         in the base game.
+                             Legacy shuffles preserve behavior from older versions of the
+                             entrance randomizer including significant technical limitations.
                              The dungeon variants only mix up dungeons and keep the rest of
                              the overworld vanilla.
                              ''')

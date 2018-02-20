@@ -209,29 +209,26 @@ Is the Vanilla layout.
 Shuffles Dungeon Entrances/Exits between each other and keeps all 4-entrance dungeons confined to one location. Outside Light World Death Mountain, interiors are shuffled but still connect the same points
 on the overworld. On Death Mountain, entrances are connected more freely.
 
-### Full
-
-Mixes cave and dungeon entrances freely. Caves and dungeons with multiple entrances will be confined to one world.
-
-### Full_Cross_Worlds
-
-Mixes cave and dungeon entrances freely, but now connector caves and dungeons can link Light World and Dark World.
-
-### Full_Legacy
-
-Mixes cave and dungeon entrances freely, but the distinction between single entrance and multi-entrance caves from older versions of the randomizer is maintained.
-
 ### Restricted
 
 Uses Dungeons shuffling from Simple but freely connects remaining entrances.
 
-### Madness
+### Full
 
-Decouples entrances and exits from each other and shuffles them freely, only ensuring that no fake Light/Dark World happens and all locations are reachable.
+Mixes cave and dungeon entrances freely. Caves and dungeons with multiple entrances will be confined to one world.
+
+### Crossed
+
+Mixes cave and dungeon entrances freely, but now connector caves and dungeons can link Light World and Dark World.
 
 ### Insanity
 
-Madness, but without the light/dark world restrictions. Gives access to Mirror and Moon Pearl from the start.
+Decouples entrances and exits from each other and shuffles them freely. Caves that were single entrance in vanilla still can only exit to the same location from which they were entered.
+
+### Legacy Variants
+
+Similar to the base shuffles, but the distinction between single entrance and multi-entrance caves from older versions of the randomizer is maintained.
+Madness_Legacy is the more similar to the modern Insanity. Insanity_Legacy has fake worlds and guaranteed Moon Pearl and Magic Mirror for a very different experience.
 
 ### Dungeon Variants
 
