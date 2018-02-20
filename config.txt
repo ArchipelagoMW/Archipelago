@@ -1,5 +1,5 @@
 "knowledge": "ADVANCED",
-"trick_difficulty": "V_HARD",
+"trick_difficulty": "HARD",
 
 // Configure generation flags here
 "settings": {

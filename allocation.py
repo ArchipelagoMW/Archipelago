@@ -44,6 +44,7 @@ class Allocation(object):
         self.item_at_item_location.update(data.unshuffled_allocations)
 
         # DEBUG CODE FOR FINDING ITEMS
+        #print('\n')
         #for k,v in self.item_at_item_location.items():
             #if v in ('PIKO_HAMMER','WALL_JUMP','RABI_SLIPPERS','AIR_JUMP','AIR_DASH','BUNNY_WHIRL','HAMMER_ROLL','SLIDING_POWDER','CARROT_BOMB','CARROT_SHOOTER','FIRE_ORB','WATER_ORB',):
                 #print('%s @ %s' % (v, k))
