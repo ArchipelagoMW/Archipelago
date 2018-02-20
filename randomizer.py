@@ -3,6 +3,8 @@ from utility import *
 from generator import Generator
 from dataparser import RandomizerData
 import mapfileio
+import musicrandomizer
+import backgroundrandomizer
 
 VERSION_STRING = '{PLACEHOLDER_VERSION}'
 
@@ -32,6 +34,164 @@ def parse_args():
     args.add_argument('-extra-eggs', default=0, type=int, help='Number of extra randomly-chosen eggs for egg-goals mode (in addition to the hard-to-reach eggs)')
 
     return args.parse_args(sys.argv[1:])
+
+
+def apply_item_specific_fixes(mod, allocation):
+    item_at_location = allocation.item_at_item_location
+
+    if is_egg(item_at_location['PURE_LOVE']):
+        data = mod.stored_datas[1]
+        data.tiledata_event[xy_to_index(404,12)] = 3
+
+    if is_egg(item_at_location['ATK_UP_SNOWLAND']):
+        data = mod.stored_datas[3]
+        data.tiledata_event[xy_to_index(93,119)] = 3
+
+    if is_egg(item_at_location['HP_UP_NORTH_FOREST']):
+        data = mod.stored_datas[0]
+        data.tiledata_map[xy_to_index(271,51)] = 0
+        data.tiledata_tiles1[xy_to_index(271,51)] = 0
+
+def apply_fixes_for_randomizer(areaid, data):
+    if areaid == 0:
+        # Remove save point and autosave point before Cocoa1
+        for y in range(84,88):
+            data.tiledata_event[xy_to_index(358,y)] = 0
+            data.tiledata_event[xy_to_index(363,y)] = 0
+            data.tiledata_event[xy_to_index(364,y)] = 0
+        for y in range(85,88):
+            data.tiledata_event[xy_to_index(361,y)] = 0
+            data.tiledata_event[xy_to_index(365,y)] = 0
+
+        # Add autosave point at ledge above Cocoa1
+        data.tiledata_event[xy_to_index(378,80)] = 42
+        data.tiledata_event[xy_to_index(378,81)] = 42
+        data.tiledata_event[xy_to_index(380,80)] = 44
+        data.tiledata_event[xy_to_index(380,81)] = 44
+        data.tiledata_event[xy_to_index(376,80)] = 44
+        data.tiledata_event[xy_to_index(376,81)] = 44
+        data.tiledata_event[xy_to_index(376,82)] = 44
+
+    if areaid == 1:
+        # Remove trampoline at crisis boost location
+        data.tiledata_event[xy_to_index(246,63)] = 0
+        data.tiledata_event[xy_to_index(246,64)] = 0
+
+    if areaid == 4:
+        # Remove save point at slide location in lab
+        for y in range(185,189):
+            data.tiledata_event[xy_to_index(309,y)] = 0
+        for y in range(186,189):
+            data.tiledata_event[xy_to_index(310,y)] = 0
+
+    if areaid == 8:
+        # Remove autosaves from warp destination
+        data.tiledata_event = [0 if x==42 else x for x in data.tiledata_event]
+
+def apply_open_mode_fixes(areaid, data):
+    # Prologue triggers that prevent you from getting past many areas
+    data.tiledata_event = [0 if x==300 else x for x in data.tiledata_event]
+
+    if areaid == 0:
+        # Trigger blocking going to beach from start
+        data.tiledata_event = [0 if x==301 else x for x in data.tiledata_event]
+
+def configure_shaft(mod, settings):
+    events_list = []
+
+    if settings.apply_fixes:
+        # Turn on warp stones from the start
+        events_list += [(525,), (281,), (524,)]
+
+    if settings.open_mode:
+        # Add ribbon
+        events_list.append((558, 5008, 5001))
+
+    # Add attack ups
+    if settings.hyper_attack_mode:
+        for i in range(0,30):
+            events_list.append((558, 5223-i, 5001))
+        print('Hyper attack mode applied')
+    elif settings.super_attack_mode:
+        for i in range(0,20):
+            events_list.append((558, 5223-i, 5001))
+        print('Super attack mode applied')
+
+    # Build shaft only if there is something to build.
+    if len(events_list) > 0:
+        for areaid, data in mod.stored_datas.items():
+            build_start_game_shaft(areaid, data, events_list)
+
+
+def build_start_game_shaft(areaid, data, events_list):
+    # area 0 only.
+    if areaid != 0: return
+
+    MAX_EVENTS = 37
+    EVENT_COUNT = len(events_list)
+    if EVENT_COUNT > MAX_EVENTS:
+        fail('Too many events in start game shaft: %d/%d' % (EVENT_COUNT, MAX_EVENTS))
+    
+    # EV_MOVEDOWN event to move erina down to start position
+    data.tiledata_event[xy_to_index(111,43)] = 554
+
+    # Place events in shaft
+    for i, ev_tuple in enumerate(events_list):
+        y = 43 - EVENT_COUNT + i
+        for dx, ev in enumerate(ev_tuple):
+            data.tiledata_event[xy_to_index(111+dx,y)] = ev
+
+    # Remove old start event
+    data.tiledata_event[xy_to_index(113,98)] = 0
+    # Place new start event
+    data.tiledata_event[xy_to_index(111,42-EVENT_COUNT)] = 34
+
+    # Add collision data
+    data.tiledata_map[xy_to_index(110,44)] = 1
+    data.tiledata_map[xy_to_index(111,44)] = 1
+    data.tiledata_map[xy_to_index(112,44)] = 1
+    for i in range(0,EVENT_COUNT+5):
+        y = 43-i
+        data.tiledata_map[xy_to_index(110,y)] = 1
+        data.tiledata_map[xy_to_index(112,y)] = 1
+    data.tiledata_map[xy_to_index(111,43-EVENT_COUNT-4)] = 1
+
+    # Blanket with black graphical tiles
+    for y in range(0,45):
+        for x in range(100,120):
+            data.tiledata_tiles1[xy_to_index(x,y)] = 33
+
+    # Change room type and background
+    for y in range(0,4):
+        data.tiledata_roombg[to_tile_index(5,y)] = 56
+        data.tiledata_roomtype[to_tile_index(5,y)] = 3
+
+
+
+def pre_modify_map_data(mod, settings):
+    # apply rando fixes
+    if settings.apply_fixes:
+        for areaid, data in mod.stored_datas.items():
+            apply_fixes_for_randomizer(areaid, data)
+        print('Map fixes applied')
+
+    if settings.open_mode:
+        for areaid, data in mod.stored_datas.items():
+            apply_open_mode_fixes(areaid, data)
+        print('Open mode applied')
+
+    # Note: because musicrandomizer requires room color info, the music
+    # must be shuffled before the room colors!
+
+    if settings.shuffle_music:
+        musicrandomizer.shuffle_music(mod.stored_datas)
+
+    if settings.shuffle_backgrounds:
+        backgroundrandomizer.shuffle_backgrounds(mod.stored_datas, settings.no_laggy_backgrounds, settings.no_difficult_backgrounds)
+
+    # Add shaft if needed
+    configure_shaft(mod, settings)
+
 
 def apply_map_transition_shuffle(mod, data, settings, allocation):
     events_2d_dict = {}
@@ -94,8 +254,8 @@ def run_randomizer(seed, source_dir, settings):
     mapfileio.grab_original_maps(source_dir, settings.output_dir)
     print('Maps copied...')
     mod = mapfileio.ItemModifier(areaids, source_dir=source_dir, no_load=True)
-    #pre_modify_map_data(mod, apply_fixes=apply_fixes, open_mode=open_mode, shuffle_music=shuffle_music, shuffle_backgrounds=shuffle_backgrounds, no_laggy_backgrounds=no_laggy_backgrounds, no_difficult_backgrounds=no_difficult_backgrounds, super_attack_mode=super_attack_mode, hyper_attack_mode=hyper_attack_mode)
-    #apply_item_specific_fixes(mod, assigned_locations)
+    pre_modify_map_data(mod, settings)
+    apply_item_specific_fixes(mod, allocation)
     apply_map_transition_shuffle(mod, randomizer_data, settings, allocation)
     insert_items_into_map(mod, randomizer_data, settings, allocation)
 
