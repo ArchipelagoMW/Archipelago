@@ -19,9 +19,10 @@ KNOWLEDGE_ADVANCED = 'KNOWLEDGE_ADVANCED'
 DIFFICULTY_HARD = 'DIFFICULTY_HARD'
 DIFFICULTY_V_HARD = 'DIFFICULTY_V_HARD'
 DIFFICULTY_STUPID = 'DIFFICULTY_STUPID'
+OPEN_MODE = 'OPEN_MODE'
 
 
-def define_setting_flags():
+def define_config_flags():
     d = {
         "TRUE": True,
         "FALSE": False,
@@ -38,17 +39,18 @@ def define_setting_flags():
         "DARKNESS_WITHOUT_LIGHT_ORB": True,
         "UNDERWATER_WITHOUT_WATER_ORB": True,
     }
-    d.update(define_difficulty_flags())
     return d
 
-def define_difficulty_flags():
-    # Difficulty Flags
+def define_setting_flags(settings):
     return {
+        # Difficulty Flags
         KNOWLEDGE_INTERMEDIATE: False,
         KNOWLEDGE_ADVANCED: False,
         DIFFICULTY_HARD: False,
         DIFFICULTY_V_HARD: False,
         DIFFICULTY_STUPID: False,
+        # Other Flags
+        OPEN_MODE: settings.open_mode,
     }
 
 # The values can be either a expression constrant, which is expressed as a string,
@@ -155,6 +157,7 @@ def define_default_expressions(variable_names_set):
         "DARKNESS": expr("DARKNESS_WITHOUT_LIGHT_ORB | LIGHT_ORB"),
         "UNDERWATER": expr("UNDERWATER_WITHOUT_WATER_ORB | WATER_ORB"),
         "UNDERWATER": expr("TRUE"),
+        "PROLOGUE_TRIGGER": expr("CHAPTER_1 | OPEN_MODE"),
         "BOOST": expr("TRUE"),
         #"RIBBON": expr("TRUE"),
         #"WARP": expr("TRUE"),
@@ -360,7 +363,7 @@ def parse_item_constraints(items_set, locations_set, variable_names_set, default
 
     return item_constraints
 
-def read_config(setting_flags, item_locations_set, setting_flags_set, predefined_additional_items_set, settings):
+def read_config(setting_flags, item_locations_set, config_flags_set, predefined_additional_items_set, settings):
     lines = read_file_and_strip_comments(settings.config_file)
     jsondata = ' '.join(lines)
     jsondata = re.sub(',\s*]', ']', jsondata)
@@ -377,7 +380,7 @@ def read_config(setting_flags, item_locations_set, setting_flags_set, predefined
     # Settings
     setting_flags = dict(setting_flags)
     for key, value in settings.items():
-        if key not in setting_flags_set:
+        if key not in config_flags_set:
             fail('Undefined flag: %s' % key)
         if not type(value) is bool:
             fail('Flag %s does not map to a boolean variable in config.txt' % key)
@@ -492,7 +495,9 @@ class RandomizerData(object):
 
 
     def __init__(self, settings):
-        self.setting_flags = define_setting_flags()
+        self.setting_flags = define_config_flags()
+        config_flags_set = set(set(self.setting_flags.keys()))
+        self.setting_flags.update(define_setting_flags(settings))
         self.pseudo_items = define_pseudo_items()
         self.locations, self.map_transitions, self.items, self.additional_items = parse_locations_and_items()
 
@@ -519,7 +524,7 @@ class RandomizerData(object):
 
         # More config loading
         self.setting_flags, self.to_shuffle, self.must_be_reachable, self.included_additional_items = \
-            read_config(self.setting_flags, items_set, set(self.setting_flags.keys()), set(self.additional_items.keys()), settings)
+            read_config(self.setting_flags, items_set, config_flags_set, set(self.additional_items.keys()), settings)
 
         default_expressions = define_default_expressions(variable_names_set)
         evaluate_pseudo_item_constraints(self.pseudo_items, variable_names_set, default_expressions)
