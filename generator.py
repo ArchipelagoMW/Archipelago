@@ -29,6 +29,10 @@ class Generator(object):
             fail('Unable to generate a valid seed after %d attempts.' % MAX_ATTEMPTS)
 
         print('Seed generated after %d attempts' % (attempts+1))
+        
+        # Generate Visualization:
+        if True: Analyzer(self.data, self.allocation, visualize=True)
+
         return self.allocation, analyzer
             
 

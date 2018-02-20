@@ -15,9 +15,10 @@ class Analyzer(object):
     # levels
     # hard_to_reach_items
 
-    def __init__(self, data, allocation):
+    def __init__(self, data, allocation, visualize=False):
         self.data = data
         self.allocation = allocation
+        self.visualize = visualize
 
         self.error_message = ''
         self.success = self.run_verifier()
@@ -92,8 +93,8 @@ class Analyzer(object):
         return (len(major_locations - visited) == 0, visited)
 
 
-    def verify_reachable_items(self, backward_exitable, visualize=True):
-        if visualize:
+    def verify_reachable_items(self, backward_exitable):
+        if self.visualize:
             from visualizer import Visualization
             vis = Visualization()
             vis.load_graph(self.data, self.allocation)
@@ -299,7 +300,7 @@ class Analyzer(object):
             levels.append(current_level_part1)
             levels.append(current_level_part2)
 
-        if visualize:
+        if self.visualize:
             for edge_id in untraversable_edges:
                 edge = edges[edge_id]
                 vis.set_edge_color(edge.from_location, edge.to_location, color=(191,32,32))
