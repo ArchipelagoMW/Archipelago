@@ -1,6 +1,7 @@
 import argparse, random, ast, sys, re
 from utility import *
 from generator import Generator
+import mapfileio
 
 VERSION_STRING = '{PLACEHOLDER_VERSION}'
 
@@ -468,8 +469,6 @@ def read_config(setting_flags, item_locations_set, setting_flags_set, predefined
     return setting_flags, to_shuffle, must_be_reachable, included_additional_items
 
 
-
-
 def parse_item_from_string(line):
     pos, areaid, itemid, name = (s.strip() for s in line.split(':', 3))
     import ast
@@ -781,6 +780,79 @@ def generate_randomized_maps(settings):
     hash_digest = hash_map_files(areaids, output_dir)
     log('Hash: %s' % hash_digest)
 
+def apply_map_transition_shuffle(mod, data, settings, allocation):
+    events_2d_dict = {}
+    for areaid, tiledata in mod.stored_datas.items():
+        tiledata_event = tiledata.tiledata_event
+        events_2d_dict[areaid] = [tiledata_event[i:i+200] for i in range(0,len(tiledata_event),200)]
+
+    def set_target_in_map(transition, area_target, entry_target):
+        events_2d = events_2d_dict[transition.area_current]
+        tiledata_event = mod.stored_datas[transition.area_current].tiledata_event
+        x1,y1,w,h = transition.rect
+        events_cropped = [x for row in events_2d[x1:x1+w] for x in row[y1:y1+h]]
+
+        original_map_event = transition.area_target + 161
+        original_entry_event = transition.entry_target + 200
+        new_map_event = area_target + 161
+        new_entry_event = entry_target + 200
+
+        for i in (i for i,ev in enumerate(events_cropped) if ev == original_map_event):
+            tiledata_event[xy_to_index(x1+i//h, y1+i%h)] = new_map_event
+
+        for i in (i for i,ev in enumerate(events_cropped) if ev == original_entry_event):
+            tiledata_event[xy_to_index(x1+i//h, y1+i%h)] = new_entry_event
+
+    for rtr, ltr in zip(data.walking_right_transitions, allocation.walking_left_transitions):
+        set_target_in_map(rtr, ltr.area_current, ltr.entry_current)
+        set_target_in_map(ltr, rtr.area_current, rtr.entry_current)
+
+
+def insert_items_into_map(mod, data, settings, allocation):
+    name_to_id = dict((item.name, item.itemid) for item in data.items)
+    name_to_id.update(data.additional_items)
+
+    mod.clear_items()
+    for original_item in data.items:
+        item = original_item.copy()
+        item_at_location = allocation.item_at_item_location[item.name]
+        if item_at_location != None:
+            #item.name = item_at_location
+            item.itemid = name_to_id[item_at_location]
+            mod.add_item(item)
+
+
+def get_default_areaids():
+    return list(range(10))
+
+
+def run_randomizer(seed, source_dir, settings):
+    if seed != None: random.seed(seed)
+    randomizer_data = RandomizerData(settings)
+    generator = Generator(randomizer_data, settings)
+    allocation, analyzer = generator.generate_seed()
+    print('done')
+
+    areaids = get_default_areaids()
+    if not mapfileio.exists_map_files(areaids, source_dir):
+        fail('Maps not found in the directory %s! Place the original Rabi-Ribi maps '
+             'in this directory for the randomizer to work.' % source_dir)
+
+    mapfileio.grab_original_maps(source_dir, settings.output_dir)
+    print('Maps copied...')
+    mod = mapfileio.ItemModifier(areaids, source_dir=source_dir, no_load=True)
+    #pre_modify_map_data(mod, apply_fixes=apply_fixes, open_mode=open_mode, shuffle_music=shuffle_music, shuffle_backgrounds=shuffle_backgrounds, no_laggy_backgrounds=no_laggy_backgrounds, no_difficult_backgrounds=no_difficult_backgrounds, super_attack_mode=super_attack_mode, hyper_attack_mode=hyper_attack_mode)
+    #apply_item_specific_fixes(mod, assigned_locations)
+    apply_map_transition_shuffle(mod, randomizer_data, settings, allocation)
+    insert_items_into_map(mod, randomizer_data, settings, allocation)
+
+    mod.save(settings.output_dir)
+    print('Maps saved successfully to %s.' % settings.output_dir)
+
+    hash_digest = hash_map_files(areaids, settings.output_dir)
+    print('Hash: %s' % hash_digest)
+
+
 if __name__ == '__main__':
     args = parse_args()
     source_dir='original_maps'
@@ -790,10 +862,4 @@ if __name__ == '__main__':
     else:
         seed = string_to_integer_seed('%s_ha:%s_hd:%s' % (args.seed, args.hide_unreachable, args.hide_difficulty))
 
-    if seed != None: random.seed(seed)
-    randomizer_data = RandomizerData(args)
-    generator = Generator(randomizer_data, args)
-    allocation, analyzer = generator.generate_seed()
-    print('done')
-
-
+    run_randomizer(seed, source_dir, args)

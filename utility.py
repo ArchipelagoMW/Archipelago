@@ -4,6 +4,7 @@ import sys
 import random
 import re
 import ast
+import os
 
 ### Enums
 LOCATION_WARP = 0
@@ -126,6 +127,23 @@ def is_potion(item_name):
 def is_egg(item_name):
     return bool(item_name.startswith('EGG_'))
 
+
+# Index Conversions
+
+def to_position(index):
+    y = index%200
+    x = index//200
+    return x,y
+
+def to_index(position):
+    x, y = position
+    return x*200 + y
+
+def xy_to_index(x, y):
+    return x*200 + y
+    
+def to_tile_index(x, y):
+    return x*18 + y
 
 
 # Expression Parsing

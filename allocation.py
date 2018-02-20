@@ -14,6 +14,8 @@ class Allocation(object):
     # dict: outgoing_edges  [location -> list(Edge)]
     # dict: incoming_edges  [location -> list(Edge)]
     # list: edges  [list(Edge)]   <-- indexed by edge_id
+    #
+    # list: walking_left_transitions  (MapTransition objects)
 
     def __init__(self, data, settings):
         self.items_to_allocate = list(data.items_to_allocate)
