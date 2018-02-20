@@ -43,12 +43,11 @@ def link_entrances(world):
             dungeon_exits.append('Ganons Tower Exit')
 
         if world.mode == 'standard':
-            # rest of hyrule castle must be in light world to avoid fake darkworld stuff, so it has to be the one connected to east exit of desert
+            # rest of hyrule castle must be in light world, so it has to be the one connected to east exit of desert
             connect_mandatory_exits(world, lw_entrances, [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')], list(LW_Dungeon_Entrances_Must_Exit))
         else:
             connect_mandatory_exits(world, lw_entrances, dungeon_exits, list(LW_Dungeon_Entrances_Must_Exit))
         connect_mandatory_exits(world, dw_entrances, dungeon_exits, list(DW_Dungeon_Entrances_Must_Exit))
-        connect_caves(world, lw_entrances, [], list(LW_Dungeon_Exits))  # Agahnim must be light world
         connect_caves(world, lw_entrances, dw_entrances, dungeon_exits)
     elif world.shuffle == 'simple':
         simple_shuffle_dungeons(world)
@@ -110,7 +109,7 @@ def link_entrances(world):
         connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut')
         bomb_shop_doors.extend(blacksmith_doors)
 
-        # place dam and pyramid fairy, have limited options
+        # place bomb shop, has limited options
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
         connect_entrance(world, bomb_shop, 'Big Bomb Shop')
@@ -161,7 +160,7 @@ def link_entrances(world):
             dw_entrances.remove(blacksmith_hut)
         bomb_shop_doors.extend(blacksmith_doors)
 
-        # place dam and pyramid fairy, have limited options
+        # place bomb shop, has limited options
         all_entrances = lw_entrances + dw_entrances
         # cannot place it anywhere already taken (or that are otherwise not eligable for placement)
         bomb_shop_doors = [door for door in bomb_shop_doors if door in all_entrances]
@@ -178,7 +177,7 @@ def link_entrances(world):
         old_man_entrance = lw_entrances.pop()
         connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)')
 
-        # place Old Man House in Light World, so using the s&q point does not cause fake dark world
+        # place Old Man House in Light World
         connect_caves(world, lw_entrances, [], [('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)')])
 
         # now scramble the rest
@@ -220,7 +219,7 @@ def link_entrances(world):
         connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)')
         connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)')
 
-        # place Old Man House in Light World, so using the s&q point does not cause fake dark world
+        # place Old Man House in Light World
         connect_caves(world, lw_entrances, [], [('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)')])
 
         # connect rest. There's 2 dw entrances remaining, so we will not run into parity issue placing caves
@@ -283,9 +282,8 @@ def link_entrances(world):
             connect_mandatory_exits(world, dw_entrances, caves, dw_must_exits)
             connect_mandatory_exits(world, lw_entrances, caves, lw_must_exits)
         if world.mode == 'standard':
-            # rest of hyrule castle must be in light world to avoid fake darkworld stuff
+            # rest of hyrule castle must be in light world
             connect_caves(world, lw_entrances, [], [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')])
-        connect_caves(world, lw_entrances, [], list(LW_Dungeon_Exits))  # Agahnim must be light world
 
         # place old man, has limited options
         # exit has to come from specific set of doors, the entrance is free to move about
@@ -308,7 +306,7 @@ def link_entrances(world):
             dw_entrances.remove(blacksmith_hut)
         bomb_shop_doors.extend(blacksmith_doors)
 
-        # place dam and pyramid fairy, have limited options
+        # place bomb shop, has limited options
         all_entrances = lw_entrances + dw_entrances
         # cannot place it anywhere already taken (or that are otherwise not eligable for placement)
         bomb_shop_doors = [door for door in bomb_shop_doors if door in all_entrances]
@@ -325,7 +323,7 @@ def link_entrances(world):
         old_man_entrance = lw_entrances.pop()
         connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)')
 
-        # place Old Man House in Light World, so using the s&q point does not cause fake dark world
+        # place Old Man House in Light World
         connect_caves(world, lw_entrances, [], [('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)')])
 
         # now scramble the rest
@@ -369,7 +367,7 @@ def link_entrances(world):
         connect_mandatory_exits(world, entrances, caves, must_exits)
 
         if world.mode == 'standard':
-            # rest of hyrule castle must be in light world to avoid fake darkworld stuff
+            # rest of hyrule castle must be dealt with
             connect_caves(world, entrances, [], [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')])
 
         # place old man, has limited options
@@ -389,7 +387,7 @@ def link_entrances(world):
         entrances.remove(blacksmith_hut)
         bomb_shop_doors.extend(blacksmith_doors)
 
-        # place dam and pyramid fairy, have limited options
+        # place bomb shop, has limited options
 
         # cannot place it anywhere already taken (or that are otherwise not eligable for placement)
         bomb_shop_doors = [door for door in bomb_shop_doors if door in entrances]
@@ -399,12 +397,12 @@ def link_entrances(world):
         entrances.remove(bomb_shop)
 
 
-        # place the old man cave's entrance somewhere in the light world
+        # place the old man cave's entrance somewhere
         random.shuffle(entrances)
         old_man_entrance = entrances.pop()
         connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)')
 
-        # place Old Man House in Light World, so using the s&q point does not cause fake dark world
+        # place Old Man House
         connect_caves(world, entrances, [], [('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)')])
 
         # now scramble the rest
@@ -450,9 +448,8 @@ def link_entrances(world):
             connect_mandatory_exits(world, dw_entrances, caves, dw_must_exits)
             connect_mandatory_exits(world, lw_entrances, caves, lw_must_exits)
         if world.mode == 'standard':
-            # rest of hyrule castle must be in light world to avoid fake darkworld stuff
+            # rest of hyrule castle must be in light world
             connect_caves(world, lw_entrances, [], [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')])
-        connect_caves(world, lw_entrances, [], list(LW_Dungeon_Exits))  # Agahnim must be light world
 
         # place old man, has limited options
         # exit has to come from specific set of doors, the entrance is free to move about
@@ -466,7 +463,7 @@ def link_entrances(world):
         connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)')
         connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)')
 
-        # place Old Man House in Light World, so using the s&q point does not cause fake dark world
+        # place Old Man House in Light World
         connect_caves(world, lw_entrances, [], [('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)')])
 
         # now scramble the rest
@@ -481,7 +478,7 @@ def link_entrances(world):
         connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut')
         bomb_shop_doors.extend(blacksmith_doors)
 
-        # place dam and pyramid fairy, have limited options
+        # place bomb shop, has limited options
         random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
         connect_entrance(world, bomb_shop, 'Big Bomb Shop')
@@ -1115,13 +1112,16 @@ def scramble_holes(world):
         hole_entrances.append(('Hyrule Castle Secret Entrance Stairs', 'Hyrule Castle Secret Entrance Drop'))
         hole_targets.append(('Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance'))
 
-    # do not shuffle sanctuary into pyramid hole
+    # do not shuffle sanctuary into pyramid hole unless shuffle is crossed
+    if world.shuffle == 'crossed':
+        hole_targets.append(('Sanctuary Exit', 'Sewer Drop'))
     if world.shuffle_ganon:
         random.shuffle(hole_targets)
         exit, target = hole_targets.pop()
         connect_two_way(world, 'Pyramid Entrance', exit)
         connect_entrance(world, 'Pyramid Hole', target)
-    hole_targets.append(('Sanctuary Exit', 'Sewer Drop'))
+    if world.shuffle != 'crossed':
+        hole_targets.append(('Sanctuary Exit', 'Sewer Drop'))
 
     random.shuffle(hole_targets)
     for entrance, drop in hole_entrances:
@@ -1318,8 +1318,6 @@ DW_Dungeon_Entrances = ['Thieves Town',
 
 DW_Dungeon_Entrances_Must_Exit = ['Dark Death Mountain Ledge (East)',
                                   'Turtle Rock Isolated Ledge Entrance']
-
-LW_Dungeon_Exits = []
 
 Dungeon_Exits = [('Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)'),
                  'Desert Palace Exit (North)',
