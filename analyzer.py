@@ -61,9 +61,7 @@ class Analyzer(object):
         if len(hard_to_reach_all) < nHardToReach:
             return 'Not enough reachable items (%d) for hard to reach (%d)...?' % (len(hard_to_reach_all), nHardToReach)
 
-        random.shuffle(hard_to_reach_all)
-
-        self.hard_to_reach_items = hard_to_reach_all[:nHardToReach]
+        self.hard_to_reach_items = random.sample(hard_to_reach_all, nHardToReach)
         self.reachable = reachable
         self.unreachable = unreachable
         self.levels = levels
@@ -233,6 +231,7 @@ class Analyzer(object):
                         #variables[location] = True
                 for item_location in data.item_locations_in_node[location]:
                     item_name = allocation.item_at_item_location[item_location]
+                    if item_name == None: continue
                     if not variables[item_name]:
                         current_level_part2.append(item_name)
                         #variables[item_name] = True
@@ -250,6 +249,7 @@ class Analyzer(object):
                     variables[base_location] = True
                 for item_location in data.item_locations_in_node[base_location]:
                     item_name = allocation.item_at_item_location[item_location]
+                    if item_name == None: continue
                     temp_variable_storage[item_name] = variables[item_name]
                     variables[item_name] = True
 
@@ -280,6 +280,7 @@ class Analyzer(object):
                             #variables[base_location] = True
                     for item_location in data.item_locations_in_node[base_location]:
                         item_name = allocation.item_at_item_location[item_location]
+                        if item_name == None: continue
                         if not variables[item_name]:
                             current_level_part2.append(item_name)
                             #variables[item_name] = True

@@ -1,5 +1,5 @@
 import random
-from utility import GraphEdge
+from utility import GraphEdge, is_egg
 
 NO_CONDITIONS = lambda v : True
 INFTY = 99999
@@ -95,5 +95,55 @@ class Allocation(object):
         self.incoming_edges = incoming_edges
 
 
-    def shift_eggs_to_hard_to_reach(self, data, settings, hard_to_reach_items):
-        pass
+    def shift_eggs_to_hard_to_reach(self, data, settings, reachable_items, hard_to_reach_items):
+        reachable_items = set(reachable_items)
+
+        hard_to_reach_pairs = [(item_location, item_name)
+                        for item_location, item_name in self.item_at_item_location.items()
+                        if item_name in hard_to_reach_items]
+
+        hard_to_reach_eggs = [(item_location, item_name) for item_location, item_name in hard_to_reach_pairs
+                        if is_egg(item_name)]
+        hard_to_reach_non_eggs = [(item_location, item_name) for item_location, item_name in hard_to_reach_pairs
+                        if not is_egg(item_name)]
+
+        non_hard_to_reach_eggs = [(item_location, item_name)
+                        for item_location, item_name in self.item_at_item_location.items()
+                        if item_name and is_egg(item_name) and item_name not in hard_to_reach_items and item_name in reachable_items]
+
+        hard_to_reach_eggs.sort(key=lambda p:p[0])
+        hard_to_reach_non_eggs.sort(key=lambda p:p[0])
+        non_hard_to_reach_eggs.sort(key=lambda p:p[0])
+
+        n_eggs_in_map = data.nHardToReach + settings.extra_eggs
+        remainingEggsToPlace = random.sample(non_hard_to_reach_eggs, n_eggs_in_map - len(hard_to_reach_eggs))
+        random.shuffle(remainingEggsToPlace)
+
+        extra_eggs = remainingEggsToPlace[:settings.extra_eggs]
+        eggs_to_move = remainingEggsToPlace[settings.extra_eggs:]
+        assert len(eggs_to_move) == len(hard_to_reach_non_eggs)
+
+        for item_location, item_name in self.item_at_item_location.items():
+            if item_name and is_egg(item_name):
+                self.item_at_item_location[item_location] = None
+
+        for item_location, item_name in hard_to_reach_eggs:
+            self.item_at_item_location[item_location] = item_name
+
+        for item_location, item_name in extra_eggs:
+            self.item_at_item_location[item_location] = item_name
+
+        for z1, z2 in zip(hard_to_reach_non_eggs, eggs_to_move):
+            # Swap
+            item_location_1, item_name_1 = z1
+            item_location_2, item_name_2 = z2
+            self.item_at_item_location[item_location_1] = item_name_2
+            self.item_at_item_location[item_location_2] = item_name_1
+        
+        # Verification
+        actual_n_eggs = sum(1 for item_location, item_name in self.item_at_item_location.items() if item_name and is_egg(item_name))
+        assert n_eggs_in_map == actual_n_eggs
+
+
+
+

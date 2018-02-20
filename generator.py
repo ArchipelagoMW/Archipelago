@@ -19,7 +19,7 @@ class Generator(object):
                 if not self.settings.egg_goals:
                     success = True
                     break
-                self.shift_eggs_to_hard_to_reach(analyzer.hard_to_reach_items)
+                self.shift_eggs_to_hard_to_reach(analyzer.reachable, analyzer.hard_to_reach_items)
                 analyzer = Analyzer(self.data, self.allocation)
                 if analyzer.success:
                     success = True
@@ -35,6 +35,6 @@ class Generator(object):
     def shuffle(self):
         self.allocation.shuffle(self.data, self.settings)
 
-    def shift_eggs_to_hard_to_reach(self, hard_to_reach_items):
-        self.allocation.shift_eggs_to_hard_to_reach(self.data, self.settings, hard_to_reach_items)
+    def shift_eggs_to_hard_to_reach(self, reachable_items, hard_to_reach_items):
+        self.allocation.shift_eggs_to_hard_to_reach(self.data, self.settings, reachable_items, hard_to_reach_items)
 
