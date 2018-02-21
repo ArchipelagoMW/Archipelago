@@ -133,72 +133,74 @@ def define_default_expressions(variable_names_set):
     # so if we parse an expression that has AIR_DASH, the default expression AIR_DASH will be used instead of the variable AIR_DASH.
     # however, the expressions parsed in define_default_expressions (just below) cannot use default expressions in their expressions.
     expr = lambda s : parse_expression(s, variable_names_set)
-    def1 = {
-        "INTERMEDIATE": expr("KNOWLEDGE_INTERMEDIATE"),
-        "ADVANCED": expr("KNOWLEDGE_ADVANCED"),
-        "HARD": expr("DIFFICULTY_HARD"),
-        "V_HARD": expr("DIFFICULTY_V_HARD"),
-        "STUPID": expr("DIFFICULTY_STUPID"),
+    expr_all = lambda d : dict((k,expr(v) if type(v)==str else v) for k,v in d.items())
 
-        "ZIP": expr("ZIP_REQUIRED"),
-        "SEMISOLID_CLIP": expr("SEMISOLID_CLIPS_REQUIRED"),
-        "BLOCK_CLIP": expr("BLOCK_CLIPS_REQUIRED"),
-        "POST_GAME": expr("POST_GAME_ALLOWED"),
-        "POST_IRISU": expr("POST_IRISU_ALLOWED"),
-        "HALLOWEEN": expr("HALLOWEEN_REACHABLE"),
-        "PLURKWOOD": expr("PLURKWOOD_REACHABLE"),
-        "WARP_DESTINATION": expr("WARP_DESTINATION_REACHABLE"),
-        "BUNNY_STRIKE": expr("BUNNY_STRIKE & PIKO_HAMMER"),
-        "BUNNY_WHIRL": expr("BUNNY_WHIRL & PIKO_HAMMER"),
-        "AIR_DASH": expr("AIR_DASH & PIKO_HAMMER"),
-        "AIR_DASH_LV3": expr("AIR_DASH_LV3 & PIKO_HAMMER"),
-        "HAMMER_ROLL": expr("HAMMER_ROLL & BUNNY_WHIRL & PIKO_HAMMER"),
-        "HAMMER_ROLL_LV3": expr("HAMMER_ROLL_LV3 & BUNNY_WHIRL & PIKO_HAMMER"),
-        "DARKNESS": expr("DARKNESS_WITHOUT_LIGHT_ORB | LIGHT_ORB"),
-        "UNDERWATER": expr("UNDERWATER_WITHOUT_WATER_ORB | WATER_ORB"),
-        "UNDERWATER": expr("TRUE"),
-        "PROLOGUE_TRIGGER": expr("CHAPTER_1 | OPEN_MODE"),
-        "BOOST": expr("TRUE"),
-        #"RIBBON": expr("TRUE"),
-        #"WARP": expr("TRUE"),
-        "TRUE": expr("TRUE"),
-        "FALSE": expr("FALSE"),
-        "NONE": expr("TRUE"),
-        "IMPOSSIBLE": expr("FALSE"),
-    }
+    def1 = expr_all({
+        "INTERMEDIATE": "KNOWLEDGE_INTERMEDIATE",
+        "ADVANCED": "KNOWLEDGE_ADVANCED",
+        "HARD": "DIFFICULTY_HARD",
+        "V_HARD": "DIFFICULTY_V_HARD",
+        "STUPID": "DIFFICULTY_STUPID",
+
+        "ZIP": "ZIP_REQUIRED",
+        "SEMISOLID_CLIP": "SEMISOLID_CLIPS_REQUIRED",
+        "BLOCK_CLIP": "BLOCK_CLIPS_REQUIRED",
+        "POST_GAME": "POST_GAME_ALLOWED",
+        "POST_IRISU": "POST_IRISU_ALLOWED",
+        "HALLOWEEN": "HALLOWEEN_REACHABLE",
+        "PLURKWOOD": "PLURKWOOD_REACHABLE",
+        "WARP_DESTINATION": "WARP_DESTINATION_REACHABLE",
+        "BUNNY_STRIKE": "BUNNY_STRIKE & PIKO_HAMMER",
+        "BUNNY_WHIRL": "BUNNY_WHIRL & PIKO_HAMMER",
+        "AIR_DASH": "AIR_DASH & PIKO_HAMMER",
+        "AIR_DASH_LV3": "AIR_DASH_LV3 & PIKO_HAMMER",
+        "HAMMER_ROLL": "HAMMER_ROLL & BUNNY_WHIRL & PIKO_HAMMER",
+        "HAMMER_ROLL_LV3": "HAMMER_ROLL_LV3 & BUNNY_WHIRL & PIKO_HAMMER",
+        "DARKNESS": "DARKNESS_WITHOUT_LIGHT_ORB | LIGHT_ORB",
+        "UNDERWATER": "UNDERWATER_WITHOUT_WATER_ORB | WATER_ORB",
+        "UNDERWATER": "TRUE",
+        "PROLOGUE_TRIGGER": "CHAPTER_1 | OPEN_MODE",
+        "BOOST": "TRUE",
+        #"RIBBON": "TRUE",
+        #"WARP": "TRUE",
+        "TRUE": "TRUE",
+        "FALSE": "FALSE",
+        "NONE": "TRUE",
+        "IMPOSSIBLE": "FALSE",
+    })
 
     expr = lambda s : parse_expression(s, variable_names_set, def1)
-    def2 = {
-        "ITM": expr("INTERMEDIATE"),
-        "ITM_HARD": expr("INTERMEDIATE & HARD"),
-        "ITM_VHARD": expr("INTERMEDIATE & HARD"),
-        "ADV": expr("ADVANCED"),
-        "ADV_HARD": expr("ADVANCED & HARD"),
-        "ADV_VHARD": expr("ADVANCED & V_HARD"),
-        "ADV_STUPID": expr("ADVANCED & STUPID"),
-    }
+    def2 = expr_all({
+        "ITM": "INTERMEDIATE",
+        "ITM_HARD": "INTERMEDIATE & HARD",
+        "ITM_VHARD": "INTERMEDIATE & HARD",
+        "ADV": "ADVANCED",
+        "ADV_HARD": "ADVANCED & HARD",
+        "ADV_VHARD": "ADVANCED & V_HARD",
+        "ADV_STUPID": "ADVANCED & STUPID",
+    })
     def1.update(def2)
 
     expr = lambda s : parse_expression(s, variable_names_set, def1)
-    def3 = {
-        "HAMMER_ROLL_ZIP": expr("ZIP & HAMMER_ROLL_LV3"),
-        "SLIDE_ZIP": expr("ZIP & SLIDING_POWDER"),
-        "WHIRL_BONK": expr("BUNNY_WHIRL & ITM_HARD"),
-        "WHIRL_BONK_CANCEL": expr("BUNNY_WHIRL & BUNNY_AMULET & ITM_HARD"),
-        "SLIDE_JUMP_BUNSTRIKE": expr("BUNNY_STRIKE & INTERMEDIATE"),
-        "SLIDE_JUMP_BUNSTRIKE_CANCEL": expr("BUNNY_STRIKE & BUNNY_AMULET & ITM_HARD"),
-        "DOWNDRILL_SEMISOLID_CLIP": expr("PIKO_HAMMER_LEVELED & SEMISOLID_CLIP"),
+    def3 = expr_all({
+        "HAMMER_ROLL_ZIP": "ZIP & HAMMER_ROLL_LV3",
+        "SLIDE_ZIP": "ZIP & SLIDING_POWDER",
+        "WHIRL_BONK": "BUNNY_WHIRL & ITM_HARD",
+        "WHIRL_BONK_CANCEL": "BUNNY_WHIRL & BUNNY_AMULET & ITM_HARD",
+        "SLIDE_JUMP_BUNSTRIKE": "BUNNY_STRIKE & INTERMEDIATE",
+        "SLIDE_JUMP_BUNSTRIKE_CANCEL": "BUNNY_STRIKE & BUNNY_AMULET & ITM_HARD",
+        "DOWNDRILL_SEMISOLID_CLIP": "PIKO_HAMMER_LEVELED & SEMISOLID_CLIP",
 
-        "EXPLOSIVES": expr("CARROT_BOMB | (CARROT_SHOOTER & BOOST)"),
-        "EXPLOSIVES_ENEMY": expr("CARROT_BOMB | CARROT_SHOOTER"),
+        "EXPLOSIVES": "CARROT_BOMB | (CARROT_SHOOTER & BOOST)",
+        "EXPLOSIVES_ENEMY": "CARROT_BOMB | CARROT_SHOOTER",
 
-        "SPEED1": expr("SPEED_BOOST | SPEEDY"),
-        "SPEED2": expr("SPEED_BOOST_LV3 | SPEEDY"),
-        "SPEED3": expr("SPEED_BOOST_LV3 | (SPEED_BOOST & SPEEDY)"),
-        "SPEED5": expr("SPEED_BOOST_LV3 & SPEEDY"),
+        "SPEED1": "SPEED_BOOST | SPEEDY",
+        "SPEED2": "SPEED_BOOST_LV3 | SPEEDY",
+        "SPEED3": "SPEED_BOOST_LV3 | (SPEED_BOOST & SPEEDY)",
+        "SPEED5": "SPEED_BOOST_LV3 & SPEEDY",
 
-        "AMULET_FOOD": expr("BUNNY_AMULET | (TOWN_MAIN & (RUMI_DONUT | RUMI_CAKE | COCOA_BOMB | GOLD_CARROT))"),
-    }
+        "AMULET_FOOD": "BUNNY_AMULET | (TOWN_MAIN & (RUMI_DONUT | RUMI_CAKE | COCOA_BOMB | GOLD_CARROT))",
+    })
     def1.update(def3)
     return def1
 
