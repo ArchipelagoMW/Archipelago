@@ -125,7 +125,7 @@ def is_potion(item_name):
     return bool(re.match('^[A-Z]*_UP', item_name))
 
 def is_egg(item_name):
-    return bool(item_name.startswith('EGG_'))
+    return item_name!=None and item_name.startswith('EGG_')
 
 
 # Index Conversions

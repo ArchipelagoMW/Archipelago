@@ -112,7 +112,7 @@ class Allocation(object):
 
         non_hard_to_reach_eggs = [(item_location, item_name)
                         for item_location, item_name in self.item_at_item_location.items()
-                        if item_name and is_egg(item_name) and item_name not in hard_to_reach_items and item_name in reachable_items]
+                        if is_egg(item_name) and item_name not in hard_to_reach_items and item_name in reachable_items]
 
         hard_to_reach_eggs.sort(key=lambda p:p[0])
         hard_to_reach_non_eggs.sort(key=lambda p:p[0])
@@ -127,7 +127,7 @@ class Allocation(object):
         assert len(eggs_to_move) == len(hard_to_reach_non_eggs)
 
         for item_location, item_name in self.item_at_item_location.items():
-            if item_name and is_egg(item_name):
+            if is_egg(item_name):
                 self.item_at_item_location[item_location] = None
 
         for item_location, item_name in hard_to_reach_eggs:
@@ -144,7 +144,7 @@ class Allocation(object):
             self.item_at_item_location[item_location_2] = item_name_1
         
         # Verification
-        actual_n_eggs = sum(1 for item_location, item_name in self.item_at_item_location.items() if item_name and is_egg(item_name))
+        actual_n_eggs = sum(1 for item_location, item_name in self.item_at_item_location.items() if is_egg(item_name))
         assert n_eggs_in_map == actual_n_eggs
 
 
