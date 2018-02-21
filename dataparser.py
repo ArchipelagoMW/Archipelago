@@ -159,7 +159,7 @@ def define_default_expressions(variable_names_set):
         "UNDERWATER": "UNDERWATER_WITHOUT_WATER_ORB | WATER_ORB",
         "UNDERWATER": "TRUE",
         "PROLOGUE_TRIGGER": "CHAPTER_1 | OPEN_MODE",
-        "BOOST": "TRUE",
+        "BOOST": "BEACH_MAIN | (RUMI_DONUT & TOWN_MAIN)",
         #"RIBBON": "TRUE",
         #"WARP": "TRUE",
         "NONE": "TRUE",
