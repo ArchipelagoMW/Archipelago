@@ -19,11 +19,12 @@ class Generator(object):
                 if not self.settings.egg_goals:
                     success = True
                     break
-                self.shift_eggs_to_hard_to_reach(analyzer.reachable, analyzer.hard_to_reach_items)
-                analyzer = Analyzer(self.data, self.allocation)
-                if analyzer.success:
-                    success = True
-                    break
+                shift_success = self.shift_eggs_to_hard_to_reach(analyzer.reachable, analyzer.hard_to_reach_items)
+                if shift_success:
+                    analyzer = Analyzer(self.data, self.allocation)
+                    if analyzer.success:
+                        success = True
+                        break
 
         if not success:
             fail('Unable to generate a valid seed after %d attempts.' % MAX_ATTEMPTS)
@@ -40,5 +41,5 @@ class Generator(object):
         self.allocation.shuffle(self.data, self.settings)
 
     def shift_eggs_to_hard_to_reach(self, reachable_items, hard_to_reach_items):
-        self.allocation.shift_eggs_to_hard_to_reach(self.data, self.settings, reachable_items, hard_to_reach_items)
+        return self.allocation.shift_eggs_to_hard_to_reach(self.data, self.settings, reachable_items, hard_to_reach_items)
 
