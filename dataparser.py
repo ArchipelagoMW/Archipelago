@@ -24,15 +24,11 @@ OPEN_MODE = 'OPEN_MODE'
 
 def define_config_flags():
     d = {
-        "TRUE": True,
-        "FALSE": False,
         "ZIP_REQUIRED": False,
         "SEMISOLID_CLIPS_REQUIRED": False,
-        "ADVANCED_TRICKS_REQUIRED": True,
         "BLOCK_CLIPS_REQUIRED": True,
         "POST_GAME_ALLOWED": True,
         "POST_IRISU_ALLOWED": True,
-        "STUPID_HARD_TRICKS": False,
         "HALLOWEEN_REACHABLE": False,
         "PLURKWOOD_REACHABLE": True,
         "WARP_DESTINATION_REACHABLE": False,
@@ -43,6 +39,9 @@ def define_config_flags():
 
 def define_setting_flags(settings):
     return {
+        # Truths
+        "TRUE": True,
+        "FALSE": False,
         # Difficulty Flags
         KNOWLEDGE_INTERMEDIATE: False,
         KNOWLEDGE_ADVANCED: False,
@@ -163,8 +162,6 @@ def define_default_expressions(variable_names_set):
         "BOOST": "TRUE",
         #"RIBBON": "TRUE",
         #"WARP": "TRUE",
-        "TRUE": "TRUE",
-        "FALSE": "FALSE",
         "NONE": "TRUE",
         "IMPOSSIBLE": "FALSE",
     })
