@@ -3,3 +3,7 @@ __pycache__/
 *.png
 original_maps/
 generated_maps/
+converter/*.txt
+converter/generated/
+converter/modified/
+converter/original/
