@@ -74,6 +74,10 @@ def apply_fixes_for_randomizer(areaid, data):
         data.tiledata_event[xy_to_index(376,81)] = 44
         data.tiledata_event[xy_to_index(376,82)] = 44
 
+        # Remove east starting forest lock
+        for y in range(102,108):
+            data.tiledata_event[xy_to_index(358,y)] = 0
+
     if areaid == 1:
         # Remove trampoline at crisis boost location
         data.tiledata_event[xy_to_index(246,63)] = 0
