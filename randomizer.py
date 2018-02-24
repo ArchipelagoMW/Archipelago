@@ -15,7 +15,7 @@ def parse_args():
     args.add_argument('-output_dir', default='generated_maps', help='Output directory for generated maps')
     args.add_argument('-config_file', default='config.txt', help='Config file to use')
     args.add_argument('-seed', default=None, type=str, help='Random seed')
-    args.add_argument('--no-write', dest='write', default=True, action='store_false', help='Flag to disable map generation, and do only map analysis')
+    args.add_argument('--no-write', action='store_true', help='Flag to disable map generation, and do only map analysis')
     args.add_argument('--no-fixes', dest='apply_fixes', default=True, action='store_false', help='Flag to disable randomizer-specific map fixes')
     args.add_argument('--reset', action='store_true', help='Reset maps by copying the original maps to the output directory.')
     args.add_argument('--hash', action='store_true', help='Generate a hash of the maps in the output directory.')
@@ -294,6 +294,9 @@ def run_randomizer(seed, source_dir, settings):
     generator = Generator(randomizer_data, settings)
     allocation, analyzer = generator.generate_seed()
     print('done')
+    if settings.no_write:
+        print('No maps generated as no-write flag is on.')
+        return
 
     areaids = get_default_areaids()
     if not mapfileio.exists_map_files(areaids, source_dir):
