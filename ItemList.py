@@ -40,7 +40,7 @@ hardbaseitems = (['Silver Arrows', 'Single Arrow', 'Single Bomb'] + ['Rupees (30
                  ['Boss Heart Container'] * 5 + ['Piece of Heart'] * 24)
 hardfirst20extra = ['Single Bomb'] * 7 + ['Rupees (5)'] * 8 + ['Rupee (1)'] * 2 + ['Rupees (20)']  * 2 + ['Arrows (10)']
 hardsecond10extra = ['Rupees (5)'] * 7 + ['Rupee (1)'] * 3
-hardthird10extra = ['Arrows (10)'] * 4 + ['Rupees (20)']  * 3 + ['Single Bomb'] * 3 
+hardthird10extra = ['Arrows (10)'] * 4 + ['Rupees (20)']  * 3 + ['Single Bomb'] * 3
 hardfourth10extra = ['Rupees (5)'] * 3 + ['Single Arrow'] * 5 + ['Single Bomb'] * 2
 hardfinal20extra = ['Single Bomb'] * 4 + ['Rupees (5)'] * 2 + ['Single Arrow'] * 14
 
@@ -217,14 +217,15 @@ def generate_itempool(world):
 
     # set up item pool
     if world.custom:
-        (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon) = make_custom_item_pool(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.customitemarray)
+        (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.customitemarray)
         world.rupoor_cost = min(world.customitemarray[67], 9999)
     else:
-        (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon) = get_pool_core(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode)
+        (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode)
     world.itempool = ItemFactory(pool)
     for (location, item) in placed_items:
         world.push_item(location, ItemFactory(item), False)
         world.get_location(location).event = True
+    world.lamps_needed_for_dark_rooms = lamps_needed_for_dark_rooms
     if clock_mode is not None:
         world.clock_mode = clock_mode
     if treasure_hunt_count is not None:
@@ -298,6 +299,10 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode):
         pool.extend(progressivegloves)
     else:
         pool.extend(basicgloves)
+
+    lamps_needed_for_dark_rooms = 1
+    if difficulty == 'easy':
+        lamps_needed_for_dark_rooms = 3
 
     # insanity shuffle doesn't have fake LW/DW logic so for now guaranteed Mirror and Moon Pearl at the start
     if  shuffle == 'insanity_legacy':
@@ -377,7 +382,7 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode):
 
     if goal == 'pedestal':
         placed_items.append(('Master Sword Pedestal', 'Triforce'))
-    return (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon)
+    return (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms)
 
 def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, customitemarray):
     pool = []
@@ -461,6 +466,10 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, c
 
     diff = difficulties[difficulty]
 
+    lamps_needed_for_dark_rooms = 1
+    if difficulty == 'easy':
+        lamps_needed_for_dark_rooms = customitemarray[12]
+
     # expert+ difficulties produce the same contents for
     # all bottles, since only one bottle is available
     if diff.same_bottle:
@@ -515,7 +524,7 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, c
     if itemtotal < total_items_to_place:
         pool.extend(['Nothing'] * (total_items_to_place - itemtotal))
 
-    return (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon)
+    return (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms)
 
 # A quick test to ensure all combinations generate the correct amount of items.
 def test():

@@ -61,6 +61,7 @@ class World(object):
         self.difficulty_requirements = None
         self.fix_fake_world = True
         self.spoiler = Spoiler(self)
+        self.lamps_needed_for_dark_rooms = 1
 
     def intialize_regions(self):
         for region in self.regions:
