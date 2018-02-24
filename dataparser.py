@@ -88,7 +88,7 @@ def define_pseudo_items():
         "TM_VANILLA": "SKY_BRIDGE_EAST",
         "TM_CHOCOLATE": "CHAPTER_1 & RAVINE_CHOCOLATE",
         "TM_KOTRI": "GRAVEYARD_MAIN & VOLCANIC_MAIN",
-        "TM_KEKE_BUNNY": "BOSS_KEKE_BUNNY & PLURKWOOD_MAIN",
+        "TM_KEKE_BUNNY": "BOSS_KEKE_BUNNY & PLURKWOOD_MAIN & TOWN_MAIN",
 
         "2TM": lambda v: count_town_members(v) >= 2,
         "3TM": lambda v: count_town_members(v) >= 3,
@@ -115,7 +115,7 @@ def define_alternate_conditions(settings, variable_names_set, default_expression
         "BUNNY_AMULET": "CHAPTER_2",
         "RUMI_DONUT": "TOWN_SHOP",
         "RUMI_CAKE": "TOWN_SHOP",
-        "COCOA_BOMB": "TM_COCOA & TOWN_MAIN",
+        "COCOA_BOMB": "TM_COCOA & TOWN_MAIN & 3TM",
     }
     if not settings.shuffle_map_transitions:
         d.update({
@@ -174,7 +174,7 @@ def define_default_expressions(variable_names_set):
     def2 = expr_all({
         "ITM": "INTERMEDIATE",
         "ITM_HARD": "INTERMEDIATE & HARD",
-        "ITM_VHARD": "INTERMEDIATE & HARD",
+        "ITM_VHARD": "INTERMEDIATE & V_HARD",
         "ADV": "ADVANCED",
         "ADV_HARD": "ADVANCED & HARD",
         "ADV_VHARD": "ADVANCED & V_HARD",

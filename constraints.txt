@@ -212,7 +212,12 @@
 {
 "item": "MP_UP_CICINI",
 "from_location": "SPECTRAL_WARP",
-"entry_prereq": "COCOA_1 & KOTRI_1",
+"entry_prereq": "
+    (COCOA_1 & KOTRI_1)
+    | AIR_JUMP
+    | SLIDE_JUMP_BUNSTRIKE_CANCEL
+    | (ITM_HARD & (WALL_JUMP_LV2 | AIR_DASH))
+",
 "exit_prereq": "NONE",
 }
 
@@ -273,11 +278,11 @@
 "item": "MP_UP_UPPER_GRAVEYARD",
 "from_location": "GRAVEYARD_UPPER",
 "entry_prereq": "
-// Getting onto the ledge
+    // Getting onto the ledge
     (AIR_JUMP | AIR_DASH | ITM_HARD)
-    & (CARROT_BOMB | BLOCK_CLIP)",
-// Not bothering with the actual prereq to jump back up for now, since you can just drop down to GRAVEYARD_MAIN.
-"exit_prereq": "IMPOSSIBLE",
+    & (CARROT_BOMB | BLOCK_CLIP)
+",
+"exit_prereq": "AIR_JUMP | SLIDE_JUMP_BUNSTRIKE_CANCEL",
 
 "alternate_exits": {
     "GRAVEYARD_MAIN": "NONE",
@@ -362,7 +367,7 @@
 "item": "ARMORED",
 "from_location": "PYRAMID_MAIN",
 "entry_prereq": "NONE",
-//"entry_prereq": "BLOCK_CLIP | CARROT_BOMB",
+//"entry_prereq": "BLOCK_CLIP | EXPLOSIVES | ITM",
 "exit_prereq": "NONE",
 }
 
@@ -629,7 +634,7 @@
 
 {
 "item": "HP_UP_MID_RAVINE",
-"from_location": "RAVINE_MAIN",
+"from_location": "RAVINE_UPPER",
 "entry_prereq": "EXPLOSIVES",
 "exit_prereq": "NONE",
 }
@@ -651,7 +656,7 @@
 {
 "item": "MANA_SURGE",
 "from_location": "RAVINE_MAIN",
-"entry_prereq": "NONE",
+"entry_prereq": "PROLOGUE_TRIGGER",
 "exit_prereq": "NONE",
 }
 
@@ -855,8 +860,8 @@
 {
 "item": "PACK_UP_AQUARIUM",
 "from_location": "AQUARIUM_BOMB_WALLED_AREA",
-"entry_prereq": "EXPLOSIVES | (HAMMER_ROLL_ZIP & WATER_ORB)",
-"exit_prereq": "EXPLOSIVES",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
@@ -1256,8 +1261,9 @@
 {
 "item": "EGG_SPECTRAL_SLIDE",
 "from_location": "SPECTRAL_WARP",
-// XXX jumps instead of bosses...
-"entry_prereq": "COCOA_1 & KOTRI_1 & SLIDING_POWDER",
+"entry_prereq": "SLIDING_POWDER & (
+    (COCOA_1 & KOTRI_1) | AIR_JUMP | SLIDE_JUMP_BUNSTRIKE_CANCEL | (ITM_HARD & (WALL_JUMP_LV2 | AIR_DASH))
+)",
 "exit_prereq": "NONE",
 }
 
