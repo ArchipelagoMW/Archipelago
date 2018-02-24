@@ -5,6 +5,7 @@ from dataparser import RandomizerData
 import mapfileio
 import musicrandomizer
 import backgroundrandomizer
+import converter.diffgenerator as diffgenerator
 
 VERSION_STRING = '{PLACEHOLDER_VERSION}'
 
@@ -23,6 +24,7 @@ def parse_args():
     args.add_argument('--shuffle-music', action='store_true', help='Shuffles the music in the map.')
     args.add_argument('--shuffle-backgrounds', action='store_true', help='Shuffles the backgrounds in the map.')
     args.add_argument('--shuffle-map-transitions', action='store_true', help='Shuffles map transitions between maps.')
+    args.add_argument('--shuffle-gift-items', action='store_true', help='Shuffles certain gift items in the maps.')
     args.add_argument('--no-laggy-backgrounds', action='store_true', help='Don\'t include laggy backgrounds in background shuffle.')
     args.add_argument('--no-difficult-backgrounds', action='store_true', help='Don\'t include backgrounds in background shuffle that interfere with visibility.')
     args.add_argument('--super-attack-mode', action='store_true', help='Start the game with a bunch of attack ups, so you do lots more damage.')
@@ -99,9 +101,19 @@ def apply_open_mode_fixes(areaid, data):
 def configure_shaft(mod, settings):
     events_list = []
 
+    event_flag_set_list = []
+
     if settings.apply_fixes:
         # Turn on warp stones from the start
-        events_list += [(525,), (281,), (524,)]
+        event_flag_set_list += [(281,)]
+
+    if settings.shuffle_gift_items:
+        # Disable event where miriam gives you speed boost and bunny strike.
+        event_flag_set_list += [(374,), (378,)]
+        # The P.Hairpin event is (453,), but I remove it from the maps in the diff instead of disabling it.
+
+    if len(event_flag_set_list) > 0:
+        events_list += [(525,)] + event_flag_set_list + [(524,)]
 
     if settings.open_mode:
         # Add ribbon
@@ -167,12 +179,45 @@ def build_start_game_shaft(areaid, data, events_list):
         data.tiledata_roomtype[to_tile_index(5,y)] = 3
 
 
+def apply_diff_patch_fixes(mod, diff_patch_files):
+    def apply_diff(arrays, diffs):
+        for layer_name, diff in diffs.items():
+            array = arrays[layer_name]
+            for index, coords, value in diff:
+                array[index] = value
 
-def pre_modify_map_data(mod, settings):
+    area_arrays = {}
+    for areaid, stored_data in mod.stored_datas.items():
+        area_arrays[areaid] = {
+            'roomtype': stored_data.tiledata_roomtype,
+            'roomcolor': stored_data.tiledata_roomcolor,
+            'roombg': stored_data.tiledata_roombg,
+            'collision': stored_data.tiledata_map,
+            'event': stored_data.tiledata_event,
+            'tiles0': stored_data.tiledata_tiles0,
+            'tiles1': stored_data.tiledata_tiles1,
+            'tiles2': stored_data.tiledata_tiles2,
+            'tiles3': stored_data.tiledata_tiles3,
+            'tiles4': stored_data.tiledata_tiles4,
+            'tiles5': stored_data.tiledata_tiles5,
+            'tiles6': stored_data.tiledata_tiles6,
+        }
+
+    for diff_path_file in diff_patch_files:
+        diff_data = diffgenerator.DiffData(diff_path_file)
+        for areaid, diffs in diff_data.area_diffs.items():
+            apply_diff(area_arrays[areaid], diffs)
+
+def pre_modify_map_data(mod, settings, diff_patch_files):
     # apply rando fixes
     if settings.apply_fixes:
         for areaid, data in mod.stored_datas.items():
             apply_fixes_for_randomizer(areaid, data)
+        diff_patch_files += [
+            './maptemplates/event_warps/ew_cicini_to_ravine.txt',
+            './maptemplates/event_warps/ew_forest_to_beach.txt',
+            './maptemplates/event_warps/ew_town_to_riverbank.txt',
+        ]
         print('Map fixes applied')
 
     if settings.open_mode:
@@ -191,6 +236,10 @@ def pre_modify_map_data(mod, settings):
 
     # Add shaft if needed
     configure_shaft(mod, settings)
+
+    # Apply map patches from list of patches. We apply this only after everything else has been applied.
+    apply_diff_patch_fixes(mod, diff_patch_files)
+    print('Map patches applied')
 
 
 def apply_map_transition_shuffle(mod, data, settings, allocation):
@@ -254,7 +303,7 @@ def run_randomizer(seed, source_dir, settings):
     mapfileio.grab_original_maps(source_dir, settings.output_dir)
     print('Maps copied...')
     mod = mapfileio.ItemModifier(areaids, source_dir=source_dir, no_load=True)
-    pre_modify_map_data(mod, settings)
+    pre_modify_map_data(mod, settings, allocation.map_modifications)
     apply_item_specific_fixes(mod, allocation)
     apply_map_transition_shuffle(mod, randomizer_data, settings, allocation)
     insert_items_into_map(mod, randomizer_data, settings, allocation)

@@ -150,6 +150,7 @@ NODE_COORDS = {
 "LAB_COMPUTER_ROOM" : 'DJ-28',
 # Area 5: RABI_RABI_TOWN
 "TOWN_MAIN" : 'AK-35',
+"TOWN_SHOP" : 'AI-33',
 # Area 6: PLURKWOOD
 "PLURKWOOD_MAIN" : 'CK-9',
 # Area 7: SUBTERRANEAN_AREA
@@ -203,7 +204,7 @@ def load_item_locs():
     with open('locations_items.txt') as f:
         reading = False
         for line in f:
-            if '===Items===' in line:
+            if '===Items===' in line or '===ShufflableGiftItems===' in line:
                 reading = True
                 continue
             elif '===' in line:

@@ -241,7 +241,22 @@ def map_index(x, y):
 def minimap_index(x, y):
     return x*MINIMAP_HEIGHT + y
 
-def diff_maps(original_file, modified_file):
+def xy_to_minimaptileid(x, y):
+    mini_x = x//20
+    mini_y = (y//45)*4
+    if y%45 >= 12: mini_y += (y%45-1)//11
+    return mini_x, mini_y
+
+def bounding_box_filter(diff, bbox, minimap=False):
+    x1, y1, w, h = bbox
+    x2, y2 = x1+w, y1+h
+    if minimap:
+        x1, y1 = xy_to_minimaptileid(x1, y1)
+        x2, y2 = xy_to_minimaptileid(x2, y2)
+    return [(i, c, v) for i, c, v in diff if (x1 <= c[0] and y1 <= c[1] and c[0] < x2 and c[1] < y2)]
+
+
+def diff_maps(original_file, modified_file, bbox=None):
     original = MapData(original_file)
     modified = MapData(modified_file)
 
@@ -249,9 +264,11 @@ def diff_maps(original_file, modified_file):
 
     for name, _ in ARRAYS_MAP:
         diffs[name] = list_diff(original.data_map[name], modified.data_map[name], map_coords)
+        if bbox != None: diffs[name] = bounding_box_filter(diffs[name], bbox, minimap=False)
 
     for name, _ in ARRAYS_MINIMAP:
         diffs[name] = list_diff(original.data_minimap[name], modified.data_minimap[name], minimap_coords)
+        if bbox != None: diffs[name] = bounding_box_filter(diffs[name], bbox, minimap=True)
 
     return diffs
 
@@ -268,7 +285,11 @@ def generate_diff_file(diff_file_name='output.txt'):
                 print('ERROR! MISSING FILE - %s' % filename)
                 return
 
-            diffs = diff_maps('%s/%s' % (DIR_ORIGINAL_MAPS, filename), '%s/%s' % (DIR_MODIFIED_MAPS, filename))
+            #if areaid == 2: bbox = 254, 182, 2, 2
+            #else: bbox = 456, 157, 26, 14
+            bbox = None
+
+            diffs = diff_maps('%s/%s' % (DIR_ORIGINAL_MAPS, filename), '%s/%s' % (DIR_MODIFIED_MAPS, filename), bbox)
             if all(len(changes) == 0 for name, changes in diffs.items()):
                 continue
 

@@ -12,6 +12,7 @@
     "POST_IRISU_ALLOWED": false,
     "HALLOWEEN_REACHABLE": false,
     "WARP_DESTINATION_REACHABLE": false,
+    "EVENT_WARPS_REQUIRED": true,
 },
 
 "additional_items": [
@@ -91,6 +92,11 @@
     "WALL_JUMP",
     "WATER_ORB",
     "WEAKEN",
+
+    // Shufflable Gift Items
+    "SPEED_BOOST",
+    "BUNNY_STRIKE",
+    "P_HAIRPIN",
 
     // Potions
     "ATK_UP_BEACH_CAVE",

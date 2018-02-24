@@ -34,6 +34,7 @@ def define_config_flags():
         "WARP_DESTINATION_REACHABLE": False,
         "DARKNESS_WITHOUT_LIGHT_ORB": True,
         "UNDERWATER_WITHOUT_WATER_ORB": True,
+        "EVENT_WARPS_REQUIRED": True,
     }
     return d
 
@@ -56,22 +57,21 @@ def define_setting_flags(settings):
 # or a lambda, that takes in a variables object and returns a bool.
 def define_pseudo_items():
     return {
-        "WALL_JUMP_LV2": "WALL_JUMP & SHOP",
-        "HAMMER_ROLL_LV3": "rHAMMER_ROLL & SHOP & CHAPTER_3",
-        "AIR_DASH_LV3": "rAIR_DASH & SHOP",
-        "SPEED_BOOST_LV3": "SPEED_BOOST & SHOP",
-        "BUNNY_AMULET_LV2": "(BUNNY_AMULET & SHOP) | CHAPTER_3",
-        "BUNNY_AMULET_LV3": "(BUNNY_AMULET & SHOP) | CHAPTER_4",
+        "WALL_JUMP_LV2": "WALL_JUMP & TOWN_SHOP",
+        "HAMMER_ROLL_LV3": "rHAMMER_ROLL & TOWN_SHOP & CHAPTER_3",
+        "AIR_DASH_LV3": "rAIR_DASH & TOWN_SHOP",
+        "SPEED_BOOST_LV3": "SPEED_BOOST & TOWN_SHOP",
+        "BUNNY_AMULET_LV2": "(BUNNY_AMULET & TOWN_SHOP) | CHAPTER_3",
+        "BUNNY_AMULET_LV3": "(BUNNY_AMULET & TOWN_SHOP) | CHAPTER_4",
         "PIKO_HAMMER_LEVELED": "PIKO_HAMMER",
         "CARROT_BOMB_ENTRY": "CARROT_BOMB",
         "CARROT_SHOOTER_ENTRY": "CARROT_SHOOTER",
-        "SHOP": "TOWN_MAIN",
 
         "COCOA_1": "FOREST_START",
         "KOTRI_1": "PARK_MAIN",
         "ASHURI_2": "RIVERBANK_MAIN",
         "BOSS_KEKE_BUNNY": "PLURKWOOD_MAIN",
-        "RIBBON": "SPECTRAL_WARP",
+        "BOSS_RIBBON": "SPECTRAL_WARP",
 
         "TM_COCOA": "COCOA_1 & KOTRI_1 & CAVE_COCOA",
         "TM_ASHURI": "RIVERBANK_MAIN & TOWN_MAIN & SPECTRAL_WEST",
@@ -105,21 +105,24 @@ def define_pseudo_items():
     }
 
 
-def define_alternate_conditions(variable_names_set, default_expressions):
+def define_alternate_conditions(settings, variable_names_set, default_expressions):
     d = {
-        "SPEED_BOOST": "SHOP",
-        "SOUL_HEART": "SHOP",
-        "BOOK_OF_CARROT": "SHOP",
-        "P_HAIRPIN": "BOSS_KEKE_BUNNY & PLURKWOOD_MAIN",
-        "HEALING_STAFF": "SHOP",
-        "MAX_BRACELET": "SHOP",
-        "BUNNY_STRIKE": "SLIDING_POWDER & SHOP",
+        "SOUL_HEART": "TOWN_SHOP",
+        "BOOK_OF_CARROT": "TOWN_SHOP",
+        "HEALING_STAFF": "TOWN_SHOP",
+        "MAX_BRACELET": "TOWN_SHOP",
         "STRANGE_BOX": "TM_SYARO & TOWN_MAIN",
         "BUNNY_AMULET": "CHAPTER_2",
-        "RUMI_DONUT": "SHOP",
-        "RUMI_CAKE": "SHOP",
+        "RUMI_DONUT": "TOWN_SHOP",
+        "RUMI_CAKE": "TOWN_SHOP",
         "COCOA_BOMB": "TM_COCOA & TOWN_MAIN",
     }
+    if not settings.shuffle_map_transitions:
+        d.update({
+            "SPEED_BOOST": "TOWN_SHOP",
+            "BUNNY_STRIKE": "SLIDING_POWDER & TOWN_SHOP",
+            "P_HAIRPIN": "BOSS_KEKE_BUNNY & PLURKWOOD_MAIN",
+        })
 
     for key in d.keys():
         if type(d[key]) == str:
@@ -157,7 +160,8 @@ def define_default_expressions(variable_names_set):
         "HAMMER_ROLL_LV3": "HAMMER_ROLL_LV3 & BUNNY_WHIRL & PIKO_HAMMER",
         "DARKNESS": "DARKNESS_WITHOUT_LIGHT_ORB | LIGHT_ORB",
         "UNDERWATER": "UNDERWATER_WITHOUT_WATER_ORB | WATER_ORB",
-        "UNDERWATER": "TRUE",
+        "EVENT_WARP": "EVENT_WARPS_REQUIRED",
+        #"UNDERWATER": "TRUE",
         "PROLOGUE_TRIGGER": "CHAPTER_1 | OPEN_MODE",
         "BOOST": "BEACH_MAIN | (RUMI_DONUT & TOWN_MAIN)",
         #"RIBBON": "TRUE",
@@ -201,6 +205,12 @@ def define_default_expressions(variable_names_set):
     def1.update(def3)
     return def1
 
+def shufflable_gift_item_map_modifications():
+    return [
+        './maptemplates/shuffle_gift_items/mod_p_hairpin.txt',
+        './maptemplates/shuffle_gift_items/mod_bunstrike_speedboost.txt',
+    ]
+
 def get_default_areaids():
     return list(range(10))
 
@@ -218,6 +228,7 @@ def evaluate_pseudo_item_constraints(pseudo_items, variable_names_set, default_e
 def parse_locations_and_items():
     locations = {}
     items = []
+    shufflable_gift_items = []
     additional_items = {}
     map_transitions = []
 
@@ -233,7 +244,8 @@ def parse_locations_and_items():
     READING_LOCATIONS = 1
     READING_MAP_TRANSITIONS = 2
     READING_ADDITIONAL_ITEMS = 3
-    READING_ITEMS = 4
+    READING_SHUFFLABLE_GIFT_ITEMS = 4
+    READING_ITEMS = 5
 
     currently_reading = READING_NOTHING
 
@@ -244,6 +256,8 @@ def parse_locations_and_items():
             currently_reading = READING_MAP_TRANSITIONS
         elif line.startswith('===AdditionalItems==='):
             currently_reading = READING_ADDITIONAL_ITEMS
+        elif line.startswith('===ShufflableGiftItems==='):
+            currently_reading = READING_SHUFFLABLE_GIFT_ITEMS
         elif line.startswith('===Items==='):
             currently_reading = READING_ITEMS
         elif currently_reading == READING_LOCATIONS:
@@ -257,11 +271,18 @@ def parse_locations_and_items():
             if len(line) <= 0: continue
             item_name, item_id = (x.strip() for x in line.split(':'))
             item_id = int(item_id)
-            if item_name in items:
+            if item_name in additional_items:
                 fail('Additional Item %s already defined!' % item)
             additional_items[item_name] = item_id
+        elif currently_reading == READING_SHUFFLABLE_GIFT_ITEMS:
+            if len(line) <= 0: continue
+            if item_name in shufflable_gift_items:
+                fail('Shufflable Gift Item %s already defined!' % item)
+            shufflable_gift_items.append(parse_item_from_string(line))
         elif currently_reading == READING_ITEMS:
             if len(line) <= 0: continue
+            if item_name in items:
+                fail('Item %s already defined!' % item)
             items.append(parse_item_from_string(line))
         elif currently_reading == READING_MAP_TRANSITIONS:
             if len(line) <= 0: continue
@@ -293,7 +314,7 @@ def parse_locations_and_items():
             set(mt.origin_location for mt in map_transitions) - set(locations.keys())
         ))
 
-    return locations, map_transitions, items, additional_items
+    return locations, map_transitions, items, additional_items, shufflable_gift_items
 
 # throws errors for invalid formats.
 def parse_edge_constraints(locations_set, variable_names_set, default_expressions):
@@ -322,7 +343,7 @@ def parse_edge_constraints(locations_set, variable_names_set, default_expression
 
     return constraints
 
-def parse_item_constraints(items_set, locations_set, variable_names_set, default_expressions):
+def parse_item_constraints(settings, items_set, shufflable_gift_items_set, locations_set, variable_names_set, default_expressions):
     lines = read_file_and_strip_comments('constraints.txt')
     jsondata = ' '.join(lines)
     jsondata = re.sub(',\s*}', '}', jsondata)
@@ -341,6 +362,7 @@ def parse_item_constraints(items_set, locations_set, variable_names_set, default
     for cdict in cdicts:
         if not valid_keys.issuperset(cdict.keys()): fail('Unknown keys in item constraint: \n' + str(cdict))
         item, from_location = cdict['item'], cdict['from_location']
+        if not settings.shuffle_gift_items and item in shufflable_gift_items_set: continue
         if item not in items_set: fail('Unknown item: %s' % item)
         if from_location not in locations_set: fail('Unknown location: %s' % from_location)
 
@@ -354,7 +376,7 @@ def parse_item_constraints(items_set, locations_set, variable_names_set, default
         ))
 
     # Validate that there are no duplicate items defined
-    if len(item_constraints) != len(set(cdict['item'] for cdict in cdicts)):
+    if len(cdicts) != len(set(cdict['item'] for cdict in cdicts)):
         # Error: duplicate item. Find the duplicate item.
         item_names = [cdict['item'] for cdict in cdicts]
         duplicates = [item for item in set(item_names) if item_names.count(item) > 1]
@@ -362,7 +384,7 @@ def parse_item_constraints(items_set, locations_set, variable_names_set, default
 
     return item_constraints
 
-def read_config(setting_flags, item_locations_set, config_flags_set, predefined_additional_items_set, settings):
+def read_config(setting_flags, item_locations_set, shufflable_gift_items_set, config_flags_set, predefined_additional_items_set, settings):
     lines = read_file_and_strip_comments(settings.config_file)
     jsondata = ' '.join(lines)
     jsondata = re.sub(',\s*]', ']', jsondata)
@@ -372,13 +394,17 @@ def read_config(setting_flags, item_locations_set, config_flags_set, predefined_
     to_shuffle = config_dict['to_shuffle']
     must_be_reachable = set(config_dict['must_be_reachable'])
     included_additional_items = config_dict['additional_items']
-    settings = config_dict['settings']
+    config_settings = config_dict['settings']
     knowledge = config_dict['knowledge']
     difficulty = config_dict['trick_difficulty']
 
+    if not settings.shuffle_gift_items:
+        to_shuffle = [item_name for item_name in to_shuffle if not item_name in shufflable_gift_items_set]
+        must_be_reachable -= shufflable_gift_items_set
+
     # Settings
     setting_flags = dict(setting_flags)
-    for key, value in settings.items():
+    for key, value in config_settings.items():
         if key not in config_flags_set:
             fail('Undefined flag: %s' % key)
         if not type(value) is bool:
@@ -439,13 +465,10 @@ def read_config(setting_flags, item_locations_set, config_flags_set, predefined_
 
     return setting_flags, to_shuffle, must_be_reachable, included_additional_items
 
-
 def parse_item_from_string(line):
     pos, areaid, itemid, name = (s.strip() for s in line.split(':', 3))
-    import ast
-    item = Item(ast.literal_eval(pos), int(areaid), int(itemid))
-    if len(name) > 0 and name != 'None':
-        item.name = name
+    name = name if (len(name) > 0 and name != 'None') else None
+    item = Item(ast.literal_eval(pos), int(areaid), int(itemid), name)
     return item
 
 class RandomizerData(object):
@@ -498,7 +521,17 @@ class RandomizerData(object):
         config_flags_set = set(set(self.setting_flags.keys()))
         self.setting_flags.update(define_setting_flags(settings))
         self.pseudo_items = define_pseudo_items()
-        self.locations, self.map_transitions, self.items, self.additional_items = parse_locations_and_items()
+        self.locations, self.map_transitions, self.items, self.all_additional_items, self.shufflable_gift_items = parse_locations_and_items()
+        self.additional_items = dict(self.all_additional_items)
+
+        self.gift_item_map_modifications = shufflable_gift_item_map_modifications()
+        self.default_map_modifications = []
+        if settings.shuffle_gift_items:
+            self.items += self.shufflable_gift_items
+            self.default_map_modifications += self.gift_item_map_modifications
+            for item in self.shufflable_gift_items:
+                del self.additional_items[item.name]
+        shufflable_gift_items_set = set(item.name for item in self.shufflable_gift_items)
 
         self.nHardToReach = 5
 
@@ -523,13 +556,13 @@ class RandomizerData(object):
 
         # More config loading
         self.setting_flags, self.to_shuffle, self.must_be_reachable, self.included_additional_items = \
-            read_config(self.setting_flags, items_set, config_flags_set, set(self.additional_items.keys()), settings)
+            read_config(self.setting_flags, items_set, shufflable_gift_items_set, config_flags_set, set(self.all_additional_items.keys()), settings)
 
         default_expressions = define_default_expressions(variable_names_set)
         evaluate_pseudo_item_constraints(self.pseudo_items, variable_names_set, default_expressions)
-        self.alternate_conditions = define_alternate_conditions(variable_names_set, default_expressions)
+        self.alternate_conditions = define_alternate_conditions(settings, variable_names_set, default_expressions)
         self.edge_constraints = parse_edge_constraints(self.locations_set, variable_names_set, default_expressions)
-        self.item_constraints = parse_item_constraints(items_set, self.locations_set, variable_names_set, default_expressions)
+        self.item_constraints = parse_item_constraints(settings, items_set, shufflable_gift_items_set, self.locations_set, variable_names_set, default_expressions)
 
         self.preprocess_data(settings)
         self.preprocess_variables(settings)

@@ -1197,6 +1197,16 @@ DARKNESS & (
 // | Area 5 : Rabi Rabi Town
 // '---------------------.
 
+{
+"edge": "TOWN_MAIN -> TOWN_SHOP",
+"prereq": "NONE",
+}
+
+{
+"edge": "TOWN_SHOP -> TOWN_MAIN",
+"prereq": "NONE",
+}
+
 // .---------------------'
 // | Area 6 : Plurkwood
 // '---------------------.
@@ -1247,3 +1257,28 @@ DARKNESS & (
 "edge": "SYSTEM_INTERIOR_MAIN -> LAB_COMPUTER_ROOM",
 "prereq": "NONE",
 }
+
+// .---------------------'
+// | Event Warp Constraints
+// '---------------------.
+
+{
+"edge": "SPECTRAL_CICINI_ROOM -> RAVINE_TOWN_ENTRANCE",
+"prereq": "EVENT_WARP & TM_CICINI",
+}
+
+{
+"edge": "TOWN_MAIN -> RIVERBANK_MAIN",
+"prereq": "EVENT_WARP & TM_CICINI & CHAPTER_2",
+}
+
+{
+"edge": "FOREST_START -> BEACH_MAIN",
+"prereq": "EVENT_WARP & BOSS_RIBBON",
+}
+
+{
+"edge": "PLURKWOOD_MAIN -> TOWN_MAIN",
+"prereq": "EVENT_WARP & BOSS_KEKE_BUNNY",
+}
+

@@ -25,11 +25,11 @@ Variable types:
 # Structs
 
 class Item(object):
-    def __init__(self, position, areaid, itemid):
+    def __init__(self, position, areaid, itemid, name=None):
         self.areaid = areaid
         self.position = position
         self.itemid = itemid
-        self.name = None
+        self.name = name
 
     # XXXX: Delete if unneeded
     def copy(self):

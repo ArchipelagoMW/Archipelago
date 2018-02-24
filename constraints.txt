@@ -1906,3 +1906,24 @@ EXPLOSIVES &
 "exit_prereq": "NONE",
 }
 
+// Shufflable Gift Items
+{
+"item": "SPEED_BOOST",
+"from_location": "TOWN_SHOP",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "BUNNY_STRIKE",
+"from_location": "TOWN_SHOP",
+"entry_prereq": "SLIDING_POWDER",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "P_HAIRPIN",
+"from_location": "PLURKWOOD_MAIN",
+"entry_prereq": "BOSS_KEKE_BUNNY",
+"exit_prereq": "NONE",
+}

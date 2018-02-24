@@ -16,10 +16,13 @@ class Allocation(object):
     # list: edges  [list(Edge)]   <-- indexed by edge_id
     #
     # list: walking_left_transitions  (MapTransition objects)
+    #
+    # list: map_modifications  (Paths to diff files)
 
     def __init__(self, data, settings):
         self.items_to_allocate = list(data.items_to_allocate)
         self.walking_left_transitions = list(data.walking_left_transitions)
+        self.map_modifications = list(data.default_map_modifications)
 
 
     def shuffle(self, data, settings):
