@@ -297,7 +297,7 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     if world.keysanity:
         rom.write_byte(0x155C9, random.choice([0x11, 0x16]))  # Randomize GT music too in keysanity mode
 
-    # patch entrance/exits/holess
+    # patch entrance/exits/holes
     for region in world.regions:
         for exit in region.exits:
             if exit.target is not None:
@@ -752,6 +752,10 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     # powder patch: remove the need to leave the scrren after powder, since it causes problems for potion shop at race game
     # temporarally we are just nopping out this check we will conver this to a rom fix soon.
     rom.write_bytes(0x02F539,[0xEA,0xEA,0xEA,0xEA,0xEA] if world.powder_patch_required else [0xAD, 0xBF, 0x0A, 0xF0, 0x4F])
+
+    # allow smith into multi-entrance caves in appropriate shuffles
+    if world.shuffle in ['restricted', 'full', 'crossed', 'insanity']:
+        rom.write_byte(0x18004C, 0x01)
 
     # set correct flag for hera basement item
     if world.get_location('Tower of Hera - Basement Cage').item is not None and world.get_location('Tower of Hera - Basement Cage').item.name == 'Small Key (Tower of Hera)':
