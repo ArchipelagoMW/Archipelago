@@ -213,7 +213,7 @@
 "item": "MP_UP_CICINI",
 "from_location": "SPECTRAL_WARP",
 "entry_prereq": "
-    (COCOA_1 & KOTRI_1)
+    (COCOA_1 & KOTRI_1 & CHAPTER_1)
     | AIR_JUMP
     | SLIDE_JUMP_BUNSTRIKE_CANCEL
     | (ITM_HARD & (WALL_JUMP_LV2 | AIR_DASH))
@@ -1262,7 +1262,7 @@
 "item": "EGG_SPECTRAL_SLIDE",
 "from_location": "SPECTRAL_WARP",
 "entry_prereq": "SLIDING_POWDER & (
-    (COCOA_1 & KOTRI_1) | AIR_JUMP | SLIDE_JUMP_BUNSTRIKE_CANCEL | (ITM_HARD & (WALL_JUMP_LV2 | AIR_DASH))
+    (COCOA_1 & KOTRI_1 & CHAPTER_1) | AIR_JUMP | SLIDE_JUMP_BUNSTRIKE_CANCEL | (ITM_HARD & (WALL_JUMP_LV2 | AIR_DASH))
 )",
 "exit_prereq": "NONE",
 }

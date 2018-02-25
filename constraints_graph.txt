@@ -318,7 +318,7 @@ PROLOGUE_TRIGGER & (
 
 {
 "edge": "SPECTRAL_MID -> SPECTRAL_WEST",
-"prereq": "NONE",
+"prereq": "PROLOGUE_TRIGGER",
 }
 
 // .---------------------'
@@ -351,7 +351,7 @@ PROLOGUE_TRIGGER & (
 
 {
 "edge": "BEACH_MAIN -> PYRAMID_MAIN",
-"prereq": "NONE",
+"prereq": "PROLOGUE_TRIGGER",
 }
 
 {
