@@ -397,8 +397,10 @@ def read_config(setting_flags, item_locations_set, shufflable_gift_items_set, co
     config_settings = config_dict['settings']
     knowledge = config_dict['knowledge']
     difficulty = config_dict['trick_difficulty']
-
-    if not settings.shuffle_gift_items:
+    
+    if settings.shuffle_gift_items:
+        included_additional_items = [item_name for item_name in included_additional_items if not item_name in shufflable_gift_items_set]
+    else:
         to_shuffle = [item_name for item_name in to_shuffle if not item_name in shufflable_gift_items_set]
         must_be_reachable -= shufflable_gift_items_set
 
