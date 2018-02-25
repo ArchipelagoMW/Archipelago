@@ -8,6 +8,9 @@ def link_entrances(world):
     for exitname, regionname in mandatory_connections:
         connect_simple(world, exitname, regionname)
 
+    connect_two_way(world, 'Links House', 'Links House Exit') # unshuffled. For now
+    connect_exit(world, 'Chris Houlihan Room Exit', 'Links House') # should always match link's house, except for plandos
+
     # if we do not shuffle, set default connections
     if world.shuffle == 'vanilla':
         for exitname, regionname in default_connections:
@@ -1649,10 +1652,7 @@ Single_Cave_Targets = ['Blinds Hideout',
                        'Dam']
 
 # these are connections that cannot be shuffled and always exist. They link together separate parts of the world we need to divide into regions
-mandatory_connections = [('Links House', 'Links House'),  # unshuffled. For now
-                         ('Links House Exit', 'Light World'),
-
-                         ('Lake Hylia Central Island Pier', 'Lake Hylia Central Island'),
+mandatory_connections = [('Lake Hylia Central Island Pier', 'Lake Hylia Central Island'),
                          ('Lake Hylia Central Island Teleporter', 'Dark Lake Hylia Central Island'),
                          ('Zoras River', 'Zoras River'),
                          ('Kings Grave Outer Rocks', 'Kings Grave Area'),
@@ -2045,7 +2045,8 @@ default_dungeon_connections = [('Desert Palace Entrance (South)', 'Desert Palace
 # exitdata = (room_id, ow_area, vram_loc, scroll_y, scroll_x, link_y, link_x, camera_y, camera_x, unknown_1, unknown_2, door_1, door_2)
 
 # ToDo somehow merge this with creation of the locations
-door_addresses = {'Desert Palace Entrance (South)': (0x08, (0x0084, 0x30, 0x0314, 0x0c56, 0x00a6, 0x0ca8, 0x0128, 0x0cc3, 0x0133, 0x0a, 0xfa, 0x0000, 0x0000)),
+door_addresses = {'Links House': (0x00, (0x0104, 0x2c, 0x0506, 0x0a9a, 0x0832, 0x0ae8, 0x08b8, 0x0b07, 0x08bf, 0x06, 0xfe, 0x0816, 0x0000)),
+                  'Desert Palace Entrance (South)': (0x08, (0x0084, 0x30, 0x0314, 0x0c56, 0x00a6, 0x0ca8, 0x0128, 0x0cc3, 0x0133, 0x0a, 0xfa, 0x0000, 0x0000)),
                   'Desert Palace Entrance (West)': (0x0A, (0x0083, 0x30, 0x0280, 0x0c46, 0x0003, 0x0c98, 0x0088, 0x0cb3, 0x0090, 0x0a, 0xfd, 0x0000, 0x0000)),
                   'Desert Palace Entrance (North)': (0x0B, (0x0063, 0x30, 0x0016, 0x0c00, 0x00a2, 0x0c28, 0x0128, 0x0c6d, 0x012f, 0x00, 0x0e, 0x0000, 0x0000)),
                   'Desert Palace Entrance (East)': (0x09, (0x0085, 0x30, 0x02a8, 0x0c4a, 0x0142, 0x0c98, 0x01c8, 0x0cb7, 0x01cf, 0x06, 0xfe, 0x0000, 0x0000)),
@@ -2189,7 +2190,9 @@ door_addresses = {'Desert Palace Entrance (South)': (0x08, (0x0084, 0x30, 0x0314
 # Key=Name
 # value = entrance #
 #        | (entrance #, exit #)
-exit_ids = {'Desert Palace Exit (South)': (0x09, 0x0A),
+exit_ids = {'Links House Exit': (0x01, 0x00),
+            'Chris Houlihan Room Exit': (None, 0x3D),
+            'Desert Palace Exit (South)': (0x09, 0x0A),
             'Desert Palace Exit (West)': (0x0B, 0x0C),
             'Desert Palace Exit (East)': (0x0A, 0x0B),
             'Desert Palace Exit (North)': (0x0C, 0x0D),

@@ -30,6 +30,7 @@ def create_regions(world):
         create_cave_region('North Fairy Cave', None, ['North Fairy Cave Exit']),
         create_cave_region('Dam', ['Floodgate Chest']),
         create_cave_region('Links House', ['Link\'s House'], ['Links House Exit']),
+        create_cave_region('Chris Houlihan Room', None, ['Chris Houlihan Room Exit']),
         create_cave_region('Tavern', ['Kakariko Tavern']),
         create_cave_region('Elder House', None, ['Elder House Exit (East)', 'Elder House Exit (West)']),
         create_cave_region('Snitch Lady (East)'),

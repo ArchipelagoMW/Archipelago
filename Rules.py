@@ -53,7 +53,7 @@ def add_rule(spot, rule, combine='and'):
 
 
 def add_lamp_requirement(spot):
-    add_rule(spot, lambda state: state.has('Lamp'))
+    add_rule(spot, lambda state: state.has('Lamp', state.world.lamps_needed_for_dark_rooms))
 
 
 def forbid_item(location, item):
@@ -437,9 +437,9 @@ def no_glitches_rules(world):
     add_conditional_lamp('Eastern Palace - Prize', 'Eastern Palace', 'Location')
 
     if not world.sewer_light_cone:
-        add_rule(world.get_location('Sewers - Dark Cross'), lambda state: state.has('Lamp'))
-        add_rule(world.get_entrance('Sewers Back Door'), lambda state: state.has('Lamp'))
-        add_rule(world.get_entrance('Throne Room'), lambda state: state.has('Lamp'))
+        add_lamp_requirement(world.get_location('Sewers - Dark Cross'))
+        add_lamp_requirement(world.get_entrance('Sewers Back Door'))
+        add_lamp_requirement(world.get_entrance('Throne Room'))
 
 
 def open_rules(world):

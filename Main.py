@@ -146,7 +146,8 @@ def copy_world(world):
     ret.can_access_trock_eyebridge = world.can_access_trock_eyebridge
     ret.can_take_damage = world.can_take_damage
     ret.difficulty_requirements = world.difficulty_requirements
-    ret.fix_fake_world = ret.fix_fake_world
+    ret.fix_fake_world = world.fix_fake_world
+    ret.lamps_needed_for_dark_rooms = world.lamps_needed_for_dark_rooms
     create_regions(ret)
     create_dungeons(ret)
 
