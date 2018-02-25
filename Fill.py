@@ -207,7 +207,7 @@ def distribute_items_restrictive(world, gftower_trash_count=0, fill_locations=No
     restitempool = [item for item in world.itempool if not item.advancement and not item.priority]
 
     # fill in gtower locations with trash first
-    if not world.shuffle_ganon:
+    if world.ganonstower_vanilla:
         gtower_locations = [location for location in fill_locations if 'Ganons Tower' in location.name]
         random.shuffle(gtower_locations)
         trashcnt = 0

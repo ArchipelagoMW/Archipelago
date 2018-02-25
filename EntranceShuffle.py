@@ -1034,6 +1034,10 @@ def link_entrances(world):
     if world.get_entrance('Pyramid Hole').connected_region.name != 'Pyramid':
         world.ganon_at_pyramid = False
 
+    # check for Ganon's Tower location
+    if world.get_entrance('Ganons Tower').connected_region.name != 'Ganons Tower (Entrance)':
+        world.ganonstower_vanilla = False
+
 
 def connect_simple(world, exitname, regionname):
     world.get_entrance(exitname).connect(world.get_region(regionname))
@@ -1424,24 +1428,22 @@ Bomb_Shop_Multi_Cave_Doors = ['Hyrule Castle Entrance (South)',
                               'Hyrule Castle Entrance (East)',
                               'Agahnims Tower',
                               'Desert Palace Entrance (West)',
-                              'Desert Palace Entrance (North)',
-                              'Old Man Cave (West)',
+                              'Desert Palace Entrance (North)'
                               # all entrances below this line would be possible for blacksmith_hut
                               # if it were not for dwarf checking multi-entrance caves
-                              'Eastern Palace',
-                              'Elder House (East)',
-                              'Elder House (West)',
-                              'Two Brothers House (East)',
-                              'Old Man Cave (West)',
-                              'Sanctuary',
-                              'Lumberjack Tree Cave',
-                              'Lost Woods Hideout Stump',
-                              'North Fairy Cave',
-                              'Bat Cave Cave',
-                              'Kakariko Well Cave']
+                              ]
 
-#unfortunately blacksmith cannot occur in multi entrance caves, because the dwarf would refuse to enter.
-Blacksmith_Multi_Cave_Doors = []
+Blacksmith_Multi_Cave_Doors = ['Eastern Palace',
+                               'Elder House (East)',
+                               'Elder House (West)',
+                               'Two Brothers House (East)',
+                               'Old Man Cave (West)',
+                               'Sanctuary',
+                               'Lumberjack Tree Cave',
+                               'Lost Woods Hideout Stump',
+                               'North Fairy Cave',
+                               'Bat Cave Cave',
+                               'Kakariko Well Cave']
 
 LW_Single_Cave_Doors = ['Blinds Hideout',
                         'Lake Hylia Fairy',

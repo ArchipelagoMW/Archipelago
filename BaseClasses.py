@@ -33,6 +33,7 @@ class World(object):
         self.swamp_patch_required = False
         self.powder_patch_required = False
         self.ganon_at_pyramid = True
+        self.ganonstower_vanilla = True
         self.sewer_light_cone = mode == 'standard'
         self.light_world_light_cone = False
         self.dark_world_light_cone = False
