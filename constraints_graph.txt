@@ -152,17 +152,30 @@ EXPLOSIVES_ENEMY & SLIDING_POWDER & PROLOGUE_TRIGGER &
 
 {
 "edge": "FOREST_NORTH_HP_UP_ROOM -> FOREST_NIGHT_NORTH_EAST",
-"prereq": "SLIDING_POWDER",
+"prereq": "DARKNESS & PROLOGUE_TRIGGER & SLIDING_POWDER",
 }
 
 {
 "edge": "FOREST_NIGHT_NORTH_EAST -> FOREST_NORTH_HP_UP_ROOM",
-"prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
+"prereq": "PROLOGUE_TRIGGER & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
 }
 
 {
 "edge": "FOREST_START -> FOREST_NIGHT_NORTH_EAST",
-"prereq": "PROLOGUE_TRIGGER | AIR_JUMP",
+"prereq": "
+ITM & DARKNESS & (
+    AIR_JUMP
+    | (WALL_JUMP_LV2 & (
+        RABI_SLIPPERS
+        | (ITM_HARD & SLIDING_POWDER)
+        | (ADV_HARD & SPEED1)
+        | AIR_DASH
+        | ADV_VHARD)
+    )
+    | WHIRL_BONK_CANCEL
+    | (RABI_SLIPPERS & SLIDING_POWDER & ADV_VHARD)
+    | SLIDE_JUMP_BUNSTRIKE_CANCEL
+)",
 }
 
 {
@@ -177,7 +190,7 @@ EXPLOSIVES_ENEMY & SLIDING_POWDER & PROLOGUE_TRIGGER &
 
 {
 "edge": "FOREST_NIGHT_WEST -> FOREST_START",
-"prereq": "NONE",
+"prereq": "PROLOGUE_TRIGGER",
 }
 
 {
@@ -286,6 +299,7 @@ PROLOGUE_TRIGGER & (
 {
 "edge": "SPECTRAL_WEST_EGG_ROOM -> SPECTRAL_MID",
 "prereq": "
+PROLOGUE_TRIGGER & (
     (AIR_JUMP &
         (
         AIR_DASH
@@ -298,12 +312,13 @@ PROLOGUE_TRIGGER & (
     | (BUNNY_STRIKE & RABI_SLIPPERS & AIR_DASH & ADV_VHARD)
     | (SLIDE_JUMP_BUNSTRIKE_CANCEL & RABI_SLIPPERS & AIR_DASH_LV3)
     | (SLIDE_JUMP_BUNSTRIKE & BUNNY_AMULET & ADV_STUPID)
+)
 ",
 }
 
 {
 "edge": "SPECTRAL_MID -> SPECTRAL_WEST_EGG_ROOM",
-"prereq": "AIR_DASH | SLIDE_JUMP_BUNSTRIKE | AIR_JUMP",
+"prereq": "PROLOGUE_TRIGGER & (AIR_DASH | SLIDE_JUMP_BUNSTRIKE | AIR_JUMP)",
 }
 
 {
@@ -351,17 +366,17 @@ PROLOGUE_TRIGGER & (
 
 {
 "edge": "BEACH_MAIN -> PYRAMID_MAIN",
-"prereq": "PROLOGUE_TRIGGER",
+"prereq": "PROLOGUE_TRIGGER | SLIDE_ZIP",
 }
 
 {
 "edge": "PYRAMID_MAIN -> BEACH_MAIN",
-"prereq": "NONE",
+"prereq": "PROLOGUE_TRIGGER | EXPLOSIVES",
 }
 
 {
 "edge": "PYRAMID_MAIN -> PYRAMID_WARP_ROOM",
-"prereq": "PROLOGUE_TRIGGER",
+"prereq": "NONE",
 }
 
 {
@@ -690,7 +705,11 @@ DARKNESS & (
 "prereq": "
         AIR_DASH
         | AIR_JUMP
-        | (ITM_HARD & (SLIDING_POWDER | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)))
+        | (ITM_HARD & AMULET_FOOD & (
+            SLIDING_POWDER
+            | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)
+            | HAMMER_ROLL_ZIP
+        ))
 ",
 }
 
@@ -701,7 +720,16 @@ DARKNESS & (
 
 {
 "edge": "SKY_BRIDGE_SLIDE_AREA -> SKY_BRIDGE_REGEN_UP_LEDGE",
-"prereq": "DARKNESS & EXPLOSIVES",
+"prereq": "
+DARKNESS & (
+    ((SLIDING_POWDER | HAMMER_ROLL_ZIP) & (
+        AIR_JUMP
+        | AIR_DASH
+        | (ITM_HARD & AMULET_FOOD)
+    ))
+    | (SLIDING_POWDER & EXPLOSIVES)
+)
+",
 }
 
 {
@@ -719,14 +747,16 @@ DARKNESS & (
 "prereq": "
         AIR_DASH
         | AIR_JUMP
-        | (ITM_HARD & (SLIDING_POWDER | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)))
+        | SLIDING_POWDER
+        | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)
+        | HAMMER_ROLL_ZIP
 ",
 }
 
 {
 "edge": "SKY_BRIDGE_SLIDE_AREA -> PARK_MAIN",
 // technically goes through SKY_BRIDGE_MAIN, but not really important
-"prereq": "SLIDING_POWDER",
+"prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
 }
 
 {
@@ -904,7 +934,7 @@ DARKNESS & (
 
 {
 "edge": "AQUARIUM_BEACH_ENTRANCE -> AQUARIUM_BOMB_WALLED_AREA",
-"prereq": "CARROT_SHOOTER & BOOST",
+"prereq": "(CARROT_SHOOTER & BOOST) | (CARROT_BOMB & SLIDING_POWDER)",
 }
 
 // .---------------------'

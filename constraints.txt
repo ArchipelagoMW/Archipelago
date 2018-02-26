@@ -1096,6 +1096,9 @@
 "alternate_entries": {
     "LAB_ENTRANCE": "HAMMER_ROLL_ZIP",
     },
+"alternate_exits": {
+    "LAB_EAST_PACK_UP_ROOM": "ADV & EXPLOSIVES_ENEMY & SLIDE_ZIP",
+    },
 }
 
 {
