@@ -191,6 +191,7 @@ def define_default_expressions(variable_names_set):
         "SLIDE_JUMP_BUNSTRIKE": "BUNNY_STRIKE & INTERMEDIATE",
         "SLIDE_JUMP_BUNSTRIKE_CANCEL": "BUNNY_STRIKE & BUNNY_AMULET & ITM_HARD",
         "DOWNDRILL_SEMISOLID_CLIP": "PIKO_HAMMER_LEVELED & SEMISOLID_CLIP",
+        "8TILE_WALLJUMP": "(ITM & (HARD | WALL_JUMP)) | RABI_SLIPPERS | AIR_JUMP",
 
         "EXPLOSIVES": "CARROT_BOMB | (CARROT_SHOOTER & BOOST)",
         "EXPLOSIVES_ENEMY": "CARROT_BOMB | CARROT_SHOOTER",
@@ -397,7 +398,7 @@ def read_config(setting_flags, item_locations_set, shufflable_gift_items_set, co
     config_settings = config_dict['settings']
     knowledge = config_dict['knowledge']
     difficulty = config_dict['trick_difficulty']
-    
+
     if settings.shuffle_gift_items:
         included_additional_items = [item_name for item_name in included_additional_items if not item_name in shufflable_gift_items_set]
     else:

@@ -593,71 +593,62 @@
 
 {
 "item": "HAMMER_WAVE",
-"from_location": "RAVINE_UPPER",
+"from_location": "RAVINE_UPPER_WEST",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "ATK_UP_WEST_RAVINE",
-"from_location": "RAVINE_UPPER",
+"from_location": "RAVINE_UPPER_WEST",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "HP_UP_SOUTH_RAVINE",
-"from_location": "RAVINE_MAIN",
+"from_location": "RAVINE_LOWER",
 "entry_prereq": "EXPLOSIVES_ENEMY & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
 "exit_prereq": "(SLIDING_POWDER | HAMMER_ROLL_ZIP)",
 }
 
 {
 "item": "ATK_UP_NORTH_RAVINE",
-"from_location": "RAVINE_UPPER",
-"entry_prereq": "
-    (
-        SLIDING_POWDER
-        | HAMMER_ROLL_ZIP
-        | (AIR_JUMP & WALL_JUMP_LV2 & SPEED5 & ADV_STUPID)
-
-// If going around and using slide is not an option:
-//        | (ADV_STUPID & (SPEED5 | SLIDING_POWDER) & (
-//            (SLIDE_JUMP_BUNSTRIKE_CANCEL & RABI_SLIPPERS & WALL_JUMP & AIR_JUMP)
-//            | (SLIDE_JUMP_BUNSTRIKE_CANCEL & RABI_SLIPPERS & WALL_JUMP_LV2)
-//            | (AIR_JUMP & WALL_JUMP_LV2)
-    )
-    & (EXPLOSIVES | BLOCK_CLIP)
-",
+"from_location": "RAVINE_NORTH_ATTACK_UP_ROOM",
+"entry_prereq": "EXPLOSIVES | BLOCK_CLIP",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "HP_UP_MID_RAVINE",
-"from_location": "RAVINE_UPPER",
+"from_location": "RAVINE_UPPER_EAST",
 "entry_prereq": "EXPLOSIVES",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "MP_UP_RAVINE",
-"from_location": "RAVINE_UPPER",
+"from_location": "RAVINE_UPPER_EAST",
 "entry_prereq": "EXPLOSIVES",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "REGEN_UP_RAVINE",
-"from_location": "RAVINE_MAIN",
+"from_location": "RAVINE_LOWER",
 "entry_prereq": "EXPLOSIVES",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "MANA_SURGE",
-"from_location": "RAVINE_MAIN",
+"from_location": "RAVINE_LOWER",
 "entry_prereq": "PROLOGUE_TRIGGER",
-"exit_prereq": "NONE",
+"exit_prereq": "PROLOGUE_TRIGGER",
+
+"alternate_exits": {
+    "RAVINE_UPPER_EAST": "NONE",
+}
 }
 
 {
@@ -1095,10 +1086,10 @@
 
 "alternate_entries": {
     "LAB_ENTRANCE": "HAMMER_ROLL_ZIP",
-    },
+},
 "alternate_exits": {
     "LAB_EAST_PACK_UP_ROOM": "ADV & EXPLOSIVES_ENEMY & SLIDE_ZIP",
-    },
+},
 }
 
 {
@@ -1692,14 +1683,14 @@ EXPLOSIVES &
 
 {
 "item": "EGG_RAVINE_ABOVE_CHOCOLATE",
-"from_location": "RAVINE_UPPER",
+"from_location": "RAVINE_UPPER_WEST",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "EGG_RAVINE_MID",
-"from_location": "RAVINE_UPPER",
+"from_location": "RAVINE_UPPER_EAST",
 "entry_prereq": "EXPLOSIVES & SLIDING_POWDER",
 "exit_prereq": "CARROT_BOMB | SLIDE_ZIP",
 }

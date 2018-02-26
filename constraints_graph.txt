@@ -555,54 +555,114 @@ PROLOGUE_TRIGGER & (
 // Ravine
 
 {
-"edge": "RAVINE_BEACH_ENTRANCE -> RAVINE_MAIN",
+"edge": "RAVINE_BEACH_ENTRANCE -> RAVINE_LOWER",
 "prereq": "NONE",
 }
 
 {
-"edge": "RAVINE_MAIN -> RAVINE_BEACH_ENTRANCE",
+"edge": "RAVINE_LOWER -> RAVINE_BEACH_ENTRANCE",
 "prereq": "NONE",
 }
 
 {
-"edge": "RAVINE_MAIN -> RAVINE_TOWN_ENTRANCE",
+"edge": "RAVINE_LOWER -> RAVINE_TOWN_ENTRANCE",
 "prereq": "NONE",
 }
 
 {
-"edge": "RAVINE_TOWN_ENTRANCE -> RAVINE_MAIN",
+"edge": "RAVINE_TOWN_ENTRANCE -> RAVINE_LOWER",
 "prereq": "NONE",
 }
 
 {
-"edge": "RAVINE_MAIN -> RAVINE_UPPER",
+"edge": "RAVINE_LOWER -> RAVINE_UPPER_EAST",
 "prereq": "PROLOGUE_TRIGGER",
 }
 
 {
-"edge": "RAVINE_UPPER -> RAVINE_MAIN",
-"prereq": "NONE",
+"edge": "RAVINE_UPPER_EAST -> RAVINE_LOWER",
+"prereq": "PROLOGUE_TRIGGER",
 }
 
 {
-"edge": "RAVINE_UPPER -> RAVINE_CHOCOLATE",
-"prereq": "NONE",
+"edge": "RAVINE_LOWER -> RAVINE_UPPER_WEST",
+"prereq": "AIR_JUMP & WALL_JUMP_LV2 & SLIDING_POWDER", // jump up the long chasm
 }
 
 {
-"edge": "RAVINE_CHOCOLATE -> RAVINE_UPPER",
-"prereq": "AIR_DASH | AIR_JUMP | RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE | ADV_STUPID",
+"edge": "RAVINE_UPPER_WEST -> RAVINE_LOWER",
+"prereq": "NONE", // semisolid
 }
 
 {
-"edge": "RAVINE_CHOCOLATE -> RAVINE_MAIN",
-"prereq": "NONE",
+"edge": "RAVINE_UPPER_EAST -> RAVINE_UPPER_WEST",
+"prereq": "PROLOGUE_TRIGGER",
 }
 
 {
-"edge": "RAVINE_MAIN -> RAVINE_CHOCOLATE",
+"edge": "RAVINE_UPPER_WEST -> RAVINE_UPPER_EAST",
+"prereq": "PROLOGUE_TRIGGER",
+}
+
+{
+"edge": "RAVINE_UPPER_EAST -> RAVINE_NORTH_ATTACK_UP_ROOM",
 "prereq": "
-    (AIR_JUMP & (SPEED1 | AIR_DASH))
+// Jumping up the chasm
+(ADV_VHARD & WALL_JUMP_LV2 & AIR_JUMP & (SLIDING_POWDER | SPEED5))
+| (ADV_STUPID & SLIDE_JUMP_BUNSTRIKE_CANCEL & RABI_SLIPPERS & (WALL_JUMP_LV2 | (WALL_JUMP & AIR_JUMP)))
+",
+}
+
+{
+"edge": "RAVINE_NORTH_ATTACK_UP_ROOM -> RAVINE_UPPER_EAST",
+"prereq": "NONE",
+}
+
+{
+"edge": "RAVINE_UPPER_WEST -> RAVINE_NORTH_ATTACK_UP_ROOM",
+"prereq": "SLIDING_POWDER",
+}
+
+{
+"edge": "RAVINE_NORTH_ATTACK_UP_ROOM -> RAVINE_UPPER_WEST",
+"prereq": "SLIDING_POWDER & 8TILE_WALLJUMP",
+}
+
+{
+"edge": "RAVINE_UPPER_WEST -> RAVINE_CHOCOLATE",
+"prereq": "NONE",
+}
+
+{
+"edge": "RAVINE_CHOCOLATE -> RAVINE_UPPER_WEST",
+"prereq": "
+// From save room up to ledge below egg
+(
+    (ITM & RABI_SLIPPERS & ((AIR_DASH & ADV_VHARD) | AIR_DASH_LV3))
+    | (AIR_JUMP & (ITM_HARD | RABI_SLIPPERS))
+    | (ADV_VHARD & SLIDE_JUMP_BUNSTRIKE & RABI_SLIPPERS)
+)
+// From ledge below egg to flower ledge
+& (AIR_DASH | AIR_JUMP | RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE | ADV_STUPID)
+// Jumping up hole above chocolate arena
+& (
+    ((AIR_JUMP | WALL_JUMP_LV2) & (RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE))
+    | (AIR_JUMP & WALL_JUMP_LV2)
+    | (AIR_JUMP & WALL_JUMP & AIR_DASH)
+    | TM_CHOCOLATE
+)
+",
+}
+
+{
+"edge": "RAVINE_CHOCOLATE -> RAVINE_LOWER",
+"prereq": "NONE",
+}
+
+{
+"edge": "RAVINE_LOWER -> RAVINE_CHOCOLATE",
+"prereq": "
+    (AIR_JUMP & ((ITM & SPEED1) | AIR_DASH))
     | WHIRL_BONK_CANCEL
     | (ADV_STUPID & RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE_CANCEL & AIR_DASH & BUNNY_AMULET_LV2)
     | (ADV_HARD & RABI_SLIPPERS & WALL_JUMP & AIR_DASH & (SLIDING_POWDER | SPEED5))
