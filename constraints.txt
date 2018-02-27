@@ -1747,7 +1747,7 @@ EXPLOSIVES &
 {
 "item": "EGG_SNOWLAND_LAKE",
 "from_location": "SNOWLAND_EAST",
-"entry_prereq": "ADV_STUPID | AIR_JUMP | WALL_JUMP | WATER_ORB | (BUNNY_WHIRL & ITM_HARD)",
+"entry_prereq": "ADV_STUPID | AIR_JUMP | WALL_JUMP_LV2 | (WALL_JUMP & AIR_DASH & ITM_HARD) | WATER_ORB | WHIRL_BONK",
 "exit_prereq": "NONE",
 }
 
