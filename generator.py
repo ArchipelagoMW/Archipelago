@@ -31,8 +31,10 @@ class Generator(object):
 
         print('Seed generated after %d attempts' % (attempts+1))
         
-        # Generate Visualization:
-        if True: Analyzer(self.data, self.allocation, visualize=True)
+        # Generate Visualization and Print Output:
+        if True:
+            Analyzer(self.data, self.allocation, visualize=True)
+            #self.allocation.print_important_item_locations()
 
         return self.allocation, analyzer
             

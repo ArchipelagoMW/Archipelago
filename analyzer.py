@@ -311,6 +311,11 @@ class Analyzer(object):
         reachable = sorted(name for name, value in variables.items() if value)
         unreachable = sorted(name for name, value in variables.items() if not value)
 
+        #if self.visualize:
+            #for en, level in enumerate(levels):
+                #print('LEVEL %d' % en)
+                #print(level)
+
         return reachable, unreachable, levels
 
 

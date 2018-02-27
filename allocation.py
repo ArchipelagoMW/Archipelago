@@ -46,13 +46,6 @@ class Allocation(object):
         self.item_at_item_location = dict(zip(item_slots, self.items_to_allocate))
         self.item_at_item_location.update(data.unshuffled_allocations)
 
-        # DEBUG CODE FOR FINDING ITEMS
-        #print('\n')
-        #for k,v in self.item_at_item_location.items():
-            #if v in ('PIKO_HAMMER','WALL_JUMP','RABI_SLIPPERS','AIR_JUMP','AIR_DASH','BUNNY_WHIRL','HAMMER_ROLL','SLIDING_POWDER','CARROT_BOMB','CARROT_SHOOTER','FIRE_ORB','WATER_ORB',):
-                #print('%s @ %s' % (v, k))
-
-
     def construct_graph(self, data, settings):
         edges = list(data.initial_edges)
         originalNEdges = len(edges)
@@ -155,6 +148,11 @@ class Allocation(object):
 
         return True
 
-
+    def print_important_item_locations(self):
+        # DEBUG CODE FOR FINDING ITEMS
+        print('--Item Locations--')
+        for k,v in self.item_at_item_location.items():
+            if v in ('PIKO_HAMMER','WALL_JUMP','RABI_SLIPPERS','AIR_JUMP','AIR_DASH','BUNNY_WHIRL','HAMMER_ROLL','SLIDING_POWDER','CARROT_BOMB','CARROT_SHOOTER','FIRE_ORB','WATER_ORB','BUNNY_STRIKE','BUNNY_AMULET','SPEED_BOOST'):
+                print('%s @ %s' % (v, k))
 
 
