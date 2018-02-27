@@ -169,7 +169,7 @@
 {
 "item": "ARM_STRENGTH",
 "from_location": "SPECTRAL_WARP",
-"entry_prereq": "(BUNNY_STRIKE & ITM_HARD) | AIR_DASH | AIR_JUMP | ADV_STUPID",
+"entry_prereq": "(BUNNY_STRIKE & ITM_HARD) | AIR_DASH | AIR_JUMP | (ADV_VHARD & AMULET_FOOD)",
 "exit_prereq": "NONE",
 }
 
@@ -241,7 +241,7 @@
 "entry_prereq": "
     (AIR_JUMP & AIR_DASH)
     | ((AIR_JUMP | AIR_DASH) & (ITM_HARD | WALL_JUMP))
-    | (ADV_STUPID & BUNNY_STRIKE)
+    | (ADV_VHARD & BUNNY_STRIKE & BUNNY_AMULET)
 ",
 "exit_prereq": "NONE",
 }
@@ -705,7 +705,7 @@
         // rwj left wall, wallkick overhang
         | (RABI_SLIPPERS & ((ITM_HARD & SPEED2) | ADV_STUPID))
         // wimpy right corner, bounce left wall, amulet (similar to spike barrier)
-        | ADV_STUPID
+        | (ADV_STUPID & AMULET_FOOD)
     )
 ",
 "exit_prereq": "NONE",
@@ -982,7 +982,7 @@
         | (BUNNY_WHIRL & ITM_HARD)
         | (RABI_SLIPPERS & AIR_DASH)
         | (BUNNY_STRIKE & AIR_DASH & ITM_HARD)
-        | ADV_STUPID // wimpy, bounce, spam amulet (same as spike barrier jump)
+        | (ADV_STUPID & 3_AMULET_FOOD) // wimpy, bounce, spam amulet (same as spike barrier jump)
     )
 ",
 "exit_prereq": "NONE",

@@ -97,11 +97,21 @@ def define_pseudo_items():
         "10TM": lambda v: count_town_members(v) >= 10,
         "SPEEDY": "TM_CICINI & TOWN_MAIN & 3TM",
 
+        "3_MAGIC_TYPES": lambda v : count_magic_types(v) >= 3,
+        "ITEM_MENU": "TOWN_MAIN | 3_MAGIC_TYPES",
+
         "CHAPTER_1": "TOWN_MAIN",
         "CHAPTER_2": "TOWN_MAIN & 2TM",
         "CHAPTER_3": "TOWN_MAIN & 4TM",
         "CHAPTER_4": "TOWN_MAIN & 7TM",
         "CHAPTER_5": "TOWN_MAIN & 10TM",
+
+        "AMULET_FOOD": lambda v : enough_amu_food(v, 1),
+        "2_AMULET_FOOD": lambda v : enough_amu_food(v, 2),
+        "3_AMULET_FOOD": lambda v : enough_amu_food(v, 3),
+        "MANY_AMULET_FOOD": "ITEM_MENU & TOWN_SHOP",
+        
+        "BOOST": "BEACH_MAIN | (RUMI_DONUT & ITEM_MENU)",
     }
 
 
@@ -115,7 +125,7 @@ def define_alternate_conditions(settings, variable_names_set, default_expression
         "BUNNY_AMULET": "CHAPTER_2",
         "RUMI_DONUT": "TOWN_SHOP",
         "RUMI_CAKE": "TOWN_SHOP",
-        "COCOA_BOMB": "TM_COCOA & TOWN_MAIN & 3TM",
+        #"COCOA_BOMB": "TM_COCOA & TOWN_MAIN & 3TM", # Discounting this because you can't buy cocoa bombs from cocoa in IMP
     }
     if not settings.shuffle_map_transitions:
         d.update({
@@ -163,7 +173,6 @@ def define_default_expressions(variable_names_set):
         "EVENT_WARP": "EVENT_WARPS_REQUIRED",
         #"UNDERWATER": "TRUE",
         "PROLOGUE_TRIGGER": "CHAPTER_1 | OPEN_MODE",
-        "BOOST": "BEACH_MAIN | (RUMI_DONUT & TOWN_MAIN)",
         #"RIBBON": "TRUE",
         #"WARP": "TRUE",
         "NONE": "TRUE",
@@ -200,8 +209,6 @@ def define_default_expressions(variable_names_set):
         "SPEED2": "SPEED_BOOST_LV3 | SPEEDY",
         "SPEED3": "SPEED_BOOST_LV3 | (SPEED_BOOST & SPEEDY)",
         "SPEED5": "SPEED_BOOST_LV3 & SPEEDY",
-
-        "AMULET_FOOD": "BUNNY_AMULET | (TOWN_MAIN & (RUMI_DONUT | RUMI_CAKE | COCOA_BOMB | GOLD_CARROT))",
     })
     def1.update(def3)
     return def1
@@ -217,7 +224,22 @@ def get_default_areaids():
 
 TOWN_MEMBERS = ('TM_COCOA','TM_ASHURI','TM_RITA','TM_CICINI','TM_SAYA','TM_SYARO','TM_PANDORA','TM_NIEVE','TM_NIXIE','TM_ARURAUNE','TM_SEANA','TM_LILITH','TM_VANILLA','TM_CHOCOLATE','TM_KOTRI','TM_KEKE_BUNNY',)
 def count_town_members(variables):
-    return sum([1 for tm in TOWN_MEMBERS if variables[tm]])
+    return sum(1 for tm in TOWN_MEMBERS if variables[tm])
+
+MAGIC_TYPES = ('SUNNY_BEAM','CHAOS_ROD','HEALING_STAFF','EXPLODE_SHOT','CARROT_SHOOTER')
+def count_magic_types(variables):
+    return sum(1 for tm in MAGIC_TYPES if variables[tm]) + 1
+
+CONSUMABLE_ITEMS = ('RUMI_DONUT','RUMI_CAKE','COCOA_BOMB','GOLD_CARROT')
+def enough_amu_food(variables, amount):
+    if variables['TOWN_SHOP']: return True
+    count = 0
+    if variables['BUNNY_AMULET']: count = 1
+    if variables['BUNNY_AMULET_LV2']: count = 2
+    if variables['BUNNY_AMULET_LV3']: count = 3
+    if variables['ITEM_MENU']:
+        count += sum(1 for tm in CONSUMABLE_ITEMS if variables[tm])
+    return count >= amount
 
 
 def evaluate_pseudo_item_constraints(pseudo_items, variable_names_set, default_expressions):
