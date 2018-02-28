@@ -83,7 +83,8 @@ This is only noticeably different if the the Ganon shuffle option is enabled.
 
 ### Easy
 
-This setting doubles the number of swords, shields, armors, and bottles in the item pool.
+This setting doubles the number of swords, shields, armors, bottles, and silver arrows in the item pool.
+This setting will also triple the number of Lamps available, and all will be obtainable before dark rooms.
 Within dungeons, the number of items found will be displayed on screen if there is no timer.
 
 ### Normal
@@ -198,20 +199,21 @@ staleness, decreasing the likelihood of receiving a progress item.
 
 ## Entrance Shuffle Algorithm
 
-Determines how locations are shuffled.
+Determines how locations are shuffled. In all modes other than Insanity and the similar legacy versions, holes shuffle as a pair with the connecting cave and the front
+two sections of Skull Woods remain confined to the general Skull Woods area. Link's house is never shuffled as a design decision.
 
-### Default
+### Vanilla
 
-Is the Vanilla layout.
+Places entrances in the same locations they were in the original The Legend of Zelda: A Link to the Past.
 
 ### Simple
 
-Shuffles Dungeon Entrances/Exits between each other and keeps all 4-entrance dungeons confined to one location. Outside Light World Death Mountain, interiors are shuffled but still connect the same points
-on the overworld. On Death Mountain, entrances are connected more freely.
+Shuffles dungeon entrances between each other and keeps all 4-entrance dungeons confined to one location such that dungeons will one to one swap with each other.
+Other than on Light World Death Mountain, interiors are shuffled but still connect the same points on the overworld. On Death Mountain, entrances are connected more freely.
 
 ### Restricted
 
-Uses Dungeons shuffling from Simple but freely connects remaining entrances.
+Uses dungeon shuffling from Simple but freely connects remaining entrances. Caves and dungeons with multiple entrances will be confined to one world.
 
 ### Full
 
@@ -237,6 +239,10 @@ The dungeon variants only mix up dungeons and keep the rest of the overworld van
 ## Heartbeep Sound Rate
 
 Select frequency of beeps when on low health. Can completely disable them.
+
+## Heart Color
+
+Select the color of Link's hearts.
 
 ## Menu Speed
 
@@ -277,7 +283,7 @@ If set, will only ensure the goal can be achieved, but not necessarily that all 
 If set, Ganon's Tower is included in the dungeon shuffle pool and the Pyramid Hole/Exit pair is included in the Holes shuffle pool. Ganon can not be defeated until the primary goal is fulfilled.
 This setting removes any bias against Ganon's Tower that some algorithms may have.
 
-## Use Custom Item pool
+## Use Custom Item Pool
 
 If set, the item pool normally associated with your difficulty setting is replaced by the item pool specified in the custom tab. This feature is only supported when the randomizer is run
 via the GUI; attempting to set this via the command line does nothing.
