@@ -261,7 +261,7 @@ def int32_as_bytes(value):
     value = value & 0xFFFFFFFF
     return [value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF, (value >> 24) & 0xFF]
 
-def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
+def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     # patch items
     for location in world.get_locations():
         itemid = location.item.code if location.item is not None else 0x5A
@@ -782,11 +782,11 @@ def patch_rom(world, rom, hashtable, beep='normal', sprite=None):
     # store hash table for main menu hash
     rom.write_bytes(0x187F00, hashtable)
 
-    apply_rom_settings(rom, beep, world.quickswap, world.fastmenu, world.disable_music, sprite)
+    apply_rom_settings(rom, beep, color, world.quickswap, world.fastmenu, world.disable_music, sprite)
 
     return rom
 
-def apply_rom_settings(rom, beep, quickswap, fastmenu, disable_music, sprite):
+def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite):
 
     # enable instant item menu
     if fastmenu == 'instant':
@@ -910,6 +910,19 @@ def apply_rom_settings(rom, beep, quickswap, fastmenu, disable_music, sprite):
 
     # set heart beep rate
     rom.write_byte(0x180033, {'off': 0x00, 'half': 0x40, 'quarter': 0x80, 'normal': 0x20}[beep])
+
+    # set heart color
+    rom.write_byte(0x6FA1E, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
+    rom.write_byte(0x6FA20, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
+    rom.write_byte(0x6FA22, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
+    rom.write_byte(0x6FA24, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
+    rom.write_byte(0x6FA26, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
+    rom.write_byte(0x6FA28, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
+    rom.write_byte(0x6FA2A, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
+    rom.write_byte(0x6FA2C, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
+    rom.write_byte(0x6FA2E, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
+    rom.write_byte(0x6FA30, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
+    rom.write_byte(0x65561, {'red': 0x05, 'blue': 0x0D, 'green': 0x19, 'yellow': 0x09}[color])
 
     # write link sprite if required
     if sprite is not None:

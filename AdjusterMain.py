@@ -26,7 +26,7 @@ def adjust(args):
     else:
         raise RuntimeError('Provided Rom is not a valid Link to the Past Randomizer Rom. Please provide one for adjusting.')
 
-    apply_rom_settings(rom, args.heartbeep, args.quickswap, args.fastmenu, args.disablemusic, sprite)
+    apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.fastmenu, args.disablemusic, sprite)
 
     rom.write_to_file(output_path('%s.sfc' % outfilebase))
 

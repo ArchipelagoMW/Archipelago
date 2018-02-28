@@ -29,6 +29,8 @@ def main():
                              Select the rate at which the heart beep sound is played at
                              low health. (default: %(default)s)
                              ''')
+    parser.add_argument('--heartcolor', default='red', const='red', nargs='?', choices=['red', 'blue', 'green', 'yellow'],
+                        help='Select the color of Link\'s heart meter. (default: %(default)s)')
     parser.add_argument('--sprite', help='''\
                              Path to a sprite sheet to use for Link. Needs to be in
                              binary format and have a length of 0x7000 (28672) bytes,

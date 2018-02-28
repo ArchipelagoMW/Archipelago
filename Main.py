@@ -117,7 +117,7 @@ def main(args, seed=None):
             rom = JsonRom()
         else:
             rom = LocalRom(args.rom)
-        patch_rom(world, rom, bytearray(logic_hash), args.heartbeep, sprite)
+        patch_rom(world, rom, bytearray(logic_hash), args.heartbeep, args.heartcolor, sprite)
         if args.jsonout:
             print(json.dumps({'patch': rom.patches, 'spoiler': world.spoiler.to_json()}))
         else:

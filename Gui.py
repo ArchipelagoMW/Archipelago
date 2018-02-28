@@ -207,6 +207,13 @@ def guiMain(args=None):
     heartbeepLabel = Label(heartbeepFrame, text='Heartbeep sound rate')
     heartbeepLabel.pack(side=LEFT)
 
+    heartcolorFrame = Frame(drowDownFrame)
+    heartcolorVar = StringVar()
+    heartcolorVar.set('red')
+    heartcolorOptionMenu = OptionMenu(heartcolorFrame, heartcolorVar, 'red', 'blue', 'green', 'yellow')
+    heartcolorOptionMenu.pack(side=RIGHT)
+    heartcolorLabel = Label(heartcolorFrame, text='Heart color')
+    heartcolorLabel.pack(side=LEFT)
 
     fastMenuFrame = Frame(drowDownFrame)
     fastMenuVar = StringVar()
@@ -225,6 +232,7 @@ def guiMain(args=None):
     algorithmFrame.pack(expand=True, anchor=E)
     shuffleFrame.pack(expand=True, anchor=E)
     heartbeepFrame.pack(expand=True, anchor=E)
+    heartcolorFrame.pack(expand=True, anchor=E)
     fastMenuFrame.pack(expand=True, anchor=E)
 
     bottomFrame = Frame(randomizerWindow)
@@ -249,6 +257,7 @@ def guiMain(args=None):
         guiargs.algorithm = algorithmVar.get()
         guiargs.shuffle = shuffleVar.get()
         guiargs.heartbeep = heartbeepVar.get()
+        guiargs.heartcolor = heartcolorVar.get()
         guiargs.fastmenu = fastMenuVar.get()
         guiargs.create_spoiler = bool(createSpoilerVar.get())
         guiargs.suppress_rom = bool(suppressRomVar.get())
@@ -353,6 +362,12 @@ def guiMain(args=None):
     heartbeepLabel2 = Label(heartbeepFrame2, text='Heartbeep sound rate')
     heartbeepLabel2.pack(side=LEFT)
 
+    heartcolorFrame2 = Frame(drowDownFrame2)
+    heartcolorOptionMenu2 = OptionMenu(heartcolorFrame2, heartcolorVar, 'red', 'blue', 'green', 'yellow')
+    heartcolorOptionMenu2.pack(side=RIGHT)
+    heartcolorLabel2 = Label(heartcolorFrame2, text='Heart color')
+    heartcolorLabel2.pack(side=LEFT)
+
     fastMenuFrame2 = Frame(drowDownFrame2)
     fastMenuOptionMenu2 = OptionMenu(fastMenuFrame2, fastMenuVar, 'normal', 'instant', 'double', 'triple', 'quadruple', 'half')
     fastMenuOptionMenu2.pack(side=RIGHT)
@@ -360,6 +375,7 @@ def guiMain(args=None):
     fastMenuLabel2.pack(side=LEFT)
 
     heartbeepFrame2.pack(expand=True, anchor=E)
+    heartcolorFrame2.pack(expand=True, anchor=E)
     fastMenuFrame2.pack(expand=True, anchor=E)
 
     bottomFrame2 = Frame(topFrame2)
@@ -367,6 +383,7 @@ def guiMain(args=None):
     def adjustRom():
         guiargs = Namespace
         guiargs.heartbeep = heartbeepVar.get()
+        guiargs.heartcolor = heartcolorVar.get()
         guiargs.fastmenu = fastMenuVar.get()
         guiargs.quickswap = bool(quickSwapVar.get())
         guiargs.disablemusic = bool(disableMusicVar.get())
@@ -385,7 +402,7 @@ def guiMain(args=None):
 
     drowDownFrame2.pack(side=LEFT, pady=(0, 40))
     rightHalfFrame2.pack(side=RIGHT)
-    topFrame2.pack(side=TOP, pady=30)
+    topFrame2.pack(side=TOP, pady=70)
     bottomFrame2.pack(side=BOTTOM, pady=(180, 0))
 
     # Custom Controls
@@ -954,7 +971,7 @@ def guiMain(args=None):
     itemList3.pack(side=LEFT, padx=(0,0))
     itemList4.pack(side=LEFT, padx=(0,0))
     itemList5.pack(side=LEFT, padx=(0,0))
-    topFrame3.pack(side=TOP)
+    topFrame3.pack(side=TOP, pady=(17,0))
 
     if args is not None:
         # load values from commandline args
