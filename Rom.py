@@ -44,7 +44,7 @@ class LocalRom(object):
 
     def __init__(self, file, patch=True):
         with open(file, 'rb') as stream:
-            self.buffer = bytearray(stream.read())
+            self.buffer = read_rom(stream)
         if patch:
             self.patch_base_rom()
 
@@ -93,6 +93,13 @@ class LocalRom(object):
         crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
         inv = crc ^ 0xFFFF
         self.write_bytes(0x7FDC, [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF])
+
+def read_rom(stream):
+    "Reads rom into bytearray and strips off any smc header"
+    buffer = bytearray(stream.read())
+    if len(buffer)%0x400 == 0x200:
+        buffer = buffer[0x200:]
+    return buffer
 
 class Sprite(object):
     default_palette = [255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
