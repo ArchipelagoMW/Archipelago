@@ -4,12 +4,12 @@ import random
 
 
 def link_entrances(world):
+    connect_two_way(world, 'Links House', 'Links House Exit') # unshuffled. For now
+    connect_exit(world, 'Chris Houlihan Room Exit', 'Links House') # should always match link's house, except for plandos
+
     # setup mandatory connections
     for exitname, regionname in mandatory_connections:
         connect_simple(world, exitname, regionname)
-
-    connect_two_way(world, 'Links House', 'Links House Exit') # unshuffled. For now
-    connect_exit(world, 'Chris Houlihan Room Exit', 'Links House') # should always match link's house, except for plandos
 
     # if we do not shuffle, set default connections
     if world.shuffle == 'vanilla':
