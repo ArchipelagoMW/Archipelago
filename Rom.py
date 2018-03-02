@@ -15,7 +15,7 @@ from Items import ItemFactory
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '6f7173a95befbb888569068d22bd790d'
+RANDOMIZERBASEHASH = '69a85962d2421498ad9d987a97baf52b'
 
 
 class JsonRom(object):
@@ -44,7 +44,7 @@ class LocalRom(object):
 
     def __init__(self, file, patch=True):
         with open(file, 'rb') as stream:
-            self.buffer = bytearray(stream.read())
+            self.buffer = read_rom(stream)
         if patch:
             self.patch_base_rom()
 
@@ -93,6 +93,13 @@ class LocalRom(object):
         crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
         inv = crc ^ 0xFFFF
         self.write_bytes(0x7FDC, [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF])
+
+def read_rom(stream):
+    "Reads rom into bytearray and strips off any smc header"
+    buffer = bytearray(stream.read())
+    if len(buffer)%0x400 == 0x200:
+        buffer = buffer[0x200:]
+    return buffer
 
 class Sprite(object):
     default_palette = [255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
@@ -398,6 +405,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     TRIFORCE_PIECE = ItemFactory('Triforce Piece').code
     GREEN_CLOCK = ItemFactory('Green Clock').code
 
+    rom.write_byte(0x18004F, 0x01) # Byrna Invulnerability: on
     # handle difficulty
     if world.difficulty == 'hard':
         # Powdered Fairies Prize
@@ -408,8 +416,8 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x180085, 0x40)  # Half Magic
         #Cape magic cost
         rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
-        #Byrna residual magic cost
-        rom.write_bytes(0x45C42, [0x08, 0x08, 0x08])
+        # Byrna Invulnerability: off
+        rom.write_byte(0x18004F, 0x00)
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
@@ -442,8 +450,8 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x180085, 0x20)  # Quarter Magic
         #Cape magic cost
         rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
-        #Byrna residual magic cost
-        rom.write_bytes(0x45C42, [0x08, 0x08, 0x08])
+        # Byrna Invulnerability: off
+        rom.write_byte(0x18004F, 0x00)
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
@@ -476,8 +484,8 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x180085, 0x00)  # No healing
         #Cape magic cost
         rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
-        #Byrna residual magic cost
-        rom.write_bytes(0x45C42, [0x08, 0x08, 0x08])
+        # Byrna Invulnerability: off
+        rom.write_byte(0x18004F, 0x00)
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
@@ -510,8 +518,8 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x180085, 0x80)  # full
         #Cape magic cost
         rom.write_bytes(0x3ADA7, [0x04, 0x08, 0x10])
-        #Byrna residual magic cost
-        rom.write_bytes(0x45C42, [0x04, 0x02, 0x01])
+        # Byrna Invulnerability: on
+        rom.write_byte(0x18004F, 0x01)
         #Enable catching fairies
         rom.write_byte(0x34FD6, 0xF0)
         #Set overflow items for progressive equipment
@@ -521,6 +529,9 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
             overflow_replacement = GREEN_CLOCK
         else:
             overflow_replacement = GREEN_TWENTY_RUPEES
+
+    #Byrna residual magic cost
+    rom.write_bytes(0x45C42, [0x04, 0x02, 0x01])
 
     difficulty = world.difficulty_requirements
     #Set overflow items for progressive equipment
@@ -592,6 +603,20 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     for prize, address in zip(bonk_prizes, bonk_addresses):
         rom.write_byte(address, prize)
 
+    # Fill in item substitutions table
+    if world.difficulty in ['easy']:
+        rom.write_bytes(0x184000, [
+            # original_item, limit, replacement_item, filler
+            0x12, 0x01, 0x35, 0xFF, # lamp -> 5 rupees
+            0x58, 0x01, 0x43, 0xFF, # silver arrows -> 1 arrow
+            0xFF, 0xFF, 0xFF, 0xFF, # end of table sentinel
+        ])
+    else:
+        rom.write_bytes(0x184000, [
+            # original_item, limit, replacement_item, filler
+            0x12, 0x01, 0x35, 0xFF, # lamp -> 5 rupees
+            0xFF, 0xFF, 0xFF, 0xFF, # end of table sentinel
+        ])
 
     # set Fountain bottle exchange items
     if world.difficulty in ['hard', 'expert', 'insane']:
@@ -681,11 +706,14 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     # TODO: a proper race rom mode should be implemented, that changes the following flag, and rummages the table (or uses the future encryption feature, etc)
     rom.write_bytes(0x180213, [0x00, 0x01]) # Not a Tournament Seed
 
+    rom.write_byte(0x180211, 0x06) #Game type, we set the Entrance and item randomization flags
+
     # assorted fixes
     rom.write_byte(0x180030, 0x00)  # Disable SRAM trace
     rom.write_byte(0x1800A2, 0x01)  # remain in real dark world when dying in dark word dungion before killing aga1
     rom.write_byte(0x180169, 0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
     rom.write_byte(0x180171, 0x01 if world.ganon_at_pyramid else 0x00)  # Enable respawning on pyramid after ganon death
+    rom.write_byte(0x180173, 0x01) # Bob is enabled
     rom.write_byte(0x180168, 0x08)  # Spike Cave Damage
     rom.write_bytes(0x18016B, [0x04, 0x02, 0x01]) #Set spike cave and MM spike room Cape usage
     rom.write_bytes(0x18016E, [0x04, 0x08, 0x10]) #Set spike cave and MM spike room Cape usage
@@ -698,6 +726,9 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_byte(0x1800A0, 0x01)  # return to light world on s+q without mirror
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
     rom.write_byte(0x180174, 0x01 if world.fix_fake_world else 0x00)
+    rom.write_byte(0x180175, 0x00) # Arrow mode: normal
+    rom.write_int16_to_rom(0x180176, 0) # Wood Arrow Cost (rupee arrow mode)
+    rom.write_int16_to_rom(0x180178, 0) # Silver Arrow Cost (rupee arrow mode)
     rom.write_byte(0x180034, 0x0A) # starting max bombs
     rom.write_byte(0x180035, 30) # starting max arrows
     for x in range(0x183000, 0x18304F):
@@ -705,6 +736,14 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_byte(0x18302C, 0x18) # starting max health
     rom.write_byte(0x18302D, 0x18) # starting current health
     rom.write_byte(0x183039, 0x68) # starting abilities, bit array
+    rom.write_byte(0x18004A, 0x00) # Inverted mode (off)
+    rom.write_byte(0x2AF79, 0xD0) # vortexes: Normal  (D0=light to dark, F0=dark to light, 42 = both)
+    rom.write_byte(0x3A943, 0xD0) # Mirror: Normal  (D0=Dark to Light, F0=light to dark, 42 = both)
+    rom.write_byte(0x3A96D, 0xF0) # Residual Portal: Normal  (F0= Light Side, D0=Dark Side, 42 = both (Darth Vader))
+    rom.write_byte(0x3A9A7, 0xD0) # Residual Portal: Normal  (D0= Light Side, F0=Dark Side, 42 = both (Darth Vader))
+
+    rom.write_byte(0x18004D, 0x00) # Escape assist (off)
+    rom.write_byte(0x18004E, 0x00) # uncle Refill (off)
 
 
     if world.goal in ['pedestal', 'triforcehunt']:
@@ -745,6 +784,8 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_bytes(0x6D2FB, [0x00, 0x00, 0xf7, 0xff, 0x02, 0x0E])
     rom.write_bytes(0x6D313, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
 
+    # Shop table
+    rom.write_bytes(0x184800, [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])
 
     # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
     rom.write_byte(0x18003D, 0x01 if world.swamp_patch_required else 0x00)
@@ -810,35 +851,7 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
     else:
         rom.write_byte(0x180048, 0x08)
 
-    # enable quick item swapping with L and R (ported by Amazing Ampharos)
-    if quickswap:
-        rom.write_bytes(0x107fb, [0x22, 0x50, 0xFF, 0x1F])
-        rom.write_bytes(0x12451, [0x22, 0x50, 0xFF, 0x1F])
-        rom.write_bytes(0xfff50, [0x20, 0x58, 0xFF, 0xA5, 0xF6, 0x29, 0x40, 0x6B, 0xA5, 0xF6, 0x89, 0x10, 0xF0, 0x03, 0x4C, 0x69,
-                                  0xFF, 0x89, 0x20, 0xF0, 0x03, 0x4C, 0xAA, 0xFF, 0x60, 0xAD, 0x02, 0x02, 0xF0, 0x3B, 0xDA, 0xAA,
-                                  0xE0, 0x0F, 0xF0, 0x14, 0xE0, 0x10, 0xF0, 0x14, 0xE0, 0x14, 0xD0, 0x02, 0xA2, 0x00, 0xE8, 0xBF,
-                                  0x3F, 0xF3, 0x7E, 0xF0, 0xEB, 0x4C, 0xEB, 0xFF, 0xA2, 0x01, 0x80, 0x0A, 0xAF, 0x4F, 0xF3, 0x7E,
-                                  0xAA, 0xE0, 0x04, 0xF0, 0x10, 0xE8, 0xBF, 0x5B, 0xF3, 0x7E, 0xF0, 0xF5, 0x8A, 0x8F, 0x4F, 0xF3,
-                                  0x7E, 0xA2, 0x10, 0x80, 0xE0, 0xA2, 0x11, 0x80, 0xD6, 0x60, 0xAD, 0x02, 0x02, 0xF0, 0x3B, 0xDA,
-                                  0xAA, 0xE0, 0x11, 0xF0, 0x14, 0xE0, 0x10, 0xF0, 0x14, 0xE0, 0x01, 0xD0, 0x02, 0xA2, 0x15, 0xCA,
-                                  0xBF, 0x3F, 0xF3, 0x7E, 0xF0, 0xEB, 0x4C, 0xEB, 0xFF, 0xA2, 0x04, 0x80, 0x0A, 0xAF, 0x4F, 0xF3,
-                                  0x7E, 0xAA, 0xE0, 0x01, 0xF0, 0x10, 0xCA, 0xBF, 0x5B, 0xF3, 0x7E, 0xF0, 0xF5, 0x8A, 0x8F, 0x4F,
-                                  0xF3, 0x7E, 0xA2, 0x10, 0x80, 0xE0, 0xA2, 0x0F, 0x80, 0xD6, 0x60, 0xA9, 0x20, 0x8D, 0x2F, 0x01,
-                                  0x8E, 0x02, 0x02, 0x22, 0x7F, 0xDB, 0x0D, 0xFA, 0x60, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])
-    else:
-        rom.write_bytes(0x107fb, [0xa5, 0xf6, 0x29, 0x40])
-        rom.write_bytes(0x12451, [0xa5, 0xf6, 0x29, 0x40])
-        rom.write_bytes(0xfff50, [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                                  0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                                  0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                                  0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                                  0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                                  0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                                  0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                                  0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                                  0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                                  0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                                  0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])
+    rom.write_byte(0x18004B, 0x01 if quickswap else 0x00)
 
     music_volumes = [
         (0x00, [0xD373B, 0xD375B, 0xD90F8]),

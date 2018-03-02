@@ -72,7 +72,7 @@ item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher cla
               'Crystal 5': (True, False, 'Crystal', [0x04, 0x32, 0x64, 0x40, 0x6E, 0x06], None, None, None, None, None, None),
               'Crystal 6': (True, False, 'Crystal', [0x01, 0x32, 0x64, 0x40, 0x6F, 0x06], None, None, None, None, None, None),
               'Crystal 7': (True, False, 'Crystal', [0x08, 0x34, 0x64, 0x40, 0x7C, 0x06], None, None, None, None, None, None),
-              'Single Arrow': (False, False, None, 0x43, 'a lonely arrow\nsits here.', 'and the arrow', 'stick-collecting kid', 'sewing kit for sale', 'fungus for arrow', 'archer boy sews again'),
+              'Single Arrow': (False, False, None, 0x43, 'a lonely arrow\nsits here.', 'and the arrow', 'stick-collecting kid', 'sewing needle for sale', 'fungus for arrow', 'archer boy sews again'),
               'Arrows (10)': (False, False, None, 0x44, 'This will give\nyou ten shots\nwith your bow!', 'and the arrow pack', 'stick-collecting kid', 'sewing kit for sale', 'fungus for arrows', 'archer boy sews again'),
               'Arrow Upgrade (+10)': (False, False, None, 0x54, 'increase arrow\nstorage, low\nlow price', 'and the quiver', 'quiver-enlarging kid', 'arrow boost for sale', 'witch and more skewers', 'upgrade boy sews more again'),
               'Arrow Upgrade (+5)': (False, False, None, 0x53, 'increase arrow\nstorage, low\nlow price', 'and the quiver', 'quiver-enlarging kid', 'arrow boost for sale', 'witch and more skewers', 'upgrade boy sews more again'),

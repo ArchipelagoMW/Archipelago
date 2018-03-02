@@ -92,9 +92,10 @@ def main(args, seed=None):
     elif args.algorithm == 'vt25':
         distribute_items_restrictive(world, 0)
     elif args.algorithm == 'vt26':
-        distribute_items_restrictive(world, random.randint(0, 15), shuffled_locations)
+
+        distribute_items_restrictive(world, gt_filler(world), shuffled_locations)
     elif args.algorithm == 'balanced':
-        distribute_items_restrictive(world, random.randint(0, 15))
+        distribute_items_restrictive(world, gt_filler(world))
 
     logger.info('Calculating playthrough.')
 
@@ -130,6 +131,11 @@ def main(args, seed=None):
     logger.debug('Total Time: %s', time.clock() - start)
 
     return world
+
+def gt_filler(world):
+    if world.goal == 'triforcehunt':
+        return random.randint(15, 50)
+    return random.randint(0, 15)
 
 def copy_world(world):
     # ToDo: Not good yet
