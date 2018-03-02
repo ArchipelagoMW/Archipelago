@@ -603,6 +603,20 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     for prize, address in zip(bonk_prizes, bonk_addresses):
         rom.write_byte(address, prize)
 
+    # Fill in item substitutions table
+    if world.difficulty in ['easy']:
+        rom.write_bytes(0x184000, [
+            # original_item, limit, replacement_item, filler
+            0x12, 0x01, 0x35, 0xFF, # lamp -> 5 rupees
+            0x58, 0x01, 0x43, 0xFF, # silver arrows -> 1 arrow
+            0xFF, 0xFF, 0xFF, 0xFF, # end of table sentinel
+        ])
+    else:
+        rom.write_bytes(0x184000, [
+            # original_item, limit, replacement_item, filler
+            0x12, 0x01, 0x35, 0xFF, # lamp -> 5 rupees
+            0xFF, 0xFF, 0xFF, 0xFF, # end of table sentinel
+        ])
 
     # set Fountain bottle exchange items
     if world.difficulty in ['hard', 'expert', 'insane']:
@@ -692,11 +706,14 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     # TODO: a proper race rom mode should be implemented, that changes the following flag, and rummages the table (or uses the future encryption feature, etc)
     rom.write_bytes(0x180213, [0x00, 0x01]) # Not a Tournament Seed
 
+    rom.write_byte(0x180211, 0x06) #Game type, we set the Entrance and item randomization flags
+
     # assorted fixes
     rom.write_byte(0x180030, 0x00)  # Disable SRAM trace
     rom.write_byte(0x1800A2, 0x01)  # remain in real dark world when dying in dark word dungion before killing aga1
     rom.write_byte(0x180169, 0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
     rom.write_byte(0x180171, 0x01 if world.ganon_at_pyramid else 0x00)  # Enable respawning on pyramid after ganon death
+    rom.write_byte(0x180173, 0x01) # Bob is enabled
     rom.write_byte(0x180168, 0x08)  # Spike Cave Damage
     rom.write_bytes(0x18016B, [0x04, 0x02, 0x01]) #Set spike cave and MM spike room Cape usage
     rom.write_bytes(0x18016E, [0x04, 0x08, 0x10]) #Set spike cave and MM spike room Cape usage
@@ -709,6 +726,9 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_byte(0x1800A0, 0x01)  # return to light world on s+q without mirror
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
     rom.write_byte(0x180174, 0x01 if world.fix_fake_world else 0x00)
+    rom.write_byte(0x180175, 0x00) # Arrow mode: normal
+    rom.write_int16_to_rom(0x180176, 0) # Wood Arrow Cost (rupee arrow mode)
+    rom.write_int16_to_rom(0x180178, 0) # Silver Arrow Cost (rupee arrow mode)
     rom.write_byte(0x180034, 0x0A) # starting max bombs
     rom.write_byte(0x180035, 30) # starting max arrows
     for x in range(0x183000, 0x18304F):
@@ -716,6 +736,14 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_byte(0x18302C, 0x18) # starting max health
     rom.write_byte(0x18302D, 0x18) # starting current health
     rom.write_byte(0x183039, 0x68) # starting abilities, bit array
+    rom.write_byte(0x18004A, 0x00) # Inverted mode (off)
+    rom.write_byte(0x2AF79, 0xD0) # vortexes: Normal  (D0=light to dark, F0=dark to light, 42 = both)
+    rom.write_byte(0x3A943, 0xD0) # Mirror: Normal  (D0=Dark to Light, F0=light to dark, 42 = both)
+    rom.write_byte(0x3A96D, 0xF0) # Residual Portal: Normal  (F0= Light Side, D0=Dark Side, 42 = both (Darth Vader))
+    rom.write_byte(0x3A9A7, 0xD0) # Residual Portal: Normal  (D0= Light Side, F0=Dark Side, 42 = both (Darth Vader))
+
+    rom.write_byte(0x18004D, 0x00) # Escape assist (off)
+    rom.write_byte(0x18004E, 0x00) # uncle Refill (off)
 
 
     if world.goal in ['pedestal', 'triforcehunt']:
@@ -756,6 +784,8 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_bytes(0x6D2FB, [0x00, 0x00, 0xf7, 0xff, 0x02, 0x0E])
     rom.write_bytes(0x6D313, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
 
+    # Shop table
+    rom.write_bytes(0x184800, [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])
 
     # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
     rom.write_byte(0x18003D, 0x01 if world.swamp_patch_required else 0x00)
