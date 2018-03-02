@@ -405,6 +405,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     TRIFORCE_PIECE = ItemFactory('Triforce Piece').code
     GREEN_CLOCK = ItemFactory('Green Clock').code
 
+    rom.write_byte(0x18004F, 0x01) # Byrna Invulnerability: on
     # handle difficulty
     if world.difficulty == 'hard':
         # Powdered Fairies Prize
@@ -415,8 +416,8 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x180085, 0x40)  # Half Magic
         #Cape magic cost
         rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
-        #Byrna residual magic cost
-        rom.write_bytes(0x45C42, [0x08, 0x08, 0x08])
+        # Byrna Invulnerability: off
+        rom.write_byte(0x18004F, 0x00)
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
@@ -449,8 +450,8 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x180085, 0x20)  # Quarter Magic
         #Cape magic cost
         rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
-        #Byrna residual magic cost
-        rom.write_bytes(0x45C42, [0x08, 0x08, 0x08])
+        # Byrna Invulnerability: off
+        rom.write_byte(0x18004F, 0x00)
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
@@ -483,8 +484,8 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x180085, 0x00)  # No healing
         #Cape magic cost
         rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
-        #Byrna residual magic cost
-        rom.write_bytes(0x45C42, [0x08, 0x08, 0x08])
+        # Byrna Invulnerability: off
+        rom.write_byte(0x18004F, 0x00)
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
@@ -517,8 +518,8 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x180085, 0x80)  # full
         #Cape magic cost
         rom.write_bytes(0x3ADA7, [0x04, 0x08, 0x10])
-        #Byrna residual magic cost
-        rom.write_bytes(0x45C42, [0x04, 0x02, 0x01])
+        # Byrna Invulnerability: on
+        rom.write_byte(0x18004F, 0x01)
         #Enable catching fairies
         rom.write_byte(0x34FD6, 0xF0)
         #Set overflow items for progressive equipment
@@ -528,6 +529,9 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
             overflow_replacement = GREEN_CLOCK
         else:
             overflow_replacement = GREEN_TWENTY_RUPEES
+
+    #Byrna residual magic cost
+    rom.write_bytes(0x45C42, [0x04, 0x02, 0x01])
 
     difficulty = world.difficulty_requirements
     #Set overflow items for progressive equipment
