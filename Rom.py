@@ -642,7 +642,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
                               192, 136, 0, 96, 144, 0, 96, 232, 0, 96, 240, 0, 96, 152, 202, 192, 216, 202, 192, 216, 19, 192, 216, 82, 192, 252, 189, 133, 253, 29, 135, 255,
                               255, 255, 255, 240, 255, 128, 46, 97, 14, 129, 14, 255, 255])
     # set Waterfall fairy prizes to be disappointing
-    rom.write_byte(0x348DB, 0x2A)  # Red Boomerang becomes Red Boomerang
+    rom.write_byte(0x348DB, 0x3A)  # Red Boomerang becomes Red Boomerang
     rom.write_byte(0x348EB, 0x05)  # Blue Shield becomes Blue Shield
 
     rom.write_byte(0x180029, 0x01) # Smithy quick item give
@@ -818,7 +818,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
 
     # set rom name
     # 21 bytes
-    rom.write_bytes(0x7FC0, bytearray('ER_052_%09d\0' % world.seed, 'utf8') + world.option_identifier.to_bytes(4, 'big'))
+    rom.write_bytes(0x7FC0, bytearray('ER_06_%09d\0' % world.seed, 'utf8') + world.option_identifier.to_bytes(4, 'big'))
 
     # store hash table for main menu hash
     rom.write_bytes(0x187F00, hashtable)
