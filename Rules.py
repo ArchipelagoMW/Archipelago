@@ -551,7 +551,7 @@ def set_big_bomb_rules(world):
     Normal_LW_entrances = ['Blinds Hideout',
                            'Bonk Fairy (Light)',
                            'Lake Hylia Fairy',
-                           'Swamp Fairy',
+                           'Light Hype Fairy',
                            'Desert Fairy',
                            'Chicken House',
                            'Aginahs Cave',
