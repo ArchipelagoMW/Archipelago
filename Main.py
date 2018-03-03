@@ -15,7 +15,7 @@ from Fill import distribute_items_cutoff, distribute_items_staleness, distribute
 from ItemList import generate_itempool, difficulties
 from Utils import output_path
 
-__version__ = '0.6'
+__version__ = '0.6.0'
 
 logic_hash = [26, 76, 4, 144, 72, 105, 234, 233, 12, 184, 95, 94, 100, 13, 15, 174,
               186, 135, 130, 189, 246, 254, 123, 245, 85, 241, 101, 129, 70, 255, 55, 248,
