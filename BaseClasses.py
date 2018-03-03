@@ -1,4 +1,5 @@
 import copy
+from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict
@@ -6,7 +7,7 @@ from collections import OrderedDict
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity):
+    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, custom, customitemarray):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
@@ -30,13 +31,16 @@ class World(object):
         self.place_dungeon_items = place_dungeon_items  # configurable in future
         self.shuffle_bonk_prizes = False
         self.swamp_patch_required = False
+        self.powder_patch_required = False
         self.ganon_at_pyramid = True
+        self.ganonstower_vanilla = True
         self.sewer_light_cone = mode == 'standard'
         self.light_world_light_cone = False
         self.dark_world_light_cone = False
         self.treasure_hunt_count = 0
         self.treasure_hunt_icon = 'Triforce Piece'
         self.clock_mode = 'off'
+        self.rupoor_cost = 10
         self.aga_randomness = True
         self.lock_aga_door_in_escape = False
         self.fix_trock_doors = self.shuffle != 'vanilla'
@@ -52,9 +56,13 @@ class World(object):
         self.fastmenu = fastmenu
         self.disable_music = disable_music
         self.keysanity = keysanity
+        self.custom = custom
+        self.customitemarray = customitemarray
         self.can_take_damage = True
         self.difficulty_requirements = None
+        self.fix_fake_world = True
         self.spoiler = Spoiler(self)
+        self.lamps_needed_for_dark_rooms = 1
 
     def intialize_regions(self):
         for region in self.regions:
@@ -247,19 +255,31 @@ class World(object):
 
     @property
     def option_identifier(self):
-        logic = 0 if self.logic == 'noglitches' else 1
-        mode = ['standard', 'open', 'swordless'].index(self.mode)
-        dungeonitems = 0 if self.place_dungeon_items else 1
-        goal = ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'].index(self.goal)
-        shuffle = ['vanilla', 'simple', 'restricted', 'full', 'madness', 'insanity', 'dungeonsfull', 'dungeonssimple'].index(self.shuffle)
-        difficulty = ['easy', 'normal', 'hard', 'expert', 'insane'].index(self.difficulty)
-        timer = ['none', 'display', 'timed', 'timed-ohko', 'timed-countdown', 'ohko'].index(self.timer)
-        progressive = ['on', 'off', 'random'].index(self.progressive)
-        algorithm = ['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26', 'balanced'].index(self.algorithm)
-        beatableonly = 1 if self.check_beatable_only else 0
-        shuffleganon = 1 if self.shuffle_ganon else 0
-        keysanity = 1 if self.keysanity else 0
-        return logic | (beatableonly << 1) | (dungeonitems << 2) | (shuffleganon << 3) | (goal << 4) | (shuffle << 7) | (difficulty << 11) | (algorithm << 13) | (mode << 16) | (keysanity << 18) | (timer << 19) | (progressive << 21)
+        id_value = 0
+        id_value_max = 1
+
+        def markbool(value):
+            nonlocal id_value, id_value_max
+            id_value += id_value_max * bool(value)
+            id_value_max *= 2
+        def marksequence(options, value):
+            nonlocal id_value, id_value_max
+            id_value += id_value_max * options.index(value)
+            id_value_max *= len(options)
+        markbool(self.logic == 'noglitches')
+        marksequence(['standard', 'open', 'swordless'], self.mode)
+        markbool(self.place_dungeon_items)
+        marksequence(['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'], self.goal)
+        marksequence(['vanilla', 'simple', 'restricted', 'full', 'crossed', 'insanity', 'restricted_legacy', 'full_legacy', 'madness_legacy', 'insanity_legacy', 'dungeonsfull', 'dungeonssimple'], self.shuffle)
+        marksequence(['easy', 'normal', 'hard', 'expert', 'insane'], self.difficulty)
+        marksequence(['none', 'display', 'timed', 'timed-ohko', 'timed-countdown', 'ohko'], self.timer)
+        marksequence(['on', 'off', 'random'], self.progressive)
+        marksequence(['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26', 'balanced'], self.algorithm)
+        markbool(self.check_beatable_only)
+        markbool(self.shuffle_ganon)
+        markbool(self.keysanity)
+        assert id_value_max <= 0xFFFFFFFF
+        return id_value
 
 
 class CollectionState(object):
@@ -383,17 +403,17 @@ class CollectionState(object):
     def can_lift_heavy_rocks(self):
         return self.has('Titans Mitts')
 
-    def can_extend_magic(self, smallmagic=8): #This reflects the total magic Link has, not the total extra he has.
+    def can_extend_magic(self, smallmagic=8, fullrefill=False): #This reflects the total magic Link has, not the total extra he has.
         basemagic = 8
         if self.has('Quarter Magic'):
             basemagic = 32
         elif self.has('Half Magic'):
             basemagic = 16
-        if self.world.difficulty == 'hard':
+        if self.world.difficulty == 'hard' and not fullrefill:
             basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count())
-        elif self.world.difficulty == 'expert':
+        elif self.world.difficulty == 'expert' and not fullrefill:
             basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count())
-        elif self.world.difficulty == 'insane':
+        elif self.world.difficulty == 'insane' and not fullrefill:
             basemagic = basemagic
         else:
             basemagic = basemagic + basemagic * self.bottle_count()
@@ -532,17 +552,32 @@ class CollectionState(object):
 
         raise RuntimeError('Cannot parse %s.' % item)
 
+@unique
+class RegionType(Enum):
+    LightWorld = 1
+    DarkWorld = 2
+    Cave = 3 # Also includes Houses
+    Dungeon = 4
+
+    @property
+    def is_indoors(self):
+        """Shorthand for checking if Cave or Dungeon"""
+        return self in (RegionType.Cave, RegionType.Dungeon)
+
+
 
 class Region(object):
 
-    def __init__(self, name):
+    def __init__(self, name, type):
         self.name = name
+        self.type = type
         self.entrances = []
         self.exits = []
         self.locations = []
         self.dungeon = None
         self.world = None
         self.is_light_world = False # will be set aftermaking connections.
+        self.is_dark_world = False
         self.spot_type = 'Region'
         self.hint_text = 'Hyrule'
         self.recursion_count = 0

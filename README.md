@@ -71,25 +71,20 @@ Ganon cannot be damaged until all dungeons (including Hyrule Castle Tower and Ga
 ### Triforce Hunt
 
 Triforce Pieces are added to the item pool, and some number of them being found will trigger game completion. Ganon cannot be damaged.
-Counts are based on the difficulty setting as well as the required number.
-Difficulty Need/Total
-Easy       10/30
-Normal     20/30
-Hard       30/40
-Expert     40/40
-Insane     50/50
+By default 30 Triforce Pieces are placed while 20 are needed to beat the game. Both values can be adjusted with the custom item pool feature.
 
 ### Crystals
 
 Standard game completion requiring you to collect the 7 crystals and then beat Ganon.
 
-This is only noticeably different if the --shuffleganon option is enabled.
+This is only noticeably different if the the Ganon shuffle option is enabled.
 
 ## Game Difficulty
 
 ### Easy
 
-This setting doubles the number of swords, shields, armors, and bottles in the item pool.
+This setting doubles the number of swords, shields, armors, bottles, and silver arrows in the item pool.
+This setting will also triple the number of Lamps available, and all will be obtainable before dark rooms.
 Within dungeons, the number of items found will be displayed on screen if there is no timer.
 
 ### Normal
@@ -204,32 +199,38 @@ staleness, decreasing the likelihood of receiving a progress item.
 
 ## Entrance Shuffle Algorithm
 
-Determines how locations are shuffled.
+Determines how locations are shuffled. In all modes other than Insanity and the similar legacy versions, holes shuffle as a pair with the connecting cave and the front
+two sections of Skull Woods remain confined to the general Skull Woods area. Link's house is never shuffled as a design decision.
 
-### Default
+### Vanilla
 
-Is the Vanilla layout.
+Places entrances in the same locations they were in the original The Legend of Zelda: A Link to the Past.
 
 ### Simple
 
-Shuffles Dungeon Entrances/Exits between each other and keeps all 4-entrance dungeons confined to one location. Outside Light World Death Mountain, interiors are shuffled but still connect the same points
-on the overworld. On Death Mountain, entrances are connected more freely.
-
-### Full
-
-Mixes cave and dungeon entrances freely.
+Shuffles dungeon entrances between each other and keeps all 4-entrance dungeons confined to one location such that dungeons will one to one swap with each other.
+Other than on Light World Death Mountain, interiors are shuffled but still connect the same points on the overworld. On Death Mountain, entrances are connected more freely.
 
 ### Restricted
 
-Uses Dungeons shuffling from Simple but freely connects remaining entrances.
+Uses dungeon shuffling from Simple but freely connects remaining entrances. Caves and dungeons with multiple entrances will be confined to one world.
 
-### Madness
+### Full
 
-Decouples entrances and exits from each other and shuffles them freely, only ensuring that no fake Light/Dark World happens and all locations are reachable.
+Mixes cave and dungeon entrances freely. Caves and dungeons with multiple entrances will be confined to one world.
+
+### Crossed
+
+Mixes cave and dungeon entrances freely, but now connector caves and dungeons can link Light World and Dark World.
 
 ### Insanity
 
-Madness, but without the light/dark world restrictions. Gives access to Mirror and Moon Pearl from the start.
+Decouples entrances and exits from each other and shuffles them freely. Caves that were single entrance in vanilla still can only exit to the same location from which they were entered.
+
+### Legacy Variants
+
+Similar to the base shuffles, but the distinction between single entrance and multi-entrance caves from older versions of the randomizer is maintained.
+Madness_Legacy is the more similar to the modern Insanity. Insanity_Legacy has fake worlds and guaranteed Moon Pearl and Magic Mirror for a very different experience.
 
 ### Dungeon Variants
 
@@ -238,6 +239,10 @@ The dungeon variants only mix up dungeons and keep the rest of the overworld van
 ## Heartbeep Sound Rate
 
 Select frequency of beeps when on low health. Can completely disable them.
+
+## Heart Color
+
+Select the color of Link's hearts.
 
 ## Menu Speed
 
@@ -275,7 +280,13 @@ If set, will only ensure the goal can be achieved, but not necessarily that all 
 
 ## Include Ganon's Tower and Pyramid Hole in Shuffle pool
 
-If set, Ganon's Tower is included in the dungeon shuffle pool and the Pyramid Hole/Exit pair is included in the Holes shuffle pool. Ganon can not be defeated until the primary goal is fulfilled. This setting removes any bias against Ganon's Tower that some algorithms may have.
+If set, Ganon's Tower is included in the dungeon shuffle pool and the Pyramid Hole/Exit pair is included in the Holes shuffle pool. Ganon can not be defeated until the primary goal is fulfilled.
+This setting removes any bias against Ganon's Tower that some algorithms may have.
+
+## Use Custom Item Pool
+
+If set, the item pool normally associated with your difficulty setting is replaced by the item pool specified in the custom tab. This feature is only supported when the randomizer is run
+via the GUI; attempting to set this via the command line does nothing.
 
 ## Seed
 
@@ -422,10 +433,10 @@ Use to select a different sprite sheet to use for Link. Path to a binary file of
 Enables the "Only Ensure Seed Beatable" option (default: False)
 
 ```
---shuffleganon
+--no-shuffleganon
 ```
 
-Enables the "Include Ganon's Tower and Pyramid Hole in Shuffle pool" option. (default: false)
+Disables the "Include Ganon's Tower and Pyramid Hole in Shuffle pool" option. (default: Enabled)
 
 ```
 --suppress_rom

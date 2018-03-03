@@ -33,7 +33,7 @@ def main(args):
     start_time = time.clock()
 
     # initialize the world
-    world = World('vanilla', 'noglitches', 'standard', 'normal', 'none', 'on', 'ganon', 'freshness', False, False, False, args.quickswap, args.fastmenu, args.disablemusic, False)
+    world = World('vanilla', 'noglitches', 'standard', 'normal', 'none', 'on', 'ganon', 'freshness', False, False, False, args.quickswap, args.fastmenu, args.disablemusic, False, False, None)
     logger = logging.getLogger('')
 
     hasher = hashlib.md5()
@@ -84,7 +84,7 @@ def main(args):
         sprite = None
 
     rom = LocalRom(args.rom)
-    patch_rom(world, rom, logic_hash, args.heartbeep, sprite)
+    patch_rom(world, rom, logic_hash, args.heartbeep, args.heartcolor, sprite)
 
     for textname, texttype, text in text_patches:
         if texttype == 'text':
@@ -219,6 +219,8 @@ def start():
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
     parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['normal', 'half', 'quarter', 'off'],
                         help='Select the rate at which the heart beep sound is played at low health.')
+    parser.add_argument('--heartcolor', default='red', const='red', nargs='?', choices=['red', 'blue', 'green', 'yellow'],
+                        help='Select the color of Link\'s heart meter. (default: %(default)s)')
     parser.add_argument('--sprite', help='Path to a sprite sheet to use for Link. Needs to be in binary format and have a length of 0x7000 (28672) bytes.')
     parser.add_argument('--plando', help='Filled out template to use for setting up the rom.')
     args = parser.parse_args()
