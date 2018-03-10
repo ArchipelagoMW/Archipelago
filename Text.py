@@ -629,10 +629,14 @@ class TextMapper(object):
 
 class RawMBTextMapper(TextMapper):
     char_map = {' ': 0xFF,
+                '『': 0xC4,
+                '』': 0xC5,
                 '?': 0xC6,
                 '!': 0xC7,
                 ',': 0xC8,
                 '-': 0xC9,
+                "🡄": 0xCA,
+                "🡆": 0xCB,
                 '…': 0xCC,
                 '.': 0xCD,
                 '~': 0xCE,
@@ -1097,19 +1101,19 @@ class RawMBTextMapper(TextMapper):
 class GoldCreditMapper(TextMapper):
     char_map = {' ': 0x9F,
                 ',': 0x34,
-                '.': 0x37,
+                "'": 0x35,
                 '-': 0x36,
-                "'": 0x35}
+                '.': 0x37,}
     alpha_offset = -0x47
 
 
 class GreenCreditMapper(TextMapper):
     char_map = {' ': 0x9F,
-                '.': 0x52}
+                '·': 0x52}
     alpha_offset = -0x29
 
 class RedCreditMapper(TextMapper):
-    char_map = {' ': 0x9F} #fixme
+    char_map = {' ': 0x9F}
     alpha_offset = -0x61
 
 class LargeCreditTopMapper(TextMapper):
@@ -1119,7 +1123,16 @@ class LargeCreditTopMapper(TextMapper):
                 '.': 0xA0,
                 '#': 0xA1,
                 '/': 0xA2,
-                ':': 0xA3}
+                ':': 0xA3,
+                ',': 0xA4,
+                '?': 0xA5,
+                '=': 0xA6,
+                '"': 0xA7,
+                '-': 0xA8,
+                '·': 0xA9,
+                '•': 0xA9,
+                '◢': 0xAA,
+                '◣': 0xAB,}
     alpha_offset = -0x04
     number_offset = 0x23
 
@@ -1131,6 +1144,15 @@ class LargeCreditBottomMapper(TextMapper):
                 '.': 0xC0,
                 '#': 0xC1,
                 '/': 0xC2,
-                ':': 0xC3}
+                ':': 0xC3,
+                ',': 0xC4,
+                '?': 0xC5,
+                '=': 0xC6,
+                '"': 0xC7,
+                '-': 0xC8,
+                '·': 0xC9,
+                '•': 0xC9,
+                '◢': 0xCA,
+                '◣': 0xCB,}
     alpha_offset = 0x22
     number_offset = 0x49
