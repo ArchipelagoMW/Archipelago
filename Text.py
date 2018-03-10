@@ -437,177 +437,183 @@ class SceneLargeCreditLine(SceneCreditLine):
         buf += LargeCreditBottomMapper.convert(self.text)
         return buf
 
+class MultiByteTextMapper(object):
+    @classmethod
+    def convert(cls, text, maxbytes=256):
+        outbuf = MultiByteCoreTextMapper.convert(text)
 
-def string_to_alttp_text(s, maxbytes=256):
-    outbuf = string_to_alttp_core(s)
+        # check for max length
+        if len(outbuf) > maxbytes - 2:
+            outbuf = outbuf[:maxbytes - 2]
+            # Note: this could crash if the last byte is part of a two byte command
+            # depedning on how well the command handles a value of 0x7F.
+            # Should probably do something about this.
 
-    # check for max length
-    if len(outbuf) > maxbytes - 2:
-        outbuf = outbuf[:maxbytes - 2]
-        # Note: this could crash if the last byte is part of a two byte command
-        # depedning on how well the command handles a value of 0x7F.
-        # Should probably do something about this.
+        outbuf.append(0x7F)
+        outbuf.append(0x7F)
+        return outbuf
 
-    outbuf.append(0x7F)
-    outbuf.append(0x7F)
-    return outbuf
+class MultiByteCoreTextMapper(object):
+    special_commands = {
+        "{SPEED0}": [0x7A, 0x00],
+        "{SPEED2}": [0x7A, 0x02],
+        "{SPEED6}": [0x7A, 0x06],
+        "{PAUSE1}": [0x78, 0x01],
+        "{PAUSE3}": [0x78, 0x03],
+        "{PAUSE5}": [0x78, 0x05],
+        "{PAUSE7}": [0x78, 0x07],
+        "{PAUSE9}": [0x78, 0x09],
+        "{INPUT}": [0x7E],
+        "{CHOICE}": [0x68],
+        "{ITEMSELECT}": [0x69],
+        "{CHOICE2}": [0x71],
+        "{CHOICE3}": [0x72],
+        "{HARP}": [0x79, 0x2D],
+        "{MENU}": [0x6D, 0x00],
+        "{BOTTOM}": [0x6D, 0x00],
+        "{NOBORDER}": [0x6B, 0x02],
+        "{CHANGEPIC}": [0x67, 0x67],
+        "{CHANGEMUSIC}": [0x67],
+        "{INTRO}": [0x6E, 0x00, 0x77, 0x07, 0x7A, 0x03, 0x6B, 0x02, 0x67],
+        "{NOTEXT}": [0x6E, 0x00, 0x6B, 0x04],
+        "{IBOX}": [0x6B, 0x02, 0x77, 0x07, 0x7A, 0x03],
+    }
 
-special_commands = {
-    "{SPEED0}": [0x7A, 0x00],
-    "{SPEED2}": [0x7A, 0x02],
-    "{SPEED6}": [0x7A, 0x06],
-    "{PAUSE1}": [0x78, 0x01],
-    "{PAUSE3}": [0x78, 0x03],
-    "{PAUSE5}": [0x78, 0x05],
-    "{PAUSE7}": [0x78, 0x07],
-    "{PAUSE9}": [0x78, 0x09],
-    "{INPUT}": [0x7E],
-    "{CHOICE}": [0x68],
-    "{ITEMSELECT}": [0x69],
-    "{CHOICE2}": [0x71],
-    "{CHOICE3}": [0x72],
-    "{HARP}": [0x79, 0x2D],
-    "{MENU}": [0x6D, 0x00],
-    "{BOTTOM}": [0x6D, 0x00],
-    "{NOBORDER}": [0x6B, 0x02],
-    "{CHANGEPIC}": [0x67, 0x67],
-    "{CHANGEMUSIC}": [0x67],
-    "{INTRO}": [0x6E, 0x00, 0x77, 0x07, 0x7A, 0x03, 0x6B, 0x02, 0x67],
-    "{NOTEXT}": [0x6E, 0x00, 0x6B, 0x04],
-    "{IBOX}": [0x6B, 0x02, 0x77, 0x07, 0x7A, 0x03],
-}
+    @classmethod
+    def convert(cls, text, pause=True, wrap=14):
+        text = text.upper()
+        lines = text.split('\n')
+        outbuf = bytearray()
+        lineindex = 0
+        is_intro = '{INTRO}' in text
 
-def string_to_alttp_core(s, pause=True, wrap=14):
-    s = s.upper()
-    lines = s.split('\n')
-    outbuf = bytearray()
-    lineindex = 0
-    is_intro = '{INTRO}' in s
+        while lines:
+            linespace = wrap
+            line = lines.pop(0)
+            if line.startswith('{'):
+                outbuf.extend(cls.special_commands[line])
+                continue
 
-    while lines:
-        linespace = wrap
-        line = lines.pop(0)
-        if line.startswith('{'):
-            outbuf.extend(special_commands[line])
-            continue
+            words = line.split(' ')
+            outbuf.append(0x74 if lineindex == 0 else 0x75 if lineindex == 1 else 0x76)  # line starter
 
-        words = line.split(' ')
-        outbuf.append(0x74 if lineindex == 0 else 0x75 if lineindex == 1 else 0x76)  # line starter
+            while words:
+                word = words.pop(0)
+                # sanity check: if the word we have is more than 14 characters, we take as much as we can still fit and push the rest back for later
+                if cls.wordlen(word) > wrap:
+                    if linespace < wrap:
+                        word = ' ' + word
+                    (word_first, word_rest) = cls.splitword(word, linespace)
+                    words.insert(0, word_rest)
+                    lines.insert(0, ' '.join(words))
 
-        while words:
-            word = words.pop(0)
-            # sanity check: if the word we have is more than 14 characters, we take as much as we can still fit and push the rest back for later
-            if wordlen(word) > wrap:
-                if linespace < wrap:
-                    word = ' ' + word
-                (word_first, word_rest) = splitword(word, linespace)
-                words.insert(0, word_rest)
-                lines.insert(0, ' '.join(words))
+                    outbuf.extend(RawMBTextMapper.convert(word_first))
+                    break
 
-                outbuf.extend(RawMBTextMapper.convert(word_first))
+                if cls.wordlen(word) <= (linespace if linespace == wrap else linespace - 1):
+                    if linespace < wrap:
+                        word = ' ' + word
+                    linespace -= cls.wordlen(word)
+                    outbuf.extend(RawMBTextMapper.convert(word))
+                else:
+                    # ran out of space, push word and lines back and continue with next line
+                    words.insert(0, word)
+                    lines.insert(0, ' '.join(words))
+                    break
+
+            if is_intro and lineindex < 3:
+                outbuf.extend([0xFF]*linespace)
+
+            has_more_lines = len(lines) > 1 or (lines and not lines[0].startswith('{'))
+
+            lineindex += 1
+            if pause and lineindex % 3 == 0 and has_more_lines:
+                outbuf.append(0x7E)
+            if lineindex >= 3 and has_more_lines:
+                outbuf.append(0x73)
+        return outbuf
+
+    @classmethod
+    def wordlen(cls, word):
+        l = 0
+        offset = 0
+        while offset < len(word):
+            c_len, offset = cls.charlen(word, offset)
+            l += c_len
+        return l
+
+    @classmethod
+    def splitword(cls, word, length):
+        l = 0
+        offset = 0
+        while True:
+            c_len, new_offset = cls.charlen(word, offset)
+            if l+c_len > length:
                 break
+            l += c_len
+            offset = new_offset
+        return (word[0:offset], word[offset:])
 
-            if wordlen(word) <= (linespace if linespace == wrap else linespace - 1):
-                if linespace < wrap:
-                    word = ' ' + word
-                linespace -= wordlen(word)
-                outbuf.extend(RawMBTextMapper.convert(word))
-            else:
-                # ran out of space, push word and lines back and continue with next line
-                words.insert(0, word)
-                lines.insert(0, ' '.join(words))
-                break
+    @classmethod
+    def charlen(cls, word, offset):
+        c = word[offset]
+        if c in ['>', '¼', '½', '♥']:
+            return (2, offset+1)
+        if c in ['@']:
+            return (4, offset+1)
+        if c in ['ᚋ', 'ᚌ', 'ᚍ', 'ᚎ']:
+            return (2, offset+1)
+        return (1, offset+1)
 
-        if is_intro and lineindex < 3:
-            outbuf.extend([0xFF]*linespace)
+class CompressedTextMapper(object):
+    two_byte_commands = [
+        0x6B, 0x6C, 0x6D, 0x6E,
+        0x77, 0x78, 0x79, 0x7A
+    ]
+    specially_coded_commands = {
+        0x73: 0xF6,
+        0x74: 0xF7,
+        0x75: 0xF8,
+        0x76: 0xF9,
+        0x7E: 0xFA,
+        0x7A: 0xFC,
+    }
 
-        has_more_lines = len(lines) > 1 or (lines and not lines[0].startswith('{'))
+    @classmethod
+    def convert(cls, text, pause=True, max_bytes_expanded=0x800, wrap=14):
+        inbuf = MultiByteCoreTextMapper.convert(text, pause, wrap)
 
-        lineindex += 1
-        if pause and lineindex % 3 == 0 and has_more_lines:
-            outbuf.append(0x7E)
-        if lineindex >= 3 and has_more_lines:
-            outbuf.append(0x73)
-    return outbuf
-
-two_byte_commands = [
-    0x6B, 0x6C, 0x6D, 0x6E,
-    0x77, 0x78, 0x79, 0x7A
-]
-specially_coded_commands = {
-    0x73: 0xF6,
-    0x74: 0xF7,
-    0x75: 0xF8,
-    0x76: 0xF9,
-    0x7E: 0xFA,
-    0x7A: 0xFC,
-}
-
-def string_to_alttp_text_compressed(s, pause=True, max_bytes_expanded=0x800, wrap=14):
-    inbuf = string_to_alttp_core(s, pause, wrap)
-
-    # Links name will need 8 bytes in the target buffer
-    # and two will be used by the terminator
-    # (Variables will use 2 bytes, but they start as 2 bytes)
-    bufsize = len(inbuf) + 7 * inbuf.count(0x6A) + 2
-    if bufsize > max_bytes_expanded:
-        raise ValueError("Uncompressed string too long for buffer")
-    inbuf.reverse()
-    outbuf = bytearray()
-    outbuf.append(0xfb) # terminator for previous record
-    while inbuf:
-        val = inbuf.pop()
-        if val == 0xFF:
-            outbuf.append(val)
-        elif val == 0x00:
-            outbuf.append(inbuf.pop())
-        elif val == 0x01: #kanji
-            outbuf.append(0xFD)
-            outbuf.append(inbuf.pop())
-        elif val >= 0x67:
-            if val in specially_coded_commands:
-                outbuf.append(specially_coded_commands[val])
-            else:
-                outbuf.append(0xFE)
+        # Links name will need 8 bytes in the target buffer
+        # and two will be used by the terminator
+        # (Variables will use 2 bytes, but they start as 2 bytes)
+        bufsize = len(inbuf) + 7 * inbuf.count(0x6A) + 2
+        if bufsize > max_bytes_expanded:
+            raise ValueError("Uncompressed string too long for buffer")
+        inbuf.reverse()
+        outbuf = bytearray()
+        outbuf.append(0xfb) # terminator for previous record
+        while inbuf:
+            val = inbuf.pop()
+            if val == 0xFF:
                 outbuf.append(val)
-            if val in two_byte_commands:
+            elif val == 0x00:
                 outbuf.append(inbuf.pop())
-        else:
-            raise ValueError("Unexpected byte found in uncompressed string")
-    return outbuf
+            elif val == 0x01: #kanji
+                outbuf.append(0xFD)
+                outbuf.append(inbuf.pop())
+            elif val >= 0x67:
+                if val in cls.specially_coded_commands:
+                    outbuf.append(cls.specially_coded_commands[val])
+                else:
+                    outbuf.append(0xFE)
+                    outbuf.append(val)
+                if val in cls.two_byte_commands:
+                    outbuf.append(inbuf.pop())
+            else:
+                raise ValueError("Unexpected byte found in uncompressed string")
+        return outbuf
 
-
-
-def wordlen(word):
-    l = 0
-    offset = 0
-    while offset < len(word):
-        c_len, offset = charlen(word, offset)
-        l += c_len
-    return l
-
-def splitword(word, length):
-    l = 0
-    offset = 0
-    while True:
-        c_len, new_offset = charlen(word, offset)
-        if l+c_len > length:
-            break
-        l += c_len
-        offset = new_offset
-    return (word[0:offset], word[offset:])
-
-def charlen(word, offset):
-    c = word[offset]
-    if c in ['>', '¼', '½', '♥']:
-        return (2, offset+1)
-    if c in ['@']:
-        return (4, offset+1)
-    if c in ['ᚋ', 'ᚌ', 'ᚍ', 'ᚎ']:
-        return (2, offset+1)
-    return (1, offset+1)
-
-class TextMapper(object):
+class CharTextMapper(object):
     number_offset = None
     alpha_offset = 0
     char_map = {}
@@ -627,7 +633,7 @@ class TextMapper(object):
             buf.append(cls.map_char(char))
         return buf
 
-class RawMBTextMapper(TextMapper):
+class RawMBTextMapper(CharTextMapper):
     char_map = {' ': 0xFF,
                 '『': 0xC4,
                 '』': 0xC5,
@@ -1098,7 +1104,7 @@ class RawMBTextMapper(TextMapper):
         return buf
 
 
-class GoldCreditMapper(TextMapper):
+class GoldCreditMapper(CharTextMapper):
     char_map = {' ': 0x9F,
                 ',': 0x34,
                 "'": 0x35,
@@ -1107,16 +1113,16 @@ class GoldCreditMapper(TextMapper):
     alpha_offset = -0x47
 
 
-class GreenCreditMapper(TextMapper):
+class GreenCreditMapper(CharTextMapper):
     char_map = {' ': 0x9F,
                 '·': 0x52}
     alpha_offset = -0x29
 
-class RedCreditMapper(TextMapper):
+class RedCreditMapper(CharTextMapper):
     char_map = {' ': 0x9F}
     alpha_offset = -0x61
 
-class LargeCreditTopMapper(TextMapper):
+class LargeCreditTopMapper(CharTextMapper):
     char_map = {' ': 0x9F,
                 "'": 0x77,
                 '!': 0x78,
@@ -1137,7 +1143,7 @@ class LargeCreditTopMapper(TextMapper):
     number_offset = 0x23
 
 
-class LargeCreditBottomMapper(TextMapper):
+class LargeCreditBottomMapper(CharTextMapper):
     char_map = {' ': 0x9F,
                 "'": 0x9D,
                 '!': 0x9E,
