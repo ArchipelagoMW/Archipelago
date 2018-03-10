@@ -504,14 +504,14 @@ def string_to_alttp_core(s, pause=True, wrap=14):
                 words.insert(0, word_rest)
                 lines.insert(0, ' '.join(words))
 
-                write_word(outbuf, word_first)
+                outbuf.extend(RawMBTextMapper.convert(word_first))
                 break
 
             if wordlen(word) <= (linespace if linespace == wrap else linespace - 1):
                 if linespace < wrap:
                     word = ' ' + word
                 linespace -= wordlen(word)
-                write_word(outbuf, word)
+                outbuf.extend(RawMBTextMapper.convert(word))
             else:
                 # ran out of space, push word and lines back and continue with next line
                 words.insert(0, word)
@@ -607,214 +607,6 @@ def charlen(word, offset):
         return (2, offset+1)
     return (1, offset+1)
 
-def write_word(buf, word):
-    for char in word:
-        res = char_to_alttp_char(char)
-        if isinstance(res, int):
-            buf.extend([0x00, res])
-        else:
-            buf.extend(res)
-
-
-char_map = {' ': 0xFF,
-            '?': 0xC6,
-            '!': 0xC7,
-            ',': 0xC8,
-            '-': 0xC9,
-            '…': 0xCC,
-            '.': 0xCD,
-            '~': 0xCE,
-            '～': 0xCE,
-            '@': [0x6A], # Links name (only works if compressed)
-            '>': [0x00, 0xD2, 0x00, 0xD3], # Link's face
-            "'": 0xD8,
-            '’': 0xD8,
-            '%': 0xDD, # Hylian Bird
-            '^': 0xDE, # Hylian Ankh
-            '=': 0xDF, # Hylian Wavy Lines
-            '↑': 0xE0,
-            '↓': 0xE1,
-            '→': 0xE2,
-            '←': 0xE3,
-            '≥': 0xE4, # Cursor
-            '¼': [0x00, 0xE5, 0x00, 0xE7], # ¼ heart
-            '½': [0x00, 0xE6, 0x00, 0xE7], # ½ heart
-            '¾': [0x00, 0xE8, 0x00, 0xE9], # ¾ heart
-            '♥': [0x00, 0xEA, 0x00, 0xEB], # full heart
-            'ᚋ': [0x6C, 0x00], # var 0
-            'ᚌ': [0x6C, 0x01], # var 1
-            'ᚍ': [0x6C, 0x02], # var 2
-            'ᚎ': [0x6C, 0x03], # var 3
-            'あ': 0x00,
-            'い': 0x01,
-            'う': 0x02,
-            'え': 0x03,
-            'お': 0x04,
-            'や': 0x05,
-            'ゆ': 0x06,
-            'よ': 0x07,
-            'か': 0x08,
-            'き': 0x09,
-            'く': 0x0A,
-            'け': 0x0B,
-            'こ': 0x0C,
-            'わ': 0x0D,
-            'を': 0x0E,
-            'ん': 0x0F,
-            'さ': 0x10,
-            'し': 0x11,
-            'す': 0x12,
-            'せ': 0x13,
-            'そ': 0x14,
-            'が': 0x15,
-            'ぎ': 0x16,
-            'ぐ': 0x17,
-            'た': 0x18,
-            'ち': 0x19,
-            'つ': 0x1A,
-            'て': 0x1B,
-            'と': 0x1C,
-            'げ': 0x1D,
-            'ご': 0x1E,
-            'ざ': 0x1F,
-            'な': 0x20,
-            'に': 0x21,
-            'ぬ': 0x22,
-            'ね': 0x23,
-            'の': 0x24,
-            'じ': 0x25,
-            'ず': 0x26,
-            'ぜ': 0x27,
-            'は': 0x28,
-            'ひ': 0x29,
-            'ふ': 0x2A,
-            'へ': 0x2B,
-            'ほ': 0x2C,
-            'ぞ': 0x2D,
-            'だ': 0x2E,
-            'ぢ': 0x2F,
-            'ま': 0x30,
-            'み': 0x31,
-            'む': 0x32,
-            'め': 0x33,
-            'も': 0x34,
-            'づ': 0x35,
-            'で': 0x36,
-            'ど': 0x37,
-            'ら': 0x38,
-            'り': 0x39,
-            'る': 0x3A,
-            'れ': 0x3B,
-            'ろ': 0x3C,
-            'ば': 0x3D,
-            'び': 0x3E,
-            'ぶ': 0x3F,
-            'べ': 0x40,
-            'ぼ': 0x41,
-            'ぱ': 0x42,
-            'ぴ': 0x43,
-            'ぷ': 0x44,
-            'ぺ': 0x45,
-            'ぽ': 0x46,
-            'ゃ': 0x47,
-            'ゅ': 0x48,
-            'ょ': 0x49,
-            'っ': 0x4A,
-            'ぁ': 0x4B,
-            'ぃ': 0x4C,
-            'ぅ': 0x4D,
-            'ぇ': 0x4E,
-            'ぉ': 0x4F,
-            'ア': 0x50,
-            'イ': 0x51,
-            'ウ': 0x52,
-            'エ': 0x53,
-            'オ': 0x54,
-            'ヤ': 0x55,
-            'ユ': 0x56,
-            'ヨ': 0x57,
-            'カ': 0x58,
-            'キ': 0x59,
-            'ク': 0x5A,
-            'ケ': 0x5B,
-            'コ': 0x5C,
-            'ワ': 0x5D,
-            'ヲ': 0x5E,
-            'ン': 0x5F,
-            'サ': 0x60,
-            'シ': 0x61,
-            'ス': 0x62,
-            'セ': 0x63,
-            'ソ': 0x64,
-            'ガ': 0x65,
-            'ギ': 0x66,
-            'グ': 0x67,
-            'タ': 0x68,
-            'チ': 0x69,
-            'ツ': 0x6A,
-            'テ': 0x6B,
-            'ト': 0x6C,
-            'ゲ': 0x6D,
-            'ゴ': 0x6E,
-            'ザ': 0x6F,
-            'ナ': 0x70,
-            'ニ': 0x71,
-            'ヌ': 0x72,
-            'ネ': 0x73,
-            'ノ': 0x74,
-            'ジ': 0x75,
-            'ズ': 0x76,
-            'ゼ': 0x77,
-            'ハ': 0x78,
-            'ヒ': 0x79,
-            'フ': 0x7A,
-            'ヘ': 0x7B,
-            'ホ': 0x7C,
-            'ゾ': 0x7D,
-            'ダ': 0x7E,
-            'マ': 0x80,
-            'ミ': 0x81,
-            'ム': 0x82,
-            'メ': 0x83,
-            'モ': 0x84,
-            'ヅ': 0x85,
-            'デ': 0x86,
-            'ド': 0x87,
-            'ラ': 0x88,
-            'リ': 0x89,
-            'ル': 0x8A,
-            'レ': 0x8B,
-            'ロ': 0x8C,
-            'バ': 0x8D,
-            'ビ': 0x8E,
-            'ブ': 0x8F,
-            'ベ': 0x90,
-            'ボ': 0x91,
-            'パ': 0x92,
-            'ピ': 0x93,
-            'プ': 0x94,
-            'ペ': 0x95,
-            'ポ': 0x96,
-            'ャ': 0x97,
-            'ュ': 0x98,
-            'ョ': 0x99,
-            'ッ': 0x9A,
-            'ァ': 0x9B,
-            'ィ': 0x9C,
-            'ゥ': 0x9D,
-            'ェ': 0x9E,
-            'ォ': 0x9F}
-
-
-def char_to_alttp_char(char):
-    if 0x30 <= ord(char) <= 0x39:
-        return ord(char) + 0x70
-
-    if 0x41 <= ord(char) <= 0x5A:
-        return ord(char) + 0x69
-
-    return char_map.get(char, 0xFF)
-
 class TextMapper(object):
     number_offset = None
     alpha_offset = 0
@@ -833,6 +625,209 @@ class TextMapper(object):
         buf = bytearray()
         for char in text.lower():
             buf.append(cls.map_char(char))
+        return buf
+
+class RawMBTextMapper(TextMapper):
+    char_map = {' ': 0xFF,
+                '?': 0xC6,
+                '!': 0xC7,
+                ',': 0xC8,
+                '-': 0xC9,
+                '…': 0xCC,
+                '.': 0xCD,
+                '~': 0xCE,
+                '～': 0xCE,
+                '@': [0x6A], # Links name (only works if compressed)
+                '>': [0x00, 0xD2, 0x00, 0xD3], # Link's face
+                "'": 0xD8,
+                '’': 0xD8,
+                '%': 0xDD, # Hylian Bird
+                '^': 0xDE, # Hylian Ankh
+                '=': 0xDF, # Hylian Wavy Lines
+                '↑': 0xE0,
+                '↓': 0xE1,
+                '→': 0xE2,
+                '←': 0xE3,
+                '≥': 0xE4, # Cursor
+                '¼': [0x00, 0xE5, 0x00, 0xE7], # ¼ heart
+                '½': [0x00, 0xE6, 0x00, 0xE7], # ½ heart
+                '¾': [0x00, 0xE8, 0x00, 0xE9], # ¾ heart
+                '♥': [0x00, 0xEA, 0x00, 0xEB], # full heart
+                'ᚋ': [0x6C, 0x00], # var 0
+                'ᚌ': [0x6C, 0x01], # var 1
+                'ᚍ': [0x6C, 0x02], # var 2
+                'ᚎ': [0x6C, 0x03], # var 3
+                'あ': 0x00,
+                'い': 0x01,
+                'う': 0x02,
+                'え': 0x03,
+                'お': 0x04,
+                'や': 0x05,
+                'ゆ': 0x06,
+                'よ': 0x07,
+                'か': 0x08,
+                'き': 0x09,
+                'く': 0x0A,
+                'け': 0x0B,
+                'こ': 0x0C,
+                'わ': 0x0D,
+                'を': 0x0E,
+                'ん': 0x0F,
+                'さ': 0x10,
+                'し': 0x11,
+                'す': 0x12,
+                'せ': 0x13,
+                'そ': 0x14,
+                'が': 0x15,
+                'ぎ': 0x16,
+                'ぐ': 0x17,
+                'た': 0x18,
+                'ち': 0x19,
+                'つ': 0x1A,
+                'て': 0x1B,
+                'と': 0x1C,
+                'げ': 0x1D,
+                'ご': 0x1E,
+                'ざ': 0x1F,
+                'な': 0x20,
+                'に': 0x21,
+                'ぬ': 0x22,
+                'ね': 0x23,
+                'の': 0x24,
+                'じ': 0x25,
+                'ず': 0x26,
+                'ぜ': 0x27,
+                'は': 0x28,
+                'ひ': 0x29,
+                'ふ': 0x2A,
+                'へ': 0x2B,
+                'ほ': 0x2C,
+                'ぞ': 0x2D,
+                'だ': 0x2E,
+                'ぢ': 0x2F,
+                'ま': 0x30,
+                'み': 0x31,
+                'む': 0x32,
+                'め': 0x33,
+                'も': 0x34,
+                'づ': 0x35,
+                'で': 0x36,
+                'ど': 0x37,
+                'ら': 0x38,
+                'り': 0x39,
+                'る': 0x3A,
+                'れ': 0x3B,
+                'ろ': 0x3C,
+                'ば': 0x3D,
+                'び': 0x3E,
+                'ぶ': 0x3F,
+                'べ': 0x40,
+                'ぼ': 0x41,
+                'ぱ': 0x42,
+                'ぴ': 0x43,
+                'ぷ': 0x44,
+                'ぺ': 0x45,
+                'ぽ': 0x46,
+                'ゃ': 0x47,
+                'ゅ': 0x48,
+                'ょ': 0x49,
+                'っ': 0x4A,
+                'ぁ': 0x4B,
+                'ぃ': 0x4C,
+                'ぅ': 0x4D,
+                'ぇ': 0x4E,
+                'ぉ': 0x4F,
+                'ア': 0x50,
+                'イ': 0x51,
+                'ウ': 0x52,
+                'エ': 0x53,
+                'オ': 0x54,
+                'ヤ': 0x55,
+                'ユ': 0x56,
+                'ヨ': 0x57,
+                'カ': 0x58,
+                'キ': 0x59,
+                'ク': 0x5A,
+                'ケ': 0x5B,
+                'コ': 0x5C,
+                'ワ': 0x5D,
+                'ヲ': 0x5E,
+                'ン': 0x5F,
+                'サ': 0x60,
+                'シ': 0x61,
+                'ス': 0x62,
+                'セ': 0x63,
+                'ソ': 0x64,
+                'ガ': 0x65,
+                'ギ': 0x66,
+                'グ': 0x67,
+                'タ': 0x68,
+                'チ': 0x69,
+                'ツ': 0x6A,
+                'テ': 0x6B,
+                'ト': 0x6C,
+                'ゲ': 0x6D,
+                'ゴ': 0x6E,
+                'ザ': 0x6F,
+                'ナ': 0x70,
+                'ニ': 0x71,
+                'ヌ': 0x72,
+                'ネ': 0x73,
+                'ノ': 0x74,
+                'ジ': 0x75,
+                'ズ': 0x76,
+                'ゼ': 0x77,
+                'ハ': 0x78,
+                'ヒ': 0x79,
+                'フ': 0x7A,
+                'ヘ': 0x7B,
+                'ホ': 0x7C,
+                'ゾ': 0x7D,
+                'ダ': 0x7E,
+                'マ': 0x80,
+                'ミ': 0x81,
+                'ム': 0x82,
+                'メ': 0x83,
+                'モ': 0x84,
+                'ヅ': 0x85,
+                'デ': 0x86,
+                'ド': 0x87,
+                'ラ': 0x88,
+                'リ': 0x89,
+                'ル': 0x8A,
+                'レ': 0x8B,
+                'ロ': 0x8C,
+                'バ': 0x8D,
+                'ビ': 0x8E,
+                'ブ': 0x8F,
+                'ベ': 0x90,
+                'ボ': 0x91,
+                'パ': 0x92,
+                'ピ': 0x93,
+                'プ': 0x94,
+                'ペ': 0x95,
+                'ポ': 0x96,
+                'ャ': 0x97,
+                'ュ': 0x98,
+                'ョ': 0x99,
+                'ッ': 0x9A,
+                'ァ': 0x9B,
+                'ィ': 0x9C,
+                'ゥ': 0x9D,
+                'ェ': 0x9E,
+                'ォ': 0x9F}
+    alpha_offset = 0x69
+    number_offset = 0x70
+
+    @classmethod
+    def convert(cls, text):
+        buf = bytearray()
+        for char in text.lower():
+            res = cls.map_char(char)
+            if isinstance(res, int):
+                buf.extend([0x00, res])
+            else:
+                buf.extend(res)
         return buf
 
 
