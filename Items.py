@@ -157,6 +157,7 @@ item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher cla
               'Big Key (Ganons Tower)': (False, False, 'BigKey', 0x92, 'A big key to the evil tower', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again'),
               'Compass (Ganons Tower)': (False, True, 'Compass', 0x82, 'Now you can find Agahnim!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again'),
               'Map (Ganons Tower)': (False, True, 'Map', 0x72, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again'),
+              'Small Key (Universal)': (False, False, 'SmallKey', 0xAF, 'A small key for any door', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again'),
               'Nothing': (False, False, None, 0x5A, 'Some Hot Air', 'and the Nothing', 'the zen kid', 'outright theft', 'shroom theft', 'empty boy is bored again'),
               'Beat Agahnim 1': (True, False, 'Event', None, None, None, None, None, None, None),
               'Beat Agahnim 2': (True, False, 'Event', None, None, None, None, None, None, None)}

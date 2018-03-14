@@ -165,6 +165,10 @@ def start():
                              Keys (and other dungeon items) are no longer restricted to
                              their dungeons, but can be anywhere
                              ''', action='store_true')
+    parser.add_argument('--retro', help='''\
+                             Keys are universal, shooting arrows costs rupees,
+                             and a few other little things make this more like Zelda-1.
+                             ''', action='store_true')
     parser.add_argument('--custom', default=False, help='Not supported.')
     parser.add_argument('--customitemarray', default=False, help='Not supported.')
     parser.add_argument('--nodungeonitems', help='''\

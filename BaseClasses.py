@@ -7,7 +7,7 @@ from collections import OrderedDict
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, custom, customitemarray):
+    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, retro, custom, customitemarray):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
@@ -56,6 +56,7 @@ class World(object):
         self.fastmenu = fastmenu
         self.disable_music = disable_music
         self.keysanity = keysanity
+        self.retro = retro
         self.custom = custom
         self.customitemarray = customitemarray
         self.can_take_damage = True
@@ -278,6 +279,7 @@ class World(object):
         markbool(self.check_beatable_only)
         markbool(self.shuffle_ganon)
         markbool(self.keysanity)
+        markbool(self.retro)
         assert id_value_max <= 0xFFFFFFFF
         return id_value
 
