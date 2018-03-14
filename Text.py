@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 text_addresses = {'Pedestal': (0x180300, 256),
                   'Triforce': (0x180400, 256),
                   'Uncle': (0x180500, 256),
@@ -137,10 +138,13 @@ Ganon1_texts = [
     "Did you know?\nThe biggest\nand heaviest\ncheese ever\nproduced\nweighed\n57,518 pounds\nand was 32\nfeet long.",
     "Now there was\na time, When\nyou loved me\nso. I couldn't\ndo wrong,\nAnd now you\nneed to know.\nSo How you\nlike me now?",
     "Did you know?\nNutrition\nexperts\nrecommend that\nat least half\nof our daily\ngrains come\nfrom whole\ngrain products",
+    "The Hemiptera\nor true bugs\nare an order\nof insects\ncovering 50k\nto 80k species\nlike aphids,\ncicadas, and\nshield bugs.",
+    "Thanks for\ndropping in,\nthe first\npassengers\nin a hot\nair balloon.\nwere a duck,\na sheep,\nand a rooster.",
+    "You think you\nare so smart?\n\nI bet you\ndidn't know\nYou can't hum\nwhile holding\nyour nose\nclosed.",
+    "grumble,\n\ngrumble…\ngrumble,\n\ngrumble…\nSeriously you\nwere supposed\nto bring food",
+    "Join me hero,\nand I shall\nmake your face\nthe greatest\nin the dark\nworld!\n\nOr else you\nwill die!",
 ]
 TavernMan_texts = [
-    'Did you know that talking to random NPCs wastes time in a race? I hope this information may be of use to you in the future.'
-] + [
     "What do you\ncall a blind\ndinosaur?\nadoyouthink-\nhesaurus\n",
     "A blind man\nwalks into\na bar.\nAnd a table.\nAnd a chair.\n",
     "What do ducks\nlike to eat?\n\nQuackers!\n",
@@ -435,32 +439,78 @@ class SceneLargeCreditLine(SceneCreditLine):
 
 
 def string_to_alttp_text(s, maxbytes=256):
-    lines = s.upper().split('\n')
+    outbuf = string_to_alttp_core(s)
+
+    # check for max length
+    if len(outbuf) > maxbytes - 2:
+        outbuf = outbuf[:maxbytes - 2]
+        # Note: this could crash if the last byte is part of a two byte command
+        # depedning on how well the command handles a value of 0x7F.
+        # Should probably do something about this.
+
+    outbuf.append(0x7F)
+    outbuf.append(0x7F)
+    return outbuf
+
+special_commands = {
+    "{SPEED0}": [0x7A, 0x00],
+    "{SPEED2}": [0x7A, 0x02],
+    "{SPEED6}": [0x7A, 0x06],
+    "{PAUSE1}": [0x78, 0x01],
+    "{PAUSE3}": [0x78, 0x03],
+    "{PAUSE5}": [0x78, 0x05],
+    "{PAUSE7}": [0x78, 0x07],
+    "{PAUSE9}": [0x78, 0x09],
+    "{INPUT}": [0x7E],
+    "{CHOICE}": [0x68],
+    "{ITEMSELECT}": [0x69],
+    "{CHOICE2}": [0x71],
+    "{CHOICE3}": [0x72],
+    "{HARP}": [0x79, 0x2D],
+    "{MENU}": [0x6D, 0x00],
+    "{BOTTOM}": [0x6D, 0x00],
+    "{NOBORDER}": [0x6B, 0x02],
+    "{CHANGEPIC}": [0x67, 0x67],
+    "{CHANGEMUSIC}": [0x67],
+    "{INTRO}": [0x6E, 0x00, 0x77, 0x07, 0x7A, 0x03, 0x6B, 0x02, 0x67],
+    "{NOTEXT}": [0x6E, 0x00, 0x6B, 0x04],
+    "{IBOX}": [0x6B, 0x02, 0x77, 0x07, 0x7A, 0x03],
+}
+
+def string_to_alttp_core(s, pause=True, wrap=14):
+    s = s.upper()
+    lines = s.split('\n')
     outbuf = bytearray()
     lineindex = 0
+    is_intro = '{INTRO}' in s
 
     while lines:
-        linespace = 14
+        linespace = wrap
         line = lines.pop(0)
+        if line.startswith('{'):
+            outbuf.extend(special_commands[line])
+            continue
+
         words = line.split(' ')
         outbuf.append(0x74 if lineindex == 0 else 0x75 if lineindex == 1 else 0x76)  # line starter
+
         while words:
             word = words.pop(0)
             # sanity check: if the word we have is more than 14 characters, we take as much as we can still fit and push the rest back for later
-            if len(word) > 14:
-                if linespace < 14:
+            if wordlen(word) > wrap:
+                if linespace < wrap:
                     word = ' ' + word
-                word_first = word[:linespace]
-                words.insert(0, word[linespace:])
+                (word_first, word_rest) = splitword(word, linespace)
+                words.insert(0, word_rest)
                 lines.insert(0, ' '.join(words))
 
                 write_word(outbuf, word_first)
                 break
 
-            if len(word) <= (linespace if linespace == 14 else linespace - 1):
-                if linespace < 14:
+            if wordlen(word) <= (linespace if linespace == wrap else linespace - 1):
+                if linespace < wrap:
                     word = ' ' + word
-                linespace -= len(word)
+                linespace -= wordlen(word)
                 write_word(outbuf, word)
             else:
                 # ran out of space, push word and lines back and continue with next line
@@ -468,26 +518,102 @@ def string_to_alttp_text(s, maxbytes=256):
                 lines.insert(0, ' '.join(words))
                 break
 
+        if is_intro and lineindex < 3:
+            outbuf.extend([0xFF]*linespace)
+
+        has_more_lines = len(lines) > 1 or (lines and not lines[0].startswith('{'))
+
         lineindex += 1
-        if lineindex % 3 == 0 and lines:
+        if pause and lineindex % 3 == 0 and has_more_lines:
             outbuf.append(0x7E)
-        if lineindex >= 3 and lines:
+        if lineindex >= 3 and has_more_lines:
             outbuf.append(0x73)
+    return outbuf
 
-    # check for max length
-    if len(outbuf) > maxbytes - 1:
-        outbuf = outbuf[:maxbytes - 1]
-        # make sure we interpret the end of box character
-        if outbuf[-1] == 0x00:
-            outbuf[-1] = 0x73
+two_byte_commands = [
+    0x6B, 0x6C, 0x6D, 0x6E,
+    0x77, 0x78, 0x79, 0x7A
+]
+specially_coded_commands = {
+    0x73: 0xF6,
+    0x74: 0xF7,
+    0x75: 0xF8,
+    0x76: 0xF9,
+    0x7E: 0xFA,
+    0x7A: 0xFC,
+}
 
-    outbuf.append(0x7F)
+def string_to_alttp_text_compressed(s, pause=True, max_bytes_expanded=0x800, wrap=14):
+    inbuf = string_to_alttp_core(s, pause, wrap)
+
+    # Links name will need 8 bytes in the target buffer
+    # and two will be used by the terminator
+    # (Variables will use 2 bytes, but they start as 2 bytes)
+    bufsize = len(inbuf) + 7 * inbuf.count(0x6A) + 2
+    if bufsize > max_bytes_expanded:
+        raise ValueError("Uncompressed string too long for buffer")
+    inbuf.reverse()
+    outbuf = bytearray()
+    outbuf.append(0xfb) # terminator for previous record
+    while inbuf:
+        val = inbuf.pop()
+        if val == 0xFF:
+            outbuf.append(val)
+        elif val == 0x00:
+            outbuf.append(inbuf.pop())
+        elif val == 0x01: #kanji
+            outbuf.append(0xFD)
+            outbuf.append(inbuf.pop())
+        elif val >= 0x67:
+            if val in specially_coded_commands:
+                outbuf.append(specially_coded_commands[val])
+            else:
+                outbuf.append(0xFE)
+                outbuf.append(val)
+            if val in two_byte_commands:
+                outbuf.append(inbuf.pop())
+        else:
+            raise ValueError("Unexpected byte found in uncompressed string")
     return outbuf
 
 
+
+def wordlen(word):
+    l = 0
+    offset = 0
+    while offset < len(word):
+        c_len, offset = charlen(word, offset)
+        l += c_len
+    return l
+
+def splitword(word, length):
+    l = 0
+    offset = 0
+    while True:
+        c_len, new_offset = charlen(word, offset)
+        if l+c_len > length:
+            break
+        l += c_len
+        offset = new_offset
+    return (word[0:offset], word[offset:])
+
+def charlen(word, offset):
+    c = word[offset]
+    if c in ['>', '¼', '½', '♥']:
+        return (2, offset+1)
+    if c in ['@']:
+        return (4, offset+1)
+    if c in ['ᚋ', 'ᚌ', 'ᚍ', 'ᚎ']:
+        return (2, offset+1)
+    return (1, offset+1)
+
 def write_word(buf, word):
     for char in word:
-        buf.extend([0x00, char_to_alttp_char(char)])
+        res = char_to_alttp_char(char)
+        if isinstance(res, int):
+            buf.extend([0x00, res])
+        else:
+            buf.extend(res)
 
 
 char_map = {' ': 0xFF,
@@ -499,12 +625,26 @@ char_map = {' ': 0xFF,
             '.': 0xCD,
             '~': 0xCE,
             '～': 0xCE,
+            '@': [0x6A], # Links name (only works if compressed)
+            '>': [0x00, 0xD2, 0x00, 0xD3], # Link's face
             "'": 0xD8,
             '’': 0xD8,
+            '%': 0xDD, # Hylian Bird
+            '^': 0xDE, # Hylian Ankh
+            '=': 0xDF, # Hylian Wavy Lines
             '↑': 0xE0,
             '↓': 0xE1,
             '→': 0xE2,
             '←': 0xE3,
+            '≥': 0xE4, # Cursor
+            '¼': [0x00, 0xE5, 0x00, 0xE7], # ¼ heart
+            '½': [0x00, 0xE6, 0x00, 0xE7], # ½ heart
+            '¾': [0x00, 0xE8, 0x00, 0xE9], # ¾ heart
+            '♥': [0x00, 0xEA, 0x00, 0xEB], # full heart
+            'ᚋ': [0x6C, 0x00], # var 0
+            'ᚌ': [0x6C, 0x01], # var 1
+            'ᚍ': [0x6C, 0x02], # var 2
+            'ᚎ': [0x6C, 0x03], # var 3
             'あ': 0x00,
             'い': 0x01,
             'う': 0x02,
