@@ -411,7 +411,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xD8)  # One Heart
         # potion heal amount
-        rom.write_byte(0x180084, 0x28)  # Five Hearts
+        rom.write_byte(0x180084, 0x38)  # Seven Hearts
         # potion magic restore amount
         rom.write_byte(0x180085, 0x40)  # Half Magic
         #Cape magic cost
@@ -423,6 +423,10 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
         rom.write_int16_to_rom(0x180036, world.rupoor_cost)
+        # Set stun items
+        rom.write_byte(0x180180, 0x01) # Hookshot only
+        # Make silver arrows only usable against Ganon
+        rom.write_byte(0x180181, 0x01)
         #Make Blue Shield more expensive
         rom.write_bytes(0xF73D2, [0xFC, 0xFF])
         rom.write_bytes(0xF73DA, [0x04, 0x00])
@@ -443,20 +447,24 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0xF723F, 0xE7)
     elif world.difficulty == 'expert':
         # Powdered Fairies Prize
-        rom.write_byte(0x36DD0, 0x79)  # Bees
+        rom.write_byte(0x36DD0, 0xD8)  # One Heart
         # potion heal amount
         rom.write_byte(0x180084, 0x08)  # One Heart
         # potion magic restore amount
         rom.write_byte(0x180085, 0x20)  # Quarter Magic
         #Cape magic cost
-        rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
+        rom.write_bytes(0x3ADA7, [0x01, 0x01, 0x01])
         # Byrna Invulnerability: off
         rom.write_byte(0x18004F, 0x00)
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
-        rom.write_int16_to_rom(0x180036, 20)
+        rom.write_int16_to_rom(0x180036, world.rupoor_cost)
+        # Set stun items
+        rom.write_byte(0x180180, 0x00) # Nothing
+        # Make silver arrows only usable against Ganon
+        rom.write_byte(0x180181, 0x01)
         #Make Blue Shield more expensive
         rom.write_bytes(0xF73D2, [0xFC, 0xFF])
         rom.write_bytes(0xF73DA, [0x04, 0x00])
@@ -483,14 +491,18 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         # potion magic restore amount
         rom.write_byte(0x180085, 0x00)  # No healing
         #Cape magic cost
-        rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
+        rom.write_bytes(0x3ADA7, [0x01, 0x01, 0x01])
         # Byrna Invulnerability: off
         rom.write_byte(0x18004F, 0x00)
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
-        rom.write_int16_to_rom(0x180036, 9999)
+        rom.write_int16_to_rom(0x180036, world.rupoor_cost)
+        # Set stun items
+        rom.write_byte(0x180180, 0x00) # Nothing
+        # Make silver arrows only usable against Ganon
+        rom.write_byte(0x180181, 0x01)
         #Make Blue Shield more expensive
         rom.write_bytes(0xF73D2, [0xFC, 0xFF])
         rom.write_bytes(0xF73DA, [0x04, 0x00])
@@ -522,6 +534,12 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x18004F, 0x01)
         #Enable catching fairies
         rom.write_byte(0x34FD6, 0xF0)
+        # Rupoor negative value
+        rom.write_int16_to_rom(0x180036, world.rupoor_cost)
+        # Set stun items
+        rom.write_byte(0x180180, 0x03) # All standard items
+        # Make silver arrows freely usable
+        rom.write_byte(0x180181, 0x00)
         #Set overflow items for progressive equipment
         if world.goal == 'triforcehunt':
             overflow_replacement = TRIFORCE_PIECE

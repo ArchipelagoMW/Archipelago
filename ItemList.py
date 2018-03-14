@@ -10,15 +10,15 @@ from Dungeons import get_dungeon_item_pool
 #Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
 
 alwaysitems = ['Bombos', 'Book of Mudora', 'Bow', 'Cane of Somaria', 'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp',
-               'Cape', 'Magic Powder', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Bug Catching Net', 'Cane of Byrna']
+               'Cape', 'Magic Powder', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Bug Catching Net', 'Cane of Byrna', 'Blue Boomerang', 'Red Boomerang']
 progressivegloves = ['Progressive Glove'] * 2
 basicgloves = ['Power Glove', 'Titans Mitts']
 
 normalbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Fairy)', 'Bottle (Bee)', 'Bottle (Good Bee)']
 hardbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Bee)', 'Bottle (Good Bee)']
 
-normalbaseitems = (['Blue Boomerang', 'Red Boomerang', 'Silver Arrows', 'Magic Upgrade (1/2)'] + ['Rupees (300)'] * 4 +
-                   ['Single Arrow', 'Sanctuary Heart Container', 'Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24)
+normalbaseitems = (['Silver Arrows', 'Magic Upgrade (1/2)', 'Single Arrow', 'Sanctuary Heart Container', 'Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] +
+                   ['Rupees (300)'] * 4 + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24)
 normalfirst15extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6
 normalsecond15extra = ['Bombs (3)'] * 10 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupee (1)']
 normalthird10extra = ['Rupees (50)'] * 4 + ['Rupees (20)'] * 3 + ['Arrows (10)', 'Rupee (1)', 'Rupees (5)']
@@ -26,8 +26,8 @@ normalfourth5extra = ['Arrows (10)'] * 2 + ['Rupees (20)'] * 2 + ['Rupees (5)']
 normalfinal25extra = ['Rupees (20)'] * 23 + ['Rupees (5)'] * 2
 
 
-easybaseitems = (['Blue Boomerang', 'Red Boomerang', 'Sanctuary Heart Container'] + ['Rupees (300)'] * 4 + ['Magic Upgrade (1/2)'] * 2 + ['Lamp'] * 2 +
-                 ['Silver Arrows'] * 2 + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 12)
+easybaseitems = (['Sanctuary Heart Container'] + ['Rupees (300)'] * 4 + ['Magic Upgrade (1/2)'] * 2 + ['Lamp'] * 2 + ['Silver Arrows'] * 2 +
+                 ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 12)
 easyextra = ['Piece of Heart'] * 12 + ['Rupees (300)']
 easylimitedextra = ['Boss Heart Container'] * 3 # collapsing down the 12 pieces of heart
 easyfirst15extra = ['Rupees (100)', 'Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] + ['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6
@@ -36,29 +36,27 @@ easythird5extra = ['Rupees (50)'] * 2 + ['Bombs (3)'] * 2 + ['Arrows (10)']
 easyfinal25extra = ['Rupees (50)'] * 4 + ['Rupees (20)'] * 14 + ['Rupee (1)'] + ['Arrows (10)'] * 4 + ['Rupees (5)'] * 2
 easytimedotherextra = ['Red Clock'] * 5
 
-hardbaseitems = (['Silver Arrows', 'Single Arrow', 'Single Bomb'] + ['Rupees (300)'] + ['Rupees (100)'] * 3 + ['Rupees (50)'] * 5 + ['Bombs (3)'] * 5 +
-                 ['Boss Heart Container'] * 5 + ['Piece of Heart'] * 24)
-hardfirst20extra = ['Single Bomb'] * 7 + ['Rupees (5)'] * 8 + ['Rupee (1)'] * 2 + ['Rupees (20)']  * 2 + ['Arrows (10)']
-hardsecond10extra = ['Rupees (5)'] * 7 + ['Rupee (1)'] * 3
-hardthird10extra = ['Arrows (10)'] * 4 + ['Rupees (20)']  * 3 + ['Single Bomb'] * 3
-hardfourth10extra = ['Rupees (5)'] * 3 + ['Single Arrow'] * 5 + ['Single Bomb'] * 2
-hardfinal20extra = ['Single Bomb'] * 4 + ['Rupees (5)'] * 2 + ['Single Arrow'] * 14
+hardbaseitems = ['Silver Arrows', 'Single Arrow'] + ['Rupees (300)'] * 4 + ['Boss Heart Container'] * 6 + ['Piece of Heart'] * 20 + ['Rupees (5)'] * 7 + ['Bombs (3)'] * 5
+hardfirst20extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Bombs (3)'] * 5 + ['Rupees (5)'] * 10 + ['Arrows (10)', 'Rupee (1)']
+hardsecond10extra = ['Rupees (5)'] * 5 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupee (1)']
+hardthird10extra = ['Rupees (50)'] * 4 + ['Rupees (20)'] * 3 + ['Rupees (5)'] * 3
+hardfourth10extra = ['Arrows (10)'] * 2 + ['Rupees (20)'] * 7 + ['Rupees (5)']
+hardfinal20extra = ['Rupees (20)'] * 18 + ['Rupees (5)'] * 2
 
-expertbaseitems = (['Single Arrow', 'Rupees (300)', 'Rupees (100)', 'Bombs (3)', 'Arrows (10)'] + ['Rupees (50)'] * 4 + ['Rupees (5)'] * 5 +
-                   ['Rupees (20)'] * 3 + ['Single Bomb'] * 10 + ['Piece of Heart'] * 24)
-expertfirst15extra = ['Single Bomb'] * 7 + ['Rupees (20)']  * 3 + ['Single Arrow'] * 5
-expertsecond15extra = ['Single Bomb'] * 6 + ['Single Arrow'] * 4 + ['Rupee (1)'] * 5
-expertthird10extra = ['Rupees (5)'] * 3 + ['Single Bomb'] * 3 + ['Rupees (20)'] * 2 + ['Single Arrow'] * 2
-expertfourth5extra = ['Rupees (5)'] * 2 + ['Single Arrow'] * 3
-expertfinal25extra = ['Single Bomb'] * 4 + ['Rupees (20)']  * 3 + ['Single Arrow'] * 18
+expertbaseitems = (['Rupees (300)'] * 4 + ['Single Arrow', 'Boss Heart Container', 'Rupee (1)'] + ['Piece of Heart'] * 20 + ['Rupees (5)'] * 3 +
+                   ['Bombs (3)'] * 10 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupees (20)'] * 2)
+expertfirst15extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Rupees (5)'] * 12
+expertsecond15extra = ['Rupees (5)'] * 10 + ['Rupees (20)'] * 5
+expertthird10extra = ['Rupees (50)'] * 4 + ['Rupees (5)'] * 2 + ['Arrows (10)'] * 3 + ['Rupee (1)']
+expertfourth5extra = ['Rupees (5)'] * 5
+expertfinal25extra = ['Rupees (20)'] * 23 + ['Rupees (5)'] * 2
 
-insanebaseitems = (['Bombs (3)', 'Arrows (10)'] + ['Rupees (50)'] * 4 + ['Rupees (5)'] * 10 + ['Rupees (300)'] * 5 + ['Rupees (100)'] * 4 +
-                   ['Rupee (1)'] * 8 + ['Rupees (20)'] * 4 + ['Single Bomb'] * 8 + ['Single Arrow'] * 6)
-insanefirst15extra = ['Single Bomb'] * 5 + ['Single Arrow'] * 4 + ['Rupee (1)'] * 5 + ['Rupees (20)']
-insanesecond15extra = ['Single Bomb'] * 5 + ['Single Arrow'] * 5 + ['Rupee (1)'] * 5
-insanethird10extra = ['Single Bomb'] * 4 + ['Single Arrow'] * 3 + ['Rupee (1)'] * 3
-insanefourth5extra = ['Single Bomb'] + ['Single Arrow'] * 2 + ['Rupee (1)'] * 2
-insanefinal25extra = ['Single Bomb'] * 2 + ['Single Arrow'] * 10 + ['Rupee (1)'] * 7 + ['Rupees (20)'] * 6
+insanebaseitems = ['Rupees (300)'] * 4 + ['Single Arrow'] + ['Rupees (5)'] * 24 + ['Bombs (3)'] * 10 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupee (1)'] + ['Rupees (20)'] * 5
+insanefirst15extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Rupees (5)'] * 12
+insanesecond15extra = ['Rupees (5)'] * 10 + ['Rupees (20)'] * 5
+insanethird10extra = ['Rupees (50)'] * 4 + ['Rupees (5)'] * 2 + ['Arrows (10)'] * 3 + ['Rupee (1)']
+insanefourth5extra = ['Rupees (5)'] * 5
+insanefinal25extra = ['Rupees (20)'] * 23 + ['Rupees (5)'] * 2
 
 Difficulty = namedtuple('Difficulty',
                         ['baseitems', 'bottles', 'bottle_count', 'same_bottle', 'progressiveshield',
@@ -150,15 +148,15 @@ difficulties = {
         progressive_sword_limit = 3,
         progressive_shield_limit = 2,
         progressive_armor_limit = 1,
-        progressive_bottle_limit = 2,
+        progressive_bottle_limit = 4,
     ),
     'expert': Difficulty(
         baseitems = expertbaseitems,
         bottles = hardbottles,
         bottle_count = 4,
-        same_bottle = True,
-        progressiveshield = [],
-        basicshield = [],
+        same_bottle = False,
+        progressiveshield = ['Progressive Shield'] * 3,
+        basicshield = ['Progressive Shield'] * 3,  #only the first one will upgrade, making this equivalent to two blue shields
         progressivearmor = [],
         basicarmor = [],
         swordless = ['Rupees (20)'] * 3 + ['Silver Arrows'],
@@ -171,15 +169,15 @@ difficulties = {
         conditional_extras = no_conditonal_extras,
         extras = [expertfirst15extra, expertsecond15extra, expertthird10extra, expertfourth5extra, expertfinal25extra],
         progressive_sword_limit = 2,
-        progressive_shield_limit = 0,
+        progressive_shield_limit = 1,
         progressive_armor_limit = 0,
-        progressive_bottle_limit = 1,
+        progressive_bottle_limit = 4,
     ),
     'insane': Difficulty(
         baseitems = insanebaseitems,
         bottles = hardbottles,
         bottle_count = 4,
-        same_bottle = True,
+        same_bottle = False,
         progressiveshield = [],
         basicshield = [],
         progressivearmor = [],
@@ -196,7 +194,7 @@ difficulties = {
         progressive_sword_limit = 2,
         progressive_shield_limit = 0,
         progressive_armor_limit = 0,
-        progressive_bottle_limit = 1,
+        progressive_bottle_limit = 4,
     ),
 }
 
