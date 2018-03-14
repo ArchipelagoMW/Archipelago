@@ -114,7 +114,7 @@ def global_rules(world):
 
     set_rule(world.get_location('Zora\'s Ledge'), lambda state: state.has('Flippers'))
     set_rule(world.get_entrance('Waterfall of Wishing'), lambda state: state.has('Flippers'))  # can be fake flippered into, but is in weird state inside that might prevent you from doing things. Can be improved in future Todo
-    set_rule(world.get_location('Blacksmith'), lambda state: state.can_lift_heavy_rocks() and state.can_reach('West Dark World'))  # Can S&Q with smith
+    set_rule(world.get_location('Blacksmith'), lambda state: state.can_lift_heavy_rocks() and state.can_reach('West Dark World') and state.has_Pearl())  # Can S&Q with smith
     set_rule(world.get_location('Magic Bat'), lambda state: state.has('Magic Powder'))
     set_rule(world.get_location('Sick Kid'), lambda state: state.has_bottle())
     set_rule(world.get_location('Library'), lambda state: state.has_Boots())
