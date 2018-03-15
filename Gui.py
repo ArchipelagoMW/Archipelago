@@ -280,7 +280,7 @@ def guiMain(args=None):
                                    int(redmailVar.get()), int(progmailVar.get()), int(halfmagicVar.get()), int(quartermagicVar.get()), int(bcap5Var.get()), int(bcap10Var.get()), int(acap5Var.get()), int(acap10Var.get()),
                                    int(arrow1Var.get()), int(arrow10Var.get()), int(bomb1Var.get()), int(bomb3Var.get()), int(rupee1Var.get()), int(rupee5Var.get()), int(rupee20Var.get()), int(rupee50Var.get()), int(rupee100Var.get()),
                                    int(rupee300Var.get()), int(rupoorVar.get()), int(blueclockVar.get()), int(greenclockVar.get()), int(redclockVar.get()), int(triforcepieceVar.get()), int(triforcecountVar.get()),
-                                   int(triforceVar.get()), int(rupoorcostVar.get())]
+                                   int(triforceVar.get()), int(rupoorcostVar.get()), int(universalkeyVar.get())]
         guiargs.rom = romVar.get()
         guiargs.jsonout = None
         guiargs.sprite = sprite
@@ -937,6 +937,14 @@ def guiMain(args=None):
     redclockFrame.pack()
     redclockLabel.pack(anchor=W, side=LEFT, padx=(0,14))
     redclockEntry.pack(anchor=E)
+
+    universalkeyFrame = Frame(itemList5)
+    universalkeyLabel = Label(universalkeyFrame, text='Universal Key')
+    universalkeyVar = StringVar(value='0')
+    universalkeyEntry = Entry(universalkeyFrame, textvariable=universalkeyVar, width=3, validate='all', vcmd=vcmd)
+    universalkeyFrame.pack()
+    universalkeyLabel.pack(anchor=W, side=LEFT, padx=(0,57))
+    universalkeyEntry.pack(anchor=E)
 
     triforcepieceFrame = Frame(itemList5)
     triforcepieceLabel = Label(triforcepieceFrame, text='Triforce Piece')

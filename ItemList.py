@@ -220,7 +220,7 @@ def generate_itempool(world):
 
     # set up item pool
     if world.custom:
-        (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.customitemarray)
+        (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.retro, world.customitemarray)
         world.rupoor_cost = min(world.customitemarray[67], 9999)
     else:
         (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.retro)
@@ -393,7 +393,7 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, retro):
         pool.extend(diff.retro)
     return (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms)
 
-def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, customitemarray):
+def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, retro, customitemarray):
     pool = []
     placed_items = []
     clock_mode = None
@@ -410,6 +410,7 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, c
     for x in range(0, 65):
         itemtotal = itemtotal + customitemarray[x]
     itemtotal = itemtotal + customitemarray[66]
+    itemtotal = itemtotal + customitemarray[68]
 
     pool.extend(['Bow'] * customitemarray[0])
     pool.extend(['Silver Arrows']* customitemarray[1])
@@ -472,6 +473,7 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, c
     pool.extend(['Red Clock'] * customitemarray[63])
     pool.extend(['Triforce Piece'] * customitemarray[64])
     pool.extend(['Triforce'] * customitemarray[66])
+    pool.extend(['Small Key (Universal)'] * customitemarray[68])
 
     diff = difficulties[difficulty]
 
@@ -530,6 +532,8 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, c
         pool.extend(['Magic Mirror'] * customitemarray[22])
         pool.extend(['Moon Pearl'] * customitemarray[28])
 
+    if retro:
+        itemtotal = itemtotal - 28 # Corrects for small keys not being in item pool in Retro Mode
     if itemtotal < total_items_to_place:
         pool.extend(['Nothing'] * (total_items_to_place - itemtotal))
 
