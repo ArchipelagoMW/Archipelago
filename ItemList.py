@@ -62,7 +62,7 @@ Difficulty = namedtuple('Difficulty',
                         ['baseitems', 'bottles', 'bottle_count', 'same_bottle', 'progressiveshield',
                          'basicshield', 'progressivearmor', 'basicarmor', 'swordless',
                          'progressivesword', 'basicsword', 'timedohko', 'timedother',
-                         'triforcehunt', 'triforce_pieces_required', 'conditional_extras',
+                         'triforcehunt', 'triforce_pieces_required', 'retro', 'conditional_extras',
                          'extras', 'progressive_sword_limit', 'progressive_shield_limit',
                          'progressive_armor_limit', 'progressive_bottle_limit'])
 
@@ -76,7 +76,7 @@ def easy_conditional_extras(timer, _goal, _mode, pool, placed_items):
         return easytimedotherextra
     return []
 
-def no_conditonal_extras(*_args):
+def no_conditional_extras(*_args):
     return []
 
 
@@ -97,7 +97,8 @@ difficulties = {
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt = ['Triforce Piece'] * 30,
         triforce_pieces_required = 20,
-        conditional_extras = no_conditonal_extras,
+        retro = ['Small Key (Universal)'] * 18 + ['Rupees (20)'] * 10,
+        conditional_extras = no_conditional_extras,
         extras = [normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit = 4,
         progressive_shield_limit = 3,
@@ -120,6 +121,7 @@ difficulties = {
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 5, # +5 more Red Clocks if there is room
         triforcehunt = ['Triforce Piece'] * 30,
         triforce_pieces_required = 20,
+        retro = ['Small Key (Universal)'] * 28,
         conditional_extras = easy_conditional_extras,
         extras = [easyextra, easyfirst15extra, easysecond10extra, easythird5extra, easyfinal25extra],
         progressive_sword_limit = 4,
@@ -143,7 +145,8 @@ difficulties = {
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt = ['Triforce Piece'] * 30,
         triforce_pieces_required = 20,
-        conditional_extras = no_conditonal_extras,
+        retro = ['Small Key (Universal)'] * 13 + ['Rupees (5)'] * 15,
+        conditional_extras = no_conditional_extras,
         extras = [hardfirst20extra, hardsecond10extra, hardthird10extra, hardfourth10extra, hardfinal20extra],
         progressive_sword_limit = 3,
         progressive_shield_limit = 2,
@@ -166,7 +169,8 @@ difficulties = {
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt = ['Triforce Piece'] * 30,
         triforce_pieces_required = 20,
-        conditional_extras = no_conditonal_extras,
+        retro = ['Small Key (Universal)'] * 13 + ['Rupees (5)'] * 15,
+        conditional_extras = no_conditional_extras,
         extras = [expertfirst15extra, expertsecond15extra, expertthird10extra, expertfourth5extra, expertfinal25extra],
         progressive_sword_limit = 2,
         progressive_shield_limit = 1,
@@ -189,7 +193,8 @@ difficulties = {
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt = ['Triforce Piece'] * 30,
         triforce_pieces_required = 20,
-        conditional_extras = no_conditonal_extras,
+        retro = ['Small Key (Universal)'] * 13 + ['Rupees (5)'] * 15,
+        conditional_extras = no_conditional_extras,
         extras = [insanefirst15extra, insanesecond15extra, insanethird10extra, insanefourth5extra, insanefinal25extra],
         progressive_sword_limit = 2,
         progressive_shield_limit = 0,
@@ -218,7 +223,7 @@ def generate_itempool(world):
         (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.customitemarray)
         world.rupoor_cost = min(world.customitemarray[67], 9999)
     else:
-        (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode)
+        (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.retro)
     world.itempool = ItemFactory(pool)
     for (location, item) in placed_items:
         world.push_item(location, ItemFactory(item), False)
@@ -281,7 +286,7 @@ def fill_prizes(world, attempts=15):
 
 
 
-def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode):
+def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, retro):
     pool = []
     placed_items = []
     clock_mode = None
@@ -380,6 +385,12 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode):
 
     if goal == 'pedestal':
         placed_items.append(('Master Sword Pedestal', 'Triforce'))
+    if retro:
+        pool = [item.replace('Single Arrow','Rupees (5)') for item in pool]
+        pool = [item.replace('Arrows (10)','Rupees (5)') for item in pool]
+        pool = [item.replace('Arrow Upgrade (+5)','Rupees (5)') for item in pool]
+        pool = [item.replace('Arrow Upgrade (+10)','Rupees (5)') for item in pool]
+        pool.extend(diff.retro)
     return (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms)
 
 def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, customitemarray):
@@ -532,13 +543,15 @@ def test():
                 for mode in ['open', 'standard', 'swordless']:
                     for progressive in ['on', 'off']:
                         for shuffle in ['full', 'insane']:
-                            out = get_pool_core(progressive, shuffle, difficulty, timer, goal, mode)
+                            out = get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, retro)
                             count = len(out[0]) + len(out[1])
 
                             correct_count = total_items_to_place
                             if goal in ['pedestal']:
                                 # pedestal goals generate one extra item
                                 correct_count += 1
+                            if retro:
+                                correct_count += 28
 
                             assert count == correct_count, "expected {0} items but found {1} items for {2}".format(correct_count, count, (progressive, shuffle, difficulty, timer, goal, mode))
 

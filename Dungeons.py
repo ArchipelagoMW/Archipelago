@@ -7,7 +7,7 @@ from Items import ItemFactory
 
 def create_dungeons(world):
     def make_dungeon(name, dungeon_regions, big_key, small_keys, dungeon_items):
-        dungeon = Dungeon(name, dungeon_regions, big_key, small_keys, dungeon_items)
+        dungeon = Dungeon(name, dungeon_regions, big_key, [] if world.retro else small_keys, dungeon_items)
         for region in dungeon.regions:
             world.get_region(region).dungeon = dungeon
         return dungeon
@@ -34,7 +34,10 @@ def fill_dungeons(world):
 
     all_state_base = world.get_all_state()
 
-    world.push_item(world.get_location('Skull Woods - Pinball Room'), ItemFactory('Small Key (Skull Woods)'), False)
+    if world.retro:
+        world.push_item(world.get_location('Skull Woods - Pinball Room'), ItemFactory('Small Key (Universal)'), False)
+    else:
+        world.push_item(world.get_location('Skull Woods - Pinball Room'), ItemFactory('Small Key (Skull Woods)'), False)
     world.get_location('Skull Woods - Pinball Room').event = True
 
     dungeons = [(list(dungeon.regions), dungeon.big_key, list(dungeon.small_keys), list(dungeon.dungeon_items)) for dungeon in world.dungeons]
@@ -110,7 +113,10 @@ def fill_dungeons_restrictive(world, shuffled_locations):
     all_state_base = world.get_all_state()
 
     skull_woods_big_chest = world.get_location('Skull Woods - Pinball Room')
-    world.push_item(skull_woods_big_chest, ItemFactory('Small Key (Skull Woods)'), False)
+    if world.retro:
+        world.push_item(skull_woods_big_chest, ItemFactory('Small Key (Universal)'), False)
+    else:
+        world.push_item(skull_woods_big_chest, ItemFactory('Small Key (Skull Woods)'), False)
     skull_woods_big_chest.event = True
     shuffled_locations.remove(skull_woods_big_chest)
 

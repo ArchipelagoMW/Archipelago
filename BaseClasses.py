@@ -44,7 +44,7 @@ class World(object):
         self.aga_randomness = True
         self.lock_aga_door_in_escape = False
         self.fix_trock_doors = self.shuffle != 'vanilla'
-        self.save_and_quite_from_boss = False
+        self.save_and_quit_from_boss = False
         self.check_beatable_only = check_beatable_only
         self.fix_skullwoods_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
         self.fix_palaceofdarkness_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
@@ -373,6 +373,13 @@ class CollectionState(object):
             checked_locations = len(reachable_events)
 
     def has(self, item, count=1):
+        if count == 1:
+            return item in self.prog_items
+        return self.item_count(item) >= count
+
+    def has_key(self, item, count=1):
+        if self.world.retro:
+            return True   #FIXME: This needs to check for shop access to a small key shop
         if count == 1:
             return item in self.prog_items
         return self.item_count(item) >= count
