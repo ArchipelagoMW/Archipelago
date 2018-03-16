@@ -20,7 +20,7 @@ hardbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle
 normalbaseitems = (['Silver Arrows', 'Magic Upgrade (1/2)', 'Single Arrow', 'Sanctuary Heart Container', 'Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] +
                    ['Rupees (300)'] * 4 + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24)
 normalfirst15extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6
-normalsecond15extra = ['Bombs (3)'] * 10 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupee (1)']
+normalsecond15extra = ['Bombs (3)'] * 9 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupee (1)'] + ['Bombs (10)']
 normalthird10extra = ['Rupees (50)'] * 4 + ['Rupees (20)'] * 3 + ['Arrows (10)', 'Rupee (1)', 'Rupees (5)']
 normalfourth5extra = ['Arrows (10)'] * 2 + ['Rupees (20)'] * 2 + ['Rupees (5)']
 normalfinal25extra = ['Rupees (20)'] * 23 + ['Rupees (5)'] * 2
@@ -31,27 +31,27 @@ easybaseitems = (['Sanctuary Heart Container'] + ['Rupees (300)'] * 4 + ['Magic 
 easyextra = ['Piece of Heart'] * 12 + ['Rupees (300)']
 easylimitedextra = ['Boss Heart Container'] * 3 # collapsing down the 12 pieces of heart
 easyfirst15extra = ['Rupees (100)', 'Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] + ['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6
-easysecond10extra = ['Bombs (3)'] * 8 + ['Rupee (1)', 'Rupees (50)']
+easysecond10extra = ['Bombs (3)'] * 7 + ['Rupee (1)', 'Rupees (50)', 'Bombs (10)']
 easythird5extra = ['Rupees (50)'] * 2 + ['Bombs (3)'] * 2 + ['Arrows (10)']
 easyfinal25extra = ['Rupees (50)'] * 4 + ['Rupees (20)'] * 14 + ['Rupee (1)'] + ['Arrows (10)'] * 4 + ['Rupees (5)'] * 2
 easytimedotherextra = ['Red Clock'] * 5
 
-hardbaseitems = ['Silver Arrows', 'Single Arrow'] + ['Rupees (300)'] * 4 + ['Boss Heart Container'] * 6 + ['Piece of Heart'] * 20 + ['Rupees (5)'] * 7 + ['Bombs (3)'] * 5
+hardbaseitems = ['Silver Arrows', 'Single Arrow', 'Bombs (10)'] + ['Rupees (300)'] * 4 + ['Boss Heart Container'] * 6 + ['Piece of Heart'] * 20 + ['Rupees (5)'] * 7 + ['Bombs (3)'] * 4
 hardfirst20extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Bombs (3)'] * 5 + ['Rupees (5)'] * 10 + ['Arrows (10)', 'Rupee (1)']
 hardsecond10extra = ['Rupees (5)'] * 5 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupee (1)']
 hardthird10extra = ['Rupees (50)'] * 4 + ['Rupees (20)'] * 3 + ['Rupees (5)'] * 3
 hardfourth10extra = ['Arrows (10)'] * 2 + ['Rupees (20)'] * 7 + ['Rupees (5)']
 hardfinal20extra = ['Rupees (20)'] * 18 + ['Rupees (5)'] * 2
 
-expertbaseitems = (['Rupees (300)'] * 4 + ['Single Arrow', 'Boss Heart Container', 'Rupee (1)'] + ['Piece of Heart'] * 20 + ['Rupees (5)'] * 3 +
-                   ['Bombs (3)'] * 10 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupees (20)'] * 2)
+expertbaseitems = (['Rupees (300)'] * 4 + ['Single Arrow', 'Silver Arrows', 'Boss Heart Container', 'Rupee (1)', 'Bombs (10)'] + ['Piece of Heart'] * 20 + ['Rupees (5)'] * 2 +
+                   ['Bombs (3)'] * 9 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupees (20)'] * 2)
 expertfirst15extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Rupees (5)'] * 12
 expertsecond15extra = ['Rupees (5)'] * 10 + ['Rupees (20)'] * 5
 expertthird10extra = ['Rupees (50)'] * 4 + ['Rupees (5)'] * 2 + ['Arrows (10)'] * 3 + ['Rupee (1)']
 expertfourth5extra = ['Rupees (5)'] * 5
 expertfinal25extra = ['Rupees (20)'] * 23 + ['Rupees (5)'] * 2
 
-insanebaseitems = ['Rupees (300)'] * 4 + ['Single Arrow'] + ['Rupees (5)'] * 24 + ['Bombs (3)'] * 10 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupee (1)'] + ['Rupees (20)'] * 5
+insanebaseitems = ['Rupees (300)'] * 4 + ['Single Arrow', 'Bombs (10)', 'Rupee (1)'] + ['Rupees (5)'] * 24 + ['Bombs (3)'] * 9 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupees (20)'] * 5
 insanefirst15extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Rupees (5)'] * 12
 insanesecond15extra = ['Rupees (5)'] * 10 + ['Rupees (20)'] * 5
 insanethird10extra = ['Rupees (50)'] * 4 + ['Rupees (5)'] * 2 + ['Arrows (10)'] * 3 + ['Rupee (1)']
@@ -97,7 +97,7 @@ difficulties = {
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt = ['Triforce Piece'] * 30,
         triforce_pieces_required = 20,
-        retro = ['Small Key (Universal)'] * 18 + ['Rupees (20)'] * 10,
+        retro = ['Small Key (Universal)'] * 17 + ['Rupees (20)'] * 10,
         conditional_extras = no_conditional_extras,
         extras = [normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit = 4,
@@ -121,7 +121,7 @@ difficulties = {
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 5, # +5 more Red Clocks if there is room
         triforcehunt = ['Triforce Piece'] * 30,
         triforce_pieces_required = 20,
-        retro = ['Small Key (Universal)'] * 28,
+        retro = ['Small Key (Universal)'] * 27,
         conditional_extras = easy_conditional_extras,
         extras = [easyextra, easyfirst15extra, easysecond10extra, easythird5extra, easyfinal25extra],
         progressive_sword_limit = 4,
@@ -145,7 +145,7 @@ difficulties = {
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt = ['Triforce Piece'] * 30,
         triforce_pieces_required = 20,
-        retro = ['Small Key (Universal)'] * 13 + ['Rupees (5)'] * 15,
+        retro = ['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 15,
         conditional_extras = no_conditional_extras,
         extras = [hardfirst20extra, hardsecond10extra, hardthird10extra, hardfourth10extra, hardfinal20extra],
         progressive_sword_limit = 3,
@@ -162,14 +162,14 @@ difficulties = {
         basicshield = ['Progressive Shield'] * 3,  #only the first one will upgrade, making this equivalent to two blue shields
         progressivearmor = [],
         basicarmor = [],
-        swordless = ['Rupees (20)'] * 3 + ['Silver Arrows'],
+        swordless = ['Rupees (20)'] * 4,
         progressivesword = ['Progressive Sword'] * 3,
         basicsword = ['Fighter Sword', 'Master Sword', 'Master Sword'],
         timedohko = ['Green Clock'] * 20 + ['Red Clock'] * 5,
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt = ['Triforce Piece'] * 30,
         triforce_pieces_required = 20,
-        retro = ['Small Key (Universal)'] * 13 + ['Rupees (5)'] * 15,
+        retro = ['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 15,
         conditional_extras = no_conditional_extras,
         extras = [expertfirst15extra, expertsecond15extra, expertthird10extra, expertfourth5extra, expertfinal25extra],
         progressive_sword_limit = 2,
@@ -193,7 +193,7 @@ difficulties = {
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt = ['Triforce Piece'] * 30,
         triforce_pieces_required = 20,
-        retro = ['Small Key (Universal)'] * 13 + ['Rupees (5)'] * 15,
+        retro = ['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 15,
         conditional_extras = no_conditional_extras,
         extras = [insanefirst15extra, insanesecond15extra, insanethird10extra, insanefourth5extra, insanefinal25extra],
         progressive_sword_limit = 2,
@@ -391,6 +391,11 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, retro):
         pool = [item.replace('Arrow Upgrade (+5)','Rupees (5)') for item in pool]
         pool = [item.replace('Arrow Upgrade (+10)','Rupees (5)') for item in pool]
         pool.extend(diff.retro)
+        if mode == 'standard':
+            key_location = random.choice(['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest', 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
+            placed_items.append((key_location, 'Small Key (Universal)'))
+        else:
+            pool.extend(['Small Key (Universal)'])
     return (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms)
 
 def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, retro, customitemarray):
@@ -473,7 +478,6 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, r
     pool.extend(['Red Clock'] * customitemarray[63])
     pool.extend(['Triforce Piece'] * customitemarray[64])
     pool.extend(['Triforce'] * customitemarray[66])
-    pool.extend(['Small Key (Universal)'] * customitemarray[68])
 
     diff = difficulties[difficulty]
 
@@ -519,9 +523,16 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, r
             placed_items.append(('Link\'s Uncle', 'Progressive Sword'))
             pool.extend(['Fighter Sword'] * customitemarray[32])
             pool.extend(['Progressive Sword'] * max((customitemarray[36] - 1), 0))
+        if retro:
+            key_location = random.choice(['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest', 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
+            placed_items.append((key_location, 'Small Key (Universal)'))
+            pool.extend(['Small Key (Universal)'] * max((customitemarray[68] - 1), 0))
+        else:
+            pool.extend(['Small Key (Universal)'] * customitemarray[68])
     else:
         pool.extend(['Fighter Sword'] * customitemarray[32])
         pool.extend(['Progressive Sword'] * customitemarray[36])
+        pool.extend(['Small Key (Universal)'] * customitemarray[68])
 
     if shuffle == 'insanity_legacy':
         placed_items.append(('Link\'s House', 'Magic Mirror'))
