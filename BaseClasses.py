@@ -7,7 +7,7 @@ from collections import OrderedDict
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, custom, customitemarray):
+    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, retro, custom, customitemarray):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
@@ -44,7 +44,7 @@ class World(object):
         self.aga_randomness = True
         self.lock_aga_door_in_escape = False
         self.fix_trock_doors = self.shuffle != 'vanilla'
-        self.save_and_quite_from_boss = False
+        self.save_and_quit_from_boss = False
         self.check_beatable_only = check_beatable_only
         self.fix_skullwoods_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
         self.fix_palaceofdarkness_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
@@ -56,6 +56,7 @@ class World(object):
         self.fastmenu = fastmenu
         self.disable_music = disable_music
         self.keysanity = keysanity
+        self.retro = retro
         self.custom = custom
         self.customitemarray = customitemarray
         self.can_take_damage = True
@@ -278,6 +279,7 @@ class World(object):
         markbool(self.check_beatable_only)
         markbool(self.shuffle_ganon)
         markbool(self.keysanity)
+        markbool(self.retro)
         assert id_value_max <= 0xFFFFFFFF
         return id_value
 
@@ -371,6 +373,13 @@ class CollectionState(object):
             checked_locations = len(reachable_events)
 
     def has(self, item, count=1):
+        if count == 1:
+            return item in self.prog_items
+        return self.item_count(item) >= count
+
+    def has_key(self, item, count=1):
+        if self.world.retro:
+            return True   #FIXME: This needs to check for shop access to a small key shop
         if count == 1:
             return item in self.prog_items
         return self.item_count(item) >= count

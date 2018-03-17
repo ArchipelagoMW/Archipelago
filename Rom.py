@@ -411,7 +411,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xD8)  # One Heart
         # potion heal amount
-        rom.write_byte(0x180084, 0x28)  # Five Hearts
+        rom.write_byte(0x180084, 0x38)  # Seven Hearts
         # potion magic restore amount
         rom.write_byte(0x180085, 0x40)  # Half Magic
         #Cape magic cost
@@ -423,6 +423,10 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
         rom.write_int16_to_rom(0x180036, world.rupoor_cost)
+        # Set stun items
+        rom.write_byte(0x180180, 0x01) # Hookshot only
+        # Make silver arrows only usable against Ganon
+        rom.write_byte(0x180181, 0x01)
         #Make Blue Shield more expensive
         rom.write_bytes(0xF73D2, [0xFC, 0xFF])
         rom.write_bytes(0xF73DA, [0x04, 0x00])
@@ -443,20 +447,24 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0xF723F, 0xE7)
     elif world.difficulty == 'expert':
         # Powdered Fairies Prize
-        rom.write_byte(0x36DD0, 0x79)  # Bees
+        rom.write_byte(0x36DD0, 0xD8)  # One Heart
         # potion heal amount
         rom.write_byte(0x180084, 0x08)  # One Heart
         # potion magic restore amount
         rom.write_byte(0x180085, 0x20)  # Quarter Magic
         #Cape magic cost
-        rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
+        rom.write_bytes(0x3ADA7, [0x01, 0x01, 0x01])
         # Byrna Invulnerability: off
         rom.write_byte(0x18004F, 0x00)
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
-        rom.write_int16_to_rom(0x180036, 20)
+        rom.write_int16_to_rom(0x180036, world.rupoor_cost)
+        # Set stun items
+        rom.write_byte(0x180180, 0x00) # Nothing
+        # Make silver arrows only usable against Ganon
+        rom.write_byte(0x180181, 0x01)
         #Make Blue Shield more expensive
         rom.write_bytes(0xF73D2, [0xFC, 0xFF])
         rom.write_bytes(0xF73DA, [0x04, 0x00])
@@ -483,14 +491,18 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         # potion magic restore amount
         rom.write_byte(0x180085, 0x00)  # No healing
         #Cape magic cost
-        rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
+        rom.write_bytes(0x3ADA7, [0x01, 0x01, 0x01])
         # Byrna Invulnerability: off
         rom.write_byte(0x18004F, 0x00)
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
-        rom.write_int16_to_rom(0x180036, 9999)
+        rom.write_int16_to_rom(0x180036, world.rupoor_cost)
+        # Set stun items
+        rom.write_byte(0x180180, 0x00) # Nothing
+        # Make silver arrows only usable against Ganon
+        rom.write_byte(0x180181, 0x01)
         #Make Blue Shield more expensive
         rom.write_bytes(0xF73D2, [0xFC, 0xFF])
         rom.write_bytes(0xF73DA, [0x04, 0x00])
@@ -522,6 +534,12 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x18004F, 0x01)
         #Enable catching fairies
         rom.write_byte(0x34FD6, 0xF0)
+        # Rupoor negative value
+        rom.write_int16_to_rom(0x180036, world.rupoor_cost)
+        # Set stun items
+        rom.write_byte(0x180180, 0x03) # All standard items
+        # Make silver arrows freely usable
+        rom.write_byte(0x180181, 0x00)
         #Set overflow items for progressive equipment
         if world.goal == 'triforcehunt':
             overflow_replacement = TRIFORCE_PIECE
@@ -726,9 +744,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_byte(0x1800A0, 0x01)  # return to light world on s+q without mirror
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
     rom.write_byte(0x180174, 0x01 if world.fix_fake_world else 0x00)
-    rom.write_byte(0x180175, 0x00) # Arrow mode: normal
-    rom.write_int16_to_rom(0x180176, 0) # Wood Arrow Cost (rupee arrow mode)
-    rom.write_int16_to_rom(0x180178, 0) # Silver Arrow Cost (rupee arrow mode)
+    rom.write_byte(0x18017E, 0x01) # Fairy fountains only trade in bottles
     rom.write_byte(0x180034, 0x0A) # starting max bombs
     rom.write_byte(0x180035, 30) # starting max arrows
     for x in range(0x183000, 0x18304F):
@@ -769,11 +785,19 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x18003C, 0x00)
 
     rom.write_byte(0x180045, 0xFF if world.keysanity else 0x00)  # free roaming items in menu
+    rom.write_byte(0x180172, 0x01 if world.retro else 0x00)  # universal keys
+    rom.write_byte(0x180175, 0x01 if world.retro else 0x00)  # rupee bow
+    rom.write_byte(0x180176, 0x0A if world.retro else 0x00)  # wood arrow cost
+    rom.write_byte(0x180178, 0x32 if world.retro else 0x00)  # silver arrow cost
+    rom.write_byte(0x301FC, 0xDA if world.retro else 0xE1)  # rupees replace arrows under pots
+    rom.write_bytes(0xECB4E, [0xA9, 0x00, 0xEA, 0xEA] if world.retro else [0xAF, 0x77, 0xF3, 0x7E])  # Thief steals rupees instead of arrows
+    rom.write_bytes(0xF0D96, [0xA9, 0x00, 0xEA, 0xEA] if world.retro else [0xAF, 0x77, 0xF3, 0x7E])  # Pikit steals rupees instead of arrows
+    rom.write_bytes(0xEDA5, [0x35, 0x41] if world.retro else [0x43, 0x44])  # Chest game gives rupees instead of arrows
     digging_game_rng = random.randint(1, 30)  # set rng for digging game
     rom.write_byte(0x180020, digging_game_rng)
     rom.write_byte(0xEFD95, digging_game_rng)
     rom.write_byte(0x1800A3, 0x01)  # enable correct world setting behaviour after agahnim kills
-    rom.write_byte(0x180042, 0x01 if world.save_and_quite_from_boss else 0x00)  # Allow Save and Quite after boss kill
+    rom.write_byte(0x180042, 0x01 if world.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
 
     # remove shield from uncle
     rom.write_bytes(0x6D253, [0x00, 0x00, 0xf6, 0xff, 0x00, 0x0E])
