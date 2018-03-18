@@ -273,7 +273,7 @@ def diff_maps(original_file, modified_file, bbox=None):
     return diffs
 
 
-def generate_diff_file(diff_file_name='output.txt'):
+def generate_diff_file(diff_file_name='output.txt', bboxes=None):
     sb = []
     for areaid in range(10):
         filename = 'area%d.map' % areaid
@@ -288,6 +288,7 @@ def generate_diff_file(diff_file_name='output.txt'):
             #if areaid == 2: bbox = 254, 182, 2, 2
             #else: bbox = 456, 157, 26, 14
             bbox = None
+            if bboxes != None: bbox = bboxes[areaid]
 
             diffs = diff_maps('%s/%s' % (DIR_ORIGINAL_MAPS, filename), '%s/%s' % (DIR_MODIFIED_MAPS, filename), bbox)
             if all(len(changes) == 0 for name, changes in diffs.items()):
@@ -318,3 +319,4 @@ def generate_maps_from_diff_file(diff_file_name='output.txt'):
 if __name__ == '__main__':
     generate_diff_file()
     #generate_maps_from_diff_file()
+
