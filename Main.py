@@ -294,8 +294,6 @@ def create_playthrough(world):
     old_world.spoiler.paths = {location.name : get_path(state, location.parent_region) for sphere in collection_spheres for location in sphere}
     if any(exit == 'Pyramid Fairy' for path in old_world.spoiler.paths.values() for (_, exit) in path):
         old_world.spoiler.paths['Big Bomb Shop'] = get_path(state, world.get_region('Big Bomb Shop'))
-    if any(exit == 'Swamp Palace Moat' for path in old_world.spoiler.paths.values() for (_, exit) in path) or 'Sunken Treasure' in old_world.required_locations:
-        old_world.spoiler.paths['Dam'] = get_path(state, world.get_region('Dam'))
 
     # we can finally output our playthrough
     old_world.spoiler.playthrough = OrderedDict([(str(i + 1), {str(location): str(location.item) for location in sphere}) for i, sphere in enumerate(collection_spheres)])

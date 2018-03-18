@@ -161,4 +161,9 @@ item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher cla
               'Small Key (Universal)': (False, True, None, 0xAF, 'A small key for any door', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again'),
               'Nothing': (False, False, None, 0x5A, 'Some Hot Air', 'and the Nothing', 'the zen kid', 'outright theft', 'shroom theft', 'empty boy is bored again'),
               'Beat Agahnim 1': (True, False, 'Event', None, None, None, None, None, None, None),
-              'Beat Agahnim 2': (True, False, 'Event', None, None, None, None, None, None, None)}
+              'Beat Agahnim 2': (True, False, 'Event', None, None, None, None, None, None, None),
+              'Get Frog': (True, False, 'Event', None, None, None, None, None, None, None),
+              'Return Smith': (True, False, 'Event', None, None, None, None, None, None, None),
+              'Pick Up Purple Chest': (True, False, 'Event', None, None, None, None, None, None, None),
+              'Open Floodgate': (True, False, 'Event', None, None, None, None, None, None, None),
+             }

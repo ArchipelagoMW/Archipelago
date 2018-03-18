@@ -217,6 +217,14 @@ def generate_itempool(world):
     world.get_location('Agahnim 1').event = True
     world.push_item('Agahnim 2', ItemFactory('Beat Agahnim 2'), False)
     world.get_location('Agahnim 2').event = True
+    world.push_item('Dark Blacksmith Ruins', ItemFactory('Pick Up Purple Chest'), False)
+    world.get_location('Dark Blacksmith Ruins').event = True
+    world.push_item('Frog', ItemFactory('Get Frog'), False)
+    world.get_location('Frog').event = True
+    world.push_item('Missing Smith', ItemFactory('Return Smith'), False)
+    world.get_location('Missing Smith').event = True
+    world.push_item('Floodgate', ItemFactory('Open Floodgate'), False)
+    world.get_location('Floodgate').event = True
 
     # set up item pool
     if world.custom:
