@@ -768,7 +768,7 @@ class RandomizerData(object):
 
         left_transition_dict = dict(( (tr.area_current, tr.entry_current), tr )
             for tr in self.map_transitions if not tr.walking_right)
-        print(len(walking_right_transitions), len(left_transition_dict))
+
         for rtr in walking_right_transitions:
             key = (rtr.area_target, rtr.entry_target)
             ltr = left_transition_dict.get(key)
