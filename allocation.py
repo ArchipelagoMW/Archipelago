@@ -22,12 +22,16 @@ class Allocation(object):
     def __init__(self, data, settings):
         self.items_to_allocate = list(data.items_to_allocate)
         self.walking_left_transitions = list(data.walking_left_transitions)
-        self.map_modifications = list(data.default_map_modifications)
 
 
     def shuffle(self, data, settings):
+        self.map_modifications = list(data.default_map_modifications)
+
         # Shuffle Items
         self.allocate_items(data, settings)
+
+        # Shuffle Constraints
+        self.choose_constraint_templates(data, settings)
 
         # Shuffle Locations
         self.construct_graph(data, settings)
@@ -46,14 +50,50 @@ class Allocation(object):
         self.item_at_item_location = dict(zip(item_slots, self.items_to_allocate))
         self.item_at_item_location.update(data.unshuffled_allocations)
 
+    def choose_constraint_templates(self, data, settings):
+        self.edge_replacements = {}
+
+        templates = list(data.template_constraints)
+        def get_template_count(x):
+            if x <= 0: return 0
+            low = int(0.5*x)
+            high = int(1.5*x+2)
+            return random.randrange(low, high)
+
+        target_template_count = get_template_count(settings.constraint_changes)
+
+        picked_templates = []
+        while len(templates) > 0 and len(picked_templates) < target_template_count:
+            index = random.randrange(sum(t.weight for t in templates))
+            for current_template in templates:
+                if index < current_template.weight: break
+                index -= current_template.weight
+            picked_templates.append(current_template)
+
+            # remove all conflicting templates
+            templates = [t for t in templates if not t.conflicts_with(current_template)]
+
+        self.picked_templates = picked_templates
+        for template in picked_templates:
+            for change in template.changes:
+                self.edge_replacements[(change.from_location, change.to_location)] = change
+            self.map_modifications.append(template.template_file)
+
     def construct_graph(self, data, settings):
         edges = list(data.initial_edges)
         originalNEdges = len(edges)
         outgoing_edges = dict((key, list(edge_ids)) for key, edge_ids in data.initial_outgoing_edges.items())
         incoming_edges = dict((key, list(edge_ids)) for key, edge_ids in data.initial_incoming_edges.items())
 
-        # Constraints
-        for constraint in data.edge_constraints:
+        # Edge Constraints
+        edge_replacements = self.edge_replacements
+        for original_constraint in data.edge_constraints:
+            key = (original_constraint.from_location, original_constraint.to_location)
+            if key in edge_replacements:
+                constraint = edge_replacements[key]
+            else:
+                constraint = original_constraint
+
             edges.append(GraphEdge(
                 edge_id=len(edges),
                 from_location=constraint.from_location,
@@ -154,5 +194,8 @@ class Allocation(object):
         for k,v in self.item_at_item_location.items():
             if v in ('PIKO_HAMMER','WALL_JUMP','RABI_SLIPPERS','AIR_JUMP','AIR_DASH','BUNNY_WHIRL','HAMMER_ROLL','SLIDING_POWDER','CARROT_BOMB','CARROT_SHOOTER','FIRE_ORB','WATER_ORB','BUNNY_STRIKE','BUNNY_AMULET','SPEED_BOOST'):
                 print('%s @ %s' % (v, k))
+
+        print('--Modified Constraints--')
+        print('\n'.join(t.name for t in self.picked_templates))
 
 

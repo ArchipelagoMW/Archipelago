@@ -1,4 +1,4 @@
-import ast, re
+import ast, re, os
 from utility import *
 
 """
@@ -110,7 +110,7 @@ def define_pseudo_items():
         "2_AMULET_FOOD": lambda v : enough_amu_food(v, 2),
         "3_AMULET_FOOD": lambda v : enough_amu_food(v, 3),
         "MANY_AMULET_FOOD": "ITEM_MENU & TOWN_SHOP",
-        
+
         "BOOST": "BEACH_MAIN | (RUMI_DONUT & ITEM_MENU)",
     }
 
@@ -407,6 +407,51 @@ def parse_item_constraints(settings, items_set, shufflable_gift_items_set, locat
 
     return item_constraints
 
+DIR_TEMPLATE_PATCH_FILES = './maptemplates/constraint_shuffle/'
+def parse_template_constraints(locations_set, variable_names_set, default_expressions, edge_constraints):
+    lines = read_file_and_strip_comments('maptemplates/template_constraints.txt')
+    jsondata = ' '.join(lines)
+    jsondata = re.sub(',\s*}', '}', jsondata)
+    jsondata = '},{'.join(re.split('}\s*{', jsondata))
+    jsondata = '[' + jsondata + ']'
+    cdicts = parse_json(jsondata)
+
+    patch_files = sorted(os.listdir(DIR_TEMPLATE_PATCH_FILES))
+    patch_names = []
+    for patch_file in patch_files:
+        if not patch_file.startswith('CS_'): fail('Patch file %s does not start with CS_' % patch_file)
+        patch_name = patch_file[len('CS_'):patch_file.rfind('.')]
+        patch_names.append(patch_name)
+    name_to_patch_file = dict(zip(patch_names, patch_files))
+
+    original_prereqs = dict(((e.from_location, e.to_location), e.prereq_expression) for e in edge_constraints)
+    
+    def parse_change(change):
+        from_location, to_location = (x.strip() for x in change['edge'].split('->'))
+        if from_location not in locations_set: fail('Unknown location: %s' % from_location)
+        if to_location not in locations_set: fail('Unknown location: %s' % to_location)
+        current_expression = original_prereqs[(from_location, to_location)]
+        prereq = parse_expression(change['prereq'], variable_names_set, default_expressions, current_expression)
+        return EdgeConstraintData(from_location, to_location, prereq)
+
+    template_constraints = []
+    for cdict in cdicts:
+        name = cdict['name']
+        if name not in name_to_patch_file: fail('Unknown template constraint %s' % name)
+        weight = int(cdict['weight'])
+        changes = [parse_change(change) for change in cdict['changes']]
+
+        template_constraints.append(TemplateConstraintData(
+            name=name,
+            weight=weight,
+            template_file=DIR_TEMPLATE_PATCH_FILES + name_to_patch_file[name],
+            changes=changes,
+        ))
+
+    template_constraints.sort(key=lambda tc:tc.name)
+    return template_constraints
+
+
 def read_config(setting_flags, item_locations_set, shufflable_gift_items_set, config_flags_set, predefined_additional_items_set, settings):
     lines = read_file_and_strip_comments(settings.config_file)
     jsondata = ' '.join(lines)
@@ -588,6 +633,7 @@ class RandomizerData(object):
         self.alternate_conditions = define_alternate_conditions(settings, variable_names_set, default_expressions)
         self.edge_constraints = parse_edge_constraints(self.locations_set, variable_names_set, default_expressions)
         self.item_constraints = parse_item_constraints(settings, items_set, shufflable_gift_items_set, self.locations_set, variable_names_set, default_expressions)
+        self.template_constraints = parse_template_constraints(self.locations_set, variable_names_set, default_expressions, self.edge_constraints)
 
         self.preprocess_data(settings)
         self.preprocess_variables(settings)

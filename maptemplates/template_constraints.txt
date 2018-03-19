@@ -1,9 +1,718 @@
 
 {
-"name": "fire_orb_palace",
+"name": "aurora_palace_wall",
+"weight": 1,
 "changes": [
     {
-    "edge": ""
-    "prereq": "FIRE_ORB"
+    "edge": "SNOWLAND_WEST -> PALACE_MAIN",
+    "prereq": "IMPOSSIBLE",
+    }
+]}
+
+{
+"name": "upper_icy_summit_wall",
+"weight": 1,
+"changes": [
+    {
+    "edge": "ICY_SUMMIT_MAIN -> ICY_SUMMIT_UPPER",
+    "prereq": "IMPOSSIBLE",
+    }
+    {
+    "edge": "ICY_SUMMIT_UPPER -> ICY_SUMMIT_MAIN",
+    "prereq": "IMPOSSIBLE",
+    }
+]}
+
+{
+"name": "aurora_palace_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "SNOWLAND_WEST -> PALACE_MAIN",
+    "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "aquarium_entrance_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "SNOWLAND_WEST -> AQUARIUM_MAIN",
+    "prereq": "FIRE_ORB",
+    }
+    {
+    "edge": "AQUARIUM_MAIN -> SNOWLAND_WEST",
+    "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "icy_summit_entrance_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "SNOWLAND_EAST -> ICY_SUMMIT_MAIN",
+    "prereq": "FIRE_ORB",
+    }
+    {
+    "edge": "ICY_SUMMIT_MAIN -> SNOWLAND_EAST",
+    "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "aquarium_east_transition_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_BEACH_ENTRANCE",
+    "prereq": "FIRE_ORB",
+    }
+    {
+    "edge": "AQUARIUM_BEACH_ENTRANCE -> AQUARIUM_BOMB_WALLED_AREA",
+    "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "aurora_palace_whirlblocks",
+"weight": 1,
+"changes": [
+    {
+    "edge": "SNOWLAND_WEST -> PALACE_MAIN",
+    "prereq": "BUNNY_WHIRL | (CARROT_SHOOTER & BOOST)",
+    }
+]}
+
+{
+"name": "aquarium_east_transition_whirlblocks",
+"weight": 1,
+"changes": [
+    {
+    "edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_BEACH_ENTRANCE",
+    "prereq": "BUNNY_WHIRL | EXPLOSIVES",
+    }
+    {
+    "edge": "AQUARIUM_BEACH_ENTRANCE -> AQUARIUM_BOMB_WALLED_AREA",
+    "prereq": "BUNNY_WHIRL | (CARROT_SHOOTER & BOOST) | ((CARROT_BOMB | PIKO_HAMMER) & SLIDING_POWDER)",
+    }
+]}
+
+{
+"name": "aquarium_entrance_hammer",
+"weight": 1,
+"changes": [
+    {
+    "edge": "SNOWLAND_WEST -> AQUARIUM_MAIN",
+    "prereq": "PIKO_HAMMER",
+    }
+    {
+    "edge": "AQUARIUM_MAIN -> SNOWLAND_WEST",
+    "prereq": "PIKO_HAMMER",
+    }
+]}
+
+{
+"name": "aurora_palace_nospring",
+"weight": 1,
+"changes": [
+    {
+    "edge": "SNOWLAND_WEST -> PALACE_MAIN",
+    "prereq": "AIR_JUMP & WALL_JUMP_LV2 & (ITM_HARD | RABI_SLIPPERS)",
+    }
+]}
+
+{
+"name": "aquarium_east_transition_nothing",
+"weight": 1,
+"changes": [
+    {
+    "edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_BEACH_ENTRANCE",
+    "prereq": "NONE",
+    }
+    {
+    "edge": "AQUARIUM_BEACH_ENTRANCE -> AQUARIUM_BOMB_WALLED_AREA",
+    "prereq": "NONE",
+    }
+]}
+
+{
+"name": "above_hammer_unclimbable",
+"weight": 4,
+"changes": [
+    {
+    "edge": "FOREST_START -> FOREST_NIGHT_TOXIC_STRIKE",
+    "prereq": "IMPOSSIBLE",
+    }
+]}
+
+{
+"name": "above_hammer_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "FOREST_START -> FOREST_NIGHT_TOXIC_STRIKE",
+    "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "pacifist_jump_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "FOREST_START -> FOREST_UPPER_EAST",
+    "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "cicini_room_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "SPECTRAL_WARP -> SPECTRAL_CICINI_ROOM",
+    "prereq": "FIRE_ORB & current",
+    }
+]}
+
+{
+"name": "forest_lower_riverbank_exit_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "FOREST_START -> FOREST_LOWER_RIVERBANK_EXIT",
+    "prereq": "FIRE_ORB",
+    }
+    {
+    "edge": "FOREST_LOWER_RIVERBANK_EXIT -> FOREST_START",
+    "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "cicini_room_hammer",
+"weight": 1,
+"changes": [
+    {
+    "edge": "SPECTRAL_WARP -> SPECTRAL_CICINI_ROOM",
+    "prereq": "(EXPLOSIVES | PIKO_HAMMER) & current",
+    }
+]}
+
+{
+"name": "forest_lower_riverbank_exit_whirlblocks",
+"weight": 1,
+"changes": [
+    {
+    "edge": "FOREST_START -> FOREST_LOWER_RIVERBANK_EXIT",
+    "prereq": "EXPLOSIVES_ENEMY | BUNNY_WHIRL",
+    }
+    {
+    "edge": "FOREST_LOWER_RIVERBANK_EXIT -> FOREST_START",
+    "prereq": "(CARROT_SHOOTER & BOOST) | BUNNY_WHIRL",
+    }
+]}
+
+{
+"name": "pacifist_jump_whirlblocks",
+"weight": 1,
+"changes": [
+    {
+    "edge": "FOREST_START -> FOREST_UPPER_EAST",
+    "prereq": "BUNNY_WHIRL",
+    }
+]}
+
+{
+"name": "beach_aquarium_entrance_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "BEACH_MAIN -> BEACH_UNDERWATER_ENTRANCE",
+    "prereq": "DOWNDRILL_SEMISOLID_CLIP | FIRE_ORB",
+    }
+]}
+
+{
+"name": "pyramid_entrance_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "BEACH_MAIN -> PYRAMID_MAIN",
+    "prereq": "FIRE_ORB & current",
+    }
+    {
+    "edge": "PYRAMID_MAIN -> BEACH_MAIN",
+    "prereq": "FIRE_ORB & current",
+    }
+]}
+
+{
+"name": "pyramid_darkroom_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "PYRAMID_MAIN -> PYRAMID_SOUTHWEST_ROOM",
+    "prereq": "DOWNDRILL_SEMISOLID_CLIP | FIRE_ORB",
+    }
+]}
+
+{
+"name": "beach_volcanic_entrance_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "BEACH_MAIN -> BEACH_VOLCANIC_ENTRANCE",
+    "prereq": "FIRE_ORB & current",
+    }
+    {
+    "edge": "BEACH_VOLCANIC_ENTRANCE -> BEACH_MAIN",
+    "prereq": "FIRE_ORB & current",
+    }
+]}
+
+{
+"name": "pyramid_lower_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "PYRAMID_WARP_ROOM -> PYRAMID_LOWER",
+    "prereq": "FIRE_ORB & (
+        AIR_JUMP
+        | AIR_DASH
+        | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)
+    )",
+    }
+]}
+
+{
+"name": "sky_island_entrance_hammer",
+"weight": 1,
+"changes": [
+    {
+    "edge": "GRAVEYARD_MAIN -> SKY_ISLAND_MAIN",
+    "prereq": "EXPLOSIVES | PIKO_HAMMER",
+    }
+]}
+
+{
+"name": "beach_volcanic_entrance_hammer",
+"weight": 1,
+"changes": [
+    {
+    "edge": "BEACH_MAIN -> BEACH_VOLCANIC_ENTRANCE",
+    "prereq": "(EXPLOSIVES | PIKO_HAMMER) & current",
+    }
+    {
+    "edge": "BEACH_VOLCANIC_ENTRANCE -> BEACH_MAIN",
+    "prereq": "(EXPLOSIVES | PIKO_HAMMER) & current",
+    }
+]}
+
+{
+"name": "pyramid_entrance_hammer_nobomb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "BEACH_MAIN -> PYRAMID_MAIN",
+    "prereq": "PIKO_HAMMER_LEVELED & current",
+    }
+    {
+    "edge": "PYRAMID_MAIN -> BEACH_MAIN",
+    "prereq": "PIKO_HAMMER & current",
+    }
+]}
+
+{
+"name": "pyramid_lower_hammer_nobomb",
+"weight": 2,
+"changes": [
+    {
+    "edge": "PYRAMID_WARP_ROOM -> PYRAMID_LOWER",
+    "prereq": "PIKO_HAMMER & (
+        AIR_JUMP
+        | AIR_DASH
+        | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)
+    )",
+    }
+]}
+
+{
+"name": "pyramid_lower_wall",
+"weight": 1,
+"changes": [
+    {
+    "edge": "PYRAMID_WARP_ROOM -> PYRAMID_LOWER",
+    "prereq": "IMPOSSIBLE",
+    }
+]}
+
+{
+"name": "ravine_town_entrance_wall",
+"weight": 1,
+"changes": [
+    {
+    "edge": "RAVINE_LOWER -> RAVINE_TOWN_ENTRANCE",
+    "prereq": "IMPOSSIBLE",
+    }
+    {
+    "edge": "RAVINE_TOWN_ENTRANCE -> RAVINE_LOWER",
+    "prereq": "IMPOSSIBLE",
+    }
+]}
+
+{
+"name": "skybridge_eastwest_wall",
+"weight": 1,
+"changes": [
+    {
+    "edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_EAST",
+    "prereq": "IMPOSSIBLE",
+    }
+    {
+    "edge": "SKY_BRIDGE_EAST -> SKY_BRIDGE_MAIN",
+    "prereq": "IMPOSSIBLE",
+    }
+]}
+
+{
+"name": "upper_park_4tile",
+"weight": 1,
+"changes": [
+    {
+    "edge": "PARK_MAIN -> PARK_UPPER",
+    "prereq": "RABI_SLIPPERS | AIR_JUMP | AIR_DASH | SLIDE_JUMP_BUNSTRIKE",
+    }
+]}
+
+{
+"name": "uprprc_base_wall",
+"weight": 1,
+"changes": [
+    {
+    "edge": "PARK_MAIN -> UPRPRC_BASE",
+    "prereq": "SLIDE_ZIP",
+    }
+]}
+
+{
+"name": "skybridge_west_wall",
+"weight": 1,
+"changes": [
+    {
+    "edge": "PARK_UPPER -> SKY_BRIDGE_MAIN",
+    "prereq": "IMPOSSIBLE",
+    }
+    {
+    "edge": "SKY_BRIDGE_MAIN -> PARK_UPPER",
+    "prereq": "IMPOSSIBLE",
+    }
+]}
+
+{
+"name": "ravine_town_entrance_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "RAVINE_LOWER -> RAVINE_TOWN_ENTRANCE",
+    "prereq": "FIRE_ORB",
+    }
+    {
+    "edge": "RAVINE_TOWN_ENTRANCE -> RAVINE_LOWER",
+    "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "skybridge_eastwest_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_EAST",
+    "prereq": "FIRE_ORB",
+    }
+    {
+    "edge": "SKY_BRIDGE_EAST -> SKY_BRIDGE_MAIN",
+    "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "upper_park_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "PARK_MAIN -> PARK_UPPER",
+    "prereq": "FIRE_ORB",
+    }
+    {
+    "edge": "PARK_UPPER -> PARK_MAIN",
+    "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "uprprc_base_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "PARK_MAIN -> UPRPRC_BASE",
+    "prereq": "FIRE_ORB | SLIDE_ZIP",
+    }
+]}
+
+{
+"name": "skybridge_west_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "PARK_UPPER -> SKY_BRIDGE_MAIN",
+    "prereq": "FIRE_ORB",
+    }
+    {
+    "edge": "SKY_BRIDGE_MAIN -> PARK_UPPER",
+    "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "ravine_town_entrance_hammer",
+"weight": 1,
+"changes": [
+    {
+    "edge": "RAVINE_LOWER -> RAVINE_TOWN_ENTRANCE",
+    "prereq": "EXPLOSIVES | PIKO_HAMMER",
+    }
+    {
+    "edge": "RAVINE_TOWN_ENTRANCE -> RAVINE_LOWER",
+    "prereq": "EXPLOSIVES | PIKO_HAMMER",
+    }
+]}
+
+{
+"name": "skybridge_eastwest_hammer",
+"weight": 1,
+"changes": [
+    {
+    "edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_EAST",
+    "prereq": "EXPLOSIVES | PIKO_HAMMER",
+    }
+    {
+    "edge": "SKY_BRIDGE_EAST -> SKY_BRIDGE_MAIN",
+    "prereq": "EXPLOSIVES | PIKO_HAMMER",
+    }
+]}
+
+{
+"name": "upper_park_whirlblocks",
+"weight": 1,
+"changes": [
+    {
+    "edge": "PARK_MAIN -> PARK_UPPER",
+    "prereq": "BUNNY_WHIRL | (CARROT_SHOOTER & BOOST)",
+    }
+    {
+    "edge": "PARK_UPPER -> PARK_MAIN",
+    "prereq": "BUNNY_WHIRL | EXPLOSIVES",
+    }
+]}
+
+{
+"name": "uprprc_base_whirlblocks",
+"weight": 1,
+"changes": [
+    {
+    "edge": "PARK_MAIN -> UPRPRC_BASE",
+    "prereq": "EXPLOSIVES_ENEMY | BUNNY_WHIRL | SLIDE_ZIP",
+    }
+]}
+
+{
+"name": "skybridge_west_hammer",
+"weight": 1,
+"changes": [
+    {
+    "edge": "PARK_UPPER -> SKY_BRIDGE_MAIN",
+    "prereq": "EXPLOSIVES | PIKO_HAMMER",
+    }
+    {
+    "edge": "SKY_BRIDGE_MAIN -> PARK_UPPER",
+    "prereq": "EXPLOSIVES | PIKO_HAMMER",
+    }
+]}
+
+{
+"name": "riverbank_lower_exit_wall",
+"weight": 1,
+"changes": [
+    {
+    "edge": "RIVERBANK_LOWER -> RIVERBANK_LOWER_FOREST_ENTRANCE",
+    "prereq": "IMPOSSIBLE",
+    }
+    {
+    "edge": "RIVERBANK_LOWER_FOREST_ENTRANCE -> RIVERBANK_LOWER",
+    "prereq": "IMPOSSIBLE",
+    }
+]}
+
+{
+"name": "riverbank_post_ashuri2_wall",
+"weight": 1,
+"changes": [
+    {
+    "edge": "RIVERBANK_MAIN -> EVERNIGHT_MAIN",
+    "prereq": "CARROT_SHOOTER & BOOST",
+    }
+    {
+    "edge": "EVERNIGHT_MAIN -> RIVERBANK_MAIN",
+    "prereq": "EXPLOSIVES",
+    }
+]}
+
+{
+"name": "lab_west_to_mid_wall",
+"weight": 1,
+"changes": [
+    {
+    "edge": "LAB_WEST -> LAB_MID",
+    "prereq": "IMPOSSIBLE",
+    }
+]}
+
+{
+"name": "riverbank_lower_exit_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "RIVERBANK_LOWER_FOREST_ENTRANCE -> RIVERBANK_UNDERGROUND",
+    "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "riverbank_post_ashuri2_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "RIVERBANK_MAIN -> EVERNIGHT_MAIN",
+    "prereq": "FIRE_ORB | (CARROT_SHOOTER & BOOST)",
+    }
+    {
+    "edge": "EVERNIGHT_MAIN -> RIVERBANK_MAIN",
+    "prereq": "FIRE_ORB | EXPLOSIVES",
+    }
+]}
+
+{
+"name": "spike_barrier_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "EVERNIGHT_MAIN -> EVERNIGHT_SPIKE_BARRIER_ROOM",
+    "prereq": "FIRE_ORB & (
+            AIR_JUMP
+            | BUNNY_STRIKE
+            | AIR_DASH
+            | (BUNNY_WHIRL & ITM_HARD)
+            | (SLIDING_POWDER & (ITM_HARD | RABI_SLIPPERS))
+            | (ADV_STUPID & SPEED5)
+        )
+    ",
+    }
+]}
+
+{
+"name": "lab_west_to_mid_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "LAB_WEST -> LAB_MID",
+    "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "computer_entrance_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "LAB_EAST -> LAB_COMPUTER_ROOM",
+    "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "evernight_to_lower_riverbank_fireorb",
+"weight": 1,
+"changes": [
+    {
+    "edge": "EVERNIGHT_LOWER -> RIVERBANK_LOWER",
+    "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "riverbank_post_ashuri2_hammer",
+"weight": 1,
+"changes": [
+    {
+    "edge": "RIVERBANK_MAIN -> EVERNIGHT_MAIN",
+    "prereq": "PIKO_HAMMER | EXPLOSIVES",
+    }
+    {
+    "edge": "EVERNIGHT_MAIN -> RIVERBANK_MAIN",
+    "prereq": "PIKO_HAMMER | EXPLOSIVES",
+    }
+]}
+
+{
+"name": "lab_west_to_mid_hammer",
+"weight": 1,
+"changes": [
+    {
+    "edge": "LAB_WEST -> LAB_MID",
+    "prereq": "PIKO_HAMMER | EXPLOSIVES",
+    }
+]}
+
+{
+"name": "computer_entrance_hammer",
+"weight": 1,
+"changes": [
+    {
+    "edge": "LAB_EAST -> LAB_COMPUTER_ROOM",
+    "prereq": "PIKO_HAMMER | EXPLOSIVES",
+    }
+]}
+
+{
+"name": "evernight_to_lower_riverbank_hammer",
+"weight": 1,
+"changes": [
+    {
+    "edge": "EVERNIGHT_LOWER -> RIVERBANK_LOWER",
+    "prereq": "PIKO_HAMMER | EXPLOSIVES",
+    }
+]}
+
+{
+"name": "computer_entrance_5tile",
+"weight": 1,
+"changes": [
+    {
+    "edge": "LAB_EAST -> LAB_COMPUTER_ROOM",
+    "prereq": "AIR_JUMP | AIR_DASH | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)",
+    }
+]}
+
+{
+"name": "volcanic_west_nostupid",
+"weight": 5,
+"changes": [
+    {
+    "edge": "VOLCANIC_MAIN -> VOLCANIC_BEACH_ENTRANCE",
+    "prereq": "RABI_SLIPPERS | AIR_DASH | AIR_JUMP | SLIDE_JUMP_BUNSTRIKE",
     }
 ]}

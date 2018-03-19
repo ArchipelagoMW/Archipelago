@@ -25,6 +25,7 @@ def parse_args():
     args.add_argument('--shuffle-backgrounds', action='store_true', help='Shuffles the backgrounds in the map.')
     args.add_argument('--shuffle-map-transitions', action='store_true', help='Shuffles map transitions between maps.')
     args.add_argument('--shuffle-gift-items', action='store_true', help='Shuffles certain gift items in the maps.')
+    args.add_argument('-constraint-changes', default=0, type=float, help='Expected number of changed map constraints')
     args.add_argument('--no-laggy-backgrounds', action='store_true', help='Don\'t include laggy backgrounds in background shuffle.')
     args.add_argument('--no-difficult-backgrounds', action='store_true', help='Don\'t include backgrounds in background shuffle that interfere with visibility.')
     args.add_argument('--super-attack-mode', action='store_true', help='Start the game with a bunch of attack ups, so you do lots more damage.')

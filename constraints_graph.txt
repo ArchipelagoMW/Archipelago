@@ -140,6 +140,16 @@ EXPLOSIVES_ENEMY & SLIDING_POWDER & PROLOGUE_TRIGGER &
 }
 
 {
+"edge": "FOREST_START -> FOREST_NIGHT_TOXIC_STRIKE",
+"prereq": "NONE",
+}
+
+{
+"edge": "FOREST_NIGHT_TOXIC_STRIKE -> FOREST_START",
+"prereq": "NONE",
+}
+
+{
 "edge": "FOREST_NIGHT_WEST -> FOREST_NIGHT_ATK_UP_ROOM",
 "prereq": "EXPLOSIVES_ENEMY",
 }
@@ -161,7 +171,7 @@ EXPLOSIVES_ENEMY & SLIDING_POWDER & PROLOGUE_TRIGGER &
 }
 
 {
-"edge": "FOREST_START -> FOREST_NIGHT_NORTH_EAST",
+"edge": "FOREST_NIGHT_TOXIC_STRIKE -> FOREST_NIGHT_NORTH_EAST",
 "prereq": "
 ITM & DARKNESS & (
     AIR_JUMP
@@ -180,17 +190,17 @@ ITM & DARKNESS & (
 }
 
 {
-"edge": "FOREST_NIGHT_NORTH_EAST -> FOREST_START",
+"edge": "FOREST_NIGHT_NORTH_EAST -> FOREST_NIGHT_TOXIC_STRIKE",
 "prereq": "NONE",
 }
 
 {
-"edge": "FOREST_START -> FOREST_NIGHT_WEST",
+"edge": "FOREST_NIGHT_TOXIC_STRIKE -> FOREST_NIGHT_WEST",
 "prereq": "DARKNESS & PROLOGUE_TRIGGER",
 }
 
 {
-"edge": "FOREST_NIGHT_WEST -> FOREST_START",
+"edge": "FOREST_NIGHT_WEST -> FOREST_NIGHT_TOXIC_STRIKE",
 "prereq": "PROLOGUE_TRIGGER",
 }
 
@@ -413,7 +423,7 @@ PROLOGUE_TRIGGER & (
 "edge": "PYRAMID_WARP_ROOM -> PYRAMID_LOWER",
 "prereq": "
     AIR_JUMP
-    | (AIR_DASH & (RABI_SLIPPERS | ITM_HARD))
+    | AIR_DASH
     | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)
     | ADV_VHARD
 ",
@@ -875,6 +885,40 @@ DARKNESS & (
 }
 
 {
+"edge": "ICY_SUMMIT_MAIN -> ICY_SUMMIT_UPPER",
+"prereq": "NONE",
+}
+
+{
+"edge": "ICY_SUMMIT_UPPER -> ICY_SUMMIT_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "ICY_SUMMIT_MAIN -> ICY_SUMMIT_NIXIE",
+"prereq": "
+    WHIRL_BONK_CANCEL | (AIR_JUMP & (
+        ((RABI_SLIPPERS | (SLIDE_JUMP_BUNSTRIKE_CANCEL & ADV_VHARD)) & AIR_DASH)
+        | (WALL_JUMP_LV2)
+    ))"
+}
+
+{
+"edge": "ICY_SUMMIT_NIXIE -> ICY_SUMMIT_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "ICY_SUMMIT_UPPER -> ICY_SUMMIT_NIXIE",
+"prereq": "NONE",
+}
+
+{
+"edge": "ICY_SUMMIT_NIXIE -> ICY_SUMMIT_UPPER",
+"prereq": "NONE",
+}
+
+{
 "edge": "SNOWLAND_WEST -> PALACE_MAIN",
 "prereq": "NONE",
 }
@@ -1071,6 +1115,11 @@ DARKNESS & (
 {
 "edge": "EVERNIGHT_MAIN -> RIVERBANK_MAIN",
 "prereq": "NONE",
+}
+
+{
+"edge": "RIVERBANK_MAIN -> EVERNIGHT_WARP",
+"prereq": "SLIDE_ZIP & ADV",
 }
 
 {

@@ -67,7 +67,7 @@ class EdgeConstraintData(object):
     def __init__(self, from_location, to_location, prereq_expression):
         self.from_location = from_location
         self.to_location = to_location
-        #self.prereq_expression = prereq_expression
+        self.prereq_expression = prereq_expression
         self.prereq_lambda = lambda v : prereq_expression.evaluate(v)
 
     def __str__(self):
@@ -87,6 +87,19 @@ class ItemConstraintData(object):
         self.alternate_exits = alternate_exits
         self.no_alternate_paths = (len(self.alternate_entries) + len(self.alternate_exits) == 0)
 
+class TemplateConstraintData(object):
+    def __init__(self, name, weight, template_file, changes):
+        self.name = name
+        self.weight = weight
+        self.template_file = template_file
+        self.changes = changes
+        self.change_edge_set = set([(c.from_location, c.to_location) for c in changes]
+                                + [(c.to_location, c.from_location) for c in changes])
+
+    def conflicts_with(self, other):
+        if other == self: return True
+        return bool(self.change_edge_set.intersection(other.change_edge_set))
+
 class GraphEdge(object):
     def __init__(self, edge_id, from_location, to_location, constraint, backtrack_cost):
         self.edge_id = edge_id
@@ -102,7 +115,6 @@ class GraphEdge(object):
             'ID: %s' % self.edge_id,
             'Cost: %s' % self.backtrack_cost,
         ])
-
 
 # misc utility functions
 
@@ -148,8 +160,8 @@ def to_tile_index(x, y):
 
 # Expression Parsing
 
-def parse_expression_lambda(line, variable_names_set, default_expressions):
-    expression = parse_expression(line, variable_names_set, default_expressions)
+def parse_expression_lambda(line, variable_names_set, default_expressions, current_expression=None):
+    expression = parse_expression(line, variable_names_set, default_expressions, current_expression)
     return lambda v : expression.evaluate(v)
 
 # & - and
@@ -157,10 +169,10 @@ def parse_expression_lambda(line, variable_names_set, default_expressions):
 # !/~ - not
 # ( ) - parentheses
 # throws errors if parsing fails
-def parse_expression(line, variable_names_set, default_expressions={}):
+def parse_expression(line, variable_names_set, default_expressions={}, current_expression=None):
     try:
         # the str(line) cast is used because sometimes <line> is a u'unicode string' on unix machines.
-        return parse_expression_logic(str(line), variable_names_set, default_expressions)
+        return parse_expression_logic(str(line), variable_names_set, default_expressions, current_expression)
     except Exception as e:
         eprint('Error parsing expression:')
         eprint(line)
@@ -168,7 +180,7 @@ def parse_expression(line, variable_names_set, default_expressions={}):
 
 # Used in string parsing. We only have either strings or expressions
 isExpr = lambda s : not type(s) is str
-def parse_expression_logic(line, variable_names_set, default_expressions):
+def parse_expression_logic(line, variable_names_set, default_expressions, current_expression):
     pat = re.compile('[()&|~!]')
     line = line.replace('&&', '&').replace('||', '|')
     tokens = (s.strip() for s in re.split('([()&|!~])', line))
@@ -211,6 +223,8 @@ def parse_expression_logic(line, variable_names_set, default_expressions):
             if next.startswith('BACKTRACK_'):
                 nSteps = int(next[next.rfind('_')+1:])
                 tokens.append(OpBacktrack(nSteps))
+            elif next == 'current':
+                tokens.append(current_expression)
             elif next in default_expressions:
                 tokens.append(default_expressions[next])
             else:
