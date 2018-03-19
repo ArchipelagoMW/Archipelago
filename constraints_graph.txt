@@ -317,17 +317,24 @@ PROLOGUE_TRIGGER & (
         | (BUNNY_STRIKE & ITM_HARD)
         | ADV_STUPID
     ))
-    | (RABI_SLIPPERS & AIR_DASH_LV3 & ADV_HARD)
+    | (AIR_DASH_LV3 & ADV_VHARD) // buffered wall launch
     | (BUNNY_STRIKE & RABI_SLIPPERS & AIR_DASH & ADV_VHARD)
     | (SLIDE_JUMP_BUNSTRIKE_CANCEL & RABI_SLIPPERS & AIR_DASH_LV3)
     | (SLIDE_JUMP_BUNSTRIKE & BUNNY_AMULET & ADV_STUPID)
-)
-",
+)",
 }
 
 {
 "edge": "SPECTRAL_MID -> SPECTRAL_WEST_EGG_ROOM",
-"prereq": "PROLOGUE_TRIGGER & (AIR_DASH | SLIDE_JUMP_BUNSTRIKE | AIR_JUMP)",
+"prereq": "PROLOGUE_TRIGGER & (
+    AIR_DASH & (
+        ITM_VHARD // launch off a 1 tile wall
+        | (SLIDING_POWDER & ITM_HARD) // slide jump into quickdrop airdash
+    )
+    | (ITM_HARD & AIR_DASH_LV3) // quickdrop airdash or launch off the lower wall
+    | SLIDE_JUMP_BUNSTRIKE
+    | AIR_JUMP
+)",
 }
 
 {
