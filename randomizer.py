@@ -293,6 +293,12 @@ def get_default_areaids():
     return list(range(10))
 
 
+def display_hash(settings):
+    areaids = get_default_areaids()
+    hash_digest = hash_map_files(areaids, settings.output_dir)
+    print('Hash: %s' % hash_digest)
+
+
 def run_randomizer(seed, source_dir, settings):
     if seed != None: random.seed(seed)
     randomizer_data = RandomizerData(settings)
@@ -319,13 +325,16 @@ def run_randomizer(seed, source_dir, settings):
     mod.save(settings.output_dir)
     print('Maps saved successfully to %s.' % settings.output_dir)
 
-    hash_digest = hash_map_files(areaids, settings.output_dir)
-    print('Hash: %s' % hash_digest)
+    display_hash(settings)
 
 
 if __name__ == '__main__':
     args = parse_args()
     source_dir='original_maps'
+
+    if args.hash:
+        display_hash(args)
+        quit()
 
     if args.seed == None:
         seed = None
