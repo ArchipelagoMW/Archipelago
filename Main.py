@@ -1,4 +1,5 @@
 from collections import OrderedDict
+import copy
 from itertools import zip_longest
 import json
 import logging
@@ -157,6 +158,15 @@ def copy_world(world):
     create_regions(ret)
     create_dungeons(ret)
 
+    #TODO: copy_dynamic_regions_and_locations() # also adds some new shops
+
+    for shop in world.shops:
+        copied_shop = ret.get_region(shop.region.name).shop
+        copied_shop.active = shop.active
+        copied_shop.inventory = copy.copy(shop.inventory)
+
+
+
     # connect copied world
     for region in world.regions:
         copied_region = ret.get_region(region.name)
@@ -294,8 +304,6 @@ def create_playthrough(world):
     old_world.spoiler.paths = {location.name : get_path(state, location.parent_region) for sphere in collection_spheres for location in sphere}
     if any(exit == 'Pyramid Fairy' for path in old_world.spoiler.paths.values() for (_, exit) in path):
         old_world.spoiler.paths['Big Bomb Shop'] = get_path(state, world.get_region('Big Bomb Shop'))
-    if any(exit == 'Swamp Palace Moat' for path in old_world.spoiler.paths.values() for (_, exit) in path) or 'Sunken Treasure' in old_world.required_locations:
-        old_world.spoiler.paths['Dam'] = get_path(state, world.get_region('Dam'))
 
     # we can finally output our playthrough
     old_world.spoiler.playthrough = OrderedDict([(str(i + 1), {str(location): str(location.item) for location in sphere}) for i, sphere in enumerate(collection_spheres)])

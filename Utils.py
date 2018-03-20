@@ -2,6 +2,14 @@ import os
 import subprocess
 import sys
 
+def int16_as_bytes(value):
+    value = value & 0xFFFF
+    return [value & 0xFF, (value >> 8) & 0xFF]
+
+def int32_as_bytes(value):
+    value = value & 0xFFFFFFFF
+    return [value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF, (value >> 24) & 0xFF]
+
 def is_bundled():
     return getattr(sys, 'frozen', False)
 
