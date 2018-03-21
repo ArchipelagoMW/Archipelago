@@ -1083,13 +1083,12 @@
     AIR_JUMP
     | AIR_DASH
     | (RABI_SLIPPERS & ADV_STUPID)
-    | HAMMER_ROLL_ZIP
     | (RABI_SLIPPERS & BUNNY_STRIKE & ITM_HARD)
 )",
 "exit_prereq": "NONE",
 
 "alternate_entries": {
-    "LAB_ENTRANCE": "HAMMER_ROLL_ZIP",
+    "LAB_ENTRANCE": "EXPLOSIVES_ENEMY & HAMMER_ROLL_ZIP",
 },
 "alternate_exits": {
     "LAB_EAST_PACK_UP_ROOM": "ADV & EXPLOSIVES_ENEMY & SLIDE_ZIP",
