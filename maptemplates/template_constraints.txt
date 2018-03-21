@@ -563,7 +563,7 @@
 "changes": [
     {
     "edge": "RIVERBANK_MAIN -> EVERNIGHT_MAIN",
-    "prereq": "CARROT_SHOOTER & BOOST",
+    "prereq": "CARROT_SHOOTER & BOOST & ITM_HARD",
     }
     {
     "edge": "EVERNIGHT_MAIN -> RIVERBANK_MAIN",
@@ -587,7 +587,7 @@
 "changes": [
     {
     "edge": "RIVERBANK_LOWER_FOREST_ENTRANCE -> RIVERBANK_UNDERGROUND",
-    "prereq": "FIRE_ORB",
+    "prereq": "FIRE_ORB & EXPLOSIVES",
     }
 ]}
 
@@ -597,7 +597,7 @@
 "changes": [
     {
     "edge": "RIVERBANK_MAIN -> EVERNIGHT_MAIN",
-    "prereq": "FIRE_ORB | (CARROT_SHOOTER & BOOST)",
+    "prereq": "FIRE_ORB | (CARROT_SHOOTER & BOOST & ITM_HARD)",
     }
     {
     "edge": "EVERNIGHT_MAIN -> RIVERBANK_MAIN",
