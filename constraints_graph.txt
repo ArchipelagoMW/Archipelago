@@ -563,6 +563,169 @@ PROLOGUE_TRIGGER & (
 "prereq": "EXPLOSIVES",
 }
 
+// Halloween
+
+{
+"edge": "GRAVEYARD_UPPER -> HALLOWEEN_UPPER",
+"prereq": "
+    HALLOWEEN & EXPLOSIVES_ENEMY
+    & (
+        WHIRL_BONK
+        | (SLIDING_POWDER & ADV_STUPID)
+        | (AIR_JUMP & (
+            ITM_HARD
+            | RABI_SLIPPERS
+            | SLIDE_JUMP_BUNSTRIKE_CANCEL
+            | BUNNY_WHIRL
+            | AIR_DASH
+            ) )
+    )
+",
+}
+
+{
+"edge": "HALLOWEEN_UPPER -> GRAVEYARD_UPPER",
+"prereq": "NONE",
+}
+
+{
+"edge": "GRAVEYARD_MAIN -> HALLOWEEN_DARK_SHAFT",
+"prereq": "
+    HALLOWEEN & DARKNESS
+    // Divided by room
+    & (BUNNY_WHIRL | (CARROT_SHOOTER & BOOST))
+    & (
+        BUNNY_WHIRL
+        | (SLIDING_POWDER & ADV_HARD)
+        | (AIR_DASH & (RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL))
+        | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)
+        | ADV_STUPID
+    ) & EXPLOSIVES
+",
+}
+
+{
+"edge": "HALLOWEEN_DARK_SHAFT -> GRAVEYARD_MAIN",
+"prereq": "
+    DARKNESS
+    & (
+        AIR_JUMP
+        | WALL_JUMP_LV2
+        | (BUNNY_WHIRL & (RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL))
+    ) & (
+        BUNNY_WHIRL
+        | (SLIDING_POWDER & ADV_HARD)
+        | (AIR_DASH & (RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL))
+        | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)
+        | ADV_STUPID
+    ) & (EXPLOSIVES | BUNNY_WHIRL)
+",
+}
+
+{
+"edge": "HALLOWEEN_DARK_SHAFT -> HALLOWEEN_CENTRAL",
+"prereq": "
+    DARKNESS
+    & (
+        (AIR_JUMP & WALL_JUMP_LV2)
+        | (AIR_JUMP & BUNNY_WHIRL & RABI_SLIPPERS)
+        | (AIR_JUMP & BUNNY_WHIRL & SLIDE_JUMP_BUNSTRIKE_CANCEL)
+        | (AIR_JUMP & RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE_CANCEL)
+        | (WHIRL_BONK_CANCEL & WALL_JUMP_LV2)
+        | (WHIRL_BONK_CANCEL & ADV_VHARD)
+    )
+",
+}
+
+{
+"edge": "HALLOWEEN_CENTRAL -> HALLOWEEN_DARK_SHAFT",
+"prereq": "DARKNESS",
+}
+
+{
+"edge": "GRAVEYARD_MAIN -> HALLOWEEN_CENTRAL",
+"prereq": "HALLOWEEN & SLIDE_ZIP",
+}
+
+{
+"edge": "HALLOWEEN_CENTRAL -> HALLOWEEN_FLOODED",
+"prereq": "EXPLOSIVES & SLIDING_POWDER & BUNNY_WHIRL",
+}
+
+//Until constraint randomizer is built, this edge does not provide a useful path
+//{
+//"edge": "HALLOWEEN_FLOODED -> HALLOWEEN_CENTRAL",
+//"prereq": "(CARROT_SHOOTER & BOOST) & SLIDE_ZIP & HAMMER_ROLL_ZIP & ADV_STUPID & AMULET_FOOD",
+//}
+
+{
+"edge": "HALLOWEEN_FLOODED -> HALLOWEEN_PUMPKIN_HALL",
+"prereq": "EXPLOSIVES & SLIDING_POWDER & BUNNY_WHIRL",
+}
+
+{
+"edge": "HALLOWEEN_FLOODED -> BEACH_MAIN",
+"prereq": "WATER_ORB & HAMMER_ROLL_ZIP",
+}
+
+{
+"edge": "HALLOWEEN_CENTRAL -> HALLOWEEN_PUMPKIN_HALL",
+"prereq": "
+    (
+        (SLIDING_POWDER & DOWNDRILL_SEMISOLID_CLIP)
+        | HAMMER_ROLL_ZIP
+        | SLIDE_ZIP
+    ) & EXPLOSIVES
+",
+}
+
+{
+"edge": "HALLOWEEN_PUMPKIN_HALL -> HALLOWEEN_CENTRAL",
+"prereq": "EXPLOSIVES",
+}
+
+{
+"edge": "HALLOWEEN_PUMPKIN_HALL -> HALLOWEEN_EXIT",
+"prereq": "
+    EXPLOSIVES &
+    (
+        WHIRL_BONK
+        | SLIDE_JUMP_BUNSTRIKE
+        | (AIR_JUMP & (ITM_VHARD | RABI_SLIPPERS))
+        | (RABI_SLIPPERS & AIR_DASH_LV3)
+    ) & (SLIDE_ZIP | BUNNY_WHIRL)
+",
+}
+
+{
+"edge": "HALLOWEEN_EXIT -> GRAVEYARD_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "GRAVEYARD_MAIN -> HALLOWEEN_EXIT",
+"prereq": "HALLOWEEN & DOWNDRILL_SEMISOLID_CLIP",
+}
+
+{
+"edge": "HALLOWEEN_EXIT -> HALLOWEEN_PAST_PILLARS",
+"prereq": "
+// RIBBON &
+    AIR_JUMP
+    | AIR_DASH
+    | RABI_SLIPPERS
+    | SLIDE_JUMP_BUNSTRIKE
+    | BUNNY_WHIRL
+    | (ADV_VHARD & AMULET_FOOD)
+    | WALL_JUMP
+",
+}
+
+{
+"edge": "HALLOWEEN_PAST_PILLARS -> HALLOWEEN_EXIT",
+"prereq": "NONE",
+}
+
 // .---------------------'
 // | Area 2 : Island Core
 // '---------------------.
