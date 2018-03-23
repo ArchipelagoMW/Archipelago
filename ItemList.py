@@ -319,7 +319,7 @@ def set_up_take_anys(world):
         entrance = world.get_region(reg).entrances[0]
         connect_entrance(world, entrance, take_any)
         entrance.target = target
-        take_any.shop = Shop(old_man_take_any, room_id, ShopType.TakeAny, 0xE3, True)
+        take_any.shop = Shop(take_any, room_id, ShopType.TakeAny, 0xE3, True)
         world.shops.append(take_any.shop)
         take_any.shop.active = True
         take_any.shop.add_inventory(0, 'Blue Potion', 0, 1)
