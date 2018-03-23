@@ -845,7 +845,36 @@ class Spoiler(object):
 
     def parse_data(self):
         self.medallions = OrderedDict([('Misery Mire', self.world.required_medallions[0]), ('Turtle Rock', self.world.required_medallions[1])])
-        self.locations = {'other locations': OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in self.world.get_locations()])}
+
+        self.locations = OrderedDict()
+        listed_locations = set()
+
+        lw_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations and loc.parent_region and loc.parent_region.type == RegionType.LightWorld]
+        self.locations['Light World'] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in lw_locations])
+        listed_locations.update(lw_locations)
+
+        dw_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations and loc.parent_region and loc.parent_region.type == RegionType.DarkWorld]
+        self.locations['Dark World'] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in dw_locations])
+        listed_locations.update(dw_locations)
+
+        cave_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations and loc.parent_region and loc.parent_region.type == RegionType.Cave]
+        self.locations['Caves'] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in cave_locations])
+        listed_locations.update(cave_locations)
+
+        # TODO: The order of these dungeons is pretty strange. Ideally we would want to sort them.
+        # Need to determine if the order in dungeons.py matters for anything. If no we just change that order.
+        # Unfortunately I think when i tried that some of the older shuffles did not like it.
+        # If so, we add a sort order parameter to the constructor
+        for dungeon in self.world.dungeons:
+            dungeon_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations and loc.parent_region and loc.parent_region.dungeon == dungeon]
+            self.locations[dungeon.name] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in dungeon_locations])
+            listed_locations.update(dungeon_locations)
+
+        other_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations]
+        if other_locations:
+            self.locations['Other Locations'] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in other_locations])
+            listed_locations.update(other_locations)
+
         from Main import __version__ as ERVersion
         self.metadata = {'version': ERVersion,
                          'seed': self.world.seed,
@@ -896,7 +925,7 @@ class Spoiler(object):
             outfile.write('\n\nMisery Mire Medallion: %s' % self.medallions['Misery Mire'])
             outfile.write('\nTurtle Rock Medallion: %s' % self.medallions['Turtle Rock'])
             outfile.write('\n\nLocations:\n\n')
-            outfile.write('\n'.join(['%s: %s' % (location, item) for (location, item) in self.locations['other locations'].items()]))
+            outfile.write('\n'.join(['%s: %s' % (location, item) for grouping in self.locations for (location, item) in grouping.items()]))
             outfile.write('\n\nPlaythrough:\n\n')
             outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(['  %s: %s' % (location, item) for (location, item) in sphere.items()])) for (sphere_nr, sphere) in self.playthrough.items()]))
             outfile.write('\n\nPaths:\n\n')
