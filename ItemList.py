@@ -385,6 +385,7 @@ def set_up_shops(world):
             shop.active = True
             shop.add_inventory(0, 'Single Arrow', 80)
             shop.add_inventory(1, 'Small Key (Universal)', 100)
+            shop.add_inventory(2, 'Bombs (10)', 80)
 
     #special shop types
 
