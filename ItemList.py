@@ -2,9 +2,12 @@ from collections import namedtuple
 import logging
 import random
 
-from Items import ItemFactory
-from Fill import FillError, fill_restrictive
+from BaseClasses import Region, RegionType, Shop, ShopType, Location
 from Dungeons import get_dungeon_item_pool
+from EntranceShuffle import connect_entrance
+from Fill import FillError, fill_restrictive
+from Items import ItemFactory
+
 
 #This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 #Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
@@ -264,8 +267,81 @@ def generate_itempool(world):
 
     set_up_shops(world)
 
+    if world.retro:
+        set_up_take_anys(world)
+
+    create_dynamic_shop_locations(world)
+
     # distribute crystals
     fill_prizes(world)
+
+take_any_locations = [
+    'Snitch Lady (East)', 'Snitch Lady (West)', 'Bush Covered House', 'Light World Bomb Hut',
+    'Fortune Teller (Light)', 'Lake Hylia Fortune Teller', 'Lumberjack House', 'Bonk Fairy (Light)',
+    'Bonk Fairy (Dark)', 'Lake Hylia Healer Fairy', 'Swamp Healer Fairy', 'Desert Healer Fairy',
+    'Dark Lake Hylia Healer Fairy', 'Dark Lake Hylia Ledge Healer Fairy', 'Dark Desert Healer Fairy',
+    'Dark Death Mountain Healer Fairy', 'Long Fairy Cave', 'Good Bee Cave', '20 Rupee Cave',
+    'Kakariko Gamble Game', 'Capacity Upgrade', '50 Rupee Cave', 'Lost Woods Gamble', 'Hookshot Fairy',
+    'Palace of Darkness Hint', 'East Dark World Hint', 'Archery Game', 'Dark Lake Hylia Ledge Hint',
+    'Dark Lake Hylia Ledge Spike Cave', 'Fortune Teller (Dark)', 'Dark Sanctuary Hint', 'Dark Desert Hint']
+
+def set_up_take_anys(world):
+    regions = random.sample(take_any_locations, 5)
+
+    old_man_take_any = Region("Old Man Sword Cave", RegionType.Cave)
+    world.regions.append(old_man_take_any)
+    world.dynamic_regions.append(old_man_take_any)
+
+    reg = regions.pop()
+    entrance = world.get_region(reg).entrances[0]
+    connect_entrance(world, entrance, old_man_take_any)
+    entrance.target = 0x58
+    old_man_take_any.shop = Shop(old_man_take_any, 0x0112, ShopType.TakeAny, 0xE2, True)
+    world.shops.append(old_man_take_any.shop)
+    old_man_take_any.shop.active = True
+
+    swords = [item for item in world.itempool if item.type == 'Sword']
+    if swords:
+        sword = random.choice(swords)
+        world.itempool.remove(sword)
+        world.itempool.append(ItemFactory('Rupees (20)'))
+        old_man_take_any.shop.add_inventory(0, sword.name, 0, 1, create_location=True)
+    else:
+        old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 1)
+
+    for num in range(4):
+        take_any = Region("Take-Any #{}".format(num+1), RegionType.Cave)
+        world.regions.append(take_any)
+        world.dynamic_regions.append(take_any)
+
+        target, room_id = random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])
+        reg = regions.pop()
+        entrance = world.get_region(reg).entrances[0]
+        connect_entrance(world, entrance, take_any)
+        entrance.target = target
+        take_any.shop = Shop(old_man_take_any, room_id, ShopType.TakeAny, 0xE3, True)
+        world.shops.append(take_any.shop)
+        take_any.shop.active = True
+        take_any.shop.add_inventory(0, 'Blue Potion', 0, 1)
+        take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 1)
+
+    world.intialize_regions()
+
+def create_dynamic_shop_locations(world):
+    for shop in world.shops:
+        for i, item in enumerate(shop.inventory):
+            if item is None:
+                continue
+            if item['create_location']:
+                loc = Location("{} Item {}".format(shop.region.name, i+1), parent=shop.region)
+                shop.region.locations.append(loc)
+                world.dynamic_locations.append(loc)
+
+                world.clear_location_cache()
+
+                world.push_item(loc, ItemFactory(item['item']), False)
+                loc.event = True
+
 
 def fill_prizes(world, attempts=15):
     crystals = ItemFactory(['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6'])

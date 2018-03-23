@@ -63,6 +63,8 @@ class World(object):
         self.can_take_damage = True
         self.difficulty_requirements = None
         self.fix_fake_world = True
+        self.dynamic_regions = []
+        self.dynamic_locations = []
         self.spoiler = Spoiler(self)
         self.lamps_needed_for_dark_rooms = 1
 
@@ -184,6 +186,9 @@ class World(object):
             for region in self.regions:
                 self._cached_locations.extend(region.locations)
         return self._cached_locations
+
+    def clear_location_cache(self):
+        self._cached_locations = None
 
     def get_unfilled_locations(self):
         return [location for location in self.get_locations() if location.item is None]
