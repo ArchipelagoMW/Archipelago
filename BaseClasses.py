@@ -839,6 +839,7 @@ class Spoiler(object):
         self.locations = {}
         self.paths = {}
         self.metadata = {}
+        self.shops = []
 
     def set_entrance(self, entrance, exit, direction):
         self.entrances.append(OrderedDict([('entrance', entrance), ('exit', exit), ('direction', direction)]))
@@ -875,6 +876,19 @@ class Spoiler(object):
             self.locations['Other Locations'] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in other_locations])
             listed_locations.update(other_locations)
 
+        for shop in self.world.shops:
+            if not shop.active:
+                continue
+            shopdata = {'location': shop.region.name,
+                        'type': 'Take Any' if shop.type == ShopType.TakeAny else 'Shop'
+                       }
+            for index, item in enumerate(shop.inventory):
+                if item is None:
+                    continue
+                shopdata['item_{}'.format(index)] = "{} ({})".format(item['item'], item['price']) if item['price'] else item['item']
+            self.shops.append(shopdata)
+
+
         from Main import __version__ as ERVersion
         self.metadata = {'version': ERVersion,
                          'seed': self.world.seed,
@@ -899,6 +913,7 @@ class Spoiler(object):
         out['entrances'] = self.entrances
         out.update(self.locations)
         out['medallions'] = self.medallions
+        out['shops'] = self.shops
         out['playthrough'] = self.playthrough
         out['paths'] = self.paths
         out['meta'] = self.metadata
@@ -925,7 +940,9 @@ class Spoiler(object):
             outfile.write('\n\nMisery Mire Medallion: %s' % self.medallions['Misery Mire'])
             outfile.write('\nTurtle Rock Medallion: %s' % self.medallions['Turtle Rock'])
             outfile.write('\n\nLocations:\n\n')
-            outfile.write('\n'.join(['%s: %s' % (location, item) for grouping in self.locations for (location, item) in grouping.items()]))
+            outfile.write('\n'.join(['%s: %s' % (location, item) for grouping in self.locations.values() for (location, item) in grouping.items()]))
+            outfile.write('\n\nShops:\n\n')
+            outfile.write('\n'.join("{} [{}]\n    {}".format(shop['location'], shop['type'], "\n    ".join(item for item in [shop.get('item_0', None), shop.get('item_1', None), shop.get('item_2', None)] if item)) for shop in self.shops))
             outfile.write('\n\nPlaythrough:\n\n')
             outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(['  %s: %s' % (location, item) for (location, item) in sphere.items()])) for (sphere_nr, sphere) in self.playthrough.items()]))
             outfile.write('\n\nPaths:\n\n')
