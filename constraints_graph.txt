@@ -1467,7 +1467,7 @@ DARKNESS & (
 {
 "edge": "LAB_SLIDING_POWDER_ROOM -> LAB_EAST",
 // bomb attack up hole, go to sliding powder room and hammer roll zip out (backtrack)
-"prereq": "EXPLOSIVES & HAMMER_ROLL_ZIP & ADVANCED & BACKTRACK_1",
+"prereq": "EXPLOSIVES & HAMMER_ROLL_ZIP & ADVANCED & BACKTRACK_2",
 }
 
 {
