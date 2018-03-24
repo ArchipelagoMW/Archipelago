@@ -260,6 +260,7 @@ class Analyzer(object):
 
                 can_exit = False
                 local_backward_frontier = set(locally_exitable)
+                new_locally_backward_exitable = set()
                 while len(local_backward_frontier) > 0 and not can_exit:
                     for node in local_backward_frontier:
                         if can_exit or node in backward_exitable:
@@ -269,28 +270,32 @@ class Analyzer(object):
                             edge = edges[edge_id]
                             if edge.to_location in locally_exitable: continue
                             variables['BACKTRACK_GOALS'] = edge.to_location, base_location
-                            if edge not in untraversable_edges or edge.satisfied(variables):
-                                can_exit = True
-                                break
+                            if edge.edge_id not in untraversable_edges or edge.satisfied(variables):
+                                locally_exitable.add(edge.to_location)
+                                new_locally_backward_exitable.add(edge.to_location)
+                    
+                    local_backward_frontier.clear()
+                    local_backward_frontier, new_locally_backward_exitable = new_locally_backward_exitable, local_backward_frontier
 
                 # Restore Previous Variables Status
+                for name, value in temp_variable_storage.items():
+                    variables[name] = value
+                temp_variable_storage.clear()
+                variables['IS_BACKTRACKING'] = False
+                variables['BACKTRACK_GOALS'] = None, None
+
+                # If we can exit, set the corresponding variables to true.
                 if can_exit:
                     if base_location in locations_set:
                         if not variables[base_location]:
                             current_level_part2.append(base_location)
-                            #variables[base_location] = True
+                            variables[base_location] = True
                     for item_location in data.item_locations_in_node[base_location]:
                         item_name = allocation.item_at_item_location[item_location]
                         if item_name == None: continue
                         if not variables[item_name]:
                             current_level_part2.append(item_name)
-                            #variables[item_name] = True
-                else:
-                    for name, value in temp_variable_storage.items():
-                        variables[name] = value
-                temp_variable_storage.clear()
-                variables['IS_BACKTRACKING'] = False
-                variables['BACKTRACK_GOALS'] = None, None
+                            variables[item_name] = True
 
             for node in current_level_part2:
                 variables[node] = True
