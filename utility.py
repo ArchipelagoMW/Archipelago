@@ -284,8 +284,8 @@ class OpBacktrack(object):
         if not variables['IS_BACKTRACKING']: return False
         untraversable_edges, outgoing_edges, edges = variables['BACKTRACK_DATA']
         current_node, target_node = variables['BACKTRACK_GOALS']
-        reachable = set()
-        frontier = set((current_node,0))
+        reachable = set((current_node,))
+        frontier = set(((current_node,0),))
         frontier_next = set()
 
         while len(frontier) > 0:
