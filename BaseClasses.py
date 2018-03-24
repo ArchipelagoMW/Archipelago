@@ -833,7 +833,7 @@ class Spoiler(object):
 
     def __init__(self, world):
         self.world = world
-        self.entrances = []
+        self.entrances = OrderedDict()
         self.medallions = {}
         self.playthrough = {}
         self.locations = {}
@@ -842,7 +842,7 @@ class Spoiler(object):
         self.shops = []
 
     def set_entrance(self, entrance, exit, direction):
-        self.entrances.append(OrderedDict([('entrance', entrance), ('exit', exit), ('direction', direction)]))
+        self.entrances[(entrance, direction)] = OrderedDict([('entrance', entrance), ('exit', exit), ('direction', direction)])
 
     def parse_data(self):
         self.medallions = OrderedDict([('Misery Mire', self.world.required_medallions[0]), ('Turtle Rock', self.world.required_medallions[1])])
@@ -910,7 +910,7 @@ class Spoiler(object):
     def to_json(self):
         self.parse_data()
         out = OrderedDict()
-        out['entrances'] = self.entrances
+        out['entrances'] = self.entrances.values()
         out.update(self.locations)
         out['medallions'] = self.medallions
         out['shops'] = self.shops
@@ -935,7 +935,7 @@ class Spoiler(object):
             outfile.write('Keysanity enabled:               %s' % ('Yes' if self.metadata['keysanity'] else 'No'))
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
-                outfile.write('\n'.join(['%s %s %s' % (entry['entrance'], '<=>' if entry['direction'] == 'both' else '<=' if entry['direction'] == 'exit' else '=>', entry['exit']) for entry in self.entrances]))
+                outfile.write('\n'.join(['%s %s %s' % (entry['entrance'], '<=>' if entry['direction'] == 'both' else '<=' if entry['direction'] == 'exit' else '=>', entry['exit']) for entry in self.entrances.values()]))
             outfile.write('\n\nMedallions')
             outfile.write('\n\nMisery Mire Medallion: %s' % self.medallions['Misery Mire'])
             outfile.write('\nTurtle Rock Medallion: %s' % self.medallions['Turtle Rock'])
