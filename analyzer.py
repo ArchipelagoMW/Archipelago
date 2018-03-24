@@ -289,13 +289,13 @@ class Analyzer(object):
                     if base_location in locations_set:
                         if not variables[base_location]:
                             current_level_part2.append(base_location)
-                            variables[base_location] = True
+                            #variables[base_location] = True
                     for item_location in data.item_locations_in_node[base_location]:
                         item_name = allocation.item_at_item_location[item_location]
                         if item_name == None: continue
                         if not variables[item_name]:
                             current_level_part2.append(item_name)
-                            variables[item_name] = True
+                            #variables[item_name] = True
 
             for node in current_level_part2:
                 variables[node] = True
