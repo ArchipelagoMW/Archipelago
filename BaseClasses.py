@@ -862,10 +862,6 @@ class Spoiler(object):
         self.locations['Caves'] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in cave_locations])
         listed_locations.update(cave_locations)
 
-        # TODO: The order of these dungeons is pretty strange. Ideally we would want to sort them.
-        # Need to determine if the order in dungeons.py matters for anything. If no we just change that order.
-        # Unfortunately I think when i tried that some of the older shuffles did not like it.
-        # If so, we add a sort order parameter to the constructor
         for dungeon in self.world.dungeons:
             dungeon_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations and loc.parent_region and loc.parent_region.dungeon == dungeon]
             self.locations[dungeon.name] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in dungeon_locations])
