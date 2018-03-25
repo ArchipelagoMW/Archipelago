@@ -6,7 +6,7 @@ import logging
 import random
 import time
 
-from BaseClasses import World, CollectionState, Item
+from BaseClasses import World, CollectionState, Item, Region, Location, Entrance, Shop
 from Regions import create_regions, mark_light_world_regions
 from EntranceShuffle import link_entrances
 from Rom import patch_rom, Sprite, LocalRom, JsonRom
@@ -158,14 +158,12 @@ def copy_world(world):
     create_regions(ret)
     create_dungeons(ret)
 
-    #TODO: copy_dynamic_regions_and_locations() # also adds some new shops
+    copy_dynamic_regions_and_locations(world, ret)
 
     for shop in world.shops:
         copied_shop = ret.get_region(shop.region.name).shop
         copied_shop.active = shop.active
         copied_shop.inventory = copy.copy(shop.inventory)
-
-
 
     # connect copied world
     for region in world.regions:
@@ -194,6 +192,24 @@ def copy_world(world):
     set_rules(ret)
 
     return ret
+
+def copy_dynamic_regions_and_locations(world, ret):
+    for region in world.dynamic_regions:
+        new_reg = Region(region.name, region.type)
+        ret.regions.append(new_reg)
+        ret.dynamic_regions.append(new_reg)
+
+        # Note: ideally exits should be copied here, but the current use case (Take anys) do not require this
+
+        if region.shop:
+            new_reg.shop = Shop(new_reg, region.shop.room_id, region.shop.type, region.shop.shopkeeper_config, region.shop.replaceable)
+            ret.shops.append(new_reg.shop)
+
+    for location in world.dynamic_locations:
+        new_loc = Location(location.name, location.address, location.crystal, location.hint_text, location.parent_region)
+        new_reg = ret.get_region(location.parent_region.name)
+        new_reg.locations.append(new_loc)
+
 
 def create_playthrough(world):
     # create a copy as we will modify it

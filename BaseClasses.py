@@ -63,6 +63,8 @@ class World(object):
         self.can_take_damage = True
         self.difficulty_requirements = None
         self.fix_fake_world = True
+        self.dynamic_regions = []
+        self.dynamic_locations = []
         self.spoiler = Spoiler(self)
         self.lamps_needed_for_dark_rooms = 1
 
@@ -184,6 +186,9 @@ class World(object):
             for region in self.regions:
                 self._cached_locations.extend(region.locations)
         return self._cached_locations
+
+    def clear_location_cache(self):
+        self._cached_locations = None
 
     def get_unfilled_locations(self):
         return [location for location in self.get_locations() if location.item is None]
@@ -828,19 +833,58 @@ class Spoiler(object):
 
     def __init__(self, world):
         self.world = world
-        self.entrances = []
+        self.entrances = OrderedDict()
         self.medallions = {}
         self.playthrough = {}
         self.locations = {}
         self.paths = {}
         self.metadata = {}
+        self.shops = []
 
     def set_entrance(self, entrance, exit, direction):
-        self.entrances.append(OrderedDict([('entrance', entrance), ('exit', exit), ('direction', direction)]))
+        self.entrances[(entrance, direction)] = OrderedDict([('entrance', entrance), ('exit', exit), ('direction', direction)])
 
     def parse_data(self):
         self.medallions = OrderedDict([('Misery Mire', self.world.required_medallions[0]), ('Turtle Rock', self.world.required_medallions[1])])
-        self.locations = {'other locations': OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in self.world.get_locations()])}
+
+        self.locations = OrderedDict()
+        listed_locations = set()
+
+        lw_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations and loc.parent_region and loc.parent_region.type == RegionType.LightWorld]
+        self.locations['Light World'] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in lw_locations])
+        listed_locations.update(lw_locations)
+
+        dw_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations and loc.parent_region and loc.parent_region.type == RegionType.DarkWorld]
+        self.locations['Dark World'] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in dw_locations])
+        listed_locations.update(dw_locations)
+
+        cave_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations and loc.parent_region and loc.parent_region.type == RegionType.Cave]
+        self.locations['Caves'] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in cave_locations])
+        listed_locations.update(cave_locations)
+
+        for dungeon in self.world.dungeons:
+            dungeon_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations and loc.parent_region and loc.parent_region.dungeon == dungeon]
+            self.locations[dungeon.name] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in dungeon_locations])
+            listed_locations.update(dungeon_locations)
+
+        other_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations]
+        if other_locations:
+            self.locations['Other Locations'] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in other_locations])
+            listed_locations.update(other_locations)
+
+        for shop in self.world.shops:
+            if not shop.active:
+                continue
+            shopdata = {'location': shop.region.name,
+                        'type': 'Take Any' if shop.type == ShopType.TakeAny else 'Shop'
+                       }
+            for index, item in enumerate(shop.inventory):
+                if item is None:
+                    continue
+                shopdata['item_{}'.format(index)] = "{} ({})".format(item['item'], item['price']) if item['price'] else item['item']
+            self.shops.append(shopdata)
+
+
         from Main import __version__ as ERVersion
         self.metadata = {'version': ERVersion,
                          'seed': self.world.seed,
@@ -862,9 +906,10 @@ class Spoiler(object):
     def to_json(self):
         self.parse_data()
         out = OrderedDict()
-        out['entrances'] = self.entrances
+        out['entrances'] = self.entrances.values()
         out.update(self.locations)
         out['medallions'] = self.medallions
+        out['shops'] = self.shops
         out['playthrough'] = self.playthrough
         out['paths'] = self.paths
         out['meta'] = self.metadata
@@ -886,12 +931,14 @@ class Spoiler(object):
             outfile.write('Keysanity enabled:               %s' % ('Yes' if self.metadata['keysanity'] else 'No'))
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
-                outfile.write('\n'.join(['%s %s %s' % (entry['entrance'], '<=>' if entry['direction'] == 'both' else '<=' if entry['direction'] == 'exit' else '=>', entry['exit']) for entry in self.entrances]))
+                outfile.write('\n'.join(['%s %s %s' % (entry['entrance'], '<=>' if entry['direction'] == 'both' else '<=' if entry['direction'] == 'exit' else '=>', entry['exit']) for entry in self.entrances.values()]))
             outfile.write('\n\nMedallions')
             outfile.write('\n\nMisery Mire Medallion: %s' % self.medallions['Misery Mire'])
             outfile.write('\nTurtle Rock Medallion: %s' % self.medallions['Turtle Rock'])
             outfile.write('\n\nLocations:\n\n')
-            outfile.write('\n'.join(['%s: %s' % (location, item) for (location, item) in self.locations['other locations'].items()]))
+            outfile.write('\n'.join(['%s: %s' % (location, item) for grouping in self.locations.values() for (location, item) in grouping.items()]))
+            outfile.write('\n\nShops:\n\n')
+            outfile.write('\n'.join("{} [{}]\n    {}".format(shop['location'], shop['type'], "\n    ".join(item for item in [shop.get('item_0', None), shop.get('item_1', None), shop.get('item_2', None)] if item)) for shop in self.shops))
             outfile.write('\n\nPlaythrough:\n\n')
             outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(['  %s: %s' % (location, item) for (location, item) in sphere.items()])) for (sphere_nr, sphere) in self.playthrough.items()]))
             outfile.write('\n\nPaths:\n\n')

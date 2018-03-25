@@ -1083,7 +1083,7 @@ class RawMBTextMapper(CharTextMapper):
              "服": 0xFD,
              "月": 0xFE,
              "姫": 0xFF}
-    alpha_offset = 0x69
+    alpha_offset = 0x49
     number_offset = 0x70
 
     @classmethod
