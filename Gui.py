@@ -149,7 +149,7 @@ def guiMain(args=None):
     logicFrame = Frame(drowDownFrame)
     logicVar = StringVar()
     logicVar.set('noglitches')
-    logicOptionMenu = OptionMenu(logicFrame, logicVar, 'noglitches', 'minorglitches')
+    logicOptionMenu = OptionMenu(logicFrame, logicVar, 'noglitches', 'minorglitches', 'nologic')
     logicOptionMenu.pack(side=RIGHT)
     logicLabel = Label(logicFrame, text='Game logic')
     logicLabel.pack(side=LEFT)

@@ -20,12 +20,14 @@ class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
 def start():
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument('--create_spoiler', help='Output a Spoiler File', action='store_true')
-    parser.add_argument('--logic', default='noglitches', const='noglitches', nargs='?', choices=['noglitches', 'minorglitches'],
+    parser.add_argument('--logic', default='noglitches', const='noglitches', nargs='?', choices=['noglitches', 'minorglitches', 'nologic'],
                         help='''\
                              Select Enforcement of Item Requirements. (default: %(default)s)
                              No Glitches:
                              Minor Glitches: May require Fake Flippers, Bunny Revival
                                              and Dark Room Navigation.
+                             No Logic: Distribute items without regard for
+                                             item requirements.
                              ''')
     parser.add_argument('--mode', default='open', const='open', nargs='?', choices=['standard', 'open', 'swordless'],
                         help='''\

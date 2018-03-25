@@ -54,6 +54,10 @@ The game can be completed without knowing how to perform glitches of any kind.
 
 May require Fake Flippers, Bunny Revival.
 
+### No Logic
+
+Items are placed without regard for progression or the seed being possible. Major glitches are likely required.
+
 ## Game Goal
 
 ### Ganon
@@ -259,7 +263,7 @@ generate spoilers for statistical analysis.
 
 ## Enable L/R button quickswapping
 
-Use to enable quick item swap with L/R buttons
+Use to enable quick item swap with L/R buttons. Press L and R together to switch the state of items like the Mushroom/Powder pair.
 
 ## Keysanity
 
@@ -268,6 +272,16 @@ in their native dungeon. Small Keys dropped by enemies or found in pots are not 
 is traditionally a guaranteed Small Key still is. These items will be distributed according to the v26/balanced algorithm, but
 the rest of the itempool will respect the algorithm setting. Music for dungeons is randomized so it cannot be used as a tell
 for which dungeons contain pendants and crystals; finding a Map for a dungeon will allow the overworld map to display its prize.
+
+## Retro
+
+This setting turns all Small Keys into universal Small Keys that can be used in any dungeon and are distributed across the world.
+The Bow now consumed rupees to shoot; the cost is 10 rupees per Wood Arrow and 50 per Silver Arrow. Shooting Wood Arrows requires
+the purchase of an arrow item from shops, and to account for this and the dynamic use of keys, both Wood Arrows and Small Keys will
+be added to several shops around the world. Four "take any" caves are added that allow the player to choose between an extra Heart
+Container and a Bottle being filled with Blue Potion, and one of the four swords from the item pool is placed into a special cave as
+well. The five caves that are removed for these will be randomly selected single entrance caves that did not contain any items or any shops.
+In further concert with the Bow changes, all arrows under pots, in chests, and elsewhere in the seed will be replaced with rupees.
 
 ## Place Dungeon Items
 
@@ -311,7 +325,7 @@ Show the help message and exit.
 Output a Spoiler File (default: False)
 
 ```
---logic [{noglitches,minorglitches}]
+--logic [{noglitches,minorglitches,nologic}]
 ```
 
 Select the game logic (default: noglitches)
@@ -353,7 +367,7 @@ Select the setting for progressive equipment. (default: on)
 Select item distribution algorithm. (default: balanced)
 
 ```
---shuffle [{default,simple,restricted,full,madness,insanity,dungeonsfull,dungeonssimple}]
+--shuffle [{default,simple,restricted,full,crossed,insanity,restricted_legacy,full_legacy,madness_legacy,insanity_legacy,dungeonsfull,dungeonssimple}]
 ```
 
 Select entrance shuffle algorithm. (default: full)
@@ -408,6 +422,12 @@ Disables game music, resulting in the game sound being just the SFX. (default: F
 Enable Keysanity (default: False)
 
 ```
+--retro
+```
+
+Enable Retro mode (default: False)
+
+```
 --nodungeonitems
 ```
 
@@ -419,6 +439,12 @@ This may lead to different amount of itempool items being placed in a dungeon th
 ```
 
 Select frequency of beeps when on low health. (default: normal)
+
+```
+--heartcolor [{red,blue,green,yellow}]
+```
+
+Select the color of Link\'s heart meter. (default: red)
 
 ```
 --sprite SPRITE

@@ -3,6 +3,15 @@ import logging
 
 
 def set_rules(world):
+
+    if world.logic == 'nologic':
+        logging.getLogger('').info('WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
+        world.get_region('Links House').can_reach = lambda state: True
+        world.get_region('Sanctuary').can_reach = lambda state: True
+        old_rule = world.get_region('Old Man House').can_reach
+        world.get_region('Old Man House').can_reach = lambda state: state.can_reach('Old Man', 'Location') or old_rule(state)
+        return
+
     global_rules(world)
 
     if world.mode == 'open':
@@ -469,7 +478,7 @@ def swordless_rules(world):
     set_rule(world.get_location('Bombos Tablet'), lambda state: state.has('Book of Mudora') and state.has('Hammer') and state.has_Mirror())
     set_rule(world.get_entrance('Misery Mire'), lambda state: state.has_Pearl() and state.has_misery_mire_medallion())  # sword not required to use medallion for opening in swordless (!)
     set_rule(world.get_entrance('Turtle Rock'), lambda state: state.has_Pearl() and state.has_turtle_rock_medallion() and state.can_reach('Turtle Rock (Top)', 'Region'))   # sword not required to use medallion for opening in swordless (!)
-    set_rule(world.get_entrance('Skull Woods Torch Room'), lambda state: state.has_key('Small Key (Skull Woods)', 3) and state.has('Fire Rod'))  # no curtain
+    set_rule(world.get_entrance('Skull Woods Torch Room'), lambda state: state.has_key('Small Key (Skull Woods)', 3) and state.has('Fire Rod') and (state.has('Hammer') or state.can_extend_magic(10)))  # no curtain
     set_rule(world.get_entrance('Ice Palace Entrance Room'), lambda state: state.has('Fire Rod') or state.has('Bombos')) #in swordless mode bombos pads are present in the relevant parts of ice palace
     set_rule(world.get_location('Agahnim 2'), lambda state: state.has('Hammer') or state.has('Bug Catching Net'))
     set_rule(world.get_location('Ganon'), lambda state: state.has('Hammer') and state.has_fire_source() and state.has('Silver Arrows') and state.can_shoot_arrows() and state.has('Crystal 1') and state.has('Crystal 2')
