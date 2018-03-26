@@ -305,9 +305,9 @@ def set_up_take_anys(world):
         sword = random.choice(swords)
         world.itempool.remove(sword)
         world.itempool.append(ItemFactory('Rupees (20)'))
-        old_man_take_any.shop.add_inventory(0, sword.name, 0, 1, create_location=True)
+        old_man_take_any.shop.add_inventory(0, sword.name, 0, 0, create_location=True)
     else:
-        old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 1)
+        old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0)
 
     for num in range(4):
         take_any = Region("Take-Any #{}".format(num+1), RegionType.Cave)
@@ -322,8 +322,8 @@ def set_up_take_anys(world):
         take_any.shop = Shop(take_any, room_id, ShopType.TakeAny, 0xE3, True)
         world.shops.append(take_any.shop)
         take_any.shop.active = True
-        take_any.shop.add_inventory(0, 'Blue Potion', 0, 1)
-        take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 1)
+        take_any.shop.add_inventory(0, 'Blue Potion', 0, 0)
+        take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0)
 
     world.intialize_regions()
 
