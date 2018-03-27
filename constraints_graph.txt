@@ -1027,7 +1027,7 @@ DARKNESS & (
 }
 
 {
-"edge": "SKY_BRIDGE_REGEN_UP_LEDGE -> PARK_MAIN",
+"edge": "SKY_BRIDGE_REGEN_UP_LEDGE -> PARK_TOWN_ENTRANCE",
 "prereq": "NONE",
 }
 
@@ -1056,7 +1056,7 @@ DARKNESS & (
 }
 
 {
-"edge": "SKY_BRIDGE_MAIN -> PARK_MAIN",
+"edge": "SKY_BRIDGE_MAIN -> PARK_TOWN_ENTRANCE",
 "prereq": "
         AIR_DASH
         | AIR_JUMP
@@ -1067,7 +1067,7 @@ DARKNESS & (
 }
 
 {
-"edge": "SKY_BRIDGE_SLIDE_AREA -> PARK_MAIN",
+"edge": "SKY_BRIDGE_SLIDE_AREA -> PARK_TOWN_ENTRANCE",
 // technically goes through SKY_BRIDGE_MAIN, but not really important
 "prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
 }
