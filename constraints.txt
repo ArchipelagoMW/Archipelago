@@ -133,7 +133,7 @@
 
 {
 "item": "CARROT_BOMB",
-"from_location": "FOREST_START",
+"from_location": "FOREST_COCOA_ROOM",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
@@ -155,8 +155,12 @@
 {
 "item": "HP_UP_FOREST_POST_COCOA",
 "from_location": "FOREST_START",
-"entry_prereq": "PIKO_HAMMER | EXPLOSIVES_ENEMY",
-"exit_prereq": "NONE",
+"entry_prereq": "PIKO_HAMMER",
+"exit_prereq": "PIKO_HAMMER | EXPLOSIVES_ENEMY",
+
+"alternate_entries": {
+    "FOREST_COCOA_ROOM": "EXPLOSIVES_ENEMY",
+    },
 }
 
 {
@@ -473,7 +477,7 @@
 
 {
 "item": "MP_UP_BEACH_PILLAR",
-"from_location": "BEACH_MAIN",
+"from_location": "BEACH_FOREST_ENTRANCE",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
@@ -644,46 +648,42 @@
 
 {
 "item": "MANA_SURGE",
-"from_location": "RAVINE_LOWER",
-"entry_prereq": "PROLOGUE_TRIGGER",
-"exit_prereq": "PROLOGUE_TRIGGER",
-
-"alternate_exits": {
-    "RAVINE_UPPER_EAST": "NONE",
-}
+"from_location": "RAVINE_MANA_SURGE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
 }
 
 {
 "item": "HP_UP_PALACE",
-"from_location": "PALACE_MAIN",
+"from_location": "PALACE_LEVEL_5",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "WATER_ORB",
-"from_location": "PALACE_MAIN",
+"from_location": "PALACE_LEVEL_5",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "HP_UP_WEST_AQUARIUM",
-"from_location": "AQUARIUM_MAIN",
+"from_location": "AQUARIUM_WEST",
 "entry_prereq": "DARKNESS & EXPLOSIVES",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "MANA_PLUS",
-"from_location": "AQUARIUM_MAIN",
+"from_location": "AQUARIUM_WEST",
 "entry_prereq": "DARKNESS",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "ATK_UP_PALACE",
-"from_location": "PALACE_MAIN",
+"from_location": "PALACE_ATTACK_UP_TUNNEL",
 "entry_prereq": "FIRE_ORB",
 "exit_prereq": "NONE",
 }
@@ -697,7 +697,7 @@
 
 {
 "item": "REGEN_UP_PALACE",
-"from_location": "PALACE_MAIN",
+"from_location": "PALACE_LEVEL_3",
 "entry_prereq": "
     DARKNESS &
     (
@@ -715,14 +715,14 @@
 
 {
 "item": "STAMINA_PLUS",
-"from_location": "PALACE_MAIN",
+"from_location": "PALACE_WARP_LEVEL_1_2",
 "entry_prereq": "EXPLOSIVES_ENEMY",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "MP_UP_PALACE",
-"from_location": "PALACE_MAIN",
+"from_location": "PALACE_WARP_LEVEL_1_2",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
@@ -775,7 +775,7 @@
 
 {
 "item": "ATK_UP_MID_AQUARIUM",
-"from_location": "AQUARIUM_MAIN",
+"from_location": "AQUARIUM_MID",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
@@ -793,14 +793,14 @@
 
 {
 "item": "MP_UP_SNOWLAND",
-"from_location": "SNOWLAND_EAST",
+"from_location": "SNOWLAND_MID",
 "entry_prereq": "EXPLOSIVES_ENEMY",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "QUICK_BARRETTE",
-"from_location": "SNOWLAND_EAST",
+"from_location": "SNOWLAND_LAKE",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
@@ -821,7 +821,7 @@
 
 {
 "item": "REGEN_UP_SNOWLAND_WATER",
-"from_location": "SNOWLAND_EAST",
+"from_location": "SNOWLAND_LAKE",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
@@ -842,7 +842,7 @@
 
 {
 "item": "CARROT_BOOST",
-"from_location": "SNOWLAND_EAST",
+"from_location": "SNOWLAND_LAKE",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
@@ -863,7 +863,7 @@
 
 {
 "item": "REGEN_UP_NORTHWEST_RIVERBANK",
-"from_location": "RIVERBANK_MAIN",
+"from_location": "RIVERBANK_LEVEL3",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
@@ -884,7 +884,7 @@
 
 {
 "item": "ATK_GROW",
-"from_location": "RIVERBANK_MAIN",
+"from_location": "RIVERBANK_LEVEL2",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
@@ -898,14 +898,14 @@
 
 {
 "item": "ATK_UP_RIVERBANK_PIT",
-"from_location": "RIVERBANK_MAIN",
+"from_location": "RIVERBANK_MAIN_LEVEL1",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "BUNNY_WHIRL",
-"from_location": "RIVERBANK_LOWER",
+"from_location": "RIVERBANK_LOWER_LEFT",
 "entry_prereq": "
     PIKO_HAMMER | (CARROT_SHOOTER & BOOST & ITM_HARD)
     // slide zip from bomb block slide tunnel in room to the left
@@ -916,14 +916,14 @@
 
 {
 "item": "EXPLODE_SHOT",
-"from_location": "RIVERBANK_MAIN",
+"from_location": "RIVERBANK_LEVEL3",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "MP_UP_MID_RIVERBANK",
-"from_location": "RIVERBANK_MAIN",
+"from_location": "RIVERBANK_MAIN_LEVEL1",
 "entry_prereq": "EXPLOSIVES_ENEMY",
 // only relevant if boost is not obtained
 "exit_prereq": "
@@ -938,8 +938,12 @@
 
 {
 "item": "ATK_UP_EAST_RIVERBANK",
-"from_location": "RIVERBANK_LOWER",
-"entry_prereq": "(EXPLOSIVES & SLIDING_POWDER) | DOWNDRILL_SEMISOLID_CLIP",
+"from_location": "RIVERBANK_MAIN_LEVEL1",
+"entry_prereq": "
+    DOWNDRILL_SEMISOLID_CLIP
+    // A bit of a workaround. Assumption: You can walk from riverbank main to health room, unconstrained.
+    | (EXPLOSIVES & RIVERBANK_LOWER_HEALTH_UP_ROOM & SLIDING_POWDER)
+",
 "exit_prereq": "NONE",
 }
 
@@ -952,7 +956,7 @@
 
 {
 "item": "FRAME_CANCEL",
-"from_location": "RIVERBANK_MAIN",
+"from_location": "RIVERBANK_LEVEL3",
 "entry_prereq": " EXPLOSIVES_ENEMY & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
 "exit_prereq": "(CARROT_BOMB_ENTRY | CARROT_SHOOTER_ENTRY) & SLIDING_POWDER",
 }
@@ -973,7 +977,7 @@
 
 {
 "item": "HP_UP_RIVERBANK",
-"from_location": "RIVERBANK_LOWER",
+"from_location": "RIVERBANK_LOWER_HEALTH_UP_ROOM",
 "entry_prereq": "EXPLOSIVES_ENEMY | BUNNY_WHIRL | AIR_DASH | BLOCK_CLIP | PIKO_HAMMER_LEVELED",
 "exit_prereq": "NONE",
 }
@@ -996,7 +1000,7 @@
 
 {
 "item": "HP_UP_EVERNIGHT",
-"from_location": "EVERNIGHT_MAIN",
+"from_location": "EVERNIGHT_NORTHWEST",
 "entry_prereq": "EXPLOSIVES",
 "exit_prereq": "NONE",
 }
@@ -1017,7 +1021,7 @@
 
 {
 "item": "ATK_UP_EVERNIGHT_UPRPRC",
-"from_location": "EVERNIGHT_MAIN",
+"from_location": "EVERNIGHT_NORTHWEST",
 "entry_prereq": "SLIDING_POWDER & (EXPLOSIVES | DOWNDRILL_SEMISOLID_CLIP)",
 "exit_prereq": "NONE",
 }
@@ -1059,7 +1063,7 @@
 
 {
 "item": "PACK_UP_NORTH_EVERNIGHT",
-"from_location": "EVERNIGHT_MAIN",
+"from_location": "EVERNIGHT_NORTHWEST",
 "entry_prereq": "AIR_DASH | AIR_JUMP | (BUNNY_STRIKE & ITM_HARD) | (RABI_SLIPPERS & ADV_STUPID) | (WALL_JUMP_LV2 & ADV_STUPID)",
 "exit_prereq": "NONE",
 }
@@ -1500,21 +1504,21 @@
 
 {
 "item": "EGG_PALACE_BRIDGE",
-"from_location": "PALACE_MAIN",
+"from_location": "PALACE_LEVEL_4",
 "entry_prereq": "EXPLOSIVES_ENEMY",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "EGG_AQUARIUM",
-"from_location": "AQUARIUM_MAIN",
+"from_location": "AQUARIUM_WEST",
 "entry_prereq": "DARKNESS | SLIDING_POWDER",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "EGG_PALACE_WALL",
-"from_location": "PALACE_MAIN",
+"from_location": "PALACE_LEVEL_3",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
@@ -1542,21 +1546,21 @@
 
 {
 "item": "EGG_SNOWLAND_LAKE",
-"from_location": "SNOWLAND_EAST",
+"from_location": "SNOWLAND_LAKE",
 "entry_prereq": "ADV_STUPID | AIR_JUMP | WALL_JUMP_LV2 | (WALL_JUMP & AIR_DASH & ITM_HARD) | WATER_ORB | WHIRL_BONK",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "EGG_RIVERBANK_SPIDER_SPIKE",
-"from_location": "RIVERBANK_MAIN",
+"from_location": "RIVERBANK_LEVEL3",
 "entry_prereq": "EXPLOSIVES_ENEMY",
 "exit_prereq": "NONE",
 }
 
 {
 "item": "EGG_RIVERBANK_WALL",
-"from_location": "RIVERBANK_MAIN",
+"from_location": "RIVERBANK_LEVEL2",
 "entry_prereq": "(RABI_SLIPPERS & ADV_STUPID) | (BUNNY_WHIRL & ITM_HARD) | AIR_JUMP | AIR_DASH | SLIDING_POWDER | (WALL_JUMP & ADV_STUPID)",
 "exit_prereq": "NONE",
 }

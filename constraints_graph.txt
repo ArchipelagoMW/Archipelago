@@ -5,12 +5,32 @@
 
 // Starting Forest
 {
-"edge": "FOREST_START -> FOREST_UPPER_EAST",
+"edge": "FOREST_START -> FOREST_EAST_ABOVE_SPRING",
+"prereq": "NONE",
+}
+
+{
+"edge": "FOREST_EAST_ABOVE_SPRING -> FOREST_START",
+"prereq": "NONE",
+}
+
+{
+"edge": "FOREST_START -> FOREST_COCOA_ROOM",
+"prereq": "NONE",
+}
+
+{
+"edge": "FOREST_COCOA_ROOM -> FOREST_START",
+"prereq": "NONE",
+}
+
+{
+"edge": "FOREST_EAST_ABOVE_SPRING -> FOREST_UPPER_EAST",
 "prereq": "ITM_HARD | (SPEED1 & ITM) | AIR_DASH | AIR_JUMP",
 }
 
 {
-"edge": "FOREST_UPPER_EAST -> FOREST_START",
+"edge": "FOREST_UPPER_EAST -> FOREST_EAST_ABOVE_SPRING",
 "prereq": "NONE",
 }
 
@@ -63,12 +83,12 @@ EXPLOSIVES_ENEMY & SLIDING_POWDER & PROLOGUE_TRIGGER &
 }
 
 {
-"edge": "FOREST_START -> FOREST_UPPER_EAST_EGG_LEDGE",
+"edge": "FOREST_EAST_ABOVE_SPRING -> FOREST_UPPER_EAST_EGG_LEDGE",
 "prereq": "WALL_JUMP_LV2 & (AIR_JUMP | WHIRL_BONK_CANCEL)",
 }
 
 {
-"edge": "FOREST_UPPER_EAST_EGG_LEDGE -> FOREST_START",
+"edge": "FOREST_UPPER_EAST_EGG_LEDGE -> FOREST_EAST_ABOVE_SPRING",
 "prereq": "NONE",
 }
 
@@ -101,22 +121,22 @@ EXPLOSIVES_ENEMY & SLIDING_POWDER & PROLOGUE_TRIGGER &
 }
 
 {
-"edge": "FOREST_START -> FOREST_UPPER_RIVERBANK_EXIT",
+"edge": "FOREST_EAST_ABOVE_SPRING -> FOREST_UPPER_RIVERBANK_EXIT",
 "prereq": "PROLOGUE_TRIGGER",
 }
 
 {
-"edge": "FOREST_UPPER_RIVERBANK_EXIT -> FOREST_START",
+"edge": "FOREST_UPPER_RIVERBANK_EXIT -> FOREST_EAST_ABOVE_SPRING",
 "prereq": "PROLOGUE_TRIGGER",
 }
 
 {
-"edge": "FOREST_START -> FOREST_LOWER_RIVERBANK_EXIT",
+"edge": "FOREST_EAST_ABOVE_SPRING -> FOREST_LOWER_RIVERBANK_EXIT",
 "prereq": "DOWNDRILL_SEMISOLID_CLIP",
 }
 
 {
-"edge": "FOREST_LOWER_RIVERBANK_EXIT -> FOREST_START",
+"edge": "FOREST_LOWER_RIVERBANK_EXIT -> FOREST_EAST_ABOVE_SPRING",
 "prereq": "NONE",
 }
 
@@ -152,6 +172,11 @@ EXPLOSIVES_ENEMY & SLIDING_POWDER & PROLOGUE_TRIGGER &
 {
 "edge": "FOREST_NIGHT_WEST -> FOREST_NIGHT_ATK_UP_ROOM",
 "prereq": "EXPLOSIVES_ENEMY",
+}
+
+{
+"edge": "FOREST_NIGHT_WEST -> FOREST_START",
+"prereq": "IMPOSSIBLE", // dummy edge for template constraint
 }
 
 {
@@ -357,6 +382,15 @@ PROLOGUE_TRIGGER & (
 // '---------------------.
 
 // Beach and Pyramid
+{
+"edge": "BEACH_MAIN -> BEACH_FOREST_ENTRANCE",
+"prereq": "NONE",
+}
+
+{
+"edge": "BEACH_FOREST_ENTRANCE -> BEACH_MAIN",
+"prereq": "NONE",
+}
 
 {
 "edge": "BEACH_MAIN -> BEACH_UNDERWATER_ENTRANCE",
@@ -754,6 +788,26 @@ PROLOGUE_TRIGGER & (
 }
 
 {
+"edge": "RAVINE_LOWER -> RAVINE_MANA_SURGE",
+"prereq": "PROLOGUE_TRIGGER",
+}
+
+{
+"edge": "RAVINE_MANA_SURGE -> RAVINE_LOWER",
+"prereq": "PROLOGUE_TRIGGER",
+}
+
+{
+"edge": "RAVINE_UPPER_EAST -> RAVINE_MANA_SURGE",
+"prereq": "SLIDING_POWDER & DOWNDRILL_SEMISOLID_CLIP",
+}
+
+{
+"edge": "RAVINE_MANA_SURGE -> RAVINE_UPPER_EAST",
+"prereq": "NONE",
+}
+
+{
 "edge": "RAVINE_LOWER -> RAVINE_UPPER_EAST",
 "prereq": "PROLOGUE_TRIGGER",
 }
@@ -765,7 +819,7 @@ PROLOGUE_TRIGGER & (
 
 {
 "edge": "RAVINE_LOWER -> RAVINE_UPPER_WEST",
-"prereq": "AIR_JUMP & WALL_JUMP_LV2 & SLIDING_POWDER", // jump up the long chasm
+"prereq": "AIR_JUMP & WALL_JUMP_LV2 & (SLIDING_POWDER | PROLOGUE_TRIGGER)", // jump up the long chasm
 }
 
 {
@@ -850,6 +904,25 @@ PROLOGUE_TRIGGER & (
 
 
 // Park and Sky Bridge
+{
+"edge": "PARK_MAIN -> PARK_KOTRI",
+"prereq": "NONE",
+}
+
+{
+"edge": "PARK_KOTRI -> PARK_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "PARK_KOTRI -> PARK_TOWN_ENTRANCE",
+"prereq": "NONE",
+}
+
+{
+"edge": "PARK_TOWN_ENTRANCE -> PARK_KOTRI",
+"prereq": "NONE",
+}
 
 {
 "edge": "PARK_MAIN -> UPRPRC_BASE",
@@ -1009,24 +1082,53 @@ DARKNESS & (
 // '---------------------.
 
 // Snowland, Palace and Icy Summit
-
 {
-"edge": "SNOWLAND_EAST -> SNOWLAND_WEST",
-"prereq": "SLIDING_POWDER",
-}
-
-{
-"edge": "SNOWLAND_WEST -> SNOWLAND_EAST",
+"edge": "SNOWLAND_EAST -> SNOWLAND_MID",
 "prereq": "NONE",
 }
 
 {
-"edge": "SNOWLAND_EAST -> SNOWLAND_CHRISTMAS_TREE",
+"edge": "SNOWLAND_MID -> SNOWLAND_EAST",
+"prereq": "NONE",
+}
+
+{
+"edge": "SNOWLAND_EAST -> SNOWLAND_LAKE",
+"prereq": "NONE",
+}
+
+{
+"edge": "SNOWLAND_LAKE -> SNOWLAND_EAST",
+"prereq": "NONE",
+}
+
+{
+"edge": "SNOWLAND_LAKE -> SNOWLAND_MID",
+"prereq": "NONE",
+}
+
+{
+"edge": "SNOWLAND_MID -> SNOWLAND_LAKE",
+"prereq": "NONE",
+}
+
+{
+"edge": "SNOWLAND_WEST -> SNOWLAND_MID",
+"prereq": "SLIDING_POWDER",
+}
+
+{
+"edge": "SNOWLAND_MID -> SNOWLAND_WEST",
+"prereq": "NONE",
+}
+
+{
+"edge": "SNOWLAND_MID -> SNOWLAND_CHRISTMAS_TREE",
 "prereq": "EXPLOSIVES & SLIDING_POWDER",
 }
 
 {
-"edge": "SNOWLAND_CHRISTMAS_TREE -> SNOWLAND_EAST",
+"edge": "SNOWLAND_CHRISTMAS_TREE -> SNOWLAND_MID",
 "prereq": "EXPLOSIVES & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
 }
 
@@ -1045,12 +1147,12 @@ DARKNESS & (
 }
 
 {
-"edge": "SNOWLAND_EAST -> ICY_SUMMIT_MAIN",
+"edge": "SNOWLAND_MID -> ICY_SUMMIT_MAIN",
 "prereq": "NONE",
 }
 
 {
-"edge": "ICY_SUMMIT_MAIN -> SNOWLAND_EAST",
+"edge": "ICY_SUMMIT_MAIN -> SNOWLAND_MID",
 "prereq": "NONE",
 }
 
@@ -1089,17 +1191,82 @@ DARKNESS & (
 }
 
 {
-"edge": "SNOWLAND_WEST -> PALACE_MAIN",
+"edge": "SNOWLAND_WEST -> PALACE_WARP_LEVEL_1_2",
 "prereq": "NONE",
 }
 
 {
-"edge": "PALACE_MAIN -> SNOWLAND_WEST",
+"edge": "PALACE_WARP_LEVEL_1_2 -> SNOWLAND_WEST",
 "prereq": "NONE",
 }
 
 {
-"edge": "PALACE_MAIN -> SNOWLAND_CHRISTMAS_TREE",
+"edge": "PALACE_WARP_LEVEL_1_2 -> PALACE_LEVEL_3",
+"prereq": "NONE",
+}
+
+{
+"edge": "PALACE_LEVEL_3 -> PALACE_WARP_LEVEL_1_2",
+"prereq": "NONE",
+}
+
+{
+"edge": "PALACE_WARP_LEVEL_1_2 -> PALACE_ATTACK_UP_TUNNEL",
+"prereq": "
+    AIR_JUMP
+    | (WALL_JUMP_LV2 & (ITM_HARD | RABI_SLIPPERS))
+    | ((RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL) & AIR_DASH)
+    // can probably be done with lower level items, haven't done it successfully yet.
+    | (SPEED3 & AIR_DASH_LV3 & ADV_STUPID)
+    ",
+}
+
+{
+"edge": "PALACE_ATTACK_UP_TUNNEL -> PALACE_WARP_LEVEL_1_2",
+"prereq": "NONE",
+}
+
+{
+"edge": "PALACE_LEVEL_3 -> PALACE_ATTACK_UP_TUNNEL",
+"prereq": "NONE",
+}
+
+{
+"edge": "PALACE_ATTACK_UP_TUNNEL -> PALACE_LEVEL_3",
+"prereq": "
+    AIR_JUMP
+    | (WALL_JUMP_LV2 & (ITM_HARD | RABI_SLIPPERS))
+    | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE_CANCEL & BUNNY_AMULET_LV2)
+",
+}
+
+{
+"edge": "PALACE_LEVEL_3 -> PALACE_LEVEL_4",
+"prereq": "NONE",
+}
+
+{
+"edge": "PALACE_LEVEL_4 -> PALACE_LEVEL_3",
+"prereq": "NONE",
+}
+
+{
+"edge": "PALACE_LEVEL_4 -> PALACE_LEVEL_5",
+"prereq": "NONE",
+}
+
+{
+"edge": "PALACE_LEVEL_5 -> PALACE_LEVEL_4",
+"prereq": "NONE",
+}
+
+{
+"edge": "PALACE_LEVEL_5 -> SNOWLAND_WEST",
+"prereq": "NONE",
+}
+
+{
+"edge": "PALACE_LEVEL_5 -> SNOWLAND_CHRISTMAS_TREE",
 "prereq": "NONE",
 }
 
@@ -1117,29 +1284,69 @@ DARKNESS & (
 // Aquarium
 
 {
-"edge": "SNOWLAND_WEST -> AQUARIUM_MAIN",
+"edge": "SNOWLAND_WEST -> AQUARIUM_TOP_ENTRANCE",
 "prereq": "NONE",
 }
 
 {
-"edge": "AQUARIUM_MAIN -> SNOWLAND_WEST",
+"edge": "AQUARIUM_TOP_ENTRANCE -> SNOWLAND_WEST",
 "prereq": "NONE",
 }
 
 {
-"edge": "SNOWLAND_EAST -> AQUARIUM_MAIN",
+"edge": "AQUARIUM_TOP_ENTRANCE -> AQUARIUM_MID",
+"prereq": "NONE",
+}
+
+{
+"edge": "AQUARIUM_MID -> AQUARIUM_TOP_ENTRANCE",
+"prereq": "NONE",
+}
+
+{
+"edge": "AQUARIUM_TOP_ENTRANCE -> AQUARIUM_WEST",
+"prereq": "DARKNESS",
+}
+
+{
+"edge": "AQUARIUM_WEST -> AQUARIUM_TOP_ENTRANCE",
+"prereq": "NONE",
+}
+
+{
+"edge": "AQUARIUM_MID -> AQUARIUM_EAST",
+"prereq": "NONE",
+}
+
+{
+"edge": "AQUARIUM_EAST -> AQUARIUM_MID",
+"prereq": "NONE",
+}
+
+{
+"edge": "AQUARIUM_WEST -> AQUARIUM_EAST",
+"prereq": "NONE",
+}
+
+{
+"edge": "AQUARIUM_EAST -> AQUARIUM_WEST",
+"prereq": "DARKNESS",
+}
+
+{
+"edge": "SNOWLAND_LAKE -> AQUARIUM_MID",
 "prereq": "FIRE_ORB",
 }
 
 {
-"edge": "AQUARIUM_MAIN -> SNOWLAND_EAST",
+"edge": "AQUARIUM_MID -> SNOWLAND_LAKE",
 "prereq": "FIRE_ORB",
 }
 
 {
-"edge": "AQUARIUM_MAIN -> AQUARIUM_WATER_TOWER",
+"edge": "AQUARIUM_WEST -> AQUARIUM_WATER_TOWER",
 "prereq": "
-    DARKNESS & WATER_ORB & EXPLOSIVES &
+    WATER_ORB & EXPLOSIVES &
     (
         (WALL_JUMP_LV2 & RABI_SLIPPERS & ITM_HARD) // you need to disable speed boost
         | (WALL_JUMP & RABI_SLIPPERS & AIR_JUMP)
@@ -1152,9 +1359,9 @@ DARKNESS & (
 }
 
 {
-"edge": "AQUARIUM_WATER_TOWER -> AQUARIUM_MAIN",
+"edge": "AQUARIUM_WATER_TOWER -> AQUARIUM_WEST",
 "prereq": "
-    WATER_ORB & (
+    DARKNESS & WATER_ORB & (
         WALL_JUMP_LV2
         | (RABI_SLIPPERS & AIR_DASH_LV3 & ITM_HARD)
         | (AIR_JUMP & (
@@ -1172,22 +1379,22 @@ DARKNESS & (
 }
 
 {
-"edge": "AQUARIUM_MAIN -> AQUARIUM_BOMB_WALLED_AREA",
+"edge": "AQUARIUM_EAST -> AQUARIUM_BOMB_WALLED_AREA",
 "prereq": "EXPLOSIVES | (WATER_ORB & HAMMER_ROLL_ZIP)",
 }
 
 {
-"edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_MAIN",
+"edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_EAST",
 "prereq": "EXPLOSIVES_ENEMY",
 }
 
 {
-"edge": "AQUARIUM_MAIN -> AQUARIUM_ORB_SLIDE_MAZE",
+"edge": "AQUARIUM_EAST -> AQUARIUM_ORB_SLIDE_MAZE",
 "prereq": "EXPLOSIVES_ENEMY",
 }
 
 {
-"edge": "AQUARIUM_ORB_SLIDE_MAZE -> AQUARIUM_MAIN",
+"edge": "AQUARIUM_ORB_SLIDE_MAZE -> AQUARIUM_EAST",
 "prereq": "EXPLOSIVES",
 }
 
@@ -1219,17 +1426,68 @@ DARKNESS & (
 // Riverbank
 
 {
-"edge": "RIVERBANK_MAIN -> RIVERBANK_LOWER",
+"edge": "RIVERBANK_MAIN_LEVEL1 -> RIVERBANK_LOWER_LEFT",
 "prereq": "NONE",
 }
 
 {
-"edge": "RIVERBANK_LOWER -> RIVERBANK_MAIN",
+"edge": "RIVERBANK_LOWER_LEFT -> RIVERBANK_MAIN_LEVEL1",
 "prereq": "NONE",
 }
 
 {
-"edge": "RIVERBANK_MAIN -> RIVERBANK_PACK_UP_ROOM",
+"edge": "RIVERBANK_MAIN_LEVEL1 -> RIVERBANK_LOWER_MID",
+"prereq": "NONE",
+}
+
+{
+"edge": "RIVERBANK_LOWER_MID -> RIVERBANK_MAIN_LEVEL1",
+"prereq": "AIR_JUMP | WHIRL_BONK_CANCEL",
+}
+
+{
+"edge": "RIVERBANK_LOWER_LEFT -> RIVERBANK_LOWER_MID",
+"prereq": "DOWNDRILL_SEMISOLID_CLIP | (PIKO_HAMMER_LEVELED & RABI_SLIPPERS) | BUNNY_WHIRL | AIR_DASH | (EXPLOSIVES_ENEMY & BACKTRACK_3)",
+}
+
+{
+"edge": "RIVERBANK_LOWER_MID -> RIVERBANK_LOWER_LEFT",
+"prereq": "NONE",
+}
+
+{
+"edge": "RIVERBANK_LOWER_MID -> RIVERBANK_LOWER_RIGHT",
+"prereq": "NONE",
+}
+
+{
+"edge": "RIVERBANK_LOWER_RIGHT -> RIVERBANK_LOWER_MID",
+"prereq": "NONE",
+}
+
+{
+"edge": "RIVERBANK_MAIN_LEVEL1 -> RIVERBANK_LOWER_HEALTH_UP_ROOM",
+"prereq": "DOWNDRILL_SEMISOLID_CLIP & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
+}
+
+{
+"edge": "RIVERBANK_LOWER_HEALTH_UP_ROOM -> RIVERBANK_MAIN_LEVEL1",
+"prereq": "SLIDING_POWDER",
+}
+
+{
+"edge": "RIVERBANK_LOWER_RIGHT -> RIVERBANK_LOWER_HEALTH_UP_ROOM",
+"prereq": "NONE",
+}
+
+{
+"edge": "RIVERBANK_LOWER_HEALTH_UP_ROOM -> RIVERBANK_LOWER_RIGHT",
+"prereq": "NONE",
+}
+
+
+{
+"edge": "RIVERBANK_MAIN_LEVEL1 -> RIVERBANK_PACK_UP_ROOM",
 "prereq": "SLIDING_POWDER & EXPLOSIVES",
 }
 
@@ -1244,7 +1502,7 @@ DARKNESS & (
 }
 
 {
-"edge": "RIVERBANK_LOWER -> RIVERBANK_LOWER_FOREST_ENTRANCE",
+"edge": "RIVERBANK_LOWER_LEFT -> RIVERBANK_LOWER_FOREST_ENTRANCE",
 "prereq": "
     SLIDING_POWDER
     | AIR_JUMP
@@ -1255,7 +1513,7 @@ DARKNESS & (
 }
 
 {
-"edge": "RIVERBANK_LOWER_FOREST_ENTRANCE -> RIVERBANK_LOWER",
+"edge": "RIVERBANK_LOWER_FOREST_ENTRANCE -> RIVERBANK_LOWER_LEFT",
 "prereq": "
     SLIDING_POWDER
     | AIR_DASH
@@ -1271,29 +1529,66 @@ DARKNESS & (
 }
 
 {
-"edge": "RIVERBANK_UNDERGROUND -> RIVERBANK_LOWER",
+"edge": "RIVERBANK_UNDERGROUND -> RIVERBANK_LOWER_LEFT",
 "prereq": "EXPLOSIVES",
 }
+
+
+{
+"edge": "RIVERBANK_MAIN_LEVEL1 -> RIVERBANK_LEVEL2",
+"prereq": "NONE",
+}
+
+{
+"edge": "RIVERBANK_LEVEL2 -> RIVERBANK_MAIN_LEVEL1",
+"prereq": "NONE",
+}
+
+{
+"edge": "RIVERBANK_LEVEL2 -> RIVERBANK_LEVEL3",
+"prereq": "NONE",
+}
+
+{
+"edge": "RIVERBANK_LEVEL3 -> RIVERBANK_LEVEL2",
+"prereq": "NONE",
+}
+
+{
+"edge": "RIVERBANK_LEVEL3 -> RIVERBANK_LOWER_HEALTH_UP_ROOM",
+"prereq": "EXPLOSIVES_ENEMY & HAMMER_ROLL_ZIP",
+}
+
 
 // Evernight
 
 {
-"edge": "RIVERBANK_MAIN -> EVERNIGHT_MAIN",
+"edge": "RIVERBANK_LEVEL3 -> EVERNIGHT_WEST_ENTRANCE",
 "prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_MAIN -> RIVERBANK_MAIN",
+"edge": "EVERNIGHT_WEST_ENTRANCE -> RIVERBANK_LEVEL3",
 "prereq": "NONE",
 }
 
 {
-"edge": "RIVERBANK_MAIN -> EVERNIGHT_WARP",
+"edge": "EVERNIGHT_WEST_ENTRANCE -> EVERNIGHT_NORTHWEST",
+"prereq": "NONE",
+}
+
+{
+"edge": "EVERNIGHT_NORTHWEST -> EVERNIGHT_WEST_ENTRANCE",
+"prereq": "NONE",
+}
+
+{
+"edge": "RIVERBANK_LEVEL3 -> EVERNIGHT_WARP",
 "prereq": "SLIDE_ZIP & ADV",
 }
 
 {
-"edge": "EVERNIGHT_MAIN -> EVERNIGHT_SPIKE_BARRIER_ROOM",
+"edge": "EVERNIGHT_NORTHWEST -> EVERNIGHT_SPIKE_BARRIER_ROOM",
 "prereq": "
     AIR_JUMP
     | BUNNY_STRIKE
@@ -1306,22 +1601,22 @@ DARKNESS & (
 }
 
 {
-"edge": "EVERNIGHT_SPIKE_BARRIER_ROOM -> EVERNIGHT_MAIN",
+"edge": "EVERNIGHT_SPIKE_BARRIER_ROOM -> EVERNIGHT_NORTHWEST",
 "prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_SPIKE_BARRIER_ROOM -> RIVERBANK_MAIN",
+"edge": "EVERNIGHT_SPIKE_BARRIER_ROOM -> RIVERBANK_LEVEL3",
 "prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_MAIN -> EVERNIGHT_SAYA",
+"edge": "EVERNIGHT_NORTHWEST -> EVERNIGHT_SAYA",
 "prereq": "NONE",
 }
 
 {
-"edge": "EVERNIGHT_SAYA -> EVERNIGHT_MAIN",
+"edge": "EVERNIGHT_SAYA -> EVERNIGHT_NORTHWEST",
 "prereq": "NONE",
 }
 
@@ -1376,12 +1671,12 @@ DARKNESS & (
 }
 
 {
-"edge": "EVERNIGHT_MAIN -> EVERNIGHT_WARP",
+"edge": "EVERNIGHT_WEST_ENTRANCE -> EVERNIGHT_WARP",
 "prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP | EXPLOSIVES",
 }
 
 {
-"edge": "EVERNIGHT_WARP -> EVERNIGHT_MAIN",
+"edge": "EVERNIGHT_WARP -> EVERNIGHT_WEST_ENTRANCE",
 "prereq": "SLIDING_POWDER",
 }
 
@@ -1406,7 +1701,7 @@ DARKNESS & (
 }
 
 {
-"edge": "EVERNIGHT_LOWER -> RIVERBANK_LOWER",
+"edge": "EVERNIGHT_LOWER -> RIVERBANK_LOWER_RIGHT",
 "prereq": "NONE",
 }
 
@@ -1414,12 +1709,12 @@ DARKNESS & (
 // Lab
 
 {
-"edge": "RIVERBANK_LOWER -> LAB_ENTRANCE",
+"edge": "RIVERBANK_LOWER_RIGHT -> LAB_ENTRANCE",
 "prereq": "TM_CICINI & CHAPTER_2",
 }
 
 {
-"edge": "LAB_ENTRANCE -> RIVERBANK_LOWER",
+"edge": "LAB_ENTRANCE -> RIVERBANK_LOWER_RIGHT",
 "prereq": "NONE",
 }
 
@@ -1600,12 +1895,12 @@ DARKNESS & (
 }
 
 {
-"edge": "TOWN_MAIN -> RIVERBANK_MAIN",
+"edge": "TOWN_MAIN -> RIVERBANK_MAIN_LEVEL1",
 "prereq": "EVENT_WARP & TM_CICINI & CHAPTER_2",
 }
 
 {
-"edge": "FOREST_START -> BEACH_MAIN",
+"edge": "FOREST_START -> BEACH_FOREST_ENTRANCE",
 "prereq": "EVENT_WARP & BOSS_RIBBON",
 }
 
