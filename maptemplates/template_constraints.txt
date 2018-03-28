@@ -253,11 +253,11 @@
 "changes": [
     {
     "edge": "BEACH_MAIN -> PYRAMID_MAIN",
-    "prereq": "FIRE_ORB & current",
+    "prereq": "(FIRE_ORB | SLIDING_POWDER) & current",
     }
     {
     "edge": "PYRAMID_MAIN -> BEACH_MAIN",
-    "prereq": "FIRE_ORB & current",
+    "prereq": "(FIRE_ORB | SLIDING_POWDER) & current",
     }
 ]}
 
@@ -329,11 +329,11 @@
 "changes": [
     {
     "edge": "BEACH_MAIN -> PYRAMID_MAIN",
-    "prereq": "PIKO_HAMMER_LEVELED & current",
+    "prereq": "(PIKO_HAMMER_LEVELED | SLIDING_POWDER) & current",
     }
     {
     "edge": "PYRAMID_MAIN -> BEACH_MAIN",
-    "prereq": "PIKO_HAMMER & current",
+    "prereq": "(PIKO_HAMMER | SLIDING_POWDER) & current",
     }
 ]}
 
@@ -1363,7 +1363,7 @@
 
 {
 "name": "spike_barrier_nostupid",
-"weight": 1,
+"weight": 5,
 "changes": [
     {
     "edge": "EVERNIGHT_NORTHWEST -> EVERNIGHT_SPIKE_BARRIER_ROOM",
