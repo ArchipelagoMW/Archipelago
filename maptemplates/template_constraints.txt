@@ -575,7 +575,7 @@
 "changes": [
     {
     "edge": "RIVERBANK_LEVEL3 -> EVERNIGHT_WEST_ENTRANCE",
-    "prereq": "CARROT_SHOOTER & BOOST & ITM_HARD",
+    "prereq": "CARROT_SHOOTER & BOOST & ADV_HARD",
     }
     {
     "edge": "EVERNIGHT_WEST_ENTRANCE -> RIVERBANK_LEVEL3",
@@ -609,7 +609,7 @@
 "changes": [
     {
     "edge": "RIVERBANK_LEVEL3 -> EVERNIGHT_WEST_ENTRANCE",
-    "prereq": "FIRE_ORB | (CARROT_SHOOTER & BOOST & ITM_HARD)",
+    "prereq": "FIRE_ORB | (CARROT_SHOOTER & BOOST & ADV_HARD)",
     }
     {
     "edge": "EVERNIGHT_WEST_ENTRANCE -> RIVERBANK_LEVEL3",
