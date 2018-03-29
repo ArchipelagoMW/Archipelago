@@ -60,7 +60,7 @@ class Analyzer(object):
             if len(additional_hard_to_reach_items) > 0:
                 nonempty_levels += 1
             hard_to_reach_all += additional_hard_to_reach_items
-            if len(hard_to_reach_all) >= minHardToReachPoolSize and nonempty_levels >= 3:
+            if len(hard_to_reach_all) >= minHardToReachPoolSize and nonempty_levels >= 2:
                 break
 
         if len(hard_to_reach_all) < nHardToReach:
