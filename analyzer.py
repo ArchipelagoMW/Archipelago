@@ -50,13 +50,17 @@ class Analyzer(object):
         
         allocated_items_set = set(self.data.items_to_allocate)
         nHardToReach = self.data.nHardToReach
-        minHardToReachPoolSize = nHardToReach * 3
+        minHardToReachPoolSize = nHardToReach * 5
 
         hard_to_reach_all = []
+        nonempty_levels = 0
         for level in reversed(levels):
             # sort to make it deterministic
-            hard_to_reach_all += sorted(allocated_items_set.intersection(level))
-            if len(hard_to_reach_all) >= minHardToReachPoolSize:
+            additional_hard_to_reach_items = sorted(allocated_items_set.intersection(level))
+            if len(additional_hard_to_reach_items) > 0:
+                nonempty_levels += 1
+            hard_to_reach_all += additional_hard_to_reach_items
+            if len(hard_to_reach_all) >= minHardToReachPoolSize and nonempty_levels >= 3:
                 break
 
         if len(hard_to_reach_all) < nHardToReach:
