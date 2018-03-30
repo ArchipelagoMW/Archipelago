@@ -113,6 +113,7 @@ def define_pseudo_items():
         "MANY_AMULET_FOOD": "ITEM_MENU & TOWN_SHOP",
 
         "BOOST": "BEACH_MAIN | (RUMI_DONUT & ITEM_MENU)",
+        "BOOST_MANY": "ITEM_MENU & TOWN_SHOP",
     }
 
 

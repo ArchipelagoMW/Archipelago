@@ -1296,9 +1296,8 @@
 "entry_prereq": "
     AIR_JUMP
     | AIR_DASH
-    | BUNNY_STRIKE
-    // may degrade to v.hard (with speedboost) once v.hard is introduced
-    | (SLIDING_POWDER & (RABI_SLIPPERS | ADV_STUPID))
+    | SLIDE_JUMP_BUNSTRIKE
+    | (SLIDING_POWDER & (RABI_SLIPPERS | (SPEED5 & ADV_STUPID)))
 ",
 "exit_prereq": "NONE",
 }
@@ -1412,9 +1411,14 @@
 "item": "EGG_HALLOWEEN_WEST",
 "from_location": "HALLOWEEN_DARK_SHAFT",
 "entry_prereq": "
-    //SLIDING_POWDER & DARKNESS & (FIRE_ORB | (ADV & RIBBON)) &
-    SLIDING_POWDER & DARKNESS & (FIRE_ORB | ADV) &
-    (BUNNY_WHIRL | (CARROT_SHOOTER & BOOST & (CARROT_BOMB | PIKO_HAMMER)))
+    //SLIDING_POWDER & DARKNESS & (FIRE_ORB | (ADV_HARD & RIBBON)) &
+    SLIDING_POWDER & DARKNESS & (FIRE_ORB | ADV_HARD) &
+    (BUNNY_WHIRL | (
+        CARROT_SHOOTER
+        & BOOST_MANY
+        & (CARROT_BOMB | PIKO_HAMMER)
+        & ADV_VHARD
+    ))
 ",
 "exit_prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
 }
