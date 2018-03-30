@@ -417,7 +417,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         # Rupoor negative value
         rom.write_int16_to_rom(0x180036, world.rupoor_cost)
         # Set stun items
-        rom.write_byte(0x180180, 0x01) # Hookshot only
+        rom.write_byte(0x180180, 0x02) # Hookshot only
         # Make silver arrows only usable against Ganon
         rom.write_byte(0x180181, 0x01)
         #Make Blue Shield more expensive
