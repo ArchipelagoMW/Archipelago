@@ -881,7 +881,7 @@ class Spoiler(object):
             for index, item in enumerate(shop.inventory):
                 if item is None:
                     continue
-                shopdata['item_{}'.format(index)] = "{} ({})".format(item['item'], item['price']) if item['price'] else item['item']
+                shopdata['item_{}'.format(index)] = "{} — {}".format(item['item'], item['price']) if item['price'] else item['item']
             self.shops.append(shopdata)
 
 
@@ -906,10 +906,11 @@ class Spoiler(object):
     def to_json(self):
         self.parse_data()
         out = OrderedDict()
-        out['entrances'] = self.entrances.values()
+        out['Entrances'] = list(self.entrances.values())
         out.update(self.locations)
-        out['medallions'] = self.medallions
-        out['shops'] = self.shops
+        out['Special'] = self.medallions
+        if self.shops:
+            out['Shops'] = self.shops
         out['playthrough'] = self.playthrough
         out['paths'] = self.paths
         out['meta'] = self.metadata

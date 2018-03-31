@@ -417,7 +417,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         # Rupoor negative value
         rom.write_int16_to_rom(0x180036, world.rupoor_cost)
         # Set stun items
-        rom.write_byte(0x180180, 0x01) # Hookshot only
+        rom.write_byte(0x180180, 0x02) # Hookshot only
         # Make silver arrows only usable against Ganon
         rom.write_byte(0x180181, 0x01)
         #Make Blue Shield more expensive
@@ -534,19 +534,17 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         # Make silver arrows freely usable
         rom.write_byte(0x180181, 0x00)
         #Set overflow items for progressive equipment
-        if world.goal == 'triforcehunt':
-            overflow_replacement = TRIFORCE_PIECE
-        elif world.timer in ['timed', 'timed-countdown', 'timed-ohko']:
+        if world.timer in ['timed', 'timed-countdown', 'timed-ohko']:
             overflow_replacement = GREEN_CLOCK
         else:
             overflow_replacement = GREEN_TWENTY_RUPEES
 
     if world.difficulty in ['easy']:
-        rom.write_byte(0x180181, 0x03) # auto equip silvers on pickup and at ganon
+        rom.write_byte(0x180182, 0x03) # auto equip silvers on pickup and at ganon
     elif world.retro and world.difficulty in ['hard','expert', 'insane']: #FIXME: this is temporary for v29 baserom
-        rom.write_byte(0x180181, 0x03) # auto equip silvers on pickup and at ganon
+        rom.write_byte(0x180182, 0x03) # auto equip silvers on pickup and at ganon
     else:
-        rom.write_byte(0x180181, 0x01) # auto equip silvers on pickup 
+        rom.write_byte(0x180182, 0x01) # auto equip silvers on pickup
 
     #Byrna residual magic cost
     rom.write_bytes(0x45C42, [0x04, 0x02, 0x01])
