@@ -3,11 +3,11 @@ from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict
-
+from Utils import int16_as_bytes
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, custom, customitemarray):
+    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, retro, custom, customitemarray):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
@@ -18,6 +18,7 @@ class World(object):
         self.algorithm = algorithm
         self.dungeons = []
         self.regions = []
+        self.shops = []
         self.itempool = []
         self.seed = None
         self.state = CollectionState(self)
@@ -44,7 +45,7 @@ class World(object):
         self.aga_randomness = True
         self.lock_aga_door_in_escape = False
         self.fix_trock_doors = self.shuffle != 'vanilla'
-        self.save_and_quite_from_boss = False
+        self.save_and_quit_from_boss = False
         self.check_beatable_only = check_beatable_only
         self.fix_skullwoods_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
         self.fix_palaceofdarkness_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
@@ -56,11 +57,14 @@ class World(object):
         self.fastmenu = fastmenu
         self.disable_music = disable_music
         self.keysanity = keysanity
+        self.retro = retro
         self.custom = custom
         self.customitemarray = customitemarray
         self.can_take_damage = True
         self.difficulty_requirements = None
         self.fix_fake_world = True
+        self.dynamic_regions = []
+        self.dynamic_locations = []
         self.spoiler = Spoiler(self)
         self.lamps_needed_for_dark_rooms = 1
 
@@ -183,6 +187,9 @@ class World(object):
                 self._cached_locations.extend(region.locations)
         return self._cached_locations
 
+    def clear_location_cache(self):
+        self._cached_locations = None
+
     def get_unfilled_locations(self):
         return [location for location in self.get_locations() if location.item is None]
 
@@ -278,6 +285,7 @@ class World(object):
         markbool(self.check_beatable_only)
         markbool(self.shuffle_ganon)
         markbool(self.keysanity)
+        markbool(self.retro)
         assert id_value_max <= 0xFFFFFFFF
         return id_value
 
@@ -375,6 +383,19 @@ class CollectionState(object):
             return item in self.prog_items
         return self.item_count(item) >= count
 
+    def has_key(self, item, count=1):
+        if self.world.retro:
+            return self.can_buy_unlimited('Small Key (Universal)')
+        if count == 1:
+            return item in self.prog_items
+        return self.item_count(item) >= count
+
+    def can_buy_unlimited(self, item):
+        for shop in self.world.shops:
+            if shop.has_unlimited(item) and shop.region.can_reach(self):
+                return True
+        return False
+
     def item_count(self, item):
         return len([pritem for pritem in self.prog_items if pritem == item])
 
@@ -415,17 +436,24 @@ class CollectionState(object):
             basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count())
         elif self.world.difficulty == 'insane' and not fullrefill:
             basemagic = basemagic
-        else:
+        elif self.can_buy_unlimited('Green Potion') or self.can_buy_unlimited('Red Potion'):
             basemagic = basemagic + basemagic * self.bottle_count()
-        return basemagic >= smallmagic # FIXME bottle should really also have a requirement that we can reach some shop that sells green or blue potions
+        return basemagic >= smallmagic
 
     def can_kill_most_things(self, enemies=5):
         return (self.has_blunt_weapon()
                 or self.has('Cane of Somaria')
                 or (self.has('Cane of Byrna') and (enemies < 6 or self.can_extend_Magic()))
-                or self.has('Bow')
+                or self.can_shoot_arrows()
                 or self.has('Fire Rod')
                )
+
+    def can_shoot_arrows(self):
+        if self.world.retro:
+            #TODO: need to decide how we want to handle wooden arrows  longer-term (a can-buy-a check, or via dynamic shop location)
+            #FIXME: Should do something about hard+ ganon only silvers. For the moment, i believe they effective grant wooden, so we are safe
+            return self.has('Bow') and (self.has('Silver Arrows') or self.can_buy_unlimited('Single Arrow'))
+        return self.has('Bow')
 
     def has_sword(self):
         return self.has('Fighter Sword') or self.has('Master Sword') or self.has('Tempered Sword') or self.has('Golden Sword')
@@ -565,7 +593,6 @@ class RegionType(Enum):
         return self in (RegionType.Cave, RegionType.Dungeon)
 
 
-
 class Region(object):
 
     def __init__(self, name, type):
@@ -575,6 +602,7 @@ class Region(object):
         self.exits = []
         self.locations = []
         self.dungeon = None
+        self.shop = None
         self.world = None
         self.is_light_world = False # will be set aftermaking connections.
         self.is_dark_world = False
@@ -742,24 +770,121 @@ class Item(object):
 class Crystal(Item):
     pass
 
+@unique
+class ShopType(Enum):
+    Shop = 0
+    TakeAny = 1
+
+class Shop(object):
+    def __init__(self, region, room_id, type, shopkeeper_config, replaceable):
+        self.region = region
+        self.room_id = room_id
+        self.type = type
+        self.inventory = [None, None, None]
+        self.shopkeeper_config = shopkeeper_config
+        self.replaceable = replaceable
+        self.active = False
+
+    @property
+    def item_count(self):
+        return (3 if self.inventory[2] else
+                2 if self.inventory[1] else
+                1 if self.inventory[0] else
+                0)
+
+    def get_bytes(self):
+        # [id][roomID-low][roomID-high][doorID][zero][shop_config][shopkeeper_config][sram_index]
+        entrances = self.region.entrances
+        config = self.item_count
+        if len(entrances) == 1 and entrances[0].addresses:
+            door_id = entrances[0].addresses+1
+        else:
+            door_id = 0
+            config |= 0x40 # ignore door id
+        if self.type == ShopType.TakeAny:
+            config |= 0x80
+        return [0x00]+int16_as_bytes(self.room_id)+[door_id, 0x00, config, self.shopkeeper_config, 0x00]
+
+    def has_unlimited(self, item):
+        for inv in self.inventory:
+            if inv is None:
+                continue
+            if inv['max'] != 0 and inv['replacement'] is not None and inv['replacement'] == item:
+                return True
+            elif inv['item'] is not None and inv['item'] == item:
+                return True
+        return False
+
+    def clear_inventory(self):
+        self.inventory = [None, None, None]
+
+    def add_inventory(self, slot, item, price, max=0, replacement=None, replacement_price=0, create_location=False):
+        self.inventory[slot] = {
+            'item': item,
+            'price': price,
+            'max': max,
+            'replacement': replacement,
+            'replacement_price': replacement_price,
+            'create_location': create_location
+        }
+
 
 class Spoiler(object):
 
     def __init__(self, world):
         self.world = world
-        self.entrances = []
+        self.entrances = OrderedDict()
         self.medallions = {}
         self.playthrough = {}
         self.locations = {}
         self.paths = {}
         self.metadata = {}
+        self.shops = []
 
     def set_entrance(self, entrance, exit, direction):
-        self.entrances.append(OrderedDict([('entrance', entrance), ('exit', exit), ('direction', direction)]))
+        self.entrances[(entrance, direction)] = OrderedDict([('entrance', entrance), ('exit', exit), ('direction', direction)])
 
     def parse_data(self):
         self.medallions = OrderedDict([('Misery Mire', self.world.required_medallions[0]), ('Turtle Rock', self.world.required_medallions[1])])
-        self.locations = {'other locations': OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in self.world.get_locations()])}
+
+        self.locations = OrderedDict()
+        listed_locations = set()
+
+        lw_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations and loc.parent_region and loc.parent_region.type == RegionType.LightWorld]
+        self.locations['Light World'] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in lw_locations])
+        listed_locations.update(lw_locations)
+
+        dw_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations and loc.parent_region and loc.parent_region.type == RegionType.DarkWorld]
+        self.locations['Dark World'] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in dw_locations])
+        listed_locations.update(dw_locations)
+
+        cave_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations and loc.parent_region and loc.parent_region.type == RegionType.Cave]
+        self.locations['Caves'] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in cave_locations])
+        listed_locations.update(cave_locations)
+
+        for dungeon in self.world.dungeons:
+            dungeon_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations and loc.parent_region and loc.parent_region.dungeon == dungeon]
+            self.locations[dungeon.name] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in dungeon_locations])
+            listed_locations.update(dungeon_locations)
+
+        other_locations = [loc for loc in self.world.get_locations() if loc not in listed_locations]
+        if other_locations:
+            self.locations['Other Locations'] = OrderedDict([(str(location), str(location.item) if location.item is not None else 'Nothing') for location in other_locations])
+            listed_locations.update(other_locations)
+
+        for shop in self.world.shops:
+            if not shop.active:
+                continue
+            shopdata = {'location': shop.region.name,
+                        'type': 'Take Any' if shop.type == ShopType.TakeAny else 'Shop'
+                       }
+            for index, item in enumerate(shop.inventory):
+                if item is None:
+                    continue
+                shopdata['item_{}'.format(index)] = "{} — {}".format(item['item'], item['price']) if item['price'] else item['item']
+            self.shops.append(shopdata)
+
+
         from Main import __version__ as ERVersion
         self.metadata = {'version': ERVersion,
                          'seed': self.world.seed,
@@ -781,9 +906,11 @@ class Spoiler(object):
     def to_json(self):
         self.parse_data()
         out = OrderedDict()
-        out['entrances'] = self.entrances
+        out['Entrances'] = list(self.entrances.values())
         out.update(self.locations)
-        out['medallions'] = self.medallions
+        out['Special'] = self.medallions
+        if self.shops:
+            out['Shops'] = self.shops
         out['playthrough'] = self.playthrough
         out['paths'] = self.paths
         out['meta'] = self.metadata
@@ -805,12 +932,14 @@ class Spoiler(object):
             outfile.write('Keysanity enabled:               %s' % ('Yes' if self.metadata['keysanity'] else 'No'))
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
-                outfile.write('\n'.join(['%s %s %s' % (entry['entrance'], '<=>' if entry['direction'] == 'both' else '<=' if entry['direction'] == 'exit' else '=>', entry['exit']) for entry in self.entrances]))
+                outfile.write('\n'.join(['%s %s %s' % (entry['entrance'], '<=>' if entry['direction'] == 'both' else '<=' if entry['direction'] == 'exit' else '=>', entry['exit']) for entry in self.entrances.values()]))
             outfile.write('\n\nMedallions')
             outfile.write('\n\nMisery Mire Medallion: %s' % self.medallions['Misery Mire'])
             outfile.write('\nTurtle Rock Medallion: %s' % self.medallions['Turtle Rock'])
             outfile.write('\n\nLocations:\n\n')
-            outfile.write('\n'.join(['%s: %s' % (location, item) for (location, item) in self.locations['other locations'].items()]))
+            outfile.write('\n'.join(['%s: %s' % (location, item) for grouping in self.locations.values() for (location, item) in grouping.items()]))
+            outfile.write('\n\nShops:\n\n')
+            outfile.write('\n'.join("{} [{}]\n    {}".format(shop['location'], shop['type'], "\n    ".join(item for item in [shop.get('item_0', None), shop.get('item_1', None), shop.get('item_2', None)] if item)) for shop in self.shops))
             outfile.write('\n\nPlaythrough:\n\n')
             outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(['  %s: %s' % (location, item) for (location, item) in sphere.items()])) for (sphere_nr, sphere) in self.playthrough.items()]))
             outfile.write('\n\nPaths:\n\n')

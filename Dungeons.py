@@ -7,7 +7,7 @@ from Items import ItemFactory
 
 def create_dungeons(world):
     def make_dungeon(name, dungeon_regions, big_key, small_keys, dungeon_items):
-        dungeon = Dungeon(name, dungeon_regions, big_key, small_keys, dungeon_items)
+        dungeon = Dungeon(name, dungeon_regions, big_key, [] if world.retro else small_keys, dungeon_items)
         for region in dungeon.regions:
             world.get_region(region).dungeon = dungeon
         return dungeon
@@ -26,7 +26,7 @@ def create_dungeons(world):
     TR = make_dungeon('Turtle Rock', ['Turtle Rock (Entrance)', 'Turtle Rock (First Section)', 'Turtle Rock (Chain Chomp Room)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Turtle Rock (Crystaroller Room)', 'Turtle Rock (Dark Room)', 'Turtle Rock (Eye Bridge)', 'Turtle Rock (Trinexx)'], ItemFactory('Big Key (Turtle Rock)'), ItemFactory(['Small Key (Turtle Rock)'] * 4), ItemFactory(['Map (Turtle Rock)', 'Compass (Turtle Rock)']))
     GT = make_dungeon('Ganons Tower', ['Ganons Tower (Entrance)', 'Ganons Tower (Tile Room)', 'Ganons Tower (Compass Room)', 'Ganons Tower (Hookshot Room)', 'Ganons Tower (Map Room)', 'Ganons Tower (Firesnake Room)', 'Ganons Tower (Teleport Room)', 'Ganons Tower (Bottom)', 'Ganons Tower (Top)', 'Ganons Tower (Before Moldorm)', 'Ganons Tower (Moldorm)', 'Agahnim 2'], ItemFactory('Big Key (Ganons Tower)'), ItemFactory(['Small Key (Ganons Tower)'] * 4), ItemFactory(['Map (Ganons Tower)', 'Compass (Ganons Tower)']))
 
-    world.dungeons = [TR, ES, EP, DP, ToH, AT, PoD, TT, SW, IP, MM, GT, SP]
+    world.dungeons = [ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, TR, GT]
 
 
 def fill_dungeons(world):
@@ -34,7 +34,10 @@ def fill_dungeons(world):
 
     all_state_base = world.get_all_state()
 
-    world.push_item(world.get_location('Skull Woods - Pinball Room'), ItemFactory('Small Key (Skull Woods)'), False)
+    if world.retro:
+        world.push_item(world.get_location('Skull Woods - Pinball Room'), ItemFactory('Small Key (Universal)'), False)
+    else:
+        world.push_item(world.get_location('Skull Woods - Pinball Room'), ItemFactory('Small Key (Skull Woods)'), False)
     world.get_location('Skull Woods - Pinball Room').event = True
 
     dungeons = [(list(dungeon.regions), dungeon.big_key, list(dungeon.small_keys), list(dungeon.dungeon_items)) for dungeon in world.dungeons]
@@ -110,7 +113,10 @@ def fill_dungeons_restrictive(world, shuffled_locations):
     all_state_base = world.get_all_state()
 
     skull_woods_big_chest = world.get_location('Skull Woods - Pinball Room')
-    world.push_item(skull_woods_big_chest, ItemFactory('Small Key (Skull Woods)'), False)
+    if world.retro:
+        world.push_item(skull_woods_big_chest, ItemFactory('Small Key (Universal)'), False)
+    else:
+        world.push_item(skull_woods_big_chest, ItemFactory('Small Key (Skull Woods)'), False)
     skull_woods_big_chest.event = True
     shuffled_locations.remove(skull_woods_big_chest)
 

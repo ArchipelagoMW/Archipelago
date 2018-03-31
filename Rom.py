@@ -6,16 +6,17 @@ import os
 import struct
 import random
 
+from BaseClasses import ShopType
 from Dungeons import dungeon_music_addresses
-from Text import string_to_alttp_text, text_addresses, Credits
+from Text import MultiByteTextMapper, text_addresses, Credits
 from Text import Uncle_texts, Ganon1_texts, PyramidFairy_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts
 from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from Utils import local_path
+from Utils import local_path, int16_as_bytes, int32_as_bytes
 from Items import ItemFactory
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = 'dc5840f0d1ef7b51009c5625a054b3dd'
+RANDOMIZERBASEHASH = '354bad0d01b6284c89f05c9b414d48c1'
 
 
 class JsonRom(object):
@@ -259,15 +260,6 @@ class Sprite(object):
         # split into palettes of 15 colors
         return array_chunk(palette_as_colors, 15)
 
-
-def int16_as_bytes(value):
-    value = value & 0xFFFF
-    return [value & 0xFF, (value >> 8) & 0xFF]
-
-def int32_as_bytes(value):
-    value = value & 0xFFFFFFFF
-    return [value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF, (value >> 24) & 0xFF]
-
 def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     # patch items
     for location in world.get_locations():
@@ -355,6 +347,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
                     # patch door table
                     rom.write_byte(0xDBB73 + exit.addresses, exit.target)
 
+    write_custom_shops(rom, world)
 
     # patch medallion requirements
     if world.required_medallions[0] == 'Bombos':
@@ -411,7 +404,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xD8)  # One Heart
         # potion heal amount
-        rom.write_byte(0x180084, 0x28)  # Five Hearts
+        rom.write_byte(0x180084, 0x38)  # Seven Hearts
         # potion magic restore amount
         rom.write_byte(0x180085, 0x40)  # Half Magic
         #Cape magic cost
@@ -423,6 +416,10 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
         rom.write_int16_to_rom(0x180036, world.rupoor_cost)
+        # Set stun items
+        rom.write_byte(0x180180, 0x02) # Hookshot only
+        # Make silver arrows only usable against Ganon
+        rom.write_byte(0x180181, 0x01)
         #Make Blue Shield more expensive
         rom.write_bytes(0xF73D2, [0xFC, 0xFF])
         rom.write_bytes(0xF73DA, [0x04, 0x00])
@@ -443,20 +440,24 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0xF723F, 0xE7)
     elif world.difficulty == 'expert':
         # Powdered Fairies Prize
-        rom.write_byte(0x36DD0, 0x79)  # Bees
+        rom.write_byte(0x36DD0, 0xD8)  # One Heart
         # potion heal amount
         rom.write_byte(0x180084, 0x08)  # One Heart
         # potion magic restore amount
         rom.write_byte(0x180085, 0x20)  # Quarter Magic
         #Cape magic cost
-        rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
+        rom.write_bytes(0x3ADA7, [0x01, 0x01, 0x01])
         # Byrna Invulnerability: off
         rom.write_byte(0x18004F, 0x00)
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
-        rom.write_int16_to_rom(0x180036, 20)
+        rom.write_int16_to_rom(0x180036, world.rupoor_cost)
+        # Set stun items
+        rom.write_byte(0x180180, 0x00) # Nothing
+        # Make silver arrows only usable against Ganon
+        rom.write_byte(0x180181, 0x01)
         #Make Blue Shield more expensive
         rom.write_bytes(0xF73D2, [0xFC, 0xFF])
         rom.write_bytes(0xF73DA, [0x04, 0x00])
@@ -483,14 +484,18 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         # potion magic restore amount
         rom.write_byte(0x180085, 0x00)  # No healing
         #Cape magic cost
-        rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
+        rom.write_bytes(0x3ADA7, [0x01, 0x01, 0x01])
         # Byrna Invulnerability: off
         rom.write_byte(0x18004F, 0x00)
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
-        rom.write_int16_to_rom(0x180036, 9999)
+        rom.write_int16_to_rom(0x180036, world.rupoor_cost)
+        # Set stun items
+        rom.write_byte(0x180180, 0x00) # Nothing
+        # Make silver arrows only usable against Ganon
+        rom.write_byte(0x180181, 0x01)
         #Make Blue Shield more expensive
         rom.write_bytes(0xF73D2, [0xFC, 0xFF])
         rom.write_bytes(0xF73DA, [0x04, 0x00])
@@ -522,13 +527,24 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x18004F, 0x01)
         #Enable catching fairies
         rom.write_byte(0x34FD6, 0xF0)
+        # Rupoor negative value
+        rom.write_int16_to_rom(0x180036, world.rupoor_cost)
+        # Set stun items
+        rom.write_byte(0x180180, 0x03) # All standard items
+        # Make silver arrows freely usable
+        rom.write_byte(0x180181, 0x00)
         #Set overflow items for progressive equipment
-        if world.goal == 'triforcehunt':
-            overflow_replacement = TRIFORCE_PIECE
-        elif world.timer in ['timed', 'timed-countdown', 'timed-ohko']:
+        if world.timer in ['timed', 'timed-countdown', 'timed-ohko']:
             overflow_replacement = GREEN_CLOCK
         else:
             overflow_replacement = GREEN_TWENTY_RUPEES
+
+    if world.difficulty in ['easy']:
+        rom.write_byte(0x180182, 0x03) # auto equip silvers on pickup and at ganon
+    elif world.retro and world.difficulty in ['hard','expert', 'insane']: #FIXME: this is temporary for v29 baserom
+        rom.write_byte(0x180182, 0x03) # auto equip silvers on pickup and at ganon
+    else:
+        rom.write_byte(0x180182, 0x01) # auto equip silvers on pickup
 
     #Byrna residual magic cost
     rom.write_bytes(0x45C42, [0x04, 0x02, 0x01])
@@ -549,6 +565,19 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     prizes = [0xD8, 0xD8, 0xD8, 0xD8, 0xD9, 0xD8, 0xD8, 0xD9, 0xDA, 0xD9, 0xDA, 0xDB, 0xDA, 0xD9, 0xDA, 0xDA, 0xE0, 0xDF, 0xDF, 0xDA, 0xE0, 0xDF, 0xD8, 0xDF,
               0xDC, 0xDC, 0xDC, 0xDD, 0xDC, 0xDC, 0xDE, 0xDC, 0xE1, 0xD8, 0xE1, 0xE2, 0xE1, 0xD8, 0xE1, 0xE2, 0xDF, 0xD9, 0xD8, 0xE1, 0xDF, 0xDC, 0xD9, 0xD8,
               0xD8, 0xE3, 0xE0, 0xDB, 0xDE, 0xD8, 0xDB, 0xE2, 0xD9, 0xDA, 0xDB, 0xD9, 0xDB, 0xD9, 0xDB]
+    dig_prizes = [0xB2, 0xD8, 0xD8, 0xD8, 0xD8, 0xD8, 0xD8, 0xD8, 0xD8,
+                  0xD9, 0xD9, 0xD9, 0xD9, 0xD9, 0xDA, 0xDA, 0xDA, 0xDA, 0xDA,
+                  0xDB, 0xDB, 0xDB, 0xDB, 0xDB, 0xDC, 0xDC, 0xDC, 0xDC, 0xDC,
+                  0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDE, 0xDE, 0xDE, 0xDE, 0xDE,
+                  0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xE0, 0xE0, 0xE0, 0xE0, 0xE0,
+                  0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE2, 0xE2, 0xE2, 0xE2, 0xE2,
+                  0xE3, 0xE3, 0xE3, 0xE3, 0xE3]
+    if world.retro:
+        prize_replacements = {0xE1: 0xDA, #5 Arrows -> Blue Rupee
+                              0xE2: 0xDB} #10 Arrows -> Red Rupee
+        prizes = [prize_replacements.get(prize,prize) for prize in prizes]
+        dig_prizes = [prize_replacements.get(prize,prize) for prize in dig_prizes]
+    rom.write_bytes(0x180100, dig_prizes)
     random.shuffle(prizes)
 
     # write tree pull prizes
@@ -726,9 +755,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_byte(0x1800A0, 0x01)  # return to light world on s+q without mirror
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
     rom.write_byte(0x180174, 0x01 if world.fix_fake_world else 0x00)
-    rom.write_byte(0x180175, 0x00) # Arrow mode: normal
-    rom.write_int16_to_rom(0x180176, 0) # Wood Arrow Cost (rupee arrow mode)
-    rom.write_int16_to_rom(0x180178, 0) # Silver Arrow Cost (rupee arrow mode)
+    rom.write_byte(0x18017E, 0x01) # Fairy fountains only trade in bottles
     rom.write_byte(0x180034, 0x0A) # starting max bombs
     rom.write_byte(0x180035, 30) # starting max arrows
     for x in range(0x183000, 0x18304F):
@@ -769,11 +796,20 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x18003C, 0x00)
 
     rom.write_byte(0x180045, 0xFF if world.keysanity else 0x00)  # free roaming items in menu
+    rom.write_byte(0x180172, 0x01 if world.retro else 0x00)  # universal keys
+    rom.write_byte(0x180175, 0x01 if world.retro else 0x00)  # rupee bow
+    rom.write_byte(0x180176, 0x0A if world.retro else 0x00)  # wood arrow cost
+    rom.write_byte(0x180178, 0x32 if world.retro else 0x00)  # silver arrow cost
+    rom.write_byte(0x301FC, 0xDA if world.retro else 0xE1)  # rupees replace arrows under pots
+    rom.write_byte(0x30052, 0xDB if world.retro else 0xE2) # replace arrows in fish prize from bottle merchant
+    rom.write_bytes(0xECB4E, [0xA9, 0x00, 0xEA, 0xEA] if world.retro else [0xAF, 0x77, 0xF3, 0x7E])  # Thief steals rupees instead of arrows
+    rom.write_bytes(0xF0D96, [0xA9, 0x00, 0xEA, 0xEA] if world.retro else [0xAF, 0x77, 0xF3, 0x7E])  # Pikit steals rupees instead of arrows
+    rom.write_bytes(0xEDA5, [0x35, 0x41] if world.retro else [0x43, 0x44])  # Chest game gives rupees instead of arrows
     digging_game_rng = random.randint(1, 30)  # set rng for digging game
     rom.write_byte(0x180020, digging_game_rng)
     rom.write_byte(0xEFD95, digging_game_rng)
     rom.write_byte(0x1800A3, 0x01)  # enable correct world setting behaviour after agahnim kills
-    rom.write_byte(0x180042, 0x01 if world.save_and_quite_from_boss else 0x00)  # Allow Save and Quite after boss kill
+    rom.write_byte(0x180042, 0x01 if world.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
 
     # remove shield from uncle
     rom.write_bytes(0x6D253, [0x00, 0x00, 0xf6, 0xff, 0x00, 0x0E])
@@ -784,15 +820,12 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_bytes(0x6D2FB, [0x00, 0x00, 0xf7, 0xff, 0x02, 0x0E])
     rom.write_bytes(0x6D313, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
 
-    # Shop table
-    rom.write_bytes(0x184800, [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])
-
     # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
     rom.write_byte(0x18003D, 0x01 if world.swamp_patch_required else 0x00)
 
     # powder patch: remove the need to leave the scrren after powder, since it causes problems for potion shop at race game
     # temporarally we are just nopping out this check we will conver this to a rom fix soon.
-    rom.write_bytes(0x02F539,[0xEA,0xEA,0xEA,0xEA,0xEA] if world.powder_patch_required else [0xAD, 0xBF, 0x0A, 0xF0, 0x4F])
+    rom.write_bytes(0x02F539, [0xEA, 0xEA, 0xEA, 0xEA, 0xEA] if world.powder_patch_required else [0xAD, 0xBF, 0x0A, 0xF0, 0x4F])
 
     # allow smith into multi-entrance caves in appropriate shuffles
     if world.shuffle in ['restricted', 'full', 'crossed', 'insanity']:
@@ -826,6 +859,38 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     apply_rom_settings(rom, beep, color, world.quickswap, world.fastmenu, world.disable_music, sprite)
 
     return rom
+
+def write_custom_shops(rom, world):
+    shops = [shop for shop in world.shops if shop.replaceable and shop.active]
+
+    shop_data = bytearray()
+    items_data = bytearray()
+    sram_offset = 0
+
+    for shop_id, shop in enumerate(shops):
+        if shop_id == len(shops) - 1:
+            shop_id = 0xFF
+        bytes = shop.get_bytes()
+        bytes[0] = shop_id
+        bytes[-1] = sram_offset
+        if shop.type == ShopType.TakeAny:
+            sram_offset += 1
+        else:
+            sram_offset += shop.item_count
+        shop_data.extend(bytes)
+        # [id][item][price-low][price-high][max][repl_id][repl_price-low][repl_price-high]
+        for item in shop.inventory:
+            if item is None:
+                break
+            item_data = [shop_id, ItemFactory(item['item']).code] + int16_as_bytes(item['price']) + [item['max'], ItemFactory(item['replacement']).code if item['replacement'] else 0xFF] + int16_as_bytes(item['replacement_price'])
+            items_data.extend(item_data)
+
+    rom.write_bytes(0x184800, shop_data)
+
+    items_data.extend([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])
+    rom.write_bytes(0x184900, items_data)
+
+
 
 def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite):
 
@@ -955,7 +1020,7 @@ def write_sprite(rom, sprite):
 
 def write_string_to_rom(rom, target, string):
     address, maxbytes = text_addresses[target]
-    rom.write_bytes(address, string_to_alttp_text(string, maxbytes))
+    rom.write_bytes(address, MultiByteTextMapper.convert(string, maxbytes))
 
 
 def write_strings(rom, world):

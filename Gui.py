@@ -62,6 +62,8 @@ def guiMain(args=None):
     quickSwapCheckbutton = Checkbutton(checkBoxFrame, text="Enabled L/R Item quickswapping", variable=quickSwapVar)
     keysanityVar = IntVar()
     keysanityCheckbutton = Checkbutton(checkBoxFrame, text="Keysanity (keys anywhere)", variable=keysanityVar)
+    retroVar = IntVar()
+    retroCheckbutton = Checkbutton(checkBoxFrame, text="Retro mode (universal keys)", variable=retroVar)
     dungeonItemsVar = IntVar()
     dungeonItemsCheckbutton = Checkbutton(checkBoxFrame, text="Place Dungeon Items (Compasses/Maps)", onvalue=0, offvalue=1, variable=dungeonItemsVar)
     beatableOnlyVar = IntVar()
@@ -78,6 +80,7 @@ def guiMain(args=None):
     suppressRomCheckbutton.pack(expand=True, anchor=W)
     quickSwapCheckbutton.pack(expand=True, anchor=W)
     keysanityCheckbutton.pack(expand=True, anchor=W)
+    retroCheckbutton.pack(expand=True, anchor=W)
     dungeonItemsCheckbutton.pack(expand=True, anchor=W)
     beatableOnlyCheckbutton.pack(expand=True, anchor=W)
     disableMusicCheckbutton.pack(expand=True, anchor=W)
@@ -146,7 +149,7 @@ def guiMain(args=None):
     logicFrame = Frame(drowDownFrame)
     logicVar = StringVar()
     logicVar.set('noglitches')
-    logicOptionMenu = OptionMenu(logicFrame, logicVar, 'noglitches', 'minorglitches')
+    logicOptionMenu = OptionMenu(logicFrame, logicVar, 'noglitches', 'minorglitches', 'nologic')
     logicOptionMenu.pack(side=RIGHT)
     logicLabel = Label(logicFrame, text='Game logic')
     logicLabel.pack(side=LEFT)
@@ -262,6 +265,7 @@ def guiMain(args=None):
         guiargs.create_spoiler = bool(createSpoilerVar.get())
         guiargs.suppress_rom = bool(suppressRomVar.get())
         guiargs.keysanity = bool(keysanityVar.get())
+        guiargs.retro = bool(retroVar.get())
         guiargs.nodungeonitems = bool(dungeonItemsVar.get())
         guiargs.beatableonly = bool(beatableOnlyVar.get())
         guiargs.quickswap = bool(quickSwapVar.get())
@@ -276,7 +280,7 @@ def guiMain(args=None):
                                    int(redmailVar.get()), int(progmailVar.get()), int(halfmagicVar.get()), int(quartermagicVar.get()), int(bcap5Var.get()), int(bcap10Var.get()), int(acap5Var.get()), int(acap10Var.get()),
                                    int(arrow1Var.get()), int(arrow10Var.get()), int(bomb1Var.get()), int(bomb3Var.get()), int(rupee1Var.get()), int(rupee5Var.get()), int(rupee20Var.get()), int(rupee50Var.get()), int(rupee100Var.get()),
                                    int(rupee300Var.get()), int(rupoorVar.get()), int(blueclockVar.get()), int(greenclockVar.get()), int(redclockVar.get()), int(triforcepieceVar.get()), int(triforcecountVar.get()),
-                                   int(triforceVar.get()), int(rupoorcostVar.get())]
+                                   int(triforceVar.get()), int(rupoorcostVar.get()), int(universalkeyVar.get())]
         guiargs.rom = romVar.get()
         guiargs.jsonout = None
         guiargs.sprite = sprite
@@ -934,6 +938,14 @@ def guiMain(args=None):
     redclockLabel.pack(anchor=W, side=LEFT, padx=(0,14))
     redclockEntry.pack(anchor=E)
 
+    universalkeyFrame = Frame(itemList5)
+    universalkeyLabel = Label(universalkeyFrame, text='Universal Key')
+    universalkeyVar = StringVar(value='0')
+    universalkeyEntry = Entry(universalkeyFrame, textvariable=universalkeyVar, width=3, validate='all', vcmd=vcmd)
+    universalkeyFrame.pack()
+    universalkeyLabel.pack(anchor=W, side=LEFT, padx=(0,57))
+    universalkeyEntry.pack(anchor=E)
+
     triforcepieceFrame = Frame(itemList5)
     triforcepieceLabel = Label(triforcepieceFrame, text='Triforce Piece')
     triforcepieceVar = StringVar(value='0')
@@ -978,6 +990,7 @@ def guiMain(args=None):
         createSpoilerVar.set(int(args.create_spoiler))
         suppressRomVar.set(int(args.suppress_rom))
         keysanityVar.set(args.keysanity)
+        retroVar.set(args.retro)
         if args.nodungeonitems:
             dungeonItemsVar.set(int(not args.nodungeonitems))
         beatableOnlyVar.set(int(args.beatableonly))

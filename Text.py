@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 text_addresses = {'Pedestal': (0x180300, 256),
                   'Triforce': (0x180400, 256),
                   'Uncle': (0x180500, 256),
@@ -137,10 +138,13 @@ Ganon1_texts = [
     "Did you know?\nThe biggest\nand heaviest\ncheese ever\nproduced\nweighed\n57,518 pounds\nand was 32\nfeet long.",
     "Now there was\na time, When\nyou loved me\nso. I couldn't\ndo wrong,\nAnd now you\nneed to know.\nSo How you\nlike me now?",
     "Did you know?\nNutrition\nexperts\nrecommend that\nat least half\nof our daily\ngrains come\nfrom whole\ngrain products",
+    "The Hemiptera\nor true bugs\nare an order\nof insects\ncovering 50k\nto 80k species\nlike aphids,\ncicadas, and\nshield bugs.",
+    "Thanks for\ndropping in,\nthe first\npassengers\nin a hot\nair balloon.\nwere a duck,\na sheep,\nand a rooster.",
+    "You think you\nare so smart?\n\nI bet you\ndidn't know\nYou can't hum\nwhile holding\nyour nose\nclosed.",
+    "grumble,\n\ngrumble…\ngrumble,\n\ngrumble…\nSeriously you\nwere supposed\nto bring food",
+    "Join me hero,\nand I shall\nmake your face\nthe greatest\nin the dark\nworld!\n\nOr else you\nwill die!",
 ]
 TavernMan_texts = [
-    'Did you know that talking to random NPCs wastes time in a race? I hope this information may be of use to you in the future.'
-] + [
     "What do you\ncall a blind\ndinosaur?\nadoyouthink-\nhesaurus\n",
     "A blind man\nwalks into\na bar.\nAnd a table.\nAnd a chair.\n",
     "What do ducks\nlike to eat?\n\nQuackers!\n",
@@ -433,249 +437,183 @@ class SceneLargeCreditLine(SceneCreditLine):
         buf += LargeCreditBottomMapper.convert(self.text)
         return buf
 
+class MultiByteTextMapper(object):
+    @classmethod
+    def convert(cls, text, maxbytes=256):
+        outbuf = MultiByteCoreTextMapper.convert(text)
 
-def string_to_alttp_text(s, maxbytes=256):
-    lines = s.upper().split('\n')
-    outbuf = bytearray()
-    lineindex = 0
+        # check for max length
+        if len(outbuf) > maxbytes - 2:
+            outbuf = outbuf[:maxbytes - 2]
+            # Note: this could crash if the last byte is part of a two byte command
+            # depedning on how well the command handles a value of 0x7F.
+            # Should probably do something about this.
 
-    while lines:
-        linespace = 14
-        line = lines.pop(0)
-        words = line.split(' ')
-        outbuf.append(0x74 if lineindex == 0 else 0x75 if lineindex == 1 else 0x76)  # line starter
-        while words:
-            word = words.pop(0)
-            # sanity check: if the word we have is more than 14 characters, we take as much as we can still fit and push the rest back for later
-            if len(word) > 14:
-                if linespace < 14:
-                    word = ' ' + word
-                word_first = word[:linespace]
-                words.insert(0, word[linespace:])
-                lines.insert(0, ' '.join(words))
+        outbuf.append(0x7F)
+        outbuf.append(0x7F)
+        return outbuf
 
-                write_word(outbuf, word_first)
+class MultiByteCoreTextMapper(object):
+    special_commands = {
+        "{SPEED0}": [0x7A, 0x00],
+        "{SPEED2}": [0x7A, 0x02],
+        "{SPEED6}": [0x7A, 0x06],
+        "{PAUSE1}": [0x78, 0x01],
+        "{PAUSE3}": [0x78, 0x03],
+        "{PAUSE5}": [0x78, 0x05],
+        "{PAUSE7}": [0x78, 0x07],
+        "{PAUSE9}": [0x78, 0x09],
+        "{INPUT}": [0x7E],
+        "{CHOICE}": [0x68],
+        "{ITEMSELECT}": [0x69],
+        "{CHOICE2}": [0x71],
+        "{CHOICE3}": [0x72],
+        "{HARP}": [0x79, 0x2D],
+        "{MENU}": [0x6D, 0x00],
+        "{BOTTOM}": [0x6D, 0x00],
+        "{NOBORDER}": [0x6B, 0x02],
+        "{CHANGEPIC}": [0x67, 0x67],
+        "{CHANGEMUSIC}": [0x67],
+        "{INTRO}": [0x6E, 0x00, 0x77, 0x07, 0x7A, 0x03, 0x6B, 0x02, 0x67],
+        "{NOTEXT}": [0x6E, 0x00, 0x6B, 0x04],
+        "{IBOX}": [0x6B, 0x02, 0x77, 0x07, 0x7A, 0x03],
+    }
+
+    @classmethod
+    def convert(cls, text, pause=True, wrap=14):
+        text = text.upper()
+        lines = text.split('\n')
+        outbuf = bytearray()
+        lineindex = 0
+        is_intro = '{INTRO}' in text
+
+        while lines:
+            linespace = wrap
+            line = lines.pop(0)
+            if line.startswith('{'):
+                outbuf.extend(cls.special_commands[line])
+                continue
+
+            words = line.split(' ')
+            outbuf.append(0x74 if lineindex == 0 else 0x75 if lineindex == 1 else 0x76)  # line starter
+
+            while words:
+                word = words.pop(0)
+                # sanity check: if the word we have is more than 14 characters, we take as much as we can still fit and push the rest back for later
+                if cls.wordlen(word) > wrap:
+                    if linespace < wrap:
+                        word = ' ' + word
+                    (word_first, word_rest) = cls.splitword(word, linespace)
+                    words.insert(0, word_rest)
+                    lines.insert(0, ' '.join(words))
+
+                    outbuf.extend(RawMBTextMapper.convert(word_first))
+                    break
+
+                if cls.wordlen(word) <= (linespace if linespace == wrap else linespace - 1):
+                    if linespace < wrap:
+                        word = ' ' + word
+                    linespace -= cls.wordlen(word)
+                    outbuf.extend(RawMBTextMapper.convert(word))
+                else:
+                    # ran out of space, push word and lines back and continue with next line
+                    words.insert(0, word)
+                    lines.insert(0, ' '.join(words))
+                    break
+
+            if is_intro and lineindex < 3:
+                outbuf.extend([0xFF]*linespace)
+
+            has_more_lines = len(lines) > 1 or (lines and not lines[0].startswith('{'))
+
+            lineindex += 1
+            if pause and lineindex % 3 == 0 and has_more_lines:
+                outbuf.append(0x7E)
+            if lineindex >= 3 and has_more_lines:
+                outbuf.append(0x73)
+        return outbuf
+
+    @classmethod
+    def wordlen(cls, word):
+        l = 0
+        offset = 0
+        while offset < len(word):
+            c_len, offset = cls.charlen(word, offset)
+            l += c_len
+        return l
+
+    @classmethod
+    def splitword(cls, word, length):
+        l = 0
+        offset = 0
+        while True:
+            c_len, new_offset = cls.charlen(word, offset)
+            if l+c_len > length:
                 break
+            l += c_len
+            offset = new_offset
+        return (word[0:offset], word[offset:])
 
-            if len(word) <= (linespace if linespace == 14 else linespace - 1):
-                if linespace < 14:
-                    word = ' ' + word
-                linespace -= len(word)
-                write_word(outbuf, word)
+    @classmethod
+    def charlen(cls, word, offset):
+        c = word[offset]
+        if c in ['>', '¼', '½', '♥']:
+            return (2, offset+1)
+        if c in ['@']:
+            return (4, offset+1)
+        if c in ['ᚋ', 'ᚌ', 'ᚍ', 'ᚎ']:
+            return (2, offset+1)
+        return (1, offset+1)
+
+class CompressedTextMapper(object):
+    two_byte_commands = [
+        0x6B, 0x6C, 0x6D, 0x6E,
+        0x77, 0x78, 0x79, 0x7A
+    ]
+    specially_coded_commands = {
+        0x73: 0xF6,
+        0x74: 0xF7,
+        0x75: 0xF8,
+        0x76: 0xF9,
+        0x7E: 0xFA,
+        0x7A: 0xFC,
+    }
+
+    @classmethod
+    def convert(cls, text, pause=True, max_bytes_expanded=0x800, wrap=14):
+        inbuf = MultiByteCoreTextMapper.convert(text, pause, wrap)
+
+        # Links name will need 8 bytes in the target buffer
+        # and two will be used by the terminator
+        # (Variables will use 2 bytes, but they start as 2 bytes)
+        bufsize = len(inbuf) + 7 * inbuf.count(0x6A) + 2
+        if bufsize > max_bytes_expanded:
+            raise ValueError("Uncompressed string too long for buffer")
+        inbuf.reverse()
+        outbuf = bytearray()
+        outbuf.append(0xfb) # terminator for previous record
+        while inbuf:
+            val = inbuf.pop()
+            if val == 0xFF:
+                outbuf.append(val)
+            elif val == 0x00:
+                outbuf.append(inbuf.pop())
+            elif val == 0x01: #kanji
+                outbuf.append(0xFD)
+                outbuf.append(inbuf.pop())
+            elif val >= 0x67:
+                if val in cls.specially_coded_commands:
+                    outbuf.append(cls.specially_coded_commands[val])
+                else:
+                    outbuf.append(0xFE)
+                    outbuf.append(val)
+                if val in cls.two_byte_commands:
+                    outbuf.append(inbuf.pop())
             else:
-                # ran out of space, push word and lines back and continue with next line
-                words.insert(0, word)
-                lines.insert(0, ' '.join(words))
-                break
+                raise ValueError("Unexpected byte found in uncompressed string")
+        return outbuf
 
-        lineindex += 1
-        if lineindex % 3 == 0 and lines:
-            outbuf.append(0x7E)
-        if lineindex >= 3 and lines:
-            outbuf.append(0x73)
-
-    # check for max length
-    if len(outbuf) > maxbytes - 1:
-        outbuf = outbuf[:maxbytes - 1]
-        # make sure we interpret the end of box character
-        if outbuf[-1] == 0x00:
-            outbuf[-1] = 0x73
-
-    outbuf.append(0x7F)
-    return outbuf
-
-
-def write_word(buf, word):
-    for char in word:
-        buf.extend([0x00, char_to_alttp_char(char)])
-
-
-char_map = {' ': 0xFF,
-            '?': 0xC6,
-            '!': 0xC7,
-            ',': 0xC8,
-            '-': 0xC9,
-            '…': 0xCC,
-            '.': 0xCD,
-            '~': 0xCE,
-            '～': 0xCE,
-            "'": 0xD8,
-            '’': 0xD8,
-            '↑': 0xE0,
-            '↓': 0xE1,
-            '→': 0xE2,
-            '←': 0xE3,
-            'あ': 0x00,
-            'い': 0x01,
-            'う': 0x02,
-            'え': 0x03,
-            'お': 0x04,
-            'や': 0x05,
-            'ゆ': 0x06,
-            'よ': 0x07,
-            'か': 0x08,
-            'き': 0x09,
-            'く': 0x0A,
-            'け': 0x0B,
-            'こ': 0x0C,
-            'わ': 0x0D,
-            'を': 0x0E,
-            'ん': 0x0F,
-            'さ': 0x10,
-            'し': 0x11,
-            'す': 0x12,
-            'せ': 0x13,
-            'そ': 0x14,
-            'が': 0x15,
-            'ぎ': 0x16,
-            'ぐ': 0x17,
-            'た': 0x18,
-            'ち': 0x19,
-            'つ': 0x1A,
-            'て': 0x1B,
-            'と': 0x1C,
-            'げ': 0x1D,
-            'ご': 0x1E,
-            'ざ': 0x1F,
-            'な': 0x20,
-            'に': 0x21,
-            'ぬ': 0x22,
-            'ね': 0x23,
-            'の': 0x24,
-            'じ': 0x25,
-            'ず': 0x26,
-            'ぜ': 0x27,
-            'は': 0x28,
-            'ひ': 0x29,
-            'ふ': 0x2A,
-            'へ': 0x2B,
-            'ほ': 0x2C,
-            'ぞ': 0x2D,
-            'だ': 0x2E,
-            'ぢ': 0x2F,
-            'ま': 0x30,
-            'み': 0x31,
-            'む': 0x32,
-            'め': 0x33,
-            'も': 0x34,
-            'づ': 0x35,
-            'で': 0x36,
-            'ど': 0x37,
-            'ら': 0x38,
-            'り': 0x39,
-            'る': 0x3A,
-            'れ': 0x3B,
-            'ろ': 0x3C,
-            'ば': 0x3D,
-            'び': 0x3E,
-            'ぶ': 0x3F,
-            'べ': 0x40,
-            'ぼ': 0x41,
-            'ぱ': 0x42,
-            'ぴ': 0x43,
-            'ぷ': 0x44,
-            'ぺ': 0x45,
-            'ぽ': 0x46,
-            'ゃ': 0x47,
-            'ゅ': 0x48,
-            'ょ': 0x49,
-            'っ': 0x4A,
-            'ぁ': 0x4B,
-            'ぃ': 0x4C,
-            'ぅ': 0x4D,
-            'ぇ': 0x4E,
-            'ぉ': 0x4F,
-            'ア': 0x50,
-            'イ': 0x51,
-            'ウ': 0x52,
-            'エ': 0x53,
-            'オ': 0x54,
-            'ヤ': 0x55,
-            'ユ': 0x56,
-            'ヨ': 0x57,
-            'カ': 0x58,
-            'キ': 0x59,
-            'ク': 0x5A,
-            'ケ': 0x5B,
-            'コ': 0x5C,
-            'ワ': 0x5D,
-            'ヲ': 0x5E,
-            'ン': 0x5F,
-            'サ': 0x60,
-            'シ': 0x61,
-            'ス': 0x62,
-            'セ': 0x63,
-            'ソ': 0x64,
-            'ガ': 0x65,
-            'ギ': 0x66,
-            'グ': 0x67,
-            'タ': 0x68,
-            'チ': 0x69,
-            'ツ': 0x6A,
-            'テ': 0x6B,
-            'ト': 0x6C,
-            'ゲ': 0x6D,
-            'ゴ': 0x6E,
-            'ザ': 0x6F,
-            'ナ': 0x70,
-            'ニ': 0x71,
-            'ヌ': 0x72,
-            'ネ': 0x73,
-            'ノ': 0x74,
-            'ジ': 0x75,
-            'ズ': 0x76,
-            'ゼ': 0x77,
-            'ハ': 0x78,
-            'ヒ': 0x79,
-            'フ': 0x7A,
-            'ヘ': 0x7B,
-            'ホ': 0x7C,
-            'ゾ': 0x7D,
-            'ダ': 0x7E,
-            'マ': 0x80,
-            'ミ': 0x81,
-            'ム': 0x82,
-            'メ': 0x83,
-            'モ': 0x84,
-            'ヅ': 0x85,
-            'デ': 0x86,
-            'ド': 0x87,
-            'ラ': 0x88,
-            'リ': 0x89,
-            'ル': 0x8A,
-            'レ': 0x8B,
-            'ロ': 0x8C,
-            'バ': 0x8D,
-            'ビ': 0x8E,
-            'ブ': 0x8F,
-            'ベ': 0x90,
-            'ボ': 0x91,
-            'パ': 0x92,
-            'ピ': 0x93,
-            'プ': 0x94,
-            'ペ': 0x95,
-            'ポ': 0x96,
-            'ャ': 0x97,
-            'ュ': 0x98,
-            'ョ': 0x99,
-            'ッ': 0x9A,
-            'ァ': 0x9B,
-            'ィ': 0x9C,
-            'ゥ': 0x9D,
-            'ェ': 0x9E,
-            'ォ': 0x9F}
-
-
-def char_to_alttp_char(char):
-    if 0x30 <= ord(char) <= 0x39:
-        return ord(char) + 0x70
-
-    if 0x41 <= ord(char) <= 0x5A:
-        return ord(char) + 0x69
-
-    return char_map.get(char, 0xFF)
-
-class TextMapper(object):
+class CharTextMapper(object):
     number_offset = None
     alpha_offset = 0
     char_map = {}
@@ -695,44 +633,532 @@ class TextMapper(object):
             buf.append(cls.map_char(char))
         return buf
 
+class RawMBTextMapper(CharTextMapper):
+    char_map = {' ': 0xFF,
+                '『': 0xC4,
+                '』': 0xC5,
+                '?': 0xC6,
+                '!': 0xC7,
+                ',': 0xC8,
+                '-': 0xC9,
+                "🡄": 0xCA,
+                "🡆": 0xCB,
+                '…': 0xCC,
+                '.': 0xCD,
+                '~': 0xCE,
+                '～': 0xCE,
+                '@': [0x6A], # Links name (only works if compressed)
+                '>': [0x00, 0xD2, 0x00, 0xD3], # Link's face
+                "'": 0xD8,
+                '’': 0xD8,
+                '%': 0xDD, # Hylian Bird
+                '^': 0xDE, # Hylian Ankh
+                '=': 0xDF, # Hylian Wavy Lines
+                '↑': 0xE0,
+                '↓': 0xE1,
+                '→': 0xE2,
+                '←': 0xE3,
+                '≥': 0xE4, # Cursor
+                '¼': [0x00, 0xE5, 0x00, 0xE7], # ¼ heart
+                '½': [0x00, 0xE6, 0x00, 0xE7], # ½ heart
+                '¾': [0x00, 0xE8, 0x00, 0xE9], # ¾ heart
+                '♥': [0x00, 0xEA, 0x00, 0xEB], # full heart
+                'ᚋ': [0x6C, 0x00], # var 0
+                'ᚌ': [0x6C, 0x01], # var 1
+                'ᚍ': [0x6C, 0x02], # var 2
+                'ᚎ': [0x6C, 0x03], # var 3
+                'あ': 0x00,
+                'い': 0x01,
+                'う': 0x02,
+                'え': 0x03,
+                'お': 0x04,
+                'や': 0x05,
+                'ゆ': 0x06,
+                'よ': 0x07,
+                'か': 0x08,
+                'き': 0x09,
+                'く': 0x0A,
+                'け': 0x0B,
+                'こ': 0x0C,
+                'わ': 0x0D,
+                'を': 0x0E,
+                'ん': 0x0F,
+                'さ': 0x10,
+                'し': 0x11,
+                'す': 0x12,
+                'せ': 0x13,
+                'そ': 0x14,
+                'が': 0x15,
+                'ぎ': 0x16,
+                'ぐ': 0x17,
+                'た': 0x18,
+                'ち': 0x19,
+                'つ': 0x1A,
+                'て': 0x1B,
+                'と': 0x1C,
+                'げ': 0x1D,
+                'ご': 0x1E,
+                'ざ': 0x1F,
+                'な': 0x20,
+                'に': 0x21,
+                'ぬ': 0x22,
+                'ね': 0x23,
+                'の': 0x24,
+                'じ': 0x25,
+                'ず': 0x26,
+                'ぜ': 0x27,
+                'は': 0x28,
+                'ひ': 0x29,
+                'ふ': 0x2A,
+                'へ': 0x2B,
+                'ほ': 0x2C,
+                'ぞ': 0x2D,
+                'だ': 0x2E,
+                'ぢ': 0x2F,
+                'ま': 0x30,
+                'み': 0x31,
+                'む': 0x32,
+                'め': 0x33,
+                'も': 0x34,
+                'づ': 0x35,
+                'で': 0x36,
+                'ど': 0x37,
+                'ら': 0x38,
+                'り': 0x39,
+                'る': 0x3A,
+                'れ': 0x3B,
+                'ろ': 0x3C,
+                'ば': 0x3D,
+                'び': 0x3E,
+                'ぶ': 0x3F,
+                'べ': 0x40,
+                'ぼ': 0x41,
+                'ぱ': 0x42,
+                'ぴ': 0x43,
+                'ぷ': 0x44,
+                'ぺ': 0x45,
+                'ぽ': 0x46,
+                'ゃ': 0x47,
+                'ゅ': 0x48,
+                'ょ': 0x49,
+                'っ': 0x4A,
+                'ぁ': 0x4B,
+                'ぃ': 0x4C,
+                'ぅ': 0x4D,
+                'ぇ': 0x4E,
+                'ぉ': 0x4F,
+                'ア': 0x50,
+                'イ': 0x51,
+                'ウ': 0x52,
+                'エ': 0x53,
+                'オ': 0x54,
+                'ヤ': 0x55,
+                'ユ': 0x56,
+                'ヨ': 0x57,
+                'カ': 0x58,
+                'キ': 0x59,
+                'ク': 0x5A,
+                'ケ': 0x5B,
+                'コ': 0x5C,
+                'ワ': 0x5D,
+                'ヲ': 0x5E,
+                'ン': 0x5F,
+                'サ': 0x60,
+                'シ': 0x61,
+                'ス': 0x62,
+                'セ': 0x63,
+                'ソ': 0x64,
+                'ガ': 0x65,
+                'ギ': 0x66,
+                'グ': 0x67,
+                'タ': 0x68,
+                'チ': 0x69,
+                'ツ': 0x6A,
+                'テ': 0x6B,
+                'ト': 0x6C,
+                'ゲ': 0x6D,
+                'ゴ': 0x6E,
+                'ザ': 0x6F,
+                'ナ': 0x70,
+                'ニ': 0x71,
+                'ヌ': 0x72,
+                'ネ': 0x73,
+                'ノ': 0x74,
+                'ジ': 0x75,
+                'ズ': 0x76,
+                'ゼ': 0x77,
+                'ハ': 0x78,
+                'ヒ': 0x79,
+                'フ': 0x7A,
+                'ヘ': 0x7B,
+                'ホ': 0x7C,
+                'ゾ': 0x7D,
+                'ダ': 0x7E,
+                'マ': 0x80,
+                'ミ': 0x81,
+                'ム': 0x82,
+                'メ': 0x83,
+                'モ': 0x84,
+                'ヅ': 0x85,
+                'デ': 0x86,
+                'ド': 0x87,
+                'ラ': 0x88,
+                'リ': 0x89,
+                'ル': 0x8A,
+                'レ': 0x8B,
+                'ロ': 0x8C,
+                'バ': 0x8D,
+                'ビ': 0x8E,
+                'ブ': 0x8F,
+                'ベ': 0x90,
+                'ボ': 0x91,
+                'パ': 0x92,
+                'ピ': 0x93,
+                'プ': 0x94,
+                'ペ': 0x95,
+                'ポ': 0x96,
+                'ャ': 0x97,
+                'ュ': 0x98,
+                'ョ': 0x99,
+                'ッ': 0x9A,
+                'ァ': 0x9B,
+                'ィ': 0x9C,
+                'ゥ': 0x9D,
+                'ェ': 0x9E,
+                'ォ': 0x9F}
 
-class GoldCreditMapper(TextMapper):
+    kanji = {"娘": 0x00,
+             "城": 0x01,
+             "行": 0x02,
+             "教": 0x03,
+             "会": 0x04,
+             "神": 0x05,
+             "父": 0x06,
+             "訪": 0x07,
+             "頼": 0x08,
+             "通": 0x09,
+             "願": 0x0A,
+             "平": 0x0B,
+             "和": 0x0C,
+             "司": 0x0D,
+             "書": 0x0E,
+             "戻": 0x0F,
+             "様": 0x10,
+             "子": 0x11,
+             "湖": 0x12,
+             "達": 0x13,
+             "彼": 0x14,
+             "女": 0x15,
+             "言": 0x16,
+             "祭": 0x17,
+             "早": 0x18,
+             "雨": 0x19,
+             "剣": 0x1A,
+             "盾": 0x1B,
+             "解": 0x1C,
+             "抜": 0x1D,
+             "者": 0x1E,
+             "味": 0x1F,
+             "方": 0x20,
+             "無": 0x21,
+             "事": 0x22,
+             "出": 0x23,
+             "本": 0x24,
+             "当": 0x25,
+             "私": 0x26,
+             "他": 0x27,
+             "救": 0x28,
+             "倒": 0x29,
+             "度": 0x2A,
+             "国": 0x2B,
+             "退": 0x2C,
+             "魔": 0x2D,
+             "伝": 0x2E,
+             "説": 0x2F,
+             "必": 0x30,
+             "要": 0x31,
+             "良": 0x32,
+             "地": 0x33,
+             "図": 0x34,
+             "印": 0x35,
+             "思": 0x36,
+             "気": 0x37,
+             "人": 0x38,
+             "間": 0x39,
+             "兵": 0x3A,
+             "病": 0x3B,
+             "法": 0x3C,
+             "屋": 0x3D,
+             "手": 0x3E,
+             "住": 0x3F,
+             "連": 0x40,
+             "恵": 0x41,
+             "表": 0x42,
+             "金": 0x43,
+             "王": 0x44,
+             "信": 0x45,
+             "裏": 0x46,
+             "取": 0x47,
+             "引": 0x48,
+             "入": 0x49,
+             "口": 0x4A,
+             "開": 0x4B,
+             "見": 0x4C,
+             "正": 0x4D,
+             "幸": 0x4E,
+             "運": 0x4F,
+             "呼": 0x50,
+             "物": 0x51,
+             "付": 0x52,
+             "紋": 0x53,
+             "章": 0x54,
+             "所": 0x55,
+             "家": 0x56,
+             "闇": 0x57,
+             "読": 0x58,
+             "左": 0x59,
+             "側": 0x5A,
+             "札": 0x5B,
+             "穴": 0x5C,
+             "道": 0x5D,
+             "男": 0x5E,
+             "大": 0x5F,
+             "声": 0x60,
+             "下": 0x61,
+             "犯": 0x62,
+             "花": 0x63,
+             "深": 0x64,
+             "森": 0x65,
+             "水": 0x66,
+             "若": 0x67,
+             "美": 0x68,
+             "探": 0x69,
+             "今": 0x6A,
+             "士": 0x6B,
+             "店": 0x6C,
+             "好": 0x6D,
+             "代": 0x6E,
+             "名": 0x6F,
+             "迷": 0x70,
+             "立": 0x71,
+             "上": 0x72,
+             "光": 0x73,
+             "点": 0x74,
+             "目": 0x75,
+             "的": 0x76,
+             "押": 0x77,
+             "前": 0x78,
+             "夜": 0x79,
+             "十": 0x7A,
+             "字": 0x7B,
+             "北": 0x7C,
+             "急": 0x7D,
+             "昔": 0x7E,
+             "果": 0x7F,
+             "奥": 0x80,
+             "選": 0x81,
+             "続": 0x82,
+             "結": 0x83,
+             "定": 0x84,
+             "悪": 0x85,
+             "向": 0x86,
+             "歩": 0x87,
+             "時": 0x88,
+             "使": 0x89,
+             "古": 0x8A,
+             "何": 0x8B,
+             "村": 0x8C,
+             "長": 0x8D,
+             "配": 0x8E,
+             "匹": 0x8F,
+             "殿": 0x90,
+             "守": 0x91,
+             "精": 0x92,
+             "知": 0x93,
+             "山": 0x94,
+             "誰": 0x95,
+             "足": 0x96,
+             "冷": 0x97,
+             "黄": 0x98,
+             "力": 0x99,
+             "宝": 0x9A,
+             "求": 0x9B,
+             "先": 0x9C,
+             "消": 0x9D,
+             "封": 0x9E,
+             "捕": 0x9F,
+             "勇": 0xA0,
+             "年": 0xA1,
+             "姿": 0xA2,
+             "話": 0xA3,
+             "色": 0xA4,
+             "々": 0xA5,
+             "真": 0xA6,
+             "紅": 0xA7,
+             "場": 0xA8,
+             "炎": 0xA9,
+             "空": 0xAA,
+             "面": 0xAB,
+             "音": 0xAC,
+             "吹": 0xAD,
+             "中": 0xAE,
+             "祈": 0xAF,
+             "起": 0xB0,
+             "右": 0xB1,
+             "念": 0xB2,
+             "再": 0xB3,
+             "生": 0xB4,
+             "庭": 0xB5,
+             "路": 0xB6,
+             "部": 0xB7,
+             "川": 0xB8,
+             "血": 0xB9,
+             "完": 0xBA,
+             "矢": 0xBB,
+             "現": 0xBC,
+             "在": 0xBD,
+             "全": 0xBE,
+             "体": 0xBF,
+             "文": 0xC0,
+             "秘": 0xC1,
+             "密": 0xC2,
+             "感": 0xC3,
+             "賢": 0xC4,
+             "陣": 0xC5,
+             "残": 0xC6,
+             "百": 0xC7,
+             "近": 0xC8,
+             "朝": 0xC9,
+             "助": 0xCA,
+             "術": 0xCB,
+             "粉": 0xCC,
+             "火": 0xCD,
+             "注": 0xCE,
+             "意": 0xCF,
+             "走": 0xD0,
+             "敵": 0xD1,
+             "玉": 0xD2,
+             "復": 0xD3,
+             "活": 0xD4,
+             "塔": 0xD5,
+             "来": 0xD6,
+             "帰": 0xD7,
+             "忘": 0xD8,
+             "東": 0xD9,
+             "青": 0xDA,
+             "持": 0xDB,
+             "込": 0xDC,
+             "逃": 0xDD,
+             "銀": 0xDE,
+             "勝": 0xDF,
+             "集": 0xE0,
+             "始": 0xE1,
+             "攻": 0xE2,
+             "撃": 0xE3,
+             "命": 0xE4,
+             "老": 0xE5,
+             "心": 0xE6,
+             "新": 0xE7,
+             "世": 0xE8,
+             "界": 0xE9,
+             "箱": 0xEA,
+             "木": 0xEB,
+             "対": 0xEC,
+             "特": 0xED,
+             "賊": 0xEE,
+             "洞": 0xEF,
+             "支": 0xF0,
+             "盗": 0xF1,
+             "族": 0xF2,
+             "能": 0xF3,
+             #"力": 0xF4,
+             "多": 0xF5,
+             "聖": 0xF6,
+             "両": 0xF7,
+             "民": 0xF8,
+             "予": 0xF9,
+             "小": 0xFA,
+             "強": 0xFB,
+             "投": 0xFC,
+             "服": 0xFD,
+             "月": 0xFE,
+             "姫": 0xFF}
+    alpha_offset = 0x49
+    number_offset = 0x70
+
+    @classmethod
+    def map_char(cls, char):
+        if char in cls.kanji:
+            return [0x01, cls.kanji[char]]
+        return super().map_char(char)
+
+    @classmethod
+    def convert(cls, text):
+        buf = bytearray()
+        for char in text.lower():
+            res = cls.map_char(char)
+            if isinstance(res, int):
+                buf.extend([0x00, res])
+            else:
+                buf.extend(res)
+        return buf
+
+
+class GoldCreditMapper(CharTextMapper):
     char_map = {' ': 0x9F,
                 ',': 0x34,
-                '.': 0x37,
+                "'": 0x35,
                 '-': 0x36,
-                "'": 0x35}
+                '.': 0x37,}
     alpha_offset = -0x47
 
 
-class GreenCreditMapper(TextMapper):
+class GreenCreditMapper(CharTextMapper):
     char_map = {' ': 0x9F,
-                '.': 0x52}
+                '·': 0x52}
     alpha_offset = -0x29
 
-class RedCreditMapper(TextMapper):
-    char_map = {' ': 0x9F} #fixme
+class RedCreditMapper(CharTextMapper):
+    char_map = {' ': 0x9F}
     alpha_offset = -0x61
 
-class LargeCreditTopMapper(TextMapper):
+class LargeCreditTopMapper(CharTextMapper):
     char_map = {' ': 0x9F,
                 "'": 0x77,
                 '!': 0x78,
                 '.': 0xA0,
                 '#': 0xA1,
                 '/': 0xA2,
-                ':': 0xA3}
+                ':': 0xA3,
+                ',': 0xA4,
+                '?': 0xA5,
+                '=': 0xA6,
+                '"': 0xA7,
+                '-': 0xA8,
+                '·': 0xA9,
+                '•': 0xA9,
+                '◢': 0xAA,
+                '◣': 0xAB,}
     alpha_offset = -0x04
     number_offset = 0x23
 
 
-class LargeCreditBottomMapper(TextMapper):
+class LargeCreditBottomMapper(CharTextMapper):
     char_map = {' ': 0x9F,
                 "'": 0x9D,
                 '!': 0x9E,
                 '.': 0xC0,
                 '#': 0xC1,
                 '/': 0xC2,
-                ':': 0xC3}
+                ':': 0xC3,
+                ',': 0xC4,
+                '?': 0xC5,
+                '=': 0xC6,
+                '"': 0xC7,
+                '-': 0xC8,
+                '·': 0xC9,
+                '•': 0xC9,
+                '◢': 0xCA,
+                '◣': 0xCB,}
     alpha_offset = 0x22
     number_offset = 0x49

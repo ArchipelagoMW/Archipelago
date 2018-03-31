@@ -1026,7 +1026,7 @@ def link_entrances(world):
     if world.get_entrance('Dam').connected_region.name != 'Dam' or world.get_entrance('Swamp Palace').connected_region.name != 'Swamp Palace (Entrance)':
         world.swamp_patch_required = True
 
-    # check for
+    # check for potion shop location
     if world.get_entrance('Potion Shop').connected_region.name != 'Potion Shop':
         world.powder_patch_required = True
 
@@ -1744,6 +1744,7 @@ mandatory_connections = [('Lake Hylia Central Island Pier', 'Lake Hylia Central 
                          ('Paradox Cave Push Block', 'Paradox Cave Front'),
                          ('Paradox Cave Bomb Jump', 'Paradox Cave'),
                          ('Paradox Cave Drop', 'Paradox Cave Chest Area'),
+                         ('Light World Death Mountain Shop', 'Light World Death Mountain Shop'),
                          ('Fairy Ascension Rocks', 'Fairy Ascension Plateau'),
                          ('Fairy Ascension Mirror Spot', 'Fairy Ascension Plateau'),
                          ('Fairy Ascension Drop', 'East Death Mountain (Bottom)'),

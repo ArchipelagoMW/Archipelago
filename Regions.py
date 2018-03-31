@@ -1,5 +1,5 @@
 import collections
-from BaseClasses import Region, Location, Entrance, RegionType
+from BaseClasses import Region, Location, Entrance, RegionType, Shop, ShopType
 
 
 def create_regions(world):
@@ -25,10 +25,10 @@ def create_regions(world):
         create_cave_region('Hyrule Castle Secret Entrance', ['Link\'s Uncle', 'Secret Passage'], ['Hyrule Castle Secret Entrance Exit']),
         create_lw_region('Zoras River', ['King Zora', 'Zora\'s Ledge']),
         create_cave_region('Waterfall of Wishing', ['Waterfall Fairy - Left', 'Waterfall Fairy - Right']),
-		create_lw_region('Kings Grave Area', None, ['Kings Grave', 'Kings Grave Inner Rocks']),
+        create_lw_region('Kings Grave Area', None, ['Kings Grave', 'Kings Grave Inner Rocks']),
         create_cave_region('Kings Grave', ['King\'s Tomb']),
         create_cave_region('North Fairy Cave', None, ['North Fairy Cave Exit']),
-        create_cave_region('Dam', ['Floodgate Chest']),
+        create_cave_region('Dam', ['Floodgate', 'Floodgate Chest']),
         create_cave_region('Links House', ['Link\'s House'], ['Links House Exit']),
         create_cave_region('Chris Houlihan Room', None, ['Chris Houlihan Room Exit']),
         create_cave_region('Tavern', ['Kakariko Tavern']),
@@ -57,7 +57,7 @@ def create_regions(world):
         create_cave_region('Kakariko Well (top)', ['Kakariko Well - Top', 'Kakariko Well - Left', 'Kakariko Well - Middle',
                                                    'Kakariko Well - Right', 'Kakariko Well - Bottom'], ['Kakariko Well (top to bottom)']),
         create_cave_region('Kakariko Well (bottom)', None, ['Kakariko Well Exit']),
-        create_cave_region('Blacksmiths Hut', ['Blacksmith']),
+        create_cave_region('Blacksmiths Hut', ['Blacksmith', 'Missing Smith']),
         create_lw_region('Bat Cave Drop Ledge', None, ['Bat Cave Drop']),
         create_cave_region('Bat Cave (right)', ['Magic Bat'], ['Bat Cave Door']),
         create_cave_region('Bat Cave (left)', None, ['Bat Cave Exit']),
@@ -95,7 +95,7 @@ def create_regions(world):
         create_lw_region('Desert Palace Lone Stairs', None, ['Desert Palace Stairs Drop', 'Desert Palace Entrance (East)']),
         create_lw_region('Desert Palace Entrance (North) Spot', None, ['Desert Palace Entrance (North)', 'Desert Ledge Return Rocks']),
         create_dungeon_region('Desert Palace Main (Outer)', ['Desert Palace - Big Chest', 'Desert Palace - Torch', 'Desert Palace - Map Chest'],
-                      ['Desert Palace Pots (Outer)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)', 'Desert Palace East Wing']),
+                              ['Desert Palace Pots (Outer)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)', 'Desert Palace East Wing']),
         create_dungeon_region('Desert Palace Main (Inner)', None, ['Desert Palace Exit (South)', 'Desert Palace Pots (Inner)']),
         create_dungeon_region('Desert Palace East', ['Desert Palace - Compass Chest', 'Desert Palace - Big Key Chest']),
         create_dungeon_region('Desert Palace North', ['Desert Palace - Lanmolas', 'Desert Palace - Prize'], ['Desert Palace Exit (North)']),
@@ -125,7 +125,7 @@ def create_regions(world):
         create_cave_region('Spectacle Rock Cave (Peak)', None, ['Spectacle Rock Cave Peak Drop', 'Spectacle Rock Cave Exit (Peak)']),
         create_lw_region('East Death Mountain (Bottom)', None, ['Broken Bridge (East)', 'Paradox Cave (Bottom)', 'Paradox Cave (Middle)', 'East Death Mountain Teleporter', 'Hookshot Fairy', 'Fairy Ascension Rocks', 'Spiral Cave (Bottom)']),
         create_cave_region('Hookshot Fairy'),
-        create_cave_region('Paradox Cave Front', None, ['Paradox Cave Push Block Reverse', 'Paradox Cave Exit (Bottom)']),
+        create_cave_region('Paradox Cave Front', None, ['Paradox Cave Push Block Reverse', 'Paradox Cave Exit (Bottom)', 'Light World Death Mountain Shop']),
         create_cave_region('Paradox Cave Chest Area', ['Paradox Cave Lower - Far Left',
                                                        'Paradox Cave Lower - Left',
                                                        'Paradox Cave Lower - Right',
@@ -135,6 +135,7 @@ def create_regions(world):
                                                        'Paradox Cave Upper - Right'],
                            ['Paradox Cave Push Block', 'Paradox Cave Bomb Jump']),
         create_cave_region('Paradox Cave', None, ['Paradox Cave Exit (Middle)', 'Paradox Cave Exit (Top)', 'Paradox Cave Drop']),
+        create_cave_region('Light World Death Mountain Shop'),
         create_lw_region('East Death Mountain (Top)', None, ['Paradox Cave (Top)', 'Death Mountain (Top)', 'Spiral Cave Ledge Access', 'East Death Mountain Drop', 'Turtle Rock Teleporter', 'Fairy Ascension Ledge']),
         create_lw_region('Spiral Cave Ledge', None, ['Spiral Cave', 'Spiral Cave Ledge Drop']),
         create_cave_region('Spiral Cave (Top)', ['Spiral Cave'], ['Spiral Cave (top to bottom)', 'Spiral Cave Exit (Top)']),
@@ -164,10 +165,10 @@ def create_regions(world):
         create_cave_region('Dark Lake Hylia Ledge Spike Cave'),
         create_cave_region('Hype Cave', ['Hype Cave - Top', 'Hype Cave - Middle Right', 'Hype Cave - Middle Left',
                                          'Hype Cave - Bottom', 'Hype Cave - Generous Guy']),
-        create_dw_region('West Dark World', None, ['Village of Outcasts Drop', 'East Dark World River Pier', 'Brewery', 'C-Shaped House', 'Chest Game', 'Thieves Town', 'Graveyard Ledge Mirror Spot', 'Kings Grave Mirror Spot', 'Bumper Cave Entrance Rock',
-                                                   'Skull Woods Forest', 'Village of Outcasts Pegs', 'Village of Outcasts Eastern Rocks', 'Red Shield Shop', 'Dark Sanctuary Hint', 'Fortune Teller (Dark)', 'Dark World Lumberjack Shop']),
+        create_dw_region('West Dark World', ['Frog'], ['Village of Outcasts Drop', 'East Dark World River Pier', 'Brewery', 'C-Shaped House', 'Chest Game', 'Thieves Town', 'Graveyard Ledge Mirror Spot', 'Kings Grave Mirror Spot', 'Bumper Cave Entrance Rock',
+                                                       'Skull Woods Forest', 'Village of Outcasts Pegs', 'Village of Outcasts Eastern Rocks', 'Red Shield Shop', 'Dark Sanctuary Hint', 'Fortune Teller (Dark)', 'Dark World Lumberjack Shop']),
         create_dw_region('Dark Grassy Lawn', None, ['Grassy Lawn Pegs', 'Dark World Shop']),
-        create_dw_region('Hammer Peg Area', None, ['Bat Cave Drop Ledge Mirror Spot', 'Dark World Hammer Peg Cave', 'Peg Area Rocks']),
+        create_dw_region('Hammer Peg Area', ['Dark Blacksmith Ruins'], ['Bat Cave Drop Ledge Mirror Spot', 'Dark World Hammer Peg Cave', 'Peg Area Rocks']),
         create_dw_region('Bumper Cave Entrance', None, ['Bumper Cave (Bottom)', 'Bumper Cave Entrance Mirror Spot', 'Bumper Cave Entrance Drop']),
         create_cave_region('Fortune Teller (Dark)'),
         create_cave_region('Village of Outcasts Shop'),
@@ -290,6 +291,14 @@ def create_regions(world):
         create_dw_region('Pyramid Ledge', None, ['Pyramid Entrance', 'Pyramid Drop'])
     ]
 
+    for region_name, (room_id, shopkeeper, replaceable) in shop_table.items():
+        region = world.get_region(region_name)
+        shop = Shop(region, room_id, ShopType.Shop, shopkeeper, replaceable)
+        region.shop = shop
+        world.shops.append(shop)
+        for index, (item, price) in enumerate(default_shop_contents[region_name]):
+            shop.add_inventory(index, item, price)
+
     world.intialize_regions()
 
 def create_lw_region(name, locations=None, exits=None):
@@ -347,6 +356,38 @@ def mark_light_world_regions(world):
                 seen.add(exit.connected_region)
                 queue.append(exit.connected_region)
 
+# (room_id, shopkeeper, replaceable)
+shop_table = {
+    'Cave Shop (Dark Death Mountain)': (0x0112, 0x51, True),
+    'Red Shield Shop': (0x0110, 0x51, True),
+    'Dark Lake Hylia Shop': (0x010F, 0x51, True),
+    'Dark World Lumberjack Shop': (0x010F, 0x51, True),
+    'Village of Outcasts Shop': (0x010F, 0x51, True),
+    'Dark World Potion Shop': (0x010F, 0x51, True),
+    'Light World Death Mountain Shop': (0x00FF, 0x51, True),
+    'Kakariko Shop': (0x011F, 0x51, True),
+    'Cave Shop (Lake Hylia)': (0x0112, 0x51, True),
+    'Potion Shop': (0x0109, 0xFF, False),
+    # Bomb Shop not currently modeled as a shop, due to special nature of items
+}
+# region, [item]
+# slot, item, price, max=0, replacement=None, replacement_price=0
+# item = (item, price)
+
+_basic_shop_defaults = [('Red Potion', 150), ('Small Heart', 10), ('Bombs (10)', 50)]
+_dark_world_shop_defaults = [('Red Potion', 150), ('Blue Shield', 50), ('Bombs (10)', 50)]
+default_shop_contents = {
+    'Cave Shop (Dark Death Mountain)': _basic_shop_defaults,
+    'Red Shield Shop': [('Red Shield', 500), ('Bee', 10), ('Arrows (10)', 30)],
+    'Dark Lake Hylia Shop': _dark_world_shop_defaults,
+    'Dark World Lumberjack Shop': _dark_world_shop_defaults,
+    'Village of Outcasts Shop': _dark_world_shop_defaults,
+    'Dark World Potion Shop': _dark_world_shop_defaults,
+    'Light World Death Mountain Shop': _basic_shop_defaults,
+    'Kakariko Shop': _basic_shop_defaults,
+    'Cave Shop (Lake Hylia)': _basic_shop_defaults,
+    'Potion Shop': [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)],
+}
 
 location_table = {'Mushroom': (0x180013, False, 'in the woods'),
                   'Bottle Merchant': (0x2EB18, False, 'with a merchant'),
@@ -567,6 +608,10 @@ location_table = {'Mushroom': (0x180013, False, 'in the woods'),
                   'Ganon': (None, False, 'from me'),
                   'Agahnim 1': (None, False, 'from my wizardry form'),
                   'Agahnim 2': (None, False, 'from my wizardry form'),
+                  'Floodgate': (None, False, None),
+                  'Frog': (None, False, None),
+                  'Missing Smith': (None, False, None),
+                  'Dark Blacksmith Ruins': (None, False, None),
                   'Eastern Palace - Prize': ([0x1209D, 0x53EF8, 0x53EF9, 0x180052, 0x18007C, 0xC6FE], True, 'Eastern Palace'),
                   'Desert Palace - Prize': ([0x1209E, 0x53F1C, 0x53F1D, 0x180053, 0x180078, 0xC6FF], True, 'Desert Palace'),
                   'Tower of Hera - Prize': ([0x120A5, 0x53F0A, 0x53F0B, 0x18005A, 0x18007A, 0xC706], True, 'Tower of Hera'),

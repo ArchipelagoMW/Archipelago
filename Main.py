@@ -1,11 +1,12 @@
 from collections import OrderedDict
+import copy
 from itertools import zip_longest
 import json
 import logging
 import random
 import time
 
-from BaseClasses import World, CollectionState, Item
+from BaseClasses import World, CollectionState, Item, Region, Location, Entrance, Shop
 from Regions import create_regions, mark_light_world_regions
 from EntranceShuffle import link_entrances
 from Rom import patch_rom, Sprite, LocalRom, JsonRom
@@ -15,31 +16,31 @@ from Fill import distribute_items_cutoff, distribute_items_staleness, distribute
 from ItemList import generate_itempool, difficulties
 from Utils import output_path
 
-__version__ = '0.6.0'
+__version__ = '0.6.1'
 
-logic_hash = [26, 76, 4, 144, 72, 105, 234, 233, 12, 184, 95, 94, 100, 13, 15, 174,
-              186, 135, 130, 189, 246, 254, 123, 245, 85, 241, 101, 129, 70, 255, 55, 248,
-              43, 146, 23, 179, 243, 208, 230, 176, 9, 88, 239, 226, 222, 203, 244, 183,
-              205, 74, 44, 5, 122, 220, 206, 47, 221, 125, 138, 155, 98, 79, 238, 119,
-              30, 24, 159, 39, 253, 27, 33, 218, 62, 82, 200, 28, 141, 191, 93, 22,
-              192, 54, 227, 108, 48, 78, 242, 166, 60, 250, 75, 145, 49, 212, 41, 25,
-              127, 89, 178, 157, 19, 158, 177, 231, 207, 66, 172, 17, 133, 61, 109, 86,
-              57, 143, 142, 219, 148, 209, 181, 87, 163, 40, 81, 114, 240, 103, 31, 175,
-              237, 185, 18, 173, 168, 45, 216, 106, 161, 16, 151, 139, 104, 134, 110, 21,
-              32, 131, 118, 182, 215, 67, 3, 73, 171, 71, 150, 147, 223, 247, 42, 132,
-              107, 149, 232, 153, 10, 201, 156, 225, 116, 194, 187, 204, 46, 165, 124, 92,
-              7, 0, 251, 126, 162, 80, 90, 154, 252, 197, 188, 52, 137, 117, 198, 63,
-              167, 38, 136, 96, 58, 11, 1, 115, 229, 224, 37, 112, 170, 59, 68, 196,
-              36, 64, 91, 213, 14, 180, 190, 164, 8, 56, 214, 77, 202, 193, 97, 84,
-              152, 83, 236, 211, 20, 217, 2, 228, 140, 69, 121, 111, 113, 128, 210, 51,
-              53, 6, 235, 34, 102, 29, 120, 35, 50, 65, 160, 249, 99, 169, 199, 195]
+logic_hash = [215, 244, 99, 97, 253, 98, 31, 150, 207, 70, 50, 78, 59, 73, 221, 191,
+              21, 34, 200, 116, 77, 234, 89, 27, 228, 96, 16, 249, 56, 148, 3, 176,
+              17, 227, 24, 20, 238, 67, 37, 219, 62, 223, 60, 123, 246, 92, 164, 177,
+              211, 15, 245, 23, 75, 33, 190, 124, 144, 100, 87, 57, 86, 108, 80, 181,
+              6, 28, 2, 71, 182, 155, 222, 229, 90, 91, 32, 126, 25, 226, 133, 41,
+              132, 122, 10, 30, 53, 239, 112, 49, 104, 76, 209, 247, 139, 13, 173, 113,
+              159, 69, 145, 161, 11, 102, 149, 143, 129, 178, 45, 217, 196, 232, 208, 119,
+              94, 19, 35, 65, 170, 103, 55, 109, 5, 43, 118, 194, 180, 12, 206, 241,
+              8, 105, 210, 231, 179, 83, 137, 18, 212, 236, 225, 66, 63, 142, 138, 131,
+              192, 160, 1, 198, 153, 128, 106, 165, 39, 248, 167, 22, 74, 163, 140, 157,
+              214, 84, 154, 127, 195, 172, 136, 168, 68, 134, 152, 95, 111, 235, 26, 42,
+              135, 186, 250, 7, 72, 58, 4, 9, 193, 101, 52, 44, 187, 183, 171, 184,
+              197, 130, 47, 189, 81, 203, 51, 110, 146, 175, 213, 88, 79, 93, 64, 107,
+              121, 237, 0, 46, 120, 141, 199, 158, 174, 114, 205, 201, 151, 185, 242, 29,
+              162, 117, 85, 54, 14, 202, 216, 169, 230, 252, 188, 251, 36, 233, 147, 82,
+              115, 61, 255, 38, 220, 218, 40, 224, 48, 125, 204, 156, 240, 254, 166, 243]
 
 
 def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.keysanity, args.custom, args.customitemarray)
+    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.keysanity, args.retro, args.custom, args.customitemarray)
     logger = logging.getLogger('')
     if seed is None:
         random.seed(None)
@@ -111,7 +112,7 @@ def main(args, seed=None):
     else:
         sprite = None
 
-    outfilebase = 'ER_%s_%s-%s-%s%s_%s-%s%s%s%s_%s' % (world.logic, world.difficulty, world.mode, world.goal, "" if world.timer in ['none', 'display'] else "-" + world.timer, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "", "-shuffleganon" if world.shuffle_ganon else "", world.seed)
+    outfilebase = 'ER_%s_%s-%s-%s%s_%s-%s%s%s%s_%s' % (world.logic, world.difficulty, world.mode, world.goal, "" if world.timer in ['none', 'display'] else "-" + world.timer, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-retro" if world.retro else "", "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "", world.seed)
 
     if not args.suppress_rom:
         if args.jsonout:
@@ -139,7 +140,7 @@ def gt_filler(world):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.timer, world.progressive, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.keysanity, world.custom, world.customitemarray)
+    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.timer, world.progressive, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.keysanity, world.retro, world.custom, world.customitemarray)
     ret.required_medallions = list(world.required_medallions)
     ret.swamp_patch_required = world.swamp_patch_required
     ret.ganon_at_pyramid = world.ganon_at_pyramid
@@ -156,6 +157,13 @@ def copy_world(world):
     ret.lamps_needed_for_dark_rooms = world.lamps_needed_for_dark_rooms
     create_regions(ret)
     create_dungeons(ret)
+
+    copy_dynamic_regions_and_locations(world, ret)
+
+    for shop in world.shops:
+        copied_shop = ret.get_region(shop.region.name).shop
+        copied_shop.active = shop.active
+        copied_shop.inventory = copy.copy(shop.inventory)
 
     # connect copied world
     for region in world.regions:
@@ -184,6 +192,24 @@ def copy_world(world):
     set_rules(ret)
 
     return ret
+
+def copy_dynamic_regions_and_locations(world, ret):
+    for region in world.dynamic_regions:
+        new_reg = Region(region.name, region.type)
+        ret.regions.append(new_reg)
+        ret.dynamic_regions.append(new_reg)
+
+        # Note: ideally exits should be copied here, but the current use case (Take anys) do not require this
+
+        if region.shop:
+            new_reg.shop = Shop(new_reg, region.shop.room_id, region.shop.type, region.shop.shopkeeper_config, region.shop.replaceable)
+            ret.shops.append(new_reg.shop)
+
+    for location in world.dynamic_locations:
+        new_loc = Location(location.name, location.address, location.crystal, location.hint_text, location.parent_region)
+        new_reg = ret.get_region(location.parent_region.name)
+        new_reg.locations.append(new_loc)
+
 
 def create_playthrough(world):
     # create a copy as we will modify it
@@ -294,8 +320,6 @@ def create_playthrough(world):
     old_world.spoiler.paths = {location.name : get_path(state, location.parent_region) for sphere in collection_spheres for location in sphere}
     if any(exit == 'Pyramid Fairy' for path in old_world.spoiler.paths.values() for (_, exit) in path):
         old_world.spoiler.paths['Big Bomb Shop'] = get_path(state, world.get_region('Big Bomb Shop'))
-    if any(exit == 'Swamp Palace Moat' for path in old_world.spoiler.paths.values() for (_, exit) in path) or 'Sunken Treasure' in old_world.required_locations:
-        old_world.spoiler.paths['Dam'] = get_path(state, world.get_region('Dam'))
 
     # we can finally output our playthrough
     old_world.spoiler.playthrough = OrderedDict([(str(i + 1), {str(location): str(location.item) for location in sphere}) for i, sphere in enumerate(collection_spheres)])

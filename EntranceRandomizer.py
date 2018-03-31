@@ -20,12 +20,14 @@ class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
 def start():
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument('--create_spoiler', help='Output a Spoiler File', action='store_true')
-    parser.add_argument('--logic', default='noglitches', const='noglitches', nargs='?', choices=['noglitches', 'minorglitches'],
+    parser.add_argument('--logic', default='noglitches', const='noglitches', nargs='?', choices=['noglitches', 'minorglitches', 'nologic'],
                         help='''\
                              Select Enforcement of Item Requirements. (default: %(default)s)
                              No Glitches:
                              Minor Glitches: May require Fake Flippers, Bunny Revival
                                              and Dark Room Navigation.
+                             No Logic: Distribute items without regard for
+                                             item requirements.
                              ''')
     parser.add_argument('--mode', default='open', const='open', nargs='?', choices=['standard', 'open', 'swordless'],
                         help='''\
@@ -164,6 +166,10 @@ def start():
     parser.add_argument('--keysanity', help='''\
                              Keys (and other dungeon items) are no longer restricted to
                              their dungeons, but can be anywhere
+                             ''', action='store_true')
+    parser.add_argument('--retro', help='''\
+                             Keys are universal, shooting arrows costs rupees,
+                             and a few other little things make this more like Zelda-1.
                              ''', action='store_true')
     parser.add_argument('--custom', default=False, help='Not supported.')
     parser.add_argument('--customitemarray', default=False, help='Not supported.')
