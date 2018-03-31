@@ -1114,12 +1114,12 @@ DARKNESS & (
 
 {
 "edge": "SNOWLAND_WEST -> SNOWLAND_MID",
-"prereq": "SLIDING_POWDER",
+"prereq": "NONE",
 }
 
 {
 "edge": "SNOWLAND_MID -> SNOWLAND_WEST",
-"prereq": "NONE",
+"prereq": "SLIDING_POWDER",
 }
 
 {
