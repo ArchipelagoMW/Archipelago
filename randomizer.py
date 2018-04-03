@@ -84,6 +84,17 @@ def apply_fixes_for_randomizer(areaid, data):
         data.tiledata_event[xy_to_index(246,63)] = 0
         data.tiledata_event[xy_to_index(246,64)] = 0
 
+        # Remove autosave point at chaos rod
+        for y in range(182,189):
+            data.tiledata_event[xy_to_index(314,y)] = 0
+        for y in range(182,188):
+            data.tiledata_event[xy_to_index(312,y)] = 0
+        data.tiledata_event[xy_to_index(316,188)] = 0
+
+        # Remove autosave point at air dash
+        for y in range(47,55):
+            data.tiledata_event[xy_to_index(387,y)] = 0
+
     if areaid == 4:
         # Remove save point at slide location in lab
         for y in range(185,189):
