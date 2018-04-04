@@ -183,7 +183,7 @@ COCOA_BOMB : 40
 ===ShufflableGiftItems===
 (223, 36) : 6 : 21 : P_HAIRPIN
 (203, 120) : 5 : 6 : SPEED_BOOST
-(210, 120) : 5 : 29 : BUNNY_STRIKE
+(210, 118) : 5 : 29 : BUNNY_STRIKE
 
 ===Items===
 // Area 0: SOUTHERN_WOODLAND
