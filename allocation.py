@@ -17,6 +17,7 @@ class Allocation(object):
     #
     # list: walking_left_transitions  (MapTransition objects)
     #
+    # dict: edge_replacements  [(from_location, to_location) -> template_changes]
     # list: map_modifications  (Paths to diff files)
 
     def __init__(self, data, settings):

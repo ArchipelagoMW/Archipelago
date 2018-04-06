@@ -31,6 +31,10 @@ class Generator(object):
 
         print('Seed generated after %d attempts' % (attempts+1))
         
+        # Run difficulty analysis
+        if False:
+            self.difficulty_analysis = DifficultyAnalysis()
+
         # Generate Visualization and Print Output:
         if True:
             Analyzer(self.data, self.allocation, visualize=True)

@@ -453,7 +453,7 @@ def parse_template_constraints(locations_set, variable_names_set, default_expres
     return template_constraints
 
 
-def read_config(setting_flags, item_locations_set, shufflable_gift_items_set, config_flags_set, predefined_additional_items_set, settings):
+def read_config(default_setting_flags, item_locations_set, shufflable_gift_items_set, config_flags_set, predefined_additional_items_set, settings):
     lines = read_file_and_strip_comments(settings.config_file)
     jsondata = ' '.join(lines)
     jsondata = re.sub(',\s*]', ']', jsondata)
@@ -474,7 +474,7 @@ def read_config(setting_flags, item_locations_set, shufflable_gift_items_set, co
         must_be_reachable -= shufflable_gift_items_set
 
     # Settings
-    setting_flags = dict(setting_flags)
+    setting_flags = dict(default_setting_flags)
     for key, value in config_settings.items():
         if key not in config_flags_set:
             fail('Undefined flag: %s' % key)
@@ -564,8 +564,10 @@ class RandomizerData(object):
     # set: locations_set
     #
     #
-    # Preprocessed - Graph
+    # Preprocessed - Based on settings
     #
+    # dict: configured_variables        (variable_name -> value)
+    # dict: pessimistic_variables        (variable_name -> value)
     # list: graph_vertices           (list(node_name))
     # dict: item_locations_in_node   (node_name -> list(item_name))
     # list: initial_edges             (edge_id -> GraphEdge)
@@ -588,9 +590,15 @@ class RandomizerData(object):
 
 
     def __init__(self, settings):
-        self.setting_flags = define_config_flags()
-        config_flags_set = set(set(self.setting_flags.keys()))
-        self.setting_flags.update(define_setting_flags(settings))
+        self.default_config_flags = define_config_flags()
+        self.pessimistic_config_flags = dict((key, False) for key in self.default_config_flags.keys())
+
+        self.default_setting_flags = define_setting_flags(settings)
+        self.pessimistic_setting_flags = dict(self.default_setting_flags)
+
+        self.default_setting_flags.update(self.default_config_flags)
+        self.pessimistic_setting_flags.update(self.pessimistic_config_flags)
+
         self.pseudo_items = define_pseudo_items()
         self.locations, self.map_transitions, self.items, self.all_additional_items, self.shufflable_gift_items = parse_locations_and_items()
         self.additional_items = dict(self.all_additional_items)
@@ -613,7 +621,7 @@ class RandomizerData(object):
                                    self.item_names + \
                                    list(self.additional_items.keys()) + \
                                    list(self.pseudo_items.keys()) + \
-                                   list(self.setting_flags.keys())
+                                   list(self.default_setting_flags.keys())
         self.variable_names_list.sort()
 
         variable_names_set = set(self.variable_names_list)
@@ -626,8 +634,9 @@ class RandomizerData(object):
         items_set = set(self.item_names)
 
         # More config loading
-        self.setting_flags, self.to_shuffle, self.must_be_reachable, self.included_additional_items = \
-            read_config(self.setting_flags, items_set, shufflable_gift_items_set, config_flags_set, set(self.all_additional_items.keys()), settings)
+        config_flags_set = set(self.default_config_flags.keys())
+        self.configured_setting_flags, self.to_shuffle, self.must_be_reachable, self.included_additional_items = \
+            read_config(self.default_setting_flags, items_set, shufflable_gift_items_set, config_flags_set, set(self.all_additional_items.keys()), settings)
 
         default_expressions = define_default_expressions(variable_names_set)
         evaluate_pseudo_item_constraints(self.pseudo_items, variable_names_set, default_expressions)
@@ -640,10 +649,10 @@ class RandomizerData(object):
         self.preprocess_variables(settings)
         self.preprocess_graph(settings)
 
-    def preprocess_variables(self, settings):
+    def preprocess_variables_with_settings(self, setting_flags, settings):
         # Mark all unconstrained pseudo-items
         variables = dict((name, False) for name in self.variable_names_list)
-        variables.update(self.setting_flags)
+        variables.update(setting_flags)
 
         to_remove = set()
         unreached_pseudo_items = dict()
@@ -660,10 +669,14 @@ class RandomizerData(object):
             for target in to_remove:
                 del unreached_pseudo_items[target]
 
-        self.default_variables = variables
+        return variables
+
+    def preprocess_variables(self, settings):
+        self.configured_variables = self.preprocess_variables_with_settings(self.configured_setting_flags, settings)
+        self.pessimistic_variables = self.preprocess_variables_with_settings(self.pessimistic_setting_flags, settings)
 
     def preprocess_graph(self, settings):
-        default_variables = self.default_variables
+        pessimistic_variables = self.pessimistic_variables
 
         # Partial Graph Construction
         graph_vertices = list(self.location_list)
@@ -671,8 +684,8 @@ class RandomizerData(object):
         edges = []
         for item_constraint in self.item_constraints:
             if item_constraint.no_alternate_paths and \
-                    item_constraint.entry_prereq(default_variables) and \
-                    item_constraint.exit_prereq(default_variables):
+                    item_constraint.entry_prereq(pessimistic_variables) and \
+                    item_constraint.exit_prereq(pessimistic_variables):
                 # Unconstrained - Merge directly into from_location
                 item_locations_in_node[item_constraint.from_location].append(item_constraint.item)
             else:
@@ -788,5 +801,8 @@ class RandomizerData(object):
 
 
     def generate_variables(self):
-        return dict(self.default_variables)
+        return dict(self.configured_variables)
+        
+    def generate_pessimistic_variables(self):
+        return dict(self.pessimistic_variables)
         
