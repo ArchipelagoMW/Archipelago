@@ -196,7 +196,7 @@ class DifficultyAnalysis(object):
         if self.current_config_score != None: return
         variables = self.data.generate_variables()
         reachable, unreachable, levels, new_variables = self.analyzer.analyze_with_variable_set(variables)
-        self.current_config_score = self._compute_average_goal_level(self.goals, levels)
+        self.current_config_score = compute_average_goal_level(self.goals, levels)
 
     def _compute_all_level_scores(self):
         if self.level_scores != None: return
@@ -213,16 +213,16 @@ class DifficultyAnalysis(object):
         score = 0
         #print('== Base %d ==' % base_config_level)
         for config_level in range(base_config_level, MAX_CONFIG_LEVEL):
-            self._configure_variables(config_level, variables)
+            configure_variables(config_level, variables)
             reachable, unreachable, levels, new_variables = analyzer.analyze_with_variable_set(variables)
             #print('level %d' % config_level)
             if goals.issubset(reachable):
                 #print('  pass - levels: %d' % len(levels))
-                #print('  average goal level: %f' % self._compute_average_goal_level(goals, levels))
+                #print('  average goal level: %f' % compute_average_goal_level(goals, levels))
                 #for en, level in enumerate(levels):
                     #print('LEVEL %.1f' % (en/2))
                     #print(level)
-                score += self._compute_average_goal_level(goals, levels)*score_multiplier
+                score += compute_average_goal_level(goals, levels)*score_multiplier
                 break
             #print('  fail - levels: %d' % len(levels))
             
@@ -234,21 +234,21 @@ class DifficultyAnalysis(object):
 
         return score
 
-    def _compute_average_goal_level(self, goals, levels):
-        count = 0
-        total = 0
+def compute_average_goal_level(goals, levels):
+    count = 0
+    total = 0
 
-        for level, variable_list in enumerate(levels):
-            goals_in_level = len(goals.intersection(variable_list))
-            count += goals_in_level
-            total += goals_in_level*level/2
+    for level, variable_list in enumerate(levels):
+        goals_in_level = len(goals.intersection(variable_list))
+        count += goals_in_level
+        total += goals_in_level*level/2
 
-        return total/count
+    return total/count
 
-    def _configure_variables(self, config_level, variables):
-        config_flags = DIFFICULTY_CONFIGS[config_level].config_flags
-        length_check_before = len(variables)
-        variables.update(config_flags)
-        if len(variables) != length_check_before:
-            fail('Unknown config flags detected!')
+def configure_variables(config_level, variables):
+    config_flags = DIFFICULTY_CONFIGS[config_level].config_flags
+    length_check_before = len(variables)
+    variables.update(config_flags)
+    if len(variables) != length_check_before:
+        fail('Unknown config flags detected!')
 

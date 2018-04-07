@@ -31,8 +31,12 @@ def parse_args():
     args.add_argument('--super-attack-mode', action='store_true', help='Start the game with a bunch of attack ups, so you do lots more damage.')
     args.add_argument('--hyper-attack-mode', action='store_true', help='Like Super Attack Mode, but with 35 attack ups.')
     args.add_argument('--open-mode', action='store_true', help='Removes prologue triggers that restrict exploration.')
-    args.add_argument('--hide-unreachable', action='store_true', help='Hide list of unreachable items. Affects seed.')
+    #args.add_argument('--hide-unreachable', action='store_true', help='Hide list of unreachable items. Affects seed.')
     args.add_argument('--hide-difficulty', action='store_true', help='Hide difficulty rating. Affects seed.')
+    args.add_argument('-min-chain-length', default=0, type=int, help='Set a minimum chain length for generation. Faster tham -min-difficulty.')
+    args.add_argument('-min-difficulty', default=0, type=float, help='Set a minimum difficulty for generation. Slower tham -min-chain-length.')
+    args.add_argument('-max-breakability', default=None, type=float, help='Set a maximum seed breakability for generation. Slower tham -min-chain-length.')
+    args.add_argument('-max-attempts', default=1000, type=int, help='Set the maximum amount of seed generation attempts before giving up. Default is 1000.')
     args.add_argument('--egg-goals', action='store_true', help='Egg goals mode. Hard-to-reach items are replaced with easter eggs. All other eggs are removed from the map.')
     args.add_argument('-extra-eggs', default=0, type=int, help='Number of extra randomly-chosen eggs for egg-goals mode (in addition to the hard-to-reach eggs)')
 
@@ -314,8 +318,12 @@ def run_randomizer(seed, source_dir, settings):
     if seed != None: random.seed(seed)
     randomizer_data = RandomizerData(settings)
     generator = Generator(randomizer_data, settings)
-    allocation, analyzer = generator.generate_seed()
+    allocation, analyzer, difficulty_analysis = generator.generate_seed()
     print('done')
+    if not settings.hide_difficulty:
+        print('Difficulty: %.2f' % difficulty_analysis.difficulty_score)
+        print('Sequence Break Potential: %.2f' % difficulty_analysis.breakability_score)
+
     if settings.no_write:
         print('No maps generated as no-write flag is on.')
         return
@@ -350,6 +358,6 @@ if __name__ == '__main__':
     if args.seed == None:
         seed = None
     else:
-        seed = string_to_integer_seed('%s_ha:%s_hd:%s' % (args.seed, args.hide_unreachable, args.hide_difficulty))
+        seed = string_to_integer_seed('%s_hd:%s' % (args.seed, args.hide_difficulty))
 
     run_randomizer(seed, source_dir, args)

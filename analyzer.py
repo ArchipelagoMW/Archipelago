@@ -1,5 +1,6 @@
 import random
 from utility import *
+from difficultyanalysis import compute_average_goal_level
 
 START_LOCATION = 'FOREST_START'
 
@@ -15,8 +16,9 @@ class Analyzer(object):
     # levels
     # hard_to_reach_items
 
-    def __init__(self, data, allocation, goals=None, visualize=False):
+    def __init__(self, data, settings, allocation, goals=None, visualize=False):
         self.data = data
+        self.settings = settings
         self.allocation = allocation
         self.visualize = visualize
         self.goals = goals
@@ -40,6 +42,11 @@ class Analyzer(object):
         if self.goals != None and not set(self.goals).issubset(reachable):
             self.error_message = 'Not all goals are reachable.'
             return False
+
+        if self.goals != None and self.settings.min_chain_length > 0:
+            if compute_average_goal_level(set(self.goals), levels) < self.settings.min_chain_length:
+                self.error_message = 'Below minimum chain length.'
+                return False
 
         error = self.process_verification_results(reachable, unreachable, levels)
         if error:
