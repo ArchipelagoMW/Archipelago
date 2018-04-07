@@ -163,10 +163,10 @@ class Analyzer(object):
                     if condition(variables):
                         current_level_part1.append(target)
                         to_remove.append(target)
+                        variables[target] = True
                         has_changes = True
 
                 for target in to_remove:
-                    variables[target] = True
                     del unreached_pseudo_items[target]
 
                 # 0 Part B: Handle alternate constraints for items
@@ -175,11 +175,11 @@ class Analyzer(object):
                     if condition(variables):
                         if not variables[target]:
                             current_level_part1.append(target)
+                            variables[target] = True
                             has_changes = True
                         to_remove.append(target)
 
                 for target in to_remove:
-                    variables[target] = True
                     del unsatisfied_item_conditions[target]
 
 
