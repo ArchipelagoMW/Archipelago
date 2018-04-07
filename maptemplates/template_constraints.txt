@@ -15,7 +15,7 @@
 
 {
 "name": "upper_icy_summit_wall",
-"weight": 10,
+"weight": 7,
 "changes": [
     {
     "edge": "ICY_SUMMIT_MAIN -> ICY_SUMMIT_UPPER",
@@ -151,7 +151,7 @@
 
 {
 "name": "above_hammer_unclimbable",
-"weight": 40,
+"weight": 170,
 "changes": [
     {
     "edge": "FOREST_START -> FOREST_NIGHT_TOXIC_STRIKE",
@@ -161,7 +161,7 @@
 
 {
 "name": "above_hammer_fireorb",
-"weight": 10,
+"weight": 60,
 "changes": [
     {
     "edge": "FOREST_START -> FOREST_NIGHT_TOXIC_STRIKE",
@@ -411,7 +411,7 @@
 
 {
 "name": "skybridge_west_wall",
-"weight": 10,
+"weight": 5,
 "changes": [
     {
     "edge": "PARK_UPPER -> SKY_BRIDGE_MAIN",
@@ -523,7 +523,7 @@
 "changes": [
     {
     "edge": "PARK_MAIN -> PARK_UPPER",
-    "prereq": "BUNNY_WHIRL | (CARROT_SHOOTER & BOOST)",
+    "prereq": "BUNNY_WHIRL",
     }
     {
     "edge": "PARK_UPPER -> PARK_MAIN",
@@ -767,7 +767,7 @@
 
 {
 "name": "forest_northwest_oneway",
-"weight": 10,
+"weight": 50,
 "changes": [
     {
     "edge": "FOREST_NIGHT_TOXIC_STRIKE -> FOREST_NIGHT_NORTH_EAST",
@@ -1470,7 +1470,7 @@
 
 {
 "name": "shop_entrance_slide",
-"weight": 10,
+"weight": 5,
 "changes": [
     {
     "edge": "TOWN_MAIN -> TOWN_SHOP",
