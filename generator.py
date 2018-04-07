@@ -3,7 +3,6 @@ from analyzer import Analyzer
 from difficultyanalysis import DifficultyAnalysis
 from utility import fail
 import time
-import random
 
 class Generator(object):
     def __init__(self, data, settings):
