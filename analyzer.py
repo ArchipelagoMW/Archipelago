@@ -15,24 +15,30 @@ class Analyzer(object):
     # levels
     # hard_to_reach_items
 
-    def __init__(self, data, allocation, visualize=False):
+    def __init__(self, data, allocation, goals=None, visualize=False):
         self.data = data
         self.allocation = allocation
         self.visualize = visualize
+        self.goals = goals
 
         self.error_message = ''
         self.success = self.run_verifier()
 
     def run_verifier(self):
-        result, backward_exitable = self.verify_warps_reachable()
+        starting_variables = self.data.generate_variables()
+        result, backward_exitable = self.verify_warps_reachable(starting_variables)
         if not result:
             self.error_message = 'Not all warps reachable.'
             return False
-        reachable, unreachable, levels = self.verify_reachable_items(backward_exitable)
+        reachable, unreachable, levels, _ = self.verify_reachable_items(starting_variables, backward_exitable)
 
         # ensure all must_be_reachable items are reachable.
         if not set(self.data.must_be_reachable).issubset(reachable):
             self.error_message = 'Not all must_be_reachable items are reachable.'
+            return False
+
+        if self.goals != None and not set(self.goals).issubset(reachable):
+            self.error_message = 'Not all goals are reachable.'
             return False
 
         error = self.process_verification_results(reachable, unreachable, levels)
@@ -74,9 +80,9 @@ class Analyzer(object):
         return None
 
 
-    def verify_warps_reachable(self):
+    def verify_warps_reachable(self, starting_variables):
         # verify that every major location has an unconstrained path to the goal.
-        variables = self.data.generate_variables()
+        variables = starting_variables #should make a copy, but we don't modify variables anyway so we optimize this out.
         allocation = self.allocation
         edges = allocation.edges
 
@@ -97,7 +103,7 @@ class Analyzer(object):
         return (len(major_locations - visited) == 0, visited)
 
 
-    def verify_reachable_items(self, backward_exitable):
+    def verify_reachable_items(self, starting_variables, backward_exitable):
         if self.visualize:
             from visualizer import Visualization
             vis = Visualization()
@@ -113,7 +119,7 @@ class Analyzer(object):
         locations_set = data.locations_set
 
         # Persistent variables
-        variables = data.generate_variables()
+        variables = dict(starting_variables)
         untraversable_edges = set(edge.edge_id for edge in edges)
         unreached_pseudo_items = dict(data.pseudo_items)
         unsatisfied_item_conditions = dict(data.alternate_conditions)
@@ -325,7 +331,11 @@ class Analyzer(object):
                 #print('LEVEL %d' % en)
                 #print(level)
 
-        return reachable, unreachable, levels
+        return reachable, unreachable, levels, variables
 
-
+    def analyze_with_variable_set(self, starting_variables):
+        result, backward_exitable = self.verify_warps_reachable(starting_variables)
+        reachable, unreachable, levels, ending_variables = self.verify_reachable_items(starting_variables, backward_exitable)
+        return reachable, unreachable, levels, ending_variables
+        
 

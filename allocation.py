@@ -158,7 +158,7 @@ class Allocation(object):
         n_eggs_in_map = data.nHardToReach + settings.extra_eggs
         if len(non_hard_to_reach_eggs) + len(hard_to_reach_eggs) < n_eggs_in_map:
             # Not enough reachable eggs. Retry.
-            return False
+            return False, None
         remainingEggsToPlace = random.sample(non_hard_to_reach_eggs, n_eggs_in_map - len(hard_to_reach_eggs))
         random.shuffle(remainingEggsToPlace)
 
@@ -187,7 +187,9 @@ class Allocation(object):
         actual_n_eggs = sum(1 for item_location, item_name in self.item_at_item_location.items() if is_egg(item_name))
         assert n_eggs_in_map == actual_n_eggs
 
-        return True
+        goal_eggs = [item_name for item_location, item_name in (eggs_to_move + hard_to_reach_eggs)]
+
+        return True, goal_eggs
 
     def print_important_item_locations(self):
         # DEBUG CODE FOR FINDING ITEMS
