@@ -47,7 +47,8 @@ class Generator(object):
                 goals = analyzer.hard_to_reach_items
 
             difficulty_analysis = DifficultyAnalysis(self.data, analyzer, goals)
-            print('Difficulty: %f' % difficulty_analysis.compute_score())
+            print('Difficulty: %.2f' % difficulty_analysis.difficulty_score)
+            print('Breakability: %.2f' % difficulty_analysis.breakability_score)
 
         # Generate Visualization and Print Output:
         if False:

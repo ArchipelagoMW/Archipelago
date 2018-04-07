@@ -1,5 +1,6 @@
 from dataparser import KNOWLEDGE_INTERMEDIATE, KNOWLEDGE_ADVANCED, DIFFICULTY_HARD, DIFFICULTY_V_HARD, DIFFICULTY_STUPID
 from utility import fail
+import statistics
 
 class DifficultyConfig(object):
     def __init__(self, weight, config_flags, score_multiplier_diff=0.5):
@@ -164,17 +165,45 @@ class DifficultyAnalysis(object):
         self.data = data
         self.analyzer = analyzer
         self.goals = set(goals)
+        self.level_scores = None
+        self.current_config_score = None
 
-    def compute_score(self):
+        self.difficulty_score = self._compute_difficulty()
+        self.breakability_score = self._compute_breakability()
+
+    def _compute_difficulty(self):
         total_weight = sum(config.weight for config in DIFFICULTY_CONFIGS)
-        level_scores = [self.compute_level_score(k) for k in range(MAX_CONFIG_LEVEL)]
-        #print(level_scores)
+        self._compute_all_level_scores()
 
         # We take the weighted mean of the square roots to reduce the weight of outliers.
-        total_weighted_score = sum(config.weight*level_score**0.5 for config, level_score in zip(DIFFICULTY_CONFIGS, level_scores))
+        total_weighted_score = sum(config.weight*level_score**0.5 for config, level_score in zip(DIFFICULTY_CONFIGS, self.level_scores))
         return (total_weighted_score / total_weight)**2
 
-    def compute_level_score(self, base_config_level):
+    def _compute_breakability(self):
+        self._compute_all_level_scores()
+        #self._compute_current_config_score()
+        score = self.difficulty_score
+
+        score_diffs = [score-x for x in self.level_scores]
+        score_diffs = [x for x in score_diffs if x > 0]
+
+        breakability_score = 0
+        if len(score_diffs) > 0:
+            breakability_score = statistics.mean(score_diffs)
+        return breakability_score
+
+    def _compute_current_config_score(self):
+        if self.current_config_score != None: return
+        variables = self.data.generate_variables()
+        reachable, unreachable, levels, new_variables = self.analyzer.analyze_with_variable_set(variables)
+        self.current_config_score = self._compute_average_goal_level(self.goals, levels)
+
+    def _compute_all_level_scores(self):
+        if self.level_scores != None: return
+        self.level_scores = [self._compute_level_score(k) for k in range(MAX_CONFIG_LEVEL)]
+        #print(self.level_scores)
+
+    def _compute_level_score(self, base_config_level):
         analyzer = self.analyzer
         goals = self.goals
 
@@ -184,16 +213,16 @@ class DifficultyAnalysis(object):
         score = 0
         #print('== Base %d ==' % base_config_level)
         for config_level in range(base_config_level, MAX_CONFIG_LEVEL):
-            self.configure_variables(config_level, variables)
+            self._configure_variables(config_level, variables)
             reachable, unreachable, levels, new_variables = analyzer.analyze_with_variable_set(variables)
             #print('level %d' % config_level)
             if goals.issubset(reachable):
                 #print('  pass - levels: %d' % len(levels))
-                #print('  average goal level: %f' % self.compute_average_goal_level(goals, levels))
+                #print('  average goal level: %f' % self._compute_average_goal_level(goals, levels))
                 #for en, level in enumerate(levels):
                     #print('LEVEL %.1f' % (en/2))
                     #print(level)
-                score += self.compute_average_goal_level(goals, levels)*score_multiplier
+                score += self._compute_average_goal_level(goals, levels)*score_multiplier
                 break
             #print('  fail - levels: %d' % len(levels))
             
@@ -205,7 +234,7 @@ class DifficultyAnalysis(object):
 
         return score
 
-    def compute_average_goal_level(self, goals, levels):
+    def _compute_average_goal_level(self, goals, levels):
         count = 0
         total = 0
 
@@ -216,7 +245,7 @@ class DifficultyAnalysis(object):
 
         return total/count
 
-    def configure_variables(self, config_level, variables):
+    def _configure_variables(self, config_level, variables):
         config_flags = DIFFICULTY_CONFIGS[config_level].config_flags
         length_check_before = len(variables)
         variables.update(config_flags)
