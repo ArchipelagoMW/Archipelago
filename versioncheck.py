@@ -1,9 +1,11 @@
 import requests
+import json
 
 VERSION_STRING = '{PLACEHOLDER_VERSION}'
 
 def get_current_branch():
-    return VERSION_STRING[len('Revision '):][:1]
+    if '#' in VERSION_STRING: return VERSION_STRING.split('#')[1][:1]
+    return 'D'
 
 def fetch_latest_version_id():
     PREFIX = 'https://ci.appveyor.com/api/'

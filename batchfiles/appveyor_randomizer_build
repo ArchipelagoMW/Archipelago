@@ -1,0 +1,12 @@
+git rev-parse --abbrev-ref HEAD > version_info.txt
+echo %APPVEYOR_REPO_BRANCH% >> version_info.txt
+git rev-list --count HEAD >> version_info.txt
+git rev-parse --short=10 HEAD >> version_info.txt
+python inject_version_info
+set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
+pip install pyinstaller
+pip install requests
+pyinstaller randomizer.py
+move dist\randomizer bin
+move batchfiles\RabiRibiRandomizer.bat .
+if not exist generated_maps md generated_maps
