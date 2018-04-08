@@ -1,4 +1,7 @@
+// Knowledge is BASIC, INTERMEDIATE or ADVANCED
 "knowledge": "ADVANCED",
+
+// Trick Difficulty is NORMAL, HARD, V_HARD or STUPID
 "trick_difficulty": "HARD",
 
 // Configure generation flags here
