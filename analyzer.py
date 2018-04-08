@@ -43,8 +43,8 @@ class Analyzer(object):
             self.error_message = 'Not all goals are reachable.'
             return False
 
-        if self.goals != None and self.settings.min_chain_length > 0:
-            if compute_average_goal_level(set(self.goals), levels) < self.settings.min_chain_length:
+        if self.settings.egg_goals:
+            if not self.verify_chain_length_requirement(levels):
                 self.error_message = 'Below minimum chain length.'
                 return False
 
@@ -53,6 +53,17 @@ class Analyzer(object):
             self.error_message = error
             return False
 
+        if not self.settings.egg_goals:
+            if not self.verify_chain_length_requirement(levels):
+                self.error_message = 'Below minimum chain length.'
+                return False
+
+        return True
+
+    def verify_chain_length_requirement(self, levels):
+        if self.goals != None and self.settings.min_chain_length > 0:
+            if compute_average_goal_level(set(self.goals), levels) < self.settings.min_chain_length:
+                return False
         return True
 
     def process_verification_results(self, reachable, unreachable, levels):
@@ -83,6 +94,9 @@ class Analyzer(object):
         self.reachable = reachable
         self.unreachable = unreachable
         self.levels = levels
+
+        if self.goals == None:
+            self.goals = self.hard_to_reach_items
 
         return None
 
