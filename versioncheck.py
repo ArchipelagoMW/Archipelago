@@ -7,10 +7,8 @@ def get_current_branch():
 
 def fetch_latest_version_id():
     PREFIX = 'https://ci.appveyor.com/api/'
-
     ERROR_UPDATING = 'Either the Randomizer is currently being updated on AppVeyor, or some other strange error has occurred.'
     ERROR_UNKNOWN = 'Unknown error retrieving latest version number.'
-
     try:
         req = requests.get(PREFIX + 'projects/wcko87/rabiribi-randomizer-ui-rc94b')
         jobs = json.loads(req.text)['build']['jobs']
@@ -36,11 +34,8 @@ def check_branch():
 def check_for_updates():
     result, message = fetch_latest_version_id()
     if result:
-        if VERSION_STRING == message:
-            result = 'You have the latest version of Randomizer.'
-        else:
-            result = 'Randomizer version does not match latest version.'
-
+        if VERSION_STRING == message: result = 'You have the latest version of Randomizer.'
+        else: result = 'Randomizer version does not match latest version.'
         sb = [
             result,
             '',

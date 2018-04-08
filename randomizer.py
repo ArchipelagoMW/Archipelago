@@ -423,7 +423,7 @@ if __name__ == '__main__':
     source_dir='original_maps'
 
     if args.version:
-        print('Rabi-Ribi Randomizer - %s' % VERSION_STRING)
+        print('Rabi-Ribi Randomizer - %s' % versioncheck.VERSION_STRING)
     elif args.check_for_updates:
         versioncheck.check_for_updates()
     elif args.check_branch:
