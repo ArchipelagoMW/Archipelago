@@ -534,7 +534,13 @@ def read_config(default_setting_flags, item_locations_set, shufflable_gift_items
             '\n'.join(map(str, set(must_be_reachable) - item_locations_set)),
         ])
 
-    return setting_flags, to_shuffle, must_be_reachable, included_additional_items
+    config_data = ConfigData(
+        knowledge=knowledge,
+        difficulty=difficulty,
+        settings=config_settings,
+    )
+
+    return setting_flags, to_shuffle, must_be_reachable, included_additional_items, config_data
 
 def parse_item_from_string(line):
     pos, areaid, itemid, name = (s.strip() for s in line.split(':', 3))
@@ -556,6 +562,8 @@ class RandomizerData(object):
     # list: edge_constraints   (EdgeConstraintData objects)
     # list: item_constraints   (ItemConstraintData objects)
     # list: map_transitions   (MapTransition objects)
+    #
+    # obj: config_data  (ConfigData object. Used for analysis printing, not used in generation.)
     #
     # Intermediate Information
     #
@@ -612,7 +620,7 @@ class RandomizerData(object):
                 del self.additional_items[item.name]
         shufflable_gift_items_set = set(item.name for item in self.shufflable_gift_items)
 
-        self.nHardToReach = 5
+        self.nHardToReach = settings.num_hard_to_reach
 
         # Do some preprocessing of variable names        
         self.item_names = [item.name for item in self.items]
@@ -635,7 +643,7 @@ class RandomizerData(object):
 
         # More config loading
         config_flags_set = set(self.default_config_flags.keys())
-        self.configured_setting_flags, self.to_shuffle, self.must_be_reachable, self.included_additional_items = \
+        self.configured_setting_flags, self.to_shuffle, self.must_be_reachable, self.included_additional_items, self.config_data = \
             read_config(self.default_setting_flags, items_set, shufflable_gift_items_set, config_flags_set, set(self.all_additional_items.keys()), settings)
 
         default_expressions = define_default_expressions(variable_names_set)

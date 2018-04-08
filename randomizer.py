@@ -6,11 +6,10 @@ import mapfileio
 import musicrandomizer
 import backgroundrandomizer
 import converter.diffgenerator as diffgenerator
-
-VERSION_STRING = '{PLACEHOLDER_VERSION}'
+import versioncheck
 
 def parse_args():
-    args = argparse.ArgumentParser(description='Rabi-Ribi Randomizer - %s' % VERSION_STRING)
+    args = argparse.ArgumentParser(description='Rabi-Ribi Randomizer - %s' % versioncheck.VERSION_STRING)
     args.add_argument('--version', action='store_true', help='Print Randomizer Version')
     args.add_argument('-output_dir', default='generated_maps', help='Output directory for generated maps')
     args.add_argument('-config_file', default='config.txt', help='Config file to use')
@@ -35,10 +34,11 @@ def parse_args():
     args.add_argument('--hide-difficulty', action='store_true', help='Hide difficulty rating. Affects seed.')
     args.add_argument('-min-chain-length', default=0, type=int, help='Set a minimum chain length for generation. Faster tham -min-difficulty.')
     args.add_argument('-min-difficulty', default=0, type=float, help='Set a minimum difficulty for generation. Slower tham -min-chain-length.')
-    args.add_argument('-max-breakability', default=None, type=float, help='Set a maximum seed breakability for generation. Slower tham -min-chain-length.')
+    args.add_argument('-max-sequence-breakability', default=None, type=float, help='Set a maximum seed breakability for generation. Slower tham -min-chain-length.')
     args.add_argument('-max-attempts', default=1000, type=int, help='Set the maximum amount of seed generation attempts before giving up. Default is 1000.')
     args.add_argument('--egg-goals', action='store_true', help='Egg goals mode. Hard-to-reach items are replaced with easter eggs. All other eggs are removed from the map.')
     args.add_argument('-extra-eggs', default=0, type=int, help='Number of extra randomly-chosen eggs for egg-goals mode (in addition to the hard-to-reach eggs)')
+    args.add_argument('-num-hard-to-reach', default=5, type=int, help='Number of hard to reach items/eggs. Default is 5.')
 
     return args.parse_args(sys.argv[1:])
 
@@ -307,6 +307,14 @@ def insert_items_into_map(mod, data, settings, allocation):
 def get_default_areaids():
     return list(range(10))
 
+def reset_maps(source_dir, output_dir):
+    if not os.path.isdir(output_dir):
+        fail('Output directory %s does not exist' % output_dir)
+    mapfileio.grab_original_maps(source_dir, output_dir)
+    analysis_file = '%s/analysis.txt' % output_dir
+    if os.path.isfile(analysis_file):
+        os.remove(analysis_file)
+    print('Original maps copied to %s.' % output_dir)
 
 def display_hash(settings):
     areaids = get_default_areaids()
@@ -314,15 +322,78 @@ def display_hash(settings):
     print('Hash: %s' % hash_digest)
 
 
+def generate_analysis_file(data, allocation, analyzer, difficulty_analysis, settings):
+    analysis_lines = []
+    def print_to_analysis(line=''):
+        print(line)
+        analysis_lines.append(str(line))
+
+    def print_to_analysis_only(line=''):
+        analysis_lines.append(str(line))
+
+    def print_setting_bool(setting_name, setting_bool):
+        print_to_analysis_only('%s: %s' % (setting_name, 'On' if setting_bool else 'Off'))
+
+    def print_setting_int(setting_name, setting_int):
+        print_to_analysis_only('%s: %d' % (setting_name, setting_int))
+
+    print_to_analysis_only('--- Randomizer Flags ---')
+    print_setting_bool('Shuffle Gift Items', settings.shuffle_gift_items)
+    print_setting_bool('Shuffle Map Transitions', settings.shuffle_map_transitions)
+    print_setting_int('Approximate Number of Constraint Changes', settings.constraint_changes)
+    print_setting_bool('Shuffle Music', settings.shuffle_music)
+    print_setting_bool('Shuffle Backgrounds', settings.shuffle_backgrounds)
+    print_setting_bool('No Laggy Backgrounds', settings.no_laggy_backgrounds)
+    print_setting_bool('No Difficult Backgrounds', settings.no_difficult_backgrounds)
+    
+    print_setting_bool('Super Attack Mode', settings.super_attack_mode)
+    print_setting_bool('Hyper Attack Mode', settings.hyper_attack_mode)
+    print_setting_bool('Open Mode', settings.open_mode)
+    print_setting_bool('Apply Map Fixes', settings.apply_fixes)
+
+    print_setting_int('Number of Hard-to-Reach Items', settings.num_hard_to_reach)
+    print_setting_bool('Egg Goals', settings.egg_goals)
+    print_setting_int('Number of Extra Eggs', settings.extra_eggs)
+    print_to_analysis_only()
+
+    config_data = data.config_data
+    print_to_analysis_only('--- Generation Settings ---')
+    print_to_analysis_only('Knowledge: %s' % config_data.knowledge)
+    print_to_analysis_only('Difficulty: %s' % config_data.difficulty)
+
+    print_to_analysis_only('Settings:')
+    for key, value in config_data.settings.items():
+        print_to_analysis_only('    %s: %s' % (key, 'true' if value else 'false'))
+    print_to_analysis_only()
+
+    print_to_analysis_only('--- Generation Results ---')
+    if settings.egg_goals:
+        print_to_analysis('Number of eggs: %d' % allocation.count_eggs())
+    else:
+        print_to_analysis('Hard to Reach Items:')
+        for item_name in analyzer.hard_to_reach_items:
+            print_to_analysis('    %s' % item_name)
+
+
+    if not settings.hide_difficulty:
+        print_to_analysis('Difficulty: %.2f' % difficulty_analysis.difficulty_score)
+        print_to_analysis('Sequence Break Potential: %.2f' % difficulty_analysis.breakability_score)
+        print_to_analysis_only()
+    
+
+    if not settings.no_write:
+        f = open('%s/%s' % (settings.output_dir, 'analysis.txt'), 'w+')
+        f.write('\n'.join(analysis_lines))
+        f.close()
+
 def run_randomizer(seed, source_dir, settings):
     if seed != None: random.seed(seed)
     randomizer_data = RandomizerData(settings)
     generator = Generator(randomizer_data, settings)
     allocation, analyzer, difficulty_analysis = generator.generate_seed()
-    print('done')
-    if not settings.hide_difficulty:
-        print('Difficulty: %.2f' % difficulty_analysis.difficulty_score)
-        print('Sequence Break Potential: %.2f' % difficulty_analysis.breakability_score)
+    #print('done')
+
+    generate_analysis_file(randomizer_data, allocation, analyzer, difficulty_analysis, settings)
 
     if settings.no_write:
         print('No maps generated as no-write flag is on.')
@@ -351,13 +422,17 @@ if __name__ == '__main__':
     args = parse_args()
     source_dir='original_maps'
 
-    if args.hash:
+    if args.version:
+        print('Rabi-Ribi Randomizer - %s' % VERSION_STRING)
+    elif args.check_for_updates:
+        versioncheck.check_for_updates()
+    elif args.check_branch:
+        versioncheck.check_branch()
+    elif args.hash:
         display_hash(args)
-        quit()
-
-    if args.seed == None:
-        seed = None
+    elif args.reset:
+        reset_maps(source_dir, args.output_dir)
     else:
-        seed = string_to_integer_seed('%s_hd:%s' % (args.seed, args.hide_difficulty))
-
-    run_randomizer(seed, source_dir, args)
+        if args.seed == None: seed = None
+        else: seed = string_to_integer_seed('%s_hd:%s' % (args.seed, args.hide_difficulty))
+        run_randomizer(seed, source_dir, args)

@@ -201,4 +201,7 @@ class Allocation(object):
         print('--Modified Constraints--')
         print('\n'.join(t.name for t in self.picked_templates))
 
+    def count_eggs(self):
+        return sum(1 for item_name in self.item_at_item_location.values() if is_egg(item_name))
+
 

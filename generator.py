@@ -22,15 +22,16 @@ class Generator(object):
             if analyzer.success:
                 if not self.settings.egg_goals:
                     success = True
-                shift_success, goal_eggs = self.shift_eggs_to_hard_to_reach(analyzer.reachable, analyzer.hard_to_reach_items)
-                if shift_success:
-                    analyzer = Analyzer(self.data, self.settings, self.allocation, goals=goal_eggs)
-                    if analyzer.success:
-                        success = True
+                else:
+                    shift_success, goal_eggs = self.shift_eggs_to_hard_to_reach(analyzer.reachable, analyzer.hard_to_reach_items)
+                    if shift_success:
+                        analyzer = Analyzer(self.data, self.settings, self.allocation, goals=goal_eggs)
+                        if analyzer.success:
+                            success = True
 
             if success:
                 difficulty_analysis = None
-                if not self.settings.hide_difficulty or self.settings.min_difficulty > 0 or self.settings.max_breakability != None:
+                if not self.settings.hide_difficulty or self.settings.min_difficulty > 0 or self.settings.max_sequence_breakability != None:
                     # Run difficulty analysis
                     if self.settings.egg_goals: goals = analyzer.goals
                     else: goals = analyzer.hard_to_reach_items
@@ -40,8 +41,8 @@ class Generator(object):
                     if difficulty_analysis.difficulty_score < self.settings.min_difficulty:
                         success = False
 
-                if self.settings.max_breakability != None:
-                    if difficulty_analysis.breakability_score > self.settings.max_breakability:
+                if self.settings.max_sequence_breakability != None:
+                    if difficulty_analysis.breakability_score > self.settings.max_sequence_breakability:
                         success = False
 
             if success:

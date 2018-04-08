@@ -116,6 +116,13 @@ class GraphEdge(object):
             'Cost: %s' % self.backtrack_cost,
         ])
 
+
+class ConfigData(object):
+    def __init__(self, knowledge, difficulty, settings):
+        self.knowledge = knowledge
+        self.difficulty = difficulty
+        self.settings = settings
+
 # misc utility functions
 
 def merge_two_dicts(x, y):
@@ -372,15 +379,6 @@ def hash_map_files(areaids, maps_dir):
             
     digest = hash.hexdigest()
     return ('%s-%s' % (digest[:4], digest[4:8])).upper()
-
-def reset_maps(source_dir='original_maps', output_dir='.'):
-    if not os.path.isdir(output_dir):
-        fail('Output directory %s does not exist' % output_dir)
-    itemreader.grab_original_maps(source_dir, output_dir)
-    analysis_file = '%s/analysis.txt' % output_dir
-    if os.path.isfile(analysis_file):
-        os.remove(analysis_file)
-    print('Original maps copied to %s.' % output_dir)
 
 def hash_maps(output_dir):
     areaids = get_default_areaids()
