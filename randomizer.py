@@ -11,8 +11,9 @@ import versioncheck
 def parse_args():
     args = argparse.ArgumentParser(description='Rabi-Ribi Randomizer - %s' % versioncheck.VERSION_STRING)
     args.add_argument('--version', action='store_true', help='Print Randomizer Version')
-    args.add_argument('-output_dir', default='generated_maps', help='Output directory for generated maps')
-    args.add_argument('-config_file', default='config.txt', help='Config file to use')
+    args.add_argument('-source-dir', default='original_maps', help='Source directory for original maps. Defaults to original_maps/. Do not make the source dir the output dir.')
+    args.add_argument('-output-dir', default='generated_maps', help='Output directory for generated maps. Defaults to generated_maps/. Do not make the source dir the output dir.')
+    args.add_argument('-config-file', default='config.txt', help='Config file to use')
     args.add_argument('-seed', default=None, type=str, help='Random seed')
     args.add_argument('--no-write', action='store_true', help='Flag to disable map generation, and do only map analysis')
     args.add_argument('--no-fixes', dest='apply_fixes', default=True, action='store_false', help='Flag to disable randomizer-specific map fixes')
@@ -386,7 +387,7 @@ def generate_analysis_file(data, allocation, analyzer, difficulty_analysis, sett
         f.write('\n'.join(analysis_lines))
         f.close()
 
-def run_randomizer(seed, source_dir, settings):
+def run_randomizer(seed, settings):
     if seed != None: random.seed(seed)
     randomizer_data = RandomizerData(settings)
     generator = Generator(randomizer_data, settings)
@@ -400,13 +401,13 @@ def run_randomizer(seed, source_dir, settings):
         return
 
     areaids = get_default_areaids()
-    if not mapfileio.exists_map_files(areaids, source_dir):
+    if not mapfileio.exists_map_files(areaids, settings.source_dir):
         fail('Maps not found in the directory %s! Place the original Rabi-Ribi maps '
-             'in this directory for the randomizer to work.' % source_dir)
+             'in this directory for the randomizer to work.' % settings.source_dir)
 
-    mapfileio.grab_original_maps(source_dir, settings.output_dir)
+    mapfileio.grab_original_maps(settings.source_dir, settings.output_dir)
     print('Maps copied...')
-    mod = mapfileio.ItemModifier(areaids, source_dir=source_dir, no_load=True)
+    mod = mapfileio.ItemModifier(areaids, source_dir=settings.source_dir, no_load=True)
     pre_modify_map_data(mod, settings, allocation.map_modifications)
     apply_item_specific_fixes(mod, allocation)
     apply_map_transition_shuffle(mod, randomizer_data, settings, allocation)
@@ -420,7 +421,6 @@ def run_randomizer(seed, source_dir, settings):
 
 if __name__ == '__main__':
     args = parse_args()
-    source_dir='original_maps'
 
     if args.version:
         print('Rabi-Ribi Randomizer - %s' % versioncheck.VERSION_STRING)
@@ -431,8 +431,8 @@ if __name__ == '__main__':
     elif args.hash:
         display_hash(args)
     elif args.reset:
-        reset_maps(source_dir, args.output_dir)
+        reset_maps(args.source_dir, args.output_dir)
     else:
         if args.seed == None: seed = None
         else: seed = string_to_integer_seed('%s_hd:%s' % (args.seed, args.hide_difficulty))
-        run_randomizer(seed, source_dir, args)
+        run_randomizer(seed, args)
