@@ -20,7 +20,7 @@ data = f.read()
 data = data.replace('{PLACEHOLDER_VERSION}', VERSION_STRING)
 f.close()
 
-f = open('itemrandomizer.py', 'w+')
+f = open('versioncheck.py', 'w+')
 f.write(data)
 f.close()
 
