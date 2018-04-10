@@ -593,7 +593,7 @@ PROLOGUE_TRIGGER & (
 }
 
 {
-"edge": "GRAVEYARD_MAIN -> BEACH_MAIN",
+"edge": "SKY_ISLAND_MAIN -> BEACH_MAIN",
 "prereq": "EXPLOSIVES",
 }
 
