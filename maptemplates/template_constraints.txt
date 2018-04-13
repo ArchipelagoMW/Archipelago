@@ -725,7 +725,10 @@
 "changes": [
     {
     "edge": "VOLCANIC_MAIN -> VOLCANIC_BEACH_ENTRANCE",
-    "prereq": "RABI_SLIPPERS | AIR_DASH | AIR_JUMP | SLIDE_JUMP_BUNSTRIKE",
+    "prereq": "
+        RABI_SLIPPERS | AIR_DASH | AIR_JUMP | SLIDE_JUMP_BUNSTRIKE
+        | (ADV_STUPID & WALL_JUMP_LV2 & 2_AMULET_FOOD)
+    ",
     }
 ]}
 
@@ -1260,7 +1263,7 @@
     "prereq": "
     (
         BUNNY_AMULET_LV3 & // safety amulets in case you needed amulets to climb all the way up palace.
-        (WHIRL_BONK_CANCEL | (RABI_SLIPPERS & BUNNY_STRIKE & AIR_JUMP))
+        (WHIRL_BONK_CANCEL | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE_CANCEL & AIR_JUMP))
     )
     | (ADV_VHARD & SLIDING_POWDER & AIR_JUMP) // slide bonk
     ",
@@ -1321,15 +1324,11 @@
 "changes": [
     {
     "edge": "RIVERBANK_MAIN_LEVEL1 -> RIVERBANK_LEVEL2",
-    "prereq": "
-        WHIRL_BONK |
-            (AIR_JUMP & (
-                RABI_SLIPPERS
-                | SLIDE_JUMP_BUNSTRIKE_CANCEL
-                | (ADV_VHARD & SLIDING_POWDER)
-            )
-        )
-        ",
+    "prereq": "ITM_HARD & (
+        AIR_JUMP
+        | WHIRL_BONK
+        | (ADV_HARD & WALL_JUMP_LV2) // turn off rabi slippers and do a 4-tile corner.
+    )",
     }
 ]}
 

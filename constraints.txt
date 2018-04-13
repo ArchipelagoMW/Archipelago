@@ -746,10 +746,17 @@
 "item": "GOLD_CARROT",
 "from_location": "ICY_SUMMIT_UPPER",
 "entry_prereq": "
-    AIR_JUMP | (
-        (WHIRL_BONK | AIR_DASH | ((SLIDING_POWDER | (SPEED1 & ITM_HARD)) & RABI_SLIPPERS) | BUNNY_STRIKE)
-        & WALL_JUMP_LV2
-    )",
+    AIR_JUMP
+    | (WALL_JUMP_LV2 & (
+        WHIRL_BONK
+        | (AIR_DASH & HARD)
+        | SLIDE_JUMP_BUNSTRIKE
+        | (RABI_SLIPPERS & (
+            SLIDING_POWDER
+            | (SPEED1 & ITM_HARD)
+            | (AMULET_FOOD & ADV_STUPID)
+        ))
+    ))",
 "exit_prereq": "NONE",
 }
 
@@ -763,7 +770,7 @@
 {
 "item": "PACK_UP_ICY_SUMMIT",
 "from_location": "ICY_SUMMIT_UPPER",
-"entry_prereq": "AIR_JUMP | AIR_DASH | (WHIRL_BONK & ADV_HARD)",
+"entry_prereq": "AIR_JUMP | AIR_DASH | (WHIRL_BONK & ADV_VHARD)",
 "exit_prereq": "NONE",
 }
 
@@ -1590,7 +1597,7 @@
 "entry_prereq": "
     WHIRL_BONK | AIR_JUMP | AIR_DASH | SLIDING_POWDER
     | (ADV_VHARD & RABI_SLIPPERS & AMULET_FOOD)
-    | (ADV_STUPID & WALL_JUMP_LV2 & MANY_AMULET_FOOD)
+    | (ADV_STUPID & WALL_JUMP_LV2 & 2_AMULET_FOOD)
     ",
 "exit_prereq": "NONE",
 }
@@ -1628,7 +1635,7 @@
 {
 "item": "EGG_TOWN",
 "from_location": "TOWN_MAIN",
-"entry_prereq": "(AIR_JUMP & RABI_SLIPPERS) | (AIR_JUMP & SLIDE_JUMP_BUNSTRIKE_CANCEL)",
+"entry_prereq": "AIR_JUMP & (RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL)",
 "exit_prereq": "NONE",
 }
 

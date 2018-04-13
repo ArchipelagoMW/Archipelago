@@ -1015,10 +1015,11 @@ DARKNESS & (
 "prereq": "
         AIR_DASH
         | AIR_JUMP
-        | (ITM_HARD & AMULET_FOOD & (
+        | ((ADV_HARD | (ITM_HARD & BUNNY_AMULET)) & (
             SLIDING_POWDER
-            | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)
             | HAMMER_ROLL_ZIP
+            | (ADV_VHARD & (RABI_SLIPPERS & AMULET_FOOD))
+            | (ADV_STUPID & WALL_JUMP_LV2 & 2_AMULET_FOOD)
         ))
 ",
 }
@@ -1035,7 +1036,7 @@ DARKNESS & (
     ((SLIDING_POWDER | HAMMER_ROLL_ZIP) & (
         AIR_JUMP
         | AIR_DASH
-        | (ITM_HARD & AMULET_FOOD)
+        | (ADV_HARD | (ITM_HARD & BUNNY_AMULET))
     ))
     | (SLIDING_POWDER & EXPLOSIVES)
 )
@@ -1264,7 +1265,7 @@ DARKNESS & (
 
 {
 "edge": "PALACE_LEVEL_5 -> SNOWLAND_CHRISTMAS_TREE",
-"prereq": "NONE",
+"prereq": "ITM | AIR_JUMP | AIR_DASH",
 }
 
 {
