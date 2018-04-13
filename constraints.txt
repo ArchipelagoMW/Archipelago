@@ -285,7 +285,7 @@
 "from_location": "GRAVEYARD_UPPER",
 "entry_prereq": "
     // Getting onto the ledge
-    (AIR_JUMP | AIR_DASH | ITM_HARD)
+    (AIR_JUMP | AIR_DASH | (ITM_HARD & (AMULET_FOOD | BUNNY_STRIKE)))
     & (CARROT_BOMB | BLOCK_CLIP)
 ",
 "exit_prereq": "AIR_JUMP | SLIDE_JUMP_BUNSTRIKE_CANCEL",

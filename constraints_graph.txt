@@ -524,7 +524,7 @@ PROLOGUE_TRIGGER & (
 // First jump
     AIR_JUMP
     | (RABI_SLIPPERS & (SLIDE_JUMP_BUNSTRIKE | (ADV_VHARD & AMULET_FOOD)))
-    | WHIRL_BONK_CANCEL
+    | WHIRL_BONK
     | (AIR_DASH & (ITM_HARD | RABI_SLIPPERS))
     // slide bonk
     | (SLIDING_POWDER & ADV_VHARD)
@@ -534,7 +534,7 @@ PROLOGUE_TRIGGER & (
 // Second jump
     AIR_JUMP
     | RABI_SLIPPERS
-    | WALL_JUMP
+    | (WALL_JUMP & ITM_HARD)
     | WHIRL_BONK_CANCEL
     | SLIDE_JUMP_BUNSTRIKE_CANCEL
     // never ever slide bonk
