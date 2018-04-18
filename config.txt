@@ -1,21 +1,21 @@
 // Knowledge is BASIC, INTERMEDIATE or ADVANCED
-"knowledge": "ADVANCED",
+"knowledge": "BASIC",
 
 // Trick Difficulty is NORMAL, HARD, V_HARD or STUPID
-"trick_difficulty": "HARD",
+"trick_difficulty": "NORMAL",
 
 // Configure generation flags here
 "settings": {
-    "DARKNESS_WITHOUT_LIGHT_ORB": true,
-    "ZIP_REQUIRED": true,
-    "SEMISOLID_CLIPS_REQUIRED": true,
-    "BLOCK_CLIPS_REQUIRED": true,
+    "DARKNESS_WITHOUT_LIGHT_ORB": false,
+    "ZIP_REQUIRED": false,
+    "SEMISOLID_CLIPS_REQUIRED": false,
+    "BLOCK_CLIPS_REQUIRED": false,
     "PLURKWOOD_REACHABLE": true,
     "POST_GAME_ALLOWED": false,
     "POST_IRISU_ALLOWED": false,
     "HALLOWEEN_REACHABLE": false,
     "WARP_DESTINATION_REACHABLE": false,
-    "EVENT_WARPS_REQUIRED": true,
+    "EVENT_WARPS_REQUIRED": false,
 },
 
 "additional_items": [
