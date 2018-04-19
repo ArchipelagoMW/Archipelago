@@ -501,8 +501,6 @@ class MultiByteCoreTextMapper(object):
                 word = words.pop(0)
                 # sanity check: if the word we have is more than 14 characters, we take as much as we can still fit and push the rest back for later
                 if cls.wordlen(word) > wrap:
-                    if linespace < wrap:
-                        word = ' ' + word
                     (word_first, word_rest) = cls.splitword(word, linespace)
                     words.insert(0, word_rest)
                     lines.insert(0, ' '.join(words))
@@ -510,9 +508,9 @@ class MultiByteCoreTextMapper(object):
                     outbuf.extend(RawMBTextMapper.convert(word_first))
                     break
 
-                if cls.wordlen(word) <= (linespace if linespace == wrap else linespace - 1):
-                    if linespace < wrap:
-                        word = ' ' + word
+                if cls.wordlen(word) <= linespace:
+                    if cls.wordlen(word) < linespace:
+                        word = word + ' '
                     linespace -= cls.wordlen(word)
                     outbuf.extend(RawMBTextMapper.convert(word))
                 else:
