@@ -8,7 +8,7 @@ import random
 
 from BaseClasses import ShopType
 from Dungeons import dungeon_music_addresses
-from Text import MultiByteTextMapper, text_addresses, Credits
+from Text import MultiByteTextMapper, text_addresses, Credits, TextTable
 from Text import Uncle_texts, Ganon1_texts, PyramidFairy_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts
 from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
 from Utils import local_path, int16_as_bytes, int32_as_bytes
@@ -1024,43 +1024,52 @@ def write_string_to_rom(rom, target, string):
 
 
 def write_strings(rom, world):
+    tt = TextTable()
+    tt.removeUnwantedText()
+
     silverarrows = world.find_items('Silver Arrows')
     silverarrow_hint = (' %s?' % silverarrows[0].hint_text) if silverarrows else '?\nI think not!'
-    write_string_to_rom(rom, 'Ganon2', 'Did you find the silver arrows%s' % silverarrow_hint)
+    tt['ganon_phase_3'] = 'Did you find the silver arrows%s' % silverarrow_hint
 
     crystal5 = world.find_items('Crystal 5')[0]
     crystal6 = world.find_items('Crystal 6')[0]
-    write_string_to_rom(rom, 'BombShop1', 'Big Bomb?\nMy supply is blocked until you clear %s and %s.' % (crystal5.hint_text, crystal6.hint_text))
+    tt['bomb_shop'] = 'Big Bomb?\nMy supply is blocked until you clear %s and %s.' % (crystal5.hint_text, crystal6.hint_text)
 
     greenpendant = world.find_items('Green Pendant')[0]
-    write_string_to_rom(rom, 'Sahasrahla1', 'I lost my family heirloom in %s' % greenpendant.hint_text)
+    tt['sahasrahla_bring_courage'] = 'I lost my family heirloom in %s' % greenpendant.hint_text
 
-    write_string_to_rom(rom, 'Uncle', Uncle_texts[random.randint(0, len(Uncle_texts) - 1)])
-    write_string_to_rom(rom, 'Triforce', Triforce_texts[random.randint(0, len(Triforce_texts) - 1)])
-    write_string_to_rom(rom, 'BombShop2', BombShop2_texts[random.randint(0, len(BombShop2_texts) - 1)])
-    write_string_to_rom(rom, 'PyramidFairy', PyramidFairy_texts[random.randint(0, len(PyramidFairy_texts) - 1)])
-    write_string_to_rom(rom, 'Sahasrahla2', Sahasrahla2_texts[random.randint(0, len(Sahasrahla2_texts) - 1)])
-    write_string_to_rom(rom, 'Blind', Blind_texts[random.randint(0, len(Blind_texts) - 1)])
+    tt['uncle_leaving_text'] = Uncle_texts[random.randint(0, len(Uncle_texts) - 1)]
+    tt['end_triforce'] = Triforce_texts[random.randint(0, len(Triforce_texts) - 1)]
+    tt['bomb_shop_big_bomb'] = BombShop2_texts[random.randint(0, len(BombShop2_texts) - 1)]
+    tt['pond_will_upgrade'] = PyramidFairy_texts[random.randint(0, len(PyramidFairy_texts) - 1)]
+
+    # unfortunate naming, but this is what shows after getting the green pendant item in rando
+    # regardless of having checked the icerod cave
+    tt['sahasrahla_have_boots_no_icerod'] = Sahasrahla2_texts[random.randint(0, len(Sahasrahla2_texts) - 1)]
+    tt['blind_by_the_light'] = Blind_texts[random.randint(0, len(Blind_texts) - 1)]
+
     if world.goal in ['pedestal', 'triforcehunt']:
-        write_string_to_rom(rom, 'Ganon1Invincible', 'Why are you even here?\n You can\'t even hurt me!')
-        write_string_to_rom(rom, 'Ganon2Invincible', 'Seriously? Go Away, I will not Die.')
+        tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me!'
+        tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
     else:
-        write_string_to_rom(rom, 'Ganon1', Ganon1_texts[random.randint(0, len(Ganon1_texts) - 1)])
-        write_string_to_rom(rom, 'Ganon1Invincible', 'You cannot defeat me until you finish your goal!')
-        write_string_to_rom(rom, 'Ganon2Invincible', 'Got wax in\nyour ears?\nI can not die!')
-    write_string_to_rom(rom, 'TavernMan', TavernMan_texts[random.randint(0, len(TavernMan_texts) - 1)])
+        tt['ganon_fall_in'] = Ganon1_texts[random.randint(0, len(Ganon1_texts) - 1)]
+        tt['ganon_fall_in_alt'] = 'You cannot defeat me until you finish your goal!'
+        tt['ganon_phase_3_alt'] = 'Got wax in\nyour ears?\nI can not die!'
+    tt['kakariko_tavern_fisherman'] = TavernMan_texts[random.randint(0, len(TavernMan_texts) - 1)]
 
     pedestalitem = world.get_location('Master Sword Pedestal').item
     pedestal_text = 'Some Hot Air' if pedestalitem is None else pedestalitem.pedestal_hint_text if pedestalitem.pedestal_hint_text is not None else 'Unknown Item'
-    write_string_to_rom(rom, 'Pedestal', pedestal_text)
+    tt['mastersword_pedestal_translated'] = pedestal_text
     pedestal_credit_text = 'and the Hot Air' if pedestalitem is None else pedestalitem.pedestal_credit_text if pedestalitem.pedestal_credit_text is not None else 'and the Unknown Item'
 
     etheritem = world.get_location('Ether Tablet').item
     ether_text = 'Some Hot Air' if etheritem is None else etheritem.pedestal_hint_text if etheritem.pedestal_hint_text is not None else 'Unknown Item'
-    write_string_to_rom(rom, 'EtherTablet', ether_text)
+    tt['tablet_ether_book'] = ether_text
     bombositem = world.get_location('Bombos Tablet').item
     bombos_text = 'Some Hot Air' if bombositem is None else bombositem.pedestal_hint_text if bombositem.pedestal_hint_text is not None else 'Unknown Item'
-    write_string_to_rom(rom, 'BombosTablet', bombos_text)
+    tt['tablet_bombos_book'] = bombos_text
+
+    rom.write_bytes(0xE0000, tt.getBytes())
 
     credits = Credits()
 
