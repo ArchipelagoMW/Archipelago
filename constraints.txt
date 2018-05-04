@@ -181,11 +181,23 @@
 "item": "REGEN_UP_EAST_FOREST",
 "from_location": "FOREST_UPPER_EAST",
 "entry_prereq": "NONE",
-// It's not impossible. Just unimportant.
-"exit_prereq": "IMPOSSIBLE",
+"exit_prereq": "
+    (AIR_JUMP & (ITM_HARD | AIR_DASH | RABI_SLIPPERS))
+    | (RABI_SLIPPERS & AIR_DASH)
+",
 
 "alternate_exits": {
-    "FOREST_START": "NONE",
+    "FOREST_EAST_ABOVE_SPRING": "NONE",
+    },
+
+"alternate_entries": {
+    "FOREST_EAST_ABOVE_SPRING": "
+        (AIR_JUMP & AIR_DASH & ((ITM_HARD & RABI_SLIPPERS) | SLIDE_JUMP_BUNSTRIKE_CANCEL))
+        | (WHIRL_BONK_CANCEL & AIR_DASH)
+        | (ADV_VHARD & WHIRL_BONK)
+        | (ADV_HARD & RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE & SPEED5)
+        // | (ADV_VHARD & HAMMER_ROLL & AIR_JUMP)
+    ",
     },
 }
 

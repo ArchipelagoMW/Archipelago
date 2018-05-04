@@ -1216,6 +1216,7 @@ DARKNESS & (
     | ((RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL) & AIR_DASH)
     // can probably be done with lower level items, haven't done it successfully yet.
     | (SPEED3 & AIR_DASH_LV3 & ADV_STUPID)
+    | (ADV_HARD & WHIRL_BONK)
     ",
 }
 
@@ -1235,6 +1236,7 @@ DARKNESS & (
     AIR_JUMP
     | (WALL_JUMP_LV2 & (ITM_HARD | RABI_SLIPPERS))
     | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE_CANCEL & BUNNY_AMULET_LV2)
+    | (WHIRL_BONK_CANCEL)
 ",
 }
 
