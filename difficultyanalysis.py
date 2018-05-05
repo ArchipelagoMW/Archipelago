@@ -128,7 +128,7 @@ DIFFICULTY_CONFIGS = [
             DIFFICULTY_V_HARD: True,
             DIFFICULTY_STUPID: False,
         },
-        score_multiplier_diff=0.6,
+        score_multiplier_diff=0.45,
     ),
 
 
@@ -153,7 +153,7 @@ DIFFICULTY_CONFIGS = [
             DIFFICULTY_V_HARD: True,
             DIFFICULTY_STUPID: True,
         },
-        score_multiplier_diff=1.0,
+        score_multiplier_diff=0.7,
     ),
 ]
 MAX_CONFIG_LEVEL = len(DIFFICULTY_CONFIGS)
