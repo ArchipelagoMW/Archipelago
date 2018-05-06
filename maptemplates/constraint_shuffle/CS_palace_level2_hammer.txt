@@ -1,13 +1,13 @@
 ==area:3==
-@collision:B(133,83)
+@collision:B(118,83)
 1
 1
 1
-@event:B(133,83)
+@event:B(118,83)
 1
 1
 1
-@tiles1:B(133,83)
+@tiles1:B(118,83)
 32
 32
 32
