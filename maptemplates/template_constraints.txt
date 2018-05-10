@@ -1,7 +1,7 @@
 
 {
 "name": "aurora_palace_wall",
-"weight": 6,
+"weight": 5,
 "changes": [
     {
     "edge": "SNOWLAND_WEST -> PALACE_WARP_LEVEL_1_2",
@@ -15,14 +15,10 @@
 
 {
 "name": "upper_icy_summit_wall",
-"weight": 7,
+"weight": 10,
 "changes": [
     {
     "edge": "ICY_SUMMIT_MAIN -> ICY_SUMMIT_UPPER",
-    "prereq": "IMPOSSIBLE",
-    }
-    {
-    "edge": "ICY_SUMMIT_UPPER -> ICY_SUMMIT_MAIN",
     "prereq": "IMPOSSIBLE",
     }
 ]}
@@ -239,7 +235,7 @@
 
 {
 "name": "beach_aquarium_entrance_fireorb",
-"weight": 10,
+"weight": 20,
 "changes": [
     {
     "edge": "BEACH_MAIN -> BEACH_UNDERWATER_ENTRANCE",
@@ -377,7 +373,7 @@
 
 {
 "name": "skybridge_eastwest_wall",
-"weight": 10,
+"weight": 7,
 "changes": [
     {
     "edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_EAST",
@@ -439,7 +435,7 @@
 
 {
 "name": "skybridge_eastwest_fireorb",
-"weight": 10,
+"weight": 7,
 "changes": [
     {
     "edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_EAST",
@@ -505,7 +501,7 @@
 
 {
 "name": "skybridge_eastwest_hammer",
-"weight": 10,
+"weight": 7,
 "changes": [
     {
     "edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_EAST",
@@ -784,7 +780,7 @@
 
 {
 "name": "forest_night_spike_gap",
-"weight": 10,
+"weight": 15,
 "changes": [
     {
     "edge": "FOREST_NIGHT_TOXIC_STRIKE -> FOREST_NIGHT_WEST",
@@ -814,7 +810,7 @@
 
 {
 "name": "beach_east_wall",
-"weight": 10,
+"weight": 30,
 "changes": [
     {
     "edge": "BEACH_MAIN -> BEACH_FOREST_ENTRANCE",
@@ -859,7 +855,7 @@
 
 {
 "name": "park_defgrow_semisolid",
-"weight": 10,
+"weight": 30,
 "changes": [
     {
     "edge": "PARK_MAIN -> PARK_KOTRI",
@@ -879,7 +875,7 @@
 
 {
 "name": "forest_east_above_spring_wall",
-"weight": 10,
+"weight": 30,
 "changes": [
     {
     "edge": "FOREST_START -> FOREST_EAST_ABOVE_SPRING",
@@ -1172,7 +1168,7 @@
 
 {
 "name": "upper_icy_summit_4tile",
-"weight": 10,
+"weight": 15,
 "changes": [
     {
     "edge": "ICY_SUMMIT_MAIN -> ICY_SUMMIT_UPPER",
@@ -1344,7 +1340,7 @@
 
 {
 "name": "evernight_warp_left_redirect",
-"weight": 10,
+"weight": 15,
 "changes": [
     {
     "edge": "EVERNIGHT_WEST_ENTRANCE -> EVERNIGHT_NORTHWEST",
@@ -1419,7 +1415,7 @@
 
 {
 "name": "lower_riverbank_east_nospring",
-"weight": 10,
+"weight": 20,
 "changes": [
     {
     "edge": "RIVERBANK_LOWER_RIGHT -> RIVERBANK_LOWER_HEALTH_UP_ROOM",
@@ -1541,7 +1537,7 @@
 
 {
 "name": "vanilla_left_wall",
-"weight": 40,
+"weight": 30,
 "changes": [
     {
     "edge": "SKY_BRIDGE_EAST -> SKY_BRIDGE_EAST_LOWER",
