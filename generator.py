@@ -59,7 +59,7 @@ class Generator(object):
 
         # Generate Visualization and Print Output:
         if False:
-            Analyzer(self.data, self.allocation, visualize=True)
+            Analyzer(self.data, self.settings, self.allocation, visualize=True)
             self.allocation.print_important_item_locations()
 
         return self.allocation, analyzer, difficulty_analysis
