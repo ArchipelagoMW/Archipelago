@@ -347,7 +347,7 @@
 
 {
 "item": "ATK_UP_GRAVEYARD",
-"from_location": "GRAVEYARD_MAIN",
+"from_location": "GRAVEYARD_KOTRI",
 "entry_prereq": "EXPLOSIVES_ENEMY",
 "exit_prereq": "NONE",
 }
@@ -606,7 +606,11 @@
     (CARROT_BOMB | (CARROT_SHOOTER & BOOST & ADV_HARD)) &
     SLIDING_POWDER
 ",
-"exit_prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
+"exit_prereq": "IMPOSSIBLE",
+
+"alternate_exits": {
+    "SKY_BRIDGE_EAST_LOWER": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
+},
 }
 
 {

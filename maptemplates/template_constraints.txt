@@ -304,7 +304,7 @@
 "weight": 10,
 "changes": [
     {
-    "edge": "GRAVEYARD_MAIN -> SKY_ISLAND_MAIN",
+    "edge": "GRAVEYARD_MAIN -> GRAVEYARD_KOTRI",
     "prereq": "EXPLOSIVES | PIKO_HAMMER",
     }
 ]}
@@ -852,7 +852,7 @@
 "weight": 10,
 "changes": [
     {
-    "edge": "GRAVEYARD_MAIN -> SKY_ISLAND_MAIN",
+    "edge": "GRAVEYARD_MAIN -> GRAVEYARD_KOTRI",
     "prereq": "WALL_JUMP | RABI_SLIPPERS | AIR_JUMP | SLIDE_JUMP_BUNSTRIKE_CANCEL | WHIRL_BONK",
     }
 ]}
@@ -1494,5 +1494,87 @@
     {
     "edge": "TOWN_MAIN -> TOWN_SHOP",
     "prereq": "PIKO_HAMMER",
+    }
+]}
+
+{
+"name": "rita_right_wall",
+"weight": 10,
+"changes": [
+    {
+    "edge": "SNOWLAND_MID -> SNOWLAND_RITA",
+    "prereq": "IMPOSSIBLE",
+    }
+    {
+    "edge": "SNOWLAND_RITA -> SNOWLAND_MID",
+    "prereq": "IMPOSSIBLE",
+    }
+]}
+
+{
+"name": "rita_right_slide",
+"weight": 10,
+"changes": [
+    {
+    "edge": "SNOWLAND_MID -> SNOWLAND_RITA",
+    "prereq": "SLIDING_POWDER",
+    }
+    {
+    "edge": "SNOWLAND_RITA -> SNOWLAND_MID",
+    "prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
+    }
+]}
+
+{
+"name": "rita_right_hammer",
+"weight": 10,
+"changes": [
+    {
+    "edge": "SNOWLAND_MID -> SNOWLAND_RITA",
+    "prereq": "PIKO_HAMMER | EXPLOSIVES",
+    }
+    {
+    "edge": "SNOWLAND_RITA -> SNOWLAND_MID",
+    "prereq": "PIKO_HAMMER | EXPLOSIVES",
+    }
+]}
+
+{
+"name": "vanilla_left_wall",
+"weight": 40,
+"changes": [
+    {
+    "edge": "SKY_BRIDGE_EAST -> SKY_BRIDGE_EAST_LOWER",
+    "prereq": "IMPOSSIBLE",
+    }
+]}
+
+{
+"name": "riverbank_level1_hammer_nobomb",
+"weight": 10,
+"changes": [
+    {
+    "edge": "RIVERBANK_MAIN_LEVEL1 -> RIVERBANK_LEVEL2",
+    "prereq": "PIKO_HAMMER",
+    }
+]}
+
+{
+"name": "riverbank_level1_fireorb",
+"weight": 10,
+"changes": [
+    {
+    "edge": "RIVERBANK_MAIN_LEVEL1 -> RIVERBANK_LEVEL2",
+    "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "sky_island_entrance_fireorb",
+"weight": 10,
+"changes": [
+    {
+    "edge": "GRAVEYARD_MAIN -> GRAVEYARD_KOTRI",
+    "prereq": "FIRE_ORB",
     }
 ]}

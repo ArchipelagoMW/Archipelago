@@ -569,12 +569,22 @@ PROLOGUE_TRIGGER & (
 }
 
 {
-"edge": "GRAVEYARD_MAIN -> SKY_ISLAND_MAIN",
+"edge": "GRAVEYARD_MAIN -> GRAVEYARD_KOTRI",
 "prereq": "NONE",
 }
 
 {
-"edge": "SKY_ISLAND_MAIN -> GRAVEYARD_MAIN",
+"edge": "GRAVEYARD_KOTRI -> GRAVEYARD_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "GRAVEYARD_KOTRI -> SKY_ISLAND_MAIN",
+"prereq": "NONE",
+}
+
+{
+"edge": "SKY_ISLAND_MAIN -> GRAVEYARD_KOTRI",
 "prereq": "NONE",
 }
 
@@ -729,12 +739,12 @@ PROLOGUE_TRIGGER & (
 }
 
 {
-"edge": "HALLOWEEN_EXIT -> GRAVEYARD_MAIN",
+"edge": "HALLOWEEN_EXIT -> GRAVEYARD_KOTRI",
 "prereq": "NONE",
 }
 
 {
-"edge": "GRAVEYARD_MAIN -> HALLOWEEN_EXIT",
+"edge": "GRAVEYARD_KOTRI -> HALLOWEEN_EXIT",
 "prereq": "HALLOWEEN & DOWNDRILL_SEMISOLID_CLIP",
 }
 
@@ -962,6 +972,16 @@ PROLOGUE_TRIGGER & (
 }
 
 {
+"edge": "SKY_BRIDGE_EAST -> SKY_BRIDGE_EAST_LOWER",
+"prereq": "NONE",
+}
+
+{
+"edge": "SKY_BRIDGE_EAST_LOWER -> SKY_BRIDGE_EAST",
+"prereq": "NONE",
+}
+
+{
 "edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_DARK_AREA",
 "prereq": "DARKNESS",
 }
@@ -1111,22 +1131,32 @@ DARKNESS & (
 }
 
 {
-"edge": "SNOWLAND_WEST -> SNOWLAND_MID",
+"edge": "SNOWLAND_MID -> SNOWLAND_RITA",
 "prereq": "NONE",
 }
 
 {
-"edge": "SNOWLAND_MID -> SNOWLAND_WEST",
+"edge": "SNOWLAND_RITA -> SNOWLAND_MID",
+"prereq": "NONE",
+}
+
+{
+"edge": "SNOWLAND_WEST -> SNOWLAND_RITA",
+"prereq": "NONE",
+}
+
+{
+"edge": "SNOWLAND_RITA -> SNOWLAND_WEST",
 "prereq": "SLIDING_POWDER",
 }
 
 {
-"edge": "SNOWLAND_MID -> SNOWLAND_CHRISTMAS_TREE",
+"edge": "SNOWLAND_RITA -> SNOWLAND_CHRISTMAS_TREE",
 "prereq": "EXPLOSIVES & SLIDING_POWDER",
 }
 
 {
-"edge": "SNOWLAND_CHRISTMAS_TREE -> SNOWLAND_MID",
+"edge": "SNOWLAND_CHRISTMAS_TREE -> SNOWLAND_RITA",
 "prereq": "EXPLOSIVES & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
 }
 
