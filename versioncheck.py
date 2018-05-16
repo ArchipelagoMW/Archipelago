@@ -1,5 +1,6 @@
 import requests
 import json
+from utility import print_ln
 
 VERSION_STRING = '{PLACEHOLDER_VERSION}'
 
@@ -31,7 +32,7 @@ def fetch_latest_version_id():
         return False, ERROR_UNKNOWN
     
 def check_branch():
-    print(get_current_branch())
+    print_ln(get_current_branch())
 
 def check_for_updates():
     result, message = fetch_latest_version_id()
@@ -51,4 +52,4 @@ def check_for_updates():
             '',
             'Current Version: %s' % VERSION_STRING,
         ]
-    print('\n'.join(sb))
+    print_ln('\n'.join(sb))

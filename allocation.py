@@ -193,13 +193,13 @@ class Allocation(object):
 
     def print_important_item_locations(self):
         # DEBUG CODE FOR FINDING ITEMS
-        print('--Item Locations--')
+        print_ln('--Item Locations--')
         for k,v in self.item_at_item_location.items():
             if v in ('PIKO_HAMMER','WALL_JUMP','RABI_SLIPPERS','AIR_JUMP','AIR_DASH','BUNNY_WHIRL','HAMMER_ROLL','SLIDING_POWDER','CARROT_BOMB','CARROT_SHOOTER','FIRE_ORB','WATER_ORB','BUNNY_STRIKE','BUNNY_AMULET','SPEED_BOOST'):
-                print('%s @ %s' % (v, k))
+                print_ln('%s @ %s' % (v, k))
 
-        print('--Modified Constraints--')
-        print('\n'.join(t.name for t in self.picked_templates))
+        print_ln('--Modified Constraints--')
+        print_ln('\n'.join(t.name for t in self.picked_templates))
 
     def count_eggs(self):
         return sum(1 for item_name in self.item_at_item_location.values() if is_egg(item_name))

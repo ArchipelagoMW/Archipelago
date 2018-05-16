@@ -122,7 +122,7 @@ def print_all_items(path='.'):
         sb.append('Area %d: NAME' % areaid)
         for item in items:
             sb.append(str(item))
-    print('\n'.join(sb))
+    print_ln('\n'.join(sb))
 
 def has_neighboring_bomb_block(tiledata_event, x, y):
     px, py = x-1, y
@@ -170,7 +170,7 @@ def ensure_neighboring_chain_bomb_block(tiledata_event, x, y):
     if py < 200 and tiledata_event[xy_to_index(px,py)] == NORMAL_BOMB_BLOCK_ID:
         tiledata_event[xy_to_index(px,py)] = CHAIN_BOMB_BLOCK_ID
         return
-    print('ERROR ENSURING NEIGHBORING CHAIN BLOCK: (%d, %d)' % (x,y))
+    print_ln('ERROR ENSURING NEIGHBORING CHAIN BLOCK: (%d, %d)' % (x,y))
 
 
 class StoredMapData(object):
@@ -260,13 +260,13 @@ class ItemModifier(object):
     def delete_item(self, item):
         try: del self.items[item.areaid][item.position]
         except KeyError:
-            print('item [%s] does not exist!' % item)
+            print_ln('item [%s] does not exist!' % item)
         self._dirty(item.areaid)
 
     def delete_position(self, areaid, position):
         try: del self.items[areaid][position]
         except KeyError:
-            print('position [%d, %s] does not exist!' % areaid, position)
+            print_ln('position [%d, %s] does not exist!' % areaid, position)
         self._dirty(item.areaid)
 
     def save(self, output_dir='.'):

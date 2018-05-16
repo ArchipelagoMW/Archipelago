@@ -201,7 +201,7 @@ class DifficultyAnalysis(object):
     def _compute_all_level_scores(self):
         if self.level_scores != None: return
         self.level_scores = [self._compute_level_score(k) for k in range(MAX_CONFIG_LEVEL)]
-        #print(self.level_scores)
+        #print_ln(self.level_scores)
 
     def _compute_level_score(self, base_config_level):
         analyzer = self.analyzer
@@ -211,26 +211,26 @@ class DifficultyAnalysis(object):
 
         score_multiplier = 1
         score = 0
-        #print('== Base %d ==' % base_config_level)
+        #print_ln('== Base %d ==' % base_config_level)
         for config_level in range(base_config_level, MAX_CONFIG_LEVEL):
             configure_variables(config_level, variables)
             reachable, unreachable, levels, new_variables = analyzer.analyze_with_variable_set(variables)
-            #print('level %d' % config_level)
+            #print_ln('level %d' % config_level)
             if goals.issubset(reachable):
-                #print('  pass - levels: %d' % len(levels))
-                #print('  average goal level: %f' % compute_average_goal_level(goals, levels))
+                #print_ln('  pass - levels: %d' % len(levels))
+                #print_ln('  average goal level: %f' % compute_average_goal_level(goals, levels))
                 #for en, level in enumerate(levels):
-                    #print('LEVEL %.1f' % (en/2))
-                    #print(level)
+                    #print_ln('LEVEL %.1f' % (en/2))
+                    #print_ln(level)
                 score += compute_average_goal_level(goals, levels)*score_multiplier
                 break
-            #print('  fail - levels: %d' % len(levels))
+            #print_ln('  fail - levels: %d' % len(levels))
             
             if config_level >= MAX_CONFIG_LEVEL-1: fail('Unable to reach goals at max config level')
             score += len(levels)/2 * score_multiplier
             score_multiplier += DIFFICULTY_CONFIGS[config_level+1].score_multiplier_diff
             variables = new_variables
-        #print('Final Score: %f' % score)
+        #print_ln('Final Score: %f' % score)
 
         return score
 

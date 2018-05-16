@@ -1,14 +1,14 @@
 import random
 import time
-from utility import to_position, to_index, xy_to_index
+from utility import to_position, to_index, xy_to_index, print_ln
 
 # NOTE: Music must be shuffled before room colors!
 def shuffle_music(stored_datas):
     #start_time = time.time()
     shuffler = MusicShuffler(stored_datas)
     shuffler.shuffle()
-    print('Music shuffled')
-    #print('Music shuffled in %f seconds' % (time.time()-start_time))
+    print_ln('Music shuffled')
+    #print_ln('Music shuffled in %f seconds' % (time.time()-start_time))
 
 is_bgm = lambda v : 129 <= v and v <= 159
 

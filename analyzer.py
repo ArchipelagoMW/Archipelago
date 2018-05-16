@@ -68,9 +68,9 @@ class Analyzer(object):
 
     def process_verification_results(self, reachable, unreachable, levels):
         #all_levels = [x for x in levels for x in x]
-        #print(set(reachable) - set(all_levels))
-        #print(len(all_levels), len(set(all_levels)), len(reachable), len(unreachable))
-        #print(set(all_levels) - set(reachable))
+        #print_ln(set(reachable) - set(all_levels))
+        #print_ln(len(all_levels), len(set(all_levels)), len(reachable), len(unreachable))
+        #print_ln(set(all_levels) - set(reachable))
         
         allocated_items_set = set(self.data.items_to_allocate)
         nHardToReach = self.data.nHardToReach
@@ -349,8 +349,8 @@ class Analyzer(object):
 
         #if self.visualize:
             #for en, level in enumerate(levels):
-                #print('LEVEL %d' % en)
-                #print(level)
+                #print_ln('LEVEL %d' % en)
+                #print_ln(level)
 
         return reachable, unreachable, levels, variables
 

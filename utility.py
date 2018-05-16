@@ -181,8 +181,8 @@ def parse_expression(line, variable_names_set, default_expressions={}, current_e
         # the str(line) cast is used because sometimes <line> is a u'unicode string' on unix machines.
         return parse_expression_logic(str(line), variable_names_set, default_expressions, current_expression)
     except Exception as e:
-        eprint('Error parsing expression:')
-        eprint(line)
+        print_err('Error parsing expression:')
+        print_err(line)
         raise e
 
 # Used in string parsing. We only have either strings or expressions
@@ -317,16 +317,15 @@ class OpBacktrack(object):
 
 # Error Handling
 
-def eprint(*args, **kwargs):
-    print(*args, file=sys.stderr, **kwargs)
+def print_err(*args, **kwargs):
+    print(*args, file=sys.stderr, flush=True, **kwargs)
 
 def fail(message):
-    eprint(message)
+    print_err(message)
     sys.exit(1)
 
-def log(*args, **kwargs):
-    print(*args, **kwargs)
-
+def print_ln(*args, **kwargs):
+    print(*args, flush=True, **kwargs)
 
 
 # File Parsing
@@ -337,11 +336,11 @@ def print_error(error, jsondata):
     VIEW_RANGE = 100
     start = max(pos-VIEW_RANGE, 0)
     end = min(pos+VIEW_RANGE, len(jsondata))
-    eprint('File parsing error')
-    eprint(error)
-    eprint('Error location:')
-    eprint(jsondata[start:pos])
-    eprint(jsondata[pos:end])
+    print_err('File parsing error')
+    print_err(error)
+    print_err('Error location:')
+    print_err(jsondata[start:pos])
+    print_err(jsondata[pos:end])
 
 def parse_json(jsondata):
     try:
@@ -383,5 +382,5 @@ def hash_map_files(areaids, maps_dir):
 def hash_maps(output_dir):
     areaids = get_default_areaids()
     hash_digest = hash_map_files(areaids, output_dir)
-    print('Hash: %s' % hash_digest)
+    print_ln('Hash: %s' % hash_digest)
 

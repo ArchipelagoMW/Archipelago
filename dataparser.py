@@ -335,7 +335,7 @@ def parse_locations_and_items():
 
     # Validate map transition locations
     if set(mt.origin_location for mt in map_transitions) - set(locations.keys()):
-        print('Unknown locations: %s' % '\n'.join(
+        print_err('Unknown locations: %s' % '\n'.join(
             set(mt.origin_location for mt in map_transitions) - set(locations.keys())
         ))
 

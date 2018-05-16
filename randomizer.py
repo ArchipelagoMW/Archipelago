@@ -144,11 +144,11 @@ def configure_shaft(mod, settings):
     if settings.hyper_attack_mode:
         for i in range(0,30):
             events_list.append((558, 5223-i, 5001))
-        print('Hyper attack mode applied')
+        print_ln('Hyper attack mode applied')
     elif settings.super_attack_mode:
         for i in range(0,20):
             events_list.append((558, 5223-i, 5001))
-        print('Super attack mode applied')
+        print_ln('Super attack mode applied')
 
     # Build shaft only if there is something to build.
     if len(events_list) > 0:
@@ -239,12 +239,12 @@ def pre_modify_map_data(mod, settings, diff_patch_files):
             './maptemplates/event_warps/ew_forest_to_beach.txt',
             './maptemplates/event_warps/ew_town_to_riverbank.txt',
         ]
-        print('Map fixes applied')
+        print_ln('Map fixes applied')
 
     if settings.open_mode:
         for areaid, data in mod.stored_datas.items():
             apply_open_mode_fixes(areaid, data)
-        print('Open mode applied')
+        print_ln('Open mode applied')
 
     # Note: because musicrandomizer requires room color info, the music
     # must be shuffled before the room colors!
@@ -260,7 +260,7 @@ def pre_modify_map_data(mod, settings, diff_patch_files):
 
     # Apply map patches from list of patches. We apply this only after everything else has been applied.
     apply_diff_patch_fixes(mod, diff_patch_files)
-    print('Map patches applied')
+    print_ln('Map patches applied')
 
 
 def apply_map_transition_shuffle(mod, data, settings, allocation):
@@ -315,18 +315,18 @@ def reset_maps(source_dir, output_dir):
     analysis_file = '%s/analysis.txt' % output_dir
     if os.path.isfile(analysis_file):
         os.remove(analysis_file)
-    print('Original maps copied to %s.' % output_dir)
+    print_ln('Original maps copied to %s.' % output_dir)
 
 def display_hash(settings):
     areaids = get_default_areaids()
     hash_digest = hash_map_files(areaids, settings.output_dir)
-    print('Hash: %s' % hash_digest)
+    print_ln('Hash: %s' % hash_digest)
 
 
 def generate_analysis_file(data, allocation, analyzer, difficulty_analysis, settings):
     analysis_lines = []
     def print_to_analysis(line=''):
-        print(line)
+        print_ln(line)
         analysis_lines.append(str(line))
 
     def print_to_analysis_only(line=''):
@@ -392,12 +392,12 @@ def run_randomizer(seed, settings):
     randomizer_data = RandomizerData(settings)
     generator = Generator(randomizer_data, settings)
     allocation, analyzer, difficulty_analysis = generator.generate_seed()
-    #print('done')
+    #print_ln('done')
 
     generate_analysis_file(randomizer_data, allocation, analyzer, difficulty_analysis, settings)
 
     if settings.no_write:
-        print('No maps generated as no-write flag is on.')
+        print_ln('No maps generated as no-write flag is on.')
         return
 
     areaids = get_default_areaids()
@@ -406,7 +406,7 @@ def run_randomizer(seed, settings):
              'in this directory for the randomizer to work.' % settings.source_dir)
 
     mapfileio.grab_original_maps(settings.source_dir, settings.output_dir)
-    print('Maps copied...')
+    print_ln('Maps copied...')
     mod = mapfileio.ItemModifier(areaids, source_dir=settings.source_dir, no_load=True)
     pre_modify_map_data(mod, settings, allocation.map_modifications)
     apply_item_specific_fixes(mod, allocation)
@@ -414,7 +414,7 @@ def run_randomizer(seed, settings):
     insert_items_into_map(mod, randomizer_data, settings, allocation)
 
     mod.save(settings.output_dir)
-    print('Maps saved successfully to %s.' % settings.output_dir)
+    print_ln('Maps saved successfully to %s.' % settings.output_dir)
 
     display_hash(settings)
 
@@ -423,7 +423,7 @@ if __name__ == '__main__':
     args = parse_args()
 
     if args.version:
-        print('Rabi-Ribi Randomizer - %s' % versioncheck.VERSION_STRING)
+        print_ln('Rabi-Ribi Randomizer - %s' % versioncheck.VERSION_STRING)
     elif args.check_for_updates:
         versioncheck.check_for_updates()
     elif args.check_branch:

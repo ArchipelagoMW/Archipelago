@@ -1,5 +1,6 @@
 import random
 import time
+from utility import print_ln
 
 LAGGY_BACKGROUNDS = set((37, 65, 66, 80, 84, 88, 89, 99))
 DIFFICULT_BACKGROUNDS = set((36, 37, 56, 57, 60, 65, 66, 80, 84, 89, 103, 110))
@@ -11,12 +12,12 @@ def shuffle_backgrounds(stored_datas, no_laggy_backgrounds, no_difficult_backgro
     #start_time = time.time()
     shuffler = BackgroundShuffler(stored_datas, no_laggy_backgrounds, no_difficult_backgrounds)
     shuffler.shuffle()
-    print('Backgrounds shuffled')
+    print_ln('Backgrounds shuffled')
 
     shuffler = RoomColorShuffler(stored_datas)
     shuffler.shuffle()
-    print('Tile colors shuffled')
-    #print('Backgrounds shuffled in %f seconds' % (time.time()-start_time))
+    print_ln('Tile colors shuffled')
+    #print_ln('Backgrounds shuffled in %f seconds' % (time.time()-start_time))
 
 
 class BackgroundShuffler(object):

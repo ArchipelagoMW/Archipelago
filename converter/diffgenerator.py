@@ -282,7 +282,7 @@ def generate_diff_file(diff_file_name='output.txt', bboxes=None):
 
         if filename in files_modified:
             if not filename in files_original:
-                print('ERROR! MISSING FILE - %s' % filename)
+                print_ln('ERROR! MISSING FILE - %s' % filename)
                 return
 
             #if areaid == 2: bbox = 254, 182, 2, 2

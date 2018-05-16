@@ -1,7 +1,7 @@
 from allocation import Allocation
 from analyzer import Analyzer
 from difficultyanalysis import DifficultyAnalysis
-from utility import fail
+from utility import fail, print_ln
 import time
 
 class Generator(object):
@@ -55,7 +55,7 @@ class Generator(object):
         time_taken = time.time() - start_time
         time_string = '%.2f seconds' % (time_taken)
 
-        print('Seed generated after %d attempts in %s' % (attempts+1, time_string))
+        print_ln('Seed generated after %d attempts in %s' % (attempts+1, time_string))
 
         # Generate Visualization and Print Output:
         if False:
