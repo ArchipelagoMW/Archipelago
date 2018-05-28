@@ -736,8 +736,11 @@
 "changes": [
     {
     "edge": "FOREST_COCOA_ROOM -> FOREST_START",
-    "prereq": "FIRE_ORB |
-        (SLIDING_POWDER | AIR_JUMP | AIR_DASH | WHIRL_BONK | (SPEED5 & ITM_HARD))
+    "prereq": "FIRE_ORB | (
+        SLIDING_POWDER | AIR_JUMP | AIR_DASH | WHIRL_BONK
+        | (SPEED5 & ADV_HARD)
+        | (ADV_STUPID & RABI_SLIPPERS & WALL_JUMP_LV2 & 2_AMULET_FOOD)
+        )
         ",
     }
 ]}
@@ -748,8 +751,11 @@
 "changes": [
     {
     "edge": "FOREST_COCOA_ROOM -> FOREST_START",
-    "prereq": "PIKO_HAMMER | EXPLOSIVES |
-        (SLIDING_POWDER | AIR_JUMP | AIR_DASH | WHIRL_BONK | (SPEED5 & ITM_HARD))
+    "prereq": "PIKO_HAMMER | EXPLOSIVES | (
+        SLIDING_POWDER | AIR_JUMP | AIR_DASH | WHIRL_BONK
+        | (SPEED5 & ADV_HARD)
+        | (ADV_STUPID & RABI_SLIPPERS & WALL_JUMP_LV2 & 2_AMULET_FOOD)
+        )
         ",
     }
 ]}

@@ -496,7 +496,7 @@
 
 {
 "item": "DEF_GROW",
-"from_location": "PARK_MAIN",
+"from_location": "PARK_KOTRI",
 "entry_prereq": "NONE",
 "exit_prereq": "NONE",
 }
@@ -1497,7 +1497,7 @@
 
 {
 "item": "EGG_PARK_GREEN_KOTRI",
-"from_location": "PARK_MAIN",
+"from_location": "PARK_KOTRI",
 "entry_prereq": "
     WHIRL_BONK | AIR_JUMP | AIR_DASH
     | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)
