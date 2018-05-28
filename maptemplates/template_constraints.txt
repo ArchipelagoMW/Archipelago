@@ -325,7 +325,7 @@
 "changes": [
     {
     "edge": "BEACH_MAIN -> PYRAMID_MAIN",
-    "prereq": "(PIKO_HAMMER_LEVELED | SLIDING_POWDER) & current",
+    "prereq": "(PIKO_HAMMER | SLIDING_POWDER) & current",
     }
     {
     "edge": "PYRAMID_MAIN -> BEACH_MAIN",
