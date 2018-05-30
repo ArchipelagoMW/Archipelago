@@ -560,7 +560,7 @@
 {
 "item": "MP_UP_PARK",
 "from_location": "PARK_MAIN",
-"entry_prereq": "RABI_SLIPPERS | SLIDING_POWDER | AIR_DASH | AIR_JUMP | (SPEED2 & ITM)",
+"entry_prereq": "RABI_SLIPPERS | SLIDING_POWDER | AIR_DASH | AIR_JUMP | (ITM & SPEED2) | (ADV_VHARD & AMULET_FOOD)",
 "exit_prereq": "NONE",
 }
 
@@ -1596,7 +1596,11 @@
 {
 "item": "EGG_SNOWLAND_LAKE",
 "from_location": "SNOWLAND_LAKE",
-"entry_prereq": "(ADV_STUPID & MANY_AMULET_FOOD) | AIR_JUMP | WALL_JUMP_LV2 | (WALL_JUMP & AIR_DASH & ITM_HARD) | WATER_ORB | WHIRL_BONK",
+"entry_prereq": "
+    AIR_JUMP | WATER_ORB | WHIRL_BONK | WALL_JUMP_LV2
+    | (WALL_JUMP & (RABI_SLIPPERS | (AIR_DASH & ITM_HARD)))
+    | (ADV_STUPID & MANY_AMULET_FOOD)
+",
 "exit_prereq": "NONE",
 }
 
