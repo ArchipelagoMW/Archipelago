@@ -906,7 +906,10 @@
     {
     "edge": "RAVINE_LOWER -> RAVINE_MANA_SURGE",
     "prereq": "current & (AIR_DASH_LV3 |
-            (ADV_HARD & AIR_JUMP & (WALL_JUMP_LV2 | RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL))
+            (ADV_HARD & (
+                (AIR_JUMP & (WALL_JUMP_LV2 | HAMMER_ROLL | RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL))
+                | (WHIRL_BONK_CANCEL & (V_HARD | WALL_JUMP_LV2))
+            ))
         )",
     }
 ]}
@@ -986,7 +989,7 @@
     {
     "edge": "RAVINE_LOWER -> RAVINE_MANA_SURGE",
     "prereq": "current & (PIKO_HAMMER | EXPLOSIVES |
-            (ADV_HARD & AIR_JUMP & (WALL_JUMP_LV2 | RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL))
+            (ADV_HARD & AIR_JUMP & (WALL_JUMP_LV2 | RABI_SLIPPERS))
         )",
     }
 ]}
@@ -1013,7 +1016,10 @@
     {
     "edge": "RAVINE_LOWER -> RAVINE_MANA_SURGE",
     "prereq": "current & (FIRE_ORB |
-            (ADV_HARD & AIR_JUMP & (WALL_JUMP_LV2 | RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL))
+            (ADV_HARD & (
+                (AIR_JUMP & (WALL_JUMP_LV2 | HAMMER_ROLL | RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL))
+                | (WHIRL_BONK_CANCEL & (V_HARD | WALL_JUMP_LV2))
+            ))
         )",
     }
 ]}

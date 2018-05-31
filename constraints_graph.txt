@@ -131,6 +131,11 @@ EXPLOSIVES_ENEMY & SLIDING_POWDER & PROLOGUE_TRIGGER &
 }
 
 {
+"edge": "FOREST_START -> FOREST_LOWER_RIVERBANK_EXIT",
+"prereq": "SLIDE_ZIP",
+}
+
+{
 "edge": "FOREST_EAST_ABOVE_SPRING -> FOREST_LOWER_RIVERBANK_EXIT",
 "prereq": "DOWNDRILL_SEMISOLID_CLIP",
 }
@@ -826,7 +831,10 @@ PROLOGUE_TRIGGER & (
 
 {
 "edge": "RAVINE_LOWER -> RAVINE_UPPER_WEST",
-"prereq": "AIR_JUMP & WALL_JUMP_LV2 & (SLIDING_POWDER | PROLOGUE_TRIGGER)", // jump up the long chasm
+"prereq": "(SLIDING_POWDER | PROLOGUE_TRIGGER) & (
+        // going up the long chasm
+        WALL_JUMP_LV2 & (AIR_JUMP | (ADV_VHARD & WHIRL_BONK_CANCEL))
+    )", 
 }
 
 {
