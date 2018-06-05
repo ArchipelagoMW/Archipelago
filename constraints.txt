@@ -173,8 +173,14 @@
 {
 "item": "ARM_STRENGTH",
 "from_location": "SPECTRAL_WARP",
-"entry_prereq": "SLIDE_JUMP_BUNSTRIKE | AIR_DASH | AIR_JUMP | (ADV_VHARD & AMULET_FOOD)",
+"entry_prereq": "AIR_JUMP",
 "exit_prereq": "NONE",
+
+"alternate_entries": {
+    "SPECTRAL_CICINI_ROOM": "
+        SLIDE_JUMP_BUNSTRIKE | AIR_DASH | AIR_JUMP | (ADV_VHARD & AMULET_FOOD)
+        ",
+    },
 }
 
 {
@@ -228,15 +234,18 @@
 {
 "item": "MP_UP_CICINI",
 "from_location": "SPECTRAL_WARP",
-"entry_prereq": "
-    (COCOA_1 & KOTRI_1 & CHAPTER_1)
-    | AIR_JUMP
-    | SLIDE_JUMP_BUNSTRIKE_CANCEL
-    | (ITM_HARD & (WALL_JUMP_LV2 | AIR_DASH))
-    | (RABI_SLIPPERS & (ADV_VHARD | (ADV_HARD & SPEED3)))
-    | (ADV_STUPID & SPEED3)
-",
+"entry_prereq": "COCOA_1 & KOTRI_1 & CHAPTER_1",
 "exit_prereq": "NONE",
+
+"alternate_entries": {
+    "SPECTRAL_CICINI_ROOM": "
+        AIR_JUMP
+        | SLIDE_JUMP_BUNSTRIKE_CANCEL
+        | (ITM_HARD & (WALL_JUMP_LV2 | AIR_DASH))
+        | (RABI_SLIPPERS & (ADV_VHARD | (ADV_HARD & SPEED3)))
+        | (ADV_STUPID & SPEED3)
+        ",
+    },
 }
 
 {
@@ -1302,15 +1311,19 @@
 {
 "item": "EGG_SPECTRAL_SLIDE",
 "from_location": "SPECTRAL_WARP",
-"entry_prereq": "SLIDING_POWDER & (
-    (COCOA_1 & KOTRI_1 & CHAPTER_1)
-    | AIR_JUMP
-    | SLIDE_JUMP_BUNSTRIKE_CANCEL
-    | (ITM_HARD & (WALL_JUMP_LV2 | AIR_DASH))
-    | (RABI_SLIPPERS & (ADV_VHARD | (ADV_HARD & SPEED3)))
-    | (ADV_STUPID & SPEED3)
-)",
+"entry_prereq": "SLIDING_POWDER & COCOA_1 & KOTRI_1 & CHAPTER_1",
 "exit_prereq": "NONE",
+
+"alternate_entries": {
+    "SPECTRAL_CICINI_ROOM": "SLIDING_POWDER & (
+            AIR_JUMP
+            | SLIDE_JUMP_BUNSTRIKE_CANCEL
+            | (ITM_HARD & (WALL_JUMP_LV2 | AIR_DASH))
+            | (RABI_SLIPPERS & (ADV_VHARD | (ADV_HARD & SPEED3)))
+            | (ADV_STUPID & SPEED3)
+        )
+        ",
+    },
 }
 
 {
