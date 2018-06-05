@@ -518,22 +518,22 @@ def read_config(default_setting_flags, item_locations_set, shufflable_gift_items
         fail('Unknown difficulty level: %s. Either NORMAL, HARD, V_HARD or STUPID.' % difficulty)
 
     if set(included_additional_items) - predefined_additional_items_set:
-        fail('\n'.join[
+        fail('\n'.join([
             'Unknown additional items defined:',
             '\n'.join(map(str, set(included_additional_items) - predefined_additional_items_set)),
-        ])
+        ]))
 
     if set(to_shuffle) - item_locations_set:
-        fail('\n'.join[
+        fail('\n'.join([
             'Unknown items defined in config:',
             '\n'.join(map(str, set(to_shuffle) - item_locations_set)),
-        ])
+        ]))
 
     if set(must_be_reachable) - item_locations_set:
-        fail('\n'.join[
+        fail('\n'.join([
             'Unknown items defined in config:',
             '\n'.join(map(str, set(must_be_reachable) - item_locations_set)),
-        ])
+        ]))
 
     config_data = ConfigData(
         knowledge=knowledge,
