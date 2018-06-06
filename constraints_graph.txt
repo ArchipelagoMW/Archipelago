@@ -302,18 +302,29 @@ ITM & DARKNESS & (
 }
 
 {
-"edge": "SPECTRAL_WARP -> SPECTRAL_CICINI_ROOM",
+"edge": "SPECTRAL_WARP -> SPECTRAL_CICINI_LEDGE",
 "prereq": "
-PROLOGUE_TRIGGER & (
-    (COCOA_1 & KOTRI_1 & CHAPTER_1) | RABI_SLIPPERS | AIR_JUMP | AIR_DASH
-    | (BUNNY_STRIKE & ITM)
+// standing on the edge of the ledge to avoid the prologue trigger is ADV_HARD
+(PROLOGUE_TRIGGER | ADV_HARD) & (
+    RABI_SLIPPERS | AIR_JUMP | AIR_DASH | SLIDE_JUMP_BUNSTRIKE
+    | (COCOA_1 & KOTRI_1 & CHAPTER_1)
     | ADV_VHARD
 )
 "
 }
 
 {
-"edge": "SPECTRAL_CICINI_ROOM -> SPECTRAL_WARP",
+"edge": "SPECTRAL_CICINI_LEDGE -> SPECTRAL_CICINI_ROOM",
+"prereq": "PROLOGUE_TRIGGER"
+}
+
+{
+"edge": "SPECTRAL_CICINI_ROOM -> SPECTRAL_CICINI_LEDGE",
+"prereq": "NONE",
+}
+
+{
+"edge": "SPECTRAL_CICINI_LEDGE -> SPECTRAL_WARP",
 "prereq": "NONE",
 }
 

@@ -180,8 +180,19 @@
 "weight": 10,
 "changes": [
     {
-    "edge": "SPECTRAL_WARP -> SPECTRAL_CICINI_ROOM",
+    "edge": "SPECTRAL_CICINI_LEDGE -> SPECTRAL_CICINI_ROOM",
     "prereq": "FIRE_ORB & current",
+    }
+    {
+    // This is copy-pasted from cicini_room_nostupid. Keep this synchronized!
+    "edge": "SPECTRAL_WARP -> SPECTRAL_CICINI_LEDGE",
+    "prereq": "
+        // standing on the edge of the ledge to avoid the prologue trigger is ADV_HARD
+        (PROLOGUE_TRIGGER | ADV_HARD) & (
+            RABI_SLIPPERS | AIR_JUMP | SLIDE_JUMP_BUNSTRIKE
+            | (COCOA_1 & KOTRI_1 & CHAPTER_1)
+        )
+    ",
     }
 ]}
 
@@ -204,8 +215,19 @@
 "weight": 10,
 "changes": [
     {
-    "edge": "SPECTRAL_WARP -> SPECTRAL_CICINI_ROOM",
+    "edge": "SPECTRAL_CICINI_LEDGE -> SPECTRAL_CICINI_ROOM",
     "prereq": "(EXPLOSIVES | PIKO_HAMMER) & current",
+    }
+    {
+    // This is copy-pasted from cicini_room_nostupid. Keep this synchronized!
+    "edge": "SPECTRAL_WARP -> SPECTRAL_CICINI_LEDGE",
+    "prereq": "
+        // standing on the edge of the ledge to avoid the prologue trigger is ADV_HARD
+        (PROLOGUE_TRIGGER | ADV_HARD) & (
+            RABI_SLIPPERS | AIR_JUMP | SLIDE_JUMP_BUNSTRIKE
+            | (COCOA_1 & KOTRI_1 & CHAPTER_1)
+        )
+    ",
     }
 ]}
 
@@ -1069,7 +1091,7 @@
 "changes": [
     {
     "edge": "SNOWLAND_EAST -> SNOWLAND_MID",
-    "prereq": "RABI_SLIPPERS | AIR_JUMP | SLIDE_JUMP_BUNSTRIKE",
+    "prereq": "SLIDING_POWDER | RABI_SLIPPERS | AIR_JUMP | WHIRL_BONK",
     }
 ]}
 
@@ -1584,5 +1606,43 @@
     {
     "edge": "GRAVEYARD_MAIN -> GRAVEYARD_KOTRI",
     "prereq": "FIRE_ORB",
+    }
+]}
+
+{
+"name": "cicini_room_slide",
+"weight": 10,
+"changes": [
+    {
+    "edge": "SPECTRAL_CICINI_LEDGE -> SPECTRAL_CICINI_ROOM",
+    "prereq": "(SLIDING_POWDER | HAMMER_ROLL_ZIP) & current",
+    }
+    {
+    // This is copy-pasted from cicini_room_nostupid. Keep this synchronized!
+    "edge": "SPECTRAL_WARP -> SPECTRAL_CICINI_LEDGE",
+    "prereq": "
+        // standing on the edge of the ledge to avoid the prologue trigger is ADV_HARD
+        (PROLOGUE_TRIGGER | ADV_HARD) & (
+            RABI_SLIPPERS | AIR_JUMP | SLIDE_JUMP_BUNSTRIKE
+            | (COCOA_1 & KOTRI_1 & CHAPTER_1)
+        )
+    ",
+    }
+]}
+
+{
+"name": "cicini_room_nostupid",
+"weight": 10,
+"changes": [
+    {
+    // This is copy-pasted from cicini_room_nostupid. Keep this synchronized!
+    "edge": "SPECTRAL_WARP -> SPECTRAL_CICINI_LEDGE",
+    "prereq": "
+        // standing on the edge of the ledge to avoid the prologue trigger is ADV_HARD
+        (PROLOGUE_TRIGGER | ADV_HARD) & (
+            RABI_SLIPPERS | AIR_JUMP | SLIDE_JUMP_BUNSTRIKE
+            | (COCOA_1 & KOTRI_1 & CHAPTER_1)
+        )
+    ",
     }
 ]}
