@@ -713,7 +713,7 @@
 "changes": [
     {
     "edge": "LAB_EAST -> LAB_COMPUTER_ROOM",
-    "prereq": "PIKO_HAMMER | EXPLOSIVES",
+    "prereq": "PIKO_HAMMER",
     }
 ]}
 
