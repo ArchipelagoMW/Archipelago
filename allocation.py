@@ -1,5 +1,5 @@
 import random
-from utility import GraphEdge, is_egg
+from utility import GraphEdge, is_egg, print_ln
 
 NO_CONDITIONS = lambda v : True
 INFTY = 99999
