@@ -43,7 +43,7 @@
 "changes": [
     {
     "edge": "SNOWLAND_WEST -> AQUARIUM_TOP_ENTRANCE",
-    "prereq": "FIRE_ORB",
+    "prereq": "current & FIRE_ORB",
     }
     {
     "edge": "AQUARIUM_TOP_ENTRANCE -> SNOWLAND_WEST",
@@ -71,11 +71,11 @@
 "changes": [
     {
     "edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_BEACH_ENTRANCE",
-    "prereq": "FIRE_ORB",
+    "prereq": "UNDERWATER & FIRE_ORB",
     }
     {
     "edge": "AQUARIUM_BEACH_ENTRANCE -> AQUARIUM_BOMB_WALLED_AREA",
-    "prereq": "FIRE_ORB",
+    "prereq": "UNDERWATER & FIRE_ORB",
     }
 ]}
 
@@ -99,11 +99,15 @@
 "changes": [
     {
     "edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_BEACH_ENTRANCE",
-    "prereq": "BUNNY_WHIRL | EXPLOSIVES",
+    "prereq": "UNDERWATER & (BUNNY_WHIRL | EXPLOSIVES)",
     }
     {
     "edge": "AQUARIUM_BEACH_ENTRANCE -> AQUARIUM_BOMB_WALLED_AREA",
-    "prereq": "BUNNY_WHIRL | (CARROT_SHOOTER & BOOST) | ((CARROT_BOMB | PIKO_HAMMER) & SLIDING_POWDER)",
+    "prereq": "UNDERWATER & (
+        BUNNY_WHIRL
+        | (CARROT_SHOOTER & BOOST)
+        | ((CARROT_BOMB | PIKO_HAMMER) & SLIDING_POWDER)
+    )",
     }
 ]}
 
@@ -113,7 +117,7 @@
 "changes": [
     {
     "edge": "SNOWLAND_WEST -> AQUARIUM_TOP_ENTRANCE",
-    "prereq": "PIKO_HAMMER",
+    "prereq": "current & PIKO_HAMMER",
     }
     {
     "edge": "AQUARIUM_TOP_ENTRANCE -> SNOWLAND_WEST",
@@ -137,11 +141,11 @@
 "changes": [
     {
     "edge": "AQUARIUM_BOMB_WALLED_AREA -> AQUARIUM_BEACH_ENTRANCE",
-    "prereq": "NONE",
+    "prereq": "UNDERWATER",
     }
     {
     "edge": "AQUARIUM_BEACH_ENTRANCE -> AQUARIUM_BOMB_WALLED_AREA",
-    "prereq": "NONE",
+    "prereq": "UNDERWATER",
     }
 ]}
 
@@ -1081,7 +1085,7 @@
 "changes": [
     {
     "edge": "SNOWLAND_WEST -> AQUARIUM_TOP_ENTRANCE",
-    "prereq": "WATER_ORB & (HAMMER_ROLL_ZIP | SLIDE_ZIP)",
+    "prereq": "current & WATER_ORB & (HAMMER_ROLL_ZIP | SLIDE_ZIP)",
     }
 ]}
 

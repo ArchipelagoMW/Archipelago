@@ -756,7 +756,7 @@
 {
 "item": "SELF_DEFENSE",
 "from_location": "SNOWLAND_WEST",
-"entry_prereq": "SLIDING_POWDER",
+"entry_prereq": "SLIDING_POWDER & UNDERWATER",
 "exit_prereq": "SLIDING_POWDER",
 }
 
@@ -925,7 +925,7 @@
 {
 "item": "REGEN_UP_SOUTH_RIVERBANK",
 "from_location": "RIVERBANK_UNDERGROUND",
-"entry_prereq": "DARKNESS & EXPLOSIVES",
+"entry_prereq": "DARKNESS & UNDERWATER & EXPLOSIVES",
 "exit_prereq": "NONE",
 }
 

@@ -1132,7 +1132,7 @@ DARKNESS & (
 
 {
 "edge": "SNOWLAND_EAST -> SNOWLAND_LAKE",
-"prereq": "NONE",
+"prereq": "UNDERWATER",
 }
 
 {
@@ -1147,7 +1147,7 @@ DARKNESS & (
 
 {
 "edge": "SNOWLAND_MID -> SNOWLAND_LAKE",
-"prereq": "NONE",
+"prereq": "UNDERWATER",
 }
 
 {
@@ -1336,7 +1336,7 @@ DARKNESS & (
 
 {
 "edge": "SNOWLAND_WEST -> AQUARIUM_TOP_ENTRANCE",
-"prereq": "NONE",
+"prereq": "UNDERWATER",
 }
 
 {
@@ -1466,7 +1466,7 @@ DARKNESS & (
 
 {
 "edge": "AQUARIUM_BEACH_ENTRANCE -> AQUARIUM_BOMB_WALLED_AREA",
-"prereq": "(CARROT_SHOOTER & BOOST) | (CARROT_BOMB & SLIDING_POWDER)",
+"prereq": "UNDERWATER & ((CARROT_SHOOTER & BOOST) | (CARROT_BOMB & SLIDING_POWDER))",
 }
 
 // .---------------------'

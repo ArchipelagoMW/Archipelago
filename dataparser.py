@@ -173,7 +173,6 @@ def define_default_expressions(variable_names_set):
         "DARKNESS": "DARKNESS_WITHOUT_LIGHT_ORB | LIGHT_ORB",
         "UNDERWATER": "UNDERWATER_WITHOUT_WATER_ORB | WATER_ORB",
         "EVENT_WARP": "EVENT_WARPS_REQUIRED",
-        #"UNDERWATER": "TRUE",
         "PROLOGUE_TRIGGER": "CHAPTER_1 | OPEN_MODE",
         #"RIBBON": "TRUE",
         #"WARP": "TRUE",
