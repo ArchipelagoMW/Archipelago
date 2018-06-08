@@ -181,7 +181,7 @@
 
 {
 "name": "cicini_room_fireorb",
-"weight": 12,
+"weight": 15,
 "changes": [
     {
     "edge": "SPECTRAL_CICINI_LEDGE -> SPECTRAL_CICINI_ROOM",
@@ -216,7 +216,7 @@
 
 {
 "name": "cicini_room_hammer",
-"weight": 12,
+"weight": 15,
 "changes": [
     {
     "edge": "SPECTRAL_CICINI_LEDGE -> SPECTRAL_CICINI_ROOM",
@@ -1615,7 +1615,7 @@
 
 {
 "name": "cicini_room_slide",
-"weight": 15,
+"weight": 20,
 "changes": [
     {
     "edge": "SPECTRAL_CICINI_LEDGE -> SPECTRAL_CICINI_ROOM",
@@ -1636,7 +1636,7 @@
 
 {
 "name": "cicini_room_nostupid",
-"weight": 30,
+"weight": 50,
 "changes": [
     {
     // This is copy-pasted from cicini_room_nostupid. Keep this synchronized!
