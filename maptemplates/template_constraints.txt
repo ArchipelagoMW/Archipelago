@@ -327,7 +327,7 @@
 "changes": [
     {
     "edge": "GRAVEYARD_MAIN -> GRAVEYARD_KOTRI",
-    "prereq": "EXPLOSIVES | PIKO_HAMMER",
+    "prereq": "PIKO_HAMMER",
     }
 ]}
 
