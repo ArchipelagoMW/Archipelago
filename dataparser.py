@@ -110,7 +110,7 @@ def define_pseudo_items():
         "AMULET_FOOD": lambda v : enough_amu_food(v, 1),
         "2_AMULET_FOOD": lambda v : enough_amu_food(v, 2),
         "3_AMULET_FOOD": lambda v : enough_amu_food(v, 3),
-        "MANY_AMULET_FOOD": "ITEM_MENU & TOWN_SHOP",
+        "MANY_AMULET_FOOD": "ITEM_MENU & TOWN_SHOP & BUNNY_AMULET",
 
         "BOOST": "BEACH_MAIN | (RUMI_DONUT & ITEM_MENU)",
         "BOOST_MANY": "ITEM_MENU & TOWN_SHOP",
