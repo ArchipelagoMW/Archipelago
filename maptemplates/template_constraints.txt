@@ -1230,12 +1230,12 @@
 "changes": [
     {
     "edge": "PALACE_WARP_LEVEL_1_2 -> PALACE_LEVEL_3",
-    "prereq": "NONE",
+    "prereq": "IMPOSSIBLE",
     }
 
     {
     "edge": "PALACE_LEVEL_3 -> PALACE_WARP_LEVEL_1_2",
-    "prereq": "FIRE_ORB",
+    "prereq": "IMPOSSIBLE",
     }
 ]}
 

@@ -1218,9 +1218,11 @@ DARKNESS & (
 {
 "edge": "ICY_SUMMIT_MAIN -> ICY_SUMMIT_NIXIE",
 "prereq": "
-    WHIRL_BONK_CANCEL | (AIR_JUMP & (
+    WHIRL_BONK_CANCEL
+    | (AIR_JUMP & (
         ((RABI_SLIPPERS | (SLIDE_JUMP_BUNSTRIKE_CANCEL & ADV_VHARD)) & AIR_DASH)
         | (WALL_JUMP_LV2)
+        | (ADV_STUPID & (RABI_SLIPPERS | SLIDING_POWDER)) // damage boost + maybe slide bonk
     ))"
 }
 
