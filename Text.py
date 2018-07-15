@@ -1311,8 +1311,8 @@ class TextTable(object):
             'shop_buy_heart',
             'bomb_shop_big_bomb_buy',
             'item_get_big_bomb',
-            'unknown_0', #catfish
-            'unknown_1', #catfish
+            'catfish',
+            'catfish_after_item',
             'zora_meeting',
             'zora_tells_cost',
             'zora_get_flippers',
@@ -1692,8 +1692,8 @@ class TextTable(object):
         text['aginah'] = CompressedTextMapper.convert("So, I've been living in this cave for years, and you think you can just come along and bomb open walls?")
         text['aginah_need_better_sword'] = CompressedTextMapper.convert("Once I farted in this cave so bad all the jazz hands guys ran away in hid in the sand.")
         text['aginah_have_better_sword'] = CompressedTextMapper.convert("Panda's are very vicious animals. Never forget…\n\n\n\n\n… I never will")
-        text['unknown_0'] = CompressedTextMapper.convert("You woke me from my nap, take this and get out!")
-        text['unknown_1'] = CompressedTextMapper.convert("I don't have anything else for you!\nTake this!")
+        text['catfish'] = CompressedTextMapper.convert("You woke me from my nap, take this and get out!")
+        text['catfish_after_item'] = CompressedTextMapper.convert("I don't have anything else for you!\nTake this!")
         # 12C
         text['lumberjack_right'] = CompressedTextMapper.convert("One of us always lies.")
         text['lumberjack_left'] = CompressedTextMapper.convert("One of us always tells the truth.")

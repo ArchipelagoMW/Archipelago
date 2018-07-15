@@ -1039,7 +1039,7 @@ def write_strings(rom, world):
     tt['sahasrahla_bring_courage'] = 'I lost my family heirloom in %s' % greenpendant.hint_text
 
     tt['uncle_leaving_text'] = Uncle_texts[random.randint(0, len(Uncle_texts) - 1)]
-    tt['end_triforce'] = Triforce_texts[random.randint(0, len(Triforce_texts) - 1)]
+    tt['end_triforce'] = "{NOBORDER\n}" + Triforce_texts[random.randint(0, len(Triforce_texts) - 1)]
     tt['bomb_shop_big_bomb'] = BombShop2_texts[random.randint(0, len(BombShop2_texts) - 1)]
     tt['pond_will_upgrade'] = PyramidFairy_texts[random.randint(0, len(PyramidFairy_texts) - 1)]
 
