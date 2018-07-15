@@ -1223,8 +1223,7 @@ class TextTable(object):
             'maiden_confirm_undersood',
             'maiden_crystal_7_again',
 
-            # Note: Item pickup text is skipped by a change we will keep, so technically we don't need to replace them
-            # Replacing them anyway to make more room in translation table
+            # item pickup text
             'item_get_lamp',
             'item_get_boomerang',
             'item_get_bow',
