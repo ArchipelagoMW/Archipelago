@@ -1182,7 +1182,7 @@ class TextTable(object):
         else:
             self._text[key]=value
 
-    def getBytes(self):
+    def getBytes(self, pad=false):
         logger = logging.getLogger('')
         data = b''.join(self._text.values())
         logger.debug("translation space remaining: %i", self.SIZE - len(data))
@@ -1190,7 +1190,10 @@ class TextTable(object):
         if len(data) > self.SIZE:
             raise Exception("Text data is too large to fit")
 
-        return data.ljust(self.SIZE, b'\xff')
+        if (pad):
+            return data.ljust(self.SIZE, b'\xff')
+        else:
+            return data
 
     def removeUnwantedText(self):
         nomessage = bytes(CompressedTextMapper.convert("{NOTEXT}", False))
@@ -1805,3 +1808,4 @@ class TextTable(object):
         text['ganon_phase_3_alt'] = CompressedTextMapper.convert("Got wax in\nyour ears?\nI cannot die!")
         # 190
         text['end_pad_data'] = bytearray([0xfb])
+        text['terminator'] =  bytearray([0xFF, 0xFF])
