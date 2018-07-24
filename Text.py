@@ -1303,6 +1303,7 @@ class TextTable(object):
             'sahasrahla_found',
             'sahasrahla_have_boots_no_icerod',
             'sahasrahla_bring_courage',
+            'sahasrahla_quest_have_master_sword',
             'shop_darkworld_enter',
             'shop_first_time',
             'shop_buy_shield',

@@ -1043,9 +1043,8 @@ def write_strings(rom, world):
     tt['bomb_shop_big_bomb'] = BombShop2_texts[random.randint(0, len(BombShop2_texts) - 1)]
     tt['pond_will_upgrade'] = PyramidFairy_texts[random.randint(0, len(PyramidFairy_texts) - 1)]
 
-    # unfortunate naming, but this is what shows after getting the green pendant item in rando
-    # regardless of having checked the icerod cave
-    tt['sahasrahla_have_boots_no_icerod'] = Sahasrahla2_texts[random.randint(0, len(Sahasrahla2_texts) - 1)]
+    # this is what shows after getting the green pendant item in rando
+    tt['sahasrahla_quest_have_master_sword'] = Sahasrahla2_texts[random.randint(0, len(Sahasrahla2_texts) - 1)]
     tt['blind_by_the_light'] = Blind_texts[random.randint(0, len(Blind_texts) - 1)]
 
     if world.goal in ['pedestal', 'triforcehunt']:
