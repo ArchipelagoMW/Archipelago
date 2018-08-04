@@ -1041,7 +1041,7 @@ def write_strings(rom, world):
     tt['sahasrahla_bring_courage'] = 'I lost my family heirloom in %s' % greenpendant.hint_text
 
     tt['uncle_leaving_text'] = Uncle_texts[random.randint(0, len(Uncle_texts) - 1)]
-    tt['end_triforce'] = "{NOBORDER\n}" + Triforce_texts[random.randint(0, len(Triforce_texts) - 1)]
+    tt['end_triforce'] = "{NOBORDER}\n" + Triforce_texts[random.randint(0, len(Triforce_texts) - 1)]
     tt['bomb_shop_big_bomb'] = BombShop2_texts[random.randint(0, len(BombShop2_texts) - 1)]
     tt['pond_will_upgrade'] = PyramidFairy_texts[random.randint(0, len(PyramidFairy_texts) - 1)]
 
@@ -1087,7 +1087,7 @@ def write_strings(rom, world):
     fluteboyitem_text = random.choice(FluteBoy_texts) if fluteboyitem is None or fluteboyitem.fluteboy_credit_text is None else fluteboyitem.fluteboy_credit_text
 
     credits.update_credits_line('castle', 0, random.choice(KingsReturn_texts))
-    credits.update_credits_line('sancturary', 0, random.choice(Sanctuary_texts))
+    credits.update_credits_line('sanctuary', 0, random.choice(Sanctuary_texts))
 
     credits.update_credits_line('kakariko', 0, random.choice(Kakariko_texts).format(random.choice(Sahasrahla_names)))
     credits.update_credits_line('desert', 0, random.choice(DesertPalace_texts))
