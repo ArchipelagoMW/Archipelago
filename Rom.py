@@ -28,6 +28,8 @@ class JsonRom(object):
         self.patches[str(address)] = [value]
 
     def write_bytes(self, startaddress, values):
+        if not values:
+            return
         self.patches[str(startaddress)] = list(values)
 
     def write_int16_to_rom(self, address, value):
