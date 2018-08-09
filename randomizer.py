@@ -241,11 +241,6 @@ def pre_modify_map_data(mod, settings, diff_patch_files):
         ]
         print_ln('Map fixes applied')
 
-    if settings.open_mode:
-        for areaid, data in mod.stored_datas.items():
-            apply_open_mode_fixes(areaid, data)
-        print_ln('Open mode applied')
-
     # Note: because musicrandomizer requires room color info, the music
     # must be shuffled before the room colors!
 
@@ -261,6 +256,12 @@ def pre_modify_map_data(mod, settings, diff_patch_files):
     # Apply map patches from list of patches. We apply this only after everything else has been applied.
     apply_diff_patch_fixes(mod, diff_patch_files)
     print_ln('Map patches applied')
+
+    # Apply open mode after map patches because all it does is remove IDs 300 and 301.
+    if settings.open_mode:
+        for areaid, data in mod.stored_datas.items():
+            apply_open_mode_fixes(areaid, data)
+        print_ln('Open mode applied')
 
 
 def apply_map_transition_shuffle(mod, data, settings, allocation):
