@@ -772,7 +772,11 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_byte(0x3A9A7, 0xD0) # Residual Portal: Normal  (D0= Light Side, F0=Dark Side, 42 = both (Darth Vader))
 
     rom.write_byte(0x18004D, 0x00) # Escape assist (off)
-    rom.write_byte(0x18004E, 0x00) # uncle Refill (off)
+    rom.write_byte(0x18004E, 0x00) # escape fills
+    rom.write_int16_to_rom(0x180183, 0) # rupee fill (for bow if rupee arrows enabled)
+    rom.write_bytes(0x180185, [0x00, 0x00, 0x00]) # uncle item refills
+    rom.write_bytes(0x180188, [0x00, 0x00, 0x00]) # zelda item refills
+    rom.write_bytes(0x18018B, [0x00, 0x00, 0x00]) # uncle item refills
 
 
     if world.goal in ['pedestal', 'triforcehunt']:

@@ -409,11 +409,11 @@ class CollectionState(object):
         return len([pritem for pritem in self.prog_items if pritem.startswith('Bottle')])
 
     def has_hearts(self, count):
-        # Warning: This oncly considers items that are marked as advancement items
+        # Warning: This only considers items that are marked as advancement items
         return self.heart_count() >= count
 
     def heart_count(self):
-        # Warning: This oncly considers items that are marked as advancement items
+        # Warning: This only considers items that are marked as advancement items
         return (
             self.item_count('Boss Heart Container')
             + self.item_count('Sanctuary Heart Container')
@@ -424,26 +424,27 @@ class CollectionState(object):
     def can_lift_heavy_rocks(self):
         return self.has('Titans Mitts')
 
-    def can_extend_magic(self, smallmagic=8, fullrefill=False): #This reflects the total magic Link has, not the total extra he has.
+    def can_extend_magic(self, smallmagic=16, fullrefill=False): #This reflects the total magic Link has, not the total extra he has.
         basemagic = 8
         if self.has('Quarter Magic'):
             basemagic = 32
         elif self.has('Half Magic'):
             basemagic = 16
-        if self.world.difficulty == 'hard' and not fullrefill:
-            basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count())
-        elif self.world.difficulty == 'expert' and not fullrefill:
-            basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count())
-        elif self.world.difficulty == 'insane' and not fullrefill:
-            basemagic = basemagic
-        elif self.can_buy_unlimited('Green Potion') or self.can_buy_unlimited('Red Potion'):
-            basemagic = basemagic + basemagic * self.bottle_count()
+        if self.can_buy_unlimited('Green Potion') or self.can_buy_unlimited('Blue Potion'):
+            if self.world.difficulty == 'hard' and not fullrefill:
+                basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count())
+            elif self.world.difficulty == 'expert' and not fullrefill:
+                basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count())
+            elif self.world.difficulty == 'insane' and not fullrefill:
+                basemagic = basemagic
+            else:
+                basemagic = basemagic + basemagic * self.bottle_count()
         return basemagic >= smallmagic
 
     def can_kill_most_things(self, enemies=5):
         return (self.has_blunt_weapon()
                 or self.has('Cane of Somaria')
-                or (self.has('Cane of Byrna') and (enemies < 6 or self.can_extend_Magic()))
+                or (self.has('Cane of Byrna') and (enemies < 6 or self.can_extend_magic()))
                 or self.can_shoot_arrows()
                 or self.has('Fire Rod')
                )
