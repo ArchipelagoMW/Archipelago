@@ -6,7 +6,7 @@ import logging
 import random
 import time
 
-from BaseClasses import World, CollectionState, Item, Region, Location, Entrance, Shop
+from BaseClasses import World, CollectionState, Item, Region, Location, Shop
 from Regions import create_regions, mark_light_world_regions
 from EntranceShuffle import link_entrances
 from Rom import patch_rom, Sprite, LocalRom, JsonRom

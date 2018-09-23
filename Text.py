@@ -108,7 +108,6 @@ Triforce_texts = [
     "  Pick us up\n  before we\n  get dizzy!",
 ]
 BombShop2_texts = ['Bombs!\nBombs!\nBiggest!\nBestest!\nGreatest!\nBoomest!']
-PyramidFairy_texts = ['May I talk to you about our lord and savior, Ganon?']
 Sahasrahla2_texts = ['You already got my item, idiot.', 'Why are you still talking to me?', 'This text won\'t change.', 'Have you met my brother, Hasarahshla?']
 Blind_texts = [
     "I hate insect\npuns, they\nreally bug me.",
@@ -126,7 +125,7 @@ Blind_texts = [
     "When you're a\nbaker, don't\nloaf around.",
     "Mire requires\nEther Quake,\nor Bombos.",
     "Broken pencils\nare pointless.",
-    "The food they\nserve guards\nlasts sentries.",
+    "The food they\nserve guards\nlasts sentries",
     "Being crushed\nby big objects\nis depressing.",
     "A tap dancer's\nroutine runs\nhot and cold.",
     "A weeknight is\na tiny\nnobleman.",
@@ -144,6 +143,7 @@ Blind_texts = [
     "Sausage is\nthe wurst.",
     "I tried to\ncatch fog,\nbut I mist.",
     "Winter is a\ngreat time\nto chill.",
+    "Do you think\nthe Ice Rod\nis cool?",
 ]
 Ganon1_texts = [
     "Start your day\nsmiling with a\ndelicious\nwhole grain\nbreakfast\ncreated for\nyour\nincredible\ninsides.",
@@ -246,7 +246,7 @@ Sahasrahla_names = [
     "sandstorms", "sandwiched", "sauerkraut", "schipperke", "schismatic", "schizocarp", "schmalzier",
     "schmeering", "schmoosing", "shibboleth", "shovelnose", "sahananana", "sarararara", "salamander",
     "sharshalah", "shahabadoo", "sassafrass", "saddlebags", "sandalwood", "shagadelic", "sandcastle",
-    "saltpeters", "shabbiness", "shlrshlrsh",
+    "saltpeters", "shabbiness", "shlrshlrsh", "sassyralph", "sallyacorn",
 ]
 
 Kakariko_texts = ["{}'s homecoming"]
@@ -1300,6 +1300,9 @@ class TextTable(object):
             'item_get_14_heart',
             'item_get_24_heart',
             'item_get_34_heart',
+            'pond_item_test',
+            'pond_will_upgrade',
+
             # misc
             'agahnim_final_meeting',
             'agahnim_hide_and_seek_found',
@@ -1461,7 +1464,7 @@ class TextTable(object):
         text['sahasrahla_have_courage'] = CompressedTextMapper.convert("{BOTTOM}\nLook, you have the green pendant! I'll give you something. Go kill the other two bosses for more pendant fun!")
         text['sahasrahla_found'] = CompressedTextMapper.convert("{BOTTOM}\nYup!\n\nI'm the old man you are looking for. I'll keep it short and sweet: Go into that dungeon, then bring me the green pendant and talk to me again.")
         text['sign_rain_north_of_links_house'] = CompressedTextMapper.convert("↑ Dying Uncle\n  This way…")
-        text['sign_north_of_links_house'] = CompressedTextMapper.convert("> Randomizer Don't read me, go beat Ganon!")
+        text['sign_north_of_links_house'] = CompressedTextMapper.convert("> Randomizer") #"> Randomizer The telepathic tiles can have hints!"
         text['sign_path_to_death_mountain'] = CompressedTextMapper.convert("Cave to lost, old man.\nGood luck.")
         text['sign_lost_woods'] = CompressedTextMapper.convert("\n↑ Lost Woods")
         text['sign_zoras'] = CompressedTextMapper.convert("Danger!\nDeep water!\nZoras!")
@@ -1596,11 +1599,11 @@ class TextTable(object):
         text['mastersword_pedestal_translated'] = CompressedTextMapper.convert("A test of strength: If you have 3 pendants, I'm yours.")
         text['telepathic_tile_spectacle_rock'] = CompressedTextMapper.convert("{NOBORDER}\n{NOBORDER}\nUse the Mirror, or the Hookshot and Hammer, to get to Tower of Hera!")
         text['telepathic_tile_swamp_entrance'] = CompressedTextMapper.convert("{NOBORDER}\nDrain the floodgate to raise the water here!")
-        text['telepathic_tile_thieves_town_upstairs'] = CompressedTextMapper.convert("Secondary tournament winners\n{HARP}\n  ~~~2017~~~\nA: Zaen")
+        text['telepathic_tile_thieves_town_upstairs'] = CompressedTextMapper.convert("{NOBORDER}\nBlind hate's bright light.")
         text['telepathic_tile_misery_mire'] = CompressedTextMapper.convert("{NOBORDER}\nLighting 4 torches will open your way forward!")
         text['hylian_text_2'] = CompressedTextMapper.convert("%%^= %==%\n ^ =%^=\n==%= ^^%^")
         text['desert_entry_translated'] = CompressedTextMapper.convert("Kneel before this stone, and magic will move around you.")
-        text['telepathic_tile_under_ganon'] = CompressedTextMapper.convert("{NOBORDER}\nOnly arrows will finish off a blue Ganon, or really well-timed spins in phase 4.")
+        text['telepathic_tile_under_ganon'] = CompressedTextMapper.convert("Secondary tournament winners\n{HARP}\n  ~~~2017~~~\nA: Zaen")
         text['telepathic_tile_palace_of_darkness'] = CompressedTextMapper.convert("{NOBORDER}\nThis is a funny looking Enemizer")
         # C0
         text['telepathic_tile_desert_bonk_torch_room'] = CompressedTextMapper.convert("{NOBORDER}\nThings can be knocked down, if you fancy yourself a dashing dude.")
@@ -1610,7 +1613,7 @@ class TextTable(object):
         text['telepathic_tile_ice_entrace'] = CompressedTextMapper.convert("{NOBORDER}\nYou can use Fire Rod or Bombos to pass.")
         text['telepathic_tile_ice_stalfos_knights_room'] = CompressedTextMapper.convert("{NOBORDER}\nKnock 'em down and then bomb them dead.")
         text['telepathic_tile_tower_of_hera_entrance'] = CompressedTextMapper.convert("{NOBORDER}\nThis is a bad place, with a guy who will make you fall…\n\n\na lot.")
-        text['houlahan_room'] = CompressedTextMapper.convert("Randomizer tournament winners\n{HARP}\n  ~~~2017~~~\nA: ajneb174\nS: ajneb174")
+        text['houlihan_room'] = CompressedTextMapper.convert("Randomizer tournament winners\n{HARP}\n  ~~~2018~~~\nS: Andy\n\n  ~~~2017~~~\nA: ajneb174\nS: ajneb174")
         text['caught_a_bee'] = CompressedTextMapper.convert("Caught a Bee\n  ≥ keep\n    release\n{CHOICE}")
         text['caught_a_fairy'] = CompressedTextMapper.convert("Caught Fairy!\n  ≥ keep\n    release\n{CHOICE}")
         text['no_empty_bottles'] = CompressedTextMapper.convert("Whoa, bucko!\nNo empty bottles.")

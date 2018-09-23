@@ -9,7 +9,7 @@ import random
 from BaseClasses import ShopType
 from Dungeons import dungeon_music_addresses
 from Text import MultiByteTextMapper, text_addresses, Credits, TextTable
-from Text import Uncle_texts, Ganon1_texts, PyramidFairy_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts
+from Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts
 from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
 from Utils import local_path, int16_as_bytes, int32_as_bytes
 from Items import ItemFactory
@@ -41,6 +41,12 @@ class JsonRom(object):
     def write_to_file(self, file):
         with open(file, 'w') as stream:
             json.dump([self.patches], stream)
+
+    def get_hash(self):
+        h = hashlib.md5()
+        h.update(json.dumps([self.patches]).encode('utf-8'))
+        return h.hexdigest()
+
 
 
 class LocalRom(object):
@@ -96,6 +102,11 @@ class LocalRom(object):
         crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
         inv = crc ^ 0xFFFF
         self.write_bytes(0x7FDC, [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF])
+
+    def get_hash(self):
+        h = hashlib.md5()
+        h.update(self.buffer)
+        return h.hexdigest()
 
 def read_rom(stream):
     "Reads rom into bytearray and strips off any smc header"
@@ -422,24 +433,6 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x180180, 0x02) # Hookshot only
         # Make silver arrows only usable against Ganon
         rom.write_byte(0x180181, 0x01)
-        #Make Blue Shield more expensive
-        rom.write_bytes(0xF73D2, [0xFC, 0xFF])
-        rom.write_bytes(0xF73DA, [0x04, 0x00])
-        rom.write_bytes(0xF73E2, [0x0C, 0x00])
-        rom.write_byte(0xF73D6, 0x31)
-        rom.write_byte(0xF73DE, 0x30)
-        rom.write_byte(0xF73E6, 0x30)
-        rom.write_byte(0xF7201, 0x00)
-        rom.write_byte(0xF71FF, 0x64)
-        #Make Red Shield more expensive
-        rom.write_bytes(0xF73FA, [0xFC, 0xFF])
-        rom.write_bytes(0xF7402, [0x04, 0x00])
-        rom.write_bytes(0xF740A, [0x0C, 0x00])
-        rom.write_byte(0xF73FE, 0x33)
-        rom.write_byte(0xF7406, 0x33)
-        rom.write_byte(0xF740E, 0x33)
-        rom.write_byte(0xF7241, 0x03)
-        rom.write_byte(0xF723F, 0xE7)
     elif world.difficulty == 'expert':
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xD8)  # One Heart
@@ -460,24 +453,6 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x180180, 0x00) # Nothing
         # Make silver arrows only usable against Ganon
         rom.write_byte(0x180181, 0x01)
-        #Make Blue Shield more expensive
-        rom.write_bytes(0xF73D2, [0xFC, 0xFF])
-        rom.write_bytes(0xF73DA, [0x04, 0x00])
-        rom.write_bytes(0xF73E2, [0x0C, 0x00])
-        rom.write_byte(0xF73D6, 0x3C)
-        rom.write_byte(0xF73DE, 0x3C)
-        rom.write_byte(0xF73E6, 0x3C)
-        rom.write_byte(0xF7201, 0x27)
-        rom.write_byte(0xF71FF, 0x06)
-        #Make Red Shield more expensive
-        rom.write_bytes(0xF73FA, [0xFC, 0xFF])
-        rom.write_bytes(0xF7402, [0x04, 0x00])
-        rom.write_bytes(0xF740A, [0x0C, 0x00])
-        rom.write_byte(0xF73FE, 0x3C)
-        rom.write_byte(0xF7406, 0x3C)
-        rom.write_byte(0xF740E, 0x3C)
-        rom.write_byte(0xF7241, 0x27)
-        rom.write_byte(0xF723F, 0x06)
     elif world.difficulty == 'insane':
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0x79)  # Bees
@@ -498,24 +473,6 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x180180, 0x00) # Nothing
         # Make silver arrows only usable against Ganon
         rom.write_byte(0x180181, 0x01)
-        #Make Blue Shield more expensive
-        rom.write_bytes(0xF73D2, [0xFC, 0xFF])
-        rom.write_bytes(0xF73DA, [0x04, 0x00])
-        rom.write_bytes(0xF73E2, [0x0C, 0x00])
-        rom.write_byte(0xF73D6, 0x3C)
-        rom.write_byte(0xF73DE, 0x3C)
-        rom.write_byte(0xF73E6, 0x3C)
-        rom.write_byte(0xF7201, 0x27)
-        rom.write_byte(0xF71FF, 0x10)
-        #Make Red Shield more expensive
-        rom.write_bytes(0xF73FA, [0xFC, 0xFF])
-        rom.write_bytes(0xF7402, [0x04, 0x00])
-        rom.write_bytes(0xF740A, [0x0C, 0x00])
-        rom.write_byte(0xF73FE, 0x3C)
-        rom.write_byte(0xF7406, 0x3C)
-        rom.write_byte(0xF740E, 0x3C)
-        rom.write_byte(0xF7241, 0x27)
-        rom.write_byte(0xF723F, 0x10)
     else:
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xE3)  # fairy
@@ -543,7 +500,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
 
     if world.difficulty in ['easy']:
         rom.write_byte(0x180182, 0x03) # auto equip silvers on pickup and at ganon
-    elif world.retro and world.difficulty in ['hard','expert', 'insane']: #FIXME: this is temporary for v29 baserom
+    elif world.retro and world.difficulty in ['hard', 'expert', 'insane']: #FIXME: this is temporary for v29 baserom (perhaps no so temporary?)
         rom.write_byte(0x180182, 0x03) # auto equip silvers on pickup and at ganon
     else:
         rom.write_byte(0x180182, 0x01) # auto equip silvers on pickup
@@ -574,11 +531,17 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
                   0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xE0, 0xE0, 0xE0, 0xE0, 0xE0,
                   0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE2, 0xE2, 0xE2, 0xE2, 0xE2,
                   0xE3, 0xE3, 0xE3, 0xE3, 0xE3]
+    if world.difficulty in ['hard', 'expert', 'insane']:
+        prize_replacements = {0xE0: 0xDF, # Fairy -> heart
+                              0xE3: 0xD8} # Big magic -> small magic
+        prizes = [prize_replacements.get(prize, prize) for prize in prizes]
+        dig_prizes = [prize_replacements.get(prize, prize) for prize in dig_prizes]
+
     if world.retro:
         prize_replacements = {0xE1: 0xDA, #5 Arrows -> Blue Rupee
                               0xE2: 0xDB} #10 Arrows -> Red Rupee
-        prizes = [prize_replacements.get(prize,prize) for prize in prizes]
-        dig_prizes = [prize_replacements.get(prize,prize) for prize in dig_prizes]
+        prizes = [prize_replacements.get(prize, prize) for prize in prizes]
+        dig_prizes = [prize_replacements.get(prize, prize) for prize in dig_prizes]
     rom.write_bytes(0x180100, dig_prizes)
     random.shuffle(prizes)
 
@@ -640,12 +603,16 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
             # original_item, limit, replacement_item, filler
             0x12, 0x01, 0x35, 0xFF, # lamp -> 5 rupees
             0x58, 0x01, 0x43, 0xFF, # silver arrows -> 1 arrow
+            0x51, 0x06, 0x52, 0xFF, # 6 +5 bomb upgrades -> +10 bomb upgrade
+			0x53, 0x06, 0x54, 0xFF, # 6 +5 arrow upgrades -> +10 arrow upgrade
             0xFF, 0xFF, 0xFF, 0xFF, # end of table sentinel
         ])
     else:
         rom.write_bytes(0x184000, [
             # original_item, limit, replacement_item, filler
             0x12, 0x01, 0x35, 0xFF, # lamp -> 5 rupees
+            0x51, 0x06, 0x52, 0xFF, # 6 +5 bomb upgrades -> +10 bomb upgrade
+			0x53, 0x06, 0x54, 0xFF, # 6 +5 arrow upgrades -> +10 arrow upgrade
             0xFF, 0xFF, 0xFF, 0xFF, # end of table sentinel
         ])
 
@@ -675,6 +642,10 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     # set Waterfall fairy prizes to be disappointing
     rom.write_byte(0x348DB, 0x3A)  # Red Boomerang becomes Red Boomerang
     rom.write_byte(0x348EB, 0x05)  # Blue Shield becomes Blue Shield
+
+    # Remove Statues for upgrade fairy
+    rom.write_bytes(0x01F810, [0x1A, 0x1E, 0x01, 0x1A, 0x1E, 0x01])
+
 
     rom.write_byte(0x180029, 0x01) # Smithy quick item give
 
@@ -740,7 +711,6 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_byte(0x180211, 0x06) #Game type, we set the Entrance and item randomization flags
 
     # assorted fixes
-    rom.write_byte(0x180030, 0x00)  # Disable SRAM trace
     rom.write_byte(0x1800A2, 0x01)  # remain in real dark world when dying in dark word dungion before killing aga1
     rom.write_byte(0x180169, 0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
     rom.write_byte(0x180171, 0x01 if world.ganon_at_pyramid else 0x00)  # Enable respawning on pyramid after ganon death
@@ -766,10 +736,13 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_byte(0x18302D, 0x18) # starting current health
     rom.write_byte(0x183039, 0x68) # starting abilities, bit array
     rom.write_byte(0x18004A, 0x00) # Inverted mode (off)
+    rom.write_byte(0x18005D, 0x00) # Hammer always breaks barrier
     rom.write_byte(0x2AF79, 0xD0) # vortexes: Normal  (D0=light to dark, F0=dark to light, 42 = both)
     rom.write_byte(0x3A943, 0xD0) # Mirror: Normal  (D0=Dark to Light, F0=light to dark, 42 = both)
     rom.write_byte(0x3A96D, 0xF0) # Residual Portal: Normal  (F0= Light Side, D0=Dark Side, 42 = both (Darth Vader))
     rom.write_byte(0x3A9A7, 0xD0) # Residual Portal: Normal  (D0= Light Side, F0=Dark Side, 42 = both (Darth Vader))
+
+    rom.write_bytes(0x180080, [50, 50, 70, 70]) # values to fill for Capacity Upgrades (Bomb5, Bomb10, Arrow5, Arrow10)
 
     rom.write_byte(0x18004D, 0x00) # Escape assist (off)
     rom.write_byte(0x18004E, 0x00) # escape fills
@@ -815,6 +788,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_byte(0x180020, digging_game_rng)
     rom.write_byte(0xEFD95, digging_game_rng)
     rom.write_byte(0x1800A3, 0x01)  # enable correct world setting behaviour after agahnim kills
+    rom.write_byte(0x1800A4, 0x01 if world.logic != 'nologic' else 0x00)  # enable POD EG fix
     rom.write_byte(0x180042, 0x01 if world.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
 
     # remove shield from uncle
@@ -859,8 +833,16 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     # 21 bytes
     rom.write_bytes(0x7FC0, bytearray('ER_060_%09d\0' % world.seed, 'utf8') + world.option_identifier.to_bytes(4, 'big'))
 
-    # store hash table for main menu hash
-    rom.write_bytes(0x187F00, hashtable)
+    # Write title screen Code
+    hashint = int(rom.get_hash(), 16)
+    code = [
+        (hashint >> 20) & 0x1F,
+        (hashint >> 15) & 0x1F,
+        (hashint >> 10) & 0x1F,
+        (hashint >> 5) & 0x1F,
+        hashint & 0x1F,
+    ]
+    rom.write_bytes(0x180215, code)
 
     apply_rom_settings(rom, beep, color, world.quickswap, world.fastmenu, world.disable_music, sprite)
 
@@ -1047,7 +1029,6 @@ def write_strings(rom, world):
     tt['uncle_leaving_text'] = Uncle_texts[random.randint(0, len(Uncle_texts) - 1)]
     tt['end_triforce'] = "{NOBORDER}\n" + Triforce_texts[random.randint(0, len(Triforce_texts) - 1)]
     tt['bomb_shop_big_bomb'] = BombShop2_texts[random.randint(0, len(BombShop2_texts) - 1)]
-    tt['pond_will_upgrade'] = PyramidFairy_texts[random.randint(0, len(PyramidFairy_texts) - 1)]
 
     # this is what shows after getting the green pendant item in rando
     tt['sahasrahla_quest_have_master_sword'] = Sahasrahla2_texts[random.randint(0, len(Sahasrahla2_texts) - 1)]

@@ -1,7 +1,7 @@
 # ALttPEntranceRandomizer
 
 This is a entrance randomizer for _The Legend of Zelda: A Link to the Past_ for the SNES.
-See http://vt.alttp.run for more details on the normal randomizer.
+See https://alttpr.com/ for more details on the normal randomizer.
 
 # Installation
 

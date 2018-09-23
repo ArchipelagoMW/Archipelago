@@ -299,6 +299,10 @@ def create_regions(world):
         for index, (item, price) in enumerate(default_shop_contents[region_name]):
             shop.add_inventory(index, item, price)
 
+    region = world.get_region('Capacity Upgrade')
+    shop = Shop(region, 0x0115, ShopType.UpgradeShop, 0x04, True)
+    shop.add_inventory(0, 'Bomb Upgrade (+5)', 100, 7)
+    shop.add_inventory(1, 'Arrow Upgrade (+5)', 100, 7)
     world.intialize_regions()
 
 def create_lw_region(name, locations=None, exits=None):
@@ -358,15 +362,15 @@ def mark_light_world_regions(world):
 
 # (room_id, shopkeeper, replaceable)
 shop_table = {
-    'Cave Shop (Dark Death Mountain)': (0x0112, 0x51, True),
-    'Red Shield Shop': (0x0110, 0x51, True),
-    'Dark Lake Hylia Shop': (0x010F, 0x51, True),
-    'Dark World Lumberjack Shop': (0x010F, 0x51, True),
-    'Village of Outcasts Shop': (0x010F, 0x51, True),
-    'Dark World Potion Shop': (0x010F, 0x51, True),
-    'Light World Death Mountain Shop': (0x00FF, 0x51, True),
-    'Kakariko Shop': (0x011F, 0x51, True),
-    'Cave Shop (Lake Hylia)': (0x0112, 0x51, True),
+    'Cave Shop (Dark Death Mountain)': (0x0112, 0xC1, True),
+    'Red Shield Shop': (0x0110, 0xC1, True),
+    'Dark Lake Hylia Shop': (0x010F, 0xC1, True),
+    'Dark World Lumberjack Shop': (0x010F, 0xC1, True),
+    'Village of Outcasts Shop': (0x010F, 0xC1, True),
+    'Dark World Potion Shop': (0x010F, 0xC1, True),
+    'Light World Death Mountain Shop': (0x00FF, 0xA0, True),
+    'Kakariko Shop': (0x011F, 0xA0, True),
+    'Cave Shop (Lake Hylia)': (0x0112, 0xA0, True),
     'Potion Shop': (0x0109, 0xFF, False),
     # Bomb Shop not currently modeled as a shop, due to special nature of items
 }

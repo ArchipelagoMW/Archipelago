@@ -45,7 +45,7 @@ class World(object):
         self.aga_randomness = True
         self.lock_aga_door_in_escape = False
         self.fix_trock_doors = self.shuffle != 'vanilla'
-        self.save_and_quit_from_boss = False
+        self.save_and_quit_from_boss = True
         self.check_beatable_only = check_beatable_only
         self.fix_skullwoods_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
         self.fix_palaceofdarkness_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
@@ -456,6 +456,16 @@ class CollectionState(object):
             return self.has('Bow') and (self.has('Silver Arrows') or self.can_buy_unlimited('Single Arrow'))
         return self.has('Bow')
 
+    def can_get_good_bee(self):
+        cave = self.world.get_region('Good Bee Cave')
+        return (
+            self.has_bottle() and
+            self.has('Bug Catching Net') and
+            (self.has_Boots() or (self.has_sword() and self.has('Quake'))) and
+            cave.can_reach(self) and
+            (cave.is_light_world or self.has_Pearl())
+        )
+
     def has_sword(self):
         return self.has('Fighter Sword') or self.has('Master Sword') or self.has('Tempered Sword') or self.has('Golden Sword')
 
@@ -775,6 +785,7 @@ class Crystal(Item):
 class ShopType(Enum):
     Shop = 0
     TakeAny = 1
+    UpgradeShop = 2
 
 class Shop(object):
     def __init__(self, region, room_id, type, shopkeeper_config, replaceable):
@@ -804,6 +815,8 @@ class Shop(object):
             config |= 0x40 # ignore door id
         if self.type == ShopType.TakeAny:
             config |= 0x80
+        if self.type == ShopType.UpgradeShop:
+            config |= 0x10 # Alt. VRAM
         return [0x00]+int16_as_bytes(self.room_id)+[door_id, 0x00, config, self.shopkeeper_config, 0x00]
 
     def has_unlimited(self, item):
