@@ -32,10 +32,10 @@ class JsonRom(object):
             return
         self.patches[str(startaddress)] = list(values)
 
-    def write_int16_to_rom(self, address, value):
+    def write_int16(self, address, value):
         self.write_bytes(address, int16_as_bytes(value))
 
-    def write_int32_to_rom(self, address, value):
+    def write_int32(self, address, value):
         self.write_bytes(address, int32_as_bytes(value))
 
     def write_to_file(self, file):
@@ -64,10 +64,10 @@ class LocalRom(object):
         for i, value in enumerate(values):
             self.write_byte(startaddress + i, value)
 
-    def write_int16_to_rom(self, address, value):
+    def write_int16(self, address, value):
         self.write_bytes(address, int16_as_bytes(value))
 
-    def write_int32_to_rom(self, address, value):
+    def write_int32(self, address, value):
         self.write_bytes(address, int32_as_bytes(value))
 
     def write_to_file(self, file):
@@ -320,9 +320,9 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
 
 
                     rom.write_byte(0x15B8C + offset, ow_area)
-                    rom.write_int16_to_rom(0x15BDB + 2 * offset, vram_loc)
-                    rom.write_int16_to_rom(0x15C79 + 2 * offset, scroll_y)
-                    rom.write_int16_to_rom(0x15D17 + 2 * offset, scroll_x)
+                    rom.write_int16(0x15BDB + 2 * offset, vram_loc)
+                    rom.write_int16(0x15C79 + 2 * offset, scroll_y)
+                    rom.write_int16(0x15D17 + 2 * offset, scroll_x)
 
                     # for positioning fixups we abuse the roomid as a way of identifying which exit data we are appling
                     # Thanks to Zarby89 for originally finding these values
@@ -333,25 +333,25 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
                                       'Palace of Darkness Exit', 'Swamp Palace Exit', 'Ganons Tower Exit', 'Desert Palace Exit (North)', 'Agahnims Tower Exit', 'Spiral Cave Exit (Top)',
                                       'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)']:
                         # For exits that connot be reached from another, no need to apply offset fixes.
-                        rom.write_int16_to_rom(0x15DB5 + 2 * offset, link_y) # same as final else
+                        rom.write_int16(0x15DB5 + 2 * offset, link_y) # same as final else
                     elif room_id == 0x0059 and world.fix_skullwoods_exit:
-                        rom.write_int16_to_rom(0x15DB5 + 2 * offset, 0x00F8)
+                        rom.write_int16(0x15DB5 + 2 * offset, 0x00F8)
                     elif room_id == 0x004a and world.fix_palaceofdarkness_exit:
-                        rom.write_int16_to_rom(0x15DB5 + 2 * offset, 0x0640)
+                        rom.write_int16(0x15DB5 + 2 * offset, 0x0640)
                     elif room_id == 0x00d6 and world.fix_trock_exit:
-                        rom.write_int16_to_rom(0x15DB5 + 2 * offset, 0x0134)
+                        rom.write_int16(0x15DB5 + 2 * offset, 0x0134)
                     elif room_id == 0x000c and world.fix_gtower_exit: # fix ganons tower exit point
-                        rom.write_int16_to_rom(0x15DB5 + 2 * offset, 0x00A4)
+                        rom.write_int16(0x15DB5 + 2 * offset, 0x00A4)
                     else:
-                        rom.write_int16_to_rom(0x15DB5 + 2 * offset, link_y)
+                        rom.write_int16(0x15DB5 + 2 * offset, link_y)
 
-                    rom.write_int16_to_rom(0x15E53 + 2 * offset, link_x)
-                    rom.write_int16_to_rom(0x15EF1 + 2 * offset, camera_y)
-                    rom.write_int16_to_rom(0x15F8F + 2 * offset, camera_x)
+                    rom.write_int16(0x15E53 + 2 * offset, link_x)
+                    rom.write_int16(0x15EF1 + 2 * offset, camera_y)
+                    rom.write_int16(0x15F8F + 2 * offset, camera_x)
                     rom.write_byte(0x1602D + offset, unknown_1)
                     rom.write_byte(0x1607C + offset, unknown_2)
-                    rom.write_int16_to_rom(0x160CB + 2 * offset, door_1)
-                    rom.write_int16_to_rom(0x16169 + 2 * offset, door_2)
+                    rom.write_int16(0x160CB + 2 * offset, door_1)
+                    rom.write_int16(0x16169 + 2 * offset, door_2)
                 elif isinstance(exit.addresses, list):
                     # is hole
                     for address in exit.addresses:
@@ -428,7 +428,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
-        rom.write_int16_to_rom(0x180036, world.rupoor_cost)
+        rom.write_int16(0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x02) # Hookshot only
         # Make silver arrows only usable against Ganon
@@ -448,7 +448,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
-        rom.write_int16_to_rom(0x180036, world.rupoor_cost)
+        rom.write_int16(0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x00) # Nothing
         # Make silver arrows only usable against Ganon
@@ -468,7 +468,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
-        rom.write_int16_to_rom(0x180036, world.rupoor_cost)
+        rom.write_int16(0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x00) # Nothing
         # Make silver arrows only usable against Ganon
@@ -487,7 +487,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         #Enable catching fairies
         rom.write_byte(0x34FD6, 0xF0)
         # Rupoor negative value
-        rom.write_int16_to_rom(0x180036, world.rupoor_cost)
+        rom.write_int16(0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x03) # All standard items
         # Make silver arrows freely usable
@@ -667,39 +667,39 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         ERtimeincrease = ERtimeincrease + 15
     if world.clock_mode == 'off':
         rom.write_bytes(0x180190, [0x00, 0x00, 0x00])  # turn off clock mode
-        rom.write_int32_to_rom(0x180200, 0)  # red clock adjustment time (in frames, sint32)
-        rom.write_int32_to_rom(0x180204, 0)  # blue clock adjustment time (in frames, sint32)
-        rom.write_int32_to_rom(0x180208, 0)  # green clock adjustment time (in frames, sint32)
-        rom.write_int32_to_rom(0x18020C, 0)  # starting time (in frames, sint32)
+        rom.write_int32(0x180200, 0)  # red clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180204, 0)  # blue clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180208, 0)  # green clock adjustment time (in frames, sint32)
+        rom.write_int32(0x18020C, 0)  # starting time (in frames, sint32)
     elif world.clock_mode == 'ohko':
         rom.write_bytes(0x180190, [0x01, 0x02, 0x01])  # ohko timer with resetable timer functionality
-        rom.write_int32_to_rom(0x180200, 0)  # red clock adjustment time (in frames, sint32)
-        rom.write_int32_to_rom(0x180204, 0)  # blue clock adjustment time (in frames, sint32)
-        rom.write_int32_to_rom(0x180208, 0)  # green clock adjustment time (in frames, sint32)
-        rom.write_int32_to_rom(0x18020C, 0)  # starting time (in frames, sint32)
+        rom.write_int32(0x180200, 0)  # red clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180204, 0)  # blue clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180208, 0)  # green clock adjustment time (in frames, sint32)
+        rom.write_int32(0x18020C, 0)  # starting time (in frames, sint32)
     elif world.clock_mode == 'countdown-ohko':
         rom.write_bytes(0x180190, [0x01, 0x02, 0x01])  # ohko timer with resetable timer functionality
-        rom.write_int32_to_rom(0x180200, -100 * 60 * 60 * 60)  # red clock adjustment time (in frames, sint32)
-        rom.write_int32_to_rom(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
-        rom.write_int32_to_rom(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180200, -100 * 60 * 60 * 60)  # red clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
         if world.difficulty == 'easy':
-            rom.write_int32_to_rom(0x18020C, (20 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
+            rom.write_int32(0x18020C, (20 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
         elif world.difficulty == 'normal':
-            rom.write_int32_to_rom(0x18020C, (10 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
+            rom.write_int32(0x18020C, (10 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
         else:
-            rom.write_int32_to_rom(0x18020C, int((5 + ERtimeincrease / 2) * 60 * 60))  # starting time (in frames, sint32)
+            rom.write_int32(0x18020C, int((5 + ERtimeincrease / 2) * 60 * 60))  # starting time (in frames, sint32)
     if world.clock_mode == 'stopwatch':
         rom.write_bytes(0x180190, [0x02, 0x01, 0x00])  # set stopwatch mode
-        rom.write_int32_to_rom(0x180200, -2 * 60 * 60)  # red clock adjustment time (in frames, sint32)
-        rom.write_int32_to_rom(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
-        rom.write_int32_to_rom(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
-        rom.write_int32_to_rom(0x18020C, 0)  # starting time (in frames, sint32)
+        rom.write_int32(0x180200, -2 * 60 * 60)  # red clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
+        rom.write_int32(0x18020C, 0)  # starting time (in frames, sint32)
     if world.clock_mode == 'countdown':
         rom.write_bytes(0x180190, [0x01, 0x01, 0x00])  # set countdown, with no reset available
-        rom.write_int32_to_rom(0x180200, -2 * 60 * 60)  # red clock adjustment time (in frames, sint32)
-        rom.write_int32_to_rom(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
-        rom.write_int32_to_rom(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
-        rom.write_int32_to_rom(0x18020C, (40 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
+        rom.write_int32(0x180200, -2 * 60 * 60)  # red clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
+        rom.write_int32(0x18020C, (40 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
 
     # set up goals for treasure hunt
     rom.write_bytes(0x180165, [0x0E, 0x28] if world.treasure_hunt_icon == 'Triforce Piece' else [0x0D, 0x28])
@@ -746,7 +746,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
 
     rom.write_byte(0x18004D, 0x00) # Escape assist (off)
     rom.write_byte(0x18004E, 0x00) # escape fills
-    rom.write_int16_to_rom(0x180183, 0) # rupee fill (for bow if rupee arrows enabled)
+    rom.write_int16(0x180183, 0) # rupee fill (for bow if rupee arrows enabled)
     rom.write_bytes(0x180185, [0x00, 0x00, 0x00]) # uncle item refills
     rom.write_bytes(0x180188, [0x00, 0x00, 0x00]) # zelda item refills
     rom.write_bytes(0x18018B, [0x00, 0x00, 0x00]) # uncle item refills
