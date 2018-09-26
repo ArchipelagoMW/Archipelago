@@ -348,7 +348,7 @@ def create_dynamic_shop_locations(world):
 def fill_prizes(world, attempts=15):
     crystals = ItemFactory(['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6'])
     crystal_locations = [world.get_location('Turtle Rock - Prize'), world.get_location('Eastern Palace - Prize'), world.get_location('Desert Palace - Prize'), world.get_location('Tower of Hera - Prize'), world.get_location('Palace of Darkness - Prize'),
-                         world.get_location('Thieves Town - Prize'), world.get_location('Skull Woods - Prize'), world.get_location('Swamp Palace - Prize'), world.get_location('Ice Palace - Prize'),
+                         world.get_location('Thieves\' Town - Prize'), world.get_location('Skull Woods - Prize'), world.get_location('Swamp Palace - Prize'), world.get_location('Ice Palace - Prize'),
                          world.get_location('Misery Mire - Prize')]
     placed_prizes = [loc.item.name for loc in crystal_locations if loc.item is not None]
     unplaced_prizes = [crystal for crystal in crystals if crystal.name not in placed_prizes]
@@ -375,6 +375,9 @@ def fill_prizes(world, attempts=15):
 def set_up_shops(world):
     # Changes to basic Shops
     # TODO: move hard+ mode changes for sheilds here, utilizing the new shops
+
+    for shop in world.shops:
+        shop.active = True
 
     if world.retro:
         rss = world.get_region('Red Shield Shop').shop

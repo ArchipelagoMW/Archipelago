@@ -517,6 +517,7 @@ class MultiByteCoreTextMapper(object):
         outbuf = bytearray()
         lineindex = 0
         is_intro = '{INTRO}' in text
+        first_line=True
 
         while lines:
             linespace = wrap
@@ -526,8 +527,11 @@ class MultiByteCoreTextMapper(object):
                 continue
 
             words = line.split(' ')
-            outbuf.append(0x74 if lineindex == 0 else 0x75 if lineindex == 1 else 0x76)  # line starter
-
+            if first_line:
+                first_line=False
+            else:
+                outbuf.append(0x74 if lineindex == 0 else 0x75 if lineindex == 1 else 0x76)  # line starter
+            pending_space = False
             while words:
                 word = words.pop(0)
                 # sanity check: if the word we have is more than 14 characters, we take as much as we can still fit and push the rest back for later
@@ -540,9 +544,11 @@ class MultiByteCoreTextMapper(object):
                     break
 
                 if cls.wordlen(word) <= linespace:
+                    if pending_space:
+                        outbuf.extend(RawMBTextMapper.convert(' '))
                     if cls.wordlen(word) < linespace:
-                        word = word + ' '
-                    linespace -= cls.wordlen(word)
+                        pending_space = True
+                    linespace -= cls.wordlen(word) + 1 if pending_space else 0
                     outbuf.extend(RawMBTextMapper.convert(word))
                 else:
                     # ran out of space, push word and lines back and continue with next line

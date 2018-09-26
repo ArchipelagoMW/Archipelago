@@ -205,7 +205,7 @@ def guiMain(args=None):
     heartbeepFrame = Frame(drowDownFrame)
     heartbeepVar = StringVar()
     heartbeepVar.set('normal')
-    heartbeepOptionMenu = OptionMenu(heartbeepFrame, heartbeepVar, 'normal', 'half', 'quarter', 'off')
+    heartbeepOptionMenu = OptionMenu(heartbeepFrame, heartbeepVar, 'double', 'normal', 'half', 'quarter', 'off')
     heartbeepOptionMenu.pack(side=RIGHT)
     heartbeepLabel = Label(heartbeepFrame, text='Heartbeep sound rate')
     heartbeepLabel.pack(side=LEFT)
@@ -361,7 +361,7 @@ def guiMain(args=None):
 
     drowDownFrame2 = Frame(topFrame2)
     heartbeepFrame2 = Frame(drowDownFrame2)
-    heartbeepOptionMenu2 = OptionMenu(heartbeepFrame2, heartbeepVar, 'normal', 'half', 'quarter', 'off')
+    heartbeepOptionMenu2 = OptionMenu(heartbeepFrame2, heartbeepVar, 'double', 'normal', 'half', 'quarter', 'off')
     heartbeepOptionMenu2.pack(side=RIGHT)
     heartbeepLabel2 = Label(heartbeepFrame2, text='Heartbeep sound rate')
     heartbeepLabel2.pack(side=LEFT)
