@@ -1077,7 +1077,7 @@ class SpriteSelector(object):
         for file in glob(output_path(path)):
             sprites.append(Sprite(file))
 
-        sprites.sort(key=lambda s: str.lower(s.name or ""))
+        sprites.sort(key=lambda s: str.lower(s.name or "").strip())
 
         i = 0
         for sprite in sprites:
@@ -1161,7 +1161,7 @@ class SpriteSelector(object):
                 deleted += 1
 
             if successful:
-                resultmessage = "official sprites updated sucessfully"
+                resultmessage = "official sprites updated successfully"
 
             task.queue_event(finished)
 
