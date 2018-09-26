@@ -3,6 +3,7 @@ import logging
 import random
 
 from BaseClasses import Region, RegionType, Shop, ShopType, Location
+from Bosses import place_bosses
 from Dungeons import get_dungeon_item_pool
 from EntranceShuffle import connect_entrance
 from Fill import FillError, fill_restrictive
@@ -265,6 +266,7 @@ def generate_itempool(world):
     tr_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
     world.required_medallions = (mm_medallion, tr_medallion)
 
+    place_bosses(world)
     set_up_shops(world)
 
     if world.retro:

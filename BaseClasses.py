@@ -7,7 +7,7 @@ from Utils import int16_as_bytes
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, retro, custom, customitemarray):
+    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, retro, custom, customitemarray, boss_shuffle):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
@@ -63,6 +63,7 @@ class World(object):
         self.can_take_damage = True
         self.difficulty_requirements = None
         self.fix_fake_world = True
+        self.boss_shuffle = boss_shuffle
         self.dynamic_regions = []
         self.dynamic_locations = []
         self.spoiler = Spoiler(self)
@@ -109,6 +110,15 @@ class World(object):
                         self._location_cache[location] = r_location
                         return r_location
         raise RuntimeError('No such location %s' % location)
+
+    def get_dungeon(self, dungeonname):
+        if isinstance(dungeonname, Dungeon):
+            return dungeonname
+
+        for dungeon in self.dungeons:
+            if dungeon.name == dungeonname:
+                return dungeon
+        raise RuntimeError('No such dungeon %s' % dungeonname)
 
     def get_all_state(self, keys=False):
         ret = CollectionState(self)
@@ -687,6 +697,15 @@ class Dungeon(object):
         self.big_key = big_key
         self.small_keys = small_keys
         self.dungeon_items = dungeon_items
+        self.bosses = dict()
+
+    @property
+    def boss(self):
+        return self.bosses.get(None, None)
+
+    @boss.setter
+    def boss(self, value):
+        self.bosses[None] = value
 
     @property
     def keys(self):
@@ -705,9 +724,16 @@ class Dungeon(object):
     def __unicode__(self):
         return '%s' % self.name
 
+class Boss(object):
+    def __init__(self, name, enemizer_name, defeat_rule):
+        self.name = name
+        self.enemizer_name = enemizer_name
+        self.defeat_rule = defeat_rule
+
+    def can_defeat(self, state):
+        return self.defeat_rule(state)
 
 class Location(object):
-
     def __init__(self, name='', address=None, crystal=False, hint_text=None, parent=None):
         self.name = name
         self.parent_region = parent
@@ -854,6 +880,7 @@ class Spoiler(object):
         self.paths = {}
         self.metadata = {}
         self.shops = []
+        self.bosses = OrderedDict()
 
     def set_entrance(self, entrance, exit, direction):
         self.entrances[(entrance, direction)] = OrderedDict([('entrance', entrance), ('exit', exit), ('direction', direction)])
@@ -898,6 +925,23 @@ class Spoiler(object):
                 shopdata['item_{}'.format(index)] = "{} — {}".format(item['item'], item['price']) if item['price'] else item['item']
             self.shops.append(shopdata)
 
+        self.bosses["Eastern Palace"] = self.world.get_dungeon("Eastern Palace").boss.name
+        self.bosses["Desert Palace"] = self.world.get_dungeon("Desert Palace").boss.name
+        self.bosses["Tower Of Hera"] = self.world.get_dungeon("Tower of Hera").boss.name
+        self.bosses["Hyrule Castle"] = "Agahnim"
+        self.bosses["Palace Of Darkness"] = self.world.get_dungeon("Palace of Darkness").boss.name
+        self.bosses["Swamp Palace"] = self.world.get_dungeon("Swamp Palace").boss.name
+        self.bosses["Skull Woods"] = self.world.get_dungeon("Skull Woods").boss.name
+        self.bosses["Thieves Town"] = self.world.get_dungeon("Thieves Town").boss.name
+        self.bosses["Ice Palace"] = self.world.get_dungeon("Ice Palace").boss.name
+        self.bosses["Misery Mire"] = self.world.get_dungeon("Misery Mire").boss.name
+        self.bosses["Turtle Rock"] = self.world.get_dungeon("Turtle Rock").boss.name
+        self.bosses["Ganons Tower Basement"] = self.world.get_dungeon('Ganons Tower').bosses['bottom'].name
+        self.bosses["Ganons Tower Middle"] = self.world.get_dungeon('Ganons Tower').bosses['middle'].name
+        self.bosses["Ganons Tower Top"] = self.world.get_dungeon('Ganons Tower').bosses['top'].name
+        self.bosses["Ganons Tower"] = "Agahnim 2"
+        self.bosses["Ganon"] = "Ganon"
+
 
         from Main import __version__ as ERVersion
         self.metadata = {'version': ERVersion,
@@ -927,7 +971,10 @@ class Spoiler(object):
             out['Shops'] = self.shops
         out['playthrough'] = self.playthrough
         out['paths'] = self.paths
+        if(self.world.boss_shuffle != 'none'):
+            out['bosses'] = self.bosses
         out['meta'] = self.metadata
+
         return json.dumps(out)
 
     def to_file(self, filename):
