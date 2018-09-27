@@ -971,8 +971,8 @@ class Spoiler(object):
             out['Shops'] = self.shops
         out['playthrough'] = self.playthrough
         out['paths'] = self.paths
-        if(self.world.boss_shuffle != 'none'):
-            out['bosses'] = self.bosses
+        if self.world.boss_shuffle != 'none':
+            out['Bosses'] = self.bosses
         out['meta'] = self.metadata
 
         return json.dumps(out)
