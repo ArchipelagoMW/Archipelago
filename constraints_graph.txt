@@ -1943,7 +1943,7 @@ DARKNESS & (
 
 {
 "edge": "FOREST_NIGHT_NORTH_EAST -> PLURKWOOD_MAIN",
-"prereq": "NONE",
+"prereq": "PLURKWOOD",
 }
 
 {
