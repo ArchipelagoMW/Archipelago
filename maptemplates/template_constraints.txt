@@ -1372,7 +1372,7 @@
 "changes": [
     {
     "edge": "RIVERBANK_LEVEL2 -> RIVERBANK_LEVEL3",
-    "prereq": "AIR_JUMP | WALL_JUMP_LV2 | WHIRL_BONK",
+    "prereq": "AIR_JUMP | WALL_JUMP_LV2 | WHIRL_BONK_CANCEL | (ADV_STUPID & WHIRL_BONK)",
     }
 ]}
 
