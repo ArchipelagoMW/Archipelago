@@ -24,7 +24,7 @@ def main():
                              ''')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
-    parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['normal', 'half', 'quarter', 'off'],
+    parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['double', 'normal', 'half', 'quarter', 'off'],
                         help='''\
                              Select the rate at which the heart beep sound is played at
                              low health. (default: %(default)s)

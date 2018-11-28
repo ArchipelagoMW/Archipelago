@@ -205,7 +205,7 @@ def guiMain(args=None):
     heartbeepFrame = Frame(drowDownFrame)
     heartbeepVar = StringVar()
     heartbeepVar.set('normal')
-    heartbeepOptionMenu = OptionMenu(heartbeepFrame, heartbeepVar, 'normal', 'half', 'quarter', 'off')
+    heartbeepOptionMenu = OptionMenu(heartbeepFrame, heartbeepVar, 'double', 'normal', 'half', 'quarter', 'off')
     heartbeepOptionMenu.pack(side=RIGHT)
     heartbeepLabel = Label(heartbeepFrame, text='Heartbeep sound rate')
     heartbeepLabel.pack(side=LEFT)
@@ -361,7 +361,7 @@ def guiMain(args=None):
 
     drowDownFrame2 = Frame(topFrame2)
     heartbeepFrame2 = Frame(drowDownFrame2)
-    heartbeepOptionMenu2 = OptionMenu(heartbeepFrame2, heartbeepVar, 'normal', 'half', 'quarter', 'off')
+    heartbeepOptionMenu2 = OptionMenu(heartbeepFrame2, heartbeepVar, 'double', 'normal', 'half', 'quarter', 'off')
     heartbeepOptionMenu2.pack(side=RIGHT)
     heartbeepLabel2 = Label(heartbeepFrame2, text='Heartbeep sound rate')
     heartbeepLabel2.pack(side=LEFT)
@@ -1077,7 +1077,7 @@ class SpriteSelector(object):
         for file in glob(output_path(path)):
             sprites.append(Sprite(file))
 
-        sprites.sort(key=lambda s: str.lower(s.name or ""))
+        sprites.sort(key=lambda s: str.lower(s.name or "").strip())
 
         i = 0
         for sprite in sprites:
@@ -1114,7 +1114,7 @@ class SpriteSelector(object):
 
             try:
                 task.update_status("Downloading official sprites list")
-                with urlopen('http://vt.alttp.run/sprites') as response:
+                with urlopen('https://alttpr.com/sprites') as response:
                     sprites_arr = json.loads(response.read().decode("utf-8"))
             except Exception as e:
                 resultmessage = "Error getting list of official sprites. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
@@ -1161,7 +1161,7 @@ class SpriteSelector(object):
                 deleted += 1
 
             if successful:
-                resultmessage = "official sprites updated sucessfully"
+                resultmessage = "official sprites updated successfully"
 
             task.queue_event(finished)
 

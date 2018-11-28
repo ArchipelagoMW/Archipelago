@@ -6,7 +6,7 @@ import logging
 import random
 import time
 
-from BaseClasses import World, CollectionState, Item, Region, Location, Entrance, Shop
+from BaseClasses import World, CollectionState, Item, Region, Location, Shop
 from Regions import create_regions, mark_light_world_regions
 from EntranceShuffle import link_entrances
 from Rom import patch_rom, Sprite, LocalRom, JsonRom
@@ -40,7 +40,7 @@ def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.keysanity, args.retro, args.custom, args.customitemarray)
+    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.keysanity, args.retro, args.custom, args.customitemarray, args.shufflebosses)
     logger = logging.getLogger('')
     if seed is None:
         random.seed(None)
@@ -140,7 +140,7 @@ def gt_filler(world):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.timer, world.progressive, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.keysanity, world.retro, world.custom, world.customitemarray)
+    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.timer, world.progressive, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.keysanity, world.retro, world.custom, world.customitemarray, world.boss_shuffle)
     ret.required_medallions = list(world.required_medallions)
     ret.swamp_patch_required = world.swamp_patch_required
     ret.ganon_at_pyramid = world.ganon_at_pyramid
@@ -159,6 +159,11 @@ def copy_world(world):
     create_dungeons(ret)
 
     copy_dynamic_regions_and_locations(world, ret)
+
+    # copy bosses
+    for dungeon in world.dungeons:
+        for level, boss in dungeon.bosses.items():
+            ret.get_dungeon(dungeon.name).bosses[level] = boss
 
     for shop in world.shops:
         copied_shop = ret.get_region(shop.region.name).shop

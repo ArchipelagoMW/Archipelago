@@ -7,7 +7,7 @@ from Utils import int16_as_bytes
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, retro, custom, customitemarray):
+    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, retro, custom, customitemarray, boss_shuffle):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
@@ -45,7 +45,7 @@ class World(object):
         self.aga_randomness = True
         self.lock_aga_door_in_escape = False
         self.fix_trock_doors = self.shuffle != 'vanilla'
-        self.save_and_quit_from_boss = False
+        self.save_and_quit_from_boss = True
         self.check_beatable_only = check_beatable_only
         self.fix_skullwoods_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
         self.fix_palaceofdarkness_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
@@ -63,6 +63,7 @@ class World(object):
         self.can_take_damage = True
         self.difficulty_requirements = None
         self.fix_fake_world = True
+        self.boss_shuffle = boss_shuffle
         self.dynamic_regions = []
         self.dynamic_locations = []
         self.spoiler = Spoiler(self)
@@ -109,6 +110,15 @@ class World(object):
                         self._location_cache[location] = r_location
                         return r_location
         raise RuntimeError('No such location %s' % location)
+
+    def get_dungeon(self, dungeonname):
+        if isinstance(dungeonname, Dungeon):
+            return dungeonname
+
+        for dungeon in self.dungeons:
+            if dungeon.name == dungeonname:
+                return dungeon
+        raise RuntimeError('No such dungeon %s' % dungeonname)
 
     def get_all_state(self, keys=False):
         ret = CollectionState(self)
@@ -409,11 +419,11 @@ class CollectionState(object):
         return len([pritem for pritem in self.prog_items if pritem.startswith('Bottle')])
 
     def has_hearts(self, count):
-        # Warning: This oncly considers items that are marked as advancement items
+        # Warning: This only considers items that are marked as advancement items
         return self.heart_count() >= count
 
     def heart_count(self):
-        # Warning: This oncly considers items that are marked as advancement items
+        # Warning: This only considers items that are marked as advancement items
         return (
             self.item_count('Boss Heart Container')
             + self.item_count('Sanctuary Heart Container')
@@ -424,26 +434,27 @@ class CollectionState(object):
     def can_lift_heavy_rocks(self):
         return self.has('Titans Mitts')
 
-    def can_extend_magic(self, smallmagic=8, fullrefill=False): #This reflects the total magic Link has, not the total extra he has.
+    def can_extend_magic(self, smallmagic=16, fullrefill=False): #This reflects the total magic Link has, not the total extra he has.
         basemagic = 8
         if self.has('Quarter Magic'):
             basemagic = 32
         elif self.has('Half Magic'):
             basemagic = 16
-        if self.world.difficulty == 'hard' and not fullrefill:
-            basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count())
-        elif self.world.difficulty == 'expert' and not fullrefill:
-            basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count())
-        elif self.world.difficulty == 'insane' and not fullrefill:
-            basemagic = basemagic
-        elif self.can_buy_unlimited('Green Potion') or self.can_buy_unlimited('Red Potion'):
-            basemagic = basemagic + basemagic * self.bottle_count()
+        if self.can_buy_unlimited('Green Potion') or self.can_buy_unlimited('Blue Potion'):
+            if self.world.difficulty == 'hard' and not fullrefill:
+                basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count())
+            elif self.world.difficulty == 'expert' and not fullrefill:
+                basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count())
+            elif self.world.difficulty == 'insane' and not fullrefill:
+                basemagic = basemagic
+            else:
+                basemagic = basemagic + basemagic * self.bottle_count()
         return basemagic >= smallmagic
 
     def can_kill_most_things(self, enemies=5):
         return (self.has_blunt_weapon()
                 or self.has('Cane of Somaria')
-                or (self.has('Cane of Byrna') and (enemies < 6 or self.can_extend_Magic()))
+                or (self.has('Cane of Byrna') and (enemies < 6 or self.can_extend_magic()))
                 or self.can_shoot_arrows()
                 or self.has('Fire Rod')
                )
@@ -454,6 +465,16 @@ class CollectionState(object):
             #FIXME: Should do something about hard+ ganon only silvers. For the moment, i believe they effective grant wooden, so we are safe
             return self.has('Bow') and (self.has('Silver Arrows') or self.can_buy_unlimited('Single Arrow'))
         return self.has('Bow')
+
+    def can_get_good_bee(self):
+        cave = self.world.get_region('Good Bee Cave')
+        return (
+            self.has_bottle() and
+            self.has('Bug Catching Net') and
+            (self.has_Boots() or (self.has_sword() and self.has('Quake'))) and
+            cave.can_reach(self) and
+            (cave.is_light_world or self.has_Pearl())
+        )
 
     def has_sword(self):
         return self.has('Fighter Sword') or self.has('Master Sword') or self.has('Tempered Sword') or self.has('Golden Sword')
@@ -676,6 +697,15 @@ class Dungeon(object):
         self.big_key = big_key
         self.small_keys = small_keys
         self.dungeon_items = dungeon_items
+        self.bosses = dict()
+
+    @property
+    def boss(self):
+        return self.bosses.get(None, None)
+
+    @boss.setter
+    def boss(self, value):
+        self.bosses[None] = value
 
     @property
     def keys(self):
@@ -694,9 +724,16 @@ class Dungeon(object):
     def __unicode__(self):
         return '%s' % self.name
 
+class Boss(object):
+    def __init__(self, name, enemizer_name, defeat_rule):
+        self.name = name
+        self.enemizer_name = enemizer_name
+        self.defeat_rule = defeat_rule
+
+    def can_defeat(self, state):
+        return self.defeat_rule(state)
 
 class Location(object):
-
     def __init__(self, name='', address=None, crystal=False, hint_text=None, parent=None):
         self.name = name
         self.parent_region = parent
@@ -774,6 +811,7 @@ class Crystal(Item):
 class ShopType(Enum):
     Shop = 0
     TakeAny = 1
+    UpgradeShop = 2
 
 class Shop(object):
     def __init__(self, region, room_id, type, shopkeeper_config, replaceable):
@@ -803,6 +841,8 @@ class Shop(object):
             config |= 0x40 # ignore door id
         if self.type == ShopType.TakeAny:
             config |= 0x80
+        if self.type == ShopType.UpgradeShop:
+            config |= 0x10 # Alt. VRAM
         return [0x00]+int16_as_bytes(self.room_id)+[door_id, 0x00, config, self.shopkeeper_config, 0x00]
 
     def has_unlimited(self, item):
@@ -840,6 +880,7 @@ class Spoiler(object):
         self.paths = {}
         self.metadata = {}
         self.shops = []
+        self.bosses = OrderedDict()
 
     def set_entrance(self, entrance, exit, direction):
         self.entrances[(entrance, direction)] = OrderedDict([('entrance', entrance), ('exit', exit), ('direction', direction)])
@@ -884,6 +925,23 @@ class Spoiler(object):
                 shopdata['item_{}'.format(index)] = "{} — {}".format(item['item'], item['price']) if item['price'] else item['item']
             self.shops.append(shopdata)
 
+        self.bosses["Eastern Palace"] = self.world.get_dungeon("Eastern Palace").boss.name
+        self.bosses["Desert Palace"] = self.world.get_dungeon("Desert Palace").boss.name
+        self.bosses["Tower Of Hera"] = self.world.get_dungeon("Tower of Hera").boss.name
+        self.bosses["Hyrule Castle"] = "Agahnim"
+        self.bosses["Palace Of Darkness"] = self.world.get_dungeon("Palace of Darkness").boss.name
+        self.bosses["Swamp Palace"] = self.world.get_dungeon("Swamp Palace").boss.name
+        self.bosses["Skull Woods"] = self.world.get_dungeon("Skull Woods").boss.name
+        self.bosses["Thieves Town"] = self.world.get_dungeon("Thieves Town").boss.name
+        self.bosses["Ice Palace"] = self.world.get_dungeon("Ice Palace").boss.name
+        self.bosses["Misery Mire"] = self.world.get_dungeon("Misery Mire").boss.name
+        self.bosses["Turtle Rock"] = self.world.get_dungeon("Turtle Rock").boss.name
+        self.bosses["Ganons Tower Basement"] = self.world.get_dungeon('Ganons Tower').bosses['bottom'].name
+        self.bosses["Ganons Tower Middle"] = self.world.get_dungeon('Ganons Tower').bosses['middle'].name
+        self.bosses["Ganons Tower Top"] = self.world.get_dungeon('Ganons Tower').bosses['top'].name
+        self.bosses["Ganons Tower"] = "Agahnim 2"
+        self.bosses["Ganon"] = "Ganon"
+
 
         from Main import __version__ as ERVersion
         self.metadata = {'version': ERVersion,
@@ -913,7 +971,10 @@ class Spoiler(object):
             out['Shops'] = self.shops
         out['playthrough'] = self.playthrough
         out['paths'] = self.paths
+        if self.world.boss_shuffle != 'none':
+            out['Bosses'] = self.bosses
         out['meta'] = self.metadata
+
         return json.dumps(out)
 
     def to_file(self, filename):

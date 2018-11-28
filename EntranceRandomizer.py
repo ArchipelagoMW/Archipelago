@@ -188,7 +188,7 @@ def start():
                              If set, the Pyramid Hole and Ganon's Tower are not
                              included entrance shuffle pool.
                              ''', action='store_false', dest='shuffleganon')
-    parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['normal', 'half', 'quarter', 'off'],
+    parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['double', 'normal', 'half', 'quarter', 'off'],
                         help='''\
                              Select the rate at which the heart beep sound is played at
                              low health. (default: %(default)s)
@@ -204,6 +204,8 @@ def start():
                              ''')
     parser.add_argument('--suppress_rom', help='Do not create an output rom file.', action='store_true')
     parser.add_argument('--gui', help='Launch the GUI', action='store_true')
+    # Deliberately not documented, only useful for vt site integration right now:
+    parser.add_argument('--shufflebosses', help=argparse.SUPPRESS, default='none', const='none', nargs='?', choices=['none', 'basic', 'normal', 'chaos'])
     parser.add_argument('--jsonout', action='store_true', help='''\
                             Output .json patch to stdout instead of a patched rom. Used
                             for VT site integration, do not use otherwise.

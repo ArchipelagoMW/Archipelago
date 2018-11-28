@@ -49,6 +49,10 @@ def set_rules(world):
 def set_rule(spot, rule):
     spot.access_rule = rule
 
+def set_defeat_dungeon_boss_rule(location):
+    # Lambda required to defer evaluation of dungeon.boss since it will change later if boos shuffle is used
+    set_rule(location, lambda state: location.parent_region.dungeon.boss.can_defeat(state))
+
 def set_always_allow(spot, rule):
     spot.always_allow = rule
 
@@ -138,6 +142,7 @@ def global_rules(world):
     set_rule(world.get_location('Sahasrahla'), lambda state: state.has('Green Pendant'))
     set_rule(world.get_entrance('Agahnims Tower'), lambda state: state.has('Cape') or state.has_beam_sword() or state.has('Beat Agahnim 1'))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
     set_rule(world.get_entrance('Agahnim 1'), lambda state: state.has_sword() and state.has_key('Small Key (Agahnims Tower)', 2))
+    set_defeat_dungeon_boss_rule(world.get_location('Agahnim 1'))
     set_rule(world.get_location('Castle Tower - Dark Maze'), lambda state: state.has_key('Small Key (Agahnims Tower)'))
     set_rule(world.get_entrance('Top of Pyramid'), lambda state: state.has('Beat Agahnim 1'))
     set_rule(world.get_entrance('Old Man Cave Exit (West)'), lambda state: False)  # drop cannot be climbed up
@@ -228,22 +233,20 @@ def global_rules(world):
     set_rule(world.get_entrance('Sewers Back Door'), lambda state: state.has_key('Small Key (Escape)'))
 
     set_rule(world.get_location('Eastern Palace - Big Chest'), lambda state: state.has('Big Key (Eastern Palace)'))
-    set_rule(world.get_location('Eastern Palace - Armos Knights'), lambda state: state.can_shoot_arrows() and state.has('Big Key (Eastern Palace)'))
-    set_rule(world.get_location('Eastern Palace - Prize'), lambda state: state.can_shoot_arrows() and state.has('Big Key (Eastern Palace)'))
-    for location in ['Eastern Palace - Armos Knights', 'Eastern Palace - Big Chest']:
+    set_rule(world.get_location('Eastern Palace - Boss'), lambda state: state.can_shoot_arrows() and state.has('Big Key (Eastern Palace)') and world.get_location('Eastern Palace - Boss').parent_region.dungeon.boss.can_defeat(state))
+    set_rule(world.get_location('Eastern Palace - Prize'), lambda state: state.can_shoot_arrows() and state.has('Big Key (Eastern Palace)') and world.get_location('Eastern Palace - Prize').parent_region.dungeon.boss.can_defeat(state))
+    for location in ['Eastern Palace - Boss', 'Eastern Palace - Big Chest']:
         forbid_item(world.get_location(location), 'Big Key (Eastern Palace)')
 
     set_rule(world.get_location('Desert Palace - Big Chest'), lambda state: state.has('Big Key (Desert Palace)'))
     set_rule(world.get_location('Desert Palace - Torch'), lambda state: state.has_Boots())
     set_rule(world.get_entrance('Desert Palace East Wing'), lambda state: state.has_key('Small Key (Desert Palace)'))
-    set_rule(world.get_location('Desert Palace - Prize'), lambda state: state.has_key('Small Key (Desert Palace)') and state.has('Big Key (Desert Palace)') and state.has_fire_source() and
-                                                                     (state.has_blunt_weapon() or state.has('Fire Rod') or state.has('Ice Rod') or state.can_shoot_arrows()))
-    set_rule(world.get_location('Desert Palace - Lanmolas'), lambda state: state.has_key('Small Key (Desert Palace)') and state.has('Big Key (Desert Palace)') and state.has_fire_source() and
-                                                                     (state.has_blunt_weapon() or state.has('Fire Rod') or state.has('Ice Rod') or state.can_shoot_arrows()))
-    for location in ['Desert Palace - Lanmolas', 'Desert Palace - Big Chest']:
+    set_rule(world.get_location('Desert Palace - Prize'), lambda state: state.has_key('Small Key (Desert Palace)') and state.has('Big Key (Desert Palace)') and state.has_fire_source() and world.get_location('Desert Palace - Prize').parent_region.dungeon.boss.can_defeat(state))
+    set_rule(world.get_location('Desert Palace - Boss'), lambda state: state.has_key('Small Key (Desert Palace)') and state.has('Big Key (Desert Palace)') and state.has_fire_source() and world.get_location('Desert Palace - Boss').parent_region.dungeon.boss.can_defeat(state))
+    for location in ['Desert Palace - Boss', 'Desert Palace - Big Chest']:
         forbid_item(world.get_location(location), 'Big Key (Desert Palace)')
 
-    for location in ['Desert Palace - Lanmolas', 'Desert Palace - Big Key Chest', 'Desert Palace - Compass Chest']:
+    for location in ['Desert Palace - Boss', 'Desert Palace - Big Key Chest', 'Desert Palace - Compass Chest']:
         forbid_item(world.get_location(location), 'Small Key (Desert Palace)')
 
     set_rule(world.get_entrance('Tower of Hera Small Key Door'), lambda state: state.has_key('Small Key (Tower of Hera)') or item_name(state, 'Tower of Hera - Big Key Chest') == 'Small Key (Tower of Hera)')
@@ -251,9 +254,9 @@ def global_rules(world):
     set_rule(world.get_location('Tower of Hera - Big Chest'), lambda state: state.has('Big Key (Tower of Hera)'))
     set_rule(world.get_location('Tower of Hera - Big Key Chest'), lambda state: state.has_fire_source())
     set_always_allow(world.get_location('Tower of Hera - Big Key Chest'), lambda state, item: item.name == 'Small Key (Tower of Hera)')
-    set_rule(world.get_location('Tower of Hera - Moldorm'), lambda state: state.has_blunt_weapon())
-    set_rule(world.get_location('Tower of Hera - Prize'), lambda state: state.has_blunt_weapon())
-    for location in ['Tower of Hera - Moldorm', 'Tower of Hera - Big Chest', 'Tower of Hera - Compass Chest']:
+    set_defeat_dungeon_boss_rule(world.get_location('Tower of Hera - Boss'))
+    set_defeat_dungeon_boss_rule(world.get_location('Tower of Hera - Prize'))
+    for location in ['Tower of Hera - Boss', 'Tower of Hera - Big Chest', 'Tower of Hera - Compass Chest']:
         forbid_item(world.get_location(location), 'Big Key (Tower of Hera)')
 #    for location in ['Tower of Hera - Big Key Chest']:
 #        forbid_item(world.get_location(location), 'Small Key (Tower of Hera)')
@@ -266,19 +269,21 @@ def global_rules(world):
     set_rule(world.get_location('Swamp Palace - Big Chest'), lambda state: state.has('Big Key (Swamp Palace)') or item_name(state, 'Swamp Palace - Big Chest') == 'Big Key (Swamp Palace)')
     set_always_allow(world.get_location('Swamp Palace - Big Chest'), lambda state, item: item.name == 'Big Key (Swamp Palace)')
     set_rule(world.get_entrance('Swamp Palace (North)'), lambda state: state.has('Hookshot'))
-    set_rule(world.get_location('Swamp Palace - Arrghus'), lambda state: state.has_blunt_weapon())
-    set_rule(world.get_location('Swamp Palace - Prize'), lambda state: state.has_blunt_weapon())
+    set_defeat_dungeon_boss_rule(world.get_location('Swamp Palace - Boss'))
+    set_defeat_dungeon_boss_rule(world.get_location('Swamp Palace - Prize'))
     for location in ['Swamp Palace - Entrance']:
         forbid_item(world.get_location(location), 'Big Key (Swamp Palace)')
 
     set_rule(world.get_entrance('Thieves Town Big Key Door'), lambda state: state.has('Big Key (Thieves Town)'))
-    set_rule(world.get_entrance('Blind Fight'), lambda state: state.has_key('Small Key (Thieves Town)') and (state.has_blunt_weapon() or state.has('Cane of Somaria') or state.has('Cane of Byrna')))
+    set_rule(world.get_entrance('Blind Fight'), lambda state: state.has_key('Small Key (Thieves Town)'))
+    set_defeat_dungeon_boss_rule(world.get_location('Thieves\' Town - Boss'))
+    set_defeat_dungeon_boss_rule(world.get_location('Thieves\' Town - Prize'))
     set_rule(world.get_location('Thieves\' Town - Big Chest'), lambda state: (state.has_key('Small Key (Thieves Town)') or item_name(state, 'Thieves\' Town - Big Chest') == 'Small Key (Thieves Town)') and state.has('Hammer'))
     set_always_allow(world.get_location('Thieves\' Town - Big Chest'), lambda state, item: item.name == 'Small Key (Thieves Town)' and state.has('Hammer'))
     set_rule(world.get_location('Thieves\' Town - Attic'), lambda state: state.has_key('Small Key (Thieves Town)'))
-    for location in ['Thieves\' Town - Attic', 'Thieves\' Town - Big Chest', 'Thieves\' Town - Blind\'s Cell', 'Thieves Town - Blind']:
+    for location in ['Thieves\' Town - Attic', 'Thieves\' Town - Big Chest', 'Thieves\' Town - Blind\'s Cell', 'Thieves\' Town - Boss']:
         forbid_item(world.get_location(location), 'Big Key (Thieves Town)')
-    for location in ['Thieves\' Town - Attic', 'Thieves Town - Blind']:
+    for location in ['Thieves\' Town - Attic', 'Thieves\' Town - Boss']:
         forbid_item(world.get_location(location), 'Small Key (Thieves Town)')
 
     set_rule(world.get_entrance('Skull Woods First Section South Door'), lambda state: state.has_key('Small Key (Skull Woods)'))
@@ -288,15 +293,20 @@ def global_rules(world):
     set_rule(world.get_location('Skull Woods - Big Chest'), lambda state: state.has('Big Key (Skull Woods)') or item_name(state, 'Skull Woods - Big Chest') == 'Big Key (Skull Woods)')
     set_always_allow(world.get_location('Skull Woods - Big Chest'), lambda state, item: item.name == 'Big Key (Skull Woods)')
     set_rule(world.get_entrance('Skull Woods Torch Room'), lambda state: state.has_key('Small Key (Skull Woods)', 3) and state.has('Fire Rod') and state.has_sword())  # sword required for curtain
-    for location in ['Skull Woods - Mothula']:
+    set_defeat_dungeon_boss_rule(world.get_location('Skull Woods - Boss'))
+    set_defeat_dungeon_boss_rule(world.get_location('Skull Woods - Prize'))
+    for location in ['Skull Woods - Boss']:
         forbid_item(world.get_location(location), 'Small Key (Skull Woods)')
 
     set_rule(world.get_entrance('Ice Palace Entrance Room'), lambda state: state.has('Fire Rod') or (state.has('Bombos') and state.has_sword()))
     set_rule(world.get_location('Ice Palace - Big Chest'), lambda state: state.has('Big Key (Ice Palace)'))
     set_rule(world.get_entrance('Ice Palace (Kholdstare)'), lambda state: state.can_lift_rocks() and state.has('Hammer') and state.has('Big Key (Ice Palace)') and (state.has_key('Small Key (Ice Palace)', 2) or (state.has('Cane of Somaria') and state.has_key('Small Key (Ice Palace)', 1))))
+    # TODO: investigate change from VT. Changed to hookshot or 2 keys (no checking for big key in specific chests)
     set_rule(world.get_entrance('Ice Palace (East)'), lambda state: (state.has('Hookshot') or (item_in_locations(state, 'Big Key (Ice Palace)', ['Ice Palace - Spike Room', 'Ice Palace - Big Key Chest', 'Ice Palace - Map Chest']) and state.has_key('Small Key (Ice Palace)'))) and (state.world.can_take_damage or state.has('Hookshot') or state.has('Cape') or state.has('Cane of Byrna')))
     set_rule(world.get_entrance('Ice Palace (East Top)'), lambda state: state.can_lift_rocks() and state.has('Hammer'))
-    for location in ['Ice Palace - Big Chest', 'Ice Palace - Kholdstare']:
+    set_defeat_dungeon_boss_rule(world.get_location('Ice Palace - Boss'))
+    set_defeat_dungeon_boss_rule(world.get_location('Ice Palace - Prize'))
+    for location in ['Ice Palace - Big Chest', 'Ice Palace - Boss']:
         forbid_item(world.get_location(location), 'Big Key (Ice Palace)')
 
     set_rule(world.get_entrance('Misery Mire Entrance Gap'), lambda state: (state.has_Boots() or state.has('Hookshot')) and (state.has_sword() or state.has('Fire Rod') or state.has('Ice Rod') or state.has('Hammer') or state.has('Cane of Somaria') or state.can_shoot_arrows()))  # need to defeat wizzrobes, bombs don't work ...
@@ -313,8 +323,10 @@ def global_rules(world):
                                                                                                                  (item_name(state, 'Misery Mire - Big Key Chest') in ['Big Key (Misery Mire)'])) else state.has_key('Small Key (Misery Mire)', 3))
     set_rule(world.get_location('Misery Mire - Compass Chest'), lambda state: state.has_fire_source())
     set_rule(world.get_location('Misery Mire - Big Key Chest'), lambda state: state.has_fire_source())
-    set_rule(world.get_entrance('Misery Mire (Vitreous)'), lambda state: state.has('Cane of Somaria') and (state.can_shoot_arrows() or state.has_blunt_weapon()))
-    for location in ['Misery Mire - Big Chest', 'Misery Mire - Vitreous']:
+    set_rule(world.get_entrance('Misery Mire (Vitreous)'), lambda state: state.has('Cane of Somaria'))
+    set_defeat_dungeon_boss_rule(world.get_location('Misery Mire - Boss'))
+    set_defeat_dungeon_boss_rule(world.get_location('Misery Mire - Prize'))
+    for location in ['Misery Mire - Big Chest', 'Misery Mire - Boss']:
         forbid_item(world.get_location(location), 'Big Key (Misery Mire)')
 
     set_rule(world.get_entrance('Turtle Rock Entrance Gap'), lambda state: state.has('Cane of Somaria'))
@@ -332,8 +344,9 @@ def global_rules(world):
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Bottom Right'), lambda state: state.has('Cane of Byrna') or state.has('Cape') or state.has('Mirror Shield'))
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Top Left'), lambda state: state.has('Cane of Byrna') or state.has('Cape') or state.has('Mirror Shield'))
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Top Right'), lambda state: state.has('Cane of Byrna') or state.has('Cape') or state.has('Mirror Shield'))
-    set_rule(world.get_entrance('Turtle Rock (Trinexx)'), lambda state: state.has_key('Small Key (Turtle Rock)', 4) and state.has('Big Key (Turtle Rock)') and state.has('Cane of Somaria') and state.has('Fire Rod') and state.has('Ice Rod') and
-             (state.has('Hammer') or state.has_beam_sword() or (state.has_sword() and state.can_extend_magic(32))))
+    set_rule(world.get_entrance('Turtle Rock (Trinexx)'), lambda state: state.has_key('Small Key (Turtle Rock)', 4) and state.has('Big Key (Turtle Rock)') and state.has('Cane of Somaria'))
+    set_defeat_dungeon_boss_rule(world.get_location('Turtle Rock - Boss'))
+    set_defeat_dungeon_boss_rule(world.get_location('Turtle Rock - Prize'))
 
     set_trock_key_rules(world)
 
@@ -350,6 +363,8 @@ def global_rules(world):
     set_rule(world.get_entrance('Palace of Darkness Spike Statue Room Door'), lambda state: state.has_key('Small Key (Palace of Darkness)', 6) or (item_name(state, 'Palace of Darkness - Harmless Hellway') in ['Small Key (Palace of Darkness)'] and state.has_key('Small Key (Palace of Darkness)', 4)))
     set_always_allow(world.get_location('Palace of Darkness - Harmless Hellway'), lambda state, item: item.name == 'Small Key (Palace of Darkness)' and state.has_key('Small Key (Palace of Darkness)', 5))
     set_rule(world.get_entrance('Palace of Darkness Maze Door'), lambda state: state.has_key('Small Key (Palace of Darkness)', 6))
+    set_defeat_dungeon_boss_rule(world.get_location('Palace of Darkness - Boss'))
+    set_defeat_dungeon_boss_rule(world.get_location('Palace of Darkness - Prize'))
 
     # these key rules are conservative, you might be able to get away with more lenient rules
     randomizer_room_chests = ['Ganons Tower - Randomizer Room - Top Left', 'Ganons Tower - Randomizer Room - Top Right', 'Ganons Tower - Randomizer Room - Bottom Left', 'Ganons Tower - Randomizer Room - Bottom Right']
@@ -380,15 +395,17 @@ def global_rules(world):
         set_rule(world.get_location(location), lambda state: state.has('Fire Rod') and (state.has_key('Small Key (Ganons Tower)', 4) or (item_in_locations(state, 'Big Key (Ganons Tower)', compass_room_chests) and state.has_key('Small Key (Ganons Tower)', 3))))
 
     set_rule(world.get_location('Ganons Tower - Big Chest'), lambda state: state.has('Big Key (Ganons Tower)'))
-    set_rule(world.get_location('Ganons Tower - Big Key Room - Left'), lambda state: state.can_shoot_arrows() or state.has_blunt_weapon())
-    set_rule(world.get_location('Ganons Tower - Big Key Chest'), lambda state: state.can_shoot_arrows() or state.has_blunt_weapon())
-    set_rule(world.get_location('Ganons Tower - Big Key Room - Right'), lambda state: state.can_shoot_arrows() or state.has_blunt_weapon())
+
+    set_rule(world.get_location('Ganons Tower - Big Key Room - Left'), lambda state: world.get_location('Ganons Tower - Big Key Room - Left').parent_region.dungeon.bosses['bottom'].can_defeat(state))
+    set_rule(world.get_location('Ganons Tower - Big Key Chest'), lambda state: world.get_location('Ganons Tower - Big Key Chest').parent_region.dungeon.bosses['bottom'].can_defeat(state))
+    set_rule(world.get_location('Ganons Tower - Big Key Room - Right'), lambda state: world.get_location('Ganons Tower - Big Key Room - Right').parent_region.dungeon.bosses['bottom'].can_defeat(state))
+
     set_rule(world.get_entrance('Ganons Tower Big Key Door'), lambda state: state.has('Big Key (Ganons Tower)') and state.can_shoot_arrows())
-    set_rule(world.get_entrance('Ganons Tower Torch Rooms'), lambda state: state.has_fire_source())
+    set_rule(world.get_entrance('Ganons Tower Torch Rooms'), lambda state: state.has_fire_source() and world.get_entrance('Ganons Tower Torch Rooms').parent_region.dungeon.bosses['middle'].can_defeat(state))
     set_rule(world.get_location('Ganons Tower - Pre-Moldorm Chest'), lambda state: state.has_key('Small Key (Ganons Tower)', 3))
     set_rule(world.get_entrance('Ganons Tower Moldorm Door'), lambda state: state.has_key('Small Key (Ganons Tower)', 4))
-    set_rule(world.get_entrance('Ganons Tower Moldorm Gap'), lambda state: state.has('Hookshot') and state.has_blunt_weapon())
-    set_rule(world.get_location('Agahnim 2'), lambda state: state.has_sword() or state.has('Hammer') or state.has('Bug Catching Net'))
+    set_rule(world.get_entrance('Ganons Tower Moldorm Gap'), lambda state: state.has('Hookshot') and world.get_entrance('Ganons Tower Moldorm Gap').parent_region.dungeon.bosses['top'].can_defeat(state))
+    set_defeat_dungeon_boss_rule(world.get_location('Agahnim 2'))
     set_rule(world.get_entrance('Pyramid Hole'), lambda state: state.has('Beat Agahnim 2'))
     for location in ['Ganons Tower - Big Chest', 'Ganons Tower - Mini Helmasaur Room - Left', 'Ganons Tower - Mini Helmasaur Room - Right',
                      'Ganons Tower - Pre-Moldorm Chest', 'Ganons Tower - Validation Chest']:
@@ -447,7 +464,7 @@ def no_glitches_rules(world):
     add_conditional_lamp('Old Man House Front to Back', 'Old Man House', 'Entrance')
     add_conditional_lamp('Old Man House Back to Front', 'Old Man House', 'Entrance')
     add_conditional_lamp('Eastern Palace - Big Key Chest', 'Eastern Palace', 'Location')
-    add_conditional_lamp('Eastern Palace - Armos Knights', 'Eastern Palace', 'Location')
+    add_conditional_lamp('Eastern Palace - Boss', 'Eastern Palace', 'Location')
     add_conditional_lamp('Eastern Palace - Prize', 'Eastern Palace', 'Location')
 
     if not world.sewer_light_cone:
@@ -473,14 +490,13 @@ def swordless_rules(world):
     open_rules(world)
 
     set_rule(world.get_entrance('Agahnims Tower'), lambda state: state.has('Cape') or state.has('Hammer') or state.has('Beat Agahnim 1'))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
-    set_rule(world.get_entrance('Agahnim 1'), lambda state: (state.has('Hammer') or (state.has('Bug Catching Net') and (state.has('Fire Rod') or state.can_shoot_arrows() or state.has('Cane of Somaria')))) and state.has_key('Small Key (Agahnims Tower)', 2))
+    set_rule(world.get_entrance('Agahnim 1'), lambda state: (state.has('Hammer') or state.has('Fire Rod') or state.can_shoot_arrows() or state.has('Cane of Somaria')) and state.has_key('Small Key (Agahnims Tower)', 2))
     set_rule(world.get_location('Ether Tablet'), lambda state: state.has('Book of Mudora') and state.has('Hammer'))
     set_rule(world.get_location('Bombos Tablet'), lambda state: state.has('Book of Mudora') and state.has('Hammer') and state.has_Mirror())
     set_rule(world.get_entrance('Misery Mire'), lambda state: state.has_Pearl() and state.has_misery_mire_medallion())  # sword not required to use medallion for opening in swordless (!)
     set_rule(world.get_entrance('Turtle Rock'), lambda state: state.has_Pearl() and state.has_turtle_rock_medallion() and state.can_reach('Turtle Rock (Top)', 'Region'))   # sword not required to use medallion for opening in swordless (!)
-    set_rule(world.get_entrance('Skull Woods Torch Room'), lambda state: state.has_key('Small Key (Skull Woods)', 3) and state.has('Fire Rod') and (state.has('Hammer') or state.can_extend_magic(10)))  # no curtain
+    set_rule(world.get_entrance('Skull Woods Torch Room'), lambda state: state.has_key('Small Key (Skull Woods)', 3) and state.has('Fire Rod'))  # no curtain
     set_rule(world.get_entrance('Ice Palace Entrance Room'), lambda state: state.has('Fire Rod') or state.has('Bombos')) #in swordless mode bombos pads are present in the relevant parts of ice palace
-    set_rule(world.get_location('Agahnim 2'), lambda state: state.has('Hammer') or state.has('Bug Catching Net'))
     set_rule(world.get_location('Ganon'), lambda state: state.has('Hammer') and state.has_fire_source() and state.has('Silver Arrows') and state.can_shoot_arrows() and state.has('Crystal 1') and state.has('Crystal 2')
                                                         and state.has('Crystal 3') and state.has('Crystal 4') and state.has('Crystal 5') and state.has('Crystal 6') and state.has('Crystal 7'))
     set_rule(world.get_entrance('Ganon Drop'), lambda state: state.has('Hammer'))  # need to damage ganon to get tiles to drop
@@ -545,7 +561,7 @@ def set_trock_key_rules(world):
     set_always_allow(world.get_location('Turtle Rock - Big Key Chest'), lambda state, item: item.name == 'Small Key (Turtle Rock)' and state.has_key('Small Key (Turtle Rock)', 3))
 
     # set big key restrictions
-    non_big_key_locations = ['Turtle Rock - Big Chest', 'Turtle Rock - Trinexx']
+    non_big_key_locations = ['Turtle Rock - Big Chest', 'Turtle Rock - Boss']
     if not can_reach_back:
         non_big_key_locations += ['Turtle Rock - Crystaroller Room', 'Turtle Rock - Eye Bridge - Bottom Left',
                                   'Turtle Rock - Eye Bridge - Bottom Right', 'Turtle Rock - Eye Bridge - Top Left',
@@ -555,7 +571,7 @@ def set_trock_key_rules(world):
         forbid_item(world.get_location(location), 'Big Key (Turtle Rock)')
 
     # small key restriction
-    for location in ['Turtle Rock - Trinexx']:
+    for location in ['Turtle Rock - Boss']:
         forbid_item(world.get_location(location), 'Small Key (Turtle Rock)')
 
 

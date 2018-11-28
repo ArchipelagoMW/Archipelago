@@ -3,6 +3,7 @@ import logging
 import random
 
 from BaseClasses import Region, RegionType, Shop, ShopType, Location
+from Bosses import place_bosses
 from Dungeons import get_dungeon_item_pool
 from EntranceShuffle import connect_entrance
 from Fill import FillError, fill_restrictive
@@ -20,9 +21,9 @@ basicgloves = ['Power Glove', 'Titans Mitts']
 normalbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Fairy)', 'Bottle (Bee)', 'Bottle (Good Bee)']
 hardbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Bee)', 'Bottle (Good Bee)']
 
-normalbaseitems = (['Silver Arrows', 'Magic Upgrade (1/2)', 'Single Arrow', 'Sanctuary Heart Container', 'Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] +
+normalbaseitems = (['Silver Arrows', 'Magic Upgrade (1/2)', 'Single Arrow', 'Sanctuary Heart Container', 'Arrows (10)', 'Bombs (3)'] +
                    ['Rupees (300)'] * 4 + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24)
-normalfirst15extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6
+normalfirst15extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Arrows (10)'] * 6 + ['Bombs (3)'] * 6
 normalsecond15extra = ['Bombs (3)'] * 9 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupee (1)'] + ['Bombs (10)']
 normalthird10extra = ['Rupees (50)'] * 4 + ['Rupees (20)'] * 3 + ['Arrows (10)', 'Rupee (1)', 'Rupees (5)']
 normalfourth5extra = ['Arrows (10)'] * 2 + ['Rupees (20)'] * 2 + ['Rupees (5)']
@@ -33,7 +34,7 @@ easybaseitems = (['Sanctuary Heart Container'] + ['Rupees (300)'] * 4 + ['Magic 
                  ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 12)
 easyextra = ['Piece of Heart'] * 12 + ['Rupees (300)']
 easylimitedextra = ['Boss Heart Container'] * 3 # collapsing down the 12 pieces of heart
-easyfirst15extra = ['Rupees (100)', 'Arrow Upgrade (+10)', 'Bomb Upgrade (+10)'] + ['Arrow Upgrade (+5)'] * 6 + ['Bomb Upgrade (+5)'] * 6
+easyfirst15extra = ['Rupees (100)'] + ['Arrows (10)'] * 7 + ['Bombs (3)'] * 7
 easysecond10extra = ['Bombs (3)'] * 7 + ['Rupee (1)', 'Rupees (50)', 'Bombs (10)']
 easythird5extra = ['Rupees (50)'] * 2 + ['Bombs (3)'] * 2 + ['Arrows (10)']
 easyfinal25extra = ['Rupees (50)'] * 4 + ['Rupees (20)'] * 14 + ['Rupee (1)'] + ['Arrows (10)'] * 4 + ['Rupees (5)'] * 2
@@ -265,6 +266,7 @@ def generate_itempool(world):
     tr_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
     world.required_medallions = (mm_medallion, tr_medallion)
 
+    place_bosses(world)
     set_up_shops(world)
 
     if world.retro:
@@ -346,7 +348,7 @@ def create_dynamic_shop_locations(world):
 def fill_prizes(world, attempts=15):
     crystals = ItemFactory(['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6'])
     crystal_locations = [world.get_location('Turtle Rock - Prize'), world.get_location('Eastern Palace - Prize'), world.get_location('Desert Palace - Prize'), world.get_location('Tower of Hera - Prize'), world.get_location('Palace of Darkness - Prize'),
-                         world.get_location('Thieves Town - Prize'), world.get_location('Skull Woods - Prize'), world.get_location('Swamp Palace - Prize'), world.get_location('Ice Palace - Prize'),
+                         world.get_location('Thieves\' Town - Prize'), world.get_location('Skull Woods - Prize'), world.get_location('Swamp Palace - Prize'), world.get_location('Ice Palace - Prize'),
                          world.get_location('Misery Mire - Prize')]
     placed_prizes = [loc.item.name for loc in crystal_locations if loc.item is not None]
     unplaced_prizes = [crystal for crystal in crystals if crystal.name not in placed_prizes]
@@ -373,6 +375,9 @@ def fill_prizes(world, attempts=15):
 def set_up_shops(world):
     # Changes to basic Shops
     # TODO: move hard+ mode changes for sheilds here, utilizing the new shops
+
+    for shop in world.shops:
+        shop.active = True
 
     if world.retro:
         rss = world.get_region('Red Shield Shop').shop

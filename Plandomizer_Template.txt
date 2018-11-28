@@ -71,14 +71,14 @@ Desert Palace - Torch: Small Key (Desert Palace)
 Desert Palace - Map Chest: Nothing
 Desert Palace - Compass Chest: Nothing
 Desert Palace - Big Key Chest: Big Key (Desert Palace)
-Desert Palace - Lanmolas: Nothing
+Desert Palace - Boss: Nothing
 Desert Palace - Prize: Blue Pendant
 Eastern Palace - Compass Chest: Nothing
 Eastern Palace - Big Chest: Bow
 Eastern Palace - Cannonball Chest: Nothing
 Eastern Palace - Big Key Chest: Big Key (Eastern Palace)
 Eastern Palace - Map Chest: Nothing
-Eastern Palace - Armos Knights: Nothing
+Eastern Palace - Boss: Nothing
 Eastern Palace - Prize: Green Pendant
 Master Sword Pedestal: Master Sword
 Hyrule Castle - Boomerang Chest: Nothing
@@ -108,7 +108,7 @@ Tower of Hera - Map Chest: Nothing
 Tower of Hera - Big Key Chest: Big Key (Tower of Hera)
 Tower of Hera - Compass Chest: Nothing
 Tower of Hera - Big Chest: Moon Pearl
-Tower of Hera - Moldorm: Nothing
+Tower of Hera - Boss: Nothing
 Tower of Hera - Prize: Red Pendant
 Pyramid: Nothing
 Catfish: Quake
@@ -147,7 +147,7 @@ Swamp Palace - West Chest: Nothing
 Swamp Palace - Flooded Room - Left: Nothing
 Swamp Palace - Flooded Room - Right: Nothing
 Swamp Palace - Waterfall Room: Nothing
-Swamp Palace - Arrghus: Nothing
+Swamp Palace - Boss: Nothing
 Swamp Palace - Prize: Crystal 2
 Thieves' Town - Big Key Chest: Big Key (Thieves Town)
 Thieves' Town - Map Chest: Nothing
@@ -156,8 +156,8 @@ Thieves' Town - Ambush Chest: Nothing
 Thieves' Town - Attic: Nothing
 Thieves' Town - Big Chest: Titans Mitts
 Thieves' Town - Blind's Cell: Small Key (Thieves Town)
-Thieves Town - Blind: Nothing
-Thieves Town - Prize: Crystal 4
+Thieves' Town - Boss: Nothing
+Thieves' Town - Prize: Crystal 4
 Skull Woods - Compass Chest: Nothing
 Skull Woods - Map Chest: Nothing
 Skull Woods - Big Chest: Fire Rod
@@ -165,7 +165,7 @@ Skull Woods - Pot Prison: Small Key (Skull Woods)
 Skull Woods - Pinball Room: Small Key (Skull Woods)
 Skull Woods - Big Key Chest: Big Key (Skull Woods)
 Skull Woods - Bridge Room: Small Key (Skull Woods)
-Skull Woods - Mothula: Nothing
+Skull Woods - Boss: Nothing
 Skull Woods - Prize: Crystal 3
 Ice Palace - Compass Chest: Nothing
 Ice Palace - Freezor Chest: Nothing
@@ -174,7 +174,7 @@ Ice Palace - Iced T Room: Small Key (Ice Palace)
 Ice Palace - Spike Room: Small Key (Ice Palace)
 Ice Palace - Big Key Chest: Big Key (Ice Palace)
 Ice Palace - Map Chest: Nothing
-Ice Palace - Kholdstare: Nothing
+Ice Palace - Boss: Nothing
 Ice Palace - Prize: Crystal 5
 Misery Mire - Big Chest: Cane of Somaria
 Misery Mire - Map Chest: Nothing
@@ -183,7 +183,7 @@ Misery Mire - Bridge Chest: Small Key (Misery Mire)
 Misery Mire - Spike Chest: Small Key (Misery Mire)
 Misery Mire - Compass Chest: Nothing
 Misery Mire - Big Key Chest: Big Key (Misery Mire)
-Misery Mire - Vitreous: Nothing
+Misery Mire - Boss: Nothing
 Misery Mire - Prize: Crystal 6
 Turtle Rock - Compass Chest: Nothing
 Turtle Rock - Roller Room - Left: Nothing
@@ -196,7 +196,7 @@ Turtle Rock - Eye Bridge - Bottom Left: Small Key (Turtle Rock)
 Turtle Rock - Eye Bridge - Bottom Right: Nothing
 Turtle Rock - Eye Bridge - Top Left: Nothing
 Turtle Rock - Eye Bridge - Top Right: Nothing
-Turtle Rock - Trinexx: Nothing
+Turtle Rock - Boss: Nothing
 Turtle Rock - Prize: Crystal 7
 Palace of Darkness - Shooter Room: Small Key (Palace of Darkness)
 Palace of Darkness - The Arena - Bridge: Small Key (Palace of Darkness)
@@ -212,7 +212,7 @@ Palace of Darkness - Dark Maze - Top: Nothing
 Palace of Darkness - Dark Maze - Bottom: Nothing
 Palace of Darkness - Big Chest: Hammer
 Palace of Darkness - Harmless Hellway: Nothing
-Palace of Darkness - Helmasaur: Nothing
+Palace of Darkness - Boss: Nothing
 Palace of Darkness - Prize: Crystal 1
 Ganons Tower - Bob's Torch: Small Key (Ganons Tower)
 Ganons Tower - Hope Room - Left: Nothing
