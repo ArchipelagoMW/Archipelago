@@ -901,7 +901,7 @@
 "changes": [
     {
     "edge": "PARK_TOWN_ENTRANCE -> PARK_KOTRI",
-    "prereq": "RABI_SLIPPERS | AIR_JUMP | SLIDE_JUMP_BUNSTRIKE | WHIRL_BONK",
+    "prereq": "RABI_SLIPPERS | AIR_JUMP | SLIDE_JUMP_BUNSTRIKE",
     }
 ]}
 
