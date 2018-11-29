@@ -267,11 +267,16 @@
 "from_location": "GRAVEYARD_UPPER",
 "entry_prereq": "
     (AIR_JUMP & AIR_DASH)
-    | ((AIR_JUMP | AIR_DASH) & (ITM_HARD | WALL_JUMP))
+    | (AIR_JUMP & ITM_HARD)
+    | (AIR_DASH_LV3 & (
+        ADV_VHARD | (ITM_HARD & (WALL_JUMP | BUNNY_AMULET))
+    ))
+    | (AIR_DASH & ADV_STUPID)
     | (ADV_VHARD & BUNNY_STRIKE & BUNNY_AMULET)
 ",
 "exit_prereq": "NONE",
 }
+
 
 {
 "item": "ATK_UP_BEACH_CAVE",
