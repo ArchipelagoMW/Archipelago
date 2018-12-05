@@ -1056,6 +1056,11 @@ DARKNESS & (
 }
 
 {
+"edge": "PARK_MAIN -> SKY_BRIDGE_SLIDE_AREA",
+"prereq": "SLIDE_ZIP & AMULET_FOOD & ADV_STUPID",
+}
+
+{
 "edge": "SKY_BRIDGE_MAIN -> SKY_BRIDGE_REGEN_UP_LEDGE",
 "prereq": "
         AIR_DASH
