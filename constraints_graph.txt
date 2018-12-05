@@ -643,6 +643,12 @@ PROLOGUE_TRIGGER & (
 ",
 }
 
+// important nonsense - no explosives necessary
+{
+"edge": "SKY_ISLAND_UPPER -> HALLOWEEN_UPPER",
+"prereq": "HALLOWEEN & RABI_SLIPPERS & AIR_JUMP & WALL_JUMP_LV2 & BUNNY_STRIKE & BUNNY_AMULET_LV2 & AIR_DASH & ADV_STUPID",
+}
+
 {
 "edge": "HALLOWEEN_UPPER -> GRAVEYARD_UPPER",
 "prereq": "NONE",
