@@ -23,6 +23,7 @@ class World(object):
         self.seed = None
         self.state = CollectionState(self)
         self.required_medallions = ['Ether', 'Quake']
+        self._cached_entrances = None
         self._cached_locations = None
         self._entrance_cache = {}
         self._region_cache = {}
@@ -189,6 +190,16 @@ class World(object):
             logging.getLogger('').debug('Placed %s at %s', item, location)
         else:
             raise RuntimeError('Cannot assign item %s to location %s.' % (item, location))
+
+    def get_entrances(self):
+        if self._cached_entrances is None:
+            self._cached_entrances = []
+            for region in self.regions:
+                self._cached_entrances.extend(region.entrances)
+        return self._cached_entrances
+
+    def clear_entrance_cache(self):
+        self._cached_entrances = None
 
     def get_locations(self):
         if self._cached_locations is None:
@@ -616,7 +627,7 @@ class RegionType(Enum):
 
 class Region(object):
 
-    def __init__(self, name, type):
+    def __init__(self, name, type, hint):
         self.name = name
         self.type = type
         self.entrances = []
@@ -628,7 +639,7 @@ class Region(object):
         self.is_light_world = False # will be set aftermaking connections.
         self.is_dark_world = False
         self.spot_type = 'Region'
-        self.hint_text = 'Hyrule'
+        self.hint_text = hint
         self.recursion_count = 0
 
     def can_reach(self, state):

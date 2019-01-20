@@ -281,6 +281,7 @@ def guiMain(args=None):
                                    int(arrow1Var.get()), int(arrow10Var.get()), int(bomb1Var.get()), int(bomb3Var.get()), int(rupee1Var.get()), int(rupee5Var.get()), int(rupee20Var.get()), int(rupee50Var.get()), int(rupee100Var.get()),
                                    int(rupee300Var.get()), int(rupoorVar.get()), int(blueclockVar.get()), int(greenclockVar.get()), int(redclockVar.get()), int(triforcepieceVar.get()), int(triforcecountVar.get()),
                                    int(triforceVar.get()), int(rupoorcostVar.get()), int(universalkeyVar.get())]
+        guiargs.shufflebosses = None
         guiargs.rom = romVar.get()
         guiargs.jsonout = None
         guiargs.sprite = sprite

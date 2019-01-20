@@ -9,7 +9,7 @@ import random
 from BaseClasses import ShopType
 from Dungeons import dungeon_music_addresses
 from Text import MultiByteTextMapper, text_addresses, Credits, TextTable
-from Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts
+from Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts, junk_texts
 from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
 from Utils import local_path, int16_as_bytes, int32_as_bytes
 from Items import ItemFactory
@@ -1015,8 +1015,90 @@ def write_strings(rom, world):
     tt = TextTable()
     tt.removeUnwantedText()
 
+    # For hints, first we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
+    entrances_to_hint = {}
+    entrances_to_hint.update(InconvenientEntrances)
+    if world.shuffle_ganon:
+            entrances_to_hint.update({'Ganons Tower': 'Ganon\'s Tower'})
+    hint_locations = HintLocations.copy()
+    random.shuffle(hint_locations)
+    all_entrances = world.get_entrances()
+    random.shuffle(all_entrances)
+    hint_count = 4
+    for entrance in all_entrances:
+        if entrance.name in entrances_to_hint:
+            this_hint = entrances_to_hint[entrance.name] + ' leads to ' + entrance.connected_region.hint_text + '.'
+            tt[hint_locations.pop(0)] = this_hint
+            entrances_to_hint.pop(entrance.name)
+            hint_count -= 1
+            if hint_count < 1:
+                break
+
+    entrances_to_hint.update(OtherEntrances)
+    if world.shuffle in ['insanity', 'madness_legacy', 'insanity_legacy']:
+        entrances_to_hint.update(InsanityEntrances)
+        if world.shuffle_ganon:
+            entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
+    hint_count = 4
+    for entrance in all_entrances:
+        if entrance.name in entrances_to_hint:
+            this_hint = entrances_to_hint[entrance.name] + ' leads to ' + entrance.connected_region.hint_text + '.'
+            tt[hint_locations.pop(0)] = this_hint
+            entrances_to_hint.pop(entrance.name)
+            hint_count -= 1
+            if hint_count < 1:
+                break
+
+    # Next we write a few hints for specific inconvenient locations. We don't make many because in entrance this is highly unpredictable.
+    locations_to_hint = InconvenientLocations.copy()
+    random.shuffle(locations_to_hint)
+    hint_count = 2
+    del locations_to_hint[hint_count:]   
+    for location in locations_to_hint:
+        if location == 'Swamp Left':
+            this_hint = ('The westmost chests in Swamp Palace contain ' + (world.get_location('Swamp Palace - Compass Chest').item.pedestal_credit_text[4:] if world.get_location('Swamp Palace - Compass Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Swamp Palace - Compass Chest').item.pedestal_credit_text) +
+                        ' and ' + (world.get_location('Swamp Palace - Big Key Chest').item.pedestal_credit_text[4:] if world.get_location('Swamp Palace - Big Key Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Swamp Palace - Big Key Chest').item.pedestal_credit_text) + '.')
+            tt[hint_locations.pop(0)] = this_hint
+        elif location == 'Mire Left':
+            this_hint = ('The westmost chests in Misery Mire contain ' + (world.get_location('Misery Mire - Compass Chest').item.pedestal_credit_text[4:] if world.get_location('Misery Mire - Compass Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Misery Mire - Compass Chest').item.pedestal_credit_text) +
+                        ' and ' + (world.get_location('Misery Mire - Big Key Chest').item.pedestal_credit_text[4:] if world.get_location('Misery Mire - Big Key Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Misery Mire - Big Key Chest').item.pedestal_credit_text) + '.')
+            tt[hint_locations.pop(0)] = this_hint
+        elif location == 'Tower of Hera - Big Key Chest':
+            this_hint = 'Waiting in the Tower of Hera basement leads to ' + (world.get_location(location).item.pedestal_credit_text[4:] if world.get_location(location).item.pedestal_credit_text[0] == 'a' else world.get_location(location).item.pedestal_credit_text) + '.'
+            tt[hint_locations.pop(0)] = this_hint
+        else:
+            this_hint = location + ' leads to ' + (world.get_location(location).item.pedestal_credit_text[4:] if world.get_location(location).item.pedestal_credit_text[0] == 'a' else world.get_location(location).item.pedestal_credit_text) + '.'
+            tt[hint_locations.pop(0)] = this_hint
+
+    # Lastly we write hints to show where certain interesting items are. It is done the way it is to re-use the silver code and also to give one hint per each type of item regardless of how many exist. This supports many settings well.
+    items_to_hint = RelevantItems.copy()
+    if world.keysanity:
+        items_to_hint.extend(KeysanityItems)
+    random.shuffle(items_to_hint)
+    hint_count = 5
+    while(hint_count > 0):
+        this_item = items_to_hint.pop(0)
+        this_location = world.find_items(this_item)
+        random.shuffle(this_location)
+        if this_location:
+            if 'Key' in this_item:
+                this_hint = this_location[0].item.pedestal_hint_text + ' can be found ' + this_location[0].hint_text + '.'
+            else:
+                this_hint = (this_location[0].item.pedestal_credit_text[4:] if this_location[0].item.pedestal_credit_text[0] == 'a' else this_location[0].item.pedestal_credit_text) + ' can be found ' + this_location[0].hint_text + '.'
+            tt[hint_locations.pop(0)] = this_hint
+            hint_count -= 1
+        else:
+            continue
+
+    # All remaining hint slots are filled with junk hints. It is done this way to ensure the same junk hint isn't selected twice.
+    junk_hints = junk_texts.copy()
+    random.shuffle(junk_hints)
+    for location in hint_locations:
+        tt[location] = junk_hints.pop(0)    
+
+   # We still need the older hints of course. Those are done here.
     silverarrows = world.find_items('Silver Arrows')
-    silverarrow_hint = (' %s?' % silverarrows[0].hint_text) if silverarrows else '?\nI think not!'
+    silverarrow_hint = (' %s?' % silverarrows[0].hint_text.replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
     tt['ganon_phase_3'] = 'Did you find the silver arrows%s' % silverarrow_hint
 
     crystal5 = world.find_items('Crystal 5')[0]
@@ -1092,3 +1174,242 @@ def write_strings(rom, world):
     (pointers, data) = credits.get_bytes()
     rom.write_bytes(0x181500, data)
     rom.write_bytes(0x76CC0, [byte for p in pointers for byte in [p & 0xFF, p >> 8 & 0xFF]])
+
+InconvenientEntrances = {'Turtle Rock': 'Turtle Rock Main',
+                         'Misery Mire': 'Misery Mire',
+                         'Ice Palace': 'Ice Palace',
+                         'Skull Woods Final Section': 'Skull Woods Final',
+                         'Death Mountain Return Cave (West)': 'The upper DM entrance',
+                         'Mimic Cave': 'Mimic Ledge',
+                         'Dark World Hammer Peg Cave': 'The rows of pegs',
+                         'Pyramid Fairy': 'The crack on the pyramid'
+                         }
+
+OtherEntrances = {'Eastern Palace': 'Eastern Palace',
+                  'Elder House (East)': 'Elder House',
+                  'Elder House (West)': 'Elder House',
+                  'Two Brothers House (East)': 'Eastern Quarreling Brothers\' house',
+                  'Old Man Cave (West)': 'The lower DM entrance',
+                  'Hyrule Castle Entrance (South)': 'The ground level castle door',
+                  'Thieves Town': 'Thieves\' Town',
+                  'Bumper Cave (Bottom)': 'The lower Bumper Cave',
+                  'Swamp Palace': 'Swamp Palace',
+                  'Skull Woods Final Section': 'The back of Skull Woods',
+                  'Dark Death Mountain Ledge (West)': 'The East dark DM connector ledge',
+                  'Dark Death Mountain Ledge (East)': 'The East dark DM connector ledge',
+                  'Superbunny Cave (Top)': 'The summit of dark DM cave',
+                  'Superbunny Cave (Bottom)': 'The base of east dark DM',
+                  'Hookshot Cave': 'The rock on dark DM',
+                  'Desert Palace Entrance (South)': 'The book sealed passage',
+                  'Tower of Hera': 'The Tower of Hera',
+                  'Two Brothers House (West)': 'The door near the race game',
+                  'Old Man Cave (East)': 'A cave on west DM',
+                  'Old Man House (Bottom)': 'A cave on west DM',
+                  'Old Man House (Top)': 'A cave on west DM',
+                  'Death Mountain Return Cave (East)': 'A cave on west DM',
+                  'Spectacle Rock Cave Peak': 'A cave on west DM',
+                  'Spectacle Rock Cave': 'A cave on west DM',
+                  'Spectacle Rock Cave (Bottom)': 'A cave on west DM',
+                  'Paradox Cave (Bottom)': 'A cave on east DM',
+                  'Paradox Cave (Middle)': 'A cave on east DM',
+                  'Paradox Cave (Top)': 'The east DM summit cave',
+                  'Fairy Ascension Cave (Bottom)': 'The east DM cave behind rocks',
+                  'Fairy Ascension Cave (Top)': 'The central east DM ledge',
+                  'Spiral Cave': 'The western east DM ledge',
+                  'Spiral Cave (Bottom)': 'A cave on east DM',
+                  'Palace of Darkness': 'Palace of Darkness',
+                  'Hyrule Castle Entrance (West)': 'An upper castle door',
+                  'Hyrule Castle Entrance (East)': 'An upper castle door',
+                  'Agahnims Tower': 'The sealed castle door',
+                  'Desert Palace Entrance (West)': 'The westmost building in the desert',
+                  'Desert Palace Entrance (North)': 'The northmost cave in the desert',
+                  'Blinds Hideout': 'Blind\'s old house',
+                  'Lake Hylia Fairy': 'A cave NE of Lake Hylia',
+                  'Light Hype Fairy': 'The cave south of your house',
+                  'Desert Fairy': 'The cave near the desert',
+                  'Chicken House': 'The chicken lady\'s house',
+                  'Aginahs Cave': 'The desert cave',
+                  'Sahasrahlas Hut': 'The building near armos',
+                  'Cave Shop (Lake Hylia)': 'The cave NW Lake Hylia',
+                  'Blacksmiths Hut': 'The old smithery',
+                  'Sick Kids House': 'The central house in Kakariko',
+                  'Lost Woods Gamble': 'A tree trunk door',
+                  'Fortune Teller (Light)': 'A building NE of Kakariko',
+                  'Snitch Lady (East)': 'A house guarded by a snitch',
+                  'Snitch Lady (West)': 'A house guarded by a snitch',
+                  'Bush Covered House': 'A house with an uncut lawn',
+                  'Tavern (Front)': 'A building with a backdoor',
+                  'Light World Bomb Hut': 'A Kakariko building with no door',
+                  'Kakariko Shop': 'The old Kakariko shop',
+                  'Mini Moldorm Cave': 'The cave south of Lake Hylia',
+                  'Long Fairy Cave': 'The eastmost portal cave',
+                  'Good Bee Cave': 'The open cave SE Lake Hylia',
+                  '20 Rupee Cave': 'The rock SE Lake Hylia',
+                  '50 Rupee Cave': 'The rock near the desert',
+                  'Ice Rod Cave': 'The sealed cave SE Lake Hylia',
+                  'Library': 'The old library',
+                  'Potion Shop': 'The witch\'s building',
+                  'Dam': 'The old dam',
+                  'Lumberjack House': 'The lumberjack house',
+                  'Lake Hylia Fortune Teller': 'The building NW Lake Hylia',
+                  'Kakariko Gamble Game': 'The old Kakariko gambling den',
+                  'Waterfall of Wishing': 'Going behind the waterfall',
+                  'Capacity Upgrade': 'The cave on the island',
+                  'Bonk Rock Cave': 'The rock pile near Sanctuary',
+                  'Graveyard Cave': 'The graveyard ledge',
+                  'Checkerboard Cave': 'The NE desert ledge',
+                  'Cave 45': 'The ledge south of haunted grove',
+                  'Kings Grave': 'The northeastmost grave',
+                  'Bonk Fairy (Light)': 'The rock pile near your home',
+                  'Hookshot Fairy': 'A cave on east DM',
+				  'Bonk Fairy (Dark)': 'The rock pile near the old bomb shop',
+                  'Dark Sanctuary Hint': 'The dark sanctuary cave',
+                  'Dark Lake Hylia Fairy': 'The cave NE dark Lake Hylia',
+                  'C-Shaped House': 'The NE house in Village of Outcasts',
+                  'Big Bomb Shop': 'The old bomb shop',
+                  'Dark Death Mountain Fairy': 'The SW cave on dark DM',
+                  'Dark Lake Hylia Shop': 'The building NW dark Lake Hylia',
+                  'Dark World Shop': 'The hammer sealed building',
+                  'Red Shield Shop': 'The fenced in building',
+                  'Mire Shed': 'The western hut in the mire',
+                  'East Dark World Hint': 'The dark cave near the eastmost portal',
+                  'Dark Desert Hint': 'The cave east of the mire',
+                  'Spike Cave': 'The ledge cave on west dark DM',
+                  'Palace of Darkness Hint': 'The building south of Kiki',
+                  'Dark Lake Hylia Ledge Spike Cave': 'The rock SE dark Lake Hylia',
+                  'Cave Shop (Dark Death Mountain)': 'The base of east dark DM',
+                  'Dark World Potion Shop': 'The building near the catfish',
+                  'Archery Game': 'The old archery game',
+                  'Dark World Lumberjack Shop': 'The northmost Dark World building',
+                  'Hype Cave': 'The cave south of the old bomb shop',
+                  'Brewery': 'The Village of Outcasts building with no door',
+                  'Dark Lake Hylia Ledge Hint': 'The open cave SE dark Lake Hylia',
+                  'Chest Game': 'The westmost building in the Village of Outcasts',
+                  'Dark Desert Fairy': 'The eastern hut in the mire',
+                  'Dark Lake Hylia Ledge Fairy': 'The sealed cave SE dark Lake Hylia',
+                  'Fortune Teller (Dark)': 'The building NE the Village of Outcasts'
+                  }
+
+InsanityEntrances = {'Sanctuary': 'Sanctuary',
+                     'Lumberjack Tree Cave': 'The cave Behind Lumberjacks',
+                     'Lost Woods Hideout Stump': 'The stump in Lost Woods',
+                     'North Fairy Cave': 'The cave East of Graveyard',
+                     'Bat Cave Cave': 'The cave in eastern Kakariko',
+                     'Kakariko Well Cave': 'The cave in northern Kakariko',
+                     'Hyrule Castle Secret Entrance Stairs': 'The tunnel near the castle',
+                     'Skull Woods First Section Door': 'The southeastmost skull',
+                     'Skull Woods Second Section Door (East)': 'The central open skull',
+                     'Skull Woods Second Section Door (West)': 'The westmost open skull',
+                     'Desert Palace Entrance (East)': 'The eastern building in the desert',
+                     'Turtle Rock Isolated Ledge Entrance': 'The isolated ledge on east dark DM',
+                     'Bumper Cave (Top)': 'The upper Bumper Cave',
+                     'Hookshot Cave Back Entrance': 'The stairs on the floating island'
+                     }
+
+HintLocations = ['telepathic_tile_eastern_palace',
+                 'telepathic_tile_tower_of_hera_floor_4',
+                 'telepathic_tile_spectacle_rock',
+                 'telepathic_tile_swamp_entrance',
+                 'telepathic_tile_thieves_town_upstairs',
+                 'telepathic_tile_misery_mire',
+                 'telepathic_tile_palace_of_darkness',
+                 'telepathic_tile_desert_bonk_torch_room',
+                 'telepathic_tile_castle_tower',
+                 'telepathic_tile_ice_large_room',
+                 'telepathic_tile_turtle_rock',
+                 'telepathic_tile_ice_entrace',
+                 'telepathic_tile_ice_stalfos_knights_room',
+                 'telepathic_tile_tower_of_hera_entrance',
+                 'telepathic_tile_south_east_darkworld_cave',
+                 'dark_palace_tree_dude',
+                 'dark_sanctuary_hint_0',
+                 'dark_sanctuary_hint_1',
+                 'dark_sanctuary_yes',
+                 'dark_sanctuary_hint_2']
+
+InconvenientLocations = ['Spike Cave',
+                         'Sahasrahla',
+                         'Purple Chest',
+                         'Swamp Left',
+                         'Mire Left',
+                         'Tower of Hera - Big Key Chest',
+                         'Magic Bat']
+RelevantItems = ['Bow',
+                 'Book of Mudora',
+                 'Hammer',
+                 'Hookshot',
+                 'Magic Mirror',
+                 'Ocarina',
+                 'Pegasus Boots',
+                 'Power Glove',
+                 'Cape',
+                 'Mushroom',
+                 'Shovel',
+                 'Lamp',
+                 'Magic Powder',
+                 'Moon Pearl',
+                 'Cane of Somaria',
+                 'Fire Rod',
+                 'Flippers',
+                 'Ice Rod',
+                 'Titans Mitts',
+                 'Ether',
+                 'Bombos',
+                 'Quake',
+                 'Bottle',
+                 'Bottle (Red Potion)',
+                 'Bottle (Green Potion)',
+                 'Bottle (Blue Potion)',
+                 'Bottle (Fairy)',
+                 'Bottle (Bee)',
+                 'Bottle (Good Bee)',
+                 'Master Sword',
+                 'Tempered Sword',
+                 'Fighter Sword',
+                 'Golden Sword',
+                 'Progressive Sword',
+                 'Progressive Glove',
+                 'Master Sword',
+                 'Power Star',
+                 'Triforce Piece',
+                 'Single Arrow',
+                 'Blue Mail',
+                 'Red Mail',
+                 'Progressive Armor',
+                 'Blue Boomerang',
+                 'Red Boomerang',
+                 'Blue Shield',
+                 'Red Shield',
+                 'Mirror Shield',
+                 'Progressive Shield',
+                 'Bug Catching Net',
+                 'Cane of Byrna',
+                 'Magic Upgrade (1/2)',
+                 'Magic Upgrade (1/4)'
+                 ]
+
+KeysanityItems = ['Small Key (Eastern Palace)',
+                  'Big Key (Eastern Palace)',
+                  'Small Key (Escape)',
+				  'Small Key (Desert Palace)',
+                  'Big Key (Desert Palace)',
+				  'Small Key (Tower of Hera)',
+                  'Big Key (Tower of Hera)',
+				  'Small Key (Agahnims Tower)',
+				  'Small Key (Palace of Darkness)',
+                  'Big Key (Palace of Darkness)',
+				  'Small Key (Thieves Town)',
+                  'Big Key (Thieves Town)',
+				  'Small Key (Swamp Palace)',
+                  'Big Key (Swamp Palace)',
+				  'Small Key (Skull Woods)',
+                  'Big Key (Skull Woods)',
+				  'Small Key (Ice Palace)',
+                  'Big Key (Ice Palace)',
+                  'Small Key (Misery Mire)',
+                  'Big Key (Misery Mire)',
+                  'Small Key (Turtle Rock)',
+                  'Big Key (Turtle Rock)',
+                  'Small Key (Ganons Tower)',
+                  'Big Key (Ganons Tower)'
+				  ]
