@@ -40,7 +40,7 @@ def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.keysanity, args.retro, args.custom, args.customitemarray, args.shufflebosses)
+    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.keysanity, args.retro, args.custom, args.customitemarray, args.shufflebosses, args.hints)
     logger = logging.getLogger('')
     if seed is None:
         random.seed(None)
@@ -112,7 +112,7 @@ def main(args, seed=None):
     else:
         sprite = None
 
-    outfilebase = 'ER_%s_%s-%s-%s%s_%s-%s%s%s%s_%s' % (world.logic, world.difficulty, world.mode, world.goal, "" if world.timer in ['none', 'display'] else "-" + world.timer, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-retro" if world.retro else "", "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "", world.seed)
+    outfilebase = 'ER_%s_%s-%s-%s%s_%s-%s%s%s%s%s_%s' % (world.logic, world.difficulty, world.mode, world.goal, "" if world.timer in ['none', 'display'] else "-" + world.timer, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-retro" if world.retro else "", "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "", "-nohints" if not world.hints else "", world.seed)
 
     if not args.suppress_rom:
         if args.jsonout:
@@ -140,7 +140,7 @@ def gt_filler(world):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.timer, world.progressive, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.keysanity, world.retro, world.custom, world.customitemarray, world.boss_shuffle)
+    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.timer, world.progressive, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.keysanity, world.retro, world.custom, world.customitemarray, world.boss_shuffle, world.hints)
     ret.required_medallions = list(world.required_medallions)
     ret.swamp_patch_required = world.swamp_patch_required
     ret.ganon_at_pyramid = world.ganon_at_pyramid

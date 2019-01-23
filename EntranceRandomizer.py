@@ -182,6 +182,9 @@ def start():
                              ensure all locations are reachable. This only has an effect
                              on the restrictive algorithm currently.
                              ''', action='store_true')
+    parser.add_argument('--hints', help='''\
+                             Make telepathic tiles and storytellers give helpful hints.
+                             ''', action='store_true')
     # included for backwards compatibility
     parser.add_argument('--shuffleganon', help=argparse.SUPPRESS, action='store_true', default=True)
     parser.add_argument('--no-shuffleganon', help='''\

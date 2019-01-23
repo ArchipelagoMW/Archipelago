@@ -16,7 +16,7 @@ from Items import ItemFactory
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '354bad0d01b6284c89f05c9b414d48c1'
+RANDOMIZERBASEHASH = 'cb560220b7b1b8202e92381aee19cd36'
 
 
 class JsonRom(object):
@@ -1016,88 +1016,90 @@ def write_strings(rom, world):
     tt.removeUnwantedText()
 
     # For hints, first we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
-    entrances_to_hint = {}
-    entrances_to_hint.update(InconvenientEntrances)
-    if world.shuffle_ganon:
-            entrances_to_hint.update({'Ganons Tower': 'Ganon\'s Tower'})
-    hint_locations = HintLocations.copy()
-    random.shuffle(hint_locations)
-    all_entrances = world.get_entrances()
-    random.shuffle(all_entrances)
-    hint_count = 4
-    for entrance in all_entrances:
-        if entrance.name in entrances_to_hint:
-            this_hint = entrances_to_hint[entrance.name] + ' leads to ' + entrance.connected_region.hint_text + '.'
-            tt[hint_locations.pop(0)] = this_hint
-            entrances_to_hint.pop(entrance.name)
-            hint_count -= 1
-            if hint_count < 1:
-                break
-
-    entrances_to_hint.update(OtherEntrances)
-    if world.shuffle in ['insanity', 'madness_legacy', 'insanity_legacy']:
-        entrances_to_hint.update(InsanityEntrances)
+    if world.hints:
+        entrances_to_hint = {}
+        entrances_to_hint.update(InconvenientEntrances)
         if world.shuffle_ganon:
-            entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
-    hint_count = 4
-    for entrance in all_entrances:
-        if entrance.name in entrances_to_hint:
-            this_hint = entrances_to_hint[entrance.name] + ' leads to ' + entrance.connected_region.hint_text + '.'
-            tt[hint_locations.pop(0)] = this_hint
-            entrances_to_hint.pop(entrance.name)
-            hint_count -= 1
-            if hint_count < 1:
-                break
+            entrances_to_hint.update({'Ganons Tower': 'Ganon\'s Tower'})
+        hint_locations = HintLocations.copy()
+        random.shuffle(hint_locations)
+        all_entrances = world.get_entrances()
+        random.shuffle(all_entrances)
+        hint_count = 4
+        for entrance in all_entrances:
+            if entrance.name in entrances_to_hint:
+                this_hint = entrances_to_hint[entrance.name] + ' leads to ' + entrance.connected_region.hint_text + '.'
+                tt[hint_locations.pop(0)] = this_hint
+                entrances_to_hint.pop(entrance.name)
+                hint_count -= 1
+                if hint_count < 1:
+                    break
 
-    # Next we write a few hints for specific inconvenient locations. We don't make many because in entrance this is highly unpredictable.
-    locations_to_hint = InconvenientLocations.copy()
-    random.shuffle(locations_to_hint)
-    hint_count = 2
-    del locations_to_hint[hint_count:]   
-    for location in locations_to_hint:
-        if location == 'Swamp Left':
-            this_hint = ('The westmost chests in Swamp Palace contain ' + (world.get_location('Swamp Palace - Compass Chest').item.pedestal_credit_text[4:] if world.get_location('Swamp Palace - Compass Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Swamp Palace - Compass Chest').item.pedestal_credit_text) +
-                        ' and ' + (world.get_location('Swamp Palace - Big Key Chest').item.pedestal_credit_text[4:] if world.get_location('Swamp Palace - Big Key Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Swamp Palace - Big Key Chest').item.pedestal_credit_text) + '.')
-            tt[hint_locations.pop(0)] = this_hint
-        elif location == 'Mire Left':
-            this_hint = ('The westmost chests in Misery Mire contain ' + (world.get_location('Misery Mire - Compass Chest').item.pedestal_credit_text[4:] if world.get_location('Misery Mire - Compass Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Misery Mire - Compass Chest').item.pedestal_credit_text) +
-                        ' and ' + (world.get_location('Misery Mire - Big Key Chest').item.pedestal_credit_text[4:] if world.get_location('Misery Mire - Big Key Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Misery Mire - Big Key Chest').item.pedestal_credit_text) + '.')
-            tt[hint_locations.pop(0)] = this_hint
-        elif location == 'Tower of Hera - Big Key Chest':
-            this_hint = 'Waiting in the Tower of Hera basement leads to ' + (world.get_location(location).item.pedestal_credit_text[4:] if world.get_location(location).item.pedestal_credit_text[0] == 'a' else world.get_location(location).item.pedestal_credit_text) + '.'
-            tt[hint_locations.pop(0)] = this_hint
-        else:
-            this_hint = location + ' leads to ' + (world.get_location(location).item.pedestal_credit_text[4:] if world.get_location(location).item.pedestal_credit_text[0] == 'a' else world.get_location(location).item.pedestal_credit_text) + '.'
-            tt[hint_locations.pop(0)] = this_hint
+        entrances_to_hint.update(OtherEntrances)
+        if world.shuffle in ['insanity', 'madness_legacy', 'insanity_legacy']:
+            entrances_to_hint.update(InsanityEntrances)
+            if world.shuffle_ganon:
+                entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
+        hint_count = 4
+        for entrance in all_entrances:
+            if entrance.name in entrances_to_hint:
+                this_hint = entrances_to_hint[entrance.name] + ' leads to ' + entrance.connected_region.hint_text + '.'
+                tt[hint_locations.pop(0)] = this_hint
+                entrances_to_hint.pop(entrance.name)
+                hint_count -= 1
+                if hint_count < 1:
+                    break
 
-    # Lastly we write hints to show where certain interesting items are. It is done the way it is to re-use the silver code and also to give one hint per each type of item regardless of how many exist. This supports many settings well.
-    items_to_hint = RelevantItems.copy()
-    if world.keysanity:
-        items_to_hint.extend(KeysanityItems)
-    random.shuffle(items_to_hint)
-    hint_count = 5
-    while(hint_count > 0):
-        this_item = items_to_hint.pop(0)
-        this_location = world.find_items(this_item)
-        random.shuffle(this_location)
-        if this_location:
-            if 'Key' in this_item:
-                this_hint = this_location[0].item.pedestal_hint_text + ' can be found ' + this_location[0].hint_text + '.'
+        # Next we write a few hints for specific inconvenient locations. We don't make many because in entrance this is highly unpredictable.
+        locations_to_hint = InconvenientLocations.copy()
+        random.shuffle(locations_to_hint)
+        hint_count = 2
+        del locations_to_hint[hint_count:]   
+        for location in locations_to_hint:
+            if location == 'Swamp Left':
+                this_hint = ('The westmost chests in Swamp Palace contain ' + (world.get_location('Swamp Palace - Compass Chest').item.pedestal_credit_text[4:] if world.get_location('Swamp Palace - Compass Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Swamp Palace - Compass Chest').item.pedestal_credit_text) +
+                            ' and ' + (world.get_location('Swamp Palace - Big Key Chest').item.pedestal_credit_text[4:] if world.get_location('Swamp Palace - Big Key Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Swamp Palace - Big Key Chest').item.pedestal_credit_text) + '.')
+                tt[hint_locations.pop(0)] = this_hint
+            elif location == 'Mire Left':
+                this_hint = ('The westmost chests in Misery Mire contain ' + (world.get_location('Misery Mire - Compass Chest').item.pedestal_credit_text[4:] if world.get_location('Misery Mire - Compass Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Misery Mire - Compass Chest').item.pedestal_credit_text) +
+                            ' and ' + (world.get_location('Misery Mire - Big Key Chest').item.pedestal_credit_text[4:] if world.get_location('Misery Mire - Big Key Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Misery Mire - Big Key Chest').item.pedestal_credit_text) + '.')
+                tt[hint_locations.pop(0)] = this_hint
+            elif location == 'Tower of Hera - Big Key Chest':
+                this_hint = 'Waiting in the Tower of Hera basement leads to ' + (world.get_location(location).item.pedestal_credit_text[4:] if world.get_location(location).item.pedestal_credit_text[0] == 'a' else world.get_location(location).item.pedestal_credit_text) + '.'
+                tt[hint_locations.pop(0)] = this_hint
             else:
-                this_hint = (this_location[0].item.pedestal_credit_text[4:] if this_location[0].item.pedestal_credit_text[0] == 'a' else this_location[0].item.pedestal_credit_text) + ' can be found ' + this_location[0].hint_text + '.'
-            tt[hint_locations.pop(0)] = this_hint
-            hint_count -= 1
-        else:
-            continue
+                this_hint = location + ' leads to ' + (world.get_location(location).item.pedestal_credit_text[4:] if world.get_location(location).item.pedestal_credit_text[0] == 'a' else world.get_location(location).item.pedestal_credit_text) + '.'
+                tt[hint_locations.pop(0)] = this_hint
 
-    # All remaining hint slots are filled with junk hints. It is done this way to ensure the same junk hint isn't selected twice.
-    junk_hints = junk_texts.copy()
-    random.shuffle(junk_hints)
-    for location in hint_locations:
-        tt[location] = junk_hints.pop(0)    
+        # Lastly we write hints to show where certain interesting items are. It is done the way it is to re-use the silver code and also to give one hint per each type of item regardless of how many exist. This supports many settings well.
+        items_to_hint = RelevantItems.copy()
+        if world.keysanity:
+            items_to_hint.extend(KeysanityItems)
+        random.shuffle(items_to_hint)
+        hint_count = 5
+        while(hint_count > 0):
+            this_item = items_to_hint.pop(0)
+            this_location = world.find_items(this_item)
+            random.shuffle(this_location)
+            if this_location:
+                if 'Key' in this_item:
+                    this_hint = this_location[0].item.pedestal_hint_text + ' can be found ' + this_location[0].hint_text + '.'
+                else:
+                    this_hint = (this_location[0].item.pedestal_credit_text[4:] if this_location[0].item.pedestal_credit_text[0] == 'a' else this_location[0].item.pedestal_credit_text) + ' can be found ' + this_location[0].hint_text + '.'
+                tt[hint_locations.pop(0)] = this_hint
+                hint_count -= 1
+            else:
+                continue
+
+        # All remaining hint slots are filled with junk hints. It is done this way to ensure the same junk hint isn't selected twice.
+        junk_hints = junk_texts.copy()
+        random.shuffle(junk_hints)
+        for location in hint_locations:
+            tt[location] = junk_hints.pop(0)    
 
    # We still need the older hints of course. Those are done here.
     silverarrows = world.find_items('Silver Arrows')
+    random.shuffle(silverarrows)
     silverarrow_hint = (' %s?' % silverarrows[0].hint_text.replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
     tt['ganon_phase_3'] = 'Did you find the silver arrows%s' % silverarrow_hint
 
@@ -1178,7 +1180,7 @@ def write_strings(rom, world):
 InconvenientEntrances = {'Turtle Rock': 'Turtle Rock Main',
                          'Misery Mire': 'Misery Mire',
                          'Ice Palace': 'Ice Palace',
-                         'Skull Woods Final Section': 'Skull Woods Final',
+                         'Skull Woods Final Section': 'The back of Skull Woods',
                          'Death Mountain Return Cave (West)': 'The upper DM entrance',
                          'Mimic Cave': 'Mimic Ledge',
                          'Dark World Hammer Peg Cave': 'The rows of pegs',
@@ -1194,7 +1196,6 @@ OtherEntrances = {'Eastern Palace': 'Eastern Palace',
                   'Thieves Town': 'Thieves\' Town',
                   'Bumper Cave (Bottom)': 'The lower Bumper Cave',
                   'Swamp Palace': 'Swamp Palace',
-                  'Skull Woods Final Section': 'The back of Skull Woods',
                   'Dark Death Mountain Ledge (West)': 'The East dark DM connector ledge',
                   'Dark Death Mountain Ledge (East)': 'The East dark DM connector ledge',
                   'Superbunny Cave (Top)': 'The summit of dark DM cave',

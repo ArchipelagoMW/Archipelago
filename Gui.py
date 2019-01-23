@@ -73,6 +73,9 @@ def guiMain(args=None):
     shuffleGanonVar = IntVar()
     shuffleGanonVar.set(1) #set default
     shuffleGanonCheckbutton = Checkbutton(checkBoxFrame, text="Include Ganon's Tower and Pyramid Hole in shuffle pool", variable=shuffleGanonVar)
+    hintsVar = IntVar()
+    hintsVar.set(1) #set default
+    hintsCheckbutton = Checkbutton(checkBoxFrame, text="Include Helpful Hints", variable=hintsVar)
     customVar = IntVar()
     customCheckbutton = Checkbutton(checkBoxFrame, text="Use custom item pool", variable=customVar)
 
@@ -85,6 +88,7 @@ def guiMain(args=None):
     beatableOnlyCheckbutton.pack(expand=True, anchor=W)
     disableMusicCheckbutton.pack(expand=True, anchor=W)
     shuffleGanonCheckbutton.pack(expand=True, anchor=W)
+    hintsCheckbutton.pack(expand=True, anchor=W)
     customCheckbutton.pack(expand=True, anchor=W)
 
     fileDialogFrame = Frame(rightHalfFrame)
@@ -271,6 +275,7 @@ def guiMain(args=None):
         guiargs.quickswap = bool(quickSwapVar.get())
         guiargs.disablemusic = bool(disableMusicVar.get())
         guiargs.shuffleganon = bool(shuffleGanonVar.get())
+        guiargs.hints = bool(hintsVar.get())
         guiargs.custom = bool(customVar.get())
         guiargs.customitemarray = [int(bowVar.get()), int(silverarrowVar.get()), int(boomerangVar.get()), int(magicboomerangVar.get()), int(hookshotVar.get()), int(mushroomVar.get()), int(magicpowderVar.get()), int(firerodVar.get()),
                                    int(icerodVar.get()), int(bombosVar.get()), int(etherVar.get()), int(quakeVar.get()), int(lampVar.get()), int(hammerVar.get()), int(shovelVar.get()), int(fluteVar.get()), int(bugnetVar.get()),
@@ -1013,6 +1018,7 @@ def guiMain(args=None):
         logicVar.set(args.logic)
         romVar.set(args.rom)
         shuffleGanonVar.set(args.shuffleganon)
+        hintsVar.set(args.hints)
         if args.sprite is not None:
             set_sprite(Sprite(args.sprite))
 

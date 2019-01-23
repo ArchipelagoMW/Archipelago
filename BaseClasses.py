@@ -7,7 +7,7 @@ from Utils import int16_as_bytes
 
 class World(object):
 
-    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, retro, custom, customitemarray, boss_shuffle):
+    def __init__(self, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, retro, custom, customitemarray, boss_shuffle, hints):
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
@@ -65,6 +65,7 @@ class World(object):
         self.difficulty_requirements = None
         self.fix_fake_world = True
         self.boss_shuffle = boss_shuffle
+        self.hints = hints
         self.dynamic_regions = []
         self.dynamic_locations = []
         self.spoiler = Spoiler(self)
