@@ -96,8 +96,8 @@ def link_entrances(world):
         connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)')
         connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)')
 
-        # add old man house to ensure it is alwayxs somewhere on light death mountain
-        caves.append(('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)'))
+        # add old man house to ensure it is always somewhere on light death mountain
+        caves.extend(list(Old_Man_House))
         caves.extend(list(three_exit_caves))
 
         # connect rest
@@ -181,7 +181,8 @@ def link_entrances(world):
         connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)')
 
         # place Old Man House in Light World
-        connect_caves(world, lw_entrances, [], [('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)')])
+        connect_caves(world, lw_entrances, [], list(Old_Man_House)) #for multiple seeds
+
 
         # now scramble the rest
         connect_caves(world, lw_entrances, dw_entrances, caves)
@@ -223,7 +224,7 @@ def link_entrances(world):
         connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)')
 
         # place Old Man House in Light World
-        connect_caves(world, lw_entrances, [], [('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)')])
+        connect_caves(world, lw_entrances, [], Old_Man_House)
 
         # connect rest. There's 2 dw entrances remaining, so we will not run into parity issue placing caves
         connect_caves(world, lw_entrances, dw_entrances, caves)
@@ -260,6 +261,7 @@ def link_entrances(world):
         bomb_shop_doors = list(Bomb_Shop_Single_Cave_Doors + Bomb_Shop_Multi_Cave_Doors)
         blacksmith_doors = list(Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
         door_targets = list(Single_Cave_Targets)
+        old_man_house = list(Old_Man_House)
 
         # tavern back door cannot be shuffled yet
         connect_doors(world, ['Tavern North'], ['Tavern'])
@@ -268,7 +270,7 @@ def link_entrances(world):
             # must connect front of hyrule castle to do escape
             connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)')
         else:
-            caves.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
+            caves.append(tuple(random.sample(['Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'],3)))
             lw_entrances.append('Hyrule Castle Entrance (South)')
 
         if not world.shuffle_ganon:
@@ -276,14 +278,32 @@ def link_entrances(world):
         else:
             dw_entrances.append('Ganons Tower')
             caves.append('Ganons Tower Exit')
+        
 
         # we randomize which world requirements we fulfill first so we get better dungeon distribution
+        #we also places the Old Man House at this time to make sure he can be connected to the desert one way
         if random.randint(0, 1) == 0:
+            caves += old_man_house
             connect_mandatory_exits(world, lw_entrances, caves, lw_must_exits)
+            try:
+                caves.remove(old_man_house[0])
+            except ValueError: 
+                print("Old man at desert")
+            else: #if the cave wasn't placed we get here
+                print("Normal Old Man")
+                connect_caves(world, lw_entrances, [], old_man_house)                
             connect_mandatory_exits(world, dw_entrances, caves, dw_must_exits)
         else:
             connect_mandatory_exits(world, dw_entrances, caves, dw_must_exits)
+            caves += old_man_house
             connect_mandatory_exits(world, lw_entrances, caves, lw_must_exits)
+            try:
+                caves.remove(old_man_house[0])
+            except ValueError:
+                print("Old man at desert")
+            else: #if the cave wasn't placed we get here
+                print("Normal Old Man")
+                connect_caves(world, lw_entrances, [], old_man_house)                
         if world.mode == 'standard':
             # rest of hyrule castle must be in light world
             connect_caves(world, lw_entrances, [], [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')])
@@ -322,12 +342,9 @@ def link_entrances(world):
             dw_entrances.remove(bomb_shop)
 
         # place the old man cave's entrance somewhere in the light world
-        random.shuffle(lw_entrances)
         old_man_entrance = lw_entrances.pop()
         connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)')
 
-        # place Old Man House in Light World
-        connect_caves(world, lw_entrances, [], [('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)')])
 
         # now scramble the rest
         connect_caves(world, lw_entrances, dw_entrances, caves)
@@ -346,7 +363,7 @@ def link_entrances(world):
         must_exits = list(DW_Entrances_Must_Exit + DW_Dungeon_Entrances_Must_Exit + LW_Dungeon_Entrances_Must_Exit)
 
         old_man_entrances = list(Old_Man_Entrances + ['Tower of Hera'])
-        caves = list(Cave_Exits + Dungeon_Exits + Cave_Three_Exits)  # don't need to consider three exit caves, have one exit caves to avoid parity issues
+        caves = list(Cave_Exits + Dungeon_Exits + Cave_Three_Exits + Old_Man_House)  # don't need to consider three exit caves, have one exit caves to avoid parity issues
         bomb_shop_doors = list(Bomb_Shop_Single_Cave_Doors + Bomb_Shop_Multi_Cave_Doors)
         blacksmith_doors = list(Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
         door_targets = list(Single_Cave_Targets)
@@ -358,7 +375,7 @@ def link_entrances(world):
             # must connect front of hyrule castle to do escape
             connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)')
         else:
-            caves.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
+            caves.append(tuple(random.sample(['Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'],3)))
             entrances.append('Hyrule Castle Entrance (South)')
 
         if not world.shuffle_ganon:
@@ -367,6 +384,7 @@ def link_entrances(world):
             entrances.append('Ganons Tower')
             caves.append('Ganons Tower Exit')
 
+        #place must-exit caves 
         connect_mandatory_exits(world, entrances, caves, must_exits)
 
         if world.mode == 'standard':
@@ -405,8 +423,6 @@ def link_entrances(world):
         old_man_entrance = entrances.pop()
         connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)')
 
-        # place Old Man House
-        connect_caves(world, entrances, [], [('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)')])
 
         # now scramble the rest
         connect_caves(world, entrances, [], caves)
@@ -434,7 +450,7 @@ def link_entrances(world):
             # must connect front of hyrule castle to do escape
             connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)')
         else:
-            caves.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
+            caves.append(tuple(random.sample(['Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'],3)))
             lw_entrances.append('Hyrule Castle Entrance (South)')
 
         if not world.shuffle_ganon:
@@ -467,7 +483,7 @@ def link_entrances(world):
         connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)')
 
         # place Old Man House in Light World
-        connect_caves(world, lw_entrances, [], [('Old Man House Exit (Bottom)', 'Old Man House Exit (Top)')])
+        connect_caves(world, lw_entrances, [], list(Old_Man_House)) #need this to avoid badness with multiple seeds
 
         # now scramble the rest
         connect_caves(world, lw_entrances, dw_entrances, caves)
@@ -1152,6 +1168,7 @@ def connect_mandatory_exits(world, entrances, caves, must_be_exits):
     """This works inplace"""
     random.shuffle(entrances)
     random.shuffle(caves)
+    used_caves = []
     while must_be_exits:
         exit = must_be_exits.pop()
         # find multi exit cave
@@ -1163,20 +1180,30 @@ def connect_mandatory_exits(world, entrances, caves, must_be_exits):
 
         if cave is None:
             raise RuntimeError('No more caves left. Should not happen!')
-        else:
-            caves.remove(cave)
-        # all caves are sorted so that the last exit is always reachable
-        for i in range(len(cave) - 1):
-            entrance = entrances.pop()
 
-            # ToDo Better solution, this is a hot fix. Do not connect both sides of trock ledge to each other
+        # all caves are sorted so that the last exit is always reachable
+        connect_two_way(world, exit, cave[-1])
+        if len(cave) == 2: 
+            entrance = entrances.pop()
+            # ToDo Better solution, this is a hot fix. Do not connect both sides of trock ledge only to each other
             if entrance == 'Dark Death Mountain Ledge (West)':
                 new_entrance = entrances.pop()
                 entrances.append(entrance)
                 entrance = new_entrance
-
-            connect_two_way(world, entrance, cave[i])
-        connect_two_way(world, exit, cave[-1])
+            connect_two_way(world, entrance, cave[0])
+        elif cave[-1] == 'Spectacle Rock Cave Exit': #Spectacle rock only has one exit
+            for exit in cave[:-1]:
+                connect_two_way(world,entrances.pop(),exit)
+        else:#save for later so we can connect to multiple exits
+            caves.append(cave[0:-1])
+            random.shuffle(caves)
+            used_caves.append(cave[0:-1])
+        caves.remove(cave)
+    for cave in used_caves:
+        if cave in caves: #check if we placed multiple entrances from this 3 or 4 exit 
+            for exit in cave:
+                connect_two_way(world, entrances.pop(), exit)
+            caves.remove(cave)
 
 
 def connect_caves(world, lw_entrances, dw_entrances, caves):
@@ -1326,7 +1353,7 @@ DW_Dungeon_Entrances = ['Thieves Town',
 DW_Dungeon_Entrances_Must_Exit = ['Dark Death Mountain Ledge (East)',
                                   'Turtle Rock Isolated Ledge Entrance']
 
-Dungeon_Exits = [('Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)'),
+Dungeon_Exits = [tuple(random.sample(['Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)'],3)),
                  'Desert Palace Exit (North)',
                  'Eastern Palace Exit',
                  'Tower of Hera Exit',
@@ -1337,7 +1364,8 @@ Dungeon_Exits = [('Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'De
                  'Palace of Darkness Exit',
                  'Swamp Palace Exit',
                  'Agahnims Tower Exit',
-                 ('Turtle Rock Exit (Front)', 'Turtle Rock Ledge Exit (East)', 'Turtle Rock Ledge Exit (West)', 'Turtle Rock Isolated Ledge Exit')]
+                 tuple(['Turtle Rock Ledge Exit (East)']+
+                    random.sample(['Turtle Rock Exit (Front)',  'Turtle Rock Ledge Exit (West)', 'Turtle Rock Isolated Ledge Exit'],3))]
 
 DW_Entrances_Must_Exit = ['Bumper Cave (Top)', 'Hookshot Cave Back Entrance']
 
@@ -1355,17 +1383,34 @@ Old_Man_Entrances = ['Old Man Cave (East)',
                      'Spectacle Rock Cave Peak',
                      'Spectacle Rock Cave (Bottom)']
 
-Cave_Exits = [('Elder House Exit (East)', 'Elder House Exit (West)'),
-              ('Two Brothers House Exit (East)', 'Two Brothers House Exit (West)'),
-              ('Death Mountain Return Cave Exit (West)', 'Death Mountain Return Cave Exit (East)'),
-              ('Fairy Ascension Cave Exit (Bottom)', 'Fairy Ascension Cave Exit (Top)'),
-              ('Spiral Cave Exit (Top)', 'Spiral Cave Exit'),
-              ('Bumper Cave Exit (Top)', 'Bumper Cave Exit (Bottom)'),
-              ('Superbunny Cave Exit (Bottom)', 'Superbunny Cave Exit (Top)'),
-              ('Hookshot Cave Exit (South)', 'Hookshot Cave Exit (North)')]
+Old_Man_House = [tuple(random.sample(['Old Man House Exit (Bottom)', 'Old Man House Exit (Top)'],2))]
 
-Cave_Three_Exits = [('Spectacle Rock Cave Exit (Peak)', 'Spectacle Rock Cave Exit (Top)', 'Spectacle Rock Cave Exit'),
-                    ('Paradox Cave Exit (Top)', 'Paradox Cave Exit (Middle)', 'Paradox Cave Exit (Bottom)')]
+
+Cave_Exits = [['Elder House Exit (East)', 'Elder House Exit (West)'],
+              ['Two Brothers House Exit (East)', 'Two Brothers House Exit (West)'],
+              ['Death Mountain Return Cave Exit (West)', 'Death Mountain Return Cave Exit (East)'],
+              ['Fairy Ascension Cave Exit (Bottom)', 'Fairy Ascension Cave Exit (Top)'],
+              ['Bumper Cave Exit (Top)', 'Bumper Cave Exit (Bottom)'],
+              ['Hookshot Cave Exit (South)', 'Hookshot Cave Exit (North)']]
+for i, cave in enumerate(Cave_Exits):
+    random.shuffle(cave)
+    Cave_Exits[i] = tuple(cave)
+
+Cave_Exits += [('Superbunny Cave Exit (Bottom)', 'Superbunny Cave Exit (Top)'),
+              ('Spiral Cave Exit (Top)', 'Spiral Cave Exit')]
+    
+
+Cave_Three_Exits = [('Spectacle Rock Cave Exit (Peak)', 'Spectacle Rock Cave Exit (Top)',
+ 'Spectacle Rock Cave Exit'),
+                    ['Paradox Cave Exit (Top)', 'Paradox Cave Exit (Middle)','Paradox Cave Exit (Bottom)']]
+
+random.shuffle(Cave_Three_Exits[1]) #shuffle the order
+#Unbias Paradox Cave (note that spec rock only has one "exit")
+while Cave_Three_Exits[1][0] == "Paradox Cave Exit (Bottom)":
+    random.shuffle(Cave_Three_Exits[1]) #shuffle the order until we don't accidentally break the game <- This is subopitmal. We are ensuring that the two 'good' entrances both don't get eaten by must-exits
+Cave_Three_Exits[1] = tuple(Cave_Three_Exits[1]) 
+
+
 
 LW_Entrances = ['Elder House (East)',
                 'Elder House (West)',
