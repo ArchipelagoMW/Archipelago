@@ -288,9 +288,8 @@ def link_entrances(world):
             try:
                 caves.remove(old_man_house[0])
             except ValueError: 
-                print("Old man at desert")
+                pass
             else: #if the cave wasn't placed we get here
-                print("Normal Old Man")
                 connect_caves(world, lw_entrances, [], old_man_house)                
             connect_mandatory_exits(world, dw_entrances, caves, dw_must_exits)
         else:
@@ -300,9 +299,8 @@ def link_entrances(world):
             try:
                 caves.remove(old_man_house[0])
             except ValueError:
-                print("Old man at desert")
+                pass
             else: #if the cave wasn't placed we get here
-                print("Normal Old Man")
                 connect_caves(world, lw_entrances, [], old_man_house)                
         if world.mode == 'standard':
             # rest of hyrule castle must be in light world

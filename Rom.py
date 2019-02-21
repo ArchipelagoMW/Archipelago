@@ -1057,7 +1057,7 @@ def write_strings(rom, world):
         del locations_to_hint[hint_count:]   
         for location in locations_to_hint:
             if location == 'Swamp Left':
-                this_hint = ('The westmost chests in Swamp Palace contain ' + (world.get_location('Swamp Palace - Compass Chest').item.pedestal_credit_text[4:] if world.get_location('Swamp Palace - Compass Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Swamp Palace - Compass Chest').item.pedestal_credit_text) +
+                this_hint = ('The westmost chests in Swamp Palace contain ' + (world.get_location('Swamp Palace - West Chest').item.pedestal_credit_text[4:] if world.get_location('Swamp Palace - West Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Swamp Palace - West Chest').item.pedestal_credit_text) +
                             ' and ' + (world.get_location('Swamp Palace - Big Key Chest').item.pedestal_credit_text[4:] if world.get_location('Swamp Palace - Big Key Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Swamp Palace - Big Key Chest').item.pedestal_credit_text) + '.')
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Mire Left':
