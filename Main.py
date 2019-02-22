@@ -200,7 +200,7 @@ def copy_world(world):
 
 def copy_dynamic_regions_and_locations(world, ret):
     for region in world.dynamic_regions:
-        new_reg = Region(region.name, region.type)
+        new_reg = Region(region.name, region.type, region.hint_text)
         ret.regions.append(new_reg)
         ret.dynamic_regions.append(new_reg)
 

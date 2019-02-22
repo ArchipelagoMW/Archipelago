@@ -290,7 +290,7 @@ take_any_locations = [
 def set_up_take_anys(world):
     regions = random.sample(take_any_locations, 5)
 
-    old_man_take_any = Region("Old Man Sword Cave", RegionType.Cave)
+    old_man_take_any = Region("Old Man Sword Cave", RegionType.Cave, 'the sword cave')
     world.regions.append(old_man_take_any)
     world.dynamic_regions.append(old_man_take_any)
 
@@ -312,7 +312,7 @@ def set_up_take_anys(world):
         old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0)
 
     for num in range(4):
-        take_any = Region("Take-Any #{}".format(num+1), RegionType.Cave)
+        take_any = Region("Take-Any #{}".format(num+1), RegionType.Cave, 'a cave of choice')
         world.regions.append(take_any)
         world.dynamic_regions.append(take_any)
 

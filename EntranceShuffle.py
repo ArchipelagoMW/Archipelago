@@ -7,6 +7,8 @@ def link_entrances(world):
     connect_two_way(world, 'Links House', 'Links House Exit') # unshuffled. For now
     connect_exit(world, 'Chris Houlihan Room Exit', 'Links House') # should always match link's house, except for plandos
 
+    unbias_some_entrances()
+
     # setup mandatory connections
     for exitname, regionname in mandatory_connections:
         connect_simple(world, exitname, regionname)
@@ -1327,6 +1329,45 @@ def simple_shuffle_dungeons(world):
         connect_two_way(world, 'Dark Death Mountain Ledge (West)', 'Turtle Rock Ledge Exit (West)')
         connect_two_way(world, 'Dark Death Mountain Ledge (East)', 'Turtle Rock Ledge Exit (East)')
 
+def unbias_some_entrances():
+    def shuffle_lists_in_list(ls):
+        for i, item in enumerate(ls):
+            if isinstance(item, list):
+                ls[i] = random.sample(item, len(item))
+
+    def tuplize_lists_in_list(ls):
+        for i, item in enumerate(ls):
+            if isinstance(item, list):
+                ls[i] = tuple(item)
+
+    shuffle_lists_in_list(Dungeon_Exits)
+    shuffle_lists_in_list(Cave_Exits)
+    shuffle_lists_in_list(Old_Man_House)
+    shuffle_lists_in_list(Cave_Three_Exits)
+
+    # paradox fixup
+    if Cave_Three_Exits[1][0] == "Paradox Cave Exit (Bottom)":
+        i = random.randint(1,2)
+        Cave_Three_Exits[1][0] = Cave_Three_Exits[1][i]
+        Cave_Three_Exits[1][i] = "Paradox Cave Exit (Bottom)"
+
+    # TR fixup
+    tr_fixup = False
+    for i, item in enumerate(Dungeon_Exits[-1]):
+        if 'Turtle Rock Ledge Exit (East)' == item:
+            tr_fixup = True
+            if 0 != i:
+                Dungeon_Exits[-1][i] = Dungeon_Exits[-1][0]
+                Dungeon_Exits[-1][0] = 'Turtle Rock Ledge Exit (East)'
+            break
+
+    if not tr_fixup: raise RuntimeError("TR entrance shuffle fixup didn't happen")
+
+    tuplize_lists_in_list(Dungeon_Exits)
+    tuplize_lists_in_list(Cave_Exits)
+    tuplize_lists_in_list(Old_Man_House)
+    tuplize_lists_in_list(Cave_Three_Exits)
+
 
 LW_Dungeon_Entrances = ['Desert Palace Entrance (South)',
                         'Desert Palace Entrance (West)',
@@ -1351,7 +1392,7 @@ DW_Dungeon_Entrances = ['Thieves Town',
 DW_Dungeon_Entrances_Must_Exit = ['Dark Death Mountain Ledge (East)',
                                   'Turtle Rock Isolated Ledge Entrance']
 
-Dungeon_Exits = [tuple(random.sample(['Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)'],3)),
+Dungeon_Exits = [['Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)'],
                  'Desert Palace Exit (North)',
                  'Eastern Palace Exit',
                  'Tower of Hera Exit',
@@ -1362,8 +1403,8 @@ Dungeon_Exits = [tuple(random.sample(['Desert Palace Exit (South)', 'Desert Pala
                  'Palace of Darkness Exit',
                  'Swamp Palace Exit',
                  'Agahnims Tower Exit',
-                 tuple(['Turtle Rock Ledge Exit (East)']+
-                    random.sample(['Turtle Rock Exit (Front)',  'Turtle Rock Ledge Exit (West)', 'Turtle Rock Isolated Ledge Exit'],3))]
+                 ['Turtle Rock Ledge Exit (East)',
+                     'Turtle Rock Exit (Front)',  'Turtle Rock Ledge Exit (West)', 'Turtle Rock Isolated Ledge Exit']]
 
 DW_Entrances_Must_Exit = ['Bumper Cave (Top)', 'Hookshot Cave Back Entrance']
 
@@ -1381,7 +1422,7 @@ Old_Man_Entrances = ['Old Man Cave (East)',
                      'Spectacle Rock Cave Peak',
                      'Spectacle Rock Cave (Bottom)']
 
-Old_Man_House = [tuple(random.sample(['Old Man House Exit (Bottom)', 'Old Man House Exit (Top)'],2))]
+Old_Man_House = [['Old Man House Exit (Bottom)', 'Old Man House Exit (Top)']]
 
 
 Cave_Exits = [['Elder House Exit (East)', 'Elder House Exit (West)'],
@@ -1390,9 +1431,6 @@ Cave_Exits = [['Elder House Exit (East)', 'Elder House Exit (West)'],
               ['Fairy Ascension Cave Exit (Bottom)', 'Fairy Ascension Cave Exit (Top)'],
               ['Bumper Cave Exit (Top)', 'Bumper Cave Exit (Bottom)'],
               ['Hookshot Cave Exit (South)', 'Hookshot Cave Exit (North)']]
-for i, cave in enumerate(Cave_Exits):
-    random.shuffle(cave)
-    Cave_Exits[i] = tuple(cave)
 
 Cave_Exits += [('Superbunny Cave Exit (Bottom)', 'Superbunny Cave Exit (Top)'),
               ('Spiral Cave Exit (Top)', 'Spiral Cave Exit')]
@@ -1401,13 +1439,6 @@ Cave_Exits += [('Superbunny Cave Exit (Bottom)', 'Superbunny Cave Exit (Top)'),
 Cave_Three_Exits = [('Spectacle Rock Cave Exit (Peak)', 'Spectacle Rock Cave Exit (Top)',
  'Spectacle Rock Cave Exit'),
                     ['Paradox Cave Exit (Top)', 'Paradox Cave Exit (Middle)','Paradox Cave Exit (Bottom)']]
-
-random.shuffle(Cave_Three_Exits[1]) #shuffle the order
-#Unbias Paradox Cave (note that spec rock only has one "exit")
-while Cave_Three_Exits[1][0] == "Paradox Cave Exit (Bottom)":
-    random.shuffle(Cave_Three_Exits[1]) #shuffle the order until we don't accidentally break the game <- This is subopitmal. We are ensuring that the two 'good' entrances both don't get eaten by must-exits
-Cave_Three_Exits[1] = tuple(Cave_Three_Exits[1]) 
-
 
 
 LW_Entrances = ['Elder House (East)',
