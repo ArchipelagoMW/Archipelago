@@ -127,6 +127,12 @@ class BackgroundShuffler(object):
                 if areaid == 0 and posindex == to_tile_index(8,6): continue
                 if areaid == 0 and posindex == to_tile_index(9,6): continue
 
+            # Fix for Sysint2 background floating effect affecting constraints
+            if allocation[val] == 66:
+                # starting forest
+                if areaid == 0 and posindex == to_tile_index(8,7): continue
+                if areaid == 0 and posindex == to_tile_index(8,8): continue
+
             stored_datas[areaid].tiledata_roombg[posindex] = allocation[val]
 
 

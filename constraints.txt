@@ -1236,7 +1236,12 @@
 "item": "HP_UP_CYBERSPACE",
 "from_location": "SYSTEM_INTERIOR_MAIN",
 "entry_prereq": "
-    SLIDING_POWDER & CARROT_BOMB & (
+    (SLIDING_POWDER & (
+        CARROT_BOMB
+        // hammer roll zip oob, then almost blind 2 tile zip
+        | (ADV_STUPID & SLIDE_ZIP & HAMMER_ROLL_ZIP)
+    ))
+    & (
         (AIR_JUMP & (RABI_SLIPPERS | ITM_HARD)) // 6tile airjump
         | (AIR_DASH_LV3 & ITM_HARD) // 4tile walljump, some other strange jumps
         | (AIR_DASH & ADV_VHARD) // (needs slide) 4tile walljump + weird jump at end
@@ -1473,7 +1478,7 @@
         CARROT_SHOOTER
         & BOOST_MANY
         & (CARROT_BOMB | PIKO_HAMMER)
-        & ADV_VHARD
+        & ADV_STUPID
     ))
 ",
 "exit_prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
