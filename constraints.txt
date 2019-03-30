@@ -1252,6 +1252,10 @@
         | (WHIRL_BONK & ITM_VHARD) // 3 buffered whirlbonks. last one is tight
     )",
 "exit_prereq": "SLIDING_POWDER",
+"alternate_entries": {
+    // whirl bonk covers the climb
+    "SYSTEM_INTERIOR_MAIN": "HAMMER_ROLL_ZIP & SLIDE_ZIP & ADV_STUPID",
+    },
 }
 
 {
@@ -1478,7 +1482,7 @@
         CARROT_SHOOTER
         & BOOST_MANY
         & (CARROT_BOMB | PIKO_HAMMER)
-        & ADV_VHARD
+        & ADV_STUPID
     ))
 ",
 "exit_prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
