@@ -56,10 +56,12 @@ DARKNESS & (
 {
 "edge": "FOREST_UPPER_EAST_EGG_LEDGE -> FOREST_UPPER_EAST",
 "prereq": "
-EXPLOSIVES_ENEMY &
-    (ADV_VHARD
-    | (ITM_HARD & AMULET_FOOD)
-    | WHIRL_BONK | RABI_SLIPPERS | BUNNY_STRIKE | AIR_JUMP | AIR_DASH)
+    (EXPLOSIVES_ENEMY | SLIDE_ZIP)
+    & (
+        ADV_VHARD
+        | (ITM_HARD & AMULET_FOOD)
+        | WHIRL_BONK | RABI_SLIPPERS | BUNNY_STRIKE | AIR_JUMP | AIR_DASH
+    )
 ",
 }
 
@@ -979,6 +981,12 @@ PROLOGUE_TRIGGER & (
 {
 "edge": "PARK_UPPER -> SKY_BRIDGE_MAIN",
 "prereq": "NONE",
+}
+
+{
+"edge": "PARK_MAIN -> SKY_BRIDGE_SLIDE_AREA",
+// consumables do not work due to screen transition
+"prereq": "ADV_STUPID & SLIDE_ZIP & BUNNY_AMULET",
 }
 
 {
