@@ -214,7 +214,10 @@
     WHIRL_BONK
     | (AIR_JUMP & (RABI_SLIPPERS | ITM_HARD))
     | (AIR_DASH & (RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL))
-    | (ADV_VHARD & AIR_DASH_LV3 & BUNNY_AMULET)",
+    // 4 tile corner rwj, airdash, wallkick, amulet cancel
+    | (ADV_VHARD & AIR_DASH_LV3 & BUNNY_AMULET)
+    // slide bonk off big bunny
+    | (ADV_STUPID & SLIDING_POWDER & RABI_SLIPPERS)",
 "exit_prereq": "NONE",
 }
 
