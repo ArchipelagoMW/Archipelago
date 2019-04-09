@@ -778,7 +778,7 @@ class Location(object):
 
 class Item(object):
 
-    def __init__(self, name='', advancement=False, priority=False, type=None, code=None, pedestal_hint=None, pedestal_credit=None, sickkid_credit=None, zora_credit=None, witch_credit=None, fluteboy_credit=None):
+    def __init__(self, name='', advancement=False, priority=False, type=None, code=None, pedestal_hint=None, pedestal_credit=None, sickkid_credit=None, zora_credit=None, witch_credit=None, fluteboy_credit=None, hint_text=None):
         self.name = name
         self.advancement = advancement
         self.priority = priority
@@ -789,6 +789,7 @@ class Item(object):
         self.zora_credit_text = zora_credit
         self.magicshop_credit_text = witch_credit
         self.fluteboy_credit_text = fluteboy_credit
+        self.hint_text = hint_text
         self.code = code
         self.location = None
 

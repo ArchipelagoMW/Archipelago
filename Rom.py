@@ -1057,18 +1057,28 @@ def write_strings(rom, world):
         del locations_to_hint[hint_count:]   
         for location in locations_to_hint:
             if location == 'Swamp Left':
-                this_hint = ('The westmost chests in Swamp Palace contain ' + (world.get_location('Swamp Palace - West Chest').item.pedestal_credit_text[4:] if world.get_location('Swamp Palace - West Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Swamp Palace - West Chest').item.pedestal_credit_text) +
-                            ' and ' + (world.get_location('Swamp Palace - Big Key Chest').item.pedestal_credit_text[4:] if world.get_location('Swamp Palace - Big Key Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Swamp Palace - Big Key Chest').item.pedestal_credit_text) + '.')
+                if random.randint(0, 1) == 0:
+                    first_item = world.get_location('Swamp Palace - West Chest').item.hint_text
+                    second_item = world.get_location('Swamp Palace - Big Key Chest').item.hint_text
+                else:
+                    second_item = world.get_location('Swamp Palace - West Chest').item.hint_text
+                    first_item = world.get_location('Swamp Palace - Big Key Chest').item.hint_text
+                this_hint = ('The westmost chests in Swamp Palace contain ' + first_item + ' and ' + second_item + '.')
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Mire Left':
-                this_hint = ('The westmost chests in Misery Mire contain ' + (world.get_location('Misery Mire - Compass Chest').item.pedestal_credit_text[4:] if world.get_location('Misery Mire - Compass Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Misery Mire - Compass Chest').item.pedestal_credit_text) +
-                            ' and ' + (world.get_location('Misery Mire - Big Key Chest').item.pedestal_credit_text[4:] if world.get_location('Misery Mire - Big Key Chest').item.pedestal_credit_text[0] == 'a' else world.get_location('Misery Mire - Big Key Chest').item.pedestal_credit_text) + '.')
+                if random.randint(0, 1) == 0:
+                    first_item = world.get_location('Misery Mire - Compass Chest').item.hint_text
+                    second_item = world.get_location('Misery Mire - Big Key Chest').item.hint_text
+                else:
+                    second_item = world.get_location('Misery Mire - Compass Chest').item.hint_text
+                    first_item = world.get_location('Misery Mire - Big Key Chest').item.hint_text
+                this_hint = ('The westmost chests in Misery Mire contain ' + first_item + ' and ' + second_item + '.')
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Tower of Hera - Big Key Chest':
-                this_hint = 'Waiting in the Tower of Hera basement leads to ' + (world.get_location(location).item.pedestal_credit_text[4:] if world.get_location(location).item.pedestal_credit_text[0] == 'a' else world.get_location(location).item.pedestal_credit_text) + '.'
+                this_hint = 'Waiting in the Tower of Hera basement leads to ' + world.get_location(location).item.hint_text + '.'
                 tt[hint_locations.pop(0)] = this_hint
             else:
-                this_hint = location + ' leads to ' + (world.get_location(location).item.pedestal_credit_text[4:] if world.get_location(location).item.pedestal_credit_text[0] == 'a' else world.get_location(location).item.pedestal_credit_text) + '.'
+                this_hint = location + ' leads to ' + world.get_location(location).item.hint_text + '.'
                 tt[hint_locations.pop(0)] = this_hint
 
         # Lastly we write hints to show where certain interesting items are. It is done the way it is to re-use the silver code and also to give one hint per each type of item regardless of how many exist. This supports many settings well.
@@ -1082,10 +1092,7 @@ def write_strings(rom, world):
             this_location = world.find_items(this_item)
             random.shuffle(this_location)
             if this_location:
-                if 'Key' in this_item:
-                    this_hint = this_location[0].item.pedestal_hint_text + ' can be found ' + this_location[0].hint_text + '.'
-                else:
-                    this_hint = (this_location[0].item.pedestal_credit_text[4:] if this_location[0].item.pedestal_credit_text[0] == 'a' else this_location[0].item.pedestal_credit_text) + ' can be found ' + this_location[0].hint_text + '.'
+                this_hint = this_location[0].item.hint_text + ' can be found ' + this_location[0].hint_text + '.'
                 tt[hint_locations.pop(0)] = this_hint
                 hint_count -= 1
             else:
