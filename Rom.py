@@ -1053,7 +1053,7 @@ def write_strings(rom, world):
         # Next we write a few hints for specific inconvenient locations. We don't make many because in entrance this is highly unpredictable.
         locations_to_hint = InconvenientLocations.copy()
         random.shuffle(locations_to_hint)
-        hint_count = 2
+        hint_count = 3
         del locations_to_hint[hint_count:]   
         for location in locations_to_hint:
             if location == 'Swamp Left':
@@ -1076,6 +1076,18 @@ def write_strings(rom, world):
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Tower of Hera - Big Key Chest':
                 this_hint = 'Waiting in the Tower of Hera basement leads to ' + world.get_location(location).item.hint_text + '.'
+                tt[hint_locations.pop(0)] = this_hint
+            elif location == 'Ganons Tower - Big Chest':
+                this_hint = 'The big chest in Ganon\'s Tower contains ' + world.get_location(location).item.hint_text + '.'
+                tt[hint_locations.pop(0)] = this_hint
+            elif location == 'Thieves\' Town - Big Chest':
+                this_hint = 'The big chest in Thieves\' Tower contains ' + world.get_location(location).item.hint_text + '.'
+                tt[hint_locations.pop(0)] = this_hint
+            elif location == 'Ice Palace - Big Chest':
+                this_hint = 'The big chest in Ice Palace contains ' + world.get_location(location).item.hint_text + '.'
+                tt[hint_locations.pop(0)] = this_hint
+            elif location == 'Eastern Palace - Big Key Chest':
+                this_hint = 'The antifairy guarded chest in Eastern Palace contains ' + world.get_location(location).item.hint_text + '.'
                 tt[hint_locations.pop(0)] = this_hint
             else:
                 this_hint = location + ' leads to ' + world.get_location(location).item.hint_text + '.'
@@ -1211,23 +1223,23 @@ OtherEntrances = {'Eastern Palace': 'Eastern Palace',
                   'Desert Palace Entrance (South)': 'The book sealed passage',
                   'Tower of Hera': 'The Tower of Hera',
                   'Two Brothers House (West)': 'The door near the race game',
-                  'Old Man Cave (East)': 'A cave on west DM',
-                  'Old Man House (Bottom)': 'A cave on west DM',
-                  'Old Man House (Top)': 'A cave on west DM',
-                  'Death Mountain Return Cave (East)': 'A cave on west DM',
-                  'Spectacle Rock Cave Peak': 'A cave on west DM',
-                  'Spectacle Rock Cave': 'A cave on west DM',
-                  'Spectacle Rock Cave (Bottom)': 'A cave on west DM',
-                  'Paradox Cave (Bottom)': 'A cave on east DM',
-                  'Paradox Cave (Middle)': 'A cave on east DM',
+                  'Old Man Cave (East)': 'The SW-most cave on west DM',
+                  'Old Man House (Bottom)': 'A cave with a door on west DM',
+                  'Old Man House (Top)': 'The eastmost cave on west DM',
+                  'Death Mountain Return Cave (East)': 'The westmost cave on west DM',
+                  'Spectacle Rock Cave Peak': 'The highest cave on west DM',
+                  'Spectacle Rock Cave': 'The right ledge on west DM',
+                  'Spectacle Rock Cave (Bottom)': 'The left ledge on west DM',
+                  'Paradox Cave (Bottom)': 'The southmost cave on east DM',
+                  'Paradox Cave (Middle)': 'The right paired cave on east DM',
                   'Paradox Cave (Top)': 'The east DM summit cave',
                   'Fairy Ascension Cave (Bottom)': 'The east DM cave behind rocks',
-                  'Fairy Ascension Cave (Top)': 'The central east DM ledge',
-                  'Spiral Cave': 'The western east DM ledge',
-                  'Spiral Cave (Bottom)': 'A cave on east DM',
+                  'Fairy Ascension Cave (Top)': 'The central ledge on east DM',
+                  'Spiral Cave': 'The left ledge on east DM',
+                  'Spiral Cave (Bottom)': 'The SWmost cave on east DM',
                   'Palace of Darkness': 'Palace of Darkness',
-                  'Hyrule Castle Entrance (West)': 'An upper castle door',
-                  'Hyrule Castle Entrance (East)': 'An upper castle door',
+                  'Hyrule Castle Entrance (West)': 'The left castle door',
+                  'Hyrule Castle Entrance (East)': 'The right castle door',
                   'Agahnims Tower': 'The sealed castle door',
                   'Desert Palace Entrance (West)': 'The westmost building in the desert',
                   'Desert Palace Entrance (North)': 'The northmost cave in the desert',
@@ -1236,8 +1248,8 @@ OtherEntrances = {'Eastern Palace': 'Eastern Palace',
                   'Light Hype Fairy': 'The cave south of your house',
                   'Desert Fairy': 'The cave near the desert',
                   'Chicken House': 'The chicken lady\'s house',
-                  'Aginahs Cave': 'The desert cave',
-                  'Sahasrahlas Hut': 'The building near armos',
+                  'Aginahs Cave': 'The open desert cave',
+                  'Sahasrahlas Hut': 'The house near armos',
                   'Cave Shop (Lake Hylia)': 'The cave NW Lake Hylia',
                   'Blacksmiths Hut': 'The old smithery',
                   'Sick Kids House': 'The central house in Kakariko',
@@ -1269,7 +1281,7 @@ OtherEntrances = {'Eastern Palace': 'Eastern Palace',
                   'Cave 45': 'The ledge south of haunted grove',
                   'Kings Grave': 'The northeastmost grave',
                   'Bonk Fairy (Light)': 'The rock pile near your home',
-                  'Hookshot Fairy': 'A cave on east DM',
+                  'Hookshot Fairy': 'The left paired cave on east DM',
 				  'Bonk Fairy (Dark)': 'The rock pile near the old bomb shop',
                   'Dark Sanctuary Hint': 'The dark sanctuary cave',
                   'Dark Lake Hylia Fairy': 'The cave NE dark Lake Hylia',
@@ -1341,6 +1353,10 @@ InconvenientLocations = ['Spike Cave',
                          'Swamp Left',
                          'Mire Left',
                          'Tower of Hera - Big Key Chest',
+                         'Eastern Palace - Big Key Chest',
+                         'Thieves\' Town - Big Chest',
+                         'Ice Palace - Big Chest',
+                         'Ganons Tower - Big Chest',
                          'Magic Bat']
 RelevantItems = ['Bow',
                  'Book of Mudora',
