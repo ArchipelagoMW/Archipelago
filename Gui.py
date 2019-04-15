@@ -217,7 +217,7 @@ def guiMain(args=None):
     heartcolorFrame = Frame(drowDownFrame)
     heartcolorVar = StringVar()
     heartcolorVar.set('red')
-    heartcolorOptionMenu = OptionMenu(heartcolorFrame, heartcolorVar, 'red', 'blue', 'green', 'yellow')
+    heartcolorOptionMenu = OptionMenu(heartcolorFrame, heartcolorVar, 'red', 'blue', 'green', 'yellow', 'random')
     heartcolorOptionMenu.pack(side=RIGHT)
     heartcolorLabel = Label(heartcolorFrame, text='Heart color')
     heartcolorLabel.pack(side=LEFT)
@@ -373,7 +373,7 @@ def guiMain(args=None):
     heartbeepLabel2.pack(side=LEFT)
 
     heartcolorFrame2 = Frame(drowDownFrame2)
-    heartcolorOptionMenu2 = OptionMenu(heartcolorFrame2, heartcolorVar, 'red', 'blue', 'green', 'yellow')
+    heartcolorOptionMenu2 = OptionMenu(heartcolorFrame2, heartcolorVar, 'red', 'blue', 'green', 'yellow', 'random')
     heartcolorOptionMenu2.pack(side=RIGHT)
     heartcolorLabel2 = Label(heartcolorFrame2, text='Heart color')
     heartcolorLabel2.pack(side=LEFT)

@@ -978,6 +978,8 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
     rom.write_byte(0x180033, {'off': 0x00, 'half': 0x40, 'quarter': 0x80, 'normal': 0x20, 'double': 0x10}[beep])
 
     # set heart color
+    if color == 'random':
+        color = random.choice(['red', 'blue', 'green', 'yellow'])
     rom.write_byte(0x6FA1E, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
     rom.write_byte(0x6FA20, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
     rom.write_byte(0x6FA22, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
@@ -1081,7 +1083,7 @@ def write_strings(rom, world):
                 this_hint = 'The big chest in Ganon\'s Tower contains ' + world.get_location(location).item.hint_text + '.'
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Thieves\' Town - Big Chest':
-                this_hint = 'The big chest in Thieves\' Tower contains ' + world.get_location(location).item.hint_text + '.'
+                this_hint = 'The big chest in Thieves\' Town contains ' + world.get_location(location).item.hint_text + '.'
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Ice Palace - Big Chest':
                 this_hint = 'The big chest in Ice Palace contains ' + world.get_location(location).item.hint_text + '.'
