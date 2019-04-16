@@ -54,6 +54,9 @@ class World(object):
         self.shuffle_ganon = shuffle_ganon
         self.fix_gtower_exit = self.shuffle_ganon
         self.can_access_trock_eyebridge = None
+        self.can_access_trock_front = None
+        self.can_access_trock_big_chest = None
+        self.can_access_trock_middle = None
         self.quickswap = quickswap
         self.fastmenu = fastmenu
         self.disable_music = disable_music
