@@ -425,7 +425,11 @@ def no_glitches_rules(world):
     set_rule(world.get_entrance('Dark Lake Hylia Drop (East)'), lambda state: state.has_Pearl() and state.has('Flippers'))
     set_rule(world.get_entrance('Dark Lake Hylia Teleporter'), lambda state: state.has_Pearl() and state.has('Flippers') and (state.has('Hammer') or state.can_lift_rocks()))
     set_rule(world.get_entrance('Dark Lake Hylia Ledge Drop'), lambda state: state.has_Pearl() and state.has('Flippers'))
-    add_rule(world.get_entrance('Ganons Tower (Hookshot Room)'), lambda state: state.has('Hookshot'))
+    add_rule(world.get_entrance('Ganons Tower (Hookshot Room)'), lambda state: state.has('Hookshot') or state.has_Boots())
+    add_rule(world.get_entrance('Ganons Tower (Double Switch Room)'), lambda state: state.has('Hookshot'))
+    DMs_room_chests = ['Ganons Tower - DMs Room - Top Left', 'Ganons Tower - DMs Room - Top Right', 'Ganons Tower - DMs Room - Bottom Left', 'Ganons Tower - DMs Room - Bottom Right']
+    for location in DMs_room_chests:
+        add_rule(world.get_location(location), lambda state: state.has('Hookshot'))
     set_rule(world.get_entrance('Paradox Cave Push Block Reverse'), lambda state: False)  # no glitches does not require block override
     set_rule(world.get_entrance('Paradox Cave Bomb Jump'), lambda state: False)
     set_rule(world.get_entrance('Skull Woods First Section Bomb Jump'), lambda state: False)
