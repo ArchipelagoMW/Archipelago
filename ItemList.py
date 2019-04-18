@@ -274,9 +274,6 @@ def generate_itempool(world):
 
     create_dynamic_shop_locations(world)
 
-    # distribute crystals
-    fill_prizes(world)
-
 take_any_locations = [
     'Snitch Lady (East)', 'Snitch Lady (West)', 'Bush Covered House', 'Light World Bomb Hut',
     'Fortune Teller (Light)', 'Lake Hylia Fortune Teller', 'Lumberjack House', 'Bonk Fairy (Light)',

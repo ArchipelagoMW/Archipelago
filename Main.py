@@ -13,7 +13,7 @@ from Rom import patch_rom, Sprite, LocalRom, JsonRom
 from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
 from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, flood_items
-from ItemList import generate_itempool, difficulties
+from ItemList import generate_itempool, difficulties, fill_prizes
 from Utils import output_path
 
 __version__ = '0.6.1'
@@ -62,13 +62,17 @@ def main(args, seed=None):
     link_entrances(world)
     mark_light_world_regions(world)
 
+    logger.info('Generating Item Pool.')
+
+    generate_itempool(world)
+
     logger.info('Calculating Access Rules.')
 
     set_rules(world)
 
-    logger.info('Generating Item Pool.')
+    logger.info('Placing Dungeon Prizes.')
 
-    generate_itempool(world)
+    fill_prizes(world)
 
     logger.info('Placing Dungeon Items.')
 
@@ -151,6 +155,9 @@ def copy_world(world):
     ret.dark_world_light_cone = world.dark_world_light_cone
     ret.seed = world.seed
     ret.can_access_trock_eyebridge = world.can_access_trock_eyebridge
+    ret.can_access_trock_front = world.can_access_trock_front
+    ret.can_access_trock_big_chest = world.can_access_trock_big_chest
+    ret.can_access_trock_middle = world.can_access_trock_middle
     ret.can_take_damage = world.can_take_damage
     ret.difficulty_requirements = world.difficulty_requirements
     ret.fix_fake_world = world.fix_fake_world
@@ -271,7 +278,8 @@ def create_playthrough(world):
             old_item = location.item
             location.item = None
             state.remove(old_item)
-            if world.can_beat_game(state_cache[num]):
+            ##if world.can_beat_game(state_cache[num]):
+            if world.can_beat_game():
                 to_delete.append(location)
             else:
                 # still required, got to keep it around

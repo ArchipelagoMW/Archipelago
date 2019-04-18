@@ -7,7 +7,12 @@ def link_entrances(world):
     connect_two_way(world, 'Links House', 'Links House Exit') # unshuffled. For now
     connect_exit(world, 'Chris Houlihan Room Exit', 'Links House') # should always match link's house, except for plandos
 
-    unbias_some_entrances()
+    Dungeon_Exits = Dungeon_Exits_Base.copy()
+    Cave_Exits = Cave_Exits_Base.copy()
+    Old_Man_House = Old_Man_House_Base.copy()
+    Cave_Three_Exits = Cave_Three_Exits_Base.copy()
+
+    unbias_some_entrances(Dungeon_Exits, Cave_Exits, Old_Man_House, Cave_Three_Exits)
 
     # setup mandatory connections
     for exitname, regionname in mandatory_connections:
@@ -1329,7 +1334,7 @@ def simple_shuffle_dungeons(world):
         connect_two_way(world, 'Dark Death Mountain Ledge (West)', 'Turtle Rock Ledge Exit (West)')
         connect_two_way(world, 'Dark Death Mountain Ledge (East)', 'Turtle Rock Ledge Exit (East)')
 
-def unbias_some_entrances():
+def unbias_some_entrances(Dungeon_Exits, Cave_Exits, Old_Man_House, Cave_Three_Exits):
     def shuffle_lists_in_list(ls):
         for i, item in enumerate(ls):
             if isinstance(item, list):
@@ -1392,7 +1397,7 @@ DW_Dungeon_Entrances = ['Thieves Town',
 DW_Dungeon_Entrances_Must_Exit = ['Dark Death Mountain Ledge (East)',
                                   'Turtle Rock Isolated Ledge Entrance']
 
-Dungeon_Exits = [['Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)'],
+Dungeon_Exits_Base = [['Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)'],
                  'Desert Palace Exit (North)',
                  'Eastern Palace Exit',
                  'Tower of Hera Exit',
@@ -1422,21 +1427,20 @@ Old_Man_Entrances = ['Old Man Cave (East)',
                      'Spectacle Rock Cave Peak',
                      'Spectacle Rock Cave (Bottom)']
 
-Old_Man_House = [['Old Man House Exit (Bottom)', 'Old Man House Exit (Top)']]
+Old_Man_House_Base = [['Old Man House Exit (Bottom)', 'Old Man House Exit (Top)']]
 
-
-Cave_Exits = [['Elder House Exit (East)', 'Elder House Exit (West)'],
+Cave_Exits_Base = [['Elder House Exit (East)', 'Elder House Exit (West)'],
               ['Two Brothers House Exit (East)', 'Two Brothers House Exit (West)'],
               ['Death Mountain Return Cave Exit (West)', 'Death Mountain Return Cave Exit (East)'],
               ['Fairy Ascension Cave Exit (Bottom)', 'Fairy Ascension Cave Exit (Top)'],
               ['Bumper Cave Exit (Top)', 'Bumper Cave Exit (Bottom)'],
               ['Hookshot Cave Exit (South)', 'Hookshot Cave Exit (North)']]
 
-Cave_Exits += [('Superbunny Cave Exit (Bottom)', 'Superbunny Cave Exit (Top)'),
+Cave_Exits_Base += [('Superbunny Cave Exit (Bottom)', 'Superbunny Cave Exit (Top)'),
               ('Spiral Cave Exit (Top)', 'Spiral Cave Exit')]
-    
 
-Cave_Three_Exits = [('Spectacle Rock Cave Exit (Peak)', 'Spectacle Rock Cave Exit (Top)',
+
+Cave_Three_Exits_Base = [('Spectacle Rock Cave Exit (Peak)', 'Spectacle Rock Cave Exit (Top)',
  'Spectacle Rock Cave Exit'),
                     ['Paradox Cave Exit (Top)', 'Paradox Cave Exit (Middle)','Paradox Cave Exit (Bottom)']]
 

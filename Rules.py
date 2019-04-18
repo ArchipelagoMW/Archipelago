@@ -56,7 +56,6 @@ def set_defeat_dungeon_boss_rule(location):
 def set_always_allow(spot, rule):
     spot.always_allow = rule
 
-
 def add_rule(spot, rule, combine='and'):
     old_rule = spot.access_rule
     if combine == 'or':
@@ -572,7 +571,7 @@ def set_trock_key_rules(world):
         set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (North)'), lambda state: state.has_key('Small Key (Turtle Rock)', 2))
         set_rule(world.get_entrance('Turtle Rock Pokey Room'), lambda state: state.has_key('Small Key (Turtle Rock)', 1))
         set_rule(world.get_location('Turtle Rock - Big Key Chest'), lambda state: state.has_key('Small Key (Turtle Rock)', tr_big_key_chest_keys_needed(state)))
-        set_always_allow(world.get_location('Turtle Rock - Big Key Chest'), lambda state, item: item.name == 'Small Key (Turtle Rock)')
+        set_always_allow(world.get_location('Turtle Rock - Big Key Chest'), lambda state, item: item.name == 'Small Key (Turtle Rock)' and state.has_key('Small Key (Turtle Rock)', 2))
         non_big_key_locations += ['Turtle Rock - Crystaroller Room', 'Turtle Rock - Eye Bridge - Bottom Left',
                                   'Turtle Rock - Eye Bridge - Bottom Right', 'Turtle Rock - Eye Bridge - Top Left',
                                   'Turtle Rock - Eye Bridge - Top Right']
@@ -585,7 +584,6 @@ def set_trock_key_rules(world):
                                   'Turtle Rock - Eye Bridge - Top Right']
         if not world.keysanity:
             non_big_key_locations += ['Turtle Rock - Big Key Chest']
-
     else:
         set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (South)'), lambda state: state.has_key('Small Key (Turtle Rock)', 2) if item_in_locations(state, 'Big Key (Turtle Rock)', ['Turtle Rock - Compass Chest', 'Turtle Rock - Roller Room - Left', 'Turtle Rock - Roller Room - Right']) else state.has_key('Small Key (Turtle Rock)', 4))
         set_rule(world.get_location('Turtle Rock - Big Key Chest'), lambda state: (state.has_key('Small Key (Turtle Rock)', 4) or item_name(state, 'Turtle Rock - Big Key Chest') == 'Small Key (Turtle Rock)'))
