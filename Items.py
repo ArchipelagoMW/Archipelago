@@ -3,7 +3,7 @@ import logging
 from BaseClasses import Item
 
 
-def ItemFactory(items):
+def ItemFactory(items, player):
     ret = []
     singleton = False
     if isinstance(items, str):
@@ -12,7 +12,7 @@ def ItemFactory(items):
     for item in items:
         if item in item_table:
             advancement, priority, type, code, pedestal_hint, pedestal_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit, hint_text = item_table[item]
-            ret.append(Item(item, advancement, priority, type, code, pedestal_hint, pedestal_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit, hint_text))
+            ret.append(Item(item, advancement, priority, type, code, pedestal_hint, pedestal_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit, hint_text, player))
         else:
             logging.getLogger('').warning('Unknown Item: %s', item)
             return None

@@ -6,13 +6,13 @@ import os
 import struct
 import random
 
-from BaseClasses import ShopType
+from BaseClasses import ShopType, Region, Location, Item
 from Dungeons import dungeon_music_addresses
 from Text import MultiByteTextMapper, text_addresses, Credits, TextTable
 from Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts, junk_texts
 from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
 from Utils import local_path, int16_as_bytes, int32_as_bytes
-from Items import ItemFactory
+from Items import ItemFactory, item_table
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
@@ -22,6 +22,7 @@ RANDOMIZERBASEHASH = 'cb560220b7b1b8202e92381aee19cd36'
 class JsonRom(object):
 
     def __init__(self):
+        self.name = None
         self.patches = {}
 
     def write_byte(self, address, value):
@@ -52,6 +53,7 @@ class JsonRom(object):
 class LocalRom(object):
 
     def __init__(self, file, patch=True):
+        self.name = None
         with open(file, 'rb') as stream:
             self.buffer = read_rom(stream)
         if patch:
@@ -273,15 +275,18 @@ class Sprite(object):
         # split into palettes of 15 colors
         return array_chunk(palette_as_colors, 15)
 
-def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
+def patch_rom(world, player, rom, hashtable, beep='normal', color='red', sprite=None):
+    random.seed(world.rom_seeds[player])
     # patch items
     for location in world.get_locations():
-        itemid = location.item.code if location.item is not None else 0x5A
-
-        if itemid is None or location.address is None:
+        if location.player != player:
             continue
 
-        locationaddress = location.address
+        itemid = location.item.code if location.item is not None else 0x5A
+
+        if location.address is None:
+            continue
+
         if not location.crystal:
             # Keys in their native dungeon should use the orignal item code for keys
             if location.parent_region.dungeon:
@@ -291,10 +296,10 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
                         itemid = 0x32
                     if location.item.type == "SmallKey":
                         itemid = 0x24
-            rom.write_byte(locationaddress, itemid)
+            rom.write_byte(location.address, itemid)
         else:
             # crystals
-            for address, value in zip(locationaddress, itemid):
+            for address, value in zip(location.address, itemid):
                 rom.write_byte(address, value)
 
             # patch music
@@ -312,7 +317,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     # patch entrance/exits/holes
     for region in world.regions:
         for exit in region.exits:
-            if exit.target is not None:
+            if exit.target is not None and exit.player == player:
                 if isinstance(exit.addresses, tuple):
                     offset = exit.target
                     room_id, ow_area, vram_loc, scroll_y, scroll_x, link_y, link_x, camera_y, camera_x, unknown_1, unknown_2, door_1, door_2 = exit.addresses
@@ -360,25 +365,25 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
                     # patch door table
                     rom.write_byte(0xDBB73 + exit.addresses, exit.target)
 
-    write_custom_shops(rom, world)
+    write_custom_shops(rom, world, player)
 
     # patch medallion requirements
-    if world.required_medallions[0] == 'Bombos':
+    if world.required_medallions[player][0] == 'Bombos':
         rom.write_byte(0x180022, 0x00)  # requirement
         rom.write_byte(0x4FF2, 0x31)  # sprite
         rom.write_byte(0x50D1, 0x80)
         rom.write_byte(0x51B0, 0x00)
-    elif world.required_medallions[0] == 'Quake':
+    elif world.required_medallions[player][0] == 'Quake':
         rom.write_byte(0x180022, 0x02)  # requirement
         rom.write_byte(0x4FF2, 0x31)  # sprite
         rom.write_byte(0x50D1, 0x88)
         rom.write_byte(0x51B0, 0x00)
-    if world.required_medallions[1] == 'Bombos':
+    if world.required_medallions[player][1] == 'Bombos':
         rom.write_byte(0x180023, 0x00)  # requirement
         rom.write_byte(0x5020, 0x31)  # sprite
         rom.write_byte(0x50FF, 0x90)
         rom.write_byte(0x51DE, 0x00)
-    elif world.required_medallions[1] == 'Ether':
+    elif world.required_medallions[player][1] == 'Ether':
         rom.write_byte(0x180023, 0x01)  # requirement
         rom.write_byte(0x5020, 0x31)  # sprite
         rom.write_byte(0x50FF, 0x98)
@@ -408,8 +413,8 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_byte(0x18003A, 0x01 if world.dark_world_light_cone else 0x00)
 
     GREEN_TWENTY_RUPEES = 0x47
-    TRIFORCE_PIECE = ItemFactory('Triforce Piece').code
-    GREEN_CLOCK = ItemFactory('Green Clock').code
+    TRIFORCE_PIECE = ItemFactory('Triforce Piece', player).code
+    GREEN_CLOCK = ItemFactory('Green Clock', player).code
 
     rom.write_byte(0x18004F, 0x01) # Byrna Invulnerability: on
     # handle difficulty
@@ -713,7 +718,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     # assorted fixes
     rom.write_byte(0x1800A2, 0x01)  # remain in real dark world when dying in dark word dungion before killing aga1
     rom.write_byte(0x180169, 0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
-    rom.write_byte(0x180171, 0x01 if world.ganon_at_pyramid else 0x00)  # Enable respawning on pyramid after ganon death
+    rom.write_byte(0x180171, 0x01 if world.ganon_at_pyramid[player] else 0x00)  # Enable respawning on pyramid after ganon death
     rom.write_byte(0x180173, 0x01) # Bob is enabled
     rom.write_byte(0x180168, 0x08)  # Spike Cave Damage
     rom.write_bytes(0x18016B, [0x04, 0x02, 0x01]) #Set spike cave and MM spike room Cape usage
@@ -801,18 +806,19 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_bytes(0x6D313, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
 
     # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
-    rom.write_byte(0x18003D, 0x01 if world.swamp_patch_required else 0x00)
+    rom.write_byte(0x18003D, 0x01 if world.swamp_patch_required[player] else 0x00)
 
-    # powder patch: remove the need to leave the scrren after powder, since it causes problems for potion shop at race game
+    # powder patch: remove the need to leave the screen after powder, since it causes problems for potion shop at race game
     # temporarally we are just nopping out this check we will conver this to a rom fix soon.
-    rom.write_bytes(0x02F539, [0xEA, 0xEA, 0xEA, 0xEA, 0xEA] if world.powder_patch_required else [0xAD, 0xBF, 0x0A, 0xF0, 0x4F])
+    rom.write_bytes(0x02F539, [0xEA, 0xEA, 0xEA, 0xEA, 0xEA] if world.powder_patch_required[player] else [0xAD, 0xBF, 0x0A, 0xF0, 0x4F])
 
     # allow smith into multi-entrance caves in appropriate shuffles
     if world.shuffle in ['restricted', 'full', 'crossed', 'insanity']:
         rom.write_byte(0x18004C, 0x01)
 
     # set correct flag for hera basement item
-    if world.get_location('Tower of Hera - Basement Cage').item is not None and world.get_location('Tower of Hera - Basement Cage').item.name == 'Small Key (Tower of Hera)':
+    hera_basement = world.get_location('Tower of Hera - Basement Cage', player)
+    if hera_basement.item is not None and hera_basement.item.name == 'Small Key (Tower of Hera)' and hera_basement.item.player == player:
         rom.write_byte(0x4E3BB, 0xE4)
     else:
         rom.write_byte(0x4E3BB, 0xEB)
@@ -827,11 +833,13 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0xFED31, 0x2A)  # preopen bombable exit
         rom.write_byte(0xFEE41, 0x2A)  # preopen bombable exit
 
-    write_strings(rom, world)
+    write_strings(rom, world, player)
 
     # set rom name
     # 21 bytes
-    rom.write_bytes(0x7FC0, bytearray('ER_062_%09d\0' % world.seed, 'utf8') + world.option_identifier.to_bytes(4, 'big'))
+    rom.name = bytearray('ER062%09d' % world.seed, 'utf8') + world.option_identifier(7, player).to_bytes(7, 'big')
+    assert(len(rom.name) == 21)
+    rom.write_bytes(0x7FC0, rom.name)
 
     # Write title screen Code
     hashint = int(rom.get_hash(), 16)
@@ -848,8 +856,8 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
 
     return rom
 
-def write_custom_shops(rom, world):
-    shops = [shop for shop in world.shops if shop.replaceable and shop.active]
+def write_custom_shops(rom, world, player):
+    shops = [shop for shop in world.shops if shop.replaceable and shop.active and shop.region.player == player]
 
     shop_data = bytearray()
     items_data = bytearray()
@@ -870,7 +878,7 @@ def write_custom_shops(rom, world):
         for item in shop.inventory:
             if item is None:
                 break
-            item_data = [shop_id, ItemFactory(item['item']).code] + int16_as_bytes(item['price']) + [item['max'], ItemFactory(item['replacement']).code if item['replacement'] else 0xFF] + int16_as_bytes(item['replacement_price'])
+            item_data = [shop_id, ItemFactory(item['item'], player).code] + int16_as_bytes(item['price']) + [item['max'], ItemFactory(item['replacement'], player).code if item['replacement'] else 0xFF] + int16_as_bytes(item['replacement_price'])
             items_data.extend(item_data)
 
     rom.write_bytes(0x184800, shop_data)
@@ -1013,7 +1021,7 @@ def write_string_to_rom(rom, target, string):
     rom.write_bytes(address, MultiByteTextMapper.convert(string, maxbytes))
 
 
-def write_strings(rom, world):
+def write_strings(rom, world, player):
     tt = TextTable()
     tt.removeUnwantedText()
 
@@ -1021,6 +1029,17 @@ def write_strings(rom, world):
     if world.shuffle in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
         tt['kakariko_flophouse_man_no_flippers'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
         tt['kakariko_flophouse_man'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
+
+    def hint_text(dest, ped_hint=False):
+        hint = dest.hint_text if not ped_hint else dest.pedestal_hint_text
+        if dest.player != player:
+            if ped_hint:
+                hint += " for p%d!" % dest.player
+            elif type(dest) in [Region, Location]:
+                hint += " in p%d's world" % dest.player
+            elif type(dest) is Item:
+                hint += " for p%d" % dest.player
+        return hint
 
     # For hints, first we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
     if world.hints:
@@ -1031,16 +1050,17 @@ def write_strings(rom, world):
             entrances_to_hint.update({'Ganons Tower': 'Ganon\'s Tower'})
         hint_locations = HintLocations.copy()
         random.shuffle(hint_locations)
-        all_entrances = world.get_entrances()
+        all_entrances = [entrance for entrance in world.get_entrances() if entrance.player == player]
         random.shuffle(all_entrances)
-        hint_count = 4
+        hint_count = 4 if world.shuffle != 'vanilla' else 0
         for entrance in all_entrances:
             if entrance.name in entrances_to_hint:
-                this_hint = entrances_to_hint[entrance.name] + ' leads to ' + entrance.connected_region.hint_text + '.'
-                tt[hint_locations.pop(0)] = this_hint
-                entrances_to_hint.pop(entrance.name)
-                hint_count -= 1
-                if hint_count < 1:
+                if hint_count > 0:
+                    this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(entrance.connected_region) + '.'
+                    tt[hint_locations.pop(0)] = this_hint
+                    entrances_to_hint.pop(entrance.name)
+                    hint_count -= 1
+                else:
                     break
 
         entrances_to_hint.update(OtherEntrances)
@@ -1048,57 +1068,58 @@ def write_strings(rom, world):
             entrances_to_hint.update(InsanityEntrances)
             if world.shuffle_ganon:
                 entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
-        hint_count = 4
+        hint_count = 4 if world.shuffle != 'vanilla' else 0
         for entrance in all_entrances:
             if entrance.name in entrances_to_hint:
-                this_hint = entrances_to_hint[entrance.name] + ' leads to ' + entrance.connected_region.hint_text + '.'
-                tt[hint_locations.pop(0)] = this_hint
-                entrances_to_hint.pop(entrance.name)
-                hint_count -= 1
-                if hint_count < 1:
+                if hint_count > 0:
+                    this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(entrance.connected_region) + '.'
+                    tt[hint_locations.pop(0)] = this_hint
+                    entrances_to_hint.pop(entrance.name)
+                    hint_count -= 1
+                else:
                     break
 
         # Next we write a few hints for specific inconvenient locations. We don't make many because in entrance this is highly unpredictable.
         locations_to_hint = InconvenientLocations.copy()
         random.shuffle(locations_to_hint)
-        hint_count = 3
-        del locations_to_hint[hint_count:]   
+        hint_count = 3 if world.shuffle != 'vanilla' else 4
+        del locations_to_hint[hint_count:]
         for location in locations_to_hint:
             if location == 'Swamp Left':
                 if random.randint(0, 1) == 0:
-                    first_item = world.get_location('Swamp Palace - West Chest').item.hint_text
-                    second_item = world.get_location('Swamp Palace - Big Key Chest').item.hint_text
+                    first_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
+                    second_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
                 else:
-                    second_item = world.get_location('Swamp Palace - West Chest').item.hint_text
-                    first_item = world.get_location('Swamp Palace - Big Key Chest').item.hint_text
+                    second_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
+                    first_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
                 this_hint = ('The westmost chests in Swamp Palace contain ' + first_item + ' and ' + second_item + '.')
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Mire Left':
                 if random.randint(0, 1) == 0:
-                    first_item = world.get_location('Misery Mire - Compass Chest').item.hint_text
-                    second_item = world.get_location('Misery Mire - Big Key Chest').item.hint_text
+                    first_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
+                    second_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
                 else:
-                    second_item = world.get_location('Misery Mire - Compass Chest').item.hint_text
-                    first_item = world.get_location('Misery Mire - Big Key Chest').item.hint_text
+                    second_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
+                    first_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
                 this_hint = ('The westmost chests in Misery Mire contain ' + first_item + ' and ' + second_item + '.')
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Tower of Hera - Big Key Chest':
-                this_hint = 'Waiting in the Tower of Hera basement leads to ' + world.get_location(location).item.hint_text + '.'
+                this_hint = 'Waiting in the Tower of Hera basement leads to ' + hint_text(world.get_location(location, player).item) + '.'
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Ganons Tower - Big Chest':
-                this_hint = 'The big chest in Ganon\'s Tower contains ' + world.get_location(location).item.hint_text + '.'
+                this_hint = 'The big chest in Ganon\'s Tower contains ' + hint_text(world.get_location(location, player).item) + '.'
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Thieves\' Town - Big Chest':
-                this_hint = 'The big chest in Thieves\' Town contains ' + world.get_location(location).item.hint_text + '.'
+                this_hint = 'The big chest in Thieves\' Town contains ' + hint_text(world.get_location(location, player).item) + '.'
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Ice Palace - Big Chest':
-                this_hint = 'The big chest in Ice Palace contains ' + world.get_location(location).item.hint_text + '.'
+                this_hint = 'The big chest in Ice Palace contains ' + hint_text(world.get_location(location, player).item) + '.'
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Eastern Palace - Big Key Chest':
-                this_hint = 'The antifairy guarded chest in Eastern Palace contains ' + world.get_location(location).item.hint_text + '.'
+                this_hint = 'The antifairy guarded chest in Eastern Palace contains ' + hint_text(world.get_location(location, player).item) + '.'
                 tt[hint_locations.pop(0)] = this_hint
             else:
-                this_hint = location + ' leads to ' + world.get_location(location).item.hint_text + '.'
+                this_hint = location + ' leads to ' + hint_text(world.get_location(location, player).item) + '.'
                 tt[hint_locations.pop(0)] = this_hint
 
         # Lastly we write hints to show where certain interesting items are. It is done the way it is to re-use the silver code and also to give one hint per each type of item regardless of how many exist. This supports many settings well.
@@ -1106,17 +1127,15 @@ def write_strings(rom, world):
         if world.keysanity:
             items_to_hint.extend(KeysanityItems)
         random.shuffle(items_to_hint)
-        hint_count = 5
-        while(hint_count > 0):
+        hint_count = 5 if world.shuffle != 'vanilla' else 7
+        while hint_count > 0:
             this_item = items_to_hint.pop(0)
-            this_location = world.find_items(this_item)
+            this_location = world.find_items(this_item, player)
             random.shuffle(this_location)
             if this_location:
-                this_hint = this_location[0].item.hint_text + ' can be found ' + this_location[0].hint_text + '.'
+                this_hint = this_location[0].item.hint_text + ' can be found ' + hint_text(this_location[0]) + '.'
                 tt[hint_locations.pop(0)] = this_hint
                 hint_count -= 1
-            else:
-                continue
 
         # All remaining hint slots are filled with junk hints. It is done this way to ensure the same junk hint isn't selected twice.
         junk_hints = junk_texts.copy()
@@ -1125,16 +1144,16 @@ def write_strings(rom, world):
             tt[location] = junk_hints.pop(0)
 
    # We still need the older hints of course. Those are done here.
-    silverarrows = world.find_items('Silver Arrows')
+    silverarrows = world.find_items('Silver Arrows', player)
     random.shuffle(silverarrows)
-    silverarrow_hint = (' %s?' % silverarrows[0].hint_text.replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
+    silverarrow_hint = (' %s?' % hint_text(silverarrows[0]).replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
     tt['ganon_phase_3'] = 'Did you find the silver arrows%s' % silverarrow_hint
 
-    crystal5 = world.find_items('Crystal 5')[0]
-    crystal6 = world.find_items('Crystal 6')[0]
+    crystal5 = world.find_items('Crystal 5', player)[0]
+    crystal6 = world.find_items('Crystal 6', player)[0]
     tt['bomb_shop'] = 'Big Bomb?\nMy supply is blocked until you clear %s and %s.' % (crystal5.hint_text, crystal6.hint_text)
 
-    greenpendant = world.find_items('Green Pendant')[0]
+    greenpendant = world.find_items('Green Pendant', player)[0]
     tt['sahasrahla_bring_courage'] = 'I lost my family heirloom in %s' % greenpendant.hint_text
 
     tt['uncle_leaving_text'] = Uncle_texts[random.randint(0, len(Uncle_texts) - 1)]
@@ -1154,32 +1173,32 @@ def write_strings(rom, world):
         tt['ganon_phase_3_alt'] = 'Got wax in\nyour ears?\nI can not die!'
     tt['kakariko_tavern_fisherman'] = TavernMan_texts[random.randint(0, len(TavernMan_texts) - 1)]
 
-    pedestalitem = world.get_location('Master Sword Pedestal').item
-    pedestal_text = 'Some Hot Air' if pedestalitem is None else pedestalitem.pedestal_hint_text if pedestalitem.pedestal_hint_text is not None else 'Unknown Item'
+    pedestalitem = world.get_location('Master Sword Pedestal', player).item
+    pedestal_text = 'Some Hot Air' if pedestalitem is None else hint_text(pedestalitem, True) if pedestalitem.pedestal_hint_text is not None else 'Unknown Item'
     tt['mastersword_pedestal_translated'] = pedestal_text
     pedestal_credit_text = 'and the Hot Air' if pedestalitem is None else pedestalitem.pedestal_credit_text if pedestalitem.pedestal_credit_text is not None else 'and the Unknown Item'
 
-    etheritem = world.get_location('Ether Tablet').item
-    ether_text = 'Some Hot Air' if etheritem is None else etheritem.pedestal_hint_text if etheritem.pedestal_hint_text is not None else 'Unknown Item'
+    etheritem = world.get_location('Ether Tablet', player).item
+    ether_text = 'Some Hot Air' if etheritem is None else hint_text(etheritem, True) if etheritem.pedestal_hint_text is not None else 'Unknown Item'
     tt['tablet_ether_book'] = ether_text
-    bombositem = world.get_location('Bombos Tablet').item
-    bombos_text = 'Some Hot Air' if bombositem is None else bombositem.pedestal_hint_text if bombositem.pedestal_hint_text is not None else 'Unknown Item'
+    bombositem = world.get_location('Bombos Tablet', player).item
+    bombos_text = 'Some Hot Air' if bombositem is None else hint_text(bombositem, True) if bombositem.pedestal_hint_text is not None else 'Unknown Item'
     tt['tablet_bombos_book'] = bombos_text
 
     rom.write_bytes(0xE0000, tt.getBytes())
 
     credits = Credits()
 
-    sickkiditem = world.get_location('Sick Kid').item
+    sickkiditem = world.get_location('Sick Kid', player).item
     sickkiditem_text = random.choice(SickKid_texts) if sickkiditem is None or sickkiditem.sickkid_credit_text is None else sickkiditem.sickkid_credit_text
 
-    zoraitem = world.get_location('King Zora').item
+    zoraitem = world.get_location('King Zora', player).item
     zoraitem_text = random.choice(Zora_texts) if zoraitem is None or zoraitem.zora_credit_text is None else zoraitem.zora_credit_text
 
-    magicshopitem = world.get_location('Potion Shop').item
+    magicshopitem = world.get_location('Potion Shop', player).item
     magicshopitem_text = random.choice(MagicShop_texts) if magicshopitem is None or magicshopitem.magicshop_credit_text is None else magicshopitem.magicshop_credit_text
 
-    fluteboyitem = world.get_location('Flute Spot').item
+    fluteboyitem = world.get_location('Flute Spot', player).item
     fluteboyitem_text = random.choice(FluteBoy_texts) if fluteboyitem is None or fluteboyitem.fluteboy_credit_text is None else fluteboyitem.fluteboy_credit_text
 
     credits.update_credits_line('castle', 0, random.choice(KingsReturn_texts))

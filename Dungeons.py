@@ -6,44 +6,45 @@ from Fill import fill_restrictive
 from Items import ItemFactory
 
 
-def create_dungeons(world):
+def create_dungeons(world, player):
     def make_dungeon(name, default_boss, dungeon_regions, big_key, small_keys, dungeon_items):
-        dungeon = Dungeon(name, dungeon_regions, big_key, [] if world.retro else small_keys, dungeon_items)
-        dungeon.boss = BossFactory(default_boss)
+        dungeon = Dungeon(name, dungeon_regions, big_key, [] if world.retro else small_keys, dungeon_items, player)
+        dungeon.boss = BossFactory(default_boss, player)
         for region in dungeon.regions:
-            world.get_region(region).dungeon = dungeon
+            world.get_region(region, player).dungeon = dungeon
         return dungeon
 
-    ES = make_dungeon('Hyrule Castle', None, ['Hyrule Castle', 'Sewers', 'Sewer Drop', 'Sewers (Dark)', 'Sanctuary'], None, [ItemFactory('Small Key (Escape)')], [ItemFactory('Map (Escape)')])
-    EP = make_dungeon('Eastern Palace', 'Armos Knights', ['Eastern Palace'], ItemFactory('Big Key (Eastern Palace)'), [], ItemFactory(['Map (Eastern Palace)', 'Compass (Eastern Palace)']))
-    DP = make_dungeon('Desert Palace', 'Lanmolas', ['Desert Palace North', 'Desert Palace Main (Inner)', 'Desert Palace Main (Outer)', 'Desert Palace East'], ItemFactory('Big Key (Desert Palace)'), [ItemFactory('Small Key (Desert Palace)')], ItemFactory(['Map (Desert Palace)', 'Compass (Desert Palace)']))
-    ToH = make_dungeon('Tower of Hera', 'Moldorm', ['Tower of Hera (Bottom)', 'Tower of Hera (Basement)', 'Tower of Hera (Top)'], ItemFactory('Big Key (Tower of Hera)'), [ItemFactory('Small Key (Tower of Hera)')], ItemFactory(['Map (Tower of Hera)', 'Compass (Tower of Hera)']))
-    AT = make_dungeon('Agahnims Tower', 'Agahnim', ['Agahnims Tower', 'Agahnim 1'], None, ItemFactory(['Small Key (Agahnims Tower)'] * 2), [])
-    PoD = make_dungeon('Palace of Darkness', 'Helmasaur King', ['Palace of Darkness (Entrance)', 'Palace of Darkness (Center)', 'Palace of Darkness (Big Key Chest)', 'Palace of Darkness (Bonk Section)', 'Palace of Darkness (North)', 'Palace of Darkness (Maze)', 'Palace of Darkness (Harmless Hellway)', 'Palace of Darkness (Final Section)'], ItemFactory('Big Key (Palace of Darkness)'), ItemFactory(['Small Key (Palace of Darkness)'] * 6), ItemFactory(['Map (Palace of Darkness)', 'Compass (Palace of Darkness)']))
-    TT = make_dungeon('Thieves Town', 'Blind', ['Thieves Town (Entrance)', 'Thieves Town (Deep)', 'Blind Fight'], ItemFactory('Big Key (Thieves Town)'), [ItemFactory('Small Key (Thieves Town)')], ItemFactory(['Map (Thieves Town)', 'Compass (Thieves Town)']))
-    SW = make_dungeon('Skull Woods', 'Mothula', ['Skull Woods Final Section (Entrance)', 'Skull Woods First Section', 'Skull Woods Second Section', 'Skull Woods Second Section (Drop)', 'Skull Woods Final Section (Mothula)', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)'], ItemFactory('Big Key (Skull Woods)'), ItemFactory(['Small Key (Skull Woods)'] * 2), ItemFactory(['Map (Skull Woods)', 'Compass (Skull Woods)']))
-    SP = make_dungeon('Swamp Palace', 'Arrghus', ['Swamp Palace (Entrance)', 'Swamp Palace (First Room)', 'Swamp Palace (Starting Area)', 'Swamp Palace (Center)', 'Swamp Palace (North)'], ItemFactory('Big Key (Swamp Palace)'), [ItemFactory('Small Key (Swamp Palace)')], ItemFactory(['Map (Swamp Palace)', 'Compass (Swamp Palace)']))
-    IP = make_dungeon('Ice Palace', 'Kholdstare', ['Ice Palace (Entrance)', 'Ice Palace (Main)', 'Ice Palace (East)', 'Ice Palace (East Top)', 'Ice Palace (Kholdstare)'], ItemFactory('Big Key (Ice Palace)'), ItemFactory(['Small Key (Ice Palace)'] * 2), ItemFactory(['Map (Ice Palace)', 'Compass (Ice Palace)']))
-    MM = make_dungeon('Misery Mire', 'Vitreous', ['Misery Mire (Entrance)', 'Misery Mire (Main)', 'Misery Mire (West)', 'Misery Mire (Final Area)', 'Misery Mire (Vitreous)'], ItemFactory('Big Key (Misery Mire)'), ItemFactory(['Small Key (Misery Mire)'] * 3), ItemFactory(['Map (Misery Mire)', 'Compass (Misery Mire)']))
-    TR = make_dungeon('Turtle Rock', 'Trinexx', ['Turtle Rock (Entrance)', 'Turtle Rock (First Section)', 'Turtle Rock (Chain Chomp Room)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Turtle Rock (Crystaroller Room)', 'Turtle Rock (Dark Room)', 'Turtle Rock (Eye Bridge)', 'Turtle Rock (Trinexx)'], ItemFactory('Big Key (Turtle Rock)'), ItemFactory(['Small Key (Turtle Rock)'] * 4), ItemFactory(['Map (Turtle Rock)', 'Compass (Turtle Rock)']))
-    GT = make_dungeon('Ganons Tower', 'Agahnim2', ['Ganons Tower (Entrance)', 'Ganons Tower (Tile Room)', 'Ganons Tower (Compass Room)', 'Ganons Tower (Hookshot Room)', 'Ganons Tower (Map Room)', 'Ganons Tower (Firesnake Room)', 'Ganons Tower (Teleport Room)', 'Ganons Tower (Bottom)', 'Ganons Tower (Top)', 'Ganons Tower (Before Moldorm)', 'Ganons Tower (Moldorm)', 'Agahnim 2'], ItemFactory('Big Key (Ganons Tower)'), ItemFactory(['Small Key (Ganons Tower)'] * 4), ItemFactory(['Map (Ganons Tower)', 'Compass (Ganons Tower)']))
+    ES = make_dungeon('Hyrule Castle', None, ['Hyrule Castle', 'Sewers', 'Sewer Drop', 'Sewers (Dark)', 'Sanctuary'], None, [ItemFactory('Small Key (Escape)', player)], [ItemFactory('Map (Escape)', player)])
+    EP = make_dungeon('Eastern Palace', 'Armos Knights', ['Eastern Palace'], ItemFactory('Big Key (Eastern Palace)', player), [], ItemFactory(['Map (Eastern Palace)', 'Compass (Eastern Palace)'], player))
+    DP = make_dungeon('Desert Palace', 'Lanmolas', ['Desert Palace North', 'Desert Palace Main (Inner)', 'Desert Palace Main (Outer)', 'Desert Palace East'], ItemFactory('Big Key (Desert Palace)', player), [ItemFactory('Small Key (Desert Palace)', player)], ItemFactory(['Map (Desert Palace)', 'Compass (Desert Palace)'], player))
+    ToH = make_dungeon('Tower of Hera', 'Moldorm', ['Tower of Hera (Bottom)', 'Tower of Hera (Basement)', 'Tower of Hera (Top)'], ItemFactory('Big Key (Tower of Hera)', player), [ItemFactory('Small Key (Tower of Hera)', player)], ItemFactory(['Map (Tower of Hera)', 'Compass (Tower of Hera)'], player))
+    AT = make_dungeon('Agahnims Tower', 'Agahnim', ['Agahnims Tower', 'Agahnim 1'], None, ItemFactory(['Small Key (Agahnims Tower)'] * 2, player), [])
+    PoD = make_dungeon('Palace of Darkness', 'Helmasaur King', ['Palace of Darkness (Entrance)', 'Palace of Darkness (Center)', 'Palace of Darkness (Big Key Chest)', 'Palace of Darkness (Bonk Section)', 'Palace of Darkness (North)', 'Palace of Darkness (Maze)', 'Palace of Darkness (Harmless Hellway)', 'Palace of Darkness (Final Section)'], ItemFactory('Big Key (Palace of Darkness)', player), ItemFactory(['Small Key (Palace of Darkness)'] * 6, player), ItemFactory(['Map (Palace of Darkness)', 'Compass (Palace of Darkness)'], player))
+    TT = make_dungeon('Thieves Town', 'Blind', ['Thieves Town (Entrance)', 'Thieves Town (Deep)', 'Blind Fight'], ItemFactory('Big Key (Thieves Town)', player), [ItemFactory('Small Key (Thieves Town)', player)], ItemFactory(['Map (Thieves Town)', 'Compass (Thieves Town)'], player))
+    SW = make_dungeon('Skull Woods', 'Mothula', ['Skull Woods Final Section (Entrance)', 'Skull Woods First Section', 'Skull Woods Second Section', 'Skull Woods Second Section (Drop)', 'Skull Woods Final Section (Mothula)', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)'], ItemFactory('Big Key (Skull Woods)', player), ItemFactory(['Small Key (Skull Woods)'] * 2, player), ItemFactory(['Map (Skull Woods)', 'Compass (Skull Woods)'], player))
+    SP = make_dungeon('Swamp Palace', 'Arrghus', ['Swamp Palace (Entrance)', 'Swamp Palace (First Room)', 'Swamp Palace (Starting Area)', 'Swamp Palace (Center)', 'Swamp Palace (North)'], ItemFactory('Big Key (Swamp Palace)', player), [ItemFactory('Small Key (Swamp Palace)', player)], ItemFactory(['Map (Swamp Palace)', 'Compass (Swamp Palace)'], player))
+    IP = make_dungeon('Ice Palace', 'Kholdstare', ['Ice Palace (Entrance)', 'Ice Palace (Main)', 'Ice Palace (East)', 'Ice Palace (East Top)', 'Ice Palace (Kholdstare)'], ItemFactory('Big Key (Ice Palace)', player), ItemFactory(['Small Key (Ice Palace)'] * 2, player), ItemFactory(['Map (Ice Palace)', 'Compass (Ice Palace)'], player))
+    MM = make_dungeon('Misery Mire', 'Vitreous', ['Misery Mire (Entrance)', 'Misery Mire (Main)', 'Misery Mire (West)', 'Misery Mire (Final Area)', 'Misery Mire (Vitreous)'], ItemFactory('Big Key (Misery Mire)', player), ItemFactory(['Small Key (Misery Mire)'] * 3, player), ItemFactory(['Map (Misery Mire)', 'Compass (Misery Mire)'], player))
+    TR = make_dungeon('Turtle Rock', 'Trinexx', ['Turtle Rock (Entrance)', 'Turtle Rock (First Section)', 'Turtle Rock (Chain Chomp Room)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Turtle Rock (Crystaroller Room)', 'Turtle Rock (Dark Room)', 'Turtle Rock (Eye Bridge)', 'Turtle Rock (Trinexx)'], ItemFactory('Big Key (Turtle Rock)', player), ItemFactory(['Small Key (Turtle Rock)'] * 4, player), ItemFactory(['Map (Turtle Rock)', 'Compass (Turtle Rock)'], player))
+    GT = make_dungeon('Ganons Tower', 'Agahnim2', ['Ganons Tower (Entrance)', 'Ganons Tower (Tile Room)', 'Ganons Tower (Compass Room)', 'Ganons Tower (Hookshot Room)', 'Ganons Tower (Map Room)', 'Ganons Tower (Firesnake Room)', 'Ganons Tower (Teleport Room)', 'Ganons Tower (Bottom)', 'Ganons Tower (Top)', 'Ganons Tower (Before Moldorm)', 'Ganons Tower (Moldorm)', 'Agahnim 2'], ItemFactory('Big Key (Ganons Tower)', player), ItemFactory(['Small Key (Ganons Tower)'] * 4, player), ItemFactory(['Map (Ganons Tower)', 'Compass (Ganons Tower)'], player))
 
-    GT.bosses['bottom'] = BossFactory('Armos Knights')
-    GT.bosses['middle'] = BossFactory('Lanmolas')
-    GT.bosses['top'] = BossFactory('Moldorm')
+    GT.bosses['bottom'] = BossFactory('Armos Knights', player)
+    GT.bosses['middle'] = BossFactory('Lanmolas', player)
+    GT.bosses['top'] = BossFactory('Moldorm', player)
 
-    world.dungeons = [ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, TR, GT]
+    world.dungeons += [ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, TR, GT]
 
 def fill_dungeons(world):
     freebes = ['Ganons Tower - Map Chest', 'Palace of Darkness - Harmless Hellway', 'Palace of Darkness - Big Key Chest', 'Turtle Rock - Big Key Chest']
 
     all_state_base = world.get_all_state()
 
-    if world.retro:
-        world.push_item(world.get_location('Skull Woods - Pinball Room'), ItemFactory('Small Key (Universal)'), False)
-    else:
-        world.push_item(world.get_location('Skull Woods - Pinball Room'), ItemFactory('Small Key (Skull Woods)'), False)
-    world.get_location('Skull Woods - Pinball Room').event = True
+    for player in range(1, world.players + 1):
+        if world.retro:
+            world.push_item(world.get_location('Skull Woods - Pinball Room', player), ItemFactory('Small Key (Universal)', player), False)
+        else:
+            world.push_item(world.get_location('Skull Woods - Pinball Room', player), ItemFactory('Small Key (Skull Woods)', player), False)
+        world.get_location('Skull Woods - Pinball Room', player).event = True
 
     dungeons = [(list(dungeon.regions), dungeon.big_key, list(dungeon.small_keys), list(dungeon.dungeon_items)) for dungeon in world.dungeons]
 
@@ -88,7 +89,7 @@ def fill_dungeons(world):
                 small_keys.append(small_key)
                 dungeons.append((dungeon_regions, big_key, small_keys, dungeon_items))
                 # infinite regression protection
-                if loopcnt < 30:
+                if loopcnt < (30 * world.players):
                     break
                 else:
                     raise RuntimeError('No suitable location for %s' % small_key)
@@ -114,13 +115,14 @@ def get_dungeon_item_pool(world):
 def fill_dungeons_restrictive(world, shuffled_locations):
     all_state_base = world.get_all_state()
 
-    skull_woods_big_chest = world.get_location('Skull Woods - Pinball Room')
-    if world.retro:
-        world.push_item(skull_woods_big_chest, ItemFactory('Small Key (Universal)'), False)
-    else:
-        world.push_item(skull_woods_big_chest, ItemFactory('Small Key (Skull Woods)'), False)
-    skull_woods_big_chest.event = True
-    shuffled_locations.remove(skull_woods_big_chest)
+    for player in range(1, world.players + 1):
+        skull_woods_big_chest = world.get_location('Skull Woods - Pinball Room', player)
+        if world.retro:
+            world.push_item(skull_woods_big_chest, ItemFactory('Small Key (Universal)', player), False)
+        else:
+            world.push_item(skull_woods_big_chest, ItemFactory('Small Key (Skull Woods)', player), False)
+        skull_woods_big_chest.event = True
+        shuffled_locations.remove(skull_woods_big_chest)
 
     if world.keysanity:
         #in keysanity dungeon items are distributed as part of the normal item pool

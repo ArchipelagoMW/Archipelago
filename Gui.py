@@ -244,15 +244,20 @@ def guiMain(args=None):
 
     bottomFrame = Frame(randomizerWindow)
 
+    worldLabel = Label(bottomFrame, text='Worlds')
+    worldVar = StringVar()
+    worldSpinbox = Spinbox(bottomFrame, from_=1, to=100, width=5, textvariable=worldVar)
+
     seedLabel = Label(bottomFrame, text='Seed #')
     seedVar = StringVar()
-    seedEntry = Entry(bottomFrame, textvariable=seedVar)
+    seedEntry = Entry(bottomFrame, width=15, textvariable=seedVar)
     countLabel = Label(bottomFrame, text='Count')
     countVar = StringVar()
-    countSpinbox = Spinbox(bottomFrame, from_=1, to=100, textvariable=countVar)
+    countSpinbox = Spinbox(bottomFrame, from_=1, to=100, width=5, textvariable=countVar)
 
     def generateRom():
         guiargs = Namespace
+        guiargs.multi = int(worldVar.get())
         guiargs.seed = int(seedVar.get()) if seedVar.get() else None
         guiargs.count = int(countVar.get()) if countVar.get() != '1' else None
         guiargs.mode = modeVar.get()
@@ -290,6 +295,8 @@ def guiMain(args=None):
         guiargs.rom = romVar.get()
         guiargs.jsonout = None
         guiargs.sprite = sprite
+        guiargs.skip_playthrough = False
+        guiargs.outputpath = None
         try:
             if guiargs.count is not None:
                 seed = guiargs.seed
@@ -305,7 +312,9 @@ def guiMain(args=None):
 
     generateButton = Button(bottomFrame, text='Generate Patched Rom', command=generateRom)
 
-    seedLabel.pack(side=LEFT)
+    worldLabel.pack(side=LEFT)
+    worldSpinbox.pack(side=LEFT)
+    seedLabel.pack(side=LEFT,  padx=(5, 0))
     seedEntry.pack(side=LEFT)
     countLabel.pack(side=LEFT, padx=(5, 0))
     countSpinbox.pack(side=LEFT)
@@ -383,6 +392,7 @@ def guiMain(args=None):
     fastMenuOptionMenu2.pack(side=RIGHT)
     fastMenuLabel2 = Label(fastMenuFrame2, text='Menu speed')
     fastMenuLabel2.pack(side=LEFT)
+
 
     heartbeepFrame2.pack(expand=True, anchor=E)
     heartcolorFrame2.pack(expand=True, anchor=E)

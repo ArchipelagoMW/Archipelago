@@ -33,7 +33,7 @@ def main(args):
     start_time = time.clock()
 
     # initialize the world
-    world = World('vanilla', 'noglitches', 'standard', 'normal', 'none', 'on', 'ganon', 'freshness', False, False, False, args.quickswap, args.fastmenu, args.disablemusic, False, False, False, None)
+    world = World(1, 'vanilla', 'noglitches', 'standard', 'normal', 'none', 'on', 'ganon', 'freshness', False, False, False, args.quickswap, args.fastmenu, args.disablemusic, False, False, False, None, 'none', False)
     logger = logging.getLogger('')
 
     hasher = hashlib.md5()
@@ -48,14 +48,14 @@ def main(args):
 
     world.difficulty_requirements = difficulties[world.difficulty]
 
-    create_regions(world)
-    create_dungeons(world)
+    create_regions(world, 1)
+    create_dungeons(world, 1)
 
-    link_entrances(world)
+    link_entrances(world, 1)
 
     logger.info('Calculating Access Rules.')
 
-    set_rules(world)
+    set_rules(world, 1)
 
     logger.info('Fill the world.')
 
@@ -63,8 +63,8 @@ def main(args):
 
     fill_world(world, args.plando, text_patches)
 
-    if world.get_entrance('Dam').connected_region.name != 'Dam' or world.get_entrance('Swamp Palace').connected_region.name != 'Swamp Palace (Entrance)':
-        world.swamp_patch_required = True
+    if world.get_entrance('Dam', 1).connected_region.name != 'Dam' or world.get_entrance('Swamp Palace', 1).connected_region.name != 'Swamp Palace (Entrance)':
+        world.swamp_patch_required[1] = True
 
     logger.info('Calculating playthrough.')
 
@@ -84,7 +84,7 @@ def main(args):
         sprite = None
 
     rom = LocalRom(args.rom)
-    patch_rom(world, rom, logic_hash, args.heartbeep, args.heartcolor, sprite)
+    patch_rom(world, 1, rom, logic_hash, args.heartbeep, args.heartcolor, sprite)
 
     for textname, texttype, text in text_patches:
         if texttype == 'text':
@@ -174,33 +174,33 @@ def fill_world(world, plando, text_patches):
                     continue
 
                 locationstr, itemstr = line.split(':', 1)
-                location = world.get_location(locationstr.strip())
+                location = world.get_location(locationstr.strip(), 1)
                 if location is None:
                     logger.warning('Unknown location: %s', locationstr)
                     continue
                 else:
-                    item = ItemFactory(itemstr.strip())
+                    item = ItemFactory(itemstr.strip(), 1)
                     if item is not None:
                         world.push_item(location, item)
                     if item.key:
                         location.event = True
             elif '<=>' in line:
                 entrance, exit = line.split('<=>', 1)
-                connect_two_way(world, entrance.strip(), exit.strip())
+                connect_two_way(world, entrance.strip(), exit.strip(), 1)
             elif '=>' in line:
                 entrance, exit = line.split('=>', 1)
-                connect_entrance(world, entrance.strip(), exit.strip())
+                connect_entrance(world, entrance.strip(), exit.strip(), 1)
             elif '<=' in line:
                 entrance, exit = line.split('<=', 1)
-                connect_exit(world, exit.strip(), entrance.strip())
+                connect_exit(world, exit.strip(), entrance.strip(), 1)
 
-    world.required_medallions = (mm_medallion, tr_medallion)
+    world.required_medallions[1] = (mm_medallion, tr_medallion)
 
     # set up Agahnim Events
-    world.get_location('Agahnim 1').event = True
-    world.get_location('Agahnim 1').item = ItemFactory('Beat Agahnim 1')
-    world.get_location('Agahnim 2').event = True
-    world.get_location('Agahnim 2').item = ItemFactory('Beat Agahnim 2')
+    world.get_location('Agahnim 1', 1).event = True
+    world.get_location('Agahnim 1', 1).item = ItemFactory('Beat Agahnim 1', 1)
+    world.get_location('Agahnim 2', 1).event = True
+    world.get_location('Agahnim 2', 1).item = ItemFactory('Beat Agahnim 2', 1)
 
 
 def start():

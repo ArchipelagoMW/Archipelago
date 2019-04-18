@@ -207,7 +207,7 @@ difficulties = {
     ),
 }
 
-def generate_itempool(world):
+def generate_itempool(world, player):
     if (world.difficulty not in ['easy', 'normal', 'hard', 'expert', 'insane'] or world.goal not in ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals']
             or world.mode not in ['open', 'standard', 'swordless'] or world.timer not in ['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'] or world.progressive not in ['on', 'off', 'random']):
         raise NotImplementedError('Not supported yet')
@@ -215,20 +215,20 @@ def generate_itempool(world):
     if world.timer in ['ohko', 'timed-ohko']:
         world.can_take_damage = False
 
-    world.push_item('Ganon', ItemFactory('Triforce'), False)
-    world.get_location('Ganon').event = True
-    world.push_item('Agahnim 1', ItemFactory('Beat Agahnim 1'), False)
-    world.get_location('Agahnim 1').event = True
-    world.push_item('Agahnim 2', ItemFactory('Beat Agahnim 2'), False)
-    world.get_location('Agahnim 2').event = True
-    world.push_item('Dark Blacksmith Ruins', ItemFactory('Pick Up Purple Chest'), False)
-    world.get_location('Dark Blacksmith Ruins').event = True
-    world.push_item('Frog', ItemFactory('Get Frog'), False)
-    world.get_location('Frog').event = True
-    world.push_item('Missing Smith', ItemFactory('Return Smith'), False)
-    world.get_location('Missing Smith').event = True
-    world.push_item('Floodgate', ItemFactory('Open Floodgate'), False)
-    world.get_location('Floodgate').event = True
+    world.push_item(world.get_location('Ganon', player), ItemFactory('Triforce', player), False)
+    world.get_location('Ganon', player).event = True
+    world.push_item(world.get_location('Agahnim 1', player), ItemFactory('Beat Agahnim 1', player), False)
+    world.get_location('Agahnim 1', player).event = True
+    world.push_item(world.get_location('Agahnim 2', player), ItemFactory('Beat Agahnim 2', player), False)
+    world.get_location('Agahnim 2', player).event = True
+    world.push_item(world.get_location('Dark Blacksmith Ruins', player), ItemFactory('Pick Up Purple Chest', player), False)
+    world.get_location('Dark Blacksmith Ruins', player).event = True
+    world.push_item(world.get_location('Frog', player), ItemFactory('Get Frog', player), False)
+    world.get_location('Frog', player).event = True
+    world.push_item(world.get_location('Missing Smith', player), ItemFactory('Return Smith', player), False)
+    world.get_location('Missing Smith', player).event = True
+    world.push_item(world.get_location('Floodgate', player), ItemFactory('Open Floodgate', player), False)
+    world.get_location('Floodgate', player).event = True
 
     # set up item pool
     if world.custom:
@@ -236,10 +236,10 @@ def generate_itempool(world):
         world.rupoor_cost = min(world.customitemarray[67], 9999)
     else:
         (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.retro)
-    world.itempool = ItemFactory(pool)
+    world.itempool += ItemFactory(pool, player)
     for (location, item) in placed_items:
-        world.push_item(location, ItemFactory(item), False)
-        world.get_location(location).event = True
+        world.push_item(world.get_location(location, player), ItemFactory(item, player), False)
+        world.get_location(location, player).event = True
     world.lamps_needed_for_dark_rooms = lamps_needed_for_dark_rooms
     if clock_mode is not None:
         world.clock_mode = clock_mode
@@ -249,30 +249,30 @@ def generate_itempool(world):
         world.treasure_hunt_icon = treasure_hunt_icon
 
     if world.keysanity:
-        world.itempool.extend(get_dungeon_item_pool(world))
+        world.itempool.extend([item for item in get_dungeon_item_pool(world) if item.player == player])
 
     # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
     # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
     if world.difficulty in ['easy', 'normal', 'hard'] and not (world.custom and world.customitemarray[30] == 0):
-        [item for item in world.itempool if item.name == 'Boss Heart Container'][0].advancement = True
+        [item for item in world.itempool if item.name == 'Boss Heart Container' and item.player == player][0].advancement = True
     elif world.difficulty in ['expert'] and not (world.custom and world.customitemarray[29] < 4):
-        adv_heart_pieces = [item for item in world.itempool if item.name == 'Piece of Heart'][0:4]
+        adv_heart_pieces = [item for item in world.itempool if item.name == 'Piece of Heart' and item.player == player][0:4]
         for hp in adv_heart_pieces:
             hp.advancement = True
 
     # shuffle medallions
     mm_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
     tr_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
-    world.required_medallions = (mm_medallion, tr_medallion)
+    world.required_medallions[player] = (mm_medallion, tr_medallion)
 
-    place_bosses(world)
-    set_up_shops(world)
+    place_bosses(world, player)
+    set_up_shops(world, player)
 
     if world.retro:
-        set_up_take_anys(world)
+        set_up_take_anys(world, player)
 
-    create_dynamic_shop_locations(world)
+    create_dynamic_shop_locations(world, player)
 
 take_any_locations = [
     'Snitch Lady (East)', 'Snitch Lady (West)', 'Bush Covered House', 'Light World Bomb Hut',
@@ -284,39 +284,39 @@ take_any_locations = [
     'Palace of Darkness Hint', 'East Dark World Hint', 'Archery Game', 'Dark Lake Hylia Ledge Hint',
     'Dark Lake Hylia Ledge Spike Cave', 'Fortune Teller (Dark)', 'Dark Sanctuary Hint', 'Dark Desert Hint']
 
-def set_up_take_anys(world):
+def set_up_take_anys(world, player):
     regions = random.sample(take_any_locations, 5)
 
-    old_man_take_any = Region("Old Man Sword Cave", RegionType.Cave, 'the sword cave')
+    old_man_take_any = Region("Old Man Sword Cave", RegionType.Cave, 'the sword cave', player)
     world.regions.append(old_man_take_any)
     world.dynamic_regions.append(old_man_take_any)
 
     reg = regions.pop()
-    entrance = world.get_region(reg).entrances[0]
-    connect_entrance(world, entrance, old_man_take_any)
+    entrance = world.get_region(reg, player).entrances[0]
+    connect_entrance(world, entrance, old_man_take_any, player)
     entrance.target = 0x58
     old_man_take_any.shop = Shop(old_man_take_any, 0x0112, ShopType.TakeAny, 0xE2, True)
     world.shops.append(old_man_take_any.shop)
     old_man_take_any.shop.active = True
 
-    swords = [item for item in world.itempool if item.type == 'Sword']
+    swords = [item for item in world.itempool if item.type == 'Sword' and item.player == player]
     if swords:
         sword = random.choice(swords)
         world.itempool.remove(sword)
-        world.itempool.append(ItemFactory('Rupees (20)'))
+        world.itempool.append(ItemFactory('Rupees (20)', player))
         old_man_take_any.shop.add_inventory(0, sword.name, 0, 0, create_location=True)
     else:
         old_man_take_any.shop.add_inventory(0, 'Rupees (300)', 0, 0)
 
     for num in range(4):
-        take_any = Region("Take-Any #{}".format(num+1), RegionType.Cave, 'a cave of choice')
+        take_any = Region("Take-Any #{}".format(num+1), RegionType.Cave, 'a cave of choice', player)
         world.regions.append(take_any)
         world.dynamic_regions.append(take_any)
 
         target, room_id = random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])
         reg = regions.pop()
-        entrance = world.get_region(reg).entrances[0]
-        connect_entrance(world, entrance, take_any)
+        entrance = world.get_region(reg, player).entrances[0]
+        connect_entrance(world, entrance, take_any, player)
         entrance.target = target
         take_any.shop = Shop(take_any, room_id, ShopType.TakeAny, 0xE3, True)
         world.shops.append(take_any.shop)
@@ -326,50 +326,52 @@ def set_up_take_anys(world):
 
     world.intialize_regions()
 
-def create_dynamic_shop_locations(world):
+def create_dynamic_shop_locations(world, player):
     for shop in world.shops:
-        for i, item in enumerate(shop.inventory):
-            if item is None:
-                continue
-            if item['create_location']:
-                loc = Location("{} Item {}".format(shop.region.name, i+1), parent=shop.region)
-                shop.region.locations.append(loc)
-                world.dynamic_locations.append(loc)
+        if shop.region.player == player:
+            for i, item in enumerate(shop.inventory):
+                if item is None:
+                    continue
+                if item['create_location']:
+                    loc = Location(player, "{} Item {}".format(shop.region.name, i+1), parent=shop.region)
+                    shop.region.locations.append(loc)
+                    world.dynamic_locations.append(loc)
 
-                world.clear_location_cache()
+                    world.clear_location_cache()
 
-                world.push_item(loc, ItemFactory(item['item']), False)
-                loc.event = True
+                    world.push_item(loc, ItemFactory(item['item'], player), False)
+                    loc.event = True
 
 
 def fill_prizes(world, attempts=15):
-    crystals = ItemFactory(['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6'])
-    crystal_locations = [world.get_location('Turtle Rock - Prize'), world.get_location('Eastern Palace - Prize'), world.get_location('Desert Palace - Prize'), world.get_location('Tower of Hera - Prize'), world.get_location('Palace of Darkness - Prize'),
-                         world.get_location('Thieves\' Town - Prize'), world.get_location('Skull Woods - Prize'), world.get_location('Swamp Palace - Prize'), world.get_location('Ice Palace - Prize'),
-                         world.get_location('Misery Mire - Prize')]
-    placed_prizes = [loc.item.name for loc in crystal_locations if loc.item is not None]
-    unplaced_prizes = [crystal for crystal in crystals if crystal.name not in placed_prizes]
-    empty_crystal_locations = [loc for loc in crystal_locations if loc.item is None]
+    all_state = world.get_all_state(keys=True)
+    for player in range(1, world.players + 1):
+        crystals = ItemFactory(['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6'], player)
+        crystal_locations = [world.get_location('Turtle Rock - Prize', player), world.get_location('Eastern Palace - Prize', player), world.get_location('Desert Palace - Prize', player), world.get_location('Tower of Hera - Prize', player), world.get_location('Palace of Darkness - Prize', player),
+                             world.get_location('Thieves\' Town - Prize', player), world.get_location('Skull Woods - Prize', player), world.get_location('Swamp Palace - Prize', player), world.get_location('Ice Palace - Prize', player),
+                             world.get_location('Misery Mire - Prize', player)]
+        placed_prizes = [loc.item.name for loc in crystal_locations if loc.item is not None]
+        unplaced_prizes = [crystal for crystal in crystals if crystal.name not in placed_prizes]
+        empty_crystal_locations = [loc for loc in crystal_locations if loc.item is None]
 
-    while attempts:
-        attempts -= 1
-        try:
-            prizepool = list(unplaced_prizes)
-            prize_locs = list(empty_crystal_locations)
-            random.shuffle(prizepool)
-            random.shuffle(prize_locs)
-            fill_restrictive(world, world.get_all_state(keys=True), prize_locs, prizepool)
-        except FillError:
-            logging.getLogger('').info("Failed to place dungeon prizes. Will retry %s more times", attempts)
-            for location in empty_crystal_locations:
-                location.item = None
-            continue
-        break
-    else:
-        raise FillError('Unable to place dungeon prizes')
+        for attempt in range(attempts):
+            try:
+                prizepool = list(unplaced_prizes)
+                prize_locs = list(empty_crystal_locations)
+                random.shuffle(prizepool)
+                random.shuffle(prize_locs)
+                fill_restrictive(world, all_state, prize_locs, prizepool)
+            except FillError as e:
+                logging.getLogger('').info("Failed to place dungeon prizes (%s). Will retry %s more times" % (e, attempts))
+                for location in empty_crystal_locations:
+                    location.item = None
+                continue
+            break
+        else:
+            raise FillError('Unable to place dungeon prizes')
 
 
-def set_up_shops(world):
+def set_up_shops(world, player):
     # Changes to basic Shops
     # TODO: move hard+ mode changes for sheilds here, utilizing the new shops
 
@@ -377,13 +379,13 @@ def set_up_shops(world):
         shop.active = True
 
     if world.retro:
-        rss = world.get_region('Red Shield Shop').shop
+        rss = world.get_region('Red Shield Shop', player).shop
         rss.active = True
         rss.add_inventory(2, 'Single Arrow', 80)
 
     # Randomized changes to Shops
     if world.retro:
-        for shop in random.sample([s for s in world.shops if s.replaceable], 5):
+        for shop in random.sample([s for s in world.shops if s.replaceable and s.region.player == player], 5):
             shop.active = True
             shop.add_inventory(0, 'Single Arrow', 80)
             shop.add_inventory(1, 'Small Key (Universal)', 100)
