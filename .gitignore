@@ -1,9 +1,10 @@
-*.pyc
-dist
-build
 .idea
-*.sfc
+.vscode
 *_Spoiler.txt
-bundle/components.wxs
+*.pyc
+*.sfc
 *.wixobj
+build
+bundle/components.wxs
+dist
 README.html

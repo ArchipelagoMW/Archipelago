@@ -530,6 +530,7 @@ class MultiByteCoreTextMapper(object):
         "{NOBORDER}": [0x6B, 0x02],
         "{CHANGEPIC}": [0x67, 0x67],
         "{CHANGEMUSIC}": [0x67],
+        "{PAGEBREAK}" : [0x7D],
         "{INTRO}": [0x6E, 0x00, 0x77, 0x07, 0x7A, 0x03, 0x6B, 0x02, 0x67],
         "{NOTEXT}": [0x6E, 0x00, 0x6B, 0x04],
         "{IBOX}": [0x6B, 0x02, 0x77, 0x07, 0x7A, 0x03],
@@ -548,6 +549,11 @@ class MultiByteCoreTextMapper(object):
             linespace = wrap
             line = lines.pop(0)
             if line.startswith('{'):
+                if line == '{PAGEBREAK}':
+                    if lineindex % 3 != 0:
+                        # insert a wait for keypress, unless we just did so
+                        outbuf.append(0x7E)
+                    lineindex = 0
                 outbuf.extend(cls.special_commands[line])
                 continue
 
@@ -589,7 +595,7 @@ class MultiByteCoreTextMapper(object):
             lineindex += 1
             if pause and lineindex % 3 == 0 and has_more_lines:
                 outbuf.append(0x7E)
-            if lineindex >= 3 and has_more_lines:
+            if lineindex >= 3 and has_more_lines and lines[0] != '{PAGEBREAK}':
                 outbuf.append(0x73)
         return outbuf
 
