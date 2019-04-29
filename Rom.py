@@ -1017,8 +1017,14 @@ def write_strings(rom, world):
     tt = TextTable()
     tt.removeUnwantedText()
 
+    # Let's keep this guy's text accurate to the shuffle setting.
+    if world.shuffle in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
+        tt['kakariko_flophouse_man_no_flippers'] = 'I really hate mowing my yard.\n\n\nI should move.'
+        tt['kakariko_flophouse_man'] = 'I really hate mowing my yard.\n\n\nI should move.'
+
     # For hints, first we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
     if world.hints:
+        tt['sign_north_of_links_house'] = 'Randomizer The telepathic tiles can have hints!'
         entrances_to_hint = {}
         entrances_to_hint.update(InconvenientEntrances)
         if world.shuffle_ganon:
@@ -1116,7 +1122,7 @@ def write_strings(rom, world):
         junk_hints = junk_texts.copy()
         random.shuffle(junk_hints)
         for location in hint_locations:
-            tt[location] = junk_hints.pop(0)    
+            tt[location] = junk_hints.pop(0)
 
    # We still need the older hints of course. Those are done here.
     silverarrows = world.find_items('Silver Arrows')
@@ -1202,7 +1208,7 @@ InconvenientEntrances = {'Turtle Rock': 'Turtle Rock Main',
                          'Misery Mire': 'Misery Mire',
                          'Ice Palace': 'Ice Palace',
                          'Skull Woods Final Section': 'The back of Skull Woods',
-                         'Death Mountain Return Cave (West)': 'The upper DM entrance',
+                         'Death Mountain Return Cave (West)': 'The SW DM foothills cave',
                          'Mimic Cave': 'Mimic Ledge',
                          'Dark World Hammer Peg Cave': 'The rows of pegs',
                          'Pyramid Fairy': 'The crack on the pyramid'

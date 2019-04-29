@@ -225,28 +225,28 @@ TavernMan_texts = [
 ]
 
 junk_texts = [
-    "It’s a secret\nto everybody.\n            >",
-    "Dodongo\ndislikes\nsmoke.      >",
-    "> Digdogger\nhates certain\nkind of sound.",
-    "I bet you’d\nlike to have\nmore bombs. >",
-    ">Secret power\nis said to be\nin the arrow.",
-    "Aim at the\neyes of Gohma.\n            >",
-    "Grumble,\ngrumble…\n            >",
-    "10th enemy\nhas the bomb.\n            >",
-    "Go to the\nnext room.\n            >",
-    ">Thanks, @\nYou’re the\nhero of Hyrule",
-    "There’s always\nmoney in the\nBanana Stand>",
-    " \nJust walk away\n            >",
-    "everybody is\nlooking for\nsomething   >",
-    "Candy Is Dandy\nBut liquor\nIs quicker. >",
-    "Spring Ball\nare behind\nRidley      >",
-    "The gnome asks\nyou to guess\nhis name.   >",
-    "I heard beans\non toast is a\ngreat meal. >",
-    "> Sweetcorn\non pizza is a\ngreat choice.",
-    "> race roms\ndon’t have\nspoiler logs",
-    "I bet a nice\ncup of tea\nwould help! >",
-    "I bet you\nexpected help,\ndidn't you? >",
-    "Learn to make\nplogues, easy\nand yummy!  >"
+    "{C:GREEN}\nIt’s a secret\nto everybody.\n            >",
+    "{C:GREEN}\nDodongo\ndislikes\nsmoke.      >",
+    "{C:GREEN}\n> Digdogger\nhates certain\nkind of sound.",
+    "{C:GREEN}\nI bet you’d\nlike to have\nmore bombs. >",
+    "{C:GREEN}\n>Secret power\nis said to be\nin the arrow.",
+    "{C:GREEN}\nAim at the\neyes of Gohma.\n            >",
+    "{C:GREEN}\nGrumble,\ngrumble…\n            >",
+    "{C:GREEN}\n10th enemy\nhas the bomb.\n            >",
+    "{C:GREEN}\nGo to the\nnext room.\n            >",
+    "{C:GREEN}\n>Thanks, @\nYou’re the\nhero of Hyrule",
+    "{C:GREEN}\nThere’s always\nmoney in the\nBanana Stand>",
+    "{C:GREEN}\n \nJust walk away\n            >",
+    "{C:GREEN}\neverybody is\nlooking for\nsomething   >",
+    "{C:GREEN}\nCandy Is Dandy\nBut liquor\nIs quicker. >",
+    "{C:GREEN}\nSpring Ball\nare behind\nRidley      >",
+    "{C:GREEN}\nThe gnome asks\nyou to guess\nhis name.   >",
+    "{C:GREEN}\nI heard beans\non toast is a\ngreat meal. >",
+    "{C:GREEN}\n> Sweetcorn\non pizza is a\ngreat choice.",
+    "{C:GREEN}\n> race roms\ndon’t have\nspoiler logs",
+    "{C:GREEN}\nI bet a nice\ncup of tea\nwould help! >",
+    "{C:GREEN}\nI bet you\nexpected help,\ndidn't you? >",
+    "{C:GREEN}\nLearn to make\nplogues, easy\nand yummy!  >"
 ]
 
 KingsReturn_texts = [
@@ -534,6 +534,8 @@ class MultiByteCoreTextMapper(object):
         "{INTRO}": [0x6E, 0x00, 0x77, 0x07, 0x7A, 0x03, 0x6B, 0x02, 0x67],
         "{NOTEXT}": [0x6E, 0x00, 0x6B, 0x04],
         "{IBOX}": [0x6B, 0x02, 0x77, 0x07, 0x7A, 0x03],
+        "{C:GREEN}": [0x77, 0x07],
+        "{C:YELLOW}": [0x77, 0x02],
     }
 
     @classmethod
@@ -1331,7 +1333,7 @@ class TextTable(object):
             'item_get_pendant_wisdom_alt',
             'item_get_pendant_power_alt',
             'pond_item_boomerang',
-            'blacksmiths_tempered_already', #!! For some reason this is coded as a recive message
+            'blacksmiths_tempered_already', #!! For some reason this is coded as a recieve message
             'item_get_whole_heart',
             'item_get_sanc_heart',
             'item_get_14_heart',
@@ -1862,8 +1864,8 @@ class TextTable(object):
         # 180
         text['game_chest_play_no'] = CompressedTextMapper.convert("Well fine, I didn't want your rupees.")
         text['game_chest_lost_woods'] = CompressedTextMapper.convert("Pay 100 rupees open 1 chest. Are you lucky?\nSo, Play game?\n  ≥ play\n    never!\n{CHOICE}")
-        text['kakariko_flophouse_man_no_flippers'] = CompressedTextMapper.convert("I sure do have a lot of beds.\n\nZora is a cheapskate and will try to sell you his trash for 500 rupees…")
-        text['kakariko_flophouse_man'] = CompressedTextMapper.convert("I sure do have a lot of beds.\n\nDid you know if you played the flute in the center of town things could happen?")
+        text['kakariko_flophouse_man_no_flippers'] = CompressedTextMapper.convert("I really hate mowing my yard.\nI moved my house and everyone else's to avoid it.\n\nI hope you don't mind.")
+        text['kakariko_flophouse_man'] = CompressedTextMapper.convert("I really hate mowing my yard.\nI moved my house and everyone else's to avoid it.\n\nI hope you don't mind.")
         text['menu_start_2'] = CompressedTextMapper.convert("{MENU}\n{SPEED0}\n≥@'s house\n Sanctuary\n{CHOICE3}", False)
         text['menu_start_3'] = CompressedTextMapper.convert("{MENU}\n{SPEED0}\n≥@'s house\n Sanctuary\n Mountain Cave\n{CHOICE2}", False)
         text['menu_pause'] = CompressedTextMapper.convert("{SPEED0}\n≥continue\n save and quit\n{CHOICE3}", False)
