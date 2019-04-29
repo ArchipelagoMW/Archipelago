@@ -10,6 +10,12 @@ def int32_as_bytes(value):
     value = value & 0xFFFFFFFF
     return [value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF, (value >> 24) & 0xFF]
 
+def pc_to_snes(value):
+    return ((value<<1) & 0x7F0000)|(value & 0x7FFF)|0x8000
+
+def snes_to_pc(value):
+    return ((value & 0x7F0000)>>1)|(value & 0x7FFF)
+
 def is_bundled():
     return getattr(sys, 'frozen', False)
 

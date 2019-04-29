@@ -182,18 +182,21 @@ def start():
                              ensure all locations are reachable. This only has an effect
                              on the restrictive algorithm currently.
                              ''', action='store_true')
+    parser.add_argument('--hints', help='''\
+                             Make telepathic tiles and storytellers give helpful hints.
+                             ''', action='store_true')
     # included for backwards compatibility
     parser.add_argument('--shuffleganon', help=argparse.SUPPRESS, action='store_true', default=True)
     parser.add_argument('--no-shuffleganon', help='''\
                              If set, the Pyramid Hole and Ganon's Tower are not
                              included entrance shuffle pool.
                              ''', action='store_false', dest='shuffleganon')
-    parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['normal', 'half', 'quarter', 'off'],
+    parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['double', 'normal', 'half', 'quarter', 'off'],
                         help='''\
                              Select the rate at which the heart beep sound is played at
                              low health. (default: %(default)s)
                              ''')
-    parser.add_argument('--heartcolor', default='red', const='red', nargs='?', choices=['red', 'blue', 'green', 'yellow'],
+    parser.add_argument('--heartcolor', default='red', const='red', nargs='?', choices=['red', 'blue', 'green', 'yellow', 'random'],
                         help='Select the color of Link\'s heart meter. (default: %(default)s)')
     parser.add_argument('--sprite', help='''\
                              Path to a sprite sheet to use for Link. Needs to be in
@@ -204,6 +207,8 @@ def start():
                              ''')
     parser.add_argument('--suppress_rom', help='Do not create an output rom file.', action='store_true')
     parser.add_argument('--gui', help='Launch the GUI', action='store_true')
+    # Deliberately not documented, only useful for vt site integration right now:
+    parser.add_argument('--shufflebosses', help=argparse.SUPPRESS, default='none', const='none', nargs='?', choices=['none', 'basic', 'normal', 'chaos'])
     parser.add_argument('--jsonout', action='store_true', help='''\
                             Output .json patch to stdout instead of a patched rom. Used
                             for VT site integration, do not use otherwise.

@@ -6,14 +6,14 @@ import logging
 import random
 import time
 
-from BaseClasses import World, CollectionState, Item, Region, Location, Entrance, Shop
+from BaseClasses import World, CollectionState, Item, Region, Location, Shop
 from Regions import create_regions, mark_light_world_regions
 from EntranceShuffle import link_entrances
 from Rom import patch_rom, Sprite, LocalRom, JsonRom
 from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
 from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, flood_items
-from ItemList import generate_itempool, difficulties
+from ItemList import generate_itempool, difficulties, fill_prizes
 from Utils import output_path
 
 __version__ = '0.6.1'
@@ -40,7 +40,7 @@ def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.keysanity, args.retro, args.custom, args.customitemarray)
+    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.keysanity, args.retro, args.custom, args.customitemarray, args.shufflebosses, args.hints)
     logger = logging.getLogger('')
     if seed is None:
         random.seed(None)
@@ -62,13 +62,17 @@ def main(args, seed=None):
     link_entrances(world)
     mark_light_world_regions(world)
 
+    logger.info('Generating Item Pool.')
+
+    generate_itempool(world)
+
     logger.info('Calculating Access Rules.')
 
     set_rules(world)
 
-    logger.info('Generating Item Pool.')
+    logger.info('Placing Dungeon Prizes.')
 
-    generate_itempool(world)
+    fill_prizes(world)
 
     logger.info('Placing Dungeon Items.')
 
@@ -112,7 +116,7 @@ def main(args, seed=None):
     else:
         sprite = None
 
-    outfilebase = 'ER_%s_%s-%s-%s%s_%s-%s%s%s%s_%s' % (world.logic, world.difficulty, world.mode, world.goal, "" if world.timer in ['none', 'display'] else "-" + world.timer, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-retro" if world.retro else "", "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "", world.seed)
+    outfilebase = 'ER_%s_%s-%s-%s%s_%s-%s%s%s%s%s_%s' % (world.logic, world.difficulty, world.mode, world.goal, "" if world.timer in ['none', 'display'] else "-" + world.timer, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-retro" if world.retro else "", "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "", "-nohints" if not world.hints else "", world.seed)
 
     if not args.suppress_rom:
         if args.jsonout:
@@ -140,7 +144,7 @@ def gt_filler(world):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.timer, world.progressive, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.keysanity, world.retro, world.custom, world.customitemarray)
+    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.timer, world.progressive, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.keysanity, world.retro, world.custom, world.customitemarray, world.boss_shuffle, world.hints)
     ret.required_medallions = list(world.required_medallions)
     ret.swamp_patch_required = world.swamp_patch_required
     ret.ganon_at_pyramid = world.ganon_at_pyramid
@@ -151,6 +155,9 @@ def copy_world(world):
     ret.dark_world_light_cone = world.dark_world_light_cone
     ret.seed = world.seed
     ret.can_access_trock_eyebridge = world.can_access_trock_eyebridge
+    ret.can_access_trock_front = world.can_access_trock_front
+    ret.can_access_trock_big_chest = world.can_access_trock_big_chest
+    ret.can_access_trock_middle = world.can_access_trock_middle
     ret.can_take_damage = world.can_take_damage
     ret.difficulty_requirements = world.difficulty_requirements
     ret.fix_fake_world = world.fix_fake_world
@@ -159,6 +166,11 @@ def copy_world(world):
     create_dungeons(ret)
 
     copy_dynamic_regions_and_locations(world, ret)
+
+    # copy bosses
+    for dungeon in world.dungeons:
+        for level, boss in dungeon.bosses.items():
+            ret.get_dungeon(dungeon.name).bosses[level] = boss
 
     for shop in world.shops:
         copied_shop = ret.get_region(shop.region.name).shop
@@ -195,7 +207,7 @@ def copy_world(world):
 
 def copy_dynamic_regions_and_locations(world, ret):
     for region in world.dynamic_regions:
-        new_reg = Region(region.name, region.type)
+        new_reg = Region(region.name, region.type, region.hint_text)
         ret.regions.append(new_reg)
         ret.dynamic_regions.append(new_reg)
 
@@ -266,7 +278,8 @@ def create_playthrough(world):
             old_item = location.item
             location.item = None
             state.remove(old_item)
-            if world.can_beat_game(state_cache[num]):
+            ##if world.can_beat_game(state_cache[num]):
+            if world.can_beat_game():
                 to_delete.append(location)
             else:
                 # still required, got to keep it around

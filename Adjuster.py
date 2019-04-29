@@ -24,12 +24,12 @@ def main():
                              ''')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
-    parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['normal', 'half', 'quarter', 'off'],
+    parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['double', 'normal', 'half', 'quarter', 'off'],
                         help='''\
                              Select the rate at which the heart beep sound is played at
                              low health. (default: %(default)s)
                              ''')
-    parser.add_argument('--heartcolor', default='red', const='red', nargs='?', choices=['red', 'blue', 'green', 'yellow'],
+    parser.add_argument('--heartcolor', default='red', const='red', nargs='?', choices=['red', 'blue', 'green', 'yellow', 'random'],
                         help='Select the color of Link\'s heart meter. (default: %(default)s)')
     parser.add_argument('--sprite', help='''\
                              Path to a sprite sheet to use for Link. Needs to be in
