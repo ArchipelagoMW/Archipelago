@@ -1,7 +1,7 @@
 # ALttPEntranceRandomizer
 
 This is a entrance randomizer for _The Legend of Zelda: A Link to the Past_ for the SNES.
-See http://vt.alttp.run for more details on the normal randomizer.
+See https://alttpr.com/ for more details on the normal randomizer.
 
 # Installation
 
@@ -297,6 +297,11 @@ If set, will only ensure the goal can be achieved, but not necessarily that all 
 If set, Ganon's Tower is included in the dungeon shuffle pool and the Pyramid Hole/Exit pair is included in the Holes shuffle pool. Ganon can not be defeated until the primary goal is fulfilled.
 This setting removes any bias against Ganon's Tower that some algorithms may have.
 
+## Include Helpful Hints
+
+If set, the 15 telepathic tiles and 5 storytellers scattered about Hyrule will give helpful hints about various items and entrances. An exact breakdown of the hint
+distribution is provided as an included text file.
+
 ## Use Custom Item Pool
 
 If set, the item pool normally associated with your difficulty setting is replaced by the item pool specified in the custom tab. This feature is only supported when the randomizer is run
@@ -441,7 +446,7 @@ This may lead to different amount of itempool items being placed in a dungeon th
 Select frequency of beeps when on low health. (default: normal)
 
 ```
---heartcolor [{red,blue,green,yellow}]
+--heartcolor [{red,blue,green,yellow,random}]
 ```
 
 Select the color of Link\'s heart meter. (default: red)
@@ -457,6 +462,12 @@ Use to select a different sprite sheet to use for Link. Path to a binary file of
 ```
 
 Enables the "Only Ensure Seed Beatable" option (default: False)
+
+```
+--hints
+```
+
+Enables helpful hints from storytellers and telepathic tiles (default: False)
 
 ```
 --no-shuffleganon

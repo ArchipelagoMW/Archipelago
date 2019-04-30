@@ -73,6 +73,9 @@ def guiMain(args=None):
     shuffleGanonVar = IntVar()
     shuffleGanonVar.set(1) #set default
     shuffleGanonCheckbutton = Checkbutton(checkBoxFrame, text="Include Ganon's Tower and Pyramid Hole in shuffle pool", variable=shuffleGanonVar)
+    hintsVar = IntVar()
+    hintsVar.set(1) #set default
+    hintsCheckbutton = Checkbutton(checkBoxFrame, text="Include Helpful Hints", variable=hintsVar)
     customVar = IntVar()
     customCheckbutton = Checkbutton(checkBoxFrame, text="Use custom item pool", variable=customVar)
 
@@ -85,6 +88,7 @@ def guiMain(args=None):
     beatableOnlyCheckbutton.pack(expand=True, anchor=W)
     disableMusicCheckbutton.pack(expand=True, anchor=W)
     shuffleGanonCheckbutton.pack(expand=True, anchor=W)
+    hintsCheckbutton.pack(expand=True, anchor=W)
     customCheckbutton.pack(expand=True, anchor=W)
 
     fileDialogFrame = Frame(rightHalfFrame)
@@ -205,7 +209,7 @@ def guiMain(args=None):
     heartbeepFrame = Frame(drowDownFrame)
     heartbeepVar = StringVar()
     heartbeepVar.set('normal')
-    heartbeepOptionMenu = OptionMenu(heartbeepFrame, heartbeepVar, 'normal', 'half', 'quarter', 'off')
+    heartbeepOptionMenu = OptionMenu(heartbeepFrame, heartbeepVar, 'double', 'normal', 'half', 'quarter', 'off')
     heartbeepOptionMenu.pack(side=RIGHT)
     heartbeepLabel = Label(heartbeepFrame, text='Heartbeep sound rate')
     heartbeepLabel.pack(side=LEFT)
@@ -213,7 +217,7 @@ def guiMain(args=None):
     heartcolorFrame = Frame(drowDownFrame)
     heartcolorVar = StringVar()
     heartcolorVar.set('red')
-    heartcolorOptionMenu = OptionMenu(heartcolorFrame, heartcolorVar, 'red', 'blue', 'green', 'yellow')
+    heartcolorOptionMenu = OptionMenu(heartcolorFrame, heartcolorVar, 'red', 'blue', 'green', 'yellow', 'random')
     heartcolorOptionMenu.pack(side=RIGHT)
     heartcolorLabel = Label(heartcolorFrame, text='Heart color')
     heartcolorLabel.pack(side=LEFT)
@@ -271,6 +275,7 @@ def guiMain(args=None):
         guiargs.quickswap = bool(quickSwapVar.get())
         guiargs.disablemusic = bool(disableMusicVar.get())
         guiargs.shuffleganon = bool(shuffleGanonVar.get())
+        guiargs.hints = bool(hintsVar.get())
         guiargs.custom = bool(customVar.get())
         guiargs.customitemarray = [int(bowVar.get()), int(silverarrowVar.get()), int(boomerangVar.get()), int(magicboomerangVar.get()), int(hookshotVar.get()), int(mushroomVar.get()), int(magicpowderVar.get()), int(firerodVar.get()),
                                    int(icerodVar.get()), int(bombosVar.get()), int(etherVar.get()), int(quakeVar.get()), int(lampVar.get()), int(hammerVar.get()), int(shovelVar.get()), int(fluteVar.get()), int(bugnetVar.get()),
@@ -281,6 +286,7 @@ def guiMain(args=None):
                                    int(arrow1Var.get()), int(arrow10Var.get()), int(bomb1Var.get()), int(bomb3Var.get()), int(rupee1Var.get()), int(rupee5Var.get()), int(rupee20Var.get()), int(rupee50Var.get()), int(rupee100Var.get()),
                                    int(rupee300Var.get()), int(rupoorVar.get()), int(blueclockVar.get()), int(greenclockVar.get()), int(redclockVar.get()), int(triforcepieceVar.get()), int(triforcecountVar.get()),
                                    int(triforceVar.get()), int(rupoorcostVar.get()), int(universalkeyVar.get())]
+        guiargs.shufflebosses = None
         guiargs.rom = romVar.get()
         guiargs.jsonout = None
         guiargs.sprite = sprite
@@ -361,13 +367,13 @@ def guiMain(args=None):
 
     drowDownFrame2 = Frame(topFrame2)
     heartbeepFrame2 = Frame(drowDownFrame2)
-    heartbeepOptionMenu2 = OptionMenu(heartbeepFrame2, heartbeepVar, 'normal', 'half', 'quarter', 'off')
+    heartbeepOptionMenu2 = OptionMenu(heartbeepFrame2, heartbeepVar, 'double', 'normal', 'half', 'quarter', 'off')
     heartbeepOptionMenu2.pack(side=RIGHT)
     heartbeepLabel2 = Label(heartbeepFrame2, text='Heartbeep sound rate')
     heartbeepLabel2.pack(side=LEFT)
 
     heartcolorFrame2 = Frame(drowDownFrame2)
-    heartcolorOptionMenu2 = OptionMenu(heartcolorFrame2, heartcolorVar, 'red', 'blue', 'green', 'yellow')
+    heartcolorOptionMenu2 = OptionMenu(heartcolorFrame2, heartcolorVar, 'red', 'blue', 'green', 'yellow', 'random')
     heartcolorOptionMenu2.pack(side=RIGHT)
     heartcolorLabel2 = Label(heartcolorFrame2, text='Heart color')
     heartcolorLabel2.pack(side=LEFT)
@@ -1012,6 +1018,7 @@ def guiMain(args=None):
         logicVar.set(args.logic)
         romVar.set(args.rom)
         shuffleGanonVar.set(args.shuffleganon)
+        hintsVar.set(args.hints)
         if args.sprite is not None:
             set_sprite(Sprite(args.sprite))
 
@@ -1077,7 +1084,7 @@ class SpriteSelector(object):
         for file in glob(output_path(path)):
             sprites.append(Sprite(file))
 
-        sprites.sort(key=lambda s: str.lower(s.name or ""))
+        sprites.sort(key=lambda s: str.lower(s.name or "").strip())
 
         i = 0
         for sprite in sprites:
@@ -1114,7 +1121,7 @@ class SpriteSelector(object):
 
             try:
                 task.update_status("Downloading official sprites list")
-                with urlopen('http://vt.alttp.run/sprites') as response:
+                with urlopen('https://alttpr.com/sprites') as response:
                     sprites_arr = json.loads(response.read().decode("utf-8"))
             except Exception as e:
                 resultmessage = "Error getting list of official sprites. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
@@ -1161,7 +1168,7 @@ class SpriteSelector(object):
                 deleted += 1
 
             if successful:
-                resultmessage = "official sprites updated sucessfully"
+                resultmessage = "official sprites updated successfully"
 
             task.queue_event(finished)
 
