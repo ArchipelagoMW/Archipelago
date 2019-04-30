@@ -1019,8 +1019,8 @@ def write_strings(rom, world):
 
     # Let's keep this guy's text accurate to the shuffle setting.
     if world.shuffle in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
-        tt['kakariko_flophouse_man_no_flippers'] = 'I really hate mowing my yard.\n\n\nI should move.'
-        tt['kakariko_flophouse_man'] = 'I really hate mowing my yard.\n\n\nI should move.'
+        tt['kakariko_flophouse_man_no_flippers'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
+        tt['kakariko_flophouse_man'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
 
     # For hints, first we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
     if world.hints:

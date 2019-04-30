@@ -1864,8 +1864,8 @@ class TextTable(object):
         # 180
         text['game_chest_play_no'] = CompressedTextMapper.convert("Well fine, I didn't want your rupees.")
         text['game_chest_lost_woods'] = CompressedTextMapper.convert("Pay 100 rupees open 1 chest. Are you lucky?\nSo, Play game?\n  ≥ play\n    never!\n{CHOICE}")
-        text['kakariko_flophouse_man_no_flippers'] = CompressedTextMapper.convert("I really hate mowing my yard.\nI moved my house and everyone else's to avoid it.\n\nI hope you don't mind.")
-        text['kakariko_flophouse_man'] = CompressedTextMapper.convert("I really hate mowing my yard.\nI moved my house and everyone else's to avoid it.\n\nI hope you don't mind.")
+        text['kakariko_flophouse_man_no_flippers'] = CompressedTextMapper.convert("I really hate mowing my yard.\nI moved my house and everyone else's to avoid it.\n{PAGEBREAK}\nI hope you don't mind.")
+        text['kakariko_flophouse_man'] = CompressedTextMapper.convert("I really hate mowing my yard.\nI moved my house and everyone else's to avoid it.\n{PAGEBREAK}\nI hope you don't mind.")
         text['menu_start_2'] = CompressedTextMapper.convert("{MENU}\n{SPEED0}\n≥@'s house\n Sanctuary\n{CHOICE3}", False)
         text['menu_start_3'] = CompressedTextMapper.convert("{MENU}\n{SPEED0}\n≥@'s house\n Sanctuary\n Mountain Cave\n{CHOICE2}", False)
         text['menu_pause'] = CompressedTextMapper.convert("{SPEED0}\n≥continue\n save and quit\n{CHOICE3}", False)
