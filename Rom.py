@@ -831,7 +831,7 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
 
     # set rom name
     # 21 bytes
-    rom.write_bytes(0x7FC0, bytearray('ER_060_%09d\0' % world.seed, 'utf8') + world.option_identifier.to_bytes(4, 'big'))
+    rom.write_bytes(0x7FC0, bytearray('ER_062_%09d\0' % world.seed, 'utf8') + world.option_identifier.to_bytes(4, 'big'))
 
     # Write title screen Code
     hashint = int(rom.get_hash(), 16)
