@@ -1024,7 +1024,7 @@ def write_strings(rom, world):
 
     # For hints, first we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
     if world.hints:
-        tt['sign_north_of_links_house'] = 'Randomizer The telepathic tiles can have hints!'
+        tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles can have hints!'
         entrances_to_hint = {}
         entrances_to_hint.update(InconvenientEntrances)
         if world.shuffle_ganon:
