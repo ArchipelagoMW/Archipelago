@@ -207,14 +207,19 @@ def start():
                              ''')
     parser.add_argument('--suppress_rom', help='Do not create an output rom file.', action='store_true')
     parser.add_argument('--gui', help='Launch the GUI', action='store_true')
-    # Deliberately not documented, only useful for vt site integration right now:
-    parser.add_argument('--shufflebosses', help=argparse.SUPPRESS, default='none', const='none', nargs='?', choices=['none', 'basic', 'normal', 'chaos'])
     parser.add_argument('--jsonout', action='store_true', help='''\
                             Output .json patch to stdout instead of a patched rom. Used
                             for VT site integration, do not use otherwise.
                             ''')
-    parser.add_argument('--multi', default=1, type=lambda value: min(max(int(value), 1), 255))
     parser.add_argument('--skip_playthrough', action='store_true', default=False)
+    parser.add_argument('--enemizercli', default='')
+    parser.add_argument('--shufflebosses', default='none', choices=['none', 'basic', 'normal', 'chaos'])
+    parser.add_argument('--shuffleenemies', default=False, action='store_true')
+    parser.add_argument('--enemy_health', default='default', choices=['default', 'easy', 'normal', 'hard', 'expert'])
+    parser.add_argument('--enemy_damage', default='default', choices=['default', 'shuffled', 'chaos'])
+    parser.add_argument('--shufflepalette', default=False, action='store_true')
+    parser.add_argument('--shufflepots', default=False, action='store_true')
+    parser.add_argument('--multi', default=1, type=lambda value: min(max(int(value), 1), 255))
 
     parser.add_argument('--outputpath')
     args = parser.parse_args()

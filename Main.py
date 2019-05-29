@@ -3,13 +3,14 @@ import copy
 from itertools import zip_longest
 import json
 import logging
+import os
 import random
 import time
 
 from BaseClasses import World, CollectionState, Item, Region, Location, Shop
 from Regions import create_regions, mark_light_world_regions
 from EntranceShuffle import link_entrances
-from Rom import patch_rom, Sprite, LocalRom, JsonRom
+from Rom import patch_rom, get_enemizer_patch, apply_rom_settings, Sprite, LocalRom, JsonRom
 from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
 from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, flood_items, balance_multiworld_progression
@@ -124,6 +125,8 @@ def main(args, seed=None):
 
     outfilebase = 'ER_%s_%s-%s-%s%s_%s-%s%s%s%s%s_%s' % (world.logic, world.difficulty, world.mode, world.goal, "" if world.timer in ['none', 'display'] else "-" + world.timer, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-retro" if world.retro else "", "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "", "-nohints" if not world.hints else "", world.seed)
 
+    use_enemizer = args.enemizercli and (args.shufflebosses != 'none' or args.shuffleenemies or args.enemy_health != 'default' or args.enemy_health != 'default' or args.enemy_damage or args.shufflepalette or args.shufflepots)
+
     jsonout = {}
     if not args.suppress_rom:
         if world.players > 1:
@@ -131,17 +134,32 @@ def main(args, seed=None):
         else:
             player = 1
 
+            local_rom = None
             if args.jsonout:
                 rom = JsonRom()
             else:
-                rom = LocalRom(args.rom)
-            patch_rom(world, player, rom, bytearray(logic_hash), args.heartbeep, args.heartcolor, sprite, player_names)
+                if use_enemizer:
+                    local_rom = LocalRom(args.rom)
+                    rom = JsonRom()
+                else:
+                    rom = LocalRom(args.rom)
+
+            patch_rom(world, player, rom, bytearray(logic_hash))
+
+            enemizer_patch = []
+            if use_enemizer:
+                enemizer_patch = get_enemizer_patch(world, player, rom, args.rom, args.enemizercli, args.shuffleenemies, args.enemy_health, args.enemy_damage, args.shufflepalette, args.shufflepots)
 
             if args.jsonout:
                 jsonout['patch'] = rom.patches
-
+                if use_enemizer:
+                    jsonout['enemizer' % player] = enemizer_patch
             else:
-                apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite, player_names)
+                if use_enemizer:
+                    local_rom.patch_enemizer(rom.patches, os.path.join(os.path.dirname(args.enemizercli), "enemizerBasePatch.json"), enemizer_patch)
+                    rom = local_rom
+
+                apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite)
                 rom.write_to_file(output_path('%s.sfc' % outfilebase))
 
     if args.create_spoiler and not args.jsonout:

@@ -4,6 +4,7 @@ import hashlib
 import logging
 import os
 import struct
+import subprocess
 import random
 
 from BaseClasses import ShopType, Region, Location, Item
@@ -11,7 +12,7 @@ from Dungeons import dungeon_music_addresses
 from Text import MultiByteTextMapper, text_addresses, Credits, TextTable
 from Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts, junk_texts
 from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from Utils import local_path, int16_as_bytes, int32_as_bytes
+from Utils import output_path, local_path, int16_as_bytes, int32_as_bytes
 from Items import ItemFactory, item_table
 
 
@@ -84,7 +85,7 @@ class LocalRom(object):
             logging.getLogger('').warning('Supplied Base Rom does not match known MD5 for JAP(1.0) release. Will try to patch anyway.')
 
         # extend to 2MB
-        self.buffer.extend(bytearray([0x00] * (2097152 - len(self.buffer))))
+        self.buffer.extend(bytearray([0x00] * (0x200000 - len(self.buffer))))
 
         # load randomizer patches
         with open(local_path('data/base2current.json'), 'r') as stream:
@@ -99,6 +100,24 @@ class LocalRom(object):
         patchedmd5.update(self.buffer)
         if RANDOMIZERBASEHASH != patchedmd5.hexdigest():
             raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
+
+    def patch_enemizer(self, rando_patch, base_enemizer_patch_path, enemizer_patch):
+        # extend to 4MB
+        self.buffer.extend(bytearray([0x00] * (0x400000 - len(self.buffer))))
+
+        # apply randomizer patches
+        for address, values in rando_patch.items():
+            self.write_bytes(int(address), values)
+
+        # load base enemizer patches
+        with open(base_enemizer_patch_path, 'r') as f:
+            base_enemizer_patch = json.load(f)
+        for patch in base_enemizer_patch:
+            self.write_bytes(patch["address"], patch["patchData"])
+
+        # apply enemizer patches
+        for patch in enemizer_patch:
+            self.write_bytes(patch["address"], patch["patchData"])
 
     def write_crc(self):
         crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
@@ -116,6 +135,124 @@ def read_rom(stream):
     if len(buffer)%0x400 == 0x200:
         buffer = buffer[0x200:]
     return buffer
+
+def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shuffleenemies, enemy_health, enemy_damage, shufflepalette, shufflepots):
+    baserom_path = os.path.abspath(baserom_path)
+    basepatch_path = os.path.abspath(local_path('data/base2current.json'))
+    randopatch_path = os.path.abspath(output_path('enemizer_randopatch.json'))
+    options_path = os.path.abspath(output_path('enemizer_options.json'))
+    enemizer_output_path = os.path.abspath(output_path('enemizer_output.json'))
+
+    # write options file for enemizer
+    options = {
+        'RandomizeEnemies': shuffleenemies,
+        'RandomizeEnemiesType': 3,
+        'RandomizeBushEnemyChance': True,
+        'RandomizeEnemyHealthRange': enemy_health != 'default',
+        'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[enemy_health],
+        'OHKO': False,
+        'RandomizeEnemyDamage': enemy_damage != 'default',
+        'AllowEnemyZeroDamage': True,
+        'ShuffleEnemyDamageGroups': enemy_damage != 'default',
+        'EnemyDamageChaosMode': enemy_damage == 'chaos',
+        'EasyModeEscape': False,
+        'EnemiesAbsorbable': False,
+        'AbsorbableSpawnRate': 10,
+        'AbsorbableTypes': {
+            'FullMagic': True, 'SmallMagic': True, 'Bomb_1': True, 'BlueRupee': True, 'Heart': True, 'BigKey': True, 'Key': True,
+            'Fairy': True, 'Arrow_10': True, 'Arrow_5': True, 'Bomb_8': True, 'Bomb_4': True, 'GreenRupee': True, 'RedRupee': True
+        },
+        'BossMadness': False,
+        'RandomizeBosses': True,
+        'RandomizeBossesType': 0,
+        'RandomizeBossHealth': False,
+        'RandomizeBossHealthMinAmount': 0,
+        'RandomizeBossHealthMaxAmount': 300,
+        'RandomizeBossDamage': False,
+        'RandomizeBossDamageMinAmount': 0,
+        'RandomizeBossDamageMaxAmount': 200,
+        'RandomizeBossBehavior': False,
+        'RandomizeDungeonPalettes': shufflepalette,
+        'SetBlackoutMode': False,
+        'RandomizeOverworldPalettes': shufflepalette,
+        'RandomizeSpritePalettes': shufflepalette,
+        'SetAdvancedSpritePalettes': False,
+        'PukeMode': False,
+        'NegativeMode': False,
+        'GrayscaleMode': False,
+        'GenerateSpoilers': False,
+        'RandomizeLinkSpritePalette': False,
+        'RandomizePots': shufflepots,
+        'ShuffleMusic': False,
+        'BootlegMagic': True,
+        'CustomBosses': False,
+        'AndyMode': False,
+        'HeartBeepSpeed': 0,
+        'AlternateGfx': False,
+        'ShieldGraphics': "shield_gfx/normal.gfx",
+        'SwordGraphics': "sword_gfx/normal.gfx",
+        'BeeMizer': False,
+        'BeesLevel': 0,
+        'RandomizeTileTrapPattern': True,
+        'RandomizeTileTrapFloorTile': False,
+        'AllowKillableThief': shuffleenemies,
+        'RandomizeSpriteOnHit': False,
+        'DebugMode': False,
+        'DebugForceEnemy': False,
+        'DebugForceEnemyId': 0,
+        'DebugForceBoss': False,
+        'DebugForceBossId': 0,
+        'DebugOpenShutterDoors': False,
+        'DebugForceEnemyDamageZero': False,
+        'DebugShowRoomIdInRupeeCounter': False,
+        'UseManualBosses': True,
+        'ManualBosses': {
+            'EasternPalace': world.get_dungeon("Eastern Palace", player).boss.enemizer_name,
+            'DesertPalace': world.get_dungeon("Desert Palace", player).boss.enemizer_name,
+            'TowerOfHera': world.get_dungeon("Tower of Hera", player).boss.enemizer_name,
+            'AgahnimsTower': 'Agahnim',
+            'PalaceOfDarkness': world.get_dungeon("Palace of Darkness", player).boss.enemizer_name,
+            'SwampPalace': world.get_dungeon("Swamp Palace", player).boss.enemizer_name,
+            'SkullWoods': world.get_dungeon("Skull Woods", player).boss.enemizer_name,
+            'ThievesTown': world.get_dungeon("Thieves Town", player).boss.enemizer_name,
+            'IcePalace': world.get_dungeon("Ice Palace", player).boss.enemizer_name,
+            'MiseryMire': world.get_dungeon("Misery Mire", player).boss.enemizer_name,
+            'TurtleRock': world.get_dungeon("Turtle Rock", player).boss.enemizer_name,
+            'GanonsTower1': world.get_dungeon('Ganons Tower', player).bosses['bottom'].enemizer_name,
+            'GanonsTower2': world.get_dungeon('Ganons Tower', player).bosses['middle'].enemizer_name,
+            'GanonsTower3': world.get_dungeon('Ganons Tower', player).bosses['top'].enemizer_name,
+            'GanonsTower4': 'Agahnim2',
+            'Ganon': 'Ganon',
+        }
+    }
+
+    rom.write_to_file(randopatch_path)
+
+    with open(options_path, 'w') as f:
+        json.dump(options, f)
+
+    subprocess.check_call([os.path.abspath(enemizercli),
+                           '--rom', baserom_path,
+                           '--seed', str(world.rom_seeds[player]),
+                           '--base', basepatch_path,
+                           '--randomizer', randopatch_path,
+                           '--enemizer', options_path,
+                           '--output', enemizer_output_path],
+                          cwd=os.path.dirname(enemizercli), stdout=subprocess.DEVNULL)
+
+    with open(enemizer_output_path, 'r') as f:
+        ret = json.load(f)
+
+    if os.path.exists(randopatch_path):
+        os.remove(randopatch_path)
+
+    if os.path.exists(options_path):
+        os.remove(options_path)
+
+    if os.path.exists(enemizer_output_path):
+        os.remove(enemizer_output_path)
+
+    return ret
 
 class Sprite(object):
     default_palette = [255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
@@ -275,7 +412,7 @@ class Sprite(object):
         # split into palettes of 15 colors
         return array_chunk(palette_as_colors, 15)
 
-def patch_rom(world, player, rom, hashtable, beep='normal', color='red', sprite=None):
+def patch_rom(world, player, rom, hashtable):
     random.seed(world.rom_seeds[player])
     # patch items
     for location in world.get_locations():
@@ -851,8 +988,6 @@ def patch_rom(world, player, rom, hashtable, beep='normal', color='red', sprite=
         hashint & 0x1F,
     ]
     rom.write_bytes(0x180215, code)
-
-    apply_rom_settings(rom, beep, color, world.quickswap, world.fastmenu, world.disable_music, sprite)
 
     return rom
 

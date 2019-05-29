@@ -5,7 +5,7 @@ import json
 import random
 import os
 import shutil
-from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, Entry, Spinbox, Button, filedialog, messagebox, ttk
+from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, BOTH, Entry, Spinbox, Button, filedialog, messagebox, ttk
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
@@ -242,12 +242,67 @@ def guiMain(args=None):
     heartcolorFrame.pack(expand=True, anchor=E)
     fastMenuFrame.pack(expand=True, anchor=E)
 
-    bottomFrame = Frame(randomizerWindow)
+    enemizerFrame = LabelFrame(randomizerWindow, text="Enemizer", padx=5, pady=5)
+    enemizerFrame.columnconfigure(0, weight=1)
+    enemizerFrame.columnconfigure(1, weight=1)
+    enemizerFrame.columnconfigure(2, weight=1)
+
+    enemizerPathFrame = Frame(enemizerFrame)
+    enemizerPathFrame.grid(row=0, column=0, columnspan=3, sticky=W)
+    enemizerCLIlabel = Label(enemizerPathFrame, text="EnemizerCLI path: ")
+    enemizerCLIlabel.pack(side=LEFT)
+    enemizerCLIpathVar = StringVar()
+    enemizerCLIpathEntry = Entry(enemizerPathFrame, textvariable=enemizerCLIpathVar, width=80)
+    enemizerCLIpathEntry.pack(side=LEFT)
+    def EnemizerSelectPath():
+        path = filedialog.askopenfilename(filetypes=[("EnemizerCLI executable", "*EnemizerCLI*")])
+        if path:
+            enemizerCLIpathVar.set(path)
+    enemizerCLIbrowseButton = Button(enemizerPathFrame, text='...', command=EnemizerSelectPath)
+    enemizerCLIbrowseButton.pack(side=LEFT)
+
+    enemyShuffleVar = IntVar()
+    enemyShuffleButton = Checkbutton(enemizerFrame, text="Enemy shuffle", variable=enemyShuffleVar)
+    enemyShuffleButton.grid(row=1, column=0)
+    paletteShuffleVar = IntVar()
+    paletteShuffleButton = Checkbutton(enemizerFrame, text="Palette shuffle", variable=paletteShuffleVar)
+    paletteShuffleButton.grid(row=1, column=1)
+    potShuffleVar = IntVar()
+    potShuffleButton = Checkbutton(enemizerFrame, text="Pot shuffle", variable=potShuffleVar)
+    potShuffleButton.grid(row=1, column=2)
+
+    enemizerBossFrame = Frame(enemizerFrame)
+    enemizerBossFrame.grid(row=2, column=0)
+    enemizerBossLabel = Label(enemizerBossFrame, text='Boss shuffle')
+    enemizerBossLabel.pack(side=LEFT)
+    enemizerBossVar = StringVar()
+    enemizerBossVar.set('none')
+    enemizerBossOption = OptionMenu(enemizerBossFrame, enemizerBossVar, 'none', 'basic', 'normal', 'chaos')
+    enemizerBossOption.pack(side=LEFT)
+
+    enemizerDamageFrame = Frame(enemizerFrame)
+    enemizerDamageFrame.grid(row=2, column=1)
+    enemizerDamageLabel = Label(enemizerDamageFrame, text='Enemy damage')
+    enemizerDamageLabel.pack(side=LEFT)
+    enemizerDamageVar = StringVar()
+    enemizerDamageVar.set('default')
+    enemizerDamageOption = OptionMenu(enemizerDamageFrame, enemizerDamageVar, 'default', 'shuffled', 'chaos')
+    enemizerDamageOption.pack(side=LEFT)
+
+    enemizerHealthFrame = Frame(enemizerFrame)
+    enemizerHealthFrame.grid(row=2, column=2)
+    enemizerHealthLabel = Label(enemizerHealthFrame, text='Enemy health')
+    enemizerHealthLabel.pack(side=LEFT)
+    enemizerHealthVar = StringVar()
+    enemizerHealthVar.set('default')
+    enemizerHealthOption = OptionMenu(enemizerHealthFrame, enemizerHealthVar, 'default', 'easy', 'normal', 'hard', 'expert')
+    enemizerHealthOption.pack(side=LEFT)
+
+    bottomFrame = Frame(randomizerWindow, pady=5)
 
     worldLabel = Label(bottomFrame, text='Worlds')
     worldVar = StringVar()
     worldSpinbox = Spinbox(bottomFrame, from_=1, to=100, width=5, textvariable=worldVar)
-
     seedLabel = Label(bottomFrame, text='Seed #')
     seedVar = StringVar()
     seedEntry = Entry(bottomFrame, width=15, textvariable=seedVar)
@@ -281,6 +336,13 @@ def guiMain(args=None):
         guiargs.disablemusic = bool(disableMusicVar.get())
         guiargs.shuffleganon = bool(shuffleGanonVar.get())
         guiargs.hints = bool(hintsVar.get())
+        guiargs.enemizercli = enemizerCLIpathVar.get()
+        guiargs.shufflebosses = enemizerBossVar.get()
+        guiargs.shuffleenemies = bool(enemyShuffleVar.get())
+        guiargs.enemy_health = enemizerHealthVar.get()
+        guiargs.enemy_damage = enemizerDamageVar.get()
+        guiargs.shufflepalette = bool(paletteShuffleVar.get())
+        guiargs.shufflepots = bool(potShuffleVar.get())
         guiargs.custom = bool(customVar.get())
         guiargs.customitemarray = [int(bowVar.get()), int(silverarrowVar.get()), int(boomerangVar.get()), int(magicboomerangVar.get()), int(hookshotVar.get()), int(mushroomVar.get()), int(magicpowderVar.get()), int(firerodVar.get()),
                                    int(icerodVar.get()), int(bombosVar.get()), int(etherVar.get()), int(quakeVar.get()), int(lampVar.get()), int(hammerVar.get()), int(shovelVar.get()), int(fluteVar.get()), int(bugnetVar.get()),
@@ -291,7 +353,6 @@ def guiMain(args=None):
                                    int(arrow1Var.get()), int(arrow10Var.get()), int(bomb1Var.get()), int(bomb3Var.get()), int(rupee1Var.get()), int(rupee5Var.get()), int(rupee20Var.get()), int(rupee50Var.get()), int(rupee100Var.get()),
                                    int(rupee300Var.get()), int(rupoorVar.get()), int(blueclockVar.get()), int(greenclockVar.get()), int(redclockVar.get()), int(triforcepieceVar.get()), int(triforcecountVar.get()),
                                    int(triforceVar.get()), int(rupoorcostVar.get()), int(universalkeyVar.get())]
-        guiargs.shufflebosses = None
         guiargs.rom = romVar.get()
         guiargs.jsonout = None
         guiargs.sprite = sprite
@@ -326,6 +387,7 @@ def guiMain(args=None):
     rightHalfFrame.pack(side=RIGHT)
     topFrame.pack(side=TOP)
     bottomFrame.pack(side=BOTTOM)
+    enemizerFrame.pack(side=BOTTOM, fill=BOTH)
 
     # Adjuster Controls
 
