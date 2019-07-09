@@ -71,7 +71,6 @@ def fill_dungeons(world):
             world.push_item(bk_location, big_key, False)
             bk_location.event = True
             dungeon_locations.remove(bk_location)
-            all_state.clear_cached_unreachable()
             big_key = None
 
         # next place small keys
@@ -97,7 +96,6 @@ def fill_dungeons(world):
             world.push_item(sk_location, small_key, False)
             sk_location.event = True
             dungeon_locations.remove(sk_location)
-            all_state.clear_cached_unreachable()
 
         if small_keys:
             # key placement not finished, loop again
@@ -109,7 +107,6 @@ def fill_dungeons(world):
                 di_location = dungeon_locations.pop()
                 world.push_item(di_location, dungeon_item, False)
 
-    world.state.clear_cached_unreachable()
 
 def get_dungeon_item_pool(world):
     return [item for dungeon in world.dungeons for item in dungeon.all_items if item.key or world.place_dungeon_items]
@@ -142,7 +139,6 @@ def fill_dungeons_restrictive(world, shuffled_locations):
 
     fill_restrictive(world, all_state_base, shuffled_locations, dungeon_items)
 
-    world.state.clear_cached_unreachable()
 
 
 dungeon_music_addresses = {'Eastern Palace - Prize': [0x1559A],

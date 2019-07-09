@@ -172,7 +172,6 @@ class World(object):
                                      'Small Key (Swamp Palace)', 'Big Key (Ice Palace)'] + ['Small Key (Ice Palace)'] * 2 + ['Big Key (Misery Mire)', 'Big Key (Turtle Rock)', 'Big Key (Ganons Tower)'] + ['Small Key (Misery Mire)'] * 3 + ['Small Key (Turtle Rock)'] * 4 + ['Small Key (Ganons Tower)'] * 4):
                 soft_collect(item)
         ret.sweep_for_events()
-        ret.clear_cached_unreachable()
         return ret
 
     def get_items(self):
@@ -233,7 +232,6 @@ class World(object):
 
     def unlocks_new_location(self, item):
         temp_state = self.state.copy()
-        temp_state.clear_cached_unreachable()
         temp_state.collect(item, True)
 
         for location in self.get_unfilled_locations():
@@ -320,75 +318,50 @@ class CollectionState(object):
     def __init__(self, parent):
         self.prog_items = []
         self.world = parent
-        self.region_cache = {}
-        self.location_cache = {}
-        self.entrance_cache = {}
-        self.recursion_count = 0
+        self.reachable_regions = set()
         self.events = []
         self.path = {}
         self.locations_checked = set()
+        self.stale = True
 
+    def update_reachable_regions(self):
+        self.stale=False
 
-    def clear_cached_unreachable(self):
-        # we only need to invalidate results which were False, places we could reach before we can still reach after adding more items
-        self.region_cache = {k: v for k, v in self.region_cache.items() if v}
-        self.location_cache = {k: v for k, v in self.location_cache.items() if v}
-        self.entrance_cache = {k: v for k, v in self.entrance_cache.items() if v}
+        new_regions = True
+        reachable_regions_count = len(self.reachable_regions)
+        while new_regions:
+            possible = [region for region in self.world.regions if region not in self.reachable_regions] 
+            for candidate in possible:
+                if candidate.can_reach_private(self):
+                    self.reachable_regions.add(candidate)
+            new_regions = len(self.reachable_regions) > reachable_regions_count
+            reachable_regions_count = len(self.reachable_regions)
 
     def copy(self):
         ret = CollectionState(self.world)
         ret.prog_items = copy.copy(self.prog_items)
-        ret.region_cache = copy.copy(self.region_cache)
-        ret.location_cache = copy.copy(self.location_cache)
-        ret.entrance_cache = copy.copy(self.entrance_cache)
+        ret.reachable_regions = copy.copy(self.reachable_regions)
         ret.events = copy.copy(self.events)
         ret.path = copy.copy(self.path)
         ret.locations_checked = copy.copy(self.locations_checked)
+        ret.stale = True
         return ret
 
     def can_reach(self, spot, resolution_hint=None):
         try:
             spot_type = spot.spot_type
-            if spot_type == 'Location':
-                correct_cache = self.location_cache
-            elif spot_type == 'Region':
-                correct_cache = self.region_cache
-            elif spot_type == 'Entrance':
-                correct_cache = self.entrance_cache
-            else:
-                raise AttributeError
         except AttributeError:
             # try to resolve a name
             if resolution_hint == 'Location':
                 spot = self.world.get_location(spot)
-                correct_cache = self.location_cache
             elif resolution_hint == 'Entrance':
                 spot = self.world.get_entrance(spot)
-                correct_cache = self.entrance_cache
             else:
                 # default to Region
                 spot = self.world.get_region(spot)
-                correct_cache = self.region_cache
+                
 
-        if spot.recursion_count > 0:
-            return False
-
-        if spot not in correct_cache:
-            # for the purpose of evaluating results, recursion is resolved by always denying recursive access (as that ia what we are trying to figure out right now in the first place
-            spot.recursion_count += 1
-            self.recursion_count += 1
-            can_reach = spot.can_reach(self)
-            spot.recursion_count -= 1
-            self.recursion_count -= 1
-
-            # we only store qualified false results (i.e. ones not inside a hypothetical)
-            if not can_reach:
-                if self.recursion_count == 0:
-                    correct_cache[spot] = can_reach
-            else:
-                correct_cache[spot] = can_reach
-            return can_reach
-        return correct_cache[spot]
+        return spot.can_reach(self)
 
     def sweep_for_events(self, key_only=False):
         # this may need improvement
@@ -566,12 +539,12 @@ class CollectionState(object):
         elif event or item.advancement:
             self.prog_items.append(item.name)
             changed = True
+        
+        self.stale = True
 
         if changed:
-            self.clear_cached_unreachable()
             if not event:
                 self.sweep_for_events()
-                self.clear_cached_unreachable()
 
     def remove(self, item):
         if item.advancement:
@@ -603,10 +576,8 @@ class CollectionState(object):
                     return
 
                 # invalidate caches, nothing can be trusted anymore now
-                self.region_cache = {}
-                self.location_cache = {}
-                self.entrance_cache = {}
-                self.recursion_count = 0
+                self.reachable_regions = set()
+                self.stale = True
 
     def __getattr__(self, item):
         if item.startswith('can_reach_'):
@@ -647,6 +618,11 @@ class Region(object):
         self.recursion_count = 0
 
     def can_reach(self, state):
+        if state.stale:
+            state.update_reachable_regions()
+        return self in state.reachable_regions
+
+    def can_reach_private(self, state):
         for entrance in self.entrances:
             if state.can_reach(entrance):
                 if not self in state.path:
@@ -683,7 +659,7 @@ class Entrance(object):
         self.access_rule = lambda state: True
 
     def can_reach(self, state):
-        if self.access_rule(state) and state.can_reach(self.parent_region):
+        if state.can_reach(self.parent_region) and self.access_rule(state):
             if not self in state.path:
                 state.path[self] = (self.name, state.path.get(self.parent_region, (self.parent_region.name, None)))
             return True
@@ -768,7 +744,7 @@ class Location(object):
         return self.always_allow(state, item) or (self.parent_region.can_fill(item) and self.item_rule(item) and (not check_access or self.can_reach(state)))
 
     def can_reach(self, state):
-        if self.access_rule(state) and state.can_reach(self.parent_region):
+        if state.can_reach(self.parent_region) and self.access_rule(state):
             return True
         return False
 

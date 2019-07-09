@@ -200,6 +200,7 @@ def copy_world(world):
 
     # copy progress items in state
     ret.state.prog_items = list(world.state.prog_items)
+    ret.state.stale = True
 
     set_rules(ret)
 
