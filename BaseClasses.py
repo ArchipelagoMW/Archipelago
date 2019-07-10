@@ -244,12 +244,11 @@ class World(object):
 
         return False
 
-    def has_beaten_game(self, state):
-        if all([state.has('Triforce', player) for player in range(1, self.players + 1)]):
-            return True
-        if self.goal in ['triforcehunt'] and all([((state.item_count('Triforce Piece', player) + state.item_count('Power Star', player)) > self.treasure_hunt_count) for player in range(1, self.players + 1)]):
-            return True
-        return False
+    def has_beaten_game(self, state, player=None):
+        if player:
+            return state.has('Triforce', player) or (self.goal in ['triforcehunt'] and (state.item_count('Triforce Piece', player) + state.item_count('Power Star', player) > self.treasure_hunt_count))
+        else:
+            return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
 
     def can_beat_game(self, starting_state=None):
         if starting_state:
@@ -410,7 +409,7 @@ class CollectionState(object):
         return self.bottle_count(player) > 0
 
     def bottle_count(self, player):
-        return len([pritem for pritem in self.prog_items if pritem[0].startswith('Bottle') and pritem[1] == player])
+        return len([item for (item, itemplayer) in self.prog_items if item.startswith('Bottle') and itemplayer == player])
 
     def has_hearts(self, player, count):
         # Warning: This only considers items that are marked as advancement items
@@ -641,7 +640,7 @@ class Region(object):
         is_dungeon_item = item.key or item.map or item.compass
         sewer_hack = self.world.mode == 'standard' and item.name == 'Small Key (Escape)'
         if sewer_hack or (is_dungeon_item and not self.world.keysanity):
-            return self.dungeon and self.dungeon.is_dungeon_item(item) and (item.player == self.player or self.world.keysanity)
+            return self.dungeon and self.dungeon.is_dungeon_item(item) and item.player == self.player
 
         return True
 

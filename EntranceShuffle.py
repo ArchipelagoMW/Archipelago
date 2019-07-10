@@ -28,7 +28,7 @@ def link_entrances(world, player):
         for exitname, regionname in default_connections:
             connect_simple(world, exitname, regionname, player)
 
-        simple_shuffle_dungeons(world)
+        simple_shuffle_dungeons(world, player)
     elif world.shuffle == 'dungeonsfull':
         for exitname, regionname in default_connections:
             connect_simple(world, exitname, regionname, player)
