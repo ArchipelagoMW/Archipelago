@@ -281,36 +281,6 @@ class World(object):
 
         return False
 
-    def option_identifier(self, maxbytes, player):
-        id_value = 0
-        id_value_max = 1
-
-        def markbool(value):
-            nonlocal id_value, id_value_max
-            id_value += id_value_max * bool(value)
-            id_value_max *= 2
-        def marksequence(options, value):
-            nonlocal id_value, id_value_max
-            id_value += id_value_max * options.index(value)
-            id_value_max *= len(options)
-        markbool(self.logic == 'noglitches')
-        marksequence(['standard', 'open', 'swordless'], self.mode)
-        markbool(self.place_dungeon_items)
-        marksequence(['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'], self.goal)
-        marksequence(['vanilla', 'simple', 'restricted', 'full', 'crossed', 'insanity', 'restricted_legacy', 'full_legacy', 'madness_legacy', 'insanity_legacy', 'dungeonsfull', 'dungeonssimple'], self.shuffle)
-        marksequence(['easy', 'normal', 'hard', 'expert', 'insane'], self.difficulty)
-        marksequence(['none', 'display', 'timed', 'timed-ohko', 'timed-countdown', 'ohko'], self.timer)
-        marksequence(['on', 'off', 'random'], self.progressive)
-        marksequence(['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26', 'balanced'], self.algorithm)
-        markbool(self.check_beatable_only)
-        markbool(self.shuffle_ganon)
-        markbool(self.keysanity)
-        markbool(self.retro)
-        marksequence(range(1, 256), self.players)
-        marksequence(range(1, self.players + 1), player)
-        assert id_value_max < (1 << (maxbytes * 8))
-        return id_value
-
 class CollectionState(object):
 
     def __init__(self, parent):

@@ -974,8 +974,9 @@ def patch_rom(world, player, rom):
 
     # set rom name
     # 21 bytes
-    rom.name = bytearray('ER062%09d' % world.seed, 'utf8') + world.option_identifier(7, player).to_bytes(7, 'big')
-    assert(len(rom.name) == 21)
+    from Main import __version__
+    rom.name = bytearray('ER_{0}_{1:09}\0'.format(__version__,world.seed), 'utf8')
+    assert len(rom.name) <= 21
     rom.write_bytes(0x7FC0, rom.name)
 
     # Write title screen Code
