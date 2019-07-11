@@ -412,7 +412,7 @@ class Sprite(object):
         # split into palettes of 15 colors
         return array_chunk(palette_as_colors, 15)
 
-def patch_rom(world, player, rom, hashtable):
+def patch_rom(world, player, rom):
     random.seed(world.rom_seeds[player])
     # patch items
     for location in world.get_locations():
