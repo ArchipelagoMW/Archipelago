@@ -246,7 +246,7 @@ def copy_world(world):
 
     # copy progress items in state
     ret.state.prog_items = list(world.state.prog_items)
-    ret.state.stale = True
+    ret.state.stale = {player: True for player in range(1, world.players + 1)}
 
     for player in range(1, world.players + 1):
         set_rules(ret, player)

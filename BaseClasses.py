@@ -227,12 +227,12 @@ class World(object):
     def get_reachable_locations(self, state=None, player=None):
         if state is None:
             state = self.state
-        return [location for location in self.get_locations() if (player is None or location.player == player) and state.can_reach(location)]
+        return [location for location in self.get_locations() if (player is None or location.player == player) and location.can_reach(state)]
 
     def get_placeable_locations(self, state=None, player=None):
         if state is None:
             state = self.state
-        return [location for location in self.get_locations() if (player is None or location.player == player) and location.item is None and state.can_reach(location)]
+        return [location for location in self.get_locations() if (player is None or location.player == player) and location.item is None and location.can_reach(state)]
 
     def unlocks_new_location(self, item):
         temp_state = self.state.copy()
@@ -316,32 +316,32 @@ class CollectionState(object):
     def __init__(self, parent):
         self.prog_items = []
         self.world = parent
-        self.reachable_regions = set()
+        self.reachable_regions = {player: set() for player in range(1, parent.players + 1)}
         self.events = []
         self.path = {}
         self.locations_checked = set()
-        self.stale = True
+        self.stale = {player: True for player in range(1, parent.players + 1)}
 
-    def update_reachable_regions(self):
-        self.stale=False
+    def update_reachable_regions(self, player):
+        self.stale[player] = False
+        rrp = self.reachable_regions[player]
         new_regions = True
-        reachable_regions_count = len(self.reachable_regions)
+        reachable_regions_count = len(rrp)
         while new_regions:
-            possible = [region for region in self.world.regions if region not in self.reachable_regions] 
+            possible = [region for region in self.world.regions if region not in rrp and region.player == player] 
             for candidate in possible:
                 if candidate.can_reach_private(self):
-                    self.reachable_regions.add(candidate)
-            new_regions = len(self.reachable_regions) > reachable_regions_count
-            reachable_regions_count = len(self.reachable_regions)
+                    rrp.add(candidate)
+            new_regions = len(rrp) > reachable_regions_count
+            reachable_regions_count = len(rrp)
 
     def copy(self):
         ret = CollectionState(self.world)
         ret.prog_items = copy.copy(self.prog_items)
-        ret.reachable_regions = copy.copy(self.reachable_regions)
+        ret.reachable_regions = {player: copy.copy(self.reachable_regions[player]) for player in range(1, self.world.players + 1)}
         ret.events = copy.copy(self.events)
         ret.path = copy.copy(self.path)
         ret.locations_checked = copy.copy(self.locations_checked)
-        ret.stale = True
         return ret
 
     def can_reach(self, spot, resolution_hint=None, player=None):
@@ -366,7 +366,7 @@ class CollectionState(object):
         while new_locations:
             if locations is None:
                 locations = self.world.get_filled_locations()
-            reachable_events = [location for location in locations if location.event and (not key_only or location.item.key) and self.can_reach(location)]
+            reachable_events = [location for location in locations if location.event and (not key_only or location.item.key) and location.can_reach(self)]
             for event in reachable_events:
                 if (event.name, event.player) not in self.events:
                     self.events.append((event.name, event.player))
@@ -537,7 +537,7 @@ class CollectionState(object):
             self.prog_items.append((item.name, item.player))
             changed = True
         
-        self.stale = True
+        self.stale[item.player] = True
 
         if changed:
             if not event:
@@ -573,8 +573,8 @@ class CollectionState(object):
                     return
 
                 # invalidate caches, nothing can be trusted anymore now
-                self.reachable_regions = set()
-                self.stale = True
+                self.reachable_regions[item.player] = set()
+                self.stale[item.player] = True
 
     def __getattr__(self, item):
         if item.startswith('can_reach_'):
@@ -616,13 +616,13 @@ class Region(object):
         self.player = player
 
     def can_reach(self, state):
-        if state.stale:
-            state.update_reachable_regions()
-        return self in state.reachable_regions
+        if state.stale[self.player]:
+            state.update_reachable_regions(self.player)
+        return self in state.reachable_regions[self.player]
 
     def can_reach_private(self, state):
         for entrance in self.entrances:
-            if state.can_reach(entrance):
+            if entrance.can_reach(state):
                 if not self in state.path:
                     state.path[self] = (self.name, state.path.get(entrance, None))
                 return True
@@ -658,7 +658,7 @@ class Entrance(object):
         self.player = player
 
     def can_reach(self, state):
-        if state.can_reach(self.parent_region) and self.access_rule(state):
+        if self.parent_region.can_reach(state) and self.access_rule(state):
             if not self in state.path:
                 state.path[self] = (self.name, state.path.get(self.parent_region, (self.parent_region.name, None)))
             return True
@@ -746,7 +746,7 @@ class Location(object):
         return self.always_allow(state, item) or (self.parent_region.can_fill(item) and self.item_rule(item) and (not check_access or self.can_reach(state)))
 
     def can_reach(self, state):
-        if state.can_reach(self.parent_region) and self.access_rule(state):
+        if self.parent_region.can_reach(state) and self.access_rule(state):
             return True
         return False
 
