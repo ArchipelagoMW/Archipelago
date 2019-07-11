@@ -327,8 +327,7 @@ def create_playthrough(world):
             old_item = location.item
             location.item = None
             state.remove(old_item)
-            ##if world.can_beat_game(state_cache[num]):
-            if world.can_beat_game():
+            if world.can_beat_game(state_cache[num]):
                 to_delete.append(location)
             else:
                 # still required, got to keep it around

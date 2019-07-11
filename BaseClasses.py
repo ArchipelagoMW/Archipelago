@@ -261,31 +261,23 @@ class World(object):
 
         prog_locations = [location for location in self.get_locations() if location.item is not None and (location.item.advancement or location.event) and location not in state.locations_checked]
 
-        treasure_pieces_collected = dict([(player, state.item_count('Triforce Piece', player) + state.item_count('Power Star', player)) for player in range(1, self.players + 1)])
-        triforces_collected = dict([(player, state.has('Triforce', player)) for player in range(1, self.players + 1)])
-
         while prog_locations:
             sphere = []
             # build up spheres of collection radius. Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
             for location in prog_locations:
-                if state.can_reach(location):
-                    if location.item.name == 'Triforce':
-                        triforces_collected[location.item.player] = True
-                        if all(triforces_collected.values()):
-                            return True
-                    elif location.item.name in ['Triforce Piece', 'Power Star']:
-                        treasure_pieces_collected[location.item.player] += 1
-                    if self.goal in ['triforcehunt'] and all([treasure_pieces_collected[player] >= self.treasure_hunt_count for player in range(1, self.players + 1)]):
-                        return True
+                if location.can_reach(state):
                     sphere.append(location)
 
             if not sphere:
-                # ran out of places and did not find triforce yet, quit
+                # ran out of places and did not finish yet, quit
                 return False
 
             for location in sphere:
                 prog_locations.remove(location)
                 state.collect(location.item, True, location)
+
+            if self.has_beaten_game(state):
+                return True
 
         return False
 
