@@ -6,7 +6,6 @@ import random
 import textwrap
 import sys
 
-from Gui import guiMain
 from Main import main
 from Utils import is_bundled, close_console, output_path
 
@@ -232,6 +231,7 @@ def start():
         # probably wants the gui. Users of the bundled build who want the command line
         # interface shouuld specify at least one option, possibly setting a value to a
         # default if they like all the defaults
+        from Gui import guiMain
         close_console()
         guiMain()
         sys.exit(0)
@@ -252,6 +252,7 @@ def start():
     logging.basicConfig(format='%(message)s', level=loglevel)
 
     if args.gui:
+        from Gui import guiMain
         guiMain(args)
     elif args.count is not None:
         seed = args.seed
