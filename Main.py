@@ -227,7 +227,7 @@ def copy_world(world):
         ret.itempool.append(Item(item.name, item.advancement, item.priority, item.type, player = item.player))
 
     # copy progress items in state
-    ret.state.prog_items = list(world.state.prog_items)
+    ret.state.prog_items = world.state.prog_items.copy()
     ret.state.stale = {player: True for player in range(1, world.players + 1)}
 
     for player in range(1, world.players + 1):

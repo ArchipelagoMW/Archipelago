@@ -3,6 +3,7 @@ from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict
+from _vendor.collections_extended import bag, setlist
 from Utils import int16_as_bytes
 
 class World(object):
@@ -135,34 +136,34 @@ class World(object):
                     if ret.has('Golden Sword', item.player):
                         pass
                     elif ret.has('Tempered Sword', item.player) and self.difficulty_requirements.progressive_sword_limit >= 4:
-                        ret.prog_items.append(('Golden Sword', item.player))
+                        ret.prog_items.add(('Golden Sword', item.player))
                     elif ret.has('Master Sword', item.player) and self.difficulty_requirements.progressive_sword_limit >= 3:
-                        ret.prog_items.append(('Tempered Sword', item.player))
+                        ret.prog_items.add(('Tempered Sword', item.player))
                     elif ret.has('Fighter Sword', item.player) and self.difficulty_requirements.progressive_sword_limit >= 2:
-                        ret.prog_items.append(('Master Sword', item.player))
+                        ret.prog_items.add(('Master Sword', item.player))
                     elif self.difficulty_requirements.progressive_sword_limit >= 1:
-                        ret.prog_items.append(('Fighter Sword', item.player))
+                        ret.prog_items.add(('Fighter Sword', item.player))
                 elif 'Glove' in item.name:
                     if ret.has('Titans Mitts', item.player):
                         pass
                     elif ret.has('Power Glove', item.player):
-                        ret.prog_items.append(('Titans Mitts', item.player))
+                        ret.prog_items.add(('Titans Mitts', item.player))
                     else:
-                        ret.prog_items.append(('Power Glove', item.player))
+                        ret.prog_items.add(('Power Glove', item.player))
                 elif 'Shield' in item.name:
                     if ret.has('Mirror Shield', item.player):
                         pass
                     elif ret.has('Red Shield', item.player) and self.difficulty_requirements.progressive_shield_limit >= 3:
-                        ret.prog_items.append(('Mirror Shield', item.player))
+                        ret.prog_items.add(('Mirror Shield', item.player))
                     elif ret.has('Blue Shield', item.player)  and self.difficulty_requirements.progressive_shield_limit >= 2:
-                        ret.prog_items.append(('Red Shield', item.player))
+                        ret.prog_items.add(('Red Shield', item.player))
                     elif self.difficulty_requirements.progressive_shield_limit >= 1:
-                        ret.prog_items.append(('Blue Shield', item.player))
+                        ret.prog_items.add(('Blue Shield', item.player))
             elif item.name.startswith('Bottle'):
                 if ret.bottle_count(item.player) < self.difficulty_requirements.progressive_bottle_limit:
-                    ret.prog_items.append((item.name, item.player))
+                    ret.prog_items.add((item.name, item.player))
             elif item.advancement or item.key:
-                ret.prog_items.append((item.name, item.player))
+                ret.prog_items.add((item.name, item.player))
 
         for item in self.itempool:
             soft_collect(item)
@@ -284,7 +285,7 @@ class World(object):
 class CollectionState(object):
 
     def __init__(self, parent):
-        self.prog_items = []
+        self.prog_items = bag()
         self.world = parent
         self.reachable_regions = {player: set() for player in range(1, parent.players + 1)}
         self.events = []
@@ -293,12 +294,13 @@ class CollectionState(object):
         self.stale = {player: True for player in range(1, parent.players + 1)}
 
     def update_reachable_regions(self, player):
+        player_regions = [region for region in self.world.regions if region.player == player]
         self.stale[player] = False
         rrp = self.reachable_regions[player]
         new_regions = True
         reachable_regions_count = len(rrp)
         while new_regions:
-            possible = [region for region in self.world.regions if region not in rrp and region.player == player] 
+            possible = [region for region in player_regions if region not in rrp] 
             for candidate in possible:
                 if candidate.can_reach_private(self):
                     rrp.add(candidate)
@@ -307,7 +309,7 @@ class CollectionState(object):
 
     def copy(self):
         ret = CollectionState(self.world)
-        ret.prog_items = copy.copy(self.prog_items)
+        ret.prog_items = self.prog_items.copy()
         ret.reachable_regions = {player: copy.copy(self.reachable_regions[player]) for player in range(1, self.world.players + 1)}
         ret.events = copy.copy(self.events)
         ret.path = copy.copy(self.path)
@@ -343,17 +345,18 @@ class CollectionState(object):
                     self.collect(event.item, True, event)
             new_locations = len(reachable_events) > checked_locations
             checked_locations = len(reachable_events)
+
     def has(self, item, player, count=1):
         if count == 1:
             return (item, player) in self.prog_items
-        return self.item_count(item, player) >= count
+        return self.prog_items.count((item, player)) >= count
 
     def has_key(self, item, player, count=1):
         if self.world.retro:
             return self.can_buy_unlimited('Small Key (Universal)', player)
         if count == 1:
             return (item, player) in self.prog_items
-        return self.item_count(item, player) >= count
+        return self.prog_items.count((item, player)) >= count
 
     def can_buy_unlimited(self, item, player):
         for shop in self.world.shops:
@@ -362,7 +365,7 @@ class CollectionState(object):
         return False
 
     def item_count(self, item, player):
-        return len([pritem for pritem in self.prog_items if pritem == (item, player)])
+        return self.prog_items.count((item, player))
 
     def can_lift_rocks(self, player):
         return self.has('Power Glove', player) or self.has('Titans Mitts', player)
@@ -467,44 +470,44 @@ class CollectionState(object):
                 if self.has('Golden Sword', item.player):
                     pass
                 elif self.has('Tempered Sword', item.player) and self.world.difficulty_requirements.progressive_sword_limit >= 4:
-                    self.prog_items.append(('Golden Sword', item.player))
+                    self.prog_items.add(('Golden Sword', item.player))
                     changed = True
                 elif self.has('Master Sword', item.player) and self.world.difficulty_requirements.progressive_sword_limit >= 3:
-                    self.prog_items.append(('Tempered Sword', item.player))
+                    self.prog_items.add(('Tempered Sword', item.player))
                     changed = True
                 elif self.has('Fighter Sword', item.player) and self.world.difficulty_requirements.progressive_sword_limit >= 2:
-                    self.prog_items.append(('Master Sword', item.player))
+                    self.prog_items.add(('Master Sword', item.player))
                     changed = True
                 elif self.world.difficulty_requirements.progressive_sword_limit >= 1:
-                    self.prog_items.append(('Fighter Sword', item.player))
+                    self.prog_items.add(('Fighter Sword', item.player))
                     changed = True
             elif 'Glove' in item.name:
                 if self.has('Titans Mitts', item.player):
                     pass
                 elif self.has('Power Glove', item.player):
-                    self.prog_items.append(('Titans Mitts', item.player))
+                    self.prog_items.add(('Titans Mitts', item.player))
                     changed = True
                 else:
-                    self.prog_items.append(('Power Glove', item.player))
+                    self.prog_items.add(('Power Glove', item.player))
                     changed = True
             elif 'Shield' in item.name:
                 if self.has('Mirror Shield', item.player):
                     pass
                 elif self.has('Red Shield', item.player) and self.world.difficulty_requirements.progressive_shield_limit >= 3:
-                    self.prog_items.append(('Mirror Shield', item.player))
+                    self.prog_items.add(('Mirror Shield', item.player))
                     changed = True
                 elif self.has('Blue Shield', item.player)  and self.world.difficulty_requirements.progressive_shield_limit >= 2:
-                    self.prog_items.append(('Red Shield', item.player))
+                    self.prog_items.add(('Red Shield', item.player))
                     changed = True
                 elif self.world.difficulty_requirements.progressive_shield_limit >= 1:
-                    self.prog_items.append(('Blue Shield', item.player))
+                    self.prog_items.add(('Blue Shield', item.player))
                     changed = True
         elif item.name.startswith('Bottle'):
             if self.bottle_count(item.player) < self.world.difficulty_requirements.progressive_bottle_limit:
-                self.prog_items.append((item.name, item.player))
+                self.prog_items.add((item.name, item.player))
                 changed = True
         elif event or item.advancement:
-            self.prog_items.append((item.name, item.player))
+            self.prog_items.add((item.name, item.player))
             changed = True
         
         self.stale[item.player] = True
