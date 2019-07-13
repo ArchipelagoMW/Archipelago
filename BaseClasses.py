@@ -610,7 +610,10 @@ class Region(object):
         return str(self.__unicode__())
 
     def __unicode__(self):
-        return '%s (Player %d)' % (self.name, self.player)
+        if self.world and self.world.players == 1:
+            return self.name
+        else:
+            return '%s (Player %d)' % (self.name, self.player)
 
 
 class Entrance(object):
@@ -646,7 +649,10 @@ class Entrance(object):
         return str(self.__unicode__())
 
     def __unicode__(self):
-        return '%s (Player %d)' % (self.name, self.player)
+        if self.parent_region and self.parent_region.world and self.parent_region.world.players == 1:
+            return self.name
+        else:
+            return '%s (Player %d)' % (self.name, self.player)
 
 
 class Dungeon(object):
@@ -659,6 +665,7 @@ class Dungeon(object):
         self.dungeon_items = dungeon_items
         self.bosses = dict()
         self.player = player
+        self.world = None
 
     @property
     def boss(self):
@@ -683,7 +690,10 @@ class Dungeon(object):
         return str(self.__unicode__())
 
     def __unicode__(self):
-        return '%s (Player %d)' % (self.name, self.player)
+        if self.world and self.world.players==1:
+            return self.name
+        else:
+            return '%s (Player %d)' % (self.name, self.player)
 
 class Boss(object):
     def __init__(self, name, enemizer_name, defeat_rule, player):
@@ -724,7 +734,10 @@ class Location(object):
         return str(self.__unicode__())
 
     def __unicode__(self):
-        return '%s (Player %d)' % (self.name, self.player)
+        if self.parent_region and self.parent_region.world and self.parent_region.world.players == 1:
+            return self.name
+        else:
+            return '%s (Player %d)' % (self.name, self.player)
 
 
 class Item(object):
@@ -765,7 +778,10 @@ class Item(object):
         return str(self.__unicode__())
 
     def __unicode__(self):
-        return '%s (Player %d)' % (self.name, self.player)
+        if self.location and self.location.parent_region and self.location.parent_region.world and self.location.parent_region.world.players == 1:
+            return self.name
+        else:
+            return '%s (Player %d)' % (self.name, self.player)
 
 
 # have 6 address that need to be filled
@@ -848,13 +864,20 @@ class Spoiler(object):
         self.bosses = OrderedDict()
 
     def set_entrance(self, entrance, exit, direction, player):
-        self.entrances[(entrance, direction, player)] = OrderedDict([('player', player), ('entrance', entrance), ('exit', exit), ('direction', direction)])
+        if self.world.players == 1:
+            self.entrances[(entrance, direction, player)] = OrderedDict([('entrance', entrance), ('exit', exit), ('direction', direction)])
+        else:
+            self.entrances[(entrance, direction, player)] = OrderedDict([('player', player), ('entrance', entrance), ('exit', exit), ('direction', direction)])
 
     def parse_data(self):
         self.medallions = OrderedDict()
-        for player in range(1, self.world.players + 1):
-            self.medallions['Misery Mire (Player %d)' % player] = self.world.required_medallions[player][0]
-            self.medallions['Turtle Rock (Player %d)' % player] = self.world.required_medallions[player][1]
+        if self.world.players == 1:
+            self.medallions['Misery Mire'] = self.world.required_medallions[1][0]
+            self.medallions['Turtle Rock'] = self.world.required_medallions[1][1]
+        else:
+            for player in range(1, self.world.players + 1):
+                self.medallions['Misery Mire (Player %d)' % player] = self.world.required_medallions[player][0]
+                self.medallions['Turtle Rock (Player %d)' % player] = self.world.required_medallions[player][1]
 
         self.locations = OrderedDict()
         listed_locations = set()
@@ -913,6 +936,8 @@ class Spoiler(object):
             self.bosses[str(player)]["Ganons Tower"] = "Agahnim 2"
             self.bosses[str(player)]["Ganon"] = "Ganon"
 
+        if self.world.players == 1:
+            self.bosses = self.bosses["1"]
 
         from Main import __version__ as ERVersion
         self.metadata = {'version': ERVersion,
@@ -966,11 +991,15 @@ class Spoiler(object):
             outfile.write('Players:                         %d' % self.metadata['players'])
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
-                outfile.write('\n'.join(['Player %d: %s %s %s' % (entry['player'], entry['entrance'], '<=>' if entry['direction'] == 'both' else '<=' if entry['direction'] == 'exit' else '=>', entry['exit']) for entry in self.entrances.values()]))
+                outfile.write('\n'.join(['%s%s %s %s' % ('Player {0}: '.format(entry['player']) if self.world.players >1 else '', entry['entrance'], '<=>' if entry['direction'] == 'both' else '<=' if entry['direction'] == 'exit' else '=>', entry['exit']) for entry in self.entrances.values()]))
             outfile.write('\n\nMedallions\n')
-            for player in range(1, self.world.players + 1):
-                outfile.write('\nMisery Mire Medallion (Player %d): %s' % (player, self.medallions['Misery Mire (Player %d)' % player]))
-                outfile.write('\nTurtle Rock Medallion (Player %d): %s' % (player, self.medallions['Turtle Rock (Player %d)' % player]))
+            if self.world.players == 1:
+                outfile.write('\nMisery Mire Medallion: %s' % (self.medallions['Misery Mire']))
+                outfile.write('\nTurtle Rock Medallion: %s' % (self.medallions['Turtle Rock']))
+            else:
+                for player in range(1, self.world.players + 1):
+                    outfile.write('\nMisery Mire Medallion (Player %d): %s' % (player, self.medallions['Misery Mire (Player %d)' % player]))
+                    outfile.write('\nTurtle Rock Medallion (Player %d): %s' % (player, self.medallions['Turtle Rock (Player %d)' % player]))
             outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(['%s: %s' % (location, item) for grouping in self.locations.values() for (location, item) in grouping.items()]))
             outfile.write('\n\nShops:\n\n')

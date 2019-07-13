@@ -12,6 +12,7 @@ def create_dungeons(world, player):
         dungeon.boss = BossFactory(default_boss, player)
         for region in dungeon.regions:
             world.get_region(region, player).dungeon = dungeon
+            dungeon.world = world
         return dungeon
 
     ES = make_dungeon('Hyrule Castle', None, ['Hyrule Castle', 'Sewers', 'Sewer Drop', 'Sewers (Dark)', 'Sanctuary'], None, [ItemFactory('Small Key (Escape)', player)], [ItemFactory('Map (Escape)', player)])
