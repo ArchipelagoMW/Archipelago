@@ -929,6 +929,9 @@ def patch_rom(world, player, rom):
     else:
         rom.write_byte(0x18003E, 0x03)  # make ganon invincible until all crystals and aga 2 are collected
 
+    rom.write_byte(0x18005E, world.crystals_needed_for_gt)
+    rom.write_byte(0x18005F, world.crystals_needed_for_ganon)
+
     rom.write_byte(0x18016A, 0x01 if world.keysanity else 0x00)  # free roaming item text boxes
     rom.write_byte(0x18003B, 0x01 if world.keysanity else 0x00)  # maps showing crystals on overworld
 

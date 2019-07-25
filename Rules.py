@@ -43,7 +43,7 @@ def set_rules(world, player):
 
     if world.goal == 'dungeons':
         # require all dungeons to beat ganon
-        add_rule(world.get_location('Ganon', player), lambda state: state.can_reach('Master Sword Pedestal', 'Location', player) and state.has('Beat Agahnim 1', player) and state.has('Beat Agahnim 2', player))
+        add_rule(world.get_location('Ganon', player), lambda state: state.can_reach('Master Sword Pedestal', 'Location', player) and state.has('Beat Agahnim 1', player) and state.has('Beat Agahnim 2', player) and state.has_crystals(7, player))
     elif world.goal == 'ganon':
         # require aga2 to beat ganon
         add_rule(world.get_location('Ganon', player), lambda state: state.has('Beat Agahnim 2', player))
@@ -427,8 +427,7 @@ def global_rules(world, player):
                      'Ganons Tower - Pre-Moldorm Chest', 'Ganons Tower - Validation Chest']:
         forbid_item(world.get_location(location, player), 'Big Key (Ganons Tower)', player)
 
-    set_rule(world.get_location('Ganon', player), lambda state: state.has_beam_sword(player) and state.has_fire_source(player) and state.has('Crystal 1', player) and state.has('Crystal 2', player)
-                                                        and state.has('Crystal 3', player) and state.has('Crystal 4', player) and state.has('Crystal 5', player) and state.has('Crystal 6', player) and state.has('Crystal 7', player)
+    set_rule(world.get_location('Ganon', player), lambda state: state.has_beam_sword(player) and state.has_fire_source(player) and state.has_crystals(world.crystals_needed_for_ganon, player)
                                                         and (state.has('Tempered Sword', player) or state.has('Golden Sword', player) or (state.has('Silver Arrows', player) and state.can_shoot_arrows(player)) or state.has('Lamp', player) or state.can_extend_magic(player, 12)))  # need to light torch a sufficient amount of times
     set_rule(world.get_entrance('Ganon Drop', player), lambda state: state.has_beam_sword(player))  # need to damage ganon to get tiles to drop
 
@@ -436,7 +435,7 @@ def global_rules(world, player):
 
     set_trock_key_rules(world, player)
 
-    set_rule(world.get_entrance('Ganons Tower', player), lambda state: state.has('Crystal 1', player) and state.has('Crystal 2', player) and state.has('Crystal 3', player) and state.has('Crystal 4', player) and state.has('Crystal 5', player) and state.has('Crystal 6', player) and state.has('Crystal 7', player))
+    set_rule(world.get_entrance('Ganons Tower', player), lambda state: state.has_crystals(world.crystals_needed_for_gt, player))
 
 def inverted_rules(world, player):
     world.get_location('Ganon', player).item_rule = lambda item: item.name == 'Triforce' and item.player == player
@@ -901,8 +900,7 @@ def swordless_rules(world, player):
     set_rule(world.get_entrance('Turtle Rock', player), lambda state: state.has_Pearl(player) and state.has_turtle_rock_medallion(player) and state.can_reach('Turtle Rock (Top)', 'Region', player))   # sword not required to use medallion for opening in swordless (!)
     set_rule(world.get_entrance('Skull Woods Torch Room', player), lambda state: state.has_key('Small Key (Skull Woods)', player, 3) and state.has('Fire Rod', player))  # no curtain
     set_rule(world.get_entrance('Ice Palace Entrance Room', player), lambda state: state.has('Fire Rod', player) or state.has('Bombos', player)) #in swordless mode bombos pads are present in the relevant parts of ice palace
-    set_rule(world.get_location('Ganon', player), lambda state: state.has('Hammer', player) and state.has_fire_source(player) and state.has('Silver Arrows', player) and state.can_shoot_arrows(player) and state.has('Crystal 1', player) and state.has('Crystal 2', player)
-                                                        and state.has('Crystal 3', player) and state.has('Crystal 4', player) and state.has('Crystal 5', player) and state.has('Crystal 6', player) and state.has('Crystal 7', player))
+    set_rule(world.get_location('Ganon', player), lambda state: state.has('Hammer', player) and state.has_fire_source(player) and state.has('Silver Arrows', player) and state.can_shoot_arrows(player) and state.has_crystals(world.crystals_needed_for_ganon, player))
     set_rule(world.get_entrance('Ganon Drop', player), lambda state: state.has('Hammer', player))  # need to damage ganon to get tiles to drop
 
 

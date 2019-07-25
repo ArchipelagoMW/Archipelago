@@ -71,6 +71,8 @@ class World(object):
         self.fix_fake_world = True
         self.boss_shuffle = boss_shuffle
         self.hints = hints
+        self.crystals_needed_for_ganon = 7
+        self.crystals_needed_for_gt = 7
         self.dynamic_regions = []
         self.dynamic_locations = []
         self.spoiler = Spoiler(self)
@@ -366,6 +368,10 @@ class CollectionState(object):
 
     def item_count(self, item, player):
         return self.prog_items.count((item, player))
+
+    def has_crystals(self, count, player):
+        crystals = ['Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7']
+        return len([crystal for crystal in crystals if self.has(crystal, player)]) >= count
 
     def can_lift_rocks(self, player):
         return self.has('Power Glove', player) or self.has('Titans Mitts', player)
