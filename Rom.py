@@ -931,6 +931,7 @@ def patch_rom(world, player, rom):
 
     rom.write_byte(0x18005E, world.crystals_needed_for_gt)
     rom.write_byte(0x18005F, world.crystals_needed_for_ganon)
+    rom.write_byte(0x18008A, 0x01 if world.mode == "standard" else 0x00) # block HC upstairs doors in rain state in standard mode
 
     rom.write_byte(0x18016A, 0x01 if world.keysanity else 0x00)  # free roaming item text boxes
     rom.write_byte(0x18003B, 0x01 if world.keysanity else 0x00)  # maps showing crystals on overworld
