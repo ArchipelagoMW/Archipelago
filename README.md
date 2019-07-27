@@ -43,6 +43,16 @@ Special notes:
 - The magic barrier to Hyrule Castle Tower can be broken with a Hammer.
 - The Hammer can be used to activate the Ether and Bombos tablets.
 
+### Inverted
+
+This mode is similar to Open but requires the Moon Pearl in order to not transform into a bunny in the Light World and the Sanctuary spawn point is moved to the Dark Sanctuary
+
+Special Notes:
+
+- Link's House is shuffled freely. The Dark Sanctuary is shuffled within West Dark World.
+- There are a number of overworld changes to account for the inability to mirror from the Light World to the Dark World.
+- Legacy shuffles are not implemente for this mode.
+
 ## Game Logic
 This determines the Item Requirements for each location.
 
@@ -336,7 +346,7 @@ Output a Spoiler File (default: False)
 Select the game logic (default: noglitches)
 
 ```
---mode [{standard,open,swordless}]
+--mode [{standard,open,swordless,inverted}]
 ```
 
 Select the game mode. (default: open)

@@ -209,7 +209,7 @@ difficulties = {
 
 def generate_itempool(world, player):
     if (world.difficulty not in ['easy', 'normal', 'hard', 'expert', 'insane'] or world.goal not in ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals']
-            or world.mode not in ['open', 'standard', 'swordless'] or world.timer not in ['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'] or world.progressive not in ['on', 'off', 'random']):
+            or world.mode not in ['open', 'standard', 'swordless', 'inverted'] or world.timer not in ['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'] or world.progressive not in ['on', 'off', 'random']):
         raise NotImplementedError('Not supported yet')
 
     if world.timer in ['ohko', 'timed-ohko']:
@@ -662,7 +662,7 @@ def test():
     for difficulty in ['easy', 'normal', 'hard', 'expert', 'insane']:
         for goal in ['ganon', 'triforcehunt', 'pedestal']:
             for timer in ['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown']:
-                for mode in ['open', 'standard', 'swordless']:
+                for mode in ['open', 'standard', 'swordless', 'inverted']:
                     for progressive in ['on', 'off']:
                         for shuffle in ['full', 'insane']:
                             for retro in [True, False]:

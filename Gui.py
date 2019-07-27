@@ -145,7 +145,7 @@ def guiMain(args=None):
     modeFrame = Frame(drowDownFrame)
     modeVar = StringVar()
     modeVar.set('open')
-    modeOptionMenu = OptionMenu(modeFrame, modeVar, 'standard', 'open', 'swordless')
+    modeOptionMenu = OptionMenu(modeFrame, modeVar, 'standard', 'open', 'swordless', 'inverted')
     modeOptionMenu.pack(side=RIGHT)
     modeLabel = Label(modeFrame, text='Game Mode')
     modeLabel.pack(side=LEFT)

@@ -28,7 +28,7 @@ def start():
                              No Logic: Distribute items without regard for
                                              item requirements.
                              ''')
-    parser.add_argument('--mode', default='open', const='open', nargs='?', choices=['standard', 'open', 'swordless'],
+    parser.add_argument('--mode', default='open', const='open', nargs='?', choices=['standard', 'open', 'swordless', 'inverted'],
                         help='''\
                              Select game mode. (default: %(default)s)
                              Open:      World starts with Zelda rescued.
@@ -42,6 +42,10 @@ def start():
                                         hammer. Misery Mire and Turtle Rock can be opened
                                         without a sword. Hammer damages Ganon. Ether and
                                         Bombos Tablet can be activated with Hammer (and Book).
+                             Inverted:  Starting locations are Dark Sanctuary in West Dark
+                                        World or at Link's House, which is shuffled freely.
+                                        Requires the moon pearl to be Link in the Light World
+                                        instead of a bunny.
                              ''')
     parser.add_argument('--goal', default='ganon', const='ganon', nargs='?', choices=['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'],
                         help='''\

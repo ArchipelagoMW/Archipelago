@@ -9,7 +9,8 @@ import time
 
 from BaseClasses import World, CollectionState, Item, Region, Location, Shop
 from Regions import create_regions, mark_light_world_regions
-from EntranceShuffle import link_entrances
+from InvertedRegions import create_inverted_regions, mark_dark_world_regions
+from EntranceShuffle import link_entrances, link_inverted_entrances
 from Rom import patch_rom, get_enemizer_patch, apply_rom_settings, Sprite, LocalRom, JsonRom
 from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
@@ -38,16 +39,27 @@ def main(args, seed=None):
 
     world.difficulty_requirements = difficulties[world.difficulty]
 
-    for player in range(1, world.players + 1):
-        create_regions(world, player)
-        create_dungeons(world, player)
+    if world.mode != 'inverted':
+        for player in range(1, world.players + 1):
+            create_regions(world, player)
+            create_dungeons(world, player)
+    else:
+        for player in range(1, world.players + 1):
+            create_inverted_regions(world, player)
+            create_dungeons(world, player)
 
     logger.info('Shuffling the World about.')
 
-    for player in range(1, world.players + 1):
-        link_entrances(world, player)
+    if world.mode != 'inverted':
+        for player in range(1, world.players + 1):
+            link_entrances(world, player)
 
-    mark_light_world_regions(world)
+        mark_light_world_regions(world)
+    else:
+        for player in range(1, world.players + 1):
+            link_inverted_entrances(world, player)
+
+        mark_dark_world_regions(world)
 
     logger.info('Generating Item Pool.')
 
@@ -189,9 +201,14 @@ def copy_world(world):
     ret.fix_fake_world = world.fix_fake_world
     ret.lamps_needed_for_dark_rooms = world.lamps_needed_for_dark_rooms
 
-    for player in range(1, world.players + 1):
-        create_regions(ret, player)
-        create_dungeons(ret, player)
+    if world.mode != 'inverted':
+        for player in range(1, world.players + 1):
+            create_regions(ret, player)
+            create_dungeons(ret, player)
+    else:
+        for player in range(1, world.players + 1):
+            create_inverted_regions(ret, player)
+            create_dungeons(ret, player)
 
     copy_dynamic_regions_and_locations(world, ret)
 
@@ -365,7 +382,10 @@ def create_playthrough(world):
         old_world.spoiler.paths.update({ str(location) : get_path(state, location.parent_region) for sphere in collection_spheres for location in sphere if location.player == player})
         for _, path in dict(old_world.spoiler.paths).items():
             if any(exit == 'Pyramid Fairy' for (_, exit) in path):
-                old_world.spoiler.paths[str(world.get_region('Big Bomb Shop', player))] = get_path(state, world.get_region('Big Bomb Shop', player))
+                if world.mode != 'inverted':
+                    old_world.spoiler.paths[str(world.get_region('Big Bomb Shop', player))] = get_path(state, world.get_region('Big Bomb Shop', player))
+                else:
+                    old_world.spoiler.paths[str(world.get_region('Inverted Big Bomb Shop', player))] = get_path(state, world.get_region('Inverted Big Bomb Shop', player))
 
     # we can finally output our playthrough
     old_world.spoiler.playthrough = OrderedDict([(str(i + 1), {str(location): str(location.item) for location in sphere}) for i, sphere in enumerate(collection_spheres)])

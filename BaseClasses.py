@@ -431,7 +431,7 @@ class CollectionState(object):
             self.has('Bug Catching Net', player) and
             (self.has_Boots(player) or (self.has_sword(player) and self.has('Quake', player))) and
             cave.can_reach(self) and
-            (cave.is_light_world or self.has_Pearl(player))
+            self.is_not_bunny(cave, player)
         )
 
     def has_sword(self, player):
@@ -454,6 +454,22 @@ class CollectionState(object):
 
     def has_fire_source(self, player):
         return self.has('Fire Rod', player) or self.has('Lamp', player)
+
+    def can_flute(self, player):
+        lw = self.world.get_region('Light World', player)
+        return self.has('Ocarina', player) and lw.can_reach(self) and self.is_not_bunny(lw, player)
+
+    def can_melt_things(self, player):
+        return self.has('Fire Rod', player) or (self.has('Bombos', player) and self.has_sword(player))
+    
+    def can_avoid_lasers(self, player):
+        return self.has('Mirror Shield', player) or self.has('Cane of Byrna', player) or self.has('Cape', player)
+
+    def is_not_bunny(self, region, player):
+        if self.has_Pearl(player):
+            return True 
+        
+        return region.is_light_world if self.world.mode != 'inverted' else region.is_dark_world
 
     def has_misery_mire_medallion(self, player):
         return self.has(self.world.required_medallions[player][0], player)
@@ -933,9 +949,15 @@ class Spoiler(object):
             self.bosses[str(player)]["Ice Palace"] = self.world.get_dungeon("Ice Palace", player).boss.name
             self.bosses[str(player)]["Misery Mire"] = self.world.get_dungeon("Misery Mire", player).boss.name
             self.bosses[str(player)]["Turtle Rock"] = self.world.get_dungeon("Turtle Rock", player).boss.name
-            self.bosses[str(player)]["Ganons Tower Basement"] = self.world.get_dungeon('Ganons Tower', player).bosses['bottom'].name
-            self.bosses[str(player)]["Ganons Tower Middle"] = self.world.get_dungeon('Ganons Tower', player).bosses['middle'].name
-            self.bosses[str(player)]["Ganons Tower Top"] = self.world.get_dungeon('Ganons Tower', player).bosses['top'].name
+            if self.world.mode != 'inverted':
+                self.bosses[str(player)]["Ganons Tower Basement"] = self.world.get_dungeon('Ganons Tower', player).bosses['bottom'].name
+                self.bosses[str(player)]["Ganons Tower Middle"] = self.world.get_dungeon('Ganons Tower', player).bosses['middle'].name
+                self.bosses[str(player)]["Ganons Tower Top"] = self.world.get_dungeon('Ganons Tower', player).bosses['top'].name
+            else:
+                self.bosses[str(player)]["Ganons Tower Basement"] = self.world.get_dungeon('Inverted Ganons Tower', player).bosses['bottom'].name
+                self.bosses[str(player)]["Ganons Tower Middle"] = self.world.get_dungeon('Inverted Ganons Tower', player).bosses['middle'].name
+                self.bosses[str(player)]["Ganons Tower Top"] = self.world.get_dungeon('Inverted Ganons Tower', player).bosses['top'].name
+
             self.bosses[str(player)]["Ganons Tower"] = "Agahnim 2"
             self.bosses[str(player)]["Ganon"] = "Ganon"
 

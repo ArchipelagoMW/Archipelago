@@ -25,7 +25,8 @@ Uncle_texts = [
     'Forward this message to 10 other people or this seed will be awful.',
     'I hope you like your seeds bootless and fluteless.',
     '10\n9\n8\n7\n6\n5\n4\n3\n2\n1\nGo!',
-    'I\'m off to visit cousin Fritzl.'
+    'I\'m off to visit cousin Fritzl.',
+    'Don\'t forget to check Antlion Cave.'
 ] * 2 + [
     "We're out of\nWeetabix. To\nthe store!",
     "This seed is\nbootless\nuntil boots.",
