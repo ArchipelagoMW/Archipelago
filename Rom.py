@@ -898,6 +898,33 @@ def patch_rom(world, player, rom):
         rom.write_byte(0x18003C, 0x00)
 
     rom.write_byte(0x180045, 0xFF if world.keysanity else 0x00)  # free roaming items in menu
+
+    # Map reveals
+    reveal_bytes = {
+        "Eastern Palace": 0x2000,
+        "Desert Palace": 0x1000,
+        "Tower of Hera": 0x0020,
+        "Palace of Darkness": 0x0200,
+        "Thieves Town": 0x0010,
+        "Skull Woods": 0x0080,
+        "Swamp Palace": 0x0400,
+        "Ice Palace": 0x0040,
+        "Misery Mire'": 0x0100,
+        "Turtle Rock": 0x0008,
+    }
+
+    def get_reveal_bytes(itemName):
+        locations = world.find_items(itemName, player)
+        if len(locations) < 1:
+            return 0x0000
+        location = locations[0]
+        if location.parent_region and location.parent_region.dungeon:
+            return reveal_bytes.get(location.parent_region.dungeon.name, 0x0000)
+        return 0x0000
+
+    rom.write_int16(0x18017A, get_reveal_bytes('Green Pendant') if world.keysanity else 0x0000) # Sahasrahla reveal
+    rom.write_int16(0x18017C, get_reveal_bytes('Crystal 5')|get_reveal_bytes('Crystal 6') if world.keysanity else 0x0000) # Bomb Shop Reveal
+
     rom.write_byte(0x180172, 0x01 if world.retro else 0x00)  # universal keys
     rom.write_byte(0x180175, 0x01 if world.retro else 0x00)  # rupee bow
     rom.write_byte(0x180176, 0x0A if world.retro else 0x00)  # wood arrow cost
