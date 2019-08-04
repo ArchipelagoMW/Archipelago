@@ -697,6 +697,18 @@ def patch_rom(world, player, rom):
                   0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xE0, 0xE0, 0xE0, 0xE0, 0xE0,
                   0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE2, 0xE2, 0xE2, 0xE2, 0xE2,
                   0xE3, 0xE3, 0xE3, 0xE3, 0xE3]
+
+    def chunk(l,n):
+        return [l[i:i+n] for i in range(0, len(l), n)]
+
+    # randomize last 7 slots
+    prizes [-7:] = random.sample(prizes, 7)
+
+    #shuffle order of 7 main packs
+    packs = chunk(prizes[:56], 8)
+    random.shuffle(packs)
+    prizes[:56] = [drop for pack in packs for drop in pack]
+
     if world.difficulty in ['hard', 'expert', 'insane']:
         prize_replacements = {0xE0: 0xDF, # Fairy -> heart
                               0xE3: 0xD8} # Big magic -> small magic
@@ -709,7 +721,6 @@ def patch_rom(world, player, rom):
         prizes = [prize_replacements.get(prize, prize) for prize in prizes]
         dig_prizes = [prize_replacements.get(prize, prize) for prize in dig_prizes]
     rom.write_bytes(0x180100, dig_prizes)
-    random.shuffle(prizes)
 
     # write tree pull prizes
     rom.write_byte(0xEFBD4, prizes.pop())
@@ -728,28 +739,6 @@ def patch_rom(world, player, rom):
 
     # fill enemy prize packs
     rom.write_bytes(0x37A78, prizes)
-
-    # prize pack drop chances
-    if world.difficulty in ['hard', 'expert', 'insane']:
-        droprates = [0x01, 0x02, 0x03, 0x03, 0x03, 0x04, 0x04]  # 50%, 25%, 3* 12.5%, 2* 6.25%
-    else:
-        droprates = [0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01]  # 50%
-
-    random.shuffle(droprates)
-    rom.write_bytes(0x37A62, droprates)
-
-    vanilla_prize_pack_assignment = [131, 150, 132, 128, 128, 128, 128, 128, 2, 0, 2, 128, 160, 131, 151, 128, 128, 148, 145, 7, 0, 128, 0, 128, 146, 150, 128, 160, 0, 0, 0, 128, 4, 128,
-                                     130, 6, 6, 0, 0, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 0, 0, 128, 128, 144, 128, 145, 145,
-                                     145, 151, 145, 149, 149, 147, 151, 20, 145, 146, 129, 130, 130, 128, 133, 128, 128, 128, 4, 4, 128, 145, 128, 128, 128, 128, 128, 128, 128, 128, 0, 128,
-                                     128, 130, 138, 128, 128, 128, 128, 146, 145, 128, 130, 129, 129, 128, 129, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 151, 128, 128, 128, 128, 194,
-                                     128, 21, 21, 23, 6, 0, 128, 0, 192, 19, 64, 0, 2, 6, 16, 20, 0, 0, 64, 0, 0, 0, 0, 19, 70, 17, 128, 128, 0, 0, 0, 16, 0, 0, 0, 22, 22, 22, 129, 135, 130,
-                                     0, 128, 128, 0, 0, 0, 0, 128, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 0, 0, 0, 23, 0, 18, 0, 0, 0, 0, 0, 16, 23, 0, 64, 1, 0, 0, 0, 0, 0,
-                                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 128, 0, 0, 0, 0, 0, 0]
-
-    # shuffle enemies to prize packs
-    for i in range(243):
-        if vanilla_prize_pack_assignment[i] & 0x0F != 0x00:
-            rom.write_byte(0x6B632 + i, (vanilla_prize_pack_assignment[i] & 0xF0) | random.randint(1, 7))
 
     # set bonk prizes
     bonk_prizes = [0x79, 0xE3, 0x79, 0xAC, 0xAC, 0xE0, 0xDC, 0xAC, 0xE3, 0xE3, 0xDA, 0xE3, 0xDA, 0xD8, 0xAC, 0xAC, 0xE3, 0xD8, 0xE3, 0xE3, 0xE3, 0xE3, 0xE3, 0xE3, 0xDC, 0xDB, 0xE3, 0xDA, 0x79, 0x79, 0xE3, 0xE3,
