@@ -46,11 +46,13 @@ def fill_dungeons(world):
     all_state_base = world.get_all_state()
 
     for player in range(1, world.players + 1):
+        pinball_room = world.get_location('Skull Woods - Pinball Room', player)
         if world.retro:
-            world.push_item(world.get_location('Skull Woods - Pinball Room', player), ItemFactory('Small Key (Universal)', player), False)
+            world.push_item(pinball_room, ItemFactory('Small Key (Universal)', player), False)
         else:
-            world.push_item(world.get_location('Skull Woods - Pinball Room', player), ItemFactory('Small Key (Skull Woods)', player), False)
-        world.get_location('Skull Woods - Pinball Room', player).event = True
+            world.push_item(pinball_room, ItemFactory('Small Key (Skull Woods)', player), False)
+        pinball_room.event = True
+        pinball_room.locked = True
 
     dungeons = [(list(dungeon.regions), dungeon.big_key, list(dungeon.small_keys), list(dungeon.dungeon_items)) for dungeon in world.dungeons]
 
@@ -77,6 +79,7 @@ def fill_dungeons(world):
 
             world.push_item(bk_location, big_key, False)
             bk_location.event = True
+            bk_location.locked = True
             dungeon_locations.remove(bk_location)
             big_key = None
 
@@ -102,6 +105,7 @@ def fill_dungeons(world):
 
             world.push_item(sk_location, small_key, False)
             sk_location.event = True
+            sk_location.locked = True
             dungeon_locations.remove(sk_location)
 
         if small_keys:
@@ -122,13 +126,14 @@ def fill_dungeons_restrictive(world, shuffled_locations):
     all_state_base = world.get_all_state()
 
     for player in range(1, world.players + 1):
-        skull_woods_big_chest = world.get_location('Skull Woods - Pinball Room', player)
+        pinball_room = world.get_location('Skull Woods - Pinball Room', player)
         if world.retro:
-            world.push_item(skull_woods_big_chest, ItemFactory('Small Key (Universal)', player), False)
+            world.push_item(pinball_room, ItemFactory('Small Key (Universal)', player), False)
         else:
-            world.push_item(skull_woods_big_chest, ItemFactory('Small Key (Skull Woods)', player), False)
-        skull_woods_big_chest.event = True
-        shuffled_locations.remove(skull_woods_big_chest)
+            world.push_item(pinball_room, ItemFactory('Small Key (Skull Woods)', player), False)
+        pinball_room.event = True
+        pinball_room.locked = True
+        shuffled_locations.remove(pinball_room)
 
     if world.keysanity:
         #in keysanity dungeon items are distributed as part of the normal item pool

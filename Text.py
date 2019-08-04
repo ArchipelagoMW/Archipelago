@@ -1883,5 +1883,7 @@ class TextTable(object):
         # 190
         text['sign_east_death_mountain_bridge'] = CompressedTextMapper.convert("How did you get up here?")
         text['fish_money'] = CompressedTextMapper.convert("It's a secret to everyone.")
+        text['sign_ganons_tower'] = CompressedTextMapper.convert("You need all 7 crystals to enter.")
+        text['sign_ganon'] = CompressedTextMapper.convert("You need all 7 crystals to beat Ganon.")
         text['end_pad_data'] = bytearray([0xfb])
         text['terminator'] =  bytearray([0xFF, 0xFF])

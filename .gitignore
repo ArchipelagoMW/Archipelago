@@ -12,3 +12,4 @@ README.html
 *multidata
 *multisave
 EnemizerCLI/
+.mypy_cache/

@@ -549,7 +549,7 @@ def patch_rom(world, player, rom):
         rom.write_byte(0x51DE, 0x00)
 
     # set open mode:
-    if world.mode in ['open', 'swordless', 'inverted']:
+    if world.mode in ['open', 'inverted']:
         rom.write_byte(0x180032, 0x01)  # open mode
 
         # disable sword sprite from uncle
@@ -587,7 +587,7 @@ def patch_rom(world, player, rom):
         # potion magic restore amount
         rom.write_byte(0x180085, 0x40)  # Half Magic
         #Cape magic cost
-        rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
+        rom.write_bytes(0x3ADA7, [0x02, 0x04, 0x08])
         # Byrna Invulnerability: off
         rom.write_byte(0x18004F, 0x00)
         #Disable catching fairies
@@ -603,31 +603,11 @@ def patch_rom(world, player, rom):
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xD8)  # One Heart
         # potion heal amount
-        rom.write_byte(0x180084, 0x08)  # One Heart
+        rom.write_byte(0x180084, 0x20)  # 4 Hearts
         # potion magic restore amount
         rom.write_byte(0x180085, 0x20)  # Quarter Magic
         #Cape magic cost
-        rom.write_bytes(0x3ADA7, [0x01, 0x01, 0x01])
-        # Byrna Invulnerability: off
-        rom.write_byte(0x18004F, 0x00)
-        #Disable catching fairies
-        rom.write_byte(0x34FD6, 0x80)
-        overflow_replacement = GREEN_TWENTY_RUPEES
-        # Rupoor negative value
-        rom.write_int16(0x180036, world.rupoor_cost)
-        # Set stun items
-        rom.write_byte(0x180180, 0x00) # Nothing
-        # Make silver arrows only usable against Ganon
-        rom.write_byte(0x180181, 0x01)
-    elif world.difficulty == 'insane':
-        # Powdered Fairies Prize
-        rom.write_byte(0x36DD0, 0x79)  # Bees
-        # potion heal amount
-        rom.write_byte(0x180084, 0x00)  # No healing
-        # potion magic restore amount
-        rom.write_byte(0x180085, 0x00)  # No healing
-        #Cape magic cost
-        rom.write_bytes(0x3ADA7, [0x01, 0x01, 0x01])
+        rom.write_bytes(0x3ADA7, [0x02, 0x04, 0x08])
         # Byrna Invulnerability: off
         rom.write_byte(0x18004F, 0x00)
         #Disable catching fairies
@@ -664,12 +644,7 @@ def patch_rom(world, player, rom):
         else:
             overflow_replacement = GREEN_TWENTY_RUPEES
 
-    if world.difficulty in ['easy']:
-        rom.write_byte(0x180182, 0x03) # auto equip silvers on pickup and at ganon
-    elif world.retro and world.difficulty in ['hard', 'expert', 'insane']: #FIXME: this is temporary for v29 baserom (perhaps no so temporary?)
-        rom.write_byte(0x180182, 0x03) # auto equip silvers on pickup and at ganon
-    else:
-        rom.write_byte(0x180182, 0x01) # auto equip silvers on pickup
+    rom.write_byte(0x180182, 0x01) # auto equip silvers on pickup
 
     #Byrna residual magic cost
     rom.write_bytes(0x45C42, [0x04, 0x02, 0x01])
@@ -709,7 +684,7 @@ def patch_rom(world, player, rom):
     random.shuffle(packs)
     prizes[:56] = [drop for pack in packs for drop in pack]
 
-    if world.difficulty in ['hard', 'expert', 'insane']:
+    if world.difficulty in ['hard', 'expert']:
         prize_replacements = {0xE0: 0xDF, # Fairy -> heart
                               0xE3: 0xD8} # Big magic -> small magic
         prizes = [prize_replacements.get(prize, prize) for prize in prizes]
@@ -753,26 +728,16 @@ def patch_rom(world, player, rom):
         rom.write_byte(address, prize)
 
     # Fill in item substitutions table
-    if world.difficulty in ['easy']:
-        rom.write_bytes(0x184000, [
-            # original_item, limit, replacement_item, filler
-            0x12, 0x01, 0x35, 0xFF, # lamp -> 5 rupees
-            0x58, 0x01, 0x43, 0xFF, # silver arrows -> 1 arrow
-            0x51, 0x06, 0x52, 0xFF, # 6 +5 bomb upgrades -> +10 bomb upgrade
-			0x53, 0x06, 0x54, 0xFF, # 6 +5 arrow upgrades -> +10 arrow upgrade
-            0xFF, 0xFF, 0xFF, 0xFF, # end of table sentinel
-        ])
-    else:
-        rom.write_bytes(0x184000, [
-            # original_item, limit, replacement_item, filler
-            0x12, 0x01, 0x35, 0xFF, # lamp -> 5 rupees
-            0x51, 0x06, 0x52, 0xFF, # 6 +5 bomb upgrades -> +10 bomb upgrade
-			0x53, 0x06, 0x54, 0xFF, # 6 +5 arrow upgrades -> +10 arrow upgrade
-            0xFF, 0xFF, 0xFF, 0xFF, # end of table sentinel
-        ])
+    rom.write_bytes(0x184000, [
+        # original_item, limit, replacement_item, filler
+        0x12, 0x01, 0x35, 0xFF, # lamp -> 5 rupees
+        0x51, 0x06, 0x52, 0xFF, # 6 +5 bomb upgrades -> +10 bomb upgrade
+        0x53, 0x06, 0x54, 0xFF, # 6 +5 arrow upgrades -> +10 arrow upgrade
+        0xFF, 0xFF, 0xFF, 0xFF, # end of table sentinel
+    ])
 
     # set Fountain bottle exchange items
-    if world.difficulty in ['hard', 'expert', 'insane']:
+    if world.difficulty in ['hard', 'expert']:
         rom.write_byte(0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][random.randint(0, 5)])
         rom.write_byte(0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][random.randint(0, 5)])
     else:
@@ -837,9 +802,7 @@ def patch_rom(world, player, rom):
         rom.write_int32(0x180200, -100 * 60 * 60 * 60)  # red clock adjustment time (in frames, sint32)
         rom.write_int32(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
         rom.write_int32(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
-        if world.difficulty == 'easy':
-            rom.write_int32(0x18020C, (20 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
-        elif world.difficulty == 'normal':
+        if world.difficulty == 'normal':
             rom.write_int32(0x18020C, (10 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
         else:
             rom.write_int32(0x18020C, int((5 + ERtimeincrease / 2) * 60 * 60))  # starting time (in frames, sint32)
@@ -866,7 +829,7 @@ def patch_rom(world, player, rom):
     rom.write_byte(0x180211, 0x06) #Game type, we set the Entrance and item randomization flags
 
     # assorted fixes
-    rom.write_byte(0x1800A2, 0x01)  # remain in real dark world when dying in dark word dungion before killing aga1
+    rom.write_byte(0x1800A2, 0x01)  # remain in real dark world when dying in dark world dungeon before killing aga1
     rom.write_byte(0x180169, 0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
     if world.mode == 'inverted':
         rom.write_byte(0x180169, 0x02)  # lock aga/ganon tower door with crystals in inverted
@@ -878,6 +841,7 @@ def patch_rom(world, player, rom):
     rom.write_bytes(0x50563, [0x3F, 0x14]) # disable below ganon chest
     rom.write_byte(0x50599, 0x00) # disable below ganon chest
     rom.write_bytes(0xE9A5, [0x7E, 0x00, 0x24]) # disable below ganon chest
+    rom.write_byte(0x18008B, 0x00) # Pyramid Hole not pre-opened
     rom.write_byte(0xF5D73, 0xF0) # bees are catchable
     rom.write_byte(0xF5F10, 0xF0) # bees are catchable
     rom.write_byte(0x180086, 0x00 if world.aga_randomness else 0x01)  # set blue ball and ganon warp randomness
@@ -928,8 +892,6 @@ def patch_rom(world, player, rom):
     # compasses showing dungeon count
     if world.clock_mode != 'off':
         rom.write_byte(0x18003C, 0x00)  # Currently must be off if timer is on, because they use same HUD location
-    elif world.difficulty == 'easy':
-        rom.write_byte(0x18003C, 0x02)  # always on
     elif world.keysanity:
         rom.write_byte(0x18003C, 0x01)  # show on pickup
     else:
@@ -1310,6 +1272,9 @@ def write_strings(rom, world, player):
 
     greenpendant = world.find_items('Green Pendant', player)[0]
     tt['sahasrahla_bring_courage'] = 'I lost my family heirloom in %s' % greenpendant.hint_text
+
+    tt['sign_ganons_tower'] = ('You need %d crystal to enter.' if world.crystals_needed_for_gt == 1 else 'You need %d crystals to enter.') % world.crystals_needed_for_gt
+    tt['sign_ganon'] = ('You need %d crystal to beat Ganon.' if world.crystals_needed_for_ganon == 1 else 'You need %d crystals to beat Ganon.') % world.crystals_needed_for_ganon
 
     tt['uncle_leaving_text'] = Uncle_texts[random.randint(0, len(Uncle_texts) - 1)]
     tt['end_triforce'] = "{NOBORDER}\n" + Triforce_texts[random.randint(0, len(Triforce_texts) - 1)]

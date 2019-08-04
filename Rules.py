@@ -26,13 +26,15 @@ def set_rules(world, player):
         open_rules(world, player)
     elif world.mode == 'standard':
         standard_rules(world, player)
-    elif world.mode == 'swordless':
-        swordless_rules(world, player)
     elif world.mode == 'inverted':
         open_rules(world, player)
         inverted_rules(world, player)
     else:
         raise NotImplementedError('Not implemented yet')
+
+    if world.swords == 'swordless':
+        # FIXME: !!! Does not handle inverted properly
+        swordless_rules(world, player)
 
     if world.logic == 'noglitches':
         no_glitches_rules(world, player)
@@ -792,8 +794,7 @@ def inverted_rules(world, player):
                      'Ganons Tower - Pre-Moldorm Chest', 'Ganons Tower - Validation Chest']:
         forbid_item(world.get_location(location, player), 'Big Key (Ganons Tower)', player)
 
-    set_rule(world.get_location('Ganon', player), lambda state: state.has_beam_sword(player) and state.has_fire_source(player) and state.has('Crystal 1', player) and state.has('Crystal 2', player)
-                                                        and state.has('Crystal 3', player) and state.has('Crystal 4', player) and state.has('Crystal 5', player) and state.has('Crystal 6', player) and state.has('Crystal 7', player)
+    set_rule(world.get_location('Ganon', player), lambda state: state.has_beam_sword(player) and state.has_fire_source(player) and state.has_crystals(world.crystals_needed_for_ganon, player)
                                                         and (state.has('Tempered Sword', player) or state.has('Golden Sword', player) or (state.has('Silver Arrows', player) and state.can_shoot_arrows(player)) or state.has('Lamp', player) or state.can_extend_magic(player, 12)))  # need to light torch a sufficient amount of times
     set_rule(world.get_entrance('Ganon Drop', player), lambda state: state.has_beam_sword(player))  # need to damage ganon to get tiles to drop
 
@@ -801,7 +802,7 @@ def inverted_rules(world, player):
 
     set_trock_key_rules(world, player)
 
-    set_rule(world.get_entrance('Inverted Ganons Tower', player), lambda state: state.has('Crystal 1', player) and state.has('Crystal 2', player) and state.has('Crystal 3', player) and state.has('Crystal 4', player) and state.has('Crystal 5', player) and state.has('Crystal 6', player) and state.has('Crystal 7', player))
+    set_rule(world.get_entrance('Inverted Ganons Tower', player), lambda state: state.has_crystals(world.crystals_needed_for_gt, player))
 
 def no_glitches_rules(world, player):
     if world.mode != 'inverted':
@@ -886,11 +887,6 @@ def open_rules(world, player):
 
 
 def swordless_rules(world, player):
-
-    # for the time being swordless mode just inherits all fixes from open mode.
-    # should there ever be fixes that apply to open mode but not swordless, this
-    # can be revisited.
-    open_rules(world, player)
 
     set_rule(world.get_entrance('Agahnims Tower', player), lambda state: state.has('Cape', player) or state.has('Hammer', player) or state.has('Beat Agahnim 1', player))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
     set_rule(world.get_entrance('Agahnim 1', player), lambda state: (state.has('Hammer', player) or state.has('Fire Rod', player) or state.can_shoot_arrows(player) or state.has('Cane of Somaria', player)) and state.has_key('Small Key (Agahnims Tower)', player, 2))

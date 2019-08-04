@@ -374,6 +374,9 @@ def balance_multiworld_progression(world):
 
                         reducing_state.sweep_for_events(locations=locations_to_test)
 
+                        if testing.locked:
+                            continue
+
                         if world.has_beaten_game(balancing_state):
                             if not world.has_beaten_game(reducing_state):
                                 items_to_replace.append(testing)
@@ -383,7 +386,7 @@ def balance_multiworld_progression(world):
                                 items_to_replace.append(testing)
 
                 replaced_items = False
-                locations_for_replacing = [l for l in checked_locations if not l.event]
+                locations_for_replacing = [l for l in checked_locations if not l.event and not l.locked]
                 while locations_for_replacing and items_to_replace:
                     new_location = locations_for_replacing.pop()
                     old_location = items_to_replace.pop()

@@ -95,12 +95,6 @@ This is only noticeably different if the the Ganon shuffle option is enabled.
 
 ## Game Difficulty
 
-### Easy
-
-This setting doubles the number of swords, shields, armors, bottles, and silver arrows in the item pool.
-This setting will also triple the number of Lamps available, and all will be obtainable before dark rooms.
-Within dungeons, the number of items found will be displayed on screen if there is no timer.
-
 ### Normal
 
 This is the default setting that has an item pool most similar to the original
@@ -117,11 +111,6 @@ the player from having fairies in bottles.
 
 This setting is a more extreme version of the Hard setting. Potions are further nerfed, the item
 pool is less helpful, and the player can find no armor, only a Master Sword, and only a single bottle.
-
-### Insane
-
-This setting is a modest step up from Expert. The main difference is that the player will never find any
-additional health.
 
 ## Timer Setting
 
@@ -358,7 +347,7 @@ Select the game mode. (default: open)
 Select the game completion goal. (default: ganon)
 
 ```
---difficulty [{easy,normal,hard,expert,insane}]
+--difficulty [{normal,hard,expert}]
 ```
 
 Select the game difficulty. Affects available itempool. (default: normal)

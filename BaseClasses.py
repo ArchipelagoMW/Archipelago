@@ -8,11 +8,12 @@ from Utils import int16_as_bytes
 
 class World(object):
 
-    def __init__(self, players, shuffle, logic, mode, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, retro, custom, customitemarray, boss_shuffle, hints):
+    def __init__(self, players, shuffle, logic, mode, swords, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, retro, custom, customitemarray, boss_shuffle, hints):
         self.players = players
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
+        self.swords = swords
         self.difficulty = difficulty
         self.timer = timer
         self.progressive = progressive
@@ -161,6 +162,13 @@ class World(object):
                         ret.prog_items.add(('Red Shield', item.player))
                     elif self.difficulty_requirements.progressive_shield_limit >= 1:
                         ret.prog_items.add(('Blue Shield', item.player))
+                elif 'Bow' in item.name:
+                    if ret.has('Silver Arrows', item.player):
+                        pass
+                    elif ret.has('Bow', item.player):
+                        ret.prog_items.add(('Silver Arrows', item.player))
+                    else:
+                        ret.prog_items.add(('Bow', item.player))
             elif item.name.startswith('Bottle'):
                 if ret.bottle_count(item.player) < self.difficulty_requirements.progressive_bottle_limit:
                     ret.prog_items.add((item.name, item.player))
@@ -409,8 +417,6 @@ class CollectionState(object):
                 basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count(player))
             elif self.world.difficulty == 'expert' and not fullrefill:
                 basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count(player))
-            elif self.world.difficulty == 'insane' and not fullrefill:
-                basemagic = basemagic
             else:
                 basemagic = basemagic + basemagic * self.bottle_count(player)
         return basemagic >= smallmagic
@@ -524,6 +530,15 @@ class CollectionState(object):
                 elif self.world.difficulty_requirements.progressive_shield_limit >= 1:
                     self.prog_items.add(('Blue Shield', item.player))
                     changed = True
+            elif 'Bow' in item.name:
+                if self.has('Silver Arrows', item.player):
+                    pass
+                elif self.has('Bow', item.player):
+                    self.prog_items.add(('Silver Arrows', item.player))
+                    changed = True
+                else:
+                    self.prog_items.add(('Bow', item.player))
+                    changed = True
         elif item.name.startswith('Bottle'):
             if self.bottle_count(item.player) < self.world.difficulty_requirements.progressive_bottle_limit:
                 self.prog_items.add((item.name, item.player))
@@ -558,6 +573,22 @@ class CollectionState(object):
                         to_remove = 'Titans Mitts'
                     elif self.has('Power Glove', item.player):
                         to_remove = 'Power Glove'
+                    else:
+                        to_remove = None
+                elif 'Shield' in item.name:
+                    if self.has('Mirror Shield', item.player):
+                        to_remove = 'Mirror Shield'
+                    elif self.has('Red Shield', item.player):
+                        to_remove = 'Red Shield'
+                    elif self.has('Blue Shield', item.player):
+                        to_remove = 'Blue Shield'
+                    else:
+                        to_remove = 'None'
+                elif 'Bow' in item.name:
+                    if self.has('Silver Arrows', item.player):
+                        to_remove = 'Silver Arrows'
+                    elif self.has('Bow', item.player):
+                        to_remove = 'Bow'
                     else:
                         to_remove = None
 
@@ -742,6 +773,7 @@ class Location(object):
         self.recursion_count = 0
         self.staleness_count = 0
         self.event = False
+        self.locked = True
         self.always_allow = lambda item, state: False
         self.access_rule = lambda state: True
         self.item_rule = lambda item: True
@@ -975,6 +1007,7 @@ class Spoiler(object):
                          'seed': self.world.seed,
                          'logic': self.world.logic,
                          'mode': self.world.mode,
+                         'swords': self.world.swords,
                          'goal': self.world.goal,
                          'shuffle': self.world.shuffle,
                          'algorithm': self.world.algorithm,

@@ -28,7 +28,7 @@ def start():
                              No Logic: Distribute items without regard for
                                              item requirements.
                              ''')
-    parser.add_argument('--mode', default='open', const='open', nargs='?', choices=['standard', 'open', 'swordless', 'inverted'],
+    parser.add_argument('--mode', default='open', const='open', nargs='?', choices=['standard', 'open', 'inverted'],
                         help='''\
                              Select game mode. (default: %(default)s)
                              Open:      World starts with Zelda rescued.
@@ -36,16 +36,24 @@ def start():
                                         but may lead to weird rain state issues if you exit
                                         through the Hyrule Castle side exits before rescuing
                                         Zelda in a full shuffle.
-                             Swordless: Like Open, but with no swords. Curtains in
-                                        Skull Woods and Agahnims Tower are removed,
-                                        Agahnim\'s Tower barrier can be destroyed with
-                                        hammer. Misery Mire and Turtle Rock can be opened
-                                        without a sword. Hammer damages Ganon. Ether and
-                                        Bombos Tablet can be activated with Hammer (and Book).
                              Inverted:  Starting locations are Dark Sanctuary in West Dark
                                         World or at Link's House, which is shuffled freely.
                                         Requires the moon pearl to be Link in the Light World
                                         instead of a bunny.
+                             ''')
+    parser.add_argument('--swords', default='random', const='random', nargs='?', choices= ['random', 'assured', 'swordless', 'vanilla'],
+                        help='''\
+                             Select sword placement. (default: %(default)s)
+                             Random:    All swords placed randomly.
+                             Assured:   Start game with a sword already.
+                             Swordless: No swords. Curtains in Skull Woods and Agahnim\'s 
+                                        Tower are removed, Agahnim\'s Tower barrier can be
+                                        destroyed with hammer. Misery Mire and Turtle Rock
+                                        can be opened without a sword. Hammer damages Ganon.
+                                        Ether and Bombos Tablet can be activated with Hammer
+                                        (and Book). Bombos pads have been added in Ice
+                                        Palace, to allow for an alternative to firerod.
+                             Vanilla:   Swords are in vanilla locations.
                              ''')
     parser.add_argument('--goal', default='ganon', const='ganon', nargs='?', choices=['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'],
                         help='''\
@@ -59,14 +67,12 @@ def start():
                              Triforce Hunt: Places 30 Triforce Pieces in the world, collect
                                             20 of them to beat the game.
                              ''')
-    parser.add_argument('--difficulty', default='normal', const='normal', nargs='?', choices=['easy', 'normal', 'hard', 'expert', 'insane'],
+    parser.add_argument('--difficulty', default='normal', const='normal', nargs='?', choices=['normal', 'hard', 'expert'],
                         help='''\
                              Select game difficulty. Affects available itempool. (default: %(default)s)
-                             Easy:            An easy setting with extra equipment.
                              Normal:          Normal difficulty.
                              Hard:            A harder setting with less equipment and reduced health.
                              Expert:          A harder yet setting with minimum equipment and health.
-                             Insane:          A setting with the absolute minimum in equipment and no extra health.
                              ''')
     parser.add_argument('--timer', default='none', const='normal', nargs='?', choices=['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'],
                         help='''\

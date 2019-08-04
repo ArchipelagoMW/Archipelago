@@ -72,18 +72,18 @@ def KholdstareDefeatRule(state, player):
             state.has('Fire Rod', player) or
             (
                 state.has('Bombos', player) and
-                # FIXME: the following only actually works for the vanilla location for swordless mode
-                (state.has_sword(player) or state.world.mode == 'swordless')
+                # FIXME: the following only actually works for the vanilla location for swordless
+                (state.has_sword(player) or state.world.swords == 'swordless')
             )
         ) and
         (
             state.has_blunt_weapon(player) or
             (state.has('Fire Rod', player) and state.can_extend_magic(player, 20)) or
-            # FIXME: this actually only works for the vanilla location for swordless mode
+            # FIXME: this actually only works for the vanilla location for swordless
             (
                 state.has('Fire Rod', player) and
                 state.has('Bombos', player) and
-                state.world.mode == 'swordless' and
+                state.world.swords == 'swordless' and
                 state.can_extend_magic(player, 16)
             )
         )
@@ -116,7 +116,7 @@ boss_table = {
 }
 
 def can_place_boss(world, boss, dungeon_name, level=None):
-    if world.mode in ['swordless'] and boss == 'Kholdstare' and dungeon_name != 'Ice Palace':
+    if world.swords in ['swordless'] and boss == 'Kholdstare' and dungeon_name != 'Ice Palace':
         return False
 
     if dungeon_name == 'Ganons Tower' and level == 'top':
@@ -161,7 +161,7 @@ def place_bosses(world, player):
 
     if world.boss_shuffle in ["basic", "normal"]:
         # temporary hack for swordless kholdstare:
-        if world.mode == 'swordless':
+        if world.swords == 'swordless':
             world.get_dungeon('Ice Palace', player).boss = BossFactory('Kholdstare', player)
             logging.getLogger('').debug('Placing boss Kholdstare at Ice Palace')
             boss_locations.remove(['Ice Palace', None])
