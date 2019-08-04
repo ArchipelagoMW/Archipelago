@@ -184,7 +184,7 @@ def fill_restrictive(world, base_state, locations, itempool):
         maximum_exploration_state = sweep_from_pool()
 
         perform_access_check = True
-        if world.check_beatable_only:
+        if world.accessibility == 'none':
             perform_access_check = not world.has_beaten_game(maximum_exploration_state)
 
         for item_to_place in items_to_place:
@@ -197,7 +197,7 @@ def fill_restrictive(world, base_state, locations, itempool):
             if spot_to_fill is None:
                 # we filled all reachable spots. Maybe the game can be beaten anyway?
                 if world.can_beat_game():
-                    if not world.check_beatable_only:
+                    if world.accessibility != 'none':
                         logging.getLogger('').warning('Not all items placed. Game beatable anyway. (Could not place %s)' % item_to_place)
                     continue
                 raise FillError('No more spots to place %s' % item_to_place)

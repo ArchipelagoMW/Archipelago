@@ -287,10 +287,6 @@ In further concert with the Bow changes, all arrows under pots, in chests, and e
 If not set, Compasses and Maps are removed from the dungeon item pools and replaced by empty chests that may end up anywhere in the world.
 This may lead to different amount of itempool items being placed in a dungeon than you are used to.
 
-## Only Ensure Seed Beatable
-
-If set, will only ensure the goal can be achieved, but not necessarily that all locations are reachable. Currently only affects VT25, VT26 and balanced algorithms.
-
 ## Include Ganon's Tower and Pyramid Hole in Shuffle pool
 
 If set, Ganon's Tower is included in the dungeon shuffle pool and the Pyramid Hole/Exit pair is included in the Holes shuffle pool. Ganon can not be defeated until the primary goal is fulfilled.
@@ -457,10 +453,10 @@ Select the color of Link\'s heart meter. (default: red)
 Use to select a different sprite sheet to use for Link. Path to a binary file of length 0x7000 containing the sprite data stored at address 0x80000 in the rom. (default: None)
 
 ```
---beatableonly
+--accessibility [{items,locations,none}]
 ```
 
-Enables the "Only Ensure Seed Beatable" option (default: False)
+Sets the item/location accessibility rules. (default: items)
 
 ```
 --hints

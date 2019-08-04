@@ -66,8 +66,6 @@ def guiMain(args=None):
     retroCheckbutton = Checkbutton(checkBoxFrame, text="Retro mode (universal keys)", variable=retroVar)
     dungeonItemsVar = IntVar()
     dungeonItemsCheckbutton = Checkbutton(checkBoxFrame, text="Place Dungeon Items (Compasses/Maps)", onvalue=0, offvalue=1, variable=dungeonItemsVar)
-    beatableOnlyVar = IntVar()
-    beatableOnlyCheckbutton = Checkbutton(checkBoxFrame, text="Only ensure seed is beatable, not all items must be reachable", variable=beatableOnlyVar)
     disableMusicVar = IntVar()
     disableMusicCheckbutton = Checkbutton(checkBoxFrame, text="Disable game music", variable=disableMusicVar)
     shuffleGanonVar = IntVar()
@@ -85,7 +83,6 @@ def guiMain(args=None):
     keysanityCheckbutton.pack(expand=True, anchor=W)
     retroCheckbutton.pack(expand=True, anchor=W)
     dungeonItemsCheckbutton.pack(expand=True, anchor=W)
-    beatableOnlyCheckbutton.pack(expand=True, anchor=W)
     disableMusicCheckbutton.pack(expand=True, anchor=W)
     shuffleGanonCheckbutton.pack(expand=True, anchor=W)
     hintsCheckbutton.pack(expand=True, anchor=W)
@@ -331,7 +328,6 @@ def guiMain(args=None):
         guiargs.keysanity = bool(keysanityVar.get())
         guiargs.retro = bool(retroVar.get())
         guiargs.nodungeonitems = bool(dungeonItemsVar.get())
-        guiargs.beatableonly = bool(beatableOnlyVar.get())
         guiargs.quickswap = bool(quickSwapVar.get())
         guiargs.disablemusic = bool(disableMusicVar.get())
         guiargs.shuffleganon = bool(shuffleGanonVar.get())
@@ -1071,7 +1067,6 @@ def guiMain(args=None):
         retroVar.set(args.retro)
         if args.nodungeonitems:
             dungeonItemsVar.set(int(not args.nodungeonitems))
-        beatableOnlyVar.set(int(args.beatableonly))
         quickSwapVar.set(int(args.quickswap))
         disableMusicVar.set(int(args.disablemusic))
         if args.count:

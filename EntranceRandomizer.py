@@ -186,11 +186,13 @@ def start():
                              Remove Maps and Compasses from Itempool, replacing them by
                              empty slots.
                              ''', action='store_true')
-    parser.add_argument('--beatableonly', help='''\
-                             Only check if the game is beatable with placement. Do not
-                             ensure all locations are reachable. This only has an effect
-                             on the restrictive algorithm currently.
-                             ''', action='store_true')
+    parser.add_argument('--accessibility', default='items', const='items', nargs='?', choices=['items', 'locations', 'none'], help='''\
+                             Select Item/Location Accessibility. (default: %(default)s)
+                             Items:     You can reach all unique inventory items. No guarantees about
+                                        reaching all locations or all keys. 
+                             Locations: You will be able to reach every location in the game.
+                             None:      You will be able to reach enough locations to beat the game.
+                             ''')
     parser.add_argument('--hints', help='''\
                              Make telepathic tiles and storytellers give helpful hints.
                              ''', action='store_true')

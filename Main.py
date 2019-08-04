@@ -24,7 +24,7 @@ def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.keysanity, args.retro, args.custom, args.customitemarray, args.shufflebosses, args.hints)
+    world = World(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.accessibility, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.keysanity, args.retro, args.custom, args.customitemarray, args.shufflebosses, args.hints)
     logger = logging.getLogger('')
     if seed is None:
         random.seed(None)
@@ -180,7 +180,7 @@ def gt_filler(world):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.timer, world.progressive, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.keysanity, world.retro, world.custom, world.customitemarray, world.boss_shuffle, world.hints)
+    ret = World(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.timer, world.progressive, world.goal, world.algorithm, world.place_dungeon_items, world.accessibility, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.keysanity, world.retro, world.custom, world.customitemarray, world.boss_shuffle, world.hints)
     ret.required_medallions = world.required_medallions.copy()
     ret.swamp_patch_required = world.swamp_patch_required.copy()
     ret.ganon_at_pyramid = world.ganon_at_pyramid.copy()
@@ -277,13 +277,8 @@ def create_playthrough(world):
     old_world = world
     world = copy_world(world)
 
-    # in treasure hunt and pedestal goals, ganon is invincible
-    if world.goal in ['pedestal', 'triforcehunt']:
-        for player in range(1, world.players + 1):
-            world.get_location('Ganon', player).item = None
-
     # if we only check for beatable, we can do this sanity check first before writing down spheres
-    if world.check_beatable_only and not world.can_beat_game():
+    if world.accessibility == 'none' and not world.can_beat_game():
         raise RuntimeError('Cannot beat game. Something went terribly wrong here!')
 
     # get locations containing progress items
@@ -314,7 +309,7 @@ def create_playthrough(world):
         logging.getLogger('').debug('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres), len(sphere), len(prog_locations))
         if not sphere:
             logging.getLogger('').debug('The following items could not be reached: %s', ['%s (Player %d) at %s (Player %d)' % (location.item.name, location.item.player, location.name, location.player) for location in sphere_candidates])
-            if not world.check_beatable_only:
+            if not world.accessibility == 'none':
                 raise RuntimeError('Not all progression items reachable. Something went terribly wrong here.')
             else:
                 break

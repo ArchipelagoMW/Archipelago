@@ -8,7 +8,7 @@ from Utils import int16_as_bytes
 
 class World(object):
 
-    def __init__(self, players, shuffle, logic, mode, swords, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, check_beatable_only, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, retro, custom, customitemarray, boss_shuffle, hints):
+    def __init__(self, players, shuffle, logic, mode, swords, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, accessibility, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, retro, custom, customitemarray, boss_shuffle, hints):
         self.players = players
         self.shuffle = shuffle
         self.logic = logic
@@ -50,7 +50,7 @@ class World(object):
         self.lock_aga_door_in_escape = False
         self.fix_trock_doors = self.shuffle != 'vanilla'
         self.save_and_quit_from_boss = True
-        self.check_beatable_only = check_beatable_only
+        self.accessibility = accessibility
         self.fix_skullwoods_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
         self.fix_palaceofdarkness_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
         self.fix_trock_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
@@ -1014,7 +1014,7 @@ class Spoiler(object):
                          'difficulty': self.world.difficulty,
                          'timer': self.world.timer,
                          'progressive': self.world.progressive,
-                         'completeable': not self.world.check_beatable_only,
+                         'accessibility': self.world.accessibility,
                          'dungeonitems': self.world.place_dungeon_items,
                          'quickswap': self.world.quickswap,
                          'fastmenu': self.world.fastmenu,
@@ -1047,7 +1047,7 @@ class Spoiler(object):
             outfile.write('Goal:                            %s\n' % self.metadata['goal'])
             outfile.write('Entrance Shuffle:                %s\n' % self.metadata['shuffle'])
             outfile.write('Filling Algorithm:               %s\n' % self.metadata['algorithm'])
-            outfile.write('All Locations Accessible:        %s\n' % ('Yes' if self.metadata['completeable'] else 'No, some locations may be unreachable'))
+            outfile.write('Accessibility:                   %s\n' % self.metadata['accessibility'])
             outfile.write('Maps and Compasses in Dungeons:  %s\n' % ('Yes' if self.metadata['dungeonitems'] else 'No'))
             outfile.write('L\\R Quickswap enabled:           %s\n' % ('Yes' if self.metadata['quickswap'] else 'No'))
             outfile.write('Menu speed:                      %s\n' % self.metadata['fastmenu'])

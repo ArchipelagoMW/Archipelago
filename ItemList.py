@@ -141,7 +141,11 @@ def generate_itempool(world, player):
     if world.timer in ['ohko', 'timed-ohko']:
         world.can_take_damage = False
 
-    world.push_item(world.get_location('Ganon', player), ItemFactory('Triforce', player), False)
+    if world.goal in ['pedestal', 'triforcehunt']:
+        world.push_item(world.get_location('Ganon', player), ItemFactory('Nothing', player), False)
+    else:
+        world.push_item(world.get_location('Ganon', player), ItemFactory('Triforce', player), False)
+    
     world.get_location('Ganon', player).event = True
     world.get_location('Ganon', player).locked = True
     world.push_item(world.get_location('Agahnim 1', player), ItemFactory('Beat Agahnim 1', player), False)
