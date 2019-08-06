@@ -154,16 +154,26 @@ EXPLOSIVES_ENEMY & SLIDING_POWDER & PROLOGUE_TRIGGER &
 {
 "edge": "FOREST_START -> FOREST_NIGHT_ATK_UP_ROOM",
 "prereq": "
-    (AIR_JUMP & (RABI_SLIPPERS | WALL_JUMP))
+ITM & (
+    (AIR_JUMP & (RABI_SLIPPERS | (HARD & WALL_JUMP)))
     | (WHIRL_BONK_CANCEL)
-    | (SLIDE_JUMP_BUNSTRIKE_CANCEL & AIR_JUMP)
-    | (SLIDE_JUMP_BUNSTRIKE_CANCEL & WALL_JUMP_LV2 & (AIR_DASH | ADV_STUPID))
+    | (SLIDE_JUMP_BUNSTRIKE_CANCEL & (
+        AIR_JUMP
+        | (WALL_JUMP_LV2 & (AIR_DASH | ADV_STUPID))
+    ))
+    | (ADV_HARD & HAMMER_ROLL & (
+        AIR_JUMP
+        | WALL_JUMP_LV2
+    ))
     | (ADV_STUPID & (
         // slide bonk
         (SLIDING_POWDER & BUNNY_AMULET & WALL_JUMP_LV2)
         // 4 tile zip. amulet cancel needed for wall jump. consumables don't work.
         | (SLIDE_ZIP & (AIR_JUMP | (BUNNY_AMULET & WALL_JUMP_LV2)))
+        // get bee into hole, airjump into hole and whirlbonk bee
+        | (WHIRL_BONK & AIR_JUMP)
     ))
+)
 ",
 }
 
@@ -393,7 +403,12 @@ PROLOGUE_TRIGGER & (
 
 {
 "edge": "SPECTRAL_WEST -> SPECTRAL_WEST_EGG_ROOM",
-"prereq": "AIR_JUMP | WHIRL_BONK_CANCEL | (SLIDE_JUMP_BUNSTRIKE_CANCEL & RABI_SLIPPERS)",
+"prereq": "
+    AIR_JUMP
+    | WHIRL_BONK_CANCEL
+    | (SLIDE_JUMP_BUNSTRIKE_CANCEL & RABI_SLIPPERS)
+    | (ADV_STUPID & SLIDING_POWDER) // slide bonk off bunny and wallkick up the hole
+",
 }
 
 {
@@ -1751,8 +1766,8 @@ DARKNESS & (
 {
 "edge": "EVERNIGHT_LOWER -> EVERNIGHT_EAST_OF_WARP",
 "prereq": "
-    (AIR_JUMP & (ADV_HARD | AIR_DASH | SLIDE_JUMP_BUNSTRIKE))
-    | (AIR_DASH_LV3 & AMULET_FOOD & ITM_HARD)
+    (AIR_JUMP & (ADV_VHARD | AIR_DASH | (ITM & SLIDING_POWDER)))
+    | (AIR_DASH_LV3 & AMULET_FOOD & ADV_HARD)
 ",
 }
 

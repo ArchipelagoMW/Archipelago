@@ -749,7 +749,7 @@
     "edge": "VOLCANIC_MAIN -> VOLCANIC_BEACH_ENTRANCE",
     "prereq": "
         RABI_SLIPPERS | AIR_DASH | AIR_JUMP | SLIDE_JUMP_BUNSTRIKE
-        | (ADV_STUPID & WALL_JUMP_LV2 & 2_AMULET_FOOD)
+        | (ADV_STUPID & AMULET_FOOD) // very stupid
     ",
     }
 ]}
@@ -1116,6 +1116,20 @@
     {
     "edge": "SNOWLAND_MID -> SNOWLAND_LAKE",
     "prereq": "IMPOSSIBLE",
+    }
+    {
+    "edge": "SNOWLAND_LAKE -> SNOWLAND_MID",
+    "prereq": "IMPOSSIBLE",
+    }
+]}
+
+{
+"name": "snowland_lake_left_entrance_semisolid",
+"weight": 10,
+"changes": [
+    {
+    "edge": "SNOWLAND_MID -> SNOWLAND_LAKE",
+    "prereq": "current & DOWNDRILL_SEMISOLID_CLIP",
     }
 ]}
 

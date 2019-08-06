@@ -107,9 +107,16 @@ def apply_fixes_for_randomizer(areaid, data):
         for y in range(186,189):
             data.tiledata_event[xy_to_index(310,y)] = 0
 
+    if areaid == 7:
+        # Remove redundant map transition
+        for y in range(37,43):
+            for x in range(96,101):
+                data.tiledata_event[xy_to_index(x,y)] = 0
+
     if areaid == 8:
         # Remove autosaves from warp destination
         data.tiledata_event = [0 if x==42 else x for x in data.tiledata_event]
+
 
 def apply_open_mode_fixes(areaid, data):
     # Prologue triggers that prevent you from getting past many areas
