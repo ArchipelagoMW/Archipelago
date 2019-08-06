@@ -676,8 +676,9 @@
 {
 "item": "REGEN_UP_RAVINE",
 "from_location": "RAVINE_LOWER",
-"entry_prereq": "EXPLOSIVES",
-"exit_prereq": "NONE",
+// cramped 2 tile zip in and out
+"entry_prereq": "EXPLOSIVES | (ADV_STUPID & SLIDE_ZIP)",
+"exit_prereq": "EXPLOSIVES | (ADV_STUPID & SLIDE_ZIP)",
 }
 
 {

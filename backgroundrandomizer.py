@@ -89,6 +89,8 @@ class BackgroundShuffler(object):
                 if areaid == 6 and posindex == to_tile_index(9,3): continue
                 # warp to exit sysint
                 if areaid == 9 and posindex == to_tile_index(14,8): continue
+                # cicini warp
+                if areaid == 0 and posindex == to_tile_index(22,14): continue
 
             # Fix for Evernight dark passage background bugs:
             if allocation[val] == 56:
@@ -126,6 +128,9 @@ class BackgroundShuffler(object):
                 if areaid == 0 and posindex == to_tile_index(7,6): continue
                 if areaid == 0 and posindex == to_tile_index(8,6): continue
                 if areaid == 0 and posindex == to_tile_index(9,6): continue
+
+                # Cicini warp doesn't work
+                if areaid == 0 and posindex == to_tile_index(22,14): continue
 
             # Fix for Sysint2 background floating effect affecting constraints
             if allocation[val] == 66:
