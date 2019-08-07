@@ -551,7 +551,13 @@ def patch_rom(world, player, rom):
     # set open mode:
     if world.mode in ['open', 'inverted']:
         rom.write_byte(0x180032, 0x01)  # open mode
+    if world.mode == 'inverted':
+        set_inverted_mode(world, rom)
+    elif world.mode == 'standard':
+        rom.write_byte(0x180032, 0x00)  # standard mode
 
+    uncle_location = world.get_location('Link\'s Uncle', player)
+    if uncle_location.item is None or uncle_location.item.name not in ['Master Sword', 'Tempered Sword', 'Fighter Sword', 'Golden Sword', 'Progressive Sword']:
         # disable sword sprite from uncle
         rom.write_bytes(0x6D263, [0x00, 0x00, 0xf6, 0xff, 0x00, 0x0E])
         rom.write_bytes(0x6D26B, [0x00, 0x00, 0xf6, 0xff, 0x00, 0x0E])
@@ -563,10 +569,6 @@ def patch_rom(world, player, rom):
         rom.write_bytes(0x6D2EB, [0x00, 0x00, 0xf7, 0xff, 0x02, 0x0E])
         rom.write_bytes(0x6D31B, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
         rom.write_bytes(0x6D323, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
-    if world.mode == 'inverted':
-        set_inverted_mode(world, rom)
-    elif world.mode == 'standard':
-        rom.write_byte(0x180032, 0x00)  # standard mode
 
     # set light cones
     rom.write_byte(0x180038, 0x01 if world.sewer_light_cone else 0x00)
@@ -866,12 +868,6 @@ def patch_rom(world, player, rom):
     rom.write_bytes(0x180080, [50, 50, 70, 70]) # values to fill for Capacity Upgrades (Bomb5, Bomb10, Arrow5, Arrow10)
 
     rom.write_byte(0x18004D, 0x00) # Escape assist (off)
-    rom.write_byte(0x18004E, 0x00) # escape fills
-    rom.write_int16(0x180183, 0) # rupee fill (for bow if rupee arrows enabled)
-    rom.write_bytes(0x180185, [0x00, 0x00, 0x00]) # uncle item refills
-    rom.write_bytes(0x180188, [0x00, 0x00, 0x00]) # zelda item refills
-    rom.write_bytes(0x18018B, [0x00, 0x00, 0x00]) # uncle item refills
-
 
     if world.goal in ['pedestal', 'triforcehunt']:
         rom.write_byte(0x18003E, 0x01)  # make ganon invincible
@@ -949,6 +945,24 @@ def patch_rom(world, player, rom):
     rom.write_bytes(0x6D2CB, [0x00, 0x00, 0xf6, 0xff, 0x02, 0x0E])
     rom.write_bytes(0x6D2FB, [0x00, 0x00, 0xf7, 0xff, 0x02, 0x0E])
     rom.write_bytes(0x6D313, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
+
+    rom.write_byte(0x18004E, 0) # Escape Fill (nothing)
+    rom.write_int16(0x180183, 300) # Escape fill rupee bow
+    rom.write_bytes(0x180185, [0,0,0]) # Uncle respawn refills (magic, bombs, arrows)
+    rom.write_bytes(0x180188, [0,0,0]) # Zelda respawn refills (magic, bombs, arrows)
+    rom.write_bytes(0x18018B, [0,0,0]) # Mantle respawn refills (magic, bombs, arrows)
+    if world.mode == 'standard':
+        if uncle_location.item is not None and uncle_location.item.name in ['Bow', 'Progressive Bow']:
+            rom.write_byte(0x18004E, 1) # Escape Fill (arrows)
+            rom.write_int16(0x180183, 300) # Escape fill rupee bow
+            rom.write_bytes(0x180185, [0,0,70]) # Uncle respawn refills (magic, bombs, arrows)
+            rom.write_bytes(0x180188, [0,0,10]) # Zelda respawn refills (magic, bombs, arrows)
+            rom.write_bytes(0x18018B, [0,0,10]) # Mantle respawn refills (magic, bombs, arrows)
+        elif uncle_location.item is not None and uncle_location.item.name in ['Cane of Somaria', 'Cane of Byrna', 'Fire Rod']:
+            rom.write_byte(0x18004E, 4) # Escape Fill (magic)
+            rom.write_bytes(0x180185, [0x80,0,0]) # Uncle respawn refills (magic, bombs, arrows)
+            rom.write_bytes(0x180188, [0x20,0,0]) # Zelda respawn refills (magic, bombs, arrows)
+            rom.write_bytes(0x18018B, [0x20,0,0]) # Mantle respawn refills (magic, bombs, arrows)
 
     # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
     rom.write_byte(0x18003D, 0x01 if world.swamp_patch_required[player] else 0x00)

@@ -387,13 +387,6 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
 
     if swords == 'swordless':
         pool.extend(diff.swordless)
-    elif mode == 'standard':
-        if want_progressives():
-            placed_items.append(('Link\'s Uncle', 'Progressive Sword'))
-            pool.extend(diff.progressivesword)
-        else:
-            placed_items.append(('Link\'s Uncle', 'Fighter Sword'))
-            pool.extend(diff.basicsword)
     else:
         if want_progressives():
             pool.extend(diff.progressivesword)
@@ -557,14 +550,6 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
         itemtotal = itemtotal + 1
 
     if mode == 'standard':
-        if progressive == 'off':
-            placed_items.append(('Link\'s Uncle', 'Fighter Sword'))
-            pool.extend(['Fighter Sword'] * max((customitemarray[32] - 1), 0))
-            pool.extend(['Progressive Sword'] * customitemarray[36])
-        else:
-            placed_items.append(('Link\'s Uncle', 'Progressive Sword'))
-            pool.extend(['Fighter Sword'] * customitemarray[32])
-            pool.extend(['Progressive Sword'] * max((customitemarray[36] - 1), 0))
         if retro:
             key_location = random.choice(['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest', 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
             placed_items.append((key_location, 'Small Key (Universal)'))
@@ -572,10 +557,11 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
         else:
             pool.extend(['Small Key (Universal)'] * customitemarray[68])
     else:
-        pool.extend(['Fighter Sword'] * customitemarray[32])
-        pool.extend(['Progressive Sword'] * customitemarray[36])
         pool.extend(['Small Key (Universal)'] * customitemarray[68])
 
+    pool.extend(['Fighter Sword'] * customitemarray[32])
+    pool.extend(['Progressive Sword'] * customitemarray[36])
+    
     if shuffle == 'insanity_legacy':
         placed_items.append(('Link\'s House', 'Magic Mirror'))
         placed_items.append(('Sanctuary', 'Moon Pearl'))

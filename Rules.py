@@ -1,5 +1,6 @@
 import collections
 import logging
+from BaseClasses import CollectionState
 
 
 def set_rules(world, player):
@@ -7,17 +8,17 @@ def set_rules(world, player):
     if world.logic == 'nologic':
         logging.getLogger('').info('WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
         if world.mode != 'inverted':
-            world.get_region('Links House', player).can_reach = lambda state: True
-            world.get_region('Sanctuary', player).can_reach = lambda state: True
+            world.get_region('Links House', player).can_reach_private = lambda state: True
+            world.get_region('Sanctuary', player).can_reach_private = lambda state: True
             old_rule = world.get_region('Old Man House', player).can_reach
-            world.get_region('Old Man House', player).can_reach = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
+            world.get_region('Old Man House', player).can_reach_private = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
             return
         else:
-            world.get_region('Inverted Links House', player).can_reach = lambda state: True
-            world.get_region('Inverted Dark Sanctuary', player).entrances[0].parent_region.can_reach = lambda state: True
+            world.get_region('Inverted Links House', player).can_reach_private = lambda state: True
+            world.get_region('Inverted Dark Sanctuary', player).entrances[0].parent_region.can_reach_private = lambda state: True
             if world.shuffle != 'vanilla':
                 old_rule = world.get_region('Old Man House', player).can_reach
-                world.get_region('Old Man House', player).can_reach = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
+                world.get_region('Old Man House', player).can_reach_private = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
             return
     if world.mode != 'inverted':
         global_rules(world, player)
@@ -90,6 +91,9 @@ def forbid_item(location, item, player):
     old_rule = location.item_rule
     location.item_rule = lambda i: (i.name != item or i.player != player) and old_rule(i)
 
+def add_item_rule(location, rule):
+    old_rule = location.item_rule
+    location.item_rule = lambda item: rule(item) and old_rule(item)
 
 def item_in_locations(state, item, player, locations):
     for location in locations:
@@ -111,15 +115,20 @@ def global_rules(world, player):
                 forbid_item(location, 'Triforce Piece', player)
 
     # ganon can only carry triforce
-    world.get_location('Ganon', player).item_rule = lambda item: item.name == 'Triforce' and item.player == player
+    add_item_rule(world.get_location('Ganon', player), lambda item: item.name == 'Triforce' and item.player == player)
 
-    # these are default save&quit points and always accessible
-    world.get_region('Links House', player).can_reach = lambda state: True
-    world.get_region('Sanctuary', player).can_reach = lambda state: True
+    if world.mode == 'standard':
+        world.get_region('Hyrule Castle Secret Entrance', player).can_reach_private = lambda state: True
+        old_rule = world.get_region('Links House', player).can_reach
+        world.get_region('Links House', player).can_reach_private = lambda state: state.can_reach('Sanctuary', 'Region', player) or old_rule(state)
+    else:
+        # these are default save&quit points and always accessible
+        world.get_region('Links House', player).can_reach_private = lambda state: True
+        world.get_region('Sanctuary', player).can_reach_private = lambda state: True
 
     # we can s&q to the old man house after we rescue him. This may be somewhere completely different if caves are shuffled!
     old_rule = world.get_region('Old Man House', player).can_reach
-    world.get_region('Old Man House', player).can_reach = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
+    world.get_region('Old Man House', player).can_reach_private = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
 
     # overworld requirements
     set_rule(world.get_entrance('Kings Grave', player), lambda state: state.has_Boots(player))
@@ -454,14 +463,20 @@ def global_rules(world, player):
     set_rule(world.get_entrance('Ganons Tower', player), lambda state: state.has_crystals(world.crystals_needed_for_gt, player))
 
 def inverted_rules(world, player):
-    world.get_location('Ganon', player).item_rule = lambda item: item.name == 'Triforce' and item.player == player
-    world.get_region('Inverted Links House', player).can_reach = lambda state: True
-    world.get_region('Inverted Dark Sanctuary', player).entrances[0].parent_region.can_reach = lambda state: True
+    if world.goal == 'triforcehunt':
+        for location in world.get_locations():
+            if location.player != player:
+                forbid_item(location, 'Triforce Piece', player)
+
+    add_item_rule(world.get_location('Ganon', player), lambda item: item.name == 'Triforce' and item.player == player)
+
+    world.get_region('Inverted Links House', player).can_reach_private = lambda state: True
+    world.get_region('Inverted Dark Sanctuary', player).entrances[0].parent_region.can_reach_private = lambda state: True
 
     # we can s&q to the old man house after we rescue him. This may be somewhere completely different if caves are shuffled!
     if world.shuffle != 'vanilla':
         old_rule = world.get_region('Old Man House', player).can_reach
-        world.get_region('Old Man House', player).can_reach = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
+        world.get_region('Old Man House', player).can_reach_private = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
     # overworld requirements 
     set_rule(world.get_location('Maze Race', player), lambda state: state.has_Pearl(player))
     set_rule(world.get_entrance('Mini Moldorm Cave', player), lambda state: state.has_Pearl(player))
@@ -930,9 +945,21 @@ def swordless_rules(world, player):
 
 
 def standard_rules(world, player):
-    for loc in ['Sanctuary', 'Sewers - Secret Room - Left', 'Sewers - Secret Room - Middle',
-                'Sewers - Secret Room - Right']:
-        add_rule(world.get_location(loc, player), lambda state: state.can_kill_most_things(player) and state.has_key('Small Key (Escape)', player))
+    add_rule(world.get_entrance('Sewers Door', player), lambda state: state.can_kill_most_things(player))
+
+    set_rule(world.get_entrance('Hyrule Castle Exit (East)', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
+    set_rule(world.get_entrance('Hyrule Castle Exit (West)', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
+
+    # ensures the required weapon for escape lands on uncle (unless player has it pre-equipped)
+    add_rule(world.get_location('Secret Passage', player), lambda state: state.can_kill_most_things(player))
+    add_rule(world.get_location('Hyrule Castle - Map Chest', player), lambda state: state.can_kill_most_things(player))
+
+    def uncle_item_rule(item):
+        copy_state = CollectionState(world)
+        copy_state.collect(item)
+        return copy_state.can_reach('Sanctuary', 'Region', player)
+
+    add_item_rule(world.get_location('Link\'s Uncle', player), uncle_item_rule)
 
     # easiest way to enforce key placement not relevant for open
     set_rule(world.get_location('Sewers - Dark Cross', player), lambda state: state.can_kill_most_things(player))
