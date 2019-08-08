@@ -826,7 +826,7 @@
 {
 "item": "MP_UP_ICY_SUMMIT",
 "from_location": "ICY_SUMMIT_MAIN",
-"entry_prereq": "RABI_SLIPPERS | AIR_JUMP | WALL_JUMP | WHIRL_BONK | (SPEED1 & ITM_VHARD)",
+"entry_prereq": "ADV_STUPID | RABI_SLIPPERS | AIR_JUMP | WALL_JUMP | WHIRL_BONK | (SPEED1 & ITM_VHARD)",
 "exit_prereq": "NONE",
 
 "alternate_entries": {

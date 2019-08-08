@@ -86,7 +86,11 @@ EXPLOSIVES_ENEMY & SLIDING_POWDER & PROLOGUE_TRIGGER &
 
 {
 "edge": "FOREST_EAST_ABOVE_SPRING -> FOREST_UPPER_EAST_EGG_LEDGE",
-"prereq": "WALL_JUMP_LV2 & (AIR_JUMP | WHIRL_BONK_CANCEL)",
+"prereq": "
+    (WALL_JUMP_LV2 & (AIR_JUMP | WHIRL_BONK_CANCEL))
+    // jump into hole to reset duck, then hammer roll bonk duck
+    | (ADV_VHARD & HAMMER_ROLL & (AIR_JUMP | (WALL_JUMP_LV2 & AIR_DASH)))
+",
 }
 
 {
