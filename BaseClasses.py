@@ -50,7 +50,7 @@ class World(object):
         self.rupoor_cost = 10
         self.aga_randomness = True
         self.lock_aga_door_in_escape = False
-        self.fix_trock_doors = self.shuffle != 'vanilla'
+        self.fix_trock_doors = self.shuffle != 'vanilla' or self.mode == 'inverted'
         self.save_and_quit_from_boss = True
         self.accessibility = accessibility
         self.fix_skullwoods_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
