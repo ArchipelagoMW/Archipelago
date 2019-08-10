@@ -957,6 +957,7 @@ def standard_rules(world, player):
     def uncle_item_rule(item):
         copy_state = CollectionState(world)
         copy_state.collect(item)
+        copy_state.sweep_for_events()
         return copy_state.can_reach('Sanctuary', 'Region', player)
 
     add_item_rule(world.get_location('Link\'s Uncle', player), uncle_item_rule)

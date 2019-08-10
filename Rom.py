@@ -858,6 +858,18 @@ def patch_rom(world, player, rom):
     rom.write_byte(0x18302C, 0x18) # starting max health
     rom.write_byte(0x18302D, 0x18) # starting current health
     rom.write_byte(0x183039, 0x68) # starting abilities, bit array
+    
+    for item in world.precollected_items:
+        if item.player != player:
+            continue
+
+        if item.name == 'Fighter Sword':
+            rom.write_byte(0x183000+0x19, 0x01)
+            rom.write_byte(0x0271A6+0x19, 0x01)
+            rom.write_byte(0x180043, 0x01) # special starting sword byte
+        else:
+            raise RuntimeError("Unsupported pre-collected item: {}".format(item))
+
     rom.write_byte(0x18004A, 0x00 if world.mode != 'inverted' else 0x01)  # Inverted mode
     rom.write_byte(0x18005D, 0x00) # Hammer always breaks barrier
     rom.write_byte(0x2AF79, 0xD0 if world.mode != 'inverted' else 0xF0) # vortexes: Normal  (D0=light to dark, F0=dark to light, 42 = both)

@@ -3,7 +3,7 @@ from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict
-from _vendor.collections_extended import bag, setlist
+from _vendor.collections_extended import bag
 from Utils import int16_as_bytes
 
 class World(object):
@@ -24,6 +24,7 @@ class World(object):
         self.shops = []
         self.itempool = []
         self.seed = None
+        self.precollected_items = []
         self.state = CollectionState(self)
         self.required_medallions = dict([(player, ['Ether', 'Quake']) for player in range(1, players + 1)])
         self._cached_entrances = None
@@ -195,6 +196,10 @@ class World(object):
     def find_items(self, item, player):
         return [location for location in self.get_locations() if location.item is not None and location.item.name == item and location.item.player == player]
 
+    def push_precollected(self, item):
+        self.precollected_items.append(item)
+        self.state.collect(item, True)
+
     def push_item(self, location, item, collect=True):
         if not isinstance(location, Location):
             raise RuntimeError('Cannot assign item %s to location %s (player %d).' % (item, location, item.player))
@@ -302,6 +307,8 @@ class CollectionState(object):
         self.path = {}
         self.locations_checked = set()
         self.stale = {player: True for player in range(1, parent.players + 1)}
+        for item in parent.precollected_items:
+            self.collect(item, True)
 
     def update_reachable_regions(self, player):
         player_regions = [region for region in self.world.regions if region.player == player]

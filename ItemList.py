@@ -21,42 +21,23 @@ basicgloves = ['Power Glove', 'Titans Mitts']
 normalbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Fairy)', 'Bottle (Bee)', 'Bottle (Good Bee)']
 hardbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Bee)', 'Bottle (Good Bee)']
 
-normalbaseitems = (['Silver Arrows', 'Magic Upgrade (1/2)', 'Single Arrow', 'Sanctuary Heart Container', 'Arrows (10)', 'Bombs (3)'] +
+normalbaseitems = (['Silver Arrows', 'Magic Upgrade (1/2)', 'Single Arrow', 'Sanctuary Heart Container', 'Arrows (10)', 'Bombs (10)'] +
                    ['Rupees (300)'] * 4 + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24)
 normalfirst15extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Arrows (10)'] * 6 + ['Bombs (3)'] * 6
-normalsecond15extra = ['Bombs (3)'] * 9 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupee (1)'] + ['Bombs (10)']
+normalsecond15extra = ['Bombs (3)'] * 10 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupee (1)']
 normalthird10extra = ['Rupees (50)'] * 4 + ['Rupees (20)'] * 3 + ['Arrows (10)', 'Rupee (1)', 'Rupees (5)']
 normalfourth5extra = ['Arrows (10)'] * 2 + ['Rupees (20)'] * 2 + ['Rupees (5)']
 normalfinal25extra = ['Rupees (20)'] * 23 + ['Rupees (5)'] * 2
-
-hardbaseitems = ['Silver Arrows', 'Single Arrow', 'Bombs (10)'] + ['Rupees (300)'] * 4 + ['Boss Heart Container'] * 6 + ['Piece of Heart'] * 20 + ['Rupees (5)'] * 7 + ['Bombs (3)'] * 4
-hardfirst20extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Bombs (3)'] * 5 + ['Rupees (5)'] * 10 + ['Arrows (10)', 'Rupee (1)']
-hardsecond10extra = ['Rupees (5)'] * 5 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupee (1)']
-hardthird10extra = ['Rupees (50)'] * 4 + ['Rupees (20)'] * 3 + ['Rupees (5)'] * 3
-hardfourth10extra = ['Arrows (10)'] * 2 + ['Rupees (20)'] * 7 + ['Rupees (5)']
-hardfinal20extra = ['Rupees (20)'] * 18 + ['Rupees (5)'] * 2
-
-expertbaseitems = (['Rupees (300)'] * 4 + ['Single Arrow', 'Silver Arrows', 'Boss Heart Container', 'Rupee (1)', 'Bombs (10)'] + ['Piece of Heart'] * 20 + ['Rupees (5)'] * 2 +
-                   ['Bombs (3)'] * 9 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupees (20)'] * 2)
-expertfirst15extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Rupees (5)'] * 12
-expertsecond15extra = ['Rupees (5)'] * 10 + ['Rupees (20)'] * 5
-expertthird10extra = ['Rupees (50)'] * 4 + ['Rupees (5)'] * 2 + ['Arrows (10)'] * 3 + ['Rupee (1)']
-expertfourth5extra = ['Rupees (5)'] * 5
-expertfinal25extra = ['Rupees (20)'] * 23 + ['Rupees (5)'] * 2
 
 Difficulty = namedtuple('Difficulty',
                         ['baseitems', 'bottles', 'bottle_count', 'same_bottle', 'progressiveshield',
                          'basicshield', 'progressivearmor', 'basicarmor', 'swordless',
                          'progressivesword', 'basicsword', 'timedohko', 'timedother',
-                         'triforcehunt', 'triforce_pieces_required', 'retro', 'conditional_extras',
+                         'triforcehunt', 'triforce_pieces_required', 'retro',
                          'extras', 'progressive_sword_limit', 'progressive_shield_limit',
                          'progressive_armor_limit', 'progressive_bottle_limit'])
 
 total_items_to_place = 153
-
-def no_conditional_extras(*_args):
-    return []
-
 
 difficulties = {
     'normal': Difficulty(
@@ -76,7 +57,6 @@ difficulties = {
         triforcehunt = ['Triforce Piece'] * 30,
         triforce_pieces_required = 20,
         retro = ['Small Key (Universal)'] * 17 + ['Rupees (20)'] * 10,
-        conditional_extras = no_conditional_extras,
         extras = [normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit = 4,
         progressive_shield_limit = 3,
@@ -84,7 +64,7 @@ difficulties = {
         progressive_bottle_limit = 4,
     ),
     'hard': Difficulty(
-        baseitems = hardbaseitems,
+        baseitems = normalbaseitems,
         bottles = hardbottles,
         bottle_count = 4,
         same_bottle = False,
@@ -95,27 +75,26 @@ difficulties = {
         swordless =  ['Rupees (20)'] * 4,
         progressivesword =  ['Progressive Sword'] * 3,
         basicsword = ['Master Sword', 'Master Sword', 'Tempered Sword'],
-        timedohko = ['Green Clock'] * 20,
+        timedohko = ['Green Clock'] * 25,
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt = ['Triforce Piece'] * 30,
         triforce_pieces_required = 20,
         retro = ['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 15,
-        conditional_extras = no_conditional_extras,
-        extras = [hardfirst20extra, hardsecond10extra, hardthird10extra, hardfourth10extra, hardfinal20extra],
+        extras = [normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit = 3,
         progressive_shield_limit = 2,
         progressive_armor_limit = 1,
         progressive_bottle_limit = 4,
     ),
     'expert': Difficulty(
-        baseitems = expertbaseitems,
+        baseitems = normalbaseitems,
         bottles = hardbottles,
         bottle_count = 4,
         same_bottle = False,
         progressiveshield = ['Progressive Shield'] * 3,
         basicshield = ['Progressive Shield'] * 3,  #only the first one will upgrade, making this equivalent to two blue shields
-        progressivearmor = [],
-        basicarmor = [],
+        progressivearmor = ['Progressive Armor'] * 2, # neither will count
+        basicarmor = ['Progressive Armor'] * 2, # neither will count
         swordless = ['Rupees (20)'] * 4,
         progressivesword = ['Progressive Sword'] * 3,
         basicsword = ['Fighter Sword', 'Master Sword', 'Master Sword'],
@@ -124,8 +103,7 @@ difficulties = {
         triforcehunt = ['Triforce Piece'] * 30,
         triforce_pieces_required = 20,
         retro = ['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 15,
-        conditional_extras = no_conditional_extras,
-        extras = [expertfirst15extra, expertsecond15extra, expertthird10extra, expertfourth5extra, expertfinal25extra],
+        extras = [normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit = 2,
         progressive_shield_limit = 1,
         progressive_armor_limit = 0,
@@ -169,11 +147,13 @@ def generate_itempool(world, player):
 
     # set up item pool
     if world.custom:
-        (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.swords, world.retro, world.customitemarray)
+        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.swords, world.retro, world.customitemarray)
         world.rupoor_cost = min(world.customitemarray[67], 9999)
     else:
-        (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.swords, world.retro)
+        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.swords, world.retro)
     world.itempool += ItemFactory(pool, player)
+    for item in precollected_items:
+        world.push_precollected(ItemFactory(item, player))
     for (location, item) in placed_items:
         world.push_item(world.get_location(location, player), ItemFactory(item, player), False)
         world.get_location(location, player).event = True
@@ -301,7 +281,7 @@ def fill_prizes(world, attempts=15):
                 random.shuffle(prize_locs)
                 fill_restrictive(world, all_state, prize_locs, prizepool)
             except FillError as e:
-                logging.getLogger('').info("Failed to place dungeon prizes (%s). Will retry %s more times" % (e, attempts))
+                logging.getLogger('').info("Failed to place dungeon prizes (%s). Will retry %s more times", e, attempts)
                 for location in empty_crystal_locations:
                     location.item = None
                 continue
@@ -335,6 +315,7 @@ def set_up_shops(world, player):
 def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, retro):
     pool = []
     placed_items = []
+    precollected_items = []
     clock_mode = None
     treasure_hunt_count = None
     treasure_hunt_icon = None
@@ -387,6 +368,31 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
 
     if swords == 'swordless':
         pool.extend(diff.swordless)
+    elif swords == 'assured':
+        precollected_items.append('Fighter Sword')
+        if want_progressives():
+            pool.extend(diff.progressivesword)
+            pool.extend(['Rupees (100)'])
+        else:
+            pool.extend(diff.basicsword)
+            pool.extend(['Rupees (100)'])
+    elif swords == 'vanilla':
+        swords_to_use = []
+        if want_progressives():
+            swords_to_use.extend(diff.progressivesword)
+            swords_to_use.extend(['Progressive Sword'])
+        else:
+            swords_to_use.extend(diff.basicsword)
+            swords_to_use.extend(['Fighter Sword'])
+        random.shuffle(swords_to_use)
+
+        placed_items.append(('Link\'s Uncle', swords_to_use.pop()))
+        placed_items.append(('Blacksmith', swords_to_use.pop()))
+        placed_items.append(('Pyramid Fairy - Left', swords_to_use.pop()))
+        if goal != 'pedestal':
+            placed_items.append(('Master Sword Pedestal', swords_to_use.pop()))
+        else:
+            placed_items.append(('Master Sword Pedestal', 'Triforce'))
     else:
         if want_progressives():
             pool.extend(diff.progressivesword)
@@ -411,16 +417,12 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
         treasure_hunt_count = diff.triforce_pieces_required
         treasure_hunt_icon = 'Triforce Piece'
 
-    cond_extras = diff.conditional_extras(timer, goal, mode, pool, placed_items)
-    pool.extend(cond_extras)
-    extraitems -= len(cond_extras)
-
     for extra in diff.extras:
         if extraitems > 0:
             pool.extend(extra)
             extraitems -= len(extra)
 
-    if goal == 'pedestal':
+    if goal == 'pedestal' and swords != 'vanilla':
         placed_items.append(('Master Sword Pedestal', 'Triforce'))
     if retro:
         pool = [item.replace('Single Arrow','Rupees (5)') for item in pool]
@@ -433,11 +435,12 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
             placed_items.append((key_location, 'Small Key (Universal)'))
         else:
             pool.extend(['Small Key (Universal)'])
-    return (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms)
+    return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms)
 
 def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, swords, retro, customitemarray):
     pool = []
     placed_items = []
+    precollected_items = []
     clock_mode = None
     treasure_hunt_count = None
     treasure_hunt_icon = None
@@ -561,7 +564,7 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
 
     pool.extend(['Fighter Sword'] * customitemarray[32])
     pool.extend(['Progressive Sword'] * customitemarray[36])
-    
+
     if shuffle == 'insanity_legacy':
         placed_items.append(('Link\'s House', 'Magic Mirror'))
         placed_items.append(('Sanctuary', 'Moon Pearl'))
@@ -576,7 +579,7 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
     if itemtotal < total_items_to_place:
         pool.extend(['Nothing'] * (total_items_to_place - itemtotal))
 
-    return (pool, placed_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms)
+    return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms)
 
 # A quick test to ensure all combinations generate the correct amount of items.
 def test():
@@ -592,13 +595,15 @@ def test():
                                     count = len(out[0]) + len(out[1])
 
                                     correct_count = total_items_to_place
-                                    if goal in ['pedestal']:
+                                    if goal == 'pedestal' and swords != 'vanilla':
                                         # pedestal goals generate one extra item
                                         correct_count += 1
                                     if retro:
                                         correct_count += 28
-
-                                    assert count == correct_count, "expected {0} items but found {1} items for {2}".format(correct_count, count, (progressive, shuffle, difficulty, timer, goal, mode, retro))
+                                    try:
+                                        assert count == correct_count, "expected {0} items but found {1} items for {2}".format(correct_count, count, (progressive, shuffle, difficulty, timer, goal, mode, swords, retro))
+                                    except AssertionError as e:
+                                        print(e)
 
 if __name__ == '__main__':
     test()
