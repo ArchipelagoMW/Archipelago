@@ -349,6 +349,12 @@ Select the game completion goal. (default: ganon)
 Select the game difficulty. Affects available itempool. (default: normal)
 
 ```
+--item_functionality [{normal,hard,expert}]
+```
+
+Select limits on item functionality to increase difficulty. (default: normal)
+
+```
 --timer [{none,display,timed,timed-ohko,ohko,timed-countdown}]
 ```
 

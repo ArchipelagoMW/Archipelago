@@ -8,13 +8,14 @@ from Utils import int16_as_bytes
 
 class World(object):
 
-    def __init__(self, players, shuffle, logic, mode, swords, difficulty, timer, progressive, goal, algorithm, place_dungeon_items, accessibility, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, retro, custom, customitemarray, boss_shuffle, hints):
+    def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive, goal, algorithm, place_dungeon_items, accessibility, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, retro, custom, customitemarray, boss_shuffle, hints):
         self.players = players
         self.shuffle = shuffle
         self.logic = logic
         self.mode = mode
         self.swords = swords
         self.difficulty = difficulty
+        self.difficulty_adjustments = difficulty_adjustments
         self.timer = timer
         self.progressive = progressive
         self.goal = goal
@@ -166,9 +167,9 @@ class World(object):
                 elif 'Bow' in item.name:
                     if ret.has('Silver Arrows', item.player):
                         pass
-                    elif ret.has('Bow', item.player):
+                    elif ret.has('Bow', item.player) and self.difficulty_requirements.progressive_bow_limit >= 2:
                         ret.prog_items.add(('Silver Arrows', item.player))
-                    else:
+                    elif self.difficulty_requirements.progressive_bow_limit >= 1:
                         ret.prog_items.add(('Bow', item.player))
             elif item.name.startswith('Bottle'):
                 if ret.bottle_count(item.player) < self.difficulty_requirements.progressive_bottle_limit:
@@ -403,10 +404,11 @@ class CollectionState(object):
 
     def heart_count(self, player):
         # Warning: This only considers items that are marked as advancement items
+        diff = self.world.difficulty_requirements
         return (
-            self.item_count('Boss Heart Container', player)
+            min(self.item_count('Boss Heart Container', player), diff.boss_heart_container_limit)
             + self.item_count('Sanctuary Heart Container', player)
-            + self.item_count('Piece of Heart', player) // 4
+            + min(self.item_count('Piece of Heart', player), diff.heart_piece_limit) // 4
             + 3 # starting hearts
         )
 
@@ -420,9 +422,9 @@ class CollectionState(object):
         elif self.has('Half Magic', player):
             basemagic = 16
         if self.can_buy_unlimited('Green Potion', player) or self.can_buy_unlimited('Blue Potion', player):
-            if self.world.difficulty == 'hard' and not fullrefill:
+            if self.world.difficulty_adjustments == 'hard' and not fullrefill:
                 basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count(player))
-            elif self.world.difficulty == 'expert' and not fullrefill:
+            elif self.world.difficulty_adjustments == 'expert' and not fullrefill:
                 basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count(player))
             else:
                 basemagic = basemagic + basemagic * self.bottle_count(player)
@@ -1019,6 +1021,7 @@ class Spoiler(object):
                          'shuffle': self.world.shuffle,
                          'algorithm': self.world.algorithm,
                          'difficulty': self.world.difficulty,
+                         'difficulty_mode': self.world.difficulty_adjustments,
                          'timer': self.world.timer,
                          'progressive': self.world.progressive,
                          'accessibility': self.world.accessibility,
@@ -1052,6 +1055,8 @@ class Spoiler(object):
             outfile.write('Logic:                           %s\n' % self.metadata['logic'])
             outfile.write('Mode:                            %s\n' % self.metadata['mode'])
             outfile.write('Goal:                            %s\n' % self.metadata['goal'])
+            outfile.write('Difficulty:                      %s\n' % self.metadata['difficulty'])
+            outfile.write('Item Functionality:              %s\n' % self.metadata['difficulty_mode'])
             outfile.write('Entrance Shuffle:                %s\n' % self.metadata['shuffle'])
             outfile.write('Filling Algorithm:               %s\n' % self.metadata['algorithm'])
             outfile.write('Accessibility:                   %s\n' % self.metadata['accessibility'])

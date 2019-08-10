@@ -13,7 +13,7 @@ from Items import ItemFactory
 #This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 #Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
 
-alwaysitems = ['Bombos', 'Book of Mudora', 'Bow', 'Cane of Somaria', 'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp',
+alwaysitems = ['Bombos', 'Book of Mudora', 'Cane of Somaria', 'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp',
                'Cape', 'Magic Powder', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Bug Catching Net', 'Cane of Byrna', 'Blue Boomerang', 'Red Boomerang']
 progressivegloves = ['Progressive Glove'] * 2
 basicgloves = ['Power Glove', 'Titans Mitts']
@@ -21,7 +21,7 @@ basicgloves = ['Power Glove', 'Titans Mitts']
 normalbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Fairy)', 'Bottle (Bee)', 'Bottle (Good Bee)']
 hardbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Bee)', 'Bottle (Good Bee)']
 
-normalbaseitems = (['Silver Arrows', 'Magic Upgrade (1/2)', 'Single Arrow', 'Sanctuary Heart Container', 'Arrows (10)', 'Bombs (10)'] +
+normalbaseitems = (['Magic Upgrade (1/2)', 'Single Arrow', 'Sanctuary Heart Container', 'Arrows (10)', 'Bombs (10)'] +
                    ['Rupees (300)'] * 4 + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24)
 normalfirst15extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Arrows (10)'] * 6 + ['Bombs (3)'] * 6
 normalsecond15extra = ['Bombs (3)'] * 10 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupee (1)']
@@ -32,10 +32,11 @@ normalfinal25extra = ['Rupees (20)'] * 23 + ['Rupees (5)'] * 2
 Difficulty = namedtuple('Difficulty',
                         ['baseitems', 'bottles', 'bottle_count', 'same_bottle', 'progressiveshield',
                          'basicshield', 'progressivearmor', 'basicarmor', 'swordless',
-                         'progressivesword', 'basicsword', 'timedohko', 'timedother',
+                         'progressivesword', 'basicsword', 'basicbow', 'timedohko', 'timedother',
                          'triforcehunt', 'triforce_pieces_required', 'retro',
                          'extras', 'progressive_sword_limit', 'progressive_shield_limit',
-                         'progressive_armor_limit', 'progressive_bottle_limit'])
+                         'progressive_armor_limit', 'progressive_bottle_limit', 
+                         'progressive_bow_limit', 'heart_piece_limit', 'boss_heart_container_limit'])
 
 total_items_to_place = 153
 
@@ -52,6 +53,7 @@ difficulties = {
         swordless = ['Rupees (20)'] * 4,
         progressivesword = ['Progressive Sword'] * 3,
         basicsword = ['Master Sword', 'Tempered Sword', 'Golden Sword'],
+        basicbow = ['Bow', 'Silver Arrows'],
         timedohko = ['Green Clock'] * 25,
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt = ['Triforce Piece'] * 30,
@@ -61,7 +63,10 @@ difficulties = {
         progressive_sword_limit = 4,
         progressive_shield_limit = 3,
         progressive_armor_limit = 2,
+        progressive_bow_limit = 2,
         progressive_bottle_limit = 4,
+        boss_heart_container_limit = 255,
+        heart_piece_limit = 255,
     ),
     'hard': Difficulty(
         baseitems = normalbaseitems,
@@ -71,10 +76,11 @@ difficulties = {
         progressiveshield = ['Progressive Shield'] * 3,
         basicshield = ['Blue Shield', 'Red Shield', 'Red Shield'],
         progressivearmor = ['Progressive Armor'] * 2,
-        basicarmor = ['Progressive Armor'] * 2, #only the first one will upgrade, making this equivalent to two blue mail
+        basicarmor = ['Progressive Armor'] * 2, # neither will count
         swordless =  ['Rupees (20)'] * 4,
         progressivesword =  ['Progressive Sword'] * 3,
         basicsword = ['Master Sword', 'Master Sword', 'Tempered Sword'],
+        basicbow = ['Bow'] * 2,
         timedohko = ['Green Clock'] * 25,
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt = ['Triforce Piece'] * 30,
@@ -83,8 +89,11 @@ difficulties = {
         extras = [normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit = 3,
         progressive_shield_limit = 2,
-        progressive_armor_limit = 1,
+        progressive_armor_limit = 0,
+        progressive_bow_limit = 1,
         progressive_bottle_limit = 4,
+        boss_heart_container_limit = 6,
+        heart_piece_limit = 16,
     ),
     'expert': Difficulty(
         baseitems = normalbaseitems,
@@ -98,6 +107,7 @@ difficulties = {
         swordless = ['Rupees (20)'] * 4,
         progressivesword = ['Progressive Sword'] * 3,
         basicsword = ['Fighter Sword', 'Master Sword', 'Master Sword'],
+        basicbow = ['Bow'] * 2,
         timedohko = ['Green Clock'] * 20 + ['Red Clock'] * 5,
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt = ['Triforce Piece'] * 30,
@@ -107,7 +117,10 @@ difficulties = {
         progressive_sword_limit = 2,
         progressive_shield_limit = 1,
         progressive_armor_limit = 0,
+        progressive_bow_limit = 1,
         progressive_bottle_limit = 4,
+        boss_heart_container_limit = 2,
+        heart_piece_limit = 8,
     ),
 }
 
@@ -366,8 +379,18 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
     else:
         pool.extend(diff.basicarmor)
 
+    if swords != 'swordless':
+        if want_progressives():
+            pool.extend(['Progressive Bow'] * 2)
+        else:
+            pool.extend(diff.basicbow)
+
     if swords == 'swordless':
         pool.extend(diff.swordless)
+        if want_progressives():
+            pool.extend(['Progressive Bow'] * 2)
+        else:
+            pool.extend(['Bow', 'Silver Arrows'])
     elif swords == 'assured':
         precollected_items.append('Fighter Sword')
         if want_progressives():

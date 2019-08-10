@@ -74,6 +74,13 @@ def start():
                              Hard:            A harder setting with less equipment and reduced health.
                              Expert:          A harder yet setting with minimum equipment and health.
                              ''')
+    parser.add_argument('--item_functionality', default='normal', const='normal', nargs='?', choices=['normal', 'hard', 'expert'],
+                             help='''\
+                             Select limits on item functionality to increase difficulty. (default: %(default)s)
+                             Normal:          Normal functionality.
+                             Hard:            Reduced functionality.
+                             Expert:          Greatly reduced functionality.
+                                  ''')
     parser.add_argument('--timer', default='none', const='normal', nargs='?', choices=['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'],
                         help='''\
                              Select game timer setting. Affects available itempool. (default: %(default)s)

@@ -580,8 +580,9 @@ def patch_rom(world, player, rom):
     GREEN_CLOCK = ItemFactory('Green Clock', player).code
 
     rom.write_byte(0x18004F, 0x01) # Byrna Invulnerability: on
-    # handle difficulty
-    if world.difficulty == 'hard':
+
+    # handle difficulty_adjustments
+    if world.difficulty_adjustments == 'hard':
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xD8)  # One Heart
         # potion heal amount
@@ -599,9 +600,7 @@ def patch_rom(world, player, rom):
         rom.write_int16(0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x02) # Hookshot only
-        # Make silver arrows only usable against Ganon
-        rom.write_byte(0x180181, 0x01)
-    elif world.difficulty == 'expert':
+    elif world.difficulty_adjustments == 'expert':
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xD8)  # One Heart
         # potion heal amount
@@ -619,8 +618,6 @@ def patch_rom(world, player, rom):
         rom.write_int16(0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x00) # Nothing
-        # Make silver arrows only usable against Ganon
-        rom.write_byte(0x180181, 0x01)
     else:
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xE3)  # fairy
@@ -638,20 +635,28 @@ def patch_rom(world, player, rom):
         rom.write_int16(0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x03) # All standard items
-        # Make silver arrows freely usable
-        rom.write_byte(0x180181, 0x00)
         #Set overflow items for progressive equipment
         if world.timer in ['timed', 'timed-countdown', 'timed-ohko']:
             overflow_replacement = GREEN_CLOCK
         else:
             overflow_replacement = GREEN_TWENTY_RUPEES
 
+    rom.write_byte(0x180181, 0x00) # Make silver arrows freely usable
     rom.write_byte(0x180182, 0x01) # auto equip silvers on pickup
 
     #Byrna residual magic cost
     rom.write_bytes(0x45C42, [0x04, 0x02, 0x01])
 
     difficulty = world.difficulty_requirements
+
+    if difficulty.progressive_bow_limit < 2 and world.swords == 'swordless':
+        # TODO: write 2 to progressive bow limit byte
+        rom.write_byte(0x180181, 0x01) # Make silver arrows work on on ganon
+    else:
+        # TODO: write difficulty.progressive_bow_limit to progressive bow limit byte
+        pass
+
+
     #Set overflow items for progressive equipment
     rom.write_bytes(0x180090,
                     [difficulty.progressive_sword_limit, overflow_replacement,
@@ -686,7 +691,7 @@ def patch_rom(world, player, rom):
     random.shuffle(packs)
     prizes[:56] = [drop for pack in packs for drop in pack]
 
-    if world.difficulty in ['hard', 'expert']:
+    if world.difficulty_adjustments in ['hard', 'expert']:
         prize_replacements = {0xE0: 0xDF, # Fairy -> heart
                               0xE3: 0xD8} # Big magic -> small magic
         prizes = [prize_replacements.get(prize, prize) for prize in prizes]
@@ -735,6 +740,9 @@ def patch_rom(world, player, rom):
         0x12, 0x01, 0x35, 0xFF, # lamp -> 5 rupees
         0x51, 0x06, 0x52, 0xFF, # 6 +5 bomb upgrades -> +10 bomb upgrade
         0x53, 0x06, 0x54, 0xFF, # 6 +5 arrow upgrades -> +10 arrow upgrade
+        0x58, 0x01, 0x36 if world.retro else 0x43, 0xFF, # silver arrows -> single arrow (red 20 in retro mode)
+        0x3E, difficulty.boss_heart_container_limit, 0x47, 0xff, # boss heart -> green 20
+        0x17, difficulty.heart_piece_limit, 0x47, 0xff, # piece of heart -> green 20
         0xFF, 0xFF, 0xFF, 0xFF, # end of table sentinel
     ])
 
@@ -804,7 +812,7 @@ def patch_rom(world, player, rom):
         rom.write_int32(0x180200, -100 * 60 * 60 * 60)  # red clock adjustment time (in frames, sint32)
         rom.write_int32(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
         rom.write_int32(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
-        if world.difficulty == 'normal':
+        if world.difficulty_adjustments == 'normal':
             rom.write_int32(0x18020C, (10 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
         else:
             rom.write_int32(0x18020C, int((5 + ERtimeincrease / 2) * 60 * 60))  # starting time (in frames, sint32)
