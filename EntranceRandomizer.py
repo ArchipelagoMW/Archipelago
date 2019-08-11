@@ -162,6 +162,23 @@ def start():
                              The dungeon variants only mix up dungeons and keep the rest of
                              the overworld vanilla.
                              ''')
+    parser.add_argument('--crystals_ganon', default='7', const='7', nargs='?', choices=['random', '0', '1', '2', '3', '4', '5', '6', '7'],
+                        help='''\
+                             How many crystals are needed to defeat ganon. Any other 
+                             requirements for ganon for the selected goal still apply.
+                             This setting does not apply when the all dungeons goal is
+                             selected. (default: %(default)s)
+                             Random: Picks a random value between 0 and 7 (inclusive).
+                             0-7:    Number of crystals needed
+                             ''')
+    parser.add_argument('--crystals_gt', default='7', const='7', nargs='?', choices=['random', '0', '1', '2', '3', '4', '5', '6', '7'],
+                        help='''\
+                             How many crystals are needed to open GT. For inverted mode
+                             this applies to the castle tower door instead. (default: %(default)s)
+                             Random: Picks a random value between 0 and 7 (inclusive).
+                             0-7:    Number of crystals needed
+                             ''')
+
     parser.add_argument('--rom', default='Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', help='Path to an ALttP JAP(1.0) rom to use as a base.')
     parser.add_argument('--loglevel', default='info', const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)

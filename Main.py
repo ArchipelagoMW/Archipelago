@@ -33,6 +33,9 @@ def main(args, seed=None):
         world.seed = int(seed)
     random.seed(world.seed)
 
+    world.crystals_needed_for_ganon = random.randint(0, 7) if args.crystals_ganon == 'random' else int(args.crystals_ganon)
+    world.crystals_needed_for_gt = random.randint(0, 7) if args.crystals_gt == 'random' else int(args.crystals_gt)
+
     world.rom_seeds = {player: random.randint(0, 999999999) for player in range(1, world.players + 1)}
 
     logger.info('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n', __version__, world.seed)
@@ -200,6 +203,8 @@ def copy_world(world):
     ret.difficulty_requirements = world.difficulty_requirements
     ret.fix_fake_world = world.fix_fake_world
     ret.lamps_needed_for_dark_rooms = world.lamps_needed_for_dark_rooms
+    ret.crystals_needed_for_ganon = world.crystals_needed_for_ganon
+    ret.crystals_needed_for_gt = world.crystals_needed_for_gt
 
     if world.mode != 'inverted':
         for player in range(1, world.players + 1):
