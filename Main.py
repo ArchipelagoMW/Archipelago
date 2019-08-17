@@ -263,6 +263,7 @@ def copy_world(world):
 def copy_dynamic_regions_and_locations(world, ret):
     for region in world.dynamic_regions:
         new_reg = Region(region.name, region.type, region.hint_text, region.player)
+        new_reg.world = ret
         ret.regions.append(new_reg)
         ret.dynamic_regions.append(new_reg)
 
@@ -273,9 +274,11 @@ def copy_dynamic_regions_and_locations(world, ret):
             ret.shops.append(new_reg.shop)
 
     for location in world.dynamic_locations:
-        new_loc = Location(location.player, location.name, location.address, location.crystal, location.hint_text, location.parent_region,)
         new_reg = ret.get_region(location.parent_region.name, location.parent_region.player)
+        new_loc = Location(location.player, location.name, location.address, location.crystal, location.hint_text, new_reg)
         new_reg.locations.append(new_loc)
+    
+        ret.clear_location_cache()
 
 
 def create_playthrough(world):
