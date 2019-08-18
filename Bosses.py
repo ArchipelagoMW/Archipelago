@@ -141,21 +141,39 @@ def place_bosses(world, player):
     if world.boss_shuffle == 'none':
         return
     # Most to least restrictive order
-    boss_locations = [
-        ['Ganons Tower', 'top'],
-        ['Tower of Hera', None],
-        ['Skull Woods', None],
-        ['Ganons Tower', 'middle'],
-        ['Eastern Palace', None],
-        ['Desert Palace', None],
-        ['Palace of Darkness', None],
-        ['Swamp Palace', None],
-        ['Thieves Town', None],
-        ['Ice Palace', None],
-        ['Misery Mire', None],
-        ['Turtle Rock', None],
-        ['Ganons Tower', 'bottom'],
-    ]
+    if world.mode != 'inverted':
+        boss_locations = [
+            ['Ganons Tower', 'top'],
+            ['Tower of Hera', None],
+            ['Skull Woods', None],
+            ['Ganons Tower', 'middle'],
+            ['Eastern Palace', None],
+            ['Desert Palace', None],
+            ['Palace of Darkness', None],
+            ['Swamp Palace', None],
+            ['Thieves Town', None],
+            ['Ice Palace', None],
+            ['Misery Mire', None],
+            ['Turtle Rock', None],
+            ['Ganons Tower', 'bottom'],
+        ]
+    else:
+        boss_locations = [
+            ['Inverted Ganons Tower', 'top'],
+            ['Tower of Hera', None],
+            ['Skull Woods', None],
+            ['Inverted Ganons Tower', 'middle'],
+            ['Eastern Palace', None],
+            ['Desert Palace', None],
+            ['Palace of Darkness', None],
+            ['Swamp Palace', None],
+            ['Thieves Town', None],
+            ['Ice Palace', None],
+            ['Misery Mire', None],
+            ['Turtle Rock', None],
+            ['Inverted Ganons Tower', 'bottom'],
+        ]
+
     all_bosses = sorted(boss_table.keys()) #s orted to be deterministic on older pythons
     placeable_bosses = [boss for boss in all_bosses if boss not in ['Agahnim', 'Agahnim2', 'Ganon']]
 
