@@ -434,6 +434,14 @@ class Sprite(object):
 
 def patch_rom(world, player, rom):
     random.seed(world.rom_seeds[player])
+
+    # progressive bow silver arrow hint hack
+    prog_bow_locs = world.find_items('Progressive Bow', player)
+    if len(prog_bow_locs) > 1:
+        # only pick a distingushed bow if we have at least two
+        distinguished_prog_bow_loc = random.choice(prog_bow_locs)
+        distinguished_prog_bow_loc.item.code = 0x65
+
     # patch items
     for location in world.get_locations():
         if location.player != player:
@@ -1321,11 +1329,28 @@ def write_strings(rom, world, player):
         for location in hint_locations:
             tt[location] = junk_hints.pop(0)
 
-   # We still need the older hints of course. Those are done here.
+    # We still need the older hints of course. Those are done here.
+
+
     silverarrows = world.find_items('Silver Arrows', player)
     random.shuffle(silverarrows)
     silverarrow_hint = (' %s?' % hint_text(silverarrows[0]).replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
-    tt['ganon_phase_3'] = 'Did you find the silver arrows%s' % silverarrow_hint
+    tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
+
+    prog_bow_locs = world.find_items('Progressive Bow', player)
+    distinguished_prog_bow_loc = next((location for location in prog_bow_locs if location.item.code == 0x65), None)
+    if distinguished_prog_bow_loc:
+        prog_bow_locs.remove(distinguished_prog_bow_loc)
+        silverarrow_hint = (' %s?' % hint_text(distinguished_prog_bow_loc).replace('Ganon\'s', 'my'))
+        tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
+
+    if any(prog_bow_locs):
+        silverarrow_hint = (' %s?' % hint_text(random.choice(prog_bow_locs)).replace('Ganon\'s', 'my'))
+        tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
+
+
+    silverarrow_hint = (' %s?' % hint_text(silverarrows[0]).replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
+
 
     crystal5 = world.find_items('Crystal 5', player)[0]
     crystal6 = world.find_items('Crystal 6', player)[0]
