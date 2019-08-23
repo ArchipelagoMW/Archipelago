@@ -1749,9 +1749,9 @@ def link_inverted_entrances(world, player):
         world.powder_patch_required[player] = True
 
     # check for ganon location
-    if world.get_entrance('Inverted Pyramid Hole', player).connected_region.name != 'Hyrule Castle Ledge':
+    if world.get_entrance('Inverted Pyramid Hole', player).connected_region.name != 'Pyramid':
         world.ganon_at_pyramid[player] = False
-
+   
     # check for Ganon's Tower location
     if world.get_entrance('Inverted Ganons Tower', player).connected_region.name != 'Ganons Tower (Entrance)':
         world.ganonstower_vanilla[player] = False
