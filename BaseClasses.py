@@ -1013,24 +1013,17 @@ class Spoiler(object):
 
         from Main import __version__ as ERVersion
         self.metadata = {'version': ERVersion,
-                         'seed': self.world.seed,
                          'logic': self.world.logic,
                          'mode': self.world.mode,
-                         'swords': self.world.swords,
+                         'weapons': self.world.swords,
                          'goal': self.world.goal,
                          'shuffle': self.world.shuffle,
-                         'algorithm': self.world.algorithm,
-                         'difficulty': self.world.difficulty,
-                         'difficulty_mode': self.world.difficulty_adjustments,
-                         'timer': self.world.timer,
-                         'progressive': self.world.progressive,
+                         'item_pool': self.world.difficulty,
+                         'item_functionality': self.world.difficulty_adjustments,
                          'accessibility': self.world.accessibility,
-                         'dungeonitems': self.world.place_dungeon_items,
-                         'quickswap': self.world.quickswap,
-                         'fastmenu': self.world.fastmenu,
-                         'disable_music': self.world.disable_music,
+                         'hints': self.world.hints,
                          'keysanity': self.world.keysanity,
-                         'players': self.world.players}
+                         }
 
     def to_json(self):
         self.parse_data()
