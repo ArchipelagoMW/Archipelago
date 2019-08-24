@@ -1363,6 +1363,9 @@ def write_strings(rom, world, player):
     tt['sign_ganons_tower'] = ('You need %d crystal to enter.' if world.crystals_needed_for_gt == 1 else 'You need %d crystals to enter.') % world.crystals_needed_for_gt
     tt['sign_ganon'] = ('You need %d crystal to beat Ganon.' if world.crystals_needed_for_ganon == 1 else 'You need %d crystals to beat Ganon.') % world.crystals_needed_for_ganon
 
+    if world.goal in ['dungeons']:
+        tt['sign_ganon'] = 'You need to complete all the dungeons.'
+
     tt['uncle_leaving_text'] = Uncle_texts[random.randint(0, len(Uncle_texts) - 1)]
     tt['end_triforce'] = "{NOBORDER}\n" + Triforce_texts[random.randint(0, len(Triforce_texts) - 1)]
     tt['bomb_shop_big_bomb'] = BombShop2_texts[random.randint(0, len(BombShop2_texts) - 1)]
@@ -1371,13 +1374,19 @@ def write_strings(rom, world, player):
     tt['sahasrahla_quest_have_master_sword'] = Sahasrahla2_texts[random.randint(0, len(Sahasrahla2_texts) - 1)]
     tt['blind_by_the_light'] = Blind_texts[random.randint(0, len(Blind_texts) - 1)]
 
-    if world.goal in ['pedestal', 'triforcehunt']:
-        tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me!'
+    if world.goal in ['triforcehunt']:
+        tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Get the Triforce Pieces.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
+        tt['sign_ganon'] = 'Go find the Triforce pieces... Ganon is invuinvincible!'
+    elif world.goal in ['pedestal']:
+        tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Your goal is at the pedestal.'
+        tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
+        tt['sign_ganon'] = 'You need to get to the pedestal... Ganon is invincible!'
     else:
         tt['ganon_fall_in'] = Ganon1_texts[random.randint(0, len(Ganon1_texts) - 1)]
         tt['ganon_fall_in_alt'] = 'You cannot defeat me until you finish your goal!'
         tt['ganon_phase_3_alt'] = 'Got wax in\nyour ears?\nI can not die!'
+
     tt['kakariko_tavern_fisherman'] = TavernMan_texts[random.randint(0, len(TavernMan_texts) - 1)]
 
     pedestalitem = world.get_location('Master Sword Pedestal', player).item
