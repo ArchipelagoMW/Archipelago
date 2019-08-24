@@ -18,7 +18,7 @@ from Fill import distribute_items_cutoff, distribute_items_staleness, distribute
 from ItemList import generate_itempool, difficulties, fill_prizes
 from Utils import output_path
 
-__version__ = '0.6.2'
+__version__ = '0.6.3-pre'
 
 def main(args, seed=None):
     start = time.clock()
