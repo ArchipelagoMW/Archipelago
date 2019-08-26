@@ -657,20 +657,17 @@ def patch_rom(world, player, rom):
 
     difficulty = world.difficulty_requirements
 
-    if difficulty.progressive_bow_limit < 2 and world.swords == 'swordless':
-        # TODO: write 2 to progressive bow limit byte
-        rom.write_byte(0x180181, 0x01) # Make silver arrows work on on ganon
-    else:
-        # TODO: write difficulty.progressive_bow_limit to progressive bow limit byte
-        pass
-
-
     #Set overflow items for progressive equipment
     rom.write_bytes(0x180090,
                     [difficulty.progressive_sword_limit, overflow_replacement,
                      difficulty.progressive_shield_limit, overflow_replacement,
                      difficulty.progressive_armor_limit, overflow_replacement,
-                     difficulty.progressive_bottle_limit, overflow_replacement])
+                     difficulty.progressive_bottle_limit, overflow_replacement,
+                     difficulty.progressive_bow_limit, overflow_replacement])
+    
+    if difficulty.progressive_bow_limit < 2 and world.swords == 'swordless':
+        rom.write_bytes(0x180098, [2, overflow_replacement])
+        rom.write_byte(0x180181, 0x01) # Make silver arrows work only on ganon
 
     # set up game internal RNG seed
     for i in range(1024):
