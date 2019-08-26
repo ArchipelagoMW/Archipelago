@@ -1377,7 +1377,7 @@ def write_strings(rom, world, player):
     if world.goal in ['triforcehunt']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Get the Triforce Pieces.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
-        tt['sign_ganon'] = 'Go find the Triforce pieces... Ganon is invuinvincible!'
+        tt['sign_ganon'] = 'Go find the Triforce pieces... Ganon is invincible!'
     elif world.goal in ['pedestal']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Your goal is at the pedestal.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
