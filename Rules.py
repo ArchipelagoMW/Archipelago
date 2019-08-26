@@ -34,7 +34,6 @@ def set_rules(world, player):
         raise NotImplementedError('Not implemented yet')
 
     if world.swords == 'swordless':
-        # FIXME: !!! Does not handle inverted properly
         swordless_rules(world, player)
 
     if world.logic == 'noglitches':
