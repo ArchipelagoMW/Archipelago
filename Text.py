@@ -1432,6 +1432,7 @@ class TextTable(object):
             'desert_thief_question_yes',
             'desert_thief_after_item_get',
             'desert_thief_reassure',
+            'pond_item_bottle_filled'
         ]
 
         for msg in messages_to_zero:
