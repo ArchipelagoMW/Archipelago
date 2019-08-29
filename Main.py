@@ -276,6 +276,11 @@ def copy_dynamic_regions_and_locations(world, ret):
     for location in world.dynamic_locations:
         new_reg = ret.get_region(location.parent_region.name, location.parent_region.player)
         new_loc = Location(location.player, location.name, location.address, location.crystal, location.hint_text, new_reg)
+        # todo: this is potentially dangerous. later refactor so we
+        # can apply dynamic region rules on top of copied world like other rules
+        new_loc.access_rule = location.access_rule
+        new_loc.always_allow = location.always_allow
+        new_loc.item_rule = location.item_rule
         new_reg.locations.append(new_loc)
     
         ret.clear_location_cache()

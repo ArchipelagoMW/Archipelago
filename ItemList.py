@@ -137,6 +137,20 @@ def generate_itempool(world, player):
     else:
         world.push_item(world.get_location('Ganon', player), ItemFactory('Triforce', player), False)
     
+    if world.goal in ['triforcehunt']:
+        region = world.get_region('Hyrule Castle Courtyard', player)
+
+        loc = Location(player, "Murahdahla", parent=region)
+        loc.access_rule = lambda state: state.item_count('Triforce Piece', player) + state.item_count('Power Star', player) > state.world.treasure_hunt_count
+        region.locations.append(loc)
+        world.dynamic_locations.append(loc)
+
+        world.clear_location_cache()
+
+        world.push_item(loc, ItemFactory('Triforce', player), False)
+        loc.event = True
+        loc.locked = True
+    
     world.get_location('Ganon', player).event = True
     world.get_location('Ganon', player).locked = True
     world.push_item(world.get_location('Agahnim 1', player), ItemFactory('Beat Agahnim 1', player), False)

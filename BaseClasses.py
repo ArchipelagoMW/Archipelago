@@ -263,7 +263,7 @@ class World(object):
 
     def has_beaten_game(self, state, player=None):
         if player:
-            return state.has('Triforce', player) or (self.goal in ['triforcehunt'] and (state.item_count('Triforce Piece', player) + state.item_count('Power Star', player) > self.treasure_hunt_count))
+            return state.has('Triforce', player)
         else:
             return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
 
