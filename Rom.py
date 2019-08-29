@@ -1403,8 +1403,6 @@ def set_inverted_mode(world, rom):
     rom.write_int16s(snes_to_pc(0x02E849), [0x0043, 0x0056, 0x0058, 0x006C, 0x006F, 0x0070, 0x007B, 0x007F, 0x001B])  # dw flute
     rom.write_int16(snes_to_pc(0x02E8D5), 0x07C8)
     rom.write_int16(snes_to_pc(0x02E8F7), 0x01F8)
-    rom.write_byte(0x7A943, 0xF0)
-    rom.write_byte(0x7A96D, 0xD0)
     rom.write_byte(snes_to_pc(0x08D40C), 0xD0)  # morph proof
     # the following bytes should only be written in vanilla
     # or they'll overwrite the randomizer's shuffles
