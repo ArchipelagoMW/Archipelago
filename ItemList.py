@@ -138,7 +138,10 @@ def generate_itempool(world, player):
         world.push_item(world.get_location('Ganon', player), ItemFactory('Triforce', player), False)
     
     if world.goal in ['triforcehunt']:
-        region = world.get_region('Hyrule Castle Courtyard', player)
+        if world.mode == 'inverted':
+            region = world.get_region('Light World',player)
+        else:
+            region = world.get_region('Hyrule Castle Courtyard', player)
 
         loc = Location(player, "Murahdahla", parent=region)
         loc.access_rule = lambda state: state.item_count('Triforce Piece', player) + state.item_count('Power Star', player) > state.world.treasure_hunt_count
