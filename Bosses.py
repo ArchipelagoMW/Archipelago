@@ -119,11 +119,11 @@ def can_place_boss(world, boss, dungeon_name, level=None):
     if world.swords in ['swordless'] and boss == 'Kholdstare' and dungeon_name != 'Ice Palace':
         return False
 
-    if dungeon_name == 'Ganons Tower' and level == 'top':
+    if dungeon_name in ['Ganons Tower', 'Inverted Ganons Tower'] and level == 'top':
         if boss in ["Armos Knights", "Arrghus",	"Blind", "Trinexx", "Lanmolas"]:
             return False
 
-    if dungeon_name == 'Ganons Tower' and level == 'middle':
+    if dungeon_name in ['Ganons Tower', 'Inverted Ganons Tower'] and level == 'middle':
         if boss in ["Blind"]:
             return False
 
