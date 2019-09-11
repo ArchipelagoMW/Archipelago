@@ -233,6 +233,9 @@ take_any_locations = [
     'Dark Lake Hylia Ledge Spike Cave', 'Fortune Teller (Dark)', 'Dark Sanctuary Hint', 'Dark Desert Hint']
 
 def set_up_take_anys(world, player):
+    if world.mode == 'inverted' and 'Dark Sanctuary Hint' in take_any_locations:
+        take_any_locations.remove('Dark Sanctuary Hint')
+    
     regions = random.sample(take_any_locations, 5)
 
     old_man_take_any = Region("Old Man Sword Cave", RegionType.Cave, 'the sword cave', player)
