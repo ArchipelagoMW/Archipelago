@@ -33,9 +33,6 @@ def set_rules(world, player):
     else:
         raise NotImplementedError('Not implemented yet')
 
-    if world.swords == 'swordless':
-        swordless_rules(world, player)
-
     if world.logic == 'noglitches':
         no_glitches_rules(world, player)
     elif world.logic == 'minorglitches':
@@ -457,6 +454,9 @@ def global_rules(world, player):
 
     set_rule(world.get_entrance('Ganons Tower', player), lambda state: False) # This is a safety for the TR function below to not require GT entrance in its key logic.
 
+    if world.swords == 'swordless':
+        swordless_rules(world, player)
+
     set_trock_key_rules(world, player)
 
     set_rule(world.get_entrance('Ganons Tower', player), lambda state: state.has_crystals(world.crystals_needed_for_gt, player))
@@ -842,6 +842,9 @@ def inverted_rules(world, player):
     set_rule(world.get_entrance('Ganon Drop', player), lambda state: state.has_beam_sword(player))  # need to damage ganon to get tiles to drop
 
     set_rule(world.get_entrance('Inverted Ganons Tower', player), lambda state: False) # This is a safety for the TR function below to not require GT entrance in its key logic.
+
+    if world.swords == 'swordless':
+        swordless_rules(world, player)
 
     set_trock_key_rules(world, player)
 
