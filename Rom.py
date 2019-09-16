@@ -1172,15 +1172,31 @@ def write_strings(rom, world, player):
     # For hints, first we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
     if world.hints:
         tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles can have hints!'
-        entrances_to_hint = {}
-        entrances_to_hint.update(InconvenientEntrances)
-        if world.shuffle_ganon:
-            entrances_to_hint.update({'Ganons Tower': 'Ganon\'s Tower'})
         hint_locations = HintLocations.copy()
         random.shuffle(hint_locations)
         all_entrances = [entrance for entrance in world.get_entrances() if entrance.player == player]
         random.shuffle(all_entrances)
-        hint_count = 4 if world.shuffle != 'vanilla' else 0
+
+        #First we take care of the one inconvenient dungeon in the appropriately simple shuffles.
+        entrances_to_hint = {}
+        entrances_to_hint.update(InconvenientDungeonEntrances)
+        if world.shuffle_ganon:
+            entrances_to_hint.update({'Ganons Tower': 'Ganon\'s Tower'})
+        if world.shuffle in ['simple', 'restricted', 'restricted_legacy']:
+            for entrance in all_entrances:
+                if entrance.name in entrances_to_hint:
+                    this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(entrance.connected_region) + '.'
+                    tt[hint_locations.pop(0)] = this_hint
+                    entrances_to_hint = {}
+                    break
+        #Now we write inconvenient locations for most shuffles and finish taking care of the less chaotic ones.
+        entrances_to_hint.update(InconvenientOtherEntrances)
+        if world.shuffle in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+            hint_count = 0
+        elif world.shuffle in ['simple', 'restricted', 'restricted_legacy']:
+            hint_count = 2
+        else:
+            hint_count = 4
         for entrance in all_entrances:
             if entrance.name in entrances_to_hint:
                 if hint_count > 0:
@@ -1191,12 +1207,18 @@ def write_strings(rom, world, player):
                 else:
                     break
 
+        #Next we handle hints for randomly selected other entrances, curating the selection intelligently based on shuffle.
+        if world.shuffle not in ['simple', 'restricted', 'restricted_legacy']:
+            entrances_to_hint.update(ConnectorEntrances)
+            entrances_to_hint.update(DungeonEntrances)
+        elif world.shuffle == 'restricted':
+            entrances_to_hint.update(ConnectorEntrances)
         entrances_to_hint.update(OtherEntrances)
         if world.shuffle in ['insanity', 'madness_legacy', 'insanity_legacy']:
             entrances_to_hint.update(InsanityEntrances)
             if world.shuffle_ganon:
                 entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
-        hint_count = 4 if world.shuffle != 'vanilla' else 0
+        hint_count = 4 if world.shuffle not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 0
         for entrance in all_entrances:
             if entrance.name in entrances_to_hint:
                 if hint_count > 0:
@@ -1209,8 +1231,10 @@ def write_strings(rom, world, player):
 
         # Next we write a few hints for specific inconvenient locations. We don't make many because in entrance this is highly unpredictable.
         locations_to_hint = InconvenientLocations.copy()
+        if world.shuffle in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+            locations_to_hint.extend(InconvenientVanillaLocations)
         random.shuffle(locations_to_hint)
-        hint_count = 3 if world.shuffle != 'vanilla' else 4
+        hint_count = 3 if world.shuffle not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 5
         del locations_to_hint[hint_count:]
         for location in locations_to_hint:
             if location == 'Swamp Left':
@@ -1246,8 +1270,14 @@ def write_strings(rom, world, player):
             elif location == 'Eastern Palace - Big Key Chest':
                 this_hint = 'The antifairy guarded chest in Eastern Palace contains ' + hint_text(world.get_location(location, player).item) + '.'
                 tt[hint_locations.pop(0)] = this_hint
+            elif location == 'Sahasrahla':
+                this_hint = 'Sahasrahla seeks a green pendant for ' + hint_text(world.get_location(location, player).item) + '.'
+                tt[hint_locations.pop(0)] = this_hint
+            elif location == 'Graveyard Cave':
+                this_hint = 'The cave north of the graveyard contains ' + hint_text(world.get_location(location, player).item) + '.'
+                tt[hint_locations.pop(0)] = this_hint
             else:
-                this_hint = location + ' leads to ' + hint_text(world.get_location(location, player).item) + '.'
+                this_hint = location + ' contains ' + hint_text(world.get_location(location, player).item) + '.'
                 tt[hint_locations.pop(0)] = this_hint
 
         # Lastly we write hints to show where certain interesting items are. It is done the way it is to re-use the silver code and also to give one hint per each type of item regardless of how many exist. This supports many settings well.
@@ -1255,11 +1285,15 @@ def write_strings(rom, world, player):
         if world.keysanity:
             items_to_hint.extend(KeysanityItems)
         random.shuffle(items_to_hint)
-        hint_count = 5 if world.shuffle != 'vanilla' else 7
+        hint_count = 5 if world.shuffle not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 8
         while hint_count > 0:
             this_item = items_to_hint.pop(0)
             this_location = world.find_items(this_item, player)
             random.shuffle(this_location)
+            #This looks dumb but prevents hints for Skull Woods Pinball Room's key safely with any item pool.
+            if this_location:
+                if this_location[0].name == 'Skull Woods - Pinball Room':
+                    this_location.pop(0)
             if this_location:
                 this_hint = this_location[0].item.hint_text + ' can be found ' + hint_text(this_location[0]) + '.'
                 tt[hint_locations.pop(0)] = this_hint
@@ -1607,54 +1641,60 @@ def patch_shuffled_dark_sanc(world, rom, player):
     rom.write_int16s(0x180253, [vram_loc, scroll_y, scroll_x, link_y, link_x, camera_y, camera_x])
     rom.write_bytes(0x180262, [unknown_1, unknown_2, 0x00])
 
-InconvenientEntrances = {'Turtle Rock': 'Turtle Rock Main',
-                         'Misery Mire': 'Misery Mire',
-                         'Ice Palace': 'Ice Palace',
-                         'Skull Woods Final Section': 'The back of Skull Woods',
-                         'Death Mountain Return Cave (West)': 'The SW DM foothills cave',
-                         'Mimic Cave': 'Mimic Ledge',
-                         'Dark World Hammer Peg Cave': 'The rows of pegs',
-                         'Pyramid Fairy': 'The crack on the pyramid'
-                         }
+InconvenientDungeonEntrances = {'Turtle Rock': 'Turtle Rock Main',
+                                'Misery Mire': 'Misery Mire',
+                                'Ice Palace': 'Ice Palace',
+                                'Skull Woods Final Section': 'The back of Skull Woods',
+                                }
 
-OtherEntrances = {'Eastern Palace': 'Eastern Palace',
-                  'Elder House (East)': 'Elder House',
-                  'Elder House (West)': 'Elder House',
-                  'Two Brothers House (East)': 'Eastern Quarreling Brothers\' house',
-                  'Old Man Cave (West)': 'The lower DM entrance',
-                  'Hyrule Castle Entrance (South)': 'The ground level castle door',
-                  'Thieves Town': 'Thieves\' Town',
-                  'Bumper Cave (Bottom)': 'The lower Bumper Cave',
-                  'Swamp Palace': 'Swamp Palace',
-                  'Dark Death Mountain Ledge (West)': 'The East dark DM connector ledge',
-                  'Dark Death Mountain Ledge (East)': 'The East dark DM connector ledge',
-                  'Superbunny Cave (Top)': 'The summit of dark DM cave',
-                  'Superbunny Cave (Bottom)': 'The base of east dark DM',
-                  'Hookshot Cave': 'The rock on dark DM',
-                  'Desert Palace Entrance (South)': 'The book sealed passage',
-                  'Tower of Hera': 'The Tower of Hera',
-                  'Two Brothers House (West)': 'The door near the race game',
-                  'Old Man Cave (East)': 'The SW-most cave on west DM',
-                  'Old Man House (Bottom)': 'A cave with a door on west DM',
-                  'Old Man House (Top)': 'The eastmost cave on west DM',
-                  'Death Mountain Return Cave (East)': 'The westmost cave on west DM',
-                  'Spectacle Rock Cave Peak': 'The highest cave on west DM',
-                  'Spectacle Rock Cave': 'The right ledge on west DM',
-                  'Spectacle Rock Cave (Bottom)': 'The left ledge on west DM',
-                  'Paradox Cave (Bottom)': 'The southmost cave on east DM',
-                  'Paradox Cave (Middle)': 'The right paired cave on east DM',
-                  'Paradox Cave (Top)': 'The east DM summit cave',
-                  'Fairy Ascension Cave (Bottom)': 'The east DM cave behind rocks',
-                  'Fairy Ascension Cave (Top)': 'The central ledge on east DM',
-                  'Spiral Cave': 'The left ledge on east DM',
-                  'Spiral Cave (Bottom)': 'The SWmost cave on east DM',
-                  'Palace of Darkness': 'Palace of Darkness',
-                  'Hyrule Castle Entrance (West)': 'The left castle door',
-                  'Hyrule Castle Entrance (East)': 'The right castle door',
-                  'Agahnims Tower': 'The sealed castle door',
-                  'Desert Palace Entrance (West)': 'The westmost building in the desert',
-                  'Desert Palace Entrance (North)': 'The northmost cave in the desert',
-                  'Blinds Hideout': 'Blind\'s old house',
+InconvenientOtherEntrances = {'Death Mountain Return Cave (West)': 'The SW DM foothills cave',
+                              'Mimic Cave': 'Mimic Ledge',
+                              'Dark World Hammer Peg Cave': 'The rows of pegs',
+                              'Pyramid Fairy': 'The crack on the pyramid'
+                              }
+
+ConnectorEntrances = {'Elder House (East)': 'Elder House',
+                      'Elder House (West)': 'Elder House',
+                      'Two Brothers House (East)': 'Eastern Quarreling Brothers\' house',
+                      'Old Man Cave (West)': 'The lower DM entrance',
+                      'Bumper Cave (Bottom)': 'The lower Bumper Cave',
+                      'Superbunny Cave (Top)': 'The summit of dark DM cave',
+                      'Superbunny Cave (Bottom)': 'The base of east dark DM',
+                      'Hookshot Cave': 'The rock on dark DM',
+                      'Two Brothers House (West)': 'The door near the race game',
+                      'Old Man Cave (East)': 'The SW-most cave on west DM',
+                      'Old Man House (Bottom)': 'A cave with a door on west DM',
+                      'Old Man House (Top)': 'The eastmost cave on west DM',
+                      'Death Mountain Return Cave (East)': 'The westmost cave on west DM',
+                      'Spectacle Rock Cave Peak': 'The highest cave on west DM',
+                      'Spectacle Rock Cave': 'The right ledge on west DM',
+                      'Spectacle Rock Cave (Bottom)': 'The left ledge on west DM',
+                      'Paradox Cave (Bottom)': 'The right paired cave on east DM',
+                      'Paradox Cave (Middle)': 'The southmost cave on east DM',
+                      'Paradox Cave (Top)': 'The east DM summit cave',
+                      'Fairy Ascension Cave (Bottom)': 'The east DM cave behind rocks',
+                      'Fairy Ascension Cave (Top)': 'The central ledge on east DM',
+                      'Spiral Cave': 'The left ledge on east DM',
+                      'Spiral Cave (Bottom)': 'The SWmost cave on east DM'
+                      }
+
+DungeonEntrances = {'Eastern Palace': 'Eastern Palace',
+                    'Hyrule Castle Entrance (South)': 'The ground level castle door',
+                    'Thieves Town': 'Thieves\' Town',
+                    'Swamp Palace': 'Swamp Palace',
+                    'Dark Death Mountain Ledge (West)': 'The East dark DM connector ledge',
+                    'Dark Death Mountain Ledge (East)': 'The East dark DM connector ledge',
+                    'Desert Palace Entrance (South)': 'The book sealed passage',
+                    'Tower of Hera': 'The Tower of Hera',
+                    'Palace of Darkness': 'Palace of Darkness',
+                    'Hyrule Castle Entrance (West)': 'The left castle door',
+                    'Hyrule Castle Entrance (East)': 'The right castle door',
+                    'Agahnims Tower': 'The sealed castle door',
+                    'Desert Palace Entrance (West)': 'The westmost building in the desert',
+                    'Desert Palace Entrance (North)': 'The northmost cave in the desert'
+                    }
+
+OtherEntrances = {'Blinds Hideout': 'Blind\'s old house',
                   'Lake Hylia Fairy': 'A cave NE of Lake Hylia',
                   'Light Hype Fairy': 'The cave south of your house',
                   'Desert Fairy': 'The cave near the desert',
@@ -1769,7 +1809,12 @@ InconvenientLocations = ['Spike Cave',
                          'Ice Palace - Big Chest',
                          'Ganons Tower - Big Chest',
                          'Magic Bat']
+
+InconvenientVanillaLocations = ['Graveyard Cave',
+                                'Mimic Cave']
+
 RelevantItems = ['Bow',
+                 'Progressive Bow',
                  'Book of Mudora',
                  'Hammer',
                  'Hookshot',
