@@ -43,6 +43,16 @@ Special notes:
 - The magic barrier to Hyrule Castle Tower can be broken with a Hammer.
 - The Hammer can be used to activate the Ether and Bombos tablets.
 
+### Inverted
+
+This mode is similar to Open but requires the Moon Pearl in order to not transform into a bunny in the Light World and the Sanctuary spawn point is moved to the Dark Sanctuary
+
+Special Notes:
+
+- Link's House is shuffled freely. The Dark Sanctuary is shuffled within West Dark World.
+- There are a number of overworld changes to account for the inability to mirror from the Light World to the Dark World.
+- Legacy shuffles are not implemente for this mode.
+
 ## Game Logic
 This determines the Item Requirements for each location.
 
@@ -85,12 +95,6 @@ This is only noticeably different if the the Ganon shuffle option is enabled.
 
 ## Game Difficulty
 
-### Easy
-
-This setting doubles the number of swords, shields, armors, bottles, and silver arrows in the item pool.
-This setting will also triple the number of Lamps available, and all will be obtainable before dark rooms.
-Within dungeons, the number of items found will be displayed on screen if there is no timer.
-
 ### Normal
 
 This is the default setting that has an item pool most similar to the original
@@ -107,11 +111,6 @@ the player from having fairies in bottles.
 
 This setting is a more extreme version of the Hard setting. Potions are further nerfed, the item
 pool is less helpful, and the player can find no armor, only a Master Sword, and only a single bottle.
-
-### Insane
-
-This setting is a modest step up from Expert. The main difference is that the player will never find any
-additional health.
 
 ## Timer Setting
 
@@ -288,10 +287,6 @@ In further concert with the Bow changes, all arrows under pots, in chests, and e
 If not set, Compasses and Maps are removed from the dungeon item pools and replaced by empty chests that may end up anywhere in the world.
 This may lead to different amount of itempool items being placed in a dungeon than you are used to.
 
-## Only Ensure Seed Beatable
-
-If set, will only ensure the goal can be achieved, but not necessarily that all locations are reachable. Currently only affects VT25, VT26 and balanced algorithms.
-
 ## Include Ganon's Tower and Pyramid Hole in Shuffle pool
 
 If set, Ganon's Tower is included in the dungeon shuffle pool and the Pyramid Hole/Exit pair is included in the Holes shuffle pool. Ganon can not be defeated until the primary goal is fulfilled.
@@ -336,7 +331,7 @@ Output a Spoiler File (default: False)
 Select the game logic (default: noglitches)
 
 ```
---mode [{standard,open,swordless}]
+--mode [{standard,open,swordless,inverted}]
 ```
 
 Select the game mode. (default: open)
@@ -348,10 +343,16 @@ Select the game mode. (default: open)
 Select the game completion goal. (default: ganon)
 
 ```
---difficulty [{easy,normal,hard,expert,insane}]
+--difficulty [{normal,hard,expert}]
 ```
 
 Select the game difficulty. Affects available itempool. (default: normal)
+
+```
+--item_functionality [{normal,hard,expert}]
+```
+
+Select limits on item functionality to increase difficulty. (default: normal)
 
 ```
 --timer [{none,display,timed,timed-ohko,ohko,timed-countdown}]
@@ -458,10 +459,10 @@ Select the color of Link\'s heart meter. (default: red)
 Use to select a different sprite sheet to use for Link. Path to a binary file of length 0x7000 containing the sprite data stored at address 0x80000 in the rom. (default: None)
 
 ```
---beatableonly
+--accessibility [{items,locations,none}]
 ```
 
-Enables the "Only Ensure Seed Beatable" option (default: False)
+Sets the item/location accessibility rules. (default: items)
 
 ```
 --hints

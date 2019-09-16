@@ -25,7 +25,8 @@ Uncle_texts = [
     'Forward this message to 10 other people or this seed will be awful.',
     'I hope you like your seeds bootless and fluteless.',
     '10\n9\n8\n7\n6\n5\n4\n3\n2\n1\nGo!',
-    'I\'m off to visit cousin Fritzl.'
+    'I\'m off to visit cousin Fritzl.',
+    'Don\'t forget to check Antlion Cave.'
 ] * 2 + [
     "We're out of\nWeetabix. To\nthe store!",
     "This seed is\nbootless\nuntil boots.",
@@ -1431,6 +1432,7 @@ class TextTable(object):
             'desert_thief_question_yes',
             'desert_thief_after_item_get',
             'desert_thief_reassure',
+            'pond_item_bottle_filled'
         ]
 
         for msg in messages_to_zero:
@@ -1882,5 +1884,12 @@ class TextTable(object):
         # 190
         text['sign_east_death_mountain_bridge'] = CompressedTextMapper.convert("How did you get up here?")
         text['fish_money'] = CompressedTextMapper.convert("It's a secret to everyone.")
+        text['sign_ganons_tower'] = CompressedTextMapper.convert("You need all 7 crystals to enter.")
+        text['sign_ganon'] = CompressedTextMapper.convert("You need all 7 crystals to beat Ganon.")
+        text['ganon_phase_3_no_bow'] = CompressedTextMapper.convert("You have no bow. Dingus!")
+        text['ganon_phase_3_no_silvers_alt'] = CompressedTextMapper.convert("You can't best me without silver arrows!")
+        text['ganon_phase_3_no_silvers'] = CompressedTextMapper.convert("You can't best me without silver arrows!")
+        text['ganon_phase_3_silvers'] = CompressedTextMapper.convert("Oh no! Silver! My one true weakness!")
+        text['murahdahla'] = CompressedTextMapper.convert("Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\ninvisibility.\n{PAUSE3}\n… … …\nWait! you can see me? I knew I should have\nhidden in  a hollow tree.")
         text['end_pad_data'] = bytearray([0xfb])
         text['terminator'] =  bytearray([0xFF, 0xFF])

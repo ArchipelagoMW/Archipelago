@@ -8,3 +8,8 @@ build
 bundle/components.wxs
 dist
 README.html
+.vs/
+*multidata
+*multisave
+EnemizerCLI/
+.mypy_cache/

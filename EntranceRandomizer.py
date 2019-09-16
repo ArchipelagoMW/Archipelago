@@ -6,9 +6,8 @@ import random
 import textwrap
 import sys
 
-from Gui import guiMain
 from Main import main
-from Utils import is_bundled, close_console
+from Utils import is_bundled, close_console, output_path
 
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
@@ -29,7 +28,7 @@ def start():
                              No Logic: Distribute items without regard for
                                              item requirements.
                              ''')
-    parser.add_argument('--mode', default='open', const='open', nargs='?', choices=['standard', 'open', 'swordless'],
+    parser.add_argument('--mode', default='open', const='open', nargs='?', choices=['standard', 'open', 'inverted'],
                         help='''\
                              Select game mode. (default: %(default)s)
                              Open:      World starts with Zelda rescued.
@@ -37,12 +36,24 @@ def start():
                                         but may lead to weird rain state issues if you exit
                                         through the Hyrule Castle side exits before rescuing
                                         Zelda in a full shuffle.
-                             Swordless: Like Open, but with no swords. Curtains in
-                                        Skull Woods and Agahnims Tower are removed,
-                                        Agahnim\'s Tower barrier can be destroyed with
-                                        hammer. Misery Mire and Turtle Rock can be opened
-                                        without a sword. Hammer damages Ganon. Ether and
-                                        Bombos Tablet can be activated with Hammer (and Book).
+                             Inverted:  Starting locations are Dark Sanctuary in West Dark
+                                        World or at Link's House, which is shuffled freely.
+                                        Requires the moon pearl to be Link in the Light World
+                                        instead of a bunny.
+                             ''')
+    parser.add_argument('--swords', default='random', const='random', nargs='?', choices= ['random', 'assured', 'swordless', 'vanilla'],
+                        help='''\
+                             Select sword placement. (default: %(default)s)
+                             Random:    All swords placed randomly.
+                             Assured:   Start game with a sword already.
+                             Swordless: No swords. Curtains in Skull Woods and Agahnim\'s 
+                                        Tower are removed, Agahnim\'s Tower barrier can be
+                                        destroyed with hammer. Misery Mire and Turtle Rock
+                                        can be opened without a sword. Hammer damages Ganon.
+                                        Ether and Bombos Tablet can be activated with Hammer
+                                        (and Book). Bombos pads have been added in Ice
+                                        Palace, to allow for an alternative to firerod.
+                             Vanilla:   Swords are in vanilla locations.
                              ''')
     parser.add_argument('--goal', default='ganon', const='ganon', nargs='?', choices=['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'],
                         help='''\
@@ -56,15 +67,20 @@ def start():
                              Triforce Hunt: Places 30 Triforce Pieces in the world, collect
                                             20 of them to beat the game.
                              ''')
-    parser.add_argument('--difficulty', default='normal', const='normal', nargs='?', choices=['easy', 'normal', 'hard', 'expert', 'insane'],
+    parser.add_argument('--difficulty', default='normal', const='normal', nargs='?', choices=['normal', 'hard', 'expert'],
                         help='''\
                              Select game difficulty. Affects available itempool. (default: %(default)s)
-                             Easy:            An easy setting with extra equipment.
                              Normal:          Normal difficulty.
                              Hard:            A harder setting with less equipment and reduced health.
                              Expert:          A harder yet setting with minimum equipment and health.
-                             Insane:          A setting with the absolute minimum in equipment and no extra health.
                              ''')
+    parser.add_argument('--item_functionality', default='normal', const='normal', nargs='?', choices=['normal', 'hard', 'expert'],
+                             help='''\
+                             Select limits on item functionality to increase difficulty. (default: %(default)s)
+                             Normal:          Normal functionality.
+                             Hard:            Reduced functionality.
+                             Expert:          Greatly reduced functionality.
+                                  ''')
     parser.add_argument('--timer', default='none', const='normal', nargs='?', choices=['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'],
                         help='''\
                              Select game timer setting. Affects available itempool. (default: %(default)s)
@@ -146,6 +162,23 @@ def start():
                              The dungeon variants only mix up dungeons and keep the rest of
                              the overworld vanilla.
                              ''')
+    parser.add_argument('--crystals_ganon', default='7', const='7', nargs='?', choices=['random', '0', '1', '2', '3', '4', '5', '6', '7'],
+                        help='''\
+                             How many crystals are needed to defeat ganon. Any other 
+                             requirements for ganon for the selected goal still apply.
+                             This setting does not apply when the all dungeons goal is
+                             selected. (default: %(default)s)
+                             Random: Picks a random value between 0 and 7 (inclusive).
+                             0-7:    Number of crystals needed
+                             ''')
+    parser.add_argument('--crystals_gt', default='7', const='7', nargs='?', choices=['random', '0', '1', '2', '3', '4', '5', '6', '7'],
+                        help='''\
+                             How many crystals are needed to open GT. For inverted mode
+                             this applies to the castle tower door instead. (default: %(default)s)
+                             Random: Picks a random value between 0 and 7 (inclusive).
+                             0-7:    Number of crystals needed
+                             ''')
+
     parser.add_argument('--rom', default='Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', help='Path to an ALttP JAP(1.0) rom to use as a base.')
     parser.add_argument('--loglevel', default='info', const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
@@ -177,11 +210,13 @@ def start():
                              Remove Maps and Compasses from Itempool, replacing them by
                              empty slots.
                              ''', action='store_true')
-    parser.add_argument('--beatableonly', help='''\
-                             Only check if the game is beatable with placement. Do not
-                             ensure all locations are reachable. This only has an effect
-                             on the restrictive algorithm currently.
-                             ''', action='store_true')
+    parser.add_argument('--accessibility', default='items', const='items', nargs='?', choices=['items', 'locations', 'none'], help='''\
+                             Select Item/Location Accessibility. (default: %(default)s)
+                             Items:     You can reach all unique inventory items. No guarantees about
+                                        reaching all locations or all keys. 
+                             Locations: You will be able to reach every location in the game.
+                             None:      You will be able to reach enough locations to beat the game.
+                             ''')
     parser.add_argument('--hints', help='''\
                              Make telepathic tiles and storytellers give helpful hints.
                              ''', action='store_true')
@@ -207,19 +242,32 @@ def start():
                              ''')
     parser.add_argument('--suppress_rom', help='Do not create an output rom file.', action='store_true')
     parser.add_argument('--gui', help='Launch the GUI', action='store_true')
-    # Deliberately not documented, only useful for vt site integration right now:
-    parser.add_argument('--shufflebosses', help=argparse.SUPPRESS, default='none', const='none', nargs='?', choices=['none', 'basic', 'normal', 'chaos'])
     parser.add_argument('--jsonout', action='store_true', help='''\
                             Output .json patch to stdout instead of a patched rom. Used
                             for VT site integration, do not use otherwise.
                             ''')
+    parser.add_argument('--skip_playthrough', action='store_true', default=False)
+    parser.add_argument('--enemizercli', default='')
+    parser.add_argument('--shufflebosses', default='none', choices=['none', 'basic', 'normal', 'chaos'])
+    parser.add_argument('--shuffleenemies', default=False, action='store_true')
+    parser.add_argument('--enemy_health', default='default', choices=['default', 'easy', 'normal', 'hard', 'expert'])
+    parser.add_argument('--enemy_damage', default='default', choices=['default', 'shuffled', 'chaos'])
+    parser.add_argument('--shufflepalette', default=False, action='store_true')
+    parser.add_argument('--shufflepots', default=False, action='store_true')
+    parser.add_argument('--multi', default=1, type=lambda value: min(max(int(value), 1), 255))
+
+    parser.add_argument('--outputpath')
     args = parser.parse_args()
+
+    if args.outputpath and os.path.isdir(args.outputpath):
+        output_path.cached_path = args.outputpath
 
     if is_bundled() and len(sys.argv) == 1:
         # for the bundled builds, if we have no arguments, the user
         # probably wants the gui. Users of the bundled build who want the command line
         # interface shouuld specify at least one option, possibly setting a value to a
         # default if they like all the defaults
+        from Gui import guiMain
         close_console()
         guiMain()
         sys.exit(0)
@@ -240,6 +288,7 @@ def start():
     logging.basicConfig(format='%(message)s', level=loglevel)
 
     if args.gui:
+        from Gui import guiMain
         guiMain(args)
     elif args.count is not None:
         seed = args.seed

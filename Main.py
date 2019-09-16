@@ -3,44 +3,28 @@ import copy
 from itertools import zip_longest
 import json
 import logging
+import os
 import random
 import time
 
 from BaseClasses import World, CollectionState, Item, Region, Location, Shop
 from Regions import create_regions, mark_light_world_regions
-from EntranceShuffle import link_entrances
-from Rom import patch_rom, Sprite, LocalRom, JsonRom
+from InvertedRegions import create_inverted_regions, mark_dark_world_regions
+from EntranceShuffle import link_entrances, link_inverted_entrances
+from Rom import patch_rom, get_enemizer_patch, apply_rom_settings, Sprite, LocalRom, JsonRom
 from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
-from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, flood_items
+from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, flood_items, balance_multiworld_progression
 from ItemList import generate_itempool, difficulties, fill_prizes
 from Utils import output_path
 
-__version__ = '0.6.2'
-
-logic_hash = [134, 166, 181, 191, 228, 89, 188, 200, 5, 157, 217, 139, 180, 198, 106, 104,
-              88, 223, 138, 28, 54, 18, 216, 129, 248, 19, 109, 220, 159, 75, 238, 57,
-              231, 183, 143, 167, 114, 176, 82, 169, 179, 94, 115, 193, 252, 222, 52, 245,
-              33, 208, 39, 122, 177, 136, 29, 161, 210, 165, 6, 125, 146, 212, 101, 185,
-              65, 247, 253, 85, 171, 147, 71, 148, 203, 202, 230, 1, 13, 64, 254, 141,
-              32, 93, 152, 4, 92, 16, 195, 204, 246, 201, 11, 7, 189, 97, 9, 91,
-              237, 215, 163, 131, 142, 34, 111, 196, 120, 127, 168, 211, 227, 61, 187, 110,
-              190, 162, 59, 80, 225, 186, 37, 154, 76, 72, 27, 17, 79, 206, 207, 243,
-              184, 197, 153, 48, 119, 99, 2, 151, 51, 67, 121, 175, 38, 224, 87, 242,
-              45, 22, 155, 244, 209, 117, 214, 213, 194, 126, 236, 73, 133, 70, 49, 140,
-              229, 108, 156, 124, 105, 226, 44, 23, 112, 102, 173, 219, 14, 116, 58, 103,
-              55, 10, 95, 251, 84, 118, 160, 78, 63, 250, 31, 41, 35, 255, 170, 25,
-              66, 172, 98, 249, 68, 8, 113, 21, 46, 24, 137, 149, 81, 130, 42, 164,
-              50, 12, 158, 15, 47, 182, 30, 40, 36, 83, 77, 205, 20, 241, 3, 132,
-              0, 60, 96, 62, 74, 178, 53, 56, 135, 174, 145, 86, 107, 233, 218, 221,
-              43, 150, 100, 69, 235, 26, 234, 192, 199, 144, 232, 128, 239, 123, 240, 90]
-
+__version__ = '0.6.3-pre'
 
 def main(args, seed=None):
     start = time.clock()
 
     # initialize the world
-    world = World(args.shuffle, args.logic, args.mode, args.difficulty, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.beatableonly, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.keysanity, args.retro, args.custom, args.customitemarray, args.shufflebosses, args.hints)
+    world = World(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty, args.item_functionality, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.accessibility, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.keysanity, args.retro, args.custom, args.customitemarray, args.shufflebosses, args.hints)
     logger = logging.getLogger('')
     if seed is None:
         random.seed(None)
@@ -49,26 +33,46 @@ def main(args, seed=None):
         world.seed = int(seed)
     random.seed(world.seed)
 
+    world.crystals_needed_for_ganon = random.randint(0, 7) if args.crystals_ganon == 'random' else int(args.crystals_ganon)
+    world.crystals_needed_for_gt = random.randint(0, 7) if args.crystals_gt == 'random' else int(args.crystals_gt)
+
+    world.rom_seeds = {player: random.randint(0, 999999999) for player in range(1, world.players + 1)}
+
     logger.info('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n', __version__, world.seed)
 
     world.difficulty_requirements = difficulties[world.difficulty]
 
-    create_regions(world)
-
-    create_dungeons(world)
+    if world.mode != 'inverted':
+        for player in range(1, world.players + 1):
+            create_regions(world, player)
+            create_dungeons(world, player)
+    else:
+        for player in range(1, world.players + 1):
+            create_inverted_regions(world, player)
+            create_dungeons(world, player)
 
     logger.info('Shuffling the World about.')
 
-    link_entrances(world)
-    mark_light_world_regions(world)
+    if world.mode != 'inverted':
+        for player in range(1, world.players + 1):
+            link_entrances(world, player)
+
+        mark_light_world_regions(world)
+    else:
+        for player in range(1, world.players + 1):
+            link_inverted_entrances(world, player)
+
+        mark_dark_world_regions(world)
 
     logger.info('Generating Item Pool.')
 
-    generate_itempool(world)
+    for player in range(1, world.players + 1):
+        generate_itempool(world, player)
 
     logger.info('Calculating Access Rules.')
 
-    set_rules(world)
+    for player in range(1, world.players + 1):
+        set_rules(world, player)
 
     logger.info('Placing Dungeon Prizes.')
 
@@ -102,9 +106,9 @@ def main(args, seed=None):
     elif args.algorithm == 'balanced':
         distribute_items_restrictive(world, gt_filler(world))
 
-    logger.info('Calculating playthrough.')
-
-    create_playthrough(world)
+    if world.players > 1:
+        logger.info('Balancing multiworld progression.')
+        balance_multiworld_progression(world)
 
     logger.info('Patching ROM.')
 
@@ -116,20 +120,55 @@ def main(args, seed=None):
     else:
         sprite = None
 
-    outfilebase = 'ER_%s_%s-%s-%s%s_%s-%s%s%s%s%s_%s' % (world.logic, world.difficulty, world.mode, world.goal, "" if world.timer in ['none', 'display'] else "-" + world.timer, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-retro" if world.retro else "", "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "", "-nohints" if not world.hints else "", world.seed)
+    outfilebase = 'ER_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s_%s' % (world.logic, world.difficulty, world.difficulty_adjustments, world.mode, world.goal, "" if world.timer in ['none', 'display'] else "-" + world.timer, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-retro" if world.retro else "", "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "", "-nohints" if not world.hints else "", world.seed)
 
+    use_enemizer = args.enemizercli and (args.shufflebosses != 'none' or args.shuffleenemies or args.enemy_health != 'default' or args.enemy_health != 'default' or args.enemy_damage or args.shufflepalette or args.shufflepots)
+
+    jsonout = {}
     if not args.suppress_rom:
-        if args.jsonout:
-            rom = JsonRom()
+        if world.players > 1:
+            raise NotImplementedError("Multiworld rom writes have not been implemented")
         else:
-            rom = LocalRom(args.rom)
-        patch_rom(world, rom, bytearray(logic_hash), args.heartbeep, args.heartcolor, sprite)
-        if args.jsonout:
-            print(json.dumps({'patch': rom.patches, 'spoiler': world.spoiler.to_json()}))
-        else:
-            rom.write_to_file(args.jsonout or output_path('%s.sfc' % outfilebase))
+            player = 1
+
+            local_rom = None
+            if args.jsonout:
+                rom = JsonRom()
+            else:
+                if use_enemizer:
+                    local_rom = LocalRom(args.rom)
+                    rom = JsonRom()
+                else:
+                    rom = LocalRom(args.rom)
+
+            patch_rom(world, player, rom)
+
+            enemizer_patch = []
+            if use_enemizer:
+                enemizer_patch = get_enemizer_patch(world, player, rom, args.rom, args.enemizercli, args.shuffleenemies, args.enemy_health, args.enemy_damage, args.shufflepalette, args.shufflepots)
+
+            if args.jsonout:
+                jsonout['patch'] = rom.patches
+                if use_enemizer:
+                    jsonout['enemizer' % player] = enemizer_patch
+            else:
+                if use_enemizer:
+                    local_rom.patch_enemizer(rom.patches, os.path.join(os.path.dirname(args.enemizercli), "enemizerBasePatch.json"), enemizer_patch)
+                    rom = local_rom
+
+                apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite)
+                rom.write_to_file(output_path('%s.sfc' % outfilebase))
 
     if args.create_spoiler and not args.jsonout:
+        world.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))
+
+    if not args.skip_playthrough:
+        logger.info('Calculating playthrough.')
+        create_playthrough(world)
+
+    if args.jsonout:
+        print(json.dumps({**jsonout, 'spoiler': world.spoiler.to_json()}))
+    elif args.create_spoiler and not args.skip_playthrough:
         world.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))
 
     logger.info('Done. Enjoy.')
@@ -144,10 +183,12 @@ def gt_filler(world):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.shuffle, world.logic, world.mode, world.difficulty, world.timer, world.progressive, world.goal, world.algorithm, world.place_dungeon_items, world.check_beatable_only, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.keysanity, world.retro, world.custom, world.customitemarray, world.boss_shuffle, world.hints)
-    ret.required_medallions = list(world.required_medallions)
-    ret.swamp_patch_required = world.swamp_patch_required
-    ret.ganon_at_pyramid = world.ganon_at_pyramid
+    ret = World(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.difficulty_adjustments, world.timer, world.progressive, world.goal, world.algorithm, world.place_dungeon_items, world.accessibility, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.keysanity, world.retro, world.custom, world.customitemarray, world.boss_shuffle, world.hints)
+    ret.required_medallions = world.required_medallions.copy()
+    ret.swamp_patch_required = world.swamp_patch_required.copy()
+    ret.ganon_at_pyramid = world.ganon_at_pyramid.copy()
+    ret.powder_patch_required = world.powder_patch_required.copy()
+    ret.ganonstower_vanilla = world.ganonstower_vanilla.copy()
     ret.treasure_hunt_count = world.treasure_hunt_count
     ret.treasure_hunt_icon = world.treasure_hunt_icon
     ret.sewer_light_cone = world.sewer_light_cone
@@ -162,52 +203,67 @@ def copy_world(world):
     ret.difficulty_requirements = world.difficulty_requirements
     ret.fix_fake_world = world.fix_fake_world
     ret.lamps_needed_for_dark_rooms = world.lamps_needed_for_dark_rooms
-    create_regions(ret)
-    create_dungeons(ret)
+    ret.crystals_needed_for_ganon = world.crystals_needed_for_ganon
+    ret.crystals_needed_for_gt = world.crystals_needed_for_gt
+
+    if world.mode != 'inverted':
+        for player in range(1, world.players + 1):
+            create_regions(ret, player)
+            create_dungeons(ret, player)
+    else:
+        for player in range(1, world.players + 1):
+            create_inverted_regions(ret, player)
+            create_dungeons(ret, player)
 
     copy_dynamic_regions_and_locations(world, ret)
 
     # copy bosses
     for dungeon in world.dungeons:
         for level, boss in dungeon.bosses.items():
-            ret.get_dungeon(dungeon.name).bosses[level] = boss
+            ret.get_dungeon(dungeon.name, dungeon.player).bosses[level] = boss
 
     for shop in world.shops:
-        copied_shop = ret.get_region(shop.region.name).shop
+        copied_shop = ret.get_region(shop.region.name, shop.region.player).shop
         copied_shop.active = shop.active
         copied_shop.inventory = copy.copy(shop.inventory)
 
     # connect copied world
     for region in world.regions:
-        copied_region = ret.get_region(region.name)
+        copied_region = ret.get_region(region.name, region.player)
         copied_region.is_light_world = region.is_light_world
         copied_region.is_dark_world = region.is_dark_world
         for entrance in region.entrances:
-            ret.get_entrance(entrance.name).connect(copied_region)
+            ret.get_entrance(entrance.name, entrance.player).connect(copied_region)
 
     # fill locations
     for location in world.get_locations():
         if location.item is not None:
-            item = Item(location.item.name, location.item.advancement, location.item.priority, location.item.type)
-            ret.get_location(location.name).item = item
-            item.location = ret.get_location(location.name)
+            item = Item(location.item.name, location.item.advancement, location.item.priority, location.item.type, player = location.item.player)
+            ret.get_location(location.name, location.player).item = item
+            item.location = ret.get_location(location.name, location.player)
         if location.event:
-            ret.get_location(location.name).event = True
+            ret.get_location(location.name, location.player).event = True
+        if location.locked:
+            ret.get_location(location.name, location.player).locked = True
 
     # copy remaining itempool. No item in itempool should have an assigned location
     for item in world.itempool:
-        ret.itempool.append(Item(item.name, item.advancement, item.priority, item.type))
+        ret.itempool.append(Item(item.name, item.advancement, item.priority, item.type, player = item.player))
 
     # copy progress items in state
-    ret.state.prog_items = list(world.state.prog_items)
+    ret.state.prog_items = world.state.prog_items.copy()
+    ret.precollected_items = world.precollected_items.copy()
+    ret.state.stale = {player: True for player in range(1, world.players + 1)}
 
-    set_rules(ret)
+    for player in range(1, world.players + 1):
+        set_rules(ret, player)
 
     return ret
 
 def copy_dynamic_regions_and_locations(world, ret):
     for region in world.dynamic_regions:
-        new_reg = Region(region.name, region.type, region.hint_text)
+        new_reg = Region(region.name, region.type, region.hint_text, region.player)
+        new_reg.world = ret
         ret.regions.append(new_reg)
         ret.dynamic_regions.append(new_reg)
 
@@ -218,9 +274,16 @@ def copy_dynamic_regions_and_locations(world, ret):
             ret.shops.append(new_reg.shop)
 
     for location in world.dynamic_locations:
-        new_loc = Location(location.name, location.address, location.crystal, location.hint_text, location.parent_region)
-        new_reg = ret.get_region(location.parent_region.name)
+        new_reg = ret.get_region(location.parent_region.name, location.parent_region.player)
+        new_loc = Location(location.player, location.name, location.address, location.crystal, location.hint_text, new_reg)
+        # todo: this is potentially dangerous. later refactor so we
+        # can apply dynamic region rules on top of copied world like other rules
+        new_loc.access_rule = location.access_rule
+        new_loc.always_allow = location.always_allow
+        new_loc.item_rule = location.item_rule
         new_reg.locations.append(new_loc)
+    
+        ret.clear_location_cache()
 
 
 def create_playthrough(world):
@@ -228,12 +291,8 @@ def create_playthrough(world):
     old_world = world
     world = copy_world(world)
 
-    # in treasure hunt and pedestal goals, ganon is invincible
-    if world.goal in ['pedestal', 'triforcehunt']:
-        world.get_location('Ganon').item = None
-
     # if we only check for beatable, we can do this sanity check first before writing down spheres
-    if world.check_beatable_only and not world.can_beat_game():
+    if world.accessibility == 'none' and not world.can_beat_game():
         raise RuntimeError('Cannot beat game. Something went terribly wrong here!')
 
     # get locations containing progress items
@@ -263,8 +322,8 @@ def create_playthrough(world):
 
         logging.getLogger('').debug('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres), len(sphere), len(prog_locations))
         if not sphere:
-            logging.getLogger('').debug('The following items could not be reached: %s', ['%s at %s' % (location.item.name, location.name) for location in sphere_candidates])
-            if not world.check_beatable_only:
+            logging.getLogger('').debug('The following items could not be reached: %s', ['%s (Player %d) at %s (Player %d)' % (location.item.name, location.item.player, location.name, location.player) for location in sphere_candidates])
+            if not world.accessibility == 'none':
                 raise RuntimeError('Not all progression items reachable. Something went terribly wrong here.')
             else:
                 break
@@ -274,12 +333,11 @@ def create_playthrough(world):
         to_delete = []
         for location in sphere:
             # we remove the item at location and check if game is still beatable
-            logging.getLogger('').debug('Checking if %s is required to beat the game.', location.item.name)
+            logging.getLogger('').debug('Checking if %s (Player %d) is required to beat the game.', location.item.name, location.item.player)
             old_item = location.item
             location.item = None
             state.remove(old_item)
-            ##if world.can_beat_game(state_cache[num]):
-            if world.can_beat_game():
+            if world.can_beat_game(state_cache[num]):
                 to_delete.append(location)
             else:
                 # still required, got to keep it around
@@ -315,7 +373,7 @@ def create_playthrough(world):
             raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
 
     # store the required locations for statistical analysis
-    old_world.required_locations = [location.name for sphere in collection_spheres for location in sphere]
+    old_world.required_locations = [(location.name, location.player) for sphere in collection_spheres for location in sphere]
 
     def flist_to_iter(node):
         while node:
@@ -330,9 +388,15 @@ def create_playthrough(world):
         pathpairs = zip_longest(pathsiter, pathsiter)
         return list(pathpairs)
 
-    old_world.spoiler.paths = {location.name : get_path(state, location.parent_region) for sphere in collection_spheres for location in sphere}
-    if any(exit == 'Pyramid Fairy' for path in old_world.spoiler.paths.values() for (_, exit) in path):
-        old_world.spoiler.paths['Big Bomb Shop'] = get_path(state, world.get_region('Big Bomb Shop'))
+    old_world.spoiler.paths = dict()
+    for player in range(1, world.players + 1):
+        old_world.spoiler.paths.update({ str(location) : get_path(state, location.parent_region) for sphere in collection_spheres for location in sphere if location.player == player})
+        for _, path in dict(old_world.spoiler.paths).items():
+            if any(exit == 'Pyramid Fairy' for (_, exit) in path):
+                if world.mode != 'inverted':
+                    old_world.spoiler.paths[str(world.get_region('Big Bomb Shop', player))] = get_path(state, world.get_region('Big Bomb Shop', player))
+                else:
+                    old_world.spoiler.paths[str(world.get_region('Inverted Big Bomb Shop', player))] = get_path(state, world.get_region('Inverted Big Bomb Shop', player))
 
     # we can finally output our playthrough
     old_world.spoiler.playthrough = OrderedDict([(str(i + 1), {str(location): str(location.item) for location in sphere}) for i, sphere in enumerate(collection_spheres)])

@@ -5,7 +5,7 @@ import json
 import random
 import os
 import shutil
-from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, Entry, Spinbox, Button, filedialog, messagebox, ttk
+from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, BOTH, Entry, Spinbox, Button, filedialog, messagebox, ttk
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
@@ -66,8 +66,6 @@ def guiMain(args=None):
     retroCheckbutton = Checkbutton(checkBoxFrame, text="Retro mode (universal keys)", variable=retroVar)
     dungeonItemsVar = IntVar()
     dungeonItemsCheckbutton = Checkbutton(checkBoxFrame, text="Place Dungeon Items (Compasses/Maps)", onvalue=0, offvalue=1, variable=dungeonItemsVar)
-    beatableOnlyVar = IntVar()
-    beatableOnlyCheckbutton = Checkbutton(checkBoxFrame, text="Only ensure seed is beatable, not all items must be reachable", variable=beatableOnlyVar)
     disableMusicVar = IntVar()
     disableMusicCheckbutton = Checkbutton(checkBoxFrame, text="Disable game music", variable=disableMusicVar)
     shuffleGanonVar = IntVar()
@@ -85,7 +83,6 @@ def guiMain(args=None):
     keysanityCheckbutton.pack(expand=True, anchor=W)
     retroCheckbutton.pack(expand=True, anchor=W)
     dungeonItemsCheckbutton.pack(expand=True, anchor=W)
-    beatableOnlyCheckbutton.pack(expand=True, anchor=W)
     disableMusicCheckbutton.pack(expand=True, anchor=W)
     shuffleGanonCheckbutton.pack(expand=True, anchor=W)
     hintsCheckbutton.pack(expand=True, anchor=W)
@@ -145,7 +142,7 @@ def guiMain(args=None):
     modeFrame = Frame(drowDownFrame)
     modeVar = StringVar()
     modeVar.set('open')
-    modeOptionMenu = OptionMenu(modeFrame, modeVar, 'standard', 'open', 'swordless')
+    modeOptionMenu = OptionMenu(modeFrame, modeVar, 'standard', 'open', 'inverted')
     modeOptionMenu.pack(side=RIGHT)
     modeLabel = Label(modeFrame, text='Game Mode')
     modeLabel.pack(side=LEFT)
@@ -169,7 +166,7 @@ def guiMain(args=None):
     difficultyFrame = Frame(drowDownFrame)
     difficultyVar = StringVar()
     difficultyVar.set('normal')
-    difficultyOptionMenu = OptionMenu(difficultyFrame, difficultyVar, 'easy', 'normal', 'hard', 'expert', 'insane')
+    difficultyOptionMenu = OptionMenu(difficultyFrame, difficultyVar, 'normal', 'hard', 'expert')
     difficultyOptionMenu.pack(side=RIGHT)
     difficultyLabel = Label(difficultyFrame, text='Game difficulty')
     difficultyLabel.pack(side=LEFT)
@@ -242,17 +239,77 @@ def guiMain(args=None):
     heartcolorFrame.pack(expand=True, anchor=E)
     fastMenuFrame.pack(expand=True, anchor=E)
 
-    bottomFrame = Frame(randomizerWindow)
+    enemizerFrame = LabelFrame(randomizerWindow, text="Enemizer", padx=5, pady=5)
+    enemizerFrame.columnconfigure(0, weight=1)
+    enemizerFrame.columnconfigure(1, weight=1)
+    enemizerFrame.columnconfigure(2, weight=1)
 
+    enemizerPathFrame = Frame(enemizerFrame)
+    enemizerPathFrame.grid(row=0, column=0, columnspan=3, sticky=W)
+    enemizerCLIlabel = Label(enemizerPathFrame, text="EnemizerCLI path: ")
+    enemizerCLIlabel.pack(side=LEFT)
+    enemizerCLIpathVar = StringVar()
+    enemizerCLIpathEntry = Entry(enemizerPathFrame, textvariable=enemizerCLIpathVar, width=80)
+    enemizerCLIpathEntry.pack(side=LEFT)
+    def EnemizerSelectPath():
+        path = filedialog.askopenfilename(filetypes=[("EnemizerCLI executable", "*EnemizerCLI*")])
+        if path:
+            enemizerCLIpathVar.set(path)
+    enemizerCLIbrowseButton = Button(enemizerPathFrame, text='...', command=EnemizerSelectPath)
+    enemizerCLIbrowseButton.pack(side=LEFT)
+
+    enemyShuffleVar = IntVar()
+    enemyShuffleButton = Checkbutton(enemizerFrame, text="Enemy shuffle", variable=enemyShuffleVar)
+    enemyShuffleButton.grid(row=1, column=0)
+    paletteShuffleVar = IntVar()
+    paletteShuffleButton = Checkbutton(enemizerFrame, text="Palette shuffle", variable=paletteShuffleVar)
+    paletteShuffleButton.grid(row=1, column=1)
+    potShuffleVar = IntVar()
+    potShuffleButton = Checkbutton(enemizerFrame, text="Pot shuffle", variable=potShuffleVar)
+    potShuffleButton.grid(row=1, column=2)
+
+    enemizerBossFrame = Frame(enemizerFrame)
+    enemizerBossFrame.grid(row=2, column=0)
+    enemizerBossLabel = Label(enemizerBossFrame, text='Boss shuffle')
+    enemizerBossLabel.pack(side=LEFT)
+    enemizerBossVar = StringVar()
+    enemizerBossVar.set('none')
+    enemizerBossOption = OptionMenu(enemizerBossFrame, enemizerBossVar, 'none', 'basic', 'normal', 'chaos')
+    enemizerBossOption.pack(side=LEFT)
+
+    enemizerDamageFrame = Frame(enemizerFrame)
+    enemizerDamageFrame.grid(row=2, column=1)
+    enemizerDamageLabel = Label(enemizerDamageFrame, text='Enemy damage')
+    enemizerDamageLabel.pack(side=LEFT)
+    enemizerDamageVar = StringVar()
+    enemizerDamageVar.set('default')
+    enemizerDamageOption = OptionMenu(enemizerDamageFrame, enemizerDamageVar, 'default', 'shuffled', 'chaos')
+    enemizerDamageOption.pack(side=LEFT)
+
+    enemizerHealthFrame = Frame(enemizerFrame)
+    enemizerHealthFrame.grid(row=2, column=2)
+    enemizerHealthLabel = Label(enemizerHealthFrame, text='Enemy health')
+    enemizerHealthLabel.pack(side=LEFT)
+    enemizerHealthVar = StringVar()
+    enemizerHealthVar.set('default')
+    enemizerHealthOption = OptionMenu(enemizerHealthFrame, enemizerHealthVar, 'default', 'easy', 'normal', 'hard', 'expert')
+    enemizerHealthOption.pack(side=LEFT)
+
+    bottomFrame = Frame(randomizerWindow, pady=5)
+
+    worldLabel = Label(bottomFrame, text='Worlds')
+    worldVar = StringVar()
+    worldSpinbox = Spinbox(bottomFrame, from_=1, to=100, width=5, textvariable=worldVar)
     seedLabel = Label(bottomFrame, text='Seed #')
     seedVar = StringVar()
-    seedEntry = Entry(bottomFrame, textvariable=seedVar)
+    seedEntry = Entry(bottomFrame, width=15, textvariable=seedVar)
     countLabel = Label(bottomFrame, text='Count')
     countVar = StringVar()
-    countSpinbox = Spinbox(bottomFrame, from_=1, to=100, textvariable=countVar)
+    countSpinbox = Spinbox(bottomFrame, from_=1, to=100, width=5, textvariable=countVar)
 
     def generateRom():
         guiargs = Namespace
+        guiargs.multi = int(worldVar.get())
         guiargs.seed = int(seedVar.get()) if seedVar.get() else None
         guiargs.count = int(countVar.get()) if countVar.get() != '1' else None
         guiargs.mode = modeVar.get()
@@ -271,11 +328,17 @@ def guiMain(args=None):
         guiargs.keysanity = bool(keysanityVar.get())
         guiargs.retro = bool(retroVar.get())
         guiargs.nodungeonitems = bool(dungeonItemsVar.get())
-        guiargs.beatableonly = bool(beatableOnlyVar.get())
         guiargs.quickswap = bool(quickSwapVar.get())
         guiargs.disablemusic = bool(disableMusicVar.get())
         guiargs.shuffleganon = bool(shuffleGanonVar.get())
         guiargs.hints = bool(hintsVar.get())
+        guiargs.enemizercli = enemizerCLIpathVar.get()
+        guiargs.shufflebosses = enemizerBossVar.get()
+        guiargs.shuffleenemies = bool(enemyShuffleVar.get())
+        guiargs.enemy_health = enemizerHealthVar.get()
+        guiargs.enemy_damage = enemizerDamageVar.get()
+        guiargs.shufflepalette = bool(paletteShuffleVar.get())
+        guiargs.shufflepots = bool(potShuffleVar.get())
         guiargs.custom = bool(customVar.get())
         guiargs.customitemarray = [int(bowVar.get()), int(silverarrowVar.get()), int(boomerangVar.get()), int(magicboomerangVar.get()), int(hookshotVar.get()), int(mushroomVar.get()), int(magicpowderVar.get()), int(firerodVar.get()),
                                    int(icerodVar.get()), int(bombosVar.get()), int(etherVar.get()), int(quakeVar.get()), int(lampVar.get()), int(hammerVar.get()), int(shovelVar.get()), int(fluteVar.get()), int(bugnetVar.get()),
@@ -286,10 +349,11 @@ def guiMain(args=None):
                                    int(arrow1Var.get()), int(arrow10Var.get()), int(bomb1Var.get()), int(bomb3Var.get()), int(rupee1Var.get()), int(rupee5Var.get()), int(rupee20Var.get()), int(rupee50Var.get()), int(rupee100Var.get()),
                                    int(rupee300Var.get()), int(rupoorVar.get()), int(blueclockVar.get()), int(greenclockVar.get()), int(redclockVar.get()), int(triforcepieceVar.get()), int(triforcecountVar.get()),
                                    int(triforceVar.get()), int(rupoorcostVar.get()), int(universalkeyVar.get())]
-        guiargs.shufflebosses = None
         guiargs.rom = romVar.get()
         guiargs.jsonout = None
         guiargs.sprite = sprite
+        guiargs.skip_playthrough = False
+        guiargs.outputpath = None
         try:
             if guiargs.count is not None:
                 seed = guiargs.seed
@@ -305,7 +369,9 @@ def guiMain(args=None):
 
     generateButton = Button(bottomFrame, text='Generate Patched Rom', command=generateRom)
 
-    seedLabel.pack(side=LEFT)
+    worldLabel.pack(side=LEFT)
+    worldSpinbox.pack(side=LEFT)
+    seedLabel.pack(side=LEFT,  padx=(5, 0))
     seedEntry.pack(side=LEFT)
     countLabel.pack(side=LEFT, padx=(5, 0))
     countSpinbox.pack(side=LEFT)
@@ -317,6 +383,7 @@ def guiMain(args=None):
     rightHalfFrame.pack(side=RIGHT)
     topFrame.pack(side=TOP)
     bottomFrame.pack(side=BOTTOM)
+    enemizerFrame.pack(side=BOTTOM, fill=BOTH)
 
     # Adjuster Controls
 
@@ -383,6 +450,7 @@ def guiMain(args=None):
     fastMenuOptionMenu2.pack(side=RIGHT)
     fastMenuLabel2 = Label(fastMenuFrame2, text='Menu speed')
     fastMenuLabel2.pack(side=LEFT)
+
 
     heartbeepFrame2.pack(expand=True, anchor=E)
     heartcolorFrame2.pack(expand=True, anchor=E)
@@ -999,7 +1067,6 @@ def guiMain(args=None):
         retroVar.set(args.retro)
         if args.nodungeonitems:
             dungeonItemsVar.set(int(not args.nodungeonitems))
-        beatableOnlyVar.set(int(args.beatableonly))
         quickSwapVar.set(int(args.quickswap))
         disableMusicVar.set(int(args.disablemusic))
         if args.count:
