@@ -492,6 +492,16 @@ class CollectionState(object):
         
         return region.is_light_world if self.world.mode != 'inverted' else region.is_dark_world
 
+    def can_reach_light_world(self, player):
+        if True in [i.is_light_world for i in self.reachable_regions[player]]:
+            return True
+        return False
+
+    def can_reach_dark_world(self, player):
+        if True in [i.is_dark_world for i in self.reachable_regions[player]]:
+            return True
+        return False
+
     def has_misery_mire_medallion(self, player):
         return self.has(self.world.required_medallions[player][0], player)
 

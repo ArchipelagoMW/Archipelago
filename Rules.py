@@ -115,7 +115,7 @@ def global_rules(world, player):
 
     if world.mode == 'standard':
         world.get_region('Hyrule Castle Secret Entrance', player).can_reach_private = lambda state: True
-        old_rule = world.get_region('Links House', player).can_reach
+        old_rule = world.get_region('Links House', player).can_reach_private
         world.get_region('Links House', player).can_reach_private = lambda state: state.can_reach('Sanctuary', 'Region', player) or old_rule(state)
     else:
         # these are default save&quit points and always accessible
@@ -123,7 +123,7 @@ def global_rules(world, player):
         world.get_region('Sanctuary', player).can_reach_private = lambda state: True
 
     # we can s&q to the old man house after we rescue him. This may be somewhere completely different if caves are shuffled!
-    old_rule = world.get_region('Old Man House', player).can_reach
+    old_rule = world.get_region('Old Man House', player).can_reach_private
     world.get_region('Old Man House', player).can_reach_private = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
 
     # overworld requirements
@@ -469,13 +469,17 @@ def inverted_rules(world, player):
 
     add_item_rule(world.get_location('Ganon', player), lambda item: item.name == 'Triforce' and item.player == player)
 
+    # s&q regions. link's house entrance is set to true so the filler knows the chest inside can always be reached
     world.get_region('Inverted Links House', player).can_reach_private = lambda state: True
+    world.get_region('Inverted Links House', player).entrances[0].can_reach = lambda state: True
     world.get_region('Inverted Dark Sanctuary', player).entrances[0].parent_region.can_reach_private = lambda state: True
 
-    # we can s&q to the old man house after we rescue him. This may be somewhere completely different if caves are shuffled!
-    if world.shuffle != 'vanilla':
-        old_rule = world.get_region('Old Man House', player).can_reach
-        world.get_region('Old Man House', player).can_reach_private = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
+    old_rule = world.get_region('Old Man House', player).can_reach_private
+    world.get_region('Old Man House', player).can_reach_private = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
+
+    old_rule = world.get_region('Hyrule Castle Ledge', player).can_reach_private
+    world.get_region('Hyrule Castle Ledge', player).can_reach_private = lambda state: (state.has_Mirror(player) and state.has('Beat Agahnim 1', player) and state.can_reach_light_world(player)) or old_rule(state)
+
     # overworld requirements 
     set_rule(world.get_location('Maze Race', player), lambda state: state.has_Pearl(player))
     set_rule(world.get_entrance('Mini Moldorm Cave', player), lambda state: state.has_Pearl(player))
@@ -540,9 +544,6 @@ def inverted_rules(world, player):
     set_rule(world.get_entrance('Agahnim 1', player), lambda state: state.has_sword(player) and state.has_key('Small Key (Agahnims Tower)', player, 2))
     set_defeat_dungeon_boss_rule(world.get_location('Agahnim 1', player))
     set_rule(world.get_location('Castle Tower - Dark Maze', player), lambda state: state.has_key('Small Key (Agahnims Tower)', player))
-    set_rule(world.get_entrance('LW Hyrule Castle Ledge SQ', player), lambda state: state.has('Beat Agahnim 1', player))
-    set_rule(world.get_entrance('EDM Hyrule Castle Ledge SQ', player), lambda state: state.has('Beat Agahnim 1', player))
-    set_rule(world.get_entrance('WDM Hyrule Castle Ledge SQ', player), lambda state: state.has('Beat Agahnim 1', player))
     set_rule(world.get_entrance('Hyrule Castle Secret Entrance Drop', player), lambda state: state.has_Pearl(player))
     set_rule(world.get_entrance('Old Man Cave Exit (West)', player), lambda state: False)  # drop cannot be climbed up
     set_rule(world.get_entrance('Broken Bridge (West)', player), lambda state: state.has('Hookshot', player) and state.has_Pearl(player))
@@ -1395,7 +1396,7 @@ def set_inverted_big_bomb_rules(world, player):
                              'Hookshot Cave',
                              'Turtle Rock Isolated Ledge Entrance',
                              'Hookshot Cave Back Entrance',
-                             'Inverted Ganons Tower']
+                             'Inverted Agahnims Tower']
     Isolated_LW_entrances = ['Capacity Upgrade',
                              'Tower of Hera',
                              'Death Mountain Return Cave (West)',

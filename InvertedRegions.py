@@ -16,7 +16,7 @@ def create_inverted_regions(world, player):
                           'Kakariko Shop', 'Long Fairy Cave', 'Good Bee Cave', '20 Rupee Cave', 'Cave Shop (Lake Hylia)',
                           'Bonk Fairy (Light)', '50 Rupee Cave', 'Fortune Teller (Light)', 'Lake Hylia Fairy', 'Light Hype Fairy', 'Desert Fairy', 'Lumberjack House', 'Lake Hylia Fortune Teller', 'Kakariko Gamble Game',
                           'East Dark World Mirror Spot', 'West Dark World Mirror Spot', 'South Dark World Mirror Spot', 'Cave 45', 'Checkerboard Cave', 'Mire Mirror Spot', 'Hammer Peg Area Mirror Spot', 
-                          'Shopping Mall Mirror Spot', 'Skull Woods Mirror Spot', 'Inverted Pyramid Entrance','Hyrule Castle Entrance (South)', 'Secret Passage Outer Bushes', 'LW Hyrule Castle Ledge SQ', 'Bush Covered Lawn Outer Bushes',
+                          'Shopping Mall Mirror Spot', 'Skull Woods Mirror Spot', 'Inverted Pyramid Entrance','Hyrule Castle Entrance (South)', 'Secret Passage Outer Bushes', 'Bush Covered Lawn Outer Bushes',
                           'Potion Shop Outer Bushes', 'Graveyard Cave Outer Bushes', 'Bomb Hut Outer Bushes']),
         create_lw_region(player, 'Bush Covered Lawn', None, ['Bush Covered House', 'Bush Covered Lawn Inner Bushes', 'Bush Covered Lawn Mirror Spot']),
         create_lw_region(player, 'Bomb Hut Area', None, ['Light World Bomb Hut', 'Bomb Hut Inner Bushes', 'Bomb Hut Mirror Spot']),
@@ -124,14 +124,14 @@ def create_inverted_regions(world, player):
         create_cave_region(player, 'Old Man House', 'a connector', None, ['Old Man House Exit (Bottom)', 'Old Man House Front to Back']),
         create_cave_region(player, 'Old Man House Back', 'a connector', None, ['Old Man House Exit (Top)', 'Old Man House Back to Front']),
         create_lw_region(player, 'Death Mountain', None, ['Old Man Cave (East)', 'Old Man House (Bottom)', 'Old Man House (Top)', 'Death Mountain Return Cave (East)', 'Spectacle Rock Cave', 
-                                                  'Spectacle Rock Cave Peak', 'Spectacle Rock Cave (Bottom)', 'Broken Bridge (West)', 'Death Mountain Mirror Spot', 'WDM Hyrule Castle Ledge SQ']),
+                                                  'Spectacle Rock Cave Peak', 'Spectacle Rock Cave (Bottom)', 'Broken Bridge (West)', 'Death Mountain Mirror Spot']),
         create_cave_region(player, 'Death Mountain Return Cave', 'a connector', None, ['Death Mountain Return Cave Exit (West)', 'Death Mountain Return Cave Exit (East)']),
         create_lw_region(player, 'Death Mountain Return Ledge', None, ['Death Mountain Return Ledge Drop', 'Death Mountain Return Cave (West)', 'Bumper Cave Ledge Mirror Spot']),
         create_cave_region(player, 'Spectacle Rock Cave (Top)', 'a connector', ['Spectacle Rock Cave'], ['Spectacle Rock Cave Drop', 'Spectacle Rock Cave Exit (Top)']),
         create_cave_region(player, 'Spectacle Rock Cave (Bottom)', 'a connector', None, ['Spectacle Rock Cave Exit']),
         create_cave_region(player, 'Spectacle Rock Cave (Peak)', 'a connector', None, ['Spectacle Rock Cave Peak Drop', 'Spectacle Rock Cave Exit (Peak)']),
         create_lw_region(player, 'East Death Mountain (Bottom)', None, ['Broken Bridge (East)', 'Paradox Cave (Bottom)', 'Paradox Cave (Middle)', 'East Death Mountain Mirror Spot (Bottom)', 'Hookshot Fairy', 
-                                                                'Fairy Ascension Rocks', 'Spiral Cave (Bottom)', 'EDM Hyrule Castle Ledge SQ']),
+                                                                'Fairy Ascension Rocks', 'Spiral Cave (Bottom)']),
         create_cave_region(player, 'Hookshot Fairy', 'fairies deep in a cave'),
         create_cave_region(player, 'Paradox Cave Front', 'a connector', None, ['Paradox Cave Push Block Reverse', 'Paradox Cave Exit (Bottom)', 'Light World Death Mountain Shop']),
         create_cave_region(player, 'Paradox Cave Chest Area', 'a connector', ['Paradox Cave Lower - Far Left',
@@ -347,7 +347,6 @@ def _create_region(player, name, type, hint='Hyrule', locations=None, exits=None
 def mark_dark_world_regions(world):
     # cross world caves may have some sections marked as both in_light_world, and in_dark_work.
     # That is ok. the bunny logic will check for this case and incorporate special rules.
-
     queue = collections.deque(region for region in world.regions if region.type == RegionType.DarkWorld)
     seen = set(queue)
     while queue:

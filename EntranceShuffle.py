@@ -1184,7 +1184,8 @@ def link_inverted_entrances(world, player):
             connect_two_way(world, entrance2, exit2, player)
         
         # place links house
-        links_house = random.choice(list(bomb_shop_doors + blacksmith_doors))
+        links_house_doors = [i for i in bomb_shop_doors + blacksmith_doors if i not in Inverted_Dark_Sanctuary_Doors + Isolated_LH_Doors]
+        links_house = random.choice(list(links_house_doors))
         connect_two_way(world, links_house, 'Inverted Links House Exit', player)
         if links_house in bomb_shop_doors:
             bomb_shop_doors.remove(links_house)
@@ -1256,7 +1257,8 @@ def link_inverted_entrances(world, player):
         door_targets = list(Inverted_Single_Cave_Targets)
 
         # place links house
-        links_house = random.choice(list(lw_entrances + dw_entrances + lw_must_exits))
+        links_house_doors = [i for i in lw_entrances + dw_entrances + lw_must_exits if i not in Inverted_Dark_Sanctuary_Doors + Isolated_LH_Doors]
+        links_house = random.choice(list(links_house_doors))
         connect_two_way(world, links_house, 'Inverted Links House Exit', player)
         if links_house in lw_entrances:
             lw_entrances.remove(links_house)
@@ -1386,8 +1388,8 @@ def link_inverted_entrances(world, player):
         caves.remove('Inverted Agahnims Tower Exit')
         
         # place links house
-        links_house_doors = [door for door in lw_entrances + dw_entrances + lw_must_exits]
-        links_house = random.choice(links_house_doors)
+        links_house_doors = [i for i in lw_entrances + dw_entrances + lw_must_exits if i not in Inverted_Dark_Sanctuary_Doors + Isolated_LH_Doors]
+        links_house = random.choice(list(links_house_doors))
         connect_two_way(world, links_house, 'Inverted Links House Exit', player)
         if links_house in lw_entrances:
             lw_entrances.remove(links_house)
@@ -1525,7 +1527,8 @@ def link_inverted_entrances(world, player):
 
 
         # place links house
-        links_house = random.choice(list(entrances + must_exits))
+        links_house_doors = [i for i in entrances + must_exits if i not in Inverted_Dark_Sanctuary_Doors + Isolated_LH_Doors]
+        links_house = random.choice(list(links_house_doors))
         connect_two_way(world, links_house, 'Inverted Links House Exit', player)
         if links_house in entrances:
             entrances.remove(links_house)
@@ -1656,7 +1659,8 @@ def link_inverted_entrances(world, player):
         caves.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
         
         # place links house and dark sanc
-        links_house = random.choice(list(entrances + entrances_must_exits))
+        links_house_doors = [i for i in entrances + entrances_must_exits if i not in Inverted_Dark_Sanctuary_Doors + Isolated_LH_Doors]
+        links_house = random.choice(list(links_house_doors))
         connect_two_way(world, links_house, 'Inverted Links House Exit', player)
         if links_house in entrances:
             entrances.remove(links_house)
@@ -2824,8 +2828,17 @@ Inverted_Dark_Sanctuary_Doors = ['Inverted Dark Sanctuary',
                                  'Red Shield Shop',
                                  'Bumper Cave (Bottom)',
                                  'Bumper Cave (Top)',
-                                 'Skull Woods Final Section',
                                  'Thieves Town']
+
+Isolated_LH_Doors = ['Kings Grave',
+                     'Waterfall of Wishing',
+                     'Desert Palace Entrance (South)',
+                     'Desert Palace Entrance (North)',
+                     'Capacity Upgrade',
+                     'Ice Palace',
+                     'Skull Woods Final Section',
+                     'Dark World Hammer Peg Cave',
+                     'Turtle Rock Isolated Ledge Entrance']
 
 # these are connections that cannot be shuffled and always exist. They link together separate parts of the world we need to divide into regions
 mandatory_connections = [('Lake Hylia Central Island Pier', 'Lake Hylia Central Island'),
@@ -3141,9 +3154,6 @@ inverted_mandatory_connections = [('Lake Hylia Central Island Pier', 'Lake Hylia
                                   ('Ganon Drop', 'Bottom of Pyramid'),
                                   ('Pyramid Drop', 'East Dark World'),
                                   ('Post Aga Teleporter', 'Light World'),
-                                  ('LW Hyrule Castle Ledge SQ', 'Hyrule Castle Ledge'),
-                                  ('EDM Hyrule Castle Ledge SQ', 'Hyrule Castle Ledge'),
-                                  ('WDM Hyrule Castle Ledge SQ', 'Hyrule Castle Ledge'),
                                   ('Secret Passage Inner Bushes', 'Light World'),
                                   ('Secret Passage Outer Bushes', 'Hyrule Castle Secret Entrance Area'),
                                   ('Potion Shop Inner Bushes', 'Light World'),
