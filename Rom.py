@@ -1407,14 +1407,15 @@ def set_inverted_mode(world, rom):
     rom.write_byte(snes_to_pc(0x08D40C), 0xD0)  # morph proof
     # the following bytes should only be written in vanilla
     # or they'll overwrite the randomizer's shuffles
-    if world.shuffle == ['vanilla', 'dungeonssimple', 'dungeonsfull']:
-        rom.write_byte(0x15B8C, 0x6C)
-        rom.write_byte(0xDBB73 + 0x00, 0x53)  # switch bomb shop and links house
-        rom.write_byte(0xDBB73 + 0x52, 0x01)
+    if world.shuffle == 'vanilla':
         rom.write_byte(0xDBB73 + 0x23, 0x37)  # switch AT and GT
         rom.write_byte(0xDBB73 + 0x36, 0x24)
         rom.write_int16(0x15AEE + 2*0x38, 0x00E0)
         rom.write_int16(0x15AEE + 2*0x25, 0x000C)
+    if world.shuffle in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+        rom.write_byte(0x15B8C, 0x6C)
+        rom.write_byte(0xDBB73 + 0x00, 0x53)  # switch bomb shop and links house
+        rom.write_byte(0xDBB73 + 0x52, 0x01)
         rom.write_byte(0xDBB73 + 0x15, 0x06)  # bumper and old man cave
         rom.write_int16(0x15AEE + 2*0x17, 0x00F0)
         rom.write_byte(0xDBB73 + 0x05, 0x16)
@@ -1469,7 +1470,7 @@ def set_inverted_mode(world, rom):
     rom.write_int16(snes_to_pc(0x02D9A6), 0x005A)
     rom.write_byte(snes_to_pc(0x02D9B3), 0x12)
     # keep the old man spawn point at old man house unless shuffle is vanilla
-    if world.shuffle == ['vanilla', 'dungeonsfull', 'dungeonssimple']:
+    if world.shuffle in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
         rom.write_bytes(snes_to_pc(0x308350), [0x00, 0x00, 0x01])
         rom.write_int16(snes_to_pc(0x02D8DE), 0x00F1) 
         rom.write_bytes(snes_to_pc(0x02D910), [0x1F, 0x1E, 0x1F, 0x1F, 0x03, 0x02, 0x03, 0x03])
