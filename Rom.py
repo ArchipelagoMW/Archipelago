@@ -785,11 +785,11 @@ def patch_rom(world, player, rom):
     rom.write_byte(0x180029, 0x01) # Smithy quick item give
 
     # set swordless mode settings
-    rom.write_byte(0x18003F, 0x01 if world.mode == 'swordless' else 0x00)  # hammer can harm ganon
-    rom.write_byte(0x180040, 0x01 if world.mode == 'swordless' else 0x00)  # open curtains
-    rom.write_byte(0x180041, 0x01 if world.mode == 'swordless' else 0x00)  # swordless medallions
-    rom.write_byte(0x180043, 0xFF if world.mode == 'swordless' else 0x00)  # starting sword for link
-    rom.write_byte(0x180044, 0x01 if world.mode == 'swordless' else 0x00)  # hammer activates tablets
+    rom.write_byte(0x18003F, 0x01 if world.swords == 'swordless' else 0x00)  # hammer can harm ganon
+    rom.write_byte(0x180040, 0x01 if world.swords == 'swordless' else 0x00)  # open curtains
+    rom.write_byte(0x180041, 0x01 if world.swords == 'swordless' else 0x00)  # swordless medallions
+    rom.write_byte(0x180043, 0xFF if world.swords == 'swordless' else 0x00)  # starting sword for link
+    rom.write_byte(0x180044, 0x01 if world.swords == 'swordless' else 0x00)  # hammer activates tablets
 
     # set up clocks for timed modes
     if world.shuffle == 'vanilla':
@@ -1442,13 +1442,14 @@ def set_inverted_mode(world, rom):
     # the following bytes should only be written in vanilla
     # or they'll overwrite the randomizer's shuffles
     if world.shuffle == 'vanilla':
-        rom.write_byte(0x15B8C, 0x6C)
-        rom.write_byte(0xDBB73 + 0x00, 0x53)  # switch bomb shop and links house
-        rom.write_byte(0xDBB73 + 0x52, 0x01)
         rom.write_byte(0xDBB73 + 0x23, 0x37)  # switch AT and GT
         rom.write_byte(0xDBB73 + 0x36, 0x24)
         rom.write_int16(0x15AEE + 2*0x38, 0x00E0)
         rom.write_int16(0x15AEE + 2*0x25, 0x000C)
+    if world.shuffle in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+        rom.write_byte(0x15B8C, 0x6C)
+        rom.write_byte(0xDBB73 + 0x00, 0x53)  # switch bomb shop and links house
+        rom.write_byte(0xDBB73 + 0x52, 0x01)
         rom.write_byte(0xDBB73 + 0x15, 0x06)  # bumper and old man cave
         rom.write_int16(0x15AEE + 2*0x17, 0x00F0)
         rom.write_byte(0xDBB73 + 0x05, 0x16)
@@ -1503,7 +1504,7 @@ def set_inverted_mode(world, rom):
     rom.write_int16(snes_to_pc(0x02D9A6), 0x005A)
     rom.write_byte(snes_to_pc(0x02D9B3), 0x12)
     # keep the old man spawn point at old man house unless shuffle is vanilla
-    if world.shuffle == 'vanilla':
+    if world.shuffle in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
         rom.write_bytes(snes_to_pc(0x308350), [0x00, 0x00, 0x01])
         rom.write_int16(snes_to_pc(0x02D8DE), 0x00F1) 
         rom.write_bytes(snes_to_pc(0x02D910), [0x1F, 0x1E, 0x1F, 0x1F, 0x03, 0x02, 0x03, 0x03])
@@ -1564,9 +1565,9 @@ def set_inverted_mode(world, rom):
                                                  0x190F, 0x9D04, 0x9D04])
     rom.write_int16s(snes_to_pc(0x1bb810), [0x00BE, 0x00C0, 0x013E])
     rom.write_int16s(snes_to_pc(0x1bb836), [0x001B, 0x001B, 0x001B])
-    rom.write_int16(snes_to_pc(0x308300), 0x0140)
+    rom.write_int16(snes_to_pc(0x308300), 0x0140) # new pyramid hole entrance
     rom.write_int16(snes_to_pc(0x308320), 0x001B)
-    if world.shuffle == 'vanilla':
+    if world.shuffle in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
         rom.write_byte(snes_to_pc(0x308340), 0x7B)
     rom.write_int16(snes_to_pc(0x1af504), 0x148B)
     rom.write_int16(snes_to_pc(0x1af50c), 0x149B)
@@ -1603,10 +1604,10 @@ def set_inverted_mode(world, rom):
     rom.write_bytes(snes_to_pc(0x1BC85A), [0x50, 0x0F, 0x82])
     rom.write_int16(0xDB96F + 2 * 0x35, 0x001B)  # move pyramid exit door
     rom.write_int16(0xDBA71 + 2 * 0x35, 0x06A4)
-    if world.shuffle == 'vanilla':
+    if world.shuffle in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
         rom.write_byte(0xDBB73 + 0x35, 0x36)
     rom.write_byte(snes_to_pc(0x09D436), 0xF3)  # remove castle gate warp
-    if world.shuffle == 'vanilla':
+    if world.shuffle in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
         rom.write_int16(0x15AEE + 2 * 0x37, 0x0010)  # pyramid exit to new hc area
         rom.write_byte(0x15B8C + 0x37, 0x1B)
         rom.write_int16(0x15BDB + 2 * 0x37, 0x0418)
@@ -1630,8 +1631,6 @@ def set_inverted_mode(world, rom):
 def patch_shuffled_dark_sanc(world, rom, player):
     dark_sanc_entrance = str(world.get_region('Inverted Dark Sanctuary', player).entrances[0].name)
     room_id, ow_area, vram_loc, scroll_y, scroll_x, link_y, link_x, camera_y, camera_x, unknown_1, unknown_2, door_1, door_2 = door_addresses[dark_sanc_entrance][1]
-    if dark_sanc_entrance == 'Skull Woods Final Section':
-        link_y = 0x00F8
     door_index = door_addresses[str(dark_sanc_entrance)][0]
     
     rom.write_byte(0x180241, 0x01)
