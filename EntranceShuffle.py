@@ -1609,7 +1609,7 @@ def link_inverted_entrances(world, player):
         # and rentering to find bomb shop. However appended list here is all those that we currently have
         # bomb shop logic for.
         # Specifically we could potentially add: 'Dark Death Mountain Ledge (East)' and doors associated with pits
-        bomb_shop_doors = list(Inverted_Bomb_Shop_Single_Cave_Doors + Inverted_Bomb_Shop_Multi_Cave_Doors + ['Desert Palace Entrance (East)', 'Turtle Rock Isolated Ledge Entrance', 'Bumper Cave (Top)', 'Hookshot Cave Back Entrance'])
+        bomb_shop_doors = list(Inverted_Bomb_Shop_Single_Cave_Doors + Inverted_Bomb_Shop_Multi_Cave_Doors + ['Turtle Rock Isolated Ledge Entrance', 'Bumper Cave (Top)', 'Hookshot Cave Back Entrance'])
         blacksmith_doors = list(Inverted_Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
         door_targets = list(Inverted_Single_Cave_Targets)
 
