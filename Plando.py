@@ -20,7 +20,7 @@ from Main import create_playthrough
 __version__ = '0.2-dev'
 
 def main(args):
-    start_time = time.clock()
+    start_time = time.process_time()
 
     # initialize the world
     world = World(1, 'vanilla', 'noglitches', 'standard', 'normal', 'none', 'on', 'ganon', 'freshness', False, False, False, args.quickswap, args.fastmenu, args.disablemusic, False, False, False, None, 'none', False)
@@ -89,7 +89,7 @@ def main(args):
         world.spoiler.to_file('%s_Spoiler.txt' % outfilebase)
 
     logger.info('Done. Enjoy.')
-    logger.debug('Total Time: %s', time.clock() - start_time)
+    logger.debug('Total Time: %s', time.process_time() - start_time)
 
     return world
 
