@@ -1181,7 +1181,10 @@ def write_strings(rom, world, player):
         entrances_to_hint = {}
         entrances_to_hint.update(InconvenientDungeonEntrances)
         if world.shuffle_ganon:
-            entrances_to_hint.update({'Ganons Tower': 'Ganon\'s Tower'})
+            if world.mode == 'inverted':
+                entrances_to_hint.update({'Inverted Ganons Tower': 'The sealed castle door'})
+            else:
+                entrances_to_hint.update({'Ganons Tower': 'Ganon\'s Tower'})
         if world.shuffle in ['simple', 'restricted', 'restricted_legacy']:
             for entrance in all_entrances:
                 if entrance.name in entrances_to_hint:
@@ -1211,13 +1214,27 @@ def write_strings(rom, world, player):
         if world.shuffle not in ['simple', 'restricted', 'restricted_legacy']:
             entrances_to_hint.update(ConnectorEntrances)
             entrances_to_hint.update(DungeonEntrances)
+            if world.mode == 'inverted':
+                entrances_to_hint.update({'Inverted Agahnims Tower': 'The dark mountain tower'})
+            else:
+                entrances_to_hint.update({'Agahnims Tower': 'The sealed castle door'})
         elif world.shuffle == 'restricted':
             entrances_to_hint.update(ConnectorEntrances)
         entrances_to_hint.update(OtherEntrances)
+        if world.mode == 'inverted':
+            entrances_to_hint.update({'Inverted Dark Sanctuary': 'The dark sanctuary cave'})
+            entrances_to_hint.update({'Inverted Big Bomb Shop': 'The old hero\'s dark home'})
+            entrances_to_hint.update({'Inverted Links House': 'The old hero\'s light home'})
+        else:
+            entrances_to_hint.update({'Dark Sanctuary Hint': 'The dark sanctuary cave'})
+            entrances_to_hint.update({'Big Bomb Shop': 'The old bomb shop'})
         if world.shuffle in ['insanity', 'madness_legacy', 'insanity_legacy']:
             entrances_to_hint.update(InsanityEntrances)
             if world.shuffle_ganon:
-                entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
+                if world.mode == 'inverted':
+                    entrances_to_hint.update({'Inverted Pyramid Entrance': 'The extra castle passage'})
+                else:
+                    entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
         hint_count = 4 if world.shuffle not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 0
         for entrance in all_entrances:
             if entrance.name in entrances_to_hint:
@@ -1688,7 +1705,6 @@ DungeonEntrances = {'Eastern Palace': 'Eastern Palace',
                     'Palace of Darkness': 'Palace of Darkness',
                     'Hyrule Castle Entrance (West)': 'The left castle door',
                     'Hyrule Castle Entrance (East)': 'The right castle door',
-                    'Agahnims Tower': 'The sealed castle door',
                     'Desert Palace Entrance (West)': 'The westmost building in the desert',
                     'Desert Palace Entrance (North)': 'The northmost cave in the desert'
                     }
@@ -1733,10 +1749,8 @@ OtherEntrances = {'Blinds Hideout': 'Blind\'s old house',
                   'Bonk Fairy (Light)': 'The rock pile near your home',
                   'Hookshot Fairy': 'The left paired cave on east DM',
 				  'Bonk Fairy (Dark)': 'The rock pile near the old bomb shop',
-                  'Dark Sanctuary Hint': 'The dark sanctuary cave',
                   'Dark Lake Hylia Fairy': 'The cave NE dark Lake Hylia',
                   'C-Shaped House': 'The NE house in Village of Outcasts',
-                  'Big Bomb Shop': 'The old bomb shop',
                   'Dark Death Mountain Fairy': 'The SW cave on dark DM',
                   'Dark Lake Hylia Shop': 'The building NW dark Lake Hylia',
                   'Dark World Shop': 'The hammer sealed building',
