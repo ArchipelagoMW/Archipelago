@@ -178,7 +178,7 @@ def generate_itempool(world, player):
     # set up item pool
     if world.custom:
         (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.swords, world.retro, world.customitemarray)
-        world.rupoor_cost = min(world.customitemarray[67], 9999)
+        world.rupoor_cost = min(world.customitemarray[69], 9999)
     else:
         (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.swords, world.retro)
     world.itempool += ItemFactory(pool, player)
@@ -489,16 +489,16 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
     treasure_hunt_icon = None
 
     # Correct for insanely oversized item counts and take initial steps to handle undersized pools.
-    for x in range(0, 64):
+    for x in range(0, 66):
         if customitemarray[x] > total_items_to_place:
             customitemarray[x] = total_items_to_place
-    if customitemarray[66] > total_items_to_place:
-        customitemarray[66] = total_items_to_place
+    if customitemarray[68] > total_items_to_place:
+        customitemarray[68] = total_items_to_place
     itemtotal = 0
-    for x in range(0, 65):
+    for x in range(0, 66):
         itemtotal = itemtotal + customitemarray[x]
-    itemtotal = itemtotal + customitemarray[66]
     itemtotal = itemtotal + customitemarray[68]
+    itemtotal = itemtotal + customitemarray[70]
 
     pool.extend(['Bow'] * customitemarray[0])
     pool.extend(['Silver Arrows']* customitemarray[1])
@@ -559,8 +559,10 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
     pool.extend(['Blue Clock'] * customitemarray[61])
     pool.extend(['Green Clock'] * customitemarray[62])
     pool.extend(['Red Clock'] * customitemarray[63])
-    pool.extend(['Triforce Piece'] * customitemarray[64])
-    pool.extend(['Triforce'] * customitemarray[66])
+    pool.extend(['Progressive Bow'] * customitemarray[64])
+    pool.extend(['Bombs (10)'] * customitemarray[65])
+    pool.extend(['Triforce Piece'] * customitemarray[66])
+    pool.extend(['Triforce'] * customitemarray[68])
 
     diff = difficulties[difficulty]
 
@@ -575,12 +577,12 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
             thisbottle = random.choice(diff.bottles)
         pool.append(thisbottle)
 
-    if customitemarray[64] > 0 or customitemarray[65] > 0:
-        treasure_hunt_count = max(min(customitemarray[65], 99), 1) #To display, count must be between 1 and 99.
+    if customitemarray[66] > 0 or customitemarray[67] > 0:
+        treasure_hunt_count = max(min(customitemarray[67], 99), 1) #To display, count must be between 1 and 99.
         treasure_hunt_icon = 'Triforce Piece'
         # Ensure game is always possible to complete here, force sufficient pieces if the player is unwilling.
-        if (customitemarray[64] < treasure_hunt_count) and (goal == 'triforcehunt') and (customitemarray[66] == 0):
-            extrapieces = treasure_hunt_count - customitemarray[64]
+        if (customitemarray[66] < treasure_hunt_count) and (goal == 'triforcehunt') and (customitemarray[68] == 0):
+            extrapieces = treasure_hunt_count - customitemarray[66]
             pool.extend(['Triforce Piece'] * extrapieces)
             itemtotal = itemtotal + extrapieces
 
@@ -599,11 +601,11 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
         if retro:
             key_location = random.choice(['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest', 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
             placed_items.append((key_location, 'Small Key (Universal)'))
-            pool.extend(['Small Key (Universal)'] * max((customitemarray[68] - 1), 0))
+            pool.extend(['Small Key (Universal)'] * max((customitemarray[70] - 1), 0))
         else:
-            pool.extend(['Small Key (Universal)'] * customitemarray[68])
+            pool.extend(['Small Key (Universal)'] * customitemarray[70])
     else:
-        pool.extend(['Small Key (Universal)'] * customitemarray[68])
+        pool.extend(['Small Key (Universal)'] * customitemarray[70])
 
     pool.extend(['Fighter Sword'] * customitemarray[32])
     pool.extend(['Progressive Sword'] * customitemarray[36])

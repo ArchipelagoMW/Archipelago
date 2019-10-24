@@ -398,8 +398,8 @@ def guiMain(args=None):
                                    int(sword3Var.get()), int(sword4Var.get()), int(progswordVar.get()), int(shield1Var.get()), int(shield2Var.get()), int(shield3Var.get()), int(progshieldVar.get()), int(bluemailVar.get()),
                                    int(redmailVar.get()), int(progmailVar.get()), int(halfmagicVar.get()), int(quartermagicVar.get()), int(bcap5Var.get()), int(bcap10Var.get()), int(acap5Var.get()), int(acap10Var.get()),
                                    int(arrow1Var.get()), int(arrow10Var.get()), int(bomb1Var.get()), int(bomb3Var.get()), int(rupee1Var.get()), int(rupee5Var.get()), int(rupee20Var.get()), int(rupee50Var.get()), int(rupee100Var.get()),
-                                   int(rupee300Var.get()), int(rupoorVar.get()), int(blueclockVar.get()), int(greenclockVar.get()), int(redclockVar.get()), int(triforcepieceVar.get()), int(triforcecountVar.get()),
-                                   int(triforceVar.get()), int(rupoorcostVar.get()), int(universalkeyVar.get())]
+                                   int(rupee300Var.get()), int(rupoorVar.get()), int(blueclockVar.get()), int(greenclockVar.get()), int(redclockVar.get()), int(progbowVar.get()), int(bomb10Var.get()), int(triforcepieceVar.get()),
+                                   int(triforcecountVar.get()), int(triforceVar.get()),  int(rupoorcostVar.get()), int(universalkeyVar.get())]
         guiargs.rom = romVar.get()
         guiargs.jsonout = None
         guiargs.sprite = sprite
@@ -553,19 +553,19 @@ def guiMain(args=None):
 
     bowFrame = Frame(itemList1)
     bowLabel = Label(bowFrame, text='Bow')
-    bowVar = StringVar(value='1')
+    bowVar = StringVar(value='0')
     bowEntry = Entry(bowFrame, textvariable=bowVar, width=3, validate='all', vcmd=vcmd)
     bowFrame.pack()
     bowLabel.pack(anchor=W, side=LEFT, padx=(0,53))
     bowEntry.pack(anchor=E)
 
-    silverarrowFrame = Frame(itemList1)
-    silverarrowLabel = Label(silverarrowFrame, text='Silver Arrow')
-    silverarrowVar = StringVar(value='1')
-    silverarrowEntry = Entry(silverarrowFrame, textvariable=silverarrowVar, width=3, validate='all', vcmd=vcmd)
-    silverarrowFrame.pack()
-    silverarrowLabel.pack(anchor=W, side=LEFT, padx=(0,13))
-    silverarrowEntry.pack(anchor=E)
+    progbowFrame = Frame(itemList1)
+    progbowLabel = Label(progbowFrame, text='Prog.Bow')
+    progbowVar = StringVar(value='2')
+    progbowEntry = Entry(progbowFrame, textvariable=progbowVar, width=3, validate='all', vcmd=vcmd)
+    progbowFrame.pack()
+    progbowLabel.pack(anchor=W, side=LEFT, padx=(0,25))
+    progbowEntry.pack(anchor=E)
 
     boomerangFrame = Frame(itemList1)
     boomerangLabel = Label(boomerangFrame, text='Boomerang')
@@ -921,7 +921,7 @@ def guiMain(args=None):
 
     bcap5Frame = Frame(itemList3)
     bcap5Label = Label(bcap5Frame, text='Bomb C.+5')
-    bcap5Var = StringVar(value='6')
+    bcap5Var = StringVar(value='0')
     bcap5Entry = Entry(bcap5Frame, textvariable=bcap5Var, width=3, validate='all', vcmd=vcmd)
     bcap5Frame.pack()
     bcap5Label.pack(anchor=W, side=LEFT, padx=(0,16))
@@ -929,7 +929,7 @@ def guiMain(args=None):
 
     bcap10Frame = Frame(itemList3)
     bcap10Label = Label(bcap10Frame, text='Bomb C.+10')
-    bcap10Var = StringVar(value='1')
+    bcap10Var = StringVar(value='0')
     bcap10Entry = Entry(bcap10Frame, textvariable=bcap10Var, width=3, validate='all', vcmd=vcmd)
     bcap10Frame.pack()
     bcap10Label.pack(anchor=W, side=LEFT, padx=(0,10))
@@ -937,7 +937,7 @@ def guiMain(args=None):
 
     acap5Frame = Frame(itemList4)
     acap5Label = Label(acap5Frame, text='Arrow C.+5')
-    acap5Var = StringVar(value='6')
+    acap5Var = StringVar(value='0')
     acap5Entry = Entry(acap5Frame, textvariable=acap5Var, width=3, validate='all', vcmd=vcmd)
     acap5Frame.pack()
     acap5Label.pack(anchor=W, side=LEFT, padx=(0,7))
@@ -945,7 +945,7 @@ def guiMain(args=None):
 
     acap10Frame = Frame(itemList4)
     acap10Label = Label(acap10Frame, text='Arrow C.+10')
-    acap10Var = StringVar(value='1')
+    acap10Var = StringVar(value='0')
     acap10Entry = Entry(acap10Frame, textvariable=acap10Var, width=3, validate='all', vcmd=vcmd)
     acap10Frame.pack()
     acap10Label.pack(anchor=W, side=LEFT, padx=(0,1))
@@ -961,7 +961,7 @@ def guiMain(args=None):
 
     arrow10Frame = Frame(itemList4)
     arrow10Label = Label(arrow10Frame, text='Arrows (10)')
-    arrow10Var = StringVar(value='5')
+    arrow10Var = StringVar(value='12')
     arrow10Entry = Entry(arrow10Frame, textvariable=arrow10Var, width=3, validate='all', vcmd=vcmd)
     arrow10Frame.pack()
     arrow10Label.pack(anchor=W, side=LEFT, padx=(0,7))
@@ -977,11 +977,19 @@ def guiMain(args=None):
 
     bomb3Frame = Frame(itemList4)
     bomb3Label = Label(bomb3Frame, text='Bombs (3)')
-    bomb3Var = StringVar(value='10')
+    bomb3Var = StringVar(value='16')
     bomb3Entry = Entry(bomb3Frame, textvariable=bomb3Var, width=3, validate='all', vcmd=vcmd)
     bomb3Frame.pack()
     bomb3Label.pack(anchor=W, side=LEFT, padx=(0,13))
     bomb3Entry.pack(anchor=E)
+
+    bomb10Frame = Frame(itemList4)
+    bomb10Label = Label(bomb10Frame, text='Bombs (10)')
+    bomb10Var = StringVar(value='1')
+    bomb10Entry = Entry(bomb10Frame, textvariable=bomb10Var, width=3, validate='all', vcmd=vcmd)
+    bomb10Frame.pack()
+    bomb10Label.pack(anchor=W, side=LEFT, padx=(0,7))
+    bomb10Entry.pack(anchor=E)
 
     rupee1Frame = Frame(itemList4)
     rupee1Label = Label(rupee1Frame, text='Rupee (1)')
@@ -1031,14 +1039,6 @@ def guiMain(args=None):
     rupee300Label.pack(anchor=W, side=LEFT, padx=(0,0))
     rupee300Entry.pack(anchor=E)
 
-    rupoorFrame = Frame(itemList4)
-    rupoorLabel = Label(rupoorFrame, text='Rupoor')
-    rupoorVar = StringVar(value='0')
-    rupoorEntry = Entry(rupoorFrame, textvariable=rupoorVar, width=3, validate='all', vcmd=vcmd)
-    rupoorFrame.pack()
-    rupoorLabel.pack(anchor=W, side=LEFT, padx=(0,28))
-    rupoorEntry.pack(anchor=E)
-
     blueclockFrame = Frame(itemList4)
     blueclockLabel = Label(blueclockFrame, text='Blue Clock')
     blueclockVar = StringVar(value='0')
@@ -1062,6 +1062,14 @@ def guiMain(args=None):
     redclockFrame.pack()
     redclockLabel.pack(anchor=W, side=LEFT, padx=(0,14))
     redclockEntry.pack(anchor=E)
+
+    silverarrowFrame = Frame(itemList5)
+    silverarrowLabel = Label(silverarrowFrame, text='Silver Arrow')
+    silverarrowVar = StringVar(value='0')
+    silverarrowEntry = Entry(silverarrowFrame, textvariable=silverarrowVar, width=3, validate='all', vcmd=vcmd)
+    silverarrowFrame.pack()
+    silverarrowLabel.pack(anchor=W, side=LEFT, padx=(0,64))
+    silverarrowEntry.pack(anchor=E)
 
     universalkeyFrame = Frame(itemList5)
     universalkeyLabel = Label(universalkeyFrame, text='Universal Key')
@@ -1094,6 +1102,14 @@ def guiMain(args=None):
     triforceFrame.pack()
     triforceLabel.pack(anchor=W, side=LEFT, padx=(0,23))
     triforceEntry.pack(anchor=E)
+
+    rupoorFrame = Frame(itemList5)
+    rupoorLabel = Label(rupoorFrame, text='Rupoor')
+    rupoorVar = StringVar(value='0')
+    rupoorEntry = Entry(rupoorFrame, textvariable=rupoorVar, width=3, validate='all', vcmd=vcmd)
+    rupoorFrame.pack()
+    rupoorLabel.pack(anchor=W, side=LEFT, padx=(0,87))
+    rupoorEntry.pack(anchor=E)
 
     rupoorcostFrame = Frame(itemList5)
     rupoorcostLabel = Label(rupoorcostFrame, text='Rupoor Cost')
