@@ -662,8 +662,10 @@ def patch_rom(world, player, rom):
                     [difficulty.progressive_sword_limit, overflow_replacement,
                      difficulty.progressive_shield_limit, overflow_replacement,
                      difficulty.progressive_armor_limit, overflow_replacement,
-                     difficulty.progressive_bottle_limit, overflow_replacement,
-                     difficulty.progressive_bow_limit, overflow_replacement])
+                     difficulty.progressive_bottle_limit, overflow_replacement])
+    
+    #Work around for json patch ordering issues - write bow limit separately so that it is replaced in the patch
+    rom.write_bytes(0x180098, [difficulty.progressive_bow_limit, overflow_replacement])
     
     if difficulty.progressive_bow_limit < 2 and world.swords == 'swordless':
         rom.write_bytes(0x180098, [2, overflow_replacement])
