@@ -338,8 +338,7 @@ def balance_multiworld_progression(world):
             reachable_locations_count[location.player] += 1
 
         if checked_locations:
-            average_reachable_locations = sum(reachable_locations_count.values()) / world.players
-            threshold = ((average_reachable_locations + max(reachable_locations_count.values())) / 2) * 0.8 #todo: probably needs some tweaking
+            threshold = max(reachable_locations_count.values()) - 20
 
             balancing_players = [player for player, reachables in reachable_locations_count.items() if reachables < threshold]
             if balancing_players:
@@ -386,13 +385,12 @@ def balance_multiworld_progression(world):
                                 items_to_replace.append(testing)
 
                 replaced_items = False
-                locations_for_replacing = [l for l in checked_locations if not l.event and not l.locked]
-                while locations_for_replacing and items_to_replace:
-                    new_location = locations_for_replacing.pop()
+                replacement_locations = [l for l in checked_locations if not l.event and not l.locked]
+                while replacement_locations and items_to_replace:
+                    new_location = replacement_locations.pop()
                     old_location = items_to_replace.pop()
                     new_location.item, old_location.item = old_location.item, new_location.item
-                    new_location.event = True
-                    old_location.event = False
+                    new_location.event, old_location.event = True, False
                     state.collect(new_location.item, True, new_location)
                     replaced_items = True
                 if replaced_items:
@@ -402,7 +400,7 @@ def balance_multiworld_progression(world):
                         sphere_locations.append(location)
 
         for location in sphere_locations:
-            if location.event:
+            if location.event and (world.keysanity or not location.item.key):
                 state.collect(location.item, True, location)
         checked_locations.extend(sphere_locations)
 
