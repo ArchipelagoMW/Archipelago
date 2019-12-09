@@ -10,7 +10,7 @@ import sys
 from BaseClasses import World
 from Regions import create_regions
 from EntranceShuffle import link_entrances, connect_entrance, connect_two_way, connect_exit
-from Rom import patch_rom, LocalRom, Sprite, write_string_to_rom
+from Rom import patch_rom, LocalRom, Sprite, write_string_to_rom, apply_rom_settings
 from Rules import set_rules
 from Dungeons import create_dungeons
 from Items import ItemFactory
@@ -74,7 +74,9 @@ def main(args):
         sprite = None
 
     rom = LocalRom(args.rom)
-    patch_rom(world, 1, rom, args.heartbeep, args.heartcolor, sprite)
+    patch_rom(world, 1, rom)
+
+    apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite)
 
     for textname, texttype, text in text_patches:
         if texttype == 'text':

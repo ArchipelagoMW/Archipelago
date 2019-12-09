@@ -781,12 +781,13 @@ class Boss(object):
         return self.defeat_rule(state, self.player)
 
 class Location(object):
-    def __init__(self, player, name='', address=None, crystal=False, hint_text=None, parent=None):
+    def __init__(self, player, name='', address=None, crystal=False, hint_text=None, parent=None, player_address=None):
         self.name = name
         self.parent_region = parent
         self.item = None
         self.crystal = crystal
         self.address = address
+        self.player_address = player_address
         self.spot_type = 'Location'
         self.hint_text = hint_text if hint_text is not None else 'Hyrule'
         self.recursion_count = 0
@@ -1033,6 +1034,7 @@ class Spoiler(object):
                          'accessibility': self.world.accessibility,
                          'hints': self.world.hints,
                          'keysanity': self.world.keysanity,
+                         'players': self.world.players
                          }
 
     def to_json(self):

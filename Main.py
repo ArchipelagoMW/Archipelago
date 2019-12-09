@@ -4,6 +4,7 @@ from itertools import zip_longest
 import json
 import logging
 import os
+import pickle
 import random
 import time
 
@@ -16,7 +17,7 @@ from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
 from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, flood_items, balance_multiworld_progression
 from ItemList import generate_itempool, difficulties, fill_prizes
-from Utils import output_path
+from Utils import output_path, parse_names_string
 
 __version__ = '0.6.3-pre'
 
@@ -120,16 +121,18 @@ def main(args, seed=None):
     else:
         sprite = None
 
+    player_names = parse_names_string(args.names)
     outfilebase = 'ER_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s_%s' % (world.logic, world.difficulty, world.difficulty_adjustments, world.mode, world.goal, "" if world.timer in ['none', 'display'] else "-" + world.timer, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-retro" if world.retro else "", "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "", "-nohints" if not world.hints else "", world.seed)
 
     use_enemizer = args.enemizercli and (args.shufflebosses != 'none' or args.shuffleenemies or args.enemy_health != 'default' or args.enemy_health != 'default' or args.enemy_damage or args.shufflepalette or args.shufflepots)
 
     jsonout = {}
     if not args.suppress_rom:
-        if world.players > 1:
-            raise NotImplementedError("Multiworld rom writes have not been implemented")
-        else:
-            player = 1
+        from MultiServer import MultiWorld
+        multidata = MultiWorld()
+        multidata.players = world.players
+
+        for player in range(1, world.players + 1):
 
             local_rom = None
             if args.jsonout:
@@ -147,17 +150,25 @@ def main(args, seed=None):
             if use_enemizer:
                 enemizer_patch = get_enemizer_patch(world, player, rom, args.rom, args.enemizercli, args.shuffleenemies, args.enemy_health, args.enemy_damage, args.shufflepalette, args.shufflepots)
 
+            multidata.rom_names[player] = list(rom.name)
+            for location in world.get_filled_locations(player):
+                if type(location.address) is int:
+                    multidata.locations[(location.address, player)] = (location.item.code, location.item.player)
+
             if args.jsonout:
-                jsonout['patch'] = rom.patches
+                jsonout[f'patch{player}'] = rom.patches
                 if use_enemizer:
-                    jsonout['enemizer' % player] = enemizer_patch
+                    jsonout[f'enemizer{player}'] = enemizer_patch
             else:
                 if use_enemizer:
                     local_rom.patch_enemizer(rom.patches, os.path.join(os.path.dirname(args.enemizercli), "enemizerBasePatch.json"), enemizer_patch)
                     rom = local_rom
 
-                apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite)
-                rom.write_to_file(output_path('%s.sfc' % outfilebase))
+                apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite, player_names)
+                rom.write_to_file(output_path(f'{outfilebase}{f"_P{player}" if world.players > 1 else ""}{f"_{player_names[player]}" if player in player_names else ""}.sfc'))
+
+        with open(output_path('%s_multidata' % outfilebase), 'wb') as f:
+            pickle.dump(multidata, f, pickle.HIGHEST_PROTOCOL)
 
     if args.create_spoiler and not args.jsonout:
         world.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))

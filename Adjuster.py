@@ -38,6 +38,7 @@ def main():
                              Alternatively, can be a ALttP Rom patched with a Link
                              sprite that will be extracted.
                              ''')
+    parser.add_argument('--names', default='', type=str)
     args = parser.parse_args()
 
     # ToDo: Validate files further than mere existance
