@@ -2,6 +2,7 @@
 from argparse import Namespace
 from glob import glob
 import json
+import logging
 import random
 import os
 import shutil
@@ -418,6 +419,7 @@ def guiMain(args=None):
             else:
                 main(seed=guiargs.seed, args=guiargs)
         except Exception as e:
+            logging.exception(e)
             messagebox.showerror(title="Error while creating seed", message=str(e))
         else:
             msgtxt = "Rom patched successfully"
@@ -540,6 +542,7 @@ def guiMain(args=None):
         try:
             adjust(args=guiargs)
         except Exception as e:
+            logging.exception(e)
             messagebox.showerror(title="Error while creating seed", message=str(e))
         else:
             msgtxt = "Rom patched successfully"
