@@ -795,7 +795,7 @@ class Location(object):
         self.recursion_count = 0
         self.staleness_count = 0
         self.event = False
-        self.locked = True
+        self.locked = False
         self.always_allow = lambda item, state: False
         self.access_rule = lambda state: True
         self.item_rule = lambda item: True
