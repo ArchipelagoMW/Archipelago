@@ -351,7 +351,7 @@ def balance_multiworld_progression(world):
                     for location in balancing_sphere:
                         if location.event:
                             balancing_state.collect(location.item, True, location)
-                            if location.item.player in balancing_players:
+                            if location.item.player in balancing_players and not location.locked:
                                 candidate_items.append(location)
                     balancing_sphere = get_sphere_locations(balancing_state, balancing_unchecked_locations)
                     for location in balancing_sphere:
@@ -373,9 +373,6 @@ def balance_multiworld_progression(world):
 
                         reducing_state.sweep_for_events(locations=locations_to_test)
 
-                        if testing.locked:
-                            continue
-
                         if world.has_beaten_game(balancing_state):
                             if not world.has_beaten_game(reducing_state):
                                 items_to_replace.append(testing)
@@ -389,6 +386,11 @@ def balance_multiworld_progression(world):
                 while replacement_locations and items_to_replace:
                     new_location = replacement_locations.pop()
                     old_location = items_to_replace.pop()
+
+                    while not new_location.can_fill(state, old_location.item):
+                        replacement_locations.insert(0, new_location)
+                        new_location = replacement_locations.pop()
+
                     new_location.item, old_location.item = old_location.item, new_location.item
                     new_location.event, old_location.event = True, False
                     state.collect(new_location.item, True, new_location)
