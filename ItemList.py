@@ -184,7 +184,7 @@ def generate_itempool(world, player):
     world.itempool += ItemFactory(pool, player)
     for item in precollected_items:
         world.push_precollected(ItemFactory(item, player))
-    for (location, item) in placed_items:
+    for (location, item) in placed_items.items():
         world.push_item(world.get_location(location, player), ItemFactory(item, player), False)
         world.get_location(location, player).event = True
         world.get_location(location, player).locked = True
@@ -347,13 +347,17 @@ def set_up_shops(world, player):
 
 def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, retro):
     pool = []
-    placed_items = []
+    placed_items = {}
     precollected_items = []
     clock_mode = None
     treasure_hunt_count = None
     treasure_hunt_icon = None
 
     pool.extend(alwaysitems)
+
+    def place_item(loc, item):
+        assert loc not in placed_items
+        placed_items[loc] = item
 
     def want_progressives():
         return random.choice([True, False]) if progressive == 'random' else progressive == 'on'
@@ -367,8 +371,8 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
 
     # insanity shuffle doesn't have fake LW/DW logic so for now guaranteed Mirror and Moon Pearl at the start
     if  shuffle == 'insanity_legacy':
-        placed_items.append(('Link\'s House', 'Magic Mirror'))
-        placed_items.append(('Sanctuary', 'Moon Pearl'))
+        place_item('Link\'s House', 'Magic Mirror')
+        place_item('Sanctuary', 'Moon Pearl')
     else:
         pool.extend(['Magic Mirror', 'Moon Pearl'])
 
@@ -429,13 +433,13 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
             swords_to_use.extend(['Fighter Sword'])
         random.shuffle(swords_to_use)
 
-        placed_items.append(('Link\'s Uncle', swords_to_use.pop()))
-        placed_items.append(('Blacksmith', swords_to_use.pop()))
-        placed_items.append(('Pyramid Fairy - Left', swords_to_use.pop()))
+        place_item('Link\'s Uncle', swords_to_use.pop())
+        place_item('Blacksmith', swords_to_use.pop())
+        place_item('Pyramid Fairy - Left', swords_to_use.pop())
         if goal != 'pedestal':
-            placed_items.append(('Master Sword Pedestal', swords_to_use.pop()))
+            place_item('Master Sword Pedestal', swords_to_use.pop())
         else:
-            placed_items.append(('Master Sword Pedestal', 'Triforce'))
+            place_item('Master Sword Pedestal', 'Triforce')
     else:
         if want_progressives():
             pool.extend(diff.progressivesword)
@@ -466,7 +470,7 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
             extraitems -= len(extra)
 
     if goal == 'pedestal' and swords != 'vanilla':
-        placed_items.append(('Master Sword Pedestal', 'Triforce'))
+        place_item('Master Sword Pedestal', 'Triforce')
     if retro:
         pool = [item.replace('Single Arrow','Rupees (5)') for item in pool]
         pool = [item.replace('Arrows (10)','Rupees (5)') for item in pool]
@@ -475,18 +479,22 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
         pool.extend(diff.retro)
         if mode == 'standard':
             key_location = random.choice(['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest', 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
-            placed_items.append((key_location, 'Small Key (Universal)'))
+            place_item(key_location, 'Small Key (Universal)')
         else:
             pool.extend(['Small Key (Universal)'])
     return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms)
 
 def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, swords, retro, customitemarray):
     pool = []
-    placed_items = []
+    placed_items = {}
     precollected_items = []
     clock_mode = None
     treasure_hunt_count = None
     treasure_hunt_icon = None
+
+    def place_item(loc, item):
+        assert loc not in placed_items
+        placed_items[loc] = item
 
     # Correct for insanely oversized item counts and take initial steps to handle undersized pools.
     for x in range(0, 66):
@@ -594,13 +602,13 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
         clock_mode = 'ohko'
 
     if goal == 'pedestal':
-        placed_items.append(('Master Sword Pedestal', 'Triforce'))
+        place_item('Master Sword Pedestal', 'Triforce')
         itemtotal = itemtotal + 1
 
     if mode == 'standard':
         if retro:
             key_location = random.choice(['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest', 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
-            placed_items.append((key_location, 'Small Key (Universal)'))
+            place_item(key_location, 'Small Key (Universal)')
             pool.extend(['Small Key (Universal)'] * max((customitemarray[70] - 1), 0))
         else:
             pool.extend(['Small Key (Universal)'] * customitemarray[70])
@@ -611,8 +619,8 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
     pool.extend(['Progressive Sword'] * customitemarray[36])
 
     if shuffle == 'insanity_legacy':
-        placed_items.append(('Link\'s House', 'Magic Mirror'))
-        placed_items.append(('Sanctuary', 'Moon Pearl'))
+        place_item('Link\'s House', 'Magic Mirror')
+        place_item('Sanctuary', 'Moon Pearl')
         pool.extend(['Magic Mirror'] * max((customitemarray[22] -1 ), 0))
         pool.extend(['Moon Pearl'] * max((customitemarray[28] - 1), 0))
     else:
