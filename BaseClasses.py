@@ -626,6 +626,8 @@ class CollectionState(object):
             return self.can_reach(item[10])
         #elif item.startswith('has_'):
         #    return self.has(item[4])
+        if item == '__len__':
+            return
 
         raise RuntimeError('Cannot parse %s.' % item)
 
