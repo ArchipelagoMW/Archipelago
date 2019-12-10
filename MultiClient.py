@@ -621,12 +621,13 @@ async def process_server_cmd(ctx : Context, cmd, args):
 
     if cmd == 'Connected':
         ctx.expected_rom = args
-        if ctx.last_rom == ctx.expected_rom:
-            rom_confirmed(ctx)
-            if ctx.locations_checked:
-                await send_msgs(ctx.socket, [['LocationChecks', [Regions.location_table[loc][0] for loc in ctx.locations_checked]]])
-        elif ctx.last_rom is not None:
-            raise Exception('Different ROM expected from server')
+        if ctx.last_rom is not None:
+            if ctx.last_rom[:len(args)] == ctx.expected_rom:
+                rom_confirmed(ctx)
+                if ctx.locations_checked:
+                    await send_msgs(ctx.socket, [['LocationChecks', [Regions.location_table[loc][0] for loc in ctx.locations_checked]]])
+            else:
+                raise Exception('Different ROM expected from server')
 
     if cmd == 'ReceivedItems':
         start_index, items = args
@@ -829,7 +830,7 @@ async def game_watcher(ctx : Context):
                 ctx.last_rom = list(rom)
                 ctx.locations_checked = set()
             if ctx.expected_rom is not None:
-                if ctx.last_rom != ctx.expected_rom:
+                if ctx.last_rom[:len(ctx.expected_rom)] != ctx.expected_rom:
                     print("Wrong ROM detected")
                     await ctx.snes_socket.close()
                     continue
