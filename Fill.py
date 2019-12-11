@@ -161,7 +161,7 @@ def distribute_items_staleness(world):
     logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s', [item.name for item in itempool], [location.name for location in fill_locations])
 
 
-def fill_restrictive(world, base_state, locations, itempool):
+def fill_restrictive(world, base_state, locations, itempool, single_player = False):
     def sweep_from_pool():
         new_state = base_state.copy()
         for item in itempool:
@@ -184,12 +184,17 @@ def fill_restrictive(world, base_state, locations, itempool):
         maximum_exploration_state = sweep_from_pool()
 
         perform_access_check = True
-        if world.accessibility == 'none':
+        if world.accessibility == 'none' and not single_player:
             perform_access_check = not world.has_beaten_game(maximum_exploration_state)
 
         for item_to_place in items_to_place:
             spot_to_fill = None
             for location in locations:
+                if single_player:
+                    if location.player != item_to_place.player:
+                        continue
+                    if world.accessibility == 'none':
+                        perform_access_check = not world.has_beaten_game(maximum_exploration_state, location.player)
                 if location.can_fill(maximum_exploration_state, item_to_place, perform_access_check):
                     spot_to_fill = location
                     break

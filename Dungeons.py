@@ -150,7 +150,7 @@ def fill_dungeons_restrictive(world, shuffled_locations):
     sort_order = {"BigKey": 3, "SmallKey": 2}
     dungeon_items.sort(key=lambda item: sort_order.get(item.type, 1))
 
-    fill_restrictive(world, all_state_base, shuffled_locations, dungeon_items)
+    fill_restrictive(world, all_state_base, shuffled_locations, dungeon_items, True)
 
 
 
