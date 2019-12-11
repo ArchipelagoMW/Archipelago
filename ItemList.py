@@ -35,7 +35,7 @@ Difficulty = namedtuple('Difficulty',
                          'progressivesword', 'basicsword', 'basicbow', 'timedohko', 'timedother',
                          'triforcehunt', 'triforce_pieces_required', 'retro',
                          'extras', 'progressive_sword_limit', 'progressive_shield_limit',
-                         'progressive_armor_limit', 'progressive_bottle_limit', 
+                         'progressive_armor_limit', 'progressive_bottle_limit',
                          'progressive_bow_limit', 'heart_piece_limit', 'boss_heart_container_limit'])
 
 total_items_to_place = 153
@@ -136,7 +136,7 @@ def generate_itempool(world, player):
         world.push_item(world.get_location('Ganon', player), ItemFactory('Nothing', player), False)
     else:
         world.push_item(world.get_location('Ganon', player), ItemFactory('Triforce', player), False)
-    
+
     if world.goal in ['triforcehunt']:
         if world.mode == 'inverted':
             region = world.get_region('Light World',player)
@@ -153,7 +153,7 @@ def generate_itempool(world, player):
         world.push_item(loc, ItemFactory('Triforce', player), False)
         loc.event = True
         loc.locked = True
-    
+
     world.get_location('Ganon', player).event = True
     world.get_location('Ganon', player).locked = True
     world.push_item(world.get_location('Agahnim 1', player), ItemFactory('Beat Agahnim 1', player), False)
@@ -181,16 +181,41 @@ def generate_itempool(world, player):
         world.rupoor_cost = min(world.customitemarray[69], 9999)
     else:
         (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.swords, world.retro)
-    world.itempool += ItemFactory(pool, player)
+
     for item in precollected_items:
         world.push_precollected(ItemFactory(item, player))
+
+    if world.mode == 'standard' and not world.state.has_blunt_weapon(player) and "Link's Uncle" not in placed_items:
+        found_sword = False
+        found_bow = False
+        possible_weapons = []
+        for item in pool:
+            if item in ['Progressive Sword', 'Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword']:
+                if not found_sword and world.swords != 'swordless':
+                    found_sword = True
+                    possible_weapons.append(item)
+            if item in ['Progressive Bow', 'Bow'] and not found_bow:
+                found_bow = True
+                possible_weapons.append(item)
+            if item in ['Hammer', 'Bombs (10)', 'Fire Rod', 'Cane of Somaria', 'Cane of Byrna']:
+                if item not in possible_weapons:
+                    possible_weapons.append(item)
+        starting_weapon = random.choice(possible_weapons)
+        placed_items["Link's Uncle"] = starting_weapon
+        pool.remove(starting_weapon)
+
     for (location, item) in placed_items.items():
         world.push_item(world.get_location(location, player), ItemFactory(item, player), False)
         world.get_location(location, player).event = True
         world.get_location(location, player).locked = True
+
+    world.itempool += ItemFactory(pool, player)
+
     world.lamps_needed_for_dark_rooms = lamps_needed_for_dark_rooms
+
     if clock_mode is not None:
         world.clock_mode = clock_mode
+
     if treasure_hunt_count is not None:
         world.treasure_hunt_count = treasure_hunt_count
     if treasure_hunt_icon is not None:
@@ -235,7 +260,7 @@ take_any_locations = [
 def set_up_take_anys(world, player):
     if world.mode == 'inverted' and 'Dark Sanctuary Hint' in take_any_locations:
         take_any_locations.remove('Dark Sanctuary Hint')
-    
+
     regions = random.sample(take_any_locations, 5)
 
     old_man_take_any = Region("Old Man Sword Cave", RegionType.Cave, 'the sword cave', player)

@@ -696,9 +696,6 @@ def no_glitches_rules(world, player):
 
 def open_rules(world, player):
     # softlock protection as you can reach the sewers small key door with a guard drop key
-    forbid_item(world.get_location('Hyrule Castle - Boomerang Chest', player), 'Small Key (Escape)', player)
-    forbid_item(world.get_location('Hyrule Castle - Zelda\'s Chest', player), 'Small Key (Escape)', player)
-
     set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player), lambda state: state.has_key('Small Key (Escape)', player))
     set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player), lambda state: state.has_key('Small Key (Escape)', player))
 
@@ -723,31 +720,10 @@ def swordless_rules(world, player):
         set_rule(world.get_entrance('Misery Mire', player), lambda state: state.has_misery_mire_medallion(player))  # sword not required to use medallion for opening in swordless (!)
         set_rule(world.get_location('Bombos Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has('Hammer', player))
 
-def standard_rules(world, player):
-    add_rule(world.get_entrance('Sewers Door', player), lambda state: state.can_kill_most_things(player))
 
+def standard_rules(world, player):
     set_rule(world.get_entrance('Hyrule Castle Exit (East)', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
     set_rule(world.get_entrance('Hyrule Castle Exit (West)', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
-
-    # ensures the required weapon for escape lands on uncle (unless player has it pre-equipped)
-    add_rule(world.get_location('Secret Passage', player), lambda state: state.can_kill_most_things(player))
-    add_rule(world.get_location('Hyrule Castle - Map Chest', player), lambda state: state.can_kill_most_things(player))
-
-    def uncle_item_rule(item):
-        copy_state = CollectionState(world)
-        copy_state.collect(item)
-        copy_state.sweep_for_events()
-        return copy_state.can_reach('Sanctuary', 'Region', player)
-
-    add_item_rule(world.get_location('Link\'s Uncle', player), uncle_item_rule)
-
-    # easiest way to enforce key placement not relevant for open
-    set_rule(world.get_location('Sewers - Dark Cross', player), lambda state: state.can_kill_most_things(player))
-
-    set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player), lambda state: state.can_kill_most_things(player))
-    set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player), lambda state: state.can_kill_most_things(player))
-
-
 
 
 def set_trock_key_rules(world, player):
