@@ -76,6 +76,7 @@ class World(object):
         self.hints = hints
         self.crystals_needed_for_ganon = 7
         self.crystals_needed_for_gt = 7
+        self.open_pyramid = False
         self.dynamic_regions = []
         self.dynamic_locations = []
         self.spoiler = Spoiler(self)
