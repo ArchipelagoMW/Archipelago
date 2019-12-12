@@ -123,7 +123,9 @@ def main(args, seed=None):
         sprite = None
 
     player_names = parse_names_string(args.names)
-    outfilebase = 'ER_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s_%s' % (world.logic, world.difficulty, world.difficulty_adjustments, world.mode, world.goal, "" if world.timer in ['none', 'display'] else "-" + world.timer, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-retro" if world.retro else "", "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "", "-nohints" if not world.hints else "", world.seed)
+    outfileprefix = 'ER_%s_' % world.seed
+    outfilesuffix = '%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (world.logic, world.difficulty, world.difficulty_adjustments, world.mode, world.goal, "" if world.timer in ['none', 'display'] else "-" + world.timer, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-retro" if world.retro else "", "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "", "-nohints" if not world.hints else "")
+    outfilebase = outfileprefix + outfilesuffix
 
     use_enemizer = args.enemizercli and (args.shufflebosses != 'none' or args.shuffleenemies or args.enemy_health != 'default' or args.enemy_health != 'default' or args.enemy_damage or args.shufflepalette or args.shufflepots)
 
@@ -166,7 +168,8 @@ def main(args, seed=None):
                     rom = local_rom
 
                 apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite, player_names)
-                rom.write_to_file(output_path(f'{outfilebase}{f"_P{player}" if world.players > 1 else ""}{f"_{player_names[player]}" if player in player_names else ""}.sfc'))
+                outfilepname = f'P{player}_' if world.players > 1 else '' + f'{player_names[player]}_' if player in player_names else ''
+                rom.write_to_file(output_path(f'{outfileprefix}{outfilepname}{outfilesuffix}.sfc'))
 
         with open(output_path('%s_multidata' % outfilebase), 'wb') as f:
             pickle.dump(multidata, f, pickle.HIGHEST_PROTOCOL)
