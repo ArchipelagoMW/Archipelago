@@ -121,7 +121,7 @@ Does not invoke a timer.
 ### Display
 
 Displays a timer on-screen but does not alter the item pool.
-This will prevent the dungeon item count feature in Easy and Keysanity from working.
+This will prevent the dungeon item count feature in Easy and Compass shuffle from working.
 
 ### Timed
 
@@ -264,12 +264,12 @@ generate spoilers for statistical analysis.
 
 Use to enable quick item swap with L/R buttons. Press L and R together to switch the state of items like the Mushroom/Powder pair.
 
-## Keysanity
+## Map/Compass/Small Key/Big Key shuffle (aka Keysanity)
 
-This setting allows dungeon specific items (Small Key, Big Key, Map, Compass) to be distributed anywhere in the world and not just
-in their native dungeon. Small Keys dropped by enemies or found in pots are not affected. The chest in southeast Skull Woods that
-is traditionally a guaranteed Small Key still is. These items will be distributed according to the v26/balanced algorithm, but
-the rest of the itempool will respect the algorithm setting. Music for dungeons is randomized so it cannot be used as a tell
+These settings allow dungeon specific items to be distributed anywhere in the world and not just in their native dungeon.
+Small Keys dropped by enemies or found in pots are not affected. The chest in southeast Skull Woods that is traditionally
+a guaranteed Small Key still is. These items will be distributed according to the v26/balanced algorithm, but the rest
+of the itempool will respect the algorithm setting. Music for dungeons is randomized so it cannot be used as a tell
 for which dungeons contain pendants and crystals; finding a Map for a dungeon will allow the overworld map to display its prize.
 
 ## Retro
@@ -422,23 +422,16 @@ Alters the rate at which the menu opens and closes. (default: normal)
 Disables game music, resulting in the game sound being just the SFX. (default: False)
 
 ```
---keysanity
+--mapshuffle --compassshuffle --keyshuffle --bigkeyshuffle
 ```
 
-Enable Keysanity (default: False)
+Respectively enable Map/Compass/SmallKey/BigKey shuffle (default: False)
 
 ```
 --retro
 ```
 
 Enable Retro mode (default: False)
-
-```
---nodungeonitems
-```
-
-If set, Compasses and Maps are removed from the dungeon item pools and replaced by empty chests that may end up anywhere in the world.
-This may lead to different amount of itempool items being placed in a dungeon than you are used to. (default: False)
 
 ```
 --heartbeep [{normal,half,quarter,off}]

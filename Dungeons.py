@@ -113,14 +113,13 @@ def fill_dungeons(world):
             continue
 
         # next place dungeon items
-        if world.place_dungeon_items:
-            for dungeon_item in dungeon_items:
-                di_location = dungeon_locations.pop()
-                world.push_item(di_location, dungeon_item, False)
+        for dungeon_item in dungeon_items:
+            di_location = dungeon_locations.pop()
+            world.push_item(di_location, dungeon_item, False)
 
 
 def get_dungeon_item_pool(world):
-    return [item for dungeon in world.dungeons for item in dungeon.all_items if item.key or world.place_dungeon_items]
+    return [item for dungeon in world.dungeons for item in dungeon.all_items]
 
 def fill_dungeons_restrictive(world, shuffled_locations):
     all_state_base = world.get_all_state()
@@ -135,16 +134,18 @@ def fill_dungeons_restrictive(world, shuffled_locations):
         pinball_room.locked = True
         shuffled_locations.remove(pinball_room)
 
-    if world.keysanity:
-        #in keysanity dungeon items are distributed as part of the normal item pool
-        for item in world.get_items():
-            if item.key:
-                item.advancement = True
-            elif item.map or item.compass:
-                item.priority = True
-        return
+    # with shuffled dungeon items they are distributed as part of the normal item pool
+    for item in world.get_items():
+        if (item.smallkey and world.keyshuffle) or (item.bigkey and world.bigkeyshuffle):
+            all_state_base.collect(item, True)
+            item.advancement = True
+        elif (item.map and world.mapshuffle) or (item.compass and world.compassshuffle):
+            item.priority = True
 
-    dungeon_items = get_dungeon_item_pool(world)
+    dungeon_items = [item for item in get_dungeon_item_pool(world) if ((item.smallkey and not world.keyshuffle)
+                                                                       or (item.bigkey and not world.bigkeyshuffle)
+                                                                       or (item.map and not world.mapshuffle)
+                                                                       or (item.compass and not world.compassshuffle))]
 
     # sort in the order Big Key, Small Key, Other before placing dungeon items
     sort_order = {"BigKey": 3, "SmallKey": 2}

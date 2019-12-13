@@ -198,20 +198,16 @@ def start():
                              ''')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
-    parser.add_argument('--keysanity', help='''\
-                             Keys (and other dungeon items) are no longer restricted to
-                             their dungeons, but can be anywhere
-                             ''', action='store_true')
+    parser.add_argument('--mapshuffle', help='Maps are no longer restricted to their dungeons, but can be anywhere', action='store_true')
+    parser.add_argument('--compassshuffle', help='Compasses are no longer restricted to their dungeons, but can be anywhere', action='store_true')
+    parser.add_argument('--keyshuffle', help='Small Keys are no longer restricted to their dungeons, but can be anywhere', action='store_true')
+    parser.add_argument('--bigkeyshuffle', help='Big Keys are no longer restricted to their dungeons, but can be anywhere', action='store_true')
     parser.add_argument('--retro', help='''\
                              Keys are universal, shooting arrows costs rupees,
                              and a few other little things make this more like Zelda-1.
                              ''', action='store_true')
     parser.add_argument('--custom', default=False, help='Not supported.')
     parser.add_argument('--customitemarray', default=False, help='Not supported.')
-    parser.add_argument('--nodungeonitems', help='''\
-                             Remove Maps and Compasses from Itempool, replacing them by
-                             empty slots.
-                             ''', action='store_true')
     parser.add_argument('--accessibility', default='items', const='items', nargs='?', choices=['items', 'locations', 'none'], help='''\
                              Select Item/Location Accessibility. (default: %(default)s)
                              Items:     You can reach all unique inventory items. No guarantees about

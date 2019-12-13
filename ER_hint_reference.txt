@@ -85,7 +85,7 @@ In the vanilla, dungeonssimple, and dungeonsfull shuffles, the following two loc
 Graveyard Cave
 Mimic Cave
 
-Valuable Items are simply all items that are shown on the pause subscreen (Y, B, or A sections) minus Silver Arrows and plus Triforce Pieces, Magic Upgrades (1/2 or 1/4), and the Single Arrow. If keysanity is being used, you can additionally get hints for Small Keys or Big Keys but not hints for Maps or Compasses.
+Valuable Items are simply all items that are shown on the pause subscreen (Y, B, or A sections) minus Silver Arrows and plus Triforce Pieces, Magic Upgrades (1/2 or 1/4), and the Single Arrow. If key shuffle is being used, you can additionally get hints for Small Keys or Big Keys but not hints for Maps or Compasses.
 
 While the exact verbage of location names and item names can be found in the source code, here's a copy for reference:
 

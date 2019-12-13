@@ -804,7 +804,7 @@ def set_trock_key_rules(world, player):
         non_big_key_locations += ['Turtle Rock - Crystaroller Room', 'Turtle Rock - Eye Bridge - Bottom Left',
                                   'Turtle Rock - Eye Bridge - Bottom Right', 'Turtle Rock - Eye Bridge - Top Left',
                                   'Turtle Rock - Eye Bridge - Top Right']
-        if not world.keysanity:
+        if not world.keyshuffle:
             non_big_key_locations += ['Turtle Rock - Big Key Chest']
     else:
         set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 2) if item_in_locations(state, 'Big Key (Turtle Rock)', player, [('Turtle Rock - Compass Chest', player), ('Turtle Rock - Roller Room - Left', player), ('Turtle Rock - Roller Room - Right', player)]) else state.has_key('Small Key (Turtle Rock)', player, 4))
@@ -814,7 +814,7 @@ def set_trock_key_rules(world, player):
         non_big_key_locations += ['Turtle Rock - Crystaroller Room', 'Turtle Rock - Eye Bridge - Bottom Left',
                                   'Turtle Rock - Eye Bridge - Bottom Right', 'Turtle Rock - Eye Bridge - Top Left',
                                   'Turtle Rock - Eye Bridge - Top Right']
-        if not world.keysanity:
+        if not world.keyshuffle:
             non_big_key_locations += ['Turtle Rock - Big Key Chest', 'Turtle Rock - Chain Chomps']
 
     # set big key restrictions

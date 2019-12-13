@@ -8,7 +8,7 @@ from Utils import int16_as_bytes
 
 class World(object):
 
-    def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive, goal, algorithm, place_dungeon_items, accessibility, shuffle_ganon, quickswap, fastmenu, disable_music, keysanity, retro, custom, customitemarray, boss_shuffle, hints):
+    def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive, goal, algorithm, accessibility, shuffle_ganon, quickswap, fastmenu, disable_music, retro, custom, customitemarray, boss_shuffle, hints):
         self.players = players
         self.shuffle = shuffle
         self.logic = logic
@@ -35,7 +35,6 @@ class World(object):
         self._entrance_cache = {}
         self._location_cache = {}
         self.required_locations = []
-        self.place_dungeon_items = place_dungeon_items  # configurable in future
         self.shuffle_bonk_prizes = False
         self.swamp_patch_required = {player: False for player in range(1, players + 1)}
         self.powder_patch_required = {player: False for player in range(1, players + 1)}
@@ -65,7 +64,10 @@ class World(object):
         self.quickswap = quickswap
         self.fastmenu = fastmenu
         self.disable_music = disable_music
-        self.keysanity = keysanity
+        self.mapshuffle = False
+        self.compassshuffle = False
+        self.keyshuffle = False
+        self.bigkeyshuffle = False
         self.retro = retro
         self.custom = custom
         self.customitemarray = customitemarray
@@ -175,7 +177,7 @@ class World(object):
             elif item.name.startswith('Bottle'):
                 if ret.bottle_count(item.player) < self.difficulty_requirements.progressive_bottle_limit:
                     ret.prog_items.add((item.name, item.player))
-            elif item.advancement or item.key:
+            elif item.advancement or item.smallkey or item.bigkey:
                 ret.prog_items.add((item.name, item.player))
 
         for item in self.itempool:
@@ -352,12 +354,14 @@ class CollectionState(object):
 
     def sweep_for_events(self, key_only=False, locations=None):
         # this may need improvement
+        if locations is None:
+            locations = self.world.get_filled_locations()
         new_locations = True
         checked_locations = 0
         while new_locations:
-            if locations is None:
-                locations = self.world.get_filled_locations()
-            reachable_events = [location for location in locations if location.event and (not key_only or location.item.key) and location.can_reach(self)]
+            reachable_events = [location for location in locations if location.event and
+                                (not key_only or (not self.world.keyshuffle and location.item.smallkey) or (not self.world.bigkeyshuffle and location.item.bigkey))
+                                and location.can_reach(self)]
             for event in reachable_events:
                 if (event.name, event.player) not in self.events:
                     self.events.append((event.name, event.player))
@@ -677,9 +681,12 @@ class Region(object):
         return False
 
     def can_fill(self, item):
-        is_dungeon_item = item.key or item.map or item.compass
+        inside_dungeon_item = ((item.smallkey and not self.world.keyshuffle)
+                               or (item.bigkey and not self.world.bigkeyshuffle)
+                               or (item.map and not self.world.mapshuffle)
+                               or (item.compass and not self.world.compassshuffle))
         sewer_hack = self.world.mode == 'standard' and item.name == 'Small Key (Escape)'
-        if sewer_hack or (is_dungeon_item and not self.world.keysanity):
+        if sewer_hack or inside_dungeon_item:
             return self.dungeon and self.dungeon.is_dungeon_item(item) and item.player == self.player
 
         return True
@@ -839,12 +846,16 @@ class Item(object):
         self.player = player
 
     @property
-    def key(self):
-        return self.type == 'SmallKey' or self.type == 'BigKey'
-
-    @property
     def crystal(self):
         return self.type == 'Crystal'
+
+    @property
+    def smallkey(self):
+        return self.type == 'SmallKey'
+
+    @property
+    def bigkey(self):
+        return self.type == 'BigKey'
 
     @property
     def map(self):
@@ -1036,7 +1047,10 @@ class Spoiler(object):
                          'item_functionality': self.world.difficulty_adjustments,
                          'accessibility': self.world.accessibility,
                          'hints': self.world.hints,
-                         'keysanity': self.world.keysanity,
+                         'mapshuffle': self.world.mapshuffle,
+                         'compassshuffle': self.world.compassshuffle,
+                         'keyshuffle': self.world.keyshuffle,
+                         'bigkeyshuffle': self.world.bigkeyshuffle,
                          'players': self.world.players
                          }
 
@@ -1068,10 +1082,12 @@ class Spoiler(object):
             outfile.write('Entrance Shuffle:                %s\n' % self.metadata['shuffle'])
             outfile.write('Filling Algorithm:               %s\n' % self.world.algorithm)
             outfile.write('Accessibility:                   %s\n' % self.metadata['accessibility'])
-            outfile.write('Maps and Compasses in Dungeons:  %s\n' % ('Yes' if self.world.place_dungeon_items else 'No'))
             outfile.write('L\\R Quickswap enabled:           %s\n' % ('Yes' if self.world.quickswap else 'No'))
             outfile.write('Menu speed:                      %s\n' % self.world.fastmenu)
-            outfile.write('Keysanity enabled:               %s\n' % ('Yes' if self.metadata['keysanity'] else 'No'))
+            outfile.write('Map shuffle:                     %s\n' % ('Yes' if self.metadata['mapshuffle'] else 'No'))
+            outfile.write('Compass shuffle:                 %s\n' % ('Yes' if self.metadata['compassshuffle'] else 'No'))
+            outfile.write('Small Key shuffle:               %s\n' % ('Yes' if self.metadata['keyshuffle'] else 'No'))
+            outfile.write('Big Key shuffle:                 %s\n' % ('Yes' if self.metadata['bigkeyshuffle'] else 'No'))
             outfile.write('Players:                         %d' % self.world.players)
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')

@@ -240,8 +240,8 @@ def distribute_items_restrictive(world, gftower_trash_count=0, fill_locations=No
     random.shuffle(fill_locations)
     fill_locations.reverse()
 
-    # Make sure the escape small key is placed first in standard keysanity to prevent running out of spots
-    if world.keysanity and world.mode == 'standard':
+    # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
+    if world.keyshuffle and world.mode == 'standard':
         progitempool.sort(key=lambda item: 1 if item.name == 'Small Key (Escape)' else 0)
 
     fill_restrictive(world, world.state, fill_locations, progitempool)
@@ -312,7 +312,7 @@ def flood_items(world):
         location_list = world.get_reachable_locations()
         random.shuffle(location_list)
         for location in location_list:
-            if location.item is not None and not location.item.advancement and not location.item.priority and not location.item.key:
+            if location.item is not None and not location.item.advancement and not location.item.priority and not location.item.smallkey and not location.item.bigkey:
                 # safe to replace
                 replace_item = location.item
                 replace_item.location = None
@@ -332,8 +332,7 @@ def balance_multiworld_progression(world):
         reachable_locations_count[player] = 0
 
     def get_sphere_locations(sphere_state, locations):
-        if not world.keysanity:
-            sphere_state.sweep_for_events(key_only=True, locations=locations)
+        sphere_state.sweep_for_events(key_only=True, locations=locations)
         return [loc for loc in locations if sphere_state.can_reach(loc)]
 
     while True:
@@ -354,7 +353,7 @@ def balance_multiworld_progression(world):
                 candidate_items = []
                 while True:
                     for location in balancing_sphere:
-                        if location.event:
+                        if location.event and (world.keyshuffle or not location.item.smallkey) and (world.bigkeyshuffle or not location.item.bigkey):
                             balancing_state.collect(location.item, True, location)
                             if location.item.player in balancing_players and not location.locked:
                                 candidate_items.append(location)
@@ -364,11 +363,14 @@ def balance_multiworld_progression(world):
                         balancing_reachables[location.player] += 1
                     if world.has_beaten_game(balancing_state) or all([reachables >= threshold for reachables in balancing_reachables.values()]):
                         break
+                    elif not balancing_sphere:
+                        raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
 
                 unlocked_locations = [l for l in unchecked_locations if l not in balancing_unchecked_locations]
                 items_to_replace = []
                 for player in balancing_players:
                     locations_to_test = [l for l in unlocked_locations if l.player == player]
+                    # only replace items that end up in another player's world
                     items_to_test = [l for l in candidate_items if l.item.player == player and l.player != player]
                     while items_to_test:
                         testing = items_to_test.pop()
@@ -392,7 +394,7 @@ def balance_multiworld_progression(world):
                     new_location = replacement_locations.pop()
                     old_location = items_to_replace.pop()
 
-                    while not new_location.can_fill(state, old_location.item):
+                    while not new_location.can_fill(state, old_location.item, False) or (new_location.item and not old_location.can_fill(state, new_location.item, False)):
                         replacement_locations.insert(0, new_location)
                         new_location = replacement_locations.pop()
 
@@ -407,9 +409,11 @@ def balance_multiworld_progression(world):
                         sphere_locations.append(location)
 
         for location in sphere_locations:
-            if location.event and (world.keysanity or not location.item.key):
+            if location.event and (world.keyshuffle or not location.item.smallkey) and (world.bigkeyshuffle or not location.item.bigkey):
                 state.collect(location.item, True, location)
         checked_locations.extend(sphere_locations)
 
         if world.has_beaten_game(state):
             break
+        elif not sphere_locations:
+            raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')

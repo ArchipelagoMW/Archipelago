@@ -174,7 +174,7 @@ def fill_world(world, plando, text_patches):
                     item = ItemFactory(itemstr.strip(), 1)
                     if item is not None:
                         world.push_item(location, item)
-                    if item.key:
+                    if item.smallkey or item.bigkey:
                         location.event = True
             elif '<=>' in line:
                 entrance, exit = line.split('<=>', 1)

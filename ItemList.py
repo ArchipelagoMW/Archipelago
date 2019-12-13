@@ -221,8 +221,11 @@ def generate_itempool(world, player):
     if treasure_hunt_icon is not None:
         world.treasure_hunt_icon = treasure_hunt_icon
 
-    if world.keysanity:
-        world.itempool.extend([item for item in get_dungeon_item_pool(world) if item.player == player])
+    world.itempool.extend([item for item in get_dungeon_item_pool(world) if item.player == player
+                           and ((item.smallkey and world.keyshuffle)
+                                or (item.bigkey and world.bigkeyshuffle)
+                                or (item.map and world.mapshuffle)
+                                or (item.compass and world.compassshuffle))])
 
     # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)

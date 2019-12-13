@@ -25,7 +25,7 @@ def main(args, seed=None):
     start = time.process_time()
 
     # initialize the world
-    world = World(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty, args.item_functionality, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.accessibility, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.keysanity, args.retro, args.custom, args.customitemarray, args.shufflebosses, args.hints)
+    world = World(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty, args.item_functionality, args.timer, args.progressive, args.goal, args.algorithm, args.accessibility, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.retro, args.custom, args.customitemarray, args.shufflebosses, args.hints)
     logger = logging.getLogger('')
     if seed is None:
         random.seed(None)
@@ -33,6 +33,19 @@ def main(args, seed=None):
     else:
         world.seed = int(seed)
     random.seed(world.seed)
+
+    world.mapshuffle = args.mapshuffle
+    world.compassshuffle = args.compassshuffle
+    world.keyshuffle = args.keyshuffle
+    world.bigkeyshuffle = args.bigkeyshuffle
+
+    mcsb_name = ''
+    if all([world.mapshuffle, world.compassshuffle, world.keyshuffle, world.bigkeyshuffle]):
+        mcsb_name = '-keysanity'
+    elif [world.mapshuffle, world.compassshuffle, world.keyshuffle, world.bigkeyshuffle].count(True) == 1:
+        mcsb_name = '-mapshuffle' if world.mapshuffle else '-compassshuffle' if world.compassshuffle else '-keyshuffle' if world.keyshuffle else '-bigkeyshuffle'
+    elif any([world.mapshuffle, world.compassshuffle, world.keyshuffle, world.bigkeyshuffle]):
+        mcsb_name = '-%s%s%s%sshuffle' % ('M' if world.mapshuffle else '', 'C' if world.compassshuffle else '', 'S' if world.keyshuffle else '', 'B' if world.bigkeyshuffle else '')
 
     world.crystals_needed_for_ganon = random.randint(0, 7) if args.crystals_ganon == 'random' else int(args.crystals_ganon)
     world.crystals_needed_for_gt = random.randint(0, 7) if args.crystals_gt == 'random' else int(args.crystals_gt)
@@ -83,7 +96,7 @@ def main(args, seed=None):
     logger.info('Placing Dungeon Items.')
 
     shuffled_locations = None
-    if args.algorithm in ['balanced', 'vt26'] or args.keysanity:
+    if args.algorithm in ['balanced', 'vt26'] or args.mapshuffle or args.compassshuffle or args.keyshuffle or args.bigkeyshuffle:
         shuffled_locations = world.get_unfilled_locations()
         random.shuffle(shuffled_locations)
         fill_dungeons_restrictive(world, shuffled_locations)
@@ -124,7 +137,7 @@ def main(args, seed=None):
 
     player_names = parse_names_string(args.names)
     outfileprefix = 'ER_%s_' % world.seed
-    outfilesuffix = '%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (world.logic, world.difficulty, world.difficulty_adjustments, world.mode, world.goal, "" if world.timer in ['none', 'display'] else "-" + world.timer, world.shuffle, world.algorithm, "-keysanity" if world.keysanity else "", "-retro" if world.retro else "", "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "", "-nohints" if not world.hints else "")
+    outfilesuffix = '%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (world.logic, world.difficulty, world.difficulty_adjustments, world.mode, world.goal, "" if world.timer in ['none', 'display'] else "-" + world.timer, world.shuffle, world.algorithm, mcsb_name, "-retro" if world.retro else "", "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "", "-nohints" if not world.hints else "")
     outfilebase = outfileprefix + outfilesuffix
 
     use_enemizer = args.enemizercli and (args.shufflebosses != 'none' or args.shuffleenemies or args.enemy_health != 'default' or args.enemy_health != 'default' or args.enemy_damage or args.shufflepalette or args.shufflepots)
@@ -198,7 +211,7 @@ def gt_filler(world):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.difficulty_adjustments, world.timer, world.progressive, world.goal, world.algorithm, world.place_dungeon_items, world.accessibility, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.keysanity, world.retro, world.custom, world.customitemarray, world.boss_shuffle, world.hints)
+    ret = World(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.difficulty_adjustments, world.timer, world.progressive, world.goal, world.algorithm, world.accessibility, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.retro, world.custom, world.customitemarray, world.boss_shuffle, world.hints)
     ret.required_medallions = world.required_medallions.copy()
     ret.swamp_patch_required = world.swamp_patch_required.copy()
     ret.ganon_at_pyramid = world.ganon_at_pyramid.copy()
@@ -218,6 +231,10 @@ def copy_world(world):
     ret.difficulty_requirements = world.difficulty_requirements
     ret.fix_fake_world = world.fix_fake_world
     ret.lamps_needed_for_dark_rooms = world.lamps_needed_for_dark_rooms
+    ret.mapshuffle = world.mapshuffle
+    ret.compassshuffle = world.compassshuffle
+    ret.keyshuffle = world.keyshuffle
+    ret.bigkeyshuffle = world.bigkeyshuffle
     ret.crystals_needed_for_ganon = world.crystals_needed_for_ganon
     ret.crystals_needed_for_gt = world.crystals_needed_for_gt
 
@@ -318,8 +335,7 @@ def create_playthrough(world):
     sphere_candidates = list(prog_locations)
     logging.getLogger('').debug('Building up collection spheres.')
     while sphere_candidates:
-        if not world.keysanity:
-            state.sweep_for_events(key_only=True)
+        state.sweep_for_events(key_only=True)
 
         sphere = []
         # build up spheres of collection radius. Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
@@ -372,8 +388,7 @@ def create_playthrough(world):
     state = CollectionState(world)
     collection_spheres = []
     while required_locations:
-        if not world.keysanity:
-            state.sweep_for_events(key_only=True)
+        state.sweep_for_events(key_only=True)
 
         sphere = list(filter(state.can_reach, required_locations))
 

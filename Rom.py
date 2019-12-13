@@ -444,10 +444,10 @@ def patch_rom(world, player, rom):
             # Keys in their native dungeon should use the orignal item code for keys
             if location.parent_region.dungeon:
                 dungeon = location.parent_region.dungeon
-                if location.item is not None and location.item.key and dungeon.is_dungeon_item(location.item):
-                    if location.item.type == "BigKey":
+                if location.item is not None and dungeon.is_dungeon_item(location.item):
+                    if location.item.bigkey:
                         itemid = 0x32
-                    if location.item.type == "SmallKey":
+                    if location.item.smallkey:
                         itemid = 0x24
             if location.item and location.item.player != player:
                 if location.player_address is not None:
@@ -462,15 +462,15 @@ def patch_rom(world, player, rom):
 
             # patch music
             music_addresses = dungeon_music_addresses[location.name]
-            if world.keysanity:
+            if world.mapshuffle:
                 music = random.choice([0x11, 0x16])
             else:
                 music = 0x11 if 'Pendant' in location.item.name else 0x16
             for music_address in music_addresses:
                 rom.write_byte(music_address, music)
 
-    if world.keysanity:
-        rom.write_byte(0x155C9, random.choice([0x11, 0x16]))  # Randomize GT music too in keysanity mode
+    if world.mapshuffle:
+        rom.write_byte(0x155C9, random.choice([0x11, 0x16]))  # Randomize GT music too with map shuffle
 
     # patch entrance/exits/holes
     for region in world.regions:
@@ -811,7 +811,7 @@ def patch_rom(world, player, rom):
         ERtimeincrease = 10
     else:
         ERtimeincrease = 20
-    if world.keysanity:
+    if world.keyshuffle or world.bigkeyshuffle or world.mapshuffle:
         ERtimeincrease = ERtimeincrease + 15
     if world.clock_mode == 'off':
         rom.write_bytes(0x180190, [0x00, 0x00, 0x00])  # turn off clock mode
@@ -922,18 +922,24 @@ def patch_rom(world, player, rom):
     rom.write_byte(0x18005F, world.crystals_needed_for_ganon)
     rom.write_byte(0x18008A, 0x01 if world.mode == "standard" else 0x00) # block HC upstairs doors in rain state in standard mode
 
-    rom.write_byte(0x18016A, 0x01 if world.keysanity else 0x00)  # free roaming item text boxes
-    rom.write_byte(0x18003B, 0x01 if world.keysanity else 0x00)  # maps showing crystals on overworld
+    rom.write_byte(0x18016A, 0x10 | ((0x01 if world.keyshuffle else 0x00)
+                                     | (0x02 if world.compassshuffle else 0x00)
+                                     | (0x04 if world.mapshuffle else 0x00)
+                                     | (0x08 if world.bigkeyshuffle else 0x00)))  # free roaming item text boxes
+    rom.write_byte(0x18003B, 0x01 if world.mapshuffle else 0x00)  # maps showing crystals on overworld
 
     # compasses showing dungeon count
     if world.clock_mode != 'off':
         rom.write_byte(0x18003C, 0x00)  # Currently must be off if timer is on, because they use same HUD location
-    elif world.keysanity:
+    elif world.compassshuffle:
         rom.write_byte(0x18003C, 0x01)  # show on pickup
     else:
         rom.write_byte(0x18003C, 0x00)
 
-    rom.write_byte(0x180045, 0xFF if world.keysanity else 0x00)  # free roaming items in menu
+    rom.write_byte(0x180045, ((0x01 if world.keyshuffle else 0x00)
+                              | (0x02 if world.bigkeyshuffle else 0x00)
+                              | (0x04 if world.compassshuffle else 0x00)
+                              | (0x08 if world.mapshuffle else 0x00)))  # free roaming items in menu
 
     # Map reveals
     reveal_bytes = {
@@ -958,8 +964,8 @@ def patch_rom(world, player, rom):
             return reveal_bytes.get(location.parent_region.dungeon.name, 0x0000)
         return 0x0000
 
-    write_int16(rom, 0x18017A, get_reveal_bytes('Green Pendant') if world.keysanity else 0x0000) # Sahasrahla reveal
-    write_int16(rom, 0x18017C, get_reveal_bytes('Crystal 5')|get_reveal_bytes('Crystal 6') if world.keysanity else 0x0000) # Bomb Shop Reveal
+    write_int16(rom, 0x18017A, get_reveal_bytes('Green Pendant') if world.mapshuffle else 0x0000) # Sahasrahla reveal
+    write_int16(rom, 0x18017C, get_reveal_bytes('Crystal 5')|get_reveal_bytes('Crystal 6') if world.mapshuffle else 0x0000) # Bomb Shop Reveal
 
     rom.write_byte(0x180172, 0x01 if world.retro else 0x00)  # universal keys
     rom.write_byte(0x180175, 0x01 if world.retro else 0x00)  # rupee bow
@@ -1440,8 +1446,10 @@ def write_strings(rom, world, player):
 
         # Lastly we write hints to show where certain interesting items are. It is done the way it is to re-use the silver code and also to give one hint per each type of item regardless of how many exist. This supports many settings well.
         items_to_hint = RelevantItems.copy()
-        if world.keysanity:
-            items_to_hint.extend(KeysanityItems)
+        if world.keyshuffle:
+            items_to_hint.extend(SmallKeys)
+        if world.bigkeyshuffle:
+            items_to_hint.extend(BigKeys)
         random.shuffle(items_to_hint)
         hint_count = 5 if world.shuffle not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 8
         while hint_count > 0:
@@ -2022,28 +2030,30 @@ RelevantItems = ['Bow',
                  'Magic Upgrade (1/4)'
                  ]
 
-KeysanityItems = ['Small Key (Eastern Palace)',
-                  'Big Key (Eastern Palace)',
-                  'Small Key (Escape)',
-				  'Small Key (Desert Palace)',
-                  'Big Key (Desert Palace)',
-				  'Small Key (Tower of Hera)',
-                  'Big Key (Tower of Hera)',
-				  'Small Key (Agahnims Tower)',
-				  'Small Key (Palace of Darkness)',
-                  'Big Key (Palace of Darkness)',
-				  'Small Key (Thieves Town)',
-                  'Big Key (Thieves Town)',
-				  'Small Key (Swamp Palace)',
-                  'Big Key (Swamp Palace)',
-				  'Small Key (Skull Woods)',
-                  'Big Key (Skull Woods)',
-				  'Small Key (Ice Palace)',
-                  'Big Key (Ice Palace)',
-                  'Small Key (Misery Mire)',
-                  'Big Key (Misery Mire)',
-                  'Small Key (Turtle Rock)',
-                  'Big Key (Turtle Rock)',
-                  'Small Key (Ganons Tower)',
-                  'Big Key (Ganons Tower)'
-				  ]
+SmallKeys = ['Small Key (Eastern Palace)',
+             'Small Key (Escape)',
+             'Small Key (Desert Palace)',
+             'Small Key (Tower of Hera)',
+             'Small Key (Agahnims Tower)',
+             'Small Key (Palace of Darkness)',
+             'Small Key (Thieves Town)',
+             'Small Key (Swamp Palace)',
+             'Small Key (Skull Woods)',
+             'Small Key (Ice Palace)',
+             'Small Key (Misery Mire)',
+             'Small Key (Turtle Rock)',
+             'Small Key (Ganons Tower)',
+             ]
+
+BigKeys = ['Big Key (Eastern Palace)',
+           'Big Key (Desert Palace)',
+           'Big Key (Tower of Hera)',
+           'Big Key (Palace of Darkness)',
+           'Big Key (Thieves Town)',
+           'Big Key (Swamp Palace)',
+           'Big Key (Skull Woods)',
+           'Big Key (Ice Palace)',
+           'Big Key (Misery Mire)',
+           'Big Key (Turtle Rock)',
+           'Big Key (Ganons Tower)'
+           ]
