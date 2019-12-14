@@ -161,7 +161,7 @@ def distribute_items_staleness(world):
     logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s', [item.name for item in itempool], [location.name for location in fill_locations])
 
 
-def fill_restrictive(world, base_state, locations, itempool, single_player = False):
+def fill_restrictive(world, base_state, locations, itempool, single_player_placement = False):
     def sweep_from_pool():
         new_state = base_state.copy()
         for item in itempool:
@@ -169,38 +169,35 @@ def fill_restrictive(world, base_state, locations, itempool, single_player = Fal
         new_state.sweep_for_events()
         return new_state
 
-    while itempool and locations:
-        items_to_place = []
-        nextpool = []
-        placing_players = set()
-        for item in reversed(itempool):
-            if item.player not in placing_players:
-                placing_players.add(item.player)
-                items_to_place.append(item)
-            else:
-                nextpool.insert(0, item)
-        itempool = nextpool
+    unplaced_items = []
+
+    player_items = {}
+    for item in itempool:
+        player_items.setdefault(item.player, []).append(item)
+
+    while any(player_items.values()) and locations:
+        items_to_place = [[itempool.remove(items[-1]), items.pop()][-1] for items in player_items.values() if items]
 
         maximum_exploration_state = sweep_from_pool()
 
         perform_access_check = True
-        if world.accessibility == 'none' and not single_player:
+        if world.accessibility == 'none' and not single_player_placement:
             perform_access_check = not world.has_beaten_game(maximum_exploration_state)
 
         for item_to_place in items_to_place:
+            if single_player_placement and world.accessibility == 'none':
+                perform_access_check = not world.has_beaten_game(maximum_exploration_state, item_to_place.player)
+
             spot_to_fill = None
             for location in locations:
-                if single_player:
-                    if location.player != item_to_place.player:
-                        continue
-                    if world.accessibility == 'none':
-                        perform_access_check = not world.has_beaten_game(maximum_exploration_state, location.player)
-                if location.can_fill(maximum_exploration_state, item_to_place, perform_access_check):
+                if (not single_player_placement or location.player == item_to_place.player)\
+                        and location.can_fill(maximum_exploration_state, item_to_place, perform_access_check):
                     spot_to_fill = location
                     break
 
             if spot_to_fill is None:
                 # we filled all reachable spots. Maybe the game can be beaten anyway?
+                unplaced_items.insert(0, item_to_place)
                 if world.can_beat_game():
                     if world.accessibility != 'none':
                         logging.getLogger('').warning('Not all items placed. Game beatable anyway. (Could not place %s)' % item_to_place)
@@ -211,6 +208,7 @@ def fill_restrictive(world, base_state, locations, itempool, single_player = Fal
             locations.remove(spot_to_fill)
             spot_to_fill.event = True
 
+    itempool.extend(unplaced_items)
 
 def distribute_items_restrictive(world, gftower_trash_count=0, fill_locations=None):
     # If not passed in, then get a shuffled list of locations to fill in
