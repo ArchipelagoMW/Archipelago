@@ -318,14 +318,14 @@ class CollectionState(object):
             self.collect(item, True)
 
     def update_reachable_regions(self, player):
-        player_regions = [region for region in self.world.regions if region.player == player]
+        player_regions = self.world.get_regions(player)
         self.stale[player] = False
         rrp = self.reachable_regions[player]
         new_regions = True
         reachable_regions_count = len(rrp)
         while new_regions:
-            possible = [region for region in player_regions if region not in rrp] 
-            for candidate in possible:
+            player_regions = [region for region in player_regions if region not in rrp]
+            for candidate in player_regions:
                 if candidate.can_reach_private(self):
                     rrp.add(candidate)
             new_regions = len(rrp) > reachable_regions_count
