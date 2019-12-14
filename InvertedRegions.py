@@ -316,7 +316,7 @@ def create_inverted_regions(world, player):
     world.shops.append(shop)
     shop.add_inventory(0, 'Bomb Upgrade (+5)', 100, 7)
     shop.add_inventory(1, 'Arrow Upgrade (+5)', 100, 7)
-    world.intialize_regions()
+    world.initialize_regions()
 
 def create_lw_region(player, name, locations=None, exits=None):
     return _create_region(player, name, RegionType.LightWorld, 'Light World', locations, exits)

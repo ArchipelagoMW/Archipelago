@@ -303,7 +303,7 @@ def set_up_take_anys(world, player):
         take_any.shop.add_inventory(0, 'Blue Potion', 0, 0)
         take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0)
 
-    world.intialize_regions()
+    world.initialize_regions()
 
 def create_dynamic_shop_locations(world, player):
     for shop in world.shops:

@@ -30,8 +30,7 @@ class World(object):
         self.required_medallions = dict([(player, ['Ether', 'Quake']) for player in range(1, players + 1)])
         self._cached_entrances = None
         self._cached_locations = None
-        self._entrance_cache = {}
-        self._region_cache = {}
+        self._region_cache = {player: {} for player in range(1, players + 1)}
         self._entrance_cache = {}
         self._location_cache = {}
         self.required_locations = []
@@ -84,19 +83,23 @@ class World(object):
         self.spoiler = Spoiler(self)
         self.lamps_needed_for_dark_rooms = 1
 
-    def intialize_regions(self):
-        for region in self.regions:
+    def initialize_regions(self, regions=None):
+        for region in regions if regions else self.regions:
             region.world = self
+            self._region_cache[region.player][region.name] = region
+
+    def get_regions(self, player=None):
+        return self.regions if player is None else self._region_cache[player].values()
 
     def get_region(self, regionname, player):
         if isinstance(regionname, Region):
             return regionname
         try:
-            return self._region_cache[(regionname, player)]
+            return self._region_cache[player][regionname]
         except KeyError:
             for region in self.regions:
                 if region.name == regionname and region.player == player:
-                    self._region_cache[(regionname, player)] = region
+                    assert not region.world # this should only happen before initialization
                     return region
             raise RuntimeError('No such region %s for player %d' % (regionname, player))
 

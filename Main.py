@@ -295,8 +295,8 @@ def copy_world(world):
 def copy_dynamic_regions_and_locations(world, ret):
     for region in world.dynamic_regions:
         new_reg = Region(region.name, region.type, region.hint_text, region.player)
-        new_reg.world = ret
         ret.regions.append(new_reg)
+        ret.initialize_regions([new_reg])
         ret.dynamic_regions.append(new_reg)
 
         # Note: ideally exits should be copied here, but the current use case (Take anys) do not require this
