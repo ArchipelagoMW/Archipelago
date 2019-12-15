@@ -134,7 +134,7 @@ def guiMain(args=None):
 
     romDialogFrame = Frame(fileDialogFrame)
     baseRomLabel = Label(romDialogFrame, text='Base Rom')
-    romVar = StringVar()
+    romVar = StringVar(value="Zelda no Densetsu - Kamigami no Triforce (Japan).sfc")
     romEntry = Entry(romDialogFrame, textvariable=romVar)
 
     def RomSelect():
