@@ -159,8 +159,7 @@ def main(args, seed=None):
                     rom = JsonRom()
                 else:
                     rom = LocalRom(args.rom)
-
-            patch_rom(world, player, rom)
+            patch_rom(world, player, rom, use_enemizer)
 
             enemizer_patch = []
             if use_enemizer:

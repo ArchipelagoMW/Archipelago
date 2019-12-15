@@ -420,7 +420,7 @@ class Sprite(object):
         # split into palettes of 15 colors
         return array_chunk(palette_as_colors, 15)
 
-def patch_rom(world, player, rom):
+def patch_rom(world, player, rom, enemized):
     random.seed(world.rom_seeds[player])
 
     # progressive bow silver arrow hint hack
@@ -855,7 +855,12 @@ def patch_rom(world, player, rom):
     # TODO: a proper race rom mode should be implemented, that changes the following flag, and rummages the table (or uses the future encryption feature, etc)
     rom.write_bytes(0x180213, [0x00, 0x01]) # Not a Tournament Seed
 
-    rom.write_byte(0x180211, 0x06) #Game type, we set the Entrance and item randomization flags
+    gametype = 0x04 # item
+    if world.shuffle != 'vanilla':
+        gametype |= 0x02 # entrance
+    if enemized:
+        gametype |= 0x01 # enemizer
+    rom.write_byte(0x180211, gametype) # Game type
 
     # assorted fixes
     rom.write_byte(0x1800A2, 0x01)  # remain in real dark world when dying in dark world dungeon before killing aga1
