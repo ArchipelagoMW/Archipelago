@@ -255,6 +255,7 @@ def start():
     parser.add_argument('--multi', default=1, type=lambda value: min(max(int(value), 1), 255))
     parser.add_argument('--names', default='')
     parser.add_argument('--outputpath')
+    parser.add_argument('--race', default=False, action='store_true')
     args = parser.parse_args()
 
     if args.outputpath and os.path.isdir(args.outputpath):

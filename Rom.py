@@ -5,6 +5,7 @@ import logging
 import os
 import random
 import struct
+import sys
 import subprocess
 
 from BaseClasses import ShopType, Region, Location, Item
@@ -852,7 +853,6 @@ def patch_rom(world, player, rom, enemized):
     rom.write_byte(0x180167, world.treasure_hunt_count % 256)
     rom.write_byte(0x180194, 1) # Must turn in triforced pieces (instant win not enabled)
 
-    # TODO: a proper race rom mode should be implemented, that changes the following flag, and rummages the table (or uses the future encryption feature, etc)
     rom.write_bytes(0x180213, [0x00, 0x01]) # Not a Tournament Seed
 
     gametype = 0x04 # item
@@ -1068,6 +1068,19 @@ def patch_rom(world, player, rom, enemized):
     rom.write_bytes(0x180215, code)
 
     return rom
+
+try:
+    import RaceRom
+except ImportError:
+    RaceRom = None
+
+def get_race_rom_patches(rom):
+    patches = {str(0x180213): [0x01, 0x00]} # Tournament Seed
+
+    if 'RaceRom' in sys.modules:
+        RaceRom.encrypt(rom, patches)
+
+    return patches
 
 def write_custom_shops(rom, world, player):
     shops = [shop for shop in world.shops if shop.replaceable and shop.active and shop.region.player == player]

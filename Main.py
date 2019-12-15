@@ -12,7 +12,7 @@ from BaseClasses import World, CollectionState, Item, Region, Location, Shop
 from Regions import create_regions, mark_light_world_regions
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from EntranceShuffle import link_entrances, link_inverted_entrances
-from Rom import patch_rom, get_enemizer_patch, apply_rom_settings, Sprite, LocalRom, JsonRom
+from Rom import patch_rom, get_race_rom_patches, get_enemizer_patch, apply_rom_settings, Sprite, LocalRom, JsonRom
 from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
 from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, flood_items, balance_multiworld_progression
@@ -174,10 +174,16 @@ def main(args, seed=None):
                 jsonout[f'patch{player}'] = rom.patches
                 if use_enemizer:
                     jsonout[f'enemizer{player}'] = enemizer_patch
+                if args.race:
+                    jsonout[f'race{player}'] = get_race_rom_patches(rom)
             else:
                 if use_enemizer:
                     local_rom.patch_enemizer(rom.patches, os.path.join(os.path.dirname(args.enemizercli), "enemizerBasePatch.json"), enemizer_patch)
                     rom = local_rom
+
+                if args.race:
+                    for addr, values in  get_race_rom_patches(rom).items():
+                        rom.write_bytes(int(addr), values)
 
                 apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite, player_names)
                 outfilepname = f'P{player}_' if world.players > 1 else '' + f'{player_names[player]}_' if player in player_names else ''
