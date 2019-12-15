@@ -1,3 +1,4 @@
+import bisect
 import io
 import json
 import hashlib
@@ -27,14 +28,36 @@ class JsonRom(object):
     def __init__(self):
         self.name = None
         self.patches = {}
+        self.addresses = []
 
     def write_byte(self, address, value):
-        self.patches[str(address)] = [value]
+        self.write_bytes(address, [value])
 
     def write_bytes(self, startaddress, values):
         if not values:
             return
-        self.patches[str(startaddress)] = list(values)
+        if type(values) is not list:
+            values = list(values)
+
+        pos = bisect.bisect_right(self.addresses, startaddress)
+        intervalstart = self.addresses[pos-1] if pos else None
+        intervalpatch = self.patches[str(intervalstart)] if pos else None
+
+        if pos and startaddress <= intervalstart + len(intervalpatch): # merge with previous segment
+            offset = startaddress - intervalstart
+            intervalpatch[offset:offset+len(values)] = values
+            startaddress = intervalstart
+            values = intervalpatch
+        else: # new segment
+            self.addresses.insert(pos, startaddress)
+            self.patches[str(startaddress)] = values
+            pos = pos + 1
+
+        while pos < len(self.addresses) and self.addresses[pos] <= startaddress + len(values): # merge the next segment into this one
+            intervalstart = self.addresses[pos]
+            values.extend(self.patches[str(intervalstart)][startaddress+len(values)-intervalstart:])
+            del self.patches[str(intervalstart)]
+            del self.addresses[pos]
 
     def write_to_file(self, file):
         with open(file, 'w') as stream:
