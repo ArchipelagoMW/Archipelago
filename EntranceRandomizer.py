@@ -256,6 +256,7 @@ def start():
     parser.add_argument('--names', default='')
     parser.add_argument('--outputpath')
     parser.add_argument('--race', default=False, action='store_true')
+    parser.add_argument('--outputname')
     args = parser.parse_args()
 
     if args.outputpath and os.path.isdir(args.outputpath):
