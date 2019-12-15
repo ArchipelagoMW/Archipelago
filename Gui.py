@@ -11,6 +11,7 @@ from urllib.parse import urlparse
 from urllib.request import urlopen
 
 from AdjusterMain import adjust
+from EntranceRandomizer import parse_arguments
 from GuiUtils import ToolTips, set_icon, BackgroundTaskProgress
 from Main import main, __version__ as ESVersion
 from Rom import Sprite
@@ -422,10 +423,11 @@ def guiMain(args=None):
                                    int(rupee300Var.get()), int(rupoorVar.get()), int(blueclockVar.get()), int(greenclockVar.get()), int(redclockVar.get()), int(progbowVar.get()), int(bomb10Var.get()), int(triforcepieceVar.get()),
                                    int(triforcecountVar.get()), int(triforceVar.get()),  int(rupoorcostVar.get()), int(universalkeyVar.get())]
         guiargs.rom = romVar.get()
-        guiargs.jsonout = None
         guiargs.sprite = sprite
-        guiargs.skip_playthrough = False
-        guiargs.outputpath = None
+        # get default values for missing parameters
+        for k,v in vars(parse_arguments([])).items():
+            if k not in vars(guiargs):
+                setattr(guiargs, k, v)
         try:
             if guiargs.count is not None:
                 seed = guiargs.seed
