@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 import argparse
+import copy
 import os
 import logging
 import random
 import textwrap
+import shlex
 import sys
 
 from Main import main
@@ -18,6 +20,11 @@ class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
 def parse_arguments(argv, no_defaults=False):
     def defval(value):
         return value if not no_defaults else None
+
+    # we need to know how many players we have first
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--multi', default=defval(1), type=lambda value: min(max(int(value), 1), 255))
+    multiargs, _ = parser.parse_known_args(argv)
 
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument('--create_spoiler', help='Output a Spoiler File', action='store_true')
@@ -259,7 +266,26 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--outputpath')
     parser.add_argument('--race', default=defval(False), action='store_true')
     parser.add_argument('--outputname')
-    return parser.parse_args(argv)
+
+    if multiargs.multi:
+        for player in range(1, multiargs.multi + 1):
+            parser.add_argument(f'--p{player}', default=defval(''), help=argparse.SUPPRESS)
+
+    ret = parser.parse_args(argv)
+
+    if multiargs.multi:
+        defaults = copy.deepcopy(ret)
+        for player in range(1, multiargs.multi + 1):
+            playerargs = parse_arguments(shlex.split(getattr(ret,f"p{player}")), True)
+
+            def set_player_arg(name):
+                value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
+                if player == 1:
+                    setattr(ret, name, {1: value})
+                else:
+                    getattr(ret, name)[player] = value
+
+    return ret
 
 def start():
     args = parse_arguments(None)
