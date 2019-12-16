@@ -67,7 +67,7 @@ class World(object):
         self.compassshuffle = {player: False for player in range(1, players + 1)}
         self.keyshuffle = {player: False for player in range(1, players + 1)}
         self.bigkeyshuffle = {player: False for player in range(1, players + 1)}
-        self.retro = retro
+        self.retro = retro.copy()
         self.custom = custom
         self.customitemarray = customitemarray
         self.can_take_damage = True
@@ -379,7 +379,7 @@ class CollectionState(object):
         return self.prog_items.count((item, player)) >= count
 
     def has_key(self, item, player, count=1):
-        if self.world.retro:
+        if self.world.retro[player]:
             return self.can_buy_unlimited('Small Key (Universal)', player)
         if count == 1:
             return (item, player) in self.prog_items
@@ -448,7 +448,7 @@ class CollectionState(object):
                )
 
     def can_shoot_arrows(self, player):
-        if self.world.retro:
+        if self.world.retro[player]:
             #TODO: need to decide how we want to handle wooden arrows  longer-term (a can-buy-a check, or via dynamic shop location)
             #FIXME: Should do something about hard+ ganon only silvers. For the moment, i believe they effective grant wooden, so we are safe
             return self.has('Bow', player) and (self.has('Silver Arrows', player) or self.can_buy_unlimited('Single Arrow', player))
@@ -1044,6 +1044,7 @@ class Spoiler(object):
         self.metadata = {'version': ERVersion,
                          'logic': self.world.logic,
                          'mode': self.world.mode,
+                         'retro': self.world.retro,
                          'weapons': self.world.swords,
                          'goal': self.world.goal,
                          'shuffle': self.world.shuffle,
@@ -1083,6 +1084,7 @@ class Spoiler(object):
             outfile.write('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n' % (self.metadata['version'], self.world.seed))
             outfile.write('Logic:                           %s\n' % self.metadata['logic'])
             outfile.write('Mode:                            %s\n' % self.metadata['mode'])
+            outfile.write('Retro:                           %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['retro'].items()})
             outfile.write('Swords:                          %s\n' % self.metadata['weapons'])
             outfile.write('Goal:                            %s\n' % self.metadata['goal'])
             outfile.write('Difficulty:                      %s\n' % self.metadata['item_pool'])

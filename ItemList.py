@@ -174,10 +174,10 @@ def generate_itempool(world, player):
 
     # set up item pool
     if world.custom:
-        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle[player], world.difficulty[player], world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro, world.customitemarray)
+        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle[player], world.difficulty[player], world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro[player], world.customitemarray)
         world.rupoor_cost = min(world.customitemarray[69], 9999)
     else:
-        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle[player], world.difficulty[player], world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro)
+        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle[player], world.difficulty[player], world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro[player])
 
     for item in precollected_items:
         world.push_precollected(ItemFactory(item, player))
@@ -242,7 +242,7 @@ def generate_itempool(world, player):
     place_bosses(world, player)
     set_up_shops(world, player)
 
-    if world.retro:
+    if world.retro[player]:
         set_up_take_anys(world, player)
 
     create_dynamic_shop_locations(world, player)
@@ -355,13 +355,13 @@ def set_up_shops(world, player):
     for shop in world.shops:
         shop.active = True
 
-    if world.retro:
+    if world.retro[player]:
         rss = world.get_region('Red Shield Shop', player).shop
         rss.active = True
         rss.add_inventory(2, 'Single Arrow', 80)
 
     # Randomized changes to Shops
-    if world.retro:
+    if world.retro[player]:
         for shop in random.sample([s for s in world.shops if s.replaceable and s.region.player == player], 5):
             shop.active = True
             shop.add_inventory(0, 'Single Arrow', 80)

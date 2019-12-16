@@ -8,7 +8,7 @@ from Items import ItemFactory
 
 def create_dungeons(world, player):
     def make_dungeon(name, default_boss, dungeon_regions, big_key, small_keys, dungeon_items):
-        dungeon = Dungeon(name, dungeon_regions, big_key, [] if world.retro else small_keys, dungeon_items, player)
+        dungeon = Dungeon(name, dungeon_regions, big_key, [] if world.retro[player] else small_keys, dungeon_items, player)
         dungeon.boss = BossFactory(default_boss, player)
         for region in dungeon.regions:
             world.get_region(region, player).dungeon = dungeon
@@ -47,7 +47,7 @@ def fill_dungeons(world):
 
     for player in range(1, world.players + 1):
         pinball_room = world.get_location('Skull Woods - Pinball Room', player)
-        if world.retro:
+        if world.retro[player]:
             world.push_item(pinball_room, ItemFactory('Small Key (Universal)', player), False)
         else:
             world.push_item(pinball_room, ItemFactory('Small Key (Skull Woods)', player), False)
@@ -126,7 +126,7 @@ def fill_dungeons_restrictive(world, shuffled_locations):
 
     for player in range(1, world.players + 1):
         pinball_room = world.get_location('Skull Woods - Pinball Room', player)
-        if world.retro:
+        if world.retro[player]:
             world.push_item(pinball_room, ItemFactory('Small Key (Universal)', player), False)
         else:
             world.push_item(pinball_room, ItemFactory('Small Key (Skull Woods)', player), False)
