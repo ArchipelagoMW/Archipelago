@@ -137,16 +137,16 @@ def fill_world(world, plando, text_patches):
                         world.fix_trock_doors = {1: trdstr.strip().lower() == 'true'}
                     elif line.startswith('!fix_trock_exit'):
                         _, trfstr = line.split(':', 1)
-                        world.fix_trock_exit = trfstr.strip().lower() == 'true'
+                        world.fix_trock_exit = {1: trfstr.strip().lower() == 'true'}
                     elif line.startswith('!fix_gtower_exit'):
                         _, gtfstr = line.split(':', 1)
                         world.fix_gtower_exit = gtfstr.strip().lower() == 'true'
                     elif line.startswith('!fix_pod_exit'):
                         _, podestr = line.split(':', 1)
-                        world.fix_palaceofdarkness_exit = podestr.strip().lower() == 'true'
+                        world.fix_palaceofdarkness_exit = {1: podestr.strip().lower() == 'true'}
                     elif line.startswith('!fix_skullwoods_exit'):
                         _, swestr = line.split(':', 1)
-                        world.fix_skullwoods_exit = swestr.strip().lower() == 'true'
+                        world.fix_skullwoods_exit = {1: swestr.strip().lower() == 'true'}
                     elif line.startswith('!check_beatable_only'):
                         _, chkbtstr = line.split(':', 1)
                         world.check_beatable_only = chkbtstr.strip().lower() == 'true'

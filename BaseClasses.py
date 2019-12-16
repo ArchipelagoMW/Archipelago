@@ -10,7 +10,7 @@ class World(object):
 
     def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive, goal, algorithm, accessibility, shuffle_ganon, quickswap, fastmenu, disable_music, retro, custom, customitemarray, boss_shuffle, hints):
         self.players = players
-        self.shuffle = shuffle
+        self.shuffle = shuffle.copy()
         self.logic = logic.copy()
         self.mode = mode.copy()
         self.swords = swords.copy()
@@ -48,12 +48,12 @@ class World(object):
         self.rupoor_cost = 10
         self.aga_randomness = True
         self.lock_aga_door_in_escape = False
-        self.fix_trock_doors = {player: self.shuffle != 'vanilla' or self.mode[player] == 'inverted' for player in range(1, players + 1)}
+        self.fix_trock_doors = {player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted' for player in range(1, players + 1)}
         self.save_and_quit_from_boss = True
         self.accessibility = accessibility
-        self.fix_skullwoods_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
-        self.fix_palaceofdarkness_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
-        self.fix_trock_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
+        self.fix_skullwoods_exit = {player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'] for player in range(1, players + 1)}
+        self.fix_palaceofdarkness_exit = {player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'] for player in range(1, players + 1)}
+        self.fix_trock_exit = {player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'] for player in range(1, players + 1)}
         self.shuffle_ganon = shuffle_ganon
         self.fix_gtower_exit = self.shuffle_ganon
         self.can_access_trock_eyebridge = None

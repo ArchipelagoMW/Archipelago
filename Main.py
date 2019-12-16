@@ -187,7 +187,7 @@ def main(args, seed=None):
                                                                           world.logic[player], world.difficulty[player], world.difficulty_adjustments[player],
                                                                           world.mode[player], world.goal[player],
                                                                           "" if world.timer in ['none', 'display'] else "-" + world.timer,
-                                                                          world.shuffle, world.algorithm, mcsb_name,
+                                                                          world.shuffle[player], world.algorithm, mcsb_name,
                                                                           "-retro" if world.retro else "",
                                                                           "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "",
                                                                           "-nohints" if not world.hints else "")) if not args.outputname else ''

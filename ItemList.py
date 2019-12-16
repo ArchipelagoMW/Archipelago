@@ -174,10 +174,10 @@ def generate_itempool(world, player):
 
     # set up item pool
     if world.custom:
-        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle, world.difficulty[player], world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro, world.customitemarray)
+        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle[player], world.difficulty[player], world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro, world.customitemarray)
         world.rupoor_cost = min(world.customitemarray[69], 9999)
     else:
-        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle, world.difficulty[player], world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro)
+        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle[player], world.difficulty[player], world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro)
 
     for item in precollected_items:
         world.push_precollected(ItemFactory(item, player))

@@ -519,17 +519,17 @@ def patch_rom(world, player, rom, enemized):
                     # Thanks to Zarby89 for originally finding these values
                     # todo fix screen scrolling
 
-                    if world.shuffle not in ['insanity', 'insanity_legacy', 'madness_legacy'] and \
-                        exit.name in ['Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit',
-                                      'Palace of Darkness Exit', 'Swamp Palace Exit', 'Ganons Tower Exit', 'Desert Palace Exit (North)', 'Agahnims Tower Exit', 'Spiral Cave Exit (Top)',
-                                      'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)']:
+                    if world.shuffle[player] not in ['insanity', 'insanity_legacy', 'madness_legacy'] and \
+                            exit.name in ['Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit',
+                                          'Palace of Darkness Exit', 'Swamp Palace Exit', 'Ganons Tower Exit', 'Desert Palace Exit (North)', 'Agahnims Tower Exit', 'Spiral Cave Exit (Top)',
+                                          'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)']:
                         # For exits that connot be reached from another, no need to apply offset fixes.
                         write_int16(rom, 0x15DB5 + 2 * offset, link_y) # same as final else
-                    elif room_id == 0x0059 and world.fix_skullwoods_exit:
+                    elif room_id == 0x0059 and world.fix_skullwoods_exit[player]:
                         write_int16(rom, 0x15DB5 + 2 * offset, 0x00F8)
-                    elif room_id == 0x004a and world.fix_palaceofdarkness_exit:
+                    elif room_id == 0x004a and world.fix_palaceofdarkness_exit[player]:
                         write_int16(rom, 0x15DB5 + 2 * offset, 0x0640)
-                    elif room_id == 0x00d6 and world.fix_trock_exit:
+                    elif room_id == 0x00d6 and world.fix_trock_exit[player]:
                         write_int16(rom, 0x15DB5 + 2 * offset, 0x0134)
                     elif room_id == 0x000c and world.fix_gtower_exit: # fix ganons tower exit point
                         write_int16(rom, 0x15DB5 + 2 * offset, 0x00A4)
@@ -581,7 +581,7 @@ def patch_rom(world, player, rom, enemized):
     if world.mode[player] in ['open', 'inverted']:
         rom.write_byte(0x180032, 0x01)  # open mode
     if world.mode[player] == 'inverted':
-        set_inverted_mode(world, rom)
+        set_inverted_mode(world, player, rom)
     elif world.mode[player] == 'standard':
         rom.write_byte(0x180032, 0x00)  # standard mode
 
@@ -833,9 +833,9 @@ def patch_rom(world, player, rom, enemized):
     rom.write_byte(0x180044, 0x01 if world.swords[player] == 'swordless' else 0x00)  # hammer activates tablets
 
     # set up clocks for timed modes
-    if world.shuffle == 'vanilla':
+    if world.shuffle[player] == 'vanilla':
         ERtimeincrease = 0
-    elif world.shuffle in ['dungeonssimple', 'dungeonsfull']:
+    elif world.shuffle[player] in ['dungeonssimple', 'dungeonsfull']:
         ERtimeincrease = 10
     else:
         ERtimeincrease = 20
@@ -883,7 +883,7 @@ def patch_rom(world, player, rom, enemized):
     rom.write_bytes(0x180213, [0x00, 0x01]) # Not a Tournament Seed
 
     gametype = 0x04 # item
-    if world.shuffle != 'vanilla':
+    if world.shuffle[player] != 'vanilla':
         gametype |= 0x02 # entrance
     if enemized:
         gametype |= 0x01 # enemizer
@@ -1057,7 +1057,7 @@ def patch_rom(world, player, rom, enemized):
     rom.write_bytes(0x02F539, [0xEA, 0xEA, 0xEA, 0xEA, 0xEA] if world.powder_patch_required[player] else [0xAD, 0xBF, 0x0A, 0xF0, 0x4F])
 
     # allow smith into multi-entrance caves in appropriate shuffles
-    if world.shuffle in ['restricted', 'full', 'crossed', 'insanity']:
+    if world.shuffle[player] in ['restricted', 'full', 'crossed', 'insanity']:
         rom.write_byte(0x18004C, 0x01)
 
     # set correct flag for hera basement item
@@ -1348,7 +1348,7 @@ def write_strings(rom, world, player):
     tt.removeUnwantedText()
 
     # Let's keep this guy's text accurate to the shuffle setting.
-    if world.shuffle in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
+    if world.shuffle[player] in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
         tt['kakariko_flophouse_man_no_flippers'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
         tt['kakariko_flophouse_man'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
 
@@ -1379,7 +1379,7 @@ def write_strings(rom, world, player):
                 entrances_to_hint.update({'Inverted Ganons Tower': 'The sealed castle door'})
             else:
                 entrances_to_hint.update({'Ganons Tower': 'Ganon\'s Tower'})
-        if world.shuffle in ['simple', 'restricted', 'restricted_legacy']:
+        if world.shuffle[player] in ['simple', 'restricted', 'restricted_legacy']:
             for entrance in all_entrances:
                 if entrance.name in entrances_to_hint:
                     this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(entrance.connected_region) + '.'
@@ -1388,9 +1388,9 @@ def write_strings(rom, world, player):
                     break
         #Now we write inconvenient locations for most shuffles and finish taking care of the less chaotic ones.
         entrances_to_hint.update(InconvenientOtherEntrances)
-        if world.shuffle in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+        if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
             hint_count = 0
-        elif world.shuffle in ['simple', 'restricted', 'restricted_legacy']:
+        elif world.shuffle[player] in ['simple', 'restricted', 'restricted_legacy']:
             hint_count = 2
         else:
             hint_count = 4
@@ -1405,14 +1405,14 @@ def write_strings(rom, world, player):
                     break
 
         #Next we handle hints for randomly selected other entrances, curating the selection intelligently based on shuffle.
-        if world.shuffle not in ['simple', 'restricted', 'restricted_legacy']:
+        if world.shuffle[player] not in ['simple', 'restricted', 'restricted_legacy']:
             entrances_to_hint.update(ConnectorEntrances)
             entrances_to_hint.update(DungeonEntrances)
             if world.mode[player] == 'inverted':
                 entrances_to_hint.update({'Inverted Agahnims Tower': 'The dark mountain tower'})
             else:
                 entrances_to_hint.update({'Agahnims Tower': 'The sealed castle door'})
-        elif world.shuffle == 'restricted':
+        elif world.shuffle[player] == 'restricted':
             entrances_to_hint.update(ConnectorEntrances)
         entrances_to_hint.update(OtherEntrances)
         if world.mode[player] == 'inverted':
@@ -1422,14 +1422,14 @@ def write_strings(rom, world, player):
         else:
             entrances_to_hint.update({'Dark Sanctuary Hint': 'The dark sanctuary cave'})
             entrances_to_hint.update({'Big Bomb Shop': 'The old bomb shop'})
-        if world.shuffle in ['insanity', 'madness_legacy', 'insanity_legacy']:
+        if world.shuffle[player] in ['insanity', 'madness_legacy', 'insanity_legacy']:
             entrances_to_hint.update(InsanityEntrances)
             if world.shuffle_ganon:
                 if world.mode[player] == 'inverted':
                     entrances_to_hint.update({'Inverted Pyramid Entrance': 'The extra castle passage'})
                 else:
                     entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
-        hint_count = 4 if world.shuffle not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 0
+        hint_count = 4 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 0
         for entrance in all_entrances:
             if entrance.name in entrances_to_hint:
                 if hint_count > 0:
@@ -1442,10 +1442,10 @@ def write_strings(rom, world, player):
 
         # Next we write a few hints for specific inconvenient locations. We don't make many because in entrance this is highly unpredictable.
         locations_to_hint = InconvenientLocations.copy()
-        if world.shuffle in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+        if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
             locations_to_hint.extend(InconvenientVanillaLocations)
         random.shuffle(locations_to_hint)
-        hint_count = 3 if world.shuffle not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 5
+        hint_count = 3 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 5
         del locations_to_hint[hint_count:]
         for location in locations_to_hint:
             if location == 'Swamp Left':
@@ -1498,7 +1498,7 @@ def write_strings(rom, world, player):
         if world.bigkeyshuffle:
             items_to_hint.extend(BigKeys)
         random.shuffle(items_to_hint)
-        hint_count = 5 if world.shuffle not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 8
+        hint_count = 5 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 8
         while hint_count > 0:
             this_item = items_to_hint.pop(0)
             this_location = world.find_items(this_item, player)
@@ -1641,7 +1641,7 @@ def write_strings(rom, world, player):
     rom.write_bytes(0x181500, data)
     rom.write_bytes(0x76CC0, [byte for p in pointers for byte in [p & 0xFF, p >> 8 & 0xFF]])
 
-def set_inverted_mode(world, rom):
+def set_inverted_mode(world, player, rom):
     rom.write_byte(snes_to_pc(0x0283E0), 0xF0)  # residual portals
     rom.write_byte(snes_to_pc(0x02B34D), 0xF0)
     rom.write_byte(snes_to_pc(0x06DB78), 0x8B)
@@ -1654,12 +1654,12 @@ def set_inverted_mode(world, rom):
     rom.write_byte(snes_to_pc(0x08D40C), 0xD0)  # morph proof
     # the following bytes should only be written in vanilla
     # or they'll overwrite the randomizer's shuffles
-    if world.shuffle == 'vanilla':
+    if world.shuffle[player] == 'vanilla':
         rom.write_byte(0xDBB73 + 0x23, 0x37)  # switch AT and GT
         rom.write_byte(0xDBB73 + 0x36, 0x24)
         write_int16(rom, 0x15AEE + 2*0x38, 0x00E0)
         write_int16(rom, 0x15AEE + 2*0x25, 0x000C)
-    if world.shuffle in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+    if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
         rom.write_byte(0x15B8C, 0x6C)
         rom.write_byte(0xDBB73 + 0x00, 0x53)  # switch bomb shop and links house
         rom.write_byte(0xDBB73 + 0x52, 0x01)
@@ -1717,7 +1717,7 @@ def set_inverted_mode(world, rom):
     write_int16(rom, snes_to_pc(0x02D9A6), 0x005A)
     rom.write_byte(snes_to_pc(0x02D9B3), 0x12)
     # keep the old man spawn point at old man house unless shuffle is vanilla
-    if world.shuffle in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
+    if world.shuffle[player] in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
         rom.write_bytes(snes_to_pc(0x308350), [0x00, 0x00, 0x01])
         write_int16(rom, snes_to_pc(0x02D8DE), 0x00F1)
         rom.write_bytes(snes_to_pc(0x02D910), [0x1F, 0x1E, 0x1F, 0x1F, 0x03, 0x02, 0x03, 0x03])
@@ -1780,7 +1780,7 @@ def set_inverted_mode(world, rom):
     write_int16s(rom, snes_to_pc(0x1bb836), [0x001B, 0x001B, 0x001B])
     write_int16(rom, snes_to_pc(0x308300), 0x0140) # new pyramid hole entrance
     write_int16(rom, snes_to_pc(0x308320), 0x001B)
-    if world.shuffle in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+    if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
         rom.write_byte(snes_to_pc(0x308340), 0x7B)
     write_int16(rom, snes_to_pc(0x1af504), 0x148B)
     write_int16(rom, snes_to_pc(0x1af50c), 0x149B)
@@ -1817,10 +1817,10 @@ def set_inverted_mode(world, rom):
     rom.write_bytes(snes_to_pc(0x1BC85A), [0x50, 0x0F, 0x82])
     write_int16(rom, 0xDB96F + 2 * 0x35, 0x001B)  # move pyramid exit door
     write_int16(rom, 0xDBA71 + 2 * 0x35, 0x06A4)
-    if world.shuffle in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+    if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
         rom.write_byte(0xDBB73 + 0x35, 0x36)
     rom.write_byte(snes_to_pc(0x09D436), 0xF3)  # remove castle gate warp
-    if world.shuffle in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+    if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
         write_int16(rom, 0x15AEE + 2 * 0x37, 0x0010)  # pyramid exit to new hc area
         rom.write_byte(0x15B8C + 0x37, 0x1B)
         write_int16(rom, 0x15BDB + 2 * 0x37, 0x0418)

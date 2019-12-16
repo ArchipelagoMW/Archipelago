@@ -16,7 +16,7 @@ def set_rules(world, player):
         else:
             world.get_region('Inverted Links House', player).can_reach_private = lambda state: True
             world.get_region('Inverted Dark Sanctuary', player).entrances[0].parent_region.can_reach_private = lambda state: True
-            if world.shuffle != 'vanilla':
+            if world.shuffle[player] != 'vanilla':
                 old_rule = world.get_region('Old Man House', player).can_reach
                 world.get_region('Old Man House', player).can_reach_private = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
             return
