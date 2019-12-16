@@ -210,7 +210,7 @@ def fill_restrictive(world, base_state, locations, itempool, single_player_place
 
     itempool.extend(unplaced_items)
 
-def distribute_items_restrictive(world, gftower_trash_count=0, fill_locations=None):
+def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None):
     # If not passed in, then get a shuffled list of locations to fill in
     if not fill_locations:
         fill_locations = world.get_unfilled_locations()
@@ -224,16 +224,20 @@ def distribute_items_restrictive(world, gftower_trash_count=0, fill_locations=No
 
     # fill in gtower locations with trash first
     for player in range(1, world.players + 1):
-        if world.ganonstower_vanilla[player]:
-            gtower_locations = [location for location in fill_locations if 'Ganons Tower' in location.name and location.player == player]
-            random.shuffle(gtower_locations)
-            trashcnt = 0
-            while gtower_locations and restitempool and trashcnt < gftower_trash_count:
-                spot_to_fill = gtower_locations.pop()
-                item_to_place = restitempool.pop()
-                world.push_item(spot_to_fill, item_to_place, False)
-                fill_locations.remove(spot_to_fill)
-                trashcnt += 1
+        if not gftower_trash or not world.ganonstower_vanilla[player]:
+            continue
+
+        gftower_trash_count = (random.randint(15, 50) if world.goal[player] == 'triforcehunt' else random.randint(0, 15))
+
+        gtower_locations = [location for location in fill_locations if 'Ganons Tower' in location.name and location.player == player]
+        random.shuffle(gtower_locations)
+        trashcnt = 0
+        while gtower_locations and restitempool and trashcnt < gftower_trash_count:
+            spot_to_fill = gtower_locations.pop()
+            item_to_place = restitempool.pop()
+            world.push_item(spot_to_fill, item_to_place, False)
+            fill_locations.remove(spot_to_fill)
+            trashcnt += 1
 
     random.shuffle(fill_locations)
     fill_locations.reverse()

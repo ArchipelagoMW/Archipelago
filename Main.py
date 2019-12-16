@@ -112,12 +112,12 @@ def main(args, seed=None):
     elif args.algorithm == 'freshness':
         distribute_items_staleness(world)
     elif args.algorithm == 'vt25':
-        distribute_items_restrictive(world, 0)
+        distribute_items_restrictive(world, False)
     elif args.algorithm == 'vt26':
 
-        distribute_items_restrictive(world, gt_filler(world), shuffled_locations)
+        distribute_items_restrictive(world, True, shuffled_locations)
     elif args.algorithm == 'balanced':
-        distribute_items_restrictive(world, gt_filler(world))
+        distribute_items_restrictive(world, True)
 
     if world.players > 1:
         logger.info('Balancing multiworld progression.')
@@ -185,7 +185,7 @@ def main(args, seed=None):
                 outfilesuffix = ('%s%s_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (f'_P{player}' if world.players > 1 else '',
                                                                           f'_{player_names[player]}' if player in player_names else '',
                                                                           world.logic[player], world.difficulty, world.difficulty_adjustments,
-                                                                          world.mode[player], world.goal,
+                                                                          world.mode[player], world.goal[player],
                                                                           "" if world.timer in ['none', 'display'] else "-" + world.timer,
                                                                           world.shuffle, world.algorithm, mcsb_name,
                                                                           "-retro" if world.retro else "",
@@ -212,11 +212,6 @@ def main(args, seed=None):
     logger.debug('Total Time: %s', time.process_time() - start)
 
     return world
-
-def gt_filler(world):
-    if world.goal == 'triforcehunt':
-        return random.randint(15, 50)
-    return random.randint(0, 15)
 
 def copy_world(world):
     # ToDo: Not good yet

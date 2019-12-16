@@ -18,7 +18,7 @@ class World(object):
         self.difficulty_adjustments = difficulty_adjustments
         self.timer = timer
         self.progressive = progressive
-        self.goal = goal
+        self.goal = goal.copy()
         self.algorithm = algorithm
         self.dungeons = []
         self.regions = []
