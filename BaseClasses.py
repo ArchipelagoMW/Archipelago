@@ -13,7 +13,7 @@ class World(object):
         self.shuffle = shuffle
         self.logic = logic.copy()
         self.mode = mode.copy()
-        self.swords = swords
+        self.swords = swords.copy()
         self.difficulty = difficulty
         self.difficulty_adjustments = difficulty_adjustments
         self.timer = timer
@@ -1080,6 +1080,7 @@ class Spoiler(object):
             outfile.write('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n' % (self.metadata['version'], self.world.seed))
             outfile.write('Logic:                           %s\n' % self.metadata['logic'])
             outfile.write('Mode:                            %s\n' % self.metadata['mode'])
+            outfile.write('Swords:                          %s\n' % self.metadata['weapons'])
             outfile.write('Goal:                            %s\n' % self.metadata['goal'])
             outfile.write('Difficulty:                      %s\n' % self.metadata['item_pool'])
             outfile.write('Item Functionality:              %s\n' % self.metadata['item_functionality'])

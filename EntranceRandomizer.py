@@ -278,15 +278,12 @@ def parse_arguments(argv, no_defaults=False):
         for player in range(1, multiargs.multi + 1):
             playerargs = parse_arguments(shlex.split(getattr(ret,f"p{player}")), True)
 
-            def set_player_arg(name):
+            for name in ['logic', 'mode', 'swords']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})
                 else:
                     getattr(ret, name)[player] = value
-
-            set_player_arg("logic")
-            set_player_arg("mode")
 
     return ret
 

@@ -458,7 +458,7 @@ def default_rules(world, player):
     set_rule(world.get_entrance('Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.open_pyramid)
     set_rule(world.get_entrance('Ganons Tower', player), lambda state: False) # This is a safety for the TR function below to not require GT entrance in its key logic.
 
-    if world.swords == 'swordless':
+    if world.swords[player] == 'swordless':
         swordless_rules(world, player)
 
     set_trock_key_rules(world, player)
@@ -613,7 +613,7 @@ def inverted_rules(world, player):
     set_rule(world.get_entrance('Inverted Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.open_pyramid)
     set_rule(world.get_entrance('Inverted Ganons Tower', player), lambda state: False) # This is a safety for the TR function below to not require GT entrance in its key logic.
 
-    if world.swords == 'swordless':
+    if world.swords[player] == 'swordless':
         swordless_rules(world, player)
 
     set_trock_key_rules(world, player)

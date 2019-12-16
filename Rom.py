@@ -706,7 +706,7 @@ def patch_rom(world, player, rom, enemized):
                      difficulty.progressive_bottle_limit, mw_bottle_replacements[difficulty.progressive_bottle_limit] if world.players > 1 else overflow_replacement,
                      difficulty.progressive_bow_limit, mw_bow_replacements[difficulty.progressive_bow_limit] if world.players > 1 else overflow_replacement])
 
-    if difficulty.progressive_bow_limit < 2 and world.swords == 'swordless':
+    if difficulty.progressive_bow_limit < 2 and world.swords[player] == 'swordless':
         rom.write_bytes(0x180098, [2, mw_bow_replacements[difficulty.progressive_bow_limit] if world.players > 1 else overflow_replacement])
         rom.write_byte(0x180181, 0x01) # Make silver arrows work only on ganon
 
@@ -826,11 +826,11 @@ def patch_rom(world, player, rom, enemized):
     rom.write_byte(0x180029, 0x01) # Smithy quick item give
 
     # set swordless mode settings
-    rom.write_byte(0x18003F, 0x01 if world.swords == 'swordless' else 0x00)  # hammer can harm ganon
-    rom.write_byte(0x180040, 0x01 if world.swords == 'swordless' else 0x00)  # open curtains
-    rom.write_byte(0x180041, 0x01 if world.swords == 'swordless' else 0x00)  # swordless medallions
-    rom.write_byte(0x180043, 0xFF if world.swords == 'swordless' else 0x00)  # starting sword for link
-    rom.write_byte(0x180044, 0x01 if world.swords == 'swordless' else 0x00)  # hammer activates tablets
+    rom.write_byte(0x18003F, 0x01 if world.swords[player] == 'swordless' else 0x00)  # hammer can harm ganon
+    rom.write_byte(0x180040, 0x01 if world.swords[player] == 'swordless' else 0x00)  # open curtains
+    rom.write_byte(0x180041, 0x01 if world.swords[player] == 'swordless' else 0x00)  # swordless medallions
+    rom.write_byte(0x180043, 0xFF if world.swords[player] == 'swordless' else 0x00)  # starting sword for link
+    rom.write_byte(0x180044, 0x01 if world.swords[player] == 'swordless' else 0x00)  # hammer activates tablets
 
     # set up clocks for timed modes
     if world.shuffle == 'vanilla':
