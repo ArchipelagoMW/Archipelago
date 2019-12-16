@@ -473,6 +473,10 @@ def patch_rom(world, player, rom, enemized):
                         itemid = 0x32
                     if location.item.smallkey:
                         itemid = 0x24
+                    if location.item.map:
+                        itemid = 0x33
+                    if location.item.compass:
+                        itemid = 0x25
             if location.item and location.item.player != player:
                 if location.player_address is not None:
                     rom.write_byte(location.player_address, location.item.player)
