@@ -935,7 +935,9 @@ def patch_rom(world, player, rom, enemized):
 
     rom.write_bytes(0x180080, [50, 50, 70, 70]) # values to fill for Capacity Upgrades (Bomb5, Bomb10, Arrow5, Arrow10)
 
-    rom.write_byte(0x18004D, 0x00) # Escape assist (off)
+    rom.write_byte(0x18004D, ((0x01 if 'arrows' in world.escape_assist else 0x00) |
+                              (0x02 if 'bombs' in world.escape_assist else 0x00) |
+                              (0x04 if 'magic' in world.escape_assist else 0x00))) # Escape assist
 
     if world.goal in ['pedestal', 'triforcehunt']:
         rom.write_byte(0x18003E, 0x01)  # make ganon invincible

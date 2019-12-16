@@ -56,6 +56,8 @@ def main(args, seed=None):
     logger.info('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n', __version__, world.seed)
 
     world.difficulty_requirements = difficulties[world.difficulty]
+    if world.mode == 'standard' and (args.shuffleenemies != 'none' or args.enemy_health not in ['default', 'easy']):
+        world.escape_assist.append(['bombs']) # enemized escape assumes infinite bombs available and will likely be unbeatable without it
 
     if world.mode != 'inverted':
         for player in range(1, world.players + 1):

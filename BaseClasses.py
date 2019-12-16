@@ -74,6 +74,7 @@ class World(object):
         self.difficulty_requirements = None
         self.fix_fake_world = True
         self.boss_shuffle = boss_shuffle
+        self.escape_assist = []
         self.hints = hints
         self.crystals_needed_for_ganon = 7
         self.crystals_needed_for_gt = 7
