@@ -34,19 +34,10 @@ def main(args, seed=None):
         world.seed = int(seed)
     random.seed(world.seed)
 
-    world.mapshuffle = args.mapshuffle
-    world.compassshuffle = args.compassshuffle
-    world.keyshuffle = args.keyshuffle
-    world.bigkeyshuffle = args.bigkeyshuffle
-
-    mcsb_name = ''
-    if all([world.mapshuffle, world.compassshuffle, world.keyshuffle, world.bigkeyshuffle]):
-        mcsb_name = '-keysanity'
-    elif [world.mapshuffle, world.compassshuffle, world.keyshuffle, world.bigkeyshuffle].count(True) == 1:
-        mcsb_name = '-mapshuffle' if world.mapshuffle else '-compassshuffle' if world.compassshuffle else '-keyshuffle' if world.keyshuffle else '-bigkeyshuffle'
-    elif any([world.mapshuffle, world.compassshuffle, world.keyshuffle, world.bigkeyshuffle]):
-        mcsb_name = '-%s%s%s%sshuffle' % ('M' if world.mapshuffle else '', 'C' if world.compassshuffle else '', 'S' if world.keyshuffle else '', 'B' if world.bigkeyshuffle else '')
-
+    world.mapshuffle = args.mapshuffle.copy()
+    world.compassshuffle = args.compassshuffle.copy()
+    world.keyshuffle = args.keyshuffle.copy()
+    world.bigkeyshuffle = args.bigkeyshuffle.copy()
     world.crystals_needed_for_ganon = {player: random.randint(0, 7) if args.crystals_ganon[player] == 'random' else int(args.crystals_ganon[player]) for player in range(1, world.players + 1)}
     world.crystals_needed_for_gt = {player: random.randint(0, 7) if args.crystals_gt[player] == 'random' else int(args.crystals_gt[player]) for player in range(1, world.players + 1)}
     world.open_pyramid = args.openpyramid.copy()
@@ -94,7 +85,8 @@ def main(args, seed=None):
     logger.info('Placing Dungeon Items.')
 
     shuffled_locations = None
-    if args.algorithm in ['balanced', 'vt26'] or args.mapshuffle or args.compassshuffle or args.keyshuffle or args.bigkeyshuffle:
+    if args.algorithm in ['balanced', 'vt26'] or any(list(args.mapshuffle.values()) + list(args.compassshuffle.values()) +
+                                                     list(args.keyshuffle.values()) + list(args.bigkeyshuffle.values())):
         shuffled_locations = world.get_unfilled_locations()
         random.shuffle(shuffled_locations)
         fill_dungeons_restrictive(world, shuffled_locations)
@@ -182,6 +174,17 @@ def main(args, seed=None):
                         rom.write_bytes(int(addr), values)
 
                 apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite, player_names)
+
+                mcsb_name = ''
+                if all([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player], world.bigkeyshuffle[player]]):
+                    mcsb_name = '-keysanity'
+                elif [world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player], world.bigkeyshuffle[player]].count(True) == 1:
+                    mcsb_name = '-mapshuffle' if world.mapshuffle[player] else '-compassshuffle' if world.compassshuffle[player] else '-keyshuffle' if world.keyshuffle[player] else '-bigkeyshuffle'
+                elif any([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player], world.bigkeyshuffle[player]]):
+                    mcsb_name = '-%s%s%s%sshuffle' % (
+                    'M' if world.mapshuffle[player] else '', 'C' if world.compassshuffle[player] else '',
+                    'S' if world.keyshuffle[player] else '', 'B' if world.bigkeyshuffle[player] else '')
+
                 outfilesuffix = ('%s%s_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (f'_P{player}' if world.players > 1 else '',
                                                                           f'_{player_names[player]}' if player in player_names else '',
                                                                           world.logic[player], world.difficulty[player], world.difficulty_adjustments[player],
@@ -235,10 +238,10 @@ def copy_world(world):
     ret.difficulty_requirements = world.difficulty_requirements.copy()
     ret.fix_fake_world = world.fix_fake_world
     ret.lamps_needed_for_dark_rooms = world.lamps_needed_for_dark_rooms
-    ret.mapshuffle = world.mapshuffle
-    ret.compassshuffle = world.compassshuffle
-    ret.keyshuffle = world.keyshuffle
-    ret.bigkeyshuffle = world.bigkeyshuffle
+    ret.mapshuffle = world.mapshuffle.copy()
+    ret.compassshuffle = world.compassshuffle.copy()
+    ret.keyshuffle = world.keyshuffle.copy()
+    ret.bigkeyshuffle = world.bigkeyshuffle.copy()
     ret.crystals_needed_for_ganon = world.crystals_needed_for_ganon.copy()
     ret.crystals_needed_for_gt = world.crystals_needed_for_gt.copy()
     ret.open_pyramid = world.open_pyramid.copy()

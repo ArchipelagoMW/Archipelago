@@ -136,16 +136,16 @@ def fill_dungeons_restrictive(world, shuffled_locations):
 
     # with shuffled dungeon items they are distributed as part of the normal item pool
     for item in world.get_items():
-        if (item.smallkey and world.keyshuffle) or (item.bigkey and world.bigkeyshuffle):
+        if (item.smallkey and world.keyshuffle[item.player]) or (item.bigkey and world.bigkeyshuffle[item.player]):
             all_state_base.collect(item, True)
             item.advancement = True
-        elif (item.map and world.mapshuffle) or (item.compass and world.compassshuffle):
+        elif (item.map and world.mapshuffle[item.player]) or (item.compass and world.compassshuffle[item.player]):
             item.priority = True
 
-    dungeon_items = [item for item in get_dungeon_item_pool(world) if ((item.smallkey and not world.keyshuffle)
-                                                                       or (item.bigkey and not world.bigkeyshuffle)
-                                                                       or (item.map and not world.mapshuffle)
-                                                                       or (item.compass and not world.compassshuffle))]
+    dungeon_items = [item for item in get_dungeon_item_pool(world) if ((item.smallkey and not world.keyshuffle[item.player])
+                                                                       or (item.bigkey and not world.bigkeyshuffle[item.player])
+                                                                       or (item.map and not world.mapshuffle[item.player])
+                                                                       or (item.compass and not world.compassshuffle[item.player]))]
 
     # sort in the order Big Key, Small Key, Other before placing dungeon items
     sort_order = {"BigKey": 3, "SmallKey": 2}

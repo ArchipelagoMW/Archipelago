@@ -243,8 +243,7 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
     fill_locations.reverse()
 
     # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
-    if world.keyshuffle:
-        progitempool.sort(key=lambda item: 1 if item.name == 'Small Key (Escape)' and world.mode[item.player] == 'standard' else 0)
+    progitempool.sort(key=lambda item: 1 if item.name == 'Small Key (Escape)' and world.mode[item.player] == 'standard' and world.keyshuffle[item.player] else 0)
 
     fill_restrictive(world, world.state, fill_locations, progitempool)
 
@@ -355,7 +354,7 @@ def balance_multiworld_progression(world):
                 candidate_items = []
                 while True:
                     for location in balancing_sphere:
-                        if location.event and (world.keyshuffle or not location.item.smallkey) and (world.bigkeyshuffle or not location.item.bigkey):
+                        if location.event and (world.keyshuffle[location.item.player] or not location.item.smallkey) and (world.bigkeyshuffle[location.item.player] or not location.item.bigkey):
                             balancing_state.collect(location.item, True, location)
                             if location.item.player in balancing_players and not location.locked:
                                 candidate_items.append(location)
@@ -411,7 +410,7 @@ def balance_multiworld_progression(world):
                         sphere_locations.append(location)
 
         for location in sphere_locations:
-            if location.event and (world.keyshuffle or not location.item.smallkey) and (world.bigkeyshuffle or not location.item.bigkey):
+            if location.event and (world.keyshuffle[location.item.player] or not location.item.smallkey) and (world.bigkeyshuffle[location.item.player] or not location.item.bigkey):
                 state.collect(location.item, True, location)
         checked_locations.extend(sphere_locations)
 

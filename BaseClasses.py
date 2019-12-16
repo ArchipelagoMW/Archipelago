@@ -63,10 +63,10 @@ class World(object):
         self.quickswap = quickswap
         self.fastmenu = fastmenu
         self.disable_music = disable_music
-        self.mapshuffle = False
-        self.compassshuffle = False
-        self.keyshuffle = False
-        self.bigkeyshuffle = False
+        self.mapshuffle = {player: False for player in range(1, players + 1)}
+        self.compassshuffle = {player: False for player in range(1, players + 1)}
+        self.keyshuffle = {player: False for player in range(1, players + 1)}
+        self.bigkeyshuffle = {player: False for player in range(1, players + 1)}
         self.retro = retro
         self.custom = custom
         self.customitemarray = customitemarray
@@ -364,7 +364,7 @@ class CollectionState(object):
         checked_locations = 0
         while new_locations:
             reachable_events = [location for location in locations if location.event and
-                                (not key_only or (not self.world.keyshuffle and location.item.smallkey) or (not self.world.bigkeyshuffle and location.item.bigkey))
+                                (not key_only or (not self.world.keyshuffle[location.item.player] and location.item.smallkey) or (not self.world.bigkeyshuffle[location.item.player] and location.item.bigkey))
                                 and location.can_reach(self)]
             for event in reachable_events:
                 if (event.name, event.player) not in self.events:
@@ -685,10 +685,10 @@ class Region(object):
         return False
 
     def can_fill(self, item):
-        inside_dungeon_item = ((item.smallkey and not self.world.keyshuffle)
-                               or (item.bigkey and not self.world.bigkeyshuffle)
-                               or (item.map and not self.world.mapshuffle)
-                               or (item.compass and not self.world.compassshuffle))
+        inside_dungeon_item = ((item.smallkey and not self.world.keyshuffle[item.player])
+                               or (item.bigkey and not self.world.bigkeyshuffle[item.player])
+                               or (item.map and not self.world.mapshuffle[item.player])
+                               or (item.compass and not self.world.compassshuffle[item.player]))
         sewer_hack = self.world.mode[item.player] == 'standard' and item.name == 'Small Key (Escape)'
         if sewer_hack or inside_dungeon_item:
             return self.dungeon and self.dungeon.is_dungeon_item(item) and item.player == self.player
@@ -1095,10 +1095,10 @@ class Spoiler(object):
             outfile.write('Accessibility:                   %s\n' % self.metadata['accessibility'])
             outfile.write('L\\R Quickswap enabled:           %s\n' % ('Yes' if self.world.quickswap else 'No'))
             outfile.write('Menu speed:                      %s\n' % self.world.fastmenu)
-            outfile.write('Map shuffle:                     %s\n' % ('Yes' if self.metadata['mapshuffle'] else 'No'))
-            outfile.write('Compass shuffle:                 %s\n' % ('Yes' if self.metadata['compassshuffle'] else 'No'))
-            outfile.write('Small Key shuffle:               %s\n' % ('Yes' if self.metadata['keyshuffle'] else 'No'))
-            outfile.write('Big Key shuffle:                 %s\n' % ('Yes' if self.metadata['bigkeyshuffle'] else 'No'))
+            outfile.write('Map shuffle:                     %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['mapshuffle'].items()})
+            outfile.write('Compass shuffle:                 %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['compassshuffle'].items()})
+            outfile.write('Small Key shuffle:               %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['keyshuffle'].items()})
+            outfile.write('Big Key shuffle:                 %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['bigkeyshuffle'].items()})
             outfile.write('Players:                         %d' % self.world.players)
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
