@@ -76,9 +76,9 @@ class World(object):
         self.boss_shuffle = boss_shuffle
         self.escape_assist = {player: [] for player in range(1, players + 1)}
         self.hints = hints
-        self.crystals_needed_for_ganon = 7
-        self.crystals_needed_for_gt = 7
-        self.open_pyramid = False
+        self.crystals_needed_for_ganon = {}
+        self.crystals_needed_for_gt = {}
+        self.open_pyramid = {player: False for player in range(1, players + 1)}
         self.dynamic_regions = []
         self.dynamic_locations = []
         self.spoiler = Spoiler(self)
@@ -1049,6 +1049,9 @@ class Spoiler(object):
                          'shuffle': self.world.shuffle,
                          'item_pool': self.world.difficulty,
                          'item_functionality': self.world.difficulty_adjustments,
+                         'gt_crystals': self.world.crystals_needed_for_gt,
+                         'ganon_crystals': self.world.crystals_needed_for_ganon,
+                         'open_pyramid': self.world.open_pyramid,
                          'accessibility': self.world.accessibility,
                          'hints': self.world.hints,
                          'mapshuffle': self.world.mapshuffle,
@@ -1085,6 +1088,9 @@ class Spoiler(object):
             outfile.write('Difficulty:                      %s\n' % self.metadata['item_pool'])
             outfile.write('Item Functionality:              %s\n' % self.metadata['item_functionality'])
             outfile.write('Entrance Shuffle:                %s\n' % self.metadata['shuffle'])
+            outfile.write('Crystals required for GT:        %s\n' % self.metadata['gt_crystals'])
+            outfile.write('Crystals required for Ganon:     %s\n' % self.metadata['ganon_crystals'])
+            outfile.write('Pyramid hole pre-opened:         %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['open_pyramid'].items()})
             outfile.write('Filling Algorithm:               %s\n' % self.world.algorithm)
             outfile.write('Accessibility:                   %s\n' % self.metadata['accessibility'])
             outfile.write('L\\R Quickswap enabled:           %s\n' % ('Yes' if self.world.quickswap else 'No'))

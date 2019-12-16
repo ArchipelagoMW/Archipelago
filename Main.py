@@ -47,9 +47,9 @@ def main(args, seed=None):
     elif any([world.mapshuffle, world.compassshuffle, world.keyshuffle, world.bigkeyshuffle]):
         mcsb_name = '-%s%s%s%sshuffle' % ('M' if world.mapshuffle else '', 'C' if world.compassshuffle else '', 'S' if world.keyshuffle else '', 'B' if world.bigkeyshuffle else '')
 
-    world.crystals_needed_for_ganon = random.randint(0, 7) if args.crystals_ganon == 'random' else int(args.crystals_ganon)
-    world.crystals_needed_for_gt = random.randint(0, 7) if args.crystals_gt == 'random' else int(args.crystals_gt)
-    world.open_pyramid = args.openpyramid
+    world.crystals_needed_for_ganon = {player: random.randint(0, 7) if args.crystals_ganon[player] == 'random' else int(args.crystals_ganon[player]) for player in range(1, world.players + 1)}
+    world.crystals_needed_for_gt = {player: random.randint(0, 7) if args.crystals_gt[player] == 'random' else int(args.crystals_gt[player]) for player in range(1, world.players + 1)}
+    world.open_pyramid = args.openpyramid.copy()
 
     world.rom_seeds = {player: random.randint(0, 999999999) for player in range(1, world.players + 1)}
 
@@ -239,8 +239,9 @@ def copy_world(world):
     ret.compassshuffle = world.compassshuffle
     ret.keyshuffle = world.keyshuffle
     ret.bigkeyshuffle = world.bigkeyshuffle
-    ret.crystals_needed_for_ganon = world.crystals_needed_for_ganon
-    ret.crystals_needed_for_gt = world.crystals_needed_for_gt
+    ret.crystals_needed_for_ganon = world.crystals_needed_for_ganon.copy()
+    ret.crystals_needed_for_gt = world.crystals_needed_for_gt.copy()
+    ret.open_pyramid = world.open_pyramid.copy()
 
     for player in range(1, world.players + 1):
         if world.mode[player] != 'inverted':

@@ -278,7 +278,7 @@ def parse_arguments(argv, no_defaults=False):
         for player in range(1, multiargs.multi + 1):
             playerargs = parse_arguments(shlex.split(getattr(ret,f"p{player}")), True)
 
-            for name in ['logic', 'mode', 'swords', 'goal', 'difficulty', 'item_functionality', 'shuffle']:
+            for name in ['logic', 'mode', 'swords', 'goal', 'difficulty', 'item_functionality', 'shuffle', 'crystals_ganon', 'crystals_gt', 'openpyramid']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})
