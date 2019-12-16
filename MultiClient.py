@@ -410,7 +410,7 @@ async def snes_recv_loop(ctx : Context):
         print("Snes disconnected, type /snes to reconnect")
     except Exception as e:
         print("Lost connection to the snes, type /snes to reconnect")
-        if type(e) is not websockets.ConnectionClosed:
+        if not isinstance(e, websockets.WebSocketException):
             logging.exception(e)
     finally:
         socket, ctx.snes_socket = ctx.snes_socket, None
@@ -561,7 +561,7 @@ async def server_loop(ctx : Context):
         print('Failed to connect to the multiworld server')
     except Exception as e:
         print('Lost connection to the multiworld server, type /connect to reconnect')
-        if type(e) is not websockets.ConnectionClosed:
+        if not isinstance(e, websockets.WebSocketException):
             logging.exception(e)
     finally:
         ctx.name = None

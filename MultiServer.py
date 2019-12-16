@@ -102,7 +102,7 @@ async def server(websocket, path, ctx : Context):
                     args = msg[1]
                 await process_client_cmd(ctx, client, cmd, args)
     except Exception as e:
-        if type(e) is not websockets.ConnectionClosed:
+        if not isinstance(e, websockets.WebSocketException):
             logging.exception(e)
     finally:
         await on_client_disconnected(ctx, client)
