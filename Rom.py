@@ -170,9 +170,9 @@ def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shuffleene
 
     # write options file for enemizer
     options = {
-        'RandomizeEnemies': shuffleenemies,
+        'RandomizeEnemies': shuffleenemies != 'none',
         'RandomizeEnemiesType': 3,
-        'RandomizeBushEnemyChance': True,
+        'RandomizeBushEnemyChance': shuffleenemies == 'chaos',
         'RandomizeEnemyHealthRange': enemy_health != 'default',
         'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[enemy_health],
         'OHKO': False,
@@ -218,9 +218,9 @@ def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shuffleene
         'SwordGraphics': "sword_gfx/normal.gfx",
         'BeeMizer': False,
         'BeesLevel': 0,
-        'RandomizeTileTrapPattern': True,
+        'RandomizeTileTrapPattern': shuffleenemies == 'chaos',
         'RandomizeTileTrapFloorTile': False,
-        'AllowKillableThief': shuffleenemies,
+        'AllowKillableThief': bool(random.randint(0,1)) if shuffleenemies == 'chaos' else shuffleenemies != 'none',
         'RandomizeSpriteOnHit': False,
         'DebugMode': False,
         'DebugForceEnemy': False,

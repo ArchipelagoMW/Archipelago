@@ -146,7 +146,7 @@ def main(args, seed=None):
                                                           "-nohints" if not world.hints else "")) if not args.outputname else ''
     outfilebase = outfileprefix + outfilesuffix
 
-    use_enemizer = args.enemizercli and (args.shufflebosses != 'none' or args.shuffleenemies or args.enemy_health != 'default' or args.enemy_health != 'default' or args.enemy_damage or args.shufflepalette or args.shufflepots)
+    use_enemizer = args.enemizercli and (args.shufflebosses != 'none' or args.shuffleenemies != 'none' or args.enemy_health != 'default' or args.enemy_health != 'default' or args.enemy_damage or args.shufflepalette or args.shufflepots)
 
     jsonout = {}
     if not args.suppress_rom:
