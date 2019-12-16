@@ -138,15 +138,7 @@ def main(args, seed=None):
         sprite = None
 
     player_names = parse_names_string(args.names)
-    outfileprefix = 'ER_%s' % (args.outputname if args.outputname else world.seed)
-    outfilesuffix = ('_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (world.logic, world.difficulty, world.difficulty_adjustments,
-                                                          world.mode, world.goal,
-                                                          "" if world.timer in ['none', 'display'] else "-" + world.timer,
-                                                          world.shuffle, world.algorithm, mcsb_name,
-                                                          "-retro" if world.retro else "",
-                                                          "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "",
-                                                          "-nohints" if not world.hints else "")) if not args.outputname else ''
-    outfilebase = outfileprefix + outfilesuffix
+    outfilebase = 'ER_%s' % (args.outputname if args.outputname else world.seed)
 
     use_enemizer = args.enemizercli and (args.shufflebosses != 'none' or args.shuffleenemies != 'none' or args.enemy_health != 'default' or args.enemy_health != 'default' or args.enemy_damage or args.shufflepalette or args.shufflepots)
 
@@ -194,8 +186,16 @@ def main(args, seed=None):
                         rom.write_bytes(int(addr), values)
 
                 apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite, player_names)
-                outfilepname = f"{f'_P{player}' if world.players > 1 else ''}{f'_{player_names[player]}' if player in player_names else ''}"
-                rom.write_to_file(output_path(f'{outfileprefix}{outfilepname}{outfilesuffix}.sfc'))
+                outfilesuffix = ('%s%s_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (f'_P{player}' if world.players > 1 else '',
+                                                                          f'_{player_names[player]}' if player in player_names else '',
+                                                                          world.logic, world.difficulty, world.difficulty_adjustments,
+                                                                          world.mode, world.goal,
+                                                                          "" if world.timer in ['none', 'display'] else "-" + world.timer,
+                                                                          world.shuffle, world.algorithm, mcsb_name,
+                                                                          "-retro" if world.retro else "",
+                                                                          "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "",
+                                                                          "-nohints" if not world.hints else "")) if not args.outputname else ''
+                rom.write_to_file(output_path(f'{outfilebase}{outfilesuffix}.sfc'))
 
         with open(output_path('%s_multidata' % outfilebase), 'wb') as f:
             pickle.dump(multidata, f, pickle.HIGHEST_PROTOCOL)
