@@ -611,7 +611,7 @@ def patch_rom(world, player, rom, enemized):
     rom.write_byte(0x18004F, 0x01) # Byrna Invulnerability: on
 
     # handle difficulty_adjustments
-    if world.difficulty_adjustments == 'hard':
+    if world.difficulty_adjustments[player] == 'hard':
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xD8)  # One Heart
         # potion heal amount
@@ -629,7 +629,7 @@ def patch_rom(world, player, rom, enemized):
         write_int16(rom, 0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x02) # Hookshot only
-    elif world.difficulty_adjustments == 'expert':
+    elif world.difficulty_adjustments[player] == 'expert':
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xD8)  # One Heart
         # potion heal amount
@@ -676,7 +676,7 @@ def patch_rom(world, player, rom, enemized):
     #Byrna residual magic cost
     rom.write_bytes(0x45C42, [0x04, 0x02, 0x01])
 
-    difficulty = world.difficulty_requirements
+    difficulty = world.difficulty_requirements[player]
 
     #Set overflow items for progressive equipment
     mw_sword_replacements = {0: overflow_replacement,
@@ -737,7 +737,7 @@ def patch_rom(world, player, rom, enemized):
     random.shuffle(packs)
     prizes[:56] = [drop for pack in packs for drop in pack]
 
-    if world.difficulty_adjustments in ['hard', 'expert']:
+    if world.difficulty_adjustments[player] in ['hard', 'expert']:
         prize_replacements = {0xE0: 0xDF, # Fairy -> heart
                               0xE3: 0xD8} # Big magic -> small magic
         prizes = [prize_replacements.get(prize, prize) for prize in prizes]
@@ -793,7 +793,7 @@ def patch_rom(world, player, rom, enemized):
     ])
 
     # set Fountain bottle exchange items
-    if world.difficulty in ['hard', 'expert']:
+    if world.difficulty[player] in ['hard', 'expert']:
         rom.write_byte(0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][random.randint(0, 5)])
         rom.write_byte(0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][random.randint(0, 5)])
     else:
@@ -858,7 +858,7 @@ def patch_rom(world, player, rom, enemized):
         write_int32(rom, 0x180200, -100 * 60 * 60 * 60)  # red clock adjustment time (in frames, sint32)
         write_int32(rom, 0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
         write_int32(rom, 0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
-        if world.difficulty_adjustments == 'normal':
+        if world.difficulty_adjustments[player] == 'normal':
             write_int32(rom, 0x18020C, (10 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
         else:
             write_int32(rom, 0x18020C, int((5 + ERtimeincrease / 2) * 60 * 60))  # starting time (in frames, sint32)

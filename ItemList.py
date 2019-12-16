@@ -125,7 +125,7 @@ difficulties = {
 }
 
 def generate_itempool(world, player):
-    if (world.difficulty not in ['normal', 'hard', 'expert'] or world.goal[player] not in ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals']
+    if (world.difficulty[player] not in ['normal', 'hard', 'expert'] or world.goal[player] not in ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals']
             or world.mode[player] not in ['open', 'standard', 'inverted'] or world.timer not in ['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'] or world.progressive not in ['on', 'off', 'random']):
         raise NotImplementedError('Not supported yet')
 
@@ -174,10 +174,10 @@ def generate_itempool(world, player):
 
     # set up item pool
     if world.custom:
-        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro, world.customitemarray)
+        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle, world.difficulty[player], world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro, world.customitemarray)
         world.rupoor_cost = min(world.customitemarray[69], 9999)
     else:
-        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro)
+        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle, world.difficulty[player], world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro)
 
     for item in precollected_items:
         world.push_precollected(ItemFactory(item, player))
@@ -227,9 +227,9 @@ def generate_itempool(world, player):
     # logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
     # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
-    if world.difficulty in ['normal', 'hard'] and not (world.custom and world.customitemarray[30] == 0):
+    if world.difficulty[player] in ['normal', 'hard'] and not (world.custom and world.customitemarray[30] == 0):
         [item for item in world.itempool if item.name == 'Boss Heart Container' and item.player == player][0].advancement = True
-    elif world.difficulty in ['expert'] and not (world.custom and world.customitemarray[29] < 4):
+    elif world.difficulty[player] in ['expert'] and not (world.custom and world.customitemarray[29] < 4):
         adv_heart_pieces = [item for item in world.itempool if item.name == 'Piece of Heart' and item.player == player][0:4]
         for hp in adv_heart_pieces:
             hp.advancement = True

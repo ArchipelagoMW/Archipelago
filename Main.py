@@ -55,9 +55,9 @@ def main(args, seed=None):
 
     logger.info('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n', __version__, world.seed)
 
-    world.difficulty_requirements = difficulties[world.difficulty]
-
     for player in range(1, world.players + 1):
+        world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
+
         if world.mode[player] == 'standard' and (args.shuffleenemies != 'none' or args.enemy_health not in ['default', 'easy']):
             world.escape_assist[player].append(['bombs']) # enemized escape assumes infinite bombs available and will likely be unbeatable without it
 
@@ -184,7 +184,7 @@ def main(args, seed=None):
                 apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite, player_names)
                 outfilesuffix = ('%s%s_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (f'_P{player}' if world.players > 1 else '',
                                                                           f'_{player_names[player]}' if player in player_names else '',
-                                                                          world.logic[player], world.difficulty, world.difficulty_adjustments,
+                                                                          world.logic[player], world.difficulty[player], world.difficulty_adjustments[player],
                                                                           world.mode[player], world.goal[player],
                                                                           "" if world.timer in ['none', 'display'] else "-" + world.timer,
                                                                           world.shuffle, world.algorithm, mcsb_name,
@@ -232,7 +232,7 @@ def copy_world(world):
     ret.can_access_trock_big_chest = world.can_access_trock_big_chest
     ret.can_access_trock_middle = world.can_access_trock_middle
     ret.can_take_damage = world.can_take_damage
-    ret.difficulty_requirements = world.difficulty_requirements
+    ret.difficulty_requirements = world.difficulty_requirements.copy()
     ret.fix_fake_world = world.fix_fake_world
     ret.lamps_needed_for_dark_rooms = world.lamps_needed_for_dark_rooms
     ret.mapshuffle = world.mapshuffle

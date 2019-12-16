@@ -36,7 +36,7 @@ def main(args):
 
     logger.info('ALttP Plandomizer Version %s  -  Seed: %s\n\n', __version__, args.plando)
 
-    world.difficulty_requirements = difficulties[world.difficulty]
+    world.difficulty_requirements[1] = difficulties[world.difficulty[1]]
 
     create_regions(world, 1)
     create_dungeons(world, 1)
