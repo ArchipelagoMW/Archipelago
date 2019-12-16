@@ -7,7 +7,7 @@ def set_rules(world, player):
 
     if world.logic[player] == 'nologic':
         logging.getLogger('').info('WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
-        if world.mode != 'inverted':
+        if world.mode[player] != 'inverted':
             world.get_region('Links House', player).can_reach_private = lambda state: True
             world.get_region('Sanctuary', player).can_reach_private = lambda state: True
             old_rule = world.get_region('Old Man House', player).can_reach
@@ -22,14 +22,14 @@ def set_rules(world, player):
             return
 
     global_rules(world, player)
-    if world.mode != 'inverted':
+    if world.mode[player] != 'inverted':
         default_rules(world, player)
 
-    if world.mode == 'open':
+    if world.mode[player] == 'open':
         open_rules(world, player)
-    elif world.mode == 'standard':
+    elif world.mode[player] == 'standard':
         standard_rules(world, player)
-    elif world.mode == 'inverted':
+    elif world.mode[player] == 'inverted':
         open_rules(world, player)
         inverted_rules(world, player)
     else:
@@ -49,7 +49,7 @@ def set_rules(world, player):
         # require aga2 to beat ganon
         add_rule(world.get_location('Ganon', player), lambda state: state.has('Beat Agahnim 2', player))
     
-    if world.mode != 'inverted':
+    if world.mode[player] != 'inverted':
         set_big_bomb_rules(world, player)
     else:
         set_inverted_big_bomb_rules(world, player)
@@ -58,7 +58,7 @@ def set_rules(world, player):
     if not world.swamp_patch_required[player]:
         add_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has_Mirror(player))
 
-    if world.mode != 'inverted':
+    if world.mode[player] != 'inverted':
         set_bunny_rules(world, player)
     else:
         set_inverted_bunny_rules(world, player)
@@ -345,7 +345,7 @@ def global_rules(world, player):
 
 
 def default_rules(world, player):
-    if world.mode == 'standard':
+    if world.mode[player] == 'standard':
         world.get_region('Hyrule Castle Secret Entrance', player).can_reach_private = lambda state: True
         old_rule = world.get_region('Links House', player).can_reach_private
         world.get_region('Links House', player).can_reach_private = lambda state: state.can_reach('Sanctuary', 'Region', player) or old_rule(state)
@@ -621,7 +621,7 @@ def inverted_rules(world, player):
     set_rule(world.get_entrance('Inverted Ganons Tower', player), lambda state: state.has_crystals(world.crystals_needed_for_gt, player))
 
 def no_glitches_rules(world, player):
-    if world.mode != 'inverted':
+    if world.mode[player] != 'inverted':
         set_rule(world.get_entrance('Zoras River', player), lambda state: state.has('Flippers', player) or state.can_lift_rocks(player))
         set_rule(world.get_entrance('Lake Hylia Central Island Pier', player), lambda state: state.has('Flippers', player))  # can be fake flippered to
         set_rule(world.get_entrance('Hobo Bridge', player), lambda state: state.has('Flippers', player))
@@ -672,7 +672,7 @@ def no_glitches_rules(world, player):
     add_conditional_lamp('Palace of Darkness Maze Door', 'Palace of Darkness (Entrance)', 'Entrance')
     add_conditional_lamp('Palace of Darkness - Dark Basement - Left', 'Palace of Darkness (Entrance)', 'Location')
     add_conditional_lamp('Palace of Darkness - Dark Basement - Right', 'Palace of Darkness (Entrance)', 'Location')
-    if world.mode != 'inverted':
+    if world.mode[player] != 'inverted':
         add_conditional_lamp('Agahnim 1', 'Agahnims Tower', 'Entrance')
         add_conditional_lamp('Castle Tower - Dark Maze', 'Agahnims Tower', 'Location')
     else:
@@ -688,7 +688,7 @@ def no_glitches_rules(world, player):
     add_conditional_lamp('Eastern Palace - Boss', 'Eastern Palace', 'Location')
     add_conditional_lamp('Eastern Palace - Prize', 'Eastern Palace', 'Location')
 
-    if not world.sewer_light_cone:
+    if not world.sewer_light_cone[player]:
         add_lamp_requirement(world.get_location('Sewers - Dark Cross', player), player)
         add_lamp_requirement(world.get_entrance('Sewers Back Door', player), player)
         add_lamp_requirement(world.get_entrance('Throne Room', player), player)
@@ -709,7 +709,7 @@ def swordless_rules(world, player):
     set_rule(world.get_location('Ganon', player), lambda state: state.has('Hammer', player) and state.has_fire_source(player) and state.has('Silver Arrows', player) and state.can_shoot_arrows(player) and state.has_crystals(world.crystals_needed_for_ganon, player))
     set_rule(world.get_entrance('Ganon Drop', player), lambda state: state.has('Hammer', player))  # need to damage ganon to get tiles to drop
 
-    if world.mode != 'inverted':
+    if world.mode[player] != 'inverted':
         set_rule(world.get_entrance('Agahnims Tower', player), lambda state: state.has('Cape', player) or state.has('Hammer', player) or state.has('Beat Agahnim 1', player))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
         set_rule(world.get_entrance('Turtle Rock', player), lambda state: state.has_Pearl(player) and state.has_turtle_rock_medallion(player) and state.can_reach('Turtle Rock (Top)', 'Region', player))   # sword not required to use medallion for opening in swordless (!)
         set_rule(world.get_entrance('Misery Mire', player), lambda state: state.has_Pearl(player) and state.has_misery_mire_medallion(player))  # sword not required to use medallion for opening in swordless (!)

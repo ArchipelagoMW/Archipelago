@@ -56,30 +56,26 @@ def main(args, seed=None):
     logger.info('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n', __version__, world.seed)
 
     world.difficulty_requirements = difficulties[world.difficulty]
-    if world.mode == 'standard' and (args.shuffleenemies != 'none' or args.enemy_health not in ['default', 'easy']):
-        world.escape_assist.append(['bombs']) # enemized escape assumes infinite bombs available and will likely be unbeatable without it
 
-    if world.mode != 'inverted':
-        for player in range(1, world.players + 1):
+    for player in range(1, world.players + 1):
+        if world.mode[player] == 'standard' and (args.shuffleenemies != 'none' or args.enemy_health not in ['default', 'easy']):
+            world.escape_assist[player].append(['bombs']) # enemized escape assumes infinite bombs available and will likely be unbeatable without it
+
+        if world.mode[player] != 'inverted':
             create_regions(world, player)
-            create_dungeons(world, player)
-    else:
-        for player in range(1, world.players + 1):
+        else:
             create_inverted_regions(world, player)
-            create_dungeons(world, player)
+        create_dungeons(world, player)
 
     logger.info('Shuffling the World about.')
 
-    if world.mode != 'inverted':
-        for player in range(1, world.players + 1):
+    for player in range(1, world.players + 1):
+        if world.mode[player] != 'inverted':
             link_entrances(world, player)
-
-        mark_light_world_regions(world)
-    else:
-        for player in range(1, world.players + 1):
+            mark_light_world_regions(world, player)
+        else:
             link_inverted_entrances(world, player)
-
-        mark_dark_world_regions(world)
+            mark_dark_world_regions(world, player)
 
     logger.info('Generating Item Pool.')
 
@@ -189,7 +185,7 @@ def main(args, seed=None):
                 outfilesuffix = ('%s%s_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (f'_P{player}' if world.players > 1 else '',
                                                                           f'_{player_names[player]}' if player in player_names else '',
                                                                           world.logic[player], world.difficulty, world.difficulty_adjustments,
-                                                                          world.mode, world.goal,
+                                                                          world.mode[player], world.goal,
                                                                           "" if world.timer in ['none', 'display'] else "-" + world.timer,
                                                                           world.shuffle, world.algorithm, mcsb_name,
                                                                           "-retro" if world.retro else "",
@@ -232,7 +228,7 @@ def copy_world(world):
     ret.ganonstower_vanilla = world.ganonstower_vanilla.copy()
     ret.treasure_hunt_count = world.treasure_hunt_count
     ret.treasure_hunt_icon = world.treasure_hunt_icon
-    ret.sewer_light_cone = world.sewer_light_cone
+    ret.sewer_light_cone = world.sewer_light_cone.copy()
     ret.light_world_light_cone = world.light_world_light_cone
     ret.dark_world_light_cone = world.dark_world_light_cone
     ret.seed = world.seed
@@ -251,14 +247,12 @@ def copy_world(world):
     ret.crystals_needed_for_ganon = world.crystals_needed_for_ganon
     ret.crystals_needed_for_gt = world.crystals_needed_for_gt
 
-    if world.mode != 'inverted':
-        for player in range(1, world.players + 1):
+    for player in range(1, world.players + 1):
+        if world.mode[player] != 'inverted':
             create_regions(ret, player)
-            create_dungeons(ret, player)
-    else:
-        for player in range(1, world.players + 1):
+        else:
             create_inverted_regions(ret, player)
-            create_dungeons(ret, player)
+        create_dungeons(ret, player)
 
     copy_dynamic_regions_and_locations(world, ret)
 
@@ -436,7 +430,7 @@ def create_playthrough(world):
         old_world.spoiler.paths.update({ str(location) : get_path(state, location.parent_region) for sphere in collection_spheres for location in sphere if location.player == player})
         for _, path in dict(old_world.spoiler.paths).items():
             if any(exit == 'Pyramid Fairy' for (_, exit) in path):
-                if world.mode != 'inverted':
+                if world.mode[player] != 'inverted':
                     old_world.spoiler.paths[str(world.get_region('Big Bomb Shop', player))] = get_path(state, world.get_region('Big Bomb Shop', player))
                 else:
                     old_world.spoiler.paths[str(world.get_region('Inverted Big Bomb Shop', player))] = get_path(state, world.get_region('Inverted Big Bomb Shop', player))

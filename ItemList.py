@@ -126,7 +126,7 @@ difficulties = {
 
 def generate_itempool(world, player):
     if (world.difficulty not in ['normal', 'hard', 'expert'] or world.goal not in ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals']
-            or world.mode not in ['open', 'standard', 'inverted'] or world.timer not in ['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'] or world.progressive not in ['on', 'off', 'random']):
+            or world.mode[player] not in ['open', 'standard', 'inverted'] or world.timer not in ['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'] or world.progressive not in ['on', 'off', 'random']):
         raise NotImplementedError('Not supported yet')
 
     if world.timer in ['ohko', 'timed-ohko']:
@@ -138,7 +138,7 @@ def generate_itempool(world, player):
         world.push_item(world.get_location('Ganon', player), ItemFactory('Triforce', player), False)
 
     if world.goal in ['triforcehunt']:
-        if world.mode == 'inverted':
+        if world.mode[player] == 'inverted':
             region = world.get_region('Light World',player)
         else:
             region = world.get_region('Hyrule Castle Courtyard', player)
@@ -177,15 +177,15 @@ def generate_itempool(world, player):
 
     # set up item pool
     if world.custom:
-        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.swords, world.retro, world.customitemarray)
+        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode[player], world.swords, world.retro, world.customitemarray)
         world.rupoor_cost = min(world.customitemarray[69], 9999)
     else:
-        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode, world.swords, world.retro)
+        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle, world.difficulty, world.timer, world.goal, world.mode[player], world.swords, world.retro)
 
     for item in precollected_items:
         world.push_precollected(ItemFactory(item, player))
 
-    if world.mode == 'standard' and not world.state.has_blunt_weapon(player) and "Link's Uncle" not in placed_items:
+    if world.mode[player] == 'standard' and not world.state.has_blunt_weapon(player) and "Link's Uncle" not in placed_items:
         found_sword = False
         found_bow = False
         possible_weapons = []
@@ -261,7 +261,7 @@ take_any_locations = [
     'Dark Lake Hylia Ledge Spike Cave', 'Fortune Teller (Dark)', 'Dark Sanctuary Hint', 'Dark Desert Hint']
 
 def set_up_take_anys(world, player):
-    if world.mode == 'inverted' and 'Dark Sanctuary Hint' in take_any_locations:
+    if world.mode[player] == 'inverted' and 'Dark Sanctuary Hint' in take_any_locations:
         take_any_locations.remove('Dark Sanctuary Hint')
 
     regions = random.sample(take_any_locations, 5)

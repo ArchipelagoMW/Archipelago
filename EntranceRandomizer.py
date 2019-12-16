@@ -286,6 +286,7 @@ def parse_arguments(argv, no_defaults=False):
                     getattr(ret, name)[player] = value
 
             set_player_arg("logic")
+            set_player_arg("mode")
 
     return ret
 

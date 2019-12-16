@@ -344,10 +344,10 @@ def _create_region(player, name, type, hint='Hyrule', locations=None, exits=None
         ret.locations.append(Location(player, location, address, crystal, hint_text, ret, player_address))
     return ret
 
-def mark_dark_world_regions(world):
+def mark_dark_world_regions(world, player):
     # cross world caves may have some sections marked as both in_light_world, and in_dark_work.
     # That is ok. the bunny logic will check for this case and incorporate special rules.
-    queue = collections.deque(region for region in world.regions if region.type == RegionType.DarkWorld)
+    queue = collections.deque(region for region in world.get_regions(player) if region.type == RegionType.DarkWorld)
     seen = set(queue)
     while queue:
         current = queue.popleft()
@@ -360,7 +360,7 @@ def mark_dark_world_regions(world):
                 seen.add(exit.connected_region)
                 queue.append(exit.connected_region)
 
-    queue = collections.deque(region for region in world.regions if region.type == RegionType.LightWorld)
+    queue = collections.deque(region for region in world.get_regions(player) if region.type == RegionType.LightWorld)
     seen = set(queue)
     while queue:
         current = queue.popleft()

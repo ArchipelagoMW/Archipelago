@@ -116,7 +116,7 @@ def fill_world(world, plando, text_patches):
                         tr_medallion = medallionstr.strip()
                     elif line.startswith('!mode'):
                         _, modestr = line.split(':', 1)
-                        world.mode = modestr.strip()
+                        world.mode = {1: modestr.strip()}
                     elif line.startswith('!logic'):
                         _, logicstr = line.split(':', 1)
                         world.logic = {1: logicstr.strip()}
@@ -125,7 +125,7 @@ def fill_world(world, plando, text_patches):
                         world.goal = goalstr.strip()
                     elif line.startswith('!light_cone_sewers'):
                         _, sewerstr = line.split(':', 1)
-                        world.sewer_light_cone = sewerstr.strip().lower() == 'true'
+                        world.sewer_light_cone = {1: sewerstr.strip().lower() == 'true'}
                     elif line.startswith('!light_cone_lw'):
                         _, lwconestr = line.split(':', 1)
                         world.light_world_light_cone = lwconestr.strip().lower() == 'true'
@@ -134,7 +134,7 @@ def fill_world(world, plando, text_patches):
                         world.dark_world_light_cone = dwconestr.strip().lower() == 'true'
                     elif line.startswith('!fix_trock_doors'):
                         _, trdstr = line.split(':', 1)
-                        world.fix_trock_doors = trdstr.strip().lower() == 'true'
+                        world.fix_trock_doors = {1: trdstr.strip().lower() == 'true'}
                     elif line.startswith('!fix_trock_exit'):
                         _, trfstr = line.split(':', 1)
                         world.fix_trock_exit = trfstr.strip().lower() == 'true'

@@ -141,7 +141,7 @@ def place_bosses(world, player):
     if world.boss_shuffle == 'none':
         return
     # Most to least restrictive order
-    if world.mode != 'inverted':
+    if world.mode[player] != 'inverted':
         boss_locations = [
             ['Ganons Tower', 'top'],
             ['Tower of Hera', None],

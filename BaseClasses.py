@@ -12,7 +12,7 @@ class World(object):
         self.players = players
         self.shuffle = shuffle
         self.logic = logic.copy()
-        self.mode = mode
+        self.mode = mode.copy()
         self.swords = swords
         self.difficulty = difficulty
         self.difficulty_adjustments = difficulty_adjustments
@@ -39,7 +39,7 @@ class World(object):
         self.powder_patch_required = {player: False for player in range(1, players + 1)}
         self.ganon_at_pyramid = {player: True for player in range(1, players + 1)}
         self.ganonstower_vanilla = {player: True for player in range(1, players + 1)}
-        self.sewer_light_cone = mode == 'standard'
+        self.sewer_light_cone = {player: mode[player] == 'standard' for player in range(1, players + 1)}
         self.light_world_light_cone = False
         self.dark_world_light_cone = False
         self.treasure_hunt_count = 0
@@ -48,7 +48,7 @@ class World(object):
         self.rupoor_cost = 10
         self.aga_randomness = True
         self.lock_aga_door_in_escape = False
-        self.fix_trock_doors = self.shuffle != 'vanilla' or self.mode == 'inverted'
+        self.fix_trock_doors = {player: self.shuffle != 'vanilla' or self.mode[player] == 'inverted' for player in range(1, players + 1)}
         self.save_and_quit_from_boss = True
         self.accessibility = accessibility
         self.fix_skullwoods_exit = self.shuffle not in ['vanilla', 'simple', 'restricted', 'dungeonssimple']
@@ -74,7 +74,7 @@ class World(object):
         self.difficulty_requirements = None
         self.fix_fake_world = True
         self.boss_shuffle = boss_shuffle
-        self.escape_assist = []
+        self.escape_assist = {player: [] for player in range(1, players + 1)}
         self.hints = hints
         self.crystals_needed_for_ganon = 7
         self.crystals_needed_for_gt = 7
@@ -499,7 +499,7 @@ class CollectionState(object):
         if self.has_Pearl(player):
             return True 
         
-        return region.is_light_world if self.world.mode != 'inverted' else region.is_dark_world
+        return region.is_light_world if self.world.mode[player] != 'inverted' else region.is_dark_world
 
     def can_reach_light_world(self, player):
         if True in [i.is_light_world for i in self.reachable_regions[player]]:
@@ -689,7 +689,7 @@ class Region(object):
                                or (item.bigkey and not self.world.bigkeyshuffle)
                                or (item.map and not self.world.mapshuffle)
                                or (item.compass and not self.world.compassshuffle))
-        sewer_hack = self.world.mode == 'standard' and item.name == 'Small Key (Escape)'
+        sewer_hack = self.world.mode[item.player] == 'standard' and item.name == 'Small Key (Escape)'
         if sewer_hack or inside_dungeon_item:
             return self.dungeon and self.dungeon.is_dungeon_item(item) and item.player == self.player
 
@@ -1025,7 +1025,7 @@ class Spoiler(object):
             self.bosses[str(player)]["Ice Palace"] = self.world.get_dungeon("Ice Palace", player).boss.name
             self.bosses[str(player)]["Misery Mire"] = self.world.get_dungeon("Misery Mire", player).boss.name
             self.bosses[str(player)]["Turtle Rock"] = self.world.get_dungeon("Turtle Rock", player).boss.name
-            if self.world.mode != 'inverted':
+            if self.world.mode[player] != 'inverted':
                 self.bosses[str(player)]["Ganons Tower Basement"] = self.world.get_dungeon('Ganons Tower', player).bosses['bottom'].name
                 self.bosses[str(player)]["Ganons Tower Middle"] = self.world.get_dungeon('Ganons Tower', player).bosses['middle'].name
                 self.bosses[str(player)]["Ganons Tower Top"] = self.world.get_dungeon('Ganons Tower', player).bosses['top'].name
