@@ -5,7 +5,7 @@ from BaseClasses import CollectionState
 
 def set_rules(world, player):
 
-    if world.logic == 'nologic':
+    if world.logic[player] == 'nologic':
         logging.getLogger('').info('WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
         if world.mode != 'inverted':
             world.get_region('Links House', player).can_reach_private = lambda state: True
@@ -35,9 +35,9 @@ def set_rules(world, player):
     else:
         raise NotImplementedError('Not implemented yet')
 
-    if world.logic == 'noglitches':
+    if world.logic[player] == 'noglitches':
         no_glitches_rules(world, player)
-    elif world.logic == 'minorglitches':
+    elif world.logic[player] == 'minorglitches':
         logging.getLogger('').info('Minor Glitches may be buggy still. No guarantee for proper logic checks.')
     else:
         raise NotImplementedError('Not implemented yet')

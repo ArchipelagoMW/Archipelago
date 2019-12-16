@@ -188,7 +188,7 @@ def main(args, seed=None):
                 apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite, player_names)
                 outfilesuffix = ('%s%s_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (f'_P{player}' if world.players > 1 else '',
                                                                           f'_{player_names[player]}' if player in player_names else '',
-                                                                          world.logic, world.difficulty, world.difficulty_adjustments,
+                                                                          world.logic[player], world.difficulty, world.difficulty_adjustments,
                                                                           world.mode, world.goal,
                                                                           "" if world.timer in ['none', 'display'] else "-" + world.timer,
                                                                           world.shuffle, world.algorithm, mcsb_name,

@@ -11,7 +11,7 @@ class World(object):
     def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive, goal, algorithm, accessibility, shuffle_ganon, quickswap, fastmenu, disable_music, retro, custom, customitemarray, boss_shuffle, hints):
         self.players = players
         self.shuffle = shuffle
-        self.logic = logic
+        self.logic = logic.copy()
         self.mode = mode
         self.swords = swords
         self.difficulty = difficulty

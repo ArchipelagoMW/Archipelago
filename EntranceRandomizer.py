@@ -285,6 +285,8 @@ def parse_arguments(argv, no_defaults=False):
                 else:
                     getattr(ret, name)[player] = value
 
+            set_player_arg("logic")
+
     return ret
 
 def start():

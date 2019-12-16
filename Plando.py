@@ -119,7 +119,7 @@ def fill_world(world, plando, text_patches):
                         world.mode = modestr.strip()
                     elif line.startswith('!logic'):
                         _, logicstr = line.split(':', 1)
-                        world.logic = logicstr.strip()
+                        world.logic = {1: logicstr.strip()}
                     elif line.startswith('!goal'):
                         _, goalstr = line.split(':', 1)
                         world.goal = goalstr.strip()
