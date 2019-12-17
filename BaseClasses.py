@@ -75,7 +75,7 @@ class World(object):
         self.fix_fake_world = True
         self.boss_shuffle = boss_shuffle
         self.escape_assist = {player: [] for player in range(1, players + 1)}
-        self.hints = hints
+        self.hints = hints.copy()
         self.crystals_needed_for_ganon = {}
         self.crystals_needed_for_gt = {}
         self.open_pyramid = {player: False for player in range(1, players + 1)}
@@ -1101,6 +1101,7 @@ class Spoiler(object):
             outfile.write('Compass shuffle:                 %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['compassshuffle'].items()})
             outfile.write('Small Key shuffle:               %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['keyshuffle'].items()})
             outfile.write('Big Key shuffle:                 %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['bigkeyshuffle'].items()})
+            outfile.write('Hints:                           %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['hints'].items()})
             outfile.write('Players:                         %d' % self.world.players)
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')

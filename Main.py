@@ -193,7 +193,7 @@ def main(args, seed=None):
                                                                           world.shuffle[player], world.algorithm, mcsb_name,
                                                                           "-retro" if world.retro[player] else "",
                                                                           "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "",
-                                                                          "-nohints" if not world.hints else "")) if not args.outputname else ''
+                                                                          "-nohints" if not world.hints[player] else "")) if not args.outputname else ''
                 rom.write_to_file(output_path(f'{outfilebase}{outfilesuffix}.sfc'))
 
         with open(output_path('%s_multidata' % outfilebase), 'wb') as f:

@@ -1364,7 +1364,7 @@ def write_strings(rom, world, player):
         return hint
 
     # For hints, first we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
-    if world.hints:
+    if world.hints[player]:
         tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles can have hints!'
         hint_locations = HintLocations.copy()
         random.shuffle(hint_locations)
