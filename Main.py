@@ -190,16 +190,15 @@ def main(args, seed=None):
                     'M' if world.mapshuffle[player] else '', 'C' if world.compassshuffle[player] else '',
                     'S' if world.keyshuffle[player] else '', 'B' if world.bigkeyshuffle[player] else '')
 
-                outfilesuffix = ('%s%s_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (f'_P{player}' if world.players > 1 else '',
-                                                                          f'_{player_names[player]}' if player in player_names else '',
-                                                                          world.logic[player], world.difficulty[player], world.difficulty_adjustments[player],
+                playername = f"{f'_P{player}' if world.players > 1 else ''}{f'_{player_names[player]}' if player in player_names else ''}"
+                outfilesuffix = ('_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (world.logic[player], world.difficulty[player], world.difficulty_adjustments[player],
                                                                           world.mode[player], world.goal[player],
                                                                           "" if world.timer in ['none', 'display'] else "-" + world.timer,
                                                                           world.shuffle[player], world.algorithm, mcsb_name,
                                                                           "-retro" if world.retro[player] else "",
                                                                           "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "",
                                                                           "-nohints" if not world.hints[player] else "")) if not args.outputname else ''
-                rom.write_to_file(output_path(f'{outfilebase}{outfilesuffix}.sfc'))
+                rom.write_to_file(output_path(f'{outfilebase}{playername}{outfilesuffix}.sfc'))
 
         with open(output_path('%s_multidata' % outfilebase), 'wb') as f:
             pickle.dump(multidata, f, pickle.HIGHEST_PROTOCOL)
