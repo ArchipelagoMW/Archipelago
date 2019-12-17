@@ -179,14 +179,12 @@ def fill_restrictive(world, base_state, locations, itempool, single_player_place
         items_to_place = [[itempool.remove(items[-1]), items.pop()][-1] for items in player_items.values() if items]
 
         maximum_exploration_state = sweep_from_pool()
-
-        perform_access_check = True
-        if world.accessibility == 'none' and not single_player_placement:
-            perform_access_check = not world.has_beaten_game(maximum_exploration_state)
+        has_beaten_game = world.has_beaten_game(maximum_exploration_state)
 
         for item_to_place in items_to_place:
-            if single_player_placement and world.accessibility == 'none':
-                perform_access_check = not world.has_beaten_game(maximum_exploration_state, item_to_place.player)
+            perform_access_check = True
+            if world.accessibility[item_to_place.player] == 'none':
+                perform_access_check = not world.has_beaten_game(maximum_exploration_state, item_to_place.player) if single_player_placement else not has_beaten_game
 
             spot_to_fill = None
             for location in locations:
@@ -199,7 +197,7 @@ def fill_restrictive(world, base_state, locations, itempool, single_player_place
                 # we filled all reachable spots. Maybe the game can be beaten anyway?
                 unplaced_items.insert(0, item_to_place)
                 if world.can_beat_game():
-                    if world.accessibility != 'none':
+                    if world.accessibility[item_to_place.player] != 'none':
                         logging.getLogger('').warning('Not all items placed. Game beatable anyway. (Could not place %s)' % item_to_place)
                     continue
                 raise FillError('No more spots to place %s' % item_to_place)

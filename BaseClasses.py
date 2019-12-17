@@ -50,7 +50,7 @@ class World(object):
         self.lock_aga_door_in_escape = False
         self.fix_trock_doors = {player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted' for player in range(1, players + 1)}
         self.save_and_quit_from_boss = True
-        self.accessibility = accessibility
+        self.accessibility = accessibility.copy()
         self.fix_skullwoods_exit = {player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'] for player in range(1, players + 1)}
         self.fix_palaceofdarkness_exit = {player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'] for player in range(1, players + 1)}
         self.fix_trock_exit = {player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'] for player in range(1, players + 1)}

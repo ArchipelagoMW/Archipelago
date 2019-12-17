@@ -330,7 +330,7 @@ def create_playthrough(world):
     world = copy_world(world)
 
     # if we only check for beatable, we can do this sanity check first before writing down spheres
-    if world.accessibility == 'none' and not world.can_beat_game():
+    if not world.can_beat_game():
         raise RuntimeError('Cannot beat game. Something went terribly wrong here!')
 
     # get locations containing progress items
@@ -360,7 +360,7 @@ def create_playthrough(world):
         logging.getLogger('').debug('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres), len(sphere), len(prog_locations))
         if not sphere:
             logging.getLogger('').debug('The following items could not be reached: %s', ['%s (Player %d) at %s (Player %d)' % (location.item.name, location.item.player, location.name, location.player) for location in sphere_candidates])
-            if not world.accessibility == 'none':
+            if any([world.accessibility[location.item.player] != 'none' for location in sphere_candidates]):
                 raise RuntimeError('Not all progression items reachable. Something went terribly wrong here.')
             else:
                 break
