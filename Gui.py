@@ -372,7 +372,7 @@ def guiMain(args=None):
     countSpinbox = Spinbox(bottomFrame, from_=1, to=100, width=5, textvariable=countVar)
 
     def generateRom():
-        guiargs = Namespace
+        guiargs = Namespace()
         guiargs.multi = int(worldVar.get())
         guiargs.names = namesVar.get()
         guiargs.seed = int(seedVar.get()) if seedVar.get() else None
@@ -428,6 +428,8 @@ def guiMain(args=None):
         for k,v in vars(parse_arguments([])).items():
             if k not in vars(guiargs):
                 setattr(guiargs, k, v)
+            elif type(v) is dict: # use same settings for every player
+                setattr(guiargs, k, {player: getattr(guiargs, k) for player in range(1, guiargs.multi + 1)})
         try:
             if guiargs.count is not None:
                 seed = guiargs.seed
@@ -548,7 +550,7 @@ def guiMain(args=None):
     bottomFrame2 = Frame(topFrame2)
 
     def adjustRom():
-        guiargs = Namespace
+        guiargs = Namespace()
         guiargs.heartbeep = heartbeepVar.get()
         guiargs.heartcolor = heartcolorVar.get()
         guiargs.fastmenu = fastMenuVar.get()
