@@ -27,19 +27,12 @@ class World(object):
         self.seed = None
         self.precollected_items = []
         self.state = CollectionState(self)
-        self.required_medallions = dict([(player, ['Ether', 'Quake']) for player in range(1, players + 1)])
         self._cached_entrances = None
         self._cached_locations = None
-        self._region_cache = {player: {} for player in range(1, players + 1)}
         self._entrance_cache = {}
         self._location_cache = {}
         self.required_locations = []
         self.shuffle_bonk_prizes = False
-        self.swamp_patch_required = {player: False for player in range(1, players + 1)}
-        self.powder_patch_required = {player: False for player in range(1, players + 1)}
-        self.ganon_at_pyramid = {player: True for player in range(1, players + 1)}
-        self.ganonstower_vanilla = {player: True for player in range(1, players + 1)}
-        self.sewer_light_cone = {player: mode[player] == 'standard' for player in range(1, players + 1)}
         self.light_world_light_cone = False
         self.dark_world_light_cone = False
         self.treasure_hunt_count = 0
@@ -48,12 +41,8 @@ class World(object):
         self.rupoor_cost = 10
         self.aga_randomness = True
         self.lock_aga_door_in_escape = False
-        self.fix_trock_doors = {player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted' for player in range(1, players + 1)}
         self.save_and_quit_from_boss = True
         self.accessibility = accessibility.copy()
-        self.fix_skullwoods_exit = {player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'] for player in range(1, players + 1)}
-        self.fix_palaceofdarkness_exit = {player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'] for player in range(1, players + 1)}
-        self.fix_trock_exit = {player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'] for player in range(1, players + 1)}
         self.shuffle_ganon = shuffle_ganon
         self.fix_gtower_exit = self.shuffle_ganon
         self.can_access_trock_eyebridge = None
@@ -63,29 +52,44 @@ class World(object):
         self.quickswap = quickswap
         self.fastmenu = fastmenu
         self.disable_music = disable_music
-        self.mapshuffle = {player: False for player in range(1, players + 1)}
-        self.compassshuffle = {player: False for player in range(1, players + 1)}
-        self.keyshuffle = {player: False for player in range(1, players + 1)}
-        self.bigkeyshuffle = {player: False for player in range(1, players + 1)}
         self.retro = retro.copy()
         self.custom = custom
         self.customitemarray = customitemarray
         self.can_take_damage = True
-        self.difficulty_requirements = {player: None for player in range(1, players + 1)}
         self.fix_fake_world = True
-        self.boss_shuffle = {player: 'none' for player in range(1, players + 1)}
-        self.enemy_shuffle = {player: 'none' for player in range(1, players + 1)}
-        self.enemy_health = {player: 'default' for player in range(1, players + 1)}
-        self.enemy_damage = {player: 'default' for player in range(1, players + 1)}
-        self.escape_assist = {player: [] for player in range(1, players + 1)}
         self.hints = hints.copy()
-        self.crystals_needed_for_ganon = {}
-        self.crystals_needed_for_gt = {}
-        self.open_pyramid = {player: False for player in range(1, players + 1)}
         self.dynamic_regions = []
         self.dynamic_locations = []
         self.spoiler = Spoiler(self)
         self.lamps_needed_for_dark_rooms = 1
+
+        for player in range(1, players + 1):
+            def set_player_attr(attr, val):
+                self.__dict__.setdefault(attr, {})[player] = val
+            set_player_attr('_region_cache', {})
+            set_player_attr('required_medallions', ['Ether', 'Quake'])
+            set_player_attr('swamp_patch_required', False)
+            set_player_attr('powder_patch_required', False)
+            set_player_attr('ganon_at_pyramid', True)
+            set_player_attr('ganonstower_vanilla', True)
+            set_player_attr('sewer_light_cone', self.mode[player] == 'standard')
+            set_player_attr('fix_trock_doors', self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
+            set_player_attr('fix_skullwoods_exit', self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
+            set_player_attr('fix_palaceofdarkness_exit', self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
+            set_player_attr('fix_trock_exit', self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
+            set_player_attr('mapshuffle', False)
+            set_player_attr('compassshuffle', False)
+            set_player_attr('keyshuffle', False)
+            set_player_attr('bigkeyshuffle', False)
+            set_player_attr('difficulty_requirements', None)
+            set_player_attr('boss_shuffle', 'none')
+            set_player_attr('enemy_shuffle', 'none')
+            set_player_attr('enemy_health', 'default')
+            set_player_attr('enemy_damage', 'default')
+            set_player_attr('escape_assist', [])
+            set_player_attr('crystals_needed_for_ganon', 7)
+            set_player_attr('crystals_needed_for_gt', 7)
+            set_player_attr('open_pyramid', False)
 
     def initialize_regions(self, regions=None):
         for region in regions if regions else self.regions:
