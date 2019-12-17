@@ -8,7 +8,7 @@ from Utils import int16_as_bytes
 
 class World(object):
 
-    def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive, goal, algorithm, accessibility, shuffle_ganon, quickswap, fastmenu, disable_music, retro, custom, customitemarray, boss_shuffle, hints):
+    def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive, goal, algorithm, accessibility, shuffle_ganon, quickswap, fastmenu, disable_music, retro, custom, customitemarray, hints):
         self.players = players
         self.shuffle = shuffle.copy()
         self.logic = logic.copy()
@@ -73,7 +73,10 @@ class World(object):
         self.can_take_damage = True
         self.difficulty_requirements = {player: None for player in range(1, players + 1)}
         self.fix_fake_world = True
-        self.boss_shuffle = boss_shuffle
+        self.boss_shuffle = {player: 'none' for player in range(1, players + 1)}
+        self.enemy_shuffle = {player: 'none' for player in range(1, players + 1)}
+        self.enemy_health = {player: 'default' for player in range(1, players + 1)}
+        self.enemy_damage = {player: 'default' for player in range(1, players + 1)}
         self.escape_assist = {player: [] for player in range(1, players + 1)}
         self.hints = hints.copy()
         self.crystals_needed_for_ganon = {}
@@ -1059,6 +1062,10 @@ class Spoiler(object):
                          'compassshuffle': self.world.compassshuffle,
                          'keyshuffle': self.world.keyshuffle,
                          'bigkeyshuffle': self.world.bigkeyshuffle,
+                         'boss_shuffle': self.world.boss_shuffle,
+                         'enemy_shuffle': self.world.enemy_shuffle,
+                         'enemy_health': self.world.enemy_health,
+                         'enemy_damage': self.world.enemy_damage,
                          'players': self.world.players
                          }
 
@@ -1072,8 +1079,7 @@ class Spoiler(object):
             out['Shops'] = self.shops
         out['playthrough'] = self.playthrough
         out['paths'] = self.paths
-        if self.world.boss_shuffle != 'none':
-            out['Bosses'] = self.bosses
+        out['Bosses'] = self.bosses
         out['meta'] = self.metadata
 
         return json.dumps(out)
@@ -1101,6 +1107,10 @@ class Spoiler(object):
             outfile.write('Compass shuffle:                 %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['compassshuffle'].items()})
             outfile.write('Small Key shuffle:               %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['keyshuffle'].items()})
             outfile.write('Big Key shuffle:                 %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['bigkeyshuffle'].items()})
+            outfile.write('Boss shuffle:                    %s\n' % self.metadata['boss_shuffle'])
+            outfile.write('Enemy shuffle:                   %s\n' % self.metadata['enemy_shuffle'])
+            outfile.write('Enemy health:                    %s\n' % self.metadata['enemy_health'])
+            outfile.write('Enemy damage:                    %s\n' % self.metadata['enemy_damage'])
             outfile.write('Hints:                           %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['hints'].items()})
             outfile.write('Players:                         %d' % self.world.players)
             if self.entrances:

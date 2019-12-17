@@ -25,7 +25,7 @@ def main(args, seed=None):
     start = time.process_time()
 
     # initialize the world
-    world = World(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty, args.item_functionality, args.timer, args.progressive, args.goal, args.algorithm, args.accessibility, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.retro, args.custom, args.customitemarray, args.shufflebosses, args.hints)
+    world = World(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty, args.item_functionality, args.timer, args.progressive, args.goal, args.algorithm, args.accessibility, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.retro, args.custom, args.customitemarray, args.hints)
     logger = logging.getLogger('')
     if seed is None:
         random.seed(None)
@@ -41,6 +41,10 @@ def main(args, seed=None):
     world.crystals_needed_for_ganon = {player: random.randint(0, 7) if args.crystals_ganon[player] == 'random' else int(args.crystals_ganon[player]) for player in range(1, world.players + 1)}
     world.crystals_needed_for_gt = {player: random.randint(0, 7) if args.crystals_gt[player] == 'random' else int(args.crystals_gt[player]) for player in range(1, world.players + 1)}
     world.open_pyramid = args.openpyramid.copy()
+    world.boss_shuffle = args.shufflebosses.copy()
+    world.enemy_shuffle = args.shuffleenemies.copy()
+    world.enemy_health = args.enemy_health.copy()
+    world.enemy_damage = args.enemy_damage.copy()
 
     world.rom_seeds = {player: random.randint(0, 999999999) for player in range(1, world.players + 1)}
 
@@ -49,7 +53,7 @@ def main(args, seed=None):
     for player in range(1, world.players + 1):
         world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
 
-        if world.mode[player] == 'standard' and (args.shuffleenemies != 'none' or args.enemy_health not in ['default', 'easy']):
+        if world.mode[player] == 'standard' and (world.enemy_shuffle[player] != 'none' or world.enemy_health[player] not in ['default', 'easy']):
             world.escape_assist[player].append(['bombs']) # enemized escape assumes infinite bombs available and will likely be unbeatable without it
 
         if world.mode[player] != 'inverted':
@@ -128,8 +132,6 @@ def main(args, seed=None):
     player_names = parse_names_string(args.names)
     outfilebase = 'ER_%s' % (args.outputname if args.outputname else world.seed)
 
-    use_enemizer = args.enemizercli and (args.shufflebosses != 'none' or args.shuffleenemies != 'none' or args.enemy_health != 'default' or args.enemy_health != 'default' or args.enemy_damage or args.shufflepalette or args.shufflepots)
-
     jsonout = {}
     if not args.suppress_rom:
         from MultiServer import MultiWorld
@@ -137,6 +139,9 @@ def main(args, seed=None):
         multidata.players = world.players
 
         for player in range(1, world.players + 1):
+            use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player] != 'none'
+                            or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
+                            or args.shufflepalette or args.shufflepots)
 
             local_rom = None
             if args.jsonout:
@@ -151,7 +156,7 @@ def main(args, seed=None):
 
             enemizer_patch = []
             if use_enemizer:
-                enemizer_patch = get_enemizer_patch(world, player, rom, args.rom, args.enemizercli, args.shuffleenemies, args.enemy_health, args.enemy_damage, args.shufflepalette, args.shufflepots)
+                enemizer_patch = get_enemizer_patch(world, player, rom, args.rom, args.enemizercli, args.shufflepalette, args.shufflepots)
 
             multidata.rom_names[player] = list(rom.name)
             for location in world.get_filled_locations(player):
@@ -218,7 +223,7 @@ def main(args, seed=None):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.difficulty_adjustments, world.timer, world.progressive, world.goal, world.algorithm, world.accessibility, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.retro, world.custom, world.customitemarray, world.boss_shuffle, world.hints)
+    ret = World(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.difficulty_adjustments, world.timer, world.progressive, world.goal, world.algorithm, world.accessibility, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.retro, world.custom, world.customitemarray, world.hints)
     ret.required_medallions = world.required_medallions.copy()
     ret.swamp_patch_required = world.swamp_patch_required.copy()
     ret.ganon_at_pyramid = world.ganon_at_pyramid.copy()
@@ -245,6 +250,10 @@ def copy_world(world):
     ret.crystals_needed_for_ganon = world.crystals_needed_for_ganon.copy()
     ret.crystals_needed_for_gt = world.crystals_needed_for_gt.copy()
     ret.open_pyramid = world.open_pyramid.copy()
+    ret.boss_shuffle = world.boss_shuffle.copy()
+    ret.enemy_shuffle = world.enemy_shuffle.copy()
+    ret.enemy_health = world.enemy_health.copy()
+    ret.enemy_damage = world.enemy_damage.copy()
 
     for player in range(1, world.players + 1):
         if world.mode[player] != 'inverted':

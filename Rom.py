@@ -161,7 +161,7 @@ def read_rom(stream):
         buffer = buffer[0x200:]
     return buffer
 
-def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shuffleenemies, enemy_health, enemy_damage, shufflepalette, shufflepots):
+def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepalette, shufflepots):
     baserom_path = os.path.abspath(baserom_path)
     basepatch_path = os.path.abspath(local_path('data/base2current.json'))
     randopatch_path = os.path.abspath(output_path('enemizer_randopatch.json'))
@@ -170,16 +170,16 @@ def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shuffleene
 
     # write options file for enemizer
     options = {
-        'RandomizeEnemies': shuffleenemies != 'none',
+        'RandomizeEnemies': world.enemy_shuffle[player] != 'none',
         'RandomizeEnemiesType': 3,
-        'RandomizeBushEnemyChance': shuffleenemies == 'chaos',
-        'RandomizeEnemyHealthRange': enemy_health != 'default',
-        'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[enemy_health],
+        'RandomizeBushEnemyChance': world.enemy_shuffle[player] == 'chaos',
+        'RandomizeEnemyHealthRange': world.enemy_health[player] != 'default',
+        'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[world.enemy_health[player]],
         'OHKO': False,
-        'RandomizeEnemyDamage': enemy_damage != 'default',
+        'RandomizeEnemyDamage': world.enemy_damage[player] != 'default',
         'AllowEnemyZeroDamage': True,
-        'ShuffleEnemyDamageGroups': enemy_damage != 'default',
-        'EnemyDamageChaosMode': enemy_damage == 'chaos',
+        'ShuffleEnemyDamageGroups': world.enemy_damage[player] != 'default',
+        'EnemyDamageChaosMode': world.enemy_damage[player] == 'chaos',
         'EasyModeEscape': False,
         'EnemiesAbsorbable': False,
         'AbsorbableSpawnRate': 10,
@@ -218,9 +218,9 @@ def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shuffleene
         'SwordGraphics': "sword_gfx/normal.gfx",
         'BeeMizer': False,
         'BeesLevel': 0,
-        'RandomizeTileTrapPattern': shuffleenemies == 'chaos',
+        'RandomizeTileTrapPattern': world.enemy_shuffle[player] == 'chaos',
         'RandomizeTileTrapFloorTile': False,
-        'AllowKillableThief': bool(random.randint(0,1)) if shuffleenemies == 'chaos' else shuffleenemies != 'none',
+        'AllowKillableThief': bool(random.randint(0,1)) if world.enemy_shuffle[player] == 'chaos' else world.enemy_shuffle[player] != 'none',
         'RandomizeSpriteOnHit': False,
         'DebugMode': False,
         'DebugForceEnemy': False,

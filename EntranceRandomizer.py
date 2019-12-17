@@ -281,7 +281,8 @@ def parse_arguments(argv, no_defaults=False):
             for name in ['logic', 'mode', 'swords', 'goal', 'difficulty', 'item_functionality',
                          'shuffle', 'crystals_ganon', 'crystals_gt', 'openpyramid',
                          'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle',
-                         'retro', 'accessibility', 'hints']:
+                         'retro', 'accessibility', 'hints',
+                         'shufflebosses', 'shuffleenemies', 'enemy_health', 'enemy_damage']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})
