@@ -1,5 +1,4 @@
 import argparse
-import os
 import logging
 import random
 import urllib.request
@@ -28,7 +27,12 @@ def parse_yaml(txt):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', help='Path to the weights file to use for rolling game settings, urls are also valid', required=True)
+    parser.add_argument('--multi', default=1, type=lambda value: min(max(int(value), 1), 255))
+    multiargs, _ = parser.parse_known_args()
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--weights', help='Path to the weights file to use for rolling game settings, urls are also valid')
+    parser.add_argument('--samesettings', help='Rolls settings per weights file rather than per player', action='store_true')
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=1, type=lambda value: min(max(int(value), 1), 255))
     parser.add_argument('--names', default='')
@@ -36,40 +40,33 @@ def main():
     parser.add_argument('--rom')
     parser.add_argument('--enemizercli')
     parser.add_argument('--outputpath')
+    for player in range(1, multiargs.multi + 1):
+        parser.add_argument(f'--p{player}', help=argparse.SUPPRESS)
     args = parser.parse_args()
 
-    try:
-        if urllib.parse.urlparse(args.weights).scheme:
-            yaml = str(urllib.request.urlopen(args.weights).read(), "utf-8")
-        else:
-            with open(args.weights, 'rb') as f:
-                yaml = str(f.read(), "utf-8")
-    except Exception as e:
-        print('Failed to read weights (%s)' % e)
-        return
+    if args.seed is None:
+        random.seed(None)
+        seed = random.randint(0, 999999999)
+    else:
+        seed = args.seed
+    random.seed(seed)
 
-    random.seed(args.seed)
-    weights = parse_yaml(yaml)
-    print(f"Weights: {args.weights} >> {weights['description']}")
-
-    while not gen_mystery(args, weights):
-        pass
-
-def gen_mystery(args, weights):
-    seed = random.randint(0, 999999999)
-    seedname = f'M{random.randint(0, 999999999)}_{os.path.splitext(os.path.basename(args.weights))[0]}'
-
+    seedname = f'M{random.randint(0, 999999999)}'
     print(f"Generating mystery for {args.multi} player{'s' if args.multi > 1 else ''}, {seedname} Seed {seed}")
 
-    choices = {}
-    def get_choice(option):
-        ret = random.choices(list(map(lambda s: s.strip('\''),weights[option].keys())), weights=list(map(int,weights[option].values())))[0]
-        choices[option] = ret
-        return ret
+    weights_cache = {}
+    if args.weights:
+        weights_cache[args.weights] = get_weights(args.weights)
+        print(f"Weights: {args.weights} >> {weights_cache[args.weights]['description']}")
+    for player in range(1, args.multi + 1):
+        path = getattr(args, f'p{player}')
+        if path:
+            if path not in weights_cache:
+                weights_cache[path] = get_weights(path)
+            print(f"P{player} Weights: {path} >> {weights_cache[path]['description']}")
 
-    erargs = argparse.Namespace
+    erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
-    erargs.multi = args.multi
     erargs.names = args.names
     erargs.create_spoiler = args.create_spoiler
     erargs.race = True
@@ -80,106 +77,128 @@ def gen_mystery(args, weights):
         erargs.rom = args.rom
     erargs.enemizercli = args.enemizercli
 
-    logic = get_choice('glitches_required')
-    if logic not in ['none', 'no_logic']:
+    settings_cache = {k: (roll_settings(v) if args.samesettings else None) for k, v in weights_cache.items()}
+
+    for player in range(1, args.multi + 1):
+        path = getattr(args, f'p{player}') if getattr(args, f'p{player}') else args.weights
+        if path:
+            settings = settings_cache[path] if settings_cache[path] else roll_settings(weights_cache[path])
+            for k, v in vars(settings).items():
+                getattr(erargs, k)[player] = v
+        else:
+            raise RuntimeError(f'No weights specified for player {player}')
+
+    # set up logger
+    loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[erargs.loglevel]
+    logging.basicConfig(format='%(message)s', level=loglevel)
+
+    ERmain(erargs, seed)
+
+def get_weights(path):
+    try:
+        if urllib.parse.urlparse(path).scheme:
+            yaml = str(urllib.request.urlopen(path).read(), "utf-8")
+        else:
+            with open(path, 'rb') as f:
+                yaml = str(f.read(), "utf-8")
+    except Exception as e:
+        print('Failed to read weights (%s)' % e)
+        return
+
+    return parse_yaml(yaml)
+
+def roll_settings(weights):
+    def get_choice(option):
+        return random.choices(list(weights[option].keys()), weights=list(map(int,weights[option].values())))[0].replace('"','').replace("'",'')
+
+    ret = argparse.Namespace()
+
+    glitches_required = get_choice('glitches_required')
+    if glitches_required not in ['none', 'no_logic']:
         print("Only NMG and No Logic supported")
-        return False
-    erargs.logic = {'none': 'noglitches', 'no_logic': 'nologic'}[logic]
+        glitches_required = 'none'
+    ret.logic = {'none': 'noglitches', 'no_logic': 'nologic'}[glitches_required]
 
     item_placement = get_choice('item_placement')
     # not supported in ER
 
     dungeon_items = get_choice('dungeon_items')
     if dungeon_items in ['mc', 'mcs', 'full']:
-        erargs.mapshuffle = True
-        erargs.compassshuffle = True
+        ret.mapshuffle = True
+        ret.compassshuffle = True
     if dungeon_items in ['mcs', 'full']:
-        erargs.keyshuffle = True
+        ret.keyshuffle = True
     if dungeon_items in ['full']:
-        erargs.bigkeyshuffle = True
+        ret.bigkeyshuffle = True
 
     accessibility = get_choice('accessibility')
-    erargs.accessibility = accessibility
+    ret.accessibility = accessibility
 
     entrance_shuffle = get_choice('entrance_shuffle')
-    erargs.shuffle = entrance_shuffle if entrance_shuffle != 'none' else 'vanilla'
+    ret.shuffle = entrance_shuffle if entrance_shuffle != 'none' else 'vanilla'
 
     goals = get_choice('goals')
-    erargs.goal = {'ganon': 'ganon',
-                   'fast_ganon': 'crystals',
-                   'dungeons': 'dungeons',
-                   'pedestal': 'pedestal',
-                   'triforce-hunt': 'triforce-hunt'
-                   }[goals]
+    ret.goal = {'ganon': 'ganon',
+                'fast_ganon': 'crystals',
+                'dungeons': 'dungeons',
+                'pedestal': 'pedestal',
+                'triforce-hunt': 'triforce-hunt'
+                }[goals]
     if goals == 'fast_ganon' and entrance_shuffle == 'none':
-        erargs.openpyramid = True
+        ret.openpyramid = True
 
     tower_open = get_choice('tower_open')
-    erargs.crystals_gt = tower_open
+    ret.crystals_gt = tower_open
 
     ganon_open = get_choice('ganon_open')
-    erargs.crystals_ganon = ganon_open
+    ret.crystals_ganon = ganon_open
 
     world_state = get_choice('world_state')
-    erargs.mode = world_state
+    ret.mode = world_state
     if world_state == 'retro':
-        erargs.mode = 'open'
-        erargs.retro = True
+        ret.mode = 'open'
+        ret.retro = True
 
     hints = get_choice('hints')
     if hints == 'on':
-        erargs.hints = True
+        ret.hints = True
 
     weapons = get_choice('weapons')
-    erargs.swords = {'randomized': 'random',
-                    'assured': 'assured',
-                    'vanilla': 'vanilla',
-                    'swordless': 'swordless'
-                    }[weapons]
+    ret.swords = {'randomized': 'random',
+                  'assured': 'assured',
+                  'vanilla': 'vanilla',
+                  'swordless': 'swordless'
+                  }[weapons]
 
     item_pool = get_choice('item_pool')
-    erargs.difficulty = item_pool
+    ret.difficulty = item_pool
 
     item_functionality = get_choice('item_functionality')
-    erargs.item_functionality = item_functionality
+    ret.item_functionality = item_functionality
 
     boss_shuffle = get_choice('boss_shuffle')
-    erargs.shufflebosses = {'none': 'none',
-                            'simple': 'basic',
-                            'full': 'normal',
-                            'random': 'chaos'
-                            }[boss_shuffle]
+    ret.shufflebosses = {'none': 'none',
+                         'simple': 'basic',
+                         'full': 'normal',
+                         'random': 'chaos'
+                         }[boss_shuffle]
 
     enemy_shuffle = get_choice('enemy_shuffle')
-    erargs.shuffleenemies = {'none': 'none',
-                             'shuffled': 'shuffled',
-                             'random': 'chaos'
-                             }[enemy_shuffle]
+    ret.shuffleenemies = {'none': 'none',
+                          'shuffled': 'shuffled',
+                          'random': 'chaos'
+                          }[enemy_shuffle]
 
     enemy_damage = get_choice('enemy_damage')
-    erargs.enemy_damage = {'default': 'default',
-                           'shuffled': 'shuffled',
-                           'random': 'chaos'
-                           }[enemy_damage]
+    ret.enemy_damage = {'default': 'default',
+                        'shuffled': 'shuffled',
+                        'random': 'chaos'
+                        }[enemy_damage]
 
     enemy_health = get_choice('enemy_health')
-    erargs.enemy_health = enemy_health
+    ret.enemy_health = enemy_health
 
-    for k, v in vars(parse_arguments([])).items():
-        if k not in vars(erargs):
-            setattr(erargs, k, v)
-
-    # set up logger
-    loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[args.loglevel]
-    logging.basicConfig(format='%(message)s', level=loglevel)
-
-    try:
-        ERmain(erargs, seed)
-    except Exception as e:
-        logging.exception(e)
-        return False
-
-    return True
+    return ret
 
 if __name__ == '__main__':
     main()
