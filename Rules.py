@@ -106,11 +106,6 @@ def item_name(state, location, player):
     return (location.item.name, location.item.player)
 
 def global_rules(world, player):
-    if world.goal[player] == 'triforcehunt':
-        for location in world.get_locations():
-            if location.player != player:
-                forbid_item(location, 'Triforce Piece', player)
-
     # ganon can only carry triforce
     add_item_rule(world.get_location('Ganon', player), lambda item: item.name == 'Triforce' and item.player == player)
 
