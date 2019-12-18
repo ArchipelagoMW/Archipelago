@@ -1173,6 +1173,9 @@ def guiMain(args=None):
     topFrame3.pack(side=TOP, pady=(17,0))
 
     if args is not None:
+        for k,v in vars(args).items():
+            if type(v) is dict:
+                setattr(args, k, v[1]) # only get values for player 1 for now
         # load values from commandline args
         createSpoilerVar.set(int(args.create_spoiler))
         suppressRomVar.set(int(args.suppress_rom))
