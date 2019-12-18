@@ -141,7 +141,7 @@ def main(args, seed=None):
         for player in range(1, world.players + 1):
             use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player] != 'none'
                             or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
-                            or args.shufflepalette or args.shufflepots)
+                            or args.shufflepalette[player] or args.shufflepots[player])
 
             local_rom = None
             if args.jsonout:
@@ -156,7 +156,7 @@ def main(args, seed=None):
 
             enemizer_patch = []
             if use_enemizer:
-                enemizer_patch = get_enemizer_patch(world, player, rom, args.rom, args.enemizercli, args.shufflepalette, args.shufflepots)
+                enemizer_patch = get_enemizer_patch(world, player, rom, args.rom, args.enemizercli, args.shufflepalette[player], args.shufflepots[player])
 
             multidata.rom_names[player] = list(rom.name)
             for location in world.get_filled_locations(player):
