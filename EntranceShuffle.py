@@ -903,7 +903,7 @@ def link_entrances(world, player):
         # place remaining doors
         connect_doors(world, doors, door_targets, player)
     elif world.shuffle[player] == 'insanity_legacy':
-        world.fix_fake_world = False
+        world.fix_fake_world[player] = False
         # beware ye who enter here
 
         entrances = LW_Entrances + LW_Dungeon_Entrances + DW_Entrances + DW_Dungeon_Entrances + Old_Man_Entrances + ['Skull Woods Second Section Door (East)', 'Skull Woods First Section Door', 'Kakariko Well Cave', 'Bat Cave Cave', 'North Fairy Cave', 'Sanctuary', 'Lost Woods Hideout Stump', 'Lumberjack Tree Cave']

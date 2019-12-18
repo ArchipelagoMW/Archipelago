@@ -736,14 +736,14 @@ def set_trock_key_rules(world, player):
     all_state = world.get_all_state(True)
     
     # Check if each of the four main regions of the dungoen can be reached. The previous code section prevents key-costing moves within the dungeon.
-    can_reach_back = all_state.can_reach(world.get_region('Turtle Rock (Eye Bridge)', player)) if world.can_access_trock_eyebridge is None else world.can_access_trock_eyebridge
-    world.can_access_trock_eyebridge = can_reach_back
-    can_reach_front = all_state.can_reach(world.get_region('Turtle Rock (Entrance)', player)) if world.can_access_trock_front is None else world.can_access_trock_front
-    world.can_access_trock_front = can_reach_front
-    can_reach_big_chest = all_state.can_reach(world.get_region('Turtle Rock (Big Chest)', player)) if world.can_access_trock_big_chest is None else world.can_access_trock_big_chest
-    world.can_access_trock_big_chest = can_reach_big_chest
-    can_reach_middle = all_state.can_reach(world.get_region('Turtle Rock (Second Section)', player)) if world.can_access_trock_middle is None else world.can_access_trock_middle
-    world.can_access_trock_middle = can_reach_middle
+    can_reach_back = all_state.can_reach(world.get_region('Turtle Rock (Eye Bridge)', player)) if world.can_access_trock_eyebridge[player] is None else world.can_access_trock_eyebridge[player]
+    world.can_access_trock_eyebridge[player] = can_reach_back
+    can_reach_front = all_state.can_reach(world.get_region('Turtle Rock (Entrance)', player)) if world.can_access_trock_front[player] is None else world.can_access_trock_front[player]
+    world.can_access_trock_front[player] = can_reach_front
+    can_reach_big_chest = all_state.can_reach(world.get_region('Turtle Rock (Big Chest)', player)) if world.can_access_trock_big_chest[player] is None else world.can_access_trock_big_chest[player]
+    world.can_access_trock_big_chest[player] = can_reach_big_chest
+    can_reach_middle = all_state.can_reach(world.get_region('Turtle Rock (Second Section)', player)) if world.can_access_trock_middle[player] is None else world.can_access_trock_middle[player]
+    world.can_access_trock_middle[player] = can_reach_middle
 
     # No matter what, the key requirement for going from the middle to the bottom should be three keys.
     set_rule(world.get_entrance('Turtle Rock Dark Room Staircase', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 3))

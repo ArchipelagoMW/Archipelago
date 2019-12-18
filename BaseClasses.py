@@ -45,10 +45,6 @@ class World(object):
         self.accessibility = accessibility.copy()
         self.shuffle_ganon = shuffle_ganon
         self.fix_gtower_exit = self.shuffle_ganon
-        self.can_access_trock_eyebridge = None
-        self.can_access_trock_front = None
-        self.can_access_trock_big_chest = None
-        self.can_access_trock_middle = None
         self.quickswap = quickswap
         self.fastmenu = fastmenu
         self.disable_music = disable_music
@@ -56,7 +52,6 @@ class World(object):
         self.custom = custom
         self.customitemarray = customitemarray
         self.can_take_damage = True
-        self.fix_fake_world = True
         self.hints = hints.copy()
         self.dynamic_regions = []
         self.dynamic_locations = []
@@ -77,6 +72,11 @@ class World(object):
             set_player_attr('fix_skullwoods_exit', self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
             set_player_attr('fix_palaceofdarkness_exit', self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
             set_player_attr('fix_trock_exit', self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
+            set_player_attr('can_access_trock_eyebridge', None)
+            set_player_attr('can_access_trock_front', None)
+            set_player_attr('can_access_trock_big_chest', None)
+            set_player_attr('can_access_trock_middle', None)
+            set_player_attr('fix_fake_world', True)
             set_player_attr('mapshuffle', False)
             set_player_attr('compassshuffle', False)
             set_player_attr('keyshuffle', False)
