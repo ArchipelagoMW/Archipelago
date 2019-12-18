@@ -147,8 +147,7 @@ def roll_settings(weights):
                 'pedestal': 'pedestal',
                 'triforce-hunt': 'triforce-hunt'
                 }[goals]
-    if goals == 'fast_ganon' and entrance_shuffle == 'none':
-        ret.openpyramid = True
+    ret.openpyramid = goals == 'fast_ganon'
 
     tower_open = get_choice('tower_open')
     ret.crystals_gt = tower_open
