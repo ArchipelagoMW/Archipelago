@@ -145,7 +145,7 @@ def roll_settings(weights):
                 'fast_ganon': 'crystals',
                 'dungeons': 'dungeons',
                 'pedestal': 'pedestal',
-                'triforce-hunt': 'triforce-hunt'
+                'triforce-hunt': 'triforcehunt'
                 }[goals]
     ret.openpyramid = goals == 'fast_ganon'
 
