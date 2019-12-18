@@ -9,7 +9,7 @@ from Main import main as ERmain
 
 def parse_yaml(txt):
     ret = {}
-    indents = {0: ret}
+    indents = {len(txt) - len(txt.lstrip(' ')): ret}
     for line in txt.splitlines():
         if not line:
             continue
@@ -162,8 +162,7 @@ def roll_settings(weights):
         ret.retro = True
 
     hints = get_choice('hints')
-    if hints == 'on':
-        ret.hints = True
+    ret.hints = hints == 'on'
 
     weapons = get_choice('weapons')
     ret.swords = {'randomized': 'random',
