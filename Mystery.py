@@ -122,14 +122,17 @@ def roll_settings(weights):
     item_placement = get_choice('item_placement')
     # not supported in ER
 
-    dungeon_items = get_choice('dungeon_items')
-    if dungeon_items in ['mc', 'mcs', 'full']:
-        ret.mapshuffle = True
-        ret.compassshuffle = True
-    if dungeon_items in ['mcs', 'full']:
-        ret.keyshuffle = True
-    if dungeon_items in ['full']:
-        ret.bigkeyshuffle = True
+    if {'map_shuffle', 'compass_shuffle', 'smallkey_shuffle', 'bigkey_shuffle'}.issubset(weights.keys()):
+        ret.mapshuffle = get_choice('map_shuffle') == 'on'
+        ret.compassshuffle = get_choice('compass_shuffle') == 'on'
+        ret.keyshuffle = get_choice('smallkey_shuffle') == 'on'
+        ret.bigkeyshuffle = get_choice('bigkey_shuffle') == 'on'
+    else:
+        dungeon_items = get_choice('dungeon_items')
+        ret.mapshuffle = dungeon_items in ['mc', 'mcs', 'full']
+        ret.compassshuffle = dungeon_items in ['mc', 'mcs', 'full']
+        ret.keyshuffle = dungeon_items in ['mcs', 'full']
+        ret.bigkeyshuffle = dungeon_items in ['full']
 
     accessibility = get_choice('accessibility')
     ret.accessibility = accessibility
