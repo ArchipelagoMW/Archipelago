@@ -1324,7 +1324,7 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
     # set player names
     for player, name in names.items():
         if 0 < player <= 64:
-            rom.write_bytes(0x185380 + ((player - 1) * 32), hud_format_text(name))
+            rom.write_bytes(0x186380 + ((player - 1) * 32), hud_format_text(name))
 
     if isinstance(rom, LocalRom):
         rom.write_crc()
