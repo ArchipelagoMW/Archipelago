@@ -371,6 +371,7 @@ def create_playthrough(world):
             if any([world.accessibility[location.item.player] != 'none' for location in sphere_candidates]):
                 raise RuntimeError('Not all progression items reachable. Something went terribly wrong here.')
             else:
+                old_world.spoiler.unreachables = sphere_candidates.copy()
                 break
 
     # in the second phase, we cull each sphere such that the game is still beatable, reducing each range of influence to the bare minimum required inside it

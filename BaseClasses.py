@@ -959,6 +959,7 @@ class Spoiler(object):
         self.entrances = OrderedDict()
         self.medallions = {}
         self.playthrough = {}
+        self.unreachables = []
         self.locations = {}
         self.paths = {}
         self.metadata = {}
@@ -1134,6 +1135,9 @@ class Spoiler(object):
             outfile.write('\n'.join("{} [{}]\n    {}".format(shop['location'], shop['type'], "\n    ".join(item for item in [shop.get('item_0', None), shop.get('item_1', None), shop.get('item_2', None)] if item)) for shop in self.shops))
             outfile.write('\n\nPlaythrough:\n\n')
             outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(['  %s: %s' % (location, item) for (location, item) in sphere.items()])) for (sphere_nr, sphere) in self.playthrough.items()]))
+            if self.unreachables:
+                outfile.write('\n\nUnreachable Items:\n\n')
+                outfile.write('\n'.join(['%s: %s' % (unreachable.item, unreachable) for unreachable in self.unreachables]))
             outfile.write('\n\nPaths:\n\n')
 
             path_listings = []
