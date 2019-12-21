@@ -35,8 +35,6 @@ class World(object):
         self.shuffle_bonk_prizes = False
         self.light_world_light_cone = False
         self.dark_world_light_cone = False
-        self.treasure_hunt_count = 0
-        self.treasure_hunt_icon = 'Triforce Piece'
         self.clock_mode = 'off'
         self.rupoor_cost = 10
         self.aga_randomness = True
@@ -90,6 +88,8 @@ class World(object):
             set_player_attr('crystals_needed_for_ganon', 7)
             set_player_attr('crystals_needed_for_gt', 7)
             set_player_attr('open_pyramid', False)
+            set_player_attr('treasure_hunt_icon', 'Triforce Piece')
+            set_player_attr('treasure_hunt_count', 0)
 
     def initialize_regions(self, regions=None):
         for region in regions if regions else self.regions:

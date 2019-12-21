@@ -141,7 +141,7 @@ def generate_itempool(world, player):
         region = world.get_region('Light World',player)
 
         loc = Location(player, "Murahdahla", parent=region)
-        loc.access_rule = lambda state: state.item_count('Triforce Piece', player) + state.item_count('Power Star', player) > state.world.treasure_hunt_count
+        loc.access_rule = lambda state: state.item_count('Triforce Piece', player) + state.item_count('Power Star', player) > state.world.treasure_hunt_count[player]
         region.locations.append(loc)
         world.dynamic_locations.append(loc)
 
@@ -214,9 +214,9 @@ def generate_itempool(world, player):
         world.clock_mode = clock_mode
 
     if treasure_hunt_count is not None:
-        world.treasure_hunt_count = treasure_hunt_count
+        world.treasure_hunt_count[player] = treasure_hunt_count
     if treasure_hunt_icon is not None:
-        world.treasure_hunt_icon = treasure_hunt_icon
+        world.treasure_hunt_icon[player] = treasure_hunt_icon
 
     world.itempool.extend([item for item in get_dungeon_item_pool(world) if item.player == player
                            and ((item.smallkey and world.keyshuffle[player])

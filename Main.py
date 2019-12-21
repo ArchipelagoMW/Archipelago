@@ -228,8 +228,8 @@ def copy_world(world):
     ret.ganon_at_pyramid = world.ganon_at_pyramid.copy()
     ret.powder_patch_required = world.powder_patch_required.copy()
     ret.ganonstower_vanilla = world.ganonstower_vanilla.copy()
-    ret.treasure_hunt_count = world.treasure_hunt_count
-    ret.treasure_hunt_icon = world.treasure_hunt_icon
+    ret.treasure_hunt_count = world.treasure_hunt_count.copy()
+    ret.treasure_hunt_icon = world.treasure_hunt_icon.copy()
     ret.sewer_light_cone = world.sewer_light_cone.copy()
     ret.light_world_light_cone = world.light_world_light_cone
     ret.dark_world_light_cone = world.dark_world_light_cone
