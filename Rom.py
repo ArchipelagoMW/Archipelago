@@ -612,6 +612,8 @@ def patch_rom(world, player, rom, enemized):
 
     # handle difficulty_adjustments
     if world.difficulty_adjustments[player] == 'hard':
+        rom.write_byte(0x180181, 0x01) # Make silver arrows work only on ganon
+        rom.write_byte(0x180182, 0x00) # Don't auto equip silvers on pickup
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xD8)  # One Heart
         # potion heal amount
@@ -630,6 +632,8 @@ def patch_rom(world, player, rom, enemized):
         # Set stun items
         rom.write_byte(0x180180, 0x02) # Hookshot only
     elif world.difficulty_adjustments[player] == 'expert':
+        rom.write_byte(0x180181, 0x01) # Make silver arrows work only on ganon
+        rom.write_byte(0x180182, 0x00) # Don't auto equip silvers on pickup
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xD8)  # One Heart
         # potion heal amount
@@ -648,6 +652,8 @@ def patch_rom(world, player, rom, enemized):
         # Set stun items
         rom.write_byte(0x180180, 0x00) # Nothing
     else:
+        rom.write_byte(0x180181, 0x00) # Make silver arrows freely usable
+        rom.write_byte(0x180182, 0x01) # auto equip silvers on pickup
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xE3)  # fairy
         # potion heal amount
@@ -670,9 +676,6 @@ def patch_rom(world, player, rom, enemized):
         else:
             overflow_replacement = GREEN_TWENTY_RUPEES
 
-    rom.write_byte(0x180181, 0x00) # Make silver arrows freely usable
-    rom.write_byte(0x180182, 0x01) # auto equip silvers on pickup
-
     #Byrna residual magic cost
     rom.write_bytes(0x45C42, [0x04, 0x02, 0x01])
 
@@ -680,7 +683,7 @@ def patch_rom(world, player, rom, enemized):
 
     #Set overflow items for progressive equipment
     rom.write_bytes(0x180090,
-                    [difficulty.progressive_sword_limit, overflow_replacement,
+                    [difficulty.progressive_sword_limit if world.swords[player] != 'swordless' else 0, overflow_replacement,
                      difficulty.progressive_shield_limit, overflow_replacement,
                      difficulty.progressive_armor_limit, overflow_replacement,
                      difficulty.progressive_bottle_limit, overflow_replacement,
@@ -689,6 +692,7 @@ def patch_rom(world, player, rom, enemized):
     if difficulty.progressive_bow_limit < 2 and world.swords[player] == 'swordless':
         rom.write_bytes(0x180098, [2, overflow_replacement])
         rom.write_byte(0x180181, 0x01) # Make silver arrows work only on ganon
+        rom.write_byte(0x180182, 0x00) # Don't auto equip silvers on pickup
 
     # set up game internal RNG seed
     for i in range(1024):
