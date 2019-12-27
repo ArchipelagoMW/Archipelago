@@ -54,7 +54,7 @@ def main(args, seed=None):
         world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
 
         if world.mode[player] == 'standard' and (world.enemy_shuffle[player] != 'none' or world.enemy_health[player] not in ['default', 'easy']):
-            world.escape_assist[player].append(['bombs']) # enemized escape assumes infinite bombs available and will likely be unbeatable without it
+            world.escape_assist[player].append('bombs') # enemized escape assumes infinite bombs available and will likely be unbeatable without it
 
         if world.mode[player] != 'inverted':
             create_regions(world, player)
