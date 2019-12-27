@@ -679,35 +679,15 @@ def patch_rom(world, player, rom, enemized):
     difficulty = world.difficulty_requirements[player]
 
     #Set overflow items for progressive equipment
-    mw_sword_replacements = {0: overflow_replacement,
-                             1: item_table['Fighter Sword'][3],
-                             2: item_table['Master Sword'][3],
-                             3: item_table['Tempered Sword'][3],
-                             4: item_table['Golden Sword'][3]}
-    mw_shield_replacements = {0: overflow_replacement,
-                              1: item_table['Blue Shield'][3],
-                              2: item_table['Red Shield'][3],
-                              3: item_table['Mirror Shield'][3]}
-    mw_armor_replacements = {0: overflow_replacement,
-                             1: item_table['Blue Mail'][3],
-                             2: item_table['Red Mail'][3]}
-    mw_bottle_replacements = {0: overflow_replacement,
-                              1: item_table['Blue Potion'][3],
-                              2: item_table['Blue Potion'][3],
-                              3: item_table['Blue Potion'][3],
-                              4: item_table['Blue Potion'][3]}
-    mw_bow_replacements = {0: overflow_replacement,
-                             1: item_table['Bow'][3],
-                             2: item_table['Bow'][3]}
     rom.write_bytes(0x180090,
-                    [difficulty.progressive_sword_limit, mw_sword_replacements[difficulty.progressive_sword_limit] if world.players > 1 else overflow_replacement,
-                     difficulty.progressive_shield_limit, mw_shield_replacements[difficulty.progressive_shield_limit] if world.players > 1 else overflow_replacement,
-                     difficulty.progressive_armor_limit, mw_armor_replacements[difficulty.progressive_armor_limit] if world.players > 1 else overflow_replacement,
-                     difficulty.progressive_bottle_limit, mw_bottle_replacements[difficulty.progressive_bottle_limit] if world.players > 1 else overflow_replacement,
-                     difficulty.progressive_bow_limit, mw_bow_replacements[difficulty.progressive_bow_limit] if world.players > 1 else overflow_replacement])
+                    [difficulty.progressive_sword_limit, overflow_replacement,
+                     difficulty.progressive_shield_limit, overflow_replacement,
+                     difficulty.progressive_armor_limit, overflow_replacement,
+                     difficulty.progressive_bottle_limit, overflow_replacement,
+                     difficulty.progressive_bow_limit, overflow_replacement])
 
     if difficulty.progressive_bow_limit < 2 and world.swords[player] == 'swordless':
-        rom.write_bytes(0x180098, [2, mw_bow_replacements[difficulty.progressive_bow_limit] if world.players > 1 else overflow_replacement])
+        rom.write_bytes(0x180098, [2, overflow_replacement])
         rom.write_byte(0x180181, 0x01) # Make silver arrows work only on ganon
 
     # set up game internal RNG seed
