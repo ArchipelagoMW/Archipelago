@@ -1160,7 +1160,7 @@ def link_inverted_entrances(world, player):
 
         single_doors = list(Single_Cave_Doors)
         bomb_shop_doors = list(Inverted_Bomb_Shop_Single_Cave_Doors)
-        blacksmith_doors = list(Inverted_Blacksmith_Single_Cave_Doors)
+        blacksmith_doors = list(Blacksmith_Single_Cave_Doors)
         door_targets = list(Inverted_Single_Cave_Targets)
 
         # we shuffle all 2 entrance caves as pairs as a start
@@ -1253,7 +1253,7 @@ def link_inverted_entrances(world, player):
         caves = list(Cave_Exits + Cave_Three_Exits + Old_Man_House)
         single_doors = list(Single_Cave_Doors)
         bomb_shop_doors = list(Inverted_Bomb_Shop_Single_Cave_Doors + Inverted_Bomb_Shop_Multi_Cave_Doors)
-        blacksmith_doors = list(Inverted_Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
+        blacksmith_doors = list(Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
         door_targets = list(Inverted_Single_Cave_Targets)
 
         # place links house
@@ -1335,7 +1335,7 @@ def link_inverted_entrances(world, player):
         old_man_entrances = list(Inverted_Old_Man_Entrances + Old_Man_Entrances + ['Inverted Agahnims Tower', 'Tower of Hera'])
         caves = list(Cave_Exits + Dungeon_Exits + Cave_Three_Exits)  # don't need to consider three exit caves, have one exit caves to avoid parity issues
         bomb_shop_doors = list(Inverted_Bomb_Shop_Single_Cave_Doors + Inverted_Bomb_Shop_Multi_Cave_Doors)
-        blacksmith_doors = list(Inverted_Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
+        blacksmith_doors = list(Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
         door_targets = list(Inverted_Single_Cave_Targets)
         old_man_house = list(Old_Man_House)
 
@@ -1486,7 +1486,7 @@ def link_inverted_entrances(world, player):
         old_man_entrances = list(Inverted_Old_Man_Entrances + Old_Man_Entrances + ['Inverted Agahnims Tower', 'Tower of Hera'])
         caves = list(Cave_Exits + Dungeon_Exits + Cave_Three_Exits + Old_Man_House)  # don't need to consider three exit caves, have one exit caves to avoid parity issues
         bomb_shop_doors = list(Inverted_Bomb_Shop_Single_Cave_Doors + Inverted_Bomb_Shop_Multi_Cave_Doors)
-        blacksmith_doors = list(Inverted_Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
+        blacksmith_doors = list(Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
         door_targets = list(Inverted_Single_Cave_Targets)
 
         # randomize which desert ledge door is a must-exit
@@ -1610,7 +1610,7 @@ def link_inverted_entrances(world, player):
         # bomb shop logic for.
         # Specifically we could potentially add: 'Dark Death Mountain Ledge (East)' and doors associated with pits
         bomb_shop_doors = list(Inverted_Bomb_Shop_Single_Cave_Doors + Inverted_Bomb_Shop_Multi_Cave_Doors + ['Turtle Rock Isolated Ledge Entrance', 'Bumper Cave (Top)', 'Hookshot Cave Back Entrance'])
-        blacksmith_doors = list(Inverted_Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
+        blacksmith_doors = list(Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
         door_targets = list(Inverted_Single_Cave_Targets)
 
         random.shuffle(doors)
@@ -2648,8 +2648,6 @@ Inverted_Bomb_Shop_Multi_Cave_Doors = ['Hyrule Castle Entrance (South)',
                                        'Desert Palace Entrance (West)',
                                        'Desert Palace Entrance (North)']
 
-Inverted_Blacksmith_Multi_Cave_Doors = []  # same as non-inverted
-
 Inverted_LW_Single_Cave_Doors = LW_Single_Cave_Doors + ['Inverted Big Bomb Shop']
 
 Inverted_DW_Single_Cave_Doors = ['Bonk Fairy (Dark)',
@@ -2717,39 +2715,8 @@ Inverted_Bomb_Shop_Single_Cave_Doors = ['Waterfall of Wishing',
                                         'Bumper Cave (Top)',
                                         'Mimic Cave',
                                         'Dark Lake Hylia Shop',
-                                        'Inverted Links House']
-
-Inverted_Blacksmith_Single_Cave_Doors = ['Blinds Hideout',
-                                         'Lake Hylia Fairy',
-                                         'Light Hype Fairy',
-                                         'Desert Fairy',
-                                         'Chicken House',
-                                         'Aginahs Cave',
-                                         'Sahasrahlas Hut',
-                                         'Cave Shop (Lake Hylia)',
-                                         'Blacksmiths Hut',
-                                         'Sick Kids House',
-                                         'Lost Woods Gamble',
-                                         'Fortune Teller (Light)',
-                                         'Snitch Lady (East)',
-                                         'Snitch Lady (West)',
-                                         'Bush Covered House',
-                                         'Tavern (Front)',
-                                         'Light World Bomb Hut',
-                                         'Kakariko Shop',
-                                         'Mini Moldorm Cave',
-                                         'Long Fairy Cave',
-                                         'Good Bee Cave',
-                                         '20 Rupee Cave',
-                                         '50 Rupee Cave',
-                                         'Ice Rod Cave',
-                                         'Library',
-                                         'Potion Shop',
-                                         'Dam',
-                                         'Lumberjack House',
-                                         'Lake Hylia Fortune Teller',
-                                         'Kakariko Gamble Game',
-                                         'Inverted Big Bomb Shop']
+                                        'Inverted Links House',
+                                        'Inverted Big Bomb Shop']
 
 
 Inverted_Single_Cave_Targets = ['Blinds Hideout',
