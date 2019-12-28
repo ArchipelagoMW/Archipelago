@@ -9,7 +9,7 @@ import shlex
 import sys
 
 from Main import main
-from Utils import is_bundled, close_console, output_path
+from Utils import is_bundled, close_console
 
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
@@ -293,9 +293,6 @@ def parse_arguments(argv, no_defaults=False):
 
 def start():
     args = parse_arguments(None)
-
-    if args.outputpath and os.path.isdir(args.outputpath):
-        output_path.cached_path = args.outputpath
 
     if is_bundled() and len(sys.argv) == 1:
         # for the bundled builds, if we have no arguments, the user

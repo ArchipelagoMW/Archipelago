@@ -22,6 +22,13 @@ from Utils import output_path, parse_names_string
 __version__ = '0.6.3-pre'
 
 def main(args, seed=None):
+    if args.outputpath:
+        try:
+            os.mkdir(args.outputpath)
+        except OSError:
+            pass
+        output_path.cached_path = args.outputpath
+
     start = time.process_time()
 
     # initialize the world
