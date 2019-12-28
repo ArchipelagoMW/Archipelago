@@ -162,7 +162,7 @@ def main(args, seed=None):
             patch_rom(world, player, rom, use_enemizer)
 
             enemizer_patch = []
-            if use_enemizer:
+            if use_enemizer and (args.enemizercli or not args.jsonout):
                 enemizer_patch = get_enemizer_patch(world, player, rom, args.rom, args.enemizercli, args.shufflepalette[player], args.shufflepots[player])
 
             multidata.rom_names[player] = list(rom.name)
