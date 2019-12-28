@@ -19,6 +19,7 @@ def set_rules(world, player):
             if world.shuffle[player] != 'vanilla':
                 old_rule = world.get_region('Old Man House', player).can_reach
                 world.get_region('Old Man House', player).can_reach_private = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
+            world.get_region('Hyrule Castle Ledge', player).can_reach_private = lambda state: True
             return
 
     global_rules(world, player)
