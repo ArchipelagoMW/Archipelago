@@ -1191,6 +1191,8 @@ def link_inverted_entrances(world, player):
             bomb_shop_doors.remove(links_house)
         if links_house in blacksmith_doors:
             blacksmith_doors.remove(links_house)
+        if links_house in old_man_entrances:
+            old_man_entrances.remove(links_house)
 
         # place dark sanc
         sanc_doors = [door for door in Inverted_Dark_Sanctuary_Doors if door in bomb_shop_doors]
