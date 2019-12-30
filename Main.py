@@ -52,6 +52,7 @@ def main(args, seed=None):
     world.enemy_shuffle = args.shuffleenemies.copy()
     world.enemy_health = args.enemy_health.copy()
     world.enemy_damage = args.enemy_damage.copy()
+    world.beemizer = args.beemizer.copy()
 
     world.rom_seeds = {player: random.randint(0, 999999999) for player in range(1, world.players + 1)}
 
@@ -260,6 +261,7 @@ def copy_world(world):
     ret.enemy_shuffle = world.enemy_shuffle.copy()
     ret.enemy_health = world.enemy_health.copy()
     ret.enemy_damage = world.enemy_damage.copy()
+    ret.beemizer = world.beemizer.copy()
 
     for player in range(1, world.players + 1):
         if world.mode[player] != 'inverted':

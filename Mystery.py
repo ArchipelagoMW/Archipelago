@@ -199,6 +199,8 @@ def roll_settings(weights):
     enemy_health = get_choice('enemy_health')
     ret.enemy_health = enemy_health
 
+    ret.beemizer = int(get_choice('beemizer')) if 'beemizer' in weights.keys() else 1 # suck it :)
+
     return ret
 
 if __name__ == '__main__':
