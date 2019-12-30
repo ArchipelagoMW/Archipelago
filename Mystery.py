@@ -26,7 +26,7 @@ def parse_yaml(txt):
     return ret
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument('--multi', default=1, type=lambda value: min(max(int(value), 1), 255))
     multiargs, _ = parser.parse_known_args()
 
