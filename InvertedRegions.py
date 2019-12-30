@@ -377,7 +377,7 @@ def mark_dark_world_regions(world, player):
 shop_table = {
     'Cave Shop (Dark Death Mountain)': (0x0112, 0xC1, True),
     'Red Shield Shop': (0x0110, 0xC1, True),
-    'Dark Lake Hylia Shop': (0x010F, 0xC1, True),
+    'Dark Lake Hylia Shop': (0x010F, 0xC1, False),
     'Dark World Lumberjack Shop': (0x010F, 0xC1, True),
     'Village of Outcasts Shop': (0x010F, 0xC1, True),
     'Dark World Potion Shop': (0x010F, 0xC1, True),
