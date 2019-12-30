@@ -61,7 +61,7 @@ def main(args, seed=None):
     for player in range(1, world.players + 1):
         world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
 
-        if world.mode[player] == 'standard' and (world.enemy_shuffle[player] != 'none' or world.enemy_health[player] not in ['default', 'easy']):
+        if world.mode[player] == 'standard' and world.enemy_shuffle[player] != 'none':
             world.escape_assist[player].append('bombs') # enemized escape assumes infinite bombs available and will likely be unbeatable without it
 
         if world.mode[player] != 'inverted':

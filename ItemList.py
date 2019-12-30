@@ -182,24 +182,27 @@ def generate_itempool(world, player):
     for item in precollected_items:
         world.push_precollected(ItemFactory(item, player))
 
-    if world.mode[player] == 'standard' and not world.state.has_blunt_weapon(player) and "Link's Uncle" not in placed_items:
-        found_sword = False
-        found_bow = False
-        possible_weapons = []
-        for item in pool:
-            if item in ['Progressive Sword', 'Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword']:
-                if not found_sword and world.swords[player] != 'swordless':
-                    found_sword = True
+    if world.mode[player] == 'standard' and not world.state.has_blunt_weapon(player):
+        if "Link's Uncle" not in placed_items:
+            found_sword = False
+            found_bow = False
+            possible_weapons = []
+            for item in pool:
+                if item in ['Progressive Sword', 'Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword']:
+                    if not found_sword and world.swords[player] != 'swordless':
+                        found_sword = True
+                        possible_weapons.append(item)
+                if item in ['Progressive Bow', 'Bow'] and not found_bow:
+                    found_bow = True
                     possible_weapons.append(item)
-            if item in ['Progressive Bow', 'Bow'] and not found_bow:
-                found_bow = True
-                possible_weapons.append(item)
-            if item in ['Hammer', 'Bombs (10)', 'Fire Rod', 'Cane of Somaria', 'Cane of Byrna']:
-                if item not in possible_weapons:
-                    possible_weapons.append(item)
-        starting_weapon = random.choice(possible_weapons)
-        placed_items["Link's Uncle"] = starting_weapon
-        pool.remove(starting_weapon)
+                if item in ['Hammer', 'Bombs (10)', 'Fire Rod', 'Cane of Somaria', 'Cane of Byrna']:
+                    if item not in possible_weapons:
+                        possible_weapons.append(item)
+            starting_weapon = random.choice(possible_weapons)
+            placed_items["Link's Uncle"] = starting_weapon
+            pool.remove(starting_weapon)
+        if placed_items["Link's Uncle"] in ['Bow', 'Progressive Bow', 'Bombs (10)', 'Cane of Somaria', 'Cane of Byrna'] and world.enemy_health[player] not in ['default', 'easy']:
+            world.escape_assist[player].append('bombs')
 
     for (location, item) in placed_items.items():
         world.push_item(world.get_location(location, player), ItemFactory(item, player), False)
