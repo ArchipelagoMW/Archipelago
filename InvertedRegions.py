@@ -396,7 +396,7 @@ _dark_world_shop_defaults = [('Red Potion', 150), ('Blue Shield', 50), ('Bombs (
 default_shop_contents = {
     'Cave Shop (Dark Death Mountain)': _basic_shop_defaults,
     'Red Shield Shop': [('Red Shield', 500), ('Bee', 10), ('Arrows (10)', 30)],
-    'Dark Lake Hylia Shop': _dark_world_shop_defaults,
+    'Dark Lake Hylia Shop': [('Blue Potion', 160), ('Blue Shield', 50), ('Bombs (10)', 50)],
     'Dark World Lumberjack Shop': _dark_world_shop_defaults,
     'Village of Outcasts Shop': _dark_world_shop_defaults,
     'Dark World Potion Shop': _dark_world_shop_defaults,
