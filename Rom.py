@@ -1337,13 +1337,18 @@ def write_strings(rom, world, player):
         tt['kakariko_flophouse_man'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
 
     def hint_text(dest, ped_hint=False):
-        hint = dest.hint_text if not ped_hint else dest.pedestal_hint_text
+        if not dest:
+            return "nothing"
+        if ped_hint:
+            hint = dest.pedestal_hint_text if dest.pedestal_hint_text else "unknown item"
+        else:
+            hint = dest.hint_text if dest.hint_text else "something"
         if dest.player != player:
             if ped_hint:
                 hint += " for p%d!" % dest.player
             elif type(dest) in [Region, Location]:
                 hint += " in p%d's world" % dest.player
-            elif type(dest) is Item:
+            else:
                 hint += " for p%d" % dest.player
         return hint
 
