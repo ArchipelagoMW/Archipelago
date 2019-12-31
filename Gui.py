@@ -425,7 +425,7 @@ def guiMain(args=None):
         guiargs.rom = romVar.get()
         guiargs.sprite = sprite
         # get default values for missing parameters
-        for k,v in vars(parse_arguments([])).items():
+        for k,v in vars(parse_arguments(['--multi', str(guiargs.multi)])).items():
             if k not in vars(guiargs):
                 setattr(guiargs, k, v)
             elif type(v) is dict: # use same settings for every player
