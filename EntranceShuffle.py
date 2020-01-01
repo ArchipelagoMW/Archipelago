@@ -2987,7 +2987,8 @@ mandatory_connections = [('Lake Hylia Central Island Pier', 'Lake Hylia Central 
                          ('Pyramid Drop', 'East Dark World')
                         ]
 
-inverted_mandatory_connections = [('Lake Hylia Central Island Pier', 'Lake Hylia Central Island'), 
+inverted_mandatory_connections = [('Lake Hylia Central Island Pier', 'Lake Hylia Central Island'),
+                                  ('Lake Hylia Island', 'Lake Hylia Island'),
                                   ('Zoras River', 'Zoras River'), 
                                   ('Kings Grave Outer Rocks', 'Kings Grave Area'),
                                   ('Kings Grave Inner Rocks', 'Light World'),

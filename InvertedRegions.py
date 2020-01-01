@@ -9,7 +9,7 @@ def create_inverted_regions(world, player):
                          ["Blinds Hideout", "Hyrule Castle Secret Entrance Drop", 'Kings Grave Outer Rocks', 'Dam',
                           'Inverted Big Bomb Shop', 'Tavern North', 'Chicken House', 'Aginahs Cave', 'Sahasrahlas Hut', 'Kakariko Well Drop', 'Kakariko Well Cave',
                           'Blacksmiths Hut', 'Bat Cave Drop Ledge', 'Bat Cave Cave', 'Sick Kids House', 'Hobo Bridge', 'Lost Woods Hideout Drop', 'Lost Woods Hideout Stump',
-                          'Lumberjack Tree Tree', 'Lumberjack Tree Cave', 'Mini Moldorm Cave', 'Ice Rod Cave', 'Lake Hylia Central Island Pier',
+                          'Lumberjack Tree Tree', 'Lumberjack Tree Cave', 'Mini Moldorm Cave', 'Ice Rod Cave', 'Lake Hylia Central Island Pier', 'Lake Hylia Island',
                           'Bonk Rock Cave', 'Library', 'Two Brothers House (East)', 'Desert Palace Stairs', 'Eastern Palace', 'Master Sword Meadow',
                           'Sanctuary', 'Sanctuary Grave', 'Death Mountain Entrance Rock', 'Light World River Drop',
                           'Elder House (East)', 'Elder House (West)', 'North Fairy Cave', 'North Fairy Cave Drop', 'Lost Woods Gamble', 'Snitch Lady (East)', 'Snitch Lady (West)', 'Tavern (Front)',
