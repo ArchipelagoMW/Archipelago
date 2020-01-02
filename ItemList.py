@@ -246,7 +246,7 @@ def set_up_take_anys(world, player):
     entrance = world.get_region(reg, player).entrances[0]
     connect_entrance(world, entrance, old_man_take_any, player)
     entrance.target = 0x58
-    old_man_take_any.shop = Shop(old_man_take_any, 0x0112, None, ShopType.TakeAny, 0xE2, True)
+    old_man_take_any.shop = Shop(old_man_take_any, 0x0112, ShopType.TakeAny, 0xE2, True)
     world.shops.append(old_man_take_any.shop)
     old_man_take_any.shop.active = True
 
@@ -269,7 +269,7 @@ def set_up_take_anys(world, player):
         entrance = world.get_region(reg, player).entrances[0]
         connect_entrance(world, entrance, take_any, player)
         entrance.target = target
-        take_any.shop = Shop(take_any, room_id, None, ShopType.TakeAny, 0xE3, True)
+        take_any.shop = Shop(take_any, room_id, ShopType.TakeAny, 0xE3, True)
         world.shops.append(take_any.shop)
         take_any.shop.active = True
         take_any.shop.add_inventory(0, 'Blue Potion', 0, 0)
