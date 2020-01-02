@@ -21,7 +21,7 @@ from Utils import output_path
 __version__ = '0.6.3-pre'
 
 def main(args, seed=None):
-    start = time.clock()
+    start = time.perf_counter()
 
     # initialize the world
     world = World(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty, args.item_functionality, args.timer, args.progressive, args.goal, args.algorithm, not args.nodungeonitems, args.accessibility, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.keysanity, args.retro, args.custom, args.customitemarray, args.shufflebosses, args.hints)
@@ -172,7 +172,7 @@ def main(args, seed=None):
         world.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))
 
     logger.info('Done. Enjoy.')
-    logger.debug('Total Time: %s', time.clock() - start)
+    logger.debug('Total Time: %s', time.perf_counter() - start)
 
     return world
 

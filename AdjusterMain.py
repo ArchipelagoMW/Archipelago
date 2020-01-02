@@ -7,7 +7,7 @@ from Rom import LocalRom, Sprite, apply_rom_settings
 
 
 def adjust(args):
-    start = time.clock()
+    start = time.perf_counter()
     logger = logging.getLogger('')
     logger.info('Patching ROM.')
 
@@ -31,6 +31,6 @@ def adjust(args):
     rom.write_to_file(output_path('%s.sfc' % outfilebase))
 
     logger.info('Done. Enjoy.')
-    logger.debug('Total Time: %s', time.clock() - start)
+    logger.debug('Total Time: %s', time.perf_counter() - start)
 
     return args
