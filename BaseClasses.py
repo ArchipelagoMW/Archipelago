@@ -871,9 +871,10 @@ class ShopType(Enum):
     UpgradeShop = 2
 
 class Shop(object):
-    def __init__(self, region, room_id, type, shopkeeper_config, replaceable):
+    def __init__(self, region, room_id, default_door_id, type, shopkeeper_config, replaceable):
         self.region = region
         self.room_id = room_id
+        self.default_door_id = default_door_id
         self.type = type
         self.inventory = [None, None, None]
         self.shopkeeper_config = shopkeeper_config
@@ -893,6 +894,8 @@ class Shop(object):
         config = self.item_count
         if len(entrances) == 1 and entrances[0].addresses:
             door_id = entrances[0].addresses+1
+        elif self.default_door_id is not None:
+            door_id = self.default_door_id
         else:
             door_id = 0
             config |= 0x40 # ignore door id
