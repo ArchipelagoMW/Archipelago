@@ -408,7 +408,6 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
         precollected_items.append('Pegasus Boots')
         pool.remove('Pegasus Boots')
 
-
     if want_progressives():
         pool.extend(progressivegloves)
     else:

@@ -731,6 +731,7 @@ def overworld_glitches_rules(world, player):
         'Death Mountain Floating Island (Dark World)',
         'Turtle Rock (Top)',
     ]
+    # set up boots-accessible regions
     if world.mode[player] != 'inverted':
         lw_boots_accessible_regions.append('Cave 45 Ledge')
         lw_boots_accessible_regions.append('Graveyard Ledge')
@@ -739,16 +740,35 @@ def overworld_glitches_rules(world, player):
         set_rule(world.get_entrance('Dark Desert Teleporter', player), lambda state: (state.has('Ocarina', player) or state.has_Boots(player)) and state.can_lift_heavy_rocks(player))
         set_rule(world.get_entrance('South Hyrule Teleporter', player), lambda state: (state.has('Hammer', player) or state.has_Boots(player)) and state.can_lift_rocks(player))
         set_rule(world.get_location('Zora\'s Ledge', player), lambda state: state.has_Boots(player))
+        add_rule(world.get_entrance('Ganons Tower', player), lambda state: state.has_Boots(player) and state.has_Pearl(player), 'or')
     needs_boots = lambda state: state.has_Boots(player)
     needs_boots_and_pearl = lambda state: state.has_Boots(player) and state.has_Pearl(player)
     for spot in lw_boots_accessible_regions:
-        region = world.get_region(spot, player)
-        for location in region.locations:
+        for location in world.get_region(spot, player).locations:
             add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] == 'inverted' else needs_boots, 'or')
     for spot in dw_boots_accessible_regions:
-        region = world.get_region(spot, player)
-        for location in region.locations:
+        for location in world.get_region(spot, player).locations:
             add_rule(world.get_location(location, player), needs_boots if world.mode[player] == 'inverted' else needs_boots_and_pearl, 'or')
+    # bunny DMD rules
+    if world.mode[player] != 'inverted':
+        # set up some mirror-accessible dw entrances.
+        boots_and_mirror = lambda state: state.has_Boots(player) and state.has_Mirror(player)
+        add_rule(world.get_entrance('Dark Sanctuary Hint', player), boots_and_mirror, 'or') # should suffice to give us west dark world access
+        for spot in world.get_region('Dark Death Mountain (East Bottom)', player).locations:
+            add_rule(world.get_location(spot, player), boots_and_mirror, 'or')
+        # dw entrances accessible with mirror and hookshot
+        mirror_hookshot_accessible_dw_locations = [
+            'Pyramid Fairy',
+            'Pyramid Entrance',
+            'Pyramid Drop',
+        ]
+        mirror_hookshot_accessible_dw_locations.extend(world.get_region('Dark Death Mountain Ledge', player).locations)
+        for spot in mirror_hookshot_accessible_dw_locations:
+            add_rule(world.get_entrance(spot, player), lambda state: state.has_Boots(player) and state.has_Mirror(player) and state.has('Hookshot', player), 'or')
+        # dw entrances accessible with mirror and titans
+        boots_mirror_titans = lambda state: state.has_Boots(player) and state.has_Mirror(player) and state.can_lift_heavy_rocks(player)
+        add_rule(world.get_entrance('Mire Shed', player), boots_mirror_titans, 'or')
+        add_rule(world.get_location('Frog', player), boots_mirror_titans, 'or')
     add_conditional_lamps(world, player)
 
 

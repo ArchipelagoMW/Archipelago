@@ -114,10 +114,10 @@ def roll_settings(weights):
     ret = argparse.Namespace()
 
     glitches_required = get_choice('glitches_required')
-    if glitches_required not in ['none', 'no_logic']:
-        print("Only NMG and No Logic supported")
+    if glitches_required not in ['none', 'no_logic', 'overworld_glitches']:
+        print("Only NMG, OWG and No Logic supported")
         glitches_required = 'none'
-    ret.logic = {'none': 'noglitches', 'no_logic': 'nologic'}[glitches_required]
+    ret.logic = {'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches'}[glitches_required]
 
     item_placement = get_choice('item_placement')
     # not supported in ER
