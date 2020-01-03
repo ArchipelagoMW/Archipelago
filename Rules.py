@@ -644,7 +644,10 @@ def no_glitches_rules(world, player):
     set_rule(world.get_entrance('Paradox Cave Push Block Reverse', player), lambda state: False)  # no glitches does not require block override
     set_rule(world.get_entrance('Paradox Cave Bomb Jump', player), lambda state: False)
     set_rule(world.get_entrance('Skull Woods First Section Bomb Jump', player), lambda state: False)
+    add_conditional_lamps(world, player)
 
+
+def add_conditional_lamps(world, player):
     # Light cones in standard depend on which world we actually are in, not which one the location would normally be
     # We add Lamp requirements only to those locations which lie in the dark world (or everything if open
     DW_Entrances = ['Bumper Cave (Bottom)', 'Superbunny Cave (Top)', 'Superbunny Cave (Bottom)', 'Hookshot Cave', 'Bumper Cave (Top)', 'Hookshot Cave Back Entrance', 'Dark Death Mountain Ledge (East)',
@@ -695,57 +698,58 @@ def no_glitches_rules(world, player):
 
 def overworld_glitches_rules(world, player):
     # spots that are immediately accessible
-    set_rule(world.get_location('Zoras River', player), lambda state: True)
-    set_rule(world.get_location('Hobo Bridge', player), lambda state: True)
-    set_rule(world.get_location('Lake Hylia Central Island', player), lambda state: True)
+    set_rule(world.get_entrance('Hobo Bridge', player), lambda state: True)
+    set_rule(world.get_region('Lake Hylia Central Island', player), lambda state: True)
+    set_rule(world.get_entrance('Zoras River', player), lambda state: True)
     # lw boots-accessible locations
-    lw_boots_accessible_locations = [
+    lw_boots_accessible_regions = [
         'Bat Cave Drop Ledge',
-        'Zora\'s Ledge',
-    ]
-    lw_boots_accessible_entrances = [
-        'Death Mountain Return Ledge',
-        'Cave 45 Ledge',
-        'Graveyard Ledge',
-        'Lake Hylia Island'
+        'Lake Hylia Island',
         'Desert Ledge',
         'Desert Ledge (Northeast)',
+        'Desert Palace Lone Stairs',
         'Desert Palace Entrance (North) Spot',
         'Death Mountain',
+        'Death Mountain Return Ledge',
         'East Death Mountain (Bottom)',
         'East Death Mountain (Top)',
         'Death Mountain (Top)',
         'Spectacle Rock',
         'Death Mountain Floating Island (Light World)',
-        'Turtle Rock Teleporter',
     ]
     # dw boots-accessible regions
     dw_boots_accessible_regions = [
+        'East Dark World',
         'Northeast Dark World',
-        'Dark Lake Hylia',
-        'Dark Lake Hylia Ledge',
         'West Dark World',
         'Hammer Peg Area',
         'Bumper Cave Ledge',
         'Dark Desert',
         'Dark Death Mountain (Top)',
-        'Dark Death Mountain Ledge',
         'Dark Death Mountain (East Bottom)',
+        'Dark Death Mountain Ledge',
         'Death Mountain Floating Island (Dark World)',
         'Turtle Rock (Top)',
-        'Ganons Tower',
     ]
+    if world.mode[player] != 'inverted':
+        lw_boots_accessible_regions.append('Cave 45 Ledge')
+        lw_boots_accessible_regions.append('Graveyard Ledge')
+        # couple other random spots
+        set_rule(world.get_location('Bombos Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has_beam_sword(player) and (state.has_Mirror(player) or state.has_Boots(player)))
+        set_rule(world.get_entrance('Dark Desert Teleporter', player), lambda state: (state.has('Ocarina', player) or state.has_Boots(player)) and state.can_lift_heavy_rocks(player))
+        set_rule(world.get_entrance('South Hyrule Teleporter', player), lambda state: (state.has('Hammer', player) or state.has_Boots(player)) and state.can_lift_rocks(player))
+        set_rule(world.get_location('Zora\'s Ledge', player), lambda state: state.has_Boots(player))
     needs_boots = lambda state: state.has_Boots(player)
     needs_boots_and_pearl = lambda state: state.has_Boots(player) and state.has_Pearl(player)
     for spot in lw_boots_accessible_regions:
-        add_rule(world.get_region(spot, player), needs_boots_and_pearl if world.mode[player] == 'inverted' else needs_boots, 'or')
+        region = world.get_region(spot, player)
+        for location in region.locations:
+            add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] == 'inverted' else needs_boots, 'or')
     for spot in dw_boots_accessible_regions:
-        add_rule(world.get_region(spot, player), needs_boots if world.mode[player] == 'inverted' else needs_boots_and_pearl, 'or')
-    # couple other random spots
-    if world.mode[player] != 'inverted':
-        set_rule(world.get_location('Bombos Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has_beam_sword(player) and (state.has_Mirror(player) or state.has_Boots(player)))
-        set_rule(world.get_entrance('Waterfall of Wishing', player), lambda state: state.has('Flippers', player) or state.has_Pearl(player))
-    else:
+        region = world.get_region(spot, player)
+        for location in region.locations:
+            add_rule(world.get_location(location, player), needs_boots if world.mode[player] == 'inverted' else needs_boots_and_pearl, 'or')
+    add_conditional_lamps(world, player)
 
 
 def open_rules(world, player):

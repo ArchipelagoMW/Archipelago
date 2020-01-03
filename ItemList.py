@@ -125,6 +125,8 @@ difficulties = {
 }
 
 def generate_itempool(world, player):
+    if world.logic == 'owglitches':
+        world.push_precollected(ItemFactory('Pegasus Boots'), player)
     if (world.difficulty[player] not in ['normal', 'hard', 'expert'] or world.goal[player] not in ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals']
             or world.mode[player] not in ['open', 'standard', 'inverted'] or world.timer not in ['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'] or world.progressive not in ['on', 'off', 'random']):
         raise NotImplementedError('Not supported yet')
