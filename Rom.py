@@ -901,7 +901,7 @@ def patch_rom(world, player, rom, enemized):
         rom.write_byte(x, 0) # Zero the initial equipment array
     rom.write_byte(0x18302C, 0x18) # starting max health
     rom.write_byte(0x18302D, 0x18) # starting current health
-    rom.write_byte(0x183039, 0x68) # starting abilities, bit array
+    ability_flags = 0x68 # starting abilities, bit array; may be modified by precollected items
     
     for item in world.precollected_items:
         if item.player != player:
@@ -911,8 +911,14 @@ def patch_rom(world, player, rom, enemized):
             rom.write_byte(0x183000+0x19, 0x01)
             rom.write_byte(0x0271A6+0x19, 0x01)
             rom.write_byte(0x180043, 0x01) # special starting sword byte
+        elif item.name == 'Pegasus Boots':
+            rom.write_byte(0x183015, 0x01)
+            ability_flags |= 0b00000100
         else:
             raise RuntimeError("Unsupported pre-collected item: {}".format(item))
+
+    # write abilities after ability flags have been determined
+    rom.write_byte(0x183039, ability_flags)
 
     rom.write_byte(0x18004A, 0x00 if world.mode[player] != 'inverted' else 0x01)  # Inverted mode
     rom.write_byte(0x18005D, 0x00) # Hammer always breaks barrier

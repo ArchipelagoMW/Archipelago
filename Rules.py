@@ -38,6 +38,8 @@ def set_rules(world, player):
 
     if world.logic[player] == 'noglitches':
         no_glitches_rules(world, player)
+    elif world.logic[player] == 'owglitches':
+        overworld_glitches_rules(world, player)
     elif world.logic[player] == 'minorglitches':
         logging.getLogger('').info('Minor Glitches may be buggy still. No guarantee for proper logic checks.')
     else:
@@ -357,7 +359,6 @@ def default_rules(world, player):
     set_rule(world.get_entrance('Kings Grave Mirror Spot', player), lambda state: state.has_Pearl(player) and state.has_Mirror(player))
     # Caution: If king's grave is releaxed at all to account for reaching it via a two way cave's exit in insanity mode, then the bomb shop logic will need to be updated (that would involve create a small ledge-like Region for it)
     set_rule(world.get_entrance('Bonk Fairy (Light)', player), lambda state: state.has_Boots(player))
-    set_rule(world.get_entrance('Bat Cave Drop Ledge', player), lambda state: state.has('Hammer', player))
     set_rule(world.get_entrance('Lumberjack Tree Tree', player), lambda state: state.has_Boots(player) and state.has('Beat Agahnim 1', player))
     set_rule(world.get_entrance('Bonk Rock Cave', player), lambda state: state.has_Boots(player))
     set_rule(world.get_entrance('Desert Palace Stairs', player), lambda state: state.has('Book of Mudora', player))
@@ -625,8 +626,10 @@ def no_glitches_rules(world, player):
         set_rule(world.get_entrance('Dark Lake Hylia Teleporter', player), lambda state: state.has_Pearl(player) and state.has('Flippers', player) and (state.has('Hammer', player) or state.can_lift_rocks(player)))
         set_rule(world.get_entrance('Dark Lake Hylia Ledge Drop', player), lambda state: state.has_Pearl(player) and state.has('Flippers', player))
     else:
+        set_rule(world.get_entrance('Bat Cave Drop Ledge', player), lambda state: state.has('Hammer', player))
         set_rule(world.get_entrance('Zoras River', player), lambda state: state.has_Pearl(player) and (state.has('Flippers', player) or state.can_lift_rocks(player)))
         set_rule(world.get_entrance('Lake Hylia Central Island Pier', player), lambda state: state.has_Pearl(player) and state.has('Flippers', player))  # can be fake flippered to
+        set_rule(world.get_entrance('Lake Hylia Island', player), lambda state: state.has_Pearl(player) and state.has('Flippers', player))
         set_rule(world.get_entrance('Hobo Bridge', player), lambda state: state.has_Pearl(player) and state.has('Flippers', player))
         set_rule(world.get_entrance('Dark Lake Hylia Drop (East)', player), lambda state: state.has('Flippers', player))
         set_rule(world.get_entrance('Dark Lake Hylia Teleporter', player), lambda state: state.has('Flippers', player) and (state.has('Hammer', player) or state.can_lift_rocks(player)))
@@ -641,7 +644,10 @@ def no_glitches_rules(world, player):
     set_rule(world.get_entrance('Paradox Cave Push Block Reverse', player), lambda state: False)  # no glitches does not require block override
     set_rule(world.get_entrance('Paradox Cave Bomb Jump', player), lambda state: False)
     set_rule(world.get_entrance('Skull Woods First Section Bomb Jump', player), lambda state: False)
+    add_conditional_lamps(world, player)
 
+
+def add_conditional_lamps(world, player):
     # Light cones in standard depend on which world we actually are in, not which one the location would normally be
     # We add Lamp requirements only to those locations which lie in the dark world (or everything if open
     DW_Entrances = ['Bumper Cave (Bottom)', 'Superbunny Cave (Top)', 'Superbunny Cave (Bottom)', 'Hookshot Cave', 'Bumper Cave (Top)', 'Hookshot Cave Back Entrance', 'Dark Death Mountain Ledge (East)',
@@ -688,6 +694,82 @@ def no_glitches_rules(world, player):
         add_lamp_requirement(world.get_location('Sewers - Dark Cross', player), player)
         add_lamp_requirement(world.get_entrance('Sewers Back Door', player), player)
         add_lamp_requirement(world.get_entrance('Throne Room', player), player)
+
+
+def overworld_glitches_rules(world, player):
+    # spots that are immediately accessible
+    set_rule(world.get_entrance('Hobo Bridge', player), lambda state: True)
+    set_rule(world.get_region('Lake Hylia Central Island', player), lambda state: True)
+    set_rule(world.get_entrance('Zoras River', player), lambda state: True)
+    # lw boots-accessible locations
+    lw_boots_accessible_regions = [
+        'Bat Cave Drop Ledge',
+        'Lake Hylia Island',
+        'Desert Ledge',
+        'Desert Ledge (Northeast)',
+        'Desert Palace Lone Stairs',
+        'Desert Palace Entrance (North) Spot',
+        'Death Mountain',
+        'Death Mountain Return Ledge',
+        'East Death Mountain (Bottom)',
+        'East Death Mountain (Top)',
+        'Death Mountain (Top)',
+        'Spectacle Rock',
+        'Death Mountain Floating Island (Light World)',
+    ]
+    # dw boots-accessible regions
+    dw_boots_accessible_regions = [
+        'East Dark World',
+        'Northeast Dark World',
+        'West Dark World',
+        'Hammer Peg Area',
+        'Bumper Cave Ledge',
+        'Dark Desert',
+        'Dark Death Mountain (Top)',
+        'Dark Death Mountain (East Bottom)',
+        'Dark Death Mountain Ledge',
+        'Death Mountain Floating Island (Dark World)',
+        'Turtle Rock (Top)',
+    ]
+    # set up boots-accessible regions
+    if world.mode[player] != 'inverted':
+        lw_boots_accessible_regions.append('Cave 45 Ledge')
+        lw_boots_accessible_regions.append('Graveyard Ledge')
+        # couple other random spots
+        set_rule(world.get_location('Bombos Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has_beam_sword(player) and (state.has_Mirror(player) or state.has_Boots(player)))
+        set_rule(world.get_entrance('Dark Desert Teleporter', player), lambda state: (state.has('Ocarina', player) or state.has_Boots(player)) and state.can_lift_heavy_rocks(player))
+        set_rule(world.get_entrance('South Hyrule Teleporter', player), lambda state: (state.has('Hammer', player) or state.has_Boots(player)) and state.can_lift_rocks(player))
+        set_rule(world.get_location('Zora\'s Ledge', player), lambda state: state.has_Boots(player))
+        add_rule(world.get_entrance('Ganons Tower', player), lambda state: state.has_Boots(player) and state.has_Pearl(player), 'or')
+    needs_boots = lambda state: state.has_Boots(player)
+    needs_boots_and_pearl = lambda state: state.has_Boots(player) and state.has_Pearl(player)
+    for spot in lw_boots_accessible_regions:
+        for location in world.get_region(spot, player).locations:
+            add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] == 'inverted' else needs_boots, 'or')
+    for spot in dw_boots_accessible_regions:
+        for location in world.get_region(spot, player).locations:
+            add_rule(world.get_location(location, player), needs_boots if world.mode[player] == 'inverted' else needs_boots_and_pearl, 'or')
+    # bunny DMD rules
+    if world.mode[player] != 'inverted':
+        # set up some mirror-accessible dw entrances.
+        boots_and_mirror = lambda state: state.has_Boots(player) and state.has_Mirror(player)
+        add_rule(world.get_entrance('Dark Sanctuary Hint', player), boots_and_mirror, 'or') # should suffice to give us west dark world access
+        for spot in world.get_region('Dark Death Mountain (East Bottom)', player).locations:
+            add_rule(world.get_location(spot, player), boots_and_mirror, 'or')
+        # dw entrances accessible with mirror and hookshot
+        mirror_hookshot_accessible_dw_locations = [
+            'Pyramid Fairy',
+            'Pyramid Entrance',
+            'Pyramid Drop',
+        ]
+        mirror_hookshot_accessible_dw_locations.extend(world.get_region('Dark Death Mountain Ledge', player).locations)
+        for spot in mirror_hookshot_accessible_dw_locations:
+            add_rule(world.get_entrance(spot, player), lambda state: state.has_Boots(player) and state.has_Mirror(player) and state.has('Hookshot', player), 'or')
+        # dw entrances accessible with mirror and titans
+        boots_mirror_titans = lambda state: state.has_Boots(player) and state.has_Mirror(player) and state.can_lift_heavy_rocks(player)
+        add_rule(world.get_entrance('Mire Shed', player), boots_mirror_titans, 'or')
+        add_rule(world.get_location('Frog', player), boots_mirror_titans, 'or')
+    add_conditional_lamps(world, player)
 
 
 def open_rules(world, player):
