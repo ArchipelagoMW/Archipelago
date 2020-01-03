@@ -125,8 +125,6 @@ difficulties = {
 }
 
 def generate_itempool(world, player):
-    if world.logic == 'owglitches':
-        world.push_precollected(ItemFactory('Pegasus Boots'), player)
     if (world.difficulty[player] not in ['normal', 'hard', 'expert'] or world.goal[player] not in ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals']
             or world.mode[player] not in ['open', 'standard', 'inverted'] or world.timer not in ['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'] or world.progressive not in ['on', 'off', 'random']):
         raise NotImplementedError('Not supported yet')
@@ -179,7 +177,7 @@ def generate_itempool(world, player):
         (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle[player], world.difficulty[player], world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro[player], world.customitemarray)
         world.rupoor_cost = min(world.customitemarray[69], 9999)
     else:
-        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle[player], world.difficulty[player], world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro[player])
+        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle[player], world.difficulty[player], world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro[player], world.logic[player])
 
     for item in precollected_items:
         world.push_precollected(ItemFactory(item, player))
@@ -388,7 +386,7 @@ def set_up_shops(world, player):
 
     #special shop types
 
-def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, retro):
+def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, retro, logic):
     pool = []
     placed_items = {}
     precollected_items = []
@@ -404,6 +402,12 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
 
     def want_progressives():
         return random.choice([True, False]) if progressive == 'random' else progressive == 'on'
+
+    # provide boots to major glitch dependent seeds
+    if logic in ['owglitches', 'nologic']:
+        precollected_items.append('Pegasus Boots')
+        pool.remove('Pegasus Boots')
+
 
     if want_progressives():
         pool.extend(progressivegloves)
@@ -687,19 +691,20 @@ def test():
                         for progressive in ['on', 'off']:
                             for shuffle in ['full', 'insanity_legacy']:
                                 for retro in [True, False]:
-                                    out = get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, retro)
-                                    count = len(out[0]) + len(out[1])
+                                    for logic in ['noglitches', 'owglitches']:
+                                        out = get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, retro, logic)
+                                        count = len(out[0]) + len(out[1])
 
-                                    correct_count = total_items_to_place
-                                    if goal == 'pedestal' and swords != 'vanilla':
-                                        # pedestal goals generate one extra item
-                                        correct_count += 1
-                                    if retro:
-                                        correct_count += 28
-                                    try:
-                                        assert count == correct_count, "expected {0} items but found {1} items for {2}".format(correct_count, count, (progressive, shuffle, difficulty, timer, goal, mode, swords, retro))
-                                    except AssertionError as e:
-                                        print(e)
+                                        correct_count = total_items_to_place
+                                        if goal == 'pedestal' and swords != 'vanilla':
+                                            # pedestal goals generate one extra item
+                                            correct_count += 1
+                                        if retro:
+                                            correct_count += 28
+                                        try:
+                                            assert count == correct_count, "expected {0} items but found {1} items for {2}".format(correct_count, count, (progressive, shuffle, difficulty, timer, goal, mode, swords, retro))
+                                        except AssertionError as e:
+                                            print(e)
 
 if __name__ == '__main__':
     test()
