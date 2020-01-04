@@ -4,10 +4,10 @@ import asyncio
 import functools
 import json
 import logging
-import pickle
 import re
 import urllib.request
 import websockets
+import zlib
 
 import Items
 import Regions
@@ -22,18 +22,14 @@ class Client:
         self.slot = None
         self.send_index = 0
 
-class MultiWorld:
-    def __init__(self):
-        self.players = None
-        self.rom_names = {}
-        self.locations = {}
-
 class Context:
     def __init__(self, host, port, password):
         self.data_filename = None
         self.save_filename = None
         self.disable_save = False
-        self.world = MultiWorld()
+        self.players = 0
+        self.rom_names = {}
+        self.locations = {}
         self.host = host
         self.port = port
         self.password = password
@@ -44,7 +40,7 @@ class Context:
 def get_room_info(ctx : Context):
     return {
         'password': ctx.password is not None,
-        'slots': ctx.world.players,
+        'slots': ctx.players,
         'players': [(client.name, client.team, client.slot) for client in ctx.clients if client.auth]
     }
 
@@ -175,8 +171,8 @@ def forfeit_player(ctx : Context, team, slot, name):
 def register_location_checks(ctx : Context, name, team, slot, locations):
     found_items = False
     for location in locations:
-        if (location, slot) in ctx.world.locations:
-            target_item, target_player = ctx.world.locations[(location, slot)]
+        if (location, slot) in ctx.locations:
+            target_item, target_player = ctx.locations[(location, slot)]
             if target_player != slot:
                 found = False
                 recvd_items = get_received_items(ctx, team, target_player)
@@ -196,7 +192,10 @@ def register_location_checks(ctx : Context, name, team, slot, locations):
     if found_items and not ctx.disable_save:
         try:
             with open(ctx.save_filename, "wb") as f:
-                pickle.dump((ctx.world.players, ctx.world.rom_names, ctx.received_items), f, pickle.HIGHEST_PROTOCOL)
+                jsonstr = json.dumps((ctx.players,
+                                      [(k, v) for k, v in ctx.rom_names.items()],
+                                      [(k, [i.__dict__ for i in v]) for k, v in ctx.received_items.items()]))
+                f.write(zlib.compress(jsonstr.encode("utf-8")))
         except Exception as e:
             logging.exception(e)
 
@@ -233,13 +232,13 @@ async def process_client_cmd(ctx : Context, client : Client, cmd, args):
         if 'slot' in args and any([c.slot == args['slot'] for c in ctx.clients if c.auth and same_team(c.team, client.team)]):
             errors.add('SlotAlreadyTaken')
         elif 'slot' not in args or not args['slot']:
-            for slot in range(1, ctx.world.players + 1):
+            for slot in range(1, ctx.players + 1):
                 if slot not in [c.slot for c in ctx.clients if c.auth and same_team(c.team, client.team)]:
                     client.slot = slot
                     break
-                elif slot == ctx.world.players:
+                elif slot == ctx.players:
                     errors.add('SlotAlreadyTaken')
-        elif args['slot'] not in range(1, ctx.world.players + 1):
+        elif args['slot'] not in range(1, ctx.players + 1):
             errors.add('InvalidSlot')
         else:
             client.slot = args['slot']
@@ -251,7 +250,7 @@ async def process_client_cmd(ctx : Context, client : Client, cmd, args):
             await send_msgs(client.socket, [['ConnectionRefused', list(errors)]])
         else:
             client.auth = True
-            reply = [['Connected', ctx.world.rom_names[client.slot]]]
+            reply = [['Connected', ctx.rom_names[client.slot]]]
             items = get_received_items(ctx, client.team, client.slot)
             if items:
                 reply.append(['ReceivedItems', (0, tuplize_received_items(items))])
@@ -358,13 +357,16 @@ async def main():
             ctx.data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data","*multidata"),))
 
         with open(ctx.data_filename, 'rb') as f:
-            ctx.world = pickle.load(f)
+            jsonobj = json.loads(zlib.decompress(f.read()).decode("utf-8"))
+            ctx.players = jsonobj[0]
+            ctx.rom_names = {k: v for k, v in jsonobj[1]}
+            ctx.locations = {tuple(k): tuple(v) for k, v in jsonobj[2]}
     except Exception as e:
         print('Failed to read multiworld data (%s)' % e)
         return
 
     ip = urllib.request.urlopen('https://v4.ident.me').read().decode('utf8') if not ctx.host else ctx.host
-    print('Hosting game of %d players (%s) at %s:%d' % (ctx.world.players, 'No password' if not ctx.password else 'Password: %s' % ctx.password, ip, ctx.port))
+    print('Hosting game of %d players (%s) at %s:%d' % (ctx.players, 'No password' if not ctx.password else 'Password: %s' % ctx.password, ip, ctx.port))
 
     ctx.disable_save = args.disable_save
     if not ctx.disable_save:
@@ -372,8 +374,11 @@ async def main():
             ctx.save_filename = (ctx.data_filename[:-9] if ctx.data_filename[-9:] == 'multidata' else (ctx.data_filename + '_')) + 'multisave'
         try:
             with open(ctx.save_filename, 'rb') as f:
-                players, rom_names, received_items = pickle.load(f)
-                if players != ctx.world.players or rom_names != ctx.world.rom_names:
+                jsonobj = json.loads(zlib.decompress(f.read()).decode("utf-8"))
+                players = jsonobj[0]
+                rom_names = {k: v for k, v in jsonobj[1]}
+                received_items = {tuple(k): [ReceivedItem(**i) for i in v] for k, v in jsonobj[2]}
+                if players != ctx.players or rom_names != ctx.rom_names:
                     raise Exception('Save file mismatch, will start a new game')
                 ctx.received_items = received_items
                 print('Loaded save file with %d received items for %d players' % (sum([len(p) for p in received_items.values()]), len(received_items)))

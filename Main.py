@@ -4,9 +4,9 @@ from itertools import zip_longest
 import json
 import logging
 import os
-import pickle
 import random
 import time
+import zlib
 
 from BaseClasses import World, CollectionState, Item, Region, Location, Shop
 from Regions import create_regions, mark_light_world_regions
@@ -140,12 +140,9 @@ def main(args, seed=None):
     player_names = parse_names_string(args.names)
     outfilebase = 'ER_%s' % (args.outputname if args.outputname else world.seed)
 
+    rom_names = []
     jsonout = {}
     if not args.suppress_rom:
-        from MultiServer import MultiWorld
-        multidata = MultiWorld()
-        multidata.players = world.players
-
         for player in range(1, world.players + 1):
             use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player] != 'none'
                             or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
@@ -161,15 +158,11 @@ def main(args, seed=None):
                 else:
                     rom = LocalRom(args.rom)
             patch_rom(world, player, rom, use_enemizer)
+            rom_names.append((player, list(rom.name)))
 
             enemizer_patch = []
             if use_enemizer and (args.enemizercli or not args.jsonout):
                 enemizer_patch = get_enemizer_patch(world, player, rom, args.rom, args.enemizercli, args.shufflepalette[player], args.shufflepots[player])
-
-            multidata.rom_names[player] = list(rom.name)
-            for location in world.get_filled_locations(player):
-                if type(location.address) is int:
-                    multidata.locations[(location.address, player)] = (location.item.code, location.item.player)
 
             if args.jsonout:
                 jsonout[f'patch{player}'] = rom.patches
@@ -209,7 +202,10 @@ def main(args, seed=None):
                 rom.write_to_file(output_path(f'{outfilebase}{playername}{outfilesuffix}.sfc'))
 
         with open(output_path('%s_multidata' % outfilebase), 'wb') as f:
-            pickle.dump(multidata, f, pickle.HIGHEST_PROTOCOL)
+            jsonstr = json.dumps((world.players,
+                                  rom_names,
+                                  [((location.address, location.player), (location.item.code, location.item.player)) for location in world.get_filled_locations() if type(location.address) is int]))
+            f.write(zlib.compress(jsonstr.encode("utf-8")))
 
     if args.create_spoiler and not args.jsonout:
         world.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))
