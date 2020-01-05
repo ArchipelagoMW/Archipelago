@@ -543,7 +543,7 @@ async def server_loop(ctx : Context):
         print('Enter multiworld server address')
         ctx.server_address = await console_input(ctx)
 
-    address = 'ws://' + ctx.server_address
+    address = f"ws://{ctx.server_address}" if "://" not in ctx.server_address else ctx.server_address
 
     print('Connecting to multiworld server at %s' % address)
     try:
