@@ -109,8 +109,8 @@ def get_weights(path):
     return parse_yaml(yaml)
 
 def roll_settings(weights):
-    def get_choice(option):
-        return random.choices(list(weights[option].keys()), weights=list(map(int,weights[option].values())))[0].replace('"','').replace("'",'')
+    def get_choice(option, root=weights):
+        return random.choices(list(root[option].keys()), weights=list(map(int,root[option].values())))[0].replace('"','').replace("'",'')
 
     ret = argparse.Namespace()
 
@@ -201,6 +201,13 @@ def roll_settings(weights):
     ret.enemy_health = enemy_health
 
     ret.beemizer = int(get_choice('beemizer')) if 'beemizer' in weights.keys() else 1 # suck it :)
+
+    inventoryweights = weights.get('startinventory', {})
+    startitems = []
+    for item in inventoryweights.keys():
+        if get_choice(item, inventoryweights) == 'on':
+            startitems.append(item)
+    ret.startinventory = ','.join(startitems)
 
     return ret
 
