@@ -8,15 +8,18 @@ from EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 
 def parse_yaml(txt):
+    def strip(s):
+        s = s.strip()
+        return '' if not s else s.strip('"') if s[0] == '"' else s.strip("'") if s[0] == "'" else s
     ret = {}
     indents = {len(txt) - len(txt.lstrip(' ')): ret}
     for line in txt.splitlines():
         if not line:
             continue
         name, val = line.split(':', 1)
-        val = val.strip()
+        val = strip(val)
         spaces = len(name) - len(name.lstrip(' '))
-        name = name.strip()
+        name = strip(name)
         if val:
             indents[spaces][name] = val
         else:
@@ -114,7 +117,7 @@ def roll_settings(weights):
             return root[option]
         if not root[option]:
             return None
-        return random.choices(list(root[option].keys()), weights=list(map(int,root[option].values())))[0].replace('"','').replace("'",'')
+        return random.choices(list(root[option].keys()), weights=list(map(int,root[option].values())))[0]
 
     ret = argparse.Namespace()
 
