@@ -51,8 +51,8 @@ difficulties = {
         progressivearmor = ['Progressive Armor'] * 2,
         basicarmor = ['Blue Mail', 'Red Mail'],
         swordless = ['Rupees (20)'] * 4,
-        progressivesword = ['Progressive Sword'] * 3,
-        basicsword = ['Master Sword', 'Tempered Sword', 'Golden Sword'],
+        progressivesword = ['Progressive Sword'] * 4,
+        basicsword = ['Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
         basicbow = ['Bow', 'Silver Arrows'],
         timedohko = ['Green Clock'] * 25,
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
@@ -78,8 +78,8 @@ difficulties = {
         progressivearmor = ['Progressive Armor'] * 2,
         basicarmor = ['Progressive Armor'] * 2, # neither will count
         swordless =  ['Rupees (20)'] * 4,
-        progressivesword =  ['Progressive Sword'] * 3,
-        basicsword = ['Master Sword', 'Master Sword', 'Tempered Sword'],
+        progressivesword =  ['Progressive Sword'] * 4,
+        basicsword = ['Fighter Sword', 'Master Sword', 'Master Sword', 'Tempered Sword'],
         basicbow = ['Bow'] * 2,
         timedohko = ['Green Clock'] * 25,
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
@@ -105,8 +105,8 @@ difficulties = {
         progressivearmor = ['Progressive Armor'] * 2, # neither will count
         basicarmor = ['Progressive Armor'] * 2, # neither will count
         swordless = ['Rupees (20)'] * 4,
-        progressivesword = ['Progressive Sword'] * 3,
-        basicsword = ['Fighter Sword', 'Master Sword', 'Master Sword'],
+        progressivesword = ['Progressive Sword'] * 4,
+        basicsword = ['Fighter Sword', 'Fighter Sword', 'Master Sword', 'Master Sword'],
         basicbow = ['Bow'] * 2,
         timedohko = ['Green Clock'] * 20 + ['Red Clock'] * 5,
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
@@ -444,34 +444,17 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
     else:
         pool.extend(diff.basicarmor)
 
-    if swords != 'swordless':
-        if want_progressives():
-            pool.extend(['Progressive Bow'] * 2)
-        else:
-            pool.extend(diff.basicbow)
+    if want_progressives():
+        pool.extend(['Progressive Bow'] * 2)
+    elif swords != 'swordless':
+        pool.extend(diff.basicbow)
+    else:
+        pool.extend(['Bow', 'Silver Arrows'])
 
     if swords == 'swordless':
         pool.extend(diff.swordless)
-        if want_progressives():
-            pool.extend(['Progressive Bow'] * 2)
-        else:
-            pool.extend(['Bow', 'Silver Arrows'])
-    elif swords == 'assured':
-        precollected_items.append('Fighter Sword')
-        if want_progressives():
-            pool.extend(diff.progressivesword)
-            pool.extend(['Rupees (100)'])
-        else:
-            pool.extend(diff.basicsword)
-            pool.extend(['Rupees (100)'])
     elif swords == 'vanilla':
-        swords_to_use = []
-        if want_progressives():
-            swords_to_use.extend(diff.progressivesword)
-            swords_to_use.extend(['Progressive Sword'])
-        else:
-            swords_to_use.extend(diff.basicsword)
-            swords_to_use.extend(['Fighter Sword'])
+        swords_to_use = diff.progressivesword.copy() if want_progressives() else diff.basicsword.copy()
         random.shuffle(swords_to_use)
 
         place_item('Link\'s Uncle', swords_to_use.pop())
@@ -482,12 +465,15 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
         else:
             place_item('Master Sword Pedestal', 'Triforce')
     else:
-        if want_progressives():
-            pool.extend(diff.progressivesword)
-            pool.extend(['Progressive Sword'])
-        else:
-            pool.extend(diff.basicsword)
-            pool.extend(['Fighter Sword'])
+        pool.extend(diff.progressivesword if want_progressives() else diff.basicsword)
+        if swords == 'assured':
+            if want_progressives():
+                precollected_items.append('Progressive Sword')
+                pool.remove('Progressive Sword')
+            else:
+                precollected_items.append('Fighter Sword')
+                pool.remove('Fighter Sword')
+            pool.extend(['Rupees (50)'])
 
     extraitems = total_items_to_place - len(pool) - len(placed_items)
 

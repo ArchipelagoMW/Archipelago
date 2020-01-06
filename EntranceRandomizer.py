@@ -216,6 +216,7 @@ def parse_arguments(argv, no_defaults=False):
                              Keys are universal, shooting arrows costs rupees,
                              and a few other little things make this more like Zelda-1.
                              ''', action='store_true')
+    parser.add_argument('--startinventory', default=defval(''), help='Specifies a list of items that will be in your starting inventory (separated by commas)')
     parser.add_argument('--custom', default=defval(False), help='Not supported.')
     parser.add_argument('--customitemarray', default=defval(False), help='Not supported.')
     parser.add_argument('--accessibility', default=defval('items'), const='items', nargs='?', choices=['items', 'locations', 'none'], help='''\
@@ -284,7 +285,7 @@ def parse_arguments(argv, no_defaults=False):
 
             for name in ['logic', 'mode', 'swords', 'goal', 'difficulty', 'item_functionality',
                          'shuffle', 'crystals_ganon', 'crystals_gt', 'openpyramid',
-                         'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle',
+                         'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle', 'startinventory',
                          'retro', 'accessibility', 'hints', 'shufflepalette', 'shufflepots', 'beemizer',
                          'shufflebosses', 'shuffleenemies', 'enemy_health', 'enemy_damage']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)

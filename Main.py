@@ -9,6 +9,7 @@ import time
 import zlib
 
 from BaseClasses import World, CollectionState, Item, Region, Location, Shop
+from Items import ItemFactory
 from Regions import create_regions, mark_light_world_regions
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from EntranceShuffle import link_entrances, link_inverted_entrances
@@ -63,6 +64,11 @@ def main(args, seed=None):
 
         if world.mode[player] == 'standard' and world.enemy_shuffle[player] != 'none':
             world.escape_assist[player].append('bombs') # enemized escape assumes infinite bombs available and will likely be unbeatable without it
+
+        for tok in filter(None, args.startinventory[player].split(',')):
+            item = ItemFactory(tok.strip(), player)
+            if item:
+                world.push_precollected(item)
 
         if world.mode[player] != 'inverted':
             create_regions(world, player)
