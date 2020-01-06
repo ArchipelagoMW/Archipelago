@@ -110,6 +110,10 @@ def get_weights(path):
 
 def roll_settings(weights):
     def get_choice(option, root=weights):
+        if type(root[option]) is not dict:
+            return root[option]
+        if not root[option]:
+            return None
         return random.choices(list(root[option].keys()), weights=list(map(int,root[option].values())))[0].replace('"','').replace("'",'')
 
     ret = argparse.Namespace()
