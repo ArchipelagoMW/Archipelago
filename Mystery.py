@@ -75,7 +75,8 @@ def main():
 
     if args.rom:
         erargs.rom = args.rom
-    erargs.enemizercli = args.enemizercli
+    if args.enemizercli:
+        erargs.enemizercli = args.enemizercli
 
     settings_cache = {k: (roll_settings(v) if args.samesettings else None) for k, v in weights_cache.items()}
 

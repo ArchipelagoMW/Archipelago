@@ -309,7 +309,7 @@ def guiMain(args=None):
     enemizerPathFrame.grid(row=0, column=0, columnspan=3, sticky=W)
     enemizerCLIlabel = Label(enemizerPathFrame, text="EnemizerCLI path: ")
     enemizerCLIlabel.pack(side=LEFT)
-    enemizerCLIpathVar = StringVar()
+    enemizerCLIpathVar = StringVar(value="EnemizerCLI/EnemizerCLI.Core")
     enemizerCLIpathEntry = Entry(enemizerPathFrame, textvariable=enemizerCLIpathVar, width=80)
     enemizerCLIpathEntry.pack(side=LEFT)
     def EnemizerSelectPath():
