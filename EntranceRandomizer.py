@@ -242,6 +242,8 @@ def parse_arguments(argv, no_defaults=False):
                              ''')
     parser.add_argument('--heartcolor', default=defval('red'), const='red', nargs='?', choices=['red', 'blue', 'green', 'yellow', 'random'],
                         help='Select the color of Link\'s heart meter. (default: %(default)s)')
+    parser.add_argument('--ow_palettes', default=defval('default'), choices=['default', 'random', 'blackout'])
+    parser.add_argument('--uw_palettes', default=defval('default'), choices=['default', 'random', 'blackout'])
     parser.add_argument('--sprite', help='''\
                              Path to a sprite sheet to use for Link. Needs to be in
                              binary format and have a length of 0x7000 (28672) bytes,
@@ -261,7 +263,6 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--shuffleenemies', default=defval('none'), choices=['none', 'shuffled', 'chaos'])
     parser.add_argument('--enemy_health', default=defval('default'), choices=['default', 'easy', 'normal', 'hard', 'expert'])
     parser.add_argument('--enemy_damage', default=defval('default'), choices=['default', 'shuffled', 'chaos'])
-    parser.add_argument('--shufflepalette', default=defval(False), action='store_true')
     parser.add_argument('--shufflepots', default=defval(False), action='store_true')
     parser.add_argument('--beemizer', default=defval(0), type=lambda value: min(max(int(value), 0), 4))
     parser.add_argument('--multi', default=defval(1), type=lambda value: min(max(int(value), 1), 255))
@@ -286,8 +287,9 @@ def parse_arguments(argv, no_defaults=False):
             for name in ['logic', 'mode', 'swords', 'goal', 'difficulty', 'item_functionality',
                          'shuffle', 'crystals_ganon', 'crystals_gt', 'openpyramid',
                          'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle', 'startinventory',
-                         'retro', 'accessibility', 'hints', 'shufflepalette', 'shufflepots', 'beemizer',
-                         'shufflebosses', 'shuffleenemies', 'enemy_health', 'enemy_damage']:
+                         'retro', 'accessibility', 'hints', 'shufflepots', 'beemizer',
+                         'shufflebosses', 'shuffleenemies', 'enemy_health', 'enemy_damage',
+                         'ow_palettes', 'uw_palettes']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})

@@ -152,7 +152,7 @@ def main(args, seed=None):
         for player in range(1, world.players + 1):
             use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player] != 'none'
                             or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
-                            or args.shufflepalette[player] or args.shufflepots[player])
+                            or args.shufflepots[player])
 
             local_rom = None
             if args.jsonout:
@@ -168,7 +168,7 @@ def main(args, seed=None):
 
             enemizer_patch = []
             if use_enemizer and (args.enemizercli or not args.jsonout):
-                enemizer_patch = get_enemizer_patch(world, player, rom, args.rom, args.enemizercli, args.shufflepalette[player], args.shufflepots[player])
+                enemizer_patch = get_enemizer_patch(world, player, rom, args.rom, args.enemizercli, args.shufflepots[player])
 
             if args.jsonout:
                 jsonout[f'patch{player}'] = rom.patches
@@ -185,7 +185,7 @@ def main(args, seed=None):
                     for addr, values in  get_race_rom_patches(rom).items():
                         rom.write_bytes(int(addr), values)
 
-                apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite, player_names)
+                apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite, args.ow_palettes[player], args.uw_palettes[player], player_names)
 
                 mcsb_name = ''
                 if all([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player], world.bigkeyshuffle[player]]):

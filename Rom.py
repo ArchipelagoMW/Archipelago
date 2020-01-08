@@ -27,6 +27,7 @@ class JsonRom(object):
 
     def __init__(self):
         self.name = None
+        self.orig_buffer = None
         self.patches = {}
         self.addresses = []
 
@@ -72,10 +73,12 @@ class LocalRom(object):
 
     def __init__(self, file, patch=True):
         self.name = None
+        self.orig_buffer = None
         with open(file, 'rb') as stream:
             self.buffer = read_rom(stream)
         if patch:
             self.patch_base_rom()
+            self.orig_buffer = self.buffer.copy()
 
     def write_byte(self, address, value):
         self.buffer[address] = value
@@ -161,7 +164,7 @@ def read_rom(stream):
         buffer = buffer[0x200:]
     return buffer
 
-def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepalette, shufflepots):
+def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepots):
     baserom_path = os.path.abspath(baserom_path)
     basepatch_path = os.path.abspath(local_path('data/base2current.json'))
     randopatch_path = os.path.abspath(output_path('enemizer_randopatch.json'))
@@ -197,10 +200,10 @@ def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepal
         'RandomizeBossDamageMinAmount': 0,
         'RandomizeBossDamageMaxAmount': 200,
         'RandomizeBossBehavior': False,
-        'RandomizeDungeonPalettes': shufflepalette,
+        'RandomizeDungeonPalettes': False,
         'SetBlackoutMode': False,
-        'RandomizeOverworldPalettes': shufflepalette,
-        'RandomizeSpritePalettes': shufflepalette,
+        'RandomizeOverworldPalettes': False,
+        'RandomizeSpritePalettes': False,
         'SetAdvancedSpritePalettes': False,
         'PukeMode': False,
         'NegativeMode': False,
@@ -1278,7 +1281,7 @@ def hud_format_text(text):
     return output[:32]
 
 
-def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite, names = None):
+def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite, ow_palettes, uw_palettes, names = None):
 
     # enable instant item menu
     if fastmenu == 'instant':
@@ -1439,6 +1442,18 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
     if sprite is not None:
         write_sprite(rom, sprite)
 
+    default_ow_palettes(rom)
+    if ow_palettes == 'random':
+        randomize_ow_palettes(rom)
+    elif ow_palettes == 'blackout':
+        blackout_ow_palettes(rom)
+
+    default_uw_palettes(rom)
+    if uw_palettes == 'random':
+        randomize_uw_palettes(rom)
+    elif uw_palettes == 'blackout':
+        blackout_uw_palettes(rom)
+
     # set player names
     for player, name in names.items():
         if 0 < player <= 64:
@@ -1455,6 +1470,130 @@ def write_sprite(rom, sprite):
     rom.write_bytes(0xDD308, sprite.palette)
     rom.write_bytes(0xDEDF5, sprite.glove_palette)
 
+def set_color(rom, address, color, shade):
+    r = round(min(color[0], 0xFF) * pow(0.8, shade) * 0x1F / 0xFF)
+    g = round(min(color[1], 0xFF) * pow(0.8, shade) * 0x1F / 0xFF)
+    b = round(min(color[2], 0xFF) * pow(0.8, shade) * 0x1F / 0xFF)
+
+    rom.write_bytes(address, ((b << 10) | (g << 5) | (r << 0)).to_bytes(2, byteorder='little', signed=False))
+
+def default_ow_palettes(rom):
+    if not rom.orig_buffer:
+        return
+    rom.write_bytes(0xDE604, rom.orig_buffer[0xDE604:0xDEBB4])
+
+    for address in [0x067FB4, 0x067F94, 0x067FC6, 0x067FE6, 0x067FE1, 0x05FEA9, 0x05FEB3]:
+        rom.write_bytes(address, rom.orig_buffer[address:address+2])
+
+def randomize_ow_palettes(rom):
+    grass, grass2, grass3, dirt, dirt2, water, clouds, dwdirt,\
+        dwgrass, dwwater, dwdmdirt, dwdmgrass, dwdmclouds1, dwdmclouds2 = [[random.randint(60, 215) for _ in range(3)] for _ in range(14)]
+    dwtree = [c + random.randint(-20, 10) for c in dwgrass]
+    treeleaf = [c + random.randint(-20, 10) for c in grass]
+
+    patches = {0x067FB4: (grass, 0), 0x067F94: (grass, 0), 0x067FC6: (grass, 0), 0x067FE6: (grass, 0), 0x067FE1: (grass, 3), 0x05FEA9: (grass, 0), 0x05FEB3: (dwgrass, 1),
+               0x0DD4AC: (grass, 2), 0x0DE6DE: (grass2, 2), 0x0DE6E0: (grass2, 1), 0x0DD4AE: (grass2, 1), 0x0DE9FA: (grass2, 1), 0x0DEA0E: (grass2, 1), 0x0DE9FE: (grass2, 0),
+               0x0DD3D2: (grass2, 2), 0x0DE88C: (grass2, 2), 0x0DE8A8: (grass2, 2), 0x0DE9F8: (grass2, 2), 0x0DEA4E: (grass2, 2), 0x0DEAF6: (grass2, 2), 0x0DEB2E: (grass2, 2), 0x0DEB4A: (grass2, 2),
+               0x0DE892: (grass, 1), 0x0DE886: (grass, 0), 0x0DE6D2: (grass, 0), 0x0DE6FA: (grass, 3), 0x0DE6FC: (grass, 0), 0x0DE6FE: (grass, 0), 0x0DE70A: (grass, 0), 0x0DE708: (grass, 2), 0x0DE70C: (grass, 1),
+               0x0DE6D4: (dirt, 2), 0x0DE6CA: (dirt, 5), 0x0DE6CC: (dirt, 4), 0x0DE6CE: (dirt, 3), 0x0DE6E2: (dirt, 2), 0x0DE6D8: (dirt, 5), 0x0DE6DA: (dirt, 4), 0x0DE6DC: (dirt, 2),
+               0x0DE6F0: (dirt, 2), 0x0DE6E6: (dirt, 5), 0x0DE6E8: (dirt, 4), 0x0DE6EA: (dirt, 2), 0x0DE6EC: (dirt, 4), 0x0DE6EE: (dirt, 2),
+               0x0DE91E: (grass, 0),
+               0x0DE920: (dirt, 2), 0x0DE916: (dirt, 3), 0x0DE934: (dirt, 3),
+               0x0DE92C: (grass, 0), 0x0DE93A: (grass, 0), 0x0DE91C: (grass, 1), 0x0DE92A: (grass, 1), 0x0DEA1C: (grass, 0), 0x0DEA2A: (grass, 0), 0x0DEA30: (grass, 0),
+               0x0DEA2E: (dirt, 5),
+               0x0DE884: (grass, 3), 0x0DE8AE: (grass, 3), 0x0DE8BE: (grass, 3), 0x0DE8E4: (grass, 3), 0x0DE938: (grass, 3), 0x0DE9C4: (grass, 3), 0x0DE6D0: (grass, 4),
+               0x0DE890: (treeleaf, 1), 0x0DE894: (treeleaf, 0),
+               0x0DE924: (water, 3), 0x0DE668: (water, 3), 0x0DE66A: (water, 2), 0x0DE670: (water, 1), 0x0DE918: (water, 1), 0x0DE66C: (water, 0), 0x0DE91A: (water, 0), 0x0DE92E: (water, 1), 0x0DEA1A: (water, 1), 0x0DEA16: (water, 3), 0x0DEA10: (water, 4),
+               0x0DE66E: (dirt, 3), 0x0DE672: (dirt, 2), 0x0DE932: (dirt, 4), 0x0DE936: (dirt, 2), 0x0DE93C: (dirt, 1),
+               0x0DE756: (dirt2, 4), 0x0DE764: (dirt2, 4), 0x0DE772: (dirt2, 4), 0x0DE994: (dirt2, 4), 0x0DE9A2: (dirt2, 4), 0x0DE758: (dirt2, 3), 0x0DE766: (dirt2, 3), 0x0DE774: (dirt2, 3),
+               0x0DE996: (dirt2, 3), 0x0DE9A4: (dirt2, 3), 0x0DE75A: (dirt2, 2), 0x0DE768: (dirt2, 2), 0x0DE776: (dirt2, 2), 0x0DE778: (dirt2, 2), 0x0DE998: (dirt2, 2), 0x0DE9A6: (dirt2, 2),
+               0x0DE9AC: (dirt2, 1), 0x0DE99E: (dirt2, 1), 0x0DE760: (dirt2, 1), 0x0DE77A: (dirt2, 1), 0x0DE77C: (dirt2, 1), 0x0DE798: (dirt2, 1), 0x0DE980: (dirt2, 1),
+               0x0DE75C: (grass3, 2), 0x0DE786: (grass3, 2), 0x0DE794: (grass3, 2), 0x0DE99A: (grass3, 2), 0x0DE75E: (grass3, 1), 0x0DE788: (grass3, 1), 0x0DE796: (grass3, 1), 0x0DE99C: (grass3, 1),
+               0x0DE76A: (clouds, 2), 0x0DE9A8: (clouds, 2), 0x0DE76E: (clouds, 0), 0x0DE9AA: (clouds, 0), 0x0DE8DA: (clouds, 0), 0x0DE8D8: (clouds, 0), 0x0DE8D0: (clouds, 0), 0x0DE98C: (clouds, 2), 0x0DE990: (clouds, 0),
+               0x0DEB34: (dwtree, 4), 0x0DEB30: (dwtree, 3), 0x0DEB32: (dwtree, 1),
+               0x0DE710: (dwdirt, 5), 0x0DE71E: (dwdirt, 5), 0x0DE72C: (dwdirt, 5), 0x0DEAD6: (dwdirt, 5), 0x0DE712: (dwdirt, 4), 0x0DE720: (dwdirt, 4), 0x0DE72E: (dwdirt, 4), 0x0DE660: (dwdirt, 4),
+               0x0DEAD8: (dwdirt, 4), 0x0DEADA: (dwdirt, 3), 0x0DE714: (dwdirt, 3), 0x0DE722: (dwdirt, 3), 0x0DE730: (dwdirt, 3), 0x0DE732: (dwdirt, 3), 0x0DE734: (dwdirt, 2), 0x0DE736: (dwdirt, 2),
+               0x0DE728: (dwdirt, 2), 0x0DE71A: (dwdirt, 2), 0x0DE664: (dwdirt, 2), 0x0DEAE0: (dwdirt, 2),
+               0x0DE716: (dwgrass, 3), 0x0DE740: (dwgrass, 3), 0x0DE74E: (dwgrass, 3), 0x0DEAC0: (dwgrass, 3), 0x0DEACE: (dwgrass, 3), 0x0DEADC: (dwgrass, 3), 0x0DEB24: (dwgrass, 3), 0x0DE752: (dwgrass, 2),
+               0x0DE718: (dwgrass, 1), 0x0DE742: (dwgrass, 1), 0x0DE750: (dwgrass, 1), 0x0DEB26: (dwgrass, 1), 0x0DEAC2: (dwgrass, 1), 0x0DEAD0: (dwgrass, 1), 0x0DEADE: (dwgrass, 1),
+               0x0DE65A: (dwwater, 5), 0x0DE65C: (dwwater, 3), 0x0DEAC8: (dwwater, 3), 0x0DEAD2: (dwwater, 2), 0x0DEABC: (dwwater, 2), 0x0DE662: (dwwater, 2), 0x0DE65E: (dwwater, 1), 0x0DEABE: (dwwater, 1), 0x0DEA98: (dwwater, 2),
+               0x0DE79A: (dwdmdirt, 6), 0x0DE7A8: (dwdmdirt, 6), 0x0DE7B6: (dwdmdirt, 6), 0x0DEB60: (dwdmdirt, 6), 0x0DEB6E: (dwdmdirt, 6), 0x0DE93E: (dwdmdirt, 6), 0x0DE94C: (dwdmdirt, 6), 0x0DEBA6: (dwdmdirt, 6),
+               0x0DE79C: (dwdmdirt, 4), 0x0DE7AA: (dwdmdirt, 4), 0x0DE7B8: (dwdmdirt, 4), 0x0DEB70: (dwdmdirt, 4), 0x0DEBA8: (dwdmdirt, 4), 0x0DEB72: (dwdmdirt, 3), 0x0DEB74: (dwdmdirt, 3), 0x0DE79E: (dwdmdirt, 3), 0x0DE7AC: (dwdmdirt, 3), 0x0DEBAA: (dwdmdirt, 3), 0x0DE7A0: (dwdmdirt, 3),
+               0x0DE7BC: (dwdmgrass, 3),
+               0x0DEBAC: (dwdmdirt, 2), 0x0DE7AE: (dwdmdirt, 2), 0x0DE7C2: (dwdmdirt, 2), 0x0DE7A6: (dwdmdirt, 2), 0x0DEB7A: (dwdmdirt, 2), 0x0DEB6C: (dwdmdirt, 2), 0x0DE7C0: (dwdmdirt, 2),
+               0x0DE7A2: (dwdmgrass, 3), 0x0DE7BE: (dwdmgrass, 3), 0x0DE7CC: (dwdmgrass, 3), 0x0DE7DA: (dwdmgrass, 3), 0x0DEB6A: (dwdmgrass, 3), 0x0DE948: (dwdmgrass, 3), 0x0DE956: (dwdmgrass, 3), 0x0DE964: (dwdmgrass, 3), 0x0DE7CE: (dwdmgrass, 1), 0x0DE7A4: (dwdmgrass, 1), 0x0DEBA2: (dwdmgrass, 1), 0x0DEBB0: (dwdmgrass, 1),
+               0x0DE644: (dwdmclouds1, 2), 0x0DEB84: (dwdmclouds1, 2), 0x0DE648: (dwdmclouds1, 1), 0x0DEB88: (dwdmclouds1, 1),
+               0x0DEBAE: (dwdmclouds2, 2), 0x0DE7B0: (dwdmclouds2, 2), 0x0DE7B4: (dwdmclouds2, 0), 0x0DEB78: (dwdmclouds2, 0), 0x0DEBB2: (dwdmclouds2, 0)
+               }
+    for address, (color, shade) in patches.items():
+        set_color(rom, address, color, shade)
+
+def blackout_ow_palettes(rom):
+    rom.write_bytes(0xDE604, [0] * 0xC4)
+    for i in range(0xDE6C8, 0xDE86C, 70):
+        rom.write_bytes(i, [0] * 64)
+        rom.write_bytes(i+66, [0] * 4)
+    rom.write_bytes(0xDE86C, [0] * 0x348)
+
+    for address in [0x067FB4, 0x067F94, 0x067FC6, 0x067FE6, 0x067FE1, 0x05FEA9, 0x05FEB3]:
+        rom.write_bytes(address, [0,0])
+
+def default_uw_palettes(rom):
+    if not rom.orig_buffer:
+        return
+    rom.write_bytes(0xDD734, rom.orig_buffer[0xDD734:0xDE544])
+
+def randomize_uw_palettes(rom):
+    for dungeon in range(20):
+        wall, pot, chest, floor1, floor2, floor3 = [[random.randint(60, 240) for _ in range(3)] for _ in range(6)]
+
+        for i in range(5):
+            shade = 10 - (i * 2)
+            set_color(rom, 0x0DD734 + (0xB4 * dungeon) + (i * 2), wall, shade)
+            set_color(rom, 0x0DD770 + (0xB4 * dungeon) + (i * 2), wall, shade)
+            set_color(rom, 0x0DD744 + (0xB4 * dungeon) + (i * 2), wall, shade)
+            if dungeon == 0:
+                set_color(rom, 0x0DD7CA + (0xB4 * dungeon) + (i * 2), wall, shade)
+
+        if dungeon == 2:
+            set_color(rom, 0x0DD74E + (0xB4 * dungeon), wall, 3)
+            set_color(rom, 0x0DD750 + (0xB4 * dungeon), wall, 5)
+            set_color(rom, 0x0DD73E + (0xB4 * dungeon), wall, 3)
+            set_color(rom, 0x0DD740 + (0xB4 * dungeon), wall, 5)
+
+        set_color(rom, 0x0DD7E4 + (0xB4 * dungeon), wall, 4)
+        set_color(rom, 0x0DD7E6 + (0xB4 * dungeon), wall, 2)
+
+        set_color(rom, 0xDD7DA + (0xB4 * dungeon), wall, 10)
+        set_color(rom, 0xDD7DC + (0xB4 * dungeon), wall, 8)
+
+        set_color(rom, 0x0DD75A + (0xB4 * dungeon), pot, 7)
+        set_color(rom, 0x0DD75C + (0xB4 * dungeon), pot, 1)
+        set_color(rom, 0x0DD75E + (0xB4 * dungeon), pot, 3)
+
+        set_color(rom, 0x0DD76A + (0xB4 * dungeon), wall, 7)
+        set_color(rom, 0x0DD76C + (0xB4 * dungeon), wall, 2)
+        set_color(rom, 0x0DD76E + (0xB4 * dungeon), wall, 4)
+
+        set_color(rom, 0x0DD7AE + (0xB4 * dungeon), chest, 2)
+        set_color(rom, 0x0DD7B0 + (0xB4 * dungeon), chest, 0)
+
+        for i in range(3):
+            shade = 6 - (i * 2)
+            set_color(rom, 0x0DD764 + (0xB4 * dungeon) + (i * 2), floor1, shade)
+            set_color(rom, 0x0DD782 + (0xB4 * dungeon) + (i * 2), floor1, shade + 3)
+
+            set_color(rom, 0x0DD7A0 + (0xB4 * dungeon) + (i * 2), floor2, shade)
+            set_color(rom, 0x0DD7BE + (0xB4 * dungeon) + (i * 2), floor2, shade + 3)
+
+        set_color(rom, 0x0DD7E2 + (0xB4 * dungeon), floor3, 3)
+        set_color(rom, 0x0DD796 + (0xB4 * dungeon), floor3, 4)
+
+def blackout_uw_palettes(rom):
+    for i in range(0xDD734, 0xDE544, 180):
+        rom.write_bytes(i, [0] * 38)
+        rom.write_bytes(i+44, [0] * 76)
+        rom.write_bytes(i+136, [0] * 44)
 
 def write_string_to_rom(rom, target, string):
     address, maxbytes = text_addresses[target]
