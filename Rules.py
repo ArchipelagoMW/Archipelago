@@ -860,7 +860,7 @@ def overworld_glitches_rules(world, player):
         'Tower of Hera',
     ]
     # also, you can do mini moldorm cave and spiral cave - but you need a sword
-    superbunny_mirror_sword = lambda state: state.has_Mirror(player) and state.has_sword(player)
+    superbunny_mirror_sword = lambda state: state.has_Boots(player) and state.has_Mirror(player) and state.has_sword(player)
     mini_moldorm_cave = world.get_region('Mini Moldorm Cave', player)
     if check_is_dark_world(mini_moldorm_cave):
         for spot in mini_moldorm_cave.locations:
