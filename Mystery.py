@@ -113,6 +113,8 @@ def get_weights(path):
 
 def roll_settings(weights):
     def get_choice(option, root=weights):
+        if option not in weights:
+            return None
         if type(root[option]) is not dict:
             return root[option]
         if not root[option]:
@@ -130,17 +132,11 @@ def roll_settings(weights):
     item_placement = get_choice('item_placement')
     # not supported in ER
 
-    if {'map_shuffle', 'compass_shuffle', 'smallkey_shuffle', 'bigkey_shuffle'}.issubset(weights.keys()):
-        ret.mapshuffle = get_choice('map_shuffle') == 'on'
-        ret.compassshuffle = get_choice('compass_shuffle') == 'on'
-        ret.keyshuffle = get_choice('smallkey_shuffle') == 'on'
-        ret.bigkeyshuffle = get_choice('bigkey_shuffle') == 'on'
-    else:
-        dungeon_items = get_choice('dungeon_items')
-        ret.mapshuffle = dungeon_items in ['mc', 'mcs', 'full']
-        ret.compassshuffle = dungeon_items in ['mc', 'mcs', 'full']
-        ret.keyshuffle = dungeon_items in ['mcs', 'full']
-        ret.bigkeyshuffle = dungeon_items in ['full']
+    dungeon_items = get_choice('dungeon_items')
+    ret.mapshuffle = get_choice('map_shuffle') == 'on' if 'map_shuffle' in weights else dungeon_items in ['mc', 'mcs', 'full']
+    ret.compassshuffle = get_choice('compass_shuffle') == 'on' if 'compass_shuffle' in weights else dungeon_items in ['mc', 'mcs', 'full']
+    ret.keyshuffle = get_choice('smallkey_shuffle') == 'on' if 'smallkey_shuffle' in weights else dungeon_items in ['mcs', 'full']
+    ret.bigkeyshuffle = get_choice('bigkey_shuffle') == 'on' if 'bigkey_shuffle' in weights else dungeon_items in ['full']
 
     accessibility = get_choice('accessibility')
     ret.accessibility = accessibility
@@ -207,7 +203,10 @@ def roll_settings(weights):
     enemy_health = get_choice('enemy_health')
     ret.enemy_health = enemy_health
 
-    ret.beemizer = int(get_choice('beemizer')) if 'beemizer' in weights.keys() else 1 # suck it :)
+    pot_shuffle = get_choice('pot_shuffle')
+    ret.shufflepots = pot_shuffle == 'on'
+
+    ret.beemizer = int(get_choice('beemizer')) if 'beemizer' in weights else 0
 
     inventoryweights = weights.get('startinventory', {})
     startitems = []
