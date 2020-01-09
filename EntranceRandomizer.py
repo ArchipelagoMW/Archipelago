@@ -9,6 +9,7 @@ import shlex
 import sys
 
 from Main import main
+from Rom import get_sprite_from_name
 from Utils import is_bundled, close_console
 
 
@@ -289,7 +290,7 @@ def parse_arguments(argv, no_defaults=False):
                          'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle', 'startinventory',
                          'retro', 'accessibility', 'hints', 'shufflepots', 'beemizer',
                          'shufflebosses', 'shuffleenemies', 'enemy_health', 'enemy_damage',
-                         'ow_palettes', 'uw_palettes']:
+                         'ow_palettes', 'uw_palettes', 'sprite']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})
@@ -315,9 +316,9 @@ def start():
     if not args.jsonout and not os.path.isfile(args.rom):
         input('Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
         sys.exit(1)
-    if args.sprite is not None and not os.path.isfile(args.sprite):
+    if any([sprite is not None and not os.path.isfile(sprite) and not get_sprite_from_name(sprite) for sprite in args.sprite.values()]):
         if not args.jsonout:
-            input('Could not find link sprite sheet at given location. \nPress Enter to exit.' % args.sprite)
+            input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
             sys.exit(1)
         else:
             raise IOError('Cannot find sprite file at %s' % args.sprite)

@@ -37,8 +37,7 @@ class JsonRom(object):
     def write_bytes(self, startaddress, values):
         if not values:
             return
-        if type(values) is not list:
-            values = list(values)
+        values = list(values)
 
         pos = bisect.bisect_right(self.addresses, startaddress)
         intervalstart = self.addresses[pos-1] if pos else None
@@ -164,7 +163,7 @@ def read_rom(stream):
         buffer = buffer[0x200:]
     return buffer
 
-def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepots):
+def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepots, random_sprite_on_hit):
     baserom_path = os.path.abspath(baserom_path)
     basepatch_path = os.path.abspath(local_path('data/base2current.json'))
     randopatch_path = os.path.abspath(output_path('enemizer_randopatch.json'))
@@ -224,7 +223,7 @@ def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepot
         'RandomizeTileTrapPattern': world.enemy_shuffle[player] == 'chaos',
         'RandomizeTileTrapFloorTile': False,
         'AllowKillableThief': bool(random.randint(0,1)) if world.enemy_shuffle[player] == 'chaos' else world.enemy_shuffle[player] != 'none',
-        'RandomizeSpriteOnHit': False,
+        'RandomizeSpriteOnHit': random_sprite_on_hit,
         'DebugMode': False,
         'DebugForceEnemy': False,
         'DebugForceEnemyId': 0,
@@ -260,7 +259,6 @@ def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepot
         options['ManualBosses']['GanonsTower2'] = world.get_dungeon('Inverted Ganons Tower', player).bosses['middle'].enemizer_name
         options['ManualBosses']['GanonsTower3'] = world.get_dungeon('Inverted Ganons Tower', player).bosses['top'].enemizer_name
 
-
     rom.write_to_file(randopatch_path)
 
     with open(options_path, 'w') as f:
@@ -287,7 +285,40 @@ def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepot
     if os.path.exists(enemizer_output_path):
         os.remove(enemizer_output_path)
 
+    if random_sprite_on_hit:
+        _populate_sprite_table()
+        sprites = list(_sprite_table.values())
+        if sprites:
+            while len(sprites) < 32:
+                sprites.extend(sprites)
+            random.shuffle(sprites)
+
+            for i, path in enumerate(sprites[:32]):
+                sprite = Sprite(path)
+                ret.append({"address": 0x300000 + (i * 0x8000), "patchData": list(sprite.sprite)})
+                ret.append({"address": 0x307000 + (i * 0x8000), "patchData": list(sprite.palette)})
+                ret.append({"address": 0x307078 + (i * 0x8000), "patchData": list(sprite.glove_palette)})
+
     return ret
+
+_sprite_table = {}
+def _populate_sprite_table():
+    if not _sprite_table:
+        for dir in [local_path('data/sprites/official'), local_path('data/sprites/unofficial')]:
+            for file in os.listdir(dir):
+                filepath = os.path.join(dir, file)
+                if not os.path.isfile(filepath):
+                    continue
+                sprite = Sprite(filepath)
+                if sprite.valid:
+                    _sprite_table[sprite.name.lower()] = filepath
+
+def get_sprite_from_name(name):
+    _populate_sprite_table()
+    name = name.lower()
+    if name in ['random', 'randomonhit']:
+        return Sprite(random.choice(list(_sprite_table.values())))
+    return Sprite(_sprite_table[name]) if name in _sprite_table else None
 
 class Sprite(object):
     default_palette = [255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
@@ -1282,6 +1313,8 @@ def hud_format_text(text):
 
 
 def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite, ow_palettes, uw_palettes, names = None):
+    if sprite and not isinstance(sprite, Sprite):
+        sprite = Sprite(sprite) if os.path.isfile(sprite) else get_sprite_from_name(sprite)
 
     # enable instant item menu
     if fastmenu == 'instant':

@@ -13,7 +13,7 @@ from Items import ItemFactory
 from Regions import create_regions, mark_light_world_regions
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from EntranceShuffle import link_entrances, link_inverted_entrances
-from Rom import patch_rom, get_race_rom_patches, get_enemizer_patch, apply_rom_settings, Sprite, LocalRom, JsonRom
+from Rom import patch_rom, get_race_rom_patches, get_enemizer_patch, apply_rom_settings, LocalRom, JsonRom
 from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
 from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, flood_items, balance_multiworld_progression
@@ -135,14 +135,6 @@ def main(args, seed=None):
 
     logger.info('Patching ROM.')
 
-    if args.sprite is not None:
-        if isinstance(args.sprite, Sprite):
-            sprite = args.sprite
-        else:
-            sprite = Sprite(args.sprite)
-    else:
-        sprite = None
-
     player_names = parse_names_string(args.names)
     outfilebase = 'ER_%s' % (args.outputname if args.outputname else world.seed)
 
@@ -150,25 +142,20 @@ def main(args, seed=None):
     jsonout = {}
     if not args.suppress_rom:
         for player in range(1, world.players + 1):
+            sprite_random_on_hit = type(args.sprite[player]) is str and args.sprite[player].lower() == 'randomonhit'
             use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player] != 'none'
                             or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
-                            or args.shufflepots[player])
+                            or args.shufflepots[player] or sprite_random_on_hit)
 
-            local_rom = None
-            if args.jsonout:
-                rom = JsonRom()
-            else:
-                if use_enemizer:
-                    local_rom = LocalRom(args.rom)
-                    rom = JsonRom()
-                else:
-                    rom = LocalRom(args.rom)
+            rom = JsonRom() if args.jsonout or use_enemizer else LocalRom(args.rom)
+            local_rom = LocalRom(args.rom) if not args.jsonout and use_enemizer else None
+
             patch_rom(world, player, rom, use_enemizer)
             rom_names.append((player, list(rom.name)))
 
             enemizer_patch = []
             if use_enemizer and (args.enemizercli or not args.jsonout):
-                enemizer_patch = get_enemizer_patch(world, player, rom, args.rom, args.enemizercli, args.shufflepots[player])
+                enemizer_patch = get_enemizer_patch(world, player, rom, args.rom, args.enemizercli, args.shufflepots[player], sprite_random_on_hit)
 
             if args.jsonout:
                 jsonout[f'patch{player}'] = rom.patches
@@ -185,7 +172,7 @@ def main(args, seed=None):
                     for addr, values in  get_race_rom_patches(rom).items():
                         rom.write_bytes(int(addr), values)
 
-                apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite, args.ow_palettes[player], args.uw_palettes[player], player_names)
+                apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, args.sprite[player], args.ow_palettes[player], args.uw_palettes[player], player_names)
 
                 mcsb_name = ''
                 if all([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player], world.bigkeyshuffle[player]]):

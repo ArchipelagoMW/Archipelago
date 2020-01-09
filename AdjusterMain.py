@@ -1,24 +1,15 @@
 import os
-import re
 import time
 import logging
 
 from Utils import output_path, parse_names_string
-from Rom import LocalRom, Sprite, apply_rom_settings
+from Rom import LocalRom, apply_rom_settings
 
 
 def adjust(args):
     start = time.process_time()
     logger = logging.getLogger('')
     logger.info('Patching ROM.')
-
-    if args.sprite is not None:
-        if isinstance(args.sprite, Sprite):
-            sprite = args.sprite
-        else:
-            sprite = Sprite(args.sprite)
-    else:
-        sprite = None
 
     outfilebase = os.path.basename(args.rom)[:-4] + '_adjusted'
 
@@ -30,7 +21,7 @@ def adjust(args):
     else:
         raise RuntimeError('Provided Rom is not a valid Link to the Past Randomizer Rom. Please provide one for adjusting.')
 
-    apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.fastmenu, args.disablemusic, sprite, args.ow_palettes, args.uw_palettes, parse_names_string(args.names))
+    apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.fastmenu, args.disablemusic, args.sprite, args.ow_palettes, args.uw_palettes, parse_names_string(args.names))
 
     rom.write_to_file(output_path('%s.sfc' % outfilebase))
 

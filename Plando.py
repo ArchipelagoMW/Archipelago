@@ -10,7 +10,7 @@ import sys
 from BaseClasses import World
 from Regions import create_regions
 from EntranceShuffle import link_entrances, connect_entrance, connect_two_way, connect_exit
-from Rom import patch_rom, LocalRom, Sprite, write_string_to_rom, apply_rom_settings
+from Rom import patch_rom, LocalRom, write_string_to_rom, apply_rom_settings, get_sprite_from_name
 from Rules import set_rules
 from Dungeons import create_dungeons
 from Items import ItemFactory
@@ -68,15 +68,10 @@ def main(args):
 
     logger.info('Patching ROM.')
 
-    if args.sprite is not None:
-        sprite = Sprite(args.sprite)
-    else:
-        sprite = None
-
     rom = LocalRom(args.rom)
     patch_rom(world, 1, rom, False)
 
-    apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite, args.ow_palettes, args.uw_palettes)
+    apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, args.sprite, args.ow_palettes, args.uw_palettes)
 
     for textname, texttype, text in text_patches:
         if texttype == 'text':
@@ -226,8 +221,8 @@ def start():
     if not os.path.isfile(args.plando):
         input('Could not find Plandomizer distribution at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.plando)
         sys.exit(1)
-    if args.sprite is not None and not os.path.isfile(args.rom):
-        input('Could not find link sprite sheet at given location. \nPress Enter to exit.' % args.sprite)
+    if args.sprite is not None and not os.path.isfile(args.sprite) and not get_sprite_from_name(args.sprite):
+        input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
         sys.exit(1)
 
     # set up logger
