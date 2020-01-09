@@ -288,9 +288,9 @@ def parse_arguments(argv, no_defaults=False):
             for name in ['logic', 'mode', 'swords', 'goal', 'difficulty', 'item_functionality',
                          'shuffle', 'crystals_ganon', 'crystals_gt', 'openpyramid',
                          'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle', 'startinventory',
-                         'retro', 'accessibility', 'hints', 'shufflepots', 'beemizer',
-                         'shufflebosses', 'shuffleenemies', 'enemy_health', 'enemy_damage',
-                         'ow_palettes', 'uw_palettes', 'sprite']:
+                         'retro', 'accessibility', 'hints', 'beemizer',
+                         'shufflebosses', 'shuffleenemies', 'enemy_health', 'enemy_damage', 'shufflepots',
+                         'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor', 'heartbeep']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})

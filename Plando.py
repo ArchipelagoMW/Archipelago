@@ -23,7 +23,7 @@ def main(args):
     start_time = time.process_time()
 
     # initialize the world
-    world = World(1, 'vanilla', 'noglitches', 'standard', 'normal', 'none', 'on', 'ganon', 'freshness', False, False, False, args.quickswap, args.fastmenu, args.disablemusic, False, False, False, None, False)
+    world = World(1, 'vanilla', 'noglitches', 'standard', 'normal', 'none', 'on', 'ganon', 'freshness', False, False, False, False, False, False, None, False)
     logger = logging.getLogger('')
 
     hasher = hashlib.md5()
@@ -71,7 +71,7 @@ def main(args):
     rom = LocalRom(args.rom)
     patch_rom(world, 1, rom, False)
 
-    apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, args.sprite, args.ow_palettes, args.uw_palettes)
+    apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.fastmenu, args.disablemusic, args.sprite, args.ow_palettes, args.uw_palettes)
 
     for textname, texttype, text in text_patches:
         if texttype == 'text':

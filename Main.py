@@ -33,7 +33,7 @@ def main(args, seed=None):
     start = time.process_time()
 
     # initialize the world
-    world = World(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty, args.item_functionality, args.timer, args.progressive, args.goal, args.algorithm, args.accessibility, args.shuffleganon, args.quickswap, args.fastmenu, args.disablemusic, args.retro, args.custom, args.customitemarray, args.hints)
+    world = World(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty, args.item_functionality, args.timer, args.progressive, args.goal, args.algorithm, args.accessibility, args.shuffleganon, args.retro, args.custom, args.customitemarray, args.hints)
     logger = logging.getLogger('')
     if seed is None:
         random.seed(None)
@@ -172,7 +172,7 @@ def main(args, seed=None):
                     for addr, values in  get_race_rom_patches(rom).items():
                         rom.write_bytes(int(addr), values)
 
-                apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, args.sprite[player], args.ow_palettes[player], args.uw_palettes[player], player_names)
+                apply_rom_settings(rom, args.heartbeep[player], args.heartcolor[player], args.quickswap[player], args.fastmenu[player], args.disablemusic[player], args.sprite[player], args.ow_palettes[player], args.uw_palettes[player], player_names)
 
                 mcsb_name = ''
                 if all([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player], world.bigkeyshuffle[player]]):
@@ -219,7 +219,7 @@ def main(args, seed=None):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.difficulty_adjustments, world.timer, world.progressive, world.goal, world.algorithm, world.accessibility, world.shuffle_ganon, world.quickswap, world.fastmenu, world.disable_music, world.retro, world.custom, world.customitemarray, world.hints)
+    ret = World(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.difficulty_adjustments, world.timer, world.progressive, world.goal, world.algorithm, world.accessibility, world.shuffle_ganon, world.retro, world.custom, world.customitemarray, world.hints)
     ret.required_medallions = world.required_medallions.copy()
     ret.swamp_patch_required = world.swamp_patch_required.copy()
     ret.ganon_at_pyramid = world.ganon_at_pyramid.copy()

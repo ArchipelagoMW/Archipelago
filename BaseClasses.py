@@ -9,7 +9,7 @@ from Utils import int16_as_bytes
 
 class World(object):
 
-    def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive, goal, algorithm, accessibility, shuffle_ganon, quickswap, fastmenu, disable_music, retro, custom, customitemarray, hints):
+    def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive, goal, algorithm, accessibility, shuffle_ganon, retro, custom, customitemarray, hints):
         self.players = players
         self.shuffle = shuffle.copy()
         self.logic = logic.copy()
@@ -44,9 +44,6 @@ class World(object):
         self.accessibility = accessibility.copy()
         self.shuffle_ganon = shuffle_ganon
         self.fix_gtower_exit = self.shuffle_ganon
-        self.quickswap = quickswap
-        self.fastmenu = fastmenu
-        self.disable_music = disable_music
         self.retro = retro.copy()
         self.custom = custom
         self.customitemarray = customitemarray
@@ -1124,8 +1121,6 @@ class Spoiler(object):
             outfile.write('Enemy health:                    %s\n' % self.metadata['enemy_health'])
             outfile.write('Enemy damage:                    %s\n' % self.metadata['enemy_damage'])
             outfile.write('Hints:                           %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['hints'].items()})
-            outfile.write('L\\R Quickswap enabled:           %s\n' % ('Yes' if self.world.quickswap else 'No'))
-            outfile.write('Menu speed:                      %s' % self.world.fastmenu)
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
                 outfile.write('\n'.join(['%s%s %s %s' % ('Player {0}: '.format(entry['player']) if self.world.players >1 else '', entry['entrance'], '<=>' if entry['direction'] == 'both' else '<=' if entry['direction'] == 'exit' else '=>', entry['exit']) for entry in self.entrances.values()]))
