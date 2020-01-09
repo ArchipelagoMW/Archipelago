@@ -302,7 +302,7 @@ def create_regions(world, player):
             shop.add_inventory(index, item, price)
 
     region = world.get_region('Capacity Upgrade', player)
-    shop = Shop(region, 0x0115, ShopType.UpgradeShop, 0x04, True)
+    shop = Shop(region, 0x0115, ShopType.UpgradeShop, 0x04, False)
     region.shop = shop
     world.shops.append(shop)
     shop.add_inventory(0, 'Bomb Upgrade (+5)', 100, 7)
