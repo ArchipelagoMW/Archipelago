@@ -380,7 +380,6 @@ def create_playthrough(world):
             logging.getLogger('').debug('Checking if %s (Player %d) is required to beat the game.', location.item.name, location.item.player)
             old_item = location.item
             location.item = None
-            state.remove(old_item)
             if world.can_beat_game(state_cache[num]):
                 to_delete.append(location)
             else:
@@ -390,6 +389,14 @@ def create_playthrough(world):
         # cull entries in spheres for spoiler walkthrough at end
         for location in to_delete:
             sphere.remove(location)
+
+    # second phase, sphere 0
+    for item in [i for i in world.precollected_items if i.advancement]:
+        logging.getLogger('').debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
+        world.precollected_items.remove(item)
+        world.state.remove(item)
+        if not world.can_beat_game():
+            world.push_precollected(item)
 
     # we are now down to just the required progress items in collection_spheres. Unfortunately
     # the previous pruning stage could potentially have made certain items dependant on others
@@ -442,4 +449,6 @@ def create_playthrough(world):
                     old_world.spoiler.paths[str(world.get_region('Inverted Big Bomb Shop', player))] = get_path(state, world.get_region('Inverted Big Bomb Shop', player))
 
     # we can finally output our playthrough
-    old_world.spoiler.playthrough = OrderedDict([(str(i + 1), {str(location): str(location.item) for location in sphere}) for i, sphere in enumerate(collection_spheres)])
+    old_world.spoiler.playthrough = OrderedDict([("0", [item for item in world.precollected_items if item.advancement])])
+    for i, sphere in enumerate(collection_spheres):
+        old_world.spoiler.playthrough[str(i + 1)] = {str(location): str(location.item) for location in sphere}
