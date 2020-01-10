@@ -34,6 +34,7 @@ class Context:
         self.port = port
         self.password = password
         self.server = None
+        self.countdown_timer = 0
         self.clients = []
         self.received_items = {}
 
@@ -116,6 +117,19 @@ async def on_client_joined(ctx : Context, client : Client):
 
 async def on_client_left(ctx : Context, client : Client):
     notify_all(ctx, "%s (Player %d, %s) has left the game" % (client.name, client.slot, "Default team" if not client.team else "Team %s" % client.team))
+
+async def countdown(ctx : Context, timer):
+    notify_all(ctx, f'[Server]: Starting countdown of {timer}s')
+    if ctx.countdown_timer:
+        ctx.countdown_timer = timer
+        return
+
+    ctx.countdown_timer = timer
+    while ctx.countdown_timer > 0:
+        notify_all(ctx, f'[Server]: {ctx.countdown_timer}')
+        ctx.countdown_timer -= 1
+        await asyncio.sleep(1)
+    notify_all(ctx, f'[Server]: GO')
 
 def get_connected_players_string(ctx : Context):
     auth_clients = [c for c in ctx.clients if c.auth]
@@ -280,10 +294,16 @@ async def process_client_cmd(ctx : Context, client : Client, cmd, args):
 
         notify_all(ctx, client.name + ': ' + args)
 
-        if args[:8] == '!players':
+        if args.startswith('!players'):
             notify_all(ctx, get_connected_players_string(ctx))
-        if args[:8] == '!forfeit':
+        if args.startswith('!forfeit'):
             forfeit_player(ctx, client.team, client.slot, client.name)
+        if args.startswith('!countdown'):
+            try:
+                timer = int(args.split()[1])
+            except (IndexError, ValueError):
+                timer = 10
+            asyncio.create_task(countdown(ctx, timer))
 
 def set_password(ctx : Context, password):
     ctx.password = password
