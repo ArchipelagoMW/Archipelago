@@ -269,7 +269,7 @@ take_any_locations = [
     'Bonk Fairy (Dark)', 'Lake Hylia Healer Fairy', 'Swamp Healer Fairy', 'Desert Healer Fairy',
     'Dark Lake Hylia Healer Fairy', 'Dark Lake Hylia Ledge Healer Fairy', 'Dark Desert Healer Fairy',
     'Dark Death Mountain Healer Fairy', 'Long Fairy Cave', 'Good Bee Cave', '20 Rupee Cave',
-    'Kakariko Gamble Game', 'Capacity Upgrade', '50 Rupee Cave', 'Lost Woods Gamble', 'Hookshot Fairy',
+    'Kakariko Gamble Game', '50 Rupee Cave', 'Lost Woods Gamble', 'Hookshot Fairy',
     'Palace of Darkness Hint', 'East Dark World Hint', 'Archery Game', 'Dark Lake Hylia Ledge Hint',
     'Dark Lake Hylia Ledge Spike Cave', 'Fortune Teller (Dark)', 'Dark Sanctuary Hint', 'Dark Desert Hint']
 
@@ -287,9 +287,8 @@ def set_up_take_anys(world, player):
     entrance = world.get_region(reg, player).entrances[0]
     connect_entrance(world, entrance, old_man_take_any, player)
     entrance.target = 0x58
-    old_man_take_any.shop = Shop(old_man_take_any, 0x0112, ShopType.TakeAny, 0xE2, True)
+    old_man_take_any.shop = Shop(old_man_take_any, 0x0112, ShopType.TakeAny, 0xE2, True, True)
     world.shops.append(old_man_take_any.shop)
-    old_man_take_any.shop.active = True
 
     swords = [item for item in world.itempool if item.type == 'Sword' and item.player == player]
     if swords:
@@ -310,9 +309,8 @@ def set_up_take_anys(world, player):
         entrance = world.get_region(reg, player).entrances[0]
         connect_entrance(world, entrance, take_any, player)
         entrance.target = target
-        take_any.shop = Shop(take_any, room_id, ShopType.TakeAny, 0xE3, True)
+        take_any.shop = Shop(take_any, room_id, ShopType.TakeAny, 0xE3, True, True)
         world.shops.append(take_any.shop)
-        take_any.shop.active = True
         take_any.shop.add_inventory(0, 'Blue Potion', 0, 0)
         take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0)
 
@@ -365,26 +363,19 @@ def fill_prizes(world, attempts=15):
 
 
 def set_up_shops(world, player):
-    # Changes to basic Shops
     # TODO: move hard+ mode changes for sheilds here, utilizing the new shops
-
-    for shop in world.shops:
-        shop.active = True
 
     if world.retro[player]:
         rss = world.get_region('Red Shield Shop', player).shop
-        rss.active = True
-        rss.add_inventory(2, 'Single Arrow', 80)
-
-    # Randomized changes to Shops
-    if world.retro[player]:
-        for shop in random.sample([s for s in world.shops if s.replaceable and s.region.player == player], 5):
-            shop.active = True
+        if not rss.locked:
+            rss.add_inventory(2, 'Single Arrow', 80)
+        for shop in random.sample([s for s in world.shops if s.custom and not s.locked and s.region.player == player], 5):
+            shop.locked = True
             shop.add_inventory(0, 'Single Arrow', 80)
             shop.add_inventory(1, 'Small Key (Universal)', 100)
             shop.add_inventory(2, 'Bombs (10)', 50)
+        rss.locked = True
 
-    #special shop types
 
 def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, retro):
     pool = []

@@ -10,7 +10,7 @@ import zlib
 
 from BaseClasses import World, CollectionState, Item, Region, Location, Shop
 from Items import ItemFactory
-from Regions import create_regions, mark_light_world_regions
+from Regions import create_regions, create_shops, mark_light_world_regions
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from EntranceShuffle import link_entrances, link_inverted_entrances
 from Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, JsonRom
@@ -71,6 +71,7 @@ def main(args, seed=None):
             create_regions(world, player)
         else:
             create_inverted_regions(world, player)
+        create_shops(world, player)
         create_dungeons(world, player)
 
     logger.info('Shuffling the World about.')
@@ -251,6 +252,7 @@ def copy_world(world):
             create_regions(ret, player)
         else:
             create_inverted_regions(ret, player)
+        create_shops(ret, player)
         create_dungeons(ret, player)
 
     copy_dynamic_regions_and_locations(world, ret)
@@ -262,7 +264,6 @@ def copy_world(world):
 
     for shop in world.shops:
         copied_shop = ret.get_region(shop.region.name, shop.region.player).shop
-        copied_shop.active = shop.active
         copied_shop.inventory = copy.copy(shop.inventory)
 
     # connect copied world
@@ -308,7 +309,7 @@ def copy_dynamic_regions_and_locations(world, ret):
         # Note: ideally exits should be copied here, but the current use case (Take anys) do not require this
 
         if region.shop:
-            new_reg.shop = Shop(new_reg, region.shop.room_id, region.shop.type, region.shop.shopkeeper_config, region.shop.replaceable)
+            new_reg.shop = Shop(new_reg, region.shop.room_id, region.shop.type, region.shop.shopkeeper_config, region.shop.custom, region.shop.locked)
             ret.shops.append(new_reg.shop)
 
     for location in world.dynamic_locations:

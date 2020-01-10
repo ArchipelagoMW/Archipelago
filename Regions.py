@@ -293,21 +293,8 @@ def create_regions(world, player):
         create_dw_region(player, 'Pyramid Ledge', None, ['Pyramid Entrance', 'Pyramid Drop'])
     ]
 
-    for region_name, (room_id, shopkeeper, replaceable) in shop_table.items():
-        region = world.get_region(region_name, player)
-        shop = Shop(region, room_id, ShopType.Shop, shopkeeper, replaceable)
-        region.shop = shop
-        world.shops.append(shop)
-        for index, (item, price) in enumerate(default_shop_contents[region_name]):
-            shop.add_inventory(index, item, price)
-
-    region = world.get_region('Capacity Upgrade', player)
-    shop = Shop(region, 0x0115, ShopType.UpgradeShop, 0x04, False)
-    region.shop = shop
-    world.shops.append(shop)
-    shop.add_inventory(0, 'Bomb Upgrade (+5)', 100, 7)
-    shop.add_inventory(1, 'Arrow Upgrade (+5)', 100, 7)
     world.initialize_regions()
+
 
 def create_lw_region(player, name, locations=None, exits=None):
     return _create_region(player, name, RegionType.LightWorld, 'Light World', locations, exits)
@@ -364,37 +351,35 @@ def mark_light_world_regions(world, player):
                 seen.add(exit.connected_region)
                 queue.append(exit.connected_region)
 
-# (room_id, shopkeeper, replaceable)
-shop_table = {
-    'Cave Shop (Dark Death Mountain)': (0x0112, 0xC1, True),
-    'Red Shield Shop': (0x0110, 0xC1, True),
-    'Dark Lake Hylia Shop': (0x010F, 0xC1, True),
-    'Dark World Lumberjack Shop': (0x010F, 0xC1, True),
-    'Village of Outcasts Shop': (0x010F, 0xC1, True),
-    'Dark World Potion Shop': (0x010F, 0xC1, True),
-    'Light World Death Mountain Shop': (0x00FF, 0xA0, True),
-    'Kakariko Shop': (0x011F, 0xA0, True),
-    'Cave Shop (Lake Hylia)': (0x0112, 0xA0, True),
-    'Potion Shop': (0x0109, 0xFF, False),
-    # Bomb Shop not currently modeled as a shop, due to special nature of items
-}
-# region, [item]
-# slot, item, price, max=0, replacement=None, replacement_price=0
-# item = (item, price)
 
+def create_shops(world, player):
+    for region_name, (room_id, type, shopkeeper, custom, locked, inventory) in shop_table.items():
+        if world.mode[player] == 'inverted' and region_name == 'Dark Lake Hylia Shop':
+            locked = True
+            inventory = [('Blue Potion', 160), ('Blue Shield', 50), ('Bombs (10)', 50)]
+        region = world.get_region(region_name, player)
+        shop = Shop(region, room_id, type, shopkeeper, custom, locked)
+        region.shop = shop
+        world.shops.append(shop)
+        for index, item in enumerate(inventory):
+            shop.add_inventory(index, *item)
+
+# (type, room_id, shopkeeper, custom, locked, [items])
+# item = (item, price, max=0, replacement=None, replacement_price=0)
 _basic_shop_defaults = [('Red Potion', 150), ('Small Heart', 10), ('Bombs (10)', 50)]
 _dark_world_shop_defaults = [('Red Potion', 150), ('Blue Shield', 50), ('Bombs (10)', 50)]
-default_shop_contents = {
-    'Cave Shop (Dark Death Mountain)': _basic_shop_defaults,
-    'Red Shield Shop': [('Red Shield', 500), ('Bee', 10), ('Arrows (10)', 30)],
-    'Dark Lake Hylia Shop': _dark_world_shop_defaults,
-    'Dark World Lumberjack Shop': _dark_world_shop_defaults,
-    'Village of Outcasts Shop': _dark_world_shop_defaults,
-    'Dark World Potion Shop': _dark_world_shop_defaults,
-    'Light World Death Mountain Shop': _basic_shop_defaults,
-    'Kakariko Shop': _basic_shop_defaults,
-    'Cave Shop (Lake Hylia)': _basic_shop_defaults,
-    'Potion Shop': [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)],
+shop_table = {
+    'Cave Shop (Dark Death Mountain)': (0x0112, ShopType.Shop, 0xC1, True, False, _basic_shop_defaults),
+    'Red Shield Shop': (0x0110, ShopType.Shop, 0xC1, True, False, [('Red Shield', 500), ('Bee', 10), ('Arrows (10)', 30)]),
+    'Dark Lake Hylia Shop': (0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
+    'Dark World Lumberjack Shop': (0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
+    'Village of Outcasts Shop': (0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
+    'Dark World Potion Shop': (0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
+    'Light World Death Mountain Shop': (0x00FF, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
+    'Kakariko Shop': (0x011F, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
+    'Cave Shop (Lake Hylia)': (0x0112, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
+    'Potion Shop': (0x0109, ShopType.Shop, 0xFF, False, True, [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)]),
+    'Capacity Upgrade': (0x0115, ShopType.UpgradeShop, 0x04, True, True, [('Bomb Upgrade (+5)', 100, 7), ('Arrow Upgrade (+5)', 100, 7)])
 }
 
 location_table = {'Mushroom': (0x180013, 0x186338, False, 'in the woods'),

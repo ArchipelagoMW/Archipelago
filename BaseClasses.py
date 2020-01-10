@@ -898,14 +898,14 @@ class ShopType(Enum):
     UpgradeShop = 2
 
 class Shop(object):
-    def __init__(self, region, room_id, type, shopkeeper_config, replaceable):
+    def __init__(self, region, room_id, type, shopkeeper_config, custom, locked):
         self.region = region
         self.room_id = room_id
         self.type = type
         self.inventory = [None, None, None]
         self.shopkeeper_config = shopkeeper_config
-        self.replaceable = replaceable
-        self.active = False
+        self.custom = custom
+        self.locked = locked
 
     @property
     def item_count(self):
@@ -1013,7 +1013,7 @@ class Spoiler(object):
 
         self.shops = []
         for shop in self.world.shops:
-            if not shop.active:
+            if not shop.custom:
                 continue
             shopdata = {'location': str(shop.region),
                         'type': 'Take Any' if shop.type == ShopType.TakeAny else 'Shop'

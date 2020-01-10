@@ -1255,7 +1255,7 @@ def patch_race_rom(rom):
         RaceRom.encrypt(rom)
 
 def write_custom_shops(rom, world, player):
-    shops = [shop for shop in world.shops if shop.replaceable and shop.active and shop.region.player == player]
+    shops = [shop for shop in world.shops if shop.custom and shop.region.player == player]
 
     shop_data = bytearray()
     items_data = bytearray()
