@@ -1097,7 +1097,9 @@ def patch_rom(world, player, rom, enemized):
 
     rom.write_byte(0x18005E, world.crystals_needed_for_gt[player])
     rom.write_byte(0x18005F, world.crystals_needed_for_ganon[player])
-    rom.write_byte(0x18008A, 0x01 if world.mode[player] == "standard" else 0x00) # block HC upstairs doors in rain state in standard mode
+
+    # block HC upstairs doors in rain state in standard mode
+    rom.write_byte(0x18008A, 0x01 if world.mode[player] == "standard" and world.shuffle[player] != 'vanilla' else 0x00)
 
     rom.write_byte(0x18016A, 0x10 | ((0x01 if world.keyshuffle[player] else 0x00)
                                      | (0x02 if world.compassshuffle[player] else 0x00)
