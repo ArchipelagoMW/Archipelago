@@ -984,7 +984,7 @@ class Spoiler(object):
                 self.medallions['Misery Mire (Player %d)' % player] = self.world.required_medallions[player][0]
                 self.medallions['Turtle Rock (Player %d)' % player] = self.world.required_medallions[player][1]
 
-        self.startinventory = self.world.precollected_items.copy()
+        self.startinventory = list(map(str, self.world.precollected_items))
 
         self.locations = OrderedDict()
         listed_locations = set()
@@ -1133,7 +1133,7 @@ class Spoiler(object):
                     outfile.write('\nMisery Mire Medallion (Player %d): %s' % (player, self.medallions['Misery Mire (Player %d)' % player]))
                     outfile.write('\nTurtle Rock Medallion (Player %d): %s' % (player, self.medallions['Turtle Rock (Player %d)' % player]))
             outfile.write('\n\nStarting Inventory:\n\n')
-            outfile.write('\n'.join(map(str, self.startinventory)))
+            outfile.write('\n'.join(self.startinventory))
             outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(['%s: %s' % (location, item) for grouping in self.locations.values() for (location, item) in grouping.items()]))
             outfile.write('\n\nShops:\n\n')

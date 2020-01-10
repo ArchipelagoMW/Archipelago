@@ -114,23 +114,10 @@ class LocalRom(object):
         # if RANDOMIZERBASEHASH != patchedmd5.hexdigest():
         #     raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
 
-    def patch_enemizer(self, rando_patch, base_enemizer_patch_path, enemizer_patch):
-        # extend to 4MB
+    def merge_enemizer_patches(self, patches):
         self.buffer.extend(bytearray([0x00] * (0x400000 - len(self.buffer))))
-
-        # apply randomizer patches
-        for address, values in rando_patch.items():
+        for address, values in patches.items():
             self.write_bytes(int(address), values)
-
-        # load base enemizer patches
-        with open(base_enemizer_patch_path, 'r') as f:
-            base_enemizer_patch = json.load(f)
-        for patch in base_enemizer_patch:
-            self.write_bytes(patch["address"], patch["patchData"])
-
-        # apply enemizer patches
-        for patch in enemizer_patch:
-            self.write_bytes(patch["address"], patch["patchData"])
 
     def write_crc(self):
         crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
@@ -163,9 +150,10 @@ def read_rom(stream):
         buffer = buffer[0x200:]
     return buffer
 
-def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepots, random_sprite_on_hit):
+def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, random_sprite_on_hit):
     baserom_path = os.path.abspath(baserom_path)
     basepatch_path = os.path.abspath(local_path('data/base2current.json'))
+    enemizer_basepatch_path = os.path.join(os.path.dirname(enemizercli), "enemizerBasePatch.json")
     randopatch_path = os.path.abspath(output_path('enemizer_randopatch.json'))
     options_path = os.path.abspath(output_path('enemizer_options.json'))
     enemizer_output_path = os.path.abspath(output_path('enemizer_output.json'))
@@ -245,19 +233,13 @@ def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepot
             'IcePalace': world.get_dungeon("Ice Palace", player).boss.enemizer_name,
             'MiseryMire': world.get_dungeon("Misery Mire", player).boss.enemizer_name,
             'TurtleRock': world.get_dungeon("Turtle Rock", player).boss.enemizer_name,
+            'GanonsTower1': world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower', player).bosses['bottom'].enemizer_name,
+            'GanonsTower2': world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower', player).bosses['middle'].enemizer_name,
+            'GanonsTower3': world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower', player).bosses['top'].enemizer_name,
             'GanonsTower4': 'Agahnim2',
             'Ganon': 'Ganon',
         }
     }
-
-    if world.mode[player] != 'inverted':
-        options['ManualBosses']['GanonsTower1'] = world.get_dungeon('Ganons Tower', player).bosses['bottom'].enemizer_name
-        options['ManualBosses']['GanonsTower2'] = world.get_dungeon('Ganons Tower', player).bosses['middle'].enemizer_name
-        options['ManualBosses']['GanonsTower3'] = world.get_dungeon('Ganons Tower', player).bosses['top'].enemizer_name
-    else:
-        options['ManualBosses']['GanonsTower1'] = world.get_dungeon('Inverted Ganons Tower', player).bosses['bottom'].enemizer_name
-        options['ManualBosses']['GanonsTower2'] = world.get_dungeon('Inverted Ganons Tower', player).bosses['middle'].enemizer_name
-        options['ManualBosses']['GanonsTower3'] = world.get_dungeon('Inverted Ganons Tower', player).bosses['top'].enemizer_name
 
     rom.write_to_file(randopatch_path)
 
@@ -273,17 +255,13 @@ def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepot
                            '--output', enemizer_output_path],
                           cwd=os.path.dirname(enemizercli), stdout=subprocess.DEVNULL)
 
+    with open(enemizer_basepatch_path, 'r') as f:
+        for patch in json.load(f):
+            rom.write_bytes(patch["address"], patch["patchData"])
+
     with open(enemizer_output_path, 'r') as f:
-        ret = json.load(f)
-
-    if os.path.exists(randopatch_path):
-        os.remove(randopatch_path)
-
-    if os.path.exists(options_path):
-        os.remove(options_path)
-
-    if os.path.exists(enemizer_output_path):
-        os.remove(enemizer_output_path)
+        for patch in json.load(f):
+            rom.write_bytes(patch["address"], patch["patchData"])
 
     if random_sprite_on_hit:
         _populate_sprite_table()
@@ -295,11 +273,24 @@ def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepot
 
             for i, path in enumerate(sprites[:32]):
                 sprite = Sprite(path)
-                ret.append({"address": 0x300000 + (i * 0x8000), "patchData": list(sprite.sprite)})
-                ret.append({"address": 0x307000 + (i * 0x8000), "patchData": list(sprite.palette)})
-                ret.append({"address": 0x307078 + (i * 0x8000), "patchData": list(sprite.glove_palette)})
+                rom.write_bytes(0x300000 + (i * 0x8000), sprite.sprite)
+                rom.write_bytes(0x307000 + (i * 0x8000), sprite.palette)
+                rom.write_bytes(0x307078 + (i * 0x8000), sprite.glove_palette)
 
-    return ret
+    try:
+        os.remove(randopatch_path)
+    except OSError:
+        pass
+
+    try:
+        os.remove(options_path)
+    except OSError:
+        pass
+
+    try:
+        os.remove(enemizer_output_path)
+    except OSError:
+        pass
 
 _sprite_table = {}
 def _populate_sprite_table():
@@ -1255,13 +1246,11 @@ try:
 except ImportError:
     RaceRom = None
 
-def get_race_rom_patches(rom):
-    patches = {str(0x180213): [0x01, 0x00]} # Tournament Seed
+def patch_race_rom(rom):
+    rom.write_bytes(0x180213, [0x01, 0x00]) # Tournament Seed
 
     if 'RaceRom' in sys.modules:
-        RaceRom.encrypt(rom, patches)
-
-    return patches
+        RaceRom.encrypt(rom)
 
 def write_custom_shops(rom, world, player):
     shops = [shop for shop in world.shops if shop.replaceable and shop.active and shop.region.player == player]
