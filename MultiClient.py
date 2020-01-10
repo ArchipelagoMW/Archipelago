@@ -5,6 +5,7 @@ import logging
 import re
 import subprocess
 import sys
+import urllib.parse
 
 import Items
 import Regions
@@ -544,10 +545,11 @@ async def server_loop(ctx : Context):
         ctx.server_address = await console_input(ctx)
 
     address = f"ws://{ctx.server_address}" if "://" not in ctx.server_address else ctx.server_address
+    port = urllib.parse.urlparse(address).port or 38281
 
     print('Connecting to multiworld server at %s' % address)
     try:
-        ctx.socket = await websockets.connect(address, ping_timeout=None, ping_interval=None)
+        ctx.socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None)
         print('Connected')
 
         async for data in ctx.socket:
