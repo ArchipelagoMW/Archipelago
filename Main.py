@@ -24,10 +24,7 @@ __version__ = '0.6.3-pre'
 
 def main(args, seed=None):
     if args.outputpath:
-        try:
-            os.mkdir(args.outputpath)
-        except OSError:
-            pass
+        os.makedirs(args.outputpath, exist_ok=True)
         output_path.cached_path = args.outputpath
 
     start = time.process_time()
