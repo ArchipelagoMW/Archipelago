@@ -65,14 +65,17 @@ def main():
         path = getattr(args, f'p{player}')
         if path:
             if path not in weights_cache:
-                weights_cache[path] = get_weights(path)
+                try:
+                    weights_cache[path] = get_weights(path)
+                except:
+                    raise ValueError(f"File {path} is destroyed. Please fix your yaml.")
             print(f"P{player} Weights: {path} >> {weights_cache[path]['description']}")
 
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
     erargs.names = args.names
     erargs.create_spoiler = args.create_spoiler
-    erargs.race = True
+    erargs.race = False
     erargs.outputname = seedname
     erargs.outputpath = args.outputpath
 
@@ -86,10 +89,13 @@ def main():
     for player in range(1, args.multi + 1):
         path = getattr(args, f'p{player}') if getattr(args, f'p{player}') else args.weights
         if path:
-            settings = settings_cache[path] if settings_cache[path] else roll_settings(weights_cache[path])
-            for k, v in vars(settings).items():
-                if v is not None:
-                    getattr(erargs, k)[player] = v
+            try:
+                settings = settings_cache[path] if settings_cache[path] else roll_settings(weights_cache[path])
+                for k, v in vars(settings).items():
+                    if v is not None:
+                        getattr(erargs, k)[player] = v
+            except:
+                raise ValueError(f"File {path} is destroyed. Please fix your yaml.")
         else:
             raise RuntimeError(f'No weights specified for player {player}')
 
