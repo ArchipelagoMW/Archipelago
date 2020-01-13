@@ -336,21 +336,30 @@ async def console(ctx : Context):
                     print("Unknown item: " + item)
             elif command[0] == '/hint':
                 if len(command) > 2:
-                    player_number = int(command[1])
-                    item = " ".join(command[2:])
-                    if item in Items.item_table:
-                        seeked_item_id = Items.item_table[item][3]
-                        for check, result in ctx.locations.items():
-                            item_id, receiving_player = result
-                            if receiving_player == player_number and item_id == seeked_item_id:
-                                location_id, finding_player = check
-                                notify_all(ctx, f"[Hint]: P{player_number}'s {item} can be found in {get_location_name_from_address(location_id)} in "
-                                      f"P{finding_player}'s World")
-
+                    player_number = 0
+                    if command[1].isnumeric():
+                        player_number = int(command[1])
                     else:
-                        print("Unknown item: " + item)
+                        client = get_client_from_name(ctx, command[1])
+                        if client:
+                            player_number = client.slot()
+                        else:
+                            print(f"Player with name {command[1]} not found.")
+                    if player_number:
+                        item = " ".join(command[2:])
+                        if item in Items.item_table:
+                            seeked_item_id = Items.item_table[item][3]
+                            for check, result in ctx.locations.items():
+                                item_id, receiving_player = result
+                                if receiving_player == player_number and item_id == seeked_item_id:
+                                    location_id, finding_player = check
+                                    notify_all(ctx, f"[Hint]: P{player_number}'s {item} can be found in {get_location_name_from_address(location_id)} in "
+                                          f"P{finding_player}'s World")
+
+                        else:
+                            print("Unknown item: " + item)
                 else:
-                    print("Use /hint {playernumber} {itemname}\nFor example /hint 1 Lamp")
+                    print("Use /hint {Playernumber/Playername} {itemname}\nFor example /hint 1 Lamp")
             elif command[0][0] != '/':
                 notify_all(ctx, '[Server]: ' + input)
         except Exception as e:
