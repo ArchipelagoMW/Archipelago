@@ -342,7 +342,7 @@ async def console(ctx : Context):
                     else:
                         client = get_client_from_name(ctx, command[1])
                         if client:
-                            player_number = client.slot()
+                            player_number = client.slot
                         else:
                             print(f"Player with name {command[1]} not found.")
                     if player_number:
