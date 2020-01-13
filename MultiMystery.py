@@ -34,6 +34,9 @@ zip_roms:int = 1
 #create a spoiler file
 create_spoiler:bool = True
 
+#create roms as race coms
+race:bool= False
+
 #folder from which the player yaml files are pulled from
 player_files_folder:str = "Players"
 
@@ -77,7 +80,7 @@ if __name__ == "__main__":
 
     command = f"py -{py_version} Mystery.py --multi {len(player_files)} {player_string} " \
               f"--names {','.join(player_names)} --enemizercli {enemizer_location} " \
-              f"--outputpath {outputpath}" + " --create_spoiler" if create_spoiler else ""
+              f"--outputpath {outputpath}" + " --create_spoiler" if create_spoiler else "" + " --race" if race else ""
     print(command)
     import time
     start = time.perf_counter()

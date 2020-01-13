@@ -43,6 +43,7 @@ def main():
     parser.add_argument('--rom')
     parser.add_argument('--enemizercli')
     parser.add_argument('--outputpath')
+    parser.add_argument('--race', action='store_true')
     for player in range(1, multiargs.multi + 1):
         parser.add_argument(f'--p{player}', help=argparse.SUPPRESS)
     args = parser.parse_args()
@@ -75,7 +76,7 @@ def main():
     erargs.seed = seed
     erargs.names = args.names
     erargs.create_spoiler = args.create_spoiler
-    erargs.race = False
+    erargs.race = args.race
     erargs.outputname = seedname
     erargs.outputpath = args.outputpath
 
