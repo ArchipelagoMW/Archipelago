@@ -54,6 +54,8 @@ class Context:
 
         self.snes_socket = None
         self.snes_state = SNES_DISCONNECTED
+        self.snes_attached_device = None
+        self.snes_reconnect_address = None
         self.snes_recv_queue = asyncio.Queue()
         self.snes_request_lock = asyncio.Lock()
         self.is_sd2snes = False
@@ -82,6 +84,7 @@ def color_code(*args):
 def color(text, *args):
     return color_code(*args) + text + color_code('reset')
 
+RECONNECT_DELAY = 30
 
 ROM_START = 0x000000
 WRAM_START = 0xF50000
@@ -324,7 +327,7 @@ SNES_CONNECTING = 1
 SNES_CONNECTED = 2
 SNES_ATTACHED = 3
 
-async def snes_connect(ctx : Context, address = None):
+async def snes_connect(ctx : Context, address):
     if ctx.snes_socket is not None:
         print('Already connected to snes')
         return
@@ -332,8 +335,7 @@ async def snes_connect(ctx : Context, address = None):
     ctx.snes_state = SNES_CONNECTING
     recv_task = None
 
-    if address is None:
-        address = 'ws://' + ctx.snes_address
+    address = f"ws://{address}" if "://" not in address else address
 
     print("Connecting to QUsb2snes at %s ..." % address)
 
@@ -358,17 +360,25 @@ async def snes_connect(ctx : Context, address = None):
             print("[%d] %s" % (id + 1, device))
 
         device = None
-        while True:
-            print("Enter a number:")
-            choice = await console_input(ctx)
-            if choice is None:
-                raise Exception('Abort input')
-            if not choice.isdigit() or int(choice) < 1 or int(choice) > len(devices):
-                print("Invalid choice (%s)" % choice)
-                continue
+        if len(devices) == 1:
+            device = devices[0]
+        elif ctx.snes_reconnect_address:
+            if ctx.snes_attached_device[1] in devices:
+                device = ctx.snes_attached_device[1]
+            else:
+                device = devices[ctx.snes_attached_device[0]]
+        else:
+            while True:
+                print("Select a device:")
+                choice = await console_input(ctx)
+                if choice is None:
+                    raise Exception('Abort input')
+                if not choice.isdigit() or int(choice) < 1 or int(choice) > len(devices):
+                    print("Invalid choice (%s)" % choice)
+                    continue
 
-            device = devices[int(choice) - 1]
-            break
+                device = devices[int(choice) - 1]
+                break
 
         print("Attaching to " + device)
 
@@ -379,6 +389,7 @@ async def snes_connect(ctx : Context, address = None):
         }
         await ctx.snes_socket.send(json.dumps(Attach_Request))
         ctx.snes_state = SNES_ATTACHED
+        ctx.snes_attached_device = (devices.index(device), device)
 
         if 'SD2SNES'.lower() in device.lower() or (len(device) == 4 and device[:3] == 'COM'):
             print("SD2SNES Detected")
@@ -390,10 +401,10 @@ async def snes_connect(ctx : Context, address = None):
         else:
             ctx.is_sd2snes = False
 
+        ctx.snes_reconnect_address = address
         recv_task = asyncio.create_task(snes_recv_loop(ctx))
 
     except Exception as e:
-        print("Error connecting to snes (%s)" % e)
         if recv_task is not None:
             if not ctx.snes_socket.closed:
                 await ctx.snes_socket.close()
@@ -403,16 +414,26 @@ async def snes_connect(ctx : Context, address = None):
                     await ctx.snes_socket.close()
                 ctx.snes_socket = None
             ctx.snes_state = SNES_DISCONNECTED
+        if not ctx.snes_reconnect_address:
+            print("Error connecting to snes (%s)" % e)
+        else:
+            print(f"Error connecting to snes, attempt again in {RECONNECT_DELAY}s")
+            asyncio.create_task(snes_reconnect(ctx))
+
+async def snes_reconnect(ctx: Context):
+    await asyncio.sleep(RECONNECT_DELAY)
+    if ctx.snes_reconnect_address and ctx.snes_socket is None:
+        await snes_connect(ctx, ctx.snes_reconnect_address)
 
 async def snes_recv_loop(ctx : Context):
     try:
         async for msg in ctx.snes_socket:
             ctx.snes_recv_queue.put_nowait(msg)
-        print("Snes disconnected, type /snes to reconnect")
+        print("Snes disconnected")
     except Exception as e:
-        print("Lost connection to the snes, type /snes to reconnect")
         if not isinstance(e, websockets.WebSocketException):
             logging.exception(e)
+        print("Lost connection to the snes, type /snes to reconnect")
     finally:
         socket, ctx.snes_socket = ctx.snes_socket, None
         if socket is not None and not socket.closed:
@@ -424,6 +445,10 @@ async def snes_recv_loop(ctx : Context):
 
         ctx.rom_confirmed = False
         ctx.last_rom = None
+
+        if ctx.snes_reconnect_address:
+            print(f"...reconnecting in {RECONNECT_DELAY}s")
+            asyncio.create_task(snes_reconnect(ctx))
 
 async def snes_read(ctx : Context, address, size):
     try:
@@ -698,8 +723,10 @@ async def console_loop(ctx : Context):
             colorama.init()
 
         if command[0] == '/snes':
-            asyncio.create_task(snes_connect(ctx, command[1] if len(command) > 1 else None))
+            ctx.snes_reconnect_address = None
+            asyncio.create_task(snes_connect(ctx, command[1] if len(command) > 1 else ctx.snes_address))
         if command[0] in ['/snes_close', '/snes_quit']:
+            ctx.snes_reconnect_address = None
             if ctx.snes_socket is not None and not ctx.snes_socket.closed:
                 await ctx.snes_socket.close()
 
@@ -883,7 +910,7 @@ async def main():
 
     input_task = asyncio.create_task(console_loop(ctx))
 
-    await snes_connect(ctx)
+    await snes_connect(ctx, ctx.snes_address)
 
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx))
@@ -892,7 +919,7 @@ async def main():
 
 
     await ctx.exit_event.wait()
-
+    ctx.snes_reconnect_address = None
 
     await watcher_task
 
