@@ -1,5 +1,5 @@
 __author__ = "Berserker55" # you can find me on the ALTTP Randomizer Discord
-__version__ = 1.4
+__version__ = 1.5
 
 """
 This script launches a Multiplayer "Multiworld" Mystery Game
@@ -52,6 +52,7 @@ def feedback(text:str):
 
 
 if __name__ == "__main__":
+    print(f"{__author__}'s MultiMystery Launcher V{__version__}")
     if not os.path.exists(enemizer_location):
         feedback(f"Enemizer not found at {enemizer_location}, please adjust the path in MultiMystery.py's config or put Enemizer in the default location.")
     if not os.path.exists("Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"):
@@ -62,10 +63,13 @@ if __name__ == "__main__":
         if file.lower().endswith(".yaml"):
             player_files.append(file)
             print(f"Player {file[:-5]} found.")
-    if len(player_files) == 0:
+    player_count = len(player_files)
+    if player_count == 0:
         feedback(f"No player files found. Please put them in a {player_files_folder} folder.")
-    player_string = ""
+    else:
+        print(player_count, "Players found.")
 
+    player_string = ""
     for i,file in enumerate(player_files):
         player_string += f"--p{i+1} {os.path.join(player_files_folder, file)} "
 
@@ -78,7 +82,7 @@ if __name__ == "__main__":
     import time
     start = time.perf_counter()
     text = subprocess.check_output(command, shell=True).decode()
-    print(f"Took {time.perf_counter()-start:3} seconds to generate seed.")
+    print(f"Took {time.perf_counter()-start:.3f} seconds to generate seed.")
     seedname = ""
 
     for segment in text.split():
