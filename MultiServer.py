@@ -268,54 +268,76 @@ def set_password(ctx : Context, password):
 async def console(ctx : Context):
     while True:
         input = await aioconsole.ainput()
+        try:
 
-        command = shlex.split(input)
-        if not command:
-            continue
+            command = shlex.split(input)
+            if not command:
+                continue
 
-        if command[0] == '/exit':
-            ctx.server.ws_server.close()
-            break
+            if command[0] == '/exit':
+                ctx.server.ws_server.close()
+                break
 
-        if command[0] == '/players':
-            print(get_connected_players_string(ctx))
-        if command[0] == '/password':
-            set_password(ctx, command[1] if len(command) > 1 else None)
-        if command[0] == '/kick' and len(command) > 1:
-            team = int(command[2]) - 1 if len(command) > 2 and command[2].isdigit() else None
-            for client in ctx.clients:
-                if client.auth and client.name.lower() == command[1].lower() and (team is None or team == client.team):
-                    if client.socket and not client.socket.closed:
-                        await client.socket.close()
-
-        if command[0] == '/forfeitslot' and len(command) > 1 and command[1].isdigit():
-            if len(command) > 2 and command[2].isdigit():
-                team = int(command[1]) - 1
-                slot = int(command[2])
-            else:
-                team = 0
-                slot = int(command[1])
-            forfeit_player(ctx, team, slot)
-        if command[0] == '/forfeitplayer' and len(command) > 1:
-            team = int(command[2]) - 1 if len(command) > 2 and command[2].isdigit() else None
-            for client in ctx.clients:
-                if client.auth and client.name.lower() == command[1].lower() and (team is None or team == client.team):
-                    if client.socket and not client.socket.closed:
-                        forfeit_player(ctx, client.team, client.slot)
-        if command[0] == '/senditem' and len(command) > 2:
-            [(player, item)] = re.findall(r'\S* (\S*) (.*)', input)
-            if item in Items.item_table:
+            if command[0] == '/players':
+                print(get_connected_players_string(ctx))
+            if command[0] == '/password':
+                set_password(ctx, command[1] if len(command) > 1 else None)
+            if command[0] == '/kick' and len(command) > 1:
+                team = int(command[2]) - 1 if len(command) > 2 and command[2].isdigit() else None
                 for client in ctx.clients:
-                    if client.auth and client.name.lower() == player.lower():
-                        new_item = ReceivedItem(Items.item_table[item][3], "cheat console", client.slot)
-                        get_received_items(ctx, client.team, client.slot).append(new_item)
-                        notify_all(ctx, 'Cheat console: sending "' + item + '" to ' + client.name)
-                send_new_items(ctx)
-            else:
-                print("Unknown item: " + item)
+                    if client.auth and client.name.lower() == command[1].lower() and (team is None or team == client.team):
+                        if client.socket and not client.socket.closed:
+                            await client.socket.close()
 
-        if command[0][0] != '/':
-            notify_all(ctx, '[Server]: ' + input)
+            if command[0] == '/forfeitslot' and len(command) > 1 and command[1].isdigit():
+                if len(command) > 2 and command[2].isdigit():
+                    team = int(command[1]) - 1
+                    slot = int(command[2])
+                else:
+                    team = 0
+                    slot = int(command[1])
+                forfeit_player(ctx, team, slot)
+            if command[0] == '/forfeitplayer' and len(command) > 1:
+                team = int(command[2]) - 1 if len(command) > 2 and command[2].isdigit() else None
+                for client in ctx.clients:
+                    if client.auth and client.name.lower() == command[1].lower() and (team is None or team == client.team):
+                        if client.socket and not client.socket.closed:
+                            forfeit_player(ctx, client.team, client.slot)
+            if command[0] == '/senditem' and len(command) > 2:
+                [(player, item)] = re.findall(r'\S* (\S*) (.*)', input)
+                if item in Items.item_table:
+                    for client in ctx.clients:
+                        if client.auth and client.name.lower() == player.lower():
+                            new_item = ReceivedItem(Items.item_table[item][3], "cheat console", client.slot)
+                            get_received_items(ctx, client.team, client.slot).append(new_item)
+                            notify_all(ctx, 'Cheat console: sending "' + item + '" to ' + client.name)
+                    send_new_items(ctx)
+                else:
+                    print("Unknown item: " + item)
+            if command[0] == '/hint':
+                team = int(command[2]) - 1 if len(command) > 2 and command[2].isdigit() else None
+                for client in ctx.clients:
+                    if client.auth and client.name.lower() == command[1].lower() and (team is None or team == client.team):
+                        item = " ".join(command[2:])
+                        if item in Items.item_table:
+                            seeked_item_id = Items.item_table[item][3]
+                            for check, result in ctx.locations.items():
+                                item_id, receiving_player = result
+                                print(receiving_player, client.slot)
+                                if receiving_player == client.slot and item_id == seeked_item_id:
+                                    location_id, finding_player = check
+                                    notify_all(ctx, f"[Hint]: P{client.name}'s {item} can be found in {get_location_name_from_address(location_id)} in "
+                                          f"P{finding_player}'s World")
+
+                        else:
+                            print("Unknown item: " + item)
+                else:
+                    print("Use /hint {Playername} {itemname}\nFor example /hint Berserker Lamp")
+            if command[0][0] != '/':
+                notify_all(ctx, '[Server]: ' + input)
+        except:
+            import traceback
+            traceback.print_exc()
 
 async def main():
     parser = argparse.ArgumentParser()
