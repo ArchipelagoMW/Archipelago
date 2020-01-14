@@ -161,9 +161,7 @@ def main(args, seed=None):
                 if use_enemizer and (args.enemizercli or not args.jsonout):
                     patch_enemizer(world, player, rom, args.rom, args.enemizercli, args.shufflepots[player], sprite_random_on_hit)
                     if not args.jsonout:
-                        patches = rom.patches
-                        rom = LocalRom(args.rom)
-                        rom.merge_enemizer_patches(patches)
+                        rom = LocalRom.fromJsonRom(rom, args.rom, 0x400000)
 
                 if args.race:
                     patch_race_rom(rom)

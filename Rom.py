@@ -25,9 +25,9 @@ JAP10HASH = '03a63945398191337e896e5771f77173'
 
 class JsonRom(object):
 
-    def __init__(self):
-        self.name = None
-        self.hash = None
+    def __init__(self, name=None, hash=None):
+        self.name = name
+        self.hash = hash
         self.orig_buffer = None
         self.patches = {}
         self.addresses = []
@@ -71,9 +71,9 @@ class JsonRom(object):
 
 class LocalRom(object):
 
-    def __init__(self, file, patch=True):
-        self.name = None
-        self.hash = None
+    def __init__(self, file, patch=True, name=None, hash=None):
+        self.name = name
+        self.hash = hash
         self.orig_buffer = None
         with open(file, 'rb') as stream:
             self.buffer = read_rom(stream)
@@ -91,6 +91,14 @@ class LocalRom(object):
     def write_to_file(self, file):
         with open(file, 'wb') as outfile:
             outfile.write(self.buffer)
+
+    @staticmethod
+    def fromJsonRom(rom, file, rom_size = 0x200000):
+        ret = LocalRom(file, True, rom.name, rom.hash)
+        ret.buffer.extend(bytearray([0x00] * (rom_size - len(ret.buffer))))
+        for address, values in rom.patches.items():
+            ret.write_bytes(int(address), values)
+        return ret
 
     def patch_base_rom(self):
         # verify correct checksum of baserom
@@ -115,11 +123,6 @@ class LocalRom(object):
         # patchedmd5.update(self.buffer)
         # if RANDOMIZERBASEHASH != patchedmd5.hexdigest():
         #     raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
-
-    def merge_enemizer_patches(self, patches):
-        self.buffer.extend(bytearray([0x00] * (0x400000 - len(self.buffer))))
-        for address, values in patches.items():
-            self.write_bytes(int(address), values)
 
     def write_crc(self):
         crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
