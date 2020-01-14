@@ -3,9 +3,6 @@ import re
 import subprocess
 import sys
 
-def parse_names_string(names):
-    return {player: name for player, name in enumerate([n for n in re.split(r'[, ]', names) if n], 1)}
-
 def int16_as_bytes(value):
     value = value & 0xFFFF
     return [value & 0xFF, (value >> 8) & 0xFF]
@@ -19,6 +16,18 @@ def pc_to_snes(value):
 
 def snes_to_pc(value):
     return ((value & 0x7F0000)>>1)|(value & 0x7FFF)
+
+def parse_player_names(names, players, teams):
+    names = [n for n in re.split(r'[, ]', names) if n]
+    ret = []
+    while names or len(ret) < teams:
+        team = [n[:16] for n in names[:players]]
+        while len(team) != players:
+            team.append(f"Player {len(team) + 1}")
+        ret.append(team)
+
+        names = names[players:]
+    return ret
 
 def is_bundled():
     return getattr(sys, 'frozen', False)

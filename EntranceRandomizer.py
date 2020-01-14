@@ -268,6 +268,7 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--beemizer', default=defval(0), type=lambda value: min(max(int(value), 0), 4))
     parser.add_argument('--multi', default=defval(1), type=lambda value: min(max(int(value), 1), 255))
     parser.add_argument('--names', default=defval(''))
+    parser.add_argument('--teams', default=defval(1), type=lambda value: max(int(value), 1))
     parser.add_argument('--outputpath')
     parser.add_argument('--race', default=defval(False), action='store_true')
     parser.add_argument('--outputname')

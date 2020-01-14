@@ -15,7 +15,7 @@ from EntranceRandomizer import parse_arguments
 from GuiUtils import ToolTips, set_icon, BackgroundTaskProgress
 from Main import main, __version__ as ESVersion
 from Rom import Sprite
-from Utils import is_bundled, local_path, output_path, open_file, parse_names_string
+from Utils import is_bundled, local_path, output_path, open_file
 
 
 def guiMain(args=None):
@@ -470,11 +470,7 @@ def guiMain(args=None):
             logging.exception(e)
             messagebox.showerror(title="Error while creating seed", message=str(e))
         else:
-            msgtxt = "Rom patched successfully"
-            if guiargs.names:
-                for player, name in parse_names_string(guiargs.names).items():
-                    msgtxt += "\nPlayer %d => %s" % (player, name)
-            messagebox.showinfo(title="Success", message=msgtxt)
+            messagebox.showinfo(title="Success", message="Rom patched successfully")
 
     generateButton = Button(bottomFrame, text='Generate Patched Rom', command=generateRom)
 
@@ -574,20 +570,11 @@ def guiMain(args=None):
     uwPalettesLabel2 = Label(uwPalettesFrame2, text='Dungeon palettes')
     uwPalettesLabel2.pack(side=LEFT)
 
-    namesFrame2 = Frame(drowDownFrame2)
-    namesLabel2 = Label(namesFrame2, text='Player names')
-    namesVar2 = StringVar()
-    namesEntry2 = Entry(namesFrame2, textvariable=namesVar2)
-
-    namesLabel2.pack(side=LEFT)
-    namesEntry2.pack(side=LEFT)
-
     heartbeepFrame2.pack(expand=True, anchor=E)
     heartcolorFrame2.pack(expand=True, anchor=E)
     fastMenuFrame2.pack(expand=True, anchor=E)
     owPalettesFrame2.pack(expand=True, anchor=E)
     uwPalettesFrame2.pack(expand=True, anchor=E)
-    namesFrame2.pack(expand=True, anchor=E)
 
     bottomFrame2 = Frame(topFrame2)
 
@@ -603,18 +590,13 @@ def guiMain(args=None):
         guiargs.rom = romVar2.get()
         guiargs.baserom = romVar.get()
         guiargs.sprite = sprite
-        guiargs.names = namesEntry2.get()
         try:
             adjust(args=guiargs)
         except Exception as e:
             logging.exception(e)
             messagebox.showerror(title="Error while creating seed", message=str(e))
         else:
-            msgtxt = "Rom patched successfully"
-            if guiargs.names:
-                for player, name in parse_names_string(guiargs.names).items():
-                    msgtxt += "\nPlayer %d => %s" % (player, name)
-            messagebox.showinfo(title="Success", message=msgtxt)
+            messagebox.showinfo(title="Success", message="Rom patched successfully")
 
     adjustButton = Button(bottomFrame2, text='Adjust Rom', command=adjustRom)
 

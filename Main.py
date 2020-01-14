@@ -13,12 +13,12 @@ from Items import ItemFactory
 from Regions import create_regions, create_shops, mark_light_world_regions
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from EntranceShuffle import link_entrances, link_inverted_entrances
-from Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, JsonRom
+from Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, JsonRom, get_hash_string
 from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
 from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, flood_items, balance_multiworld_progression
 from ItemList import generate_itempool, difficulties, fill_prizes
-from Utils import output_path, parse_names_string
+from Utils import output_path, parse_player_names
 
 __version__ = '0.6.3-pre'
 
@@ -54,7 +54,16 @@ def main(args, seed=None):
 
     world.rom_seeds = {player: random.randint(0, 999999999) for player in range(1, world.players + 1)}
 
-    logger.info('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n', __version__, world.seed)
+    logger.info('ALttP Entrance Randomizer Version %s  -  Seed: %s\n', __version__, world.seed)
+
+    parsed_names = parse_player_names(args.names, world.players, args.teams)
+    world.teams = len(parsed_names)
+    for i, team in enumerate(parsed_names, 1):
+        if world.players > 1:
+            logger.info('%s%s', 'Team%d: ' % i if world.teams > 1 else 'Players: ', ', '.join(team))
+        for player, name in enumerate(team, 1):
+            world.player_names[player].append(name)
+    logger.info('')
 
     for player in range(1, world.players + 1):
         world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
@@ -133,60 +142,64 @@ def main(args, seed=None):
 
     logger.info('Patching ROM.')
 
-    player_names = parse_names_string(args.names)
     outfilebase = 'ER_%s' % (args.outputname if args.outputname else world.seed)
 
     rom_names = []
     jsonout = {}
     if not args.suppress_rom:
-        for player in range(1, world.players + 1):
-            sprite_random_on_hit = type(args.sprite[player]) is str and args.sprite[player].lower() == 'randomonhit'
-            use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player] != 'none'
-                            or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
-                            or args.shufflepots[player] or sprite_random_on_hit)
+        for team in range(world.teams):
+            for player in range(1, world.players + 1):
+                sprite_random_on_hit = type(args.sprite[player]) is str and args.sprite[player].lower() == 'randomonhit'
+                use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player] != 'none'
+                                or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
+                                or args.shufflepots[player] or sprite_random_on_hit)
 
-            rom = JsonRom() if args.jsonout or use_enemizer else LocalRom(args.rom)
+                rom = JsonRom() if args.jsonout or use_enemizer else LocalRom(args.rom)
 
-            patch_rom(world, player, rom, use_enemizer)
-            rom_names.append((player, list(rom.name)))
+                patch_rom(world, rom, player, team, use_enemizer)
 
-            if use_enemizer and (args.enemizercli or not args.jsonout):
-                patch_enemizer(world, player, rom, args.rom, args.enemizercli, args.shufflepots[player], sprite_random_on_hit)
-                if not args.jsonout:
-                    patches = rom.patches
-                    rom = LocalRom(args.rom)
-                    rom.merge_enemizer_patches(patches)
+                if use_enemizer and (args.enemizercli or not args.jsonout):
+                    patch_enemizer(world, player, rom, args.rom, args.enemizercli, args.shufflepots[player], sprite_random_on_hit)
+                    if not args.jsonout:
+                        patches = rom.patches
+                        rom = LocalRom(args.rom)
+                        rom.merge_enemizer_patches(patches)
 
-            if args.race:
-                patch_race_rom(rom)
+                if args.race:
+                    patch_race_rom(rom)
 
-            apply_rom_settings(rom, args.heartbeep[player], args.heartcolor[player], args.quickswap[player], args.fastmenu[player], args.disablemusic[player], args.sprite[player], args.ow_palettes[player], args.uw_palettes[player], player_names)
+                rom_names.append((player, team, list(rom.name)))
+                world.spoiler.hashes[(player, team)] = get_hash_string(rom.hash)
 
-            if args.jsonout:
-                jsonout[f'patch{player}'] = rom.patches
-            else:
-                mcsb_name = ''
-                if all([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player], world.bigkeyshuffle[player]]):
-                    mcsb_name = '-keysanity'
-                elif [world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player], world.bigkeyshuffle[player]].count(True) == 1:
-                    mcsb_name = '-mapshuffle' if world.mapshuffle[player] else '-compassshuffle' if world.compassshuffle[player] else '-keyshuffle' if world.keyshuffle[player] else '-bigkeyshuffle'
-                elif any([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player], world.bigkeyshuffle[player]]):
-                    mcsb_name = '-%s%s%s%sshuffle' % (
-                    'M' if world.mapshuffle[player] else '', 'C' if world.compassshuffle[player] else '',
-                    'S' if world.keyshuffle[player] else '', 'B' if world.bigkeyshuffle[player] else '')
+                apply_rom_settings(rom, args.heartbeep[player], args.heartcolor[player], args.quickswap[player], args.fastmenu[player], args.disablemusic[player], args.sprite[player], args.ow_palettes[player], args.uw_palettes[player])
 
-                playername = f"{f'_P{player}' if world.players > 1 else ''}{f'_{player_names[player]}' if player in player_names else ''}"
-                outfilesuffix = ('_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (world.logic[player], world.difficulty[player], world.difficulty_adjustments[player],
-                                                                          world.mode[player], world.goal[player],
-                                                                          "" if world.timer in ['none', 'display'] else "-" + world.timer,
-                                                                          world.shuffle[player], world.algorithm, mcsb_name,
-                                                                          "-retro" if world.retro[player] else "",
-                                                                          "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "",
-                                                                          "-nohints" if not world.hints[player] else "")) if not args.outputname else ''
-                rom.write_to_file(output_path(f'{outfilebase}{playername}{outfilesuffix}.sfc'))
+                if args.jsonout:
+                    jsonout[f'patch_t{team}_p{player}'] = rom.patches
+                else:
+                    mcsb_name = ''
+                    if all([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player], world.bigkeyshuffle[player]]):
+                        mcsb_name = '-keysanity'
+                    elif [world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player], world.bigkeyshuffle[player]].count(True) == 1:
+                        mcsb_name = '-mapshuffle' if world.mapshuffle[player] else '-compassshuffle' if world.compassshuffle[player] else '-keyshuffle' if world.keyshuffle[player] else '-bigkeyshuffle'
+                    elif any([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player], world.bigkeyshuffle[player]]):
+                        mcsb_name = '-%s%s%s%sshuffle' % (
+                        'M' if world.mapshuffle[player] else '', 'C' if world.compassshuffle[player] else '',
+                        'S' if world.keyshuffle[player] else '', 'B' if world.bigkeyshuffle[player] else '')
 
-        multidata = zlib.compress(json.dumps((world.players,
-                                              rom_names,
+                    outfilepname = f'_T{team+1}' if world.teams > 1 else ''
+                    if world.players > 1:
+                        outfilepname += f'_P{player}'
+                        outfilepname += f"_{world.player_names[player][team].replace(' ', '_')}" if world.player_names[player][team] != 'Player %d' % player else ''
+                    outfilesuffix = ('_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (world.logic[player], world.difficulty[player], world.difficulty_adjustments[player],
+                                                                              world.mode[player], world.goal[player],
+                                                                              "" if world.timer in ['none', 'display'] else "-" + world.timer,
+                                                                              world.shuffle[player], world.algorithm, mcsb_name,
+                                                                              "-retro" if world.retro[player] else "",
+                                                                              "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "",
+                                                                              "-nohints" if not world.hints[player] else "")) if not args.outputname else ''
+                    rom.write_to_file(output_path(f'{outfilebase}{outfilepname}{outfilesuffix}.sfc'))
+
+        multidata = zlib.compress(json.dumps((parsed_names, rom_names,
                                               [((location.address, location.player), (location.item.code, location.item.player)) for location in world.get_filled_locations() if type(location.address) is int])
                                              ).encode("utf-8"))
         if args.jsonout:
@@ -215,6 +228,8 @@ def main(args, seed=None):
 def copy_world(world):
     # ToDo: Not good yet
     ret = World(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.difficulty_adjustments, world.timer, world.progressive, world.goal, world.algorithm, world.accessibility, world.shuffle_ganon, world.retro, world.custom, world.customitemarray, world.hints)
+    ret.teams = world.teams
+    ret.player_names = copy.deepcopy(world.player_names)
     ret.required_medallions = world.required_medallions.copy()
     ret.swamp_patch_required = world.swamp_patch_required.copy()
     ret.ganon_at_pyramid = world.ganon_at_pyramid.copy()
@@ -280,6 +295,7 @@ def copy_world(world):
             item = Item(location.item.name, location.item.advancement, location.item.priority, location.item.type, player = location.item.player)
             ret.get_location(location.name, location.player).item = item
             item.location = ret.get_location(location.name, location.player)
+            item.world = ret
         if location.event:
             ret.get_location(location.name, location.player).event = True
         if location.locked:
@@ -289,9 +305,11 @@ def copy_world(world):
     for item in world.itempool:
         ret.itempool.append(Item(item.name, item.advancement, item.priority, item.type, player = item.player))
 
+    for item in world.precollected_items:
+        ret.push_precollected(ItemFactory(item.name, item.player))
+
     # copy progress items in state
     ret.state.prog_items = world.state.prog_items.copy()
-    ret.precollected_items = world.precollected_items.copy()
     ret.state.stale = {player: True for player in range(1, world.players + 1)}
 
     for player in range(1, world.players + 1):
