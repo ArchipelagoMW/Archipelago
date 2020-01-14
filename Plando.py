@@ -24,6 +24,7 @@ def main(args):
 
     # initialize the world
     world = World(1, 'vanilla', 'noglitches', 'standard', 'normal', 'none', 'on', 'ganon', 'freshness', False, False, False, False, False, False, None, False)
+    world.player_names[1].append("Player 1")
     logger = logging.getLogger('')
 
     hasher = hashlib.md5()
@@ -69,7 +70,7 @@ def main(args):
     logger.info('Patching ROM.')
 
     rom = LocalRom(args.rom)
-    patch_rom(world, 1, rom, False)
+    patch_rom(world, rom, 1, 1, False)
 
     apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.fastmenu, args.disablemusic, args.sprite, args.ow_palettes, args.uw_palettes)
 

@@ -5,6 +5,7 @@ import functools
 import json
 import logging
 import re
+import shlex
 import urllib.request
 import websockets
 import zlib
@@ -27,7 +28,7 @@ class Context:
         self.data_filename = None
         self.save_filename = None
         self.disable_save = False
-        self.players = 0
+        self.player_names = {}
         self.rom_names = {}
         self.locations = {}
         self.host = host
@@ -41,15 +42,8 @@ class Context:
 def get_room_info(ctx : Context):
     return {
         'password': ctx.password is not None,
-        'slots': ctx.players,
         'players': [(client.name, client.team, client.slot) for client in ctx.clients if client.auth]
     }
-
-def same_name(lhs, rhs):
-    return lhs.lower() == rhs.lower()
-
-def same_team(lhs, rhs):
-    return (type(lhs) is type(rhs)) and ((not lhs and not rhs) or (lhs.lower() == rhs.lower()))
 
 async def send_msgs(websocket, msgs):
     if not websocket or not websocket.open or websocket.closed:
@@ -66,21 +60,21 @@ def broadcast_all(ctx : Context, msgs):
 
 def broadcast_team(ctx : Context, team, msgs):
     for client in ctx.clients:
-        if client.auth and same_team(client.team, team):
+        if client.auth and client.team == team:
             asyncio.create_task(send_msgs(client.socket, msgs))
 
 def notify_all(ctx : Context, text):
     print("Notice (all): %s" % text)
     broadcast_all(ctx, [['Print', text]])
 
-def notify_team(ctx : Context, team : str, text : str):
-    print("Team notice (%s): %s" % ("Default" if not team else team, text))
+def notify_team(ctx : Context, team : int, text : str):
+    print("Notice (Team #%d): %s" % (team+1, text))
     broadcast_team(ctx, team, [['Print', text]])
 
 def notify_client(client : Client, text : str):
     if not client.auth:
         return
-    print("Player notice (%s): %s" % (client.name, text))
+    print("Notice (Player %s in team %d): %s" % (client.name, client.team+1, text))
     asyncio.create_task(send_msgs(client.socket,  [['Print', text]]))
 
 async def server(websocket, path, ctx : Context):
@@ -113,10 +107,10 @@ async def on_client_disconnected(ctx : Context, client : Client):
         await on_client_left(ctx, client)
 
 async def on_client_joined(ctx : Context, client : Client):
-    notify_all(ctx, "%s has joined the game as player %d for %s" % (client.name, client.slot, "the default team" if not client.team else "team %s" % client.team))
+    notify_all(ctx, "%s (Team #%d) has joined the game" % (client.name, client.team + 1))
 
 async def on_client_left(ctx : Context, client : Client):
-    notify_all(ctx, "%s (Player %d, %s) has left the game" % (client.name, client.slot, "Default team" if not client.team else "Team %s" % client.team))
+    notify_all(ctx, "%s (Team #%d) has left the game" % (client.name, client.team + 1))
 
 async def countdown(ctx : Context, timer):
     notify_all(ctx, f'[Server]: Starting countdown of {timer}s')
@@ -136,37 +130,21 @@ def get_connected_players_string(ctx : Context):
     if not auth_clients:
         return 'No player connected'
 
-    auth_clients.sort(key=lambda c: ('' if not c.team else c.team.lower(), c.slot))
+    auth_clients.sort(key=lambda c: (c.team, c.slot))
     current_team = 0
-    text = ''
+    text = 'Team #1: '
     for c in auth_clients:
         if c.team != current_team:
-            text += '::' + ('default team' if not c.team else c.team) + ':: '
+            text += f':: Team #{c.team + 1}: '
             current_team = c.team
-        text += '%d:%s ' % (c.slot, c.name)
+        text += f'{c.name} '
     return 'Connected players: ' + text[:-1]
 
-def get_player_name_in_team(ctx : Context, team, slot):
-    for client in ctx.clients:
-        if client.auth and same_team(team, client.team) and client.slot == slot:
-            return client.name
-    return "Player %d" % slot
-
-def get_client_from_name(ctx : Context, name):
-    for client in ctx.clients:
-        if client.auth and same_name(name, client.name):
-            return client
-    return None
-
 def get_received_items(ctx : Context, team, player):
-    for (c_team, c_id), items in ctx.received_items.items():
-        if c_id == player and same_team(c_team, team):
-            return items
-    ctx.received_items[(team, player)] = []
-    return ctx.received_items[(team, player)]
+    return ctx.received_items.setdefault((team, player), [])
 
 def tuplize_received_items(items):
-    return [(item.item, item.location, item.player_id, item.player_name) for item in items]
+    return [(item.item, item.location, item.player) for item in items]
 
 def send_new_items(ctx : Context):
     for client in ctx.clients:
@@ -177,12 +155,12 @@ def send_new_items(ctx : Context):
             asyncio.create_task(send_msgs(client.socket, [['ReceivedItems', (client.send_index, tuplize_received_items(items)[client.send_index:])]]))
             client.send_index = len(items)
 
-def forfeit_player(ctx : Context, team, slot, name):
+def forfeit_player(ctx : Context, team, slot):
     all_locations = [values[0] for values in Regions.location_table.values() if type(values[0]) is int]
-    notify_all(ctx, "%s (Player %d) in team %s has forfeited" % (name, slot, team if team else 'default'))
-    register_location_checks(ctx, name, team, slot, all_locations)
+    notify_all(ctx, "%s (Team #%d) has forfeited" % (ctx.player_names[(team, slot)], team + 1))
+    register_location_checks(ctx, team, slot, all_locations)
 
-def register_location_checks(ctx : Context, name, team, slot, locations):
+def register_location_checks(ctx : Context, team, slot, locations):
     found_items = False
     for location in locations:
         if (location, slot) in ctx.locations:
@@ -191,23 +169,21 @@ def register_location_checks(ctx : Context, name, team, slot, locations):
                 found = False
                 recvd_items = get_received_items(ctx, team, target_player)
                 for recvd_item in recvd_items:
-                    if recvd_item.location == location and recvd_item.player_id == slot:
+                    if recvd_item.location == location and recvd_item.player == slot:
                         found = True
                         break
                 if not found:
-                    new_item = ReceivedItem(target_item, location, slot, name)
+                    new_item = ReceivedItem(target_item, location, slot)
                     recvd_items.append(new_item)
-                    target_player_name = get_player_name_in_team(ctx, team, target_player)
-                    broadcast_team(ctx, team, [['ItemSent', (name, target_player_name, target_item, location)]])
-                    print('(%s) %s sent %s to %s (%s)' % (team if team else 'Team', name, get_item_name_from_id(target_item), target_player_name, get_location_name_from_address(location)))
+                    broadcast_team(ctx, team, [['ItemSent', (slot, location, target_player, target_item)]])
+                    print('(Team #%d) %s sent %s to %s (%s)' % (team, ctx.player_names[(team, slot)], get_item_name_from_id(target_item), ctx.player_names[(team, target_player)], get_location_name_from_address(location)))
                     found_items = True
     send_new_items(ctx)
 
     if found_items and not ctx.disable_save:
         try:
             with open(ctx.save_filename, "wb") as f:
-                jsonstr = json.dumps((ctx.players,
-                                      [(k, v) for k, v in ctx.rom_names.items()],
+                jsonstr = json.dumps((list(ctx.rom_names.items()),
                                       [(k, [i.__dict__ for i in v]) for k, v in ctx.received_items.items()]))
                 f.write(zlib.compress(jsonstr.encode("utf-8")))
         except Exception as e:
@@ -221,50 +197,30 @@ async def process_client_cmd(ctx : Context, client : Client, cmd, args):
     if cmd == 'Connect':
         if not args or type(args) is not dict or \
                 'password' not in args or type(args['password']) not in [str, type(None)] or \
-                'name' not in args or type(args['name']) is not str or \
-                'team' not in args or type(args['team']) not in [str, type(None)] or \
-                'slot' not in args or type(args['slot']) not in [int, type(None)]:
+                'rom' not in args or type(args['rom']) is not list:
             await send_msgs(client.socket, [['InvalidArguments', 'Connect']])
             return
 
         errors = set()
-        if ctx.password is not None and ('password' not in args or args['password'] != ctx.password):
+        if ctx.password is not None and args['password'] != ctx.password:
             errors.add('InvalidPassword')
 
-        if 'name' not in args or not args['name'] or not re.match(r'\w{1,10}', args['name']):
-            errors.add('InvalidName')
-        elif any([same_name(c.name, args['name']) for c in ctx.clients if c.auth]):
-            errors.add('NameAlreadyTaken')
+        if tuple(args['rom']) not in ctx.rom_names:
+            errors.add('InvalidRom')
         else:
-            client.name = args['name']
-
-        if 'team' in args and args['team'] is not None and not re.match(r'\w{1,15}', args['team']):
-            errors.add('InvalidTeam')
-        else:
-            client.team = args['team'] if 'team' in args else None
-
-        if 'slot' in args and any([c.slot == args['slot'] for c in ctx.clients if c.auth and same_team(c.team, client.team)]):
-            errors.add('SlotAlreadyTaken')
-        elif 'slot' not in args or not args['slot']:
-            for slot in range(1, ctx.players + 1):
-                if slot not in [c.slot for c in ctx.clients if c.auth and same_team(c.team, client.team)]:
-                    client.slot = slot
-                    break
-                elif slot == ctx.players:
-                    errors.add('SlotAlreadyTaken')
-        elif args['slot'] not in range(1, ctx.players + 1):
-            errors.add('InvalidSlot')
-        else:
-            client.slot = args['slot']
+            team, slot = ctx.rom_names[tuple(args['rom'])]
+            if any([c.slot == slot and c.team == team for c in ctx.clients if c.auth]):
+                errors.add('SlotAlreadyTaken')
+            else:
+                client.name = ctx.player_names[(team, slot)]
+                client.team = team
+                client.slot = slot
 
         if errors:
-            client.name = None
-            client.team = None
-            client.slot = None
             await send_msgs(client.socket, [['ConnectionRefused', list(errors)]])
         else:
             client.auth = True
-            reply = [['Connected', ctx.rom_names[client.slot]]]
+            reply = [['Connected', [(client.team, client.slot), [(p, n) for (t, p), n in ctx.player_names.items() if t == client.team]]]]
             items = get_received_items(ctx, client.team, client.slot)
             if items:
                 reply.append(['ReceivedItems', (0, tuplize_received_items(items))])
@@ -285,7 +241,7 @@ async def process_client_cmd(ctx : Context, client : Client, cmd, args):
         if type(args) is not list:
             await send_msgs(client.socket, [['InvalidArguments', 'LocationChecks']])
             return
-        register_location_checks(ctx, client.name, client.team, client.slot, args)
+        register_location_checks(ctx, client.team, client.slot, args)
 
     if cmd == 'Say':
         if type(args) is not str or not args.isprintable():
@@ -297,7 +253,7 @@ async def process_client_cmd(ctx : Context, client : Client, cmd, args):
         if args.startswith('!players'):
             notify_all(ctx, get_connected_players_string(ctx))
         if args.startswith('!forfeit'):
-            forfeit_player(ctx, client.team, client.slot, client.name)
+            forfeit_player(ctx, client.team, client.slot)
         if args.startswith('!countdown'):
             try:
                 timer = int(args.split()[1])
@@ -313,7 +269,7 @@ async def console(ctx : Context):
     while True:
         input = await aioconsole.ainput()
 
-        command = input.split()
+        command = shlex.split(input)
         if not command:
             continue
 
@@ -326,27 +282,34 @@ async def console(ctx : Context):
         if command[0] == '/password':
             set_password(ctx, command[1] if len(command) > 1 else None)
         if command[0] == '/kick' and len(command) > 1:
-            client = get_client_from_name(ctx, command[1])
-            if client and client.socket and not client.socket.closed:
-                await client.socket.close()
+            team = int(command[2]) - 1 if len(command) > 2 and command[2].isdigit() else None
+            for client in ctx.clients:
+                if client.auth and client.name.lower() == command[1].lower() and (team is None or team == client.team):
+                    if client.socket and not client.socket.closed:
+                        await client.socket.close()
 
-        if command[0] == '/forfeitslot' and len(command) == 3 and command[2].isdigit():
-            team = command[1] if command[1] != 'default' else None
-            slot = int(command[2])
-            name = get_player_name_in_team(ctx, team, slot)
-            forfeit_player(ctx, team, slot, name)
+        if command[0] == '/forfeitslot' and len(command) > 1 and command[1].isdigit():
+            if len(command) > 2 and command[2].isdigit():
+                team = int(command[1]) - 1
+                slot = int(command[2])
+            else:
+                team = 0
+                slot = int(command[1])
+            forfeit_player(ctx, team, slot)
         if command[0] == '/forfeitplayer' and len(command) > 1:
-            client = get_client_from_name(ctx, command[1])
-            if client:
-                forfeit_player(ctx, client.team, client.slot, client.name)
+            team = int(command[2]) - 1 if len(command) > 2 and command[2].isdigit() else None
+            for client in ctx.clients:
+                if client.auth and client.name.lower() == command[1].lower() and (team is None or team == client.team):
+                    if client.socket and not client.socket.closed:
+                        forfeit_player(ctx, client.team, client.slot)
         if command[0] == '/senditem' and len(command) > 2:
             [(player, item)] = re.findall(r'\S* (\S*) (.*)', input)
             if item in Items.item_table:
-                client = get_client_from_name(ctx, player)
-                if client:
-                    new_item = ReceivedItem(Items.item_table[item][3], "cheat console", 0, "server")
-                    get_received_items(ctx, client.team, client.slot).append(new_item)
-                    notify_all(ctx, 'Cheat console: sending "' + item + '" to ' + client.name)
+                for client in ctx.clients:
+                    if client.auth and client.name.lower() == player.lower():
+                        new_item = ReceivedItem(Items.item_table[item][3], "cheat console", client.slot)
+                        get_received_items(ctx, client.team, client.slot).append(new_item)
+                        notify_all(ctx, 'Cheat console: sending "' + item + '" to ' + client.name)
                 send_new_items(ctx)
             else:
                 print("Unknown item: " + item)
@@ -378,15 +341,17 @@ async def main():
 
         with open(ctx.data_filename, 'rb') as f:
             jsonobj = json.loads(zlib.decompress(f.read()).decode("utf-8"))
-            ctx.players = jsonobj[0]
-            ctx.rom_names = {k: v for k, v in jsonobj[1]}
+            for team, names in enumerate(jsonobj[0]):
+                for player, name in enumerate(names, 1):
+                    ctx.player_names[(team, player)] = name
+            ctx.rom_names = {tuple(rom): (team, slot) for slot, team, rom in jsonobj[1]}
             ctx.locations = {tuple(k): tuple(v) for k, v in jsonobj[2]}
     except Exception as e:
         print('Failed to read multiworld data (%s)' % e)
         return
 
     ip = urllib.request.urlopen('https://v4.ident.me').read().decode('utf8') if not ctx.host else ctx.host
-    print('Hosting game of %d players (%s) at %s:%d' % (ctx.players, 'No password' if not ctx.password else 'Password: %s' % ctx.password, ip, ctx.port))
+    print('Hosting game at %s:%d (%s)' % (ip, ctx.port, 'No password' if not ctx.password else 'Password: %s' % ctx.password))
 
     ctx.disable_save = args.disable_save
     if not ctx.disable_save:
@@ -395,10 +360,9 @@ async def main():
         try:
             with open(ctx.save_filename, 'rb') as f:
                 jsonobj = json.loads(zlib.decompress(f.read()).decode("utf-8"))
-                players = jsonobj[0]
-                rom_names = {k: v for k, v in jsonobj[1]}
-                received_items = {tuple(k): [ReceivedItem(**i) for i in v] for k, v in jsonobj[2]}
-                if players != ctx.players or rom_names != ctx.rom_names:
+                rom_names = jsonobj[0]
+                received_items = {tuple(k): [ReceivedItem(**i) for i in v] for k, v in jsonobj[1]}
+                if not all([ctx.rom_names[tuple(rom)] == (team, slot) for rom, (team, slot) in rom_names]):
                     raise Exception('Save file mismatch, will start a new game')
                 ctx.received_items = received_items
                 print('Loaded save file with %d received items for %d players' % (sum([len(p) for p in received_items.values()]), len(received_items)))

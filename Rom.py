@@ -27,6 +27,7 @@ class JsonRom(object):
 
     def __init__(self):
         self.name = None
+        self.hash = None
         self.orig_buffer = None
         self.patches = {}
         self.addresses = []
@@ -72,6 +73,7 @@ class LocalRom(object):
 
     def __init__(self, file, patch=True):
         self.name = None
+        self.hash = None
         self.orig_buffer = None
         with open(file, 'rb') as stream:
             self.buffer = read_rom(stream)
@@ -469,7 +471,7 @@ class Sprite(object):
         # split into palettes of 15 colors
         return array_chunk(palette_as_colors, 15)
 
-def patch_rom(world, player, rom, enemized):
+def patch_rom(world, rom, player, team, enemized):
     random.seed(world.rom_seeds[player])
 
     # progressive bow silver arrow hint hack
@@ -1222,13 +1224,18 @@ def patch_rom(world, player, rom, enemized):
         rom.write_byte(0xFED31, 0x2A)  # preopen bombable exit
         rom.write_byte(0xFEE41, 0x2A)  # preopen bombable exit
 
-    write_strings(rom, world, player)
+    write_strings(rom, world, player, team)
 
     # set rom name
     # 21 bytes
     from Main import __version__
-    rom.name = bytearray('ER{0}_{1}_{2:09}\0'.format(__version__.split('-')[0].replace('.','')[0:3], player, world.seed), 'utf8')
-    rom.write_bytes(0x7FC0, rom.name[0:21])
+    rom.name = bytearray(f'ER{__version__.split("-")[0].replace(".","")[0:3]}_{team+1}_{player}_{world.seed:09}\0', 'utf8')[:21]
+    rom.name.extend([0] * (21 - len(rom.name)))
+    rom.write_bytes(0x7FC0, rom.name)
+
+    # set player names
+    for p in range(1, min(world.players, 64) + 1):
+        rom.write_bytes(0x186380 + ((p - 1) * 32), hud_format_text(world.player_names[p][team]))
 
     # Write title screen Code
     hashint = int(rom.get_hash(), 16)
@@ -1240,6 +1247,7 @@ def patch_rom(world, player, rom, enemized):
         hashint & 0x1F,
     ]
     rom.write_bytes(0x180215, code)
+    rom.hash = code
 
     return rom
 
@@ -1303,7 +1311,7 @@ def hud_format_text(text):
     return output[:32]
 
 
-def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite, ow_palettes, uw_palettes, names = None):
+def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite, ow_palettes, uw_palettes):
     if sprite and not isinstance(sprite, Sprite):
         sprite = Sprite(sprite) if os.path.isfile(sprite) else get_sprite_from_name(sprite)
 
@@ -1371,11 +1379,6 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
         randomize_uw_palettes(rom)
     elif uw_palettes == 'blackout':
         blackout_uw_palettes(rom)
-
-    # set player names
-    for player, name in names.items():
-        if 0 < player <= 64:
-            rom.write_bytes(0x186380 + ((player - 1) * 32), hud_format_text(name))
 
     if isinstance(rom, LocalRom):
         rom.write_crc()
@@ -1513,12 +1516,15 @@ def blackout_uw_palettes(rom):
         rom.write_bytes(i+44, [0] * 76)
         rom.write_bytes(i+136, [0] * 44)
 
+def get_hash_string(hash):
+    return ", ".join([hash_alphabet[code & 0x1F] for code in hash])
+
 def write_string_to_rom(rom, target, string):
     address, maxbytes = text_addresses[target]
     rom.write_bytes(address, MultiByteTextMapper.convert(string, maxbytes))
 
 
-def write_strings(rom, world, player):
+def write_strings(rom, world, player, team):
     tt = TextTable()
     tt.removeUnwantedText()
 
@@ -1536,11 +1542,11 @@ def write_strings(rom, world, player):
             hint = dest.hint_text if dest.hint_text else "something"
         if dest.player != player:
             if ped_hint:
-                hint += " for p%d!" % dest.player
+                hint += f" for {world.player_names[dest.player][team]}!"
             elif type(dest) in [Region, Location]:
-                hint += " in p%d's world" % dest.player
+                hint += f" in {world.player_names[dest.player][team]}'s world"
             else:
-                hint += " for p%d" % dest.player
+                hint += f" for {world.player_names[dest.player][team]}"
         return hint
 
     # For hints, first we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
@@ -2281,3 +2287,9 @@ BigKeys = ['Big Key (Eastern Palace)',
            'Big Key (Turtle Rock)',
            'Big Key (Ganons Tower)'
            ]
+
+hash_alphabet = [
+    "Bow", "Boomerang", "Hookshot", "Bomb", "Mushroom", "Powder", "Rod", "Pendant", "Bombos", "Ether", "Quake",
+    "Lamp", "Hammer", "Shovel", "Ocarina", "Bug Net", "Book", "Bottle", "Potion", "Cane", "Cape", "Mirror", "Boots",
+    "Gloves", "Flippers", "Pearl", "Shield", "Tunic", "Heart", "Map", "Compass", "Key"
+]

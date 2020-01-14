@@ -39,6 +39,7 @@ def main():
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=1, type=lambda value: min(max(int(value), 1), 255))
     parser.add_argument('--names', default='')
+    parser.add_argument('--teams', default=1, type=lambda value: max(int(value), 1))
     parser.add_argument('--create_spoiler', action='store_true')
     parser.add_argument('--rom')
     parser.add_argument('--enemizercli')
