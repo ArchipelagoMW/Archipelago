@@ -121,5 +121,4 @@ if __name__ == "__main__":
                         os.remove(file)
                         print(f"Removed file {file} that is now present in the zipfile")
 
-    serverfile = "HintedMultiServer.py" if os.path.exists("HintedMultiServer.py") else "MultiServer.py"
-    subprocess.call(f"py -{py_version} {serverfile} --multidata {os.path.join(outputpath, multidataname)}")
+    subprocess.call(f"py -{py_version} MultiServer.py --multidata {os.path.join(outputpath, multidataname)}")
