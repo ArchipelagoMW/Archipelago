@@ -315,24 +315,23 @@ async def console(ctx : Context):
                 else:
                     print("Unknown item: " + item)
             if command[0] == '/hint':
-                team = int(command[2]) - 1 if len(command) > 2 and command[2].isdigit() else None
-                for client in ctx.clients:
-                    if client.auth and client.name.lower() == command[1].lower() and (team is None or team == client.team):
+                for (team,slot), name in ctx.player_names.items():
+                    if len(command) == 1:
+                        print("Use /hint {Playername} {itemname}\nFor example /hint Berserker Lamp")
+                    elif name.lower() == command[1].lower():
                         item = " ".join(command[2:])
                         if item in Items.item_table:
                             seeked_item_id = Items.item_table[item][3]
                             for check, result in ctx.locations.items():
                                 item_id, receiving_player = result
-                                print(receiving_player, client.slot)
-                                if receiving_player == client.slot and item_id == seeked_item_id:
+                                if receiving_player == slot and item_id == seeked_item_id:
                                     location_id, finding_player = check
-                                    notify_all(ctx, f"[Hint]: P{client.name}'s {item} can be found in {get_location_name_from_address(location_id)} in "
-                                          f"P{finding_player}'s World")
-
+                                    name_finder = ctx.player_names[team, finding_player]
+                                    hint = f"[Hint]: {name}'s {item} can be found in " \
+                                           f"{get_location_name_from_address(location_id)} in {name_finder}'s World"
+                                    notify_team(ctx, team, hint)
                         else:
                             print("Unknown item: " + item)
-                else:
-                    print("Use /hint {Playername} {itemname}\nFor example /hint Berserker Lamp")
             if command[0][0] != '/':
                 notify_all(ctx, '[Server]: ' + input)
         except:
