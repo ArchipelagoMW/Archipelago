@@ -37,7 +37,8 @@ def parse_arguments(argv, no_defaults=False):
                              Overworld Glitches: May require overworld glitches. Starts with
                                              boots.
                              No Logic: Distribute items without regard for
-                                             item requirements.
+                                             item requirements. Starts with
+                                             boots
                              ''')
     parser.add_argument('--mode', default=defval('open'), const='open', nargs='?', choices=['standard', 'open', 'inverted'],
                         help='''\
