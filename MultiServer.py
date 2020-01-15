@@ -39,12 +39,6 @@ class Context:
         self.clients = []
         self.received_items = {}
 
-def get_room_info(ctx : Context):
-    return {
-        'password': ctx.password is not None,
-        'players': [(client.name, client.team, client.slot) for client in ctx.clients if client.auth]
-    }
-
 async def send_msgs(websocket, msgs):
     if not websocket or not websocket.open or websocket.closed:
         return
@@ -100,7 +94,10 @@ async def server(websocket, path, ctx : Context):
         ctx.clients.remove(client)
 
 async def on_client_connected(ctx : Context, client : Client):
-    await send_msgs(client.socket, [['RoomInfo', get_room_info(ctx)]])
+    await send_msgs(client.socket, [['RoomInfo', {
+        'password': ctx.password is not None,
+        'players': [(client.team, client.slot, client.name) for client in ctx.clients if client.auth]
+    }]])
 
 async def on_client_disconnected(ctx : Context, client : Client):
     if client.auth:
