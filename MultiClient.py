@@ -618,13 +618,13 @@ async def process_server_cmd(ctx : Context, cmd, args):
         if len(args['players']) < 1:
             print('No player connected')
         else:
-            args['players'].sort(key=lambda _, t, s: (t, s))
+            args['players'].sort()
             current_team = 0
             print('Connected players:')
             print('  Team #1')
-            for name, team, slot in args['players']:
+            for team, slot, name in args['players']:
                 if team != current_team:
-                    print('  Team #d' % team + 1)
+                    print(f'  Team #{team + 1}')
                     current_team = team
                 print('    %s (Player %d)' % (name, slot))
         await server_auth(ctx, args['password'])
