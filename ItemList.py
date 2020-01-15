@@ -51,8 +51,8 @@ difficulties = {
         progressivearmor = ['Progressive Armor'] * 2,
         basicarmor = ['Blue Mail', 'Red Mail'],
         swordless = ['Rupees (20)'] * 4,
-        progressivesword = ['Progressive Sword'] * 3,
-        basicsword = ['Master Sword', 'Tempered Sword', 'Golden Sword'],
+        progressivesword = ['Progressive Sword'] * 4,
+        basicsword = ['Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
         basicbow = ['Bow', 'Silver Arrows'],
         timedohko = ['Green Clock'] * 25,
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
@@ -78,8 +78,8 @@ difficulties = {
         progressivearmor = ['Progressive Armor'] * 2,
         basicarmor = ['Progressive Armor'] * 2, # neither will count
         swordless =  ['Rupees (20)'] * 4,
-        progressivesword =  ['Progressive Sword'] * 3,
-        basicsword = ['Master Sword', 'Master Sword', 'Tempered Sword'],
+        progressivesword =  ['Progressive Sword'] * 4,
+        basicsword = ['Fighter Sword', 'Master Sword', 'Master Sword', 'Tempered Sword'],
         basicbow = ['Bow'] * 2,
         timedohko = ['Green Clock'] * 25,
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
@@ -105,8 +105,8 @@ difficulties = {
         progressivearmor = ['Progressive Armor'] * 2, # neither will count
         basicarmor = ['Progressive Armor'] * 2, # neither will count
         swordless = ['Rupees (20)'] * 4,
-        progressivesword = ['Progressive Sword'] * 3,
-        basicsword = ['Fighter Sword', 'Master Sword', 'Master Sword'],
+        progressivesword = ['Progressive Sword'] * 4,
+        basicsword = ['Fighter Sword', 'Fighter Sword', 'Master Sword', 'Master Sword'],
         basicbow = ['Bow'] * 2,
         timedohko = ['Green Clock'] * 20 + ['Red Clock'] * 5,
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
@@ -269,7 +269,7 @@ take_any_locations = [
     'Bonk Fairy (Dark)', 'Lake Hylia Healer Fairy', 'Swamp Healer Fairy', 'Desert Healer Fairy',
     'Dark Lake Hylia Healer Fairy', 'Dark Lake Hylia Ledge Healer Fairy', 'Dark Desert Healer Fairy',
     'Dark Death Mountain Healer Fairy', 'Long Fairy Cave', 'Good Bee Cave', '20 Rupee Cave',
-    'Kakariko Gamble Game', 'Capacity Upgrade', '50 Rupee Cave', 'Lost Woods Gamble', 'Hookshot Fairy',
+    'Kakariko Gamble Game', '50 Rupee Cave', 'Lost Woods Gamble', 'Hookshot Fairy',
     'Palace of Darkness Hint', 'East Dark World Hint', 'Archery Game', 'Dark Lake Hylia Ledge Hint',
     'Dark Lake Hylia Ledge Spike Cave', 'Fortune Teller (Dark)', 'Dark Sanctuary Hint', 'Dark Desert Hint']
 
@@ -287,9 +287,8 @@ def set_up_take_anys(world, player):
     entrance = world.get_region(reg, player).entrances[0]
     connect_entrance(world, entrance, old_man_take_any, player)
     entrance.target = 0x58
-    old_man_take_any.shop = Shop(old_man_take_any, 0x0112, ShopType.TakeAny, 0xE2, True)
+    old_man_take_any.shop = Shop(old_man_take_any, 0x0112, ShopType.TakeAny, 0xE2, True, True)
     world.shops.append(old_man_take_any.shop)
-    old_man_take_any.shop.active = True
 
     swords = [item for item in world.itempool if item.type == 'Sword' and item.player == player]
     if swords:
@@ -310,9 +309,8 @@ def set_up_take_anys(world, player):
         entrance = world.get_region(reg, player).entrances[0]
         connect_entrance(world, entrance, take_any, player)
         entrance.target = target
-        take_any.shop = Shop(take_any, room_id, ShopType.TakeAny, 0xE3, True)
+        take_any.shop = Shop(take_any, room_id, ShopType.TakeAny, 0xE3, True, True)
         world.shops.append(take_any.shop)
-        take_any.shop.active = True
         take_any.shop.add_inventory(0, 'Blue Potion', 0, 0)
         take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0)
 
@@ -365,26 +363,19 @@ def fill_prizes(world, attempts=15):
 
 
 def set_up_shops(world, player):
-    # Changes to basic Shops
     # TODO: move hard+ mode changes for sheilds here, utilizing the new shops
-
-    for shop in world.shops:
-        shop.active = True
 
     if world.retro[player]:
         rss = world.get_region('Red Shield Shop', player).shop
-        rss.active = True
-        rss.add_inventory(2, 'Single Arrow', 80)
-
-    # Randomized changes to Shops
-    if world.retro[player]:
-        for shop in random.sample([s for s in world.shops if s.replaceable and s.region.player == player], 5):
-            shop.active = True
+        if not rss.locked:
+            rss.add_inventory(2, 'Single Arrow', 80)
+        for shop in random.sample([s for s in world.shops if s.custom and not s.locked and s.region.player == player], 5):
+            shop.locked = True
             shop.add_inventory(0, 'Single Arrow', 80)
             shop.add_inventory(1, 'Small Key (Universal)', 100)
             shop.add_inventory(2, 'Bombs (10)', 50)
+        rss.locked = True
 
-    #special shop types
 
 def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, retro, logic):
     pool = []
@@ -449,34 +440,17 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
     else:
         pool.extend(diff.basicarmor)
 
-    if swords != 'swordless':
-        if want_progressives():
-            pool.extend(['Progressive Bow'] * 2)
-        else:
-            pool.extend(diff.basicbow)
+    if want_progressives():
+        pool.extend(['Progressive Bow'] * 2)
+    elif swords != 'swordless':
+        pool.extend(diff.basicbow)
+    else:
+        pool.extend(['Bow', 'Silver Arrows'])
 
     if swords == 'swordless':
         pool.extend(diff.swordless)
-        if want_progressives():
-            pool.extend(['Progressive Bow'] * 2)
-        else:
-            pool.extend(['Bow', 'Silver Arrows'])
-    elif swords == 'assured':
-        precollected_items.append('Fighter Sword')
-        if want_progressives():
-            pool.extend(diff.progressivesword)
-            pool.extend(['Rupees (100)'])
-        else:
-            pool.extend(diff.basicsword)
-            pool.extend(['Rupees (100)'])
     elif swords == 'vanilla':
-        swords_to_use = []
-        if want_progressives():
-            swords_to_use.extend(diff.progressivesword)
-            swords_to_use.extend(['Progressive Sword'])
-        else:
-            swords_to_use.extend(diff.basicsword)
-            swords_to_use.extend(['Fighter Sword'])
+        swords_to_use = diff.progressivesword.copy() if want_progressives() else diff.basicsword.copy()
         random.shuffle(swords_to_use)
 
         place_item('Link\'s Uncle', swords_to_use.pop())
@@ -487,12 +461,15 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
         else:
             place_item('Master Sword Pedestal', 'Triforce')
     else:
-        if want_progressives():
-            pool.extend(diff.progressivesword)
-            pool.extend(['Progressive Sword'])
-        else:
-            pool.extend(diff.basicsword)
-            pool.extend(['Fighter Sword'])
+        pool.extend(diff.progressivesword if want_progressives() else diff.basicsword)
+        if swords == 'assured':
+            if want_progressives():
+                precollected_items.append('Progressive Sword')
+                pool.remove('Progressive Sword')
+            else:
+                precollected_items.append('Fighter Sword')
+                pool.remove('Fighter Sword')
+            pool.extend(['Rupees (50)'])
 
     extraitems = total_items_to_place - len(pool) - len(placed_items)
 

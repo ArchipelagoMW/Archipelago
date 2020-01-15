@@ -6,6 +6,7 @@ import textwrap
 import sys
 
 from AdjusterMain import adjust
+from Rom import get_sprite_from_name
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
 
@@ -15,7 +16,8 @@ class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
 def main():
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('--rom', default='ER_base.sfc', help='Path to an ALttP JAP(1.0) rom to use as a base.')
+    parser.add_argument('--rom', default='ER_base.sfc', help='Path to an ALttPR rom to adjust.')
+    parser.add_argument('--baserom', default='Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', help='Path to an ALttP JAP(1.0) rom to use as a base.')
     parser.add_argument('--loglevel', default='info', const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
     parser.add_argument('--fastmenu', default='normal', const='normal', nargs='?', choices=['normal', 'instant', 'double', 'triple', 'quadruple', 'half'],
                         help='''\
@@ -31,6 +33,8 @@ def main():
                              ''')
     parser.add_argument('--heartcolor', default='red', const='red', nargs='?', choices=['red', 'blue', 'green', 'yellow', 'random'],
                         help='Select the color of Link\'s heart meter. (default: %(default)s)')
+    parser.add_argument('--ow_palettes', default='default', choices=['default', 'random', 'blackout'])
+    parser.add_argument('--uw_palettes', default='default', choices=['default', 'random', 'blackout'])
     parser.add_argument('--sprite', help='''\
                              Path to a sprite sheet to use for Link. Needs to be in
                              binary format and have a length of 0x7000 (28672) bytes,
@@ -43,10 +47,10 @@ def main():
 
     # ToDo: Validate files further than mere existance
     if not os.path.isfile(args.rom):
-        input('Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
+        input('Could not find valid rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
         sys.exit(1)
-    if args.sprite is not None and not os.path.isfile(args.sprite):
-        input('Could not find link sprite sheet at given location. \nPress Enter to exit.' % args.sprite)
+    if args.sprite is not None and not os.path.isfile(args.sprite) and not get_sprite_from_name(args.sprite):
+        input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
         sys.exit(1)
 
     # set up logger

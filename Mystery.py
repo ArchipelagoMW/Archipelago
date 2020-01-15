@@ -8,15 +8,18 @@ from EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 
 def parse_yaml(txt):
+    def strip(s):
+        s = s.strip()
+        return '' if not s else s.strip('"') if s[0] == '"' else s.strip("'") if s[0] == "'" else s
     ret = {}
     indents = {len(txt) - len(txt.lstrip(' ')): ret}
     for line in txt.splitlines():
         if not line:
             continue
         name, val = line.split(':', 1)
-        val = val.strip()
+        val = strip(val)
         spaces = len(name) - len(name.lstrip(' '))
-        name = name.strip()
+        name = strip(name)
         if val:
             indents[spaces][name] = val
         else:
@@ -36,6 +39,7 @@ def main():
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=1, type=lambda value: min(max(int(value), 1), 255))
     parser.add_argument('--names', default='')
+    parser.add_argument('--teams', default=1, type=lambda value: max(int(value), 1))
     parser.add_argument('--create_spoiler', action='store_true')
     parser.add_argument('--rom')
     parser.add_argument('--enemizercli')
@@ -75,7 +79,8 @@ def main():
 
     if args.rom:
         erargs.rom = args.rom
-    erargs.enemizercli = args.enemizercli
+    if args.enemizercli:
+        erargs.enemizercli = args.enemizercli
 
     settings_cache = {k: (roll_settings(v) if args.samesettings else None) for k, v in weights_cache.items()}
 
@@ -84,7 +89,8 @@ def main():
         if path:
             settings = settings_cache[path] if settings_cache[path] else roll_settings(weights_cache[path])
             for k, v in vars(settings).items():
-                getattr(erargs, k)[player] = v
+                if v is not None:
+                    getattr(erargs, k)[player] = v
         else:
             raise RuntimeError(f'No weights specified for player {player}')
 
@@ -108,8 +114,14 @@ def get_weights(path):
     return parse_yaml(yaml)
 
 def roll_settings(weights):
-    def get_choice(option):
-        return random.choices(list(weights[option].keys()), weights=list(map(int,weights[option].values())))[0].replace('"','').replace("'",'')
+    def get_choice(option, root=weights):
+        if option not in root:
+            return None
+        if type(root[option]) is not dict:
+            return root[option]
+        if not root[option]:
+            return None
+        return random.choices(list(root[option].keys()), weights=list(map(int,root[option].values())))[0]
 
     ret = argparse.Namespace()
 
@@ -122,84 +134,85 @@ def roll_settings(weights):
     item_placement = get_choice('item_placement')
     # not supported in ER
 
-    if {'map_shuffle', 'compass_shuffle', 'smallkey_shuffle', 'bigkey_shuffle'}.issubset(weights.keys()):
-        ret.mapshuffle = get_choice('map_shuffle') == 'on'
-        ret.compassshuffle = get_choice('compass_shuffle') == 'on'
-        ret.keyshuffle = get_choice('smallkey_shuffle') == 'on'
-        ret.bigkeyshuffle = get_choice('bigkey_shuffle') == 'on'
-    else:
-        dungeon_items = get_choice('dungeon_items')
-        ret.mapshuffle = dungeon_items in ['mc', 'mcs', 'full']
-        ret.compassshuffle = dungeon_items in ['mc', 'mcs', 'full']
-        ret.keyshuffle = dungeon_items in ['mcs', 'full']
-        ret.bigkeyshuffle = dungeon_items in ['full']
+    dungeon_items = get_choice('dungeon_items')
+    ret.mapshuffle = get_choice('map_shuffle') == 'on' if 'map_shuffle' in weights else dungeon_items in ['mc', 'mcs', 'full']
+    ret.compassshuffle = get_choice('compass_shuffle') == 'on' if 'compass_shuffle' in weights else dungeon_items in ['mc', 'mcs', 'full']
+    ret.keyshuffle = get_choice('smallkey_shuffle') == 'on' if 'smallkey_shuffle' in weights else dungeon_items in ['mcs', 'full']
+    ret.bigkeyshuffle = get_choice('bigkey_shuffle') == 'on' if 'bigkey_shuffle' in weights else dungeon_items in ['full']
 
-    accessibility = get_choice('accessibility')
-    ret.accessibility = accessibility
+    ret.accessibility = get_choice('accessibility')
 
     entrance_shuffle = get_choice('entrance_shuffle')
     ret.shuffle = entrance_shuffle if entrance_shuffle != 'none' else 'vanilla'
 
-    goals = get_choice('goals')
     ret.goal = {'ganon': 'ganon',
                 'fast_ganon': 'crystals',
                 'dungeons': 'dungeons',
                 'pedestal': 'pedestal',
                 'triforce-hunt': 'triforcehunt'
-                }[goals]
-    ret.openpyramid = goals == 'fast_ganon'
+                }[get_choice('goals')]
+    ret.openpyramid = ret.goal == 'fast_ganon'
 
-    tower_open = get_choice('tower_open')
-    ret.crystals_gt = tower_open
+    ret.crystals_gt = get_choice('tower_open')
 
-    ganon_open = get_choice('ganon_open')
-    ret.crystals_ganon = ganon_open
+    ret.crystals_ganon =  get_choice('ganon_open')
 
-    world_state = get_choice('world_state')
-    ret.mode = world_state
-    if world_state == 'retro':
+    ret.mode = get_choice('world_state')
+    if ret.mode == 'retro':
         ret.mode = 'open'
         ret.retro = True
 
-    hints = get_choice('hints')
-    ret.hints = hints == 'on'
+    ret.hints = get_choice('hints') == 'on'
 
-    weapons = get_choice('weapons')
     ret.swords = {'randomized': 'random',
                   'assured': 'assured',
                   'vanilla': 'vanilla',
                   'swordless': 'swordless'
-                  }[weapons]
+                  }[get_choice('weapons')]
 
-    item_pool = get_choice('item_pool')
-    ret.difficulty = item_pool
+    ret.difficulty = get_choice('item_pool')
 
-    item_functionality = get_choice('item_functionality')
-    ret.item_functionality = item_functionality
+    ret.item_functionality = get_choice('item_functionality')
 
-    boss_shuffle = get_choice('boss_shuffle')
     ret.shufflebosses = {'none': 'none',
                          'simple': 'basic',
                          'full': 'normal',
                          'random': 'chaos'
-                         }[boss_shuffle]
+                         }[get_choice('boss_shuffle')]
 
-    enemy_shuffle = get_choice('enemy_shuffle')
     ret.shuffleenemies = {'none': 'none',
                           'shuffled': 'shuffled',
                           'random': 'chaos'
-                          }[enemy_shuffle]
+                          }[get_choice('enemy_shuffle')]
 
-    enemy_damage = get_choice('enemy_damage')
     ret.enemy_damage = {'default': 'default',
                         'shuffled': 'shuffled',
                         'random': 'chaos'
-                        }[enemy_damage]
+                        }[get_choice('enemy_damage')]
 
-    enemy_health = get_choice('enemy_health')
-    ret.enemy_health = enemy_health
+    ret.enemy_health = get_choice('enemy_health')
 
-    ret.beemizer = int(get_choice('beemizer')) if 'beemizer' in weights.keys() else 1 # suck it :)
+    ret.shufflepots = get_choice('pot_shuffle') == 'on'
+
+    ret.beemizer = int(get_choice('beemizer')) if 'beemizer' in weights else 0
+
+    inventoryweights = weights.get('startinventory', {})
+    startitems = []
+    for item in inventoryweights.keys():
+        if get_choice(item, inventoryweights) == 'on':
+            startitems.append(item)
+    ret.startinventory = ','.join(startitems)
+
+    if 'rom' in weights:
+        romweights = weights['rom']
+        ret.sprite = get_choice('sprite', romweights)
+        ret.disablemusic = get_choice('disablemusic', romweights) == 'on'
+        ret.quickswap = get_choice('quickswap', romweights) == 'on'
+        ret.fastmenu = get_choice('menuspeed', romweights)
+        ret.heartcolor = get_choice('heartcolor', romweights)
+        ret.heartbeep = get_choice('heartbeep', romweights)
+        ret.ow_palettes = get_choice('ow_palettes', romweights)
+        ret.uw_palettes = get_choice('uw_palettes', romweights)
 
     return ret
 

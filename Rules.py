@@ -918,7 +918,6 @@ def overworld_glitches_rules(world, player):
         for spot in mini_moldorm_cave.locations:
             add_rule(world.get_location(spot, player), superbunny_mirror_sword, 'or')
     add_rule(world.get_location('Spiral Cave', player), superbunny_mirror_sword, 'or')
->>>>>>> c677a875f2a124bd0930467b2952e0587d24839b
     add_conditional_lamps(world, player)
 
 

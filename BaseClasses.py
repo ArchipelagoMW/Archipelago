@@ -9,8 +9,9 @@ from Utils import int16_as_bytes
 
 class World(object):
 
-    def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive, goal, algorithm, accessibility, shuffle_ganon, quickswap, fastmenu, disable_music, retro, custom, customitemarray, hints):
+    def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive, goal, algorithm, accessibility, shuffle_ganon, retro, custom, customitemarray, hints):
         self.players = players
+        self.teams = 1
         self.shuffle = shuffle.copy()
         self.logic = logic.copy()
         self.mode = mode.copy()
@@ -44,9 +45,6 @@ class World(object):
         self.accessibility = accessibility.copy()
         self.shuffle_ganon = shuffle_ganon
         self.fix_gtower_exit = self.shuffle_ganon
-        self.quickswap = quickswap
-        self.fastmenu = fastmenu
-        self.disable_music = disable_music
         self.retro = retro.copy()
         self.custom = custom
         self.customitemarray = customitemarray
@@ -61,6 +59,7 @@ class World(object):
             def set_player_attr(attr, val):
                 self.__dict__.setdefault(attr, {})[player] = val
             set_player_attr('_region_cache', {})
+            set_player_attr('player_names', [])
             set_player_attr('required_medallions', ['Ether', 'Quake'])
             set_player_attr('swamp_patch_required', False)
             set_player_attr('powder_patch_required', False)
@@ -92,6 +91,12 @@ class World(object):
             set_player_attr('open_pyramid', False)
             set_player_attr('treasure_hunt_icon', 'Triforce Piece')
             set_player_attr('treasure_hunt_count', 0)
+
+    def get_name_string_for_object(self, obj):
+        return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_names(obj.player)})'
+
+    def get_player_names(self, player):
+        return ", ".join([name for i, name in enumerate(self.player_names[player]) if self.player_names[player].index(name) == i])
 
     def initialize_regions(self, regions=None):
         for region in regions if regions else self.regions:
@@ -214,6 +219,9 @@ class World(object):
         return [location for location in self.get_locations() if location.item is not None and location.item.name == item and location.item.player == player]
 
     def push_precollected(self, item):
+        item.world = self
+        if (item.smallkey and self.keyshuffle[item.player]) or (item.bigkey and self.bigkeyshuffle[item.player]):
+            item.advancement = True
         self.precollected_items.append(item)
         self.state.collect(item, True)
 
@@ -224,6 +232,7 @@ class World(object):
         if location.can_fill(self.state, item, False):
             location.item = item
             item.location = location
+            item.world = self
             if collect:
                 self.state.collect(item, location.event, location)
 
@@ -708,10 +717,7 @@ class Region(object):
         return str(self.__unicode__())
 
     def __unicode__(self):
-        if self.world and self.world.players == 1:
-            return self.name
-        else:
-            return '%s (Player %d)' % (self.name, self.player)
+        return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
 
 
 class Entrance(object):
@@ -747,11 +753,8 @@ class Entrance(object):
         return str(self.__unicode__())
 
     def __unicode__(self):
-        if self.parent_region and self.parent_region.world and self.parent_region.world.players == 1:
-            return self.name
-        else:
-            return '%s (Player %d)' % (self.name, self.player)
-
+        world = self.parent_region.world if self.parent_region else None
+        return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
 
 class Dungeon(object):
 
@@ -788,10 +791,7 @@ class Dungeon(object):
         return str(self.__unicode__())
 
     def __unicode__(self):
-        if self.world and self.world.players==1:
-            return self.name
-        else:
-            return '%s (Player %d)' % (self.name, self.player)
+        return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
 
 class Boss(object):
     def __init__(self, name, enemizer_name, defeat_rule, player):
@@ -834,10 +834,8 @@ class Location(object):
         return str(self.__unicode__())
 
     def __unicode__(self):
-        if self.parent_region and self.parent_region.world and self.parent_region.world.players == 1:
-            return self.name
-        else:
-            return '%s (Player %d)' % (self.name, self.player)
+        world = self.parent_region.world if self.parent_region and self.parent_region.world else None
+        return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
 
 
 class Item(object):
@@ -856,6 +854,7 @@ class Item(object):
         self.hint_text = hint_text
         self.code = code
         self.location = None
+        self.world = None
         self.player = player
 
     @property
@@ -882,10 +881,7 @@ class Item(object):
         return str(self.__unicode__())
 
     def __unicode__(self):
-        if self.location and self.location.parent_region and self.location.parent_region.world and self.location.parent_region.world.players == 1:
-            return self.name
-        else:
-            return '%s (Player %d)' % (self.name, self.player)
+        return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
 
 
 # have 6 address that need to be filled
@@ -899,14 +895,14 @@ class ShopType(Enum):
     UpgradeShop = 2
 
 class Shop(object):
-    def __init__(self, region, room_id, type, shopkeeper_config, replaceable):
+    def __init__(self, region, room_id, type, shopkeeper_config, custom, locked):
         self.region = region
         self.room_id = room_id
         self.type = type
         self.inventory = [None, None, None]
         self.shopkeeper_config = shopkeeper_config
-        self.replaceable = replaceable
-        self.active = False
+        self.custom = custom
+        self.locked = locked
 
     @property
     def item_count(self):
@@ -958,10 +954,12 @@ class Spoiler(object):
 
     def __init__(self, world):
         self.world = world
+        self.hashes = {}
         self.entrances = OrderedDict()
         self.medallions = {}
         self.playthrough = {}
         self.unreachables = []
+        self.startinventory = []
         self.locations = {}
         self.paths = {}
         self.metadata = {}
@@ -981,8 +979,10 @@ class Spoiler(object):
             self.medallions['Turtle Rock'] = self.world.required_medallions[1][1]
         else:
             for player in range(1, self.world.players + 1):
-                self.medallions['Misery Mire (Player %d)' % player] = self.world.required_medallions[player][0]
-                self.medallions['Turtle Rock (Player %d)' % player] = self.world.required_medallions[player][1]
+                self.medallions[f'Misery Mire ({self.world.get_player_names(player)})'] = self.world.required_medallions[player][0]
+                self.medallions[f'Turtle Rock ({self.world.get_player_names(player)})'] = self.world.required_medallions[player][1]
+
+        self.startinventory = list(map(str, self.world.precollected_items))
 
         self.locations = OrderedDict()
         listed_locations = set()
@@ -1011,7 +1011,7 @@ class Spoiler(object):
 
         self.shops = []
         for shop in self.world.shops:
-            if not shop.active:
+            if not shop.custom:
                 continue
             shopdata = {'location': str(shop.region),
                         'type': 'Take Any' if shop.type == ShopType.TakeAny else 'Shop'
@@ -1073,7 +1073,8 @@ class Spoiler(object):
                          'enemy_shuffle': self.world.enemy_shuffle,
                          'enemy_health': self.world.enemy_health,
                          'enemy_damage': self.world.enemy_damage,
-                         'players': self.world.players
+                         'players': self.world.players,
+                         'teams': self.world.teams
                          }
 
     def to_json(self):
@@ -1081,7 +1082,10 @@ class Spoiler(object):
         out = OrderedDict()
         out['Entrances'] = list(self.entrances.values())
         out.update(self.locations)
+        out['Starting Inventory'] = self.startinventory
         out['Special'] = self.medallions
+        if self.hashes:
+            out['Hashes'] = {f"{self.world.player_names[player][team]} (Team {team+1})": hash for (player, team), hash in self.hashes.items()}
         if self.shops:
             out['Shops'] = self.shops
         out['playthrough'] = self.playthrough
@@ -1095,48 +1099,50 @@ class Spoiler(object):
         self.parse_data()
         with open(filename, 'w') as outfile:
             outfile.write('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n' % (self.metadata['version'], self.world.seed))
-            outfile.write('Players:                         %d\n' % self.world.players)
             outfile.write('Filling Algorithm:               %s\n' % self.world.algorithm)
-            outfile.write('Logic:                           %s\n' % self.metadata['logic'])
-            outfile.write('Mode:                            %s\n' % self.metadata['mode'])
-            outfile.write('Retro:                           %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['retro'].items()})
-            outfile.write('Swords:                          %s\n' % self.metadata['weapons'])
-            outfile.write('Goal:                            %s\n' % self.metadata['goal'])
-            outfile.write('Difficulty:                      %s\n' % self.metadata['item_pool'])
-            outfile.write('Item Functionality:              %s\n' % self.metadata['item_functionality'])
-            outfile.write('Entrance Shuffle:                %s\n' % self.metadata['shuffle'])
-            outfile.write('Crystals required for GT:        %s\n' % self.metadata['gt_crystals'])
-            outfile.write('Crystals required for Ganon:     %s\n' % self.metadata['ganon_crystals'])
-            outfile.write('Pyramid hole pre-opened:         %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['open_pyramid'].items()})
-            outfile.write('Accessibility:                   %s\n' % self.metadata['accessibility'])
-            outfile.write('Map shuffle:                     %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['mapshuffle'].items()})
-            outfile.write('Compass shuffle:                 %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['compassshuffle'].items()})
-            outfile.write('Small Key shuffle:               %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['keyshuffle'].items()})
-            outfile.write('Big Key shuffle:                 %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['bigkeyshuffle'].items()})
-            outfile.write('Boss shuffle:                    %s\n' % self.metadata['boss_shuffle'])
-            outfile.write('Enemy shuffle:                   %s\n' % self.metadata['enemy_shuffle'])
-            outfile.write('Enemy health:                    %s\n' % self.metadata['enemy_health'])
-            outfile.write('Enemy damage:                    %s\n' % self.metadata['enemy_damage'])
-            outfile.write('Hints:                           %s\n' % {k: 'Yes' if v else 'No' for k, v in self.metadata['hints'].items()})
-            outfile.write('L\\R Quickswap enabled:           %s\n' % ('Yes' if self.world.quickswap else 'No'))
-            outfile.write('Menu speed:                      %s' % self.world.fastmenu)
+            outfile.write('Players:                         %d\n' % self.world.players)
+            outfile.write('Teams:                           %d\n' % self.world.teams)
+            for player in range(1, self.world.players + 1):
+                if self.world.players > 1:
+                    outfile.write('\nPlayer %d: %s\n' % (player, self.world.get_player_names(player)))
+                for team in range(self.world.teams):
+                    outfile.write('%s%s\n' % (f"Hash - {self.world.player_names[player][team]} (Team {team+1}): " if self.world.teams > 1 else 'Hash: ', self.hashes[player, team]))
+                outfile.write('Logic:                           %s\n' % self.metadata['logic'][player])
+                outfile.write('Mode:                            %s\n' % self.metadata['mode'][player])
+                outfile.write('Retro:                           %s\n' % ('Yes' if self.metadata['retro'][player] else 'No'))
+                outfile.write('Swords:                          %s\n' % self.metadata['weapons'][player])
+                outfile.write('Goal:                            %s\n' % self.metadata['goal'][player])
+                outfile.write('Difficulty:                      %s\n' % self.metadata['item_pool'][player])
+                outfile.write('Item Functionality:              %s\n' % self.metadata['item_functionality'][player])
+                outfile.write('Entrance Shuffle:                %s\n' % self.metadata['shuffle'][player])
+                outfile.write('Crystals required for GT:        %s\n' % self.metadata['gt_crystals'][player])
+                outfile.write('Crystals required for Ganon:     %s\n' % self.metadata['ganon_crystals'][player])
+                outfile.write('Pyramid hole pre-opened:         %s\n' % ('Yes' if self.metadata['open_pyramid'][player] else 'No'))
+                outfile.write('Accessibility:                   %s\n' % self.metadata['accessibility'][player])
+                outfile.write('Map shuffle:                     %s\n' % ('Yes' if self.metadata['mapshuffle'][player] else 'No'))
+                outfile.write('Compass shuffle:                 %s\n' % ('Yes' if self.metadata['compassshuffle'][player] else 'No'))
+                outfile.write('Small Key shuffle:               %s\n' % ('Yes' if self.metadata['keyshuffle'][player] else 'No'))
+                outfile.write('Big Key shuffle:                 %s\n' % ('Yes' if self.metadata['bigkeyshuffle'][player] else 'No'))
+                outfile.write('Boss shuffle:                    %s\n' % self.metadata['boss_shuffle'][player])
+                outfile.write('Enemy shuffle:                   %s\n' % self.metadata['enemy_shuffle'][player])
+                outfile.write('Enemy health:                    %s\n' % self.metadata['enemy_health'][player])
+                outfile.write('Enemy damage:                    %s\n' % self.metadata['enemy_damage'][player])
+                outfile.write('Hints:                           %s\n' % ('Yes' if self.metadata['hints'][player] else 'No'))
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
-                outfile.write('\n'.join(['%s%s %s %s' % ('Player {0}: '.format(entry['player']) if self.world.players >1 else '', entry['entrance'], '<=>' if entry['direction'] == 'both' else '<=' if entry['direction'] == 'exit' else '=>', entry['exit']) for entry in self.entrances.values()]))
-            outfile.write('\n\nMedallions\n')
-            if self.world.players == 1:
-                outfile.write('\nMisery Mire Medallion: %s' % (self.medallions['Misery Mire']))
-                outfile.write('\nTurtle Rock Medallion: %s' % (self.medallions['Turtle Rock']))
-            else:
-                for player in range(1, self.world.players + 1):
-                    outfile.write('\nMisery Mire Medallion (Player %d): %s' % (player, self.medallions['Misery Mire (Player %d)' % player]))
-                    outfile.write('\nTurtle Rock Medallion (Player %d): %s' % (player, self.medallions['Turtle Rock (Player %d)' % player]))
+                outfile.write('\n'.join(['%s%s %s %s' % (f'{self.world.get_player_names(entry["player"])}: ' if self.world.players > 1 else '', entry['entrance'], '<=>' if entry['direction'] == 'both' else '<=' if entry['direction'] == 'exit' else '=>', entry['exit']) for entry in self.entrances.values()]))
+            outfile.write('\n\nMedallions:\n')
+            for dungeon, medallion in self.medallions.items():
+                outfile.write(f'\n{dungeon}: {medallion}')
+            if self.startinventory:
+                outfile.write('\n\nStarting Inventory:\n\n')
+                outfile.write('\n'.join(self.startinventory))
             outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(['%s: %s' % (location, item) for grouping in self.locations.values() for (location, item) in grouping.items()]))
             outfile.write('\n\nShops:\n\n')
             outfile.write('\n'.join("{} [{}]\n    {}".format(shop['location'], shop['type'], "\n    ".join(item for item in [shop.get('item_0', None), shop.get('item_1', None), shop.get('item_2', None)] if item)) for shop in self.shops))
             outfile.write('\n\nPlaythrough:\n\n')
-            outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(['  %s: %s' % (location, item) for (location, item) in sphere.items()])) for (sphere_nr, sphere) in self.playthrough.items()]))
+            outfile.write('\n'.join(['%s: {\n%s\n}' % (sphere_nr, '\n'.join(['  %s: %s' % (location, item) for (location, item) in sphere.items()] if sphere_nr != '0' else [f'  {item}' for item in sphere])) for (sphere_nr, sphere) in self.playthrough.items()]))
             if self.unreachables:
                 outfile.write('\n\nUnreachable Items:\n\n')
                 outfile.write('\n'.join(['%s: %s' % (unreachable.item, unreachable) for unreachable in self.unreachables]))

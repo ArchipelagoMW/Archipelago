@@ -9,13 +9,13 @@ import struct
 import sys
 import subprocess
 
-from BaseClasses import ShopType, Region, Location, Item
+from BaseClasses import CollectionState, ShopType, Region, Location
 from Dungeons import dungeon_music_addresses
 from Text import MultiByteTextMapper, CompressedTextMapper, text_addresses, Credits, TextTable
 from Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts, junk_texts
 from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
 from Utils import output_path, local_path, int16_as_bytes, int32_as_bytes, snes_to_pc
-from Items import ItemFactory, item_table
+from Items import ItemFactory
 from EntranceShuffle import door_addresses
 
 
@@ -25,8 +25,10 @@ JAP10HASH = '03a63945398191337e896e5771f77173'
 
 class JsonRom(object):
 
-    def __init__(self):
-        self.name = None
+    def __init__(self, name=None, hash=None):
+        self.name = name
+        self.hash = hash
+        self.orig_buffer = None
         self.patches = {}
         self.addresses = []
 
@@ -36,8 +38,7 @@ class JsonRom(object):
     def write_bytes(self, startaddress, values):
         if not values:
             return
-        if type(values) is not list:
-            values = list(values)
+        values = list(values)
 
         pos = bisect.bisect_right(self.addresses, startaddress)
         intervalstart = self.addresses[pos-1] if pos else None
@@ -70,12 +71,15 @@ class JsonRom(object):
 
 class LocalRom(object):
 
-    def __init__(self, file, patch=True):
-        self.name = None
+    def __init__(self, file, patch=True, name=None, hash=None):
+        self.name = name
+        self.hash = hash
+        self.orig_buffer = None
         with open(file, 'rb') as stream:
             self.buffer = read_rom(stream)
         if patch:
             self.patch_base_rom()
+            self.orig_buffer = self.buffer.copy()
 
     def write_byte(self, address, value):
         self.buffer[address] = value
@@ -87,6 +91,14 @@ class LocalRom(object):
     def write_to_file(self, file):
         with open(file, 'wb') as outfile:
             outfile.write(self.buffer)
+
+    @staticmethod
+    def fromJsonRom(rom, file, rom_size = 0x200000):
+        ret = LocalRom(file, True, rom.name, rom.hash)
+        ret.buffer.extend(bytearray([0x00] * (rom_size - len(ret.buffer))))
+        for address, values in rom.patches.items():
+            ret.write_bytes(int(address), values)
+        return ret
 
     def patch_base_rom(self):
         # verify correct checksum of baserom
@@ -111,24 +123,6 @@ class LocalRom(object):
         # patchedmd5.update(self.buffer)
         # if RANDOMIZERBASEHASH != patchedmd5.hexdigest():
         #     raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
-
-    def patch_enemizer(self, rando_patch, base_enemizer_patch_path, enemizer_patch):
-        # extend to 4MB
-        self.buffer.extend(bytearray([0x00] * (0x400000 - len(self.buffer))))
-
-        # apply randomizer patches
-        for address, values in rando_patch.items():
-            self.write_bytes(int(address), values)
-
-        # load base enemizer patches
-        with open(base_enemizer_patch_path, 'r') as f:
-            base_enemizer_patch = json.load(f)
-        for patch in base_enemizer_patch:
-            self.write_bytes(patch["address"], patch["patchData"])
-
-        # apply enemizer patches
-        for patch in enemizer_patch:
-            self.write_bytes(patch["address"], patch["patchData"])
 
     def write_crc(self):
         crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
@@ -161,9 +155,10 @@ def read_rom(stream):
         buffer = buffer[0x200:]
     return buffer
 
-def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepalette, shufflepots):
+def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, random_sprite_on_hit):
     baserom_path = os.path.abspath(baserom_path)
     basepatch_path = os.path.abspath(local_path('data/base2current.json'))
+    enemizer_basepatch_path = os.path.join(os.path.dirname(enemizercli), "enemizerBasePatch.json")
     randopatch_path = os.path.abspath(output_path('enemizer_randopatch.json'))
     options_path = os.path.abspath(output_path('enemizer_options.json'))
     enemizer_output_path = os.path.abspath(output_path('enemizer_output.json'))
@@ -197,10 +192,10 @@ def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepal
         'RandomizeBossDamageMinAmount': 0,
         'RandomizeBossDamageMaxAmount': 200,
         'RandomizeBossBehavior': False,
-        'RandomizeDungeonPalettes': shufflepalette,
+        'RandomizeDungeonPalettes': False,
         'SetBlackoutMode': False,
-        'RandomizeOverworldPalettes': shufflepalette,
-        'RandomizeSpritePalettes': shufflepalette,
+        'RandomizeOverworldPalettes': False,
+        'RandomizeSpritePalettes': False,
         'SetAdvancedSpritePalettes': False,
         'PukeMode': False,
         'NegativeMode': False,
@@ -221,7 +216,7 @@ def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepal
         'RandomizeTileTrapPattern': world.enemy_shuffle[player] == 'chaos',
         'RandomizeTileTrapFloorTile': False,
         'AllowKillableThief': bool(random.randint(0,1)) if world.enemy_shuffle[player] == 'chaos' else world.enemy_shuffle[player] != 'none',
-        'RandomizeSpriteOnHit': False,
+        'RandomizeSpriteOnHit': random_sprite_on_hit,
         'DebugMode': False,
         'DebugForceEnemy': False,
         'DebugForceEnemyId': 0,
@@ -243,20 +238,13 @@ def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepal
             'IcePalace': world.get_dungeon("Ice Palace", player).boss.enemizer_name,
             'MiseryMire': world.get_dungeon("Misery Mire", player).boss.enemizer_name,
             'TurtleRock': world.get_dungeon("Turtle Rock", player).boss.enemizer_name,
+            'GanonsTower1': world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower', player).bosses['bottom'].enemizer_name,
+            'GanonsTower2': world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower', player).bosses['middle'].enemizer_name,
+            'GanonsTower3': world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower', player).bosses['top'].enemizer_name,
             'GanonsTower4': 'Agahnim2',
             'Ganon': 'Ganon',
         }
     }
-
-    if world.mode[player] != 'inverted':
-        options['ManualBosses']['GanonsTower1'] = world.get_dungeon('Ganons Tower', player).bosses['bottom'].enemizer_name
-        options['ManualBosses']['GanonsTower2'] = world.get_dungeon('Ganons Tower', player).bosses['middle'].enemizer_name
-        options['ManualBosses']['GanonsTower3'] = world.get_dungeon('Ganons Tower', player).bosses['top'].enemizer_name
-    else:
-        options['ManualBosses']['GanonsTower1'] = world.get_dungeon('Inverted Ganons Tower', player).bosses['bottom'].enemizer_name
-        options['ManualBosses']['GanonsTower2'] = world.get_dungeon('Inverted Ganons Tower', player).bosses['middle'].enemizer_name
-        options['ManualBosses']['GanonsTower3'] = world.get_dungeon('Inverted Ganons Tower', player).bosses['top'].enemizer_name
-
 
     rom.write_to_file(randopatch_path)
 
@@ -272,19 +260,61 @@ def get_enemizer_patch(world, player, rom, baserom_path, enemizercli, shufflepal
                            '--output', enemizer_output_path],
                           cwd=os.path.dirname(enemizercli), stdout=subprocess.DEVNULL)
 
+    with open(enemizer_basepatch_path, 'r') as f:
+        for patch in json.load(f):
+            rom.write_bytes(patch["address"], patch["patchData"])
+
     with open(enemizer_output_path, 'r') as f:
-        ret = json.load(f)
+        for patch in json.load(f):
+            rom.write_bytes(patch["address"], patch["patchData"])
 
-    if os.path.exists(randopatch_path):
+    if random_sprite_on_hit:
+        _populate_sprite_table()
+        sprites = list(_sprite_table.values())
+        if sprites:
+            while len(sprites) < 32:
+                sprites.extend(sprites)
+            random.shuffle(sprites)
+
+            for i, path in enumerate(sprites[:32]):
+                sprite = Sprite(path)
+                rom.write_bytes(0x300000 + (i * 0x8000), sprite.sprite)
+                rom.write_bytes(0x307000 + (i * 0x8000), sprite.palette)
+                rom.write_bytes(0x307078 + (i * 0x8000), sprite.glove_palette)
+
+    try:
         os.remove(randopatch_path)
+    except OSError:
+        pass
 
-    if os.path.exists(options_path):
+    try:
         os.remove(options_path)
+    except OSError:
+        pass
 
-    if os.path.exists(enemizer_output_path):
+    try:
         os.remove(enemizer_output_path)
+    except OSError:
+        pass
 
-    return ret
+_sprite_table = {}
+def _populate_sprite_table():
+    if not _sprite_table:
+        for dir in [local_path('data/sprites/official'), local_path('data/sprites/unofficial')]:
+            for file in os.listdir(dir):
+                filepath = os.path.join(dir, file)
+                if not os.path.isfile(filepath):
+                    continue
+                sprite = Sprite(filepath)
+                if sprite.valid:
+                    _sprite_table[sprite.name.lower()] = filepath
+
+def get_sprite_from_name(name):
+    _populate_sprite_table()
+    name = name.lower()
+    if name in ['random', 'randomonhit']:
+        return Sprite(random.choice(list(_sprite_table.values())))
+    return Sprite(_sprite_table[name]) if name in _sprite_table else None
 
 class Sprite(object):
     default_palette = [255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
@@ -444,7 +474,7 @@ class Sprite(object):
         # split into palettes of 15 colors
         return array_chunk(palette_as_colors, 15)
 
-def patch_rom(world, player, rom, enemized):
+def patch_rom(world, rom, player, team, enemized):
     random.seed(world.rom_seeds[player])
 
     # progressive bow silver arrow hint hack
@@ -895,30 +925,158 @@ def patch_rom(world, player, rom, enemized):
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
     rom.write_byte(0x180174, 0x01 if world.fix_fake_world[player] else 0x00)
     rom.write_byte(0x18017E, 0x01) # Fairy fountains only trade in bottles
-    rom.write_byte(0x180034, 0x0A) # starting max bombs
-    rom.write_byte(0x180035, 30) # starting max arrows
-    for x in range(0x183000, 0x18304F):
-        rom.write_byte(x, 0) # Zero the initial equipment array
-    rom.write_byte(0x18302C, 0x18) # starting max health
-    rom.write_byte(0x18302D, 0x18) # starting current health
-    ability_flags = 0x68 # starting abilities, bit array; may be modified by precollected items
-    
+
+    # Starting equipment
+    equip = [0] * (0x340 + 0x4F)
+    equip[0x36C] = 0x18
+    equip[0x36D] = 0x18
+    equip[0x379] = 0x68
+    starting_max_bombs = 10
+    starting_max_arrows = 30
+
+    startingstate = CollectionState(world)
+
+    if startingstate.has('Bow', player):
+        equip[0x340] = 1
+        equip[0x38E] |= 0x20 # progressive flag to get the correct hint in all cases
+        if not world.retro[player]:
+            equip[0x38E] |= 0x80
+    if startingstate.has('Silver Arrows', player):
+        equip[0x38E] |= 0x40
+
+    if startingstate.has('Titans Mitts', player):
+        equip[0x354] = 2
+    elif startingstate.has('Power Glove', player):
+        equip[0x354] = 1
+
+    if startingstate.has('Golden Sword', player):
+        equip[0x359] = 4
+    elif startingstate.has('Tempered Sword', player):
+        equip[0x359] = 3
+    elif startingstate.has('Master Sword', player):
+        equip[0x359] = 2
+    elif startingstate.has('Fighter Sword', player):
+        equip[0x359] = 1
+
+    if startingstate.has('Mirror Shield', player):
+        equip[0x35A] = 3
+    elif startingstate.has('Red Shield', player):
+        equip[0x35A] = 2
+    elif startingstate.has('Blue Shield', player):
+        equip[0x35A] = 1
+
+    if startingstate.has('Red Mail', player):
+        equip[0x35B] = 2
+    elif startingstate.has('Blue Mail', player):
+        equip[0x35B] = 1
+
+    if startingstate.has('Magic Upgrade (1/4)', player):
+        equip[0x37B] = 2
+        equip[0x36E] = 0x80
+    elif startingstate.has('Magic Upgrade (1/2)', player):
+        equip[0x37B] = 1
+        equip[0x36E] = 0x80
+
     for item in world.precollected_items:
         if item.player != player:
             continue
 
-        if item.name == 'Fighter Sword':
-            rom.write_byte(0x183000+0x19, 0x01)
-            rom.write_byte(0x0271A6+0x19, 0x01)
-            rom.write_byte(0x180043, 0x01) # special starting sword byte
-        elif item.name == 'Pegasus Boots':
-            rom.write_byte(0x183015, 0x01)
-            ability_flags |= 0b00000100
-        else:
-            raise RuntimeError("Unsupported pre-collected item: {}".format(item))
+        if item.name in ['Bow', 'Silver Arrows', 'Progressive Bow', 'Progressive Bow (Alt)',
+                         'Titans Mitts', 'Power Glove', 'Progressive Glove',
+                         'Golden Sword', 'Tempered Sword', 'Master Sword', 'Fighter Sword', 'Progressive Sword',
+                         'Mirror Shield', 'Red Shield', 'Blue Shield', 'Progressive Shield',
+                         'Red Mail', 'Blue Mail', 'Progressive Armor',
+                         'Magic Upgrade (1/4)', 'Magic Upgrade (1/2)']:
+            continue
 
-    # write abilities after ability flags have been determined
-    rom.write_byte(0x183039, ability_flags)
+        set_table = {'Book of Mudora': (0x34E, 1), 'Hammer': (0x34B, 1), 'Bug Catching Net': (0x34D, 1), 'Hookshot': (0x342, 1), 'Magic Mirror': (0x353, 2),
+                     'Cape': (0x352, 1), 'Lamp': (0x34A, 1), 'Moon Pearl': (0x357, 1), 'Cane of Somaria': (0x350, 1), 'Cane of Byrna': (0x351, 1),
+                     'Fire Rod': (0x345, 1), 'Ice Rod': (0x346, 1), 'Bombos': (0x347, 1), 'Ether': (0x348, 1), 'Quake': (0x349, 1)}
+        or_table = {'Green Pendant': (0x374, 0x04), 'Red Pendant': (0x374, 0x01), 'Blue Pendant': (0x374, 0x02),
+                    'Crystal 1': (0x37A, 0x02), 'Crystal 2': (0x37A, 0x10), 'Crystal 3': (0x37A, 0x40), 'Crystal 4': (0x37A, 0x20),
+                    'Crystal 5': (0x37A, 0x04), 'Crystal 6': (0x37A, 0x01), 'Crystal 7': (0x37A, 0x08),
+                    'Big Key (Eastern Palace)': (0x367, 0x20), 'Compass (Eastern Palace)': (0x365, 0x20), 'Map (Eastern Palace)': (0x369, 0x20),
+                    'Big Key (Desert Palace)': (0x367, 0x10), 'Compass (Desert Palace)': (0x365, 0x10), 'Map (Desert Palace)': (0x369, 0x10),
+                    'Big Key (Tower of Hera)': (0x366, 0x20), 'Compass (Tower of Hera)': (0x364, 0x20), 'Map (Tower of Hera)': (0x368, 0x20),
+                    'Big Key (Escape)': (0x367, 0xC0), 'Compass (Escape)': (0x365, 0xC0), 'Map (Escape)': (0x369, 0xC0),
+                    'Big Key (Palace of Darkness)': (0x367, 0x02), 'Compass (Palace of Darkness)': (0x365, 0x02), 'Map (Palace of Darkness)': (0x369, 0x02),
+                    'Big Key (Thieves Town)': (0x366, 0x10), 'Compass (Thieves Town)': (0x364, 0x10), 'Map (Thieves Town)': (0x368, 0x10),
+                    'Big Key (Skull Woods)': (0x366, 0x80), 'Compass (Skull Woods)': (0x364, 0x80), 'Map (Skull Woods)': (0x368, 0x80),
+                    'Big Key (Swamp Palace)': (0x367, 0x04), 'Compass (Swamp Palace)': (0x365, 0x04), 'Map (Swamp Palace)': (0x369, 0x04),
+                    'Big Key (Ice Palace)': (0x366, 0x40), 'Compass (Ice Palace)': (0x364, 0x40), 'Map (Ice Palace)': (0x368, 0x40),
+                    'Big Key (Misery Mire)': (0x367, 0x01), 'Compass (Misery Mire)': (0x365, 0x01), 'Map (Misery Mire)': (0x369, 0x01),
+                    'Big Key (Turtle Rock)': (0x366, 0x08), 'Compass (Turtle Rock)': (0x364, 0x08), 'Map (Turtle Rock)': (0x368, 0x08),
+                    'Big Key (Ganons Tower)': (0x366, 0x04), 'Compass (Ganons Tower)': (0x364, 0x04), 'Map (Ganons Tower)': (0x368, 0x04)}
+        set_or_table = {'Flippers': (0x356, 1, 0x379, 0x02),'Pegasus Boots': (0x355, 1, 0x379, 0x04),
+                        'Shovel': (0x34C, 1, 0x38C, 0x04), 'Ocarina': (0x34C, 3, 0x38C, 0x01),
+                        'Mushroom': (0x344, 1, 0x38C, 0x20 | 0x08), 'Magic Powder': (0x344, 2, 0x38C, 0x10),
+                        'Blue Boomerang': (0x341, 1, 0x38C, 0x80), 'Red Boomerang': (0x341, 2, 0x38C, 0x40)}
+        keys = {'Small Key (Eastern Palace)': [0x37E], 'Small Key (Desert Palace)': [0x37F],
+                'Small Key (Tower of Hera)': [0x386],
+                'Small Key (Agahnims Tower)': [0x380], 'Small Key (Palace of Darkness)': [0x382],
+                'Small Key (Thieves Town)': [0x387],
+                'Small Key (Skull Woods)': [0x384], 'Small Key (Swamp Palace)': [0x381],
+                'Small Key (Ice Palace)': [0x385],
+                'Small Key (Misery Mire)': [0x383], 'Small Key (Turtle Rock)': [0x388],
+                'Small Key (Ganons Tower)': [0x389],
+                'Small Key (Universal)': [0x38B], 'Small Key (Escape)': [0x37C, 0x37D]}
+        bottles = {'Bottle': 2, 'Bottle (Red Potion)': 3, 'Bottle (Green Potion)': 4, 'Bottle (Blue Potion)': 5,
+                   'Bottle (Fairy)': 6, 'Bottle (Bee)': 7, 'Bottle (Good Bee)': 8}
+        rupees = {'Rupee (1)': 1, 'Rupees (5)': 5, 'Rupees (20)': 20, 'Rupees (50)': 50, 'Rupees (100)': 100, 'Rupees (300)': 300}
+        bomb_caps = {'Bomb Upgrade (+5)': 5, 'Bomb Upgrade (+10)': 10}
+        arrow_caps = {'Arrow Upgrade (+5)': 5, 'Arrow Upgrade (+10)': 10}
+        bombs = {'Single Bomb': 1, 'Bombs (3)': 3, 'Bombs (10)': 10}
+        arrows = {'Single Arrow': 1, 'Arrows (10)': 10}
+
+        if item.name in set_table:
+            equip[set_table[item.name][0]] = set_table[item.name][1]
+        elif item.name in or_table:
+            equip[or_table[item.name][0]] |= or_table[item.name][1]
+        elif item.name in set_or_table:
+            equip[set_or_table[item.name][0]] = set_or_table[item.name][1]
+            equip[set_or_table[item.name][2]] |= set_or_table[item.name][3]
+        elif item.name in keys:
+            for address in keys[item.name]:
+                equip[address] = min(equip[address] + 1, 99)
+        elif item.name in bottles:
+            if equip[0x34F] < world.difficulty_requirements[player].progressive_bottle_limit:
+                equip[0x35C + equip[0x34F]] = bottles[item.name]
+                equip[0x34F] += 1
+        elif item.name in rupees:
+            equip[0x360:0x362] = list(min(equip[0x360] + (equip[0x361] << 8) + rupees[item.name], 9999).to_bytes(2, byteorder='little', signed=False))
+            equip[0x362:0x364] = list(min(equip[0x362] + (equip[0x363] << 8) + rupees[item.name], 9999).to_bytes(2, byteorder='little', signed=False))
+        elif item.name in bomb_caps:
+            starting_max_bombs = min(starting_max_bombs + bomb_caps[item.name], 50)
+        elif item.name in arrow_caps:
+            starting_max_arrows = min(starting_max_arrows + arrow_caps[item.name], 70)
+        elif item.name in bombs:
+            equip[0x343] += bombs[item.name]
+        elif item.name in arrows:
+            if world.retro[player]:
+                equip[0x38E] |= 0x80
+                equip[0x377] = 1
+            else:
+                equip[0x377] += arrows[item.name]
+        elif item.name in ['Piece of Heart', 'Boss Heart Container', 'Sanctuary Heart Container']:
+            if item.name == 'Piece of Heart':
+                equip[0x36B] = (equip[0x36B] + 1) % 4
+            if item.name != 'Piece of Heart' or equip[0x36B] == 0:
+                equip[0x36C] = min(equip[0x36C] + 0x08, 0xA0)
+                equip[0x36D] = min(equip[0x36D] + 0x08, 0xA0)
+        else:
+            raise RuntimeError(f'Unsupported item in starting equipment: {item.name}')
+
+    equip[0x343] = min(equip[0x343], starting_max_bombs)
+    rom.write_byte(0x180034, starting_max_bombs)
+    equip[0x377] = min(equip[0x377], starting_max_arrows)
+    rom.write_byte(0x180035, starting_max_arrows)
+    rom.write_bytes(0x180046, equip[0x360:0x362])
+    if equip[0x359]:
+        rom.write_byte(0x180043, equip[0x359])
+
+    assert equip[:0x340] == [0] * 0x340
+    rom.write_bytes(0x183000, equip[0x340:])
+    rom.write_bytes(0x271A6, equip[0x340:0x340+60])
 
     rom.write_byte(0x18004A, 0x00 if world.mode[player] != 'inverted' else 0x01)  # Inverted mode
     rom.write_byte(0x18005D, 0x00) # Hammer always breaks barrier
@@ -944,7 +1102,9 @@ def patch_rom(world, player, rom, enemized):
 
     rom.write_byte(0x18005E, world.crystals_needed_for_gt[player])
     rom.write_byte(0x18005F, world.crystals_needed_for_ganon[player])
-    rom.write_byte(0x18008A, 0x01 if world.mode[player] == "standard" else 0x00) # block HC upstairs doors in rain state in standard mode
+
+    # block HC upstairs doors in rain state in standard mode
+    rom.write_byte(0x18008A, 0x01 if world.mode[player] == "standard" and world.shuffle[player] != 'vanilla' else 0x00)
 
     rom.write_byte(0x18016A, 0x10 | ((0x01 if world.keyshuffle[player] else 0x00)
                                      | (0x02 if world.compassshuffle[player] else 0x00)
@@ -1067,13 +1227,18 @@ def patch_rom(world, player, rom, enemized):
         rom.write_byte(0xFED31, 0x2A)  # preopen bombable exit
         rom.write_byte(0xFEE41, 0x2A)  # preopen bombable exit
 
-    write_strings(rom, world, player)
+    write_strings(rom, world, player, team)
 
     # set rom name
     # 21 bytes
     from Main import __version__
-    rom.name = bytearray('ER{0}_{1}_{2:09}\0'.format(__version__.split('-')[0].replace('.','')[0:3], player, world.seed), 'utf8')
-    rom.write_bytes(0x7FC0, rom.name[0:21])
+    rom.name = bytearray(f'ER{__version__.split("-")[0].replace(".","")[0:3]}_{team+1}_{player}_{world.seed:09}\0', 'utf8')[:21]
+    rom.name.extend([0] * (21 - len(rom.name)))
+    rom.write_bytes(0x7FC0, rom.name)
+
+    # set player names
+    for p in range(1, min(world.players, 64) + 1):
+        rom.write_bytes(0x186380 + ((p - 1) * 32), hud_format_text(world.player_names[p][team]))
 
     # Write title screen Code
     hashint = int(rom.get_hash(), 16)
@@ -1085,6 +1250,7 @@ def patch_rom(world, player, rom, enemized):
         hashint & 0x1F,
     ]
     rom.write_bytes(0x180215, code)
+    rom.hash = code
 
     return rom
 
@@ -1093,16 +1259,14 @@ try:
 except ImportError:
     RaceRom = None
 
-def get_race_rom_patches(rom):
-    patches = {str(0x180213): [0x01, 0x00]} # Tournament Seed
+def patch_race_rom(rom):
+    rom.write_bytes(0x180213, [0x01, 0x00]) # Tournament Seed
 
     if 'RaceRom' in sys.modules:
-        RaceRom.encrypt(rom, patches)
-
-    return patches
+        RaceRom.encrypt(rom)
 
 def write_custom_shops(rom, world, player):
-    shops = [shop for shop in world.shops if shop.replaceable and shop.active and shop.region.player == player]
+    shops = [shop for shop in world.shops if shop.custom and shop.region.player == player]
 
     shop_data = bytearray()
     items_data = bytearray()
@@ -1150,7 +1314,9 @@ def hud_format_text(text):
     return output[:32]
 
 
-def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite, names = None):
+def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite, ow_palettes, uw_palettes):
+    if sprite and not isinstance(sprite, Sprite):
+        sprite = Sprite(sprite) if os.path.isfile(sprite) else get_sprite_from_name(sprite)
 
     # enable instant item menu
     if fastmenu == 'instant':
@@ -1176,118 +1342,12 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
 
     rom.write_byte(0x18004B, 0x01 if quickswap else 0x00)
 
-    music_volumes = [
-        (0x00, [0xD373B, 0xD375B, 0xD90F8]),
-        (0x14, [0xDA710, 0xDA7A4, 0xDA7BB, 0xDA7D2]),
-        (0x3C, [0xD5954, 0xD653B, 0xDA736, 0xDA752, 0xDA772, 0xDA792]),
-        (0x50, [0xD5B47, 0xD5B5E]),
-        (0x54, [0xD4306]),
-        (0x64,
-         [0xD6878, 0xD6883, 0xD6E48, 0xD6E76, 0xD6EFB, 0xD6F2D, 0xDA211, 0xDA35B, 0xDA37B, 0xDA38E, 0xDA39F, 0xDA5C3,
-          0xDA691, 0xDA6A8, 0xDA6DF]),
-        (0x78,
-         [0xD2349, 0xD3F45, 0xD42EB, 0xD48B9, 0xD48FF, 0xD543F, 0xD5817, 0xD5957, 0xD5ACB, 0xD5AE8, 0xD5B4A, 0xDA5DE,
-          0xDA608, 0xDA635,
-          0xDA662, 0xDA71F, 0xDA7AF, 0xDA7C6, 0xDA7DD]),
-        (0x82, [0xD2F00, 0xDA3D5]),
-        (0xA0,
-         [0xD249C, 0xD24CD, 0xD2C09, 0xD2C53, 0xD2CAF, 0xD2CEB, 0xD2D91, 0xD2EE6, 0xD38ED, 0xD3C91, 0xD3CD3, 0xD3CE8,
-          0xD3F0C,
-          0xD3F82, 0xD405F, 0xD4139, 0xD4198, 0xD41D5, 0xD41F6, 0xD422B, 0xD4270, 0xD42B1, 0xD4334, 0xD4371, 0xD43A6,
-          0xD43DB,
-          0xD441E, 0xD4597, 0xD4B3C, 0xD4BAB, 0xD4C03, 0xD4C53, 0xD4C7F, 0xD4D9C, 0xD5424, 0xD65D2, 0xD664F, 0xD6698,
-          0xD66FF,
-          0xD6985, 0xD6C5C, 0xD6C6F, 0xD6C8E, 0xD6CB4, 0xD6D7D, 0xD827D, 0xD960C, 0xD9828, 0xDA233, 0xDA3A2, 0xDA49E,
-          0xDA72B,
-          0xDA745, 0xDA765, 0xDA785, 0xDABF6, 0xDAC0D, 0xDAEBE, 0xDAFAC]),
-        (0xAA, [0xD9A02, 0xD9BD6]),
-        (0xB4,
-         [0xD21CD, 0xD2279, 0xD2E66, 0xD2E70, 0xD2EAB, 0xD3B97, 0xD3BAC, 0xD3BE8, 0xD3C0D, 0xD3C39, 0xD3C68, 0xD3C9F,
-          0xD3CBC,
-          0xD401E, 0xD4290, 0xD443E, 0xD456F, 0xD47D3, 0xD4D43, 0xD4DCC, 0xD4EBA, 0xD4F0B, 0xD4FE5, 0xD5012, 0xD54BC,
-          0xD54D5,
-          0xD54F0, 0xD5509, 0xD57D8, 0xD59B9, 0xD5A2F, 0xD5AEB, 0xD5E5E, 0xD5FE9, 0xD658F, 0xD674A, 0xD6827, 0xD69D6,
-          0xD69F5,
-          0xD6A05, 0xD6AE9, 0xD6DCF, 0xD6E20, 0xD6ECB, 0xD71D4, 0xD71E6, 0xD7203, 0xD721E, 0xD8724, 0xD8732, 0xD9652,
-          0xD9698,
-          0xD9CBC, 0xD9DC0, 0xD9E49, 0xDAA68, 0xDAA77, 0xDAA88, 0xDAA99, 0xDAF04]),
-        (0x8c,
-         [0xD1D28, 0xD1D41, 0xD1D5C, 0xD1D77, 0xD1EEE, 0xD311D, 0xD31D1, 0xD4148, 0xD5543, 0xD5B6F, 0xD65B3, 0xD6760,
-          0xD6B6B,
-          0xD6DF6, 0xD6E0D, 0xD73A1, 0xD814C, 0xD825D, 0xD82BE, 0xD8340, 0xD8394, 0xD842C, 0xD8796, 0xD8903, 0xD892A,
-          0xD91E8,
-          0xD922B, 0xD92E0, 0xD937E, 0xD93C1, 0xDA958, 0xDA971, 0xDA98C, 0xDA9A7]),
-        (0xC8,
-         [0xD1D92, 0xD1DBD, 0xD1DEB, 0xD1F5D, 0xD1F9F, 0xD1FBD, 0xD1FDC, 0xD1FEA, 0xD20CA, 0xD21BB, 0xD22C9, 0xD2754,
-          0xD284C,
-          0xD2866, 0xD2887, 0xD28A0, 0xD28BA, 0xD28DB, 0xD28F4, 0xD293E, 0xD2BF3, 0xD2C1F, 0xD2C69, 0xD2CA1, 0xD2CC5,
-          0xD2D05,
-          0xD2D73, 0xD2DAF, 0xD2E3D, 0xD2F36, 0xD2F46, 0xD2F6F, 0xD2FCF, 0xD2FDF, 0xD302B, 0xD3086, 0xD3099, 0xD30A5,
-          0xD30CD,
-          0xD30F6, 0xD3154, 0xD3184, 0xD333A, 0xD33D9, 0xD349F, 0xD354A, 0xD35E5, 0xD3624, 0xD363C, 0xD3672, 0xD3691,
-          0xD36B4,
-          0xD36C6, 0xD3724, 0xD3767, 0xD38CB, 0xD3B1D, 0xD3B2F, 0xD3B55, 0xD3B70, 0xD3B81, 0xD3BBF, 0xD3F65, 0xD3FA6,
-          0xD404F,
-          0xD4087, 0xD417A, 0xD41A0, 0xD425C, 0xD4319, 0xD433C, 0xD43EF, 0xD440C, 0xD4452, 0xD4494, 0xD44B5, 0xD4512,
-          0xD45D1,
-          0xD45EF, 0xD4682, 0xD46C3, 0xD483C, 0xD4848, 0xD4855, 0xD4862, 0xD486F, 0xD487C, 0xD4A1C, 0xD4A3B, 0xD4A60,
-          0xD4B27,
-          0xD4C7A, 0xD4D12, 0xD4D81, 0xD4E90, 0xD4ED6, 0xD4EE2, 0xD5005, 0xD502E, 0xD503C, 0xD5081, 0xD51B1, 0xD51C7,
-          0xD51CF,
-          0xD51EF, 0xD520C, 0xD5214, 0xD5231, 0xD5257, 0xD526D, 0xD5275, 0xD52AF, 0xD52BD, 0xD52CD, 0xD52DB, 0xD549C,
-          0xD5801,
-          0xD58A4, 0xD5A68, 0xD5A7F, 0xD5C12, 0xD5D71, 0xD5E10, 0xD5E9A, 0xD5F8B, 0xD5FA4, 0xD651A, 0xD6542, 0xD65ED,
-          0xD661D,
-          0xD66D7, 0xD6776, 0xD68BD, 0xD68E5, 0xD6956, 0xD6973, 0xD69A8, 0xD6A51, 0xD6A86, 0xD6B96, 0xD6C3E, 0xD6D4A,
-          0xD6E9C,
-          0xD6F80, 0xD717E, 0xD7190, 0xD71B9, 0xD811D, 0xD8139, 0xD816B, 0xD818A, 0xD819E, 0xD81BE, 0xD829C, 0xD82E1,
-          0xD8306,
-          0xD830E, 0xD835E, 0xD83AB, 0xD83CA, 0xD83F0, 0xD83F8, 0xD844B, 0xD8479, 0xD849E, 0xD84CB, 0xD84EB, 0xD84F3,
-          0xD854A,
-          0xD8573, 0xD859D, 0xD85B4, 0xD85CE, 0xD862A, 0xD8681, 0xD87E3, 0xD87FF, 0xD887B, 0xD88C6, 0xD88E3, 0xD8944,
-          0xD897B,
-          0xD8C97, 0xD8CA4, 0xD8CB3, 0xD8CC2, 0xD8CD1, 0xD8D01, 0xD917B, 0xD918C, 0xD919A, 0xD91B5, 0xD91D0, 0xD91DD,
-          0xD9220,
-          0xD9273, 0xD9284, 0xD9292, 0xD92AD, 0xD92C8, 0xD92D5, 0xD9311, 0xD9322, 0xD9330, 0xD934B, 0xD9366, 0xD9373,
-          0xD93B6,
-          0xD97A6, 0xD97C2, 0xD97DC, 0xD97FB, 0xD9811, 0xD98FF, 0xD996F, 0xD99A8, 0xD99D5, 0xD9A30, 0xD9A4E, 0xD9A6B,
-          0xD9A88,
-          0xD9AF7, 0xD9B1D, 0xD9B43, 0xD9B7C, 0xD9BA9, 0xD9C84, 0xD9C8D, 0xD9CAC, 0xD9CE8, 0xD9CF3, 0xD9CFD, 0xD9D46,
-          0xDA35E,
-          0xDA37E, 0xDA391, 0xDA478, 0xDA4C3, 0xDA4D7, 0xDA4F6, 0xDA515, 0xDA6E2, 0xDA9C2, 0xDA9ED, 0xDAA1B, 0xDAA57,
-          0xDABAF,
-          0xDABC9, 0xDABE2, 0xDAC28, 0xDAC46, 0xDAC63, 0xDACB8, 0xDACEC, 0xDAD08, 0xDAD25, 0xDAD42, 0xDAD5F, 0xDAE17,
-          0xDAE34,
-          0xDAE51, 0xDAF2E, 0xDAF55, 0xDAF6B, 0xDAF81, 0xDB14F, 0xDB16B, 0xDB180, 0xDB195, 0xDB1AA]),
-        (0xD2, [0xD2B88, 0xD364A, 0xD369F, 0xD3747]),
-        (0xDC,
-         [0xD213F, 0xD2174, 0xD229E, 0xD2426, 0xD4731, 0xD4753, 0xD4774, 0xD4795, 0xD47B6, 0xD4AA5, 0xD4AE4, 0xD4B96,
-          0xD4CA5,
-          0xD5477, 0xD5A3D, 0xD6566, 0xD672C, 0xD67C0, 0xD69B8, 0xD6AB1, 0xD6C05, 0xD6DB3, 0xD71AB, 0xD8E2D, 0xD8F0D,
-          0xD94E0,
-          0xD9544, 0xD95A8, 0xD9982, 0xD9B56, 0xDA694, 0xDA6AB, 0xDAE88, 0xDAEC8, 0xDAEE6, 0xDB1BF]),
-        (0xE6, [0xD210A, 0xD22DC, 0xD2447, 0xD5A4D, 0xD5DDC, 0xDA251, 0xDA26C]),
-        (0xF0, [0xD945E, 0xD967D, 0xD96C2, 0xD9C95, 0xD9EE6, 0xDA5C6]),
-        (0xFA,
-         [0xD2047, 0xD24C2, 0xD24EC, 0xD25A4, 0xD51A8, 0xD51E6, 0xD524E, 0xD529E, 0xD6045, 0xD81DE, 0xD821E, 0xD94AA,
-          0xD9A9E,
-          0xD9AE4, 0xDA289]),
-        (0xFF, [0xD2085, 0xD21C5, 0xD5F28])
-    ]
-    for volume, addresses in music_volumes:
-        for address in addresses:
-            rom.write_byte(address, volume if not disable_music else 0x00)
+    rom.write_byte(0x0CFE18, 0x00 if disable_music else rom.orig_buffer[0x0CFE18] if rom.orig_buffer else 0x70)
+    rom.write_byte(0x0CFEC1, 0x00 if disable_music else rom.orig_buffer[0x0CFEC1] if rom.orig_buffer else 0xC0)
+    rom.write_bytes(0x0D0000, [0x00, 0x00] if disable_music else rom.orig_buffer[0x0D0000:0x0D0002] if rom.orig_buffer else [0xDA, 0x58])
+    rom.write_bytes(0x0D00E7, [0xC4, 0x58] if disable_music else rom.orig_buffer[0x0D00E7:0x0D00E9] if rom.orig_buffer else [0xDA, 0x58])
 
     rom.write_byte(0x18021A, 1 if disable_music else 0x00)
-
-    # restore Mirror sound effect volumes (for existing seeds that lack it)
-    rom.write_byte(0xD3E04, 0xC8)
-    rom.write_byte(0xD3DC6, 0xC8)
-    rom.write_byte(0xD3D6E, 0xC8)
-    rom.write_byte(0xD3D34, 0xC8)
-    rom.write_byte(0xD3D55, 0xC8)
-    rom.write_byte(0xD3E38, 0xC8)
-    rom.write_byte(0xD3DAA, 0xFA)
 
     # set heart beep rate
     rom.write_byte(0x180033, {'off': 0x00, 'half': 0x40, 'quarter': 0x80, 'normal': 0x20, 'double': 0x10}[beep])
@@ -1311,10 +1371,17 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
     if sprite is not None:
         write_sprite(rom, sprite)
 
-    # set player names
-    for player, name in names.items():
-        if 0 < player <= 64:
-            rom.write_bytes(0x186380 + ((player - 1) * 32), hud_format_text(name))
+    default_ow_palettes(rom)
+    if ow_palettes == 'random':
+        randomize_ow_palettes(rom)
+    elif ow_palettes == 'blackout':
+        blackout_ow_palettes(rom)
+
+    default_uw_palettes(rom)
+    if uw_palettes == 'random':
+        randomize_uw_palettes(rom)
+    elif uw_palettes == 'blackout':
+        blackout_uw_palettes(rom)
 
     if isinstance(rom, LocalRom):
         rom.write_crc()
@@ -1327,13 +1394,140 @@ def write_sprite(rom, sprite):
     rom.write_bytes(0xDD308, sprite.palette)
     rom.write_bytes(0xDEDF5, sprite.glove_palette)
 
+def set_color(rom, address, color, shade):
+    r = round(min(color[0], 0xFF) * pow(0.8, shade) * 0x1F / 0xFF)
+    g = round(min(color[1], 0xFF) * pow(0.8, shade) * 0x1F / 0xFF)
+    b = round(min(color[2], 0xFF) * pow(0.8, shade) * 0x1F / 0xFF)
+
+    rom.write_bytes(address, ((b << 10) | (g << 5) | (r << 0)).to_bytes(2, byteorder='little', signed=False))
+
+def default_ow_palettes(rom):
+    if not rom.orig_buffer:
+        return
+    rom.write_bytes(0xDE604, rom.orig_buffer[0xDE604:0xDEBB4])
+
+    for address in [0x067FB4, 0x067F94, 0x067FC6, 0x067FE6, 0x067FE1, 0x05FEA9, 0x05FEB3]:
+        rom.write_bytes(address, rom.orig_buffer[address:address+2])
+
+def randomize_ow_palettes(rom):
+    grass, grass2, grass3, dirt, dirt2, water, clouds, dwdirt,\
+        dwgrass, dwwater, dwdmdirt, dwdmgrass, dwdmclouds1, dwdmclouds2 = [[random.randint(60, 215) for _ in range(3)] for _ in range(14)]
+    dwtree = [c + random.randint(-20, 10) for c in dwgrass]
+    treeleaf = [c + random.randint(-20, 10) for c in grass]
+
+    patches = {0x067FB4: (grass, 0), 0x067F94: (grass, 0), 0x067FC6: (grass, 0), 0x067FE6: (grass, 0), 0x067FE1: (grass, 3), 0x05FEA9: (grass, 0), 0x05FEB3: (dwgrass, 1),
+               0x0DD4AC: (grass, 2), 0x0DE6DE: (grass2, 2), 0x0DE6E0: (grass2, 1), 0x0DD4AE: (grass2, 1), 0x0DE9FA: (grass2, 1), 0x0DEA0E: (grass2, 1), 0x0DE9FE: (grass2, 0),
+               0x0DD3D2: (grass2, 2), 0x0DE88C: (grass2, 2), 0x0DE8A8: (grass2, 2), 0x0DE9F8: (grass2, 2), 0x0DEA4E: (grass2, 2), 0x0DEAF6: (grass2, 2), 0x0DEB2E: (grass2, 2), 0x0DEB4A: (grass2, 2),
+               0x0DE892: (grass, 1), 0x0DE886: (grass, 0), 0x0DE6D2: (grass, 0), 0x0DE6FA: (grass, 3), 0x0DE6FC: (grass, 0), 0x0DE6FE: (grass, 0), 0x0DE70A: (grass, 0), 0x0DE708: (grass, 2), 0x0DE70C: (grass, 1),
+               0x0DE6D4: (dirt, 2), 0x0DE6CA: (dirt, 5), 0x0DE6CC: (dirt, 4), 0x0DE6CE: (dirt, 3), 0x0DE6E2: (dirt, 2), 0x0DE6D8: (dirt, 5), 0x0DE6DA: (dirt, 4), 0x0DE6DC: (dirt, 2),
+               0x0DE6F0: (dirt, 2), 0x0DE6E6: (dirt, 5), 0x0DE6E8: (dirt, 4), 0x0DE6EA: (dirt, 2), 0x0DE6EC: (dirt, 4), 0x0DE6EE: (dirt, 2),
+               0x0DE91E: (grass, 0),
+               0x0DE920: (dirt, 2), 0x0DE916: (dirt, 3), 0x0DE934: (dirt, 3),
+               0x0DE92C: (grass, 0), 0x0DE93A: (grass, 0), 0x0DE91C: (grass, 1), 0x0DE92A: (grass, 1), 0x0DEA1C: (grass, 0), 0x0DEA2A: (grass, 0), 0x0DEA30: (grass, 0),
+               0x0DEA2E: (dirt, 5),
+               0x0DE884: (grass, 3), 0x0DE8AE: (grass, 3), 0x0DE8BE: (grass, 3), 0x0DE8E4: (grass, 3), 0x0DE938: (grass, 3), 0x0DE9C4: (grass, 3), 0x0DE6D0: (grass, 4),
+               0x0DE890: (treeleaf, 1), 0x0DE894: (treeleaf, 0),
+               0x0DE924: (water, 3), 0x0DE668: (water, 3), 0x0DE66A: (water, 2), 0x0DE670: (water, 1), 0x0DE918: (water, 1), 0x0DE66C: (water, 0), 0x0DE91A: (water, 0), 0x0DE92E: (water, 1), 0x0DEA1A: (water, 1), 0x0DEA16: (water, 3), 0x0DEA10: (water, 4),
+               0x0DE66E: (dirt, 3), 0x0DE672: (dirt, 2), 0x0DE932: (dirt, 4), 0x0DE936: (dirt, 2), 0x0DE93C: (dirt, 1),
+               0x0DE756: (dirt2, 4), 0x0DE764: (dirt2, 4), 0x0DE772: (dirt2, 4), 0x0DE994: (dirt2, 4), 0x0DE9A2: (dirt2, 4), 0x0DE758: (dirt2, 3), 0x0DE766: (dirt2, 3), 0x0DE774: (dirt2, 3),
+               0x0DE996: (dirt2, 3), 0x0DE9A4: (dirt2, 3), 0x0DE75A: (dirt2, 2), 0x0DE768: (dirt2, 2), 0x0DE776: (dirt2, 2), 0x0DE778: (dirt2, 2), 0x0DE998: (dirt2, 2), 0x0DE9A6: (dirt2, 2),
+               0x0DE9AC: (dirt2, 1), 0x0DE99E: (dirt2, 1), 0x0DE760: (dirt2, 1), 0x0DE77A: (dirt2, 1), 0x0DE77C: (dirt2, 1), 0x0DE798: (dirt2, 1), 0x0DE980: (dirt2, 1),
+               0x0DE75C: (grass3, 2), 0x0DE786: (grass3, 2), 0x0DE794: (grass3, 2), 0x0DE99A: (grass3, 2), 0x0DE75E: (grass3, 1), 0x0DE788: (grass3, 1), 0x0DE796: (grass3, 1), 0x0DE99C: (grass3, 1),
+               0x0DE76A: (clouds, 2), 0x0DE9A8: (clouds, 2), 0x0DE76E: (clouds, 0), 0x0DE9AA: (clouds, 0), 0x0DE8DA: (clouds, 0), 0x0DE8D8: (clouds, 0), 0x0DE8D0: (clouds, 0), 0x0DE98C: (clouds, 2), 0x0DE990: (clouds, 0),
+               0x0DEB34: (dwtree, 4), 0x0DEB30: (dwtree, 3), 0x0DEB32: (dwtree, 1),
+               0x0DE710: (dwdirt, 5), 0x0DE71E: (dwdirt, 5), 0x0DE72C: (dwdirt, 5), 0x0DEAD6: (dwdirt, 5), 0x0DE712: (dwdirt, 4), 0x0DE720: (dwdirt, 4), 0x0DE72E: (dwdirt, 4), 0x0DE660: (dwdirt, 4),
+               0x0DEAD8: (dwdirt, 4), 0x0DEADA: (dwdirt, 3), 0x0DE714: (dwdirt, 3), 0x0DE722: (dwdirt, 3), 0x0DE730: (dwdirt, 3), 0x0DE732: (dwdirt, 3), 0x0DE734: (dwdirt, 2), 0x0DE736: (dwdirt, 2),
+               0x0DE728: (dwdirt, 2), 0x0DE71A: (dwdirt, 2), 0x0DE664: (dwdirt, 2), 0x0DEAE0: (dwdirt, 2),
+               0x0DE716: (dwgrass, 3), 0x0DE740: (dwgrass, 3), 0x0DE74E: (dwgrass, 3), 0x0DEAC0: (dwgrass, 3), 0x0DEACE: (dwgrass, 3), 0x0DEADC: (dwgrass, 3), 0x0DEB24: (dwgrass, 3), 0x0DE752: (dwgrass, 2),
+               0x0DE718: (dwgrass, 1), 0x0DE742: (dwgrass, 1), 0x0DE750: (dwgrass, 1), 0x0DEB26: (dwgrass, 1), 0x0DEAC2: (dwgrass, 1), 0x0DEAD0: (dwgrass, 1), 0x0DEADE: (dwgrass, 1),
+               0x0DE65A: (dwwater, 5), 0x0DE65C: (dwwater, 3), 0x0DEAC8: (dwwater, 3), 0x0DEAD2: (dwwater, 2), 0x0DEABC: (dwwater, 2), 0x0DE662: (dwwater, 2), 0x0DE65E: (dwwater, 1), 0x0DEABE: (dwwater, 1), 0x0DEA98: (dwwater, 2),
+               0x0DE79A: (dwdmdirt, 6), 0x0DE7A8: (dwdmdirt, 6), 0x0DE7B6: (dwdmdirt, 6), 0x0DEB60: (dwdmdirt, 6), 0x0DEB6E: (dwdmdirt, 6), 0x0DE93E: (dwdmdirt, 6), 0x0DE94C: (dwdmdirt, 6), 0x0DEBA6: (dwdmdirt, 6),
+               0x0DE79C: (dwdmdirt, 4), 0x0DE7AA: (dwdmdirt, 4), 0x0DE7B8: (dwdmdirt, 4), 0x0DEB70: (dwdmdirt, 4), 0x0DEBA8: (dwdmdirt, 4), 0x0DEB72: (dwdmdirt, 3), 0x0DEB74: (dwdmdirt, 3), 0x0DE79E: (dwdmdirt, 3), 0x0DE7AC: (dwdmdirt, 3), 0x0DEBAA: (dwdmdirt, 3), 0x0DE7A0: (dwdmdirt, 3),
+               0x0DE7BC: (dwdmgrass, 3),
+               0x0DEBAC: (dwdmdirt, 2), 0x0DE7AE: (dwdmdirt, 2), 0x0DE7C2: (dwdmdirt, 2), 0x0DE7A6: (dwdmdirt, 2), 0x0DEB7A: (dwdmdirt, 2), 0x0DEB6C: (dwdmdirt, 2), 0x0DE7C0: (dwdmdirt, 2),
+               0x0DE7A2: (dwdmgrass, 3), 0x0DE7BE: (dwdmgrass, 3), 0x0DE7CC: (dwdmgrass, 3), 0x0DE7DA: (dwdmgrass, 3), 0x0DEB6A: (dwdmgrass, 3), 0x0DE948: (dwdmgrass, 3), 0x0DE956: (dwdmgrass, 3), 0x0DE964: (dwdmgrass, 3), 0x0DE7CE: (dwdmgrass, 1), 0x0DE7A4: (dwdmgrass, 1), 0x0DEBA2: (dwdmgrass, 1), 0x0DEBB0: (dwdmgrass, 1),
+               0x0DE644: (dwdmclouds1, 2), 0x0DEB84: (dwdmclouds1, 2), 0x0DE648: (dwdmclouds1, 1), 0x0DEB88: (dwdmclouds1, 1),
+               0x0DEBAE: (dwdmclouds2, 2), 0x0DE7B0: (dwdmclouds2, 2), 0x0DE7B4: (dwdmclouds2, 0), 0x0DEB78: (dwdmclouds2, 0), 0x0DEBB2: (dwdmclouds2, 0)
+               }
+    for address, (color, shade) in patches.items():
+        set_color(rom, address, color, shade)
+
+def blackout_ow_palettes(rom):
+    rom.write_bytes(0xDE604, [0] * 0xC4)
+    for i in range(0xDE6C8, 0xDE86C, 70):
+        rom.write_bytes(i, [0] * 64)
+        rom.write_bytes(i+66, [0] * 4)
+    rom.write_bytes(0xDE86C, [0] * 0x348)
+
+    for address in [0x067FB4, 0x067F94, 0x067FC6, 0x067FE6, 0x067FE1, 0x05FEA9, 0x05FEB3]:
+        rom.write_bytes(address, [0,0])
+
+def default_uw_palettes(rom):
+    if not rom.orig_buffer:
+        return
+    rom.write_bytes(0xDD734, rom.orig_buffer[0xDD734:0xDE544])
+
+def randomize_uw_palettes(rom):
+    for dungeon in range(20):
+        wall, pot, chest, floor1, floor2, floor3 = [[random.randint(60, 240) for _ in range(3)] for _ in range(6)]
+
+        for i in range(5):
+            shade = 10 - (i * 2)
+            set_color(rom, 0x0DD734 + (0xB4 * dungeon) + (i * 2), wall, shade)
+            set_color(rom, 0x0DD770 + (0xB4 * dungeon) + (i * 2), wall, shade)
+            set_color(rom, 0x0DD744 + (0xB4 * dungeon) + (i * 2), wall, shade)
+            if dungeon == 0:
+                set_color(rom, 0x0DD7CA + (0xB4 * dungeon) + (i * 2), wall, shade)
+
+        if dungeon == 2:
+            set_color(rom, 0x0DD74E + (0xB4 * dungeon), wall, 3)
+            set_color(rom, 0x0DD750 + (0xB4 * dungeon), wall, 5)
+            set_color(rom, 0x0DD73E + (0xB4 * dungeon), wall, 3)
+            set_color(rom, 0x0DD740 + (0xB4 * dungeon), wall, 5)
+
+        set_color(rom, 0x0DD7E4 + (0xB4 * dungeon), wall, 4)
+        set_color(rom, 0x0DD7E6 + (0xB4 * dungeon), wall, 2)
+
+        set_color(rom, 0xDD7DA + (0xB4 * dungeon), wall, 10)
+        set_color(rom, 0xDD7DC + (0xB4 * dungeon), wall, 8)
+
+        set_color(rom, 0x0DD75A + (0xB4 * dungeon), pot, 7)
+        set_color(rom, 0x0DD75C + (0xB4 * dungeon), pot, 1)
+        set_color(rom, 0x0DD75E + (0xB4 * dungeon), pot, 3)
+
+        set_color(rom, 0x0DD76A + (0xB4 * dungeon), wall, 7)
+        set_color(rom, 0x0DD76C + (0xB4 * dungeon), wall, 2)
+        set_color(rom, 0x0DD76E + (0xB4 * dungeon), wall, 4)
+
+        set_color(rom, 0x0DD7AE + (0xB4 * dungeon), chest, 2)
+        set_color(rom, 0x0DD7B0 + (0xB4 * dungeon), chest, 0)
+
+        for i in range(3):
+            shade = 6 - (i * 2)
+            set_color(rom, 0x0DD764 + (0xB4 * dungeon) + (i * 2), floor1, shade)
+            set_color(rom, 0x0DD782 + (0xB4 * dungeon) + (i * 2), floor1, shade + 3)
+
+            set_color(rom, 0x0DD7A0 + (0xB4 * dungeon) + (i * 2), floor2, shade)
+            set_color(rom, 0x0DD7BE + (0xB4 * dungeon) + (i * 2), floor2, shade + 3)
+
+        set_color(rom, 0x0DD7E2 + (0xB4 * dungeon), floor3, 3)
+        set_color(rom, 0x0DD796 + (0xB4 * dungeon), floor3, 4)
+
+def blackout_uw_palettes(rom):
+    for i in range(0xDD734, 0xDE544, 180):
+        rom.write_bytes(i, [0] * 38)
+        rom.write_bytes(i+44, [0] * 76)
+        rom.write_bytes(i+136, [0] * 44)
+
+def get_hash_string(hash):
+    return ", ".join([hash_alphabet[code & 0x1F] for code in hash])
 
 def write_string_to_rom(rom, target, string):
     address, maxbytes = text_addresses[target]
     rom.write_bytes(address, MultiByteTextMapper.convert(string, maxbytes))
 
 
-def write_strings(rom, world, player):
+def write_strings(rom, world, player, team):
     tt = TextTable()
     tt.removeUnwantedText()
 
@@ -1351,11 +1545,11 @@ def write_strings(rom, world, player):
             hint = dest.hint_text if dest.hint_text else "something"
         if dest.player != player:
             if ped_hint:
-                hint += " for p%d!" % dest.player
+                hint += f" for {world.player_names[dest.player][team]}!"
             elif type(dest) in [Region, Location]:
-                hint += " in p%d's world" % dest.player
+                hint += f" in {world.player_names[dest.player][team]}'s world"
             else:
-                hint += " for p%d" % dest.player
+                hint += f" for {world.player_names[dest.player][team]}"
         return hint
 
     # For hints, first we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
@@ -2096,3 +2290,9 @@ BigKeys = ['Big Key (Eastern Palace)',
            'Big Key (Turtle Rock)',
            'Big Key (Ganons Tower)'
            ]
+
+hash_alphabet = [
+    "Bow", "Boomerang", "Hookshot", "Bomb", "Mushroom", "Powder", "Rod", "Pendant", "Bombos", "Ether", "Quake",
+    "Lamp", "Hammer", "Shovel", "Ocarina", "Bug Net", "Book", "Bottle", "Potion", "Cane", "Cape", "Mirror", "Boots",
+    "Gloves", "Flippers", "Pearl", "Shield", "Tunic", "Heart", "Map", "Compass", "Key"
+]

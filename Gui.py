@@ -15,7 +15,7 @@ from EntranceRandomizer import parse_arguments
 from GuiUtils import ToolTips, set_icon, BackgroundTaskProgress
 from Main import main, __version__ as ESVersion
 from Rom import Sprite
-from Utils import is_bundled, local_path, output_path, open_file, parse_names_string
+from Utils import is_bundled, local_path, output_path, open_file
 
 
 def guiMain(args=None):
@@ -60,8 +60,6 @@ def guiMain(args=None):
     createSpoilerCheckbutton = Checkbutton(checkBoxFrame, text="Create Spoiler Log", variable=createSpoilerVar)
     suppressRomVar = IntVar()
     suppressRomCheckbutton = Checkbutton(checkBoxFrame, text="Do not create patched Rom", variable=suppressRomVar)
-    quickSwapVar = IntVar()
-    quickSwapCheckbutton = Checkbutton(checkBoxFrame, text="Enabled L/R Item quickswapping", variable=quickSwapVar)
     openpyramidVar = IntVar()
     openpyramidCheckbutton = Checkbutton(checkBoxFrame, text="Pre-open Pyramid Hole", variable=openpyramidVar)
     mcsbshuffleFrame = Frame(checkBoxFrame)
@@ -76,8 +74,6 @@ def guiMain(args=None):
     bigkeyshuffleCheckbutton = Checkbutton(mcsbshuffleFrame, text="BigKeys", variable=bigkeyshuffleVar)
     retroVar = IntVar()
     retroCheckbutton = Checkbutton(checkBoxFrame, text="Retro mode (universal keys)", variable=retroVar)
-    disableMusicVar = IntVar()
-    disableMusicCheckbutton = Checkbutton(checkBoxFrame, text="Disable game music", variable=disableMusicVar)
     shuffleGanonVar = IntVar()
     shuffleGanonVar.set(1) #set default
     shuffleGanonCheckbutton = Checkbutton(checkBoxFrame, text="Include Ganon's Tower and Pyramid Hole in shuffle pool", variable=shuffleGanonVar)
@@ -89,7 +85,6 @@ def guiMain(args=None):
 
     createSpoilerCheckbutton.pack(expand=True, anchor=W)
     suppressRomCheckbutton.pack(expand=True, anchor=W)
-    quickSwapCheckbutton.pack(expand=True, anchor=W)
     openpyramidCheckbutton.pack(expand=True, anchor=W)
     mcsbshuffleFrame.pack(expand=True, anchor=W)
     mcsbLabel.grid(row=0, column=0)
@@ -98,57 +93,23 @@ def guiMain(args=None):
     keyshuffleCheckbutton.grid(row=0, column=3)
     bigkeyshuffleCheckbutton.grid(row=0, column=4)
     retroCheckbutton.pack(expand=True, anchor=W)
-    disableMusicCheckbutton.pack(expand=True, anchor=W)
     shuffleGanonCheckbutton.pack(expand=True, anchor=W)
     hintsCheckbutton.pack(expand=True, anchor=W)
     customCheckbutton.pack(expand=True, anchor=W)
 
-    fileDialogFrame = Frame(rightHalfFrame)
+    romOptionsFrame = LabelFrame(rightHalfFrame, text="Rom options")
+    romOptionsFrame.columnconfigure(0, weight=1)
+    romOptionsFrame.columnconfigure(1, weight=1)
+    for i in range(5):
+        romOptionsFrame.rowconfigure(i, weight=1)
 
-    heartbeepFrame = Frame(fileDialogFrame)
-    heartbeepVar = StringVar()
-    heartbeepVar.set('normal')
-    heartbeepOptionMenu = OptionMenu(heartbeepFrame, heartbeepVar, 'double', 'normal', 'half', 'quarter', 'off')
-    heartbeepOptionMenu.pack(side=RIGHT)
-    heartbeepLabel = Label(heartbeepFrame, text='Heartbeep sound rate')
-    heartbeepLabel.pack(side=LEFT, padx=(0,52))
+    disableMusicVar = IntVar()
+    disableMusicCheckbutton = Checkbutton(romOptionsFrame, text="Disable music", variable=disableMusicVar)
+    disableMusicCheckbutton.grid(row=0, column=0, sticky=E)
 
-    heartcolorFrame = Frame(fileDialogFrame)
-    heartcolorVar = StringVar()
-    heartcolorVar.set('red')
-    heartcolorOptionMenu = OptionMenu(heartcolorFrame, heartcolorVar, 'red', 'blue', 'green', 'yellow', 'random')
-    heartcolorOptionMenu.pack(side=RIGHT)
-    heartcolorLabel = Label(heartcolorFrame, text='Heart color')
-    heartcolorLabel.pack(side=LEFT, padx=(0,127))
-
-    fastMenuFrame = Frame(fileDialogFrame)
-    fastMenuVar = StringVar()
-    fastMenuVar.set('normal')
-    fastMenuOptionMenu = OptionMenu(fastMenuFrame, fastMenuVar, 'normal', 'instant', 'double', 'triple', 'quadruple', 'half')
-    fastMenuOptionMenu.pack(side=RIGHT)
-    fastMenuLabel = Label(fastMenuFrame, text='Menu speed')
-    fastMenuLabel.pack(side=LEFT, padx=(0,100))
-
-    heartbeepFrame.pack(expand=True, anchor=E)
-    heartcolorFrame.pack(expand=True, anchor=E)
-    fastMenuFrame.pack(expand=True, anchor=E)
-
-    romDialogFrame = Frame(fileDialogFrame)
-    baseRomLabel = Label(romDialogFrame, text='Base Rom')
-    romVar = StringVar(value="Zelda no Densetsu - Kamigami no Triforce (Japan).sfc")
-    romEntry = Entry(romDialogFrame, textvariable=romVar)
-
-    def RomSelect():
-        rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc")), ("All Files", "*")])
-        romVar.set(rom)
-    romSelectButton = Button(romDialogFrame, text='Select Rom', command=RomSelect)
-
-    baseRomLabel.pack(side=LEFT)
-    romEntry.pack(side=LEFT)
-    romSelectButton.pack(side=LEFT)
-
-    spriteDialogFrame = Frame(fileDialogFrame)
-    baseSpriteLabel = Label(spriteDialogFrame, text='Link Sprite:')
+    spriteDialogFrame = Frame(romOptionsFrame)
+    spriteDialogFrame.grid(row=0, column=1)
+    baseSpriteLabel = Label(spriteDialogFrame, text='Sprite:')
 
     spriteNameVar = StringVar()
     sprite = None
@@ -168,17 +129,79 @@ def guiMain(args=None):
     def SpriteSelect():
         SpriteSelector(mainWindow, set_sprite)
 
-    spriteSelectButton = Button(spriteDialogFrame, text='Open Sprite Picker', command=SpriteSelect)
+    spriteSelectButton = Button(spriteDialogFrame, text='...', command=SpriteSelect)
 
     baseSpriteLabel.pack(side=LEFT)
     spriteEntry.pack(side=LEFT)
     spriteSelectButton.pack(side=LEFT)
 
-    romDialogFrame.pack()
-    spriteDialogFrame.pack()
+    quickSwapVar = IntVar()
+    quickSwapCheckbutton = Checkbutton(romOptionsFrame, text="L/R Quickswapping", variable=quickSwapVar)
+    quickSwapCheckbutton.grid(row=1, column=0, sticky=E)
 
-    checkBoxFrame.pack()
-    fileDialogFrame.pack()
+    fastMenuFrame = Frame(romOptionsFrame)
+    fastMenuFrame.grid(row=1, column=1, sticky=E)
+    fastMenuLabel = Label(fastMenuFrame, text='Menu speed')
+    fastMenuLabel.pack(side=LEFT)
+    fastMenuVar = StringVar()
+    fastMenuVar.set('normal')
+    fastMenuOptionMenu = OptionMenu(fastMenuFrame, fastMenuVar, 'normal', 'instant', 'double', 'triple', 'quadruple', 'half')
+    fastMenuOptionMenu.pack(side=LEFT)
+
+    heartcolorFrame = Frame(romOptionsFrame)
+    heartcolorFrame.grid(row=2, column=0, sticky=E)
+    heartcolorLabel = Label(heartcolorFrame, text='Heart color')
+    heartcolorLabel.pack(side=LEFT)
+    heartcolorVar = StringVar()
+    heartcolorVar.set('red')
+    heartcolorOptionMenu = OptionMenu(heartcolorFrame, heartcolorVar, 'red', 'blue', 'green', 'yellow', 'random')
+    heartcolorOptionMenu.pack(side=LEFT)
+
+    heartbeepFrame = Frame(romOptionsFrame)
+    heartbeepFrame.grid(row=2, column=1, sticky=E)
+    heartbeepLabel = Label(heartbeepFrame, text='Heartbeep')
+    heartbeepLabel.pack(side=LEFT)
+    heartbeepVar = StringVar()
+    heartbeepVar.set('normal')
+    heartbeepOptionMenu = OptionMenu(heartbeepFrame, heartbeepVar, 'double', 'normal', 'half', 'quarter', 'off')
+    heartbeepOptionMenu.pack(side=LEFT)
+
+    owPalettesFrame = Frame(romOptionsFrame)
+    owPalettesFrame.grid(row=3, column=0, sticky=E)
+    owPalettesLabel = Label(owPalettesFrame, text='Overworld palettes')
+    owPalettesLabel.pack(side=LEFT)
+    owPalettesVar = StringVar()
+    owPalettesVar.set('default')
+    owPalettesOptionMenu = OptionMenu(owPalettesFrame, owPalettesVar, 'default', 'random', 'blackout')
+    owPalettesOptionMenu.pack(side=LEFT)
+
+    uwPalettesFrame = Frame(romOptionsFrame)
+    uwPalettesFrame.grid(row=3, column=1, sticky=E)
+    uwPalettesLabel = Label(uwPalettesFrame, text='Dungeon palettes')
+    uwPalettesLabel.pack(side=LEFT)
+    uwPalettesVar = StringVar()
+    uwPalettesVar.set('default')
+    uwPalettesOptionMenu = OptionMenu(uwPalettesFrame, uwPalettesVar, 'default', 'random', 'blackout')
+    uwPalettesOptionMenu.pack(side=LEFT)
+
+    romDialogFrame = Frame(romOptionsFrame)
+    romDialogFrame.grid(row=4, column=0, columnspan=2, sticky=W+E)
+
+    baseRomLabel = Label(romDialogFrame, text='Base Rom: ')
+    romVar = StringVar(value="Zelda no Densetsu - Kamigami no Triforce (Japan).sfc")
+    romEntry = Entry(romDialogFrame, textvariable=romVar)
+
+    def RomSelect():
+        rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc")), ("All Files", "*")])
+        romVar.set(rom)
+    romSelectButton = Button(romDialogFrame, text='Select Rom', command=RomSelect)
+
+    baseRomLabel.pack(side=LEFT)
+    romEntry.pack(side=LEFT, expand=True, fill=X)
+    romSelectButton.pack(side=LEFT)
+
+    checkBoxFrame.pack(side=TOP, anchor=W, padx=5, pady=10)
+    romOptionsFrame.pack(expand=True, fill=BOTH, padx=3)
 
     drowDownFrame = Frame(topFrame)
 
@@ -300,18 +323,19 @@ def guiMain(args=None):
     algorithmFrame.pack(expand=True, anchor=E)
     shuffleFrame.pack(expand=True, anchor=E)
 
-    enemizerFrame = LabelFrame(randomizerWindow, text="Enemizer", padx=5, pady=5)
+    enemizerFrame = LabelFrame(randomizerWindow, text="Enemizer", padx=5, pady=2)
     enemizerFrame.columnconfigure(0, weight=1)
     enemizerFrame.columnconfigure(1, weight=1)
     enemizerFrame.columnconfigure(2, weight=1)
+    enemizerFrame.columnconfigure(3, weight=1)
 
     enemizerPathFrame = Frame(enemizerFrame)
-    enemizerPathFrame.grid(row=0, column=0, columnspan=3, sticky=W)
+    enemizerPathFrame.grid(row=0, column=0, columnspan=3, sticky=W+E, padx=3)
     enemizerCLIlabel = Label(enemizerPathFrame, text="EnemizerCLI path: ")
     enemizerCLIlabel.pack(side=LEFT)
-    enemizerCLIpathVar = StringVar()
-    enemizerCLIpathEntry = Entry(enemizerPathFrame, textvariable=enemizerCLIpathVar, width=80)
-    enemizerCLIpathEntry.pack(side=LEFT)
+    enemizerCLIpathVar = StringVar(value="EnemizerCLI/EnemizerCLI.Core")
+    enemizerCLIpathEntry = Entry(enemizerPathFrame, textvariable=enemizerCLIpathVar)
+    enemizerCLIpathEntry.pack(side=LEFT, expand=True, fill=X)
     def EnemizerSelectPath():
         path = filedialog.askopenfilename(filetypes=[("EnemizerCLI executable", "*EnemizerCLI*")])
         if path:
@@ -319,18 +343,21 @@ def guiMain(args=None):
     enemizerCLIbrowseButton = Button(enemizerPathFrame, text='...', command=EnemizerSelectPath)
     enemizerCLIbrowseButton.pack(side=LEFT)
 
-    enemyShuffleVar = IntVar()
-    enemyShuffleButton = Checkbutton(enemizerFrame, text="Enemy shuffle", variable=enemyShuffleVar)
-    enemyShuffleButton.grid(row=1, column=0)
-    paletteShuffleVar = IntVar()
-    paletteShuffleButton = Checkbutton(enemizerFrame, text="Palette shuffle", variable=paletteShuffleVar)
-    paletteShuffleButton.grid(row=1, column=1)
     potShuffleVar = IntVar()
     potShuffleButton = Checkbutton(enemizerFrame, text="Pot shuffle", variable=potShuffleVar)
-    potShuffleButton.grid(row=1, column=2)
+    potShuffleButton.grid(row=0, column=3)
+
+    enemizerEnemyFrame = Frame(enemizerFrame)
+    enemizerEnemyFrame.grid(row=1, column=0, pady=5)
+    enemizerEnemyLabel = Label(enemizerEnemyFrame, text='Enemy shuffle')
+    enemizerEnemyLabel.pack(side=LEFT)
+    enemyShuffleVar = StringVar()
+    enemyShuffleVar.set('none')
+    enemizerEnemyOption = OptionMenu(enemizerEnemyFrame, enemyShuffleVar, 'none', 'shuffled', 'chaos')
+    enemizerEnemyOption.pack(side=LEFT)
 
     enemizerBossFrame = Frame(enemizerFrame)
-    enemizerBossFrame.grid(row=2, column=0)
+    enemizerBossFrame.grid(row=1, column=1)
     enemizerBossLabel = Label(enemizerBossFrame, text='Boss shuffle')
     enemizerBossLabel.pack(side=LEFT)
     enemizerBossVar = StringVar()
@@ -339,7 +366,7 @@ def guiMain(args=None):
     enemizerBossOption.pack(side=LEFT)
 
     enemizerDamageFrame = Frame(enemizerFrame)
-    enemizerDamageFrame.grid(row=2, column=1)
+    enemizerDamageFrame.grid(row=1, column=2)
     enemizerDamageLabel = Label(enemizerDamageFrame, text='Enemy damage')
     enemizerDamageLabel.pack(side=LEFT)
     enemizerDamageVar = StringVar()
@@ -348,7 +375,7 @@ def guiMain(args=None):
     enemizerDamageOption.pack(side=LEFT)
 
     enemizerHealthFrame = Frame(enemizerFrame)
-    enemizerHealthFrame.grid(row=2, column=2)
+    enemizerHealthFrame.grid(row=1, column=3)
     enemizerHealthLabel = Label(enemizerHealthFrame, text='Enemy health')
     enemizerHealthLabel.pack(side=LEFT)
     enemizerHealthVar = StringVar()
@@ -403,14 +430,15 @@ def guiMain(args=None):
         guiargs.retro = bool(retroVar.get())
         guiargs.quickswap = bool(quickSwapVar.get())
         guiargs.disablemusic = bool(disableMusicVar.get())
+        guiargs.ow_palettes = owPalettesVar.get()
+        guiargs.uw_palettes = uwPalettesVar.get()
         guiargs.shuffleganon = bool(shuffleGanonVar.get())
         guiargs.hints = bool(hintsVar.get())
         guiargs.enemizercli = enemizerCLIpathVar.get()
         guiargs.shufflebosses = enemizerBossVar.get()
-        guiargs.shuffleenemies = 'chaos' if bool(enemyShuffleVar.get()) else 'none'
+        guiargs.shuffleenemies = enemyShuffleVar.get()
         guiargs.enemy_health = enemizerHealthVar.get()
         guiargs.enemy_damage = enemizerDamageVar.get()
-        guiargs.shufflepalette = bool(paletteShuffleVar.get())
         guiargs.shufflepots = bool(potShuffleVar.get())
         guiargs.custom = bool(customVar.get())
         guiargs.customitemarray = [int(bowVar.get()), int(silverarrowVar.get()), int(boomerangVar.get()), int(magicboomerangVar.get()), int(hookshotVar.get()), int(mushroomVar.get()), int(magicpowderVar.get()), int(firerodVar.get()),
@@ -442,11 +470,7 @@ def guiMain(args=None):
             logging.exception(e)
             messagebox.showerror(title="Error while creating seed", message=str(e))
         else:
-            msgtxt = "Rom patched successfully"
-            if guiargs.names:
-                for player, name in parse_names_string(guiargs.names).items():
-                    msgtxt += "\nPlayer %d => %s" % (player, name)
-            messagebox.showinfo(title="Success", message=msgtxt)
+            messagebox.showinfo(title="Success", message="Rom patched successfully")
 
     generateButton = Button(bottomFrame, text='Generate Patched Rom', command=generateRom)
 
@@ -534,18 +558,23 @@ def guiMain(args=None):
     fastMenuLabel2 = Label(fastMenuFrame2, text='Menu speed')
     fastMenuLabel2.pack(side=LEFT)
 
-    namesFrame2 = Frame(drowDownFrame2)
-    namesLabel2 = Label(namesFrame2, text='Player names')
-    namesVar2 = StringVar()
-    namesEntry2 = Entry(namesFrame2, textvariable=namesVar2)
+    owPalettesFrame2 = Frame(drowDownFrame2)
+    owPalettesOptionMenu2 = OptionMenu(owPalettesFrame2, owPalettesVar, 'default', 'random', 'blackout')
+    owPalettesOptionMenu2.pack(side=RIGHT)
+    owPalettesLabel2 = Label(owPalettesFrame2, text='Overworld palettes')
+    owPalettesLabel2.pack(side=LEFT)
 
-    namesLabel2.pack(side=LEFT)
-    namesEntry2.pack(side=LEFT)
+    uwPalettesFrame2 = Frame(drowDownFrame2)
+    uwPalettesOptionMenu2 = OptionMenu(uwPalettesFrame2, uwPalettesVar, 'default', 'random', 'blackout')
+    uwPalettesOptionMenu2.pack(side=RIGHT)
+    uwPalettesLabel2 = Label(uwPalettesFrame2, text='Dungeon palettes')
+    uwPalettesLabel2.pack(side=LEFT)
 
     heartbeepFrame2.pack(expand=True, anchor=E)
     heartcolorFrame2.pack(expand=True, anchor=E)
     fastMenuFrame2.pack(expand=True, anchor=E)
-    namesFrame2.pack(expand=True, anchor=E)
+    owPalettesFrame2.pack(expand=True, anchor=E)
+    uwPalettesFrame2.pack(expand=True, anchor=E)
 
     bottomFrame2 = Frame(topFrame2)
 
@@ -554,22 +583,20 @@ def guiMain(args=None):
         guiargs.heartbeep = heartbeepVar.get()
         guiargs.heartcolor = heartcolorVar.get()
         guiargs.fastmenu = fastMenuVar.get()
+        guiargs.ow_palettes = owPalettesVar.get()
+        guiargs.uw_palettes = uwPalettesVar.get()
         guiargs.quickswap = bool(quickSwapVar.get())
         guiargs.disablemusic = bool(disableMusicVar.get())
         guiargs.rom = romVar2.get()
+        guiargs.baserom = romVar.get()
         guiargs.sprite = sprite
-        guiargs.names = namesEntry2.get()
         try:
             adjust(args=guiargs)
         except Exception as e:
             logging.exception(e)
             messagebox.showerror(title="Error while creating seed", message=str(e))
         else:
-            msgtxt = "Rom patched successfully"
-            if guiargs.names:
-                for player, name in parse_names_string(guiargs.names).items():
-                    msgtxt += "\nPlayer %d => %s" % (player, name)
-            messagebox.showinfo(title="Success", message=msgtxt)
+            messagebox.showinfo(title="Success", message="Rom patched successfully")
 
     adjustButton = Button(bottomFrame2, text='Adjust Rom', command=adjustRom)
 

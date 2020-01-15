@@ -10,7 +10,7 @@ import sys
 from BaseClasses import World
 from Regions import create_regions
 from EntranceShuffle import link_entrances, connect_entrance, connect_two_way, connect_exit
-from Rom import patch_rom, LocalRom, Sprite, write_string_to_rom, apply_rom_settings
+from Rom import patch_rom, LocalRom, write_string_to_rom, apply_rom_settings, get_sprite_from_name
 from Rules import set_rules
 from Dungeons import create_dungeons
 from Items import ItemFactory
@@ -23,7 +23,8 @@ def main(args):
     start_time = time.process_time()
 
     # initialize the world
-    world = World(1, 'vanilla', 'noglitches', 'standard', 'normal', 'none', 'on', 'ganon', 'freshness', False, False, False, args.quickswap, args.fastmenu, args.disablemusic, False, False, False, None, False)
+    world = World(1, 'vanilla', 'noglitches', 'standard', 'normal', 'none', 'on', 'ganon', 'freshness', False, False, False, False, False, False, None, False)
+    world.player_names[1].append("Player 1")
     logger = logging.getLogger('')
 
     hasher = hashlib.md5()
@@ -68,15 +69,10 @@ def main(args):
 
     logger.info('Patching ROM.')
 
-    if args.sprite is not None:
-        sprite = Sprite(args.sprite)
-    else:
-        sprite = None
-
     rom = LocalRom(args.rom)
-    patch_rom(world, 1, rom)
+    patch_rom(world, rom, 1, 1, False)
 
-    apply_rom_settings(rom, args.heartbeep, args.heartcolor, world.quickswap, world.fastmenu, world.disable_music, sprite)
+    apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.fastmenu, args.disablemusic, args.sprite, args.ow_palettes, args.uw_palettes)
 
     for textname, texttype, text in text_patches:
         if texttype == 'text':
@@ -213,6 +209,8 @@ def start():
                         help='Select the rate at which the heart beep sound is played at low health.')
     parser.add_argument('--heartcolor', default='red', const='red', nargs='?', choices=['red', 'blue', 'green', 'yellow'],
                         help='Select the color of Link\'s heart meter. (default: %(default)s)')
+    parser.add_argument('--ow_palettes', default='default', choices=['default', 'random', 'blackout'])
+    parser.add_argument('--uw_palettes', default='default', choices=['default', 'random', 'blackout'])
     parser.add_argument('--sprite', help='Path to a sprite sheet to use for Link. Needs to be in binary format and have a length of 0x7000 (28672) bytes.')
     parser.add_argument('--plando', help='Filled out template to use for setting up the rom.')
     args = parser.parse_args()
@@ -224,8 +222,8 @@ def start():
     if not os.path.isfile(args.plando):
         input('Could not find Plandomizer distribution at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.plando)
         sys.exit(1)
-    if args.sprite is not None and not os.path.isfile(args.rom):
-        input('Could not find link sprite sheet at given location. \nPress Enter to exit.' % args.sprite)
+    if args.sprite is not None and not os.path.isfile(args.sprite) and not get_sprite_from_name(args.sprite):
+        input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
         sys.exit(1)
 
     # set up logger
