@@ -13,6 +13,7 @@ MultiMystery.py
  * Additional instructions and settings are at the start of the file. Open with a text editor.
  
  MultiServer.py
+  * Added a try/except to prevent malformed console commands from crashing the entire server
   * Added /hint command on the server (use just /hint for help on command)
   * can be used as /hint Playername Itemname
   * All Itemnames can be found in Items.py starting at line 25
