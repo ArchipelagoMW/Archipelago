@@ -158,7 +158,7 @@ def roll_settings(weights):
                 'pedestal': 'pedestal',
                 'triforce-hunt': 'triforcehunt'
                 }[get_choice('goals')]
-    ret.openpyramid = ret.goal == 'fast_ganon'
+    ret.openpyramid = ret.goal == 'crystals'
 
     ret.crystals_gt = get_choice('tower_open')
 
