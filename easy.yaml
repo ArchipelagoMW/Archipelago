@@ -1,0 +1,137 @@
+description: Easy/Open/Normal
+glitches_required: none
+item_placement: basic
+map_shuffle:
+  on: 0
+  off: 1
+compass_shuffle:
+  on: 0
+  off: 1
+smallkey_shuffle:
+  on: 0
+  off: 1
+bigkey_shuffle:
+  on: 0
+  off: 1
+accessibility:
+  items: 0
+  locations: 1
+  none: 0
+entrance_shuffle:
+  none: 1
+  simple: 0
+  restricted: 0
+  full: 0
+  crossed: 0
+  insanity: 0
+goals:
+  ganon: 5
+  fast_ganon: 4
+  dungeons: 1
+  pedestal: 0
+  triforce-hunt: 0
+tower_open:
+  '0': 0
+  '1': 0
+  '2': 0
+  '3': 0
+  '4': 0
+  '5': 0
+  '6': 0
+  '7': 0
+  random: 1
+ganon_open:
+  '0': 0
+  '1': 0
+  '2': 0
+  '3': 0
+  '4': 0
+  '5': 0
+  '6': 0
+  '7': 0
+  random: 1
+world_state:
+  standard: 1
+  open: 9
+  inverted: 0
+  retro: 0
+hints:
+  'on': 1
+  'off': 0
+weapons:
+  randomized: 5
+  assured: 2
+  vanilla: 3
+  swordless: 0
+item_pool:
+  normal: 1
+  hard: 0
+  expert: 0
+  crowd_control: 0
+item_functionality:
+  normal: 1
+  hard: 0
+  expert: 0
+boss_shuffle:
+  none: 1
+  simple: 0
+  full: 0
+  random: 0
+enemy_shuffle:
+  none: 1
+  shuffled: 0
+  random: 0
+enemy_damage:
+  default: 1
+  shuffled: 0
+  random: 0
+enemy_health:
+  default: 1
+  easy: 0
+  hard: 0
+  expert: 0
+pot_shuffle:
+  'on': 0
+  'off': 1
+beemizer:
+  0: 1
+  1: 0
+  2: 0
+  3: 0
+  4: 0
+rom:
+  sprite:
+    random: 1
+    randomonhit: 1
+    link: 1
+  disablemusic: off
+  quickswap:
+    on: 1
+    off: 0
+  menuspeed:
+    normal: 1
+    instant: 1
+    double: 1
+    triple: 1
+    quadruple: 1
+    half: 0
+  heartcolor:
+    red: 1
+    blue: 1
+    green: 1
+    yellow: 1
+    random: 0
+  heartbeep:
+    double: 1
+    normal: 1
+    half: 1
+    quarter: 1
+    off: 1
+  ow_palettes:
+    default: 1
+    random: 1
+    blackout: 0
+  uw_palettes:
+    default: 1
+    random: 1
+    blackout: 0
