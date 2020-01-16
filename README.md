@@ -25,6 +25,7 @@ Notice (Team #1): [Hint]: Berserker's Progressive Sword can be found in Palace o
 Notice (Team #1): [Hint]: Berserker's Progressive Sword can be found in Ganons Tower - Map Chest in Will's World  
 
 Mystery.py
+ * Fix fast_ganon not working at all currently
  * Defaults to generating a non-race ROM (Bonta's only makes race ROMs at this time)
  * If a race ROM is desired, pass --create-race as argument to it
  * When an error is generated due to a broken .yaml file, it now mentions in the error trace which file it is
