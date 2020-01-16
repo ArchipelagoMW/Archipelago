@@ -3,7 +3,7 @@ import logging
 from BaseClasses import Item
 
 
-def ItemFactory(items):
+def ItemFactory(items, player):
     ret = []
     singleton = False
     if isinstance(items, str):
@@ -12,7 +12,7 @@ def ItemFactory(items):
     for item in items:
         if item in item_table:
             advancement, priority, type, code, pedestal_hint, pedestal_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit, hint_text = item_table[item]
-            ret.append(Item(item, advancement, priority, type, code, pedestal_hint, pedestal_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit, hint_text))
+            ret.append(Item(item, advancement, priority, type, code, pedestal_hint, pedestal_credit, sickkid_credit, zora_credit, witch_credit, fluteboy_credit, hint_text, player))
         else:
             logging.getLogger('').warning('Unknown Item: %s', item)
             return None
@@ -24,6 +24,8 @@ def ItemFactory(items):
 
 # Format: Name: (Advancement, Priority, Type, ItemCode, Pedestal Hint Text, Pedestal Credit Text, Sick Kid Credit Text, Zora Credit Text, Witch Credit Text, Flute Boy Credit Text, Hint Text)
 item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher class.', 'the stick and twine', 'arrow-slinging kid', 'arrow sling for sale', 'witch and robin hood', 'archer boy shoots again', 'the Bow'),
+              'Progressive Bow': (True, False, None, 0x64, 'You have\nchosen the\narcher class.', 'the stick and twine', 'arrow-slinging kid', 'arrow sling for sale', 'witch and robin hood', 'archer boy shoots again', 'a Bow'),
+              'Progressive Bow (Alt)': (True, False, None, 0x65, 'You have\nchosen the\narcher class.', 'the stick and twine', 'arrow-slinging kid', 'arrow sling for sale', 'witch and robin hood', 'archer boy shoots again', 'a Bow'),
               'Book of Mudora': (True, False, None, 0x1D, 'This is a\nparadox?!', 'and the story book', 'the scholarly kid', 'moon runes for sale', 'drugs for literacy', 'book-worm boy can read again', 'the Book'),
               'Hammer': (True, False, None, 0x09, 'stop\nhammer time!', 'and m c hammer', 'hammer-smashing kid', 'm c hammer for sale', 'stop...   hammer time', 'stop, hammer time', 'the hammer'),
               'Hookshot': (True, False, None, 0x0A, 'BOING!!!\nBOING!!!\nBOING!!!', 'and the tickle beam', 'tickle-monster kid', 'tickle beam for sale', 'witch and tickle boy', 'beam boy tickles again', 'the Hookshot'),
@@ -42,8 +44,8 @@ item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher cla
               'Flippers': (True, False, None, 0x1E, 'fancy a swim?', 'and the toewebs', 'the swimming kid', 'finger webs for sale', 'shrooms let you swim', 'swimming boy swims again', 'the flippers'),
               'Ice Rod': (True, False, None, 0x08, 'I\'m the cold\nrod. I make\nthings freeze!', 'and the freeze ray', 'the ice-bending kid', 'freeze ray for sale', 'fungus for ice-rod', 'ice-cube boy freezes again', 'the ice rod'),
               'Titans Mitts': (True, False, None, 0x1C, 'Now you can\nlift heavy\nstuff!', 'and the golden glove', 'body-building kid', 'carry glove for sale', 'fungus for bling-gloves', 'body-building boy has gold again', 'the mitts'),
-              'Ether': (True, False, None, 0x10, 'This magic\ncoin freezes\neverything!', 'and the bolt coin', 'coin-collecting kid', 'bolt coin for sale', 'shrooms for bolt-coin', 'medallion boy sees floor again', 'Ether'),
               'Bombos': (True, False, None, 0x0F, 'Burn, baby,\nburn! Fear my\nring of fire!', 'and the swirly coin', 'coin-collecting kid', 'swirly coin for sale', 'shrooms for swirly-coin', 'medallion boy melts room again', 'Bombos'),
+              'Ether': (True, False, None, 0x10, 'This magic\ncoin freezes\neverything!', 'and the bolt coin', 'coin-collecting kid', 'bolt coin for sale', 'shrooms for bolt-coin', 'medallion boy sees floor again', 'Ether'),
               'Quake': (True, False, None, 0x11, 'Maxing out the\nRichter scale\nis what I do!', 'and the wavy coin', 'coin-collecting kid', 'wavy coin for sale', 'shrooms for wavy-coin', 'medallion boy shakes dirt again', 'Quake'),
               'Bottle': (True, False, None, 0x16, 'Now you can\nstore potions\nand stuff!', 'and the terrarium', 'the terrarium kid', 'terrarium for sale', 'special promotion', 'bottle boy has terrarium again', 'a Bottle'),
               'Bottle (Red Potion)': (True, False, None, 0x2B, 'Hearty red goop!', 'and the red goo', 'the liquid kid', 'potion for sale', 'free samples', 'bottle boy has red goo again', 'a Bottle'),
@@ -160,11 +162,12 @@ item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher cla
               'Map (Ganons Tower)': (False, True, 'Map', 0x72, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Ganon\'s Tower'),
               'Small Key (Universal)': (False, True, None, 0xAF, 'A small key for any door', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key'),
               'Nothing': (False, False, None, 0x5A, 'Some Hot Air', 'and the Nothing', 'the zen kid', 'outright theft', 'shroom theft', 'empty boy is bored again', 'nothing'),
-              'Red Potion': (False, False, None, 0x2E, None, None, None, None, None, None, None),
-              'Green Potion': (False, False, None, 0x2F, None, None, None, None, None, None, None),
-              'Blue Potion': (False, False, None, 0x30, None, None, None, None, None, None, None),
-              'Bee': (False, False, None, 0x0E, None, None, None, None, None, None, None),
-              'Small Heart': (False, False, None, 0x42, None, None, None, None, None, None, None),
+              'Bee Trap': (False, False, None, 0xB0, 'We will sting your face a whole lot!', 'and the sting buddies', 'the beekeeper kid', 'insects for sale', 'shroom pollenation', 'bottle boy has mad bees again', 'friendship'),
+              'Red Potion': (False, False, None, 0x2E, 'Hearty red goop!', 'and the red goo', 'the liquid kid', 'potion for sale', 'free samples', 'bottle boy has red goo again', 'a red potion'),
+              'Green Potion': (False, False, None, 0x2F, 'Refreshing green goop!', 'and the green goo', 'the liquid kid', 'potion for sale', 'free samples', 'bottle boy has green goo again', 'a green potion'),
+              'Blue Potion': (False, False, None, 0x30, 'Delicious blue goop!', 'and the blue goo', 'the liquid kid', 'potion for sale', 'free samples', 'bottle boy has blue goo again', 'a blue potion'),
+              'Bee': (False, False, None, 0x0E, 'I will sting your foes a few times', 'and the sting buddy', 'the beekeeper kid', 'insect for sale', 'shroom pollenation', 'bottle boy has mad bee again', 'a bee'),
+              'Small Heart': (False, False, None, 0x42, 'Just a little\npiece of love!', 'and the heart', 'the life-giving kid', 'little love for sale', 'fungus for life', 'life boy feels some love again', 'a heart'),
               'Beat Agahnim 1': (True, False, 'Event', None, None, None, None, None, None, None, None),
               'Beat Agahnim 2': (True, False, 'Event', None, None, None, None, None, None, None, None),
               'Get Frog': (True, False, 'Event', None, None, None, None, None, None, None, None),

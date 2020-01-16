@@ -1,4 +1,5 @@
 import os
+import re
 import subprocess
 import sys
 
@@ -15,6 +16,18 @@ def pc_to_snes(value):
 
 def snes_to_pc(value):
     return ((value & 0x7F0000)>>1)|(value & 0x7FFF)
+
+def parse_player_names(names, players, teams):
+    names = [n for n in re.split(r'[, ]', names) if n]
+    ret = []
+    while names or len(ret) < teams:
+        team = [n[:16] for n in names[:players]]
+        while len(team) != players:
+            team.append(f"Player {len(team) + 1}")
+        ret.append(team)
+
+        names = names[players:]
+    return ret
 
 def is_bundled():
     return getattr(sys, 'frozen', False)
@@ -86,14 +99,6 @@ def close_console():
             ctypes.windll.kernel32.FreeConsole()
         except Exception:
             pass
-
-def new_logic_array():
-    import random
-    l = list(range(256))
-    random.SystemRandom().shuffle(l)
-    chunks = [l[i:i + 16] for i in range(0, len(l), 16)]
-    lines = [", ".join([str(j) for j in i]) for i in chunks]
-    print("logic_hash = ["+",\n              ".join(lines)+"]")
 
 def make_new_base2current(old_rom='Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', new_rom='working.sfc'):
     from collections import OrderedDict

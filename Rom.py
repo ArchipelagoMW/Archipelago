@@ -1,42 +1,64 @@
+import bisect
 import io
 import json
 import hashlib
 import logging
 import os
-import struct
 import random
+import struct
+import sys
+import subprocess
 
-from BaseClasses import ShopType
+from BaseClasses import CollectionState, ShopType, Region, Location
 from Dungeons import dungeon_music_addresses
-from Text import MultiByteTextMapper, text_addresses, Credits, TextTable
+from Text import MultiByteTextMapper, CompressedTextMapper, text_addresses, Credits, TextTable
 from Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts, junk_texts
 from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from Utils import local_path, int16_as_bytes, int32_as_bytes
+from Utils import output_path, local_path, int16_as_bytes, int32_as_bytes, snes_to_pc
 from Items import ItemFactory
+from EntranceShuffle import door_addresses
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = 'cb560220b7b1b8202e92381aee19cd36'
+# RANDOMIZERBASEHASH = '1907d4caccffe60fc69940cfa11b2dab'
 
 
 class JsonRom(object):
 
-    def __init__(self):
+    def __init__(self, name=None, hash=None):
+        self.name = name
+        self.hash = hash
+        self.orig_buffer = None
         self.patches = {}
+        self.addresses = []
 
     def write_byte(self, address, value):
-        self.patches[str(address)] = [value]
+        self.write_bytes(address, [value])
 
     def write_bytes(self, startaddress, values):
         if not values:
             return
-        self.patches[str(startaddress)] = list(values)
+        values = list(values)
 
-    def write_int16(self, address, value):
-        self.write_bytes(address, int16_as_bytes(value))
+        pos = bisect.bisect_right(self.addresses, startaddress)
+        intervalstart = self.addresses[pos-1] if pos else None
+        intervalpatch = self.patches[str(intervalstart)] if pos else None
 
-    def write_int32(self, address, value):
-        self.write_bytes(address, int32_as_bytes(value))
+        if pos and startaddress <= intervalstart + len(intervalpatch): # merge with previous segment
+            offset = startaddress - intervalstart
+            intervalpatch[offset:offset+len(values)] = values
+            startaddress = intervalstart
+            values = intervalpatch
+        else: # new segment
+            self.addresses.insert(pos, startaddress)
+            self.patches[str(startaddress)] = values
+            pos = pos + 1
+
+        while pos < len(self.addresses) and self.addresses[pos] <= startaddress + len(values): # merge the next segment into this one
+            intervalstart = self.addresses[pos]
+            values.extend(self.patches[str(intervalstart)][startaddress+len(values)-intervalstart:])
+            del self.patches[str(intervalstart)]
+            del self.addresses[pos]
 
     def write_to_file(self, file):
         with open(file, 'w') as stream:
@@ -47,15 +69,17 @@ class JsonRom(object):
         h.update(json.dumps([self.patches]).encode('utf-8'))
         return h.hexdigest()
 
-
-
 class LocalRom(object):
 
-    def __init__(self, file, patch=True):
+    def __init__(self, file, patch=True, name=None, hash=None):
+        self.name = name
+        self.hash = hash
+        self.orig_buffer = None
         with open(file, 'rb') as stream:
             self.buffer = read_rom(stream)
         if patch:
             self.patch_base_rom()
+            self.orig_buffer = self.buffer.copy()
 
     def write_byte(self, address, value):
         self.buffer[address] = value
@@ -64,15 +88,17 @@ class LocalRom(object):
         for i, value in enumerate(values):
             self.write_byte(startaddress + i, value)
 
-    def write_int16(self, address, value):
-        self.write_bytes(address, int16_as_bytes(value))
-
-    def write_int32(self, address, value):
-        self.write_bytes(address, int32_as_bytes(value))
-
     def write_to_file(self, file):
         with open(file, 'wb') as outfile:
             outfile.write(self.buffer)
+
+    @staticmethod
+    def fromJsonRom(rom, file, rom_size = 0x200000):
+        ret = LocalRom(file, True, rom.name, rom.hash)
+        ret.buffer.extend(bytearray([0x00] * (rom_size - len(ret.buffer))))
+        for address, values in rom.patches.items():
+            ret.write_bytes(int(address), values)
+        return ret
 
     def patch_base_rom(self):
         # verify correct checksum of baserom
@@ -82,7 +108,7 @@ class LocalRom(object):
             logging.getLogger('').warning('Supplied Base Rom does not match known MD5 for JAP(1.0) release. Will try to patch anyway.')
 
         # extend to 2MB
-        self.buffer.extend(bytearray([0x00] * (2097152 - len(self.buffer))))
+        self.buffer.extend(bytearray([0x00] * (0x200000 - len(self.buffer))))
 
         # load randomizer patches
         with open(local_path('data/base2current.json'), 'r') as stream:
@@ -93,10 +119,10 @@ class LocalRom(object):
                     self.write_bytes(int(baseaddress), values)
 
         # verify md5
-        patchedmd5 = hashlib.md5()
-        patchedmd5.update(self.buffer)
-        if RANDOMIZERBASEHASH != patchedmd5.hexdigest():
-            raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
+        # patchedmd5 = hashlib.md5()
+        # patchedmd5.update(self.buffer)
+        # if RANDOMIZERBASEHASH != patchedmd5.hexdigest():
+        #     raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
 
     def write_crc(self):
         crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
@@ -108,12 +134,187 @@ class LocalRom(object):
         h.update(self.buffer)
         return h.hexdigest()
 
+def write_int16(rom, address, value):
+    rom.write_bytes(address, int16_as_bytes(value))
+
+def write_int32(rom, address, value):
+    rom.write_bytes(address, int32_as_bytes(value))
+
+def write_int16s(rom,  startaddress, values):
+    for i, value in enumerate(values):
+        write_int16(rom, startaddress + (i * 2), value)
+
+def write_int32s(rom, startaddress, values):
+    for i, value in enumerate(values):
+        write_int32(rom, startaddress + (i * 4), value)
+
 def read_rom(stream):
     "Reads rom into bytearray and strips off any smc header"
     buffer = bytearray(stream.read())
     if len(buffer)%0x400 == 0x200:
         buffer = buffer[0x200:]
     return buffer
+
+def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, random_sprite_on_hit):
+    baserom_path = os.path.abspath(baserom_path)
+    basepatch_path = os.path.abspath(local_path('data/base2current.json'))
+    enemizer_basepatch_path = os.path.join(os.path.dirname(enemizercli), "enemizerBasePatch.json")
+    randopatch_path = os.path.abspath(output_path('enemizer_randopatch.json'))
+    options_path = os.path.abspath(output_path('enemizer_options.json'))
+    enemizer_output_path = os.path.abspath(output_path('enemizer_output.json'))
+
+    # write options file for enemizer
+    options = {
+        'RandomizeEnemies': world.enemy_shuffle[player] != 'none',
+        'RandomizeEnemiesType': 3,
+        'RandomizeBushEnemyChance': world.enemy_shuffle[player] == 'chaos',
+        'RandomizeEnemyHealthRange': world.enemy_health[player] != 'default',
+        'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[world.enemy_health[player]],
+        'OHKO': False,
+        'RandomizeEnemyDamage': world.enemy_damage[player] != 'default',
+        'AllowEnemyZeroDamage': True,
+        'ShuffleEnemyDamageGroups': world.enemy_damage[player] != 'default',
+        'EnemyDamageChaosMode': world.enemy_damage[player] == 'chaos',
+        'EasyModeEscape': False,
+        'EnemiesAbsorbable': False,
+        'AbsorbableSpawnRate': 10,
+        'AbsorbableTypes': {
+            'FullMagic': True, 'SmallMagic': True, 'Bomb_1': True, 'BlueRupee': True, 'Heart': True, 'BigKey': True, 'Key': True,
+            'Fairy': True, 'Arrow_10': True, 'Arrow_5': True, 'Bomb_8': True, 'Bomb_4': True, 'GreenRupee': True, 'RedRupee': True
+        },
+        'BossMadness': False,
+        'RandomizeBosses': True,
+        'RandomizeBossesType': 0,
+        'RandomizeBossHealth': False,
+        'RandomizeBossHealthMinAmount': 0,
+        'RandomizeBossHealthMaxAmount': 300,
+        'RandomizeBossDamage': False,
+        'RandomizeBossDamageMinAmount': 0,
+        'RandomizeBossDamageMaxAmount': 200,
+        'RandomizeBossBehavior': False,
+        'RandomizeDungeonPalettes': False,
+        'SetBlackoutMode': False,
+        'RandomizeOverworldPalettes': False,
+        'RandomizeSpritePalettes': False,
+        'SetAdvancedSpritePalettes': False,
+        'PukeMode': False,
+        'NegativeMode': False,
+        'GrayscaleMode': False,
+        'GenerateSpoilers': False,
+        'RandomizeLinkSpritePalette': False,
+        'RandomizePots': shufflepots,
+        'ShuffleMusic': False,
+        'BootlegMagic': True,
+        'CustomBosses': False,
+        'AndyMode': False,
+        'HeartBeepSpeed': 0,
+        'AlternateGfx': False,
+        'ShieldGraphics': "shield_gfx/normal.gfx",
+        'SwordGraphics': "sword_gfx/normal.gfx",
+        'BeeMizer': False,
+        'BeesLevel': 0,
+        'RandomizeTileTrapPattern': world.enemy_shuffle[player] == 'chaos',
+        'RandomizeTileTrapFloorTile': False,
+        'AllowKillableThief': bool(random.randint(0,1)) if world.enemy_shuffle[player] == 'chaos' else world.enemy_shuffle[player] != 'none',
+        'RandomizeSpriteOnHit': random_sprite_on_hit,
+        'DebugMode': False,
+        'DebugForceEnemy': False,
+        'DebugForceEnemyId': 0,
+        'DebugForceBoss': False,
+        'DebugForceBossId': 0,
+        'DebugOpenShutterDoors': False,
+        'DebugForceEnemyDamageZero': False,
+        'DebugShowRoomIdInRupeeCounter': False,
+        'UseManualBosses': True,
+        'ManualBosses': {
+            'EasternPalace': world.get_dungeon("Eastern Palace", player).boss.enemizer_name,
+            'DesertPalace': world.get_dungeon("Desert Palace", player).boss.enemizer_name,
+            'TowerOfHera': world.get_dungeon("Tower of Hera", player).boss.enemizer_name,
+            'AgahnimsTower': 'Agahnim',
+            'PalaceOfDarkness': world.get_dungeon("Palace of Darkness", player).boss.enemizer_name,
+            'SwampPalace': world.get_dungeon("Swamp Palace", player).boss.enemizer_name,
+            'SkullWoods': world.get_dungeon("Skull Woods", player).boss.enemizer_name,
+            'ThievesTown': world.get_dungeon("Thieves Town", player).boss.enemizer_name,
+            'IcePalace': world.get_dungeon("Ice Palace", player).boss.enemizer_name,
+            'MiseryMire': world.get_dungeon("Misery Mire", player).boss.enemizer_name,
+            'TurtleRock': world.get_dungeon("Turtle Rock", player).boss.enemizer_name,
+            'GanonsTower1': world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower', player).bosses['bottom'].enemizer_name,
+            'GanonsTower2': world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower', player).bosses['middle'].enemizer_name,
+            'GanonsTower3': world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower', player).bosses['top'].enemizer_name,
+            'GanonsTower4': 'Agahnim2',
+            'Ganon': 'Ganon',
+        }
+    }
+
+    rom.write_to_file(randopatch_path)
+
+    with open(options_path, 'w') as f:
+        json.dump(options, f)
+
+    subprocess.check_call([os.path.abspath(enemizercli),
+                           '--rom', baserom_path,
+                           '--seed', str(world.rom_seeds[player]),
+                           '--base', basepatch_path,
+                           '--randomizer', randopatch_path,
+                           '--enemizer', options_path,
+                           '--output', enemizer_output_path],
+                          cwd=os.path.dirname(enemizercli), stdout=subprocess.DEVNULL)
+
+    with open(enemizer_basepatch_path, 'r') as f:
+        for patch in json.load(f):
+            rom.write_bytes(patch["address"], patch["patchData"])
+
+    with open(enemizer_output_path, 'r') as f:
+        for patch in json.load(f):
+            rom.write_bytes(patch["address"], patch["patchData"])
+
+    if random_sprite_on_hit:
+        _populate_sprite_table()
+        sprites = list(_sprite_table.values())
+        if sprites:
+            while len(sprites) < 32:
+                sprites.extend(sprites)
+            random.shuffle(sprites)
+
+            for i, path in enumerate(sprites[:32]):
+                sprite = Sprite(path)
+                rom.write_bytes(0x300000 + (i * 0x8000), sprite.sprite)
+                rom.write_bytes(0x307000 + (i * 0x8000), sprite.palette)
+                rom.write_bytes(0x307078 + (i * 0x8000), sprite.glove_palette)
+
+    try:
+        os.remove(randopatch_path)
+    except OSError:
+        pass
+
+    try:
+        os.remove(options_path)
+    except OSError:
+        pass
+
+    try:
+        os.remove(enemizer_output_path)
+    except OSError:
+        pass
+
+_sprite_table = {}
+def _populate_sprite_table():
+    if not _sprite_table:
+        for dir in [local_path('data/sprites/official'), local_path('data/sprites/unofficial')]:
+            for file in os.listdir(dir):
+                filepath = os.path.join(dir, file)
+                if not os.path.isfile(filepath):
+                    continue
+                sprite = Sprite(filepath)
+                if sprite.valid:
+                    _sprite_table[sprite.name.lower()] = filepath
+
+def get_sprite_from_name(name):
+    _populate_sprite_table()
+    name = name.lower()
+    if name in ['random', 'randomonhit']:
+        return Sprite(random.choice(list(_sprite_table.values())))
+    return Sprite(_sprite_table[name]) if name in _sprite_table else None
 
 class Sprite(object):
     default_palette = [255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
@@ -273,46 +474,66 @@ class Sprite(object):
         # split into palettes of 15 colors
         return array_chunk(palette_as_colors, 15)
 
-def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
+def patch_rom(world, rom, player, team, enemized):
+    random.seed(world.rom_seeds[player])
+
+    # progressive bow silver arrow hint hack
+    prog_bow_locs = world.find_items('Progressive Bow', player)
+    if len(prog_bow_locs) > 1:
+        # only pick a distingushed bow if we have at least two
+        distinguished_prog_bow_loc = random.choice(prog_bow_locs)
+        distinguished_prog_bow_loc.item.code = 0x65
+
     # patch items
     for location in world.get_locations():
-        itemid = location.item.code if location.item is not None else 0x5A
-
-        if itemid is None or location.address is None:
+        if location.player != player:
             continue
 
-        locationaddress = location.address
+        itemid = location.item.code if location.item is not None else 0x5A
+
+        if location.address is None:
+            continue
+
         if not location.crystal:
             # Keys in their native dungeon should use the orignal item code for keys
             if location.parent_region.dungeon:
                 dungeon = location.parent_region.dungeon
-                if location.item is not None and location.item.key and dungeon.is_dungeon_item(location.item):
-                    if location.item.type == "BigKey":
+                if location.item is not None and dungeon.is_dungeon_item(location.item):
+                    if location.item.bigkey:
                         itemid = 0x32
-                    if location.item.type == "SmallKey":
+                    if location.item.smallkey:
                         itemid = 0x24
-            rom.write_byte(locationaddress, itemid)
+                    if location.item.map:
+                        itemid = 0x33
+                    if location.item.compass:
+                        itemid = 0x25
+            if location.item and location.item.player != player:
+                if location.player_address is not None:
+                    rom.write_byte(location.player_address, location.item.player)
+                else:
+                    itemid = 0x5A
+            rom.write_byte(location.address, itemid)
         else:
             # crystals
-            for address, value in zip(locationaddress, itemid):
+            for address, value in zip(location.address, itemid):
                 rom.write_byte(address, value)
 
             # patch music
             music_addresses = dungeon_music_addresses[location.name]
-            if world.keysanity:
+            if world.mapshuffle[player]:
                 music = random.choice([0x11, 0x16])
             else:
                 music = 0x11 if 'Pendant' in location.item.name else 0x16
             for music_address in music_addresses:
                 rom.write_byte(music_address, music)
 
-    if world.keysanity:
-        rom.write_byte(0x155C9, random.choice([0x11, 0x16]))  # Randomize GT music too in keysanity mode
+    if world.mapshuffle[player]:
+        rom.write_byte(0x155C9, random.choice([0x11, 0x16]))  # Randomize GT music too with map shuffle
 
     # patch entrance/exits/holes
     for region in world.regions:
         for exit in region.exits:
-            if exit.target is not None:
+            if exit.target is not None and exit.player == player:
                 if isinstance(exit.addresses, tuple):
                     offset = exit.target
                     room_id, ow_area, vram_loc, scroll_y, scroll_x, link_y, link_x, camera_y, camera_x, unknown_1, unknown_2, door_1, door_2 = exit.addresses
@@ -320,38 +541,38 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
 
 
                     rom.write_byte(0x15B8C + offset, ow_area)
-                    rom.write_int16(0x15BDB + 2 * offset, vram_loc)
-                    rom.write_int16(0x15C79 + 2 * offset, scroll_y)
-                    rom.write_int16(0x15D17 + 2 * offset, scroll_x)
+                    write_int16(rom, 0x15BDB + 2 * offset, vram_loc)
+                    write_int16(rom, 0x15C79 + 2 * offset, scroll_y)
+                    write_int16(rom, 0x15D17 + 2 * offset, scroll_x)
 
                     # for positioning fixups we abuse the roomid as a way of identifying which exit data we are appling
                     # Thanks to Zarby89 for originally finding these values
                     # todo fix screen scrolling
 
-                    if world.shuffle not in ['insanity', 'insanity_legacy', 'madness_legacy'] and \
-                        exit.name in ['Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit',
-                                      'Palace of Darkness Exit', 'Swamp Palace Exit', 'Ganons Tower Exit', 'Desert Palace Exit (North)', 'Agahnims Tower Exit', 'Spiral Cave Exit (Top)',
-                                      'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)']:
+                    if world.shuffle[player] not in ['insanity', 'insanity_legacy', 'madness_legacy'] and \
+                            exit.name in ['Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit',
+                                          'Palace of Darkness Exit', 'Swamp Palace Exit', 'Ganons Tower Exit', 'Desert Palace Exit (North)', 'Agahnims Tower Exit', 'Spiral Cave Exit (Top)',
+                                          'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)']:
                         # For exits that connot be reached from another, no need to apply offset fixes.
-                        rom.write_int16(0x15DB5 + 2 * offset, link_y) # same as final else
-                    elif room_id == 0x0059 and world.fix_skullwoods_exit:
-                        rom.write_int16(0x15DB5 + 2 * offset, 0x00F8)
-                    elif room_id == 0x004a and world.fix_palaceofdarkness_exit:
-                        rom.write_int16(0x15DB5 + 2 * offset, 0x0640)
-                    elif room_id == 0x00d6 and world.fix_trock_exit:
-                        rom.write_int16(0x15DB5 + 2 * offset, 0x0134)
+                        write_int16(rom, 0x15DB5 + 2 * offset, link_y) # same as final else
+                    elif room_id == 0x0059 and world.fix_skullwoods_exit[player]:
+                        write_int16(rom, 0x15DB5 + 2 * offset, 0x00F8)
+                    elif room_id == 0x004a and world.fix_palaceofdarkness_exit[player]:
+                        write_int16(rom, 0x15DB5 + 2 * offset, 0x0640)
+                    elif room_id == 0x00d6 and world.fix_trock_exit[player]:
+                        write_int16(rom, 0x15DB5 + 2 * offset, 0x0134)
                     elif room_id == 0x000c and world.fix_gtower_exit: # fix ganons tower exit point
-                        rom.write_int16(0x15DB5 + 2 * offset, 0x00A4)
+                        write_int16(rom, 0x15DB5 + 2 * offset, 0x00A4)
                     else:
-                        rom.write_int16(0x15DB5 + 2 * offset, link_y)
+                        write_int16(rom, 0x15DB5 + 2 * offset, link_y)
 
-                    rom.write_int16(0x15E53 + 2 * offset, link_x)
-                    rom.write_int16(0x15EF1 + 2 * offset, camera_y)
-                    rom.write_int16(0x15F8F + 2 * offset, camera_x)
+                    write_int16(rom, 0x15E53 + 2 * offset, link_x)
+                    write_int16(rom, 0x15EF1 + 2 * offset, camera_y)
+                    write_int16(rom, 0x15F8F + 2 * offset, camera_x)
                     rom.write_byte(0x1602D + offset, unknown_1)
                     rom.write_byte(0x1607C + offset, unknown_2)
-                    rom.write_int16(0x160CB + 2 * offset, door_1)
-                    rom.write_int16(0x16169 + 2 * offset, door_2)
+                    write_int16(rom, 0x160CB + 2 * offset, door_1)
+                    write_int16(rom, 0x16169 + 2 * offset, door_2)
                 elif isinstance(exit.addresses, list):
                     # is hole
                     for address in exit.addresses:
@@ -359,35 +580,43 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
                 else:
                     # patch door table
                     rom.write_byte(0xDBB73 + exit.addresses, exit.target)
-
-    write_custom_shops(rom, world)
+    if world.mode[player] == 'inverted':
+        patch_shuffled_dark_sanc(world, rom, player)
+        
+    write_custom_shops(rom, world, player)
 
     # patch medallion requirements
-    if world.required_medallions[0] == 'Bombos':
+    if world.required_medallions[player][0] == 'Bombos':
         rom.write_byte(0x180022, 0x00)  # requirement
         rom.write_byte(0x4FF2, 0x31)  # sprite
         rom.write_byte(0x50D1, 0x80)
         rom.write_byte(0x51B0, 0x00)
-    elif world.required_medallions[0] == 'Quake':
+    elif world.required_medallions[player][0] == 'Quake':
         rom.write_byte(0x180022, 0x02)  # requirement
         rom.write_byte(0x4FF2, 0x31)  # sprite
         rom.write_byte(0x50D1, 0x88)
         rom.write_byte(0x51B0, 0x00)
-    if world.required_medallions[1] == 'Bombos':
+    if world.required_medallions[player][1] == 'Bombos':
         rom.write_byte(0x180023, 0x00)  # requirement
         rom.write_byte(0x5020, 0x31)  # sprite
         rom.write_byte(0x50FF, 0x90)
         rom.write_byte(0x51DE, 0x00)
-    elif world.required_medallions[1] == 'Ether':
+    elif world.required_medallions[player][1] == 'Ether':
         rom.write_byte(0x180023, 0x01)  # requirement
         rom.write_byte(0x5020, 0x31)  # sprite
         rom.write_byte(0x50FF, 0x98)
         rom.write_byte(0x51DE, 0x00)
 
     # set open mode:
-    if world.mode in ['open', 'swordless']:
+    if world.mode[player] in ['open', 'inverted']:
         rom.write_byte(0x180032, 0x01)  # open mode
+    if world.mode[player] == 'inverted':
+        set_inverted_mode(world, player, rom)
+    elif world.mode[player] == 'standard':
+        rom.write_byte(0x180032, 0x00)  # standard mode
 
+    uncle_location = world.get_location('Link\'s Uncle', player)
+    if uncle_location.item is None or uncle_location.item.name not in ['Master Sword', 'Tempered Sword', 'Fighter Sword', 'Golden Sword', 'Progressive Sword']:
         # disable sword sprite from uncle
         rom.write_bytes(0x6D263, [0x00, 0x00, 0xf6, 0xff, 0x00, 0x0E])
         rom.write_bytes(0x6D26B, [0x00, 0x00, 0xf6, 0xff, 0x00, 0x0E])
@@ -399,21 +628,22 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_bytes(0x6D2EB, [0x00, 0x00, 0xf7, 0xff, 0x02, 0x0E])
         rom.write_bytes(0x6D31B, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
         rom.write_bytes(0x6D323, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
-    else:
-        rom.write_byte(0x180032, 0x00)  # standard mode
 
     # set light cones
-    rom.write_byte(0x180038, 0x01 if world.sewer_light_cone else 0x00)
+    rom.write_byte(0x180038, 0x01 if world.sewer_light_cone[player] else 0x00)
     rom.write_byte(0x180039, 0x01 if world.light_world_light_cone else 0x00)
     rom.write_byte(0x18003A, 0x01 if world.dark_world_light_cone else 0x00)
 
     GREEN_TWENTY_RUPEES = 0x47
-    TRIFORCE_PIECE = ItemFactory('Triforce Piece').code
-    GREEN_CLOCK = ItemFactory('Green Clock').code
+    TRIFORCE_PIECE = ItemFactory('Triforce Piece', player).code
+    GREEN_CLOCK = ItemFactory('Green Clock', player).code
 
     rom.write_byte(0x18004F, 0x01) # Byrna Invulnerability: on
-    # handle difficulty
-    if world.difficulty == 'hard':
+
+    # handle difficulty_adjustments
+    if world.difficulty_adjustments[player] == 'hard':
+        rom.write_byte(0x180181, 0x01) # Make silver arrows work only on ganon
+        rom.write_byte(0x180182, 0x00) # Don't auto equip silvers on pickup
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xD8)  # One Heart
         # potion heal amount
@@ -421,59 +651,39 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         # potion magic restore amount
         rom.write_byte(0x180085, 0x40)  # Half Magic
         #Cape magic cost
-        rom.write_bytes(0x3ADA7, [0x02, 0x02, 0x02])
+        rom.write_bytes(0x3ADA7, [0x02, 0x04, 0x08])
         # Byrna Invulnerability: off
         rom.write_byte(0x18004F, 0x00)
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
-        rom.write_int16(0x180036, world.rupoor_cost)
+        write_int16(rom, 0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x02) # Hookshot only
-        # Make silver arrows only usable against Ganon
-        rom.write_byte(0x180181, 0x01)
-    elif world.difficulty == 'expert':
+    elif world.difficulty_adjustments[player] == 'expert':
+        rom.write_byte(0x180181, 0x01) # Make silver arrows work only on ganon
+        rom.write_byte(0x180182, 0x00) # Don't auto equip silvers on pickup
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xD8)  # One Heart
         # potion heal amount
-        rom.write_byte(0x180084, 0x08)  # One Heart
+        rom.write_byte(0x180084, 0x20)  # 4 Hearts
         # potion magic restore amount
         rom.write_byte(0x180085, 0x20)  # Quarter Magic
         #Cape magic cost
-        rom.write_bytes(0x3ADA7, [0x01, 0x01, 0x01])
+        rom.write_bytes(0x3ADA7, [0x02, 0x04, 0x08])
         # Byrna Invulnerability: off
         rom.write_byte(0x18004F, 0x00)
         #Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
-        rom.write_int16(0x180036, world.rupoor_cost)
+        write_int16(rom, 0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x00) # Nothing
-        # Make silver arrows only usable against Ganon
-        rom.write_byte(0x180181, 0x01)
-    elif world.difficulty == 'insane':
-        # Powdered Fairies Prize
-        rom.write_byte(0x36DD0, 0x79)  # Bees
-        # potion heal amount
-        rom.write_byte(0x180084, 0x00)  # No healing
-        # potion magic restore amount
-        rom.write_byte(0x180085, 0x00)  # No healing
-        #Cape magic cost
-        rom.write_bytes(0x3ADA7, [0x01, 0x01, 0x01])
-        # Byrna Invulnerability: off
-        rom.write_byte(0x18004F, 0x00)
-        #Disable catching fairies
-        rom.write_byte(0x34FD6, 0x80)
-        overflow_replacement = GREEN_TWENTY_RUPEES
-        # Rupoor negative value
-        rom.write_int16(0x180036, world.rupoor_cost)
-        # Set stun items
-        rom.write_byte(0x180180, 0x00) # Nothing
-        # Make silver arrows only usable against Ganon
-        rom.write_byte(0x180181, 0x01)
     else:
+        rom.write_byte(0x180181, 0x00) # Make silver arrows freely usable
+        rom.write_byte(0x180182, 0x01) # auto equip silvers on pickup
         # Powdered Fairies Prize
         rom.write_byte(0x36DD0, 0xE3)  # fairy
         # potion heal amount
@@ -487,34 +697,32 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         #Enable catching fairies
         rom.write_byte(0x34FD6, 0xF0)
         # Rupoor negative value
-        rom.write_int16(0x180036, world.rupoor_cost)
+        write_int16(rom, 0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x03) # All standard items
-        # Make silver arrows freely usable
-        rom.write_byte(0x180181, 0x00)
         #Set overflow items for progressive equipment
         if world.timer in ['timed', 'timed-countdown', 'timed-ohko']:
             overflow_replacement = GREEN_CLOCK
         else:
             overflow_replacement = GREEN_TWENTY_RUPEES
 
-    if world.difficulty in ['easy']:
-        rom.write_byte(0x180182, 0x03) # auto equip silvers on pickup and at ganon
-    elif world.retro and world.difficulty in ['hard', 'expert', 'insane']: #FIXME: this is temporary for v29 baserom (perhaps no so temporary?)
-        rom.write_byte(0x180182, 0x03) # auto equip silvers on pickup and at ganon
-    else:
-        rom.write_byte(0x180182, 0x01) # auto equip silvers on pickup
-
     #Byrna residual magic cost
     rom.write_bytes(0x45C42, [0x04, 0x02, 0x01])
 
-    difficulty = world.difficulty_requirements
+    difficulty = world.difficulty_requirements[player]
+
     #Set overflow items for progressive equipment
     rom.write_bytes(0x180090,
-                    [difficulty.progressive_sword_limit, overflow_replacement,
+                    [difficulty.progressive_sword_limit if world.swords[player] != 'swordless' else 0, overflow_replacement,
                      difficulty.progressive_shield_limit, overflow_replacement,
                      difficulty.progressive_armor_limit, overflow_replacement,
-                     difficulty.progressive_bottle_limit, overflow_replacement])
+                     difficulty.progressive_bottle_limit, overflow_replacement,
+                     difficulty.progressive_bow_limit, overflow_replacement])
+
+    if difficulty.progressive_bow_limit < 2 and world.swords[player] == 'swordless':
+        rom.write_bytes(0x180098, [2, overflow_replacement])
+        rom.write_byte(0x180181, 0x01) # Make silver arrows work only on ganon
+        rom.write_byte(0x180182, 0x00) # Don't auto equip silvers on pickup
 
     # set up game internal RNG seed
     for i in range(1024):
@@ -531,19 +739,30 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
                   0xDF, 0xDF, 0xDF, 0xDF, 0xDF, 0xE0, 0xE0, 0xE0, 0xE0, 0xE0,
                   0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE2, 0xE2, 0xE2, 0xE2, 0xE2,
                   0xE3, 0xE3, 0xE3, 0xE3, 0xE3]
-    if world.difficulty in ['hard', 'expert', 'insane']:
+
+    def chunk(l,n):
+        return [l[i:i+n] for i in range(0, len(l), n)]
+
+    # randomize last 7 slots
+    prizes [-7:] = random.sample(prizes, 7)
+
+    #shuffle order of 7 main packs
+    packs = chunk(prizes[:56], 8)
+    random.shuffle(packs)
+    prizes[:56] = [drop for pack in packs for drop in pack]
+
+    if world.difficulty_adjustments[player] in ['hard', 'expert']:
         prize_replacements = {0xE0: 0xDF, # Fairy -> heart
                               0xE3: 0xD8} # Big magic -> small magic
         prizes = [prize_replacements.get(prize, prize) for prize in prizes]
         dig_prizes = [prize_replacements.get(prize, prize) for prize in dig_prizes]
 
-    if world.retro:
+    if world.retro[player]:
         prize_replacements = {0xE1: 0xDA, #5 Arrows -> Blue Rupee
                               0xE2: 0xDB} #10 Arrows -> Red Rupee
         prizes = [prize_replacements.get(prize, prize) for prize in prizes]
         dig_prizes = [prize_replacements.get(prize, prize) for prize in dig_prizes]
     rom.write_bytes(0x180100, dig_prizes)
-    random.shuffle(prizes)
 
     # write tree pull prizes
     rom.write_byte(0xEFBD4, prizes.pop())
@@ -563,28 +782,6 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     # fill enemy prize packs
     rom.write_bytes(0x37A78, prizes)
 
-    # prize pack drop chances
-    if world.difficulty in ['hard', 'expert', 'insane']:
-        droprates = [0x01, 0x02, 0x03, 0x03, 0x03, 0x04, 0x04]  # 50%, 25%, 3* 12.5%, 2* 6.25%
-    else:
-        droprates = [0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01]  # 50%
-
-    random.shuffle(droprates)
-    rom.write_bytes(0x37A62, droprates)
-
-    vanilla_prize_pack_assignment = [131, 150, 132, 128, 128, 128, 128, 128, 2, 0, 2, 128, 160, 131, 151, 128, 128, 148, 145, 7, 0, 128, 0, 128, 146, 150, 128, 160, 0, 0, 0, 128, 4, 128,
-                                     130, 6, 6, 0, 0, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 0, 0, 128, 128, 144, 128, 145, 145,
-                                     145, 151, 145, 149, 149, 147, 151, 20, 145, 146, 129, 130, 130, 128, 133, 128, 128, 128, 4, 4, 128, 145, 128, 128, 128, 128, 128, 128, 128, 128, 0, 128,
-                                     128, 130, 138, 128, 128, 128, 128, 146, 145, 128, 130, 129, 129, 128, 129, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 151, 128, 128, 128, 128, 194,
-                                     128, 21, 21, 23, 6, 0, 128, 0, 192, 19, 64, 0, 2, 6, 16, 20, 0, 0, 64, 0, 0, 0, 0, 19, 70, 17, 128, 128, 0, 0, 0, 16, 0, 0, 0, 22, 22, 22, 129, 135, 130,
-                                     0, 128, 128, 0, 0, 0, 0, 128, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 0, 0, 0, 23, 0, 18, 0, 0, 0, 0, 0, 16, 23, 0, 64, 1, 0, 0, 0, 0, 0,
-                                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 128, 0, 0, 0, 0, 0, 0]
-
-    # shuffle enemies to prize packs
-    for i in range(243):
-        if vanilla_prize_pack_assignment[i] & 0x0F != 0x00:
-            rom.write_byte(0x6B632 + i, (vanilla_prize_pack_assignment[i] & 0xF0) | random.randint(1, 7))
-
     # set bonk prizes
     bonk_prizes = [0x79, 0xE3, 0x79, 0xAC, 0xAC, 0xE0, 0xDC, 0xAC, 0xE3, 0xE3, 0xDA, 0xE3, 0xDA, 0xD8, 0xAC, 0xAC, 0xE3, 0xD8, 0xE3, 0xE3, 0xE3, 0xE3, 0xE3, 0xE3, 0xDC, 0xDB, 0xE3, 0xDA, 0x79, 0x79, 0xE3, 0xE3,
                    0xDA, 0x79, 0xAC, 0xAC, 0x79, 0xE3, 0x79, 0xAC, 0xAC, 0xE0, 0xDC, 0xE3, 0x79, 0xDE, 0xE3, 0xAC, 0xDB, 0x79, 0xE3, 0xD8, 0xAC, 0x79, 0xE3, 0xDB, 0xDB, 0xE3, 0xE3, 0x79, 0xD8, 0xDD]
@@ -598,26 +795,19 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(address, prize)
 
     # Fill in item substitutions table
-    if world.difficulty in ['easy']:
-        rom.write_bytes(0x184000, [
-            # original_item, limit, replacement_item, filler
-            0x12, 0x01, 0x35, 0xFF, # lamp -> 5 rupees
-            0x58, 0x01, 0x43, 0xFF, # silver arrows -> 1 arrow
-            0x51, 0x06, 0x52, 0xFF, # 6 +5 bomb upgrades -> +10 bomb upgrade
-			0x53, 0x06, 0x54, 0xFF, # 6 +5 arrow upgrades -> +10 arrow upgrade
-            0xFF, 0xFF, 0xFF, 0xFF, # end of table sentinel
-        ])
-    else:
-        rom.write_bytes(0x184000, [
-            # original_item, limit, replacement_item, filler
-            0x12, 0x01, 0x35, 0xFF, # lamp -> 5 rupees
-            0x51, 0x06, 0x52, 0xFF, # 6 +5 bomb upgrades -> +10 bomb upgrade
-			0x53, 0x06, 0x54, 0xFF, # 6 +5 arrow upgrades -> +10 arrow upgrade
-            0xFF, 0xFF, 0xFF, 0xFF, # end of table sentinel
-        ])
+    rom.write_bytes(0x184000, [
+        # original_item, limit, replacement_item, filler
+        0x12, 0x01, 0x35, 0xFF, # lamp -> 5 rupees
+        0x51, 0x06, 0x52, 0xFF, # 6 +5 bomb upgrades -> +10 bomb upgrade
+        0x53, 0x06, 0x54, 0xFF, # 6 +5 arrow upgrades -> +10 arrow upgrade
+        0x58, 0x01, 0x36 if world.retro[player] else 0x43, 0xFF, # silver arrows -> single arrow (red 20 in retro mode)
+        0x3E, difficulty.boss_heart_container_limit, 0x47, 0xff, # boss heart -> green 20
+        0x17, difficulty.heart_piece_limit, 0x47, 0xff, # piece of heart -> green 20
+        0xFF, 0xFF, 0xFF, 0xFF, # end of table sentinel
+    ])
 
     # set Fountain bottle exchange items
-    if world.difficulty in ['hard', 'expert', 'insane']:
+    if world.difficulty[player] in ['hard', 'expert']:
         rom.write_byte(0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][random.randint(0, 5)])
         rom.write_byte(0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][random.randint(0, 5)])
     else:
@@ -650,70 +840,75 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_byte(0x180029, 0x01) # Smithy quick item give
 
     # set swordless mode settings
-    rom.write_byte(0x18003F, 0x01 if world.mode == 'swordless' else 0x00)  # hammer can harm ganon
-    rom.write_byte(0x180040, 0x01 if world.mode == 'swordless' else 0x00)  # open curtains
-    rom.write_byte(0x180041, 0x01 if world.mode == 'swordless' else 0x00)  # swordless medallions
-    rom.write_byte(0x180043, 0xFF if world.mode == 'swordless' else 0x00)  # starting sword for link
-    rom.write_byte(0x180044, 0x01 if world.mode == 'swordless' else 0x00)  # hammer activates tablets
+    rom.write_byte(0x18003F, 0x01 if world.swords[player] == 'swordless' else 0x00)  # hammer can harm ganon
+    rom.write_byte(0x180040, 0x01 if world.swords[player] == 'swordless' else 0x00)  # open curtains
+    rom.write_byte(0x180041, 0x01 if world.swords[player] == 'swordless' else 0x00)  # swordless medallions
+    rom.write_byte(0x180043, 0xFF if world.swords[player] == 'swordless' else 0x00)  # starting sword for link
+    rom.write_byte(0x180044, 0x01 if world.swords[player] == 'swordless' else 0x00)  # hammer activates tablets
 
     # set up clocks for timed modes
-    if world.shuffle == 'vanilla':
+    if world.shuffle[player] == 'vanilla':
         ERtimeincrease = 0
-    elif world.shuffle in ['dungeonssimple', 'dungeonsfull']:
+    elif world.shuffle[player] in ['dungeonssimple', 'dungeonsfull']:
         ERtimeincrease = 10
     else:
         ERtimeincrease = 20
-    if world.keysanity:
+    if world.keyshuffle[player] or world.bigkeyshuffle[player] or world.mapshuffle[player]:
         ERtimeincrease = ERtimeincrease + 15
     if world.clock_mode == 'off':
         rom.write_bytes(0x180190, [0x00, 0x00, 0x00])  # turn off clock mode
-        rom.write_int32(0x180200, 0)  # red clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180204, 0)  # blue clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180208, 0)  # green clock adjustment time (in frames, sint32)
-        rom.write_int32(0x18020C, 0)  # starting time (in frames, sint32)
+        write_int32(rom, 0x180200, 0)  # red clock adjustment time (in frames, sint32)
+        write_int32(rom, 0x180204, 0)  # blue clock adjustment time (in frames, sint32)
+        write_int32(rom, 0x180208, 0)  # green clock adjustment time (in frames, sint32)
+        write_int32(rom, 0x18020C, 0)  # starting time (in frames, sint32)
     elif world.clock_mode == 'ohko':
         rom.write_bytes(0x180190, [0x01, 0x02, 0x01])  # ohko timer with resetable timer functionality
-        rom.write_int32(0x180200, 0)  # red clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180204, 0)  # blue clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180208, 0)  # green clock adjustment time (in frames, sint32)
-        rom.write_int32(0x18020C, 0)  # starting time (in frames, sint32)
+        write_int32(rom, 0x180200, 0)  # red clock adjustment time (in frames, sint32)
+        write_int32(rom, 0x180204, 0)  # blue clock adjustment time (in frames, sint32)
+        write_int32(rom, 0x180208, 0)  # green clock adjustment time (in frames, sint32)
+        write_int32(rom, 0x18020C, 0)  # starting time (in frames, sint32)
     elif world.clock_mode == 'countdown-ohko':
         rom.write_bytes(0x180190, [0x01, 0x02, 0x01])  # ohko timer with resetable timer functionality
-        rom.write_int32(0x180200, -100 * 60 * 60 * 60)  # red clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
-        if world.difficulty == 'easy':
-            rom.write_int32(0x18020C, (20 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
-        elif world.difficulty == 'normal':
-            rom.write_int32(0x18020C, (10 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
+        write_int32(rom, 0x180200, -100 * 60 * 60 * 60)  # red clock adjustment time (in frames, sint32)
+        write_int32(rom, 0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
+        write_int32(rom, 0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
+        if world.difficulty_adjustments[player] == 'normal':
+            write_int32(rom, 0x18020C, (10 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
         else:
-            rom.write_int32(0x18020C, int((5 + ERtimeincrease / 2) * 60 * 60))  # starting time (in frames, sint32)
+            write_int32(rom, 0x18020C, int((5 + ERtimeincrease / 2) * 60 * 60))  # starting time (in frames, sint32)
     if world.clock_mode == 'stopwatch':
         rom.write_bytes(0x180190, [0x02, 0x01, 0x00])  # set stopwatch mode
-        rom.write_int32(0x180200, -2 * 60 * 60)  # red clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
-        rom.write_int32(0x18020C, 0)  # starting time (in frames, sint32)
+        write_int32(rom, 0x180200, -2 * 60 * 60)  # red clock adjustment time (in frames, sint32)
+        write_int32(rom, 0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
+        write_int32(rom, 0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
+        write_int32(rom, 0x18020C, 0)  # starting time (in frames, sint32)
     if world.clock_mode == 'countdown':
         rom.write_bytes(0x180190, [0x01, 0x01, 0x00])  # set countdown, with no reset available
-        rom.write_int32(0x180200, -2 * 60 * 60)  # red clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
-        rom.write_int32(0x18020C, (40 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
+        write_int32(rom, 0x180200, -2 * 60 * 60)  # red clock adjustment time (in frames, sint32)
+        write_int32(rom, 0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
+        write_int32(rom, 0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
+        write_int32(rom, 0x18020C, (40 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
 
     # set up goals for treasure hunt
-    rom.write_bytes(0x180165, [0x0E, 0x28] if world.treasure_hunt_icon == 'Triforce Piece' else [0x0D, 0x28])
-    rom.write_byte(0x180167, world.treasure_hunt_count % 256)
+    rom.write_bytes(0x180165, [0x0E, 0x28] if world.treasure_hunt_icon[player] == 'Triforce Piece' else [0x0D, 0x28])
+    rom.write_byte(0x180167, world.treasure_hunt_count[player] % 256)
+    rom.write_byte(0x180194, 1) # Must turn in triforced pieces (instant win not enabled)
 
-    # TODO: a proper race rom mode should be implemented, that changes the following flag, and rummages the table (or uses the future encryption feature, etc)
     rom.write_bytes(0x180213, [0x00, 0x01]) # Not a Tournament Seed
 
-    rom.write_byte(0x180211, 0x06) #Game type, we set the Entrance and item randomization flags
+    gametype = 0x04 # item
+    if world.shuffle[player] != 'vanilla':
+        gametype |= 0x02 # entrance
+    if enemized:
+        gametype |= 0x01 # enemizer
+    rom.write_byte(0x180211, gametype) # Game type
 
     # assorted fixes
-    rom.write_byte(0x1800A2, 0x01)  # remain in real dark world when dying in dark word dungion before killing aga1
+    rom.write_byte(0x1800A2, 0x01)  # remain in real dark world when dying in dark world dungeon before killing aga1
     rom.write_byte(0x180169, 0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
-    rom.write_byte(0x180171, 0x01 if world.ganon_at_pyramid else 0x00)  # Enable respawning on pyramid after ganon death
+    if world.mode[player] == 'inverted':
+        rom.write_byte(0x180169, 0x02)  # lock aga/ganon tower door with crystals in inverted
+    rom.write_byte(0x180171, 0x01 if world.ganon_at_pyramid[player] else 0x00)  # Enable respawning on pyramid after ganon death
     rom.write_byte(0x180173, 0x01) # Bob is enabled
     rom.write_byte(0x180168, 0x08)  # Spike Cave Damage
     rom.write_bytes(0x18016B, [0x04, 0x02, 0x01]) #Set spike cave and MM spike room Cape usage
@@ -721,74 +916,255 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_bytes(0x50563, [0x3F, 0x14]) # disable below ganon chest
     rom.write_byte(0x50599, 0x00) # disable below ganon chest
     rom.write_bytes(0xE9A5, [0x7E, 0x00, 0x24]) # disable below ganon chest
+    rom.write_byte(0x18008B, 0x01 if world.open_pyramid[player] else 0x00) # pre-open Pyramid Hole
+    rom.write_byte(0x18008C, 0x01 if world.crystals_needed_for_gt[player] == 0 else 0x00) # GT pre-opened if crystal requirement is 0
     rom.write_byte(0xF5D73, 0xF0) # bees are catchable
     rom.write_byte(0xF5F10, 0xF0) # bees are catchable
     rom.write_byte(0x180086, 0x00 if world.aga_randomness else 0x01)  # set blue ball and ganon warp randomness
     rom.write_byte(0x1800A0, 0x01)  # return to light world on s+q without mirror
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
-    rom.write_byte(0x180174, 0x01 if world.fix_fake_world else 0x00)
+    rom.write_byte(0x180174, 0x01 if world.fix_fake_world[player] else 0x00)
     rom.write_byte(0x18017E, 0x01) # Fairy fountains only trade in bottles
-    rom.write_byte(0x180034, 0x0A) # starting max bombs
-    rom.write_byte(0x180035, 30) # starting max arrows
-    for x in range(0x183000, 0x18304F):
-        rom.write_byte(x, 0) # Zero the initial equipment array
-    rom.write_byte(0x18302C, 0x18) # starting max health
-    rom.write_byte(0x18302D, 0x18) # starting current health
-    rom.write_byte(0x183039, 0x68) # starting abilities, bit array
-    rom.write_byte(0x18004A, 0x00) # Inverted mode (off)
+
+    # Starting equipment
+    equip = [0] * (0x340 + 0x4F)
+    equip[0x36C] = 0x18
+    equip[0x36D] = 0x18
+    equip[0x379] = 0x68
+    starting_max_bombs = 10
+    starting_max_arrows = 30
+
+    startingstate = CollectionState(world)
+
+    if startingstate.has('Bow', player):
+        equip[0x340] = 1
+        equip[0x38E] |= 0x20 # progressive flag to get the correct hint in all cases
+        if not world.retro[player]:
+            equip[0x38E] |= 0x80
+    if startingstate.has('Silver Arrows', player):
+        equip[0x38E] |= 0x40
+
+    if startingstate.has('Titans Mitts', player):
+        equip[0x354] = 2
+    elif startingstate.has('Power Glove', player):
+        equip[0x354] = 1
+
+    if startingstate.has('Golden Sword', player):
+        equip[0x359] = 4
+    elif startingstate.has('Tempered Sword', player):
+        equip[0x359] = 3
+    elif startingstate.has('Master Sword', player):
+        equip[0x359] = 2
+    elif startingstate.has('Fighter Sword', player):
+        equip[0x359] = 1
+
+    if startingstate.has('Mirror Shield', player):
+        equip[0x35A] = 3
+    elif startingstate.has('Red Shield', player):
+        equip[0x35A] = 2
+    elif startingstate.has('Blue Shield', player):
+        equip[0x35A] = 1
+
+    if startingstate.has('Red Mail', player):
+        equip[0x35B] = 2
+    elif startingstate.has('Blue Mail', player):
+        equip[0x35B] = 1
+
+    if startingstate.has('Magic Upgrade (1/4)', player):
+        equip[0x37B] = 2
+        equip[0x36E] = 0x80
+    elif startingstate.has('Magic Upgrade (1/2)', player):
+        equip[0x37B] = 1
+        equip[0x36E] = 0x80
+
+    for item in world.precollected_items:
+        if item.player != player:
+            continue
+
+        if item.name in ['Bow', 'Silver Arrows', 'Progressive Bow', 'Progressive Bow (Alt)',
+                         'Titans Mitts', 'Power Glove', 'Progressive Glove',
+                         'Golden Sword', 'Tempered Sword', 'Master Sword', 'Fighter Sword', 'Progressive Sword',
+                         'Mirror Shield', 'Red Shield', 'Blue Shield', 'Progressive Shield',
+                         'Red Mail', 'Blue Mail', 'Progressive Armor',
+                         'Magic Upgrade (1/4)', 'Magic Upgrade (1/2)']:
+            continue
+
+        set_table = {'Book of Mudora': (0x34E, 1), 'Hammer': (0x34B, 1), 'Bug Catching Net': (0x34D, 1), 'Hookshot': (0x342, 1), 'Magic Mirror': (0x353, 2),
+                     'Cape': (0x352, 1), 'Lamp': (0x34A, 1), 'Moon Pearl': (0x357, 1), 'Cane of Somaria': (0x350, 1), 'Cane of Byrna': (0x351, 1),
+                     'Fire Rod': (0x345, 1), 'Ice Rod': (0x346, 1), 'Bombos': (0x347, 1), 'Ether': (0x348, 1), 'Quake': (0x349, 1)}
+        or_table = {'Green Pendant': (0x374, 0x04), 'Red Pendant': (0x374, 0x01), 'Blue Pendant': (0x374, 0x02),
+                    'Crystal 1': (0x37A, 0x02), 'Crystal 2': (0x37A, 0x10), 'Crystal 3': (0x37A, 0x40), 'Crystal 4': (0x37A, 0x20),
+                    'Crystal 5': (0x37A, 0x04), 'Crystal 6': (0x37A, 0x01), 'Crystal 7': (0x37A, 0x08),
+                    'Big Key (Eastern Palace)': (0x367, 0x20), 'Compass (Eastern Palace)': (0x365, 0x20), 'Map (Eastern Palace)': (0x369, 0x20),
+                    'Big Key (Desert Palace)': (0x367, 0x10), 'Compass (Desert Palace)': (0x365, 0x10), 'Map (Desert Palace)': (0x369, 0x10),
+                    'Big Key (Tower of Hera)': (0x366, 0x20), 'Compass (Tower of Hera)': (0x364, 0x20), 'Map (Tower of Hera)': (0x368, 0x20),
+                    'Big Key (Escape)': (0x367, 0xC0), 'Compass (Escape)': (0x365, 0xC0), 'Map (Escape)': (0x369, 0xC0),
+                    'Big Key (Palace of Darkness)': (0x367, 0x02), 'Compass (Palace of Darkness)': (0x365, 0x02), 'Map (Palace of Darkness)': (0x369, 0x02),
+                    'Big Key (Thieves Town)': (0x366, 0x10), 'Compass (Thieves Town)': (0x364, 0x10), 'Map (Thieves Town)': (0x368, 0x10),
+                    'Big Key (Skull Woods)': (0x366, 0x80), 'Compass (Skull Woods)': (0x364, 0x80), 'Map (Skull Woods)': (0x368, 0x80),
+                    'Big Key (Swamp Palace)': (0x367, 0x04), 'Compass (Swamp Palace)': (0x365, 0x04), 'Map (Swamp Palace)': (0x369, 0x04),
+                    'Big Key (Ice Palace)': (0x366, 0x40), 'Compass (Ice Palace)': (0x364, 0x40), 'Map (Ice Palace)': (0x368, 0x40),
+                    'Big Key (Misery Mire)': (0x367, 0x01), 'Compass (Misery Mire)': (0x365, 0x01), 'Map (Misery Mire)': (0x369, 0x01),
+                    'Big Key (Turtle Rock)': (0x366, 0x08), 'Compass (Turtle Rock)': (0x364, 0x08), 'Map (Turtle Rock)': (0x368, 0x08),
+                    'Big Key (Ganons Tower)': (0x366, 0x04), 'Compass (Ganons Tower)': (0x364, 0x04), 'Map (Ganons Tower)': (0x368, 0x04)}
+        set_or_table = {'Flippers': (0x356, 1, 0x379, 0x02),'Pegasus Boots': (0x355, 1, 0x379, 0x04),
+                        'Shovel': (0x34C, 1, 0x38C, 0x04), 'Ocarina': (0x34C, 3, 0x38C, 0x01),
+                        'Mushroom': (0x344, 1, 0x38C, 0x20 | 0x08), 'Magic Powder': (0x344, 2, 0x38C, 0x10),
+                        'Blue Boomerang': (0x341, 1, 0x38C, 0x80), 'Red Boomerang': (0x341, 2, 0x38C, 0x40)}
+        keys = {'Small Key (Eastern Palace)': [0x37E], 'Small Key (Desert Palace)': [0x37F],
+                'Small Key (Tower of Hera)': [0x386],
+                'Small Key (Agahnims Tower)': [0x380], 'Small Key (Palace of Darkness)': [0x382],
+                'Small Key (Thieves Town)': [0x387],
+                'Small Key (Skull Woods)': [0x384], 'Small Key (Swamp Palace)': [0x381],
+                'Small Key (Ice Palace)': [0x385],
+                'Small Key (Misery Mire)': [0x383], 'Small Key (Turtle Rock)': [0x388],
+                'Small Key (Ganons Tower)': [0x389],
+                'Small Key (Universal)': [0x38B], 'Small Key (Escape)': [0x37C, 0x37D]}
+        bottles = {'Bottle': 2, 'Bottle (Red Potion)': 3, 'Bottle (Green Potion)': 4, 'Bottle (Blue Potion)': 5,
+                   'Bottle (Fairy)': 6, 'Bottle (Bee)': 7, 'Bottle (Good Bee)': 8}
+        rupees = {'Rupee (1)': 1, 'Rupees (5)': 5, 'Rupees (20)': 20, 'Rupees (50)': 50, 'Rupees (100)': 100, 'Rupees (300)': 300}
+        bomb_caps = {'Bomb Upgrade (+5)': 5, 'Bomb Upgrade (+10)': 10}
+        arrow_caps = {'Arrow Upgrade (+5)': 5, 'Arrow Upgrade (+10)': 10}
+        bombs = {'Single Bomb': 1, 'Bombs (3)': 3, 'Bombs (10)': 10}
+        arrows = {'Single Arrow': 1, 'Arrows (10)': 10}
+
+        if item.name in set_table:
+            equip[set_table[item.name][0]] = set_table[item.name][1]
+        elif item.name in or_table:
+            equip[or_table[item.name][0]] |= or_table[item.name][1]
+        elif item.name in set_or_table:
+            equip[set_or_table[item.name][0]] = set_or_table[item.name][1]
+            equip[set_or_table[item.name][2]] |= set_or_table[item.name][3]
+        elif item.name in keys:
+            for address in keys[item.name]:
+                equip[address] = min(equip[address] + 1, 99)
+        elif item.name in bottles:
+            if equip[0x34F] < world.difficulty_requirements[player].progressive_bottle_limit:
+                equip[0x35C + equip[0x34F]] = bottles[item.name]
+                equip[0x34F] += 1
+        elif item.name in rupees:
+            equip[0x360:0x362] = list(min(equip[0x360] + (equip[0x361] << 8) + rupees[item.name], 9999).to_bytes(2, byteorder='little', signed=False))
+            equip[0x362:0x364] = list(min(equip[0x362] + (equip[0x363] << 8) + rupees[item.name], 9999).to_bytes(2, byteorder='little', signed=False))
+        elif item.name in bomb_caps:
+            starting_max_bombs = min(starting_max_bombs + bomb_caps[item.name], 50)
+        elif item.name in arrow_caps:
+            starting_max_arrows = min(starting_max_arrows + arrow_caps[item.name], 70)
+        elif item.name in bombs:
+            equip[0x343] += bombs[item.name]
+        elif item.name in arrows:
+            if world.retro[player]:
+                equip[0x38E] |= 0x80
+                equip[0x377] = 1
+            else:
+                equip[0x377] += arrows[item.name]
+        elif item.name in ['Piece of Heart', 'Boss Heart Container', 'Sanctuary Heart Container']:
+            if item.name == 'Piece of Heart':
+                equip[0x36B] = (equip[0x36B] + 1) % 4
+            if item.name != 'Piece of Heart' or equip[0x36B] == 0:
+                equip[0x36C] = min(equip[0x36C] + 0x08, 0xA0)
+                equip[0x36D] = min(equip[0x36D] + 0x08, 0xA0)
+        else:
+            raise RuntimeError(f'Unsupported item in starting equipment: {item.name}')
+
+    equip[0x343] = min(equip[0x343], starting_max_bombs)
+    rom.write_byte(0x180034, starting_max_bombs)
+    equip[0x377] = min(equip[0x377], starting_max_arrows)
+    rom.write_byte(0x180035, starting_max_arrows)
+    rom.write_bytes(0x180046, equip[0x360:0x362])
+    if equip[0x359]:
+        rom.write_byte(0x180043, equip[0x359])
+
+    assert equip[:0x340] == [0] * 0x340
+    rom.write_bytes(0x183000, equip[0x340:])
+    rom.write_bytes(0x271A6, equip[0x340:0x340+60])
+
+    rom.write_byte(0x18004A, 0x00 if world.mode[player] != 'inverted' else 0x01)  # Inverted mode
     rom.write_byte(0x18005D, 0x00) # Hammer always breaks barrier
-    rom.write_byte(0x2AF79, 0xD0) # vortexes: Normal  (D0=light to dark, F0=dark to light, 42 = both)
-    rom.write_byte(0x3A943, 0xD0) # Mirror: Normal  (D0=Dark to Light, F0=light to dark, 42 = both)
-    rom.write_byte(0x3A96D, 0xF0) # Residual Portal: Normal  (F0= Light Side, D0=Dark Side, 42 = both (Darth Vader))
+    rom.write_byte(0x2AF79, 0xD0 if world.mode[player] != 'inverted' else 0xF0) # vortexes: Normal  (D0=light to dark, F0=dark to light, 42 = both)
+    rom.write_byte(0x3A943, 0xD0 if world.mode[player] != 'inverted' else 0xF0) # Mirror: Normal  (D0=Dark to Light, F0=light to dark, 42 = both)
+    rom.write_byte(0x3A96D, 0xF0 if world.mode[player] != 'inverted' else 0xD0) # Residual Portal: Normal  (F0= Light Side, D0=Dark Side, 42 = both (Darth Vader))
     rom.write_byte(0x3A9A7, 0xD0) # Residual Portal: Normal  (D0= Light Side, F0=Dark Side, 42 = both (Darth Vader))
 
     rom.write_bytes(0x180080, [50, 50, 70, 70]) # values to fill for Capacity Upgrades (Bomb5, Bomb10, Arrow5, Arrow10)
 
-    rom.write_byte(0x18004D, 0x00) # Escape assist (off)
-    rom.write_byte(0x18004E, 0x00) # escape fills
-    rom.write_int16(0x180183, 0) # rupee fill (for bow if rupee arrows enabled)
-    rom.write_bytes(0x180185, [0x00, 0x00, 0x00]) # uncle item refills
-    rom.write_bytes(0x180188, [0x00, 0x00, 0x00]) # zelda item refills
-    rom.write_bytes(0x18018B, [0x00, 0x00, 0x00]) # uncle item refills
+    rom.write_byte(0x18004D, ((0x01 if 'arrows' in world.escape_assist[player] else 0x00) |
+                              (0x02 if 'bombs' in world.escape_assist[player] else 0x00) |
+                              (0x04 if 'magic' in world.escape_assist[player] else 0x00))) # Escape assist
 
-
-    if world.goal in ['pedestal', 'triforcehunt']:
+    if world.goal[player] in ['pedestal', 'triforcehunt']:
         rom.write_byte(0x18003E, 0x01)  # make ganon invincible
-    elif world.goal in ['dungeons']:
+    elif world.goal[player] in ['dungeons']:
         rom.write_byte(0x18003E, 0x02)  # make ganon invincible until all dungeons are beat
-    elif world.goal in ['crystals']:
+    elif world.goal[player] in ['crystals']:
         rom.write_byte(0x18003E, 0x04)  # make ganon invincible until all crystals
     else:
         rom.write_byte(0x18003E, 0x03)  # make ganon invincible until all crystals and aga 2 are collected
 
-    rom.write_byte(0x18016A, 0x01 if world.keysanity else 0x00)  # free roaming item text boxes
-    rom.write_byte(0x18003B, 0x01 if world.keysanity else 0x00)  # maps showing crystals on overworld
+    rom.write_byte(0x18005E, world.crystals_needed_for_gt[player])
+    rom.write_byte(0x18005F, world.crystals_needed_for_ganon[player])
+
+    # block HC upstairs doors in rain state in standard mode
+    rom.write_byte(0x18008A, 0x01 if world.mode[player] == "standard" and world.shuffle[player] != 'vanilla' else 0x00)
+
+    rom.write_byte(0x18016A, 0x10 | ((0x01 if world.keyshuffle[player] else 0x00)
+                                     | (0x02 if world.compassshuffle[player] else 0x00)
+                                     | (0x04 if world.mapshuffle[player] else 0x00)
+                                     | (0x08 if world.bigkeyshuffle[player] else 0x00)))  # free roaming item text boxes
+    rom.write_byte(0x18003B, 0x01 if world.mapshuffle[player] else 0x00)  # maps showing crystals on overworld
 
     # compasses showing dungeon count
     if world.clock_mode != 'off':
         rom.write_byte(0x18003C, 0x00)  # Currently must be off if timer is on, because they use same HUD location
-    elif world.difficulty == 'easy':
-        rom.write_byte(0x18003C, 0x02)  # always on
-    elif world.keysanity:
+    elif world.compassshuffle[player]:
         rom.write_byte(0x18003C, 0x01)  # show on pickup
     else:
         rom.write_byte(0x18003C, 0x00)
 
-    rom.write_byte(0x180045, 0xFF if world.keysanity else 0x00)  # free roaming items in menu
-    rom.write_byte(0x180172, 0x01 if world.retro else 0x00)  # universal keys
-    rom.write_byte(0x180175, 0x01 if world.retro else 0x00)  # rupee bow
-    rom.write_byte(0x180176, 0x0A if world.retro else 0x00)  # wood arrow cost
-    rom.write_byte(0x180178, 0x32 if world.retro else 0x00)  # silver arrow cost
-    rom.write_byte(0x301FC, 0xDA if world.retro else 0xE1)  # rupees replace arrows under pots
-    rom.write_byte(0x30052, 0xDB if world.retro else 0xE2) # replace arrows in fish prize from bottle merchant
-    rom.write_bytes(0xECB4E, [0xA9, 0x00, 0xEA, 0xEA] if world.retro else [0xAF, 0x77, 0xF3, 0x7E])  # Thief steals rupees instead of arrows
-    rom.write_bytes(0xF0D96, [0xA9, 0x00, 0xEA, 0xEA] if world.retro else [0xAF, 0x77, 0xF3, 0x7E])  # Pikit steals rupees instead of arrows
-    rom.write_bytes(0xEDA5, [0x35, 0x41] if world.retro else [0x43, 0x44])  # Chest game gives rupees instead of arrows
+    rom.write_byte(0x180045, ((0x01 if world.keyshuffle[player] else 0x00)
+                              | (0x02 if world.bigkeyshuffle[player] else 0x00)
+                              | (0x04 if world.compassshuffle[player] else 0x00)
+                              | (0x08 if world.mapshuffle[player] else 0x00)))  # free roaming items in menu
+
+    # Map reveals
+    reveal_bytes = {
+        "Eastern Palace": 0x2000,
+        "Desert Palace": 0x1000,
+        "Tower of Hera": 0x0020,
+        "Palace of Darkness": 0x0200,
+        "Thieves Town": 0x0010,
+        "Skull Woods": 0x0080,
+        "Swamp Palace": 0x0400,
+        "Ice Palace": 0x0040,
+        "Misery Mire'": 0x0100,
+        "Turtle Rock": 0x0008,
+    }
+
+    def get_reveal_bytes(itemName):
+        locations = world.find_items(itemName, player)
+        if len(locations) < 1:
+            return 0x0000
+        location = locations[0]
+        if location.parent_region and location.parent_region.dungeon:
+            return reveal_bytes.get(location.parent_region.dungeon.name, 0x0000)
+        return 0x0000
+
+    write_int16(rom, 0x18017A, get_reveal_bytes('Green Pendant') if world.mapshuffle[player] else 0x0000) # Sahasrahla reveal
+    write_int16(rom, 0x18017C, get_reveal_bytes('Crystal 5')|get_reveal_bytes('Crystal 6') if world.mapshuffle[player] else 0x0000) # Bomb Shop Reveal
+
+    rom.write_byte(0x180172, 0x01 if world.retro[player] else 0x00)  # universal keys
+    rom.write_byte(0x180175, 0x01 if world.retro[player] else 0x00)  # rupee bow
+    rom.write_byte(0x180176, 0x0A if world.retro[player] else 0x00)  # wood arrow cost
+    rom.write_byte(0x180178, 0x32 if world.retro[player] else 0x00)  # silver arrow cost
+    rom.write_byte(0x301FC, 0xDA if world.retro[player] else 0xE1)  # rupees replace arrows under pots
+    rom.write_byte(0x30052, 0xDB if world.retro[player] else 0xE2) # replace arrows in fish prize from bottle merchant
+    rom.write_bytes(0xECB4E, [0xA9, 0x00, 0xEA, 0xEA] if world.retro[player] else [0xAF, 0x77, 0xF3, 0x7E])  # Thief steals rupees instead of arrows
+    rom.write_bytes(0xF0D96, [0xA9, 0x00, 0xEA, 0xEA] if world.retro[player] else [0xAF, 0x77, 0xF3, 0x7E])  # Pikit steals rupees instead of arrows
+    rom.write_bytes(0xEDA5, [0x35, 0x41] if world.retro[player] else [0x43, 0x44])  # Chest game gives rupees instead of arrows
     digging_game_rng = random.randint(1, 30)  # set rng for digging game
     rom.write_byte(0x180020, digging_game_rng)
     rom.write_byte(0xEFD95, digging_game_rng)
     rom.write_byte(0x1800A3, 0x01)  # enable correct world setting behaviour after agahnim kills
-    rom.write_byte(0x1800A4, 0x01 if world.logic != 'nologic' else 0x00)  # enable POD EG fix
+    rom.write_byte(0x1800A4, 0x01 if world.logic[player] != 'nologic' else 0x00)  # enable POD EG fix
     rom.write_byte(0x180042, 0x01 if world.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
 
     # remove shield from uncle
@@ -800,25 +1176,49 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
     rom.write_bytes(0x6D2FB, [0x00, 0x00, 0xf7, 0xff, 0x02, 0x0E])
     rom.write_bytes(0x6D313, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
 
-    # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
-    rom.write_byte(0x18003D, 0x01 if world.swamp_patch_required else 0x00)
+    rom.write_byte(0x18004E, 0) # Escape Fill (nothing)
+    write_int16(rom, 0x180183, 300) # Escape fill rupee bow
+    rom.write_bytes(0x180185, [0,0,0]) # Uncle respawn refills (magic, bombs, arrows)
+    rom.write_bytes(0x180188, [0,0,0]) # Zelda respawn refills (magic, bombs, arrows)
+    rom.write_bytes(0x18018B, [0,0,0]) # Mantle respawn refills (magic, bombs, arrows)
+    if world.mode[player] == 'standard':
+        if uncle_location.item is not None and uncle_location.item.name in ['Bow', 'Progressive Bow']:
+            rom.write_byte(0x18004E, 1) # Escape Fill (arrows)
+            write_int16(rom, 0x180183, 300) # Escape fill rupee bow
+            rom.write_bytes(0x180185, [0,0,70]) # Uncle respawn refills (magic, bombs, arrows)
+            rom.write_bytes(0x180188, [0,0,10]) # Zelda respawn refills (magic, bombs, arrows)
+            rom.write_bytes(0x18018B, [0,0,10]) # Mantle respawn refills (magic, bombs, arrows)
+        elif uncle_location.item is not None and uncle_location.item.name in ['Bombs (10)']:
+            rom.write_byte(0x18004E, 2) # Escape Fill (bombs)
+            rom.write_bytes(0x180185, [0,50,0]) # Uncle respawn refills (magic, bombs, arrows)
+            rom.write_bytes(0x180188, [0,3,0]) # Zelda respawn refills (magic, bombs, arrows)
+            rom.write_bytes(0x18018B, [0,3,0]) # Mantle respawn refills (magic, bombs, arrows)
+        elif uncle_location.item is not None and uncle_location.item.name in ['Cane of Somaria', 'Cane of Byrna', 'Fire Rod']:
+            rom.write_byte(0x18004E, 4) # Escape Fill (magic)
+            rom.write_bytes(0x180185, [0x80,0,0]) # Uncle respawn refills (magic, bombs, arrows)
+            rom.write_bytes(0x180188, [0x20,0,0]) # Zelda respawn refills (magic, bombs, arrows)
+            rom.write_bytes(0x18018B, [0x20,0,0]) # Mantle respawn refills (magic, bombs, arrows)
 
-    # powder patch: remove the need to leave the scrren after powder, since it causes problems for potion shop at race game
+    # patch swamp: Need to enable permanent drain of water as dam or swamp were moved
+    rom.write_byte(0x18003D, 0x01 if world.swamp_patch_required[player] else 0x00)
+
+    # powder patch: remove the need to leave the screen after powder, since it causes problems for potion shop at race game
     # temporarally we are just nopping out this check we will conver this to a rom fix soon.
-    rom.write_bytes(0x02F539, [0xEA, 0xEA, 0xEA, 0xEA, 0xEA] if world.powder_patch_required else [0xAD, 0xBF, 0x0A, 0xF0, 0x4F])
+    rom.write_bytes(0x02F539, [0xEA, 0xEA, 0xEA, 0xEA, 0xEA] if world.powder_patch_required[player] else [0xAD, 0xBF, 0x0A, 0xF0, 0x4F])
 
     # allow smith into multi-entrance caves in appropriate shuffles
-    if world.shuffle in ['restricted', 'full', 'crossed', 'insanity']:
+    if world.shuffle[player] in ['restricted', 'full', 'crossed', 'insanity']:
         rom.write_byte(0x18004C, 0x01)
 
     # set correct flag for hera basement item
-    if world.get_location('Tower of Hera - Basement Cage').item is not None and world.get_location('Tower of Hera - Basement Cage').item.name == 'Small Key (Tower of Hera)':
+    hera_basement = world.get_location('Tower of Hera - Basement Cage', player)
+    if hera_basement.item is not None and hera_basement.item.name == 'Small Key (Tower of Hera)' and hera_basement.item.player == player:
         rom.write_byte(0x4E3BB, 0xE4)
     else:
         rom.write_byte(0x4E3BB, 0xEB)
 
     # fix trock doors for reverse entrances
-    if world.fix_trock_doors:
+    if world.fix_trock_doors[player]:
         rom.write_byte(0xFED31, 0x0E)  # preopen bombable exit
         rom.write_byte(0xFEE41, 0x0E)  # preopen bombable exit
         # included unconditionally in base2current
@@ -827,11 +1227,18 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         rom.write_byte(0xFED31, 0x2A)  # preopen bombable exit
         rom.write_byte(0xFEE41, 0x2A)  # preopen bombable exit
 
-    write_strings(rom, world)
+    write_strings(rom, world, player, team)
 
     # set rom name
     # 21 bytes
-    rom.write_bytes(0x7FC0, bytearray('ER_062_%09d\0' % world.seed, 'utf8') + world.option_identifier.to_bytes(4, 'big'))
+    from Main import __version__
+    rom.name = bytearray(f'ER{__version__.split("-")[0].replace(".","")[0:3]}_{team+1}_{player}_{world.seed:09}\0', 'utf8')[:21]
+    rom.name.extend([0] * (21 - len(rom.name)))
+    rom.write_bytes(0x7FC0, rom.name)
+
+    # set player names
+    for p in range(1, min(world.players, 64) + 1):
+        rom.write_bytes(0x186380 + ((p - 1) * 32), hud_format_text(world.player_names[p][team]))
 
     # Write title screen Code
     hashint = int(rom.get_hash(), 16)
@@ -843,13 +1250,23 @@ def patch_rom(world, rom, hashtable, beep='normal', color='red', sprite=None):
         hashint & 0x1F,
     ]
     rom.write_bytes(0x180215, code)
-
-    apply_rom_settings(rom, beep, color, world.quickswap, world.fastmenu, world.disable_music, sprite)
+    rom.hash = code
 
     return rom
 
-def write_custom_shops(rom, world):
-    shops = [shop for shop in world.shops if shop.replaceable and shop.active]
+try:
+    import RaceRom
+except ImportError:
+    RaceRom = None
+
+def patch_race_rom(rom):
+    rom.write_bytes(0x180213, [0x01, 0x00]) # Tournament Seed
+
+    if 'RaceRom' in sys.modules:
+        RaceRom.encrypt(rom)
+
+def write_custom_shops(rom, world, player):
+    shops = [shop for shop in world.shops if shop.custom and shop.region.player == player]
 
     shop_data = bytearray()
     items_data = bytearray()
@@ -870,7 +1287,7 @@ def write_custom_shops(rom, world):
         for item in shop.inventory:
             if item is None:
                 break
-            item_data = [shop_id, ItemFactory(item['item']).code] + int16_as_bytes(item['price']) + [item['max'], ItemFactory(item['replacement']).code if item['replacement'] else 0xFF] + int16_as_bytes(item['replacement_price'])
+            item_data = [shop_id, ItemFactory(item['item'], player).code] + int16_as_bytes(item['price']) + [item['max'], ItemFactory(item['replacement'], player).code if item['replacement'] else 0xFF] + int16_as_bytes(item['replacement_price'])
             items_data.extend(item_data)
 
     rom.write_bytes(0x184800, shop_data)
@@ -879,8 +1296,27 @@ def write_custom_shops(rom, world):
     rom.write_bytes(0x184900, items_data)
 
 
+def hud_format_text(text):
+    output = bytes()
+    for char in text.lower():
+        if 'a' <= char <= 'z':
+            output += bytes([0x5d + ord(char) - ord('a'), 0x29])
+        elif '0' <= char <= '8':
+            output += bytes([0x77 + ord(char) - ord('0'), 0x29])
+        elif char == '9':
+            output += b'\x4b\x29'
+        elif char == ' ':
+            output += b'\x7f\x00'
+        else:
+            output += b'\x2a\x29'
+    while len(output) < 32:
+        output += b'\x7f\x00'
+    return output[:32]
 
-def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite):
+
+def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite, ow_palettes, uw_palettes):
+    if sprite and not isinstance(sprite, Sprite):
+        sprite = Sprite(sprite) if os.path.isfile(sprite) else get_sprite_from_name(sprite)
 
     # enable instant item menu
     if fastmenu == 'instant':
@@ -906,73 +1342,12 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
 
     rom.write_byte(0x18004B, 0x01 if quickswap else 0x00)
 
-    music_volumes = [
-        (0x00, [0xD373B, 0xD375B, 0xD90F8]),
-        (0x14, [0xDA710, 0xDA7A4, 0xDA7BB, 0xDA7D2]),
-        (0x3C, [0xD5954, 0xD653B, 0xDA736, 0xDA752, 0xDA772, 0xDA792]),
-        (0x50, [0xD5B47, 0xD5B5E]),
-        (0x54, [0xD4306]),
-        (0x64, [0xD6878, 0xD6883, 0xD6E48, 0xD6E76, 0xD6EFB, 0xD6F2D, 0xDA211, 0xDA35B, 0xDA37B, 0xDA38E, 0xDA39F, 0xDA5C3, 0xDA691, 0xDA6A8, 0xDA6DF]),
-        (0x78, [0xD2349, 0xD3F45, 0xD42EB, 0xD48B9, 0xD48FF, 0xD543F, 0xD5817, 0xD5957, 0xD5ACB, 0xD5AE8, 0xD5B4A, 0xDA5DE, 0xDA608, 0xDA635,
-                0xDA662, 0xDA71F, 0xDA7AF, 0xDA7C6, 0xDA7DD]),
-        (0x82, [0xD2F00, 0xDA3D5]),
-        (0xA0, [0xD249C, 0xD24CD, 0xD2C09, 0xD2C53, 0xD2CAF, 0xD2CEB, 0xD2D91, 0xD2EE6, 0xD38ED, 0xD3C91, 0xD3CD3, 0xD3CE8, 0xD3F0C,
-                0xD3F82, 0xD405F, 0xD4139, 0xD4198, 0xD41D5, 0xD41F6, 0xD422B, 0xD4270, 0xD42B1, 0xD4334, 0xD4371, 0xD43A6, 0xD43DB,
-                0xD441E, 0xD4597, 0xD4B3C, 0xD4BAB, 0xD4C03, 0xD4C53, 0xD4C7F, 0xD4D9C, 0xD5424, 0xD65D2, 0xD664F, 0xD6698, 0xD66FF,
-                0xD6985, 0xD6C5C, 0xD6C6F, 0xD6C8E, 0xD6CB4, 0xD6D7D, 0xD827D, 0xD960C, 0xD9828, 0xDA233, 0xDA3A2, 0xDA49E, 0xDA72B,
-                0xDA745, 0xDA765, 0xDA785, 0xDABF6, 0xDAC0D, 0xDAEBE, 0xDAFAC]),
-        (0xAA, [0xD9A02, 0xD9BD6]),
-        (0xB4, [0xD21CD, 0xD2279, 0xD2E66, 0xD2E70, 0xD2EAB, 0xD3B97, 0xD3BAC, 0xD3BE8, 0xD3C0D, 0xD3C39, 0xD3C68, 0xD3C9F, 0xD3CBC,
-                0xD401E, 0xD4290, 0xD443E, 0xD456F, 0xD47D3, 0xD4D43, 0xD4DCC, 0xD4EBA, 0xD4F0B, 0xD4FE5, 0xD5012, 0xD54BC, 0xD54D5,
-                0xD54F0, 0xD5509, 0xD57D8, 0xD59B9, 0xD5A2F, 0xD5AEB, 0xD5E5E, 0xD5FE9, 0xD658F, 0xD674A, 0xD6827, 0xD69D6, 0xD69F5,
-                0xD6A05, 0xD6AE9, 0xD6DCF, 0xD6E20, 0xD6ECB, 0xD71D4, 0xD71E6, 0xD7203, 0xD721E, 0xD8724, 0xD8732, 0xD9652, 0xD9698,
-                0xD9CBC, 0xD9DC0, 0xD9E49, 0xDAA68, 0xDAA77, 0xDAA88, 0xDAA99, 0xDAF04]),
-        (0x8c, [0xD1D28, 0xD1D41, 0xD1D5C, 0xD1D77, 0xD1EEE, 0xD311D, 0xD31D1, 0xD4148, 0xD5543, 0xD5B6F, 0xD65B3, 0xD6760, 0xD6B6B,
-                0xD6DF6, 0xD6E0D, 0xD73A1, 0xD814C, 0xD825D, 0xD82BE, 0xD8340, 0xD8394, 0xD842C, 0xD8796, 0xD8903, 0xD892A, 0xD91E8,
-                0xD922B, 0xD92E0, 0xD937E, 0xD93C1, 0xDA958, 0xDA971, 0xDA98C, 0xDA9A7]),
-        (0xC8, [0xD1D92, 0xD1DBD, 0xD1DEB, 0xD1F5D, 0xD1F9F, 0xD1FBD, 0xD1FDC, 0xD1FEA, 0xD20CA, 0xD21BB, 0xD22C9, 0xD2754, 0xD284C,
-                0xD2866, 0xD2887, 0xD28A0, 0xD28BA, 0xD28DB, 0xD28F4, 0xD293E, 0xD2BF3, 0xD2C1F, 0xD2C69, 0xD2CA1, 0xD2CC5, 0xD2D05,
-                0xD2D73, 0xD2DAF, 0xD2E3D, 0xD2F36, 0xD2F46, 0xD2F6F, 0xD2FCF, 0xD2FDF, 0xD302B, 0xD3086, 0xD3099, 0xD30A5, 0xD30CD,
-                0xD30F6, 0xD3154, 0xD3184, 0xD333A, 0xD33D9, 0xD349F, 0xD354A, 0xD35E5, 0xD3624, 0xD363C, 0xD3672, 0xD3691, 0xD36B4,
-                0xD36C6, 0xD3724, 0xD3767, 0xD38CB, 0xD3B1D, 0xD3B2F, 0xD3B55, 0xD3B70, 0xD3B81, 0xD3BBF, 0xD3F65, 0xD3FA6, 0xD404F,
-                0xD4087, 0xD417A, 0xD41A0, 0xD425C, 0xD4319, 0xD433C, 0xD43EF, 0xD440C, 0xD4452, 0xD4494, 0xD44B5, 0xD4512, 0xD45D1,
-                0xD45EF, 0xD4682, 0xD46C3, 0xD483C, 0xD4848, 0xD4855, 0xD4862, 0xD486F, 0xD487C, 0xD4A1C, 0xD4A3B, 0xD4A60, 0xD4B27,
-                0xD4C7A, 0xD4D12, 0xD4D81, 0xD4E90, 0xD4ED6, 0xD4EE2, 0xD5005, 0xD502E, 0xD503C, 0xD5081, 0xD51B1, 0xD51C7, 0xD51CF,
-                0xD51EF, 0xD520C, 0xD5214, 0xD5231, 0xD5257, 0xD526D, 0xD5275, 0xD52AF, 0xD52BD, 0xD52CD, 0xD52DB, 0xD549C, 0xD5801,
-                0xD58A4, 0xD5A68, 0xD5A7F, 0xD5C12, 0xD5D71, 0xD5E10, 0xD5E9A, 0xD5F8B, 0xD5FA4, 0xD651A, 0xD6542, 0xD65ED, 0xD661D,
-                0xD66D7, 0xD6776, 0xD68BD, 0xD68E5, 0xD6956, 0xD6973, 0xD69A8, 0xD6A51, 0xD6A86, 0xD6B96, 0xD6C3E, 0xD6D4A, 0xD6E9C,
-                0xD6F80, 0xD717E, 0xD7190, 0xD71B9, 0xD811D, 0xD8139, 0xD816B, 0xD818A, 0xD819E, 0xD81BE, 0xD829C, 0xD82E1, 0xD8306,
-                0xD830E, 0xD835E, 0xD83AB, 0xD83CA, 0xD83F0, 0xD83F8, 0xD844B, 0xD8479, 0xD849E, 0xD84CB, 0xD84EB, 0xD84F3, 0xD854A,
-                0xD8573, 0xD859D, 0xD85B4, 0xD85CE, 0xD862A, 0xD8681, 0xD87E3, 0xD87FF, 0xD887B, 0xD88C6, 0xD88E3, 0xD8944, 0xD897B,
-                0xD8C97, 0xD8CA4, 0xD8CB3, 0xD8CC2, 0xD8CD1, 0xD8D01, 0xD917B, 0xD918C, 0xD919A, 0xD91B5, 0xD91D0, 0xD91DD, 0xD9220,
-                0xD9273, 0xD9284, 0xD9292, 0xD92AD, 0xD92C8, 0xD92D5, 0xD9311, 0xD9322, 0xD9330, 0xD934B, 0xD9366, 0xD9373, 0xD93B6,
-                0xD97A6, 0xD97C2, 0xD97DC, 0xD97FB, 0xD9811, 0xD98FF, 0xD996F, 0xD99A8, 0xD99D5, 0xD9A30, 0xD9A4E, 0xD9A6B, 0xD9A88,
-                0xD9AF7, 0xD9B1D, 0xD9B43, 0xD9B7C, 0xD9BA9, 0xD9C84, 0xD9C8D, 0xD9CAC, 0xD9CE8, 0xD9CF3, 0xD9CFD, 0xD9D46, 0xDA35E,
-                0xDA37E, 0xDA391, 0xDA478, 0xDA4C3, 0xDA4D7, 0xDA4F6, 0xDA515, 0xDA6E2, 0xDA9C2, 0xDA9ED, 0xDAA1B, 0xDAA57, 0xDABAF,
-                0xDABC9, 0xDABE2, 0xDAC28, 0xDAC46, 0xDAC63, 0xDACB8, 0xDACEC, 0xDAD08, 0xDAD25, 0xDAD42, 0xDAD5F, 0xDAE17, 0xDAE34,
-                0xDAE51, 0xDAF2E, 0xDAF55, 0xDAF6B, 0xDAF81, 0xDB14F, 0xDB16B, 0xDB180, 0xDB195, 0xDB1AA]),
-        (0xD2, [0xD2B88, 0xD364A, 0xD369F, 0xD3747]),
-        (0xDC, [0xD213F, 0xD2174, 0xD229E, 0xD2426, 0xD4731, 0xD4753, 0xD4774, 0xD4795, 0xD47B6, 0xD4AA5, 0xD4AE4, 0xD4B96, 0xD4CA5,
-                0xD5477, 0xD5A3D, 0xD6566, 0xD672C, 0xD67C0, 0xD69B8, 0xD6AB1, 0xD6C05, 0xD6DB3, 0xD71AB, 0xD8E2D, 0xD8F0D, 0xD94E0,
-                0xD9544, 0xD95A8, 0xD9982, 0xD9B56, 0xDA694, 0xDA6AB, 0xDAE88, 0xDAEC8, 0xDAEE6, 0xDB1BF]),
-        (0xE6, [0xD210A, 0xD22DC, 0xD2447, 0xD5A4D, 0xD5DDC, 0xDA251, 0xDA26C]),
-        (0xF0, [0xD945E, 0xD967D, 0xD96C2, 0xD9C95, 0xD9EE6, 0xDA5C6]),
-        (0xFA, [0xD2047, 0xD24C2, 0xD24EC, 0xD25A4, 0xD51A8, 0xD51E6, 0xD524E, 0xD529E, 0xD6045, 0xD81DE, 0xD821E, 0xD94AA, 0xD9A9E,
-                0xD9AE4, 0xDA289]),
-        (0xFF, [0xD2085, 0xD21C5, 0xD5F28])
-    ]
-    for volume, addresses in music_volumes:
-        for address in addresses:
-            rom.write_byte(address, volume if not disable_music else 0x00)
+    rom.write_byte(0x0CFE18, 0x00 if disable_music else rom.orig_buffer[0x0CFE18] if rom.orig_buffer else 0x70)
+    rom.write_byte(0x0CFEC1, 0x00 if disable_music else rom.orig_buffer[0x0CFEC1] if rom.orig_buffer else 0xC0)
+    rom.write_bytes(0x0D0000, [0x00, 0x00] if disable_music else rom.orig_buffer[0x0D0000:0x0D0002] if rom.orig_buffer else [0xDA, 0x58])
+    rom.write_bytes(0x0D00E7, [0xC4, 0x58] if disable_music else rom.orig_buffer[0x0D00E7:0x0D00E9] if rom.orig_buffer else [0xDA, 0x58])
 
-    # restore Mirror sound effect volumes (for existing seeds that lack it)
-    rom.write_byte(0xD3E04, 0xC8)
-    rom.write_byte(0xD3DC6, 0xC8)
-    rom.write_byte(0xD3D6E, 0xC8)
-    rom.write_byte(0xD3D34, 0xC8)
-    rom.write_byte(0xD3D55, 0xC8)
-    rom.write_byte(0xD3E38, 0xC8)
-    rom.write_byte(0xD3DAA, 0xFA)
+    rom.write_byte(0x18021A, 1 if disable_music else 0x00)
 
     # set heart beep rate
     rom.write_byte(0x180033, {'off': 0x00, 'half': 0x40, 'quarter': 0x80, 'normal': 0x20, 'double': 0x10}[beep])
@@ -996,6 +1371,18 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
     if sprite is not None:
         write_sprite(rom, sprite)
 
+    default_ow_palettes(rom)
+    if ow_palettes == 'random':
+        randomize_ow_palettes(rom)
+    elif ow_palettes == 'blackout':
+        blackout_ow_palettes(rom)
+
+    default_uw_palettes(rom)
+    if uw_palettes == 'random':
+        randomize_uw_palettes(rom)
+    elif uw_palettes == 'blackout':
+        blackout_uw_palettes(rom)
+
     if isinstance(rom, LocalRom):
         rom.write_crc()
 
@@ -1007,116 +1394,312 @@ def write_sprite(rom, sprite):
     rom.write_bytes(0xDD308, sprite.palette)
     rom.write_bytes(0xDEDF5, sprite.glove_palette)
 
+def set_color(rom, address, color, shade):
+    r = round(min(color[0], 0xFF) * pow(0.8, shade) * 0x1F / 0xFF)
+    g = round(min(color[1], 0xFF) * pow(0.8, shade) * 0x1F / 0xFF)
+    b = round(min(color[2], 0xFF) * pow(0.8, shade) * 0x1F / 0xFF)
+
+    rom.write_bytes(address, ((b << 10) | (g << 5) | (r << 0)).to_bytes(2, byteorder='little', signed=False))
+
+def default_ow_palettes(rom):
+    if not rom.orig_buffer:
+        return
+    rom.write_bytes(0xDE604, rom.orig_buffer[0xDE604:0xDEBB4])
+
+    for address in [0x067FB4, 0x067F94, 0x067FC6, 0x067FE6, 0x067FE1, 0x05FEA9, 0x05FEB3]:
+        rom.write_bytes(address, rom.orig_buffer[address:address+2])
+
+def randomize_ow_palettes(rom):
+    grass, grass2, grass3, dirt, dirt2, water, clouds, dwdirt,\
+        dwgrass, dwwater, dwdmdirt, dwdmgrass, dwdmclouds1, dwdmclouds2 = [[random.randint(60, 215) for _ in range(3)] for _ in range(14)]
+    dwtree = [c + random.randint(-20, 10) for c in dwgrass]
+    treeleaf = [c + random.randint(-20, 10) for c in grass]
+
+    patches = {0x067FB4: (grass, 0), 0x067F94: (grass, 0), 0x067FC6: (grass, 0), 0x067FE6: (grass, 0), 0x067FE1: (grass, 3), 0x05FEA9: (grass, 0), 0x05FEB3: (dwgrass, 1),
+               0x0DD4AC: (grass, 2), 0x0DE6DE: (grass2, 2), 0x0DE6E0: (grass2, 1), 0x0DD4AE: (grass2, 1), 0x0DE9FA: (grass2, 1), 0x0DEA0E: (grass2, 1), 0x0DE9FE: (grass2, 0),
+               0x0DD3D2: (grass2, 2), 0x0DE88C: (grass2, 2), 0x0DE8A8: (grass2, 2), 0x0DE9F8: (grass2, 2), 0x0DEA4E: (grass2, 2), 0x0DEAF6: (grass2, 2), 0x0DEB2E: (grass2, 2), 0x0DEB4A: (grass2, 2),
+               0x0DE892: (grass, 1), 0x0DE886: (grass, 0), 0x0DE6D2: (grass, 0), 0x0DE6FA: (grass, 3), 0x0DE6FC: (grass, 0), 0x0DE6FE: (grass, 0), 0x0DE70A: (grass, 0), 0x0DE708: (grass, 2), 0x0DE70C: (grass, 1),
+               0x0DE6D4: (dirt, 2), 0x0DE6CA: (dirt, 5), 0x0DE6CC: (dirt, 4), 0x0DE6CE: (dirt, 3), 0x0DE6E2: (dirt, 2), 0x0DE6D8: (dirt, 5), 0x0DE6DA: (dirt, 4), 0x0DE6DC: (dirt, 2),
+               0x0DE6F0: (dirt, 2), 0x0DE6E6: (dirt, 5), 0x0DE6E8: (dirt, 4), 0x0DE6EA: (dirt, 2), 0x0DE6EC: (dirt, 4), 0x0DE6EE: (dirt, 2),
+               0x0DE91E: (grass, 0),
+               0x0DE920: (dirt, 2), 0x0DE916: (dirt, 3), 0x0DE934: (dirt, 3),
+               0x0DE92C: (grass, 0), 0x0DE93A: (grass, 0), 0x0DE91C: (grass, 1), 0x0DE92A: (grass, 1), 0x0DEA1C: (grass, 0), 0x0DEA2A: (grass, 0), 0x0DEA30: (grass, 0),
+               0x0DEA2E: (dirt, 5),
+               0x0DE884: (grass, 3), 0x0DE8AE: (grass, 3), 0x0DE8BE: (grass, 3), 0x0DE8E4: (grass, 3), 0x0DE938: (grass, 3), 0x0DE9C4: (grass, 3), 0x0DE6D0: (grass, 4),
+               0x0DE890: (treeleaf, 1), 0x0DE894: (treeleaf, 0),
+               0x0DE924: (water, 3), 0x0DE668: (water, 3), 0x0DE66A: (water, 2), 0x0DE670: (water, 1), 0x0DE918: (water, 1), 0x0DE66C: (water, 0), 0x0DE91A: (water, 0), 0x0DE92E: (water, 1), 0x0DEA1A: (water, 1), 0x0DEA16: (water, 3), 0x0DEA10: (water, 4),
+               0x0DE66E: (dirt, 3), 0x0DE672: (dirt, 2), 0x0DE932: (dirt, 4), 0x0DE936: (dirt, 2), 0x0DE93C: (dirt, 1),
+               0x0DE756: (dirt2, 4), 0x0DE764: (dirt2, 4), 0x0DE772: (dirt2, 4), 0x0DE994: (dirt2, 4), 0x0DE9A2: (dirt2, 4), 0x0DE758: (dirt2, 3), 0x0DE766: (dirt2, 3), 0x0DE774: (dirt2, 3),
+               0x0DE996: (dirt2, 3), 0x0DE9A4: (dirt2, 3), 0x0DE75A: (dirt2, 2), 0x0DE768: (dirt2, 2), 0x0DE776: (dirt2, 2), 0x0DE778: (dirt2, 2), 0x0DE998: (dirt2, 2), 0x0DE9A6: (dirt2, 2),
+               0x0DE9AC: (dirt2, 1), 0x0DE99E: (dirt2, 1), 0x0DE760: (dirt2, 1), 0x0DE77A: (dirt2, 1), 0x0DE77C: (dirt2, 1), 0x0DE798: (dirt2, 1), 0x0DE980: (dirt2, 1),
+               0x0DE75C: (grass3, 2), 0x0DE786: (grass3, 2), 0x0DE794: (grass3, 2), 0x0DE99A: (grass3, 2), 0x0DE75E: (grass3, 1), 0x0DE788: (grass3, 1), 0x0DE796: (grass3, 1), 0x0DE99C: (grass3, 1),
+               0x0DE76A: (clouds, 2), 0x0DE9A8: (clouds, 2), 0x0DE76E: (clouds, 0), 0x0DE9AA: (clouds, 0), 0x0DE8DA: (clouds, 0), 0x0DE8D8: (clouds, 0), 0x0DE8D0: (clouds, 0), 0x0DE98C: (clouds, 2), 0x0DE990: (clouds, 0),
+               0x0DEB34: (dwtree, 4), 0x0DEB30: (dwtree, 3), 0x0DEB32: (dwtree, 1),
+               0x0DE710: (dwdirt, 5), 0x0DE71E: (dwdirt, 5), 0x0DE72C: (dwdirt, 5), 0x0DEAD6: (dwdirt, 5), 0x0DE712: (dwdirt, 4), 0x0DE720: (dwdirt, 4), 0x0DE72E: (dwdirt, 4), 0x0DE660: (dwdirt, 4),
+               0x0DEAD8: (dwdirt, 4), 0x0DEADA: (dwdirt, 3), 0x0DE714: (dwdirt, 3), 0x0DE722: (dwdirt, 3), 0x0DE730: (dwdirt, 3), 0x0DE732: (dwdirt, 3), 0x0DE734: (dwdirt, 2), 0x0DE736: (dwdirt, 2),
+               0x0DE728: (dwdirt, 2), 0x0DE71A: (dwdirt, 2), 0x0DE664: (dwdirt, 2), 0x0DEAE0: (dwdirt, 2),
+               0x0DE716: (dwgrass, 3), 0x0DE740: (dwgrass, 3), 0x0DE74E: (dwgrass, 3), 0x0DEAC0: (dwgrass, 3), 0x0DEACE: (dwgrass, 3), 0x0DEADC: (dwgrass, 3), 0x0DEB24: (dwgrass, 3), 0x0DE752: (dwgrass, 2),
+               0x0DE718: (dwgrass, 1), 0x0DE742: (dwgrass, 1), 0x0DE750: (dwgrass, 1), 0x0DEB26: (dwgrass, 1), 0x0DEAC2: (dwgrass, 1), 0x0DEAD0: (dwgrass, 1), 0x0DEADE: (dwgrass, 1),
+               0x0DE65A: (dwwater, 5), 0x0DE65C: (dwwater, 3), 0x0DEAC8: (dwwater, 3), 0x0DEAD2: (dwwater, 2), 0x0DEABC: (dwwater, 2), 0x0DE662: (dwwater, 2), 0x0DE65E: (dwwater, 1), 0x0DEABE: (dwwater, 1), 0x0DEA98: (dwwater, 2),
+               0x0DE79A: (dwdmdirt, 6), 0x0DE7A8: (dwdmdirt, 6), 0x0DE7B6: (dwdmdirt, 6), 0x0DEB60: (dwdmdirt, 6), 0x0DEB6E: (dwdmdirt, 6), 0x0DE93E: (dwdmdirt, 6), 0x0DE94C: (dwdmdirt, 6), 0x0DEBA6: (dwdmdirt, 6),
+               0x0DE79C: (dwdmdirt, 4), 0x0DE7AA: (dwdmdirt, 4), 0x0DE7B8: (dwdmdirt, 4), 0x0DEB70: (dwdmdirt, 4), 0x0DEBA8: (dwdmdirt, 4), 0x0DEB72: (dwdmdirt, 3), 0x0DEB74: (dwdmdirt, 3), 0x0DE79E: (dwdmdirt, 3), 0x0DE7AC: (dwdmdirt, 3), 0x0DEBAA: (dwdmdirt, 3), 0x0DE7A0: (dwdmdirt, 3),
+               0x0DE7BC: (dwdmgrass, 3),
+               0x0DEBAC: (dwdmdirt, 2), 0x0DE7AE: (dwdmdirt, 2), 0x0DE7C2: (dwdmdirt, 2), 0x0DE7A6: (dwdmdirt, 2), 0x0DEB7A: (dwdmdirt, 2), 0x0DEB6C: (dwdmdirt, 2), 0x0DE7C0: (dwdmdirt, 2),
+               0x0DE7A2: (dwdmgrass, 3), 0x0DE7BE: (dwdmgrass, 3), 0x0DE7CC: (dwdmgrass, 3), 0x0DE7DA: (dwdmgrass, 3), 0x0DEB6A: (dwdmgrass, 3), 0x0DE948: (dwdmgrass, 3), 0x0DE956: (dwdmgrass, 3), 0x0DE964: (dwdmgrass, 3), 0x0DE7CE: (dwdmgrass, 1), 0x0DE7A4: (dwdmgrass, 1), 0x0DEBA2: (dwdmgrass, 1), 0x0DEBB0: (dwdmgrass, 1),
+               0x0DE644: (dwdmclouds1, 2), 0x0DEB84: (dwdmclouds1, 2), 0x0DE648: (dwdmclouds1, 1), 0x0DEB88: (dwdmclouds1, 1),
+               0x0DEBAE: (dwdmclouds2, 2), 0x0DE7B0: (dwdmclouds2, 2), 0x0DE7B4: (dwdmclouds2, 0), 0x0DEB78: (dwdmclouds2, 0), 0x0DEBB2: (dwdmclouds2, 0)
+               }
+    for address, (color, shade) in patches.items():
+        set_color(rom, address, color, shade)
+
+def blackout_ow_palettes(rom):
+    rom.write_bytes(0xDE604, [0] * 0xC4)
+    for i in range(0xDE6C8, 0xDE86C, 70):
+        rom.write_bytes(i, [0] * 64)
+        rom.write_bytes(i+66, [0] * 4)
+    rom.write_bytes(0xDE86C, [0] * 0x348)
+
+    for address in [0x067FB4, 0x067F94, 0x067FC6, 0x067FE6, 0x067FE1, 0x05FEA9, 0x05FEB3]:
+        rom.write_bytes(address, [0,0])
+
+def default_uw_palettes(rom):
+    if not rom.orig_buffer:
+        return
+    rom.write_bytes(0xDD734, rom.orig_buffer[0xDD734:0xDE544])
+
+def randomize_uw_palettes(rom):
+    for dungeon in range(20):
+        wall, pot, chest, floor1, floor2, floor3 = [[random.randint(60, 240) for _ in range(3)] for _ in range(6)]
+
+        for i in range(5):
+            shade = 10 - (i * 2)
+            set_color(rom, 0x0DD734 + (0xB4 * dungeon) + (i * 2), wall, shade)
+            set_color(rom, 0x0DD770 + (0xB4 * dungeon) + (i * 2), wall, shade)
+            set_color(rom, 0x0DD744 + (0xB4 * dungeon) + (i * 2), wall, shade)
+            if dungeon == 0:
+                set_color(rom, 0x0DD7CA + (0xB4 * dungeon) + (i * 2), wall, shade)
+
+        if dungeon == 2:
+            set_color(rom, 0x0DD74E + (0xB4 * dungeon), wall, 3)
+            set_color(rom, 0x0DD750 + (0xB4 * dungeon), wall, 5)
+            set_color(rom, 0x0DD73E + (0xB4 * dungeon), wall, 3)
+            set_color(rom, 0x0DD740 + (0xB4 * dungeon), wall, 5)
+
+        set_color(rom, 0x0DD7E4 + (0xB4 * dungeon), wall, 4)
+        set_color(rom, 0x0DD7E6 + (0xB4 * dungeon), wall, 2)
+
+        set_color(rom, 0xDD7DA + (0xB4 * dungeon), wall, 10)
+        set_color(rom, 0xDD7DC + (0xB4 * dungeon), wall, 8)
+
+        set_color(rom, 0x0DD75A + (0xB4 * dungeon), pot, 7)
+        set_color(rom, 0x0DD75C + (0xB4 * dungeon), pot, 1)
+        set_color(rom, 0x0DD75E + (0xB4 * dungeon), pot, 3)
+
+        set_color(rom, 0x0DD76A + (0xB4 * dungeon), wall, 7)
+        set_color(rom, 0x0DD76C + (0xB4 * dungeon), wall, 2)
+        set_color(rom, 0x0DD76E + (0xB4 * dungeon), wall, 4)
+
+        set_color(rom, 0x0DD7AE + (0xB4 * dungeon), chest, 2)
+        set_color(rom, 0x0DD7B0 + (0xB4 * dungeon), chest, 0)
+
+        for i in range(3):
+            shade = 6 - (i * 2)
+            set_color(rom, 0x0DD764 + (0xB4 * dungeon) + (i * 2), floor1, shade)
+            set_color(rom, 0x0DD782 + (0xB4 * dungeon) + (i * 2), floor1, shade + 3)
+
+            set_color(rom, 0x0DD7A0 + (0xB4 * dungeon) + (i * 2), floor2, shade)
+            set_color(rom, 0x0DD7BE + (0xB4 * dungeon) + (i * 2), floor2, shade + 3)
+
+        set_color(rom, 0x0DD7E2 + (0xB4 * dungeon), floor3, 3)
+        set_color(rom, 0x0DD796 + (0xB4 * dungeon), floor3, 4)
+
+def blackout_uw_palettes(rom):
+    for i in range(0xDD734, 0xDE544, 180):
+        rom.write_bytes(i, [0] * 38)
+        rom.write_bytes(i+44, [0] * 76)
+        rom.write_bytes(i+136, [0] * 44)
+
+def get_hash_string(hash):
+    return ", ".join([hash_alphabet[code & 0x1F] for code in hash])
 
 def write_string_to_rom(rom, target, string):
     address, maxbytes = text_addresses[target]
     rom.write_bytes(address, MultiByteTextMapper.convert(string, maxbytes))
 
 
-def write_strings(rom, world):
+def write_strings(rom, world, player, team):
     tt = TextTable()
     tt.removeUnwantedText()
 
     # Let's keep this guy's text accurate to the shuffle setting.
-    if world.shuffle in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
+    if world.shuffle[player] in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
         tt['kakariko_flophouse_man_no_flippers'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
         tt['kakariko_flophouse_man'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
 
+    def hint_text(dest, ped_hint=False):
+        if not dest:
+            return "nothing"
+        if ped_hint:
+            hint = dest.pedestal_hint_text if dest.pedestal_hint_text else "unknown item"
+        else:
+            hint = dest.hint_text if dest.hint_text else "something"
+        if dest.player != player:
+            if ped_hint:
+                hint += f" for {world.player_names[dest.player][team]}!"
+            elif type(dest) in [Region, Location]:
+                hint += f" in {world.player_names[dest.player][team]}'s world"
+            else:
+                hint += f" for {world.player_names[dest.player][team]}"
+        return hint
+
     # For hints, first we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
-    if world.hints:
+    if world.hints[player]:
         tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles can have hints!'
-        entrances_to_hint = {}
-        entrances_to_hint.update(InconvenientEntrances)
-        if world.shuffle_ganon:
-            entrances_to_hint.update({'Ganons Tower': 'Ganon\'s Tower'})
         hint_locations = HintLocations.copy()
         random.shuffle(hint_locations)
-        all_entrances = world.get_entrances()
+        all_entrances = [entrance for entrance in world.get_entrances() if entrance.player == player]
         random.shuffle(all_entrances)
-        hint_count = 4
+
+        #First we take care of the one inconvenient dungeon in the appropriately simple shuffles.
+        entrances_to_hint = {}
+        entrances_to_hint.update(InconvenientDungeonEntrances)
+        if world.shuffle_ganon:
+            if world.mode[player] == 'inverted':
+                entrances_to_hint.update({'Inverted Ganons Tower': 'The sealed castle door'})
+            else:
+                entrances_to_hint.update({'Ganons Tower': 'Ganon\'s Tower'})
+        if world.shuffle[player] in ['simple', 'restricted', 'restricted_legacy']:
+            for entrance in all_entrances:
+                if entrance.name in entrances_to_hint:
+                    this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(entrance.connected_region) + '.'
+                    tt[hint_locations.pop(0)] = this_hint
+                    entrances_to_hint = {}
+                    break
+        #Now we write inconvenient locations for most shuffles and finish taking care of the less chaotic ones.
+        entrances_to_hint.update(InconvenientOtherEntrances)
+        if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+            hint_count = 0
+        elif world.shuffle[player] in ['simple', 'restricted', 'restricted_legacy']:
+            hint_count = 2
+        else:
+            hint_count = 4
         for entrance in all_entrances:
             if entrance.name in entrances_to_hint:
-                this_hint = entrances_to_hint[entrance.name] + ' leads to ' + entrance.connected_region.hint_text + '.'
-                tt[hint_locations.pop(0)] = this_hint
-                entrances_to_hint.pop(entrance.name)
-                hint_count -= 1
-                if hint_count < 1:
+                if hint_count > 0:
+                    this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(entrance.connected_region) + '.'
+                    tt[hint_locations.pop(0)] = this_hint
+                    entrances_to_hint.pop(entrance.name)
+                    hint_count -= 1
+                else:
                     break
 
+        #Next we handle hints for randomly selected other entrances, curating the selection intelligently based on shuffle.
+        if world.shuffle[player] not in ['simple', 'restricted', 'restricted_legacy']:
+            entrances_to_hint.update(ConnectorEntrances)
+            entrances_to_hint.update(DungeonEntrances)
+            if world.mode[player] == 'inverted':
+                entrances_to_hint.update({'Inverted Agahnims Tower': 'The dark mountain tower'})
+            else:
+                entrances_to_hint.update({'Agahnims Tower': 'The sealed castle door'})
+        elif world.shuffle[player] == 'restricted':
+            entrances_to_hint.update(ConnectorEntrances)
         entrances_to_hint.update(OtherEntrances)
-        if world.shuffle in ['insanity', 'madness_legacy', 'insanity_legacy']:
+        if world.mode[player] == 'inverted':
+            entrances_to_hint.update({'Inverted Dark Sanctuary': 'The dark sanctuary cave'})
+            entrances_to_hint.update({'Inverted Big Bomb Shop': 'The old hero\'s dark home'})
+            entrances_to_hint.update({'Inverted Links House': 'The old hero\'s light home'})
+        else:
+            entrances_to_hint.update({'Dark Sanctuary Hint': 'The dark sanctuary cave'})
+            entrances_to_hint.update({'Big Bomb Shop': 'The old bomb shop'})
+        if world.shuffle[player] in ['insanity', 'madness_legacy', 'insanity_legacy']:
             entrances_to_hint.update(InsanityEntrances)
             if world.shuffle_ganon:
-                entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
-        hint_count = 4
+                if world.mode[player] == 'inverted':
+                    entrances_to_hint.update({'Inverted Pyramid Entrance': 'The extra castle passage'})
+                else:
+                    entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
+        hint_count = 4 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 0
         for entrance in all_entrances:
             if entrance.name in entrances_to_hint:
-                this_hint = entrances_to_hint[entrance.name] + ' leads to ' + entrance.connected_region.hint_text + '.'
-                tt[hint_locations.pop(0)] = this_hint
-                entrances_to_hint.pop(entrance.name)
-                hint_count -= 1
-                if hint_count < 1:
+                if hint_count > 0:
+                    this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(entrance.connected_region) + '.'
+                    tt[hint_locations.pop(0)] = this_hint
+                    entrances_to_hint.pop(entrance.name)
+                    hint_count -= 1
+                else:
                     break
 
         # Next we write a few hints for specific inconvenient locations. We don't make many because in entrance this is highly unpredictable.
         locations_to_hint = InconvenientLocations.copy()
+        if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+            locations_to_hint.extend(InconvenientVanillaLocations)
         random.shuffle(locations_to_hint)
-        hint_count = 3
-        del locations_to_hint[hint_count:]   
+        hint_count = 3 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 5
+        del locations_to_hint[hint_count:]
         for location in locations_to_hint:
             if location == 'Swamp Left':
                 if random.randint(0, 1) == 0:
-                    first_item = world.get_location('Swamp Palace - West Chest').item.hint_text
-                    second_item = world.get_location('Swamp Palace - Big Key Chest').item.hint_text
+                    first_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
+                    second_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
                 else:
-                    second_item = world.get_location('Swamp Palace - West Chest').item.hint_text
-                    first_item = world.get_location('Swamp Palace - Big Key Chest').item.hint_text
+                    second_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
+                    first_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
                 this_hint = ('The westmost chests in Swamp Palace contain ' + first_item + ' and ' + second_item + '.')
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Mire Left':
                 if random.randint(0, 1) == 0:
-                    first_item = world.get_location('Misery Mire - Compass Chest').item.hint_text
-                    second_item = world.get_location('Misery Mire - Big Key Chest').item.hint_text
+                    first_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
+                    second_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
                 else:
-                    second_item = world.get_location('Misery Mire - Compass Chest').item.hint_text
-                    first_item = world.get_location('Misery Mire - Big Key Chest').item.hint_text
+                    second_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
+                    first_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
                 this_hint = ('The westmost chests in Misery Mire contain ' + first_item + ' and ' + second_item + '.')
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Tower of Hera - Big Key Chest':
-                this_hint = 'Waiting in the Tower of Hera basement leads to ' + world.get_location(location).item.hint_text + '.'
+                this_hint = 'Waiting in the Tower of Hera basement leads to ' + hint_text(world.get_location(location, player).item) + '.'
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Ganons Tower - Big Chest':
-                this_hint = 'The big chest in Ganon\'s Tower contains ' + world.get_location(location).item.hint_text + '.'
+                this_hint = 'The big chest in Ganon\'s Tower contains ' + hint_text(world.get_location(location, player).item) + '.'
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Thieves\' Town - Big Chest':
-                this_hint = 'The big chest in Thieves\' Town contains ' + world.get_location(location).item.hint_text + '.'
+                this_hint = 'The big chest in Thieves\' Town contains ' + hint_text(world.get_location(location, player).item) + '.'
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Ice Palace - Big Chest':
-                this_hint = 'The big chest in Ice Palace contains ' + world.get_location(location).item.hint_text + '.'
+                this_hint = 'The big chest in Ice Palace contains ' + hint_text(world.get_location(location, player).item) + '.'
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Eastern Palace - Big Key Chest':
-                this_hint = 'The antifairy guarded chest in Eastern Palace contains ' + world.get_location(location).item.hint_text + '.'
+                this_hint = 'The antifairy guarded chest in Eastern Palace contains ' + hint_text(world.get_location(location, player).item) + '.'
+                tt[hint_locations.pop(0)] = this_hint
+            elif location == 'Sahasrahla':
+                this_hint = 'Sahasrahla seeks a green pendant for ' + hint_text(world.get_location(location, player).item) + '.'
+                tt[hint_locations.pop(0)] = this_hint
+            elif location == 'Graveyard Cave':
+                this_hint = 'The cave north of the graveyard contains ' + hint_text(world.get_location(location, player).item) + '.'
                 tt[hint_locations.pop(0)] = this_hint
             else:
-                this_hint = location + ' leads to ' + world.get_location(location).item.hint_text + '.'
+                this_hint = location + ' contains ' + hint_text(world.get_location(location, player).item) + '.'
                 tt[hint_locations.pop(0)] = this_hint
 
         # Lastly we write hints to show where certain interesting items are. It is done the way it is to re-use the silver code and also to give one hint per each type of item regardless of how many exist. This supports many settings well.
         items_to_hint = RelevantItems.copy()
-        if world.keysanity:
-            items_to_hint.extend(KeysanityItems)
+        if world.keyshuffle[player]:
+            items_to_hint.extend(SmallKeys)
+        if world.bigkeyshuffle[player]:
+            items_to_hint.extend(BigKeys)
         random.shuffle(items_to_hint)
-        hint_count = 5
-        while(hint_count > 0):
+        hint_count = 5 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 8
+        while hint_count > 0:
             this_item = items_to_hint.pop(0)
-            this_location = world.find_items(this_item)
+            this_location = world.find_items(this_item, player)
             random.shuffle(this_location)
+            #This looks dumb but prevents hints for Skull Woods Pinball Room's key safely with any item pool.
             if this_location:
-                this_hint = this_location[0].item.hint_text + ' can be found ' + this_location[0].hint_text + '.'
+                if this_location[0].name == 'Skull Woods - Pinball Room':
+                    this_location.pop(0)
+            if this_location:
+                this_hint = this_location[0].item.hint_text + ' can be found ' + hint_text(this_location[0]) + '.'
                 tt[hint_locations.pop(0)] = this_hint
                 hint_count -= 1
-            else:
-                continue
 
         # All remaining hint slots are filled with junk hints. It is done this way to ensure the same junk hint isn't selected twice.
         junk_hints = junk_texts.copy()
@@ -1124,18 +1707,39 @@ def write_strings(rom, world):
         for location in hint_locations:
             tt[location] = junk_hints.pop(0)
 
-   # We still need the older hints of course. Those are done here.
-    silverarrows = world.find_items('Silver Arrows')
-    random.shuffle(silverarrows)
-    silverarrow_hint = (' %s?' % silverarrows[0].hint_text.replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
-    tt['ganon_phase_3'] = 'Did you find the silver arrows%s' % silverarrow_hint
+    # We still need the older hints of course. Those are done here.
 
-    crystal5 = world.find_items('Crystal 5')[0]
-    crystal6 = world.find_items('Crystal 6')[0]
+
+    silverarrows = world.find_items('Silver Arrows', player)
+    random.shuffle(silverarrows)
+    silverarrow_hint = (' %s?' % hint_text(silverarrows[0]).replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
+    tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
+    tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
+
+    prog_bow_locs = world.find_items('Progressive Bow', player)
+    distinguished_prog_bow_loc = next((location for location in prog_bow_locs if location.item.code == 0x65), None)
+    if distinguished_prog_bow_loc:
+        prog_bow_locs.remove(distinguished_prog_bow_loc)
+        silverarrow_hint = (' %s?' % hint_text(distinguished_prog_bow_loc).replace('Ganon\'s', 'my'))
+        tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
+
+    if any(prog_bow_locs):
+        silverarrow_hint = (' %s?' % hint_text(random.choice(prog_bow_locs)).replace('Ganon\'s', 'my'))
+        tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
+
+
+    crystal5 = world.find_items('Crystal 5', player)[0]
+    crystal6 = world.find_items('Crystal 6', player)[0]
     tt['bomb_shop'] = 'Big Bomb?\nMy supply is blocked until you clear %s and %s.' % (crystal5.hint_text, crystal6.hint_text)
 
-    greenpendant = world.find_items('Green Pendant')[0]
+    greenpendant = world.find_items('Green Pendant', player)[0]
     tt['sahasrahla_bring_courage'] = 'I lost my family heirloom in %s' % greenpendant.hint_text
+
+    tt['sign_ganons_tower'] = ('You need %d crystal to enter.' if world.crystals_needed_for_gt[player] == 1 else 'You need %d crystals to enter.') % world.crystals_needed_for_gt[player]
+    tt['sign_ganon'] = ('You need %d crystal to beat Ganon.' if world.crystals_needed_for_ganon[player] == 1 else 'You need %d crystals to beat Ganon.') % world.crystals_needed_for_ganon[player]
+
+    if world.goal[player] in ['dungeons']:
+        tt['sign_ganon'] = 'You need to complete all the dungeons.'
 
     tt['uncle_leaving_text'] = Uncle_texts[random.randint(0, len(Uncle_texts) - 1)]
     tt['end_triforce'] = "{NOBORDER}\n" + Triforce_texts[random.randint(0, len(Triforce_texts) - 1)]
@@ -1145,41 +1749,60 @@ def write_strings(rom, world):
     tt['sahasrahla_quest_have_master_sword'] = Sahasrahla2_texts[random.randint(0, len(Sahasrahla2_texts) - 1)]
     tt['blind_by_the_light'] = Blind_texts[random.randint(0, len(Blind_texts) - 1)]
 
-    if world.goal in ['pedestal', 'triforcehunt']:
-        tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me!'
+    if world.goal[player] in ['triforcehunt']:
+        tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Get the Triforce Pieces.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
+        tt['sign_ganon'] = 'Go find the Triforce pieces... Ganon is invincible!'
+        tt['murahdahla'] = "Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\ninvisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\nhidden in  a hollow tree. If you bring\n%d triforce pieces, I can reassemble it." % world.treasure_hunt_count[player]
+    elif world.goal[player] in ['pedestal']:
+        tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Your goal is at the pedestal.'
+        tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
+        tt['sign_ganon'] = 'You need to get to the pedestal... Ganon is invincible!'
     else:
         tt['ganon_fall_in'] = Ganon1_texts[random.randint(0, len(Ganon1_texts) - 1)]
         tt['ganon_fall_in_alt'] = 'You cannot defeat me until you finish your goal!'
         tt['ganon_phase_3_alt'] = 'Got wax in\nyour ears?\nI can not die!'
+
     tt['kakariko_tavern_fisherman'] = TavernMan_texts[random.randint(0, len(TavernMan_texts) - 1)]
 
-    pedestalitem = world.get_location('Master Sword Pedestal').item
-    pedestal_text = 'Some Hot Air' if pedestalitem is None else pedestalitem.pedestal_hint_text if pedestalitem.pedestal_hint_text is not None else 'Unknown Item'
+    pedestalitem = world.get_location('Master Sword Pedestal', player).item
+    pedestal_text = 'Some Hot Air' if pedestalitem is None else hint_text(pedestalitem, True) if pedestalitem.pedestal_hint_text is not None else 'Unknown Item'
     tt['mastersword_pedestal_translated'] = pedestal_text
     pedestal_credit_text = 'and the Hot Air' if pedestalitem is None else pedestalitem.pedestal_credit_text if pedestalitem.pedestal_credit_text is not None else 'and the Unknown Item'
 
-    etheritem = world.get_location('Ether Tablet').item
-    ether_text = 'Some Hot Air' if etheritem is None else etheritem.pedestal_hint_text if etheritem.pedestal_hint_text is not None else 'Unknown Item'
+    etheritem = world.get_location('Ether Tablet', player).item
+    ether_text = 'Some Hot Air' if etheritem is None else hint_text(etheritem, True) if etheritem.pedestal_hint_text is not None else 'Unknown Item'
     tt['tablet_ether_book'] = ether_text
-    bombositem = world.get_location('Bombos Tablet').item
-    bombos_text = 'Some Hot Air' if bombositem is None else bombositem.pedestal_hint_text if bombositem.pedestal_hint_text is not None else 'Unknown Item'
+    bombositem = world.get_location('Bombos Tablet', player).item
+    bombos_text = 'Some Hot Air' if bombositem is None else hint_text(bombositem, True) if bombositem.pedestal_hint_text is not None else 'Unknown Item'
     tt['tablet_bombos_book'] = bombos_text
 
+    # inverted spawn menu changes
+    if world.mode[player] == 'inverted':
+        tt['menu_start_2'] = "{MENU}\n{SPEED0}\n≥@'s house\n Dark Chapel\n{CHOICE3}"
+        tt['menu_start_3'] = "{MENU}\n{SPEED0}\n≥@'s house\n Dark Chapel\n Mountain Cave\n{CHOICE2}"
+        tt['intro_main'] = CompressedTextMapper.convert(
+                            "{INTRO}\n Episode  III\n{PAUSE3}\n A Link to\n   the Past\n"
+                            + "{PAUSE3}\nInverted\n  Randomizer\n{PAUSE3}\nAfter mostly disregarding what happened in the first two games.\n"
+                            + "{PAUSE3}\nLink has been transported to the Dark World\n{PAUSE3}\nWhile he was slumbering\n"
+                            + "{PAUSE3}\nWhatever will happen?\n{PAUSE3}\n{CHANGEPIC}\nGanon has moved around all the items in Hyrule.\n"
+                            + "{PAUSE7}\nYou will have to find all the items necessary to beat Ganon.\n"
+                            + "{PAUSE7}\nThis is your chance to be a hero.\n{PAUSE3}\n{CHANGEPIC}\n"
+                            + "You must get the 7 crystals to beat Ganon.\n{PAUSE9}\n{CHANGEPIC}", False)
     rom.write_bytes(0xE0000, tt.getBytes())
 
     credits = Credits()
 
-    sickkiditem = world.get_location('Sick Kid').item
+    sickkiditem = world.get_location('Sick Kid', player).item
     sickkiditem_text = random.choice(SickKid_texts) if sickkiditem is None or sickkiditem.sickkid_credit_text is None else sickkiditem.sickkid_credit_text
 
-    zoraitem = world.get_location('King Zora').item
+    zoraitem = world.get_location('King Zora', player).item
     zoraitem_text = random.choice(Zora_texts) if zoraitem is None or zoraitem.zora_credit_text is None else zoraitem.zora_credit_text
 
-    magicshopitem = world.get_location('Potion Shop').item
+    magicshopitem = world.get_location('Potion Shop', player).item
     magicshopitem_text = random.choice(MagicShop_texts) if magicshopitem is None or magicshopitem.magicshop_credit_text is None else magicshopitem.magicshop_credit_text
 
-    fluteboyitem = world.get_location('Flute Spot').item
+    fluteboyitem = world.get_location('Flute Spot', player).item
     fluteboyitem_text = random.choice(FluteBoy_texts) if fluteboyitem is None or fluteboyitem.fluteboy_credit_text is None else fluteboyitem.fluteboy_credit_text
 
     credits.update_credits_line('castle', 0, random.choice(KingsReturn_texts))
@@ -1204,54 +1827,271 @@ def write_strings(rom, world):
     rom.write_bytes(0x181500, data)
     rom.write_bytes(0x76CC0, [byte for p in pointers for byte in [p & 0xFF, p >> 8 & 0xFF]])
 
-InconvenientEntrances = {'Turtle Rock': 'Turtle Rock Main',
-                         'Misery Mire': 'Misery Mire',
-                         'Ice Palace': 'Ice Palace',
-                         'Skull Woods Final Section': 'The back of Skull Woods',
-                         'Death Mountain Return Cave (West)': 'The SW DM foothills cave',
-                         'Mimic Cave': 'Mimic Ledge',
-                         'Dark World Hammer Peg Cave': 'The rows of pegs',
-                         'Pyramid Fairy': 'The crack on the pyramid'
-                         }
+def set_inverted_mode(world, player, rom):
+    rom.write_byte(snes_to_pc(0x0283E0), 0xF0)  # residual portals
+    rom.write_byte(snes_to_pc(0x02B34D), 0xF0)
+    rom.write_byte(snes_to_pc(0x06DB78), 0x8B)
+    rom.write_byte(snes_to_pc(0x05AF79), 0xF0)
+    rom.write_byte(snes_to_pc(0x0DB3C5), 0xC6)
+    rom.write_byte(snes_to_pc(0x07A3F4), 0xF0)  # duck
+    write_int16s(rom, snes_to_pc(0x02E849), [0x0043, 0x0056, 0x0058, 0x006C, 0x006F, 0x0070, 0x007B, 0x007F, 0x001B])  # dw flute
+    write_int16(rom, snes_to_pc(0x02E8D5), 0x07C8)
+    write_int16(rom, snes_to_pc(0x02E8F7), 0x01F8)
+    rom.write_byte(snes_to_pc(0x08D40C), 0xD0)  # morph proof
+    # the following bytes should only be written in vanilla
+    # or they'll overwrite the randomizer's shuffles
+    if world.shuffle[player] == 'vanilla':
+        rom.write_byte(0xDBB73 + 0x23, 0x37)  # switch AT and GT
+        rom.write_byte(0xDBB73 + 0x36, 0x24)
+        write_int16(rom, 0x15AEE + 2*0x38, 0x00E0)
+        write_int16(rom, 0x15AEE + 2*0x25, 0x000C)
+    if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+        rom.write_byte(0x15B8C, 0x6C)
+        rom.write_byte(0xDBB73 + 0x00, 0x53)  # switch bomb shop and links house
+        rom.write_byte(0xDBB73 + 0x52, 0x01)
+        rom.write_byte(0xDBB73 + 0x15, 0x06)  # bumper and old man cave
+        write_int16(rom, 0x15AEE + 2*0x17, 0x00F0)
+        rom.write_byte(0xDBB73 + 0x05, 0x16)
+        write_int16(rom, 0x15AEE + 2*0x07, 0x00FB)
+        rom.write_byte(0xDBB73 + 0x2D, 0x17)
+        write_int16(rom, 0x15AEE + 2*0x2F, 0x00EB)
+        rom.write_byte(0xDBB73 + 0x06, 0x2E)
+        write_int16(rom, 0x15AEE + 2*0x08, 0x00E6)
+        rom.write_byte(0xDBB73 + 0x16, 0x5E)
+        rom.write_byte(0xDBB73 + 0x6F, 0x07)  # DDM fairy to old man cave
+        write_int16(rom, 0x15AEE + 2*0x18, 0x00F1)
+        rom.write_byte(0x15B8C + 0x18, 0x43)
+        write_int16(rom, 0x15BDB + 2 * 0x18, 0x1400)
+        write_int16(rom, 0x15C79 + 2 * 0x18, 0x0294)
+        write_int16(rom, 0x15D17 + 2 * 0x18, 0x0600)
+        write_int16(rom, 0x15DB5 + 2 * 0x18, 0x02E8)
+        write_int16(rom, 0x15E53 + 2 * 0x18, 0x0678)
+        write_int16(rom, 0x15EF1 + 2 * 0x18, 0x0303)
+        write_int16(rom, 0x15F8F + 2 * 0x18, 0x0685)
+        rom.write_byte(0x1602D + 0x18, 0x0A)
+        rom.write_byte(0x1607C + 0x18, 0xF6)
+        write_int16(rom, 0x160CB + 2 * 0x18, 0x0000)
+        write_int16(rom, 0x16169 + 2 * 0x18, 0x0000)
+    write_int16(rom, 0x15AEE + 2 * 0x3D, 0x0003)  # pyramid exit and houlihan
+    rom.write_byte(0x15B8C + 0x3D, 0x5B)
+    write_int16(rom, 0x15BDB + 2 * 0x3D, 0x0B0E)
+    write_int16(rom, 0x15C79 + 2 * 0x3D, 0x075A)
+    write_int16(rom, 0x15D17 + 2 * 0x3D, 0x0674)
+    write_int16(rom, 0x15DB5 + 2 * 0x3D, 0x07A8)
+    write_int16(rom, 0x15E53 + 2 * 0x3D, 0x06E8)
+    write_int16(rom, 0x15EF1 + 2 * 0x3D, 0x07C7)
+    write_int16(rom, 0x15F8F + 2 * 0x3D, 0x06F3)
+    rom.write_byte(0x1602D + 0x3D, 0x06)
+    rom.write_byte(0x1607C + 0x3D, 0xFA)
+    write_int16(rom, 0x160CB + 2 * 0x3D, 0x0000)
+    write_int16(rom, 0x16169 + 2 * 0x3D, 0x0000)
+    write_int16(rom, snes_to_pc(0x02D8D4), 0x112)  # change sactuary spawn point to dark sanc
+    rom.write_bytes(snes_to_pc(0x02D8E8), [0x22, 0x22, 0x22, 0x23, 0x04, 0x04, 0x04, 0x05])
+    write_int16(rom, snes_to_pc(0x02D91A), 0x0400)
+    write_int16(rom, snes_to_pc(0x02D928), 0x222E)
+    write_int16(rom, snes_to_pc(0x02D936), 0x229A)
+    write_int16(rom, snes_to_pc(0x02D944), 0x0480)
+    write_int16(rom, snes_to_pc(0x02D952), 0x00A5)
+    write_int16(rom, snes_to_pc(0x02D960), 0x007F)
+    rom.write_byte(snes_to_pc(0x02D96D), 0x14)
+    rom.write_byte(snes_to_pc(0x02D974), 0x00)
+    rom.write_byte(snes_to_pc(0x02D97B), 0xFF)
+    rom.write_byte(snes_to_pc(0x02D982), 0x00)
+    rom.write_byte(snes_to_pc(0x02D989), 0x02)
+    rom.write_byte(snes_to_pc(0x02D990), 0x00)
+    write_int16(rom, snes_to_pc(0x02D998), 0x0000)
+    write_int16(rom, snes_to_pc(0x02D9A6), 0x005A)
+    rom.write_byte(snes_to_pc(0x02D9B3), 0x12)
+    # keep the old man spawn point at old man house unless shuffle is vanilla
+    if world.shuffle[player] in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
+        rom.write_bytes(snes_to_pc(0x308350), [0x00, 0x00, 0x01])
+        write_int16(rom, snes_to_pc(0x02D8DE), 0x00F1)
+        rom.write_bytes(snes_to_pc(0x02D910), [0x1F, 0x1E, 0x1F, 0x1F, 0x03, 0x02, 0x03, 0x03])
+        write_int16(rom, snes_to_pc(0x02D924), 0x0300)
+        write_int16(rom, snes_to_pc(0x02D932), 0x1F10)
+        write_int16(rom, snes_to_pc(0x02D940), 0x1FC0)
+        write_int16(rom, snes_to_pc(0x02D94E), 0x0378)
+        write_int16(rom, snes_to_pc(0x02D95C), 0x0187)
+        write_int16(rom, snes_to_pc(0x02D96A), 0x017F)
+        rom.write_byte(snes_to_pc(0x02D972), 0x06)
+        rom.write_byte(snes_to_pc(0x02D979), 0x00)
+        rom.write_byte(snes_to_pc(0x02D980), 0xFF)
+        rom.write_byte(snes_to_pc(0x02D987), 0x00)
+        rom.write_byte(snes_to_pc(0x02D98E), 0x22)
+        rom.write_byte(snes_to_pc(0x02D995), 0x12)
+        write_int16(rom, snes_to_pc(0x02D9A2), 0x0000)
+        write_int16(rom, snes_to_pc(0x02D9B0), 0x0007)
+        rom.write_byte(snes_to_pc(0x02D9B8), 0x12)
+        rom.write_bytes(0x180247, [0x00, 0x5A, 0x00, 0x00, 0x00, 0x00, 0x00])
+    write_int16(rom, 0x15AEE + 2 * 0x06, 0x0020)  # post aga hyrule castle spawn
+    rom.write_byte(0x15B8C + 0x06, 0x1B)
+    write_int16(rom, 0x15BDB + 2 * 0x06, 0x00AE)
+    write_int16(rom, 0x15C79 + 2 * 0x06, 0x0610)
+    write_int16(rom, 0x15D17 + 2 * 0x06, 0x077E)
+    write_int16(rom, 0x15DB5 + 2 * 0x06, 0x0672)
+    write_int16(rom, 0x15E53 + 2 * 0x06, 0x07F8)
+    write_int16(rom, 0x15EF1 + 2 * 0x06, 0x067D)
+    write_int16(rom, 0x15F8F + 2 * 0x06, 0x0803)
+    rom.write_byte(0x1602D + 0x06, 0x00)
+    rom.write_byte(0x1607C + 0x06, 0xF2)
+    write_int16(rom, 0x160CB + 2 * 0x06, 0x0000)
+    write_int16(rom, 0x16169 + 2 * 0x06, 0x0000)
+    write_int16(rom, snes_to_pc(0x02E87B), 0x00AE)  # move flute splot 9
+    write_int16(rom, snes_to_pc(0x02E89D), 0x0610)
+    write_int16(rom, snes_to_pc(0x02E8BF), 0x077E)
+    write_int16(rom, snes_to_pc(0x02E8E1), 0x0672)
+    write_int16(rom, snes_to_pc(0x02E903), 0x07F8)
+    write_int16(rom, snes_to_pc(0x02E925), 0x067D)
+    write_int16(rom, snes_to_pc(0x02E947), 0x0803)
+    write_int16(rom, snes_to_pc(0x02E969), 0x0000)
+    write_int16(rom, snes_to_pc(0x02E98B), 0xFFF2)
+    rom.write_byte(snes_to_pc(0x1AF696), 0xF0)  # bat sprite retreat
+    rom.write_byte(snes_to_pc(0x1AF6B2), 0x33)
+    rom.write_bytes(snes_to_pc(0x1AF730), [0x6A, 0x9E, 0x0C, 0x00, 0x7A, 0x9E, 0x0C,
+                                           0x00, 0x8A, 0x9E, 0x0C, 0x00, 0x6A, 0xAE,
+                                           0x0C, 0x00, 0x7A, 0xAE, 0x0C, 0x00, 0x8A,
+                                           0xAE, 0x0C, 0x00, 0x67, 0x97, 0x0C, 0x00,
+                                           0x8D, 0x97, 0x0C, 0x00])
+    write_int16s(rom, snes_to_pc(0x0FF1C8), [0x190F, 0x190F, 0x190F, 0x194C, 0x190F,
+                                                 0x194B, 0x190F, 0x195C, 0x594B, 0x194C,
+                                                 0x19EE, 0x19EE, 0x194B, 0x19EE, 0x19EE,
+                                                 0x19EE, 0x594B, 0x190F, 0x595C, 0x190F,
+                                                 0x190F, 0x195B, 0x190F, 0x190F, 0x19EE,
+                                                 0x19EE, 0x195C, 0x19EE, 0x19EE, 0x19EE,
+                                                 0x19EE, 0x595C, 0x595B, 0x190F, 0x190F,
+                                                 0x190F])
+    write_int16s(rom, snes_to_pc(0x0FA480), [0x190F, 0x196B, 0x9D04, 0x9D04, 0x196B,
+                                                 0x190F, 0x9D04, 0x9D04])
+    write_int16s(rom, snes_to_pc(0x1bb810), [0x00BE, 0x00C0, 0x013E])
+    write_int16s(rom, snes_to_pc(0x1bb836), [0x001B, 0x001B, 0x001B])
+    write_int16(rom, snes_to_pc(0x308300), 0x0140) # new pyramid hole entrance
+    write_int16(rom, snes_to_pc(0x308320), 0x001B)
+    if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+        rom.write_byte(snes_to_pc(0x308340), 0x7B)
+    write_int16(rom, snes_to_pc(0x1af504), 0x148B)
+    write_int16(rom, snes_to_pc(0x1af50c), 0x149B)
+    write_int16(rom, snes_to_pc(0x1af514), 0x14A4)
+    write_int16(rom, snes_to_pc(0x1af51c), 0x1489)
+    write_int16(rom, snes_to_pc(0x1af524), 0x14AC)
+    write_int16(rom, snes_to_pc(0x1af52c), 0x54AC)
+    write_int16(rom, snes_to_pc(0x1af534), 0x148C)
+    write_int16(rom, snes_to_pc(0x1af53c), 0x548C)
+    write_int16(rom, snes_to_pc(0x1af544), 0x1484)
+    write_int16(rom, snes_to_pc(0x1af54c), 0x5484)
+    write_int16(rom, snes_to_pc(0x1af554), 0x14A2)
+    write_int16(rom, snes_to_pc(0x1af55c), 0x54A2)
+    write_int16(rom, snes_to_pc(0x1af564), 0x14A0)
+    write_int16(rom, snes_to_pc(0x1af56c), 0x54A0)
+    write_int16(rom, snes_to_pc(0x1af574), 0x148E)
+    write_int16(rom, snes_to_pc(0x1af57c), 0x548E)
+    write_int16(rom, snes_to_pc(0x1af584), 0x14AE)
+    write_int16(rom, snes_to_pc(0x1af58c), 0x54AE)
+    rom.write_byte(snes_to_pc(0x00DB9D), 0x1A)  # castle hole graphics
+    rom.write_byte(snes_to_pc(0x00DC09), 0x1A)
+    rom.write_byte(snes_to_pc(0x00D009), 0x31)
+    rom.write_byte(snes_to_pc(0x00D0e8), 0xE0)
+    rom.write_byte(snes_to_pc(0x00D1c7), 0x00)
+    write_int16(rom, snes_to_pc(0x1BE8DA), 0x39AD)
+    rom.write_byte(0xF6E58, 0x80)  # no whirlpool under castle gate
+    rom.write_bytes(0x0086E, [0x5C, 0x00, 0xA0, 0xA1])  # TR tail
+    rom.write_bytes(snes_to_pc(0x1BC67A), [0x2E, 0x0B, 0x82])  # add warps under rocks
+    rom.write_bytes(snes_to_pc(0x1BC81E), [0x94, 0x1D, 0x82])
+    rom.write_bytes(snes_to_pc(0x1BC655), [0x4A, 0x1D, 0x82])
+    rom.write_bytes(snes_to_pc(0x1BC80D), [0xB2, 0x0B, 0x82])
+    rom.write_bytes(snes_to_pc(0x1BC3DF), [0xD8, 0xD1])
+    rom.write_bytes(snes_to_pc(0x1BD1D8), [0xA8, 0x02, 0x82, 0xFF, 0xFF])
+    rom.write_bytes(snes_to_pc(0x1BC85A), [0x50, 0x0F, 0x82])
+    write_int16(rom, 0xDB96F + 2 * 0x35, 0x001B)  # move pyramid exit door
+    write_int16(rom, 0xDBA71 + 2 * 0x35, 0x06A4)
+    if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+        rom.write_byte(0xDBB73 + 0x35, 0x36)
+    rom.write_byte(snes_to_pc(0x09D436), 0xF3)  # remove castle gate warp
+    if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+        write_int16(rom, 0x15AEE + 2 * 0x37, 0x0010)  # pyramid exit to new hc area
+        rom.write_byte(0x15B8C + 0x37, 0x1B)
+        write_int16(rom, 0x15BDB + 2 * 0x37, 0x0418)
+        write_int16(rom, 0x15C79 + 2 * 0x37, 0x0679)
+        write_int16(rom, 0x15D17 + 2 * 0x37, 0x06B4)
+        write_int16(rom, 0x15DB5 + 2 * 0x37, 0x06C6)
+        write_int16(rom, 0x15E53 + 2 * 0x37, 0x0738)
+        write_int16(rom, 0x15EF1 + 2 * 0x37, 0x06E6)
+        write_int16(rom, 0x15F8F + 2 * 0x37, 0x0733)
+        rom.write_byte(0x1602D + 0x37, 0x07)
+        rom.write_byte(0x1607C + 0x37, 0xF9)
+        write_int16(rom, 0x160CB + 2 * 0x37, 0x0000)
+        write_int16(rom, 0x16169 + 2 * 0x37, 0x0000)
+    rom.write_bytes(snes_to_pc(0x1BC387), [0xDD, 0xD1])
+    rom.write_bytes(snes_to_pc(0x1BD1DD), [0xA4, 0x06, 0x82, 0x9E, 0x06, 0x82, 0xFF, 0xFF])
+    rom.write_byte(0x180089, 0x01)  # open TR after exit
+    rom.write_byte(snes_to_pc(0x0ABFBB), 0x90)
+    rom.write_byte(snes_to_pc(0x0280A6), 0xD0)
+    rom.write_bytes(snes_to_pc(0x06B2AB), [0xF0, 0xE1, 0x05])
 
-OtherEntrances = {'Eastern Palace': 'Eastern Palace',
-                  'Elder House (East)': 'Elder House',
-                  'Elder House (West)': 'Elder House',
-                  'Two Brothers House (East)': 'Eastern Quarreling Brothers\' house',
-                  'Old Man Cave (West)': 'The lower DM entrance',
-                  'Hyrule Castle Entrance (South)': 'The ground level castle door',
-                  'Thieves Town': 'Thieves\' Town',
-                  'Bumper Cave (Bottom)': 'The lower Bumper Cave',
-                  'Swamp Palace': 'Swamp Palace',
-                  'Dark Death Mountain Ledge (West)': 'The East dark DM connector ledge',
-                  'Dark Death Mountain Ledge (East)': 'The East dark DM connector ledge',
-                  'Superbunny Cave (Top)': 'The summit of dark DM cave',
-                  'Superbunny Cave (Bottom)': 'The base of east dark DM',
-                  'Hookshot Cave': 'The rock on dark DM',
-                  'Desert Palace Entrance (South)': 'The book sealed passage',
-                  'Tower of Hera': 'The Tower of Hera',
-                  'Two Brothers House (West)': 'The door near the race game',
-                  'Old Man Cave (East)': 'The SW-most cave on west DM',
-                  'Old Man House (Bottom)': 'A cave with a door on west DM',
-                  'Old Man House (Top)': 'The eastmost cave on west DM',
-                  'Death Mountain Return Cave (East)': 'The westmost cave on west DM',
-                  'Spectacle Rock Cave Peak': 'The highest cave on west DM',
-                  'Spectacle Rock Cave': 'The right ledge on west DM',
-                  'Spectacle Rock Cave (Bottom)': 'The left ledge on west DM',
-                  'Paradox Cave (Bottom)': 'The southmost cave on east DM',
-                  'Paradox Cave (Middle)': 'The right paired cave on east DM',
-                  'Paradox Cave (Top)': 'The east DM summit cave',
-                  'Fairy Ascension Cave (Bottom)': 'The east DM cave behind rocks',
-                  'Fairy Ascension Cave (Top)': 'The central ledge on east DM',
-                  'Spiral Cave': 'The left ledge on east DM',
-                  'Spiral Cave (Bottom)': 'The SWmost cave on east DM',
-                  'Palace of Darkness': 'Palace of Darkness',
-                  'Hyrule Castle Entrance (West)': 'The left castle door',
-                  'Hyrule Castle Entrance (East)': 'The right castle door',
-                  'Agahnims Tower': 'The sealed castle door',
-                  'Desert Palace Entrance (West)': 'The westmost building in the desert',
-                  'Desert Palace Entrance (North)': 'The northmost cave in the desert',
-                  'Blinds Hideout': 'Blind\'s old house',
+def patch_shuffled_dark_sanc(world, rom, player):
+    dark_sanc_entrance = str(world.get_region('Inverted Dark Sanctuary', player).entrances[0].name)
+    room_id, ow_area, vram_loc, scroll_y, scroll_x, link_y, link_x, camera_y, camera_x, unknown_1, unknown_2, door_1, door_2 = door_addresses[dark_sanc_entrance][1]
+    door_index = door_addresses[str(dark_sanc_entrance)][0]
+    
+    rom.write_byte(0x180241, 0x01)
+    rom.write_byte(0x180248, door_index + 1) 
+    write_int16(rom, 0x180250, room_id)
+    rom.write_byte(0x180252, ow_area)
+    write_int16s(rom, 0x180253, [vram_loc, scroll_y, scroll_x, link_y, link_x, camera_y, camera_x])
+    rom.write_bytes(0x180262, [unknown_1, unknown_2, 0x00])
+
+InconvenientDungeonEntrances = {'Turtle Rock': 'Turtle Rock Main',
+                                'Misery Mire': 'Misery Mire',
+                                'Ice Palace': 'Ice Palace',
+                                'Skull Woods Final Section': 'The back of Skull Woods',
+                                }
+
+InconvenientOtherEntrances = {'Death Mountain Return Cave (West)': 'The SW DM foothills cave',
+                              'Mimic Cave': 'Mimic Ledge',
+                              'Dark World Hammer Peg Cave': 'The rows of pegs',
+                              'Pyramid Fairy': 'The crack on the pyramid'
+                              }
+
+ConnectorEntrances = {'Elder House (East)': 'Elder House',
+                      'Elder House (West)': 'Elder House',
+                      'Two Brothers House (East)': 'Eastern Quarreling Brothers\' house',
+                      'Old Man Cave (West)': 'The lower DM entrance',
+                      'Bumper Cave (Bottom)': 'The lower Bumper Cave',
+                      'Superbunny Cave (Top)': 'The summit of dark DM cave',
+                      'Superbunny Cave (Bottom)': 'The base of east dark DM',
+                      'Hookshot Cave': 'The rock on dark DM',
+                      'Two Brothers House (West)': 'The door near the race game',
+                      'Old Man Cave (East)': 'The SW-most cave on west DM',
+                      'Old Man House (Bottom)': 'A cave with a door on west DM',
+                      'Old Man House (Top)': 'The eastmost cave on west DM',
+                      'Death Mountain Return Cave (East)': 'The westmost cave on west DM',
+                      'Spectacle Rock Cave Peak': 'The highest cave on west DM',
+                      'Spectacle Rock Cave': 'The right ledge on west DM',
+                      'Spectacle Rock Cave (Bottom)': 'The left ledge on west DM',
+                      'Paradox Cave (Bottom)': 'The right paired cave on east DM',
+                      'Paradox Cave (Middle)': 'The southmost cave on east DM',
+                      'Paradox Cave (Top)': 'The east DM summit cave',
+                      'Fairy Ascension Cave (Bottom)': 'The east DM cave behind rocks',
+                      'Fairy Ascension Cave (Top)': 'The central ledge on east DM',
+                      'Spiral Cave': 'The left ledge on east DM',
+                      'Spiral Cave (Bottom)': 'The SWmost cave on east DM'
+                      }
+
+DungeonEntrances = {'Eastern Palace': 'Eastern Palace',
+                    'Hyrule Castle Entrance (South)': 'The ground level castle door',
+                    'Thieves Town': 'Thieves\' Town',
+                    'Swamp Palace': 'Swamp Palace',
+                    'Dark Death Mountain Ledge (West)': 'The East dark DM connector ledge',
+                    'Dark Death Mountain Ledge (East)': 'The East dark DM connector ledge',
+                    'Desert Palace Entrance (South)': 'The book sealed passage',
+                    'Tower of Hera': 'The Tower of Hera',
+                    'Palace of Darkness': 'Palace of Darkness',
+                    'Hyrule Castle Entrance (West)': 'The left castle door',
+                    'Hyrule Castle Entrance (East)': 'The right castle door',
+                    'Desert Palace Entrance (West)': 'The westmost building in the desert',
+                    'Desert Palace Entrance (North)': 'The northmost cave in the desert'
+                    }
+
+OtherEntrances = {'Blinds Hideout': 'Blind\'s old house',
                   'Lake Hylia Fairy': 'A cave NE of Lake Hylia',
                   'Light Hype Fairy': 'The cave south of your house',
                   'Desert Fairy': 'The cave near the desert',
@@ -1291,10 +2131,8 @@ OtherEntrances = {'Eastern Palace': 'Eastern Palace',
                   'Bonk Fairy (Light)': 'The rock pile near your home',
                   'Hookshot Fairy': 'The left paired cave on east DM',
 				  'Bonk Fairy (Dark)': 'The rock pile near the old bomb shop',
-                  'Dark Sanctuary Hint': 'The dark sanctuary cave',
                   'Dark Lake Hylia Fairy': 'The cave NE dark Lake Hylia',
                   'C-Shaped House': 'The NE house in Village of Outcasts',
-                  'Big Bomb Shop': 'The old bomb shop',
                   'Dark Death Mountain Fairy': 'The SW cave on dark DM',
                   'Dark Lake Hylia Shop': 'The building NW dark Lake Hylia',
                   'Dark World Shop': 'The hammer sealed building',
@@ -1366,7 +2204,12 @@ InconvenientLocations = ['Spike Cave',
                          'Ice Palace - Big Chest',
                          'Ganons Tower - Big Chest',
                          'Magic Bat']
+
+InconvenientVanillaLocations = ['Graveyard Cave',
+                                'Mimic Cave']
+
 RelevantItems = ['Bow',
+                 'Progressive Bow',
                  'Book of Mudora',
                  'Hammer',
                  'Hookshot',
@@ -1420,28 +2263,36 @@ RelevantItems = ['Bow',
                  'Magic Upgrade (1/4)'
                  ]
 
-KeysanityItems = ['Small Key (Eastern Palace)',
-                  'Big Key (Eastern Palace)',
-                  'Small Key (Escape)',
-				  'Small Key (Desert Palace)',
-                  'Big Key (Desert Palace)',
-				  'Small Key (Tower of Hera)',
-                  'Big Key (Tower of Hera)',
-				  'Small Key (Agahnims Tower)',
-				  'Small Key (Palace of Darkness)',
-                  'Big Key (Palace of Darkness)',
-				  'Small Key (Thieves Town)',
-                  'Big Key (Thieves Town)',
-				  'Small Key (Swamp Palace)',
-                  'Big Key (Swamp Palace)',
-				  'Small Key (Skull Woods)',
-                  'Big Key (Skull Woods)',
-				  'Small Key (Ice Palace)',
-                  'Big Key (Ice Palace)',
-                  'Small Key (Misery Mire)',
-                  'Big Key (Misery Mire)',
-                  'Small Key (Turtle Rock)',
-                  'Big Key (Turtle Rock)',
-                  'Small Key (Ganons Tower)',
-                  'Big Key (Ganons Tower)'
-				  ]
+SmallKeys = ['Small Key (Eastern Palace)',
+             'Small Key (Escape)',
+             'Small Key (Desert Palace)',
+             'Small Key (Tower of Hera)',
+             'Small Key (Agahnims Tower)',
+             'Small Key (Palace of Darkness)',
+             'Small Key (Thieves Town)',
+             'Small Key (Swamp Palace)',
+             'Small Key (Skull Woods)',
+             'Small Key (Ice Palace)',
+             'Small Key (Misery Mire)',
+             'Small Key (Turtle Rock)',
+             'Small Key (Ganons Tower)',
+             ]
+
+BigKeys = ['Big Key (Eastern Palace)',
+           'Big Key (Desert Palace)',
+           'Big Key (Tower of Hera)',
+           'Big Key (Palace of Darkness)',
+           'Big Key (Thieves Town)',
+           'Big Key (Swamp Palace)',
+           'Big Key (Skull Woods)',
+           'Big Key (Ice Palace)',
+           'Big Key (Misery Mire)',
+           'Big Key (Turtle Rock)',
+           'Big Key (Ganons Tower)'
+           ]
+
+hash_alphabet = [
+    "Bow", "Boomerang", "Hookshot", "Bomb", "Mushroom", "Powder", "Rod", "Pendant", "Bombos", "Ether", "Quake",
+    "Lamp", "Hammer", "Shovel", "Ocarina", "Bug Net", "Book", "Bottle", "Potion", "Cane", "Cape", "Mirror", "Boots",
+    "Gloves", "Flippers", "Pearl", "Shield", "Tunic", "Heart", "Map", "Compass", "Key"
+]

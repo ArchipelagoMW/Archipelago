@@ -314,7 +314,7 @@ async def console(ctx : Context):
             if command[0] == '/hint':
                 for (team,slot), name in ctx.player_names.items():
                     if len(command) == 1:
-                        print("Use /hint {Playername} {Itemname}\nFor example /hint Berserker Lamp")
+                        print("Use /hint {Playername} {itemname}\nFor example /hint Berserker Lamp")
                     elif name.lower() == command[1].lower():
                         item = " ".join(command[2:])
                         if item in Items.item_table:
