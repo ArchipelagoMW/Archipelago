@@ -16,19 +16,26 @@ while True:
         break
     except ImportError:
         aioconsole = None
-        print('Required python module "aioconsole" not found, press enter to install it')
-        input()
+        input('Required python module "aioconsole" not found, press enter to install it')
         subprocess.call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'aioconsole'])
 
-while True:
+websockets = None
+
+while not websockets:
     try:
         import websockets
-        break
     except ImportError:
         websockets = None
-        print('Required python module "websockets" not found, press enter to install it')
-        input()
+        input('Required python module "websockets" not found, press enter to install it')
         subprocess.call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'websockets'])
+    else:
+        version = websockets.__version__
+        if type(version) == str:
+            version = tuple(int(part) for part in version.split("."))
+        if version < (8,1):
+            websockets = None
+            input('Required python module "websockets" too old, press enter to upgrade it')
+            subprocess.call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'websockets'])
 
 try:
     import colorama
