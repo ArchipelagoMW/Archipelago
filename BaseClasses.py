@@ -1074,6 +1074,8 @@ class Spoiler(object):
                          'enemy_shuffle': self.world.enemy_shuffle,
                          'enemy_health': self.world.enemy_health,
                          'enemy_damage': self.world.enemy_damage,
+                         'beemizer': self.world.beemizer,
+                         'shufflepots': self.world.shufflepots,
                          'players': self.world.players,
                          'teams': self.world.teams
                          }
@@ -1129,6 +1131,8 @@ class Spoiler(object):
                 outfile.write('Enemy health:                    %s\n' % self.metadata['enemy_health'][player])
                 outfile.write('Enemy damage:                    %s\n' % self.metadata['enemy_damage'][player])
                 outfile.write('Hints:                           %s\n' % ('Yes' if self.metadata['hints'][player] else 'No'))
+                outfile.write('Beemizer:                        %s\n' % self.metadata['beemizer'][player])
+                outfile.write('Pot shuffle                      %s\n' % ('Yes' if self.metadata['shufflepots'][player] else 'No'))
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
                 outfile.write('\n'.join(['%s%s %s %s' % (f'{self.world.get_player_names(entry["player"])}: ' if self.world.players > 1 else '', entry['entrance'], '<=>' if entry['direction'] == 'both' else '<=' if entry['direction'] == 'exit' else '=>', entry['exit']) for entry in self.entrances.values()]))
