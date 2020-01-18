@@ -1,39 +1,16 @@
+import aioconsole
 import argparse
 import asyncio
+import colorama
 import json
 import logging
 import shlex
-import subprocess
-import sys
 import urllib.parse
+import websockets
 
 import Items
 import Regions
 
-while True:
-    try:
-        import aioconsole
-        break
-    except ImportError:
-        aioconsole = None
-        print('Required python module "aioconsole" not found, press enter to install it')
-        input()
-        subprocess.call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'aioconsole'])
-
-while True:
-    try:
-        import websockets
-        break
-    except ImportError:
-        websockets = None
-        print('Required python module "websockets" not found, press enter to install it')
-        input()
-        subprocess.call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'websockets'])
-
-try:
-    import colorama
-except ImportError:
-    colorama = None
 
 class ReceivedItem:
     def __init__(self, item, location, player):
@@ -731,12 +708,6 @@ async def console_loop(ctx : Context):
         if command[0] == '/exit':
             ctx.exit_event.set()
 
-        if command[0] == '/installcolors' and 'colorama' not in sys.modules:
-            subprocess.call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'colorama'])
-            global colorama
-            import colorama
-            colorama.init()
-
         if command[0] == '/snes':
             ctx.snes_reconnect_address = None
             asyncio.create_task(snes_connect(ctx, command[1] if len(command) > 1 else ctx.snes_address))
@@ -948,13 +919,9 @@ async def main():
     await input_task
 
 if __name__ == '__main__':
-    if 'colorama' in sys.modules:
-        colorama.init()
-
+    colorama.init()
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main())
     loop.run_until_complete(asyncio.gather(*asyncio.Task.all_tasks()))
     loop.close()
-
-    if 'colorama' in sys.modules:
-        colorama.deinit()
+    colorama.deinit()
