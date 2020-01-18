@@ -59,17 +59,17 @@ def broadcast_team(ctx : Context, team, msgs):
             asyncio.create_task(send_msgs(client.socket, msgs))
 
 def notify_all(ctx : Context, text):
-    print("Notice (all): %s" % text)
+    logging.info("Notice (all): %s" % text)
     broadcast_all(ctx, [['Print', text]])
 
 def notify_team(ctx : Context, team : int, text : str):
-    print("Notice (Team #%d): %s" % (team+1, text))
+    logging.info("Notice (Team #%d): %s" % (team+1, text))
     broadcast_team(ctx, team, [['Print', text]])
 
 def notify_client(client : Client, text : str):
     if not client.auth:
         return
-    print("Notice (Player %s in team %d): %s" % (client.name, client.team+1, text))
+    logging.info("Notice (Player %s in team %d): %s" % (client.name, client.team+1, text))
     asyncio.create_task(send_msgs(client.socket,  [['Print', text]]))
 
 async def server(websocket, path, ctx : Context):
@@ -175,7 +175,7 @@ def register_location_checks(ctx : Context, team, slot, locations):
                     recvd_items.append(new_item)
                     if slot != target_player:
                         broadcast_team(ctx, team, [['ItemSent', (slot, location, target_player, target_item)]])
-                    print('(Team #%d) %s sent %s to %s (%s)' % (team+1, ctx.player_names[(team, slot)], get_item_name_from_id(target_item), ctx.player_names[(team, target_player)], get_location_name_from_address(location)))
+                    logging.info('(Team #%d) %s sent %s to %s (%s)' % (team+1, ctx.player_names[(team, slot)], get_item_name_from_id(target_item), ctx.player_names[(team, target_player)], get_location_name_from_address(location)))
                     found_items = True
     send_new_items(ctx)
 
@@ -261,7 +261,7 @@ async def process_client_cmd(ctx : Context, client : Client, cmd, args):
 
             locs.append([loc_name, location, target_item, target_player])
 
-        print(f"{client.name} in team {client.team+1} scouted {', '.join([l[0] for l in locs])}")
+        logging.info(f"{client.name} in team {client.team+1} scouted {', '.join([l[0] for l in locs])}")
         await send_msgs(client.socket, [['LocationInfo', [l[1:] for l in locs]]])
 
     if cmd == 'Say':
@@ -284,7 +284,7 @@ async def process_client_cmd(ctx : Context, client : Client, cmd, args):
 
 def set_password(ctx : Context, password):
     ctx.password = password
-    print('Password set to ' + password if password is not None else 'Password disabled')
+    logging.warning('Password set to ' + password if password is not None else 'Password disabled')
 
 async def console(ctx : Context):
     while True:
@@ -299,7 +299,7 @@ async def console(ctx : Context):
             break
 
         if command[0] == '/players':
-            print(get_connected_players_string(ctx))
+            logging.info(get_connected_players_string(ctx))
         if command[0] == '/password':
             set_password(ctx, command[1] if len(command) > 1 else None)
         if command[0] == '/kick' and len(command) > 1:
@@ -333,7 +333,7 @@ async def console(ctx : Context):
                         notify_all(ctx, 'Cheat console: sending "' + item + '" to ' + client.name)
                 send_new_items(ctx)
             else:
-                print("Unknown item: " + item)
+                logging.warning("Unknown item: " + item)
 
         if command[0][0] != '/':
             notify_all(ctx, '[Server]: ' + input)
@@ -346,7 +346,10 @@ async def main():
     parser.add_argument('--multidata', default=None)
     parser.add_argument('--savefile', default=None)
     parser.add_argument('--disable_save', default=False, action='store_true')
+    parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
     args = parser.parse_args()
+
+    logging.basicConfig(format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
 
     ctx = Context(args.host, args.port, args.password)
 
@@ -369,11 +372,11 @@ async def main():
             ctx.remote_items = set(jsonobj['remote_items'])
             ctx.locations = {tuple(k): tuple(v) for k, v in jsonobj['locations']}
     except Exception as e:
-        print('Failed to read multiworld data (%s)' % e)
+        logging.error('Failed to read multiworld data (%s)' % e)
         return
 
     ip = urllib.request.urlopen('https://v4.ident.me').read().decode('utf8') if not ctx.host else ctx.host
-    print('Hosting game at %s:%d (%s)' % (ip, ctx.port, 'No password' if not ctx.password else 'Password: %s' % ctx.password))
+    logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port, 'No password' if not ctx.password else 'Password: %s' % ctx.password))
 
     ctx.disable_save = args.disable_save
     if not ctx.disable_save:
@@ -387,11 +390,11 @@ async def main():
                 if not all([ctx.rom_names[tuple(rom)] == (team, slot) for rom, (team, slot) in rom_names]):
                     raise Exception('Save file mismatch, will start a new game')
                 ctx.received_items = received_items
-                print('Loaded save file with %d received items for %d players' % (sum([len(p) for p in received_items.values()]), len(received_items)))
+                logging.info('Loaded save file with %d received items for %d players' % (sum([len(p) for p in received_items.values()]), len(received_items)))
         except FileNotFoundError:
-            print('No save data found, starting a new game')
+            logging.error('No save data found, starting a new game')
         except Exception as e:
-            print(e)
+            logging.info(e)
 
     ctx.server = websockets.serve(functools.partial(server,ctx=ctx), ctx.host, ctx.port, ping_timeout=None, ping_interval=None)
     await ctx.server
