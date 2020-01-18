@@ -173,7 +173,8 @@ def register_location_checks(ctx : Context, team, slot, locations):
                 if not found:
                     new_item = ReceivedItem(target_item, location, slot)
                     recvd_items.append(new_item)
-                    broadcast_team(ctx, team, [['ItemSent', (slot, location, target_player, target_item)]])
+                    if slot != target_player:
+                        broadcast_team(ctx, team, [['ItemSent', (slot, location, target_player, target_item)]])
                     print('(Team #%d) %s sent %s to %s (%s)' % (team+1, ctx.player_names[(team, slot)], get_item_name_from_id(target_item), ctx.player_names[(team, target_player)], get_location_name_from_address(location)))
                     found_items = True
     send_new_items(ctx)
