@@ -14,9 +14,9 @@ Basis is a .yaml file that sets these weights. You can find an easy.yaml in this
  
  MultiServer.py
   * Added a try/except to prevent malformed console commands from crashing the entire server
-  * Added /hint command on the server (use just /hint for help on command)
-can be used as /hint Playername Itemname
-All Itemnames can be found in Items.py starting at line 25
+  * Added /hint command on the server (use just /hint for help on command)  
+can be used as /hint Playername Itemname  
+All Itemnames can be found in Items.py starting at line 25  
 example:  
 /hint Berserker Progressive Sword  
 Notice (Team #1): [Hint]: Berserker's Progressive Sword can be found in Hype Cave - Top in ahhdurr's World  
