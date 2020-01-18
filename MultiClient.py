@@ -24,6 +24,7 @@ class Context:
         self.server_address = server_address
 
         self.exit_event = asyncio.Event()
+        self.watcher_event = asyncio.Event()
 
         self.input_queue = asyncio.Queue()
         self.input_requests = 0
@@ -647,6 +648,7 @@ async def process_server_cmd(ctx : Context, cmd, args):
         if start_index == len(ctx.items_received):
             for item in items:
                 ctx.items_received.append(ReceivedItem(*item))
+        ctx.watcher_event.set()
 
     if cmd == 'LocationInfo':
         for location, item, player in args:
@@ -655,6 +657,7 @@ async def process_server_cmd(ctx : Context, cmd, args):
                 item_name = replacements.get(item, get_item_name_from_id(item))
                 print(f"Saw {color(item_name, 'red', 'bold')} at {list(Regions.location_table.keys())[location - 1]}")
                 ctx.locations_info[location] = (item, player)
+        ctx.watcher_event.set()
 
     if cmd == 'ItemSent':
         player_sent, location, player_recvd, item = args
@@ -822,7 +825,11 @@ async def track_locations(ctx : Context, roomid, roomdata):
 
 async def game_watcher(ctx : Context):
     while not ctx.exit_event.is_set():
-        await asyncio.sleep(2)
+        try:
+            await asyncio.wait_for(ctx.watcher_event.wait(), 2)
+        except asyncio.TimeoutError:
+            pass
+        ctx.watcher_event.clear()
 
         if not ctx.rom:
             rom = await snes_read(ctx, ROMNAME_START, ROMNAME_SIZE)
@@ -857,12 +864,6 @@ async def game_watcher(ctx : Context):
         assert SCOUT_LOCATION_ADDR == RECV_PROGRESS_ADDR + 7
         scout_location = data[7]
 
-        if scout_location > 0 and scout_location not in ctx.locations_scouted:
-            ctx.locations_scouted.add(scout_location)
-            print(f'Scouting item at {list(Regions.location_table.keys())[scout_location - 1]}')
-            await send_msgs(ctx.socket, [['LocationScouts', [scout_location]]])
-        await track_locations(ctx, roomid, roomdata)
-
         if recv_index < len(ctx.items_received) and recv_item == 0:
             item = ctx.items_received[recv_index]
             print('Received %s from %s (%s) (%d/%d in list)' % (
@@ -878,6 +879,12 @@ async def game_watcher(ctx : Context):
             snes_buffered_write(ctx, SCOUTREPLY_PLAYER_ADDR, bytes([ctx.locations_info[scout_location][1]]))
 
         await snes_flush_writes(ctx)
+
+        if scout_location > 0 and scout_location not in ctx.locations_scouted:
+            ctx.locations_scouted.add(scout_location)
+            print(f'Scouting item at {list(Regions.location_table.keys())[scout_location - 1]}')
+            await send_msgs(ctx.socket, [['LocationScouts', [scout_location]]])
+        await track_locations(ctx, roomid, roomdata)
 
 async def main():
     parser = argparse.ArgumentParser()
