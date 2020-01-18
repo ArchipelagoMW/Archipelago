@@ -266,6 +266,7 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--enemy_damage', default=defval('default'), choices=['default', 'shuffled', 'chaos'])
     parser.add_argument('--shufflepots', default=defval(False), action='store_true')
     parser.add_argument('--beemizer', default=defval(0), type=lambda value: min(max(int(value), 0), 4))
+    parser.add_argument('--remote_items', default=defval(False), action='store_true')
     parser.add_argument('--multi', default=defval(1), type=lambda value: min(max(int(value), 1), 255))
     parser.add_argument('--names', default=defval(''))
     parser.add_argument('--teams', default=defval(1), type=lambda value: max(int(value), 1))
@@ -291,7 +292,8 @@ def parse_arguments(argv, no_defaults=False):
                          'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle', 'startinventory',
                          'retro', 'accessibility', 'hints', 'beemizer',
                          'shufflebosses', 'shuffleenemies', 'enemy_health', 'enemy_damage', 'shufflepots',
-                         'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor', 'heartbeep']:
+                         'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor', 'heartbeep',
+                         'remote_items']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})

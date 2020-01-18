@@ -11,6 +11,7 @@ import subprocess
 
 from BaseClasses import CollectionState, ShopType, Region, Location
 from Dungeons import dungeon_music_addresses
+from Regions import location_table
 from Text import MultiByteTextMapper, CompressedTextMapper, text_addresses, Credits, TextTable
 from Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts, junk_texts
 from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
@@ -495,23 +496,27 @@ def patch_rom(world, rom, player, team, enemized):
             continue
 
         if not location.crystal:
-            # Keys in their native dungeon should use the orignal item code for keys
-            if location.parent_region.dungeon:
-                dungeon = location.parent_region.dungeon
-                if location.item is not None and dungeon.is_dungeon_item(location.item):
-                    if location.item.bigkey:
-                        itemid = 0x32
-                    if location.item.smallkey:
-                        itemid = 0x24
-                    if location.item.map:
-                        itemid = 0x33
-                    if location.item.compass:
-                        itemid = 0x25
-            if location.item and location.item.player != player:
-                if location.player_address is not None:
-                    rom.write_byte(location.player_address, location.item.player)
-                else:
-                    itemid = 0x5A
+            if location.item is not None:
+                # Keys in their native dungeon should use the orignal item code for keys
+                if location.parent_region.dungeon:
+                    if location.parent_region.dungeon.is_dungeon_item(location.item):
+                        if location.item.bigkey:
+                            itemid = 0x32
+                        if location.item.smallkey:
+                            itemid = 0x24
+                        if location.item.map:
+                            itemid = 0x33
+                        if location.item.compass:
+                            itemid = 0x25
+                if world.remote_items[player]:
+                    itemid = list(location_table.keys()).index(location.name) + 1
+                    assert itemid < 0x100
+                    rom.write_byte(location.player_address, 0xFF)
+                elif location.item.player != player:
+                    if location.player_address is not None:
+                        rom.write_byte(location.player_address, location.item.player)
+                    else:
+                        itemid = 0x5A
             rom.write_byte(location.address, itemid)
         else:
             # crystals
@@ -1228,6 +1233,8 @@ def patch_rom(world, rom, player, team, enemized):
         rom.write_byte(0xFEE41, 0x2A)  # preopen bombable exit
 
     write_strings(rom, world, player, team)
+
+    rom.write_byte(0x18636C, 1 if world.remote_items[player] else 0)
 
     # set rom name
     # 21 bytes

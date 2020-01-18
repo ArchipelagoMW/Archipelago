@@ -30,6 +30,7 @@ class Context:
         self.disable_save = False
         self.player_names = {}
         self.rom_names = {}
+        self.remote_items = set()
         self.locations = {}
         self.host = host
         self.port = port
@@ -162,7 +163,7 @@ def register_location_checks(ctx : Context, team, slot, locations):
     for location in locations:
         if (location, slot) in ctx.locations:
             target_item, target_player = ctx.locations[(location, slot)]
-            if target_player != slot:
+            if target_player != slot or slot in ctx.remote_items:
                 found = False
                 recvd_items = get_received_items(ctx, team, target_player)
                 for recvd_item in recvd_items:
@@ -173,7 +174,7 @@ def register_location_checks(ctx : Context, team, slot, locations):
                     new_item = ReceivedItem(target_item, location, slot)
                     recvd_items.append(new_item)
                     broadcast_team(ctx, team, [['ItemSent', (slot, location, target_player, target_item)]])
-                    print('(Team #%d) %s sent %s to %s (%s)' % (team, ctx.player_names[(team, slot)], get_item_name_from_id(target_item), ctx.player_names[(team, target_player)], get_location_name_from_address(location)))
+                    print('(Team #%d) %s sent %s to %s (%s)' % (team+1, ctx.player_names[(team, slot)], get_item_name_from_id(target_item), ctx.player_names[(team, target_player)], get_location_name_from_address(location)))
                     found_items = True
     send_new_items(ctx)
 
@@ -232,13 +233,35 @@ async def process_client_cmd(ctx : Context, client : Client, cmd, args):
         items = get_received_items(ctx, client.team, client.slot)
         if items:
             client.send_index = len(items)
-            await send_msgs(client.socket, ['ReceivedItems', (0, tuplize_received_items(items))])
+            await send_msgs(client.socket, [['ReceivedItems', (0, tuplize_received_items(items))]])
 
     if cmd == 'LocationChecks':
         if type(args) is not list:
             await send_msgs(client.socket, [['InvalidArguments', 'LocationChecks']])
             return
         register_location_checks(ctx, client.team, client.slot, args)
+
+    if cmd == 'LocationScouts':
+        if type(args) is not list:
+            await send_msgs(client.socket, [['InvalidArguments', 'LocationScouts']])
+            return
+        locs = []
+        for location in args:
+            if type(location) is not int or 0 >= location > len(Regions.location_table):
+                await send_msgs(client.socket, [['InvalidArguments', 'LocationScouts']])
+                return
+            loc_name = list(Regions.location_table.keys())[location - 1]
+            target_item, target_player = ctx.locations[(Regions.location_table[loc_name][0], client.slot)]
+
+            replacements = {'SmallKey': 0xA2, 'BigKey': 0x9D, 'Compass': 0x8D, 'Map': 0x7D}
+            item_type = [i[2] for i in Items.item_table.values() if type(i[3]) is int and i[3] == target_item]
+            if item_type:
+                target_item = replacements.get(item_type[0], target_item)
+
+            locs.append([loc_name, location, target_item, target_player])
+
+        print(f"{client.name} in team {client.team+1} scouted {', '.join([l[0] for l in locs])}")
+        await send_msgs(client.socket, [['LocationInfo', [l[1:] for l in locs]]])
 
     if cmd == 'Say':
         if type(args) is not str or not args.isprintable():
@@ -338,11 +361,12 @@ async def main():
 
         with open(ctx.data_filename, 'rb') as f:
             jsonobj = json.loads(zlib.decompress(f.read()).decode("utf-8"))
-            for team, names in enumerate(jsonobj[0]):
+            for team, names in enumerate(jsonobj['names']):
                 for player, name in enumerate(names, 1):
                     ctx.player_names[(team, player)] = name
-            ctx.rom_names = {tuple(rom): (team, slot) for slot, team, rom in jsonobj[1]}
-            ctx.locations = {tuple(k): tuple(v) for k, v in jsonobj[2]}
+            ctx.rom_names = {tuple(rom): (team, slot) for slot, team, rom in jsonobj['roms']}
+            ctx.remote_items = set(jsonobj['remote_items'])
+            ctx.locations = {tuple(k): tuple(v) for k, v in jsonobj['locations']}
     except Exception as e:
         print('Failed to read multiworld data (%s)' % e)
         return

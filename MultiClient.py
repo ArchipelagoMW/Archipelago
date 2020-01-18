@@ -68,7 +68,9 @@ class Context:
         self.slot = None
         self.player_names = {}
         self.locations_checked = set()
+        self.locations_scouted = set()
         self.items_received = []
+        self.locations_info = {}
         self.awaiting_rom = False
         self.rom = None
         self.auth = None
@@ -97,11 +99,15 @@ INGAME_MODES = {0x07, 0x09, 0x0b}
 SAVEDATA_START = WRAM_START + 0xF000
 SAVEDATA_SIZE = 0x500
 
-RECV_PROGRESS_ADDR = SAVEDATA_START + 0x4D0     # 2 bytes
-RECV_ITEM_ADDR = SAVEDATA_START + 0x4D2         # 1 byte
-RECV_ITEM_PLAYER_ADDR = SAVEDATA_START + 0x4D3  # 1 byte
-ROOMID_ADDR = SAVEDATA_START + 0x4D4            # 2 bytes
-ROOMDATA_ADDR = SAVEDATA_START + 0x4D6          # 1 byte
+RECV_PROGRESS_ADDR = SAVEDATA_START + 0x4D0         # 2 bytes
+RECV_ITEM_ADDR = SAVEDATA_START + 0x4D2             # 1 byte
+RECV_ITEM_PLAYER_ADDR = SAVEDATA_START + 0x4D3      # 1 byte
+ROOMID_ADDR = SAVEDATA_START + 0x4D4                # 2 bytes
+ROOMDATA_ADDR = SAVEDATA_START + 0x4D6              # 1 byte
+SCOUT_LOCATION_ADDR = SAVEDATA_START + 0x4D7        # 1 byte
+SCOUTREPLY_LOCATION_ADDR = SAVEDATA_START + 0x4D8   # 1 byte
+SCOUTREPLY_ITEM_ADDR = SAVEDATA_START + 0x4D9       # 1 byte
+SCOUTREPLY_PLAYER_ADDR = SAVEDATA_START + 0x4DA     # 1 byte
 
 location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      "Blind's Hideout - Left": (0x11d, 0x20),
@@ -595,6 +601,7 @@ async def server_loop(ctx : Context, address = None):
         ctx.awaiting_rom = False
         ctx.auth = None
         ctx.items_received = []
+        ctx.locations_info = {}
         socket, ctx.socket = ctx.socket, None
         if socket is not None and not socket.closed:
             await socket.close()
@@ -643,8 +650,13 @@ async def process_server_cmd(ctx : Context, cmd, args):
     if cmd == 'Connected':
         ctx.team, ctx.slot = args[0]
         ctx.player_names = {p: n for p, n in args[1]}
+        msgs = []
         if ctx.locations_checked:
-            await send_msgs(ctx.socket, [['LocationChecks', [Regions.location_table[loc][0] for loc in ctx.locations_checked]]])
+            msgs.append(['LocationChecks', [Regions.location_table[loc][0] for loc in ctx.locations_checked]])
+        if ctx.locations_scouted:
+            msgs.append(['LocationScouts', list(ctx.locations_scouted)])
+        if msgs:
+            await send_msgs(ctx.socket, msgs)
 
     if cmd == 'ReceivedItems':
         start_index, items = args
@@ -658,6 +670,14 @@ async def process_server_cmd(ctx : Context, cmd, args):
         if start_index == len(ctx.items_received):
             for item in items:
                 ctx.items_received.append(ReceivedItem(*item))
+
+    if cmd == 'LocationInfo':
+        for location, item, player in args:
+            if location not in ctx.locations_info:
+                replacements = {0xA2: 'Small Key', 0x9D: 'Big Key', 0x8D: 'Compass', 0x7D: 'Map'}
+                item_name = replacements.get(item, get_item_name_from_id(item))
+                print(f"Saw {color(item_name, 'red', 'bold')} at {list(Regions.location_table.keys())[location - 1]}")
+                ctx.locations_info[location] = (item, player)
 
     if cmd == 'ItemSent':
         player_sent, location, player_recvd, item = args
@@ -840,6 +860,7 @@ async def game_watcher(ctx : Context):
 
             ctx.rom = list(rom)
             ctx.locations_checked = set()
+            ctx.locations_scouted = set()
             if ctx.awaiting_rom:
                 await server_auth(ctx, False)
 
@@ -851,18 +872,24 @@ async def game_watcher(ctx : Context):
         if gamemode is None or gamemode[0] not in INGAME_MODES:
             continue
 
-        data = await snes_read(ctx, RECV_PROGRESS_ADDR, 7)
+        data = await snes_read(ctx, RECV_PROGRESS_ADDR, 8)
         if data is None:
             continue
 
         recv_index = data[0] | (data[1] << 8)
-        assert(RECV_ITEM_ADDR == RECV_PROGRESS_ADDR + 2)
+        assert RECV_ITEM_ADDR == RECV_PROGRESS_ADDR + 2
         recv_item = data[2]
-        assert(ROOMID_ADDR == RECV_PROGRESS_ADDR + 4)
+        assert ROOMID_ADDR == RECV_PROGRESS_ADDR + 4
         roomid = data[4] | (data[5] << 8)
-        assert(ROOMDATA_ADDR == RECV_PROGRESS_ADDR + 6)
+        assert ROOMDATA_ADDR == RECV_PROGRESS_ADDR + 6
         roomdata = data[6]
+        assert SCOUT_LOCATION_ADDR == RECV_PROGRESS_ADDR + 7
+        scout_location = data[7]
 
+        if scout_location > 0 and scout_location not in ctx.locations_scouted:
+            ctx.locations_scouted.add(scout_location)
+            print(f'Scouting item at {list(Regions.location_table.keys())[scout_location - 1]}')
+            await send_msgs(ctx.socket, [['LocationScouts', [scout_location]]])
         await track_locations(ctx, roomid, roomdata)
 
         if recv_index < len(ctx.items_received) and recv_item == 0:
@@ -873,7 +900,11 @@ async def game_watcher(ctx : Context):
             recv_index += 1
             snes_buffered_write(ctx, RECV_PROGRESS_ADDR, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
             snes_buffered_write(ctx, RECV_ITEM_ADDR, bytes([item.item]))
-            snes_buffered_write(ctx, RECV_ITEM_PLAYER_ADDR, bytes([item.player]))
+            snes_buffered_write(ctx, RECV_ITEM_PLAYER_ADDR, bytes([item.player if item.player != ctx.slot else 0]))
+        if scout_location > 0 and scout_location in ctx.locations_info:
+            snes_buffered_write(ctx, SCOUTREPLY_LOCATION_ADDR, bytes([scout_location]))
+            snes_buffered_write(ctx, SCOUTREPLY_ITEM_ADDR, bytes([ctx.locations_info[scout_location][0]]))
+            snes_buffered_write(ctx, SCOUTREPLY_PLAYER_ADDR, bytes([ctx.locations_info[scout_location][1]]))
 
         await snes_flush_writes(ctx)
 
