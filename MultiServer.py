@@ -1,4 +1,3 @@
-import aioconsole
 import argparse
 import asyncio
 import functools
@@ -7,8 +6,13 @@ import logging
 import re
 import shlex
 import urllib.request
-import websockets
 import zlib
+
+import ModuleUpdate
+ModuleUpdate.update()
+
+import websockets
+import aioconsole
 
 import Items
 import Regions
@@ -348,7 +352,7 @@ async def console(ctx : Context):
                                 if receiving_player == slot and item_id == seeked_item_id:
                                     location_id, finding_player = check
                                     name_finder = ctx.player_names[team, finding_player]
-                                    hint = f"[Hint]: {name}'s {item} can be found in " \
+                                    hint = f"[Hint]: {name}'s {item} can be found at " \
                                            f"{get_location_name_from_address(location_id)} in {name_finder}'s World"
                                     notify_team(ctx, team, hint)
                         else:

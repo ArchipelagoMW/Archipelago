@@ -56,6 +56,10 @@ def feedback(text:str):
 
 if __name__ == "__main__":
     try:
+
+        import ModuleUpdate
+        ModuleUpdate.update()
+
         print(f"{__author__}'s MultiMystery Launcher V{__version__}")
         if not os.path.exists(enemizer_location):
             feedback(f"Enemizer not found at {enemizer_location}, please adjust the path in MultiMystery.py's config or put Enemizer in the default location.")
