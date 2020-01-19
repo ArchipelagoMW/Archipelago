@@ -16,6 +16,9 @@ def parse_yaml(txt):
     for line in txt.splitlines():
         if not line:
             continue
+        line = line.split('#')[0]
+        if not line:
+            continue
         name, val = line.split(':', 1)
         val = strip(val)
         spaces = len(name) - len(name.lstrip(' '))
