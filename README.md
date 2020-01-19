@@ -7,6 +7,12 @@ This is a drop-in replacement with everything from Bonta's Multiworld included.
 Additions/Changes
 -----------------
 
+Project
+ * Compatible with Python 3.7 and 3.8. Potentially future versions as well.
+ * Update modules if they are too old, preventing a crash when trying to connect among potential other issues
+ * Autoinstall missing modules
+ * Allow newer versions of modules than specified, as they will *usually* not break compatibility
+
 MultiMystery.py
  * Allows you to generate a Multiworld with individual player mystery weights. Since weights can also be set to 100%, this also allows for individual settings for each player in a regular multiworld.
 Basis is a .yaml file that sets these weights. You can find an easy.yaml in this project folder to get started.
@@ -29,8 +35,5 @@ Mystery.py
 If a race ROM is desired, pass --create-race as argument to it
  * When an error is generated due to a broken .yaml file, it now mentions in the error trace which file it is
  
-Project
- * Update modules if they are too old, preventing a crash when trying to connect among potential other issues
- * Autoinstall missing modules
- * Allow newer versions of modules than specified, as they will *usually* not break compatibility
+
  
