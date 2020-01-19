@@ -1,3 +1,4 @@
 aioconsole>=0.1.15
 colorama>=0.4.3
 websockets>=8.1
+PyYAML>=5.3

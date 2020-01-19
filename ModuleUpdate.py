@@ -3,18 +3,24 @@ import sys
 import subprocess
 import importlib
 
-update_ran = False
+update_ran = hasattr(sys, "frozen") and getattr(sys, "frozen")  # don't run update if environment is frozen/compiled
+
 
 def update_command():
     subprocess.call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt', '--upgrade'])
+
+
+naming_specialties = {"PyYAML": "yaml"}  # PyYAML is imported as the name yaml
+
 
 def update():
     global update_ran
     if not update_ran:
         update_ran = True
-        with open(os.path.join(os.path.dirname(__file__),'requirements.txt')) as requirementsfile:
+        with open(os.path.join(os.path.dirname(__file__), 'requirements.txt')) as requirementsfile:
             for line in requirementsfile.readlines():
                 module, remoteversion = line.split(">=")
+                module = naming_specialties.get(module, module)
                 try:
                     module = importlib.import_module(module)
                 except:
