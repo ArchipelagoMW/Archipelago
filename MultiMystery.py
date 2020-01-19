@@ -42,7 +42,8 @@ player_files_folder:str = "Players"
 
 #Version of python to use for Bonta Multiworld. Probably leave this as is, if you don't know what this does.
 #can be tagged for bitness, for example "3.8-32" would be latest installed 3.8 on 32 bits
-py_version:str = "3.7"
+#special case: None -> use the python which was used to launch this file.
+py_version:str = None
 ####end of config####
 
 import os
@@ -56,7 +57,8 @@ def feedback(text:str):
 
 if __name__ == "__main__":
     try:
-
+        if not py_version:
+            py_version = f"{sys.version_info.major}.{sys.version_info.minor}"
         import ModuleUpdate
         ModuleUpdate.update()
 
