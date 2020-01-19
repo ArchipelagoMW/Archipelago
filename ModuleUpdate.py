@@ -1,3 +1,4 @@
+import os
 import sys
 import subprocess
 import importlib
@@ -11,7 +12,7 @@ def update():
     global update_ran
     if not update_ran:
         update_ran = True
-        with open('requirements.txt') as requirementsfile:
+        with open(os.path.join(os.path.dirname(__file__),'requirements.txt')) as requirementsfile:
             for line in requirementsfile.readlines():
                 module, remoteversion = line.split(">=")
                 try:
