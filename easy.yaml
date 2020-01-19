@@ -1,36 +1,36 @@
-description: Easy/Open/Normal
-glitches_required: none
-item_placement: basic
-map_shuffle:
+description: Easy/Open/Normal #please describe your options. Especially useful when you have multiple yamls for different occasions
+glitches_required: none #there is also no_logic.
+item_placement: basic #this is based on Entrance Randomizer, which does not (yet?) support advanced
+map_shuffle: #to shuffle dungeon maps into the outside world and other dungeons, as well as other player's worlds in multiworld
   on: 0
   off: 1
-compass_shuffle:
+compass_shuffle: #same for compass
   on: 0
   off: 1
-smallkey_shuffle:
+smallkey_shuffle: #same for small keys
   on: 0
   off: 1
-bigkey_shuffle:
+bigkey_shuffle: #same for big keys
   on: 0
   off: 1
 accessibility:
-  items: 0
-  locations: 1
-  none: 0
+  items: 0 # item accessibility means you can get all inventory items. So a key could lock itself, but you can fill your inventory
+  locations: 1 # location accessibility means you can access every location in your seed and get all 216 checks
+  none: 0 # no accessibility means your seed is "beatable only", meaning any items you do not need to beat the game can be unreachable. This can mean you have to defeat ganon with a lamp and master sword.
 entrance_shuffle:
-  none: 1
-  simple: 0
-  restricted: 0
-  full: 0
-  crossed: 0
-  insanity: 0
+  none: 1 # no entrance shuffle
+  simple: 0 #dungeons are shuffled with each other and the other entrances are shuffled with each other
+  restricted: 0 #dungeons still shuffle along each other but connects other entrances more feely with each other while keeping entrances in one world
+  full: 0 # mixes caves and dungeons freely, except for confining all entrances to one world
+  crossed: 0 #introduces cross world connectors
+  insanity: 0 #any entrance can lead to any other entrance
 goals:
-  ganon: 5
-  fast_ganon: 4
-  dungeons: 1
-  pedestal: 0
-  triforce-hunt: 0
-tower_open:
+  ganon: 5 #beat GT and then Ganon
+  fast_ganon: 4 # Just kill Ganon
+  dungeons: 1 # All Dungeons, including GT, and Agahnims Tower
+  pedestal: 0 # Pull the win out of the Pedestal
+  triforce-hunt: 0 # Collect 20 of 30 Triforce pieces then hand them in in front of Hyrule Castle
+tower_open: # Crystals required to open GT
   '0': 0
   '1': 0
   '2': 0
@@ -40,7 +40,7 @@ tower_open:
   '6': 0
   '7': 0
   random: 1
-ganon_open:
+ganon_open: # Crystals required to hurt Ganon
   '0': 0
   '1': 0
   '2': 0
@@ -51,18 +51,18 @@ ganon_open:
   '7': 0
   random: 1
 world_state:
-  standard: 1
-  open: 9
-  inverted: 0
-  retro: 0
+  standard: 1 # Do standard escape to bring Zelda to Sanctuary
+  open: 9 # Start with the ability to skip the standard opening and go where you want
+  inverted: 0 # You start in the Dark World, the Light World has changes to it's Map and requires a Moon Pearl to not be Bunny
+  retro: 0 # Keys are universal, you have to buy a quiver, there are take any caves and some other changes. Makes it more like Z1
 hints:
-  'on': 1
-  'off': 0
-weapons:
-  randomized: 5
-  assured: 2
-  vanilla: 3
-  swordless: 0
+  'on': 1 # Hint tiles can give useful item location hints on occasion
+  'off': 0 # You get gameplay hints, but not location/item hints
+weapons: # this means swords
+  randomized: 5 # Your swords can be anywhere
+  assured: 2 # You start with a sword, the rest are anywhere
+  vanilla: 3 # Your swords are in vanilla locations in your own game (Uncle, Pyramid Fairy, Smiths, Pedestal)
+  swordless: 0 # You don't have a sword. A hammer can be used like a Master Sword in certain situations
 item_pool:
   normal: 1
   hard: 0
