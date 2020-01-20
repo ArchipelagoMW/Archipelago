@@ -119,6 +119,8 @@ def get_weights(path):
 def interpret_on_off(value):
     return {"on": True, "off": False}.get(value, value)
 
+def convert_to_on_off(value):
+    return {True: "on", False: "off"}.get(value, value)
 
 def roll_settings(weights):
     def get_choice(option, root=weights):
@@ -219,11 +221,11 @@ def roll_settings(weights):
         ret.sprite = get_choice('sprite', romweights)
         ret.disablemusic = get_choice('disablemusic', romweights)
         ret.quickswap = get_choice('quickswap', romweights)
-        ret.fastmenu = get_choice('menuspeed', romweights)
+        ret.fastmenu = convert_to_on_off(get_choice('menuspeed', romweights))
         ret.heartcolor = get_choice('heartcolor', romweights)
-        ret.heartbeep = get_choice('heartbeep', romweights)
-        ret.ow_palettes = get_choice('ow_palettes', romweights)
-        ret.uw_palettes = get_choice('uw_palettes', romweights)
+        ret.heartbeep = convert_to_on_off(get_choice('heartbeep', romweights))
+        ret.ow_palettes = convert_to_on_off(get_choice('ow_palettes', romweights))
+        ret.uw_palettes = convert_to_on_off(get_choice('uw_palettes', romweights))
 
     return ret
 
