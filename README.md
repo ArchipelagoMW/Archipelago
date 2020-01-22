@@ -33,7 +33,7 @@ Notice (Team #1): [Hint]: Berserker's Progressive Sword can be found in Ganons T
 Mystery.py
  * Defaults to generating a non-race ROM (Bonta's only makes race ROMs at this time)
 If a race ROM is desired, pass --create-race as argument to it
- * When an error is generated due to a broken .yaml file, it now mentions in the error trace which file it is
+ * When an error is generated due to a broken .yaml file, it now mentions in the error trace which file, line and character is the culprit
  
 
  

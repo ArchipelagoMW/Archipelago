@@ -211,7 +211,7 @@ def main(args, seed=None):
                                                              (location.item.code, location.item.player))
                                                             for location in world.get_filled_locations() if
                                                             type(location.address) is int]
-                                              }).encode("utf-8-sig"))
+                                              }).encode("utf-8"))
         if args.jsonout:
             jsonout["multidata"] = list(multidata)
         else:
