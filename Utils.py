@@ -109,7 +109,7 @@ def make_new_base2current(old_rom='Zelda no Densetsu - Kamigami no Triforce (Jap
     with open(new_rom, 'rb') as stream:
         new_rom_data = bytearray(stream.read())
     # extend to 2 mb
-    old_rom_data.extend(bytearray([0x00] * (2097152 - len(old_rom_data))))
+    old_rom_data.extend(bytearray([0x00]) * (2097152 - len(old_rom_data)))
 
     out_data = OrderedDict()
     for idx, old in enumerate(old_rom_data):

@@ -96,7 +96,7 @@ class LocalRom(object):
     @staticmethod
     def fromJsonRom(rom, file, rom_size = 0x200000):
         ret = LocalRom(file, True, rom.name, rom.hash)
-        ret.buffer.extend(bytearray([0x00] * (rom_size - len(ret.buffer))))
+        ret.buffer.extend(bytearray([0x00]) * (rom_size - len(ret.buffer)))
         for address, values in rom.patches.items():
             ret.write_bytes(int(address), values)
         return ret
@@ -109,7 +109,7 @@ class LocalRom(object):
             logging.getLogger('').warning('Supplied Base Rom does not match known MD5 for JAP(1.0) release. Will try to patch anyway.')
 
         # extend to 2MB
-        self.buffer.extend(bytearray([0x00] * (0x200000 - len(self.buffer))))
+        self.buffer.extend(bytearray([0x00]) * (0x200000 - len(self.buffer)))
 
         # load randomizer patches
         with open(local_path('data/base2current.json'), 'r') as stream:
