@@ -1119,7 +1119,7 @@ class Spoiler(object):
                 outfile.write('Goal:                            %s\n' % self.metadata['goal'][player])
                 outfile.write('Difficulty:                      %s\n' % self.metadata['item_pool'][player])
                 outfile.write('Item Functionality:              %s\n' % self.metadata['item_functionality'][player])
-                outfile.write('Item Progression                 %s\n' % self.metadata['progressive'][player])
+                outfile.write('Item Progression:                %s\n' % self.metadata['progressive'][player])
                 outfile.write('Entrance Shuffle:                %s\n' % self.metadata['shuffle'][player])
                 outfile.write('Crystals required for GT:        %s\n' % self.metadata['gt_crystals'][player])
                 outfile.write('Crystals required for Ganon:     %s\n' % self.metadata['ganon_crystals'][player])
