@@ -72,14 +72,15 @@ class JsonRom(object):
 
 class LocalRom(object):
 
-    def __init__(self, file, patch=True, name=None, hash=None):
+    def __init__(self, file, extendedmsu=False, patch=True, name=None, hash=None):
         self.name = name
         self.hash = hash
         self.orig_buffer = None
+        self.extendedmsu = extendedmsu
         with open(file, 'rb') as stream:
             self.buffer = read_rom(stream)
         if patch:
-            self.patch_base_rom()
+            self.patch_base_rom(extendedmsu)
             self.orig_buffer = self.buffer.copy()
 
     def write_byte(self, address, value):
@@ -94,25 +95,25 @@ class LocalRom(object):
             outfile.write(self.buffer)
 
     @staticmethod
-    def fromJsonRom(rom, file, rom_size = 0x200000):
-        ret = LocalRom(file, True, rom.name, rom.hash)
+    def fromJsonRom(rom, file, rom_size = 0x200000, extendedmsu=False):
+        ret = LocalRom(file, extendedmsu, True, rom.name, rom.hash)
         ret.buffer.extend(bytearray([0x00]) * (rom_size - len(ret.buffer)))
         for address, values in rom.patches.items():
             ret.write_bytes(int(address), values)
         return ret
 
-    def patch_base_rom(self):
+    def patch_base_rom(self, extendedmsu):
         # verify correct checksum of baserom
         basemd5 = hashlib.md5()
         basemd5.update(self.buffer)
         if JAP10HASH != basemd5.hexdigest():
             logging.getLogger('').warning('Supplied Base Rom does not match known MD5 for JAP(1.0) release. Will try to patch anyway.')
-
+        
         # extend to 2MB
         self.buffer.extend(bytearray([0x00]) * (0x200000 - len(self.buffer)))
 
         # load randomizer patches
-        with open(local_path('data/base2current.json'), 'r') as stream:
+        with open(local_path('data/base2current.json') if not extendedmsu else local_path('data/base2current_extendedmsu.json'), 'r') as stream:
             patches = json.load(stream)
         for patch in patches:
             if isinstance(patch, dict):
@@ -156,9 +157,9 @@ def read_rom(stream):
         buffer = buffer[0x200:]
     return buffer
 
-def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, random_sprite_on_hit):
+def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, random_sprite_on_hit, extendedmsu):
     baserom_path = os.path.abspath(baserom_path)
-    basepatch_path = os.path.abspath(local_path('data/base2current.json'))
+    basepatch_path = os.path.abspath(local_path('data/base2current.json') if not extendedmsu else local_path('data/base2current_extendedmsu.json'))
     enemizer_basepatch_path = os.path.join(os.path.dirname(enemizercli), "enemizerBasePatch.json")
     randopatch_path = os.path.abspath(output_path('enemizer_randopatch.json'))
     options_path = os.path.abspath(output_path('enemizer_options.json'))
