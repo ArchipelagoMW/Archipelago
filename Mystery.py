@@ -99,7 +99,6 @@ def main():
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[erargs.loglevel]
     logging.basicConfig(format='%(message)s', level=loglevel)
-
     ERmain(erargs, seed)
 
 def get_weights(path):
@@ -209,6 +208,7 @@ def roll_settings(weights):
 
     ret.beemizer = int(get_choice('beemizer')) if 'beemizer' in weights else 0
 
+    ret.progressive = convert_to_on_off(get_choice('progressive')) if "progressive" in weights else 'on'
     inventoryweights = weights.get('startinventory', {})
     startitems = []
     for item in inventoryweights.keys():

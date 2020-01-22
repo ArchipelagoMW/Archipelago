@@ -30,7 +30,9 @@ def main(args, seed=None):
     start = time.process_time()
 
     # initialize the world
-    world = World(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty, args.item_functionality, args.timer, args.progressive, args.goal, args.algorithm, args.accessibility, args.shuffleganon, args.retro, args.custom, args.customitemarray, args.hints)
+    world = World(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty,
+                  args.item_functionality, args.timer, args.progressive.copy(), args.goal, args.algorithm,
+                  args.accessibility, args.shuffleganon, args.retro, args.custom, args.customitemarray, args.hints)
     logger = logging.getLogger('')
     if seed is None:
         random.seed(None)
@@ -53,6 +55,7 @@ def main(args, seed=None):
     world.enemy_damage = args.enemy_damage.copy()
     world.beemizer = args.beemizer.copy()
     world.shufflepots = args.shufflepots.copy()
+    world.progressive = args.progressive.copy()
 
     world.rom_seeds = {player: random.randint(0, 999999999) for player in range(1, world.players + 1)}
 

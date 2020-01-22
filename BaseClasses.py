@@ -3,7 +3,7 @@ from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict
-from _vendor.collections_extended import bag
+from collections_extended import bag
 from EntranceShuffle import door_addresses
 from Utils import int16_as_bytes
 
@@ -86,6 +86,7 @@ class World(object):
             set_player_attr('enemy_health', 'default')
             set_player_attr('enemy_damage', 'default')
             set_player_attr('beemizer', 0)
+            set_player_attr('progressive', 'on')
             set_player_attr('escape_assist', [])
             set_player_attr('crystals_needed_for_ganon', 7)
             set_player_attr('crystals_needed_for_gt', 7)
@@ -1075,6 +1076,7 @@ class Spoiler(object):
                          'enemy_health': self.world.enemy_health,
                          'enemy_damage': self.world.enemy_damage,
                          'beemizer': self.world.beemizer,
+                         'progressive': self.world.progressive,
                          'shufflepots': self.world.shufflepots,
                          'players': self.world.players,
                          'teams': self.world.teams
@@ -1117,6 +1119,7 @@ class Spoiler(object):
                 outfile.write('Goal:                            %s\n' % self.metadata['goal'][player])
                 outfile.write('Difficulty:                      %s\n' % self.metadata['item_pool'][player])
                 outfile.write('Item Functionality:              %s\n' % self.metadata['item_functionality'][player])
+                outfile.write('Item Progression                 %s\n' % self.metadata['progressive'][player])
                 outfile.write('Entrance Shuffle:                %s\n' % self.metadata['shuffle'][player])
                 outfile.write('Crystals required for GT:        %s\n' % self.metadata['gt_crystals'][player])
                 outfile.write('Crystals required for Ganon:     %s\n' % self.metadata['ganon_crystals'][player])

@@ -125,10 +125,15 @@ difficulties = {
 }
 
 def generate_itempool(world, player):
-    if (world.difficulty[player] not in ['normal', 'hard', 'expert'] or world.goal[player] not in ['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals']
-            or world.mode[player] not in ['open', 'standard', 'inverted'] or world.timer not in ['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'] or world.progressive not in ['on', 'off', 'random']):
+    if (world.difficulty[player] not in ['normal', 'hard', 'expert'] or world.goal[player] not in ['ganon', 'pedestal',
+                                                                                                   'dungeons',
+                                                                                                   'triforcehunt',
+                                                                                                   'crystals']
+            or world.mode[player] not in ['open', 'standard', 'inverted'] or world.timer not in ['none', 'display',
+                                                                                                 'timed', 'timed-ohko',
+                                                                                                 'ohko',
+                                                                                                 'timed-countdown']):
         raise NotImplementedError('Not supported yet')
-
     if world.timer in ['ohko', 'timed-ohko']:
         world.can_take_damage = False
 
@@ -174,10 +179,17 @@ def generate_itempool(world, player):
 
     # set up item pool
     if world.custom:
-        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive, world.shuffle[player], world.difficulty[player], world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro[player], world.customitemarray)
+        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
+         lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive[player], world.shuffle[player],
+                                                              world.difficulty[player], world.timer, world.goal[player],
+                                                              world.mode[player], world.swords[player],
+                                                              world.retro[player], world.customitemarray)
         world.rupoor_cost = min(world.customitemarray[69], 9999)
     else:
-        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms) = get_pool_core(world.progressive, world.shuffle[player], world.difficulty[player], world.timer, world.goal[player], world.mode[player], world.swords[player], world.retro[player])
+        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
+         lamps_needed_for_dark_rooms) = get_pool_core(world.progressive[player], world.shuffle[player],
+                                                      world.difficulty[player], world.timer, world.goal[player],
+                                                      world.mode[player], world.swords[player], world.retro[player])
 
     for item in precollected_items:
         world.push_precollected(ItemFactory(item, player))
