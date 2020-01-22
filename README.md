@@ -12,7 +12,8 @@ Project
  * Update modules if they are too old, preventing a crash when trying to connect among potential other issues
  * Autoinstall missing modules
  * Allow newer versions of modules than specified, as they will *usually* not break compatibility
-
+ * Support for V31 extendedmsu
+ 
 MultiMystery.py
  * Allows you to generate a Multiworld with individual player mystery weights. Since weights can also be set to 100%, this also allows for individual settings for each player in a regular multiworld.
 Basis is a .yaml file that sets these weights. You can find an easy.yaml in this project folder to get started.
@@ -34,6 +35,7 @@ Mystery.py
  * Defaults to generating a non-race ROM (Bonta's only makes race ROMs at this time)
 If a race ROM is desired, pass --create-race as argument to it
  * When an error is generated due to a broken .yaml file, it now mentions in the error trace which file, line and character is the culprit
- 
+ * Option for progressive items, allowing you to turn them off (see easy.yaml for more info)
+ * Rom-Option for extendedmsu (see easy.yaml for more info)
 
  
