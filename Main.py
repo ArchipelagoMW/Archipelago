@@ -205,10 +205,13 @@ def main(args, seed=None):
 
         multidata = zlib.compress(json.dumps({"names": parsed_names,
                                               "roms": rom_names,
-                                              "remote_items": [player for player in range(1, world.players + 1) if world.remote_items[player]],
-                                              "locations": [((location.address, location.player), (location.item.code, location.item.player))
-                                                            for location in world.get_filled_locations() if type(location.address) is int]
-                                              }).encode("utf-8"))
+                                              "remote_items": [player for player in range(1, world.players + 1) if
+                                                               world.remote_items[player]],
+                                              "locations": [((location.address, location.player),
+                                                             (location.item.code, location.item.player))
+                                                            for location in world.get_filled_locations() if
+                                                            type(location.address) is int]
+                                              }).encode("utf-8-sig"))
         if args.jsonout:
             jsonout["multidata"] = list(multidata)
         else:
