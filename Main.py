@@ -39,6 +39,7 @@ def main(args, seed=None):
         world.seed = int(seed)
     random.seed(world.seed)
 
+    world.remote_items = args.remote_items.copy()
     world.mapshuffle = args.mapshuffle.copy()
     world.compassshuffle = args.compassshuffle.copy()
     world.keyshuffle = args.keyshuffle.copy()
@@ -187,6 +188,7 @@ def main(args, seed=None):
                     outfilepname = f'_T{team+1}' if world.teams > 1 else ''
                     if world.players > 1:
                         outfilepname += f'_P{player}'
+                    if world.players > 1 or world.teams > 1:
                         outfilepname += f"_{world.player_names[player][team].replace(' ', '_')}" if world.player_names[player][team] != 'Player %d' % player else ''
                     outfilesuffix = ('_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (world.logic[player], world.difficulty[player], world.difficulty_adjustments[player],
                                                                               world.mode[player], world.goal[player],
@@ -197,9 +199,12 @@ def main(args, seed=None):
                                                                               "-nohints" if not world.hints[player] else "")) if not args.outputname else ''
                     rom.write_to_file(output_path(f'{outfilebase}{outfilepname}{outfilesuffix}.sfc'))
 
-        multidata = zlib.compress(json.dumps((parsed_names, rom_names,
-                                              [((location.address, location.player), (location.item.code, location.item.player)) for location in world.get_filled_locations() if type(location.address) is int])
-                                             ).encode("utf-8"))
+        multidata = zlib.compress(json.dumps({"names": parsed_names,
+                                              "roms": rom_names,
+                                              "remote_items": [player for player in range(1, world.players + 1) if world.remote_items[player]],
+                                              "locations": [((location.address, location.player), (location.item.code, location.item.player))
+                                                            for location in world.get_filled_locations() if type(location.address) is int]
+                                              }).encode("utf-8"))
         if args.jsonout:
             jsonout["multidata"] = list(multidata)
         else:
@@ -228,6 +233,7 @@ def copy_world(world):
     ret = World(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.difficulty_adjustments, world.timer, world.progressive, world.goal, world.algorithm, world.accessibility, world.shuffle_ganon, world.retro, world.custom, world.customitemarray, world.hints)
     ret.teams = world.teams
     ret.player_names = copy.deepcopy(world.player_names)
+    ret.remote_items = world.remote_items.copy()
     ret.required_medallions = world.required_medallions.copy()
     ret.swamp_patch_required = world.swamp_patch_required.copy()
     ret.ganon_at_pyramid = world.ganon_at_pyramid.copy()

@@ -60,6 +60,7 @@ class World(object):
                 self.__dict__.setdefault(attr, {})[player] = val
             set_player_attr('_region_cache', {})
             set_player_attr('player_names', [])
+            set_player_attr('remote_items', False)
             set_player_attr('required_medallions', ['Ether', 'Quake'])
             set_player_attr('swamp_patch_required', False)
             set_player_attr('powder_patch_required', False)
