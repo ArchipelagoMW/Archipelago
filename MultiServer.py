@@ -323,11 +323,10 @@ async def console(ctx : Context):
                     slot = int(command[1])
                 forfeit_player(ctx, team, slot)
             if command[0] == '/forfeitplayer' and len(command) > 1:
-                team = int(command[2]) - 1 if len(command) > 2 and command[2].isdigit() else None
-                for client in ctx.clients:
-                    if client.auth and client.name.lower() == command[1].lower() and (team is None or team == client.team):
-                        if client.socket and not client.socket.closed:
-                            forfeit_player(ctx, client.team, client.slot)
+                seeked_player = command[1].lower()
+                for (team, slot), name in ctx.player_names.items():
+                    if name.lower() == seeked_player:
+                        forfeit_player(ctx, team, slot)
             if command[0] == '/senditem' and len(command) > 2:
                 [(player, item)] = re.findall(r'\S* (\S*) (.*)', input)
                 if item in Items.item_table:

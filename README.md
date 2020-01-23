@@ -21,6 +21,7 @@ Basis is a .yaml file that sets these weights. You can find an easy.yaml in this
  
  MultiServer.py
   * Added a try/except to prevent malformed console commands from crashing the entire server
+  * /forfeitplayer Playername now works when the player is not currently connected
   * Added /hint command on the server (use just /hint for help on command)  
 can be used as /hint Playername Itemname  
 All Itemnames can be found in Items.py starting at line 25  
