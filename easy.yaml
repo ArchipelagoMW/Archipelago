@@ -18,6 +18,10 @@ accessibility:
   items: 0 # item accessibility means you can get all inventory items. So a key could lock itself, but you can fill your inventory
   locations: 1 # location accessibility means you can access every location in your seed and get all 216 checks
   none: 0 # no accessibility means your seed is "beatable only", meaning any items you do not need to beat the game can be unreachable. This can mean you have to defeat ganon with a lamp and master sword.
+progressive: #not available in bonta's multiworld at this time. If you want this option, make sure the host uses the correct Multiworld
+  on: 1 # progressive items, you will always get progressive items like swords in their order: figher sword -> master sword -> tempered sword -> golden sword
+  off: 0 # turns progressive items off, so you can find, for example, silver arrows before a bow
+  random: 0 # rolls a 50/50 chance for each potentially progressive item. So, for example, you can have progressive swords but non-progressive mittens
 entrance_shuffle:
   none: 1 # no entrance shuffle
   simple: 0 #dungeons are shuffled with each other and the other entrances are shuffled with each other
@@ -106,6 +110,7 @@ rom:
     randomonhit: 1
     link: 1
   disablemusic: off
+  extendedmsu: off #turn on to have V31 extended MSU support
   quickswap:
     on: 1
     off: 0
