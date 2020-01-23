@@ -144,8 +144,11 @@ def roll_settings(weights):
     # not supported in ER
 
     dungeon_items = get_choice('dungeon_items')
-    if dungeon_items == 'full':
+    if dungeon_items == 'full' or dungeon_items == True:
         dungeon_items = 'mcsb'
+    elif not dungeon_items:
+        dungeon_items = ""
+
     ret.mapshuffle = get_choice('map_shuffle') if 'map_shuffle' in weights else 'm' in dungeon_items
     ret.compassshuffle = get_choice('compass_shuffle') if 'compass_shuffle' in weights else 'c' in dungeon_items
     ret.keyshuffle = get_choice('smallkey_shuffle') if 'smallkey_shuffle' in weights else 's' in dungeon_items
