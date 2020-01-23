@@ -468,9 +468,10 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
         else:
             place_item('Master Sword Pedestal', 'Triforce')
     else:
-        pool.extend(diff.progressivesword if want_progressives() else diff.basicsword)
+        progressive_swords = want_progressives()
+        pool.extend(diff.progressivesword if progressive_swords else diff.basicsword)
         if swords == 'assured':
-            if want_progressives():
+            if progressive_swords:
                 precollected_items.append('Progressive Sword')
                 pool.remove('Progressive Sword')
             else:
