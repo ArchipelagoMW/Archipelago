@@ -71,7 +71,7 @@ def main():
 
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
-    erargs.names = args.names
+    erargs.name = {x+1: name for x,name in enumerate(args.names.split(","))}
     erargs.create_spoiler = args.create_spoiler
     erargs.race = args.race
     erargs.outputname = seedname
@@ -99,6 +99,8 @@ def main():
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[erargs.loglevel]
     logging.basicConfig(format='%(message)s', level=loglevel)
+    logging.info(erargs)
+    erargs.names = ",".join(erargs.name[i] for i in sorted(erargs.name.keys()))
     ERmain(erargs, seed)
 
 def get_weights(path):
@@ -133,7 +135,7 @@ def roll_settings(weights):
             random.choices(list(root[option].keys()), weights=list(map(int, root[option].values())))[0])
 
     ret = argparse.Namespace()
-
+    ret.name = get_choice('name')
     glitches_required = get_choice('glitches_required')
     if glitches_required not in ['none', 'no_logic']:
         print("Only NMG and No Logic supported")
