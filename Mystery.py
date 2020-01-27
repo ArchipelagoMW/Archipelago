@@ -101,8 +101,8 @@ def main():
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[erargs.loglevel]
     logging.basicConfig(format='%(message)s', level=loglevel)
-    logging.info(erargs)
     erargs.names = ",".join(erargs.name[i] for i in sorted(erargs.name.keys()))
+
     ERmain(erargs, seed)
 
 def get_weights(path):
