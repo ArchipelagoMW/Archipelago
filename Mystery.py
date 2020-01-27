@@ -4,6 +4,7 @@ import random
 import urllib.request
 import urllib.parse
 import functools
+import os
 
 import ModuleUpdate
 
@@ -16,6 +17,7 @@ try:
 except ImportError:
     from yaml import Loader
 
+from Rom import get_sprite_from_name
 from EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 
@@ -88,7 +90,7 @@ def main():
         path = getattr(args, f'p{player}') if getattr(args, f'p{player}') else args.weights
         if path:
             try:
-                settings = settings_cache[path] if settings_cache[path] else roll_settings(weights_cache[path])
+                settings = settings_cache[path] if settings_cache[path] else roll_settings(weights_cache[path], path)
                 for k, v in vars(settings).items():
                     if v is not None:
                         getattr(erargs, k)[player] = v
@@ -123,7 +125,7 @@ def interpret_on_off(value):
 def convert_to_on_off(value):
     return {True: "on", False: "off"}.get(value, value)
 
-def roll_settings(weights):
+def roll_settings(weights, path):
     def get_choice(option, root=weights):
         if option not in root:
             return None
@@ -230,6 +232,8 @@ def roll_settings(weights):
     if 'rom' in weights:
         romweights = weights['rom']
         ret.sprite = get_choice('sprite', romweights)
+        if ret.sprite is not None and not os.path.isfile(ret.sprite) and not get_sprite_from_name(ret.sprite):
+            logging.Logger('').warning(f"Warning: In yaml file \"{path}\", The choson sprite, \"{ret.sprite}\" does not exist.")
         ret.disablemusic = get_choice('disablemusic', romweights)
         ret.extendedmsu = get_choice('extendedmsu', romweights)
         ret.quickswap = get_choice('quickswap', romweights)
