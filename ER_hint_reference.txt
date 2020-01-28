@@ -1,0 +1,359 @@
+Hint description:
+
+Hints will appear in the following ratios across the 15 telepathic tiles that have hints and the five storyteller locations:
+
+4 hints for inconvenient entrances.
+4 hints for random entrances (this can by coincidence pick inconvenient entrances that aren't used for the first set of hints).
+3 hints for inconvenient item locations.
+5 hints for valuable items.
+4 junk hints.
+
+In the vanilla, dungeonssimple, and dungeonsfull shuffles, the following ratios will be used instead:
+
+5 hints for inconvenient item locations.
+8 hints for valuable items.
+7 junk hints.
+
+In the simple, restricted, and restricted legacy shuffles, these are the ratios:
+
+2 hints for inconvenient entrances.
+1 hint for an inconvenient dungeon entrance.
+4 hints for random entrances (this can by coincidence pick inconvenient entrances that aren't used for the first set of hints).
+3 hints for inconvenient item locations.
+5 hints for valuable items.
+5 junk hints.
+
+These hints will use the following format:
+
+Entrance hints go "[Entrance on overworld] leads to [interior]".
+
+Inconvenient item locations are a little more custom but amount to "[Location] has [item name]". The item name is literal and will specify which dungeon the dungeon specific items hail from (small key/big key/map/compass).
+
+The valuable items are of the format "[item name] can be found [location]". The item name is again literal, and the location text is taken from Ganon's silver arrow hints. Note that the way it works is that every unique valuable item that exists is considered independently, and you won't get multiple hints for the EXACT same item (so you can only get one hint for Progressive Sword no matter how many swords exist in the seed, but if swords are not progressive, you could get hints for both Master Sword and Tempered Sword). More copies of an item existing does not increase the probability of getting a hint for that particular item (you are equally likely to get a hint for a Progressive Sword as for the Hammer). Unlike the IR, item names are never obfuscated by "something unique", and there is no special bias for hints for GT Big Key or Pegasus Boots.
+
+Hint Locations:
+
+Eastern Palace room before Big Chest
+Desert Palace bonk torch room
+Tower of Hera entrance room
+Tower of Hera Big Chest room
+Castle Tower after dark rooms
+Palace of Darkness before Bow section
+Swamp Palace entryway
+Thieves' Town upstairs
+Ice Palace entrance
+Ice Palace after first drop
+Ice Palace tall ice floor room
+Misery Mire cutscene room
+Turtle Rock entrance
+Spectacle Rock cave
+Spiky Hint cave
+PoD Bdlg NPC
+Near PoD Storyteller (bug near bomb wall)
+Dark Sanctuary Storyteller (long room with tables)
+Near Mire Storyteller (feather duster in winding cave)
+SE DW Storyteller (owl in winding cave)
+
+Inconvenient entrance list:
+
+Skull Woods Final
+Ice Palace
+Misery Mire
+Turtle Rock
+Ganon's Tower
+Mimic Ledge
+SW DM Foothills Cave (mirror from upper Bumper ledge)
+Hammer Pegs (near purple chest)
+Super Bomb cracked wall
+
+Inconvenient location list:
+
+Swamp left (two chests)
+Mire left (two chests)
+Hera basement
+Eastern Palace Big Key chest (protected by anti-fairies)
+Thieves' Town Big Chest
+Ice Palace Big Chest
+Ganon's Tower Big Chest
+Purple Chest
+Spike Cave
+Magic Bat
+Sahasrahla (Green Pendant)
+
+In the vanilla, dungeonssimple, and dungeonsfull shuffles, the following two locations are added to the inconvenient locations list:
+
+Graveyard Cave
+Mimic Cave
+
+Valuable Items are simply all items that are shown on the pause subscreen (Y, B, or A sections) minus Silver Arrows and plus Triforce Pieces, Magic Upgrades (1/2 or 1/4), and the Single Arrow. If key shuffle is being used, you can additionally get hints for Small Keys or Big Keys but not hints for Maps or Compasses.
+
+While the exact verbage of location names and item names can be found in the source code, here's a copy for reference:
+
+Overworld Entrance naming:
+
+Turtle Rock: Turtle Rock Main
+Misery Mire: Misery Mire
+Ice Palace: Ice Palace
+Skull Woods Final Section: The back of Skull Woods
+Death Mountain Return Cave (West): The SW DM Foothills Cave
+Mimic Cave: Mimic Ledge
+Dark World Hammer Peg Cave: The rows of pegs
+Pyramid Fairy: The crack on the pyramid
+Eastern Palace: Eastern Palace
+Elder House (East): Elder House
+Elder House (West): Elder House
+Two Brothers House (East): Eastern Quarreling Brothers' house
+Old Man Cave (West): The lower DM entrance
+Hyrule Castle Entrance (South): The ground level castle door
+Thieves Town: Thieves' Town
+Bumper Cave (Bottom): The lower Bumper Cave
+Swamp Palace: Swamp Palace
+Dark Death Mountain Ledge (West): The East dark DM connector ledge
+Dark Death Mountain Ledge (East): The East dark DM connector ledge
+Superbunny Cave (Top): The summit of dark DM cave
+Superbunny Cave (Bottom): The base of east dark DM
+Hookshot Cave: The rock on dark DM
+Desert Palace Entrance (South): The book sealed passage
+Tower of Hera: The Tower of Hera
+Two Brothers House (West): The door near the race game
+Old Man Cave (East): The SW-most cave on west DM
+Old Man House (Bottom): A cave with a door on west DM
+Old Man House (Top): The eastmost cave on west DM
+Death Mountain Return Cave (East): The westmost cave on west DM
+Spectacle Rock Cave Peak: The highest cave on west DM
+Spectacle Rock Cave: The right ledge on west DM
+Spectacle Rock Cave (Bottom): The left ledge on west DM
+Paradox Cave (Bottom): The right paired cave on east DM
+Paradox Cave (Middle): The southmost cave on east DM
+Paradox Cave (Top): The east DM summit cave
+Fairy Ascension Cave (Bottom): The east DM cave behind rocks
+Fairy Ascension Cave (Top): The central ledge on east DM
+Spiral Cave: The left ledge on east DM
+Spiral Cave (Bottom): The SWmost cave on east DM
+Palace of Darkness: Palace of Darkness
+Hyrule Castle Entrance (West): The left castle door
+Hyrule Castle Entrance (East): The right castle door
+Agahnims Tower: The sealed castle door
+Desert Palace Entrance (West): The westmost building in the desert
+Desert Palace Entrance (North): The northmost cave in the desert
+Blinds Hideout: Blind's old house
+Lake Hylia Fairy: A cave NE of Lake Hylia
+Light Hype Fairy: The cave south of your house
+Desert Fairy: The cave near the desert
+Chicken House: The chicken lady's house
+Aginahs Cave: The open desert cave
+Sahasrahlas Hut: The house near armos
+Cave Shop (Lake Hylia): The cave NW Lake Hylia
+Blacksmiths Hut: The old smithery
+Sick Kids House: The central house in Kakariko
+Lost Woods Gamble: A tree trunk door
+Fortune Teller (Light): A building NE of Kakariko
+Snitch Lady (East): A house guarded by a snitch
+Snitch Lady (West): A house guarded by a snitch
+Bush Covered House: A house with an uncut lawn
+Tavern (Front): A building with a backdoor
+Light World Bomb Hut: A Kakariko building with no door
+Kakariko Shop: The old Kakariko shop
+Mini Moldorm Cave: The cave south of Lake Hylia
+Long Fairy Cave: The eastmost portal cave
+Good Bee Cave: The open cave SE Lake Hylia
+20 Rupee Cave: The rock SE Lake Hylia
+50 Rupee Cave: The rock near the desert
+Ice Rod Cave: The sealed cave SE Lake Hylia
+Library: The old library
+Potion Shop: The witch's building
+Dam: The old dam
+Lumberjack House: The lumberjack house
+Lake Hylia Fortune Teller: The building NW Lake Hylia
+Kakariko Gamble Game: The old Kakariko gambling den
+Waterfall of Wishing: Going behind the waterfall
+Capacity Upgrade: The cave on the island
+Bonk Rock Cave: The rock pile near Sanctuary
+Graveyard Cave: The graveyard ledge
+Checkerboard Cave: The NE desert ledge
+Cave 45: The ledge south of haunted grove
+Kings Grave: The northeastmost grave
+Bonk Fairy (Light): The rock pile near your home
+Hookshot Fairy: A cave on east DM
+Bonk Fairy (Dark): The rock pile near the old bomb shop
+Dark Sanctuary Hint: The dark sanctuary cave
+Dark Lake Hylia Fairy: The cave NE dark Lake Hylia
+C-Shaped House: The NE house in Village of Outcasts
+Big Bomb Shop: The old bomb shop
+Dark Death Mountain Fairy: The SW cave on dark DM
+Dark Lake Hylia Shop: The building NW dark Lake Hylia
+Dark World Shop: The hammer sealed building
+Red Shield Shop: The fenced in building
+Mire Shed: The western hut in the mire
+East Dark World Hint: The dark cave near the eastmost portal
+Dark Desert Hint: The cave east of the mire
+Spike Cave: The ledge cave on west dark DM
+Palace of Darkness Hint: The building south of Kiki
+Dark Lake Hylia Ledge Spike Cave: The rock SE dark Lake Hylia
+Cave Shop (Dark Death Mountain): The base of east dark DM
+Dark World Potion Shop: The building near the catfish
+Archery Game: The old archery game
+Dark World Lumberjack Shop: The northmost Dark World building
+Hype Cave: The cave south of the old bomb shop
+Brewery: The Village of Outcasts building with no door
+Dark Lake Hylia Ledge Hint: The open cave SE dark Lake Hylia
+Chest Game: The westmost building in the Village of Outcasts
+Dark Desert Fairy: The eastern hut in the mire
+Dark Lake Hylia Ledge Fairy: The sealed cave SE dark Lake Hylia
+Fortune Teller (Dark): The building NE the Village of Outcasts
+Sanctuary: Sanctuary
+Lumberjack Tree Cave: The cave Behind Lumberjacks
+Lost Woods Hideout Stump: The stump in Lost Woods
+North Fairy Cave: The cave East of Graveyard
+Bat Cave Cave: The cave in eastern Kakariko
+Kakariko Well Cave: The cave in northern Kakariko
+Hyrule Castle Secret Entrance Stairs: The tunnel near the castle
+Skull Woods First Section Door: The southeastmost skull
+Skull Woods Second Section Door (East): The central open skull
+Skull Woods Second Section Door (West): The westmost open skull
+Desert Palace Entrance (East): The eastern building in the desert
+Turtle Rock Isolated Ledge Entrance: The isolated ledge on east dark DM
+Bumper Cave (Top): The upper Bumper Cave
+Hookshot Cave Back Entrance: The stairs on the floating island
+
+Destination Entrance Naming:
+
+Hyrule Castle: Hyrule Castle (all three entrances)
+Eastern Palace: Eastern Palace
+Desert Palace: Desert Palace (all four entrances, including final)
+Tower of Hera: Tower of Hera
+Palace of Darkness: Palace of Darkness
+Swamp Palace: Swamp Palace
+Skull Woods: Skull Woods (any entrance including final)
+Thieves' Town: Thieves' Town
+Ice Palace: Ice Palace
+Misery Mire: Misery Mire
+Turtle Rock: Turtle Rock (all four entrances)
+Ganon's Tower: Ganon's Tower
+Castle Tower: Agahnim's Tower
+A connector: Paradox Cave, Spectacle Rock Cave, Hookshot Cave, Superbunny Cave, Spiral Cave, Old Man Fetch Cave, Old Man House, Elder House, Quarreling Brothers' House, Bumper Cave, DM Fairy Ascent Cave, DM Exit Cave
+A bounty of five items: Mini-moldorm cave, Hype Cave, Blind's Hideout
+Sahasrahla: Sahasrahla
+A cave with two items: Mire hut, Waterfall Fairy, Pyramid Fairy
+A fairy fountain: Any healer fairy cave, either bonk cave with four fairies, the "long fairy" cave
+A common shop: Any shop that sells bombs by default
+The rare shop: The shop that sells the Red Shield by default
+The potion shop: Potion Shop
+The bomb shop: Bomb Shop
+A fortune teller: Any of the three fortune tellers
+A house with a chest: Chicken Lady's house, C-House, Brewery
+A cave with an item: Checkerboard cave, Hammer Pegs cave, Cave 45, Graveyard Ledge cave
+A cave with a chest: Sanc Bonk Rock Cave, Cape Grave Cave, Ice Rod Cave, Aginah's Cave
+The dam: Watergate
+The sick kid: Sick Kid
+The library: Library
+Mimic Cave: Mimic Cave
+Spike Cave: Spike Cave
+A game of 16 chests: VoO chest game (for the item)
+A storyteller: The four DW NPCs who charge 20 rupees for a hint as well as the PoD Bdlg guy who gives a free hint
+A cave with some cash: 20 rupee cave, 50 rupee cave (both have thieves and some pots)
+A game of chance: Gambling game (just for cash, no items)
+A game of skill: Archery minigame
+The queen of fairies: Capacity Upgrade Fairy
+A drop's exit: Sanctuary, LW Thieves' Hideout, Kakariko Well, Magic Bat, Useless Fairy, Uncle Tunnel, Ganon drop exit
+A restock room: The Kakariko bomb/arrow restock room
+The tavern: The Kakariko tavern
+The grass man: The Kakariko man with many beds
+A cold bee: The "wrong side" of Ice Rod cave where you can get a Good Bee
+Fairies deep in a cave: Hookshot Fairy
+
+Location naming reference:
+
+Mushroom: in the woods
+Master Sword Pedestal: at the pedestal
+Bottle Merchant: with a merchant
+Stumpy: with tree boy
+Flute Spot: underground
+Digging Game: underground
+Lake Hylia Island: on an island
+Floating Island: on an island
+Bumper Cave Ledge: on a ledge
+Spectacle Rock: atop a rock
+Maze Race: at the race
+Desert Ledge: in the desert
+Pyramid: on the pyramid
+Catfish: with a catfish
+Ether Tablet: at a monument
+Bombos Tablet: at a monument
+Hobo: with the hobo
+Zora's Ledge: near Zora
+King Zora: at a high price
+Sunken Treasure: underwater
+Floodgate Chest: in the dam
+Blacksmith: with the smith
+Purple Chest: from a box
+Old Man: with the old man
+Link's Uncle: with your uncle
+Secret Passage: near your uncle
+Kakariko Well (5 items): in a well
+Lost Woods Hideout: near a thief
+Lumberjack Tree: in a hole
+Magic Bat: with the bat
+Paradox Cave (7 items): in a cave with seven chests
+Blind's Hideout (5 items): in a basement
+Mini Moldorm Cave (5 items): near Moldorms
+Hype Cave (4 back chests): near a bat-like man
+Hype Cave - Generous Guy: with a bat-like man
+Hookshot Cave (4 items): across pits
+Sahasrahla's Hut (chests in back): near the elder
+Sahasrahla: with the elder
+Waterfall Fairy (2 items): near a fairy
+Pyramid Fairy (2 items): near a fairy
+Mire Shed (2 items): near sparks
+Superbunny Cave (2 items): in a connection
+Spiral Cave: in spiral cave
+Kakariko Tavern: in the bar
+Link's House: in your home
+Sick Kid: with the sick
+Library: near books
+Potion Shop: near potions
+Spike Cave: beyond spikes
+Mimic Cave: in a cave of mimicry
+Chest Game: as a prize
+Chicken House: near poultry
+Aginah's Cave: with Aginah
+Ice Rod Cave: in a frozen cave
+Brewery: alone in a home
+C-Shaped House: alone in a home
+Spectacle Rock Cave: alone in a cave
+King's Tomb: alone in a cave
+Cave 45: alone in a cave
+Graveyard Cave: alone in a cave
+Checkerboard Cave: alone in a cave
+Bonk Rock Cave: alone in a cave
+Peg Cave: alone in a cave
+Sanctuary: in Sanctuary
+Hyrule Castle - Boomerang Chest: in Hyrule Castle
+Hyrule Castle - Map Chest: in Hyrule Castle
+Hyrule Castle - Zelda's Chest: in Hyrule Castle
+Sewers - Dark Cross: in the sewers
+Sewers - Secret Room (3 items): in the sewers
+Eastern Palace - Boss: with the Armos
+Eastern Palace (otherwise, 5 items): in Eastern Palace
+Desert Palace - Boss: with Lanmolas
+Desert Palace (otherwise, 5 items): in Desert Palace
+Tower of Hera - Boss: with Moldorm
+Tower of Hera (otherwise, 5 items): in Tower of Hera
+Castle Tower (2 items): in Castle Tower
+Palace of Darkness - Boss: with Helmasaur King
+Palace of Darkness (otherwise, 13 items): in Palace of Darkness
+Swamp Palace - Boss: with Arrghus
+Swamp Palace (otherwise, 9 items): in Swamp Palace
+Skull Woods - Bridge Room: near Mothula
+Skull Woods - Boss: with Mothula
+Skull Woods (otherwise, 6 items): in Skull Woods
+Thieves' Town - Boss: with Blind
+Thieves' Town (otherwise, 7 items): in Thieves' Town
+Ice Palace - Boss: with Kholdstare
+Ice Palace (otherwise, 7 items): in Ice Palace
+Misery Mire - Boss: with Vitreous
+Misery Mire (otherwise, 7 items): in Misery Mire
+Turtle Rock - Boss: with Trinexx
+Turtle Rock (otherwise, 11 items): in Turtle Rock
+Ganons Tower (after climb, 4 items): atop Ganon's Tower
+Ganon's Tower (otherwise, 23 items): in Ganon's Tower
