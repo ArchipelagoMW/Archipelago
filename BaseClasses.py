@@ -9,7 +9,7 @@ from Utils import int16_as_bytes
 
 class World(object):
 
-    def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive, goal, algorithm, accessibility, shuffle_ganon, retro, custom, customitemarray, hints):
+    def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive, goal, algorithm, accessibility, shuffle_ganon, retro, custom, customitemarray, hints, text):
         self.players = players
         self.teams = 1
         self.shuffle = shuffle.copy()
@@ -54,6 +54,7 @@ class World(object):
         self.dynamic_locations = []
         self.spoiler = Spoiler(self)
         self.lamps_needed_for_dark_rooms = 1
+        self.text = text
 
         for player in range(1, players + 1):
             def set_player_attr(attr, val):

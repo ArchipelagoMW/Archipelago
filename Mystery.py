@@ -67,6 +67,7 @@ def main():
         if path:
             if path not in weights_cache:
                 weights_cache[path] = get_weights(path)
+            print(weights_cache[path])
             print(f"P{player} Weights: {path} >> {weights_cache[path]['description']}")
 
     erargs = parse_arguments(['--multi', str(args.multi)])
@@ -83,7 +84,6 @@ def main():
         erargs.enemizercli = args.enemizercli
 
     settings_cache = {k: (roll_settings(v) if args.samesettings else None) for k, v in weights_cache.items()}
-
     for player in range(1, args.multi + 1):
         path = getattr(args, f'p{player}') if getattr(args, f'p{player}') else args.weights
         if path:
@@ -102,11 +102,8 @@ def main():
 
 def get_weights(path):
     try:
-        if urllib.parse.urlparse(path).scheme:
-            yaml = str(urllib.request.urlopen(path).read(), "utf-8")
-        else:
-            with open(path, 'rb') as f:
-                yaml = str(f.read(), "utf-8")
+        with open(path, 'rb') as f:
+            yaml = str(f.read(), "utf-8")
     except Exception as e:
         print('Failed to read weights (%s)' % e)
         return
@@ -214,6 +211,7 @@ def roll_settings(weights):
         ret.heartbeep = get_choice('heartbeep', romweights)
         ret.ow_palettes = get_choice('ow_palettes', romweights)
         ret.uw_palettes = get_choice('uw_palettes', romweights)
+        ret.text = get_choice('text', romweights)
 
     return ret
 

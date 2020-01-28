@@ -713,118 +713,61 @@ def add_conditional_lamps(world, player):
 
 
 def overworld_glitches_rules(world, player):
-    # spots that are immediately accessible
-    set_rule(world.get_entrance('Hobo Bridge', player), lambda state: True)
-    set_rule(world.get_region('Lake Hylia Central Island', player), lambda state: True)
-    set_rule(world.get_entrance('Zoras River', player), lambda state: True)
-    # lw boots-accessible locations
-    lw_boots_accessible_regions = [
-        'Bat Cave Drop Ledge',
-        'Lake Hylia Island',
-        'Desert Ledge',
-        'Desert Ledge (Northeast)',
-        'Desert Palace Lone Stairs',
-        'Desert Palace Entrance (North) Spot',
-        'Death Mountain',
-        'Death Mountain Return Ledge',
-        'East Death Mountain (Bottom)',
-        'East Death Mountain (Top)',
-        'Death Mountain (Top)',
-        'Spectacle Rock',
-        'Death Mountain Floating Island (Light World)',
-    ]
-    # dw boots-accessible regions
-    dw_boots_accessible_regions = [
-        'East Dark World',
-        'Northeast Dark World',
-        'West Dark World',
-        'Hammer Peg Area',
-        'Bumper Cave Ledge',
-        'Dark Desert',
-        'Dark Death Mountain (Top)',
-        'Dark Death Mountain (East Bottom)',
-        'Dark Death Mountain Ledge',
-        'Death Mountain Floating Island (Dark World)',
-        'Turtle Rock (Top)',
-    ]
-    # set up boots-accessible regions
-    if world.mode[player] != 'inverted':
-        lw_boots_accessible_regions.append('Cave 45 Ledge')
-        lw_boots_accessible_regions.append('Graveyard Ledge')
-        # couple other random spots
-        set_rule(world.get_location('Bombos Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has_beam_sword(player) and (state.has_Mirror(player) or state.has_Boots(player)))
-        set_rule(world.get_entrance('Dark Desert Teleporter', player), lambda state: (state.has('Ocarina', player) or state.has_Boots(player)) and state.can_lift_heavy_rocks(player))
-        set_rule(world.get_entrance('South Hyrule Teleporter', player), lambda state: (state.has('Hammer', player) or state.has_Boots(player)) and state.can_lift_rocks(player))
-        set_rule(world.get_location('Zora\'s Ledge', player), lambda state: state.has_Boots(player))
-        add_rule(world.get_entrance('Ganons Tower', player), lambda state: state.has_Boots(player) and state.has_Pearl(player), 'or')
-    needs_boots = lambda state: state.has_Boots(player)
-    needs_boots_and_pearl = lambda state: state.has_Boots(player) and state.has_Pearl(player)
-    for spot in lw_boots_accessible_regions:
-        for location in world.get_region(spot, player).locations:
-            add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] == 'inverted' else needs_boots, 'or')
-    for spot in dw_boots_accessible_regions:
-        for location in world.get_region(spot, player).locations:
-            add_rule(world.get_location(location, player), needs_boots if world.mode[player] == 'inverted' else needs_boots_and_pearl, 'or')
     # spots that are immediately accessible due to fake flippering
     set_rule(world.get_entrance('Hobo Bridge', player), lambda state: True)
-    set_rule(world.get_region('Lake Hylia Central Island', player), lambda state: True)
     set_rule(world.get_entrance('Zoras River', player), lambda state: True)
+    set_rule(world.get_entrance('Lake Hylia Island Mirror Spot', player), lambda state: True)
+    set_rule(world.get_entrance('Capacity Upgrade', player), lambda state: True)
 
     # boots-accessible stuff
     lw_boots_accessible_entrances = [
         'Bat Cave Drop Ledge',
-        'Bat Cave Drop Ledge Mirror Spot',
-        'Lake Hylia Island Mirror Spot',
         'Desert Ledge Return Rocks',
-        'Desert Ledge Mirror Spot',
-        'Checkerboard Cave',
-        'Old Man House Exit (Bottom)',
-        'Desert Ledge (Northeast) Mirror Spot',
-        'Death Mountain Return Cave Exit (East)',
-        'Desert Palace Entrance (North) Rocks',
-        'Desert Palace Entrance (North) Mirror Spot',
+        'Desert Palace Entrance (West)',
+        'Desert Palace Entrance (North)',
         'Flute Spot 1',
         'Broken Bridge (East)',
         'Death Mountain Drop',
-        'Death Mountain Return Cave Exit (West)',
-        'Old Man Cave Exit (East)',
-        'Bumper Cave Ledge Mirror Spot',
+        'Old Man Cave (East)',
+        'Old Man House (Bottom)',
+        'Old Man House (Top)',
+        'Death Mountain Return Cave (East)',
+        'Spectacle Rock Cave',
+        'Spectacle Rock Cave Peak',
+        'Spectacle Rock Cave (Bottom)',
         'Broken Bridge (West)',
+        'Broken Bridge (East)',
         'East Death Mountain Drop',
         'Spiral Cave Ledge Drop',
         'Fairy Ascension Drop',
+        'Fairy Ascension Cave (Bottom)',
         'East Death Mountain (Top)',
-        'East Death Mountain (Top) Mirror Spot',
         'Death Mountain (Top)',
         'Spectacle Rock Drop',
-        'Spectacle Rock Mirror Spot',
-        'Floating Island Mirror Spot',
-        'Fairy Ascension Cave Exit (Top)',
-        'Fairy Ascension Cave Exit (Bottom)',
-        'Death Mountain Return Cave Exit (East)',
-        'Spiral Cave Exit',
+        'Death Mountain Return Cave (West)',
+        'Paradox Cave (Bottom)',
+        'Paradox Cave (Middle)',
+        'Hookshot Fairy',
+        'Spiral Cave (Bottom)',
+        'Paradox Cave (Top)',
+        'Spiral Cave Ledge Access',
+        'Fairy Ascension Ledge',
     ]
     lw_boots_accessible_locations = [
         'Lake Hylia Island',
         'Desert Ledge',
-        'Ether Tablet',
         'Spectacle Rock',
         'Floating Island',
     ]
     dw_boots_accessible_entrances = [
         'Northeast Dark World Broken Bridge Pass',
-        'Death Mountain Return Cave Exit (West)',
         'Peg Area Rocks',
         'Grassy Lawn Pegs',
         'West Dark World Gap',
         'Bumper Cave Ledge Drop',
-        'Turtle Rock Ledge Exit (West)',
-        'Turtle Rock Isolated Ledge Exit',
         'Dark Desert Teleporter',
-        'Turtle Rock Exit (Front)',
         'Turtle Rock Drop',
         'Floating Island Drop',
-        'Turtle Rock Ledge Exit (East)',
         'Dark Death Mountain Drop (East)',
         'Village of Outcasts Drop',
         'Dark Lake Hylia Ledge',
@@ -852,15 +795,18 @@ def overworld_glitches_rules(world, player):
     ]
     # set up boots-accessible regions
     if world.mode[player] != 'inverted':
-        lw_boots_accessible_entrances.append('Cave 45 Mirror Spot')
-        lw_boots_accessible_entrances.append('Graveyard Ledge Mirror Spot')
+        lw_boots_accessible_entrances.append('Cave 45')
+        lw_boots_accessible_entrances.append('Graveyard Cave')
         # couple other random spots
         set_rule(world.get_location('Bombos Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has_beam_sword(player) and (state.has_Mirror(player) or state.has_Boots(player)))
+        set_rule(world.get_location('Ether Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has_beam_sword(player) and (state.has_Mirror(player) or state.has_Boots(player)))
         set_rule(world.get_entrance('Dark Desert Teleporter', player), lambda state: state.has('Ocarina', player) or (state.has_Boots(player) and state.can_lift_heavy_rocks(player)))
         set_rule(world.get_location('Zora\'s Ledge', player), lambda state: state.has_Boots(player))
         add_rule(world.get_entrance('Ganons Tower', player), lambda state: state.has_Boots(player) and state.has_Pearl(player), 'or')
         add_rule(world.get_entrance('East Death Mountain Teleporter', player), lambda state: state.can_lift_heavy_rocks(player) and state.has_Boots(player), 'or')
-        add_rule(world.get_entrance('Turtle Rock Teleporter', player), lambda state: state.has_Boots(player) and state.has('Hammer', player))
+        add_rule(world.get_entrance('Turtle Rock Teleporter', player), lambda state: state.has_Boots(player) and state.has('Hammer', player), 'or')
+        add_rule(world.get_entrance('Checkerboard Cave', player), lambda state: state.has_Boots(player) and state.can_lift_rocks(player), 'or')
+
     needs_boots = lambda state: state.has_Boots(player)
     needs_boots_and_pearl = lambda state: state.has_Boots(player) and state.has_Pearl(player)
     for entrance in lw_boots_accessible_entrances:

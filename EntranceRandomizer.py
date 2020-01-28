@@ -276,6 +276,7 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--outputpath')
     parser.add_argument('--race', default=defval(False), action='store_true')
     parser.add_argument('--outputname')
+    parser.add_argument('--text', default=defval('text'), choices=['text', 'fantatext'])
 
     if multiargs.multi:
         for player in range(1, multiargs.multi + 1):
@@ -296,7 +297,7 @@ def parse_arguments(argv, no_defaults=False):
                          'retro', 'accessibility', 'hints', 'beemizer',
                          'shufflebosses', 'shuffleenemies', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor', 'heartbeep',
-                         'remote_items']:
+                         'remote_items', 'text']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})
