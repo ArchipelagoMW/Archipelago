@@ -138,6 +138,8 @@ def roll_settings(weights):
 
     ret = argparse.Namespace()
     ret.name = get_choice('name')
+    if ret.name:
+        ret.name = ret.name.replace(" ", "-").replace("_", "-")
     glitches_required = get_choice('glitches_required')
     if glitches_required not in ['none', 'no_logic']:
         print("Only NMG and No Logic supported")

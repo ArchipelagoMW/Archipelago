@@ -427,7 +427,6 @@ class CreditLine(object):
 
     @property
     def x(self):
-        x = 0
         if self.align == 'left':
             x = 0
         elif self.align == 'right':
