@@ -90,7 +90,7 @@ def main():
         path = getattr(args, f'p{player}') if getattr(args, f'p{player}') else args.weights
         if path:
             try:
-                settings = settings_cache[path] if settings_cache[path] else roll_settings(weights_cache[path], path)
+                settings = settings_cache[path] if settings_cache[path] else roll_settings(weights_cache[path])
                 for k, v in vars(settings).items():
                     if v is not None:
                         getattr(erargs, k)[player] = v
