@@ -235,7 +235,7 @@ def roll_settings(weights):
         romweights = weights['rom']
         ret.sprite = get_choice('sprite', romweights)
         if ret.sprite is not None and not os.path.isfile(ret.sprite) and not get_sprite_from_name(ret.sprite):
-            logging.Logger('').warning(f"Warning: The choson sprite, \"{ret.sprite}\" does not exist.")
+            logging.Logger('').warning(f"Warning: The chosen sprite, \"{ret.sprite}\" does not exist.")
         ret.disablemusic = get_choice('disablemusic', romweights)
         ret.extendedmsu = get_choice('extendedmsu', romweights)
         ret.quickswap = get_choice('quickswap', romweights)
