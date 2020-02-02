@@ -43,10 +43,19 @@ def manifest_creation():
     json.dump(manifest, open(manifestpath, "wt"), indent=4)
     print("Created Manifest")
 
-EXE = cx_Freeze.Executable(
-    script="MultiClient.py",
-    targetName="BerserkerMultiClient" if sys.platform == "linux" else "BerserkerMultiClient.exe"
-)
+scripts = {"MultiClient.py" : "BerserkerMultiClient",
+           "MultiMystery.py" : "BerserkerMultiMystery",
+           "MultiServer.py" : "BerserkerMultiServer",
+           "gui.py" : "BerserkerMultiCreator",
+           "Mystery.py" : "BerserkerMystery"}
+
+exes = []
+
+for script, scriptname in scripts.items():
+    exes.append(cx_Freeze.Executable(
+        script=script,
+        targetName=scriptname + ("" if sys.platform == "linux" else ".exe"))
+    )
 
 
 import datetime
@@ -57,7 +66,7 @@ cx_Freeze.setup(
     name="HonorarPlus",
     version=f"{buildtime.year}.{buildtime.month}.{buildtime.day}.{buildtime.hour}",
     description="HonorarPlus",
-    executables=[EXE],
+    executables=exes,
     options={
         "build_exe": {
             "zip_include_packages": ["*"],
@@ -87,7 +96,7 @@ def installfile(path):
         print('Warning,', path, 'not found')
 
 
-extra_data = ["LICENSE"]
+extra_data = ["LICENSE", "data", "EnemizerCLI"]
 
 for data in extra_data:
     installfile(Path(data))

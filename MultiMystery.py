@@ -85,7 +85,14 @@ if __name__ == "__main__":
 
         player_names = list(file[:-5] for file in player_files)
 
-        command = f"py -{py_version} Mystery.py --multi {len(player_files)} {player_string} " \
+        if os.path.exists("BerserkerMultiServer.exe"):
+            basemysterycommand = "BerserkerMystery.exe" #compiled windows
+        elif os.path.exists("BerserkerMultiServer"):
+            basemysterycommand = "BerserkerMystery" # compiled linux
+        else:
+            basemysterycommand = f"py -{py_version} Mystery.py" #source
+
+        command = f"{basemysterycommand} --multi {len(player_files)} {player_string} " \
                   f"--names {','.join(player_names)} --enemizercli {enemizer_location} " \
                   f"--outputpath {outputpath}" + " --create_spoiler" if create_spoiler else "" + " --race" if race else ""
         print(command)
@@ -128,7 +135,15 @@ if __name__ == "__main__":
                             os.remove(file)
                             print(f"Removed file {file} that is now present in the zipfile")
 
-        subprocess.call(f"py -{py_version} MultiServer.py --multidata {os.path.join(outputpath, multidataname)}")
+        if os.path.exists("BerserkerMultiServer.exe"):
+            baseservercommand = "BerserkerMultiServer.exe"  # compiled windows
+        elif os.path.exists("BerserkerMultiServer"):
+            baseservercommand = "BerserkerMultiServer"  # compiled linux
+        else:
+            baseservercommand = f"py -{py_version} MultiServer.py"  # source
+        #don't have a mac to test that. If you try to run compiled on mac, good luck.
+
+        subprocess.call(f"{baseservercommand} --multidata {os.path.join(outputpath, multidataname)}")
     except:
         import traceback
         traceback.print_exc()

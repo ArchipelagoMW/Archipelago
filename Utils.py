@@ -36,13 +36,15 @@ def local_path(path):
     if local_path.cached_path is not None:
         return os.path.join(local_path.cached_path, path)
 
-    if is_bundled():
-        # we are running in a bundle
+    if is_bundled() and hasattr(sys, "_MEIPASS"):
+        # we are running in a PyInstaller bundle
         local_path.cached_path = sys._MEIPASS # pylint: disable=protected-access,no-member
+    elif is_bundled():
+        #probably cxFreeze
+        local_path.cached_path = os.path.dirname(sys.argv[0])
     else:
         # we are running in a normal Python environment
         local_path.cached_path = os.path.dirname(os.path.abspath(__file__))
-
     return os.path.join(local_path.cached_path, path)
 
 local_path.cached_path = None
