@@ -17,6 +17,8 @@ from Main import main, __version__ as ESVersion
 from Rom import Sprite
 from Utils import is_bundled, local_path, output_path, open_file
 
+import ModuleUpdate
+ModuleUpdate.update()
 
 def guiMain(args=None):
     mainWindow = Tk()
