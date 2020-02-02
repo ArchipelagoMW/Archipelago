@@ -751,7 +751,9 @@ async def console_loop(ctx : Context):
                 snes_buffered_write(ctx, RECV_ITEM_PLAYER_ADDR, bytes([0]))
             else:
                 logging.info('Invalid item: ' + item)
-
+        if command[0] == "/license":
+            with open("LICENSE") as f:
+                logging.info(f.read())
         await snes_flush_writes(ctx)
 
 def get_item_name_from_id(code):
