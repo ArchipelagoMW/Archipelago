@@ -4,6 +4,9 @@ import json
 import logging
 import shlex
 import urllib.parse
+import atexit
+
+exit_func = atexit.register(input, "Press enter to close.")
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -940,3 +943,4 @@ if __name__ == '__main__':
     loop.run_until_complete(asyncio.gather(*asyncio.Task.all_tasks()))
     loop.close()
     colorama.deinit()
+    atexit.unregister(exit_func)
