@@ -10,6 +10,9 @@ from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, T
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
+import ModuleUpdate
+ModuleUpdate.update()
+
 from AdjusterMain import adjust
 from EntranceRandomizer import parse_arguments
 from GuiUtils import ToolTips, set_icon, BackgroundTaskProgress
@@ -17,8 +20,6 @@ from Main import main, __version__ as ESVersion
 from Rom import Sprite
 from Utils import is_bundled, local_path, output_path, open_file
 
-import ModuleUpdate
-ModuleUpdate.update()
 
 def guiMain(args=None):
     mainWindow = Tk()
