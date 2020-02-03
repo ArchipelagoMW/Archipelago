@@ -105,6 +105,13 @@ beemizer:
   2: 0
   3: 0
   4: 0
+timer:
+  none: 1
+  timed: 0
+  timed_ohko: 0
+  ohko: 0
+  timed_countdown: 0
+  display: 0
 rom:
   sprite:
     random: 1
