@@ -92,7 +92,7 @@ class World(object):
             set_player_attr('treasure_hunt_icon', 'Triforce Piece')
             set_player_attr('treasure_hunt_count', 0)
             set_player_attr('clock_mode', 'off')
-            set_player_attr('can_take_damage', False)
+            set_player_attr('can_take_damage', True)
 
     def get_name_string_for_object(self, obj):
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_names(obj.player)})'
