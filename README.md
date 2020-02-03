@@ -9,6 +9,7 @@ Additions/Changes
 -----------------
 
 Project
+ * Available in precompiled form for Windows 64Bit on [Releases](https://github.com/Berserker66/MultiWorld-Utilities/releases) page.
  * Compatible with Python 3.7 and 3.8. Potentially future versions as well.
  * Update modules if they are too old, preventing a crash when trying to connect among potential other issues
  * Autoinstall missing modules
