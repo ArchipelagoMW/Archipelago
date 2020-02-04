@@ -219,9 +219,6 @@ def main(args, seed=None):
             with open(output_path('%s_multidata' % outfilebase), 'wb') as f:
                 f.write(multidata)
 
-    if args.create_spoiler and not args.jsonout:
-        world.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))
-
     if not args.skip_playthrough:
         logger.info('Calculating playthrough.')
         create_playthrough(world)
