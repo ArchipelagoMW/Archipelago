@@ -134,7 +134,7 @@ def global_rules(world, player):
              ((state.has('Cape', player) and state.can_extend_magic(player, 16, True)) or
                  (state.has('Cane of Byrna', player) and
                      (state.can_extend_magic(player, 12, True) or
-                     (state.world.can_take_damage and (state.has_Boots(player) or state.has_hearts(player, 4))))))
+                     (state.world.can_take_damage[player] and (state.has_Boots(player) or state.has_hearts(player, 4))))))
             )
 
     set_rule(world.get_location('Hookshot Cave - Top Right', player), lambda state: state.has('Hookshot', player))
@@ -220,7 +220,7 @@ def global_rules(world, player):
     set_rule(world.get_location('Ice Palace - Big Chest', player), lambda state: state.has('Big Key (Ice Palace)', player))
     set_rule(world.get_entrance('Ice Palace (Kholdstare)', player), lambda state: state.can_lift_rocks(player) and state.has('Hammer', player) and state.has('Big Key (Ice Palace)', player) and (state.has_key('Small Key (Ice Palace)', player, 2) or (state.has('Cane of Somaria', player) and state.has_key('Small Key (Ice Palace)', player, 1))))
     # TODO: investigate change from VT. Changed to hookshot or 2 keys (no checking for big key in specific chests)
-    set_rule(world.get_entrance('Ice Palace (East)', player), lambda state: (state.has('Hookshot', player) or (item_in_locations(state, 'Big Key (Ice Palace)', player, [('Ice Palace - Spike Room', player), ('Ice Palace - Big Key Chest', player), ('Ice Palace - Map Chest', player)]) and state.has_key('Small Key (Ice Palace)', player))) and (state.world.can_take_damage or state.has('Hookshot', player) or state.has('Cape', player) or state.has('Cane of Byrna', player)))
+    set_rule(world.get_entrance('Ice Palace (East)', player), lambda state: (state.has('Hookshot', player) or (item_in_locations(state, 'Big Key (Ice Palace)', player, [('Ice Palace - Spike Room', player), ('Ice Palace - Big Key Chest', player), ('Ice Palace - Map Chest', player)]) and state.has_key('Small Key (Ice Palace)', player))) and (state.world.can_take_damage[player] or state.has('Hookshot', player) or state.has('Cape', player) or state.has('Cane of Byrna', player)))
     set_rule(world.get_entrance('Ice Palace (East Top)', player), lambda state: state.can_lift_rocks(player) and state.has('Hammer', player))
     set_defeat_dungeon_boss_rule(world.get_location('Ice Palace - Boss', player))
     set_defeat_dungeon_boss_rule(world.get_location('Ice Palace - Prize', player))
@@ -229,7 +229,7 @@ def global_rules(world, player):
 
     set_rule(world.get_entrance('Misery Mire Entrance Gap', player), lambda state: (state.has_Boots(player) or state.has('Hookshot', player)) and (state.has_sword(player) or state.has('Fire Rod', player) or state.has('Ice Rod', player) or state.has('Hammer', player) or state.has('Cane of Somaria', player) or state.can_shoot_arrows(player)))  # need to defeat wizzrobes, bombs don't work ...
     set_rule(world.get_location('Misery Mire - Big Chest', player), lambda state: state.has('Big Key (Misery Mire)', player))
-    set_rule(world.get_location('Misery Mire - Spike Chest', player), lambda state: (state.world.can_take_damage and state.has_hearts(player, 4)) or state.has('Cane of Byrna', player) or state.has('Cape', player))
+    set_rule(world.get_location('Misery Mire - Spike Chest', player), lambda state: (state.world.can_take_damage[player] and state.has_hearts(player, 4)) or state.has('Cane of Byrna', player) or state.has('Cape', player))
     set_rule(world.get_entrance('Misery Mire Big Key Door', player), lambda state: state.has('Big Key (Misery Mire)', player))
     # you can squander the free small key from the pot by opening the south door to the north west switch room, locking you out of accessing a color switch ...
     # big key gives backdoor access to that from the teleporter in the north west

@@ -135,7 +135,7 @@ def generate_itempool(world, player):
                                                                                                  'timed-countdown']):
         raise NotImplementedError('Not supported yet')
     if world.timer[player] in ['ohko', 'timed-ohko']:
-        world.can_take_damage = False
+        world.can_take_damage[player] = False
 
     if world.goal[player] in ['pedestal', 'triforcehunt']:
         world.push_item(world.get_location('Ganon', player), ItemFactory('Nothing', player), False)
