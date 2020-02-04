@@ -54,6 +54,7 @@ def main(args, seed=None):
     world.enemy_health = args.enemy_health.copy()
     world.enemy_damage = args.enemy_damage.copy()
     world.beemizer = args.beemizer.copy()
+    world.timer = args.timer.copy()
     world.shufflepots = args.shufflepots.copy()
     world.progressive = args.progressive.copy()
     world.extendedmsu = args.extendedmsu.copy()
@@ -270,6 +271,7 @@ def copy_world(world):
     ret.enemy_health = world.enemy_health.copy()
     ret.enemy_damage = world.enemy_damage.copy()
     ret.beemizer = world.beemizer.copy()
+    ret.timer = world.timer.copy()
     ret.shufflepots = world.shufflepots.copy()
     ret.extendedmsu = world.extendedmsu.copy()
 

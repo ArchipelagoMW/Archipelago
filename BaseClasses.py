@@ -18,7 +18,7 @@ class World(object):
         self.swords = swords.copy()
         self.difficulty = difficulty.copy()
         self.difficulty_adjustments = difficulty_adjustments.copy()
-        self.timer = timer
+        self.timer = timer.copy()
         self.progressive = progressive
         self.goal = goal.copy()
         self.algorithm = algorithm
@@ -37,7 +37,6 @@ class World(object):
         self.shuffle_bonk_prizes = False
         self.light_world_light_cone = False
         self.dark_world_light_cone = False
-        self.clock_mode = 'off'
         self.rupoor_cost = 10
         self.aga_randomness = True
         self.lock_aga_door_in_escape = False
@@ -48,7 +47,6 @@ class World(object):
         self.retro = retro.copy()
         self.custom = custom
         self.customitemarray = customitemarray
-        self.can_take_damage = True
         self.hints = hints.copy()
         self.dynamic_regions = []
         self.dynamic_locations = []
@@ -93,6 +91,8 @@ class World(object):
             set_player_attr('open_pyramid', False)
             set_player_attr('treasure_hunt_icon', 'Triforce Piece')
             set_player_attr('treasure_hunt_count', 0)
+            set_player_attr('clock_mode', 'off')
+            set_player_attr('can_take_damage', True)
 
     def get_name_string_for_object(self, obj):
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_names(obj.player)})'

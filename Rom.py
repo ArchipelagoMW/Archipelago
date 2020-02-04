@@ -707,7 +707,7 @@ def patch_rom(world, rom, player, team, enemized):
         # Set stun items
         rom.write_byte(0x180180, 0x03) # All standard items
         #Set overflow items for progressive equipment
-        if world.timer in ['timed', 'timed-countdown', 'timed-ohko']:
+        if world.timer[player] in ['timed', 'timed-countdown', 'timed-ohko']:
             overflow_replacement = GREEN_CLOCK
         else:
             overflow_replacement = GREEN_TWENTY_RUPEES
@@ -861,19 +861,19 @@ def patch_rom(world, rom, player, team, enemized):
         ERtimeincrease = 20
     if world.keyshuffle[player] or world.bigkeyshuffle[player] or world.mapshuffle[player]:
         ERtimeincrease = ERtimeincrease + 15
-    if world.clock_mode == 'off':
+    if world.clock_mode[player] == 'off':
         rom.write_bytes(0x180190, [0x00, 0x00, 0x00])  # turn off clock mode
         write_int32(rom, 0x180200, 0)  # red clock adjustment time (in frames, sint32)
         write_int32(rom, 0x180204, 0)  # blue clock adjustment time (in frames, sint32)
         write_int32(rom, 0x180208, 0)  # green clock adjustment time (in frames, sint32)
         write_int32(rom, 0x18020C, 0)  # starting time (in frames, sint32)
-    elif world.clock_mode == 'ohko':
+    elif world.clock_mode[player] == 'ohko':
         rom.write_bytes(0x180190, [0x01, 0x02, 0x01])  # ohko timer with resetable timer functionality
         write_int32(rom, 0x180200, 0)  # red clock adjustment time (in frames, sint32)
         write_int32(rom, 0x180204, 0)  # blue clock adjustment time (in frames, sint32)
         write_int32(rom, 0x180208, 0)  # green clock adjustment time (in frames, sint32)
         write_int32(rom, 0x18020C, 0)  # starting time (in frames, sint32)
-    elif world.clock_mode == 'countdown-ohko':
+    elif world.clock_mode[player] == 'countdown-ohko':
         rom.write_bytes(0x180190, [0x01, 0x02, 0x01])  # ohko timer with resetable timer functionality
         write_int32(rom, 0x180200, -100 * 60 * 60 * 60)  # red clock adjustment time (in frames, sint32)
         write_int32(rom, 0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
@@ -882,13 +882,13 @@ def patch_rom(world, rom, player, team, enemized):
             write_int32(rom, 0x18020C, (10 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
         else:
             write_int32(rom, 0x18020C, int((5 + ERtimeincrease / 2) * 60 * 60))  # starting time (in frames, sint32)
-    if world.clock_mode == 'stopwatch':
+    if world.clock_mode[player] == 'stopwatch':
         rom.write_bytes(0x180190, [0x02, 0x01, 0x00])  # set stopwatch mode
         write_int32(rom, 0x180200, -2 * 60 * 60)  # red clock adjustment time (in frames, sint32)
         write_int32(rom, 0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
         write_int32(rom, 0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
         write_int32(rom, 0x18020C, 0)  # starting time (in frames, sint32)
-    if world.clock_mode == 'countdown':
+    if world.clock_mode[player] == 'countdown':
         rom.write_bytes(0x180190, [0x01, 0x01, 0x00])  # set countdown, with no reset available
         write_int32(rom, 0x180200, -2 * 60 * 60)  # red clock adjustment time (in frames, sint32)
         write_int32(rom, 0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
@@ -1119,7 +1119,7 @@ def patch_rom(world, rom, player, team, enemized):
     rom.write_byte(0x18003B, 0x01 if world.mapshuffle[player] else 0x00)  # maps showing crystals on overworld
 
     # compasses showing dungeon count
-    if world.clock_mode != 'off':
+    if world.clock_mode[player] != 'off':
         rom.write_byte(0x18003C, 0x00)  # Currently must be off if timer is on, because they use same HUD location
     elif world.compassshuffle[player]:
         rom.write_byte(0x18003C, 0x01)  # show on pickup

@@ -129,12 +129,12 @@ def generate_itempool(world, player):
                                                                                                    'dungeons',
                                                                                                    'triforcehunt',
                                                                                                    'crystals']
-            or world.mode[player] not in ['open', 'standard', 'inverted'] or world.timer not in ['none', 'display',
+            or world.mode[player] not in ['open', 'standard', 'inverted'] or world.timer[player] not in ['none', 'display',
                                                                                                  'timed', 'timed-ohko',
                                                                                                  'ohko',
                                                                                                  'timed-countdown']):
         raise NotImplementedError('Not supported yet')
-    if world.timer in ['ohko', 'timed-ohko']:
+    if world.timer[player] in ['ohko', 'timed-ohko']:
         world.can_take_damage = False
 
     if world.goal[player] in ['pedestal', 'triforcehunt']:
@@ -181,14 +181,14 @@ def generate_itempool(world, player):
     if world.custom:
         (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
          lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive[player], world.shuffle[player],
-                                                              world.difficulty[player], world.timer, world.goal[player],
+                                                              world.difficulty[player], world.timer[player], world.goal[player],
                                                               world.mode[player], world.swords[player],
                                                               world.retro[player], world.customitemarray)
         world.rupoor_cost = min(world.customitemarray[69], 9999)
     else:
         (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
          lamps_needed_for_dark_rooms) = get_pool_core(world.progressive[player], world.shuffle[player],
-                                                      world.difficulty[player], world.timer, world.goal[player],
+                                                      world.difficulty[player], world.timer[player], world.goal[player],
                                                       world.mode[player], world.swords[player], world.retro[player])
 
     for item in precollected_items:
@@ -226,7 +226,7 @@ def generate_itempool(world, player):
     world.lamps_needed_for_dark_rooms = lamps_needed_for_dark_rooms
 
     if clock_mode is not None:
-        world.clock_mode = clock_mode
+        world.clock_mode[player] = clock_mode
 
     if treasure_hunt_count is not None:
         world.treasure_hunt_count[player] = treasure_hunt_count
