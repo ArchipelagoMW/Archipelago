@@ -39,6 +39,7 @@ def set_rules(world, player):
     if world.logic[player] == 'noglitches':
         no_glitches_rules(world, player)
     elif world.logic[player] == 'owglitches':
+        logging.getLogger('').info('There is a chance OWG has bugged edge case rulesets, especially in inverted. Definitely file a report on GitHub if you see anything strange.')
         overworld_glitches_rules(world, player)
     elif world.logic[player] == 'minorglitches':
         logging.getLogger('').info('Minor Glitches may be buggy still. No guarantee for proper logic checks.')
@@ -735,6 +736,7 @@ def overworld_glitches_rules(world, player):
         'Spectacle Rock Cave',
         'Spectacle Rock Cave Peak',
         'Spectacle Rock Cave (Bottom)',
+        'Spectacle Rock Mirror Spot',
         'Broken Bridge (West)',
         'Broken Bridge (East)',
         'East Death Mountain Drop',
@@ -752,6 +754,16 @@ def overworld_glitches_rules(world, player):
         'Paradox Cave (Top)',
         'Spiral Cave Ledge Access',
         'Fairy Ascension Ledge',
+        'Cave 45 Mirror Spot',
+        'Graveyard Ledge Mirror Spot',
+        'Bumper Cave Ledge Mirror Spot',
+        'Desert Ledge (Northeast) Mirror Spot',
+        'Desert Ledge Mirror Spot',
+        'Desert Palace Entrance (North) Mirror Spot',
+        'East Death Mountain (Top) Mirror Spot',
+        'Spiral Cave Mirror Spot',
+        'Fairy Ascension Mirror Spot',
+        'Floating Island Mirror Spot',
     ]
     lw_boots_accessible_locations = [
         'Lake Hylia Island',
@@ -778,7 +790,6 @@ def overworld_glitches_rules(world, player):
         'C-Shaped House',
         'Chest Game',
         'Thieves Town',
-        'Graveyard Ledge Mirror Spot',
         'Kings Grave Mirror Spot',
         'Bumper Cave Entrance Rock',
         'Red Shield Shop',
@@ -796,7 +807,7 @@ def overworld_glitches_rules(world, player):
         'Dark Blacksmith Ruins',
         'Bumper Cave Ledge',
     ]
-    dw_bunny_accessible_locations = [
+    dw_bunny_inaccessible_locations = [
         'Thieves Town',
         'Graveyard Ledge Mirror Spot',
         'Kings Grave Mirror Spot',
@@ -804,6 +815,11 @@ def overworld_glitches_rules(world, player):
         'Brewery',
         'Village of Outcasts Pegs',
         'Village of Outcasts Eastern Rocks',
+        'Dark Lake Hylia Drop (South)',
+        'Hype Cave',
+        'Village of Outcasts Heavy Rock',
+        'East Dark World Bridge',
+        'Bonk Fairy (Dark)',
     ]
     # set up boots-accessible regions
     if world.mode[player] != 'inverted':
@@ -831,13 +847,13 @@ def overworld_glitches_rules(world, player):
     for location in dw_boots_accessible_locations:
         add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots, 'or')
 
-    # bunny DMD rules
+    # bunny DMD rules. @todo: calculate and implement for inverted.
     if world.mode[player] != 'inverted':
         # set up some mirror-accessible dw entrances.
         boots_and_mirror = lambda state: state.has_Boots(player) and state.has_Mirror(player)
-        for spot in world.get_region('West Dark World', player).locations:
-            if spot not in dw_bunny_accessible_locations:
-                add_rule(world.get_location(spot, player), boots_and_mirror, 'or')
+        for spot in world.get_region('West Dark World', player).exits + world.get_region('South Dark World', player).exits:
+            if spot.name not in dw_bunny_inaccessible_locations:
+                add_rule(world.get_entrance(spot, player), boots_and_mirror, 'or')
         for spot in world.get_region('Dark Death Mountain (East Bottom)', player).locations:
             add_rule(world.get_location(spot, player), boots_and_mirror, 'or')
         # dw entrances accessible with mirror and hookshot
@@ -854,13 +870,16 @@ def overworld_glitches_rules(world, player):
         add_rule(world.get_entrance('Mire Shed', player), boots_mirror_titans, 'or')
         add_rule(world.get_location('Frog', player), boots_mirror_titans, 'or')
 
-    # also, you can do mini moldorm cave and spiral cave - but we're going to consider it required to have a weapon that doesn't require magic and is guaranteed to kill.
-    superbunny_mirror_weapon = lambda state: state.has_Boots(player) and state.has_Mirror(player) and (state.has_sword(player) or state.has('Hammer', player))
+    # also, you can do mini moldorm cave and spiral cave - but requiring a sword.
+    superbunny_mirror_weapon = lambda state: state.has_Mirror(player) and state.has_sword(player)
     mini_moldorm_cave = world.get_region('Mini Moldorm Cave', player)
     if check_is_dark_world(mini_moldorm_cave):
         for spot in mini_moldorm_cave.locations:
             add_rule(world.get_location(spot, player), superbunny_mirror_weapon, 'or')
-    add_rule(world.get_location('Spiral Cave', player), superbunny_mirror_weapon, 'or')
+    if check_is_dark_world(world.get_region('Spiral Cave (Top)', player)):
+        add_rule(world.get_location('Spiral Cave', player), superbunny_mirror_weapon, 'or')
+
+    # add darkness condition.
     add_conditional_lamps(world, player)
 
 
@@ -1404,6 +1423,7 @@ def set_inverted_big_bomb_rules(world, player):
 
 
 def set_bunny_rules(world, player):
+    # If you can get to a dungeon exit, you can bunny revive.
     dungeon_exits = ['Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)', 'Desert Palace Exit (North)', 'Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit', 'Palace of Darkness Exit', 'Swamp Palace Exit', 'Agahnims Tower Exit', 'Turtle Rock Ledge Exit (East)', 'Turtle Rock Exit (Front)', 'Turtle Rock Ledge Exit (West)', 'Turtle Rock Isolated Ledge Exit']
     # regions for the exits of multi-entrace caves/drops that bunny cannot pass
     # Note spiral cave may be technically passible, but it would be too absurd to require since OHKO mode is a thing.
@@ -1422,15 +1442,17 @@ def set_bunny_rules(world, player):
         return lambda state: any(rule(state) for rule in options)
 
     def get_rule_to_add(region, location = None):
+        possible_options = []
         if not region.is_light_world:
             if world.logic[player] == 'owglitches' and location in superbunny_accessible_locations and region.name not in invalid_mirror_bunny_entrances_dw:
-                return lambda state: (state.can_reach(region) and state.has_Mirror(player)) or state.has_Pearl(player)
-            return lambda state: state.has_Pearl(player)
+                possible_options.append(lambda state: state.has_Boots(player) and state.has_Mirror(player))
+            else:
+                return lambda state: state.has_Pearl(player)
         # in this case we are mixed region.
         # we collect possible options.
 
         # The base option is having the moon pearl
-        possible_options = [lambda state: state.has_Pearl(player)]
+        possible_options.append(lambda state: state.has_Pearl(player))
 
         # We will search entrances recursively until we find
         # one that leads to an exclusively light world region
@@ -1486,6 +1508,7 @@ def set_bunny_rules(world, player):
             add_rule(location, get_rule_to_add(location.parent_region, location.name))
 
 def set_inverted_bunny_rules(world, player):
+    # If you can get to a dungeon exit, you can bunny revive.
     dungeon_exits = ['Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)', 'Desert Palace Exit (North)', 'Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit', 'Palace of Darkness Exit', 'Swamp Palace Exit', 'Inverted Agahnims Tower Exit', 'Turtle Rock Ledge Exit (East)', 'Turtle Rock Exit (Front)', 'Turtle Rock Ledge Exit (West)', 'Turtle Rock Isolated Ledge Exit']
     # regions for the exits of multi-entrace caves/drops that bunny cannot pass
     # Note spiral cave may be technically passible, but it would be too absurd to require since OHKO mode is a thing.
@@ -1501,15 +1524,17 @@ def set_inverted_bunny_rules(world, player):
         return lambda state: any(rule(state) for rule in options)
 
     def get_rule_to_add(region, location = None):
+        possible_options = []
         if not region.is_dark_world:
             if world.logic[player] == 'owglitches' and location in bunny_accessible_locations and region.name not in invalid_mirror_bunny_entrances_lw:
-                return lambda state: (state.can_reach(region) and state.has_Mirror(player)) or state.has_Pearl(player)
-            return lambda state: state.has_Pearl(player)
+                possible_options.append(lambda state: state.has_Boots(player) and state.has_Mirror(player))
+            else:
+                return lambda state: state.has_Pearl(player)
         # in this case we are mixed region.
         # we collect possible options.
 
         # The base option is having the moon pearl
-        possible_options = [lambda state: state.has_Pearl(player)]
+        possible_options.append(lambda state: state.has_Pearl(player))
 
         # We will search entrances recursively until we find
         # one that leads to an exclusively dark world region
