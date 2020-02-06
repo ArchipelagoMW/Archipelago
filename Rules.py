@@ -765,7 +765,6 @@ def overworld_glitches_rules(world, player):
         'Grassy Lawn Pegs',
         'West Dark World Gap',
         'Bumper Cave Ledge Drop',
-        'Dark Desert Teleporter',
         'Turtle Rock Drop',
         'Floating Island Drop',
         'Dark Death Mountain Drop (East)',
@@ -786,6 +785,10 @@ def overworld_glitches_rules(world, player):
         'Dark Sanctuary Hint',
         'Fortune Teller (Dark)',
         'Dark World Lumberjack Shop',
+        'Misery Mire',
+        'Mire Shed',
+        'Dark Desert Hint',
+        'Dark Desert Fairy',
     ]
     dw_boots_accessible_locations = [
         'Catfish',
@@ -1401,7 +1404,7 @@ def set_inverted_big_bomb_rules(world, player):
 
 
 def set_bunny_rules(world, player):
-
+    dungeon_exits = ['Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)', 'Desert Palace Exit (North)', 'Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit', 'Palace of Darkness Exit', 'Swamp Palace Exit', 'Agahnims Tower Exit', 'Turtle Rock Ledge Exit (East)', 'Turtle Rock Exit (Front)', 'Turtle Rock Ledge Exit (West)', 'Turtle Rock Isolated Ledge Exit']
     # regions for the exits of multi-entrace caves/drops that bunny cannot pass
     # Note spiral cave may be technically passible, but it would be too absurd to require since OHKO mode is a thing.
     bunny_impassable_caves = ['Bumper Cave', 'Two Brothers House', 'Hookshot Cave', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)', 'Turtle Rock (Entrance)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Skull Woods Second Section (Drop)',
@@ -1445,7 +1448,14 @@ def set_bunny_rules(world, player):
                 new_path = path + [entrance.access_rule]
                 seen.add(new_region)
                 if not new_region.is_light_world:
-                    continue # we don't care about pure dark world entrances in non-owg
+                    if world.logic[player] == 'owglitches':
+                        if entrance in superbunny_accessible_locations and region.name not in invalid_mirror_bunny_entrances_dw:
+                            possible_options.append(path_to_access_rule(new_path, entrance))
+                        for exit in new_region.exits:
+                            if exit.name in dungeon_exits:
+                                possible_options.append(path_to_access_rule(new_path, entrance))
+                    else:
+                        continue
                 if new_region.is_dark_world:
                     queue.append((new_region, new_path))
                 else:
@@ -1466,7 +1476,7 @@ def set_bunny_rules(world, player):
     if paradox_shop.is_dark_world:
         add_rule(paradox_shop.entrances[0], get_rule_to_add(paradox_shop))
 
-    # Add requirements for all locations that are actually in the dark world, except those available to the bunny
+    # Add requirements for all locations that are actually in the dark world, except those available to the bunny, including dungeon revival
     for location in world.get_locations():
         if location.player == player and location.parent_region.is_dark_world:
 
@@ -1476,7 +1486,7 @@ def set_bunny_rules(world, player):
             add_rule(location, get_rule_to_add(location.parent_region, location.name))
 
 def set_inverted_bunny_rules(world, player):
-
+    dungeon_exits = ['Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)', 'Desert Palace Exit (North)', 'Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit', 'Palace of Darkness Exit', 'Swamp Palace Exit', 'Inverted Agahnims Tower Exit', 'Turtle Rock Ledge Exit (East)', 'Turtle Rock Exit (Front)', 'Turtle Rock Ledge Exit (West)', 'Turtle Rock Isolated Ledge Exit']
     # regions for the exits of multi-entrace caves/drops that bunny cannot pass
     # Note spiral cave may be technically passible, but it would be too absurd to require since OHKO mode is a thing.
     bunny_impassable_caves = ['Bumper Cave', 'Two Brothers House', 'Hookshot Cave', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)', 'Turtle Rock (Entrance)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Skull Woods Second Section (Drop)',
@@ -1517,7 +1527,14 @@ def set_inverted_bunny_rules(world, player):
                 new_path = path + [entrance.access_rule]
                 seen.add(new_region)
                 if not new_region.is_dark_world:
-                    continue # we don't care about pure light world entrances
+                    if world.logic[player] == 'owglitches':
+                        if entrance in superbunny_accessible_locations and region.name not in invalid_mirror_bunny_entrances_lw:
+                            possible_options.append(path_to_access_rule(new_path, entrance))
+                        for exit in new_region.exits:
+                            if exit.name in dungeon_exits:
+                                possible_options.append(path_to_access_rule(new_path, entrance))
+                    else:
+                        continue
                 if new_region.is_light_world:
                     queue.append((new_region, new_path))
                 else:
@@ -1538,7 +1555,7 @@ def set_inverted_bunny_rules(world, player):
     if paradox_shop.is_light_world:
         add_rule(paradox_shop.entrances[0], get_rule_to_add(paradox_shop))
 
-    # Add requirements for all locations that are actually in the light world, except those available to the bunny
+    # Add requirements for all locations that are actually in the light world, except those available to the bunny, including dungeon revival
     for location in world.get_locations():
         if location.player == player and location.parent_region.is_light_world:
 
