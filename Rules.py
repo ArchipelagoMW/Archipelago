@@ -793,6 +793,15 @@ def overworld_glitches_rules(world, player):
         'Dark Blacksmith Ruins',
         'Bumper Cave Ledge',
     ]
+    dw_bunny_accessible_locations = [
+        'Thieves Town',
+        'Graveyard Ledge Mirror Spot',
+        'Kings Grave Mirror Spot',
+        'Bumper Cave Entrance Rock',
+        'Brewery',
+        'Village of Outcasts Pegs',
+        'Village of Outcasts Eastern Rocks',
+    ]
     # set up boots-accessible regions
     if world.mode[player] != 'inverted':
         lw_boots_accessible_entrances.append('Cave 45')
@@ -807,22 +816,25 @@ def overworld_glitches_rules(world, player):
         add_rule(world.get_entrance('Turtle Rock Teleporter', player), lambda state: state.has_Boots(player) and state.has('Hammer', player), 'or')
         add_rule(world.get_entrance('Checkerboard Cave', player), lambda state: state.has_Boots(player) and state.can_lift_rocks(player), 'or')
 
+    # ton of boots-accessible locations.
     needs_boots = lambda state: state.has_Boots(player)
     needs_boots_and_pearl = lambda state: state.has_Boots(player) and state.has_Pearl(player)
     for entrance in lw_boots_accessible_entrances:
         add_rule(world.get_entrance(entrance, player), needs_boots_and_pearl if world.mode[player] == 'inverted' else needs_boots, 'or')
     for location in lw_boots_accessible_locations:
         add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] == 'inverted' else needs_boots, 'or')
-    # no inverted rules here; no DMD bunny known so far
     for entrance in dw_boots_accessible_entrances:
-        add_rule(world.get_entrance(entrance, player), needs_boots_and_pearl, 'or')
+        add_rule(world.get_entrance(entrance, player), needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots, 'or')
     for location in dw_boots_accessible_locations:
-        add_rule(world.get_location(location, player), needs_boots_and_pearl, 'or')
+        add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots, 'or')
+
     # bunny DMD rules
     if world.mode[player] != 'inverted':
         # set up some mirror-accessible dw entrances.
         boots_and_mirror = lambda state: state.has_Boots(player) and state.has_Mirror(player)
-        add_rule(world.get_entrance('Dark Sanctuary Hint', player), boots_and_mirror, 'or') # should suffice to give us west dark world access
+        for spot in world.get_region('West Dark World', player).locations:
+            if spot not in dw_bunny_accessible_locations:
+                add_rule(world.get_location(spot, player), boots_and_mirror, 'or')
         for spot in world.get_region('Dark Death Mountain (East Bottom)', player).locations:
             add_rule(world.get_location(spot, player), boots_and_mirror, 'or')
         # dw entrances accessible with mirror and hookshot
@@ -839,31 +851,13 @@ def overworld_glitches_rules(world, player):
         add_rule(world.get_entrance('Mire Shed', player), boots_mirror_titans, 'or')
         add_rule(world.get_location('Frog', player), boots_mirror_titans, 'or')
 
-    # all entrances you can't mirror bunny into. @todo: use for inverted
-    invalid_mirror_bunny_entrances_lw = [
-        'Bonk Rock Cave',
-        'Bonk Fairy (Light)',
-        'Blinds Hideout',
-        '50 Rupee Cave',
-        '20 Rupee Cave',
-        'Checkerboard Cave',
-        'Light Hype Fairy',
-        'Waterfall of Wishing',
-        'Light World Bomb Hut',
-        'Mini Moldorm Cave',
-        'Ice Rod Cave',
-        'Hyrule Castle Secret Entrance Stairs',
-        'Sanctuary Grave',
-        'Kings Grave',
-        'Tower of Hera',
-    ]
-    # also, you can do mini moldorm cave and spiral cave - but you need a sword
-    superbunny_mirror_sword = lambda state: state.has_Boots(player) and state.has_Mirror(player) and state.has_sword(player)
+    # also, you can do mini moldorm cave and spiral cave - but we're going to consider it required to have a weapon that doesn't require magic and is guaranteed to kill.
+    superbunny_mirror_weapon = lambda state: state.has_Boots(player) and state.has_Mirror(player) and (state.has_sword(player) or state.has('Hammer', player))
     mini_moldorm_cave = world.get_region('Mini Moldorm Cave', player)
     if check_is_dark_world(mini_moldorm_cave):
         for spot in mini_moldorm_cave.locations:
-            add_rule(world.get_location(spot, player), superbunny_mirror_sword, 'or')
-    add_rule(world.get_location('Spiral Cave', player), superbunny_mirror_sword, 'or')
+            add_rule(world.get_location(spot, player), superbunny_mirror_weapon, 'or')
+    add_rule(world.get_location('Spiral Cave', player), superbunny_mirror_weapon, 'or')
     add_conditional_lamps(world, player)
 
 
@@ -1487,8 +1481,8 @@ def set_inverted_bunny_rules(world, player):
     # Note spiral cave may be technically passible, but it would be too absurd to require since OHKO mode is a thing.
     bunny_impassable_caves = ['Bumper Cave', 'Two Brothers House', 'Hookshot Cave', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)', 'Turtle Rock (Entrance)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Skull Woods Second Section (Drop)',
                               'Turtle Rock (Eye Bridge)', 'Sewers', 'Pyramid', 'Spiral Cave (Top)', 'Desert Palace Main (Inner)', 'Fairy Ascension Cave (Drop)', 'The Sky']
-
     bunny_accessible_locations = ['Link\'s Uncle', 'Sahasrahla', 'Sick Kid', 'Lost Woods Hideout', 'Lumberjack Tree', 'Checkerboard Cave', 'Potion Shop', 'Spectacle Rock Cave', 'Pyramid', 'Hype Cave - Generous Guy', 'Peg Cave', 'Bumper Cave Ledge', 'Dark Blacksmith Ruins', 'Bombos Tablet', 'Ether Tablet', 'Purple Chest']
+    invalid_mirror_bunny_entrances_lw = ['Bonk Rock Cave', 'Bonk Fairy (Light)', 'Blinds Hideout', '50 Rupee Cave', '20 Rupee Cave', 'Checkerboard Cave', 'Light Hype Fairy', 'Waterfall of Wishing', 'Light World Bomb Hut', 'Mini Moldorm Cave', 'Ice Rod Cave', 'Hyrule Castle Secret Entrance Stairs', 'Sanctuary Grave', 'Kings Grave', 'Tower of Hera']
 
     def path_to_access_rule(path, entrance):
         return lambda state: state.can_reach(entrance) and all(rule(state) for rule in path)
@@ -1496,8 +1490,10 @@ def set_inverted_bunny_rules(world, player):
     def options_to_access_rule(options):
         return lambda state: any(rule(state) for rule in options)
 
-    def get_rule_to_add(region):
+    def get_rule_to_add(region, location = None):
         if not region.is_dark_world:
+            if world.logic[player] == 'owglitches' and location in bunny_accessible_locations and region.name not in invalid_mirror_bunny_entrances_lw:
+                return lambda state: (state.can_reach(region) and state.has_Mirror(player)) or state.has_Pearl(player)
             return lambda state: state.has_Pearl(player)
         # in this case we are mixed region.
         # we collect possible options.
@@ -1549,6 +1545,6 @@ def set_inverted_bunny_rules(world, player):
             if location.name in bunny_accessible_locations:
                 continue
 
-            add_rule(location, get_rule_to_add(location.parent_region))
+            add_rule(location, get_rule_to_add(location.parent_region, location.name))
 
 

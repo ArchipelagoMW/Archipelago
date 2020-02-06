@@ -211,7 +211,6 @@ def roll_settings(weights):
         ret.heartbeep = get_choice('heartbeep', romweights)
         ret.ow_palettes = get_choice('ow_palettes', romweights)
         ret.uw_palettes = get_choice('uw_palettes', romweights)
-        ret.text = get_choice('text', romweights)
 
     return ret
 
