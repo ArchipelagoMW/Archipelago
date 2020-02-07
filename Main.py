@@ -201,7 +201,7 @@ def main(args, seed=None):
                                                                               "" if world.timer[player] in ['none', 'display'] else "-" + world.timer[player],
                                                                               world.shuffle[player], world.algorithm, mcsb_name,
                                                                               "-retro" if world.retro[player] else "",
-                                                                              "-prog_" + world.progressive if world.progressive in ['off', 'random'] else "",
+                                                                              "-prog_" + world.progressive[player] if world.progressive[player] in ['off', 'random'] else "",
                                                                               "-nohints" if not world.hints[player] else "")) if not args.outputname else ''
                     rom.write_to_file(output_path(f'{outfilebase}{outfilepname}{outfilesuffix}.sfc'))
 
