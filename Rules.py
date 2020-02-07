@@ -803,7 +803,6 @@ def overworld_glitches_rules(world, player):
     ]
     dw_boots_accessible_locations = [
         'Catfish',
-        'Frog',
         'Dark Blacksmith Ruins',
         'Bumper Cave Ledge',
     ]
@@ -834,6 +833,9 @@ def overworld_glitches_rules(world, player):
         add_rule(world.get_entrance('East Death Mountain Teleporter', player), lambda state: state.can_lift_heavy_rocks(player) and state.has_Boots(player), 'or')
         add_rule(world.get_entrance('Turtle Rock Teleporter', player), lambda state: state.has_Boots(player) and state.has('Hammer', player), 'or')
         add_rule(world.get_entrance('Checkerboard Cave', player), lambda state: state.has_Boots(player) and state.can_lift_rocks(player), 'or')
+        add_rule(world.get_entrance('South Hyrule Teleporter', player), lambda state: state.has_Boots(player) and state.can_lift_rocks(player), 'or')
+    else:
+        add_rule(world.get_entrance('South Dark World Teleporter', player), lambda state: state.has_Boots(player) and state.can_lift_rocks(player), 'or')
 
     # ton of boots-accessible locations.
     needs_boots = lambda state: state.has_Boots(player)
@@ -846,6 +848,16 @@ def overworld_glitches_rules(world, player):
         add_rule(world.get_entrance(entrance, player), needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots, 'or')
     for location in dw_boots_accessible_locations:
         add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots, 'or')
+
+    # standard dmd rules
+    wdw = world.get_region('West Dark World', player)
+    wdw.can_reach_private = lambda state: wdw.can_reach(state) or (needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots)
+    sdw = world.get_region('South Dark World', player)
+    sdw.can_reach_private = lambda state: sdw.can_reach(state) or (needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots)
+    dd = world.get_region('Dark Desert', player)
+    dd.can_reach_private = lambda state: dd.can_reach(state) or (needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots)
+    edw = world.get_region('East Dark World', player)
+    edw.can_reach_private = lambda state: edw.can_reach(state) or (needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots)
 
     # bunny DMD rules. @todo: calculate and implement for inverted.
     if world.mode[player] != 'inverted':
