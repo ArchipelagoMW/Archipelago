@@ -398,8 +398,17 @@ async def main():
     except Exception as e:
         logging.error('Failed to read multiworld data (%s)' % e)
         return
+    import socket
+    ip = socket.gethostbyname(socket.gethostname())
+    try:
+        ip = urllib.request.urlopen('https://checkip.amazonaws.com/').read().decode('utf8').strip()
+    except Exception as e:
+        try:
+            ip = urllib.request.urlopen('https://v4.ident.me').read().decode('utf8').strip()
+        except:
+            logging.exception(e)
+            pass # we could be offline, in a local game, so no point in erroring out
 
-    ip = urllib.request.urlopen('https://v4.ident.me').read().decode('utf8') if not ctx.host else ctx.host
     logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port, 'No password' if not ctx.password else 'Password: %s' % ctx.password))
 
     ctx.disable_save = args.disable_save
