@@ -849,18 +849,21 @@ def overworld_glitches_rules(world, player):
     for location in dw_boots_accessible_locations:
         add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots, 'or')
 
-    # standard dmd rules
-    wdw = world.get_region('West Dark World', player)
-    wdw.can_reach_private = lambda state: wdw.can_reach(state) or (needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots)
-    sdw = world.get_region('South Dark World', player)
-    sdw.can_reach_private = lambda state: sdw.can_reach(state) or (needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots)
-    dd = world.get_region('Dark Desert', player)
-    dd.can_reach_private = lambda state: dd.can_reach(state) or (needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots)
-    edw = world.get_region('East Dark World', player)
-    edw.can_reach_private = lambda state: edw.can_reach(state) or (needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots)
-
-    # bunny DMD rules. @todo: calculate and implement for inverted.
+    # standard dmd rules, also feat. bunny
     if world.mode[player] != 'inverted':
+        can_bunny_dmd = lambda state: world.get_region('Death Mountain').can_reach(state, player) and state.has_Mirror(player)
+        wdw = world.get_region('West Dark World', player)
+        wdw.can_reach_private = lambda state: wdw.can_reach(state) or (needs_boots_and_pearl or can_bunny_dmd)
+        sdw = world.get_region('South Dark World', player)
+        sdw.can_reach_private = lambda state: sdw.can_reach(state) or (needs_boots_and_pearl or can_bunny_dmd)
+        dd = world.get_region('Dark Desert', player)
+        dd.can_reach_private = lambda state: dd.can_reach(state) or needs_boots_and_pearl
+        nedw = world.get_region('Northeast Dark World', player)
+        nedw.can_reach_private = lambda state: nedw.can_reach(state) or (needs_boots_and_pearl or can_bunny_dmd)
+        edw = world.get_region('East Dark World', player)
+        edw.can_reach_private = lambda state: edw.can_reach(state) or needs_boots_and_pearl
+        edmb = world.get_region('Dark Death Mountain (East Bottom)', player)
+        edmb.can_reach_private = lambda state: edmb.can_reach(state) or can_bunny_dmd
         # set up some mirror-accessible dw entrances.
         boots_and_mirror = lambda state: state.has_Boots(player) and state.has_Mirror(player)
         for spot in world.get_region('West Dark World', player).exits + world.get_region('South Dark World', player).exits:
@@ -880,6 +883,8 @@ def overworld_glitches_rules(world, player):
         # dw entrances accessible with mirror and titans
         boots_mirror_titans = lambda state: state.has_Boots(player) and state.has_Mirror(player) and state.can_lift_heavy_rocks(player)
         add_rule(world.get_entrance('Mire Shed', player), boots_mirror_titans, 'or')
+        # plus the mirror superbunny version
+        add_rule(world.get_entrance('Mire Shed', player), lambda state: state.has('Ocarina', player) and state.has_Mirror(player) and state.can_lift_heavy_rocks(player), 'or')
         add_rule(world.get_location('Frog', player), boots_mirror_titans, 'or')
 
     # also, you can do mini moldorm cave and spiral cave - but requiring a sword.
