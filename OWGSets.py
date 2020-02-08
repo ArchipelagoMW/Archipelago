@@ -1,4 +1,4 @@
-class OWGSets(self):
+class OWGSets(object):
     '''
     Helper class to deliver entrance/exit/region sets to OWG rules.
     '''
