@@ -2922,7 +2922,7 @@ mandatory_connections = [('Lake Hylia Central Island Pier', 'Lake Hylia Central 
                          ('Spiral Cave Mirror Spot', 'Spiral Cave Ledge'),
                          ('Mimic Cave Mirror Spot', 'Mimic Cave Ledge'),
                          ('Cave 45 Mirror Spot', 'Cave 45 Ledge'),
-                         ('Bombos Tablet Mirror Spot', 'Bombos Tablet Ledge')
+                         ('Bombos Tablet Mirror Spot', 'Bombos Tablet Ledge'),
                          ('Graveyard Ledge Mirror Spot', 'Graveyard Ledge'),
 
                          ('Swamp Palace Moat', 'Swamp Palace (First Room)'),
