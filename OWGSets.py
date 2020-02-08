@@ -2,18 +2,20 @@
 Helper functions to deliver entrance/exit/region sets to OWG rules.
 '''
 
-def get_immediately_accessible_entrances():
+def get_immediately_accessible_entrances(world, player):
     '''
     Entrances that are available with no items at all.
 
     At this point, these are fake flipper spots.
     '''
-    return [
+    entrances = [
         'Hobo Bridge',
         'Zoras River',
-        'Lake Hylia Island Mirror Spot',
         'Capacity Upgrade',
         ]
+    if world.mode[player] != 'inverted':
+        entrances.append('Lake Hylia Island Mirror Spot')
+    return entrances
 
 def get_lw_boots_accessible_entrances(world, player):
     '''
@@ -24,7 +26,6 @@ def get_lw_boots_accessible_entrances(world, player):
         'Desert Ledge Return Rocks',
         'Desert Palace Entrance (West)',
         'Desert Palace Entrance (North)',
-        'Flute Spot 1',
         'Broken Bridge (East)',
         'Death Mountain Drop',
         'Old Man Cave (East)',
@@ -34,7 +35,6 @@ def get_lw_boots_accessible_entrances(world, player):
         'Spectacle Rock Cave',
         'Spectacle Rock Cave Peak',
         'Spectacle Rock Cave (Bottom)',
-        'Spectacle Rock Mirror Spot',
         'Broken Bridge (West)',
         'Broken Bridge (East)',
         'East Death Mountain Drop',
@@ -43,7 +43,6 @@ def get_lw_boots_accessible_entrances(world, player):
         'Fairy Ascension Cave (Bottom)',
         'East Death Mountain (Top)',
         'Death Mountain (Top)',
-        'Spectacle Rock Drop',
         'Death Mountain Return Cave (West)',
         'Paradox Cave (Bottom)',
         'Paradox Cave (Middle)',
@@ -51,23 +50,24 @@ def get_lw_boots_accessible_entrances(world, player):
         'Spiral Cave (Bottom)',
         'Paradox Cave (Top)',
         'Spiral Cave Ledge Access',
-        'Fairy Ascension Ledge',
-        'Cave 45 Mirror Spot',
-        'Graveyard Ledge Mirror Spot',
         'Bumper Cave Ledge Mirror Spot',
-        'Desert Ledge (Northeast) Mirror Spot',
-        'Desert Ledge Mirror Spot',
-        'Desert Palace Entrance (North) Mirror Spot',
-        'East Death Mountain (Top) Mirror Spot',
-        'Spiral Cave Mirror Spot',
-        'Fairy Ascension Mirror Spot',
         'Floating Island Mirror Spot',
         ]
-
     if world.mode[player] != 'inverted':
         entrances.append('Cave 45')
         entrances.append('Graveyard Cave')
-
+        entrances.append('Flute Spot 1')
+        entrances.append('Spectacle Rock Mirror Spot')
+        entrances.append('Spectacle Rock Drop')
+        entrances.append('Fairy Ascension Ledge')
+        entrances.append('Cave 45 Mirror Spot')
+        entrances.append('Graveyard Ledge Mirror Spot')
+        entrances.append('Desert Ledge (Northeast) Mirror Spot')
+        entrances.append('Desert Ledge Mirror Spot')
+        entrances.append('Desert Palace Entrance (North) Mirror Spot')
+        entrances.append('East Death Mountain (Top) Mirror Spot')
+        entrances.append('Spiral Cave Mirror Spot')
+        entrances.append('Fairy Ascension Mirror Spot')
     return entrances
 
 
@@ -83,11 +83,11 @@ def get_lw_boots_accessible_locations():
         ]
 
 
-def get_dw_boots_accessible_entrances():
+def get_dw_boots_accessible_entrances(world, player):
     '''
     Dark World entrances that can be accessed with boots clips.
     '''
-    return [
+    entrances = [
         'Northeast Dark World Broken Bridge Pass',
         'Peg Area Rocks',
         'Grassy Lawn Pegs',
@@ -97,19 +97,15 @@ def get_dw_boots_accessible_entrances():
         'Floating Island Drop',
         'Dark Death Mountain Drop (East)',
         'Village of Outcasts Drop',
-        'Dark Lake Hylia Ledge',
         'Hype Cave',
         'Dark World Potion Shop',
-        'Big Bomb Shop',
         'Archery Game',
         'Brewery',
         'C-Shaped House',
         'Chest Game',
         'Thieves Town',
-        'Kings Grave Mirror Spot',
         'Bumper Cave Entrance Rock',
         'Red Shield Shop',
-        'Dark Sanctuary Hint',
         'Fortune Teller (Dark)',
         'Dark World Lumberjack Shop',
         'Misery Mire',
@@ -117,6 +113,12 @@ def get_dw_boots_accessible_entrances():
         'Dark Desert Hint',
         'Dark Desert Fairy',
         ]
+    if world.mode[player] != 'inverted':
+        entrances.append('Dark Lake Hylia Ledge')
+        entrances.append('Big Bomb Shop')
+        entrances.append('Kings Grave Mirror Spot')
+        entrances.append('Dark Sanctuary Hint')
+    return entrances
 
 
 def get_dw_boots_accessible_locations():

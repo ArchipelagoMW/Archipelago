@@ -722,7 +722,7 @@ def overworld_glitches_rules(world, player):
     # around. We could detect a path to determine if one can be stored.
 
     # Spots that are immediately accessible.
-    for entrance in OWGSets.get_immediately_accessible_entrances():
+    for entrance in OWGSets.get_immediately_accessible_entrances(world, player):
         set_rule(world.get_entrance(entrance, player), lambda state: True)
 
     # Boots-accessible locations.
@@ -732,7 +732,7 @@ def overworld_glitches_rules(world, player):
         add_rule(world.get_entrance(entrance, player), needs_boots_and_pearl if world.mode[player] == 'inverted' else needs_boots, 'or')
     for location in OWGSets.get_lw_boots_accessible_locations():
         add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] == 'inverted' else needs_boots, 'or')
-    for entrance in OWGSets.get_dw_boots_accessible_entrances():
+    for entrance in OWGSets.get_dw_boots_accessible_entrances(world, player):
         add_rule(world.get_entrance(entrance, player), needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots, 'or')
     for location in OWGSets.get_dw_boots_accessible_locations():
         add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots, 'or')
