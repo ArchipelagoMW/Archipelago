@@ -1,5 +1,6 @@
 import collections
 import logging
+import OWGSets
 from BaseClasses import CollectionState
 
 
@@ -405,7 +406,7 @@ def default_rules(world, player):
     set_rule(world.get_entrance('Hyrule Castle Ledge Mirror Spot', player), lambda state: state.has_Mirror(player))
     set_rule(world.get_entrance('Hyrule Castle Main Gate', player), lambda state: state.has_Mirror(player))
     set_rule(world.get_entrance('Dark Lake Hylia Drop (East)', player), lambda state: (state.has_Pearl(player) and state.has('Flippers', player) or state.has_Mirror(player)))  # Overworld Bunny Revival
-    set_rule(world.get_location('Bombos Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has_beam_sword(player) and state.has_Mirror(player))
+    set_rule(world.get_location('Bombos Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has_beam_sword(player))
     set_rule(world.get_entrance('Dark Lake Hylia Drop (South)', player), lambda state: state.has_Pearl(player) and state.has('Flippers', player))  # ToDo any fake flipper set up?
     set_rule(world.get_entrance('Dark Lake Hylia Ledge Fairy', player), lambda state: state.has_Pearl(player)) # bomb required
     set_rule(world.get_entrance('Dark Lake Hylia Ledge Spike Cave', player), lambda state: state.can_lift_rocks(player) and state.has_Pearl(player))
@@ -418,6 +419,7 @@ def default_rules(world, player):
     set_rule(world.get_entrance('Skull Woods Second Section Hole', player), lambda state: state.has_Pearl(player)) # bunny cannot lift bush
     set_rule(world.get_entrance('Maze Race Mirror Spot', player), lambda state: state.has_Mirror(player))
     set_rule(world.get_entrance('Cave 45 Mirror Spot', player), lambda state: state.has_Mirror(player))
+    set_rule(world.get_entrance('Bombos Tablet Mirror Spot', player), lambda state: state.has_Mirror(player))
     set_rule(world.get_entrance('East Dark World Bridge', player), lambda state: state.has_Pearl(player) and state.has('Hammer', player))
     set_rule(world.get_entrance('Lake Hylia Island Mirror Spot', player), lambda state: state.has_Pearl(player) and state.has_Mirror(player) and state.has('Flippers', player))
     set_rule(world.get_entrance('Lake Hylia Central Island Mirror Spot', player), lambda state: state.has_Mirror(player))
@@ -714,117 +716,68 @@ def add_conditional_lamps(world, player):
 
 
 def overworld_glitches_rules(world, player):
-    # spots that are immediately accessible due to fake flippering
-    set_rule(world.get_entrance('Hobo Bridge', player), lambda state: True)
-    set_rule(world.get_entrance('Zoras River', player), lambda state: True)
-    set_rule(world.get_entrance('Lake Hylia Island Mirror Spot', player), lambda state: True)
-    set_rule(world.get_entrance('Capacity Upgrade', player), lambda state: True)
+    # @TODO: Waterfall fairy and Zora ledge could use some logic to determine
+    # if we can water walk and/or stored water walk in; currently it's omitted
+    # in case no interiors provide a water walk, but one could be kicking
+    # around. We could detect a path to determine if one can be stored.
 
-    # boots-accessible stuff
-    lw_boots_accessible_entrances = [
-        'Bat Cave Drop Ledge',
-        'Desert Ledge Return Rocks',
-        'Desert Palace Entrance (West)',
-        'Desert Palace Entrance (North)',
-        'Flute Spot 1',
-        'Broken Bridge (East)',
-        'Death Mountain Drop',
-        'Old Man Cave (East)',
-        'Old Man House (Bottom)',
-        'Old Man House (Top)',
-        'Death Mountain Return Cave (East)',
-        'Spectacle Rock Cave',
-        'Spectacle Rock Cave Peak',
-        'Spectacle Rock Cave (Bottom)',
-        'Spectacle Rock Mirror Spot',
-        'Broken Bridge (West)',
-        'Broken Bridge (East)',
-        'East Death Mountain Drop',
-        'Spiral Cave Ledge Drop',
-        'Fairy Ascension Drop',
-        'Fairy Ascension Cave (Bottom)',
-        'East Death Mountain (Top)',
-        'Death Mountain (Top)',
-        'Spectacle Rock Drop',
-        'Death Mountain Return Cave (West)',
-        'Paradox Cave (Bottom)',
-        'Paradox Cave (Middle)',
-        'Hookshot Fairy',
-        'Spiral Cave (Bottom)',
-        'Paradox Cave (Top)',
-        'Spiral Cave Ledge Access',
-        'Fairy Ascension Ledge',
-        'Cave 45 Mirror Spot',
-        'Graveyard Ledge Mirror Spot',
-        'Bumper Cave Ledge Mirror Spot',
-        'Desert Ledge (Northeast) Mirror Spot',
-        'Desert Ledge Mirror Spot',
-        'Desert Palace Entrance (North) Mirror Spot',
-        'East Death Mountain (Top) Mirror Spot',
-        'Spiral Cave Mirror Spot',
-        'Fairy Ascension Mirror Spot',
-        'Floating Island Mirror Spot',
-    ]
-    lw_boots_accessible_locations = [
-        'Lake Hylia Island',
-        'Desert Ledge',
-        'Spectacle Rock',
-        'Floating Island',
-    ]
-    dw_boots_accessible_entrances = [
-        'Northeast Dark World Broken Bridge Pass',
-        'Peg Area Rocks',
-        'Grassy Lawn Pegs',
-        'West Dark World Gap',
-        'Bumper Cave Ledge Drop',
-        'Turtle Rock Drop',
-        'Floating Island Drop',
-        'Dark Death Mountain Drop (East)',
-        'Village of Outcasts Drop',
-        'Dark Lake Hylia Ledge',
-        'Hype Cave',
-        'Dark World Potion Shop',
-        'Big Bomb Shop',
-        'Archery Game',
-        'Brewery',
-        'C-Shaped House',
-        'Chest Game',
-        'Thieves Town',
-        'Kings Grave Mirror Spot',
-        'Bumper Cave Entrance Rock',
-        'Red Shield Shop',
-        'Dark Sanctuary Hint',
-        'Fortune Teller (Dark)',
-        'Dark World Lumberjack Shop',
-        'Misery Mire',
-        'Mire Shed',
-        'Dark Desert Hint',
-        'Dark Desert Fairy',
-    ]
-    dw_boots_accessible_locations = [
-        'Catfish',
-        'Dark Blacksmith Ruins',
-        'Bumper Cave Ledge',
-    ]
-    dw_bunny_inaccessible_locations = [
-        'Thieves Town',
-        'Graveyard Ledge Mirror Spot',
-        'Kings Grave Mirror Spot',
-        'Bumper Cave Entrance Rock',
-        'Brewery',
-        'Village of Outcasts Pegs',
-        'Village of Outcasts Eastern Rocks',
-        'Dark Lake Hylia Drop (South)',
-        'Hype Cave',
-        'Village of Outcasts Heavy Rock',
-        'East Dark World Bridge',
-        'Bonk Fairy (Dark)',
-    ]
-    # set up boots-accessible regions
+    # Spots that are immediately accessible.
+    for entrance in OWGSets.get_immediately_accessible_entrances():
+        set_rule(world.get_entrance(entrance, player), lambda state: True)
+
+    # Boots-accessible locations.
+    needs_boots = lambda state: state.has_Boots(player)
+    needs_boots_and_pearl = lambda state: state.has_Boots(player) and state.has_Pearl(player)
+    for entrance in OWGSets.get_lw_boots_accessible_entrances(world, player):
+        add_rule(world.get_entrance(entrance, player), needs_boots_and_pearl if world.mode[player] == 'inverted' else needs_boots, 'or')
+    for location in OWGSets.get_lw_boots_accessible_locations():
+        add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] == 'inverted' else needs_boots, 'or')
+    for entrance in OWGSets.get_dw_boots_accessible_entrances():
+        add_rule(world.get_entrance(entrance, player), needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots, 'or')
+    for location in OWGSets.get_dw_boots_accessible_locations():
+        add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots, 'or')
+
+    # Boots-accessible regions due to DMD.
     if world.mode[player] != 'inverted':
-        lw_boots_accessible_entrances.append('Cave 45')
-        lw_boots_accessible_entrances.append('Graveyard Cave')
-        # couple other random spots
+        # DMD with and without bunny.
+        can_bunny_dmd = lambda state: world.get_region('Death Mountain').can_reach(state, player) and state.has_Mirror(player)
+        for dmd_bunny_region in OWGSets.get_dmd_and_bunny_regions():
+            region = world.get_region(dmd_bunny_region, player)
+            region.can_reach_private = lambda state: region.can_reach(state) or (needs_boots_and_pearl or can_bunny_dmd)
+        for non_dmd_bunny_region in OWGSets.get_dmd_non_bunny_regions():
+            region = world.get_region(non_dmd_bunny_region, player)
+            region.can_reach_private = lambda state: region.can_reach(state) or (needs_boots_and_pearl)
+        edmb = world.get_region('Dark Death Mountain (East Bottom)', player)
+        edmb.can_reach_private = lambda state: edmb.can_reach(state) or can_bunny_dmd
+
+        # Set up some mirror-accessible DW entrances.
+        boots_and_mirror = lambda state: state.has_Boots(player) and state.has_Mirror(player)
+        for spot in world.get_region('West Dark World', player).exits + world.get_region('South Dark World', player).exits:
+            if spot.name not in OWGSets.get_dw_bunny_inaccessible_locations():
+                add_rule(world.get_entrance(spot, player), boots_and_mirror, 'or')
+        for spot in world.get_region('Dark Death Mountain (East Bottom)', player).locations:
+            add_rule(world.get_location(spot, player), boots_and_mirror, 'or')
+        # DW entrances accessible with mirror and hookshot.
+        for spot in OWGSets.get_mirror_hookshot_accessible_dw_locations(world, player):
+            add_rule(world.get_entrance(spot, player), lambda state: state.has_Boots(player) and state.has_Mirror(player) and state.has('Hookshot', player), 'or')
+        # DW entrances accessible with mirror and titans.
+        boots_mirror_titans = lambda state: state.has_Boots(player) and state.has_Mirror(player) and state.can_lift_heavy_rocks(player)
+        add_rule(world.get_entrance('Mire Shed', player), boots_mirror_titans, 'or')
+        # Plus the mirror superbunny version.
+        add_rule(world.get_entrance('Mire Shed', player), lambda state: state.has('Ocarina', player) and state.has_Mirror(player) and state.can_lift_heavy_rocks(player), 'or')
+        add_rule(world.get_location('Frog', player), boots_mirror_titans, 'or')
+
+    # Locations that you can superbunny mirror into, but need a sword to clear.
+    superbunny_mirror_weapon = lambda state: state.has_Mirror(player) and state.has_sword(player)
+    mini_moldorm_cave = world.get_region('Mini Moldorm Cave', player)
+    for superbunny_mirror_weapon_region in OWGSets.get_sword_required_superbunny_mirror_regions():
+        region = world.get_region(superbunny_mirror_weapon_region, player)
+        if check_is_dark_world(region):
+            for spot in region.locations:
+                add_rule(world.get_location(spot, player), superbunny_mirror_weapon, 'or')
+
+    # Regions that require the boots and some other stuff.
+    if world.mode[player] != 'inverted':
         set_rule(world.get_location('Bombos Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has_beam_sword(player) and (state.has_Mirror(player) or state.has_Boots(player)))
         set_rule(world.get_location('Ether Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has_beam_sword(player) and (state.has_Mirror(player) or state.has_Boots(player)))
         set_rule(world.get_entrance('Dark Desert Teleporter', player), lambda state: state.has('Ocarina', player) or (state.has_Boots(player) and state.can_lift_heavy_rocks(player)))
@@ -837,66 +790,7 @@ def overworld_glitches_rules(world, player):
     else:
         add_rule(world.get_entrance('South Dark World Teleporter', player), lambda state: state.has_Boots(player) and state.can_lift_rocks(player), 'or')
 
-    # ton of boots-accessible locations.
-    needs_boots = lambda state: state.has_Boots(player)
-    needs_boots_and_pearl = lambda state: state.has_Boots(player) and state.has_Pearl(player)
-    for entrance in lw_boots_accessible_entrances:
-        add_rule(world.get_entrance(entrance, player), needs_boots_and_pearl if world.mode[player] == 'inverted' else needs_boots, 'or')
-    for location in lw_boots_accessible_locations:
-        add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] == 'inverted' else needs_boots, 'or')
-    for entrance in dw_boots_accessible_entrances:
-        add_rule(world.get_entrance(entrance, player), needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots, 'or')
-    for location in dw_boots_accessible_locations:
-        add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots, 'or')
-
-    # standard dmd rules, also feat. bunny
-    if world.mode[player] != 'inverted':
-        can_bunny_dmd = lambda state: world.get_region('Death Mountain').can_reach(state, player) and state.has_Mirror(player)
-        wdw = world.get_region('West Dark World', player)
-        wdw.can_reach_private = lambda state: wdw.can_reach(state) or (needs_boots_and_pearl or can_bunny_dmd)
-        sdw = world.get_region('South Dark World', player)
-        sdw.can_reach_private = lambda state: sdw.can_reach(state) or (needs_boots_and_pearl or can_bunny_dmd)
-        dd = world.get_region('Dark Desert', player)
-        dd.can_reach_private = lambda state: dd.can_reach(state) or needs_boots_and_pearl
-        nedw = world.get_region('Northeast Dark World', player)
-        nedw.can_reach_private = lambda state: nedw.can_reach(state) or (needs_boots_and_pearl or can_bunny_dmd)
-        edw = world.get_region('East Dark World', player)
-        edw.can_reach_private = lambda state: edw.can_reach(state) or needs_boots_and_pearl
-        edmb = world.get_region('Dark Death Mountain (East Bottom)', player)
-        edmb.can_reach_private = lambda state: edmb.can_reach(state) or can_bunny_dmd
-        # set up some mirror-accessible dw entrances.
-        boots_and_mirror = lambda state: state.has_Boots(player) and state.has_Mirror(player)
-        for spot in world.get_region('West Dark World', player).exits + world.get_region('South Dark World', player).exits:
-            if spot.name not in dw_bunny_inaccessible_locations:
-                add_rule(world.get_entrance(spot, player), boots_and_mirror, 'or')
-        for spot in world.get_region('Dark Death Mountain (East Bottom)', player).locations:
-            add_rule(world.get_location(spot, player), boots_and_mirror, 'or')
-        # dw entrances accessible with mirror and hookshot
-        mirror_hookshot_accessible_dw_locations = [
-            'Pyramid Fairy',
-            'Pyramid Entrance',
-            'Pyramid Drop',
-        ]
-        mirror_hookshot_accessible_dw_locations.extend(world.get_region('Dark Death Mountain Ledge', player).locations)
-        for spot in mirror_hookshot_accessible_dw_locations:
-            add_rule(world.get_entrance(spot, player), lambda state: state.has_Boots(player) and state.has_Mirror(player) and state.has('Hookshot', player), 'or')
-        # dw entrances accessible with mirror and titans
-        boots_mirror_titans = lambda state: state.has_Boots(player) and state.has_Mirror(player) and state.can_lift_heavy_rocks(player)
-        add_rule(world.get_entrance('Mire Shed', player), boots_mirror_titans, 'or')
-        # plus the mirror superbunny version
-        add_rule(world.get_entrance('Mire Shed', player), lambda state: state.has('Ocarina', player) and state.has_Mirror(player) and state.can_lift_heavy_rocks(player), 'or')
-        add_rule(world.get_location('Frog', player), boots_mirror_titans, 'or')
-
-    # also, you can do mini moldorm cave and spiral cave - but requiring a sword.
-    superbunny_mirror_weapon = lambda state: state.has_Mirror(player) and state.has_sword(player)
-    mini_moldorm_cave = world.get_region('Mini Moldorm Cave', player)
-    if check_is_dark_world(mini_moldorm_cave):
-        for spot in mini_moldorm_cave.locations:
-            add_rule(world.get_location(spot, player), superbunny_mirror_weapon, 'or')
-    if check_is_dark_world(world.get_region('Spiral Cave (Top)', player)):
-        add_rule(world.get_location('Spiral Cave', player), superbunny_mirror_weapon, 'or')
-
-    # add darkness condition.
+    # Add darkness conditions.
     add_conditional_lamps(world, player)
 
 
@@ -1531,7 +1425,7 @@ def set_inverted_bunny_rules(world, player):
     # Note spiral cave may be technically passible, but it would be too absurd to require since OHKO mode is a thing.
     bunny_impassable_caves = ['Bumper Cave', 'Two Brothers House', 'Hookshot Cave', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)', 'Turtle Rock (Entrance)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Skull Woods Second Section (Drop)',
                               'Turtle Rock (Eye Bridge)', 'Sewers', 'Pyramid', 'Spiral Cave (Top)', 'Desert Palace Main (Inner)', 'Fairy Ascension Cave (Drop)', 'The Sky']
-    bunny_accessible_locations = ['Link\'s Uncle', 'Sahasrahla', 'Sick Kid', 'Lost Woods Hideout', 'Lumberjack Tree', 'Checkerboard Cave', 'Potion Shop', 'Spectacle Rock Cave', 'Pyramid', 'Hype Cave - Generous Guy', 'Peg Cave', 'Bumper Cave Ledge', 'Dark Blacksmith Ruins', 'Bombos Tablet', 'Ether Tablet', 'Purple Chest']
+    bunny_accessible_locations = ['Link\'s Uncle', 'Sahasrahla', 'Sick Kid', 'Lost Woods Hideout', 'Lumberjack Tree', 'Checkerboard Cave', 'Potion Shop', 'Spectacle Rock Cave', 'Pyramid', 'Hype Cave - Generous Guy', 'Peg Cave', 'Bumper Cave Ledge', 'Dark Blacksmith Ruins', 'Bombos Tablet Ledge', 'Ether Tablet', 'Purple Chest']
     invalid_mirror_bunny_entrances_lw = ['Bonk Rock Cave', 'Bonk Fairy (Light)', 'Blinds Hideout', '50 Rupee Cave', '20 Rupee Cave', 'Checkerboard Cave', 'Light Hype Fairy', 'Waterfall of Wishing', 'Light World Bomb Hut', 'Mini Moldorm Cave', 'Ice Rod Cave', 'Hyrule Castle Secret Entrance Stairs', 'Sanctuary Grave', 'Kings Grave', 'Tower of Hera']
 
     def path_to_access_rule(path, entrance):

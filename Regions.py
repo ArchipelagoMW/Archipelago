@@ -156,8 +156,9 @@ def create_regions(world, player):
         create_dw_region(player, 'Northeast Dark World', ['Catfish'], ['West Dark World Gap', 'Dark World Potion Shop', 'East Dark World Broken Bridge Pass']),
         create_cave_region(player, 'Palace of Darkness Hint', 'a storyteller'),
         create_cave_region(player, 'East Dark World Hint', 'a storyteller'),
-        create_dw_region(player, 'South Dark World', ['Stumpy', 'Digging Game', 'Bombos Tablet'], ['Dark Lake Hylia Drop (South)', 'Hype Cave', 'Swamp Palace', 'Village of Outcasts Heavy Rock', 'Maze Race Mirror Spot',
-                                                                                           'Cave 45 Mirror Spot', 'East Dark World Bridge', 'Big Bomb Shop', 'Archery Game', 'Bonk Fairy (Dark)', 'Dark Lake Hylia Shop']),
+        create_dw_region(player, 'South Dark World', ['Stumpy', 'Digging Game'], ['Dark Lake Hylia Drop (South)', 'Hype Cave', 'Swamp Palace', 'Village of Outcasts Heavy Rock', 'Maze Race Mirror Spot',
+                                                                                  'Cave 45 Mirror Spot', 'East Dark World Bridge', 'Big Bomb Shop', 'Archery Game', 'Bonk Fairy (Dark)', 'Dark Lake Hylia Shop', 'Bombos Tablet Mirror Spot']),
+        create_lw_region(player, 'Bombos Tablet Ledge', ['Bombos Tablet'])
         create_cave_region(player, 'Big Bomb Shop', 'the bomb shop'),
         create_cave_region(player, 'Archery Game', 'a game of skill'),
         create_dw_region(player, 'Dark Lake Hylia', None, ['Lake Hylia Island Mirror Spot', 'East Dark World Pier', 'Dark Lake Hylia Ledge']),
