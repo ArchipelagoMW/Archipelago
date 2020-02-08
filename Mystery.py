@@ -67,7 +67,6 @@ def main():
         if path:
             if path not in weights_cache:
                 weights_cache[path] = get_weights(path)
-            print(weights_cache[path])
             print(f"P{player} Weights: {path} >> {weights_cache[path]['description']}")
 
     erargs = parse_arguments(['--multi', str(args.multi)])
@@ -102,8 +101,10 @@ def main():
 
 def get_weights(path):
     try:
-        with open(path, 'rb') as f:
-            yaml = str(f.read(), "utf-8")
+        parsed_url = urllib.parse.urlparse(path)
+        if all(parsed_url.scheme, parsed_url.netloc, parsed_url.path):
+            with open(path, 'rb') as f:
+                yaml = str(f.read(), "utf-8")
     except Exception as e:
         print('Failed to read weights (%s)' % e)
         return
