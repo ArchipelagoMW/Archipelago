@@ -192,3 +192,71 @@ def get_sword_required_superbunny_mirror_regions():
         'Mini Moldorm Cave',
         'Spiral Cave (Top)',
         ]
+
+
+def get_invalid_mirror_bunny_entrances_dw():
+    '''
+    Dark World entrances that can't be superbunny-mirrored into.
+    '''
+    return [
+        'Skull Woods Final Section (Entrance)',
+        'Hype Cave',
+        'Bonk Fairy (Dark)',
+        'Thieves Town',
+        'Dark World Hammer Peg Cave',
+        'Brewery',
+        'Hookshot Cave',
+        'Hookshot Cave Exit (South)',
+        'Dark Lake Hylia Ledge Fairy',
+        'Dark Lake Hylia Ledge Spike Cave',
+        ]
+
+
+def get_invalid_mirror_bunny_entrances_lw():
+    '''
+    Light World entrances that can't be superbunny-mirrored into.
+
+    A couple of these, like Blind's Hideout, are odd cases where the pixel
+    leading into the entrance prevents mirror superbunnying - generally due to
+    there being stairs there. 
+    '''
+    return [
+        'Bonk Rock Cave',
+        'Bonk Fairy (Light)',
+        'Blinds Hideout',
+        '50 Rupee Cave',
+        '20 Rupee Cave',
+        'Checkerboard Cave',
+        'Light Hype Fairy',
+        'Waterfall of Wishing',
+        'Light World Bomb Hut',
+        'Mini Moldorm Cave',
+        'Ice Rod Cave',
+        'Hyrule Castle Secret Entrance Stairs',
+        'Sanctuary Grave',
+        'Kings Grave',
+        'Tower of Hera',
+        ]
+
+
+def get_superbunny_accessible_locations():
+    '''
+    Interior locations that can be accessed with superbunny state.
+    '''
+    return [
+        'Waterfall of Wishing - Left',
+        'Waterfall of Wishing - Right',
+        'King\'s Tomb', 'Floodgate',
+        'Floodgate Chest',
+        'Cave 45',
+        'Bonk Rock Cave',
+        'Brewery',
+        'C-Shaped House',
+        'Chest Game',
+        'Mire Shed - Left',
+        'Mire Shed - Right',
+        'Secret Passage',
+        'Ice Rod Cave',
+        'Pyramid Fairy - Left',
+        'Pyramid Fairy - Right',
+        ]
