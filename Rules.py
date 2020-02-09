@@ -755,7 +755,6 @@ def overworld_glitches_rules(world, player):
         for spot in world.get_region('West Dark World', player).exits + world.get_region('South Dark World', player).exits:
             if spot.name not in OWGSets.get_dw_bunny_inaccessible_locations():
                 add_rule(world.get_entrance(spot, player), boots_and_mirror, 'or')
-        add_rule(world.get_entrance('East Death Mountain Mirror Spot (Bottom)', player), boots_and_mirror, 'or')
         # DW entrances accessible with mirror and hookshot.
         for spot in OWGSets.get_mirror_hookshot_accessible_dw_locations(world, player):
             add_rule(world.get_entrance(spot, player), lambda state: state.has_Boots(player) and state.has_Mirror(player) and state.has('Hookshot', player), 'or')
@@ -765,6 +764,8 @@ def overworld_glitches_rules(world, player):
         # Plus the mirror superbunny version.
         add_rule(world.get_entrance('Mire Shed', player), lambda state: state.has('Ocarina', player) and state.has_Mirror(player) and state.can_lift_heavy_rocks(player), 'or')
         add_rule(world.get_location('Frog', player), boots_mirror_titans, 'or')
+    else:
+        add_rule(world.get_entrance('East Death Mountain Mirror Spot (Bottom)', player), boots_and_mirror, 'or')
 
     # Locations that you can superbunny mirror into, but need a sword to clear.
     superbunny_mirror_weapon = lambda state: state.has_Mirror(player) and state.has_sword(player)
@@ -1377,6 +1378,7 @@ def set_bunny_rules(world, player):
                     if world.logic[player] == 'owglitches' and entrance.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw():
                         for location in entrance.connected_region.locations:
                             if location.name in OWGSets.get_superbunny_accessible_locations():
+                                print(location.name)
                                 possible_options.append(lambda state: state.can_reach(entrance) and all(rule(state) for rule in path) and state.has_Mirror(player))
                                 continue
                         for exit in new_region.exits:
