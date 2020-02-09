@@ -10,18 +10,11 @@ import ModuleUpdate
 
 ModuleUpdate.update()
 
-from yaml import load
-
-try:
-    from yaml import CLoader as Loader
-except ImportError:
-    from yaml import Loader
-
+from Utils import parse_yaml
 from Rom import get_sprite_from_name
 from EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 
-parse_yaml = functools.partial(load, Loader=Loader)
 
 
 def main():

@@ -127,3 +127,11 @@ def make_new_base2current(old_rom='Zelda no Densetsu - Kamigami no Triforce (Jap
     basemd5 = hashlib.md5()
     basemd5.update(new_rom_data)
     return "New Rom Hash: " + basemd5.hexdigest()
+
+from yaml import load
+import functools
+
+try: from yaml import CLoader as Loader
+except ImportError: from yaml import Loader
+
+parse_yaml = functools.partial(load, Loader=Loader)

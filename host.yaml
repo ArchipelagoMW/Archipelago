@@ -1,0 +1,37 @@
+#options for MultiServer
+#null means nothing, for the server this means to default the value
+#these overwrite command line arguments!
+server_options:
+  host: null
+  port: null
+  password: null
+  multidata: null
+  savefile: null
+  disable_save: null
+  loglevel: null
+#Client hint system
+#points given to player for each acquired item
+  location_check_points: 1
+#point cost to receive a hint via !hint for players
+  hint_cost: 1000
+#options for MultiMystery.py
+multi_mystery_options:
+#Where to place the resulting files
+  output_path: "MultiMystery"
+#location of your Enemizer CLI, available here: https://github.com/Bonta0/Enemizer/releases
+  enemizer_path: "EnemizerCLI/EnemizerCLI.Core.exe"
+#folder from which the player yaml files are pulled from
+  player_files_path: "Players"
+#automatically launches {player_name}.yaml's ROM file using the OS's default program once generation completes. (likely your emulator)
+#does nothing if the name is not found
+#example: player_name = "Berserker"
+  player_name: "" # the hosts name
+#Zip the resulting roms
+#0 -> Don't
+#1 -> Create a zip
+#2 -> Create a zip and delete the ROMs that will be in it, except the hosts (requires player_name to be set correctly)
+  zip_roms: 1
+#create a spoiler file
+  create_spoiler: 1
+#create roms flagged as race roms
+  race: 0

@@ -7,6 +7,7 @@ import re
 import shlex
 import urllib.request
 import zlib
+import collections
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -16,6 +17,7 @@ import aioconsole
 
 import Items
 import Regions
+import Utils
 from MultiClient import ReceivedItem, get_item_name_from_id, get_location_name_from_address
 
 class Client:
@@ -28,7 +30,7 @@ class Client:
         self.send_index = 0
 
 class Context:
-    def __init__(self, host, port, password):
+    def __init__(self, host:str, port:int, password:str, location_check_points:int, hint_cost:int):
         self.data_filename = None
         self.save_filename = None
         self.disable_save = False
@@ -43,6 +45,29 @@ class Context:
         self.countdown_timer = 0
         self.clients = []
         self.received_items = {}
+        self.location_checks = collections.defaultdict(lambda: 0)
+        self.hint_cost = hint_cost
+        self.location_check_points = location_check_points
+        self.hints_used = collections.defaultdict(lambda: 0)
+
+    def get_save(self) -> dict:
+        return {
+            "rom_names": list(self.rom_names.items()),
+            "received_items": tuple((k, [i.__dict__ for i in v]) for k, v in self.received_items.items()),
+            "hints_used" : tuple((key,value) for key, value in self.hints_used.items()),
+            "location_checks" : tuple((key,value) for key, value in self.location_checks.items())
+        }
+
+    def set_save(self, savedata: dict):
+        rom_names = savedata["rom_names"]
+        received_items = {tuple(k): [ReceivedItem(**i) for i in v] for k, v in savedata["received_items"]}
+        if not all([self.rom_names[tuple(rom)] == (team, slot) for rom, (team, slot) in rom_names]):
+            raise Exception('Save file mismatch, will start a new game')
+        self.received_items = received_items
+        self.hints_used.update({tuple(key): value for key, value in savedata["hints_used"]})
+        self.location_checks.update({tuple(key): value for key, value in savedata["location_checks"]})
+        logging.info(f'Loaded save file with {sum([len(p) for p in received_items.values()])} received items '
+                     f'for {len(received_items)} players')
 
 async def send_msgs(websocket, msgs):
     if not websocket or not websocket.open or websocket.closed:
@@ -174,7 +199,9 @@ def register_location_checks(ctx : Context, team, slot, locations):
                     if recvd_item.location == location and recvd_item.player == slot:
                         found = True
                         break
+
                 if not found:
+                    ctx.location_checks[team, slot] += 1
                     new_item = ReceivedItem(target_item, location, slot)
                     recvd_items.append(new_item)
                     if slot != target_player:
@@ -183,14 +210,31 @@ def register_location_checks(ctx : Context, team, slot, locations):
                     found_items = True
     send_new_items(ctx)
 
-    if found_items and not ctx.disable_save:
+    if found_items:
+        save(ctx)
+
+def save(ctx:Context):
+    if not ctx.disable_save:
         try:
             with open(ctx.save_filename, "wb") as f:
-                jsonstr = json.dumps((list(ctx.rom_names.items()),
-                                      [(k, [i.__dict__ for i in v]) for k, v in ctx.received_items.items()]))
+                jsonstr = json.dumps(ctx.get_save())
                 f.write(zlib.compress(jsonstr.encode("utf-8")))
         except Exception as e:
             logging.exception(e)
+
+def hint(ctx:Context, team, slot, item:str):
+    found = 0
+    seeked_item_id = Items.item_table[item][3]
+    for check, result in ctx.locations.items():
+        item_id, receiving_player = result
+        if receiving_player == slot and item_id == seeked_item_id:
+            location_id, finding_player = check
+            hint = f"[Hint]: {ctx.player_names[(team, slot)]}'s {item} can be found at " \
+                   f"{get_location_name_from_address(location_id)} in {ctx.player_names[team, finding_player]}'s World"
+            notify_team(ctx, team, hint)
+            found += 1
+
+    return found
 
 async def process_client_cmd(ctx : Context, client : Client, cmd, args):
     if type(cmd) is not str:
@@ -277,15 +321,37 @@ async def process_client_cmd(ctx : Context, client : Client, cmd, args):
 
         if args.startswith('!players'):
             notify_all(ctx, get_connected_players_string(ctx))
-        if args.startswith('!forfeit'):
+        elif args.startswith('!forfeit'):
             forfeit_player(ctx, client.team, client.slot)
-        if args.startswith('!countdown'):
+        elif args.startswith('!countdown'):
             try:
                 timer = int(args.split()[1])
             except (IndexError, ValueError):
                 timer = 10
             asyncio.create_task(countdown(ctx, timer))
+        elif args.startswith("!hint"):
+            points_available = ctx.location_check_points * ctx.location_checks[client.team, client.slot] - ctx.hint_cost*ctx.hints_used[client.team, client.slot]
+            itemname = args[6:]
+            if not itemname:
+                notify_client(client, "Use !hint {itemname}. For example !hint Lamp. "
+                                      f"A hint costs {ctx.hint_cost} points.\n"
+                                      f"You have {points_available} points.")
+            elif itemname in Items.item_table:
+                if ctx.hint_cost: can_pay = points_available // ctx.hint_cost >= 1
+                else: can_pay = True
 
+                if can_pay:
+                    found = hint(ctx, client.team, client.slot, itemname)
+                    ctx.hints_used[client.team, client.slot] += found
+                    if not found:
+                        notify_client(client, "No items found, points refunded.")
+                    else:
+                        save(ctx)
+                else:
+                    notify_client(client, f"You can't afford the hint. "
+                                          f"You have {points_available} points and need {ctx.hint_cost}")
+            else:
+                notify_client(client, f'Item "{itemname}" not found.')
 def set_password(ctx : Context, password):
     ctx.password = password
     logging.warning('Password set to ' + password if password is not None else 'Password disabled')
@@ -339,21 +405,13 @@ async def console(ctx : Context):
                 else:
                     logging.warning("Unknown item: " + item)
             if command[0] == '/hint':
-                for (team,slot), name in ctx.player_names.items():
+                for (team, slot), name in ctx.player_names.items():
                     if len(command) == 1:
-                        print("Use /hint {Playername} {itemname}\nFor example /hint Berserker Lamp")
+                        logging.info("Use /hint {Playername} {itemname}\nFor example /hint Berserker Lamp")
                     elif name.lower() == command[1].lower():
                         item = " ".join(command[2:])
                         if item in Items.item_table:
-                            seeked_item_id = Items.item_table[item][3]
-                            for check, result in ctx.locations.items():
-                                item_id, receiving_player = result
-                                if receiving_player == slot and item_id == seeked_item_id:
-                                    location_id, finding_player = check
-                                    name_finder = ctx.player_names[team, finding_player]
-                                    hint = f"[Hint]: {name}'s {item} can be found at " \
-                                           f"{get_location_name_from_address(location_id)} in {name_finder}'s World"
-                                    notify_team(ctx, team, hint)
+                            hint(ctx, team, slot, item)
                         else:
                             logging.warning("Unknown item: " + item)
             if command[0][0] != '/':
@@ -371,11 +429,16 @@ async def main():
     parser.add_argument('--savefile', default=None)
     parser.add_argument('--disable_save', default=False, action='store_true')
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
+    parser.add_argument('--location_check_points', default=1, type=int)
+    parser.add_argument('--hint_cost', default=1000, type=int)
     args = parser.parse_args()
-
+    file_options = Utils.parse_yaml(open("host.yaml").read())["server_options"]
+    for key, value in file_options.items():
+        if value is not None:
+            setattr(args, key, value)
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
 
-    ctx = Context(args.host, args.port, args.password)
+    ctx = Context(args.host, args.port, args.password, args.location_check_points, args.hint_cost)
 
     ctx.data_filename = args.multidata
 
@@ -418,16 +481,11 @@ async def main():
         try:
             with open(ctx.save_filename, 'rb') as f:
                 jsonobj = json.loads(zlib.decompress(f.read()).decode("utf-8"))
-                rom_names = jsonobj[0]
-                received_items = {tuple(k): [ReceivedItem(**i) for i in v] for k, v in jsonobj[1]}
-                if not all([ctx.rom_names[tuple(rom)] == (team, slot) for rom, (team, slot) in rom_names]):
-                    raise Exception('Save file mismatch, will start a new game')
-                ctx.received_items = received_items
-                logging.info('Loaded save file with %d received items for %d players' % (sum([len(p) for p in received_items.values()]), len(received_items)))
+                ctx.set_save(jsonobj)
         except FileNotFoundError:
             logging.error('No save data found, starting a new game')
         except Exception as e:
-            logging.info(e)
+            logging.exception(e)
 
     ctx.server = websockets.serve(functools.partial(server,ctx=ctx), ctx.host, ctx.port, ping_timeout=None, ping_interval=None)
     await ctx.server
