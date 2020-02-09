@@ -146,6 +146,7 @@ def get_dmd_and_bunny_regions():
     return [
         'West Dark World',
         'South Dark World',
+        'East Dark World',
         ]
 
 
@@ -155,7 +156,6 @@ def get_dmd_non_bunny_regions():
     '''
     return [
         'Dark Desert',
-        'East Dark World',
         'Northeast Dark World',
         ]
 
