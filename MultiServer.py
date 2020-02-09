@@ -45,7 +45,7 @@ class Context:
         self.countdown_timer = 0
         self.clients = []
         self.received_items = {}
-        self.location_checks = collections.defaultdict(lambda: 0)
+        self.location_checks = collections.defaultdict(set)
         self.hint_cost = hint_cost
         self.location_check_points = location_check_points
         self.hints_used = collections.defaultdict(lambda: 0)
@@ -55,7 +55,7 @@ class Context:
             "rom_names": list(self.rom_names.items()),
             "received_items": tuple((k, [i.__dict__ for i in v]) for k, v in self.received_items.items()),
             "hints_used" : tuple((key,value) for key, value in self.hints_used.items()),
-            "location_checks" : tuple((key,value) for key, value in self.location_checks.items())
+            "location_checks" : tuple((key,tuple(value)) for key, value in self.location_checks.items())
         }
 
     def set_save(self, savedata: dict):
@@ -65,7 +65,7 @@ class Context:
             raise Exception('Save file mismatch, will start a new game')
         self.received_items = received_items
         self.hints_used.update({tuple(key): value for key, value in savedata["hints_used"]})
-        self.location_checks.update({tuple(key): value for key, value in savedata["location_checks"]})
+        self.location_checks.update({tuple(key): set(value) for key, value in savedata["location_checks"]})
         logging.info(f'Loaded save file with {sum([len(p) for p in received_items.values()])} received items '
                      f'for {len(received_items)} players')
 
@@ -188,6 +188,8 @@ def forfeit_player(ctx : Context, team, slot):
     register_location_checks(ctx, team, slot, all_locations)
 
 def register_location_checks(ctx : Context, team, slot, locations):
+    ctx.location_checks[team, slot] |= set(locations)
+
     found_items = False
     for location in locations:
         if (location, slot) in ctx.locations:
@@ -201,7 +203,6 @@ def register_location_checks(ctx : Context, team, slot, locations):
                         break
 
                 if not found:
-                    ctx.location_checks[team, slot] += 1
                     new_item = ReceivedItem(target_item, location, slot)
                     recvd_items.append(new_item)
                     if slot != target_player:
@@ -330,7 +331,7 @@ async def process_client_cmd(ctx : Context, client : Client, cmd, args):
                 timer = 10
             asyncio.create_task(countdown(ctx, timer))
         elif args.startswith("!hint"):
-            points_available = ctx.location_check_points * ctx.location_checks[client.team, client.slot] - ctx.hint_cost*ctx.hints_used[client.team, client.slot]
+            points_available = ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) - ctx.hint_cost*ctx.hints_used[client.team, client.slot]
             itemname = args[6:]
             if not itemname:
                 notify_client(client, "Use !hint {itemname}. For example !hint Lamp. "
