@@ -96,7 +96,7 @@ def installfile(path):
         print('Warning,', path, 'not found')
 
 
-extra_data = ["LICENSE", "data", "EnemizerCLI"]
+extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml"]
 
 for data in extra_data:
     installfile(Path(data))
