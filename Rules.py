@@ -738,6 +738,7 @@ def overworld_glitches_rules(world, player):
         add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots, 'or')
 
     # Boots-accessible regions.
+    boots_and_mirror = lambda state: state.has_Boots(player) and state.has_Mirror(player)
     if world.mode[player] != 'inverted':
         for boots_accessible_region in OWGSets.get_boots_accessible_regions_lw():
             region = world.get_region(boots_accessible_region, player)
@@ -754,7 +755,6 @@ def overworld_glitches_rules(world, player):
         edmb.can_reach_private = lambda state: edmb.can_reach(state) or can_bunny_dmd
 
         # Set up some mirror-accessible DW entrances.
-        boots_and_mirror = lambda state: state.has_Boots(player) and state.has_Mirror(player)
         for spot in world.get_region('West Dark World', player).exits + world.get_region('South Dark World', player).exits:
             if spot.name not in OWGSets.get_dw_bunny_inaccessible_locations():
                 add_rule(world.get_entrance(spot, player), boots_and_mirror, 'or')
@@ -1433,7 +1433,7 @@ def set_inverted_bunny_rules(world, player):
         return lambda state: any(rule(state) for rule in options)
 
     def get_rule_to_add(region, location = None):
-        if not region.is_dark_world or not (world.logic[player] == 'owglitches' and location in bunny_accessible_locations and region.name not in invalid_mirror_bunny_entrances_lw):
+        if not region.is_dark_world and not (world.logic[player] == 'owglitches' and location in bunny_accessible_locations and region.name not in invalid_mirror_bunny_entrances_lw):
             return lambda state: state.has_Pearl(player)
         # in this case we are mixed region.
         # we collect possible options.
@@ -1461,7 +1461,7 @@ def set_inverted_bunny_rules(world, player):
                     if world.logic[player] == 'owglitches' and entrance.name not in OWGSets.get_invalid_mirror_bunny_entrances_lw():
                         for location in entrance.connected_region.locations:
                             if location.name in OWGSets.get_superbunny_accessible_locations():
-                                possible_options.append(lambda state: state.can_reach(entrance) and all(rule(state) for rule in path) and state.has_Mirror(player))
+                                possible_options.append(lambda state: path_to_access_rule(new_path, entrance) and state.has_Mirror(player))
                                 continue
                         for exit in new_region.exits:
                             if exit.name in dungeon_exits:
@@ -1494,6 +1494,9 @@ def set_inverted_bunny_rules(world, player):
         if location.player == player and location.parent_region.is_light_world:
 
             if location.name in bunny_accessible_locations:
+                continue
+            if world.logic[player] == 'owglitches' and location.parent_region.name not in OWGSets.get_invalid_mirror_bunny_entrances_lw() and location.name in OWGSets.get_superbunny_accessible_locations():
+                add_rule(location, get_rule_to_add(location.parent_region, location.name))
                 continue
 
             add_rule(location, get_rule_to_add(location.parent_region, location.name))
