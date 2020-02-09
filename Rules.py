@@ -740,7 +740,7 @@ def overworld_glitches_rules(world, player):
     # Boots-accessible regions due to DMD.
     if world.mode[player] != 'inverted':
         # DMD with and without bunny.
-        can_bunny_dmd = lambda state: state.has_Mirror(player)
+        can_bunny_dmd = lambda state: world.get_region('Death Mountain').can_reach(state) and state.has_Mirror(player)
         for dmd_bunny_region in OWGSets.get_dmd_and_bunny_regions():
             region = world.get_region(dmd_bunny_region, player)
             region.can_reach_private = lambda state: region.can_reach(state) or (needs_boots_and_pearl or can_bunny_dmd)
@@ -755,8 +755,7 @@ def overworld_glitches_rules(world, player):
         for spot in world.get_region('West Dark World', player).exits + world.get_region('South Dark World', player).exits:
             if spot.name not in OWGSets.get_dw_bunny_inaccessible_locations():
                 add_rule(world.get_entrance(spot, player), boots_and_mirror, 'or')
-        for spot in world.get_region('Dark Death Mountain (East Bottom)', player).locations:
-            add_rule(world.get_location(spot, player), boots_and_mirror, 'or')
+        add_rule(world.get_entrance('East Death Mountain Mirror Spot (Bottom)', player), boots_and_mirror, 'or')
         # DW entrances accessible with mirror and hookshot.
         for spot in OWGSets.get_mirror_hookshot_accessible_dw_locations(world, player):
             add_rule(world.get_entrance(spot, player), lambda state: state.has_Boots(player) and state.has_Mirror(player) and state.has('Hookshot', player), 'or')
