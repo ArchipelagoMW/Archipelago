@@ -740,7 +740,7 @@ def overworld_glitches_rules(world, player):
     # Boots-accessible regions due to DMD.
     if world.mode[player] != 'inverted':
         # DMD with and without bunny.
-        can_bunny_dmd = lambda state: world.get_region('Death Mountain').can_reach(state, player) and state.has_Mirror(player)
+        can_bunny_dmd = lambda state: state.has_Mirror(player)
         for dmd_bunny_region in OWGSets.get_dmd_and_bunny_regions():
             region = world.get_region(dmd_bunny_region, player)
             region.can_reach_private = lambda state: region.can_reach(state) or (needs_boots_and_pearl or can_bunny_dmd)
@@ -781,7 +781,6 @@ def overworld_glitches_rules(world, player):
         set_rule(world.get_location('Bombos Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has_beam_sword(player) and (state.has_Mirror(player) or state.has_Boots(player)))
         set_rule(world.get_location('Ether Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has_beam_sword(player) and (state.has_Mirror(player) or state.has_Boots(player)))
         set_rule(world.get_entrance('Dark Desert Teleporter', player), lambda state: state.has('Ocarina', player) or (state.has_Boots(player) and state.can_lift_heavy_rocks(player)))
-        set_rule(world.get_location('Zora\'s Ledge', player), lambda state: state.has_Boots(player))
         add_rule(world.get_entrance('Ganons Tower', player), lambda state: state.has_Boots(player) and state.has_Pearl(player), 'or')
         add_rule(world.get_entrance('East Death Mountain Teleporter', player), lambda state: state.can_lift_heavy_rocks(player) and state.has_Boots(player), 'or')
         add_rule(world.get_entrance('Turtle Rock Teleporter', player), lambda state: state.has_Boots(player) and state.has('Hammer', player), 'or')
