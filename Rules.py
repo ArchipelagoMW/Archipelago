@@ -737,10 +737,13 @@ def overworld_glitches_rules(world, player):
     for location in OWGSets.get_dw_boots_accessible_locations():
         add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots, 'or')
 
-    # Boots-accessible regions due to DMD.
+    # Boots-accessible regions.
     if world.mode[player] != 'inverted':
+        for boots_accessible_region in OWGSets.get_boots_accessible_regions_lw():
+            region = world.get_region(boots_accessible_region, player)
+            region.can_reach_private = lambda state: region.can_reach(state) or needs_boots
         # DMD with and without bunny.
-        can_bunny_dmd = lambda state: world.get_region('Death Mountain').can_reach(state) and state.has_Mirror(player)
+        can_bunny_dmd = lambda state: world.get_region('Death Mountain', player).can_reach(state) and state.has_Mirror(player)
         for dmd_bunny_region in OWGSets.get_dmd_and_bunny_regions():
             region = world.get_region(dmd_bunny_region, player)
             region.can_reach_private = lambda state: region.can_reach(state) or (needs_boots_and_pearl or can_bunny_dmd)
@@ -778,14 +781,10 @@ def overworld_glitches_rules(world, player):
 
     # Regions that require the boots and some other stuff.
     if world.mode[player] != 'inverted':
-        set_rule(world.get_location('Bombos Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has_beam_sword(player) and (state.has_Mirror(player) or state.has_Boots(player)))
-        set_rule(world.get_location('Ether Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has_beam_sword(player) and (state.has_Mirror(player) or state.has_Boots(player)))
         set_rule(world.get_entrance('Dark Desert Teleporter', player), lambda state: state.has('Ocarina', player) or (state.has_Boots(player) and state.can_lift_heavy_rocks(player)))
         add_rule(world.get_entrance('Ganons Tower', player), lambda state: state.has_Boots(player) and state.has_Pearl(player), 'or')
         add_rule(world.get_entrance('East Death Mountain Teleporter', player), lambda state: state.can_lift_heavy_rocks(player) and state.has_Boots(player), 'or')
         add_rule(world.get_entrance('Turtle Rock Teleporter', player), lambda state: state.has_Boots(player) and state.has('Hammer', player), 'or')
-        add_rule(world.get_entrance('Checkerboard Cave', player), lambda state: state.has_Boots(player) and state.can_lift_rocks(player), 'or')
-        add_rule(world.get_entrance('South Hyrule Teleporter', player), lambda state: state.has_Boots(player) and state.can_lift_rocks(player), 'or')
     else:
         add_rule(world.get_entrance('South Dark World Teleporter', player), lambda state: state.has_Boots(player) and state.can_lift_rocks(player), 'or')
 
@@ -1350,7 +1349,7 @@ def set_bunny_rules(world, player):
         return lambda state: any(rule(state) for rule in options)
 
     def get_rule_to_add(region, location = None):
-        if not region.is_light_world or not(world.logic[player] == 'owglitches' and location in OWGSets.get_superbunny_accessible_locations() and region.name not in invalid_mirror_bunny_entrances_dw):
+        if not region.is_light_world and not (world.logic[player] == 'owglitches' and location in OWGSets.get_superbunny_accessible_locations() and region.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw()):
             return lambda state: state.has_Pearl(player)
         # in this case we are mixed region.
         # we collect possible options.
@@ -1378,8 +1377,7 @@ def set_bunny_rules(world, player):
                     if world.logic[player] == 'owglitches' and entrance.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw():
                         for location in entrance.connected_region.locations:
                             if location.name in OWGSets.get_superbunny_accessible_locations():
-                                print(location.name)
-                                possible_options.append(lambda state: state.can_reach(entrance) and all(rule(state) for rule in path) and state.has_Mirror(player))
+                                possible_options.append(lambda state: path_to_access_rule(new_path, entrance) and state.has_Mirror(player))
                                 continue
                         for exit in new_region.exits:
                             if exit.name in dungeon_exits:
@@ -1412,6 +1410,9 @@ def set_bunny_rules(world, player):
         if location.player == player and location.parent_region.is_dark_world:
 
             if location.name in bunny_accessible_locations:
+                continue
+            if world.logic[player] == 'owglitches' and location.parent_region.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw() and location.name in OWGSets.get_superbunny_accessible_locations():
+                add_rule(location, get_rule_to_add(location.parent_region, location.name))
                 continue
 
             add_rule(location, get_rule_to_add(location.parent_region, location.name))

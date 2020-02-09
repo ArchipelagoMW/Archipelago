@@ -13,8 +13,6 @@ def get_immediately_accessible_entrances(world, player):
         'Zoras River',
         'Capacity Upgrade',
         ]
-    if world.mode[player] != 'inverted':
-        entrances.append('Lake Hylia Island Mirror Spot')
     return entrances
 
 def get_lw_boots_accessible_entrances(world, player):
@@ -54,20 +52,9 @@ def get_lw_boots_accessible_entrances(world, player):
         'Floating Island Mirror Spot',
         ]
     if world.mode[player] != 'inverted':
-        entrances.append('Cave 45')
-        entrances.append('Graveyard Cave')
         entrances.append('Flute Spot 1')
-        entrances.append('Spectacle Rock Mirror Spot')
         entrances.append('Spectacle Rock Drop')
         entrances.append('Fairy Ascension Ledge')
-        entrances.append('Cave 45 Mirror Spot')
-        entrances.append('Graveyard Ledge Mirror Spot')
-        entrances.append('Desert Ledge (Northeast) Mirror Spot')
-        entrances.append('Desert Ledge Mirror Spot')
-        entrances.append('Desert Palace Entrance (North) Mirror Spot')
-        entrances.append('East Death Mountain (Top) Mirror Spot')
-        entrances.append('Spiral Cave Mirror Spot')
-        entrances.append('Fairy Ascension Mirror Spot')
     return entrances
 
 
@@ -173,6 +160,23 @@ def get_dmd_non_bunny_regions():
         ]
 
 
+def get_boots_accessible_regions_lw():
+    '''
+    Light World regions that can be accessed using boots clips.
+    '''
+    return [
+        'Desert Ledge (Northeast)',
+        'Desert Ledge',
+        'Desert Palace Entrance (North) Spot',
+        'Cave 45 Ledge',
+        'Graveyard Ledge',
+        'Lake Hylia Island',
+        'Death Mountain',
+        'Death Mountain Return Ledge',
+        'Bombos Tablet Ledge',
+        ]
+
+
 def get_mirror_hookshot_accessible_dw_locations(world, player):
     '''
     Locations accessible potentially using weird mirror hookshot boots setups.
@@ -261,4 +265,6 @@ def get_superbunny_accessible_locations():
         'Ice Rod Cave',
         'Pyramid Fairy - Left',
         'Pyramid Fairy - Right',
+        'Superbunny Cave - Top',
+        'Superbunny Cave - Bottom',
         ]
