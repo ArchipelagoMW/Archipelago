@@ -19,7 +19,8 @@ Project
 MultiMystery.py
  * Allows you to generate a Multiworld with individual player mystery weights. Since weights can also be set to 100%, this also allows for individual settings for each player in a regular multiworld.
 Basis is a .yaml file that sets these weights. You can find an easy.yaml in this project folder to get started.
- * Additional instructions and settings are at the start of the file. Open with a text editor.
+ * Additional instructions are at the start of the file. Open with a text editor.
+ * Configuration options in the host.yaml file.
  
  MultiServer.py
   * Added a try/except to prevent malformed console commands from crashing the entire server
@@ -33,6 +34,7 @@ Notice (Team #1): [Hint]: Berserker's Progressive Sword can be found in Hype Cav
 Notice (Team #1): [Hint]: Berserker's Progressive Sword can be found in Blind's Hideout - Far Right in Schulzer's World  
 Notice (Team #1): [Hint]: Berserker's Progressive Sword can be found in Palace of Darkness - Map Chest in Thorus's World  
 Notice (Team #1): [Hint]: Berserker's Progressive Sword can be found in Ganons Tower - Map Chest in Will's World  
+ * A player-side hint command "!hint" also exists. It needs to be turned on in the host.yaml and is based on points.
 
 Mystery.py
  * Defaults to generating a non-race ROM (Bonta's only makes race ROMs at this time)

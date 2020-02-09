@@ -13,7 +13,7 @@ server_options:
 #points given to player for each acquired item
   location_check_points: 1
 #point cost to receive a hint via !hint for players
-  hint_cost: 1000
+  hint_cost: 1000 #set to 0 if you want free hints
 #options for MultiMystery.py
 multi_mystery_options:
 #Where to place the resulting files
