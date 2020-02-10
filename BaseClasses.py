@@ -536,6 +536,19 @@ class CollectionState(object):
     def has_turtle_rock_medallion(self, player):
         return self.has(self.world.required_medallions[player][1], player)
 
+    def can_boots_clip_lw(self, player):
+        if self.world.mode[player] == 'inverted':
+            return self.has_Boots(player) and self.has_Pearl(player)
+        return self.has_Boots(player)
+
+    def can_boots_clip_dw(self, player):
+        if self.world.mode[player] != 'inverted':
+            return self.has_Boots(player) and self.has_Pearl(player)
+        return self.has_Boots(player)
+
+    def can_bunny_dmd(self, player):
+        return self.world.get_region('Death Mountain', player).can_reach(self) and self.has_Mirror(player)
+
     def collect(self, item, event=False, location=None):
         if location:
             self.locations_checked.add(location)

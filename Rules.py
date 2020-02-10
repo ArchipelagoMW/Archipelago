@@ -726,33 +726,30 @@ def overworld_glitches_rules(world, player):
         set_rule(world.get_entrance(entrance, player), lambda state: True)
 
     # Boots-accessible locations.
-    needs_boots = lambda state: state.has_Boots(player)
-    needs_boots_and_pearl = lambda state: state.has_Boots(player) and state.has_Pearl(player)
     for entrance in OWGSets.get_lw_boots_accessible_entrances(world, player):
-        add_rule(world.get_entrance(entrance, player), needs_boots_and_pearl if world.mode[player] == 'inverted' else needs_boots, 'or')
+        add_rule(world.get_entrance(entrance, player), lambda state: state.can_boots_clip_lw(player), 'or')
     for location in OWGSets.get_lw_boots_accessible_locations():
-        add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] == 'inverted' else needs_boots, 'or')
+        add_rule(world.get_location(location, player), lambda state: state.can_boots_clip_lw(player), 'or')
     for entrance in OWGSets.get_dw_boots_accessible_entrances(world, player):
-        add_rule(world.get_entrance(entrance, player), needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots, 'or')
+        add_rule(world.get_entrance(entrance, player), lambda state: state.can_boots_clip_dw(player), 'or')
     for location in OWGSets.get_dw_boots_accessible_locations():
-        add_rule(world.get_location(location, player), needs_boots_and_pearl if world.mode[player] != 'inverted' else needs_boots, 'or')
+        add_rule(world.get_location(location, player), lambda state: state.can_boots_clip_dw(player), 'or')
 
     # Boots-accessible regions.
     boots_and_mirror = lambda state: state.has_Boots(player) and state.has_Mirror(player)
     if world.mode[player] != 'inverted':
         for boots_accessible_region in OWGSets.get_boots_accessible_regions_lw():
             region = world.get_region(boots_accessible_region, player)
-            region.can_reach_private = lambda state: region.can_reach(state) or needs_boots
+            region.can_reach_private = lambda state: region.can_reach(state) or state.has_Boots(player)
         # DMD with and without bunny.
-        can_bunny_dmd = lambda state: world.get_region('Death Mountain', player).can_reach(state) and state.has_Mirror(player)
         for dmd_bunny_region in OWGSets.get_dmd_and_bunny_regions():
             region = world.get_region(dmd_bunny_region, player)
-            region.can_reach_private = lambda state: region.can_reach(state) or (needs_boots_and_pearl or can_bunny_dmd)
+            region.can_reach_private = lambda state: region.can_reach(state) or (state.can_boots_clip_dw(player) or state.can_bunny_dmd(player))
         for non_dmd_bunny_region in OWGSets.get_dmd_non_bunny_regions():
             region = world.get_region(non_dmd_bunny_region, player)
-            region.can_reach_private = lambda state: region.can_reach(state) or (needs_boots_and_pearl)
+            region.can_reach_private = lambda state: region.can_reach(state) or state.can_boots_clip_dw(player)
         edmb = world.get_region('Dark Death Mountain (East Bottom)', player)
-        edmb.can_reach_private = lambda state: edmb.can_reach(state) or can_bunny_dmd
+        edmb.can_reach_private = lambda state: edmb.can_reach(state) or state.can_bunny_dmd(player)
 
         # Set up some mirror-accessible DW entrances.
         for spot in world.get_region('West Dark World', player).exits + world.get_region('South Dark World', player).exits:
@@ -1333,7 +1330,7 @@ def set_inverted_big_bomb_rules(world, player):
 
 def set_bunny_rules(world, player):
     # If you can get to a dungeon exit, you can bunny revive.
-    dungeon_exits = ['Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)', 'Desert Palace Exit (North)', 'Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit', 'Palace of Darkness Exit', 'Swamp Palace Exit', 'Agahnims Tower Exit', 'Turtle Rock Ledge Exit (East)', 'Turtle Rock Exit (Front)', 'Turtle Rock Ledge Exit (West)', 'Turtle Rock Isolated Ledge Exit']
+    dungeon_exits = ['Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)', 'Desert Palace Exit (North)', 'Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Misery Mire Exit', 'Palace of Darkness Exit', 'Swamp Palace Exit', 'Agahnims Tower Exit', 'Turtle Rock Ledge Exit (East)', 'Turtle Rock Exit (Front)', 'Turtle Rock Ledge Exit (West)', 'Turtle Rock Isolated Ledge Exit']
     # regions for the exits of multi-entrace caves/drops that bunny cannot pass
     # Note spiral cave may be technically passible, but it would be too absurd to require since OHKO mode is a thing.
     bunny_impassable_caves = ['Bumper Cave', 'Two Brothers House', 'Hookshot Cave', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)', 'Turtle Rock (Entrance)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Skull Woods Second Section (Drop)',
@@ -1419,7 +1416,7 @@ def set_bunny_rules(world, player):
 
 def set_inverted_bunny_rules(world, player):
     # If you can get to a dungeon exit, you can bunny revive.
-    dungeon_exits = ['Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)', 'Desert Palace Exit (North)', 'Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit', 'Palace of Darkness Exit', 'Swamp Palace Exit', 'Inverted Agahnims Tower Exit', 'Turtle Rock Ledge Exit (East)', 'Turtle Rock Exit (Front)', 'Turtle Rock Ledge Exit (West)', 'Turtle Rock Isolated Ledge Exit']
+    dungeon_exits = ['Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)', 'Desert Palace Exit (North)', 'Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit', 'Palace of Darkness Exit', 'Inverted Agahnims Tower Exit', 'Turtle Rock Ledge Exit (East)', 'Turtle Rock Exit (Front)', 'Turtle Rock Ledge Exit (West)', 'Turtle Rock Isolated Ledge Exit']
     # regions for the exits of multi-entrace caves/drops that bunny cannot pass
     # Note spiral cave may be technically passible, but it would be too absurd to require since OHKO mode is a thing.
     bunny_impassable_caves = ['Bumper Cave', 'Two Brothers House', 'Hookshot Cave', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)', 'Turtle Rock (Entrance)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Skull Woods Second Section (Drop)',
