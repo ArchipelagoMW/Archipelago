@@ -223,19 +223,21 @@ def save(ctx:Context):
         except Exception as e:
             logging.exception(e)
 
-def hint(ctx:Context, team, slot, item:str):
-    found = 0
+def collect_hints(ctx:Context, team, slot, item:str) -> list:
+    hints = []
     seeked_item_id = Items.item_table[item][3]
     for check, result in ctx.locations.items():
         item_id, receiving_player = result
         if receiving_player == slot and item_id == seeked_item_id:
             location_id, finding_player = check
-            hint = f"[Hint]: {ctx.player_names[(team, slot)]}'s {item} can be found at " \
-                   f"{get_location_name_from_address(location_id)} in {ctx.player_names[team, finding_player]}'s World"
-            notify_team(ctx, team, hint)
-            found += 1
+            found = location_id in ctx.location_checks[team, finding_player]
+            hints.append((
+                found,
+                f"[Hint]: {ctx.player_names[(team, slot)]}'s {item} can be found at " \
+                f"{get_location_name_from_address(location_id)} in {ctx.player_names[team, finding_player]}'s World." +
+                " (found)" if found else ""))
 
-    return found
+    return hints
 
 async def process_client_cmd(ctx : Context, client : Client, cmd, args):
     if type(cmd) is not str:
@@ -342,10 +344,14 @@ async def process_client_cmd(ctx : Context, client : Client, cmd, args):
                 else: can_pay = True
 
                 if can_pay:
-                    found = hint(ctx, client.team, client.slot, itemname)
+                    hints = collect_hints(ctx, client.team, client.slot, itemname)
+                    found = 0
+                    for already_found, hint in hints:
+                        found += 1-already_found
+                        notify_team(ctx, client.team, hint)
                     ctx.hints_used[client.team, client.slot] += found
                     if not found:
-                        notify_client(client, "No items found, points refunded.")
+                        notify_client(client, "No new items found, points refunded.")
                     else:
                         save(ctx)
                 else:
@@ -353,6 +359,7 @@ async def process_client_cmd(ctx : Context, client : Client, cmd, args):
                                           f"You have {points_available} points and need {ctx.hint_cost}")
             else:
                 notify_client(client, f'Item "{itemname}" not found.')
+
 def set_password(ctx : Context, password):
     ctx.password = password
     logging.warning('Password set to ' + password if password is not None else 'Password disabled')
@@ -412,7 +419,9 @@ async def console(ctx : Context):
                     elif name.lower() == command[1].lower():
                         item = " ".join(command[2:])
                         if item in Items.item_table:
-                            hint(ctx, team, slot, item)
+                            hints = collect_hints(ctx, team, slot, item)
+                            for already_found, hint in hints:
+                                notify_team(ctx, team, hint)
                         else:
                             logging.warning("Unknown item: " + item)
             if command[0][0] != '/':
