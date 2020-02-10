@@ -336,8 +336,8 @@ async def process_client_cmd(ctx : Context, client : Client, cmd, args):
             points_available = ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) - ctx.hint_cost*ctx.hints_used[client.team, client.slot]
             itemname = args[6:]
             if not itemname:
-                notify_client(client, "Use !hint {itemname}. For example !hint Lamp. "
-                                      f"A hint costs {ctx.hint_cost} points.\n"
+                notify_client(client, "Use !hint {itemname}, for example !hint Lamp. "
+                                      f"A hint costs {ctx.hint_cost} points. "
                                       f"You have {points_available} points.")
             elif itemname in Items.item_table:
                 if ctx.hint_cost: can_pay = points_available // ctx.hint_cost >= 1
