@@ -398,6 +398,7 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
     if logic in ['owglitches', 'nologic']:
         precollected_items.append('Pegasus Boots')
         pool.remove('Pegasus Boots')
+        pool.extend(['Rupees (20)'])
 
     if want_progressives():
         pool.extend(progressivegloves)
