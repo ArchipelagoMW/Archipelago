@@ -302,10 +302,6 @@ def global_rules(world, player):
     set_rule(world.get_location('Ganons Tower - Bob\'s Torch', player), lambda state: state.has_Boots(player))
     set_rule(world.get_entrance('Ganons Tower (Tile Room)', player), lambda state: state.has('Cane of Somaria', player))
     set_rule(world.get_entrance('Ganons Tower (Hookshot Room)', player), lambda state: state.has('Hammer', player) and (state.has('Hookshot', player) or state.has_Boots(player)))
-
-    DMs_room_chests = ['Ganons Tower - DMs Room - Top Left', 'Ganons Tower - DMs Room - Top Right', 'Ganons Tower - DMs Room - Bottom Left', 'Ganons Tower - DMs Room - Bottom Right']
-    for location in DMs_room_chests:
-        add_rule(world.get_location(location, player), lambda state: state.has('Hookshot', player))
     set_rule(world.get_entrance('Ganons Tower (Map Room)', player), lambda state: state.has_key('Small Key (Ganons Tower)', player, 4) or (item_name(state, 'Ganons Tower - Map Chest', player) in [('Big Key (Ganons Tower)', player), ('Small Key (Ganons Tower)', player)] and state.has_key('Small Key (Ganons Tower)', player, 3)))
     if world.accessibility[player] != 'locations':
         set_always_allow(world.get_location('Ganons Tower - Map Chest', player), lambda state, item: item.name == 'Small Key (Ganons Tower)' and item.player == player and state.has_key('Small Key (Ganons Tower)', player, 3))
@@ -647,9 +643,16 @@ def no_glitches_rules(world, player):
 
     add_rule(world.get_entrance('Ganons Tower (Double Switch Room)', player), lambda state: state.has('Hookshot', player))
     set_rule(world.get_entrance('Paradox Cave Push Block Reverse', player), lambda state: False)  # no glitches does not require block override
+    forbid_bomb_jump_requirements(world, player)
+    add_conditional_lamps(world, player)
+
+
+def forbid_bomb_jump_requirements(world, player):
+    DMs_room_chests = ['Ganons Tower - DMs Room - Top Left', 'Ganons Tower - DMs Room - Top Right', 'Ganons Tower - DMs Room - Bottom Left', 'Ganons Tower - DMs Room - Bottom Right']
+    for location in DMs_room_chests:
+        add_rule(world.get_location(location, player), lambda state: state.has('Hookshot', player))
     set_rule(world.get_entrance('Paradox Cave Bomb Jump', player), lambda state: False)
     set_rule(world.get_entrance('Skull Woods First Section Bomb Jump', player), lambda state: False)
-    add_conditional_lamps(world, player)
 
 
 DW_Entrances = ['Bumper Cave (Bottom)',
@@ -786,9 +789,6 @@ def overworld_glitches_rules(world, player):
         add_rule(world.get_entrance('Turtle Rock Teleporter', player), lambda state: state.has_Boots(player) and state.has('Hammer', player), 'or')
     else:
         add_rule(world.get_entrance('South Dark World Teleporter', player), lambda state: state.has_Boots(player) and state.can_lift_rocks(player), 'or')
-
-    # Add darkness conditions.
-    add_conditional_lamps(world, player)
 
 
 def open_rules(world, player):
