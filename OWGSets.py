@@ -96,43 +96,50 @@ def get_superbunny_accessible_locations():
         ]
 
 
-def get_boots_clip_exits_lw():
+def get_boots_clip_exits_lw(inverted = False):
     '''
     Special Light World region exits that require boots clips.
     '''
-    return [
+    exits = [
         'Bat Cave River Clip Spot',
         'Light World DMA Clip Spot',
         'Hera Ascent',
-        'Spectacle Rock Clip Spot',
         'Death Mountain Return Ledge Clip Spot',
         'Death Mountain Glitched Bridge',
-        'Floating Island Clip Spot',
         'Zora Descent Clip Spot',
-        'Graveyard Ledge Clip Spot',
         'Desert Northern Cliffs',
         'Lake Hylia Island Clip Spot',
         'Death Mountain Entrance Clip (Broken Camera)',
+        'Death Mountain Descent',
         ]
+    if not inverted:
+        exits.append('Spectacle Rock Clip Spot')
+        exits.append('Graveyard Ledge Clip Spot')
+        exits.append('Bombos Tablet Clip Spot')
+        exits.append('Floating Island Clip Spot')
+    return exits
 
 
-def get_boots_clip_exits_dw():
+def get_boots_clip_exits_dw(inverted = False):
     '''
     Special Dark World region exits that require boots clips.
     '''
-    return [
+    exits = [
         'Dark World DMA Clip Spot',
-        'Ganons Tower Ascent',
         'Bumper Cave Ledge Clip Spot',
-        'Dark Death Mountain Glitched Bridge',
         'Hookshot Cave Island Clip Spot',
         'Catfish Descent',
         'Hammer Pegs River Clip Spot',
         'Dark Lake Hylia Ledge Clip Spot',
         'Dark Desert Cliffs Clip Spot',
         'Bumper Cave Entrance Clip (Broken Camera)',
-        'Turtle Rock (Top) Clip Spot',
+        'Dark Death Mountain Descent',
         ]
+    if not inverted:
+        exits.append('Ganons Tower Ascent')
+        exits.append('Dark Death Mountain Glitched Bridge')
+        exits.append('Turtle Rock (Top) Clip Spot')
+    return exits
 
 
 def get_glitched_speed_drops_lw():
@@ -161,4 +168,13 @@ def get_mirror_clip_spots_dw():
     return [
         'Dark Death Mountain Offset Mirror',
         'Dark Death Mountain Bunny Descent Mirror Spot',
+        ]
+
+
+def get_mirror_clip_spots_lw():
+    '''
+    Inverted mirror shenanigans in logic even if the player is a bunny.
+    '''
+    return [
+        'Death Mountain Bunny Descent Mirror Spot',
         ]

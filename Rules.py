@@ -470,16 +470,17 @@ def default_rules(world, player):
 
 
 def forbid_overworld_glitches(world, player):
-    for exit in OWGSets.get_boots_clip_exits_lw():
+    for exit in OWGSets.get_boots_clip_exits_lw(world.mode[player] == 'inverted'):
         set_rule(world.get_entrance(exit, player), lambda state: False)
-    for exit in OWGSets.get_boots_clip_exits_dw():
+    for exit in OWGSets.get_boots_clip_exits_dw(world.mode[player] == 'inverted'):
         set_rule(world.get_entrance(exit, player), lambda state: False)
     for exit in OWGSets.get_glitched_speed_drops_lw():
         set_rule(world.get_entrance(exit, player), lambda state: False)
     for exit in OWGSets.get_glitched_speed_drops_dw():
         set_rule(world.get_entrance(exit, player), lambda state: False)
-    for exit in OWGSets.get_mirror_clip_spots_dw():
-        set_rule(world.get_entrance(exit, player), lambda state: False)
+    if world.mode[player] != 'inverted':
+        for exit in OWGSets.get_mirror_clip_spots_dw():
+            set_rule(world.get_entrance(exit, player), lambda state: False)
 
 
 def inverted_rules(world, player):
@@ -747,9 +748,9 @@ def overworld_glitches_rules(world, player):
         set_rule(world.get_entrance(entrance, player), lambda state: True)
 
     # Boots-accessible locations.
-    for entrance in OWGSets.get_boots_clip_exits_lw():
+    for entrance in OWGSets.get_boots_clip_exits_lw(world.mode[player] == 'inverted'):
         set_rule(world.get_entrance(entrance, player), lambda state: state.can_boots_clip_lw(player))
-    for entrance in OWGSets.get_boots_clip_exits_dw():
+    for entrance in OWGSets.get_boots_clip_exits_dw(world.mode[player] == 'inverted'):
         set_rule(world.get_entrance(entrance, player), lambda state: state.can_boots_clip_dw(player))
 
     # Glitched speed drops.
@@ -758,11 +759,16 @@ def overworld_glitches_rules(world, player):
     for drop in OWGSets.get_glitched_speed_drops_dw():
         set_rule(world.get_entrance(drop, player), lambda state: state.can_get_glitched_speed_dw(player))
     # Dark Death Mountain Ledge Clip Spot also accessible with mirror.
-    add_rule(world.get_entrance('Dark Death Mountain Ledge Clip Spot', player), lambda state: state.has_Mirror(player), 'or')
+    if world.mode[player] != 'inverted':
+        add_rule(world.get_entrance('Dark Death Mountain Ledge Clip Spot', player), lambda state: state.has_Mirror(player), 'or')
 
     # Mirror clip spots.
-    for clip_spot in OWGSets.get_mirror_clip_spots_dw():
-        set_rule(world.get_entrance(clip_spot, player), lambda state: state.has_Mirror(player))
+    if world.mode[player] != 'inverted':
+        for clip_spot in OWGSets.get_mirror_clip_spots_dw():
+            set_rule(world.get_entrance(clip_spot, player), lambda state: state.has_Mirror(player))
+    else:
+        for clip_spot in OWGSets.get_mirror_clip_spots_lw():
+            set_rule(world.get_entrance(clip_spot, player), lambda state: state.has_Mirror(player))
 
     # Locations that you can superbunny mirror into, but need a sword to clear.
     superbunny_mirror_weapon = lambda state: state.has_Mirror(player) and state.has_sword(player)
