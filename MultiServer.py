@@ -231,11 +231,9 @@ def collect_hints(ctx:Context, team, slot, item:str) -> list:
         if receiving_player == slot and item_id == seeked_item_id:
             location_id, finding_player = check
             found = location_id in ctx.location_checks[team, finding_player]
-            hints.append((
-                found,
-                f"[Hint]: {ctx.player_names[(team, slot)]}'s {item} can be found at " \
-                f"{get_location_name_from_address(location_id)} in {ctx.player_names[team, finding_player]}'s World." +
-                " (found)" if found else ""))
+            hinttext = f"[Hint]: {ctx.player_names[(team, slot)]}'s {item} can be found at " \
+                       f"{get_location_name_from_address(location_id)} in {ctx.player_names[team, finding_player]}'s World."
+            hints.append((found, hinttext + (" (found)" if found else "")))
 
     return hints
 
