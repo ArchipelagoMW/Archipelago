@@ -3023,6 +3023,7 @@ mandatory_connections = [('Lake Hylia Central Island Pier', 'Lake Hylia Central 
                          ('Dark Death Mountain Descent', 'West Dark World'),
                          ('Death Mountain Descent', 'Light World'),
                          ('Bombos Tablet Clip Spot', 'Bombos Tablet Ledge'),
+                         ('Cave 45 Clip Spot', 'Cave 45 Ledge'),
                         ]
 
 inverted_mandatory_connections = [('Lake Hylia Central Island Pier', 'Lake Hylia Central Island'),

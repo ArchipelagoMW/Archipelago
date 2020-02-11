@@ -15,7 +15,7 @@ def create_regions(world, player):
                           'Elder House (East)', 'Elder House (West)', 'North Fairy Cave', 'North Fairy Cave Drop', 'Lost Woods Gamble', 'Snitch Lady (East)', 'Snitch Lady (West)', 'Tavern (Front)',
                           'Bush Covered House', 'Light World Bomb Hut', 'Kakariko Shop', 'Long Fairy Cave', 'Good Bee Cave', '20 Rupee Cave', 'Cave Shop (Lake Hylia)', 'Waterfall of Wishing', 'Hyrule Castle Main Gate',
                           'Bonk Fairy (Light)', '50 Rupee Cave', 'Fortune Teller (Light)', 'Lake Hylia Fairy', 'Light Hype Fairy', 'Desert Fairy', 'Lumberjack House', 'Lake Hylia Fortune Teller', 'Kakariko Gamble Game', 'Top of Pyramid',
-                          'Light World DMA Clip Spot', 'Death Mountain Return Ledge Clip Spot', 'Desert Northern Cliffs', 'Lake Hylia Island Clip Spot', 'Death Mountain Entrance Clip (Broken Camera)', 'Bat Cave River Clip Spot', 'Bombos Tablet Clip Spot']),
+                          'Light World DMA Clip Spot', 'Death Mountain Return Ledge Clip Spot', 'Desert Northern Cliffs', 'Lake Hylia Island Clip Spot', 'Death Mountain Entrance Clip (Broken Camera)', 'Bat Cave River Clip Spot', 'Bombos Tablet Clip Spot', 'Cave 45 Clip Spot']),
         create_lw_region(player, 'Death Mountain Entrance', None, ['Old Man Cave (West)', 'Death Mountain Entrance Drop']),
         create_lw_region(player, 'Lake Hylia Central Island', None, ['Capacity Upgrade', 'Lake Hylia Central Island Teleporter']),
         create_cave_region(player, 'Blinds Hideout', 'a bounty of five items', ["Blind\'s Hideout - Top",

@@ -117,6 +117,7 @@ def get_boots_clip_exits_lw(inverted = False):
         exits.append('Graveyard Ledge Clip Spot')
         exits.append('Bombos Tablet Clip Spot')
         exits.append('Floating Island Clip Spot')
+        exits.append('Cave 45 Clip Spot')
     return exits
 
 
