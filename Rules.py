@@ -1,7 +1,7 @@
 import collections
 import logging
 import OWGSets
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, RegionType
 
 
 def set_rules(world, player):
@@ -1330,8 +1330,6 @@ def set_inverted_big_bomb_rules(world, player):
 
 
 def set_bunny_rules(world, player):
-    # If you can get to a dungeon exit, you can bunny revive.
-    dungeon_exits = ['Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)', 'Desert Palace Exit (North)', 'Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Misery Mire Exit', 'Palace of Darkness Exit', 'Swamp Palace Exit', 'Agahnims Tower Exit', 'Turtle Rock Ledge Exit (East)', 'Turtle Rock Exit (Front)', 'Turtle Rock Ledge Exit (West)', 'Turtle Rock Isolated Ledge Exit']
     # regions for the exits of multi-entrace caves/drops that bunny cannot pass
     # Note spiral cave may be technically passible, but it would be too absurd to require since OHKO mode is a thing.
     bunny_impassable_caves = ['Bumper Cave', 'Two Brothers House', 'Hookshot Cave', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)', 'Turtle Rock (Entrance)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Skull Woods Second Section (Drop)',
@@ -1347,8 +1345,14 @@ def set_bunny_rules(world, player):
         return lambda state: any(rule(state) for rule in options)
 
     def get_rule_to_add(region, location = None):
-        if not region.is_light_world and not (world.logic[player] == 'owglitches' and location in OWGSets.get_superbunny_accessible_locations() and region.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw()):
+        if world.logic[player] == 'owglitches' and not any([
+            location in OWGSets.get_superbunny_accessible_locations() and region.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw(),
+            region.type == RegionType.Dungeon and region.name != 'Swamp Palace (Entrance)',
+            not region.is_light_world]):
             return lambda state: state.has_Pearl(player)
+        elif world.logic[player] != 'owglitches' and not region.is_light_world:
+            return lambda state: state.has_Pearl(player)
+
         # in this case we are mixed region.
         # we collect possible options.
 
@@ -1377,16 +1381,12 @@ def set_bunny_rules(world, player):
                             if location.name in OWGSets.get_superbunny_accessible_locations():
                                 possible_options.append(lambda state: path_to_access_rule(new_path, entrance) and state.has_Mirror(player))
                                 continue
-                        for exit in new_region.exits:
-                            if exit.name in dungeon_exits:
-                                possible_options.append(path_to_access_rule(new_path, entrance))
-                                continue
                     else:
                         continue
                 if new_region.is_dark_world:
                     queue.append((new_region, new_path))
                 else:
-                    # we have reached pure light world, so we have a new possible option
+                    # we have reached pure light world or a dungeon, so we have a new possible option
                     possible_options.append(path_to_access_rule(new_path, entrance))
         return options_to_access_rule(possible_options)
 
@@ -1416,8 +1416,6 @@ def set_bunny_rules(world, player):
             add_rule(location, get_rule_to_add(location.parent_region, location.name))
 
 def set_inverted_bunny_rules(world, player):
-    # If you can get to a dungeon exit, you can bunny revive.
-    dungeon_exits = ['Desert Palace Exit (South)', 'Desert Palace Exit (West)', 'Desert Palace Exit (East)', 'Desert Palace Exit (North)', 'Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit', 'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit', 'Palace of Darkness Exit', 'Inverted Agahnims Tower Exit', 'Turtle Rock Ledge Exit (East)', 'Turtle Rock Exit (Front)', 'Turtle Rock Ledge Exit (West)', 'Turtle Rock Isolated Ledge Exit']
     # regions for the exits of multi-entrace caves/drops that bunny cannot pass
     # Note spiral cave may be technically passible, but it would be too absurd to require since OHKO mode is a thing.
     bunny_impassable_caves = ['Bumper Cave', 'Two Brothers House', 'Hookshot Cave', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)', 'Turtle Rock (Entrance)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Skull Woods Second Section (Drop)',
@@ -1431,7 +1429,12 @@ def set_inverted_bunny_rules(world, player):
         return lambda state: any(rule(state) for rule in options)
 
     def get_rule_to_add(region, location = None):
-        if not region.is_dark_world and not (world.logic[player] == 'owglitches' and location in bunny_accessible_locations and region.name not in invalid_mirror_bunny_entrances_lw):
+        if world.logic[player] == 'owglitches' and not any([
+            location in OWGSets.get_superbunny_accessible_locations() and region.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw(),
+            region.type == RegionType.Dungeon and region.name != 'Swamp Palace (Entrance)',
+            not region.is_dark_world]):
+            return lambda state: state.has_Pearl(player)
+        elif world.logic[player] != 'owglitches' and not region.is_dark_world:
             return lambda state: state.has_Pearl(player)
         # in this case we are mixed region.
         # we collect possible options.
@@ -1460,10 +1463,6 @@ def set_inverted_bunny_rules(world, player):
                         for location in entrance.connected_region.locations:
                             if location.name in OWGSets.get_superbunny_accessible_locations():
                                 possible_options.append(lambda state: path_to_access_rule(new_path, entrance) and state.has_Mirror(player))
-                                continue
-                        for exit in new_region.exits:
-                            if exit.name in dungeon_exits:
-                                possible_options.append(path_to_access_rule(new_path, entrance))
                                 continue
                     else:
                         continue
