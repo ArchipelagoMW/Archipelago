@@ -166,4 +166,5 @@ def get_mirror_clip_spots_lw():
     '''
     return [
         'Death Mountain Bunny Descent Mirror Spot',
+        'Death Mountain Offset Mirror',
         ]
