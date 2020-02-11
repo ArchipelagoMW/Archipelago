@@ -546,8 +546,17 @@ class CollectionState(object):
             return self.has_Boots(player) and self.has_Pearl(player)
         return self.has_Boots(player)
 
-    def can_bunny_dmd(self, player):
-        return self.world.get_region('Death Mountain', player).can_reach(self) and self.has_Mirror(player)
+    def can_get_glitched_speed_lw(self, player):
+        rules = [self.has_Boots(player), any([self.has('Hookshot', player), self.has_sword(player)])]
+        if self.world.mode[player] == 'inverted':
+            rules.append(self.has_Pearl(player))
+        return all(rules)
+
+    def can_get_glitched_speed_dw(self, player):
+        rules = [self.has_Boots(player), any([self.has('Hookshot', player), self.has_sword(player)])]
+        if self.world.mode[player] != 'inverted':
+            rules.append(self.has_Pearl(player))
+        return all(rules)
 
     def collect(self, item, event=False, location=None):
         if location:

@@ -11,183 +11,9 @@ def get_immediately_accessible_entrances(world, player):
     entrances = [
         'Hobo Bridge',
         'Zoras River',
-        'Capacity Upgrade',
+        'Lake Hylia Central Island Pier',
         ]
     return entrances
-
-def get_lw_boots_accessible_entrances(world, player):
-    '''
-    Light World entrances that can be accessed with boots clips.
-    '''
-    entrances = [
-        'Bat Cave Drop Ledge',
-        'Desert Ledge Return Rocks',
-        'Desert Palace Entrance (West)',
-        'Desert Palace Entrance (North)',
-        'Broken Bridge (East)',
-        'Death Mountain Drop',
-        'Old Man Cave (East)',
-        'Old Man House (Bottom)',
-        'Old Man House (Top)',
-        'Death Mountain Return Cave (East)',
-        'Spectacle Rock Cave',
-        'Spectacle Rock Cave Peak',
-        'Spectacle Rock Cave (Bottom)',
-        'Broken Bridge (West)',
-        'Broken Bridge (East)',
-        'East Death Mountain Drop',
-        'Spiral Cave Ledge Drop',
-        'Fairy Ascension Drop',
-        'Fairy Ascension Cave (Bottom)',
-        'East Death Mountain (Top)',
-        'Death Mountain (Top)',
-        'Death Mountain Return Cave (West)',
-        'Paradox Cave (Bottom)',
-        'Paradox Cave (Middle)',
-        'Hookshot Fairy',
-        'Spiral Cave (Bottom)',
-        'Paradox Cave (Top)',
-        'Spiral Cave Ledge Access',
-        'Bumper Cave Ledge Mirror Spot',
-        'Floating Island Mirror Spot',
-        ]
-    if world.mode[player] != 'inverted':
-        entrances.append('Flute Spot 1')
-        entrances.append('Spectacle Rock Drop')
-        entrances.append('Fairy Ascension Ledge')
-    return entrances
-
-
-def get_lw_boots_accessible_locations():
-    '''
-    Light World locations that can be reached using boots clips.
-    '''
-    return [
-        'Lake Hylia Island',
-        'Desert Ledge',
-        'Spectacle Rock',
-        'Floating Island',
-        ]
-
-
-def get_dw_boots_accessible_entrances(world, player):
-    '''
-    Dark World entrances that can be accessed with boots clips.
-    '''
-    entrances = [
-        'Northeast Dark World Broken Bridge Pass',
-        'Peg Area Rocks',
-        'Grassy Lawn Pegs',
-        'West Dark World Gap',
-        'Bumper Cave Ledge Drop',
-        'Turtle Rock Drop',
-        'Floating Island Drop',
-        'Dark Death Mountain Drop (East)',
-        'Village of Outcasts Drop',
-        'Hype Cave',
-        'Dark World Potion Shop',
-        'Archery Game',
-        'Brewery',
-        'C-Shaped House',
-        'Chest Game',
-        'Thieves Town',
-        'Bumper Cave Entrance Rock',
-        'Red Shield Shop',
-        'Fortune Teller (Dark)',
-        'Dark World Lumberjack Shop',
-        'Misery Mire',
-        'Mire Shed',
-        'Dark Desert Hint',
-        'Dark Desert Fairy',
-        ]
-    if world.mode[player] != 'inverted':
-        entrances.append('Dark Lake Hylia Ledge')
-        entrances.append('Big Bomb Shop')
-        entrances.append('Kings Grave Mirror Spot')
-        entrances.append('Dark Sanctuary Hint')
-    return entrances
-
-
-def get_dw_boots_accessible_locations():
-    '''
-    Dark World locations accessible using boots clips.
-    '''
-    return [
-        'Catfish',
-        'Dark Blacksmith Ruins',
-        'Bumper Cave Ledge',
-        ]
-
-
-def get_dw_bunny_inaccessible_locations():
-    '''
-    Locations that the bunny cannot access.
-    '''
-    return [
-        'Thieves Town',
-        'Graveyard Ledge Mirror Spot',
-        'Kings Grave Mirror Spot',
-        'Bumper Cave Entrance Rock',
-        'Brewery',
-        'Village of Outcasts Pegs',
-        'Village of Outcasts Eastern Rocks',
-        'Dark Lake Hylia Drop (South)',
-        'Hype Cave',
-        'Village of Outcasts Heavy Rock',
-        'East Dark World Bridge',
-        'Bonk Fairy (Dark)',
-        ]
-
-
-def get_dmd_and_bunny_regions():
-    '''
-    Dark World regions accessible using Link and Bunny DMD methods.
-    '''
-    return [
-        'West Dark World',
-        'South Dark World',
-        'East Dark World',
-        ]
-
-
-def get_dmd_non_bunny_regions():
-    '''
-    Dark World regions accessible using only Link DMD methods.
-    '''
-    return [
-        'Dark Desert',
-        'Northeast Dark World',
-        ]
-
-
-def get_boots_accessible_regions_lw():
-    '''
-    Light World regions that can be accessed using boots clips.
-    '''
-    return [
-        'Desert Ledge (Northeast)',
-        'Desert Ledge',
-        'Desert Palace Entrance (North) Spot',
-        'Cave 45 Ledge',
-        'Graveyard Ledge',
-        'Lake Hylia Island',
-        'Death Mountain',
-        'Death Mountain Return Ledge',
-        'Bombos Tablet Ledge',
-        ]
-
-
-def get_mirror_hookshot_accessible_dw_locations(world, player):
-    '''
-    Locations accessible potentially using weird mirror hookshot boots setups.
-    '''
-    locations = [
-        'Pyramid Fairy',
-        'Pyramid Entrance',
-        'Pyramid Drop',
-        ]
-    locations.extend(world.get_region('Dark Death Mountain Ledge', player).locations)
-    return locations
 
 
 def get_sword_required_superbunny_mirror_regions():
@@ -267,4 +93,72 @@ def get_superbunny_accessible_locations():
         'Pyramid Fairy - Right',
         'Superbunny Cave - Top',
         'Superbunny Cave - Bottom',
+        ]
+
+
+def get_boots_clip_exits_lw():
+    '''
+    Special Light World region exits that require boots clips.
+    '''
+    return [
+        'Bat Cave River Clip Spot',
+        'Light World DMA Clip Spot',
+        'Hera Ascent',
+        'Spectacle Rock Clip Spot',
+        'Death Mountain Return Ledge Clip Spot',
+        'Death Mountain Glitched Bridge',
+        'Floating Island Clip Spot',
+        'Zora Descent Clip Spot',
+        'Graveyard Ledge Clip Spot',
+        'Desert Northern Cliffs',
+        'Lake Hylia Island Clip Spot',
+        'Death Mountain Entrance Clip (Broken Camera)',
+        ]
+
+
+def get_boots_clip_exits_dw():
+    '''
+    Special Dark World region exits that require boots clips.
+    '''
+    return [
+        'Dark World DMA Clip Spot',
+        'Ganons Tower Ascent',
+        'Bumper Cave Ledge Clip Spot',
+        'Dark Death Mountain Glitched Bridge',
+        'Hookshot Cave Island Clip Spot',
+        'Catfish Descent',
+        'Hammer Pegs River Clip Spot',
+        'Dark Lake Hylia Ledge Clip Spot',
+        'Dark Desert Cliffs Clip Spot',
+        'Bumper Cave Entrance Clip (Broken Camera)',
+        'Turtle Rock (Top) Clip Spot',
+        ]
+
+
+def get_glitched_speed_drops_lw():
+    '''
+    Light World drop-down ledges that require glitched speed.
+    '''
+    return [
+        'Death Mountain Return Ledge Clip Drop',
+        ]
+
+
+def get_glitched_speed_drops_dw():
+    '''
+    Dark World drop-down ledges that require glitched speed.
+    '''
+    return [
+        'Dark Death Mountain Ledge Clip Spot',
+        'Bumper Cave Ledge Clip Drop',
+        ]
+
+
+def get_mirror_clip_spots_dw():
+    '''
+    Mirror shenanigans that are in logic even if the player is a bunny.
+    '''
+    return [
+        'Dark Death Mountain Offset Mirror',
+        'Dark Death Mountain Bunny Descent Mirror Spot',
         ]
