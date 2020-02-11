@@ -3021,6 +3021,7 @@ mandatory_connections = [('Lake Hylia Central Island Pier', 'Lake Hylia Central 
                          ('Bat Cave River Clip Spot', 'Bat Cave Drop Ledge'),
                          ('Turtle Rock (Top) Clip Spot', 'Turtle Rock (Top)'),
                          ('Dark Death Mountain Descent', 'West Dark World'),
+                         ('Death Mountain Descent', 'Light World'),
                          ('Bombos Tablet Clip Spot', 'Bombos Tablet Ledge'),
                         ]
 
