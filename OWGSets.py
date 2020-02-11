@@ -109,7 +109,6 @@ def get_boots_clip_exits_lw(inverted = False):
         'Zora Descent Clip Spot',
         'Desert Northern Cliffs',
         'Lake Hylia Island Clip Spot',
-        'Death Mountain Entrance Clip (Broken Camera)',
         'Death Mountain Descent',
         ]
     if not inverted:
@@ -133,7 +132,6 @@ def get_boots_clip_exits_dw(inverted = False):
         'Hammer Pegs River Clip Spot',
         'Dark Lake Hylia Ledge Clip Spot',
         'Dark Desert Cliffs Clip Spot',
-        'Bumper Cave Entrance Clip (Broken Camera)',
         'Dark Death Mountain Descent',
         ]
     if not inverted:
@@ -143,22 +141,12 @@ def get_boots_clip_exits_dw(inverted = False):
     return exits
 
 
-def get_glitched_speed_drops_lw():
-    '''
-    Light World drop-down ledges that require glitched speed.
-    '''
-    return [
-        'Death Mountain Return Ledge Clip Drop',
-        ]
-
-
 def get_glitched_speed_drops_dw():
     '''
     Dark World drop-down ledges that require glitched speed.
     '''
     return [
         'Dark Death Mountain Ledge Clip Spot',
-        'Bumper Cave Ledge Clip Drop',
         ]
 
 

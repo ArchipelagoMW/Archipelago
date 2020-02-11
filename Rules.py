@@ -474,8 +474,6 @@ def forbid_overworld_glitches(world, player):
         set_rule(world.get_entrance(exit, player), lambda state: False)
     for exit in OWGSets.get_boots_clip_exits_dw(world.mode[player] == 'inverted'):
         set_rule(world.get_entrance(exit, player), lambda state: False)
-    for exit in OWGSets.get_glitched_speed_drops_lw():
-        set_rule(world.get_entrance(exit, player), lambda state: False)
     for exit in OWGSets.get_glitched_speed_drops_dw():
         set_rule(world.get_entrance(exit, player), lambda state: False)
     if world.mode[player] != 'inverted':
@@ -754,8 +752,6 @@ def overworld_glitches_rules(world, player):
         set_rule(world.get_entrance(entrance, player), lambda state: state.can_boots_clip_dw(player))
 
     # Glitched speed drops.
-    for drop in OWGSets.get_glitched_speed_drops_lw():
-        set_rule(world.get_entrance(drop, player), lambda state: state.can_get_glitched_speed_lw(player))
     for drop in OWGSets.get_glitched_speed_drops_dw():
         set_rule(world.get_entrance(drop, player), lambda state: state.can_get_glitched_speed_dw(player))
     # Dark Death Mountain Ledge Clip Spot also accessible with mirror.
