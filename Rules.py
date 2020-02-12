@@ -1340,7 +1340,7 @@ def set_bunny_rules(world, player):
         return lambda state: any(rule(state) for rule in options)
 
     def get_rule_to_add(region, location = None):
-        if world.logic['player'] == 'owglitches':
+        if world.logic[player] == 'owglitches':
             if region.name == 'Tower of Hera (Bottom)' and region.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw():
                 return lambda state: state.can_superbunny_mirror_with_sword(player) or state.has_Pearl(player)
             if region.name == 'Turtle Rock (Entrance)' and region.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw():
@@ -1430,7 +1430,7 @@ def set_inverted_bunny_rules(world, player):
         return lambda state: any(rule(state) for rule in options)
 
     def get_rule_to_add(region, location = None):
-        if world.logic['player'] == 'owglitches':
+        if world.logic[player] == 'owglitches':
             if region.name == 'Tower of Hera (Bottom)' and region.name not in OWGSets.get_invalid_mirror_bunny_entrances_lw():
                 return lambda state: state.can_superbunny_mirror_with_sword(player) or state.has_Pearl(player)
             if region.name == 'Turtle Rock (Entrance)' and region.name not in OWGSets.get_invalid_mirror_bunny_entrances_lw():
