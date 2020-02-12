@@ -127,7 +127,6 @@ def get_boots_clip_exits_dw(inverted = False):
     exits = [
         'Dark World DMA Clip Spot',
         'Bumper Cave Ledge Clip Spot',
-        'Hookshot Cave Island Clip Spot',
         'Catfish Descent',
         'Hammer Pegs River Clip Spot',
         'Dark Lake Hylia Ledge Clip Spot',

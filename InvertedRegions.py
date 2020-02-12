@@ -209,7 +209,7 @@ def create_inverted_regions(world, player):
         create_cave_region(player, 'Dark Desert Hint', 'a storyteller'),
         create_dw_region(player, 'Dark Death Mountain', None, ['Dark Death Mountain Drop (East)', 'Inverted Agahnims Tower', 'Superbunny Cave (Top)', 'Hookshot Cave', 'Turtle Rock', 
                                                       'Spike Cave', 'Dark Death Mountain Fairy', 'Dark Death Mountain Teleporter (West)', 'Turtle Rock Tail Drop', 'DDM Flute',
-                                                      'Dark Death Mountain Ledge Clip Spot', 'Hookshot Cave Island Clip Spot', 'Catfish Descent', 'Turtle Rock (Top) Clip Spot',
+                                                      'Dark Death Mountain Ledge Clip Spot', 'Catfish Descent', 'Turtle Rock (Top) Clip Spot',
                                                       'Dark Death Mountain Descent']),
         create_dw_region(player, 'Dark Death Mountain Ledge', None, ['Dark Death Mountain Ledge (East)', 'Dark Death Mountain Ledge (West)']),
         create_dw_region(player, 'Turtle Rock (Top)', None, ['Dark Death Mountain Teleporter (East)', 'Turtle Rock Drop']),
