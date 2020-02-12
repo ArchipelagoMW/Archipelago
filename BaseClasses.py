@@ -552,6 +552,9 @@ class CollectionState(object):
             rules.append(self.has_Pearl(player))
         return all(rules)
 
+    def can_superbunny_mirror_with_sword(self, player):
+        return self.has_Mirror(player) and self.has_sword(player)
+
     def can_get_glitched_speed_dw(self, player):
         rules = [self.has_Boots(player), any([self.has('Hookshot', player), self.has_sword(player)])]
         if self.world.mode[player] != 'inverted':
