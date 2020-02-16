@@ -17,6 +17,7 @@ import aioconsole
 
 import Items
 import Regions
+import Utils
 
 class ReceivedItem:
     def __init__(self, item, location, player):
@@ -59,14 +60,19 @@ class Context:
         self.rom = None
         self.auth = None
 
+
+color_codes = {'reset': 0, 'bold': 1, 'underline': 4, 'black': 30, 'red': 31, 'green': 32, 'yellow': 33, 'blue': 34,
+               'magenta': 35, 'cyan': 36, 'white': 37, 'black_bg': 40, 'red_bg': 41, 'green_bg': 42, 'yellow_bg': 43,
+               'blue_bg': 44, 'purple_bg': 45, 'cyan_bg': 46, 'white_bg': 47}
+
+
 def color_code(*args):
-    codes = {'reset': 0, 'bold': 1, 'underline': 4, 'black': 30, 'red': 31, 'green': 32, 'yellow': 33, 'blue': 34,
-             'magenta': 35, 'cyan': 36, 'white': 37 , 'black_bg': 40, 'red_bg': 41, 'green_bg': 42, 'yellow_bg': 43,
-             'blue_bg': 44, 'purple_bg': 45, 'cyan_bg': 46, 'white_bg': 47}
-    return '\033[' + ';'.join([str(codes[arg]) for arg in args]) + 'm'
+    return '\033[' + ';'.join([str(color_codes[arg]) for arg in args]) + 'm'
+
 
 def color(text, *args):
     return color_code(*args) + text + color_code('reset')
+
 
 RECONNECT_DELAY = 30
 
@@ -604,15 +610,17 @@ async def process_server_cmd(ctx : Context, cmd, args):
         logging.info('--------------------------------')
         logging.info('Room Information:')
         logging.info('--------------------------------')
+        logging.info(f'Server protocol version: {args.get("version", "unknown Bonta Protocol")}')
+        if "tags" in args:
+            logging.info("Server protocol tags: " + ", ".join(args["tags"]))
         if args['password']:
             logging.info('Password required')
         if len(args['players']) < 1:
             logging.info('No player connected')
         else:
             args['players'].sort()
-            current_team = 0
+            current_team = -1
             logging.info('Connected players:')
-            logging.info('  Team #1')
             for team, slot, name in args['players']:
                 if team != current_team:
                     logging.info(f'  Team #{team + 1}')
@@ -620,18 +628,21 @@ async def process_server_cmd(ctx : Context, cmd, args):
                 logging.info('    %s (Player %d)' % (name, slot))
         await server_auth(ctx, args['password'])
 
-    if cmd == 'ConnectionRefused':
+    elif cmd == 'ConnectionRefused':
         if 'InvalidPassword' in args:
             logging.error('Invalid password')
             ctx.password = None
             await server_auth(ctx, True)
         if 'InvalidRom' in args:
-            raise Exception('Invalid ROM detected, please verify that you have loaded the correct rom and reconnect your snes')
+            raise Exception(
+                'Invalid ROM detected, please verify that you have loaded the correct rom and reconnect your snes (/snes)')
         if 'SlotAlreadyTaken' in args:
             raise Exception('Player slot already in use for that team')
+        if 'IncompatibleVersion' in args:
+            raise Exception('Server reported your client version as incompatible')
         raise Exception('Connection refused by the multiworld host')
 
-    if cmd == 'Connected':
+    elif cmd == 'Connected':
         ctx.team, ctx.slot = args[0]
         ctx.player_names = {p: n for p, n in args[1]}
         msgs = []
@@ -642,7 +653,7 @@ async def process_server_cmd(ctx : Context, cmd, args):
         if msgs:
             await send_msgs(ctx.socket, msgs)
 
-    if cmd == 'ReceivedItems':
+    elif cmd == 'ReceivedItems':
         start_index, items = args
         if start_index == 0:
             ctx.items_received = []
@@ -656,36 +667,52 @@ async def process_server_cmd(ctx : Context, cmd, args):
                 ctx.items_received.append(ReceivedItem(*item))
         ctx.watcher_event.set()
 
-    if cmd == 'LocationInfo':
+    elif cmd == 'LocationInfo':
         for location, item, player in args:
             if location not in ctx.locations_info:
                 replacements = {0xA2: 'Small Key', 0x9D: 'Big Key', 0x8D: 'Compass', 0x7D: 'Map'}
                 item_name = replacements.get(item, get_item_name_from_id(item))
-                logging.info(f"Saw {color(item_name, 'red', 'bold')} at {list(Regions.location_table.keys())[location - 1]}")
+                logging.info(
+                    f"Saw {color(item_name, 'red', 'bold')} at {list(Regions.location_table.keys())[location - 1]}")
                 ctx.locations_info[location] = (item, player)
         ctx.watcher_event.set()
 
-    if cmd == 'ItemSent':
+    elif cmd == 'ItemSent':
         player_sent, location, player_recvd, item = args
         item = color(get_item_name_from_id(item), 'cyan' if player_sent != ctx.slot else 'green')
         player_sent = color(ctx.player_names[player_sent], 'yellow' if player_sent != ctx.slot else 'magenta')
         player_recvd = color(ctx.player_names[player_recvd], 'yellow' if player_recvd != ctx.slot else 'magenta')
-        logging.info('%s sent %s to %s (%s)' % (player_sent, item, player_recvd, get_location_name_from_address(location)))
+        logging.info(
+            '%s sent %s to %s (%s)' % (player_sent, item, player_recvd, get_location_name_from_address(location)))
 
-    if cmd == 'Print':
+    elif cmd == 'Hint':
+        hints = [Utils.Hint(*hint) for hint in args]
+        for hint in hints:
+            item = color(get_item_name_from_id(hint.item), 'green' if hint.found else 'cyan')
+            player_find = color(ctx.player_names[hint.finding_player],
+                                'yellow' if hint.finding_player != ctx.slot else 'magenta')
+            player_recvd = color(ctx.player_names[hint.receiving_player],
+                                 'yellow' if hint.receiving_player != ctx.slot else 'magenta')
+            logging.info(f"[Hint]: {player_recvd}'s {item} can be found "
+                         f"at {get_location_name_from_address(hint.location)} in {player_find}'s World." +
+                         (" (found)" if hint.found else ""))
+    elif cmd == 'Print':
         logging.info(args)
 
-async def server_auth(ctx : Context, password_requested):
+
+async def server_auth(ctx: Context, password_requested):
     if password_requested and not ctx.password:
         logging.info('Enter the password required to join this game:')
         ctx.password = await console_input(ctx)
     if ctx.rom is None:
         ctx.awaiting_rom = True
-        logging.info('No ROM detected, awaiting snes connection to authenticate to the multiworld server')
+        logging.info('No ROM detected, awaiting snes connection to authenticate to the multiworld server (/snes)')
         return
     ctx.awaiting_rom = False
     ctx.auth = ctx.rom.copy()
-    await send_msgs(ctx.socket, [['Connect', {'password': ctx.password, 'rom': ctx.auth}]])
+    await send_msgs(ctx.socket, [['Connect', {
+        'password': ctx.password, 'rom': ctx.auth, 'version': [1, 0, 0], 'tags': ['Berserker']
+    }]])
 
 async def console_input(ctx : Context):
     ctx.input_requests += 1
@@ -714,38 +741,43 @@ async def console_loop(ctx : Context):
         if not command:
             continue
 
-        if command[0] == '/exit':
-            ctx.exit_event.set()
+        if command[0][:1] != '/':
+            asyncio.create_task(send_msgs(ctx.socket, [['Say', input]]))
+            continue
 
-        if command[0] == '/snes':
+        precommand = command[0][1:]
+
+        if precommand == 'exit':
+            ctx.exit_event.set()
+        elif precommand == 'snes':
             ctx.snes_reconnect_address = None
             asyncio.create_task(snes_connect(ctx, command[1] if len(command) > 1 else ctx.snes_address))
-        if command[0] in ['/snes_close', '/snes_quit']:
+        elif precommand in {'snes_close', 'snes_quit'}:
             ctx.snes_reconnect_address = None
             if ctx.snes_socket is not None and not ctx.snes_socket.closed:
                 await ctx.snes_socket.close()
 
-        if command[0] in ['/connect', '/reconnect']:
+        elif precommand in {'connect', 'reconnect'}:
             ctx.server_address = None
             asyncio.create_task(connect(ctx, command[1] if len(command) > 1 else None))
-        if command[0] == '/disconnect':
+        elif precommand == 'disconnect':
             ctx.server_address = None
             asyncio.create_task(disconnect(ctx))
-        if command[0][:1] != '/':
-            asyncio.create_task(send_msgs(ctx.socket, [['Say', input]]))
 
-        if command[0] == '/received':
+
+        elif precommand == 'received':
             logging.info('Received items:')
             for index, item in enumerate(ctx.items_received, 1):
                 logging.info('%s from %s (%s) (%d/%d in list)' % (
-                    color(get_item_name_from_id(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
+                    color(get_item_name_from_id(item.item), 'red', 'bold'),
+                    color(ctx.player_names[item.player], 'yellow'),
                     get_location_name_from_address(item.location), index, len(ctx.items_received)))
 
-        if command[0] == '/missing':
+        elif precommand == 'missing':
             for location in [k for k, v in Regions.location_table.items() if type(v[0]) is int]:
                 if location not in ctx.locations_checked:
                     logging.info('Missing: ' + location)
-        if command[0] == '/getitem' and len(command) > 1:
+        elif precommand == 'getitem' and len(command) > 1:
             item = input[9:]
             item_id = Items.item_table[item][3] if item in Items.item_table else None
             if type(item_id) is int and item_id in range(0x100):
@@ -754,9 +786,10 @@ async def console_loop(ctx : Context):
                 snes_buffered_write(ctx, RECV_ITEM_PLAYER_ADDR, bytes([0]))
             else:
                 logging.info('Invalid item: ' + item)
-        if command[0] == "/license":
+        elif precommand == "license":
             with open("LICENSE") as f:
                 logging.info(f.read())
+
         await snes_flush_writes(ctx)
 
 def get_item_name_from_id(code):

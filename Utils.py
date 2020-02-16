@@ -2,14 +2,26 @@ import os
 import re
 import subprocess
 import sys
+import typing
+import functools
+
+from yaml import load
+
+try:
+    from yaml import CLoader as Loader
+except ImportError:
+    from yaml import Loader
+
 
 def int16_as_bytes(value):
     value = value & 0xFFFF
     return [value & 0xFF, (value >> 8) & 0xFF]
 
+
 def int32_as_bytes(value):
     value = value & 0xFFFFFFFF
     return [value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF, (value >> 24) & 0xFF]
+
 
 def pc_to_snes(value):
     return ((value<<1) & 0x7F0000)|(value & 0x7FFF)|0x8000
@@ -122,16 +134,19 @@ def make_new_base2current(old_rom='Zelda no Densetsu - Kamigami no Triforce (Jap
         if offset - 1 in out_data:
             out_data[offset-1].extend(out_data.pop(offset))
     with open('data/base2current.json', 'wt') as outfile:
-        json.dump([{key:value} for key, value in out_data.items()], outfile, separators=(",", ":"))
+        json.dump([{key: value} for key, value in out_data.items()], outfile, separators=(",", ":"))
 
     basemd5 = hashlib.md5()
     basemd5.update(new_rom_data)
     return "New Rom Hash: " + basemd5.hexdigest()
 
-from yaml import load
-import functools
-
-try: from yaml import CLoader as Loader
-except ImportError: from yaml import Loader
 
 parse_yaml = functools.partial(load, Loader=Loader)
+
+
+class Hint(typing.NamedTuple):
+    receiving_player: int
+    finding_player: int
+    location: int
+    item: int
+    found: bool

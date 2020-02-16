@@ -8,7 +8,6 @@ from EntranceShuffle import door_addresses
 from Utils import int16_as_bytes
 
 class World(object):
-
     def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive, goal, algorithm, accessibility, shuffle_ganon, retro, custom, customitemarray, hints):
         self.players = players
         self.teams = 1
@@ -953,7 +952,7 @@ class Shop(object):
 
 
 class Spoiler(object):
-
+    world: World
     def __init__(self, world):
         self.world = world
         self.hashes = {}
