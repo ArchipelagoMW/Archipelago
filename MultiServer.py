@@ -338,23 +338,29 @@ async def process_client_cmd(ctx : Context, client : Client, cmd, args):
                                       f"A hint costs {ctx.hint_cost} points. "
                                       f"You have {points_available} points.")
             elif itemname in Items.item_table:
-                if ctx.hint_cost: can_pay = points_available // ctx.hint_cost >= 1
-                else: can_pay = True
-
-                if can_pay:
-                    hints = collect_hints(ctx, client.team, client.slot, itemname)
-                    found = 0
+                hints = collect_hints(ctx, client.team, client.slot, itemname)
+                found = 0
+                for already_found, hint in hints:
+                    found += 1 - already_found
+                if not found:
                     for already_found, hint in hints:
-                        found += 1-already_found
                         notify_team(ctx, client.team, hint)
-                    ctx.hints_used[client.team, client.slot] += found
-                    if not found:
-                        notify_client(client, "No new items found, points refunded.")
-                    else:
-                        save(ctx)
+                    notify_client(client, "No new items found, points refunded.")
                 else:
-                    notify_client(client, f"You can't afford the hint. "
-                                          f"You have {points_available} points and need {ctx.hint_cost}")
+                    if ctx.hint_cost:
+                        can_pay = points_available // (ctx.hint_cost * found) >= 1
+                    else:
+                        can_pay = True
+
+                    if can_pay:
+                        ctx.hints_used[client.team, client.slot] += found
+                        for already_found, hint in hints:
+                            notify_team(ctx, client.team, hint)
+                        save(ctx)
+                    else:
+                        notify_client(client, f"You can't afford the hint. "
+                                              f"You have {points_available} points and need  at least {ctx.hint_cost}, "
+                                              f"more if multiple items are still be found.")
             else:
                 notify_client(client, f'Item "{itemname}" not found.')
 
