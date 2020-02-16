@@ -90,16 +90,15 @@ if __name__ == "__main__":
 
         romfilename = ""
         if player_name:
-            try:
-                index = player_names.index(player_name)
-            except IndexError:
-                print(f"Could not find Player {player_name}")
-            else:
-                romfilename = os.path.join(output_path, f"ER_{seedname}_P{index+1}_{player_name}.sfc")
-                import webbrowser
-                if os.path.exists(romfilename):
-                    print(f"Launching ROM file {romfilename}")
-                    webbrowser.open(romfilename)
+            for file in os.listdir(output_path):
+                if player_name in file:
+                    romfilename = os.path.join(output_path, file)
+                    import webbrowser
+
+                    if os.path.exists(romfilename):
+                        print(f"Launching ROM file {romfilename}")
+                        webbrowser.open(romfilename)
+                    break
 
         if zip_roms:
             zipname = os.path.join(output_path, f"ER_{seedname}.zip")
