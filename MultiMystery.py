@@ -92,12 +92,11 @@ if __name__ == "__main__":
         if player_name:
             for file in os.listdir(output_path):
                 if player_name in file:
-                    romfilename = os.path.join(output_path, file)
                     import webbrowser
 
-                    if os.path.exists(romfilename):
-                        print(f"Launching ROM file {romfilename}")
-                        webbrowser.open(romfilename)
+                    romfilename = os.path.join(output_path, file)
+                    print(f"Launching ROM file {romfilename}")
+                    webbrowser.open(romfilename)
                     break
 
         if zip_roms:
