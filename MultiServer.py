@@ -154,6 +154,8 @@ async def on_client_connected(ctx : Context, client : Client):
     await send_msgs(client.socket, [['RoomInfo', {
         'password': ctx.password is not None,
         'players': [(client.team, client.slot, client.name) for client in ctx.clients if client.auth],
+        # tags are for additional features in the communication.
+        # Name them by feature or fork, as you feel is appropriate.
         'tags': ['Berserker'],
         'version': "1.0.0"
     }]])
