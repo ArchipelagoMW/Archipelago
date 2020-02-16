@@ -51,100 +51,39 @@ item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher cla
               'Bottle (Red Potion)': (True, False, None, 0x2B, 'Hearty red goop!', 'and the red goo', 'the liquid kid', 'potion for sale', 'free samples', 'bottle boy has red goo again', 'a Bottle'),
               'Bottle (Green Potion)': (True, False, None, 0x2C, 'Refreshing green goop!', 'and the green goo', 'the liquid kid', 'potion for sale', 'free samples', 'bottle boy has green goo again', 'a Bottle'),
               'Bottle (Blue Potion)': (True, False, None, 0x2D, 'Delicious blue goop!', 'and the blue goo', 'the liquid kid', 'potion for sale', 'free samples', 'bottle boy has blue goo again', 'a Bottle'),
-              'Bottle (Fairy)': (
-              True, False, None, 0x3D, 'Save me and I will revive you', 'and the captive', 'the tingle kid',
-              'hostage for sale', 'fairy dust and shrooms', 'bottle boy has friend again', 'a Bottle'),
-              'Bottle (Bee)': (
-              True, False, None, 0x3C, 'I will sting your foes a few times', 'and the sting buddy', 'the beekeeper kid',
-              'insect for sale', 'shroom pollenation', 'bottle boy has mad bee again', 'a Bottle'),
-              'Bottle (Good Bee)': (
-              True, False, None, 0x48, 'I will sting your foes a whole lot!', 'and the sparkle sting',
-              'the beekeeper kid', 'insect for sale', 'shroom pollenation', 'bottle boy has beetor again', 'a Bottle'),
-              'Master Sword': (
-              True, False, 'Sword', 0x50, 'I beat barries and pigs alike', 'and the master sword', 'sword-wielding kid',
-              'glow sword for sale', 'fungus for blue slasher', 'sword boy fights again', 'the Master Sword'),
-              'Tempered Sword': (True, False, 'Sword', 0x02, 'I stole the\nblacksmith\'s\njob!', 'the tempered sword',
-                                 'sword-wielding kid', 'flame sword for sale', 'fungus for red slasher',
-                                 'sword boy fights again', 'the Tempered Sword'),
-              'Fighter Sword': (
-              True, False, 'Sword', 0x49, 'A pathetic\nsword rests\nhere!', 'the tiny sword', 'sword-wielding kid',
-              'tiny sword for sale', 'fungus for tiny slasher', 'sword boy fights again', 'the small sword'),
-              'Golden Sword': (True, False, 'Sword', 0x03, 'The butter\nsword rests\nhere!', 'and the butter sword',
-                               'sword-wielding kid', 'butter for sale', 'cap churned to butter',
-                               'sword boy fights again', 'the Golden Sword'),
-              'Progressive Sword': (
-              True, False, 'Sword', 0x5E, 'a better copy\nof your sword\nfor your time', 'the unknown sword',
-              'sword-wielding kid', 'sword for sale', 'fungus for some slasher', 'sword boy fights again', 'a sword'),
-              'Progressive Glove': (
-              True, False, None, 0x61, 'a way to lift\nheavier things', 'and the lift upgrade', 'body-building kid',
-              'some glove for sale', 'fungus for gloves', 'body-building boy lifts again', 'a glove'),
-              'Silver Arrows': (True, False, None, 0x58, 'Do you fancy\nsilver tipped\narrows?', 'and the ganonsbane',
-                                'ganon-killing kid', 'ganon doom for sale', 'fungus for pork',
-                                'archer boy shines again', 'the silver arrows'),
-              'Green Pendant': (
-              True, False, 'Crystal', (0x04, 0x38, 0x62, 0x00, 0x69, 0x01), None, None, None, None, None, None, None),
-              'Red Pendant': (
-              True, False, 'Crystal', (0x02, 0x34, 0x60, 0x00, 0x69, 0x02), None, None, None, None, None, None, None),
-              'Blue Pendant': (
-              True, False, 'Crystal', (0x01, 0x32, 0x60, 0x00, 0x69, 0x03), None, None, None, None, None, None, None),
-              'Triforce': (
-              True, False, None, 0x6A, '\n   YOU WIN!', 'and the triforce', 'victorious kid', 'victory for sale',
-              'fungus for the win', 'greedy boy wins game again', 'the Triforce'),
-              'Power Star': (
-              True, False, None, 0x6B, 'a small victory', 'and the power star', 'star-struck kid', 'star for sale',
-              'see stars with shroom', 'mario powers up again', 'a Power Star'),
-              'Triforce Piece': (
-              True, False, None, 0x6C, 'a small victory', 'and the thirdforce', 'triangular kid', 'triangle for sale',
-              'fungus for triangle', 'wise boy has triangle again', 'a Triforce Piece'),
-              'Crystal 1': (
-              True, False, 'Crystal', (0x02, 0x34, 0x64, 0x40, 0x7F, 0x06), None, None, None, None, None, None, None),
-              'Crystal 2': (
-              True, False, 'Crystal', (0x10, 0x34, 0x64, 0x40, 0x79, 0x06), None, None, None, None, None, None, None),
-              'Crystal 3': (
-              True, False, 'Crystal', (0x40, 0x34, 0x64, 0x40, 0x6C, 0x06), None, None, None, None, None, None, None),
-              'Crystal 4': (
-              True, False, 'Crystal', (0x20, 0x34, 0x64, 0x40, 0x6D, 0x06), None, None, None, None, None, None, None),
-              'Crystal 5': (
-              True, False, 'Crystal', (0x04, 0x32, 0x64, 0x40, 0x6E, 0x06), None, None, None, None, None, None, None),
-              'Crystal 6': (
-              True, False, 'Crystal', (0x01, 0x32, 0x64, 0x40, 0x6F, 0x06), None, None, None, None, None, None, None),
-              'Crystal 7': (
-              True, False, 'Crystal', (0x08, 0x34, 0x64, 0x40, 0x7C, 0x06), None, None, None, None, None, None, None),
-              'Single Arrow': (
-              False, False, None, 0x43, 'a lonely arrow\nsits here.', 'and the arrow', 'stick-collecting kid',
-              'sewing needle for sale', 'fungus for arrow', 'archer boy sews again', 'an arrow'),
-              'Arrows (10)': (
-              False, False, None, 0x44, 'This will give\nyou ten shots\nwith your bow!', 'and the arrow pack',
-              'stick-collecting kid', 'sewing kit for sale', 'fungus for arrows', 'archer boy sews again',
-              'ten arrows'),
-              'Arrow Upgrade (+10)': (
-              False, False, None, 0x54, 'increase arrow\nstorage, low\nlow price', 'and the quiver',
-              'quiver-enlarging kid', 'arrow boost for sale', 'witch and more skewers', 'upgrade boy sews more again',
-              'arrow capacity'),
-              'Arrow Upgrade (+5)': (
-              False, False, None, 0x53, 'increase arrow\nstorage, low\nlow price', 'and the quiver',
-              'quiver-enlarging kid', 'arrow boost for sale', 'witch and more skewers', 'upgrade boy sews more again',
-              'arrow capacity'),
-              'Single Bomb': (False, False, None, 0x27, 'I make things\ngo BOOM! But\njust once.', 'and the explosion',
-                              'the bomb-holding kid', 'firecracker for sale', 'blend fungus into bomb',
-                              '\'splosion boy explodes again', 'a bomb'),
-              'Bombs (3)': (False, False, None, 0x28, 'I make things\ngo triple\nBOOM!!!', 'and the explosions',
-                            'the bomb-holding kid', 'firecrackers for sale', 'blend fungus into bombs',
-                            '\'splosion boy explodes again', 'three bombs'),
-              'Bombs (10)': (False, False, None, 0x31, 'I make things\ngo BOOM! Ten\ntimes!', 'and the explosions',
-                             'the bomb-holding kid', 'firecrackers for sale', 'blend fungus into bombs',
-                             '\'splosion boy explodes again', 'ten bombs'),
-              'Bomb Upgrade (+10)': (
-              False, False, None, 0x52, 'increase bomb\nstorage, low\nlow price', 'and the bomb bag',
-              'boom-enlarging kid', 'bomb boost for sale', 'the shroom goes boom', 'upgrade boy explodes more again',
-              'bomb capacity'),
-              'Bomb Upgrade (+5)': (
-              False, False, None, 0x51, 'increase bomb\nstorage, low\nlow price', 'and the bomb bag',
-              'boom-enlarging kid', 'bomb boost for sale', 'the shroom goes boom', 'upgrade boy explodes more again',
-              'bomb capacity'),
-              'Blue Mail': (
-              False, True, None, 0x22, 'Now you\'re a\nblue elf!', 'and the banana hat', 'the protected kid',
-              'banana hat for sale', 'the clothing store', 'tailor boy banana hatted again', 'the blue mail'),
+              'Bottle (Fairy)': (True, False, None, 0x3D, 'Save me and I will revive you', 'and the captive', 'the tingle kid','hostage for sale', 'fairy dust and shrooms', 'bottle boy has friend again', 'a Bottle'),
+              'Bottle (Bee)': (True, False, None, 0x3C, 'I will sting your foes a few times', 'and the sting buddy', 'the beekeeper kid', 'insect for sale', 'shroom pollenation', 'bottle boy has mad bee again', 'a Bottle'),
+              'Bottle (Good Bee)': (True, False, None, 0x48, 'I will sting your foes a whole lot!', 'and the sparkle sting', 'the beekeeper kid', 'insect for sale', 'shroom pollenation', 'bottle boy has beetor again', 'a Bottle'),
+              'Master Sword': (True, False, 'Sword', 0x50, 'I beat barries and pigs alike', 'and the master sword', 'sword-wielding kid', 'glow sword for sale', 'fungus for blue slasher', 'sword boy fights again', 'the Master Sword'),
+              'Tempered Sword': (True, False, 'Sword', 0x02, 'I stole the\nblacksmith\'s\njob!', 'the tempered sword', 'sword-wielding kid', 'flame sword for sale', 'fungus for red slasher', 'sword boy fights again', 'the Tempered Sword'),
+              'Fighter Sword': (True, False, 'Sword', 0x49, 'A pathetic\nsword rests\nhere!', 'the tiny sword', 'sword-wielding kid', 'tiny sword for sale', 'fungus for tiny slasher', 'sword boy fights again', 'the small sword'),
+              'Golden Sword': (True, False, 'Sword', 0x03, 'The butter\nsword rests\nhere!', 'and the butter sword', 'sword-wielding kid', 'butter for sale', 'cap churned to butter', 'sword boy fights again', 'the Golden Sword'),
+              'Progressive Sword': (True, False, 'Sword', 0x5E, 'a better copy\nof your sword\nfor your time', 'the unknown sword', 'sword-wielding kid', 'sword for sale', 'fungus for some slasher', 'sword boy fights again', 'a sword'),
+              'Progressive Glove': (True, False, None, 0x61, 'a way to lift\nheavier things', 'and the lift upgrade', 'body-building kid', 'some glove for sale', 'fungus for gloves', 'body-building boy lifts again', 'a glove'),
+              'Silver Arrows': (True, False, None, 0x58, 'Do you fancy\nsilver tipped\narrows?', 'and the ganonsbane', 'ganon-killing kid', 'ganon doom for sale', 'fungus for pork', 'archer boy shines again', 'the silver arrows'),
+              'Green Pendant': (True, False, 'Crystal', (0x04, 0x38, 0x62, 0x00, 0x69, 0x01), None, None, None, None, None, None, None),
+              'Red Pendant': (True, False, 'Crystal', (0x02, 0x34, 0x60, 0x00, 0x69, 0x02), None, None, None, None, None, None, None),
+              'Blue Pendant': (True, False, 'Crystal', (0x01, 0x32, 0x60, 0x00, 0x69, 0x03), None, None, None, None, None, None, None),
+              'Triforce': (True, False, None, 0x6A, '\n   YOU WIN!', 'and the triforce', 'victorious kid', 'victory for sale', 'fungus for the win', 'greedy boy wins game again', 'the Triforce'),
+              'Power Star': (True, False, None, 0x6B, 'a small victory', 'and the power star', 'star-struck kid', 'star for sale', 'see stars with shroom', 'mario powers up again', 'a Power Star'),
+              'Triforce Piece': (True, False, None, 0x6C, 'a small victory', 'and the thirdforce', 'triangular kid', 'triangle for sale', 'fungus for triangle', 'wise boy has triangle again', 'a Triforce Piece'),
+              'Crystal 1': (True, False, 'Crystal', (0x02, 0x34, 0x64, 0x40, 0x7F, 0x06), None, None, None, None, None, None, None),
+              'Crystal 2': (True, False, 'Crystal', (0x10, 0x34, 0x64, 0x40, 0x79, 0x06), None, None, None, None, None, None, None),
+              'Crystal 3': (True, False, 'Crystal', (0x40, 0x34, 0x64, 0x40, 0x6C, 0x06), None, None, None, None, None, None, None),
+              'Crystal 4': (True, False, 'Crystal', (0x20, 0x34, 0x64, 0x40, 0x6D, 0x06), None, None, None, None, None, None, None),
+              'Crystal 5': (True, False, 'Crystal', (0x04, 0x32, 0x64, 0x40, 0x6E, 0x06), None, None, None, None, None, None, None),
+              'Crystal 6': (True, False, 'Crystal', (0x01, 0x32, 0x64, 0x40, 0x6F, 0x06), None, None, None, None, None, None, None),
+              'Crystal 7': (True, False, 'Crystal', (0x08, 0x34, 0x64, 0x40, 0x7C, 0x06), None, None, None, None, None, None, None),
+              'Single Arrow': (False, False, None, 0x43, 'a lonely arrow\nsits here.', 'and the arrow', 'stick-collecting kid', 'sewing needle for sale', 'fungus for arrow', 'archer boy sews again', 'an arrow'),
+              'Arrows (10)': (False, False, None, 0x44, 'This will give\nyou ten shots\nwith your bow!', 'and the arrow pack', 'stick-collecting kid', 'sewing kit for sale', 'fungus for arrows', 'archer boy sews again', 'ten arrows'),
+              'Arrow Upgrade (+10)': (False, False, None, 0x54, 'increase arrow\nstorage, low\nlow price', 'and the quiver', 'quiver-enlarging kid', 'arrow boost for sale', 'witch and more skewers', 'upgrade boy sews more again', 'arrow capacity'),
+              'Arrow Upgrade (+5)': (False, False, None, 0x53, 'increase arrow\nstorage, low\nlow price', 'and the quiver', 'quiver-enlarging kid', 'arrow boost for sale', 'witch and more skewers', 'upgrade boy sews more again', 'arrow capacity'),
+              'Single Bomb': (False, False, None, 0x27, 'I make things\ngo BOOM! But\njust once.', 'and the explosion', 'the bomb-holding kid', 'firecracker for sale', 'blend fungus into bomb', '\'splosion boy explodes again', 'a bomb'),
+              'Bombs (3)': (False, False, None, 0x28, 'I make things\ngo triple\nBOOM!!!', 'and the explosions', 'the bomb-holding kid', 'firecrackers for sale', 'blend fungus into bombs', '\'splosion boy explodes again', 'three bombs'),
+              'Bombs (10)': (False, False, None, 0x31, 'I make things\ngo BOOM! Ten\ntimes!', 'and the explosions', 'the bomb-holding kid', 'firecrackers for sale', 'blend fungus into bombs', '\'splosion boy explodes again', 'ten bombs'),
+              'Bomb Upgrade (+10)': (False, False, None, 0x52, 'increase bomb\nstorage, low\nlow price', 'and the bomb bag', 'boom-enlarging kid', 'bomb boost for sale', 'the shroom goes boom', 'upgrade boy explodes more again', 'bomb capacity'),
+              'Bomb Upgrade (+5)': (False, False, None, 0x51, 'increase bomb\nstorage, low\nlow price', 'and the bomb bag', 'boom-enlarging kid', 'bomb boost for sale', 'the shroom goes boom', 'upgrade boy explodes more again', 'bomb capacity'),
+              'Blue Mail': (False, True, None, 0x22, 'Now you\'re a\nblue elf!', 'and the banana hat', 'the protected kid', 'banana hat for sale', 'the clothing store', 'tailor boy banana hatted again', 'the blue mail'),
               'Red Mail': (False, True, None, 0x23, 'Now you\'re a\nred elf!', 'and the eggplant hat', 'well-protected kid', 'purple hat for sale', 'the nice clothing store', 'tailor boy fears nothing again', 'the red mail'),
               'Progressive Armor': (False, True, None, 0x60, 'time for a\nchange of\nclothes?', 'and the unknown hat', 'the protected kid', 'new hat for sale', 'the clothing store', 'tailor boy has threads again', 'some armor'),
               'Blue Boomerang': (True, False, None, 0x0C, 'No matter what\nyou do, blue\nreturns to you', 'and the bluemarang', 'the bat-throwing kid', 'bent stick for sale', 'fungus for puma-stick', 'throwing boy plays fetch again', 'the blue boomerang'),
@@ -227,12 +166,8 @@ item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher cla
               'Red Potion': (False, False, None, 0x2E, 'Hearty red goop!', 'and the red goo', 'the liquid kid', 'potion for sale', 'free samples', 'bottle boy has red goo again', 'a red potion'),
               'Green Potion': (False, False, None, 0x2F, 'Refreshing green goop!', 'and the green goo', 'the liquid kid', 'potion for sale', 'free samples', 'bottle boy has green goo again', 'a green potion'),
               'Blue Potion': (False, False, None, 0x30, 'Delicious blue goop!', 'and the blue goo', 'the liquid kid', 'potion for sale', 'free samples', 'bottle boy has blue goo again', 'a blue potion'),
-              'Bee': (False, False, None, 0x0E, 'I will sting your foes a few times', 'and the sting buddy',
-                      'the beekeeper kid', 'insect for sale', 'shroom pollenation', 'bottle boy has mad bee again',
-                      'a bee'),
-              'Small Heart': (
-              False, False, None, 0x42, 'Just a little\npiece of love!', 'and the heart', 'the life-giving kid',
-              'little love for sale', 'fungus for life', 'life boy feels some love again', 'a heart'),
+              'Bee': (False, False, None, 0x0E, 'I will sting your foes a few times', 'and the sting buddy', 'the beekeeper kid', 'insect for sale', 'shroom pollenation', 'bottle boy has mad bee again', 'a bee'),
+              'Small Heart': (False, False, None, 0x42, 'Just a little\npiece of love!', 'and the heart', 'the life-giving kid', 'little love for sale', 'fungus for life', 'life boy feels some love again', 'a heart'),
               'Beat Agahnim 1': (True, False, 'Event', None, None, None, None, None, None, None, None),
               'Beat Agahnim 2': (True, False, 'Event', None, None, None, None, None, None, None, None),
               'Get Frog': (True, False, 'Event', None, None, None, None, None, None, None, None),
