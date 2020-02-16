@@ -157,7 +157,7 @@ async def on_client_connected(ctx : Context, client : Client):
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ['Berserker'],
-        'version': "1.0.0"
+        'version': [1, 0, 0]
     }]])
 
 async def on_client_disconnected(ctx : Context, client : Client):
