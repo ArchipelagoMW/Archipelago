@@ -145,6 +145,8 @@ def roll_settings(weights):
     dungeon_items = get_choice('dungeon_items')
     if dungeon_items == 'full' or dungeon_items == True:
         dungeon_items = 'mcsb'
+    elif dungeon_items == 'standard':
+        dungeon_items = ""
     elif not dungeon_items:
         dungeon_items = ""
 
