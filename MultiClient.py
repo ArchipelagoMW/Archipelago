@@ -796,15 +796,10 @@ async def console_loop(ctx : Context):
         await snes_flush_writes(ctx)
 
 def get_item_name_from_id(code):
-    items = [k for k, i in Items.item_table.items() if type(i[3]) is int and i[3] == code]
-    return items[0] if items else 'Unknown item'
+    return Items.lookup_id_to_name.get(code, 'Unknown item')
 
 def get_location_name_from_address(address):
-    if type(address) is str:
-        return address
-
-    locs = [k for k, l in Regions.location_table.items() if type(l[0]) is int and l[0] == address]
-    return locs[0] if locs else 'Unknown location'
+    return Regions.lookup_id_to_name.get(address, 'Unknown location')
 
 async def track_locations(ctx : Context, roomid, roomdata):
     new_locations = []

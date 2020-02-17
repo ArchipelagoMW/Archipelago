@@ -615,3 +615,5 @@ location_table = {'Mushroom': (0x180013, 0x186338, False, 'in the woods'),
                   'Ice Palace - Prize': ([0x120A4, 0x53F5A, 0x53F5B, 0x180059, 0x180073, 0xC705], None, True, 'Ice Palace'),
                   'Misery Mire - Prize': ([0x120A2, 0x53F48, 0x53F49, 0x180057, 0x180075, 0xC703], None, True, 'Misery Mire'),
                   'Turtle Rock - Prize': ([0x120A7, 0x53F24, 0x53F25, 0x18005C, 0x180079, 0xC708], None, True, 'Turtle Rock')}
+
+lookup_id_to_name = {data[0] : name for name, data in location_table.items() if type(data[0]) == int}
