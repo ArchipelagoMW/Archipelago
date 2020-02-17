@@ -26,12 +26,16 @@ multi_mystery_options:
 #does nothing if the name is not found
 #example: player_name = "Berserker"
   player_name: "" # the hosts name
+#create a spoiler file
+  create_spoiler: 1
 #Zip the resulting roms
 #0 -> Don't
 #1 -> Create a zip
 #2 -> Create a zip and delete the ROMs that will be in it, except the hosts (requires player_name to be set correctly)
   zip_roms: 1
-#create a spoiler file
-  create_spoiler: 1
+#include the spoiler log in the zip, 2 -> delete the non-zipped one
+  zip_spoiler: 0
+#include the multidata file in the zip, 2 -> delete the non-zipped one, which also means the server won't autostart
+  zip_multidata: 0
 #create roms flagged as race roms
   race: 0
