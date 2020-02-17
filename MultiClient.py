@@ -740,7 +740,7 @@ async def console_loop(ctx : Context):
             ctx.input_queue.put_nowait(input)
             continue
 
-        command = shlex.split(input)
+        command = input.split()
         if not command:
             continue
 

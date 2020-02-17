@@ -271,6 +271,18 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
 
     return hints
 
+def collect_hints_location(ctx: Context, team: int, slot: int, location: str) -> typing.List[Utils.Hint]:
+    hints = []
+    location = Regions.lookup_lower_name_to_name[location]
+    seeked_location = Regions.location_table[location][0]
+    for check, result in ctx.locations.items():
+        location_id, finding_player = check
+        if finding_player == slot and location_id == seeked_location:
+            item_id, receiving_player = result
+            found = location_id in ctx.location_checks[team, finding_player]
+            hints.append(Utils.Hint(receiving_player, finding_player, location_id, item_id, found))
+            break # each location has 1 item
+    return hints
 
 def format_hint(ctx: Context, team: int, hint: Utils.Hint) -> str:
     return f"[Hint]: {ctx.player_names[team, hint.receiving_player]}'s " \
@@ -380,12 +392,20 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             points_available = ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) - \
                                ctx.hint_cost * ctx.hints_used[client.team, client.slot]
             item_name = args[6:].lower()
+            hints = []
             if not item_name:
-                notify_client(client, "Use !hint {item_name}, for example !hint Lamp. "
+                notify_client(client, "Use !hint {item_name/location_name}, "
+                                      "for example !hint Lamp or !hint Link's House. "
                                       f"A hint costs {ctx.hint_cost} points. "
                                       f"You have {points_available} points.")
             elif item_name in Items.lookup_lower_name_to_id:
                 hints = collect_hints(ctx, client.team, client.slot, item_name)
+            elif item_name in Regions.lookup_lower_name_to_name:
+                hints = collect_hints_location(ctx, client.team, client.slot, item_name)
+            else:
+                notify_client(client, f'Item/location "{item_name}" not found.')
+
+            if hints:
                 found = 0
                 for hint in hints:
                     found += 1 - hint.found
@@ -406,8 +426,6 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
                         notify_client(client, f"You can't afford the hint. "
                                               f"You have {points_available} points and need at least {ctx.hint_cost}, "
                                               f"more if multiple items are still to be found.")
-            else:
-                notify_client(client, f'Item "{item_name}" not found.')
 
 def set_password(ctx : Context, password):
     ctx.password = password
@@ -418,7 +436,7 @@ async def console(ctx : Context):
         input = await aioconsole.ainput()
         try:
 
-            command = shlex.split(input)
+            command = input.split()
             if not command:
                 continue
 
@@ -465,14 +483,17 @@ async def console(ctx : Context):
             if command[0] == '/hint':
                 for (team, slot), name in ctx.player_names.items():
                     if len(command) == 1:
-                        logging.info("Use /hint {Playername} {itemname}\nFor example /hint Berserker Lamp")
+                        logging.info("Use /hint {Playername} {itemname/locationname}\nFor example /hint Berserker Lamp")
                     elif name.lower() == command[1].lower():
                         item = " ".join(command[2:]).lower()
-                        if item in Items.lookup_lower_name_to_id:
+                        if item in Items.lookup_lower_name_to_id: #item name
                             hints = collect_hints(ctx, team, slot, item)
                             notify_hints(ctx, team, hints)
+                        elif item in Regions.lookup_lower_name_to_name: #location name
+                            hints = collect_hints_location(ctx, team, slot, item)
+                            notify_hints(ctx, team, hints)
                         else:
-                            logging.warning("Unknown item: " + item)
+                            logging.warning("Unknown item/location: " + item)
             if command[0][0] != '/':
                 notify_all(ctx, '[Server]: ' + input)
         except:
