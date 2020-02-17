@@ -3,3 +3,4 @@ colorama>=0.4.3
 websockets>=8.1
 PyYAML>=5.3
 collections_extended>=1.0.3
+fuzzywuzzy>=0.18.0
