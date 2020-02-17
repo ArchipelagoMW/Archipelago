@@ -18,7 +18,7 @@
 
 Mushroom: Mushroom
 Bottle Merchant: Bottle
-Flute Spot: Ocarina
+Flute Spot: Flute
 Sunken Treasure: Nothing
 Purple Chest: Nothing
 Blind's Hideout - Top: Nothing

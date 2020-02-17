@@ -1014,7 +1014,7 @@ def patch_rom(world, rom, player, team, enemized):
                     'Big Key (Turtle Rock)': (0x366, 0x08), 'Compass (Turtle Rock)': (0x364, 0x08), 'Map (Turtle Rock)': (0x368, 0x08),
                     'Big Key (Ganons Tower)': (0x366, 0x04), 'Compass (Ganons Tower)': (0x364, 0x04), 'Map (Ganons Tower)': (0x368, 0x04)}
         set_or_table = {'Flippers': (0x356, 1, 0x379, 0x02),'Pegasus Boots': (0x355, 1, 0x379, 0x04),
-                        'Shovel': (0x34C, 1, 0x38C, 0x04), 'Ocarina': (0x34C, 3, 0x38C, 0x01),
+                        'Shovel': (0x34C, 1, 0x38C, 0x04), 'Flute': (0x34C, 3, 0x38C, 0x01),
                         'Mushroom': (0x344, 1, 0x38C, 0x20 | 0x08), 'Magic Powder': (0x344, 2, 0x38C, 0x10),
                         'Blue Boomerang': (0x341, 1, 0x38C, 0x80), 'Red Boomerang': (0x341, 2, 0x38C, 0x40)}
         keys = {'Small Key (Eastern Palace)': [0x37E], 'Small Key (Desert Palace)': [0x37F],
@@ -2222,7 +2222,7 @@ RelevantItems = ['Bow',
                  'Hammer',
                  'Hookshot',
                  'Magic Mirror',
-                 'Ocarina',
+                 'Flute',
                  'Pegasus Boots',
                  'Power Glove',
                  'Cape',
@@ -2301,6 +2301,6 @@ BigKeys = ['Big Key (Eastern Palace)',
 
 hash_alphabet = [
     "Bow", "Boomerang", "Hookshot", "Bomb", "Mushroom", "Powder", "Rod", "Pendant", "Bombos", "Ether", "Quake",
-    "Lamp", "Hammer", "Shovel", "Ocarina", "Bug Net", "Book", "Bottle", "Potion", "Cane", "Cape", "Mirror", "Boots",
+    "Lamp", "Hammer", "Shovel", "Flute", "Bug Net", "Book", "Bottle", "Potion", "Cane", "Cape", "Mirror", "Boots",
     "Gloves", "Flippers", "Pearl", "Shield", "Tunic", "Heart", "Map", "Compass", "Key"
 ]

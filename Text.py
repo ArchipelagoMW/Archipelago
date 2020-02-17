@@ -366,7 +366,7 @@ class Credits(object):
                 SceneLargeCreditLine(23, "Woodsmen's Hut"),
             ],
             'grove': [
-                SceneSmallCreditLine(19, 'ocarina boy plays again'),
+                SceneSmallCreditLine(19, 'flute boy plays again'),
                 SceneLargeCreditLine(23, 'Haunted Grove'),
             ],
             'well': [
@@ -1310,7 +1310,7 @@ class TextTable(object):
             'item_get_bombos',
             'item_get_quake',
             'item_get_hammer',
-            'item_get_ocarina',
+            'item_get_flute',
             'item_get_cane_of_somaria',
             'item_get_hookshot',
             'item_get_bombs',
@@ -1551,7 +1551,7 @@ class TextTable(object):
         text['item_get_bombos'] = CompressedTextMapper.convert("Let's set everything on fire, and melt things!")
         text['item_get_quake'] = CompressedTextMapper.convert("Time to make the earth shake, rattle, and roll!")
         text['item_get_hammer'] = CompressedTextMapper.convert("STOP!\n\nHammer Time!") # 66
-        text['item_get_ocarina'] = CompressedTextMapper.convert("Finally! We can play the Song of Time!")
+        text['item_get_flute'] = CompressedTextMapper.convert("Finally! We can play the Song of Time!")
         text['item_get_cane_of_somaria'] = CompressedTextMapper.convert("Make blocks!\nThrow blocks!\nsplode Blocks!")
         text['item_get_hookshot'] = CompressedTextMapper.convert("BOING!!!\nBOING!!!\nSay no more…")
         text['item_get_bombs'] = CompressedTextMapper.convert("BOMBS! Use A to pick 'em up, throw 'em, get hurt!")

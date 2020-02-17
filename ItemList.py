@@ -13,7 +13,7 @@ from Items import ItemFactory
 #This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 #Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
 
-alwaysitems = ['Bombos', 'Book of Mudora', 'Cane of Somaria', 'Ether', 'Fire Rod', 'Flippers', 'Ocarina', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp',
+alwaysitems = ['Bombos', 'Book of Mudora', 'Cane of Somaria', 'Ether', 'Fire Rod', 'Flippers', 'Flute', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp',
                'Cape', 'Magic Powder', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Bug Catching Net', 'Cane of Byrna', 'Blue Boomerang', 'Red Boomerang']
 progressivegloves = ['Progressive Glove'] * 2
 basicgloves = ['Power Glove', 'Titans Mitts']
@@ -554,7 +554,7 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
     pool.extend(['Lamp'] * customitemarray[12])
     pool.extend(['Hammer'] * customitemarray[13])
     pool.extend(['Shovel'] * customitemarray[14])
-    pool.extend(['Ocarina'] * customitemarray[15])
+    pool.extend(['Flute'] * customitemarray[15])
     pool.extend(['Bug Catching Net'] * customitemarray[16])
     pool.extend(['Book of Mudora'] * customitemarray[17])
     pool.extend(['Cane of Somaria'] * customitemarray[19])

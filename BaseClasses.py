@@ -506,7 +506,7 @@ class CollectionState(object):
 
     def can_flute(self, player):
         lw = self.world.get_region('Light World', player)
-        return self.has('Ocarina', player) and lw.can_reach(self) and self.is_not_bunny(lw, player)
+        return self.has('Flute', player) and lw.can_reach(self) and self.is_not_bunny(lw, player)
 
     def can_melt_things(self, player):
         return self.has('Fire Rod', player) or (self.has('Bombos', player) and self.has_sword(player))
