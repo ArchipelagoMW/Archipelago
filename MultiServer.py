@@ -117,7 +117,7 @@ def notify_client(client: Client, text: str):
 def notify_hints(ctx: Context, team: int, hints: typing.List[Utils.Hint]):
     cmd = [["Hint", hints]]
     texts = [['Print', format_hint(ctx, team, hint)] for hint in hints]
-    for cmd, text in texts:
+    for _, text in texts:
         logging.info("Notice (Team #%d): %s" % (team + 1, text))
     for client in ctx.clients:
         if client.auth and client.team == team:
@@ -390,7 +390,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
                 for hint in hints:
                     found += 1 - hint.found
                 if not found:
-                    notify_hints(ctx, client.team, format_hint(ctx, client.team, hints))
+                    notify_hints(ctx, client.team, hints)
                     notify_client(client, "No new items found, points refunded.")
                 else:
                     if ctx.hint_cost:
@@ -400,7 +400,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
 
                     if can_pay:
                         ctx.hints_used[client.team, client.slot] += found
-                        notify_hints(ctx, client.team, format_hint(ctx, client.team, hints))
+                        notify_hints(ctx, client.team, hints)
                         save(ctx)
                     else:
                         notify_client(client, f"You can't afford the hint. "
