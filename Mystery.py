@@ -63,7 +63,7 @@ def main():
         try:
             weights_cache[args.meta] = get_weights(args.meta)
         except Exception as e:
-            raise ValueError(f"File {args.weights} is destroyed. Please fix your yaml.") from e
+            raise ValueError(f"File {args.meta} is destroyed. Please fix your yaml.") from e
         print(f"Meta: {args.meta} >> {weights_cache[args.meta]['meta_description']}")
         if args.samesettings:
             raise Exception("Cannot mix --samesettings with --meta")
