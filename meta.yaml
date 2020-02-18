@@ -1,0 +1,36 @@
+#this file has to be in the Players folder to take effect.
+meta_description: Meta file with the intention of having similar-length roms for a hopefully better experience
+goals:
+  ganon: 10
+  fast_ganon: 30
+  dungeons: 5
+  pedestal: 5
+  triforce-hunt: 1
+  null: 0 # maintain individual goals
+world_state:
+  standard: 5
+  open: 5
+  inverted: 5
+  retro: 5
+  null: 10 # maintain individual world states
+tower_open:
+  '0': 8
+  '1': 7
+  '2': 6
+  '3': 5
+  '4': 4
+  '5': 3
+  '6': 2
+  '7': 1
+  random: 5
+ganon_open:
+  '0': 3
+  '1': 4
+  '2': 5
+  '3': 6
+  '4': 7
+  '5': 8
+  '6': 9
+  '7': 10
+  random: 5
+#do not use meta rom options at this time.

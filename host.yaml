@@ -22,6 +22,8 @@ multi_mystery_options:
   enemizer_path: "EnemizerCLI/EnemizerCLI.Core.exe"
 #folder from which the player yaml files are pulled from
   player_files_path: "Players"
+#meta file name, within players folder
+  meta_file_path: "meta.yaml"
 #automatically launches {player_name}.yaml's ROM file using the OS's default program once generation completes. (likely your emulator)
 #does nothing if the name is not found
 #example: player_name = "Berserker"

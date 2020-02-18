@@ -448,7 +448,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
 
 def set_password(ctx : Context, password):
     ctx.password = password
-    logging.warning('Password set to ' + password if password is not None else 'Password disabled')
+    logging.warning('Password set to ' + password if password else 'Password disabled')
 
 async def console(ctx : Context):
     while True:
