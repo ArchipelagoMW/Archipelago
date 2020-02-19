@@ -167,3 +167,13 @@ def get_mirror_clip_spots_lw():
         'Death Mountain Bunny Descent Mirror Spot',
         'Death Mountain Offset Mirror',
         ]
+
+
+def get_invalid_bunny_revival_dungeons():
+    '''
+    Dungeon regions that can't be bunny revived from.
+    '''
+    return [
+        'Tower of Hera (Bottom)',
+        'Swamp Palace (Entrance)',
+        ]

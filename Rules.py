@@ -1339,15 +1339,14 @@ def set_bunny_rules(world, player):
     def options_to_access_rule(options):
         return lambda state: any(rule(state) for rule in options)
 
-    def get_rule_to_add(region, location = None):
-        if world.logic[player] == 'owglitches':
-            if region.name == 'Tower of Hera (Bottom)' and region.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw():
+    def get_rule_to_add(region, location = None, connecting_entrance = None):
+        if world.logic[player] == 'owglitches' and connecting_entrance != None:
+            if region.name == 'Tower of Hera (Bottom)' and connecting_entrance.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw():
                 return lambda state: state.can_superbunny_mirror_with_sword(player) or state.has_Pearl(player)
-            if region.name == 'Turtle Rock (Entrance)' and region.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw():
+            if region.name == 'Turtle Rock (Entrance)' and connecting_entrance.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw():
                 return lambda state: state.has_Mirror(player) or state.has_Pearl(player)
             if not any([
-                location in OWGSets.get_superbunny_accessible_locations() and region.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw(),
-                region.type == RegionType.Dungeon and region.name != 'Swamp Palace (Entrance)',
+                location != None and location.name in OWGSets.get_superbunny_accessible_locations() and connecting_entrance.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw(),
                 not region.is_dark_world]):
                 return lambda state: state.has_Pearl(player)
         else:
@@ -1405,16 +1404,24 @@ def set_bunny_rules(world, player):
         add_rule(paradox_shop.entrances[0], get_rule_to_add(paradox_shop))
 
     # Add requirements for all locations that are actually in the dark world, except those available to the bunny, including dungeon revival
-    for location in world.get_locations():
-        if location.player == player and location.parent_region.is_dark_world:
-
-            if location.name in bunny_accessible_locations:
-                continue
-            if world.logic[player] == 'owglitches' and location.parent_region.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw() and location.name in OWGSets.get_superbunny_accessible_locations():
-                add_rule(location, get_rule_to_add(location.parent_region, location.name))
-                continue
-
-            add_rule(location, get_rule_to_add(location.parent_region, location.name))
+    for entrance in world.get_entrances():
+        if entrance.player == player and entrance.parent_region.is_dark_world:
+            if world.logic[player] == 'owglitches':
+                if entrance.connected_region.type == RegionType.Dungeon:
+                    if entrance.connected_region.name in OWGSets.get_invalid_bunny_revival_dungeons():
+                        add_rule(entrance, get_rule_to_add(entrance.connected_region, None, entrance))
+                    continue
+                if entrance.connected_region.name == 'Turtle Rock (Entrance)':
+                    add_rule(world.get_entrance('Turtle Rock Entrance Gap', player), get_rule_to_add(entrance.connected_region, None, entrance))
+                if entrance.name in OWGSets.get_invalid_mirror_bunny_entrances_dw():
+                    continue
+            for location in entrance.connected_region.locations:
+                if world.logic[player] == 'owglitches' and entrance.name in OWGSets.get_invalid_mirror_bunny_entrances_dw():
+                    add_rule(location, get_rule_to_add(entrance.connected_region, location, entrance))
+                    continue
+                if location.name in bunny_accessible_locations:
+                        continue
+                add_rule(location, get_rule_to_add(entrance.connected_region, location))
 
 def set_inverted_bunny_rules(world, player):
     # regions for the exits of multi-entrace caves/drops that bunny cannot pass
@@ -1429,19 +1436,18 @@ def set_inverted_bunny_rules(world, player):
     def options_to_access_rule(options):
         return lambda state: any(rule(state) for rule in options)
 
-    def get_rule_to_add(region, location = None):
-        if world.logic[player] == 'owglitches':
-            if region.name == 'Tower of Hera (Bottom)' and region.name not in OWGSets.get_invalid_mirror_bunny_entrances_lw():
+    def get_rule_to_add(region, location = None, connecting_entrance = None):
+        if world.logic[player] == 'owglitches' and connecting_entrance != None:
+            if region.name == 'Tower of Hera (Bottom)' and connecting_entrance.name not in OWGSets.get_invalid_mirror_bunny_entrances_lw():
                 return lambda state: state.can_superbunny_mirror_with_sword(player) or state.has_Pearl(player)
-            if region.name == 'Turtle Rock (Entrance)' and region.name not in OWGSets.get_invalid_mirror_bunny_entrances_lw():
+            if region.name == 'Turtle Rock (Entrance)' and connecting_entrance.name not in OWGSets.get_invalid_mirror_bunny_entrances_lw():
                 return lambda state: state.has_Mirror(player) or state.has_Pearl(player)
             if not any([
-                location in OWGSets.get_superbunny_accessible_locations() and region.name not in OWGSets.get_invalid_mirror_bunny_entrances_lw(),
-                region.type == RegionType.Dungeon and region.name != 'Swamp Palace (Entrance)',
-                not region.is_dark_world]):
+                location != None and location.name in OWGSets.get_superbunny_accessible_locations() and connecting_entrance.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw(),
+                not region.is_light_world]):
                 return lambda state: state.has_Pearl(player)
         else:
-            if not region.is_dark_world:
+            if not region.is_light_world:
                 return lambda state: state.has_Pearl(player)
         # in this case we are mixed region.
         # we collect possible options.
@@ -1494,15 +1500,21 @@ def set_inverted_bunny_rules(world, player):
         add_rule(paradox_shop.entrances[0], get_rule_to_add(paradox_shop))
 
     # Add requirements for all locations that are actually in the light world, except those available to the bunny, including dungeon revival
-    for location in world.get_locations():
-        if location.player == player and location.parent_region.is_light_world:
-
-            if location.name in bunny_accessible_locations:
-                continue
-            if world.logic[player] == 'owglitches' and location.parent_region.name not in OWGSets.get_invalid_mirror_bunny_entrances_lw() and location.name in OWGSets.get_superbunny_accessible_locations():
-                add_rule(location, get_rule_to_add(location.parent_region, location.name))
-                continue
-
-            add_rule(location, get_rule_to_add(location.parent_region, location.name))
-
-
+    for entrance in world.get_entrances():
+        if entrance.player == player and entrance.parent_region.is_light_world:
+            if world.logic[player] == 'owglitches':
+                if entrance.connected_region.type == RegionType.Dungeon:
+                    if entrance.connected_region.name in OWGSets.get_invalid_bunny_revival_dungeons():
+                        add_rule(entrance, get_rule_to_add(entrance.connected_region, None, entrance))
+                    continue
+                if entrance.connected_region.name == 'Turtle Rock (Entrance)':
+                    add_rule(world.get_entrance('Turtle Rock Entrance Gap', player), get_rule_to_add(entrance.connected_region, None, entrance))
+                if entrance.name in OWGSets.get_invalid_mirror_bunny_entrances_lw():
+                    continue
+            for location in entrance.connected_region.locations:
+                if world.logic[player] == 'owglitches' and entrance.name in OWGSets.get_invalid_mirror_bunny_entrances_lw():
+                    add_rule(location, get_rule_to_add(entrance.connected_region, location, entrance))
+                    continue
+                if location.name in bunny_accessible_locations:
+                        continue
+                add_rule(location, get_rule_to_add(entrance.connected_region, location))
