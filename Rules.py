@@ -1347,10 +1347,10 @@ def set_bunny_rules(world, player):
                 return lambda state: state.has_Mirror(player) or state.has_Pearl(player)
             if not any([
                 location != None and location.name in OWGSets.get_superbunny_accessible_locations() and connecting_entrance.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw(),
-                not region.is_dark_world]):
+                not region.is_light_world]):
                 return lambda state: state.has_Pearl(player)
         else:
-            if not region.is_dark_world:
+            if not region.is_light_world:
                 return lambda state: state.has_Pearl(player)
 
         # in this case we are mixed region.
@@ -1444,10 +1444,10 @@ def set_inverted_bunny_rules(world, player):
                 return lambda state: state.has_Mirror(player) or state.has_Pearl(player)
             if not any([
                 location != None and location.name in OWGSets.get_superbunny_accessible_locations() and connecting_entrance.name not in OWGSets.get_invalid_mirror_bunny_entrances_dw(),
-                not region.is_light_world]):
+                not region.is_dark_world]):
                 return lambda state: state.has_Pearl(player)
         else:
-            if not region.is_light_world:
+            if not region.is_dark_world:
                 return lambda state: state.has_Pearl(player)
         # in this case we are mixed region.
         # we collect possible options.
