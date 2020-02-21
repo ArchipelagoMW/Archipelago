@@ -39,6 +39,8 @@ if __name__ == "__main__":
         zip_roms = multi_mystery_options["zip_roms"]
         zip_spoiler = multi_mystery_options["zip_spoiler"]
         zip_multidata = multi_mystery_options["zip_multidata"]
+        zip_format = multi_mystery_options["zip_format"]
+        #zip_password = multi_mystery_options["zip_password"] not at this time
         player_name = multi_mystery_options["player_name"]
         meta_file_path = multi_mystery_options["meta_file_path"]
 
@@ -114,6 +116,13 @@ if __name__ == "__main__":
 
         if any((zip_roms, zip_multidata, zip_spoiler)):
             import zipfile
+            compression = {1 : zipfile.ZIP_DEFLATED,
+                           2 : zipfile.ZIP_LZMA,
+                           3 : zipfile.ZIP_BZIP2}[zip_format]
+
+            typical_zip_ending = {1: "zip",
+                                  2: "7z",
+                                  3: "bz2"}[zip_format]
 
             def pack_file(file: str):
                 zf.write(os.path.join(output_path, file), file)
@@ -123,10 +132,11 @@ if __name__ == "__main__":
                 os.remove(os.path.join(output_path, file))
                 print(f"Removed {file} which is now present in the zipfile")
 
-            zipname = os.path.join(output_path, f"ER_{seedname}.zip")
+            zipname = os.path.join(output_path, f"ER_{seedname}.{typical_zip_ending}")
+
             print(f"Creating zipfile {zipname}")
 
-            with zipfile.ZipFile(zipname, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+            with zipfile.ZipFile(zipname, "w", compression=compression, compresslevel=9) as zf:
                 for file in os.listdir(output_path):
                     if zip_roms and file.endswith(".sfc") and seedname in file:
                         pack_file(file)

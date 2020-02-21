@@ -39,5 +39,7 @@ multi_mystery_options:
   zip_spoiler: 0
 #include the multidata file in the zip, 2 -> delete the non-zipped one, which also means the server won't autostart
   zip_multidata: 0
+#zip algorithm to use
+  zip_format: 2 # 1 -> zip, 2 -> 7z, 3->bz2
 #create roms flagged as race roms
   race: 0
