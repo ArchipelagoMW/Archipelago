@@ -27,7 +27,7 @@ class Client:
     version: typing.List[int] = [0, 0, 0]
     tags: typing.List[str] = []
 
-    def __init__(self, socket):
+    def __init__(self, socket: websockets.server.WebSocketServerProtocol):
         self.socket = socket
         self.auth = False
         self.name = None
@@ -154,7 +154,7 @@ async def server(websocket, path, ctx: Context):
         await on_client_disconnected(ctx, client)
         ctx.clients.remove(client)
 
-async def on_client_connected(ctx : Context, client : Client):
+async def on_client_connected(ctx: Context, client: Client):
     await send_msgs(client.socket, [['RoomInfo', {
         'password': ctx.password is not None,
         'players': [(client.team, client.slot, client.name) for client in ctx.clients if client.auth],
@@ -164,17 +164,17 @@ async def on_client_connected(ctx : Context, client : Client):
         'version': [1, 0, 0]
     }]])
 
-async def on_client_disconnected(ctx : Context, client : Client):
+async def on_client_disconnected(ctx: Context, client: Client):
     if client.auth:
         await on_client_left(ctx, client)
 
-async def on_client_joined(ctx : Context, client : Client):
+async def on_client_joined(ctx: Context, client: Client):
     notify_all(ctx, "%s (Team #%d) has joined the game" % (client.name, client.team + 1))
 
-async def on_client_left(ctx : Context, client : Client):
+async def on_client_left(ctx: Context, client: Client):
     notify_all(ctx, "%s (Team #%d) has left the game" % (client.name, client.team + 1))
 
-async def countdown(ctx : Context, timer):
+async def countdown(ctx: Context, timer):
     notify_all(ctx, f'[Server]: Starting countdown of {timer}s')
     if ctx.countdown_timer:
         ctx.countdown_timer = timer
@@ -187,7 +187,7 @@ async def countdown(ctx : Context, timer):
         await asyncio.sleep(1)
     notify_all(ctx, f'[Server]: GO')
 
-def get_connected_players_string(ctx : Context):
+def get_connected_players_string(ctx: Context):
     auth_clients = [c for c in ctx.clients if c.auth]
     if not auth_clients:
         return 'No player connected'
@@ -206,10 +206,12 @@ def get_connected_players_string(ctx : Context):
 def get_received_items(ctx: Context, team: int, player: int):
     return ctx.received_items.setdefault((team, player), [])
 
+
 def tuplize_received_items(items):
     return [(item.item, item.location, item.player) for item in items]
 
-def send_new_items(ctx : Context):
+
+def send_new_items(ctx: Context):
     for client in ctx.clients:
         if not client.auth:
             continue
@@ -219,13 +221,13 @@ def send_new_items(ctx : Context):
             client.send_index = len(items)
 
 
-def forfeit_player(ctx: Context, team, slot):
-    all_locations = [values[0] for values in Regions.location_table.values() if type(values[0]) is int]
+def forfeit_player(ctx: Context, team: int, slot: int):
+    all_locations = {values[0] for values in Regions.location_table.values() if type(values[0]) is int}
     notify_all(ctx, "%s (Team #%d) has forfeited" % (ctx.player_names[(team, slot)], team + 1))
     register_location_checks(ctx, team, slot, all_locations)
 
 
-def register_location_checks(ctx: Context, team, slot, locations):
+def register_location_checks(ctx: Context, team: int, slot: int, locations):
     ctx.location_checks[team, slot] |= set(locations)
 
     found_items = False
@@ -275,6 +277,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
 
     return hints
 
+
 def collect_hints_location(ctx: Context, team: int, slot: int, location: str) -> typing.List[Utils.Hint]:
     hints = []
     location = Regions.lookup_lower_name_to_name[location.lower()]
@@ -288,12 +291,14 @@ def collect_hints_location(ctx: Context, team: int, slot: int, location: str) ->
             break # each location has 1 item
     return hints
 
+
 def format_hint(ctx: Context, team: int, hint: Utils.Hint) -> str:
     return f"[Hint]: {ctx.player_names[team, hint.receiving_player]}'s " \
            f"{Items.lookup_id_to_name[hint.item]} can be found " \
            f"at {get_location_name_from_address(hint.location)} " \
            f"in {ctx.player_names[team, hint.finding_player]}'s World." \
            + (" (found)" if hint.found else "")
+
 
 def get_intended_text(input_text: str, possible_answers: typing.Iterable[str]= console_names) -> typing.Tuple[str, bool, str]:
     picks = fuzzy_process.extract(input_text, possible_answers, limit=2)
@@ -306,6 +311,7 @@ def get_intended_text(input_text: str, possible_answers: typing.Iterable[str]= c
         return picks[0][0], True, "Close Match"
     else:
         return picks[0][0], False, f"Too many close matches, did you mean {picks[0][0]}?"
+
 
 async def process_client_cmd(ctx: Context, client: Client, cmd, args):
     if type(cmd) is not str:
@@ -462,10 +468,10 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
                     notify_client(client, response)
 
 
-
 def set_password(ctx : Context, password):
     ctx.password = password
     logging.warning('Password set to ' + password if password else 'Password disabled')
+
 
 async def console(ctx : Context):
     while True:
@@ -550,6 +556,7 @@ async def console(ctx : Context):
         except:
             import traceback
             traceback.print_exc()
+
 
 async def main():
     parser = argparse.ArgumentParser()
