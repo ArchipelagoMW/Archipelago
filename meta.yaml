@@ -1,17 +1,28 @@
-#this file has to be in the Players folder to take effect.
-meta_description: Meta file with the intention of having similar-length roms for a hopefully better experience
+# this file has to be in the Players folder to take effect, keeping the "meta.yaml" name.
+# A meta file rolls its own set of options first
+# the result will then overwrite each player's option in that particular field
+# for example, if a meta.yaml fast_ganon result is rolled, every player will have that fast_ganon goal
+# there is the special case of null, which ignores that part of the meta.yaml,
+# allowing for a chance for that meta to not take effect
+# players can also have a meta_ignore option to ignore specific options
+# example of ignore that would be in a player's file:
+# meta_ignore:
+#   world_state:
+#     inverted
+#this means, if world_state is meta-rolled and the result happens to be inverted, then defer to the player's yaml instead.
+meta_description: Meta-Mystery file with the intention of having similar-length completion times for a hopefully better experience
 goals:
   ganon: 10
-  fast_ganon: 30
+  fast_ganon: 25
   dungeons: 5
-  pedestal: 5
+  pedestal: 10
   triforce-hunt: 1
   null: 0 # maintain individual goals
 world_state:
-  standard: 5
-  open: 5
-  inverted: 5
-  retro: 5
+  standard: 10
+  open: 60
+  inverted: 10
+  retro: 10
   null: 10 # maintain individual world states
 tower_open:
   '0': 8
@@ -22,7 +33,7 @@ tower_open:
   '5': 3
   '6': 2
   '7': 1
-  random: 5
+  random: 10 # a different GT open time should not usually result in a vastly different completion time, unless ganon goal and tower_open > ganon_open
 ganon_open:
   '0': 3
   '1': 4
@@ -32,5 +43,5 @@ ganon_open:
   '5': 8
   '6': 9
   '7': 10
-  random: 5
+  random: 5 # this will mean differing completion times. But leaving it for that surprise effect
 #do not use meta rom options at this time.
