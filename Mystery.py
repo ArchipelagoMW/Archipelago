@@ -85,6 +85,10 @@ def main():
     erargs.outputname = seedname
     erargs.outputpath = args.outputpath
 
+    # set up logger
+    loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[erargs.loglevel]
+    logging.basicConfig(format='%(message)s', level=loglevel)
+
     if args.rom:
         erargs.rom = args.rom
     if args.enemizercli:
@@ -103,7 +107,10 @@ def main():
             option = get_choice(key, meta_weights)
             if option is not None:
                 for player, path in player_path_cache.items():
-                    if key not in weights_cache[path]["meta_ignore"]:
+                    players_meta = weights_cache[path]["meta_ignore"]
+                    if key not in players_meta:
+                        weights_cache[path][key] = option
+                    elif type(players_meta) == dict and option not in players_meta[key]:
                         weights_cache[path][key] = option
 
     for player in range(1, args.multi + 1):
@@ -118,9 +125,7 @@ def main():
                 raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
         else:
             raise RuntimeError(f'No weights specified for player {player}')
-    # set up logger
-    loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[erargs.loglevel]
-    logging.basicConfig(format='%(message)s', level=loglevel)
+
     erargs.names = ",".join(erargs.name[i] for i in sorted(erargs.name.keys()))
 
     ERmain(erargs, seed)
