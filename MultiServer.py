@@ -57,13 +57,15 @@ class Context:
         self.location_checks = collections.defaultdict(set)
         self.hint_cost = hint_cost
         self.location_check_points = location_check_points
-        self.hints_used = collections.defaultdict(lambda: 0)
+        self.hints_used = collections.defaultdict(int)
+        self.hints_sent = collections.defaultdict(set)
 
     def get_save(self) -> dict:
         return {
             "rom_names": list(self.rom_names.items()),
             "received_items": tuple((k, [i.__dict__ for i in v]) for k, v in self.received_items.items()),
             "hints_used" : tuple((key,value) for key, value in self.hints_used.items()),
+            "hints_sent" : tuple((key,tuple(value)) for key, value in self.hints_sent.items()),
             "location_checks" : tuple((key,tuple(value)) for key, value in self.location_checks.items())
         }
 
@@ -74,6 +76,7 @@ class Context:
             raise Exception('Save file mismatch, will start a new game')
         self.received_items = received_items
         self.hints_used.update({tuple(key): value for key, value in savedata["hints_used"]})
+        self.hints_sent.update({tuple(key): set(value) for key, value in savedata["hints_sent"]})
         self.location_checks.update({tuple(key): set(value) for key, value in savedata["location_checks"]})
         logging.info(f'Loaded save file with {sum([len(p) for p in received_items.values()])} received items '
                      f'for {len(received_items)} players')
@@ -410,35 +413,49 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
                                       "for example !hint Lamp or !hint Link's House. "
                                       f"A hint costs {ctx.hint_cost} points. "
                                       f"You have {points_available} points.")
+                for item_name in ctx.hints_sent[client.team, client.slot]:
+                    if item_name in Items.item_table:  # item name
+                        hints = collect_hints(ctx, client.team, client.slot, item_name)
+                    else:  # location name
+                        hints = collect_hints_location(ctx, client.team, client.slot, item_name)
+                    notify_hints(ctx, client.team, hints)
             else:
                 item_name, usable, response = get_intended_text(item_name)
                 if usable:
-                    if item_name in Items.item_table:  # item name
+                    if item_name in Items.hint_blacklist:
+                        notify_client(client, f"Sorry, \"{item_name}\" is marked as non-hintable.")
+                        hints = []
+                    elif item_name in Items.item_table:  # item name
                         hints = collect_hints(ctx, client.team, client.slot, item_name)
                     else:  # location name
                         hints = collect_hints_location(ctx, client.team, client.slot, item_name)
 
                     if hints:
-                        found = 0
-                        for hint in hints:
-                            found += 1 - hint.found
-                        if not found:
+                        if item_name in ctx.hints_sent[client.team, client.slot]:
                             notify_hints(ctx, client.team, hints)
-                            notify_client(client, "No new items found, points refunded.")
+                            notify_client(client, "Hint was previously used, no points deducted.")
                         else:
-                            if ctx.hint_cost:
-                                can_pay = points_available // (ctx.hint_cost * found) >= 1
-                            else:
-                                can_pay = True
-
-                            if can_pay:
-                                ctx.hints_used[client.team, client.slot] += found
+                            found = 0
+                            for hint in hints:
+                                found += 1 - hint.found
+                            if not found:
                                 notify_hints(ctx, client.team, hints)
-                                save(ctx)
+                                notify_client(client, "No new items found, no points deducted.")
                             else:
-                                notify_client(client, f"You can't afford the hint. "
-                                                      f"You have {points_available} points and need at least {ctx.hint_cost}, "
-                                                      f"more if multiple items are still to be found.")
+                                if ctx.hint_cost:
+                                    can_pay = points_available // (ctx.hint_cost * found) >= 1
+                                else:
+                                    can_pay = True
+
+                                if can_pay:
+                                    ctx.hints_used[client.team, client.slot] += found
+                                    ctx.hints_sent[client.team, client.slot].add(item_name)
+                                    notify_hints(ctx, client.team, hints)
+                                    save(ctx)
+                                else:
+                                    notify_client(client, f"You can't afford the hint. "
+                                                          f"You have {points_available} points and need at least {ctx.hint_cost}, "
+                                                          f"more if multiple items are still to be found.")
                     else:
                         notify_client(client, "Nothing found. Item/Location may not exist.")
                 else:

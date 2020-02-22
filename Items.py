@@ -179,3 +179,5 @@ item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher cla
 lookup_lower_name_to_id = {name.lower(): data[3] for name, data in item_table.items()}
 lookup_lower_name_to_name = {name.lower(): name for name in item_table}
 lookup_id_to_name = {data[3]: name for name, data in item_table.items()}
+
+hint_blacklist = {"Triforce"}
