@@ -39,7 +39,8 @@ class Client:
 
 
 class Context:
-    def __init__(self, host: str, port: int, password: str, location_check_points: int, hint_cost: int):
+    def __init__(self, host: str, port: int, password: str, location_check_points: int, hint_cost: int,
+                 item_cheat: bool):
         self.data_filename = None
         self.save_filename = None
         self.disable_save = False
@@ -59,11 +60,12 @@ class Context:
         self.location_check_points = location_check_points
         self.hints_used = collections.defaultdict(int)
         self.hints_sent = collections.defaultdict(set)
+        self.item_cheat = item_cheat
 
     def get_save(self) -> dict:
         return {
             "rom_names": list(self.rom_names.items()),
-            "received_items": tuple((k, [i.__dict__ for i in v]) for k, v in self.received_items.items()),
+            "received_items": tuple((k, v) for k, v in self.received_items.items()),
             "hints_used" : tuple((key,value) for key, value in self.hints_used.items()),
             "hints_sent" : tuple((key,tuple(value)) for key, value in self.hints_sent.items()),
             "location_checks" : tuple((key,tuple(value)) for key, value in self.location_checks.items())
@@ -71,7 +73,7 @@ class Context:
 
     def set_save(self, savedata: dict):
         rom_names = savedata["rom_names"]
-        received_items = {tuple(k): [ReceivedItem(**i) for i in v] for k, v in savedata["received_items"]}
+        received_items = {tuple(k): [ReceivedItem(*i) for i in v] for k, v in savedata["received_items"]}
         if not all([self.rom_names[tuple(rom)] == (team, slot) for rom, (team, slot) in rom_names]):
             raise Exception('Save file mismatch, will start a new game')
         self.received_items = received_items
@@ -258,8 +260,8 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations):
 def save(ctx: Context):
     if not ctx.disable_save:
         try:
+            jsonstr = json.dumps(ctx.get_save())
             with open(ctx.save_filename, "wb") as f:
-                jsonstr = json.dumps(ctx.get_save())
                 f.write(zlib.compress(jsonstr.encode("utf-8")))
         except Exception as e:
             logging.exception(e)
@@ -409,10 +411,20 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             except (IndexError, ValueError):
                 timer = 10
             asyncio.create_task(countdown(ctx, timer))
+        elif args.startswith('!getitem') and ctx.item_cheat:
+            item_name = args[9:].lower()
+            item_name, usable, response = get_intended_text(item_name, Items.item_table.keys())
+            if usable:
+                new_item = ReceivedItem(Items.item_table[item_name][3], -1, client.slot)
+                get_received_items(ctx, client.team, client.slot).append(new_item)
+                notify_all(ctx, 'Cheat console: sending "' + item_name + '" to ' + client.name)
+                send_new_items(ctx)
+            else:
+                notify_client(client, response)
         elif args.startswith("!hint"):
             points_available = ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) - \
                                ctx.hint_cost * ctx.hints_used[client.team, client.slot]
-            item_name = args[6:].lower()
+            item_name = args[6:]
 
             if not item_name:
                 notify_client(client, "Use !hint {item_name/location_name}, "
@@ -521,7 +533,7 @@ async def console(ctx : Context):
                         if usable:
                             for client in ctx.clients:
                                 if client.name == seeked_player:
-                                    new_item = ReceivedItem(item, "cheat console", client.slot)
+                                    new_item = ReceivedItem(Items.item_table[item][3], "cheat console", client.slot)
                                     get_received_items(ctx, client.team, client.slot).append(new_item)
                                     notify_all(ctx, 'Cheat console: sending "' + item + '" to ' + client.name)
                             send_new_items(ctx)
@@ -569,6 +581,7 @@ async def main():
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
     parser.add_argument('--location_check_points', default=1, type=int)
     parser.add_argument('--hint_cost', default=1000, type=int)
+    parser.add_argument('--disable_item_cheat', default=False, action='store_true')
     args = parser.parse_args()
     file_options = Utils.parse_yaml(open("host.yaml").read())["server_options"]
     for key, value in file_options.items():
@@ -576,7 +589,8 @@ async def main():
             setattr(args, key, value)
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
 
-    ctx = Context(args.host, args.port, args.password, args.location_check_points, args.hint_cost)
+    ctx = Context(args.host, args.port, args.password, args.location_check_points, args.hint_cost,
+                  not args.disable_item_cheat)
 
     ctx.data_filename = args.multidata
 
