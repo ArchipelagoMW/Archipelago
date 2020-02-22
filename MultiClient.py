@@ -726,7 +726,7 @@ async def server_auth(ctx: Context, password_requested):
     ctx.awaiting_rom = False
     ctx.auth = ctx.rom.copy()
     await send_msgs(ctx.socket, [['Connect', {
-        'password': ctx.password, 'rom': ctx.auth, 'version': [1, 0, 0], 'tags': ['Berserker']
+        'password': ctx.password, 'rom': ctx.auth, 'version': [1, 1, 0], 'tags': ['Berserker']
     }]])
 
 async def console_input(ctx : Context):
