@@ -51,8 +51,8 @@ if __name__ == "__main__":
 
         if not os.path.exists(enemizer_path):
             feedback(f"Enemizer not found at {enemizer_path}, please adjust the path in MultiMystery.py's config or put Enemizer in the default location.")
-        if not os.path.exists("Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"):
-            feedback("Base rom is expected as Zelda no Densetsu - Kamigami no Triforce (Japan).sfc in the Multiworld root folder please place/rename it there.")
+        if not os.path.exists(rom_file):
+            feedback(f"Base rom is expected as {rom_file} in the Multiworld root folder please place/rename it there.")
         player_files = []
         os.makedirs(player_files_path, exist_ok=True)
         for file in os.listdir(player_files_path):
