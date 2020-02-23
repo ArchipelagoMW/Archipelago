@@ -30,10 +30,12 @@ def snes_to_pc(value):
     return ((value & 0x7F0000)>>1)|(value & 0x7FFF)
 
 def parse_player_names(names, players, teams):
-    names = [n for n in re.split(r'[, ]', names) if n]
+    names = (n.strip() for n in names.split(","))
+    names = tuple(filter(bool, names))
     ret = []
     while names or len(ret) < teams:
         team = [n[:16] for n in names[:players]]
+        # where does the 16 character limit come from?
         while len(team) != players:
             team.append(f"Player {len(team) + 1}")
         ret.append(team)

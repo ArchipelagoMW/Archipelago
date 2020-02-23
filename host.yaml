@@ -16,6 +16,10 @@ server_options:
   hint_cost: 1000 #set to 0 if you want free hints
 #options for MultiMystery.py
 multi_mystery_options:
+#File name of the v1.0 J rom
+  rom_file: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
+#teams, however, note that there is currently no way to supply names for teams 2+ through MultiMystery
+  teams: 1
 #Where to place the resulting files
   output_path: "MultiMystery"
 #location of your Enemizer CLI, available here: https://github.com/Bonta0/Enemizer/releases

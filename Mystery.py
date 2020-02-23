@@ -79,7 +79,7 @@ def main():
             print(f"P{player} Weights: {path} >> {weights_cache[path]['description']}")
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
-    erargs.name = {x+1: name for x,name in enumerate(args.names.split(","))}
+    erargs.name = {x: name.strip() for x, name in enumerate(args.names.split(","), 1)} # only so it can be overwrittin in mystery
     erargs.create_spoiler = args.create_spoiler
     erargs.race = args.race
     erargs.outputname = seedname
@@ -92,6 +92,7 @@ def main():
 
     if args.rom:
         erargs.rom = args.rom
+
     if args.enemizercli:
         erargs.enemizercli = args.enemizercli
 
@@ -129,7 +130,10 @@ def main():
 
     erargs.names = ",".join(erargs.name[i] for i in sorted(erargs.name.keys()))
 
+    del(erargs.name)
+
     ERmain(erargs, seed)
+
 
 def get_weights(path):
     try:
@@ -148,8 +152,10 @@ def get_weights(path):
 def interpret_on_off(value):
     return {"on": True, "off": False}.get(value, value)
 
+
 def convert_to_on_off(value):
     return {True: "on", False: "off"}.get(value, value)
+
 
 def get_choice(option, root) -> typing.Any:
     if option not in root:
@@ -161,16 +167,21 @@ def get_choice(option, root) -> typing.Any:
     return interpret_on_off(
         random.choices(list(root[option].keys()), weights=list(map(int, root[option].values())))[0])
 
+
+def handle_name(name: str):
+    return name.strip().replace(' ', '_')
+
+
 def roll_settings(weights):
     ret = argparse.Namespace()
     ret.name = get_choice('name', weights)
     if ret.name:
-        ret.name = ret.name.replace(" ", "-").replace("_", "-")
+        ret.name = handle_name(ret.name)
     glitches_required = get_choice('glitches_required', weights)
     if glitches_required not in ['none', 'no_logic']:
-        print("Only NMG and No Logic supported")
+        logging.warning("Only NMG and No Logic supported")
         glitches_required = 'none'
-    ret.logic = {'none': 'noglitches', 'no_logic': 'nologic'}[glitches_required]
+    ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic'}[glitches_required]
 
     # item_placement = get_choice('item_placement')
     # not supported in ER

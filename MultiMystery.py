@@ -1,5 +1,5 @@
 __author__ = "Berserker55" # you can find me on the ALTTP Randomizer Discord
-__version__ = 1.6
+__version__ = 1.7
 
 """
 This script launches a Multiplayer "Multiworld" Mystery Game
@@ -43,6 +43,8 @@ if __name__ == "__main__":
         #zip_password = multi_mystery_options["zip_password"] not at this time
         player_name = multi_mystery_options["player_name"]
         meta_file_path = multi_mystery_options["meta_file_path"]
+        teams = multi_mystery_options["teams"]
+        rom_file = multi_mystery_options["rom_file"]
 
 
         py_version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -57,7 +59,7 @@ if __name__ == "__main__":
             lfile = file.lower()
             if lfile.endswith(".yaml") and lfile != meta_file_path.lower():
                 player_files.append(file)
-                print(f"Player {file[:-5]} found.")
+                print(f"Found player's file {file}.")
         player_count = len(player_files)
         if player_count == 0:
             feedback(f"No player files found. Please put them in a {player_files_path} folder.")
@@ -65,10 +67,9 @@ if __name__ == "__main__":
             print(player_count, "Players found.")
 
         player_string = ""
-        for i,file in enumerate(player_files):
-            player_string += f"--p{i+1} {os.path.join(player_files_path, file)} "
+        for i, file in enumerate(player_files, 1):
+            player_string += f"--p{i} {os.path.join(player_files_path, file)} "
 
-        player_names = list(file[:-5] for file in player_files)
 
         if os.path.exists("BerserkerMultiServer.exe"):
             basemysterycommand = "BerserkerMystery.exe" #compiled windows
@@ -78,11 +79,11 @@ if __name__ == "__main__":
             basemysterycommand = f"py -{py_version} Mystery.py" #source
 
         command = f"{basemysterycommand} --multi {len(player_files)} {player_string} " \
-                  f"--names {','.join(player_names)} --enemizercli {enemizer_path} " \
-                  f"--outputpath {output_path}"
+                  f"--rom \"{rom_file}\" --enemizercli \"{enemizer_path}\" " \
+                  f"--outputpath \"{output_path}\" --teams {teams}"
 
         if create_spoiler:
-            command +=  " --create_spoiler"
+            command += " --create_spoiler"
         if race:
             command += " --race"
         if os.path.exists(os.path.join(player_files_path, meta_file_path)):

@@ -70,6 +70,7 @@ def main(args, seed=None):
             logger.info('%s%s', 'Team%d: ' % i if world.teams > 1 else 'Players: ', ', '.join(team))
         for player, name in enumerate(team, 1):
             world.player_names[player].append(name)
+
     logger.info('')
 
     for player in range(1, world.players + 1):
