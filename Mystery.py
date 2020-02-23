@@ -84,6 +84,7 @@ def main():
     erargs.race = args.race
     erargs.outputname = seedname
     erargs.outputpath = args.outputpath
+    erargs.teams = args.teams
 
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[erargs.loglevel]
