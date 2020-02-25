@@ -284,20 +284,12 @@ def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, r
                 rom.write_bytes(0x307000 + (i * 0x8000), sprite.palette)
                 rom.write_bytes(0x307078 + (i * 0x8000), sprite.glove_palette)
 
-    try:
-        os.remove(randopatch_path)
-    except OSError:
-        pass
+    for used in (randopatch_path, options_path, enemizer_output_path):
+        try:
+            os.remove(used)
+        except OSError:
+            pass
 
-    try:
-        os.remove(options_path)
-    except OSError:
-        pass
-
-    try:
-        os.remove(enemizer_output_path)
-    except OSError:
-        pass
 
 _sprite_table = {}
 def _populate_sprite_table():
