@@ -29,7 +29,6 @@ def main():
                         action='store_true')
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=1, type=lambda value: min(max(int(value), 1), 255))
-    parser.add_argument('--names', default='')
     parser.add_argument('--teams', default=1, type=lambda value: max(int(value), 1))
     parser.add_argument('--create_spoiler', action='store_true')
     parser.add_argument('--rom')
@@ -79,7 +78,7 @@ def main():
             print(f"P{player} Weights: {path} >> {weights_cache[path]['description']}")
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
-    erargs.name = {x: name.strip() for x, name in enumerate(args.names.split(","), 1)} # only so it can be overwrittin in mystery
+    erargs.name = {x: "" for x in range(1, args.multi + 1)} # only so it can be overwrittin in mystery
     erargs.create_spoiler = args.create_spoiler
     erargs.race = args.race
     erargs.outputname = seedname
@@ -127,9 +126,10 @@ def main():
                 raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
         else:
             raise RuntimeError(f'No weights specified for player {player}')
+        if not erargs.name[player]:
+            erargs.name[player] = os.path.split(path)[-1].split(".")[0]
 
-    erargs.names = ",".join(erargs.name[i] for i in sorted(erargs.name.keys()))
-
+    erargs.names = ",".join(erargs.name[i] for i in range(1, args.multi + 1))
     del(erargs.name)
 
     ERmain(erargs, seed)
