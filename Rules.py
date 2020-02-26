@@ -736,11 +736,6 @@ def add_conditional_lamps(world, player):
 
 
 def overworld_glitches_rules(world, player):
-    # @TODO: Waterfall fairy and Zora ledge could use some logic to determine
-    # if we can water walk and/or stored water walk in; currently it's omitted
-    # in case no interiors provide a water walk, but one could be kicking
-    # around. We could detect a path to determine if one can be stored.
-
     # Spots that are immediately accessible.
     for entrance in OWGSets.get_immediately_accessible_entrances(world, player):
         set_rule(world.get_entrance(entrance, player), lambda state: True)
@@ -783,6 +778,9 @@ def overworld_glitches_rules(world, player):
         add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: state.can_reach('Dark Death Mountain (West Bottom)', 'Region', player) and state.has_Mirror(player))
     else:
         add_rule(world.get_entrance('South Dark World Teleporter', player), lambda state: state.has_Boots(player) and state.can_lift_rocks(player), 'or')
+
+    # Zora's Ledge via waterwalk setup.
+    add_rule(world.get_location('Zora\'s Ledge', player), lambda state: state.has_Boots(player), 'or')
 
 
 def open_rules(world, player):

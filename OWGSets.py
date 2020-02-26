@@ -110,10 +110,12 @@ def get_boots_clip_exits_lw(inverted = False):
         'Desert Northern Cliffs',
         'Lake Hylia Island Clip Spot',
         'Death Mountain Descent',
+        'Graveyard Ledge Clip Spot',
+        # Also requires a waterwalk setup, but the point still remains.
+        'Waterfall of Wishing',
         ]
     if not inverted:
         exits.append('Spectacle Rock Clip Spot')
-        exits.append('Graveyard Ledge Clip Spot')
         exits.append('Bombos Tablet Clip Spot')
         exits.append('Floating Island Clip Spot')
         exits.append('Cave 45 Clip Spot')

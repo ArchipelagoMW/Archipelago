@@ -127,7 +127,7 @@ def create_inverted_regions(world, player):
         create_cave_region(player, 'Old Man House Back', 'a connector', None, ['Old Man House Exit (Top)', 'Old Man House Back to Front']),
         create_lw_region(player, 'Death Mountain', None, ['Old Man Cave (East)', 'Old Man House (Bottom)', 'Old Man House (Top)', 'Death Mountain Return Cave (East)', 'Spectacle Rock Cave', 
                                                   'Spectacle Rock Cave Peak', 'Spectacle Rock Cave (Bottom)', 'Broken Bridge (West)', 'Death Mountain Mirror Spot', 'Death Mountain Bunny Descent Mirror Spot',
-                                                  'Death Mountain Offset Mirror', 'Hera Ascent', 'Death Mountain Glitched Bridge', 'Death Mountain Descent']),
+                                                  'Death Mountain Offset Mirror', 'Hera Ascent', 'Death Mountain Glitched Bridge', 'Death Mountain Descent', 'Graveyard Ledge Clip Spot']),
         create_cave_region(player, 'Death Mountain Return Cave', 'a connector', None, ['Death Mountain Return Cave Exit (West)', 'Death Mountain Return Cave Exit (East)']),
         create_lw_region(player, 'Death Mountain Return Ledge', None, ['Death Mountain Return Ledge Drop', 'Death Mountain Return Cave (West)', 'Bumper Cave Ledge Mirror Spot']),
         create_cave_region(player, 'Spectacle Rock Cave (Top)', 'a connector', ['Spectacle Rock Cave'], ['Spectacle Rock Cave Drop', 'Spectacle Rock Cave Exit (Top)']),
