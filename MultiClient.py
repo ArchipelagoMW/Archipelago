@@ -803,10 +803,10 @@ async def console_loop(ctx : Context):
         await snes_flush_writes(ctx)
 
 def get_item_name_from_id(code):
-    return Items.lookup_id_to_name.get(code, 'Unknown item')
+    return Items.lookup_id_to_name.get(code, f'Unknown item (ID:{code})')
 
 def get_location_name_from_address(address):
-    return Regions.lookup_id_to_name.get(address, 'Unknown location')
+    return Regions.lookup_id_to_name.get(address, f'Unknown location (ID:{address})')
 
 async def track_locations(ctx : Context, roomid, roomdata):
     new_locations = []
