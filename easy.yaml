@@ -25,6 +25,8 @@ progressive: #not available in bonta's multiworld at this time. If you want this
   random: 0 # rolls a 50/50 chance for each potentially progressive item. So, for example, you can have progressive swords but non-progressive mittens
 entrance_shuffle:
   none: 1 # no entrance shuffle
+  dungeonssimple: 0 # shuffle just dungeons amongst each other, swapping dungeons entirely
+  dungeonsfull: 0 # shuffle any dungeon entrance with any dungeon interior
   simple: 0 #dungeons are shuffled with each other and the other entrances are shuffled with each other
   restricted: 0 #dungeons still shuffle along each other but connects other entrances more feely with each other while keeping entrances in one world
   full: 0 # mixes caves and dungeons freely, except for confining all entrances to one world
