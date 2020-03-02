@@ -30,8 +30,7 @@ def snes_to_pc(value):
     return ((value & 0x7F0000)>>1)|(value & 0x7FFF)
 
 def parse_player_names(names, players, teams):
-    names = (n.strip() for n in names.split(","))
-    names = tuple(filter(bool, names))
+    names = tuple(n for n in (n.strip() for n in names.split(",")) if n)
     ret = []
     while names or len(ret) < teams:
         team = [n[:16] for n in names[:players]]
@@ -58,7 +57,7 @@ def local_path(path):
         local_path.cached_path = os.path.dirname(sys.argv[0])
     else:
         # we are running in a normal Python environment
-        local_path.cached_path = os.path.dirname(os.path.abspath(__file__))
+        local_path.cached_path = os.path.dirname(os.path.abspath(sys.argv[0]))
     return os.path.join(local_path.cached_path, path)
 
 local_path.cached_path = None
