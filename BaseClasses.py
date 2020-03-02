@@ -116,9 +116,7 @@ class World(object):
     def get_regions(self, player=None):
         return self.regions if player is None else self._region_cache[player].values()
 
-    def get_region(self, regionname, player: int) -> Region:
-        if isinstance(regionname, Region):
-            return regionname
+    def get_region(self, regionname: str, player: int) -> Region:
         try:
             return self._region_cache[player][regionname]
         except KeyError:
@@ -128,9 +126,7 @@ class World(object):
                     return region
             raise RuntimeError('No such region %s for player %d' % (regionname, player))
 
-    def get_entrance(self, entrance, player: int) -> Entrance:
-        if isinstance(entrance, Entrance):
-            return entrance
+    def get_entrance(self, entrance: str, player: int) -> Entrance:
         try:
             return self._entrance_cache[(entrance, player)]
         except KeyError:
@@ -141,9 +137,7 @@ class World(object):
                         return exit
             raise RuntimeError('No such entrance %s for player %d' % (entrance, player))
 
-    def get_location(self, location, player: int) -> Location:
-        if isinstance(location, Location):
-            return location
+    def get_location(self, location: str, player: int) -> Location:
         try:
             return self._location_cache[(location, player)]
         except KeyError:
@@ -154,10 +148,7 @@ class World(object):
                         return r_location
         raise RuntimeError('No such location %s for player %d' % (location, player))
 
-    def get_dungeon(self, dungeonname, player: int) -> Dungeon:
-        if isinstance(dungeonname, Dungeon):
-            return dungeonname
-
+    def get_dungeon(self, dungeonname: str, player: int) -> Dungeon:
         for dungeon in self.dungeons:
             if dungeon.name == dungeonname and dungeon.player == player:
                 return dungeon

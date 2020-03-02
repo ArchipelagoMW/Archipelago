@@ -1766,7 +1766,7 @@ def connect_simple(world, exitname, regionname, player):
     world.get_entrance(exitname, player).connect(world.get_region(regionname, player))
 
 
-def connect_entrance(world, entrancename, exitname, player):
+def connect_entrance(world, entrancename: str, exitname: str, player: int):
     entrance = world.get_entrance(entrancename, player)
     # check if we got an entrance or a region to connect to
     try:
