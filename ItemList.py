@@ -297,7 +297,7 @@ def set_up_take_anys(world, player):
 
     reg = regions.pop()
     entrance = world.get_region(reg, player).entrances[0]
-    connect_entrance(world, entrance, old_man_take_any.name, player)
+    connect_entrance(world, entrance.name, old_man_take_any.name, player)
     entrance.target = 0x58
     old_man_take_any.shop = Shop(old_man_take_any, 0x0112, ShopType.TakeAny, 0xE2, True, True)
     world.shops.append(old_man_take_any.shop)
@@ -319,7 +319,7 @@ def set_up_take_anys(world, player):
         target, room_id = random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])
         reg = regions.pop()
         entrance = world.get_region(reg, player).entrances[0]
-        connect_entrance(world, entrance, take_any.name, player)
+        connect_entrance(world, entrance.name, take_any.name, player)
         entrance.target = target
         take_any.shop = Shop(take_any, room_id, ShopType.TakeAny, 0xE3, True, True)
         world.shops.append(take_any.shop)
