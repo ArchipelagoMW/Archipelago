@@ -15,6 +15,10 @@ smallkey_shuffle: #same for small keys
 bigkey_shuffle: #same for big keys
   on: 0
   off: 1
+dungeon_items: # alternative to the 4 shuffles above this, does nothing until the respective 4 shuffles are deleted
+  mc: 0 # shuffle Maps and Compass
+  none: 1 # shuffle none of the 4
+  mcsb: 0 # shuffle all of the 4, any combination of m, c, s and b will shuffle the respective item, or not if it's missing, so you can add more options here
 accessibility:
   items: 0 # item accessibility means you can get all inventory items. So a key could lock itself, but you can fill your inventory
   locations: 1 # location accessibility means you can access every location in your seed and get all 216 checks
@@ -25,8 +29,8 @@ progressive: #not available in bonta's multiworld at this time. If you want this
   random: 0 # rolls a 50/50 chance for each potentially progressive item. So, for example, you can have progressive swords but non-progressive mittens
 entrance_shuffle:
   none: 1 # no entrance shuffle
-  dungeonssimple: 0 # shuffle just dungeons amongst each other, swapping dungeons entirely
-  dungeonsfull: 0 # shuffle any dungeon entrance with any dungeon interior
+  dungeonssimple: 0 # shuffle just dungeons amongst each other, swapping dungeons entirely, so Hyrule Castle is always 1 dungeon
+  dungeonsfull: 0 # shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle can be 4 different dungeons
   simple: 0 #dungeons are shuffled with each other and the other entrances are shuffled with each other
   restricted: 0 #dungeons still shuffle along each other but connects other entrances more feely with each other while keeping entrances in one world
   full: 0 # mixes caves and dungeons freely, except for confining all entrances to one world
@@ -98,9 +102,9 @@ enemy_health:
   easy: 0
   hard: 0
   expert: 0
-pot_shuffle:
-  'on': 0
-  'off': 1
+pot_shuffle: # Shuffle pots, their contents and whatever is hiding under them. Broken with any door shuffle that is not vanilla, do not combine
+  on: 0
+  off: 1
 beemizer:
   0: 1
   1: 0
