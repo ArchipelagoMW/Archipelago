@@ -9,10 +9,10 @@ environment:
     - PYTHON: "C:\Python38-x64"
       PYTHON_VERSION: "3.8"
 install:
-  - cmd: %PYTHON% -m pip install --upgrade pip
-  - cmd: %PYTHON% -m pip install -r requirements.txt --upgrade
+  - cmd: "%PYTHON% -m pip install --upgrade pip"
+  - cmd: "%PYTHON% -m pip install -r requirements.txt --upgrade"
 build_script:
-  - cmd: %PYTHON% setup.py build_exe
+  - cmd: "%PYTHON% setup.py build_exe"
 artifacts:
-  - path: build\exe.win-amd64-%PYTHON_VERSION%\
-    name: Berserker_Multiworld_{branch}_{version}_PY%PYTHON_VERSION%.zip
+  - path: "build\exe.win-amd64-%PYTHON_VERSION%\\"
+    name: "Berserker_Multiworld_{branch}_{version}_PY%PYTHON_VERSION%.zip"
