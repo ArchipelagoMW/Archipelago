@@ -4,11 +4,12 @@ pull_requests:
 environment:
   ProjectVersion: build$(APPVEYOR_BUILD_VERSION)
   matrix:
-    - PYTHON: C:\Python38-x64
+    - PYTHON: C:\Python37-x64
 install:
+  - cmd: python -m pip install --upgrade pip
   - cmd: pip install -r requirements.txt --upgrade
 build_script:
   - cmd: setup.py build_exe
 artifacts:
-  - path: build\exe.win-amd64-3.8\
+  - path: build\exe.win-amd64-3.7\
     name: Berserker_Multiworld_{branch}_{version}.zip
