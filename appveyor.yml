@@ -3,10 +3,10 @@ pull_requests:
   do_not_increment_build_number: true
 environment:
   matrix:
-    - PYTHON: "C:\Python37-x64"
+    - PYTHON: "C:\\Python37-x64"
       PYTHON_VERSION: "3.7"
 
-    - PYTHON: "C:\Python38-x64"
+    - PYTHON: "C:\\Python38-x64"
       PYTHON_VERSION: "3.8"
 install:
   - cmd: "%PYTHON% -m pip install --upgrade pip"
@@ -14,5 +14,5 @@ install:
 build_script:
   - cmd: "%PYTHON% setup.py build_exe"
 artifacts:
-  - path: "build\exe.win-amd64-%PYTHON_VERSION%\\"
+  - path: "build\\exe.win-amd64-%PYTHON_VERSION%\\"
     name: "Berserker_Multiworld_{branch}_{version}_PY%PYTHON_VERSION%.zip"
