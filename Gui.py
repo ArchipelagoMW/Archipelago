@@ -416,6 +416,8 @@ def guiMain(args=None):
         guiargs.difficulty = difficultyVar.get()
         guiargs.item_functionality = itemfunctionVar.get()
         guiargs.timer = timerVar.get()
+        if guiargs.timer == "none":
+            guiargs.timer = False
         guiargs.progressive = progressiveVar.get()
         guiargs.accessibility = accessibilityVar.get()
         guiargs.algorithm = algorithmVar.get()

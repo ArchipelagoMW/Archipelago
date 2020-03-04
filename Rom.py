@@ -853,7 +853,7 @@ def patch_rom(world, rom, player, team, enemized):
         ERtimeincrease = 20
     if world.keyshuffle[player] or world.bigkeyshuffle[player] or world.mapshuffle[player]:
         ERtimeincrease = ERtimeincrease + 15
-    if world.clock_mode[player] == 'off':
+    if world.clock_mode[player] == False:
         rom.write_bytes(0x180190, [0x00, 0x00, 0x00])  # turn off clock mode
         write_int32(rom, 0x180200, 0)  # red clock adjustment time (in frames, sint32)
         write_int32(rom, 0x180204, 0)  # blue clock adjustment time (in frames, sint32)
@@ -1111,7 +1111,7 @@ def patch_rom(world, rom, player, team, enemized):
     rom.write_byte(0x18003B, 0x01 if world.mapshuffle[player] else 0x00)  # maps showing crystals on overworld
 
     # compasses showing dungeon count
-    if world.clock_mode[player] != 'off':
+    if world.clock_mode[player]:
         rom.write_byte(0x18003C, 0x00)  # Currently must be off if timer is on, because they use same HUD location
     elif world.compassshuffle[player]:
         rom.write_byte(0x18003C, 0x01)  # show on pickup

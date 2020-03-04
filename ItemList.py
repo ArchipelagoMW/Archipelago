@@ -129,10 +129,12 @@ def generate_itempool(world, player):
                                                                                                    'dungeons',
                                                                                                    'triforcehunt',
                                                                                                    'crystals']
-            or world.mode[player] not in ['open', 'standard', 'inverted'] or world.timer[player] not in ['none', 'display',
-                                                                                                 'timed', 'timed-ohko',
-                                                                                                 'ohko',
-                                                                                                 'timed-countdown']):
+            or world.mode[player] not in ['open', 'standard', 'inverted'] or world.timer[player] not in [False,
+                                                                                                         'display',
+                                                                                                         'timed',
+                                                                                                         'timed-ohko',
+                                                                                                         'ohko',
+                                                                                                         'timed-countdown']):
         raise NotImplementedError('Not supported yet')
     if world.timer[player] in ['ohko', 'timed-ohko']:
         world.can_take_damage[player] = False
@@ -414,7 +416,7 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
     lamps_needed_for_dark_rooms = 1
 
     # insanity shuffle doesn't have fake LW/DW logic so for now guaranteed Mirror and Moon Pearl at the start
-    if  shuffle == 'insanity_legacy':
+    if shuffle == 'insanity_legacy':
         place_item('Link\'s House', 'Magic Mirror')
         place_item('Sanctuary', 'Moon Pearl')
     else:
@@ -669,13 +671,14 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
 def test():
     for difficulty in ['normal', 'hard', 'expert']:
         for goal in ['ganon', 'triforcehunt', 'pedestal']:
-            for timer in ['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown']:
+            for timer in [False, 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown']:
                 for mode in ['open', 'standard', 'inverted']:
                     for swords in ['random', 'assured', 'swordless', 'vanilla']:
                         for progressive in ['on', 'off']:
                             for shuffle in ['full', 'insanity_legacy']:
                                 for retro in [True, False]:
-                                    out = get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, retro)
+                                    out = get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords,
+                                                        retro)
                                     count = len(out[0]) + len(out[1])
 
                                     correct_count = total_items_to_place

@@ -256,12 +256,14 @@ def roll_settings(weights):
 
     ret.beemizer = int(get_choice('beemizer', weights)) if 'beemizer' in weights else 0
 
-    ret.timer = {'none': 'none',
+    ret.timer = {'none': False,
+                 None: False,
+                 False: False,
                  'timed': 'timed',
                  'timed_ohko': 'timed-ohko',
                  'ohko': 'ohko',
                  'timed_countdown': 'timed-countdown',
-                 'display': 'display'}[get_choice('timer', weights)] if 'timer' in weights.keys() else 'none'
+                 'display': 'display'}[get_choice('timer', weights)] if 'timer' in weights.keys() else False
 
     ret.progressive = convert_to_on_off(get_choice('progressive', weights)) if "progressive" in weights else 'on'
     inventoryweights = weights.get('startinventory', {})

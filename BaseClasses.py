@@ -98,7 +98,7 @@ class World(object):
             set_player_attr('open_pyramid', False)
             set_player_attr('treasure_hunt_icon', 'Triforce Piece')
             set_player_attr('treasure_hunt_count', 0)
-            set_player_attr('clock_mode', 'off')
+            set_player_attr('clock_mode', False)
             set_player_attr('can_take_damage', True)
 
     def get_name_string_for_object(self, obj) -> str:
