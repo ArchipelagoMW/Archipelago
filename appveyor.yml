@@ -2,14 +2,17 @@ version: '{build}'
 pull_requests:
   do_not_increment_build_number: true
 environment:
-  ProjectVersion: build$(APPVEYOR_BUILD_VERSION)
   matrix:
     - PYTHON: C:\Python37-x64
+      PYTHON_VERSION: 3.7
+
+    - PYTHON: C:\Python38-x64
+      PYTHON_VERSION: 3.8
 install:
-  - cmd: python -m pip install --upgrade pip
-  - cmd: pip install -r requirements.txt --upgrade
+  - cmd: %PYTHON% -m pip install --upgrade pip
+  - cmd: %PYTHON% -m pip install -r requirements.txt --upgrade
 build_script:
-  - cmd: setup.py build_exe
+  - cmd: %PYTHON% setup.py build_exe
 artifacts:
-  - path: build\exe.win-amd64-3.7\
-    name: Berserker_Multiworld_{branch}_{version}.zip
+  - path: build\exe.win-amd64-%PYTHON_VERSION%\
+    name: Berserker_Multiworld_{branch}_{version}_PY%PYTHON_VERSION%.zip
