@@ -26,17 +26,22 @@ if __name__ == "__main__":
     try:
         print(f"{__author__}'s MultiMystery Launcher V{__version__}")
         import ModuleUpdate
+
         ModuleUpdate.update()
 
-        from Utils import parse_yaml
+        from Utils import parse_yaml, get_public_ipv4
+        from Patch import create_patch_file
 
-        multi_mystery_options = parse_yaml(open("host.yaml").read())["multi_mystery_options"]
+        options = parse_yaml(open("host.yaml").read())
+
+        multi_mystery_options = options["multi_mystery_options"]
         output_path = multi_mystery_options["output_path"]
         enemizer_path = multi_mystery_options["enemizer_path"]
         player_files_path = multi_mystery_options["player_files_path"]
         race = multi_mystery_options["race"]
         create_spoiler = multi_mystery_options["create_spoiler"]
         zip_roms = multi_mystery_options["zip_roms"]
+        zip_diffs = multi_mystery_options["zip_diffs"]
         zip_spoiler = multi_mystery_options["zip_spoiler"]
         zip_multidata = multi_mystery_options["zip_multidata"]
         zip_format = multi_mystery_options["zip_format"]
@@ -44,7 +49,7 @@ if __name__ == "__main__":
         player_name = multi_mystery_options["player_name"]
         meta_file_path = multi_mystery_options["meta_file_path"]
         teams = multi_mystery_options["teams"]
-        rom_file = multi_mystery_options["rom_file"]
+        rom_file = options["general_options"]["rom_file"]
 
 
         py_version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -136,13 +141,19 @@ if __name__ == "__main__":
             zipname = os.path.join(output_path, f"ER_{seedname}.{typical_zip_ending}")
 
             print(f"Creating zipfile {zipname}")
-
+            ipv4 = get_public_ipv4()
             with zipfile.ZipFile(zipname, "w", compression=compression, compresslevel=9) as zf:
                 for file in os.listdir(output_path):
-                    if zip_roms and file.endswith(".sfc") and seedname in file:
-                        pack_file(file)
-                        if zip_roms == 2 and player_name.lower() not in file.lower():
-                            remove_zipped_file(file)
+                    if file.endswith(".sfc") and seedname in file:
+                        if zip_diffs:
+                            diff = os.path.split(create_patch_file(os.path.join(output_path, file), ipv4))[1]
+                            pack_file(diff)
+                            if zip_diffs == 2:
+                                remove_zipped_file(diff)
+                        if zip_roms:
+                            pack_file(file)
+                            if zip_roms == 2 and player_name.lower() not in file.lower():
+                                remove_zipped_file(file)
                 if zip_multidata and os.path.exists(os.path.join(output_path, multidataname)):
                     pack_file(multidataname)
                     if zip_multidata == 2:
