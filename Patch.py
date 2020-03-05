@@ -31,7 +31,7 @@ def create_patch_file(rom_file_to_patch: str, server: str = "") -> str:
     bytes = generate_patch(load_bytes(rom_file_to_patch),
                            {
                                "server": server})  # allow immediate connection to server in multiworld. Empty string otherwise
-    target = os.path.splitext(rom_file_to_patch)[0] + ".bbp"
+    target = os.path.splitext(rom_file_to_patch)[0] + ".bmbp"
     write_lzma(bytes, target)
     return target
 
