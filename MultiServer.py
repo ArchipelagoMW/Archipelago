@@ -192,17 +192,17 @@ async def countdown(ctx: Context, timer):
 def get_connected_players_string(ctx: Context):
     auth_clients = [c for c in ctx.clients if c.auth]
     if not auth_clients:
-        return 'No player connected'
+        return f'No player connected, of {len(ctx.player_names)} expected players'
 
     auth_clients.sort(key=lambda c: (c.team, c.slot))
-    current_team = 0
-    text = 'Team #1: '
+    current_team = -1
+    text = ''
     for c in auth_clients:
         if c.team != current_team:
             text += f':: Team #{c.team + 1}: '
             current_team = c.team
         text += f'{c.name} '
-    return 'Connected players: ' + text[:-1]
+    return f'Connected players ({len(auth_clients)} of {len(ctx.player_names)}) ' + text[:-1]
 
 
 def get_received_items(ctx: Context, team: int, player: int):

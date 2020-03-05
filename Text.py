@@ -107,6 +107,7 @@ Triforce_texts = [
     "You get one\nwish.  Choose\nwisely, hero!",
     "Can you please\nbreak us three\nup?  Thanks.",
     "  Pick us up\n  before we\n  get dizzy!",
+    "\n   Honk."
 ]
 BombShop2_texts = ['Bombs!\nBombs!\nBiggest!\nBestest!\nGreatest!\nBoomest!']
 Sahasrahla2_texts = ['You already got my item, idiot.', 'Why are you still talking to me?', 'This text won\'t change.', 'Have you met my brother, Hasarahshla?']

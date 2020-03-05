@@ -70,12 +70,13 @@ def main():
     for player in range(1, args.multi + 1):
         path = getattr(args, f'p{player}')
         if path:
-            if path not in weights_cache:
-                try:
+            try:
+                if path not in weights_cache:
                     weights_cache[path] = get_weights(path)
-                except Exception as e:
-                    raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
-            print(f"P{player} Weights: {path} >> {weights_cache[path]['description']}")
+                print(f"P{player} Weights: {path} >> {weights_cache[path]['description']}")
+
+            except Exception as e:
+                raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
     erargs.name = {x: "" for x in range(1, args.multi + 1)} # only so it can be overwrittin in mystery
