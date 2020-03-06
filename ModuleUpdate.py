@@ -17,7 +17,10 @@ def update():
     global update_ran
     if not update_ran:
         update_ran = True
-        with open(os.path.join(os.path.dirname(__file__), 'requirements.txt')) as requirementsfile:
+        path = os.path.join(os.path.dirname(sys.argv[0]), 'requirements.txt')
+        if not os.path.exists(path):
+            os.path.join(os.path.dirname(__file__), 'requirements.txt')
+        with open(path) as requirementsfile:
             for line in requirementsfile.readlines():
                 module, remoteversion = line.split(">=")
                 module = naming_specialties.get(module, module)
