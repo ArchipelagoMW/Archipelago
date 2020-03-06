@@ -5,15 +5,21 @@ import logging
 import typing
 import urllib.parse
 import atexit
+import sys
+import os
+
+os.chdir(os.path.split(sys.argv[0])[0])  # set to local folder, so that options yamls can be found
 
 exit_func = atexit.register(input, "Press enter to close.")
 
 import ModuleUpdate
+
 ModuleUpdate.update()
 
 import colorama
 import websockets
 import aioconsole
+
 try:
     import tqdm
 except:
