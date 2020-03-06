@@ -39,8 +39,8 @@ def update():
                             module_version = tuple(int(part.strip()) for part in module_version.split("."))
                         remote_version = tuple(int(part.strip()) for part in remote_version.split("."))
                         if module_version < remote_version:
-                            input(
-                                f'Required python module {module} is outdated ({module_version}<{remote_version}), press enter to upgrade it')
+                            input(f'Required python module {module} is outdated ({module_version}<{remote_version}),'
+                                  ' press enter to upgrade it')
                             update_command()
 
 
