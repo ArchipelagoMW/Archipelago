@@ -343,14 +343,23 @@ async def snes_connect(ctx : Context, address):
     address = f"ws://{address}" if "://" not in address else address
 
     logging.info("Connecting to QUsb2snes at %s ..." % address)
-
+    seen_problems = set()
+    while ctx.snes_state == SNES_CONNECTING:
+        try:
+            ctx.snes_socket = await websockets.connect(address, ping_timeout=None, ping_interval=None)
+        except Exception as e:
+            problem = "%s" % e
+            # only tell the user about new problems, otherwise silently lay in wait for a working connection
+            if problem not in seen_problems:
+                seen_problems.add(problem)
+                logging.error(f"Error connecting to QUsb2snes ({problem})")
+            await asyncio.sleep(1)
+        else:
+            ctx.snes_state = SNES_CONNECTED
     try:
-        ctx.snes_socket = await websockets.connect(address, ping_timeout=None, ping_interval=None)
-        ctx.snes_state = SNES_CONNECTED
-
         DeviceList_Request = {
-            "Opcode" : "DeviceList",
-            "Space" : "SNES"
+            "Opcode": "DeviceList",
+            "Space": "SNES"
         }
         await ctx.snes_socket.send(json.dumps(DeviceList_Request))
 
@@ -358,7 +367,12 @@ async def snes_connect(ctx : Context, address):
         devices = reply['Results'] if 'Results' in reply and len(reply['Results']) > 0 else None
 
         if not devices:
-            raise Exception('No device found')
+            logging.info('No device found, waiting for device. Run multibridge and connect it to QUSB2SNES.')
+            while not devices:
+                await asyncio.sleep(1)
+                await ctx.snes_socket.send(json.dumps(DeviceList_Request))
+                reply = json.loads(await ctx.snes_socket.recv())
+                devices = reply['Results'] if 'Results' in reply and len(reply['Results']) > 0 else None
 
         logging.info("Available devices:")
         for id, device in enumerate(devices):
