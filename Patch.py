@@ -6,7 +6,7 @@ import hashlib
 import logging
 
 import Utils
-from Rom import JAP10HASH
+from Rom import JAP10HASH, read_rom
 
 base_rom_bytes = None
 
@@ -17,13 +17,13 @@ def get_base_rom_bytes() -> bytes:
         with open("host.yaml") as f:
             options = Utils.parse_yaml(f.read())
         file_name = options["general_options"]["rom_file"]
-        base_rom_bytes = load_bytes(file_name)
+        base_rom_bytes = bytes(read_rom(open(file_name, "rb")))
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         if JAP10HASH != basemd5.hexdigest():
-            logging.getLogger('').warning('Supplied Base Rom does not match known MD5 for JAP(1.0) release.'
-                                          ' Will try to patch anyway.')
+            logging.warning('Supplied Base Rom does not match known MD5 for JAP(1.0) release.'
+                            ' Will try to patch anyway.')
     return base_rom_bytes
 
 
