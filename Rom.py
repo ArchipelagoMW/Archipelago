@@ -159,11 +159,12 @@ def read_rom(stream):
 
 def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, random_sprite_on_hit, extendedmsu):
     baserom_path = os.path.abspath(baserom_path)
-    basepatch_path = os.path.abspath(local_path('data/base2current.json') if not extendedmsu else local_path('data/base2current_extendedmsu.json'))
+    basepatch_path = os.path.abspath(
+        local_path('data/base2current.json') if not extendedmsu else local_path('data/base2current_extendedmsu.json'))
     enemizer_basepatch_path = os.path.join(os.path.dirname(enemizercli), "enemizerBasePatch.json")
-    randopatch_path = os.path.abspath(output_path('enemizer_randopatch.json'))
-    options_path = os.path.abspath(output_path('enemizer_options.json'))
-    enemizer_output_path = os.path.abspath(output_path('enemizer_output.json'))
+    randopatch_path = os.path.abspath(output_path(f'enemizer_randopatch_{player}.json'))
+    options_path = os.path.abspath(output_path(f'enemizer_options_{player}.json'))
+    enemizer_output_path = os.path.abspath(output_path(f'enemizer_output_{player}.json'))
 
     # write options file for enemizer
     options = {
@@ -171,7 +172,8 @@ def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, r
         'RandomizeEnemiesType': 3,
         'RandomizeBushEnemyChance': world.enemy_shuffle[player] == 'chaos',
         'RandomizeEnemyHealthRange': world.enemy_health[player] != 'default',
-        'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[world.enemy_health[player]],
+        'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[
+            world.enemy_health[player]],
         'OHKO': False,
         'RandomizeEnemyDamage': world.enemy_damage[player] != 'default',
         'AllowEnemyZeroDamage': True,
