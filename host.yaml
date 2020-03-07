@@ -1,9 +1,9 @@
-#options for MultiServer
-#null means nothing, for the server this means to default the value
-#these overwrite command line arguments!
 general_options:
   #File name of the v1.0 J rom
   rom_file: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
+#options for MultiServer
+#null means nothing, for the server this means to default the value
+#these overwrite command line arguments!
 server_options:
   host: null
   port: null
