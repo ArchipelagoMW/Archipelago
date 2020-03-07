@@ -120,7 +120,7 @@ if __name__ == "__main__":
                     webbrowser.open(romfilename)
                     break
 
-        if any((zip_roms, zip_multidata, zip_spoiler)):
+        if any((zip_roms, zip_multidata, zip_spoiler, zip_diffs)):
             import zipfile
             compression = {1 : zipfile.ZIP_DEFLATED,
                            2 : zipfile.ZIP_LZMA,
