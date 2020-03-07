@@ -484,8 +484,9 @@ def set_password(ctx : Context, password):
     logging.warning('Password set to ' + password if password else 'Password disabled')
 
 
-async def console(ctx : Context):
-    while True:
+async def console(ctx: Context):
+    running = True
+    while running:
         input = await aioconsole.ainput()
         try:
 
@@ -494,8 +495,8 @@ async def console(ctx : Context):
                 continue
 
             if command[0] == '/exit':
-                ctx.server.ws_server.close()
-                break
+                await ctx.server.ws_server._close()
+                running = False
 
             if command[0] == '/players':
                 logging.info(get_connected_players_string(ctx))
