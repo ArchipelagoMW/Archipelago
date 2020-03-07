@@ -8,6 +8,7 @@ from collections import OrderedDict
 from collections_extended import bag
 from EntranceShuffle import door_addresses
 from Utils import int16_as_bytes
+from typing import Union
 
 class World(object):
     player_names: list
@@ -294,7 +295,7 @@ class World(object):
 
         return False
 
-    def has_beaten_game(self, state, player=None):
+    def has_beaten_game(self, state, player: Union[None, int] = None):
         if player:
             return state.has('Triforce', player)
         else:
@@ -302,14 +303,15 @@ class World(object):
 
     def can_beat_game(self, starting_state=None):
         if starting_state:
+            if self.has_beaten_game(starting_state):
+                return True
             state = starting_state.copy()
         else:
+            if self.has_beaten_game(self.state):
+                return True
             state = CollectionState(self)
-
-        if self.has_beaten_game(state):
-            return True
-
-        prog_locations = [location for location in self.get_locations() if location.item is not None and (location.item.advancement or location.event) and location not in state.locations_checked]
+        prog_locations = {location for location in self.get_locations() if location.item is not None and (
+                    location.item.advancement or location.event) and location not in state.locations_checked}
 
         while prog_locations:
             sphere = []
@@ -343,6 +345,7 @@ class CollectionState(object):
         self.stale = {player: True for player in range(1, parent.players + 1)}
         for item in parent.precollected_items:
             self.collect(item, True)
+        self._reachable_cache = set()
 
     def update_reachable_regions(self, player: int):
         player_regions = self.world.get_regions(player)
@@ -369,19 +372,22 @@ class CollectionState(object):
         return ret
 
     def can_reach(self, spot, resolution_hint=None, player=None):
-        try:
-            spot_type = spot.spot_type
-        except AttributeError:
-            # try to resolve a name
-            if resolution_hint == 'Location':
-                spot = self.world.get_location(spot, player)
-            elif resolution_hint == 'Entrance':
-                spot = self.world.get_entrance(spot, player)
-            else:
-                # default to Region
-                spot = self.world.get_region(spot, player)
-
-        return spot.can_reach(self)
+        if (player, getattr(spot, "name", spot)) in self._reachable_cache:
+            return True
+        else:
+            if not hasattr(spot, "spot_type"):
+                # try to resolve a name
+                if resolution_hint == 'Location':
+                    spot = self.world.get_location(spot, player)
+                elif resolution_hint == 'Entrance':
+                    spot = self.world.get_entrance(spot, player)
+                else:
+                    # default to Region
+                    spot = self.world.get_region(spot, player)
+            res = spot.can_reach(self)
+            if res:
+                self._reachable_cache.add((player, spot.name))
+            return spot.can_reach(self)
 
     def sweep_for_events(self, key_only=False, locations=None):
         # this may need improvement
@@ -695,7 +701,7 @@ class Region(object):
         self.dungeon = None
         self.shop = None
         self.world = None
-        self.is_light_world = False  # will be set aftermaking connections.
+        self.is_light_world = False  # will be set after making connections.
         self.is_dark_world = False
         self.spot_type = 'Region'
         self.hint_text = hint
@@ -707,7 +713,7 @@ class Region(object):
             state.update_reachable_regions(self.player)
         return self in state.reachable_regions[self.player]
 
-    def can_reach_private(self, state):
+    def can_reach_private(self, state: CollectionState):
         for entrance in self.entrances:
             if entrance.can_reach(state):
                 if not self in state.path:
@@ -715,7 +721,7 @@ class Region(object):
                 return True
         return False
 
-    def can_fill(self, item):
+    def can_fill(self, item: Item):
         inside_dungeon_item = ((item.smallkey and not self.world.keyshuffle[item.player])
                                or (item.bigkey and not self.world.bigkeyshuffle[item.player])
                                or (item.map and not self.world.mapshuffle[item.player])
