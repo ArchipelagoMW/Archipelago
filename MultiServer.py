@@ -590,8 +590,8 @@ def forward_port(port: int):
         NewInternalPort=port,
         NewInternalClient=ip,
         NewEnabled=1,
-        NewPortMappingDescription='Berserker\s Multiworld',
-        NewLeaseDuration=60*60*24#24 hours
+        NewPortMappingDescription='Berserker\'s Multiworld',
+        NewLeaseDuration=60 * 60 * 24  # 24 hours
     )
 
     logging.info(f"Attempted to forward port {port} to {ip}, your local ip address.")
