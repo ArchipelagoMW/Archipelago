@@ -44,7 +44,7 @@ multi_mystery_options:
   #1 -> Create a zip
   #2 -> Create a zip and delete the ROMs that will be in it, except the hosts (requires player_name to be set correctly)
   zip_roms: 1
-  # zip diff files
+  # zip diff files, 2-> delete the non-zipped one. Note that diffs are only created if they are placed in a zip.
   zip_diffs: 2
   #include the spoiler log in the zip, 2 -> delete the non-zipped one
   zip_spoiler: 0
