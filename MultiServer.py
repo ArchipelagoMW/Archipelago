@@ -568,6 +568,33 @@ async def console(ctx : Context):
             import traceback
             traceback.print_exc()
 
+def forward_port(port: int):
+    import upnpy
+    import socket
+
+    upnp = upnpy.UPnP()
+    upnp.discover()
+    device = upnp.get_igd()
+
+    service = device['WANPPPConnection.1']
+
+    #get own lan IP
+    ip = socket.gethostbyname(socket.gethostname())
+
+    # This specific action returns an empty dict: {}
+    service.AddPortMapping(
+        NewRemoteHost='',
+        NewExternalPort=port,
+        NewProtocol='TCP',
+        NewInternalPort=port,
+        NewInternalClient=ip,
+        NewEnabled=1,
+        NewPortMappingDescription='Berserker\s Multiworld',
+        NewLeaseDuration=60*60*24#24 hours
+    )
+
+    logging.info(f"Attempted to forward port {port} to {ip}, your local ip address.")
+
 
 async def main():
     parser = argparse.ArgumentParser()
@@ -581,13 +608,18 @@ async def main():
     parser.add_argument('--location_check_points', default=1, type=int)
     parser.add_argument('--hint_cost', default=1000, type=int)
     parser.add_argument('--disable_item_cheat', default=False, action='store_true')
+    parser.add_argument('--disable_port_forward', default=False, action='store_true')
     args = parser.parse_args()
     file_options = Utils.parse_yaml(open("host.yaml").read())["server_options"]
     for key, value in file_options.items():
         if value is not None:
             setattr(args, key, value)
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
-
+    if not args.disable_port_forward:
+        try:
+            forward_port(args.port)
+        except:
+            logging.exception("Automatic port forwarding failed with:")
     ctx = Context(args.host, args.port, args.password, args.location_check_points, args.hint_cost,
                   not args.disable_item_cheat)
 
