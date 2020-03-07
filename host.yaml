@@ -43,7 +43,7 @@ multi_mystery_options:
   #0 -> Don't
   #1 -> Create a zip
   #2 -> Create a zip and delete the ROMs that will be in it, except the hosts (requires player_name to be set correctly)
-  zip_roms: 1
+  zip_roms: 0
   # zip diff files, 2-> delete the non-zipped one. Note that diffs are only created if they are placed in a zip.
   zip_diffs: 2
   #include the spoiler log in the zip, 2 -> delete the non-zipped one
@@ -51,6 +51,6 @@ multi_mystery_options:
   #include the multidata file in the zip, 2 -> delete the non-zipped one, which also means the server won't autostart
   zip_multidata: 0
   #zip algorithm to use
-  zip_format: 2 # 1 -> zip, 2 -> 7z, 3->bz2
+  zip_format: 1 # 1 -> zip, 2 -> 7z, 3->bz2
   #create roms flagged as race roms
   race: 0
