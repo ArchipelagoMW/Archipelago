@@ -17,3 +17,13 @@ build_script:
 artifacts:
   - path: "build\\exe.win-amd64-%PYTHON_VERSION%\\"
     name: "Berserker_Multiworld_%APPVEYOR_REPO_BRANCH%_%APPVEYOR_REPO_TAG%_Python%PYTHON_VERSION%-x64"
+deploy:
+  description: 'Appveyor automated build'
+  provider: GitHub
+  auth_token:
+    secure: +cRWefLphFutZuzCcCsNS0tl7nNj/IpnJmfht6hZFh2z9eQdFgcu6zwGS3lWItat
+  artifact: /.*\.zip/            # upload all NuGet packages to release assets
+  draft: false
+  prerelease: false
+  on:
+    APPVEYOR_REPO_TAG: true        # deploy on tag push only
