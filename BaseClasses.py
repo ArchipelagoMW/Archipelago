@@ -344,7 +344,6 @@ class CollectionState(object):
         self.stale = {player: True for player in range(1, parent.players + 1)}
         for item in parent.precollected_items:
             self.collect(item, True)
-        self._reachable_cache = set()
 
     def update_reachable_regions(self, player: int):
         player_regions = self.world.get_regions(player)
@@ -371,22 +370,16 @@ class CollectionState(object):
         return ret
 
     def can_reach(self, spot, resolution_hint=None, player=None):
-        if (player, getattr(spot, "name", spot)) in self._reachable_cache:
-            return True
-        else:
-            if not hasattr(spot, "spot_type"):
-                # try to resolve a name
-                if resolution_hint == 'Location':
-                    spot = self.world.get_location(spot, player)
-                elif resolution_hint == 'Entrance':
-                    spot = self.world.get_entrance(spot, player)
-                else:
-                    # default to Region
-                    spot = self.world.get_region(spot, player)
-            res = spot.can_reach(self)
-            if res:
-                self._reachable_cache.add((player, spot.name))
-            return spot.can_reach(self)
+        if not hasattr(spot, "spot_type"):
+            # try to resolve a name
+            if resolution_hint == 'Location':
+                spot = self.world.get_location(spot, player)
+            elif resolution_hint == 'Entrance':
+                spot = self.world.get_entrance(spot, player)
+            else:
+                # default to Region
+                spot = self.world.get_region(spot, player)
+        return spot.can_reach(self)
 
     def sweep_for_events(self, key_only=False, locations=None):
         # this may need improvement
@@ -662,7 +655,6 @@ class CollectionState(object):
                 if self.prog_items[to_remove, item.player] < 1:
                     del (self.prog_items[to_remove, item.player])
                 # invalidate caches, nothing can be trusted anymore now
-                self._reachable_cache = set()
                 self.reachable_regions[item.player] = set()
                 self.stale[item.player] = True
 
