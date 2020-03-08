@@ -13,7 +13,7 @@ server_options:
   disable_save: null
   loglevel: null
   #disallow automatically forwarding the port that is used, then closing that port on shutdown
-  disable_port_forward: true
+  disable_port_forward: null
   #Disallow !getitem. Old /getitem cannot be blocked this way
   disable_item_cheat: null
   #Client hint system

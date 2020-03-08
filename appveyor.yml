@@ -16,7 +16,7 @@ build_script:
   - cmd: "%PYTHON% setup.py build_exe"
 artifacts:
   - path: "build\\exe.win-amd64-%PYTHON_VERSION%\\"
-    name: "Berserker_Multiworld_%APPVEYOR_REPO_BRANCH%_%APPVEYOR_REPO_TAG%_Python%PYTHON_VERSION%-x64"
+    name: "Berserker_Multiworld_%APPVEYOR_REPO_BRANCH%_Python%PYTHON_VERSION%-x64"
 deploy:
   description: 'Appveyor automated build'
   provider: GitHub
