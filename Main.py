@@ -218,7 +218,11 @@ def main(args, seed=None):
                                                                                                 'random'] else "",
                                                                   "-nohints" if not world.hints[
                                                                       player] else "")) if not args.outputname else ''
-            rom.write_to_file(output_path(f'{outfilebase}{outfilepname}{outfilesuffix}.sfc'))
+            rompath = output_path(f'{outfilebase}{outfilepname}{outfilesuffix}.sfc')
+            rom.write_to_file(rompath)
+            if args.create_diff:
+                import Patch
+                Patch.create_patch_file(rompath)
         return (player, team, list(rom.name))
 
     if not args.suppress_rom:
