@@ -170,7 +170,9 @@ async def on_client_disconnected(ctx: Context, client: Client):
         await on_client_left(ctx, client)
 
 async def on_client_joined(ctx: Context, client: Client):
-    notify_all(ctx, "%s (Team #%d) has joined the game" % (client.name, client.team + 1))
+    notify_all(ctx, "%s (Team #%d) has joined the game. Client(%s, %s)." % (client.name, client.team + 1,
+                                                                            ".".join(str(x) for x in client.version),
+                                                                            client.tags))
 
 async def on_client_left(ctx: Context, client: Client):
     notify_all(ctx, "%s (Team #%d) has left the game" % (client.name, client.team + 1))

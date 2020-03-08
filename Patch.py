@@ -22,8 +22,8 @@ def get_base_rom_bytes() -> bytes:
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         if JAP10HASH != basemd5.hexdigest():
-            logging.warning('Supplied Base Rom does not match known MD5 for JAP(1.0) release.'
-                            ' Will try to patch anyway.')
+            raise Exception('Supplied Base Rom does not match known MD5 for JAP(1.0) release. '
+                            'Get the correct game and version, then dump it')
     return base_rom_bytes
 
 
