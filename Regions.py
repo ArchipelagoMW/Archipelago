@@ -622,4 +622,3 @@ location_table = {'Mushroom': (0x180013, 0x186338, False, 'in the woods'),
                   'Turtle Rock - Prize': ([0x120A7, 0x53F24, 0x53F25, 0x18005C, 0x180079, 0xC708], None, True, 'Turtle Rock')}
 
 lookup_id_to_name = {data[0] : name for name, data in location_table.items() if type(data[0]) == int}
-lookup_lower_name_to_name = {name.lower() : name for name in location_table}

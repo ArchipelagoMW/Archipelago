@@ -163,7 +163,7 @@ async def on_client_connected(ctx: Context, client: Client):
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ['Berserker'],
-        'version': [1, 1, 0]
+        'version': [1, 2, 0]
     }]])
 
 async def on_client_disconnected(ctx: Context, client: Client):
@@ -271,7 +271,7 @@ def save(ctx: Context):
 
 def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[Utils.Hint]:
     hints = []
-    seeked_item_id = Items.lookup_lower_name_to_id[item.lower()]
+    seeked_item_id = Items.item_table[item][3]
     for check, result in ctx.locations.items():
         item_id, receiving_player = result
         if receiving_player == slot and item_id == seeked_item_id:
@@ -284,7 +284,6 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
 
 def collect_hints_location(ctx: Context, team: int, slot: int, location: str) -> typing.List[Utils.Hint]:
     hints = []
-    location = Regions.lookup_lower_name_to_name[location.lower()]
     seeked_location = Regions.location_table[location][0]
     for check, result in ctx.locations.items():
         location_id, finding_player = check
@@ -572,7 +571,8 @@ async def console(ctx: Context):
             import traceback
             traceback.print_exc()
 
-def forward_port(port: int):
+
+async def forward_port(port: int):
     import upnpy
     import socket
 
@@ -582,7 +582,7 @@ def forward_port(port: int):
 
     service = device['WANPPPConnection.1']
 
-    #get own lan IP
+    # get own lan IP
     ip = socket.gethostbyname(socket.gethostname())
 
     # This specific action returns an empty dict: {}
@@ -621,11 +621,10 @@ async def main():
             if value is not None:
                 setattr(args, key, value)
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
+    portforwardtask = None
     if not args.disable_port_forward:
-        try:
-            forward_port(args.port)
-        except:
-            logging.exception("Automatic port forwarding failed with:")
+        portforwardtask = asyncio.create_task(forward_port(args.port))
+
     ctx = Context(args.host, args.port, args.password, args.location_check_points, args.hint_cost,
                   not args.disable_item_cheat)
 
@@ -653,14 +652,13 @@ async def main():
 
     ip = Utils.get_public_ipv4()
 
-    logging.info('Hosting game at %s:%d (%s)' % (
-    ip, ctx.port, 'No password' if not ctx.password else 'Password: %s' % ctx.password))
+
 
     ctx.disable_save = args.disable_save
     if not ctx.disable_save:
         if not ctx.save_filename:
             ctx.save_filename = (ctx.data_filename[:-9] if ctx.data_filename[-9:] == 'multidata' else (
-                        ctx.data_filename + '_')) + 'multisave'
+                    ctx.data_filename + '_')) + 'multisave'
         try:
             with open(ctx.save_filename, 'rb') as f:
                 jsonobj = json.loads(zlib.decompress(f.read()).decode("utf-8"))
@@ -669,8 +667,15 @@ async def main():
             logging.error('No save data found, starting a new game')
         except Exception as e:
             logging.exception(e)
-
-    ctx.server = websockets.serve(functools.partial(server,ctx=ctx), ctx.host, ctx.port, ping_timeout=None, ping_interval=None)
+    if portforwardtask:
+        try:
+            await portforwardtask
+        except:
+            logging.exception("Automatic port forwarding failed with:")
+    ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ping_timeout=None,
+                                  ping_interval=None)
+    logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port,
+                                                 'No password' if not ctx.password else 'Password: %s' % ctx.password))
     await ctx.server
     await console(ctx)
 

@@ -953,6 +953,12 @@ async def game_watcher(ctx : Context):
             await send_msgs(ctx.socket, [['LocationScouts', [scout_location]]])
         await track_locations(ctx, roomid, roomdata)
 
+
+async def run_game(romfile):
+    import webbrowser
+    webbrowser.open(romfile)
+
+
 async def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('diff_file', default="", type=str, nargs="?",
@@ -962,10 +968,15 @@ async def main():
     parser.add_argument('--password', default=None, help='Password of the multiworld host.')
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
     args = parser.parse_args()
+
+    logging.basicConfig(format='%(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
+
     if args.diff_file:
         import Patch
-        args.connect = Patch.create_rom_file(args.diff_file)["server"]
-    logging.basicConfig(format='%(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
+        meta, romfile = Patch.create_rom_file(args.diff_file)
+        args.connect = meta["server"]
+        logging.info(f"Wrote rom file to {romfile}")
+        asyncio.create_task(run_game(romfile))
 
     ctx = Context(args.snes, args.connect, args.password)
 
