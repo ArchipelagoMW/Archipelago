@@ -1112,8 +1112,9 @@ class Spoiler(object):
 
     def to_file(self, filename):
         self.parse_data()
-        with open(filename, 'w') as outfile:
-            outfile.write('ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n' % (self.metadata['version'], self.world.seed))
+        with open(filename, 'w', encoding="utf-8-sig") as outfile:
+            outfile.write(
+                'ALttP Entrance Randomizer Version %s  -  Seed: %s\n\n' % (self.metadata['version'], self.world.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.world.algorithm)
             outfile.write('Players:                         %d\n' % self.world.players)
             outfile.write('Teams:                           %d\n' % self.world.teams)
@@ -1121,7 +1122,9 @@ class Spoiler(object):
                 if self.world.players > 1:
                     outfile.write('\nPlayer %d: %s\n' % (player, self.world.get_player_names(player)))
                 for team in range(self.world.teams):
-                    outfile.write('%s%s\n' % (f"Hash - {self.world.player_names[player][team]} (Team {team+1}): " if self.world.teams > 1 else 'Hash: ', self.hashes[player, team]))
+                    outfile.write('%s%s\n' % (
+                    f"Hash - {self.world.player_names[player][team]} (Team {team + 1}): " if self.world.teams > 1 else 'Hash: ',
+                    self.hashes[player, team]))
                 outfile.write('Logic:                           %s\n' % self.metadata['logic'][player])
                 outfile.write('Mode:                            %s\n' % self.metadata['mode'][player])
                 outfile.write('Retro:                           %s\n' % ('Yes' if self.metadata['retro'][player] else 'No'))
