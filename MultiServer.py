@@ -181,15 +181,14 @@ async def on_client_left(ctx: Context, client: Client):
 async def countdown(ctx: Context, timer):
     notify_all(ctx, f'[Server]: Starting countdown of {timer}s')
     if ctx.countdown_timer:
+        ctx.countdown_timer = timer  # timer is already running, set it to a different time
+    else:
         ctx.countdown_timer = timer
-        return
-
-    ctx.countdown_timer = timer
-    while ctx.countdown_timer > 0:
-        notify_all(ctx, f'[Server]: {ctx.countdown_timer}')
-        ctx.countdown_timer -= 1
-        await asyncio.sleep(1)
-    notify_all(ctx, f'[Server]: GO')
+        while ctx.countdown_timer > 0:
+            notify_all(ctx, f'[Server]: {ctx.countdown_timer}')
+            ctx.countdown_timer -= 1
+            await asyncio.sleep(1)
+        notify_all(ctx, f'[Server]: GO')
 
 def get_connected_players_string(ctx: Context):
     auth_clients = {(c.team, c.slot) for c in ctx.clients if c.auth}
