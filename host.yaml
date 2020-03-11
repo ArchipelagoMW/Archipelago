@@ -12,7 +12,7 @@ server_options:
   savefile: null
   disable_save: null
   loglevel: null
-  #disallow automatically forwarding the port that is used, then closing that port on shutdown
+  #automatically forward the port that is used, then close that port after 24 hours
   port_forward: null
   #Disallow !getitem. Old /getitem cannot be blocked this way
   disable_item_cheat: null
