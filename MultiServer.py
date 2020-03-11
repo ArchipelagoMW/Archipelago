@@ -614,7 +614,7 @@ async def main():
     parser.add_argument('--location_check_points', default=1, type=int)
     parser.add_argument('--hint_cost', default=1000, type=int)
     parser.add_argument('--disable_item_cheat', default=False, action='store_true')
-    parser.add_argument('--disable_port_forward', default=False, action='store_true')
+    parser.add_argument('--port_forward', default=False, action='store_true')
     args = parser.parse_args()
 
     if os.path.exists('host.yaml'):
@@ -624,7 +624,7 @@ async def main():
                 setattr(args, key, value)
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
     portforwardtask = None
-    if not args.disable_port_forward:
+    if args.port_forward:
         portforwardtask = asyncio.create_task(forward_port(args.port))
 
     ctx = Context(args.host, args.port, args.password, args.location_check_points, args.hint_cost,
