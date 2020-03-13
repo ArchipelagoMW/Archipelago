@@ -9,10 +9,12 @@ import typing
 import os
 
 import ModuleUpdate
+
 ModuleUpdate.update()
 
 import websockets
-import aioconsole
+import prompt_toolkit
+from prompt_toolkit.patch_stdout import patch_stdout
 from fuzzywuzzy import process as fuzzy_process
 
 import Items
@@ -488,12 +490,14 @@ def set_password(ctx : Context, password):
 
 
 async def console(ctx: Context):
+    session = prompt_toolkit.PromptSession()
     running = True
     while running:
-        input = await aioconsole.ainput()
+        with patch_stdout():
+            input_text = await session.prompt_async()
         try:
 
-            command = input.split()
+            command = input_text.split()
             if not command:
                 continue
 
@@ -536,7 +540,7 @@ async def console(ctx: Context):
                         if usable:
                             for client in ctx.clients:
                                 if client.name == seeked_player:
-                                    new_item = ReceivedItem(Items.item_table[item][3], "cheat console", client.slot)
+                                    new_item = ReceivedItem(Items.item_table[item][3], -1, client.slot)
                                     get_received_items(ctx, client.team, client.slot).append(new_item)
                                     notify_all(ctx, 'Cheat console: sending "' + item + '" to ' + client.name)
                             send_new_items(ctx)
@@ -567,7 +571,7 @@ async def console(ctx: Context):
                         logging.warning(response)
 
             if command[0][0] != '/':
-                notify_all(ctx, '[Server]: ' + input)
+                notify_all(ctx, '[Server]: ' + input_text)
         except:
             import traceback
             traceback.print_exc()

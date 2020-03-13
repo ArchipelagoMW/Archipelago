@@ -612,13 +612,22 @@ location_table = {'Mushroom': (0x180013, 0x186338, False, 'in the woods'),
                   'Dark Blacksmith Ruins': (None, None, False, None),
                   'Eastern Palace - Prize': ([0x1209D, 0x53EF8, 0x53EF9, 0x180052, 0x18007C, 0xC6FE], None, True, 'Eastern Palace'),
                   'Desert Palace - Prize': ([0x1209E, 0x53F1C, 0x53F1D, 0x180053, 0x180078, 0xC6FF], None, True, 'Desert Palace'),
-                  'Tower of Hera - Prize': ([0x120A5, 0x53F0A, 0x53F0B, 0x18005A, 0x18007A, 0xC706], None, True, 'Tower of Hera'),
-                  'Palace of Darkness - Prize': ([0x120A1, 0x53F00, 0x53F01, 0x180056, 0x18007D, 0xC702], None, True, 'Palace of Darkness'),
-                  'Swamp Palace - Prize': ([0x120A0, 0x53F6C, 0x53F6D, 0x180055, 0x180071, 0xC701], None, True, 'Swamp Palace'),
-                  'Thieves\' Town - Prize': ([0x120A6, 0x53F36, 0x53F37, 0x18005B, 0x180077, 0xC707], None, True, 'Thieves\' Town'),
-                  'Skull Woods - Prize': ([0x120A3, 0x53F12, 0x53F13, 0x180058, 0x18007B, 0xC704], None, True, 'Skull Woods'),
-                  'Ice Palace - Prize': ([0x120A4, 0x53F5A, 0x53F5B, 0x180059, 0x180073, 0xC705], None, True, 'Ice Palace'),
-                  'Misery Mire - Prize': ([0x120A2, 0x53F48, 0x53F49, 0x180057, 0x180075, 0xC703], None, True, 'Misery Mire'),
-                  'Turtle Rock - Prize': ([0x120A7, 0x53F24, 0x53F25, 0x18005C, 0x180079, 0xC708], None, True, 'Turtle Rock')}
+                  'Tower of Hera - Prize': (
+                  [0x120A5, 0x53F0A, 0x53F0B, 0x18005A, 0x18007A, 0xC706], None, True, 'Tower of Hera'),
+                  'Palace of Darkness - Prize': (
+                  [0x120A1, 0x53F00, 0x53F01, 0x180056, 0x18007D, 0xC702], None, True, 'Palace of Darkness'),
+                  'Swamp Palace - Prize': (
+                  [0x120A0, 0x53F6C, 0x53F6D, 0x180055, 0x180071, 0xC701], None, True, 'Swamp Palace'),
+                  'Thieves\' Town - Prize': (
+                  [0x120A6, 0x53F36, 0x53F37, 0x18005B, 0x180077, 0xC707], None, True, 'Thieves\' Town'),
+                  'Skull Woods - Prize': (
+                  [0x120A3, 0x53F12, 0x53F13, 0x180058, 0x18007B, 0xC704], None, True, 'Skull Woods'),
+                  'Ice Palace - Prize': (
+                  [0x120A4, 0x53F5A, 0x53F5B, 0x180059, 0x180073, 0xC705], None, True, 'Ice Palace'),
+                  'Misery Mire - Prize': (
+                  [0x120A2, 0x53F48, 0x53F49, 0x180057, 0x180075, 0xC703], None, True, 'Misery Mire'),
+                  'Turtle Rock - Prize': (
+                  [0x120A7, 0x53F24, 0x53F25, 0x18005C, 0x180079, 0xC708], None, True, 'Turtle Rock')}
 
-lookup_id_to_name = {data[0] : name for name, data in location_table.items() if type(data[0]) == int}
+lookup_id_to_name = {data[0]: name for name, data in location_table.items() if type(data[0]) == int}
+lookup_id_to_name[-1] = "cheat console"

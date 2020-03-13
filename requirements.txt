@@ -1,7 +1,7 @@
-aioconsole>=0.1.15
 colorama>=0.4.3
 websockets>=8.1
 PyYAML>=5.3
 fuzzywuzzy>=0.18.0
 bsdiff4>=1.1.9
 upnpy>=1.1.5
+prompt_toolkit>=3.0.4
