@@ -474,11 +474,11 @@ def inverted_rules(world, player):
     world.get_region('Inverted Links House', player).entrances[0].can_reach = lambda state: True
     world.get_region('Inverted Dark Sanctuary', player).entrances[0].parent_region.can_reach_private = lambda state: True
 
-    old_rule = world.get_region('Old Man House', player).can_reach_private
-    world.get_region('Old Man House', player).can_reach_private = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
+    old_rule_old_man = world.get_region('Old Man House', player).can_reach_private
+    world.get_region('Old Man House', player).can_reach_private = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule_old_man(state)
 
-    old_rule = world.get_region('Hyrule Castle Ledge', player).can_reach_private
-    world.get_region('Hyrule Castle Ledge', player).can_reach_private = lambda state: (state.has_Mirror(player) and state.has('Beat Agahnim 1', player) and state.can_reach_light_world(player)) or old_rule(state)
+    old_rule_castle_ledge = world.get_region('Hyrule Castle Ledge', player).can_reach_private
+    world.get_region('Hyrule Castle Ledge', player).can_reach_private = lambda state: (state.has_Mirror(player) and state.has('Beat Agahnim 1', player) and state.can_reach_light_world(player)) or old_rule_castle_ledge(state)
 
     # overworld requirements 
     set_rule(world.get_location('Maze Race', player), lambda state: state.has_Pearl(player))
