@@ -442,9 +442,8 @@ class CollectionState(object):
 
     def can_shoot_arrows(self, player):
         if self.world.retro:
-            #TODO: need to decide how we want to handle wooden arrows  longer-term (a can-buy-a check, or via dynamic shop location)
-            #FIXME: Should do something about hard+ ganon only silvers. For the moment, i believe they effective grant wooden, so we are safe
-            return self.has('Bow', player) and (self.has('Silver Arrows', player) or self.can_buy_unlimited('Single Arrow', player))
+            #TODO: Progressive and Non-Progressive silvers work differently (progressive is not usable until the shop arrow is bought)
+            return self.has('Bow', player) and self.can_buy_unlimited('Single Arrow', player)
         return self.has('Bow', player)
 
     def can_get_good_bee(self, player):
