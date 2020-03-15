@@ -438,7 +438,7 @@ class CollectionState(object):
                 or (self.has('Cane of Byrna', player) and (enemies < 6 or self.can_extend_magic(player)))
                 or self.can_shoot_arrows(player)
                 or self.has('Fire Rod', player)
-               )
+                or (self.has('Bombs (10)') and enemies < 6))
 
     def can_shoot_arrows(self, player):
         if self.world.retro:
