@@ -18,6 +18,7 @@ def ArmosKnightsDefeatRule(state, player):
     # Magic amounts are probably a bit overkill
     return (
         state.has_blunt_weapon(player) or
+        state.can_shoot_arrows(player) or
         (state.has('Cane of Somaria', player) and state.can_extend_magic(player, 10)) or
         (state.has('Cane of Byrna', player) and state.can_extend_magic(player, 16)) or
         (state.has('Ice Rod', player) and state.can_extend_magic(player, 32)) or
@@ -26,18 +27,20 @@ def ArmosKnightsDefeatRule(state, player):
         state.has('Red Boomerang', player))
 
 def LanmolasDefeatRule(state, player):
-    # TODO: Allow the canes here?
     return (
         state.has_blunt_weapon(player) or
         state.has('Fire Rod', player) or
         state.has('Ice Rod', player) or
+        state.has('Cane of Somaria', player) or
+        state.has('Cane of Byrna', player) or
         state.can_shoot_arrows(player))
 
 def MoldormDefeatRule(state, player):
     return state.has_blunt_weapon(player)
 
 def HelmasaurKingDefeatRule(state, player):
-    return state.has_blunt_weapon(player) or state.can_shoot_arrows(player)
+    # TODO: technically possible with the hammer
+    return state.has_sword(player) or state.can_shoot_arrows(player)
 
 def ArrghusDefeatRule(state, player):
     if not state.has('Hookshot', player):
@@ -95,7 +98,9 @@ def VitreousDefeatRule(state, player):
 def TrinexxDefeatRule(state, player):
     if not (state.has('Fire Rod', player) and state.has('Ice Rod', player)):
         return False
-    return state.has('Hammer', player) or state.has_beam_sword(player) or (state.has_sword(player) and state.can_extend_magic(player, 32))
+    return state.has('Hammer', player) or state.has('Tempered Sword', player) or state.has('Golden Sword', player) or \
+            (state.has('Master Sword', player) and state.can_extend_magic(player, 16)) or \
+            (state.has_sword(player) and state.can_extend_magic(player, 32))
 
 def AgahnimDefeatRule(state, player):
     return state.has_sword(player) or state.has('Hammer', player) or state.has('Bug Catching Net', player)
