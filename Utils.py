@@ -46,36 +46,37 @@ def is_bundled():
     return getattr(sys, 'frozen', False)
 
 def local_path(path):
-    if local_path.cached_path is not None:
+    if local_path.cached_path:
         return os.path.join(local_path.cached_path, path)
 
-    if is_bundled() and hasattr(sys, "_MEIPASS"):
+    elif is_bundled() and hasattr(sys, "_MEIPASS"):
         # we are running in a PyInstaller bundle
-        local_path.cached_path = sys._MEIPASS # pylint: disable=protected-access,no-member
-    elif is_bundled():
-        #probably cxFreeze
-        local_path.cached_path = os.path.dirname(sys.argv[0])
+        local_path.cached_path = sys._MEIPASS  # pylint: disable=protected-access,no-member
+
     else:
         # we are running in a normal Python environment
+        # or cx_Freeze
         local_path.cached_path = os.path.dirname(os.path.abspath(sys.argv[0]))
+
     return os.path.join(local_path.cached_path, path)
 
 local_path.cached_path = None
 
 def output_path(path):
-    if output_path.cached_path is not None:
+    if output_path.cached_path:
         return os.path.join(output_path.cached_path, path)
 
-    if not is_bundled():
+    if not is_bundled() and not hasattr(sys, "_MEIPASS"):
+        # this should trigger if it's cx_freeze bundling
         output_path.cached_path = '.'
         return os.path.join(output_path.cached_path, path)
     else:
-        # has been packaged, so cannot use CWD for output.
+        # has been PyInstaller packaged, so cannot use CWD for output.
         if sys.platform == 'win32':
-            #windows
+            # windows
             import ctypes.wintypes
-            CSIDL_PERSONAL = 5       # My Documents
-            SHGFP_TYPE_CURRENT = 0   # Get current, not default value
+            CSIDL_PERSONAL = 5  # My Documents
+            SHGFP_TYPE_CURRENT = 0  # Get current, not default value
 
             buf = ctypes.create_unicode_buffer(ctypes.wintypes.MAX_PATH)
             ctypes.windll.shell32.SHGetFolderPathW(None, CSIDL_PERSONAL, None, SHGFP_TYPE_CURRENT, buf)
@@ -166,3 +167,22 @@ def get_public_ipv4() -> str:
             logging.exception(e)
             pass  # we could be offline, in a local game, so no point in erroring out
     return ip
+
+
+_options = None
+
+
+def get_options() -> dict:
+    global _options
+    if _options:
+        return _options
+    else:
+        locations = ("options.yaml", "host.yaml",
+                     local_path("options.yaml"), local_path("host.yaml"))
+
+        for location in locations:
+            if os.path.exists(location):
+                with open(location) as f:
+                    _options = parse_yaml(f.read())
+                return _options
+        raise FileNotFoundError(f"Could not find {locations[0]} to load options.")

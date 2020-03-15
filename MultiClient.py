@@ -8,8 +8,6 @@ import atexit
 import sys
 import os
 
-if __name__ == "__main__":
-    os.chdir(os.path.split(sys.argv[0])[0])  # set to local folder, so that options yamls can be found
 
 exit_func = atexit.register(input, "Press enter to close.")
 

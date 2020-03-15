@@ -1,5 +1,4 @@
 __author__ = "Berserker55" # you can find me on the ALTTP Randomizer Discord
-__version__ = 1.7
 
 """
 This script launches a Multiplayer "Multiworld" Mystery Game
@@ -24,7 +23,7 @@ def feedback(text:str):
 
 if __name__ == "__main__":
     try:
-        print(f"{__author__}'s MultiMystery Launcher V{__version__}")
+        print(f"{__author__}'s MultiMystery Launcher")
         import ModuleUpdate
 
         ModuleUpdate.update()
