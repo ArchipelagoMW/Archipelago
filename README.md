@@ -21,7 +21,7 @@ Project
  
 MultiMystery.py
  * Allows you to generate a Multiworld with individual player mystery weights. Since weights can also be set to 100%, this also allows for individual settings for each player in a regular multiworld.
-Basis is a .yaml file that sets these weights. You can find an easy.yaml in this project folder to get started.
+Basis is a .yaml file that sets these weights. You can find an [easy.yaml](https://github.com/Berserker66/MultiWorld-Utilities/blob/master/easy.yaml) in this project folder to get started.
  * Additional instructions are at the start of the file. Open with a text editor.
  * Configuration options in the host.yaml file.
  
@@ -48,8 +48,9 @@ If a race ROM is desired, pass --create-race as argument to it
  * When an error is generated due to a broken .yaml file, it now mentions in the error trace which file, line and character is the culprit
  * Option for progressive items, allowing you to turn them off (see easy.yaml for more info)
  * Rom-Option for extendedmsu (see easy.yaml for more info)
- * Option for "clock_mode"
- * Supports new Meta-Mystery mode. Read meta.yaml for details.
+ * Option for "timer"
+ * Supports new Meta-Mystery mode. Read [meta.yaml](https://github.com/Berserker66/MultiWorld-Utilities/blob/master/meta.yaml) for details.
+ * Added `dungeonssimple` and `dungeonsfull` ER modes
  
 MultiClient.py
  * Awaits a Qusb2snes connection when started, latching on when available
