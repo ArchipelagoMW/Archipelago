@@ -15,6 +15,9 @@ Project
  * Autoinstall missing modules
  * Allow newer versions of modules than specified, as they will *usually* not break compatibility
  * Support for V31 extendedmsu
+ * Has support for binary patching to allow legal distribution of multiworld rom files
+ * Various performance improvements
+ * Various crash fixes
  
 MultiMystery.py
  * Allows you to generate a Multiworld with individual player mystery weights. Since weights can also be set to 100%, this also allows for individual settings for each player in a regular multiworld.
@@ -24,7 +27,10 @@ Basis is a .yaml file that sets these weights. You can find an easy.yaml in this
  
  MultiServer.py
   * Added a try/except to prevent malformed console commands from crashing the entire server
+  * Supports automatic port-forwarding, can be enabled in host.yaml
+  * improved `!players` command, mentioning how many players are currently connected of how many expected and who's missing
   * /forfeitplayer Playername now works when the player is not currently connected
+  * various commands, like /senditem and /hint use "fuzzy text matching", no longer requiring you to enter a location, player name or item name perfectly
   * Added /hint command on the server (use just /hint for help on command)  
 can be used as /hint Playername Itemname  
 All Itemnames can be found in Items.py starting at line 25  
@@ -42,5 +48,12 @@ If a race ROM is desired, pass --create-race as argument to it
  * When an error is generated due to a broken .yaml file, it now mentions in the error trace which file, line and character is the culprit
  * Option for progressive items, allowing you to turn them off (see easy.yaml for more info)
  * Rom-Option for extendedmsu (see easy.yaml for more info)
-
+ * Option for "clock_mode"
+ * Supports new Meta-Mystery mode. Read meta.yaml for details.
+ 
+MultiClient.py
+ * Awaits a Qusb2snes connection when started, latching on when available
+ * Terminal improvements
+ * Running it with a patch file will patch out the multiworld rom and then automatically connect to the host that created the multiworld
+ * Cheating is now controlled by the server and can be disabled through host.yaml
  
