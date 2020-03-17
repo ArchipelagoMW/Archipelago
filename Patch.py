@@ -63,3 +63,13 @@ def load_bytes(path: str):
 def write_lzma(data: bytes, path: str):
     with lzma.LZMAFile(path, 'wb') as f:
         f.write(data)
+
+if __name__ == "__main__":
+    ipv4 = Utils.get_public_ipv4()
+    import sys
+
+    for rom in sys.argv:
+        if rom.endswith(".sfc"):
+            print(f"Creating patch for {rom}")
+            result = create_patch_file(rom, ipv4)
+            print(f"Created patch {result}")
