@@ -66,9 +66,9 @@ class TestInvertedDeathMountain(TestInverted):
             ["Pyramid Fairy - Left", False, [], ['Magic Mirror']],
             ["Pyramid Fairy - Left", False, [], ['Crystal 5']],
             ["Pyramid Fairy - Left", False, [], ['Crystal 6']],
-            ["Pyramid Fairy - Right", True, ['Crystal 5', 'Crystal 6', 'Magic Mirror', 'Hammer', 'Progressive Glove', 'Moon Pearl']],
-            ["Pyramid Fairy - Right", True, ['Crystal 5', 'Crystal 6', 'Magic Mirror', 'Progressive Glove', 'Progressive Glove', 'Moon Pearl']],
-            ["Pyramid Fairy - Right", True, ['Crystal 5', 'Crystal 6', 'Magic Mirror', 'Beat Agahnim 1']],
+            ["Pyramid Fairy - Left", True, ['Crystal 5', 'Crystal 6', 'Magic Mirror', 'Hammer', 'Progressive Glove', 'Moon Pearl']],
+            ["Pyramid Fairy - Left", True, ['Crystal 5', 'Crystal 6', 'Magic Mirror', 'Progressive Glove', 'Progressive Glove', 'Moon Pearl']],
+            ["Pyramid Fairy - Left", True, ['Crystal 5', 'Crystal 6', 'Magic Mirror', 'Beat Agahnim 1']],
 
             ["Pyramid Fairy - Right", False, []],
             ["Pyramid Fairy - Right", False, [], ['Magic Mirror']],
