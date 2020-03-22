@@ -185,4 +185,4 @@ def get_options() -> dict:
                 with open(location) as f:
                     _options = parse_yaml(f.read())
                 return _options
-        raise FileNotFoundError(f"Could not find {locations[0]} to load options.")
+        raise FileNotFoundError(f"Could not find {locations[1]} to load options.")

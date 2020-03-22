@@ -18,9 +18,9 @@ server_options:
   disable_item_cheat: null
   #Client hint system
   #points given to player for each acquired item
-  location_check_points: 1
+  location_check_points: null
   #point cost to receive a hint via !hint for players
-  hint_cost: 50 #set to 0 if you want free hints
+  hint_cost: null #set to 0 if you want free hints
 #options for MultiMystery.py
 multi_mystery_options:
 #teams, however, note that there is currently no way to supply names for teams 2+ through MultiMystery
