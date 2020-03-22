@@ -619,11 +619,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--disable_item_cheat', default=False, action='store_true')
     parser.add_argument('--port_forward', default=False, action='store_true')
     args = parser.parse_args()
-    if os.path.exists('host.yaml'):
-        file_options = Utils.parse_yaml(open("host.yaml").read())["server_options"]
-        for key, value in file_options.items():
-            if value is not None:
-                setattr(args, key, value)
+    file_options = Utils.get_options()["server_options"]
+    for key, value in file_options.items():
+        if value is not None:
+            setattr(args, key, value)
     return args
 
 
