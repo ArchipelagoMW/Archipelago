@@ -34,7 +34,7 @@ def generate_patch(rom: bytes, metadata=None) -> bytes:
     patch = bsdiff4.diff(get_base_rom_bytes(), rom)
     patch = yaml.dump({"meta": metadata,
                        "patch": patch})
-    return patch.encode()
+    return patch.encode(encoding="utf-8-sig")
 
 
 def create_patch_file(rom_file_to_patch: str, server: str = "") -> str:
