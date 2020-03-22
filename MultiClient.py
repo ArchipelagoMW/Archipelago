@@ -666,6 +666,7 @@ async def process_server_cmd(ctx : Context, cmd, args):
             ctx.password = None
             await server_auth(ctx, True)
         if 'InvalidRom' in args:
+            ctx.rom = None
             raise Exception(
                 'Invalid ROM detected, please verify that you have loaded the correct rom and reconnect your snes (/snes)')
         if 'SlotAlreadyTaken' in args:
