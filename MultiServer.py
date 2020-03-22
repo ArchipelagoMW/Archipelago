@@ -605,7 +605,7 @@ async def forward_port(port: int):
     logging.info(f"Attempted to forward port {port} to {ip}, your local ip address.")
 
 
-async def main():
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument('--host', default=None)
     parser.add_argument('--port', default=38281, type=int)
@@ -619,12 +619,15 @@ async def main():
     parser.add_argument('--disable_item_cheat', default=False, action='store_true')
     parser.add_argument('--port_forward', default=False, action='store_true')
     args = parser.parse_args()
-
     if os.path.exists('host.yaml'):
         file_options = Utils.parse_yaml(open("host.yaml").read())["server_options"]
         for key, value in file_options.items():
             if value is not None:
                 setattr(args, key, value)
+    return args
+
+
+async def main(args: argparse.Namespace):
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
     portforwardtask = None
     if args.port_forward:
@@ -686,5 +689,5 @@ async def main():
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    loop.run_until_complete(main(parse_args()))
     loop.close()
