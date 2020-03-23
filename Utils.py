@@ -172,20 +172,16 @@ def get_public_ipv4() -> str:
     return ip
 
 
-_options = None
-
-
 def get_options() -> dict:
-    global _options
-    if _options:
-        return _options
-    else:
+    if not hasattr(get_options, "options"):
         locations = ("options.yaml", "host.yaml",
                      local_path("options.yaml"), local_path("host.yaml"))
 
         for location in locations:
             if os.path.exists(location):
                 with open(location) as f:
-                    _options = parse_yaml(f.read())
-                return _options
-        raise FileNotFoundError(f"Could not find {locations[1]} to load options.")
+                    get_options.options = parse_yaml(f.read())
+                break
+        else:
+            raise FileNotFoundError(f"Could not find {locations[1]} to load options.")
+    return get_options.options
