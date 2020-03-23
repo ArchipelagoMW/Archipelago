@@ -5,8 +5,6 @@ import logging
 import typing
 import urllib.parse
 import atexit
-import sys
-import os
 
 
 exit_func = atexit.register(input, "Press enter to close.")
@@ -31,7 +29,7 @@ class ReceivedItem(typing.NamedTuple):
     player: int
 
 class Context:
-    def __init__(self, snes_address, server_address, password):
+    def __init__(self, snes_address, server_address, password, found_items):
         self.snes_address = snes_address
         self.server_address = server_address
 
@@ -64,6 +62,7 @@ class Context:
         self.awaiting_rom = False
         self.rom = None
         self.auth = None
+        self.found_items = found_items
 
 
 color_codes = {'reset': 0, 'bold': 1, 'underline': 4, 'black': 30, 'red': 31, 'green': 32, 'yellow': 33, 'blue': 34,
@@ -719,6 +718,12 @@ async def process_server_cmd(ctx : Context, cmd, args):
         logging.info(
             '%s sent %s to %s (%s)' % (player_sent, item, player_recvd, get_location_name_from_address(location)))
 
+    elif cmd == 'ItemFound':
+        found = ReceivedItem(*args)
+        item = color(get_item_name_from_id(found.item), 'cyan' if found.player != ctx.slot else 'green')
+        player_sent = color(ctx.player_names[found.player], 'yellow' if found.player != ctx.slot else 'magenta')
+        logging.info('%s found %s (%s)' % (player_sent, item, get_location_name_from_address(found.location)))
+
     elif cmd == 'Hint':
         hints = [Utils.Hint(*hint) for hint in args]
         for hint in hints:
@@ -733,6 +738,11 @@ async def process_server_cmd(ctx : Context, cmd, args):
     elif cmd == 'Print':
         logging.info(args)
 
+def get_tags(ctx: Context):
+    tags = ['Berserker']
+    if ctx.found_items:
+        tags.append('FoundItems')
+    return tags
 
 async def server_auth(ctx: Context, password_requested):
     if password_requested and not ctx.password:
@@ -745,7 +755,7 @@ async def server_auth(ctx: Context, password_requested):
     ctx.awaiting_rom = False
     ctx.auth = ctx.rom.copy()
     await send_msgs(ctx.socket, [['Connect', {
-        'password': ctx.password, 'rom': ctx.auth, 'version': [1, 2, 0], 'tags': ['Berserker']
+        'password': ctx.password, 'rom': ctx.auth, 'version': [1, 2, 0], 'tags': get_tags(ctx)
     }]])
 
 async def console_input(ctx : Context):
@@ -818,6 +828,14 @@ async def console_loop(ctx : Context):
                 for location in [k for k, v in Regions.location_table.items() if type(v[0]) is int]:
                     if location not in ctx.locations_checked:
                         logging.info('Missing: ' + location)
+
+            elif precommand == "show_items":
+                if len(command) > 1:
+                    ctx.found_items = command[1].lower() in {"1", "true", "on"}
+                else:
+                    ctx.found_items = not ctx.found_items
+                logging.info(f"Set showing team items to {ctx.found_items}")
+                asyncio.create_task(send_msgs(ctx.socket, [['UpdateTags', get_tags(ctx)]]))
 
             elif precommand == "license":
                 with open("LICENSE") as f:
@@ -970,6 +988,7 @@ async def main():
     parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
     parser.add_argument('--password', default=None, help='Password of the multiworld host.')
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
+    parser.add_argument('--founditems', default=False, action='store_true', help='Show items found by other players for themselves.')
     args = parser.parse_args()
 
     logging.basicConfig(format='%(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
@@ -981,7 +1000,7 @@ async def main():
         logging.info(f"Wrote rom file to {romfile}")
         asyncio.create_task(run_game(romfile))
 
-    ctx = Context(args.snes, args.connect, args.password)
+    ctx = Context(args.snes, args.connect, args.password, args.founditems)
 
     input_task = asyncio.create_task(console_loop(ctx))
 
