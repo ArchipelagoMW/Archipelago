@@ -120,6 +120,8 @@ def main():
         if path:
             try:
                 settings = settings_cache[path] if settings_cache[path] else roll_settings(weights_cache[path])
+                if settings.sprite is not None and not os.path.isfile(settings.sprite) and not get_sprite_from_name(settings.sprite):
+                    logging.warning(f"Warning: The chosen sprite, \"{settings.sprite}\", for yaml \"{path}\", does not exist.")
                 for k, v in vars(settings).items():
                     if v is not None:
                         getattr(erargs, k)[player] = v
@@ -283,8 +285,6 @@ def roll_settings(weights):
     if 'rom' in weights:
         romweights = weights['rom']
         ret.sprite = get_choice('sprite', romweights)
-        if ret.sprite is not None and not os.path.isfile(ret.sprite) and not get_sprite_from_name(ret.sprite):
-            logging.Logger('').warning(f"Warning: The chosen sprite, \"{ret.sprite}\" does not exist.")
         ret.disablemusic = get_choice('disablemusic', romweights)
         ret.extendedmsu = get_choice('extendedmsu', romweights)
         ret.quickswap = get_choice('quickswap', romweights)
