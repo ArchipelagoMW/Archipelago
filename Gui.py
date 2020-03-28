@@ -464,6 +464,12 @@ def guiMain(args=None):
             elif type(v) is dict: # use same settings for every player
                 setattr(guiargs, k, {player: getattr(guiargs, k) for player in range(1, guiargs.multi + 1)})
         try:
+            if not guiargs.suppress_rom:
+                if not os.path.exists(guiargs.rom):
+                    raise FileNotFoundError(f"Could not find specified rom file {guiargs.rom}")
+                else:
+                    import Patch
+                    Patch.get_base_rom_bytes(guiargs.rom)  # throws error on checksum fail
             if guiargs.count is not None:
                 seed = guiargs.seed
                 for _ in range(guiargs.count):
