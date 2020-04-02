@@ -86,17 +86,17 @@ item_functionality:
   expert: 0
 boss_shuffle:
   none: 1
-  simple: 0
-  full: 0
-  random: 0
+  simple: 0 # existing bosses gets shuffled around
+  full: 0 # all bosses exist once, except 3 can appear twice
+  random: 0 # any boss can appear any number of times
 enemy_shuffle:
   none: 1
-  shuffled: 0
-  random: 0
+  shuffled: 0 # enemies get shuffled around
+  random: 0 # any enemy can appear any number of times
 enemy_damage:
   default: 1
-  shuffled: 0
-  random: 0
+  shuffled: 0 # damage tables get shuffled, however armor effects are not
+  random: 0 # all damages are completely shuffled, including armor effects, making it possible red mail is worse than green
 enemy_health:
   default: 1
   easy: 0
@@ -105,10 +105,10 @@ enemy_health:
 pot_shuffle: # Shuffle pots, their contents and whatever is hiding under them. Broken with any door shuffle that is not vanilla, do not combine
   on: 0
   off: 1
-beemizer:
+beemizer: # replace items with bees, that will attack you
   0: 1
-  1: 0
-  2: 0
+  1: 0 # max 15 hearts
+  2: 0 # max 10 hearts
   3: 0
   4: 0
 timer:
@@ -118,25 +118,25 @@ timer:
   ohko: 0
   timed_countdown: 0
   display: 0
-remote_items: # Stores all your items on the server, effectively sending them to you as if another player picked it up
+remote_items: # Warning: currently broken. Stores all your items on the server, effectively sending them to you as if another player picked it up
   on: 0 # intended for racing, as the item information is missing from the ROM
   off: 1
 rom:
   sprite:
     random: 1
     randomonhit: 1
-    link: 1
-  disablemusic: off
+    link: 1 # to get other sprite names, open up gui/Creator, select a sprite and write down the sprite name as it is there
+  disablemusic: off # turn on for V30 MSU packs
   extendedmsu: off #turn on to have V31 extended MSU support
   quickswap:
-    on: 1
+    on: 1 # press L/R to swap items without opening the menu
     off: 0
   menuspeed:
     normal: 1
-    instant: 1
-    double: 1
-    triple: 1
-    quadruple: 1
+    instant: 0
+    double: 0
+    triple: 0
+    quadruple: 0
     half: 0
   heartcolor:
     red: 1
@@ -145,16 +145,16 @@ rom:
     yellow: 1
     random: 0
   heartbeep:
-    double: 1
+    double: 0
     normal: 1
-    half: 1
-    quarter: 1
-    off: 1
+    half: 0
+    quarter: 0
+    off: 0
   ow_palettes:
     default: 1
-    random: 1
-    blackout: 0
+    random: 1 # shuffle the palette of overworld colors
+    blackout: 0 # makes everything blank, making it almost a blind playthrough
   uw_palettes:
     default: 1
-    random: 1
-    blackout: 0
+    random: 1 # shuffle the palette of dungeon/cave colors
+    blackout: 0 # makes everything blank, making it almost a blind playthrough
