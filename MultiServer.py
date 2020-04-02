@@ -237,8 +237,6 @@ def forfeit_player(ctx: Context, team: int, slot: int):
 
 
 def register_location_checks(ctx: Context, team: int, slot: int, locations):
-
-
     found_items = False
     for location in locations:
         if (location, slot) in ctx.locations:
@@ -624,22 +622,20 @@ async def forward_port(port: int):
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument('--host', default=None)
-    parser.add_argument('--port', default=38281, type=int)
-    parser.add_argument('--password', default=None)
-    parser.add_argument('--multidata', default=None)
-    parser.add_argument('--savefile', default=None)
-    parser.add_argument('--disable_save', default=False, action='store_true')
-    parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
-    parser.add_argument('--location_check_points', default=1, type=int)
-    parser.add_argument('--hint_cost', default=1000, type=int)
-    parser.add_argument('--disable_item_cheat', default=False, action='store_true')
-    parser.add_argument('--port_forward', default=False, action='store_true')
+    defaults = Utils.get_options()["server_options"]
+    parser.add_argument('--host', default=defaults["host"])
+    parser.add_argument('--port', default=defaults["port"], type=int)
+    parser.add_argument('--password', default=defaults["password"])
+    parser.add_argument('--multidata', default=defaults["multidata"])
+    parser.add_argument('--savefile', default=defaults["savefile"])
+    parser.add_argument('--disable_save', default=defaults["disable_save"], action='store_true')
+    parser.add_argument('--loglevel', default=defaults["loglevel"],
+                        choices=['debug', 'info', 'warning', 'error', 'critical'])
+    parser.add_argument('--location_check_points', default=defaults["location_check_points"], type=int)
+    parser.add_argument('--hint_cost', default=defaults["hint_cost"], type=int)
+    parser.add_argument('--disable_item_cheat', default=defaults["disable_item_cheat"], action='store_true')
+    parser.add_argument('--port_forward', default=defaults["port_forward"], action='store_true')
     args = parser.parse_args()
-    file_options = Utils.get_options()["server_options"]
-    for key, value in file_options.items():
-        if value is not None:
-            setattr(args, key, value)
     return args
 
 

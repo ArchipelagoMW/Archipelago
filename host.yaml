@@ -6,21 +6,21 @@ general_options:
 #these overwrite command line arguments!
 server_options:
   host: null
-  port: null
+  port: 38281
   password: null
   multidata: null
   savefile: null
-  disable_save: null
-  loglevel: null
+  disable_save: false
+  loglevel: "info"
   #automatically forward the port that is used, then close that port after 24 hours
-  port_forward: null
+  port_forward: false
   #Disallow !getitem. Old /getitem cannot be blocked this way
-  disable_item_cheat: null
+  disable_item_cheat: false
   #Client hint system
   #points given to player for each acquired item
-  location_check_points: null
+  location_check_points: 1
   #point cost to receive a hint via !hint for players
-  hint_cost: null #set to 0 if you want free hints
+  hint_cost: 1000 #set to 0 if you want free hints
 #options for MultiMystery.py
 multi_mystery_options:
 #teams, however, note that there is currently no way to supply names for teams 2+ through MultiMystery
