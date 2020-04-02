@@ -28,7 +28,9 @@ if __name__ == "__main__":
 
         ModuleUpdate.update()
 
-        from Utils import parse_yaml, get_public_ipv4, get_options
+
+        from Utils import get_public_ipv4, get_options
+
         from Patch import create_patch_file
 
         options = get_options()

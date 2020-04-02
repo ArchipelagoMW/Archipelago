@@ -1,6 +1,7 @@
 .idea
 .vscode
 *_Spoiler.txt
+*.bmbp
 *.pyc
 *.sfc
 *.wixobj
