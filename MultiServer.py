@@ -670,7 +670,7 @@ async def main(args: argparse.Namespace):
         logging.error('Failed to read multiworld data (%s)' % e)
         return
 
-    ip = Utils.get_public_ipv4()
+    ip = args.host if args.host else Utils.get_public_ipv4()
 
 
 
