@@ -1245,15 +1245,6 @@ def set_inverted_big_bomb_rules(world, player):
     elif bombshop_entrance.name == 'Two Brothers House (West)':
         # First you must Mirror. Then you can either Flute, cross the peg bridge, or use the Agah 1 portal to Mirror again.
         add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: (state.can_flute(player) or state.has('Hammer', player) or state.has('Beat Agahnim 1', player)) and state.has_Mirror(player))
-    elif bombshop_entrance.name == 'Waterfall of Wishing':
-        # You absolutely must be able to swim to return it from here.
-        add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: state.has('Flippers', player) and state.has_Pearl(player) and state.has_Mirror(player))
-    elif bombshop_entrance.name == 'Ice Palace':
-        # You can swim to the dock or use the Flute to get off the island.
-        add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: state.has('Flippers', player) or state.can_flute(player))
-    elif bombshop_entrance.name == 'Capacity Upgrade':
-        # You must Mirror but then can use either Ice Palace return path.
-        add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: (state.has('Flippers', player) or state.can_flute(player)) and state.has_Mirror(player))
     elif bombshop_entrance.name in LW_inaccessible_entrances:
         # You can't get to the pyramid from these entrances without bomb duping.
         raise Exception('No valid path to open Pyramid Fairy. (Could not route from %s)' % bombshop_entrance.name)
