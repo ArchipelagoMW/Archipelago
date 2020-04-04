@@ -911,7 +911,16 @@ def patch_rom(world, player, rom):
     rom.write_byte(0x18005F, world.crystals_needed_for_ganon)
     rom.write_byte(0x18008A, 0x01 if world.mode == "standard" else 0x00) # block HC upstairs doors in rain state in standard mode
 
-    rom.write_byte(0x18016A, 0x01 if world.keysanity else 0x00)  # free roaming item text boxes
+     # Bitfield - enable text box to show with free roaming items
+     #
+     # ---o bmcs
+     # o - enabled for outside dungeon items
+     # b - enabled for inside big keys
+     # m - enabled for inside maps
+     # c - enabled for inside compasses
+     # s - enabled for inside small keys
+    rom.write_byte(0x18016A, 0xFF if world.keysanity else 0x00)
+    
     rom.write_byte(0x18003B, 0x01 if world.keysanity else 0x00)  # maps showing crystals on overworld
 
     # compasses showing dungeon count
@@ -922,6 +931,14 @@ def patch_rom(world, player, rom):
     else:
         rom.write_byte(0x18003C, 0x00)
 
+     # Bitfield - enable free items to show up in menu
+     #
+     # ----dcba
+     # d - Compass
+     # c - Map
+     # b - Big Key
+     # a - Small Key
+     #
     rom.write_byte(0x180045, 0xFF if world.keysanity else 0x00)  # free roaming items in menu
 
     # Map reveals
