@@ -1,0 +1,160 @@
+#More general info here: https://docs.google.com/document/d/1r7qs1-MK7YbFf2d-mEUeTy2wHykIf1ALG9pLtVvUbSw/edit
+description: Easy/Open/Normal #please describe your options. Especially useful when you have multiple yamls for different occasions
+name: PleaseEnterNameHere #your name ingame, space and "_" gets replaced with a dash "-"
+glitches_required: none #there is also no_logic.
+item_placement: basic #this is based on Entrance Randomizer, which does not (yet?) support advanced
+map_shuffle: #to shuffle dungeon maps into the outside world and other dungeons, as well as other player's worlds in multiworld
+  on: 0
+  off: 1
+compass_shuffle: #same for compass
+  on: 0
+  off: 1
+smallkey_shuffle: #same for small keys
+  on: 0
+  off: 1
+bigkey_shuffle: #same for big keys
+  on: 0
+  off: 1
+dungeon_items: # alternative to the 4 shuffles above this, does nothing until the respective 4 shuffles are deleted
+  mc: 0 # shuffle Maps and Compass
+  none: 1 # shuffle none of the 4
+  mcsb: 0 # shuffle all of the 4, any combination of m, c, s and b will shuffle the respective item, or not if it's missing, so you can add more options here
+accessibility:
+  items: 0 # item accessibility means you can get all inventory items. So a key could lock itself, but you can fill your inventory
+  locations: 1 # location accessibility means you can access every location in your seed and get all 216 checks
+  none: 0 # no accessibility means your seed is "beatable only", meaning any items you do not need to beat the game can be unreachable. This can mean you have to defeat ganon with a lamp and master sword.
+progressive: #not available in bonta's multiworld at this time. If you want this option, make sure the host uses the correct Multiworld
+  on: 1 # progressive items, you will always get progressive items like swords in their order: figher sword -> master sword -> tempered sword -> golden sword
+  off: 0 # turns progressive items off, so you can find, for example, silver arrows before a bow
+  random: 0 # rolls a 50/50 chance for each potentially progressive item. So, for example, you can have progressive swords but non-progressive mittens
+entrance_shuffle:
+  none: 1 # no entrance shuffle
+  dungeonssimple: 0 # shuffle just dungeons amongst each other, swapping dungeons entirely, so Hyrule Castle is always 1 dungeon
+  dungeonsfull: 0 # shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle can be 4 different dungeons
+  simple: 0 #dungeons are shuffled with each other and the other entrances are shuffled with each other
+  restricted: 0 #dungeons still shuffle along each other but connects other entrances more feely with each other while keeping entrances in one world
+  full: 0 # mixes caves and dungeons freely, except for confining all entrances to one world
+  crossed: 0 #introduces cross world connectors
+  insanity: 0 #any entrance can lead to any other entrance
+goals:
+  ganon: 5 #beat GT and then Ganon
+  fast_ganon: 4 # Just kill Ganon
+  dungeons: 1 # All Dungeons, including GT, and Agahnims Tower
+  pedestal: 0 # Pull the win out of the Pedestal
+  triforce-hunt: 0 # Collect 20 of 30 Triforce pieces then hand them in in front of Hyrule Castle
+tower_open: # Crystals required to open GT
+  '0': 0
+  '1': 0
+  '2': 0
+  '3': 0
+  '4': 0
+  '5': 0
+  '6': 0
+  '7': 0
+  random: 1
+ganon_open: # Crystals required to hurt Ganon
+  '0': 0
+  '1': 0
+  '2': 0
+  '3': 0
+  '4': 0
+  '5': 0
+  '6': 0
+  '7': 0
+  random: 1
+world_state:
+  standard: 1 # Do standard escape to bring Zelda to Sanctuary
+  open: 9 # Start with the ability to skip the standard opening and go where you want
+  inverted: 0 # You start in the Dark World, the Light World has changes to it's Map and requires a Moon Pearl to not be Bunny
+  retro: 0 # Keys are universal, you have to buy a quiver, there are take any caves and some other changes. Makes it more like Z1
+hints:
+  'on': 1 # Hint tiles can give useful item location hints on occasion
+  'off': 0 # You get gameplay hints, but not location/item hints
+weapons: # this means swords
+  randomized: 5 # Your swords can be anywhere
+  assured: 2 # You start with a sword, the rest are anywhere
+  vanilla: 3 # Your swords are in vanilla locations in your own game (Uncle, Pyramid Fairy, Smiths, Pedestal)
+  swordless: 0 # You don't have a sword. A hammer can be used like a Master Sword in certain situations
+item_pool:
+  normal: 1
+  hard: 0
+  expert: 0
+  crowd_control: 0
+item_functionality:
+  normal: 1
+  hard: 0
+  expert: 0
+boss_shuffle:
+  none: 1
+  simple: 0 # existing bosses gets shuffled around
+  full: 0 # all bosses exist once, except 3 can appear twice
+  random: 0 # any boss can appear any number of times
+enemy_shuffle:
+  none: 1
+  shuffled: 0 # enemies get shuffled around
+  random: 0 # any enemy can appear any number of times
+enemy_damage:
+  default: 1
+  shuffled: 0 # damage tables get shuffled, however armor effects are not
+  random: 0 # all damages are completely shuffled, including armor effects, making it possible red mail is worse than green
+enemy_health:
+  default: 1
+  easy: 0
+  hard: 0
+  expert: 0
+pot_shuffle: # Shuffle pots, their contents and whatever is hiding under them. Broken with any door shuffle that is not vanilla, do not combine
+  on: 0
+  off: 1
+beemizer: # replace items with bees, that will attack you
+  0: 1
+  1: 0 # max 15 hearts
+  2: 0 # max 10 hearts
+  3: 0
+  4: 0
+timer:
+  none: 1
+  timed: 0
+  timed_ohko: 0
+  ohko: 0
+  timed_countdown: 0
+  display: 0
+remote_items: # Warning: currently broken. Stores all your items on the server, effectively sending them to you as if another player picked it up
+  on: 0 # intended for racing, as the item information is missing from the ROM
+  off: 1
+rom:
+  sprite:
+    random: 1
+    randomonhit: 1
+    link: 1 # to get other sprite names, open up gui/Creator, select a sprite and write down the sprite name as it is there
+  disablemusic: off # turn on for V30 MSU packs
+  extendedmsu: off #turn on to have V31 extended MSU support
+  quickswap:
+    on: 1 # press L/R to swap items without opening the menu
+    off: 0
+  menuspeed:
+    normal: 1
+    instant: 0
+    double: 0
+    triple: 0
+    quadruple: 0
+    half: 0
+  heartcolor:
+    red: 1
+    blue: 1
+    green: 1
+    yellow: 1
+    random: 0
+  heartbeep:
+    double: 0
+    normal: 1
+    half: 0
+    quarter: 0
+    off: 0
+  ow_palettes:
+    default: 1
+    random: 1 # shuffle the palette of overworld colors
+    blackout: 0 # makes everything blank, making it almost a blind playthrough
+  uw_palettes:
+    default: 1
+    random: 1 # shuffle the palette of dungeon/cave colors
+    blackout: 0 # makes everything blank, making it almost a blind playthrough

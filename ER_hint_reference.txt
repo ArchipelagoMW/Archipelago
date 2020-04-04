@@ -8,6 +8,21 @@ Hints will appear in the following ratios across the 15 telepathic tiles that ha
 5 hints for valuable items.
 4 junk hints.
 
+In the vanilla, dungeonssimple, and dungeonsfull shuffles, the following ratios will be used instead:
+
+5 hints for inconvenient item locations.
+8 hints for valuable items.
+7 junk hints.
+
+In the simple, restricted, and restricted legacy shuffles, these are the ratios:
+
+2 hints for inconvenient entrances.
+1 hint for an inconvenient dungeon entrance.
+4 hints for random entrances (this can by coincidence pick inconvenient entrances that aren't used for the first set of hints).
+3 hints for inconvenient item locations.
+5 hints for valuable items.
+5 junk hints.
+
 These hints will use the following format:
 
 Entrance hints go "[Entrance on overworld] leads to [interior]".
@@ -65,7 +80,12 @@ Spike Cave
 Magic Bat
 Sahasrahla (Green Pendant)
 
-Valuable Items are simply all items that are shown on the pause subscreen (Y, B, or A sections) minus Silver Arrows and plus Triforce Pieces, Magic Upgrades (1/2 or 1/4), and the Single Arrow. If keysanity is being used, you can additionally get hints for Small Keys or Big Keys but not hints for Maps or Compasses.
+In the vanilla, dungeonssimple, and dungeonsfull shuffles, the following two locations are added to the inconvenient locations list:
+
+Graveyard Cave
+Mimic Cave
+
+Valuable Items are simply all items that are shown on the pause subscreen (Y, B, or A sections) minus Silver Arrows and plus Triforce Pieces, Magic Upgrades (1/2 or 1/4), and the Single Arrow. If key shuffle is being used, you can additionally get hints for Small Keys or Big Keys but not hints for Maps or Compasses.
 
 While the exact verbage of location names and item names can be found in the source code, here's a copy for reference:
 
@@ -103,8 +123,8 @@ Death Mountain Return Cave (East): The westmost cave on west DM
 Spectacle Rock Cave Peak: The highest cave on west DM
 Spectacle Rock Cave: The right ledge on west DM
 Spectacle Rock Cave (Bottom): The left ledge on west DM
-Paradox Cave (Bottom): The southmost cave on east DM
-Paradox Cave (Middle): The right paired cave on east DM
+Paradox Cave (Bottom): The right paired cave on east DM
+Paradox Cave (Middle): The southmost cave on east DM
 Paradox Cave (Top): The east DM summit cave
 Fairy Ascension Cave (Bottom): The east DM cave behind rocks
 Fairy Ascension Cave (Top): The central ledge on east DM

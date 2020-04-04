@@ -161,7 +161,7 @@ def distribute_items_staleness(world):
     logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s', [item.name for item in itempool], [location.name for location in fill_locations])
 
 
-def fill_restrictive(world, base_state, locations, itempool):
+def fill_restrictive(world, base_state, locations, itempool, single_player_placement = False):
     def sweep_from_pool():
         new_state = base_state.copy()
         for item in itempool:
@@ -169,45 +169,51 @@ def fill_restrictive(world, base_state, locations, itempool):
         new_state.sweep_for_events()
         return new_state
 
-    while itempool and locations:
-        items_to_place = []
-        nextpool = []
-        placing_players = set()
-        for item in reversed(itempool):
-            if item.player not in placing_players:
-                placing_players.add(item.player)
-                items_to_place.append(item)
-            else:
-                nextpool.insert(0, item)
-        itempool = nextpool
+    unplaced_items = []
 
-        maximum_exploration_state = sweep_from_pool()
+    no_access_checks = {}
+    reachable_items = {}
+    for item in itempool:
+        if world.accessibility[item.player] == 'none':
+            no_access_checks.setdefault(item.player, []).append(item)
+        else:
+            reachable_items.setdefault(item.player, []).append(item)
 
-        perform_access_check = True
-        if world.accessibility == 'none':
-            perform_access_check = not world.has_beaten_game(maximum_exploration_state)
+    for player_items in [no_access_checks, reachable_items]:
+        while any(player_items.values()) and locations:
+            items_to_place = [[itempool.remove(items[-1]), items.pop()][-1] for items in player_items.values() if items]
 
-        for item_to_place in items_to_place:
-            spot_to_fill = None
-            for location in locations:
-                if location.can_fill(maximum_exploration_state, item_to_place, perform_access_check):
-                    spot_to_fill = location
-                    break
+            maximum_exploration_state = sweep_from_pool()
+            has_beaten_game = world.has_beaten_game(maximum_exploration_state)
 
-            if spot_to_fill is None:
-                # we filled all reachable spots. Maybe the game can be beaten anyway?
-                if world.can_beat_game():
-                    if world.accessibility != 'none':
-                        logging.getLogger('').warning('Not all items placed. Game beatable anyway. (Could not place %s)' % item_to_place)
-                    continue
-                raise FillError('No more spots to place %s' % item_to_place)
+            for item_to_place in items_to_place:
+                perform_access_check = True
+                if world.accessibility[item_to_place.player] == 'none':
+                    perform_access_check = not world.has_beaten_game(maximum_exploration_state, item_to_place.player) if single_player_placement else not has_beaten_game
 
-            world.push_item(spot_to_fill, item_to_place, False)
-            locations.remove(spot_to_fill)
-            spot_to_fill.event = True
+                spot_to_fill = None
+                for location in locations:
+                    if (not single_player_placement or location.player == item_to_place.player)\
+                            and location.can_fill(maximum_exploration_state, item_to_place, perform_access_check):
+                        spot_to_fill = location
+                        break
 
+                if spot_to_fill is None:
+                    # we filled all reachable spots. Maybe the game can be beaten anyway?
+                    unplaced_items.insert(0, item_to_place)
+                    if world.can_beat_game():
+                        if world.accessibility[item_to_place.player] != 'none':
+                            logging.getLogger('').warning('Not all items placed. Game beatable anyway. (Could not place %s)' % item_to_place)
+                        continue
+                    raise FillError('No more spots to place %s' % item_to_place)
 
-def distribute_items_restrictive(world, gftower_trash_count=0, fill_locations=None):
+                world.push_item(spot_to_fill, item_to_place, False)
+                locations.remove(spot_to_fill)
+                spot_to_fill.event = True
+
+    itempool.extend(unplaced_items)
+
+def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None):
     # If not passed in, then get a shuffled list of locations to fill in
     if not fill_locations:
         fill_locations = world.get_unfilled_locations()
@@ -221,23 +227,26 @@ def distribute_items_restrictive(world, gftower_trash_count=0, fill_locations=No
 
     # fill in gtower locations with trash first
     for player in range(1, world.players + 1):
-        if world.ganonstower_vanilla[player]:
-            gtower_locations = [location for location in fill_locations if 'Ganons Tower' in location.name and location.player == player]
-            random.shuffle(gtower_locations)
-            trashcnt = 0
-            while gtower_locations and restitempool and trashcnt < gftower_trash_count:
-                spot_to_fill = gtower_locations.pop()
-                item_to_place = restitempool.pop()
-                world.push_item(spot_to_fill, item_to_place, False)
-                fill_locations.remove(spot_to_fill)
-                trashcnt += 1
+        if not gftower_trash or not world.ganonstower_vanilla[player]:
+            continue
+
+        gftower_trash_count = (random.randint(15, 50) if world.goal[player] == 'triforcehunt' else random.randint(0, 15))
+
+        gtower_locations = [location for location in fill_locations if 'Ganons Tower' in location.name and location.player == player]
+        random.shuffle(gtower_locations)
+        trashcnt = 0
+        while gtower_locations and restitempool and trashcnt < gftower_trash_count:
+            spot_to_fill = gtower_locations.pop()
+            item_to_place = restitempool.pop()
+            world.push_item(spot_to_fill, item_to_place, False)
+            fill_locations.remove(spot_to_fill)
+            trashcnt += 1
 
     random.shuffle(fill_locations)
     fill_locations.reverse()
 
-    # Make sure the escape small key is placed first in standard keysanity to prevent running out of spots
-    if world.keysanity and world.mode == 'standard':
-        progitempool.sort(key=lambda item: 1 if item.name == 'Small Key (Escape)' else 0)
+    # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
+    progitempool.sort(key=lambda item: 1 if item.name == 'Small Key (Escape)' and world.mode[item.player] == 'standard' and world.keyshuffle[item.player] else 0)
 
     fill_restrictive(world, world.state, fill_locations, progitempool)
 
@@ -307,7 +316,7 @@ def flood_items(world):
         location_list = world.get_reachable_locations()
         random.shuffle(location_list)
         for location in location_list:
-            if location.item is not None and not location.item.advancement and not location.item.priority and not location.item.key:
+            if location.item is not None and not location.item.advancement and not location.item.priority and not location.item.smallkey and not location.item.bigkey:
                 # safe to replace
                 replace_item = location.item
                 replace_item.location = None
@@ -327,8 +336,7 @@ def balance_multiworld_progression(world):
         reachable_locations_count[player] = 0
 
     def get_sphere_locations(sphere_state, locations):
-        if not world.keysanity:
-            sphere_state.sweep_for_events(key_only=True, locations=locations)
+        sphere_state.sweep_for_events(key_only=True, locations=locations)
         return [loc for loc in locations if sphere_state.can_reach(loc)]
 
     while True:
@@ -338,8 +346,7 @@ def balance_multiworld_progression(world):
             reachable_locations_count[location.player] += 1
 
         if checked_locations:
-            average_reachable_locations = sum(reachable_locations_count.values()) / world.players
-            threshold = ((average_reachable_locations + max(reachable_locations_count.values())) / 2) * 0.8 #todo: probably needs some tweaking
+            threshold = max(reachable_locations_count.values()) - 20
 
             balancing_players = [player for player, reachables in reachable_locations_count.items() if reachables < threshold]
             if balancing_players:
@@ -350,9 +357,9 @@ def balance_multiworld_progression(world):
                 candidate_items = []
                 while True:
                     for location in balancing_sphere:
-                        if location.event:
+                        if location.event and (world.keyshuffle[location.item.player] or not location.item.smallkey) and (world.bigkeyshuffle[location.item.player] or not location.item.bigkey):
                             balancing_state.collect(location.item, True, location)
-                            if location.item.player in balancing_players:
+                            if location.item.player in balancing_players and not location.locked:
                                 candidate_items.append(location)
                     balancing_sphere = get_sphere_locations(balancing_state, balancing_unchecked_locations)
                     for location in balancing_sphere:
@@ -360,11 +367,14 @@ def balance_multiworld_progression(world):
                         balancing_reachables[location.player] += 1
                     if world.has_beaten_game(balancing_state) or all([reachables >= threshold for reachables in balancing_reachables.values()]):
                         break
+                    elif not balancing_sphere:
+                        raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
 
                 unlocked_locations = [l for l in unchecked_locations if l not in balancing_unchecked_locations]
                 items_to_replace = []
                 for player in balancing_players:
                     locations_to_test = [l for l in unlocked_locations if l.player == player]
+                    # only replace items that end up in another player's world
                     items_to_test = [l for l in candidate_items if l.item.player == player and l.player != player]
                     while items_to_test:
                         testing = items_to_test.pop()
@@ -373,9 +383,6 @@ def balance_multiworld_progression(world):
                             reducing_state.collect(location.item, True, location)
 
                         reducing_state.sweep_for_events(locations=locations_to_test)
-
-                        if testing.locked:
-                            continue
 
                         if world.has_beaten_game(balancing_state):
                             if not world.has_beaten_game(reducing_state):
@@ -386,13 +393,17 @@ def balance_multiworld_progression(world):
                                 items_to_replace.append(testing)
 
                 replaced_items = False
-                locations_for_replacing = [l for l in checked_locations if not l.event and not l.locked]
-                while locations_for_replacing and items_to_replace:
-                    new_location = locations_for_replacing.pop()
+                replacement_locations = [l for l in checked_locations if not l.event and not l.locked]
+                while replacement_locations and items_to_replace:
+                    new_location = replacement_locations.pop()
                     old_location = items_to_replace.pop()
+
+                    while not new_location.can_fill(state, old_location.item, False) or (new_location.item and not old_location.can_fill(state, new_location.item, False)):
+                        replacement_locations.insert(0, new_location)
+                        new_location = replacement_locations.pop()
+
                     new_location.item, old_location.item = old_location.item, new_location.item
-                    new_location.event = True
-                    old_location.event = False
+                    new_location.event, old_location.event = True, False
                     state.collect(new_location.item, True, new_location)
                     replaced_items = True
                 if replaced_items:
@@ -402,9 +413,11 @@ def balance_multiworld_progression(world):
                         sphere_locations.append(location)
 
         for location in sphere_locations:
-            if location.event:
+            if location.event and (world.keyshuffle[location.item.player] or not location.item.smallkey) and (world.bigkeyshuffle[location.item.player] or not location.item.bigkey):
                 state.collect(location.item, True, location)
         checked_locations.extend(sphere_locations)
 
         if world.has_beaten_game(state):
             break
+        elif not sphere_locations:
+            raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')

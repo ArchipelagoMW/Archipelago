@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 import argparse
+import copy
 import os
 import logging
 import random
 import textwrap
+import shlex
 import sys
 
 from Main import main
-from Utils import is_bundled, close_console, output_path
+from Rom import get_sprite_from_name
+from Utils import is_bundled, close_console
 
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
@@ -15,11 +18,18 @@ class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
     def _get_help_string(self, action):
         return textwrap.dedent(action.help)
 
+def parse_arguments(argv, no_defaults=False):
+    def defval(value):
+        return value if not no_defaults else None
 
-def start():
+    # we need to know how many players we have first
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument('--multi', default=defval(1), type=lambda value: min(max(int(value), 1), 255))
+    multiargs, _ = parser.parse_known_args(argv)
+
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument('--create_spoiler', help='Output a Spoiler File', action='store_true')
-    parser.add_argument('--logic', default='noglitches', const='noglitches', nargs='?', choices=['noglitches', 'minorglitches', 'nologic'],
+    parser.add_argument('--logic', default=defval('noglitches'), const='noglitches', nargs='?', choices=['noglitches', 'minorglitches', 'nologic'],
                         help='''\
                              Select Enforcement of Item Requirements. (default: %(default)s)
                              No Glitches:
@@ -28,7 +38,7 @@ def start():
                              No Logic: Distribute items without regard for
                                              item requirements.
                              ''')
-    parser.add_argument('--mode', default='open', const='open', nargs='?', choices=['standard', 'open', 'inverted'],
+    parser.add_argument('--mode', default=defval('open'), const='open', nargs='?', choices=['standard', 'open', 'inverted'],
                         help='''\
                              Select game mode. (default: %(default)s)
                              Open:      World starts with Zelda rescued.
@@ -41,7 +51,7 @@ def start():
                                         Requires the moon pearl to be Link in the Light World
                                         instead of a bunny.
                              ''')
-    parser.add_argument('--swords', default='random', const='random', nargs='?', choices= ['random', 'assured', 'swordless', 'vanilla'],
+    parser.add_argument('--swords', default=defval('random'), const='random', nargs='?', choices= ['random', 'assured', 'swordless', 'vanilla'],
                         help='''\
                              Select sword placement. (default: %(default)s)
                              Random:    All swords placed randomly.
@@ -55,7 +65,7 @@ def start():
                                         Palace, to allow for an alternative to firerod.
                              Vanilla:   Swords are in vanilla locations.
                              ''')
-    parser.add_argument('--goal', default='ganon', const='ganon', nargs='?', choices=['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'],
+    parser.add_argument('--goal', default=defval('ganon'), const='ganon', nargs='?', choices=['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'],
                         help='''\
                              Select completion goal. (default: %(default)s)
                              Ganon:         Collect all crystals, beat Agahnim 2 then
@@ -67,21 +77,21 @@ def start():
                              Triforce Hunt: Places 30 Triforce Pieces in the world, collect
                                             20 of them to beat the game.
                              ''')
-    parser.add_argument('--difficulty', default='normal', const='normal', nargs='?', choices=['normal', 'hard', 'expert'],
+    parser.add_argument('--difficulty', default=defval('normal'), const='normal', nargs='?', choices=['normal', 'hard', 'expert'],
                         help='''\
                              Select game difficulty. Affects available itempool. (default: %(default)s)
                              Normal:          Normal difficulty.
                              Hard:            A harder setting with less equipment and reduced health.
                              Expert:          A harder yet setting with minimum equipment and health.
                              ''')
-    parser.add_argument('--item_functionality', default='normal', const='normal', nargs='?', choices=['normal', 'hard', 'expert'],
+    parser.add_argument('--item_functionality', default=defval('normal'), const='normal', nargs='?', choices=['normal', 'hard', 'expert'],
                              help='''\
                              Select limits on item functionality to increase difficulty. (default: %(default)s)
                              Normal:          Normal functionality.
                              Hard:            Reduced functionality.
                              Expert:          Greatly reduced functionality.
                                   ''')
-    parser.add_argument('--timer', default='none', const='normal', nargs='?', choices=['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'],
+    parser.add_argument('--timer', default=defval('none'), const='normal', nargs='?', choices=['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'],
                         help='''\
                              Select game timer setting. Affects available itempool. (default: %(default)s)
                              None:            No timer.
@@ -101,7 +111,7 @@ def start():
                                               Timed mode. If time runs out, you lose (but can
                                               still keep playing).
                              ''')
-    parser.add_argument('--progressive', default='on', const='normal', nargs='?', choices=['on', 'off', 'random'],
+    parser.add_argument('--progressive', default=defval('on'), const='normal', nargs='?', choices=['on', 'off', 'random'],
                         help='''\
                              Select progressive equipment setting. Affects available itempool. (default: %(default)s)
                              On:              Swords, Shields, Armor, and Gloves will
@@ -115,7 +125,7 @@ def start():
                                               category, be randomly progressive or not.
                                               Link will die in one hit.
                              ''')
-    parser.add_argument('--algorithm', default='balanced', const='balanced', nargs='?', choices=['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26', 'balanced'],
+    parser.add_argument('--algorithm', default=defval('balanced'), const='balanced', nargs='?', choices=['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26', 'balanced'],
                         help='''\
                              Select item filling algorithm. (default: %(default)s
                              balanced:    vt26 derivitive that aims to strike a balance between
@@ -138,7 +148,7 @@ def start():
                                           slightly biased to placing progression items with
                                           less restrictions.
                              ''')
-    parser.add_argument('--shuffle', default='full', const='full', nargs='?', choices=['vanilla', 'simple', 'restricted', 'full', 'crossed', 'insanity', 'restricted_legacy', 'full_legacy', 'madness_legacy', 'insanity_legacy', 'dungeonsfull', 'dungeonssimple'],
+    parser.add_argument('--shuffle', default=defval('full'), const='full', nargs='?', choices=['vanilla', 'simple', 'restricted', 'full', 'crossed', 'insanity', 'restricted_legacy', 'full_legacy', 'madness_legacy', 'insanity_legacy', 'dungeonsfull', 'dungeonssimple'],
                         help='''\
                              Select Entrance Shuffling Algorithm. (default: %(default)s)
                              Full:       Mix cave and dungeon entrances freely while limiting
@@ -162,7 +172,7 @@ def start():
                              The dungeon variants only mix up dungeons and keep the rest of
                              the overworld vanilla.
                              ''')
-    parser.add_argument('--crystals_ganon', default='7', const='7', nargs='?', choices=['random', '0', '1', '2', '3', '4', '5', '6', '7'],
+    parser.add_argument('--crystals_ganon', default=defval('7'), const='7', nargs='?', choices=['random', '0', '1', '2', '3', '4', '5', '6', '7'],
                         help='''\
                              How many crystals are needed to defeat ganon. Any other 
                              requirements for ganon for the selected goal still apply.
@@ -171,16 +181,18 @@ def start():
                              Random: Picks a random value between 0 and 7 (inclusive).
                              0-7:    Number of crystals needed
                              ''')
-    parser.add_argument('--crystals_gt', default='7', const='7', nargs='?', choices=['random', '0', '1', '2', '3', '4', '5', '6', '7'],
+    parser.add_argument('--crystals_gt', default=defval('7'), const='7', nargs='?', choices=['random', '0', '1', '2', '3', '4', '5', '6', '7'],
                         help='''\
                              How many crystals are needed to open GT. For inverted mode
                              this applies to the castle tower door instead. (default: %(default)s)
                              Random: Picks a random value between 0 and 7 (inclusive).
                              0-7:    Number of crystals needed
                              ''')
-
-    parser.add_argument('--rom', default='Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', help='Path to an ALttP JAP(1.0) rom to use as a base.')
-    parser.add_argument('--loglevel', default='info', const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
+    parser.add_argument('--openpyramid', default=defval(False), help='''\
+                            Pre-opens the pyramid hole, this removes the Agahnim 2 requirement for it
+                             ''', action='store_true')
+    parser.add_argument('--rom', default=defval('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc'), help='Path to an ALttP JAP(1.0) rom to use as a base.')
+    parser.add_argument('--loglevel', default=defval('info'), const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--count', help='''\
                              Use to batch generate multiple seeds with same settings.
@@ -189,50 +201,51 @@ def start():
                              --seed given will produce the same 10 (different) roms each
                              time).
                              ''', type=int)
-    parser.add_argument('--fastmenu', default='normal', const='normal', nargs='?', choices=['normal', 'instant', 'double', 'triple', 'quadruple', 'half'],
+    parser.add_argument('--fastmenu', default=defval('normal'), const='normal', nargs='?', choices=['normal', 'instant', 'double', 'triple', 'quadruple', 'half'],
                         help='''\
                              Select the rate at which the menu opens and closes.
                              (default: %(default)s)
                              ''')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
-    parser.add_argument('--keysanity', help='''\
-                             Keys (and other dungeon items) are no longer restricted to
-                             their dungeons, but can be anywhere
-                             ''', action='store_true')
-    parser.add_argument('--retro', help='''\
+    parser.add_argument('--extendedmsu', help='Use v31 Extended msu', action='store_true')
+    parser.add_argument('--mapshuffle', default=defval(False), help='Maps are no longer restricted to their dungeons, but can be anywhere', action='store_true')
+    parser.add_argument('--compassshuffle', default=defval(False), help='Compasses are no longer restricted to their dungeons, but can be anywhere', action='store_true')
+    parser.add_argument('--keyshuffle', default=defval(False), help='Small Keys are no longer restricted to their dungeons, but can be anywhere', action='store_true')
+    parser.add_argument('--bigkeyshuffle', default=defval(False), help='Big Keys are no longer restricted to their dungeons, but can be anywhere', action='store_true')
+    parser.add_argument('--keysanity', default=defval(False), help=argparse.SUPPRESS, action='store_true')
+    parser.add_argument('--retro', default=defval(False), help='''\
                              Keys are universal, shooting arrows costs rupees,
                              and a few other little things make this more like Zelda-1.
                              ''', action='store_true')
-    parser.add_argument('--custom', default=False, help='Not supported.')
-    parser.add_argument('--customitemarray', default=False, help='Not supported.')
-    parser.add_argument('--nodungeonitems', help='''\
-                             Remove Maps and Compasses from Itempool, replacing them by
-                             empty slots.
-                             ''', action='store_true')
-    parser.add_argument('--accessibility', default='items', const='items', nargs='?', choices=['items', 'locations', 'none'], help='''\
+    parser.add_argument('--startinventory', default=defval(''), help='Specifies a list of items that will be in your starting inventory (separated by commas)')
+    parser.add_argument('--custom', default=defval(False), help='Not supported.')
+    parser.add_argument('--customitemarray', default=defval(False), help='Not supported.')
+    parser.add_argument('--accessibility', default=defval('items'), const='items', nargs='?', choices=['items', 'locations', 'none'], help='''\
                              Select Item/Location Accessibility. (default: %(default)s)
                              Items:     You can reach all unique inventory items. No guarantees about
                                         reaching all locations or all keys. 
                              Locations: You will be able to reach every location in the game.
                              None:      You will be able to reach enough locations to beat the game.
                              ''')
-    parser.add_argument('--hints', help='''\
+    parser.add_argument('--hints', default=defval(False), help='''\
                              Make telepathic tiles and storytellers give helpful hints.
                              ''', action='store_true')
     # included for backwards compatibility
-    parser.add_argument('--shuffleganon', help=argparse.SUPPRESS, action='store_true', default=True)
+    parser.add_argument('--shuffleganon', help=argparse.SUPPRESS, action='store_true', default=defval(True))
     parser.add_argument('--no-shuffleganon', help='''\
                              If set, the Pyramid Hole and Ganon's Tower are not
                              included entrance shuffle pool.
                              ''', action='store_false', dest='shuffleganon')
-    parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['double', 'normal', 'half', 'quarter', 'off'],
+    parser.add_argument('--heartbeep', default=defval('normal'), const='normal', nargs='?', choices=['double', 'normal', 'half', 'quarter', 'off'],
                         help='''\
                              Select the rate at which the heart beep sound is played at
                              low health. (default: %(default)s)
                              ''')
-    parser.add_argument('--heartcolor', default='red', const='red', nargs='?', choices=['red', 'blue', 'green', 'yellow', 'random'],
+    parser.add_argument('--heartcolor', default=defval('red'), const='red', nargs='?', choices=['red', 'blue', 'green', 'yellow', 'random'],
                         help='Select the color of Link\'s heart meter. (default: %(default)s)')
+    parser.add_argument('--ow_palettes', default=defval('default'), choices=['default', 'random', 'blackout'])
+    parser.add_argument('--uw_palettes', default=defval('default'), choices=['default', 'random', 'blackout'])
     parser.add_argument('--sprite', help='''\
                              Path to a sprite sheet to use for Link. Needs to be in
                              binary format and have a length of 0x7000 (28672) bytes,
@@ -246,21 +259,58 @@ def start():
                             Output .json patch to stdout instead of a patched rom. Used
                             for VT site integration, do not use otherwise.
                             ''')
-    parser.add_argument('--skip_playthrough', action='store_true', default=False)
-    parser.add_argument('--enemizercli', default='')
-    parser.add_argument('--shufflebosses', default='none', choices=['none', 'basic', 'normal', 'chaos'])
-    parser.add_argument('--shuffleenemies', default=False, action='store_true')
-    parser.add_argument('--enemy_health', default='default', choices=['default', 'easy', 'normal', 'hard', 'expert'])
-    parser.add_argument('--enemy_damage', default='default', choices=['default', 'shuffled', 'chaos'])
-    parser.add_argument('--shufflepalette', default=False, action='store_true')
-    parser.add_argument('--shufflepots', default=False, action='store_true')
-    parser.add_argument('--multi', default=1, type=lambda value: min(max(int(value), 1), 255))
-
+    parser.add_argument('--skip_playthrough', action='store_true', default=defval(False))
+    parser.add_argument('--enemizercli', default=defval('EnemizerCLI/EnemizerCLI.Core'))
+    parser.add_argument('--shufflebosses', default=defval('none'), choices=['none', 'basic', 'normal', 'chaos'])
+    parser.add_argument('--shuffleenemies', default=defval('none'), choices=['none', 'shuffled', 'chaos'])
+    parser.add_argument('--enemy_health', default=defval('default'), choices=['default', 'easy', 'normal', 'hard', 'expert'])
+    parser.add_argument('--enemy_damage', default=defval('default'), choices=['default', 'shuffled', 'chaos'])
+    parser.add_argument('--shufflepots', default=defval(False), action='store_true')
+    parser.add_argument('--beemizer', default=defval(0), type=lambda value: min(max(int(value), 0), 4))
+    parser.add_argument('--remote_items', default=defval(False), action='store_true')
+    parser.add_argument('--multi', default=defval(1), type=lambda value: min(max(int(value), 1), 255))
+    parser.add_argument('--names', default=defval(''))
+    parser.add_argument('--teams', default=defval(1), type=lambda value: max(int(value), 1))
     parser.add_argument('--outputpath')
-    args = parser.parse_args()
+    parser.add_argument('--race', default=defval(False), action='store_true')
+    parser.add_argument('--outputname')
+    parser.add_argument('--create_diff', default=defval(False), action='store_true', help='''\
+    create a binary patch file from which the randomized rom can be recreated using MultiClient.
+    Does not work with jsonout.''')
 
-    if args.outputpath and os.path.isdir(args.outputpath):
-        output_path.cached_path = args.outputpath
+    if multiargs.multi:
+        for player in range(1, multiargs.multi + 1):
+            parser.add_argument(f'--p{player}', default=defval(''), help=argparse.SUPPRESS)
+
+    ret = parser.parse_args(argv)
+    if ret.timer == "none":
+        ret.timer = False
+    if ret.keysanity:
+        ret.mapshuffle, ret.compassshuffle, ret.keyshuffle, ret.bigkeyshuffle = [True] * 4
+
+    if multiargs.multi:
+        defaults = copy.deepcopy(ret)
+        for player in range(1, multiargs.multi + 1):
+            playerargs = parse_arguments(shlex.split(getattr(ret, f"p{player}")), True)
+
+            for name in ['logic', 'mode', 'swords', 'goal', 'difficulty', 'item_functionality',
+                         'shuffle', 'crystals_ganon', 'crystals_gt', 'openpyramid', 'timer',
+                         'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle', 'startinventory',
+                         'retro', 'accessibility', 'hints', 'beemizer',
+                         'shufflebosses', 'shuffleenemies', 'enemy_health', 'enemy_damage', 'shufflepots',
+                         'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
+                         'heartbeep',
+                         'remote_items', 'progressive', 'extendedmsu']:
+                value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
+                if player == 1:
+                    setattr(ret, name, {1: value})
+                else:
+                    getattr(ret, name)[player] = value
+
+    return ret
+
+def start():
+    args = parse_arguments(None)
 
     if is_bundled() and len(sys.argv) == 1:
         # for the bundled builds, if we have no arguments, the user
@@ -276,9 +326,9 @@ def start():
     if not args.jsonout and not os.path.isfile(args.rom):
         input('Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
         sys.exit(1)
-    if args.sprite is not None and not os.path.isfile(args.sprite):
+    if any([sprite is not None and not os.path.isfile(sprite) and not get_sprite_from_name(sprite) for sprite in args.sprite.values()]):
         if not args.jsonout:
-            input('Could not find link sprite sheet at given location. \nPress Enter to exit.' % args.sprite)
+            input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
             sys.exit(1)
         else:
             raise IOError('Cannot find sprite file at %s' % args.sprite)

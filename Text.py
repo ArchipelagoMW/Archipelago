@@ -107,6 +107,7 @@ Triforce_texts = [
     "You get one\nwish.  Choose\nwisely, hero!",
     "Can you please\nbreak us three\nup?  Thanks.",
     "  Pick us up\n  before we\n  get dizzy!",
+    "\n   Honk."
 ]
 BombShop2_texts = ['Bombs!\nBombs!\nBiggest!\nBestest!\nGreatest!\nBoomest!']
 Sahasrahla2_texts = ['You already got my item, idiot.', 'Why are you still talking to me?', 'This text won\'t change.', 'Have you met my brother, Hasarahshla?']
@@ -366,7 +367,7 @@ class Credits(object):
                 SceneLargeCreditLine(23, "Woodsmen's Hut"),
             ],
             'grove': [
-                SceneSmallCreditLine(19, 'ocarina boy plays again'),
+                SceneSmallCreditLine(19, 'flute boy plays again'),
                 SceneLargeCreditLine(23, 'Haunted Grove'),
             ],
             'well': [
@@ -427,7 +428,6 @@ class CreditLine(object):
 
     @property
     def x(self):
-        x = 0
         if self.align == 'left':
             x = 0
         elif self.align == 'right':
@@ -1311,7 +1311,7 @@ class TextTable(object):
             'item_get_bombos',
             'item_get_quake',
             'item_get_hammer',
-            'item_get_ocarina',
+            'item_get_flute',
             'item_get_cane_of_somaria',
             'item_get_hookshot',
             'item_get_bombs',
@@ -1552,7 +1552,7 @@ class TextTable(object):
         text['item_get_bombos'] = CompressedTextMapper.convert("Let's set everything on fire, and melt things!")
         text['item_get_quake'] = CompressedTextMapper.convert("Time to make the earth shake, rattle, and roll!")
         text['item_get_hammer'] = CompressedTextMapper.convert("STOP!\n\nHammer Time!") # 66
-        text['item_get_ocarina'] = CompressedTextMapper.convert("Finally! We can play the Song of Time!")
+        text['item_get_flute'] = CompressedTextMapper.convert("Finally! We can play the Song of Time!")
         text['item_get_cane_of_somaria'] = CompressedTextMapper.convert("Make blocks!\nThrow blocks!\nsplode Blocks!")
         text['item_get_hookshot'] = CompressedTextMapper.convert("BOING!!!\nBOING!!!\nSay no more…")
         text['item_get_bombs'] = CompressedTextMapper.convert("BOMBS! Use A to pick 'em up, throw 'em, get hurt!")

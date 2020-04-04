@@ -76,7 +76,7 @@ def KholdstareDefeatRule(state, player):
             (
                 state.has('Bombos', player) and
                 # FIXME: the following only actually works for the vanilla location for swordless
-                (state.has_sword(player) or state.world.swords == 'swordless')
+                (state.has_sword(player) or state.world.swords[player] == 'swordless')
             )
         ) and
         (
@@ -86,7 +86,7 @@ def KholdstareDefeatRule(state, player):
             (
                 state.has('Fire Rod', player) and
                 state.has('Bombos', player) and
-                state.world.swords == 'swordless' and
+                state.world.swords[player] == 'swordless' and
                 state.can_extend_magic(player, 16)
             )
         )
@@ -120,8 +120,8 @@ boss_table = {
     'Agahnim2': ('Agahnim2', AgahnimDefeatRule)
 }
 
-def can_place_boss(world, boss, dungeon_name, level=None):
-    if world.swords in ['swordless'] and boss == 'Kholdstare' and dungeon_name != 'Ice Palace':
+def can_place_boss(world, player, boss, dungeon_name, level=None):
+    if world.swords[player] in ['swordless'] and boss == 'Kholdstare' and dungeon_name != 'Ice Palace':
         return False
 
     if dungeon_name in ['Ganons Tower', 'Inverted Ganons Tower'] and level == 'top':
@@ -143,10 +143,10 @@ def can_place_boss(world, boss, dungeon_name, level=None):
     return True
 
 def place_bosses(world, player):
-    if world.boss_shuffle == 'none':
+    if world.boss_shuffle[player] == 'none':
         return
     # Most to least restrictive order
-    if world.mode != 'inverted':
+    if world.mode[player] != 'inverted':
         boss_locations = [
             ['Ganons Tower', 'top'],
             ['Tower of Hera', None],
@@ -182,15 +182,15 @@ def place_bosses(world, player):
     all_bosses = sorted(boss_table.keys()) #s orted to be deterministic on older pythons
     placeable_bosses = [boss for boss in all_bosses if boss not in ['Agahnim', 'Agahnim2', 'Ganon']]
 
-    if world.boss_shuffle in ["basic", "normal"]:
+    if world.boss_shuffle[player] in ["basic", "normal"]:
         # temporary hack for swordless kholdstare:
-        if world.swords == 'swordless':
+        if world.swords[player] == 'swordless':
             world.get_dungeon('Ice Palace', player).boss = BossFactory('Kholdstare', player)
             logging.getLogger('').debug('Placing boss Kholdstare at Ice Palace')
             boss_locations.remove(['Ice Palace', None])
             placeable_bosses.remove('Kholdstare')
 
-        if world.boss_shuffle == "basic": # vanilla bosses shuffled
+        if world.boss_shuffle[player] == "basic": # vanilla bosses shuffled
             bosses = placeable_bosses + ['Armos Knights', 'Lanmolas', 'Moldorm']
         else: # all bosses present, the three duplicates chosen at random
             bosses = all_bosses + [random.choice(placeable_bosses) for _ in range(3)]
@@ -200,18 +200,18 @@ def place_bosses(world, player):
         random.shuffle(bosses)
         for [loc, level] in boss_locations:
             loc_text = loc + (' ('+level+')' if level else '')
-            boss = next((b for b in bosses if can_place_boss(world, b, loc, level)), None)
+            boss = next((b for b in bosses if can_place_boss(world, player, b, loc, level)), None)
             if not boss:
                 raise FillError('Could not place boss for location %s' % loc_text)
             bosses.remove(boss)
 
             logging.getLogger('').debug('Placing boss %s at %s', boss, loc_text)
             world.get_dungeon(loc, player).bosses[level] = BossFactory(boss, player)
-    elif world.boss_shuffle == "chaos": #all bosses chosen at random
+    elif world.boss_shuffle[player] == "chaos": #all bosses chosen at random
         for [loc, level] in boss_locations:
             loc_text = loc + (' ('+level+')' if level else '')
             try:
-                boss = random.choice([b for b in placeable_bosses if can_place_boss(world, b, loc, level)])
+                boss = random.choice([b for b in placeable_bosses if can_place_boss(world, player, b, loc, level)])
             except IndexError:
                 raise FillError('Could not place boss for location %s' % loc_text)
 

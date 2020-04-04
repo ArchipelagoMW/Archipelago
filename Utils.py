@@ -1,14 +1,26 @@
 import os
 import subprocess
 import sys
+import typing
+import functools
+
+from yaml import load
+
+try:
+    from yaml import CLoader as Loader
+except ImportError:
+    from yaml import Loader
+
 
 def int16_as_bytes(value):
     value = value & 0xFFFF
     return [value & 0xFF, (value >> 8) & 0xFF]
 
+
 def int32_as_bytes(value):
     value = value & 0xFFFFFFFF
     return [value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF, (value >> 24) & 0xFF]
+
 
 def pc_to_snes(value):
     return ((value<<1) & 0x7F0000)|(value & 0x7FFF)|0x8000
@@ -16,38 +28,57 @@ def pc_to_snes(value):
 def snes_to_pc(value):
     return ((value & 0x7F0000)>>1)|(value & 0x7FFF)
 
+def parse_player_names(names, players, teams):
+    names = tuple(n for n in (n.strip() for n in names.split(",")) if n)
+    ret = []
+    while names or len(ret) < teams:
+        team = [n[:16] for n in names[:players]]
+        # where does the 16 character limit come from?
+        while len(team) != players:
+            team.append(f"Player {len(team) + 1}")
+        ret.append(team)
+
+        names = names[players:]
+    return ret
+
 def is_bundled():
     return getattr(sys, 'frozen', False)
 
 def local_path(path):
-    if local_path.cached_path is not None:
+    if local_path.cached_path:
         return os.path.join(local_path.cached_path, path)
 
-    if is_bundled():
-        # we are running in a bundle
-        local_path.cached_path = sys._MEIPASS # pylint: disable=protected-access,no-member
+    elif is_bundled():
+        if hasattr(sys, "_MEIPASS"):
+            # we are running in a PyInstaller bundle
+            local_path.cached_path = sys._MEIPASS  # pylint: disable=protected-access,no-member
+        else:
+            # cx_Freeze
+            local_path.cached_path = os.path.dirname(os.path.abspath(sys.argv[0]))
     else:
         # we are running in a normal Python environment
-        local_path.cached_path = os.path.dirname(os.path.abspath(__file__))
+        import __main__
+        local_path.cached_path = os.path.dirname(os.path.abspath(__main__.__file__))
 
     return os.path.join(local_path.cached_path, path)
 
 local_path.cached_path = None
 
 def output_path(path):
-    if output_path.cached_path is not None:
+    if output_path.cached_path:
         return os.path.join(output_path.cached_path, path)
 
-    if not is_bundled():
+    if not is_bundled() and not hasattr(sys, "_MEIPASS"):
+        # this should trigger if it's cx_freeze bundling
         output_path.cached_path = '.'
         return os.path.join(output_path.cached_path, path)
     else:
-        # has been packaged, so cannot use CWD for output.
+        # has been PyInstaller packaged, so cannot use CWD for output.
         if sys.platform == 'win32':
-            #windows
+            # windows
             import ctypes.wintypes
-            CSIDL_PERSONAL = 5       # My Documents
-            SHGFP_TYPE_CURRENT = 0   # Get current, not default value
+            CSIDL_PERSONAL = 5  # My Documents
+            SHGFP_TYPE_CURRENT = 0  # Get current, not default value
 
             buf = ctypes.create_unicode_buffer(ctypes.wintypes.MAX_PATH)
             ctypes.windll.shell32.SHGetFolderPathW(None, CSIDL_PERSONAL, None, SHGFP_TYPE_CURRENT, buf)
@@ -96,7 +127,7 @@ def make_new_base2current(old_rom='Zelda no Densetsu - Kamigami no Triforce (Jap
     with open(new_rom, 'rb') as stream:
         new_rom_data = bytearray(stream.read())
     # extend to 2 mb
-    old_rom_data.extend(bytearray([0x00] * (2097152 - len(old_rom_data))))
+    old_rom_data.extend(bytearray([0x00]) * (2097152 - len(old_rom_data)))
 
     out_data = OrderedDict()
     for idx, old in enumerate(old_rom_data):
@@ -107,8 +138,49 @@ def make_new_base2current(old_rom='Zelda no Densetsu - Kamigami no Triforce (Jap
         if offset - 1 in out_data:
             out_data[offset-1].extend(out_data.pop(offset))
     with open('data/base2current.json', 'wt') as outfile:
-        json.dump([{key:value} for key, value in out_data.items()], outfile, separators=(",", ":"))
+        json.dump([{key: value} for key, value in out_data.items()], outfile, separators=(",", ":"))
 
     basemd5 = hashlib.md5()
     basemd5.update(new_rom_data)
     return "New Rom Hash: " + basemd5.hexdigest()
+
+
+parse_yaml = functools.partial(load, Loader=Loader)
+
+
+class Hint(typing.NamedTuple):
+    receiving_player: int
+    finding_player: int
+    location: int
+    item: int
+    found: bool
+
+def get_public_ipv4() -> str:
+    import socket
+    import urllib.request
+    import logging
+    ip = socket.gethostbyname(socket.gethostname())
+    try:
+        ip = urllib.request.urlopen('https://checkip.amazonaws.com/').read().decode('utf8').strip()
+    except Exception as e:
+        try:
+            ip = urllib.request.urlopen('https://v4.ident.me').read().decode('utf8').strip()
+        except:
+            logging.exception(e)
+            pass  # we could be offline, in a local game, so no point in erroring out
+    return ip
+
+
+def get_options() -> dict:
+    if not hasattr(get_options, "options"):
+        locations = ("options.yaml", "host.yaml",
+                     local_path("options.yaml"), local_path("host.yaml"))
+
+        for location in locations:
+            if os.path.exists(location):
+                with open(location) as f:
+                    get_options.options = parse_yaml(f.read())
+                break
+        else:
+            raise FileNotFoundError(f"Could not find {locations[1]} to load options.")
+    return get_options.options

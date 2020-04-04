@@ -1,6 +1,7 @@
 .idea
 .vscode
 *_Spoiler.txt
+*.bmbp
 *.pyc
 *.sfc
 *.wixobj
@@ -13,3 +14,9 @@ README.html
 *multisave
 EnemizerCLI/
 .mypy_cache/
+RaceRom.py
+weights/
+/MultiMystery/
+/Players/
+/QUsb2Snes/
+/options.yaml

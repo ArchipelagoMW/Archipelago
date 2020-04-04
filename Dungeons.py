@@ -8,7 +8,7 @@ from Items import ItemFactory
 
 def create_dungeons(world, player):
     def make_dungeon(name, default_boss, dungeon_regions, big_key, small_keys, dungeon_items):
-        dungeon = Dungeon(name, dungeon_regions, big_key, [] if world.retro else small_keys, dungeon_items, player)
+        dungeon = Dungeon(name, dungeon_regions, big_key, [] if world.retro[player] else small_keys, dungeon_items, player)
         dungeon.boss = BossFactory(default_boss, player)
         for region in dungeon.regions:
             world.get_region(region, player).dungeon = dungeon
@@ -27,7 +27,7 @@ def create_dungeons(world, player):
     MM = make_dungeon('Misery Mire', 'Vitreous', ['Misery Mire (Entrance)', 'Misery Mire (Main)', 'Misery Mire (West)', 'Misery Mire (Final Area)', 'Misery Mire (Vitreous)'], ItemFactory('Big Key (Misery Mire)', player), ItemFactory(['Small Key (Misery Mire)'] * 3, player), ItemFactory(['Map (Misery Mire)', 'Compass (Misery Mire)'], player))
     TR = make_dungeon('Turtle Rock', 'Trinexx', ['Turtle Rock (Entrance)', 'Turtle Rock (First Section)', 'Turtle Rock (Chain Chomp Room)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Turtle Rock (Crystaroller Room)', 'Turtle Rock (Dark Room)', 'Turtle Rock (Eye Bridge)', 'Turtle Rock (Trinexx)'], ItemFactory('Big Key (Turtle Rock)', player), ItemFactory(['Small Key (Turtle Rock)'] * 4, player), ItemFactory(['Map (Turtle Rock)', 'Compass (Turtle Rock)'], player))
 
-    if world.mode != 'inverted':
+    if world.mode[player] != 'inverted':
         AT = make_dungeon('Agahnims Tower', 'Agahnim', ['Agahnims Tower', 'Agahnim 1'], None, ItemFactory(['Small Key (Agahnims Tower)'] * 2, player), [])
         GT = make_dungeon('Ganons Tower', 'Agahnim2', ['Ganons Tower (Entrance)', 'Ganons Tower (Tile Room)', 'Ganons Tower (Compass Room)', 'Ganons Tower (Hookshot Room)', 'Ganons Tower (Map Room)', 'Ganons Tower (Firesnake Room)', 'Ganons Tower (Teleport Room)', 'Ganons Tower (Bottom)', 'Ganons Tower (Top)', 'Ganons Tower (Before Moldorm)', 'Ganons Tower (Moldorm)', 'Agahnim 2'], ItemFactory('Big Key (Ganons Tower)', player), ItemFactory(['Small Key (Ganons Tower)'] * 4, player), ItemFactory(['Map (Ganons Tower)', 'Compass (Ganons Tower)'], player))
     else:
@@ -47,7 +47,7 @@ def fill_dungeons(world):
 
     for player in range(1, world.players + 1):
         pinball_room = world.get_location('Skull Woods - Pinball Room', player)
-        if world.retro:
+        if world.retro[player]:
             world.push_item(pinball_room, ItemFactory('Small Key (Universal)', player), False)
         else:
             world.push_item(pinball_room, ItemFactory('Small Key (Skull Woods)', player), False)
@@ -113,21 +113,20 @@ def fill_dungeons(world):
             continue
 
         # next place dungeon items
-        if world.place_dungeon_items:
-            for dungeon_item in dungeon_items:
-                di_location = dungeon_locations.pop()
-                world.push_item(di_location, dungeon_item, False)
+        for dungeon_item in dungeon_items:
+            di_location = dungeon_locations.pop()
+            world.push_item(di_location, dungeon_item, False)
 
 
 def get_dungeon_item_pool(world):
-    return [item for dungeon in world.dungeons for item in dungeon.all_items if item.key or world.place_dungeon_items]
+    return [item for dungeon in world.dungeons for item in dungeon.all_items]
 
 def fill_dungeons_restrictive(world, shuffled_locations):
     all_state_base = world.get_all_state()
 
     for player in range(1, world.players + 1):
         pinball_room = world.get_location('Skull Woods - Pinball Room', player)
-        if world.retro:
+        if world.retro[player]:
             world.push_item(pinball_room, ItemFactory('Small Key (Universal)', player), False)
         else:
             world.push_item(pinball_room, ItemFactory('Small Key (Skull Woods)', player), False)
@@ -135,22 +134,24 @@ def fill_dungeons_restrictive(world, shuffled_locations):
         pinball_room.locked = True
         shuffled_locations.remove(pinball_room)
 
-    if world.keysanity:
-        #in keysanity dungeon items are distributed as part of the normal item pool
-        for item in world.get_items():
-            if item.key:
-                item.advancement = True
-            elif item.map or item.compass:
-                item.priority = True
-        return
+    # with shuffled dungeon items they are distributed as part of the normal item pool
+    for item in world.get_items():
+        if (item.smallkey and world.keyshuffle[item.player]) or (item.bigkey and world.bigkeyshuffle[item.player]):
+            all_state_base.collect(item, True)
+            item.advancement = True
+        elif (item.map and world.mapshuffle[item.player]) or (item.compass and world.compassshuffle[item.player]):
+            item.priority = True
 
-    dungeon_items = get_dungeon_item_pool(world)
+    dungeon_items = [item for item in get_dungeon_item_pool(world) if ((item.smallkey and not world.keyshuffle[item.player])
+                                                                       or (item.bigkey and not world.bigkeyshuffle[item.player])
+                                                                       or (item.map and not world.mapshuffle[item.player])
+                                                                       or (item.compass and not world.compassshuffle[item.player]))]
 
     # sort in the order Big Key, Small Key, Other before placing dungeon items
     sort_order = {"BigKey": 3, "SmallKey": 2}
     dungeon_items.sort(key=lambda item: sort_order.get(item.type, 1))
 
-    fill_restrictive(world, all_state_base, shuffled_locations, dungeon_items)
+    fill_restrictive(world, all_state_base, shuffled_locations, dungeon_items, True)
 
 
 
