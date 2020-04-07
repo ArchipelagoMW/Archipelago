@@ -85,8 +85,8 @@ begin
   end;
 end;
 
-var
-  ROMFilePage: TInputFileWizardPage;
+var ROMFilePage: TInputFileWizardPage;
+var R : longint;
 
 procedure InitializeWizard();
 begin
@@ -105,8 +105,12 @@ end;
 
 function GetROMPath(Param: string): string;
 begin
-  if Assigned(RomFilePage) then
-    Result := ROMFilePage.Values[0]
+  if Assigned(RomFilePage) then    begin
+      R := CompareStr(GetMD5OfFile(ROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
+      if R <> 0 then
+        MsgBox('ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);  
+      Result := ROMFilePage.Values[0]
+    end
   else
     Result := '';
  end;
