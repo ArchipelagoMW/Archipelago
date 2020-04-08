@@ -191,7 +191,7 @@ def generate_itempool(world, player):
         (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
          lamps_needed_for_dark_rooms) = get_pool_core(world.progressive[player], world.shuffle[player],
                                                       world.difficulty[player], world.timer[player], world.goal[player],
-                                                      world.mode[player], world.swords[player], world.retro[player])
+                                                      world.mode[player], world.swords[player], world.retro[player], world.logic[player])
 
     for item in precollected_items:
         world.push_precollected(ItemFactory(item, player))
@@ -391,7 +391,7 @@ def set_up_shops(world, player):
         rss.locked = True
 
 
-def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, retro):
+def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, retro, logic):
     pool = []
     placed_items = {}
     precollected_items = []
@@ -407,6 +407,12 @@ def get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords, r
 
     def want_progressives():
         return random.choice([True, False]) if progressive == 'random' else progressive == 'on'
+
+    # provide boots to major glitch dependent seeds
+    if logic in ['owglitches', 'nologic']:
+        precollected_items.append('Pegasus Boots')
+        pool.remove('Pegasus Boots')
+        pool.extend(['Rupees (20)'])
 
     if want_progressives():
         pool.extend(progressivegloves)
@@ -677,20 +683,21 @@ def test():
                         for progressive in ['on', 'off']:
                             for shuffle in ['full', 'insanity_legacy']:
                                 for retro in [True, False]:
-                                    out = get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords,
-                                                        retro)
-                                    count = len(out[0]) + len(out[1])
+                                    for logic in ['noglitches', 'owglitches']:
+                                        out = get_pool_core(progressive, shuffle, difficulty, timer, goal, mode, swords,
+                                                        retro, logic)
+                                        count = len(out[0]) + len(out[1])
 
-                                    correct_count = total_items_to_place
-                                    if goal == 'pedestal' and swords != 'vanilla':
-                                        # pedestal goals generate one extra item
-                                        correct_count += 1
-                                    if retro:
-                                        correct_count += 28
-                                    try:
-                                        assert count == correct_count, "expected {0} items but found {1} items for {2}".format(correct_count, count, (progressive, shuffle, difficulty, timer, goal, mode, swords, retro))
-                                    except AssertionError as e:
-                                        print(e)
+                                        correct_count = total_items_to_place
+                                        if goal == 'pedestal' and swords != 'vanilla':
+                                            # pedestal goals generate one extra item
+                                            correct_count += 1
+                                        if retro:
+                                            correct_count += 28
+                                        try:
+                                            assert count == correct_count, "expected {0} items but found {1} items for {2}".format(correct_count, count, (progressive, shuffle, difficulty, timer, goal, mode, swords, retro))
+                                        except AssertionError as e:
+                                            print(e)
 
 if __name__ == '__main__':
     test()

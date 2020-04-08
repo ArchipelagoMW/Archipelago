@@ -140,9 +140,8 @@ def main():
 
 def get_weights(path):
     try:
-        if urllib.parse.urlparse(path).scheme:
-            yaml = str(urllib.request.urlopen(path).read(), "utf-8")
-        else:
+        parsed_url = urllib.parse.urlparse(path)
+        if all(parsed_url.scheme, parsed_url.netloc, parsed_url.path):
             with open(path, 'rb') as f:
                 yaml = str(f.read(), "utf-8")
     except Exception as e:
@@ -181,10 +180,10 @@ def roll_settings(weights):
     if ret.name:
         ret.name = handle_name(ret.name)
     glitches_required = get_choice('glitches_required', weights)
-    if glitches_required not in ['none', 'no_logic']:
-        logging.warning("Only NMG and No Logic supported")
+    if glitches_required not in ['none', 'no_logic', 'overworld_glitches']:
+        logging.warning("Only NMG, OWG and No Logic supported")
         glitches_required = 'none'
-    ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic'}[glitches_required]
+    ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches'}[glitches_required]
 
     # item_placement = get_choice('item_placement')
     # not supported in ER

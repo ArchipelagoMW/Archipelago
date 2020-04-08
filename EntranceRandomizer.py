@@ -29,14 +29,17 @@ def parse_arguments(argv, no_defaults=False):
 
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument('--create_spoiler', help='Output a Spoiler File', action='store_true')
-    parser.add_argument('--logic', default=defval('noglitches'), const='noglitches', nargs='?', choices=['noglitches', 'minorglitches', 'nologic'],
+    parser.add_argument('--logic', default=defval('noglitches'), const='noglitches', nargs='?', choices=['noglitches', 'minorglitches', 'owglitches', 'nologic'],
                         help='''\
                              Select Enforcement of Item Requirements. (default: %(default)s)
                              No Glitches:
                              Minor Glitches: May require Fake Flippers, Bunny Revival
                                              and Dark Room Navigation.
+                             Overworld Glitches: May require overworld glitches. Starts with
+                                             boots.
                              No Logic: Distribute items without regard for
-                                             item requirements.
+                                             item requirements. Starts with
+                                             boots
                              ''')
     parser.add_argument('--mode', default=defval('open'), const='open', nargs='?', choices=['standard', 'open', 'inverted'],
                         help='''\

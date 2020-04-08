@@ -227,7 +227,7 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
 
     # fill in gtower locations with trash first
     for player in range(1, world.players + 1):
-        if not gftower_trash or not world.ganonstower_vanilla[player]:
+        if not gftower_trash or not world.ganonstower_vanilla[player] or world.logic[player] == 'owglitches':
             continue
 
         gftower_trash_count = (random.randint(15, 50) if world.goal[player] == 'triforcehunt' else random.randint(0, 15))

@@ -544,6 +544,31 @@ class CollectionState(object):
     def has_turtle_rock_medallion(self, player: int) -> bool:
         return self.has(self.world.required_medallions[player][1], player)
 
+    def can_boots_clip_lw(self, player):
+        if self.world.mode[player] == 'inverted':
+            return self.has_Boots(player) and self.has_Pearl(player)
+        return self.has_Boots(player)
+
+    def can_boots_clip_dw(self, player):
+        if self.world.mode[player] != 'inverted':
+            return self.has_Boots(player) and self.has_Pearl(player)
+        return self.has_Boots(player)
+
+    def can_get_glitched_speed_lw(self, player):
+        rules = [self.has_Boots(player), any([self.has('Hookshot', player), self.has_sword(player)])]
+        if self.world.mode[player] == 'inverted':
+            rules.append(self.has_Pearl(player))
+        return all(rules)
+
+    def can_superbunny_mirror_with_sword(self, player):
+        return self.has_Mirror(player) and self.has_sword(player)
+
+    def can_get_glitched_speed_dw(self, player):
+        rules = [self.has_Boots(player), any([self.has('Hookshot', player), self.has_sword(player)])]
+        if self.world.mode[player] != 'inverted':
+            rules.append(self.has_Pearl(player))
+        return all(rules)
+
     def collect(self, item: Item, event=False, location=None):
         if location:
             self.locations_checked.add(location)
