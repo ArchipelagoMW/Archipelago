@@ -3,6 +3,11 @@ Helper functions to deliver entrance/exit/region sets to OWG rules.
 """
 
 
+# TODO: reevaluate these points:
+# why is this its own module?
+# why are these functions?
+# why is it named sets, when it was originally functions that return lists and had nothing to do with sets?
+
 def get_immediately_accessible_entrances():
     """
     Entrances that are available with no items at all.
