@@ -11,6 +11,7 @@ from Utils import int16_as_bytes
 from typing import Union
 
 class World(object):
+    debug_types = False
     player_names: list
     _region_cache: dict
     difficulty_requirements: dict
@@ -18,6 +19,15 @@ class World(object):
 
     def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive,
                  goal, algorithm, accessibility, shuffle_ganon, retro, custom, customitemarray, hints):
+        if self.debug_types:
+            import inspect
+            methods = inspect.getmembers(self, predicate=inspect.ismethod)
+
+            for name, method in methods:
+                if name.startswith("_debug_"):
+                    setattr(self, name[7:], method)
+                    logging.info(f"Set {self}.{name[7:]} to {method}")
+            self.get_location = self._debug_get_location
         self.players = players
         self.teams = 1
         self.shuffle = shuffle.copy()
@@ -127,7 +137,32 @@ class World(object):
                     return region
             raise RuntimeError('No such region %s for player %d' % (regionname, player))
 
+    def _debug_get_region(self, regionname: str, player: int) -> Region:
+        if type(regionname) != str:
+            raise TypeError(f"expected str, got {type(regionname)} instead")
+        try:
+            return self._region_cache[player][regionname]
+        except KeyError:
+            for region in self.regions:
+                if region.name == regionname and region.player == player:
+                    assert not region.world  # this should only happen before initialization
+                    return region
+            raise RuntimeError('No such region %s for player %d' % (regionname, player))
+
     def get_entrance(self, entrance: str, player: int) -> Entrance:
+        try:
+            return self._entrance_cache[(entrance, player)]
+        except KeyError:
+            for region in self.regions:
+                for exit in region.exits:
+                    if exit.name == entrance and exit.player == player:
+                        self._entrance_cache[(entrance, player)] = exit
+                        return exit
+            raise RuntimeError('No such entrance %s for player %d' % (entrance, player))
+
+    def _debug_get_entrance(self, entrance: str, player: int) -> Entrance:
+        if type(entrance) != str:
+            raise TypeError(f"expected str, got {type(entrance)} instead")
         try:
             return self._entrance_cache[(entrance, player)]
         except KeyError:
@@ -149,7 +184,28 @@ class World(object):
                         return r_location
         raise RuntimeError('No such location %s for player %d' % (location, player))
 
+    def _debug_get_location(self, location: str, player: int) -> Location:
+        if type(location) != str:
+            raise TypeError(f"expected str, got {type(location)} instead")
+        try:
+            return self._location_cache[(location, player)]
+        except KeyError:
+            for region in self.regions:
+                for r_location in region.locations:
+                    if r_location.name == location and r_location.player == player:
+                        self._location_cache[(location, player)] = r_location
+                        return r_location
+        raise RuntimeError('No such location %s for player %d' % (location, player))
+
     def get_dungeon(self, dungeonname: str, player: int) -> Dungeon:
+        for dungeon in self.dungeons:
+            if dungeon.name == dungeonname and dungeon.player == player:
+                return dungeon
+        raise RuntimeError('No such dungeon %s for player %d' % (dungeonname, player))
+
+    def _debug_get_dungeon(self, dungeonname: str, player: int) -> Dungeon:
+        if type(dungeonname) != str:
+            raise TypeError(f"expected str, got {type(dungeonname)} instead")
         for dungeon in self.dungeons:
             if dungeon.name == dungeonname and dungeon.player == player:
                 return dungeon
