@@ -26,7 +26,7 @@ class World(object):
             for name, method in methods:
                 if name.startswith("_debug_"):
                     setattr(self, name[7:], method)
-                    logging.info(f"Set {self}.{name[7:]} to {method}")
+                    logging.debug(f"Set {self}.{name[7:]} to {method}")
             self.get_location = self._debug_get_location
         self.players = players
         self.teams = 1

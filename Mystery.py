@@ -275,12 +275,13 @@ def roll_settings(weights):
         itemvalue = get_choice(item, inventoryweights)
         if item.startswith(('Progressive ', 'Small Key ', 'Rupee', 'Piece of Heart', 'Boss Heart Container',
                             'Sanctuary Heart Container', 'Arrow', 'Bombs ', 'Bomb ', 'Bottle')) and isinstance(
-                itemvalue, int):
+            itemvalue, int):
             for i in range(int(itemvalue)):
                 startitems.append(item)
         elif itemvalue:
             startitems.append(item)
-    if glitches_required in ['no_logic'] and 'Pegasus Boots' not in startitems:
+    glitch_boots = get_choice('glitch_boots', weights) if 'glitch_boots' in weights else True
+    if ret.logic != 'noglitches' and 'Pegasus Boots' not in startitems and glitch_boots:
         startitems.append('Pegasus Boots')
     ret.startinventory = ','.join(startitems)
 
