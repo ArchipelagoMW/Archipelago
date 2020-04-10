@@ -803,10 +803,10 @@ class Region(object):
 
         return True
 
-    def __str__(self):
-        return str(self.__unicode__())
+    def __repr__(self):
+        return self.__str__()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
 
 
@@ -839,10 +839,10 @@ class Entrance(object):
         self.vanilla = vanilla
         region.entrances.append(self)
 
-    def __str__(self):
-        return str(self.__unicode__())
+    def __repr__(self):
+        return self.__str__()
 
-    def __unicode__(self):
+    def __str__(self):
         world = self.parent_region.world if self.parent_region else None
         return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
 
@@ -877,10 +877,10 @@ class Dungeon(object):
     def is_dungeon_item(self, item):
         return item.player == self.player and item.name in [dungeon_item.name for dungeon_item in self.all_items]
 
-    def __str__(self):
-        return str(self.__unicode__())
+    def __repr__(self):
+        return self.__str__()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
 
 class Boss(object):
@@ -915,17 +915,17 @@ class Location(object):
 
     def can_fill(self, state, item, check_access=True) -> bool:
         return self.always_allow(state, item) or (self.parent_region.can_fill(item) and self.item_rule(item) and (
-                    not check_access or self.can_reach(state)))
+                not check_access or self.can_reach(state)))
 
     def can_reach(self, state) -> bool:
         if self.parent_region.can_reach(state) and self.access_rule(state):
             return True
         return False
 
-    def __str__(self):
-        return str(self.__unicode__())
+    def __repr__(self):
+        return self.__str__()
 
-    def __unicode__(self):
+    def __str__(self):
         world = self.parent_region.world if self.parent_region and self.parent_region.world else None
         return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
 
@@ -969,10 +969,10 @@ class Item(object):
     def compass(self) -> bool:
         return self.type == 'Compass'
 
-    def __str__(self):
-        return str(self.__unicode__())
+    def __repr__(self):
+        return self.__str__()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
 
 
