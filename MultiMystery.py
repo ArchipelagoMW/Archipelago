@@ -15,8 +15,11 @@ Configuration can be found in host.yaml
 import os
 import subprocess
 import sys
+import threading
+import concurrent.futures
 
-def feedback(text:str):
+
+def feedback(text: str):
     print(text)
     input("Press Enter to ignore and probably crash.")
 
@@ -133,38 +136,58 @@ if __name__ == "__main__":
                                   2: "7z",
                                   3: "bz2"}[zip_format]
 
+            ziplock = threading.Lock()
+
+
             def pack_file(file: str):
-                zf.write(os.path.join(output_path, file), file)
-                print(f"Packed {file} into zipfile {zipname}")
+                with ziplock:
+                    zf.write(os.path.join(output_path, file), file)
+                    print(f"Packed {file} into zipfile {zipname}")
+
 
             def remove_zipped_file(file: str):
                 os.remove(os.path.join(output_path, file))
                 print(f"Removed {file} which is now present in the zipfile")
 
+
             zipname = os.path.join(output_path, f"ER_{seedname}.{typical_zip_ending}")
 
             print(f"Creating zipfile {zipname}")
             ipv4 = (host if host else get_public_ipv4()) + ":" + str(port)
-            with zipfile.ZipFile(zipname, "w", compression=compression, compresslevel=9) as zf:
-                for file in os.listdir(output_path):
-                    if file.endswith(".sfc") and seedname in file:
-                        if zip_diffs:
-                            diff = os.path.split(create_patch_file(os.path.join(output_path, file), ipv4))[1]
-                            pack_file(diff)
-                            if zip_diffs == 2:
-                                remove_zipped_file(diff)
-                        if zip_roms:
-                            pack_file(file)
-                            if zip_roms == 2 and player_name.lower() not in file.lower():
-                                remove_zipped_file(file)
-                if zip_multidata and os.path.exists(os.path.join(output_path, multidataname)):
-                    pack_file(multidataname)
-                    if zip_multidata == 2:
-                        remove_zipped_file(multidataname)
-                if zip_spoiler and create_spoiler:
-                    pack_file(spoilername)
-                    if zip_spoiler == 2:
-                        remove_zipped_file(spoilername)
+
+
+            def _handle_file(file: str):
+                if zip_diffs:
+                    # the main reason for using threading, the patch is created using bsdiff4, which frees the GIL
+                    diff = os.path.split(create_patch_file(os.path.join(output_path, file), ipv4))[1]
+                    pack_file(diff)
+                    if zip_diffs == 2:
+                        remove_zipped_file(diff)
+                if zip_roms:
+                    pack_file(file)
+                    if zip_roms == 2 and player_name.lower() not in file.lower():
+                        remove_zipped_file(file)
+
+
+            with concurrent.futures.ThreadPoolExecutor() as pool:
+                futures = []
+                with zipfile.ZipFile(zipname, "w", compression=compression, compresslevel=9) as zf:
+                    for file in os.listdir(output_path):
+                        if file.endswith(".sfc") and seedname in file:
+                            futures.append(pool.submit(_handle_file, file))
+
+                    if zip_multidata and os.path.exists(os.path.join(output_path, multidataname)):
+                        pack_file(multidataname)
+                        if zip_multidata == 2:
+                            remove_zipped_file(multidataname)
+
+                    if zip_spoiler and create_spoiler:
+                        pack_file(spoilername)
+                        if zip_spoiler == 2:
+                            remove_zipped_file(spoilername)
+
+                    for future in futures:
+                        future.result()  # make sure we close the zip AFTER any packing is done
 
         if os.path.exists(os.path.join(output_path, multidataname)):
             if os.path.exists("BerserkerMultiServer.exe"):
