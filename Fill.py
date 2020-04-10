@@ -191,14 +191,13 @@ def fill_restrictive(world, base_state, locations, itempool, single_player_place
                 if world.accessibility[item_to_place.player] == 'none':
                     perform_access_check = not world.has_beaten_game(maximum_exploration_state, item_to_place.player) if single_player_placement else not has_beaten_game
 
-                spot_to_fill = None
                 for location in locations:
                     if (not single_player_placement or location.player == item_to_place.player)\
                             and location.can_fill(maximum_exploration_state, item_to_place, perform_access_check):
                         spot_to_fill = location
                         break
 
-                if spot_to_fill is None:
+                else:
                     # we filled all reachable spots. Maybe the game can be beaten anyway?
                     unplaced_items.insert(0, item_to_place)
                     if world.can_beat_game():

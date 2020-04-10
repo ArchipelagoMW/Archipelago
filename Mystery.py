@@ -140,8 +140,9 @@ def main():
 
 def get_weights(path):
     try:
-        parsed_url = urllib.parse.urlparse(path)
-        if all(parsed_url.scheme, parsed_url.netloc, parsed_url.path):
+        if urllib.parse.urlparse(path).scheme:
+            yaml = str(urllib.request.urlopen(path).read(), "utf-8")
+        else:
             with open(path, 'rb') as f:
                 yaml = str(f.read(), "utf-8")
     except Exception as e:
