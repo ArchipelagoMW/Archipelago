@@ -40,7 +40,6 @@ def set_rules(world, player):
     if world.logic[player] == 'noglitches':
         no_glitches_rules(world, player)
     elif world.logic[player] == 'owglitches':
-        logging.getLogger('').info('There is a chance OWG has bugged edge case rulesets, especially in inverted. Definitely file a report on GitHub if you see anything strange.')
         # Initially setting no_glitches_rules to set the baseline rules for some
         # entrances. The overworld_glitches_rules set is primarily additive.
         no_glitches_rules(world, player)
@@ -745,7 +744,7 @@ def add_conditional_lamps(world, player):
 
 def overworld_glitches_rules(world, player):
     # Spots that are immediately accessible.
-    for entrance in OWGSets.get_immediately_accessible_entrances(world, player):
+    for entrance in OWGSets.get_immediately_accessible_entrances():
         set_rule(world.get_entrance(entrance, player), lambda state: True)
 
     # Boots-accessible locations.
@@ -823,8 +822,6 @@ def standard_rules(world, player):
 
 
 def set_trock_key_rules(world, player):
-
-
     # First set all relevant locked doors to impassible.
     for entrance in ['Turtle Rock Dark Room Staircase', 'Turtle Rock (Chain Chomp Room) (North)', 'Turtle Rock (Chain Chomp Room) (South)', 'Turtle Rock Pokey Room']:
         set_rule(world.get_entrance(entrance, player), lambda state: False)
