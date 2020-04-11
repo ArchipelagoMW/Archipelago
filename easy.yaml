@@ -1,7 +1,10 @@
 #More general info here: https://docs.google.com/document/d/1r7qs1-MK7YbFf2d-mEUeTy2wHykIf1ALG9pLtVvUbSw/edit
 description: Easy/Open/Normal #please describe your options. Especially useful when you have multiple yamls for different occasions
 name: PleaseEnterNameHere #your name ingame, space and "_" gets replaced with a dash "-"
-glitches_required: none #there is also no_logic.
+glitches_required:
+  none: 1 # the "regular" glitch-free mode
+  overworld_glitches: 0 # puts overworld glitches like fake flipper, water-walk, link-state and boots clipping in logic
+  no_logic: 0 # no logic at all, careful with this in multiworld as it will create item loops that put other players into glitches required
 item_placement: basic #this is based on Entrance Randomizer, which does not (yet?) support advanced
 map_shuffle: #to shuffle dungeon maps into the outside world and other dungeons, as well as other player's worlds in multiworld
   on: 0
