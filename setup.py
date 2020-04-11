@@ -100,5 +100,7 @@ extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "QUsb2Snes", "meta.
 for data in extra_data:
     installfile(Path(data))
 
+os.makedirs(buildfolder / "Players", exist_ok=True)
+shutil.copyfile("easy.yaml", buildfolder / "Players" / "easy.yaml")
 
 manifest_creation()
