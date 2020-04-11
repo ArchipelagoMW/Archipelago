@@ -383,7 +383,7 @@ def set_up_shops(world, player):
         rss = world.get_region('Red Shield Shop', player).shop
         if not rss.locked:
             rss.add_inventory(2, 'Single Arrow', 80)
-        for shop in random.sample([s for s in world.shops if s.custom and not s.locked and s.region.player == player], 5):
+        for shop in random.sample([s for s in world.shops if s.custom and not s.locked and s.type == ShopType.Shop and s.region.player == player], 5):
             shop.locked = True
             shop.add_inventory(0, 'Single Arrow', 80)
             shop.add_inventory(1, 'Small Key (Universal)', 100)

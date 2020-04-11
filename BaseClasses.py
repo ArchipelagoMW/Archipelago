@@ -5,6 +5,7 @@ from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict, Counter
+
 from EntranceShuffle import door_addresses
 from Utils import int16_as_bytes
 from typing import Union
@@ -451,9 +452,9 @@ class CollectionState(object):
     def can_extend_magic(self, player: int, smallmagic: int = 16,
                          fullrefill: bool = False):  # This reflects the total magic Link has, not the total extra he has.
         basemagic = 8
-        if self.has('Quarter Magic', player):
+        if self.has('Magic Upgrade (1/4)', player):
             basemagic = 32
-        elif self.has('Half Magic', player):
+        elif self.has('Magic Upgrade (1/2)', player):
             basemagic = 16
         if self.can_buy_unlimited('Green Potion', player) or self.can_buy_unlimited('Blue Potion', player):
             if self.world.difficulty_adjustments[player] == 'hard' and not fullrefill:
@@ -470,14 +471,12 @@ class CollectionState(object):
                 or (self.has('Cane of Byrna', player) and (enemies < 6 or self.can_extend_magic(player)))
                 or self.can_shoot_arrows(player)
                 or self.has('Fire Rod', player)
-                )
+                or (self.has('Bombs (10)', player) and enemies < 6))
 
     def can_shoot_arrows(self, player: int) -> bool:
         if self.world.retro[player]:
-            # TODO: need to decide how we want to handle wooden arrows  longer-term (a can-buy-a check, or via dynamic shop location)
-            # FIXME: Should do something about hard+ ganon only silvers. For the moment, i believe they effective grant wooden, so we are safe
-            return self.has('Bow', player) and (
-                        self.has('Silver Arrows', player) or self.can_buy_unlimited('Single Arrow', player))
+            # TODO: Progressive and Non-Progressive silvers work differently (progressive is not usable until the shop arrow is bought)
+            return self.has('Bow', player) and self.can_buy_unlimited('Single Arrow', player)
         return self.has('Bow', player)
 
     def can_get_good_bee(self, player: int) -> bool:

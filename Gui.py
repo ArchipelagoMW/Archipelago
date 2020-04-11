@@ -196,7 +196,16 @@ def guiMain(args=None):
 
     def RomSelect():
         rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc")), ("All Files", "*")])
-        romVar.set(rom)
+        import Patch
+        try:
+            Patch.get_base_rom_bytes(rom)  # throws error on checksum fail
+        except Exception as e:
+            logging.exception(e)
+            messagebox.showerror(title="Error while reading ROM", message=str(e))
+        else:
+            romVar.set(rom)
+            romSelectButton['state'] = "disabled"
+            romSelectButton["text"] = "ROM verified"
     romSelectButton = Button(romDialogFrame, text='Select Rom', command=RomSelect)
 
     baseRomLabel.pack(side=LEFT)
@@ -464,6 +473,8 @@ def guiMain(args=None):
             elif type(v) is dict: # use same settings for every player
                 setattr(guiargs, k, {player: getattr(guiargs, k) for player in range(1, guiargs.multi + 1)})
         try:
+            if not guiargs.suppress_rom and not os.path.exists(guiargs.rom):
+                raise FileNotFoundError(f"Could not find specified rom file {guiargs.rom}")
             if guiargs.count is not None:
                 seed = guiargs.seed
                 for _ in range(guiargs.count):

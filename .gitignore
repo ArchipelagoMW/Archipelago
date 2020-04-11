@@ -1,6 +1,7 @@
 .idea
 .vscode
 *_Spoiler.txt
+*.bmbp
 *.pyc
 *.sfc
 *.wixobj
@@ -18,3 +19,4 @@ weights/
 /MultiMystery/
 /Players/
 /QUsb2Snes/
+/options.yaml

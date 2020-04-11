@@ -6,7 +6,6 @@ import logging
 import zlib
 import collections
 import typing
-import os
 
 import ModuleUpdate
 
@@ -38,6 +37,10 @@ class Client:
         self.send_index = 0
         self.tags = []
         self.version = [0, 0, 0]
+
+    @property
+    def wants_item_notification(self):
+        return self.auth and "FoundItems" in self.tags
 
 
 class Context:
@@ -135,7 +138,6 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[Utils.Hint]):
                 payload = texts
             asyncio.create_task(send_msgs(client.socket, payload))
 
-
 async def server(websocket, path, ctx: Context):
     client = Client(websocket)
     ctx.clients.append(client)
@@ -210,7 +212,7 @@ def get_connected_players_string(ctx: Context):
     return f'{len(auth_clients)} players of {len(ctx.player_names)} connected ' + text[:-1]
 
 
-def get_received_items(ctx: Context, team: int, player: int):
+def get_received_items(ctx: Context, team: int, player: int) -> typing.List[ReceivedItem]:
     return ctx.received_items.setdefault((team, player), [])
 
 
@@ -235,8 +237,6 @@ def forfeit_player(ctx: Context, team: int, slot: int):
 
 
 def register_location_checks(ctx: Context, team: int, slot: int, locations):
-    ctx.location_checks[team, slot] |= set(locations)
-
     found_items = False
     for location in locations:
         if (location, slot) in ctx.locations:
@@ -254,8 +254,17 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations):
                     recvd_items.append(new_item)
                     if slot != target_player:
                         broadcast_team(ctx, team, [['ItemSent', (slot, location, target_player, target_item)]])
-                    logging.info('(Team #%d) %s sent %s to %s (%s)' % (team+1, ctx.player_names[(team, slot)], get_item_name_from_id(target_item), ctx.player_names[(team, target_player)], get_location_name_from_address(location)))
+                    logging.info('(Team #%d) %s sent %s to %s (%s)' % (
+                    team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(target_item),
+                    ctx.player_names[(team, target_player)], get_location_name_from_address(location)))
                     found_items = True
+            elif target_player == slot:  # local pickup, notify clients of the pickup
+                if location not in ctx.location_checks[team, slot]:
+                    for client in ctx.clients:
+                        if client.team == team and client.wants_item_notification:
+                            asyncio.create_task(
+                                send_msgs(client.socket, [['ItemFound', (target_item, location, slot)]]))
+    ctx.location_checks[team, slot] |= set(locations)
     send_new_items(ctx)
 
     if found_items:
@@ -397,6 +406,12 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
 
         logging.info(f"{client.name} in team {client.team+1} scouted {', '.join([l[0] for l in locs])}")
         await send_msgs(client.socket, [['LocationInfo', [l[1:] for l in locs]]])
+
+    if cmd == 'UpdateTags':
+        if not args or type(args) is not list:
+            await send_msgs(client.socket, [['InvalidArguments', 'UpdateTags']])
+            return
+        client.tags = args
 
     if cmd == 'Say':
         if type(args) is not str or not args.isprintable():
@@ -605,26 +620,26 @@ async def forward_port(port: int):
     logging.info(f"Attempted to forward port {port} to {ip}, your local ip address.")
 
 
-async def main():
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument('--host', default=None)
-    parser.add_argument('--port', default=38281, type=int)
-    parser.add_argument('--password', default=None)
-    parser.add_argument('--multidata', default=None)
-    parser.add_argument('--savefile', default=None)
-    parser.add_argument('--disable_save', default=False, action='store_true')
-    parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
-    parser.add_argument('--location_check_points', default=1, type=int)
-    parser.add_argument('--hint_cost', default=1000, type=int)
-    parser.add_argument('--disable_item_cheat', default=False, action='store_true')
-    parser.add_argument('--port_forward', default=False, action='store_true')
+    defaults = Utils.get_options()["server_options"]
+    parser.add_argument('--host', default=defaults["host"])
+    parser.add_argument('--port', default=defaults["port"], type=int)
+    parser.add_argument('--password', default=defaults["password"])
+    parser.add_argument('--multidata', default=defaults["multidata"])
+    parser.add_argument('--savefile', default=defaults["savefile"])
+    parser.add_argument('--disable_save', default=defaults["disable_save"], action='store_true')
+    parser.add_argument('--loglevel', default=defaults["loglevel"],
+                        choices=['debug', 'info', 'warning', 'error', 'critical'])
+    parser.add_argument('--location_check_points', default=defaults["location_check_points"], type=int)
+    parser.add_argument('--hint_cost', default=defaults["hint_cost"], type=int)
+    parser.add_argument('--disable_item_cheat', default=defaults["disable_item_cheat"], action='store_true')
+    parser.add_argument('--port_forward', default=defaults["port_forward"], action='store_true')
     args = parser.parse_args()
+    return args
 
-    if os.path.exists('host.yaml'):
-        file_options = Utils.parse_yaml(open("host.yaml").read())["server_options"]
-        for key, value in file_options.items():
-            if value is not None:
-                setattr(args, key, value)
+
+async def main(args: argparse.Namespace):
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
     portforwardtask = None
     if args.port_forward:
@@ -655,7 +670,7 @@ async def main():
         logging.error('Failed to read multiworld data (%s)' % e)
         return
 
-    ip = Utils.get_public_ipv4()
+    ip = args.host if args.host else Utils.get_public_ipv4()
 
 
 
@@ -686,5 +701,5 @@ async def main():
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    loop.run_until_complete(main(parse_args()))
     loop.close()

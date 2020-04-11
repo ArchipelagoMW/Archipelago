@@ -1,5 +1,4 @@
 import os
-import re
 import subprocess
 import sys
 import typing
@@ -49,14 +48,17 @@ def local_path(path):
     if local_path.cached_path:
         return os.path.join(local_path.cached_path, path)
 
-    elif is_bundled() and hasattr(sys, "_MEIPASS"):
-        # we are running in a PyInstaller bundle
-        local_path.cached_path = sys._MEIPASS  # pylint: disable=protected-access,no-member
-
+    elif is_bundled():
+        if hasattr(sys, "_MEIPASS"):
+            # we are running in a PyInstaller bundle
+            local_path.cached_path = sys._MEIPASS  # pylint: disable=protected-access,no-member
+        else:
+            # cx_Freeze
+            local_path.cached_path = os.path.dirname(os.path.abspath(sys.argv[0]))
     else:
         # we are running in a normal Python environment
-        # or cx_Freeze
-        local_path.cached_path = os.path.dirname(os.path.abspath(sys.argv[0]))
+        import __main__
+        local_path.cached_path = os.path.dirname(os.path.abspath(__main__.__file__))
 
     return os.path.join(local_path.cached_path, path)
 
@@ -169,20 +171,16 @@ def get_public_ipv4() -> str:
     return ip
 
 
-_options = None
-
-
 def get_options() -> dict:
-    global _options
-    if _options:
-        return _options
-    else:
+    if not hasattr(get_options, "options"):
         locations = ("options.yaml", "host.yaml",
                      local_path("options.yaml"), local_path("host.yaml"))
 
         for location in locations:
             if os.path.exists(location):
                 with open(location) as f:
-                    _options = parse_yaml(f.read())
-                return _options
-        raise FileNotFoundError(f"Could not find {locations[0]} to load options.")
+                    get_options.options = parse_yaml(f.read())
+                break
+        else:
+            raise FileNotFoundError(f"Could not find {locations[1]} to load options.")
+    return get_options.options

@@ -1,26 +1,28 @@
 general_options:
   #File name of the v1.0 J rom
   rom_file: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
+  # set this to your (Q)Usb2Snes location if you want the MultiClient to attempt an auto start, does nothing if not found
+  qusb2snes: "QUsb2Snes\\QUsb2Snes.exe"
 #options for MultiServer
 #null means nothing, for the server this means to default the value
 #these overwrite command line arguments!
 server_options:
   host: null
-  port: null
+  port: 38281
   password: null
   multidata: null
   savefile: null
-  disable_save: null
-  loglevel: null
+  disable_save: false
+  loglevel: "info"
   #automatically forward the port that is used, then close that port after 24 hours
-  port_forward: null
+  port_forward: false
   #Disallow !getitem. Old /getitem cannot be blocked this way
-  disable_item_cheat: null
+  disable_item_cheat: false
   #Client hint system
   #points given to player for each acquired item
   location_check_points: 1
   #point cost to receive a hint via !hint for players
-  hint_cost: 50 #set to 0 if you want free hints
+  hint_cost: 1000 #set to 0 if you want free hints
 #options for MultiMystery.py
 multi_mystery_options:
 #teams, however, note that there is currently no way to supply names for teams 2+ through MultiMystery
@@ -50,7 +52,7 @@ multi_mystery_options:
   zip_spoiler: 0
   #include the multidata file in the zip, 2 -> delete the non-zipped one, which also means the server won't autostart
   zip_multidata: 0
-  #zip algorithm to use
+  #zip algorithm to use. zip is recommended for patch files, 7z is recommended for roms. All of them get the job done.
   zip_format: 1 # 1 -> zip, 2 -> 7z, 3->bz2
   #create roms flagged as race roms
   race: 0

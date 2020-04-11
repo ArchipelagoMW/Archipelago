@@ -120,6 +120,8 @@ def main():
         if path:
             try:
                 settings = settings_cache[path] if settings_cache[path] else roll_settings(weights_cache[path])
+                if settings.sprite is not None and not os.path.isfile(settings.sprite) and not get_sprite_from_name(settings.sprite):
+                    logging.warning(f"Warning: The chosen sprite, \"{settings.sprite}\", for yaml \"{path}\", does not exist.")
                 for k, v in vars(settings).items():
                     if v is not None:
                         getattr(erargs, k)[player] = v
@@ -271,7 +273,9 @@ def roll_settings(weights):
     startitems = []
     for item in inventoryweights.keys():
         itemvalue = get_choice(item, inventoryweights)
-        if item.startswith(('Progressive ', 'Small Key ', 'Rupee', 'Piece of Heart', 'Boss Heart Container', 'Sanctuary Heart Container', 'Arrow', 'Bombs ', 'Bomb ', 'Bottle')) and isinstance(itemvalue, int):
+        if item.startswith(('Progressive ', 'Small Key ', 'Rupee', 'Piece of Heart', 'Boss Heart Container',
+                            'Sanctuary Heart Container', 'Arrow', 'Bombs ', 'Bomb ', 'Bottle')) and isinstance(
+                itemvalue, int):
             for i in range(int(itemvalue)):
                 startitems.append(item)
         elif itemvalue:
@@ -280,11 +284,11 @@ def roll_settings(weights):
         startitems.append('Pegasus Boots')
     ret.startinventory = ','.join(startitems)
 
+    ret.remote_items = get_choice('remote_items', weights) if 'remote_items' in weights else False
+
     if 'rom' in weights:
         romweights = weights['rom']
         ret.sprite = get_choice('sprite', romweights)
-        if ret.sprite is not None and not os.path.isfile(ret.sprite) and not get_sprite_from_name(ret.sprite):
-            logging.Logger('').warning(f"Warning: The chosen sprite, \"{ret.sprite}\" does not exist.")
         ret.disablemusic = get_choice('disablemusic', romweights)
         ret.extendedmsu = get_choice('extendedmsu', romweights)
         ret.quickswap = get_choice('quickswap', romweights)

@@ -3,7 +3,7 @@ import yaml
 import os
 import lzma
 import hashlib
-from typing import Tuple
+from typing import Tuple, Optional
 
 import Utils
 from Rom import JAP10HASH, read_rom
@@ -11,11 +11,12 @@ from Rom import JAP10HASH, read_rom
 base_rom_bytes = None
 
 
-def get_base_rom_bytes() -> bytes:
+def get_base_rom_bytes(file_name: str = None) -> bytes:
     global base_rom_bytes
     if not base_rom_bytes:
         options = Utils.get_options()
-        file_name = options["general_options"]["rom_file"]
+        if not file_name:
+            file_name = options["general_options"]["rom_file"]
         if not os.path.exists(file_name):
             file_name = Utils.local_path(file_name)
         base_rom_bytes = bytes(read_rom(open(file_name, "rb")))
@@ -34,7 +35,7 @@ def generate_patch(rom: bytes, metadata=None) -> bytes:
     patch = bsdiff4.diff(get_base_rom_bytes(), rom)
     patch = yaml.dump({"meta": metadata,
                        "patch": patch})
-    return patch.encode()
+    return patch.encode(encoding="utf-8-sig")
 
 
 def create_patch_file(rom_file_to_patch: str, server: str = "") -> str:

@@ -27,7 +27,7 @@ def main(args, seed=None):
         os.makedirs(args.outputpath, exist_ok=True)
         output_path.cached_path = args.outputpath
 
-    start = time.process_time()
+    start = time.perf_counter()
 
     # initialize the world
     world = World(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty,
@@ -260,7 +260,7 @@ def main(args, seed=None):
         world.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))
 
     logger.info('Done. Enjoy.')
-    logger.debug('Total Time: %s', time.process_time() - start)
+    logger.debug('Total Time: %s', time.perf_counter() - start)
 
     return world
 

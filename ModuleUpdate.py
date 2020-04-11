@@ -31,6 +31,7 @@ def update():
                     traceback.print_exc()
                     input(f'Required python module {module} not found, press enter to install it')
                     update_command()
+                    return
                 else:
                     if hasattr(module, "__version__"):
                         module_version = module.__version__
@@ -42,6 +43,7 @@ def update():
                             input(f'Required python module {module} is outdated ({module_version}<{remote_version}),'
                                   ' press enter to upgrade it')
                             update_command()
+                            return
 
 
 if __name__ == "__main__":

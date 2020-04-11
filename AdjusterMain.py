@@ -7,7 +7,7 @@ from Rom import LocalRom, apply_rom_settings
 
 
 def adjust(args):
-    start = time.process_time()
+    start = time.perf_counter()
     logger = logging.getLogger('Adjuster')
     logger.info('Patching ROM.')
 
@@ -24,6 +24,6 @@ def adjust(args):
     rom.write_to_file(output_path(f'{os.path.basename(args.rom)[:-4]}_adjusted.sfc'))
 
     logger.info('Done. Enjoy.')
-    logger.debug('Total Time: %s', time.process_time() - start)
+    logger.debug('Total Time: %s', time.perf_counter() - start)
 
     return args
