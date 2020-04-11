@@ -50,7 +50,6 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 
 [Run]
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: IsVCRedist64BitNeeded; StatusMsg: "Installing VC++ redistributable..."
-; Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
 Type: dirifempty; Name: "{app}"
@@ -87,9 +86,23 @@ end;
 
 var ROMFilePage: TInputFileWizardPage;
 var R : longint;
+var rom: string;
 
 procedure InitializeWizard();
 begin
+  rom := FileSearch('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', WizardDirValue());
+  if Length(rom) > 0 then
+    begin
+      log('existing ROM found');
+      log(IntToStr(CompareStr(GetMD5OfFile(rom), '03a63945398191337e896e5771f77173')));
+      if CompareStr(GetMD5OfFile(rom), '03a63945398191337e896e5771f77173') = 0 then
+        begin
+        log('existing ROM verified');
+        exit;
+        end;
+      log('existing ROM failed verification');
+    end;
+  rom := ''
   ROMFilePage :=
     CreateInputFilePage(
       wpLicense,
@@ -105,10 +118,14 @@ end;
 
 function GetROMPath(Param: string): string;
 begin
-  if Assigned(RomFilePage) then    begin
+  if Length(rom) > 0 then
+    Result := rom
+  else if Assigned(RomFilePage) then
+    begin
       R := CompareStr(GetMD5OfFile(ROMFilePage.Values[0]), '03a63945398191337e896e5771f77173')
       if R <> 0 then
-        MsgBox('ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);  
+        MsgBox('ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+  
       Result := ROMFilePage.Values[0]
     end
   else

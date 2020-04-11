@@ -1002,6 +1002,9 @@ def patch_rom(world, rom, player, team, enemized):
                     'Big Key (Desert Palace)': (0x367, 0x10), 'Compass (Desert Palace)': (0x365, 0x10), 'Map (Desert Palace)': (0x369, 0x10),
                     'Big Key (Tower of Hera)': (0x366, 0x20), 'Compass (Tower of Hera)': (0x364, 0x20), 'Map (Tower of Hera)': (0x368, 0x20),
                     'Big Key (Escape)': (0x367, 0xC0), 'Compass (Escape)': (0x365, 0xC0), 'Map (Escape)': (0x369, 0xC0),
+                    # doors-specific items
+                    'Big Key (Agahnims Tower)': (0x367, 0x08), 'Compass (Agahnims Tower)': (0x365, 0x08), 'Map (Agahnims Tower)': (0x369, 0x08),
+                    # end of doors-specific items
                     'Big Key (Palace of Darkness)': (0x367, 0x02), 'Compass (Palace of Darkness)': (0x365, 0x02), 'Map (Palace of Darkness)': (0x369, 0x02),
                     'Big Key (Thieves Town)': (0x366, 0x10), 'Compass (Thieves Town)': (0x364, 0x10), 'Map (Thieves Town)': (0x368, 0x10),
                     'Big Key (Skull Woods)': (0x366, 0x80), 'Compass (Skull Woods)': (0x364, 0x80), 'Map (Skull Woods)': (0x368, 0x80),
