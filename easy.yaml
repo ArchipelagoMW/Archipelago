@@ -42,6 +42,10 @@ smallkey_shuffle: # Shuffle small keys into the world and other dungeons, includ
 bigkey_shuffle: # Shuffle big keys into the world and other dungeons, including other players' worlds
   on: 0
   off: 1
+dungeon_items: # alternative to the 4 shuffles above this, does nothing until the respective 4 shuffles are deleted
+  mc: 0 # shuffle Maps and Compass
+  none: 1 # shuffle none of the 4
+  mcsb: 0 # shuffle all of the 4, any combination of m, c, s and b will shuffle the respective item, or not if it's missing, so you can add more options here
 accessibility:
   items: 0 # Guarantees you will be able to acquire all items, but you may not be able to access all locations
   locations: 1 # Guarantees you will be able to access all locations, and therefore all items
@@ -134,6 +138,13 @@ beemizer: # Remove items from the global item pool and replace them with single 
   2: 0 # 60% of the non-essential item pool is replaced with bee traps, of which 20% could be single bees
   3: 0 # 100% of the non-essential item pool is replaced with bee traps, of which 50% could be single bees
   4: 0 # 100% of the non-essential item pool is replaced with bee traps
+timer:
+  none: 1
+  timed: 0
+  timed_ohko: 0
+  ohko: 0
+  timed_countdown: 0
+  display: 0
 rom:
   sprite: # Enter the name of your preferred sprite and weight it appropriately
     random: 0
