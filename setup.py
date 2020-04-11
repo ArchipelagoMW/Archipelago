@@ -103,4 +103,8 @@ for data in extra_data:
 os.makedirs(buildfolder / "Players", exist_ok=True)
 shutil.copyfile("easy.yaml", buildfolder / "Players" / "easy.yaml")
 
+qusb2sneslog = buildfolder / "QUsb2Snes" / "log.txt"
+if os.path.exists(qusb2sneslog):
+    os.remove(qusb2sneslog)
+
 manifest_creation()
