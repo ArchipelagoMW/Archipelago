@@ -46,6 +46,11 @@ dungeon_items: # alternative to the 4 shuffles above this, does nothing until th
   mc: 0 # shuffle Maps and Compass
   none: 1 # shuffle none of the 4
   mcsb: 0 # shuffle all of the 4, any combination of m, c, s and b will shuffle the respective item, or not if it's missing, so you can add more options here
+dungeon_counters:
+  on: 0 # always display amount of items checked in a dungeon
+  pickup: 0 # show when compass is picked up
+  default: 1 # show when compass is picked up if the compass itself is shuffled
+  off: 0 # never show item count in dungeons
 accessibility:
   items: 0 # Guarantees you will be able to acquire all items, but you may not be able to access all locations
   locations: 1 # Guarantees you will be able to access all locations, and therefore all items

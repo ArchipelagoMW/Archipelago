@@ -289,6 +289,14 @@ def guiMain(args=None):
     timerLabel = Label(timerFrame, text='Timer setting')
     timerLabel.pack(side=LEFT)
 
+    dungeonCounterFrame = Frame(drowDownFrame)
+    dungeonCounterVar = StringVar()
+    dungeonCounterVar.set('auto')
+    dungeonCounterOptionMenu = OptionMenu(dungeonCounterFrame, dungeonCounterVar, 'auto', 'off', 'on', 'on_compass_pickup')
+    dungeonCounterOptionMenu.pack(side=RIGHT)
+    dungeonCounterLabel = Label(dungeonCounterFrame, text='Dungeon Chest Counters')
+    dungeonCounterLabel.pack(side=LEFT)
+
     progressiveFrame = Frame(drowDownFrame)
     progressiveVar = StringVar()
     progressiveVar.set('on')
@@ -330,6 +338,7 @@ def guiMain(args=None):
     difficultyFrame.pack(expand=True, anchor=E)
     itemfunctionFrame.pack(expand=True, anchor=E)
     timerFrame.pack(expand=True, anchor=E)
+    dungeonCounterFrame.pack(expand=True, anchor=E)
     progressiveFrame.pack(expand=True, anchor=E)
     accessibilityFrame.pack(expand=True, anchor=E)
     algorithmFrame.pack(expand=True, anchor=E)
@@ -427,6 +436,13 @@ def guiMain(args=None):
         guiargs.timer = timerVar.get()
         if guiargs.timer == "none":
             guiargs.timer = False
+        guiargs.dungeon_counters = dungeonCounterVar.get()
+        if guiargs.dungeon_counters == "on_compass_pickup":
+            guiargs.dungeon_counters = "pickup"
+        elif guiargs.dungeon_counters == "on":
+            guiargs.dungeon_counters = True
+        elif guiargs.dungeon_counters == "off":
+            guiargs.dungeon_counters = False
         guiargs.progressive = progressiveVar.get()
         guiargs.accessibility = accessibilityVar.get()
         guiargs.algorithm = algorithmVar.get()

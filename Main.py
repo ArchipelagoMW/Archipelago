@@ -57,6 +57,7 @@ def main(args, seed=None):
     world.timer = args.timer.copy()
     world.shufflepots = args.shufflepots.copy()
     world.progressive = args.progressive.copy()
+    world.dungeon_counters = args.dungeon_counters.copy()
     world.extendedmsu = args.extendedmsu.copy()
 
     world.rom_seeds = {player: random.randint(0, 999999999) for player in range(1, world.players + 1)}
