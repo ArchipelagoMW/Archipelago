@@ -349,12 +349,13 @@ async def snes_connect(ctx : Context, address):
                 if len(seen_problems) == 1:
                     # this is the first problem. Let's try launching QUsb2snes if it isn't already running
                     qusb2snes_path = Utils.get_options()["general_options"]["qusb2snes"]
+
                     import os
+                    if not os.path.isfile(qusb2snes_path):
+                        qusb2snes_path = Utils.local_path(qusb2snes_path)
+
                     if os.path.isfile(qusb2snes_path):
                         logging.info(f"Attempting to start {qusb2snes_path}")
-                    else:
-                        qusb2snes_path = Utils.local_path(qusb2snes_path)
-                    if os.path.isfile(qusb2snes_path):
                         import subprocess
                         subprocess.Popen(qusb2snes_path, cwd=os.path.dirname(qusb2snes_path))
                     else:
