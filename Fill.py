@@ -161,7 +161,7 @@ def distribute_items_staleness(world):
     logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s', [item.name for item in itempool], [location.name for location in fill_locations])
 
 
-def fill_restrictive(world, base_state, locations, itempool, single_player_placement = False):
+def fill_restrictive(world, base_state: CollectionState, locations, itempool, single_player_placement=False):
     def sweep_from_pool():
         new_state = base_state.copy()
         for item in itempool:
@@ -190,7 +190,6 @@ def fill_restrictive(world, base_state, locations, itempool, single_player_place
                 perform_access_check = True
                 if world.accessibility[item_to_place.player] == 'none':
                     perform_access_check = not world.has_beaten_game(maximum_exploration_state, item_to_place.player) if single_player_placement else not has_beaten_game
-
                 for location in locations:
                     if (not single_player_placement or location.player == item_to_place.player)\
                             and location.can_fill(maximum_exploration_state, item_to_place, perform_access_check):
@@ -200,9 +199,9 @@ def fill_restrictive(world, base_state, locations, itempool, single_player_place
                 else:
                     # we filled all reachable spots. Maybe the game can be beaten anyway?
                     unplaced_items.insert(0, item_to_place)
-                    if world.can_beat_game():
-                        if world.accessibility[item_to_place.player] != 'none':
-                            logging.getLogger('').warning('Not all items placed. Game beatable anyway. (Could not place %s)' % item_to_place)
+                    if world.accessibility[item_to_place.player] != 'none' and world.can_beat_game():
+                        logging.getLogger('').warning(
+                            'Not all items placed. Game beatable anyway. (Could not place %s)' % item_to_place)
                         continue
                     raise FillError('No more spots to place %s' % item_to_place)
 

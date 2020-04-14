@@ -738,16 +738,6 @@ class CollectionState(object):
                 self.reachable_regions[item.player] = set()
                 self.stale[item.player] = True
 
-    def __getattr__(self, item):
-        if item.startswith('can_reach_'):
-            return self.can_reach(item[10])
-        #elif item.startswith('has_'):
-        #    return self.has(item[4])
-        if item == '__len__':
-            return
-
-        raise RuntimeError('Cannot parse %s.' % item)
-
 @unique
 class RegionType(Enum):
     LightWorld = 1
