@@ -367,7 +367,8 @@ def fill_prizes(world, attempts=15):
                 random.shuffle(prize_locs)
                 fill_restrictive(world, all_state, prize_locs, prizepool, True)
             except FillError as e:
-                logging.getLogger('').info("Failed to place dungeon prizes (%s). Will retry %s more times", e, attempts - attempt - 1)
+                logging.getLogger('').exception("Failed to place dungeon prizes (%s). Will retry %s more times", e,
+                                                attempts - attempt - 1)
                 for location in empty_crystal_locations:
                     location.item = None
                 continue

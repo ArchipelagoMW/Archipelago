@@ -1582,4 +1582,5 @@ def get_image_for_sprite(sprite):
     return image.zoom(2)
 
 if __name__ == '__main__':
+    logging.basicConfig(format='%(message)s', level=logging.INFO)
     guiMain()
