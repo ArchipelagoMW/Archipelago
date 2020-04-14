@@ -407,6 +407,9 @@ class ClientMessageProcessor(CommandProcessor):
     def output(self, text):
         notify_client(self.client, text)
 
+    def default(self, raw: str):
+        pass  # default is client sending just text
+
     def _cmd_players(self):
         """Get information about connected and missing players"""
         notify_all(self.ctx, get_connected_players_string(self.ctx))
