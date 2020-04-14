@@ -35,11 +35,9 @@ def parse_arguments(argv, no_defaults=False):
                              No Glitches:
                              Minor Glitches: May require Fake Flippers, Bunny Revival
                                              and Dark Room Navigation.
-                             Overworld Glitches: May require overworld glitches. Starts with
-                                             boots.
+                             Overworld Glitches: May require overworld glitches.
                              No Logic: Distribute items without regard for
-                                             item requirements. Starts with
-                                             boots
+                                             item requirements.
                              ''')
     parser.add_argument('--mode', default=defval('open'), const='open', nargs='?', choices=['standard', 'open', 'inverted'],
                         help='''\
