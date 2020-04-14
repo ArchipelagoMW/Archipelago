@@ -114,6 +114,20 @@ def parse_arguments(argv, no_defaults=False):
                                               Timed mode. If time runs out, you lose (but can
                                               still keep playing).
                              ''')
+    parser.add_argument('--dungeon_counters', default=defval('default'), const='default', nargs='?', choices=['default', 'on', 'pickup', 'off'],
+                        help='''\
+                             Select dungeon counter display settings. (default: %(default)s)
+                             (Note, since timer takes up the same space on the hud as dungeon
+                             counters, timer settings override dungeon counter settings.)
+                             Default:       Dungeon counters only show when the compass is
+                                            picked up, or otherwise sent, only when compass
+                                            shuffle is turned on.
+                             On:            Dungeon counters are always displayed.
+                             Pickup:        Dungeon counters are shown when the compass is
+                                            picked up, even when compass shuffle is turned
+                                            off.
+                             Off:           Dungeon counters are never shown.
+                             ''')
     parser.add_argument('--progressive', default=defval('on'), const='normal', nargs='?', choices=['on', 'off', 'random'],
                         help='''\
                              Select progressive equipment setting. Affects available itempool. (default: %(default)s)
@@ -288,6 +302,10 @@ def parse_arguments(argv, no_defaults=False):
     ret = parser.parse_args(argv)
     if ret.timer == "none":
         ret.timer = False
+    if ret.dungeon_counters == 'on':
+        ret.dungeon_counters = True
+    elif ret.dungeon_counters == 'off':
+        ret.dungeon_counters = False
     if ret.keysanity:
         ret.mapshuffle, ret.compassshuffle, ret.keyshuffle, ret.bigkeyshuffle = [True] * 4
 
@@ -303,7 +321,7 @@ def parse_arguments(argv, no_defaults=False):
                          'shufflebosses', 'shuffleenemies', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
                          'heartbeep',
-                         'remote_items', 'progressive', 'extendedmsu']:
+                         'remote_items', 'progressive', 'extendedmsu', 'dungeon_counters']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})

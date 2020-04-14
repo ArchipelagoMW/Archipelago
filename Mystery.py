@@ -268,6 +268,8 @@ def roll_settings(weights):
                  'timed_countdown': 'timed-countdown',
                  'display': 'display'}[get_choice('timer', weights)] if 'timer' in weights.keys() else False
 
+    ret.dungeon_counters = get_choice('dungeon_counters', weights) if 'dungeon_counters' in weights else 'default'
+
     ret.progressive = convert_to_on_off(get_choice('progressive', weights)) if "progressive" in weights else 'on'
     inventoryweights = weights.get('startinventory', {})
     startitems = []
