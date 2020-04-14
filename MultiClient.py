@@ -2,10 +2,10 @@ import argparse
 import asyncio
 import json
 import logging
-import typing
 import urllib.parse
 import atexit
 
+from Utils import get_item_name_from_id, get_location_name_from_address, ReceivedItem
 
 exit_func = atexit.register(input, "Press enter to close.")
 
@@ -18,15 +18,9 @@ import websockets
 import prompt_toolkit
 from prompt_toolkit.patch_stdout import patch_stdout
 
-import Items
 import Regions
 import Utils
 
-
-class ReceivedItem(typing.NamedTuple):
-    item: int
-    location: int
-    player: int
 
 class Context:
     def __init__(self, snes_address, server_address, password, found_items):
@@ -609,7 +603,7 @@ async def server_loop(ctx : Context, address = None):
 
     logging.info('Connecting to multiworld server at %s' % address)
     try:
-        ctx.socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None)
+        ctx.socket = await websockets.connect(address, port=port, ping_timeout=60, ping_interval=30)
         logging.info('Connected')
         ctx.server_address = address
 
@@ -778,19 +772,82 @@ async def console_input(ctx : Context):
     ctx.input_requests += 1
     return await ctx.input_queue.get()
 
+
 async def disconnect(ctx: Context):
     if ctx.socket is not None and not ctx.socket.closed:
         await ctx.socket.close()
     if ctx.server_task is not None:
         await ctx.server_task
 
+
 async def connect(ctx: Context, address=None):
     await disconnect(ctx)
     ctx.server_task = asyncio.create_task(server_loop(ctx, address))
 
 
-async def console_loop(ctx : Context):
+from MultiServer import CommandProcessor
+
+
+class ClientCommandProcessor(CommandProcessor):
+    def __init__(self, ctx: Context):
+        self.ctx = ctx
+
+    def _cmd_exit(self):
+        """Close connections and client"""
+        self.ctx.exit_event.set()
+
+    def _cmd_snes(self, snes_address: str = ""):
+        """Connect to a snes. Optionally include network address of a snes to connect to, otherwise show available devices"""
+        self.ctx.snes_reconnect_address = None
+        asyncio.create_task(snes_connect(self.ctx, snes_address if snes_address else self.ctx.snes_address))
+
+    def _cmd_snes_close(self):
+        """Close connection to a currently connected snes"""
+        self.ctx.snes_reconnect_address = None
+        if self.ctx.snes_socket is not None and not self.ctx.snes_socket.closed:
+            asyncio.create_task(self.ctx.snes_socket.close())
+
+    def _cmd_connect(self, address: str = ""):
+        """Connect to a MultiWorld Server"""
+        self.ctx.server_address = None
+        asyncio.create_task(connect(self.ctx, address if address else None))
+
+    def _cmd_disconnect(self):
+        """Disconnect from a MultiWorld Server"""
+        self.ctx.server_address = None
+        asyncio.create_task(disconnect(self.ctx))
+
+    def _cmd_received(self):
+        """List all received items"""
+        logging.info('Received items:')
+        for index, item in enumerate(self.ctx.items_received, 1):
+            logging.info('%s from %s (%s) (%d/%d in list)' % (
+                color(get_item_name_from_id(item.item), 'red', 'bold'),
+                color(self.ctx.player_names[item.player], 'yellow'),
+                get_location_name_from_address(item.location), index, len(self.ctx.items_received)))
+
+    def _cmd_missing(self):
+        """List all missing location checks"""
+        for location in [k for k, v in Regions.location_table.items() if type(v[0]) is int]:
+            if location not in self.ctx.locations_checked:
+                logging.info('Missing: ' + location)
+
+    def _cmd_show_items(self, toggle: str = ""):
+        """Toggle showing of items received across the team"""
+        if toggle:
+            self.ctx.found_items = toggle.lower() in {"1", "true", "on"}
+        else:
+            self.ctx.found_items = not self.ctx.found_items
+        logging.info(f"Set showing team items to {self.ctx.found_items}")
+        asyncio.create_task(send_msgs(self.ctx.socket, [['UpdateTags', get_tags(self.ctx)]]))
+
+    def default(self, raw: str):
+        asyncio.create_task(send_msgs(self.ctx.socket, [['Say', raw]]))
+
+
+async def console_loop(ctx: Context):
     session = prompt_toolkit.PromptSession()
+    commandprocessor = ClientCommandProcessor(ctx)
     while not ctx.exit_event.is_set():
         try:
             with patch_stdout():
@@ -804,67 +861,11 @@ async def console_loop(ctx : Context):
             command = input_text.split()
             if not command:
                 continue
-
-            if command[0][:1] != '/':
-                asyncio.create_task(send_msgs(ctx.socket, [['Say', input_text]]))
-                continue
-
-            precommand = command[0][1:]
-
-            if precommand == 'exit':
-                ctx.exit_event.set()
-
-            elif precommand == 'snes':
-                ctx.snes_reconnect_address = None
-                asyncio.create_task(snes_connect(ctx, command[1] if len(command) > 1 else ctx.snes_address))
-
-            elif precommand in {'snes_close', 'snes_quit'}:
-                ctx.snes_reconnect_address = None
-                if ctx.snes_socket is not None and not ctx.snes_socket.closed:
-                    await ctx.snes_socket.close()
-
-            elif precommand in {'connect', 'reconnect'}:
-                ctx.server_address = None
-                asyncio.create_task(connect(ctx, command[1] if len(command) > 1 else None))
-
-            elif precommand == 'disconnect':
-                ctx.server_address = None
-                asyncio.create_task(disconnect(ctx))
-
-
-            elif precommand == 'received':
-                logging.info('Received items:')
-                for index, item in enumerate(ctx.items_received, 1):
-                    logging.info('%s from %s (%s) (%d/%d in list)' % (
-                        color(get_item_name_from_id(item.item), 'red', 'bold'),
-                        color(ctx.player_names[item.player], 'yellow'),
-                        get_location_name_from_address(item.location), index, len(ctx.items_received)))
-
-            elif precommand == 'missing':
-                for location in [k for k, v in Regions.location_table.items() if type(v[0]) is int]:
-                    if location not in ctx.locations_checked:
-                        logging.info('Missing: ' + location)
-
-            elif precommand == "show_items":
-                if len(command) > 1:
-                    ctx.found_items = command[1].lower() in {"1", "true", "on"}
-                else:
-                    ctx.found_items = not ctx.found_items
-                logging.info(f"Set showing team items to {ctx.found_items}")
-                asyncio.create_task(send_msgs(ctx.socket, [['UpdateTags', get_tags(ctx)]]))
-
-            elif precommand == "license":
-                with open("LICENSE") as f:
-                    logging.info(f.read())
+            commandprocessor(input_text)
         except Exception as e:
             logging.exception(e)
         await snes_flush_writes(ctx)
 
-def get_item_name_from_id(code):
-    return Items.lookup_id_to_name.get(code, f'Unknown item (ID:{code})')
-
-def get_location_name_from_address(address):
-    return Regions.lookup_id_to_name.get(address, f'Unknown location (ID:{address})')
 
 async def track_locations(ctx : Context, roomid, roomdata):
     new_locations = []
