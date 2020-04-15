@@ -481,6 +481,9 @@ def forbid_overworld_glitches(world, player):
     if world.mode[player] != 'inverted':
         for exit in OWGSets.get_mirror_clip_spots_dw():
             set_rule(world.get_entrance(exit, player), lambda state: False)
+    else:
+        for exit in OWGSets.get_mirror_clip_spots_lw():
+            set_rule(world.get_entrance(exit, player), lambda state: False)
 
 
 def inverted_rules(world, player):
