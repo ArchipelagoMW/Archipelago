@@ -65,6 +65,13 @@ def set_rules(world, player):
     if not world.swamp_patch_required[player]:
         add_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has_Mirror(player))
 
+    ganons_tower = world.get_entrance('Inverted Ganons Tower' if world.mode[player] == 'inverted' else 'Ganons Tower', player)
+    set_rule(ganons_tower, lambda state: False) # This is a safety for the TR function below to not require GT entrance in its key logic.
+
+    set_trock_key_rules(world, player)
+
+    set_rule(ganons_tower, lambda state: state.has_crystals(world.crystals_needed_for_gt[player], player))
+
     if world.mode[player] != 'inverted':
         set_bunny_rules(world, player)
     else:
@@ -457,14 +464,9 @@ def default_rules(world, player):
     set_rule(world.get_entrance('Turtle Rock', player), lambda state: state.has_Pearl(player) and state.has_sword(player) and state.has_turtle_rock_medallion(player) and state.can_reach('Turtle Rock (Top)', 'Region', player))  # sword required to cast magic (!)
 
     set_rule(world.get_entrance('Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.open_pyramid[player])
-    set_rule(world.get_entrance('Ganons Tower', player), lambda state: False) # This is a safety for the TR function below to not require GT entrance in its key logic.
 
     if world.swords[player] == 'swordless':
         swordless_rules(world, player)
-
-    set_trock_key_rules(world, player)
-
-    set_rule(world.get_entrance('Ganons Tower', player), lambda state: state.has_crystals(world.crystals_needed_for_gt[player], player))
 
 
 def forbid_overworld_glitches(world, player):
@@ -476,6 +478,9 @@ def forbid_overworld_glitches(world, player):
         set_rule(world.get_entrance(exit, player), lambda state: False)
     if world.mode[player] != 'inverted':
         for exit in OWGSets.get_mirror_clip_spots_dw():
+            set_rule(world.get_entrance(exit, player), lambda state: False)
+    else:
+        for exit in OWGSets.get_mirror_clip_spots_lw():
             set_rule(world.get_entrance(exit, player), lambda state: False)
 
 
@@ -632,14 +637,9 @@ def inverted_rules(world, player):
     set_rule(world.get_entrance('Hammer Peg Area Flute', player), lambda state: state.can_flute(player))
     
     set_rule(world.get_entrance('Inverted Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.open_pyramid[player])
-    set_rule(world.get_entrance('Inverted Ganons Tower', player), lambda state: False) # This is a safety for the TR function below to not require GT entrance in its key logic.
 
     if world.swords[player] == 'swordless':
         swordless_rules(world, player)
-
-    set_trock_key_rules(world, player)
-
-    set_rule(world.get_entrance('Inverted Ganons Tower', player), lambda state: state.has_crystals(world.crystals_needed_for_gt[player], player))
 
 def no_glitches_rules(world, player):
     if world.mode[player] != 'inverted':
