@@ -184,3 +184,19 @@ def get_options() -> dict:
         else:
             raise FileNotFoundError(f"Could not find {locations[1]} to load options.")
     return get_options.options
+
+
+def get_item_name_from_id(code):
+    import Items
+    return Items.lookup_id_to_name.get(code, f'Unknown item (ID:{code})')
+
+
+def get_location_name_from_address(address):
+    import Regions
+    return Regions.lookup_id_to_name.get(address, f'Unknown location (ID:{address})')
+
+
+class ReceivedItem(typing.NamedTuple):
+    item: int
+    location: int
+    player: int

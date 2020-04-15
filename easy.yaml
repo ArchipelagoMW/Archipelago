@@ -160,7 +160,7 @@ rom:
   sprite: # Enter the name of your preferred sprite and weight it appropriately
     random: 0
     randomonhit: 0
-    link: 1
+    link: 1 # to add other sprites: open the gui/Creator, go to adjust, select a sprite and write down the name the gui calls it
   disablemusic: off # If "on", all in-game music will be disabled
   extendedmsu: on # If "on", V31 extended MSU support will be available
   quickswap: # Enable switching items by pressing the L+R shoulder buttons

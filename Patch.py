@@ -3,6 +3,10 @@ import yaml
 import os
 import lzma
 import hashlib
+import threading
+import concurrent.futures
+import zipfile
+import sys
 from typing import Tuple, Optional
 
 import Utils
@@ -11,7 +15,7 @@ from Rom import JAP10HASH, read_rom
 base_rom_bytes = None
 
 
-def get_base_rom_bytes(file_name: str = None) -> bytes:
+def get_base_rom_bytes(file_name: str = "") -> bytes:
     global base_rom_bytes
     if not base_rom_bytes:
         options = Utils.get_options()
@@ -29,7 +33,7 @@ def get_base_rom_bytes(file_name: str = None) -> bytes:
     return base_rom_bytes
 
 
-def generate_patch(rom: bytes, metadata=None) -> bytes:
+def generate_patch(rom: bytes, metadata: Optional[dict] = None) -> bytes:
     if metadata is None:
         metadata = {}
     patch = bsdiff4.diff(get_base_rom_bytes(), rom)
@@ -47,7 +51,7 @@ def create_patch_file(rom_file_to_patch: str, server: str = "") -> str:
     return target
 
 
-def create_rom_file(patch_file) -> Tuple[dict, str]:
+def create_rom_file(patch_file: str) -> Tuple[dict, str]:
     data = Utils.parse_yaml(lzma.decompress(load_bytes(patch_file)).decode("utf-8-sig"))
     patched_data = bsdiff4.patch(get_base_rom_bytes(), data["patch"])
     target = os.path.splitext(patch_file)[0] + ".sfc"
@@ -56,7 +60,14 @@ def create_rom_file(patch_file) -> Tuple[dict, str]:
     return data["meta"], target
 
 
-def load_bytes(path: str):
+def update_patch_data(patch_data: bytes, server: str = "") -> bytes:
+    data = Utils.parse_yaml(lzma.decompress(patch_data).decode("utf-8-sig"))
+    data["meta"]["server"] = server
+    bytes = generate_patch(data["patch"], data["meta"])
+    return lzma.compress(bytes)
+
+
+def load_bytes(path: str) -> bytes:
     with open(path, "rb") as f:
         return f.read()
 
@@ -66,11 +77,51 @@ def write_lzma(data: bytes, path: str):
         f.write(data)
 
 if __name__ == "__main__":
-    ipv4 = Utils.get_public_ipv4()
-    import sys
+    host = Utils.get_public_ipv4()
+    options = Utils.get_options()['server_options']
+    if options['host']:
+        host = options['host']
 
+    address = f"{host}:{options['port']}"
+    ziplock = threading.Lock()
+    print(f"Host for patches to be created is {address}")
+
+    Processed = False
     for rom in sys.argv:
-        if rom.endswith(".sfc"):
-            print(f"Creating patch for {rom}")
-            result = create_patch_file(rom, ipv4)
-            print(f"Created patch {result}")
+        try:
+            if rom.endswith(".sfc"):
+                print(f"Creating patch for {rom}")
+                result = create_patch_file(rom, address)
+                print(f"Created patch {result}")
+            elif rom.endswith(".bmbp"):
+                print(f"Applying patch {rom}")
+                data, target = create_rom_file(rom)
+                print(f"Created rom {target}.")
+                if 'server' in data:
+                    print(f"Host is {data['server']}")
+            elif rom.endswith(".zip"):
+                print(f"Updating host in patch files contained in {rom}")
+                def _handle_zip_file_entry(zfinfo : zipfile.ZipInfo, server: str):
+                    data = zfr.read(zfinfo)
+                    if zfinfo.filename.endswith(".bmbp"):
+                        data = update_patch_data(data, server)
+                    with ziplock:
+                        zfw.writestr(zfinfo, data)
+                    return zfinfo.filename
+
+                with concurrent.futures.ThreadPoolExecutor() as pool:
+                    futures = []
+                    with zipfile.ZipFile(rom, "r") as zfr:
+                        updated_zip = os.path.splitext(rom)[0] + "_updated.zip"
+                        with zipfile.ZipFile(updated_zip, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as zfw:
+                            for zfname in zfr.namelist():
+                                futures.append(pool.submit(_handle_zip_file_entry, zfr.getinfo(zfname), address))
+                            for future in futures:
+                                print(f"File {future.result()} added to {os.path.split(updated_zip)[1]}")
+
+        except:
+            import traceback
+            traceback.print_exc()
+
+    if Processed:
+        input("Press enter to close.")
