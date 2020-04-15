@@ -426,8 +426,9 @@ class ClientMessageProcessor(CommandProcessor):
             timer = 10
         asyncio.create_task(countdown(self.ctx, timer))
 
-    def _cmd_getitem(self, item_name: str):
+    def _cmd_getitem(self, *item_name: str):
         """Cheat in an item"""
+        item_name = " ".join(item_name)
         if self.ctx.item_cheat:
             item_name, usable, response = get_intended_text(item_name, Items.item_table.keys())
             if usable:
@@ -440,12 +441,12 @@ class ClientMessageProcessor(CommandProcessor):
         else:
             self.output("Cheating is disabled.")
 
-    def _cmd_hint(self, item_or_location: str = ""):
+    def _cmd_hint(self, *item_or_location: str):
         """Use !hint {item_name/location_name}, for example !hint Lamp or !hint Link's House. """
         points_available = self.ctx.location_check_points * len(
             self.ctx.location_checks[self.client.team, self.client.slot]) - \
                            self.ctx.hint_cost * self.ctx.hints_used[self.client.team, self.client.slot]
-
+        item_or_location = " ".join(item_or_location)
         if not item_or_location:
             self.output(f"A hint costs {self.ctx.hint_cost} points. "
                         f"You have {points_available} points.")
