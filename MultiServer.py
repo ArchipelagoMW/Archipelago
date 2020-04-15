@@ -638,9 +638,10 @@ class ServerCommandProcessor(CommandProcessor):
         asyncio.create_task(self.ctx.server.ws_server._close())
         self.ctx.running = False
 
-    def _cmd_password(self, new_password: str = ""):
+    def _cmd_password(self, *new_password: str):
         """Set the server password. Leave the password text empty to remove the password"""
-        set_password(self.ctx, new_password if new_password else None)
+
+        set_password(self.ctx, " ".join(new_password) if new_password else None)
 
     def _cmd_forfeit(self, player_name: str):
         """Send out the remaining items from a player's game to their intended recipients"""
