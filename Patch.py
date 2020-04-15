@@ -6,6 +6,7 @@ import hashlib
 import threading
 import concurrent.futures
 import zipfile
+import sys
 from typing import Tuple, Optional
 
 import Utils
@@ -14,7 +15,7 @@ from Rom import JAP10HASH, read_rom
 base_rom_bytes = None
 
 
-def get_base_rom_bytes(file_name: str = None) -> bytes:
+def get_base_rom_bytes(file_name: str = "") -> bytes:
     global base_rom_bytes
     if not base_rom_bytes:
         options = Utils.get_options()
@@ -32,7 +33,7 @@ def get_base_rom_bytes(file_name: str = None) -> bytes:
     return base_rom_bytes
 
 
-def generate_patch(rom: bytes, metadata=None) -> bytes:
+def generate_patch(rom: bytes, metadata: Optional[dict] = None) -> bytes:
     if metadata is None:
         metadata = {}
     patch = bsdiff4.diff(get_base_rom_bytes(), rom)
@@ -50,7 +51,7 @@ def create_patch_file(rom_file_to_patch: str, server: str = "") -> str:
     return target
 
 
-def create_rom_file(patch_file) -> Tuple[dict, str]:
+def create_rom_file(patch_file: str) -> Tuple[dict, str]:
     data = Utils.parse_yaml(lzma.decompress(load_bytes(patch_file)).decode("utf-8-sig"))
     patched_data = bsdiff4.patch(get_base_rom_bytes(), data["patch"])
     target = os.path.splitext(patch_file)[0] + ".sfc"
@@ -66,7 +67,7 @@ def update_patch_data(patch_data: bytes, server: str = "") -> bytes:
     return lzma.compress(bytes)
 
 
-def load_bytes(path: str):
+def load_bytes(path: str) -> bytes:
     with open(path, "rb") as f:
         return f.read()
 
@@ -77,27 +78,20 @@ def write_lzma(data: bytes, path: str):
 
 if __name__ == "__main__":
     host = Utils.get_public_ipv4()
-    try:
-        options = Utils.get_options()['server_options']
-        if options['host']:
-            ipv4 = options['host'] + ":" + str(options['port'])
-        else:
-            ipv4 = host + ":" + options['port']
-    except:
-        ipv4 = host + ":38281"
+    options = Utils.get_options()['server_options']
+    if options['host']:
+        host = options['host']
 
+    address = f"{host}:{options['port']}"
     ziplock = threading.Lock()
-
-    print(f"Host for patches to be created is {ipv4}")
-    import sys
+    print(f"Host for patches to be created is {address}")
 
     Processed = False
     for rom in sys.argv:
-        Processed |= rom.endswith(".sfc") or rom.endswith(".bmbp") or rom.endswith(".zip")
         try:
             if rom.endswith(".sfc"):
                 print(f"Creating patch for {rom}")
-                result = create_patch_file(rom, ipv4)
+                result = create_patch_file(rom, address)
                 print(f"Created patch {result}")
             elif rom.endswith(".bmbp"):
                 print(f"Applying patch {rom}")
@@ -121,7 +115,7 @@ if __name__ == "__main__":
                         updated_zip = os.path.splitext(rom)[0] + "_updated.zip"
                         with zipfile.ZipFile(updated_zip, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as zfw:
                             for zfname in zfr.namelist():
-                                futures.append(pool.submit(_handle_zip_file_entry, zfr.getinfo(zfname), ipv4))
+                                futures.append(pool.submit(_handle_zip_file_entry, zfr.getinfo(zfname), address))
                             for future in futures:
                                 print(f"File {future.result()} added to {os.path.split(updated_zip)[1]}")
 
