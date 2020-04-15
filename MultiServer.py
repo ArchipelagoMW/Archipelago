@@ -173,7 +173,7 @@ async def on_client_connected(ctx: Context, client: Client):
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ['Berserker'],
-        'version': [1, 2, 0]
+        'version': [1, 3, 0]
     }]])
 
 async def on_client_disconnected(ctx: Context, client: Client):
@@ -354,16 +354,19 @@ class CommandProcessor(metaclass=CommandMeta):
     def __call__(self, raw: str):
         if not raw:
             return
-        command = raw.split()
-        basecommand = command[0]
-        if basecommand[0] == self.marker:
-            method = self.commands.get(basecommand[1:].lower(), None)
-            if not method:
-                self._error_unknown_command(basecommand[1:])
+        try:
+            command = raw.split()
+            basecommand = command[0]
+            if basecommand[0] == self.marker:
+                method = self.commands.get(basecommand[1:].lower(), None)
+                if not method:
+                    self._error_unknown_command(basecommand[1:])
+                else:
+                    method(self, *command[1:])
             else:
-                method(self, *command[1:])
-        else:
-            self.default(raw)
+                self.default(raw)
+        except Exception as e:
+            self._error_parsing_command(e)
 
     def get_help_text(self) -> str:
         s = ""
@@ -394,6 +397,9 @@ class CommandProcessor(metaclass=CommandMeta):
 
     def _error_unknown_command(self, raw: str):
         self.output(f"Could not find command {raw}. Known commands: {', '.join(self.commands)}")
+
+    def _error_parsing_command(self, exception: Exception):
+        self.output(str(exception))
 
 
 class ClientMessageProcessor(CommandProcessor):
