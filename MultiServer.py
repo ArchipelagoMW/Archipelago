@@ -376,9 +376,13 @@ class CommandProcessor(metaclass=CommandMeta):
             for argname, parameter in spec.items():
                 if argname == "self":
                     continue
-                argtext += argname
+
                 if isinstance(parameter.default, str):
-                    argtext += "=" + parameter.default
+                    if not parameter.default:
+                        argname = f"[{argname}]"
+                    else:
+                        argname += "=" + parameter.default
+                argtext += argname
                 argtext += " "
             s += f"{self.marker}{command} {argtext}\n    {method.__doc__}\n"
         return s
