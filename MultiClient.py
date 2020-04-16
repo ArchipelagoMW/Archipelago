@@ -675,8 +675,8 @@ async def process_server_cmd(ctx : Context, cmd, args):
             ctx.password = None
             await server_auth(ctx, True)
         if 'InvalidRom' in args:
-            ctx.snes_state = SNES_DISCONNECTED
-            ctx.rom = None
+            if ctx.snes_socket is not None and not ctx.snes_socket.closed:
+                asyncio.create_task(ctx.snes_socket.close())
             raise Exception(
                 'Invalid ROM detected, please verify that you have loaded the correct rom and reconnect your snes (/snes)')
         if 'SlotAlreadyTaken' in args:
