@@ -33,13 +33,17 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
     return base_rom_bytes
 
 
+def generate_yaml(patch: bytes, metadata: Optional[dict] = None) -> bytes:
+    patch = yaml.dump({"meta": metadata,
+                       "patch": patch})
+    return patch.encode(encoding="utf-8-sig")
+
+
 def generate_patch(rom: bytes, metadata: Optional[dict] = None) -> bytes:
     if metadata is None:
         metadata = {}
     patch = bsdiff4.diff(get_base_rom_bytes(), rom)
-    patch = yaml.dump({"meta": metadata,
-                       "patch": patch})
-    return patch.encode(encoding="utf-8-sig")
+    return generate_yaml(patch, metadata)
 
 
 def create_patch_file(rom_file_to_patch: str, server: str = "") -> str:
@@ -63,7 +67,7 @@ def create_rom_file(patch_file: str) -> Tuple[dict, str]:
 def update_patch_data(patch_data: bytes, server: str = "") -> bytes:
     data = Utils.parse_yaml(lzma.decompress(patch_data).decode("utf-8-sig"))
     data["meta"]["server"] = server
-    bytes = generate_patch(data["patch"], data["meta"])
+    bytes = generate_yaml(data["patch"], data["meta"])
     return lzma.compress(bytes)
 
 
@@ -76,6 +80,7 @@ def write_lzma(data: bytes, path: str):
     with lzma.LZMAFile(path, 'wb') as f:
         f.write(data)
 
+
 if __name__ == "__main__":
     host = Utils.get_public_ipv4()
     options = Utils.get_options()['server_options']
@@ -86,7 +91,6 @@ if __name__ == "__main__":
     ziplock = threading.Lock()
     print(f"Host for patches to be created is {address}")
 
-    Processed = False
     for rom in sys.argv:
         try:
             if rom.endswith(".sfc"):
@@ -101,6 +105,7 @@ if __name__ == "__main__":
                     print(f"Host is {data['server']}")
             elif rom.endswith(".zip"):
                 print(f"Updating host in patch files contained in {rom}")
+
                 def _handle_zip_file_entry(zfinfo : zipfile.ZipInfo, server: str):
                     data = zfr.read(zfinfo)
                     if zfinfo.filename.endswith(".bmbp"):
@@ -122,6 +127,4 @@ if __name__ == "__main__":
         except:
             import traceback
             traceback.print_exc()
-
-    if Processed:
-        input("Press enter to close.")
+            input("Press enter to close.")
