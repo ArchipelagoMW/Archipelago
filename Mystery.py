@@ -282,9 +282,7 @@ def roll_settings(weights):
                 startitems.append(item)
         elif itemvalue:
             startitems.append(item)
-    glitch_boots = get_choice('glitch_boots', weights) if 'glitch_boots' in weights else True
-    if ret.logic != 'noglitches' and 'Pegasus Boots' not in startitems and glitch_boots:
-        startitems.append('Pegasus Boots')
+    ret.glitch_boots = get_choice('glitch_boots', weights) if 'glitch_boots' in weights else True
     ret.startinventory = ','.join(startitems)
 
     ret.remote_items = get_choice('remote_items', weights) if 'remote_items' in weights else False

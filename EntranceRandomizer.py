@@ -292,12 +292,15 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--create_diff', default=defval(False), action='store_true', help='''\
     create a binary patch file from which the randomized rom can be recreated using MultiClient.
     Does not work with jsonout.''')
+    parser.add_argument('--disable_glitch_boots', default=defval(False), action='store_true', help='''\
+    turns off starting with Pegasus Boots in glitched modes.''')
 
     if multiargs.multi:
         for player in range(1, multiargs.multi + 1):
             parser.add_argument(f'--p{player}', default=defval(''), help=argparse.SUPPRESS)
 
     ret = parser.parse_args(argv)
+    ret.glitch_boots = not ret.disable_glitch_boots
     if ret.timer == "none":
         ret.timer = False
     if ret.dungeon_counters == 'on':
@@ -319,7 +322,7 @@ def parse_arguments(argv, no_defaults=False):
                          'shufflebosses', 'shuffleenemies', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
                          'heartbeep',
-                         'remote_items', 'progressive', 'extendedmsu', 'dungeon_counters']:
+                         'remote_items', 'progressive', 'extendedmsu', 'dungeon_counters', 'glitch_boots']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})
