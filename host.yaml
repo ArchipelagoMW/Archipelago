@@ -23,6 +23,8 @@ server_options:
   location_check_points: 1
   #point cost to receive a hint via !hint for players
   hint_cost: 1000 #set to 0 if you want free hints
+  #disable client forfeit
+  disable_client_forfeit: false
 #options for MultiMystery.py
 multi_mystery_options:
 #teams, however, note that there is currently no way to supply names for teams 2+ through MultiMystery

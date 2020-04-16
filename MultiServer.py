@@ -49,7 +49,7 @@ class Client:
 
 class Context:
     def __init__(self, host: str, port: int, password: str, location_check_points: int, hint_cost: int,
-                 item_cheat: bool):
+                 item_cheat: bool, forfeit_allowed):
         self.data_filename = None
         self.save_filename = None
         self.disable_save = False
@@ -69,6 +69,7 @@ class Context:
         self.location_check_points = location_check_points
         self.hints_used = collections.defaultdict(int)
         self.hints_sent = collections.defaultdict(set)
+        self.forfeit_allowed = forfeit_allowed
         self.item_cheat = item_cheat
         self.running = True
         self.commandprocessor = ServerCommandProcessor(self)
@@ -426,7 +427,11 @@ class ClientMessageProcessor(CommandProcessor):
 
     def _cmd_forfeit(self):
         """Surrender and send your remaining items out to their recipients"""
-        forfeit_player(self.ctx, self.client.team, self.client.slot)
+        if self.ctx.forfeit_allowed:
+            forfeit_player(self.ctx, self.client.team, self.client.slot)
+        else:
+            self.output(
+                "Sorry, client forfeiting has been disabled on this server. You can ask the server admin for a /forfeit")
 
     def _cmd_countdown(self, seconds: str = "10"):
         """Start a countdown in seconds"""
@@ -749,6 +754,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--hint_cost', default=defaults["hint_cost"], type=int)
     parser.add_argument('--disable_item_cheat', default=defaults["disable_item_cheat"], action='store_true')
     parser.add_argument('--port_forward', default=defaults["port_forward"], action='store_true')
+    parser.add_argument('--disable_client_forfeit', default=defaults["disable_client_forfeit"], action='store_true')
     args = parser.parse_args()
     return args
 
@@ -760,7 +766,7 @@ async def main(args: argparse.Namespace):
         portforwardtask = asyncio.create_task(forward_port(args.port))
 
     ctx = Context(args.host, args.port, args.password, args.location_check_points, args.hint_cost,
-                  not args.disable_item_cheat)
+                  not args.disable_item_cheat, not args.disable_client_forfeit)
 
     ctx.data_filename = args.multidata
 
