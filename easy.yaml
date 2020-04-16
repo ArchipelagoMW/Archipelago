@@ -150,6 +150,12 @@ timer:
   ohko: 0
   timed_countdown: 0
   display: 0
+glitch_boots:
+  on: 1 # enables that you start with Pegasus Boots in any glitched logic mode
+  off: 0
+remote_items: # Warning: currently broken. Stores all your items on the server, effectively sending them to you as if another player picked it up
+  on: 0 # intended for racing, as the item information is missing from the ROM
+  off: 1
 rom:
   sprite: # Enter the name of your preferred sprite and weight it appropriately
     random: 0

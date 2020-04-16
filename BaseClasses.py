@@ -11,6 +11,7 @@ from Utils import int16_as_bytes
 from typing import Union
 
 class World(object):
+    debug_types = False
     player_names: list
     _region_cache: dict
     difficulty_requirements: dict
@@ -18,6 +19,15 @@ class World(object):
 
     def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive,
                  goal, algorithm, accessibility, shuffle_ganon, retro, custom, customitemarray, hints):
+        if self.debug_types:
+            import inspect
+            methods = inspect.getmembers(self, predicate=inspect.ismethod)
+
+            for name, method in methods:
+                if name.startswith("_debug_"):
+                    setattr(self, name[7:], method)
+                    logging.debug(f"Set {self}.{name[7:]} to {method}")
+            self.get_location = self._debug_get_location
         self.players = players
         self.teams = 1
         self.shuffle = shuffle.copy()
@@ -127,7 +137,32 @@ class World(object):
                     return region
             raise RuntimeError('No such region %s for player %d' % (regionname, player))
 
+    def _debug_get_region(self, regionname: str, player: int) -> Region:
+        if type(regionname) != str:
+            raise TypeError(f"expected str, got {type(regionname)} instead")
+        try:
+            return self._region_cache[player][regionname]
+        except KeyError:
+            for region in self.regions:
+                if region.name == regionname and region.player == player:
+                    assert not region.world  # this should only happen before initialization
+                    return region
+            raise RuntimeError('No such region %s for player %d' % (regionname, player))
+
     def get_entrance(self, entrance: str, player: int) -> Entrance:
+        try:
+            return self._entrance_cache[(entrance, player)]
+        except KeyError:
+            for region in self.regions:
+                for exit in region.exits:
+                    if exit.name == entrance and exit.player == player:
+                        self._entrance_cache[(entrance, player)] = exit
+                        return exit
+            raise RuntimeError('No such entrance %s for player %d' % (entrance, player))
+
+    def _debug_get_entrance(self, entrance: str, player: int) -> Entrance:
+        if type(entrance) != str:
+            raise TypeError(f"expected str, got {type(entrance)} instead")
         try:
             return self._entrance_cache[(entrance, player)]
         except KeyError:
@@ -149,7 +184,28 @@ class World(object):
                         return r_location
         raise RuntimeError('No such location %s for player %d' % (location, player))
 
+    def _debug_get_location(self, location: str, player: int) -> Location:
+        if type(location) != str:
+            raise TypeError(f"expected str, got {type(location)} instead")
+        try:
+            return self._location_cache[(location, player)]
+        except KeyError:
+            for region in self.regions:
+                for r_location in region.locations:
+                    if r_location.name == location and r_location.player == player:
+                        self._location_cache[(location, player)] = r_location
+                        return r_location
+        raise RuntimeError('No such location %s for player %d' % (location, player))
+
     def get_dungeon(self, dungeonname: str, player: int) -> Dungeon:
+        for dungeon in self.dungeons:
+            if dungeon.name == dungeonname and dungeon.player == player:
+                return dungeon
+        raise RuntimeError('No such dungeon %s for player %d' % (dungeonname, player))
+
+    def _debug_get_dungeon(self, dungeonname: str, player: int) -> Dungeon:
+        if type(dungeonname) != str:
+            raise TypeError(f"expected str, got {type(dungeonname)} instead")
         for dungeon in self.dungeons:
             if dungeon.name == dungeonname and dungeon.player == player:
                 return dungeon
@@ -544,6 +600,31 @@ class CollectionState(object):
     def has_turtle_rock_medallion(self, player: int) -> bool:
         return self.has(self.world.required_medallions[player][1], player)
 
+    def can_boots_clip_lw(self, player):
+        if self.world.mode[player] == 'inverted':
+            return self.has_Boots(player) and self.has_Pearl(player)
+        return self.has_Boots(player)
+
+    def can_boots_clip_dw(self, player):
+        if self.world.mode[player] != 'inverted':
+            return self.has_Boots(player) and self.has_Pearl(player)
+        return self.has_Boots(player)
+
+    def can_get_glitched_speed_lw(self, player):
+        rules = [self.has_Boots(player), any([self.has('Hookshot', player), self.has_sword(player)])]
+        if self.world.mode[player] == 'inverted':
+            rules.append(self.has_Pearl(player))
+        return all(rules)
+
+    def can_superbunny_mirror_with_sword(self, player):
+        return self.has_Mirror(player) and self.has_sword(player)
+
+    def can_get_glitched_speed_dw(self, player):
+        rules = [self.has_Boots(player), any([self.has('Hookshot', player), self.has_sword(player)])]
+        if self.world.mode[player] != 'inverted':
+            rules.append(self.has_Pearl(player))
+        return all(rules)
+
     def collect(self, item: Item, event=False, location=None):
         if location:
             self.locations_checked.add(location)
@@ -657,16 +738,6 @@ class CollectionState(object):
                 self.reachable_regions[item.player] = set()
                 self.stale[item.player] = True
 
-    def __getattr__(self, item):
-        if item.startswith('can_reach_'):
-            return self.can_reach(item[10])
-        #elif item.startswith('has_'):
-        #    return self.has(item[4])
-        if item == '__len__':
-            return
-
-        raise RuntimeError('Cannot parse %s.' % item)
-
 @unique
 class RegionType(Enum):
     LightWorld = 1
@@ -722,10 +793,10 @@ class Region(object):
 
         return True
 
-    def __str__(self):
-        return str(self.__unicode__())
+    def __repr__(self):
+        return self.__str__()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
 
 
@@ -758,10 +829,10 @@ class Entrance(object):
         self.vanilla = vanilla
         region.entrances.append(self)
 
-    def __str__(self):
-        return str(self.__unicode__())
+    def __repr__(self):
+        return self.__str__()
 
-    def __unicode__(self):
+    def __str__(self):
         world = self.parent_region.world if self.parent_region else None
         return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
 
@@ -796,10 +867,10 @@ class Dungeon(object):
     def is_dungeon_item(self, item):
         return item.player == self.player and item.name in [dungeon_item.name for dungeon_item in self.all_items]
 
-    def __str__(self):
-        return str(self.__unicode__())
+    def __repr__(self):
+        return self.__str__()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
 
 class Boss(object):
@@ -834,17 +905,17 @@ class Location(object):
 
     def can_fill(self, state, item, check_access=True) -> bool:
         return self.always_allow(state, item) or (self.parent_region.can_fill(item) and self.item_rule(item) and (
-                    not check_access or self.can_reach(state)))
+                not check_access or self.can_reach(state)))
 
     def can_reach(self, state) -> bool:
         if self.parent_region.can_reach(state) and self.access_rule(state):
             return True
         return False
 
-    def __str__(self):
-        return str(self.__unicode__())
+    def __repr__(self):
+        return self.__str__()
 
-    def __unicode__(self):
+    def __str__(self):
         world = self.parent_region.world if self.parent_region and self.parent_region.world else None
         return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
 
@@ -888,10 +959,10 @@ class Item(object):
     def compass(self) -> bool:
         return self.type == 'Compass'
 
-    def __str__(self):
-        return str(self.__unicode__())
+    def __repr__(self):
+        return self.__str__()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
 
 

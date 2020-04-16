@@ -649,7 +649,7 @@ async def process_server_cmd(ctx : Context, cmd, args):
         logging.info('Room Information:')
         logging.info('--------------------------------')
         version = args.get("version", "unknown Bonta Protocol")
-        if not type(version) == 'str':
+        if isinstance(version, str):
             version = ".".join(str(item) for item in version)
         logging.info(f'Server protocol version: {version}')
         if "tags" in args:
