@@ -83,19 +83,18 @@ class LocalRom(object):
             self.patch_base_rom(extendedmsu)
             self.orig_buffer = self.buffer.copy()
 
-    def write_byte(self, address, value):
+    def write_byte(self, address: int, value):
         self.buffer[address] = value
 
-    def write_bytes(self, startaddress, values):
-        for i, value in enumerate(values):
-            self.write_byte(startaddress + i, value)
+    def write_bytes(self, startaddress: int, values):
+        self.buffer[startaddress:startaddress + len(values)] = values
 
     def write_to_file(self, file):
         with open(file, 'wb') as outfile:
             outfile.write(self.buffer)
 
     @staticmethod
-    def fromJsonRom(rom, file, rom_size = 0x200000, extendedmsu=False):
+    def fromJsonRom(rom, file, rom_size=0x200000, extendedmsu=False):
         ret = LocalRom(file, extendedmsu, True, rom.name, rom.hash)
         ret.buffer.extend(bytearray([0x00]) * (rom_size - len(ret.buffer)))
         for address, values in rom.patches.items():
@@ -150,10 +149,11 @@ def write_int32s(rom, startaddress, values):
     for i, value in enumerate(values):
         write_int32(rom, startaddress + (i * 4), value)
 
-def read_rom(stream):
+
+def read_rom(stream) -> bytearray:
     "Reads rom into bytearray and strips off any smc header"
     buffer = bytearray(stream.read())
-    if len(buffer)%0x400 == 0x200:
+    if len(buffer) % 0x400 == 0x200:
         buffer = buffer[0x200:]
     return buffer
 
