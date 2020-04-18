@@ -18,7 +18,7 @@ from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
 from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, flood_items, balance_multiworld_progression
 from ItemList import generate_itempool, difficulties, fill_prizes
-from Utils import output_path, parse_player_names
+from Utils import output_path, parse_player_names, get_options
 
 __version__ = '0.6.3-pre'
 
@@ -244,7 +244,8 @@ def main(args, seed=None):
                                               "locations": [((location.address, location.player),
                                                              (location.item.code, location.item.player))
                                                             for location in world.get_filled_locations() if
-                                                            type(location.address) is int]
+                                                            type(location.address) is int],
+                                              "server_options": get_options()["server_options"]
                                               }).encode("utf-8"))
         if args.jsonout:
             jsonout["multidata"] = list(multidata)
