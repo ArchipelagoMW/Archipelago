@@ -624,8 +624,9 @@ class ServerCommandProcessor(CommandProcessor):
     def default(self, raw: str):
         notify_all(self.ctx, '[Server]: ' + raw)
 
-    def _cmd_kick(self, player_name: str):
+    def _cmd_kick(self, *player_name: str):
         """Kick specified player from the server"""
+        player_name = " ".join(player_name)
         for client in self.ctx.clients:
             if client.auth and client.name.lower() == player_name.lower() and client.socket and not client.socket.closed:
                 asyncio.create_task(client.socket.close())
