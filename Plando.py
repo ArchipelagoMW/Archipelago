@@ -24,7 +24,7 @@ def main(args):
 
     # initialize the world
     world = World(1, 'vanilla', 'noglitches', 'standard', 'normal', 'none', 'on', 'ganon', 'freshness', False, False, False, False, False, False, None, False)
-    world.player_names[1].append("Player 1")
+    world.player_names[1].append("Player1")
     logger = logging.getLogger('')
 
     hasher = hashlib.md5()

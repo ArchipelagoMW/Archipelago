@@ -204,7 +204,7 @@ def main(args, seed=None):
                 outfilepname += f'_P{player}'
             if world.players > 1 or world.teams > 1:
                 outfilepname += f"_{world.player_names[player][team].replace(' ', '_')}" if world.player_names[player][
-                                                                                                team] != 'Player %d' % player else ''
+                                                                                                team] != 'Player%d' % player else ''
             outfilesuffix = ('_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (world.logic[player], world.difficulty[player],
                                                                   world.difficulty_adjustments[player],
                                                                   world.mode[player], world.goal[player],

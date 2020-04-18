@@ -35,7 +35,7 @@ def parse_player_names(names, players, teams):
         team = [n[:16] for n in names[:players]]
         # where does the 16 character limit come from?
         while len(team) != players:
-            team.append(f"Player {len(team) + 1}")
+            team.append(f"Player{len(team) + 1}")
         ret.append(team)
 
         names = names[players:]
