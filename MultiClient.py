@@ -581,10 +581,7 @@ async def snes_flush_writes(ctx : Context):
 async def send_msgs(websocket, msgs):
     if not websocket or not websocket.open or websocket.closed:
         return
-    try:
-        await websocket.send(json.dumps(msgs))
-    except websockets.ConnectionClosed:
-        pass
+    await websocket.send(json.dumps(msgs))
 
 async def server_loop(ctx : Context, address = None):
     if ctx.socket is not None:
