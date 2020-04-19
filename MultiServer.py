@@ -99,10 +99,7 @@ class Context:
 async def send_msgs(websocket, msgs):
     if not websocket or not websocket.open or websocket.closed:
         return
-    try:
-        await websocket.send(json.dumps(msgs))
-    except websockets.ConnectionClosed:
-        pass
+    await websocket.send(json.dumps(msgs))
 
 def broadcast_all(ctx : Context, msgs):
     for client in ctx.clients:
