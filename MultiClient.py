@@ -603,7 +603,7 @@ async def server_loop(ctx : Context, address = None):
 
     logging.info('Connecting to multiworld server at %s' % address)
     try:
-        ctx.socket = await websockets.connect(address, port=port, ping_timeout=0, ping_interval=0)
+        ctx.socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None)
         logging.info('Connected')
         ctx.server_address = address
 
