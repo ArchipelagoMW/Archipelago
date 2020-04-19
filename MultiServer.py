@@ -378,14 +378,14 @@ class CommandProcessor(metaclass=CommandMeta):
                 if not method:
                     self._error_unknown_command(basecommand[1:])
                 else:
-                    if getattr(method, "raw_text", False):
+                    if getattr(method, "raw_text", False):  # method is requesting unprocessed text data
                         arg = raw.split(maxsplit=1)
                         if len(arg) > 1:
-                            method(self, arg[1])
+                            method(self, arg[1])  # argument text was found, so pass it along
                         else:
-                            method(self)
+                            method(self)  # argument may be optional, try running without args
                     else:
-                        method(self, *command[1:])
+                        method(self, *command[1:])  # pass each word as argument
             else:
                 self.default(raw)
         except Exception as e:
