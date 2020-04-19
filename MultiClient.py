@@ -603,7 +603,7 @@ async def server_loop(ctx : Context, address = None):
 
     logging.info('Connecting to multiworld server at %s' % address)
     try:
-        ctx.socket = await websockets.connect(address, port=port, ping_timeout=60, ping_interval=30)
+        ctx.socket = await websockets.connect(address, port=port, ping_timeout=0, ping_interval=0)
         logging.info('Connected')
         ctx.server_address = address
 
@@ -858,8 +858,7 @@ async def console_loop(ctx: Context):
                 ctx.input_queue.put_nowait(input_text)
                 continue
 
-            command = input_text.split()
-            if not command:
+            if not input_text:
                 continue
             commandprocessor(input_text)
         except Exception as e:

@@ -345,6 +345,11 @@ class CommandMeta(type):
         return super(CommandMeta, cls).__new__(cls, name, bases, attrs)
 
 
+def mark_raw(function):
+    function.raw_text = True
+    return function
+
+
 class CommandProcessor(metaclass=CommandMeta):
     commands: typing.Dict[str, typing.Callable]
     marker = "/"
@@ -363,7 +368,10 @@ class CommandProcessor(metaclass=CommandMeta):
                 if not method:
                     self._error_unknown_command(basecommand[1:])
                 else:
-                    method(self, *command[1:])
+                    if getattr(method, "raw_text", False):
+                        method(self, raw.split(maxsplit=1)[1])
+                    else:
+                        method(self, *command[1:])
             else:
                 self.default(raw)
         except Exception as e:
@@ -441,9 +449,9 @@ class ClientMessageProcessor(CommandProcessor):
             timer = 10
         asyncio.create_task(countdown(self.ctx, timer))
 
-    def _cmd_getitem(self, *item_name: str):
+    @mark_raw
+    def _cmd_getitem(self, item_name: str):
         """Cheat in an item"""
-        item_name = " ".join(item_name)
         if self.ctx.item_cheat:
             item_name, usable, response = get_intended_text(item_name, Items.item_table.keys())
             if usable:
@@ -456,12 +464,12 @@ class ClientMessageProcessor(CommandProcessor):
         else:
             self.output("Cheating is disabled.")
 
-    def _cmd_hint(self, *item_or_location: str):
+    @mark_raw
+    def _cmd_hint(self, item_or_location: str):
         """Use !hint {item_name/location_name}, for example !hint Lamp or !hint Link's House. """
         points_available = self.ctx.location_check_points * len(
             self.ctx.location_checks[self.client.team, self.client.slot]) - \
                            self.ctx.hint_cost * self.ctx.hints_used[self.client.team, self.client.slot]
-        item_or_location = " ".join(item_or_location)
         if not item_or_location:
             self.output(f"A hint costs {self.ctx.hint_cost} points. "
                         f"You have {points_available} points.")
@@ -624,9 +632,9 @@ class ServerCommandProcessor(CommandProcessor):
     def default(self, raw: str):
         notify_all(self.ctx, '[Server]: ' + raw)
 
-    def _cmd_kick(self, *player_name: str):
+    @mark_raw
+    def _cmd_kick(self, player_name: str):
         """Kick specified player from the server"""
-        player_name = " ".join(player_name)
         for client in self.ctx.clients:
             if client.auth and client.name.lower() == player_name.lower() and client.socket and not client.socket.closed:
                 asyncio.create_task(client.socket.close())
@@ -644,11 +652,12 @@ class ServerCommandProcessor(CommandProcessor):
         asyncio.create_task(self.ctx.server.ws_server._close())
         self.ctx.running = False
 
-    def _cmd_password(self, *new_password: str):
+    @mark_raw
+    def _cmd_password(self, new_password: str):
         """Set the server password. Leave the password text empty to remove the password"""
+        set_password(self.ctx, new_password if new_password else None)
 
-        set_password(self.ctx, " ".join(new_password) if new_password else None)
-
+    @mark_raw
     def _cmd_forfeit(self, player_name: str):
         """Send out the remaining items from a player's game to their intended recipients"""
         seeked_player = player_name.lower()
