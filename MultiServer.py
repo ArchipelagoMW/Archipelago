@@ -379,7 +379,11 @@ class CommandProcessor(metaclass=CommandMeta):
                     self._error_unknown_command(basecommand[1:])
                 else:
                     if getattr(method, "raw_text", False):
-                        method(self, raw.split(maxsplit=1)[1])
+                        arg = raw.split(maxsplit=1)
+                        if len(arg) > 1:
+                            method(self, arg[1])
+                        else:
+                            method(self)
                     else:
                         method(self, *command[1:])
             else:
@@ -475,7 +479,7 @@ class ClientMessageProcessor(CommandProcessor):
             self.output("Cheating is disabled.")
 
     @mark_raw
-    def _cmd_hint(self, item_or_location: str):
+    def _cmd_hint(self, item_or_location: str = ""):
         """Use !hint {item_name/location_name}, for example !hint Lamp or !hint Link's House. """
         points_available = self.ctx.location_check_points * len(
             self.ctx.location_checks[self.client.team, self.client.slot]) - \
