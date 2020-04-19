@@ -210,7 +210,7 @@ async def countdown(ctx: Context, timer):
             await asyncio.sleep(1)
         notify_all(ctx, f'[Server]: GO')
 
-def get_connected_players_string(ctx: Context):
+def get_players_string(ctx: Context):
     auth_clients = {(c.team, c.slot) for c in ctx.clients if c.auth}
 
     player_names = sorted(ctx.player_names.keys())
@@ -441,7 +441,7 @@ class ClientMessageProcessor(CommandProcessor):
 
     def _cmd_players(self):
         """Get information about connected and missing players"""
-        notify_all(self.ctx, get_connected_players_string(self.ctx))
+        notify_all(self.ctx, get_players_string(self.ctx))
 
     def _cmd_forfeit(self):
         """Surrender and send your remaining items out to their recipients"""
@@ -655,7 +655,7 @@ class ServerCommandProcessor(CommandProcessor):
 
     def _cmd_players(self):
         """Get information about connected players"""
-        self.output(get_connected_players_string(self.ctx))
+        self.output(get_players_string(self.ctx))
 
     def _cmd_exit(self):
         """Shutdown the server"""
