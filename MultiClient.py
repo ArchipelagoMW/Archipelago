@@ -824,10 +824,17 @@ class ClientCommandProcessor(CommandProcessor):
                 get_location_name_from_address(item.location), index, len(self.ctx.items_received)))
 
     def _cmd_missing(self):
-        """List all missing location checks"""
+        """List all missing location checks, from your local game state"""
+        count = 0
         for location in [k for k, v in Regions.location_table.items() if type(v[0]) is int]:
             if location not in self.ctx.locations_checked:
-                logging.info('Missing: ' + location)
+                self.output('Missing: ' + location)
+                count += 1
+
+        if count:
+            self.output(f"Found {count} missing location checks")
+        else:
+            self.output("No missing location checks found.")
 
     def _cmd_show_items(self, toggle: str = ""):
         """Toggle showing of items received across the team"""

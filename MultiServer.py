@@ -466,6 +466,20 @@ class ClientMessageProcessor(CommandProcessor):
             timer = 10
         asyncio.create_task(countdown(self.ctx, timer))
 
+    def _cmd_missing(self):
+        """List all missing location checks from the server's perspective"""
+        buffer = ""  # try not to spam small packets over network
+        count = 0
+        for location_id, location_name in Regions.lookup_id_to_name.items():  # cheat console is -1, keep in mind
+            if location_id != -1 and location_id not in self.ctx.location_checks[self.client.team, self.client.slot]:
+                buffer += f'Missing: {location_name}\n'
+                count += 1
+
+        if buffer:
+            self.output(buffer + f"Found {count} missing location checks")
+        else:
+            self.output("No missing location checks found.")
+
     @mark_raw
     def _cmd_getitem(self, item_name: str):
         """Cheat in an item"""
@@ -670,7 +684,7 @@ class ServerCommandProcessor(CommandProcessor):
         self.ctx.running = False
 
     @mark_raw
-    def _cmd_password(self, new_password: str):
+    def _cmd_password(self, new_password: str = ""):
         """Set the server password. Leave the password text empty to remove the password"""
         set_password(self.ctx, new_password if new_password else None)
 
