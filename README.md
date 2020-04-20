@@ -54,4 +54,3 @@ MultiClient.py
  * Cheating is now controlled by the server and can be disabled through host.yaml
  * Automatically starts QUsb2Snes, if it isn't running
  * Better reconnect to both snes and server
- * State is properly reset, allowing you to keep using the same client across multiworld runs
