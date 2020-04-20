@@ -451,7 +451,10 @@ class ClientMessageProcessor(CommandProcessor):
 
     def _cmd_players(self):
         """Get information about connected and missing players"""
-        notify_all(self.ctx, get_players_string(self.ctx))
+        if len(self.ctx.player_names) < 10:
+            notify_all(self.ctx, get_players_string(self.ctx))
+        else:
+            self.output(get_players_string(self.ctx))
 
     def _cmd_forfeit(self):
         """Surrender and send your remaining items out to their recipients"""
