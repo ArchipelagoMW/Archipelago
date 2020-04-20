@@ -17,26 +17,26 @@ def BossFactory(boss, player):
 def ArmosKnightsDefeatRule(state, player):
     # Magic amounts are probably a bit overkill
     return (
-        state.has_blunt_weapon(player) or
-        state.can_shoot_arrows(player) or
-        (state.has('Cane of Somaria', player) and state.can_extend_magic(player, 10)) or
-        (state.has('Cane of Byrna', player) and state.can_extend_magic(player, 16)) or
-        (state.has('Ice Rod', player) and state.can_extend_magic(player, 32)) or
-        (state.has('Fire Rod', player) and state.can_extend_magic(player, 32)) or
-        state.has('Blue Boomerang', player) or
-        state.has('Red Boomerang', player))
+            state.has_melee_weapon(player) or
+            state.can_shoot_arrows(player) or
+            (state.has('Cane of Somaria', player) and state.can_extend_magic(player, 10)) or
+            (state.has('Cane of Byrna', player) and state.can_extend_magic(player, 16)) or
+            (state.has('Ice Rod', player) and state.can_extend_magic(player, 32)) or
+            (state.has('Fire Rod', player) and state.can_extend_magic(player, 32)) or
+            state.has('Blue Boomerang', player) or
+            state.has('Red Boomerang', player))
 
 def LanmolasDefeatRule(state, player):
     return (
-        state.has_blunt_weapon(player) or
-        state.has('Fire Rod', player) or
-        state.has('Ice Rod', player) or
-        state.has('Cane of Somaria', player) or
-        state.has('Cane of Byrna', player) or
-        state.can_shoot_arrows(player))
+            state.has_melee_weapon(player) or
+            state.has('Fire Rod', player) or
+            state.has('Ice Rod', player) or
+            state.has('Cane of Somaria', player) or
+            state.has('Cane of Byrna', player) or
+            state.can_shoot_arrows(player))
 
 def MoldormDefeatRule(state, player):
-    return state.has_blunt_weapon(player)
+    return state.has_melee_weapon(player)
 
 def HelmasaurKingDefeatRule(state, player):
     # TODO: technically possible with the hammer
@@ -48,7 +48,7 @@ def ArrghusDefeatRule(state, player):
     # TODO: ideally we would have a check for bow and silvers, which combined with the
     # hookshot is enough. This is not coded yet because the silvers that only work in pyramid feature
     # makes this complicated
-    if state.has_blunt_weapon(player):
+    if state.has_melee_weapon(player):
         return True
 
     return ((state.has('Fire Rod', player) and (state.can_shoot_arrows(player) or state.can_extend_magic(player, 12))) or #assuming mostly gitting two puff with one shot
@@ -57,21 +57,21 @@ def ArrghusDefeatRule(state, player):
 
 def MothulaDefeatRule(state, player):
     return (
-        state.has_blunt_weapon(player) or
-        (state.has('Fire Rod', player) and state.can_extend_magic(player, 10)) or
-        # TODO: Not sure how much (if any) extend magic is needed for these two, since they only apply
-        # to non-vanilla locations, so are harder to test, so sticking with what VT has for now:
-        (state.has('Cane of Somaria', player) and state.can_extend_magic(player, 16)) or
-        (state.has('Cane of Byrna', player) and state.can_extend_magic(player, 16)) or
-        state.can_get_good_bee(player)
+            state.has_melee_weapon(player) or
+            (state.has('Fire Rod', player) and state.can_extend_magic(player, 10)) or
+            # TODO: Not sure how much (if any) extend magic is needed for these two, since they only apply
+            # to non-vanilla locations, so are harder to test, so sticking with what VT has for now:
+            (state.has('Cane of Somaria', player) and state.can_extend_magic(player, 16)) or
+            (state.has('Cane of Byrna', player) and state.can_extend_magic(player, 16)) or
+            state.can_get_good_bee(player)
     )
 
 def BlindDefeatRule(state, player):
-    return state.has_blunt_weapon(player) or state.has('Cane of Somaria', player) or state.has('Cane of Byrna', player)
+    return state.has_melee_weapon(player) or state.has('Cane of Somaria', player) or state.has('Cane of Byrna', player)
 
 def KholdstareDefeatRule(state, player):
     return (
-        (
+            (
             state.has('Fire Rod', player) or
             (
                 state.has('Bombos', player) and
@@ -79,21 +79,21 @@ def KholdstareDefeatRule(state, player):
                 (state.has_sword(player) or state.world.swords[player] == 'swordless')
             )
         ) and
-        (
-            state.has_blunt_weapon(player) or
-            (state.has('Fire Rod', player) and state.can_extend_magic(player, 20)) or
-            # FIXME: this actually only works for the vanilla location for swordless
             (
-                state.has('Fire Rod', player) and
-                state.has('Bombos', player) and
-                state.world.swords[player] == 'swordless' and
-                state.can_extend_magic(player, 16)
+                    state.has_melee_weapon(player) or
+                    (state.has('Fire Rod', player) and state.can_extend_magic(player, 20)) or
+                    # FIXME: this actually only works for the vanilla location for swordless
+                    (
+                            state.has('Fire Rod', player) and
+                            state.has('Bombos', player) and
+                            state.world.swords[player] == 'swordless' and
+                            state.can_extend_magic(player, 16)
+                    )
             )
-        )
     )
 
 def VitreousDefeatRule(state, player):
-    return state.can_shoot_arrows(player) or state.has_blunt_weapon(player)
+    return state.can_shoot_arrows(player) or state.has_melee_weapon(player)
 
 def TrinexxDefeatRule(state, player):
     if not (state.has('Fire Rod', player) and state.has('Ice Rod', player)):

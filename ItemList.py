@@ -194,7 +194,7 @@ def generate_itempool(world, player):
     for item in precollected_items:
         world.push_precollected(ItemFactory(item, player))
 
-    if world.mode[player] == 'standard' and not world.state.has_blunt_weapon(player):
+    if world.mode[player] == 'standard' and not world.state.has_melee_weapon(player):
         if "Link's Uncle" not in placed_items:
             found_sword = False
             found_bow = False
