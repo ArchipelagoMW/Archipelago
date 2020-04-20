@@ -1,3 +1,6 @@
+__version__ = "2.0.2"
+_version_tuple = tuple(int(piece, 10) for piece in __version__.split("."))
+
 import os
 import subprocess
 import sys

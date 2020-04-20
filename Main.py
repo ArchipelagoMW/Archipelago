@@ -18,9 +18,8 @@ from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
 from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, flood_items, balance_multiworld_progression
 from ItemList import generate_itempool, difficulties, fill_prizes
-from Utils import output_path, parse_player_names, get_options
+from Utils import output_path, parse_player_names, get_options, __version__
 
-__version__ = '0.6.3-pre'
 
 def main(args, seed=None):
     if args.outputpath:
@@ -63,7 +62,7 @@ def main(args, seed=None):
 
     world.rom_seeds = {player: random.randint(0, 999999999) for player in range(1, world.players + 1)}
 
-    logger.info('ALttP Entrance Randomizer Version %s  -  Seed: %s\n', __version__, world.seed)
+    logger.info('ALttP Berserker\'s Multiworld Version %s  -  Seed: %s\n', __version__, world.seed)
 
     parsed_names = parse_player_names(args.names, world.players, args.teams)
     world.teams = len(parsed_names)
