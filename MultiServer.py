@@ -10,6 +10,7 @@ import collections
 import typing
 import inspect
 import weakref
+import datetime
 
 import ModuleUpdate
 
@@ -80,6 +81,7 @@ class Context:
         self.forfeit_allowed = forfeit_allowed
         self.item_cheat = item_cheat
         self.running = True
+        self.client_activity_timers = {}
         self.commandprocessor = ServerCommandProcessor(self)
 
     def get_save(self) -> dict:
@@ -254,6 +256,7 @@ def forfeit_player(ctx: Context, team: int, slot: int):
 
 
 def register_location_checks(ctx: Context, team: int, slot: int, locations):
+    ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
     found_items = False
     for location in locations:
         if (location, slot) in ctx.locations:
