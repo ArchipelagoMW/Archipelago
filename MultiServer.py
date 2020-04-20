@@ -419,8 +419,11 @@ class CommandProcessor(metaclass=CommandMeta):
 
     def _cmd_license(self):
         """Returns the licensing information"""
-        with open("LICENSE") as f:
-            self.output(f.read())
+        license = getattr(CommandProcessor, "license", None)
+        if not license:
+            with open(Utils.local_path("LICENSE")) as f:
+                CommandProcessor.license = license = f.read()
+        self.output(CommandProcessor.license)
 
     def default(self, raw: str):
         self.output("Echo: " + raw)
