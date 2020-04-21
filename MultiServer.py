@@ -337,15 +337,22 @@ def format_hint(ctx: Context, team: int, hint: Utils.Hint) -> str:
 
 def get_intended_text(input_text: str, possible_answers: typing.Iterable[str]= console_names) -> typing.Tuple[str, bool, str]:
     picks = fuzzy_process.extract(input_text, possible_answers, limit=2)
-    dif = picks[0][1] - picks[1][1]
-    if picks[0][1] == 100:
-        return picks[0][0], True, "Perfect Match"
-    elif picks[0][1] < 75:
-        return picks[0][0], False, f"Didn't find something that closely matches, did you mean {picks[0][0]}?"
-    elif dif > 5:
-        return picks[0][0], True, "Close Match"
+    if len(picks) > 1:
+        dif = picks[0][1] - picks[1][1]
+        if picks[0][1] == 100:
+            return picks[0][0], True, "Perfect Match"
+        elif picks[0][1] < 75:
+            return picks[0][0], False, f"Didn't find something that closely matches, " \
+                                       f"did you mean {picks[0][0]}? ({picks[0][1]}% sure)"
+        elif dif > 5:
+            return picks[0][0], True, "Close Match"
+        else:
+            return picks[0][0], False, f"Too many close matches, did you mean {picks[0][0]}? ({picks[0][1]}% sure)"
     else:
-        return picks[0][0], False, f"Too many close matches, did you mean {picks[0][0]}?"
+        if picks[0][1] > 90:
+            return picks[0][0], True, "Only Option Match"
+        else:
+            return picks[0][0], False, f"Did you mean {picks[0][0]}? ({picks[0][1]}% sure)"
 
 
 class CommandMeta(type):
