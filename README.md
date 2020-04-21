@@ -1,9 +1,10 @@
 Berserker's Multiworld
 ======================
 
-This is a complete fork of Bonta's Multiworld V31, which assumes you already know how to setup and use that project. Instructions here are only for the additions.
-This is a drop-in replacement with everything from Bonta's Multiworld included.
+This is a complete fork of Bonta's Multiworld V31.
+It is a drop-in replacement with everything from Bonta's Multiworld included.
 You can find a guide here: https://docs.google.com/document/d/1r7qs1-MK7YbFf2d-mEUeTy2wHykIf1ALG9pLtVvUbSw/edit#
+Or use the Wiki button at the top
 
 Additions/Changes
 -----------------
