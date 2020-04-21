@@ -370,7 +370,7 @@ class CommandProcessor(metaclass=CommandMeta):
     def output(self, text: str):
         print(text)
 
-    def __call__(self, raw: str):
+    def __call__(self, raw: str) -> typing.Optional[bool]:
         if not raw:
             return
         try:
@@ -384,11 +384,11 @@ class CommandProcessor(metaclass=CommandMeta):
                     if getattr(method, "raw_text", False):  # method is requesting unprocessed text data
                         arg = raw.split(maxsplit=1)
                         if len(arg) > 1:
-                            method(self, arg[1])  # argument text was found, so pass it along
+                            return method(self, arg[1])  # argument text was found, so pass it along
                         else:
-                            method(self)  # argument may be optional, try running without args
+                            return method(self)  # argument may be optional, try running without args
                     else:
-                        method(self, *command[1:])  # pass each word as argument
+                        return method(self, *command[1:])  # pass each word as argument
             else:
                 self.default(raw)
         except Exception as e:
@@ -449,30 +449,33 @@ class ClientMessageProcessor(CommandProcessor):
     def default(self, raw: str):
         pass  # default is client sending just text
 
-    def _cmd_players(self):
+    def _cmd_players(self) -> bool:
         """Get information about connected and missing players"""
         if len(self.ctx.player_names) < 10:
             notify_all(self.ctx, get_players_string(self.ctx))
         else:
             self.output(get_players_string(self.ctx))
 
-    def _cmd_forfeit(self):
+    def _cmd_forfeit(self) -> bool:
         """Surrender and send your remaining items out to their recipients"""
         if self.ctx.forfeit_allowed:
             forfeit_player(self.ctx, self.client.team, self.client.slot)
+            return True
         else:
             self.output(
                 "Sorry, client forfeiting has been disabled on this server. You can ask the server admin for a /forfeit")
+            return False
 
-    def _cmd_countdown(self, seconds: str = "10"):
+    def _cmd_countdown(self, seconds: str = "10") -> bool:
         """Start a countdown in seconds"""
         try:
             timer = int(seconds)
         except ValueError:
             timer = 10
         asyncio.create_task(countdown(self.ctx, timer))
+        return True
 
-    def _cmd_missing(self):
+    def _cmd_missing(self) -> bool:
         """List all missing location checks from the server's perspective"""
         buffer = ""  # try not to spam small packets over network
         count = 0
@@ -485,9 +488,10 @@ class ClientMessageProcessor(CommandProcessor):
             self.output(buffer + f"Found {count} missing location checks")
         else:
             self.output("No missing location checks found.")
+        return True
 
     @mark_raw
-    def _cmd_getitem(self, item_name: str):
+    def _cmd_getitem(self, item_name: str) -> bool:
         """Cheat in an item"""
         if self.ctx.item_cheat:
             item_name, usable, response = get_intended_text(item_name, Items.item_table.keys())
@@ -496,13 +500,16 @@ class ClientMessageProcessor(CommandProcessor):
                 get_received_items(self.ctx, self.client.team, self.client.slot).append(new_item)
                 notify_all(self.ctx, 'Cheat console: sending "' + item_name + '" to ' + self.client.name)
                 send_new_items(self.ctx)
+                return True
             else:
                 self.output(response)
+                return False
         else:
             self.output("Cheating is disabled.")
+            return False
 
     @mark_raw
-    def _cmd_hint(self, item_or_location: str = ""):
+    def _cmd_hint(self, item_or_location: str = "") -> bool:
         """Use !hint {item_name/location_name}, for example !hint Lamp or !hint Link's House. """
         points_available = self.ctx.location_check_points * len(
             self.ctx.location_checks[self.client.team, self.client.slot]) - \
@@ -516,6 +523,7 @@ class ClientMessageProcessor(CommandProcessor):
                 else:  # location name
                     hints = collect_hints_location(self.ctx, self.client.team, self.client.slot, item_name)
                 notify_hints(self.ctx, self.client.team, hints)
+            return True
         else:
             item_name, usable, response = get_intended_text(item_or_location)
             if usable:
@@ -531,6 +539,7 @@ class ClientMessageProcessor(CommandProcessor):
                     if item_name in self.ctx.hints_sent[self.client.team, self.client.slot]:
                         notify_hints(self.ctx, self.client.team, hints)
                         self.output("Hint was previously used, no points deducted.")
+                        return True
                     else:
                         found = 0
                         for hint in hints:
@@ -538,6 +547,7 @@ class ClientMessageProcessor(CommandProcessor):
                         if not found:
                             notify_hints(self.ctx, self.client.team, hints)
                             self.output("No new items found, no points deducted.")
+                            return False
                         else:
                             if self.ctx.hint_cost:
                                 can_pay = points_available // (self.ctx.hint_cost * found) >= 1
@@ -554,10 +564,13 @@ class ClientMessageProcessor(CommandProcessor):
                                                            f"You have {points_available} points and need at least "
                                                            f"{self.ctx.hint_cost}, "
                                                            f"more if multiple items are still to be found.")
+                            return True
                 else:
                     self.output("Nothing found. Item/Location may not exist.")
+                    return False
             else:
                 self.output(response)
+                return False
 
 
 async def process_client_cmd(ctx: Context, client: Client, cmd, args):
@@ -670,42 +683,47 @@ class ServerCommandProcessor(CommandProcessor):
         notify_all(self.ctx, '[Server]: ' + raw)
 
     @mark_raw
-    def _cmd_kick(self, player_name: str):
+    def _cmd_kick(self, player_name: str) -> bool:
         """Kick specified player from the server"""
         for client in self.ctx.clients:
             if client.auth and client.name.lower() == player_name.lower() and client.socket and not client.socket.closed:
                 asyncio.create_task(client.socket.close())
                 self.output(f"Kicked {client.name}")
-                break
-        else:
-            self.output("Could not find player to kick")
+                return True
 
-    def _cmd_players(self):
+        self.output(f"Could not find player {player_name} to kick")
+        return False
+
+    def _cmd_players(self) -> bool:
         """Get information about connected players"""
         self.output(get_players_string(self.ctx))
+        return True
 
-    def _cmd_exit(self):
+    def _cmd_exit(self) -> bool:
         """Shutdown the server"""
         asyncio.create_task(self.ctx.server.ws_server._close())
         self.ctx.running = False
+        return True
 
     @mark_raw
-    def _cmd_password(self, new_password: str = ""):
+    def _cmd_password(self, new_password: str = "") -> bool:
         """Set the server password. Leave the password text empty to remove the password"""
         set_password(self.ctx, new_password if new_password else None)
+        return True
 
     @mark_raw
-    def _cmd_forfeit(self, player_name: str):
+    def _cmd_forfeit(self, player_name: str) -> bool:
         """Send out the remaining items from a player's game to their intended recipients"""
         seeked_player = player_name.lower()
         for (team, slot), name in self.ctx.player_names.items():
             if name.lower() == seeked_player:
                 forfeit_player(self.ctx, team, slot)
-                break
-        else:
-            self.output("Could not find player to forfeit")
+                return True
 
-    def _cmd_send(self, player_name: str, *item_name: str):
+        self.output(f"Could not find player {player_name} to forfeit")
+        return False
+
+    def _cmd_send(self, player_name: str, *item_name: str) -> bool:
         """Sends an item to the specified player"""
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
@@ -718,13 +736,15 @@ class ServerCommandProcessor(CommandProcessor):
                         get_received_items(self.ctx, client.team, client.slot).append(new_item)
                         notify_all(self.ctx, 'Cheat console: sending "' + item + '" to ' + client.name)
                         send_new_items(self.ctx)
-                        return
+                        return True
             else:
                 self.output(response)
+                return False
         else:
             self.output(response)
+            return False
 
-    def _cmd_hint(self, player_name: str, *item_or_location: str):
+    def _cmd_hint(self, player_name: str, *item_or_location: str) -> bool:
         """Send out a hint for a player's item or location to their team"""
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
@@ -739,11 +759,14 @@ class ServerCommandProcessor(CommandProcessor):
                         else:  # location name
                             hints = collect_hints_location(self.ctx, team, slot, item)
                             notify_hints(self.ctx, team, hints)
+                        return True
                     else:
                         self.output(response)
-                    return
+                        return False
+
         else:
             self.output(response)
+            return False
 
 
 async def console(ctx: Context):

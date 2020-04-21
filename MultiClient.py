@@ -789,32 +789,39 @@ class ClientCommandProcessor(CommandProcessor):
     def __init__(self, ctx: Context):
         self.ctx = ctx
 
-    def _cmd_exit(self):
+    def _cmd_exit(self) -> bool:
         """Close connections and client"""
         self.ctx.exit_event.set()
+        return True
 
-    def _cmd_snes(self, snes_address: str = ""):
+    def _cmd_snes(self, snes_address: str = "") -> bool:
         """Connect to a snes. Optionally include network address of a snes to connect to, otherwise show available devices"""
         self.ctx.snes_reconnect_address = None
         asyncio.create_task(snes_connect(self.ctx, snes_address if snes_address else self.ctx.snes_address))
+        return True
 
-    def _cmd_snes_close(self):
+    def _cmd_snes_close(self) -> bool:
         """Close connection to a currently connected snes"""
         self.ctx.snes_reconnect_address = None
         if self.ctx.snes_socket is not None and not self.ctx.snes_socket.closed:
             asyncio.create_task(self.ctx.snes_socket.close())
+            return True
+        else:
+            return False
 
-    def _cmd_connect(self, address: str = ""):
+    def _cmd_connect(self, address: str = "") -> bool:
         """Connect to a MultiWorld Server"""
         self.ctx.server_address = None
         asyncio.create_task(connect(self.ctx, address if address else None))
+        return True
 
-    def _cmd_disconnect(self):
+    def _cmd_disconnect(self) -> bool:
         """Disconnect from a MultiWorld Server"""
         self.ctx.server_address = None
         asyncio.create_task(disconnect(self.ctx))
+        return True
 
-    def _cmd_received(self):
+    def _cmd_received(self) -> bool:
         """List all received items"""
         logging.info('Received items:')
         for index, item in enumerate(self.ctx.items_received, 1):
@@ -822,8 +829,9 @@ class ClientCommandProcessor(CommandProcessor):
                 color(get_item_name_from_id(item.item), 'red', 'bold'),
                 color(self.ctx.player_names[item.player], 'yellow'),
                 get_location_name_from_address(item.location), index, len(self.ctx.items_received)))
+        return True
 
-    def _cmd_missing(self):
+    def _cmd_missing(self) -> bool:
         """List all missing location checks, from your local game state"""
         count = 0
         for location in [k for k, v in Regions.location_table.items() if type(v[0]) is int]:
@@ -835,8 +843,9 @@ class ClientCommandProcessor(CommandProcessor):
             self.output(f"Found {count} missing location checks")
         else:
             self.output("No missing location checks found.")
+        return True
 
-    def _cmd_show_items(self, toggle: str = ""):
+    def _cmd_show_items(self, toggle: str = "") -> bool:
         """Toggle showing of items received across the team"""
         if toggle:
             self.ctx.found_items = toggle.lower() in {"1", "true", "on"}
@@ -844,6 +853,7 @@ class ClientCommandProcessor(CommandProcessor):
             self.ctx.found_items = not self.ctx.found_items
         logging.info(f"Set showing team items to {self.ctx.found_items}")
         asyncio.create_task(send_msgs(self.ctx.socket, [['UpdateTags', get_tags(self.ctx)]]))
+        return True
 
     def default(self, raw: str):
         asyncio.create_task(send_msgs(self.ctx.socket, [['Say', raw]]))
