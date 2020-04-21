@@ -469,7 +469,7 @@ class ClientMessageProcessor(CommandProcessor):
     def _cmd_countdown(self, seconds: str = "10") -> bool:
         """Start a countdown in seconds"""
         try:
-            timer = int(seconds)
+            timer = int(seconds, 10)
         except ValueError:
             timer = 10
         asyncio.create_task(countdown(self.ctx, timer))
