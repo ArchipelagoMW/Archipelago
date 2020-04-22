@@ -17,6 +17,7 @@ import subprocess
 import sys
 import threading
 import concurrent.futures
+import argparse
 
 
 def feedback(text: str):
@@ -31,6 +32,9 @@ if __name__ == "__main__":
 
         ModuleUpdate.update()
 
+        parser = argparse.ArgumentParser(add_help=False)
+        parser.add_argument('--disable_autohost', action='store_true')
+        args = parser.parse_args()
 
         from Utils import get_public_ipv4, get_options
 
@@ -189,16 +193,17 @@ if __name__ == "__main__":
                     for future in futures:
                         future.result()  # make sure we close the zip AFTER any packing is done
 
-        if os.path.exists(os.path.join(output_path, multidataname)):
-            if os.path.exists("BerserkerMultiServer.exe"):
-                baseservercommand = "BerserkerMultiServer.exe"  # compiled windows
-            elif os.path.exists("BerserkerMultiServer"):
-                baseservercommand = "BerserkerMultiServer"  # compiled linux
-            else:
-                baseservercommand = f"py -{py_version} MultiServer.py"  # source
-            #don't have a mac to test that. If you try to run compiled on mac, good luck.
+        if not args.disable_autohost:
+            if os.path.exists(os.path.join(output_path, multidataname)):
+                if os.path.exists("BerserkerMultiServer.exe"):
+                    baseservercommand = "BerserkerMultiServer.exe"  # compiled windows
+                elif os.path.exists("BerserkerMultiServer"):
+                    baseservercommand = "BerserkerMultiServer"  # compiled linux
+                else:
+                    baseservercommand = f"py -{py_version} MultiServer.py"  # source
+                #don't have a mac to test that. If you try to run compiled on mac, good luck.
 
-            subprocess.call(f"{baseservercommand} --multidata {os.path.join(output_path, multidataname)}")
+                subprocess.call(f"{baseservercommand} --multidata {os.path.join(output_path, multidataname)}")
     except:
         import traceback
         traceback.print_exc()
