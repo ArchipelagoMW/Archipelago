@@ -168,6 +168,9 @@ class Hint(typing.NamedTuple):
             return Hint(self.receiving_player, self.finding_player, self.location, self.item, found)
         return self
 
+    def __hash__(self):
+        return hash((self.receiving_player, self.finding_player, self.location, self.item))
+
 def get_public_ipv4() -> str:
     import socket
     import urllib.request
