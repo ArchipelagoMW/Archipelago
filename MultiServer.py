@@ -77,7 +77,7 @@ class Context:
         self.hint_cost = hint_cost
         self.location_check_points = location_check_points
         self.hints_used = collections.defaultdict(int)
-        self.hints_sent = collections.defaultdict(set)
+        self.hints: typing.Dict[typing.Tuple[int, int], typing.Set[Utils.Hint]] = collections.defaultdict(set)
         self.forfeit_allowed = forfeit_allowed
         self.item_cheat = item_cheat
         self.running = True
@@ -88,9 +88,9 @@ class Context:
         return {
             "rom_names": list(self.rom_names.items()),
             "received_items": tuple((k, v) for k, v in self.received_items.items()),
-            "hints_used" : tuple((key,value) for key, value in self.hints_used.items()),
-            "hints_sent" : tuple((key,tuple(value)) for key, value in self.hints_sent.items()),
-            "location_checks" : tuple((key,tuple(value)) for key, value in self.location_checks.items())
+            "hints_used": tuple((key, value) for key, value in self.hints_used.items()),
+            "hints": tuple((key, value) for key, value in self.hints.items()),
+            "location_checks": tuple((key, tuple(value)) for key, value in self.location_checks.items())
         }
 
     def set_save(self, savedata: dict):
@@ -100,7 +100,23 @@ class Context:
             raise Exception('Save file mismatch, will start a new game')
         self.received_items = received_items
         self.hints_used.update({tuple(key): value for key, value in savedata["hints_used"]})
-        self.hints_sent.update({tuple(key): set(value) for key, value in savedata["hints_sent"]})
+        if "hints" in savedata:
+            self.hints.update(
+                {tuple(key): set(Utils.Hint(*hint) for hint in value) for key, value in savedata["hints"]})
+        else:  # backwards compatiblity for <= 2.0.2
+            old_hints = {tuple(key): set(value) for key, value in savedata["hints_sent"]}
+            for team_slot, item_or_location_s in old_hints.items():
+                team, slot = team_slot
+                for item_or_location in item_or_location_s:
+                    if item_or_location in Items.item_table:
+                        hints = collect_hints(self, team, slot, item_or_location)
+                    else:
+                        hints = collect_hints_location(self, team, slot, item_or_location)
+                    for hint in hints:
+                        self.hints[team, hint.receiving_player].add(hint)
+                        # even if it is the same hint, it won't be duped due to set
+                        self.hints[team, hint.finding_player].add(hint)
+
         self.location_checks.update({tuple(key): set(value) for key, value in savedata["location_checks"]})
         logging.info(f'Loaded save file with {sum([len(p) for p in received_items.values()])} received items '
                      f'for {len(received_items)} players')
@@ -145,7 +161,7 @@ def notify_client(client: Client, text: str):
 
 # separated out, due to compatibilty between clients
 def notify_hints(ctx: Context, team: int, hints: typing.List[Utils.Hint]):
-    cmd = [["Hint", hints]]
+    cmd = [["Hint", hints]]  # make sure it is a list, as it can be set internally
     texts = [['Print', format_hint(ctx, team, hint)] for hint in hints]
     for _, text in texts:
         logging.info("Notice (Team #%d): %s" % (team + 1, text))
@@ -524,12 +540,10 @@ class ClientMessageProcessor(CommandProcessor):
         if not item_or_location:
             self.output(f"A hint costs {self.ctx.hint_cost} points. "
                         f"You have {points_available} points.")
-            for item_name in self.ctx.hints_sent[self.client.team, self.client.slot]:
-                if item_name in Items.item_table:  # item name
-                    hints = collect_hints(self.ctx, self.client.team, self.client.slot, item_name)
-                else:  # location name
-                    hints = collect_hints_location(self.ctx, self.client.team, self.client.slot, item_name)
-                notify_hints(self.ctx, self.client.team, hints)
+            hints = {hint.re_check(self.ctx, self.client.team) for hint in
+                     self.ctx.hints[self.client.team, self.client.slot]}
+            self.ctx.hints[self.client.team, self.client.slot] = hints
+            notify_hints(self.ctx, self.client.team, list(hints))
             return True
         else:
             item_name, usable, response = get_intended_text(item_or_location)
@@ -543,7 +557,7 @@ class ClientMessageProcessor(CommandProcessor):
                     hints = collect_hints_location(self.ctx, self.client.team, self.client.slot, item_name)
 
                 if hints:
-                    if item_name in self.ctx.hints_sent[self.client.team, self.client.slot]:
+                    if item_name in self.ctx.hints[self.client.team, self.client.slot]:
                         notify_hints(self.ctx, self.client.team, hints)
                         self.output("Hint was previously used, no points deducted.")
                         return True
@@ -563,7 +577,10 @@ class ClientMessageProcessor(CommandProcessor):
 
                             if can_pay:
                                 self.ctx.hints_used[self.client.team, self.client.slot] += found
-                                self.ctx.hints_sent[self.client.team, self.client.slot].add(item_name)
+
+                                for hint in hints:
+                                    self.ctx.hints[self.client.team, hint.finding_player].add(hint)
+                                    self.ctx.hints[self.client.team, hint.receiving_player].add(hint)
                                 notify_hints(self.ctx, self.client.team, hints)
                                 save(self.ctx)
                             else:
