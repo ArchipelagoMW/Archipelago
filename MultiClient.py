@@ -16,6 +16,7 @@ ModuleUpdate.update()
 import colorama
 import websockets
 import prompt_toolkit
+import typing
 from prompt_toolkit.patch_stdout import patch_stdout
 
 import Regions
@@ -48,7 +49,7 @@ class Context:
 
         self.team = None
         self.slot = None
-        self.player_names = {}
+        self.player_names: typing.Dict[int: str] = {}
         self.locations_checked = set()
         self.locations_scouted = set()
         self.items_received = []
@@ -742,8 +743,12 @@ async def process_server_cmd(ctx : Context, cmd, args):
             logging.info(f"[Hint]: {player_recvd}'s {item} can be found "
                          f"at {get_location_name_from_address(hint.location)} in {player_find}'s World." +
                          (" (found)" if hint.found else ""))
+    elif cmd == "AliasUpdate":
+        ctx.player_names = {p: n for p, n in args}
     elif cmd == 'Print':
         logging.info(args)
+    else:
+        logging.debug(f"unknown command {args}")
 
 def get_tags(ctx: Context):
     tags = ['Berserker']

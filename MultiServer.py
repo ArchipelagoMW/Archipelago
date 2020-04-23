@@ -73,6 +73,7 @@ class Context:
         self.countdown_timer = 0
         self.clients = []
         self.received_items = {}
+        self.name_aliases: typing.Dict[typing.Tuple[int, int], str] = {}
         self.location_checks = collections.defaultdict(set)
         self.hint_cost = hint_cost
         self.location_check_points = location_check_points
@@ -90,9 +91,9 @@ class Context:
             "received_items": tuple((k, v) for k, v in self.received_items.items()),
             "hints_used": tuple((key, value) for key, value in self.hints_used.items()),
             "hints": tuple((key, list(value)) for key, value in self.hints.items()),
-            "location_checks": tuple((key, tuple(value)) for key, value in self.location_checks.items())
+            "location_checks": tuple((key, tuple(value)) for key, value in self.location_checks.items()),
+            "name_aliases": tuple((key, value) for key, value in self.name_aliases.items()),
         }
-
         return d
 
     def set_save(self, savedata: dict):
@@ -118,10 +119,17 @@ class Context:
                         self.hints[team, hint.receiving_player].add(hint)
                         # even if it is the same hint, it won't be duped due to set
                         self.hints[team, hint.finding_player].add(hint)
-
+        if "name_aliases" in savedata:
+            self.name_aliases.update({tuple(key): value for key, value in savedata["name_aliases"]})
         self.location_checks.update({tuple(key): set(value) for key, value in savedata["location_checks"]})
         logging.info(f'Loaded save file with {sum([len(p) for p in received_items.values()])} received items '
                      f'for {len(received_items)} players')
+
+    def get_aliased_name(self, team: int, slot: int):
+        if (team, slot) in self.name_aliases:
+            return f"{self.name_aliases[team, slot]} ({self.player_names[team, slot]})"
+        else:
+            return self.player_names[team, slot]
 
 
 async def send_msgs(client: Client, msgs):
@@ -134,12 +142,25 @@ async def send_msgs(client: Client, msgs):
         logging.exception("Exception during send_msgs")
         await client.disconnect()
 
-def broadcast_all(ctx : Context, msgs):
+
+async def send_json_msgs(client: Client, msg: str):
+    websocket = client.socket
+    if not websocket or not websocket.open or websocket.closed:
+        return
+    try:
+        await websocket.send(msg)
+    except websockets.ConnectionClosed:
+        logging.exception("Exception during send_msgs")
+        await client.disconnect()
+
+
+def broadcast_all(ctx: Context, msgs):
     for client in ctx.clients:
         if client.auth:
             asyncio.create_task(send_msgs(client, msgs))
 
-def broadcast_team(ctx : Context, team, msgs):
+
+def broadcast_team(ctx: Context, team, msgs):
     for client in ctx.clients:
         if client.auth and client.team == team:
             asyncio.create_task(send_msgs(client, msgs))
@@ -163,7 +184,7 @@ def notify_client(client: Client, text: str):
 
 # separated out, due to compatibilty between clients
 def notify_hints(ctx: Context, team: int, hints: typing.List[Utils.Hint]):
-    cmd = [["Hint", hints]]  # make sure it is a list, as it can be set internally
+    cmd = json.dumps([["Hint", hints]])  # make sure it is a list, as it can be set internally
     texts = [['Print', format_hint(ctx, team, hint)] for hint in hints]
     for _, text in texts:
         logging.info("Notice (Team #%d): %s" % (team + 1, text))
@@ -171,9 +192,23 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[Utils.Hint]):
         if client.auth and client.team == team:
             if "Berserker" in client.tags:
                 payload = cmd
+                asyncio.create_task(send_json_msgs(client, payload))
             else:
                 payload = texts
-            asyncio.create_task(send_msgs(client, payload))
+                asyncio.create_task(send_msgs(client, payload))
+
+
+def update_aliases(ctx: Context, team: int, client: typing.Optional[Client] = None):
+    cmd = json.dumps([["AliasUpdate",
+                       [(key[1], ctx.get_aliased_name(*key)) for key, value in ctx.player_names.items() if
+                        key[0] == team]]])  # make sure it is a list, as it can be set internally
+    if client is None:
+        for client in ctx.clients:
+            if client.team == team and client.auth and client.version > [2, 0, 3]:
+                asyncio.create_task(send_json_msgs(client, cmd))
+    else:
+        asyncio.create_task(send_json_msgs(client, cmd))
+
 
 async def server(websocket, path, ctx: Context):
     client = Client(websocket, ctx)
@@ -199,7 +234,8 @@ async def server(websocket, path, ctx: Context):
 async def on_client_connected(ctx: Context, client: Client):
     await send_msgs(client, [['RoomInfo', {
         'password': ctx.password is not None,
-        'players': [(client.team, client.slot, client.name) for client in ctx.clients if client.auth],
+        'players': [(client.team, client.slot, ctx.name_aliases.get((client.team, client.slot), client.name)) for client
+                    in ctx.clients if client.auth],
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ['Berserker'],
@@ -210,10 +246,13 @@ async def on_client_disconnected(ctx: Context, client: Client):
     if client.auth:
         await on_client_left(ctx, client)
 
+
 async def on_client_joined(ctx: Context, client: Client):
-    notify_all(ctx, "%s (Team #%d) has joined the game. Client(%s, %s)." % (client.name, client.team + 1,
-                                                                            ".".join(str(x) for x in client.version),
-                                                                            client.tags))
+    notify_all(ctx,
+               "%s (Team #%d) has joined the game. Client(%s, %s)." % (ctx.get_aliased_name(client.team, client.slot),
+                                                                       client.team + 1,
+                                                                       ".".join(str(x) for x in client.version),
+                                                                       client.tags))
 
 async def on_client_left(ctx: Context, client: Client):
     notify_all(ctx, "%s (Team #%d) has left the game" % (client.name, client.team + 1))
@@ -516,6 +555,23 @@ class ClientMessageProcessor(CommandProcessor):
         return True
 
     @mark_raw
+    def _cmd_alias(self, alias_name: str = ""):
+        if alias_name:
+            alias_name = alias_name[:15]
+            self.ctx.name_aliases[self.client.team, self.client.slot] = alias_name
+            self.output(f"Hello, {alias_name}")
+            update_aliases(self.ctx, self.client.team)
+            save(self.ctx)
+            return True
+        elif (self.client.team, self.client.slot) in self.ctx.name_aliases:
+            del (self.ctx.name_aliases[self.client.team, self.client.slot])
+            self.output("Removed Alias")
+            update_aliases(self.ctx, self.client.team)
+            save(self.ctx)
+            return True
+        return False
+
+    @mark_raw
     def _cmd_getitem(self, item_name: str) -> bool:
         """Cheat in an item"""
         if self.ctx.item_cheat:
@@ -685,7 +741,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
                 await send_msgs(client, [['InvalidArguments', 'Say']])
                 return
 
-            notify_all(ctx, client.name + ': ' + args)
+            notify_all(ctx, ctx.get_aliased_name(client.team, client.slot) + ': ' + args)
             print(args)
             client.messageprocessor(args)
 
@@ -717,6 +773,11 @@ class ServerCommandProcessor(CommandProcessor):
 
         self.output(f"Could not find player {player_name} to kick")
         return False
+
+    def _cmd_save(self) -> bool:
+        """Save current state to multidata"""
+        save(self.ctx)
+        return True
 
     def _cmd_players(self) -> bool:
         """Get information about connected players"""
