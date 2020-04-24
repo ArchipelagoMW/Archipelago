@@ -9,7 +9,7 @@ import sys
 import typing
 import functools
 
-from yaml import load
+from yaml import load, dump
 
 try:
     from yaml import CLoader as Loader
@@ -210,6 +210,28 @@ def get_item_name_from_id(code):
 def get_location_name_from_address(address):
     import Regions
     return Regions.lookup_id_to_name.get(address, f'Unknown location (ID:{address})')
+
+
+def persistent_store(category, key, value):
+    path = local_path("_persistent_storage.yaml")
+    storage: dict = persistent_load()
+    category = storage.setdefault(category, {})
+    category[key] = value
+    with open(path, "wt") as f:
+        f.write(dump(storage))
+
+
+def persistent_load():
+    path = local_path("_persistent_storage.yaml")
+    storage: dict = {}
+    if os.path.exists(path):
+        try:
+            with open(path, "r") as f:
+                storage = parse_yaml(f.read())
+        except Exception as e:
+            import logging
+            logging.debug(f"Could not read store: {e}")
+    return storage
 
 
 class ReceivedItem(typing.NamedTuple):

@@ -589,12 +589,21 @@ async def server_loop(ctx : Context, address = None):
         logging.error('Already connected')
         return
 
-    if address is None:
+    if address is None:  # set through CLI or BMBP
         address = ctx.server_address
-
+    if address is None:  # see if this is an old connection
+        try:
+            address = Utils.persistent_load()["servers"][ctx.auth]
+        except Exception as e:
+            logging.debug(f"Could not find cached server address. {e}")
+        else:
+            logging.info(f"Using server {address} from the last time this rom was loaded. \n"
+                         f"Should this be in error, use /connect <new_address>")
     while not address:
         logging.info('Enter multiworld server address')
         address = await console_input(ctx)
+
+    Utils.persistent_store("servers", ctx.auth, address)
 
     address = f"ws://{address}" if "://" not in address else address
     port = urllib.parse.urlparse(address).port or 38281
