@@ -41,6 +41,7 @@ def create_dungeons(world, player):
     world.dungeons += [ES, EP, DP, ToH, AT, PoD, TT, SW, SP, IP, MM, TR, GT]
 
 def fill_dungeons(world):
+    #All chests on the freebes list locked behind a key in room with no other exit
     freebes = ['Ganons Tower - Map Chest', 'Palace of Darkness - Harmless Hellway', 'Palace of Darkness - Big Key Chest', 'Turtle Rock - Big Key Chest']
 
     all_state_base = world.get_all_state()
