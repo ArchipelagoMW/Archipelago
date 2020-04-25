@@ -666,7 +666,7 @@ async def process_server_cmd(ctx : Context, cmd, args):
         logging.info('--------------------------------')
         version = args.get("version", "unknown Bonta Protocol")
         if isinstance(version, list):
-            ctx.server_version = tuple(item for item in version)
+            ctx.server_version = tuple(version)
             version = ".".join(str(item) for item in version)
         else:
             ctx.server_version = (0, 0, 0)
@@ -1013,12 +1013,10 @@ async def game_watcher(ctx : Context):
         if gameend[0]:
             if not ctx.finished_game:
                 try:
-                    if ctx.server_version >= (2, 0, 5):
-                        await send_msgs(ctx.socket, [['GameFinished', '']])
-                        ctx.finished_game = True
+                    await send_msgs(ctx.socket, [['GameFinished', '']])
+                    ctx.finished_game = True
                 except Exception as ex:
                     logging.exception(ex)
-                    pass
 
             if time.perf_counter() - perf_counter < delay:
                 continue
@@ -1031,7 +1029,7 @@ async def game_watcher(ctx : Context):
             else:
                 prev_game_timer = game_timer
 
-        if gamemode in ENDGAME_MODES:
+        if gamemode in ENDGAME_MODES:  # triforce room and credits
             continue
 
         data = await snes_read(ctx, RECV_PROGRESS_ADDR, 8)
