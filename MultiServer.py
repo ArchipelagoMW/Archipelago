@@ -209,7 +209,7 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[Utils.Hint]):
 def update_aliases(ctx: Context, team: int, client: typing.Optional[Client] = None):
     cmd = json.dumps([["AliasUpdate",
                        [(key[1], ctx.get_aliased_name(*key)) for key, value in ctx.player_names.items() if
-                        key[0] == team]]])  # make sure it is a list, as it can be set internally
+                        key[0] == team]]])
     if client is None:
         for client in ctx.clients:
             if client.team == team and client.auth and client.version > [2, 0, 3]:
@@ -740,7 +740,8 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             client.version = args.get('version', Client.version)
             client.tags = args.get('tags', Client.tags)
             reply = [['Connected', [(client.team, client.slot),
-                                    [(p, n) for (t, p), n in ctx.player_names.items() if t == client.team]]]]
+                                    [(p, ctx.get_aliased_name(t, p)) for (t, p), n in ctx.player_names.items() if
+                                     t == client.team]]]]
             items = get_received_items(ctx, client.team, client.slot)
             if items:
                 reply.append(['ReceivedItems', (0, tuplize_received_items(items))])
