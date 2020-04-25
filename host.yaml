@@ -23,8 +23,16 @@ server_options:
   location_check_points: 1
   #point cost to receive a hint via !hint for players
   hint_cost: 1000 #set to 0 if you want free hints
-  #disable client forfeit
-  disable_client_forfeit: false
+  #forfeit modes: "disabled" -> clients can't forfeit, "enabled" -> clients can always forfeit
+  # "auto" -> automatic forfeit on goal completion, "goal" -> clients can forfeit after achieving their goal
+  # warning: only Berserker's Multiworld clients of version 2.1+ send game beaten information
+  forfeit_mode: "goal"
+  # !remaining handling, that tells a client which items remain in their pool
+  # "enabled" -> client can always ask for remaining items
+  # "disabled" -> client can never ask for remaining items
+  # "goal" -> client can ask for remaining items after goal completion
+  # warning: only Berserker's Multiworld clients of version 2.1+ send game beaten information
+  remaining_mode: "goal"
 #options for MultiMystery.py
 multi_mystery_options:
 #teams, however, note that there is currently no way to supply names for teams 2+ through MultiMystery

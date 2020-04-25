@@ -28,6 +28,9 @@ from Utils import get_item_name_from_id, get_location_name_from_address, Receive
 
 console_names = frozenset(set(Items.item_table) | set(Regions.location_table))
 
+CLIENT_PLAYING = 0
+CLIENT_GOAL = 1
+
 
 class Client:
     version: typing.List[int] = [0, 0, 0]
@@ -58,7 +61,7 @@ class Client:
 
 class Context:
     def __init__(self, host: str, port: int, password: str, location_check_points: int, hint_cost: int,
-                 item_cheat: bool, forfeit_allowed):
+                 item_cheat: bool, forfeit_mode: str = "disabled", remaining_mode: str = "disabled"):
         self.data_filename = None
         self.save_filename = None
         self.disable_save = False
@@ -79,11 +82,12 @@ class Context:
         self.location_check_points = location_check_points
         self.hints_used = collections.defaultdict(int)
         self.hints: typing.Dict[typing.Tuple[int, int], typing.Set[Utils.Hint]] = collections.defaultdict(set)
-        self.forfeit_allowed = forfeit_allowed
+        self.forfeit_mode: str = forfeit_mode
+        self.remaining_mode: str = remaining_mode
         self.item_cheat = item_cheat
         self.running = True
         self.client_activity_timers = {}
-        self.client_finished_game = {}
+        self.client_game_state: typing.Dict[typing.Tuple[int, int], int] = collections.defaultdict(int)
         self.commandprocessor = ServerCommandProcessor(self)
 
     def get_save(self) -> dict:
@@ -94,6 +98,7 @@ class Context:
             "hints": tuple((key, list(value)) for key, value in self.hints.items()),
             "location_checks": tuple((key, tuple(value)) for key, value in self.location_checks.items()),
             "name_aliases": tuple((key, value) for key, value in self.name_aliases.items()),
+            "client_game_state": tuple((key, value) for key, value in self.client_game_state.items())
         }
         return d
 
@@ -122,6 +127,8 @@ class Context:
                         self.hints[team, hint.finding_player].add(hint)
         if "name_aliases" in savedata:
             self.name_aliases.update({tuple(key): value for key, value in savedata["name_aliases"]})
+            if "client_game_state" in savedata:
+                self.client_game_state.update({tuple(key): value for key, value in savedata["client_game_state"]})
         self.location_checks.update({tuple(key): set(value) for key, value in savedata["location_checks"]})
         logging.info(f'Loaded save file with {sum([len(p) for p in received_items.values()])} received items '
                      f'for {len(received_items)} players')
@@ -312,6 +319,13 @@ def forfeit_player(ctx: Context, team: int, slot: int):
     notify_all(ctx, "%s (Team #%d) has forfeited" % (ctx.player_names[(team, slot)], team + 1))
     register_location_checks(ctx, team, slot, all_locations)
 
+
+def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
+    items = []
+    for (location, location_slot) in ctx.locations:
+        if location_slot == slot and location not in ctx.location_checks[team, slot]:
+            items.append(ctx.locations[location, slot][0])  # item ID
+    return sorted(items)
 
 def register_location_checks(ctx: Context, team: int, slot: int, locations):
     ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
@@ -524,13 +538,50 @@ class ClientMessageProcessor(CommandProcessor):
 
     def _cmd_forfeit(self) -> bool:
         """Surrender and send your remaining items out to their recipients"""
-        if self.ctx.forfeit_allowed:
+        if self.ctx.forfeit_mode == "enabled":
             forfeit_player(self.ctx, self.client.team, self.client.slot)
             return True
-        else:
+        elif self.ctx.forfeit_mode == "disabled":
             self.output(
                 "Sorry, client forfeiting has been disabled on this server. You can ask the server admin for a /forfeit")
             return False
+        else:  # is auto or goal
+            if self.ctx.client_game_state[self.client.team, self.client.slot] == CLIENT_GOAL:
+                forfeit_player(self.ctx, self.client.team, self.client.slot)
+                return True
+            else:
+                self.output(
+                    "Sorry, client forfeiting requires you to have beaten the game on this server."
+                    " You can ask the server admin for a /forfeit")
+                return False
+
+    def _cmd_remaining(self) -> bool:
+        """List remaining items in your game, but not their location or recipient"""
+        if self.ctx.remaining_mode == "enabled":
+            remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
+            if remaining_item_ids:
+                self.output("Remaining items: " + ", ".join(Items.lookup_id_to_name.get(item_id, "unknown item")
+                                                            for item_id in remaining_item_ids))
+            else:
+                self.output("No remaining items found.")
+            return True
+        elif self.ctx.remaining_mode == "disabled":
+            self.output(
+                "Sorry, !remaining has been disabled on this server.")
+            return False
+        else:  # is goal
+            if self.ctx.client_game_state[self.client.team, self.client.slot] == CLIENT_GOAL:
+                remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
+                if remaining_item_ids:
+                    self.output("Remaining items: " + ", ".join(Items.lookup_id_to_name.get(item_id, "unknown item")
+                                                                for item_id in remaining_item_ids))
+                else:
+                    self.output("No remaining items found.")
+                return True
+            else:
+                self.output(
+                    "Sorry, !remaining requires you to have beaten the game on this server")
+                return False
 
     def _cmd_countdown(self, seconds: str = "10") -> bool:
         """Start a countdown in seconds"""
@@ -739,11 +790,11 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             client.tags = args
 
         elif cmd == 'GameFinished':
-            if (client.team, client.slot) not in ctx.client_finished_game:
+            if (client.team, client.slot) not in ctx.client_game_state:
                 finished_msg = f'{client.name} (Team #{client.team + 1}) has found the triforce.'
                 notify_all(ctx, finished_msg)
                 print(finished_msg)
-                ctx.client_finished_game[client.team, client.slot] = True
+                ctx.client_game_state[client.team, client.slot] = CLIENT_GOAL
             # TODO: Add auto-forfeit code here
 
         if cmd == 'Say':
@@ -787,6 +838,7 @@ class ServerCommandProcessor(CommandProcessor):
     def _cmd_save(self) -> bool:
         """Save current state to multidata"""
         save(self.ctx)
+        self.output("Game saved")
         return True
 
     def _cmd_players(self) -> bool:
@@ -919,7 +971,21 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--hint_cost', default=defaults["hint_cost"], type=int)
     parser.add_argument('--disable_item_cheat', default=defaults["disable_item_cheat"], action='store_true')
     parser.add_argument('--port_forward', default=defaults["port_forward"], action='store_true')
-    parser.add_argument('--disable_client_forfeit', default=defaults["disable_client_forfeit"], action='store_true')
+    parser.add_argument('--forfeit_mode', default=defaults["forfeit_mode"], nargs='?',
+                        choices=['auto', 'enabled', 'disabled', "goal"], help='''\
+                             Select !forfeit Accessibility. (default: %(default)s)
+                             auto:     Automatic "forfeit" on goal completion
+                             enabled:  !forfeit is always available
+                             disabled: !forfeit is never available
+                             goal:     !forfeit can be used after goal completion
+                             ''')
+    parser.add_argument('--remaining_mode', default=defaults["remaining_mode"], nargs='?',
+                        choices=['enabled', 'disabled', "goal"], help='''\
+                             Select !remaining Accessibility. (default: %(default)s)
+                             enabled:  !remaining is always available
+                             disabled: !remaining is never available
+                             goal:     !remaining can be used after goal completion
+                             ''')
     args = parser.parse_args()
     return args
 
@@ -931,7 +997,7 @@ async def main(args: argparse.Namespace):
         portforwardtask = asyncio.create_task(forward_port(args.port))
 
     ctx = Context(args.host, args.port, args.password, args.location_check_points, args.hint_cost,
-                  not args.disable_item_cheat, not args.disable_client_forfeit)
+                  not args.disable_item_cheat, args.forfeit_mode, args.remaining_mode)
 
     ctx.data_filename = args.multidata
 
