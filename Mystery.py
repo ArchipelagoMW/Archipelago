@@ -227,15 +227,15 @@ def handle_name(name: str):
 
 def roll_settings(weights):
     ret = argparse.Namespace()
-    ret.name = get_choice('name', weights)
-    if ret.name:
-        ret.name = handle_name(ret.name)
-
     if "linked_options" in weights:
         weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
         for option_set in weights["linked_options"]:
             if random.random() < (option_set["percentage"] / 100):
                 weights.update(option_set["options"])
+
+    ret.name = get_choice('name', weights)
+    if ret.name:
+        ret.name = handle_name(ret.name)
 
     glitches_required = get_choice('glitches_required', weights)
     if glitches_required not in ['none', 'no_logic', 'overworld_glitches']:
