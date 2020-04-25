@@ -38,6 +38,8 @@ def main():
     parser.add_argument('--meta', default=None)
     parser.add_argument('--log_output_path', help='Path to store output log')
     parser.add_argument('--loglevel', default='info', help='Sets log level')
+    parser.add_argument('--yaml_output', default=256, type=lambda value: min(max(int(value), 0), 255),
+                        help='Output rolled mystery results to yaml up to specified number (made for async multiworld)"')
 
     for player in range(1, multiargs.multi + 1):
         parser.add_argument(f'--p{player}', help=argparse.SUPPRESS)
@@ -161,11 +163,27 @@ def main():
             raise RuntimeError(f'No weights specified for player {player}')
         if not erargs.name[player]:
             erargs.name[player] = os.path.split(path)[-1].split(".")[0]
-    if args.samesettings:
+    if args.weights:
         erargs.names = ""
     else:
         erargs.names = ",".join(erargs.name[i] for i in range(1, args.multi + 1))
     del (erargs.name)
+    if args.yaml_output:
+        import yaml
+        important = {}
+        for option, player_settings in vars(erargs).items():
+            if type(player_settings) == dict:
+                if len(set(player_settings.values())) > 1:
+                    important[option] = {player: value for player, value in player_settings.items() if
+                                         player <= args.yaml_output}
+                else:
+                    important[option] = player_settings[1]
+            else:
+                if player_settings != "":  # is not empty name
+                    important[option] = player_settings
+        os.makedirs(args.outputpath, exist_ok=True)
+        with open(os.path.join(args.outputpath if args.outputpath else ".", f"mystery_result_{seed}.yaml"), "wt") as f:
+            yaml.dump(important, f)
 
     ERmain(erargs, seed)
 
@@ -212,11 +230,19 @@ def roll_settings(weights):
     ret.name = get_choice('name', weights)
     if ret.name:
         ret.name = handle_name(ret.name)
+
+    if "linked_options" in weights:
+        weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
+        for option_set in weights["linked_options"]:
+            if random.random() < (option_set["percentage"] / 100):
+                weights.update(option_set["options"])
+
     glitches_required = get_choice('glitches_required', weights)
     if glitches_required not in ['none', 'no_logic', 'overworld_glitches']:
         logging.warning("Only NMG, OWG and No Logic supported")
         glitches_required = 'none'
-    ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches'}[glitches_required]
+    ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches'}[
+        glitches_required]
 
     # item_placement = get_choice('item_placement')
     # not supported in ER

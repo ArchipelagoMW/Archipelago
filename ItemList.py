@@ -356,7 +356,6 @@ def fill_prizes(world, attempts=15):
         placed_prizes = [loc.item.name for loc in crystal_locations if loc.item is not None]
         unplaced_prizes = [crystal for crystal in crystals if crystal.name not in placed_prizes]
         empty_crystal_locations = [loc for loc in crystal_locations if loc.item is None]
-
         for attempt in range(attempts):
             try:
                 prizepool = list(unplaced_prizes)
@@ -366,7 +365,7 @@ def fill_prizes(world, attempts=15):
                 fill_restrictive(world, all_state, prize_locs, prizepool, True)
             except FillError as e:
                 logging.getLogger('').exception("Failed to place dungeon prizes (%s). Will retry %s more times", e,
-                                                attempts - attempt - 1)
+                                                attempts - attempt)
                 for location in empty_crystal_locations:
                     location.item = None
                 continue
