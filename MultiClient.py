@@ -4,6 +4,7 @@ import json
 import logging
 import urllib.parse
 import atexit
+import time
 
 from Utils import get_item_name_from_id, get_location_name_from_address, ReceivedItem
 
@@ -46,6 +47,7 @@ class Context:
         self.server_task = None
         self.socket = None
         self.password = password
+        self.server_version = (0, 0, 0)
 
         self.team = None
         self.slot = None
@@ -58,6 +60,8 @@ class Context:
         self.rom = None
         self.auth = None
         self.found_items = found_items
+        self.finished_game = False
+        self.slow_mode = False
 
 
 color_codes = {'reset': 0, 'bold': 1, 'underline': 4, 'black': 30, 'red': 31, 'green': 32, 'yellow': 33, 'blue': 34,
@@ -84,6 +88,7 @@ ROMNAME_START = SRAM_START + 0x2000
 ROMNAME_SIZE = 0x15
 
 INGAME_MODES = {0x07, 0x09, 0x0b}
+ENDGAME_MODES = {0x19, 0x1a}
 
 SAVEDATA_START = WRAM_START + 0xF000
 SAVEDATA_SIZE = 0x500
@@ -635,6 +640,7 @@ async def server_loop(ctx : Context, address = None):
         ctx.auth = None
         ctx.items_received = []
         ctx.locations_info = {}
+        ctx.server_version = (0, 0, 0)
         socket, ctx.socket = ctx.socket, None
         if socket is not None and not socket.closed:
             await socket.close()
@@ -659,8 +665,11 @@ async def process_server_cmd(ctx : Context, cmd, args):
         logging.info('Room Information:')
         logging.info('--------------------------------')
         version = args.get("version", "unknown Bonta Protocol")
-        if isinstance(version, str):
+        if isinstance(version, list):
+            ctx.server_version = tuple(version)
             version = ".".join(str(item) for item in version)
+        else:
+            ctx.server_version = (0, 0, 0)
         logging.info(f'Server protocol version: {version}')
         if "tags" in args:
             logging.info("Server protocol tags: " + ", ".join(args["tags"]))
@@ -872,6 +881,15 @@ class ClientCommandProcessor(CommandProcessor):
         asyncio.create_task(send_msgs(self.ctx.socket, [['UpdateTags', get_tags(self.ctx)]]))
         return True
 
+    def _cmd_slow_mode(self, toggle: str = ""):
+        """Toggle slow mode, which limits how fast you send / receive items."""
+        if toggle:
+            self.ctx.slow_mode = toggle.lower() in {"1", "true", "on"}
+        else:
+            self.ctx.slow_mode = not self.ctx.slow_mode
+
+        logging.info(f"Setting slow mode to {self.ctx.slow_mode}")
+
     def default(self, raw: str):
         asyncio.create_task(send_msgs(self.ctx.socket, [['Say', raw]]))
 
@@ -959,14 +977,17 @@ async def track_locations(ctx : Context, roomid, roomdata):
     await send_msgs(ctx.socket, [['LocationChecks', new_locations]])
 
 async def game_watcher(ctx : Context):
+    prev_game_timer = 0
+    perf_counter = time.perf_counter()
     while not ctx.exit_event.is_set():
         try:
-            await asyncio.wait_for(ctx.watcher_event.wait(), 2)
+            await asyncio.wait_for(ctx.watcher_event.wait(), 0.125)
         except asyncio.TimeoutError:
             pass
         ctx.watcher_event.clear()
 
         if not ctx.rom:
+            ctx.finished_game = False
             rom = await snes_read(ctx, ROMNAME_START, ROMNAME_SIZE)
             if rom is None or rom == bytes([0] * ROMNAME_SIZE):
                 continue
@@ -982,7 +1003,33 @@ async def game_watcher(ctx : Context):
             await disconnect(ctx)
 
         gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
-        if gamemode is None or gamemode[0] not in INGAME_MODES:
+        gameend = await snes_read(ctx, SAVEDATA_START + 0x443, 1)
+        game_timer = await snes_read(ctx, SAVEDATA_START + 0x42E, 4)
+        if gamemode is None or gameend is None or game_timer is None or \
+                (gamemode[0] not in INGAME_MODES and gamemode[0] not in ENDGAME_MODES):
+            continue
+
+        delay = 7 if ctx.slow_mode else 2
+        if gameend[0]:
+            if not ctx.finished_game:
+                try:
+                    await send_msgs(ctx.socket, [['GameFinished', '']])
+                    ctx.finished_game = True
+                except Exception as ex:
+                    logging.exception(ex)
+
+            if time.perf_counter() - perf_counter < delay:
+                continue
+            else:
+                perf_counter = time.perf_counter()
+        else:
+            game_timer = game_timer[0] | (game_timer[1] << 8) | (game_timer[2] << 16) | (game_timer[3] << 24)
+            if abs(game_timer - prev_game_timer) < (delay * 60):
+                continue
+            else:
+                prev_game_timer = game_timer
+
+        if gamemode in ENDGAME_MODES:  # triforce room and credits
             continue
 
         data = await snes_read(ctx, RECV_PROGRESS_ADDR, 8)
