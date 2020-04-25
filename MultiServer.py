@@ -83,6 +83,7 @@ class Context:
         self.item_cheat = item_cheat
         self.running = True
         self.client_activity_timers = {}
+        self.client_finished_game = {}
         self.commandprocessor = ServerCommandProcessor(self)
 
     def get_save(self) -> dict:
@@ -736,6 +737,13 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
                 await send_msgs(client, [['InvalidArguments', 'UpdateTags']])
                 return
             client.tags = args
+
+        elif cmd == 'GameFinished':
+            if (client.team, client.slot) not in ctx.client_finished_game:
+                notify_all(ctx, client.name + ' has finished the game.')
+                print(client.name + ' has finished the game.')
+                ctx.client_finished_game[client.team, client.slot] = True
+            # TODO: Add auto-forfeit code here
 
         if cmd == 'Say':
             if type(args) is not str or not args.isprintable():
