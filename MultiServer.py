@@ -740,8 +740,9 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
 
         elif cmd == 'GameFinished':
             if (client.team, client.slot) not in ctx.client_finished_game:
-                notify_all(ctx, client.name + ' has finished the game.')
-                print(client.name + ' has finished the game.')
+                finished_msg = f'{client.name} (Team #{client.team + 1}) has found the triforce.'
+                notify_all(ctx, finished_msg)
+                print(finished_msg)
                 ctx.client_finished_game[client.team, client.slot] = True
             # TODO: Add auto-forfeit code here
 
