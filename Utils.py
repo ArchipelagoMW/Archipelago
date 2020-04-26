@@ -221,7 +221,7 @@ def persistent_store(category, key, value):
         f.write(dump(storage))
 
 
-def persistent_load():
+def persistent_load() -> typing.Dict[dict]:
     path = local_path("_persistent_storage.yaml")
     storage: dict = {}
     if os.path.exists(path):

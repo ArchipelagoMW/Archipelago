@@ -17,13 +17,15 @@ def adjust(args):
             baserom = LocalRom(args.baserom, patch=True)
             rom.orig_buffer = baserom.orig_buffer
     else:
-        raise RuntimeError('Provided Rom is not a valid Link to the Past Randomizer Rom. Please provide one for adjusting.')
+        raise RuntimeError(
+            'Provided Rom is not a valid Link to the Past Randomizer Rom. Please provide one for adjusting.')
 
-    apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.fastmenu, args.disablemusic, args.sprite, args.ow_palettes, args.uw_palettes)
-
-    rom.write_to_file(output_path(f'{os.path.basename(args.rom)[:-4]}_adjusted.sfc'))
+    apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.fastmenu, args.disablemusic,
+                       args.sprite, args.ow_palettes, args.uw_palettes)
+    path = output_path(f'{os.path.basename(args.rom)[:-4]}_adjusted.sfc')
+    rom.write_to_file(path)
 
     logger.info('Done. Enjoy.')
     logger.debug('Total Time: %s', time.perf_counter() - start)
 
-    return args
+    return args, path

@@ -1089,9 +1089,29 @@ async def main():
 
     if args.diff_file:
         import Patch
+        logging.info("Patch file was supplied. Creating sfc rom..")
         meta, romfile = Patch.create_rom_file(args.diff_file)
         args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
+        adjuster_settings = Utils.persistent_load().get("adjuster", {}).get("last_settings", {})
+        if adjuster_settings:
+            import pprint
+            adjuster_settings.rom = romfile
+            adjuster_settings.baserom = Patch.get_base_rom_path()
+            whitelist = {"disablemusic", "fastmenu", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
+                         "uw_palettes"}
+            printed_options = {name: value for name, value in vars(adjuster_settings).items() if name in whitelist}
+            sprite = getattr(adjuster_settings, "sprite", None)
+            if sprite:
+                printed_options["sprite"]: adjuster_settings.sprite.name
+            adjust_wanted = input(f"Last used adjuster settings were found. Would you like to apply these? \n"
+                                  f"{pprint.pformat(printed_options)}\n"
+                                  f"Enter yes or no: ")
+            if adjust_wanted and adjust_wanted.startswith("y"):
+                import AdjusterMain
+                _, romfile = AdjusterMain.adjust(adjuster_settings)
+            else:
+                logging.info("Skipping post-patch adjustment")
         asyncio.create_task(run_game(romfile))
 
     ctx = Context(args.snes, args.connect, args.password, args.founditems)

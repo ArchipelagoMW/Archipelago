@@ -623,12 +623,14 @@ def guiMain(args=None):
         guiargs.baserom = romVar.get()
         guiargs.sprite = sprite
         try:
-            adjust(args=guiargs)
+            guiargs, path = adjust(args=guiargs)
         except Exception as e:
             logging.exception(e)
-            messagebox.showerror(title="Error while creating seed", message=str(e))
+            messagebox.showerror(title="Error while adjusting Rom", message=str(e))
         else:
             messagebox.showinfo(title="Success", message="Rom patched successfully")
+            from Utils import persistent_store
+            persistent_store("adjuster", "last_settings", guiargs)
 
     adjustButton = Button(bottomFrame2, text='Adjust Rom', command=adjustRom)
 

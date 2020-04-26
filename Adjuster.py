@@ -47,17 +47,20 @@ def main():
 
     # ToDo: Validate files further than mere existance
     if not os.path.isfile(args.rom):
-        input('Could not find valid rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
+        input(
+            'Could not find valid rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
         sys.exit(1)
     if args.sprite is not None and not os.path.isfile(args.sprite) and not get_sprite_from_name(args.sprite):
         input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
         sys.exit(1)
 
     # set up logger
-    loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[args.loglevel]
+    loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[
+        args.loglevel]
     logging.basicConfig(format='%(message)s', level=loglevel)
-
-    adjust(args=args)
+    args, path = adjust(args=args)
+    from Utils import persistent_store
+    persistent_store("adjuster", "last_settings", args)
 
 if __name__ == '__main__':
     main()
