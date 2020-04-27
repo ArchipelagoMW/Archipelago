@@ -610,7 +610,7 @@ class ClientMessageProcessor(CommandProcessor):
     @mark_raw
     def _cmd_alias(self, alias_name: str = ""):
         if alias_name:
-            alias_name = alias_name[:15]
+            alias_name = alias_name[:15].strip()
             self.ctx.name_aliases[self.client.team, self.client.slot] = alias_name
             self.output(f"Hello, {alias_name}")
             update_aliases(self.ctx, self.client.team)
@@ -796,7 +796,6 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
                 notify_all(ctx, finished_msg)
                 print(finished_msg)
                 ctx.client_game_state[client.team, client.slot] = CLIENT_GOAL
-            # TODO: Add auto-forfeit code here
 
         if cmd == 'Say':
             if type(args) is not str or not args.isprintable():
@@ -852,6 +851,30 @@ class ServerCommandProcessor(CommandProcessor):
         asyncio.create_task(self.ctx.server.ws_server._close())
         self.ctx.running = False
         return True
+
+    @mark_raw
+    def _cmd_alias(self, player_name_then_alias_name):
+        player_name, alias_name = player_name_then_alias_name.split(" ", 1)
+        player_name, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
+        if usable:
+            for (team, slot), name in self.ctx.player_names.items():
+                if name == player_name:
+                    if alias_name:
+                        alias_name = alias_name.strip()[:15]
+                        self.ctx.name_aliases[team, slot] = alias_name
+                        self.output(f"Named {player_name} as {alias_name}")
+                        update_aliases(self.ctx, team)
+                        save(self.ctx)
+                        return True
+                    else:
+                        del (self.ctx.name_aliases[team, slot])
+                        self.output(f"Removed Alias for {player_name}")
+                        update_aliases(self.ctx, team)
+                        save(self.ctx)
+                        return True
+        else:
+            self.output(response)
+            return False
 
     @mark_raw
     def _cmd_password(self, new_password: str = "") -> bool:
