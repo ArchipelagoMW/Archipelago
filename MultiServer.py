@@ -791,7 +791,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             client.tags = args
 
         elif cmd == 'GameFinished':
-            if (client.team, client.slot) not in ctx.client_game_state:
+            if ctx.client_game_state[client.team, client.slot] != CLIENT_GOAL:
                 finished_msg = f'{client.name} (Team #{client.team + 1}) has found the triforce.'
                 notify_all(ctx, finished_msg)
                 print(finished_msg)
