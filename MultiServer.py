@@ -459,6 +459,7 @@ class CommandProcessor(metaclass=CommandMeta):
                 method = self.commands.get(basecommand[1:].lower(), None)
                 if not method:
                     self._error_unknown_command(basecommand[1:])
+                    return False
                 else:
                     if getattr(method, "raw_text", False):  # method is requesting unprocessed text data
                         arg = raw.split(maxsplit=1)
@@ -498,11 +499,11 @@ class CommandProcessor(metaclass=CommandMeta):
 
     def _cmd_license(self):
         """Returns the licensing information"""
-        license = getattr(CommandProcessor, "license", None)
-        if not license:
+        mw_license = getattr(CommandProcessor, "license", None)
+        if not mw_license:
             with open(Utils.local_path("LICENSE")) as f:
-                CommandProcessor.license = license = f.read()
-        self.output(CommandProcessor.license)
+                CommandProcessor.license = mw_license = f.read()
+        self.output(mw_license)
 
     def default(self, raw: str):
         self.output("Echo: " + raw)
