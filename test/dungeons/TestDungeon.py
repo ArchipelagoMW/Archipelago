@@ -5,22 +5,22 @@ from Dungeons import create_dungeons, get_dungeon_item_pool
 from EntranceShuffle import mandatory_connections, connect_simple
 from ItemList import difficulties, generate_itempool
 from Items import ItemFactory
-from Regions import create_regions
+from Regions import create_regions, create_shops
 from Rules import set_rules
 
 
 class TestDungeon(unittest.TestCase):
     def setUp(self):
-        self.world = World(1, 'vanilla', 'noglitches', 'open', 'random', 'normal', 'normal', 'none', 'on', 'ganon', 'balanced',
-                           True, False, False, False, False, False, False, False, False, None,
-                           'none', False)
+        self.world = World(1, {1:'vanilla'}, {1:'noglitches'}, {1:'open'}, {1:'random'}, {1:'normal'}, {1:'normal'}, {1:False}, {1:'on'}, {1:'ganon'}, 'balanced',  {1:'items'},
+                           True,  {1:False}, False, None,  {1:False})
         self.starting_regions = []
-        self.world.difficulty_requirements = difficulties['normal']
+        self.world.difficulty_requirements[1] = difficulties['normal']
         create_regions(self.world, 1)
         create_dungeons(self.world, 1)
+        create_shops(self.world, 1)
         for exitname, regionname in mandatory_connections:
             connect_simple(self.world, exitname, regionname, 1)
-        connect_simple(self.world, self.world.get_entrance('Big Bomb Shop', 1), self.world.get_region('Big Bomb Shop', 1), 1)
+        connect_simple(self.world, 'Big Bomb Shop', 'Big Bomb Shop', 1)
         self.world.swamp_patch_required[1] = True
         set_rules(self.world, 1)
         generate_itempool(self.world, 1)

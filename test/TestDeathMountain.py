@@ -1,25 +1,10 @@
-from BaseClasses import World
-from Dungeons import create_dungeons
-from EntranceShuffle import link_entrances
-from ItemList import difficulties
-from Regions import create_regions
-from Rules import set_rules
-from test.TestVanilla import TestVanilla
+from test.vanilla.TestVanilla import TestVanilla
 
 
 class TestDeathMountain(TestVanilla):
-    def setUp(self):
-        self.world = World(1, 'vanilla', 'noglitches', 'open', 'random', 'normal', 'normal', 'none', 'on', 'ganon', 'balanced',
-                      True, False, False, False, False, False, False, False, False, None,
-                      'none', False)
-        self.world.difficulty_requirements = difficulties['normal']
-        create_regions(self.world, 1)
-        create_dungeons(self.world, 1)
-        link_entrances(self.world, 1)
-        set_rules(self.world, 1)
 
     def testWestDeathMountain(self):
-        self.run_tests([
+        self.run_location_tests([
             ["Ether Tablet", False, []],
             ["Ether Tablet", False, [], ['Progressive Glove', 'Flute']],
             ["Ether Tablet", False, [], ['Lamp', 'Flute']],

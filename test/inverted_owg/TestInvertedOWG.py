@@ -9,9 +9,9 @@ from Rules import set_rules
 from test.TestBase import TestBase
 
 
-class TestInverted(TestBase):
+class TestInvertedOWG(TestBase):
     def setUp(self):
-        self.world = World(1, {1:'vanilla'}, {1:'noglitches'}, {1:'inverted'}, {1:'random'}, {1:'normal'}, {1:'normal'}, {1:False}, {1:'on'}, {1:'ganon'}, 'balanced',  {1:'items'},
+        self.world = World(1, {1:'vanilla'}, {1:'owglitches'}, {1:'inverted'}, {1:'random'}, {1:'normal'}, {1:'normal'}, {1:False}, {1:'on'}, {1:'ganon'}, 'balanced',  {1:'items'},
                            True,  {1:False}, False, None,  {1:False})
         self.world.difficulty_requirements[1] = difficulties['normal']
         create_inverted_regions(self.world, 1)
@@ -24,5 +24,7 @@ class TestInverted(TestBase):
         self.world.itempool.extend(ItemFactory(['Green Pendant', 'Red Pendant', 'Blue Pendant', 'Beat Agahnim 1', 'Beat Agahnim 2', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7'], 1))
         self.world.get_location('Agahnim 1', 1).item = None
         self.world.get_location('Agahnim 2', 1).item = None
+        self.world.precollected_items.clear()
+        self.world.itempool.append(ItemFactory('Pegasus Boots', 1))
         mark_light_world_regions(self.world, 1)
         set_rules(self.world, 1)

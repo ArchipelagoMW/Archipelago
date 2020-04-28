@@ -1,10 +1,10 @@
 from test.inverted.TestInverted import TestInverted
 
 
-class TestInvertedDeathMountain(TestInverted):
+class TestInvertedDarkWorld(TestInverted):
 
     def testNorthWest(self):
-        self.run_tests([
+        self.run_location_tests([
             ["Brewery", True, []],
 
             ["C-Shaped House", True, []],
@@ -30,22 +30,18 @@ class TestInvertedDeathMountain(TestInverted):
             ["Blacksmith", False, []],
             ["Blacksmith", False, [], ['Progressive Glove', 'Magic Mirror']],
             ["Blacksmith", True, ['Progressive Glove', 'Progressive Glove', 'Moon Pearl']],
-            #@todo: Can get this without moon pearl
-            #["Blacksmith", True, ['Beat Agahnim 1', 'Magic Mirror']],
-            ["Blacksmith", True, ['Beat Agahnim 1', 'Magic Mirror', 'Moon Pearl']],
+            ["Blacksmith", True, ['Beat Agahnim 1', 'Magic Mirror']],
             ["Blacksmith", True, ['Progressive Glove', 'Hammer', 'Magic Mirror', 'Moon Pearl']],
 
             ["Purple Chest", False, []],
             ["Purple Chest", False, [], ['Progressive Glove', 'Magic Mirror']],
             ["Purple Chest", True, ['Progressive Glove', 'Progressive Glove', 'Moon Pearl']],
-            # @todo: Can get this without moon pearl
-            #["Purple Chest", True, ['Beat Agahnim 1', 'Magic Mirror']],
-            ["Purple Chest", True, ['Beat Agahnim 1', 'Magic Mirror', 'Moon Pearl']],
+            ["Purple Chest", True, ['Beat Agahnim 1', 'Magic Mirror']],
             ["Purple Chest", True, ['Progressive Glove', 'Hammer', 'Magic Mirror', 'Moon Pearl']],
         ])
 
     def testNorthEast(self):
-        self.run_tests([
+        self.run_location_tests([
             ["Catfish", False, []],
             ["Catfish", False, [], ['Progressive Glove', 'Flippers']],
             ["Catfish", False, [], ['Progressive Glove', 'Magic Mirror']],
@@ -80,7 +76,7 @@ class TestInvertedDeathMountain(TestInverted):
         ])
 
     def testSouth(self):
-        self.run_tests([
+        self.run_location_tests([
             ["Hype Cave - Top", True, []],
 
             ["Hype Cave - Middle Right", True, []],
@@ -99,7 +95,7 @@ class TestInvertedDeathMountain(TestInverted):
         ])
 
     def testMireArea(self):
-        self.run_tests([
+        self.run_location_tests([
             ["Mire Shed - Left", False, []],
             ["Mire Shed - Left", False, [], ['Flute', 'Magic Mirror']],
             ["Mire Shed - Left", True, ['Moon Pearl', 'Flute', 'Progressive Glove', 'Progressive Glove']],

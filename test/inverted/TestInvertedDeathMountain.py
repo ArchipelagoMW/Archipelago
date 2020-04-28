@@ -4,7 +4,7 @@ from test.inverted.TestInverted import TestInverted
 class TestInvertedDeathMountain(TestInverted):
 
     def testWestDeathMountain(self):
-        self.run_tests([
+        self.run_location_tests([
             ["Old Man", False, []],
             ["Old Man", False, [], ['Progressive Glove', 'Flute']],
             ["Old Man", False, [], ['Lamp']],
@@ -23,7 +23,7 @@ class TestInvertedDeathMountain(TestInverted):
         ])
         
     def testEastDeathMountain(self):
-        self.run_tests([
+        self.run_location_tests([
             ["Spiral Cave", False, []],
             ["Spiral Cave", False, [], ['Moon Pearl']],
             ["Spiral Cave", False, [], ['Progressive Glove', 'Flute']],
@@ -158,7 +158,7 @@ class TestInvertedDeathMountain(TestInverted):
         ])
 
     def testEastDarkWorldDeathMountain(self):
-        self.run_tests([
+        self.run_location_tests([
             ["Superbunny Cave - Top", False, []],
             ["Superbunny Cave - Top", False, [], ['Progressive Glove', 'Flute']],
             ["Superbunny Cave - Top", True, ['Progressive Glove', 'Lamp']],
@@ -204,18 +204,19 @@ class TestInvertedDeathMountain(TestInverted):
         ])
 
     def testWestDarkWorldDeathMountain(self):
-        self.run_tests([
+        self.run_location_tests([
             ["Spike Cave", False, []],
             ["Spike Cave", False, [], ['Progressive Glove']],
             ["Spike Cave", False, [], ['Hammer']],
             ["Spike Cave", False, [], ['Cape', 'Cane of Byrna']],
             ["Spike Cave", False, [], ['Cane of Byrna', 'AnyBottle', 'Magic Upgrade (1/2)']],
             ["Spike Cave", False, [], ['AnyBottle', 'Magic Upgrade (1/2)', 'Pegasus Boots', 'Boss Heart Container', 'Piece of Heart', 'Sanctuary Heart Container']],
-            ["Spike Cave", False, ['Bottle', 'Hammer', 'Progressive Glove', 'Lamp', 'Cape']],
-            ["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Lamp', 'Moon Pearl', 'Cape']],
+            ["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Lamp', 'Cape']],
+            # Change from base ER - this fork places a blue potion in dark world
+            #["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Lamp', 'Moon Pearl', 'Cape']],
             ["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Flute', 'Moon Pearl', 'Cape']],
-            ["Spike Cave", False, ['Bottle', 'Hammer', 'Progressive Glove', 'Lamp', 'Cane of Byrna']],
-            ["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Lamp', 'Moon Pearl', 'Cane of Byrna']],
+            ["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Lamp', 'Cane of Byrna']],
+            #["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Lamp', 'Moon Pearl', 'Cane of Byrna']],
             ["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Flute', 'Moon Pearl', 'Cane of Byrna']],
             ["Spike Cave", True, ['Magic Upgrade (1/2)', 'Hammer', 'Progressive Glove', 'Lamp', 'Cape']],
             ["Spike Cave", True, ['Magic Upgrade (1/2)', 'Hammer', 'Progressive Glove', 'Flute', 'Moon Pearl', 'Cape']],
