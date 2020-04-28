@@ -190,7 +190,6 @@ def main():
         with open(os.path.join(args.outputpath if args.outputpath else ".", f"mystery_result_{seed}.yaml"), "wt") as f:
             yaml.dump(important, f)
 
-    logging.info(erargs)
     ERmain(erargs, seed)
 
 

@@ -680,6 +680,3 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
         pool.extend(['Nothing'] * (total_items_to_place - itemtotal))
 
     return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms)
-
-if __name__ == '__main__':
-    test()
