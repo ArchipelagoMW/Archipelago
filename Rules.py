@@ -67,8 +67,10 @@ def set_rules(world, player):
     if not world.swamp_patch_required[player]:
         add_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has_Mirror(player))
 
+    # GT Entrance may be required for Turtle Rock for OWG and < 7 required
     ganons_tower = world.get_entrance('Inverted Ganons Tower' if world.mode[player] == 'inverted' else 'Ganons Tower', player)
-    set_rule(ganons_tower, lambda state: False) # This is a safety for the TR function below to not require GT entrance in its key logic.
+    if world.crystals_needed_for_gt[player] == 7 and not (world.logic[player] == 'owglitches' and world.mode[player] != 'inverted'):
+        set_rule(ganons_tower, lambda state: False)
 
     set_trock_key_rules(world, player)
 
@@ -845,81 +847,67 @@ def set_trock_key_rules(world, player):
     can_reach_middle = all_state.can_reach(world.get_region('Turtle Rock (Second Section)', player)) if world.can_access_trock_middle[player] is None else world.can_access_trock_middle[player]
     world.can_access_trock_middle[player] = can_reach_middle
 
+    # For some entrance configurations, 100% locations is not achievable
+    tr_breaks_accessibility = False
+
+    # The following represent the common key rules.
+
     # No matter what, the key requirement for going from the middle to the bottom should be three keys.
     set_rule(world.get_entrance('Turtle Rock Dark Room Staircase', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 3))
 
-    # The following represent the most common and most restrictive key rules. These are overwritten later as needed.
-    set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 4))
-    set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (North)', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 4))
-    set_rule(world.get_entrance('Turtle Rock Pokey Room', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 4))
-
     # No matter what, the Big Key cannot be in the Big Chest or held by Trinexx.
     non_big_key_locations = ['Turtle Rock - Big Chest', 'Turtle Rock - Boss']
-
-    def tr_big_key_chest_keys_needed(state):
-        # This function handles the key requirements for the TR Big Chest in the situations it having the Big Key should logically require 2 keys, small key
-        # should logically require no keys, and anything else should logically require 4 keys.
-        item = item_name(state, 'Turtle Rock - Big Key Chest', player)
-        if item in [('Small Key (Turtle Rock)', player)]:
-            return 0
-        if item in [('Big Key (Turtle Rock)', player)]:
-            return 2
-        return 4
 
     # Now we need to set rules based on which entrances we have access to. The most important point is whether we have back access. If we have back access, we
     # might open all the locked doors in any order so we need maximally restrictive rules.
     if can_reach_back:
         set_rule(world.get_location('Turtle Rock - Big Key Chest', player), lambda state: (state.has_key('Small Key (Turtle Rock)', player, 4) or item_name(state, 'Turtle Rock - Big Key Chest', player) == ('Small Key (Turtle Rock)', player)))
-        if world.accessibility[player] != 'locations':
-            set_always_allow(world.get_location('Turtle Rock - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Turtle Rock)' and item.player == player
-                                                                                                            and state.can_reach(world.get_region('Turtle Rock (Eye Bridge)', player)))
-        else:
-            forbid_item(world.get_location('Turtle Rock - Big Key Chest', player), 'Small Key (Turtle Rock)', player)
-    elif can_reach_front and can_reach_middle:
-        set_rule(world.get_location('Turtle Rock - Big Key Chest', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, tr_big_key_chest_keys_needed(state)))
-        if world.accessibility[player] != 'locations':
-            set_always_allow(world.get_location('Turtle Rock - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Turtle Rock)' and item.player == player
-                                                                                                            and state.can_reach(world.get_region('Turtle Rock (Entrance)', player)) and state.can_reach(world.get_region('Turtle Rock (Second Section)', player)))
-        else:
-            forbid_item(world.get_location('Turtle Rock - Big Key Chest', player), 'Small Key (Turtle Rock)', player)
-        non_big_key_locations += ['Turtle Rock - Crystaroller Room', 'Turtle Rock - Eye Bridge - Bottom Left',
-                                  'Turtle Rock - Eye Bridge - Bottom Right', 'Turtle Rock - Eye Bridge - Top Left',
-                                  'Turtle Rock - Eye Bridge - Top Right']
-    elif can_reach_front:
+        set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 4))
+        # Only consider wasting the key on the Trinexx door for going from the front entrance to middle section.  If other key doors are accessible, then these doors can be avoided
+        set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (North)', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 3))
+        set_rule(world.get_entrance('Turtle Rock Pokey Room', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 2))
+    else:
+        # Middle to front requires 2 keys if the back is locked, otherwise 4
+        set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 2)
+                if item_in_locations(state, 'Big Key (Turtle Rock)', player, [('Turtle Rock - Compass Chest', player), ('Turtle Rock - Roller Room - Left', player), ('Turtle Rock - Roller Room - Right', player)])
+                else state.has_key('Small Key (Turtle Rock)', player, 4))
+
+        # Front to middle requires 2 keys (if the middle is accessible then these doors can be avoided, otherwise no keys can be wasted)
         set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (North)', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 2))
         set_rule(world.get_entrance('Turtle Rock Pokey Room', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 1))
+
         set_rule(world.get_location('Turtle Rock - Big Key Chest', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, tr_big_key_chest_keys_needed(state)))
-        if world.accessibility[player] != 'locations':
-            set_always_allow(world.get_location('Turtle Rock - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Turtle Rock)' and item.player == player and state.has_key('Small Key (Turtle Rock)', player, 2)
-                                                                                                            and state.can_reach(world.get_region('Turtle Rock (Entrance)', player)))
-        else:
-            forbid_item(world.get_location('Turtle Rock - Big Key Chest', player), 'Small Key (Turtle Rock)', player)
+
+        def tr_big_key_chest_keys_needed(state):
+            # This function handles the key requirements for the TR Big Chest in the situations it having the Big Key should logically require 2 keys, small key
+            # should logically require no keys, and anything else should logically require 4 keys.
+            item = item_name(state, 'Turtle Rock - Big Key Chest', player)
+            if item in [('Small Key (Turtle Rock)', player)]:
+                return 0
+            if item in [('Big Key (Turtle Rock)', player)]:
+                return 2
+            return 4
+
         non_big_key_locations += ['Turtle Rock - Crystaroller Room', 'Turtle Rock - Eye Bridge - Bottom Left',
                                   'Turtle Rock - Eye Bridge - Bottom Right', 'Turtle Rock - Eye Bridge - Top Left',
                                   'Turtle Rock - Eye Bridge - Top Right']
-    elif can_reach_big_chest:
-        set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 2) if item_in_locations(state, 'Big Key (Turtle Rock)', player, [('Turtle Rock - Compass Chest', player), ('Turtle Rock - Roller Room - Left', player), ('Turtle Rock - Roller Room - Right', player)]) else state.has_key('Small Key (Turtle Rock)', player, 4))
-        set_rule(world.get_location('Turtle Rock - Big Key Chest', player), lambda state: (state.has_key('Small Key (Turtle Rock)', player, 4) or item_name(state, 'Turtle Rock - Big Key Chest', player) == ('Small Key (Turtle Rock)', player)))
-        if world.accessibility[player] != 'locations':
-            set_always_allow(world.get_location('Turtle Rock - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Turtle Rock)' and item.player == player
-                                                                                                            and state.can_reach(world.get_region('Turtle Rock (Big Chest)', player)))
-        else:
-            forbid_item(world.get_location('Turtle Rock - Big Key Chest', player), 'Small Key (Turtle Rock)', player)
-        non_big_key_locations += ['Turtle Rock - Crystaroller Room', 'Turtle Rock - Eye Bridge - Bottom Left',
-                                  'Turtle Rock - Eye Bridge - Bottom Right', 'Turtle Rock - Eye Bridge - Top Left',
-                                  'Turtle Rock - Eye Bridge - Top Right']
-        if not world.keyshuffle[player]:
+
+        # If TR is only accessible from the middle, the big key must be further restricted to prevent softlock potential
+        if not can_reach_front and not world.keyshuffle[player]:
+            # Must not go in the Big Key Chest - only 1 chest available and 2+ keys required for all other chests
             non_big_key_locations += ['Turtle Rock - Big Key Chest']
+            if not can_reach_big_chest:
+                # Must not go in the Chain Chomps chest - only 2 chests available and 3+ keys required for all other chests
+                non_big_key_locations += ['Turtle Rock - Chain Chomps']
+            if world.accessibility[player] == 'locations':
+                # A small key must go in the Big Key Chest to avoid a potential softlock.
+                tr_breaks_accessibility = True
+
+    if world.accessibility[player] != 'locations' or tr_breaks_accessibility:
+        set_always_allow(world.get_location('Turtle Rock - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Turtle Rock)' and item.player == player
+                and state.can_reach(world.get_region('Turtle Rock (Second Section)', player)))
     else:
-        set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 2) if item_in_locations(state, 'Big Key (Turtle Rock)', player, [('Turtle Rock - Compass Chest', player), ('Turtle Rock - Roller Room - Left', player), ('Turtle Rock - Roller Room - Right', player)]) else state.has_key('Small Key (Turtle Rock)', player, 4))
-        set_rule(world.get_location('Turtle Rock - Big Key Chest', player), lambda state: (state.has_key('Small Key (Turtle Rock)', player, 4) or item_name(state, 'Turtle Rock - Big Key Chest', player) == ('Small Key (Turtle Rock)', player)))
-        if world.accessibility[player] != 'locations':
-            set_always_allow(world.get_location('Turtle Rock - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Turtle Rock)' and item.player == player)
-        non_big_key_locations += ['Turtle Rock - Crystaroller Room', 'Turtle Rock - Eye Bridge - Bottom Left',
-                                  'Turtle Rock - Eye Bridge - Bottom Right', 'Turtle Rock - Eye Bridge - Top Left',
-                                  'Turtle Rock - Eye Bridge - Top Right']
-        if not world.keyshuffle[player]:
-            non_big_key_locations += ['Turtle Rock - Big Key Chest', 'Turtle Rock - Chain Chomps']
+        forbid_item(world.get_location('Turtle Rock - Big Key Chest', player), 'Small Key (Turtle Rock)', player)
 
     # set big key restrictions
     for location in non_big_key_locations:
