@@ -183,6 +183,10 @@ def global_rules(world, player):
     for location in ['Desert Palace - Boss', 'Desert Palace - Big Key Chest', 'Desert Palace - Compass Chest']:
         forbid_item(world.get_location(location, player), 'Small Key (Desert Palace)', player)
 
+    # logic patch to prevent placing a crystal in Desert that's required to reach the required keys
+    if not (world.keyshuffle[player] and world.bigkeyshuffle[player]):
+        add_rule(world.get_location('Desert Palace - Prize', player), lambda state: state.world.get_region('Desert Palace Main (Outer)', 1).can_reach(state))
+
     set_rule(world.get_entrance('Tower of Hera Small Key Door', player), lambda state: state.has_key('Small Key (Tower of Hera)', player) or item_name(state, 'Tower of Hera - Big Key Chest', player) == ('Small Key (Tower of Hera)', player))
     set_rule(world.get_entrance('Tower of Hera Big Key Door', player), lambda state: state.has('Big Key (Tower of Hera)', player))
     set_rule(world.get_location('Tower of Hera - Big Chest', player), lambda state: state.has('Big Key (Tower of Hera)', player))
