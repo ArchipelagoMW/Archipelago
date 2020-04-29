@@ -894,14 +894,18 @@ def set_trock_key_rules(world, player):
 
         # If TR is only accessible from the middle, the big key must be further restricted to prevent softlock potential
         if not can_reach_front and not world.keyshuffle[player]:
-            # Must not go in the Big Key Chest - only 1 chest available and 2+ keys required for all other chests
+            # Must not go in the Big Key Chest - only 1 other chest available and 2+ keys required for all other chests
             non_big_key_locations += ['Turtle Rock - Big Key Chest']
             if not can_reach_big_chest:
-                # Must not go in the Chain Chomps chest - only 2 chests available and 3+ keys required for all other chests
+                # Must not go in the Chain Chomps chest - only 2 other chests available and 3+ keys required for all other chests
                 non_big_key_locations += ['Turtle Rock - Chain Chomps']
             if world.accessibility[player] == 'locations':
-                # A small key must go in the Big Key Chest to avoid a potential softlock.
-                tr_breaks_accessibility = True
+                if world.bigkeyshuffle[player] and can_reach_big_chest:
+                    # Must not go in the dungeon - all 3 available chests (Chomps, Big Chest, Crystaroller) must be keys to access laser bridge, and the big key is required first
+                    non_big_key_locations += ['Turtle Rock - Chain Chomps', 'Turtle Rock - Compass Chest', 'Turtle Rock - Roller Room - Left', 'Turtle Rock - Roller Room - Right']
+                else:
+                    # A small key must go in the Big Key Chest to avoid a potential softlock.
+                    tr_breaks_accessibility = True
 
     if world.accessibility[player] != 'locations' or tr_breaks_accessibility:
         set_always_allow(world.get_location('Turtle Rock - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Turtle Rock)' and item.player == player
