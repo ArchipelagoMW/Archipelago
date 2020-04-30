@@ -171,6 +171,7 @@ Ganon1_texts = [
     "When I conquer\nthe Light\nWorld, I'll\nhold a parade\nof all my\nmonsters to\ndemonstrate my\nmight to the\npeople!",
     "Life, dreams,\nhope...\nWhere'd they\ncome from? And\nwhere are they\nheaded?  These\nthings... I am\ngoing to\ndestroy!",
     "My minions all\nfailed to\nguard those\nitems?!\n\nWhy am I\nsurrounded by\nincompetent\nfools?!",
+    "Goose is\nactually the\nterm for\nfemale geese,\nmale geese are\ncalled\nganders.",
 ]
 TavernMan_texts = [
     "What do you\ncall a blind\ndinosaur?\na doyouthink-\nhesaurus.",
@@ -248,7 +249,7 @@ junk_texts = [
     "{C:GREEN}\n> race roms\ndon’t have\nspoiler logs",
     "{C:GREEN}\nI bet a nice\ncup of tea\nwould help! >",
     "{C:GREEN}\nI bet you\nexpected help,\ndidn't you? >",
-    "{C:GREEN}\nLearn to make\nplogues, easy\nand yummy!  >"
+    "{C:GREEN}\nLearn to make\nplogues, easy\nand yummy!  >",
 ]
 
 KingsReturn_texts = [

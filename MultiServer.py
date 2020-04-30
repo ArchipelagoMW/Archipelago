@@ -265,7 +265,7 @@ async def on_client_joined(ctx: Context, client: Client):
                                                                        client.tags))
 
 async def on_client_left(ctx: Context, client: Client):
-    notify_all(ctx, "%s (Team #%d) has left the game" % (client.name, client.team + 1))
+    notify_all(ctx, "%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1))
 
 async def countdown(ctx: Context, timer):
     notify_all(ctx, f'[Server]: Starting countdown of {timer}s')
@@ -641,7 +641,7 @@ class ClientMessageProcessor(CommandProcessor):
             if usable:
                 new_item = ReceivedItem(Items.item_table[item_name][3], -1, self.client.slot)
                 get_received_items(self.ctx, self.client.team, self.client.slot).append(new_item)
-                notify_all(self.ctx, 'Cheat console: sending "' + item_name + '" to ' + self.client.name)
+                notify_all(self.ctx, 'Cheat console: sending "' + item_name + '" to ' + self.ctx.get_aliased_name(self.client.team, self.client.slot))
                 send_new_items(self.ctx)
                 return True
             else:
@@ -801,7 +801,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
 
         elif cmd == 'GameFinished':
             if ctx.client_game_state[client.team, client.slot] != CLIENT_GOAL:
-                finished_msg = f'{client.name} (Team #{client.team + 1}) has found the triforce.'
+                finished_msg = f'{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has found the triforce.'
                 notify_all(ctx, finished_msg)
                 ctx.client_game_state[client.team, client.slot] = CLIENT_GOAL
 
@@ -836,7 +836,7 @@ class ServerCommandProcessor(CommandProcessor):
         for client in self.ctx.clients:
             if client.auth and client.name.lower() == player_name.lower() and client.socket and not client.socket.closed:
                 asyncio.create_task(client.socket.close())
-                self.output(f"Kicked {client.name}")
+                self.output(f"Kicked {self.ctx.get_aliased_name(client.team, client.slot)}")
                 return True
 
         self.output(f"Could not find player {player_name} to kick")
@@ -912,7 +912,7 @@ class ServerCommandProcessor(CommandProcessor):
                     if client.name == seeked_player:
                         new_item = ReceivedItem(Items.item_table[item][3], -1, client.slot)
                         get_received_items(self.ctx, client.team, client.slot).append(new_item)
-                        notify_all(self.ctx, 'Cheat console: sending "' + item + '" to ' + client.name)
+                        notify_all(self.ctx, 'Cheat console: sending "' + item + '" to ' + self.ctx.get_aliased_name(client.team, client.slot))
                         send_new_items(self.ctx)
                         return True
             else:
