@@ -803,7 +803,6 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             if ctx.client_game_state[client.team, client.slot] != CLIENT_GOAL:
                 finished_msg = f'{client.name} (Team #{client.team + 1}) has found the triforce.'
                 notify_all(ctx, finished_msg)
-                print(finished_msg)
                 ctx.client_game_state[client.team, client.slot] = CLIENT_GOAL
 
         if cmd == 'Say':
@@ -812,7 +811,6 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
                 return
 
             notify_all(ctx, ctx.get_aliased_name(client.team, client.slot) + ': ' + args)
-            print(args)
             client.messageprocessor(args)
 
 
