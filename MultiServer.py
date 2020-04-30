@@ -163,15 +163,17 @@ async def send_json_msgs(client: Client, msg: str):
 
 
 def broadcast_all(ctx: Context, msgs):
+    msgs = json.dumps(msgs)
     for client in ctx.clients:
         if client.auth:
-            asyncio.create_task(send_msgs(client, msgs))
+            asyncio.create_task(send_json_msgs(client, msgs))
 
 
 def broadcast_team(ctx: Context, team, msgs):
+    msgs = json.dumps(msgs)
     for client in ctx.clients:
         if client.auth and client.team == team:
-            asyncio.create_task(send_msgs(client, msgs))
+            asyncio.create_task(send_json_msgs(client, msgs))
 
 def notify_all(ctx : Context, text):
     logging.info("Notice (all): %s" % text)
