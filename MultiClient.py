@@ -1116,14 +1116,14 @@ async def main():
 
     ctx = Context(args.snes, args.connect, args.password, args.founditems)
 
-    input_task = asyncio.create_task(console_loop(ctx))
+    input_task = asyncio.create_task(console_loop(ctx), name="Input")
 
     await snes_connect(ctx, ctx.snes_address)
 
     if ctx.server_task is None:
-        ctx.server_task = asyncio.create_task(server_loop(ctx))
+        ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
-    watcher_task = asyncio.create_task(game_watcher(ctx))
+    watcher_task = asyncio.create_task(game_watcher(ctx), name="GameWatcher")
 
 
     await ctx.exit_event.wait()
