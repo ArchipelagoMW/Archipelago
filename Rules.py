@@ -2,6 +2,7 @@ import collections
 import logging
 import OWGSets
 from BaseClasses import CollectionState, RegionType
+from Items import ItemFactory
 
 
 def set_rules(world, player):
@@ -847,9 +848,6 @@ def set_trock_key_rules(world, player):
     can_reach_middle = all_state.can_reach(world.get_region('Turtle Rock (Second Section)', player)) if world.can_access_trock_middle[player] is None else world.can_access_trock_middle[player]
     world.can_access_trock_middle[player] = can_reach_middle
 
-    # For some entrance configurations, 100% locations is not achievable
-    tr_breaks_accessibility = False
-
     # The following represent the common key rules.
 
     # No matter what, the key requirement for going from the middle to the bottom should be three keys.
@@ -904,10 +902,13 @@ def set_trock_key_rules(world, player):
                     # Must not go in the dungeon - all 3 available chests (Chomps, Big Chest, Crystaroller) must be keys to access laser bridge, and the big key is required first
                     non_big_key_locations += ['Turtle Rock - Chain Chomps', 'Turtle Rock - Compass Chest', 'Turtle Rock - Roller Room - Left', 'Turtle Rock - Roller Room - Right']
                 else:
-                    # A small key must go in the Big Key Chest to avoid a potential softlock.
-                    tr_breaks_accessibility = True
+                    # A key is required in the Big Key Chest to prevent a possible softlock.  Place an extra key to ensure 100% locations still works
+                    world.push_item(world.get_location('Turtle Rock - Big Key Chest', player), ItemFactory('Small Key (Turtle Rock)', player), False)
+                    world.get_location('Turtle Rock - Big Key Chest', player).event = True
+                    big20 = next(i for i in world.itempool if i.name == "Rupees (20)" and i.player == player)
+                    world.itempool.remove(big20)
 
-    if world.accessibility[player] != 'locations' or tr_breaks_accessibility:
+    if world.accessibility[player] != 'locations':
         set_always_allow(world.get_location('Turtle Rock - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Turtle Rock)' and item.player == player
                 and state.can_reach(world.get_region('Turtle Rock (Second Section)', player)))
     else:
