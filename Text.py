@@ -66,7 +66,6 @@ Uncle_texts = [
     "Get to the\nchop...\ncastle!",
     "Come with me\nif you want\nto live",
     "I must go\nmy planet\nneeds me",
-    "\n   Honk.",
 ]
 Triforce_texts = [
     'Product has Hole in center. Bad seller, 0 out of 5.',
@@ -251,7 +250,6 @@ junk_texts = [
     "{C:GREEN}\nI bet a nice\ncup of tea\nwould help! >",
     "{C:GREEN}\nI bet you\nexpected help,\ndidn't you? >",
     "{C:GREEN}\nLearn to make\nplogues, easy\nand yummy!  >",
-    "{C:GREEN}\n \n   Honk.\n            >"
 ]
 
 KingsReturn_texts = [
