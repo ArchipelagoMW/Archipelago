@@ -597,8 +597,11 @@ async def server_loop(ctx : Context, address = None):
     if address is None:  # set through CLI or BMBP
         address = ctx.server_address
     if address is None:  # see if this is an old connection
+        await asyncio.sleep(0.5)  # wait for snes connection to succeed if possible.
+        rom = "".join(chr(x) for x in ctx.rom) if ctx.rom is not None else None
         try:
-            address = Utils.persistent_load()["servers"]["default"]
+            servers = Utils.persistent_load()["servers"]
+            address = servers[rom] if rom is not None and rom in servers else servers["default"]
         except Exception as e:
             logging.debug(f"Could not find cached server address. {e}")
         else:
@@ -610,8 +613,6 @@ async def server_loop(ctx : Context, address = None):
     while not address:
         logging.info('Enter multiworld server address')
         address = await console_input(ctx)
-
-    Utils.persistent_store("servers", "default", address)
 
     address = f"ws://{address}" if "://" not in address else address
     port = urllib.parse.urlparse(address).port or 38281
@@ -705,6 +706,8 @@ async def process_server_cmd(ctx : Context, cmd, args):
         raise Exception('Connection refused by the multiworld host')
 
     elif cmd == 'Connected':
+        Utils.persistent_store("servers", "default", ctx.server_address)
+        Utils.persistent_store("servers", "".join(chr(x) for x in ctx.rom), ctx.server_address)
         ctx.team, ctx.slot = args[0]
         ctx.player_names = {p: n for p, n in args[1]}
         msgs = []
