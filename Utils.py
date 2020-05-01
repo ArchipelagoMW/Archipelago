@@ -231,6 +231,8 @@ def persistent_load() -> typing.Dict[dict]:
         except Exception as e:
             import logging
             logging.debug(f"Could not read store: {e}")
+    if storage is None:
+        storage = {}
     return storage
 
 
