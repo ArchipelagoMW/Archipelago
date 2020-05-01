@@ -16,6 +16,15 @@ library = Path(libfolder, "library.zip")
 print("Outputting to: " + str(buildfolder))
 compress = False
 icon="icon.ico"
+
+if os.path.exists("X:/pw.txt"):
+    print("Using signtool")
+    with open("X:/pw.txt") as f:
+        pw = f.read()
+    signtool = r'"C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x64\signtool.exe" sign /f X:/_SITS_Zertifikat_.pfx /p '+ pw + r' /fd sha256 /tr http://timestamp.digicert.com/ '
+else:
+    signtool = None
+
 from hashlib import sha3_512
 import base64
 
@@ -106,5 +115,11 @@ shutil.copyfile("easy.yaml", buildfolder / "Players" / "easy.yaml")
 qusb2sneslog = buildfolder / "QUsb2Snes" / "log.txt"
 if os.path.exists(qusb2sneslog):
     os.remove(qusb2sneslog)
+
+if signtool:
+    for exe in exes:
+        print(f"Signing {exe.targetName}")
+        os.system(signtool+exe.targetName)
+
 
 manifest_creation()
