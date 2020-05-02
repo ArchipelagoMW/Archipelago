@@ -93,31 +93,34 @@ if __name__ == "__main__":
     address = f"{host}:{options['port']}"
     ziplock = threading.Lock()
     print(f"Host for patches to be created is {address}")
+    with concurrent.futures.ThreadPoolExecutor() as pool:
+        for rom in sys.argv:
+            try:
 
-    for rom in sys.argv:
-        try:
-            if rom.endswith(".sfc"):
-                print(f"Creating patch for {rom}")
-                result = create_patch_file(rom, address)
-                print(f"Created patch {result}")
-            elif rom.endswith(".bmbp"):
-                print(f"Applying patch {rom}")
-                data, target = create_rom_file(rom)
-                print(f"Created rom {target}.")
-                if 'server' in data:
-                    print(f"Host is {data['server']}")
-            elif rom.endswith(".zip"):
-                print(f"Updating host in patch files contained in {rom}")
+                if rom.endswith(".sfc"):
+                    print(f"Creating patch for {rom}")
+                    result = pool.submit(create_patch_file, rom, address)
+                    result.add_done_callback(lambda task: print(f"Created patch {task.result()}"))
 
-                def _handle_zip_file_entry(zfinfo : zipfile.ZipInfo, server: str):
-                    data = zfr.read(zfinfo)
-                    if zfinfo.filename.endswith(".bmbp"):
-                        data = update_patch_data(data, server)
-                    with ziplock:
-                        zfw.writestr(zfinfo, data)
-                    return zfinfo.filename
+                elif rom.endswith(".bmbp"):
+                    print(f"Applying patch {rom}")
+                    data, target = create_rom_file(rom)
+                    print(f"Created rom {target}.")
+                    if 'server' in data:
+                        print(f"Host is {data['server']}")
 
-                with concurrent.futures.ThreadPoolExecutor() as pool:
+                elif rom.endswith(".zip"):
+                    print(f"Updating host in patch files contained in {rom}")
+
+                    def _handle_zip_file_entry(zfinfo : zipfile.ZipInfo, server: str):
+                        data = zfr.read(zfinfo)
+                        if zfinfo.filename.endswith(".bmbp"):
+                            data = update_patch_data(data, server)
+                        with ziplock:
+                            zfw.writestr(zfinfo, data)
+                        return zfinfo.filename
+
+
                     futures = []
                     with zipfile.ZipFile(rom, "r") as zfr:
                         updated_zip = os.path.splitext(rom)[0] + "_updated.zip"
@@ -127,7 +130,7 @@ if __name__ == "__main__":
                             for future in futures:
                                 print(f"File {future.result()} added to {os.path.split(updated_zip)[1]}")
 
-        except:
-            import traceback
-            traceback.print_exc()
-            input("Press enter to close.")
+            except:
+                import traceback
+                traceback.print_exc()
+                input("Press enter to close.")
