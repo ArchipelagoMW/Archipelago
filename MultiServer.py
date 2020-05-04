@@ -541,10 +541,10 @@ class ClientMessageProcessor(CommandProcessor):
 
     def _cmd_forfeit(self) -> bool:
         """Surrender and send your remaining items out to their recipients"""
-        if self.ctx.forfeit_mode == "enabled":
+        if "enabled" in self.ctx.forfeit_mode:
             forfeit_player(self.ctx, self.client.team, self.client.slot)
             return True
-        elif self.ctx.forfeit_mode == "disabled":
+        elif "disabled" in self.ctx.forfeit_mode:
             self.output(
                 "Sorry, client forfeiting has been disabled on this server. You can ask the server admin for a /forfeit")
             return False
@@ -804,6 +804,8 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
                 finished_msg = f'{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has found the triforce.'
                 notify_all(ctx, finished_msg)
                 ctx.client_game_state[client.team, client.slot] = CLIENT_GOAL
+                if "auto" in ctx.forfeit_mode:
+                    forfeit_player(ctx, client.team, client.slot)
 
         if cmd == 'Say':
             if type(args) is not str or not args.isprintable():
@@ -1009,6 +1011,7 @@ def parse_args() -> argparse.Namespace:
                              enabled:  !forfeit is always available
                              disabled: !forfeit is never available
                              goal:     !forfeit can be used after goal completion
+                             auto-enabled: !forfeit is available and automatically triggered on goal completion
                              ''')
     parser.add_argument('--remaining_mode', default=defaults["remaining_mode"], nargs='?',
                         choices=['enabled', 'disabled', "goal"], help='''\
