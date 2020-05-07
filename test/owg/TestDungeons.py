@@ -89,9 +89,8 @@ class TestDungeons(TestVanillaOWG):
             ["Ice Palace - Compass Chest", False, []],
             ["Ice Palace - Compass Chest", False, [], ['Fire Rod', 'Bombos']],
             ["Ice Palace - Compass Chest", False, [], ['Fire Rod', 'Progressive Sword']],
-            #todo: Missing clip?
-            #["Ice Palace - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Flippers', 'Fire Rod']],
-            #["Ice Palace - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Flippers', 'Bombos', 'Progressive Sword']],
+            ["Ice Palace - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Flippers', 'Fire Rod']],
+            ["Ice Palace - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Flippers', 'Bombos', 'Progressive Sword']],
             ["Ice Palace - Compass Chest", True, ['Progressive Glove', 'Progressive Glove', 'Fire Rod']],
             ["Ice Palace - Compass Chest", True, ['Progressive Glove', 'Progressive Glove', 'Bombos', 'Progressive Sword']],
 
@@ -121,6 +120,7 @@ class TestDungeons(TestVanillaOWG):
             #todo: does clip require sword?
             #["Turtle Rock - Crystaroller Room", True, ['Moon Pearl', 'Pegasus Boots', 'Big Key (Turtle Rock)']],
             ["Turtle Rock - Crystaroller Room", True, ['Moon Pearl', 'Pegasus Boots', 'Big Key (Turtle Rock)', 'Progressive Sword']],
+            ["Turtle Rock - Crystaroller Room", True, ['Moon Pearl', 'Pegasus Boots', 'Big Key (Turtle Rock)', 'Hookshot']],
             ["Turtle Rock - Crystaroller Room", True, ['Pegasus Boots', 'Magic Mirror', 'Hammer', 'Big Key (Turtle Rock)']],
 
             ["Ganons Tower - Hope Room - Left", False, []],

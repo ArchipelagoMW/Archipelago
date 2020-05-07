@@ -266,102 +266,6 @@ def main(args, seed=None):
 
     return world
 
-def copy_world(world):
-    # ToDo: Not good yet
-    ret = World(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.difficulty_adjustments, world.timer, world.progressive, world.goal, world.algorithm, world.accessibility, world.shuffle_ganon, world.retro, world.custom, world.customitemarray, world.hints)
-    ret.teams = world.teams
-    ret.player_names = copy.deepcopy(world.player_names)
-    ret.remote_items = world.remote_items.copy()
-    ret.required_medallions = world.required_medallions.copy()
-    ret.swamp_patch_required = world.swamp_patch_required.copy()
-    ret.ganon_at_pyramid = world.ganon_at_pyramid.copy()
-    ret.powder_patch_required = world.powder_patch_required.copy()
-    ret.ganonstower_vanilla = world.ganonstower_vanilla.copy()
-    ret.treasure_hunt_count = world.treasure_hunt_count.copy()
-    ret.treasure_hunt_icon = world.treasure_hunt_icon.copy()
-    ret.sewer_light_cone = world.sewer_light_cone.copy()
-    ret.light_world_light_cone = world.light_world_light_cone
-    ret.dark_world_light_cone = world.dark_world_light_cone
-    ret.seed = world.seed
-    ret.can_access_trock_eyebridge = world.can_access_trock_eyebridge.copy()
-    ret.can_access_trock_front = world.can_access_trock_front.copy()
-    ret.can_access_trock_big_chest = world.can_access_trock_big_chest.copy()
-    ret.can_access_trock_middle = world.can_access_trock_middle.copy()
-    ret.can_take_damage = world.can_take_damage
-    ret.difficulty_requirements = world.difficulty_requirements.copy()
-    ret.fix_fake_world = world.fix_fake_world.copy()
-    ret.lamps_needed_for_dark_rooms = world.lamps_needed_for_dark_rooms
-    ret.mapshuffle = world.mapshuffle.copy()
-    ret.compassshuffle = world.compassshuffle.copy()
-    ret.keyshuffle = world.keyshuffle.copy()
-    ret.bigkeyshuffle = world.bigkeyshuffle.copy()
-    ret.crystals_needed_for_ganon = world.crystals_needed_for_ganon.copy()
-    ret.crystals_needed_for_gt = world.crystals_needed_for_gt.copy()
-    ret.open_pyramid = world.open_pyramid.copy()
-    ret.boss_shuffle = world.boss_shuffle.copy()
-    ret.enemy_shuffle = world.enemy_shuffle.copy()
-    ret.enemy_health = world.enemy_health.copy()
-    ret.enemy_damage = world.enemy_damage.copy()
-    ret.beemizer = world.beemizer.copy()
-    ret.timer = world.timer.copy()
-    ret.shufflepots = world.shufflepots.copy()
-    ret.extendedmsu = world.extendedmsu.copy()
-
-    for player in range(1, world.players + 1):
-        if world.mode[player] != 'inverted':
-            create_regions(ret, player)
-        else:
-            create_inverted_regions(ret, player)
-        create_shops(ret, player)
-        create_dungeons(ret, player)
-
-    copy_dynamic_regions_and_locations(world, ret)
-
-    # copy bosses
-    for dungeon in world.dungeons:
-        for level, boss in dungeon.bosses.items():
-            ret.get_dungeon(dungeon.name, dungeon.player).bosses[level] = boss
-
-    for shop in world.shops:
-        copied_shop = ret.get_region(shop.region.name, shop.region.player).shop
-        copied_shop.inventory = copy.copy(shop.inventory)
-
-    # connect copied world
-    for region in world.regions:
-        copied_region = ret.get_region(region.name, region.player)
-        copied_region.is_light_world = region.is_light_world
-        copied_region.is_dark_world = region.is_dark_world
-        for entrance in region.entrances:
-            ret.get_entrance(entrance.name, entrance.player).connect(copied_region)
-
-    # fill locations
-    for location in world.get_locations():
-        if location.item is not None:
-            item = Item(location.item.name, location.item.advancement, location.item.priority, location.item.type, player = location.item.player)
-            ret.get_location(location.name, location.player).item = item
-            item.location = ret.get_location(location.name, location.player)
-            item.world = ret
-        if location.event:
-            ret.get_location(location.name, location.player).event = True
-        if location.locked:
-            ret.get_location(location.name, location.player).locked = True
-
-    # copy remaining itempool. No item in itempool should have an assigned location
-    for item in world.itempool:
-        ret.itempool.append(Item(item.name, item.advancement, item.priority, item.type, player = item.player))
-
-    for item in world.precollected_items:
-        ret.push_precollected(ItemFactory(item.name, item.player))
-
-    # copy progress items in state
-    ret.state.prog_items = world.state.prog_items.copy()
-    ret.state.stale = {player: True for player in range(1, world.players + 1)}
-
-    for player in range(1, world.players + 1):
-        set_rules(ret, player)
-
-    return ret
-
 def copy_dynamic_regions_and_locations(world, ret):
     for region in world.dynamic_regions:
         new_reg = Region(region.name, region.type, region.hint_text, region.player)
@@ -391,7 +295,7 @@ def copy_dynamic_regions_and_locations(world, ret):
 def create_playthrough(world):
     # create a copy as we will modify it
     old_world = world
-    world = copy_world(world)
+    world = copy.deepcopy(world)
 
     # if we only check for beatable, we can do this sanity check first before writing down spheres
     if not world.can_beat_game():

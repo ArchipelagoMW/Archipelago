@@ -13,11 +13,11 @@ class TestLightWorld(TestInvertedOWG):
             ["Master Sword Pedestal", True, ['Green Pendant', 'Red Pendant', 'Blue Pendant', 'Magic Mirror', 'Pegasus Boots']],
 
             ["Link's Uncle", False, []],
-            ["Link's Uncle", False, [], ['Moon Pearl', 'Magic Mirror']],
+            ["Link's Uncle", False, [], ['Moon Pearl']],
             ["Link's Uncle", True, ['Moon Pearl', 'Pegasus Boots']],
 
             ["Secret Passage", False, []],
-            ["Secret Passage", False, [], ['Moon Pearl', 'Magic Mirror']],
+            ["Secret Passage", False, [], ['Moon Pearl']],
             ["Secret Passage", True, ['Moon Pearl', 'Pegasus Boots']],
 
             ["King's Tomb", False, []],
@@ -26,6 +26,7 @@ class TestLightWorld(TestInvertedOWG):
             ["King's Tomb", True, ['Pegasus Boots', 'Magic Mirror', 'Moon Pearl']],
 
             ["Floodgate Chest", False, []],
+            ["Floodgate Chest", False, [], ['Moon Pearl', 'Magic Mirror']],
             ["Floodgate Chest", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Floodgate Chest", True, ['Magic Mirror', 'Pegasus Boots']],
 
@@ -45,24 +46,27 @@ class TestLightWorld(TestInvertedOWG):
             ["Aginah's Cave", True, ['Moon Pearl', 'Pegasus Boots']],
 
             ["Sahasrahla's Hut - Left", False, []],
-            ["Sahasrahla's Hut - Left", False, ['Moon Pearl', 'Magic Mirror']],
+            ["Sahasrahla's Hut - Left", False, [], ['Moon Pearl', 'Magic Mirror']],
+            ["Sahasrahla's Hut - Left", False, [], ['Moon Pearl', 'Pegasus Boots']],
             ["Sahasrahla's Hut - Left", True, ['Moon Pearl', 'Pegasus Boots']],
-            #todo: superbunny into sahasrahla in logic?
-            #["Sahasrahla's Hut - Left", True, ['Magic Mirror', 'Pegasus Boots']],
+            ["Sahasrahla's Hut - Left", True, ['Magic Mirror', 'Pegasus Boots']],
+            ##todo: Damage boost superbunny not in logic
             #["Sahasrahla's Hut - Left", True, ['Beat Agahnim 1', 'Pegasus Boots']],
             ["Sahasrahla's Hut - Left", True, ['Moon Pearl', 'Beat Agahnim 1']],
 
             ["Sahasrahla's Hut - Middle", False, []],
-            ["Sahasrahla's Hut - Middle", False, ['Moon Pearl', 'Magic Mirror']],
+            ["Sahasrahla's Hut - Middle", False, [], ['Moon Pearl', 'Magic Mirror']],
+            ["Sahasrahla's Hut - Middle", False, [], ['Moon Pearl', 'Pegasus Boots']],
             ["Sahasrahla's Hut - Middle", True, ['Moon Pearl', 'Pegasus Boots']],
-            #["Sahasrahla's Hut - Middle", True, ['Magic Mirror', 'Pegasus Boots']],
+            ["Sahasrahla's Hut - Middle", True, ['Magic Mirror', 'Pegasus Boots']],
             #["Sahasrahla's Hut - Middle", True, ['Beat Agahnim 1', 'Pegasus Boots']],
             ["Sahasrahla's Hut - Middle", True, ['Moon Pearl', 'Beat Agahnim 1']],
 
             ["Sahasrahla's Hut - Right", False, []],
-            ["Sahasrahla's Hut - Right", False, ['Moon Pearl', 'Magic Mirror']],
+            ["Sahasrahla's Hut - Right", False, [], ['Moon Pearl', 'Magic Mirror']],
+            ["Sahasrahla's Hut - Right", False, [], ['Moon Pearl', 'Pegasus Boots']],
             ["Sahasrahla's Hut - Right", True, ['Moon Pearl', 'Pegasus Boots']],
-            #["Sahasrahla's Hut - Right", True, ['Magic Mirror', 'Pegasus Boots']],
+            ["Sahasrahla's Hut - Right", True, ['Magic Mirror', 'Pegasus Boots']],
             #["Sahasrahla's Hut - Right", True, ['Beat Agahnim 1', 'Pegasus Boots']],
             ["Sahasrahla's Hut - Right", True, ['Moon Pearl', 'Beat Agahnim 1']],
 
@@ -73,21 +77,25 @@ class TestLightWorld(TestInvertedOWG):
             ["Kakariko Well - Left", False, []],
             ["Kakariko Well - Left", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Kakariko Well - Left", True, ['Magic Mirror', 'Pegasus Boots']],
+            ["Kakariko Well - Left", True, ['Progressive Glove', 'Progressive Glove', 'Pegasus Boots']],
             ["Kakariko Well - Left", True, ['Beat Agahnim 1']],
 
             ["Kakariko Well - Middle", False, []],
             ["Kakariko Well - Middle", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Kakariko Well - Middle", True, ['Magic Mirror', 'Pegasus Boots']],
+            ["Kakariko Well - Middle", True, ['Progressive Glove', 'Progressive Glove', 'Pegasus Boots']],
             ["Kakariko Well - Middle", True, ['Beat Agahnim 1']],
 
             ["Kakariko Well - Right", False, []],
             ["Kakariko Well - Right", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Kakariko Well - Right", True, ['Magic Mirror', 'Pegasus Boots']],
+            ["Kakariko Well - Right", True, ['Progressive Glove', 'Progressive Glove', 'Pegasus Boots']],
             ["Kakariko Well - Right", True, ['Beat Agahnim 1']],
 
             ["Kakariko Well - Bottom", False, []],
             ["Kakariko Well - Bottom", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Kakariko Well - Bottom", True, ['Magic Mirror', 'Pegasus Boots']],
+            ["Kakariko Well - Bottom", True, ['Progressive Glove', 'Progressive Glove', 'Pegasus Boots']],
             ["Kakariko Well - Bottom", True, ['Beat Agahnim 1']],
 
             ["Blind's Hideout - Top", False, []],
@@ -95,21 +103,25 @@ class TestLightWorld(TestInvertedOWG):
             ["Blind's Hideout - Top", True, ['Moon Pearl', 'Pegasus Boots']],
 
             ["Blind's Hideout - Left", False, []],
+            ["Blind's Hideout - Left", False, [], ['Moon Pearl', 'Magic Mirror']],
             ["Blind's Hideout - Left", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Blind's Hideout - Left", True, ['Magic Mirror', 'Pegasus Boots']],
             ["Blind's Hideout - Left", True, ['Magic Mirror', 'Beat Agahnim 1']],
 
             ["Blind's Hideout - Right", False, []],
+            ["Blind's Hideout - Right", False, [], ['Moon Pearl', 'Magic Mirror']],
             ["Blind's Hideout - Right", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Blind's Hideout - Right", True, ['Magic Mirror', 'Pegasus Boots']],
             ["Blind's Hideout - Right", True, ['Magic Mirror', 'Beat Agahnim 1']],
 
             ["Blind's Hideout - Far Left", False, []],
+            ["Blind's Hideout - Far Left", False, [], ['Moon Pearl', 'Magic Mirror']],
             ["Blind's Hideout - Far Left", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Blind's Hideout - Far Left", True, ['Magic Mirror', 'Pegasus Boots']],
             ["Blind's Hideout - Far Left", True, ['Magic Mirror', 'Beat Agahnim 1']],
 
             ["Blind's Hideout - Far Right", False, []],
+            ["Blind's Hideout - Far Right", False, [], ['Moon Pearl', 'Magic Mirror']],
             ["Blind's Hideout - Far Right", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Blind's Hideout - Far Right", True, ['Magic Mirror', 'Pegasus Boots']],
             ["Blind's Hideout - Far Right", True, ['Magic Mirror', 'Beat Agahnim 1']],
@@ -125,6 +137,7 @@ class TestLightWorld(TestInvertedOWG):
 
             ["Mini Moldorm Cave - Left", False, []],
             ["Mini Moldorm Cave - Left", False, [], ['Moon Pearl']],
+            ["Mini Moldorm Cave - Left", True, ['Moon Pearl', 'Pegasus Boots']],
 
             ["Mini Moldorm Cave - Right", False, []],
             ["Mini Moldorm Cave - Right", False, [], ['Moon Pearl']],
@@ -132,9 +145,13 @@ class TestLightWorld(TestInvertedOWG):
 
             ["Mini Moldorm Cave - Far Right", False, []],
             ["Mini Moldorm Cave - Far Right", False, [], ['Moon Pearl']],
+            ["Mini Moldorm Cave - Far Right", True, ['Moon Pearl', 'Pegasus Boots']],
+
+            ["Mini Moldorm Cave - Generous Guy", False, []],
+            ["Mini Moldorm Cave - Generous Guy", False, [], ['Moon Pearl']],
+            ["Mini Moldorm Cave - Generous Guy", True, ['Moon Pearl', 'Pegasus Boots']],
 
             ["Ice Rod Cave", False, []],
-            #["Ice Rod Cave", False, [], ['Moon Pearl', 'BigRedBomb']],
             ["Ice Rod Cave", False, [], ['Moon Pearl']],
             ["Ice Rod Cave", True, ['Moon Pearl', 'Pegasus Boots']],
             #I don't think so
@@ -144,11 +161,15 @@ class TestLightWorld(TestInvertedOWG):
             ["Bottle Merchant", False, []],
             ["Bottle Merchant", True, ['Pegasus Boots', 'Magic Mirror']],
             ["Bottle Merchant", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Bottle Merchant", True, ['Progressive Glove', 'Progressive Glove', 'Pegasus Boots']],
+            ["Bottle Merchant", True, ['Magic Mirror', 'Pegasus Boots']],
 
             ["Sahasrahla", False, []],
             ["Sahasrahla", False, [], ['Green Pendant']],
             ["Sahasrahla", True, ['Green Pendant', 'Magic Mirror', 'Pegasus Boots']],
             ["Sahasrahla", True, ['Green Pendant', 'Moon Pearl', 'Pegasus Boots']],
+            ["Sahasrahla", True, ['Green Pendant', 'Magic Mirror', 'Pegasus Boots']],
+            ["Sahasrahla", True, ['Green Pendant', 'Progressive Glove', 'Progressive Glove', 'Pegasus Boots']],
 
             ["Magic Bat", False, []],
             ["Magic Bat", False, [], ['Magic Powder']],
@@ -174,10 +195,11 @@ class TestLightWorld(TestInvertedOWG):
             ["Sick Kid", True, ['Bottle (Green Potion)', 'Moon Pearl', 'Pegasus Boots']],
             ["Sick Kid", True, ['Bottle (Blue Potion)', 'Magic Mirror', 'Pegasus Boots']],
             ["Sick Kid", True, ['Bottle (Blue Potion)', 'Moon Pearl', 'Pegasus Boots']],
-            ["Sick Kid", True, ['Bottle', 'Magic Mirror', 'Pegasus Boots']],
-            ["Sick Kid", True, ['Bottle', 'Moon Pearl', 'Pegasus Boots']],
             ["Sick Kid", True, ['Bottle (Good Bee)', 'Magic Mirror', 'Pegasus Boots']],
             ["Sick Kid", True, ['Bottle (Good Bee)', 'Moon Pearl', 'Pegasus Boots']],
+            ["Sick Kid", True, ['Bottle', 'Magic Mirror', 'Pegasus Boots']],
+            ["Sick Kid", True, ['Bottle', 'Moon Pearl', 'Pegasus Boots']],
+            ["Sick Kid", True, ['Bottle', 'Progressive Glove', 'Progressive Glove', 'Pegasus Boots']],
 
             ["Hobo", False, []],
             ["Hobo", False, [], ['Moon Pearl']],
@@ -189,6 +211,7 @@ class TestLightWorld(TestInvertedOWG):
             ["Bombos Tablet", False, [], ['Book of Mudora']],
             ["Bombos Tablet", True, ['Moon Pearl', 'Book of Mudora', 'Pegasus Boots', 'Progressive Sword', 'Progressive Sword']],
             ["Bombos Tablet", True, ['Magic Mirror', 'Book of Mudora', 'Pegasus Boots', 'Progressive Sword', 'Progressive Sword']],
+            ["Bombos Tablet", True, ['Progressive Glove', 'Progressive Glove', 'Book of Mudora', 'Pegasus Boots', 'Progressive Sword', 'Progressive Sword']],
 
             ["King Zora", False, []],
             ["King Zora", False, [], ['Moon Pearl']],
@@ -205,6 +228,7 @@ class TestLightWorld(TestInvertedOWG):
             ["Lumberjack Tree", True, ['Pegasus Boots', 'Moon Pearl', 'Beat Agahnim 1']],
 
             ["Cave 45", False, []],
+            ["Cave 45", False, [], ['Moon Pearl', 'Magic Mirror']],
             ["Cave 45", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Cave 45", True, ['Magic Mirror', 'Pegasus Boots']],
             ["Cave 45", True, ['Magic Mirror', 'Beat Agahnim 1']],
@@ -218,12 +242,9 @@ class TestLightWorld(TestInvertedOWG):
             ["Checkerboard Cave", False, [], ['Moon Pearl']],
             ["Checkerboard Cave", True, ['Progressive Glove', 'Pegasus Boots', 'Moon Pearl']],
 
-            ["Mini Moldorm Cave - Generous Guy", False, []],
-            ["Mini Moldorm Cave - Generous Guy", False, [], ['Moon Pearl']],
-            ["Mini Moldorm Cave - Generous Guy", True, ['Moon Pearl', 'Pegasus Boots']],
-
             ["Library", False, []],
             ["Library", False, [], ['Pegasus Boots']],
+            ["Library", False, [], ['Moon Pearl', 'Magic Mirror']],
             ["Library", True, ['Pegasus Boots', 'Moon Pearl']],
             ["Library", True, ['Pegasus Boots', 'Magic Mirror']],
 
@@ -242,6 +263,7 @@ class TestLightWorld(TestInvertedOWG):
 
             ["Desert Ledge", False, []],
             ["Desert Ledge", True, ['Book of Mudora', 'Magic Mirror', 'Pegasus Boots']],
+            ["Desert Ledge", True, ['Book of Mudora', 'Progressive Glove', 'Progressive Glove', 'Pegasus Boots']],
             ["Desert Ledge", True, ['Book of Mudora', 'Beat Agahnim 1']],
             ["Desert Ledge", True, ['Moon Pearl', 'Pegasus Boots']],
 
@@ -250,6 +272,7 @@ class TestLightWorld(TestInvertedOWG):
             ["Lake Hylia Island", True, ['Moon Pearl', 'Pegasus Boots']],
 
             ["Sunken Treasure", False, []],
+            ["Sunken Treasure", False, [], ['Moon Pearl', 'Magic Mirror']],
             ["Sunken Treasure", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Sunken Treasure", True, ['Magic Mirror', 'Pegasus Boots']],
             ["Sunken Treasure", True, ['Magic Mirror', 'Beat Agahnim 1']],
@@ -265,20 +288,17 @@ class TestLightWorld(TestInvertedOWG):
 
             ["Waterfall Fairy - Left", False, []],
             ["Waterfall Fairy - Left", False, [], ['Moon Pearl']],
-            ["Waterfall Fairy - Left", True, ['Moon Pearl', 'Pegasus Boots', 'Flippers']],
-            #todo: Waterwalking into caves not in logic
-            # ["Waterfall Fairy - Left", True, ['Moon Pearl', 'Pegasus Boots']],
-            # ["Waterfall Fairy - Left", True, ['Moon Pearl', 'Beat Agahnim 1']],
-            # ["Waterfall Fairy - Left", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            # ["Waterfall Fairy - Left", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Waterfall Fairy - Left", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Waterfall Fairy - Left", True, ['Moon Pearl', 'Beat Agahnim 1']],
+            ["Waterfall Fairy - Left", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Waterfall Fairy - Left", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
 
             ["Waterfall Fairy - Right", False, []],
             ["Waterfall Fairy - Right", False, [], ['Moon Pearl']],
-            ["Waterfall Fairy - Right", True, ['Moon Pearl', 'Pegasus Boots', 'Flippers']],
-            # ["Waterfall Fairy - Right", True, ['Moon Pearl', 'Pegasus Boots']],
-            # ["Waterfall Fairy - Right", True, ['Moon Pearl', 'Beat Agahnim 1']],
-            # ["Waterfall Fairy - Right", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            # ["Waterfall Fairy - Right", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Waterfall Fairy - Right", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Waterfall Fairy - Right", True, ['Moon Pearl', 'Beat Agahnim 1']],
+            ["Waterfall Fairy - Right", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Waterfall Fairy - Right", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
 
             # Bomb Merchant is not a separate check, and is only used as part of the Pyramid Fairy rules
             # ["Bomb Merchant", False, []],

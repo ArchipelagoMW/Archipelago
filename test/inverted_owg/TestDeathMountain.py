@@ -16,6 +16,8 @@ class TestDeathMountain(TestInvertedOWG):
     def testEastDeathMountain(self):
         self.run_location_tests([
             ["Spiral Cave", False, []],
+            ["Spiral Cave", False, [], ['Moon Pearl', 'Magic Mirror']],
+            ["Spiral Cave", False, [], ['Moon Pearl', 'Progressive Sword']],
             ["Spiral Cave", True, ['Magic Mirror', 'Progressive Glove', 'Progressive Glove', 'Lamp', 'Progressive Sword']],
             ["Spiral Cave", True, ['Magic Mirror', 'Progressive Glove', 'Progressive Glove', 'Pegasus Boots', 'Progressive Sword']],
             ["Spiral Cave", True, ['Moon Pearl', 'Pegasus Boots']],
