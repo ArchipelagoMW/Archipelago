@@ -141,10 +141,11 @@ def main():
             if option is not None:
                 for player, path in player_path_cache.items():
                     players_meta = weights_cache[path]["meta_ignore"]
-                    if key not in players_meta:
-                        weights_cache[path][key] = option
-                    elif type(players_meta) == dict and option not in players_meta[key]:
-                        weights_cache[path][key] = option
+                    if players_meta:
+                        if key not in players_meta:
+                            weights_cache[path][key] = option
+                        elif type(players_meta) == dict and players_meta[key] and option not in players_meta[key]:
+                            weights_cache[path][key] = option
 
     for player in range(1, args.multi + 1):
         path = player_path_cache[player]
