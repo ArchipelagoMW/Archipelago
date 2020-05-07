@@ -2996,6 +2996,8 @@ inverted_mandatory_connections = [('Lake Hylia Central Island Pier', 'Lake Hylia
                                   ('Lake Hylia Warp', 'Northeast Light World'),
                                   ('Northeast Light World Warp', 'Light World'),
                                   ('Zoras River', 'Zoras River'),
+                                  ('Waterfall of Wishing Cave', 'Waterfall of Wishing Cave'),
+                                  ('Northeast Light World Return', 'Northeast Light World'),
                                   ('Kings Grave Outer Rocks', 'Kings Grave Area'),
                                   ('Kings Grave Inner Rocks', 'Light World'),
                                   ('Kakariko Well (top to bottom)', 'Kakariko Well (bottom)'),

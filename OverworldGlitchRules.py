@@ -214,7 +214,7 @@ def overworld_glitches_rules(world, player):
         world.get_entrance('Turtle Rock Teleporter', player).access_rule = lambda state: (state.can_boots_clip_lw(player) or state.can_lift_heavy_rocks(player)) and state.has('Hammer', player)
         add_alternate_rule(world.get_entrance('Waterfall of Wishing', player), lambda state: state.has('Moon Pearl', player) or state.has_Boots(player))
     else:
-        add_alternate_rule(world.get_entrance('Waterfall of Wishing', player), lambda state: state.has('Moon Pearl', player))
+        add_alternate_rule(world.get_entrance('Waterfall of Wishing Cave', player), lambda state: state.has('Moon Pearl', player))
 
     world.get_entrance('Dark Desert Teleporter', player).access_rule = lambda state: (state.has('Flute', player) or state.has_Boots(player)) and state.can_lift_heavy_rocks(player)
     add_alternate_rule(world.get_entrance('Catfish Exit Rock', player), lambda state: state.can_boots_clip_dw(player))
@@ -230,11 +230,6 @@ def add_alternate_rule(entrance, rule):
 
 def create_owg_connections(player, world, connections, rule):
     for entrance, parent_region, target_region in connections:
-        #@todo: remove - making sure I didn't leave an entrance
-        for region in world.regions:
-            for exit in region.exits:
-                if exit.name == entrance and exit.player == player:
-                    raise RuntimeError('Redefining an entrance %s:%d' % (entrance, player))
         parent = world.get_region(parent_region, player)
         target = world.get_region(target_region, player)
         connection = Entrance(player, entrance, parent)
