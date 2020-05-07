@@ -27,26 +27,19 @@ def get_boots_required_superbunny_mirror_locations():
     yield 'Sahasrahla\'s Hut - Right'
 
 
-def get_invalid_mirror_bunny_entrances_dw():
+def get_invalid_mirror_bunny_entrances():
     """
-    Dark World entrances that can't be superbunny-mirrored into.
+    Entrances that can't be superbunny-mirrored into.
     """
-    yield 'Skull Woods Final Section (Entrance)'
+    yield 'Skull Woods Final Section'
     yield 'Hype Cave'
     yield 'Bonk Fairy (Dark)'
     yield 'Thieves Town'
     yield 'Dark World Hammer Peg Cave'
     yield 'Brewery'
     yield 'Hookshot Cave'
-    yield 'Hookshot Cave Exit (South)'
     yield 'Dark Lake Hylia Ledge Fairy'
     yield 'Dark Lake Hylia Ledge Spike Cave'
-
-
-def get_invalid_mirror_bunny_entrances_lw():
-    """
-    Light World entrances that can't be superbunny-mirrored into.
-    """
     yield 'Bonk Rock Cave'
     yield 'Bonk Fairy (Light)'
     yield '50 Rupee Cave'
@@ -59,9 +52,6 @@ def get_invalid_mirror_bunny_entrances_lw():
     yield 'Ice Rod Cave'
     yield 'Sanctuary Grave'
     yield 'Kings Grave'
-    #todo: you can for insanity shuffle
-    yield 'Hyrule Castle Secret Entrance Stairs'
-    yield 'Tower of Hera'
 
 
 def get_superbunny_accessible_locations():
