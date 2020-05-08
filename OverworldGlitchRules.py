@@ -132,6 +132,7 @@ def get_boots_clip_exits_dw(inverted = False):
     yield ('Hammer Pegs River Clip Spot', 'East Dark World', 'Hammer Peg Area')
     yield ('Dark Lake Hylia Ledge Clip Spot', 'East Dark World', 'Dark Lake Hylia Ledge')
     yield ('Dark Desert Cliffs Clip Spot', 'South Dark World', 'Dark Desert')
+    yield ('DW Floating Island Clip Spot', 'Dark Death Mountain (East Bottom)', 'Death Mountain Floating Island (Dark World)')
 
     if not inverted:
         yield ('Dark Death Mountain Descent', 'Dark Death Mountain (West Bottom)', 'West Dark World')

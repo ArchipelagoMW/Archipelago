@@ -184,13 +184,11 @@ class TestLightWorld(TestVanillaOWG):
 
             ["Waterfall Fairy - Left", False, []],
             ["Waterfall Fairy - Left", True, ['Flippers']],
-            #todo: not in logic yet - need to determine which caves are ok to waterwalk into
-            #["Waterfall Fairy - Left", True, ['Moon Pearl']],
-            #["Waterfall Fairy - Left", True, ['Pegasus Boots']],
+            ["Waterfall Fairy - Left", True, ['Moon Pearl']],
+            ["Waterfall Fairy - Left", True, ['Pegasus Boots']],
 
             ["Waterfall Fairy - Right", False, []],
             ["Waterfall Fairy - Right", True, ['Flippers']],
-            #todo: not in logic yet - need to determine which caves are ok to waterwalk into
-            #["Waterfall Fairy - Right", True, ['Moon Pearl']],
-            #["Waterfall Fairy - Right", True, ['Pegasus Boots']]
+            ["Waterfall Fairy - Right", True, ['Moon Pearl']],
+            ["Waterfall Fairy - Right", True, ['Pegasus Boots']]
         ])

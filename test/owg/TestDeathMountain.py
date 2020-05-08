@@ -169,8 +169,7 @@ class TestDeathMountain(TestVanillaOWG):
             ["Hookshot Cave - Bottom Right", False, []],
             ["Hookshot Cave - Bottom Right", False, [], ['Progressive Glove', 'Pegasus Boots']],
             ["Hookshot Cave - Bottom Right", False, [], ['Moon Pearl']],
-            #todo: DW Floating island clip not in logic
-            #["Hookshot Cave - Bottom Right", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Hookshot Cave - Bottom Right", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Hookshot Cave - Bottom Right", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Hookshot', 'Flute']],
             ["Hookshot Cave - Bottom Right", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Magic Mirror', 'Hammer', 'Flute', 'Pegasus Boots']],
             ["Hookshot Cave - Bottom Right", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Hookshot', 'Lamp']],
@@ -180,8 +179,7 @@ class TestDeathMountain(TestVanillaOWG):
             ["Hookshot Cave - Bottom Left", False, [], ['Progressive Glove', 'Pegasus Boots']],
             ["Hookshot Cave - Bottom Left", False, [], ['Moon Pearl']],
             ["Hookshot Cave - Bottom Left", False, [], ['Hookshot']],
-            #todo: DW Floating island clip not in logic
-            #["Hookshot Cave - Bottom Left", True, ['Moon Pearl', 'Pegasus Boots', 'Hookshot']],
+            ["Hookshot Cave - Bottom Left", True, ['Moon Pearl', 'Pegasus Boots', 'Hookshot']],
             ["Hookshot Cave - Bottom Left", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Hookshot', 'Flute']],
             ["Hookshot Cave - Bottom Left", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Hookshot', 'Lamp']],
 
@@ -189,8 +187,7 @@ class TestDeathMountain(TestVanillaOWG):
             ["Hookshot Cave - Top Left", False, [], ['Progressive Glove', 'Pegasus Boots']],
             ["Hookshot Cave - Top Left", False, [], ['Moon Pearl']],
             ["Hookshot Cave - Top Left", False, [], ['Hookshot']],
-            #todo: DW Floating island clip not in logic
-            #["Hookshot Cave - Top Left", True, ['Moon Pearl', 'Pegasus Boots', 'Hookshot']],
+            ["Hookshot Cave - Top Left", True, ['Moon Pearl', 'Pegasus Boots', 'Hookshot']],
             ["Hookshot Cave - Top Left", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Hookshot', 'Flute']],
             ["Hookshot Cave - Top Left", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Hookshot', 'Lamp']],
 
@@ -198,8 +195,7 @@ class TestDeathMountain(TestVanillaOWG):
             ["Hookshot Cave - Top Right", False, [], ['Progressive Glove', 'Pegasus Boots']],
             ["Hookshot Cave - Top Right", False, [], ['Moon Pearl']],
             ["Hookshot Cave - Top Right", False, [], ['Hookshot']],
-            #todo: DW Floating island clip not in logic
-            #["Hookshot Cave - Top Right", True, ['Moon Pearl', 'Pegasus Boots', 'Hookshot']],
+            ["Hookshot Cave - Top Right", True, ['Moon Pearl', 'Pegasus Boots', 'Hookshot']],
             ["Hookshot Cave - Top Right", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Hookshot', 'Flute']],
             ["Hookshot Cave - Top Right", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Hookshot', 'Lamp']],
         ])
