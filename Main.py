@@ -245,7 +245,7 @@ def main(args, seed=None):
                                                             for location in world.get_filled_locations() if
                                                             type(location.address) is int],
                                               "server_options": get_options()["server_options"]
-                                              }).encode("utf-8"))
+                                              }).encode("utf-8"), 9)
         if args.jsonout:
             jsonout["multidata"] = list(multidata)
         else:

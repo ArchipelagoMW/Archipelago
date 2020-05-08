@@ -1044,7 +1044,7 @@ async def main(args: argparse.Namespace):
             ctx.data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data","*multidata"),))
 
         with open(ctx.data_filename, 'rb') as f:
-            jsonobj = json.loads(zlib.decompress(f.read()).decode("utf-8"))
+            jsonobj = json.loads(zlib.decompress(f.read()).decode("utf-8-sig"))
             for team, names in enumerate(jsonobj['names']):
                 for player, name in enumerate(names, 1):
                     ctx.player_names[(team, player)] = name
@@ -1052,7 +1052,7 @@ async def main(args: argparse.Namespace):
             ctx.remote_items = set(jsonobj['remote_items'])
             ctx.locations = {tuple(k): tuple(v) for k, v in jsonobj['locations']}
     except Exception as e:
-        logging.error('Failed to read multiworld data (%s)' % e)
+        logging.exception('Failed to read multiworld data (%s)' % e)
         return
 
     ip = args.host if args.host else Utils.get_public_ipv4()
