@@ -1,7 +1,7 @@
 from test.owg.TestVanillaOWG import TestVanillaOWG
 
 
-class TestLightWorld(TestVanillaOWG):
+class TestDarkWorld(TestVanillaOWG):
 
     def testSouthDarkWorld(self):
         self.run_location_tests([

@@ -52,8 +52,7 @@ class TestDarkWorld(TestInvertedOWG):
             #todo: Qirn Jump
             #["Pyramid", True, []],
             ["Pyramid", False, []],
-            #todo: Waterwalk
-            #["Pyramid", True, ['Pegasus Boots']],
+            ["Pyramid", True, ['Pegasus Boots']],
             ["Pyramid", True, ['Flippers']],
 
             ["Pyramid Fairy - Left", False, []],
