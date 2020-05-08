@@ -219,6 +219,7 @@ def add_alternate_rule(entrance, rule):
     old_rule = entrance.access_rule
     entrance.access_rule = lambda state: old_rule(state) or rule(state)
 
+
 def create_owg_connections(player, world, connections, rule):
     for entrance, parent_region, target_region in connections:
         parent = world.get_region(parent_region, player)

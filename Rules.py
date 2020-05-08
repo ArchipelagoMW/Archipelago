@@ -61,8 +61,9 @@ def set_rules(world, player):
 
     if world.mode[player] != 'inverted':
         set_big_bomb_rules(world, player)
-        if world.logic[player] == 'owglitches':
-            add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: state.can_reach('Dark Death Mountain (West Bottom)', 'Region', player) and state.has_Mirror(player), 'or')
+        if world.logic[player] == 'owglitches' and world.shuffle not in ('insanity', 'insanity_legacy'):
+            path_to_courtyard = mirrorless_path_to_castle_courtyard(world, player)
+            add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: state.world.get_entrance('Dark Death Mountain Offset Mirror', player).can_reach(state) and all(rule(state) for rule in path_to_courtyard), 'or')
     else:
         set_inverted_big_bomb_rules(world, player)
 
@@ -83,6 +84,23 @@ def set_rules(world, player):
 
     set_bunny_rules(world, player, world.mode[player] == 'inverted')
 
+
+def mirrorless_path_to_castle_courtyard(world, player):
+    # If Agahnim is defeated then the courtyard needs to be accessible without using the mirror for the mirror offset glitch.
+    # Only considering the secret passage for now (in non-insanity shuffle).  Basically, if it's Ganon you need the master sword.
+    start = world.get_entrance('Hyrule Castle Secret Entrance Drop', player)
+    target = world.get_region('Hyrule Castle Courtyard', player)
+    seen = {start.parent_region, start.connected_region}
+    queue = collections.deque([(start.connected_region, [])])
+    while queue:
+        (current, path) = queue.popleft()
+        for entrance in current.exits:
+            if entrance.connected_region not in seen:
+                new_path = path + [entrance.access_rule]
+                if entrance.connected_region == target:
+                    return new_path
+                else:
+                    queue.append((entrance.connected_region, new_path))
 
 def set_rule(spot, rule):
     spot.access_rule = rule
