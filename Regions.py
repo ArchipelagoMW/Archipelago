@@ -151,10 +151,10 @@ def create_regions(world, player):
         create_dungeon_region(player, 'Tower of Hera (Basement)', 'Tower of Hera', ['Tower of Hera - Big Key Chest']),
         create_dungeon_region(player, 'Tower of Hera (Top)', 'Tower of Hera', ['Tower of Hera - Compass Chest', 'Tower of Hera - Big Chest', 'Tower of Hera - Boss', 'Tower of Hera - Prize']),
 
-        create_dw_region(player, 'East Dark World', ['Pyramid'], ['Pyramid Fairy', 'South Dark World Bridge', 'Palace of Darkness', 'Dark Lake Hylia Drop (East)', 'Dark Lake Hylia Teleporter',
+        create_dw_region(player, 'East Dark World', ['Pyramid'], ['Pyramid Fairy', 'South Dark World Bridge', 'Palace of Darkness', 'Dark Lake Hylia Drop (East)',
                                                            'Hyrule Castle Ledge Mirror Spot', 'Dark Lake Hylia Fairy', 'Palace of Darkness Hint', 'East Dark World Hint', 'Pyramid Hole', 'Northeast Dark World Broken Bridge Pass',]),
         create_dw_region(player, 'Catfish', ['Catfish'], ['Catfish Exit Rock']),
-        create_dw_region(player, 'Northeast Dark World', None, ['West Dark World Gap', 'Dark World Potion Shop', 'East Dark World Broken Bridge Pass', 'Catfish Entrance Rock']),
+        create_dw_region(player, 'Northeast Dark World', None, ['West Dark World Gap', 'Dark World Potion Shop', 'East Dark World Broken Bridge Pass', 'Catfish Entrance Rock', 'Dark Lake Hylia Teleporter']),
         create_cave_region(player, 'Palace of Darkness Hint', 'a storyteller'),
         create_cave_region(player, 'East Dark World Hint', 'a storyteller'),
         create_dw_region(player, 'South Dark World', ['Stumpy', 'Digging Game'], ['Dark Lake Hylia Drop (South)', 'Hype Cave', 'Swamp Palace', 'Village of Outcasts Heavy Rock', 'Maze Race Mirror Spot',

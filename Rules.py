@@ -449,7 +449,7 @@ def default_rules(world, player):
     set_rule(world.get_entrance('Dark Lake Hylia Drop (South)', player), lambda state: state.has_Pearl(player) and state.has('Flippers', player))  # ToDo any fake flipper set up?
     set_rule(world.get_entrance('Dark Lake Hylia Ledge Fairy', player), lambda state: state.has_Pearl(player)) # bomb required
     set_rule(world.get_entrance('Dark Lake Hylia Ledge Spike Cave', player), lambda state: state.can_lift_rocks(player) and state.has_Pearl(player))
-    set_rule(world.get_entrance('Dark Lake Hylia Teleporter', player), lambda state: state.has_Pearl(player) and (state.has('Hammer', player) or state.can_lift_rocks(player)))  # Move this to NE Dark World
+    set_rule(world.get_entrance('Dark Lake Hylia Teleporter', player), lambda state: state.has_Pearl(player))
     set_rule(world.get_entrance('Village of Outcasts Heavy Rock', player), lambda state: state.has_Pearl(player) and state.can_lift_heavy_rocks(player))
     set_rule(world.get_entrance('Hype Cave', player), lambda state: state.has_Pearl(player)) # bomb required
     set_rule(world.get_entrance('Brewery', player), lambda state: state.has_Pearl(player)) # bomb required
@@ -591,7 +591,8 @@ def inverted_rules(world, player):
     set_rule(world.get_entrance('Dark Lake Hylia Drop (South)', player), lambda state: state.has('Flippers', player))  # ToDo any fake flipper set up?
     set_rule(world.get_entrance('Dark Lake Hylia Ledge Pier', player), lambda state: state.has('Flippers', player))
     set_rule(world.get_entrance('Dark Lake Hylia Ledge Spike Cave', player), lambda state: state.can_lift_rocks(player))
-    set_rule(world.get_entrance('Dark Lake Hylia Teleporter', player), lambda state: state.has('Flippers', player) and (state.has('Hammer', player) or state.can_lift_rocks(player)))  # Fake Flippers
+    set_rule(world.get_entrance('Dark Lake Hylia Teleporter', player), lambda state: state.has('Flippers', player))  # Fake Flippers
+    set_rule(world.get_entrance('Dark Lake Hylia Shallows', player), lambda state: state.has('Flippers', player))
     set_rule(world.get_entrance('Village of Outcasts Heavy Rock', player), lambda state: state.can_lift_heavy_rocks(player))
     set_rule(world.get_entrance('East Dark World Bridge', player), lambda state: state.has('Hammer', player))
     set_rule(world.get_entrance('Lake Hylia Central Island Mirror Spot', player), lambda state: state.has_Mirror(player))
@@ -664,7 +665,7 @@ def no_glitches_rules(world, player):
         set_rule(world.get_entrance('Lake Hylia Central Island Pier', player), lambda state: state.has('Flippers', player))  # can be fake flippered to
         set_rule(world.get_entrance('Hobo Bridge', player), lambda state: state.has('Flippers', player))
         set_rule(world.get_entrance('Dark Lake Hylia Drop (East)', player), lambda state: state.has_Pearl(player) and state.has('Flippers', player))
-        set_rule(world.get_entrance('Dark Lake Hylia Teleporter', player), lambda state: state.has_Pearl(player) and state.has('Flippers', player) and (state.has('Hammer', player) or state.can_lift_rocks(player)))
+        set_rule(world.get_entrance('Dark Lake Hylia Teleporter', player), lambda state: state.has_Pearl(player) and state.has('Flippers', player))
         set_rule(world.get_entrance('Dark Lake Hylia Ledge Drop', player), lambda state: state.has_Pearl(player) and state.has('Flippers', player))
     else:
         set_rule(world.get_entrance('Zoras River', player), lambda state: state.has_Pearl(player) and (state.has('Flippers', player) or state.can_lift_rocks(player)))
@@ -689,7 +690,7 @@ def fake_flipper_rules(world, player):
         set_rule(world.get_entrance('Lake Hylia Central Island Pier', player), lambda state: True)
         set_rule(world.get_entrance('Hobo Bridge', player), lambda state: True)
         set_rule(world.get_entrance('Dark Lake Hylia Drop (East)', player), lambda state: state.has_Pearl(player) and state.has('Flippers', player))
-        set_rule(world.get_entrance('Dark Lake Hylia Teleporter', player), lambda state: state.has_Pearl(player) and state.has('Flippers', player) and (state.has('Hammer', player) or state.can_lift_rocks(player)))
+        set_rule(world.get_entrance('Dark Lake Hylia Teleporter', player), lambda state: state.has_Pearl(player))
         set_rule(world.get_entrance('Dark Lake Hylia Ledge Drop', player), lambda state: state.has_Pearl(player))
     else:
         set_rule(world.get_entrance('Zoras River', player), lambda state: state.has_Pearl(player))
@@ -701,7 +702,7 @@ def fake_flipper_rules(world, player):
         set_rule(world.get_entrance('Dark Lake Hylia Drop (East)', player), lambda state: state.has('Flippers', player))
         set_rule(world.get_entrance('Dark Lake Hylia Teleporter', player), lambda state: True)
         set_rule(world.get_entrance('Dark Lake Hylia Ledge Drop', player), lambda state: True)
-        set_rule(world.get_entrance('East Dark World Pier', player), lambda state: True) #todo: Ice Palace exit
+        set_rule(world.get_entrance('East Dark World Pier', player), lambda state: True)
 
 
 def forbid_bomb_jump_requirements(world, player):
