@@ -267,10 +267,84 @@ def main(args, seed=None):
     return world
 
 
+def copy_world(world):
+    # ToDo: Not good yet
+    ret = World(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.difficulty_adjustments, world.timer, world.progressive, world.goal, world.algorithm, world.accessibility, world.shuffle_ganon, world.retro, world.custom, world.customitemarray, world.hints)
+    ret.teams = world.teams
+    ret.player_names = copy.deepcopy(world.player_names)
+    ret.remote_items = world.remote_items.copy()
+    ret.required_medallions = world.required_medallions.copy()
+    ret.swamp_patch_required = world.swamp_patch_required.copy()
+    ret.ganon_at_pyramid = world.ganon_at_pyramid.copy()
+    ret.powder_patch_required = world.powder_patch_required.copy()
+    ret.ganonstower_vanilla = world.ganonstower_vanilla.copy()
+    ret.treasure_hunt_count = world.treasure_hunt_count.copy()
+    ret.treasure_hunt_icon = world.treasure_hunt_icon.copy()
+    ret.sewer_light_cone = world.sewer_light_cone.copy()
+    ret.light_world_light_cone = world.light_world_light_cone
+    ret.dark_world_light_cone = world.dark_world_light_cone
+    ret.seed = world.seed
+    ret.can_access_trock_eyebridge = world.can_access_trock_eyebridge.copy()
+    ret.can_access_trock_front = world.can_access_trock_front.copy()
+    ret.can_access_trock_big_chest = world.can_access_trock_big_chest.copy()
+    ret.can_access_trock_middle = world.can_access_trock_middle.copy()
+    ret.can_take_damage = world.can_take_damage
+    ret.difficulty_requirements = world.difficulty_requirements.copy()
+    ret.fix_fake_world = world.fix_fake_world.copy()
+    ret.lamps_needed_for_dark_rooms = world.lamps_needed_for_dark_rooms
+    ret.mapshuffle = world.mapshuffle.copy()
+    ret.compassshuffle = world.compassshuffle.copy()
+    ret.keyshuffle = world.keyshuffle.copy()
+    ret.bigkeyshuffle = world.bigkeyshuffle.copy()
+    ret.crystals_needed_for_ganon = world.crystals_needed_for_ganon.copy()
+    ret.crystals_needed_for_gt = world.crystals_needed_for_gt.copy()
+    ret.open_pyramid = world.open_pyramid.copy()
+    ret.boss_shuffle = world.boss_shuffle.copy()
+    ret.enemy_shuffle = world.enemy_shuffle.copy()
+    ret.enemy_health = world.enemy_health.copy()
+    ret.enemy_damage = world.enemy_damage.copy()
+    ret.beemizer = world.beemizer.copy()
+    ret.timer = world.timer.copy()
+    ret.shufflepots = world.shufflepots.copy()
+    ret.extendedmsu = world.extendedmsu.copy()
+    ret.regions = [copy.copy(region) for region in world.regions]
+    ret.shops = [copy.copy(shop) for shop in world.shops]
+    ret.dungeons = [copy.copy(dungeon) for dungeon in world.dungeons]
+    ret.itempool = world.itempool
+    ret.precollected_items = world.precollected_items.copy()
+
+    for shop in ret.shops:
+        shop.inventory = shop.inventory.copy()
+
+    ret.initialize_regions()
+
+    # Copy locations
+    for region in ret.regions:
+        region.locations = [copy.copy(location) for location in region.locations]
+        for location in region.locations:
+            location.parent_region = region
+        region.entrances = [copy.copy(entrance) for entrance in region.entrances]
+        for entrance in region.entrances:
+            entrance.connected_region = region
+            entrance.parent_region = ret.get_region(entrance.parent_region.name, entrance.parent_region.player)
+        region.exits = [copy.copy(exit) for exit in region.exits]
+        for exit in region.exits:
+            exit.parent_region = region
+            exit.connected_region = ret.get_region(entrance.connected_region.name, entrance.connected_region.player)
+
+    # copy state
+    ret.state = ret.state.copy()
+    ret.state.world = ret
+    ret.state.prog_items = world.state.prog_items.copy()
+    ret.state.stale = {player: True for player in range(1, world.players + 1)}
+
+    return ret
+
+
 def create_playthrough(world):
     # create a copy as we will modify it
     old_world = world
-    world = copy.deepcopy(world)
+    world = copy_world(world)
 
     # if we only check for beatable, we can do this sanity check first before writing down spheres
     if not world.can_beat_game():
