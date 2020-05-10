@@ -4,9 +4,9 @@ import copy
 from enum import Enum, unique
 import logging
 import json
-from collections import OrderedDict, Counter
+from collections import OrderedDict, Counter, deque
 
-from EntranceShuffle import door_addresses
+from EntranceShuffle import door_addresses, indirect_connections
 from Utils import int16_as_bytes
 from typing import Union
 
@@ -396,6 +396,7 @@ class CollectionState(object):
         self.prog_items = Counter()
         self.world = parent
         self.reachable_regions = {player: set() for player in range(1, parent.players + 1)}
+        self.blocked_connections = {player: set() for player in range(1, parent.players + 1)}
         self.events = []
         self.path = {}
         self.locations_checked = set()
@@ -404,24 +405,46 @@ class CollectionState(object):
             self.collect(item, True)
 
     def update_reachable_regions(self, player: int):
-        player_regions = self.world.get_regions(player)
         self.stale[player] = False
         rrp = self.reachable_regions[player]
-        new_regions = True
-        reachable_regions_count = len(rrp)
-        while new_regions:
-            player_regions = [region for region in player_regions if region not in rrp]
-            for candidate in player_regions:
-                if candidate.can_reach_private(self):
-                    rrp.add(candidate)
-            new_regions = len(rrp) > reachable_regions_count
-            reachable_regions_count = len(rrp)
+        bc = self.blocked_connections[player]
+        queue = deque(self.blocked_connections[player])
+        start = self.world.get_region('Menu', player)
+
+        # init on first call - this can't be done on construction since the regions don't exist yet
+        if not start in rrp:
+            rrp.add(start)
+            bc.update(start.exits)
+            queue.extend(start.exits)
+
+        # run BFS on all connections, and keep track of those blocked by missing items
+        while True:
+            try:
+                connection = queue.popleft()
+                new_region = connection.connected_region
+                if new_region in rrp:
+                    bc.remove(connection)
+                elif connection.can_reach(self):
+                    rrp.add(new_region)
+                    bc.remove(connection)
+                    bc.update(new_region.exits)
+                    queue.extend(new_region.exits)
+                    self.path[new_region] = (new_region.name, self.path.get(connection, None))
+
+                    # Retry connections if the new region can unblock them
+                    if new_region.name in indirect_connections:
+                        new_entrance = self.world.get_entrance(indirect_connections[new_region.name], player)
+                        if new_entrance in bc and new_entrance not in queue:
+                            queue.append(new_entrance)
+            except IndexError:
+                break
 
     def copy(self) -> CollectionState:
         ret = CollectionState(self.world)
         ret.prog_items = self.prog_items.copy()
         ret.reachable_regions = {player: copy.copy(self.reachable_regions[player]) for player in
                                  range(1, self.world.players + 1)}
+        ret.blocked_connections = {player: copy.copy(self.blocked_connections[player]) for player in range(1, self.world.players + 1)}
         ret.events = copy.copy(self.events)
         ret.path = copy.copy(self.path)
         ret.locations_checked = copy.copy(self.locations_checked)
@@ -737,6 +760,7 @@ class CollectionState(object):
                     del (self.prog_items[to_remove, item.player])
                 # invalidate caches, nothing can be trusted anymore now
                 self.reachable_regions[item.player] = set()
+                self.blocked_connections[item.player] = set()
                 self.stale[item.player] = True
 
 @unique
@@ -814,10 +838,11 @@ class Entrance(object):
         self.vanilla = None
         self.access_rule = lambda state: True
         self.player = player
+        self.hide_path = False
 
     def can_reach(self, state):
         if self.parent_region.can_reach(state) and self.access_rule(state):
-            if not self in state.path:
+            if not self.hide_path and not self in state.path:
                 state.path[self] = (self.name, state.path.get(self.parent_region, (self.parent_region.name, None)))
             return True
 

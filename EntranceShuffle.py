@@ -1198,7 +1198,9 @@ def link_inverted_entrances(world, player):
         sanc_doors = [door for door in Inverted_Dark_Sanctuary_Doors if door in bomb_shop_doors]
         sanc_door = random.choice(sanc_doors)
         bomb_shop_doors.remove(sanc_door)
-        connect_doors(world, [sanc_door], ['Inverted Dark Sanctuary'], player)
+
+        connect_entrance(world, sanc_door, 'Inverted Dark Sanctuary', player)
+        world.get_entrance('Inverted Dark Sanctuary Exit', player).connect(world.get_entrance(sanc_door, player).parent_region)
         
         lw_dm_entrances = ['Paradox Cave (Bottom)', 'Paradox Cave (Middle)', 'Paradox Cave (Top)', 'Old Man House (Bottom)',
                            'Fairy Ascension Cave (Bottom)', 'Fairy Ascension Cave (Top)', 'Spiral Cave (Bottom)', 'Old Man Cave (East)',
@@ -1273,7 +1275,8 @@ def link_inverted_entrances(world, player):
         sanc_doors = [door for door in Inverted_Dark_Sanctuary_Doors if door in dw_entrances]
         sanc_door = random.choice(sanc_doors)
         dw_entrances.remove(sanc_door)
-        connect_doors(world, [sanc_door], ['Inverted Dark Sanctuary'], player)
+        connect_entrance(world, sanc_door, 'Inverted Dark Sanctuary', player)
+        world.get_entrance('Inverted Dark Sanctuary Exit', player).connect(world.get_entrance(sanc_door, player).parent_region)
 
         # tavern back door cannot be shuffled yet
         connect_doors(world, ['Tavern North'], ['Tavern'], player)
@@ -1404,7 +1407,8 @@ def link_inverted_entrances(world, player):
         sanc_doors = [door for door in Inverted_Dark_Sanctuary_Doors if door in dw_entrances]
         sanc_door = random.choice(sanc_doors)
         dw_entrances.remove(sanc_door)
-        connect_doors(world, [sanc_door], ['Inverted Dark Sanctuary'], player)
+        connect_entrance(world, sanc_door, 'Inverted Dark Sanctuary', player)
+        world.get_entrance('Inverted Dark Sanctuary Exit', player).connect(world.get_entrance(sanc_door, player).parent_region)
         
         # place old man house
         # no dw must exits in inverted, but we randomize whether cave is in light or dark world
@@ -1541,7 +1545,8 @@ def link_inverted_entrances(world, player):
         sanc_doors = [door for door in Inverted_Dark_Sanctuary_Doors if door in entrances]
         sanc_door = random.choice(sanc_doors)
         entrances.remove(sanc_door)
-        connect_doors(world, [sanc_door], ['Inverted Dark Sanctuary'], player)
+        connect_entrance(world, sanc_door, 'Inverted Dark Sanctuary', player)
+        world.get_entrance('Inverted Dark Sanctuary Exit', player).connect(world.get_entrance(sanc_door, player).parent_region)
 
         # tavern back door cannot be shuffled yet
         connect_doors(world, ['Tavern North'], ['Tavern'], player)
@@ -1674,7 +1679,8 @@ def link_inverted_entrances(world, player):
         sanc_door = random.choice(sanc_doors)
         entrances.remove(sanc_door)
         doors.remove(sanc_door)
-        connect_doors(world, [sanc_door], ['Inverted Dark Sanctuary'], player)
+        connect_entrance(world, sanc_door, 'Inverted Dark Sanctuary', player)
+        world.get_entrance('Inverted Dark Sanctuary Exit', player).connect(world.get_entrance(sanc_door, player).parent_region)
 
         # now let's deal with mandatory reachable stuff
         def extract_reachable_exit(cavelist):
@@ -2810,7 +2816,10 @@ Isolated_LH_Doors = ['Kings Grave',
                      'Turtle Rock Isolated Ledge Entrance']
 
 # these are connections that cannot be shuffled and always exist. They link together separate parts of the world we need to divide into regions
-mandatory_connections = [('Lake Hylia Central Island Pier', 'Lake Hylia Central Island'),
+mandatory_connections = [('Links House S&Q', 'Links House'),
+                         ('Sanctuary S&Q', 'Sanctuary'),
+                         ('Old Man S&Q', 'Old Man House'),
+                         ('Lake Hylia Central Island Pier', 'Lake Hylia Central Island'),
                          ('Lake Hylia Central Island Teleporter', 'Dark Lake Hylia Central Island'),
                          ('Zoras River', 'Zoras River'),
                          ('Kings Grave Outer Rocks', 'Kings Grave Area'),
@@ -2991,7 +3000,11 @@ mandatory_connections = [('Lake Hylia Central Island Pier', 'Lake Hylia Central 
                          ('Pyramid Drop', 'East Dark World')
                         ]
 
-inverted_mandatory_connections = [('Lake Hylia Central Island Pier', 'Lake Hylia Central Island'),
+inverted_mandatory_connections = [('Links House S&Q', 'Inverted Links House'),
+                                  ('Dark Sanctuary S&Q', 'Inverted Dark Sanctuary'),
+                                  ('Old Man S&Q', 'Old Man House'),
+                                  ('Castle Ledge S&Q', 'Hyrule Castle Ledge'),
+                                  ('Lake Hylia Central Island Pier', 'Lake Hylia Central Island'),
                                   ('Lake Hylia Island Pier', 'Lake Hylia Island'),
                                   ('Lake Hylia Warp', 'Northeast Light World'),
                                   ('Northeast Light World Warp', 'Light World'),
@@ -3495,6 +3508,7 @@ inverted_default_connections =  [('Waterfall of Wishing', 'Waterfall of Wishing'
                                  ('Inverted Links House Exit', 'South Dark World'),
                                  ('Inverted Big Bomb Shop', 'Inverted Big Bomb Shop'),
                                  ('Inverted Dark Sanctuary', 'Inverted Dark Sanctuary'),
+                                 ('Inverted Dark Sanctuary Exit', 'West Dark World'),
                                  ('Old Man Cave (West)', 'Bumper Cave'),
                                  ('Old Man Cave (East)', 'Death Mountain Return Cave'),
                                  ('Old Man Cave Exit (West)', 'West Dark World'),
@@ -3625,6 +3639,18 @@ inverted_default_dungeon_connections = [('Desert Palace Entrance (South)', 'Dese
                                         ('Inverted Agahnims Tower Exit', 'Dark Death Mountain'),
                                         ('Turtle Rock Exit (Front)', 'Dark Death Mountain'),
                                         ('Ice Palace Exit', 'Dark Lake Hylia')]
+
+# Regions that can be required to access entrances through rules, not paths
+indirect_connections = {
+    'Turtle Rock (Top)': 'Turtle Rock',
+    'East Dark World': 'Pyramid Fairy',
+    'Big Bomb Shop': 'Pyramid Fairy',
+    'Dark Desert': 'Pyramid Fairy',
+    'West Dark World': 'Pyramid Fairy',
+    'South Dark World': 'Pyramid Fairy',
+    'Light World': 'Pyramid Fairy',
+    'Old Man Cave': 'Old Man S&Q'
+}
 
 # format:
 # Key=Name
