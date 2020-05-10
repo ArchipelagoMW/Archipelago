@@ -42,6 +42,7 @@ class TestSkullWoods(TestDungeon):
 
     def testSkullWoodsLeftOnly(self):
         self.starting_regions = ['Skull Woods First Section (Left)']
+        self.remove_exits = ['Skull Woods First Section Exit']
         self.run_tests([
             ["Skull Woods - Big Chest", False, []],
             ["Skull Woods - Big Chest", False, [], ['Never in logic']],
@@ -59,6 +60,7 @@ class TestSkullWoods(TestDungeon):
 
     def testSkullWoodsBackOnly(self):
         self.starting_regions = ['Skull Woods First Section (Top)']
+        self.remove_exits = ['Skull Woods First Section Exit']
         self.run_tests([
             ["Skull Woods - Big Chest", False, []],
             ["Skull Woods - Big Chest", False, [], ['Big Key (Skull Woods)']],
@@ -81,6 +83,7 @@ class TestSkullWoods(TestDungeon):
 
     def testSkullWoodsMiddle(self):
         self.starting_regions = ['Skull Woods Second Section']
+        self.remove_exits = ['Skull Woods Second Section Exit (East)', 'Skull Woods Second Section Exit (West)']
         self.run_tests([["Skull Woods - Big Key Chest", True, []]])
 
     def testSkullWoodsBack(self):

@@ -1,7 +1,7 @@
 import collections
 import logging
 import OverworldGlitchRules
-from BaseClasses import RegionType, World
+from BaseClasses import RegionType, World, Entrance
 from Items import ItemFactory
 from OverworldGlitchRules import overworld_glitches_rules
 
@@ -10,20 +10,10 @@ def set_rules(world, player):
 
     if world.logic[player] == 'nologic':
         logging.getLogger('').info('WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
-        if world.mode[player] != 'inverted':
-            world.get_region('Links House', player).can_reach_private = lambda state: True
-            world.get_region('Sanctuary', player).can_reach_private = lambda state: True
-            old_rule = world.get_region('Old Man House', player).can_reach
-            world.get_region('Old Man House', player).can_reach_private = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
-            return
-        else:
-            world.get_region('Inverted Links House', player).can_reach_private = lambda state: True
-            world.get_region('Inverted Dark Sanctuary', player).entrances[0].parent_region.can_reach_private = lambda state: True
-            if world.shuffle[player] != 'vanilla':
-                old_rule = world.get_region('Old Man House', player).can_reach
-                world.get_region('Old Man House', player).can_reach_private = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
-            world.get_region('Hyrule Castle Ledge', player).can_reach_private = lambda state: True
-            return
+        world.get_region('Menu', player).can_reach_private = lambda state: True
+        for exit in world.get_region('Menu', player).exits:
+            exit.hide_path = True
+        return
 
     global_rules(world, player)
     if world.mode[player] != 'inverted':
@@ -148,9 +138,12 @@ def global_rules(world, player):
     # ganon can only carry triforce
     add_item_rule(world.get_location('Ganon', player), lambda item: item.name == 'Triforce' and item.player == player)
 
-    # we can s&q to the old man house after we rescue him. This may be somewhere completely different if caves are shuffled!
-    old_rule = world.get_region('Old Man House', player).can_reach_private
-    world.get_region('Old Man House', player).can_reach_private = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule(state)
+    # determines which S&Q locations are available - hide from paths since it isn't an in-game location
+    world.get_region('Menu', player).can_reach_private = lambda state: True
+    for exit in world.get_region('Menu', player).exits:
+        exit.hide_path = True
+
+    set_rule(world.get_entrance('Old Man S&Q', player), lambda state: state.can_reach('Old Man', 'Location', player))
 
     set_rule(world.get_location('Sunken Treasure', player), lambda state: state.has('Open Floodgate', player))
     set_rule(world.get_location('Dark Blacksmith Ruins', player), lambda state: state.has('Return Smith', player))
@@ -206,7 +199,7 @@ def global_rules(world, player):
 
     # logic patch to prevent placing a crystal in Desert that's required to reach the required keys
     if not (world.keyshuffle[player] and world.bigkeyshuffle[player]):
-        add_rule(world.get_location('Desert Palace - Prize', player), lambda state: state.world.get_region('Desert Palace Main (Outer)', 1).can_reach(state))
+        add_rule(world.get_location('Desert Palace - Prize', player), lambda state: state.world.get_region('Desert Palace Main (Outer)', player).can_reach(state))
 
     set_rule(world.get_entrance('Tower of Hera Small Key Door', player), lambda state: state.has_key('Small Key (Tower of Hera)', player) or item_name(state, 'Tower of Hera - Big Key Chest', player) == ('Small Key (Tower of Hera)', player))
     set_rule(world.get_entrance('Tower of Hera Big Key Door', player), lambda state: state.has('Big Key (Tower of Hera)', player))
@@ -382,15 +375,6 @@ def global_rules(world, player):
 
 
 def default_rules(world, player):
-    if world.mode[player] == 'standard':
-        world.get_region('Hyrule Castle Secret Entrance', player).can_reach_private = lambda state: True
-        old_rule = world.get_region('Links House', player).can_reach_private
-        world.get_region('Links House', player).can_reach_private = lambda state: state.can_reach('Sanctuary', 'Region', player) or old_rule(state)
-    else:
-        # these are default save&quit points and always accessible
-        world.get_region('Links House', player).can_reach_private = lambda state: True
-        world.get_region('Sanctuary', player).can_reach_private = lambda state: True
-
     # overworld requirements
     set_rule(world.get_entrance('Kings Grave', player), lambda state: state.has_Boots(player))
     set_rule(world.get_entrance('Kings Grave Outer Rocks', player), lambda state: state.can_lift_heavy_rocks(player))
@@ -501,16 +485,8 @@ def default_rules(world, player):
 
 
 def inverted_rules(world, player):
-    # s&q regions. link's house entrance is set to true so the filler knows the chest inside can always be reached
-    world.get_region('Inverted Links House', player).can_reach_private = lambda state: True
-    world.get_region('Inverted Links House', player).entrances[0].can_reach = lambda state: True
-    world.get_region('Inverted Dark Sanctuary', player).entrances[0].parent_region.can_reach_private = lambda state: True
-
-    old_rule_old_man = world.get_region('Old Man House', player).can_reach_private
-    world.get_region('Old Man House', player).can_reach_private = lambda state: state.can_reach('Old Man', 'Location', player) or old_rule_old_man(state)
-
-    old_rule_castle_ledge = world.get_region('Hyrule Castle Ledge', player).can_reach_private
-    world.get_region('Hyrule Castle Ledge', player).can_reach_private = lambda state: (state.has_Mirror(player) and state.has('Beat Agahnim 1', player) and state.can_reach_light_world(player)) or old_rule_castle_ledge(state)
+    # s&q regions.
+    set_rule(world.get_entrance('Castle Ledge S&Q', player), lambda state: state.has_Mirror(player) and state.has('Beat Agahnim 1', player))
 
     # overworld requirements 
     set_rule(world.get_location('Maze Race', player), lambda state: state.has_Pearl(player))
@@ -805,9 +781,20 @@ def swordless_rules(world, player):
         set_rule(world.get_location('Bombos Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has('Hammer', player))
 
 
+def add_connection(parent_name, target_name, entrance_name, world, player):
+    parent = world.get_region(parent_name, player)
+    target = world.get_region(target_name, player)
+    connection = Entrance(player, entrance_name, parent)
+    parent.exits.append(connection)
+    connection.connect(target)
+
 def standard_rules(world, player):
+    add_connection('Menu', 'Hyrule Castle Secret Entrance', 'Uncle S&Q', world, player)
+    world.get_entrance('Uncle S&Q', player).hide_path = True
     set_rule(world.get_entrance('Hyrule Castle Exit (East)', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
     set_rule(world.get_entrance('Hyrule Castle Exit (West)', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
+    set_rule(world.get_entrance('Links House S&Q', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
+    set_rule(world.get_entrance('Sanctuary S&Q', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
 
 
 def set_trock_key_rules(world, player):
@@ -1033,7 +1020,7 @@ def set_big_bomb_rules(world, player):
     # the basic routes assume you can reach eastern light world with the bomb.
     # you can then use the southern teleporter, or (if you have beaten Aga1) the hyrule castle gate warp
     def basic_routes(state):
-        return southern_teleporter(state) or state.can_reach('Top of Pyramid', 'Entrance', player)
+        return southern_teleporter(state) or state.has('Beat Agahnim 1', player)
 
     # Key for below abbreviations:
     # P = pearl
@@ -1066,7 +1053,7 @@ def set_big_bomb_rules(world, player):
         #1. Mirror and enter via gate: Need mirror and Aga1
         #2. cross peg bridge: Need hammer and moon pearl
         # -> CPB or (M and A)
-        add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: cross_peg_bridge(state) or (state.has_Mirror(player) and state.can_reach('Top of Pyramid', 'Entrance', player)))
+        add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: cross_peg_bridge(state) or (state.has_Mirror(player) and state.has('Beat Agahnim 1', player)))
     elif bombshop_entrance.name in Isolated_DW_entrances:
         # 1. mirror then flute then basic routes
         # -> M and Flute and BR
@@ -1335,7 +1322,7 @@ def set_bunny_rules(world: World, player: int, inverted: bool):
 
 
     def path_to_access_rule(path, entrance):
-        return lambda state: state.can_reach(entrance) and all(rule(state) for rule in path)
+        return lambda state: state.can_reach(entrance.name, 'Entrance', entrance.player) and all(rule(state) for rule in path)
 
     def options_to_access_rule(options):
         return lambda state: any(rule(state) for rule in options)

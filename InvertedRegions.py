@@ -6,6 +6,7 @@ from Regions import create_lw_region, create_dw_region, create_cave_region, crea
 def create_inverted_regions(world, player):
 
     world.regions += [
+        create_dw_region(player, 'Menu', None, ['Links House S&Q', 'Dark Sanctuary S&Q', 'Old Man S&Q', 'Castle Ledge S&Q']),
         create_lw_region(player, 'Light World', ['Mushroom', 'Bottle Merchant', 'Flute Spot', 'Sunken Treasure', 'Purple Chest', 'Bombos Tablet'],
                          ["Blinds Hideout", "Hyrule Castle Secret Entrance Drop", 'Kings Grave Outer Rocks', 'Dam',
                           'Inverted Big Bomb Shop', 'Tavern North', 'Chicken House', 'Aginahs Cave', 'Sahasrahlas Hut', 'Kakariko Well Drop', 'Kakariko Well Cave',
@@ -197,7 +198,7 @@ def create_inverted_regions(world, player):
         create_cave_region(player, 'C-Shaped House', 'a house with a chest', ['C-Shaped House']),
         create_cave_region(player, 'Chest Game', 'a game of 16 chests', ['Chest Game']),
         create_cave_region(player, 'Red Shield Shop', 'the rare shop'),
-        create_cave_region(player, 'Inverted Dark Sanctuary', 'a storyteller'),
+        create_cave_region(player, 'Inverted Dark Sanctuary', 'a storyteller', None, ['Inverted Dark Sanctuary Exit']),
         create_cave_region(player, 'Bumper Cave', 'a connector', None, ['Bumper Cave Exit (Bottom)', 'Bumper Cave Exit (Top)']),
         create_dw_region(player, 'Skull Woods Forest', None, ['Skull Woods First Section Hole (East)', 'Skull Woods First Section Hole (West)', 'Skull Woods First Section Hole (North)',
                                                       'Skull Woods First Section Door', 'Skull Woods Second Section Door (East)']),
