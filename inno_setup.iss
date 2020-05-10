@@ -58,7 +58,7 @@ Type: dirifempty; Name: "{app}"
 [Registry]
 
 Root: HKCR; Subkey: ".bmbp";                                 ValueData: "{#MyAppName}patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""
-Root: HKCR; Subkey: "{#MyAppName}patch";                     ValueData: "{#MyAppName} Patch";       Flags: uninsdeletekey;   ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: "{#MyAppName}patch";                     ValueData: "Berserker's Multiworld Binary Patch";       Flags: uninsdeletekey;   ValueType: string;  ValueName: ""
 Root: HKCR; Subkey: "{#MyAppName}patch\DefaultIcon";         ValueData: "{app}\{#MyAppExeName},0";                           ValueType: string;  ValueName: ""
 Root: HKCR; Subkey: "{#MyAppName}patch\shell\open\command";  ValueData: """{app}\{#MyAppExeName}"" ""%1""";                  ValueType: string;  ValueName: ""
 
