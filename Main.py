@@ -307,38 +307,89 @@ def copy_world(world):
     ret.timer = world.timer.copy()
     ret.shufflepots = world.shufflepots.copy()
     ret.extendedmsu = world.extendedmsu.copy()
-    ret.regions = [copy.copy(region) for region in world.regions]
-    ret.shops = [copy.copy(shop) for shop in world.shops]
-    ret.dungeons = [copy.copy(dungeon) for dungeon in world.dungeons]
-    ret.itempool = world.itempool
-    ret.precollected_items = world.precollected_items.copy()
 
-    for shop in ret.shops:
-        shop.inventory = shop.inventory.copy()
+    for player in range(1, world.players + 1):
+        if world.mode[player] != 'inverted':
+            create_regions(ret, player)
+        else:
+            create_inverted_regions(ret, player)
+        create_shops(ret, player)
+        create_dungeons(ret, player)
 
-    ret.initialize_regions()
+    copy_dynamic_regions_and_locations(world, ret)
 
-    # Copy locations
-    for region in ret.regions:
-        region.locations = [copy.copy(location) for location in region.locations]
-        for location in region.locations:
-            location.parent_region = region
-        region.entrances = [copy.copy(entrance) for entrance in region.entrances]
-        for entrance in region.entrances:
-            entrance.connected_region = region
-            entrance.parent_region = ret.get_region(entrance.parent_region.name, entrance.parent_region.player)
-        region.exits = [copy.copy(exit) for exit in region.exits]
-        for exit in region.exits:
-            exit.parent_region = region
-            exit.connected_region = ret.get_region(entrance.connected_region.name, entrance.connected_region.player)
+    # copy bosses
+    for dungeon in world.dungeons:
+        for level, boss in dungeon.bosses.items():
+            ret.get_dungeon(dungeon.name, dungeon.player).bosses[level] = boss
 
-    # copy state
-    ret.state = ret.state.copy()
-    ret.state.world = ret
+    for shop in world.shops:
+        copied_shop = ret.get_region(shop.region.name, shop.region.player).shop
+        copied_shop.inventory = copy.copy(shop.inventory)
+
+    # connect copied world
+    for region in world.regions:
+        copied_region = ret.get_region(region.name, region.player)
+        copied_region.is_light_world = region.is_light_world
+        copied_region.is_dark_world = region.is_dark_world
+        for exit in copied_region.exits:
+            old_connection = world.get_entrance(exit.name, exit.player).connected_region
+            exit.connect(ret.get_region(old_connection.name, old_connection.player))
+
+    # fill locations
+    for location in world.get_locations():
+        if location.item is not None:
+            item = Item(location.item.name, location.item.advancement, location.item.priority, location.item.type, player = location.item.player)
+            ret.get_location(location.name, location.player).item = item
+            item.location = ret.get_location(location.name, location.player)
+            item.world = ret
+        if location.event:
+            ret.get_location(location.name, location.player).event = True
+        if location.locked:
+            ret.get_location(location.name, location.player).locked = True
+
+    # copy remaining itempool. No item in itempool should have an assigned location
+    for item in world.itempool:
+        ret.itempool.append(Item(item.name, item.advancement, item.priority, item.type, player = item.player))
+
+    for item in world.precollected_items:
+        ret.push_precollected(ItemFactory(item.name, item.player))
+
+    # copy progress items in state
     ret.state.prog_items = world.state.prog_items.copy()
     ret.state.stale = {player: True for player in range(1, world.players + 1)}
 
+    for player in range(1, world.players + 1):
+        set_rules(ret, player)
+
+
     return ret
+
+
+def copy_dynamic_regions_and_locations(world, ret):
+    for region in world.dynamic_regions:
+        new_reg = Region(region.name, region.type, region.hint_text, region.player)
+        ret.regions.append(new_reg)
+        ret.initialize_regions([new_reg])
+        ret.dynamic_regions.append(new_reg)
+
+        # Note: ideally exits should be copied here, but the current use case (Take anys) do not require this
+
+        if region.shop:
+            new_reg.shop = Shop(new_reg, region.shop.room_id, region.shop.type, region.shop.shopkeeper_config, region.shop.custom, region.shop.locked)
+            ret.shops.append(new_reg.shop)
+
+    for location in world.dynamic_locations:
+        new_reg = ret.get_region(location.parent_region.name, location.parent_region.player)
+        new_loc = Location(location.player, location.name, location.address, location.crystal, location.hint_text, new_reg)
+        # todo: this is potentially dangerous. later refactor so we
+        # can apply dynamic region rules on top of copied world like other rules
+        new_loc.access_rule = location.access_rule
+        new_loc.always_allow = location.always_allow
+        new_loc.item_rule = location.item_rule
+        new_reg.locations.append(new_loc)
+
+        ret.clear_location_cache()
 
 
 def create_playthrough(world):
