@@ -145,7 +145,7 @@ def main(args, seed=None):
     elif args.algorithm == 'balanced':
         distribute_items_restrictive(world, True)
 
-    if world.players > 1:
+    if world.players > 1 and not args.skip_progression_balancing:
         logger.info('Balancing multiworld progression.')
         balance_multiworld_progression(world)
 

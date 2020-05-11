@@ -11,6 +11,9 @@
 #     inverted
 #this means, if world_state is meta-rolled and the result happens to be inverted, then defer to the player's yaml instead.
 meta_description: Meta-Mystery file with the intention of having similar-length completion times for a hopefully better experience
+progression_balancing: # only available in meta.yaml
+  on: 1
+  off: 0 # if you turn this off, then prepare for a lot of logical BK
 goals:
   ganon: 10
   fast_ganon: 25

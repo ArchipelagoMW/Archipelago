@@ -85,7 +85,9 @@ def guiMain(args=None):
     hintsCheckbutton = Checkbutton(checkBoxFrame, text="Include Helpful Hints", variable=hintsVar)
     customVar = IntVar()
     customCheckbutton = Checkbutton(checkBoxFrame, text="Use custom item pool", variable=customVar)
-
+    balancingVar = IntVar()
+    balancingVar.set(1) #set default
+    balancingCheckbutton = Checkbutton(checkBoxFrame, text="Multiworld Progression Balancing", variable=balancingVar)
     createSpoilerCheckbutton.pack(expand=True, anchor=W)
     suppressRomCheckbutton.pack(expand=True, anchor=W)
     openpyramidCheckbutton.pack(expand=True, anchor=W)
@@ -99,6 +101,7 @@ def guiMain(args=None):
     shuffleGanonCheckbutton.pack(expand=True, anchor=W)
     hintsCheckbutton.pack(expand=True, anchor=W)
     customCheckbutton.pack(expand=True, anchor=W)
+    balancingCheckbutton.pack(expand=True, anchor=W)
 
     romOptionsFrame = LabelFrame(rightHalfFrame, text="Rom options")
     romOptionsFrame.columnconfigure(0, weight=1)
@@ -434,6 +437,7 @@ def guiMain(args=None):
         guiargs.difficulty = difficultyVar.get()
         guiargs.item_functionality = itemfunctionVar.get()
         guiargs.timer = timerVar.get()
+        guiargs.skip_progression_balancing = not balancingVar.get()
         if guiargs.timer == "none":
             guiargs.timer = False
         guiargs.dungeon_counters = dungeonCounterVar.get()

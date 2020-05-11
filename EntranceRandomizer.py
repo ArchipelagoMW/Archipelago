@@ -274,6 +274,8 @@ def parse_arguments(argv, no_defaults=False):
                             Output .json patch to stdout instead of a patched rom. Used
                             for VT site integration, do not use otherwise.
                             ''')
+    parser.add_argument('--skip_progression_balancing', action='store_true', default=defval(False),
+                        help="Skip Multiworld Progression balancing.")
     parser.add_argument('--skip_playthrough', action='store_true', default=defval(False))
     parser.add_argument('--enemizercli', default=defval('EnemizerCLI/EnemizerCLI.Core'))
     parser.add_argument('--shufflebosses', default=defval('none'), choices=['none', 'basic', 'normal', 'chaos'])

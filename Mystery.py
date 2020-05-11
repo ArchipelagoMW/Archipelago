@@ -62,14 +62,18 @@ def main():
         except Exception as e:
             raise ValueError(f"File {args.weights} is destroyed. Please fix your yaml.") from e
         print(f"Weights: {args.weights} >> {weights_cache[args.weights]['description']}")
+    progression_balancing = True
     if args.meta:
         try:
             weights_cache[args.meta] = get_weights(args.meta)
         except Exception as e:
             raise ValueError(f"File {args.meta} is destroyed. Please fix your yaml.") from e
-        print(f"Meta: {args.meta} >> {weights_cache[args.meta]['meta_description']}")
+        meta_weights = weights_cache[args.meta]
+        print(f"Meta: {args.meta} >> {meta_weights['meta_description']}")
         if args.samesettings:
             raise Exception("Cannot mix --samesettings with --meta")
+        if "progression_balancing" in meta_weights:
+            progression_balancing = get_choice("progression_balancing", meta_weights)
 
     for player in range(1, args.multi + 1):
         path = getattr(args, f'p{player}')
@@ -82,6 +86,7 @@ def main():
             except Exception as e:
                 raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
     erargs = parse_arguments(['--multi', str(args.multi)])
+    erargs.skip_progression_balancing = not progression_balancing
     erargs.seed = seed
     erargs.name = {x: "" for x in range(1, args.multi + 1)} # only so it can be overwrittin in mystery
     erargs.create_spoiler = args.create_spoiler
@@ -94,6 +99,7 @@ def main():
     if args.loglevel:
         erargs.loglevel = args.loglevel
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[erargs.loglevel]
+
     import sys
     class LoggerWriter(object):
         def __init__(self, writer):
@@ -120,7 +126,7 @@ def main():
         logging.basicConfig(format='%(message)s', level=loglevel, filename=os.path.join(args.log_output_path, f"{seed}.log"))
     else:
         logging.basicConfig(format='%(message)s', level=loglevel)
-
+    logging.info(progression_balancing)
     if args.rom:
         erargs.rom = args.rom
 
