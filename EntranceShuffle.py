@@ -1046,7 +1046,7 @@ def link_entrances(world, player):
         # place remaining doors
         connect_doors(world, single_doors, door_targets, player)
     else:
-        raise NotImplementedError('Shuffling not supported yet')
+        raise NotImplementedError(f'{world.shuffle[player]} Shuffling not supported yet. Player {player}')
 
     # check for swamp palace fix
     if world.get_entrance('Dam', player).connected_region.name != 'Dam' or world.get_entrance('Swamp Palace', player).connected_region.name != 'Swamp Palace (Entrance)':
