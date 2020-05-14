@@ -702,10 +702,10 @@ class ClientMessageProcessor(CommandProcessor):
                             notify_hints(self.ctx, self.client.team, list(new_hints))
                             save(self.ctx)
                         else:
-                            notify_client(self.client, f"You can't afford the hint. "
-                                                       f"You have {points_available} points and need at least "
-                                                       f"{self.ctx.hint_cost}, "
-                                                       f"more if multiple items are still to be found.")
+                            self.output(f"You can't afford the hint. "
+                                        f"You have {points_available} points and need at least "
+                                        f"{self.ctx.hint_cost}, "
+                                        f"more if multiple items are still to be found.")
                         return True
                 else:
                     self.output("Nothing found. Item/Location may not exist.")
