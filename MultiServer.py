@@ -1005,7 +1005,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--disable_item_cheat', default=defaults["disable_item_cheat"], action='store_true')
     parser.add_argument('--port_forward', default=defaults["port_forward"], action='store_true')
     parser.add_argument('--forfeit_mode', default=defaults["forfeit_mode"], nargs='?',
-                        choices=['auto', 'enabled', 'disabled', "goal"], help='''\
+                        choices=['auto', 'enabled', 'disabled', "goal", "auto-enabled"], help='''\
                              Select !forfeit Accessibility. (default: %(default)s)
                              auto:     Automatic "forfeit" on goal completion
                              enabled:  !forfeit is always available
