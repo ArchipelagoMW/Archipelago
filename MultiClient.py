@@ -766,7 +766,7 @@ async def process_server_cmd(ctx : Context, cmd, args):
                                 'yellow' if hint.finding_player != ctx.slot else 'magenta')
             player_recvd = color(ctx.player_names[hint.receiving_player],
                                  'yellow' if hint.receiving_player != ctx.slot else 'magenta')
-            text = f"[Hint]: {player_recvd}'s {item} can be found " \
+            text = f"[Hint]: {player_recvd}'s {item} is " \
                    f"at {color(get_location_name_from_address(hint.location), 'blue_bg', 'white')} in {player_find}'s World"
             if hint.entrance:
                 text += " at " + color(hint.entrance, 'white_bg', 'black')

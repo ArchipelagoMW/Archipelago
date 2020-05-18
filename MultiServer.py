@@ -412,7 +412,7 @@ def collect_hints_location(ctx: Context, team: int, slot: int, location: str) ->
 
 def format_hint(ctx: Context, team: int, hint: Utils.Hint) -> str:
     text = f"[Hint]: {ctx.player_names[team, hint.receiving_player]}'s " \
-           f"{Items.lookup_id_to_name[hint.item]} can be found " \
+           f"{Items.lookup_id_to_name[hint.item]} is " \
            f"at {get_location_name_from_address(hint.location)} " \
            f"in {ctx.player_names[team, hint.finding_player]}'s World"
 
