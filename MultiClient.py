@@ -770,7 +770,7 @@ async def process_server_cmd(ctx : Context, cmd, args):
                    f"at {color(get_location_name_from_address(hint.location), 'blue_bg', 'white')} in {player_find}'s World"
             if hint.entrance:
                 text += " at " + color(hint.entrance, 'white_bg', 'black')
-            logging.info(text + (f". {color('(found)', 'green_bg')} " if hint.found else "."))
+            logging.info(text + (f". {color('(found)', 'green_bg', 'black')} " if hint.found else "."))
     elif cmd == "AliasUpdate":
         ctx.player_names = {p: n for p, n in args}
     elif cmd == 'Print':
