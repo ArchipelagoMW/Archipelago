@@ -112,6 +112,7 @@ class World(object):
             set_player_attr('clock_mode', False)
             set_player_attr('can_take_damage', True)
             set_player_attr('glitch_boots', True)
+            set_player_attr('progression_balancing', True)
 
     def get_name_string_for_object(self, obj) -> str:
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_names(obj.player)})'

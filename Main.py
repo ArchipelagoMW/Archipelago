@@ -59,6 +59,7 @@ def main(args, seed=None):
     world.dungeon_counters = args.dungeon_counters.copy()
     world.extendedmsu = args.extendedmsu.copy()
     world.glitch_boots = args.glitch_boots.copy()
+    world.progression_balancing = {player: not balance for player, balance in args.skip_progression_balancing.items()}
 
     world.rom_seeds = {player: random.randint(0, 999999999) for player in range(1, world.players + 1)}
 
@@ -145,8 +146,7 @@ def main(args, seed=None):
     elif args.algorithm == 'balanced':
         distribute_items_restrictive(world, True)
 
-    if world.players > 1 and not args.skip_progression_balancing:
-        logger.info('Balancing multiworld progression.')
+    if world.players > 1:
         balance_multiworld_progression(world)
 
     logger.info('Patching ROM.')

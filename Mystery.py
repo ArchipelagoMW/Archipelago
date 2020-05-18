@@ -62,7 +62,6 @@ def main():
         except Exception as e:
             raise ValueError(f"File {args.weights} is destroyed. Please fix your yaml.") from e
         print(f"Weights: {args.weights} >> {weights_cache[args.weights]['description']}")
-    progression_balancing = True
     if args.meta:
         try:
             weights_cache[args.meta] = get_weights(args.meta)
@@ -72,8 +71,6 @@ def main():
         print(f"Meta: {args.meta} >> {meta_weights['meta_description']}")
         if args.samesettings:
             raise Exception("Cannot mix --samesettings with --meta")
-        if "progression_balancing" in meta_weights:
-            progression_balancing = get_choice("progression_balancing", meta_weights)
 
     for player in range(1, args.multi + 1):
         path = getattr(args, f'p{player}')
@@ -86,7 +83,6 @@ def main():
             except Exception as e:
                 raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
     erargs = parse_arguments(['--multi', str(args.multi)])
-    erargs.skip_progression_balancing = not progression_balancing
     erargs.seed = seed
     erargs.name = {x: "" for x in range(1, args.multi + 1)} # only so it can be overwrittin in mystery
     erargs.create_spoiler = args.create_spoiler
@@ -94,6 +90,7 @@ def main():
     erargs.outputname = seedname
     erargs.outputpath = args.outputpath
     erargs.teams = args.teams
+    erargs.progression_balancing = {}
 
     # set up logger
     if args.loglevel:
@@ -126,7 +123,6 @@ def main():
         logging.basicConfig(format='%(message)s', level=loglevel, filename=os.path.join(args.log_output_path, f"{seed}.log"))
     else:
         logging.basicConfig(format='%(message)s', level=loglevel)
-    logging.info(progression_balancing)
     if args.rom:
         erargs.rom = args.rom
 
@@ -146,12 +142,11 @@ def main():
             option = get_choice(key, meta_weights)
             if option is not None:
                 for player, path in player_path_cache.items():
-                    players_meta = weights_cache[path]["meta_ignore"]
-                    if players_meta:
-                        if key not in players_meta:
-                            weights_cache[path][key] = option
-                        elif type(players_meta) == dict and players_meta[key] and option not in players_meta[key]:
-                            weights_cache[path][key] = option
+                    players_meta = weights_cache[path].get("meta_ignore", [])
+                    if key not in players_meta:
+                        weights_cache[path][key] = option
+                    elif type(players_meta) == dict and players_meta[key] and option not in players_meta[key]:
+                        weights_cache[path][key] = option
 
     for player in range(1, args.multi + 1):
         path = player_path_cache[player]
@@ -197,6 +192,9 @@ def main():
         with open(os.path.join(args.outputpath if args.outputpath else ".", f"mystery_result_{seed}.yaml"), "wt") as f:
             yaml.dump(important, f)
 
+    erargs.skip_progression_balancing = {player: not balanced for player, balanced in
+                                         erargs.progression_balancing.items()}
+    del (erargs.progression_balancing)
     ERmain(erargs, seed)
 
 
@@ -255,7 +253,8 @@ def roll_settings(weights):
         glitches_required = 'none'
     ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches'}[
         glitches_required]
-
+    ret.progression_balancing = get_choice('progression_balancing',
+                                           weights) if 'progression_balancing' in weights else True
     # item_placement = get_choice('item_placement')
     # not supported in ER
 
