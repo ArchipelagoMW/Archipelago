@@ -22,7 +22,8 @@ from EntranceShuffle import door_addresses
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-# RANDOMIZERBASEHASH = '1907d4caccffe60fc69940cfa11b2dab'
+RANDOMIZERBASEHASH = '1347ce535618fa1a844d2d45cf0ca661'
+EXTENDEDMSURANDOMIZERBASEHASH = 'f42949bde03ba5ea71c2d43a21f5d6bf'
 
 
 class JsonRom(object):
@@ -121,10 +122,10 @@ class LocalRom(object):
                     self.write_bytes(int(baseaddress), values)
 
         # verify md5
-        # patchedmd5 = hashlib.md5()
-        # patchedmd5.update(self.buffer)
-        # if RANDOMIZERBASEHASH != patchedmd5.hexdigest():
-        #     raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
+        patchedmd5 = hashlib.md5()
+        patchedmd5.update(self.buffer)
+        if patchedmd5.hexdigest() not in [RANDOMIZERBASEHASH, EXTENDEDMSURANDOMIZERBASEHASH]:
+            raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
 
     def write_crc(self):
         crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
