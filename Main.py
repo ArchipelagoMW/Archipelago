@@ -236,6 +236,24 @@ def main(args, seed=None):
         for future in futures:
             rom_name = future.result()
             rom_names.append(rom_name)
+
+        def get_entrance_to_region(region: Region):
+            for entrance in region.entrances:
+                if entrance.parent_region.type in (RegionType.DarkWorld, RegionType.LightWorld):
+                    return entrance
+            for entrance in region.entrances:  # BFS might be better here, trying DFS for now.
+                return get_entrance_to_region(entrance.parent_region)
+
+        # collect ER hint info
+        er_hint_data = {player: {} for player in range(1, world.players + 1) if world.shuffle[player] != "vanilla"}
+        from Regions import RegionType
+        for region in world.regions:
+            if region.player in er_hint_data and region.locations:
+                main_entrance = get_entrance_to_region(region)
+                for location in region.locations:
+                    if type(location.address) == int:  # skips events and crystals
+                        er_hint_data[region.player][location.address] = main_entrance.name
+
         multidata = zlib.compress(json.dumps({"names": parsed_names,
                                               "roms": rom_names,
                                               "remote_items": [player for player in range(1, world.players + 1) if
@@ -244,7 +262,8 @@ def main(args, seed=None):
                                                              (location.item.code, location.item.player))
                                                             for location in world.get_filled_locations() if
                                                             type(location.address) is int],
-                                              "server_options": get_options()["server_options"]
+                                              "server_options": get_options()["server_options"],
+                                              "er_hint_data": er_hint_data,
                                               }).encode("utf-8"), 9)
         if args.jsonout:
             jsonout["multidata"] = list(multidata)

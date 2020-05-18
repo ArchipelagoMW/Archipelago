@@ -764,9 +764,11 @@ async def process_server_cmd(ctx : Context, cmd, args):
                                 'yellow' if hint.finding_player != ctx.slot else 'magenta')
             player_recvd = color(ctx.player_names[hint.receiving_player],
                                  'yellow' if hint.receiving_player != ctx.slot else 'magenta')
-            logging.info(f"[Hint]: {player_recvd}'s {item} can be found "
-                         f"at {get_location_name_from_address(hint.location)} in {player_find}'s World." +
-                         (" (found)" if hint.found else ""))
+            text = f"[Hint]: {player_recvd}'s {item} can be found " \
+                   f"at {color(get_location_name_from_address(hint.location), 'blue_bg')} in {player_find}'s World"
+            if hint.entrance:
+                text += " at " + color(hint.entrance, 'cyan_bg')
+            logging.info(text + (". (found)" if hint.found else "."))
     elif cmd == "AliasUpdate":
         ctx.player_names = {p: n for p, n in args}
     elif cmd == 'Print':

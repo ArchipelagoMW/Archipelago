@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__version__ = "2.2.0"
+__version__ = "2.2.1"
 _version_tuple = tuple(int(piece, 10) for piece in __version__.split("."))
 
 import os
@@ -159,17 +159,21 @@ class Hint(typing.NamedTuple):
     location: int
     item: int
     found: bool
+    entrance: str = ""
 
     def re_check(self, ctx, team) -> Hint:
         if self.found:
             return self
         found = self.location in ctx.location_checks[team, self.finding_player]
         if found:
-            return Hint(self.receiving_player, self.finding_player, self.location, self.item, found)
+            return Hint(self.receiving_player, self.finding_player, self.location, self.item, found, self.entrance)
         return self
 
+    def as_legacy(self) -> tuple:
+        return self.receiving_player, self.finding_player, self.location, self.item, self.found
+
     def __hash__(self):
-        return hash((self.receiving_player, self.finding_player, self.location, self.item))
+        return hash((self.receiving_player, self.finding_player, self.location, self.item, self.entrance))
 
 def get_public_ipv4() -> str:
     import socket
