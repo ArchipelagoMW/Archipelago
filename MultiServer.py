@@ -384,10 +384,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
         if receiving_player == slot and item_id == seeked_item_id:
             location_id, finding_player = check
             found = location_id in ctx.location_checks[team, finding_player]
-            entrance = ""
-            if finding_player in ctx.er_hint_data:
-                if location_id in ctx.er_hint_data[finding_player]:
-                    entrance = ctx.er_hint_data[finding_player][location_id]
+            entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
             hints.append(Utils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance))
 
     return hints
@@ -401,10 +398,7 @@ def collect_hints_location(ctx: Context, team: int, slot: int, location: str) ->
         if finding_player == slot and location_id == seeked_location:
             item_id, receiving_player = result
             found = location_id in ctx.location_checks[team, finding_player]
-            entrance = ""
-            if finding_player in ctx.er_hint_data:
-                if location_id in ctx.er_hint_data[finding_player]:
-                    entrance = ctx.er_hint_data[finding_player][location_id]
+            entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
             hints.append(Utils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance))
             break  # each location has 1 item
     return hints
