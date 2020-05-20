@@ -1186,7 +1186,8 @@ class Spoiler(object):
                          'progressive': self.world.progressive,
                          'shufflepots': self.world.shufflepots,
                          'players': self.world.players,
-                         'teams': self.world.teams
+                         'teams': self.world.teams,
+                         'progression_balancing' : self.world.progression_balancing
                          }
 
     def to_json(self):
@@ -1223,6 +1224,8 @@ class Spoiler(object):
                     f"Hash - {self.world.player_names[player][team]} (Team {team + 1}): " if self.world.teams > 1 else 'Hash: ',
                     self.hashes[player, team]))
                 outfile.write('Logic:                           %s\n' % self.metadata['logic'][player])
+                if self.world.players > 1:
+                    outfile.write('Progression Balanced:            %s\n' % ('Yes' if self.metadata['progression_balancing'][player] else 'No'))
                 outfile.write('Mode:                            %s\n' % self.metadata['mode'][player])
                 outfile.write('Retro:                           %s\n' % ('Yes' if self.metadata['retro'][player] else 'No'))
                 outfile.write('Swords:                          %s\n' % self.metadata['weapons'][player])
