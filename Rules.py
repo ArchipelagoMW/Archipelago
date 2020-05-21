@@ -867,7 +867,7 @@ def set_trock_key_rules(world, player):
                 if world.bigkeyshuffle[player] and can_reach_big_chest:
                     # Must not go in the dungeon - all 3 available chests (Chomps, Big Chest, Crystaroller) must be keys to access laser bridge, and the big key is required first
                     non_big_key_locations += ['Turtle Rock - Chain Chomps', 'Turtle Rock - Compass Chest', 'Turtle Rock - Roller Room - Left', 'Turtle Rock - Roller Room - Right']
-                else:
+                elif not world.retro[player]:
                     # A key is required in the Big Key Chest to prevent a possible softlock.  Place an extra key to ensure 100% locations still works
                     world.push_item(world.get_location('Turtle Rock - Big Key Chest', player), ItemFactory('Small Key (Turtle Rock)', player), False)
                     world.get_location('Turtle Rock - Big Key Chest', player).event = True
