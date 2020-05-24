@@ -473,13 +473,13 @@ class Sprite(object):
         return array_chunk(palette_as_colors, 15)
 
 def patch_rom(world, rom, player, team, enemized):
-    random.seed(world.rom_seeds[player])
+    local_random = random.Random(world.rom_seeds[player])
 
     # progressive bow silver arrow hint hack
     prog_bow_locs = world.find_items('Progressive Bow', player)
     if len(prog_bow_locs) > 1:
         # only pick a distingushed bow if we have at least two
-        distinguished_prog_bow_loc = random.choice(prog_bow_locs)
+        distinguished_prog_bow_loc = local_random.choice(prog_bow_locs)
         distinguished_prog_bow_loc.item.code = 0x65
 
     # patch items
@@ -523,14 +523,14 @@ def patch_rom(world, rom, player, team, enemized):
             # patch music
             music_addresses = dungeon_music_addresses[location.name]
             if world.mapshuffle[player]:
-                music = random.choice([0x11, 0x16])
+                music = local_random.choice([0x11, 0x16])
             else:
                 music = 0x11 if 'Pendant' in location.item.name else 0x16
             for music_address in music_addresses:
                 rom.write_byte(music_address, music)
 
     if world.mapshuffle[player]:
-        rom.write_byte(0x155C9, random.choice([0x11, 0x16]))  # Randomize GT music too with map shuffle
+        rom.write_byte(0x155C9, local_random.choice([0x11, 0x16]))  # Randomize GT music too with map shuffle
 
     # patch entrance/exits/holes
     for region in world.regions:
@@ -729,7 +729,7 @@ def patch_rom(world, rom, player, team, enemized):
         rom.write_byte(0x180182, 0x00) # Don't auto equip silvers on pickup
 
     # set up game internal RNG seed
-    rom.write_bytes(0x178000, random.getrandbits(8 * 1024).to_bytes(1024, 'big'))
+    rom.write_bytes(0x178000, local_random.getrandbits(8 * 1024).to_bytes(1024, 'big'))
 
     # shuffle prize packs
     prizes = [0xD8, 0xD8, 0xD8, 0xD8, 0xD9, 0xD8, 0xD8, 0xD9, 0xDA, 0xD9, 0xDA, 0xDB, 0xDA, 0xD9, 0xDA, 0xDA, 0xE0, 0xDF, 0xDF, 0xDA, 0xE0, 0xDF, 0xD8, 0xDF,
@@ -747,11 +747,11 @@ def patch_rom(world, rom, player, team, enemized):
         return [l[i:i+n] for i in range(0, len(l), n)]
 
     # randomize last 7 slots
-    prizes [-7:] = random.sample(prizes, 7)
+    prizes [-7:] = local_random.sample(prizes, 7)
 
     #shuffle order of 7 main packs
     packs = chunk(prizes[:56], 8)
-    random.shuffle(packs)
+    local_random.shuffle(packs)
     prizes[:56] = [drop for pack in packs for drop in pack]
 
     if world.difficulty_adjustments[player] in ['hard', 'expert']:
@@ -793,7 +793,7 @@ def patch_rom(world, rom, player, team, enemized):
                       0x4CDC0, 0x4CDC3, 0x4CDC6, 0x4CE37, 0x4D2DE, 0x4D32F, 0x4D355, 0x4D367, 0x4D384, 0x4D387, 0x4D397, 0x4D39E, 0x4D3AB, 0x4D3AE, 0x4D3D1, 0x4D3D7,
                       0x4D3F8, 0x4D416, 0x4D420, 0x4D423, 0x4D42D, 0x4D449, 0x4D48C, 0x4D4D9, 0x4D4DC, 0x4D4E3, 0x4D504, 0x4D507, 0x4D55E, 0x4D56A]
     if world.shuffle_bonk_prizes:
-        random.shuffle(bonk_prizes)
+        local_random.shuffle(bonk_prizes)
     for prize, address in zip(bonk_prizes, bonk_addresses):
         rom.write_byte(address, prize)
 
@@ -811,11 +811,11 @@ def patch_rom(world, rom, player, team, enemized):
 
     # set Fountain bottle exchange items
     if world.difficulty[player] in ['hard', 'expert']:
-        rom.write_byte(0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][random.randint(0, 5)])
-        rom.write_byte(0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][random.randint(0, 5)])
+        rom.write_byte(0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][local_random.randint(0, 5)])
+        rom.write_byte(0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][local_random.randint(0, 5)])
     else:
-        rom.write_byte(0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)])
-        rom.write_byte(0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][random.randint(0, 6)])
+        rom.write_byte(0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][local_random.randint(0, 6)])
+        rom.write_byte(0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][local_random.randint(0, 6)])
 
     #enable Fat Fairy Chests
     rom.write_bytes(0x1FC16, [0xB1, 0xC6, 0xF9, 0xC9, 0xC6, 0xF9])
@@ -1184,7 +1184,7 @@ def patch_rom(world, rom, player, team, enemized):
     rom.write_bytes(0xECB4E, [0xA9, 0x00, 0xEA, 0xEA] if world.retro[player] else [0xAF, 0x77, 0xF3, 0x7E])  # Thief steals rupees instead of arrows
     rom.write_bytes(0xF0D96, [0xA9, 0x00, 0xEA, 0xEA] if world.retro[player] else [0xAF, 0x77, 0xF3, 0x7E])  # Pikit steals rupees instead of arrows
     rom.write_bytes(0xEDA5, [0x35, 0x41] if world.retro[player] else [0x43, 0x44])  # Chest game gives rupees instead of arrows
-    digging_game_rng = random.randint(1, 30)  # set rng for digging game
+    digging_game_rng = local_random.randint(1, 30)  # set rng for digging game
     rom.write_byte(0x180020, digging_game_rng)
     rom.write_byte(0xEFD95, digging_game_rng)
     rom.write_byte(0x1800A3, 0x01)  # enable correct world setting behaviour after agahnim kills
