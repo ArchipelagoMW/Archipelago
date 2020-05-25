@@ -1,6 +1,7 @@
 import random
 
 # ToDo: With shuffle_ganon option, prevent gtower from linking to an exit only location through a 2 entrance cave.
+from collections import defaultdict
 
 
 def link_entrances(world, player):
@@ -1103,11 +1104,9 @@ def link_inverted_entrances(world, player):
         # randomize which desert ledge door is a must-exit
         if random.randint(0, 1) == 0:
             lw_dungeon_entrances_must_exit.append('Desert Palace Entrance (North)')
-            dp_must_exit = 'Desert Palace Entrance (North)'
             lw_entrances.append('Desert Palace Entrance (West)')
         else:
             lw_dungeon_entrances_must_exit.append('Desert Palace Entrance (West)')
-            dp_must_exit = 'Desert Palace Entrance (West)'
             lw_entrances.append('Desert Palace Entrance (North)')
         
         dungeon_exits.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
@@ -1143,13 +1142,10 @@ def link_inverted_entrances(world, player):
 
         connect_two_way(world, aga_door, 'Inverted Agahnims Tower Exit', player)
         dungeon_exits.remove('Inverted Agahnims Tower Exit')
-        
-        all_dungeon_entrances = dw_entrances + lw_entrances 
-        connect_mandatory_exits(world, all_dungeon_entrances, dungeon_exits, lw_dungeon_entrances_must_exit, player, dp_must_exit)
-       
-        remaining_dw_entrances = [i for i in all_dungeon_entrances if i in dw_entrances]
-        remaining_lw_entrances = [i for i in all_dungeon_entrances if i in lw_entrances]
-        connect_caves(world, remaining_lw_entrances, remaining_dw_entrances, dungeon_exits, player)
+
+        connect_mandatory_exits(world, lw_entrances, dungeon_exits, lw_dungeon_entrances_must_exit, player)
+
+        connect_caves(world, lw_entrances, dw_entrances, dungeon_exits, player)
 
     elif world.shuffle[player] == 'simple':
         simple_shuffle_dungeons(world, player)
@@ -1347,11 +1343,9 @@ def link_inverted_entrances(world, player):
         # randomize which desert ledge door is a must-exit
         if random.randint(0, 1) == 0:
             lw_must_exits.append('Desert Palace Entrance (North)')
-            dp_must_exit = 'Desert Palace Entrance (North)'
             lw_entrances.append('Desert Palace Entrance (West)')
         else:
             lw_must_exits.append('Desert Palace Entrance (West)')
-            dp_must_exit = 'Desert Palace Entrance (West)'
             lw_entrances.append('Desert Palace Entrance (North)')
 
         # tavern back door cannot be shuffled yet
@@ -1414,7 +1408,7 @@ def link_inverted_entrances(world, player):
         # no dw must exits in inverted, but we randomize whether cave is in light or dark world
         if random.randint(0, 1) == 0:
             caves += old_man_house
-            connect_mandatory_exits(world, lw_entrances, caves, lw_must_exits, player, dp_must_exit)
+            connect_mandatory_exits(world, lw_entrances, caves, lw_must_exits, player)
             try:
                 caves.remove(old_man_house[0])
             except ValueError: 
@@ -1423,7 +1417,7 @@ def link_inverted_entrances(world, player):
                 connect_caves(world, lw_entrances, [], old_man_house, player)                
         else:
             connect_caves(world, dw_entrances, [], old_man_house, player)
-            connect_mandatory_exits(world, lw_entrances, caves, lw_must_exits, player, dp_must_exit)
+            connect_mandatory_exits(world, lw_entrances, caves, lw_must_exits, player)
 
         # place old man, has limited options
         # exit has to come from specific set of doors, the entrance is free to move about
@@ -1498,11 +1492,9 @@ def link_inverted_entrances(world, player):
         # randomize which desert ledge door is a must-exit
         if random.randint(0, 1) == 0:
             must_exits.append('Desert Palace Entrance (North)')
-            dp_must_exit = 'Desert Palace Entrance (North)'
             entrances.append('Desert Palace Entrance (West)')
         else:
             must_exits.append('Desert Palace Entrance (West)')
-            dp_must_exit = 'Desert Palace Entrance (West)'
             entrances.append('Desert Palace Entrance (North)')
 
         caves.append(tuple(random.sample(['Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'],3)))
@@ -1553,7 +1545,7 @@ def link_inverted_entrances(world, player):
 
         
         #place must-exit caves 
-        connect_mandatory_exits(world, entrances, caves, must_exits, player, dp_must_exit)
+        connect_mandatory_exits(world, entrances, caves, must_exits, player)
 
 
         # place old man, has limited options
@@ -1917,17 +1909,33 @@ def connect_random(world, exitlist, targetlist, player, two_way=False):
             connect_entrance(world, exit, target, player)
 
 
-def connect_mandatory_exits(world, entrances, caves, must_be_exits, player, dp_must_exit=None):
+def connect_mandatory_exits(world, entrances, caves, must_be_exits, player):
     """This works inplace"""
     random.shuffle(entrances)
     random.shuffle(caves)
+    # Keeps track of entrances that cannot be used to access each exit / cave
+    if world.mode[player] == 'inverted':
+        invalid_connections = Inverted_Must_Exit_Invalid_Connections.copy()
+    else:
+        invalid_connections = Must_Exit_Invalid_Connections.copy()
+    invalid_cave_connections = defaultdict(set)
+
+    # Handle inverted Aga Tower - if it depends on connections, then so does Hyrule Castle Ledge
+    if world.mode[player] == 'inverted':
+        for entrance in invalid_connections:
+            if world.get_entrance(entrance, player).connected_region == world.get_region('Inverted Agahnims Tower', player):
+                for exit in invalid_connections[entrance]:
+                    invalid_connections[exit] = invalid_connections[exit].union({'Inverted Ganons Tower', 'Hyrule Castle Entrance (West)', 'Hyrule Castle Entrance (East)'})
+                break
+
     used_caves = []
+    required_entrances = 0  # Number of entrances reserved for used_caves
     while must_be_exits:
         exit = must_be_exits.pop()
         # find multi exit cave
         cave = None
         for candidate in caves:
-            if not isinstance(candidate, str):
+            if not isinstance(candidate, str) and (candidate in used_caves or len(candidate) < len(entrances) - required_entrances - 1):
                 cave = candidate
                 break
 
@@ -1936,30 +1944,47 @@ def connect_mandatory_exits(world, entrances, caves, must_be_exits, player, dp_m
 
         # all caves are sorted so that the last exit is always reachable
         connect_two_way(world, exit, cave[-1], player)
-        if len(cave) == 2: 
-            entrance = entrances.pop()
-            # ToDo Better solution, this is a hot fix. Do not connect both sides of trock/desert ledge only to each other
-            if world.mode[player] != 'inverted' and entrance == 'Dark Death Mountain Ledge (West)':
-                new_entrance = entrances.pop()
-                entrances.append(entrance)
-                entrance = new_entrance
-            if world.mode[player] == 'inverted' and entrance == dp_must_exit:
-                new_entrance = entrances.pop()
-                entrances.append(entrance)
-                entrance = new_entrance
+        if len(cave) == 2:
+            entrance = next(e for e in entrances[::-1] if e not in invalid_connections[exit] and e not in invalid_cave_connections[tuple(cave)])
+            entrances.remove(entrance)
             connect_two_way(world, entrance, cave[0], player)
+            if cave in used_caves:
+                required_entrances -= 2
+                used_caves.remove(cave)
+            if entrance in invalid_connections:
+                for exit2 in invalid_connections[entrance]:
+                    invalid_connections[exit2] = invalid_connections[exit2].union(invalid_connections[exit]).union(invalid_cave_connections[tuple(cave)])
         elif cave[-1] == 'Spectacle Rock Cave Exit': #Spectacle rock only has one exit
-            for exit in cave[:-1]:
-                connect_two_way(world,entrances.pop(),exit, player)
+            cave_entrances = []
+            for cave_exit in cave[:-1]:
+                entrance = next(e for e in entrances[::-1] if e not in invalid_connections[exit])
+                cave_entrances.append(entrance)
+                entrances.remove(entrance)
+                connect_two_way(world,entrance,cave_exit, player)
+                if entrance not in invalid_connections:
+                    invalid_connections[exit] = set()
+            if all(entrance in invalid_connections for entrance in cave_entrances):
+                new_invalid_connections = invalid_connections[cave_entrances[0]].intersection(invalid_connections[cave_entrances[1]])
+                for exit2 in new_invalid_connections:
+                    invalid_connections[exit2] = invalid_connections[exit2].union(invalid_connections[exit])
         else:#save for later so we can connect to multiple exits
+            if cave in used_caves:
+                required_entrances -= 1
+                used_caves.remove(cave)
+            else:
+                required_entrances += len(cave)-1
             caves.append(cave[0:-1])
             random.shuffle(caves)
             used_caves.append(cave[0:-1])
+            invalid_cave_connections[tuple(cave[0:-1])] = invalid_cave_connections[tuple(cave)].union(invalid_connections[exit])
         caves.remove(cave)
     for cave in used_caves:
         if cave in caves: #check if we placed multiple entrances from this 3 or 4 exit 
-            for exit in cave:
-                connect_two_way(world, entrances.pop(), exit, player)
+            for cave_exit in cave:
+                entrance = next(e for e in entrances[::-1] if e not in invalid_cave_connections[tuple(cave)])
+                invalid_cave_connections[tuple(cave)] = set()
+                entrances.remove(entrance)
+                connect_two_way(world, entrance, cave_exit, player)
             caves.remove(cave)
 
 
@@ -2814,6 +2839,26 @@ Isolated_LH_Doors = ['Kings Grave',
                      'Skull Woods Final Section',
                      'Dark World Hammer Peg Cave',
                      'Turtle Rock Isolated Ledge Entrance']
+
+# Entrances that cannot be used to access a must_exit entrance - symmetrical to allow reverse lookups
+Must_Exit_Invalid_Connections = defaultdict(set, {
+    'Dark Death Mountain Ledge (East)': {'Dark Death Mountain Ledge (West)', 'Mimic Cave'},
+    'Dark Death Mountain Ledge (West)': {'Dark Death Mountain Ledge (East)', 'Mimic Cave'},
+    'Mimic Cave': {'Dark Death Mountain Ledge (West)', 'Dark Death Mountain Ledge (East)'},
+    'Bumper Cave (Top)': {'Death Mountain Return Cave (West)'},
+    'Death Mountain Return Cave (West)': {'Bumper Cave (Top)'},
+    'Skull Woods Second Section Door (West)': {'Skull Woods Final Section'},
+    'Skull Woods Final Section': {'Skull Woods Second Section Door (West)'},
+})
+Inverted_Must_Exit_Invalid_Connections = defaultdict(set, {
+    'Bumper Cave (Top)': {'Death Mountain Return Cave (West)'},
+    'Death Mountain Return Cave (West)': {'Bumper Cave (Top)'},
+    'Desert Palace Entrance (North)': {'Desert Palace Entrance (West)'},
+    'Desert Palace Entrance (West)': {'Desert Palace Entrance (North)'},
+    'Inverted Ganons Tower': {'Hyrule Castle Entrance (West)', 'Hyrule Castle Entrance (East)'},
+    'Hyrule Castle Entrance (West)': {'Hyrule Castle Entrance (East)', 'Inverted Ganons Tower'},
+    'Hyrule Castle Entrance (East)': {'Hyrule Castle Entrance (West)', 'Inverted Ganons Tower'},
+})
 
 # these are connections that cannot be shuffled and always exist. They link together separate parts of the world we need to divide into regions
 mandatory_connections = [('Links House S&Q', 'Links House'),
