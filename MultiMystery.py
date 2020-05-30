@@ -99,6 +99,8 @@ if __name__ == "__main__":
 
         if create_spoiler:
             command += " --create_spoiler"
+            if create_spoiler == 2:
+                command += " --skip_playthrough"
         if race:
             command += " --race"
         if os.path.exists(os.path.join(player_files_path, meta_file_path)):

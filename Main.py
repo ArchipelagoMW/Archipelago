@@ -277,7 +277,7 @@ def main(args, seed=None):
 
     if args.jsonout:
         print(json.dumps({**jsonout, 'spoiler': world.spoiler.to_json()}))
-    elif args.create_spoiler and not args.skip_playthrough:
+    elif args.create_spoiler:
         world.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))
 
     logger.info('Done. Enjoy.')

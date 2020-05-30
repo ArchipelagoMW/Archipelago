@@ -31,6 +31,7 @@ def main():
     parser.add_argument('--multi', default=1, type=lambda value: min(max(int(value), 1), 255))
     parser.add_argument('--teams', default=1, type=lambda value: max(int(value), 1))
     parser.add_argument('--create_spoiler', action='store_true')
+    parser.add_argument('--skip_playthrough', action='store_true')
     parser.add_argument('--rom')
     parser.add_argument('--enemizercli')
     parser.add_argument('--outputpath')
@@ -87,6 +88,7 @@ def main():
     erargs.name = {x: "" for x in range(1, args.multi + 1)} # only so it can be overwrittin in mystery
     erargs.create_spoiler = args.create_spoiler
     erargs.race = args.race
+    erargs.skip_playthrough = args.skip_playthrough
     erargs.outputname = seedname
     erargs.outputpath = args.outputpath
     erargs.teams = args.teams

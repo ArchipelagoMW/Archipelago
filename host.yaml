@@ -42,15 +42,18 @@ multi_mystery_options:
   output_path: "MultiMystery"
 #location of your Enemizer CLI, available here: https://github.com/Bonta0/Enemizer/releases
   enemizer_path: "EnemizerCLI/EnemizerCLI.Core.exe"
-#folder from which the player yaml files are pulled from
+  #folder from which the player yaml files are pulled from
   player_files_path: "Players"
-#meta file name, within players folder
+  #meta file name, within players folder
   meta_file_path: "meta.yaml"
-#automatically launches {player_name}.yaml's ROM file using the OS's default program once generation completes. (likely your emulator)
+  #automatically launches {player_name}.yaml's ROM file using the OS's default program once generation completes. (likely your emulator)
   #does nothing if the name is not found
   #example: player_name = "Berserker"
   player_name: "" # the hosts name
   #create a spoiler file
+  # 0 -> none
+  # 1 -> full spoiler
+  # 2- -> spoiler without playthrough
   create_spoiler: 1
   #Zip the resulting roms
   #0 -> Don't
