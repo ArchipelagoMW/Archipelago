@@ -3,9 +3,6 @@ pull_requests:
   do_not_increment_build_number: true
 environment:
   matrix:
-    - PYTHON: "C:\\Python37-x64\\python.exe"
-      PYTHON_VERSION: "3.7"
-
     - PYTHON: "C:\\Python38-x64\\python.exe"
       PYTHON_VERSION: "3.8"
 install:
