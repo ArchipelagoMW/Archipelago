@@ -250,7 +250,11 @@ async def on_client_connected(ctx: Context, client: Client):
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ['Berserker'],
-        'version': Utils._version_tuple
+        'version': Utils._version_tuple,
+        'forfeit_mode': ctx.forfeit_mode,
+        'remaining_mode': ctx.remaining_mode,
+        'hint_cost' : ctx.hint_cost,
+        'location_check_points': ctx.location_check_points
     }]])
 
 async def on_client_disconnected(ctx: Context, client: Client):
