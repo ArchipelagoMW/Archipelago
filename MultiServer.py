@@ -967,34 +967,6 @@ async def console(ctx: Context):
             traceback.print_exc()
 
 
-async def forward_port(port: int):
-    import upnpy
-    import socket
-
-    upnp = upnpy.UPnP()
-    upnp.discover()
-    device = upnp.get_igd()
-
-    service = device['WANPPPConnection.1']
-
-    # get own lan IP
-    ip = socket.gethostbyname(socket.gethostname())
-
-    # This specific action returns an empty dict: {}
-    service.AddPortMapping(
-        NewRemoteHost='',
-        NewExternalPort=port,
-        NewProtocol='TCP',
-        NewInternalPort=port,
-        NewInternalClient=ip,
-        NewEnabled=1,
-        NewPortMappingDescription='Berserker\'s Multiworld',
-        NewLeaseDuration=60 * 60 * 24  # 24 hours
-    )
-
-    logging.info(f"Attempted to forward port {port} to {ip}, your local ip address.")
-
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     defaults = Utils.get_options()["server_options"]
@@ -1009,7 +981,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--location_check_points', default=defaults["location_check_points"], type=int)
     parser.add_argument('--hint_cost', default=defaults["hint_cost"], type=int)
     parser.add_argument('--disable_item_cheat', default=defaults["disable_item_cheat"], action='store_true')
-    parser.add_argument('--port_forward', default=defaults["port_forward"], action='store_true')
     parser.add_argument('--forfeit_mode', default=defaults["forfeit_mode"], nargs='?',
                         choices=['auto', 'enabled', 'disabled', "goal", "auto-enabled"], help='''\
                              Select !forfeit Accessibility. (default: %(default)s)
@@ -1032,9 +1003,6 @@ def parse_args() -> argparse.Namespace:
 
 async def main(args: argparse.Namespace):
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
-    portforwardtask = None
-    if args.port_forward:
-        portforwardtask = asyncio.create_task(forward_port(args.port))
 
     ctx = Context(args.host, args.port, args.password, args.location_check_points, args.hint_cost,
                   not args.disable_item_cheat, args.forfeit_mode, args.remaining_mode)
@@ -1081,11 +1049,7 @@ async def main(args: argparse.Namespace):
             logging.error('No save data found, starting a new game')
         except Exception as e:
             logging.exception(e)
-    if portforwardtask:
-        try:
-            await portforwardtask
-        except:
-            logging.exception("Automatic port forwarding failed with:")
+
     ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ping_timeout=None,
                                   ping_interval=None)
     logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port,

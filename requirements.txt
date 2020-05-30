@@ -3,6 +3,5 @@ websockets>=8.1
 PyYAML>=5.3.1
 fuzzywuzzy>=0.18.0
 bsdiff4>=1.1.9
-upnpy>=1.1.5
 prompt_toolkit>=3.0.5
 appdirs>=1.4.4
