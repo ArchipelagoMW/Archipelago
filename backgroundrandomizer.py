@@ -132,8 +132,8 @@ class BackgroundShuffler(object):
                 # Cicini warp doesn't work
                 if areaid == 0 and posindex == to_tile_index(22,14): continue
 
-            # Fix for Sysint2 background floating effect affecting constraints
-            if allocation[val] == 66:
+            # Fix for Sysint1 background floating effect affecting constraints
+            if allocation[val] == 65:
                 # starting forest
                 if areaid == 0 and posindex == to_tile_index(8,7): continue
                 if areaid == 0 and posindex == to_tile_index(8,8): continue
