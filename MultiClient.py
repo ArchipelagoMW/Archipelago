@@ -819,7 +819,7 @@ async def connect(ctx: Context, address=None):
     ctx.server_task = asyncio.create_task(server_loop(ctx, address))
 
 
-from MultiServer import CommandProcessor
+from MultiServer import CommandProcessor, mark_raw
 
 
 class ClientCommandProcessor(CommandProcessor):
@@ -831,6 +831,7 @@ class ClientCommandProcessor(CommandProcessor):
         self.ctx.exit_event.set()
         return True
 
+    @mark_raw
     def _cmd_snes(self, snes_address: str = "") -> bool:
         """Connect to a snes. Optionally include network address of a snes to connect to, otherwise show available devices"""
         self.ctx.snes_reconnect_address = None
