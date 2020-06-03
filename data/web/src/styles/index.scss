@@ -1,0 +1,12 @@
+@font-face{
+    font-family: HyliaSerif;
+    src: local('HyliaSerif'), url('../assets/HyliaSerif.otf')
+}
+
+body {
+    background-color: #131313;
+    color: #eae703;
+    font-family: HyliaSerif, serif;
+    letter-spacing: 2px;
+    margin: 0;
+}

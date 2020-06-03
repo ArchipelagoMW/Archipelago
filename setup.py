@@ -50,6 +50,7 @@ def manifest_creation():
     json.dump(manifest, open(manifestpath, "wt"), indent=4)
     print("Created Manifest")
 
+
 scripts = {"MultiClient.py" : "BerserkerMultiClient",
            "MultiMystery.py" : "BerserkerMultiMystery",
            "MultiServer.py" : "BerserkerMultiServer",
@@ -62,8 +63,8 @@ for script, scriptname in scripts.items():
     exes.append(cx_Freeze.Executable(
         script=script,
         targetName=scriptname + ("" if sys.platform == "linux" else ".exe"),
-        icon=icon)
-    )
+        icon=icon,
+    ))
 
 
 import datetime
@@ -77,6 +78,7 @@ cx_Freeze.setup(
     executables=exes,
     options={
         "build_exe": {
+            "includes" : [],
             "zip_include_packages": ["*"],
             "zip_exclude_packages": [],
             "include_files": [],

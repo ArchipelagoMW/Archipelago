@@ -1,0 +1,45 @@
+#monitor-controls{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 48px;
+  margin-top: 0.5em;
+  padding-bottom: 0.5em;
+
+  #connection-status{
+    display: flex;
+    flex-direction: row;
+
+    #snes-connection, #server-connection{
+      margin-right: 1em;
+      table{
+        td{
+          padding-right: 0.5em;
+        }
+      }
+    }
+
+    .connected{
+      color: #008000;
+    }
+
+    .not-connected{
+      color: #ff0000;
+    }
+
+    button {
+      border-radius: 3px;
+    }
+  }
+
+  #accessibility{
+    display: flex;
+    flex-direction: column;
+    height: 48px;
+
+    button{
+      border-radius: 4px;
+      margin: 0.5em;
+    }
+  }
+}

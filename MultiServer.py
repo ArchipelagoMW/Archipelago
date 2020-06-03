@@ -25,6 +25,7 @@ import Items
 import Regions
 import Utils
 from Utils import get_item_name_from_id, get_location_name_from_address, ReceivedItem
+from NetUtils import Node, Endpoint
 
 console_names = frozenset(set(Items.item_table) | set(Regions.location_table))
 
@@ -32,12 +33,12 @@ CLIENT_PLAYING = 0
 CLIENT_GOAL = 1
 
 
-class Client:
+class Client(Endpoint):
     version: typing.List[int] = [0, 0, 0]
     tags: typing.List[str] = []
 
     def __init__(self, socket: websockets.server.WebSocketServerProtocol, ctx: Context):
-        self.socket = socket
+        super().__init__(socket)
         self.auth = False
         self.name = None
         self.team = None
@@ -49,21 +50,15 @@ class Client:
         self.ctx = weakref.ref(ctx)
         ctx.client_connection_timers[self.team, self.slot] = datetime.datetime.now(datetime.timezone.utc)
 
-    async def disconnect(self):
-        ctx = self.ctx()
-        if ctx:
-            await on_client_disconnected(ctx, self)
-            ctx.clients.remove(self)
-            ctx.client_connection_timers[self.team, self.slot] = datetime.datetime.now(datetime.timezone.utc)
-
     @property
     def wants_item_notification(self):
         return self.auth and "FoundItems" in self.tags
 
 
-class Context:
+class Context(Node):
     def __init__(self, host: str, port: int, password: str, location_check_points: int, hint_cost: int,
                  item_cheat: bool, forfeit_mode: str = "disabled", remaining_mode: str = "disabled"):
+        super(Context, self).__init__()
         self.data_filename = None
         self.save_filename = None
         self.disable_save = False
@@ -76,7 +71,6 @@ class Context:
         self.password = password
         self.server = None
         self.countdown_timer = 0
-        self.clients = []
         self.received_items = {}
         self.name_aliases: typing.Dict[typing.Tuple[int, int], str] = {}
         self.location_checks = collections.defaultdict(set)
@@ -143,57 +137,30 @@ class Context:
         else:
             return self.player_names[team, slot]
 
+    def notify_all(self, text):
+        logging.info("Notice (all): %s" % text)
+        self.broadcast_all([['Print', text]])
 
-async def send_msgs(client: Client, msgs):
-    websocket = client.socket
-    if not websocket or not websocket.open or websocket.closed:
-        return
-    try:
-        await websocket.send(json.dumps(msgs))
-    except websockets.ConnectionClosed:
-        logging.exception("Exception during send_msgs")
-        await client.disconnect()
+    def notify_client(self, client: Client, text: str):
+        if not client.auth:
+            return
+        logging.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
+        asyncio.create_task(self.send_msgs(client, [['Print', text]]))
 
+    def broadcast_team(self, team, msgs):
+        for client in self.endpoints:
+            if client.auth and client.team == team:
+                asyncio.create_task(self.send_msgs(client, msgs))
 
-async def send_json_msgs(client: Client, msg: str):
-    websocket = client.socket
-    if not websocket or not websocket.open or websocket.closed:
-        return
-    try:
-        await websocket.send(msg)
-    except websockets.ConnectionClosed:
-        logging.exception("Exception during send_msgs")
-        await client.disconnect()
+    def broadcast_all(self, msgs):
+        msgs = json.dumps(msgs)
+        for endpoint in self.endpoints:
+            if endpoint.auth:
+                asyncio.create_task(self.send_json_msgs(endpoint, msgs))
 
-
-def broadcast_all(ctx: Context, msgs):
-    msgs = json.dumps(msgs)
-    for client in ctx.clients:
-        if client.auth:
-            asyncio.create_task(send_json_msgs(client, msgs))
-
-
-def broadcast_team(ctx: Context, team, msgs):
-    msgs = json.dumps(msgs)
-    for client in ctx.clients:
-        if client.auth and client.team == team:
-            asyncio.create_task(send_json_msgs(client, msgs))
-
-def notify_all(ctx : Context, text):
-    logging.info("Notice (all): %s" % text)
-    broadcast_all(ctx, [['Print', text]])
-
-
-def notify_team(ctx: Context, team: int, text: str):
-    logging.info("Notice (Team #%d): %s" % (team + 1, text))
-    broadcast_team(ctx, team, [['Print', text]])
-
-
-def notify_client(client: Client, text: str):
-    if not client.auth:
-        return
-    logging.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
-    asyncio.create_task(send_msgs(client, [['Print', text]]))
+    async def disconnect(self, endpoint):
+        await super(Context, self).disconnect(endpoint)
+        await on_client_disconnected(self, endpoint)
 
 
 # separated out, due to compatibilty between clients
@@ -203,13 +170,13 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[Utils.Hint]):
     for _, text in texts:
         logging.info("Notice (Team #%d): %s" % (team + 1, text))
     texts = json.dumps(texts)
-    for client in ctx.clients:
+    for client in ctx.endpoints:
         if client.auth and client.team == team:
             if "Berserker" in client.tags and client.version >= [2, 2, 1]:
                 payload = cmd
             else:
                 payload = texts
-            asyncio.create_task(send_json_msgs(client, payload))
+            asyncio.create_task(ctx.send_json_msgs(client, payload))
 
 
 def update_aliases(ctx: Context, team: int, client: typing.Optional[Client] = None):
@@ -217,16 +184,16 @@ def update_aliases(ctx: Context, team: int, client: typing.Optional[Client] = No
                        [(key[1], ctx.get_aliased_name(*key)) for key, value in ctx.player_names.items() if
                         key[0] == team]]])
     if client is None:
-        for client in ctx.clients:
+        for client in ctx.endpoints:
             if client.team == team and client.auth and client.version > [2, 0, 3]:
-                asyncio.create_task(send_json_msgs(client, cmd))
+                asyncio.create_task(ctx.send_json_msgs(client, cmd))
     else:
-        asyncio.create_task(send_json_msgs(client, cmd))
+        asyncio.create_task(ctx.send_json_msgs(client, cmd))
 
 
 async def server(websocket, path, ctx: Context):
     client = Client(websocket, ctx)
-    ctx.clients.append(client)
+    ctx.endpoints.append(client)
 
     try:
         await on_client_connected(ctx, client)
@@ -243,13 +210,14 @@ async def server(websocket, path, ctx: Context):
         if not isinstance(e, websockets.WebSocketException):
             logging.exception(e)
     finally:
-        await client.disconnect()
+        await ctx.disconnect(client)
+
 
 async def on_client_connected(ctx: Context, client: Client):
-    await send_msgs(client, [['RoomInfo', {
+    await ctx.send_msgs(client, [['RoomInfo', {
         'password': ctx.password is not None,
         'players': [(client.team, client.slot, ctx.name_aliases.get((client.team, client.slot), client.name)) for client
-                    in ctx.clients if client.auth],
+                    in ctx.endpoints if client.auth],
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ['Berserker'],
@@ -260,35 +228,46 @@ async def on_client_connected(ctx: Context, client: Client):
         'location_check_points': ctx.location_check_points
     }]])
 
+
 async def on_client_disconnected(ctx: Context, client: Client):
     if client.auth:
         await on_client_left(ctx, client)
 
 
 async def on_client_joined(ctx: Context, client: Client):
-    notify_all(ctx,
-               "%s (Team #%d) has joined the game. Client(%s, %s)." % (ctx.get_aliased_name(client.team, client.slot),
-                                                                       client.team + 1,
-                                                                       ".".join(str(x) for x in client.version),
-                                                                       client.tags))
+    ctx.notify_all(
+        "%s (Team #%d) has joined the game. Client(%s, %s)." % (ctx.get_aliased_name(client.team, client.slot),
+                                                                client.team + 1,
+                                                                ".".join(str(x) for x in client.version),
+                                                                client.tags))
+
 
 async def on_client_left(ctx: Context, client: Client):
-    notify_all(ctx, "%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1))
+    ctx.notify_all("%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1))
+    ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
+
 
 async def countdown(ctx: Context, timer):
-    notify_all(ctx, f'[Server]: Starting countdown of {timer}s')
+    ctx.notify_all(f'[Server]: Starting countdown of {timer}s')
     if ctx.countdown_timer:
         ctx.countdown_timer = timer  # timer is already running, set it to a different time
     else:
         ctx.countdown_timer = timer
         while ctx.countdown_timer > 0:
-            notify_all(ctx, f'[Server]: {ctx.countdown_timer}')
+            ctx.notify_all(f'[Server]: {ctx.countdown_timer}')
             ctx.countdown_timer -= 1
             await asyncio.sleep(1)
-        notify_all(ctx, f'[Server]: GO')
+        ctx.notify_all(f'[Server]: GO')
+
+
+async def missing(ctx: Context, client: Client, locations: list):
+    await ctx.send_msgs(client, [['Missing', {
+        'locations': json.dumps(locations)
+    }]])
+
 
 def get_players_string(ctx: Context):
-    auth_clients = {(c.team, c.slot) for c in ctx.clients if c.auth}
+    auth_clients = {(c.team, c.slot) for c in ctx.endpoints if c.auth}
 
     player_names = sorted(ctx.player_names.keys())
     current_team = -1
@@ -314,19 +293,19 @@ def tuplize_received_items(items):
 
 
 def send_new_items(ctx: Context):
-    for client in ctx.clients:
+    for client in ctx.endpoints:
         if not client.auth:
             continue
         items = get_received_items(ctx, client.team, client.slot)
         if len(items) > client.send_index:
-            asyncio.create_task(send_msgs(client, [
+            asyncio.create_task(ctx.send_msgs(client, [
                 ['ReceivedItems', (client.send_index, tuplize_received_items(items)[client.send_index:])]]))
             client.send_index = len(items)
 
 
 def forfeit_player(ctx: Context, team: int, slot: int):
     all_locations = {values[0] for values in Regions.location_table.values() if type(values[0]) is int}
-    notify_all(ctx, "%s (Team #%d) has forfeited" % (ctx.player_names[(team, slot)], team + 1))
+    ctx.notify_all("%s (Team #%d) has forfeited" % (ctx.player_names[(team, slot)], team + 1))
     register_location_checks(ctx, team, slot, all_locations)
 
 
@@ -336,6 +315,7 @@ def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
         if location_slot == slot and location not in ctx.location_checks[team, slot]:
             items.append(ctx.locations[location, slot][0])  # item ID
     return sorted(items)
+
 
 def register_location_checks(ctx: Context, team: int, slot: int, locations):
     found_items = False
@@ -357,22 +337,27 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations):
                         new_item = ReceivedItem(target_item, location, slot)
                         recvd_items.append(new_item)
                         if slot != target_player:
-                            broadcast_team(ctx,team, [['ItemSent', (slot, location, target_player, target_item)]])
-                        logging.info('(Team #%d) %s sent %s to %s (%s)' % (
-                        team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(target_item),
-                        ctx.player_names[(team, target_player)], get_location_name_from_address(location)))
-                        found_items = True
+                            ctx.broadcast_team(team, [['ItemSent', (slot, location, target_player, target_item)]])
+                    logging.info('(Team #%d) %s sent %s to %s (%s)' % (
+                    team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(target_item),
+                    ctx.player_names[(team, target_player)], get_location_name_from_address(location)))
+                    found_items = True
                 elif target_player == slot:  # local pickup, notify clients of the pickup
                     if location not in ctx.location_checks[team, slot]:
-                        for client in ctx.clients:
-                            if client.team == team and client.wants_item_notification:
-                                asyncio.create_task(
-                                    send_msgs(client, [['ItemFound', (target_item, location, slot)]]))
+                        for client in ctx.endpoints:
+                                if client.team == team and client.wants_item_notification:
+                                    asyncio.create_task(
+                                        ctx.send_msgs(client, [['ItemFound', (target_item, location, slot)]]))
         ctx.location_checks[team, slot] |= new_locations
         send_new_items(ctx)
 
         if found_items:
             save(ctx)
+
+
+def notify_team(ctx: Context, team: int, text: str):
+    logging.info("Notice (Team #%d): %s" % (team + 1, text))
+    ctx.broadcast_team(team, [['Print', text]])
 
 
 def save(ctx: Context):
@@ -476,7 +461,6 @@ class CommandProcessor(metaclass=CommandMeta):
                 method = self.commands.get(basecommand[1:].lower(), None)
                 if not method:
                     self._error_unknown_command(basecommand[1:])
-                    return False
                 else:
                     if getattr(method, "raw_text", False):  # method is requesting unprocessed text data
                         arg = raw.split(maxsplit=1)
@@ -516,11 +500,11 @@ class CommandProcessor(metaclass=CommandMeta):
 
     def _cmd_license(self):
         """Returns the licensing information"""
-        mw_license = getattr(CommandProcessor, "license", None)
-        if not mw_license:
+        license = getattr(CommandProcessor, "license", None)
+        if not license:
             with open(Utils.local_path("LICENSE")) as f:
-                CommandProcessor.license = mw_license = f.read()
-        self.output(mw_license)
+                CommandProcessor.license = license = f.read()
+        self.output(CommandProcessor.license)
 
     def default(self, raw: str):
         self.output("Echo: " + raw)
@@ -541,7 +525,7 @@ class ClientMessageProcessor(CommandProcessor):
         self.client = client
 
     def output(self, text):
-        notify_client(self.client, text)
+        self.ctx.notify_client(self.client, text)
 
     def default(self, raw: str):
         pass  # default is client sending just text
@@ -549,7 +533,7 @@ class ClientMessageProcessor(CommandProcessor):
     def _cmd_players(self) -> bool:
         """Get information about connected and missing players"""
         if len(self.ctx.player_names) < 10:
-            notify_all(self.ctx, get_players_string(self.ctx))
+            self.ctx.notify_all(get_players_string(self.ctx))
         else:
             self.output(get_players_string(self.ctx))
         return True
@@ -618,15 +602,13 @@ class ClientMessageProcessor(CommandProcessor):
 
     def _cmd_missing(self) -> bool:
         """List all missing location checks from the server's perspective"""
-        buffer = ""  # try not to spam small packets over network
-        count = 0
+        locations = []
         for location_id, location_name in Regions.lookup_id_to_name.items():  # cheat console is -1, keep in mind
             if location_id != -1 and location_id not in self.ctx.location_checks[self.client.team, self.client.slot]:
-                buffer += f'Missing: {location_name}\n'
-                count += 1
+                locations.append(location_name)
 
-        if buffer:
-            self.output(buffer + f"Found {count} missing location checks")
+        if len(locations) > 0:
+            asyncio.create_task(missing(self.ctx, self.client, locations))
         else:
             self.output("No missing location checks found.")
         return True
@@ -656,7 +638,7 @@ class ClientMessageProcessor(CommandProcessor):
             if usable:
                 new_item = ReceivedItem(Items.item_table[item_name][3], -1, self.client.slot)
                 get_received_items(self.ctx, self.client.team, self.client.slot).append(new_item)
-                notify_all(self.ctx, 'Cheat console: sending "' + item_name + '" to ' + self.ctx.get_aliased_name(self.client.team, self.client.slot))
+                self.ctx.notify_all('Cheat console: sending "' + item_name + '" to ' + self.ctx.get_aliased_name(self.client.team, self.client.slot))
                 send_new_items(self.ctx)
                 return True
             else:
@@ -732,14 +714,14 @@ class ClientMessageProcessor(CommandProcessor):
 
 async def process_client_cmd(ctx: Context, client: Client, cmd, args):
     if type(cmd) is not str:
-        await send_msgs(client, [['InvalidCmd']])
+        await ctx.send_msgs(client, [['InvalidCmd']])
         return
 
     if cmd == 'Connect':
         if not args or type(args) is not dict or \
                 'password' not in args or type(args['password']) not in [str, type(None)] or \
                 'rom' not in args or type(args['rom']) is not list:
-            await send_msgs(client, [['InvalidArguments', 'Connect']])
+            await ctx.send_msgs(client, [['InvalidArguments', 'Connect']])
             return
 
         errors = set()
@@ -750,7 +732,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             errors.add('InvalidRom')
         else:
             team, slot = ctx.rom_names[tuple(args['rom'])]
-            if any([c.slot == slot and c.team == team for c in ctx.clients if c.auth]):
+            if any([c.slot == slot and c.team == team for c in ctx.endpoints if c.auth]):
                 errors.add('SlotAlreadyTaken')
             else:
                 client.name = ctx.player_names[(team, slot)]
@@ -758,7 +740,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
                 client.slot = slot
 
         if errors:
-            await send_msgs(client, [['ConnectionRefused', list(errors)]])
+            await ctx.send_msgs(client, [['ConnectionRefused', list(errors)]])
         else:
             client.auth = True
             client.version = args.get('version', Client.version)
@@ -770,7 +752,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             if items:
                 reply.append(['ReceivedItems', (0, tuplize_received_items(items))])
                 client.send_index = len(items)
-            await send_msgs(client, reply)
+            await ctx.send_msgs(client, reply)
             await on_client_joined(ctx, client)
 
     if client.auth:
@@ -778,22 +760,22 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             items = get_received_items(ctx, client.team, client.slot)
             if items:
                 client.send_index = len(items)
-                await send_msgs(client, [['ReceivedItems', (0, tuplize_received_items(items))]])
+                await ctx.send_msgs(client, [['ReceivedItems', (0, tuplize_received_items(items))]])
 
         elif cmd == 'LocationChecks':
             if type(args) is not list:
-                await send_msgs(client, [['InvalidArguments', 'LocationChecks']])
+                await ctx.send_msgs(client, [['InvalidArguments', 'LocationChecks']])
                 return
             register_location_checks(ctx, client.team, client.slot, args)
 
         elif cmd == 'LocationScouts':
             if type(args) is not list:
-                await send_msgs(client, [['InvalidArguments', 'LocationScouts']])
+                await ctx.send_msgs(client, [['InvalidArguments', 'LocationScouts']])
                 return
             locs = []
             for location in args:
                 if type(location) is not int or 0 >= location > len(Regions.location_table):
-                    await send_msgs(client, [['InvalidArguments', 'LocationScouts']])
+                    await ctx.send_msgs(client, [['InvalidArguments', 'LocationScouts']])
                     return
                 loc_name = list(Regions.location_table.keys())[location - 1]
                 target_item, target_player = ctx.locations[(Regions.location_table[loc_name][0], client.slot)]
@@ -806,30 +788,29 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
                 locs.append([loc_name, location, target_item, target_player])
 
             # logging.info(f"{client.name} in team {client.team+1} scouted {', '.join([l[0] for l in locs])}")
-            await send_msgs(client, [['LocationInfo', [l[1:] for l in locs]]])
+            await ctx.send_msgs(client, [['LocationInfo', [l[1:] for l in locs]]])
 
         elif cmd == 'UpdateTags':
             if not args or type(args) is not list:
-                await send_msgs(client, [['InvalidArguments', 'UpdateTags']])
+                await ctx.send_msgs(client, [['InvalidArguments', 'UpdateTags']])
                 return
             client.tags = args
 
         elif cmd == 'GameFinished':
             if ctx.client_game_state[client.team, client.slot] != CLIENT_GOAL:
                 finished_msg = f'{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has found the triforce.'
-                notify_all(ctx, finished_msg)
+                ctx.notify_all(finished_msg)
                 ctx.client_game_state[client.team, client.slot] = CLIENT_GOAL
                 if "auto" in ctx.forfeit_mode:
                     forfeit_player(ctx, client.team, client.slot)
 
         if cmd == 'Say':
             if type(args) is not str or not args.isprintable():
-                await send_msgs(client, [['InvalidArguments', 'Say']])
+                await ctx.send_msgs(client, [['InvalidArguments', 'Say']])
                 return
 
-            notify_all(ctx, ctx.get_aliased_name(client.team, client.slot) + ': ' + args)
+            ctx.notify_all(ctx.get_aliased_name(client.team, client.slot) + ': ' + args)
             client.messageprocessor(args)
-
 
 
 def set_password(ctx: Context, password):
@@ -845,12 +826,12 @@ class ServerCommandProcessor(CommandProcessor):
         super(ServerCommandProcessor, self).__init__()
 
     def default(self, raw: str):
-        notify_all(self.ctx, '[Server]: ' + raw)
+        self.ctx.notify_all('[Server]: ' + raw)
 
     @mark_raw
     def _cmd_kick(self, player_name: str) -> bool:
         """Kick specified player from the server"""
-        for client in self.ctx.clients:
+        for client in self.ctx.endpoints:
             if client.auth and client.name.lower() == player_name.lower() and client.socket and not client.socket.closed:
                 asyncio.create_task(client.socket.close())
                 self.output(f"Kicked {self.ctx.get_aliased_name(client.team, client.slot)}")
@@ -925,11 +906,11 @@ class ServerCommandProcessor(CommandProcessor):
             item = " ".join(item_name)
             item, usable, response = get_intended_text(item, Items.item_table.keys())
             if usable:
-                for client in self.ctx.clients:
+                for client in self.ctx.endpoints:
                     if client.name == seeked_player:
                         new_item = ReceivedItem(Items.item_table[item][3], -1, client.slot)
                         get_received_items(self.ctx, client.team, client.slot).append(new_item)
-                        notify_all(self.ctx, 'Cheat console: sending "' + item + '" to ' + self.ctx.get_aliased_name(client.team, client.slot))
+                        self.ctx.notify_all('Cheat console: sending "' + item + '" to ' + self.ctx.get_aliased_name(client.team, client.slot))
                         send_new_items(self.ctx)
                         return True
             else:

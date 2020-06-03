@@ -1,0 +1,39 @@
+#widget-area{
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  padding: 0.25em;
+  border: 2px solid #6a6a6a;
+
+  &:not(.collapsed){
+    width: calc(20% - 1.5em - 4px);
+  }
+
+  #widget-button-row{
+    width: 100%;
+    text-align: right;
+
+    .collapse-button{
+      width: 35px;
+    }
+  }
+
+  #widget-area-contents{
+    display: flex;
+    flex-direction: column;
+
+    #notes{
+      display: flex;
+      flex-direction: column;
+
+      #notes-title{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      textarea{
+        height: 10em;
+      }
+    }
+  }
+}
