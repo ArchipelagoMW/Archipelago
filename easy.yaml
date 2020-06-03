@@ -151,6 +151,11 @@ timer:
   ohko: 0
   timed_countdown: 0
   display: 0
+#can be uncommented to use it
+#local_items: #force certain items to appear in your world only, not across the multiworld. Recognizes some group names, like "Swords"
+#  - "Moon Pearl"
+#  - "Small Keys"
+#  - "Big Keys"
 glitch_boots:
   on: 1 # enables that you start with Pegasus Boots in any glitched logic mode
   off: 0

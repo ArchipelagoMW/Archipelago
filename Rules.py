@@ -138,9 +138,12 @@ def global_rules(world, player):
     # ganon can only carry triforce
     add_item_rule(world.get_location('Ganon', player), lambda item: item.name == 'Triforce' and item.player == player)
     if world.goal[player] == "localtriforcehunt":
+        world.local_items[player].add('Triforce Piece')
+    if world.local_items[player]:
         for location in world.get_locations():
             if location.player != player:
-                forbid_item(location, 'Triforce Piece', player)
+                for item in world.local_items[player]:
+                    forbid_item(location, item, player)
     # determines which S&Q locations are available - hide from paths since it isn't an in-game location
     world.get_region('Menu', player).can_reach_private = lambda state: True
     for exit in world.get_region('Menu', player).exits:

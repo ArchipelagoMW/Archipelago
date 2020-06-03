@@ -85,6 +85,7 @@ def main(args, seed=None):
             item = ItemFactory(tok.strip(), player)
             if item:
                 world.push_precollected(item)
+        world.local_items[player] = {item.strip() for item in args.local_items[player].split(',')}
 
         if world.mode[player] != 'inverted':
             create_regions(world, player)

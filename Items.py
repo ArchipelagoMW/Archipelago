@@ -128,11 +128,11 @@ item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher cla
               'Compass (Escape)': (False, True, 'Compass', 0x8F, 'Now you can find no boss!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Hyrule Castle'),
               'Map (Escape)': (False, True, 'Map', 0x7F, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Hyrule Castle'),
               'Small Key (Agahnims Tower)': (False, False, 'SmallKey', 0xA4, 'A small key to Agahnim', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Castle Tower'),
-               # doors-specific items, baserom will not be able to understand these
+              # doors-specific items, baserom will not be able to understand these
               'Big Key (Agahnims Tower)': (False, False, 'BigKey', 0x9B, 'A big key to Agahnim', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Castle Tower'),
               'Compass (Agahnims Tower)': (False, True, 'Compass', 0x8B, 'Now you can find Aga1!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds null again', 'a compass to Castle Tower'),
               'Map (Agahnims Tower)': (False, True, 'Map', 0x7B, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Castle Tower'),
-               # end of doors-specific items
+              # end of doors-specific items
               'Small Key (Palace of Darkness)': (False, False, 'SmallKey', 0xA6, 'A small key to darkness', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Palace of Darkness'),
               'Big Key (Palace of Darkness)': (False, False, 'BigKey', 0x99, 'A big key to darkness', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Palace of Darkness'),
               'Compass (Palace of Darkness)': (False, True, 'Compass', 0x89, 'Now you can find Helmasaur King!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Palace of Darkness'),
@@ -184,3 +184,24 @@ item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher cla
 lookup_id_to_name = {data[3]: name for name, data in item_table.items()}
 
 hint_blacklist = {"Triforce"}
+
+item_name_groups = {"Bows": {"Bow", "Silver Arrows", "Progressive Bow (Alt)", "Progressive Bow"}}
+# generic groups, (Name, substring)
+_simple_groups = {("Swords", "Sword"),
+
+                  ("Small Keys", "Small Key"),
+                  ("Big Keys", "Big Key"),
+                  ("Compasses", "Compass"),
+                  ("Maps", "Map"),
+
+                  ("Bottles", "Bottle"),
+                  ("Potions", "Potion"),
+                  ("Rupees", "Rupee")
+                  }
+for basename, substring in _simple_groups:
+    tempset = item_name_groups[basename] = set()
+    for itemname in item_table:
+        if substring in itemname:
+            tempset.add(itemname)
+
+del (_simple_groups)
