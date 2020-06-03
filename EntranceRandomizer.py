@@ -66,7 +66,8 @@ def parse_arguments(argv, no_defaults=False):
                                         Palace, to allow for an alternative to firerod.
                              Vanilla:   Swords are in vanilla locations.
                              ''')
-    parser.add_argument('--goal', default=defval('ganon'), const='ganon', nargs='?', choices=['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'crystals'],
+    parser.add_argument('--goal', default=defval('ganon'), const='ganon', nargs='?',
+                        choices=['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'localtriforcehunt', 'crystals'],
                         help='''\
                              Select completion goal. (default: %(default)s)
                              Ganon:         Collect all crystals, beat Agahnim 2 then
@@ -77,6 +78,8 @@ def parse_arguments(argv, no_defaults=False):
                                             Agahnim fights and then defeat Ganon.
                              Triforce Hunt: Places 30 Triforce Pieces in the world, collect
                                             20 of them to beat the game.
+                             Local Triforce Hunt: Places 30 Triforce Pieces in your world, collect
+                                            20 of them to beat the game.       
                              ''')
     parser.add_argument('--difficulty', default=defval('normal'), const='normal', nargs='?', choices=['normal', 'hard', 'expert'],
                         help='''\

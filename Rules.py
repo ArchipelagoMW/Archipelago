@@ -137,7 +137,10 @@ def item_name(state, location, player):
 def global_rules(world, player):
     # ganon can only carry triforce
     add_item_rule(world.get_location('Ganon', player), lambda item: item.name == 'Triforce' and item.player == player)
-
+    if world.goal[player] == "localtriforcehunt":
+        for location in world.get_locations():
+            if location.player != player:
+                forbid_item(location, 'Triforce Piece', player)
     # determines which S&Q locations are available - hide from paths since it isn't an in-game location
     world.get_region('Menu', player).can_reach_private = lambda state: True
     for exit in world.get_region('Menu', player).exits:
@@ -147,7 +150,8 @@ def global_rules(world, player):
 
     set_rule(world.get_location('Sunken Treasure', player), lambda state: state.has('Open Floodgate', player))
     set_rule(world.get_location('Dark Blacksmith Ruins', player), lambda state: state.has('Return Smith', player))
-    set_rule(world.get_location('Purple Chest', player), lambda state: state.has('Pick Up Purple Chest', player))  # Can S&Q with chest
+    set_rule(world.get_location('Purple Chest', player),
+             lambda state: state.has('Pick Up Purple Chest', player))  # Can S&Q with chest
     set_rule(world.get_location('Ether Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has_beam_sword(player))
     set_rule(world.get_location('Master Sword Pedestal', player), lambda state: state.has('Red Pendant', player) and state.has('Blue Pendant', player) and state.has('Green Pendant', player))
 

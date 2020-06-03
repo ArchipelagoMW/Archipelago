@@ -324,8 +324,10 @@ class World(object):
         self._cached_locations = None
 
     def get_unfilled_locations(self, player=None) -> list:
-        return [location for location in self.get_locations() if
-                (player is None or location.player == player) and location.item is None]
+        if player is not None:
+            return [location for location in self.get_locations() if
+                    location.player == player and not location.item]
+        return [location for location in self.get_locations() if not location.item]
 
     def get_filled_locations(self, player=None) -> list:
         return [location for location in self.get_locations() if
