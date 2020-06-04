@@ -40,7 +40,7 @@ def main():
     parser.add_argument('--meta', default=None)
     parser.add_argument('--log_output_path', help='Path to store output log')
     parser.add_argument('--loglevel', default='info', help='Sets log level')
-    parser.add_argument('--yaml_output', default=256, type=lambda value: min(max(int(value), 0), 255),
+    parser.add_argument('--yaml_output', default=0, type=lambda value: min(max(int(value), 0), 255),
                         help='Output rolled mystery results to yaml up to specified number (made for async multiworld)')
 
     for player in range(1, multiargs.multi + 1):

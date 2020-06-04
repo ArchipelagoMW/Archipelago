@@ -25,8 +25,7 @@ import prompt_toolkit
 import typing
 from prompt_toolkit.patch_stdout import patch_stdout
 from NetUtils import Endpoint
-import WebUiServer
-import WebUiClient
+import WebUI
 
 import Regions
 import Utils
@@ -44,7 +43,7 @@ class Context():
         self.snes_address = snes_address
         self.server_address = server_address
 
-        self.ui_node = WebUiClient.WebUiClient()
+        self.ui_node = WebUI.WebUiClient()
         self.custom_address = None
         self.webui_socket_port = port
 
@@ -687,7 +686,7 @@ async def server_loop(ctx: Context, address=None):
                 cmd, args = (msg[0], msg[1]) if len(msg) > 1 else (msg, None)
                 await process_server_cmd(ctx, cmd, args)
         ctx.ui_node.log_warning('Disconnected from multiworld server, type /connect to reconnect')
-    except WebUiClient.WaitingForUiException:
+    except WebUI.WaitingForUiException:
         pass
     except ConnectionRefusedError:
         if cached_address:
@@ -1257,7 +1256,7 @@ async def main():
                 if not sock.connect_ex(('localhost', port)) == 0:
                     break
         import threading
-        WebUiServer.start_server(
+        WebUI.start_server(
             port, on_start=threading.Timer(1, webbrowser.open, (f'http://localhost:5050?port={port}',)).start)
 
     if args.diff_file:
