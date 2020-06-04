@@ -9,6 +9,7 @@ import functools
 import webbrowser
 import multiprocessing
 import socket
+import uuid
 from random import randrange
 
 from Utils import get_item_name_from_id, get_location_name_from_address, ReceivedItem
@@ -886,7 +887,8 @@ async def server_auth(ctx: Context, password_requested):
     ctx.awaiting_rom = False
     ctx.auth = ctx.rom.copy()
     await ctx.send_msgs([['Connect', {
-        'password': ctx.password, 'rom': ctx.auth, 'version': Utils._version_tuple, 'tags': get_tags(ctx)
+        'password': ctx.password, 'rom': ctx.auth, 'version': Utils._version_tuple, 'tags': get_tags(ctx),
+        'uuid': uuid.getnode()
     }]])
 
 
