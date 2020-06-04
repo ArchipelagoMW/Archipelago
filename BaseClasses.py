@@ -868,7 +868,7 @@ class Entrance(object):
 
 class Dungeon(object):
 
-    def __init__(self, name, regions, big_key, small_keys, dungeon_items, player: int):
+    def __init__(self, name: str, regions, big_key, small_keys, dungeon_items, player: int):
         self.name = name
         self.regions = regions
         self.big_key = big_key
@@ -894,8 +894,11 @@ class Dungeon(object):
     def all_items(self):
         return self.dungeon_items + self.keys
 
-    def is_dungeon_item(self, item):
+    def is_dungeon_item(self, item: Item) -> bool:
         return item.player == self.player and item.name in [dungeon_item.name for dungeon_item in self.all_items]
+
+    def __eq__(self, other: Item) -> bool:
+        return self.name == other.name and self.player == other.player
 
     def __repr__(self):
         return self.__str__()

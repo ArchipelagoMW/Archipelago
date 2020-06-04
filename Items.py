@@ -185,7 +185,9 @@ lookup_id_to_name = {data[3]: name for name, data in item_table.items()}
 
 hint_blacklist = {"Triforce"}
 
-item_name_groups = {"Bows": {"Bow", "Silver Arrows", "Progressive Bow (Alt)", "Progressive Bow"}}
+item_name_groups = {"Bows": {"Bow", "Silver Arrows", "Progressive Bow (Alt)", "Progressive Bow"},
+                    "Gloves": {"Power Glove", "Progressive Glove", "Titans Mitts"},
+                    "Medallions": {"Ether", "Bombos", "Quake"}}
 # generic groups, (Name, substring)
 _simple_groups = {("Swords", "Sword"),
 
@@ -196,7 +198,8 @@ _simple_groups = {("Swords", "Sword"),
 
                   ("Bottles", "Bottle"),
                   ("Potions", "Potion"),
-                  ("Rupees", "Rupee")
+                  ("Rupees", "Rupee"),
+                  ("Clocks", "Clock")
                   }
 for basename, substring in _simple_groups:
     tempset = item_name_groups[basename] = set()
