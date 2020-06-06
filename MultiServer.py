@@ -1052,6 +1052,7 @@ async def main(args: argparse.Namespace):
 
     except Exception as e:
         logging.exception('Failed to read multiworld data (%s)' % e)
+        raise
 
     ctx.init_save(not args.disable_save)
 
