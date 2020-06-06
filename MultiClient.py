@@ -436,7 +436,6 @@ async def get_snes_devices(ctx: Context):
 
 
 async def snes_connect(ctx: Context, address):
-    logging.info("connecting")
     if ctx.snes_socket is not None:
         ctx.ui_node.log_error('Already connected to snes')
         return
