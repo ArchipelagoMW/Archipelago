@@ -61,7 +61,7 @@ class Context(Node):
         super(Context, self).__init__()
         self.data_filename = None
         self.save_filename = None
-        self.disable_save = False
+        self.saving = False
         self.player_names = {}
         self.rom_names = {}
         self.remote_items = set()
@@ -82,11 +82,45 @@ class Context(Node):
         self.remaining_mode: str = remaining_mode
         self.item_cheat = item_cheat
         self.running = True
-        self.client_activity_timers: typing.Dict[typing.Tuple[int, int], datetime.datetime] = {} # datatime of last new item check
-        self.client_connection_timers: typing.Dict[typing.Tuple[int, int], datetime.datetime] = {} # datetime of last connection
+        self.client_activity_timers: typing.Dict[
+            typing.Tuple[int, int], datetime.datetime] = {}  # datatime of last new item check
+        self.client_connection_timers: typing.Dict[
+            typing.Tuple[int, int], datetime.datetime] = {}  # datetime of last connection
         self.client_game_state: typing.Dict[typing.Tuple[int, int], int] = collections.defaultdict(int)
         self.er_hint_data: typing.Dict[int, typing.Dict[int, str]] = {}
         self.commandprocessor = ServerCommandProcessor(self)
+
+    def load(self, multidatapath: str):
+        with open(multidatapath, 'rb') as f:
+            self._load(f)
+        self.data_filename = multidatapath
+
+    def _load(self, fileobj):
+        jsonobj = json.loads(zlib.decompress(fileobj.read()).decode("utf-8-sig"))
+        for team, names in enumerate(jsonobj['names']):
+            for player, name in enumerate(names, 1):
+                self.player_names[(team, player)] = name
+        self.rom_names = {tuple(rom): (team, slot) for slot, team, rom in jsonobj['roms']}
+        self.remote_items = set(jsonobj['remote_items'])
+        self.locations = {tuple(k): tuple(v) for k, v in jsonobj['locations']}
+        if "er_hint_data" in jsonobj:
+            self.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
+                                 for player, loc_data in jsonobj["er_hint_data"].items()}
+
+    def init_save(self, enabled: bool):
+        self.saving = enabled
+        if self.saving:
+            if not self.save_filename:
+                self.save_filename = (self.data_filename[:-9] if self.data_filename[-9:] == 'multidata' else (
+                        self.data_filename + '_')) + 'multisave'
+            try:
+                with open(self.save_filename, 'rb') as f:
+                    jsonobj = json.loads(zlib.decompress(f.read()).decode("utf-8"))
+                    self.set_save(jsonobj)
+            except FileNotFoundError:
+                logging.error('No save data found, starting a new game')
+            except Exception as e:
+                logging.exception(e)
 
     def get_save(self) -> dict:
         d = {
@@ -361,7 +395,7 @@ def notify_team(ctx: Context, team: int, text: str):
 
 
 def save(ctx: Context):
-    if not ctx.disable_save:
+    if ctx.saving:
         try:
             jsonstr = json.dumps(ctx.get_save())
             with open(ctx.save_filename, "wb") as f:
@@ -1004,51 +1038,26 @@ async def main(args: argparse.Namespace):
     ctx = Context(args.host, args.port, args.password, args.location_check_points, args.hint_cost,
                   not args.disable_item_cheat, args.forfeit_mode, args.remaining_mode)
 
-    ctx.data_filename = args.multidata
+    data_filename = args.multidata
 
     try:
-        if not ctx.data_filename:
+        if not data_filename:
             import tkinter
             import tkinter.filedialog
             root = tkinter.Tk()
             root.withdraw()
-            ctx.data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data","*multidata"),))
+            data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*multidata"),))
 
-        with open(ctx.data_filename, 'rb') as f:
-            jsonobj = json.loads(zlib.decompress(f.read()).decode("utf-8-sig"))
-            for team, names in enumerate(jsonobj['names']):
-                for player, name in enumerate(names, 1):
-                    ctx.player_names[(team, player)] = name
-            ctx.rom_names = {tuple(rom): (team, slot) for slot, team, rom in jsonobj['roms']}
-            ctx.remote_items = set(jsonobj['remote_items'])
-            ctx.locations = {tuple(k): tuple(v) for k, v in jsonobj['locations']}
-            if "er_hint_data" in jsonobj:
-                ctx.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
-                                    for player, loc_data in jsonobj["er_hint_data"].items()}
+        ctx.load(data_filename)
+
     except Exception as e:
         logging.exception('Failed to read multiworld data (%s)' % e)
-        return
 
-    ip = args.host if args.host else Utils.get_public_ipv4()
-
-
-
-    ctx.disable_save = args.disable_save
-    if not ctx.disable_save:
-        if not ctx.save_filename:
-            ctx.save_filename = (ctx.data_filename[:-9] if ctx.data_filename[-9:] == 'multidata' else (
-                    ctx.data_filename + '_')) + 'multisave'
-        try:
-            with open(ctx.save_filename, 'rb') as f:
-                jsonobj = json.loads(zlib.decompress(f.read()).decode("utf-8"))
-                ctx.set_save(jsonobj)
-        except FileNotFoundError:
-            logging.error('No save data found, starting a new game')
-        except Exception as e:
-            logging.exception(e)
+    ctx.init_save(not args.disable_save)
 
     ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ping_timeout=None,
                                   ping_interval=None)
+    ip = args.host if args.host else Utils.get_public_ipv4()
     logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port,
                                                  'No password' if not ctx.password else 'Password: %s' % ctx.password))
     await ctx.server
