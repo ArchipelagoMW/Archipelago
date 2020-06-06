@@ -41,18 +41,22 @@ class MonitorControls extends Component {
       if (this.props.webSocket) {
       // Poll for available devices
         this.pollSnesDevices();
-
-        setTimeout(() => {
-          if (this.props.availableDevices.length === 1) {
-            this.setState({ deviceId: this.props.availableDevices[0] }, () => {
-              if (!this.props.snesConnected) {
-                this.connectToSnes();
-              }
-            });
-          }
-        }, 500);
       }
     }, 500);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.availableDevices.length !== this.props.availableDevices.length &&
+      this.props.availableDevices.length === 1
+    ) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ deviceId: this.props.availableDevices[0] }, () => {
+        if (!this.props.snesConnected) {
+          this.connectToSnes();
+        }
+      });
+    }
   }
 
   increaseTextSize = () => {

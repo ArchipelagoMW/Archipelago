@@ -1209,7 +1209,7 @@ async def websocket_server(websocket: websockets.WebSocketServerProtocol, path, 
         async for incoming_data in websocket:
             try:
                 data = json.loads(incoming_data)
-                logging.debug(f"WebUIData:{data}")
+                logging.info(f"WebUIData:{data}")
                 if ('type' not in data) or ('content' not in data):
                     raise Exception('Invalid data received in websocket')
 
@@ -1229,11 +1229,10 @@ async def websocket_server(websocket: websockets.WebSocketServerProtocol, path, 
                             ctx.ui_node.manual_snes = None
                             ctx.snes_reconnect_address = None
                             await snes_disconnect(ctx)
-                            return
-
-                        await snes_disconnect(ctx)
-                        ctx.ui_node.manual_snes = data['content']['deviceId']
-                        await snes_connect(ctx, ctx.snes_address)
+                        else:
+                            await snes_disconnect(ctx)
+                            ctx.ui_node.manual_snes = data['content']['deviceId']
+                            await snes_connect(ctx, ctx.snes_address)
 
                 elif data['type'] == 'webControl':
                     if 'disconnect' in data['content']:
