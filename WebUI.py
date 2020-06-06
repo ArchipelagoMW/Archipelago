@@ -5,6 +5,7 @@ import socket
 import socketserver
 import threading
 import webbrowser
+import asyncio
 from functools import partial
 
 from NetUtils import Node
@@ -43,6 +44,9 @@ class WebUiClient(Node):
         self.broadcast_all(self.build_message('chat', message))
 
     def send_connection_status(self, ctx: Context):
+        asyncio.create_task(self._send_connection_status(ctx))
+
+    async def _send_connection_status(self, ctx: Context):
         cache = Utils.persistent_load()
         cached_address = cache["servers"]["default"] if cache else None
         server_address = ctx.server_address if ctx.server_address else cached_address if cached_address else None
@@ -53,7 +57,6 @@ class WebUiClient(Node):
             'serverAddress': server_address,
             'server': 1 if ctx.server is not None and not ctx.server.socket.closed else 0,
         }))
-
     def send_device_list(self, devices):
         self.broadcast_all(self.build_message('availableDevices', {
             'devices': devices,

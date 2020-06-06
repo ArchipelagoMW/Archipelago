@@ -9,6 +9,8 @@ import functools
 import webbrowser
 import multiprocessing
 import socket
+import sys
+import typing
 
 from random import randrange
 
@@ -23,7 +25,7 @@ ModuleUpdate.update()
 import colorama
 import websockets
 import prompt_toolkit
-import typing
+
 from prompt_toolkit.patch_stdout import patch_stdout
 from NetUtils import Endpoint
 import WebUI
@@ -35,8 +37,10 @@ import Utils
 def create_named_task(coro, *args, name=None):
     if not name:
         name = coro.__name__
-        print(name)
-    return asyncio.create_task(coro, *args, name=name)
+    if sys.version_info.major > 2 and sys.version_info.minor > 7:
+        return asyncio.create_task(coro, *args, name=name)
+    else:
+        return asyncio.create_task(coro, *args)
 
 
 class Context():
@@ -1289,16 +1293,16 @@ async def main():
         asyncio.create_task(run_game(romfile))
 
     ctx = Context(args.snes, args.connect, args.password, args.founditems, port)
-    input_task = asyncio.create_task(console_loop(ctx), name="Input")
+    input_task = create_named_task(console_loop(ctx), name="Input")
     if not args.disable_web_ui:
         ui_socket = websockets.serve(functools.partial(websocket_server, ctx=ctx),
                                      'localhost', port, ping_timeout=None, ping_interval=None)
         await ui_socket
 
     if ctx.server_task is None:
-        ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
+        ctx.server_task = create_named_task(server_loop(ctx), name="ServerLoop")
 
-    watcher_task = asyncio.create_task(game_watcher(ctx), name="GameWatcher")
+    watcher_task = create_named_task(game_watcher(ctx), name="GameWatcher")
 
     await ctx.exit_event.wait()
     ctx.server_address = None
