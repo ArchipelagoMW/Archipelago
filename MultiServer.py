@@ -27,7 +27,7 @@ import Utils
 from Utils import get_item_name_from_id, get_location_name_from_address, ReceivedItem
 from NetUtils import Node, Endpoint
 
-console_names = frozenset(set(Items.item_table) | set(Regions.location_table))
+console_names = frozenset(set(Items.item_table) | set(Regions.location_table) | set(Items.item_name_groups))
 
 CLIENT_PLAYING = 0
 CLIENT_GOAL = 1
@@ -668,6 +668,10 @@ class ClientMessageProcessor(CommandProcessor):
                 if item_name in Items.hint_blacklist:
                     self.output(f"Sorry, \"{item_name}\" is marked as non-hintable.")
                     hints = []
+                elif item_name in Items.item_name_groups:
+                    hints = []
+                    for item in Items.item_name_groups[item_name]:
+                        hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item))
                 elif item_name in Items.item_table:  # item name
                     hints = collect_hints(self.ctx, self.client.team, self.client.slot, item_name)
                 else:  # location name
@@ -929,12 +933,15 @@ class ServerCommandProcessor(CommandProcessor):
                     item = " ".join(item_or_location)
                     item, usable, response = get_intended_text(item)
                     if usable:
-                        if item in Items.item_table:  # item name
+                        if item in Items.item_name_groups:
+                            hints = []
+                            for item in Items.item_name_groups[item]:
+                                hints.extend(collect_hints(self.ctx, team, slot, item))
+                        elif item in Items.item_table:  # item name
                             hints = collect_hints(self.ctx, team, slot, item)
-                            notify_hints(self.ctx, team, hints)
                         else:  # location name
                             hints = collect_hints_location(self.ctx, team, slot, item)
-                            notify_hints(self.ctx, team, hints)
+                        notify_hints(self.ctx, team, hints)
                         return True
                     else:
                         self.output(response)
