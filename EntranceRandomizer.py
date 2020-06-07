@@ -81,15 +81,20 @@ def parse_arguments(argv, no_defaults=False):
                              Local Triforce Hunt: Places 30 Triforce Pieces in your world, collect
                                             20 of them to beat the game.       
                              ''')
-    parser.add_argument('--difficulty', default=defval('normal'), const='normal', nargs='?', choices=['normal', 'hard', 'expert'],
+    parser.add_argument('--triforce_pieces_required', default=defval(20),
+                        type=lambda value: min(max(int(value), 1), 30),
+                        help='''Set Triforce Pieces required to win a Triforce Hunt''')
+    parser.add_argument('--difficulty', default=defval('normal'), const='normal', nargs='?',
+                        choices=['normal', 'hard', 'expert'],
                         help='''\
                              Select game difficulty. Affects available itempool. (default: %(default)s)
                              Normal:          Normal difficulty.
                              Hard:            A harder setting with less equipment and reduced health.
                              Expert:          A harder yet setting with minimum equipment and health.
                              ''')
-    parser.add_argument('--item_functionality', default=defval('normal'), const='normal', nargs='?', choices=['normal', 'hard', 'expert'],
-                             help='''\
+    parser.add_argument('--item_functionality', default=defval('normal'), const='normal', nargs='?',
+                        choices=['normal', 'hard', 'expert'],
+                        help='''\
                              Select limits on item functionality to increase difficulty. (default: %(default)s)
                              Normal:          Normal functionality.
                              Hard:            Reduced functionality.
@@ -329,7 +334,7 @@ def parse_arguments(argv, no_defaults=False):
                          'local_items', 'retro', 'accessibility', 'hints', 'beemizer',
                          'shufflebosses', 'shuffleenemies', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
-                         'heartbeep', "skip_progression_balancing",
+                         'heartbeep', "skip_progression_balancing", "triforce_pieces_required",
                          'remote_items', 'progressive', 'extendedmsu', 'dungeon_counters', 'glitch_boots']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
