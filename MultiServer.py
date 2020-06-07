@@ -753,8 +753,7 @@ class ClientMessageProcessor(CommandProcessor):
                         else:
                             self.output(f"You can't afford the hint. "
                                         f"You have {points_available} points and need at least "
-                                        f"{self.ctx.hint_cost}, "
-                                        f"more if multiple items are still to be found.")
+                                        f"{self.ctx.hint_cost}")
                             return False
 
 
