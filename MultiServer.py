@@ -721,27 +721,43 @@ class ClientMessageProcessor(CommandProcessor):
                     if new_hints:
                         found_hints = sum(not hint.found for hint in new_hints)
                         if not found_hints:  # everything's been found, no need to pay
-                            can_pay = True
+                            can_pay = 1000
                         elif self.ctx.hint_cost:
-                            can_pay = points_available // (self.ctx.hint_cost * found_hints) >= 1
+                            can_pay = points_available // self.ctx.hint_cost
                         else:
-                            can_pay = True
-
+                            can_pay = 1000
+                        import random
+                        new_hints = list(new_hints)
+                        random.shuffle(new_hints)
                         if can_pay:
-                            self.ctx.hints_used[self.client.team, self.client.slot] += found_hints
+                            hints = []
+                            while can_pay > 0:
+                                if not new_hints:
+                                    break
+                                hint = new_hints.pop()
+                                hints.append(hint)
+                                can_pay -= 1
+                                self.ctx.hints_used[self.client.team, self.client.slot] += 1
 
-                            for hint in new_hints:
                                 if not hint.found:
                                     self.ctx.hints[self.client.team, hint.finding_player].add(hint)
                                     self.ctx.hints[self.client.team, hint.receiving_player].add(hint)
-                            notify_hints(self.ctx, self.client.team, list(new_hints))
+
+                            else:
+                                self.output(
+                                    "Could not pay for everything. Rerun the hint later with more points to get the remaining hints.")
+                            notify_hints(self.ctx, self.client.team, list(old_hints) + hints)
                             save(self.ctx)
+                            return True
+
                         else:
                             self.output(f"You can't afford the hint. "
                                         f"You have {points_available} points and need at least "
                                         f"{self.ctx.hint_cost}, "
                                         f"more if multiple items are still to be found.")
-                        return True
+                            return False
+
+
                 else:
                     self.output("Nothing found. Item/Location may not exist.")
                     return False
