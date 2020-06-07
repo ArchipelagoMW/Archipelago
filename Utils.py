@@ -244,6 +244,43 @@ def persistent_load() -> typing.Dict[dict]:
     return storage
 
 
+def get_adjuster_settings(romfile: str):
+    if hasattr(get_adjuster_settings, "adjuster_settings"):
+        adjuster_settings = getattr(get_adjuster_settings, "adjuster_settings")
+    else:
+        adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings", {})
+    if adjuster_settings:
+        import pprint
+        import Patch
+        adjuster_settings.rom = romfile
+        adjuster_settings.baserom = Patch.get_base_rom_path()
+        whitelist = {"disablemusic", "fastmenu", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
+                     "uw_palettes"}
+        printed_options = {name: value for name, value in vars(adjuster_settings).items() if name in whitelist}
+        sprite = getattr(adjuster_settings, "sprite", None)
+        if sprite:
+            printed_options["sprite"] = adjuster_settings.sprite.name
+        if hasattr(get_adjuster_settings, "adjust_wanted"):
+            adjust_wanted = getattr(get_adjuster_settings, "adjust_wanted")
+        else:
+            adjust_wanted = input(f"Last used adjuster settings were found. Would you like to apply these? \n"
+                                  f"{pprint.pformat(printed_options)}\n"
+                                  f"Enter yes or no: ")
+        if adjust_wanted and adjust_wanted.startswith("y"):
+            adjusted = True
+            import AdjusterMain
+            _, romfile = AdjusterMain.adjust(adjuster_settings)
+        else:
+            adjusted = False
+            import logging
+            if not hasattr(get_adjuster_settings, "adjust_wanted"):
+                logging.info(f"Skipping post-patch adjustment")
+        get_adjuster_settings.adjuster_settings = adjuster_settings
+        get_adjuster_settings.adjust_wanted = adjust_wanted
+        return romfile, adjusted
+
+
+
 class ReceivedItem(typing.NamedTuple):
     item: int
     location: int

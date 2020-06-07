@@ -61,6 +61,8 @@ def create_patch_file(rom_file_to_patch: str, server: str = "") -> str:
 def create_rom_file(patch_file: str) -> Tuple[dict, str]:
     data = Utils.parse_yaml(lzma.decompress(load_bytes(patch_file)).decode("utf-8-sig"))
     patched_data = bsdiff4.patch(get_base_rom_bytes(), data["patch"])
+    rom_hash = patched_data[int(0x7FC0):int(0x7FD5)]
+    data["meta"]["hash"] = "".join(chr(x) for x in rom_hash)
     target = os.path.splitext(patch_file)[0] + ".sfc"
     with open(target, "wb") as f:
         f.write(patched_data)
@@ -96,7 +98,6 @@ if __name__ == "__main__":
     with concurrent.futures.ThreadPoolExecutor() as pool:
         for rom in sys.argv:
             try:
-
                 if rom.endswith(".sfc"):
                     print(f"Creating patch for {rom}")
                     result = pool.submit(create_patch_file, rom, address)
@@ -105,9 +106,28 @@ if __name__ == "__main__":
                 elif rom.endswith(".bmbp"):
                     print(f"Applying patch {rom}")
                     data, target = create_rom_file(rom)
-                    print(f"Created rom {target}.")
+                    romfile, adjusted = Utils.get_adjuster_settings(target)
+                    if adjusted:
+                        try:
+                            os.replace(romfile, target)
+                            romfile = target
+                        except Exception as e:
+                            print(e)
+                    print(f"Created rom {romfile if adjusted else target}.")
                     if 'server' in data:
+                        Utils.persistent_store("servers", data['hash'], data['server'])
                         print(f"Host is {data['server']}")
+
+                elif rom.endswith("_multidata"):
+                    import json
+                    import zlib
+                    with open(rom, 'rb') as fr:
+                        multidata = zlib.decompress(fr.read()).decode("utf-8")
+                        with open(rom + '.txt', 'w') as fw:
+                            fw.write(multidata)
+                        multidata = json.loads(multidata)
+                        for rom in multidata['roms']:
+                            Utils.persistent_store("servers", "".join(chr(byte) for byte in rom[2]), address)
 
                 elif rom.endswith(".zip"):
                     print(f"Updating host in patch files contained in {rom}")
