@@ -746,7 +746,7 @@ class ClientMessageProcessor(CommandProcessor):
                             else:
                                 self.output(
                                     "Could not pay for everything. Rerun the hint later with more points to get the remaining hints.")
-                            notify_hints(self.ctx, self.client.team, list(old_hints) + hints)
+                            notify_hints(self.ctx, self.client.team, hints)
                             save(self.ctx)
                             return True
 
