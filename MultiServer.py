@@ -727,7 +727,7 @@ class ClientMessageProcessor(CommandProcessor):
                         else:
                             can_pay = 1000
                         import random
-                        new_hints = list(new_hints)
+                        new_hints = [hint for hint in new_hints if not hint.found]
                         random.shuffle(new_hints)
                         if can_pay:
                             hints = []
