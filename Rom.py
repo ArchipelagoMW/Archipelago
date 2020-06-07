@@ -1328,7 +1328,7 @@ def hud_format_text(text):
             output += bytes([0x77 + ord(char) - ord('0'), 0x29])
         elif char == '9':
             output += b'\x4b\x29'
-        elif char == ' ':
+        elif char == ' ' or char == '_':
             output += b'\x7f\x00'
         else:
             output += b'\x2a\x29'
