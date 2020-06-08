@@ -143,7 +143,7 @@ def generate_itempool(world, player):
 
         loc = Location(player, "Murahdahla", parent=region)
         loc.access_rule = lambda state: state.item_count('Triforce Piece', player) + state.item_count('Power Star',
-                                                                                                      player) > \
+                                                                                                      player) >= \
                                         state.world.treasure_hunt_count[player]
         region.locations.append(loc)
         world.dynamic_locations.append(loc)
