@@ -73,9 +73,9 @@ begin
   if (RegQueryStringValue(HKEY_LOCAL_MACHINE,
     'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64', 'Version', strVersion)) then
   begin
-    // Is the installed version at least 14.24 ? 
+    // Is the installed version at least the packaged one ?
     Log('VC Redist x64 Version : found ' + strVersion);
-    Result := (CompareStr(strVersion, 'v14.24.28127.4') < 0);
+    Result := (CompareStr(strVersion, 'v14.26.28720') < 0);
   end
   else
   begin

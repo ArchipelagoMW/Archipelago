@@ -634,7 +634,6 @@ def patch_rom(world, rom, player, team, enemized):
     rom.write_byte(0x18003A, 0x01 if world.dark_world_light_cone else 0x00)
 
     GREEN_TWENTY_RUPEES = 0x47
-    TRIFORCE_PIECE = ItemFactory('Triforce Piece', player).code
     GREEN_CLOCK = ItemFactory('Green Clock', player).code
 
     rom.write_byte(0x18004F, 0x01) # Byrna Invulnerability: on

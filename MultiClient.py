@@ -50,7 +50,7 @@ class Context():
 
         self.ui_node = WebUI.WebUiClient()
         self.custom_address = None
-        self.webui_socket_port = port
+        self.webui_socket_port: typing.Optional[int] = port
 
         self.exit_event = asyncio.Event()
         self.watcher_event = asyncio.Event()
@@ -1007,7 +1007,10 @@ class ClientCommandProcessor(CommandProcessor):
         self.ctx.ui_node.log_info(f"Setting slow mode to {self.ctx.slow_mode}")
 
     def _cmd_web(self):
-        webbrowser.open(f'http://localhost:5050?port={self.ctx.webui_socket_port}')
+        if self.ctx.webui_socket_port:
+            webbrowser.open(f'http://localhost:5050?port={self.ctx.webui_socket_port}')
+        else:
+            self.output("Web UI was never started.")
 
     def default(self, raw: str):
         asyncio.create_task(self.ctx.send_msgs([['Say', raw]]))
@@ -1263,7 +1266,7 @@ async def main():
     parser.add_argument('--disable_web_ui', default=False, action='store_true', help="Turn off emitting a webserver for the webbrowser based user interface.")
     args = parser.parse_args()
     logging.basicConfig(format='%(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
-
+    port = None
     if not args.disable_web_ui:
         # Find an available port on the host system to use for hosting the websocket server
         while True:

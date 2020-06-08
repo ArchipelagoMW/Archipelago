@@ -58,6 +58,7 @@ def main(args, seed=None):
     world.progressive = args.progressive.copy()
     world.dungeon_counters = args.dungeon_counters.copy()
     world.glitch_boots = args.glitch_boots.copy()
+    world.triforce_pieces_required = args.triforce_pieces_required.copy()
     world.progression_balancing = {player: not balance for player, balance in args.skip_progression_balancing.items()}
 
     world.rom_seeds = {player: random.randint(0, 999999999) for player in range(1, world.players + 1)}
