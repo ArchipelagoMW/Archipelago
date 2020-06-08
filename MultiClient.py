@@ -1212,7 +1212,7 @@ async def websocket_server(websocket: websockets.WebSocketServerProtocol, path, 
         async for incoming_data in websocket:
             try:
                 data = json.loads(incoming_data)
-                logging.info(f"WebUIData:{data}")
+                logging.debug(f"WebUIData:{data}")
                 if ('type' not in data) or ('content' not in data):
                     raise Exception('Invalid data received in websocket')
 
