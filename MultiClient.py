@@ -786,6 +786,8 @@ async def process_server_cmd(ctx: Context, cmd, args):
             raise Exception(
                 'Invalid ROM detected, please verify that you have loaded the correct rom and reconnect your snes (/snes)')
         if 'SlotAlreadyTaken' in args:
+            Utils.persistent_store("servers", "default", ctx.server_address)
+            Utils.persistent_store("servers", "".join(chr(x) for x in ctx.rom), ctx.server_address)
             raise Exception('Player slot already in use for that team')
         if 'IncompatibleVersion' in args:
             raise Exception('Server reported your client version as incompatible')
@@ -1284,26 +1286,15 @@ async def main():
         meta, romfile = Patch.create_rom_file(args.diff_file)
         args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
-        adjuster_settings = Utils.persistent_load().get("adjuster", {}).get("last_settings", {})
-        if adjuster_settings:
-            import pprint
-            adjuster_settings.rom = romfile
-            adjuster_settings.baserom = Patch.get_base_rom_path()
-            whitelist = {"disablemusic", "fastmenu", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
-                         "uw_palettes"}
-            printed_options = {name: value for name, value in vars(adjuster_settings).items() if name in whitelist}
-            sprite = getattr(adjuster_settings, "sprite", None)
-            if sprite:
-                printed_options["sprite"]: adjuster_settings.sprite.name
-            adjust_wanted = input(f"Last used adjuster settings were found. Would you like to apply these? \n"
-                                  f"{pprint.pformat(printed_options)}\n"
-                                  f"Enter yes or no: ")
-            if adjust_wanted and adjust_wanted.startswith("y"):
-                import AdjusterMain
-                _, romfile = AdjusterMain.adjust(adjuster_settings)
-            else:
-                logging.info("Skipping post-patch adjustment")
-        asyncio.create_task(run_game(romfile))
+        adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile)
+        if adjusted:
+            try:
+                import os
+                os.replace(adjustedromfile, romfile)
+                adjustedromfile = romfile
+            except Exception as e:
+                logging.exception(e)
+        asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
 
     ctx = Context(args.snes, args.connect, args.password, args.founditems, port)
     input_task = create_named_task(console_loop(ctx), name="Input")
