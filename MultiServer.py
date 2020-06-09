@@ -719,22 +719,24 @@ class ClientMessageProcessor(CommandProcessor):
                         if not new_hints:
                             self.output("Hint was previously used, no points deducted.")
                     if new_hints:
-                        found_hints = sum(not hint.found for hint in new_hints)
-                        if not found_hints:  # everything's been found, no need to pay
+                        found_hints = [hint for hint in new_hints if hint.found]
+                        not_found_hints = [hint for hint in new_hints if not hint.found]
+
+                        if not not_found_hints:  # everything's been found, no need to pay
                             can_pay = 1000
                         elif self.ctx.hint_cost:
                             can_pay = points_available // self.ctx.hint_cost
                         else:
                             can_pay = 1000
                         import random
-                        new_hints = [hint for hint in new_hints if not hint.found]
-                        random.shuffle(new_hints)
+
+                        random.shuffle(not_found_hints)
                         if can_pay:
                             hints = []
                             while can_pay > 0:
-                                if not new_hints:
+                                if not not_found_hints:
                                     break
-                                hint = new_hints.pop()
+                                hint = not_found_hints.pop()
                                 hints.append(hint)
                                 can_pay -= 1
                                 self.ctx.hints_used[self.client.team, self.client.slot] += 1
@@ -746,7 +748,7 @@ class ClientMessageProcessor(CommandProcessor):
                             else:
                                 self.output(
                                     "Could not pay for everything. Rerun the hint later with more points to get the remaining hints.")
-                            notify_hints(self.ctx, self.client.team, hints)
+                            notify_hints(self.ctx, self.client.team, found_hints + hints)
                             save(self.ctx)
                             return True
 
