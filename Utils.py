@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__version__ = "2.3.0"
+__version__ = "2.3.1"
 _version_tuple = tuple(int(piece, 10) for piece in __version__.split("."))
 
 import os
