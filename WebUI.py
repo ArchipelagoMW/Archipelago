@@ -48,7 +48,7 @@ class WebUiClient(Node):
 
     async def _send_connection_status(self, ctx: Context):
         cache = Utils.persistent_load()
-        cached_address = cache["servers"]["default"] if cache else None
+        cached_address = cache.get("servers", {}).get("default", None)
         server_address = ctx.server_address if ctx.server_address else cached_address if cached_address else None
 
         self.broadcast_all(self.build_message('connections', {
