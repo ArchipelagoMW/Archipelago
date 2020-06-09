@@ -244,7 +244,7 @@ def persistent_load() -> typing.Dict[dict]:
     return storage
 
 
-def get_adjuster_settings(romfile: str):
+def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
     if hasattr(get_adjuster_settings, "adjuster_settings"):
         adjuster_settings = getattr(get_adjuster_settings, "adjuster_settings")
     else:
@@ -278,6 +278,7 @@ def get_adjuster_settings(romfile: str):
         get_adjuster_settings.adjuster_settings = adjuster_settings
         get_adjuster_settings.adjust_wanted = adjust_wanted
         return romfile, adjusted
+    return romfile, False
 
 
 
