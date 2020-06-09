@@ -22,8 +22,7 @@ from EntranceShuffle import door_addresses
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '1347ce535618fa1a844d2d45cf0ca661'
-EXTENDEDMSURANDOMIZERBASEHASH = 'f42949bde03ba5ea71c2d43a21f5d6bf'
+RANDOMIZERBASEHASH = 'aec17dd8b3c76c16d0b0311c36eb1c00'
 
 
 class JsonRom(object):
@@ -74,15 +73,14 @@ class JsonRom(object):
 
 class LocalRom(object):
 
-    def __init__(self, file, extendedmsu=False, patch=True, name=None, hash=None):
+    def __init__(self, file, patch=True, name=None, hash=None):
         self.name = name
         self.hash = hash
         self.orig_buffer = None
-        self.extendedmsu = extendedmsu
         with open(file, 'rb') as stream:
             self.buffer = read_rom(stream)
         if patch:
-            self.patch_base_rom(extendedmsu)
+            self.patch_base_rom()
             self.orig_buffer = self.buffer.copy()
 
     def write_byte(self, address: int, value):
@@ -96,14 +94,14 @@ class LocalRom(object):
             outfile.write(self.buffer)
 
     @staticmethod
-    def fromJsonRom(rom, file, rom_size=0x200000, extendedmsu=False):
-        ret = LocalRom(file, extendedmsu, True, rom.name, rom.hash)
+    def fromJsonRom(rom, file, rom_size=0x200000):
+        ret = LocalRom(file, True, rom.name, rom.hash)
         ret.buffer.extend(bytearray([0x00]) * (rom_size - len(ret.buffer)))
         for address, values in rom.patches.items():
             ret.write_bytes(int(address), values)
         return ret
 
-    def patch_base_rom(self, extendedmsu):
+    def patch_base_rom(self):
         # verify correct checksum of baserom
         basemd5 = hashlib.md5()
         basemd5.update(self.buffer)
@@ -114,7 +112,7 @@ class LocalRom(object):
         self.buffer.extend(bytearray([0x00]) * (0x200000 - len(self.buffer)))
 
         # load randomizer patches
-        with open(local_path('data/base2current.json') if not extendedmsu else local_path('data/base2current_extendedmsu.json'), 'r') as stream:
+        with open(local_path('data/base2current.json')) as stream:
             patches = json.load(stream)
         for patch in patches:
             if isinstance(patch, dict):
@@ -124,7 +122,7 @@ class LocalRom(object):
         # verify md5
         patchedmd5 = hashlib.md5()
         patchedmd5.update(self.buffer)
-        if patchedmd5.hexdigest() not in [RANDOMIZERBASEHASH, EXTENDEDMSURANDOMIZERBASEHASH]:
+        if patchedmd5.hexdigest() not in [RANDOMIZERBASEHASH]:
             raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
 
     def write_crc(self):
@@ -159,10 +157,9 @@ def read_rom(stream) -> bytearray:
         buffer = buffer[0x200:]
     return buffer
 
-def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, random_sprite_on_hit, extendedmsu):
+def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, random_sprite_on_hit):
     baserom_path = os.path.abspath(baserom_path)
-    basepatch_path = os.path.abspath(
-        local_path('data/base2current.json') if not extendedmsu else local_path('data/base2current_extendedmsu.json'))
+    basepatch_path = os.path.abspath(local_path('data/base2current.json'))
     enemizer_basepatch_path = os.path.join(os.path.dirname(enemizercli), "enemizerBasePatch.json")
     randopatch_path = os.path.abspath(output_path(f'enemizer_randopatch_{player}.json'))
     options_path = os.path.abspath(output_path(f'enemizer_options_{player}.json'))
@@ -1262,8 +1259,8 @@ def patch_rom(world, rom, player, team, enemized):
     rom.write_bytes(0x7FC0, rom.name)
 
     # set player names
-    for p in range(1, min(world.players, 64) + 1):
-        rom.write_bytes(0x186380 + ((p - 1) * 32), hud_format_text(world.player_names[p][team]))
+    for p in range(1, min(world.players, 255) + 1):
+        rom.write_bytes(0x195FFC + ((p - 1) * 32), hud_format_text(world.player_names[p][team]))
 
     # Write title screen Code
     hashint = int(rom.get_hash(), 16)
@@ -1330,7 +1327,7 @@ def hud_format_text(text):
             output += bytes([0x77 + ord(char) - ord('0'), 0x29])
         elif char == '9':
             output += b'\x4b\x29'
-        elif char == ' ':
+        elif char == ' ' or char == '_':
             output += b'\x7f\x00'
         else:
             output += b'\x2a\x29'

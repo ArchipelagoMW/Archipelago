@@ -380,7 +380,6 @@ def roll_settings(weights):
         romweights = weights['rom']
         ret.sprite = get_choice('sprite', romweights)
         ret.disablemusic = get_choice('disablemusic', romweights)
-        ret.extendedmsu = get_choice('extendedmsu', romweights)
         ret.quickswap = get_choice('quickswap', romweights)
         ret.fastmenu = get_choice('menuspeed', romweights)
         ret.heartcolor = get_choice('heartcolor', romweights)
