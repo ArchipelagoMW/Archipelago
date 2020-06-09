@@ -102,6 +102,30 @@ class LocalRom(object):
         return ret
 
     def patch_base_rom(self):
+        from Patch import create_patch_file, create_rom_bytes
+
+        if os.path.isfile(local_path('data/baserom.sfc')):
+            with open(local_path('data/baserom.sfc'), 'rb') as stream:
+                buffer = bytearray(stream.read())
+
+            buffermd5 = hashlib.md5()
+            buffermd5.update(buffer)
+            if RANDOMIZERBASEHASH == buffermd5.hexdigest():
+                self.buffer = buffer
+                if not os.path.exists(local_path('data/baserom.bmbp')):
+                    create_patch_file(local_path('data/baserom.sfc'))
+                return
+
+        if os.path.isfile(local_path('data/baserom.bmbp')):
+            _, target, buffer = create_rom_bytes(local_path('data/baserom.bmbp'))
+            buffermd5 = hashlib.md5()
+            buffermd5.update(buffer)
+            if RANDOMIZERBASEHASH == buffermd5.hexdigest():
+                self.buffer = bytearray(buffer)
+                with open(local_path('data/baserom.sfc'), 'wb') as stream:
+                    stream.write(buffer)
+                return
+
         # verify correct checksum of baserom
         basemd5 = hashlib.md5()
         basemd5.update(self.buffer)
@@ -124,6 +148,12 @@ class LocalRom(object):
         patchedmd5.update(self.buffer)
         if patchedmd5.hexdigest() not in [RANDOMIZERBASEHASH]:
             raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
+        else:
+            with open(local_path('data/baserom.sfc'), 'wb') as stream:
+                stream.write(self.buffer)
+            create_patch_file(local_path('data/baserom.sfc'))
+            os.remove(local_path('data/base2current.json'))
+
 
     def write_crc(self):
         crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
