@@ -58,7 +58,7 @@ class LocalRom(object):
     def verify(buffer, expected=RANDOMIZERBASEHASH):
         buffermd5 = hashlib.md5()
         buffermd5.update(buffer)
-        return RANDOMIZERBASEHASH == buffermd5.hexdigest()
+        return expected == buffermd5.hexdigest()
 
     def patch_base_rom(self):
         from Patch import create_patch_file, create_rom_bytes
