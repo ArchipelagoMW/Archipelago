@@ -1775,9 +1775,11 @@ def write_strings(rom, world, player, team):
     if world.goal[player] in ['triforcehunt', 'localtriforcehunt']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Get the Triforce Pieces.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
-        tt['sign_ganon'] = 'Go find the Triforce pieces... Ganon is invincible!'
-        tt[
-            'murahdahla'] = "Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\ninvisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\nhidden in  a hollow tree. If you bring\n%d triforce pieces, I can reassemble it." % \
+        if world.goal[player] == 'triforcehunt' and world.players > 1:
+            tt['sign_ganon'] = 'Go find the Triforce pieces with your friends... Ganon is invincible!'
+        else:
+            tt['sign_ganon'] = 'Go find the Triforce pieces... Ganon is invincible!'
+        tt['murahdahla'] = "Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\ninvisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\nhidden in  a hollow tree. If you bring\n%d triforce pieces, I can reassemble it." % \
                             world.treasure_hunt_count[player]
     elif world.goal[player] in ['pedestal']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Your goal is at the pedestal.'
