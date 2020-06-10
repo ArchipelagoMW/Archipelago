@@ -349,10 +349,7 @@ def guiMain(args=None):
     shuffleFrame.pack(expand=True, anchor=E)
 
     enemizerFrame = LabelFrame(randomizerWindow, text="Enemizer", padx=5, pady=2)
-    enemizerFrame.columnconfigure(0, weight=1)
-    enemizerFrame.columnconfigure(1, weight=1)
-    enemizerFrame.columnconfigure(2, weight=1)
-    enemizerFrame.columnconfigure(3, weight=1)
+
 
     enemizerPathFrame = Frame(enemizerFrame)
     enemizerPathFrame.grid(row=0, column=0, columnspan=3, sticky=W+E, padx=3)
@@ -408,20 +405,21 @@ def guiMain(args=None):
     enemizerHealthOption = OptionMenu(enemizerHealthFrame, enemizerHealthVar, 'default', 'easy', 'normal', 'hard', 'expert')
     enemizerHealthOption.pack(side=LEFT)
 
-    bottomFrame = Frame(randomizerWindow, pady=5)
+    multiworldframe = LabelFrame(randomizerWindow, text="Multiworld", padx=5, pady=2)
 
-    worldLabel = Label(bottomFrame, text='Worlds')
+
+    worldLabel = Label(multiworldframe, text='Worlds')
     worldVar = StringVar()
-    worldSpinbox = Spinbox(bottomFrame, from_=1, to=100, width=5, textvariable=worldVar)
-    namesLabel = Label(bottomFrame, text='Player names')
+    worldSpinbox = Spinbox(multiworldframe, from_=1, to=255, width=5, textvariable=worldVar)
+    namesLabel = Label(multiworldframe, text='Player names')
     namesVar = StringVar()
-    namesEntry = Entry(bottomFrame, textvariable=namesVar)
-    seedLabel = Label(bottomFrame, text='Seed #')
+    namesEntry = Entry(multiworldframe, textvariable=namesVar)
+    seedLabel = Label(multiworldframe, text='Seed #')
     seedVar = StringVar()
-    seedEntry = Entry(bottomFrame, width=15, textvariable=seedVar)
-    countLabel = Label(bottomFrame, text='Count')
+    seedEntry = Entry(multiworldframe, width=15, textvariable=seedVar)
+    countLabel = Label(multiworldframe, text='Count')
     countVar = StringVar()
-    countSpinbox = Spinbox(bottomFrame, from_=1, to=100, width=5, textvariable=countVar)
+    countSpinbox = Spinbox(multiworldframe, from_=1, to=100, width=5, textvariable=countVar)
 
     def generateRom():
         guiargs = Namespace()
@@ -509,24 +507,24 @@ def guiMain(args=None):
         else:
             messagebox.showinfo(title="Success", message="Rom patched successfully")
 
-    generateButton = Button(bottomFrame, text='Generate Patched Rom', command=generateRom)
+    generateButton = Button(farBottomFrame, text='Generate Patched Rom', command=generateRom)
 
     worldLabel.pack(side=LEFT)
     worldSpinbox.pack(side=LEFT)
     namesLabel.pack(side=LEFT)
-    namesEntry.pack(side=LEFT)
+    namesEntry.pack(side=LEFT, expand=True, fill=X)
     seedLabel.pack(side=LEFT,  padx=(5, 0))
     seedEntry.pack(side=LEFT)
     countLabel.pack(side=LEFT, padx=(5, 0))
     countSpinbox.pack(side=LEFT)
-    generateButton.pack(side=LEFT, padx=(5, 0))
+    generateButton.pack(side=RIGHT, padx=(5, 0))
 
-    openOutputButton.pack(side=RIGHT)
+    openOutputButton.pack(side=LEFT)
 
     drowDownFrame.pack(side=LEFT)
     rightHalfFrame.pack(side=RIGHT)
     topFrame.pack(side=TOP)
-    bottomFrame.pack(side=BOTTOM)
+    multiworldframe.pack(side=BOTTOM, expand=True, fill=X)
     enemizerFrame.pack(side=BOTTOM, fill=BOTH)
 
     # Adjuster Controls
