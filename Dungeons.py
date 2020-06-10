@@ -47,13 +47,11 @@ def fill_dungeons(world):
     all_state_base = world.get_all_state()
 
     for player in range(1, world.players + 1):
-        pinball_room = world.get_location('Skull Woods - Pinball Room', player)
-        if world.retro[player]:
-            world.push_item(pinball_room, ItemFactory('Small Key (Universal)', player), False)
-        else:
+        if not world.retro[player] and world.logic == "noglitches":
+            pinball_room = world.get_location('Skull Woods - Pinball Room', player)
             world.push_item(pinball_room, ItemFactory('Small Key (Skull Woods)', player), False)
-        pinball_room.event = True
-        pinball_room.locked = True
+            pinball_room.event = True
+            pinball_room.locked = True
 
     dungeons = [(list(dungeon.regions), dungeon.big_key, list(dungeon.small_keys), list(dungeon.dungeon_items)) for dungeon in world.dungeons]
 
