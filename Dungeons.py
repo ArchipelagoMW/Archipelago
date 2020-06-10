@@ -21,7 +21,7 @@ def create_dungeons(world, player):
     ToH = make_dungeon('Tower of Hera', 'Moldorm', ['Tower of Hera (Bottom)', 'Tower of Hera (Basement)', 'Tower of Hera (Top)'], ItemFactory('Big Key (Tower of Hera)', player), [ItemFactory('Small Key (Tower of Hera)', player)], ItemFactory(['Map (Tower of Hera)', 'Compass (Tower of Hera)'], player))
     PoD = make_dungeon('Palace of Darkness', 'Helmasaur King', ['Palace of Darkness (Entrance)', 'Palace of Darkness (Center)', 'Palace of Darkness (Big Key Chest)', 'Palace of Darkness (Bonk Section)', 'Palace of Darkness (North)', 'Palace of Darkness (Maze)', 'Palace of Darkness (Harmless Hellway)', 'Palace of Darkness (Final Section)'], ItemFactory('Big Key (Palace of Darkness)', player), ItemFactory(['Small Key (Palace of Darkness)'] * 6, player), ItemFactory(['Map (Palace of Darkness)', 'Compass (Palace of Darkness)'], player))
     TT = make_dungeon('Thieves Town', 'Blind', ['Thieves Town (Entrance)', 'Thieves Town (Deep)', 'Blind Fight'], ItemFactory('Big Key (Thieves Town)', player), [ItemFactory('Small Key (Thieves Town)', player)], ItemFactory(['Map (Thieves Town)', 'Compass (Thieves Town)'], player))
-    SW = make_dungeon('Skull Woods', 'Mothula', ['Skull Woods Final Section (Entrance)', 'Skull Woods First Section', 'Skull Woods Second Section', 'Skull Woods Second Section (Drop)', 'Skull Woods Final Section (Mothula)', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)'], ItemFactory('Big Key (Skull Woods)', player), ItemFactory(['Small Key (Skull Woods)'] * 2, player), ItemFactory(['Map (Skull Woods)', 'Compass (Skull Woods)'], player))
+    SW = make_dungeon('Skull Woods', 'Mothula', ['Skull Woods Final Section (Entrance)', 'Skull Woods First Section', 'Skull Woods Second Section', 'Skull Woods Second Section (Drop)', 'Skull Woods Final Section (Mothula)', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)'], ItemFactory('Big Key (Skull Woods)', player), ItemFactory(['Small Key (Skull Woods)'] * 3, player), ItemFactory(['Map (Skull Woods)', 'Compass (Skull Woods)'], player))
     SP = make_dungeon('Swamp Palace', 'Arrghus', ['Swamp Palace (Entrance)', 'Swamp Palace (First Room)', 'Swamp Palace (Starting Area)', 'Swamp Palace (Center)', 'Swamp Palace (North)'], ItemFactory('Big Key (Swamp Palace)', player), [ItemFactory('Small Key (Swamp Palace)', player)], ItemFactory(['Map (Swamp Palace)', 'Compass (Swamp Palace)'], player))
     IP = make_dungeon('Ice Palace', 'Kholdstare', ['Ice Palace (Entrance)', 'Ice Palace (Main)', 'Ice Palace (East)', 'Ice Palace (East Top)', 'Ice Palace (Kholdstare)'], ItemFactory('Big Key (Ice Palace)', player), ItemFactory(['Small Key (Ice Palace)'] * 2, player), ItemFactory(['Map (Ice Palace)', 'Compass (Ice Palace)'], player))
     MM = make_dungeon('Misery Mire', 'Vitreous', ['Misery Mire (Entrance)', 'Misery Mire (Main)', 'Misery Mire (West)', 'Misery Mire (Final Area)', 'Misery Mire (Vitreous)'], ItemFactory('Big Key (Misery Mire)', player), ItemFactory(['Small Key (Misery Mire)'] * 3, player), ItemFactory(['Map (Misery Mire)', 'Compass (Misery Mire)'], player))
@@ -48,14 +48,12 @@ def fill_dungeons(world):
 
     for player in range(1, world.players + 1):
         if not world.retro[player] and world.logic == "noglitches" and not world.keyshuffle[player]:
+            skull_woods = world.get_dungeon('Skull Woods', player)
+            skull_woods.small_keys.pop()
             pinball_room = world.get_location('Skull Woods - Pinball Room', player)
             world.push_item(pinball_room, ItemFactory('Small Key (Skull Woods)', player), False)
             pinball_room.event = True
             pinball_room.locked = True
-        elif world.retro[player]:
-            world.itempool += [ItemFactory('Small Key (Universal)', player)]
-        else:
-            world.itempool += [ItemFactory('Small Key (Skull Woods)', player)]
 
     dungeons = [(list(dungeon.regions), dungeon.big_key, list(dungeon.small_keys), list(dungeon.dungeon_items)) for dungeon in world.dungeons]
 
@@ -129,15 +127,13 @@ def fill_dungeons_restrictive(world, shuffled_locations):
 
     for player in range(1, world.players + 1):
         if not world.retro[player] and world.logic == "noglitches" and not world.keyshuffle[player]:
+            skull_woods = world.get_dungeon('Skull Woods', player)
+            skull_woods.small_keys.pop()
             pinball_room = world.get_location('Skull Woods - Pinball Room', player)
             world.push_item(pinball_room, ItemFactory('Small Key (Skull Woods)', player), False)
             pinball_room.event = True
             pinball_room.locked = True
             shuffled_locations.remove(pinball_room)
-        elif world.retro[player]:
-            world.itempool += [ItemFactory('Small Key (Universal)', player)]
-        else:
-            world.itempool += [ItemFactory('Small Key (Skull Woods)', player)]
 
     # with shuffled dungeon items they are distributed as part of the normal item pool
     for item in world.get_items():
