@@ -21,6 +21,7 @@ description: Your Description Here # Used to describe your yaml. Useful if you h
 name: YourName # Your name in-game. Spaces and underscores will be replaced with dashes
 glitches_required: # Determine the logic required to complete the seed
   none: 1 # No glitches required
+  minor_glitches: 0 # put fake flipper into logic
   overworld_glitches: 0 # Assumes the player knows how to perform overworld glitches like fake flipper, water walk, etc
   no_logic: 0 # Items are places completely at random and with no regard for logic. Your fire rod could be on Trinexx
 item_placement: basic # This is based on Entrance Randomizer, which does not (yet?) support advanced

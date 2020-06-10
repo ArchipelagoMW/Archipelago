@@ -251,10 +251,11 @@ def roll_settings(weights):
         ret.name = handle_name(ret.name)
 
     glitches_required = get_choice('glitches_required', weights)
-    if glitches_required not in ['none', 'no_logic', 'overworld_glitches']:
+    if glitches_required not in ['none', 'no_logic', 'overworld_glitches', 'minor_glitches']:
         logging.warning("Only NMG, OWG and No Logic supported")
         glitches_required = 'none'
-    ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches'}[
+    ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches',
+                 'minor_glitches' : 'minorglitches'}[
         glitches_required]
     ret.progression_balancing = get_choice('progression_balancing',
                                            weights) if 'progression_balancing' in weights else True
