@@ -649,8 +649,9 @@ class ClientMessageProcessor(CommandProcessor):
 
     @mark_raw
     def _cmd_alias(self, alias_name: str = ""):
+        """Set your alias to the passed name."""
         if alias_name:
-            alias_name = alias_name[:15].strip()
+            alias_name = alias_name[:16].strip()
             self.ctx.name_aliases[self.client.team, self.client.slot] = alias_name
             self.output(f"Hello, {alias_name}")
             update_aliases(self.ctx, self.client.team)
@@ -666,7 +667,7 @@ class ClientMessageProcessor(CommandProcessor):
 
     @mark_raw
     def _cmd_getitem(self, item_name: str) -> bool:
-        """Cheat in an item"""
+        """Cheat in an item, if it is enabled on this server"""
         if self.ctx.item_cheat:
             item_name, usable, response = get_intended_text(item_name, Items.item_table.keys())
             if usable:
@@ -914,6 +915,7 @@ class ServerCommandProcessor(CommandProcessor):
 
     @mark_raw
     def _cmd_alias(self, player_name_then_alias_name):
+        """Set a player's alias, by listing their base name and then their intended alias."""
         player_name, alias_name = player_name_then_alias_name.split(" ", 1)
         player_name, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
