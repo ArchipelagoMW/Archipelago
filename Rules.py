@@ -39,6 +39,8 @@ def set_rules(world, player):
         overworld_glitches_rules(world, player)
     elif world.logic[player] == 'minorglitches':
         logging.getLogger('').info('Minor Glitches may be buggy still. No guarantee for proper logic checks.')
+        no_glitches_rules(world, player)
+        fake_flipper_rules(world, player)
     else:
         raise NotImplementedError('Not implemented yet')
 
