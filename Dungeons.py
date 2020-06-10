@@ -52,11 +52,10 @@ def fill_dungeons(world):
             world.push_item(pinball_room, ItemFactory('Small Key (Skull Woods)', player), False)
             pinball_room.event = True
             pinball_room.locked = True
+        elif world.retro[player]:
+            world.itempool += [ItemFactory('Small Key (Universal)', player)]
         else:
-            if not world.retro[player]:
-                world.itempool += [ItemFactory('Small Key (Skull Woods)', player)]
-            else:
-                world.itempool += [ItemFactory('Small Key (Universal)', player)]
+            world.itempool += [ItemFactory('Small Key (Skull Woods)', player)]
 
     dungeons = [(list(dungeon.regions), dungeon.big_key, list(dungeon.small_keys), list(dungeon.dungeon_items)) for dungeon in world.dungeons]
 
@@ -135,11 +134,10 @@ def fill_dungeons_restrictive(world, shuffled_locations):
             pinball_room.event = True
             pinball_room.locked = True
             shuffled_locations.remove(pinball_room)
+        elif world.retro[player]:
+            world.itempool += [ItemFactory('Small Key (Universal)', player)]
         else:
-            if not world.retro[player]:
-                world.itempool += [ItemFactory('Small Key (Skull Woods)', player)]
-            else:
-                world.itempool += [ItemFactory('Small Key (Universal)', player)]
+            world.itempool += [ItemFactory('Small Key (Skull Woods)', player)]
 
     # with shuffled dungeon items they are distributed as part of the normal item pool
     for item in world.get_items():
