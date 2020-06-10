@@ -118,8 +118,8 @@ if __name__ == "__main__":
                 seedname = segment
                 break
 
-        multidataname = f"ER_{seedname}_multidata"
-        spoilername = f"ER_{seedname}_Spoiler.txt"
+        multidataname = f"BM_{seedname}.multidata"
+        spoilername = f"BM_{seedname}_Spoiler.txt"
         romfilename = ""
 
         if player_name:

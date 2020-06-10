@@ -62,6 +62,11 @@ Root: HKCR; Subkey: "{#MyAppName}patch";                     ValueData: "Berserk
 Root: HKCR; Subkey: "{#MyAppName}patch\DefaultIcon";         ValueData: "{app}\{#MyAppExeName},0";                           ValueType: string;  ValueName: ""
 Root: HKCR; Subkey: "{#MyAppName}patch\shell\open\command";  ValueData: """{app}\{#MyAppExeName}"" ""%1""";                  ValueType: string;  ValueName: ""
 
+Root: HKCR; Subkey: ".multidata";                                ValueData: "{#MyAppName}multidata";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: "{#MyAppName}multidata";                     ValueData: "Berserker's Multiworld Server Data";       Flags: uninsdeletekey;   ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: "{#MyAppName}multidata\DefaultIcon";         ValueData: "{app}\BerserkerMultiServer.exe,0";                           ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: "{#MyAppName}multidata\shell\open\command";  ValueData: """{app}\BerserkerMultiServer.exe"" --multidata ""%1""";                  ValueType: string;  ValueName: ""
+
 
 
 [Code]

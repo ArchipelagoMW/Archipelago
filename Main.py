@@ -152,7 +152,7 @@ def main(args, seed=None):
 
     logger.info('Patching ROM.')
 
-    outfilebase = 'ER_%s' % (args.outputname if args.outputname else world.seed)
+    outfilebase = 'BM_%s' % (args.outputname if args.outputname else world.seed)
 
     rom_names = []
     jsonout = {}
@@ -269,7 +269,7 @@ def main(args, seed=None):
         if args.jsonout:
             jsonout["multidata"] = list(multidata)
         else:
-            with open(output_path('%s_multidata' % outfilebase), 'wb') as f:
+            with open(output_path('%s.multidata' % outfilebase), 'wb') as f:
                 f.write(multidata)
 
     if not args.skip_playthrough:

@@ -1065,7 +1065,7 @@ async def main(args: argparse.Namespace):
             import tkinter.filedialog
             root = tkinter.Tk()
             root.withdraw()
-            data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*multidata"),))
+            data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.multidata"),))
 
         ctx.load(data_filename)
 
