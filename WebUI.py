@@ -119,7 +119,15 @@ class WaitingForUiException(Exception):
 
 webthread = None
 PORT = 5050
-Handler = partial(http.server.SimpleHTTPRequestHandler,
+class RequestHandler(http.server.SimpleHTTPRequestHandler):
+    def log_request(self, code='-', size='-'):
+        pass
+    def log_message(self, format, *args):
+        pass
+    def log_date_time_string(self):
+        pass
+
+Handler = partial(RequestHandler,
                   directory=Utils.local_path(os.path.join("data", "web", "public")))
 
 
