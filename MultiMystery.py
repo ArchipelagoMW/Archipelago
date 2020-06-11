@@ -156,7 +156,7 @@ if __name__ == "__main__":
                 print(f"Removed {file} which is now present in the zipfile")
 
 
-            zipname = os.path.join(output_path, f"ER_{seedname}.{typical_zip_ending}")
+            zipname = os.path.join(output_path, f"BM_{seedname}.{typical_zip_ending}")
 
             print(f"Creating zipfile {zipname}")
             ipv4 = (host if host else get_public_ipv4()) + ":" + str(port)
