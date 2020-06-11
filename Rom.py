@@ -46,6 +46,10 @@ class LocalRom(object):
         with open(file, 'wb') as outfile:
             outfile.write(self.buffer)
 
+    def read_from_file(self, file):
+        with open(file, 'rb') as stream:
+            self.buffer = bytearray(stream.read())
+
     @staticmethod
     def fromJsonRom(rom, file, rom_size=0x200000):
         ret = LocalRom(file, True, rom.name, rom.hash)
@@ -140,12 +144,9 @@ def read_rom(stream) -> bytearray:
     return buffer
 
 def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, random_sprite_on_hit):
-    baserom_path = os.path.abspath(baserom_path)
-    basepatch_path = os.path.abspath(local_path('data/base2current.json'))
-    enemizer_basepatch_path = os.path.join(os.path.dirname(enemizercli), "enemizerBasePatch.json")
-    randopatch_path = os.path.abspath(output_path(f'enemizer_randopatch_{player}.json'))
+    randopatch_path = os.path.abspath(output_path(f'enemizer_randopatch_{player}.sfc'))
     options_path = os.path.abspath(output_path(f'enemizer_options_{player}.json'))
-    enemizer_output_path = os.path.abspath(output_path(f'enemizer_output_{player}.json'))
+    enemizer_output_path = os.path.abspath(output_path(f'enemizer_output_{player}.sfc'))
 
     # write options file for enemizer
     options = {
@@ -237,21 +238,14 @@ def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, r
         json.dump(options, f)
 
     subprocess.check_call([os.path.abspath(enemizercli),
-                           '--rom', baserom_path,
+                           '--rom', randopatch_path,
                            '--seed', str(world.rom_seeds[player]),
-                           '--base', basepatch_path,
-                           '--randomizer', randopatch_path,
+                           '--binary',
                            '--enemizer', options_path,
                            '--output', enemizer_output_path],
                           cwd=os.path.dirname(enemizercli), stdout=subprocess.DEVNULL)
-
-    with open(enemizer_basepatch_path, 'r') as f:
-        for patch in json.load(f):
-            rom.write_bytes(patch["address"], patch["patchData"])
-
-    with open(enemizer_output_path, 'r') as f:
-        for patch in json.load(f):
-            rom.write_bytes(patch["address"], patch["patchData"])
+    rom.read_from_file(enemizer_output_path)
+    os.remove(enemizer_output_path)
 
     if random_sprite_on_hit:
         _populate_sprite_table()
@@ -267,7 +261,7 @@ def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, r
                 rom.write_bytes(0x307000 + (i * 0x8000), sprite.palette)
                 rom.write_bytes(0x307078 + (i * 0x8000), sprite.glove_palette)
 
-    for used in (randopatch_path, options_path, enemizer_output_path):
+    for used in (randopatch_path, options_path):
         try:
             os.remove(used)
         except OSError:

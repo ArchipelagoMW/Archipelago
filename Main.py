@@ -169,7 +169,6 @@ def main(args, seed=None):
         if use_enemizer:
             patch_enemizer(world, player, rom, args.rom, args.enemizercli, args.shufflepots[player],
                            sprite_random_on_hit)
-            rom = LocalRom.fromJsonRom(rom, args.rom, 0x400000)
 
         if args.race:
             patch_race_rom(rom)
