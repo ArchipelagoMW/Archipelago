@@ -82,7 +82,7 @@ def parse_arguments(argv, no_defaults=False):
                                             20 of them to beat the game.       
                              ''')
     parser.add_argument('--triforce_pieces_required', default=defval(20),
-                        type=lambda value: min(max(int(value), 1), 30),
+                        type=lambda value: min(max(int(value), 1), 112),
                         help='''Set Triforce Pieces required to win a Triforce Hunt''')
     parser.add_argument('--difficulty', default=defval('normal'), const='normal', nargs='?',
                         choices=['normal', 'hard', 'expert'],

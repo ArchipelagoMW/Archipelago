@@ -256,7 +256,15 @@ def generate_itempool(world, player):
             return item if not choice else ItemFactory("Bee Trap", player) if choice == 'trap' else ItemFactory("Bee", player)
         return item
 
-    world.itempool += [beemizer(item) for item in items]
+    progressionitems = [item for item in items if item.advancement or item.priority or item.type]
+    nonprogressionitems = [beemizer(item) for item in items if not item.advancement and not item.priority and not item.type]
+    random.shuffle(nonprogressionitems)
+
+    if treasure_hunt_count and treasure_hunt_count > 30:
+        progressionitems += [ItemFactory("Triforce Piece", player)] * (treasure_hunt_count - 30)
+        nonprogressionitems = nonprogressionitems[(treasure_hunt_count-30):]
+
+    world.itempool += progressionitems + nonprogressionitems
 
     # shuffle medallions
     mm_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
