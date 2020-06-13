@@ -28,6 +28,7 @@ module.exports = {
     "react/destructuring-assignment": 0,
     "react/jsx-curly-spacing": [2, { "when": "always" }],
     "react/prop-types": 0,
+    "react/no-access-state-in-setstate": 0,
     "react/button-has-type": 0,
     "max-len": [2, { code: 120 }],
     "operator-linebreak": [2, "after"],

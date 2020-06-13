@@ -42,7 +42,6 @@ class WebUI extends Component {
     this.props.appendMonitorMessage(MonitorTools.createTextDiv(
       `Attempting to connect to MultiClient (attempt ${this.state.connectionAttempts + 1})...`,
     ));
-    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ connectionAttempts: this.state.connectionAttempts + 1 }, () => {
       if (this.state.connectionAttempts >= 20) {
         this.props.appendMonitorMessage(MonitorTools.createTextDiv(
@@ -90,7 +89,6 @@ class WebUI extends Component {
         this.props.appendMonitorMessage(MonitorTools.createTextDiv('Connected to MultiClient.'));
         this.setState({ connectionAttempts: 0 });
       };
-      this.setState({ connectionInProgress: false });
     });
   };
 
