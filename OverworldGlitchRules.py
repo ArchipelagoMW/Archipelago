@@ -92,6 +92,37 @@ def get_superbunny_accessible_locations():
         yield location
 
 
+def get_non_mandatory_exits(inverted):
+    """
+    Entrances that can be reached with full equipment using overworld glitches and don't need to be an exit.
+    The following are still be mandatory exits:
+
+    Open:
+    Turtle Rock Isolated Ledge Entrance
+    Skull Woods Second Section Door (West) (or Skull Woods Final Section)
+
+    Inverted:
+    Two Brothers House (West)
+    Desert Palace Entrance (East)
+    """
+
+    yield 'Bumper Cave (Top)'
+    yield 'Death Mountain Return Cave (West)'
+    yield 'Hookshot Cave Back Entrance'
+
+    if inverted:
+        yield 'Desert Palace Entrance (North)'
+        yield 'Desert Palace Entrance (West)'
+        yield 'Inverted Ganons Tower'
+        yield 'Hyrule Castle Entrance (West)'
+        yield 'Hyrule Castle Entrance (East)'
+    else:
+        yield 'Dark Death Mountain Ledge (West)'
+        yield 'Dark Death Mountain Ledge (East)'
+        yield 'Mimic Cave'
+        yield 'Desert Palace Entrance (East)'
+
+
 def get_boots_clip_exits_lw(inverted = False):
     """
     Special Light World region exits that require boots clips.
