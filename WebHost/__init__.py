@@ -49,7 +49,7 @@ class Multiworld():
 
     def start(self):
         if self.process and self.process.is_alive():
-            return
+            return False
         logging.info(f"Spinning up {self.multidata}")
         self.process = multiprocessing.Process(group=None, target=run_server_process,
                                                args=(self.port, self.multidata),
@@ -82,15 +82,7 @@ def upload_multidata():
             file.save(os.path.join(multidata_folder, filename))
             return redirect(url_for('host_multidata',
                                     filename=filename))
-    return '''
-    <!doctype html>
-    <title>Upload Multidata</title>
-    <h1>Upload Multidata</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
+    return render_template("upload_multidata.html")
 
 
 portlock = threading.Lock()
@@ -147,13 +139,13 @@ def run_server_process(port: int, multidata: str):
         ctx = Context("", port, "", 1, 1000,
                       True, "enabled", "goal")
         ctx.load(multidata, True)
+        ctx.auto_shutdown = 24 * 60 * 60  # 24 hours
         ctx.init_save()
 
         ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ping_timeout=None,
                                       ping_interval=None)
 
-        logging.info('Hosting game at %s:%d (%s)' % (name, ctx.port,
-                                                     'No password' if not ctx.password else 'Password: %s' % ctx.password))
+        logging.info(f'Hosting game at {name}:{ctx.port} (Password: {bool(ctx.password)})')
         await ctx.server
         while ctx.running:
             await asyncio.sleep(1)

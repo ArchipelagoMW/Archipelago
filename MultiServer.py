@@ -57,7 +57,7 @@ class Client(Endpoint):
 
 class Context(Node):
     def __init__(self, host: str, port: int, password: str, location_check_points: int, hint_cost: int,
-                 item_cheat: bool, forfeit_mode: str = "disabled", remaining_mode: str = "disabled"):
+                 item_cheat: bool, forfeit_mode: str = "disabled", remaining_mode: str = "disabled", auto_shutdown=0):
         super(Context, self).__init__()
         self.data_filename = None
         self.save_filename = None
@@ -88,7 +88,9 @@ class Context(Node):
             typing.Tuple[int, int], datetime.datetime] = {}  # datetime of last connection
         self.client_game_state: typing.Dict[typing.Tuple[int, int], int] = collections.defaultdict(int)
         self.er_hint_data: typing.Dict[int, typing.Dict[int, str]] = {}
+        self.auto_shutdown = 0
         self.commandprocessor = ServerCommandProcessor(self)
+        self.embedded_blacklist = {"host", "port"}
 
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
         with open(multidatapath, 'rb') as f:
@@ -111,10 +113,10 @@ class Context(Node):
             self._set_options(server_options)
 
     def _set_options(self, server_options: dict):
-        blacklist = {"host", "port"}
+
         sentinel = object()
         for key, value in server_options.items():
-            if key not in blacklist:
+            if key not in self.blacklist:
                 current = getattr(self, key, sentinel)
                 if current is not sentinel:
                     logging.debug(f"Setting server option {key} to {value} from supplied multidata")
@@ -1061,6 +1063,9 @@ def parse_args() -> argparse.Namespace:
                              disabled: !remaining is never available
                              goal:     !remaining can be used after goal completion
                              ''')
+    parser.add_argument('--auto_shutdown', default=defaults["auto_shutdown"], type=int,
+                        help="automatically shut down the server after this many minutes without new location checks. "
+                             "0 to keep running. Not yet implemented.")
     parser.add_argument('--use_embedded_options', action="store_true",
                         help='retrieve forfeit, remaining and hint options from the multidata file,'
                              ' instead of host.yaml')
@@ -1068,11 +1073,15 @@ def parse_args() -> argparse.Namespace:
     return args
 
 
+async def auto_shutdown(ctx):
+    # to be implemented soon
+    pass
+
 async def main(args: argparse.Namespace):
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
 
     ctx = Context(args.host, args.port, args.password, args.location_check_points, args.hint_cost,
-                  not args.disable_item_cheat, args.forfeit_mode, args.remaining_mode)
+                  not args.disable_item_cheat, args.forfeit_mode, args.remaining_mode, args.auto_shutdown)
 
     data_filename = args.multidata
 

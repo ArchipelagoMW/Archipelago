@@ -13,7 +13,7 @@ Hosting {{ filename }} at {{ name }}:{{ port }}
 
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            myFunction(this.responseText);
+            document.getElementById("logger").innerText = this.responseText;
         }
     };
 
@@ -22,10 +22,6 @@ Hosting {{ filename }} at {{ name }}:{{ port }}
         xmlhttp.send();
     }
 
-
-    function myFunction(text) {
-        document.getElementById("logger").innerText = text;
-    }
 
     request_new();
     window.setInterval(request_new, 3000);
