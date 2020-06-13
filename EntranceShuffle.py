@@ -1910,15 +1910,25 @@ def connect_random(world, exitlist, targetlist, player, two_way=False):
 
 
 def connect_mandatory_exits(world, entrances, caves, must_be_exits, player):
-    """This works inplace"""
-    random.shuffle(entrances)
-    random.shuffle(caves)
+
     # Keeps track of entrances that cannot be used to access each exit / cave
     if world.mode[player] == 'inverted':
         invalid_connections = Inverted_Must_Exit_Invalid_Connections.copy()
     else:
         invalid_connections = Must_Exit_Invalid_Connections.copy()
     invalid_cave_connections = defaultdict(set)
+
+    if world.logic[player] in ['owglitches', 'nologic']:
+        import OverworldGlitchRules
+        for entrance in OverworldGlitchRules.get_non_mandatory_exits(world.mode[player] == 'inverted'):
+            invalid_connections[entrance] = set()
+            if entrance in must_be_exits:
+                must_be_exits.remove(entrance)
+                entrances.append(entrance)
+
+    """This works inplace"""
+    random.shuffle(entrances)
+    random.shuffle(caves)
 
     # Handle inverted Aga Tower - if it depends on connections, then so does Hyrule Castle Ledge
     if world.mode[player] == 'inverted':
