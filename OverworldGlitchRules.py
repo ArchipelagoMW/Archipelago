@@ -120,7 +120,7 @@ def get_boots_clip_exits_lw(inverted = False):
         yield ('Cave 45 Clip Spot', 'Light World', 'Cave 45 Ledge')
 
 
-def get_boots_clip_exits_dw(inverted = False):
+def get_boots_clip_exits_dw(inverted, player):
     """
     Special Dark World region exits that require boots clips.
     """
@@ -139,6 +139,7 @@ def get_boots_clip_exits_dw(inverted = False):
         yield ('Ganons Tower Ascent', 'Dark Death Mountain (West Bottom)', 'Dark Death Mountain (Top)')  # This only gets you to the GT entrance
         yield ('Dark Death Mountain Glitched Bridge', 'Dark Death Mountain (West Bottom)', 'Dark Death Mountain (Top)')
         yield ('Turtle Rock (Top) Clip Spot', 'Dark Death Mountain (Top)', 'Turtle Rock (Top)')
+        yield ('Ice Palace Clip', 'South Dark World', 'Dark Lake Hylia Central Island', lambda state: state.can_boots_clip_dw(player) and state.has('Flippers', player))
     else:
         yield ('Dark Desert Teleporter Clip Spot', 'Dark Desert', 'Dark Desert Ledge')
 
@@ -152,26 +153,33 @@ def get_glitched_speed_drops_dw(inverted = False):
 
 def get_mirror_clip_spots_dw():
     """
-    Mirror shenanigans that are in logic even if the player is a bunny.
+    Out of bounds transitions using the mirror
     """
-    yield ('Dark Death Mountain Offset Mirror', 'Dark Death Mountain (West Bottom)', 'East Dark World')
     yield ('Dark Death Mountain Bunny Descent Mirror Spot', 'Dark Death Mountain (West Bottom)', 'Dark Death Mountain Bunny Descent Area')
     yield ('West Dark World Bunny Descent', 'Dark Death Mountain Bunny Descent Area', 'West Dark World')
     yield ('Dark Death Mountain (East Bottom) Jump', 'Dark Death Mountain Bunny Descent Area', 'Dark Death Mountain (East Bottom)')
+    yield ('Desert East Mirror Clip', 'Dark Desert', 'Desert Palace Lone Stairs')
 
 
-def get_mirror_clip_spots_lw():
+def get_mirror_offset_spots_dw():
     """
-    Inverted mirror shenanigans in logic even if the player is a bunny.
+    Mirror shenanigans placing a mirror portal with a broken camera
     """
-    yield ('Death Mountain Bunny Descent Mirror Spot', 'Death Mountain', 'Death Mountain Bunny Descent Area')
-    yield ('Light World Bunny Descent', 'Death Mountain Bunny Descent Area', 'Light World')
-    yield ('East Death Mountain (Bottom) Jump', 'Death Mountain Bunny Descent Area', 'East Death Mountain (Bottom)')
+    yield ('Dark Death Mountain Offset Mirror', 'Dark Death Mountain (West Bottom)', 'East Dark World')
+
+
+def get_mirror_offset_spots_lw(player):
+    """
+    Mirror shenanigans placing a mirror portal with a broken camera
+    """
+    yield ('Death Mountain Offset Mirror', 'Death Mountain', 'Light World')
+    yield ('Death Mountain Offset Mirror (Houlihan Exit)', 'Death Mountain', 'Hyrule Castle Ledge', lambda state: state.has_Mirror(player) and state.can_boots_clip_dw(player) and state.has_Pearl(player))
+
 
 
 def get_invalid_bunny_revival_dungeons():
     """
-    Dungeon regions that can't be bunny revived from.
+    Dungeon regions that can't be bunny revived from without superbunny state.
     """
     yield 'Tower of Hera (Bottom)'
     yield 'Swamp Palace (Entrance)'
@@ -183,10 +191,7 @@ def overworld_glitches_rules(world, player):
 
     # Boots-accessible locations.
     create_owg_connections(player, world, get_boots_clip_exits_lw(world.mode[player] == 'inverted'), lambda state: state.can_boots_clip_lw(player))
-    create_owg_connections(player, world, get_boots_clip_exits_dw(world.mode[player] == 'inverted'), lambda state: state.can_boots_clip_dw(player))
-
-    if world.mode[player] != 'inverted':
-        create_owg_connections(player, world, [('Ice Palace Clip', 'South Dark World', 'Dark Lake Hylia Central Island')], lambda state: state.can_boots_clip_dw(player) and state.has('Flippers', player))
+    create_owg_connections(player, world, get_boots_clip_exits_dw(world.mode[player] == 'inverted', player), lambda state: state.can_boots_clip_dw(player))
 
     # Glitched speed drops.
     create_owg_connections(player, world, get_glitched_speed_drops_dw(world.mode[player] == 'inverted'), lambda state: state.can_get_glitched_speed_dw(player))
@@ -197,8 +202,9 @@ def overworld_glitches_rules(world, player):
     # Mirror clip spots.
     if world.mode[player] != 'inverted':
         create_owg_connections(player, world, get_mirror_clip_spots_dw(), lambda state: state.has_Mirror(player))
+        create_owg_connections(player, world, get_mirror_offset_spots_dw(), lambda state: state.has_Mirror(player) and state.can_boots_clip_lw(player))
     else:
-        create_owg_connections(player, world, get_mirror_clip_spots_lw(), lambda state: state.has_Mirror(player))
+        create_owg_connections(player, world, get_mirror_offset_spots_lw(player), lambda state: state.has_Mirror(player) and state.can_boots_clip_dw(player))
 
     # Regions that require the boots and some other stuff.
     if world.mode[player] != 'inverted':
@@ -220,11 +226,12 @@ def add_alternate_rule(entrance, rule):
     entrance.access_rule = lambda state: old_rule(state) or rule(state)
 
 
-def create_owg_connections(player, world, connections, rule):
-    for entrance, parent_region, target_region in connections:
+def create_owg_connections(player, world, connections, default_rule):
+    for entrance, parent_region, target_region, *rule_override in connections:
         parent = world.get_region(parent_region, player)
         target = world.get_region(target_region, player)
         connection = Entrance(player, entrance, parent)
         parent.exits.append(connection)
         connection.connect(target)
+        rule = rule_override[0] if len(rule_override) > 0 else default_rule
         connection.access_rule = rule
