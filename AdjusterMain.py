@@ -13,9 +13,6 @@ def adjust(args):
 
     if os.stat(args.rom).st_size in (0x200000, 0x400000) and os.path.splitext(args.rom)[-1].lower() == '.sfc':
         rom = LocalRom(args.rom, patch=False)
-        if os.path.isfile(args.baserom):
-            baserom = LocalRom(args.baserom, patch=True)
-            rom.orig_buffer = baserom.orig_buffer
     else:
         raise RuntimeError(
             'Provided Rom is not a valid Link to the Past Randomizer Rom. Please provide one for adjusting.')

@@ -280,10 +280,6 @@ def parse_arguments(argv, no_defaults=False):
                              ''')
     parser.add_argument('--suppress_rom', help='Do not create an output rom file.', action='store_true')
     parser.add_argument('--gui', help='Launch the GUI', action='store_true')
-    parser.add_argument('--jsonout', action='store_true', help='''\
-                            Output .json patch to stdout instead of a patched rom. Used
-                            for VT site integration, do not use otherwise.
-                            ''')
     parser.add_argument('--skip_progression_balancing', action='store_true', default=defval(False),
                         help="Skip Multiworld Progression balancing.")
     parser.add_argument('--skip_playthrough', action='store_true', default=defval(False))
@@ -302,8 +298,7 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--race', default=defval(False), action='store_true')
     parser.add_argument('--outputname')
     parser.add_argument('--create_diff', default=defval(False), action='store_true', help='''\
-    create a binary patch file from which the randomized rom can be recreated using MultiClient.
-    Does not work with jsonout.''')
+    create a binary patch file from which the randomized rom can be recreated using MultiClient.''')
     parser.add_argument('--disable_glitch_boots', default=defval(False), action='store_true', help='''\
     turns off starting with Pegasus Boots in glitched modes.''')
 
@@ -357,15 +352,14 @@ def start():
         sys.exit(0)
 
     # ToDo: Validate files further than mere existance
-    if not args.jsonout and not os.path.isfile(args.rom):
-        input('Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
+    if not os.path.isfile(args.rom):
+        input(
+            'Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
         sys.exit(1)
-    if any([sprite is not None and not os.path.isfile(sprite) and not get_sprite_from_name(sprite) for sprite in args.sprite.values()]):
-        if not args.jsonout:
-            input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
-            sys.exit(1)
-        else:
-            raise IOError('Cannot find sprite file at %s' % args.sprite)
+    if any([sprite is not None and not os.path.isfile(sprite) and not get_sprite_from_name(sprite) for sprite in
+            args.sprite.values()]):
+        input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
+        sys.exit(1)
 
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[args.loglevel]

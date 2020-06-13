@@ -24,53 +24,6 @@ from EntranceShuffle import door_addresses
 JAP10HASH = '03a63945398191337e896e5771f77173'
 RANDOMIZERBASEHASH = 'aec17dd8b3c76c16d0b0311c36eb1c00'
 
-
-class JsonRom(object):
-
-    def __init__(self, name=None, hash=None):
-        self.name = name
-        self.hash = hash
-        self.orig_buffer = None
-        self.patches = {}
-        self.addresses = []
-
-    def write_byte(self, address, value):
-        self.write_bytes(address, [value])
-
-    def write_bytes(self, startaddress, values):
-        if not values:
-            return
-        values = list(values)
-
-        pos = bisect.bisect_right(self.addresses, startaddress)
-        intervalstart = self.addresses[pos-1] if pos else None
-        intervalpatch = self.patches[str(intervalstart)] if pos else None
-
-        if pos and startaddress <= intervalstart + len(intervalpatch): # merge with previous segment
-            offset = startaddress - intervalstart
-            intervalpatch[offset:offset+len(values)] = values
-            startaddress = intervalstart
-            values = intervalpatch
-        else: # new segment
-            self.addresses.insert(pos, startaddress)
-            self.patches[str(startaddress)] = values
-            pos = pos + 1
-
-        while pos < len(self.addresses) and self.addresses[pos] <= startaddress + len(values): # merge the next segment into this one
-            intervalstart = self.addresses[pos]
-            values.extend(self.patches[str(intervalstart)][startaddress+len(values)-intervalstart:])
-            del self.patches[str(intervalstart)]
-            del self.addresses[pos]
-
-    def write_to_file(self, file):
-        with open(file, 'w') as stream:
-            json.dump([self.patches], stream)
-
-    def get_hash(self):
-        h = hashlib.md5()
-        h.update(json.dumps([self.patches]).encode('utf-8'))
-        return h.hexdigest()
-
 class LocalRom(object):
 
     def __init__(self, file, patch=True, name=None, hash=None):
@@ -93,6 +46,10 @@ class LocalRom(object):
         with open(file, 'wb') as outfile:
             outfile.write(self.buffer)
 
+    def read_from_file(self, file):
+        with open(file, 'rb') as stream:
+            self.buffer = bytearray(stream.read())
+
     @staticmethod
     def fromJsonRom(rom, file, rom_size=0x200000):
         ret = LocalRom(file, True, rom.name, rom.hash)
@@ -101,12 +58,37 @@ class LocalRom(object):
             ret.write_bytes(int(address), values)
         return ret
 
+    @staticmethod
+    def verify(buffer, expected=RANDOMIZERBASEHASH):
+        buffermd5 = hashlib.md5()
+        buffermd5.update(buffer)
+        return expected == buffermd5.hexdigest()
+
     def patch_base_rom(self):
+        from Patch import create_patch_file, create_rom_bytes
+
+        if os.path.isfile(local_path('data/baserom.sfc')):
+            with open(local_path('data/baserom.sfc'), 'rb') as stream:
+                buffer = bytearray(stream.read())
+
+            if self.verify(buffer):
+                self.buffer = buffer
+                if not os.path.exists(local_path('data/baserom.bmbp')):
+                    create_patch_file(local_path('data/baserom.sfc'))
+                return
+
+        if os.path.isfile(local_path('data/baserom.bmbp')):
+            _, target, buffer = create_rom_bytes(local_path('data/baserom.bmbp'))
+            if self.verify(buffer):
+                self.buffer = bytearray(buffer)
+                with open(local_path('data/baserom.sfc'), 'wb') as stream:
+                    stream.write(buffer)
+                return
+
         # verify correct checksum of baserom
-        basemd5 = hashlib.md5()
-        basemd5.update(self.buffer)
-        if JAP10HASH != basemd5.hexdigest():
-            logging.getLogger('').warning('Supplied Base Rom does not match known MD5 for JAP(1.0) release. Will try to patch anyway.')
+        if not self.verify(self.buffer, JAP10HASH):
+            logging.getLogger('').warning(
+                'Supplied Base Rom does not match known MD5 for JAP(1.0) release. Will try to patch anyway.')
 
         # extend to 2MB
         self.buffer.extend(bytearray([0x00]) * (0x200000 - len(self.buffer)))
@@ -120,10 +102,14 @@ class LocalRom(object):
                     self.write_bytes(int(baseaddress), values)
 
         # verify md5
-        patchedmd5 = hashlib.md5()
-        patchedmd5.update(self.buffer)
-        if patchedmd5.hexdigest() not in [RANDOMIZERBASEHASH]:
-            raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
+        if self.verify(self.buffer):
+            with open(local_path('data/baserom.sfc'), 'wb') as stream:
+                stream.write(self.buffer)
+            create_patch_file(local_path('data/baserom.sfc'))
+            os.remove(local_path('data/base2current.json'))
+        else:
+            raise RuntimeError(
+                'Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
 
     def write_crc(self):
         crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
@@ -158,12 +144,9 @@ def read_rom(stream) -> bytearray:
     return buffer
 
 def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, random_sprite_on_hit):
-    baserom_path = os.path.abspath(baserom_path)
-    basepatch_path = os.path.abspath(local_path('data/base2current.json'))
-    enemizer_basepatch_path = os.path.join(os.path.dirname(enemizercli), "enemizerBasePatch.json")
-    randopatch_path = os.path.abspath(output_path(f'enemizer_randopatch_{player}.json'))
+    randopatch_path = os.path.abspath(output_path(f'enemizer_randopatch_{player}.sfc'))
     options_path = os.path.abspath(output_path(f'enemizer_options_{player}.json'))
-    enemizer_output_path = os.path.abspath(output_path(f'enemizer_output_{player}.json'))
+    enemizer_output_path = os.path.abspath(output_path(f'enemizer_output_{player}.sfc'))
 
     # write options file for enemizer
     options = {
@@ -255,21 +238,14 @@ def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, r
         json.dump(options, f)
 
     subprocess.check_call([os.path.abspath(enemizercli),
-                           '--rom', baserom_path,
+                           '--rom', randopatch_path,
                            '--seed', str(world.rom_seeds[player]),
-                           '--base', basepatch_path,
-                           '--randomizer', randopatch_path,
+                           '--binary',
                            '--enemizer', options_path,
                            '--output', enemizer_output_path],
                           cwd=os.path.dirname(enemizercli), stdout=subprocess.DEVNULL)
-
-    with open(enemizer_basepatch_path, 'r') as f:
-        for patch in json.load(f):
-            rom.write_bytes(patch["address"], patch["patchData"])
-
-    with open(enemizer_output_path, 'r') as f:
-        for patch in json.load(f):
-            rom.write_bytes(patch["address"], patch["patchData"])
+    rom.read_from_file(enemizer_output_path)
+    os.remove(enemizer_output_path)
 
     if random_sprite_on_hit:
         _populate_sprite_table()
@@ -285,7 +261,7 @@ def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, r
                 rom.write_bytes(0x307000 + (i * 0x8000), sprite.palette)
                 rom.write_bytes(0x307078 + (i * 0x8000), sprite.glove_palette)
 
-    for used in (randopatch_path, options_path, enemizer_output_path):
+    for used in (randopatch_path, options_path):
         try:
             os.remove(used)
         except OSError:

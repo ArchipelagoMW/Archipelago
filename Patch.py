@@ -57,16 +57,19 @@ def create_patch_file(rom_file_to_patch: str, server: str = "") -> str:
     write_lzma(bytes, target)
     return target
 
-
-def create_rom_file(patch_file: str) -> Tuple[dict, str]:
+def create_rom_bytes(patch_file: str) -> Tuple[dict, str, bytearray]:
     data = Utils.parse_yaml(lzma.decompress(load_bytes(patch_file)).decode("utf-8-sig"))
     patched_data = bsdiff4.patch(get_base_rom_bytes(), data["patch"])
     rom_hash = patched_data[int(0x7FC0):int(0x7FD5)]
     data["meta"]["hash"] = "".join(chr(x) for x in rom_hash)
     target = os.path.splitext(patch_file)[0] + ".sfc"
+    return data["meta"], target, patched_data
+
+def create_rom_file(patch_file: str) -> Tuple[dict, str]:
+    data, target, patched_data = create_rom_bytes(patch_file)
     with open(target, "wb") as f:
         f.write(patched_data)
-    return data["meta"], target
+    return data, target
 
 
 def update_patch_data(patch_data: bytes, server: str = "") -> bytes:
