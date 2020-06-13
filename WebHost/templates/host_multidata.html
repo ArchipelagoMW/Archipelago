@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Multiworld {{ filename }}</title>
+</head>
+<body>
+Hosting {{ filename }} at {{ name }}:{{ port }}
+<div id="logger"></div>
+<script>
+    var xmlhttp = new XMLHttpRequest();
+    var url = '{{ url_for('display_log', filename = filename) }}';
+
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            myFunction(this.responseText);
+        }
+    };
+
+    function request_new() {
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+
+    function myFunction(text) {
+        document.getElementById("logger").innerText = text;
+    }
+
+    request_new();
+    window.setInterval(request_new, 3000);
+</script>
+</body>
+</html>
