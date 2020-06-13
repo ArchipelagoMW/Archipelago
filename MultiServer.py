@@ -90,12 +90,12 @@ class Context(Node):
         self.er_hint_data: typing.Dict[int, typing.Dict[int, str]] = {}
         self.commandprocessor = ServerCommandProcessor(self)
 
-    def load(self, multidatapath: str):
+    def load(self, multidatapath: str, use_embedded_server_options: bool = False):
         with open(multidatapath, 'rb') as f:
-            self._load(f)
+            self._load(f, use_embedded_server_options)
         self.data_filename = multidatapath
 
-    def _load(self, fileobj):
+    def _load(self, fileobj, use_embedded_server_options: bool):
         jsonobj = json.loads(zlib.decompress(fileobj.read()).decode("utf-8-sig"))
         for team, names in enumerate(jsonobj['names']):
             for player, name in enumerate(names, 1):
@@ -106,8 +106,22 @@ class Context(Node):
         if "er_hint_data" in jsonobj:
             self.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
                                  for player, loc_data in jsonobj["er_hint_data"].items()}
+        if use_embedded_server_options:
+            server_options = jsonobj.get("server_options", {})
+            self._set_options(server_options)
 
-    def init_save(self, enabled: bool):
+    def _set_options(self, server_options: dict):
+        blacklist = {"host", "port"}
+        sentinel = object()
+        for key, value in server_options.items():
+            if key not in blacklist:
+                current = getattr(self, key, sentinel)
+                if current is not sentinel:
+                    logging.debug(f"Setting server option {key} to {value} from supplied multidata")
+                    setattr(self, key, value)
+        self.item_cheat = not server_options.get("disable_item_cheat", True)
+
+    def init_save(self, enabled: bool = True):
         self.saving = enabled
         if self.saving:
             if not self.save_filename:
@@ -1047,6 +1061,9 @@ def parse_args() -> argparse.Namespace:
                              disabled: !remaining is never available
                              goal:     !remaining can be used after goal completion
                              ''')
+    parser.add_argument('--use_embedded_options', action="store_true",
+                        help='retrieve forfeit, remaining and hint options from the multidata file,'
+                             ' instead of host.yaml')
     args = parser.parse_args()
     return args
 
@@ -1067,7 +1084,7 @@ async def main(args: argparse.Namespace):
             root.withdraw()
             data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.multidata"),))
 
-        ctx.load(data_filename)
+        ctx.load(data_filename, args.use_embedded_options)
 
     except Exception as e:
         logging.exception('Failed to read multiworld data (%s)' % e)
