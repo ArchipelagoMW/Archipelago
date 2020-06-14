@@ -86,8 +86,11 @@ def upload_multidata():
 
 
 def _read_log(path: str):
-    with open(path) as log:
-        yield from log
+    if os.path.exists(path):
+        with open(path) as log:
+            yield from log
+    else:
+        yield "Logfile does not exist. Likely a crash during spinup of multiworld instance."
 
 
 @app.route('/log/<filename>')
@@ -140,8 +143,7 @@ def run_server_process(multidata: str):
     if ".." not in sys.path:
         sys.path.append("..")
     from MultiServer import Context, server
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    asyncio.run(main())
 
 
 if __name__ == "__main__":
