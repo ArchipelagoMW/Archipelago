@@ -14,9 +14,8 @@ import websockets
 from flask import Flask, flash, request, redirect, url_for, render_template, Response, g
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = 'uploads'
-LOGS_FOLDER = 'logs'
-
+UPLOAD_FOLDER = os.path.relpath('uploads')
+LOGS_FOLDER = os.path.relpath('logs')
 multidata_folder = os.path.join(UPLOAD_FOLDER, "multidata")
 os.makedirs(multidata_folder, exist_ok=True)
 os.makedirs(LOGS_FOLDER, exist_ok=True)
@@ -90,11 +89,13 @@ def _read_log(path: str):
         with open(path) as log:
             yield from log
     else:
-        yield "Logfile does not exist. Likely a crash during spinup of multiworld instance."
+        yield f"Logfile {path} does not exist. " \
+              f"Likely a crash during spinup of multiworld instance or it is still spinning up."
 
 
 @app.route('/log/<filename>')
 def display_log(filename: str):
+    filename = secure_filename(filename)
     # noinspection PyTypeChecker
     return Response(_read_log(os.path.join("logs", filename + ".txt")), mimetype="text/plain;charset=UTF-8")
 
@@ -120,7 +121,6 @@ def run_server_process(multidata: str):
         logging.basicConfig(format='[%(asctime)s] %(message)s',
                             level=logging.INFO,
                             filename=os.path.join(LOGS_FOLDER, multidata + ".txt"))
-
         ctx = Context("", 0, "", 1, 1000,
                       True, "enabled", "goal")
         ctx.load(os.path.join(multidata_folder, multidata), True)
@@ -131,9 +131,12 @@ def run_server_process(multidata: str):
                                       ping_interval=None)
 
         await ctx.server
-        for socket in ctx.server.ws_server.sockets:
-            socketname = socket.getsockname()
-            logging.info(f'Hosting game at {socketname[0]}:{socketname[1]}')
+        for wssocket in ctx.server.ws_server.sockets:
+            socketname = wssocket.getsockname()
+            if wssocket.family == socket.AF_INET6:
+                logging.info(f'Hosting game at [{get_public_ipv6()}]:{socketname[1]}')
+            elif wssocket.family == socket.AF_INET:
+                logging.info(f'Hosting game at {get_public_ipv4()}:{socketname[1]}')
         while ctx.running:
             await asyncio.sleep(1)
         logging.info("Shutting down")
@@ -142,11 +145,14 @@ def run_server_process(multidata: str):
     if ".." not in sys.path:
         sys.path.append("..")
     from MultiServer import Context, server
+    from Utils import get_public_ipv4, get_public_ipv6
+    import socket
     asyncio.run(main())
 
 
 if __name__ == "__main__":
     multiprocessing.freeze_support()
+    multiprocessing.set_start_method('spawn')
     db.bind(**app.config["PONY"])
     db.generate_mapping(create_tables=True)
     app.run(debug=True)
