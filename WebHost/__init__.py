@@ -105,10 +105,9 @@ processstartlock = threading.Lock()
 @app.route('/hosted/<filename>')
 def host_multidata(filename: str):
     with db_session:
-        multidata = os.path.join(multidata_folder, filename)
-        multiworld = multiworlds.get(multidata, None)
+        multiworld = multiworlds.get(filename, None)
         if not multiworld:
-            multiworld = Multiworld(multidata)
+            multiworld = Multiworld(filename)
 
         with processstartlock:
             multiworld.start()
@@ -120,11 +119,11 @@ def run_server_process(multidata: str):
     async def main():
         logging.basicConfig(format='[%(asctime)s] %(message)s',
                             level=logging.INFO,
-                            filename=os.path.join(LOGS_FOLDER, os.path.split(multidata)[-1] + ".txt"))
+                            filename=os.path.join(LOGS_FOLDER, multidata + ".txt"))
 
         ctx = Context("", 0, "", 1, 1000,
                       True, "enabled", "goal")
-        ctx.load(multidata, True)
+        ctx.load(os.path.join(multidata_folder, multidata), True)
         ctx.auto_shutdown = 24 * 60 * 60  # 24 hours
         ctx.init_save()
 
