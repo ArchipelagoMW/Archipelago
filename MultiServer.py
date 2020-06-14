@@ -116,7 +116,7 @@ class Context(Node):
 
         sentinel = object()
         for key, value in server_options.items():
-            if key not in self.blacklist:
+            if key not in self.embedded_blacklist:
                 current = getattr(self, key, sentinel)
                 if current is not sentinel:
                     logging.debug(f"Setting server option {key} to {value} from supplied multidata")
