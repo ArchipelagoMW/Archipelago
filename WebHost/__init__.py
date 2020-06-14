@@ -1,3 +1,5 @@
+# module has yet to be made capable of running in multiple processes
+
 import os
 import logging
 import sys
@@ -5,13 +7,12 @@ import threading
 import typing
 import multiprocessing
 import functools
+from pony.flask import Pony
+from pony.orm import Database, Required, Optional, commit, select, db_session
 
 import websockets
-from flask import Flask, flash, request, redirect, url_for, render_template, Response
+from flask import Flask, flash, request, redirect, url_for, render_template, Response, g
 from werkzeug.utils import secure_filename
-
-if ".." not in sys.path:
-    sys.path.append("..")
 
 UPLOAD_FOLDER = 'uploads'
 LOGS_FOLDER = 'logs'
@@ -29,40 +30,39 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024  # 1 megabyte limit
 app.config["SECRET_KEY"] = os.urandom(32)
+app.config["PONY"] = {
+    'provider': 'sqlite',
+    'filename': 'db.db3',
+    'create_db': True
+}
+
+db = Database()
+
 name = "localhost"
 
-portrange = (49152, 65535)
-current_port = portrange[0]
-current_ports = {}
-current_multiworlds = {}
+multiworlds = {}
 
 
 class Multiworld():
-    def __init__(self, file: str):
-        self.port = get_next_port()
-        self.multidata = file
-
-        current_ports[self.port] = self
-        current_multiworlds[self.multidata] = self
-
+    def __init__(self, multidata: str):
+        self.multidata = multidata
         self.process: typing.Optional[multiprocessing.Process] = None
+        multiworlds[multidata] = self
 
     def start(self):
         if self.process and self.process.is_alive():
             return False
+
         logging.info(f"Spinning up {self.multidata}")
         self.process = multiprocessing.Process(group=None, target=run_server_process,
-                                               args=(self.port, self.multidata),
-                                               name="MultiHost" + str(self.port))
+                                               args=(self.multidata,),
+                                               name="MultiHost")
         self.process.start()
 
     def stop(self):
         if self.process:
             self.process.terminate()
             self.process = None
-
-        del (current_ports[self.port])
-        del (current_multiworlds[self.multidata])
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_multidata():
@@ -85,21 +85,6 @@ def upload_multidata():
     return render_template("upload_multidata.html")
 
 
-portlock = threading.Lock()
-
-
-def get_next_port() -> int:
-    global current_port
-    with portlock:
-        while current_port in current_ports:
-            if current_port >= portrange[1]:
-                current_port = portrange[0]
-            else:
-                current_port += 1
-
-        return current_port
-
-
 def _read_log(path: str):
     with open(path) as log:
         yield from log
@@ -115,43 +100,45 @@ processstartlock = threading.Lock()
 
 
 @app.route('/hosted/<filename>')
-def host_multidata(filename: str = None):
-    if not filename:
-        return redirect(url_for('upload_multidata'))
-    else:
+def host_multidata(filename: str):
+    with db_session:
         multidata = os.path.join(multidata_folder, filename)
-        if multidata in current_multiworlds:
-            multiworld = current_multiworlds[multidata]
-        else:
-            with processstartlock:
-                multiworld = Multiworld(multidata)
-                multiworld.start()
+        multiworld = multiworlds.get(multidata, None)
+        if not multiworld:
+            multiworld = Multiworld(multidata)
 
-        return render_template("host_multidata.html", filename=filename, port=multiworld.port, name=name)
+        with processstartlock:
+            multiworld.start()
+
+    return render_template("host_multidata.html", filename=filename)
 
 
-def run_server_process(port: int, multidata: str):
+def run_server_process(multidata: str):
     async def main():
         logging.basicConfig(format='[%(asctime)s] %(message)s',
                             level=logging.INFO,
                             filename=os.path.join(LOGS_FOLDER, os.path.split(multidata)[-1] + ".txt"))
 
-        ctx = Context("", port, "", 1, 1000,
+        ctx = Context("", 0, "", 1, 1000,
                       True, "enabled", "goal")
         ctx.load(multidata, True)
         ctx.auto_shutdown = 24 * 60 * 60  # 24 hours
         ctx.init_save()
 
-        ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ping_timeout=None,
+        ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ping_timeout=None,
                                       ping_interval=None)
 
-        logging.info(f'Hosting game at {name}:{ctx.port} (Password: {bool(ctx.password)})')
         await ctx.server
+        for socket in ctx.server.ws_server.sockets:
+            socketname = socket.getsockname()
+            logging.info(f'Hosting game at {socketname[0]}:{socketname[1]}')
         while ctx.running:
             await asyncio.sleep(1)
         logging.info("Shutting down")
 
     import asyncio
+    if ".." not in sys.path:
+        sys.path.append("..")
     from MultiServer import Context, server
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main())
@@ -159,4 +146,6 @@ def run_server_process(port: int, multidata: str):
 
 if __name__ == "__main__":
     multiprocessing.freeze_support()
-    app.run()
+    db.bind(**app.config["PONY"])
+    db.generate_mapping(create_tables=True)
+    app.run(debug=True)
