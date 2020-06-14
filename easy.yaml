@@ -182,16 +182,16 @@ linked_options:
       smallkey_shuffle: true
     percentage: 0 # set this to the percentage chance you want crosskeys
   - name: localcrosskeys
-      options: # these overwrite earlier options if the percentage chance triggers
-        entrance_shuffle: crossed
-        bigkey_shuffle: true
-        compass_shuffle: true
-        map_shuffle: true
-        smallkey_shuffle: true
-        local_items: #forces keys to be local to your own world
-          - "Small Keys"
-          - "Big Keys"
-      percentage: 0 # set this to the percentage chance you want local crosskeys
+    options: # these overwrite earlier options if the percentage chance triggers
+      entrance_shuffle: crossed
+      bigkey_shuffle: true
+      compass_shuffle: true
+      map_shuffle: true
+      smallkey_shuffle: true
+      local_items: #forces keys to be local to your own world
+        - "Small Keys"
+        - "Big Keys"
+    percentage: 0 # set this to the percentage chance you want local crosskeys
   - name: enemizer
     options:
       boss_shuffle: # subchances can be injected too, which then get rolled
