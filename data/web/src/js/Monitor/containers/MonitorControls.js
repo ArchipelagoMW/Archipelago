@@ -46,6 +46,7 @@ class MonitorControls extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    // If there is only one SNES device available, connect to it automatically
     if (
       prevProps.availableDevices.length !== this.props.availableDevices.length &&
       this.props.availableDevices.length === 1
@@ -56,6 +57,17 @@ class MonitorControls extends Component {
           this.connectToSnes();
         }
       });
+    }
+
+    // If we have moved from a disconnected state (default) into a connected state, request the game information
+    if (
+      (
+        (prevProps.snesConnected !== this.props.snesConnected) || // SNES status changed
+        (prevProps.serverConnected !== this.props.serverConnected) // OR server status changed
+      ) && ((this.props.serverConnected) && (this.props.snesConnected)) // AND both are connected
+    ) {
+      this.props.webSocket.send(WebSocketUtils.formatSocketData('webStatus', 'gameInfo'));
+      this.props.webSocket.send(WebSocketUtils.formatSocketData('webStatus', 'checkData'));
     }
   }
 

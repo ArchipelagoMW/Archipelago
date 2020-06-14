@@ -1,17 +1,20 @@
 import _assign from 'lodash-es/assign';
 
 const initialState = {
+  serverVersion: null,
+  forfeitMode: null,
+  remainingMode: null,
   connections: {
     snesDevice: '',
     snesConnected: false,
     serverAddress: null,
     serverConnected: false,
   },
-  hints: {
-    hintCost: null,
-    checkPoints: null,
-    playerPoints: 0,
-  },
+  totalChecks: 0,
+  lastCheck: null,
+  hintCost: null,
+  checkPoints: null,
+  hintPoints: 0,
 };
 
 const gameStateReducer = (state = initialState, action) => {

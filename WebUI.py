@@ -57,6 +57,7 @@ class WebUiClient(Node):
             'serverAddress': server_address,
             'server': 1 if ctx.server is not None and not ctx.server.socket.closed else 0,
         }))
+
     def send_device_list(self, devices):
         self.broadcast_all(self.build_message('availableDevices', {
             'devices': devices,
@@ -105,11 +106,20 @@ class WebUiClient(Node):
             'entranceLocation': entrance_location,
         }))
 
-    def send_game_state(self, ctx: Context):
-        self.broadcast_all(self.build_message('gameState', {
-            'hintCost': 0,
-            'checkPoints': 0,
-            'playerPoints': 0,
+    def send_game_info(self, ctx: Context):
+        self.broadcast_all(self.build_message('gameInfo', {
+            'serverVersion': Utils.__version__,
+            'hintCost': ctx.hint_cost,
+            'checkPoints': ctx.check_points,
+            'forfeitMode': ctx.forfeit_mode,
+            'remainingMode': ctx.remaining_mode,
+        }))
+
+    def send_location_check(self, ctx: Context, last_check: str):
+        self.broadcast_all(self.build_message('locationCheck', {
+            'totalChecks': len(ctx.locations_checked),
+            'hintPoints': 0,
+            'lastCheck': last_check,
         }))
 
 
@@ -117,22 +127,27 @@ class WaitingForUiException(Exception):
     pass
 
 
-webthread = None
+web_thread = None
 PORT = 5050
+
+
 class RequestHandler(http.server.SimpleHTTPRequestHandler):
     def log_request(self, code='-', size='-'):
         pass
+
     def log_message(self, format, *args):
         pass
+
     def log_date_time_string(self):
         pass
+
 
 Handler = partial(RequestHandler,
                   directory=Utils.local_path(os.path.join("data", "web", "public")))
 
 
 def start_server(socket_port: int, on_start=lambda: None):
-    global webthread
+    global web_thread
     try:
         server = socketserver.TCPServer(("", PORT), Handler)
     except OSError:
@@ -152,4 +167,4 @@ def start_server(socket_port: int, on_start=lambda: None):
     else:
         print("serving at port", PORT)
         on_start()
-        webthread = threading.Thread(target=server.serve_forever).start()
+        web_thread = threading.Thread(target=server.serve_forever).start()

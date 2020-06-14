@@ -48,9 +48,15 @@ class Context():
         self.snes_address = snes_address
         self.server_address = server_address
 
+        # WebUI Stuff
         self.ui_node = WebUI.WebUiClient()
         self.custom_address = None
         self.webui_socket_port: typing.Optional[int] = port
+        self.hint_cost = 0
+        self.check_points = 0
+        self.forfeit_mode = ''
+        self.remaining_mode = ''
+        # End WebUI Stuff
 
         self.exit_event = asyncio.Event()
         self.watcher_event = asyncio.Event()
@@ -761,7 +767,13 @@ async def process_server_cmd(ctx: Context, cmd, args):
         if "forfeit_mode" in args: # could also be version > 2.2.1, but going with implicit content here
             logging.info("Forfeit setting: "+args["forfeit_mode"])
             logging.info("Remaining setting: "+args["remaining_mode"])
-            logging.info(f"A !hint costs {args['hint_cost']} points and you get {args['location_check_points']} for each location checked.")
+            logging.info(f"A !hint costs {args['hint_cost']} points and you get {args['location_check_points']}"
+                         f" for each location checked.")
+            ctx.hint_cost = int(args['hint_cost'])
+            ctx.check_points = int(args['location_check_points'])
+            ctx.forfeit_mode = args['forfeit_mode']
+            ctx.remaining_mode = args['remaining_mode']
+            ctx.ui_node.send_game_info(ctx)
         if len(args['players']) < 1:
             ctx.ui_node.log_info('No player connected')
         else:
@@ -1045,6 +1057,7 @@ async def track_locations(ctx : Context, roomid, roomdata):
     def new_check(location):
         ctx.locations_checked.add(location)
         ctx.ui_node.log_info("New check: %s (%d/216)" % (location, len(ctx.locations_checked)))
+        ctx.ui_node.send_location_check(ctx, location)
         new_locations.append(Regions.location_table[location][0])
 
     for location, (loc_roomid, loc_mask) in location_table_uw.items():
@@ -1223,6 +1236,10 @@ async def websocket_server(websocket: websockets.WebSocketServerProtocol, path, 
                         ctx.ui_node.send_connection_status(ctx)
                     elif data['content'] == 'devices':
                         await get_snes_devices(ctx)
+                    elif data['content'] == 'gameInfo':
+                        ctx.ui_node.send_game_info(ctx)
+                    elif data['content'] == 'checkData':
+                        ctx.ui_node.send_location_check(ctx, 'Waiting for check...')
 
                 elif data['type'] == 'webConfig':
                     if 'serverAddress' in data['content']:
