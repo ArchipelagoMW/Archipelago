@@ -56,6 +56,7 @@ class Context():
         self.check_points = 0
         self.forfeit_mode = ''
         self.remaining_mode = ''
+        self.hint_points = 0
         # End WebUI Stuff
 
         self.exit_event = asyncio.Event()
@@ -892,8 +893,13 @@ async def process_server_cmd(ctx: Context, cmd, args):
 
     elif cmd == "AliasUpdate":
         ctx.player_names = {p: n for p, n in args}
+
     elif cmd == 'Print':
         ctx.ui_node.log_info(args)
+
+    elif cmd == 'HintPointUpdate':
+        ctx.hint_points = args[0]
+
     else:
         logging.debug(f"unknown command {args}")
 

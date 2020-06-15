@@ -402,6 +402,9 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations):
         send_new_items(ctx)
 
         if found_items:
+            for client in ctx.endpoints:
+                if client.team == team and client.slot == slot:
+                    asyncio.create_task(ctx.send_msgs(client, [["HintPointUpdate", (get_client_points(ctx, client),)]]))
             save(ctx)
 
 
@@ -702,9 +705,7 @@ class ClientMessageProcessor(CommandProcessor):
     @mark_raw
     def _cmd_hint(self, item_or_location: str = "") -> bool:
         """Use !hint {item_name/location_name}, for example !hint Lamp or !hint Link's House. """
-        points_available = self.ctx.location_check_points * len(
-            self.ctx.location_checks[self.client.team, self.client.slot]) - \
-                           self.ctx.hint_cost * self.ctx.hints_used[self.client.team, self.client.slot]
+        points_available = get_client_points(self.ctx, self.client)
         if not item_or_location:
             self.output(f"A hint costs {self.ctx.hint_cost} points. "
                         f"You have {points_available} points.")
@@ -783,6 +784,10 @@ class ClientMessageProcessor(CommandProcessor):
                 self.output(response)
                 return False
 
+
+def get_client_points(ctx: Context, client: Client) -> int:
+    return (ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) -
+            ctx.hint_cost * ctx.hints_used[client.team, client.slot])
 
 async def process_client_cmd(ctx: Context, client: Client, cmd, args):
     if type(cmd) is not str:
