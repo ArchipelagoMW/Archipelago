@@ -91,6 +91,7 @@ class Context(Node):
         self.auto_shutdown = 0
         self.commandprocessor = ServerCommandProcessor(self)
         self.embedded_blacklist = {"host", "port"}
+        self.client_ids: typing.Dict[typing.Tuple[int, int], datetime.datetime] = {}
 
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
         with open(multidatapath, 'rb') as f:
@@ -815,8 +816,17 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             errors.add('InvalidRom')
         else:
             team, slot = ctx.rom_names[tuple(args['rom'])]
-            if any([c.slot == slot and c.team == team for c in ctx.endpoints if c.auth]):
-                errors.add('SlotAlreadyTaken')
+            # this can only ever be 0 or 1 elements
+            clients = [c for c in ctx.endpoints if c.auth and c.slot == slot and c.team == team]
+            if clients:
+                # likely same player with a "ghosted" slot. We bust the ghost.
+                if "uuid" in args and ctx.client_ids[team, slot] == args["uuid"]:
+                    await clients[0].socket.close()  # we have to await the DC of the ghost, so not to create data pasta
+                    client.name = ctx.player_names[(team, slot)]
+                    client.team = team
+                    client.slot = slot
+                else:
+                    errors.add('SlotAlreadyTaken')
             else:
                 client.name = ctx.player_names[(team, slot)]
                 client.team = team
@@ -825,6 +835,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
         if errors:
             await ctx.send_msgs(client, [['ConnectionRefused', list(errors)]])
         else:
+            ctx.client_ids[client.team, client.slot] = args.get("uuid", None)
             client.auth = True
             client.version = args.get('version', Client.version)
             client.tags = args.get('tags', Client.tags)
