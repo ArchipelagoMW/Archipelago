@@ -2,17 +2,15 @@
 
 import os
 import logging
-import sys
 import threading
 import typing
 import multiprocessing
-import functools
-from pony.flask import Pony
-from pony.orm import Database, Required, Optional, commit, select, db_session
+from pony.orm import Database, db_session
 
-import websockets
-from flask import Flask, flash, request, redirect, url_for, render_template, Response, g
+from flask import Flask, flash, request, redirect, url_for, render_template, Response
 from werkzeug.utils import secure_filename
+
+
 
 UPLOAD_FOLDER = os.path.relpath('uploads')
 LOGS_FOLDER = os.path.relpath('logs')
@@ -116,39 +114,7 @@ def host_multidata(filename: str):
     return render_template("host_multidata.html", filename=filename)
 
 
-def run_server_process(multidata: str):
-    async def main():
-        logging.basicConfig(format='[%(asctime)s] %(message)s',
-                            level=logging.INFO,
-                            filename=os.path.join(LOGS_FOLDER, multidata + ".txt"))
-        ctx = Context("", 0, "", 1, 1000,
-                      True, "enabled", "goal")
-        ctx.load(os.path.join(multidata_folder, multidata), True)
-        ctx.auto_shutdown = 24 * 60 * 60  # 24 hours
-        ctx.init_save()
-
-        ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ping_timeout=None,
-                                      ping_interval=None)
-
-        await ctx.server
-        for wssocket in ctx.server.ws_server.sockets:
-            socketname = wssocket.getsockname()
-            if wssocket.family == socket.AF_INET6:
-                logging.info(f'Hosting game at [{get_public_ipv6()}]:{socketname[1]}')
-            elif wssocket.family == socket.AF_INET:
-                logging.info(f'Hosting game at {get_public_ipv4()}:{socketname[1]}')
-        while ctx.running:
-            await asyncio.sleep(1)
-        logging.info("Shutting down")
-
-    import asyncio
-    if ".." not in sys.path:
-        sys.path.append("..")
-    from MultiServer import Context, server
-    from Utils import get_public_ipv4, get_public_ipv6
-    import socket
-    asyncio.run(main())
-
+from WebHost.customserver import run_server_process
 
 if __name__ == "__main__":
     multiprocessing.freeze_support()

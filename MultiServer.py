@@ -57,8 +57,10 @@ class Client(Endpoint):
 
 class Context(Node):
     def __init__(self, host: str, port: int, password: str, location_check_points: int, hint_cost: int,
-                 item_cheat: bool, forfeit_mode: str = "disabled", remaining_mode: str = "disabled", auto_shutdown=0):
+                 item_cheat: bool, forfeit_mode: str = "disabled", remaining_mode: str = "disabled",
+                 auto_shutdown: typing.SupportsFloat = 0):
         super(Context, self).__init__()
+        self.shutdown_task = None
         self.data_filename = None
         self.save_filename = None
         self.saving = False
@@ -88,7 +90,7 @@ class Context(Node):
             typing.Tuple[int, int], datetime.datetime] = {}  # datetime of last connection
         self.client_game_state: typing.Dict[typing.Tuple[int, int], int] = collections.defaultdict(int)
         self.er_hint_data: typing.Dict[int, typing.Dict[int, str]] = {}
-        self.auto_shutdown = 0
+        self.auto_shutdown = auto_shutdown
         self.commandprocessor = ServerCommandProcessor(self)
         self.embedded_blacklist = {"host", "port"}
         self.client_ids: typing.Dict[typing.Tuple[int, int], datetime.datetime] = {}
@@ -948,6 +950,8 @@ class ServerCommandProcessor(CommandProcessor):
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
         asyncio.create_task(self.ctx.server.ws_server._close())
+        if self.ctx.shutdown_task:
+            self.ctx.shutdown_task.cancel()
         self.ctx.running = False
         return True
 
@@ -1095,9 +1099,30 @@ def parse_args() -> argparse.Namespace:
     return args
 
 
-async def auto_shutdown(ctx):
-    # to be implemented soon
-    pass
+async def auto_shutdown(ctx, to_cancel=None):
+    await asyncio.sleep(ctx.auto_shutdown * 60)
+    while ctx.running:
+        if not ctx.client_activity_timers.values():
+            asyncio.create_task(ctx.server.ws_server._close())
+            ctx.running = False
+            if to_cancel:
+                for task in to_cancel:
+                    task.cancel()
+            logging.info("Shutting down due to inactivity.")
+        else:
+            newest_activity = max(ctx.client_activity_timers.values())
+            delta = datetime.datetime.now(datetime.timezone.utc) - newest_activity
+            seconds = ctx.auto_shutdown * 60 - delta.total_seconds()
+            if seconds < 0:
+                asyncio.create_task(ctx.server.ws_server._close())
+                ctx.running = False
+                if to_cancel:
+                    for task in to_cancel:
+                        task.cancel()
+                logging.info("Shutting down due to inactivity.")
+            else:
+                await asyncio.sleep(seconds)
+
 
 async def main(args: argparse.Namespace):
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
@@ -1128,9 +1153,18 @@ async def main(args: argparse.Namespace):
     ip = args.host if args.host else Utils.get_public_ipv4()
     logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port,
                                                  'No password' if not ctx.password else 'Password: %s' % ctx.password))
+
     await ctx.server
-    await console(ctx)
+    console_task = asyncio.create_task(console(ctx))
+    if ctx.auto_shutdown:
+        ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, [console_task]))
+    await console_task
+    if ctx.shutdown_task:
+        await ctx.shutdown_task
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(main(parse_args()))
+    try:
+        loop.run_until_complete(main(parse_args()))
+    except asyncio.exceptions.CancelledError:
+        pass
