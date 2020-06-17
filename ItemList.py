@@ -260,9 +260,10 @@ def generate_itempool(world, player):
     nonprogressionitems = [beemizer(item) for item in items if not item.advancement and not item.priority and not item.type]
     random.shuffle(nonprogressionitems)
 
-    if treasure_hunt_count and treasure_hunt_count > 30:
-        progressionitems += [ItemFactory("Triforce Piece", player)] * (treasure_hunt_count - 30)
-        nonprogressionitems = nonprogressionitems[(treasure_hunt_count-30):]
+    triforce_pieces = world.triforce_pieces_available[player]
+    if world.goal[player] in {'triforcehunt', 'localtriforcehunt'} and triforce_pieces > 30:
+        progressionitems += [ItemFactory("Triforce Piece", player)] * (triforce_pieces - 30)
+        nonprogressionitems = nonprogressionitems[(triforce_pieces-30):]
 
     world.itempool += progressionitems + nonprogressionitems
 
@@ -510,6 +511,10 @@ def get_pool_core(world, player: int):
         extraitems -= len(diff.timedohko)
         clock_mode = 'countdown-ohko'
     if goal in {'triforcehunt', 'localtriforcehunt'}:
+        if world.triforce_pieces_required[player] > world.triforce_pieces_available[player]:
+            world.triforce_pieces_required[player] = world.triforce_pieces_available[player]
+        while len(diff.triforcehunt) > world.triforce_pieces_available[player]:
+            diff.triforcehunt.pop()
         pool.extend(diff.triforcehunt)
         extraitems -= len(diff.triforcehunt)
         treasure_hunt_count = world.triforce_pieces_required[player]
