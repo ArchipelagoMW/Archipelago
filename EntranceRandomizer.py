@@ -81,8 +81,11 @@ def parse_arguments(argv, no_defaults=False):
                              Local Triforce Hunt: Places 30 Triforce Pieces in your world, collect
                                             20 of them to beat the game.       
                              ''')
+    parser.add_argument('--triforce_pieces_available', default=defval(30),
+                        type=lambda value: min(max(int(value), 1), 112),
+                        help='''Set Triforce Pieces available in item pool.''')
     parser.add_argument('--triforce_pieces_required', default=defval(20),
-                        type=lambda value: min(max(int(value), 1), 30),
+                        type=lambda value: min(max(int(value), 1), 112),
                         help='''Set Triforce Pieces required to win a Triforce Hunt''')
     parser.add_argument('--difficulty', default=defval('normal'), const='normal', nargs='?',
                         choices=['normal', 'hard', 'expert'],
@@ -328,7 +331,7 @@ def parse_arguments(argv, no_defaults=False):
                          'local_items', 'retro', 'accessibility', 'hints', 'beemizer',
                          'shufflebosses', 'shuffleenemies', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
-                         'heartbeep', "skip_progression_balancing", "triforce_pieces_required",
+                         'heartbeep', "skip_progression_balancing", "triforce_pieces_available", "triforce_pieces_required",
                          'remote_items', 'progressive', 'dungeon_counters', 'glitch_boots']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:

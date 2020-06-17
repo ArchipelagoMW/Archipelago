@@ -295,9 +295,14 @@ def roll_settings(weights):
 
     ret.crystals_ganon = get_choice('ganon_open', weights)
 
+    ret.triforce_pieces_available = get_choice('triforce_pieces_available',
+                                               weights) if "triforce_pieces_available" in weights else 30
+
+    ret.triforce_pieces_available = min(max(1, int(ret.triforce_pieces_available)), 112)
+
     ret.triforce_pieces_required = get_choice('triforce_pieces_required',
                                               weights) if "triforce_pieces_required" in weights else 20
-    ret.triforce_pieces_required = min(max(1, int(ret.triforce_pieces_required)), 30)
+    ret.triforce_pieces_required = min(max(1, int(ret.triforce_pieces_required)), 112)
 
     ret.mode = get_choice('world_state', weights)
     if ret.mode == 'retro':

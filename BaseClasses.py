@@ -113,6 +113,7 @@ class World(object):
             set_player_attr('glitch_boots', True)
             set_player_attr('progression_balancing', True)
             set_player_attr('local_items', set())
+            set_player_attr('triforce_pieces_available', 30)
             set_player_attr('triforce_pieces_required', 20)
 
     def get_name_string_for_object(self, obj) -> str:
@@ -1194,6 +1195,7 @@ class Spoiler(object):
                          'players': self.world.players,
                          'teams': self.world.teams,
                          'progression_balancing': self.world.progression_balancing,
+                         'triforce_pieces_available': self.world.triforce_pieces_available,
                          'triforce_pieces_required': self.world.triforce_pieces_required,
                          }
 
@@ -1240,6 +1242,8 @@ class Spoiler(object):
                 outfile.write('Swords:                          %s\n' % self.metadata['weapons'][player])
                 outfile.write('Goal:                            %s\n' % self.metadata['goal'][player])
                 if "triforce" in self.metadata["goal"][player]:  # triforce hunt
+                    outfile.write(
+                        "Pieces available for Triforce:   %s\n" % self.metadata['triforce_pieces_available'][player])
                     outfile.write(
                         "Pieces required for Triforce:    %s\n" % self.metadata["triforce_pieces_required"][player])
                 outfile.write('Difficulty:                      %s\n' % self.metadata['item_pool'][player])

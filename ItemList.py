@@ -256,7 +256,16 @@ def generate_itempool(world, player):
             return item if not choice else ItemFactory("Bee Trap", player) if choice == 'trap' else ItemFactory("Bee", player)
         return item
 
-    world.itempool += [beemizer(item) for item in items]
+    progressionitems = [item for item in items if item.advancement or item.priority or item.type]
+    nonprogressionitems = [beemizer(item) for item in items if not item.advancement and not item.priority and not item.type]
+    random.shuffle(nonprogressionitems)
+
+    triforce_pieces = world.triforce_pieces_available[player]
+    if world.goal[player] in {'triforcehunt', 'localtriforcehunt'} and triforce_pieces > 30:
+        progressionitems += [ItemFactory("Triforce Piece", player)] * (triforce_pieces - 30)
+        nonprogressionitems = nonprogressionitems[(triforce_pieces-30):]
+
+    world.itempool += progressionitems + nonprogressionitems
 
     # shuffle medallions
     mm_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
@@ -502,6 +511,8 @@ def get_pool_core(world, player: int):
         extraitems -= len(diff.timedohko)
         clock_mode = 'countdown-ohko'
     if goal in {'triforcehunt', 'localtriforcehunt'}:
+        while len(diff.triforcehunt) > world.triforce_pieces_available[player]:
+            diff.triforcehunt.pop()
         pool.extend(diff.triforcehunt)
         extraitems -= len(diff.triforcehunt)
         treasure_hunt_count = world.triforce_pieces_required[player]
