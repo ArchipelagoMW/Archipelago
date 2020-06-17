@@ -88,6 +88,8 @@ def main(args, seed=None):
                 world.push_precollected(item)
         world.local_items[player] = {item.strip() for item in args.local_items[player].split(',')}
 
+        world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player], world.triforce_pieces_required[player])
+
         if world.mode[player] != 'inverted':
             create_regions(world, player)
         else:

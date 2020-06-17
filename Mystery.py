@@ -302,7 +302,7 @@ def roll_settings(weights):
 
     ret.triforce_pieces_required = get_choice('triforce_pieces_required',
                                               weights) if "triforce_pieces_required" in weights else 20
-    ret.triforce_pieces_required = min(max(1, int(ret.triforce_pieces_required)), ret.triforce_pieces_available)
+    ret.triforce_pieces_required = min(max(1, int(ret.triforce_pieces_required)), 112)
 
     ret.mode = get_choice('world_state', weights)
     if ret.mode == 'retro':

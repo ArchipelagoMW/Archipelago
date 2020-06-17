@@ -511,8 +511,6 @@ def get_pool_core(world, player: int):
         extraitems -= len(diff.timedohko)
         clock_mode = 'countdown-ohko'
     if goal in {'triforcehunt', 'localtriforcehunt'}:
-        if world.triforce_pieces_required[player] > world.triforce_pieces_available[player]:
-            world.triforce_pieces_required[player] = world.triforce_pieces_available[player]
         while len(diff.triforcehunt) > world.triforce_pieces_available[player]:
             diff.triforcehunt.pop()
         pool.extend(diff.triforcehunt)
