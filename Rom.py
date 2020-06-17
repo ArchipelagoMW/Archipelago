@@ -67,21 +67,22 @@ class LocalRom(object):
     def patch_base_rom(self):
         from Patch import create_patch_file, create_rom_bytes
 
-        if os.path.isfile(local_path('data/baserom.sfc')):
-            with open(local_path('data/baserom.sfc'), 'rb') as stream:
+        if os.path.isfile(local_path('basepatch.sfc')):
+            with open(local_path('basepatch.sfc'), 'rb') as stream:
                 buffer = bytearray(stream.read())
 
             if self.verify(buffer):
                 self.buffer = buffer
-                if not os.path.exists(local_path('data/baserom.bmbp')):
-                    create_patch_file(local_path('data/baserom.sfc'))
+                if not os.path.exists(local_path(os.path.join('data', 'basepatch.bmbp'))):
+                    create_patch_file(local_path('basepatch.sfc'))
                 return
-
-        if os.path.isfile(local_path('data/baserom.bmbp')):
-            _, target, buffer = create_rom_bytes(local_path('data/baserom.bmbp'))
+        logging.info(local_path(os.path.join('data', 'basepatch.bmbp')))
+        logging.info(os.path.isfile(local_path(os.path.join('data', 'basepatch.bmbp'))))
+        if os.path.isfile(local_path(os.path.join('data', 'basepatch.bmbp'))):
+            _, target, buffer = create_rom_bytes(local_path(os.path.join('data', 'basepatch.bmbp')))
             if self.verify(buffer):
                 self.buffer = bytearray(buffer)
-                with open(local_path('data/baserom.sfc'), 'wb') as stream:
+                with open(local_path('basepatch.sfc'), 'wb') as stream:
                     stream.write(buffer)
                 return
 
@@ -103,9 +104,9 @@ class LocalRom(object):
 
         # verify md5
         if self.verify(self.buffer):
-            with open(local_path('data/baserom.sfc'), 'wb') as stream:
+            with open(local_path('basepatch.sfc'), 'wb') as stream:
                 stream.write(self.buffer)
-            create_patch_file(local_path('data/baserom.sfc'))
+            create_patch_file(local_path('basepatch.sfc'))
             os.remove(local_path('data/base2current.json'))
         else:
             raise RuntimeError(
