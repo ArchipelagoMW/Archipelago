@@ -31,8 +31,6 @@ def run_server_process(multidata: str):
                 logging.info(f'Hosting game at {get_public_ipv4()}:{socketname[1]}')
         ctx.auto_shutdown = 6 * 60
         ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
-        while ctx.running:
-            await asyncio.sleep(1)
         await ctx.shutdown_task
         logging.info("Shutting down")
 
