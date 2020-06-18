@@ -76,8 +76,7 @@ class LocalRom(object):
                 if not os.path.exists(local_path(os.path.join('data', 'basepatch.bmbp'))):
                     create_patch_file(local_path('basepatch.sfc'))
                 return
-        logging.info(local_path(os.path.join('data', 'basepatch.bmbp')))
-        logging.info(os.path.isfile(local_path(os.path.join('data', 'basepatch.bmbp'))))
+
         if os.path.isfile(local_path(os.path.join('data', 'basepatch.bmbp'))):
             _, target, buffer = create_rom_bytes(local_path(os.path.join('data', 'basepatch.bmbp')))
             if self.verify(buffer):
