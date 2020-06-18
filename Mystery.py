@@ -223,15 +223,17 @@ def convert_to_on_off(value):
     return {True: "on", False: "off"}.get(value, value)
 
 
-def get_choice(option, root) -> typing.Any:
+def get_choice(option, root, value=None) -> typing.Any:
     if option not in root:
-        return None
+        return value
     if type(root[option]) is not dict:
         return interpret_on_off(root[option])
     if not root[option]:
-        return None
+        return value
+    if any(list(map(int, root[option].values()))):
         return interpret_on_off(
             random.choices(list(root[option].keys()), weights=list(map(int, root[option].values())))[0])
+    raise RuntimeError(f"All options specified in {option} are weighted as zero.")
 
 
 def handle_name(name: str):
