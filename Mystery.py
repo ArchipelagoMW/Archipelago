@@ -230,8 +230,8 @@ def get_choice(option, root) -> typing.Any:
         return interpret_on_off(root[option])
     if not root[option]:
         return None
-    return interpret_on_off(
-        random.choices(list(root[option].keys()), weights=list(map(int, root[option].values())))[0])
+        return interpret_on_off(
+            random.choices(list(root[option].keys()), weights=list(map(int, root[option].values())))[0])
 
 
 def handle_name(name: str):
@@ -297,12 +297,12 @@ def roll_settings(weights):
 
     ret.triforce_pieces_available = get_choice('triforce_pieces_available',
                                                weights) if "triforce_pieces_available" in weights else 30
-
-    ret.triforce_pieces_available = min(max(1, int(ret.triforce_pieces_available)), 112)
+    
+    ret.triforce_pieces_available = min(max(1, int(ret.triforce_pieces_available)), 90)
 
     ret.triforce_pieces_required = get_choice('triforce_pieces_required',
                                               weights) if "triforce_pieces_required" in weights else 20
-    ret.triforce_pieces_required = min(max(1, int(ret.triforce_pieces_required)), 112)
+    ret.triforce_pieces_required = min(max(1, int(ret.triforce_pieces_required)), 90)
 
     ret.mode = get_choice('world_state', weights)
     if ret.mode == 'retro':
