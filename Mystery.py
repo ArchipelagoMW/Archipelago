@@ -63,14 +63,14 @@ def main():
             weights_cache[args.weights] = get_weights(args.weights)
         except Exception as e:
             raise ValueError(f"File {args.weights} is destroyed. Please fix your yaml.") from e
-        print(f"Weights: {args.weights} >> {weights_cache[args.weights]['description']}")
+        print(f"Weights: {args.weights} >> {get_choice('description', weights_cache[args.weights], 'No description specified')}")
     if args.meta:
         try:
             weights_cache[args.meta] = get_weights(args.meta)
         except Exception as e:
             raise ValueError(f"File {args.meta} is destroyed. Please fix your yaml.") from e
         meta_weights = weights_cache[args.meta]
-        print(f"Meta: {args.meta} >> {meta_weights['meta_description']}")
+        print(f"Meta: {args.meta} >> {get_choice('meta_description', meta_weights, 'No description specified')}")
         if args.samesettings:
             raise Exception("Cannot mix --samesettings with --meta")
 
@@ -80,7 +80,7 @@ def main():
             try:
                 if path not in weights_cache:
                     weights_cache[path] = get_weights(path)
-                print(f"P{player} Weights: {path} >> {weights_cache[path]['description']}")
+                print(f"P{player} Weights: {path} >> {get_choice('description', weights_cache[path], 'No description specified')}")
 
             except Exception as e:
                 raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
