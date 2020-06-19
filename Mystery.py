@@ -230,7 +230,7 @@ def get_choice(option, root, value=None) -> typing.Any:
         return interpret_on_off(root[option])
     if not root[option]:
         return value
-    if any(list(map(int, root[option].values()))):
+    if any(root[option].values()):
         return interpret_on_off(
             random.choices(list(root[option].keys()), weights=list(map(int, root[option].values())))[0])
     raise RuntimeError(f"All options specified in {option} are weighted as zero.")
