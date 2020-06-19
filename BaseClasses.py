@@ -116,6 +116,10 @@ class World(object):
             set_player_attr('triforce_pieces_available', 30)
             set_player_attr('triforce_pieces_required', 20)
 
+    @property
+    def player_ids(self):
+        yield from range(1, self.players + 1)
+
     def get_name_string_for_object(self, obj) -> str:
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_names(obj.player)})'
 

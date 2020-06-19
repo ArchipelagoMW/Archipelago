@@ -208,3 +208,5 @@ for basename, substring in _simple_groups:
             tempset.add(itemname)
 
 del (_simple_groups)
+
+progression_items = {name for name, data in item_table.items() if type(data[3]) == int and data[0]}
