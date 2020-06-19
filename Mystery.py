@@ -372,7 +372,10 @@ def roll_settings(weights):
 
     ret.remote_items = get_choice('remote_items', weights) if 'remote_items' in weights else False
 
-    ret.local_items = set()
+    if "l" in dungeon_items:
+        ret.local_items = {"Small Keys", "Big Keys"}
+    else:
+        ret.local_items = set()
     for item_name in weights.get('local_items', []):
         items = item_name_groups.get(item_name, {item_name})
         for item in items:
