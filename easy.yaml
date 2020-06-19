@@ -43,10 +43,14 @@ smallkey_shuffle: # Shuffle small keys into the world and other dungeons, includ
 bigkey_shuffle: # Shuffle big keys into the world and other dungeons, including other players' worlds
   on: 0
   off: 1
-dungeon_items: # alternative to the 4 shuffles above this, does nothing until the respective 4 shuffles are deleted
+local_keys: # Keep small keys and big keys local to your world.
+  on: 0
+  off: 1
+dungeon_items: # alternative to the 4 shuffles and local_keys above this, does nothing until the respective 4 shuffles and local_keys above are deleted
   mc: 0 # shuffle Maps and Compass
   none: 1 # shuffle none of the 4
   mcsb: 0 # shuffle all of the 4, any combination of m, c, s and b will shuffle the respective item, or not if it's missing, so you can add more options here
+  lmcsb: 0 # like mcsb above, but with keys kept local to your world. l is what makes your keys local,  or not if it's missing.
 dungeon_counters:
   on: 0 # always display amount of items checked in a dungeon
   pickup: 1 # show when compass is picked up
