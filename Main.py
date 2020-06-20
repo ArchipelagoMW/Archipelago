@@ -10,7 +10,7 @@ import zlib
 
 from BaseClasses import World, CollectionState, Item, Region, Location, Shop
 from Items import ItemFactory
-from Regions import create_regions, create_shops, mark_light_world_regions
+from Regions import create_regions, create_shops, mark_light_world_regions, lookup_vanilla_location_to_entrance
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from EntranceShuffle import link_entrances, link_inverted_entrances
 from Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, get_hash_string
@@ -250,7 +250,8 @@ def main(args, seed=None):
                 main_entrance = get_entrance_to_region(region)
                 for location in region.locations:
                     if type(location.address) == int:  # skips events and crystals
-                        er_hint_data[region.player][location.address] = main_entrance.name
+                        if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
+                            er_hint_data[region.player][location.address] = main_entrance.name
 
         multidata = zlib.compress(json.dumps({"names": parsed_names,
                                               "roms": rom_names,
