@@ -11,6 +11,7 @@ import typing
 import inspect
 import weakref
 import datetime
+import threading
 
 import ModuleUpdate
 
@@ -94,14 +95,17 @@ class Context(Node):
         self.commandprocessor = ServerCommandProcessor(self)
         self.embedded_blacklist = {"host", "port"}
         self.client_ids: typing.Dict[typing.Tuple[int, int], datetime.datetime] = {}
+        self.auto_save_interval = 60  # in seconds
+        self.auto_saver_thread = None
+        self.save_dirty = False
 
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
         with open(multidatapath, 'rb') as f:
-            self._load(f, use_embedded_server_options)
+            self._load(json.loads(zlib.decompress(f.read()).decode("utf-8-sig")),
+                       use_embedded_server_options)
         self.data_filename = multidatapath
 
-    def _load(self, fileobj, use_embedded_server_options: bool):
-        jsonobj = json.loads(zlib.decompress(fileobj.read()).decode("utf-8-sig"))
+    def _load(self, jsonobj: dict, use_embedded_server_options: bool):
         for team, names in enumerate(jsonobj['names']):
             for player, name in enumerate(names, 1):
                 self.player_names[(team, player)] = name
@@ -126,6 +130,28 @@ class Context(Node):
                     setattr(self, key, value)
         self.item_cheat = not server_options.get("disable_item_cheat", True)
 
+    def save(self, now=False) -> bool:
+        if self.saving:
+            if now:
+                self.save_dirty = False
+                return self._save()
+
+            self.save_dirty = True
+            return True
+
+        return False
+
+    def _save(self) -> bool:
+        try:
+            jsonstr = json.dumps(self.get_save())
+            with open(self.save_filename, "wb") as f:
+                f.write(zlib.compress(jsonstr.encode("utf-8")))
+        except Exception as e:
+            logging.exception(e)
+            return False
+        else:
+            return True
+
     def init_save(self, enabled: bool = True):
         self.saving = enabled
         if self.saving:
@@ -140,6 +166,22 @@ class Context(Node):
                 logging.error('No save data found, starting a new game')
             except Exception as e:
                 logging.exception(e)
+
+            if not self.auto_saver_thread:
+                def save_regularly():
+                    import time
+                    while self.running:
+                        time.sleep(self.auto_save_interval)
+                        if self.save_dirty:
+                            logging.debug("Saving multisave via thread.")
+                            self.save_dirty = False
+                            self._save()
+
+                self.auto_saver_thread = threading.Thread(target=save_regularly, daemon=True)
+                self.auto_saver_thread.start()
+
+            import atexit
+            atexit.register(self._save)  # make sure we save on exit too
 
     def get_save(self) -> dict:
         d = {
@@ -407,22 +449,13 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations):
             for client in ctx.endpoints:
                 if client.team == team and client.slot == slot:
                     asyncio.create_task(ctx.send_msgs(client, [["HintPointUpdate", (get_client_points(ctx, client),)]]))
-            save(ctx)
+            ctx.save()
 
 
 def notify_team(ctx: Context, team: int, text: str):
     logging.info("Notice (Team #%d): %s" % (team + 1, text))
     ctx.broadcast_team(team, [['Print', text]])
 
-
-def save(ctx: Context):
-    if ctx.saving:
-        try:
-            jsonstr = json.dumps(ctx.get_save())
-            with open(ctx.save_filename, "wb") as f:
-                f.write(zlib.compress(jsonstr.encode("utf-8")))
-        except Exception as e:
-            logging.exception(e)
 
 
 def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[Utils.Hint]:
@@ -683,13 +716,13 @@ class ClientMessageProcessor(CommandProcessor):
             self.ctx.name_aliases[self.client.team, self.client.slot] = alias_name
             self.output(f"Hello, {alias_name}")
             update_aliases(self.ctx, self.client.team)
-            save(self.ctx)
+            self.ctx.save()
             return True
         elif (self.client.team, self.client.slot) in self.ctx.name_aliases:
             del (self.ctx.name_aliases[self.client.team, self.client.slot])
             self.output("Removed Alias")
             update_aliases(self.ctx, self.client.team)
-            save(self.ctx)
+            self.ctx.save()
             return True
         return False
 
@@ -776,7 +809,7 @@ class ClientMessageProcessor(CommandProcessor):
                                 self.output(
                                     "Could not pay for everything. Rerun the hint later with more points to get the remaining hints.")
                             notify_hints(self.ctx, self.client.team, found_hints + hints)
-                            save(self.ctx)
+                            self.ctx.save()
                             return True
 
                         else:
@@ -938,9 +971,13 @@ class ServerCommandProcessor(CommandProcessor):
 
     def _cmd_save(self) -> bool:
         """Save current state to multidata"""
-        save(self.ctx)
-        self.output("Game saved")
-        return True
+        if self.ctx.saving:
+            self.ctx.save(True)
+            self.output("Game saved")
+            return True
+        else:
+            self.output("Saving is disabled.")
+            return False
 
     def _cmd_players(self) -> bool:
         """Get information about connected players"""
@@ -968,13 +1005,13 @@ class ServerCommandProcessor(CommandProcessor):
                         self.ctx.name_aliases[team, slot] = alias_name
                         self.output(f"Named {player_name} as {alias_name}")
                         update_aliases(self.ctx, team)
-                        save(self.ctx)
+                        self.ctx.save()
                         return True
                     else:
                         del (self.ctx.name_aliases[team, slot])
                         self.output(f"Removed Alias for {player_name}")
                         update_aliases(self.ctx, team)
-                        save(self.ctx)
+                        self.ctx.save()
                         return True
         else:
             self.output(response)

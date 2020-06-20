@@ -25,3 +25,4 @@ weights/
 /logs/
 _persistent_storage.yaml
 mystery_result_*.yaml
+/db.db3
