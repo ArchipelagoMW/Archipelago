@@ -37,7 +37,7 @@ app.config["PONY"] = {
 multiworlds = {}
 
 
-@app.before_first_request
+@app.before_request
 def register_session():
     session.permanent = True  # technically 31 days after the last visit
     if not session.get("_id", None):
