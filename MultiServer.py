@@ -166,22 +166,24 @@ class Context(Node):
                 logging.error('No save data found, starting a new game')
             except Exception as e:
                 logging.exception(e)
+            self._start_async_saving()
 
-            if not self.auto_saver_thread:
-                def save_regularly():
-                    import time
-                    while self.running:
-                        time.sleep(self.auto_save_interval)
-                        if self.save_dirty:
-                            logging.debug("Saving multisave via thread.")
-                            self.save_dirty = False
-                            self._save()
+    def _start_async_saving(self):
+        if not self.auto_saver_thread:
+            def save_regularly():
+                import time
+                while self.running:
+                    time.sleep(self.auto_save_interval)
+                    if self.save_dirty:
+                        logging.debug("Saving multisave via thread.")
+                        self.save_dirty = False
+                        self._save()
 
-                self.auto_saver_thread = threading.Thread(target=save_regularly, daemon=True)
-                self.auto_saver_thread.start()
+            self.auto_saver_thread = threading.Thread(target=save_regularly, daemon=True)
+            self.auto_saver_thread.start()
 
-            import atexit
-            atexit.register(self._save)  # make sure we save on exit too
+        import atexit
+        atexit.register(self._save)  # make sure we save on exit too
 
     def get_save(self) -> dict:
         d = {

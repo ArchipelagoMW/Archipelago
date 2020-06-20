@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% block head %}
+    <title>Multiworld Seed {{ seed.id }}</title>
+{% endblock %}
+{% block body %}
+    Seed #{{ seed.id }}<br>
+    Players:
+    <ul class="list-group">
+        {% for team in seed.multidata["names"] %}
+            <li class="list-group-item">Team #{{ loop.index }} - {{ team | length }}
+                <ul class="list-group">
+                    {% for player in team %}
+                        <li class="list-group-item">{{ player }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+    Rooms:
+    <ul class="list-group">
+        {% for room in seed.rooms if room.owner == session["_id"] %}
+            <li class="list-group-item"><a href="{{ url_for("host_room", room=room.id) }}">Room #{{ room.id }}</a></li>
+        {% endfor %}
+        <li class="list-group-item list-group-item-action"><a href="{{ url_for("new_room", seed=seed.id) }}">new
+            room</a></li>
+    </ul>
+{% endblock %}

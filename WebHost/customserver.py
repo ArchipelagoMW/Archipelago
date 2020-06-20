@@ -1,21 +1,74 @@
 import functools
 import logging
 import os
-import sys
-
 import websockets
+import asyncio
+import socket
+import threading
+import time
 
-from WebHost import LOGS_FOLDER, multidata_folder
+from WebHost import LOGS_FOLDER
+from .models import *
+
+from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor
+from Utils import get_public_ipv4, get_public_ipv6
 
 
-def run_server_process(multidata: str):
+class DBCommandProcessor(ServerCommandProcessor):
+    def output(self, text: str):
+        logging.info(text)
+
+
+class WebHostContext(Context):
+    def __init__(self):
+        super(WebHostContext, self).__init__("", 0, "", 1, 40, True, "enabled", "enabled", 0)
+
+    def listen_to_db_commands(self):
+        cmdprocessor = DBCommandProcessor(self)
+
+        while self.running:
+            with db_session:
+                commands = select(command for command in Command if command.room.id == self.room_id)
+                if commands:
+                    for command in commands:
+                        cmdprocessor(command.commandtext)
+                        command.delete()
+                    commit()
+            time.sleep(5)
+
+    @db_session
+    def load(self, room_id: int):
+        self.room_id = room_id
+        return self._load(Room.get(id=room_id).seed.multidata, True)
+
+    @db_session
+    def init_save(self, enabled: bool = True):
+        self.saving = enabled
+        if self.saving:
+            existings_savegame = Room.get(id=self.room_id).multisave
+            if existings_savegame:
+                self.set_save(existings_savegame)
+            self._start_async_saving()
+        threading.Thread(target=self.listen_to_db_commands, daemon=True).start()
+
+    @db_session
+    def _save(self) -> bool:
+        Room.get(id=self.room_id).multisave = self.get_save()
+        return True
+
+
+def run_server_process(room_id, ponyconfig: dict):
+    # establish DB connection for multidata and multisave
+    db.bind(**ponyconfig)
+    db.generate_mapping(check_tables=False)
+
     async def main():
+
         logging.basicConfig(format='[%(asctime)s] %(message)s',
                             level=logging.INFO,
-                            filename=os.path.join(LOGS_FOLDER, multidata + ".txt"))
-        ctx = Context("", 0, "", 1, 1000,
-                      True, "enabled", "goal", 0)
-        ctx.load(os.path.join(multidata_folder, multidata), True)
+                            filename=os.path.join(LOGS_FOLDER, f"{room_id}.txt"))
+        ctx = WebHostContext()
+        ctx.load(room_id)
         ctx.auto_shutdown = 24 * 60 * 60  # 24 hours
         ctx.init_save()
 
@@ -34,10 +87,4 @@ def run_server_process(multidata: str):
         await ctx.shutdown_task
         logging.info("Shutting down")
 
-    import asyncio
-    if ".." not in sys.path:
-        sys.path.append("..")
-    from MultiServer import Context, server, auto_shutdown
-    from Utils import get_public_ipv4, get_public_ipv6
-    import socket
     asyncio.run(main())

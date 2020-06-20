@@ -1,21 +1,19 @@
-# module has yet to be made capable of running in multiple processes
-
 import os
 import logging
-import threading
 import typing
 import multiprocessing
-from pony.orm import Database, db_session
+import threading
+import json
+import zlib
 
-from flask import Flask, flash, request, redirect, url_for, render_template, Response
-from werkzeug.utils import secure_filename
+from pony.orm import db_session, commit
+from pony.flask import Pony
+from flask import Flask, flash, request, redirect, url_for, render_template, Response, session
 
-
+from .models import *
 
 UPLOAD_FOLDER = os.path.relpath('uploads')
 LOGS_FOLDER = os.path.relpath('logs')
-multidata_folder = os.path.join(UPLOAD_FOLDER, "multidata")
-os.makedirs(multidata_folder, exist_ok=True)
 os.makedirs(LOGS_FOLDER, exist_ok=True)
 
 
@@ -24,36 +22,43 @@ def allowed_file(filename):
 
 
 app = Flask(__name__)
+Pony(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024  # 1 megabyte limit
+# if you want persistent sessions on your server, make sure you make this a constant in your config.yaml
 app.config["SECRET_KEY"] = os.urandom(32)
+app.config['SESSION_PERMANENT'] = True
 app.config["PONY"] = {
     'provider': 'sqlite',
-    'filename': 'db.db3',
+    'filename': os.path.abspath('db.db3'),
     'create_db': True
 }
-
-db = Database()
-
-name = "localhost"
 
 multiworlds = {}
 
 
-class Multiworld():
-    def __init__(self, multidata: str):
-        self.multidata = multidata
+@app.before_first_request
+def register_session():
+    session.permanent = True  # technically 31 days after the last visit
+    if not session.get("_id", None):
+        session["_id"] = uuid4()  # uniquely identify each session without needing a login
+
+
+class MultiworldInstance():
+    def __init__(self, room: Room):
+        self.room_id = room.id
         self.process: typing.Optional[multiprocessing.Process] = None
-        multiworlds[multidata] = self
+        multiworlds[self.room_id] = self
 
     def start(self):
         if self.process and self.process.is_alive():
             return False
 
-        logging.info(f"Spinning up {self.multidata}")
-        self.process = multiprocessing.Process(group=None, target=run_server_process,
-                                               args=(self.multidata,),
-                                               name="MultiHost")
+        logging.info(f"Spinning up {self.room_id}")
+        with db_session:
+            self.process = multiprocessing.Process(group=None, target=run_server_process,
+                                                   args=(self.room_id, app.config["PONY"]),
+                                                   name="MultiHost")
         self.process.start()
 
     def stop(self):
@@ -67,19 +72,38 @@ def upload_multidata():
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(multidata_folder, filename))
-            return redirect(url_for('host_multidata',
-                                    filename=filename))
+        else:
+            file = request.files['file']
+            # if user does not select file, browser also
+            # submit an empty part without filename
+            if file.filename == '':
+                flash('No selected file')
+            elif file and allowed_file(file.filename):
+                try:
+                    multidata = json.loads(zlib.decompress(file.read()).decode("utf-8-sig"))
+                except:
+                    flash("Could not load multidata. File may be corrupted or incompatible.")
+                else:
+                    seed = Seed(multidata=multidata)
+                    commit()  # place into DB and generate ids
+                    return redirect(url_for("view_seed", seed=seed.id))
+            else:
+                flash("Not recognized file format. Awaiting a .multidata file.")
     return render_template("upload_multidata.html")
+
+
+@app.route('/seed/<int:seed>')
+def view_seed(seed: int):
+    seed = Seed.get(id=seed)
+    return render_template("view_seed.html", seed=seed)
+
+
+@app.route('/new_room/<int:seed>')
+def new_room(seed: int):
+    seed = Seed.get(id=seed)
+    room = Room(seed=seed, owner=session["_id"])
+    commit()
+    return redirect(url_for("host_room", room=room.id))
 
 
 def _read_log(path: str):
@@ -91,34 +115,32 @@ def _read_log(path: str):
               f"Likely a crash during spinup of multiworld instance or it is still spinning up."
 
 
-@app.route('/log/<filename>')
-def display_log(filename: str):
-    filename = secure_filename(filename)
+@app.route('/log/<int:room>')
+def display_log(room: int):
     # noinspection PyTypeChecker
-    return Response(_read_log(os.path.join("logs", filename + ".txt")), mimetype="text/plain;charset=UTF-8")
+    return Response(_read_log(os.path.join("logs", str(room) + ".txt")), mimetype="text/plain;charset=UTF-8")
 
 
 processstartlock = threading.Lock()
 
 
-@app.route('/hosted/<filename>')
-def host_multidata(filename: str):
+@app.route('/hosted/<int:room>', methods=['GET', 'POST'])
+def host_room(room: int):
+    room = Room.get(id=room)
+    if request.method == "POST":
+        if room.owner == session["_id"]:
+            cmd = request.form["cmd"]
+            Command(room=room, commandtext=cmd)
+            commit()
     with db_session:
-        multiworld = multiworlds.get(filename, None)
+        multiworld = multiworlds.get(room.id, None)
         if not multiworld:
-            multiworld = Multiworld(filename)
+            multiworld = MultiworldInstance(room)
 
-        with processstartlock:
-            multiworld.start()
+    with processstartlock:
+        multiworld.start()
 
-    return render_template("host_multidata.html", filename=filename)
+    return render_template("host_room.html", room=room)
 
 
 from WebHost.customserver import run_server_process
-
-if __name__ == "__main__":
-    multiprocessing.freeze_support()
-    multiprocessing.set_start_method('spawn')
-    db.bind(**app.config["PONY"])
-    db.generate_mapping(create_tables=True)
-    app.run(debug=True)

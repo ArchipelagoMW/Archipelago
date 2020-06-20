@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+{% block head %}
+    <title>Multiworld {{ room.id }}</title>
+{% endblock %}
+{% block body %}
+    Room created from <a href="{{ url_for("view_seed", seed=room.seed.id) }}">Seed #{{ room.seed.id }}</a><br>
+    {% if room.owner == session["_id"] %}
+        <form method=post>
+            <div class="form-group">
+                <label for="cmd"></label>
+                <input class="form-control" type="text" id="cmd" name="cmd"
+                       placeholder="Server Command. /help to list them, list gets appended to log.">
+            </div>
+        </form>
+    {% endif %}
+    Log:
+    <div id="logger"></div>
+    <script>
+        var xmlhttp = new XMLHttpRequest();
+        var url = '{{ url_for('display_log', room = room.id) }}';
+
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("logger").innerText = this.responseText;
+            }
+        };
+
+        function request_new() {
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+        }
+
+        window.setTimeout(request_new, 1000);
+        window.setInterval(request_new, 3000);
+    </script>
+{% endblock %}
