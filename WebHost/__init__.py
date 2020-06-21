@@ -130,7 +130,7 @@ def host_room(room: int):
 
 
 @app.route('/tracker/<int:room>')
-@cache.memoize(timeout=60 * 5)  # update every 5 minutes
+@cache.memoize(timeout=60)  # update every minute
 def get_tracker(room: int):
     # This more WIP than the rest
     import Items
