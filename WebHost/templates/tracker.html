@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block head %}
-    <title>Multiworld User {{ session["_id"] }}</title>
+    <title>Multiworld Tracker for Room {{ room.id }}</title>
 {% endblock %}
 {% block body %}
     {% for team, players in inventory.items() %}
