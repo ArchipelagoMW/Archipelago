@@ -23,10 +23,6 @@ class Room(db.Entity):
     last_port = Optional(int, default=lambda: 0)
 
 
-
-
-
-
 class Seed(db.Entity):
     id = PrimaryKey(int, auto=True)
     rooms = Set(Room)
