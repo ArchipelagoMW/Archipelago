@@ -11,7 +11,12 @@
                 <th>Player</th>
                 <th>Name</th>
                 {% for name in tracking_names %}
-                    <th>{{ name }}</th>
+                    {% if name in icons %}
+                        <th><img height="32" width="32" style="object-fit: contain" src="{{ icons[name] }}"
+                                 alt="{{ name }}"></th>
+                    {% else %}
+                        <th>{{ name }}</th>
+                    {% endif %}
                 {% endfor %}
             </tr>
             </thead>
