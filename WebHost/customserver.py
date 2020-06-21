@@ -23,6 +23,7 @@ class DBCommandProcessor(ServerCommandProcessor):
 class WebHostContext(Context):
     def __init__(self):
         super(WebHostContext, self).__init__("", 0, "", 1, 40, True, "enabled", "enabled", 0)
+        self.main_loop = asyncio.get_running_loop()
 
     def listen_to_db_commands(self):
         cmdprocessor = DBCommandProcessor(self)
@@ -32,7 +33,7 @@ class WebHostContext(Context):
                 commands = select(command for command in Command if command.room.id == self.room_id)
                 if commands:
                     for command in commands:
-                        cmdprocessor(command.commandtext)
+                        self.main_loop.call_soon_threadsafe(cmdprocessor, command.commandtext)
                         command.delete()
                     commit()
             time.sleep(5)
