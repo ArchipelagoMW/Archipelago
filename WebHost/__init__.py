@@ -188,7 +188,7 @@ def get_tracker(room: int):
 
         return render_template("tracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
                                lookup_id_to_name=lookup_id_to_name, player_names=player_names,
-                               tracking_names=tracking_names, tracking_ids=tracking_ids)
+                               tracking_names=tracking_names, tracking_ids=tracking_ids, room=room)
     else:
         return "Tracker disabled for this room."
 
