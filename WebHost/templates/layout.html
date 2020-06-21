@@ -9,13 +9,9 @@
 </head>
 <body>
 {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul class=flashes>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    {% for message in messages %}
+        <div class="alert alert-danger" role="alert">{{ message }}</div>
+    {% endfor %}
 {% endwith %}
 {% block body %}{% endblock %}
 <footer class="page-footer" style="position: fixed; left: 0; bottom: 0; width: 100%; text-align: center">
