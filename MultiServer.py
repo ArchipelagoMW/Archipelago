@@ -451,7 +451,7 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations):
             for client in ctx.endpoints:
                 if client.team == team and client.slot == slot:
                     asyncio.create_task(ctx.send_msgs(client, [["HintPointUpdate", (get_client_points(ctx, client),)]]))
-            ctx.save()
+        ctx.save()
 
 
 def notify_team(ctx: Context, team: int, text: str):

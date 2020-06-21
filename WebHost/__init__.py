@@ -161,7 +161,7 @@ def get_tracker(room: int):
                  "Titans Mitts": "Progressive Glove"
                  }
         links = {get_id(key): get_id(value) for key, value in links.items()}
-        inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(len(team))}
+        inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1)}
                      for teamnumber, team in enumerate(multidata["names"])}
         for (team, player), locations_checked in room.multisave.get("location_checks", {}):
             for location in locations_checked:

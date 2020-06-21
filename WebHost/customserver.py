@@ -95,10 +95,9 @@ def run_server_process(room_id, ponyconfig: dict):
             socketname = wssocket.getsockname()
             if wssocket.family == socket.AF_INET6:
                 logging.info(f'Hosting game at [{get_public_ipv6()}]:{socketname[1]}')
-                if ctx.port != socketname[1]:  # different port
-                    with db_session:
-                        room = Room.get(id=ctx.room_id)
-                        room.last_port = socketname[1]
+                with db_session:
+                    room = Room.get(id=ctx.room_id)
+                    room.last_port = socketname[1]
             elif wssocket.family == socket.AF_INET:
                 logging.info(f'Hosting game at {get_public_ipv4()}:{socketname[1]}')
         ctx.auto_shutdown = 6 * 60
