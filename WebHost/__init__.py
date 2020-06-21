@@ -219,7 +219,7 @@ def get_tracker(room: int):
             "Triforce":
                 r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/4/4e/TriforceALttPTitle.png?version=dc398e1293177581c16303e4f9d12a48"
         }
-
+        multi_items = {get_id(name) for name in ("Progressive Sword", "Progressive Bow", "Bottle")}
         links = {get_id(key): get_id(value) for key, value in links.items()}
         inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1)}
                      for teamnumber, team in enumerate(multidata["names"])}
@@ -248,7 +248,8 @@ def get_tracker(room: int):
 
         return render_template("tracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
                                lookup_id_to_name=lookup_id_to_name, player_names=player_names,
-                               tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=icons)
+                               tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=icons,
+                               multi_items=multi_items)
     else:
         return "Tracker disabled for this room."
 

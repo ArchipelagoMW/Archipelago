@@ -23,12 +23,16 @@
             <tbody>
             {% for player, items in players.items() %}
                 <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>{{ player_names[(team, loop.index)] }}</td>
+                    <td class="table-info">{{ loop.index }}</td>
+                    <td class="table-info">{{ player_names[(team, loop.index)] }}</td>
                     {% for id in tracking_ids %}
-                        <td>
-                            {{ items[id] }}
-                        </td>
+
+                        {% if items[id] %}
+                            <td class="table-success">
+                                {% if id in multi_items %}{{ items[id] }}{% else %}✔️{% endif %}</td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
                     {% endfor %}
                 </tr>
             {% endfor %}
