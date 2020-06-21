@@ -49,11 +49,11 @@ def generate_patch(rom: bytes, metadata: Optional[dict] = None) -> bytes:
     return generate_yaml(patch, metadata)
 
 
-def create_patch_file(rom_file_to_patch: str, server: str = "") -> str:
+def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str = None) -> str:
     bytes = generate_patch(load_bytes(rom_file_to_patch),
                            {
                                "server": server})  # allow immediate connection to server in multiworld. Empty string otherwise
-    target = os.path.splitext(rom_file_to_patch)[0] + ".bmbp"
+    target = destination if destination else os.path.splitext(rom_file_to_patch)[0] + ".bmbp"
     write_lzma(bytes, target)
     return target
 
