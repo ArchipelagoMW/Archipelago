@@ -1,3 +1,6 @@
+"""Friendly reminder that if you want to host this somewhere on the internet, that it's licensed under MIT Berserker66
+So unless you're Berserker you need to include license information."""
+
 import json
 import os
 import logging
@@ -143,6 +146,7 @@ def get_tracker(room: int):
 
         links = {"Bow": "Progressive Bow",
                  "Silver Arrows": "Progressive Bow",
+                 "Progressive Bow (Alt)": "Progressive Bow",
                  "Bottle (Red Potion)": "Bottle",
                  "Bottle (Green Potion)": "Bottle",
                  "Bottle (Blue Potion)": "Bottle",
