@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+{% block head %}
+    <title>Multiworld User {{ session["_id"] }}</title>
+{% endblock %}
+{% block body %}
+    {% for team, players in inventory.items() %}
+        <table class="table table-striped table-bordered table-hover table-sm">
+            <thead class="thead-dark">
+            <tr>
+                <th>Player</th>
+                <th>Name</th>
+                {% for name in tracking_names %}
+                    <th>{{ name }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for player, items in players.items() %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ player_names[(team, loop.index)] }}</td>
+                    {% for id in tracking_ids %}
+                        <td>
+                            {{ items[id] }}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+{% endblock %}

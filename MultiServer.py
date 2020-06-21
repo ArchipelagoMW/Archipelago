@@ -1202,8 +1202,7 @@ async def main(args: argparse.Namespace):
         await ctx.shutdown_task
 
 if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
     try:
-        loop.run_until_complete(main(parse_args()))
+        asyncio.run(main(parse_args()))
     except asyncio.exceptions.CancelledError:
         pass

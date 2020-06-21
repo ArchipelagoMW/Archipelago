@@ -6,6 +6,7 @@ import asyncio
 import socket
 import threading
 import time
+import random
 
 from WebHost import LOGS_FOLDER
 from .models import *
@@ -39,7 +40,12 @@ class WebHostContext(Context):
     @db_session
     def load(self, room_id: int):
         self.room_id = room_id
-        return self._load(Room.get(id=room_id).seed.multidata, True)
+        room = Room.get(id=room_id)
+        if room.last_port:
+            self.port = room.last_port
+        else:
+            self.port = get_random_port()
+        return self._load(room.seed.multidata, True)
 
     @db_session
     def init_save(self, enabled: bool = True):
@@ -57,6 +63,9 @@ class WebHostContext(Context):
         return True
 
 
+def get_random_port():
+    return random.randint(49152, 65535)
+
 def run_server_process(room_id, ponyconfig: dict):
     # establish DB connection for multidata and multisave
     db.bind(**ponyconfig)
@@ -72,14 +81,24 @@ def run_server_process(room_id, ponyconfig: dict):
         ctx.auto_shutdown = 24 * 60 * 60  # 24 hours
         ctx.init_save()
 
-        ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ping_timeout=None,
-                                      ping_interval=None)
+        try:
+            ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ping_timeout=None,
+                                          ping_interval=None)
 
-        await ctx.server
+            await ctx.server
+        except Exception:  # likely port in use - in windows this is OSError, but I didn't check the others
+            ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ping_timeout=None,
+                                          ping_interval=None)
+
+            await ctx.server
         for wssocket in ctx.server.ws_server.sockets:
             socketname = wssocket.getsockname()
             if wssocket.family == socket.AF_INET6:
                 logging.info(f'Hosting game at [{get_public_ipv6()}]:{socketname[1]}')
+                if ctx.port != socketname[1]:  # different port
+                    with db_session:
+                        room = Room.get(id=ctx.room_id)
+                        room.last_port = socketname[1]
             elif wssocket.family == socket.AF_INET:
                 logging.info(f'Hosting game at {get_public_ipv4()}:{socketname[1]}')
         ctx.auto_shutdown = 6 * 60

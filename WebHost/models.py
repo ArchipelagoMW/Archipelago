@@ -16,22 +16,15 @@ class Room(db.Entity):
     last_activity = Required(datetime, default=lambda: datetime.utcnow())
     owner = Required(UUID)
     commands = Set('Command')
-    host_jobs = Set('HostJob')
     seed = Required('Seed')
     multisave = Optional(Json)
+    timeout = Required(int, default=lambda: 6)
+    allow_tracker = Required(bool, default=True)
+    last_port = Optional(int, default=lambda: 0)
 
 
-class HostJob(db.Entity):
-    id = PrimaryKey(int, auto=True)
-    sockets = Set('Socket')
-    room = Required(Room)
-    scheduler_id = Required(int, unique=True)
 
 
-class Socket(db.Entity):
-    port = PrimaryKey(int)
-    ipv6 = Required(bool)
-    host_job = Required(HostJob)
 
 
 class Seed(db.Entity):

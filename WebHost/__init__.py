@@ -1,14 +1,16 @@
+import json
 import os
 import logging
 import typing
 import multiprocessing
 import threading
-import json
 import zlib
+import collections
 
-from pony.orm import db_session, commit
 from pony.flask import Pony
-from flask import Flask, flash, request, redirect, url_for, render_template, Response, session
+from flask import Flask, request, redirect, url_for, render_template, Response, session, abort, flash
+from flask_caching import Cache
+from pony.orm import commit
 
 from .models import *
 
@@ -20,9 +22,9 @@ os.makedirs(LOGS_FOLDER, exist_ok=True)
 def allowed_file(filename):
     return filename.endswith('multidata')
 
-
 app = Flask(__name__)
 Pony(app)
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024  # 1 megabyte limit
 # if you want persistent sessions on your server, make sure you make this a constant in your config.yaml
@@ -33,6 +35,9 @@ app.config["PONY"] = {
     'filename': os.path.abspath('db.db3'),
     'create_db': True
 }
+app.config["CACHE_TYPE"] = "simple"
+
+cache = Cache(app)
 
 multiworlds = {}
 
@@ -66,36 +71,14 @@ class MultiworldInstance():
             self.process.terminate()
             self.process = None
 
-@app.route('/', methods=['GET', 'POST'])
-def upload_multidata():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-        else:
-            file = request.files['file']
-            # if user does not select file, browser also
-            # submit an empty part without filename
-            if file.filename == '':
-                flash('No selected file')
-            elif file and allowed_file(file.filename):
-                try:
-                    multidata = json.loads(zlib.decompress(file.read()).decode("utf-8-sig"))
-                except:
-                    flash("Could not load multidata. File may be corrupted or incompatible.")
-                else:
-                    seed = Seed(multidata=multidata)
-                    commit()  # place into DB and generate ids
-                    return redirect(url_for("view_seed", seed=seed.id))
-            else:
-                flash("Not recognized file format. Awaiting a .multidata file.")
-    return render_template("upload_multidata.html")
-
 
 @app.route('/seed/<int:seed>')
 def view_seed(seed: int):
     seed = Seed.get(id=seed)
-    return render_template("view_seed.html", seed=seed)
+    if seed:
+        return render_template("view_seed.html", seed=seed)
+    else:
+        abort(404)
 
 
 @app.route('/new_room/<int:seed>')
@@ -143,4 +126,93 @@ def host_room(room: int):
     return render_template("host_room.html", room=room)
 
 
+@app.route('/tracker/<int:room>')
+@cache.memoize(timeout=60 * 5)  # update every 5 minutes
+def get_tracker(room: int):
+    # This more WIP than the rest
+    import Items
+    def get_id(item_name):
+        return Items.item_table[item_name][3]
+
+    room = Room.get(id=room)
+    if not room:
+        abort(404)
+    if room.allow_tracker:
+        multidata = room.seed.multidata
+        locations = {tuple(k): tuple(v) for k, v in multidata['locations']}
+
+        links = {"Bow": "Progressive Bow",
+                 "Silver Arrows": "Progressive Bow",
+                 "Bottle (Red Potion)": "Bottle",
+                 "Bottle (Green Potion)": "Bottle",
+                 "Bottle (Blue Potion)": "Bottle",
+                 "Bottle (Fairy)": "Bottle",
+                 "Bottle (Bee)": "Bottle",
+                 "Bottle (Good Bee)": "Bottle",
+                 "Fighter Sword": "Progressive Sword",
+                 "Master Sword": "Progressive Sword",
+                 "Tempered Sword": "Progressive Sword",
+                 "Golden Sword": "Progressive Sword",
+                 "Power Glove": "Progressive Glove",
+                 "Titans Mitts": "Progressive Glove"
+                 }
+        links = {get_id(key): get_id(value) for key, value in links.items()}
+        inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(len(team))}
+                     for teamnumber, team in enumerate(multidata["names"])}
+        for (team, player), locations_checked in room.multisave.get("location_checks", {}):
+            for location in locations_checked:
+                item, recipient = locations[location, player]
+                inventory[team][recipient][links.get(item, item)] += 1
+
+        from MultiServer import get_item_name_from_id
+        from Items import lookup_id_to_name
+        player_names = {}
+        for team, names in enumerate(multidata['names']):
+            for player, name in enumerate(names, 1):
+                player_names[(team, player)] = name
+        tracking_names = ["Progressive Sword", "Progressive Bow", "Progressive Bow (Alt)", "Book of Mudora", "Hammer",
+                          "Hookshot", "Magic Mirror", "Flute",
+                          "Pegasus Boots", "Progressive Glove", "Flippers", "Moon Pearl", "Blue Boomerang",
+                          "Red Boomerang", "Bug Catching Net", "Cane of Byrna", "Cape", "Mushroom", "Shovel", "Lamp",
+                          "Magic Powder",
+                          "Cane of Somaria", "Fire Rod", "Ice Rod", "Bombos", "Ether", "Quake",
+                          "Bottle", "Triforce"]  # TODO make sure this list has what we need and sort it better
+        tracking_ids = []
+
+        for item in tracking_names:
+            tracking_ids.append(get_id(item))
+
+        return render_template("tracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
+                               lookup_id_to_name=lookup_id_to_name, player_names=player_names,
+                               tracking_names=tracking_names, tracking_ids=tracking_ids)
+    else:
+        return "Tracker disabled for this room."
+
+
 from WebHost.customserver import run_server_process
+
+
+@app.route('/', methods=['GET', 'POST'])
+def upload_multidata():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+        else:
+            file = request.files['file']
+            # if user does not select file, browser also
+            # submit an empty part without filename
+            if file.filename == '':
+                flash('No selected file')
+            elif file and allowed_file(file.filename):
+                try:
+                    multidata = json.loads(zlib.decompress(file.read()).decode("utf-8-sig"))
+                except:
+                    flash("Could not load multidata. File may be corrupted or incompatible.")
+                else:
+                    seed = Seed(multidata=multidata)
+                    commit()  # place into DB and generate ids
+                    return redirect(url_for("view_seed", seed=seed.id))
+            else:
+                flash("Not recognized file format. Awaiting a .multidata file.")
+    return render_template("upload_multidata.html")
