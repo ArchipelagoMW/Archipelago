@@ -22,7 +22,7 @@ from EntranceShuffle import door_addresses
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = 'aec17dd8b3c76c16d0b0311c36eb1c00'
+RANDOMIZERBASEHASH = '131b1e7f1bd500cc2ec9ddf936d65d97'
 
 class LocalRom(object):
 
@@ -106,6 +106,7 @@ class LocalRom(object):
             with open(local_path('basepatch.sfc'), 'wb') as stream:
                 stream.write(self.buffer)
             create_patch_file(local_path('basepatch.sfc'))
+            os.rename(local_path('basepatch.bmbp'), os.path.join('data', 'basepatch.bmbp'))
             os.remove(local_path('data/base2current.json'))
         else:
             raise RuntimeError(
