@@ -76,7 +76,8 @@ def run_server_process(room_id, ponyconfig: dict):
 
         logging.basicConfig(format='[%(asctime)s] %(message)s',
                             level=logging.INFO,
-                            filename=os.path.join(LOGS_FOLDER, f"{room_id}.txt"))
+                            handlers=[
+                                logging.FileHandler(os.path.join(LOGS_FOLDER, f"{room_id}.txt"), 'a', 'utf-8-sig')])
         ctx = WebHostContext()
         ctx.load(room_id)
         ctx.auto_shutdown = 24 * 60 * 60  # 24 hours

@@ -94,7 +94,7 @@ def new_room(seed: int):
 
 def _read_log(path: str):
     if os.path.exists(path):
-        with open(path) as log:
+        with open(path, encoding="utf-8-sig") as log:
             yield from log
     else:
         yield f"Logfile {path} does not exist. " \
@@ -227,7 +227,9 @@ def get_tracker(room: int):
             for location in locations_checked:
                 item, recipient = locations[location, player]
                 inventory[team][recipient][links.get(item, item)] += 1
-
+        for (team, player), game_state in room.multisave.get("client_game_state", []):
+            if game_state:
+                inventory[team][player][106] = 1  # Triforce
         from MultiServer import get_item_name_from_id
         from Items import lookup_id_to_name
         player_names = {}

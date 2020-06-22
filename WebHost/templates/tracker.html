@@ -12,8 +12,9 @@
                 <th>Name</th>
                 {% for name in tracking_names %}
                     {% if name in icons %}
-                        <th><img height="32" width="32" style="object-fit: contain" src="{{ icons[name] }}"
-                                 alt="{{ name }}"></th>
+                        <th style="text-align: center"><img height="32" width="32" style="object-fit: contain"
+                                                            src="{{ icons[name] }}"
+                                                            alt="{{ name }}"></th>
                     {% else %}
                         <th>{{ name }}</th>
                     {% endif %}
@@ -28,7 +29,7 @@
                     {% for id in tracking_ids %}
 
                         {% if items[id] %}
-                            <td class="table-success">
+                            <td style="text-align: center" class="table-success">
                                 {% if id in multi_items %}{{ items[id] }}{% else %}✔️{% endif %}</td>
                         {% else %}
                             <td></td>
