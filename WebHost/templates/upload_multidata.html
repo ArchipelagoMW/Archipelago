@@ -8,4 +8,17 @@
         <input type=file name=file>
         <input type=submit value=Upload>
     </form>
+    <br>
+    {% if rooms %}
+        <h1>Your Rooms:</h1>
+        <ul class="list-group">
+            {% for room in rooms %}
+                <li class="list-group-item"><a href="{{ url_for("host_room", room=room.id) }}">Room #{{ room.id }}</a>
+                    based on <a href="{{ url_for("view_seed", seed=room.seed.id) }}">Seed #{{ room.seed.id }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h3>No rooms owned by you were found. Upload a Multiworld to get started.</h3>
+    {% endif %}
+
 {% endblock %}

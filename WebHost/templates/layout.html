@@ -8,12 +8,14 @@
     {% endblock %}
 </head>
 <body>
-{% with messages = get_flashed_messages() %}
-    {% for message in messages %}
-        <div class="alert alert-danger" role="alert">{{ message }}</div>
-    {% endfor %}
-{% endwith %}
-{% block body %}{% endblock %}
+<div class=".container-fluid">
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <div class="alert alert-danger" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+    {% block body %}{% endblock %}
+</div>
 <footer class="page-footer" style="position: fixed; left: 0; bottom: 0; width: 100%; text-align: center">
     <div class="container">
         <span class="text-muted">This site uses a cookie to track your session in order to give you ownership over uploaded files and created instances.</span>
