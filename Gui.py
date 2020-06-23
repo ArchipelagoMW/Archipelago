@@ -1348,7 +1348,7 @@ class SpriteSelector(object):
             button = Button(frame, image=image, command=lambda spr=sprite: self.select_sprite(spr))
             ToolTips.register(button, sprite.name + ("\nBy: %s" % sprite.author_name if sprite.author_name else ""))
             button.image = image
-            button.grid(row=i // 16, column=i % 16)
+            button.grid(row=i // 32, column=i % 32)
             i += 1
 
         if i == 0:
