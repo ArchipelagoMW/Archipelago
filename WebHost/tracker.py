@@ -3,9 +3,8 @@ import collections
 from flask import render_template
 from werkzeug.exceptions import abort
 
-from WebHost import app, cache, Room
-
 import Items
+from WebHost import app, cache, Room
 
 
 def get_id(item_name):
@@ -98,6 +97,42 @@ tracking_names = ["Progressive Sword", "Progressive Bow", "Book of Mudora", "Ham
                   "Cane of Somaria", "Cane of Byrna", "Fire Rod", "Ice Rod", "Bombos", "Ether", "Quake",
                   "Bottle", "Triforce"]  # TODO make sure this list has what we need and sort it better
 
+default_locations = {
+    'Light World': {1572864, 1572865, 60034, 1572867, 1572868, 60037, 1572869, 1572866, 60040, 59788, 60046, 60175,
+                    1572880, 60049, 60178, 1572883, 60052, 60181, 1572885, 60055, 60184, 191256, 60058, 60187, 1572884,
+                    1572886, 1572887, 1572906, 60202, 60205, 59824, 166320, 1010170, 60208, 60211, 60214, 60217, 59836,
+                    60220, 60223, 59839, 1573184, 60226, 975299, 1573188, 1573189, 188229, 60229, 60232, 1573193,
+                    1573194, 60235, 1573187, 59845, 59854, 211407, 60238, 59857, 1573185, 1573186, 1572882, 212328,
+                    59881, 59761, 59890, 59770, 193020, 212605},
+    'Dark World': {59776, 59779, 975237, 1572870, 60043, 1572881, 60190, 60193, 60196, 60199, 60840, 1573190, 209095,
+                   1573192, 1573191, 60241, 60244, 60247, 60250, 59884, 59887, 60019, 60022, 60028, 60031},
+    'Desert Palace': {1573216, 59842, 59851, 59791, 1573201, 59830},
+    'Eastern Palace': {1573200, 59827, 59893, 59767, 59833, 59773},
+    'Hyrule Castle': {60256, 60259, 60169, 60172, 59758, 59764, 60025, 60253},
+    'Agahnims Tower': {60082, 60085},
+    'Tower of Hera': {1573218, 59878, 59821, 1573202, 59896, 59899},
+    'Swamp Palace': {60064, 60067, 60070, 59782, 59785, 60073, 60076, 60079, 1573204, 60061},
+    'Thieves Town': {59905, 59908, 59911, 59914, 59917, 59920, 59923, 1573206},
+    'Skull Woods': {59809, 59902, 59848, 59794, 1573205, 59800, 59803, 59806},
+    'Ice Palace': {59872, 59875, 59812, 59818, 59860, 59797, 1573207, 59869},
+    'Misery Mire': {60001, 60004, 60007, 60010, 60013, 1573208, 59866, 59998},
+    'Turtle Rock': {59938, 59941, 59944, 1573209, 59947, 59950, 59953, 59956, 59926, 59929, 59932, 59935},
+    'Palace of Darkness': {59968, 59971, 59974, 59977, 59980, 59983, 59986, 1573203, 59989, 59959, 59992, 59962, 59995,
+                           59965},
+    'Ganons Tower': {60160, 60163, 60166, 60088, 60091, 60094, 60097, 60100, 60103, 60106, 60109, 60112, 60115, 60118,
+                     60121, 60124, 60127, 1573217, 60130, 60133, 60136, 60139, 60142, 60145, 60148, 60151, 60157}}
+
+location_to_area = {}
+for area, locations in default_locations.items():
+    for location in locations:
+        location_to_area[location] = area
+
+checks_in_area = {area: len(checks) for area, checks in default_locations.items()}
+
+ordered_areas = ('Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
+                 'Tower of Hera', 'Palace of Darkness', 'Swamp Palace', 'Skull Woods', 'Thieves Town', 'Ice Palace',
+                 'Misery Mire', 'Turtle Rock', 'Ganons Tower')
+
 tracking_ids = []
 
 for item in tracking_names:
@@ -121,10 +156,15 @@ def get_tracker(room: int):
         inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1)}
                      for teamnumber, team in enumerate(multidata["names"])}
 
+        checks_done = {teamnumber: {playernumber: {loc_name: 0 for loc_name in default_locations}
+                                    for playernumber in range(1, len(team) + 1)}
+                       for teamnumber, team in enumerate(multidata["names"])}
+
         for (team, player), locations_checked in room.multisave.get("location_checks", {}):
             for location in locations_checked:
                 item, recipient = locations[location, player]
                 inventory[team][recipient][links.get(item, item)] += 1
+                checks_done[team][player][location_to_area[location]] += 1
         for (team, player), game_state in room.multisave.get("client_game_state", []):
             if game_state:
                 inventory[team][player][106] = 1  # Triforce
@@ -137,6 +177,7 @@ def get_tracker(room: int):
         return render_template("tracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
                                lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
                                tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=icons,
-                               multi_items=multi_items)
+                               multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
+                               checks_in_area=checks_in_area)
     else:
         return "Tracker disabled for this room."

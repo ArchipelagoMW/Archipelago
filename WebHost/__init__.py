@@ -111,6 +111,8 @@ processstartlock = threading.Lock()
 @app.route('/hosted/<int:room>', methods=['GET', 'POST'])
 def host_room(room: int):
     room = Room.get(id=room)
+    if room is None:
+        return abort(404)
     if request.method == "POST":
         if room.owner == session["_id"]:
             cmd = request.form["cmd"]

@@ -40,4 +40,41 @@
             </tbody>
         </table>
     {% endfor %}
+    {% for team, players in checks_done.items() %}
+        <table class="table table-striped table-bordered table-hover table-sm">
+            <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                {% for area in ordered_areas %}
+                    {% if area in icons %}
+                        <th style="text-align: center"><img height="32" width="32" style="object-fit: contain"
+                                                            src="{{ icons[area] }}"
+                                                            alt="{{ area }}"></th>
+                    {% else %}
+                        <th>{{ area }}</th>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for player, checks in players.items() %}
+                <tr>
+                    <td class="table-info">{{ loop.index }}</td>
+                    <td class="table-info">{{ player_names[(team, loop.index)] }}</td>
+                    {% for area in ordered_areas %}
+                        {% set checks_done = checks[area] %}
+                        {% set checks_total = checks_in_area[area] %}
+                        {% if checks_done == checks_total %}
+                            <td style="text-align: center" class="table-success">
+                                {{ checks_done }}/{{ checks_total }}</td>
+                        {% else %}
+                            <td>{{ checks_done }}/{{ checks_total }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
 {% endblock %}
