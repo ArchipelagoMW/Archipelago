@@ -49,7 +49,6 @@ class Client(Endpoint):
         self.version = [0, 0, 0]
         self.messageprocessor = ClientMessageProcessor(ctx, self)
         self.ctx = weakref.ref(ctx)
-        ctx.client_connection_timers[self.team, self.slot] = datetime.datetime.now(datetime.timezone.utc)
 
     @property
     def wants_item_notification(self):
@@ -86,7 +85,7 @@ class Context(Node):
         self.item_cheat = item_cheat
         self.running = True
         self.client_activity_timers: typing.Dict[
-            typing.Tuple[int, int], datetime.datetime] = {}  # datatime of last new item check
+            typing.Tuple[int, int], datetime.datetime] = {}  # datetime of last new item check
         self.client_connection_timers: typing.Dict[
             typing.Tuple[int, int], datetime.datetime] = {}  # datetime of last connection
         self.client_game_state: typing.Dict[typing.Tuple[int, int], int] = collections.defaultdict(int)
@@ -193,7 +192,11 @@ class Context(Node):
             "hints": tuple((key, list(value)) for key, value in self.hints.items()),
             "location_checks": tuple((key, tuple(value)) for key, value in self.location_checks.items()),
             "name_aliases": tuple((key, value) for key, value in self.name_aliases.items()),
-            "client_game_state": tuple((key, value) for key, value in self.client_game_state.items())
+            "client_game_state": tuple((key, value) for key, value in self.client_game_state.items()),
+            "client_activity_timers": tuple(
+                (key, value.timestamp()) for key, value in self.client_activity_timers.items()),
+            "client_connection_timers": tuple(
+                (key, value.timestamp()) for key, value in self.client_connection_timers.items()),
         }
         return d
 
@@ -224,7 +227,16 @@ class Context(Node):
             self.name_aliases.update({tuple(key): value for key, value in savedata["name_aliases"]})
             if "client_game_state" in savedata:
                 self.client_game_state.update({tuple(key): value for key, value in savedata["client_game_state"]})
+                if "client_activity_timers" in savedata:
+                    self.client_connection_timers.update(
+                        {tuple(key): datetime.datetime.fromtimestamp(value, datetime.timezone.utc) for key, value
+                         in savedata["client_connection_timers"]})
+                    self.client_activity_timers.update(
+                        {tuple(key): datetime.datetime.fromtimestamp(value, datetime.timezone.utc) for key, value
+                         in savedata["client_activity_timers"]})
+
         self.location_checks.update({tuple(key): set(value) for key, value in savedata["location_checks"]})
+
         logging.info(f'Loaded save file with {sum([len(p) for p in received_items.values()])} received items '
                      f'for {len(received_items)} players')
 
@@ -337,7 +349,7 @@ async def on_client_joined(ctx: Context, client: Client):
                                                                 client.team + 1,
                                                                 ".".join(str(x) for x in client.version),
                                                                 client.tags))
-
+    ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 async def on_client_left(ctx: Context, client: Client):
     ctx.notify_all("%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1))
