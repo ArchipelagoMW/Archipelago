@@ -8,6 +8,7 @@ from waitress import serve
 from WebHost.models import db
 
 DEBUG = False
+port = 80
 
 if __name__ == "__main__":
     multiprocessing.freeze_support()
@@ -26,6 +27,6 @@ if __name__ == "__main__":
     db.bind(**app.config["PONY"])
     db.generate_mapping(create_tables=True)
     if DEBUG:
-        app.run(debug=True)
+        app.run(debug=True, port=port)
     else:
-        serve(app, port=80, threads=1)
+        serve(app, port=port, threads=1)

@@ -86,7 +86,7 @@ links = {"Bow": "Progressive Bow",
          "Power Glove": "Progressive Glove",
          "Titans Mitts": "Progressive Glove"
          }
-multi_items = {get_id(name) for name in ("Progressive Sword", "Progressive Bow", "Bottle")}
+multi_items = {get_id(name) for name in ("Progressive Sword", "Progressive Bow", "Bottle", "Progressive Glove")}
 links = {get_id(key): get_id(value) for key, value in links.items()}
 
 tracking_names = ["Progressive Sword", "Progressive Bow", "Book of Mudora", "Hammer",
@@ -120,18 +120,19 @@ default_locations = {
     'Palace of Darkness': {59968, 59971, 59974, 59977, 59980, 59983, 59986, 1573203, 59989, 59959, 59992, 59962, 59995,
                            59965},
     'Ganons Tower': {60160, 60163, 60166, 60088, 60091, 60094, 60097, 60100, 60103, 60106, 60109, 60112, 60115, 60118,
-                     60121, 60124, 60127, 1573217, 60130, 60133, 60136, 60139, 60142, 60145, 60148, 60151, 60157}}
-
+                     60121, 60124, 60127, 1573217, 60130, 60133, 60136, 60139, 60142, 60145, 60148, 60151, 60157},
+    'Total': set()}
 location_to_area = {}
 for area, locations in default_locations.items():
     for location in locations:
         location_to_area[location] = area
 
 checks_in_area = {area: len(checks) for area, checks in default_locations.items()}
+checks_in_area["Total"] = 216
 
 ordered_areas = ('Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
                  'Tower of Hera', 'Palace of Darkness', 'Swamp Palace', 'Skull Woods', 'Thieves Town', 'Ice Palace',
-                 'Misery Mire', 'Turtle Rock', 'Ganons Tower')
+                 'Misery Mire', 'Turtle Rock', 'Ganons Tower', "Total")
 
 tracking_ids = []
 
@@ -165,6 +166,7 @@ def get_tracker(room: int):
                 item, recipient = locations[location, player]
                 inventory[team][recipient][links.get(item, item)] += 1
                 checks_done[team][player][location_to_area[location]] += 1
+                checks_done[team][player]["Total"] += 1
         for (team, player), game_state in room.multisave.get("client_game_state", []):
             if game_state:
                 inventory[team][player][106] = 1  # Triforce
