@@ -3,6 +3,7 @@ import collections
 from flask import render_template
 from werkzeug.exceptions import abort
 import datetime
+import logging
 
 import Items
 from WebHost import app, cache, Room
@@ -87,8 +88,17 @@ links = {"Bow": "Progressive Bow",
          "Power Glove": "Progressive Glove",
          "Titans Mitts": "Progressive Glove"
          }
+
+levels = {"Fighter Sword": 1,
+          "Master Sword": 2,
+          "Tempered Sword": 3,
+          "Golden Sword": 4,
+          "Power Glove": 1,
+          "Titans Mitts": 2}
+
 multi_items = {get_id(name) for name in ("Progressive Sword", "Progressive Bow", "Bottle", "Progressive Glove")}
 links = {get_id(key): get_id(value) for key, value in links.items()}
+levels = {get_id(key): value for key, value in levels.items()}
 
 tracking_names = ["Progressive Sword", "Progressive Bow", "Book of Mudora", "Hammer",
                   "Hookshot", "Magic Mirror", "Flute",
@@ -143,6 +153,13 @@ for item in tracking_names:
 from MultiServer import get_item_name_from_id
 
 
+def attribute_item(inventory, team, recipient, item):
+    target_item = links.get(item, item)
+    if item in levels:  # non-progressive
+        inventory[team][recipient][target_item] = max(inventory[team][recipient][target_item], levels[item])
+    else:
+        inventory[team][recipient][target_item] += 1
+
 @app.route('/tracker/<int:room>')
 @cache.memoize(timeout=60)  # update every minute
 def get_tracker(room: int):
@@ -159,11 +176,16 @@ def get_tracker(room: int):
         checks_done = {teamnumber: {playernumber: {loc_name: 0 for loc_name in default_locations}
                                     for playernumber in range(1, len(team) + 1)}
                        for teamnumber, team in enumerate(multidata["names"])}
+        precollected_items = room.seed.multidata.get("precollected_items", None)
 
         for (team, player), locations_checked in room.multisave.get("location_checks", {}):
+            if precollected_items:
+                precollected = precollected_items[player - 1]
+                for item_id in precollected:
+                    attribute_item(inventory, team, player, item_id)
             for location in locations_checked:
                 item, recipient = locations[location, player]
-                inventory[team][recipient][links.get(item, item)] += 1
+                attribute_item(inventory, team, recipient, item)
                 checks_done[team][player][location_to_area[location]] += 1
                 checks_done[team][player]["Total"] += 1
         for (team, player), game_state in room.multisave.get("client_game_state", []):

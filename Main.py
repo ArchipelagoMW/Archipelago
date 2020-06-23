@@ -253,6 +253,10 @@ def main(args, seed=None):
                         if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
                             er_hint_data[region.player][location.address] = main_entrance.name
 
+        precollected_items = [[] for player in range(world.players)]
+        for item in world.precollected_items:
+            precollected_items[item.player - 1].append(item.code)
+
         multidata = zlib.compress(json.dumps({"names": parsed_names,
                                               "roms": rom_names,
                                               "remote_items": [player for player in range(1, world.players + 1) if
@@ -263,6 +267,7 @@ def main(args, seed=None):
                                                             type(location.address) is int],
                                               "server_options": get_options()["server_options"],
                                               "er_hint_data": er_hint_data,
+                                              "precollected_items": precollected_items
                                               }).encode("utf-8"), 9)
 
         with open(output_path('%s.multidata' % outfilebase), 'wb') as f:
