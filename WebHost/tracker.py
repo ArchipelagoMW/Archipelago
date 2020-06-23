@@ -2,6 +2,7 @@ import collections
 
 from flask import render_template
 from werkzeug.exceptions import abort
+import datetime
 
 import Items
 from WebHost import app, cache, Room
@@ -145,8 +146,6 @@ from MultiServer import get_item_name_from_id
 @app.route('/tracker/<int:room>')
 @cache.memoize(timeout=60)  # update every minute
 def get_tracker(room: int):
-    # This more WIP than the rest
-
     room = Room.get(id=room)
     if not room:
         abort(404)
@@ -171,6 +170,10 @@ def get_tracker(room: int):
             if game_state:
                 inventory[team][player][106] = 1  # Triforce
 
+        activity_timers = {}
+        for (team, player), timestamp in room.multisave.get("client_activity_timers", []):
+            activity_timers[team, player] = datetime.datetime.utcfromtimestamp(timestamp)
+
         player_names = {}
         for team, names in enumerate(multidata['names']):
             for player, name in enumerate(names, 1):
@@ -180,6 +183,6 @@ def get_tracker(room: int):
                                lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
                                tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=icons,
                                multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
-                               checks_in_area=checks_in_area)
+                               checks_in_area=checks_in_area, activity_timers=activity_timers)
     else:
         return "Tracker disabled for this room."

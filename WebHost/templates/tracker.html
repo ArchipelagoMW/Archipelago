@@ -55,6 +55,7 @@
                         <th>{{ area }}</th>
                     {% endif %}
                 {% endfor %}
+                <th>Last Activity (UTC)</th>
             </tr>
             </thead>
             <tbody>
@@ -72,6 +73,10 @@
                             <td style="text-align: center">{{ checks_done }}/{{ checks_total }}</td>
                         {% endif %}
                     {% endfor %}
+                    {% if activity_timers[(team, player)] %}
+                        <td class="table-info">{{ activity_timers[(team, player)].isoformat(sep=" ", timespec='minutes') }}</td>
+                    {% else %}
+                        <td class="table-warning">No activity</td>{% endif %}
                 </tr>
             {% endfor %}
             </tbody>
