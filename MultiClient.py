@@ -818,6 +818,8 @@ async def process_server_cmd(ctx: Context, cmd, args):
             msgs.append(['LocationScouts', list(ctx.locations_scouted)])
         if msgs:
             await ctx.send_msgs(msgs)
+        if ctx.finished_game:
+            await send_finished_game(ctx)
 
     elif cmd == 'ReceivedItems':
         start_index, items = args
@@ -1121,6 +1123,14 @@ async def track_locations(ctx : Context, roomid, roomdata):
     await ctx.send_msgs([['LocationChecks', new_locations]])
 
 
+async def send_finished_game(ctx: Context):
+    try:
+        await ctx.send_msgs([['GameFinished', '']])
+        ctx.finished_game = True
+    except Exception as ex:
+        logging.exception(ex)
+
+
 async def game_watcher(ctx : Context):
     prev_game_timer = 0
     perf_counter = time.perf_counter()
@@ -1160,11 +1170,7 @@ async def game_watcher(ctx : Context):
         delay = 7 if ctx.slow_mode else 2
         if gameend[0]:
             if not ctx.finished_game:
-                try:
-                    await ctx.send_msgs([['GameFinished', '']])
-                    ctx.finished_game = True
-                except Exception as ex:
-                    logging.exception(ex)
+                await(send_finished_game(ctx))
 
             if time.perf_counter() - perf_counter < delay:
                 continue
