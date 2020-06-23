@@ -164,7 +164,7 @@ def crossover_logic(world, player):
             if location.player in no_logic_players:
                 for item in progression_items:
                     forbid_item(location, item, player)
-                for item in item_name_groups["Small Keys"]:
+                for item in item_name_groups["Small Keys"] - {"Small Key (Universal)"}:
                     forbid_item(location, item, player)
                 for item in item_name_groups["Big Keys"]:
                     forbid_item(location, item, player)
