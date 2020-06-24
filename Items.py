@@ -113,75 +113,30 @@ item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher cla
               'Magic Upgrade (1/4)': (True, False, None, 0x4F, 'Your magic\npower has been\nquadrupled!', 'and the spell power', 'the magic-saving kid', 'wizardry for sale', 'mekalekahi mekahiney ho', 'magic boy saves magic again', 'quarter magic'),  # can be required to beat mothula in an open seed in very very rare circumstance
               'Small Key (Eastern Palace)': (False, False, 'SmallKey', 0xA2, 'A small key to Armos Knights', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Eastern Palace'),
               'Big Key (Eastern Palace)': (False, False, 'BigKey', 0x9D, 'A big key to Armos Knights', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Eastern Palace'),
-              'Compass (Eastern Palace)': (
-              False, True, 'Compass', 0x8D, 'Now you can find the Armos Knights!', 'and the compass',
-              'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again',
-              'a compass to Eastern Palace'),
-              'Map (Eastern Palace)': (
-              False, True, 'Map', 0x7D, 'A tightly folded map rests here', 'and the map', 'cartography kid',
-              'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Eastern Palace'),
-              'Small Key (Desert Palace)': (
-              False, False, 'SmallKey', 0xA3, 'A small key to the desert', 'and the key', 'the unlocking kid',
-              'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Desert Palace'),
-              'Big Key (Desert Palace)': (
-              False, False, 'BigKey', 0x9C, 'A big key to the desert', 'and the big key', 'the big-unlock kid',
-              'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Desert Palace'),
-              'Compass (Desert Palace)': (
-              False, True, 'Compass', 0x8C, 'Now you can find Lanmolas!', 'and the compass', 'the magnetic kid',
-              'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Desert Palace'),
-              'Map (Desert Palace)': (
-              False, True, 'Map', 0x7C, 'A tightly folded map rests here', 'and the map', 'cartography kid',
-              'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Desert Palace'),
-              'Small Key (Tower of Hera)': (
-              False, False, 'SmallKey', 0xAA, 'A small key to Hera', 'and the key', 'the unlocking kid',
-              'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Tower of Hera'),
-              'Big Key (Tower of Hera)': (
-              False, False, 'BigKey', 0x95, 'A big key to Hera', 'and the big key', 'the big-unlock kid',
-              'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Tower of Hera'),
-              'Compass (Tower of Hera)': (
-              False, True, 'Compass', 0x85, 'Now you can find Moldorm!', 'and the compass', 'the magnetic kid',
-              'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Tower of Hera'),
-              'Map (Tower of Hera)': (
-              False, True, 'Map', 0x75, 'A tightly folded map rests here', 'and the map', 'cartography kid',
-              'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Tower of Hera'),
-              'Small Key (Hyrule Castle)': (
-              False, False, 'SmallKey', 0xA0, 'A small key to the castle', 'and the key', 'the unlocking kid',
-              'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Hyrule Castle'),
-              'Big Key (Hyrule Castle)': (
-              False, False, 'BigKey', 0x9F, 'A big key to the castle', 'and the big key', 'the big-unlock kid',
-              'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Hyrule Castle'),
-              'Compass (Hyrule Castle)': (
-              False, True, 'Compass', 0x8F, 'Now you can find no boss!', 'and the compass', 'the magnetic kid',
-              'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Hyrule Castle'),
-              'Map (Hyrule Castle)': (
-              False, True, 'Map', 0x7F, 'A tightly folded map rests here', 'and the map', 'cartography kid',
-              'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Hyrule Castle'),
-              'Small Key (Agahnims Tower)': (
-              False, False, 'SmallKey', 0xA4, 'A small key to Agahnim', 'and the key', 'the unlocking kid',
-              'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Castle Tower'),
+              'Compass (Eastern Palace)': (False, True, 'Compass', 0x8D, 'Now you can find the Armos Knights!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Eastern Palace'),
+              'Map (Eastern Palace)': (False, True, 'Map', 0x7D, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Eastern Palace'),
+              'Small Key (Desert Palace)': (False, False, 'SmallKey', 0xA3, 'A small key to the desert', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Desert Palace'),
+              'Big Key (Desert Palace)': (False, False, 'BigKey', 0x9C, 'A big key to the desert', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Desert Palace'),
+              'Compass (Desert Palace)': (False, True, 'Compass', 0x8C, 'Now you can find Lanmolas!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Desert Palace'),
+              'Map (Desert Palace)': (False, True, 'Map', 0x7C, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Desert Palace'),
+              'Small Key (Tower of Hera)': (False, False, 'SmallKey', 0xAA, 'A small key to Hera', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Tower of Hera'),
+              'Big Key (Tower of Hera)': (False, False, 'BigKey', 0x95, 'A big key to Hera', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Tower of Hera'),
+              'Compass (Tower of Hera)': (False, True, 'Compass', 0x85, 'Now you can find Moldorm!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Tower of Hera'),
+              'Map (Tower of Hera)': (False, True, 'Map', 0x75, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Tower of Hera'),
+              'Small Key (Hyrule Castle)': (False, False, 'SmallKey', 0xA0, 'A small key to the castle', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Hyrule Castle'),
+              'Big Key (Hyrule Castle)': (False, False, 'BigKey', 0x9F, 'A big key to the castle', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Hyrule Castle'),
+              'Compass (Hyrule Castle)': (False, True, 'Compass', 0x8F, 'Now you can find no boss!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Hyrule Castle'),
+              'Map (Hyrule Castle)': (False, True, 'Map', 0x7F, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Hyrule Castle'),
+              'Small Key (Agahnims Tower)': (False, False, 'SmallKey', 0xA4, 'A small key to Agahnim', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Castle Tower'),
               # doors-specific items, baserom will not be able to understand these
-              'Big Key (Agahnims Tower)': (
-              False, False, 'BigKey', 0x9B, 'A big key to Agahnim', 'and the big key', 'the big-unlock kid',
-              'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Castle Tower'),
-              'Compass (Agahnims Tower)': (
-              False, True, 'Compass', 0x8B, 'Now you can find Aga1!', 'and the compass', 'the magnetic kid',
-              'compass for sale', 'magnetic fungus', 'compass boy finds null again', 'a compass to Castle Tower'),
-              'Map (Agahnims Tower)': (
-              False, True, 'Map', 0x7B, 'A tightly folded map rests here', 'and the map', 'cartography kid',
-              'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Castle Tower'),
+              'Big Key (Agahnims Tower)': (False, False, 'BigKey', 0x9B, 'A big key to Agahnim', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Castle Tower'),
+              'Compass (Agahnims Tower)': (False, True, 'Compass', 0x8B, 'Now you can find Aga1!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds null again', 'a compass to Castle Tower'),
+              'Map (Agahnims Tower)': (False, True, 'Map', 0x7B, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Castle Tower'),
               # end of doors-specific items
-              'Small Key (Palace of Darkness)': (
-              False, False, 'SmallKey', 0xA6, 'A small key to darkness', 'and the key', 'the unlocking kid',
-              'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Palace of Darkness'),
-              'Big Key (Palace of Darkness)': (
-              False, False, 'BigKey', 0x99, 'A big key to darkness', 'and the big key', 'the big-unlock kid',
-              'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Palace of Darkness'),
-              'Compass (Palace of Darkness)': (
-              False, True, 'Compass', 0x89, 'Now you can find Helmasaur King!', 'and the compass', 'the magnetic kid',
-              'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Palace of Darkness'),
-              'Map (Palace of Darkness)': (
-              False, True, 'Map', 0x79, 'A tightly folded map rests here', 'and the map', 'cartography kid',
-              'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Palace of Darkness'),
+              'Small Key (Palace of Darkness)': (False, False, 'SmallKey', 0xA6, 'A small key to darkness', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Palace of Darkness'),
+              'Big Key (Palace of Darkness)': (False, False, 'BigKey', 0x99, 'A big key to darkness', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Palace of Darkness'),
+              'Compass (Palace of Darkness)': (False, True, 'Compass', 0x89, 'Now you can find Helmasaur King!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Palace of Darkness'),
+              'Map (Palace of Darkness)': (False, True, 'Map', 0x79, 'A tightly folded map rests here', 'and the map', 'cartography kid', 'map for sale', 'a map to shrooms', 'map boy navigates again', 'a map to Palace of Darkness'),
               'Small Key (Thieves Town)': (False, False, 'SmallKey', 0xAB, 'A small key to thievery', 'and the key', 'the unlocking kid', 'keys for sale', 'unlock the fungus', 'key boy opens door again', 'a small key to Thieves\' Town'),
               'Big Key (Thieves Town)': (False, False, 'BigKey', 0x94, 'A big key to thievery', 'and the big key', 'the big-unlock kid', 'big key for sale', 'face key fungus', 'key boy opens chest again', 'a big key to Thieves\' Town'),
               'Compass (Thieves Town)': (False, True, 'Compass', 0x84, 'Now you can find Blind!', 'and the compass', 'the magnetic kid', 'compass for sale', 'magnetic fungus', 'compass boy finds boss again', 'a compass to Thieves\' Town'),
