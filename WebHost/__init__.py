@@ -31,6 +31,8 @@ app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024  # 1 megabyte limit
 # if you want persistent sessions on your server, make sure you make this a constant in your config.yaml
 app.config["SECRET_KEY"] = os.urandom(32)
 app.config['SESSION_PERMANENT'] = True
+app.config[
+    "WAITRESS_THREADS"] = 10  # waitress uses one thread for I/O, these are for processing of views that then get sent
 app.config["PONY"] = {
     'provider': 'sqlite',
     'filename': os.path.abspath('db.db3'),
@@ -40,6 +42,7 @@ app.config["CACHE_TYPE"] = "simple"
 
 cache = Cache(app)
 
+# this local cache is risky business if app hosting is done with subprocesses as it will not sync. Waitress is fine though
 multiworlds = {}
 
 

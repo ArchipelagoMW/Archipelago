@@ -29,4 +29,4 @@ if __name__ == "__main__":
     if DEBUG:
         app.run(debug=True, port=port)
     else:
-        serve(app, port=port, threads=1)
+        serve(app, port=port, threads=app.config["WAITRESS_THREADS"])
