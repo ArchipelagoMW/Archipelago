@@ -8,18 +8,22 @@
             src="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.21/fh-3.1.7/datatables.min.js"></script>
     <script>
         $(document).ready(function () {
-            $(".table").DataTable({
+            var tables = $(".table").DataTable({
                 "paging": false,
                 "ordering": true,
                 "info": false,
                 "fixedHeader": true,
                 "dom": "t"
             });
+            $('#searchbox').keyup(function () {
+                tables.search($(this).val()).draw();
+            })
         })
     </script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="static.css") }}"/>
 {% endblock %}
 {% block body %}
+    <input id="searchbox" class="form-control" type="text" placeholder="Search">
     {% for team, players in inventory.items() %}
         <table class="table table-striped table-bordered table-hover table-sm">
             <thead class="thead-dark">
@@ -30,9 +34,9 @@
                     {% if name in icons %}
                         <th style="text-align: center"><img height="32" width="32" style="object-fit: contain"
                                                             src="{{ icons[name] }}"
-                                                            alt="{{ name }}"></th>
+                                                            alt="{{ name|e }}"></th>
                     {% else %}
-                        <th>{{ name }}</th>
+                        <th>{{ name|e }}</th>
                     {% endif %}
                 {% endfor %}
             </tr>
@@ -78,7 +82,7 @@
             {% for player, checks in players.items() %}
                 <tr>
                     <td class="table-info">{{ loop.index }}</td>
-                    <td class="table-info">{{ player_names[(team, loop.index)] }}</td>
+                    <td class="table-info">{{ player_names[(team, loop.index)]|e }}</td>
                     {% for area in ordered_areas %}
                         {% set checks_done = checks[area] %}
                         {% set checks_total = checks_in_area[area] %}

@@ -188,6 +188,7 @@ def get_tracker(room: int):
                 attribute_item(inventory, team, recipient, item)
                 checks_done[team][player][location_to_area[location]] += 1
                 checks_done[team][player]["Total"] += 1
+
         for (team, player), game_state in room.multisave.get("client_game_state", []):
             if game_state:
                 inventory[team][player][106] = 1  # Triforce
@@ -200,6 +201,8 @@ def get_tracker(room: int):
         for team, names in enumerate(multidata['names']):
             for player, name in enumerate(names, 1):
                 player_names[(team, player)] = name
+        for (team, player), alias in room.multisave.get("name_aliases", []):
+            player_names[team, player] = alias
 
         return render_template("tracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
                                lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,

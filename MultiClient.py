@@ -443,7 +443,7 @@ async def get_snes_devices(ctx: Context):
 
 
 async def snes_connect(ctx: Context, address):
-    if ctx.snes_socket is not None:
+    if ctx.snes_socket is not None and ctx.snes_state == SNES_CONNECTED:
         ctx.ui_node.log_error('Already connected to snes')
         return
 
