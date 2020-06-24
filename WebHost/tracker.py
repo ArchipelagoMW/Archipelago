@@ -234,10 +234,6 @@ def get_tracker(room: int):
             for player, name in enumerate(names, 1):
                 player_names[(team, player)] = name
 
-        for team in inventory:
-            for player in inventory[team]:
-                for id, area in small_key_ids.items():
-                    logging.info((player, area, inventory[team][player][id]))
         for (team, player), alias in room.multisave.get("name_aliases", []):
             player_names[team, player] = alias
 
