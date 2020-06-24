@@ -69,7 +69,13 @@ icons = {
     "Magic Mirror":
         r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/e5/ALttP_Magic_Mirror_Sprite.png?version=e035dbc9cbe2a3bd44aa6d047762b0cc",
     "Triforce":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/4/4e/TriforceALttPTitle.png?version=dc398e1293177581c16303e4f9d12a48"
+        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/4/4e/TriforceALttPTitle.png?version=dc398e1293177581c16303e4f9d12a48",
+    "Small Key":
+        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/f/f1/ALttP_Small_Key_Sprite.png?version=4f35d92842f0de39d969181eea03774e",
+    "Big Key":
+        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/3/33/ALttP_Big_Key_Sprite.png?version=136dfa418ba76c8b4e270f466fc12f4d",
+    "Chest":
+        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/7/73/ALttP_Treasure_Chest_Sprite.png?version=5f530ecd98dcb22251e146e8049c0dda"
 }
 
 links = {"Bow": "Progressive Bow",
@@ -133,6 +139,11 @@ default_locations = {
     'Ganons Tower': {60160, 60163, 60166, 60088, 60091, 60094, 60097, 60100, 60103, 60106, 60109, 60112, 60115, 60118,
                      60121, 60124, 60127, 1573217, 60130, 60133, 60136, 60139, 60142, 60145, 60148, 60151, 60157},
     'Total': set()}
+
+key_locations = {"Desert Palace", "Eastern Palace", "Hyrule Castle", "Agahnims Tower", "Tower of Hera", "Swamp Palace",
+                 "Thieves Town", "Skull Woods", "Ice Palace", "Misery Mire", "Turtle Rock", "Palace of Darkness",
+                 "Ganons Tower"}
+
 location_to_area = {}
 for area, locations in default_locations.items():
     for location in locations:
@@ -150,6 +161,17 @@ tracking_ids = []
 for item in tracking_names:
     tracking_ids.append(get_id(item))
 
+small_key_ids = {}
+big_key_ids = {}
+
+for item_name, data in Items.item_table.items():
+    if "Key" in item_name:
+        area = item_name.split("(")[1][:-1]
+        if "Small" in item_name:
+            small_key_ids[area] = data[3]
+        else:
+            big_key_ids[area] = data[3]
+
 from MultiServer import get_item_name_from_id
 
 
@@ -159,6 +181,15 @@ def attribute_item(inventory, team, recipient, item):
         inventory[team][recipient][target_item] = max(inventory[team][recipient][target_item], levels[item])
     else:
         inventory[team][recipient][target_item] += 1
+
+
+@app.template_filter()
+def render_timedelta(delta: datetime.timedelta):
+    hours, minutes = divmod(delta.total_seconds() / 60, 60)
+    hours = str(int(hours))
+    minutes = str(int(minutes)).zfill(2)
+    return f"{hours}:{minutes}"
+
 
 @app.route('/tracker/<int:room>')
 @cache.memoize(timeout=60)  # update every minute
@@ -194,13 +225,19 @@ def get_tracker(room: int):
                 inventory[team][player][106] = 1  # Triforce
 
         activity_timers = {}
+        now = datetime.datetime.utcnow()
         for (team, player), timestamp in room.multisave.get("client_activity_timers", []):
-            activity_timers[team, player] = datetime.datetime.utcfromtimestamp(timestamp)
+            activity_timers[team, player] = now - datetime.datetime.utcfromtimestamp(timestamp)
 
         player_names = {}
         for team, names in enumerate(multidata['names']):
             for player, name in enumerate(names, 1):
                 player_names[(team, player)] = name
+
+        for team in inventory:
+            for player in inventory[team]:
+                for id, area in small_key_ids.items():
+                    logging.info((player, area, inventory[team][player][id]))
         for (team, player), alias in room.multisave.get("name_aliases", []):
             player_names[team, player] = alias
 
@@ -208,6 +245,7 @@ def get_tracker(room: int):
                                lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
                                tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=icons,
                                multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
-                               checks_in_area=checks_in_area, activity_timers=activity_timers)
+                               checks_in_area=checks_in_area, activity_timers=activity_timers,
+                               key_locations=key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids)
     else:
         return "Tracker disabled for this room."
