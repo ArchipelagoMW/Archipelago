@@ -2,6 +2,22 @@
 {% block head %}
     <meta http-equiv="refresh" content="60">
     <title>Multiworld Tracker for Room {{ room.id }}</title>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.21/fh-3.1.7/datatables.min.css"/>
+    <script type="text/javascript"
+            src="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.21/fh-3.1.7/datatables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".table").DataTable({
+                "paging": false,
+                "ordering": true,
+                "info": false,
+                "fixedHeader": true,
+                "dom": "t"
+            });
+        })
+    </script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="static.css") }}"/>
 {% endblock %}
 {% block body %}
     {% for team, players in inventory.items() %}

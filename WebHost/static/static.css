@@ -1,0 +1,12 @@
+table.dataTable.table-sm > thead > tr > th :not(.sorting_disabled) {
+    padding-right: 0;
+}
+
+.dataTable > thead > tr > th[class*="sort"]:before,
+.dataTable > thead > tr > th[class*="sort"]:after {
+    content: "" !important;
+}
+
+table.dataTable.table-sm > thead > tr > th {
+    padding: 1px !important;
+}
