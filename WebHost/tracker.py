@@ -192,7 +192,7 @@ def render_timedelta(delta: datetime.timedelta):
 
 
 @app.route('/tracker/<int:room>')
-@cache.memoize(timeout=60)  # update every minute
+@cache.memoize(timeout=30)  # update every 30 seconds
 def get_tracker(room: int):
     room = Room.get(id=room)
     if not room:

@@ -1,6 +1,5 @@
 {% extends 'layout.html' %}
 {% block head %}
-    <meta http-equiv="refresh" content="60">
     <title>Multiworld Tracker for Room {{ room.id }}</title>
     <link rel="stylesheet" type="text/css"
           href="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.21/fh-3.1.7/datatables.min.css"/>
@@ -15,9 +14,29 @@
                 "fixedHeader": true,
                 "dom": "t"
             });
+
             $('#searchbox').keyup(function () {
                 tables.search($(this).val()).draw();
-            })
+            });
+
+            function update() {
+                var target = $("<div></div>");
+                target.load("/tracker/{{ room.id }}", function (response, status) {
+                    if (status === "success") {
+                        target.find(".table").each(function (i, new_table) {
+                            var new_trs = $(new_table).find("tbody>tr");
+                            var old_table = tables.eq(i);
+                            old_table.clear();
+                            old_table.rows.add(new_trs).draw();
+                        });
+                    } else {
+                        console.log("Failed to connect to Server, in order to update Table Data.");
+                        console.log(response);
+                    }
+                })
+            }
+
+            setInterval(update, 30000);
         })
     </script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="static.css") }}"/>
