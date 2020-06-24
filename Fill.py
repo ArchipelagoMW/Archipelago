@@ -274,7 +274,7 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
 
     # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
     progitempool.sort(
-        key=lambda item: 1 if item.name == 'Small Key (Escape)' and world.mode[item.player] == 'standard' and
+        key=lambda item: 1 if item.name == 'Small Key (Hyrule Castle)' and world.mode[item.player] == 'standard' and
                               world.keyshuffle[item.player] else 0)
 
     fill_restrictive(world, world.state, fill_locations, progitempool)

@@ -272,10 +272,19 @@ class World(object):
         if keys:
             for p in range(1, self.players + 1):
                 from Items import ItemFactory
-                for item in ItemFactory(['Small Key (Escape)', 'Big Key (Eastern Palace)', 'Big Key (Desert Palace)', 'Small Key (Desert Palace)', 'Big Key (Tower of Hera)', 'Small Key (Tower of Hera)', 'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)',
-                                         'Big Key (Palace of Darkness)'] + ['Small Key (Palace of Darkness)'] * 6 + ['Big Key (Thieves Town)', 'Small Key (Thieves Town)', 'Big Key (Skull Woods)'] + ['Small Key (Skull Woods)'] * 3 + ['Big Key (Swamp Palace)',
-                                         'Small Key (Swamp Palace)', 'Big Key (Ice Palace)'] + ['Small Key (Ice Palace)'] * 2 + ['Big Key (Misery Mire)', 'Big Key (Turtle Rock)', 'Big Key (Ganons Tower)'] + ['Small Key (Misery Mire)'] * 3 + ['Small Key (Turtle Rock)'] * 4 + ['Small Key (Ganons Tower)'] * 4,
-                                         p):
+                for item in ItemFactory(
+                        ['Small Key (Hyrule Castle)', 'Big Key (Eastern Palace)', 'Big Key (Desert Palace)',
+                         'Small Key (Desert Palace)', 'Big Key (Tower of Hera)', 'Small Key (Tower of Hera)',
+                         'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)',
+                         'Big Key (Palace of Darkness)'] + ['Small Key (Palace of Darkness)'] * 6 + [
+                            'Big Key (Thieves Town)', 'Small Key (Thieves Town)', 'Big Key (Skull Woods)'] + [
+                            'Small Key (Skull Woods)'] * 3 + ['Big Key (Swamp Palace)',
+                                                              'Small Key (Swamp Palace)', 'Big Key (Ice Palace)'] + [
+                            'Small Key (Ice Palace)'] * 2 + ['Big Key (Misery Mire)', 'Big Key (Turtle Rock)',
+                                                             'Big Key (Ganons Tower)'] + [
+                            'Small Key (Misery Mire)'] * 3 + ['Small Key (Turtle Rock)'] * 4 + [
+                            'Small Key (Ganons Tower)'] * 4,
+                        p):
                     soft_collect(item)
         ret.sweep_for_events()
         return ret
@@ -821,7 +830,7 @@ class Region(object):
                                or (item.bigkey and not self.world.bigkeyshuffle[item.player])
                                or (item.map and not self.world.mapshuffle[item.player])
                                or (item.compass and not self.world.compassshuffle[item.player]))
-        sewer_hack = self.world.mode[item.player] == 'standard' and item.name == 'Small Key (Escape)'
+        sewer_hack = self.world.mode[item.player] == 'standard' and item.name == 'Small Key (Hyrule Castle)'
         if sewer_hack or inside_dungeon_item:
             return self.dungeon and self.dungeon.is_dungeon_item(item) and item.player == self.player
 

@@ -198,26 +198,40 @@ def global_rules(world, player):
     set_rule(world.get_location('Spike Cave', player), lambda state:
              state.has('Hammer', player) and state.can_lift_rocks(player) and
              ((state.has('Cape', player) and state.can_extend_magic(player, 16, True)) or
-                 (state.has('Cane of Byrna', player) and
-                     (state.can_extend_magic(player, 12, True) or
-                     (state.world.can_take_damage[player] and (state.has_Boots(player) or state.has_hearts(player, 4))))))
-            )
+              (state.has('Cane of Byrna', player) and
+               (state.can_extend_magic(player, 12, True) or
+                (state.world.can_take_damage[player] and (state.has_Boots(player) or state.has_hearts(player, 4))))))
+             )
 
     set_rule(world.get_location('Hookshot Cave - Top Right', player), lambda state: state.has('Hookshot', player))
     set_rule(world.get_location('Hookshot Cave - Top Left', player), lambda state: state.has('Hookshot', player))
-    set_rule(world.get_location('Hookshot Cave - Bottom Right', player), lambda state: state.has('Hookshot', player) or state.has('Pegasus Boots', player))
+    set_rule(world.get_location('Hookshot Cave - Bottom Right', player),
+             lambda state: state.has('Hookshot', player) or state.has('Pegasus Boots', player))
     set_rule(world.get_location('Hookshot Cave - Bottom Left', player), lambda state: state.has('Hookshot', player))
 
-    set_rule(world.get_entrance('Sewers Door', player), lambda state: state.has_key('Small Key (Escape)', player) or (world.retro[player] and world.mode[player] == 'standard')) # standard retro cannot access the shop
-    set_rule(world.get_entrance('Sewers Back Door', player), lambda state: state.has_key('Small Key (Escape)', player))
-    set_rule(world.get_entrance('Agahnim 1', player), lambda state: state.has_sword(player) and state.has_key('Small Key (Agahnims Tower)', player, 2))
+    set_rule(world.get_entrance('Sewers Door', player),
+             lambda state: state.has_key('Small Key (Hyrule Castle)', player) or (world.retro[player] and world.mode[
+                 player] == 'standard'))  # standard retro cannot access the shop
+    set_rule(world.get_entrance('Sewers Back Door', player),
+             lambda state: state.has_key('Small Key (Hyrule Castle)', player))
+    set_rule(world.get_entrance('Agahnim 1', player),
+             lambda state: state.has_sword(player) and state.has_key('Small Key (Agahnims Tower)', player, 2))
     set_defeat_dungeon_boss_rule(world.get_location('Agahnim 1', player))
     set_rule(world.get_location('Castle Tower - Room 03', player), lambda state: state.can_kill_most_things(player, 8))
-    set_rule(world.get_location('Castle Tower - Dark Maze', player), lambda state: state.can_kill_most_things(player, 8) and state.has_key('Small Key (Agahnims Tower)', player))
+    set_rule(world.get_location('Castle Tower - Dark Maze', player),
+             lambda state: state.can_kill_most_things(player, 8) and state.has_key('Small Key (Agahnims Tower)',
+                                                                                   player))
 
-    set_rule(world.get_location('Eastern Palace - Big Chest', player), lambda state: state.has('Big Key (Eastern Palace)', player))
-    set_rule(world.get_location('Eastern Palace - Boss', player), lambda state: state.can_shoot_arrows(player) and state.has('Big Key (Eastern Palace)', player) and state.world.get_location('Eastern Palace - Boss', player).parent_region.dungeon.boss.can_defeat(state))
-    set_rule(world.get_location('Eastern Palace - Prize', player), lambda state: state.can_shoot_arrows(player) and state.has('Big Key (Eastern Palace)', player) and state.world.get_location('Eastern Palace - Prize', player).parent_region.dungeon.boss.can_defeat(state))
+    set_rule(world.get_location('Eastern Palace - Big Chest', player),
+             lambda state: state.has('Big Key (Eastern Palace)', player))
+    set_rule(world.get_location('Eastern Palace - Boss', player),
+             lambda state: state.can_shoot_arrows(player) and state.has('Big Key (Eastern Palace)',
+                                                                        player) and state.world.get_location(
+                 'Eastern Palace - Boss', player).parent_region.dungeon.boss.can_defeat(state))
+    set_rule(world.get_location('Eastern Palace - Prize', player),
+             lambda state: state.can_shoot_arrows(player) and state.has('Big Key (Eastern Palace)',
+                                                                        player) and state.world.get_location(
+                 'Eastern Palace - Prize', player).parent_region.dungeon.boss.can_defeat(state))
     for location in ['Eastern Palace - Boss', 'Eastern Palace - Big Chest']:
         forbid_item(world.get_location(location, player), 'Big Key (Eastern Palace)', player)
 
@@ -791,8 +805,10 @@ def add_conditional_lamps(world, player):
 
 def open_rules(world, player):
     # softlock protection as you can reach the sewers small key door with a guard drop key
-    set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player), lambda state: state.has_key('Small Key (Escape)', player))
-    set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player), lambda state: state.has_key('Small Key (Escape)', player))
+    set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player),
+             lambda state: state.has_key('Small Key (Hyrule Castle)', player))
+    set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player),
+             lambda state: state.has_key('Small Key (Hyrule Castle)', player))
 
 
 def swordless_rules(world, player):
