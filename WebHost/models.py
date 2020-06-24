@@ -13,10 +13,10 @@ class Patch(db.Entity):
 
 class Room(db.Entity):
     id = PrimaryKey(int, auto=True)
-    last_activity = Required(datetime, default=lambda: datetime.utcnow())
-    owner = Required(UUID)
+    last_activity = Required(datetime, default=lambda: datetime.utcnow(), index=True)
+    owner = Required(UUID, index=True)
     commands = Set('Command')
-    seed = Required('Seed')
+    seed = Required('Seed', index=True)
     multisave = Optional(Json)
     timeout = Required(int, default=lambda: 6)
     allow_tracker = Required(bool, default=True)
