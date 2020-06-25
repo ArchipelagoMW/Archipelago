@@ -12,6 +12,7 @@ import zlib
 from pony.flask import Pony
 from flask import Flask, request, redirect, url_for, render_template, Response, session, abort, flash
 from flask_caching import Cache
+from flaskext.autoversion import Autoversion
 
 from .models import *
 
@@ -39,7 +40,8 @@ app.config["PONY"] = {
     'create_db': True
 }
 app.config["CACHE_TYPE"] = "simple"
-
+app.autoversion = True
+av = Autoversion(app)
 cache = Cache(app)
 
 # this local cache is risky business if app hosting is done with subprocesses as it will not sync. Waitress is fine though

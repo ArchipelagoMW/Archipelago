@@ -39,7 +39,7 @@
             setInterval(update, 30000);
         })
     </script>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="static.css") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("static.css") }}"/>
 {% endblock %}
 {% block body %}
     <input id="searchbox" class="form-control" type="text" placeholder="Search">

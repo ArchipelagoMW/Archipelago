@@ -1,5 +1,5 @@
 table.dataTable.table-sm > thead > tr > th :not(.sorting_disabled) {
-    padding-right: 0;
+    padding: 1px;
 }
 
 .dataTable > thead > tr > th[class*="sort"]:before,
@@ -7,6 +7,6 @@ table.dataTable.table-sm > thead > tr > th :not(.sorting_disabled) {
     content: "" !important;
 }
 
-table.dataTable.table-sm > thead > tr > th {
+th {
     padding: 1px !important;
 }
