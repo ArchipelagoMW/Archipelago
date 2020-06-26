@@ -820,8 +820,9 @@ class ClientMessageProcessor(CommandProcessor):
                                     self.ctx.hints[self.client.team, hint.receiving_player].add(hint)
 
                             else:
-                                self.output(
-                                    "Could not pay for everything. Rerun the hint later with more points to get the remaining hints.")
+                                if not_found_hints:
+                                    self.output(
+                                        "Could not pay for everything. Rerun the hint later with more points to get the remaining hints.")
                             notify_hints(self.ctx, self.client.team, found_hints + hints)
                             self.ctx.save()
                             return True
