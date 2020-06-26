@@ -7,26 +7,30 @@ db = Database()
 
 class Patch(db.Entity):
     id = PrimaryKey(int, auto=True)
+    player = Required(int)
     data = Required(buffer)
-    simple_seed = Required('Seed')
+    seed = Optional('Seed')
 
 
 class Room(db.Entity):
-    id = PrimaryKey(int, auto=True)
+    id = PrimaryKey(UUID, default=uuid4)
     last_activity = Required(datetime, default=lambda: datetime.utcnow(), index=True)
+    creation_time = Required(datetime, default=lambda: datetime.utcnow())
     owner = Required(UUID, index=True)
     commands = Set('Command')
     seed = Required('Seed', index=True)
     multisave = Optional(Json)
+    show_spoiler = Required(int, default=0)  # 0 -> never, 1 -> after completion, -> 2 always
     timeout = Required(int, default=lambda: 6)
-    allow_tracker = Required(bool, default=True)
+    tracker = Optional(UUID, index=True)
     last_port = Optional(int, default=lambda: 0)
 
 
 class Seed(db.Entity):
-    id = PrimaryKey(int, auto=True)
+    id = PrimaryKey(UUID, default=uuid4)
     rooms = Set(Room)
     multidata = Optional(Json)
+    owner = Required(UUID, index=True)
     creation_time = Required(datetime, default=lambda: datetime.utcnow())
     patches = Set(Patch)
     spoiler = Optional(str)

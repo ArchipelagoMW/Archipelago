@@ -67,7 +67,7 @@ multi_mystery_options:
   #include the spoiler log in the zip, 2 -> delete the non-zipped one
   zip_spoiler: 0
   #include the multidata file in the zip, 2 -> delete the non-zipped one, which also means the server won't autostart
-  zip_multidata: 0
+  zip_multidata: 1
   #zip algorithm to use. zip is recommended for patch files, 7z is recommended for roms. All of them get the job done.
   zip_format: 1 # 1 -> zip, 2 -> 7z, 3->bz2
   #create roms flagged as race roms

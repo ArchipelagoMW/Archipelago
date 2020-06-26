@@ -4,6 +4,7 @@ from flask import render_template
 from werkzeug.exceptions import abort
 import datetime
 import logging
+from uuid import UUID
 
 import Items
 from WebHost import app, cache, Room
@@ -191,57 +192,54 @@ def render_timedelta(delta: datetime.timedelta):
     return f"{hours}:{minutes}"
 
 
-@app.route('/tracker/<int:room>')
+@app.route('/tracker/<uuid:tracker>')
 @cache.memoize(timeout=30)  # update every 30 seconds
-def get_tracker(room: int):
-    room = Room.get(id=room)
+def get_tracker(tracker: UUID):
+    room = Room.get(tracker=tracker)
     if not room:
         abort(404)
-    if room.allow_tracker:
-        multidata = room.seed.multidata
-        locations = {tuple(k): tuple(v) for k, v in multidata['locations']}
+    multidata = room.seed.multidata
+    locations = {tuple(k): tuple(v) for k, v in multidata['locations']}
 
-        inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1)}
-                     for teamnumber, team in enumerate(multidata["names"])}
+    inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1)}
+                 for teamnumber, team in enumerate(multidata["names"])}
 
-        checks_done = {teamnumber: {playernumber: {loc_name: 0 for loc_name in default_locations}
-                                    for playernumber in range(1, len(team) + 1)}
-                       for teamnumber, team in enumerate(multidata["names"])}
-        precollected_items = room.seed.multidata.get("precollected_items", None)
+    checks_done = {teamnumber: {playernumber: {loc_name: 0 for loc_name in default_locations}
+                                for playernumber in range(1, len(team) + 1)}
+                   for teamnumber, team in enumerate(multidata["names"])}
+    precollected_items = room.seed.multidata.get("precollected_items", None)
 
-        for (team, player), locations_checked in room.multisave.get("location_checks", {}):
-            if precollected_items:
-                precollected = precollected_items[player - 1]
-                for item_id in precollected:
-                    attribute_item(inventory, team, player, item_id)
-            for location in locations_checked:
-                item, recipient = locations[location, player]
-                attribute_item(inventory, team, recipient, item)
-                checks_done[team][player][location_to_area[location]] += 1
-                checks_done[team][player]["Total"] += 1
+    for (team, player), locations_checked in room.multisave.get("location_checks", {}):
+        if precollected_items:
+            precollected = precollected_items[player - 1]
+            for item_id in precollected:
+                attribute_item(inventory, team, player, item_id)
+        for location in locations_checked:
+            item, recipient = locations[location, player]
+            attribute_item(inventory, team, recipient, item)
+            checks_done[team][player][location_to_area[location]] += 1
+            checks_done[team][player]["Total"] += 1
 
-        for (team, player), game_state in room.multisave.get("client_game_state", []):
-            if game_state:
-                inventory[team][player][106] = 1  # Triforce
+    for (team, player), game_state in room.multisave.get("client_game_state", []):
+        if game_state:
+            inventory[team][player][106] = 1  # Triforce
 
-        activity_timers = {}
-        now = datetime.datetime.utcnow()
-        for (team, player), timestamp in room.multisave.get("client_activity_timers", []):
-            activity_timers[team, player] = now - datetime.datetime.utcfromtimestamp(timestamp)
+    activity_timers = {}
+    now = datetime.datetime.utcnow()
+    for (team, player), timestamp in room.multisave.get("client_activity_timers", []):
+        activity_timers[team, player] = now - datetime.datetime.utcfromtimestamp(timestamp)
 
-        player_names = {}
-        for team, names in enumerate(multidata['names']):
-            for player, name in enumerate(names, 1):
-                player_names[(team, player)] = name
+    player_names = {}
+    for team, names in enumerate(multidata['names']):
+        for player, name in enumerate(names, 1):
+            player_names[(team, player)] = name
 
-        for (team, player), alias in room.multisave.get("name_aliases", []):
-            player_names[team, player] = alias
+    for (team, player), alias in room.multisave.get("name_aliases", []):
+        player_names[team, player] = alias
 
-        return render_template("tracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
-                               lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
-                               tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=icons,
-                               multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
-                               checks_in_area=checks_in_area, activity_timers=activity_timers,
-                               key_locations=key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids)
-    else:
-        return "Tracker disabled for this room."
+    return render_template("tracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
+                           lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
+                           tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=icons,
+                           multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
+                           checks_in_area=checks_in_area, activity_timers=activity_timers,
+                           key_locations=key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids)

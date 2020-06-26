@@ -1,0 +1,10 @@
+{% macro list_rooms(rooms) -%}
+    Rooms:
+    <ul class="list-group">
+        {% for room in rooms %}
+            <li class="list-group-item"><a href="{{ url_for("host_room", room=room.id) }}">Room #{{ room.id }}</a></li>
+        {% endfor %}
+        {{ caller() }}
+
+    </ul>
+{%- endmacro %}

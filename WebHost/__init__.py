@@ -1,16 +1,14 @@
 """Friendly reminder that if you want to host this somewhere on the internet, that it's licensed under MIT Berserker66
 So unless you're Berserker you need to include license information."""
 
-import json
 import os
 import logging
 import typing
 import multiprocessing
 import threading
-import zlib
 
 from pony.flask import Pony
-from flask import Flask, request, redirect, url_for, render_template, Response, session, abort, flash
+from flask import Flask, request, redirect, url_for, render_template, Response, session, abort
 from flask_caching import Cache
 from flaskext.autoversion import Autoversion
 
@@ -22,13 +20,13 @@ os.makedirs(LOGS_FOLDER, exist_ok=True)
 
 
 def allowed_file(filename):
-    return filename.endswith('multidata')
+    return filename.endswith(('multidata', ".zip"))
 
 app = Flask(__name__)
 Pony(app)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024  # 1 megabyte limit
+app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # 4 megabyte limit
 # if you want persistent sessions on your server, make sure you make this a constant in your config.yaml
 app.config["SECRET_KEY"] = os.urandom(32)
 app.config['SESSION_PERMANENT'] = True
@@ -78,19 +76,21 @@ class MultiworldInstance():
             self.process = None
 
 
-@app.route('/seed/<int:seed>')
-def view_seed(seed: int):
+@app.route('/seed/<uuid:seed>')
+def view_seed(seed: UUID):
     seed = Seed.get(id=seed)
-    if seed:
-        return render_template("view_seed.html", seed=seed)
-    else:
+    if not seed:
         abort(404)
+    return render_template("view_seed.html", seed=seed,
+                           rooms=[room for room in seed.rooms if room.owner == session["_id"]])
 
 
-@app.route('/new_room/<int:seed>')
-def new_room(seed: int):
+@app.route('/new_room/<uuid:seed>')
+def new_room(seed: UUID):
     seed = Seed.get(id=seed)
-    room = Room(seed=seed, owner=session["_id"])
+    if not seed:
+        abort(404)
+    room = Room(seed=seed, owner=session["_id"], tracker=uuid4())
     commit()
     return redirect(url_for("host_room", room=room.id))
 
@@ -104,8 +104,8 @@ def _read_log(path: str):
               f"Likely a crash during spinup of multiworld instance or it is still spinning up."
 
 
-@app.route('/log/<int:room>')
-def display_log(room: int):
+@app.route('/log/<uuid:room>')
+def display_log(room: UUID):
     # noinspection PyTypeChecker
     return Response(_read_log(os.path.join("logs", str(room) + ".txt")), mimetype="text/plain;charset=UTF-8")
 
@@ -113,8 +113,8 @@ def display_log(room: int):
 processstartlock = threading.Lock()
 
 
-@app.route('/hosted/<int:room>', methods=['GET', 'POST'])
-def host_room(room: int):
+@app.route('/hosted/<uuid:room>', methods=['GET', 'POST'])
+def host_room(room: UUID):
     room = Room.get(id=room)
     if room is None:
         return abort(404)
@@ -135,30 +135,4 @@ def host_room(room: int):
 
 
 from WebHost.customserver import run_server_process
-from . import tracker  # to trigger app routing picking up on it
-
-@app.route('/', methods=['GET', 'POST'])
-def upload_multidata():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-        else:
-            file = request.files['file']
-            # if user does not select file, browser also
-            # submit an empty part without filename
-            if file.filename == '':
-                flash('No selected file')
-            elif file and allowed_file(file.filename):
-                try:
-                    multidata = json.loads(zlib.decompress(file.read()).decode("utf-8-sig"))
-                except:
-                    flash("Could not load multidata. File may be corrupted or incompatible.")
-                else:
-                    seed = Seed(multidata=multidata)
-                    commit()  # place into DB and generate ids
-                    return redirect(url_for("view_seed", seed=seed.id))
-            else:
-                flash("Not recognized file format. Awaiting a .multidata file.")
-    rooms = select(room for room in Room if room.owner == session["_id"])
-    return render_template("upload_multidata.html", rooms=rooms)
+from . import tracker, upload  # to trigger app routing picking up on it

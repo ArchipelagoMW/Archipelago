@@ -1,9 +1,11 @@
 {% extends 'layout.html' %}
+{% import "macros.html" as macros %}
 {% block head %}
     <title>Multiworld Seed {{ seed.id }}</title>
 {% endblock %}
 {% block body %}
     Seed #{{ seed.id }}<br>
+    Created: {{ seed.creation_time }} UTC <br>
     Players:
     <ul class="list-group">
         {% for team in seed.multidata["names"] %}
@@ -16,12 +18,8 @@
             </li>
         {% endfor %}
     </ul>
-    Rooms:
-    <ul class="list-group">
-        {% for room in seed.rooms if room.owner == session["_id"] %}
-            <li class="list-group-item"><a href="{{ url_for("host_room", room=room.id) }}">Room #{{ room.id }}</a></li>
-        {% endfor %}
+    {% call macros.list_rooms(rooms) %}
         <li class="list-group-item list-group-item-action"><a href="{{ url_for("new_room", seed=seed.id) }}">new
             room</a></li>
-    </ul>
+    {% endcall %}
 {% endblock %}

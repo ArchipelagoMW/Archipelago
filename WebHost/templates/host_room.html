@@ -3,9 +3,11 @@
     <title>Multiworld {{ room.id }}</title>
 {% endblock %}
 {% block body %}
-    Room created from <a href="{{ url_for("view_seed", seed=room.seed.id) }}">Seed #{{ room.seed.id }}</a><br>
-    {% if room.allow_tracker %}
-        This room has a <a href="{{ url_for("get_tracker", room=room.id) }}">Multiworld Tracker</a> enabled.<br>
+    {% if room.owner == session["_id"] %}
+        Room created from <a href="{{ url_for("view_seed", seed=room.seed.id) }}">Seed #{{ room.seed.id }}</a><br>
+    {% endif %}
+    {% if room.tracker %}
+        This room has a <a href="{{ url_for("get_tracker", tracker=room.tracker) }}">Multiworld Tracker</a> enabled.<br>
     {% endif %}
     This room will be closed after {{ room.timeout }} hours of inactivity. Should you wish to continue later,
     you can simply refresh this page and the server will be started again.<br>
