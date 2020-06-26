@@ -67,7 +67,7 @@ def parse_arguments(argv, no_defaults=False):
                              Vanilla:   Swords are in vanilla locations.
                              ''')
     parser.add_argument('--goal', default=defval('ganon'), const='ganon', nargs='?',
-                        choices=['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'localtriforcehunt', 'crystals'],
+                        choices=['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'localtriforcehunt', 'ganontriforcehunt', 'localganontriforcehunt', 'crystals'],
                         help='''\
                              Select completion goal. (default: %(default)s)
                              Ganon:         Collect all crystals, beat Agahnim 2 then
@@ -79,7 +79,11 @@ def parse_arguments(argv, no_defaults=False):
                              Triforce Hunt: Places 30 Triforce Pieces in the world, collect
                                             20 of them to beat the game.
                              Local Triforce Hunt: Places 30 Triforce Pieces in your world, collect
-                                            20 of them to beat the game.       
+                                            20 of them to beat the game.
+                             Ganon Triforce Hunt: Places 30 Triforce Pieces in the world, collect
+                                            20 of them, then defeat Ganon.
+                             Local Ganon Triforce Hunt: Places 30 Triforce Pieces in your world,
+                                            collect 20 of them, then defeat Ganon.
                              ''')
     parser.add_argument('--triforce_pieces_available', default=defval(30),
                         type=lambda value: min(max(int(value), 1), 90),

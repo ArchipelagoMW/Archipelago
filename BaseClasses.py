@@ -518,6 +518,9 @@ class CollectionState(object):
     def item_count(self, item, player: int) -> int:
         return self.prog_items[item, player]
 
+    def has_triforce_pieces(self, count: int, player: int) -> bool:
+        return self.item_count('Triforce Piece', player) + self.item_count('Power Star', player) >= count
+
     def has_crystals(self, count: int, player: int) -> bool:
         crystals = ['Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7']
         return len([crystal for crystal in crystals if self.has(crystal, player)]) >= count
