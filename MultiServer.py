@@ -961,6 +961,12 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
 
 class ServerCommandProcessor(CommandProcessor):
     ctx: Context
+    simple_options = {"hint_cost": int,
+                      "location_check_points": int,
+                      "password": str,
+                      "forfeit_mode": str,
+                      "item_cheat": bool,
+                      "auto_save_interval": int}
 
     def __init__(self, ctx: Context):
         self.ctx = ctx
@@ -1091,23 +1097,29 @@ class ServerCommandProcessor(CommandProcessor):
 
     def _cmd_option(self, option_name: str, option: str):
         """Set options for the server. Warning: expires on restart"""
-        simple_options = {"hint_cost": int,
-                          "location_check_points": int,
-                          "password": str,
-                          "forfeit_mode": str,
-                          "item_cheat": bool,
-                          "auto_save_interval": int}
 
-        attrtype = simple_options.get(option_name, None)
+        attrtype = self.simple_options.get(option_name, None)
         if attrtype:
+            if attrtype == bool:
+                def attrtype(input_text: str):
+                    if input_text.lower() in {"off", "0", "false", "none", "null", "no"}:
+                        return False
+                    else:
+                        return True
             setattr(self, option_name, attrtype(option))
             self.output(f"Set option {option_name} to {getattr(self, option_name)}")
             return True
         else:
-            known = (f"{option}:{otype}" for option, otype in simple_options.items())
+            known = (f"{option}:{otype}" for option, otype in self.simple_options.items())
             self.output(f"Unrecognized Option {option_name}, known: "
                         f"{', '.join(known)}")
             return False
+
+    def _cmd_options(self):
+        """List all current options. Warning: lists password."""
+        self.output("Current options:")
+        for option in self.simple_options:
+            self.output(f"Option {option} is set to {getattr(self.ctx, option)}")
 
 async def console(ctx: Context):
     session = prompt_toolkit.PromptSession()
