@@ -21,7 +21,7 @@
 
             function update() {
                 var target = $("<div></div>");
-                target.load("/tracker/{{ room.id }}", function (response, status) {
+                target.load("/tracker/{{ room.tracker.id }}", function (response, status) {
                     if (status === "success") {
                         target.find(".table").each(function (i, new_table) {
                             var new_trs = $(new_table).find("tbody>tr");
