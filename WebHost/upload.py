@@ -64,7 +64,7 @@ def upload_game():
                     except:
                         flash("Could not load multidata. File may be corrupted or incompatible.")
                     else:
-                        seed = Seed(multidata=multidata, owner=session["_id"], private=False)
+                        seed = Seed(multidata=multidata, owner=session["_id"])
                         commit()  # place into DB and generate ids
                         return redirect(url_for("view_seed", seed=seed.id))
             else:

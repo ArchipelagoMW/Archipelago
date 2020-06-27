@@ -11,8 +11,23 @@ import random
 from WebHost import LOGS_FOLDER
 from .models import *
 
-from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor
+from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor
 from Utils import get_public_ipv4, get_public_ipv6
+
+
+class CustomClientMessageProcessor(ClientMessageProcessor):
+    def _cmd_video(self, platform, user):
+        if platform.lower().startswith("t"):  # twitch
+            self.ctx.video[self.client.team, self.client.slot] = "Twitch", user
+            self.ctx.save()
+            self.output(f"Registered Twitch Stream https://www.twitch.tv/{user}")
+
+
+# inject
+import MultiServer
+
+MultiServer.client_message_processor = CustomClientMessageProcessor
+del (MultiServer)
 
 
 class DBCommandProcessor(ServerCommandProcessor):
@@ -24,6 +39,8 @@ class WebHostContext(Context):
     def __init__(self):
         super(WebHostContext, self).__init__("", 0, "", 1, 40, True, "enabled", "enabled", 0)
         self.main_loop = asyncio.get_running_loop()
+        self.video = {}
+        self.tags = ["Berserker", "WebHost"]
 
     def listen_to_db_commands(self):
         cmdprocessor = DBCommandProcessor(self)
@@ -63,6 +80,10 @@ class WebHostContext(Context):
         Room.get(id=self.room_id).multisave = self.get_save()
         return True
 
+    def get_save(self) -> dict:
+        d = super(WebHostContext, self).get_save()
+        d["video"] = [(tuple(playerslot), videodata) for playerslot, videodata in self.video.items()]
+        return d
 
 def get_random_port():
     return random.randint(49152, 65535)

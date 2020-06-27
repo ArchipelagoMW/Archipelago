@@ -34,6 +34,7 @@ CLIENT_PLAYING = 0
 CLIENT_GOAL = 1
 
 
+
 class Client(Endpoint):
     version: typing.List[int] = [0, 0, 0]
     tags: typing.List[str] = []
@@ -47,7 +48,7 @@ class Client(Endpoint):
         self.send_index = 0
         self.tags = []
         self.version = [0, 0, 0]
-        self.messageprocessor = ClientMessageProcessor(ctx, self)
+        self.messageprocessor = client_message_processor(ctx, self)
         self.ctx = weakref.ref(ctx)
 
     @property
@@ -97,6 +98,7 @@ class Context(Node):
         self.auto_save_interval = 60  # in seconds
         self.auto_saver_thread = None
         self.save_dirty = False
+        self.tags = ['Berserker']
 
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
         with open(multidatapath, 'rb') as f:
@@ -329,11 +331,11 @@ async def on_client_connected(ctx: Context, client: Client):
                     in ctx.endpoints if client.auth],
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
-        'tags': ['Berserker'],
+        'tags': ctx.tags,
         'version': Utils._version_tuple,
         'forfeit_mode': ctx.forfeit_mode,
         'remaining_mode': ctx.remaining_mode,
-        'hint_cost' : ctx.hint_cost,
+        'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points
     }]])
 
@@ -1213,6 +1215,9 @@ async def main(args: argparse.Namespace):
     await console_task
     if ctx.shutdown_task:
         await ctx.shutdown_task
+
+
+client_message_processor = ClientMessageProcessor
 
 if __name__ == '__main__':
     try:

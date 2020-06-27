@@ -235,11 +235,16 @@ def get_tracker(tracker: UUID):
             player_names[(team, player)] = name
 
     for (team, player), alias in room.multisave.get("name_aliases", []):
-        player_names[team, player] = alias
+        player_names[(team, player)] = alias
+
+    video = {}
+    for (team, player), data in room.multisave.get("video", []):
+        video[(team, player)] = data
 
     return render_template("tracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
                            lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
                            tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=icons,
                            multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
                            checks_in_area=checks_in_area, activity_timers=activity_timers,
-                           key_locations=key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids)
+                           key_locations=key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids,
+                           video=video)
