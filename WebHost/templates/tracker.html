@@ -67,7 +67,7 @@
                     {% if (team, loop.index) in video %}
                         <td class="table-info"><a target="_blank"
                                                   href="https://www.twitch.tv/{{ video[(team, loop.index)][1] }}">{{ player_names[(team, loop.index)] }}
-                            📺</a></td>
+                            ▶️</a></td>
                     {% else %}
                         <td class="table-info">{{ player_names[(team, loop.index)] }}</td>{% endif %}
                     {% for id in tracking_ids %}
