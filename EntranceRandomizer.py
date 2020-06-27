@@ -8,7 +8,7 @@ import textwrap
 import shlex
 import sys
 
-from Main import main
+from Main import main, get_seed
 from Rom import get_sprite_from_name
 from Utils import is_bundled, close_console
 
@@ -379,7 +379,7 @@ def start():
         seed = args.seed
         for _ in range(args.count):
             main(seed=seed, args=args)
-            seed = random.randint(0, 999999999)
+            seed = get_seed()
     else:
         main(seed=args.seed, args=args)
 

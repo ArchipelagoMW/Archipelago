@@ -16,9 +16,19 @@ from EntranceShuffle import link_entrances, link_inverted_entrances
 from Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, get_hash_string
 from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
-from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, flood_items, balance_multiworld_progression
+from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, flood_items, \
+    balance_multiworld_progression
 from ItemList import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__
+
+seeddigits = 20
+
+
+def get_seed(seed=None):
+    if seed is None:
+        random.seed(None)
+        return random.randint(0, pow(10, seeddigits) - 1)
+    return seed
 
 
 def main(args, seed=None):
@@ -33,11 +43,7 @@ def main(args, seed=None):
                   args.item_functionality, args.timer, args.progressive.copy(), args.goal, args.algorithm,
                   args.accessibility, args.shuffleganon, args.retro, args.custom, args.customitemarray, args.hints)
     logger = logging.getLogger('')
-    if seed is None:
-        random.seed(None)
-        world.seed = random.randint(0, 999999999)
-    else:
-        world.seed = int(seed)
+    world.seed = get_seed(seed)
     random.seed(world.seed)
 
     world.remote_items = args.remote_items.copy()

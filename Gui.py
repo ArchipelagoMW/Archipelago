@@ -16,7 +16,7 @@ ModuleUpdate.update()
 from AdjusterMain import adjust
 from EntranceRandomizer import parse_arguments
 from GuiUtils import ToolTips, set_icon, BackgroundTaskProgress
-from Main import main, __version__ as ESVersion
+from Main import main, get_seed, __version__ as ESVersion
 from Rom import Sprite
 from Utils import is_bundled, local_path, output_path, open_file
 
@@ -416,7 +416,7 @@ def guiMain(args=None):
     namesEntry = Entry(multiworldframe, textvariable=namesVar)
     seedLabel = Label(multiworldframe, text='Seed #')
     seedVar = StringVar()
-    seedEntry = Entry(multiworldframe, width=15, textvariable=seedVar)
+    seedEntry = Entry(multiworldframe, width=20, textvariable=seedVar)
     countLabel = Label(multiworldframe, text='Count')
     countVar = StringVar()
     countSpinbox = Spinbox(multiworldframe, from_=1, to=100, width=5, textvariable=countVar)
@@ -498,7 +498,7 @@ def guiMain(args=None):
                 seed = guiargs.seed
                 for _ in range(guiargs.count):
                     main(seed=seed, args=guiargs)
-                    seed = random.randint(0, 999999999)
+                    seed = get_seed()
             else:
                 main(seed=guiargs.seed, args=guiargs)
         except Exception as e:

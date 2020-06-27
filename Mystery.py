@@ -14,6 +14,7 @@ from Utils import parse_yaml
 from Rom import get_sprite_from_name
 from EntranceRandomizer import parse_arguments
 from Main import main as ERmain
+from Main import get_seed, seeddigits
 from Items import item_name_groups, item_table
 
 
@@ -47,14 +48,10 @@ def main():
         parser.add_argument(f'--p{player}', help=argparse.SUPPRESS)
     args = parser.parse_args()
 
-    if args.seed is None:
-        random.seed(None)
-        seed = random.randint(0, 999999999)
-    else:
-        seed = args.seed
+    seed = get_seed(args.seed)
     random.seed(seed)
 
-    seedname = "M"+(f"{random.randint(0, 999999999)}".zfill(9))
+    seedname = "M" + (f"{get_seed()}".zfill(seeddigits))
     print(f"Generating mystery for {args.multi} player{'s' if args.multi > 1 else ''}, {seedname} Seed {seed}")
 
     weights_cache = {}
