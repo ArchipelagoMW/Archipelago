@@ -959,11 +959,6 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             client.messageprocessor(args)
 
 
-def set_password(ctx: Context, password):
-    ctx.password = password
-    logging.warning('Password set to ' + password if password else 'Password disabled')
-
-
 class ServerCommandProcessor(CommandProcessor):
     ctx: Context
 
@@ -1035,12 +1030,6 @@ class ServerCommandProcessor(CommandProcessor):
             return False
 
     @mark_raw
-    def _cmd_password(self, new_password: str = "") -> bool:
-        """Set the server password. Leave the password text empty to remove the password"""
-        set_password(self.ctx, new_password if new_password else None)
-        return True
-
-    @mark_raw
     def _cmd_forfeit(self, player_name: str) -> bool:
         """Send out the remaining items from a player's game to their intended recipients"""
         seeked_player = player_name.lower()
@@ -1100,6 +1089,25 @@ class ServerCommandProcessor(CommandProcessor):
             self.output(response)
             return False
 
+    def _cmd_option(self, option_name: str, option: str):
+        """Set options for the server. Warning: expires on restart"""
+        simple_options = {"hint_cost": int,
+                          "location_check_points": int,
+                          "password": str,
+                          "forfeit_mode": str,
+                          "item_cheat": bool,
+                          "auto_save_interval": int}
+
+        attrtype = simple_options.get(option_name, None)
+        if attrtype:
+            setattr(self, option_name, attrtype(option))
+            self.output(f"Set option {option_name} to {getattr(self, option_name)}")
+            return True
+        else:
+            known = (f"{option}:{otype}" for option, otype in simple_options.items())
+            self.output(f"Unrecognized Option {option_name}, known: "
+                        f"{', '.join(known)}")
+            return False
 
 async def console(ctx: Context):
     session = prompt_toolkit.PromptSession()

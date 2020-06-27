@@ -17,10 +17,13 @@ from Utils import get_public_ipv4, get_public_ipv6
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
     def _cmd_video(self, platform, user):
+        """Set a link for your name in the WebHost tracker pointing to a video stream"""
         if platform.lower().startswith("t"):  # twitch
             self.ctx.video[self.client.team, self.client.slot] = "Twitch", user
             self.ctx.save()
             self.output(f"Registered Twitch Stream https://www.twitch.tv/{user}")
+            return True
+        return False
 
 
 # inject
