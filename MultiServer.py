@@ -1106,8 +1106,8 @@ class ServerCommandProcessor(CommandProcessor):
                         return False
                     else:
                         return True
-            setattr(self, option_name, attrtype(option))
-            self.output(f"Set option {option_name} to {getattr(self, option_name)}")
+            setattr(self.ctx, option_name, attrtype(option))
+            self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
             return True
         else:
             known = (f"{option}:{otype}" for option, otype in self.simple_options.items())
