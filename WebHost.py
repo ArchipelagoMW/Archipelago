@@ -5,25 +5,28 @@ import logging
 from WebHost import app
 from waitress import serve
 
-from WebHost.models import db
+from WebHost.models import db, Room, db_session, select
 
 DEBUG = False
 port = 80
 
 
 def autohost(config: dict):
-    from WebHost.models import *
+    return
+    # not implemented yet. https://github.com/ponyorm/pony/issues/527
     import time
     from datetime import timedelta, datetime
 
     def keep_running():
-        db.bind(**config["pony"])
-        db.generate_mapping(check_tables=False)
+        # db.bind(**config["PONY"])
+        # db.generate_mapping(check_tables=False)
         while 1:
             time.sleep(3)
             with db_session:
-                select(
-                    room for room in Room if (datetime.utcnow() - room.last_activity) < timedelta(hours=room.timeout))
+                rooms = select(
+                    room for room in Room if
+                    room.last_activity >= datetime.utcnow() - timedelta(hours=room.timeout))
+                logging.info(rooms)
 
     import threading
     threading.Thread(target=keep_running).start()
@@ -45,7 +48,7 @@ if __name__ == "__main__":
     db.bind(**app.config["PONY"])
     db.generate_mapping(create_tables=True)
     if DEBUG:
-        autohost(config)
+        autohost(app.config)
         app.run(debug=True, port=port)
     else:
         serve(app, port=port, threads=app.config["WAITRESS_THREADS"])

@@ -192,21 +192,35 @@ def render_timedelta(delta: datetime.timedelta):
     return f"{hours}:{minutes}"
 
 
+_multidata_cache = {}
+
+
+def get_static_room_data(room: Room):
+    result = _multidata_cache.get(room.seed.id, None)
+    if result:
+        return result
+    multidata = room.seed.multidata
+    # in > 100 players this can take a bit of time and is the main reason for the cache
+    locations = {tuple(k): tuple(v) for k, v in multidata['locations']}
+    names = multidata["names"]
+    _multidata_cache[room.seed.id] = locations, names
+    return locations, names
+
+
 @app.route('/tracker/<uuid:tracker>')
 @cache.memoize(timeout=30)  # update every 30 seconds
 def get_tracker(tracker: UUID):
     room = Room.get(tracker=tracker)
     if not room:
         abort(404)
-    multidata = room.seed.multidata
-    locations = {tuple(k): tuple(v) for k, v in multidata['locations']}
+    locations, names = get_static_room_data(room)
 
     inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1)}
-                 for teamnumber, team in enumerate(multidata["names"])}
+                 for teamnumber, team in enumerate(names)}
 
     checks_done = {teamnumber: {playernumber: {loc_name: 0 for loc_name in default_locations}
                                 for playernumber in range(1, len(team) + 1)}
-                   for teamnumber, team in enumerate(multidata["names"])}
+                   for teamnumber, team in enumerate(names)}
     precollected_items = room.seed.multidata.get("precollected_items", None)
 
     for (team, player), locations_checked in room.multisave.get("location_checks", {}):
@@ -230,7 +244,7 @@ def get_tracker(tracker: UUID):
         activity_timers[team, player] = now - datetime.datetime.utcfromtimestamp(timestamp)
 
     player_names = {}
-    for team, names in enumerate(multidata['names']):
+    for team, names in enumerate(names):
         for player, name in enumerate(names, 1):
             player_names[(team, player)] = name
 

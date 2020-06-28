@@ -10,3 +10,7 @@ table.dataTable.table-sm > thead > tr > th :not(.sorting_disabled) {
 th {
     padding: 1px !important;
 }
+
+table {
+    width: 100% !important;
+}
