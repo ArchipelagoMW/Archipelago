@@ -51,7 +51,7 @@
                 <th>Name</th>
                 {% for name in tracking_names %}
                     {% if name in icons %}
-                        <th style="text-align: center"><img height="32" width="32" style="object-fit: contain"
+                        <th style="text-align: center"><img class="alttp-sprite"
                                                             src="{{ icons[name] }}"
                                                             alt="{{ name|e }}"></th>
                     {% else %}
@@ -96,8 +96,7 @@
                 {% for area in ordered_areas %}
                     {% set colspan = (3 if area in key_locations else 1) %}
                     {% if area in icons %}
-                        <th colspan="{{ colspan }}" style="text-align: center"><img height="32" width="32"
-                                                                                    style="object-fit: contain"
+                        <th colspan="{{ colspan }}" style="text-align: center"><img class="alttp-sprite"
                                                                                     src="{{ icons[area] }}"
                                                                                     alt="{{ area }}"></th>
                     {% else %}
@@ -108,12 +107,12 @@
             </tr>
             <tr>
                 {% for area in ordered_areas %}
-                    <th style="text-align: center"><img height="32" width="32" style="object-fit: contain"
-                                                        src="{{ icons["Chest"] }}" alt="Checks"></th>
+                    <th style="text-align: center"><img class="alttp-sprite" src="{{ icons["Chest"] }}" alt="Checks">
+                    </th>
                     {% if area in key_locations %}
-                        <th style="text-align: center"><img height="32" width="32" style="object-fit: contain"
+                        <th style="text-align: center"><img class="alttp-sprite"
                                                             src="{{ icons["Small Key"] }}" alt="Small Key"></th>
-                        <th style="text-align: center"><img height="32" width="32" style="object-fit: contain"
+                        <th style="text-align: center"><img class="alttp-sprite"
                                                             src="{{ icons["Big Key"] }}" alt="Big Key"></th>
                     {% endif %}
                 {% endfor %}

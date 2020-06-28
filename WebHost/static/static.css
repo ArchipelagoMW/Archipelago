@@ -14,3 +14,18 @@ th {
 table {
     width: 100% !important;
 }
+
+img.alttp-sprite {
+    height: 32px;
+    width: 32px;
+    object-fit: contain;
+}
+
+/* this is specific to the tracker right now */
+@media all and (max-width: 1750px) {
+    img.alttp-sprite {
+        height: 16px;
+        width: 16px;
+        object-fit: contain;
+    }
+}
