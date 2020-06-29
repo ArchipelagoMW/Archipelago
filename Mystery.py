@@ -18,8 +18,7 @@ from Main import get_seed, seeddigits
 from Items import item_name_groups, item_table
 
 
-
-def main():
+def mystery_argparse():
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument('--multi', default=1, type=lambda value: min(max(int(value), 1), 255))
     multiargs, _ = parser.parse_known_args()
@@ -47,11 +46,17 @@ def main():
     for player in range(1, multiargs.multi + 1):
         parser.add_argument(f'--p{player}', help=argparse.SUPPRESS)
     args = parser.parse_args()
+    return args
+
+
+def main(args=None):
+    if not args:
+        args = mystery_argparse()
 
     seed = get_seed(args.seed)
     random.seed(seed)
 
-    seedname = "M" + (f"{get_seed()}".zfill(seeddigits))
+    seedname = "M" + (f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits))
     print(f"Generating mystery for {args.multi} player{'s' if args.multi > 1 else ''}, {seedname} Seed {seed}")
 
     weights_cache = {}
