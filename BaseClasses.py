@@ -436,26 +436,23 @@ class CollectionState(object):
             queue.extend(start.exits)
 
         # run BFS on all connections, and keep track of those blocked by missing items
-        while True:
-            try:
-                connection = queue.popleft()
-                new_region = connection.connected_region
-                if new_region in rrp:
-                    bc.remove(connection)
-                elif connection.can_reach(self):
-                    rrp.add(new_region)
-                    bc.remove(connection)
-                    bc.update(new_region.exits)
-                    queue.extend(new_region.exits)
-                    self.path[new_region] = (new_region.name, self.path.get(connection, None))
+        while queue:
+            connection = queue.popleft()
+            new_region = connection.connected_region
+            if new_region in rrp:
+                bc.remove(connection)
+            elif connection.can_reach(self):
+                rrp.add(new_region)
+                bc.remove(connection)
+                bc.update(new_region.exits)
+                queue.extend(new_region.exits)
+                self.path[new_region] = (new_region.name, self.path.get(connection, None))
 
-                    # Retry connections if the new region can unblock them
-                    if new_region.name in indirect_connections:
-                        new_entrance = self.world.get_entrance(indirect_connections[new_region.name], player)
-                        if new_entrance in bc and new_entrance not in queue:
-                            queue.append(new_entrance)
-            except IndexError:
-                break
+                # Retry connections if the new region can unblock them
+                if new_region.name in indirect_connections:
+                    new_entrance = self.world.get_entrance(indirect_connections[new_region.name], player)
+                    if new_entrance in bc and new_entrance not in queue:
+                        queue.append(new_entrance)
 
     def copy(self) -> CollectionState:
         ret = CollectionState(self.world)
@@ -468,7 +465,7 @@ class CollectionState(object):
         ret.locations_checked = copy.copy(self.locations_checked)
         return ret
 
-    def can_reach(self, spot, resolution_hint=None, player=None):
+    def can_reach(self, spot, resolution_hint=None, player=None) -> bool:
         if not hasattr(spot, "spot_type"):
             # try to resolve a name
             if resolution_hint == 'Location':
@@ -480,7 +477,7 @@ class CollectionState(object):
                 spot = self.world.get_region(spot, player)
         return spot.can_reach(self)
 
-    def sweep_for_events(self, key_only=False, locations=None):
+    def sweep_for_events(self, key_only: bool = False, locations=None):
         # this may need improvement
         if locations is None:
             locations = self.world.get_filled_locations()
@@ -488,7 +485,9 @@ class CollectionState(object):
         checked_locations = 0
         while new_locations:
             reachable_events = [location for location in locations if location.event and
-                                (not key_only or (not self.world.keyshuffle[location.item.player] and location.item.smallkey) or (not self.world.bigkeyshuffle[location.item.player] and location.item.bigkey))
+                                (not key_only or (not self.world.keyshuffle[
+                                    location.item.player] and location.item.smallkey) or (not self.world.bigkeyshuffle[
+                                    location.item.player] and location.item.bigkey))
                                 and location.can_reach(self)]
             for event in reachable_events:
                 if (event.name, event.player) not in self.events:
@@ -497,12 +496,12 @@ class CollectionState(object):
             new_locations = len(reachable_events) > checked_locations
             checked_locations = len(reachable_events)
 
-    def has(self, item, player, count=1):
+    def has(self, item, player: int, count: int = 1):
         if count == 1:
             return (item, player) in self.prog_items
         return self.prog_items[item, player] >= count
 
-    def has_key(self, item, player, count=1):
+    def has_key(self, item, player, count: int = 1):
         if self.world.retro[player]:
             return self.can_buy_unlimited('Small Key (Universal)', player)
         if count == 1:
