@@ -53,7 +53,7 @@ difficulties = {
         swordless = ['Rupees (20)'] * 4,
         progressivesword = ['Progressive Sword'] * 4,
         basicsword = ['Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
-        basicbow = ['Bow', 'Silver Arrows'],
+        basicbow = ['Bow', 'Silver Bow'],
         timedohko = ['Green Clock'] * 25,
         timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt = ['Triforce Piece'] * 30,
@@ -472,7 +472,7 @@ def get_pool_core(world, player: int):
     elif swords != 'swordless':
         pool.extend(diff.basicbow)
     else:
-        pool.extend(['Bow', 'Silver Arrows'])
+        pool.extend(['Bow', 'Silver Bow'])
 
     if swords == 'swordless':
         pool.extend(diff.swordless)
@@ -562,7 +562,7 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
     itemtotal = itemtotal + customitemarray[70]
 
     pool.extend(['Bow'] * customitemarray[0])
-    pool.extend(['Silver Arrows']* customitemarray[1])
+    pool.extend(['Silver Bow']* customitemarray[1])
     pool.extend(['Blue Boomerang'] * customitemarray[2])
     pool.extend(['Red Boomerang'] * customitemarray[3])
     pool.extend(['Hookshot'] * customitemarray[4])

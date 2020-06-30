@@ -81,6 +81,7 @@ icons = {
 
 links = {"Bow": "Progressive Bow",
          "Silver Arrows": "Progressive Bow",
+         "Silver Bow": "Progressive Bow",
          "Progressive Bow (Alt)": "Progressive Bow",
          "Bottle (Red Potion)": "Bottle",
          "Bottle (Green Potion)": "Bottle",
@@ -101,7 +102,8 @@ levels = {"Fighter Sword": 1,
           "Tempered Sword": 3,
           "Golden Sword": 4,
           "Power Glove": 1,
-          "Titans Mitts": 2}
+          "Titans Mitts": 2,
+          "Silver Bow": 2}
 
 multi_items = {get_id(name) for name in ("Progressive Sword", "Progressive Bow", "Bottle", "Progressive Glove")}
 links = {get_id(key): get_id(value) for key, value in links.items()}

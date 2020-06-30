@@ -26,6 +26,8 @@ def ItemFactory(items, player):
 item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher class.', 'the stick and twine', 'arrow-slinging kid', 'arrow sling for sale', 'witch and robin hood', 'archer boy shoots again', 'the Bow'),
               'Progressive Bow': (True, False, None, 0x64, 'You have\nchosen the\narcher class.', 'the stick and twine', 'arrow-slinging kid', 'arrow sling for sale', 'witch and robin hood', 'archer boy shoots again', 'a Bow'),
               'Progressive Bow (Alt)': (True, False, None, 0x65, 'You have\nchosen the\narcher class.', 'the stick and twine', 'arrow-slinging kid', 'arrow sling for sale', 'witch and robin hood', 'archer boy shoots again', 'a Bow'),
+              'Silver Arrows': (True, False, None, 0x58, 'Do you fancy\nsilver tipped\narrows?', 'and the ganonsbane','ganon-killing kid', 'ganon doom for sale', 'fungus for pork','archer boy shines again', 'the silver arrows'),
+              'Silver Bow': (True, False, None, 0x3B, 'Buy 1 Silver\nget Archery\nfor free.', 'the baconmaker', 'ganon-killing kid', 'ganon doom for sale', 'fungus for port', 'archer boy shines again', 'the Silver Bow'),
               'Book of Mudora': (True, False, None, 0x1D, 'This is a\nparadox?!', 'and the story book', 'the scholarly kid', 'moon runes for sale', 'drugs for literacy', 'book-worm boy can read again', 'the Book'),
               'Hammer': (True, False, None, 0x09, 'stop\nhammer time!', 'and m c hammer', 'hammer-smashing kid', 'm c hammer for sale', 'stop...   hammer time', 'stop, hammer time', 'the hammer'),
               'Hookshot': (True, False, None, 0x0A, 'BOING!!!\nBOING!!!\nBOING!!!', 'and the tickle beam', 'tickle-monster kid', 'tickle beam for sale', 'witch and tickle boy', 'beam boy tickles again', 'the Hookshot'),
@@ -60,7 +62,6 @@ item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher cla
               'Golden Sword': (True, False, 'Sword', 0x03, 'The butter\nsword rests\nhere!', 'and the butter sword', 'sword-wielding kid', 'butter for sale', 'cap churned to butter', 'sword boy fights again', 'the Golden Sword'),
               'Progressive Sword': (True, False, 'Sword', 0x5E, 'a better copy\nof your sword\nfor your time', 'the unknown sword', 'sword-wielding kid', 'sword for sale', 'fungus for some slasher', 'sword boy fights again', 'a sword'),
               'Progressive Glove': (True, False, None, 0x61, 'a way to lift\nheavier things', 'and the lift upgrade', 'body-building kid', 'some glove for sale', 'fungus for gloves', 'body-building boy lifts again', 'a glove'),
-              'Silver Arrows': (True, False, None, 0x58, 'Do you fancy\nsilver tipped\narrows?', 'and the ganonsbane', 'ganon-killing kid', 'ganon doom for sale', 'fungus for pork', 'archer boy shines again', 'the silver arrows'),
               'Green Pendant': (True, False, 'Crystal', (0x04, 0x38, 0x62, 0x00, 0x69, 0x01), None, None, None, None, None, None, None),
               'Blue Pendant': (True, False, 'Crystal', (0x02, 0x34, 0x60, 0x00, 0x69, 0x02), None, None, None, None, None, None, None),
               'Red Pendant': (True, False, 'Crystal', (0x01, 0x32, 0x60, 0x00, 0x69, 0x03), None, None, None, None, None, None, None),
@@ -185,7 +186,7 @@ lookup_id_to_name = {data[3]: name for name, data in item_table.items()}
 
 hint_blacklist = {"Triforce"}
 
-item_name_groups = {"Bows": {"Bow", "Silver Arrows", "Progressive Bow (Alt)", "Progressive Bow"},
+item_name_groups = {"Bows": {"Bow", "Silver Arrows", "Silver Bow", "Progressive Bow (Alt)", "Progressive Bow"},
                     "Gloves": {"Power Glove", "Progressive Glove", "Titans Mitts"},
                     "Medallions": {"Ether", "Bombos", "Quake"}}
 # generic groups, (Name, substring)

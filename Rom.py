@@ -918,6 +918,7 @@ def patch_rom(world, rom, player, team, enemized):
             equip[0x38E] |= 0x80
     if startingstate.has('Silver Arrows', player):
         equip[0x38E] |= 0x40
+        #TODO add Silver Bow
 
     if startingstate.has('Titans Mitts', player):
         equip[0x354] = 2
@@ -956,7 +957,7 @@ def patch_rom(world, rom, player, team, enemized):
         if item.player != player:
             continue
 
-        if item.name in ['Bow', 'Silver Arrows', 'Progressive Bow', 'Progressive Bow (Alt)',
+        if item.name in ['Bow', 'Silver Bow', 'Silver Arrows', 'Progressive Bow', 'Progressive Bow (Alt)',
                          'Titans Mitts', 'Power Glove', 'Progressive Glove',
                          'Golden Sword', 'Tempered Sword', 'Master Sword', 'Fighter Sword', 'Progressive Sword',
                          'Mirror Shield', 'Red Shield', 'Blue Shield', 'Progressive Shield',
@@ -1723,7 +1724,7 @@ def write_strings(rom, world, player, team):
     # We still need the older hints of course. Those are done here.
 
 
-    silverarrows = world.find_items('Silver Arrows', player)
+    silverarrows = world.find_items('Silver Bow', player)
     random.shuffle(silverarrows)
     silverarrow_hint = (' %s?' % hint_text(silverarrows[0]).replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
     tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint

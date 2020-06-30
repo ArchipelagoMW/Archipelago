@@ -254,10 +254,10 @@ class World(object):
                     elif self.difficulty_requirements[item.player].progressive_shield_limit >= 1:
                         ret.prog_items['Blue Shield', item.player] += 1
                 elif 'Bow' in item.name:
-                    if ret.has('Silver Arrows', item.player):
+                    if ret.has('Silver', item.player):
                         pass
                     elif ret.has('Bow', item.player) and self.difficulty_requirements[item.player].progressive_bow_limit >= 2:
-                        ret.prog_items['Silver Arrows', item.player] += 1
+                        ret.prog_items['Silver Bow', item.player] += 1
                     elif self.difficulty_requirements[item.player].progressive_bow_limit >= 1:
                         ret.prog_items['Bow', item.player] += 1
             elif item.name.startswith('Bottle'):
@@ -576,8 +576,8 @@ class CollectionState(object):
     def can_shoot_arrows(self, player: int) -> bool:
         if self.world.retro[player]:
             # TODO: Progressive and Non-Progressive silvers work differently (progressive is not usable until the shop arrow is bought)
-            return self.has('Bow', player) and self.can_buy_unlimited('Single Arrow', player)
-        return self.has('Bow', player)
+            return (self.has('Bow', player) or self.has('Silver Bow', player)) and self.can_buy_unlimited('Single Arrow', player)
+        return self.has('Bow', player) or self.has('Silver Bow', player)
 
     def can_get_good_bee(self, player: int) -> bool:
         cave = self.world.get_region('Good Bee Cave', player)
@@ -712,10 +712,10 @@ class CollectionState(object):
                     self.prog_items['Blue Shield', item.player] += 1
                     changed = True
             elif 'Bow' in item.name:
-                if self.has('Silver Arrows', item.player):
+                if self.has('Silver Bow', item.player):
                     pass
                 elif self.has('Bow', item.player):
-                    self.prog_items['Silver Arrows', item.player] += 1
+                    self.prog_items['Silver Bow', item.player] += 1
                     changed = True
                 else:
                     self.prog_items['Bow', item.player] += 1
@@ -766,8 +766,8 @@ class CollectionState(object):
                     else:
                         to_remove = 'None'
                 elif 'Bow' in item.name:
-                    if self.has('Silver Arrows', item.player):
-                        to_remove = 'Silver Arrows'
+                    if self.has('Silver Bow', item.player):
+                        to_remove = 'Silver Bow'
                     elif self.has('Bow', item.player):
                         to_remove = 'Bow'
                     else:
