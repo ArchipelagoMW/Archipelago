@@ -8,14 +8,19 @@
     {% endblock %}
 </head>
 <body>
-<div class=".container-fluid">
-    {% with messages = get_flashed_messages() %}
-        {% for message in messages %}
-            <div class="alert alert-danger" role="alert">{{ message }}</div>
-        {% endfor %}
-    {% endwith %}
-    {% block body %}{% endblock %}
-</div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class=".container-fluid">
+            {% for message in messages %}
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+{% block body %}{% endblock %}
+
 <br> {# spacing for notice #}
 <footer class="page-footer" style="position: fixed; left: 0; bottom: 0; width: 100%; text-align: center">
     <div class="container">

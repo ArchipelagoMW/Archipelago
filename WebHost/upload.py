@@ -15,8 +15,8 @@ accepted_zip_contents = {"patches": ".bmbp",
 banned_zip_contents = (".sfc",)
 
 
-@app.route('/', methods=['GET', 'POST'])
-def upload_game():
+@app.route('/uploads', methods=['GET', 'POST'])
+def uploads():
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -70,4 +70,4 @@ def upload_game():
             else:
                 flash("Not recognized file format. Awaiting a .multidata file.")
     rooms = select(room for room in Room if room.owner == session["_id"])
-    return render_template("upload_game.html", rooms=rooms)
+    return render_template("uploads.html", rooms=rooms)

@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% block head %}
+    <title>Berserker's Multiworld</title>
+{% endblock %}
+{% block body %}
+    <nav class="navbar navbar-dark bg-dark navbar-expand-sm">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for("uploads") }}">Start a Group</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for("uploads") }}">Upload a Multiworld</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for("uploads") }}">Your Content</a>
+            </li>
+        </ul>
+    </nav>
+    <br>
+    <div class="container container-fluid">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <div class="col-md-5 p-lg-2 mx-auto my-2">
+                    <h1 class="text-center display-4 font-weight-normal">Berserker's Multiworld</h1>
+                    <p class="text-center lead font-weight-normal"><a
+                            href="https://github.com/Berserker66/MultiWorld-Utilities">Source Code</a>
+                        - <a href="https://github.com/Berserker66/MultiWorld-Utilities/wiki">Wiki</a>
+                        -
+                        <a href="https://github.com/Berserker66/MultiWorld-Utilities/graphs/contributors">Contributors</a>
+                    </p>
+                </div>
+                <div>
+                    <p class="lead">This is randomizer for The Legend of Zelda: A Link to the Past.</p>
+                    <p class="lead">It is a multiworld, meaning items get shuffled across multiple players' worlds
+                        which get exchanged on pickup through the internet.</p>
+                    <p class="lead">This website allows hosting such a Multiworld and comes with an item and location
+                        tracker.</p>
+                    <p class="lead">Currently you still require a locally installed client to play, that handles
+                        connecting to the server and patching a vanilla game to the randomized one. Get started on the
+                        <a href="https://github.com/Berserker66/MultiWorld-Utilities/wiki">Wiki</a>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

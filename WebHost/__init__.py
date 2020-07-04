@@ -137,4 +137,4 @@ def host_room(room: UUID):
 
 
 from WebHost.customserver import run_server_process
-from . import tracker, upload  # to trigger app routing picking up on it
+from . import tracker, upload, landing  # to trigger app routing picking up on it
