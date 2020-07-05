@@ -245,7 +245,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite
                            '--binary',
                            '--enemizer', options_path,
                            '--output', enemizer_output_path],
-                          cwd=os.path.dirname(enemizercli), stdout=subprocess.DEVNULL)
+                          cwd=os.path.dirname(enemizercli))
     rom.read_from_file(enemizer_output_path)
     os.remove(enemizer_output_path)
 
