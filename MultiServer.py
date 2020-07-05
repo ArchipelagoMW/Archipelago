@@ -369,6 +369,7 @@ async def countdown(ctx: Context, timer):
             ctx.countdown_timer -= 1
             await asyncio.sleep(1)
         ctx.notify_all(f'[Server]: GO')
+        ctx.countdown_timer = 0
 
 async def missing(ctx: Context, client: Client, locations: list):
     await ctx.send_msgs(client, [['Missing', {
