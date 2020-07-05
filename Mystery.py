@@ -331,7 +331,9 @@ def roll_settings(weights):
 
     ret.shuffleenemies = {'none': 'none',
                           'shuffled': 'shuffled',
-                          'random': 'chaos'
+                          'random': 'chaos',
+                          'chaosthieves': 'chaosthieves',
+                          'chaos': 'chaos'
                           }[get_choice('enemy_shuffle', weights)]
 
     ret.enemy_damage = {'default': 'default',

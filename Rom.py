@@ -152,7 +152,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite
     options = {
         'RandomizeEnemies': world.enemy_shuffle[player] != 'none',
         'RandomizeEnemiesType': 3,
-        'RandomizeBushEnemyChance': world.enemy_shuffle[player] == 'chaos',
+        'RandomizeBushEnemyChance': 'chaos' in world.enemy_shuffle[player],
         'RandomizeEnemyHealthRange': world.enemy_health[player] != 'default',
         'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[
             world.enemy_health[player]],
@@ -203,7 +203,8 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite
         'BeesLevel': 0,
         'RandomizeTileTrapPattern': world.enemy_shuffle[player] == 'chaos',
         'RandomizeTileTrapFloorTile': False,
-        'AllowKillableThief': world.enemy_shuffle[player] != 'none',
+        'AllowKillableThief': bool(random.randint(0, 1)) if 'thieves' in world.enemy_shuffle[player] else
+        world.enemy_shuffle[player] != 'none',
         'RandomizeSpriteOnHit': random_sprite_on_hit,
         'DebugMode': False,
         'DebugForceEnemy': False,

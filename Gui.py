@@ -375,7 +375,7 @@ def guiMain(args=None):
     enemizerEnemyLabel.pack(side=LEFT)
     enemyShuffleVar = StringVar()
     enemyShuffleVar.set('none')
-    enemizerEnemyOption = OptionMenu(enemizerEnemyFrame, enemyShuffleVar, 'none', 'shuffled', 'chaos')
+    enemizerEnemyOption = OptionMenu(enemizerEnemyFrame, enemyShuffleVar, 'none', 'shuffled', 'chaos', 'chaosthieves')
     enemizerEnemyOption.pack(side=LEFT)
 
     enemizerBossFrame = Frame(enemizerFrame)

@@ -292,8 +292,10 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--skip_playthrough', action='store_true', default=defval(False))
     parser.add_argument('--enemizercli', default=defval('EnemizerCLI/EnemizerCLI.Core'))
     parser.add_argument('--shufflebosses', default=defval('none'), choices=['none', 'basic', 'normal', 'chaos'])
-    parser.add_argument('--shuffleenemies', default=defval('none'), choices=['none', 'shuffled', 'chaos'])
-    parser.add_argument('--enemy_health', default=defval('default'), choices=['default', 'easy', 'normal', 'hard', 'expert'])
+    parser.add_argument('--shuffleenemies', default=defval('none'),
+                        choices=['none', 'shuffled', 'chaos', 'chaosthieves'])
+    parser.add_argument('--enemy_health', default=defval('default'),
+                        choices=['default', 'easy', 'normal', 'hard', 'expert'])
     parser.add_argument('--enemy_damage', default=defval('default'), choices=['default', 'shuffled', 'chaos'])
     parser.add_argument('--shufflepots', default=defval(False), action='store_true')
     parser.add_argument('--beemizer', default=defval(0), type=lambda value: min(max(int(value), 0), 4))
