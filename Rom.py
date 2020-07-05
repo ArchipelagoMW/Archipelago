@@ -203,7 +203,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite
         'BeesLevel': 0,
         'RandomizeTileTrapPattern': world.enemy_shuffle[player] == 'chaos',
         'RandomizeTileTrapFloorTile': False,
-        'AllowKillableThief': bool(random.randint(0,1)) if world.enemy_shuffle[player] == 'chaos' else world.enemy_shuffle[player] != 'none',
+        'AllowKillableThief': world.enemy_shuffle[player] != 'none',
         'RandomizeSpriteOnHit': random_sprite_on_hit,
         'DebugMode': False,
         'DebugForceEnemy': False,
