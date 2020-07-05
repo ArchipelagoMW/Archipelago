@@ -176,7 +176,7 @@ def main(args, seed=None):
         patch_rom(world, rom, player, team, use_enemizer)
 
         if use_enemizer:
-            patch_enemizer(world, player, rom, args.rom, args.enemizercli, args.shufflepots[player],
+            patch_enemizer(world, player, rom, args.enemizercli,
                            sprite_random_on_hit)
 
         if args.race:

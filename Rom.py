@@ -143,7 +143,7 @@ def read_rom(stream) -> bytearray:
         buffer = buffer[0x200:]
     return buffer
 
-def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, random_sprite_on_hit):
+def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite_on_hit):
     randopatch_path = os.path.abspath(output_path(f'enemizer_randopatch_{player}.sfc'))
     options_path = os.path.abspath(output_path(f'enemizer_options_{player}.json'))
     enemizer_output_path = os.path.abspath(output_path(f'enemizer_output_{player}.sfc'))
@@ -161,12 +161,14 @@ def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, r
         'AllowEnemyZeroDamage': True,
         'ShuffleEnemyDamageGroups': world.enemy_damage[player] != 'default',
         'EnemyDamageChaosMode': world.enemy_damage[player] == 'chaos',
-        'EasyModeEscape': False,
+        'EasyModeEscape': world.mode[player] == "standard",
         'EnemiesAbsorbable': False,
         'AbsorbableSpawnRate': 10,
         'AbsorbableTypes': {
-            'FullMagic': True, 'SmallMagic': True, 'Bomb_1': True, 'BlueRupee': True, 'Heart': True, 'BigKey': True, 'Key': True,
-            'Fairy': True, 'Arrow_10': True, 'Arrow_5': True, 'Bomb_8': True, 'Bomb_4': True, 'GreenRupee': True, 'RedRupee': True
+            'FullMagic': True, 'SmallMagic': True, 'Bomb_1': True, 'BlueRupee': True, 'Heart': True, 'BigKey': True,
+            'Key': True,
+            'Fairy': True, 'Arrow_10': True, 'Arrow_5': True, 'Bomb_8': True, 'Bomb_4': True, 'GreenRupee': True,
+            'RedRupee': True
         },
         'BossMadness': False,
         'RandomizeBosses': True,
@@ -188,7 +190,7 @@ def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, r
         'GrayscaleMode': False,
         'GenerateSpoilers': False,
         'RandomizeLinkSpritePalette': False,
-        'RandomizePots': shufflepots,
+        'RandomizePots': world.shufflepots[player],
         'ShuffleMusic': False,
         'BootlegMagic': True,
         'CustomBosses': False,

@@ -15,7 +15,7 @@ import sys
 
 import functools
 
-from yaml import load, dump
+from yaml import load, dump, safe_load
 
 try:
     from yaml import CLoader as Loader
@@ -147,7 +147,7 @@ def make_new_base2current(old_rom='Zelda no Densetsu - Kamigami no Triforce (Jap
             out_data[idx] = [int(new)]
     for offset in reversed(list(out_data.keys())):
         if offset - 1 in out_data:
-            out_data[offset-1].extend(out_data.pop(offset))
+            out_data[offset - 1].extend(out_data.pop(offset))
     with open('data/base2current.json', 'wt') as outfile:
         json.dump([{key: value} for key, value in out_data.items()], outfile, separators=(",", ":"))
 
@@ -156,7 +156,8 @@ def make_new_base2current(old_rom='Zelda no Densetsu - Kamigami no Triforce (Jap
     return "New Rom Hash: " + basemd5.hexdigest()
 
 
-parse_yaml = functools.partial(load, Loader=Loader)
+parse_yaml = safe_load
+unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 
 
 class Hint(typing.NamedTuple):
@@ -251,7 +252,7 @@ def persistent_load() -> typing.Dict[dict]:
     if os.path.exists(path):
         try:
             with open(path, "r") as f:
-                storage = parse_yaml(f.read())
+                storage = unsafe_parse_yaml(f.read())
         except Exception as e:
             import logging
             logging.debug(f"Could not read store: {e}")
