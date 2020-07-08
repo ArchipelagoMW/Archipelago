@@ -377,7 +377,7 @@ def roll_settings(weights):
     ret.remote_items = get_choice('remote_items', weights, False)
 
     if get_choice("local_keys", weights, "l" in dungeon_items):
-        ret.local_items = {"Small Keys", "Big Keys"}
+        ret.local_items = item_name_groups["Small Keys"] | item_name_groups["Big Keys"]
     else:
         ret.local_items = set()
     for item_name in weights.get('local_items', []):
@@ -386,7 +386,8 @@ def roll_settings(weights):
             if item in item_table:
                 ret.local_items.add(item)
             else:
-                logging.warning(f"Could not force item {item} to be world-local, as it was not recognized.")
+                raise Exception(f"Could not force item {item} to be world-local, as it was not recognized.")
+
     ret.local_items = ",".join(ret.local_items)
 
     if 'rom' in weights:
