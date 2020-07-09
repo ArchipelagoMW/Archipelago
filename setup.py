@@ -69,7 +69,7 @@ for script, scriptname in scripts.items():
 
 import datetime
 
-buildtime = datetime.datetime.now()
+buildtime = datetime.datetime.utcnow()
 
 cx_Freeze.setup(
     name="BerserkerMultiWorld",

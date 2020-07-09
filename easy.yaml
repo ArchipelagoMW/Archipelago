@@ -149,7 +149,7 @@ boss_shuffle:
   random: 0 # Any boss can appear any amount of times
 enemy_shuffle:
   none: 1 # Vanilla enemy placement
-  shuffled: 0 # Enemies are randomized
+  chaos: 0 # Enemies are randomized
   random: 0 # also shuffle bush enemies, random tile rooms and random bush enemy spawn chance
   chaosthieves: 0 # random + thieves may not be killable
 enemy_damage:

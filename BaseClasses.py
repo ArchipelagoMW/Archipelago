@@ -952,11 +952,11 @@ class Location(object):
         self.item_rule = lambda item: True
         self.player = player
 
-    def can_fill(self, state, item, check_access=True) -> bool:
+    def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
         return self.always_allow(state, item) or (self.parent_region.can_fill(item) and self.item_rule(item) and (
                 not check_access or self.can_reach(state)))
 
-    def can_reach(self, state) -> bool:
+    def can_reach(self, state: CollectionState) -> bool:
         if self.parent_region.can_reach(state) and self.access_rule(state):
             return True
         return False

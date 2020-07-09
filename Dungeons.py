@@ -50,15 +50,6 @@ def fill_dungeons(world):
 
     all_state_base = world.get_all_state()
 
-    for player in range(1, world.players + 1):
-        if not world.retro[player] and world.logic == "noglitches" and not world.keyshuffle[player]:
-            skull_woods = world.get_dungeon('Skull Woods', player)
-            skull_woods.small_keys.pop()
-            pinball_room = world.get_location('Skull Woods - Pinball Room', player)
-            world.push_item(pinball_room, ItemFactory('Small Key (Skull Woods)', player), False)
-            pinball_room.event = True
-            pinball_room.locked = True
-
     dungeons = [(list(dungeon.regions), dungeon.big_key, list(dungeon.small_keys), list(dungeon.dungeon_items)) for dungeon in world.dungeons]
 
     loopcnt = 0
@@ -128,16 +119,6 @@ def get_dungeon_item_pool(world):
 
 def fill_dungeons_restrictive(world, shuffled_locations):
     all_state_base = world.get_all_state()
-
-    for player in range(1, world.players + 1):
-        if not world.retro[player] and world.logic == "noglitches" and not world.keyshuffle[player]:
-            skull_woods = world.get_dungeon('Skull Woods', player)
-            skull_woods.small_keys.pop()
-            pinball_room = world.get_location('Skull Woods - Pinball Room', player)
-            world.push_item(pinball_room, ItemFactory('Small Key (Skull Woods)', player), False)
-            pinball_room.event = True
-            pinball_room.locked = True
-            shuffled_locations.remove(pinball_room)
 
     # with shuffled dungeon items they are distributed as part of the normal item pool
     for item in world.get_items():
