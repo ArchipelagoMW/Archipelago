@@ -42,7 +42,6 @@ def set_rules(world, player):
         fake_flipper_rules(world, player)
         overworld_glitches_rules(world, player)
     elif world.logic[player] == 'minorglitches':
-        logging.getLogger('').info('Minor Glitches may be buggy still. No guarantee for proper logic checks.')
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
     else:
@@ -120,13 +119,20 @@ def add_lamp_requirement(spot, player):
     add_rule(spot, lambda state: state.has('Lamp', player, state.world.lamps_needed_for_dark_rooms))
 
 
-def forbid_item(location, item, player):
+def forbid_item(location, item, player: int):
     old_rule = location.item_rule
     location.item_rule = lambda i: (i.name != item or i.player != player) and old_rule(i)
+
+
+def forbid_items(location, items: set, player: int):
+    old_rule = location.item_rule
+    location.item_rule = lambda i: (i.player != player or i.name not in items) and old_rule(i)
+
 
 def add_item_rule(location, rule):
     old_rule = location.item_rule
     location.item_rule = lambda item: rule(item) and old_rule(item)
+
 
 def item_in_locations(state, item, player, locations):
     for location in locations:
@@ -148,8 +154,7 @@ def locality_rules(world, player):
     if world.local_items[player]:
         for location in world.get_locations():
             if location.player != player:
-                for item in world.local_items[player]:
-                    forbid_item(location, item, player)
+                forbid_items(location, world.local_items[player], player)
 
 
 def crossover_logic(world, player):
