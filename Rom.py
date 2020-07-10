@@ -145,7 +145,38 @@ def read_rom(stream) -> bytearray:
         buffer = buffer[0x200:]
     return buffer
 
+
+def check_enemizer(enemizercli):
+    if getattr(check_enemizer, "done", None):
+        return
+    if not os.path.exists(enemizercli) and not os.path.exists(enemizercli + ".exe"):
+        raise Exception(f"Enemizer not found at {enemizercli}, please install a multiworld fork of Enemizer. "
+                        f"Such as https://github.com/Ijwu/Enemizer/releases")
+    if sys.platform == "win32":
+        try:
+            import pythoncom
+            from win32com.client import Dispatch
+        except ImportError:
+            logging.info("Could not check Enemizer Version info as pywin32 bindings are missing.")
+        else:
+            # version info is saved on the lib, for some reason
+            library = os.path.join(os.path.dirname(enemizercli), "EnemizerLibrary.dll")
+            pythoncom.CoInitialize()
+            ver_parser = Dispatch('Scripting.FileSystemObject')
+            info = ver_parser.GetFileVersion(library)
+
+            if info == 'No Version Information Available':
+                info = None
+            version = tuple(int(part) for part in info.split("."))
+            if version < (6, 1, 0, 179):
+                raise Exception(
+                    f"Enemizer found at {enemizercli} is outdated ({info}), please install a multiworld fork of Enemizer. "
+                    f"Such as https://github.com/Ijwu/Enemizer/releases")
+    check_enemizer.done = True
+
+
 def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite_on_hit):
+    check_enemizer(enemizercli)
     randopatch_path = os.path.abspath(output_path(f'enemizer_randopatch_{player}.sfc'))
     options_path = os.path.abspath(output_path(f'enemizer_options_{player}.json'))
     enemizer_output_path = os.path.abspath(output_path(f'enemizer_output_{player}.sfc'))

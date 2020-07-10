@@ -58,7 +58,7 @@ else:  # unix
 
 def launch_room(room: Room, config: dict):
     # requires db_session!
-    if room.last_activity >= datetime.utcnow() - timedelta(minutes=room.timeout):
+    if room.last_activity >= datetime.utcnow() - timedelta(seconds=room.timeout):
         multiworld = multiworlds.get(room.id, None)
         if not multiworld:
             multiworld = MultiworldInstance(room, config)
