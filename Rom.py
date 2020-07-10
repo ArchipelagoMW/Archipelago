@@ -150,7 +150,7 @@ def check_enemizer(enemizercli):
     if getattr(check_enemizer, "done", None):
         return
     if not os.path.exists(enemizercli) and not os.path.exists(enemizercli + ".exe"):
-        raise Exception(f"Enemizer not found at {enemizercli}, please install a multiworld fork of Enemizer. "
+        raise Exception(f"Enemizer not found at {enemizercli}, please install it."
                         f"Such as https://github.com/Ijwu/Enemizer/releases")
     if sys.platform == "win32":
         try:
@@ -170,7 +170,7 @@ def check_enemizer(enemizercli):
             version = tuple(int(part) for part in info.split("."))
             if version < (6, 1, 0, 179):
                 raise Exception(
-                    f"Enemizer found at {enemizercli} is outdated ({info}), please install a multiworld fork of Enemizer. "
+                    f"Enemizer found at {enemizercli} is outdated ({info}), please update your Enemizer. "
                     f"Such as https://github.com/Ijwu/Enemizer/releases")
     check_enemizer.done = True
 
