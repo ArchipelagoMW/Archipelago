@@ -7,8 +7,6 @@ from waitress import serve
 
 from WebHost.models import db, Room, db_session, select
 
-DEBUG = False
-port = 80
 
 
 def autohost(config: dict):
@@ -47,8 +45,8 @@ if __name__ == "__main__":
         logging.info(f"Updated config from {configpath}")
     db.bind(**app.config["PONY"])
     db.generate_mapping(create_tables=True)
-    if DEBUG:
+    if app.config["DEBUG"]:
         autohost(app.config)
-        app.run(debug=True, port=port)
+        app.run(debug=True, port=app.config["PORT"])
     else:
-        serve(app, port=port, threads=app.config["WAITRESS_THREADS"])
+        serve(app, port=app.config["PORT"], threads=app.config["WAITRESS_THREADS"])

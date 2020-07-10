@@ -26,6 +26,8 @@ def allowed_file(filename):
 app = Flask(__name__)
 Pony(app)
 
+app.config["DEBUG"] = False
+app.config["PORT"] = 80
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # 4 megabyte limit
 # if you want persistent sessions on your server, make sure you make this a constant in your config.yaml
