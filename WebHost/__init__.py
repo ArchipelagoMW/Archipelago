@@ -2,9 +2,6 @@
 So unless you're Berserker you need to include license information."""
 
 import os
-import logging
-import typing
-import multiprocessing
 import threading
 
 from pony.flask import Pony
@@ -23,9 +20,12 @@ os.makedirs(LOGS_FOLDER, exist_ok=True)
 def allowed_file(filename):
     return filename.endswith(('multidata', ".zip"))
 
+
 app = Flask(__name__)
 Pony(app)
 
+app.config["SELFHOST"] = True
+app.config["SELFLAUNCH"] = True
 app.config["DEBUG"] = False
 app.config["PORT"] = 80
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -47,7 +47,6 @@ cache = Cache(app)
 Compress(app)
 
 # this local cache is risky business if app hosting is done with subprocesses as it will not sync. Waitress is fine though
-multiworlds = {}
 
 
 @app.before_request
@@ -55,29 +54,6 @@ def register_session():
     session.permanent = True  # technically 31 days after the last visit
     if not session.get("_id", None):
         session["_id"] = uuid4()  # uniquely identify each session without needing a login
-
-
-class MultiworldInstance():
-    def __init__(self, room: Room):
-        self.room_id = room.id
-        self.process: typing.Optional[multiprocessing.Process] = None
-        multiworlds[self.room_id] = self
-
-    def start(self):
-        if self.process and self.process.is_alive():
-            return False
-
-        logging.info(f"Spinning up {self.room_id}")
-        with db_session:
-            self.process = multiprocessing.Process(group=None, target=run_server_process,
-                                                   args=(self.room_id, app.config["PONY"]),
-                                                   name="MultiHost")
-        self.process.start()
-
-    def stop(self):
-        if self.process:
-            self.process.terminate()
-            self.process = None
 
 
 @app.route('/seed/<uuid:seed>')
@@ -114,8 +90,6 @@ def display_log(room: UUID):
     return Response(_read_log(os.path.join("logs", str(room) + ".txt")), mimetype="text/plain;charset=UTF-8")
 
 
-processstartlock = threading.Lock()
-
 
 @app.route('/hosted/<uuid:room>', methods=['GET', 'POST'])
 def host_room(room: UUID):
@@ -127,13 +101,9 @@ def host_room(room: UUID):
             cmd = request.form["cmd"]
             Command(room=room, commandtext=cmd)
             commit()
-    with db_session:
-        multiworld = multiworlds.get(room.id, None)
-        if not multiworld:
-            multiworld = MultiworldInstance(room)
 
-    with processstartlock:
-        multiworld.start()
+    with db_session:
+        room.last_activity = datetime.utcnow()  # will trigger a spinup, if it's not already running
 
     return render_template("host_room.html", room=room)
 

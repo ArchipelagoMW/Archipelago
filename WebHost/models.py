@@ -21,7 +21,7 @@ class Room(db.Entity):
     seed = Required('Seed', index=True)
     multisave = Optional(Json, lazy=True)
     show_spoiler = Required(int, default=0)  # 0 -> never, 1 -> after completion, -> 2 always
-    timeout = Required(int, default=lambda: 6)
+    timeout = Required(int, default=lambda: 6 * 60 * 60)  # seconds since last activity to shutdown
     tracker = Optional(UUID, index=True)
     last_port = Optional(int, default=lambda: 0)
 

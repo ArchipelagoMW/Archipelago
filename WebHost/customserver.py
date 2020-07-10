@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import functools
 import logging
 import os
@@ -8,7 +10,7 @@ import threading
 import time
 import random
 
-from WebHost import LOGS_FOLDER
+
 from .models import *
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor
@@ -16,6 +18,7 @@ from Utils import get_public_ipv4, get_public_ipv6
 
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
+    ctx: WebHostContext
     def _cmd_video(self, platform, user):
         """Set a link for your name in the WebHost tracker pointing to a video stream"""
         if platform.lower().startswith("t"):  # twitch
@@ -28,7 +31,6 @@ class CustomClientMessageProcessor(ClientMessageProcessor):
 
 # inject
 import MultiServer
-
 MultiServer.client_message_processor = CustomClientMessageProcessor
 del (MultiServer)
 
@@ -80,7 +82,10 @@ class WebHostContext(Context):
 
     @db_session
     def _save(self) -> bool:
-        Room.get(id=self.room_id).multisave = self.get_save()
+        room = Room.get(id=self.room_id)
+        room.multisave = self.get_save()
+        # saving only occurs on activity, so we can "abuse" this information to mark this as last_activity
+        room.last_activity = datetime.utcnow()
         return True
 
     def get_save(self) -> dict:
@@ -104,7 +109,6 @@ def run_server_process(room_id, ponyconfig: dict):
                                 logging.FileHandler(os.path.join(LOGS_FOLDER, f"{room_id}.txt"), 'a', 'utf-8-sig')])
         ctx = WebHostContext()
         ctx.load(room_id)
-        ctx.auto_shutdown = 24 * 60 * 60  # 24 hours
         ctx.init_save()
 
         try:
@@ -126,9 +130,13 @@ def run_server_process(room_id, ponyconfig: dict):
                     room.last_port = socketname[1]
             elif wssocket.family == socket.AF_INET:
                 logging.info(f'Hosting game at {get_public_ipv4()}:{socketname[1]}')
-        ctx.auto_shutdown = 6 * 60
+        with db_session:
+            ctx.auto_shutdown = Room.get(id=room_id).timeout
         ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
         await ctx.shutdown_task
         logging.info("Shutting down")
 
     asyncio.run(main())
+
+
+from WebHost import LOGS_FOLDER

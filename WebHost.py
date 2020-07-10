@@ -2,41 +2,17 @@ import os
 import multiprocessing
 import logging
 
-from WebHost import app
+from WebHost import app as raw_app
 from waitress import serve
 
-from WebHost.models import db, Room, db_session, select
+from WebHost.models import db
+from WebHost.autolauncher import autohost
+
+configpath = "config.yaml"
 
 
-
-def autohost(config: dict):
-    return
-    # not implemented yet. https://github.com/ponyorm/pony/issues/527
-    import time
-    from datetime import timedelta, datetime
-
-    def keep_running():
-        # db.bind(**config["PONY"])
-        # db.generate_mapping(check_tables=False)
-        while 1:
-            time.sleep(3)
-            with db_session:
-                rooms = select(
-                    room for room in Room if
-                    room.last_activity >= datetime.utcnow() - timedelta(hours=room.timeout))
-                logging.info(rooms)
-
-    import threading
-    threading.Thread(target=keep_running).start()
-
-
-if __name__ == "__main__":
-    multiprocessing.freeze_support()
-    multiprocessing.set_start_method('spawn')
-    logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
-
-    configpath = "config.yaml"
-
+def get_app():
+    app = raw_app
     if os.path.exists(configpath):
         import yaml
         with open(configpath) as c:
@@ -45,8 +21,19 @@ if __name__ == "__main__":
         logging.info(f"Updated config from {configpath}")
     db.bind(**app.config["PONY"])
     db.generate_mapping(create_tables=True)
-    if app.config["DEBUG"]:
+    return app
+
+
+if __name__ == "__main__":
+    multiprocessing.freeze_support()
+    multiprocessing.set_start_method('spawn')
+    logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
+    app = get_app()
+    if app.config["SELFLAUNCH"]:
         autohost(app.config)
-        app.run(debug=True, port=app.config["PORT"])
-    else:
-        serve(app, port=app.config["PORT"], threads=app.config["WAITRESS_THREADS"])
+    if app.config["SELFHOST"]:  # using WSGI, you just want to run get_app()
+        if app.config["DEBUG"]:
+            autohost(app.config)
+            app.run(debug=True, port=app.config["PORT"])
+        else:
+            serve(app, port=app.config["PORT"], threads=app.config["WAITRESS_THREADS"])

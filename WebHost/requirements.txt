@@ -4,3 +4,5 @@ waitress>=1.4.4
 flask-caching>=1.9.0
 Flask-Autoversion>=0.2.0
 Flask-Compress>=1.5.0
+redis>=3.5.3
+rq>=1.4.3

@@ -104,6 +104,7 @@ class Context(Node):
         with open(multidatapath, 'rb') as f:
             self._load(json.loads(zlib.decompress(f.read()).decode("utf-8-sig")),
                        use_embedded_server_options)
+
         self.data_filename = multidatapath
 
     def _load(self, jsonobj: dict, use_embedded_server_options: bool):
@@ -1177,7 +1178,7 @@ def parse_args() -> argparse.Namespace:
 
 
 async def auto_shutdown(ctx, to_cancel=None):
-    await asyncio.sleep(ctx.auto_shutdown * 60)
+    await asyncio.sleep(ctx.auto_shutdown)
     while ctx.running:
         if not ctx.client_activity_timers.values():
             asyncio.create_task(ctx.server.ws_server._close())
@@ -1189,7 +1190,7 @@ async def auto_shutdown(ctx, to_cancel=None):
         else:
             newest_activity = max(ctx.client_activity_timers.values())
             delta = datetime.datetime.now(datetime.timezone.utc) - newest_activity
-            seconds = ctx.auto_shutdown * 60 - delta.total_seconds()
+            seconds = ctx.auto_shutdown - delta.total_seconds()
             if seconds < 0:
                 asyncio.create_task(ctx.server.ws_server._close())
                 ctx.running = False
