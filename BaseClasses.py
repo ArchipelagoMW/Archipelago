@@ -102,7 +102,6 @@ class World(object):
             set_player_attr('enemy_health', 'default')
             set_player_attr('enemy_damage', 'default')
             set_player_attr('beemizer', 0)
-            set_player_attr('progressive', 'on')
             set_player_attr('escape_assist', [])
             set_player_attr('crystals_needed_for_ganon', 7)
             set_player_attr('crystals_needed_for_gt', 7)
@@ -114,7 +113,12 @@ class World(object):
             set_player_attr('glitch_boots', True)
             set_player_attr('progression_balancing', True)
             set_player_attr('local_items', set())
+            set_player_attr('triforce_pieces_available', 30)
             set_player_attr('triforce_pieces_required', 20)
+
+    @property
+    def player_ids(self):
+        yield from range(1, self.players + 1)
 
     def get_name_string_for_object(self, obj) -> str:
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_names(obj.player)})'
@@ -250,10 +254,10 @@ class World(object):
                     elif self.difficulty_requirements[item.player].progressive_shield_limit >= 1:
                         ret.prog_items['Blue Shield', item.player] += 1
                 elif 'Bow' in item.name:
-                    if ret.has('Silver Arrows', item.player):
+                    if ret.has('Silver', item.player):
                         pass
                     elif ret.has('Bow', item.player) and self.difficulty_requirements[item.player].progressive_bow_limit >= 2:
-                        ret.prog_items['Silver Arrows', item.player] += 1
+                        ret.prog_items['Silver Bow', item.player] += 1
                     elif self.difficulty_requirements[item.player].progressive_bow_limit >= 1:
                         ret.prog_items['Bow', item.player] += 1
             elif item.name.startswith('Bottle'):
@@ -268,10 +272,19 @@ class World(object):
         if keys:
             for p in range(1, self.players + 1):
                 from Items import ItemFactory
-                for item in ItemFactory(['Small Key (Escape)', 'Big Key (Eastern Palace)', 'Big Key (Desert Palace)', 'Small Key (Desert Palace)', 'Big Key (Tower of Hera)', 'Small Key (Tower of Hera)', 'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)',
-                                         'Big Key (Palace of Darkness)'] + ['Small Key (Palace of Darkness)'] * 6 + ['Big Key (Thieves Town)', 'Small Key (Thieves Town)', 'Big Key (Skull Woods)'] + ['Small Key (Skull Woods)'] * 3 + ['Big Key (Swamp Palace)',
-                                         'Small Key (Swamp Palace)', 'Big Key (Ice Palace)'] + ['Small Key (Ice Palace)'] * 2 + ['Big Key (Misery Mire)', 'Big Key (Turtle Rock)', 'Big Key (Ganons Tower)'] + ['Small Key (Misery Mire)'] * 3 + ['Small Key (Turtle Rock)'] * 4 + ['Small Key (Ganons Tower)'] * 4,
-                                         p):
+                for item in ItemFactory(
+                        ['Small Key (Hyrule Castle)', 'Big Key (Eastern Palace)', 'Big Key (Desert Palace)',
+                         'Small Key (Desert Palace)', 'Big Key (Tower of Hera)', 'Small Key (Tower of Hera)',
+                         'Small Key (Agahnims Tower)', 'Small Key (Agahnims Tower)',
+                         'Big Key (Palace of Darkness)'] + ['Small Key (Palace of Darkness)'] * 6 + [
+                            'Big Key (Thieves Town)', 'Small Key (Thieves Town)', 'Big Key (Skull Woods)'] + [
+                            'Small Key (Skull Woods)'] * 3 + ['Big Key (Swamp Palace)',
+                                                              'Small Key (Swamp Palace)', 'Big Key (Ice Palace)'] + [
+                            'Small Key (Ice Palace)'] * 2 + ['Big Key (Misery Mire)', 'Big Key (Turtle Rock)',
+                                                             'Big Key (Ganons Tower)'] + [
+                            'Small Key (Misery Mire)'] * 3 + ['Small Key (Turtle Rock)'] * 4 + [
+                            'Small Key (Ganons Tower)'] * 4,
+                        p):
                     soft_collect(item)
         ret.sweep_for_events()
         return ret
@@ -423,26 +436,23 @@ class CollectionState(object):
             queue.extend(start.exits)
 
         # run BFS on all connections, and keep track of those blocked by missing items
-        while True:
-            try:
-                connection = queue.popleft()
-                new_region = connection.connected_region
-                if new_region in rrp:
-                    bc.remove(connection)
-                elif connection.can_reach(self):
-                    rrp.add(new_region)
-                    bc.remove(connection)
-                    bc.update(new_region.exits)
-                    queue.extend(new_region.exits)
-                    self.path[new_region] = (new_region.name, self.path.get(connection, None))
+        while queue:
+            connection = queue.popleft()
+            new_region = connection.connected_region
+            if new_region in rrp:
+                bc.remove(connection)
+            elif connection.can_reach(self):
+                rrp.add(new_region)
+                bc.remove(connection)
+                bc.update(new_region.exits)
+                queue.extend(new_region.exits)
+                self.path[new_region] = (new_region.name, self.path.get(connection, None))
 
-                    # Retry connections if the new region can unblock them
-                    if new_region.name in indirect_connections:
-                        new_entrance = self.world.get_entrance(indirect_connections[new_region.name], player)
-                        if new_entrance in bc and new_entrance not in queue:
-                            queue.append(new_entrance)
-            except IndexError:
-                break
+                # Retry connections if the new region can unblock them
+                if new_region.name in indirect_connections:
+                    new_entrance = self.world.get_entrance(indirect_connections[new_region.name], player)
+                    if new_entrance in bc and new_entrance not in queue:
+                        queue.append(new_entrance)
 
     def copy(self) -> CollectionState:
         ret = CollectionState(self.world)
@@ -455,7 +465,7 @@ class CollectionState(object):
         ret.locations_checked = copy.copy(self.locations_checked)
         return ret
 
-    def can_reach(self, spot, resolution_hint=None, player=None):
+    def can_reach(self, spot, resolution_hint=None, player=None) -> bool:
         if not hasattr(spot, "spot_type"):
             # try to resolve a name
             if resolution_hint == 'Location':
@@ -467,7 +477,7 @@ class CollectionState(object):
                 spot = self.world.get_region(spot, player)
         return spot.can_reach(self)
 
-    def sweep_for_events(self, key_only=False, locations=None):
+    def sweep_for_events(self, key_only: bool = False, locations=None):
         # this may need improvement
         if locations is None:
             locations = self.world.get_filled_locations()
@@ -475,7 +485,9 @@ class CollectionState(object):
         checked_locations = 0
         while new_locations:
             reachable_events = [location for location in locations if location.event and
-                                (not key_only or (not self.world.keyshuffle[location.item.player] and location.item.smallkey) or (not self.world.bigkeyshuffle[location.item.player] and location.item.bigkey))
+                                (not key_only or (not self.world.keyshuffle[
+                                    location.item.player] and location.item.smallkey) or (not self.world.bigkeyshuffle[
+                                    location.item.player] and location.item.bigkey))
                                 and location.can_reach(self)]
             for event in reachable_events:
                 if (event.name, event.player) not in self.events:
@@ -484,12 +496,12 @@ class CollectionState(object):
             new_locations = len(reachable_events) > checked_locations
             checked_locations = len(reachable_events)
 
-    def has(self, item, player, count=1):
+    def has(self, item, player: int, count: int = 1):
         if count == 1:
             return (item, player) in self.prog_items
         return self.prog_items[item, player] >= count
 
-    def has_key(self, item, player, count=1):
+    def has_key(self, item, player, count: int = 1):
         if self.world.retro[player]:
             return self.can_buy_unlimited('Small Key (Universal)', player)
         if count == 1:
@@ -504,6 +516,9 @@ class CollectionState(object):
 
     def item_count(self, item, player: int) -> int:
         return self.prog_items[item, player]
+
+    def has_triforce_pieces(self, count: int, player: int) -> bool:
+        return self.item_count('Triforce Piece', player) + self.item_count('Power Star', player) >= count
 
     def has_crystals(self, count: int, player: int) -> bool:
         crystals = ['Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7']
@@ -561,8 +576,8 @@ class CollectionState(object):
     def can_shoot_arrows(self, player: int) -> bool:
         if self.world.retro[player]:
             # TODO: Progressive and Non-Progressive silvers work differently (progressive is not usable until the shop arrow is bought)
-            return self.has('Bow', player) and self.can_buy_unlimited('Single Arrow', player)
-        return self.has('Bow', player)
+            return (self.has('Bow', player) or self.has('Silver Bow', player)) and self.can_buy_unlimited('Single Arrow', player)
+        return self.has('Bow', player) or self.has('Silver Bow', player)
 
     def can_get_good_bee(self, player: int) -> bool:
         cave = self.world.get_region('Good Bee Cave', player)
@@ -697,10 +712,10 @@ class CollectionState(object):
                     self.prog_items['Blue Shield', item.player] += 1
                     changed = True
             elif 'Bow' in item.name:
-                if self.has('Silver Arrows', item.player):
+                if self.has('Silver Bow', item.player):
                     pass
                 elif self.has('Bow', item.player):
-                    self.prog_items['Silver Arrows', item.player] += 1
+                    self.prog_items['Silver Bow', item.player] += 1
                     changed = True
                 else:
                     self.prog_items['Bow', item.player] += 1
@@ -751,8 +766,8 @@ class CollectionState(object):
                     else:
                         to_remove = 'None'
                 elif 'Bow' in item.name:
-                    if self.has('Silver Arrows', item.player):
-                        to_remove = 'Silver Arrows'
+                    if self.has('Silver Bow', item.player):
+                        to_remove = 'Silver Bow'
                     elif self.has('Bow', item.player):
                         to_remove = 'Bow'
                     else:
@@ -817,7 +832,7 @@ class Region(object):
                                or (item.bigkey and not self.world.bigkeyshuffle[item.player])
                                or (item.map and not self.world.mapshuffle[item.player])
                                or (item.compass and not self.world.compassshuffle[item.player]))
-        sewer_hack = self.world.mode[item.player] == 'standard' and item.name == 'Small Key (Escape)'
+        sewer_hack = self.world.mode[item.player] == 'standard' and item.name == 'Small Key (Hyrule Castle)'
         if sewer_hack or inside_dungeon_item:
             return self.dungeon and self.dungeon.is_dungeon_item(item) and item.player == self.player
 
@@ -937,11 +952,11 @@ class Location(object):
         self.item_rule = lambda item: True
         self.player = player
 
-    def can_fill(self, state, item, check_access=True) -> bool:
+    def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
         return self.always_allow(state, item) or (self.parent_region.can_fill(item) and self.item_rule(item) and (
                 not check_access or self.can_reach(state)))
 
-    def can_reach(self, state) -> bool:
+    def can_reach(self, state: CollectionState) -> bool:
         if self.parent_region.can_reach(state) and self.access_rule(state):
             return True
         return False
@@ -1195,6 +1210,7 @@ class Spoiler(object):
                          'players': self.world.players,
                          'teams': self.world.teams,
                          'progression_balancing': self.world.progression_balancing,
+                         'triforce_pieces_available': self.world.triforce_pieces_available,
                          'triforce_pieces_required': self.world.triforce_pieces_required,
                          }
 
@@ -1241,6 +1257,8 @@ class Spoiler(object):
                 outfile.write('Swords:                          %s\n' % self.metadata['weapons'][player])
                 outfile.write('Goal:                            %s\n' % self.metadata['goal'][player])
                 if "triforce" in self.metadata["goal"][player]:  # triforce hunt
+                    outfile.write(
+                        "Pieces available for Triforce:   %s\n" % self.metadata['triforce_pieces_available'][player])
                     outfile.write(
                         "Pieces required for Triforce:    %s\n" % self.metadata["triforce_pieces_required"][player])
                 outfile.write('Difficulty:                      %s\n' % self.metadata['item_pool'][player])

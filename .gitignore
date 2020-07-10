@@ -20,5 +20,9 @@ weights/
 /Players/
 /QUsb2Snes/
 /options.yaml
+/config.yaml
+/uploads/
+/logs/
 _persistent_storage.yaml
 mystery_result_*.yaml
+/db.db3

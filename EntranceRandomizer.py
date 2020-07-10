@@ -8,7 +8,7 @@ import textwrap
 import shlex
 import sys
 
-from Main import main
+from Main import main, get_seed
 from Rom import get_sprite_from_name
 from Utils import is_bundled, close_console
 
@@ -67,7 +67,7 @@ def parse_arguments(argv, no_defaults=False):
                              Vanilla:   Swords are in vanilla locations.
                              ''')
     parser.add_argument('--goal', default=defval('ganon'), const='ganon', nargs='?',
-                        choices=['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'localtriforcehunt', 'crystals'],
+                        choices=['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'localtriforcehunt', 'ganontriforcehunt', 'localganontriforcehunt', 'crystals'],
                         help='''\
                              Select completion goal. (default: %(default)s)
                              Ganon:         Collect all crystals, beat Agahnim 2 then
@@ -79,10 +79,17 @@ def parse_arguments(argv, no_defaults=False):
                              Triforce Hunt: Places 30 Triforce Pieces in the world, collect
                                             20 of them to beat the game.
                              Local Triforce Hunt: Places 30 Triforce Pieces in your world, collect
-                                            20 of them to beat the game.       
+                                            20 of them to beat the game.
+                             Ganon Triforce Hunt: Places 30 Triforce Pieces in the world, collect
+                                            20 of them, then defeat Ganon.
+                             Local Ganon Triforce Hunt: Places 30 Triforce Pieces in your world,
+                                            collect 20 of them, then defeat Ganon.
                              ''')
+    parser.add_argument('--triforce_pieces_available', default=defval(30),
+                        type=lambda value: min(max(int(value), 1), 90),
+                        help='''Set Triforce Pieces available in item pool.''')
     parser.add_argument('--triforce_pieces_required', default=defval(20),
-                        type=lambda value: min(max(int(value), 1), 30),
+                        type=lambda value: min(max(int(value), 1), 90),
                         help='''Set Triforce Pieces required to win a Triforce Hunt''')
     parser.add_argument('--difficulty', default=defval('normal'), const='normal', nargs='?',
                         choices=['normal', 'hard', 'expert'],
@@ -280,17 +287,15 @@ def parse_arguments(argv, no_defaults=False):
                              ''')
     parser.add_argument('--suppress_rom', help='Do not create an output rom file.', action='store_true')
     parser.add_argument('--gui', help='Launch the GUI', action='store_true')
-    parser.add_argument('--jsonout', action='store_true', help='''\
-                            Output .json patch to stdout instead of a patched rom. Used
-                            for VT site integration, do not use otherwise.
-                            ''')
     parser.add_argument('--skip_progression_balancing', action='store_true', default=defval(False),
                         help="Skip Multiworld Progression balancing.")
     parser.add_argument('--skip_playthrough', action='store_true', default=defval(False))
     parser.add_argument('--enemizercli', default=defval('EnemizerCLI/EnemizerCLI.Core'))
     parser.add_argument('--shufflebosses', default=defval('none'), choices=['none', 'basic', 'normal', 'chaos'])
-    parser.add_argument('--shuffleenemies', default=defval('none'), choices=['none', 'shuffled', 'chaos'])
-    parser.add_argument('--enemy_health', default=defval('default'), choices=['default', 'easy', 'normal', 'hard', 'expert'])
+    parser.add_argument('--shuffleenemies', default=defval('none'),
+                        choices=['none', 'shuffled', 'chaos', 'chaosthieves'])
+    parser.add_argument('--enemy_health', default=defval('default'),
+                        choices=['default', 'easy', 'normal', 'hard', 'expert'])
     parser.add_argument('--enemy_damage', default=defval('default'), choices=['default', 'shuffled', 'chaos'])
     parser.add_argument('--shufflepots', default=defval(False), action='store_true')
     parser.add_argument('--beemizer', default=defval(0), type=lambda value: min(max(int(value), 0), 4))
@@ -302,8 +307,7 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--race', default=defval(False), action='store_true')
     parser.add_argument('--outputname')
     parser.add_argument('--create_diff', default=defval(False), action='store_true', help='''\
-    create a binary patch file from which the randomized rom can be recreated using MultiClient.
-    Does not work with jsonout.''')
+    create a binary patch file from which the randomized rom can be recreated using MultiClient.''')
     parser.add_argument('--disable_glitch_boots', default=defval(False), action='store_true', help='''\
     turns off starting with Pegasus Boots in glitched modes.''')
 
@@ -333,7 +337,7 @@ def parse_arguments(argv, no_defaults=False):
                          'local_items', 'retro', 'accessibility', 'hints', 'beemizer',
                          'shufflebosses', 'shuffleenemies', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
-                         'heartbeep', "skip_progression_balancing", "triforce_pieces_required",
+                         'heartbeep', "skip_progression_balancing", "triforce_pieces_available", "triforce_pieces_required",
                          'remote_items', 'progressive', 'dungeon_counters', 'glitch_boots']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
@@ -357,15 +361,14 @@ def start():
         sys.exit(0)
 
     # ToDo: Validate files further than mere existance
-    if not args.jsonout and not os.path.isfile(args.rom):
-        input('Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
+    if not os.path.isfile(args.rom):
+        input(
+            'Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
         sys.exit(1)
-    if any([sprite is not None and not os.path.isfile(sprite) and not get_sprite_from_name(sprite) for sprite in args.sprite.values()]):
-        if not args.jsonout:
-            input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
-            sys.exit(1)
-        else:
-            raise IOError('Cannot find sprite file at %s' % args.sprite)
+    if any([sprite is not None and not os.path.isfile(sprite) and not get_sprite_from_name(sprite) for sprite in
+            args.sprite.values()]):
+        input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
+        sys.exit(1)
 
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[args.loglevel]
@@ -378,7 +381,7 @@ def start():
         seed = args.seed
         for _ in range(args.count):
             main(seed=seed, args=args)
-            seed = random.randint(0, 999999999)
+            seed = get_seed()
     else:
         main(seed=args.seed, args=args)
 

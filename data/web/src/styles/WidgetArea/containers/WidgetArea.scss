@@ -21,15 +21,36 @@
     display: flex;
     flex-direction: column;
 
-    #notes{
-      display: flex;
-      flex-direction: column;
+    table{
+      th{
+        text-align: left;
+      }
+      td{
+        padding-left: 1em;
+      }
+    }
 
-      #notes-title{
+    #game-info{
+      margin-bottom: 1em;
+
+      #game-info-title{
         display: flex;
         flex-direction: row;
         justify-content: space-between;
       }
+    }
+
+    #check-data{
+      margin-bottom: 1em;
+    }
+
+    #hint-data{
+      margin-bottom: 1em;
+    }
+
+    #notes{
+      display: flex;
+      flex-direction: column;
 
       textarea{
         height: 10em;

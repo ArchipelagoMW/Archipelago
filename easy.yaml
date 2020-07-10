@@ -21,6 +21,7 @@ description: Your Description Here # Used to describe your yaml. Useful if you h
 name: YourName # Your name in-game. Spaces and underscores will be replaced with dashes
 glitches_required: # Determine the logic required to complete the seed
   none: 1 # No glitches required
+  minor_glitches: 0 # put fake flipper into logic
   overworld_glitches: 0 # Assumes the player knows how to perform overworld glitches like fake flipper, water walk, etc
   no_logic: 0 # Items are places completely at random and with no regard for logic. Your fire rod could be on Trinexx
 item_placement: basic # This is based on Entrance Randomizer, which does not (yet?) support advanced
@@ -42,10 +43,14 @@ smallkey_shuffle: # Shuffle small keys into the world and other dungeons, includ
 bigkey_shuffle: # Shuffle big keys into the world and other dungeons, including other players' worlds
   on: 0
   off: 1
-dungeon_items: # alternative to the 4 shuffles above this, does nothing until the respective 4 shuffles are deleted
+local_keys: # Keep small keys and big keys local to your world.
+  on: 0
+  off: 1
+dungeon_items: # alternative to the 4 shuffles and local_keys above this, does nothing until the respective 4 shuffles and local_keys above are deleted
   mc: 0 # shuffle Maps and Compass
   none: 1 # shuffle none of the 4
   mcsb: 0 # shuffle all of the 4, any combination of m, c, s and b will shuffle the respective item, or not if it's missing, so you can add more options here
+  lmcsb: 0 # like mcsb above, but with keys kept local to your world. l is what makes your keys local,  or not if it's missing.
 dungeon_counters:
   on: 0 # always display amount of items checked in a dungeon
   pickup: 1 # show when compass is picked up
@@ -75,7 +80,18 @@ goals:
   pedestal: 0 # Pull the Triforce from the Master Sword pedestal
   triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then turn them in to Murahadala in front of Hyrule Castle
   local_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
-triforce_pieces_required: # set to how many out of 30 triforce pieces you need to win the game in a triforce hunt. 20 is the default. Max is 30, Min is 1.
+  ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
+  local_ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
+triforce_pieces_available: # set to how many triforces pieces are available to collect in the world. 30 is the default. Max is 112, Min is 1.
+  # format "pieces: chance"
+  25: 0
+  30: 1
+  31: 0
+  32: 0
+  33: 0
+  34: 0
+  35: 0
+triforce_pieces_required: # set to how many out of X triforce pieces you need to win the game in a triforce hunt. 20 is the default. Max is 112, Min is 1.
   # format "pieces: chance"
   15: 0
   20: 1
@@ -129,16 +145,17 @@ item_functionality:
 boss_shuffle:
   none: 1 # No boss shuffle
   simple: 0 # Existing bosses except Ganon and Agahnim are shuffled throughout dungeons
-  full: 0 # Replace GT bosses with random bosses, then follow simple logic
-  random: 0 # Choose from one of the above options
+  full: 0 # 3 bosses can occur twice
+  random: 0 # Any boss can appear any amount of times
 enemy_shuffle:
   none: 1 # Vanilla enemy placement
-  shuffled: 0 # Enemies are randomized
-  random: 0 # Choose one of the above
+  chaos: 0 # Enemies are randomized
+  random: 0 # also shuffle bush enemies, random tile rooms and random bush enemy spawn chance
+  chaosthieves: 0 # random + thieves may not be killable
 enemy_damage:
   default: 1 # Vanilla enemy damage
-  shuffled: 0 # Enemies do a randomized amount of damage
-  random: 0 # Choose one of the above
+  shuffled: 0 # Enemies deal 0 to 4 hearts and armor helps
+  random: 0 # Enemies deal 0 to 8 hearts and armor just reshuffles the damage
 enemy_health:
   default: 1 # Vanilla enemy HP
   easy: 0 # Enemies have reduced health
@@ -180,6 +197,17 @@ linked_options:
       map_shuffle: true
       smallkey_shuffle: true
     percentage: 0 # set this to the percentage chance you want crosskeys
+  - name: localcrosskeys
+    options: # these overwrite earlier options if the percentage chance triggers
+      entrance_shuffle: crossed
+      bigkey_shuffle: true
+      compass_shuffle: true
+      map_shuffle: true
+      smallkey_shuffle: true
+      local_items: #forces keys to be local to your own world
+        - "Small Keys"
+        - "Big Keys"
+    percentage: 0 # set this to the percentage chance you want local crosskeys
   - name: enemizer
     options:
       boss_shuffle: # subchances can be injected too, which then get rolled

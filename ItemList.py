@@ -32,7 +32,7 @@ normalfinal25extra = ['Rupees (20)'] * 23 + ['Rupees (5)'] * 2
 Difficulty = namedtuple('Difficulty',
                         ['baseitems', 'bottles', 'bottle_count', 'same_bottle', 'progressiveshield',
                          'basicshield', 'progressivearmor', 'basicarmor', 'swordless',
-                         'progressivesword', 'basicsword', 'basicbow', 'timedohko', 'timedother',
+                         'progressivesword', 'basicsword', 'progressivebow', 'basicbow', 'timedohko', 'timedother',
                          'triforcehunt', 'retro',
                          'extras', 'progressive_sword_limit', 'progressive_shield_limit',
                          'progressive_armor_limit', 'progressive_bottle_limit',
@@ -43,78 +43,82 @@ total_items_to_place = 153
 difficulties = {
     'normal': Difficulty(
         baseitems = normalbaseitems,
-        bottles = normalbottles,
-        bottle_count = 4,
-        same_bottle = False,
-        progressiveshield = ['Progressive Shield'] * 3,
-        basicshield = ['Blue Shield', 'Red Shield', 'Mirror Shield'],
-        progressivearmor = ['Progressive Armor'] * 2,
-        basicarmor = ['Blue Mail', 'Red Mail'],
-        swordless = ['Rupees (20)'] * 4,
-        progressivesword = ['Progressive Sword'] * 4,
-        basicsword = ['Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
-        basicbow = ['Bow', 'Silver Arrows'],
-        timedohko = ['Green Clock'] * 25,
-        timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
-        triforcehunt = ['Triforce Piece'] * 30,
-        retro = ['Small Key (Universal)'] * 17 + ['Rupees (20)'] * 10,
-        extras = [normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
-        progressive_sword_limit = 4,
-        progressive_shield_limit = 3,
-        progressive_armor_limit = 2,
-        progressive_bow_limit = 2,
+        bottles=normalbottles,
+        bottle_count=4,
+        same_bottle=False,
+        progressiveshield=['Progressive Shield'] * 3,
+        basicshield=['Blue Shield', 'Red Shield', 'Mirror Shield'],
+        progressivearmor=['Progressive Armor'] * 2,
+        basicarmor=['Blue Mail', 'Red Mail'],
+        swordless=['Rupees (20)'] * 4,
+        progressivesword=['Progressive Sword'] * 4,
+        basicsword=['Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
+        progressivebow=["Progressive Bow"] * 2,
+        basicbow=['Bow', 'Silver Bow'],
+        timedohko=['Green Clock'] * 25,
+        timedother=['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
+        triforcehunt=['Triforce Piece'] * 30,
+        retro=['Small Key (Universal)'] * 18 + ['Rupees (20)'] * 10,
+        extras=[normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
+        progressive_sword_limit=4,
+        progressive_shield_limit=3,
+        progressive_armor_limit=2,
+        progressive_bow_limit=2,
         progressive_bottle_limit = 4,
-        boss_heart_container_limit = 255,
-        heart_piece_limit = 255,
+        boss_heart_container_limit = 10,
+        heart_piece_limit = 24,
     ),
     'hard': Difficulty(
         baseitems = normalbaseitems,
-        bottles = hardbottles,
-        bottle_count = 4,
-        same_bottle = False,
-        progressiveshield = ['Progressive Shield'] * 3,
-        basicshield = ['Blue Shield', 'Red Shield', 'Red Shield'],
-        progressivearmor = ['Progressive Armor'] * 2,
-        basicarmor = ['Progressive Armor'] * 2, # neither will count
-        swordless =  ['Rupees (20)'] * 4,
-        progressivesword =  ['Progressive Sword'] * 4,
-        basicsword = ['Fighter Sword', 'Master Sword', 'Master Sword', 'Tempered Sword'],
-        basicbow = ['Bow'] * 2,
-        timedohko = ['Green Clock'] * 25,
-        timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
-        triforcehunt = ['Triforce Piece'] * 30,
-        retro = ['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 15,
-        extras = [normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
-        progressive_sword_limit = 3,
-        progressive_shield_limit = 2,
-        progressive_armor_limit = 0,
-        progressive_bow_limit = 1,
+        bottles=hardbottles,
+        bottle_count=4,
+        same_bottle=False,
+        progressiveshield=['Progressive Shield'] * 3,
+        basicshield=['Blue Shield', 'Red Shield', 'Red Shield'],
+        progressivearmor=['Progressive Armor'] * 2,
+        basicarmor=['Progressive Armor'] * 2,  # neither will count
+        swordless=['Rupees (20)'] * 4,
+        progressivesword=['Progressive Sword'] * 4,
+        basicsword=['Fighter Sword', 'Master Sword', 'Master Sword', 'Tempered Sword'],
+        progressivebow=["Progressive Bow"] * 2,
+        basicbow=['Bow'] * 2,
+        timedohko=['Green Clock'] * 25,
+        timedother=['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
+        triforcehunt=['Triforce Piece'] * 30,
+        retro=['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 16,
+        extras=[normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
+        progressive_sword_limit=3,
+        progressive_shield_limit=2,
+        progressive_armor_limit=0,
+        progressive_bow_limit=1,
         progressive_bottle_limit = 4,
         boss_heart_container_limit = 6,
         heart_piece_limit = 16,
     ),
     'expert': Difficulty(
         baseitems = normalbaseitems,
-        bottles = hardbottles,
-        bottle_count = 4,
-        same_bottle = False,
-        progressiveshield = ['Progressive Shield'] * 3,
-        basicshield = ['Progressive Shield'] * 3,  #only the first one will upgrade, making this equivalent to two blue shields
-        progressivearmor = ['Progressive Armor'] * 2, # neither will count
-        basicarmor = ['Progressive Armor'] * 2, # neither will count
-        swordless = ['Rupees (20)'] * 4,
-        progressivesword = ['Progressive Sword'] * 4,
-        basicsword = ['Fighter Sword', 'Fighter Sword', 'Master Sword', 'Master Sword'],
-        basicbow = ['Bow'] * 2,
-        timedohko = ['Green Clock'] * 20 + ['Red Clock'] * 5,
-        timedother = ['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
-        triforcehunt = ['Triforce Piece'] * 30,
-        retro = ['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 15,
-        extras = [normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
-        progressive_sword_limit = 2,
-        progressive_shield_limit = 1,
-        progressive_armor_limit = 0,
-        progressive_bow_limit = 1,
+        bottles=hardbottles,
+        bottle_count=4,
+        same_bottle=False,
+        progressiveshield=['Progressive Shield'] * 3,
+        basicshield=['Progressive Shield'] * 3,
+        # only the first one will upgrade, making this equivalent to two blue shields
+        progressivearmor=['Progressive Armor'] * 2,  # neither will count
+        basicarmor=['Progressive Armor'] * 2,  # neither will count
+        swordless=['Rupees (20)'] * 4,
+        progressivesword=['Progressive Sword'] * 4,
+        basicsword=['Fighter Sword', 'Fighter Sword', 'Master Sword', 'Master Sword'],
+        progressivebow=["Progressive Bow"] * 2,
+        basicbow=['Bow'] * 2,
+        timedohko=['Green Clock'] * 20 + ['Red Clock'] * 5,
+        timedother=['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
+        triforcehunt=['Triforce Piece'] * 30,
+        retro=['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 16,
+        extras=[normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
+        progressive_sword_limit=2,
+        progressive_shield_limit=1,
+        progressive_armor_limit=0,
+        progressive_bow_limit=1,
         progressive_bottle_limit = 4,
         boss_heart_container_limit = 2,
         heart_piece_limit = 8,
@@ -124,7 +128,7 @@ difficulties = {
 def generate_itempool(world, player):
     if world.difficulty[player] not in ['normal', 'hard', 'expert']:
         raise NotImplementedError(f"Diffulty {world.difficulty[player]}")
-    if world.goal[player] not in {'ganon', 'pedestal', 'dungeons', 'triforcehunt', 'localtriforcehunt', 'crystals'}:
+    if world.goal[player] not in {'ganon', 'pedestal', 'dungeons', 'triforcehunt', 'localtriforcehunt', 'ganontriforcehunt', 'localganontriforcehunt', 'crystals'}:
         raise NotImplementedError(f"Goal {world.goal[player]}")
     if world.mode[player] not in {'open', 'standard', 'inverted'}:
         raise NotImplementedError(f"Mode {world.mode[player]}")
@@ -142,9 +146,8 @@ def generate_itempool(world, player):
         region = world.get_region('Light World', player)
 
         loc = Location(player, "Murahdahla", parent=region)
-        loc.access_rule = lambda state: state.item_count('Triforce Piece', player) + state.item_count('Power Star',
-                                                                                                      player) >= \
-                                        state.world.treasure_hunt_count[player]
+        loc.access_rule = lambda state: state.has_triforce_pieces(state.world.treasure_hunt_count[player], player)
+
         region.locations.append(loc)
         world.dynamic_locations.append(loc)
 
@@ -256,7 +259,16 @@ def generate_itempool(world, player):
             return item if not choice else ItemFactory("Bee Trap", player) if choice == 'trap' else ItemFactory("Bee", player)
         return item
 
-    world.itempool += [beemizer(item) for item in items]
+    progressionitems = [item for item in items if item.advancement or item.priority or item.type]
+    nonprogressionitems = [beemizer(item) for item in items if not item.advancement and not item.priority and not item.type]
+    random.shuffle(nonprogressionitems)
+
+    triforce_pieces = world.triforce_pieces_available[player]
+    if 'triforcehunt' in world.goal[player] and triforce_pieces > 30:
+        progressionitems += [ItemFactory("Triforce Piece", player)] * (triforce_pieces - 30)
+        nonprogressionitems = nonprogressionitems[(triforce_pieces-30):]
+
+    world.itempool += progressionitems + nonprogressionitems
 
     # shuffle medallions
     mm_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
@@ -460,11 +472,11 @@ def get_pool_core(world, player: int):
         pool.extend(diff.basicarmor)
 
     if want_progressives():
-        pool.extend(['Progressive Bow'] * 2)
+        pool.extend(diff.progressivebow)
     elif swords != 'swordless':
         pool.extend(diff.basicbow)
     else:
-        pool.extend(['Bow', 'Silver Arrows'])
+        pool.extend(['Bow', 'Silver Bow'])
 
     if swords == 'swordless':
         pool.extend(diff.swordless)
@@ -501,7 +513,9 @@ def get_pool_core(world, player: int):
         pool.extend(diff.timedohko)
         extraitems -= len(diff.timedohko)
         clock_mode = 'countdown-ohko'
-    if goal in {'triforcehunt', 'localtriforcehunt'}:
+    if 'triforcehunt' in goal:
+        while len(diff.triforcehunt) > world.triforce_pieces_available[player]:
+            diff.triforcehunt.pop()
         pool.extend(diff.triforcehunt)
         extraitems -= len(diff.triforcehunt)
         treasure_hunt_count = world.triforce_pieces_required[player]
@@ -552,7 +566,7 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
     itemtotal = itemtotal + customitemarray[70]
 
     pool.extend(['Bow'] * customitemarray[0])
-    pool.extend(['Silver Arrows']* customitemarray[1])
+    pool.extend(['Silver Bow']* customitemarray[1])
     pool.extend(['Blue Boomerang'] * customitemarray[2])
     pool.extend(['Red Boomerang'] * customitemarray[3])
     pool.extend(['Hookshot'] * customitemarray[4])
@@ -632,8 +646,7 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
         treasure_hunt_count = max(min(customitemarray[67], 99), 1) #To display, count must be between 1 and 99.
         treasure_hunt_icon = 'Triforce Piece'
         # Ensure game is always possible to complete here, force sufficient pieces if the player is unwilling.
-        if (customitemarray[66] < treasure_hunt_count) and (goal in {'triforcehunt', 'localtriforcehunt'}) and (
-                customitemarray[68] == 0):
+        if (customitemarray[66] < treasure_hunt_count) and ('triforcehunt' in goal) and (customitemarray[68] == 0):
             extrapieces = treasure_hunt_count - customitemarray[66]
             pool.extend(['Triforce Piece'] * extrapieces)
             itemtotal = itemtotal + extrapieces

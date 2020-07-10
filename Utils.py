@@ -1,15 +1,21 @@
 from __future__ import annotations
+import typing
 
-__version__ = "2.3.1"
-_version_tuple = tuple(int(piece, 10) for piece in __version__.split("."))
+
+def tuplize_version(version: str) -> typing.Tuple[int, ...]:
+    return tuple(int(piece, 10) for piece in version.split("."))
+
+
+__version__ = "2.3.4"
+_version_tuple = tuplize_version(__version__)
 
 import os
 import subprocess
 import sys
-import typing
+
 import functools
 
-from yaml import load, dump
+from yaml import load, dump, safe_load
 
 try:
     from yaml import CLoader as Loader
@@ -141,7 +147,7 @@ def make_new_base2current(old_rom='Zelda no Densetsu - Kamigami no Triforce (Jap
             out_data[idx] = [int(new)]
     for offset in reversed(list(out_data.keys())):
         if offset - 1 in out_data:
-            out_data[offset-1].extend(out_data.pop(offset))
+            out_data[offset - 1].extend(out_data.pop(offset))
     with open('data/base2current.json', 'wt') as outfile:
         json.dump([{key: value} for key, value in out_data.items()], outfile, separators=(",", ":"))
 
@@ -150,7 +156,8 @@ def make_new_base2current(old_rom='Zelda no Densetsu - Kamigami no Triforce (Jap
     return "New Rom Hash: " + basemd5.hexdigest()
 
 
-parse_yaml = functools.partial(load, Loader=Loader)
+parse_yaml = safe_load
+unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 
 
 class Hint(typing.NamedTuple):
@@ -190,6 +197,17 @@ def get_public_ipv4() -> str:
             pass  # we could be offline, in a local game, so no point in erroring out
     return ip
 
+def get_public_ipv6() -> str:
+    import socket
+    import urllib.request
+    import logging
+    ip = socket.gethostbyname(socket.gethostname())
+    try:
+        ip = urllib.request.urlopen('https://v6.ident.me').read().decode('utf8').strip()
+    except Exception as e:
+        logging.exception(e)
+        pass  # we could be offline, in a local game, or ipv6 may not be available
+    return ip
 
 def get_options() -> dict:
     if not hasattr(get_options, "options"):
@@ -234,7 +252,7 @@ def persistent_load() -> typing.Dict[dict]:
     if os.path.exists(path):
         try:
             with open(path, "r") as f:
-                storage = parse_yaml(f.read())
+                storage = unsafe_parse_yaml(f.read())
         except Exception as e:
             import logging
             logging.debug(f"Could not read store: {e}")
@@ -244,7 +262,7 @@ def persistent_load() -> typing.Dict[dict]:
     return storage
 
 
-def get_adjuster_settings(romfile: str):
+def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
     if hasattr(get_adjuster_settings, "adjuster_settings"):
         adjuster_settings = getattr(get_adjuster_settings, "adjuster_settings")
     else:
@@ -278,6 +296,7 @@ def get_adjuster_settings(romfile: str):
         get_adjuster_settings.adjuster_settings = adjuster_settings
         get_adjuster_settings.adjust_wanted = adjust_wanted
         return romfile, adjusted
+    return romfile, False
 
 
 

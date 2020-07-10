@@ -34,6 +34,8 @@ server_options:
   # "goal" -> client can ask for remaining items after goal completion
   # warning: only Berserker's Multiworld clients of version 2.1+ send game beaten information
   remaining_mode: "goal"
+  # automatically shut down the server after this many minutes without new location checks, 0 to keep running
+  auto_shutdown: 0
 #options for MultiMystery.py
 multi_mystery_options:
 #teams, however, note that there is currently no way to supply names for teams 2+ through MultiMystery
@@ -65,7 +67,7 @@ multi_mystery_options:
   #include the spoiler log in the zip, 2 -> delete the non-zipped one
   zip_spoiler: 0
   #include the multidata file in the zip, 2 -> delete the non-zipped one, which also means the server won't autostart
-  zip_multidata: 0
+  zip_multidata: 1
   #zip algorithm to use. zip is recommended for patch files, 7z is recommended for roms. All of them get the job done.
   zip_format: 1 # 1 -> zip, 2 -> 7z, 3->bz2
   #create roms flagged as race roms

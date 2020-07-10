@@ -60,6 +60,22 @@ class WebSocketUtils {
             parseInt(data.content.iAmFinder, 10) === 1, parseInt(data.content.iAmRecipient, 10) === 1,
             data.content.entranceLocation));
 
+        case 'gameInfo':
+          return updateGameState({
+            serverVersion: data.content.serverVersion,
+            forfeitMode: data.content.forfeitMode,
+            remainingMode: data.content.remainingMode,
+            hintCost: parseInt(data.content.hintCost, 10),
+            checkPoints: parseInt(data.content.checkPoints, 10),
+          });
+
+        case 'locationCheck':
+          return updateGameState({
+            totalChecks: parseInt(data.content.totalChecks, 10),
+            lastCheck: data.content.lastCheck,
+            hintPoints: parseInt(data.content.hintPoints, 10),
+          });
+
         // The client prints several types of messages to the console
         case 'critical':
         case 'error':

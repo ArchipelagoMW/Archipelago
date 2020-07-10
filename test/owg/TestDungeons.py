@@ -11,7 +11,7 @@ class TestDungeons(TestVanillaOWG):
 
             ["Sewers - Secret Room - Left", False, []],
             ["Sewers - Secret Room - Left", True, ['Progressive Glove']],
-            ["Sewers - Secret Room - Left", True, ['Lamp', 'Small Key (Escape)']],
+            ["Sewers - Secret Room - Left", True, ['Lamp', 'Small Key (Hyrule Castle)']],
 
             ["Eastern Palace - Compass Chest", True, []],
 

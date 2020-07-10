@@ -11,6 +11,7 @@ import typing
 import inspect
 import weakref
 import datetime
+import threading
 
 import ModuleUpdate
 
@@ -33,6 +34,7 @@ CLIENT_PLAYING = 0
 CLIENT_GOAL = 1
 
 
+
 class Client(Endpoint):
     version: typing.List[int] = [0, 0, 0]
     tags: typing.List[str] = []
@@ -46,9 +48,8 @@ class Client(Endpoint):
         self.send_index = 0
         self.tags = []
         self.version = [0, 0, 0]
-        self.messageprocessor = ClientMessageProcessor(ctx, self)
+        self.messageprocessor = client_message_processor(ctx, self)
         self.ctx = weakref.ref(ctx)
-        ctx.client_connection_timers[self.team, self.slot] = datetime.datetime.now(datetime.timezone.utc)
 
     @property
     def wants_item_notification(self):
@@ -57,8 +58,10 @@ class Client(Endpoint):
 
 class Context(Node):
     def __init__(self, host: str, port: int, password: str, location_check_points: int, hint_cost: int,
-                 item_cheat: bool, forfeit_mode: str = "disabled", remaining_mode: str = "disabled"):
+                 item_cheat: bool, forfeit_mode: str = "disabled", remaining_mode: str = "disabled",
+                 auto_shutdown: typing.SupportsFloat = 0):
         super(Context, self).__init__()
+        self.shutdown_task = None
         self.data_filename = None
         self.save_filename = None
         self.saving = False
@@ -83,20 +86,27 @@ class Context(Node):
         self.item_cheat = item_cheat
         self.running = True
         self.client_activity_timers: typing.Dict[
-            typing.Tuple[int, int], datetime.datetime] = {}  # datatime of last new item check
+            typing.Tuple[int, int], datetime.datetime] = {}  # datetime of last new item check
         self.client_connection_timers: typing.Dict[
             typing.Tuple[int, int], datetime.datetime] = {}  # datetime of last connection
         self.client_game_state: typing.Dict[typing.Tuple[int, int], int] = collections.defaultdict(int)
         self.er_hint_data: typing.Dict[int, typing.Dict[int, str]] = {}
+        self.auto_shutdown = auto_shutdown
         self.commandprocessor = ServerCommandProcessor(self)
+        self.embedded_blacklist = {"host", "port"}
+        self.client_ids: typing.Dict[typing.Tuple[int, int], datetime.datetime] = {}
+        self.auto_save_interval = 60  # in seconds
+        self.auto_saver_thread = None
+        self.save_dirty = False
+        self.tags = ['Berserker']
 
-    def load(self, multidatapath: str):
+    def load(self, multidatapath: str, use_embedded_server_options: bool = False):
         with open(multidatapath, 'rb') as f:
-            self._load(f)
+            self._load(json.loads(zlib.decompress(f.read()).decode("utf-8-sig")),
+                       use_embedded_server_options)
         self.data_filename = multidatapath
 
-    def _load(self, fileobj):
-        jsonobj = json.loads(zlib.decompress(fileobj.read()).decode("utf-8-sig"))
+    def _load(self, jsonobj: dict, use_embedded_server_options: bool):
         for team, names in enumerate(jsonobj['names']):
             for player, name in enumerate(names, 1):
                 self.player_names[(team, player)] = name
@@ -106,8 +116,44 @@ class Context(Node):
         if "er_hint_data" in jsonobj:
             self.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
                                  for player, loc_data in jsonobj["er_hint_data"].items()}
+        if use_embedded_server_options:
+            server_options = jsonobj.get("server_options", {})
+            self._set_options(server_options)
 
-    def init_save(self, enabled: bool):
+    def _set_options(self, server_options: dict):
+
+        sentinel = object()
+        for key, value in server_options.items():
+            if key not in self.embedded_blacklist:
+                current = getattr(self, key, sentinel)
+                if current is not sentinel:
+                    logging.debug(f"Setting server option {key} to {value} from supplied multidata")
+                    setattr(self, key, value)
+        self.item_cheat = not server_options.get("disable_item_cheat", True)
+
+    def save(self, now=False) -> bool:
+        if self.saving:
+            if now:
+                self.save_dirty = False
+                return self._save()
+
+            self.save_dirty = True
+            return True
+
+        return False
+
+    def _save(self) -> bool:
+        try:
+            jsonstr = json.dumps(self.get_save())
+            with open(self.save_filename, "wb") as f:
+                f.write(zlib.compress(jsonstr.encode("utf-8")))
+        except Exception as e:
+            logging.exception(e)
+            return False
+        else:
+            return True
+
+    def init_save(self, enabled: bool = True):
         self.saving = enabled
         if self.saving:
             if not self.save_filename:
@@ -121,6 +167,24 @@ class Context(Node):
                 logging.error('No save data found, starting a new game')
             except Exception as e:
                 logging.exception(e)
+            self._start_async_saving()
+
+    def _start_async_saving(self):
+        if not self.auto_saver_thread:
+            def save_regularly():
+                import time
+                while self.running:
+                    time.sleep(self.auto_save_interval)
+                    if self.save_dirty:
+                        logging.debug("Saving multisave via thread.")
+                        self.save_dirty = False
+                        self._save()
+
+            self.auto_saver_thread = threading.Thread(target=save_regularly, daemon=True)
+            self.auto_saver_thread.start()
+
+        import atexit
+        atexit.register(self._save)  # make sure we save on exit too
 
     def get_save(self) -> dict:
         d = {
@@ -130,7 +194,11 @@ class Context(Node):
             "hints": tuple((key, list(value)) for key, value in self.hints.items()),
             "location_checks": tuple((key, tuple(value)) for key, value in self.location_checks.items()),
             "name_aliases": tuple((key, value) for key, value in self.name_aliases.items()),
-            "client_game_state": tuple((key, value) for key, value in self.client_game_state.items())
+            "client_game_state": tuple((key, value) for key, value in self.client_game_state.items()),
+            "client_activity_timers": tuple(
+                (key, value.timestamp()) for key, value in self.client_activity_timers.items()),
+            "client_connection_timers": tuple(
+                (key, value.timestamp()) for key, value in self.client_connection_timers.items()),
         }
         return d
 
@@ -161,7 +229,16 @@ class Context(Node):
             self.name_aliases.update({tuple(key): value for key, value in savedata["name_aliases"]})
             if "client_game_state" in savedata:
                 self.client_game_state.update({tuple(key): value for key, value in savedata["client_game_state"]})
+                if "client_activity_timers" in savedata:
+                    self.client_connection_timers.update(
+                        {tuple(key): datetime.datetime.fromtimestamp(value, datetime.timezone.utc) for key, value
+                         in savedata["client_connection_timers"]})
+                    self.client_activity_timers.update(
+                        {tuple(key): datetime.datetime.fromtimestamp(value, datetime.timezone.utc) for key, value
+                         in savedata["client_activity_timers"]})
+
         self.location_checks.update({tuple(key): set(value) for key, value in savedata["location_checks"]})
+
         logging.info(f'Loaded save file with {sum([len(p) for p in received_items.values()])} received items '
                      f'for {len(received_items)} players')
 
@@ -254,11 +331,11 @@ async def on_client_connected(ctx: Context, client: Client):
                     in ctx.endpoints if client.auth],
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
-        'tags': ['Berserker'],
+        'tags': ctx.tags,
         'version': Utils._version_tuple,
         'forfeit_mode': ctx.forfeit_mode,
         'remaining_mode': ctx.remaining_mode,
-        'hint_cost' : ctx.hint_cost,
+        'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points
     }]])
 
@@ -274,7 +351,7 @@ async def on_client_joined(ctx: Context, client: Client):
                                                                 client.team + 1,
                                                                 ".".join(str(x) for x in client.version),
                                                                 client.tags))
-
+    ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 async def on_client_left(ctx: Context, client: Client):
     ctx.notify_all("%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1))
@@ -292,7 +369,7 @@ async def countdown(ctx: Context, timer):
             ctx.countdown_timer -= 1
             await asyncio.sleep(1)
         ctx.notify_all(f'[Server]: GO')
-
+        ctx.countdown_timer = 0
 
 async def missing(ctx: Context, client: Client, locations: list):
     await ctx.send_msgs(client, [['Missing', {
@@ -386,22 +463,16 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations):
         send_new_items(ctx)
 
         if found_items:
-            save(ctx)
+            for client in ctx.endpoints:
+                if client.team == team and client.slot == slot:
+                    asyncio.create_task(ctx.send_msgs(client, [["HintPointUpdate", (get_client_points(ctx, client),)]]))
+        ctx.save()
 
 
 def notify_team(ctx: Context, team: int, text: str):
     logging.info("Notice (Team #%d): %s" % (team + 1, text))
     ctx.broadcast_team(team, [['Print', text]])
 
-
-def save(ctx: Context):
-    if ctx.saving:
-        try:
-            jsonstr = json.dumps(ctx.get_save())
-            with open(ctx.save_filename, "wb") as f:
-                f.write(zlib.compress(jsonstr.encode("utf-8")))
-        except Exception as e:
-            logging.exception(e)
 
 
 def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[Utils.Hint]:
@@ -550,9 +621,33 @@ class CommandProcessor(metaclass=CommandMeta):
         self.output(str(exception))
 
 
+class CommonCommandProcessor(CommandProcessor):
+    ctx: Context
+
+    simple_options = {"hint_cost": int,
+                      "location_check_points": int,
+                      "password": str,
+                      "forfeit_mode": str,
+                      "item_cheat": bool,
+                      "auto_save_interval": int}
+
+    def _cmd_countdown(self, seconds: str = "10") -> bool:
+        """Start a countdown in seconds"""
+        try:
+            timer = int(seconds, 10)
+        except ValueError:
+            timer = 10
+        asyncio.create_task(countdown(self.ctx, timer))
+        return True
+
+    def _cmd_options(self):
+        """List all current options. Warning: lists password."""
+        self.output("Current options:")
+        for option in self.simple_options:
+            self.output(f"Option {option} is set to {getattr(self.ctx, option)}")
+
 class ClientMessageProcessor(CommandProcessor):
     marker = "!"
-    ctx: Context
 
     def __init__(self, ctx: Context, client: Client):
         self.ctx = ctx
@@ -625,48 +720,48 @@ class ClientMessageProcessor(CommandProcessor):
                         "Your client is too old to send game beaten information. Please update, load you savegame and reconnect.")
                 return False
 
-    def _cmd_countdown(self, seconds: str = "10") -> bool:
-        """Start a countdown in seconds"""
-        try:
-            timer = int(seconds, 10)
-        except ValueError:
-            timer = 10
-        asyncio.create_task(countdown(self.ctx, timer))
-        return True
 
     def _cmd_missing(self) -> bool:
         """List all missing location checks from the server's perspective"""
+
         locations = []
         for location_id, location_name in Regions.lookup_id_to_name.items():  # cheat console is -1, keep in mind
             if location_id != -1 and location_id not in self.ctx.location_checks[self.client.team, self.client.slot]:
                 locations.append(location_name)
 
         if len(locations) > 0:
-            asyncio.create_task(missing(self.ctx, self.client, locations))
+            if self.client.version < [2, 3, 0]:
+                buffer = ""
+                for location in locations:
+                    buffer += f'Missing: {location}\n'
+                self.output(buffer + f"Found {len(locations)} missing location checks")
+            else:
+                asyncio.create_task(missing(self.ctx, self.client, locations))
         else:
             self.output("No missing location checks found.")
         return True
 
     @mark_raw
     def _cmd_alias(self, alias_name: str = ""):
+        """Set your alias to the passed name."""
         if alias_name:
-            alias_name = alias_name[:15].strip()
+            alias_name = alias_name[:16].strip()
             self.ctx.name_aliases[self.client.team, self.client.slot] = alias_name
             self.output(f"Hello, {alias_name}")
             update_aliases(self.ctx, self.client.team)
-            save(self.ctx)
+            self.ctx.save()
             return True
         elif (self.client.team, self.client.slot) in self.ctx.name_aliases:
             del (self.ctx.name_aliases[self.client.team, self.client.slot])
             self.output("Removed Alias")
             update_aliases(self.ctx, self.client.team)
-            save(self.ctx)
+            self.ctx.save()
             return True
         return False
 
     @mark_raw
     def _cmd_getitem(self, item_name: str) -> bool:
-        """Cheat in an item"""
+        """Cheat in an item, if it is enabled on this server"""
         if self.ctx.item_cheat:
             item_name, usable, response = get_intended_text(item_name, Items.item_table.keys())
             if usable:
@@ -685,9 +780,7 @@ class ClientMessageProcessor(CommandProcessor):
     @mark_raw
     def _cmd_hint(self, item_or_location: str = "") -> bool:
         """Use !hint {item_name/location_name}, for example !hint Lamp or !hint Link's House. """
-        points_available = self.ctx.location_check_points * len(
-            self.ctx.location_checks[self.client.team, self.client.slot]) - \
-                           self.ctx.hint_cost * self.ctx.hints_used[self.client.team, self.client.slot]
+        points_available = get_client_points(self.ctx, self.client)
         if not item_or_location:
             self.output(f"A hint costs {self.ctx.hint_cost} points. "
                         f"You have {points_available} points.")
@@ -746,10 +839,11 @@ class ClientMessageProcessor(CommandProcessor):
                                     self.ctx.hints[self.client.team, hint.receiving_player].add(hint)
 
                             else:
-                                self.output(
-                                    "Could not pay for everything. Rerun the hint later with more points to get the remaining hints.")
+                                if not_found_hints:
+                                    self.output(
+                                        "Could not pay for everything. Rerun the hint later with more points to get the remaining hints.")
                             notify_hints(self.ctx, self.client.team, found_hints + hints)
-                            save(self.ctx)
+                            self.ctx.save()
                             return True
 
                         else:
@@ -766,6 +860,10 @@ class ClientMessageProcessor(CommandProcessor):
                 self.output(response)
                 return False
 
+
+def get_client_points(ctx: Context, client: Client) -> int:
+    return (ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) -
+            ctx.hint_cost * ctx.hints_used[client.team, client.slot])
 
 async def process_client_cmd(ctx: Context, client: Client, cmd, args):
     if type(cmd) is not str:
@@ -787,8 +885,17 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             errors.add('InvalidRom')
         else:
             team, slot = ctx.rom_names[tuple(args['rom'])]
-            if any([c.slot == slot and c.team == team for c in ctx.endpoints if c.auth]):
-                errors.add('SlotAlreadyTaken')
+            # this can only ever be 0 or 1 elements
+            clients = [c for c in ctx.endpoints if c.auth and c.slot == slot and c.team == team]
+            if clients:
+                # likely same player with a "ghosted" slot. We bust the ghost.
+                if "uuid" in args and ctx.client_ids[team, slot] == args["uuid"]:
+                    await clients[0].socket.close()  # we have to await the DC of the ghost, so not to create data pasta
+                    client.name = ctx.player_names[(team, slot)]
+                    client.team = team
+                    client.slot = slot
+                else:
+                    errors.add('SlotAlreadyTaken')
             else:
                 client.name = ctx.player_names[(team, slot)]
                 client.team = team
@@ -797,6 +904,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
         if errors:
             await ctx.send_msgs(client, [['ConnectionRefused', list(errors)]])
         else:
+            ctx.client_ids[client.team, client.slot] = args.get("uuid", None)
             client.auth = True
             client.version = args.get('version', Client.version)
             client.tags = args.get('tags', Client.tags)
@@ -868,14 +976,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             client.messageprocessor(args)
 
 
-def set_password(ctx: Context, password):
-    ctx.password = password
-    logging.warning('Password set to ' + password if password else 'Password disabled')
-
-
-class ServerCommandProcessor(CommandProcessor):
-    ctx: Context
-
+class ServerCommandProcessor(CommonCommandProcessor):
     def __init__(self, ctx: Context):
         self.ctx = ctx
         super(ServerCommandProcessor, self).__init__()
@@ -897,9 +998,13 @@ class ServerCommandProcessor(CommandProcessor):
 
     def _cmd_save(self) -> bool:
         """Save current state to multidata"""
-        save(self.ctx)
-        self.output("Game saved")
-        return True
+        if self.ctx.saving:
+            self.ctx.save(True)
+            self.output("Game saved")
+            return True
+        else:
+            self.output("Saving is disabled.")
+            return False
 
     def _cmd_players(self) -> bool:
         """Get information about connected players"""
@@ -909,11 +1014,14 @@ class ServerCommandProcessor(CommandProcessor):
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
         asyncio.create_task(self.ctx.server.ws_server._close())
+        if self.ctx.shutdown_task:
+            self.ctx.shutdown_task.cancel()
         self.ctx.running = False
         return True
 
     @mark_raw
     def _cmd_alias(self, player_name_then_alias_name):
+        """Set a player's alias, by listing their base name and then their intended alias."""
         player_name, alias_name = player_name_then_alias_name.split(" ", 1)
         player_name, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
@@ -924,23 +1032,17 @@ class ServerCommandProcessor(CommandProcessor):
                         self.ctx.name_aliases[team, slot] = alias_name
                         self.output(f"Named {player_name} as {alias_name}")
                         update_aliases(self.ctx, team)
-                        save(self.ctx)
+                        self.ctx.save()
                         return True
                     else:
                         del (self.ctx.name_aliases[team, slot])
                         self.output(f"Removed Alias for {player_name}")
                         update_aliases(self.ctx, team)
-                        save(self.ctx)
+                        self.ctx.save()
                         return True
         else:
             self.output(response)
             return False
-
-    @mark_raw
-    def _cmd_password(self, new_password: str = "") -> bool:
-        """Set the server password. Leave the password text empty to remove the password"""
-        set_password(self.ctx, new_password if new_password else None)
-        return True
 
     @mark_raw
     def _cmd_forfeit(self, player_name: str) -> bool:
@@ -1002,6 +1104,25 @@ class ServerCommandProcessor(CommandProcessor):
             self.output(response)
             return False
 
+    def _cmd_option(self, option_name: str, option: str):
+        """Set options for the server. Warning: expires on restart"""
+
+        attrtype = self.simple_options.get(option_name, None)
+        if attrtype:
+            if attrtype == bool:
+                def attrtype(input_text: str):
+                    if input_text.lower() in {"off", "0", "false", "none", "null", "no"}:
+                        return False
+                    else:
+                        return True
+            setattr(self.ctx, option_name, attrtype(option))
+            self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
+            return True
+        else:
+            known = (f"{option}:{otype}" for option, otype in self.simple_options.items())
+            self.output(f"Unrecognized Option {option_name}, known: "
+                        f"{', '.join(known)}")
+            return False
 
 async def console(ctx: Context):
     session = prompt_toolkit.PromptSession()
@@ -1045,15 +1166,46 @@ def parse_args() -> argparse.Namespace:
                              disabled: !remaining is never available
                              goal:     !remaining can be used after goal completion
                              ''')
+    parser.add_argument('--auto_shutdown', default=defaults["auto_shutdown"], type=int,
+                        help="automatically shut down the server after this many minutes without new location checks. "
+                             "0 to keep running. Not yet implemented.")
+    parser.add_argument('--use_embedded_options', action="store_true",
+                        help='retrieve forfeit, remaining and hint options from the multidata file,'
+                             ' instead of host.yaml')
     args = parser.parse_args()
     return args
+
+
+async def auto_shutdown(ctx, to_cancel=None):
+    await asyncio.sleep(ctx.auto_shutdown * 60)
+    while ctx.running:
+        if not ctx.client_activity_timers.values():
+            asyncio.create_task(ctx.server.ws_server._close())
+            ctx.running = False
+            if to_cancel:
+                for task in to_cancel:
+                    task.cancel()
+            logging.info("Shutting down due to inactivity.")
+        else:
+            newest_activity = max(ctx.client_activity_timers.values())
+            delta = datetime.datetime.now(datetime.timezone.utc) - newest_activity
+            seconds = ctx.auto_shutdown * 60 - delta.total_seconds()
+            if seconds < 0:
+                asyncio.create_task(ctx.server.ws_server._close())
+                ctx.running = False
+                if to_cancel:
+                    for task in to_cancel:
+                        task.cancel()
+                logging.info("Shutting down due to inactivity.")
+            else:
+                await asyncio.sleep(seconds)
 
 
 async def main(args: argparse.Namespace):
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
 
     ctx = Context(args.host, args.port, args.password, args.location_check_points, args.hint_cost,
-                  not args.disable_item_cheat, args.forfeit_mode, args.remaining_mode)
+                  not args.disable_item_cheat, args.forfeit_mode, args.remaining_mode, args.auto_shutdown)
 
     data_filename = args.multidata
 
@@ -1063,9 +1215,9 @@ async def main(args: argparse.Namespace):
             import tkinter.filedialog
             root = tkinter.Tk()
             root.withdraw()
-            data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*multidata"),))
+            data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.multidata"),))
 
-        ctx.load(data_filename)
+        ctx.load(data_filename, args.use_embedded_options)
 
     except Exception as e:
         logging.exception('Failed to read multiworld data (%s)' % e)
@@ -1078,9 +1230,20 @@ async def main(args: argparse.Namespace):
     ip = args.host if args.host else Utils.get_public_ipv4()
     logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port,
                                                  'No password' if not ctx.password else 'Password: %s' % ctx.password))
+
     await ctx.server
-    await console(ctx)
+    console_task = asyncio.create_task(console(ctx))
+    if ctx.auto_shutdown:
+        ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, [console_task]))
+    await console_task
+    if ctx.shutdown_task:
+        await ctx.shutdown_task
+
+
+client_message_processor = ClientMessageProcessor
 
 if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main(parse_args()))
+    try:
+        asyncio.run(main(parse_args()))
+    except asyncio.exceptions.CancelledError:
+        pass

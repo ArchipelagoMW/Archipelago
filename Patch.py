@@ -21,6 +21,7 @@ def get_base_rom_path(file_name: str = "") -> str:
         file_name = Utils.local_path(file_name)
     return file_name
 
+
 def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
@@ -38,7 +39,9 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 def generate_yaml(patch: bytes, metadata: Optional[dict] = None) -> bytes:
     patch = yaml.dump({"meta": metadata,
-                       "patch": patch})
+                       "patch": patch,
+                       "game": "alttp",
+                       "base_checksum": JAP10HASH})
     return patch.encode(encoding="utf-8-sig")
 
 
@@ -49,24 +52,27 @@ def generate_patch(rom: bytes, metadata: Optional[dict] = None) -> bytes:
     return generate_yaml(patch, metadata)
 
 
-def create_patch_file(rom_file_to_patch: str, server: str = "") -> str:
+def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str = None) -> str:
     bytes = generate_patch(load_bytes(rom_file_to_patch),
                            {
                                "server": server})  # allow immediate connection to server in multiworld. Empty string otherwise
-    target = os.path.splitext(rom_file_to_patch)[0] + ".bmbp"
+    target = destination if destination else os.path.splitext(rom_file_to_patch)[0] + ".bmbp"
     write_lzma(bytes, target)
     return target
 
-
-def create_rom_file(patch_file: str) -> Tuple[dict, str]:
+def create_rom_bytes(patch_file: str) -> Tuple[dict, str, bytearray]:
     data = Utils.parse_yaml(lzma.decompress(load_bytes(patch_file)).decode("utf-8-sig"))
     patched_data = bsdiff4.patch(get_base_rom_bytes(), data["patch"])
     rom_hash = patched_data[int(0x7FC0):int(0x7FD5)]
     data["meta"]["hash"] = "".join(chr(x) for x in rom_hash)
     target = os.path.splitext(patch_file)[0] + ".sfc"
+    return data["meta"], target, patched_data
+
+def create_rom_file(patch_file: str) -> Tuple[dict, str]:
+    data, target, patched_data = create_rom_bytes(patch_file)
     with open(target, "wb") as f:
         f.write(patched_data)
-    return data["meta"], target
+    return data, target
 
 
 def update_patch_data(patch_data: bytes, server: str = "") -> bytes:

@@ -244,8 +244,8 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
             continue
 
         gftower_trash_count = (
-            random.randint(15, 50) if world.goal[player] in {'triforcehunt', 'localtriforcehunt'} else random.randint(0,
-                                                                                                                      15))
+            random.randint(15, 50) if 'triforcehunt' in world.goal[player]
+            else random.randint(0, 15))
 
         gtower_locations = [location for location in fill_locations if
                             'Ganons Tower' in location.name and location.player == player]
@@ -274,21 +274,21 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
 
     # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
     progitempool.sort(
-        key=lambda item: 1 if item.name == 'Small Key (Escape)' and world.mode[item.player] == 'standard' and
+        key=lambda item: 1 if item.name == 'Small Key (Hyrule Castle)' and world.mode[item.player] == 'standard' and
                               world.keyshuffle[item.player] else 0)
 
     fill_restrictive(world, world.state, fill_locations, progitempool)
 
     if any(
             localprioitempool.values() or localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
-        for player, items in localprioitempool.items():  # already shuffled
+        for player, items in localprioitempool.items():  # items already shuffled
             local_locations = [location for location in fill_locations if location.player == player]
             random.shuffle(local_locations)
             for item_to_place in items:
                 spot_to_fill = local_locations.pop()
                 world.push_item(spot_to_fill, item_to_place, False)
                 fill_locations.remove(spot_to_fill)
-        for player, items in localrestitempool.items():  # already shuffled
+        for player, items in localrestitempool.items():  # items already shuffled
             local_locations = [location for location in fill_locations if location.player == player]
             random.shuffle(local_locations)
             for item_to_place in items:

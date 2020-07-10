@@ -2,21 +2,25 @@ import collections
 import logging
 import OverworldGlitchRules
 from BaseClasses import RegionType, World, Entrance
-from Items import ItemFactory
+from Items import ItemFactory, progression_items, item_name_groups
 from OverworldGlitchRules import overworld_glitches_rules, no_logic_rules
 
 
 def set_rules(world, player):
-
+    locality_rules(world, player)
     if world.logic[player] == 'nologic':
-        logging.getLogger('').info('WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
+        logging.getLogger('').info(
+            'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
         world.get_region('Menu', player).can_reach_private = lambda state: True
         no_logic_rules(world, player)
         for exit in world.get_region('Menu', player).exits:
             exit.hide_path = True
         return
 
+    crossover_logic(world, player)
+
     global_rules(world, player)
+
     if world.mode[player] != 'inverted':
         default_rules(world, player)
 
@@ -39,7 +43,8 @@ def set_rules(world, player):
         fake_flipper_rules(world, player)
         overworld_glitches_rules(world, player)
     elif world.logic[player] == 'minorglitches':
-        logging.getLogger('').info('Minor Glitches may be buggy still. No guarantee for proper logic checks.')
+        no_glitches_rules(world, player)
+        fake_flipper_rules(world, player)
     else:
         raise NotImplementedError('Not implemented yet')
 
@@ -115,13 +120,20 @@ def add_lamp_requirement(spot, player):
     add_rule(spot, lambda state: state.has('Lamp', player, state.world.lamps_needed_for_dark_rooms))
 
 
-def forbid_item(location, item, player):
+def forbid_item(location, item, player: int):
     old_rule = location.item_rule
     location.item_rule = lambda i: (i.name != item or i.player != player) and old_rule(i)
+
+
+def forbid_items(location, items: set, player: int):
+    old_rule = location.item_rule
+    location.item_rule = lambda i: (i.player != player or i.name not in items) and old_rule(i)
+
 
 def add_item_rule(location, rule):
     old_rule = location.item_rule
     location.item_rule = lambda item: rule(item) and old_rule(item)
+
 
 def item_in_locations(state, item, player, locations):
     for location in locations:
@@ -129,22 +141,42 @@ def item_in_locations(state, item, player, locations):
             return True
     return False
 
+
 def item_name(state, location, player):
     location = state.world.get_location(location, player)
     if location.item is None:
         return None
     return (location.item.name, location.item.player)
 
-def global_rules(world, player):
-    # ganon can only carry triforce
-    add_item_rule(world.get_location('Ganon', player), lambda item: item.name == 'Triforce' and item.player == player)
-    if world.goal[player] == "localtriforcehunt":
+
+def locality_rules(world, player):
+    if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
         world.local_items[player].add('Triforce Piece')
     if world.local_items[player]:
         for location in world.get_locations():
             if location.player != player:
-                for item in world.local_items[player]:
-                    forbid_item(location, item, player)
+                forbid_items(location, world.local_items[player], player)
+
+
+non_crossover_items = (item_name_groups["Small Keys"] | item_name_groups["Big Keys"] | progression_items) - {
+    "Small Key (Universal)"}
+
+
+def crossover_logic(world, player):
+    """ Simple and not graceful solution to logic loops if you mix no logic and logic.
+    Making it so that logical progression cannot be placed in no logic worlds."""
+    no_logic_players = set()
+    for other_player in world.player_ids:
+        if world.logic[other_player] == 'nologic':
+            no_logic_players.add(other_player)
+    if no_logic_players:
+        for location in world.get_locations():
+            if location.player in no_logic_players:
+                forbid_items(location, non_crossover_items, player)
+
+def global_rules(world, player):
+    # ganon can only carry triforce
+    add_item_rule(world.get_location('Ganon', player), lambda item: item.name == 'Triforce' and item.player == player)
     # determines which S&Q locations are available - hide from paths since it isn't an in-game location
     world.get_region('Menu', player).can_reach_private = lambda state: True
     for exit in world.get_region('Menu', player).exits:
@@ -171,26 +203,40 @@ def global_rules(world, player):
     set_rule(world.get_location('Spike Cave', player), lambda state:
              state.has('Hammer', player) and state.can_lift_rocks(player) and
              ((state.has('Cape', player) and state.can_extend_magic(player, 16, True)) or
-                 (state.has('Cane of Byrna', player) and
-                     (state.can_extend_magic(player, 12, True) or
-                     (state.world.can_take_damage[player] and (state.has_Boots(player) or state.has_hearts(player, 4))))))
-            )
+              (state.has('Cane of Byrna', player) and
+               (state.can_extend_magic(player, 12, True) or
+                (state.world.can_take_damage[player] and (state.has_Boots(player) or state.has_hearts(player, 4))))))
+             )
 
     set_rule(world.get_location('Hookshot Cave - Top Right', player), lambda state: state.has('Hookshot', player))
     set_rule(world.get_location('Hookshot Cave - Top Left', player), lambda state: state.has('Hookshot', player))
-    set_rule(world.get_location('Hookshot Cave - Bottom Right', player), lambda state: state.has('Hookshot', player) or state.has('Pegasus Boots', player))
+    set_rule(world.get_location('Hookshot Cave - Bottom Right', player),
+             lambda state: state.has('Hookshot', player) or state.has('Pegasus Boots', player))
     set_rule(world.get_location('Hookshot Cave - Bottom Left', player), lambda state: state.has('Hookshot', player))
 
-    set_rule(world.get_entrance('Sewers Door', player), lambda state: state.has_key('Small Key (Escape)', player) or (world.retro[player] and world.mode[player] == 'standard')) # standard retro cannot access the shop
-    set_rule(world.get_entrance('Sewers Back Door', player), lambda state: state.has_key('Small Key (Escape)', player))
-    set_rule(world.get_entrance('Agahnim 1', player), lambda state: state.has_sword(player) and state.has_key('Small Key (Agahnims Tower)', player, 2))
+    set_rule(world.get_entrance('Sewers Door', player),
+             lambda state: state.has_key('Small Key (Hyrule Castle)', player) or (world.retro[player] and world.mode[
+                 player] == 'standard'))  # standard retro cannot access the shop
+    set_rule(world.get_entrance('Sewers Back Door', player),
+             lambda state: state.has_key('Small Key (Hyrule Castle)', player))
+    set_rule(world.get_entrance('Agahnim 1', player),
+             lambda state: state.has_sword(player) and state.has_key('Small Key (Agahnims Tower)', player, 2))
     set_defeat_dungeon_boss_rule(world.get_location('Agahnim 1', player))
     set_rule(world.get_location('Castle Tower - Room 03', player), lambda state: state.can_kill_most_things(player, 8))
-    set_rule(world.get_location('Castle Tower - Dark Maze', player), lambda state: state.can_kill_most_things(player, 8) and state.has_key('Small Key (Agahnims Tower)', player))
+    set_rule(world.get_location('Castle Tower - Dark Maze', player),
+             lambda state: state.can_kill_most_things(player, 8) and state.has_key('Small Key (Agahnims Tower)',
+                                                                                   player))
 
-    set_rule(world.get_location('Eastern Palace - Big Chest', player), lambda state: state.has('Big Key (Eastern Palace)', player))
-    set_rule(world.get_location('Eastern Palace - Boss', player), lambda state: state.can_shoot_arrows(player) and state.has('Big Key (Eastern Palace)', player) and state.world.get_location('Eastern Palace - Boss', player).parent_region.dungeon.boss.can_defeat(state))
-    set_rule(world.get_location('Eastern Palace - Prize', player), lambda state: state.can_shoot_arrows(player) and state.has('Big Key (Eastern Palace)', player) and state.world.get_location('Eastern Palace - Prize', player).parent_region.dungeon.boss.can_defeat(state))
+    set_rule(world.get_location('Eastern Palace - Big Chest', player),
+             lambda state: state.has('Big Key (Eastern Palace)', player))
+    set_rule(world.get_location('Eastern Palace - Boss', player),
+             lambda state: state.can_shoot_arrows(player) and state.has('Big Key (Eastern Palace)',
+                                                                        player) and state.world.get_location(
+                 'Eastern Palace - Boss', player).parent_region.dungeon.boss.can_defeat(state))
+    set_rule(world.get_location('Eastern Palace - Prize', player),
+             lambda state: state.can_shoot_arrows(player) and state.has('Big Key (Eastern Palace)',
+                                                                        player) and state.world.get_location(
+                 'Eastern Palace - Prize', player).parent_region.dungeon.boss.can_defeat(state))
     for location in ['Eastern Palace - Boss', 'Eastern Palace - Big Chest']:
         forbid_item(world.get_location(location, player), 'Big Key (Eastern Palace)', player)
 
@@ -377,8 +423,13 @@ def global_rules(world, player):
                      'Ganons Tower - Pre-Moldorm Chest', 'Ganons Tower - Validation Chest']:
         forbid_item(world.get_location(location, player), 'Big Key (Ganons Tower)', player)
 
-    set_rule(world.get_location('Ganon', player), lambda state: state.has_beam_sword(player) and state.has_fire_source(player) and state.has_crystals(world.crystals_needed_for_ganon[player], player)
-                                                        and (state.has('Tempered Sword', player) or state.has('Golden Sword', player) or (state.has('Silver Arrows', player) and state.can_shoot_arrows(player)) or state.has('Lamp', player) or state.can_extend_magic(player, 12)))  # need to light torch a sufficient amount of times
+
+    if world.goal[player] in ['ganontriforcehunt', 'localganontriforcehunt']:
+        set_rule(world.get_location('Ganon', player), lambda state: state.has_beam_sword(player) and state.has_fire_source(player) and state.has_triforce_pieces(world.treasure_hunt_count[player], player)
+            and (state.has('Tempered Sword', player) or state.has('Golden Sword', player) or (state.has('Silver Bow', player) and state.can_shoot_arrows(player)) or state.has('Lamp', player) or state.can_extend_magic(player, 12)))  # need to light torch a sufficient amount of times
+    else:
+        set_rule(world.get_location('Ganon', player), lambda state: state.has_beam_sword(player) and state.has_fire_source(player) and state.has_crystals(world.crystals_needed_for_ganon[player], player)
+            and (state.has('Tempered Sword', player) or state.has('Golden Sword', player) or (state.has('Silver Bow', player) and state.can_shoot_arrows(player)) or state.has('Lamp', player) or state.can_extend_magic(player, 12)))  # need to light torch a sufficient amount of times
     set_rule(world.get_entrance('Ganon Drop', player), lambda state: state.has_beam_sword(player))  # need to damage ganon to get tiles to drop
 
 
@@ -764,8 +815,10 @@ def add_conditional_lamps(world, player):
 
 def open_rules(world, player):
     # softlock protection as you can reach the sewers small key door with a guard drop key
-    set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player), lambda state: state.has_key('Small Key (Escape)', player))
-    set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player), lambda state: state.has_key('Small Key (Escape)', player))
+    set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player),
+             lambda state: state.has_key('Small Key (Hyrule Castle)', player))
+    set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player),
+             lambda state: state.has_key('Small Key (Hyrule Castle)', player))
 
 
 def swordless_rules(world, player):
@@ -774,7 +827,10 @@ def swordless_rules(world, player):
     set_rule(world.get_location('Ether Tablet', player), lambda state: state.has('Book of Mudora', player) and state.has('Hammer', player))
     set_rule(world.get_entrance('Skull Woods Torch Room', player), lambda state: state.has_key('Small Key (Skull Woods)', player, 3) and state.has('Fire Rod', player))  # no curtain
     set_rule(world.get_entrance('Ice Palace Entrance Room', player), lambda state: state.has('Fire Rod', player) or state.has('Bombos', player)) #in swordless mode bombos pads are present in the relevant parts of ice palace
-    set_rule(world.get_location('Ganon', player), lambda state: state.has('Hammer', player) and state.has_fire_source(player) and state.has('Silver Arrows', player) and state.can_shoot_arrows(player) and state.has_crystals(world.crystals_needed_for_ganon[player], player))
+    if world.goal[player] in ['ganontriforcehunt', 'localganontriforcehunt']:
+        set_rule(world.get_location('Ganon', player), lambda state: state.has('Hammer', player) and state.has_fire_source(player) and state.has('Silver Bow', player) and state.can_shoot_arrows(player) and state.has_triforce_pieces(world.treasure_hunt_count[player], player))
+    else:
+        set_rule(world.get_location('Ganon', player), lambda state: state.has('Hammer', player) and state.has_fire_source(player) and state.has('Silver Bow', player) and state.can_shoot_arrows(player) and state.has_crystals(world.crystals_needed_for_ganon[player], player))
     set_rule(world.get_entrance('Ganon Drop', player), lambda state: state.has('Hammer', player))  # need to damage ganon to get tiles to drop
 
     if world.mode[player] != 'inverted':

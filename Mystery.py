@@ -14,11 +14,11 @@ from Utils import parse_yaml
 from Rom import get_sprite_from_name
 from EntranceRandomizer import parse_arguments
 from Main import main as ERmain
+from Main import get_seed, seeddigits
 from Items import item_name_groups, item_table
 
 
-
-def main():
+def mystery_argparse():
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument('--multi', default=1, type=lambda value: min(max(int(value), 1), 255))
     multiargs, _ = parser.parse_known_args()
@@ -46,15 +46,17 @@ def main():
     for player in range(1, multiargs.multi + 1):
         parser.add_argument(f'--p{player}', help=argparse.SUPPRESS)
     args = parser.parse_args()
+    return args
 
-    if args.seed is None:
-        random.seed(None)
-        seed = random.randint(0, 999999999)
-    else:
-        seed = args.seed
+
+def main(args=None):
+    if not args:
+        args = mystery_argparse()
+
+    seed = get_seed(args.seed)
     random.seed(seed)
 
-    seedname = "M"+(f"{random.randint(0, 999999999)}".zfill(9))
+    seedname = "M" + (f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits))
     print(f"Generating mystery for {args.multi} player{'s' if args.multi > 1 else ''}, {seedname} Seed {seed}")
 
     weights_cache = {}
@@ -63,14 +65,14 @@ def main():
             weights_cache[args.weights] = get_weights(args.weights)
         except Exception as e:
             raise ValueError(f"File {args.weights} is destroyed. Please fix your yaml.") from e
-        print(f"Weights: {args.weights} >> {weights_cache[args.weights]['description']}")
+        print(f"Weights: {args.weights} >> {get_choice('description', weights_cache[args.weights], 'No description specified')}")
     if args.meta:
         try:
             weights_cache[args.meta] = get_weights(args.meta)
         except Exception as e:
             raise ValueError(f"File {args.meta} is destroyed. Please fix your yaml.") from e
         meta_weights = weights_cache[args.meta]
-        print(f"Meta: {args.meta} >> {meta_weights['meta_description']}")
+        print(f"Meta: {args.meta} >> {get_choice('meta_description', meta_weights, 'No description specified')}")
         if args.samesettings:
             raise Exception("Cannot mix --samesettings with --meta")
 
@@ -80,7 +82,7 @@ def main():
             try:
                 if path not in weights_cache:
                     weights_cache[path] = get_weights(path)
-                print(f"P{player} Weights: {path} >> {weights_cache[path]['description']}")
+                print(f"P{player} Weights: {path} >> {get_choice('description', weights_cache[path], 'No description specified')}")
 
             except Exception as e:
                 raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
@@ -223,15 +225,17 @@ def convert_to_on_off(value):
     return {True: "on", False: "off"}.get(value, value)
 
 
-def get_choice(option, root) -> typing.Any:
+def get_choice(option, root, value=None) -> typing.Any:
     if option not in root:
-        return None
+        return value
     if type(root[option]) is not dict:
         return interpret_on_off(root[option])
     if not root[option]:
-        return None
-    return interpret_on_off(
-        random.choices(list(root[option].keys()), weights=list(map(int, root[option].values())))[0])
+        return value
+    if any(root[option].values()):
+        return interpret_on_off(
+            random.choices(list(root[option].keys()), weights=list(map(int, root[option].values())))[0])
+    raise RuntimeError(f"All options specified in {option} are weighted as zero.")
 
 
 def handle_name(name: str):
@@ -251,13 +255,13 @@ def roll_settings(weights):
         ret.name = handle_name(ret.name)
 
     glitches_required = get_choice('glitches_required', weights)
-    if glitches_required not in ['none', 'no_logic', 'overworld_glitches']:
+    if glitches_required not in ['none', 'no_logic', 'overworld_glitches', 'minor_glitches']:
         logging.warning("Only NMG, OWG and No Logic supported")
         glitches_required = 'none'
-    ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches'}[
+    ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches',
+                 'minor_glitches' : 'minorglitches'}[
         glitches_required]
-    ret.progression_balancing = get_choice('progression_balancing',
-                                           weights) if 'progression_balancing' in weights else True
+    ret.progression_balancing = get_choice('progression_balancing', weights, True)
     # item_placement = get_choice('item_placement')
     # not supported in ER
 
@@ -269,10 +273,10 @@ def roll_settings(weights):
     elif not dungeon_items:
         dungeon_items = ""
 
-    ret.mapshuffle = get_choice('map_shuffle', weights) if 'map_shuffle' in weights else 'm' in dungeon_items
-    ret.compassshuffle = get_choice('compass_shuffle', weights) if 'compass_shuffle' in weights else 'c' in dungeon_items
-    ret.keyshuffle = get_choice('smallkey_shuffle', weights) if 'smallkey_shuffle' in weights else 's' in dungeon_items
-    ret.bigkeyshuffle = get_choice('bigkey_shuffle', weights) if 'bigkey_shuffle' in weights else 'b' in dungeon_items
+    ret.mapshuffle = get_choice('map_shuffle', weights, 'm' in dungeon_items)
+    ret.compassshuffle = get_choice('compass_shuffle', weights, 'c' in dungeon_items)
+    ret.keyshuffle = get_choice('smallkey_shuffle', weights, 's' in dungeon_items)
+    ret.bigkeyshuffle = get_choice('bigkey_shuffle', weights, 'b' in dungeon_items)
 
     ret.accessibility = get_choice('accessibility', weights)
 
@@ -286,17 +290,21 @@ def roll_settings(weights):
                 'pedestal': 'pedestal',
                 'triforce_hunt': 'triforcehunt',
                 'triforce-hunt': 'triforcehunt',  # deprecated, moving all goals to `_`
-                'local_triforce_hunt': 'localtriforcehunt'
+                'local_triforce_hunt': 'localtriforcehunt',
+                'ganon_triforce_hunt': 'ganontriforcehunt',
+                'local_ganon_triforce_hunt': 'localganontriforcehunt'
                 }[goal]
-    ret.openpyramid = goal == 'fast_ganon'
+    ret.openpyramid = goal in ['fast_ganon', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt']
 
     ret.crystals_gt = get_choice('tower_open', weights)
 
     ret.crystals_ganon = get_choice('ganon_open', weights)
 
-    ret.triforce_pieces_required = get_choice('triforce_pieces_required',
-                                              weights) if "triforce_pieces_required" in weights else 20
-    ret.triforce_pieces_required = min(max(1, int(ret.triforce_pieces_required)), 30)
+    ret.triforce_pieces_available = get_choice('triforce_pieces_available', weights, 30)
+    ret.triforce_pieces_available = min(max(1, int(ret.triforce_pieces_available)), 90)
+
+    ret.triforce_pieces_required = get_choice('triforce_pieces_required', weights, 20)
+    ret.triforce_pieces_required = min(max(1, int(ret.triforce_pieces_required)), 90)
 
     ret.mode = get_choice('world_state', weights)
     if ret.mode == 'retro':
@@ -323,7 +331,9 @@ def roll_settings(weights):
 
     ret.shuffleenemies = {'none': 'none',
                           'shuffled': 'shuffled',
-                          'random': 'chaos'
+                          'random': 'chaos',
+                          'chaosthieves': 'chaosthieves',
+                          'chaos': 'chaos'
                           }[get_choice('enemy_shuffle', weights)]
 
     ret.enemy_damage = {'default': 'default',
@@ -335,7 +345,7 @@ def roll_settings(weights):
 
     ret.shufflepots = get_choice('pot_shuffle', weights)
 
-    ret.beemizer = int(get_choice('beemizer', weights)) if 'beemizer' in weights else 0
+    ret.beemizer = int(get_choice('beemizer', weights, 0))
 
     ret.timer = {'none': False,
                  None: False,
@@ -344,11 +354,11 @@ def roll_settings(weights):
                  'timed_ohko': 'timed-ohko',
                  'ohko': 'ohko',
                  'timed_countdown': 'timed-countdown',
-                 'display': 'display'}[get_choice('timer', weights)] if 'timer' in weights.keys() else False
+                 'display': 'display'}[get_choice('timer', weights, False)]
 
-    ret.dungeon_counters = get_choice('dungeon_counters', weights) if 'dungeon_counters' in weights else 'default'
+    ret.dungeon_counters = get_choice('dungeon_counters', weights, 'default')
 
-    ret.progressive = convert_to_on_off(get_choice('progressive', weights)) if "progressive" in weights else 'on'
+    ret.progressive = convert_to_on_off(get_choice('progressive', weights, 'on'))
     inventoryweights = weights.get('startinventory', {})
     startitems = []
     for item in inventoryweights.keys():
@@ -362,18 +372,22 @@ def roll_settings(weights):
             startitems.append(item)
     ret.startinventory = ','.join(startitems)
 
-    ret.glitch_boots = get_choice('glitch_boots', weights) if 'glitch_boots' in weights else True
+    ret.glitch_boots = get_choice('glitch_boots', weights, True)
 
-    ret.remote_items = get_choice('remote_items', weights) if 'remote_items' in weights else False
+    ret.remote_items = get_choice('remote_items', weights, False)
 
-    ret.local_items = set()
+    if get_choice("local_keys", weights, "l" in dungeon_items):
+        ret.local_items = item_name_groups["Small Keys"] | item_name_groups["Big Keys"]
+    else:
+        ret.local_items = set()
     for item_name in weights.get('local_items', []):
         items = item_name_groups.get(item_name, {item_name})
         for item in items:
             if item in item_table:
                 ret.local_items.add(item)
             else:
-                logging.warning(f"Could not force item {item} to be world-local, as it was not recognized.")
+                raise Exception(f"Could not force item {item} to be world-local, as it was not recognized.")
+
     ret.local_items = ",".join(ret.local_items)
 
     if 'rom' in weights:

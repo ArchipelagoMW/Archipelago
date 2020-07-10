@@ -22,54 +22,7 @@ from EntranceShuffle import door_addresses
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = 'aec17dd8b3c76c16d0b0311c36eb1c00'
-
-
-class JsonRom(object):
-
-    def __init__(self, name=None, hash=None):
-        self.name = name
-        self.hash = hash
-        self.orig_buffer = None
-        self.patches = {}
-        self.addresses = []
-
-    def write_byte(self, address, value):
-        self.write_bytes(address, [value])
-
-    def write_bytes(self, startaddress, values):
-        if not values:
-            return
-        values = list(values)
-
-        pos = bisect.bisect_right(self.addresses, startaddress)
-        intervalstart = self.addresses[pos-1] if pos else None
-        intervalpatch = self.patches[str(intervalstart)] if pos else None
-
-        if pos and startaddress <= intervalstart + len(intervalpatch): # merge with previous segment
-            offset = startaddress - intervalstart
-            intervalpatch[offset:offset+len(values)] = values
-            startaddress = intervalstart
-            values = intervalpatch
-        else: # new segment
-            self.addresses.insert(pos, startaddress)
-            self.patches[str(startaddress)] = values
-            pos = pos + 1
-
-        while pos < len(self.addresses) and self.addresses[pos] <= startaddress + len(values): # merge the next segment into this one
-            intervalstart = self.addresses[pos]
-            values.extend(self.patches[str(intervalstart)][startaddress+len(values)-intervalstart:])
-            del self.patches[str(intervalstart)]
-            del self.addresses[pos]
-
-    def write_to_file(self, file):
-        with open(file, 'w') as stream:
-            json.dump([self.patches], stream)
-
-    def get_hash(self):
-        h = hashlib.md5()
-        h.update(json.dumps([self.patches]).encode('utf-8'))
-        return h.hexdigest()
+RANDOMIZERBASEHASH = 'a567da86e8bd499256da4bba2209a3fd'
 
 class LocalRom(object):
 
@@ -93,6 +46,10 @@ class LocalRom(object):
         with open(file, 'wb') as outfile:
             outfile.write(self.buffer)
 
+    def read_from_file(self, file):
+        with open(file, 'rb') as stream:
+            self.buffer = bytearray(stream.read())
+
     @staticmethod
     def fromJsonRom(rom, file, rom_size=0x200000):
         ret = LocalRom(file, True, rom.name, rom.hash)
@@ -101,12 +58,37 @@ class LocalRom(object):
             ret.write_bytes(int(address), values)
         return ret
 
+    @staticmethod
+    def verify(buffer, expected=RANDOMIZERBASEHASH):
+        buffermd5 = hashlib.md5()
+        buffermd5.update(buffer)
+        return expected == buffermd5.hexdigest()
+
     def patch_base_rom(self):
+        from Patch import create_patch_file, create_rom_bytes
+
+        if os.path.isfile(local_path('basepatch.sfc')):
+            with open(local_path('basepatch.sfc'), 'rb') as stream:
+                buffer = bytearray(stream.read())
+
+            if self.verify(buffer):
+                self.buffer = buffer
+                if not os.path.exists(local_path(os.path.join('data', 'basepatch.bmbp'))):
+                    create_patch_file(local_path('basepatch.sfc'))
+                return
+
+        if os.path.isfile(local_path(os.path.join('data', 'basepatch.bmbp'))):
+            _, target, buffer = create_rom_bytes(local_path(os.path.join('data', 'basepatch.bmbp')))
+            if self.verify(buffer):
+                self.buffer = bytearray(buffer)
+                with open(local_path('basepatch.sfc'), 'wb') as stream:
+                    stream.write(buffer)
+                return
+
         # verify correct checksum of baserom
-        basemd5 = hashlib.md5()
-        basemd5.update(self.buffer)
-        if JAP10HASH != basemd5.hexdigest():
-            logging.getLogger('').warning('Supplied Base Rom does not match known MD5 for JAP(1.0) release. Will try to patch anyway.')
+        if not self.verify(self.buffer, JAP10HASH):
+            logging.getLogger('').warning(
+                'Supplied Base Rom does not match known MD5 for JAP(1.0) release. Will try to patch anyway.')
 
         # extend to 2MB
         self.buffer.extend(bytearray([0x00]) * (0x200000 - len(self.buffer)))
@@ -120,10 +102,14 @@ class LocalRom(object):
                     self.write_bytes(int(baseaddress), values)
 
         # verify md5
-        patchedmd5 = hashlib.md5()
-        patchedmd5.update(self.buffer)
-        if patchedmd5.hexdigest() not in [RANDOMIZERBASEHASH]:
-            raise RuntimeError('Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
+        if self.verify(self.buffer):
+            with open(local_path('basepatch.sfc'), 'wb') as stream:
+                stream.write(self.buffer)
+            create_patch_file(local_path('basepatch.sfc'), destination=local_path(os.path.join('data', 'basepatch.bmbp')))
+            os.remove(local_path('data/base2current.json'))
+        else:
+            raise RuntimeError(
+                'Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
 
     def write_crc(self):
         crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
@@ -157,19 +143,16 @@ def read_rom(stream) -> bytearray:
         buffer = buffer[0x200:]
     return buffer
 
-def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, random_sprite_on_hit):
-    baserom_path = os.path.abspath(baserom_path)
-    basepatch_path = os.path.abspath(local_path('data/base2current.json'))
-    enemizer_basepatch_path = os.path.join(os.path.dirname(enemizercli), "enemizerBasePatch.json")
-    randopatch_path = os.path.abspath(output_path(f'enemizer_randopatch_{player}.json'))
+def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite_on_hit):
+    randopatch_path = os.path.abspath(output_path(f'enemizer_randopatch_{player}.sfc'))
     options_path = os.path.abspath(output_path(f'enemizer_options_{player}.json'))
-    enemizer_output_path = os.path.abspath(output_path(f'enemizer_output_{player}.json'))
+    enemizer_output_path = os.path.abspath(output_path(f'enemizer_output_{player}.sfc'))
 
     # write options file for enemizer
     options = {
         'RandomizeEnemies': world.enemy_shuffle[player] != 'none',
         'RandomizeEnemiesType': 3,
-        'RandomizeBushEnemyChance': world.enemy_shuffle[player] == 'chaos',
+        'RandomizeBushEnemyChance': 'chaos' in world.enemy_shuffle[player],
         'RandomizeEnemyHealthRange': world.enemy_health[player] != 'default',
         'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[
             world.enemy_health[player]],
@@ -178,12 +161,14 @@ def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, r
         'AllowEnemyZeroDamage': True,
         'ShuffleEnemyDamageGroups': world.enemy_damage[player] != 'default',
         'EnemyDamageChaosMode': world.enemy_damage[player] == 'chaos',
-        'EasyModeEscape': False,
+        'EasyModeEscape': world.mode[player] == "standard",
         'EnemiesAbsorbable': False,
         'AbsorbableSpawnRate': 10,
         'AbsorbableTypes': {
-            'FullMagic': True, 'SmallMagic': True, 'Bomb_1': True, 'BlueRupee': True, 'Heart': True, 'BigKey': True, 'Key': True,
-            'Fairy': True, 'Arrow_10': True, 'Arrow_5': True, 'Bomb_8': True, 'Bomb_4': True, 'GreenRupee': True, 'RedRupee': True
+            'FullMagic': True, 'SmallMagic': True, 'Bomb_1': True, 'BlueRupee': True, 'Heart': True, 'BigKey': True,
+            'Key': True,
+            'Fairy': True, 'Arrow_10': True, 'Arrow_5': True, 'Bomb_8': True, 'Bomb_4': True, 'GreenRupee': True,
+            'RedRupee': True
         },
         'BossMadness': False,
         'RandomizeBosses': True,
@@ -205,7 +190,7 @@ def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, r
         'GrayscaleMode': False,
         'GenerateSpoilers': False,
         'RandomizeLinkSpritePalette': False,
-        'RandomizePots': shufflepots,
+        'RandomizePots': world.shufflepots[player],
         'ShuffleMusic': False,
         'BootlegMagic': True,
         'CustomBosses': False,
@@ -218,7 +203,8 @@ def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, r
         'BeesLevel': 0,
         'RandomizeTileTrapPattern': world.enemy_shuffle[player] == 'chaos',
         'RandomizeTileTrapFloorTile': False,
-        'AllowKillableThief': bool(random.randint(0,1)) if world.enemy_shuffle[player] == 'chaos' else world.enemy_shuffle[player] != 'none',
+        'AllowKillableThief': bool(random.randint(0, 1)) if 'thieves' in world.enemy_shuffle[player] else
+        world.enemy_shuffle[player] != 'none',
         'RandomizeSpriteOnHit': random_sprite_on_hit,
         'DebugMode': False,
         'DebugForceEnemy': False,
@@ -255,21 +241,14 @@ def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, r
         json.dump(options, f)
 
     subprocess.check_call([os.path.abspath(enemizercli),
-                           '--rom', baserom_path,
+                           '--rom', randopatch_path,
                            '--seed', str(world.rom_seeds[player]),
-                           '--base', basepatch_path,
-                           '--randomizer', randopatch_path,
+                           '--binary',
                            '--enemizer', options_path,
                            '--output', enemizer_output_path],
-                          cwd=os.path.dirname(enemizercli), stdout=subprocess.DEVNULL)
-
-    with open(enemizer_basepatch_path, 'r') as f:
-        for patch in json.load(f):
-            rom.write_bytes(patch["address"], patch["patchData"])
-
-    with open(enemizer_output_path, 'r') as f:
-        for patch in json.load(f):
-            rom.write_bytes(patch["address"], patch["patchData"])
+                          cwd=os.path.dirname(enemizercli))
+    rom.read_from_file(enemizer_output_path)
+    os.remove(enemizer_output_path)
 
     if random_sprite_on_hit:
         _populate_sprite_table()
@@ -285,7 +264,7 @@ def patch_enemizer(world, player, rom, baserom_path, enemizercli, shufflepots, r
                 rom.write_bytes(0x307000 + (i * 0x8000), sprite.palette)
                 rom.write_bytes(0x307078 + (i * 0x8000), sprite.glove_palette)
 
-    for used in (randopatch_path, options_path, enemizer_output_path):
+    for used in (randopatch_path, options_path):
         try:
             os.remove(used)
         except OSError:
@@ -942,6 +921,7 @@ def patch_rom(world, rom, player, team, enemized):
             equip[0x38E] |= 0x80
     if startingstate.has('Silver Arrows', player):
         equip[0x38E] |= 0x40
+        #TODO add Silver Bow
 
     if startingstate.has('Titans Mitts', player):
         equip[0x354] = 2
@@ -980,7 +960,7 @@ def patch_rom(world, rom, player, team, enemized):
         if item.player != player:
             continue
 
-        if item.name in ['Bow', 'Silver Arrows', 'Progressive Bow', 'Progressive Bow (Alt)',
+        if item.name in ['Bow', 'Silver Bow', 'Silver Arrows', 'Progressive Bow', 'Progressive Bow (Alt)',
                          'Titans Mitts', 'Power Glove', 'Progressive Glove',
                          'Golden Sword', 'Tempered Sword', 'Master Sword', 'Fighter Sword', 'Progressive Sword',
                          'Mirror Shield', 'Red Shield', 'Blue Shield', 'Progressive Shield',
@@ -992,22 +972,35 @@ def patch_rom(world, rom, player, team, enemized):
                      'Cape': (0x352, 1), 'Lamp': (0x34A, 1), 'Moon Pearl': (0x357, 1), 'Cane of Somaria': (0x350, 1), 'Cane of Byrna': (0x351, 1),
                      'Fire Rod': (0x345, 1), 'Ice Rod': (0x346, 1), 'Bombos': (0x347, 1), 'Ether': (0x348, 1), 'Quake': (0x349, 1)}
         or_table = {'Green Pendant': (0x374, 0x04), 'Red Pendant': (0x374, 0x01), 'Blue Pendant': (0x374, 0x02),
-                    'Crystal 1': (0x37A, 0x02), 'Crystal 2': (0x37A, 0x10), 'Crystal 3': (0x37A, 0x40), 'Crystal 4': (0x37A, 0x20),
+                    'Crystal 1': (0x37A, 0x02), 'Crystal 2': (0x37A, 0x10), 'Crystal 3': (0x37A, 0x40),
+                    'Crystal 4': (0x37A, 0x20),
                     'Crystal 5': (0x37A, 0x04), 'Crystal 6': (0x37A, 0x01), 'Crystal 7': (0x37A, 0x08),
-                    'Big Key (Eastern Palace)': (0x367, 0x20), 'Compass (Eastern Palace)': (0x365, 0x20), 'Map (Eastern Palace)': (0x369, 0x20),
-                    'Big Key (Desert Palace)': (0x367, 0x10), 'Compass (Desert Palace)': (0x365, 0x10), 'Map (Desert Palace)': (0x369, 0x10),
-                    'Big Key (Tower of Hera)': (0x366, 0x20), 'Compass (Tower of Hera)': (0x364, 0x20), 'Map (Tower of Hera)': (0x368, 0x20),
-                    'Big Key (Escape)': (0x367, 0xC0), 'Compass (Escape)': (0x365, 0xC0), 'Map (Escape)': (0x369, 0xC0),
+                    'Big Key (Eastern Palace)': (0x367, 0x20), 'Compass (Eastern Palace)': (0x365, 0x20),
+                    'Map (Eastern Palace)': (0x369, 0x20),
+                    'Big Key (Desert Palace)': (0x367, 0x10), 'Compass (Desert Palace)': (0x365, 0x10),
+                    'Map (Desert Palace)': (0x369, 0x10),
+                    'Big Key (Tower of Hera)': (0x366, 0x20), 'Compass (Tower of Hera)': (0x364, 0x20),
+                    'Map (Tower of Hera)': (0x368, 0x20),
+                    'Big Key (Hyrule Castle)': (0x367, 0xC0), 'Compass (Hyrule Castle)': (0x365, 0xC0),
+                    'Map (Hyrule Castle)': (0x369, 0xC0),
                     # doors-specific items
-                    'Big Key (Agahnims Tower)': (0x367, 0x08), 'Compass (Agahnims Tower)': (0x365, 0x08), 'Map (Agahnims Tower)': (0x369, 0x08),
+                    'Big Key (Agahnims Tower)': (0x367, 0x08), 'Compass (Agahnims Tower)': (0x365, 0x08),
+                    'Map (Agahnims Tower)': (0x369, 0x08),
                     # end of doors-specific items
-                    'Big Key (Palace of Darkness)': (0x367, 0x02), 'Compass (Palace of Darkness)': (0x365, 0x02), 'Map (Palace of Darkness)': (0x369, 0x02),
-                    'Big Key (Thieves Town)': (0x366, 0x10), 'Compass (Thieves Town)': (0x364, 0x10), 'Map (Thieves Town)': (0x368, 0x10),
-                    'Big Key (Skull Woods)': (0x366, 0x80), 'Compass (Skull Woods)': (0x364, 0x80), 'Map (Skull Woods)': (0x368, 0x80),
-                    'Big Key (Swamp Palace)': (0x367, 0x04), 'Compass (Swamp Palace)': (0x365, 0x04), 'Map (Swamp Palace)': (0x369, 0x04),
-                    'Big Key (Ice Palace)': (0x366, 0x40), 'Compass (Ice Palace)': (0x364, 0x40), 'Map (Ice Palace)': (0x368, 0x40),
-                    'Big Key (Misery Mire)': (0x367, 0x01), 'Compass (Misery Mire)': (0x365, 0x01), 'Map (Misery Mire)': (0x369, 0x01),
-                    'Big Key (Turtle Rock)': (0x366, 0x08), 'Compass (Turtle Rock)': (0x364, 0x08), 'Map (Turtle Rock)': (0x368, 0x08),
+                    'Big Key (Palace of Darkness)': (0x367, 0x02), 'Compass (Palace of Darkness)': (0x365, 0x02),
+                    'Map (Palace of Darkness)': (0x369, 0x02),
+                    'Big Key (Thieves Town)': (0x366, 0x10), 'Compass (Thieves Town)': (0x364, 0x10),
+                    'Map (Thieves Town)': (0x368, 0x10),
+                    'Big Key (Skull Woods)': (0x366, 0x80), 'Compass (Skull Woods)': (0x364, 0x80),
+                    'Map (Skull Woods)': (0x368, 0x80),
+                    'Big Key (Swamp Palace)': (0x367, 0x04), 'Compass (Swamp Palace)': (0x365, 0x04),
+                    'Map (Swamp Palace)': (0x369, 0x04),
+                    'Big Key (Ice Palace)': (0x366, 0x40), 'Compass (Ice Palace)': (0x364, 0x40),
+                    'Map (Ice Palace)': (0x368, 0x40),
+                    'Big Key (Misery Mire)': (0x367, 0x01), 'Compass (Misery Mire)': (0x365, 0x01),
+                    'Map (Misery Mire)': (0x369, 0x01),
+                    'Big Key (Turtle Rock)': (0x366, 0x08), 'Compass (Turtle Rock)': (0x364, 0x08),
+                    'Map (Turtle Rock)': (0x368, 0x08),
                     'Big Key (Ganons Tower)': (0x366, 0x04), 'Compass (Ganons Tower)': (0x364, 0x04), 'Map (Ganons Tower)': (0x368, 0x04)}
         set_or_table = {'Flippers': (0x356, 1, 0x379, 0x02),'Pegasus Boots': (0x355, 1, 0x379, 0x04),
                         'Shovel': (0x34C, 1, 0x38C, 0x04), 'Flute': (0x34C, 3, 0x38C, 0x01),
@@ -1021,7 +1014,7 @@ def patch_rom(world, rom, player, team, enemized):
                 'Small Key (Ice Palace)': [0x385],
                 'Small Key (Misery Mire)': [0x383], 'Small Key (Turtle Rock)': [0x388],
                 'Small Key (Ganons Tower)': [0x389],
-                'Small Key (Universal)': [0x38B], 'Small Key (Escape)': [0x37C, 0x37D]}
+                'Small Key (Universal)': [0x38B], 'Small Key (Hyrule Castle)': [0x37C, 0x37D]}
         bottles = {'Bottle': 2, 'Bottle (Red Potion)': 3, 'Bottle (Green Potion)': 4, 'Bottle (Blue Potion)': 5,
                    'Bottle (Fairy)': 6, 'Bottle (Bee)': 7, 'Bottle (Good Bee)': 8}
         rupees = {'Rupee (1)': 1, 'Rupees (5)': 5, 'Rupees (20)': 20, 'Rupees (50)': 50, 'Rupees (100)': 100, 'Rupees (300)': 300}
@@ -1095,6 +1088,8 @@ def patch_rom(world, rom, player, team, enemized):
 
     if world.goal[player] in ['pedestal', 'triforcehunt', 'localtriforcehunt']:
         rom.write_byte(0x18003E, 0x01)  # make ganon invincible
+    elif world.goal[player] in ['ganontriforcehunt', 'localganontriforcehunt']:
+        rom.write_byte(0x18003E, 0x05)  # make ganon invincible until 20 triforce pieces are collected
     elif world.goal[player] in ['dungeons']:
         rom.write_byte(0x18003E, 0x02)  # make ganon invincible until all dungeons are beat
     elif world.goal[player] in ['crystals']:
@@ -1732,7 +1727,7 @@ def write_strings(rom, world, player, team):
     # We still need the older hints of course. Those are done here.
 
 
-    silverarrows = world.find_items('Silver Arrows', player)
+    silverarrows = world.find_items('Silver Bow', player)
     random.shuffle(silverarrows)
     silverarrow_hint = (' %s?' % hint_text(silverarrows[0]).replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
     tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
@@ -1775,9 +1770,11 @@ def write_strings(rom, world, player, team):
     if world.goal[player] in ['triforcehunt', 'localtriforcehunt']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Get the Triforce Pieces.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
-        tt['sign_ganon'] = 'Go find the Triforce pieces... Ganon is invincible!'
-        tt[
-            'murahdahla'] = "Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\ninvisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\nhidden in  a hollow tree. If you bring\n%d triforce pieces, I can reassemble it." % \
+        if world.goal[player] == 'triforcehunt' and world.players > 1:
+            tt['sign_ganon'] = 'Go find the Triforce pieces with your friends... Ganon is invincible!'
+        else:
+            tt['sign_ganon'] = 'Go find the Triforce pieces... Ganon is invincible!'
+        tt['murahdahla'] = "Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\ninvisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\nhidden in  a hollow tree. If you bring\n%d triforce pieces, I can reassemble it." % \
                             world.treasure_hunt_count[player]
     elif world.goal[player] in ['pedestal']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Your goal is at the pedestal.'
@@ -1787,6 +1784,10 @@ def write_strings(rom, world, player, team):
         tt['ganon_fall_in'] = Ganon1_texts[random.randint(0, len(Ganon1_texts) - 1)]
         tt['ganon_fall_in_alt'] = 'You cannot defeat me until you finish your goal!'
         tt['ganon_phase_3_alt'] = 'Got wax in\nyour ears?\nI can not die!'
+        if world.goal[player] == 'ganontriforcehunt' and world.players > 1:
+            tt['sign_ganon'] = 'You need to find %d Triforce pieces with your friends to defeat Ganon.' % world.treasure_hunt_count[player]
+        elif world.goal[player] in ['ganontriforcehunt', 'localganontriforcehunt']:
+            tt['sign_ganon'] = 'You need to find %d Triforce pieces to defeat Ganon.' % world.treasure_hunt_count[player]
 
     tt['kakariko_tavern_fisherman'] = TavernMan_texts[random.randint(0, len(TavernMan_texts) - 1)]
 
@@ -2290,7 +2291,7 @@ RelevantItems = ['Bow',
                  ]
 
 SmallKeys = ['Small Key (Eastern Palace)',
-             'Small Key (Escape)',
+             'Small Key (Hyrule Castle)',
              'Small Key (Desert Palace)',
              'Small Key (Tower of Hera)',
              'Small Key (Agahnims Tower)',
