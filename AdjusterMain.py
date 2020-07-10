@@ -11,6 +11,10 @@ def adjust(args):
     logger = logging.getLogger('Adjuster')
     logger.info('Patching ROM.')
 
+    if os.path.splitext(args.rom)[-1].lower() == '.bmbp':
+        import Patch
+        meta, args.rom = Patch.create_rom_file(args.rom)
+        
     if os.stat(args.rom).st_size in (0x200000, 0x400000) and os.path.splitext(args.rom)[-1].lower() == '.sfc':
         rom = LocalRom(args.rom, patch=False)
     else:
