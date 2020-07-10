@@ -3,7 +3,7 @@ import logging
 import OverworldGlitchRules
 from BaseClasses import RegionType, World, Entrance
 from Items import ItemFactory
-from OverworldGlitchRules import overworld_glitches_rules
+from OverworldGlitchRules import overworld_glitches_rules, no_logic_rules
 
 
 def set_rules(world, player):
@@ -11,6 +11,7 @@ def set_rules(world, player):
     if world.logic[player] == 'nologic':
         logging.getLogger('').info('WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
         world.get_region('Menu', player).can_reach_private = lambda state: True
+        no_logic_rules(world, player)
         for exit in world.get_region('Menu', player).exits:
             exit.hide_path = True
         return
