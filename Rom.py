@@ -1,4 +1,6 @@
-import bisect
+JAP10HASH = '03a63945398191337e896e5771f77173'
+RANDOMIZERBASEHASH = 'a567da86e8bd499256da4bba2209a3fd'
+
 import io
 import json
 import hashlib
@@ -19,10 +21,9 @@ from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths
 from Utils import output_path, local_path, int16_as_bytes, int32_as_bytes, snes_to_pc
 from Items import ItemFactory
 from EntranceShuffle import door_addresses
+import Patch
 
 
-JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = 'a567da86e8bd499256da4bba2209a3fd'
 
 class LocalRom(object):
 
@@ -65,7 +66,7 @@ class LocalRom(object):
         return expected == buffermd5.hexdigest()
 
     def patch_base_rom(self):
-        from Patch import create_patch_file, create_rom_bytes
+
 
         if os.path.isfile(local_path('basepatch.sfc')):
             with open(local_path('basepatch.sfc'), 'rb') as stream:
@@ -74,11 +75,11 @@ class LocalRom(object):
             if self.verify(buffer):
                 self.buffer = buffer
                 if not os.path.exists(local_path(os.path.join('data', 'basepatch.bmbp'))):
-                    create_patch_file(local_path('basepatch.sfc'))
+                    Patch.create_patch_file(local_path('basepatch.sfc'))
                 return
 
         if os.path.isfile(local_path(os.path.join('data', 'basepatch.bmbp'))):
-            _, target, buffer = create_rom_bytes(local_path(os.path.join('data', 'basepatch.bmbp')))
+            _, target, buffer = Patch.create_rom_bytes(local_path(os.path.join('data', 'basepatch.bmbp')))
             if self.verify(buffer):
                 self.buffer = bytearray(buffer)
                 with open(local_path('basepatch.sfc'), 'wb') as stream:
@@ -105,7 +106,8 @@ class LocalRom(object):
         if self.verify(self.buffer):
             with open(local_path('basepatch.sfc'), 'wb') as stream:
                 stream.write(self.buffer)
-            create_patch_file(local_path('basepatch.sfc'), destination=local_path(os.path.join('data', 'basepatch.bmbp')))
+            Patch.create_patch_file(local_path('basepatch.sfc'),
+                                    destination=local_path(os.path.join('data', 'basepatch.bmbp')))
             os.remove(local_path('data/base2current.json'))
         else:
             raise RuntimeError(

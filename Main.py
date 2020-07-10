@@ -20,6 +20,7 @@ from Fill import distribute_items_cutoff, distribute_items_staleness, distribute
     balance_multiworld_progression
 from ItemList import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__
+import Patch
 
 seeddigits = 20
 
@@ -226,7 +227,6 @@ def main(args, seed=None):
         rompath = output_path(f'{outfilebase}{outfilepname}{outfilesuffix}.sfc')
         rom.write_to_file(rompath)
         if args.create_diff:
-            import Patch
             Patch.create_patch_file(rompath)
         return (player, team, list(rom.name))
 
