@@ -1,5 +1,5 @@
 from flask import render_template
-from WebHost import app, cache
+from WebHostLib import app, cache
 
 
 @cache.memoize(timeout=300)
