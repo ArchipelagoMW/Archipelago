@@ -45,8 +45,8 @@ else:  # unix
 
     class Locker(CommonLocker):
         def __enter__(self):
-            self.fp = open(self.lockfile, "rb")
             try:
+                self.fp = open(self.lockfile, "wb")
                 fcntl.flock(self.fp.fileno(), fcntl.LOCK_EX)
             except OSError as e:
                 raise AlreadyRunningException() from e
@@ -72,6 +72,7 @@ def autohost(config: dict):
     def keep_running():
         try:
             with Locker("autohost"):
+                logging.info("Starting autohost service")
                 # db.bind(**config["PONY"])
                 # db.generate_mapping(check_tables=False)
                 while 1:
