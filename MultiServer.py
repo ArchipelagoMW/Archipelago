@@ -647,7 +647,7 @@ class CommonCommandProcessor(CommandProcessor):
         for option in self.simple_options:
             self.output(f"Option {option} is set to {getattr(self.ctx, option)}")
 
-class ClientMessageProcessor(CommandProcessor):
+class ClientMessageProcessor(CommonCommandProcessor):
     marker = "!"
 
     def __init__(self, ctx: Context, client: Client):
