@@ -6,7 +6,7 @@ import logging
 from flask import request, flash, redirect, url_for, session, render_template
 from pony.orm import commit, select
 
-from WebHost import app, allowed_file, Seed, Room, Patch
+from WebHostLib import app, allowed_file, Seed, Room, Patch
 
 accepted_zip_contents = {"patches": ".bmbp",
                          "spoiler": ".txt",

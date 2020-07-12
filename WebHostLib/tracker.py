@@ -7,7 +7,7 @@ import logging
 from uuid import UUID
 
 import Items
-from WebHost import app, cache, Room
+from WebHostLib import app, cache, Room
 
 
 def get_id(item_name):

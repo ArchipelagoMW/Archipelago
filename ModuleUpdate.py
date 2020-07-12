@@ -19,7 +19,7 @@ def update():
         update_ran = True
         path = os.path.join(os.path.dirname(sys.argv[0]), 'requirements.txt')
         if not os.path.exists(path):
-            os.path.join(os.path.dirname(__file__), 'requirements.txt')
+            path = os.path.join(os.path.dirname(__file__), 'requirements.txt')
         with open(path) as requirementsfile:
             for line in requirementsfile.readlines():
                 module, remote_version = line.split(">=")

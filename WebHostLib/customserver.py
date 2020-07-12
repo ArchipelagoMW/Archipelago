@@ -20,7 +20,7 @@ from Utils import get_public_ipv4, get_public_ipv6
 class CustomClientMessageProcessor(ClientMessageProcessor):
     ctx: WebHostContext
     def _cmd_video(self, platform, user):
-        """Set a link for your name in the WebHost tracker pointing to a video stream"""
+        """Set a link for your name in the WebHostLib tracker pointing to a video stream"""
         if platform.lower().startswith("t"):  # twitch
             self.ctx.video[self.client.team, self.client.slot] = "Twitch", user
             self.ctx.save()
@@ -139,4 +139,4 @@ def run_server_process(room_id, ponyconfig: dict):
     asyncio.run(main())
 
 
-from WebHost import LOGS_FOLDER
+from WebHostLib import LOGS_FOLDER

@@ -2,11 +2,11 @@ import os
 import multiprocessing
 import logging
 
-from WebHost import app as raw_app
+from WebHostLib import app as raw_app
 from waitress import serve
 
-from WebHost.models import db
-from WebHost.autolauncher import autohost
+from WebHostLib.models import db
+from WebHostLib.autolauncher import autohost
 
 configpath = "config.yaml"
 

@@ -281,7 +281,6 @@ junk_texts = [
     "{C:GREEN}\nThe gnome asks\nyou to guess\nhis name.   >",
     "{C:GREEN}\nI heard beans\non toast is a\ngreat meal. >",
     "{C:GREEN}\n> Sweetcorn\non pizza is a\ngreat choice.",
-    "{C:GREEN}\n> race roms\ndon’t have\nspoiler logs",
     "{C:GREEN}\nI bet a nice\ncup of tea\nwould help! >",
     "{C:GREEN}\nI bet you\nexpected help,\ndidn't you? >",
     "{C:GREEN}\nLearn to make\nplogues, easy\nand yummy!  >",
@@ -297,7 +296,7 @@ junk_texts = [
     "{C:GREEN}\n>  READ\nor the owl\nwill eat you.",
     "{C:GREEN}\n> Bunnies\nare cute.",
     "{C:GREEN}\nPugs are the\nsuperior dog\nbreed.  >",
-    "{C:GREEN}\nYou are\nplaying\nALTTPR.    >",
+    "{C:GREEN}\nThis is\nBerserker's\nMultiworld.>",
     "{C:GREEN}\nOther randos\nexist too!\nTry some!  >",
 ]
 
