@@ -296,7 +296,7 @@ junk_texts = [
     "{C:GREEN}\n>  READ\nor the owl\nwill eat you.",
     "{C:GREEN}\n> Bunnies\nare cute.",
     "{C:GREEN}\nPugs are the\nsuperior dog\nbreed.  >",
-    "{C:GREEN}\nYou are\nplaying\nALTTPR.    >",
+    "{C:GREEN}\nThis is\nBerserker's\nMultiworld.>",
     "{C:GREEN}\nOther randos\nexist too!\nTry some!  >",
 ]
 
