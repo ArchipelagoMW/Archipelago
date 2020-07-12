@@ -1410,6 +1410,8 @@ def set_bunny_rules(world: World, player: int, inverted: bool):
         if world.logic[player] == 'owglitches':
             if region.name == 'Swamp Palace (Entrance)':
                 return lambda state: state.has_Pearl(player)
+            if region.name == 'Tower of Hera (Bottom)':  # Need to hit the crystal switch
+                return lambda state: state.has_Mirror(player) and state.has_sword(player) or state.has_Pearl(player)
             if region.name in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
                 return lambda state: state.has_Mirror(player) or state.has_Pearl(player)
             if region.type == RegionType.Dungeon:

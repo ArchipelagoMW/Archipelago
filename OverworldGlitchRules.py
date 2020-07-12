@@ -9,7 +9,6 @@ def get_sword_required_superbunny_mirror_regions():
     """
     Cave regions that superbunny can get through - but only with a sword.
     """
-    yield 'Mini Moldorm Cave'
     yield 'Spiral Cave (Top)'
 
 def get_boots_required_superbunny_mirror_regions():
