@@ -372,7 +372,7 @@ class World(object):
 
     def has_beaten_game(self, state, player: Union[None, int] = None):
         if player:
-            return state.has('Triforce', player)
+            return state.has('Triforce', player) or state.world.logic[player] == 'nologic'
         else:
             return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
 
@@ -953,8 +953,7 @@ class Location(object):
         self.player = player
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-        return self.always_allow(state, item) or (self.parent_region.can_fill(item) and self.item_rule(item) and (
-                not check_access or self.can_reach(state)))
+        return self.parent_region.can_fill(item) and (not check_access or self.always_allow(state, item) or (self.item_rule(item) and self.can_reach(state)))
 
     def can_reach(self, state: CollectionState) -> bool:
         if self.parent_region.can_reach(state) and self.access_rule(state):
