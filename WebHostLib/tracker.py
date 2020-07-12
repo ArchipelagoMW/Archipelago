@@ -103,6 +103,7 @@ levels = {"Fighter Sword": 1,
           "Golden Sword": 4,
           "Power Glove": 1,
           "Titans Mitts": 2,
+          "Bow": 1,
           "Silver Bow": 2}
 
 multi_items = {get_id(name) for name in ("Progressive Sword", "Progressive Bow", "Bottle", "Progressive Glove")}
