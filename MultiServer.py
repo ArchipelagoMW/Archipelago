@@ -347,11 +347,10 @@ async def on_client_disconnected(ctx: Context, client: Client):
 
 
 async def on_client_joined(ctx: Context, client: Client):
+    version_str = '.'.join(str(x) for x in client.version)
     ctx.notify_all(
-        "%s (Team #%d) has joined the game. Client(%s, %s)." % (ctx.get_aliased_name(client.team, client.slot),
-                                                                client.team + 1,
-                                                                ".".join(str(x) for x in client.version),
-                                                                client.tags))
+        f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has joined the game. "
+        f"Client({version_str}), {client.tags}).")
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 async def on_client_left(ctx: Context, client: Client):
