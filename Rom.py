@@ -1282,7 +1282,7 @@ def patch_rom(world, rom, player, team, enemized):
     # set rom name
     # 21 bytes
     from Main import __version__
-    rom.name = bytearray(f'ER{__version__.split("-")[0].replace(".","")[0:3]}_{team+1}_{player}_{world.seed:09}\0', 'utf8')[:21]
+    rom.name = bytearray(f'BM{__version__.replace(".", "")[0:3]}_{team + 1}_{player}_{world.seed:09}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
 

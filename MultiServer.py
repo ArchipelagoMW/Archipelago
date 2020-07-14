@@ -111,7 +111,12 @@ class Context(Node):
         for team, names in enumerate(jsonobj['names']):
             for player, name in enumerate(names, 1):
                 self.player_names[(team, player)] = name
-        self.rom_names = {tuple(rom): (team, slot) for slot, team, rom in jsonobj['roms']}
+        version = jsonobj.get("version", [1, 0, 0])
+        if version > [2, 4, 0]:
+            self.rom_names = {rom: (team, slot) for slot, team, rom in jsonobj['roms']}
+        else:
+            self.rom_names = {bytes(letter for letter in rom).decode(): (team, slot) for slot, team, rom in
+                              jsonobj['roms']}
         self.remote_items = set(jsonobj['remote_items'])
         self.locations = {tuple(k): tuple(v) for k, v in jsonobj['locations']}
         if "er_hint_data" in jsonobj:
@@ -206,8 +211,12 @@ class Context(Node):
     def set_save(self, savedata: dict):
         rom_names = savedata["rom_names"]
         received_items = {tuple(k): [ReceivedItem(*i) for i in v] for k, v in savedata["received_items"]}
-        if not all([self.rom_names[tuple(rom)] == (team, slot) for rom, (team, slot) in rom_names]):
-            raise Exception('Save file mismatch, will start a new game')
+
+        if rom_names != self.rom_names:
+            adjusted = {rom: (team, slot) for (rom, (team, slot)) in rom_names}
+            if self.rom_names != adjusted:
+                raise Exception('Save file mismatch, will start a new game')
+
         self.received_items = received_items
         self.hints_used.update({tuple(key): value for key, value in savedata["hints_used"]})
         if "hints" in savedata:
@@ -870,18 +879,20 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
     if cmd == 'Connect':
         if not args or type(args) is not dict or \
                 'password' not in args or type(args['password']) not in [str, type(None)] or \
-                'rom' not in args or type(args['rom']) is not list:
+                'rom' not in args or type(args['rom']) not in (list, str):
             await ctx.send_msgs(client, [['InvalidArguments', 'Connect']])
             return
 
         errors = set()
         if ctx.password is not None and args['password'] != ctx.password:
             errors.add('InvalidPassword')
+        if type(args["rom"]) == list:
+            args["rom"] = bytes(letter for letter in args["rom"]).decode()
 
-        if tuple(args['rom']) not in ctx.rom_names:
+        if args['rom'] not in ctx.rom_names:
             errors.add('InvalidRom')
         else:
-            team, slot = ctx.rom_names[tuple(args['rom'])]
+            team, slot = ctx.rom_names[args['rom']]
             # this can only ever be 0 or 1 elements
             clients = [c for c in ctx.endpoints if c.auth and c.slot == slot and c.team == team]
             if clients:

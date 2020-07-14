@@ -800,7 +800,7 @@ async def process_server_cmd(ctx: Context, cmd, args):
                 'Invalid ROM detected, please verify that you have loaded the correct rom and reconnect your snes (/snes)')
         if 'SlotAlreadyTaken' in args:
             Utils.persistent_store("servers", "default", ctx.server_address)
-            Utils.persistent_store("servers", "".join(chr(x) for x in ctx.rom), ctx.server_address)
+            Utils.persistent_store("servers", ctx.rom, ctx.server_address)
             raise Exception('Player slot already in use for that team')
         if 'IncompatibleVersion' in args:
             raise Exception('Server reported your client version as incompatible')
@@ -808,7 +808,7 @@ async def process_server_cmd(ctx: Context, cmd, args):
 
     elif cmd == 'Connected':
         Utils.persistent_store("servers", "default", ctx.server_address)
-        Utils.persistent_store("servers", "".join(chr(x) for x in ctx.rom), ctx.server_address)
+        Utils.persistent_store("servers", ctx.rom, ctx.server_address)
         ctx.team, ctx.slot = args[0]
         ctx.player_names = {p: n for p, n in args[1]}
         msgs = []
@@ -922,7 +922,7 @@ async def server_auth(ctx: Context, password_requested):
         ctx.ui_node.log_info('No ROM detected, awaiting snes connection to authenticate to the multiworld server (/snes)')
         return
     ctx.awaiting_rom = False
-    ctx.auth = ctx.rom.copy()
+    ctx.auth = ctx.rom if ctx.server_version > (2, 4, 0) else list(bytes(ctx.rom))
     await ctx.send_msgs([['Connect', {
         'password': ctx.password, 'rom': ctx.auth, 'version': Utils._version_tuple, 'tags': get_tags(ctx),
         'uuid': Utils.get_unique_identifier()
@@ -1147,11 +1147,11 @@ async def game_watcher(ctx : Context):
             if rom is None or rom == bytes([0] * ROMNAME_SIZE):
                 continue
 
-            ctx.rom = list(rom)
+            ctx.rom = rom.decode()
             if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
                 ctx.locations_checked = set()
                 ctx.locations_scouted = set()
-            ctx.prev_rom = ctx.rom.copy()
+            ctx.prev_rom = ctx.rom
 
             if ctx.awaiting_rom:
                 await server_auth(ctx, False)
