@@ -16,14 +16,14 @@ ModuleUpdate.update()
 from AdjusterMain import adjust
 from EntranceRandomizer import parse_arguments
 from GuiUtils import ToolTips, set_icon, BackgroundTaskProgress
-from Main import main, get_seed, __version__ as ESVersion
+from Main import main, get_seed, __version__ as MWVersion
 from Rom import Sprite
 from Utils import is_bundled, local_path, output_path, open_file
 
 
 def guiMain(args=None):
     mainWindow = Tk()
-    mainWindow.wm_title("Entrance Shuffle %s" % ESVersion)
+    mainWindow.wm_title("Berserker's Multiworld %s" % MWVersion)
 
     set_icon(mainWindow)
 
