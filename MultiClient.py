@@ -919,12 +919,14 @@ async def server_auth(ctx: Context, password_requested):
         ctx.password = await console_input(ctx)
     if ctx.rom is None:
         ctx.awaiting_rom = True
-        ctx.ui_node.log_info('No ROM detected, awaiting snes connection to authenticate to the multiworld server (/snes)')
+        ctx.ui_node.log_info(
+            'No ROM detected, awaiting snes connection to authenticate to the multiworld server (/snes)')
         return
     ctx.awaiting_rom = False
-    ctx.auth = ctx.rom if ctx.server_version > (2, 4, 0) else list(bytes(ctx.rom))
+    ctx.auth = ctx.rom
+    auth = ctx.rom if ctx.server_version > (2, 4, 0) else list(ctx.rom.encode())
     await ctx.send_msgs([['Connect', {
-        'password': ctx.password, 'rom': ctx.auth, 'version': Utils._version_tuple, 'tags': get_tags(ctx),
+        'password': ctx.password, 'rom': auth, 'version': Utils._version_tuple, 'tags': get_tags(ctx),
         'uuid': Utils.get_unique_identifier()
     }]])
 
