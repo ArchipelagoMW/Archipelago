@@ -111,9 +111,9 @@ class Context(Node):
         for team, names in enumerate(jsonobj['names']):
             for player, name in enumerate(names, 1):
                 self.player_names[(team, player)] = name
-        version = jsonobj.get("version", [1, 0, 0])
-        if version > [2, 4, 0]:
-            self.rom_names = {rom: (team, slot) for slot, team, rom in jsonobj['roms']}
+
+        if "rom_strings" in jsonobj:
+            self.rom_names = {rom: (team, slot) for slot, team, rom in jsonobj['rom_strings']}
         else:
             self.rom_names = {bytes(letter for letter in rom).decode(): (team, slot) for slot, team, rom in
                               jsonobj['roms']}

@@ -262,9 +262,11 @@ def main(args, seed=None):
         precollected_items = [[] for player in range(world.players)]
         for item in world.precollected_items:
             precollected_items[item.player - 1].append(item.code)
-
         multidata = zlib.compress(json.dumps({"names": parsed_names,
-                                              "roms": rom_names,
+                                              # backwards compat for < 2.4.1
+                                              "roms": [(slot, team, list(name.encode()))
+                                                       for (slot, team, name) in rom_names],
+                                              "rom_strings": rom_names,
                                               "remote_items": [player for player in range(1, world.players + 1) if
                                                                world.remote_items[player]],
                                               "locations": [((location.address, location.player),
