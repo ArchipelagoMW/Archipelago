@@ -43,17 +43,25 @@ def main(args, seed=None):
     world = World(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty,
                   args.item_functionality, args.timer, args.progressive.copy(), args.goal, args.algorithm,
                   args.accessibility, args.shuffleganon, args.retro, args.custom, args.customitemarray, args.hints)
+
     logger = logging.getLogger('')
     world.seed = get_seed(seed)
-    random.seed(world.seed)
+    if args.race:
+        world.secure()
+    else:
+        world.random.seed(world.seed)
 
     world.remote_items = args.remote_items.copy()
     world.mapshuffle = args.mapshuffle.copy()
     world.compassshuffle = args.compassshuffle.copy()
     world.keyshuffle = args.keyshuffle.copy()
     world.bigkeyshuffle = args.bigkeyshuffle.copy()
-    world.crystals_needed_for_ganon = {player: random.randint(0, 7) if args.crystals_ganon[player] == 'random' else int(args.crystals_ganon[player]) for player in range(1, world.players + 1)}
-    world.crystals_needed_for_gt = {player: random.randint(0, 7) if args.crystals_gt[player] == 'random' else int(args.crystals_gt[player]) for player in range(1, world.players + 1)}
+    world.crystals_needed_for_ganon = {
+        player: world.random.randint(0, 7) if args.crystals_ganon[player] == 'random' else int(
+            args.crystals_ganon[player]) for player in range(1, world.players + 1)}
+    world.crystals_needed_for_gt = {
+        player: world.random.randint(0, 7) if args.crystals_gt[player] == 'random' else int(args.crystals_gt[player])
+        for player in range(1, world.players + 1)}
     world.open_pyramid = args.openpyramid.copy()
     world.boss_shuffle = args.shufflebosses.copy()
     world.enemy_shuffle = args.shuffleenemies.copy()
@@ -69,7 +77,7 @@ def main(args, seed=None):
     world.triforce_pieces_required = args.triforce_pieces_required.copy()
     world.progression_balancing = {player: not balance for player, balance in args.skip_progression_balancing.items()}
 
-    world.rom_seeds = {player: random.randint(0, 999999999) for player in range(1, world.players + 1)}
+    world.rom_seeds = {player: world.random.randint(0, 999999999) for player in range(1, world.players + 1)}
 
     logger.info('ALttP Berserker\'s Multiworld Version %s  -  Seed: %s\n', __version__, world.seed)
 
@@ -134,7 +142,7 @@ def main(args, seed=None):
     if args.algorithm in ['balanced', 'vt26'] or any(list(args.mapshuffle.values()) + list(args.compassshuffle.values()) +
                                                      list(args.keyshuffle.values()) + list(args.bigkeyshuffle.values())):
         shuffled_locations = world.get_unfilled_locations()
-        random.shuffle(shuffled_locations)
+        world.random.shuffle(shuffled_locations)
         fill_dungeons_restrictive(world, shuffled_locations)
     else:
         fill_dungeons(world)

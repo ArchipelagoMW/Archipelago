@@ -1,5 +1,3 @@
-import random
-
 from BaseClasses import Dungeon
 from Bosses import BossFactory
 from Fill import fill_restrictive
@@ -58,7 +56,7 @@ def fill_dungeons(world):
         dungeon_regions, big_key, small_keys, dungeon_items = dungeons.pop(0)
         # this is what we need to fill
         dungeon_locations = [location for location in world.get_unfilled_locations() if location.parent_region.name in dungeon_regions]
-        random.shuffle(dungeon_locations)
+        world.random.shuffle(dungeon_locations)
 
         all_state = all_state_base.copy()
 

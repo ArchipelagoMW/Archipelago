@@ -1,5 +1,4 @@
 import logging
-import random
 
 from BaseClasses import Boss
 from Fill import FillError
@@ -193,11 +192,11 @@ def place_bosses(world, player):
         if world.boss_shuffle[player] == "basic": # vanilla bosses shuffled
             bosses = placeable_bosses + ['Armos Knights', 'Lanmolas', 'Moldorm']
         else: # all bosses present, the three duplicates chosen at random
-            bosses = all_bosses + [random.choice(placeable_bosses) for _ in range(3)]
+            bosses = all_bosses + [world.random.choice(placeable_bosses) for _ in range(3)]
 
         logging.getLogger('').debug('Bosses chosen %s', bosses)
 
-        random.shuffle(bosses)
+        world.random.shuffle(bosses)
         for [loc, level] in boss_locations:
             loc_text = loc + (' ('+level+')' if level else '')
             boss = next((b for b in bosses if can_place_boss(world, player, b, loc, level)), None)
@@ -211,7 +210,8 @@ def place_bosses(world, player):
         for [loc, level] in boss_locations:
             loc_text = loc + (' ('+level+')' if level else '')
             try:
-                boss = random.choice([b for b in placeable_bosses if can_place_boss(world, player, b, loc, level)])
+                boss = world.random.choice(
+                    [b for b in placeable_bosses if can_place_boss(world, player, b, loc, level)])
             except IndexError:
                 raise FillError('Could not place boss for location %s' % loc_text)
 

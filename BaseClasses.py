@@ -10,6 +10,10 @@ from EntranceShuffle import door_addresses, indirect_connections
 from Utils import int16_as_bytes
 from typing import Union
 
+import secrets
+import random
+
+
 class World(object):
     debug_types = False
     player_names: list
@@ -28,6 +32,8 @@ class World(object):
                     setattr(self, name[7:], method)
                     logging.debug(f"Set {self}.{name[7:]} to {method}")
             self.get_location = self._debug_get_location
+        self.random = random.Random()  # world-local random state is saved in case of future use a
+        # persistently running program with multiple worlds rolling concurrently
         self.players = players
         self.teams = 1
         self.shuffle = shuffle.copy()
@@ -115,6 +121,9 @@ class World(object):
             set_player_attr('local_items', set())
             set_player_attr('triforce_pieces_available', 30)
             set_player_attr('triforce_pieces_required', 20)
+
+    def secure(self):
+        self.random = secrets.SystemRandom()
 
     @property
     def player_ids(self):

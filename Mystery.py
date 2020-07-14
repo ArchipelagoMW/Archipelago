@@ -56,6 +56,9 @@ def main(args=None):
     seed = get_seed(args.seed)
     random.seed(seed)
 
+    if args.race:
+        random.seed()  # reset to time-based random source
+
     seedname = "M" + (f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits))
     print(f"Generating mystery for {args.multi} player{'s' if args.multi > 1 else ''}, {seedname} Seed {seed}")
 

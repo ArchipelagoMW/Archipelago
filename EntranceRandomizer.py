@@ -3,7 +3,6 @@ import argparse
 import copy
 import os
 import logging
-import random
 import textwrap
 import shlex
 import sys

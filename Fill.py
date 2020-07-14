@@ -1,4 +1,3 @@
-import random
 import logging
 
 from BaseClasses import CollectionState
@@ -10,10 +9,10 @@ class FillError(RuntimeError):
 def distribute_items_cutoff(world, cutoffrate=0.33):
     # get list of locations to fill in
     fill_locations = world.get_unfilled_locations()
-    random.shuffle(fill_locations)
+    world.random.shuffle(fill_locations)
 
     # get items to distribute
-    random.shuffle(world.itempool)
+    world.random.shuffle(world.itempool)
     itempool = world.itempool
 
     total_advancement_items = len([item for item in itempool if item.advancement])
@@ -83,10 +82,10 @@ def distribute_items_cutoff(world, cutoffrate=0.33):
 def distribute_items_staleness(world):
     # get list of locations to fill in
     fill_locations = world.get_unfilled_locations()
-    random.shuffle(fill_locations)
+    world.random.shuffle(fill_locations)
 
     # get items to distribute
-    random.shuffle(world.itempool)
+    world.random.shuffle(world.itempool)
     itempool = world.itempool
 
     progress_done = False
@@ -131,7 +130,7 @@ def distribute_items_staleness(world):
         spot_to_fill = None
         for location in fill_locations:
             # increase likelyhood of skipping a location if it has been found stale
-            if not progress_done and random.randint(0, location.staleness_count) > 2:
+            if not progress_done and world.random.randint(0, location.staleness_count) > 2:
                 continue
 
             if location.can_fill(world.state, item_to_place):
@@ -215,10 +214,10 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
     # If not passed in, then get a shuffled list of locations to fill in
     if not fill_locations:
         fill_locations = world.get_unfilled_locations()
-        random.shuffle(fill_locations)
+        world.random.shuffle(fill_locations)
 
     # get items to distribute
-    random.shuffle(world.itempool)
+    world.random.shuffle(world.itempool)
     progitempool = []
     localprioitempool = {player: [] for player in range(1, world.players + 1)}
     localrestitempool = {player: [] for player in range(1, world.players + 1)}
@@ -244,17 +243,17 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
             continue
 
         gftower_trash_count = (
-            random.randint(15, 50) if 'triforcehunt' in world.goal[player]
-            else random.randint(0, 15))
+            world.random.randint(15, 50) if 'triforcehunt' in world.goal[player]
+            else world.random.randint(0, 15))
 
         gtower_locations = [location for location in fill_locations if
                             'Ganons Tower' in location.name and location.player == player]
-        random.shuffle(gtower_locations)
+        world.random.shuffle(gtower_locations)
         trashcnt = 0
         localrest = localrestitempool[player]
         if localrest:
             gt_item_pool = restitempool + localrest
-            random.shuffle(gt_item_pool)
+            world.random.shuffle(gt_item_pool)
         else:
             gt_item_pool = restitempool.copy()
 
@@ -269,7 +268,7 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
             fill_locations.remove(spot_to_fill)
             trashcnt += 1
 
-    random.shuffle(fill_locations)
+    world.random.shuffle(fill_locations)
     fill_locations.reverse()
 
     # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
@@ -283,20 +282,20 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
             localprioitempool.values() or localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
         for player, items in localprioitempool.items():  # items already shuffled
             local_locations = [location for location in fill_locations if location.player == player]
-            random.shuffle(local_locations)
+            world.random.shuffle(local_locations)
             for item_to_place in items:
                 spot_to_fill = local_locations.pop()
                 world.push_item(spot_to_fill, item_to_place, False)
                 fill_locations.remove(spot_to_fill)
         for player, items in localrestitempool.items():  # items already shuffled
             local_locations = [location for location in fill_locations if location.player == player]
-            random.shuffle(local_locations)
+            world.random.shuffle(local_locations)
             for item_to_place in items:
                 spot_to_fill = local_locations.pop()
                 world.push_item(spot_to_fill, item_to_place, False)
                 fill_locations.remove(spot_to_fill)
 
-    random.shuffle(fill_locations)
+    world.random.shuffle(fill_locations)
 
     fast_fill(world, prioitempool, fill_locations)
 
@@ -314,7 +313,7 @@ def fast_fill(world, item_pool, fill_locations):
 
 def flood_items(world):
     # get items to distribute
-    random.shuffle(world.itempool)
+    world.random.shuffle(world.itempool)
     itempool = world.itempool
     progress_done = False
 
@@ -324,7 +323,7 @@ def flood_items(world):
     # fill world from top of itempool while we can
     while not progress_done:
         location_list = world.get_unfilled_locations()
-        random.shuffle(location_list)
+        world.random.shuffle(location_list)
         spot_to_fill = None
         for location in location_list:
             if location.can_fill(world.state, itempool[0]):
@@ -360,7 +359,7 @@ def flood_items(world):
 
         # find item to replace with progress item
         location_list = world.get_reachable_locations()
-        random.shuffle(location_list)
+        world.random.shuffle(location_list)
         for location in location_list:
             if location.item is not None and not location.item.advancement and not location.item.priority and not location.item.smallkey and not location.item.bigkey:
                 # safe to replace
@@ -380,7 +379,7 @@ def balance_multiworld_progression(world):
         state = CollectionState(world)
         checked_locations = []
         unchecked_locations = world.get_locations().copy()
-        random.shuffle(unchecked_locations)
+        world.random.shuffle(unchecked_locations)
 
         reachable_locations_count = {player: 0 for player in range(1, world.players + 1)}
 

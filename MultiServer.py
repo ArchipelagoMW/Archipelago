@@ -12,6 +12,7 @@ import inspect
 import weakref
 import datetime
 import threading
+import random
 
 import ModuleUpdate
 
@@ -830,7 +831,6 @@ class ClientMessageProcessor(CommonCommandProcessor):
                             can_pay = points_available // self.ctx.hint_cost
                         else:
                             can_pay = 1000
-                        import random
 
                         random.shuffle(not_found_hints)
 

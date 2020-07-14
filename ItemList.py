@@ -1,6 +1,5 @@
 from collections import namedtuple
 import logging
-import random
 
 from BaseClasses import Region, RegionType, Shop, ShopType, Location
 from Bosses import place_bosses
@@ -181,10 +180,7 @@ def generate_itempool(world, player):
     # set up item pool
     if world.custom:
         (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
-         lamps_needed_for_dark_rooms) = make_custom_item_pool(world.progressive[player], world.shuffle[player],
-                                                              world.difficulty[player], world.timer[player], world.goal[player],
-                                                              world.mode[player], world.swords[player],
-                                                              world.retro[player], world.customitemarray)
+         lamps_needed_for_dark_rooms) = make_custom_item_pool(world, player)
         world.rupoor_cost = min(world.customitemarray[69], 9999)
     else:
         (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
@@ -209,7 +205,7 @@ def generate_itempool(world, player):
                 if item in ['Hammer', 'Bombs (10)', 'Fire Rod', 'Cane of Somaria', 'Cane of Byrna']:
                     if item not in possible_weapons:
                         possible_weapons.append(item)
-            starting_weapon = random.choice(possible_weapons)
+            starting_weapon = world.random.choice(possible_weapons)
             placed_items["Link's Uncle"] = starting_weapon
             pool.remove(starting_weapon)
         if placed_items["Link's Uncle"] in ['Bow', 'Progressive Bow', 'Bombs (10)', 'Cane of Somaria', 'Cane of Byrna'] and world.enemy_health[player] not in ['default', 'easy']:
@@ -255,24 +251,25 @@ def generate_itempool(world, player):
                   4: {'trap': 100}}
     def beemizer(item):
         if world.beemizer[item.player] and not item.advancement and not item.priority and not item.type:
-            choice = random.choices(list(beeweights[world.beemizer[item.player]].keys()), weights=list(beeweights[world.beemizer[item.player]].values()))[0]
+            choice = world.random.choices(list(beeweights[world.beemizer[item.player]].keys()),
+                                          weights=list(beeweights[world.beemizer[item.player]].values()))[0]
             return item if not choice else ItemFactory("Bee Trap", player) if choice == 'trap' else ItemFactory("Bee", player)
         return item
 
     progressionitems = [item for item in items if item.advancement or item.priority or item.type]
     nonprogressionitems = [beemizer(item) for item in items if not item.advancement and not item.priority and not item.type]
-    random.shuffle(nonprogressionitems)
+    world.random.shuffle(nonprogressionitems)
 
     triforce_pieces = world.triforce_pieces_available[player]
     if 'triforcehunt' in world.goal[player] and triforce_pieces > 30:
         progressionitems += [ItemFactory("Triforce Piece", player)] * (triforce_pieces - 30)
-        nonprogressionitems = nonprogressionitems[(triforce_pieces-30):]
+        nonprogressionitems = nonprogressionitems[(triforce_pieces - 30):]
 
     world.itempool += progressionitems + nonprogressionitems
 
     # shuffle medallions
-    mm_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
-    tr_medallion = ['Ether', 'Quake', 'Bombos'][random.randint(0, 2)]
+    mm_medallion = ['Ether', 'Quake', 'Bombos'][world.random.randint(0, 2)]
+    tr_medallion = ['Ether', 'Quake', 'Bombos'][world.random.randint(0, 2)]
     world.required_medallions[player] = (mm_medallion, tr_medallion)
 
     place_bosses(world, player)
@@ -297,7 +294,7 @@ def set_up_take_anys(world, player):
     if world.mode[player] == 'inverted' and 'Dark Sanctuary Hint' in take_any_locations:
         take_any_locations.remove('Dark Sanctuary Hint')
 
-    regions = random.sample(take_any_locations, 5)
+    regions = world.random.sample(take_any_locations, 5)
 
     old_man_take_any = Region("Old Man Sword Cave", RegionType.Cave, 'the sword cave', player)
     world.regions.append(old_man_take_any)
@@ -312,7 +309,7 @@ def set_up_take_anys(world, player):
 
     swords = [item for item in world.itempool if item.type == 'Sword' and item.player == player]
     if swords:
-        sword = random.choice(swords)
+        sword = world.random.choice(swords)
         world.itempool.remove(sword)
         world.itempool.append(ItemFactory('Rupees (20)', player))
         old_man_take_any.shop.add_inventory(0, sword.name, 0, 0, create_location=True)
@@ -324,7 +321,7 @@ def set_up_take_anys(world, player):
         world.regions.append(take_any)
         world.dynamic_regions.append(take_any)
 
-        target, room_id = random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])
+        target, room_id = world.random.choice([(0x58, 0x0112), (0x60, 0x010F), (0x46, 0x011F)])
         reg = regions.pop()
         entrance = world.get_region(reg, player).entrances[0]
         connect_entrance(world, entrance.name, take_any.name, player)
@@ -368,8 +365,8 @@ def fill_prizes(world, attempts=15):
             try:
                 prizepool = list(unplaced_prizes)
                 prize_locs = list(empty_crystal_locations)
-                random.shuffle(prizepool)
-                random.shuffle(prize_locs)
+                world.random.shuffle(prizepool)
+                world.random.shuffle(prize_locs)
                 fill_restrictive(world, all_state, prize_locs, prizepool, True)
             except FillError as e:
                 logging.getLogger('').exception("Failed to place dungeon prizes (%s). Will retry %s more times", e,
@@ -389,7 +386,9 @@ def set_up_shops(world, player):
         rss = world.get_region('Red Shield Shop', player).shop
         if not rss.locked:
             rss.add_inventory(2, 'Single Arrow', 80)
-        for shop in random.sample([s for s in world.shops if s.custom and not s.locked and s.type == ShopType.Shop and s.region.player == player], 5):
+        for shop in world.random.sample([s for s in world.shops if
+                                         s.custom and not s.locked and s.type == ShopType.Shop and s.region.player == player],
+                                        5):
             shop.locked = True
             shop.add_inventory(0, 'Single Arrow', 80)
             shop.add_inventory(1, 'Small Key (Universal)', 100)
@@ -422,7 +421,7 @@ def get_pool_core(world, player: int):
         placed_items[loc] = item
 
     def want_progressives():
-        return random.choice([True, False]) if progressive == 'random' else progressive == 'on'
+        return world.random.choice([True, False]) if progressive == 'random' else progressive == 'on'
 
     # provide boots to major glitch dependent seeds
     if logic in {'owglitches', 'nologic'} and world.glitch_boots[player]:
@@ -455,10 +454,10 @@ def get_pool_core(world, player: int):
     # expert+ difficulties produce the same contents for
     # all bottles, since only one bottle is available
     if diff.same_bottle:
-        thisbottle = random.choice(diff.bottles)
+        thisbottle = world.random.choice(diff.bottles)
     for _ in range(diff.bottle_count):
         if not diff.same_bottle:
-            thisbottle = random.choice(diff.bottles)
+            thisbottle = world.random.choice(diff.bottles)
         pool.append(thisbottle)
 
     if want_progressives():
@@ -482,7 +481,7 @@ def get_pool_core(world, player: int):
         pool.extend(diff.swordless)
     elif swords == 'vanilla':
         swords_to_use = diff.progressivesword.copy() if want_progressives() else diff.basicsword.copy()
-        random.shuffle(swords_to_use)
+        world.random.shuffle(swords_to_use)
 
         place_item('Link\'s Uncle', swords_to_use.pop())
         place_item('Blacksmith', swords_to_use.pop())
@@ -535,13 +534,24 @@ def get_pool_core(world, player: int):
         pool = [item.replace('Arrow Upgrade (+10)','Rupees (5)') for item in pool]
         pool.extend(diff.retro)
         if mode == 'standard':
-            key_location = random.choice(['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest', 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
+            key_location = world.random.choice(
+                ['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest',
+                 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
             place_item(key_location, 'Small Key (Universal)')
         else:
             pool.extend(['Small Key (Universal)'])
     return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon, lamps_needed_for_dark_rooms)
 
-def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, swords, retro, customitemarray):
+
+def make_custom_item_pool(world, player):
+    shuffle = world.shuffle[player]
+    difficulty = world.difficulty[player]
+    timer = world.timer[player]
+    goal = world.goal[player]
+    mode = world.mode[player]
+    retro = world.retro[player]
+    customitemarray = world.customitemarray[player]
+
     pool = []
     placed_items = {}
     precollected_items = []
@@ -636,10 +646,10 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
     # expert+ difficulties produce the same contents for
     # all bottles, since only one bottle is available
     if diff.same_bottle:
-        thisbottle = random.choice(diff.bottles)
+        thisbottle = world.random.choice(diff.bottles)
     for _ in range(customitemarray[18]):
         if not diff.same_bottle:
-            thisbottle = random.choice(diff.bottles)
+            thisbottle = world.random.choice(diff.bottles)
         pool.append(thisbottle)
 
     if customitemarray[66] > 0 or customitemarray[67] > 0:
@@ -664,7 +674,9 @@ def make_custom_item_pool(progressive, shuffle, difficulty, timer, goal, mode, s
 
     if mode == 'standard':
         if retro:
-            key_location = random.choice(['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest', 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
+            key_location = world.random.choice(
+                ['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest',
+                 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
             place_item(key_location, 'Small Key (Universal)')
             pool.extend(['Small Key (Universal)'] * max((customitemarray[70] - 1), 0))
         else:
