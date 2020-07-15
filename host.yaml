@@ -3,6 +3,10 @@ general_options:
   rom_file: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
   # set this to your (Q)Usb2Snes location if you want the MultiClient to attempt an auto start, does nothing if not found
   qusb2snes: "QUsb2Snes\\QUsb2Snes.exe"
+  # Set this to false to never autostart a rom (such as after patching)
+  # true for operating system default program
+  # alternatively, a path to a program to open the .sfc file with
+  rom_start: true
 #options for MultiServer
 #null means nothing, for the server this means to default the value
 #these overwrite command line arguments!

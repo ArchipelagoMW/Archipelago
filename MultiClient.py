@@ -11,6 +11,8 @@ import multiprocessing
 import socket
 import sys
 import typing
+import os
+import subprocess
 
 from random import randrange
 
@@ -378,7 +380,6 @@ SNES_ATTACHED = 3
 def launch_qusb2snes(ctx: Context):
     qusb2snes_path = Utils.get_options()["general_options"]["qusb2snes"]
 
-    import os
     if not os.path.isfile(qusb2snes_path):
         qusb2snes_path = Utils.local_path(qusb2snes_path)
 
@@ -1229,8 +1230,13 @@ async def game_watcher(ctx : Context):
 
 
 async def run_game(romfile):
-    import webbrowser
-    webbrowser.open(romfile)
+    auto_start = Utils.get_options()["general_options"].get("rom_start", True)
+    if auto_start is True:
+        import webbrowser
+        webbrowser.open(romfile)
+    elif os.path.isfile(auto_start):
+        subprocess.Popen([auto_start, romfile],
+                         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 async def websocket_server(websocket: websockets.WebSocketServerProtocol, path, ctx: Context):
@@ -1320,7 +1326,6 @@ async def main():
         adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile)
         if adjusted:
             try:
-                import os
                 os.replace(adjustedromfile, romfile)
                 adjustedromfile = romfile
             except Exception as e:
