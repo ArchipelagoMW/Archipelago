@@ -1309,7 +1309,7 @@ async def main():
     if not args.disable_web_ui:
         # Find an available port on the host system to use for hosting the websocket server
         while True:
-            port = randrange(5000, 5999)
+            port = randrange(49152, 65535)
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
                 if not sock.connect_ex(('localhost', port)) == 0:
                     break
