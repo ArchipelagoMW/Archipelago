@@ -40,6 +40,11 @@ server_options:
   remaining_mode: "goal"
   # automatically shut down the server after this many seconds without new location checks, 0 to keep running
   auto_shutdown: 0
+  #compatibility handling
+  #2 -> recommended for casual/cooperative play, attempt to be compatible with everything across all versions
+  #1 -> recommended for friendly racing, only allow Berserker's Multiworld, to disallow old /getitem for example
+  #0 -> recommended for tournaments to force a level playing field, only allow an exact version match
+  compatibility: 2
 #options for MultiMystery.py
 multi_mystery_options:
 #teams, however, note that there is currently no way to supply names for teams 2+ through MultiMystery

@@ -26,7 +26,7 @@ from fuzzywuzzy import process as fuzzy_process
 import Items
 import Regions
 import Utils
-from Utils import get_item_name_from_id, get_location_name_from_address, ReceivedItem
+from Utils import get_item_name_from_id, get_location_name_from_address, ReceivedItem, _version_tuple
 from NetUtils import Node, Endpoint
 
 console_names = frozenset(set(Items.item_table) | set(Regions.location_table) | set(Items.item_name_groups))
@@ -60,8 +60,9 @@ class Client(Endpoint):
 class Context(Node):
     def __init__(self, host: str, port: int, password: str, location_check_points: int, hint_cost: int,
                  item_cheat: bool, forfeit_mode: str = "disabled", remaining_mode: str = "disabled",
-                 auto_shutdown: typing.SupportsFloat = 0):
+                 auto_shutdown: typing.SupportsFloat = 0, compatibility: int = 2):
         super(Context, self).__init__()
+        self.compatibility: int = compatibility
         self.shutdown_task = None
         self.data_filename = None
         self.save_filename = None
@@ -190,8 +191,8 @@ class Context(Node):
             self.auto_saver_thread = threading.Thread(target=save_regularly, daemon=True)
             self.auto_saver_thread.start()
 
-        import atexit
-        atexit.register(self._save)  # make sure we save on exit too
+            import atexit
+            atexit.register(self._save)  # make sure we save on exit too
 
     def get_save(self) -> dict:
         d = {
@@ -640,7 +641,8 @@ class CommonCommandProcessor(CommandProcessor):
                       "password": str,
                       "forfeit_mode": str,
                       "item_cheat": bool,
-                      "auto_save_interval": int}
+                      "auto_save_interval": int,
+                      "compatibility": int}
 
     def _cmd_countdown(self, seconds: str = "10") -> bool:
         """Start a countdown in seconds"""
@@ -889,7 +891,6 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             errors.add('InvalidPassword')
         if type(args["rom"]) == list:
             args["rom"] = bytes(letter for letter in args["rom"]).decode()
-
         if args['rom'] not in ctx.rom_names:
             errors.add('InvalidRom')
         else:
@@ -909,8 +910,12 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
                 client.name = ctx.player_names[(team, slot)]
                 client.team = team
                 client.slot = slot
-
+        if ctx.compatibility == 1 and "Berserker" not in args.get('tags', Client.tags):
+            errors.add('IncompatibleVersion')
+        elif ctx.compatibility == 0 and args.get('version', Client.version) != list(_version_tuple):
+            errors.add('IncompatibleVersion')
         if errors:
+            logging.info(f"A client connection was refused due to: {errors}")
             await ctx.send_msgs(client, [['ConnectionRefused', list(errors)]])
         else:
             ctx.client_ids[client.team, client.slot] = args.get("uuid", None)
@@ -1181,6 +1186,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--use_embedded_options', action="store_true",
                         help='retrieve forfeit, remaining and hint options from the multidata file,'
                              ' instead of host.yaml')
+    parser.add_argument('--compatibility', default=defaults["compatibility"], type=int,
+                        help="""
+    #2 -> recommended for casual/cooperative play, attempt to be compatible with everything across all versions
+    #1 -> recommended for friendly racing, only allow Berserker's Multiworld, to disallow old /getitem for example
+    #0 -> recommended for tournaments to force a level playing field, only allow an exact version match
+    """)
     args = parser.parse_args()
     return args
 
@@ -1214,7 +1225,8 @@ async def main(args: argparse.Namespace):
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
 
     ctx = Context(args.host, args.port, args.password, args.location_check_points, args.hint_cost,
-                  not args.disable_item_cheat, args.forfeit_mode, args.remaining_mode, args.auto_shutdown)
+                  not args.disable_item_cheat, args.forfeit_mode, args.remaining_mode, args.auto_shutdown,
+                  args.compatibility)
 
     data_filename = args.multidata
 
