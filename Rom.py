@@ -289,7 +289,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite
         if sprites:
             while len(sprites) < 32:
                 sprites.extend(sprites)
-            world.random.shuffle(sprites)
+            world.rom_seeds[player].shuffle(sprites)
 
             for i, path in enumerate(sprites[:32]):
                 sprite = Sprite(path)
@@ -316,11 +316,11 @@ def _populate_sprite_table():
                 if sprite.valid:
                     _sprite_table[sprite.name.lower()] = filepath
 
-def get_sprite_from_name(name):
+def get_sprite_from_name(name, local_random=random):
     _populate_sprite_table()
     name = name.lower()
     if name in ['random', 'randomonhit']:
-        return Sprite(random.choice(list(_sprite_table.values())))
+        return Sprite(local_random.choice(list(_sprite_table.values())))
     return Sprite(_sprite_table[name]) if name in _sprite_table else None
 
 class Sprite(object):
@@ -1364,9 +1364,10 @@ def hud_format_text(text):
     return output[:32]
 
 
-def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite, ow_palettes, uw_palettes):
+def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite, ow_palettes, uw_palettes, world=None, player=1):
+    local_random = random if not world else world.rom_seeds[player]
     if sprite and not isinstance(sprite, Sprite):
-        sprite = Sprite(sprite) if os.path.isfile(sprite) else get_sprite_from_name(sprite)
+        sprite = Sprite(sprite) if os.path.isfile(sprite) else get_sprite_from_name(sprite, local_random)
 
     # enable instant item menu
     if fastmenu == 'instant':
@@ -1404,7 +1405,7 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
 
     # set heart color
     if color == 'random':
-        color = random.choice(['red', 'blue', 'green', 'yellow'])
+        color = local_random.choice(['red', 'blue', 'green', 'yellow'])
     rom.write_byte(0x6FA1E, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
     rom.write_byte(0x6FA20, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
     rom.write_byte(0x6FA22, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
@@ -1423,13 +1424,13 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
 
     default_ow_palettes(rom)
     if ow_palettes == 'random':
-        randomize_ow_palettes(rom)
+        randomize_ow_palettes(rom, local_random)
     elif ow_palettes == 'blackout':
         blackout_ow_palettes(rom)
 
     default_uw_palettes(rom)
     if uw_palettes == 'random':
-        randomize_uw_palettes(rom)
+        randomize_uw_palettes(rom, local_random)
     elif uw_palettes == 'blackout':
         blackout_uw_palettes(rom)
 
@@ -1459,11 +1460,11 @@ def default_ow_palettes(rom):
     for address in [0x067FB4, 0x067F94, 0x067FC6, 0x067FE6, 0x067FE1, 0x05FEA9, 0x05FEB3]:
         rom.write_bytes(address, rom.orig_buffer[address:address+2])
 
-def randomize_ow_palettes(rom):
+def randomize_ow_palettes(rom, local_random):
     grass, grass2, grass3, dirt, dirt2, water, clouds, dwdirt,\
-        dwgrass, dwwater, dwdmdirt, dwdmgrass, dwdmclouds1, dwdmclouds2 = [[random.randint(60, 215) for _ in range(3)] for _ in range(14)]
-    dwtree = [c + random.randint(-20, 10) for c in dwgrass]
-    treeleaf = [c + random.randint(-20, 10) for c in grass]
+        dwgrass, dwwater, dwdmdirt, dwdmgrass, dwdmclouds1, dwdmclouds2 = [[local_random.randint(60, 215) for _ in range(3)] for _ in range(14)]
+    dwtree = [c + local_random.randint(-20, 10) for c in dwgrass]
+    treeleaf = [c + local_random.randint(-20, 10) for c in grass]
 
     patches = {0x067FB4: (grass, 0), 0x067F94: (grass, 0), 0x067FC6: (grass, 0), 0x067FE6: (grass, 0), 0x067FE1: (grass, 3), 0x05FEA9: (grass, 0), 0x05FEB3: (dwgrass, 1),
                0x0DD4AC: (grass, 2), 0x0DE6DE: (grass2, 2), 0x0DE6E0: (grass2, 1), 0x0DD4AE: (grass2, 1), 0x0DE9FA: (grass2, 1), 0x0DEA0E: (grass2, 1), 0x0DE9FE: (grass2, 0),
@@ -1517,9 +1518,9 @@ def default_uw_palettes(rom):
         return
     rom.write_bytes(0xDD734, rom.orig_buffer[0xDD734:0xDE544])
 
-def randomize_uw_palettes(rom):
+def randomize_uw_palettes(rom, local_random):
     for dungeon in range(20):
-        wall, pot, chest, floor1, floor2, floor3 = [[random.randint(60, 240) for _ in range(3)] for _ in range(6)]
+        wall, pot, chest, floor1, floor2, floor3 = [[local_random.randint(60, 240) for _ in range(3)] for _ in range(6)]
 
         for i in range(5):
             shade = 10 - (i * 2)
