@@ -74,9 +74,9 @@ class WebHostContext(Context):
     def init_save(self, enabled: bool = True):
         self.saving = enabled
         if self.saving:
-            existings_savegame = Room.get(id=self.room_id).multisave
-            if existings_savegame:
-                self.set_save(existings_savegame)
+            existing_savegame = Room.get(id=self.room_id).multisave
+            if existing_savegame:
+                self.set_save(existing_savegame)
             self._start_async_saving()
         threading.Thread(target=self.listen_to_db_commands, daemon=True).start()
 

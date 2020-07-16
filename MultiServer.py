@@ -210,13 +210,14 @@ class Context(Node):
         return d
 
     def set_save(self, savedata: dict):
-        rom_names = savedata["rom_names"]
-        received_items = {tuple(k): [ReceivedItem(*i) for i in v] for k, v in savedata["received_items"]}
-
+        rom_names = savedata["rom_names"]  # convert from TrackerList to List in case of ponyorm
         if rom_names != self.rom_names:
-            adjusted = {rom: (team, slot) for (rom, (team, slot)) in rom_names}
+            adjusted = {tuple(rom): (team, slot) for (rom, (team, slot)) in rom_names}  # old format, ponyorm friendly
             if self.rom_names != adjusted:
-                raise Exception('Save file mismatch, will start a new game')
+                logging.warning('Save file mismatch, will start a new game')
+                return
+
+        received_items = {tuple(k): [ReceivedItem(*i) for i in v] for k, v in savedata["received_items"]}
 
         self.received_items = received_items
         self.hints_used.update({tuple(key): value for key, value in savedata["hints_used"]})
