@@ -168,7 +168,7 @@ def check_enemizer(enemizercli):
             if info == 'No Version Information Available':
                 info = None
             version = tuple(int(part) for part in info.split("."))
-            if version < (6, 1, 0, 179):
+            if version < (6, 1, 0, 200):
                 raise Exception(
                     f"Enemizer found at {enemizercli} is outdated ({info}), please update your Enemizer. "
                     f"Such as https://github.com/Ijwu/Enemizer/releases")
