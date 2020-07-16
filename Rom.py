@@ -236,9 +236,8 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite
         'BeesLevel': 0,
         'RandomizeTileTrapPattern': world.enemy_shuffle[player] == 'chaos',
         'RandomizeTileTrapFloorTile': False,
-        'AllowKillableThief': bool(world.random.randint(0, 1)) if 'thieves' in world.enemy_shuffle[player] else
+        'AllowKillableThief': bool(world.rom_seeds[player].randint(0, 1)) if 'thieves' in world.enemy_shuffle[player] else
         world.enemy_shuffle[player] != 'none',
-        # TODO: this is currently non-deterministic due to being called in a thread
         'RandomizeSpriteOnHit': random_sprite_on_hit,
         'DebugMode': False,
         'DebugForceEnemy': False,
@@ -276,7 +275,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite
 
     subprocess.check_call([os.path.abspath(enemizercli),
                            '--rom', randopatch_path,
-                           '--seed', str(world.rom_seeds[player]),
+                           '--seed', str(world.rom_seeds[player].randint(0, 999999999)),
                            '--binary',
                            '--enemizer', options_path,
                            '--output', enemizer_output_path],
@@ -483,7 +482,7 @@ class Sprite(object):
         return array_chunk(palette_as_colors, 15)
 
 def patch_rom(world, rom, player, team, enemized):
-    local_random = random.Random(world.rom_seeds[player])
+    local_random = world.rom_seeds[player]
 
     # progressive bow silver arrow hint hack
     prog_bow_locs = world.find_items('Progressive Bow', player)
@@ -1579,6 +1578,8 @@ def write_string_to_rom(rom, target, string):
 
 
 def write_strings(rom, world, player, team):
+    local_random = world.rom_seeds[player]
+
     tt = TextTable()
     tt.removeUnwantedText()
 
@@ -1607,9 +1608,9 @@ def write_strings(rom, world, player, team):
     if world.hints[player]:
         tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles can have hints!'
         hint_locations = HintLocations.copy()
-        world.random.shuffle(hint_locations)
+        local_random.shuffle(hint_locations)
         all_entrances = [entrance for entrance in world.get_entrances() if entrance.player == player]
-        world.random.shuffle(all_entrances)
+        local_random.shuffle(all_entrances)
 
         #First we take care of the one inconvenient dungeon in the appropriately simple shuffles.
         entrances_to_hint = {}
@@ -1684,12 +1685,12 @@ def write_strings(rom, world, player, team):
         locations_to_hint = InconvenientLocations.copy()
         if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
             locations_to_hint.extend(InconvenientVanillaLocations)
-        world.random.shuffle(locations_to_hint)
+        local_random.shuffle(locations_to_hint)
         hint_count = 3 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 5
         del locations_to_hint[hint_count:]
         for location in locations_to_hint:
             if location == 'Swamp Left':
-                if world.random.randint(0, 1) == 0:
+                if local_random.randint(0, 1) == 0:
                     first_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
                     second_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
                 else:
@@ -1698,7 +1699,7 @@ def write_strings(rom, world, player, team):
                 this_hint = ('The westmost chests in Swamp Palace contain ' + first_item + ' and ' + second_item + '.')
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Mire Left':
-                if world.random.randint(0, 1) == 0:
+                if local_random.randint(0, 1) == 0:
                     first_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
                     second_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
                 else:
@@ -1737,12 +1738,12 @@ def write_strings(rom, world, player, team):
             items_to_hint.extend(SmallKeys)
         if world.bigkeyshuffle[player]:
             items_to_hint.extend(BigKeys)
-        world.random.shuffle(items_to_hint)
+        local_random.shuffle(items_to_hint)
         hint_count = 5 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 8
         while hint_count > 0:
             this_item = items_to_hint.pop(0)
             this_location = world.find_items(this_item, player)
-            world.random.shuffle(this_location)
+            local_random.shuffle(this_location)
             #This looks dumb but prevents hints for Skull Woods Pinball Room's key safely with any item pool.
             if this_location:
                 if this_location[0].name == 'Skull Woods - Pinball Room':
@@ -1754,7 +1755,7 @@ def write_strings(rom, world, player, team):
 
         # All remaining hint slots are filled with junk hints. It is done this way to ensure the same junk hint isn't selected twice.
         junk_hints = junk_texts.copy()
-        world.random.shuffle(junk_hints)
+        local_random.shuffle(junk_hints)
         for location in hint_locations:
             tt[location] = junk_hints.pop(0)
 
@@ -1762,7 +1763,7 @@ def write_strings(rom, world, player, team):
 
 
     silverarrows = world.find_items('Silver Bow', player)
-    world.random.shuffle(silverarrows)
+    local_random.shuffle(silverarrows)
     silverarrow_hint = (' %s?' % hint_text(silverarrows[0]).replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
     tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
     tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
@@ -1776,7 +1777,7 @@ def write_strings(rom, world, player, team):
         tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
 
     if any(prog_bow_locs):
-        silverarrow_hint = (' %s?' % hint_text(world.random.choice(prog_bow_locs)).replace('Ganon\'s',
+        silverarrow_hint = (' %s?' % hint_text(local_random.choice(prog_bow_locs)).replace('Ganon\'s',
                                                                                            'my')) if progressive_silvers else '?\nI think not!'
         tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
 
@@ -1798,13 +1799,13 @@ def write_strings(rom, world, player, team):
     if world.goal[player] in ['dungeons']:
         tt['sign_ganon'] = 'You need to complete all the dungeons.'
 
-    tt['uncle_leaving_text'] = Uncle_texts[world.random.randint(0, len(Uncle_texts) - 1)]
-    tt['end_triforce'] = "{NOBORDER}\n" + Triforce_texts[world.random.randint(0, len(Triforce_texts) - 1)]
-    tt['bomb_shop_big_bomb'] = BombShop2_texts[world.random.randint(0, len(BombShop2_texts) - 1)]
+    tt['uncle_leaving_text'] = Uncle_texts[local_random.randint(0, len(Uncle_texts) - 1)]
+    tt['end_triforce'] = "{NOBORDER}\n" + Triforce_texts[local_random.randint(0, len(Triforce_texts) - 1)]
+    tt['bomb_shop_big_bomb'] = BombShop2_texts[local_random.randint(0, len(BombShop2_texts) - 1)]
 
     # this is what shows after getting the green pendant item in rando
-    tt['sahasrahla_quest_have_master_sword'] = Sahasrahla2_texts[world.random.randint(0, len(Sahasrahla2_texts) - 1)]
-    tt['blind_by_the_light'] = Blind_texts[world.random.randint(0, len(Blind_texts) - 1)]
+    tt['sahasrahla_quest_have_master_sword'] = Sahasrahla2_texts[local_random.randint(0, len(Sahasrahla2_texts) - 1)]
+    tt['blind_by_the_light'] = Blind_texts[local_random.randint(0, len(Blind_texts) - 1)]
 
     if world.goal[player] in ['triforcehunt', 'localtriforcehunt']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Get the Triforce Pieces.'
@@ -1821,7 +1822,7 @@ def write_strings(rom, world, player, team):
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
         tt['sign_ganon'] = 'You need to get to the pedestal... Ganon is invincible!'
     else:
-        tt['ganon_fall_in'] = Ganon1_texts[world.random.randint(0, len(Ganon1_texts) - 1)]
+        tt['ganon_fall_in'] = Ganon1_texts[local_random.randint(0, len(Ganon1_texts) - 1)]
         tt['ganon_fall_in_alt'] = 'You cannot defeat me until you finish your goal!'
         tt['ganon_phase_3_alt'] = 'Got wax in\nyour ears?\nI can not die!'
         if world.goal[player] == 'ganontriforcehunt' and world.players > 1:
@@ -1829,7 +1830,7 @@ def write_strings(rom, world, player, team):
         elif world.goal[player] in ['ganontriforcehunt', 'localganontriforcehunt']:
             tt['sign_ganon'] = 'You need to find %d Triforce pieces to defeat Ganon.' % world.treasure_hunt_count[player]
 
-    tt['kakariko_tavern_fisherman'] = TavernMan_texts[world.random.randint(0, len(TavernMan_texts) - 1)]
+    tt['kakariko_tavern_fisherman'] = TavernMan_texts[local_random.randint(0, len(TavernMan_texts) - 1)]
 
     pedestalitem = world.get_location('Master Sword Pedestal', player).item
     pedestal_text = 'Some Hot Air' if pedestalitem is None else hint_text(pedestalitem, True) if pedestalitem.pedestal_hint_text is not None else 'Unknown Item'
@@ -1860,38 +1861,38 @@ def write_strings(rom, world, player, team):
     credits = Credits()
 
     sickkiditem = world.get_location('Sick Kid', player).item
-    sickkiditem_text = world.random.choice(
+    sickkiditem_text = local_random.choice(
         SickKid_texts) if sickkiditem is None or sickkiditem.sickkid_credit_text is None else sickkiditem.sickkid_credit_text
 
     zoraitem = world.get_location('King Zora', player).item
-    zoraitem_text = world.random.choice(
+    zoraitem_text = local_random.choice(
         Zora_texts) if zoraitem is None or zoraitem.zora_credit_text is None else zoraitem.zora_credit_text
 
     magicshopitem = world.get_location('Potion Shop', player).item
-    magicshopitem_text = world.random.choice(
+    magicshopitem_text = local_random.choice(
         MagicShop_texts) if magicshopitem is None or magicshopitem.magicshop_credit_text is None else magicshopitem.magicshop_credit_text
 
     fluteboyitem = world.get_location('Flute Spot', player).item
-    fluteboyitem_text = world.random.choice(
+    fluteboyitem_text = local_random.choice(
         FluteBoy_texts) if fluteboyitem is None or fluteboyitem.fluteboy_credit_text is None else fluteboyitem.fluteboy_credit_text
 
-    credits.update_credits_line('castle', 0, world.random.choice(KingsReturn_texts))
-    credits.update_credits_line('sanctuary', 0, world.random.choice(Sanctuary_texts))
+    credits.update_credits_line('castle', 0, local_random.choice(KingsReturn_texts))
+    credits.update_credits_line('sanctuary', 0, local_random.choice(Sanctuary_texts))
 
     credits.update_credits_line('kakariko', 0,
-                                world.random.choice(Kakariko_texts).format(world.random.choice(Sahasrahla_names)))
-    credits.update_credits_line('desert', 0, world.random.choice(DesertPalace_texts))
-    credits.update_credits_line('hera', 0, world.random.choice(MountainTower_texts))
-    credits.update_credits_line('house', 0, world.random.choice(LinksHouse_texts))
+                                local_random.choice(Kakariko_texts).format(local_random.choice(Sahasrahla_names)))
+    credits.update_credits_line('desert', 0, local_random.choice(DesertPalace_texts))
+    credits.update_credits_line('hera', 0, local_random.choice(MountainTower_texts))
+    credits.update_credits_line('house', 0, local_random.choice(LinksHouse_texts))
     credits.update_credits_line('zora', 0, zoraitem_text)
     credits.update_credits_line('witch', 0, magicshopitem_text)
-    credits.update_credits_line('lumberjacks', 0, world.random.choice(Lumberjacks_texts))
+    credits.update_credits_line('lumberjacks', 0, local_random.choice(Lumberjacks_texts))
     credits.update_credits_line('grove', 0, fluteboyitem_text)
-    credits.update_credits_line('well', 0, world.random.choice(WishingWell_texts))
-    credits.update_credits_line('smithy', 0, world.random.choice(Blacksmiths_texts))
+    credits.update_credits_line('well', 0, local_random.choice(WishingWell_texts))
+    credits.update_credits_line('smithy', 0, local_random.choice(Blacksmiths_texts))
     credits.update_credits_line('kakariko2', 0, sickkiditem_text)
-    credits.update_credits_line('bridge', 0, world.random.choice(DeathMountain_texts))
-    credits.update_credits_line('woods', 0, world.random.choice(LostWoods_texts))
+    credits.update_credits_line('bridge', 0, local_random.choice(DeathMountain_texts))
+    credits.update_credits_line('woods', 0, local_random.choice(LostWoods_texts))
     credits.update_credits_line('pedestal', 0, pedestal_credit_text)
 
     (pointers, data) = credits.get_bytes()
