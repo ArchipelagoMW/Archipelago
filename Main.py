@@ -77,7 +77,7 @@ def main(args, seed=None):
     world.triforce_pieces_required = args.triforce_pieces_required.copy()
     world.progression_balancing = {player: not balance for player, balance in args.skip_progression_balancing.items()}
 
-    world.rom_seeds = {player: world.random.randint(0, 999999999) for player in range(1, world.players + 1)}
+    world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}
 
     logger.info('ALttP Berserker\'s Multiworld Version %s  -  Seed: %s\n', __version__, world.seed)
 
@@ -199,7 +199,7 @@ def main(args, seed=None):
 
         apply_rom_settings(rom, args.heartbeep[player], args.heartcolor[player], args.quickswap[player],
                            args.fastmenu[player], args.disablemusic[player], args.sprite[player],
-                           args.ow_palettes[player], args.uw_palettes[player])
+                           args.ow_palettes[player], args.uw_palettes[player], world, player)
 
         mcsb_name = ''
         if all([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player],
