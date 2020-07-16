@@ -511,6 +511,8 @@ class CollectionState(object):
         return self.prog_items[item, player] >= count
 
     def has_key(self, item, player, count: int = 1):
+        if self.world.logic[player] == 'nologic':
+            return True
         if self.world.retro[player]:
             return self.can_buy_unlimited('Small Key (Universal)', player)
         if count == 1:
@@ -962,7 +964,7 @@ class Location(object):
         self.player = player
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-        return self.parent_region.can_fill(item) and (not check_access or self.always_allow(state, item) or (self.item_rule(item) and self.can_reach(state)))
+        return self.always_allow(state, item) or (self.parent_region.can_fill(item) and self.item_rule(item) and (not check_access or self.can_reach(state)))
 
     def can_reach(self, state: CollectionState) -> bool:
         if self.parent_region.can_reach(state) and self.access_rule(state):
