@@ -183,7 +183,7 @@ timer:
 #  - "Small Keys"
 #  - "Big Keys"
 glitch_boots:
-  on: 1 # enables that you start with Pegasus Boots in any glitched logic mode
+  on: 1 # enables that you start with Pegasus Boots in any glitched logic mode that makes use of them
   off: 0
 door_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
   vanilla: 1 # everything should be like in vanilla
