@@ -49,7 +49,7 @@ def set_rules(world, player):
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
     else:
-        raise NotImplementedError('Not implemented yet')
+        raise NotImplementedError(f'Not implemented yet: Logic - {world.logic[player]}')
 
     if world.goal[player] == 'dungeons':
         # require all dungeons to beat ganon
