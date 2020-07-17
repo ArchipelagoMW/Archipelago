@@ -681,10 +681,10 @@ async def server_loop(ctx: Context, address=None):
         address = ctx.server_address
     if address is None:  # see if this is an old connection
         await asyncio.sleep(0.5)  # wait for snes connection to succeed if possible.
-        rom = "".join(chr(x) for x in ctx.rom) if ctx.rom is not None else None
+        rom = ctx.rom if ctx.rom else None
         try:
             servers = cached_address = Utils.persistent_load()["servers"]
-            address = servers[rom] if rom is not None and rom in servers else servers["default"]
+            address = servers[rom] if rom and rom in servers else servers["default"]
         except Exception as e:
             logging.debug(f"Could not find cached server address. {e}")
 
