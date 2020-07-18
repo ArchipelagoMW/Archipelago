@@ -1,56 +1,43 @@
 {% extends 'layout.html' %}
+
 {% block head %}
     <title>Berserker's Multiworld</title>
+    <link rel="stylesheet" type="text/css" href="static/landing.css" />
 {% endblock %}
+
 {% block body %}
-    <nav class="navbar navbar-dark bg-dark navbar-expand-sm">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for("uploads") }}">Start a Group</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for("uploads") }}">Upload a Multiworld</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for("uploads") }}">Your Content</a>
-            </li>
-        </ul>
-    </nav>
-    <br>
-
-    <div class="container container-fluid d-flex">
-        <div class="jumbotron jumbotron-fluid">
-            <div class="container">
-                <div class="col-md-5 p-lg-2 mx-auto my-2">
-                    <h1 class="text-center display-4 font-weight-normal">Berserker's Multiworld</h1>
-                    <p class="text-center lead font-weight-normal"><a
-                            href="https://github.com/Berserker66/MultiWorld-Utilities">Source Code</a>
-                        - <a href="https://github.com/Berserker66/MultiWorld-Utilities/wiki">Wiki</a>
-                        -
-                        <a href="https://github.com/Berserker66/MultiWorld-Utilities/graphs/contributors">Contributors</a>
-                    </p>
-                </div>
-                <div>
-                    <p class="lead">This webpage is still under heavy construction. Database may be wiped as I see fit
-                        and some stuff may be broken.</p>
-                    <p class="lead">This is a randomizer for The Legend of Zelda: A Link to the Past.</p>
-                    <p class="lead">It is a multiworld, meaning items get shuffled across multiple players' worlds
-                        which get exchanged on pickup through the internet.</p>
-                    <p class="lead">This website allows hosting such a Multiworld and comes with an item and location
-                        tracker.</p>
-                    <p class="lead">Currently you still require a locally installed client to play, that handles
-                        connecting to the server and patching a vanilla game to the randomized one. Get started on the
-                        <a href="https://github.com/Berserker66/MultiWorld-Utilities/wiki">Wiki</a>.</p>
-
-                </div>
+    <div id="landing-wrapper">
+        <div id="landing" class="main-content">
+            <div id="landing-header">
+                <h3>Berserker's Multiworld</h3>
+                <p id="landing-header-links">
+                    <a href="https://github.com/Berserker66/MultiWorld-Utilities">Source Code</a>
+                    -
+                    <a href="https://github.com/Berserker66/MultiWorld-Utilities/wiki">Wiki</a>
+                    -
+                    <a href="https://github.com/Berserker66/MultiWorld-Utilities/graphs/contributors">Contributors</a>
+                </p>
+            </div>
+            <div id="landing-buttons">
+                <a href="uploads"><button>Start Playing</button></a>
+            </div>
+            <div id="landing-body">
+                <p>This is a randomizer for The Legend of Zelda: A Link to the Past.</p>
+                <p>This is also a multiworld, meaning your items may be placed into other players' worlds, and
+                    other players's items may be placed into your world. When a player picks up an item which does
+                    not belong to them, it is sent back to the player it belongs to over the internet.</p>
+                <p>This website allows you to host a multiworld game, and provides item and location trackers for all
+                    games hosted here.</p>
+                <p>Currently, a locally installed client is required to play. This client should handle patching
+                    your ROM files and connecting to the multiworld server. More information on how to set up a local
+                    client may be found on the
+                    <a href="https://github.com/Berserker66/MultiWorld-Utilities/wiki">Wiki</a>.</p>
+                <p>This website is under active development. As such, your hosted rooms may occasionally disappear,
+                    and there may be bugs. If you do happen to find a bug, please report it
+                    <a href="https://github.com/Berserker66/MultiWorld-Utilities/issues">here</a>.</p>
             </div>
         </div>
-        <div>
-            <iframe src="https://discordapp.com/widget?id=731205301247803413&theme=light" width="300" height="500"
-                    allowtransparency="true" frameborder="0"></iframe>
-
-        </div>
+        <iframe src="https://discordapp.com/widget?id=731205301247803413&theme=light"
+                width="300" height="500" allowtransparency="true"></iframe>
     </div>
-
-
 {% endblock %}

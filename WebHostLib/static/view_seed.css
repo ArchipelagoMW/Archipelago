@@ -1,0 +1,9 @@
+#view-seed-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#view-seed-wrapper table td{
+    vertical-align: top;
+}

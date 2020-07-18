@@ -1,0 +1,24 @@
+#uploads-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#uploads-form-wrapper{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+#upload-form{
+    display: none;
+}
+
+#room-list{
+    font-size: 1rem;
+}
+
+#room-list ul{
+    vertical-align: top;
+}

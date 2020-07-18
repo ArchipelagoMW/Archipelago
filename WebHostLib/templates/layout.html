@@ -2,16 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    {% block head %}<title>Berserker's Multiworld</title>
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+            integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+            crossorigin="anonymous"
+    />
+    <link rel="stylesheet" type="text/css" href="static/layout.css" />
+    {% block head %}
+        <title>Berserker's Multiworld</title>
     {% endblock %}
 </head>
 <body>
 
 {% with messages = get_flashed_messages() %}
     {% if messages %}
-        <div class=".container-fluid">
+        <div>
             {% for message in messages %}
                 <div class="alert alert-danger" role="alert">{{ message }}</div>
             {% endfor %}
@@ -19,13 +25,8 @@
     {% endif %}
 {% endwith %}
 
-{% block body %}{% endblock %}
+{% block body %}
+{% endblock %}
 
-<br> {# spacing for notice #}
-<footer class="page-footer" style="position: fixed; left: 0; bottom: 0; width: 100%; text-align: center">
-    <div class="container">
-        <span class="text-muted">This site uses a cookie to track your session in order to give you ownership over uploaded files and created instances.</span>
-        {#  <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('cookiefooter').remove()">X</button> #}
-    </div>
-</footer>
 </body>
+</html>

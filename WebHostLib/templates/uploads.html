@@ -1,24 +1,37 @@
 {% extends 'layout.html' %}
+
 {% block head %}
     <title>Upload Multidata</title>
+    <link rel="stylesheet" type="text/css" href="static/uploads.css" />
+    <script type="application/ecmascript" src="static/uploads.js"></script>
 {% endblock %}
-{% block body %}
-    <h1>Upload Multidata or Multiworld Zip</h1>
-    <form method=post enctype=multipart/form-data>
-        <input type=file name=file>
-        <input type=submit value=Upload>
-    </form>
-    <br>
-    {% if rooms %}
-        <h1>Your Rooms:</h1>
-        <ul class="list-group">
-            {% for room in rooms %}
-                <li class="list-group-item"><a href="{{ url_for("host_room", room=room.id) }}">Room #{{ room.id }}</a>
-                    based on <a href="{{ url_for("view_seed", seed=room.seed.id) }}">Seed #{{ room.seed.id }}</a></li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <h3>No rooms owned by you were found. Upload a Multiworld to get started.</h3>
-    {% endif %}
 
+{% block body %}
+    <div id="uploads-wrapper">
+        <div id="uploads" class="main-content">
+            <h3>Upload Multidata</h3>
+            <p>To host a game, you need up upload a .multidata file or a .zip file created by the
+                multiworld generator.</p>
+            <div id="uploads-form-wrapper">
+                <form id="upload-form" method="post" enctype="multipart/form-data">
+                    <input id="file-input" type="file" name="file">
+                </form>
+                <button id="upload-button">Upload</button>
+            </div>
+
+            {% if rooms %}
+                <p>Your Rooms:</p>
+                <ul id="room-list">
+                    {% for room in rooms %}
+                        <li>
+                            Room: <a href="{{ url_for("host_room", room=room.id) }}">{{ room.id }}</a><br />
+                            Seed: <a href="{{ url_for("view_seed", seed=room.seed.id) }}">{{ room.seed.id }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No rooms owned by you were found. Upload a file to get started.</p>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

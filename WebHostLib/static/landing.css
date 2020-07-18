@@ -1,0 +1,35 @@
+#landing-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#landing{
+    margin-right: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+#landing-header-links{
+    width: 100%;
+    text-align: center;
+    margin: 0;
+}
+
+#landing-header-links a{
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+#landing-buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+iframe{
+    border: none;
+}

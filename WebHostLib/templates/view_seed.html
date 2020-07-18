@@ -1,25 +1,55 @@
 {% extends 'layout.html' %}
 {% import "macros.html" as macros %}
+
 {% block head %}
     <title>Multiworld Seed {{ seed.id }}</title>
+    <link rel="stylesheet" type="text/css" href="../static/layout.css">
+    <link rel="stylesheet" type="text/css" href="../static/view_seed.css" />
+    <script type="application/ecmascript" src="../static/view_seed.js" ></script>
 {% endblock %}
+
 {% block body %}
-    Seed #{{ seed.id }}<br>
-    Created: {{ seed.creation_time }} UTC <br>
-    Players:
-    <ul class="list-group">
-        {% for team in seed.multidata["names"] %}
-            <li class="list-group-item">Team #{{ loop.index }} - {{ team | length }}
-                <ul class="list-group">
-                    {% for player in team %}
-                        <li class="list-group-item">{{ player }}</li>
-                    {% endfor %}
-                </ul>
-            </li>
-        {% endfor %}
-    </ul>
-    {% call macros.list_rooms(rooms) %}
-        <li class="list-group-item list-group-item-action"><a href="{{ url_for("new_room", seed=seed.id) }}">new
-            room</a></li>
-    {% endcall %}
+    <div id="view-seed-wrapper">
+        <div class="main-content">
+            <h3>Seed Info</h3>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Seed:&nbsp;</td>
+                        <td>{{ seed.id }}</td>
+                    </tr>
+                    <tr>
+                        <td>Created:&nbsp;</td>
+                        <td id="creation-time" data-creation-time="{{ seed.creation_time }}"></td>
+                    </tr>
+                    <tr>
+                        <td>Players:&nbsp;</td>
+                        <td>
+                            <ul>
+                                {% for team in seed.multidata["names"] %}
+                                    <li>Team #{{ loop.index }} - {{ team | length }}
+                                        <ul>
+                                            {% for player in team %}
+                                                <li>{{ player }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Rooms:&nbsp;</td>
+                        <td>
+                            {% call macros.list_rooms(rooms) %}
+                                <li>
+                                    <a href="{{ url_for("new_room", seed=seed.id) }}">Create New Room</a>
+                                </li>
+                            {% endcall %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}
