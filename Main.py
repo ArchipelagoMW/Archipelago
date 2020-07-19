@@ -288,7 +288,8 @@ def main(args, seed=None):
                                               "server_options": get_options()["server_options"],
                                               "er_hint_data": er_hint_data,
                                               "precollected_items": precollected_items,
-                                              "version": _version_tuple
+                                              "version": _version_tuple,
+                                              "tags": ["ER"]
                                               }).encode("utf-8"), 9)
 
         with open(output_path('%s.multidata' % outfilebase), 'wb') as f:
