@@ -119,9 +119,14 @@
                         {% if area in big_key_locations %}
                         {% set colspan = colspan + 1 %}
                         {% endif %}
-                        <th colspan="{{ colspan }}">{{ area }}</th>
+                        {% if area in icons %}
+                            <th colspan="{{ colspan }}" style="text-align: center">
+                                <img class="alttp-sprite" src="{{ icons[area] }}" alt="{{ area }}"></th>
+                        {% else %}
+                            <th colspan="{{ colspan }}">{{ area }}</th>
+                        {% endif %}
                     {% endfor %}
-                    <th rowspan="2">Last Activity</th>
+                    <th rowspan="2">Last<br>Activity</th>
                 </tr>
                 <tr>
                     {% for area in ordered_areas %}

@@ -21,15 +21,15 @@ table {
 
 img.alttp-sprite {
     height: 32px;
-    width: 32px;
+    min-width: 32px;
     object-fit: contain;
 }
 
 /* this is specific to the tracker right now */
-@media all and (max-width: 1750px) {
+@media all and (max-width: 1700px) {
     img.alttp-sprite {
         height: 16px;
-        width: 16px;
+        min-width: 16px;
         object-fit: contain;
     }
 }
