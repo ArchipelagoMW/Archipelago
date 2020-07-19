@@ -148,6 +148,8 @@ key_locations = {"Desert Palace", "Eastern Palace", "Hyrule Castle", "Agahnims T
                  "Thieves Town", "Skull Woods", "Ice Palace", "Misery Mire", "Turtle Rock", "Palace of Darkness",
                  "Ganons Tower"}
 
+big_key_locations = {"Desert Palace", "Eastern Palace", "Tower of Hera", "Swamp Palace", "Thieves Town", "Skull Woods",
+                     "Ice Palace", "Misery Mire", "Turtle Rock", "Palace of Darkness", "Ganons Tower"}
 location_to_area = {}
 for area, locations in default_locations.items():
     for location in locations:
@@ -206,8 +208,13 @@ def get_static_room_data(room: Room):
     # in > 100 players this can take a bit of time and is the main reason for the cache
     locations = {tuple(k): tuple(v) for k, v in multidata['locations']}
     names = multidata["names"]
-    _multidata_cache[room.seed.id] = locations, names
-    return locations, names
+
+    use_door_tracker = False
+    if "tags" in multidata:
+        use_door_tracker = "DR" in multidata.tags
+    result = locations, names, use_door_tracker
+    _multidata_cache[room.seed.id] = result
+    return result
 
 
 @app.route('/tracker/<uuid:tracker>')
@@ -216,7 +223,7 @@ def get_tracker(tracker: UUID):
     room = Room.get(tracker=tracker)
     if not room:
         abort(404)
-    locations, names = get_static_room_data(room)
+    locations, names, use_door_tracker = get_static_room_data(room)
 
     inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1)}
                  for teamnumber, team in enumerate(names)}
@@ -264,4 +271,4 @@ def get_tracker(tracker: UUID):
                            multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
                            checks_in_area=checks_in_area, activity_timers=activity_timers,
                            key_locations=key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids,
-                           video=video)
+                           video=video, big_key_locations = key_locations if use_door_tracker else big_key_locations)

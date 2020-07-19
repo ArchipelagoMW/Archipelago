@@ -112,14 +112,14 @@
                     <th rowspan="2">#</th>
                     <th rowspan="2">Name</th>
                     {% for area in ordered_areas %}
-                        {% set colspan = (3 if area in key_locations else 1) %}
-                        {% if area in icons %}
-                            <th colspan="{{ colspan }}" style="text-align: center"><img class="alttp-sprite"
-                                                                                        src="{{ icons[area] }}"
-                                                                                        alt="{{ area }}"></th>
-                        {% else %}
-                            <th colspan="{{ colspan }}">{{ area }}</th>
+                        {% set colspan = 1 %}
+                        {% if area in key_locations %}
+                        {% set colspan = colspan + 1 %}
                         {% endif %}
+                        {% if area in big_key_locations %}
+                        {% set colspan = colspan + 1 %}
+                        {% endif %}
+                        <th colspan="{{ colspan }}">{{ area }}</th>
                     {% endfor %}
                     <th rowspan="2">Last Activity</th>
                 </tr>
@@ -130,6 +130,8 @@
                         {% if area in key_locations %}
                             <th style="text-align: center"><img class="alttp-sprite"
                                                                 src="{{ icons["Small Key"] }}" alt="Small Key"></th>
+                        {% endif %}
+                        {% if area in big_key_locations %}
                             <th style="text-align: center"><img class="alttp-sprite"
                                                                 src="{{ icons["Big Key"] }}" alt="Big Key"></th>
                         {% endif %}
@@ -152,6 +154,8 @@
                             {% endif %}
                             {% if area in key_locations %}
                                 <td>{{ inventory[team][player][small_key_ids[area]] }}</td>
+                            {% endif %}
+                            {% if area in big_key_locations %}
                                 <td>{% if inventory[team][player][big_key_ids[area]] %}✔️{% endif %}</td>
                             {% endif %}
                         {% endfor %}
