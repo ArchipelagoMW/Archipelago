@@ -74,7 +74,6 @@
     <input id="searchbox" class="form-control" type="text" placeholder="Search" />
     <div>
         {% for team, players in inventory.items() %}
-            <script type="application/ecmascript">console.log("Table 1: {{ team }} {{ players }}")</script>
             <table class="table table-striped table-bordered table-hover table-sm">
                 <thead class="thead-dark">
                     <tr>
@@ -119,7 +118,6 @@
 
         {% for team, players in checks_done.items() %}
             <table class="table table-striped table-bordered table-hover table-sm">
-                <script type="application/ecmascript">console.log("Table 2: {{ team }} {{ players }}")</script>
                 <thead class="thead-dark">
                 <tr>
                     <th rowspan="2">#</th>
