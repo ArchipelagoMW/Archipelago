@@ -7,6 +7,10 @@ table.dataTable.table-sm > thead > tr > th :not(.sorting_disabled) {
     content: "" !important;
 }
 
+.dataTable > thead > tr > th :not(.sorting_disabled) {
+    padding-right: 0 !important;
+}
+
 th {
     padding: 1px !important;
 }
