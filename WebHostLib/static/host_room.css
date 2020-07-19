@@ -1,0 +1,5 @@
+#host-room input[type=text]{
+    width: calc(100% - 6px);
+    padding: 0.125rem;
+    height: 1.5rem;
+}

@@ -1,18 +1,25 @@
 {% extends 'layout.html' %}
 {% block head %}
     <title>Multiworld Tracker for Room {{ room.id }}</title>
-
-    <link rel="stylesheet" type="text/css"
-          href="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.21/fh-3.1.7/datatables.min.css"/>
     <link rel="stylesheet" type="text/css" href="{{ static_autoversion("static.css") }}"/>
-    <script type="text/javascript"
-            src="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.21/fh-3.1.7/datatables.min.js"></script>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+          crossorigin="anonymous" />
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" />
+    <script type="application/ecmascript"
+            src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+            crossorigin="anonymous"></script>
+    <script type="application/ecmascript"
+            src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script type="application/ecmascript"
+            src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
     <script src="{{ static_autoversion("jquery.scrollsync.js") }}"></script>
-
     <script>
-
-        $(document).ready(function () {
-            var tables = $(".table").DataTable({
+        window.onload = () => {
+            let tables = $(".table").DataTable({
                 "paging": false,
                 "ordering": true,
                 "info": false,
@@ -59,114 +66,116 @@
                 tables.draw, {# this fixes the top header misalignment, for some reason #}
                 500
             );
-        })
+        }
     </script>
 
 {% endblock %}
 {% block body %}
-    <input id="searchbox" class="form-control" type="text" placeholder="Search">
+    <input id="searchbox" class="form-control" type="text" placeholder="Search" />
     <div>
         {% for team, players in inventory.items() %}
+            <script type="application/ecmascript">console.log("Table 1: {{ team }} {{ players }}")</script>
             <table class="table table-striped table-bordered table-hover table-sm">
                 <thead class="thead-dark">
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                {% for name in tracking_names %}
-                    {% if name in icons %}
-                        <th style="text-align: center"><img class="alttp-sprite"
-                                                            src="{{ icons[name] }}"
-                                                            alt="{{ name|e }}"></th>
-                    {% else %}
-                        <th>{{ name|e }}</th>
-                    {% endif %}
-                {% endfor %}
-            </tr>
-            </thead>
-            <tbody>
-            {% for player, items in players.items() %}
-                <tr>
-                    <td class="table-info">{{ loop.index }}</td>
-                    {% if (team, loop.index) in video %}
-                        <td class="table-info">
-                            <a target="_blank" href="https://www.twitch.tv/{{ video[(team, loop.index)][1] }}">
-                                {{ player_names[(team, loop.index)] }}
-                                ▶️</a></td>
-                    {% else %}
-                        <td class="table-info">{{ player_names[(team, loop.index)] }}</td>{% endif %}
-                    {% for id in tracking_ids %}
-
-                        {% if items[id] %}
-                            <td style="text-align: center" class="table-success">
-                                {% if id in multi_items %}{{ items[id] }}{% else %}✔️{% endif %}</td>
-                        {% else %}
-                            <td></td>
-                        {% endif %}
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        {% for name in tracking_names %}
+                            {% if name in icons %}
+                                <th style="text-align: center">
+                                    <img class="alttp-sprite" src="{{ icons[name] }}" alt="{{ name|e }}">
+                                </th>
+                            {% else %}
+                                <th>{{ name|e }}</th>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player, items in players.items() %}
+                        <tr>
+                            <td class="table-info">{{ loop.index }}</td>
+                            {% if (team, loop.index) in video %}
+                                <td class="table-info">
+                                    <a target="_blank" href="https://www.twitch.tv/{{ video[(team, loop.index)][1] }}">
+                                        {{ player_names[(team, loop.index)] }}
+                                        ▶️</a></td>
+                            {% else %}
+                                <td class="table-info">{{ player_names[(team, loop.index)] }}</td>
+                            {% endif %}
+                            {% for id in tracking_ids %}
+                                {% if items[id] %}
+                                    <td style="text-align: center" class="table-success">
+                                        {% if id in multi_items %}{{ items[id] }}{% else %}✔️{% endif %}</td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
                     {% endfor %}
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
 
-    {% for team, players in checks_done.items() %}
-        <table class="table table-striped table-bordered table-hover table-sm">
-            <thead class="thead-dark">
-            <tr>
-                <th rowspan="2">#</th>
-                <th rowspan="2">Name</th>
-                {% for area in ordered_areas %}
-                    {% set colspan = (3 if area in key_locations else 1) %}
-                    {% if area in icons %}
-                        <th colspan="{{ colspan }}" style="text-align: center"><img class="alttp-sprite"
-                                                                                    src="{{ icons[area] }}"
-                                                                                    alt="{{ area }}"></th>
-                    {% else %}
-                        <th colspan="{{ colspan }}">{{ area }}</th>
-                    {% endif %}
-                {% endfor %}
-                <th rowspan="2">Last Activity</th>
-            </tr>
-            <tr>
-                {% for area in ordered_areas %}
-                    <th style="text-align: center"><img class="alttp-sprite" src="{{ icons["Chest"] }}" alt="Checks">
-                    </th>
-                    {% if area in key_locations %}
-                        <th style="text-align: center"><img class="alttp-sprite"
-                                                            src="{{ icons["Small Key"] }}" alt="Small Key"></th>
-                        <th style="text-align: center"><img class="alttp-sprite"
-                                                            src="{{ icons["Big Key"] }}" alt="Big Key"></th>
-                    {% endif %}
-                {% endfor %}
-            </tr>
-            </thead>
-            <tbody>
-            {% for player, checks in players.items() %}
+        {% for team, players in checks_done.items() %}
+            <table class="table table-striped table-bordered table-hover table-sm">
+                <script type="application/ecmascript">console.log("Table 2: {{ team }} {{ players }}")</script>
+                <thead class="thead-dark">
                 <tr>
-                    <td class="table-info">{{ loop.index }}</td>
-                    <td class="table-info">{{ player_names[(team, loop.index)]|e }}</td>
+                    <th rowspan="2">#</th>
+                    <th rowspan="2">Name</th>
                     {% for area in ordered_areas %}
-                        {% set checks_done = checks[area] %}
-                        {% set checks_total = checks_in_area[area] %}
-                        {% if checks_done == checks_total %}
-                            <td style="text-align: center" class="table-success">
-                                {{ checks_done }}/{{ checks_total }}</td>
+                        {% set colspan = (3 if area in key_locations else 1) %}
+                        {% if area in icons %}
+                            <th colspan="{{ colspan }}" style="text-align: center"><img class="alttp-sprite"
+                                                                                        src="{{ icons[area] }}"
+                                                                                        alt="{{ area }}"></th>
                         {% else %}
-                            <td style="text-align: center">{{ checks_done }}/{{ checks_total }}</td>
-                        {% endif %}
-                        {% if area in key_locations %}
-                            <td>{{ inventory[team][player][small_key_ids[area]] }}</td>
-                            <td>{% if inventory[team][player][big_key_ids[area]] %}✔️{% endif %}</td>
+                            <th colspan="{{ colspan }}">{{ area }}</th>
                         {% endif %}
                     {% endfor %}
-                    {% if activity_timers[(team, player)] %}
-                        <td class="table-info">{{ activity_timers[(team, player)] | render_timedelta }}</td>
-                    {% else %}
-                        <td class="table-warning">None</td>{% endif %}
+                    <th rowspan="2">Last Activity</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% endfor %}
+                <tr>
+                    {% for area in ordered_areas %}
+                        <th style="text-align: center"><img class="alttp-sprite" src="{{ icons["Chest"] }}" alt="Checks">
+                        </th>
+                        {% if area in key_locations %}
+                            <th style="text-align: center"><img class="alttp-sprite"
+                                                                src="{{ icons["Small Key"] }}" alt="Small Key"></th>
+                            <th style="text-align: center"><img class="alttp-sprite"
+                                                                src="{{ icons["Big Key"] }}" alt="Big Key"></th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for player, checks in players.items() %}
+                    <tr>
+                        <td class="table-info">{{ loop.index }}</td>
+                        <td class="table-info">{{ player_names[(team, loop.index)]|e }}</td>
+                        {% for area in ordered_areas %}
+                            {% set checks_done = checks[area] %}
+                            {% set checks_total = checks_in_area[area] %}
+                            {% if checks_done == checks_total %}
+                                <td style="text-align: center" class="table-success">
+                                    {{ checks_done }}/{{ checks_total }}</td>
+                            {% else %}
+                                <td style="text-align: center">{{ checks_done }}/{{ checks_total }}</td>
+                            {% endif %}
+                            {% if area in key_locations %}
+                                <td>{{ inventory[team][player][small_key_ids[area]] }}</td>
+                                <td>{% if inventory[team][player][big_key_ids[area]] %}✔️{% endif %}</td>
+                            {% endif %}
+                        {% endfor %}
+                        {% if activity_timers[(team, player)] %}
+                            <td class="table-info">{{ activity_timers[(team, player)] | render_timedelta }}</td>
+                        {% else %}
+                            <td class="table-warning">None</td>{% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
     </div>
 {% endblock %}
