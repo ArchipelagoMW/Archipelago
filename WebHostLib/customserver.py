@@ -81,11 +81,12 @@ class WebHostContext(Context):
         threading.Thread(target=self.listen_to_db_commands, daemon=True).start()
 
     @db_session
-    def _save(self) -> bool:
+    def _save(self, exit_save:bool = False) -> bool:
         room = Room.get(id=self.room_id)
         room.multisave = self.get_save()
         # saving only occurs on activity, so we can "abuse" this information to mark this as last_activity
-        room.last_activity = datetime.utcnow()
+        if not exit_save: # we don't want to count a shutdown as activity, which would restart the server again
+            room.last_activity = datetime.utcnow()
         return True
 
     def get_save(self) -> dict:

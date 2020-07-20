@@ -150,7 +150,7 @@ class Context(Node):
 
         return False
 
-    def _save(self) -> bool:
+    def _save(self, exit_save:bool=False) -> bool:
         try:
             jsonstr = json.dumps(self.get_save())
             with open(self.save_filename, "wb") as f:
@@ -192,7 +192,7 @@ class Context(Node):
             self.auto_saver_thread.start()
 
             import atexit
-            atexit.register(self._save)  # make sure we save on exit too
+            atexit.register(self._save, True)  # make sure we save on exit too
 
     def get_save(self) -> dict:
         d = {
@@ -212,8 +212,9 @@ class Context(Node):
 
     def set_save(self, savedata: dict):
         rom_names = savedata["rom_names"]  # convert from TrackerList to List in case of ponyorm
-        if rom_names != self.rom_names:
-            adjusted = {tuple(rom): (team, slot) for (rom, (team, slot)) in rom_names}  # old format, ponyorm friendly
+
+        if {rom: other for rom, other in rom_names} != self.rom_names:
+            adjusted = {rom: (team, slot) for (rom, (team, slot)) in rom_names}  # old format, ponyorm friendly
             if self.rom_names != adjusted:
                 logging.warning('Save file mismatch, will start a new game')
                 return
