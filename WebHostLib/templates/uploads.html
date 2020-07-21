@@ -1,9 +1,21 @@
-{% extends 'layout.html' %}
+{% extends 'tablepage.html' %}
 
 {% block head %}
+    {{ super() }}
     <title>Upload Multidata</title>
     <link rel="stylesheet" type="text/css" href="{{ static_autoversion("uploads.css") }}" />
     <script type="application/ecmascript" src="{{ static_autoversion("uploads.js") }}"></script>
+    <script>
+        window.onload = () => {
+            let tables = $(".table").DataTable({
+                "paging": false,
+                "ordering": true,
+                "order": [[ 3, "desc" ]],
+                "info": false,
+                "dom": "t",
+            });
+        }
+    </script>
 {% endblock %}
 
 {% block body %}
@@ -21,14 +33,30 @@
 
             {% if rooms %}
                 <p>Your Rooms:</p>
-                <ul id="room-list">
+                <table class="table table-striped table-bordered table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th>Seed</th>
+                            <th>Room</th>
+                            <th>Players</th>
+                            <th>Created</th>
+                            <th>Last Activity</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
                     {% for room in rooms %}
-                        <li>
-                            Room: <a href="{{ url_for("host_room", room=room.id) }}">{{ room.id }}</a><br />
-                            Seed: <a href="{{ url_for("view_seed", seed=room.seed.id) }}">{{ room.seed.id }}</a>
-                        </li>
+                        <tr>
+                            <td><a href="{{ url_for("view_seed", seed=room.seed.id) }}">{{ room.seed.id }}</a></td>
+                            <td><a href="{{ url_for("host_room", room=room.id) }}">{{ room.id }}</a></td>
+                            <td>{{ room.seed.multidata.names[0]|length }} Total:
+                                {{ room.seed.multidata.names[0]|join(", ")|truncate(256, False, " ...") }}</td>
+                            <td>{{ room.creation_time.strftime("%Y-%m-%d %H:%M") }}</td>
+                            <td>{{ room.last_activity.strftime("%Y-%m-%d %H:%M") }}</td>
+                        </tr>
                     {% endfor %}
-                </ul>
+                    </tbody>
+                </table>
             {% else %}
                 <p>No rooms owned by you were found. Upload a file to get started.</p>
             {% endif %}

@@ -621,7 +621,7 @@ class CommandProcessor(metaclass=CommandMeta):
         license = getattr(CommandProcessor, "license", None)
         if not license:
             with open(Utils.local_path("LICENSE")) as f:
-                CommandProcessor.license = license = f.read()
+                CommandProcessor.license = f.read()
         self.output(CommandProcessor.license)
 
     def default(self, raw: str):

@@ -242,7 +242,7 @@ def get_static_room_data(room: Room):
 
     use_door_tracker = False
     if "tags" in multidata:
-        use_door_tracker = "DR" in multidata.tags
+        use_door_tracker = "DR" in multidata["tags"]
     result = locations, names, use_door_tracker
     _multidata_cache[room.seed.id] = result
     return result

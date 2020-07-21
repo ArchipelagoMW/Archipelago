@@ -36,8 +36,10 @@ def int32_as_bytes(value):
 def pc_to_snes(value):
     return ((value<<1) & 0x7F0000)|(value & 0x7FFF)|0x8000
 
+
 def snes_to_pc(value):
     return ((value & 0x7F0000)>>1)|(value & 0x7FFF)
+
 
 def parse_player_names(names, players, teams):
     names = tuple(n for n in (n.strip() for n in names.split(",")) if n)
@@ -52,8 +54,10 @@ def parse_player_names(names, players, teams):
         names = names[players:]
     return ret
 
-def is_bundled():
+
+def is_bundled() -> bool:
     return getattr(sys, 'frozen', False)
+
 
 def local_path(path):
     if local_path.cached_path:
