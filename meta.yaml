@@ -16,11 +16,14 @@ progression_balancing: # progression balancing tries to make sure that the playe
   off: 0 # force every player out of progression balancing, then prepare for a lot of logical BK
   null: 1 # let players decide via their own progression_balancing flag in their yaml, defaulting to on
 goals:
-  ganon: 10
-  fast_ganon: 25
-  dungeons: 5
-  pedestal: 10
-  triforce-hunt: 1
+  ganon: 100
+  fast_ganon: 250
+  dungeons: 50
+  pedestal: 100
+  triforce-hunt: 5
+  local_triforce_hunt: 10 # Collect 20 of 30 Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
+  ganon_triforce_hunt: 5 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
+  local_ganon_triforce_hunt: 20 # Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
   null: 0 # maintain individual goals
 world_state:
   standard: 10
