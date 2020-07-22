@@ -212,10 +212,14 @@ class Context(Node):
 
     def set_save(self, savedata: dict):
         rom_names = savedata["rom_names"]  # convert from TrackerList to List in case of ponyorm
-
-        if {rom: other for rom, other in rom_names} != self.rom_names:
-            adjusted = {rom: (team, slot) for (rom, (team, slot)) in rom_names}  # old format, ponyorm friendly
+        try:
+            adjusted = {rom: other for rom, other in rom_names}
+        except TypeError:
+            adjusted = {tuple(rom): (team, slot) for (rom, (team, slot)) in rom_names}  # old format, ponyorm friendly
             if self.rom_names != adjusted:
+                logging.warning('Save file mismatch, will start a new game')
+        else:
+            if adjusted != self.rom_names:
                 logging.warning('Save file mismatch, will start a new game')
                 return
 
