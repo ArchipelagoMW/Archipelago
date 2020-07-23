@@ -1326,26 +1326,32 @@ def set_bunny_rules(world: World, player: int, inverted: bool):
     bunny_impassable_caves = ['Bumper Cave', 'Two Brothers House', 'Hookshot Cave', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)', 'Turtle Rock (Entrance)', 'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Skull Woods Second Section (Drop)',
                               'Turtle Rock (Eye Bridge)', 'Sewers', 'Pyramid', 'Spiral Cave (Top)', 'Desert Palace Main (Inner)', 'Fairy Ascension Cave (Drop)']
 
-    bunny_accessible_locations = ['Link\'s Uncle', 'Sahasrahla', 'Sick Kid', 'Lost Woods Hideout', 'Lumberjack Tree', 'Checkerboard Cave', 'Potion Shop', 'Spectacle Rock Cave', 'Pyramid', 'Hype Cave - Generous Guy', 'Peg Cave', 'Bumper Cave Ledge', 'Dark Blacksmith Ruins', 'Spectacle Rock', 'Bombos Tablet', 'Ether Tablet', 'Purple Chest', 'Blacksmith', 'Missing Smith', 'Master Sword Pedestal', 'Bottle Merchant', 'Sunken Treasure', 'Desert Ledge']
-
+    bunny_accessible_locations = ['Link\'s Uncle', 'Sahasrahla', 'Sick Kid', 'Lost Woods Hideout', 'Lumberjack Tree',
+                                  'Checkerboard Cave', 'Potion Shop', 'Spectacle Rock Cave', 'Pyramid',
+                                  'Hype Cave - Generous Guy', 'Peg Cave', 'Bumper Cave Ledge', 'Dark Blacksmith Ruins',
+                                  'Spectacle Rock', 'Bombos Tablet', 'Ether Tablet', 'Purple Chest', 'Blacksmith',
+                                  'Missing Smith', 'Master Sword Pedestal', 'Bottle Merchant', 'Sunken Treasure',
+                                  'Desert Ledge']
 
     def path_to_access_rule(path, entrance):
-        return lambda state: state.can_reach(entrance.name, 'Entrance', entrance.player) and all(rule(state) for rule in path)
+        return lambda state: state.can_reach(entrance.name, 'Entrance', entrance.player) and all(
+            rule(state) for rule in path)
 
     def options_to_access_rule(options):
         return lambda state: any(rule(state) for rule in options)
 
     # Helper functions to determine if the moon pearl is required
-    def is_bunny(region):
-        if inverted:
+    if inverted:
+        def is_bunny(region):
             return region.is_light_world
-        else:
+
+        def is_link(region):
+            return region.is_dark_world
+    else:
+        def is_bunny(region):
             return region.is_dark_world
 
-    def is_link(region):
-        if inverted:
-            return region.is_dark_world
-        else:
+        def is_link(region):
             return region.is_light_world
 
     def get_rule_to_add(region, location = None, connecting_entrance = None):
@@ -1379,7 +1385,7 @@ def set_bunny_rules(world: World, player: int, inverted: bool):
         # for each such entrance a new option is added that consist of:
         #    a) being able to reach it, and
         #    b) being able to access all entrances from there to `region`
-        seen = set([region])
+        seen = {region}
         queue = collections.deque([(region, [])])
         while queue:
             (current, path) = queue.popleft()
