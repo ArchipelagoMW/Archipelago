@@ -1,0 +1,27 @@
+table.dataTable{
+    width: 100% !important;
+}
+
+table.dataTable, table.dataTable.no-footer{
+    border: none;
+    font-size: 1rem;
+    text-align: left;
+}
+
+.dataTables_wrapper .dataTables_filter{
+    float: none;
+    text-align: left;
+}
+
+table.dataTable thead{
+    background-color: #b0a77d;
+}
+
+table.dataTable thead tr th{
+    border: none;
+    padding: 5px;
+}
+
+table.dataTable tbody tr{
+    background-color: inherit;
+}

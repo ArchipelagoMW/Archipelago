@@ -26,7 +26,7 @@ button:hover, input[type=submit]:hover{
 
 /** Content styles */
 .main-content{
-    max-width: 800px;
+    max-width: 1000px;
     border-radius: 8px;
     background-color: #bbb288;
     padding: 0.5em 1.5rem 1.5rem;=

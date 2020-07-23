@@ -1,35 +1,46 @@
-table.dataTable.table-sm > thead > tr > th :not(.sorting_disabled) {
-    padding: 1px;
+#tracker-wrapper{
+    display: flex;
+    flex-direction: column;
 }
 
-.dataTable > thead > tr > th[class*="sort"]:before,
-.dataTable > thead > tr > th[class*="sort"]:after {
-    content: "" !important;
+.table-wrapper{
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: auto;
+    width: 100%;
 }
 
-.dataTable > thead > tr > th :not(.sorting_disabled) {
-    padding-right: 0 !important;
+div.dataTables_wrapper.no-footer .dataTables_scrollBody{
+    border: none;
 }
 
-th {
-    padding: 1px !important;
+table.dataTable{
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
 }
 
-table {
-    width: 100% !important;
+div.dataTables_scrollBody{
+    background-color: inherit !important;
+}
+
+table.dataTable .center-column{
+    text-align: center;
 }
 
 img.alttp-sprite {
-    height: 32px;
-    min-width: 32px;
-    object-fit: contain;
+    height: auto;
+    max-height: 32px;
+    min-height: 14px;
 }
 
-/* this is specific to the tracker right now */
-@media all and (max-width: 1700px) {
+@media all and (max-width: 1600px) {
     img.alttp-sprite {
-        height: 16px;
-        min-width: 16px;
-        object-fit: contain;
+        height: auto;
+        max-height: 16px;
+        min-height: 10px;
     }
+}
+
+.item-acquired{
+    background-color: green;
 }

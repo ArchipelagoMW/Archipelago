@@ -7,7 +7,7 @@ window.onload = () => {
         document.getElementById('upload-form').submit();
     });
 
-    $(".table").DataTable({
+    $("#uploads-table").DataTable({
         "paging": false,
         "ordering": true,
         "order": [[ 3, "desc" ]],

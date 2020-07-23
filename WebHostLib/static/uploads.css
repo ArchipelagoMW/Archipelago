@@ -14,11 +14,3 @@
 #upload-form{
     display: none;
 }
-
-#room-list{
-    font-size: 1rem;
-}
-
-#room-list ul{
-    vertical-align: top;
-}
