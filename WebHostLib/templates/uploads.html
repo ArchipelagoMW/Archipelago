@@ -5,17 +5,6 @@
     <title>Upload Multidata</title>
     <link rel="stylesheet" type="text/css" href="{{ static_autoversion("uploads.css") }}" />
     <script type="application/ecmascript" src="{{ static_autoversion("uploads.js") }}"></script>
-    <script>
-        window.onload = () => {
-            let tables = $(".table").DataTable({
-                "paging": false,
-                "ordering": true,
-                "order": [[ 3, "desc" ]],
-                "info": false,
-                "dom": "t",
-            });
-        }
-    </script>
 {% endblock %}
 
 {% block body %}
