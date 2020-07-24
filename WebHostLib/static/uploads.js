@@ -1,4 +1,4 @@
-window.onload = () => {
+window.addEventListener('load', () => {
     document.getElementById('upload-button').addEventListener('click', () => {
         document.getElementById('file-input').click();
     });
@@ -14,4 +14,4 @@ window.onload = () => {
         "info": false,
         "dom": "t",
     });
-};
+});

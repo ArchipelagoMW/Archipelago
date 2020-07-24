@@ -1,7 +1,5 @@
-let tables = null;
-
-window.onload = () => {
-    tables = $(".table").DataTable({
+window.addEventListener('load', () => {
+    const tables = $(".table").DataTable({
         paging: false,
         info: false,
         scrollCollapse: true,
@@ -37,6 +35,4 @@ window.onload = () => {
         y_sync: true,
         x_sync: true
     });
-
-    window.onresize = () => tables.draw();
-}
+});
