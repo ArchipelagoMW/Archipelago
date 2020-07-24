@@ -218,6 +218,7 @@ class Context(Node):
             adjusted = {tuple(rom): (team, slot) for (rom, (team, slot)) in rom_names}  # old format, ponyorm friendly
             if self.rom_names != adjusted:
                 logging.warning('Save file mismatch, will start a new game')
+                return
         else:
             if adjusted != self.rom_names:
                 logging.warning('Save file mismatch, will start a new game')
