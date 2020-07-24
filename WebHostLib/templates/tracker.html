@@ -8,17 +8,17 @@
 
 {% endblock %}
 {% block body %}
-    <div id="tracker-wrapper">
+    <div id="tracker-wrapper" data-tracker="{{ room.tracker }}">
         {% for team, players in inventory.items() %}
             <div class="table-wrapper">
                 <table class="table unique-item-table">
                     <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            {% for name in tracking_names %}
-                                {% if name in icons %}
-                                    <th class="center-column">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        {% for name in tracking_names %}
+                            {% if name in icons %}
+                                <th class="center-column">
                                         <img class="alttp-sprite" src="{{ icons[name] }}" alt="{{ name|e }}">
                                     </th>
                                 {% else %}

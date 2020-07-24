@@ -10,7 +10,8 @@ window.addEventListener('load', () => {
 
     const update = () => {
         const target = $("<div></div>");
-        target.load("/tracker/{{ room.tracker }}", function (response, status) {
+        const tracker = document.getElementById('tracker-wrapper').getAttribute('data-tracker');
+        target.load("/tracker/" + tracker, function (response, status) {
             if (status === "success") {
                 target.find(".table").each(function (i, new_table) {
                     const new_trs = $(new_table).find("tbody>tr");
