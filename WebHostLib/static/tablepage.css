@@ -1,11 +1,12 @@
 table.dataTable{
-    width: 100% !important;
+    width: 100%;
 }
 
 table.dataTable, table.dataTable.no-footer{
     border: none;
     font-size: 1rem;
     text-align: left;
+    border-collapse: collapse;
 }
 
 .dataTables_wrapper .dataTables_filter{

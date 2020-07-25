@@ -9,6 +9,7 @@
 {% endblock %}
 {% block body %}
     <div id="tracker-wrapper" data-tracker="{{ room.tracker }}">
+    <input placeholder="Search" id="search" />
         {% for team, players in inventory.items() %}
             <div class="table-wrapper">
                 <table class="table unique-item-table">
@@ -76,7 +77,7 @@
                                     <th colspan="{{ colspan }}" class="center-column">{{ area }}</th>
                                 {% endif %}
                             {% endfor %}
-                            <th rowspan="2">Last<br>Activity</th>
+                            <th rowspan="2" class="center-column">Last<br>Activity</th>
                         </tr>
                         <tr>
                             {% for area in ordered_areas %}

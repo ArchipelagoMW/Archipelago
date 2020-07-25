@@ -2,10 +2,16 @@ window.addEventListener('load', () => {
     const tables = $(".table").DataTable({
         paging: false,
         info: false,
-        scrollCollapse: true,
+        dom: "t",
 
         // DO NOT use the scrollX or scrollY options. They cause DataTables to split the thead from
         // the tbody and render two separate tables.
+    });
+
+    document.getElementById('search').addEventListener('keyup', (event) => {
+        tables.search(event.target.value);
+        console.info(tables.search());
+        tables.draw();
     });
 
     const update = () => {
@@ -31,6 +37,8 @@ window.addEventListener('load', () => {
     }
 
     setInterval(update, 30000);
+
+    window.addEventListener('resize', () => tables.draw());
 
     $(".dataTables_scrollBody").scrollsync({
         y_sync: true,

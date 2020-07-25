@@ -1,22 +1,52 @@
 #tracker-wrapper{
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .table-wrapper{
-    max-height: 400px;
     overflow-y: auto;
     overflow-x: auto;
-    width: 100%;
+    margin-bottom: 2rem;
+    max-height: 425px;
+}
+
+#search{
+    width: 200px;
+    height: 20px;
+    margin-bottom: 0.5rem;
+}
+
+.table-wrapper table tbody tr:hover{
+    background-color: #e2eabb;
 }
 
 div.dataTables_wrapper.no-footer .dataTables_scrollBody{
     border: none;
 }
 
-table.dataTable{
-    margin-top: 0.5rem;
-    margin-bottom: 2rem;
+table.dataTable tbody th, table.dataTable tbody td{
+    padding: 4px 6px;
+}
+
+table.dataTable, table.dataTable.no-footer{
+    border-left: 1px solid #bba967;
+    width: calc(100% - 2px) !important;
+    font-size: 1rem;
+}
+
+table.dataTable thead{
+    position: sticky;
+    top: 0;
+}
+
+table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc{
+    background-image: none;
+}
+
+table.dataTable tbody td{
+    border: 1px solid #bba967;
 }
 
 div.dataTables_scrollBody{
@@ -33,14 +63,30 @@ img.alttp-sprite {
     min-height: 14px;
 }
 
-@media all and (max-width: 1600px) {
+.item-acquired{
+    background-color: #d3c97d;
+}
+
+@media all and (max-width: 1700px) {
+    table.dataTable, table.dataTable.no-footer{
+        font-size: 0.8rem;
+    }
+
     img.alttp-sprite {
         height: auto;
-        max-height: 16px;
+        max-height: 24px;
         min-height: 10px;
     }
 }
 
-.item-acquired{
-    background-color: green;
+@media all and (max-width: 1400px) {
+    table.dataTable, table.dataTable.no-footer{
+        font-size: 0.6rem;
+    }
+
+    img.alttp-sprite {
+        height: auto;
+        max-height: 20px;
+        min-height: 10px;
+    }
 }
