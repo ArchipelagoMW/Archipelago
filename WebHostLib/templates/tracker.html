@@ -5,18 +5,16 @@
     <link rel="stylesheet" type="text/css" href="{{ static_autoversion("tracker.css") }}"/>
     <script type="application/ecmascript" src="{{ static_autoversion("jquery.scrollsync.js") }}"></script>
     <script type="application/ecmascript" src="{{ static_autoversion("tracker.js") }}"></script>
-
 {% endblock %}
 {% block body %}
-
     <div id="tracker-wrapper" data-tracker="{{ room.tracker }}">
         <div id="tracker-header-bar">
             <input placeholder="Search" id="search" />
-            {% if video %}<span><a target="_blank" href="https://multistream.me/
+            {%- if video -%}<span><a target="_blank" href="https://multistream.me/
                 {%- for teamslot, (platform, link) in video.items()-%}
-                    {%- if platform == "Twitch" -%}t{%- else -%}yt{%- endif -%}:{{ link }}/">Multistream</a></span>
-                {% endfor %}
-            {% endif %}
+                    {%- if platform == "Twitch" -%}t{%- else -%}yt{%- endif -%}:{{- link -}}/
+                {%- endfor -%}">Multistream</a></span>
+            {%- endif -%}
         </div>
         {% for team, players in inventory.items() %}
             <div class="table-wrapper">
@@ -25,46 +23,46 @@
                     <tr>
                         <th>#</th>
                         <th>Name</th>
-                        {% for name in tracking_names %}
-                            {% if name in icons %}
+                        {%- for name in tracking_names -%}
+                            {%- if name in icons -%}
                                 <th class="center-column">
                                         <img class="alttp-sprite" src="{{ icons[name] }}" alt="{{ name|e }}">
                                     </th>
-                                {% else %}
+                                {%- else -%}
                                     <th class="center-column">{{ name|e }}</th>
-                                {% endif %}
-                            {% endfor %}
+                                {%- endif -%}
+                            {%- endfor -%}
                         </tr>
                     </thead>
                     <tbody>
-                        {% for player, items in players.items() %}
+                        {%- for player, items in players.items() -%}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                {% if (team, loop.index) in video %}
-                                    {% if video[(team, loop.index)][0] == "Twitch" %}
+                                {%- if (team, loop.index) in video -%}
+                                    {%- if video[(team, loop.index)][0] == "Twitch" -%}
                                     <td>
                                         <a target="_blank" href="https://www.twitch.tv/{{ video[(team, loop.index)][1] }}">
                                             {{ player_names[(team, loop.index)] }}
                                             ▶️</a></td>
-                                    {% elif video[(team, loop.index)][0] == "Youtube" %}
+                                    {%- elif video[(team, loop.index)][0] == "Youtube" -%}
                                     <td>
                                         <a target="_blank" href="youtube.com/c/{{ video[(team, loop.index)][1] }}/live">
                                             {{ player_names[(team, loop.index)] }}
                                             ▶️</a></td>
-                                    {% endif %}
-                                {% else %}
+                                    {%- endif -%}
+                                {%- else -%}
                                     <td>{{ player_names[(team, loop.index)] }}</td>
-                                {% endif %}
-                                {% for id in tracking_ids %}
-                                    {% if items[id] %}
+                                {%- endif -%}
+                                {%- for id in tracking_ids -%}
+                                    {%- if items[id] -%}
                                         <td class="center-column item-acquired">
                                             {% if id in multi_items %}{{ items[id] }}{% else %}✔️{% endif %}</td>
-                                    {% else %}
+                                    {%- else -%}
                                         <td></td>
-                                    {% endif %}
+                                    {%- endif -%}
                                 {% endfor %}
                             </tr>
-                        {% endfor %}
+                        {%- endfor -%}
                     </tbody>
                 </table>
             </div>
@@ -88,10 +86,10 @@
                                 {% if area in icons %}
                                     <th colspan="{{ colspan }}" class="center-column upper-row">
                                         <img class="alttp-sprite" src="{{ icons[area] }}" alt="{{ area }}"></th>
-                                {% else %}
+                                {%- else -%}
                                     <th colspan="{{ colspan }}" class="center-column">{{ area }}</th>
-                                {% endif %}
-                            {% endfor %}
+                                {%- endif -%}
+                            {%- endfor -%}
                             <th rowspan="2" class="center-column">Last<br>Activity</th>
                         </tr>
                         <tr>
@@ -108,38 +106,38 @@
                                     <th class="center-column lower-row">
                                         <img class="alttp-sprite" src="{{ icons["Big Key"] }}" alt="Big Key">
                                     </th>
-                                {% endif %}
-                            {% endfor %}
+                                {%- endif -%}
+                            {%- endfor -%}
                         </tr>
                     </thead>
                     <tbody>
-                        {% for player, checks in players.items() %}
+                        {%- for player, checks in players.items() -%}
                             <tr>
                                 <td>{{ loop.index }}</td>
                                 <td>{{ player_names[(team, loop.index)]|e }}</td>
-                                {% for area in ordered_areas %}
-                                    {% set checks_done = checks[area] %}
-                                    {% set checks_total = checks_in_area[area] %}
-                                    {% if checks_done == checks_total %}
+                                {%- for area in ordered_areas -%}
+                                    {%- set checks_done = checks[area] -%}
+                                    {%- set checks_total = checks_in_area[area] -%}
+                                    {%- if checks_done == checks_total -%}
                                         <td class="item-acquired center-column">
                                             {{ checks_done }}/{{ checks_total }}</td>
-                                    {% else %}
+                                    {%- else -%}
                                         <td class="center-column">{{ checks_done }}/{{ checks_total }}</td>
-                                    {% endif %}
-                                    {% if area in key_locations %}
+                                    {%- endif -%}
+                                    {%- if area in key_locations -%}
                                         <td class="center-column">{{ inventory[team][player][small_key_ids[area]] }}</td>
-                                    {% endif %}
-                                    {% if area in big_key_locations %}
+                                    {%- endif -%}
+                                    {%- if area in big_key_locations -%}
                                         <td class="center-column">{% if inventory[team][player][big_key_ids[area]] %}✔️{% endif %}</td>
-                                    {% endif %}
-                                {% endfor %}
-                                {% if activity_timers[(team, player)] %}
+                                    {%- endif -%}
+                                {%- endfor -%}
+                                {%- if activity_timers[(team, player)] -%}
                                     <td class="center-column">{{ activity_timers[(team, player)] | render_timedelta }}</td>
-                                {% else %}
+                                {%- else -%}
                                     <td class="center-column">None</td>
-                                {% endif %}
+                                {%- endif -%}
                             </tr>
-                        {% endfor %}
+                        {%- endfor -%}
                     </tbody>
                 </table>
             </div>
