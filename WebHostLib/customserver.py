@@ -26,6 +26,11 @@ class CustomClientMessageProcessor(ClientMessageProcessor):
             self.ctx.save()
             self.output(f"Registered Twitch Stream https://www.twitch.tv/{user}")
             return True
+        elif platform.lower().startswith("y"): # youtube
+            self.ctx.video[self.client.team, self.client.slot] = "Youtube", user
+            self.ctx.save()
+            self.output(f"Registered Youtube Stream for {user}")
+            return True
         return False
 
 

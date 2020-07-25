@@ -49,7 +49,7 @@ def mystery_argparse():
     return args
 
 
-def main(args=None):
+def main(args=None, callback = ERmain):
     if not args:
         args = mystery_argparse()
 
@@ -203,7 +203,7 @@ def main(args=None):
     erargs.skip_progression_balancing = {player: not balanced for player, balanced in
                                          erargs.progression_balancing.items()}
     del (erargs.progression_balancing)
-    ERmain(erargs, seed)
+    callback(erargs, seed)
 
 
 def get_weights(path):

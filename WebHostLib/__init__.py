@@ -2,7 +2,6 @@
 So unless you're Berserker you need to include license information."""
 
 import os
-import threading
 
 from pony.flask import Pony
 from flask import Flask, request, redirect, url_for, render_template, Response, session, abort
@@ -23,6 +22,9 @@ def allowed_file(filename):
 
 app = Flask(__name__)
 Pony(app)
+
+app.jinja_env.filters['any'] = any
+app.jinja_env.filters['all'] = all
 
 app.config["SELFHOST"] = True
 app.config["SELFLAUNCH"] = True

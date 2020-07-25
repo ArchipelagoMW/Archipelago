@@ -8,8 +8,16 @@
 
 {% endblock %}
 {% block body %}
+
     <div id="tracker-wrapper" data-tracker="{{ room.tracker }}">
-    <input placeholder="Search" id="search" />
+        <div id="tracker-header-bar">
+            <input placeholder="Search" id="search" />
+            {% if video %}<span><a target="_blank" href="https://multistream.me/
+                {%- for teamslot, (platform, link) in video.items()-%}
+                    {%- if platform == "Twitch" -%}t{%- else -%}yt{%- endif -%}:{{ link }}/">Multistream</a></span>
+                {% endfor %}
+            {% endif %}
+        </div>
         {% for team, players in inventory.items() %}
             <div class="table-wrapper">
                 <table class="table unique-item-table">
@@ -33,10 +41,17 @@
                             <tr>
                                 <td>{{ loop.index }}</td>
                                 {% if (team, loop.index) in video %}
+                                    {% if video[(team, loop.index)][0] == "Twitch" %}
                                     <td>
                                         <a target="_blank" href="https://www.twitch.tv/{{ video[(team, loop.index)][1] }}">
                                             {{ player_names[(team, loop.index)] }}
                                             ▶️</a></td>
+                                    {% elif video[(team, loop.index)][0] == "Youtube" %}
+                                    <td>
+                                        <a target="_blank" href="youtube.com/c/{{ video[(team, loop.index)][1] }}/live">
+                                            {{ player_names[(team, loop.index)] }}
+                                            ▶️</a></td>
+                                    {% endif %}
                                 {% else %}
                                     <td>{{ player_names[(team, loop.index)] }}</td>
                                 {% endif %}
