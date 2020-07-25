@@ -119,9 +119,9 @@
                                     {% endif %}
                                 {% endfor %}
                                 {% if activity_timers[(team, player)] %}
-                                    <td>{{ activity_timers[(team, player)] | render_timedelta }}</td>
+                                    <td class="center-column">{{ activity_timers[(team, player)] | render_timedelta }}</td>
                                 {% else %}
-                                    <td>None</td>
+                                    <td class="center-column">None</td>
                                 {% endif %}
                             </tr>
                         {% endfor %}
