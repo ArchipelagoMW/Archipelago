@@ -86,7 +86,7 @@
                                 {% set colspan = colspan + 1 %}
                                 {% endif %}
                                 {% if area in icons %}
-                                    <th colspan="{{ colspan }}" class="center-column">
+                                    <th colspan="{{ colspan }}" class="center-column upper-row">
                                         <img class="alttp-sprite" src="{{ icons[area] }}" alt="{{ area }}"></th>
                                 {% else %}
                                     <th colspan="{{ colspan }}" class="center-column">{{ area }}</th>
@@ -96,16 +96,16 @@
                         </tr>
                         <tr>
                             {% for area in ordered_areas %}
-                                <th class="center-column">
+                                <th class="center-column lower-row">
                                     <img class="alttp-sprite" src="{{ icons["Chest"] }}" alt="Checks">
                                 </th>
                                 {% if area in key_locations %}
-                                    <th class="center-column">
+                                    <th class="center-column lower-row">
                                         <img class="alttp-sprite" src="{{ icons["Small Key"] }}" alt="Small Key">
                                     </th>
                                 {% endif %}
                                 {% if area in big_key_locations %}
-                                    <th class="center-column">
+                                    <th class="center-column lower-row">
                                         <img class="alttp-sprite" src="{{ icons["Big Key"] }}" alt="Big Key">
                                     </th>
                                 {% endif %}

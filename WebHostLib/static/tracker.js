@@ -40,7 +40,7 @@ window.addEventListener('load', () => {
 
     window.addEventListener('resize', () => tables.draw());
 
-    $(".dataTables_scrollBody").scrollsync({
+    $(".table-wrapper").scrollsync({
         y_sync: true,
         x_sync: true
     });

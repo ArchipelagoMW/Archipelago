@@ -12,21 +12,23 @@
     max-height: 425px;
 }
 
+#tracker-header-bar{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
 #search{
     width: 200px;
     height: 20px;
     margin-bottom: 0.5rem;
 }
 
-.table-wrapper table tbody tr:hover{
-    background-color: #e2eabb;
-}
-
 div.dataTables_wrapper.no-footer .dataTables_scrollBody{
     border: none;
 }
 
-table.dataTable tbody th, table.dataTable tbody td{
+table.dataTable tbody td{
     padding: 4px 6px;
 }
 
@@ -36,13 +38,27 @@ table.dataTable, table.dataTable.no-footer{
     font-size: 1rem;
 }
 
-table.dataTable thead{
+table.dataTable thead th{
+    position: -webkit-sticky;
     position: sticky;
+    background-color: #b0a77d;
     top: 0;
 }
 
-table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc{
-    background-image: none;
+table.dataTable thead th.upper-row{
+    position: -webkit-sticky;
+    position: sticky;
+    background-color: #b0a77d;
+    height: 36px;
+    top: 0;
+}
+
+table.dataTable thead th.lower-row{
+    position: -webkit-sticky;
+    position: sticky;
+    background-color: #b0a77d;
+    height: 22px;
+    top: 46px;
 }
 
 table.dataTable tbody td{
@@ -68,6 +84,22 @@ img.alttp-sprite {
 }
 
 @media all and (max-width: 1700px) {
+    table.dataTable thead th.upper-row{
+        position: -webkit-sticky;
+        position: sticky;
+        background-color: #b0a77d;
+        height: 27px;
+        top: 0;
+    }
+
+    table.dataTable thead th.lower-row{
+        position: -webkit-sticky;
+        position: sticky;
+        background-color: #b0a77d;
+        height: 20px;
+        top: 37px;
+    }
+
     table.dataTable, table.dataTable.no-footer{
         font-size: 0.8rem;
     }
@@ -80,6 +112,22 @@ img.alttp-sprite {
 }
 
 @media all and (max-width: 1400px) {
+    table.dataTable thead th.upper-row{
+        position: -webkit-sticky;
+        position: sticky;
+        background-color: #b0a77d;
+        height: 22px;
+        top: 0;
+    }
+
+    table.dataTable thead th.lower-row{
+        position: -webkit-sticky;
+        position: sticky;
+        background-color: #b0a77d;
+        height: 19px;
+        top: 32px;
+    }
+
     table.dataTable, table.dataTable.no-footer{
         font-size: 0.6rem;
     }

@@ -14,6 +14,10 @@ table.dataTable, table.dataTable.no-footer{
     text-align: left;
 }
 
+table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc{
+    background-image: none;
+}
+
 table.dataTable thead{
     background-color: #b0a77d;
 }
@@ -25,4 +29,8 @@ table.dataTable thead tr th{
 
 table.dataTable tbody tr{
     background-color: inherit;
+}
+
+table.dataTable tbody tr:hover{
+    background-color: #e2eabb;
 }
