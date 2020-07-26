@@ -1,4 +1,4 @@
-#tracker-wrapper{
+#tracker-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -8,8 +8,7 @@
 .table-wrapper{
     overflow-y: auto;
     overflow-x: auto;
-    margin-bottom: 2rem;
-    max-height: 425px;
+    margin-bottom: 1rem;
 }
 
 #tracker-header-bar{

@@ -16,131 +16,133 @@
                 {%- endfor -%}">Multistream</a></span>
             {%- endif -%}
         </div>
-        {% for team, players in inventory.items() %}
-            <div class="table-wrapper">
-                <table class="table unique-item-table">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        {%- for name in tracking_names -%}
-                            {%- if name in icons -%}
-                                <th class="center-column">
-                                        <img class="alttp-sprite" src="{{ icons[name] }}" alt="{{ name|e }}">
-                                    </th>
-                                {%- else -%}
-                                    <th class="center-column">{{ name|e }}</th>
-                                {%- endif -%}
-                            {%- endfor -%}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {%- for player, items in players.items() -%}
-                            <tr>
-                                <td>{{ loop.index }}</td>
-                                {%- if (team, loop.index) in video -%}
-                                    {%- if video[(team, loop.index)][0] == "Twitch" -%}
-                                    <td>
-                                        <a target="_blank" href="https://www.twitch.tv/{{ video[(team, loop.index)][1] }}">
-                                            {{ player_names[(team, loop.index)] }}
-                                            ▶️</a></td>
-                                    {%- elif video[(team, loop.index)][0] == "Youtube" -%}
-                                    <td>
-                                        <a target="_blank" href="youtube.com/c/{{ video[(team, loop.index)][1] }}/live">
-                                            {{ player_names[(team, loop.index)] }}
-                                            ▶️</a></td>
-                                    {%- endif -%}
-                                {%- else -%}
-                                    <td>{{ player_names[(team, loop.index)] }}</td>
-                                {%- endif -%}
-                                {%- for id in tracking_ids -%}
-                                    {%- if items[id] -%}
-                                        <td class="center-column item-acquired">
-                                            {% if id in multi_items %}{{ items[id] }}{% else %}✔️{% endif %}</td>
-                                    {%- else -%}
-                                        <td></td>
-                                    {%- endif -%}
-                                {% endfor %}
-                            </tr>
-                        {%- endfor -%}
-                    </tbody>
-                </table>
-            </div>
-        {% endfor %}
-
-        {% for team, players in checks_done.items() %}
-            <div class="table-wrapper">
-                <table class="table non-unique-item-table">
-                    <thead>
+        <div id="tables-container">
+            {% for team, players in inventory.items() %}
+                <div class="table-wrapper">
+                    <table class="table unique-item-table">
+                        <thead>
                         <tr>
-                            <th rowspan="2">#</th>
-                            <th rowspan="2">Name</th>
-                            {% for area in ordered_areas %}
-                                {% set colspan = 1 %}
-                                {% if area in key_locations %}
-                                {% set colspan = colspan + 1 %}
-                                {% endif %}
-                                {% if area in big_key_locations %}
-                                {% set colspan = colspan + 1 %}
-                                {% endif %}
-                                {% if area in icons %}
-                                    <th colspan="{{ colspan }}" class="center-column upper-row">
-                                        <img class="alttp-sprite" src="{{ icons[area] }}" alt="{{ area }}"></th>
-                                {%- else -%}
-                                    <th colspan="{{ colspan }}" class="center-column">{{ area }}</th>
-                                {%- endif -%}
-                            {%- endfor -%}
-                            <th rowspan="2" class="center-column">Last<br>Activity</th>
-                        </tr>
-                        <tr>
-                            {% for area in ordered_areas %}
-                                <th class="center-column lower-row">
-                                    <img class="alttp-sprite" src="{{ icons["Chest"] }}" alt="Checks">
-                                </th>
-                                {% if area in key_locations %}
-                                    <th class="center-column lower-row">
-                                        <img class="alttp-sprite" src="{{ icons["Small Key"] }}" alt="Small Key">
-                                    </th>
-                                {% endif %}
-                                {% if area in big_key_locations %}
-                                    <th class="center-column lower-row">
-                                        <img class="alttp-sprite" src="{{ icons["Big Key"] }}" alt="Big Key">
-                                    </th>
-                                {%- endif -%}
-                            {%- endfor -%}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {%- for player, checks in players.items() -%}
-                            <tr>
-                                <td>{{ loop.index }}</td>
-                                <td>{{ player_names[(team, loop.index)]|e }}</td>
-                                {%- for area in ordered_areas -%}
-                                    {%- set checks_done = checks[area] -%}
-                                    {%- set checks_total = checks_in_area[area] -%}
-                                    {%- if checks_done == checks_total -%}
-                                        <td class="item-acquired center-column">
-                                            {{ checks_done }}/{{ checks_total }}</td>
+                            <th>#</th>
+                            <th>Name</th>
+                            {%- for name in tracking_names -%}
+                                {%- if name in icons -%}
+                                    <th class="center-column">
+                                            <img class="alttp-sprite" src="{{ icons[name] }}" alt="{{ name|e }}">
+                                        </th>
                                     {%- else -%}
-                                        <td class="center-column">{{ checks_done }}/{{ checks_total }}</td>
-                                    {%- endif -%}
-                                    {%- if area in key_locations -%}
-                                        <td class="center-column">{{ inventory[team][player][small_key_ids[area]] }}</td>
-                                    {%- endif -%}
-                                    {%- if area in big_key_locations -%}
-                                        <td class="center-column">{% if inventory[team][player][big_key_ids[area]] %}✔️{% endif %}</td>
+                                        <th class="center-column">{{ name|e }}</th>
                                     {%- endif -%}
                                 {%- endfor -%}
-                                {%- if activity_timers[(team, player)] -%}
-                                    <td class="center-column">{{ activity_timers[(team, player)] | render_timedelta }}</td>
-                                {%- else -%}
-                                    <td class="center-column">None</td>
-                                {%- endif -%}
                             </tr>
-                        {%- endfor -%}
-                    </tbody>
-                </table>
-            </div>
-        {% endfor %}
+                        </thead>
+                        <tbody>
+                            {%- for player, items in players.items() -%}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    {%- if (team, loop.index) in video -%}
+                                        {%- if video[(team, loop.index)][0] == "Twitch" -%}
+                                        <td>
+                                            <a target="_blank" href="https://www.twitch.tv/{{ video[(team, loop.index)][1] }}">
+                                                {{ player_names[(team, loop.index)] }}
+                                                ▶️</a></td>
+                                        {%- elif video[(team, loop.index)][0] == "Youtube" -%}
+                                        <td>
+                                            <a target="_blank" href="youtube.com/c/{{ video[(team, loop.index)][1] }}/live">
+                                                {{ player_names[(team, loop.index)] }}
+                                                ▶️</a></td>
+                                        {%- endif -%}
+                                    {%- else -%}
+                                        <td>{{ player_names[(team, loop.index)] }}</td>
+                                    {%- endif -%}
+                                    {%- for id in tracking_ids -%}
+                                        {%- if items[id] -%}
+                                            <td class="center-column item-acquired">
+                                                {% if id in multi_items %}{{ items[id] }}{% else %}✔️{% endif %}</td>
+                                        {%- else -%}
+                                            <td></td>
+                                        {%- endif -%}
+                                    {% endfor %}
+                                </tr>
+                            {%- endfor -%}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+
+            {% for team, players in checks_done.items() %}
+                <div class="table-wrapper">
+                    <table class="table non-unique-item-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">#</th>
+                                <th rowspan="2">Name</th>
+                                {% for area in ordered_areas %}
+                                    {% set colspan = 1 %}
+                                    {% if area in key_locations %}
+                                    {% set colspan = colspan + 1 %}
+                                    {% endif %}
+                                    {% if area in big_key_locations %}
+                                    {% set colspan = colspan + 1 %}
+                                    {% endif %}
+                                    {% if area in icons %}
+                                        <th colspan="{{ colspan }}" class="center-column upper-row">
+                                            <img class="alttp-sprite" src="{{ icons[area] }}" alt="{{ area }}"></th>
+                                    {%- else -%}
+                                        <th colspan="{{ colspan }}" class="center-column">{{ area }}</th>
+                                    {%- endif -%}
+                                {%- endfor -%}
+                                <th rowspan="2" class="center-column">Last<br>Activity</th>
+                            </tr>
+                            <tr>
+                                {% for area in ordered_areas %}
+                                    <th class="center-column lower-row">
+                                        <img class="alttp-sprite" src="{{ icons["Chest"] }}" alt="Checks">
+                                    </th>
+                                    {% if area in key_locations %}
+                                        <th class="center-column lower-row">
+                                            <img class="alttp-sprite" src="{{ icons["Small Key"] }}" alt="Small Key">
+                                        </th>
+                                    {% endif %}
+                                    {% if area in big_key_locations %}
+                                        <th class="center-column lower-row">
+                                            <img class="alttp-sprite" src="{{ icons["Big Key"] }}" alt="Big Key">
+                                        </th>
+                                    {%- endif -%}
+                                {%- endfor -%}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%- for player, checks in players.items() -%}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ player_names[(team, loop.index)]|e }}</td>
+                                    {%- for area in ordered_areas -%}
+                                        {%- set checks_done = checks[area] -%}
+                                        {%- set checks_total = checks_in_area[area] -%}
+                                        {%- if checks_done == checks_total -%}
+                                            <td class="item-acquired center-column">
+                                                {{ checks_done }}/{{ checks_total }}</td>
+                                        {%- else -%}
+                                            <td class="center-column">{{ checks_done }}/{{ checks_total }}</td>
+                                        {%- endif -%}
+                                        {%- if area in key_locations -%}
+                                            <td class="center-column">{{ inventory[team][player][small_key_ids[area]] }}</td>
+                                        {%- endif -%}
+                                        {%- if area in big_key_locations -%}
+                                            <td class="center-column">{% if inventory[team][player][big_key_ids[area]] %}✔️{% endif %}</td>
+                                        {%- endif -%}
+                                    {%- endfor -%}
+                                    {%- if activity_timers[(team, player)] -%}
+                                        <td class="center-column">{{ activity_timers[(team, player)] | render_timedelta }}</td>
+                                    {%- else -%}
+                                        <td class="center-column">None</td>
+                                    {%- endif -%}
+                                </tr>
+                            {%- endfor -%}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

@@ -1,3 +1,17 @@
+const adjustTableHeight = () => {
+    const tablesContainer = document.getElementById('tables-container');
+    const upperDistance = tablesContainer.getBoundingClientRect().top;
+
+    const containerHeight = window.innerHeight - upperDistance;
+    tablesContainer.style.maxHeight = `calc(${containerHeight}px - 1rem)`;
+
+    const tableWrappers = document.getElementsByClassName('table-wrapper');
+    for(let i=0; i < tableWrappers.length; i++){
+        const maxHeight = (window.innerHeight - upperDistance) / 2;
+        tableWrappers[i].style.maxHeight = `calc(${maxHeight}px - 1rem)`;
+    }
+};
+
 window.addEventListener('load', () => {
     const tables = $(".table").DataTable({
         paging: false,
@@ -38,10 +52,15 @@ window.addEventListener('load', () => {
 
     setInterval(update, 30000);
 
-    window.addEventListener('resize', () => tables.draw());
+    window.addEventListener('resize', () => {
+        adjustTableHeight();
+        tables.draw()
+    });
 
     $(".table-wrapper").scrollsync({
         y_sync: true,
         x_sync: true
     });
+
+    adjustTableHeight();
 });
