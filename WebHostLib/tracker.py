@@ -7,12 +7,17 @@ import logging
 from uuid import UUID
 
 import Items
+import Regions
 from WebHostLib import app, cache, Room
+from Utils import Hint
 
 
 def get_id(item_name):
     return Items.item_table[item_name][3]
 
+
+app.jinja_env.filters["location_name"] = lambda location: Regions.lookup_id_to_name.get(location, location)
+app.jinja_env.filters['item_name'] = lambda id: Items.lookup_id_to_name.get(id, id)
 
 icons = {
     "Progressive Sword":
@@ -263,6 +268,10 @@ def get_tracker(tracker: UUID):
                                 for playernumber in range(1, len(team) + 1)}
                    for teamnumber, team in enumerate(names)}
     precollected_items = room.seed.multidata.get("precollected_items", None)
+    hints = {team: set() for team in range(len(names))}
+    for key, hintdata in room.multisave["hints"]:
+        for hint in hintdata:
+            hints[key[0]].add(Hint(*hint))
 
     for (team, player), locations_checked in room.multisave.get("location_checks", {}):
         if precollected_items:
@@ -302,4 +311,5 @@ def get_tracker(tracker: UUID):
                            multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
                            checks_in_area=checks_in_area, activity_timers=activity_timers,
                            key_locations=key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids,
-                           video=video, big_key_locations = key_locations if use_door_tracker else big_key_locations)
+                           video=video, big_key_locations=key_locations if use_door_tracker else big_key_locations,
+                           hints=hints)

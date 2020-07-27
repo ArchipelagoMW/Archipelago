@@ -7,9 +7,9 @@
     <script type="application/ecmascript" src="{{ static_autoversion("tracker.js") }}"></script>
 {% endblock %}
 {% block body %}
-    <div id="tracker-wrapper" data-tracker="{{ room.tracker }}">
+    <div id="tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
         <div id="tracker-header-bar">
-            <input placeholder="Search" id="search" />
+            <input placeholder="Search" id="search"/>
             {%- if video -%}<span><a target="_blank" href="https://multistream.me/
                 {%- for teamslot, (platform, link) in video.items()-%}
                     {%- if platform == "Twitch" -%}t{%- else -%}yt{%- endif -%}:{{- link -}}/
@@ -142,6 +142,36 @@
                         </tbody>
                     </table>
                 </div>
+            {% endfor %}
+            {% for team, hints in hints.items() %}
+                {% if hints %}
+                    <div class="table-wrapper">
+                        <table class="table non-unique-item-table">
+                            <thead>
+                            <tr>
+                                <th>Finder</th>
+                                <th>Receiver</th>
+                                <th>Item</th>
+                                <th>Location</th>
+                                <th>Entrance</th>
+                                <th>Found</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {%- for hint in hints -%}
+                                <tr>
+                                    <td>{{ player_names[team, hint.finding_player] }}</td>
+                                    <td>{{ player_names[team, hint.receiving_player] }}</td>
+                                    <td>{{ hint.item|item_name }}</td>
+                                    <td>{{ hint.location|location_name }}</td>
+                                    <td>{% if hint.entrance %}{{ hint.entrance }}{% else %}Vanilla{% endif %}</td>
+                                    <td>{% if hint.found %}✔{% endif %}</td>
+                                </tr>
+                            {%- endfor -%}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
     </div>

@@ -199,7 +199,8 @@ class Context(Node):
             "rom_names": list(self.rom_names.items()),
             "received_items": tuple((k, v) for k, v in self.received_items.items()),
             "hints_used": tuple((key, value) for key, value in self.hints_used.items()),
-            "hints": tuple((key, list(value)) for key, value in self.hints.items()),
+            "hints": tuple(
+                (key, list(hint.re_check(self, key[0]) for hint in value)) for key, value in self.hints.items()),
             "location_checks": tuple((key, tuple(value)) for key, value in self.location_checks.items()),
             "name_aliases": tuple((key, value) for key, value in self.name_aliases.items()),
             "client_game_state": tuple((key, value) for key, value in self.client_game_state.items()),
