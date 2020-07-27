@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    {{ super() }}
+    <title>Mystery Check Result</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("uploads.css") }}" />
+    <script type="application/ecmascript" src="{{ static_autoversion("uploads.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div id="uploads-wrapper">
+        <div id="uploads" class="main-content">
+            <h3>Upload Yaml</h3>
+            <p>This page checks a .yaml file for you, to be used as options for a mystery multiworld. You can also upload a .zip with multiple YAMLs.</p>
+            <div id="uploads-form-wrapper">
+                <form id="upload-form" method="post" enctype="multipart/form-data">
+                    <input id="file-input" type="file" name="file">
+                </form>
+                <button id="upload-button">Upload</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

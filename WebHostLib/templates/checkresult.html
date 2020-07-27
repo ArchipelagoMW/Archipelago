@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    {{ super() }}
+    <title>Upload Mystery YAML</title>
+{% endblock %}
+
+{% block body %}
+    {%   for filename, resulttext in results.items() %}
+    <span>{{ filename }}: {{ resulttext }}</span><br>
+    {% endfor %}
+{% endblock %}

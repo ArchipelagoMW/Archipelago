@@ -6,7 +6,7 @@ import logging
 from flask import request, flash, redirect, url_for, session, render_template
 from pony.orm import commit, select
 
-from WebHostLib import app, allowed_file, Seed, Room, Patch
+from WebHostLib import app, Seed, Room, Patch
 
 accepted_zip_contents = {"patches": ".bmbp",
                          "spoiler": ".txt",
@@ -71,3 +71,7 @@ def uploads():
                 flash("Not recognized file format. Awaiting a .multidata file.")
     rooms = select(room for room in Room if room.owner == session["_id"])
     return render_template("uploads.html", rooms=rooms)
+
+
+def allowed_file(filename):
+    return filename.endswith(('multidata', ".zip"))
