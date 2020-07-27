@@ -248,7 +248,7 @@ def get_static_room_data(room: Room):
     return result
 
 
-@app.route('/tracker/<uuid:tracker>')
+@app.route('/tracker/<suuid:tracker>')
 @cache.memoize(timeout=30)  # update every 30 seconds
 def get_tracker(tracker: UUID):
     room = Room.get(tracker=tracker)

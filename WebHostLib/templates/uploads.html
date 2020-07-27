@@ -36,8 +36,9 @@
                     <tbody>
                     {% for room in rooms %}
                         <tr>
-                            <td><a href="{{ url_for("view_seed", seed=room.seed.id) }}">{{ room.seed.id }}</a></td>
-                            <td><a href="{{ url_for("host_room", room=room.id) }}">{{ room.id }}</a></td>
+                            <td><a href="{{ url_for("view_seed", seed=room.seed.id) }}">{{ room.seed.id|suuid }}</a>
+                            </td>
+                            <td><a href="{{ url_for("host_room", room=room.id) }}">{{ room.id|suuid }}</a></td>
                             <td>{{ room.seed.multidata.names[0]|length }} Total:
                                 {{ room.seed.multidata.names[0]|join(", ")|truncate(256, False, " ...") }}</td>
                             <td>{{ room.creation_time.strftime("%Y-%m-%d %H:%M") }}</td>

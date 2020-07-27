@@ -2,6 +2,8 @@
 So unless you're Berserker you need to include license information."""
 
 import os
+import uuid
+import base64
 
 from pony.flask import Pony
 from flask import Flask, request, redirect, url_for, render_template, Response, session, abort
@@ -46,7 +48,21 @@ av = Autoversion(app)
 cache = Cache(app)
 Compress(app)
 
-# this local cache is risky business if app hosting is done with subprocesses as it will not sync. Waitress is fine though
+from werkzeug.routing import BaseConverter
+
+
+class B64UUIDConverter(BaseConverter):
+
+    def to_python(self, value):
+        return uuid.UUID(bytes=base64.urlsafe_b64decode(value + '=='))
+
+    def to_url(self, value):
+        return base64.urlsafe_b64encode(value.bytes).rstrip(b'=').decode('ascii')
+
+
+# short UUID
+app.url_map.converters["suuid"] = B64UUIDConverter
+app.jinja_env.filters['suuid'] = lambda value: base64.urlsafe_b64encode(value.bytes).rstrip(b'=').decode('ascii')
 
 
 @app.before_request
@@ -56,7 +72,7 @@ def register_session():
         session["_id"] = uuid4()  # uniquely identify each session without needing a login
 
 
-@app.route('/seed/<uuid:seed>')
+@app.route('/seed/<suuid:seed>')
 def view_seed(seed: UUID):
     seed = Seed.get(id=seed)
     if not seed:
@@ -65,7 +81,7 @@ def view_seed(seed: UUID):
                            rooms=[room for room in seed.rooms if room.owner == session["_id"]])
 
 
-@app.route('/new_room/<uuid:seed>')
+@app.route('/new_room/<suuid:seed>')
 def new_room(seed: UUID):
     seed = Seed.get(id=seed)
     if not seed:
@@ -84,14 +100,13 @@ def _read_log(path: str):
               f"Likely a crash during spinup of multiworld instance or it is still spinning up."
 
 
-@app.route('/log/<uuid:room>')
+@app.route('/log/<suuid:room>')
 def display_log(room: UUID):
     # noinspection PyTypeChecker
     return Response(_read_log(os.path.join("logs", str(room) + ".txt")), mimetype="text/plain;charset=UTF-8")
 
 
-
-@app.route('/hosted/<uuid:room>', methods=['GET', 'POST'])
+@app.route('/hosted/<suuid:room>', methods=['GET', 'POST'])
 def host_room(room: UUID):
     room = Room.get(id=room)
     if room is None:

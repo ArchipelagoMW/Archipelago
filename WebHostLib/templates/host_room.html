@@ -1,19 +1,22 @@
 {% extends 'layout.html' %}
 
 {% block head %}
-    <title>Multiworld {{ room.id }}</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("host_room.css") }}" />
+    <title>Multiworld {{ room.id|suuid }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("host_room.css") }}"/>
 {% endblock %}
 
 {% block body %}
     <div id="host-room">
         {% if room.owner == session["_id"] %}
-            Room created from <a href="{{ url_for("view_seed", seed=room.seed.id) }}">Seed #{{ room.seed.id }}</a><br>
+            Room created from <a href="{{ url_for("view_seed", seed=room.seed.id) }}">Seed #{{ room.seed.id|suuid }}</a>
+            <br>
         {% endif %}
         {% if room.tracker %}
-            This room has a <a href="{{ url_for("get_tracker", tracker=room.tracker) }}">Multiworld Tracker</a> enabled.<br>
+            This room has a <a href="{{ url_for("get_tracker", tracker=room.tracker) }}">Multiworld Tracker</a> enabled.
+            <br>
         {% endif %}
-        This room will be closed after {{ room.timeout//60//60 }} hours of inactivity. Should you wish to continue later,
+        This room will be closed after {{ room.timeout//60//60 }} hours of inactivity. Should you wish to continue
+        later,
         you can simply refresh this page and the server will be started again.<br>
         {% if room.owner == session["_id"] %}
             <form method=post>

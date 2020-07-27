@@ -2,9 +2,9 @@
 {% import "macros.html" as macros %}
 
 {% block head %}
-    <title>Multiworld Seed {{ seed.id }}</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("view_seed.css") }}" />
-    <script type="application/ecmascript" src="{{ static_autoversion("view_seed.js") }}" ></script>
+    <title>Multiworld Seed {{ seed.id|suuid }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("view_seed.css") }}"/>
+    <script type="application/ecmascript" src="{{ static_autoversion("view_seed.js") }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -13,19 +13,19 @@
             <h3>Seed Info</h3>
             <table>
                 <tbody>
-                    <tr>
-                        <td>Seed:&nbsp;</td>
-                        <td>{{ seed.id }}</td>
-                    </tr>
-                    <tr>
-                        <td>Created:&nbsp;</td>
-                        <td id="creation-time" data-creation-time="{{ seed.creation_time }}"></td>
-                    </tr>
-                    <tr>
-                        <td>Players:&nbsp;</td>
-                        <td>
-                            <ul>
-                                {% for team in seed.multidata["names"] %}
+                <tr>
+                    <td>Seed:&nbsp;</td>
+                    <td>{{ seed.id|suuid }}</td>
+                </tr>
+                <tr>
+                    <td>Created:&nbsp;</td>
+                    <td id="creation-time" data-creation-time="{{ seed.creation_time }}"></td>
+                </tr>
+                <tr>
+                    <td>Players:&nbsp;</td>
+                    <td>
+                        <ul>
+                            {% for team in seed.multidata["names"] %}
                                     <li>Team #{{ loop.index }} - {{ team | length }}
                                         <ul>
                                             {% for player in team %}
