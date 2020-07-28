@@ -11,7 +11,7 @@
         <div id="tracker-header-bar">
             <input placeholder="Search" id="search"/>
             {%- if video -%}<span><a target="_blank" href="https://multistream.me/
-                {%- for teamslot, (platform, link) in video.items()-%}
+                {%- for platform, link in video.values()|unique(False, 1)-%}
                     {%- if platform == "Twitch" -%}t{%- else -%}yt{%- endif -%}:{{- link -}}/
                 {%- endfor -%}">Multistream</a></span>
             {%- endif -%}
