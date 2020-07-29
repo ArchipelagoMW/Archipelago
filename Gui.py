@@ -1328,6 +1328,7 @@ class SpriteSelector(object):
         set_icon(self.window)
         self.window.focus()
 
+
     def icon_section(self, frame_label, path, no_results_label):
         frame = LabelFrame(self.window, labelwidget=frame_label, padx=5, pady=5)
         frame.pack(side=TOP, fill=X)
@@ -1339,7 +1340,7 @@ class SpriteSelector(object):
 
         sprites.sort(key=lambda s: str.lower(s.name or "").strip())
 
-        i = 0
+        frame.buttons = []
         for sprite in sprites:
             image = get_image_for_sprite(sprite)
             if image is None:
@@ -1348,18 +1349,29 @@ class SpriteSelector(object):
             button = Button(frame, image=image, command=lambda spr=sprite: self.select_sprite(spr))
             ToolTips.register(button, sprite.name + ("\nBy: %s" % sprite.author_name if sprite.author_name else ""))
             button.image = image
-            button.grid(row=i // 32, column=i % 32)
-            i += 1
+            frame.buttons.append(button)
 
-        if i == 0:
+        if not frame.buttons:
             label = Label(frame, text=no_results_label)
             label.pack()
 
+        def update_sprites(event):
+            sprites_per_row = (event.width - 10) // 38
+            self.grid_fill_sprites(frame, sprites_per_row)
+
+        self.grid_fill_sprites(frame, 32)
+
+        frame.bind("<Configure>", update_sprites)
+
+    def grid_fill_sprites(self, frame, sprites_per_row):
+        for i, button in enumerate(frame.buttons):
+            button.grid(row=i // sprites_per_row, column=i % sprites_per_row)
 
     def update_official_sprites(self):
         # need to wrap in try catch. We don't want errors getting the json or downloading the files to break us.
         self.window.destroy()
         self.parent.update()
+
         def work(task):
             resultmessage = ""
             successful = True
