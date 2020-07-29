@@ -43,6 +43,7 @@ window.addEventListener('load', () => {
                     $(old_table.settings()[0].nScrollBody).scrollTop(topscroll);
                     $(old_table.settings()[0].nScrollBody).scrollLeft(leftscroll);
                 });
+                $("#multi-stream-link").replaceWith(target.find("#multi-stream-link"));
             } else {
                 console.log("Failed to connect to Server, in order to update Table Data.");
                 console.log(response);

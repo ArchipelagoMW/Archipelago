@@ -25,6 +25,10 @@
     margin-right: 1rem;
 }
 
+#multi-stream-link{
+    margin-right: 1rem;
+}
+
 div.dataTables_wrapper.no-footer .dataTables_scrollBody{
     border: none;
 }

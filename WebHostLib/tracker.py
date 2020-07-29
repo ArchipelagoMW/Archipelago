@@ -297,9 +297,10 @@ def get_tracker(tracker: UUID):
     for team, names in enumerate(names):
         for player, name in enumerate(names, 1):
             player_names[(team, player)] = name
-
+    long_player_names = player_names.copy()
     for (team, player), alias in room.multisave.get("name_aliases", []):
         player_names[(team, player)] = alias
+        long_player_names[(team, player)] = f"{alias} ({long_player_names[(team, player)]})"
 
     video = {}
     for (team, player), data in room.multisave.get("video", []):
@@ -312,4 +313,4 @@ def get_tracker(tracker: UUID):
                            checks_in_area=checks_in_area, activity_timers=activity_timers,
                            key_locations=key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids,
                            video=video, big_key_locations=key_locations if use_door_tracker else big_key_locations,
-                           hints=hints)
+                           hints=hints, long_player_names = long_player_names)

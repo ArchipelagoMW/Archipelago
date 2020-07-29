@@ -10,11 +10,11 @@
     <div id="tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
         <div id="tracker-header-bar">
             <input placeholder="Search" id="search"/>
-            {%- if video -%}<span><a target="_blank" href="https://multistream.me/
+            <span{% if not video %} hidden{% endif %} id="multi-stream-link"><a target="_blank" href="https://multistream.me/
                 {%- for platform, link in video.values()|unique(False, 1)-%}
                     {%- if platform == "Twitch" -%}t{%- else -%}yt{%- endif -%}:{{- link -}}/
                 {%- endfor -%}">Multistream</a></span>
-            {%- endif -%}
+            <span>This tracker will automatically update itself periodically.</span>
         </div>
         <div id="tables-container">
             {% for team, players in inventory.items() %}
@@ -144,34 +144,32 @@
                 </div>
             {% endfor %}
             {% for team, hints in hints.items() %}
-                {% if hints %}
-                    <div class="table-wrapper">
-                        <table class="table non-unique-item-table">
-                            <thead>
+                <div class="table-wrapper">
+                    <table class="table non-unique-item-table">
+                        <thead>
+                        <tr>
+                            <th>Finder</th>
+                            <th>Receiver</th>
+                            <th>Item</th>
+                            <th>Location</th>
+                            <th>Entrance</th>
+                            <th>Found</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {%- for hint in hints -%}
                             <tr>
-                                <th>Finder</th>
-                                <th>Receiver</th>
-                                <th>Item</th>
-                                <th>Location</th>
-                                <th>Entrance</th>
-                                <th>Found</th>
+                                <td>{{ long_player_names[team, hint.finding_player] }}</td>
+                                <td>{{ long_player_names[team, hint.receiving_player] }}</td>
+                                <td>{{ hint.item|item_name }}</td>
+                                <td>{{ hint.location|location_name }}</td>
+                                <td>{% if hint.entrance %}{{ hint.entrance }}{% else %}Vanilla{% endif %}</td>
+                                <td>{% if hint.found %}✔{% endif %}</td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            {%- for hint in hints -%}
-                                <tr>
-                                    <td>{{ player_names[team, hint.finding_player] }}</td>
-                                    <td>{{ player_names[team, hint.receiving_player] }}</td>
-                                    <td>{{ hint.item|item_name }}</td>
-                                    <td>{{ hint.location|location_name }}</td>
-                                    <td>{% if hint.entrance %}{{ hint.entrance }}{% else %}Vanilla{% endif %}</td>
-                                    <td>{% if hint.found %}✔{% endif %}</td>
-                                </tr>
-                            {%- endfor -%}
-                            </tbody>
-                        </table>
-                    </div>
-                {% endif %}
+                        {%- endfor -%}
+                        </tbody>
+                    </table>
+                </div>
             {% endfor %}
         </div>
     </div>
