@@ -53,7 +53,9 @@ def link_entrances(world, player):
 
         if world.mode[player] == 'standard':
             # rest of hyrule castle must be in light world, so it has to be the one connected to east exit of desert
-            connect_mandatory_exits(world, lw_entrances, [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')], list(LW_Dungeon_Entrances_Must_Exit), player)
+            hyrule_castle_exits = [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')]
+            connect_mandatory_exits(world, lw_entrances, hyrule_castle_exits, list(LW_Dungeon_Entrances_Must_Exit), player)
+            connect_caves(world, lw_entrances, [], hyrule_castle_exits, player)
         else:
             connect_mandatory_exits(world, lw_entrances, dungeon_exits, list(LW_Dungeon_Entrances_Must_Exit), player)
         connect_mandatory_exits(world, dw_entrances, dungeon_exits, list(DW_Dungeon_Entrances_Must_Exit), player)
