@@ -273,13 +273,39 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite
     with open(options_path, 'w') as f:
         json.dump(options, f)
 
-    subprocess.check_call([os.path.abspath(enemizercli),
-                           '--rom', randopatch_path,
-                           '--seed', str(world.rom_seeds[player].randint(0, 999999999)),
-                           '--binary',
-                           '--enemizer', options_path,
-                           '--output', enemizer_output_path],
-                          cwd=os.path.dirname(enemizercli))
+    max_enemizer_tries = 5
+    for i in range(max_enemizer_tries):
+        enemizer_seed = str(world.rom_seeds[player].randint(0, 999999999))
+        enemizer_command = [os.path.abspath(enemizercli),
+                            '--rom', randopatch_path,
+                            '--seed', enemizer_seed,
+                            '--binary',
+                            '--enemizer', options_path,
+                            '--output', enemizer_output_path]
+
+        p_open = subprocess.Popen(enemizer_command,
+                                  cwd=os.path.dirname(enemizercli),
+                                  stdout=subprocess.PIPE,
+                                  stderr=subprocess.STDOUT,
+                                  universal_newlines=True)
+
+        logging.info(f"Enemizer attempt {i + 1} of {max_enemizer_tries} for player {player} using enemizer seed {enemizer_seed}")
+        for stdout_line in iter(p_open.stdout.readline, ""):
+            logging.info(stdout_line.rstrip())
+        p_open.stdout.close()
+
+        return_code = p_open.wait()
+        if return_code:
+            if i == max_enemizer_tries-1:
+                raise subprocess.CalledProcessError(return_code, enemizer_command)
+            continue
+
+        for j in range(i+1, max_enemizer_tries):
+            world.rom_seeds[player].randint(0, 999999999)
+            # Sacrifice all remaining random numbers that would have been used for unused enemizer tries.
+            # This allows for future enemizer bug fixes to NOT affect the rest of the seed's randomness
+        break
+
     rom.read_from_file(enemizer_output_path)
     os.remove(enemizer_output_path)
 
