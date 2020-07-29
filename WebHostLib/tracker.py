@@ -269,9 +269,10 @@ def get_tracker(tracker: UUID):
                    for teamnumber, team in enumerate(names)}
     precollected_items = room.seed.multidata.get("precollected_items", None)
     hints = {team: set() for team in range(len(names))}
-    for key, hintdata in room.multisave["hints"]:
-        for hint in hintdata:
-            hints[key[0]].add(Hint(*hint))
+    if "hints" in room.multisave:
+        for key, hintdata in room.multisave["hints"]:
+            for hint in hintdata:
+                hints[key[0]].add(Hint(*hint))
 
     for (team, player), locations_checked in room.multisave.get("location_checks", {}):
         if precollected_items:
