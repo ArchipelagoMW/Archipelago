@@ -43,3 +43,16 @@ button:hover, input[type=submit]:hover{
     color: #34768a;
     text-decoration: none;
 }
+
+/** Tooltip styles */
+[data-tooltop]{
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+}
+
+[data-tooltip]:before, [data-tooltip]:after{
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
