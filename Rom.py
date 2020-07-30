@@ -168,7 +168,7 @@ def check_enemizer(enemizercli):
             if info == 'No Version Information Available':
                 info = None
             version = tuple(int(part) for part in info.split("."))
-            if version < (6, 1, 0, 200):
+            if version < (6, 1, 0, 222):
                 raise Exception(
                     f"Enemizer found at {enemizercli} is outdated ({info}), please update your Enemizer. "
                     f"Such as https://github.com/Ijwu/Enemizer/releases")
@@ -619,7 +619,7 @@ def patch_rom(world, rom, player, team, enemized):
                     rom.write_byte(0xDBB73 + exit.addresses, exit.target)
     if world.mode[player] == 'inverted':
         patch_shuffled_dark_sanc(world, rom, player)
-        
+
     write_custom_shops(rom, world, player)
 
     # patch medallion requirements
@@ -2131,9 +2131,9 @@ def patch_shuffled_dark_sanc(world, rom, player):
     dark_sanc_entrance = str([i for i in dark_sanc.entrances if i.parent_region.name != 'Menu'][0].name)
     room_id, ow_area, vram_loc, scroll_y, scroll_x, link_y, link_x, camera_y, camera_x, unknown_1, unknown_2, door_1, door_2 = door_addresses[dark_sanc_entrance][1]
     door_index = door_addresses[str(dark_sanc_entrance)][0]
-    
+
     rom.write_byte(0x180241, 0x01)
-    rom.write_byte(0x180248, door_index + 1) 
+    rom.write_byte(0x180248, door_index + 1)
     write_int16(rom, 0x180250, room_id)
     rom.write_byte(0x180252, ow_area)
     write_int16s(rom, 0x180253, [vram_loc, scroll_y, scroll_x, link_y, link_x, camera_y, camera_x])
