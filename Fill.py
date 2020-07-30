@@ -375,7 +375,7 @@ def balance_multiworld_progression(world):
     if not balanceable_players:
         logging.info('Skipping multiworld progression balancing.')
     else:
-        logging.info(f'Balancing multiworld progression for Players {balanceable_players}.')
+        logging.info(f'Balancing multiworld progression for {len(balanceable_players)} Players.')
         state = CollectionState(world)
         checked_locations = []
         unchecked_locations = world.get_locations().copy()
