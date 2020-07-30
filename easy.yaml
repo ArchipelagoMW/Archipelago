@@ -217,6 +217,8 @@ linked_options:
         simple: 1
         full: 1
         random: 1
+        singularity: 1
+        duality: 1
       enemy_damage:
         shuffled: 1
         random: 1
