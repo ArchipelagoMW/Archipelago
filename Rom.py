@@ -289,9 +289,9 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite
                                   stderr=subprocess.STDOUT,
                                   universal_newlines=True)
 
-        logging.info(f"Enemizer attempt {i + 1} of {max_enemizer_tries} for player {player} using enemizer seed {enemizer_seed}")
+        logging.debug(f"Enemizer attempt {i + 1} of {max_enemizer_tries} for player {player} using enemizer seed {enemizer_seed}")
         for stdout_line in iter(p_open.stdout.readline, ""):
-            logging.info(stdout_line.rstrip())
+            logging.debug(stdout_line.rstrip())
         p_open.stdout.close()
 
         return_code = p_open.wait()
