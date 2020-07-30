@@ -147,6 +147,8 @@ boss_shuffle:
   simple: 0 # Existing bosses except Ganon and Agahnim are shuffled throughout dungeons
   full: 0 # 3 bosses can occur twice
   random: 0 # Any boss can appear any amount of times
+  singularity: 0 # picks any boss that can appear anywhere and puts that boss into every arena
+  duality: 0 # picks a boss that can only appear in some places and a boss that can appear anywhere, then attempts to put both in that order in every arena
 enemy_shuffle:
   none: 1 # Vanilla enemy placement
   chaos: 0 # Enemies are randomized
