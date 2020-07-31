@@ -72,6 +72,11 @@ def register_session():
         session["_id"] = uuid4()  # uniquely identify each session without needing a login
 
 
+@app.route('/tutorial')
+def readme():
+    return render_template("tutorial.html")
+
+
 @app.route('/seed/<suuid:seed>')
 def view_seed(seed: UUID):
     seed = Seed.get(id=seed)
@@ -121,6 +126,11 @@ def host_room(room: UUID):
         room.last_activity = datetime.utcnow()  # will trigger a spinup, if it's not already running
 
     return render_template("host_room.html", room=room)
+
+
+@app.route('/<filename>', methods=['GET'])
+def static_file(filename: str):
+    return app.send_static_file(filename)
 
 
 from WebHostLib.customserver import run_server_process

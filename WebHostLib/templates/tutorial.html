@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    <title>Setup Tutorial</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("tutorial.css") }}" />
+    <script type="application/ecmascript" src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
+    <script type="application/ecmascript" src="{{ static_autoversion("tutorial.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div id="tutorial-wrapper" class="main-content">
+        <!-- Content generated from MarkDown by EcmaScript -->
+    </div>
+{%  endblock %}
