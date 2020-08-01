@@ -23,7 +23,7 @@ normalbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bott
 hardbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Bee)',
                'Bottle (Good Bee)']
 
-easybaseitems = (['Sanctuary Heart Container'] + ['Rupees (300)'] * 4 + ['Magic Upgrade (1/2)'] * 2 +
+easybaseitems = (['Sanctuary Heart Container', "Lamp"] + ['Rupees (300)'] * 4 + ['Magic Upgrade (1/2)'] * 2 +
                  ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 12)
 easyextra = ['Piece of Heart'] * 12 + ['Rupees (300)']
 easyfirst15extra = ['Rupees (100)'] + ['Arrows (10)'] * 7 + ['Bombs (3)'] * 7
