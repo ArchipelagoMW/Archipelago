@@ -838,6 +838,17 @@ def set_trock_key_rules(world, player):
     can_reach_middle = all_state.can_reach(world.get_region('Turtle Rock (Second Section)', player)) if world.can_access_trock_middle[player] is None else world.can_access_trock_middle[player]
     world.can_access_trock_middle[player] = can_reach_middle
 
+    # If you can't enter from the back, the door to the front of TR requires only 2 small keys if the big key is in one of these chests since 2 key doors are locked behind the big key door.
+    # If you can only enter from the middle, this includes all locations that can only be reached by exiting the front.  This can include Laser Bridge and Crystaroller if the front and back connect via Dark DM Ledge!
+    front_locked_locations = {('Turtle Rock - Compass Chest', player), ('Turtle Rock - Roller Room - Left', player), ('Turtle Rock - Roller Room - Right', player)}
+    if can_reach_middle and not can_reach_back and not can_reach_front:
+        normal_regions = all_state.reachable_regions[player].copy()
+        set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: True)
+        all_state.update_reachable_regions(player)
+        front_locked_regions = all_state.reachable_regions[player].difference(normal_regions)
+        front_locked_locations = set((location.name, player) for region in front_locked_regions for location in region.locations)
+
+
     # The following represent the common key rules.
 
     # No matter what, the key requirement for going from the middle to the bottom should be three keys.
@@ -854,7 +865,7 @@ def set_trock_key_rules(world, player):
     else:
         # Middle to front requires 2 keys if the back is locked, otherwise 4
         set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 2)
-                if item_in_locations(state, 'Big Key (Turtle Rock)', player, [('Turtle Rock - Compass Chest', player), ('Turtle Rock - Roller Room - Left', player), ('Turtle Rock - Roller Room - Right', player)])
+                if item_in_locations(state, 'Big Key (Turtle Rock)', player, front_locked_locations)
                 else state.has_key('Small Key (Turtle Rock)', player, 4))
 
         # Front to middle requires 2 keys (if the middle is accessible then these doors can be avoided, otherwise no keys can be wasted)
