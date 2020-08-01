@@ -6,7 +6,7 @@ import uuid
 import base64
 
 from pony.flask import Pony
-from flask import Flask, request, redirect, url_for, render_template, Response, session, abort
+from flask import Flask, request, redirect, url_for, render_template, Response, session, abort, send_from_directory
 from flask_caching import Cache
 from flaskext.autoversion import Autoversion
 from flask_compress import Compress
@@ -128,10 +128,10 @@ def host_room(room: UUID):
     return render_template("host_room.html", room=room)
 
 
-@app.route('/<filename>', methods=['GET'])
-def static_file(filename: str):
-    return app.send_static_file(filename)
-
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 from WebHostLib.customserver import run_server_process
 from . import tracker, upload, landing, check  # to trigger app routing picking up on it
