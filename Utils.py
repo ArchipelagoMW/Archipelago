@@ -82,38 +82,10 @@ local_path.cached_path = None
 def output_path(path):
     if output_path.cached_path:
         return os.path.join(output_path.cached_path, path)
-
-    if not is_bundled() and not hasattr(sys, "_MEIPASS"):
-        # this should trigger if it's cx_freeze bundling
-        output_path.cached_path = '.'
-        return os.path.join(output_path.cached_path, path)
-    else:
-        # has been PyInstaller packaged, so cannot use CWD for output.
-        if sys.platform == 'win32':
-            # windows
-            import ctypes.wintypes
-            CSIDL_PERSONAL = 5  # My Documents
-            SHGFP_TYPE_CURRENT = 0  # Get current, not default value
-
-            buf = ctypes.create_unicode_buffer(ctypes.wintypes.MAX_PATH)
-            ctypes.windll.shell32.SHGetFolderPathW(None, CSIDL_PERSONAL, None, SHGFP_TYPE_CURRENT, buf)
-
-            documents = buf.value
-
-        elif sys.platform == 'darwin':
-            from AppKit import NSSearchPathForDirectoriesInDomains # pylint: disable=import-error
-            # http://developer.apple.com/DOCUMENTATION/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Functions/Reference/reference.html#//apple_ref/c/func/NSSearchPathForDirectoriesInDomains
-            NSDocumentDirectory = 9
-            NSUserDomainMask = 1
-            # True for expanding the tilde into a fully qualified path
-            documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, True)[0]
-        else:
-            raise NotImplementedError('Not supported yet')
-
-        output_path.cached_path = os.path.join(documents, 'ALttPEntranceRandomizer')
-        if not os.path.exists(output_path.cached_path):
-            os.mkdir(output_path.cached_path)
-        return os.path.join(output_path.cached_path, path)
+    output_path.cached_path = local_path(os.path.join("output", path))
+    path = os.path.join(output_path.cached_path, path)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    return path
 
 output_path.cached_path = None
 
