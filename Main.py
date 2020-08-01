@@ -332,7 +332,6 @@ def copy_world(world):
     ret.can_take_damage = world.can_take_damage
     ret.difficulty_requirements = world.difficulty_requirements.copy()
     ret.fix_fake_world = world.fix_fake_world.copy()
-    ret.lamps_needed_for_dark_rooms = world.lamps_needed_for_dark_rooms
     ret.mapshuffle = world.mapshuffle.copy()
     ret.compassshuffle = world.compassshuffle.copy()
     ret.keyshuffle = world.keyshuffle.copy()

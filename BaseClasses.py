@@ -75,7 +75,6 @@ class World(object):
         self.dynamic_regions = []
         self.dynamic_locations = []
         self.spoiler = Spoiler(self)
-        self.lamps_needed_for_dark_rooms = 1
 
         for player in range(1, players + 1):
             def set_player_attr(attr, val):
