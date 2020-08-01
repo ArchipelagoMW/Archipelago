@@ -300,10 +300,11 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
     fast_fill(world, prioitempool, fill_locations)
 
     fast_fill(world, restitempool, fill_locations)
+    unplaced = [item.name for item in progitempool + prioitempool + restitempool]
+    unfilled = [location.name for location in fill_locations]
 
-    logging.getLogger('').debug('Unplaced items: %s - Unfilled Locations: %s',
-                                [item.name for item in progitempool + prioitempool + restitempool],
-                                [location.name for location in fill_locations])
+    if unplaced or unfilled:
+        logging.warning('Unplaced items: %s - Unfilled Locations: %s', unplaced, unfilled)
 
 
 def fast_fill(world, item_pool, fill_locations):

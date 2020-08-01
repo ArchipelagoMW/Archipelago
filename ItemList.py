@@ -8,17 +8,28 @@ from EntranceShuffle import connect_entrance
 from Fill import FillError, fill_restrictive
 from Items import ItemFactory
 
+# This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
+# Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
 
-#This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
-#Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
-
-alwaysitems = ['Bombos', 'Book of Mudora', 'Cane of Somaria', 'Ether', 'Fire Rod', 'Flippers', 'Flute', 'Hammer', 'Hookshot', 'Ice Rod', 'Lamp',
-               'Cape', 'Magic Powder', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Bug Catching Net', 'Cane of Byrna', 'Blue Boomerang', 'Red Boomerang']
+alwaysitems = ['Bombos', 'Book of Mudora', 'Cane of Somaria', 'Ether', 'Fire Rod', 'Flippers', 'Flute', 'Hammer',
+               'Hookshot', 'Ice Rod', 'Lamp',
+               'Cape', 'Magic Powder', 'Mushroom', 'Pegasus Boots', 'Quake', 'Shovel', 'Bug Catching Net',
+               'Cane of Byrna', 'Blue Boomerang', 'Red Boomerang']
 progressivegloves = ['Progressive Glove'] * 2
 basicgloves = ['Power Glove', 'Titans Mitts']
 
-normalbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Fairy)', 'Bottle (Bee)', 'Bottle (Good Bee)']
-hardbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Bee)', 'Bottle (Good Bee)']
+normalbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Fairy)',
+                 'Bottle (Bee)', 'Bottle (Good Bee)']
+hardbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Bee)',
+               'Bottle (Good Bee)']
+
+easybaseitems = (['Sanctuary Heart Container'] + ['Rupees (300)'] * 4 + ['Magic Upgrade (1/2)'] * 2 +
+                 ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 12)
+easyextra = ['Piece of Heart'] * 12 + ['Rupees (300)']
+easyfirst15extra = ['Rupees (100)'] + ['Arrows (10)'] * 7 + ['Bombs (3)'] * 7
+easysecond10extra = ['Bombs (3)'] * 7 + ['Rupee (1)', 'Rupees (50)', 'Bombs (10)']
+easythird5extra = ['Rupees (50)'] * 2 + ['Bombs (3)'] * 2 + ['Arrows (10)']
+easyfinal25extra = ['Rupees (50)'] * 4 + ['Rupees (20)'] * 14 + ['Rupee (1)'] + ['Arrows (10)'] * 4 + ['Rupees (5)'] * 2
 
 normalbaseitems = (['Magic Upgrade (1/2)', 'Single Arrow', 'Sanctuary Heart Container', 'Arrows (10)', 'Bombs (10)'] +
                    ['Rupees (300)'] * 4 + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24)
@@ -40,8 +51,36 @@ Difficulty = namedtuple('Difficulty',
 total_items_to_place = 153
 
 difficulties = {
+    'easy': Difficulty(
+        baseitems=easybaseitems,
+        bottles=normalbottles,
+        bottle_count=8,
+        same_bottle=False,
+        progressiveshield=['Progressive Shield'] * 6,
+        basicshield=['Blue Shield', 'Red Shield', 'Mirror Shield'] * 2,
+        progressivearmor=['Progressive Armor'] * 4,
+        basicarmor=['Blue Mail', 'Red Mail'] * 2,
+        swordless=['Rupees (20)'] * 8,
+        progressivesword=['Progressive Sword'] * 8,
+        basicsword=['Master Sword', 'Tempered Sword', 'Golden Sword', 'Fighter Sword'] * 2,
+        progressivebow=["Progressive Bow"] * 2,
+        basicbow=['Bow', 'Silver Bow'] * 2,
+        timedohko=['Green Clock'] * 25,
+        timedother=['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 5,
+        # +5 more Red Clocks if there is room
+        triforcehunt=['Triforce Piece'] * 30,
+        retro=['Small Key (Universal)'] * 27,
+        extras=[easyextra, easyfirst15extra, easysecond10extra, easythird5extra, easyfinal25extra],
+        progressive_sword_limit=8,
+        progressive_shield_limit=6,
+        progressive_armor_limit=2,
+        progressive_bow_limit=4,
+        progressive_bottle_limit=8,
+        boss_heart_container_limit=10,
+        heart_piece_limit=24,
+    ),
     'normal': Difficulty(
-        baseitems = normalbaseitems,
+        baseitems=normalbaseitems,
         bottles=normalbottles,
         bottle_count=4,
         same_bottle=False,
@@ -125,9 +164,10 @@ difficulties = {
 }
 
 def generate_itempool(world, player):
-    if world.difficulty[player] not in ['normal', 'hard', 'expert']:
+    if world.difficulty[player] not in difficulties:
         raise NotImplementedError(f"Diffulty {world.difficulty[player]}")
-    if world.goal[player] not in {'ganon', 'pedestal', 'dungeons', 'triforcehunt', 'localtriforcehunt', 'ganontriforcehunt', 'localganontriforcehunt', 'crystals'}:
+    if world.goal[player] not in {'ganon', 'pedestal', 'dungeons', 'triforcehunt', 'localtriforcehunt',
+                                  'ganontriforcehunt', 'localganontriforcehunt', 'crystals'}:
         raise NotImplementedError(f"Goal {world.goal[player]}")
     if world.mode[player] not in {'open', 'standard', 'inverted'}:
         raise NotImplementedError(f"Mode {world.mode[player]}")

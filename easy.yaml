@@ -24,7 +24,6 @@ glitches_required: # Determine the logic required to complete the seed
   minor_glitches: 0 # puts fake flipper and super bunny shenanigans into logic
   overworld_glitches: 0 # Assumes the player knows how to perform overworld glitches like fake flipper, water walk, etc
   no_logic: 0 # Items are places completely at random and with no regard for logic. Your fire rod could be on Trinexx
-item_placement: basic # This is based on Entrance Randomizer, which does not (yet?) support advanced
 meta_ignore: # Nullify options specified in the meta.yaml file. Adding an option here guarantees it will not occur in your seed, even if the .yaml file specifies it
   world_state:
     - inverted # Never play inverted seeds
@@ -134,6 +133,7 @@ weapons: # Specifically, swords
   vanilla: 0 # Swords are placed in vanilla locations in your own game (Uncle, Pyramid Fairy, Smiths, Pedestal)
   swordless: 0 # Your swords are replaced by rupees. Gameplay changes have been made to accommodate this change.
 item_pool:
+  easy: 0 # doubled upgrades, progressives etc.
   normal: 1 # Item availability remains unchanged from the vanilla game
   hard: 0 # Reduced upgrade availability (max: 14 hearts, green mail, tempered sword, fire shield, no silvers unless swordless)
   expert: 0 # Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless)
