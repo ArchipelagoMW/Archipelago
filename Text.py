@@ -1334,7 +1334,7 @@ class TextTable(object):
             'maiden_crystal_6',
             'maiden_crystal_7',
             'maiden_ending',
-            'maiden_confirm_undersood',
+            'maiden_confirm_understood',
             'maiden_crystal_7_again',
 
             # item pickup text
@@ -1837,7 +1837,7 @@ class TextTable(object):
         text['maiden_crystal_6'] = CompressedTextMapper.convert("{SPEED2}\n{BOTTOM}\n{NOBORDER}\nI have a pretty green dress.\n{SPEED1}\nJust thought I would tell you.")
         text['maiden_crystal_7'] = CompressedTextMapper.convert("{SPEED2}\n{BOTTOM}\n{NOBORDER}\nIt's about friggin time.\n{SPEED1}\nDo you know how long I've been waiting?")
         text['maiden_ending'] = CompressedTextMapper.convert("May the way of the hero lead to the Triforce")
-        text['maiden_confirm_undersood'] = CompressedTextMapper.convert("{SPEED2}\n{BOTTOM}\n{NOBORDER}\nCapisce?\n  ≥ Yes\n    No\n{CHOICE}")
+        text['maiden_confirm_understood'] = CompressedTextMapper.convert("{SPEED2}\n{BOTTOM}\n{NOBORDER}\nCapisce?\n  ≥ Yes\n    No\n{CHOICE}")
         text['barrier_breaking'] = CompressedTextMapper.convert("What did the seven crystals say to Ganon's Tower?")
         text['maiden_crystal_7_again'] = CompressedTextMapper.convert("{SPEED2}\n{BOTTOM}\n{NOBORDER}\nIt's about friggin time.\n{SPEED1}\nDo you know how long I have been waiting?")
         text['agahnim_zelda_teleport'] = CompressedTextMapper.convert("I am a magician, and this is my act. Watch as I make this girl disappear")
