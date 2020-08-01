@@ -137,11 +137,14 @@ item_pool:
   normal: 1 # Item availability remains unchanged from the vanilla game
   hard: 0 # Reduced upgrade availability (max: 14 hearts, green mail, tempered sword, fire shield, no silvers unless swordless)
   expert: 0 # Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless)
-  crowd_control: 0 # Unless you know what you're doing, leave this at 0
+  crowd_control: 0 # Sets up the item pool for the crowd control extension. Do not use it without crowd control
 item_functionality:
   normal: 1 # Vanilla game item functionality
   hard: 0 # Reduced helpfulness of items (potions less effective, can't catch faeries, cape uses double magic, byrna does not grant invulnerability, boomerangs do not stun, silvers disabled outside ganon)
   expert: 0 # Vastly helpfulness of items (potions barely effective, can't catch faeries, cape uses double magic, byrna does not grant invulnerability, boomerangs and hookshot do not stun, silvers disabled outside ganon)
+progression_balancing:
+  on: 1 # a system to reduce BK, as in times during which you can't do anything by moving your items into earler access sphere to make it likely you have stuff to do
+  off: 0 # turn this off if you don't mind a longer multiworld, or can glitch around missing items.
 boss_shuffle:
   none: 1 # No boss shuffle
   simple: 0 # Existing bosses except Ganon and Agahnim are shuffled throughout dungeons
