@@ -91,9 +91,10 @@ def parse_arguments(argv, no_defaults=False):
                         type=lambda value: min(max(int(value), 1), 90),
                         help='''Set Triforce Pieces required to win a Triforce Hunt''')
     parser.add_argument('--difficulty', default=defval('normal'), const='normal', nargs='?',
-                        choices=['normal', 'hard', 'expert'],
+                        choices=['easy', 'normal', 'hard', 'expert'],
                         help='''\
                              Select game difficulty. Affects available itempool. (default: %(default)s)
+                             Easy:            An easier setting with some equipment duplicated and increased health.
                              Normal:          Normal difficulty.
                              Hard:            A harder setting with less equipment and reduced health.
                              Expert:          A harder yet setting with minimum equipment and health.

@@ -272,7 +272,7 @@ def guiMain(args=None):
     difficultyFrame = Frame(drowDownFrame)
     difficultyVar = StringVar()
     difficultyVar.set('normal')
-    difficultyOptionMenu = OptionMenu(difficultyFrame, difficultyVar, 'normal', 'hard', 'expert')
+    difficultyOptionMenu = OptionMenu(difficultyFrame, difficultyVar, 'easy', 'normal', 'hard', 'expert')
     difficultyOptionMenu.pack(side=RIGHT)
     difficultyLabel = Label(difficultyFrame, text='Difficulty: item pool')
     difficultyLabel.pack(side=LEFT)
