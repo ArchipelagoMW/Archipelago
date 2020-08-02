@@ -2,7 +2,7 @@
 
 {% block head %}
     <title>Berserker's Multiworld</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("landing.css") }}" />
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/landing.css") }}" />
 {% endblock %}
 
 {% block body %}
@@ -20,10 +20,10 @@
             </div>
             <div id="landing-buttons">
                 <a href="{{ url_for("generate") }}">
-                    <button>Start Playing</button>
+                    <button>Start a New Game</button>
                 </a>
                 <a href="{{ url_for("uploads") }}">
-                    <button>Upload Multiworld</button>
+                    <button>Host Existing Game</button>
                 </a>
                 <a href="{{ url_for("mysterycheck") }}">
                     <button>Test YAML Config</button>

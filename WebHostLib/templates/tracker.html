@@ -2,18 +2,22 @@
 {% block head %}
     {{ super() }}
     <title>Multiworld Tracker for Room {{ room.id }}</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("tracker.css") }}"/>
-    <script type="application/ecmascript" src="{{ static_autoversion("jquery.scrollsync.js") }}"></script>
-    <script type="application/ecmascript" src="{{ static_autoversion("tracker.js") }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/tracker.css") }}"/>
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/jquery.scrollsync.js") }}"></script>
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/tracker.js") }}"></script>
 {% endblock %}
 {% block body %}
     <div id="tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
         <div id="tracker-header-bar">
             <input placeholder="Search" id="search"/>
-            <span{% if not video %} hidden{% endif %} id="multi-stream-link"><a target="_blank" href="https://multistream.me/
-                {%- for platform, link in video.values()|unique(False, 1)-%}
-                    {%- if platform == "Twitch" -%}t{%- else -%}yt{%- endif -%}:{{- link -}}/
-                {%- endfor -%}">Multistream</a></span>
+            <span{% if not video %} hidden{% endif %} id="multi-stream-link">
+                <a target="_blank" href="https://multistream.me/
+                    {%- for platform, link in video.values()|unique(False, 1)-%}
+                        {%- if platform == "Twitch" -%}t{%- else -%}yt{%- endif -%}:{{- link -}}/
+                    {%- endfor -%}">
+                    Multistream
+                </a>
+            </span>
             <span>This tracker will automatically update itself periodically.</span>
         </div>
         <div id="tables-container">
