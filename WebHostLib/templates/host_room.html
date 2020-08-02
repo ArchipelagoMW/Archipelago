@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-
+{% import "macros.html" as macros %}
 {% block head %}
     <title>Multiworld {{ room.id|suuid }}</title>
     <link rel="stylesheet" type="text/css" href="{{ static_autoversion("host_room.css") }}"/>
@@ -18,6 +18,10 @@
         This room will be closed after {{ room.timeout//60//60 }} hours of inactivity. Should you wish to continue
         later,
         you can simply refresh this page and the server will be started again.<br>
+        {% if room.last_port %}
+            You can connect to this room by using '/connect berserkermulti.world:{{ room.last_port }}'
+            in the <a href="https://github.com/Berserker66/MultiWorld-Utilities/releases">client</a>.<br>{% endif %}
+        {{ macros.list_patches_room(room.seed.patches, room) }}
         {% if room.owner == session["_id"] %}
             <form method=post>
                 <div class="form-group">
@@ -26,15 +30,15 @@
                            placeholder="Server Command. /help to list them, list gets appended to log.">
                 </div>
             </form>
-        {% endif %}
-        Log:
+
+            Log:
         <div id="logger"></div>
         <script>
             let xmlhttp = new XMLHttpRequest();
             let url = '{{ url_for('display_log', room = room.id) }}';
 
             xmlhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
+                if (this.readyState === 4 && this.status === 200) {
                     document.getElementById("logger").innerText = this.responseText;
                 }
             };
@@ -47,5 +51,6 @@
             window.setTimeout(request_new, 1000);
             window.setInterval(request_new, 10000);
         </script>
+        {% endif %}
     </div>
 {% endblock %}

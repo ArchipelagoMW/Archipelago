@@ -103,27 +103,27 @@ def main(args=None, callback = ERmain):
     # set up logger
     if args.loglevel:
         erargs.loglevel = args.loglevel
-    loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[erargs.loglevel]
-
-    import sys
-    class LoggerWriter(object):
-        def __init__(self, writer):
-            self._writer = writer
-            self._msg = ''
-
-        def write(self, message):
-            self._msg = self._msg + message
-            while '\n' in self._msg:
-                pos = self._msg.find('\n')
-                self._writer(self._msg[:pos])
-                self._msg = self._msg[pos + 1:]
-
-        def flush(self):
-            if self._msg != '':
-                self._writer(self._msg)
-                self._msg = ''
+    loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[
+        erargs.loglevel]
 
     if args.log_output_path:
+        import sys
+        class LoggerWriter(object):
+            def __init__(self, writer):
+                self._writer = writer
+                self._msg = ''
+
+            def write(self, message):
+                self._msg = self._msg + message
+                while '\n' in self._msg:
+                    pos = self._msg.find('\n')
+                    self._writer(self._msg[:pos])
+                    self._msg = self._msg[pos + 1:]
+
+            def flush(self):
+                if self._msg != '':
+                    self._writer(self._msg)
+                    self._msg = ''
         log = logging.getLogger("stderr")
         log.addHandler(logging.StreamHandler())
         sys.stderr = LoggerWriter(log.error)

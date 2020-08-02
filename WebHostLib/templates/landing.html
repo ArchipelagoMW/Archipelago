@@ -19,8 +19,14 @@
                 </p>
             </div>
             <div id="landing-buttons">
-                <a href="uploads">
+                <a href="{{ url_for("generate") }}">
                     <button>Start Playing</button>
+                </a>
+                <a href="{{ url_for("uploads") }}">
+                    <button>Upload Multiworld</button>
+                </a>
+                <a href="{{ url_for("mysterycheck") }}">
+                    <button>Test YAML Config</button>
                 </a>
             </div>
             <div id="landing-body">

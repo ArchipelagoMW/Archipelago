@@ -42,6 +42,7 @@ app.config["PONY"] = {
     'filename': os.path.abspath('db.db3'),
     'create_db': True
 }
+app.config["MAX_ROLL"] = 20
 app.config["CACHE_TYPE"] = "simple"
 app.autoversion = True
 av = Autoversion(app)
@@ -133,5 +134,6 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+
 from WebHostLib.customserver import run_server_process
-from . import tracker, upload, landing, check  # to trigger app routing picking up on it
+from . import tracker, upload, landing, check, generate  # to trigger app routing picking up on it

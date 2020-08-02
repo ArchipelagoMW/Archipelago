@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    {{ super() }}
+    <title>Generate Game</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("uploads.css") }}"/>
+    <script type="application/ecmascript" src="{{ static_autoversion("generate.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div id="uploads-wrapper">
+        <div id="uploads" class="main-content">
+            <h3>Upload YAML(s){% if race %} (Race Mode){% endif %}</h3>
+            <p>
+                This page accepts a yaml file containing generator options.
+                You can find a documented example at <a
+                    href="https://raw.githubusercontent.com/Berserker66/MultiWorld-Utilities/master/easy.yaml">easy.yaml</a>.
+                This file can be saved as .yaml, edited to your liking and then supplied to the generator.
+                You can also upload a .zip with multiple YAMLs.
+                A proper menu is in the works.
+                {% if race -%}
+                    Race Mode means the spoiler log will be unavailable.
+                {%- else -%}
+                    You can go to <a href="{{ url_for("generate", race=True) }}">Race Mode</a> to create a game without
+                    spoiler log.
+                {%- endif -%}
+            </p>
+            <p>
+                After generation is complete, you will have the option to download a patch file.
+                This patch file can be opened with the <a
+                    href="https://github.com/Berserker66/MultiWorld-Utilities/releases">Client</a> to create a rom file.
+                In-Browser patching will come.
+            </p>
+            <div id="uploads-form-wrapper">
+                <form id="upload-form" method="post" enctype="multipart/form-data">
+                    <input id="file-input" type="file" name="file">
+                </form>
+                <button id="upload-button">Upload</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

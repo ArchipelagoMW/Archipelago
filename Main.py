@@ -216,11 +216,9 @@ def main(args, seed=None):
                 'S' if world.keyshuffle[player] else '', 'B' if world.bigkeyshuffle[player] else '')
 
         outfilepname = f'_T{team + 1}' if world.teams > 1 else ''
-        if world.players > 1:
-            outfilepname += f'_P{player}'
-        if world.players > 1 or world.teams > 1:
-            outfilepname += f"_{world.player_names[player][team].replace(' ', '_')}" if world.player_names[player][
-                                                                                            team] != 'Player%d' % player else ''
+        outfilepname += f'_P{player}'
+        outfilepname += f"_{world.player_names[player][team].replace(' ', '_')}" if world.player_names[player][
+                                                                                        team] != 'Player%d' % player else ''
         outfilesuffix = ('_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (world.logic[player], world.difficulty[player],
                                                               world.difficulty_adjustments[player],
                                                               world.mode[player], world.goal[player],
