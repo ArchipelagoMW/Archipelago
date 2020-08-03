@@ -62,7 +62,7 @@ def download_patch(patch_id, room_id):
 
 @app.route("/dl_spoiler/<suuid:seed_id>")
 def download_spoiler(seed_id):
-    return Response(Seed.get(id=seed_id).spoiler[3:], mimetype="text/plain")
+    return Response(Seed.get(id=seed_id).spoiler, mimetype="text/plain")
 
 
 @app.route("/dl_raw_patch/<suuid:seed_id>/<int:player_id>")
