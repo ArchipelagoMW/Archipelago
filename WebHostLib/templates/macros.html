@@ -9,7 +9,7 @@
 {% macro list_patches_room(patches, room) %}
     {% if patches %}
         <ul>
-            {% for patch in patches %}
+            {% for patch in patches|list|sort %}
                 <li><a href="{{ url_for("download_patch", patch_id=patch.id, room_id=room.id) }}">
                     Patch for player {{ patch.player }} - {{ room.seed.multidata["names"][0][patch.player-1] }}</a></li>
             {% endfor %}
