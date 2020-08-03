@@ -90,17 +90,16 @@ Triforce_texts = [
     '\n  Well Done!',
     'You just wasted 2 hours of your life.',
     'This was meant to be a trapezoid'
-] * 2 + [
-    "\n     G G",
+    "\n   Success!", #Contributed by caitsith2
+                 ] * 2 + [
+    "\n     GG",
     "All your base\nare belong\nto us.",
     "You have ended\nthe domination\nof Dr. Wily",
     " Thanks for\n  playing!!!",
     "\n  You Win!",
     "  Thank you!\n  Your quest\n   is over.",
-    "  A winner\n     is\n    you!",
-    "\n   WINNER!!",
-    "\n  I'm sorry\n\n  but your\nprincess is in\nanother castle",
-    "\n   Success!",
+    "Your princess \n is in another\n castle."
+    "\n  I'm sorry",
     "  Whelp…\n   that just\n    happened",
     "   Oh hey…\n    it's you",
     "\n  Wheeeeee!!",
@@ -110,10 +109,9 @@ Triforce_texts = [
     "\nThe valuuue!!!",
     "Cool seed,\n\nright?",
     "\n  We did it!",
-    " Spam those\n  emotes in\n  Wild's chat",
     "\n   O  M  G",
     " Hello.  Will\n  you be my\n   friend?",
-    "   Beetorp\n     was\n    here!",
+    " Berserker\n     was\n    here!",
     "The Wind Fish\nwill wake\nsoon.    Hoot!",
     "Meow meow meow\nMeow meow meow\n  Oh my god!",
     "Ahhhhhhhhh\nYa ya yaaaah\nYa ya yaaah",
@@ -130,8 +128,8 @@ Triforce_texts = [
     "I promise the\nnext seed will\nbe better.",
     "\n   Honk.",
 ]
-BombShop2_texts = ['Bombs!\nBombs!\nBiggest!\nBestest!\nGreatest!\nBoomest!']
-Sahasrahla2_texts = ['You already got my item, idiot.', 'Why are you still talking to me?', 'This text won\'t change.', 'Have you met my brother, Hasarahshla?']
+BombShop2_texts = ['Bombs!\nBombs!\nBiggest!\nBestest!\nGreatest!\nBoomiest!']
+Sahasrahla2_texts = ['You already got my item, idiot.', 'Why are you still talking to me?', 'Have you met my brother, Hasarahshla?']
 Blind_texts = [
     "I hate insect\npuns, they\nreally bug me.",
     "I haven't seen\nthe eye doctor\nin years.",
@@ -146,10 +144,7 @@ Blind_texts = [
     "A baker's job\nis a piece of\ncake.",
     "My optometrist\nsaid I have\nvision!",
     "When you're a\nbaker, don't\nloaf around.",
-    "Mire requires\nEther Quake,\nor Bombos.",
     "Broken pencils\nare pointless.",
-    "The food they\nserve guards\nlasts sentries",
-    "Being crushed\nby big objects\nis depressing.",
     "A tap dancer's\nroutine runs\nhot and cold.",
     "A weeknight is\na tiny\nnobleman.",
     "The chimney\nsweep wore a\nsoot and tye.",
@@ -160,13 +155,12 @@ Blind_texts = [
     "Archers give\ngifts tied\nwith a bow.",
     "A healed\ngambler is\nall better.",
     "Any old sword\nwill make the\ncut here.",
-    "Lazy wyrms\nkeep dragon\ntheir feet.",
+    "Lazy wyrms\nkeep dragin'\ntheir feet.",
     "Percussionist\nmasters drum\nup audiences.",
     "Retrievers\nlove fetch\nquests.",
     "Sausage is\nthe wurst.",
     "I tried to\ncatch fog,\nbut I mist.",
     "Winter is a\ngreat time\nto chill.",
-    "Do you think\nthe Ice Rod\nis cool?",
     "Pyramids?\nI never saw\nthe point.",
     "Stone golems\nare created as\nblank slates.",
     "Desert humor\nis often dry.",
