@@ -33,7 +33,7 @@ class Seed(db.Entity):
     owner = Required(UUID, index=True)
     creation_time = Required(datetime, default=lambda: datetime.utcnow())
     patches = Set(Patch)
-    spoiler = Optional(str, lazy=True)
+    spoiler = Optional(LongStr, lazy=True)
 
 
 class Command(db.Entity):
