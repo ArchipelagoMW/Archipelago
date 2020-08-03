@@ -30,7 +30,7 @@ def generate(race=False):
                 flash(options)
             else:
                 results, gen_options = roll_yamls(options)
-                if any(result == str for result in results.values()):
+                if any(type(result) == str for result in results.values()):
                     return render_template("checkresult.html", results=results)
                 elif len(gen_options) > app.config["MAX_ROLL"]:
                     flash(f"Sorry, generating of multiworld is limited to {app.config['MAX_ROLL']} players for now. "
