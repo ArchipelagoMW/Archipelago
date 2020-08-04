@@ -23,7 +23,7 @@ normalbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bott
 hardbottles = ['Bottle', 'Bottle (Red Potion)', 'Bottle (Green Potion)', 'Bottle (Blue Potion)', 'Bottle (Bee)',
                'Bottle (Good Bee)']
 
-easybaseitems = (['Sanctuary Heart Container', "Lamp"] + ['Rupees (300)'] * 5 + ['Magic Upgrade (1/2)'] * 2 +
+easybaseitems = (['Sanctuary Heart Container', "Lamp"] + ['Rupees (300)'] * 5 +
                  ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24)
 easyfirst15extra = ['Piece of Heart'] * 12 + ['Rupees (300)'] * 3
 easysecond15extra = ['Rupees (100)'] + ['Arrows (10)'] * 7 + ['Bombs (3)'] * 7
@@ -31,7 +31,7 @@ easythird10extra = ['Bombs (3)'] * 7 + ['Rupee (1)', 'Rupees (50)', 'Bombs (10)'
 easyfourth5extra = ['Rupees (50)'] * 2 + ['Bombs (3)'] * 2 + ['Arrows (10)']
 easyfinal25extra = ['Rupees (50)'] * 4 + ['Rupees (20)'] * 14 + ['Rupee (1)'] + ['Arrows (10)'] * 4 + ['Rupees (5)'] * 2
 
-normalbaseitems = (['Magic Upgrade (1/2)', 'Single Arrow', 'Sanctuary Heart Container', 'Arrows (10)', 'Bombs (10)'] +
+normalbaseitems = (['Single Arrow', 'Sanctuary Heart Container', 'Arrows (10)', 'Bombs (10)'] +
                    ['Rupees (300)'] * 4 + ['Boss Heart Container'] * 10 + ['Piece of Heart'] * 24)
 normalfirst15extra = ['Rupees (100)', 'Rupees (300)', 'Rupees (50)'] + ['Arrows (10)'] * 6 + ['Bombs (3)'] * 6
 normalsecond15extra = ['Bombs (3)'] * 10 + ['Rupees (50)'] * 2 + ['Arrows (10)'] * 2 + ['Rupee (1)']
@@ -41,7 +41,7 @@ normalfinal25extra = ['Rupees (20)'] * 23 + ['Rupees (5)'] * 2
 
 Difficulty = namedtuple('Difficulty',
                         ['baseitems', 'bottles', 'bottle_count', 'same_bottle', 'progressiveshield',
-                         'basicshield', 'progressivearmor', 'basicarmor', 'swordless',
+                         'basicshield', 'progressivearmor', 'basicarmor', 'swordless', 'progressivemagic', 'basicmagic',
                          'progressivesword', 'basicsword', 'progressivebow', 'basicbow', 'timedohko', 'timedother',
                          'triforcehunt', 'retro',
                          'extras', 'progressive_sword_limit', 'progressive_shield_limit',
@@ -61,6 +61,8 @@ difficulties = {
         progressivearmor=['Progressive Armor'] * 4,
         basicarmor=['Blue Mail', 'Red Mail'] * 2,
         swordless=['Rupees (20)'] * 8,
+        progressivemagic=['Magic Upgrade (1/2)'] * 2,
+        basicmagic=['Magic Upgrade (1/2)', 'Magic Upgrade (1/4)'],
         progressivesword=['Progressive Sword'] * 8,
         basicsword=['Master Sword', 'Tempered Sword', 'Golden Sword', 'Fighter Sword'] * 2,
         progressivebow=["Progressive Bow"] * 2,
@@ -88,6 +90,8 @@ difficulties = {
         progressivearmor=['Progressive Armor'] * 2,
         basicarmor=['Blue Mail', 'Red Mail'],
         swordless=['Rupees (20)'] * 4,
+        progressivemagic=['Magic Upgrade (1/2)'],
+        basicmagic=['Magic Upgrade (1/2)'],
         progressivesword=['Progressive Sword'] * 4,
         basicsword=['Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
         progressivebow=["Progressive Bow"] * 2,
@@ -115,6 +119,8 @@ difficulties = {
         progressivearmor=['Progressive Armor'] * 2,
         basicarmor=['Progressive Armor'] * 2,  # neither will count
         swordless=['Rupees (20)'] * 4,
+        progressivemagic=['Magic Upgrade (1/2)'],
+        basicmagic=['Magic Upgrade (1/2)'],
         progressivesword=['Progressive Sword'] * 4,
         basicsword=['Fighter Sword', 'Master Sword', 'Master Sword', 'Tempered Sword'],
         progressivebow=["Progressive Bow"] * 2,
@@ -143,6 +149,8 @@ difficulties = {
         progressivearmor=['Progressive Armor'] * 2,  # neither will count
         basicarmor=['Progressive Armor'] * 2,  # neither will count
         swordless=['Rupees (20)'] * 4,
+        progressivemagic=['Magic Upgrade (1/2)'],
+        basicmagic=['Magic Upgrade (1/2)'],
         progressivesword=['Progressive Sword'] * 4,
         basicsword=['Fighter Sword', 'Fighter Sword', 'Master Sword', 'Master Sword'],
         progressivebow=["Progressive Bow"] * 2,
@@ -505,6 +513,11 @@ def get_pool_core(world, player: int):
         pool.extend(diff.progressivearmor)
     else:
         pool.extend(diff.basicarmor)
+
+    if want_progressives():
+        pool.extend(diff.progressivemagic)
+    else:
+        pool.extend(diff.basicmagic)
 
     if want_progressives():
         pool.extend(diff.progressivebow)
