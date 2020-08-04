@@ -541,7 +541,10 @@ def get_pool_core(world, player: int):
         if goal != 'pedestal':
             place_item('Master Sword Pedestal', swords_to_use.pop())
         else:
+            swords_to_use.pop()
             place_item('Master Sword Pedestal', 'Triforce')
+        if swords_to_use:
+            pool.extend(swords_to_use)
     else:
         progressive_swords = want_progressives()
         pool.extend(diff.progressivesword if progressive_swords else diff.basicsword)
