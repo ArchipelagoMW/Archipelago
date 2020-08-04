@@ -6,7 +6,7 @@ window.addEventListener('load', () => {
             if (ajax.status !== 200) { reject('Unable to retrieve tutorial markdown file.') }
             resolve(ajax.responseText);
         };
-        ajax.open('GET', 'static/tutorial.md', true);
+        ajax.open('GET', 'static/assets/tutorial.md', true);
         ajax.send();
     }).then((response) => {
         let markdown = new showdown.Converter();
