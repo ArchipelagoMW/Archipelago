@@ -589,6 +589,10 @@
     "edge": "RIVERBANK_LOWER_FOREST_ENTRANCE -> RIVERBANK_LOWER_LEFT",
     "prereq": "IMPOSSIBLE",
     }
+    {
+    "edge": "RIVERBANK_MAIN_LEVEL1 -> RIVERBANK_LOWER_FOREST_ENTRANCE",
+    "prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
+    }
 ]}
 
 {
