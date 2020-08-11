@@ -161,7 +161,8 @@ def main(args=None, callback = ERmain):
         if path:
             try:
                 settings = settings_cache[path] if settings_cache[path] else roll_settings(weights_cache[path])
-                if settings.sprite is not None and not os.path.isfile(settings.sprite) and not get_sprite_from_name(settings.sprite):
+                if settings.sprite is not None and not os.path.isfile(settings.sprite) and not get_sprite_from_name(
+                        settings.sprite):
                     logging.warning(
                         f"Warning: The chosen sprite, \"{settings.sprite}\", for yaml \"{path}\", does not exist.")
                 for k, v in vars(settings).items():
@@ -171,12 +172,11 @@ def main(args=None, callback = ERmain):
                 raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
         else:
             raise RuntimeError(f'No weights specified for player {player}')
-        if not erargs.name[player]:
+        if path == args.weights:  # if name came from the weights file, just use base player name
+            erargs.name[player] = f"Player{player}"
+        elif not erargs.name[player]:  # if name was not specified, generate it from filename
             erargs.name[player] = os.path.split(path)[-1].split(".")[0]
-    if args.weights:
-        erargs.names = ""
-    else:
-        erargs.names = ",".join(erargs.name[i] for i in range(1, args.multi + 1))
+    erargs.names = ",".join(erargs.name[i] for i in range(1, args.multi + 1))
     del (erargs.name)
     if args.yaml_output:
         import yaml
