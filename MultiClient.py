@@ -1305,17 +1305,6 @@ async def main():
     parser.add_argument('--disable_web_ui', default=False, action='store_true', help="Turn off emitting a webserver for the webbrowser based user interface.")
     args = parser.parse_args()
     logging.basicConfig(format='%(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
-    port = None
-    if not args.disable_web_ui:
-        # Find an available port on the host system to use for hosting the websocket server
-        while True:
-            port = randrange(49152, 65535)
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-                if not sock.connect_ex(('localhost', port)) == 0:
-                    break
-        import threading
-        WebUI.start_server(
-            port, on_start=threading.Timer(1, webbrowser.open, (f'http://localhost:5050?port={port}',)).start)
 
     if args.diff_file:
         import Patch
@@ -1331,6 +1320,18 @@ async def main():
             except Exception as e:
                 logging.exception(e)
         asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
+
+    port = None
+    if not args.disable_web_ui:
+        # Find an available port on the host system to use for hosting the websocket server
+        while True:
+            port = randrange(49152, 65535)
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+                if not sock.connect_ex(('localhost', port)) == 0:
+                    break
+        import threading
+        WebUI.start_server(
+            port, on_start=threading.Timer(1, webbrowser.open, (f'http://localhost:5050?port={port}',)).start)
 
     ctx = Context(args.snes, args.connect, args.password, args.founditems, port)
     input_task = create_named_task(console_loop(ctx), name="Input")
