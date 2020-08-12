@@ -10,6 +10,7 @@ import random
 import struct
 import sys
 import subprocess
+import threading
 
 from BaseClasses import CollectionState, ShopType, Region, Location
 from Dungeons import dungeon_music_addresses
@@ -146,32 +147,35 @@ def read_rom(stream) -> bytearray:
     return buffer
 
 
-def check_enemizer(enemizercli):
-    if getattr(check_enemizer, "done", None):
-        return
-    if not os.path.exists(enemizercli) and not os.path.exists(enemizercli + ".exe"):
-        raise Exception(f"Enemizer not found at {enemizercli}, please install it."
-                        f"Such as https://github.com/Ijwu/Enemizer/releases")
-    if sys.platform == "win32":
-        try:
-            import pythoncom
-            from win32com.client import Dispatch
-        except ImportError:
-            logging.info("Could not check Enemizer Version info as pywin32 bindings are missing.")
-        else:
-            # version info is saved on the lib, for some reason
-            library = os.path.join(os.path.dirname(enemizercli), "EnemizerLibrary.dll")
-            pythoncom.CoInitialize()
-            ver_parser = Dispatch('Scripting.FileSystemObject')
-            info = ver_parser.GetFileVersion(library)
+check_lock = threading.Lock()
 
-            if info == 'No Version Information Available':
-                info = None
-            version = tuple(int(part) for part in info.split("."))
-            if version < (6, 1, 0, 222):
-                raise Exception(
-                    f"Enemizer found at {enemizercli} is outdated ({info}), please update your Enemizer. "
-                    f"Such as https://github.com/Ijwu/Enemizer/releases")
+
+def check_enemizer(enemizercli):
+    with check_lock:
+        if getattr(check_enemizer, "done", None):
+            return
+        if not os.path.exists(enemizercli) and not os.path.exists(enemizercli + ".exe"):
+            raise Exception(f"Enemizer not found at {enemizercli}, please install it."
+                            f"Such as https://github.com/Ijwu/Enemizer/releases")
+        if sys.platform == "win32":
+            try:
+                import pythoncom
+                from win32com.client import Dispatch
+                pythoncom.CoInitialize()
+            except ImportError:
+                logging.info("Could not check Enemizer Version info as pywin32 bindings are missing.")
+            else:
+                # version info is saved on the lib, for some reason
+                library = os.path.join(os.path.dirname(enemizercli), "EnemizerLibrary.dll")
+                ver_parser = Dispatch('Scripting.FileSystemObject')
+                info = ver_parser.GetFileVersion(library)
+
+                if info != 'No Version Information Available':
+                    version = tuple(int(part) for part in info.split("."))
+                    if version < (6, 1, 0, 222):
+                        raise Exception(
+                            f"Enemizer found at {enemizercli} is outdated ({info}), please update your Enemizer. "
+                            f"Such as https://github.com/Ijwu/Enemizer/releases")
     check_enemizer.done = True
 
 
