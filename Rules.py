@@ -820,6 +820,17 @@ def standard_rules(world, player):
     set_rule(world.get_entrance('Links House S&Q', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
     set_rule(world.get_entrance('Sanctuary S&Q', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
 
+def toss_junk_item(world, player):
+    items = ['Rupees (20)', 'Bombs (3)', 'Arrows (10)', 'Rupees (5)', 'Rupee (1)', 'Bombs (10)',
+             'Single Arrow', 'Rupees (50)', 'Rupees (100)', 'Single Bomb', 'Bee', 'Bee Trap',
+             'Rupees (300)']
+    for item in items:
+        big20 = next((i for i in world.itempool if i.name == item and i.player == player), None)
+        if big20:
+            world.itempool.remove(big20)
+            return
+    raise Exception("Unable to find a junk item to toss to make room for a TR small key")
+
 
 def set_trock_key_rules(world, player):
     # First set all relevant locked doors to impassible.
@@ -900,8 +911,7 @@ def set_trock_key_rules(world, player):
                     # A key is required in the Big Key Chest to prevent a possible softlock.  Place an extra key to ensure 100% locations still works
                     world.push_item(world.get_location('Turtle Rock - Big Key Chest', player), ItemFactory('Small Key (Turtle Rock)', player), False)
                     world.get_location('Turtle Rock - Big Key Chest', player).event = True
-                    big20 = next(i for i in world.itempool if i.name == "Rupees (20)" and i.player == player)
-                    world.itempool.remove(big20)
+                    toss_junk_item(world, player)
 
     if world.accessibility[player] != 'locations':
         set_always_allow(world.get_location('Turtle Rock - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Turtle Rock)' and item.player == player
