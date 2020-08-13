@@ -21,7 +21,7 @@
 ### Windows Setup
 1. Download and install the Multiworld Utilities from the link above, making sure to install the most recent version.
 **The file is located in the assets section at the bottom of the version information**. If you intend to play normal
-multiworld games, you want _Setup.BerserkerMultiWorld.exe_.
+multiworld games, you want `Setup.BerserkerMultiWorld.exe`
     - If you intend to play the doors variant of multiworld, you will want to download the alternate doors file.
     - During the installation process, you will be asked to browse for your Japanese 1.0 ROM file. If you have
       installed this software before and are simply upgrading now, you will not be prompted to locate your
