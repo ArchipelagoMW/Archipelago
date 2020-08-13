@@ -25,7 +25,7 @@
                 <a href="{{ url_for("uploads") }}">
                     <button>Host Existing Game</button>
                 </a>
-                <a href="/tutorial">
+                <a href="{{ url_for('readme') }}">
                     <button>Setup Guide</button>
                 </a>
                 <a href="{{ url_for("mysterycheck") }}">
@@ -43,11 +43,11 @@
                 <p>Currently, a locally installed client is required to play. This client should handle patching
                     your ROM files and connecting to the multiworld server. More information on how to set up a local
                     client may be found on the
-                    <a href="/tutorial">Setup Guide</a>.</p>
+                    <a href="{{ url_for("readme") }}">Setup Guide</a>.</p>
                 <p>This website is under active development. As such, your hosted rooms may occasionally disappear,
                     and there may be bugs. If you do happen to find a bug, please report it
                     <a href="https://github.com/Berserker66/MultiWorld-Utilities/issues">here</a>.</p>
-                <p>{{ multiworlds }} games were started in the last 7 days.</p>
+                <p>{{ seeds }} games were created and {{ rooms }} hosted in the last 7 days.</p>
             </div>
         </div>
         <iframe src="https://discordapp.com/widget?id=731205301247803413&theme=light"
