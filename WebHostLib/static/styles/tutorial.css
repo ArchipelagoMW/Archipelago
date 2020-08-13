@@ -55,3 +55,21 @@
 #tutorial-wrapper a{
 
 }
+
+#tutorial-wrapper pre{
+    padding: 0.5rem 0.25rem;
+    background-color: #dce2bd;
+    border: 1px solid #9f916a;
+    border-radius: 6px;
+}
+
+#tutorial-wrapper code{
+    background-color: #dce2bd;
+    border-radius: 4px;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+}
+
+#tutorial-wrapper iframe{
+    text-align: center;
+}
