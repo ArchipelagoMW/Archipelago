@@ -444,7 +444,7 @@ def create_playthrough(world):
     collection_spheres = []
     state = CollectionState(world)
     sphere_candidates = list(prog_locations)
-    logging.getLogger('').debug('Building up collection spheres.')
+    logging.debug('Building up collection spheres.')
     while sphere_candidates:
         state.sweep_for_events(key_only=True)
 
@@ -462,11 +462,15 @@ def create_playthrough(world):
 
         state_cache.append(state.copy())
 
-        logging.getLogger('').debug('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres), len(sphere), len(prog_locations))
+        logging.debug('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres), len(sphere),
+                      len(prog_locations))
         if not sphere:
-            logging.getLogger('').debug('The following items could not be reached: %s', ['%s (Player %d) at %s (Player %d)' % (location.item.name, location.item.player, location.name, location.player) for location in sphere_candidates])
+            logging.debug('The following items could not be reached: %s', ['%s (Player %d) at %s (Player %d)' % (
+                location.item.name, location.item.player, location.name, location.player) for location in
+                                                                           sphere_candidates])
             if any([world.accessibility[location.item.player] != 'none' for location in sphere_candidates]):
-                raise RuntimeError('Not all progression items reachable. Something went terribly wrong here.')
+                raise RuntimeError(f'Not all progression items reachable ({sphere_candidates}). '
+                                   f'Something went terribly wrong here.')
             else:
                 old_world.spoiler.unreachables = sphere_candidates.copy()
                 break

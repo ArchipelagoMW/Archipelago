@@ -1,4 +1,5 @@
 import logging
+import typing
 
 from BaseClasses import CollectionState
 
@@ -199,10 +200,10 @@ def fill_restrictive(world, base_state: CollectionState, locations, itempool, si
                     # we filled all reachable spots. Maybe the game can be beaten anyway?
                     unplaced_items.insert(0, item_to_place)
                     if world.accessibility[item_to_place.player] != 'none' and world.can_beat_game():
-                        logging.getLogger('').warning(
-                            'Not all items placed. Game beatable anyway. (Could not place %s)' % item_to_place)
+                        logging.warning(
+                            f'Not all items placed. Game beatable anyway. (Could not place {item_to_place})')
                         continue
-                    raise FillError('No more spots to place %s' % item_to_place)
+                    raise FillError(f'No more spots to place {item_to_place}, locations {locations} are invalid')
 
                 world.push_item(spot_to_fill, item_to_place, False)
                 locations.remove(spot_to_fill)
@@ -297,9 +298,9 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
 
     world.random.shuffle(fill_locations)
 
-    fast_fill(world, prioitempool, fill_locations)
+    prioitempool, fill_locations = fast_fill(world, prioitempool, fill_locations)
 
-    fast_fill(world, restitempool, fill_locations)
+    restitempool, fill_locations = fast_fill(world, restitempool, fill_locations)
     unplaced = [item.name for item in progitempool + prioitempool + restitempool]
     unfilled = [location.name for location in fill_locations]
 
@@ -307,9 +308,11 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
         logging.warning('Unplaced items: %s - Unfilled Locations: %s', unplaced, unfilled)
 
 
-def fast_fill(world, item_pool, fill_locations):
-    while item_pool and fill_locations:
-        world.push_item(fill_locations.pop(), item_pool.pop(), False)
+def fast_fill(world, item_pool: typing.List, fill_locations: typing.List) -> typing.Tuple[typing.List, typing.List]:
+    placing = min(len(item_pool), len(fill_locations))
+    for item, location in zip(item_pool, fill_locations):
+        world.push_item(location, item, False)
+    return item_pool[placing:], fill_locations[placing:]
 
 
 def flood_items(world):

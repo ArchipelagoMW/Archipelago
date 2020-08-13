@@ -313,7 +313,8 @@ class World(object):
 
     def push_item(self, location: Location, item: Item, collect: bool = True):
         if not isinstance(location, Location):
-            raise RuntimeError('Cannot assign item %s to location %s (player %d).' % (item, location, item.player))
+            raise RuntimeError(
+                'Cannot assign item %s to invalid location %s (player %d).' % (item, location, item.player))
 
         if location.can_fill(self.state, item, False):
             location.item = item
@@ -322,7 +323,7 @@ class World(object):
             if collect:
                 self.state.collect(item, location.event, location)
 
-            logging.getLogger('').debug('Placed %s at %s', item, location)
+            logging.debug('Placed %s at %s', item, location)
         else:
             raise RuntimeError('Cannot assign item %s to location %s.' % (item, location))
 
@@ -353,8 +354,10 @@ class World(object):
         return [location for location in self.get_locations() if not location.item]
 
     def get_filled_locations(self, player=None) -> list:
-        return [location for location in self.get_locations() if
-                (player is None or location.player == player) and location.item is not None]
+        if player is not None:
+            return [location for location in self.get_locations() if
+                    location.player == player and location.item is not None]
+        return [location for location in self.get_locations() if location.item is not None]
 
     def get_reachable_locations(self, state=None, player=None) -> list:
         if state is None:
@@ -498,15 +501,13 @@ class CollectionState(object):
                                     location.item.player] and location.item.bigkey))
                                 and location.can_reach(self)]
             for event in reachable_events:
-                if (event.name, event.player) not in self.events:
-                    self.events.append((event.name, event.player))
+                if event not in self.events:
+                    self.events.append(event)
                     self.collect(event.item, True, event)
             new_locations = len(reachable_events) > checked_locations
             checked_locations = len(reachable_events)
 
     def has(self, item, player: int, count: int = 1):
-        if count == 1:
-            return (item, player) in self.prog_items
         return self.prog_items[item, player] >= count
 
     def has_key(self, item, player, count: int = 1):
@@ -531,18 +532,33 @@ class CollectionState(object):
         return self.item_count('Triforce Piece', player) + self.item_count('Power Star', player) >= count
 
     def has_crystals(self, count: int, player: int) -> bool:
-        crystals = ['Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7']
-        return len([crystal for crystal in crystals if self.has(crystal, player)]) >= count
+        found: int = 0
+        for itemname, itemplayer in self.prog_items:
+            if itemplayer == player and itemname.startswith('Crystal '):
+                found += 1
+                if found >= count:
+                    return True
+        return False
 
-    def can_lift_rocks(self, player):
+    def can_lift_rocks(self, player: int):
         return self.has('Power Glove', player) or self.has('Titans Mitts', player)
 
     def has_bottle(self, player: int) -> bool:
-        return self.bottle_count(player) > 0
+        return self.has_bottles(1, player)
 
     def bottle_count(self, player: int) -> int:
         return len(
-            [item for (item, itemplayer) in self.prog_items if item.startswith('Bottle') and itemplayer == player])
+            tuple(item for (item, itemplayer) in self.prog_items if itemplayer == player and item.startswith('Bottle')))
+
+    def has_bottles(self, bottles: int, player: int):
+        """Version of bottle_count that allows fast abort"""
+        found: int = 0
+        for itemname, itemplayer in self.prog_items:
+            if itemplayer == player and itemname.startswith('Bottle'):
+                found += 1
+                if found >= bottles:
+                    return True
+        return False
 
     def has_hearts(self, player: int, count: int) -> int:
         # Warning: This only considers items that are marked as advancement items
