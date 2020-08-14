@@ -76,12 +76,14 @@ def register_session():
 
 @app.route('/tutorial')
 @app.route('/tutorial/<string:lang>')
+@cache.memoize(timeout=300)  # update every 300 seconds
 def tutorial(lang='en'):
     try:
-        md_file = open(f'WebHostLib/tutorial/tutorial_{lang}.md', 'r', encoding="utf-8")
-        return render_template("tutorial.html", tutorial=markdown.markdown(md_file.read()))
+        md_file = open(os.path.join('WebHostLib', 'tutorial', f"tutorial_{lang}.md"), encoding="utf-8-sig")
     except FileNotFoundError:
         return render_template("tutorial.html", tutorial='The tutorial is not available in that language yet, sorry.')
+    else:
+        return render_template("tutorial.html", tutorial=markdown.markdown(md_file.read()))
 
 
 @app.route('/seed/<suuid:seed>')
