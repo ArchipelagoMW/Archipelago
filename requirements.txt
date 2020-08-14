@@ -5,3 +5,4 @@ fuzzywuzzy>=0.18.0
 bsdiff4>=1.1.9
 prompt_toolkit>=3.0.5
 appdirs>=1.4.4
+markdown>=3.2.2

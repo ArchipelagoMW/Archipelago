@@ -10,6 +10,7 @@ from flask import Flask, request, redirect, url_for, render_template, Response, 
 from flask_caching import Cache
 from flaskext.autoversion import Autoversion
 from flask_compress import Compress
+import markdown
 
 from .models import *
 
@@ -74,8 +75,13 @@ def register_session():
 
 
 @app.route('/tutorial')
-def tutorial():
-    return render_template("tutorial.html")
+@app.route('/tutorial/<string:lang>')
+def tutorial(lang='en'):
+    try:
+        md_file = open(f'WebHostLib/tutorial/tutorial_{lang}.md', 'r', encoding="utf-8")
+        return render_template("tutorial.html", tutorial=markdown.markdown(md_file.read()))
+    except FileNotFoundError:
+        return render_template("tutorial.html", tutorial='The tutorial is not available in that language yet, sorry.')
 
 
 @app.route('/seed/<suuid:seed>')

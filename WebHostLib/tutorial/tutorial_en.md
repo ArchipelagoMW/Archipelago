@@ -41,9 +41,6 @@ for launching ROM files.
 ### Macintosh Setup
 - We need volunteers to help fill this section! Please contact **Farrak Kilhn** on Discord if you want to help.
 
-### Linux Setup
-- Coming Soon™
-
 ## Configuring your YAML file
 
 ### What is a YAML file and why do I need one?
@@ -58,11 +55,13 @@ the players folder and is called `easy.yaml`
 
 ### Your YAML file is weighted
 Throughout your YAML file, you will see many options which look similar to this:
-```yaml
+<pre>
+```
 map_shuffle:
   on: 5
   off: 15
 ```
+</pre>
 In the above example, imagine the generator creates a bucket labelled "map_shuffle", and places a folded
 piece of paper into the bucket for each sub-option. Here, there are twenty pieces of paper in the bucket:
 five for "on" and fifteen for "off". When the generator is deciding whether or not to turn on map shuffle
@@ -84,7 +83,8 @@ which do not affect gameplay. These options are also weighted, in case you want 
 of your hearts or by the silliness of your overworld palette.
 
 If you would like to add a sprite to the list, simply include its name and give it a weight like so:
-```yaml
+<pre>
+```
 rom:
   sprite: # Enter the name of your preferred sprite and weight it appropriately
     random: 0
@@ -95,6 +95,7 @@ rom:
     rocko: 5
     luigi: 3
 ```
+</pre>
 
 ### Verifying your YAML file
 If you would like to validate your YAML file to make sure it works, you may do so on the
@@ -111,9 +112,10 @@ If you would like to validate your YAML file to make sure it works, you may do s
 ### Obtain your patch file and create your ROM
 When you join a multiworld game, you will be asked to provide your YAML file to whoever is hosting. Once that
 is done, the host will provide you with either a link to download your patch file, or with a zip file containing
-everyone's patch files. Your patch file should have a `.bmbp` extension. Put your patch file on your desktop or
-somewhere convenient, and double click it. This should automatically launch the client, and will also create
-your ROM file in the same place as your patch file.
+everyone's patch files. Your patch file should have a `.bmbp` extension.
+
+Put your patch file on your desktop or somewhere convenient, and double click it. This should automatically
+launch the client, and will also create your ROM file in the same place as your patch file.
 
 ### Connect to the client
 
@@ -136,13 +138,13 @@ Firewall.
    these menu options:
    `Config --> Cores --> SNES --> BSNES`  
    Once you have changed the loaded core, you must restart BizHawk.
-1. Load your ROM file if it hasn't already been loaded.
-2. Click on the Tools menu and click on **Lua Console**
-3. Click the button to open a new Lua script.
-4. Browse to your MultiWorld Utilities installation directory, and into the following directories:  
+2. Load your ROM file if it hasn't already been loaded.
+3. Click on the Tools menu and click on **Lua Console**
+4. Click the button to open a new Lua script.
+5. Browse to your MultiWorld Utilities installation directory, and into the following directories:  
    `QUsb2Snes/Qusb2Snes/LuaBridge`
-5. Select `luabridge.lua` and click Open.
-6. Observe a name has been assigned to you, and that the client shows "SNES Device: Connected", with that same
+6. Select `luabridge.lua` and click Open.
+7. Observe a name has been assigned to you, and that the client shows "SNES Device: Connected", with that same
    name in the upper left corner. 
 
 #### With hardware
@@ -153,7 +155,7 @@ done so already, please do this now. SD2SNES and FXPak Pro users may download th
 
 **To connect with hardware you must use an old version of QUsb2Snes
 ([v0.7.16](https://github.com/Skarsnik/QUsb2snes/releases/tag/v0.7.16)).**  
-Versions of QUsb2Snes later than this break compatibility with multiworld.
+Versions of QUsb2Snes later than this break compatibility with hardware for multiworld.
 
 1. Close your emulator, which may have auto-launched.
 2. Close QUsb2Snes, which launched automatically with the client.
@@ -163,9 +165,10 @@ Versions of QUsb2Snes later than this break compatibility with multiworld.
 
 ### Connect to the MultiServer
 The patch file which launched your client should have automatically connected you to the MultiServer.
-However there are a few reasons this may not happen, including if the game is hosted on the website but
+There are a few reasons this may not happen however, including if the game is hosted on the website but
 was generated elsewhere. If the client window shows "Server Status: Not Connected", simply ask the host
 for the address of the server, and copy/paste it into the "Server" input field then press enter.
+
 The client will attempt to reconnect to the new server address, and should momentarily show "Server
 Status: Connected". If the client does not connect after a few moments, you may need to refresh the page.
 
@@ -176,6 +179,7 @@ on successfully joining a multiworld game!
 ## Hosting a MultiWorld game
 The recommended way to host a game is to use the hosting service provided on
 [the website](https://berserkermulti.world/generate). The process is relatively simple:
+
 1. Collect YAML files from your players.
 2. Create a zip file containing your players' YAML files.
 3. Upload that zip file to the website linked above.
