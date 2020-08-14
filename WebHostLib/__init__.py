@@ -74,7 +74,7 @@ def register_session():
 
 
 @app.route('/tutorial')
-def readme():
+def tutorial():
     return render_template("tutorial.html")
 
 

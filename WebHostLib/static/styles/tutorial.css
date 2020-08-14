@@ -70,6 +70,7 @@
     padding-right: 0.25rem;
 }
 
-#tutorial-wrapper iframe{
+#tutorial-wrapper #tutorial-video-container{
+    width: 100%;
     text-align: center;
 }

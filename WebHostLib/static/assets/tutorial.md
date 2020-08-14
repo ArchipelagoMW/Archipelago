@@ -1,13 +1,13 @@
-# A Link to the Past Randomizer Multiworld Setup Guide
+# A Link to the Past Randomizer Setup Guide
 
-<div style="width:100%; text-align: center;">
+<div id="tutorial-video-container">
     <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/mJKEHaiyR_Y" frameborder="0"
       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
     </iframe>
 </div>
 
 ## Required Software
-- [Multiworld Utilities](https://github.com/Berserker66/MultiWorld-Utilities/releases)
+- [MultiWorld Utilities](https://github.com/Berserker66/MultiWorld-Utilities/releases)
 - [QUsb2Snes](https://github.com/Skarsnik/QUsb2snes/releases) (Included in the above Utilities)
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of running Lua scripts
@@ -19,7 +19,7 @@
 ## Installation Procedures
 
 ### Windows Setup
-1. Download and install the Multiworld Utilities from the link above, making sure to install the most recent version.
+1. Download and install the MultiWorld Utilities from the link above, making sure to install the most recent version.
 **The file is located in the assets section at the bottom of the version information**. If you intend to play normal
 multiworld games, you want `Setup.BerserkerMultiWorld.exe`
     - If you intend to play the doors variant of multiworld, you will want to download the alternate doors file.
@@ -52,6 +52,10 @@ it should generate your game. Each player of a multiworld will provide their own
 each player to enjoy an experience customized for their taste, and different players in the same multiworld
 can all have different options.
 
+### Where do I get a YAML file?
+A basic YAML file is available in the directory where you installed the MultiWorld Utilities. It is within
+the players folder and is called `easy.yaml`
+
 ### Your YAML file is weighted
 Throughout your YAML file, you will see many options which look similar to this:
 ```yaml
@@ -65,6 +69,14 @@ five for "on" and fifteen for "off". When the generator is deciding whether or n
 for your game, it reaches into this bucket and pulls out a piece of paper at random. In this example,
 you are much more likely to have map shuffle turned off. If you never want an option to be chosen, simply
 set its value to zero.
+
+### Configuring your YAML file
+Before you begin configuring your YAML file, there are two things you must do.
+1. Set your `name`. This is what will appear as you send and receive items (if you play MultiWorld games).
+2. Rename the file to something meaningful.
+
+Once those are complete, feel free to adjust the options within the file to fit your desired randomizer
+experience. The options are commented to explain their effects on the game.
 
 ### ROM Options
 At the bottom of your YAML file, you will find a set of ROM options. These control various aesthetic changes
@@ -84,7 +96,17 @@ rom:
     luigi: 3
 ```
 
-## Joining a Multiworld Game
+### Verifying your YAML file
+If you would like to validate your YAML file to make sure it works, you may do so on the
+[YAML Validator](/mysterycheck) page.
+
+## Generating a Single-Player Game
+1. Navigate to [the Generator Page](/generate) and upload your YAML file.
+2. You will be presented with a "Seed Info" page, where you can download your patch file.
+3. Double-click on your patch file and the emulator should launch with your game automatically. As the
+   Client is unnecessary for single player games, you may close it and the WebUI.
+
+## Joining a MultiWorld Game
 
 ### Obtain your patch file and create your ROM
 When you join a multiworld game, you will be asked to provide your YAML file to whoever is hosting. Once that
@@ -110,11 +132,15 @@ Firewall.
    name in the upper left corner.
 
 ##### BizHawk
+1. Ensure you have the BSNES core loaded. You may do this by clicking on the Tools menu in BizHawk and following
+   these menu options:
+   `Config --> Cores --> SNES --> BSNES`  
+   Once you have changed the loaded core, you must restart BizHawk.
 1. Load your ROM file if it hasn't already been loaded.
 2. Click on the Tools menu and click on **Lua Console**
 3. Click the button to open a new Lua script.
-4. Browse to your Multiworld Utilities installation directory, and into the following folders:  
-   `QUsb2Snes --> Qusb2Snes --> LuaBridge`
+4. Browse to your MultiWorld Utilities installation directory, and into the following directories:  
+   `QUsb2Snes/Qusb2Snes/LuaBridge`
 5. Select `luabridge.lua` and click Open.
 6. Observe a name has been assigned to you, and that the client shows "SNES Device: Connected", with that same
    name in the upper left corner. 
@@ -147,16 +173,19 @@ Status: Connected". If the client does not connect after a few moments, you may 
 When the client shows both SNES Device and Server as connected, you're ready to begin playing. Congratulations
 on successfully joining a multiworld game!
 
-## Hosting a game
+## Hosting a MultiWorld game
 The recommended way to host a game is to use the hosting service provided on
 [the website](https://berserkermulti.world/generate). The process is relatively simple:
 1. Collect YAML files from your players.
 2. Create a zip file containing your players' YAML files.
 3. Upload that zip file to the website linked above.
 4. Wait a moment while the seed is generated.
-5. Provide your players with a link to the "Seed Info" page so they may download their patch files.
-6. Click "Create New Room". This will take you to the server page, where you may find the server address to
-   send to your players if they do not connect automatically. It should look similar to: `45.83.104.96:50783`
-7. Note that a link to a Multiworld Tracker is at the top of the room page. You should also provide this link
-   to your players so they can watch the progress of the game.
+5. When the seed is generated, you will be redirected to a "Seed Info" page.
+6. Click "Create New Room". This will take you to the server page. Provide the link to this page to your players
+   so they may download their patch files from here.  
+   **Note:** The patch files provided on this page will allow players to automatically connect to the server,
+   while the patch files on the "Seed Info" page will not.
+7. Note that a link to a MultiWorld Tracker is at the top of the room page. You should also provide this link
+   to your players so they can watch the progress of the game. Any observers may also be given the link to
+   this page.
 8. Once all players have joined, you may begin playing.
