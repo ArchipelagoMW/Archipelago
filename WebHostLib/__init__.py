@@ -79,6 +79,11 @@ def tutorial(lang='en'):
     return render_template(f"tutorial.html", lang=lang)
 
 
+@app.route('/game-settings')
+def game_settings():
+    return render_template("game-settings.html")
+
+
 @app.route('/seed/<suuid:seed>')
 def view_seed(seed: UUID):
     seed = Seed.get(id=seed)

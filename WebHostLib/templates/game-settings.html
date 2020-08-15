@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    <title>Game Settings</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/game-settings.css") }}" />
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/js-yaml.min.js") }}"></script>
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/game-settings.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div id="game-settings" class="main-content">
+        <h3>Game Settings</h3>
+        <table>
+            <tr>
+                <td colspan="2">
+                    Set a description for this settings file. It will be included if you download a yaml file,
+                    but isn't particularly important otherwise.
+                </td>
+            </tr>
+            <tr>
+                <td class="option-name"><label for="description">Description:</label></td>
+                <td class="option-value"><input id="description" /></td>
+            </tr>
+        </table>
+    </div>
+{%  endblock %}
