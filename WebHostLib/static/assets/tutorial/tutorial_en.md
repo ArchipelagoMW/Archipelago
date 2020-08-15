@@ -55,13 +55,11 @@ the players folder and is called `easy.yaml`
 
 ### Your YAML file is weighted
 Throughout your YAML file, you will see many options which look similar to this:
-<pre>
-```
+```yaml
 map_shuffle:
   on: 5
   off: 15
 ```
-</pre>
 In the above example, imagine the generator creates a bucket labelled "map_shuffle", and places a folded
 piece of paper into the bucket for each sub-option. Here, there are twenty pieces of paper in the bucket:
 five for "on" and fifteen for "off". When the generator is deciding whether or not to turn on map shuffle
@@ -83,8 +81,7 @@ which do not affect gameplay. These options are also weighted, in case you want 
 of your hearts or by the silliness of your overworld palette.
 
 If you would like to add a sprite to the list, simply include its name and give it a weight like so:
-<pre>
-```
+```yaml
 rom:
   sprite: # Enter the name of your preferred sprite and weight it appropriately
     random: 0
@@ -95,7 +92,6 @@ rom:
     rocko: 5
     luigi: 3
 ```
-</pre>
 
 ### Verifying your YAML file
 If you would like to validate your YAML file to make sure it works, you may do so on the
