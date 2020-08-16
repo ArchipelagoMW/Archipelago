@@ -48,12 +48,12 @@ class LocalRom(object):
 
         if hide_enemizer:
             extra_zeroes = 0x400000 - len(self.buffer)
-            logging.info(extra_zeroes)
             if extra_zeroes > 0:
                 buffer = self.buffer + bytes([0x00] * extra_zeroes)
                 with open(file, 'wb') as outfile:
                     outfile.write(buffer)
                 return
+
         with open(file, 'wb') as outfile:
             outfile.write(self.buffer)
 
