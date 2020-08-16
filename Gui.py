@@ -1210,7 +1210,7 @@ def guiMain(args=None):
 
     triforcepieceFrame = Frame(itemList5)
     triforcepieceLabel = Label(triforcepieceFrame, text='Triforce Piece')
-    triforcepieceVar = StringVar(value='0')
+    triforcepieceVar = StringVar(value='30')
     triforcepieceEntry = Entry(triforcepieceFrame, textvariable=triforcepieceVar, width=3, validate='all', vcmd=vcmd)
     triforcepieceFrame.pack()
     triforcepieceLabel.pack(anchor=W, side=LEFT, padx=(0,55))
@@ -1218,7 +1218,7 @@ def guiMain(args=None):
 
     triforcecountFrame = Frame(itemList5)
     triforcecountLabel = Label(triforcecountFrame, text='Triforce Pieces Required')
-    triforcecountVar = StringVar(value='0')
+    triforcecountVar = StringVar(value='20')
     triforcecountEntry = Entry(triforcecountFrame, textvariable=triforcecountVar, width=3, validate='all', vcmd=vcmd)
     triforcecountFrame.pack()
     triforcecountLabel.pack(anchor=W, side=LEFT, padx=(0,0))

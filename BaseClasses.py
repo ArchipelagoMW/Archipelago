@@ -8,7 +8,7 @@ from collections import OrderedDict, Counter, deque
 
 from EntranceShuffle import door_addresses, indirect_connections
 from Utils import int16_as_bytes
-from typing import Union
+from typing import Union, Optional
 
 import secrets
 import random
@@ -21,7 +21,8 @@ class World(object):
     difficulty_requirements: dict
     required_medallions: dict
 
-    def __init__(self, players, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer, progressive,
+    def __init__(self, players: int, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer,
+                 progressive,
                  goal, algorithm, accessibility, shuffle_ganon, retro, custom, customitemarray, hints):
         if self.debug_types:
             import inspect
@@ -959,7 +960,8 @@ class Boss(object):
         return self.defeat_rule(state, self.player)
 
 class Location(object):
-    def __init__(self, player: int, name: str = '', address=None, crystal=False, hint_text=None, parent=None,
+    def __init__(self, player: int, name: str = '', address=None, crystal: bool = False,
+                 hint_text: Optional[str] = None, parent=None,
                  player_address=None):
         self.name = name
         self.parent_region = parent
