@@ -945,7 +945,7 @@ def patch_rom(world, rom, player, team, enemized):
     rom.write_byte(0x180211, gametype) # Game type
 
     # assorted fixes
-    rom.write_byte(0x1800A2, 0x01)  # remain in real dark world when dying in dark world dungeon before killing aga1
+    rom.write_byte(0x1800A2, 0x01 if world.fix_fake_world[player] else 0x00)  # Toggle whether to be in real/fake dark world when dying in a DW dungeon before killing aga1 
     rom.write_byte(0x180169, 0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
     if world.mode[player] == 'inverted':
         rom.write_byte(0x180169, 0x02)  # lock aga/ganon tower door with crystals in inverted
