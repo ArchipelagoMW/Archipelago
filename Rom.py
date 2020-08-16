@@ -44,7 +44,16 @@ class LocalRom(object):
     def write_bytes(self, startaddress: int, values):
         self.buffer[startaddress:startaddress + len(values)] = values
 
-    def write_to_file(self, file):
+    def write_to_file(self, file, hide_enemizer=False):
+
+        if hide_enemizer:
+            extra_zeroes = 0x400000 - len(self.buffer)
+            logging.info(extra_zeroes)
+            if extra_zeroes > 0:
+                buffer = self.buffer + bytes([0x00] * extra_zeroes)
+                with open(file, 'wb') as outfile:
+                    outfile.write(buffer)
+                return
         with open(file, 'wb') as outfile:
             outfile.write(self.buffer)
 

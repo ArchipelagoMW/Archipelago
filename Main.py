@@ -235,7 +235,7 @@ def main(args, seed=None):
                                                               "-nohints" if not world.hints[
                                                                   player] else "")) if not args.outputname else ''
         rompath = output_path(f'{outfilebase}{outfilepname}{outfilesuffix}.sfc')
-        rom.write_to_file(rompath)
+        rom.write_to_file(rompath, hide_enemizer=True)
         if args.create_diff:
             Patch.create_patch_file(rompath)
         return player, team, bytes(rom.name).decode()
