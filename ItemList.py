@@ -229,7 +229,7 @@ def generate_itempool(world, player: int):
     if world.custom:
         (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count,
          treasure_hunt_icon) = make_custom_item_pool(world, player)
-        world.rupoor_cost = min(world.customitemarray[69], 9999)
+        world.rupoor_cost = min(world.customitemarray[67], 9999)
     else:
         (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon) = get_pool_core(
             world, player)
@@ -696,11 +696,8 @@ def make_custom_item_pool(world, player):
     pool.extend(['Red Clock'] * customitemarray[63])
     pool.extend(['Progressive Bow'] * customitemarray[64])
     pool.extend(['Bombs (10)'] * customitemarray[65])
-    pool.extend(['Triforce Piece'] * customitemarray[66])
-    pool.extend(['Triforce'] * customitemarray[68])
 
     diff = difficulties[difficulty]
-
 
     # expert+ difficulties produce the same contents for
     # all bottles, since only one bottle is available
@@ -711,14 +708,11 @@ def make_custom_item_pool(world, player):
             thisbottle = world.random.choice(diff.bottles)
         pool.append(thisbottle)
 
-    if customitemarray[66] > 0 or customitemarray[67] > 0:
-        treasure_hunt_count = max(min(customitemarray[67], 99), 1) #To display, count must be between 1 and 99.
+    if world.triforce_pieces_available[player] or world.triforce_pieces_required[player]:
+        pool.extend(["Triforce Piece"] * world.triforce_pieces_available[player])
+        itemtotal += world.triforce_pieces_available[player]
+        treasure_hunt_count = world.triforce_pieces_required[player]
         treasure_hunt_icon = 'Triforce Piece'
-        # Ensure game is always possible to complete here, force sufficient pieces if the player is unwilling.
-        if (customitemarray[66] < treasure_hunt_count) and ('triforcehunt' in goal) and (customitemarray[68] == 0):
-            extrapieces = treasure_hunt_count - customitemarray[66]
-            pool.extend(['Triforce Piece'] * extrapieces)
-            itemtotal = itemtotal + extrapieces
 
     if timer in ['display', 'timed', 'timed-countdown']:
         clock_mode = 'countdown' if timer == 'timed-countdown' else 'stopwatch'
@@ -737,11 +731,11 @@ def make_custom_item_pool(world, player):
                 ['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest',
                  'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
             place_item(key_location, 'Small Key (Universal)')
-            pool.extend(['Small Key (Universal)'] * max((customitemarray[70] - 1), 0))
+            pool.extend(['Small Key (Universal)'] * max((customitemarray[68] - 1), 0))
         else:
-            pool.extend(['Small Key (Universal)'] * customitemarray[70])
+            pool.extend(['Small Key (Universal)'] * customitemarray[68])
     else:
-        pool.extend(['Small Key (Universal)'] * customitemarray[70])
+        pool.extend(['Small Key (Universal)'] * customitemarray[68])
 
     pool.extend(['Fighter Sword'] * customitemarray[32])
     pool.extend(['Progressive Sword'] * customitemarray[36])

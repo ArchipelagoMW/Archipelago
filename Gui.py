@@ -475,15 +475,33 @@ def guiMain(args=None):
         guiargs.enemy_damage = enemizerDamageVar.get()
         guiargs.shufflepots = bool(potShuffleVar.get())
         guiargs.custom = bool(customVar.get())
-        guiargs.customitemarray = [int(bowVar.get()), int(silverarrowVar.get()), int(boomerangVar.get()), int(magicboomerangVar.get()), int(hookshotVar.get()), int(mushroomVar.get()), int(magicpowderVar.get()), int(firerodVar.get()),
-                                   int(icerodVar.get()), int(bombosVar.get()), int(etherVar.get()), int(quakeVar.get()), int(lampVar.get()), int(hammerVar.get()), int(shovelVar.get()), int(fluteVar.get()), int(bugnetVar.get()),
-                                   int(bookVar.get()), int(bottleVar.get()), int(somariaVar.get()), int(byrnaVar.get()), int(capeVar.get()), int(mirrorVar.get()), int(bootsVar.get()), int(powergloveVar.get()), int(titansmittVar.get()),
-                                   int(proggloveVar.get()), int(flippersVar.get()), int(pearlVar.get()), int(heartpieceVar.get()), int(fullheartVar.get()), int(sancheartVar.get()), int(sword1Var.get()), int(sword2Var.get()),
-                                   int(sword3Var.get()), int(sword4Var.get()), int(progswordVar.get()), int(shield1Var.get()), int(shield2Var.get()), int(shield3Var.get()), int(progshieldVar.get()), int(bluemailVar.get()),
-                                   int(redmailVar.get()), int(progmailVar.get()), int(halfmagicVar.get()), int(quartermagicVar.get()), int(bcap5Var.get()), int(bcap10Var.get()), int(acap5Var.get()), int(acap10Var.get()),
-                                   int(arrow1Var.get()), int(arrow10Var.get()), int(bomb1Var.get()), int(bomb3Var.get()), int(rupee1Var.get()), int(rupee5Var.get()), int(rupee20Var.get()), int(rupee50Var.get()), int(rupee100Var.get()),
-                                   int(rupee300Var.get()), int(rupoorVar.get()), int(blueclockVar.get()), int(greenclockVar.get()), int(redclockVar.get()), int(progbowVar.get()), int(bomb10Var.get()), int(triforcepieceVar.get()),
-                                   int(triforcecountVar.get()), int(triforceVar.get()),  int(rupoorcostVar.get()), int(universalkeyVar.get())]
+        guiargs.triforce_pieces_required = min(90, int(triforcecountVar.get()))
+        guiargs.triforce_pieces_available = min(90, int(triforcepieceVar.get()))
+        guiargs.customitemarray = [int(bowVar.get()), int(silverarrowVar.get()), int(boomerangVar.get()),
+                                   int(magicboomerangVar.get()), int(hookshotVar.get()), int(mushroomVar.get()),
+                                   int(magicpowderVar.get()), int(firerodVar.get()),
+                                   int(icerodVar.get()), int(bombosVar.get()), int(etherVar.get()), int(quakeVar.get()),
+                                   int(lampVar.get()), int(hammerVar.get()), int(shovelVar.get()), int(fluteVar.get()),
+                                   int(bugnetVar.get()),
+                                   int(bookVar.get()), int(bottleVar.get()), int(somariaVar.get()), int(byrnaVar.get()),
+                                   int(capeVar.get()), int(mirrorVar.get()), int(bootsVar.get()),
+                                   int(powergloveVar.get()), int(titansmittVar.get()),
+                                   int(proggloveVar.get()), int(flippersVar.get()), int(pearlVar.get()),
+                                   int(heartpieceVar.get()), int(fullheartVar.get()), int(sancheartVar.get()),
+                                   int(sword1Var.get()), int(sword2Var.get()),
+                                   int(sword3Var.get()), int(sword4Var.get()), int(progswordVar.get()),
+                                   int(shield1Var.get()), int(shield2Var.get()), int(shield3Var.get()),
+                                   int(progshieldVar.get()), int(bluemailVar.get()),
+                                   int(redmailVar.get()), int(progmailVar.get()), int(halfmagicVar.get()),
+                                   int(quartermagicVar.get()), int(bcap5Var.get()), int(bcap10Var.get()),
+                                   int(acap5Var.get()), int(acap10Var.get()),
+                                   int(arrow1Var.get()), int(arrow10Var.get()), int(bomb1Var.get()),
+                                   int(bomb3Var.get()), int(rupee1Var.get()), int(rupee5Var.get()),
+                                   int(rupee20Var.get()), int(rupee50Var.get()), int(rupee100Var.get()),
+                                   int(rupee300Var.get()), int(rupoorVar.get()), int(blueclockVar.get()),
+                                   int(greenclockVar.get()), int(redclockVar.get()), int(progbowVar.get()),
+                                   int(bomb10Var.get()), int(triforceVar.get()),
+                                   int(rupoorcostVar.get()), int(universalkeyVar.get())]
         guiargs.rom = romVar.get()
         guiargs.sprite = sprite
         # get default values for missing parameters
