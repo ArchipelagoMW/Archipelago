@@ -242,34 +242,35 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
     for player in range(1, world.players + 1):
         if not gftower_trash or not world.ganonstower_vanilla[player] or \
                 world.logic[player] in {'owglitches', "nologic"}:
-            continue
-        if 'triforcehunt' in world.goal[player] and ('local' in world.goal[player] or world.players == 1):
-            gftower_trash_count = world.random.randint(world.crystals_needed_for_gt[player] * 2,
-                                                       world.crystals_needed_for_gt[player] * 4)
+            gtower_trash_count = 0
+        elif 'triforcehunt' in world.goal[player] and ('local' in world.goal[player] or world.players == 1):
+            gtower_trash_count = world.random.randint(world.crystals_needed_for_gt[player] * 2,
+                                                      world.crystals_needed_for_gt[player] * 4)
         else:
-            gftower_trash_count = world.random.randint(0, world.crystals_needed_for_gt[player] * 2)
+            gtower_trash_count = world.random.randint(0, world.crystals_needed_for_gt[player] * 2)
 
-        gtower_locations = [location for location in fill_locations if
-                            'Ganons Tower' in location.name and location.player == player]
-        world.random.shuffle(gtower_locations)
-        trashcnt = 0
-        localrest = localrestitempool[player]
-        if localrest:
-            gt_item_pool = restitempool + localrest
-            world.random.shuffle(gt_item_pool)
-        else:
-            gt_item_pool = restitempool.copy()
-
-        while gtower_locations and gt_item_pool and trashcnt < gftower_trash_count:
-            spot_to_fill = gtower_locations.pop()
-            item_to_place = gt_item_pool.pop()
-            if item_to_place in localrest:
-                localrest.remove(item_to_place)
+        if gtower_trash_count:
+            gtower_locations = [location for location in fill_locations if
+                                'Ganons Tower' in location.name and location.player == player]
+            world.random.shuffle(gtower_locations)
+            trashcnt = 0
+            localrest = localrestitempool[player]
+            if localrest:
+                gt_item_pool = restitempool + localrest
+                world.random.shuffle(gt_item_pool)
             else:
-                restitempool.remove(item_to_place)
-            world.push_item(spot_to_fill, item_to_place, False)
-            fill_locations.remove(spot_to_fill)
-            trashcnt += 1
+                gt_item_pool = restitempool.copy()
+
+            while gtower_locations and gt_item_pool and trashcnt < gtower_trash_count:
+                spot_to_fill = gtower_locations.pop()
+                item_to_place = gt_item_pool.pop()
+                if item_to_place in localrest:
+                    localrest.remove(item_to_place)
+                else:
+                    restitempool.remove(item_to_place)
+                world.push_item(spot_to_fill, item_to_place, False)
+                fill_locations.remove(spot_to_fill)
+                trashcnt += 1
 
     world.random.shuffle(fill_locations)
     fill_locations.reverse()
