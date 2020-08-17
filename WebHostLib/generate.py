@@ -3,6 +3,7 @@ import tempfile
 import random
 import zlib
 import json
+import multiprocessing
 
 from flask import request, flash, redirect, url_for, session, render_template
 
@@ -32,57 +33,78 @@ def generate(race=False):
                 if any(type(result) == str for result in results.values()):
                     return render_template("checkresult.html", results=results)
                 elif len(gen_options) > app.config["MAX_ROLL"]:
-                    flash(f"Sorry, generating of multiworld is limited to {app.config['MAX_ROLL']} players for now. "
+                    flash(f"Sorry, generating of multiworlds is limited to {app.config['MAX_ROLL']} players for now. "
                           f"If you have a larger group, please generate it yourself and upload it.")
                 else:
-                    seed_id = gen(gen_options, race=race)
-                    return redirect(url_for("view_seed", seed=seed_id))
+
+                    gen = Generation(options={name: vars(options) for name, options in gen_options.items()},
+                                     # convert to json compatible
+                                     meta={"race": race, "owner": session["_id"].int}, state=STATE_QUEUED,
+                                     owner=session["_id"])
+                    commit()
+
+                    return redirect(url_for("wait_seed", seed=gen.id))
     return render_template("generate.html", race=race)
 
 
-def gen(gen_options, race=False):
+def gen_game(gen_options, race=False, owner=None, sid=None):
     target = tempfile.TemporaryDirectory()
-    with target:
-        playercount = len(gen_options)
-        seed = get_seed()
-        random.seed(seed)
+    playercount = len(gen_options)
+    seed = get_seed()
+    random.seed(seed)
 
-        if race:
-            random.seed()  # reset to time-based random source
+    if race:
+        random.seed()  # reset to time-based random source
 
-        seedname = "M" + (f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits))
+    seedname = "M" + (f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits))
 
-        erargs = parse_arguments(['--multi', str(playercount)])
-        erargs.seed = seed
-        erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwrittin in mystery
-        erargs.create_spoiler = not race
-        erargs.race = race
-        erargs.skip_playthrough = race
-        erargs.outputname = seedname
-        erargs.outputpath = target.name
-        erargs.teams = 1
-        erargs.progression_balancing = {}
-        erargs.create_diff = True
+    erargs = parse_arguments(['--multi', str(playercount)])
+    erargs.seed = seed
+    erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwrittin in mystery
+    erargs.create_spoiler = not race
+    erargs.race = race
+    erargs.skip_playthrough = race
+    erargs.outputname = seedname
+    erargs.outputpath = target.name
+    erargs.teams = 1
+    erargs.progression_balancing = {}
+    erargs.create_diff = True
 
-        for player, (playerfile, settings) in enumerate(gen_options.items(), 1):
-            for k, v in vars(settings).items():
-                if v is not None:
-                    getattr(erargs, k)[player] = v
+    for player, (playerfile, settings) in enumerate(gen_options.items(), 1):
+        for k, v in settings.items():
+            if v is not None:
+                getattr(erargs, k)[player] = v
 
-            if not erargs.name[player]:
-                erargs.name[player] = os.path.split(playerfile)[-1].split(".")[0]
+        if not erargs.name[player]:
+            erargs.name[player] = os.path.split(playerfile)[-1].split(".")[0]
 
-        erargs.names = ",".join(erargs.name[i] for i in range(1, playercount + 1))
-        del (erargs.name)
+    erargs.names = ",".join(erargs.name[i] for i in range(1, playercount + 1))
+    del (erargs.name)
 
-        erargs.skip_progression_balancing = {player: not balanced for player, balanced in
-                                             erargs.progression_balancing.items()}
-        del (erargs.progression_balancing)
-        ERmain(erargs, seed)
-        return upload_to_db(target.name)
+    erargs.skip_progression_balancing = {player: not balanced for player, balanced in
+                                         erargs.progression_balancing.items()}
+    del (erargs.progression_balancing)
+    ERmain(erargs, seed)
+
+    return upload_to_db(target.name, owner, sid)
 
 
-def upload_to_db(folder):
+@app.route('/wait/<suuid:seed>')
+def wait_seed(seed: UUID):
+    seed_id = seed
+    seed = Seed.get(id=seed_id)
+    if seed:
+        return redirect(url_for("view_seed", seed=seed_id))
+    generation = Generation.get(id=seed_id)
+
+    if not generation:
+        return "Generation not found."
+    elif generation.state == STATE_ERROR:
+        return "Generation failed, please retry."
+    return render_template("wait_seed.html", seed_id=seed_id)
+
+
+def upload_to_db(folder, owner, sid):
     patches = set()
     spoiler = ""
     multidata = None
@@ -99,9 +121,9 @@ def upload_to_db(folder):
             except Exception as e:
                 flash(e)
     if multidata:
-        commit()  # commit patches
-        seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=session["_id"])
-        commit()  # create seed
+        seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner, id=sid)
         for patch in patches:
             patch.seed = seed
+        Generation.get(id=sid).delete()
+        commit()
         return seed.id

@@ -4,6 +4,10 @@ from pony.orm import *
 
 db = Database()
 
+STATE_QUEUED = 0
+STATE_STARTED = 1
+STATE_ERROR = -1
+
 
 class Patch(db.Entity):
     id = PrimaryKey(int, auto=True)
@@ -40,3 +44,11 @@ class Command(db.Entity):
     id = PrimaryKey(int, auto=True)
     room = Required(Room)
     commandtext = Required(str)
+
+
+class Generation(db.Entity):
+    id = PrimaryKey(UUID, default=uuid4)
+    owner = Required(UUID)
+    options = Required(Json, lazy=True)
+    meta = Required(Json)
+    state = Required(int, default=0, index=True)

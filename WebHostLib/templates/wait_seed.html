@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% import "macros.html" as macros %}
+
+{% block head %}
+    <title>Multiworld Seed {{ seed_id|suuid }} (generating...)</title>
+    <meta http-equiv="refresh" content="1">
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/view_seed.css") }}"/>
+{% endblock %}
+
+{% block body %}
+    <div id="wait-seed-wrapper">
+        <div class="main-content">
+            Waiting for game to generate, this page auto-refreshes to check.
+        </div>
+    </div>
+{% endblock %}

@@ -24,6 +24,7 @@ app.jinja_env.filters['any'] = any
 app.jinja_env.filters['all'] = all
 
 app.config["SELFHOST"] = True
+app.config["GENERATORS"] = 8  # maximum concurrent world gens
 app.config["SELFLAUNCH"] = True
 app.config["DEBUG"] = False
 app.config["PORT"] = 80
