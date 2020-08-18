@@ -48,45 +48,50 @@ def generate(race=False):
 
 
 def gen_game(gen_options, race=False, owner=None, sid=None):
-    target = tempfile.TemporaryDirectory()
-    playercount = len(gen_options)
-    seed = get_seed()
-    random.seed(seed)
+    try:
+        target = tempfile.TemporaryDirectory()
+        playercount = len(gen_options)
+        seed = get_seed()
+        random.seed(seed)
 
-    if race:
-        random.seed()  # reset to time-based random source
+        if race:
+            random.seed()  # reset to time-based random source
 
-    seedname = "M" + (f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits))
+        seedname = "M" + (f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits))
 
-    erargs = parse_arguments(['--multi', str(playercount)])
-    erargs.seed = seed
-    erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwrittin in mystery
-    erargs.create_spoiler = not race
-    erargs.race = race
-    erargs.skip_playthrough = race
-    erargs.outputname = seedname
-    erargs.outputpath = target.name
-    erargs.teams = 1
-    erargs.progression_balancing = {}
-    erargs.create_diff = True
+        erargs = parse_arguments(['--multi', str(playercount)])
+        erargs.seed = seed
+        erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwrittin in mystery
+        erargs.create_spoiler = not race
+        erargs.race = race
+        erargs.skip_playthrough = race
+        erargs.outputname = seedname
+        erargs.outputpath = target.name
+        erargs.teams = 1
+        erargs.progression_balancing = {}
+        erargs.create_diff = True
 
-    for player, (playerfile, settings) in enumerate(gen_options.items(), 1):
-        for k, v in settings.items():
-            if v is not None:
-                getattr(erargs, k)[player] = v
+        for player, (playerfile, settings) in enumerate(gen_options.items(), 1):
+            for k, v in settings.items():
+                if v is not None:
+                    getattr(erargs, k)[player] = v
 
-        if not erargs.name[player]:
-            erargs.name[player] = os.path.split(playerfile)[-1].split(".")[0]
+            if not erargs.name[player]:
+                erargs.name[player] = os.path.split(playerfile)[-1].split(".")[0]
 
-    erargs.names = ",".join(erargs.name[i] for i in range(1, playercount + 1))
-    del (erargs.name)
+        erargs.names = ",".join(erargs.name[i] for i in range(1, playercount + 1))
+        del (erargs.name)
 
-    erargs.skip_progression_balancing = {player: not balanced for player, balanced in
-                                         erargs.progression_balancing.items()}
-    del (erargs.progression_balancing)
-    ERmain(erargs, seed)
+        erargs.skip_progression_balancing = {player: not balanced for player, balanced in
+                                             erargs.progression_balancing.items()}
+        del (erargs.progression_balancing)
+        ERmain(erargs, seed)
 
-    return upload_to_db(target.name, owner, sid)
+        return upload_to_db(target.name, owner, sid)
+    except BaseException:
+        with db_session:
+            Generation.get(id=sid).state = STATE_ERROR
+        raise
 
 
 @app.route('/wait/<suuid:seed>')
@@ -121,9 +126,9 @@ def upload_to_db(folder, owner, sid):
             except Exception as e:
                 flash(e)
     if multidata:
-        seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner, id=sid)
-        for patch in patches:
-            patch.seed = seed
-        Generation.get(id=sid).delete()
-        commit()
+        with db_session:
+            seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner, id=sid)
+            for patch in patches:
+                patch.seed = seed
+            Generation.get(id=sid).delete()
         return seed.id

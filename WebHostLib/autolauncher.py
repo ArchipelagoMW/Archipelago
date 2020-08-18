@@ -77,11 +77,6 @@ def handle_generation_failure(result: BaseException):
 
 
 def launch_generator(pool: multiprocessing.pool.Pool, generation: Generation):
-    @db_session
-    def handle_fail(result: BaseException):
-        generation.state = STATE_ERROR
-        handle_generation_failure(result)
-
     logging.info(f"Generating {generation.id} for {len(generation.options)} players")
 
     pool.apply_async(gen_game, (generation.options,),
