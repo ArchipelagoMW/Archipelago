@@ -292,7 +292,7 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--skip_playthrough', action='store_true', default=defval(False))
     parser.add_argument('--enemizercli', default=defval('EnemizerCLI/EnemizerCLI.Core'))
     parser.add_argument('--shufflebosses', default=defval('none'), choices=['none', 'basic', 'normal', 'chaos',
-                                                                            "singularity", "duality"])
+                                                                            "singularity"])
     parser.add_argument('--shuffleenemies', default=defval('none'),
                         choices=['none', 'shuffled', 'chaos', 'chaosthieves'])
     parser.add_argument('--enemy_health', default=defval('default'),

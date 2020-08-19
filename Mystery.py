@@ -331,7 +331,7 @@ def roll_settings(weights):
                          'full': 'normal',
                          'random': 'chaos',
                          'singularity': 'singularity',
-                         'duality': 'duality'
+                         'duality': 'singularity'
                          }[get_choice('boss_shuffle', weights)]
 
     ret.shuffleenemies = {'none': 'none',

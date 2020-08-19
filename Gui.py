@@ -385,7 +385,7 @@ def guiMain(args=None):
     enemizerBossVar = StringVar()
     enemizerBossVar.set('none')
     enemizerBossOption = OptionMenu(enemizerBossFrame, enemizerBossVar, 'none', 'basic', 'normal', 'chaos',
-                                    "singularity", "duality")
+                                    "singularity")
     enemizerBossOption.pack(side=LEFT)
 
     enemizerDamageFrame = Frame(enemizerFrame)

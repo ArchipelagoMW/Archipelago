@@ -238,23 +238,17 @@ def place_bosses(world, player: int):
                 place_boss(world, player, boss, loc, level)
 
     elif world.boss_shuffle[player] == "singularity":
-        boss = world.random.choice(anywhere_bosses)
-        for loc, level in boss_locations:
-            place_boss(world, player, boss, loc, level)
-
-    elif world.boss_shuffle[player] == "duality":
-        # pick a boss that can only appear in some places
-        limited_boss = world.random.choice([boss for boss in placeable_bosses if boss not in anywhere_bosses])
-
+        primary_boss = world.random.choice(placeable_bosses)
         remaining_boss_locations = []
         for loc, level in boss_locations:
-            #place that boss where it can go
-            if can_place_boss(world, player, limited_boss, loc, level):
-                place_boss(world, player, limited_boss, loc, level)
+            # place that boss where it can go
+            if can_place_boss(world, player, primary_boss, loc, level):
+                place_boss(world, player, primary_boss, loc, level)
             else:
                 remaining_boss_locations.append((loc, level))
-        #pick a boss to go into the remaining locations
-        remaining_boss = world.random.choice([boss for boss in placeable_bosses if all(
-            can_place_boss(world, player, boss, loc, level) for loc, level in remaining_boss_locations)])
-        for loc, level in remaining_boss_locations:
-            place_boss(world, player, remaining_boss, loc, level)
+        if remaining_boss_locations:
+            # pick a boss to go into the remaining locations
+            remaining_boss = world.random.choice([boss for boss in placeable_bosses if all(
+                can_place_boss(world, player, boss, loc, level) for loc, level in remaining_boss_locations)])
+            for loc, level in remaining_boss_locations:
+                place_boss(world, player, remaining_boss, loc, level)
