@@ -196,9 +196,9 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite
 
     # write options file for enemizer
     options = {
-        'RandomizeEnemies': world.enemy_shuffle[player] != 'none',
+        'RandomizeEnemies': world.enemy_shuffle[player],
         'RandomizeEnemiesType': 3,
-        'RandomizeBushEnemyChance': 'chaos' in world.enemy_shuffle[player],
+        'RandomizeBushEnemyChance': world.bush_shuffle[player],
         'RandomizeEnemyHealthRange': world.enemy_health[player] != 'default',
         'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[
             world.enemy_health[player]],
@@ -247,10 +247,9 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite
         'SwordGraphics': "sword_gfx/normal.gfx",
         'BeeMizer': False,
         'BeesLevel': 0,
-        'RandomizeTileTrapPattern': world.enemy_shuffle[player] == 'chaos',
+        'RandomizeTileTrapPattern': world.tile_shuffle[player],
         'RandomizeTileTrapFloorTile': False,
-        'AllowKillableThief': bool(world.rom_seeds[player].randint(0, 1)) if 'thieves' in world.enemy_shuffle[player] else
-        world.enemy_shuffle[player] != 'none',
+        'AllowKillableThief': world.killable_thieves[player],
         'RandomizeSpriteOnHit': random_sprite_on_hit,
         'DebugMode': False,
         'DebugForceEnemy': False,

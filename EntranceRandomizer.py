@@ -293,8 +293,10 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--enemizercli', default=defval('EnemizerCLI/EnemizerCLI.Core'))
     parser.add_argument('--shufflebosses', default=defval('none'), choices=['none', 'basic', 'normal', 'chaos',
                                                                             "singularity"])
-    parser.add_argument('--shuffleenemies', default=defval('none'),
-                        choices=['none', 'shuffled', 'chaos', 'chaosthieves'])
+    parser.add_argument('--enemy_shuffle', action='store_true')
+    parser.add_argument('--killable_thieves', action='store_true')
+    parser.add_argument('--tile_shuffle', action='store_true')
+    parser.add_argument('--bush_shuffle', action='store_true')
     parser.add_argument('--enemy_health', default=defval('default'),
                         choices=['default', 'easy', 'normal', 'hard', 'expert'])
     parser.add_argument('--enemy_damage', default=defval('default'), choices=['default', 'shuffled', 'chaos'])
@@ -336,10 +338,12 @@ def parse_arguments(argv, no_defaults=False):
                          'shuffle', 'crystals_ganon', 'crystals_gt', 'openpyramid', 'timer',
                          'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle', 'startinventory',
                          'local_items', 'retro', 'accessibility', 'hints', 'beemizer',
-                         'shufflebosses', 'shuffleenemies', 'enemy_health', 'enemy_damage', 'shufflepots',
+                         'shufflebosses', 'enemy_shuffle', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
-                         'heartbeep', "skip_progression_balancing", "triforce_pieces_available", "triforce_pieces_required",
-                         'remote_items', 'progressive', 'dungeon_counters', 'glitch_boots']:
+                         'heartbeep', "skip_progression_balancing", "triforce_pieces_available",
+                         "triforce_pieces_required",
+                         'remote_items', 'progressive', 'dungeon_counters', 'glitch_boots', 'killable_thieves',
+                         'tile_shuffle', 'bush_shuffle']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})

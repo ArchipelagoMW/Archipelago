@@ -352,62 +352,74 @@ def guiMain(args=None):
 
 
     enemizerPathFrame = Frame(enemizerFrame)
-    enemizerPathFrame.grid(row=0, column=0, columnspan=3, sticky=W+E, padx=3)
+    enemizerPathFrame.grid(row=0, column=0, columnspan=4, sticky=W + E, padx=3)
     enemizerCLIlabel = Label(enemizerPathFrame, text="EnemizerCLI path: ")
     enemizerCLIlabel.pack(side=LEFT)
     enemizerCLIpathVar = StringVar(value="EnemizerCLI/EnemizerCLI.Core")
     enemizerCLIpathEntry = Entry(enemizerPathFrame, textvariable=enemizerCLIpathVar)
     enemizerCLIpathEntry.pack(side=LEFT, expand=True, fill=X)
+
     def EnemizerSelectPath():
         path = filedialog.askopenfilename(filetypes=[("EnemizerCLI executable", "*EnemizerCLI*")])
         if path:
             enemizerCLIpathVar.set(path)
+
     enemizerCLIbrowseButton = Button(enemizerPathFrame, text='...', command=EnemizerSelectPath)
     enemizerCLIbrowseButton.pack(side=LEFT)
 
-    potShuffleVar = IntVar()
-    potShuffleButton = Checkbutton(enemizerFrame, text="Pot shuffle", variable=potShuffleVar)
-    potShuffleButton.grid(row=0, column=3)
-
     enemizerEnemyFrame = Frame(enemizerFrame)
     enemizerEnemyFrame.grid(row=1, column=0, pady=5)
-    enemizerEnemyLabel = Label(enemizerEnemyFrame, text='Enemy shuffle')
-    enemizerEnemyLabel.pack(side=LEFT)
-    enemyShuffleVar = StringVar()
-    enemyShuffleVar.set('none')
-    enemizerEnemyOption = OptionMenu(enemizerEnemyFrame, enemyShuffleVar, 'none', 'shuffled', 'chaos', 'chaosthieves')
-    enemizerEnemyOption.pack(side=LEFT)
+
+    enemyShuffleVar = IntVar()
+    enemizerEnemyButton = Checkbutton(enemizerEnemyFrame, text="Enemy shuffle", variable=enemyShuffleVar)
+    enemizerEnemyButton.pack(side=LEFT)
 
     enemizerBossFrame = Frame(enemizerFrame)
     enemizerBossFrame.grid(row=1, column=1)
-    enemizerBossLabel = Label(enemizerBossFrame, text='Boss shuffle')
-    enemizerBossLabel.pack(side=LEFT)
     enemizerBossVar = StringVar()
     enemizerBossVar.set('none')
     enemizerBossOption = OptionMenu(enemizerBossFrame, enemizerBossVar, 'none', 'basic', 'normal', 'chaos',
                                     "singularity")
     enemizerBossOption.pack(side=LEFT)
+    enemizerBossLabel = Label(enemizerBossFrame, text='Boss shuffle')
+    enemizerBossLabel.pack(side=LEFT)
 
     enemizerDamageFrame = Frame(enemizerFrame)
     enemizerDamageFrame.grid(row=1, column=2)
-    enemizerDamageLabel = Label(enemizerDamageFrame, text='Enemy damage')
-    enemizerDamageLabel.pack(side=LEFT)
     enemizerDamageVar = StringVar()
     enemizerDamageVar.set('default')
     enemizerDamageOption = OptionMenu(enemizerDamageFrame, enemizerDamageVar, 'default', 'shuffled', 'chaos')
     enemizerDamageOption.pack(side=LEFT)
+    enemizerDamageLabel = Label(enemizerDamageFrame, text='Enemy damage')
+    enemizerDamageLabel.pack(side=LEFT)
 
     enemizerHealthFrame = Frame(enemizerFrame)
     enemizerHealthFrame.grid(row=1, column=3)
-    enemizerHealthLabel = Label(enemizerHealthFrame, text='Enemy health')
-    enemizerHealthLabel.pack(side=LEFT)
     enemizerHealthVar = StringVar()
     enemizerHealthVar.set('default')
-    enemizerHealthOption = OptionMenu(enemizerHealthFrame, enemizerHealthVar, 'default', 'easy', 'normal', 'hard', 'expert')
+    enemizerHealthOption = OptionMenu(enemizerHealthFrame, enemizerHealthVar, 'default', 'easy', 'normal', 'hard',
+                                      'expert')
     enemizerHealthOption.pack(side=LEFT)
+    enemizerHealthLabel = Label(enemizerHealthFrame, text='Enemy health')
+    enemizerHealthLabel.pack(side=LEFT)
+
+    potShuffleVar = IntVar()
+    potShuffleButton = Checkbutton(enemizerFrame, text="Pot shuffle", variable=potShuffleVar)
+    potShuffleButton.grid(row=2, column=0, sticky=W)
+
+    tileShuffleVar = IntVar()
+    tileShuffleButton = Checkbutton(enemizerFrame, text="Tile shuffle", variable=tileShuffleVar)
+    tileShuffleButton.grid(row=2, column=1, sticky=W)
+
+    bushShuffleVar = IntVar()
+    bushShuffleButton = Checkbutton(enemizerFrame, text="Bush shuffle", variable=bushShuffleVar)
+    bushShuffleButton.grid(row=2, column=2, sticky=W)
+
+    killableThievesVar = IntVar()
+    killable_thievesShuffleButton = Checkbutton(enemizerFrame, text="Killable Thieves", variable=killableThievesVar)
+    killable_thievesShuffleButton.grid(row=2, column=3, sticky=W)
 
     multiworldframe = LabelFrame(randomizerWindow, text="Multiworld", padx=5, pady=2)
-
 
     worldLabel = Label(multiworldframe, text='Worlds')
     worldVar = StringVar()
@@ -470,7 +482,10 @@ def guiMain(args=None):
         guiargs.hints = bool(hintsVar.get())
         guiargs.enemizercli = enemizerCLIpathVar.get()
         guiargs.shufflebosses = enemizerBossVar.get()
-        guiargs.shuffleenemies = enemyShuffleVar.get()
+        guiargs.enemy_shuffle = enemyShuffleVar.get()
+        guiargs.bush_shuffle = bushShuffleVar.get()
+        guiargs.tile_shuffle = tileShuffleVar.get()
+        guiargs.killable_thieves = killableThievesVar.get()
         guiargs.enemy_health = enemizerHealthVar.get()
         guiargs.enemy_damage = enemizerDamageVar.get()
         guiargs.shufflepots = bool(potShuffleVar.get())

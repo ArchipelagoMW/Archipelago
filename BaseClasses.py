@@ -104,9 +104,12 @@ class World(object):
             set_player_attr('bigkeyshuffle', False)
             set_player_attr('difficulty_requirements', None)
             set_player_attr('boss_shuffle', 'none')
-            set_player_attr('enemy_shuffle', 'none')
+            set_player_attr('enemy_shuffle', False)
             set_player_attr('enemy_health', 'default')
             set_player_attr('enemy_damage', 'default')
+            set_player_attr('killable_thieves', False)
+            set_player_attr('tile_shuffle', False)
+            set_player_attr('bush_shuffle', False)
             set_player_attr('beemizer', 0)
             set_player_attr('escape_assist', [])
             set_player_attr('crystals_needed_for_ganon', 7)
@@ -1231,6 +1234,9 @@ class Spoiler(object):
                          'enemy_shuffle': self.world.enemy_shuffle,
                          'enemy_health': self.world.enemy_health,
                          'enemy_damage': self.world.enemy_damage,
+                         'killable_thieves': self.world.killable_thieves,
+                         'tile_shuffle': self.world.tile_shuffle,
+                         'bush_shuffle': self.world.bush_shuffle,
                          'beemizer': self.world.beemizer,
                          'progressive': self.world.progressive,
                          'shufflepots': self.world.shufflepots,
@@ -1261,9 +1267,14 @@ class Spoiler(object):
 
     def to_file(self, filename):
         self.parse_data()
+
+        def bool_to_text(variable: bool) -> str:
+            return 'Yes' if variable else 'No'
+
         with open(filename, 'w', encoding="utf-8-sig") as outfile:
             outfile.write(
-                'ALttP Berserker\'s Multiworld Version %s  -  Seed: %s\n\n' % (self.metadata['version'], self.world.seed))
+                'ALttP Berserker\'s Multiworld Version %s  -  Seed: %s\n\n' % (
+                self.metadata['version'], self.world.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.world.algorithm)
             outfile.write('Players:                         %d\n' % self.world.players)
             outfile.write('Teams:                           %d\n' % self.world.teams)
@@ -1301,15 +1312,23 @@ class Spoiler(object):
                     'Map shuffle:                     %s\n' % ('Yes' if self.metadata['mapshuffle'][player] else 'No'))
                 outfile.write('Compass shuffle:                 %s\n' % (
                     'Yes' if self.metadata['compassshuffle'][player] else 'No'))
-                outfile.write('Small Key shuffle:               %s\n' % ('Yes' if self.metadata['keyshuffle'][player] else 'No'))
-                outfile.write('Big Key shuffle:                 %s\n' % ('Yes' if self.metadata['bigkeyshuffle'][player] else 'No'))
+                outfile.write(
+                    'Small Key shuffle:               %s\n' % ('Yes' if self.metadata['keyshuffle'][player] else 'No'))
+                outfile.write('Big Key shuffle:                 %s\n' % (
+                    'Yes' if self.metadata['bigkeyshuffle'][player] else 'No'))
                 outfile.write('Boss shuffle:                    %s\n' % self.metadata['boss_shuffle'][player])
-                outfile.write('Enemy shuffle:                   %s\n' % self.metadata['enemy_shuffle'][player])
+                outfile.write(
+                    'Enemy shuffle:                   %s\n' % bool_to_text(self.metadata['enemy_shuffle'][player]))
                 outfile.write('Enemy health:                    %s\n' % self.metadata['enemy_health'][player])
                 outfile.write('Enemy damage:                    %s\n' % self.metadata['enemy_damage'][player])
-                outfile.write('Hints:                           %s\n' % ('Yes' if self.metadata['hints'][player] else 'No'))
+                outfile.write(f'Killable thieves:                {bool_to_text(self.metadata["killable_thieves"])}\n')
+                outfile.write(f'Shuffled tiles:                  {bool_to_text(self.metadata["tile_shuffle"])}\n')
+                outfile.write(f'Shuffled bushes:                 {bool_to_text(self.metadata["bush_shuffle"])}\n')
+                outfile.write(
+                    'Hints:                           %s\n' % ('Yes' if self.metadata['hints'][player] else 'No'))
                 outfile.write('Beemizer:                        %s\n' % self.metadata['beemizer'][player])
-                outfile.write('Pot shuffle                      %s\n' % ('Yes' if self.metadata['shufflepots'][player] else 'No'))
+                outfile.write(
+                    'Pot shuffle                      %s\n' % ('Yes' if self.metadata['shufflepots'][player] else 'No'))
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
                 outfile.write('\n'.join(['%s%s %s %s' % (f'{self.world.get_player_names(entry["player"])}: ' if self.world.players > 1 else '', entry['entrance'], '<=>' if entry['direction'] == 'both' else '<=' if entry['direction'] == 'exit' else '=>', entry['exit']) for entry in self.entrances.values()]))

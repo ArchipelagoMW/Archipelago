@@ -64,9 +64,12 @@ def main(args, seed=None):
         for player in range(1, world.players + 1)}
     world.open_pyramid = args.openpyramid.copy()
     world.boss_shuffle = args.shufflebosses.copy()
-    world.enemy_shuffle = args.shuffleenemies.copy()
+    world.enemy_shuffle = args.enemy_shuffle.copy()
     world.enemy_health = args.enemy_health.copy()
     world.enemy_damage = args.enemy_damage.copy()
+    world.killable_thieves = args.killable_thieves.copy()
+    world.bush_shuffle = args.bush_shuffle.copy()
+    world.tile_shuffle = args.tile_shuffle.copy()
     world.beemizer = args.beemizer.copy()
     world.timer = args.timer.copy()
     world.shufflepots = args.shufflepots.copy()
@@ -180,9 +183,10 @@ def main(args, seed=None):
 
     def _gen_rom(team: int, player: int):
         sprite_random_on_hit = type(args.sprite[player]) is str and args.sprite[player].lower() == 'randomonhit'
-        use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player] != 'none'
+        use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
                         or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
-                        or args.shufflepots[player] or sprite_random_on_hit)
+                        or world.shufflepots[player] or sprite_random_on_hit or world.bush_shuffle[player]
+                        or world.killable_thieves[player] or world.tile_shuffle[player])
 
         rom = LocalRom(args.rom)
 

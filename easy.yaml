@@ -145,18 +145,25 @@ item_functionality:
 progression_balancing:
   on: 1 # A system to reduce BK, as in times during which you can't do anything by moving your items into an earlier access sphere to make it likely you have stuff to do
   off: 0 # Turn this off if you don't mind a longer multiworld, or can glitch around missing items.
+### Enemizer Section ###
 boss_shuffle:
   none: 1 # Vanilla bosses
   simple: 0 # Existing bosses except Ganon and Agahnim are shuffled throughout dungeons
   full: 0 # 3 bosses can occur twice
   random: 0 # Any boss can appear any amount of times
-  singularity: 0 # Picks any boss that can appear anywhere and puts that boss into every arena
-  duality: 0 # Picks a boss that can only appear in some places and a boss that can appear anywhere, then attempts to put both in that order in every arena
-enemy_shuffle:
-  none: 1 # Vanilla enemy placement
-  chaos: 0 # Enemies are randomized
-  random: 0 # Also shuffle bush enemies, random tile rooms, and random bush enemy spawn chance
-  chaosthieves: 0 # Random + thieves may not be killable
+  singularity: 0 # Picks a boss, tries to put it everywhere that works, if there's spaces remaining it picks a boss to fill those
+enemy_shuffle: # randomize enemy placement
+  on: 0
+  off: 1
+killable_thieves: # make thieves killable.
+  on: 0 # usually turned on together with enemy_shuffle to make annoying thief placement more manageable
+  off: 1
+tile_shuffle: # randomize the tile layouts in flying tile rooms
+  on: 0
+  off: 1
+bush_shuffle: # randomize the chance that bushes have enemies and the enemies under said bush
+  on: 0
+  off: 1
 enemy_damage:
   default: 1 # Vanilla enemy damage
   shuffled: 0 # Enemies deal 0 to 4 hearts and armor helps
@@ -169,6 +176,7 @@ enemy_health:
 pot_shuffle:
   'on': 0 # Keys, items, and buttons hidden under pots in dungeons are shuffled with other pots in their supertile
   'off': 1 # Default pot item locations
+### End of Enemizer Section ###
 beemizer: # Remove items from the global item pool and replace them with single bees and bee traps
   0: 1 # No bee traps are placed
   1: 0 # 25% of the non-essential item pool is replaced with bee traps
