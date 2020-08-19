@@ -357,7 +357,7 @@ def roll_settings(weights):
             ret.bush_shuffle = True
             ret.tile_shuffle = True
         elif ret.enemy_shuffle == "chaosthieves":
-            ret.killable_thieves = ret.killable_thieves = bool(random.randint(0, 1))
+            ret.killable_thieves = bool(random.randint(0, 1))
             ret.bush_shuffle = True
             ret.tile_shuffle = True
         ret.enemy_shuffle = True
