@@ -23,52 +23,22 @@ def ItemFactory(items, player):
 
 
 # Format: Name: (Advancement, Priority, Type, ItemCode, Pedestal Hint Text, Pedestal Credit Text, Sick Kid Credit Text, Zora Credit Text, Witch Credit Text, Flute Boy Credit Text, Hint Text)
-item_table = {'Bow': (
-True, False, None, 0x0B, 'You have\nchosen the\narcher class.', 'the stick and twine', 'arrow-slinging kid',
-'arrow sling for sale', 'witch and robin hood', 'archer boy shoots again', 'the Bow'),
-              'Progressive Bow': (True, False, None, 0x64, 'You have\nchosen the\narcher class.', 'the stick and twine',
-                                  'arrow-slinging kid', 'arrow sling for sale', 'witch and robin hood',
-                                  'archer boy shoots again', 'a Bow'),
-              'Progressive Bow (Alt)': (
-              True, False, None, 0x65, 'You have\nchosen the\narcher class.', 'the stick and twine',
-              'arrow-slinging kid', 'arrow sling for sale', 'witch and robin hood', 'archer boy shoots again', 'a Bow'),
-              'Silver Arrows': (True, False, None, 0x58, 'Do you fancy\nsilver tipped\narrows?', 'and the ganonsbane',
-                                'ganon-killing kid', 'ganon doom for sale', 'fungus for pork',
-                                'archer boy shines again', 'the Silver Arrows'),
-              'Silver Bow': (
-              True, False, None, 0x3B, 'Buy 1 Silver\nget Archery\nfor free.', 'the baconmaker', 'ganon-killing kid',
-              'ganon doom for sale', 'fungus for pork', 'archer boy shines again', 'the Silver Bow'),
-              'Book of Mudora': (
-              True, False, None, 0x1D, 'Hylian\nfor\nDingusses.', 'and the story book', 'the scholarly kid',
-              'moon runes for sale', 'drugs for literacy', 'book-worm boy can read again', 'the Book'),
-              'Hammer': (True, False, None, 0x09, 'stop\nhammer time!', 'and m c hammer', 'hammer-smashing kid',
-                         'm c hammer for sale', 'stop...   hammer time', 'stop, hammer time', 'the Hammer'),
-              'Hookshot': (
-              True, False, None, 0x0A, 'BOING!!!\nBOING!!!\nBOING!!!', 'and the tickle beam', 'tickle-monster kid',
-              'tickle beam for sale', 'witch and tickle boy', 'beam boy tickles again', 'the Hookshot'),
-              'Magic Mirror': (True, False, None, 0x1A, 'Isn\'t your\nreflection so\npretty?', 'the face reflector',
-                               'the narcissistic kid', 'your face for sale', 'trades looking-glass',
-                               'narcissistic boy is happy again', 'the Mirror'),
-              'Flute': (
-              True, False, None, 0x14, 'Save the duck\nand fly to\nfreedom!', 'and the duck call', 'the duck-call kid',
-              'duck call for sale', 'duck-calls for trade', 'flute boy plays again', 'the Flute'),
-              'Pegasus Boots': (
-              True, False, None, 0x4B, 'Gotta go fast!', 'and the sprint shoes', 'the running-man kid',
-              'sprint shoe for sale', 'shrooms for speed', 'gotta-go-fast boy runs again', 'the Boots'),
-              'Power Glove': (
-              True, False, None, 0x1B, 'Now you can\nlift weak\nstuff!', 'and the grey mittens', 'body-building kid',
-              'lift glove for sale', 'fungus for gloves', 'body-building boy lifts again', 'the Glove'),
-              'Cape': (
-              True, False, None, 0x19, 'Wear this to\nbecome\ninvisible!', 'the camouflage cape', 'red riding-hood kid',
-              'red hood for sale', 'hood from a hood', 'dapper boy hides again', 'the Cape'),
-              'Mushroom': (True, False, None, 0x29, 'I\'m a fun guy!\n\nI\'m a funghi!', 'and the legal drugs',
-                           'the drug-dealing kid', 'legal drugs for sale', 'shroom swap',
-                           'shroom boy sells drugs again', 'the Mushroom'),
-              'Shovel': (True, False, None, 0x13, 'Can\n   You\n      Dig it?', 'and the spade', 'archaeologist kid',
-                         'dirt spade for sale', 'can you dig it', 'shovel boy digs again', 'the Shovel'),
-              'Lamp': (
-              True, False, None, 0x12, 'Baby, baby,\nbaby.\nLight my way!', 'and the flashlight', 'light-shining kid',
-              'flashlight for sale', 'fungus for illumination', 'illuminated boy can see again', 'the Lamp'),
+item_table = {'Bow': (True, False, None, 0x0B, 'You have\nchosen the\narcher class.', 'the stick and twine', 'arrow-slinging kid', 'arrow sling for sale', 'witch and robin hood', 'archer boy shoots again', 'the Bow'),
+              'Progressive Bow': (True, False, None, 0x64, 'You have\nchosen the\narcher class.', 'the stick and twine', 'arrow-slinging kid', 'arrow sling for sale', 'witch and robin hood', 'archer boy shoots again', 'a Bow'),
+              'Progressive Bow (Alt)': (True, False, None, 0x65, 'You have\nchosen the\narcher class.', 'the stick and twine', 'arrow-slinging kid', 'arrow sling for sale', 'witch and robin hood', 'archer boy shoots again', 'a Bow'),
+              'Silver Arrows': (True, False, None, 0x58, 'Do you fancy\nsilver tipped\narrows?', 'and the ganonsbane','ganon-killing kid', 'ganon doom for sale', 'fungus for pork','archer boy shines again', 'the Silver Arrows'),
+              'Silver Bow': (True, False, None, 0x3B, 'Buy 1 Silver\nget Archery\nfor free.', 'the baconmaker', 'ganon-killing kid', 'ganon doom for sale', 'fungus for pork', 'archer boy shines again', 'the Silver Bow'),
+              'Book of Mudora': (True, False, None, 0x1D, 'Hylian\nfor\nDingusses.', 'and the story book', 'the scholarly kid', 'moon runes for sale', 'drugs for literacy', 'book-worm boy can read again', 'the Book'),
+              'Hammer': (True, False, None, 0x09, 'stop\nhammer time!', 'and m c hammer', 'hammer-smashing kid', 'm c hammer for sale', 'stop...   hammer time', 'stop, hammer time', 'the Hammer'),
+              'Hookshot': (True, False, None, 0x0A, 'BOING!!!\nBOING!!!\nBOING!!!', 'and the tickle beam', 'tickle-monster kid', 'tickle beam for sale', 'witch and tickle boy', 'beam boy tickles again', 'the Hookshot'),
+              'Magic Mirror': (True, False, None, 0x1A, 'Isn\'t your\nreflection so\npretty?', 'the face reflector', 'the narcissistic kid', 'your face for sale', 'trades looking-glass', 'narcissistic boy is happy again', 'the Mirror'),
+              'Flute': (True, False, None, 0x14, 'Save the duck\nand fly to\nfreedom!', 'and the duck call', 'the duck-call kid', 'duck call for sale', 'duck-calls for trade', 'flute boy plays again', 'the Flute'),
+              'Pegasus Boots': (True, False, None, 0x4B, 'Gotta go fast!', 'and the sprint shoes', 'the running-man kid', 'sprint shoe for sale', 'shrooms for speed', 'gotta-go-fast boy runs again', 'the Boots'),
+              'Power Glove': (True, False, None, 0x1B, 'Now you can\nlift weak\nstuff!', 'and the grey mittens', 'body-building kid', 'lift glove for sale', 'fungus for gloves', 'body-building boy lifts again', 'the Glove'),
+              'Cape': (True, False, None, 0x19, 'Wear this to\nbecome\ninvisible!', 'the camouflage cape', 'red riding-hood kid', 'red hood for sale', 'hood from a hood', 'dapper boy hides again', 'the Cape'),
+              'Mushroom': (True, False, None, 0x29, 'I\'m a fun guy!\n\nI\'m a funghi!', 'and the legal drugs', 'the drug-dealing kid', 'legal drugs for sale', 'shroom swap', 'shroom boy sells drugs again', 'the Mushroom'),
+              'Shovel': (True, False, None, 0x13, 'Can\n   You\n      Dig it?', 'and the spade', 'archaeologist kid', 'dirt spade for sale', 'can you dig it', 'shovel boy digs again', 'the Shovel'),
+              'Lamp': (True, False, None, 0x12, 'Baby, baby,\nbaby.\nLight my way!', 'and the flashlight', 'light-shining kid', 'flashlight for sale', 'fungus for illumination', 'illuminated boy can see again', 'the Lamp'),
               'Magic Powder': (True, False, None, 0x0D, 'you can turn\nanti-faeries\ninto faeries', 'and the magic sack', 'the sack-holding kid', 'magic sack for sale', 'the witch and assistant', 'magic boy plays marbles again', 'the Powder'),
               'Moon Pearl': (True, False, None, 0x1F, '  Bunny Link\n      be\n     gone!', 'and the jaw breaker', 'fortune-telling kid', 'lunar orb for sale', 'shrooms for moon rock', 'moon boy plays ball again', 'the Moon Pearl'),
               'Cane of Somaria': (True, False, None, 0x15, 'I make blocks\nto hold down\nswitches!', 'and the red blocks', 'the block-making kid', 'block stick for sale', 'block stick for trade', 'cane boy makes blocks again', 'the Red Cane'),
