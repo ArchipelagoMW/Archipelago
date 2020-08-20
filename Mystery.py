@@ -278,7 +278,8 @@ def roll_settings(weights):
 
     ret.mapshuffle = get_choice('map_shuffle', weights, 'm' in dungeon_items)
     ret.compassshuffle = get_choice('compass_shuffle', weights, 'c' in dungeon_items)
-    ret.keyshuffle = get_choice('smallkey_shuffle', weights, 's' in dungeon_items)
+    ret.keyshuffle = get_choice('smallkey_shuffle', weights,
+                                'universal' if 'u' in dungeon_items else 's' in dungeon_items)
     ret.bigkeyshuffle = get_choice('bigkey_shuffle', weights, 'b' in dungeon_items)
 
     ret.accessibility = get_choice('accessibility', weights)
@@ -309,10 +310,13 @@ def roll_settings(weights):
     ret.triforce_pieces_required = get_choice('triforce_pieces_required', weights, 20)
     ret.triforce_pieces_required = min(max(1, int(ret.triforce_pieces_required)), 90)
 
-    ret.mode = get_choice('world_state', weights)
+    ret.mode = get_choice('world_state', weights, None)  # legacy support
     if ret.mode == 'retro':
         ret.mode = 'open'
         ret.retro = True
+    elif ret.mode is None:
+        ret.mode = get_choice("mode", weights)
+        ret.retro = get_choice("retro", weights)
 
     ret.hints = get_choice('hints', weights)
 

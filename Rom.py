@@ -1237,7 +1237,7 @@ def patch_rom(world, rom, player, team, enemized):
     write_int16(rom, 0x18017A, get_reveal_bytes('Green Pendant') if world.mapshuffle[player] else 0x0000) # Sahasrahla reveal
     write_int16(rom, 0x18017C, get_reveal_bytes('Crystal 5')|get_reveal_bytes('Crystal 6') if world.mapshuffle[player] else 0x0000) # Bomb Shop Reveal
 
-    rom.write_byte(0x180172, 0x01 if world.retro[player] else 0x00)  # universal keys
+    rom.write_byte(0x180172, int(world.keyshuffle == "universal"))  # universal keys
     rom.write_byte(0x180175, 0x01 if world.retro[player] else 0x00)  # rupee bow
     rom.write_byte(0x180176, 0x0A if world.retro[player] else 0x00)  # wood arrow cost
     rom.write_byte(0x180178, 0x32 if world.retro[player] else 0x00)  # silver arrow cost

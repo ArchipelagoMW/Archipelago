@@ -231,17 +231,27 @@ def parse_arguments(argv, no_defaults=False):
                              --seed given will produce the same 10 (different) roms each
                              time).
                              ''', type=int)
-    parser.add_argument('--fastmenu', default=defval('normal'), const='normal', nargs='?', choices=['normal', 'instant', 'double', 'triple', 'quadruple', 'half'],
+    parser.add_argument('--fastmenu', default=defval('normal'), const='normal', nargs='?',
+                        choices=['normal', 'instant', 'double', 'triple', 'quadruple', 'half'],
                         help='''\
                              Select the rate at which the menu opens and closes.
                              (default: %(default)s)
                              ''')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
-    parser.add_argument('--mapshuffle', default=defval(False), help='Maps are no longer restricted to their dungeons, but can be anywhere', action='store_true')
-    parser.add_argument('--compassshuffle', default=defval(False), help='Compasses are no longer restricted to their dungeons, but can be anywhere', action='store_true')
-    parser.add_argument('--keyshuffle', default=defval(False), help='Small Keys are no longer restricted to their dungeons, but can be anywhere', action='store_true')
-    parser.add_argument('--bigkeyshuffle', default=defval(False), help='Big Keys are no longer restricted to their dungeons, but can be anywhere', action='store_true')
+    parser.add_argument('--mapshuffle', default=defval(False),
+                        help='Maps are no longer restricted to their dungeons, but can be anywhere',
+                        action='store_true')
+    parser.add_argument('--compassshuffle', default=defval(False),
+                        help='Compasses are no longer restricted to their dungeons, but can be anywhere',
+                        action='store_true')
+    parser.add_argument('--keyshuffle', default=defval("off"), help='\
+                        on: Small Keys are no longer restricted to their dungeons, but can be anywhere.\
+                        universal: Makes all Small Keys usable in any dungeon and places shops to buy more keys.',
+                        choices=["on", "universal", "off"])
+    parser.add_argument('--bigkeyshuffle', default=defval(False),
+                        help='Big Keys are no longer restricted to their dungeons, but can be anywhere',
+                        action='store_true')
     parser.add_argument('--keysanity', default=defval(False), help=argparse.SUPPRESS, action='store_true')
     parser.add_argument('--retro', default=defval(False), help='''\
                              Keys are universal, shooting arrows costs rupees,
@@ -326,9 +336,13 @@ def parse_arguments(argv, no_defaults=False):
         ret.dungeon_counters = True
     elif ret.dungeon_counters == 'off':
         ret.dungeon_counters = False
-    if ret.keysanity:
-        ret.mapshuffle, ret.compassshuffle, ret.keyshuffle, ret.bigkeyshuffle = [True] * 4
 
+    if ret.keysanity:
+        ret.mapshuffle = ret.compassshuffle = ret.keyshuffle = ret.bigkeyshuffle = True
+    elif ret.keyshuffle == "on":
+        ret.keyshuffle = True
+    elif ret.keyshuffle == "off":
+        ret.keyshuffle = False
     if multiargs.multi:
         defaults = copy.deepcopy(ret)
         for player in range(1, multiargs.multi + 1):

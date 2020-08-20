@@ -516,17 +516,13 @@ class CollectionState(object):
     def has_key(self, item, player, count: int = 1):
         if self.world.logic[player] == 'nologic':
             return True
-        if self.world.retro[player]:
+        if self.world.keyshuffle[player] == "universal":
             return self.can_buy_unlimited('Small Key (Universal)', player)
-        if count == 1:
-            return (item, player) in self.prog_items
         return self.prog_items[item, player] >= count
 
     def can_buy_unlimited(self, item: str, player: int) -> bool:
-        for shop in self.world.shops:
-            if shop.region.player == player and shop.has_unlimited(item) and shop.region.can_reach(self):
-                return True
-        return False
+        return any(shop.region.player == player and shop.has_unlimited(item) and shop.region.can_reach(self) for
+                   shop in self.world.shops)
 
     def item_count(self, item, player: int) -> int:
         return self.prog_items[item, player]
@@ -619,9 +615,10 @@ class CollectionState(object):
         )
 
     def has_sword(self, player: int) -> bool:
-        return self.has('Fighter Sword', player) or self.has('Master Sword', player) or self.has('Tempered Sword',
-                                                                                                 player) or self.has(
-            'Golden Sword', player)
+        return self.has('Fighter Sword', player) \
+               or self.has('Master Sword', player) \
+               or self.has('Tempered Sword', player) \
+               or self.has('Golden Sword', player)
 
     def has_beam_sword(self, player: int) -> bool:
         return self.has('Master Sword', player) or self.has('Tempered Sword', player) or self.has('Golden Sword', player)
@@ -1267,13 +1264,15 @@ class Spoiler(object):
     def to_file(self, filename):
         self.parse_data()
 
-        def bool_to_text(variable: bool) -> str:
+        def bool_to_text(variable: Union[bool, str]) -> str:
+            if type(variable) == str:
+                return variable
             return 'Yes' if variable else 'No'
 
         with open(filename, 'w', encoding="utf-8-sig") as outfile:
             outfile.write(
                 'ALttP Berserker\'s Multiworld Version %s  -  Seed: %s\n\n' % (
-                self.metadata['version'], self.world.seed))
+                    self.metadata['version'], self.world.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.world.algorithm)
             outfile.write('Players:                         %d\n' % self.world.players)
             outfile.write('Teams:                           %d\n' % self.world.teams)
@@ -1312,7 +1311,7 @@ class Spoiler(object):
                 outfile.write('Compass shuffle:                 %s\n' % (
                     'Yes' if self.metadata['compassshuffle'][player] else 'No'))
                 outfile.write(
-                    'Small Key shuffle:               %s\n' % ('Yes' if self.metadata['keyshuffle'][player] else 'No'))
+                    'Small Key shuffle:               %s\n' % (bool_to_text(self.metadata['keyshuffle'][player])))
                 outfile.write('Big Key shuffle:                 %s\n' % (
                     'Yes' if self.metadata['bigkeyshuffle'][player] else 'No'))
                 outfile.write('Boss shuffle:                    %s\n' % self.metadata['boss_shuffle'][player])

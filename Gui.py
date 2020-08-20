@@ -67,16 +67,27 @@ def guiMain(args=None):
     openpyramidCheckbutton = Checkbutton(checkBoxFrame, text="Pre-open Pyramid Hole", variable=openpyramidVar)
     mcsbshuffleFrame = Frame(checkBoxFrame)
     mcsbLabel = Label(mcsbshuffleFrame, text="Shuffle: ")
+
     mapshuffleVar = IntVar()
     mapshuffleCheckbutton = Checkbutton(mcsbshuffleFrame, text="Maps", variable=mapshuffleVar)
+
     compassshuffleVar = IntVar()
     compassshuffleCheckbutton = Checkbutton(mcsbshuffleFrame, text="Compasses", variable=compassshuffleVar)
-    keyshuffleVar = IntVar()
-    keyshuffleCheckbutton = Checkbutton(mcsbshuffleFrame, text="Keys", variable=keyshuffleVar)
+
     bigkeyshuffleVar = IntVar()
     bigkeyshuffleCheckbutton = Checkbutton(mcsbshuffleFrame, text="BigKeys", variable=bigkeyshuffleVar)
+
+    keyshuffleFrame = Frame(checkBoxFrame)
+    keyshuffleVar = StringVar()
+    keyshuffleVar.set('off')
+    modeOptionMenu = OptionMenu(keyshuffleFrame, keyshuffleVar, 'off', 'universal', 'on')
+    modeOptionMenu.pack(side=LEFT)
+    modeLabel = Label(keyshuffleFrame, text='Key Shuffle')
+    modeLabel.pack(side=LEFT)
+
     retroVar = IntVar()
-    retroCheckbutton = Checkbutton(checkBoxFrame, text="Retro mode (universal keys)", variable=retroVar)
+    retroCheckbutton = Checkbutton(checkBoxFrame, text="Retro mode", variable=retroVar)
+
     shuffleGanonVar = IntVar()
     shuffleGanonVar.set(1)  # set default
     shuffleGanonCheckbutton = Checkbutton(checkBoxFrame, text="Include Ganon's Tower and Pyramid Hole in shuffle pool",
@@ -99,8 +110,8 @@ def guiMain(args=None):
     mcsbLabel.grid(row=0, column=0)
     mapshuffleCheckbutton.grid(row=0, column=1)
     compassshuffleCheckbutton.grid(row=0, column=2)
-    keyshuffleCheckbutton.grid(row=0, column=3)
     bigkeyshuffleCheckbutton.grid(row=0, column=4)
+    keyshuffleFrame.pack(expand=True, anchor=W)
     retroCheckbutton.pack(expand=True, anchor=W)
     shuffleGanonCheckbutton.pack(expand=True, anchor=W)
     hintsCheckbutton.pack(expand=True, anchor=W)
@@ -476,7 +487,7 @@ def guiMain(args=None):
         guiargs.openpyramid = bool(openpyramidVar.get())
         guiargs.mapshuffle = bool(mapshuffleVar.get())
         guiargs.compassshuffle = bool(compassshuffleVar.get())
-        guiargs.keyshuffle = bool(keyshuffleVar.get())
+        guiargs.keyshuffle = {"on": True, "universal": "universal", "off": False}[keyshuffleVar.get()]
         guiargs.bigkeyshuffle = bool(bigkeyshuffleVar.get())
         guiargs.retro = bool(retroVar.get())
         guiargs.quickswap = bool(quickSwapVar.get())

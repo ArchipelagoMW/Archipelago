@@ -206,8 +206,9 @@ def global_rules(world, player):
     set_rule(world.get_location('Hookshot Cave - Bottom Left', player), lambda state: state.has('Hookshot', player))
 
     set_rule(world.get_entrance('Sewers Door', player),
-             lambda state: state.has_key('Small Key (Hyrule Castle)', player) or (world.retro[player] and world.mode[
-                 player] == 'standard'))  # standard retro cannot access the shop
+             lambda state: state.has_key('Small Key (Hyrule Castle)', player) or (
+                         world.keyshuffle[player] == "universal" and world.mode[
+                     player] == 'standard'))  # standard universal small keys cannot access the shop
     set_rule(world.get_entrance('Sewers Back Door', player),
              lambda state: state.has_key('Small Key (Hyrule Castle)', player))
     set_rule(world.get_entrance('Agahnim 1', player),
@@ -896,7 +897,7 @@ def set_trock_key_rules(world, player):
             return 4
 
         # If TR is only accessible from the middle, the big key must be further restricted to prevent softlock potential
-        if not can_reach_front and not world.keyshuffle[player] and not world.retro[player]:
+        if not can_reach_front and not world.keyshuffle[player]:
             # Must not go in the Big Key Chest - only 1 other chest available and 2+ keys required for all other chests
             forbid_item(world.get_location('Turtle Rock - Big Key Chest', player), 'Big Key (Turtle Rock)', player)
             if not can_reach_big_chest:
@@ -905,7 +906,8 @@ def set_trock_key_rules(world, player):
             if world.accessibility[player] == 'locations':
                 if world.bigkeyshuffle[player] and can_reach_big_chest:
                     # Must not go in the dungeon - all 3 available chests (Chomps, Big Chest, Crystaroller) must be keys to access laser bridge, and the big key is required first
-                    for location in ['Turtle Rock - Chain Chomps', 'Turtle Rock - Compass Chest', 'Turtle Rock - Roller Room - Left', 'Turtle Rock - Roller Room - Right']:
+                    for location in ['Turtle Rock - Chain Chomps', 'Turtle Rock - Compass Chest',
+                                     'Turtle Rock - Roller Room - Left', 'Turtle Rock - Roller Room - Right']:
                         forbid_item(world.get_location(location, player), 'Big Key (Turtle Rock)', player)
                 else:
                     # A key is required in the Big Key Chest to prevent a possible softlock.  Place an extra key to ensure 100% locations still works

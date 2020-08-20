@@ -43,7 +43,7 @@ Difficulty = namedtuple('Difficulty',
                         ['baseitems', 'bottles', 'bottle_count', 'same_bottle', 'progressiveshield',
                          'basicshield', 'progressivearmor', 'basicarmor', 'swordless', 'progressivemagic', 'basicmagic',
                          'progressivesword', 'basicsword', 'progressivebow', 'basicbow', 'timedohko', 'timedother',
-                         'triforcehunt', 'retro',
+                         'triforcehunt', 'universal_keys',
                          'extras', 'progressive_sword_limit', 'progressive_shield_limit',
                          'progressive_armor_limit', 'progressive_bottle_limit',
                          'progressive_bow_limit', 'heart_piece_limit', 'boss_heart_container_limit'])
@@ -70,7 +70,7 @@ difficulties = {
         timedohko=['Green Clock'] * 25,
         timedother=['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt=['Triforce Piece'] * 30,
-        retro=['Small Key (Universal)'] * 28,
+        universal_keys=['Small Key (Universal)'] * 28,
         extras=[easyfirst15extra, easysecond15extra, easythird10extra, easyfourth5extra, easyfinal25extra],
         progressive_sword_limit=8,
         progressive_shield_limit=6,
@@ -99,15 +99,15 @@ difficulties = {
         timedohko=['Green Clock'] * 25,
         timedother=['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt=['Triforce Piece'] * 30,
-        retro=['Small Key (Universal)'] * 18 + ['Rupees (20)'] * 10,
+        universal_keys=['Small Key (Universal)'] * 18 + ['Rupees (20)'] * 10,
         extras=[normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit=4,
         progressive_shield_limit=3,
         progressive_armor_limit=2,
         progressive_bow_limit=2,
-        progressive_bottle_limit = 4,
-        boss_heart_container_limit = 10,
-        heart_piece_limit = 24,
+        progressive_bottle_limit=4,
+        boss_heart_container_limit=10,
+        heart_piece_limit=24,
     ),
     'hard': Difficulty(
         baseitems = normalbaseitems,
@@ -128,7 +128,7 @@ difficulties = {
         timedohko=['Green Clock'] * 25,
         timedother=['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt=['Triforce Piece'] * 30,
-        retro=['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 16,
+        universal_keys=['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 16,
         extras=[normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit=3,
         progressive_shield_limit=2,
@@ -158,7 +158,7 @@ difficulties = {
         timedohko=['Green Clock'] * 20 + ['Red Clock'] * 5,
         timedother=['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
         triforcehunt=['Triforce Piece'] * 30,
-        retro=['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 16,
+        universal_keys=['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 16,
         extras=[normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit=2,
         progressive_shield_limit=1,
@@ -425,21 +425,26 @@ def fill_prizes(world, attempts=15):
             raise FillError('Unable to place dungeon prizes')
 
 
-def set_up_shops(world, player):
-    # TODO: move hard+ mode changes for sheilds here, utilizing the new shops
+def set_up_shops(world, player: int):
+    # TODO: move hard+ mode changes for shields here, utilizing the new shops
 
     if world.retro[player]:
         rss = world.get_region('Red Shield Shop', player).shop
         if not rss.locked:
             rss.add_inventory(2, 'Single Arrow', 80)
+        rss.locked = True
+
+    if world.keyshuffle[player] == "universal":
         for shop in world.random.sample([s for s in world.shops if
                                          s.custom and not s.locked and s.type == ShopType.Shop and s.region.player == player],
                                         5):
             shop.locked = True
-            shop.add_inventory(0, 'Single Arrow', 80)
+            if world.retro[player]:
+                shop.add_inventory(0, 'Single Arrow', 80)
+            else:
+                shop.add_inventory(0, "Red Potion", 150)
             shop.add_inventory(1, 'Small Key (Universal)', 100)
             shop.add_inventory(2, 'Bombs (10)', 50)
-        rss.locked = True
 
 
 def get_pool_core(world, player: int):
@@ -592,7 +597,8 @@ def get_pool_core(world, player: int):
         pool = [item.replace('Arrows (10)', 'Rupees (5)') for item in pool]
         pool = [item.replace('Arrow Upgrade (+5)', 'Rupees (5)') for item in pool]
         pool = [item.replace('Arrow Upgrade (+10)', 'Rupees (5)') for item in pool]
-        pool.extend(diff.retro)
+    if world.keyshuffle[player] == "universal":
+        pool.extend(diff.universal_keys)
         if mode == 'standard':
             key_location = world.random.choice(
                 ['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest',
@@ -609,7 +615,6 @@ def make_custom_item_pool(world, player):
     timer = world.timer[player]
     goal = world.goal[player]
     mode = world.mode[player]
-    retro = world.retro[player]
     customitemarray = world.customitemarray[player]
 
     pool = []
@@ -726,7 +731,7 @@ def make_custom_item_pool(world, player):
         itemtotal = itemtotal + 1
 
     if mode == 'standard':
-        if retro:
+        if world.keyshuffle == "universal":
             key_location = world.random.choice(
                 ['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest',
                  'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
@@ -749,9 +754,10 @@ def make_custom_item_pool(world, player):
         pool.extend(['Magic Mirror'] * customitemarray[22])
         pool.extend(['Moon Pearl'] * customitemarray[28])
 
-    if retro:
-        itemtotal = itemtotal - 28 # Corrects for small keys not being in item pool in Retro Mode
+    if world.keyshuffle == "universal":
+        itemtotal = itemtotal - 28  # Corrects for small keys not being in item pool in Retro Mode
     if itemtotal < total_items_to_place:
         pool.extend(['Nothing'] * (total_items_to_place - itemtotal))
+        logging.warning(f"Pool was filled up with {total_items_to_place - itemtotal} Nothing's for player {player}")
 
     return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon)

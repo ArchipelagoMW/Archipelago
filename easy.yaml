@@ -38,6 +38,7 @@ compass_shuffle: # Shuffle compasses into the world and other dungeons, includin
   off: 1
 smallkey_shuffle: # Shuffle small keys into the world and other dungeons, including other players' worlds
   on: 0
+  universal: 0 # allows small keys to be used in any dungeon and adds shops to buy more
   off: 1
 bigkey_shuffle: # Shuffle big keys into the world and other dungeons, including other players' worlds
   on: 0
@@ -50,6 +51,8 @@ dungeon_items: # Alternative to the 4 shuffles and local_keys above this, does n
   none: 1 # Shuffle none of the 4
   mcsb: 0 # Shuffle all of the 4, any combination of m, c, s and b will shuffle the respective item, or not if it's missing, so you can add more options here
   lmcsb: 0 # Like mcsb above, but with keys kept local to your world. l is what makes your keys local, or not if it's missing
+  ub: 0 # universal small keys and shuffled big keys
+  # you can add more combos of these letters here
 dungeon_counters:
   on: 0 # Always display amount of items checked in a dungeon
   pickup: 1 # Show when compass is picked up
@@ -119,11 +122,13 @@ ganon_open: # Crystals required to hurt Ganon
   '6': 2
   '7': 1
   random: 0
-world_state:
+mode:
   standard: 1 # Begin the game by rescuing Zelda from her cell and escorting her to the Sanctuary
   open: 1 # Begin the game from your choice of Link's House or the Sanctuary
   inverted: 0 # Begin in the Dark World. The Moon Pearl is required to avoid bunny-state in Light World, and the Light World game map is altered
-  retro: 0 # Small keys are universal, you must buy a quiver, take-any caves and an old-man cave are added to the world. You may need to find your sword from the old man's cave
+retro:
+  on: 0 # you must buy a quiver to use the bow, take-any caves and an old-man cave are added to the world. You may need to find your sword from the old man's cave
+  off: 1
 hints:
   'on': 1 # Hint tiles sometimes give item location hints
   'off': 0 # Hint tiles provide gameplay tips
