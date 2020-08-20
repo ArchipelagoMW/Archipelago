@@ -43,10 +43,12 @@ def snes_to_pc(value):
 
 def parse_player_names(names, players, teams):
     names = tuple(n for n in (n.strip() for n in names.split(",")) if n)
+    if len(names) != len(set(names)):
+        raise ValueError("Duplicate Player names is not supported.")
     ret = []
     while names or len(ret) < teams:
         team = [n[:16] for n in names[:players]]
-        # where does the 16 character limit come from?
+        # 16 bytes in rom per player, which will map to more in unicode, but those characters later get filtered
         while len(team) != players:
             team.append(f"Player{len(team) + 1}")
         ret.append(team)
