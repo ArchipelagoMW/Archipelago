@@ -135,9 +135,8 @@ class World(object):
     def get_name_string_for_object(self, obj) -> str:
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_names(obj.player)})'
 
-    def get_player_names(self, player) -> str:
-        return ", ".join(
-            [name for i, name in enumerate(self.player_names[player]) if self.player_names[player].index(name) == i])
+    def get_player_names(self, player: int) -> str:
+        return ", ".join(self.player_names[player])
 
     def initialize_regions(self, regions=None):
         for region in regions if regions else self.regions:
