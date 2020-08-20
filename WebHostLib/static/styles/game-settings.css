@@ -3,22 +3,39 @@
     margin-right: auto;
 }
 
-#game-settings table{
-
+#game-settings code{
+    background-color: #dbe1bc;
+    border-radius: 4px;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
 }
 
-#game-settings table td.option-name{
-
+#game-settings #instructions{
+    text-align: center;
 }
 
-#game-settings table td.option-name label{
+#game-settings #settings-wrapper{
+    margin-top: 1.5rem;
+}
+
+#game-settings table.option-set{
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+#game-settings table.option-set td.option-name{
+    width: 150px;
     font-weight: bold;
+    font-size: 1rem;
+    line-height: 2rem;
 }
 
-#game-settings table .option-value{
-
+#game-settings table.option-set td.option-value{
+    line-height: 2rem;
 }
 
-#game-settings table .option-value input{
-
+#game-settings table.option-set td.option-value input[type=range]{
+    width: 90%;
+    min-width: 300px;
+    vertical-align: middle;
 }
