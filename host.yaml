@@ -7,6 +7,8 @@ general_options:
   # true for operating system default program
   # alternatively, a path to a program to open the .sfc file with
   rom_start: true
+  # Where to place output files
+  output_path: "output"
 #options for MultiServer
 #null means nothing, for the server this means to default the value
 #these overwrite command line arguments!
@@ -49,8 +51,6 @@ server_options:
 multi_mystery_options:
 #teams, however, note that there is currently no way to supply names for teams 2+ through MultiMystery
   teams: 1
-#Where to place the resulting files
-  output_path: "output"
 #location of your Enemizer CLI, available here: https://github.com/Bonta0/Enemizer/releases
   enemizer_path: "EnemizerCLI/EnemizerCLI.Core.exe"
   #folder from which the player yaml files are pulled from

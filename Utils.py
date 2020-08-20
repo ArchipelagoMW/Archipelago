@@ -84,7 +84,7 @@ local_path.cached_path = None
 def output_path(path):
     if output_path.cached_path:
         return os.path.join(output_path.cached_path, path)
-    output_path.cached_path = local_path("output")
+    output_path.cached_path = local_path(get_options()["general_options"]["output_path"])
     path = os.path.join(output_path.cached_path, path)
     os.makedirs(os.path.dirname(path), exist_ok=True)
     return path

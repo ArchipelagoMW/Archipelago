@@ -2,7 +2,7 @@ from BaseClasses import World
 from Dungeons import create_dungeons, get_dungeon_item_pool
 from EntranceShuffle import link_inverted_entrances
 from InvertedRegions import create_inverted_regions
-from ItemList import generate_itempool, difficulties
+from ItemPool import generate_itempool, difficulties
 from Items import ItemFactory
 from Regions import mark_light_world_regions, create_shops
 from Rules import set_rules

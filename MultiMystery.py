@@ -43,7 +43,7 @@ if __name__ == "__main__":
         options = get_options()
 
         multi_mystery_options = options["multi_mystery_options"]
-        output_path = multi_mystery_options["output_path"]
+        output_path = options["general_options"]["output_path"]
         enemizer_path = multi_mystery_options["enemizer_path"]
         player_files_path = multi_mystery_options["player_files_path"]
         race = multi_mystery_options["race"]

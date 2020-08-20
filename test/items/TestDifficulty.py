@@ -1,4 +1,4 @@
-from ItemList import difficulties
+from ItemPool import difficulties
 from test.TestBase import TestBase
 
 base_items = 41

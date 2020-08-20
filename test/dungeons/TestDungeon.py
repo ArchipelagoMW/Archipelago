@@ -3,7 +3,7 @@ import unittest
 from BaseClasses import World, CollectionState
 from Dungeons import create_dungeons, get_dungeon_item_pool
 from EntranceShuffle import mandatory_connections, connect_simple
-from ItemList import difficulties, generate_itempool
+from ItemPool import difficulties, generate_itempool
 from Items import ItemFactory
 from Regions import create_regions, create_shops
 from Rules import set_rules
