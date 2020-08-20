@@ -365,7 +365,7 @@ def roll_settings(weights):
             ret.bush_shuffle = True
             ret.tile_shuffle = True
         ret.enemy_shuffle = True
-    logging.info(ret.enemy_shuffle)
+
     # end of legacy block
 
     ret.enemy_damage = {'default': 'default',
