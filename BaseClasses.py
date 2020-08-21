@@ -983,7 +983,8 @@ class Location(object):
         return self.always_allow(state, item) or (self.parent_region.can_fill(item) and self.item_rule(item) and (not check_access or self.can_reach(state)))
 
     def can_reach(self, state: CollectionState) -> bool:
-        if self.parent_region.can_reach(state) and self.access_rule(state):
+        # self.access_rule computes faster on average, so placing it first for faster abort
+        if self.access_rule(state) and self.parent_region.can_reach(state):
             return True
         return False
 
