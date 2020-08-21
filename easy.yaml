@@ -140,7 +140,7 @@ weapons: # Specifically, swords
 item_pool:
   easy: 0 # Doubled upgrades, progressives, and etc
   normal: 1 # Item availability remains unchanged from vanilla game
-  hard: 0 # Reduced upgrade availability (max: 14 hearts, green mail, tempered sword, fire shield, no silvers unless swordless)
+  hard: 0 # Reduced upgrade availability (max: 14 hearts, blue mail, tempered sword, fire shield, no silvers unless swordless)
   expert: 0 # Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless)
   crowd_control: 0 # Sets up the item pool for the crowd control extension. Do not use it without crowd control
 item_functionality:
