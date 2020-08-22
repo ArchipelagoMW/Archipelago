@@ -1,9 +1,9 @@
 import logging
 
-from BaseClasses import Item
 
 
 def ItemFactory(items, player):
+    from BaseClasses import Item
     ret = []
     singleton = False
     if isinstance(items, str):

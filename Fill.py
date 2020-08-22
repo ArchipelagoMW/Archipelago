@@ -209,7 +209,7 @@ def fill_restrictive(world, base_state: CollectionState, locations, itempool, si
                             if location.item and not location.event:
                                 placements.append(location)
                     raise FillError(f'No more spots to place {item_to_place}, locations {locations} are invalid. '
-                                    f'\nAlready placed {len(placements)}: {", ".join(placements)}')
+                                    f'Already placed {len(placements)}: {", ".join(placements)}')
 
                 world.push_item(spot_to_fill, item_to_place, False)
                 locations.remove(spot_to_fill)

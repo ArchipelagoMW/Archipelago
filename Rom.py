@@ -348,6 +348,8 @@ def _populate_sprite_table():
                 if sprite.valid:
                     _sprite_table[sprite.name.lower()] = sprite
                     _sprite_table[os.path.basename(file).split(".")[0].lower()] = sprite  # alias for filename base
+                else:
+                    logging.debug(f"Spritefile {file} could not be loaded as a valid sprite.")
 
             with concurrent.futures.ThreadPoolExecutor() as pool:
                 for dir in [local_path('data/sprites/alttpr'), local_path('data/sprites/custom')]:

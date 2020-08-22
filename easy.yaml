@@ -17,17 +17,18 @@
 # To test if your yaml is valid or not, you can use this website:
 # http://www.yamllint.com/
 
-description: Your Description Here # Used to describe your yaml. Useful if you have multiple files
-name: YourName # Your name in-game. Spaces and underscores will be replaced with dashes
+description: easy template # Used to describe your yaml. Useful if you have multiple files
+name: YourName # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
 glitches_required: # Determine the logic required to complete the seed
   none: 1 # No glitches required
   minor_glitches: 0 # Puts fake flipper, waterwalk, super bunny shenanigans, and etc into logic
   overworld_glitches: 0 # Assumes the player has knowledge of both overworld major glitches (boots clips, mirror clips) and minor glitches (fake flipper, super bunny shenanigans, water walk and etc.)
   no_logic: 0 # Items are places completely at random and with no regard for logic. Your fire rod could be on Trinexx
 meta_ignore: # Nullify options specified in the meta.yaml file. Adding an option here guarantees it will not occur in your seed, even if the .yaml file specifies it
-  world_state:
+  mode:
     - inverted # Never play inverted seeds
-    - retro # Never play retro seeds
+  retro:
+    - on # Never play retro seeds
   weapons:
     - swordless # Never play a swordless seed
 map_shuffle: # Shuffle dungeon maps into the world and other dungeons, including other players' worlds

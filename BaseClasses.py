@@ -5,13 +5,13 @@ from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict, Counter, deque
+from typing import Union, Optional
+import secrets
+import random
 
 from EntranceShuffle import door_addresses, indirect_connections
 from Utils import int16_as_bytes
-from typing import Union, Optional
-
-import secrets
-import random
+from Items import item_name_groups
 
 
 class World(object):
@@ -429,7 +429,7 @@ class CollectionState(object):
         self.world = parent
         self.reachable_regions = {player: set() for player in range(1, parent.players + 1)}
         self.blocked_connections = {player: set() for player in range(1, parent.players + 1)}
-        self.events = []
+        self.events = set()
         self.path = {}
         self.locations_checked = set()
         self.stale = {player: True for player in range(1, parent.players + 1)}
@@ -492,23 +492,19 @@ class CollectionState(object):
         return spot.can_reach(self)
 
     def sweep_for_events(self, key_only: bool = False, locations=None):
-        # this may need improvement
         if locations is None:
             locations = self.world.get_filled_locations()
         new_locations = True
-        checked_locations = 0
         while new_locations:
-            reachable_events = [location for location in locations if location.event and
+            reachable_events = {location for location in locations if location.event and
                                 (not key_only or (not self.world.keyshuffle[
                                     location.item.player] and location.item.smallkey) or (not self.world.bigkeyshuffle[
                                     location.item.player] and location.item.bigkey))
-                                and location.can_reach(self)]
-            for event in reachable_events:
-                if event not in self.events:
-                    self.events.append(event)
-                    self.collect(event.item, True, event)
-            new_locations = len(reachable_events) > checked_locations
-            checked_locations = len(reachable_events)
+                                and location.can_reach(self)}
+            new_locations = reachable_events - self.events
+            for event in new_locations:
+                self.events.add(event)
+                self.collect(event.item, True, event)
 
     def has(self, item, player: int, count: int = 1):
         return self.prog_items[item, player] >= count
@@ -532,11 +528,10 @@ class CollectionState(object):
 
     def has_crystals(self, count: int, player: int) -> bool:
         found: int = 0
-        for itemname, itemplayer in self.prog_items:
-            if itemplayer == player and itemname.startswith('Crystal '):
-                found += 1
-                if found >= count:
-                    return True
+        for crystalnumber in range(1, 8):
+            found += self.prog_items[f"Crystal {crystalnumber}", player]
+            if found >= count:
+                return True
         return False
 
     def can_lift_rocks(self, player: int):
@@ -546,17 +541,18 @@ class CollectionState(object):
         return self.has_bottles(1, player)
 
     def bottle_count(self, player: int) -> int:
-        return len(
-            tuple(item for (item, itemplayer) in self.prog_items if itemplayer == player and item.startswith('Bottle')))
+        found: int = 0
+        for bottlename in item_name_groups["Bottles"]:
+            found += self.prog_items[bottlename, player]
+        return found
 
-    def has_bottles(self, bottles: int, player: int):
+    def has_bottles(self, bottles: int, player: int) -> bool:
         """Version of bottle_count that allows fast abort"""
         found: int = 0
-        for itemname, itemplayer in self.prog_items:
-            if itemplayer == player and itemname.startswith('Bottle'):
-                found += 1
-                if found >= bottles:
-                    return True
+        for bottlename in item_name_groups["Bottles"]:
+            found += self.prog_items[bottlename, player]
+            if found >= bottles:
+                return True
         return False
 
     def has_hearts(self, player: int, count: int) -> int:
@@ -994,6 +990,9 @@ class Location(object):
     def __str__(self):
         world = self.parent_region.world if self.parent_region and self.parent_region.world else None
         return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
+
+    def __hash__(self):
+        return hash((self.name, self.player))
 
 
 class Item(object):
