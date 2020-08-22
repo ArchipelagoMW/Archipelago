@@ -1,0 +1,2081 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "required": [
+    "description",
+    "name",
+    "glitches_required",
+    "map_shuffle",
+    "compass_shuffle",
+    "smallkey_shuffle",
+    "bigkey_shuffle",
+    "local_keys",
+    "dungeon_items",
+    "dungeon_counters",
+    "accessibility",
+    "progressive",
+    "entrance_shuffle",
+    "goals",
+    "triforce_pieces_available",
+    "triforce_pieces_required",
+    "tower_open",
+    "ganon_open",
+    "mode",
+    "retro",
+    "hints",
+    "weapons",
+    "item_pool",
+    "item_functionality",
+    "progression_balancing",
+    "boss_shuffle",
+    "enemy_shuffle",
+    "killable_thieves",
+    "tile_shuffle",
+    "bush_shuffle",
+    "enemy_damage",
+    "enemy_health",
+    "pot_shuffle",
+    "beemizer",
+    "timer",
+    "glitch_boots",
+    "door_shuffle",
+    "rom"
+  ],
+  "properties": {
+    "description": {
+      "$id": "#/properties/description",
+      "type": "string",
+      "title": "Preset Name",
+      "description": "A short name to describe this preset.",
+      "default": "Your Description Here"
+    },
+    "name": {
+      "$id": "#/properties/name",
+      "type": "string",
+      "title": "Player Name",
+      "description": "The name you want to appear in the game. This only matters for multiworld games, but it still mandatory.",
+      "default": "Your Name"
+    },
+    "glitches_required": {
+      "$id": "#/properties/glitches_required",
+      "type": "object",
+      "title": "Glitches Required",
+      "description": "When generating the game, required items may be placed in locations that require knowing certain glitches to access. Here, you may choose the level of glitch knowledge which may be required to complete your game.",
+      "required": [
+        "none",
+        "minor_glitches",
+        "overworld_glitches",
+        "no_logic"
+      ],
+      "properties": {
+        "none": {
+          "$id": "#/properties/glitches_required/properties/none",
+          "type": "integer",
+          "title": "No Glitches",
+          "description": "All required items will be placed in locations which do not require any glitch knowledge to access.",
+          "default": 50
+        },
+        "minor_glitches": {
+          "$id": "#/properties/glitches_required/properties/minor_glitches",
+          "type": "integer",
+          "title": "Minor Glitches",
+          "description": "Required items may be placed in locations which require knowledge of minor glitches to access.",
+          "default": 0
+        },
+        "overworld_glitches": {
+          "$id": "#/properties/glitches_required/properties/overworld_glitches",
+          "type": "integer",
+          "title": "Overworld Glitches",
+          "description": "Required items may be placed in locations which require knowledge of overworld glitches to access.",
+          "default": 0
+        },
+        "no_logic": {
+          "$id": "#/properties/glitches_required/properties/no_logic",
+          "type": "integer",
+          "title": "No Logic",
+          "description": "Required items may be placed in any location in the world, with no regard to logical access. Be aware, this may do things like put the Fire Rod on Trinexx",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "meta_ignore": {
+      "$id": "#/properties/meta_ignore",
+      "type": "object",
+      "title": "The meta_ignore schema",
+      "description": "An explanation about the purpose of this instance.",
+      "properties": {
+        "mode": {
+          "$id": "#/properties/meta_ignore/properties/mode",
+          "type": "array",
+          "title": "Game Mode",
+          "description": "Ignore meta rules for Game Mode.",
+          "default": [
+            "inverted"
+          ],
+          "additionalItems": true,
+          "items": {
+            "$id": "#/properties/meta_ignore/properties/mode/items",
+            "anyOf": [
+              {
+                "$id": "#/properties/meta_ignore/properties/mode/items/anyOf/0",
+                "type": "string",
+                "title": "Options for meta-ignore Mode",
+                "description": "Options for meta-ignore Mode",
+                "enum": ["standard", "open", "inverted"]
+              }
+            ]
+          }
+        },
+        "retro": {
+          "$id": "#/properties/meta_ignore/properties/retro",
+          "type": "array",
+          "title": "Retro",
+          "description": "Ignore meta rules for Retro.",
+          "default": [
+            "on"
+          ],
+          "additionalItems": true,
+          "items": {
+            "$id": "#/properties/meta_ignore/properties/retro/items",
+            "anyOf": [
+              {
+                "$id": "#/properties/meta_ignore/properties/retro/items/anyOf/0",
+                "type": "string",
+                "title": "Options for meta-ignore Retro",
+                "description": "Options for meta-ignore Retro",
+                "enum": ["on", "off"]
+              }
+            ]
+          }
+        },
+        "weapons": {
+          "$id": "#/properties/meta_ignore/properties/weapons",
+          "type": "array",
+          "title": "Weapons",
+          "description": "Ignore meta rules for Weapons",
+          "default": [
+            "swordless"
+          ],
+          "additionalItems": true,
+          "items": {
+            "$id": "#/properties/meta_ignore/properties/weapons/items",
+            "anyOf": [
+              {
+                "$id": "#/properties/meta_ignore/properties/weapons/items/anyOf/0",
+                "type": "string",
+                "title": "Options for meta-ignore Weapons",
+                "description": "Options for meta-ignore Weapons",
+                "enum": [
+                  "randomized",
+                  "assured",
+                  "vanilla",
+                  "swordless"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "map_shuffle": {
+      "$id": "#/properties/map_shuffle",
+      "type": "object",
+      "title": "Map Shuffle",
+      "description": "Shuffles dungeon maps throughout the world. Dungeon pendant/crystal rewards will be hidden on the overworld map until you find the corresponding dungeon's map.",
+      "required": [
+        "on",
+        "off"
+      ],
+      "properties": {
+        "on": {
+          "$id": "#/properties/map_shuffle/properties/on",
+          "type": "integer",
+          "title": "On",
+          "description": "Turn on dungeon shuffle.",
+          "default": 0
+        },
+        "off": {
+          "$id": "#/properties/map_shuffle/properties/off",
+          "type": "integer",
+          "title": "Off",
+          "description": "Turn off dungeon shuffle.",
+          "default": 50
+        }
+      },
+      "additionalProperties": true
+    },
+    "compass_shuffle": {
+      "$id": "#/properties/compass_shuffle",
+      "type": "object",
+      "title": "Compass Shuffle",
+      "description": "Shuffles compasses throughout the world. Finding a dungeon's compass will cause an item counter to be displayed in the corresponding dungeon.",
+      "required": [
+        "on",
+        "off"
+      ],
+      "properties": {
+        "on": {
+          "$id": "#/properties/compass_shuffle/properties/on",
+          "type": "integer",
+          "title": "On",
+          "description": "Turn on compass shuffle.",
+          "default": 0
+        },
+        "off": {
+          "$id": "#/properties/compass_shuffle/properties/off",
+          "type": "integer",
+          "title": "Off",
+          "description": "Turn off compass shuffle.",
+          "default": 50
+        }
+      },
+      "additionalProperties": true
+    },
+    "smallkey_shuffle": {
+      "$id": "#/properties/smallkey_shuffle",
+      "type": "object",
+      "title": "Small Key Shuffle",
+      "description": "Shuffle small keys from dungeons throughout the world.",
+      "required": [
+        "on",
+        "off",
+        "universal"
+      ],
+      "properties": {
+        "on": {
+          "$id": "#/properties/smallkey_shuffle/properties/on",
+          "type": "integer",
+          "title": "On",
+          "description": "Turn on small key shuffle.",
+          "default": 0
+        },
+        "off": {
+          "$id": "#/properties/smallkey_shuffle/properties/off",
+          "type": "integer",
+          "title": "Off",
+          "description": "Turn off small key shuffle",
+          "default": 50
+        },
+        "universal": {
+          "$id": "#/properties/smallkey_shuffle/properties/universal",
+          "type": "integer",
+          "title": "Universal Small Keys",
+          "description": "In addition to being placed throughout the world, all small keys are also made universal, similar to retry mode. This also allows you to purchase them in shops.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "bigkey_shuffle": {
+      "$id": "#/properties/bigkey_shuffle",
+      "type": "object",
+      "title": "Big Key Shuffle",
+      "description": "Shuffle dungeon big keys throughout the world.",
+      "required": [
+        "on",
+        "off"
+      ],
+      "properties": {
+        "on": {
+          "$id": "#/properties/bigkey_shuffle/properties/on",
+          "type": "integer",
+          "title": "On",
+          "description": "Turn on big key shuffle.",
+          "default": 0
+        },
+        "off": {
+          "$id": "#/properties/bigkey_shuffle/properties/off",
+          "type": "integer",
+          "title": "Off",
+          "description": "Turn off big key shuffle.",
+          "default": 50
+        }
+      },
+      "additionalProperties": true
+    },
+    "local_keys": {
+      "$id": "#/properties/local_keys",
+      "type": "object",
+      "title": "Local Keys",
+      "description": "Force all keys to be placed in your own world. Irrelevant in single-player seeds.",
+      "required": [
+        "on",
+        "off"
+      ],
+      "properties": {
+        "on": {
+          "$id": "#/properties/local_keys/properties/on",
+          "type": "integer",
+          "title": "On",
+          "description": "Turn on the local keys setting.",
+          "default": 0
+        },
+        "off": {
+          "$id": "#/properties/local_keys/properties/off",
+          "type": "integer",
+          "title": "Off",
+          "description": "Turn off the local keys setting.",
+          "default": 50
+        }
+      },
+      "additionalProperties": true
+    },
+    "dungeon_counters": {
+      "$id": "#/properties/dungeon_counters",
+      "type": "object",
+      "title": "Dungeon Counters",
+      "description": "Choose how and when to show an item count for checks available within a dungeon.",
+      "required": [
+        "on",
+        "pickup",
+        "default",
+        "off"
+      ],
+      "properties": {
+        "on": {
+          "$id": "#/properties/dungeon_counters/properties/on",
+          "type": "integer",
+          "title": "On",
+          "description": "Always display the number of completed checks in a dungeon.",
+          "default": 50
+        },
+        "pickup": {
+          "$id": "#/properties/dungeon_counters/properties/pickup",
+          "type": "integer",
+          "title": "Pickup",
+          "description": "Show the check counter only after the dungeon's compass has been picked up.",
+          "default": 0
+        },
+        "default": {
+          "$id": "#/properties/dungeon_counters/properties/default",
+          "type": "integer",
+          "title": "Default",
+          "description": "Do not show the dungeon's check counter unless compasses are shuffled and the corresponding dungeon compass has been acquired.",
+          "default": 0
+        },
+        "off": {
+          "$id": "#/properties/dungeon_counters/properties/off",
+          "type": "integer",
+          "title": "Off",
+          "description": "Never show dungeon check counters.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "accessibility": {
+      "$id": "#/properties/accessibility",
+      "type": "object",
+      "title": "Accessibility",
+      "description": "Determine the availability of item checks and locations.",
+      "required": [
+        "items",
+        "locations",
+        "none"
+      ],
+      "properties": {
+        "items": {
+          "$id": "#/properties/accessibility/properties/items",
+          "type": "integer",
+          "title": "Items",
+          "description": "Guarantees you will be able to acquire all items, but not necessarily access all locations in the game.",
+          "default": 0
+        },
+        "locations": {
+          "$id": "#/properties/accessibility/properties/locations",
+          "type": "integer",
+          "title": "Locations",
+          "description": "Guarantees you will be able to access all locations, and therefore all items in the game.",
+          "default": 50
+        },
+        "none": {
+          "$id": "#/properties/accessibility/properties/none",
+          "type": "integer",
+          "title": "None",
+          "description": "Guarantees only that the game is beatable. Not all items may be available, and not all locations may be accessable.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "progressive": {
+      "$id": "#/properties/progressive",
+      "type": "object",
+      "title": "Progressive Items",
+      "description": "Enable or disable progressive items throughout the game.",
+      "required": [
+        "on",
+        "off",
+        "random"
+      ],
+      "properties": {
+        "on": {
+          "$id": "#/properties/progressive/properties/on",
+          "type": "integer",
+          "title": "On",
+          "description": "All items with multiple tiers will be progressive (swords, shields, bow, gloves).",
+          "default": 50
+        },
+        "off": {
+          "$id": "#/properties/progressive/properties/off",
+          "type": "integer",
+          "title": "Off",
+          "description": "All items will be non-progressive. You might find the Golden Sword in Link's house.",
+          "default": 0
+        },
+        "random": {
+          "$id": "#/properties/progressive/properties/random",
+          "type": "integer",
+          "title": "Random",
+          "description": "Decide whether to shuffle each tiered item independently. Swords might be progressive while gloves are not.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "entrance_shuffle": {
+      "$id": "#/properties/entrance_shuffle",
+      "type": "object",
+      "title": "Entrance Shuffle",
+      "description": "Determine the frequency and complexity with which entrances are shuffled with one another.",
+      "required": [
+        "none",
+        "dungeonssimple",
+        "dungeonsfull",
+        "simple",
+        "restricted",
+        "full",
+        "crossed",
+        "insanity"
+      ],
+      "properties": {
+        "none": {
+          "$id": "#/properties/entrance_shuffle/properties/none",
+          "type": "integer",
+          "title": "No Shuffle",
+          "description": "All entrances lead to their vanilla locations.",
+          "default": 50
+        },
+        "dungeonssimple": {
+          "$id": "#/properties/entrance_shuffle/properties/dungeonssimple",
+          "type": "integer",
+          "title": "Dungeons Simple",
+          "description": "Shuffles only dungeons amongst each other, swapping dungeons entirely. So Hyrule Castle is always one dungeon, for example.",
+          "default": 0
+        },
+        "dungeonsfull": {
+          "$id": "#/properties/entrance_shuffle/properties/dungeonsfull",
+          "type": "integer",
+          "title": "Dungeons Full",
+          "description": "Shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle might lead to four dungeons.",
+          "default": 0
+        },
+        "simple": {
+          "$id": "#/properties/entrance_shuffle/properties/simple",
+          "type": "integer",
+          "title": "Simple",
+          "description": "Entrances are grouped together before being randomized. Simple imposes the most strict grouping rules.",
+          "default": 0
+        },
+        "restricted": {
+          "$id": "#/properties/entrance_shuffle/properties/restricted",
+          "type": "integer",
+          "title": "Restricted",
+          "description": "Less strict rules than 'Simple'",
+          "default": 0
+        },
+        "full": {
+          "$id": "#/properties/entrance_shuffle/properties/full",
+          "type": "integer",
+          "title": "Full",
+          "description": "Less strict rules than 'Restricted'",
+          "default": 0
+        },
+        "crossed": {
+          "$id": "#/properties/entrance_shuffle/properties/crossed",
+          "type": "integer",
+          "title": "Crossed",
+          "description": "Less strict rules than 'Full'",
+          "default": 0
+        },
+        "insanity": {
+          "$id": "#/properties/entrance_shuffle/properties/insanity",
+          "type": "integer",
+          "title": "Insanity",
+          "description": "Very few grouping rules. Good luck.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "goals": {
+      "$id": "#/properties/goals",
+      "type": "object",
+      "title": "Goals",
+      "description": "Determine the final goal of your game.",
+      "required": [
+        "ganon",
+        "fast_ganon",
+        "dungeons",
+        "pedestal",
+        "triforce_hunt",
+        "local_triforce_hunt",
+        "ganon_triforce_hunt",
+        "local_ganon_triforce_hunt"
+      ],
+      "properties": {
+        "ganon": {
+          "$id": "#/properties/goals/properties/ganon",
+          "type": "integer",
+          "title": "Ganon",
+          "description": "Acquire all required crystals to enter Ganaon's Tower and defeat Agahnim, then defeat Ganon.",
+          "default": 50
+        },
+        "fast_ganon": {
+          "$id": "#/properties/goals/properties/fast_ganon",
+          "type": "integer",
+          "title": "Fast Ganon",
+          "description": "Ganon's pyramid is open from the start of the game, and you must defeat him, but there is a minimum crystal requirement to be able to damage him.",
+          "default": 0
+        },
+        "dungeons": {
+          "$id": "#/properties/goals/properties/dungeons",
+          "type": "integer",
+          "title": "All Dungeons",
+          "description": "Acquire all pendants and crystals, defeat Agahnim in both Hyrule Castle Tower and Ganon's Tower, and defeat Ganon in his pyramid.",
+          "default": 0
+        },
+        "pedestal": {
+          "$id": "#/properties/goals/properties/pedestal",
+          "type": "integer",
+          "title": "Pedestal",
+          "description": "Acquire all three pendants and pull the Master Sword from its pedestal.",
+          "default": 0
+        },
+        "triforce_hunt": {
+          "$id": "#/properties/goals/properties/triforce_hunt",
+          "type": "integer",
+          "title": "Triforce Hunt",
+          "description": "The triforce has been broken into pieces and you must find them, then turn them in to Murahadala, who is standing in front of Hyrule Castle.",
+          "default": 0
+        },
+        "local_triforce_hunt": {
+          "$id": "#/properties/goals/properties/local_triforce_hunt",
+          "type": "integer",
+          "title": "Local Triforce Hunt",
+          "description": "Same as triforce hunt, but all the triforce pieces are guaranteed to be in your world. Irrelevant to single-player games.",
+          "default": 0
+        },
+        "ganon_triforce_hunt": {
+          "$id": "#/properties/goals/properties/ganon_triforce_hunt",
+          "type": "integer",
+          "title": "Triforce Hunt /w Ganon",
+          "description": "The triforce of courage has been broken and the pieces are scattered around Hyrule. Link must find them, then face Ganon in his pyramid.",
+          "default": 0
+        },
+        "local_ganon_triforce_hunt": {
+          "$id": "#/properties/goals/properties/local_ganon_triforce_hunt",
+          "type": "integer",
+          "title": "Local Triforce Hunt /w Ganon",
+          "description": "Same as Triforce Hunt /w Ganon, but all the triforce pieces are guaranteed to be in your world. Irrelevant to single-player games.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "triforce_pieces_available": {
+      "$id": "#/properties/triforce_pieces_available",
+      "type": "object",
+      "title": "Triforce Pieces Available",
+      "description": "Determines how many Triforce pieces are placed throughout the world. Irrelevant unless a Triforce Hunt goal is chosen.",
+      "required": [
+        "20",
+        "25",
+        "30",
+        "35",
+        "40",
+        "45",
+        "50"
+      ],
+      "properties": {
+        "20": {
+          "$id": "#/properties/triforce_pieces_available/properties/25",
+          "type": "integer",
+          "title": "20",
+          "description": "20 Triforce pieces will be placed throughout the world.",
+          "default": 0
+        },
+        "25": {
+          "$id": "#/properties/triforce_pieces_available/properties/25",
+          "type": "integer",
+          "title": "25",
+          "description": "25 Triforce pieces will be placed throughout the world.",
+          "default": 0
+        },
+        "30": {
+          "$id": "#/properties/triforce_pieces_available/properties/25",
+          "type": "integer",
+          "title": "30",
+          "description": "30 Triforce pieces will be placed throughout the world.",
+          "default": 50
+        },
+        "35": {
+          "$id": "#/properties/triforce_pieces_available/properties/25",
+          "type": "integer",
+          "title": "35",
+          "description": "35 Triforce pieces will be placed throughout the world.",
+          "default": 0
+        },
+        "40": {
+          "$id": "#/properties/triforce_pieces_available/properties/25",
+          "type": "integer",
+          "title": "40",
+          "description": "40 Triforce pieces will be placed throughout the world.",
+          "default": 0
+        },
+        "45": {
+          "$id": "#/properties/triforce_pieces_available/properties/25",
+          "type": "integer",
+          "title": "45",
+          "description": "45 Triforce pieces will be placed throughout the world.",
+          "default": 0
+        },
+        "50": {
+          "$id": "#/properties/triforce_pieces_available/properties/25",
+          "type": "integer",
+          "title": "50",
+          "description": "50 Triforce pieces will be placed throughout the world.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "triforce_pieces_required": {
+      "$id": "#/properties/triforce_pieces_required",
+      "type": "object",
+      "title": "Triforce Pieces Required",
+      "description": "The number of triforce pieces you must find before you may complete the game by speaking with Murahadala. Irrelevant unless a Triforce Hunt goal is chosen.",
+      "required": [
+        "15",
+        "20",
+        "25",
+        "30",
+        "35",
+        "40"
+      ],
+      "properties": {
+        "15": {
+          "$id": "#/properties/triforce_pieces_required/properties/15",
+          "type": "integer",
+          "title": "15",
+          "description": "15 Triforce pieces are required to complete the game.",
+          "default": 0
+        },
+        "20": {
+          "$id": "#/properties/triforce_pieces_required/properties/15",
+          "type": "integer",
+          "title": "20",
+          "description": "20 Triforce pieces are required to complete the game.",
+          "default": 0
+        },
+        "25": {
+          "$id": "#/properties/triforce_pieces_required/properties/15",
+          "type": "integer",
+          "title": "25",
+          "description": "25 Triforce pieces are required to complete the game.",
+          "default": 50
+        },
+        "30": {
+          "$id": "#/properties/triforce_pieces_required/properties/15",
+          "type": "integer",
+          "title": "30",
+          "description": "30 Triforce pieces are required to complete the game.",
+          "default": 0
+        },
+        "35": {
+          "$id": "#/properties/triforce_pieces_required/properties/15",
+          "type": "integer",
+          "title": "35",
+          "description": "35 Triforce pieces are required to complete the game.",
+          "default": 0
+        },
+        "40": {
+          "$id": "#/properties/triforce_pieces_required/properties/15",
+          "type": "integer",
+          "title": "40",
+          "description": "40 Triforce pieces are required to complete the game.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "tower_open": {
+      "$id": "#/properties/tower_open",
+      "type": "object",
+      "title": "Tower Open",
+      "description": "How many crystals will be required to open Ganon's Tower?",
+      "required": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "random"
+      ],
+      "properties": {
+        "0": {
+          "$id": "#/properties/tower_open/properties/0",
+          "type": "integer",
+          "title": "0 Crystals",
+          "description": "0 Crystals are required to open Ganon's Tower.",
+          "default": 80
+        },
+        "1": {
+          "$id": "#/properties/tower_open/properties/1",
+          "type": "integer",
+          "title": "1 Crystal",
+          "description": "1 Crystal is required to open Ganon's Tower.",
+          "default": 70
+        },
+        "2": {
+          "$id": "#/properties/tower_open/properties/2",
+          "type": "integer",
+          "title": "2 Crystals",
+          "description": "2 Crystals are required to open Ganon's Tower.",
+          "default": 60
+        },
+        "3": {
+          "$id": "#/properties/tower_open/properties/3",
+          "type": "integer",
+          "title": "3 Crystals",
+          "description": "3 Crystals are required to open Ganon's Tower.",
+          "default": 50
+        },
+        "4": {
+          "$id": "#/properties/tower_open/properties/4",
+          "type": "integer",
+          "title": "4 Crystals",
+          "description": "4 Crystals are required to open Ganon's Tower.",
+          "default": 40
+        },
+        "5": {
+          "$id": "#/properties/tower_open/properties/5",
+          "type": "integer",
+          "title": "5 Crystals",
+          "description": "5 Crystals are required to open Ganon's Tower.",
+          "default": 30
+        },
+        "6": {
+          "$id": "#/properties/tower_open/properties/6",
+          "type": "integer",
+          "title": "6 Crystals",
+          "description": "6 Crystals are required to open Ganon's Tower.",
+          "default": 20
+        },
+        "7": {
+          "$id": "#/properties/tower_open/properties/7",
+          "type": "integer",
+          "title": "7 Crystals",
+          "description": "7 Crystals are required to open Ganon's Tower.",
+          "default": 10
+        },
+        "random": {
+          "$id": "#/properties/tower_open/properties/random",
+          "type": "integer",
+          "title": "Random",
+          "description": "A random number from 0-7 crystals will be required to open Ganon's Tower.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "ganon_open": {
+      "$id": "#/properties/ganon_open",
+      "type": "object",
+      "title": "Ganon Vulnerable",
+      "description": "How many crystals are required to harm Ganon?",
+      "required": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "random"
+      ],
+      "properties": {
+        "0": {
+          "$id": "#/properties/tower_open/properties/0",
+          "type": "integer",
+          "title": "0 Crystals",
+          "description": "0 Crystals are required to harm Ganon.",
+          "default": 80
+        },
+        "1": {
+          "$id": "#/properties/tower_open/properties/1",
+          "type": "integer",
+          "title": "1 Crystal",
+          "description": "1 Crystal is required to harm Ganon.",
+          "default": 70
+        },
+        "2": {
+          "$id": "#/properties/tower_open/properties/2",
+          "type": "integer",
+          "title": "2 Crystals",
+          "description": "2 Crystals are required to harm Ganon.",
+          "default": 60
+        },
+        "3": {
+          "$id": "#/properties/tower_open/properties/3",
+          "type": "integer",
+          "title": "3 Crystals",
+          "description": "3 Crystals are required to harm Ganon.",
+          "default": 50
+        },
+        "4": {
+          "$id": "#/properties/tower_open/properties/4",
+          "type": "integer",
+          "title": "4 Crystals",
+          "description": "4 Crystals are required to harm Ganon.",
+          "default": 40
+        },
+        "5": {
+          "$id": "#/properties/tower_open/properties/5",
+          "type": "integer",
+          "title": "5 Crystals",
+          "description": "5 Crystals are required to harm Ganon.",
+          "default": 30
+        },
+        "6": {
+          "$id": "#/properties/tower_open/properties/6",
+          "type": "integer",
+          "title": "6 Crystals",
+          "description": "6 Crystals are required to harm Ganon.",
+          "default": 20
+        },
+        "7": {
+          "$id": "#/properties/tower_open/properties/7",
+          "type": "integer",
+          "title": "7 Crystals",
+          "description": "7 Crystals are required to harm Ganon.",
+          "default": 10
+        },
+        "random": {
+          "$id": "#/properties/tower_open/properties/random",
+          "type": "integer",
+          "title": "Random",
+          "description": "A random number from 0-7 crystals will be required to harm Ganon.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "mode": {
+      "$id": "#/properties/mode",
+      "type": "object",
+      "title": "Game Mode",
+      "description": "Choose a game mode to play. This may affect the world state.",
+      "required": [
+        "standard",
+        "open",
+        "inverted"
+      ],
+      "properties": {
+        "standard": {
+          "$id": "#/properties/mode/properties/standard",
+          "type": "integer",
+          "title": "Standard",
+          "description": "Begin the game by rescuing Zelda from her cell.",
+          "default": 50
+        },
+        "open": {
+          "$id": "#/properties/mode/properties/open",
+          "type": "integer",
+          "title": "Open",
+          "description": "Begin the game from your choice of Link's House or the Sanctuary.",
+          "default": 50
+        },
+        "inverted": {
+          "$id": "#/properties/mode/properties/inverted",
+          "type": "integer",
+          "title": "Inverted",
+          "description": "Begin in the dark world. The Moon Pearl is required to avoid bunny-state in Light World, and the Light World game map is altered.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "retro": {
+      "$id": "#/properties/retro",
+      "type": "object",
+      "title": "Retro Mode",
+      "description": "Make the game similar to Zelda 1. All small keys are universal and may be purchased in shops, the quiver must be purchased in a shop, take-any caves are added to the overworld, and you may need to find your old-man cave to acquire a sword.",
+      "required": [
+        "on",
+        "off"
+      ],
+      "properties": {
+        "on": {
+          "$id": "#/properties/retro/properties/on",
+          "type": "integer",
+          "title": "On",
+          "description": "Turn on Retro mode.",
+          "default": 0
+        },
+        "off": {
+          "$id": "#/properties/retro/properties/off",
+          "type": "integer",
+          "title": "Off",
+          "description": "Turn off Retro mode.",
+          "default": 50
+        }
+      },
+      "additionalProperties": true
+    },
+    "hints": {
+      "$id": "#/properties/hints",
+      "type": "object",
+      "title": "Item Hints",
+      "description": "Determine what type of hints will be given in-game.",
+      "required": [
+        "on",
+        "off"
+      ],
+      "properties": {
+        "on": {
+          "$id": "#/properties/hints/properties/on",
+          "type": "integer",
+          "title": "On",
+          "description": "Hint tiles will tell you the location of items.",
+          "default": 50
+        },
+        "off": {
+          "$id": "#/properties/hints/properties/off",
+          "type": "integer",
+          "title": "Off",
+          "description": "Hint tiles will give gameplay tips.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "weapons": {
+      "$id": "#/properties/weapons",
+      "type": "object",
+      "title": "The weapons schema",
+      "description": "An explanation about the purpose of this instance.",
+      "required": [
+        "randomized",
+        "assured",
+        "vanilla",
+        "swordless"
+      ],
+      "properties": {
+        "randomized": {
+          "$id": "#/properties/weapons/properties/randomized",
+          "type": "integer",
+          "title": "Randomized",
+          "description": "Swords are placed randomly throughout the world.",
+          "default": 0
+        },
+        "assured": {
+          "$id": "#/properties/weapons/properties/assured",
+          "type": "integer",
+          "title": "Assured",
+          "description": "Begin the game with a sword. The others are placed randomly throughout the world.",
+          "default": 50
+        },
+        "vanilla": {
+          "$id": "#/properties/weapons/properties/vanilla",
+          "type": "integer",
+          "title": "Vanilla",
+          "description": "Swords are located at their vanilla game locations.",
+          "default": 0
+        },
+        "swordless": {
+          "$id": "#/properties/weapons/properties/swordless",
+          "type": "integer",
+          "title": "Swordless",
+          "description": "Swords are removed from the item pool.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "item_pool": {
+      "$id": "#/properties/item_pool",
+      "type": "object",
+      "title": "Item Pool",
+      "description": "Add or remove helpful items from the game.",
+      "required": [
+        "easy",
+        "normal",
+        "hard",
+        "expert",
+        "crowd_control"
+      ],
+      "properties": {
+        "easy": {
+          "$id": "#/properties/item_pool/properties/easy",
+          "type": "integer",
+          "title": "Easy",
+          "description": "Doubled availability of upgrades, progressive, items, etc.",
+          "default": 0
+        },
+        "normal": {
+          "$id": "#/properties/item_pool/properties/normal",
+          "type": "integer",
+          "title": "Normal",
+          "description": "Item availability unchanged from the vanilla game.",
+          "default": 50
+        },
+        "hard": {
+          "$id": "#/properties/item_pool/properties/hard",
+          "type": "integer",
+          "title": "Hard",
+          "description": "Reduced upgrade availability (max: 14 hearts, blue mail, tempered sword, fire shield, no silvers unless swordless)",
+          "default": 0
+        },
+        "expert": {
+          "$id": "#/properties/item_pool/properties/expert",
+          "type": "integer",
+          "title": "Expert",
+          "description": "Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless)",
+          "default": 0
+        },
+        "crowd_control": {
+          "$id": "#/properties/item_pool/properties/crowd_control",
+          "type": "integer",
+          "title": "Crowd Control",
+          "description": "Sets up the item pool for the crowd control extension. Do not use it without crowd control.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "item_functionality": {
+      "$id": "#/properties/item_functionality",
+      "type": "object",
+      "title": "Item Functionality",
+      "description": "Determines the usefulness of items.",
+      "required": [
+        "normal",
+        "hard",
+        "expert"
+      ],
+      "properties": {
+        "normal": {
+          "$id": "#/properties/item_functionality/properties/normal",
+          "type": "integer",
+          "title": "Normal",
+          "description": "Vanilla item functionality.",
+          "default": 50
+        },
+        "hard": {
+          "$id": "#/properties/item_functionality/properties/hard",
+          "type": "integer",
+          "title": "Hard",
+          "description": "Reduced helpfulness of items (potions less effective, can't catch faeries, Magic Cape uses double magic, Cane of Byrna does not grant invulnerability, boomerangs do not stun, silvers disabled outside ganon)",
+          "default": 0
+        },
+        "expert": {
+          "$id": "#/properties/item_functionality/properties/expert",
+          "type": "integer",
+          "title": "Expert",
+          "description": "Vastly reduces the helpfulness of items (potions barely effective, can't catch faeries, Magic Cape uses double magic, Cane of Byrna does not grant invulnerability, boomerangs and hookshot do not stun, silvers disabled outside ganon)",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "progression_balancing": {
+      "$id": "#/properties/progression_balancing",
+      "type": "object",
+      "title": "Progression Balancing",
+      "description": "Whether the generator should attempt to put required items in earlier spheres.",
+      "required": [
+        "on",
+        "off"
+      ],
+      "properties": {
+        "on": {
+          "$id": "#/properties/progression_balancing/properties/on",
+          "type": "integer",
+          "title": "On",
+          "description": "Turn on progression balancing.",
+          "default": 50
+        },
+        "off": {
+          "$id": "#/properties/progression_balancing/properties/off",
+          "type": "integer",
+          "title": "Off",
+          "description": "Turn off progression balancing.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "boss_shuffle": {
+      "$id": "#/properties/boss_shuffle",
+      "type": "object",
+      "title": "Boss Shuffle",
+      "description": "Choose how and when bosses should be shuffled around dungeons.",
+      "required": [
+        "none",
+        "simple",
+        "full",
+        "random",
+        "singularity"
+      ],
+      "properties": {
+        "none": {
+          "$id": "#/properties/boss_shuffle/properties/none",
+          "type": "integer",
+          "title": "None",
+          "description": "Bosses are left in their vanilla locations.",
+          "default": 50
+        },
+        "simple": {
+          "$id": "#/properties/boss_shuffle/properties/simple",
+          "type": "integer",
+          "title": "Simple",
+          "description": "Existing bosses are shuffled throughout dungeons.",
+          "default": 0
+        },
+        "full": {
+          "$id": "#/properties/boss_shuffle/properties/full",
+          "type": "integer",
+          "title": "Full",
+          "description": "Shuffles all bosses, including those in Ganon's Tower across dungeons.",
+          "default": 0
+        },
+        "random": {
+          "$id": "#/properties/boss_shuffle/properties/random",
+          "type": "integer",
+          "title": "Random",
+          "description": "Any boss can occur any number of times.",
+          "default": 0
+        },
+        "singularity": {
+          "$id": "#/properties/boss_shuffle/properties/singularity",
+          "type": "integer",
+          "title": "Singularity",
+          "description": "Randomly chooses a boss and tries to put it everywhere. Puts other bosses in locations the chosen boss cannot exist.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "enemy_shuffle": {
+      "$id": "#/properties/enemy_shuffle",
+      "type": "object",
+      "title": "Enemy Shuffle",
+      "description": "Randomizes enemy placement",
+      "required": [
+        "on",
+        "off"
+      ],
+      "properties": {
+        "on": {
+          "$id": "#/properties/enemy_shuffle/properties/on",
+          "type": "integer",
+          "title": "On",
+          "description": "Turn on enemy shuffle.",
+          "default": 0
+        },
+        "off": {
+          "$id": "#/properties/enemy_shuffle/properties/off",
+          "type": "integer",
+          "title": "Off",
+          "description": "Vanilla enemy placement.",
+          "default": 50,
+          "examples": [
+            1
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "killable_thieves": {
+      "$id": "#/properties/killable_thieves",
+      "type": "object",
+      "title": "Killable Thieves",
+      "description": "Determines whether or not thieves are able to be killed.",
+      "required": [
+        "on",
+        "off"
+      ],
+      "properties": {
+        "on": {
+          "$id": "#/properties/killable_thieves/properties/on",
+          "type": "integer",
+          "title": "On",
+          "description": "Thieves will be killable.",
+          "default": 50
+        },
+        "off": {
+          "$id": "#/properties/killable_thieves/properties/off",
+          "type": "integer",
+          "title": "Off",
+          "description": "Thieves will be invulnerable.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "tile_shuffle": {
+      "$id": "#/properties/tile_shuffle",
+      "type": "object",
+      "title": "Tile Shuffle",
+      "description": "Randomize the tile layout of rooms where tiles fly at you.",
+      "required": [
+        "on",
+        "off"
+      ],
+      "properties": {
+        "on": {
+          "$id": "#/properties/tile_shuffle/properties/on",
+          "type": "integer",
+          "title": "On",
+          "description": "Tile patterns will be randomized.",
+          "default": 0
+        },
+        "off": {
+          "$id": "#/properties/tile_shuffle/properties/off",
+          "type": "integer",
+          "title": "Off",
+          "description": "Tile patterns will be static.",
+          "default": 50
+        }
+      },
+      "additionalProperties": true
+    },
+    "bush_shuffle": {
+      "$id": "#/properties/bush_shuffle",
+      "type": "object",
+      "title": "Bush Shuffle",
+      "description": "Determines if bushes should randomly have enemies hiding beneath them.",
+      "required": [
+        "on",
+        "off"
+      ],
+      "properties": {
+        "on": {
+          "$id": "#/properties/bush_shuffle/properties/on",
+          "type": "integer",
+          "title": "On",
+          "description": "Bushes will randomly have enemies hiding beneath them.",
+          "default": 0
+        },
+        "off": {
+          "$id": "#/properties/bush_shuffle/properties/off",
+          "type": "integer",
+          "title": "Off",
+          "description": "Bushes will have enemies hiding beneath them only in vanilla locations.",
+          "default": 50
+        }
+      },
+      "additionalProperties": true
+    },
+    "enemy_damage": {
+      "$id": "#/properties/enemy_damage",
+      "type": "object",
+      "title": "Enemy Damage",
+      "description": "Changes how much damage enemies deal to Link.",
+      "required": [
+        "default",
+        "shuffled",
+        "random"
+      ],
+      "properties": {
+        "default": {
+          "$id": "#/properties/enemy_damage/properties/default",
+          "type": "integer",
+          "title": "Default",
+          "description": "Enemies deal vanilla damage to Link.",
+          "default": 50
+        },
+        "shuffled": {
+          "$id": "#/properties/enemy_damage/properties/shuffled",
+          "type": "integer",
+          "title": "Shuffled",
+          "description": "Enemies deal 0-4 hearts of damage and armor may reduce this amount.",
+          "default": 0
+        },
+        "random": {
+          "$id": "#/properties/enemy_damage/properties/random",
+          "type": "integer",
+          "title": "Random",
+          "description": "Enemies deal 0-8 hearts of damage and armor re-shuffles the damage amount.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "enemy_health": {
+      "$id": "#/properties/enemy_health",
+      "type": "object",
+      "title": "Enemy Health",
+      "description": "Determines how much damage enemies can take before they die.",
+      "required": [
+        "default",
+        "easy",
+        "hard",
+        "expert"
+      ],
+      "properties": {
+        "default": {
+          "$id": "#/properties/enemy_health/properties/default",
+          "type": "integer",
+          "title": "Default",
+          "description": "Enemies have vanilla HP.",
+          "default": 50
+        },
+        "easy": {
+          "$id": "#/properties/enemy_health/properties/easy",
+          "type": "integer",
+          "title": "Easy",
+          "description": "Enemies have reduced health.",
+          "default": 0
+        },
+        "hard": {
+          "$id": "#/properties/enemy_health/properties/hard",
+          "type": "integer",
+          "title": "Hard",
+          "description": "Enemies have increased health.",
+          "default": 0
+        },
+        "expert": {
+          "$id": "#/properties/enemy_health/properties/expert",
+          "type": "integer",
+          "title": "Expert",
+          "description": "Enemies have greatly increased health.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "pot_shuffle": {
+      "$id": "#/properties/pot_shuffle",
+      "type": "object",
+      "title": "Pot Shuffle",
+      "description": "Determine if keys, items, and buttons hidden beneath pots in dungeons will have their locations randomized.",
+      "required": [
+        "on",
+        "off"
+      ],
+      "properties": {
+        "on": {
+          "$id": "#/properties/pot_shuffle/properties/on",
+          "type": "integer",
+          "title": "On",
+          "description": "Turn on pot shuffle.",
+          "default": 0
+        },
+        "off": {
+          "$id": "#/properties/pot_shuffle/properties/off",
+          "type": "integer",
+          "title": "Off",
+          "description": "Turn off pot shuffle.",
+          "default": 50
+        }
+      },
+      "additionalProperties": true
+    },
+    "beemizer": {
+      "$id": "#/properties/beemizer",
+      "type": "object",
+      "title": "Beemizer",
+      "description": "Remove items from the global pool and replace them with single bees and bee traps.",
+      "required": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "properties": {
+        "0": {
+          "$id": "#/properties/beemizer/properties/0",
+          "type": "integer",
+          "title": "Disabled",
+          "description": "Disable beemizer.",
+          "default": 50
+        },
+        "1": {
+          "$id": "#/properties/beemizer/properties/1",
+          "type": "integer",
+          "title": "Level 1",
+          "description": "25% of the non-essential item pool is replaced with bee traps.",
+          "default": 0
+        },
+        "2": {
+          "$id": "#/properties/beemizer/properties/2",
+          "type": "integer",
+          "title": "Level 2",
+          "description": "60% of the non-essential item pool is replaced with bee traps, of which 20% could be single bees.",
+          "default": 0
+        },
+        "3": {
+          "$id": "#/properties/beemizer/properties/3",
+          "type": "integer",
+          "title": "Level 3",
+          "description": "100% of the non-essential item pool is replaced with bee traps, of which 50% could be single bees.",
+          "default": 0
+        },
+        "4": {
+          "$id": "#/properties/beemizer/properties/4",
+          "type": "integer",
+          "title": "Level 4",
+          "description": "100% of the non-essential item pool is replaced with bee traps.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "timer": {
+      "$id": "#/properties/timer",
+      "type": "object",
+      "title": "Timer",
+      "description": "Show a timer while playing the game. This may have different effects.",
+      "required": [
+        "none",
+        "timed",
+        "timed_ohko",
+        "ohko",
+        "timed_countdown",
+        "display"
+      ],
+      "properties": {
+        "none": {
+          "$id": "#/properties/timer/properties/none",
+          "type": "integer",
+          "title": "None",
+          "description": "No timer will be displayed.",
+          "default": 50
+        },
+        "timed": {
+          "$id": "#/properties/timer/properties/timed",
+          "type": "integer",
+          "title": "Timed",
+          "description": "???",
+          "default": 0
+        },
+        "timed_ohko": {
+          "$id": "#/properties/timer/properties/timed_ohko",
+          "type": "integer",
+          "title": "Timed OHKO",
+          "description": "???",
+          "default": 0
+        },
+        "ohko": {
+          "$id": "#/properties/timer/properties/ohko",
+          "type": "integer",
+          "title": "OHKO",
+          "description": "???",
+          "default": 0
+        },
+        "timed_countdown": {
+          "$id": "#/properties/timer/properties/timed_countdown",
+          "type": "integer",
+          "title": "Timed Countdown",
+          "description": "???",
+          "default": 0
+        },
+        "display": {
+          "$id": "#/properties/timer/properties/display",
+          "type": "integer",
+          "title": "Display",
+          "description": "???",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "glitch_boots": {
+      "$id": "#/properties/glitch_boots",
+      "type": "object",
+      "title": "Glitch Boots",
+      "description": "Start with Pegasus Boots in glitched logic which makes use of them.",
+      "required": [
+        "on",
+        "off"
+      ],
+      "properties": {
+        "on": {
+          "$id": "#/properties/glitch_boots/properties/on",
+          "type": "integer",
+          "title": "On",
+          "description": "Enable the Glitched Boots option.",
+          "default": 0
+        },
+        "off": {
+          "$id": "#/properties/glitch_boots/properties/off",
+          "type": "integer",
+          "title": "Off",
+          "description": "Disable the Glitched Boots option.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "door_shuffle": {
+      "$id": "#/properties/door_shuffle",
+      "type": "object",
+      "title": "Door Shuffle",
+      "description": "These options will only be used if the host generates the seed using the doors branch.",
+      "required": [
+        "vanilla",
+        "basic",
+        "crossed"
+      ],
+      "properties": {
+        "vanilla": {
+          "$id": "#/properties/door_shuffle/properties/vanilla",
+          "type": "integer",
+          "title": "Vanilla",
+          "description": "All doors lead to their vanilla destination.",
+          "default": 50
+        },
+        "basic": {
+          "$id": "#/properties/door_shuffle/properties/basic",
+          "type": "integer",
+          "title": "Basic",
+          "description": "Dungeons are shuffled within themselves.",
+          "default": 0
+        },
+        "crossed": {
+          "$id": "#/properties/door_shuffle/properties/crossed",
+          "type": "integer",
+          "title": "Crossed",
+          "description": "Dungeons are shuffled across each other.",
+          "default": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "rom": {
+      "$id": "#/properties/rom",
+      "type": "object",
+      "title": "The rom schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "sprite": {
+            "random": 0,
+            "randomonhit": 0,
+            "link": 1
+          },
+          "disablemusic": "off",
+          "quickswap": {
+            "on": 0,
+            "off": 1
+          },
+          "menuspeed": {
+            "normal": 1,
+            "instant": 0,
+            "double": 0,
+            "triple": 0,
+            "quadruple": 0,
+            "half": 0
+          },
+          "heartcolor": {
+            "red": 1,
+            "blue": 0,
+            "green": 0,
+            "yellow": 0,
+            "random": 0
+          },
+          "heartbeep": {
+            "double": 0,
+            "normal": 1,
+            "half": 0,
+            "quarter": 0,
+            "off": 0
+          },
+          "ow_palettes": {
+            "default": 1,
+            "random": 0,
+            "blackout": 0
+          },
+          "uw_palettes": {
+            "default": 1,
+            "random": 0,
+            "blackout": 0
+          }
+        }
+      ],
+      "required": [
+        "sprite",
+        "disablemusic",
+        "quickswap",
+        "menuspeed",
+        "heartcolor",
+        "heartbeep",
+        "ow_palettes",
+        "uw_palettes"
+      ],
+      "properties": {
+        "sprite": {
+          "$id": "#/properties/rom/properties/sprite",
+          "type": "object",
+          "title": "The sprite schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": {},
+          "examples": [
+            {
+              "random": 0,
+              "randomonhit": 0,
+              "link": 1
+            }
+          ],
+          "required": [
+            "random",
+            "randomonhit",
+            "link"
+          ],
+          "properties": {
+            "random": {
+              "$id": "#/properties/rom/properties/sprite/properties/random",
+              "type": "integer",
+              "title": "The random schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            },
+            "randomonhit": {
+              "$id": "#/properties/rom/properties/sprite/properties/randomonhit",
+              "type": "integer",
+              "title": "The randomonhit schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            },
+            "link": {
+              "$id": "#/properties/rom/properties/sprite/properties/link",
+              "type": "integer",
+              "title": "The link schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                1
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "disablemusic": {
+          "$id": "#/properties/rom/properties/disablemusic",
+          "type": "string",
+          "title": "The disablemusic schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "off"
+          ]
+        },
+        "quickswap": {
+          "$id": "#/properties/rom/properties/quickswap",
+          "type": "object",
+          "title": "The quickswap schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": {},
+          "examples": [
+            {
+              "on": 0,
+              "off": 1
+            }
+          ],
+          "required": [
+            "on",
+            "off"
+          ],
+          "properties": {
+            "on": {
+              "$id": "#/properties/rom/properties/quickswap/properties/on",
+              "type": "integer",
+              "title": "The on schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            },
+            "off": {
+              "$id": "#/properties/rom/properties/quickswap/properties/off",
+              "type": "integer",
+              "title": "The off schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                1
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "menuspeed": {
+          "$id": "#/properties/rom/properties/menuspeed",
+          "type": "object",
+          "title": "The menuspeed schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": {},
+          "examples": [
+            {
+              "normal": 1,
+              "instant": 0,
+              "double": 0,
+              "triple": 0,
+              "quadruple": 0,
+              "half": 0
+            }
+          ],
+          "required": [
+            "normal",
+            "instant",
+            "double",
+            "triple",
+            "quadruple",
+            "half"
+          ],
+          "properties": {
+            "normal": {
+              "$id": "#/properties/rom/properties/menuspeed/properties/normal",
+              "type": "integer",
+              "title": "The normal schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                1
+              ]
+            },
+            "instant": {
+              "$id": "#/properties/rom/properties/menuspeed/properties/instant",
+              "type": "integer",
+              "title": "The instant schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            },
+            "double": {
+              "$id": "#/properties/rom/properties/menuspeed/properties/double",
+              "type": "integer",
+              "title": "The double schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            },
+            "triple": {
+              "$id": "#/properties/rom/properties/menuspeed/properties/triple",
+              "type": "integer",
+              "title": "The triple schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            },
+            "quadruple": {
+              "$id": "#/properties/rom/properties/menuspeed/properties/quadruple",
+              "type": "integer",
+              "title": "The quadruple schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            },
+            "half": {
+              "$id": "#/properties/rom/properties/menuspeed/properties/half",
+              "type": "integer",
+              "title": "The half schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "heartcolor": {
+          "$id": "#/properties/rom/properties/heartcolor",
+          "type": "object",
+          "title": "The heartcolor schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": {},
+          "examples": [
+            {
+              "red": 1,
+              "blue": 0,
+              "green": 0,
+              "yellow": 0,
+              "random": 0
+            }
+          ],
+          "required": [
+            "red",
+            "blue",
+            "green",
+            "yellow",
+            "random"
+          ],
+          "properties": {
+            "red": {
+              "$id": "#/properties/rom/properties/heartcolor/properties/red",
+              "type": "integer",
+              "title": "The red schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                1
+              ]
+            },
+            "blue": {
+              "$id": "#/properties/rom/properties/heartcolor/properties/blue",
+              "type": "integer",
+              "title": "The blue schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            },
+            "green": {
+              "$id": "#/properties/rom/properties/heartcolor/properties/green",
+              "type": "integer",
+              "title": "The green schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            },
+            "yellow": {
+              "$id": "#/properties/rom/properties/heartcolor/properties/yellow",
+              "type": "integer",
+              "title": "The yellow schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            },
+            "random": {
+              "$id": "#/properties/rom/properties/heartcolor/properties/random",
+              "type": "integer",
+              "title": "The random schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "heartbeep": {
+          "$id": "#/properties/rom/properties/heartbeep",
+          "type": "object",
+          "title": "The heartbeep schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": {},
+          "examples": [
+            {
+              "double": 0,
+              "normal": 1,
+              "half": 0,
+              "quarter": 0,
+              "off": 0
+            }
+          ],
+          "required": [
+            "double",
+            "normal",
+            "half",
+            "quarter",
+            "off"
+          ],
+          "properties": {
+            "double": {
+              "$id": "#/properties/rom/properties/heartbeep/properties/double",
+              "type": "integer",
+              "title": "The double schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            },
+            "normal": {
+              "$id": "#/properties/rom/properties/heartbeep/properties/normal",
+              "type": "integer",
+              "title": "The normal schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                1
+              ]
+            },
+            "half": {
+              "$id": "#/properties/rom/properties/heartbeep/properties/half",
+              "type": "integer",
+              "title": "The half schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            },
+            "quarter": {
+              "$id": "#/properties/rom/properties/heartbeep/properties/quarter",
+              "type": "integer",
+              "title": "The quarter schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            },
+            "off": {
+              "$id": "#/properties/rom/properties/heartbeep/properties/off",
+              "type": "integer",
+              "title": "The off schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "ow_palettes": {
+          "$id": "#/properties/rom/properties/ow_palettes",
+          "type": "object",
+          "title": "The ow_palettes schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": {},
+          "examples": [
+            {
+              "default": 1,
+              "random": 0,
+              "blackout": 0
+            }
+          ],
+          "required": [
+            "default",
+            "random",
+            "blackout"
+          ],
+          "properties": {
+            "default": {
+              "$id": "#/properties/rom/properties/ow_palettes/properties/default",
+              "type": "integer",
+              "title": "The default schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                1
+              ]
+            },
+            "random": {
+              "$id": "#/properties/rom/properties/ow_palettes/properties/random",
+              "type": "integer",
+              "title": "The random schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            },
+            "blackout": {
+              "$id": "#/properties/rom/properties/ow_palettes/properties/blackout",
+              "type": "integer",
+              "title": "The blackout schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "uw_palettes": {
+          "$id": "#/properties/rom/properties/uw_palettes",
+          "type": "object",
+          "title": "The uw_palettes schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": {},
+          "examples": [
+            {
+              "default": 1,
+              "random": 0,
+              "blackout": 0
+            }
+          ],
+          "required": [
+            "default",
+            "random",
+            "blackout"
+          ],
+          "properties": {
+            "default": {
+              "$id": "#/properties/rom/properties/uw_palettes/properties/default",
+              "type": "integer",
+              "title": "The default schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                1
+              ]
+            },
+            "random": {
+              "$id": "#/properties/rom/properties/uw_palettes/properties/random",
+              "type": "integer",
+              "title": "The random schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            },
+            "blackout": {
+              "$id": "#/properties/rom/properties/uw_palettes/properties/blackout",
+              "type": "integer",
+              "title": "The blackout schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                0
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
