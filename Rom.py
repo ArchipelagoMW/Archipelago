@@ -336,21 +336,23 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite
         except OSError:
             pass
 
-
+sprite_list_lock = threading.Lock()
 _sprite_table = {}
-def _populate_sprite_table():
-    if not _sprite_table:
-        def load_sprite_from_file(file):
-            filepath = os.path.join(dir, file)
-            sprite = Sprite(filepath)
-            if sprite.valid:
-                _sprite_table[sprite.name.lower()] = sprite
-                _sprite_table[os.path.basename(filepath).split(".")[0]] = sprite  # alias for filename base
 
-        with concurrent.futures.ThreadPoolExecutor() as pool:
-            for dir in [local_path('data/sprites/alttpr'), local_path('data/sprites/custom')]:
-                for file in os.listdir(dir):
-                    pool.submit(load_sprite_from_file, file)
+
+def _populate_sprite_table():
+    with sprite_list_lock:
+        if not _sprite_table:
+            def load_sprite_from_file(file):
+                sprite = Sprite(file)
+                if sprite.valid:
+                    _sprite_table[sprite.name.lower()] = sprite
+                    _sprite_table[os.path.basename(file).split(".")[0].lower()] = sprite  # alias for filename base
+
+            with concurrent.futures.ThreadPoolExecutor() as pool:
+                for dir in [local_path('data/sprites/alttpr'), local_path('data/sprites/custom')]:
+                    for file in os.listdir(dir):
+                        pool.submit(load_sprite_from_file, os.path.join(dir, file))
 
 def get_sprite_from_name(name, local_random=random):
     _populate_sprite_table()
