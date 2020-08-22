@@ -119,7 +119,7 @@ def main(args, seed=None):
     logger.info('Shuffling the World about.')
 
     for player in range(1, world.players + 1):
-        if world.logic[player] != "noglitches" and world.shuffle[player] in \
+        if world.logic[player] not in ["noglitches", "minorglitches"] and world.shuffle[player] in \
                 {"vanilla", "dungeonssimple", "dungeonsfull", "simple", "restricted", "full"}:
             world.fix_fake_world[player] = False
 
