@@ -25,7 +25,10 @@ from Items import ItemFactory
 from EntranceShuffle import door_addresses
 import Patch
 
-
+try:
+    from maseya import z3pr
+except:
+    z3pr = None
 
 class LocalRom(object):
 
@@ -1477,16 +1480,33 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
     if sprite is not None:
         write_sprite(rom, sprite)
 
+    # reset palette if it was adjusted already
     default_ow_palettes(rom)
-    if ow_palettes == 'random':
-        randomize_ow_palettes(rom, local_random)
-    elif ow_palettes == 'blackout':
-        blackout_ow_palettes(rom)
-
     default_uw_palettes(rom)
-    if uw_palettes == 'random':
-        randomize_uw_palettes(rom, local_random)
-    elif uw_palettes == 'blackout':
+
+    if z3pr:
+        options = {
+            "randomize_dungeon": uw_palettes == 'random',
+            "randomize_overworld": ow_palettes == 'random'
+        }
+        if any(options.values()):
+            ColorF = z3pr.ColorF
+
+            def next_color():
+                return ColorF(local_random.random(), local_random.random(), local_random.random())
+
+            z3pr.randomize(rom.buffer, "maseya", next_color, options)
+    else:
+        logging.warning("Could not find z3pr palette shuffle. "
+                        "If you want improved palette shuffling please install the maseya-z3pr package.")
+        if ow_palettes == 'random':
+            randomize_ow_palettes(rom, local_random)
+        if uw_palettes == 'random':
+            randomize_uw_palettes(rom, local_random)
+
+    if ow_palettes == 'blackout':
+        blackout_ow_palettes(rom)
+    if uw_palettes == 'blackout':
         blackout_uw_palettes(rom)
 
     if isinstance(rom, LocalRom):

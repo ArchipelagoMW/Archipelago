@@ -246,7 +246,7 @@ def main(args, seed=None):
         return player, team, bytes(rom.name).decode()
 
     pool = concurrent.futures.ThreadPoolExecutor()
-
+    multidata_task = None
     if not args.suppress_rom:
 
         rom_futures = []
@@ -302,11 +302,13 @@ def main(args, seed=None):
             with open(output_path('%s.multidata' % outfilebase), 'wb') as f:
                 f.write(multidata)
 
-        pool.submit(write_multidata, rom_futures)
+        multidata_task = pool.submit(write_multidata, rom_futures)
 
     if not args.skip_playthrough:
         logger.info('Calculating playthrough.')
         create_playthrough(world)
+    if multidata_task:
+        multidata_task.result()  # retrieve exception if one exists
     pool.shutdown()  # wait for all queued tasks to complete
     if args.create_spoiler:  # needs spoiler.hashes to be filled, that depend on rom_futures being done
         world.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))

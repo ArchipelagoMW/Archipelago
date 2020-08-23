@@ -10,7 +10,8 @@ def update_command():
     subprocess.call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt', '--upgrade'])
 
 
-naming_specialties = {"PyYAML": "yaml"}  # PyYAML is imported as the name yaml
+naming_specialties = {"PyYAML": "yaml",  # PyYAML is imported as the name yaml
+                      "maseya-z3pr": "maseya"}
 
 
 def update():
