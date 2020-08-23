@@ -24,7 +24,7 @@ Project
  
 MultiMystery.py
  * Allows you to generate a Multiworld with individual player mystery weights. Since weights can also be set to 100%, this also allows for individual settings for each player in a regular multiworld.
-Basis is a .yaml file that sets these weights. You can find an [easy.yaml](https://github.com/Berserker66/MultiWorld-Utilities/blob/master/easy.yaml) in this project folder to get started
+Basis is a .yaml file that sets these weights. You can find an [playerSettings.yaml](https://github.com/Berserker66/MultiWorld-Utilities/blob/master/playerSettings.yaml) in this project folder to get started
  * Additional instructions are at the start of the file. Open with a text editor
  * Configuration options can be found in the [host.yaml](https://github.com/Berserker66/MultiWorld-Utilities/blob/master/host.yaml) file
  * Allows a new Mode called "Meta-Mystery", allowing certain mystery settings to apply to all players
@@ -43,7 +43,7 @@ Mystery.py
  * Defaults to generating a non-race ROM (Bonta's only makes race ROMs at this time).
 If a race ROM is desired, pass --create-race as argument to it
  * When an error is generated due to a broken .yaml file, it now mentions in the error trace which file, line, and character is the culprit
- * Option for progressive items, allowing you to turn them off (see [easy.yaml](https://github.com/Berserker66/MultiWorld-Utilities/blob/master/easy.yaml) for more information)
+ * Option for progressive items, allowing you to turn them off (see [playerSettings.yaml](https://github.com/Berserker66/MultiWorld-Utilities/blob/master/playerSettings.yaml) for more information)
  * Option for "timer", allows you to configure a timer to display in game and/or options for timed one hit knock out
  * Option for "dungeon_counters", allowing you to configure the dungeon item counter
  * Option for "glitch_boots", allowing to run glitched modes without automatic boots
