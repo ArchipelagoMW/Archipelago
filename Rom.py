@@ -993,14 +993,18 @@ def patch_rom(world, rom, player, team, enemized):
 
     startingstate = CollectionState(world)
 
-    if startingstate.has('Bow', player):
+    if startingstate.has('Silver Bow', player):
         equip[0x340] = 1
-        equip[0x38E] |= 0x20 # progressive flag to get the correct hint in all cases
+        equip[0x38E] |= 0x60
+        if not world.retro[player]:
+            equip[0x38E] |= 0x80
+    elif startingstate.has('Bow', player):
+        equip[0x340] = 1
+        equip[0x38E] |= 0x20  # progressive flag to get the correct hint in all cases
         if not world.retro[player]:
             equip[0x38E] |= 0x80
     if startingstate.has('Silver Arrows', player):
         equip[0x38E] |= 0x40
-        #TODO add Silver Bow
 
     if startingstate.has('Titans Mitts', player):
         equip[0x354] = 2
@@ -1039,12 +1043,12 @@ def patch_rom(world, rom, player, team, enemized):
         if item.player != player:
             continue
 
-        if item.name in ['Bow', 'Silver Bow', 'Silver Arrows', 'Progressive Bow', 'Progressive Bow (Alt)',
+        if item.name in {'Bow', 'Silver Bow', 'Silver Arrows', 'Progressive Bow', 'Progressive Bow (Alt)',
                          'Titans Mitts', 'Power Glove', 'Progressive Glove',
                          'Golden Sword', 'Tempered Sword', 'Master Sword', 'Fighter Sword', 'Progressive Sword',
                          'Mirror Shield', 'Red Shield', 'Blue Shield', 'Progressive Shield',
                          'Red Mail', 'Blue Mail', 'Progressive Armor',
-                         'Magic Upgrade (1/4)', 'Magic Upgrade (1/2)']:
+                         'Magic Upgrade (1/4)', 'Magic Upgrade (1/2)'}:
             continue
 
         set_table = {'Book of Mudora': (0x34E, 1), 'Hammer': (0x34B, 1), 'Bug Catching Net': (0x34D, 1), 'Hookshot': (0x342, 1), 'Magic Mirror': (0x353, 2),
@@ -1168,7 +1172,7 @@ def patch_rom(world, rom, player, team, enemized):
     if world.goal[player] in ['pedestal', 'triforcehunt', 'localtriforcehunt']:
         rom.write_byte(0x18003E, 0x01)  # make ganon invincible
     elif world.goal[player] in ['ganontriforcehunt', 'localganontriforcehunt']:
-        rom.write_byte(0x18003E, 0x05)  # make ganon invincible until 20 triforce pieces are collected
+        rom.write_byte(0x18003E, 0x05)  # make ganon invincible until enough triforce pieces are collected
     elif world.goal[player] in ['dungeons']:
         rom.write_byte(0x18003E, 0x02)  # make ganon invincible until all dungeons are beat
     elif world.goal[player] in ['crystals']:
@@ -1199,7 +1203,7 @@ def patch_rom(world, rom, player, team, enemized):
     # compasses showing dungeon count
     if world.clock_mode[player] or not world.dungeon_counters[player]:
         rom.write_byte(0x18003C, 0x00)  # Currently must be off if timer is on, because they use same HUD location
-    elif world.dungeon_counters[player] == True:
+    elif world.dungeon_counters[player] is True:
         rom.write_byte(0x18003C, 0x02)  # always on
     elif world.compassshuffle[player] or world.dungeon_counters[player] == 'pickup':
         rom.write_byte(0x18003C, 0x01)  # show on pickup
