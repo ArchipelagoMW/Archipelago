@@ -341,7 +341,7 @@ def shuffle_shops(world, items, player: int):
                 shop.clear_inventory()
 
         for i, item in enumerate(items):
-            if item.name.startswith(("Bombs", "Arrows", "Rupees")):
+            if item.name.startswith(("Bombs", "Arrows", "Rupee", "Nothing")):
                 items[i] = ItemFactory(new_items.pop(), player)
                 if not new_items:
                     break
@@ -485,7 +485,7 @@ def set_up_shops(world, player: int):
 
     if world.retro[player]:
         rss = world.get_region('Red Shield Shop', player).shop
-        rss.add_inventory(2, 'Single Arrow', 80)
+        rss.push_inventory(2, 'Single Arrow', 80)
         rss.locked = True
 
     if world.keyshuffle[player] == "universal" or world.retro[player]:

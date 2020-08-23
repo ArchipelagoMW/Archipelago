@@ -23,7 +23,8 @@ glitches_required: # Determine the logic required to complete the seed
   none: 1 # No glitches required
   minor_glitches: 0 # Puts fake flipper, waterwalk, super bunny shenanigans, and etc into logic
   overworld_glitches: 0 # Assumes the player has knowledge of both overworld major glitches (boots clips, mirror clips) and minor glitches (fake flipper, super bunny shenanigans, water walk and etc.)
-  no_logic: 0 # Items are places completely at random and with no regard for logic. Your fire rod could be on Trinexx
+  no_logic: 0 # Your own items are placed with no regard to any logic; such as your Fire Rod can be on your Trinexx.
+  # Other players items are placed into your world under OWG logic
 meta_ignore: # Nullify options specified in the meta.yaml file. Adding an option here guarantees it will not occur in your seed, even if the .yaml file specifies it
   mode:
     - inverted # Never play inverted seeds
