@@ -311,8 +311,6 @@ def generate_itempool(world, player: int):
         progressionitems += [ItemFactory("Triforce Piece", player)] * (triforce_pieces - 30)
         nonprogressionitems = nonprogressionitems[(triforce_pieces - 30):]
 
-    world.itempool += progressionitems + nonprogressionitems
-
     # shuffle medallions
     mm_medallion = ['Ether', 'Quake', 'Bombos'][world.random.randint(0, 2)]
     tr_medallion = ['Ether', 'Quake', 'Bombos'][world.random.randint(0, 2)]
@@ -323,43 +321,64 @@ def generate_itempool(world, player: int):
 
     if world.retro[player]:
         set_up_take_anys(world, player)
-    if world.shop_shuffle[player] != 'off':
-        shuffle_shops(world, player)
+    if world.shop_shuffle[player]:
+        shuffle_shops(world, nonprogressionitems, player)
     create_dynamic_shop_locations(world, player)
 
+    world.itempool += progressionitems + nonprogressionitems
 
-def shuffle_shops(world, player: int):
+
+def shuffle_shops(world, items, player: int):
     option = world.shop_shuffle[player]
-    shops = []
-    total_inventory = []
-    for shop in world.shops:
-        if shop.type == ShopType.Shop and shop.region.player == player:
-            shops.append(shop)
-            total_inventory.extend(shop.inventory)
-
-    if 'price' in option:
-        def price_adjust(price: int) -> int:
-            # it is important that a base price of 0 always returns 0 as new price!
-            return int(price * (0.5 + world.random.random() * 2))
-
-        for item in total_inventory:
-            if item:
-                item["price"] = price_adjust(item["price"])
-                item['replacement_price'] = price_adjust(item["price"])
+    if 'u' in option:
+        if world.retro[player]:
+            new_items = ["Bomb Upgrade (+5)"] * 7
+        else:
+            new_items = ["Bomb Upgrade (+5)", "Arrow Upgrade (+5)"] * 7
         for shop in world.shops:
-            if shop.type == ShopType.UpgradeShop and shop.region.player == player:
-                for item in shop.inventory:
-                    if item:
-                        item['price'] = price_adjust(item["price"])
-                        item['replacement_price'] = price_adjust(item["price"])
+            if shop.type == ShopType.UpgradeShop and shop.region.player == player and \
+                    shop.region.name == "Capacity Upgrade":
+                shop.clear_inventory()
 
-    if 'inventory' in option:
-        world.random.shuffle(total_inventory)
-        i = 0
-        for shop in shops:
-            slots = shop.slots
-            shop.inventory = total_inventory[i:i + slots]
-            i += slots
+        for i, item in enumerate(items):
+            if item.name.startswith(("Bombs", "Arrows", "Rupees")):
+                items[i] = ItemFactory(new_items.pop(), player)
+                if not new_items:
+                    break
+        else:
+            logging.warning(f"Not all upgrades put into Player{player}' item pool. Still missing: {new_items}")
+
+    if 'p' in option or 'i' in option:
+        shops = []
+        total_inventory = []
+        for shop in world.shops:
+            if shop.type == ShopType.Shop and shop.region.player == player:
+                shops.append(shop)
+                total_inventory.extend(shop.inventory)
+
+        if 'p' in option:
+            def price_adjust(price: int) -> int:
+                # it is important that a base price of 0 always returns 0 as new price!
+                return int(price * (0.5 + world.random.random() * 2))
+
+            for item in total_inventory:
+                if item:
+                    item["price"] = price_adjust(item["price"])
+                    item['replacement_price'] = price_adjust(item["price"])
+            for shop in world.shops:
+                if shop.type == ShopType.UpgradeShop and shop.region.player == player:
+                    for item in shop.inventory:
+                        if item:
+                            item['price'] = price_adjust(item["price"])
+                            item['replacement_price'] = price_adjust(item["price"])
+
+        if 'i' in option:
+            world.random.shuffle(total_inventory)
+            i = 0
+            for shop in shops:
+                slots = shop.slots
+                shop.inventory = total_inventory[i:i + slots]
+                i += slots
 
 
 take_any_locations = [
@@ -466,21 +485,21 @@ def set_up_shops(world, player: int):
 
     if world.retro[player]:
         rss = world.get_region('Red Shield Shop', player).shop
-        if not rss.locked:
-            rss.add_inventory(2, 'Single Arrow', 80)
+        rss.add_inventory(2, 'Single Arrow', 80)
         rss.locked = True
 
-    if world.keyshuffle[player] == "universal":
+    if world.keyshuffle[player] == "universal" or world.retro[player]:
         for shop in world.random.sample([s for s in world.shops if
                                          s.custom and not s.locked and s.type == ShopType.Shop and s.region.player == player],
                                         5):
             shop.locked = True
+            slots = [0, 1, 2]
+            world.random.shuffle(slots)
+            slots = iter(slots)
             if world.retro[player]:
-                shop.add_inventory(0, 'Single Arrow', 80)
-            else:
-                shop.add_inventory(0, "Red Potion", 150)
-            shop.add_inventory(1, 'Small Key (Universal)', 100)
-            shop.add_inventory(2, 'Bombs (10)', 50)
+                shop.push_inventory(next(slots), 'Single Arrow', 80)
+            if world.keyshuffle[player] == "universal":
+                shop.add_inventory(next(slots), 'Small Key (Universal)', 100)
 
 
 def get_pool_core(world, player: int):

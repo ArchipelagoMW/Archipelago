@@ -312,7 +312,7 @@ def roll_settings(weights):
 
     ret.shop_shuffle = get_choice('shop_shuffle', weights, False)
     if not ret.shop_shuffle:
-        ret.shop_shuffle = 'off'
+        ret.shop_shuffle = ''
 
     ret.mode = get_choice('world_state', weights, None)  # legacy support
     if ret.mode == 'retro':

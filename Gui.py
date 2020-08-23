@@ -75,14 +75,14 @@ def guiMain(args=None):
     compassshuffleCheckbutton = Checkbutton(mcsbshuffleFrame, text="Compasses", variable=compassshuffleVar)
 
     bigkeyshuffleVar = IntVar()
-    bigkeyshuffleCheckbutton = Checkbutton(mcsbshuffleFrame, text="BigKeys", variable=bigkeyshuffleVar)
+    bigkeyshuffleCheckbutton = Checkbutton(mcsbshuffleFrame, text="Big Keys", variable=bigkeyshuffleVar)
 
     keyshuffleFrame = Frame(checkBoxFrame)
     keyshuffleVar = StringVar()
     keyshuffleVar.set('off')
     modeOptionMenu = OptionMenu(keyshuffleFrame, keyshuffleVar, 'off', 'universal', 'on')
     modeOptionMenu.pack(side=LEFT)
-    modeLabel = Label(keyshuffleFrame, text='Key Shuffle')
+    modeLabel = Label(keyshuffleFrame, text='Small Key Shuffle')
     modeLabel.pack(side=LEFT)
 
     retroVar = IntVar()
@@ -447,6 +447,20 @@ def guiMain(args=None):
     killable_thievesShuffleButton = Checkbutton(enemizerFrame, text="Killable Thieves", variable=killableThievesVar)
     killable_thievesShuffleButton.grid(row=2, column=3, sticky=W)
 
+    shopframe = LabelFrame(randomizerWindow, text="Shops", padx=5, pady=2)
+
+    shopPriceShuffleVar = IntVar()
+    shopPriceShuffleButton = Checkbutton(shopframe, text="Random Prices", variable=shopPriceShuffleVar)
+    shopPriceShuffleButton.grid(row=0, column=0, sticky=W)
+
+    shopShuffleVar = IntVar()
+    shopShuffleButton = Checkbutton(shopframe, text="Shuffle Inventories", variable=shopShuffleVar)
+    shopShuffleButton.grid(row=0, column=1, sticky=W)
+
+    shopUpgradeShuffleVar = IntVar()
+    shopUpgradeShuffleButton = Checkbutton(shopframe, text="Lootable Upgrades", variable=shopUpgradeShuffleVar)
+    shopUpgradeShuffleButton.grid(row=0, column=2, sticky=W)
+
     multiworldframe = LabelFrame(randomizerWindow, text="Multiworld", padx=5, pady=2)
 
     worldLabel = Label(multiworldframe, text='Worlds')
@@ -521,6 +535,13 @@ def guiMain(args=None):
         guiargs.custom = bool(customVar.get())
         guiargs.triforce_pieces_required = min(90, int(triforcecountVar.get()))
         guiargs.triforce_pieces_available = min(90, int(triforcepieceVar.get()))
+        guiargs.shop_shuffle = ""
+        if shopShuffleVar.get():
+            guiargs.shop_shuffle += "i"
+        if shopPriceShuffleVar.get():
+            guiargs.shop_shuffle += "p"
+        if shopUpgradeShuffleVar.get():
+            guiargs.shop_shuffle += "u"
         guiargs.customitemarray = [int(bowVar.get()), int(silverarrowVar.get()), int(boomerangVar.get()),
                                    int(magicboomerangVar.get()), int(hookshotVar.get()), int(mushroomVar.get()),
                                    int(magicpowderVar.get()), int(firerodVar.get()),
@@ -567,9 +588,9 @@ def guiMain(args=None):
                 main(seed=guiargs.seed, args=guiargs)
         except Exception as e:
             logging.exception(e)
-            messagebox.showerror(title="Error while creating seed", message=str(e))
+            messagebox.showerror(title="Error while creating multiworld", message=str(e))
         else:
-            messagebox.showinfo(title="Success", message="Rom patched successfully")
+            messagebox.showinfo(title="Success", message="Multiworld created successfully")
 
     generateButton = Button(farBottomFrame, text='Generate Patched Rom', command=generateRom)
 
@@ -590,6 +611,7 @@ def guiMain(args=None):
     topFrame.pack(side=TOP)
     multiworldframe.pack(side=BOTTOM, expand=True, fill=X)
     enemizerFrame.pack(side=BOTTOM, fill=BOTH)
+    shopframe.pack(side=BOTTOM, expand=True, fill=X)
 
     # Adjuster Controls
 

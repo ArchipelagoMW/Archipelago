@@ -312,7 +312,12 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--enemy_damage', default=defval('default'), choices=['default', 'shuffled', 'chaos'])
     parser.add_argument('--shufflepots', default=defval(False), action='store_true')
     parser.add_argument('--beemizer', default=defval(0), type=lambda value: min(max(int(value), 0), 4))
-    parser.add_argument('--shop_shuffle', default='off', choices=['off', 'inventory', 'price', 'inventory_price'])
+    parser.add_argument('--shop_shuffle', default='', help='''\
+    combine letters for options:
+    i: shuffle the inventories of the shops around
+    p: randomize the prices of the items in shop inventories
+    u: shuffle capacity upgrades into the item pool
+    ''')
     parser.add_argument('--remote_items', default=defval(False), action='store_true')
     parser.add_argument('--multi', default=defval(1), type=lambda value: min(max(int(value), 1), 255))
     parser.add_argument('--names', default=defval(''))
