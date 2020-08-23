@@ -10,7 +10,7 @@ window.addEventListener('load', () => {
             }
             resolve(ajax.responseText);
         };
-        ajax.open('GET', `${window.location.origin}/static/static/easy.yaml` ,true);
+        ajax.open('GET', `${window.location.origin}/static/static/playerSettings.yaml` ,true);
         ajax.send();
     }).then((results) => {
         // Load YAML into object

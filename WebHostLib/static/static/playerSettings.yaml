@@ -1,0 +1,297 @@
+# What is this file?
+# This file contains options which allow you to configure your multiworld experience while allowing others
+# to play how they want as well.
+
+# How do I use it?
+# The options in this file are weighted. This means the higher number you assign to a value, the more
+# chances you have for that option to be chosen. For example, an option like this:
+#
+# map_shuffle:
+#   on: 5
+#   off: 15
+#
+# Means you have 5 chances for map shuffle to not occur, and 15 chances for map shuffle to be turned on
+
+# I've never seen a file like this before. What characters am I allowed to use?
+# This is a .yaml file. You are allowed to use most characters.
+# To test if your yaml is valid or not, you can use this website:
+# http://www.yamllint.com/
+
+description: Template Name # Used to describe your yaml. Useful if you have multiple files
+name: YourName # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
+glitches_required: # Determine the logic required to complete the seed
+  none: 1 # No glitches required
+  minor_glitches: 0 # Puts fake flipper, waterwalk, super bunny shenanigans, and etc into logic
+  overworld_glitches: 0 # Assumes the player has knowledge of both overworld major glitches (boots clips, mirror clips) and minor glitches (fake flipper, super bunny shenanigans, water walk and etc.)
+  no_logic: 0 # Your own items are placed with no regard to any logic; such as your Fire Rod can be on your Trinexx.
+  # Other players items are placed into your world under OWG logic
+meta_ignore: # Nullify options specified in the meta.yaml file. Adding an option here guarantees it will not occur in your seed, even if the .yaml file specifies it
+  mode:
+    - inverted # Never play inverted seeds
+  retro:
+    - on # Never play retro seeds
+  weapons:
+    - swordless # Never play a swordless seed
+map_shuffle: # Shuffle dungeon maps into the world and other dungeons, including other players' worlds
+  on: 0
+  off: 1
+compass_shuffle: # Shuffle compasses into the world and other dungeons, including other players' worlds
+  on: 0
+  off: 1
+smallkey_shuffle: # Shuffle small keys into the world and other dungeons, including other players' worlds
+  on: 0
+  universal: 0 # allows small keys to be used in any dungeon and adds shops to buy more
+  off: 1
+bigkey_shuffle: # Shuffle big keys into the world and other dungeons, including other players' worlds
+  on: 0
+  off: 1
+local_keys: # Keep small keys and big keys local to your world
+  on: 0
+  off: 1
+dungeon_items: # Alternative to the 4 shuffles and local_keys above this, does nothing until the respective 4 shuffles and local_keys above are deleted
+  mc: 0 # Shuffle maps and compasses
+  none: 1 # Shuffle none of the 4
+  mcsb: 0 # Shuffle all of the 4, any combination of m, c, s and b will shuffle the respective item, or not if it's missing, so you can add more options here
+  lmcsb: 0 # Like mcsb above, but with keys kept local to your world. l is what makes your keys local, or not if it's missing
+  ub: 0 # universal small keys and shuffled big keys
+  # you can add more combos of these letters here
+dungeon_counters:
+  on: 0 # Always display amount of items checked in a dungeon
+  pickup: 1 # Show when compass is picked up
+  default: 0 # Show when compass is picked up if the compass itself is shuffled
+  off: 0 # Never show item count in dungeons
+accessibility:
+  items: 0 # Guarantees you will be able to acquire all items, but you may not be able to access all locations
+  locations: 1 # Guarantees you will be able to access all locations, and therefore all items
+  none: 0 # Guarantees only that the game is beatable. You may not be able to access all locations or acquire all items
+progressive: # Enable or disable progressive items (swords, shields, bow)
+  on: 1 # All items are progressive
+  off: 0 # No items are progressive
+  random: 0 # Randomly decides for all items. Swords could be progressive, shields might not be
+entrance_shuffle: # Documentation: https://alttpr.com/en/options#entrance_shuffle
+  none: 1 # Vanilla game map. All entrances and exits lead to their original locations. You probably want this option
+  dungeonssimple: 0 # Shuffle just dungeons amongst each other, swapping dungeons entirely, so Hyrule Castle is always 1 dungeon
+  dungeonsfull: 0 # Shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle can be 4 different dungeons
+  simple: 0 # Entrances are grouped together before being randomized. Simple uses the most strict grouping rules
+  restricted: 0 # Less strict than simple
+  full: 0 # Less strict than restricted
+  crossed: 0 # Less strict than full
+  insanity: 0 # Very few grouping rules. Good luck
+goals:
+  ganon: 1 # Climb GT, defeat Agahnim 2, and then kill Ganon
+  fast_ganon: 0 # Only killing Ganon is required. The hole is always open. However, items may still be placed in GT
+  dungeons: 0 # Defeat the boss of all dungeons, including Agahnim's tower and GT (Aga 2)
+  pedestal: 0 # Pull the Triforce from the Master Sword pedestal
+  triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then turn them in to Murahadala in front of Hyrule Castle
+  local_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
+  ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
+  local_ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
+triforce_pieces_available: # Set to how many triforces pieces are available to collect in the world. Default is 30. Max is 90, Min is 1
+  # Format "pieces: chance"
+  25: 0
+  30: 1
+  31: 0
+  32: 0
+  33: 0
+  34: 0
+  35: 0
+triforce_pieces_required: # Set to how many out of X triforce pieces you need to win the game in a triforce hunt. Default is 20. Max is 90, Min is 1
+  # Format "pieces: chance"
+  15: 0
+  20: 1
+  21: 0
+  22: 0
+  23: 0
+  24: 0
+  25: 0
+tower_open: # Crystals required to open GT
+  '0': 8
+  '1': 7
+  '2': 6
+  '3': 5
+  '4': 4
+  '5': 3
+  '6': 2
+  '7': 1
+  random: 0
+ganon_open: # Crystals required to hurt Ganon
+  '0': 8
+  '1': 7
+  '2': 6
+  '3': 5
+  '4': 4
+  '5': 3
+  '6': 2
+  '7': 1
+  random: 0
+mode:
+  standard: 1 # Begin the game by rescuing Zelda from her cell and escorting her to the Sanctuary
+  open: 1 # Begin the game from your choice of Link's House or the Sanctuary
+  inverted: 0 # Begin in the Dark World. The Moon Pearl is required to avoid bunny-state in Light World, and the Light World game map is altered
+retro:
+  on: 0 # you must buy a quiver to use the bow, take-any caves and an old-man cave are added to the world. You may need to find your sword from the old man's cave
+  off: 1
+hints:
+  'on': 1 # Hint tiles sometimes give item location hints
+  'off': 0 # Hint tiles provide gameplay tips
+weapons: # Specifically, swords
+  randomized: 0 # Swords are placed randomly throughout the world
+  assured: 1 # Begin with a sword, the rest are placed randomly throughout the world
+  vanilla: 0 # Swords are placed in vanilla locations in your own game (Uncle, Pyramid Fairy, Smiths, Pedestal)
+  swordless: 0 # Your swords are replaced by rupees. Gameplay changes have been made to accommodate this change
+item_pool:
+  easy: 0 # Doubled upgrades, progressives, and etc
+  normal: 1 # Item availability remains unchanged from vanilla game
+  hard: 0 # Reduced upgrade availability (max: 14 hearts, blue mail, tempered sword, fire shield, no silvers unless swordless)
+  expert: 0 # Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless)
+  crowd_control: 0 # Sets up the item pool for the crowd control extension. Do not use it without crowd control
+item_functionality:
+  normal: 1 # Vanilla item functionality
+  hard: 0 # Reduced helpfulness of items (potions less effective, can't catch faeries, cape uses double magic, byrna does not grant invulnerability, boomerangs do not stun, silvers disabled outside ganon)
+  expert: 0 # Vastly reduces the helpfulness of items (potions barely effective, can't catch faeries, cape uses double magic, byrna does not grant invulnerability, boomerangs and hookshot do not stun, silvers disabled outside ganon)
+progression_balancing:
+  on: 1 # A system to reduce BK, as in times during which you can't do anything by moving your items into an earlier access sphere to make it likely you have stuff to do
+  off: 0 # Turn this off if you don't mind a longer multiworld, or can glitch around missing items.
+### Enemizer Section ###
+boss_shuffle:
+  none: 1 # Vanilla bosses
+  simple: 0 # Existing bosses except Ganon and Agahnim are shuffled throughout dungeons
+  full: 0 # 3 bosses can occur twice
+  random: 0 # Any boss can appear any amount of times
+  singularity: 0 # Picks a boss, tries to put it everywhere that works, if there's spaces remaining it picks a boss to fill those
+enemy_shuffle: # randomize enemy placement
+  on: 0
+  off: 1
+killable_thieves: # make thieves killable.
+  on: 0 # usually turned on together with enemy_shuffle to make annoying thief placement more manageable
+  off: 1
+tile_shuffle: # randomize the tile layouts in flying tile rooms
+  on: 0
+  off: 1
+bush_shuffle: # randomize the chance that bushes have enemies and the enemies under said bush
+  on: 0
+  off: 1
+enemy_damage:
+  default: 1 # Vanilla enemy damage
+  shuffled: 0 # Enemies deal 0 to 4 hearts and armor helps
+  random: 0 # Enemies deal 0 to 8 hearts and armor just reshuffles the damage
+enemy_health:
+  default: 1 # Vanilla enemy HP
+  easy: 0 # Enemies have reduced health
+  hard: 0 # Enemies have increased health
+  expert: 0 # Enemies have greatly increased health
+pot_shuffle:
+  'on': 0 # Keys, items, and buttons hidden under pots in dungeons are shuffled with other pots in their supertile
+  'off': 1 # Default pot item locations
+### End of Enemizer Section ###
+beemizer: # Remove items from the global item pool and replace them with single bees and bee traps
+  0: 1 # No bee traps are placed
+  1: 0 # 25% of the non-essential item pool is replaced with bee traps
+  2: 0 # 60% of the non-essential item pool is replaced with bee traps, of which 20% could be single bees
+  3: 0 # 100% of the non-essential item pool is replaced with bee traps, of which 50% could be single bees
+  4: 0 # 100% of the non-essential item pool is replaced with bee traps
+shop_shuffle:
+  none: 1
+  i: 0 # shuffle the inventories of the shops around
+  p: 0 # randomize the prices of the items in shop inventories
+  u: 0 # shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
+  ip: 0 # shuffle inventories and randomize prices
+  uip: 0 # shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool
+  # you can add more combos
+timer:
+  none: 1 # No timer will be displayed.
+  timed: 0 # Starts with clock at zero. Green clocks subtract 4 minutes (total 20). Blue clocks subtract 2 minutes (total 10). Red clocks add two minutes (total 10). Winner is the player with the lowest time at the end.
+  timed_ohko: 0 # Starts the clock at ten minutes. Green clocks add five minutes (total 25). As long as the clock as at zero, Link will die in one hit.
+  ohko: 0 # Timer always at zero. Permanent OHKO.
+  timed_countdown: 0 # Starts the clock with forty minutes. Same clocks as timed mode, but if the clock hits zero you lose. You can still keep playing, though.
+  display: 0 # Displays a timer, but otherwise does not affect gameplay or the item pool.
+# Can be uncommented to use it
+# local_items: # Force certain items to appear in your world only, not across the multiworld. Recognizes some group names, like "Swords"
+#  - "Moon Pearl"
+#  - "Small Keys"
+#  - "Big Keys"
+# Can be uncommented to use it
+# startinventory: # Begin the file with the listed items/upgrades
+  # Pegasus Boots: on
+  # Bomb Upgrade (+10): 4
+  # Arrow Upgrade (+10): 4
+glitch_boots:
+  on: 1 # Start with Pegasus Boots in any glitched logic mode that makes use of them
+  off: 0
+door_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
+  vanilla: 1 # Everything should be like in vanilla
+  basic: 0 # Dungeons are shuffled within themselves
+  crossed: 0 # Dungeons are shuffled across each other
+linked_options:
+  - name: crosskeys
+    options: # These overwrite earlier options if the percentage chance triggers
+      entrance_shuffle: crossed
+      bigkey_shuffle: true
+      compass_shuffle: true
+      map_shuffle: true
+      smallkey_shuffle: true
+    percentage: 0 # Set this to the percentage chance you want crosskeys
+  - name: localcrosskeys
+    options: # These overwrite earlier options if the percentage chance triggers
+      entrance_shuffle: crossed
+      bigkey_shuffle: true
+      compass_shuffle: true
+      map_shuffle: true
+      smallkey_shuffle: true
+      local_items: # Forces keys to be local to your own world
+        - "Small Keys"
+        - "Big Keys"
+    percentage: 0 # Set this to the percentage chance you want local crosskeys
+  - name: enemizer
+    options:
+      boss_shuffle: # Subchances can be injected too, which then get rolled
+        simple: 1
+        full: 1
+        random: 1
+        singularity: 1
+      enemy_damage:
+        shuffled: 1
+        random: 1
+      enemy_health:
+        easy: 1
+        hard: 1
+        expert: 1
+    percentage: 0 # Set this to the percentage chance you want enemizer
+rom:
+  sprite: # Enter the name of your preferred sprite and weight it appropriately
+    random: 0
+    randomonhit: 0
+    link: 1 # To add other sprites: open the gui/Creator, go to adjust, select a sprite and write down the name the gui calls it
+  disablemusic: # If "on", all in-game music will be disabled
+    on: 1
+    off: 0
+  quickswap: # Enable switching items by pressing the L+R shoulder buttons
+    on: 0
+    off: 1
+  menuspeed: # Controls how fast the item menu opens and closes
+    normal: 1
+    instant: 0
+    double: 0
+    triple: 0
+    quadruple: 0
+    half: 0
+  heartcolor: # Controls the color of your health hearts
+    red: 1
+    blue: 0
+    green: 0
+    yellow: 0
+    random: 0
+  heartbeep: # Controls the frequency of the low-health beeping
+    double: 0
+    normal: 1
+    half: 0
+    quarter: 0
+    off: 0
+  ow_palettes: # Change the colors of the overworld
+    default: 1 # No changes
+    random: 0 # Shuffle the colors
+    blackout: 0 # Never use this
+  uw_palettes: # Change the colors of caves and dungeons
+    default: 1 # No changes
+    random: 0 # Shuffle the colors
+    blackout: 0 # Never use this

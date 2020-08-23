@@ -80,9 +80,9 @@ def tutorial(lang='en'):
     return render_template(f"tutorial.html", lang=lang)
 
 
-@app.route('/game-settings')
+@app.route('/player-settings')
 def game_settings():
-    return render_template("game-settings.html")
+    return render_template("player-settings.html")
 
 
 @app.route('/seed/<suuid:seed>')
