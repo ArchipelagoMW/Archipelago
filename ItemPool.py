@@ -323,8 +323,44 @@ def generate_itempool(world, player: int):
 
     if world.retro[player]:
         set_up_take_anys(world, player)
-
+    if world.shop_shuffle[player] != 'off':
+        shuffle_shops(world, player)
     create_dynamic_shop_locations(world, player)
+
+
+def shuffle_shops(world, player: int):
+    option = world.shop_shuffle[player]
+    shops = []
+    total_inventory = []
+    for shop in world.shops:
+        if shop.type == ShopType.Shop and shop.region.player == player:
+            shops.append(shop)
+            total_inventory.extend(shop.inventory)
+
+    if 'price' in option:
+        def price_adjust(price: int) -> int:
+            # it is important that a base price of 0 always returns 0 as new price!
+            return int(price * (0.5 + world.random.random() * 2))
+
+        for item in total_inventory:
+            if item:
+                item["price"] = price_adjust(item["price"])
+                item['replacement_price'] = price_adjust(item["price"])
+        for shop in world.shops:
+            if shop.type == ShopType.UpgradeShop and shop.region.player == player:
+                for item in shop.inventory:
+                    if item:
+                        item['price'] = price_adjust(item["price"])
+                        item['replacement_price'] = price_adjust(item["price"])
+
+    if 'inventory' in option:
+        world.random.shuffle(total_inventory)
+        i = 0
+        for shop in shops:
+            slots = shop.slots
+            shop.inventory = total_inventory[i:i + slots]
+            i += slots
+
 
 take_any_locations = [
     'Snitch Lady (East)', 'Snitch Lady (West)', 'Bush Covered House', 'Light World Bomb Hut',

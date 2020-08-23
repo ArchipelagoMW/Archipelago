@@ -124,6 +124,7 @@ class World(object):
             set_player_attr('local_items', set())
             set_player_attr('triforce_pieces_available', 30)
             set_player_attr('triforce_pieces_required', 20)
+            set_player_attr('shop_shuffle', 'off')
 
     def secure(self):
         self.random = secrets.SystemRandom()
@@ -1052,6 +1053,7 @@ class ShopType(Enum):
     UpgradeShop = 2
 
 class Shop(object):
+    slots = 3
     def __init__(self, region, room_id, type, shopkeeper_config, custom, locked):
         self.region = region
         self.room_id = room_id

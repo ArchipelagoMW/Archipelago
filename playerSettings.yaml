@@ -189,6 +189,11 @@ beemizer: # Remove items from the global item pool and replace them with single 
   2: 0 # 60% of the non-essential item pool is replaced with bee traps, of which 20% could be single bees
   3: 0 # 100% of the non-essential item pool is replaced with bee traps, of which 50% could be single bees
   4: 0 # 100% of the non-essential item pool is replaced with bee traps
+shop_shuffle:
+  off: 1
+  inventory: 0 # shuffle the inventories of the shops around
+  price: 0 # randomize the prices of the items in shop inventories
+  inventory_price: 0 # shuffle inventories and randomize prices
 timer:
   none: 1
   timed: 0

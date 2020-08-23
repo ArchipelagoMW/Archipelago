@@ -310,6 +310,10 @@ def roll_settings(weights):
     ret.triforce_pieces_required = get_choice('triforce_pieces_required', weights, 20)
     ret.triforce_pieces_required = min(max(1, int(ret.triforce_pieces_required)), 90)
 
+    ret.shop_shuffle = get_choice('shop_shuffle', weights, False)
+    if not ret.shop_shuffle:
+        ret.shop_shuffle = 'off'
+
     ret.mode = get_choice('world_state', weights, None)  # legacy support
     if ret.mode == 'retro':
         ret.mode = 'open'
