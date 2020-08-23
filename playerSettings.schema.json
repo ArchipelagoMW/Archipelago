@@ -593,15 +593,6 @@
       "type": "object",
       "title": "Triforce Pieces Available",
       "description": "Determines how many Triforce pieces are placed throughout the world. Irrelevant unless a Triforce Hunt goal is chosen.",
-      "required": [
-        "20",
-        "25",
-        "30",
-        "35",
-        "40",
-        "45",
-        "50"
-      ],
       "properties": {
         "20": {
           "$id": "#/properties/triforce_pieces_available/properties/25",
@@ -660,14 +651,6 @@
       "type": "object",
       "title": "Triforce Pieces Required",
       "description": "The number of triforce pieces you must find before you may complete the game by speaking with Murahadala. Irrelevant unless a Triforce Hunt goal is chosen.",
-      "required": [
-        "15",
-        "20",
-        "25",
-        "30",
-        "35",
-        "40"
-      ],
       "properties": {
         "15": {
           "$id": "#/properties/triforce_pieces_required/properties/15",
@@ -815,63 +798,63 @@
       ],
       "properties": {
         "0": {
-          "$id": "#/properties/tower_open/properties/0",
+          "$id": "#/properties/ganon_open/properties/0",
           "type": "integer",
           "title": "0 Crystals",
           "description": "0 Crystals are required to harm Ganon.",
           "default": 80
         },
         "1": {
-          "$id": "#/properties/tower_open/properties/1",
+          "$id": "#/properties/ganon_open/properties/1",
           "type": "integer",
           "title": "1 Crystal",
           "description": "1 Crystal is required to harm Ganon.",
           "default": 70
         },
         "2": {
-          "$id": "#/properties/tower_open/properties/2",
+          "$id": "#/properties/ganon_open/properties/2",
           "type": "integer",
           "title": "2 Crystals",
           "description": "2 Crystals are required to harm Ganon.",
           "default": 60
         },
         "3": {
-          "$id": "#/properties/tower_open/properties/3",
+          "$id": "#/properties/ganon_open/properties/3",
           "type": "integer",
           "title": "3 Crystals",
           "description": "3 Crystals are required to harm Ganon.",
           "default": 50
         },
         "4": {
-          "$id": "#/properties/tower_open/properties/4",
+          "$id": "#/properties/ganon_open/properties/4",
           "type": "integer",
           "title": "4 Crystals",
           "description": "4 Crystals are required to harm Ganon.",
           "default": 40
         },
         "5": {
-          "$id": "#/properties/tower_open/properties/5",
+          "$id": "#/properties/ganon_open/properties/5",
           "type": "integer",
           "title": "5 Crystals",
           "description": "5 Crystals are required to harm Ganon.",
           "default": 30
         },
         "6": {
-          "$id": "#/properties/tower_open/properties/6",
+          "$id": "#/properties/ganon_open/properties/6",
           "type": "integer",
           "title": "6 Crystals",
           "description": "6 Crystals are required to harm Ganon.",
           "default": 20
         },
         "7": {
-          "$id": "#/properties/tower_open/properties/7",
+          "$id": "#/properties/ganon_open/properties/7",
           "type": "integer",
           "title": "7 Crystals",
           "description": "7 Crystals are required to harm Ganon.",
           "default": 10
         },
         "random": {
-          "$id": "#/properties/tower_open/properties/random",
+          "$id": "#/properties/ganon_open/properties/random",
           "type": "integer",
           "title": "Random",
           "description": "A random number from 0-7 crystals will be required to harm Ganon.",
@@ -1443,11 +1426,69 @@
       },
       "additionalProperties": true
     },
+    "shop_shuffle": {
+      "$id": "#/properties/shop_shuffle",
+      "type": "object",
+      "title": "Shop Shuffle",
+      "description": "Change the inventory if shops throughout the game",
+      "required": [
+        "none",
+        "i",
+        "p",
+        "u",
+        "ip",
+        "uip"
+      ],
+      "properties": {
+        "none": {
+          "$id": "#/properties/shop_shuffle/properties/i",
+          "type": "integer",
+          "title": "None",
+          "description": "Do not change shop inventory.",
+          "default": 50
+        },
+        "i": {
+          "$id": "#/properties/shop_shuffle/properties/i",
+          "type": "integer",
+          "title": "Inventory",
+          "description": "Shuffle the inventory of shops.",
+          "default": 0
+        },
+        "p": {
+          "$id": "#/properties/shop_shuffle/properties/i",
+          "type": "integer",
+          "title": "Prices",
+          "description": "Shuffle the prices of shops.",
+          "default": 0
+        },
+        "u": {
+          "$id": "#/properties/shop_shuffle/properties/i",
+          "type": "integer",
+          "title": "Capacity Upgrades",
+          "description": "Shuffle capacity upgrades into the item pool.",
+          "default": 0
+        },
+        "ip": {
+          "$id": "#/properties/shop_shuffle/properties/i",
+          "type": "integer",
+          "title": "Inventory and Prices",
+          "description": "Shuffle the inventory and prices of shops.",
+          "default": 0
+        },
+        "uip": {
+          "$id": "#/properties/shop_shuffle/properties/i",
+          "type": "integer",
+          "title": "Upgrades, Inventory, and Prices",
+          "description": "Shuffle the inventory and prices of shops, and shuffle capacity upgrades into the item pool.",
+          "default": 0
+        }
+      }
+    },
     "timer": {
       "$id": "#/properties/timer",
       "type": "object",
       "title": "Timer",
-      "description": "Show a timer while playing the game. This may have different effects.",
+      "description": "Settings for the game timer. May impact the item pool.",
       "required": [
         "none",
         "timed",
@@ -1468,35 +1509,35 @@
           "$id": "#/properties/timer/properties/timed",
           "type": "integer",
           "title": "Timed",
-          "description": "???",
+          "description": "Starts with clock at zero. Green clocks subtract 4 minutes (total 20). Blue clocks subtract 2 minutes (total 10). Red clocks add two minutes (total 10). Winner is the player with the lowest time at the end.",
           "default": 0
         },
         "timed_ohko": {
           "$id": "#/properties/timer/properties/timed_ohko",
           "type": "integer",
           "title": "Timed OHKO",
-          "description": "???",
+          "description": "Starts the clock at ten minutes. Green clocks add five minutes (total 25). As long as the clock as at zero, Link will die in one hit.",
           "default": 0
         },
         "ohko": {
           "$id": "#/properties/timer/properties/ohko",
           "type": "integer",
           "title": "OHKO",
-          "description": "???",
+          "description": "Timer always at zero. Permanent OHKO.",
           "default": 0
         },
         "timed_countdown": {
           "$id": "#/properties/timer/properties/timed_countdown",
           "type": "integer",
           "title": "Timed Countdown",
-          "description": "???",
+          "description": "Starts the clock with forty minutes. Same clocks as timed mode, but if the clock hits zero you lose. You can still keep playing, though.",
           "default": 0
         },
         "display": {
           "$id": "#/properties/timer/properties/display",
           "type": "integer",
           "title": "Display",
-          "description": "???",
+          "description": "Displays a timer, but otherwise does not affect gameplay or the item pool.",
           "default": 0
         }
       },
@@ -1567,55 +1608,8 @@
     "rom": {
       "$id": "#/properties/rom",
       "type": "object",
-      "title": "The rom schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": {},
-      "examples": [
-        {
-          "sprite": {
-            "random": 0,
-            "randomonhit": 0,
-            "link": 1
-          },
-          "disablemusic": "off",
-          "quickswap": {
-            "on": 0,
-            "off": 1
-          },
-          "menuspeed": {
-            "normal": 1,
-            "instant": 0,
-            "double": 0,
-            "triple": 0,
-            "quadruple": 0,
-            "half": 0
-          },
-          "heartcolor": {
-            "red": 1,
-            "blue": 0,
-            "green": 0,
-            "yellow": 0,
-            "random": 0
-          },
-          "heartbeep": {
-            "double": 0,
-            "normal": 1,
-            "half": 0,
-            "quarter": 0,
-            "off": 0
-          },
-          "ow_palettes": {
-            "default": 1,
-            "random": 0,
-            "blackout": 0
-          },
-          "uw_palettes": {
-            "default": 1,
-            "random": 0,
-            "blackout": 0
-          }
-        }
-      ],
+      "title": "ROM Options",
+      "description": "Options which affect the aesthetics of your game, but not gameplay.",
       "required": [
         "sprite",
         "disablemusic",
@@ -1630,16 +1624,8 @@
         "sprite": {
           "$id": "#/properties/rom/properties/sprite",
           "type": "object",
-          "title": "The sprite schema",
-          "description": "An explanation about the purpose of this instance.",
-          "default": {},
-          "examples": [
-            {
-              "random": 0,
-              "randomonhit": 0,
-              "link": 1
-            }
-          ],
+          "title": "Sprite",
+          "description": "Choose which character to play as.",
           "required": [
             "random",
             "randomonhit",
@@ -1649,32 +1635,23 @@
             "random": {
               "$id": "#/properties/rom/properties/sprite/properties/random",
               "type": "integer",
-              "title": "The random schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Random",
+              "description": "Your sprite will be chosen randomly.",
+              "default": 0
             },
             "randomonhit": {
               "$id": "#/properties/rom/properties/sprite/properties/randomonhit",
               "type": "integer",
-              "title": "The randomonhit schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Random on Hit",
+              "description": "Your sprite changes every time you take damage.",
+              "default": 0
             },
             "link": {
               "$id": "#/properties/rom/properties/sprite/properties/link",
               "type": "integer",
-              "title": "The link schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                1
-              ]
+              "title": "Link",
+              "description": "Play as the vanilla Link sprite.",
+              "default": 50
             }
           },
           "additionalProperties": true
@@ -1682,25 +1659,30 @@
         "disablemusic": {
           "$id": "#/properties/rom/properties/disablemusic",
           "type": "string",
-          "title": "The disablemusic schema",
-          "description": "An explanation about the purpose of this instance.",
-          "default": "",
-          "examples": [
-            "off"
-          ]
+          "title": "Disable Music",
+          "description": "Disables all in-game music. Sound effects will still be played.",
+          "properties": {
+            "on": {
+              "$id": "#/properties/rom/properties/disablemusic/on",
+              "type": "integer",
+              "title": "On",
+              "description": "Disables all in-game music.",
+              "default": "0"
+            },
+            "off": {
+              "$id": "#/properties/rom/properties/disablemusic/on",
+              "type": "integer",
+              "title": "On",
+              "description": "Enables all in-game music.",
+              "default": "100"
+            }
+          }
         },
         "quickswap": {
           "$id": "#/properties/rom/properties/quickswap",
           "type": "object",
-          "title": "The quickswap schema",
-          "description": "An explanation about the purpose of this instance.",
-          "default": {},
-          "examples": [
-            {
-              "on": 0,
-              "off": 1
-            }
-          ],
+          "title": "Item Quick Swap",
+          "description": "Swap between items using the L+R buttons.",
           "required": [
             "on",
             "off"
@@ -1709,22 +1691,16 @@
             "on": {
               "$id": "#/properties/rom/properties/quickswap/properties/on",
               "type": "integer",
-              "title": "The on schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "On",
+              "description": "Enable item quick swap.",
+              "default": 0
             },
             "off": {
               "$id": "#/properties/rom/properties/quickswap/properties/off",
               "type": "integer",
-              "title": "The off schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                1
-              ]
+              "title": "Off",
+              "description": "Disable item quick swap.",
+              "default": 50
             }
           },
           "additionalProperties": true
@@ -1732,19 +1708,8 @@
         "menuspeed": {
           "$id": "#/properties/rom/properties/menuspeed",
           "type": "object",
-          "title": "The menuspeed schema",
-          "description": "An explanation about the purpose of this instance.",
-          "default": {},
-          "examples": [
-            {
-              "normal": 1,
-              "instant": 0,
-              "double": 0,
-              "triple": 0,
-              "quadruple": 0,
-              "half": 0
-            }
-          ],
+          "title": "Menu Speed",
+          "description": "Alter the animation speed of the in-game menu.",
           "required": [
             "normal",
             "instant",
@@ -1757,62 +1722,44 @@
             "normal": {
               "$id": "#/properties/rom/properties/menuspeed/properties/normal",
               "type": "integer",
-              "title": "The normal schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                1
-              ]
+              "title": "Normal",
+              "description": "Vanilla game menu speed.",
+              "default": 50
             },
             "instant": {
               "$id": "#/properties/rom/properties/menuspeed/properties/instant",
               "type": "integer",
-              "title": "The instant schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Instant",
+              "description": "In-game menu appears and disappears instantly.",
+              "default": 0
             },
             "double": {
               "$id": "#/properties/rom/properties/menuspeed/properties/double",
               "type": "integer",
-              "title": "The double schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Double",
+              "description": "In-game menu animations are double speed.",
+              "default": 0
             },
             "triple": {
               "$id": "#/properties/rom/properties/menuspeed/properties/triple",
               "type": "integer",
-              "title": "The triple schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Triple",
+              "description": "In-game menu animations are triple speed.",
+              "default": 0
             },
             "quadruple": {
               "$id": "#/properties/rom/properties/menuspeed/properties/quadruple",
               "type": "integer",
-              "title": "The quadruple schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Quadruple",
+              "description": "In-game menu animations are quadruple speed.",
+              "default": 0
             },
             "half": {
               "$id": "#/properties/rom/properties/menuspeed/properties/half",
               "type": "integer",
-              "title": "The half schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Half",
+              "description": "In-game menu animations are half speed.",
+              "default": 0
             }
           },
           "additionalProperties": true
@@ -1820,18 +1767,8 @@
         "heartcolor": {
           "$id": "#/properties/rom/properties/heartcolor",
           "type": "object",
-          "title": "The heartcolor schema",
-          "description": "An explanation about the purpose of this instance.",
-          "default": {},
-          "examples": [
-            {
-              "red": 1,
-              "blue": 0,
-              "green": 0,
-              "yellow": 0,
-              "random": 0
-            }
-          ],
+          "title": "Heart Color",
+          "description": "Change the color of Link's heart meter.",
           "required": [
             "red",
             "blue",
@@ -1843,52 +1780,37 @@
             "red": {
               "$id": "#/properties/rom/properties/heartcolor/properties/red",
               "type": "integer",
-              "title": "The red schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                1
-              ]
+              "title": "Red",
+              "description": "Hearts are red, as in the vanilla game.",
+              "default": 50
             },
             "blue": {
               "$id": "#/properties/rom/properties/heartcolor/properties/blue",
               "type": "integer",
-              "title": "The blue schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Blue",
+              "description": "Hearts are blue.",
+              "default": 0
             },
             "green": {
               "$id": "#/properties/rom/properties/heartcolor/properties/green",
               "type": "integer",
-              "title": "The green schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Green",
+              "description": "Hearts are green.",
+              "default": 0
             },
             "yellow": {
               "$id": "#/properties/rom/properties/heartcolor/properties/yellow",
               "type": "integer",
-              "title": "The yellow schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Yellow",
+              "description": "Hearts are yellow.",
+              "default": 0
             },
             "random": {
               "$id": "#/properties/rom/properties/heartcolor/properties/random",
               "type": "integer",
-              "title": "The random schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Random",
+              "description": "Heart color is chosen at random from the above options.",
+              "default": 0
             }
           },
           "additionalProperties": true
@@ -1896,18 +1818,8 @@
         "heartbeep": {
           "$id": "#/properties/rom/properties/heartbeep",
           "type": "object",
-          "title": "The heartbeep schema",
-          "description": "An explanation about the purpose of this instance.",
-          "default": {},
-          "examples": [
-            {
-              "double": 0,
-              "normal": 1,
-              "half": 0,
-              "quarter": 0,
-              "off": 0
-            }
-          ],
+          "title": "Heart Beep Frequency",
+          "description": "Alter the frequency of the alarm which plays when Link as at low health.",
           "required": [
             "double",
             "normal",
@@ -1919,52 +1831,37 @@
             "double": {
               "$id": "#/properties/rom/properties/heartbeep/properties/double",
               "type": "integer",
-              "title": "The double schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Double Speed",
+              "description": "Heart beeps play at double speed.",
+              "default": 0
             },
             "normal": {
               "$id": "#/properties/rom/properties/heartbeep/properties/normal",
               "type": "integer",
-              "title": "The normal schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                1
-              ]
+              "title": "Normal",
+              "description": "Heart beep plays at the vanilla speed.",
+              "default": 50
             },
             "half": {
               "$id": "#/properties/rom/properties/heartbeep/properties/half",
               "type": "integer",
-              "title": "The half schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Half Speed",
+              "description": "Heart beep plays at half speed.",
+              "default": 0
             },
             "quarter": {
               "$id": "#/properties/rom/properties/heartbeep/properties/quarter",
               "type": "integer",
-              "title": "The quarter schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Quarter Speed",
+              "description": "Heart beep plays at one quarter speed.",
+              "default": 0
             },
             "off": {
               "$id": "#/properties/rom/properties/heartbeep/properties/off",
               "type": "integer",
-              "title": "The off schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Off",
+              "description": "Heart beep will never be played.",
+              "default": 0
             }
           },
           "additionalProperties": true
@@ -1972,16 +1869,8 @@
         "ow_palettes": {
           "$id": "#/properties/rom/properties/ow_palettes",
           "type": "object",
-          "title": "The ow_palettes schema",
-          "description": "An explanation about the purpose of this instance.",
-          "default": {},
-          "examples": [
-            {
-              "default": 1,
-              "random": 0,
-              "blackout": 0
-            }
-          ],
+          "title": "Overworld Palette",
+          "description": "Change the colors of the overworld palette.",
           "required": [
             "default",
             "random",
@@ -1991,32 +1880,23 @@
             "default": {
               "$id": "#/properties/rom/properties/ow_palettes/properties/default",
               "type": "integer",
-              "title": "The default schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                1
-              ]
+              "title": "Default",
+              "description": "No not change the overworld color palette.",
+              "default": 50
             },
             "random": {
               "$id": "#/properties/rom/properties/ow_palettes/properties/random",
               "type": "integer",
-              "title": "The random schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Random",
+              "description": "Randomize the overworld palette colors.",
+              "default": 0
             },
             "blackout": {
               "$id": "#/properties/rom/properties/ow_palettes/properties/blackout",
               "type": "integer",
-              "title": "The blackout schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Blackout",
+              "description": "Change all colors on the overworld palette to black. Never use this.",
+              "default": 0
             }
           },
           "additionalProperties": true
@@ -2024,16 +1904,8 @@
         "uw_palettes": {
           "$id": "#/properties/rom/properties/uw_palettes",
           "type": "object",
-          "title": "The uw_palettes schema",
-          "description": "An explanation about the purpose of this instance.",
-          "default": {},
-          "examples": [
-            {
-              "default": 1,
-              "random": 0,
-              "blackout": 0
-            }
-          ],
+          "title": "Underworld Palette",
+          "description": "Change the color of the underworld palette (caves, dungeons, etc.)",
           "required": [
             "default",
             "random",
@@ -2043,32 +1915,23 @@
             "default": {
               "$id": "#/properties/rom/properties/uw_palettes/properties/default",
               "type": "integer",
-              "title": "The default schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                1
-              ]
+              "title": "Default",
+              "description": "No not change the underworld color palette.",
+              "default": 50
             },
             "random": {
               "$id": "#/properties/rom/properties/uw_palettes/properties/random",
               "type": "integer",
-              "title": "The random schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Random",
+              "description": "Randomize the underworld palette colors.",
+              "default": 0
             },
             "blackout": {
               "$id": "#/properties/rom/properties/uw_palettes/properties/blackout",
               "type": "integer",
-              "title": "The blackout schema",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                0
-              ]
+              "title": "Blackout",
+              "description": "Change all colors on the underworld palette to black. Never use this.",
+              "default": 0
             }
           },
           "additionalProperties": true
