@@ -71,7 +71,7 @@ class World(object):
         self.fix_gtower_exit = self.shuffle_ganon
         self.retro = retro.copy()
         self.custom = custom
-        self.customitemarray = customitemarray
+        self.customitemarray: List[int] = customitemarray
         self.hints = hints.copy()
         self.dynamic_regions = []
         self.dynamic_locations = []
