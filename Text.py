@@ -84,13 +84,13 @@ Uncle_texts = [
     "Gonna shuffle\nall the items\nreal quick.",
 ]
 Triforce_texts = [
-    'Product has Hole in center. Bad seller, 0 out of 5.',
-    'Who stole the fourth triangle?',
-    'Trifource?\nMore Like Tritrice, am I right?'
-    '\n  Well Done!',
-    'You just wasted 2 hours of your life.',
-    'This was meant to be a trapezoid'
-    "\n   Success!", #Contributed by caitsith2
+                     'Product has Hole in center. Bad seller, 0 out of 5.',
+                     'Who stole the fourth triangle?',
+                     'Trifource?\nMore Like Tritrice, am I right?'
+                     '\n  Well Done!',
+                     'You just wasted 2 hours of your life.',
+                     'This was meant to be a trapezoid\n   Success!',  # Contributed by caitsith2
+                     'This was meant to be a trapezoid',
                  ] * 2 + [
     "\n     GG",
     "All your base\nare belong\nto us.",
@@ -155,7 +155,7 @@ Blind_texts = [
     "Archers give\ngifts tied\nwith a bow.",
     "A healed\ngambler is\nall better.",
     "Any old sword\nwill make the\ncut here.",
-    "Lazy wyrms\nkeep dragin'\ntheir feet.",
+    "Lazy wyrms\nkeep dragon\ntheir feet.",
     "Percussionist\nmasters drum\nup audiences.",
     "Retrievers\nlove fetch\nquests.",
     "Sausage is\nthe wurst.",

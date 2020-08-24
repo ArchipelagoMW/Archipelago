@@ -21,7 +21,7 @@ if os.path.exists("X:/pw.txt"):
     print("Using signtool")
     with open("X:/pw.txt") as f:
         pw = f.read()
-    signtool = r'"C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x64\signtool.exe" sign /f X:/_SITS_Zertifikat_.pfx /p '+ pw + r' /fd sha256 /tr http://timestamp.digicert.com/ '
+    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p ' + pw + r' /fd sha256 /tr http://timestamp.digicert.com/ '
 else:
     signtool = None
 
@@ -78,9 +78,9 @@ cx_Freeze.setup(
     executables=exes,
     options={
         "build_exe": {
-            "includes" : [],
+            "includes": [],
             "zip_include_packages": ["*"],
-            "zip_exclude_packages": [],
+            "zip_exclude_packages": ["maseya"],
             "include_files": [],
             "include_msvcr": True,
             "replace_paths": [("*", "")],
