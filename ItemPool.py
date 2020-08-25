@@ -352,7 +352,7 @@ def shuffle_shops(world, items, player: int):
         shops = []
         total_inventory = []
         for shop in world.shops:
-            if shop.type == ShopType.Shop and shop.region.player == player:
+            if shop.type == ShopType.Shop and shop.region.player == player and shop.region.name != 'Potion Shop':
                 shops.append(shop)
                 total_inventory.extend(shop.inventory)
 
