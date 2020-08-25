@@ -658,10 +658,8 @@ def get_pool_core(world, player: int):
         pool.remove("Rupees (20)")
 
     if retro:
-        pool = [item.replace('Single Arrow', 'Rupees (5)') for item in pool]
-        pool = [item.replace('Arrows (10)', 'Rupees (5)') for item in pool]
-        pool = [item.replace('Arrow Upgrade (+5)', 'Rupees (5)') for item in pool]
-        pool = [item.replace('Arrow Upgrade (+10)', 'Rupees (5)') for item in pool]
+        replace = {'Single Arrow', 'Arrows (10)', 'Arrow Upgrade (+5)', 'Arrow Upgrade (+10)'}
+        pool = ['Rupees (5)' if item in replace else item for item in pool]
     if world.keyshuffle[player] == "universal":
         pool.extend(diff.universal_keys)
         if mode == 'standard':
