@@ -322,13 +322,14 @@ def generate_itempool(world, player: int):
     place_bosses(world, player)
     set_up_shops(world, player)
 
-    if world.retro[player]:
-        set_up_take_anys(world, player)
     if world.shop_shuffle[player]:
         shuffle_shops(world, nonprogressionitems, player)
     create_dynamic_shop_locations(world, player)
 
     world.itempool += progressionitems + nonprogressionitems
+
+    if world.retro[player]:
+        set_up_take_anys(world, player)  # depends on world.itempool to be set
 
 
 def shuffle_shops(world, items, player: int):
