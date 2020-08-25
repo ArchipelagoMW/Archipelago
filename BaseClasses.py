@@ -972,7 +972,6 @@ class Location(object):
         self.spot_type = 'Location'
         self.hint_text: str = hint_text if hint_text else name
         self.recursion_count = 0
-        self.staleness_count = 0
         self.event = False
         self.locked = False
         self.always_allow = lambda item, state: False

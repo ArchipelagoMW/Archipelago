@@ -155,7 +155,8 @@ def parse_arguments(argv, no_defaults=False):
                                               category, be randomly progressive or not.
                                               Link will die in one hit.
                              ''')
-    parser.add_argument('--algorithm', default=defval('balanced'), const='balanced', nargs='?', choices=['freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26', 'balanced'],
+    parser.add_argument('--algorithm', default=defval('balanced'), const='balanced', nargs='?',
+                        choices=['freshness', 'flood', 'vt25', 'vt26', 'balanced'],
                         help='''\
                              Select item filling algorithm. (default: %(default)s
                              balanced:    vt26 derivitive that aims to strike a balance between
@@ -166,14 +167,6 @@ def parse_arguments(argv, no_defaults=False):
                                           dungeon keys and items.
                              vt25:        Shuffle items and place them in a random location
                                           that it is not impossible to be in.
-                             vt21:        Unbiased in its selection, but has tendency to put
-                                          Ice Rod in Turtle Rock.
-                             vt22:        Drops off stale locations after 1/3 of progress
-                                          items were placed to try to circumvent vt21\'s
-                                          shortcomings.
-                             Freshness:   Keep track of stale locations (ones that cannot be
-                                          reached yet) and decrease likeliness of selecting
-                                          them the more often they were found unreachable.
                              Flood:       Push out items starting from Link\'s House and
                                           slightly biased to placing progression items with
                                           less restrictions.

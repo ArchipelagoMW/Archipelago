@@ -336,7 +336,7 @@ def guiMain(args=None):
     algorithmFrame = Frame(drowDownFrame)
     algorithmVar = StringVar()
     algorithmVar.set('balanced')
-    algorithmOptionMenu = OptionMenu(algorithmFrame, algorithmVar, 'freshness', 'flood', 'vt21', 'vt22', 'vt25', 'vt26', 'balanced')
+    algorithmOptionMenu = OptionMenu(algorithmFrame, algorithmVar, 'flood', 'vt25', 'vt26', 'balanced')
     algorithmOptionMenu.pack(side=RIGHT)
     algorithmLabel = Label(algorithmFrame, text='Item distribution algorithm')
     algorithmLabel.pack(side=LEFT)

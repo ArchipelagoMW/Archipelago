@@ -17,8 +17,7 @@ from EntranceShuffle import link_entrances, link_inverted_entrances
 from Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, get_hash_string
 from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
-from Fill import distribute_items_cutoff, distribute_items_staleness, distribute_items_restrictive, flood_items, \
-    balance_multiworld_progression
+from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression
 from ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
 import Patch
@@ -160,16 +159,9 @@ def main(args, seed=None):
 
     if args.algorithm == 'flood':
         flood_items(world)  # different algo, biased towards early game progress items
-    elif args.algorithm == 'vt21':
-        distribute_items_cutoff(world, 1)
-    elif args.algorithm == 'vt22':
-        distribute_items_cutoff(world, 0.66)
-    elif args.algorithm == 'freshness':
-        distribute_items_staleness(world)
     elif args.algorithm == 'vt25':
         distribute_items_restrictive(world, False)
     elif args.algorithm == 'vt26':
-
         distribute_items_restrictive(world, True, shuffled_locations)
     elif args.algorithm == 'balanced':
         distribute_items_restrictive(world, True)
