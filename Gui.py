@@ -1566,22 +1566,22 @@ class SpriteSelector(object):
     @property
     def alttpr_sprite_dir(self):
         if is_bundled():
-            return output_path("sprites/alttpr")
+            return output_path("sprites", "alttpr")
         return self.local_alttpr_sprite_dir
 
     @property
     def local_alttpr_sprite_dir(self):
-        return local_path("data/sprites/alttpr")
+        return local_path("data", "sprites", "alttpr")
 
     @property
     def custom_sprite_dir(self):
         if is_bundled():
-            return output_path("sprites/custom")
+            return output_path("sprites", "custom")
         return self.local_custom_sprite_dir
 
     @property
     def local_custom_sprite_dir(self):
-        return local_path("data/sprites/custom")
+        return local_path("data", "sprites", "custom")
 
 
 def get_image_for_sprite(sprite):

@@ -143,7 +143,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
 
 
 Handler = partial(RequestHandler,
-                  directory=Utils.local_path(os.path.join("data", "web", "public")))
+                  directory=Utils.local_path("data", "web", "public"))
 
 
 def start_server(socket_port: int, on_start=lambda: None):

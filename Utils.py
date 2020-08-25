@@ -61,9 +61,9 @@ def is_bundled() -> bool:
     return getattr(sys, 'frozen', False)
 
 
-def local_path(path):
+def local_path(*path):
     if local_path.cached_path:
-        return os.path.join(local_path.cached_path, path)
+        return os.path.join(local_path.cached_path, *path)
 
     elif is_bundled():
         if hasattr(sys, "_MEIPASS"):
@@ -77,15 +77,16 @@ def local_path(path):
         import __main__
         local_path.cached_path = os.path.dirname(os.path.abspath(__main__.__file__))
 
-    return os.path.join(local_path.cached_path, path)
+    return os.path.join(local_path.cached_path, *path)
 
 local_path.cached_path = None
 
-def output_path(path):
+
+def output_path(*path):
     if output_path.cached_path:
-        return os.path.join(output_path.cached_path, path)
+        return os.path.join(output_path.cached_path, *path)
     output_path.cached_path = local_path(get_options()["general_options"]["output_path"])
-    path = os.path.join(output_path.cached_path, path)
+    path = os.path.join(output_path.cached_path, *path)
     os.makedirs(os.path.dirname(path), exist_ok=True)
     return path
 

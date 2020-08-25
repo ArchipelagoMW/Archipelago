@@ -19,8 +19,10 @@ from Regions import location_table
 from Text import MultiByteTextMapper, CompressedTextMapper, text_addresses, Credits, TextTable
 from Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts, junk_texts
 
-from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from Utils import output_path, local_path, int16_as_bytes, int32_as_bytes, snes_to_pc
+from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, \
+    LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
+    SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
+from Utils import output_path, local_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_bundled
 from Items import ItemFactory
 from EntranceShuffle import door_addresses
 import Patch
@@ -78,12 +80,12 @@ class LocalRom(object):
 
             if self.verify(buffer):
                 self.buffer = buffer
-                if not os.path.exists(local_path(os.path.join('data', 'basepatch.bmbp'))):
+                if not os.path.exists(local_path('data', 'basepatch.bmbp')):
                     Patch.create_patch_file(local_path('basepatch.sfc'))
                 return
 
-        if os.path.isfile(local_path(os.path.join('data', 'basepatch.bmbp'))):
-            _, target, buffer = Patch.create_rom_bytes(local_path(os.path.join('data', 'basepatch.bmbp')))
+        if os.path.isfile(local_path('data', 'basepatch.bmbp')):
+            _, target, buffer = Patch.create_rom_bytes(local_path('data', 'basepatch.bmbp'))
             if self.verify(buffer):
                 self.buffer = bytearray(buffer)
                 with open(local_path('basepatch.sfc'), 'wb') as stream:
@@ -99,7 +101,7 @@ class LocalRom(object):
         self.buffer.extend(bytearray([0x00]) * (0x200000 - len(self.buffer)))
 
         # load randomizer patches
-        with open(local_path('data/base2current.json')) as stream:
+        with open(local_path('data', 'base2current.json')) as stream:
             patches = json.load(stream)
         for patch in patches:
             if isinstance(patch, dict):
@@ -111,8 +113,8 @@ class LocalRom(object):
             with open(local_path('basepatch.sfc'), 'wb') as stream:
                 stream.write(self.buffer)
             Patch.create_patch_file(local_path('basepatch.sfc'),
-                                    destination=local_path(os.path.join('data', 'basepatch.bmbp')))
-            os.remove(local_path('data/base2current.json'))
+                                    destination=local_path('data', 'basepatch.bmbp'))
+            os.remove(local_path('data', 'base2current.json'))
         else:
             raise RuntimeError(
                 'Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
@@ -355,7 +357,7 @@ def _populate_sprite_table():
                     logging.debug(f"Spritefile {file} could not be loaded as a valid sprite.")
 
             with concurrent.futures.ThreadPoolExecutor() as pool:
-                for dir in [local_path('data/sprites/alttpr'), local_path('data/sprites/custom')]:
+                for dir in [local_path('data', 'sprites', 'alttpr'), local_path('data', 'sprites', 'custom')]:
                     for file in os.listdir(dir):
                         pool.submit(load_sprite_from_file, os.path.join(dir, file))
 
@@ -430,7 +432,7 @@ class Sprite(object):
 
     @staticmethod
     def default_link_sprite():
-        return Sprite(local_path('data/default.zspr'))
+        return Sprite(local_path('data', 'default.zspr'))
 
     def decode8(self, pos):
         arr = [[0 for _ in range(8)] for _ in range(8)]

@@ -80,7 +80,7 @@ cx_Freeze.setup(
         "build_exe": {
             "includes": [],
             "zip_include_packages": ["*"],
-            "zip_exclude_packages": ["maseya"],
+            "zip_exclude_packages": [],
             "include_files": [],
             "include_msvcr": True,
             "replace_paths": [("*", "")],
@@ -91,15 +91,14 @@ cx_Freeze.setup(
 )
 
 
-
-def installfile(path):
+def installfile(path, keep_content=False):
     lbuildfolder = buildfolder
     print('copying', path, '->', lbuildfolder)
     if path.is_dir():
         lbuildfolder /= path.name
-        if lbuildfolder.is_dir():
+        if lbuildfolder.is_dir() and not keep_content:
             shutil.rmtree(lbuildfolder)
-        shutil.copytree(path, lbuildfolder)
+        shutil.copytree(path, lbuildfolder, dirs_exist_ok=True)
     elif path.is_file():
         shutil.copy(path, lbuildfolder)
     else:

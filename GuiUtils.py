@@ -5,10 +5,10 @@ import tkinter as tk
 from Utils import local_path
 
 def set_icon(window):
-    er16 = tk.PhotoImage(file=local_path('data/ER16.gif'))
-    er32 = tk.PhotoImage(file=local_path('data/ER32.gif'))
-    er48 = tk.PhotoImage(file=local_path('data/ER32.gif'))
-    window.tk.call('wm', 'iconphoto', window._w, er16, er32, er48) # pylint: disable=protected-access
+    er16 = tk.PhotoImage(file=local_path('data', 'ER16.gif'))
+    er32 = tk.PhotoImage(file=local_path('data', 'ER32.gif'))
+    er48 = tk.PhotoImage(file=local_path('data', 'ER32.gif'))
+    window.tk.call('wm', 'iconphoto', window._w, er16, er32, er48)  # pylint: disable=protected-access
 
 # Although tkinter is intended to be thread safe, there are many reports of issues
 # some which may be platform specific, or depend on if the TCL library was compiled without
