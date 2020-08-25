@@ -1,7 +1,7 @@
 from collections import namedtuple
 import logging
 
-from BaseClasses import Region, RegionType, Shop, ShopType, Location
+from BaseClasses import Region, RegionType, ShopType, Location, TakeAny
 from Bosses import place_bosses
 from Dungeons import get_dungeon_item_pool
 from EntranceShuffle import connect_entrance
@@ -350,27 +350,31 @@ def shuffle_shops(world, items, player: int):
 
     if 'p' in option or 'i' in option:
         shops = []
+        upgrade_shops = []
         total_inventory = []
         for shop in world.shops:
-            if shop.type == ShopType.Shop and shop.region.player == player and shop.region.name != 'Potion Shop':
-                shops.append(shop)
-                total_inventory.extend(shop.inventory)
+            if shop.region.player == player:
+                if shop.type == ShopType.UpgradeShop:
+                    upgrade_shops.append(shop)
+                elif shop.type == ShopType.Shop and shop.region.name != 'Potion Shop':
+                    shops.append(shop)
+                    total_inventory.extend(shop.inventory)
 
         if 'p' in option:
             def price_adjust(price: int) -> int:
                 # it is important that a base price of 0 always returns 0 as new price!
                 return int(price * (0.5 + world.random.random() * 2))
 
-            for item in total_inventory:
+            def adjust_item(item):
                 if item:
                     item["price"] = price_adjust(item["price"])
                     item['replacement_price'] = price_adjust(item["price"])
-            for shop in world.shops:
-                if shop.type == ShopType.UpgradeShop and shop.region.player == player:
-                    for item in shop.inventory:
-                        if item:
-                            item['price'] = price_adjust(item["price"])
-                            item['replacement_price'] = price_adjust(item["price"])
+
+            for item in total_inventory:
+                adjust_item(item)
+            for shop in upgrade_shops:
+                for item in shop.inventory:
+                    adjust_item(item)
 
         if 'i' in option:
             world.random.shuffle(total_inventory)
@@ -405,7 +409,7 @@ def set_up_take_anys(world, player):
     entrance = world.get_region(reg, player).entrances[0]
     connect_entrance(world, entrance.name, old_man_take_any.name, player)
     entrance.target = 0x58
-    old_man_take_any.shop = Shop(old_man_take_any, 0x0112, ShopType.TakeAny, 0xE2, True, True)
+    old_man_take_any.shop = TakeAny(old_man_take_any, 0x0112, 0xE2, True, True)
     world.shops.append(old_man_take_any.shop)
 
     swords = [item for item in world.itempool if item.type == 'Sword' and item.player == player]
@@ -427,7 +431,7 @@ def set_up_take_anys(world, player):
         entrance = world.get_region(reg, player).entrances[0]
         connect_entrance(world, entrance.name, take_any.name, player)
         entrance.target = target
-        take_any.shop = Shop(take_any, room_id, ShopType.TakeAny, 0xE3, True, True)
+        take_any.shop = TakeAny(take_any, room_id, 0xE3, True, True)
         world.shops.append(take_any.shop)
         take_any.shop.add_inventory(0, 'Blue Potion', 0, 0)
         take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0)

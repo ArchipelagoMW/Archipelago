@@ -1056,38 +1056,39 @@ class ShopType(Enum):
     TakeAny = 1
     UpgradeShop = 2
 
-class Shop(object):
-    slots = 3
+class Shop():
+    slots = 3  # slot count is not dynamic in asm, however inventory can have None as empty slots
+    blacklist = set()  # items that don't work, todo: actually check against this
+    type = ShopType.Shop
 
-    def __init__(self, region, room_id, type, shopkeeper_config, custom, locked: bool):
+    def __init__(self, region: Region, room_id: int, shopkeeper_config: int, custom: bool, locked: bool):
         self.region = region
         self.room_id = room_id
-        self.type = type
-        self.inventory: List[Union[None, dict]] = [None, None, None]
+        self.inventory: List[Union[None, dict]] = [None] * self.slots
         self.shopkeeper_config = shopkeeper_config
         self.custom = custom
         self.locked = locked
 
     @property
-    def item_count(self):
-        return (3 if self.inventory[2] else
-                2 if self.inventory[1] else
-                1 if self.inventory[0] else
-                0)
+    def item_count(self) -> int:
+        for x in range(self.slots - 1, -1, -1):  # last x is 0
+            if self.inventory[x]:
+                return x + 1
+        return 0
 
-    def get_bytes(self):
+    def get_bytes(self) -> List[int]:
         # [id][roomID-low][roomID-high][doorID][zero][shop_config][shopkeeper_config][sram_index]
         entrances = self.region.entrances
         config = self.item_count
         if len(entrances) == 1 and entrances[0].name in door_addresses:
-            door_id = door_addresses[entrances[0].name][0]+1
+            door_id = door_addresses[entrances[0].name][0] + 1
         else:
             door_id = 0
-            config |= 0x40 # ignore door id
+            config |= 0x40  # ignore door id
         if self.type == ShopType.TakeAny:
             config |= 0x80
-        if self.type == ShopType.UpgradeShop:
-            config |= 0x10 # Alt. VRAM
+        elif self.type == ShopType.UpgradeShop:
+            config |= 0x10  # Alt. VRAM
         return [0x00]+int16_as_bytes(self.room_id)+[door_id, 0x00, config, self.shopkeeper_config, 0x00]
 
     def has_unlimited(self, item: str) -> bool:
@@ -1111,7 +1112,7 @@ class Shop(object):
         return False
 
     def clear_inventory(self):
-        self.inventory = [None, None, None]
+        self.inventory = [None] * self.slots
 
     def add_inventory(self, slot: int, item: str, price: int, max: int = 0,
                       replacement: Optional[str] = None, replacement_price: int = 0, create_location: bool = False):
@@ -1137,8 +1138,21 @@ class Shop(object):
             'create_location': self.inventory[slot]["create_location"]
         }
 
+
+class TakeAny(Shop):
+    type = ShopType.TakeAny
+
+
+class UpgradeShop(Shop):
+    type = ShopType.UpgradeShop
+    # Potions break due to VRAM flags set in UpgradeShop.
+    # Didn't check for more things breaking as not much else can be shuffled here currently
+    blacklist = item_name_groups["Potions"]
+
+
 class Spoiler(object):
     world: World
+
     def __init__(self, world):
         self.world = world
         self.hashes = {}

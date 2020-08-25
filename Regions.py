@@ -1,6 +1,6 @@
 import collections
 
-from BaseClasses import Region, Location, Entrance, RegionType, Shop, ShopType
+from BaseClasses import Region, Location, Entrance, RegionType, Shop, TakeAny, UpgradeShop, ShopType
 
 
 def create_regions(world, player):
@@ -365,12 +365,15 @@ def mark_light_world_regions(world, player: int):
 
 
 def create_shops(world, player: int):
+    cls_mapping = {ShopType.UpgradeShop: UpgradeShop,
+                   ShopType.Shop: Shop,
+                   ShopType.TakeAny: TakeAny}
     for region_name, (room_id, type, shopkeeper, custom, locked, inventory) in shop_table.items():
         if world.mode[player] == 'inverted' and region_name == 'Dark Lake Hylia Shop':
             locked = True
             inventory = [('Blue Potion', 160), ('Blue Shield', 50), ('Bombs (10)', 50)]
         region = world.get_region(region_name, player)
-        shop = Shop(region, room_id, type, shopkeeper, custom, locked)
+        shop = cls_mapping[type](region, room_id, shopkeeper, custom, locked)
         region.shop = shop
         world.shops.append(shop)
         for index, item in enumerate(inventory):
