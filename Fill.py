@@ -125,7 +125,6 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
                 trashcnt += 1
 
     world.random.shuffle(fill_locations)
-    fill_locations.reverse()
 
     # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
     progitempool.sort(
@@ -134,8 +133,8 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
 
     fill_restrictive(world, world.state, fill_locations, progitempool)
 
-    if any(
-            localprioitempool.values() or localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
+    if any(localprioitempool.values() or
+           localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
         for player, items in localprioitempool.items():  # items already shuffled
             local_locations = [location for location in fill_locations if location.player == player]
             world.random.shuffle(local_locations)
@@ -152,11 +151,10 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
                 fill_locations.remove(spot_to_fill)
 
     world.random.shuffle(fill_locations)
-
     prioitempool, fill_locations = fast_fill(world, prioitempool, fill_locations)
 
     restitempool, fill_locations = fast_fill(world, restitempool, fill_locations)
-    unplaced = [item.name for item in progitempool + prioitempool + restitempool]
+    unplaced = [item for item in progitempool + prioitempool + restitempool]
     unfilled = [location.name for location in fill_locations]
 
     if unplaced or unfilled:
