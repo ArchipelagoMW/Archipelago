@@ -242,7 +242,7 @@ def get_choice(option, root, value=None) -> typing.Any:
 
 
 def handle_name(name: str):
-    return name.strip().replace(' ', '_')
+    return name.strip().replace(' ', '_')[:16]
 
 
 def roll_settings(weights):
@@ -310,7 +310,7 @@ def roll_settings(weights):
     ret.triforce_pieces_required = get_choice('triforce_pieces_required', weights, 20)
     ret.triforce_pieces_required = min(max(1, int(ret.triforce_pieces_required)), 90)
 
-    ret.shop_shuffle = get_choice('shop_shuffle', weights, False)
+    ret.shop_shuffle = get_choice('shop_shuffle', weights, '')
     if not ret.shop_shuffle:
         ret.shop_shuffle = ''
 
@@ -413,7 +413,9 @@ def roll_settings(weights):
     ret.remote_items = get_choice('remote_items', weights, False)
 
     if get_choice("local_keys", weights, "l" in dungeon_items):
-        ret.local_items = item_name_groups["Small Keys"] | item_name_groups["Big Keys"]
+        ret.local_items = item_name_groups["Small Keys"] if "s" in dungeon_items else set() \
+                                                                                      | item_name_groups[
+                                                                                          "Big Keys"] if "b" in dungeon_items else set()
     else:
         ret.local_items = set()
     for item_name in weights.get('local_items', []):

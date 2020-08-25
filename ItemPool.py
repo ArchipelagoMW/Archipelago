@@ -43,7 +43,7 @@ Difficulty = namedtuple('Difficulty',
                         ['baseitems', 'bottles', 'bottle_count', 'same_bottle', 'progressiveshield',
                          'basicshield', 'progressivearmor', 'basicarmor', 'swordless', 'progressivemagic', 'basicmagic',
                          'progressivesword', 'basicsword', 'progressivebow', 'basicbow', 'timedohko', 'timedother',
-                         'triforcehunt', 'universal_keys',
+                         'universal_keys',
                          'extras', 'progressive_sword_limit', 'progressive_shield_limit',
                          'progressive_armor_limit', 'progressive_bottle_limit',
                          'progressive_bow_limit', 'heart_piece_limit', 'boss_heart_container_limit'])
@@ -69,7 +69,6 @@ difficulties = {
         basicbow=['Bow', 'Silver Bow'] * 2,
         timedohko=['Green Clock'] * 25,
         timedother=['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
-        triforcehunt=['Triforce Piece'] * 30,
         universal_keys=['Small Key (Universal)'] * 28,
         extras=[easyfirst15extra, easysecond15extra, easythird10extra, easyfourth5extra, easyfinal25extra],
         progressive_sword_limit=8,
@@ -98,7 +97,6 @@ difficulties = {
         basicbow=['Bow', 'Silver Bow'],
         timedohko=['Green Clock'] * 25,
         timedother=['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
-        triforcehunt=['Triforce Piece'] * 30,
         universal_keys=['Small Key (Universal)'] * 18 + ['Rupees (20)'] * 10,
         extras=[normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit=4,
@@ -127,7 +125,6 @@ difficulties = {
         basicbow=['Bow'] * 2,
         timedohko=['Green Clock'] * 25,
         timedother=['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
-        triforcehunt=['Triforce Piece'] * 30,
         universal_keys=['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 16,
         extras=[normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit=3,
@@ -157,7 +154,6 @@ difficulties = {
         basicbow=['Bow'] * 2,
         timedohko=['Green Clock'] * 20 + ['Red Clock'] * 5,
         timedother=['Green Clock'] * 20 + ['Blue Clock'] * 10 + ['Red Clock'] * 10,
-        triforcehunt=['Triforce Piece'] * 30,
         universal_keys=['Small Key (Universal)'] * 12 + ['Rupees (5)'] * 16,
         extras=[normalfirst15extra, normalsecond15extra, normalthird10extra, normalfourth5extra, normalfinal25extra],
         progressive_sword_limit=2,
@@ -226,13 +222,14 @@ def generate_itempool(world, player: int):
     world.get_location('Floodgate', player).locked = True
 
     # set up item pool
+    additional_triforce_pieces = 0
     if world.custom:
         (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count,
          treasure_hunt_icon) = make_custom_item_pool(world, player)
         world.rupoor_cost = min(world.customitemarray[67], 9999)
     else:
-        (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon) = get_pool_core(
-            world, player)
+        pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, \
+        treasure_hunt_icon, additional_triforce_pieces = get_pool_core(world, player)
 
     for item in precollected_items:
         world.push_precollected(ItemFactory(item, player))
@@ -299,21 +296,27 @@ def generate_itempool(world, player: int):
         if world.beemizer[item.player] and not item.advancement and not item.priority and not item.type:
             choice = world.random.choices(list(beeweights[world.beemizer[item.player]].keys()),
                                           weights=list(beeweights[world.beemizer[item.player]].values()))[0]
-            return item if not choice else ItemFactory("Bee Trap", player) if choice == 'trap' else ItemFactory("Bee", player)
+            return item if not choice else ItemFactory("Bee Trap", player) if choice == 'trap' else ItemFactory("Bee",
+                                                                                                                player)
         return item
 
     progressionitems = [item for item in items if item.advancement or item.priority or item.type]
-    nonprogressionitems = [beemizer(item) for item in items if not item.advancement and not item.priority and not item.type]
+    nonprogressionitems = [beemizer(item) for item in items if
+                           not item.advancement and not item.priority and not item.type]
     world.random.shuffle(nonprogressionitems)
 
-    triforce_pieces = world.triforce_pieces_available[player]
-    if 'triforcehunt' in world.goal[player] and triforce_pieces > 30:
-        progressionitems += [ItemFactory("Triforce Piece", player)] * (triforce_pieces - 30)
-        nonprogressionitems = nonprogressionitems[(triforce_pieces - 30):]
+    if additional_triforce_pieces:
+        if additional_triforce_pieces > len(nonprogressionitems):
+            raise FillError(f"Not enough non-progression items to replace with Triforce pieces found for player "
+                            f"{world.get_player_names(player)}.")
+        progressionitems += [ItemFactory("Triforce Piece", player)] * additional_triforce_pieces
+        nonprogressionitems.sort(key=lambda item: int("Heart" in item.name))  # try to keep hearts in the pool
+        nonprogressionitems = nonprogressionitems[additional_triforce_pieces:]
+        world.random.shuffle(nonprogressionitems)
 
     # shuffle medallions
-    mm_medallion = ['Ether', 'Quake', 'Bombos'][world.random.randint(0, 2)]
-    tr_medallion = ['Ether', 'Quake', 'Bombos'][world.random.randint(0, 2)]
+    mm_medallion = world.random.choice(['Ether', 'Quake', 'Bombos'])
+    tr_medallion = world.random.choice(['Ether', 'Quake', 'Bombos'])
     world.required_medallions[player] = (mm_medallion, tr_medallion)
 
     place_bosses(world, player)
@@ -341,7 +344,7 @@ def shuffle_shops(world, items, player: int):
                 shop.clear_inventory()
 
         for i, item in enumerate(items):
-            if item.name.startswith(("Bombs", "Arrows", "Rupee", "Nothing")):
+            if not "Heart" in item.name:
                 items[i] = ItemFactory(new_items.pop(), player)
                 if not new_items:
                     break
@@ -631,11 +634,12 @@ def get_pool_core(world, player: int):
         pool.extend(diff.timedohko)
         extraitems -= len(diff.timedohko)
         clock_mode = 'countdown-ohko'
+    additional_pieces_to_place = 0
     if 'triforcehunt' in goal:
-        while len(diff.triforcehunt) > world.triforce_pieces_available[player]:
-            diff.triforcehunt.pop()
-        pool.extend(diff.triforcehunt)
-        extraitems -= len(diff.triforcehunt)
+        pieces_in_core = min(extraitems, world.triforce_pieces_available[player])
+        additional_pieces_to_place = world.triforce_pieces_available[player] - pieces_in_core
+        pool.extend(["Triforce Piece"] * pieces_in_core)
+        extraitems -= pieces_in_core
         treasure_hunt_count = world.triforce_pieces_required[player]
         treasure_hunt_icon = 'Triforce Piece'
 
@@ -645,6 +649,8 @@ def get_pool_core(world, player: int):
             extraitems -= len(extra)
         elif extraitems > 0:
             pool.extend(world.random.sample(extra, extraitems))
+            break
+        else:
             break
 
     if goal == 'pedestal' and swords != 'vanilla':
@@ -665,7 +671,8 @@ def get_pool_core(world, player: int):
             place_item(key_location, 'Small Key (Universal)')
         else:
             pool.extend(['Small Key (Universal)'])
-    return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon)
+    return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
+            additional_pieces_to_place)
 
 
 def make_custom_item_pool(world, player):

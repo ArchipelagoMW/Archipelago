@@ -385,7 +385,7 @@ class World(object):
 
         return False
 
-    def has_beaten_game(self, state, player: Union[None, int] = None):
+    def has_beaten_game(self, state, player: Optional[int] = None):
         if player:
             return state.has('Triforce', player) or state.world.logic[player] == 'nologic'
         else:
