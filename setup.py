@@ -113,6 +113,16 @@ for data in extra_data:
 os.makedirs(buildfolder / "Players", exist_ok=True)
 shutil.copyfile("playerSettings.yaml", buildfolder / "Players" / "playerSettings.yaml")
 
+try:
+    from maseya import z3pr
+except ImportError:
+    print("Maseya Palette Shuffle not found, skipping data files.")
+else:
+    # maseya Palette Shuffle exists and needs its data files
+    print("Maseya Palette Shuffle found, including data files...")
+    file = z3pr.__file__
+    installfile(Path(os.path.dirname(file)) / "data", keep_content=True)
+
 qusb2sneslog = buildfolder / "QUsb2Snes" / "log.txt"
 if os.path.exists(qusb2sneslog):
     os.remove(qusb2sneslog)
@@ -120,7 +130,7 @@ if os.path.exists(qusb2sneslog):
 if signtool:
     for exe in exes:
         print(f"Signing {exe.targetName}")
-        os.system(signtool+exe.targetName)
+        os.system(signtool + exe.targetName)
 
 
 manifest_creation()

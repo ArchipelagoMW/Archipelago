@@ -1501,10 +1501,12 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
         if any(options.values()):
             ColorF = z3pr.ColorF
 
+            data_dir = local_path("data") if is_bundled() else None
+
             def next_color():
                 return ColorF(local_random.random(), local_random.random(), local_random.random())
 
-            z3pr.randomize(rom.buffer, "maseya", next_color, options)
+            z3pr.randomize(rom.buffer, "maseya", next_color, options, data_dir)
     else:
         logging.warning("Could not find z3pr palette shuffle. "
                         "If you want improved palette shuffling please install the maseya-z3pr package.")
