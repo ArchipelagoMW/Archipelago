@@ -10,8 +10,19 @@
     padding-right: 0.25rem;
 }
 
-#game-settings #instructions{
-    text-align: center;
+#game-settings .instructions{
+    text-align: left;
+}
+
+#game-settings #settings-wrapper .setting-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+#game-settings #settings-wrapper .setting-wrapper .title-span{
+    font-weight: bold;
 }
 
 #game-settings #settings-wrapper{

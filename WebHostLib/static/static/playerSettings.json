@@ -1,0 +1,88 @@
+{
+  "description": {
+    "keyString": "description",
+    "friendlyName": "Description",
+    "inputType": "text",
+    "description": "A short description of this preset. Useful if you have multiple files",
+    "defaultValue": "Preset Name"
+  },
+  "name": {
+    "keyString": "name",
+    "friendlyName": "Player Name",
+    "inputType": "text",
+    "description": "Displayed in-game. Spaces will be replaced with underscores.",
+    "defaultValue": "Your Name"
+  },
+  "glitches_required": {
+    "keyString": "glitches_required",
+    "friendlyName": "Glitches Required",
+    "description": "Determine the logic required to complete the seed.",
+    "inputType": "range",
+    "subOptions": {
+      "none": {
+        "keyString": "glitches_required.none",
+        "friendlyName": "None",
+        "description": "No glitches required.",
+        "defaultValue": 50
+      },
+      "minor_glitches": {
+        "keyString": "glitches_required.minor_glitches",
+        "friendlyName": "Minor Glitches",
+        "description": "Puts fake flipper, water-walk, super bunny, etc into logic",
+        "defaultValue": 0
+      },
+      "overworld_glitches": {
+        "keyString": "glitches_required.overworld_glitches",
+        "friendlyName": "Overworld Glitches",
+        "description": "Assumes the player has knowledge of both overworld major glitches (boots clips, mirror clips) and minor glitches (fake flipper, super bunny shenanigans, water walk and etc.)",
+        "defaultValue": 0
+      },
+      "no_logic": {
+        "keyString": "glitches_required.no_logic",
+        "friendlyName": "No Logic",
+        "description": "Your items are placed with no regard to any logic. Your Fire Rod could be on your Trinexx.",
+        "defaultValue": 0
+      }
+    }
+  },
+  "map_shuffle": {
+    "keyString": "map_shuffle",
+    "friendlyName": "Map Shuffle",
+    "description": "Shuffle dungeon maps into the world and other dungeons, including other players' worlds.",
+    "inputType": "range",
+    "subOptions": {
+      "off": {
+        "keyString": "map_shuffle.off",
+        "friendlyName": "Off",
+        "description": "Disable map shuffle.",
+        "defaultValue": 50
+      },
+      "on": {
+        "keyString": "map_shuffle.on",
+        "friendlyName": "On",
+        "description": "Enable map shuffle.",
+        "defaultValue": 0
+      }
+    }
+  },
+  "compass_shuffle": {
+    "keyString": "compass_shuffle",
+    "friendlyName": "Compass Shuffle",
+    "description": "Shuffle compasses into the world and other dungeons, including other players' worlds",
+    "inputType": "range",
+    "subOptions": {
+      "off": {
+        "keyString": "compass_shuffle.off",
+        "friendlyName": "Off",
+        "description": "Disable compass shuffle.",
+        "defaultValue": 50
+      },
+      "on": {
+        "keyString": "compass_shuffle.on",
+        "friendlyName": "On",
+        "description": "Enable compass shuffle.",
+        "defaultValue": 0
+      }
+    }
+  }
+}

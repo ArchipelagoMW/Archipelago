@@ -1,20 +1,8 @@
 window.addEventListener('load', () => {
     const gameSettings = document.getElementById('game-settings');
-    new Promise((resolve, reject) => {
-        const ajax = new XMLHttpRequest();
-        ajax.onreadystatechange = () => {
-            if (ajax.readyState !== 4) { return; }
-            if (ajax.status !== 200) {
-                reject("Unable to fetch source yaml file.");
-                return;
-            }
-            resolve(ajax.responseText);
-        };
-        ajax.open('GET', `${window.location.origin}/static/static/playerSettings.yaml` ,true);
-        ajax.send();
-    }).then((results) => {
+    Promise.all([fetchPlayerSettingsYaml(), fetchPlayerSettingsJson()]).then((results) => {
         // Load YAML into object
-        const sourceData = jsyaml.load(results);
+        const sourceData = jsyaml.safeLoad(results[0], { json: true });
 
         // Update localStorage with three settings objects. Preserve original objects if present.
         for (let i=1; i<=3; i++) {
@@ -23,17 +11,49 @@ window.addEventListener('load', () => {
             localStorage.setItem(`gameSettings${i}`, JSON.stringify(updatedObj));
         }
 
+        // Build the entire UI
+        buildUI(JSON.parse(results[1]));
+
+        // Populate the UI and add event listeners
         populateSettings();
         document.getElementById('preset-number').addEventListener('change', populateSettings);
         gameSettings.addEventListener('change', handleOptionChange);
         gameSettings.addEventListener('keyup', handleOptionChange);
     }).catch((error) => {
         gameSettings.innerHTML = `
-        <h2>Something went wrong while loading your game settings page.</h2>
-        <h2>${error}</h2>
-        <h2><a href="${window.location.origin}">Click here to return to safety!</a></h2>
-        `
+            <h2>Something went wrong while loading your game settings page.</h2>
+            <h2>${error}</h2>
+            <h2><a href="${window.location.origin}">Click here to return to safety!</a></h2>
+            `
     });
+});
+
+const fetchPlayerSettingsYaml = () => new Promise((resolve, reject) => {
+    const ajax = new XMLHttpRequest();
+    ajax.onreadystatechange = () => {
+        if (ajax.readyState !== 4) { return; }
+        if (ajax.status !== 200) {
+            reject("Unable to fetch source yaml file.");
+            return;
+        }
+        resolve(ajax.responseText);
+    };
+    ajax.open('GET', `${window.location.origin}/static/static/playerSettings.yaml` ,true);
+    ajax.send();
+});
+
+const fetchPlayerSettingsJson = () => new Promise((resolve, reject) => {
+    const ajax = new XMLHttpRequest();
+    ajax.onreadystatechange = () => {
+        if (ajax.readyState !== 4) { return; }
+        if (ajax.status !== 200) {
+            reject('Unable to fetch JSON schema file');
+            return;
+        }
+        resolve(ajax.responseText);
+    };
+    ajax.open('GET', `${window.location.origin}/static/static/playerSettings.json`);
+    ajax.send();
 });
 
 const handleOptionChange = (event) => {
@@ -73,7 +93,6 @@ const populateSettings = () => {
     settingsInputs.forEach((input) => {
         const settingString = input.getAttribute('data-setting');
         const settingValue = getSettingValue(settings, settingString);
-        console.info(`${settingString}: ${settingValue}`);
         if(settingValue !== false){
             input.value = settingValue;
             document.getElementById(settingString).innerText = settingValue;
@@ -99,3 +118,98 @@ const getSettingValue = (settings, keyString) => {
     });
     return currentVal;
 };
+
+const buildUI = (settings) => {
+    const settingsWrapper = document.getElementById('settings-wrapper');
+    Object.values(settings).forEach((setting) => {
+        if (typeof(setting.inputType) === 'undefined' || !setting.inputType){
+            console.error(setting);
+            throw new Error('Setting with no inputType specified.');
+        }
+
+        switch(setting.inputType){
+            case 'text':
+                // Currently, all text input is handled manually because there is very little of it
+                return;
+            case 'range':
+                buildRangeSettings(settingsWrapper, setting);
+                return;
+            default:
+                console.error(setting);
+                throw new Error('Unhandled inputType specified.');
+        }
+    });
+};
+
+const buildRangeSettings = (parentElement, settings) => {
+    // Ensure we are operating on a range-specific setting
+    if(typeof(settings.inputType) === 'undefined' || settings.inputType !== 'range'){
+        throw new Error('Invalid input type provided to buildRangeSettings func.');
+    }
+
+    const settingWrapper = document.createElement('div');
+    settingWrapper.className = 'setting-wrapper';
+
+    if(typeof(settings.friendlyName) !== 'undefined' && settings.friendlyName){
+        const sectionTitle = document.createElement('span');
+        sectionTitle.className = 'title-span';
+        sectionTitle.innerText = settings.friendlyName;
+        settingWrapper.appendChild(sectionTitle);
+    }
+
+    if(settings.description){
+        const description = document.createElement('span');
+        description.className = 'description-span';
+        description.innerText = settings.description;
+        settingWrapper.appendChild(description);
+    }
+
+    // Create table
+    const optionSetTable = document.createElement('table');
+    optionSetTable.className = 'option-set';
+
+    // Create table body
+    const tbody = document.createElement('tbody');
+    Object.keys(settings.subOptions).forEach((setting) => {
+        // Overwrite setting key name with real object
+        setting = settings.subOptions[setting];
+        const settingId = (Math.random() * 1000000).toString();
+
+        // Create rows for each option
+        const optionRow = document.createElement('tr');
+
+        // Option name td
+        const optionName = document.createElement('td');
+        optionName.className = 'option-name';
+        const optionLabel = document.createElement('label');
+        optionLabel.setAttribute('for', settingId);
+        optionLabel.innerText = setting.friendlyName;
+        optionName.appendChild(optionLabel);
+        optionRow.appendChild(optionName);
+
+        // Option value td
+        const optionValue = document.createElement('td');
+        optionValue.className = 'option-value';
+        const input = document.createElement('input');
+        input.className = 'setting';
+        input.setAttribute('id', settingId);
+        input.setAttribute('type', 'range');
+        input.setAttribute('min', '0');
+        input.setAttribute('max', '100');
+        input.setAttribute('data-setting', setting.keyString);
+        input.value = setting.defaultValue;
+        optionValue.appendChild(input);
+        const valueDisplay = document.createElement('span');
+        valueDisplay.setAttribute('id', setting.keyString);
+        valueDisplay.innerText = setting.defaultValue;
+        optionValue.appendChild(valueDisplay);
+        optionRow.appendChild(optionValue);
+        tbody.appendChild(optionRow);
+    });
+
+    optionSetTable.appendChild(tbody);
+    settingWrapper.appendChild(optionSetTable);
+    parentElement.appendChild(settingWrapper);
+};
+
+const buildSelectSettings = (parentElement, settings) => {};

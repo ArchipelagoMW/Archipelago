@@ -9,40 +9,42 @@
 
 {% block body %}
     <div id="game-settings" class="main-content">
-        <h3>Game Settings</h3>
+        <h3>Player Settings</h3>
         <div id="instructions">
-            This page is used to configure your game settings. You have three presets you can control, which
+            This page is used to configure your player settings. You have three presets you can control, which
             you can access using the dropdown menu below. These settings will be usable when generating a
             single player game, or you can export them to a <code>.yaml</code> file and use them in a multiworld.
         </div>
 
         <div id="settings-wrapper">
-            Choose a preset and optionally assign it a nickname, which will be used as the file's description if
-            you download it.
-            <table class="option-set">
-                <tbody>
-                    <tr>
-                        <td class="option-name">
-                            <label for="preset-number">Preset Number:</label>
-                        </td>
-                        <td class="option-value">
-                            <select id="preset-number">
-                                <option value="1">Preset 1</option>
-                                <option value="2">Preset 2</option>
-                                <option value="3">Preset 3</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="option-name">
-                            <label for="description">Preset Name:</label>
-                        </td>
-                        <td class="option-value">
-                            <input id="description" class="setting" data-setting="description" />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="setting-wrapper">
+                Choose a preset and optionally assign it a nickname, which will be used as the file's description if
+                you download it.
+                <table class="option-set">
+                    <tbody>
+                        <tr>
+                            <td class="option-name">
+                                <label for="preset-number">Preset Number:</label>
+                            </td>
+                            <td class="option-value">
+                                <select id="preset-number">
+                                    <option value="1">Preset 1</option>
+                                    <option value="2">Preset 2</option>
+                                    <option value="3">Preset 3</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="option-name">
+                                <label for="description">Preset Name:</label>
+                            </td>
+                            <td class="option-value">
+                                <input id="description" class="setting" data-setting="description" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
             Choose a name you want to represent you in-game. This will appear when you send items
             to other people in multiworld games.
@@ -54,73 +56,6 @@
                         </td>
                         <td class="option-value">
                             <input id="name" maxlength="16" class="setting" data-setting="name" />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            Glitches Required - Allows the generator to place required items in locations which require knowledge
-            of glitches.
-            <table class="option-set">
-                <tbody>
-                    <tr>
-                        <td class="option-name">
-                            <label for="glitches-required-none">None:</label>
-                        </td>
-                        <td class="option-value">
-                            <input id="glitches-required-none"
-                                   data-setting="glitches_required.none"
-                                   class="setting"
-                                   type="range"
-                                   min="0"
-                                   max="100"
-                            />
-                            <span id="glitches_required.none"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="option-name">
-                            <label for="glitches-required-minor">Minor Glitches:</label>
-                        </td>
-                        <td class="option-value">
-                            <input id="glitches-required-minor"
-                                   data-setting="glitches_required.minor_glitches"
-                                   class="setting"
-                                   type="range"
-                                   min="0"
-                                   max="100"
-                            />
-                            <span id="glitches_required.minor_glitches"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="option-name">
-                            <label for="glitches-required-overworld">Overworld Glitches:</label>
-                        </td>
-                        <td class="option-value">
-                            <input id="glitches-required-overworld"
-                                   data-setting="glitches_required.overworld_glitches"
-                                   class="setting"
-                                   type="range"
-                                   min="0"
-                                   max="100"
-                            />
-                            <span id="glitches_required.overworld_glitches"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="option-name">
-                            <label for="glitches-required-no-logic">No Logic:</label>
-                        </td>
-                        <td class="option-value">
-                            <input id="glitches-required-no-logic"
-                                   data-setting="glitches_required.no_logic"
-                                   class="setting"
-                                   type="range"
-                                   min="0"
-                                   max="100"
-                            />
-                            <span id="glitches_required.no_logic"></span>
                         </td>
                     </tr>
                 </tbody>
