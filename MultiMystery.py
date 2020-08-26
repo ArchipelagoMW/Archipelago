@@ -91,7 +91,7 @@ if __name__ == "__main__":
         elif os.path.exists("BerserkerMultiServer"):
             basemysterycommand = "BerserkerMystery" # compiled linux
         else:
-            basemysterycommand = f"py -{py_version} Mystery.py" #source
+            basemysterycommand = f"py -{py_version} Mystery.py"  # source
 
         command = f"{basemysterycommand} --multi {len(player_files)} {player_string} " \
                   f"--rom \"{rom_file}\" --enemizercli \"{enemizer_path}\" " \
@@ -101,6 +101,8 @@ if __name__ == "__main__":
             command += " --create_spoiler"
             if create_spoiler == 2:
                 command += " --skip_playthrough"
+        if zip_diffs:
+            command += " --create_diff"
         if race:
             command += " --race"
         if os.path.exists(os.path.join(player_files_path, meta_file_path)):
@@ -108,9 +110,10 @@ if __name__ == "__main__":
 
         print(command)
         import time
+
         start = time.perf_counter()
         text = subprocess.check_output(command, shell=True).decode()
-        print(f"Took {time.perf_counter()-start:.3f} seconds to generate rom(s).")
+        print(f"Took {time.perf_counter() - start:.3f} seconds to generate multiworld.")
         seedname = ""
 
         for segment in text.split():
@@ -161,16 +164,17 @@ if __name__ == "__main__":
             ipv4 = (host if host else get_public_ipv4()) + ":" + str(port)
 
 
-            def _handle_file(file: str):
-                if zip_diffs:
-                    # the main reason for using threading, the patch is created using bsdiff4, which frees the GIL
-                    diff = os.path.split(create_patch_file(os.path.join(output_path, file), ipv4))[1]
-                    pack_file(diff)
-                    if zip_diffs == 2:
-                        remove_zipped_file(diff)
+            def _handle_sfc_file(file: str):
                 if zip_roms:
                     pack_file(file)
                     if zip_roms == 2 and player_name.lower() not in file.lower():
+                        remove_zipped_file(file)
+
+
+            def _handle_diff_file(file: str):
+                if zip_diffs > 0:
+                    pack_file(file)
+                    if zip_diffs == 2:
                         remove_zipped_file(file)
 
 
@@ -178,8 +182,11 @@ if __name__ == "__main__":
                 futures = []
                 with zipfile.ZipFile(zipname, "w", compression=compression, compresslevel=9) as zf:
                     for file in os.listdir(output_path):
-                        if file.endswith(".sfc") and seedname in file:
-                            futures.append(pool.submit(_handle_file, file))
+                        if seedname in file:
+                            if file.endswith(".sfc"):
+                                futures.append(pool.submit(_handle_sfc_file, file))
+                            elif file.endswith(".bmbp"):
+                                futures.append(pool.submit(_handle_diff_file, file))
 
                     if zip_multidata and os.path.exists(os.path.join(output_path, multidataname)):
                         pack_file(multidataname)
