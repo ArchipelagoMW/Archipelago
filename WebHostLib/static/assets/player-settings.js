@@ -183,6 +183,7 @@ const buildRangeSettings = (parentElement, settings) => {
         optionName.className = 'option-name';
         const optionLabel = document.createElement('label');
         optionLabel.setAttribute('for', settingId);
+        optionLabel.setAttribute('data-tooltip', setting.description);
         optionLabel.innerText = setting.friendlyName;
         optionName.appendChild(optionLabel);
         optionRow.appendChild(optionName);
