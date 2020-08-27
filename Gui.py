@@ -609,7 +609,7 @@ def guiMain(args=None):
     rightHalfFrame2 = Frame(topFrame2)
     checkBoxFrame2 = Frame(rightHalfFrame2)
 
-    quickSwapCheckbutton2 = Checkbutton(checkBoxFrame2, text="Enabled L/R Item quickswapping", variable=quickSwapVar)
+    quickSwapCheckbutton2 = Checkbutton(checkBoxFrame2, text="L/R Item quickswapping", variable=quickSwapVar)
     disableMusicCheckbutton2 = Checkbutton(checkBoxFrame2, text="Disable game music", variable=disableMusicVar)
 
     quickSwapCheckbutton2.pack(expand=True, anchor=W)
