@@ -44,6 +44,12 @@ class LocalRom(object):
             self.patch_base_rom()
             self.orig_buffer = self.buffer.copy()
 
+    def read_byte(self, address: int) -> int:
+        return self.buffer[address]
+
+    def read_bytes(self, startaddress: int, length: int) -> bytes:
+        return self.buffer[startaddress:startaddress + length]
+
     def write_byte(self, address: int, value: int):
         self.buffer[address] = value
 
@@ -281,6 +287,9 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite
         }
     }
 
+    blindmaiden = rom.read_byte(0x04DE81)
+    blindspawncode = rom.read_bytes(0xEA081, 15)
+
     rom.write_to_file(randopatch_path)
 
     with open(options_path, 'w') as f:
@@ -321,6 +330,11 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, random_sprite
 
     rom.read_from_file(enemizer_output_path)
     os.remove(enemizer_output_path)
+
+    if world.get_dungeon("Thieves Town", player).boss.enemizer_name == "Blind":
+        rom.write_byte(0x04DE81, blindmaiden)
+        rom.write_bytes(0xEA081, blindspawncode)
+        rom.write_byte(0x200101, 0)  # Do not close boss room door on entry.
 
     if random_sprite_on_hit:
         _populate_sprite_table()
