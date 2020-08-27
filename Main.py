@@ -431,7 +431,7 @@ def copy_dynamic_regions_and_locations(world, ret):
         new_loc.item_rule = location.item_rule
         new_reg.locations.append(new_loc)
 
-        ret.clear_location_cache()
+    ret.clear_location_cache()
 
 
 def create_playthrough(world):

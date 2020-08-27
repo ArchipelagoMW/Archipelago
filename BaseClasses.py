@@ -5,7 +5,7 @@ from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict, Counter, deque
-from typing import Union, Optional, List
+from typing import Union, Optional, List, Set
 import secrets
 import random
 
@@ -333,9 +333,7 @@ class World(object):
 
     def get_entrances(self) -> list:
         if self._cached_entrances is None:
-            self._cached_entrances = []
-            for region in self.regions:
-                self._cached_entrances.extend(region.entrances)
+            self._cached_entrances = [entrance for region in self.regions for entrance in region.entrances]
         return self._cached_entrances
 
     def clear_entrance_cache(self):
@@ -343,9 +341,7 @@ class World(object):
 
     def get_locations(self) -> list:
         if self._cached_locations is None:
-            self._cached_locations = []
-            for region in self.regions:
-                self._cached_locations.extend(region.locations)
+            self._cached_locations = [location for region in self.regions for location in region.locations]
         return self._cached_locations
 
     def clear_location_cache(self):

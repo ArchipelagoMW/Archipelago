@@ -351,14 +351,6 @@ def guiMain(args=None):
     shuffleLabel = Label(shuffleFrame, text='Entrance shuffle algorithm')
     shuffleLabel.pack(side=LEFT)
 
-    shop_shuffleFrame = Frame(drowDownFrame)
-    shop_shuffleVar = StringVar()
-    shop_shuffleVar.set('off')
-    shop_shuffleOptionMenu = OptionMenu(shop_shuffleFrame, shop_shuffleVar, 'off', 'inventory', 'price',
-                                        'price and inventory')
-    shop_shuffleOptionMenu.pack(side=RIGHT)
-    shop_shuffleLabel = Label(shop_shuffleFrame, text='Shop Shuffle')
-    shop_shuffleLabel.pack(side=LEFT)
 
     modeFrame.pack(expand=True, anchor=E)
     logicFrame.pack(expand=True, anchor=E)
@@ -374,7 +366,6 @@ def guiMain(args=None):
     accessibilityFrame.pack(expand=True, anchor=E)
     algorithmFrame.pack(expand=True, anchor=E)
     shuffleFrame.pack(expand=True, anchor=E)
-    shop_shuffleFrame.pack(expand=True, anchor=E)
 
     enemizerFrame = LabelFrame(randomizerWindow, text="Enemizer", padx=5, pady=2)
 
@@ -505,7 +496,6 @@ def guiMain(args=None):
         guiargs.accessibility = accessibilityVar.get()
         guiargs.algorithm = algorithmVar.get()
         guiargs.shuffle = shuffleVar.get()
-        guiargs.shop_shuffle = shop_shuffleVar.get()
         guiargs.heartbeep = heartbeepVar.get()
         guiargs.heartcolor = heartcolorVar.get()
         guiargs.fastmenu = fastMenuVar.get()
