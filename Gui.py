@@ -81,9 +81,9 @@ def guiMain(args=None):
     keyshuffleVar = StringVar()
     keyshuffleVar.set('off')
     modeOptionMenu = OptionMenu(keyshuffleFrame, keyshuffleVar, 'off', 'universal', 'on')
-    modeOptionMenu.pack(side=LEFT)
     modeLabel = Label(keyshuffleFrame, text='Small Key Shuffle')
     modeLabel.pack(side=LEFT)
+    modeOptionMenu.pack(side=LEFT)
 
     retroVar = IntVar()
     retroCheckbutton = Checkbutton(checkBoxFrame, text="Retro mode", variable=retroVar)
@@ -399,18 +399,18 @@ def guiMain(args=None):
     enemizerBossVar.set('none')
     enemizerBossOption = OptionMenu(enemizerBossFrame, enemizerBossVar, 'none', 'basic', 'normal', 'chaos',
                                     "singularity")
-    enemizerBossOption.pack(side=LEFT)
     enemizerBossLabel = Label(enemizerBossFrame, text='Boss shuffle')
     enemizerBossLabel.pack(side=LEFT)
+    enemizerBossOption.pack(side=LEFT)
 
     enemizerDamageFrame = Frame(enemizerFrame)
     enemizerDamageFrame.grid(row=1, column=2)
     enemizerDamageVar = StringVar()
     enemizerDamageVar.set('default')
     enemizerDamageOption = OptionMenu(enemizerDamageFrame, enemizerDamageVar, 'default', 'shuffled', 'chaos')
-    enemizerDamageOption.pack(side=LEFT)
     enemizerDamageLabel = Label(enemizerDamageFrame, text='Enemy damage')
     enemizerDamageLabel.pack(side=LEFT)
+    enemizerDamageOption.pack(side=LEFT)
 
     enemizerHealthFrame = Frame(enemizerFrame)
     enemizerHealthFrame.grid(row=1, column=3)
@@ -418,9 +418,9 @@ def guiMain(args=None):
     enemizerHealthVar.set('default')
     enemizerHealthOption = OptionMenu(enemizerHealthFrame, enemizerHealthVar, 'default', 'easy', 'normal', 'hard',
                                       'expert')
-    enemizerHealthOption.pack(side=LEFT)
     enemizerHealthLabel = Label(enemizerHealthFrame, text='Enemy health')
     enemizerHealthLabel.pack(side=LEFT)
+    enemizerHealthOption.pack(side=LEFT)
 
     potShuffleVar = IntVar()
     potShuffleButton = Checkbutton(enemizerFrame, text="Pot shuffle", variable=potShuffleVar)
