@@ -213,6 +213,41 @@ timer:
 glitch_boots:
   on: 50 # Start with Pegasus Boots in any glitched logic mode that makes use of them
   off: 0
+linked_options:
+  - name: crosskeys
+    options: # These overwrite earlier options if the percentage chance triggers
+      entrance_shuffle: crossed
+      bigkey_shuffle: true
+      compass_shuffle: true
+      map_shuffle: true
+      smallkey_shuffle: true
+    percentage: 0 # Set this to the percentage chance you want crosskeys
+  - name: localcrosskeys
+    options: # These overwrite earlier options if the percentage chance triggers
+      entrance_shuffle: crossed
+      bigkey_shuffle: true
+      compass_shuffle: true
+      map_shuffle: true
+      smallkey_shuffle: true
+      local_items: # Forces keys to be local to your own world
+        - "Small Keys"
+        - "Big Keys"
+    percentage: 0 # Set this to the percentage chance you want local crosskeys
+  - name: enemizer
+    options:
+      boss_shuffle: # Subchances can be injected too, which then get rolled
+        simple: 1
+        full: 1
+        random: 1
+        singularity: 1
+      enemy_damage:
+        shuffled: 1
+        random: 1
+      enemy_health:
+        easy: 1
+        hard: 1
+        expert: 1
+    percentage: 0 # Set this to the percentage chance you want enemizer
 door_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
   vanilla: 50 # Everything should be like in vanilla
   basic: 0 # Dungeons are shuffled within themselves
