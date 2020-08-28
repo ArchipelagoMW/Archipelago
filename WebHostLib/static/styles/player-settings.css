@@ -50,3 +50,8 @@
     min-width: 300px;
     vertical-align: middle;
 }
+
+#game-settings #game-settings-button-row{
+    width: 100%;
+    text-align: center;
+}

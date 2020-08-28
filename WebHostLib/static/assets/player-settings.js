@@ -6,9 +6,9 @@ window.addEventListener('load', () => {
 
         // Update localStorage with three settings objects. Preserve original objects if present.
         for (let i=1; i<=3; i++) {
-            const localSettings = JSON.parse(localStorage.getItem(`gameSettings${i}`));
+            const localSettings = JSON.parse(localStorage.getItem(`playerSettings${i}`));
             const updatedObj = localSettings ? Object.assign(sourceData, localSettings) : sourceData;
-            localStorage.setItem(`gameSettings${i}`, JSON.stringify(updatedObj));
+            localStorage.setItem(`playerSettings${i}`, JSON.stringify(updatedObj));
         }
 
         // Build the entire UI
@@ -19,6 +19,8 @@ window.addEventListener('load', () => {
         document.getElementById('preset-number').addEventListener('change', populateSettings);
         gameSettings.addEventListener('change', handleOptionChange);
         gameSettings.addEventListener('keyup', handleOptionChange);
+
+        document.getElementById('export-button').addEventListener('click', exportSettings);
     }).catch((error) => {
         gameSettings.innerHTML = `
             <h2>Something went wrong while loading your game settings page.</h2>
@@ -59,20 +61,20 @@ const fetchPlayerSettingsJson = () => new Promise((resolve, reject) => {
 const handleOptionChange = (event) => {
     if(!event.target.matches('.setting')) { return; }
     const presetNumber = document.getElementById('preset-number').value;
-    const settings = JSON.parse(localStorage.getItem(`gameSettings${presetNumber}`))
+    const settings = JSON.parse(localStorage.getItem(`playerSettings${presetNumber}`))
     const settingString = event.target.getAttribute('data-setting');
     document.getElementById(settingString).innerText = event.target.value;
     if(getSettingValue(settings, settingString) !== false){
         const keys = settingString.split('.');
         switch (keys.length) {
             case 1:
-                settings[keys[0]] = event.target.value;
+                settings[keys[0]] = isNaN(event.target.value) ? event.target.value : parseInt(event.target.value, 10);
                 break;
             case 2:
-                settings[keys[0]][keys[1]] = event.target.value;
+                settings[keys[0]][keys[1]] = isNaN(event.target.value) ? event.target.value : parseInt(event.target.value, 10);
                 break;
             case 3:
-                settings[keys[0]][keys[1]][keys[2]] = event.target.value;
+                settings[keys[0]][keys[1]][keys[2]] = isNaN(event.target.value) ? event.target.value : parseInt(event.target.value, 10);
                 break;
             default:
                 console.warn(`Unknown setting string received: ${settingString}`)
@@ -80,7 +82,7 @@ const handleOptionChange = (event) => {
         }
 
         // Save the updated settings object bask to localStorage
-        localStorage.setItem(`gameSettings${presetNumber}`, JSON.stringify(settings));
+        localStorage.setItem(`playerSettings${presetNumber}`, JSON.stringify(settings));
     }else{
         console.warn(`Unknown setting string received: ${settingString}`)
     }
@@ -88,7 +90,7 @@ const handleOptionChange = (event) => {
 
 const populateSettings = () => {
     const presetNumber = document.getElementById('preset-number').value;
-    const settings = JSON.parse(localStorage.getItem(`gameSettings${presetNumber}`))
+    const settings = JSON.parse(localStorage.getItem(`playerSettings${presetNumber}`))
     const settingsInputs = Array.from(document.querySelectorAll('.setting'));
     settingsInputs.forEach((input) => {
         const settingString = input.getAttribute('data-setting');
@@ -119,9 +121,37 @@ const getSettingValue = (settings, keyString) => {
     return currentVal;
 };
 
+const exportSettings = () => {
+    const presetNumber = document.getElementById('preset-number').value;
+    const settings = JSON.parse(localStorage.getItem(`playerSettings${presetNumber}`));
+    const yamlText = jsyaml.safeDump(settings);
+    download(`${settings.description}.yaml`, yamlText);
+};
+
+/** Create an anchor and trigger a download of a text file. */
+const download = (filename, text) => {
+    const downloadLink = document.createElement('a');
+    downloadLink.setAttribute('href','data:text/yaml;charset=utf-8,'+ encodeURIComponent(text))
+    downloadLink.setAttribute('download', filename);
+    downloadLink.style.display = 'none';
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+};
+
 const buildUI = (settings) => {
     const settingsWrapper = document.getElementById('settings-wrapper');
-    Object.values(settings).forEach((setting) => {
+    const settingTypes = {
+        gameOptions: 'Game Options',
+        romOptions: 'ROM Options'
+    }
+
+    Object.keys(settingTypes).forEach((settingTypeKey) => {
+        const sectionHeader = document.createElement('h1');
+        sectionHeader.innerText = settingTypes[settingTypeKey];
+        settingsWrapper.appendChild(sectionHeader);
+
+       Object.values(settings[settingTypeKey]).forEach((setting) => {
         if (typeof(setting.inputType) === 'undefined' || !setting.inputType){
             console.error(setting);
             throw new Error('Setting with no inputType specified.');
@@ -138,6 +168,7 @@ const buildUI = (settings) => {
                 console.error(setting);
                 throw new Error('Unhandled inputType specified.');
         }
+    });
     });
 };
 

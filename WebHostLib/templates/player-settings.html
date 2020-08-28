@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block head %}
-    <title>Game Settings</title>
+    <title>Player Settings</title>
     <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/player-settings.css") }}" />
     <script type="application/ecmascript" src="{{ static_autoversion("assets/js-yaml.min.js") }}"></script>
     <script type="application/ecmascript" src="{{ static_autoversion("assets/player-settings.js") }}"></script>
@@ -60,6 +60,9 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div id="game-settings-button-row">
+            <button id="export-button">Export Settings</button>
         </div>
     </div>
 {%  endblock %}
