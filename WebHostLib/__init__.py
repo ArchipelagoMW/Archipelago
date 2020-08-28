@@ -81,7 +81,7 @@ def tutorial(lang='en'):
 
 
 @app.route('/player-settings')
-def game_settings():
+def player_settings():
     return render_template("player-settings.html")
 
 
