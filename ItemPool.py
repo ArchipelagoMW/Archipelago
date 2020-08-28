@@ -281,17 +281,18 @@ def generate_itempool(world, player: int):
     # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
     # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
     if world.difficulty[player] in ['normal', 'hard'] and not (world.custom and world.customitemarray[30] == 0):
-        [item for item in items if item.name == 'Boss Heart Container'][0].advancement = True
+        next(item for item in items if item.name == 'Boss Heart Container').advancement = True
     elif world.difficulty[player] in ['expert'] and not (world.custom and world.customitemarray[29] < 4):
-        adv_heart_pieces = [item for item in items if item.name == 'Piece of Heart'][0:4]
-        for hp in adv_heart_pieces:
-            hp.advancement = True
+        adv_heart_pieces = (item for item in items if item.name == 'Piece of Heart')
+        for i in range(4):
+            next(adv_heart_pieces).advancement = True
 
     beeweights = {0: {None: 100},
                   1: {None: 75, 'trap': 25},
                   2: {None: 40, 'trap': 40, 'bee': 20},
                   3: {'trap': 50, 'bee': 50},
                   4: {'trap': 100}}
+
     def beemizer(item):
         if world.beemizer[item.player] and not item.advancement and not item.priority and not item.type:
             choice = world.random.choices(list(beeweights[world.beemizer[item.player]].keys()),
@@ -300,9 +301,13 @@ def generate_itempool(world, player: int):
                                                                                                                 player)
         return item
 
-    progressionitems = [item for item in items if item.advancement or item.priority or item.type]
-    nonprogressionitems = [beemizer(item) for item in items if
-                           not item.advancement and not item.priority and not item.type]
+    progressionitems = []
+    nonprogressionitems = []
+    for item in items:
+        if item.advancement or item.priority or item.type:
+            progressionitems.append(item)
+        else:
+            nonprogressionitems.append(beemizer(item))
     world.random.shuffle(nonprogressionitems)
 
     if additional_triforce_pieces:

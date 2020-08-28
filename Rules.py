@@ -106,7 +106,7 @@ def set_rule(spot, rule):
     spot.access_rule = rule
 
 def set_defeat_dungeon_boss_rule(location):
-    # Lambda required to defer evaluation of dungeon.boss since it will change later if boos shuffle is used
+    # Lambda required to defer evaluation of dungeon.boss since it will change later if boss shuffle is used
     set_rule(location, lambda state: location.parent_region.dungeon.boss.can_defeat(state))
 
 def set_always_allow(spot, rule):
