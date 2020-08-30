@@ -372,7 +372,7 @@ def shuffle_shops(world, items, player: int):
         if 'p' in option:
             def price_adjust(price: int) -> int:
                 # it is important that a base price of 0 always returns 0 as new price!
-                return int(price * (0.5 + world.random.random() * 2))
+                return int(price * (0.5 + world.random.random() * 1.5))
 
             def adjust_item(item):
                 if item:
