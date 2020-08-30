@@ -277,6 +277,8 @@ def roll_settings(weights):
         dungeon_items = ""
     elif not dungeon_items:
         dungeon_items = ""
+    if "u" in dungeon_items:
+        dungeon_items.replace("s", "")
 
     ret.mapshuffle = get_choice('map_shuffle', weights, 'm' in dungeon_items)
     ret.compassshuffle = get_choice('compass_shuffle', weights, 'c' in dungeon_items)
