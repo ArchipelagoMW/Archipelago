@@ -500,6 +500,7 @@ def guiMain(args=None):
         guiargs.heartcolor = heartcolorVar.get()
         guiargs.fastmenu = fastMenuVar.get()
         guiargs.create_spoiler = bool(createSpoilerVar.get())
+        guiargs.skip_playthrough = not bool(createSpoilerVar.get())
         guiargs.suppress_rom = bool(suppressRomVar.get())
         guiargs.openpyramid = bool(openpyramidVar.get())
         guiargs.mapshuffle = bool(mapshuffleVar.get())
