@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
         player_string = ""
         for i, file in enumerate(player_files, 1):
-            player_string += f"--p{i} {os.path.join(player_files_path, file)} "
+            player_string += f"--p{i} \"{os.path.join(player_files_path, file)}\" "
 
 
         if os.path.exists("BerserkerMultiServer.exe"):
