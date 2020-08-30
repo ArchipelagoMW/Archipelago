@@ -42,7 +42,7 @@ def uploads():
                                 player = int(file.filename.split("P")[1].split(".")[0].split("_")[0])
                                 patches.add(Patch(data=zfile.open(file, "r").read(), player=player))
                             elif file.filename.endswith(".txt"):
-                                spoiler = zfile.open(file, "rt").read().decode("utf-8-sig")
+                                spoiler = zfile.open(file, "r").read().decode("utf-8-sig")
                             elif file.filename.endswith("multidata"):
                                 try:
                                     multidata = json.loads(zlib.decompress(zfile.open(file).read()).decode("utf-8-sig"))
