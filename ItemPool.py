@@ -414,6 +414,8 @@ take_any_locations = [
 def set_up_take_anys(world, player):
     if world.mode[player] == 'inverted' and 'Dark Sanctuary Hint' in take_any_locations:
         take_any_locations.remove('Dark Sanctuary Hint')
+    elif world.mode[player] != 'inverted' and 'Dark Sanctuary Hint' not in take_any_locations:
+        take_any_locations.append('Dark Sanctuary Hint')
 
     regions = world.random.sample(take_any_locations, 5)
 
