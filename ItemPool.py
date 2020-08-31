@@ -518,14 +518,13 @@ def set_up_shops(world, player: int):
                                          s.custom and not s.locked and s.type == ShopType.Shop and s.region.player == player],
                                         5):
             shop.locked = True
-            slots = [0, 1, 2]
+            slots = [0, 0, 1, 1, 2, 2]
             world.random.shuffle(slots)
             slots = iter(slots)
-            if world.retro[player]:
-                shop.push_inventory(next(slots), 'Single Arrow', 80)
             if world.keyshuffle[player] == "universal":
                 shop.add_inventory(next(slots), 'Small Key (Universal)', 100)
-
+            if world.retro[player]:
+                shop.push_inventory(next(slots), 'Single Arrow', 80)
 
 def get_pool_core(world, player: int):
     progressive = world.progressive[player]
