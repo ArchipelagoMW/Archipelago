@@ -7,6 +7,7 @@ import '../../../styles/Monitor/containers/MonitorControls.scss';
 // Redux actions
 import setMonitorFontSize from '../Redux/actions/setMonitorFontSize';
 import setShowRelevant from '../Redux/actions/setShowRelevant';
+import setSimpleFont from '../Redux/actions/setSimpleFont';
 
 const mapReduxStateToProps = (reduxState) => ({
   fontSize: reduxState.monitor.fontSize,
@@ -16,6 +17,7 @@ const mapReduxStateToProps = (reduxState) => ({
   snesConnected: reduxState.gameState.connections.snesConnected,
   serverAddress: reduxState.gameState.connections.serverAddress,
   serverConnected: reduxState.gameState.connections.serverConnected,
+  simpleFont: reduxState.monitor.simpleFont,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -24,6 +26,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   doToggleRelevance: (showRelevantOnly) => {
     dispatch(setShowRelevant(showRelevantOnly));
+  },
+  doSetSimpleFont: (simpleFont) => {
+    dispatch(setSimpleFont(simpleFont));
   },
 });
 
@@ -129,6 +134,8 @@ class MonitorControls extends Component {
     this.props.doToggleRelevance(event.target.checked);
   };
 
+  setSimpleFont = (event) => this.props.doSetSimpleFont(event.target.checked);
+
   render() {
     return (
       <div id="monitor-controls">
@@ -193,6 +200,14 @@ class MonitorControls extends Component {
           </div>
           <div>
             Only show my items <input type="checkbox" onChange={ this.toggleRelevance } />
+          </div>
+          <div>
+            Use alternate font
+            <input
+              type="checkbox"
+              onChange={ this.setSimpleFont }
+              defaultChecked={ this.props.simpleFont }
+            />
           </div>
         </div>
       </div>

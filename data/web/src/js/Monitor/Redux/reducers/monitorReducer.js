@@ -2,6 +2,7 @@ import _assign from 'lodash-es/assign';
 
 const initialState = {
   fontSize: 18,
+  simpleFont: false,
   showRelevantOnly: false,
   messageLog: [],
 };
@@ -17,6 +18,11 @@ const monitorReducer = (state = initialState, action) => {
     case 'SET_MONITOR_FONT_SIZE':
       return _assign({}, state, {
         fontSize: action.fontSize,
+      });
+
+    case 'SET_SIMPLE_FONT':
+      return _assign({}, state, {
+        simpleFont: action.simpleFont,
       });
 
     case 'SET_SHOW_RELEVANT':

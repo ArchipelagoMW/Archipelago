@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 48px;
   margin-top: 0.5em;
   padding-bottom: 0.5em;
 
@@ -35,7 +34,6 @@
   #accessibility{
     display: flex;
     flex-direction: column;
-    height: 48px;
 
     button{
       border-radius: 4px;

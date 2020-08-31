@@ -14,6 +14,7 @@ import appendMessage from '../../Monitor/Redux/actions/appendMessage';
 
 const mapReduxStateToProps = (reduxState) => ({
   connections: reduxState.gameState.connections,
+  simpleFont: reduxState.monitor.simpleFont,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -94,7 +95,7 @@ class WebUI extends Component {
 
   render() {
     return (
-      <div id="web-ui" ref={ this.webUiRef }>
+      <div id="web-ui" ref={ this.webUiRef } className={ this.props.simpleFont ? 'simple-font' : null }>
         <HeaderBar />
         <div id="content-middle">
           <Monitor />

@@ -68,13 +68,16 @@ const handleOptionChange = (event) => {
         const keys = settingString.split('.');
         switch (keys.length) {
             case 1:
-                settings[keys[0]] = isNaN(event.target.value) ? event.target.value : parseInt(event.target.value, 10);
+                settings[keys[0]] = isNaN(event.target.value) ?
+                    event.target.value : parseInt(event.target.value, 10);
                 break;
             case 2:
-                settings[keys[0]][keys[1]] = isNaN(event.target.value) ? event.target.value : parseInt(event.target.value, 10);
+                settings[keys[0]][keys[1]] = isNaN(event.target.value) ?
+                    event.target.value : parseInt(event.target.value, 10);
                 break;
             case 3:
-                settings[keys[0]][keys[1]][keys[2]] = isNaN(event.target.value) ? event.target.value : parseInt(event.target.value, 10);
+                settings[keys[0]][keys[1]][keys[2]] = isNaN(event.target.value) ?
+                    event.target.value : parseInt(event.target.value, 10);
                 break;
             default:
                 console.warn(`Unknown setting string received: ${settingString}`)

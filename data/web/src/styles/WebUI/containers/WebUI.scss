@@ -1,6 +1,16 @@
+@font-face{
+    font-family: HyliaSerif;
+    src: local('HyliaSerif'), url('../../../assets/HyliaSerif.otf')
+}
+
 #web-ui{
   width: calc(100% - 1.5em);
   padding: 0.75em;
+  font-family: HyliaSerif, sans-serif;
+
+  &.simple-font{
+    font-family: sans-serif;
+  }
 
   #content-middle{
     display: flex;
