@@ -505,7 +505,12 @@ def set_up_shops(world, player: int):
 
     if world.retro[player]:
         rss = world.get_region('Red Shield Shop', player).shop
-        rss.push_inventory(2, 'Single Arrow', 80)
+        replacement_items = [['Red Potion', 150], ['Green Potion', 75], ['Blue Potion', 200], ['Bombs (10)', 50],
+                             ['Blue Shield', 50], ['Small Heart', 10]]  # Can't just replace the single arrow with 10 arrows as retro doesn't need them.
+        if world.keyshuffle[player] == "universal":
+            replacement_items.append(['Small Key (Universal)', 100])
+        replacement_item = world.random.choice(replacement_items)
+        rss.add_inventory(2, 'Single Arrow', 80, 1, replacement_item[0], replacement_item[1])
         rss.locked = True
 
     if world.keyshuffle[player] == "universal" or world.retro[player]:
