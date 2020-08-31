@@ -340,10 +340,17 @@ def generate_itempool(world, player: int):
 def shuffle_shops(world, items, player: int):
     option = world.shop_shuffle[player]
     if 'u' in option:
-        if world.retro[player]:
-            new_items = ["Bomb Upgrade (+5)"] * 7
-        else:
-            new_items = ["Bomb Upgrade (+5)", "Arrow Upgrade (+5)"] * 7
+        progressive = world.progressive[player]
+        progressive = world.random.choice([True, False]) if progressive == 'random' else progressive == 'on'
+        new_items = ["Bomb Upgrade (+5)"] * 6
+        new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
+
+        if not world.retro[player]:
+            new_items += ["Arrow Upgrade (+5)"] * 6
+            new_items.append("Arrow Upgrade (+5)" if progressive else "Arrow Upgrade (+10)")
+
+        world.random.shuffle(new_items)  # Decide what gets tossed randomly if it can't insert everything.
+
         for shop in world.shops:
             if shop.type == ShopType.UpgradeShop and shop.region.player == player and \
                     shop.region.name == "Capacity Upgrade":
