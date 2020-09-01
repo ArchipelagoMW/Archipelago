@@ -1575,7 +1575,7 @@ class SpriteSelector(object):
         return local_path("data", "sprites", "custom")
 
 
-def get_image_for_sprite(sprite):
+def get_image_for_sprite(sprite, gif_only: bool = False):
     if not sprite.valid:
         return None
     height = 24
@@ -1671,6 +1671,9 @@ def get_image_for_sprite(sprite):
         return gif
 
     gif_data = make_gif(draw_sprite_into_gif)
+    if gif_only:
+        return gif_data
+
     image = PhotoImage(data=gif_data)
 
     return image.zoom(2)
