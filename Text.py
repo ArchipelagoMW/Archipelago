@@ -1686,9 +1686,11 @@ class TextTable(object):
         text['telepathic_tile_thieves_town_upstairs'] = CompressedTextMapper.convert("{NOBORDER}\nBlind hate's bright light.")
         text['telepathic_tile_misery_mire'] = CompressedTextMapper.convert("{NOBORDER}\nLighting 4 torches will open your way forward!")
         text['hylian_text_2'] = CompressedTextMapper.convert("%%^= %==%\n ^ =%^=\n==%= ^^%^")
-        text['desert_entry_translated'] = CompressedTextMapper.convert("Kneel before this stone, and magic will move around you.")
-        text['telepathic_tile_under_ganon'] = CompressedTextMapper.convert("Secondary tournament winners\n{HARP}\n  ~~~2017~~~\nA: Zaen")
-        text['telepathic_tile_palace_of_darkness'] = CompressedTextMapper.convert("{NOBORDER}\nThis is a funny looking Enemizer")
+        text['desert_entry_translated'] = CompressedTextMapper.convert(
+            "Kneel before this stone, and magic will move around you.")
+        text['telepathic_tile_under_ganon'] = CompressedTextMapper.convert("Haha")
+        text['telepathic_tile_palace_of_darkness'] = CompressedTextMapper.convert(
+            "{NOBORDER}\nThis is a funny looking Enemizer")
         # C0
         text['telepathic_tile_desert_bonk_torch_room'] = CompressedTextMapper.convert("{NOBORDER}\nThings can be knocked down, if you fancy yourself a dashing dude.")
         text['telepathic_tile_castle_tower'] = CompressedTextMapper.convert("{NOBORDER}\nYou can reflect Agahnim's energy with Sword, Bug-net or Hammer.")
@@ -1696,8 +1698,10 @@ class TextTable(object):
         text['telepathic_tile_turtle_rock'] = CompressedTextMapper.convert("{NOBORDER}\nYou shall not pass… without the red cane")
         text['telepathic_tile_ice_entrace'] = CompressedTextMapper.convert("{NOBORDER}\nYou can use Fire Rod or Bombos to pass.")
         text['telepathic_tile_ice_stalfos_knights_room'] = CompressedTextMapper.convert("{NOBORDER}\nKnock 'em down and then bomb them dead.")
-        text['telepathic_tile_tower_of_hera_entrance'] = CompressedTextMapper.convert("{NOBORDER}\nThis is a bad place, with a guy who will make you fall…\n\n\na lot.")
-        text['houlihan_room'] = CompressedTextMapper.convert("Randomizer tournament winners\n{HARP}\n  ~~~2018~~~\nS: Andy\n\n  ~~~2017~~~\nA: ajneb174\nS: ajneb174")
+        text['telepathic_tile_tower_of_hera_entrance'] = CompressedTextMapper.convert(
+            "{NOBORDER}\nThis is a bad place, with a guy who will make you fall…\n\n\na lot.")
+        text['houlihan_room'] = CompressedTextMapper.convert(
+            "Have a Multiworld Tournament\nand we can list the winners here.")
         text['caught_a_bee'] = CompressedTextMapper.convert("Caught a Bee\n  ≥ keep\n    release\n{CHOICE}")
         text['caught_a_fairy'] = CompressedTextMapper.convert("Caught Fairy!\n  ≥ keep\n    release\n{CHOICE}")
         text['no_empty_bottles'] = CompressedTextMapper.convert("Whoa, bucko!\nNo empty bottles.")
