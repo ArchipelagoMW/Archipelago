@@ -128,7 +128,9 @@ def color(text, *args):
     return color_code(*args) + text + color_code('reset')
 
 
-RECONNECT_DELAY = 5
+START_RECONNECT_DELAY = 5
+SNES_RECONNECT_DELAY = 5
+SERVER_RECONNECT_DELAY = 5
 
 ROM_START = 0x000000
 WRAM_START = 0xF50000
@@ -444,6 +446,7 @@ async def get_snes_devices(ctx: Context):
 
 
 async def snes_connect(ctx: Context, address):
+    global SNES_RECONNECT_DELAY
     if ctx.snes_socket is not None and ctx.snes_state == SNES_CONNECTED:
         ctx.ui_node.log_error('Already connected to snes')
         return
@@ -495,8 +498,10 @@ async def snes_connect(ctx: Context, address):
 
         ctx.snes_reconnect_address = address
         recv_task = asyncio.create_task(snes_recv_loop(ctx))
+        SNES_RECONNECT_DELAY = START_RECONNECT_DELAY
 
     except Exception as e:
+
         if recv_task is not None:
             if not ctx.snes_socket.closed:
                 await ctx.snes_socket.close()
@@ -509,8 +514,9 @@ async def snes_connect(ctx: Context, address):
         if not ctx.snes_reconnect_address:
             ctx.ui_node.log_error("Error connecting to snes (%s)" % e)
         else:
-            ctx.ui_node.log_error(f"Error connecting to snes, attempt again in {RECONNECT_DELAY}s")
+            ctx.ui_node.log_error(f"Error connecting to snes, attempt again in {SNES_RECONNECT_DELAY}s")
             asyncio.create_task(snes_autoreconnect(ctx))
+        SNES_RECONNECT_DELAY *= 2
 
 
 async def snes_disconnect(ctx: Context):
@@ -525,7 +531,8 @@ async def snes_autoreconnect(ctx: Context):
     # with prompt_toolkit.shortcuts.ProgressBar() as pb:
     #    for _ in pb(range(100)):
     #        await asyncio.sleep(RECONNECT_DELAY/100)
-    await asyncio.sleep(RECONNECT_DELAY)
+
+    await asyncio.sleep(SNES_RECONNECT_DELAY)
     if ctx.snes_reconnect_address and ctx.snes_socket is None:
         await snes_connect(ctx, ctx.snes_reconnect_address)
 
@@ -552,7 +559,7 @@ async def snes_recv_loop(ctx: Context):
         ctx.rom = None
 
         if ctx.snes_reconnect_address:
-            ctx.ui_node.log_info(f"...reconnecting in {RECONNECT_DELAY}s")
+            ctx.ui_node.log_info(f"...reconnecting in {SNES_RECONNECT_DELAY}s")
             asyncio.create_task(snes_autoreconnect(ctx))
 
 
@@ -671,6 +678,7 @@ async def send_msgs(websocket, msgs):
 
 
 async def server_loop(ctx: Context, address=None):
+    global SERVER_RECONNECT_DELAY
     ctx.ui_node.send_connection_status(ctx)
     cached_address = None
     if ctx.server and ctx.server.socket:
@@ -704,7 +712,7 @@ async def server_loop(ctx: Context, address=None):
         ctx.ui_node.log_info('Connected')
         ctx.server_address = address
         ctx.ui_node.send_connection_status(ctx)
-
+        SERVER_RECONNECT_DELAY = START_RECONNECT_DELAY
         async for data in ctx.server.socket:
             for msg in json.loads(data):
                 cmd, args = (msg[0], msg[1]) if len(msg) > 1 else (msg, None)
@@ -735,17 +743,17 @@ async def server_loop(ctx: Context, address=None):
         ctx.server = None
         ctx.server_task = None
         if ctx.server_address:
-            ctx.ui_node.log_info(f"... reconnecting in {RECONNECT_DELAY}s")
+            ctx.ui_node.log_info(f"... reconnecting in {SERVER_RECONNECT_DELAY}s")
             ctx.ui_node.send_connection_status(ctx)
             asyncio.create_task(server_autoreconnect(ctx))
-
+        SERVER_RECONNECT_DELAY *= 2
 
 async def server_autoreconnect(ctx: Context):
     # unfortunately currently broken. See: https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1033
     # with prompt_toolkit.shortcuts.ProgressBar() as pb:
     #    for _ in pb(range(100)):
     #        await asyncio.sleep(RECONNECT_DELAY/100)
-    await asyncio.sleep(RECONNECT_DELAY)
+    await asyncio.sleep(SERVER_RECONNECT_DELAY)
     if ctx.server_address and ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx))
 
