@@ -1216,6 +1216,13 @@ class Spoiler(object):
                 if item is None:
                     continue
                 shopdata['item_{}'.format(index)] = "{} — {}".format(item['item'], item['price']) if item['price'] else item['item']
+                if item['max'] == 0:
+                    continue
+                shopdata['item_{}'.format(index)] += " x {}".format(item['max'])
+
+                if item['replacement'] is None:
+                    continue
+                shopdata['item_{}'.format(index)] += ", {} - {}".format(item['replacement'], item['replacement_price']) if item['replacement_price'] else item['replacement']
             self.shops.append(shopdata)
 
         for player in range(1, self.world.players + 1):
