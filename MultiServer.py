@@ -69,6 +69,7 @@ class Context(Node):
         self.saving = False
         self.player_names = {}
         self.rom_names = {}
+        self.allow_forfeits = {}
         self.remote_items = set()
         self.locations = {}
         self.host = host
@@ -689,6 +690,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     def _cmd_forfeit(self) -> bool:
         """Surrender and send your remaining items out to their recipients"""
+        if self.ctx.allow_forfeits.get((self.client.team, self.client.slot), False):
+            forfeit_player(self.ctx, self.client.team, self.client.slot)
+            return True
         if "enabled" in self.ctx.forfeit_mode:
             forfeit_player(self.ctx, self.client.team, self.client.slot)
             return True
@@ -1075,6 +1079,32 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 return True
 
         self.output(f"Could not find player {player_name} to forfeit")
+        return False
+
+    @mark_raw
+    def _cmd_allow_forfeit(self, player_name: str) -> bool:
+        """Allow the specified player to use the !forfeit command"""
+        seeked_player = player_name.lower()
+        for (team, slot), name in self.ctx.player_names.items():
+            if name.lower() == seeked_player:
+                self.ctx.allow_forfeits[(team, slot)] = True
+                self.output(f"Player {player_name} is now allowed to use the !forfeit command at any time.")
+                return True
+
+        self.output(f"Could not find player {player_name} to allow the !forfeit command for.")
+        return False
+
+    @mark_raw
+    def _cmd_forbid_forfeit(self, player_name: str) -> bool:
+        """"Disallow the specified player from using the !forfeit command"""
+        seeked_player = player_name.lower()
+        for (team, slot), name in self.ctx.player_names.items():
+            if name.lower() == seeked_player:
+                self.ctx.allow_forfeits[(team, slot)] = False
+                self.output(f"Player {player_name} has to follow the server restrictions on use of the !forfeit command.")
+                return True
+
+        self.output(f"Could not find player {player_name} to forbid the !forfeit command for.")
         return False
 
     def _cmd_send(self, player_name: str, *item_name: str) -> bool:
