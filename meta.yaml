@@ -29,7 +29,6 @@ mode:
   standard: 10
   open: 60
   inverted: 10
-  retro: 10
   null: 10 # Maintain individual world states
 tower_open:
   '0': 8
