@@ -154,16 +154,16 @@ boss_shuffle:
   full: 0 # 3 bosses can occur twice
   random: 0 # Any boss can appear any amount of times
   singularity: 0 # Picks a boss, tries to put it everywhere that works, if there's spaces remaining it picks a boss to fill those
-enemy_shuffle: # randomize enemy placement
+enemy_shuffle: # Randomize enemy placement
   on: 0
   off: 50
-killable_thieves: # make thieves killable.
-  on: 0 # usually turned on together with enemy_shuffle to make annoying thief placement more manageable
+killable_thieves: # Make thieves killable
+  on: 0 # Usually turned on together with enemy_shuffle to make annoying thief placement more manageable
   off: 50
-tile_shuffle: # randomize the tile layouts in flying tile rooms
+tile_shuffle: # Randomize the tile layouts in flying tile rooms
   on: 0
   off: 50
-bush_shuffle: # randomize the chance that bushes have enemies and the enemies under said bush
+bush_shuffle: # Randomize the chance that bushes have enemies and the enemies under said bush
   on: 0
   off: 50
 enemy_damage:
@@ -187,12 +187,12 @@ beemizer: # Remove items from the global item pool and replace them with single 
   4: 0 # 100% of the non-essential item pool is replaced with bee traps
 shop_shuffle:
   none: 50
-  i: 0 # shuffle the inventories of the shops around
-  p: 0 # randomize the prices of the items in shop inventories
-  u: 0 # shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
-  ip: 0 # shuffle inventories and randomize prices
-  uip: 0 # shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool
-  # you can add more combos
+  i: 0 # Shuffle the inventories of the shops around
+  p: 0 # Randomize the prices of the items in shop inventories
+  u: 0 # Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
+  ip: 0 # Shuffle inventories and randomize prices
+  uip: 0 # Shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool
+  # You can add more combos
 timer:
   none: 50 # No timer will be displayed.
   timed: 0 # Starts with clock at zero. Green clocks subtract 4 minutes (total 20). Blue clocks subtract 2 minutes (total 10). Red clocks add two minutes (total 10). Winner is the player with the lowest time at the end.

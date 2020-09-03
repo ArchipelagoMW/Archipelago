@@ -1,36 +1,36 @@
-# this file has to be in the Players folder to take effect, keeping the "meta.yaml" name.
+# This file has to be in the Players folder to take effect, keeping the "meta.yaml" name
 # A meta file rolls its own set of options first
-# the result will then overwrite each player's option in that particular field
-# for example, if a meta.yaml fast_ganon result is rolled, every player will have that fast_ganon goal
-# there is the special case of null, which ignores that part of the meta.yaml,
+# The result will then overwrite each player's option in that particular field
+# For example, if a meta.yaml fast_ganon result is rolled, every player will have that fast_ganon goal
+# There is the special case of null, which ignores that part of the meta.yaml,
 # allowing for a chance for that meta to not take effect
-# players can also have a meta_ignore option to ignore specific options
-# example of ignore that would be in a player's file:
+# Players can also have a meta_ignore option to ignore specific options
+# Example of ignore that would be in a player's file:
 # meta_ignore:
-#   world_state:
+#   mode:
 #     inverted
-#this means, if world_state is meta-rolled and the result happens to be inverted, then defer to the player's yaml instead.
+# This means, if mode is meta-rolled and the result happens to be inverted, then defer to the player's yaml instead.
 meta_description: Meta-Mystery file with the intention of having similar-length completion times for a hopefully better experience
-progression_balancing: # progression balancing tries to make sure that the player has *something* towards any players goal in each "sphere"
-  on: 0 # force every player into progression balancing
-  off: 0 # force every player out of progression balancing, then prepare for a lot of logical BK
-  null: 1 # let players decide via their own progression_balancing flag in their yaml, defaulting to on
+progression_balancing: # Progression balancing tries to make sure that the player has *something* towards any players goal in each "sphere"
+  on: 0 # Force every player into progression balancing
+  off: 0 # Force every player out of progression balancing, then prepare for a lot of logical BK
+  null: 1 # Let players decide via their own progression_balancing flag in their yaml, defaulting to on
 goals:
-  ganon: 100
-  fast_ganon: 250
-  dungeons: 50
-  pedestal: 100
-  triforce-hunt: 5
+  ganon: 100 # Climb GT, defeat Agahnim 2, and then kill Ganon
+  fast_ganon: 250 # Only killing Ganon is required. The hole is always open. However, items may still be placed in GT
+  dungeons: 50 # Defeat the boss of all dungeons, including Agahnim's tower and GT (Aga 2)
+  pedestal: 100 # Pull the Triforce from the Master Sword pedestal
+  triforce-hunt: 5 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then turn them in to Murahadala in front of Hyrule Castle
   local_triforce_hunt: 10 # Collect 20 of 30 Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
   ganon_triforce_hunt: 5 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
   local_ganon_triforce_hunt: 20 # Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
-  null: 0 # maintain individual goals
-world_state:
+  null: 0 # Maintain individual goals
+mode:
   standard: 10
   open: 60
   inverted: 10
   retro: 10
-  null: 10 # maintain individual world states
+  null: 10 # Maintain individual world states
 tower_open:
   '0': 8
   '1': 7
@@ -40,7 +40,7 @@ tower_open:
   '5': 3
   '6': 2
   '7': 1
-  random: 10 # a different GT open time should not usually result in a vastly different completion time, unless ganon goal and tower_open > ganon_open
+  random: 10 # A different GT open time should not usually result in a vastly different completion time, unless ganon goal and tower_open > ganon_open
 ganon_open:
   '0': 3
   '1': 4
@@ -50,5 +50,5 @@ ganon_open:
   '5': 8
   '6': 9
   '7': 10
-  random: 5 # this will mean differing completion times. But leaving it for that surprise effect
-#do not use meta rom options at this time.
+  random: 5 # This will mean differing completion times. But leaving it for that surprise effect
+# Do not use meta rom options at this time
