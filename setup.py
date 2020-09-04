@@ -79,6 +79,7 @@ cx_Freeze.setup(
     options={
         "build_exe": {
             "includes": [],
+            "excludes": ["numpy", "Cython"],
             "zip_include_packages": ["*"],
             "zip_exclude_packages": [],
             "include_files": [],
