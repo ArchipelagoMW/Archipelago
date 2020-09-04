@@ -183,7 +183,7 @@ def check_enemizer(enemizercli):
             if lib.startswith("EnemizerLibrary/"):
                 version = lib.split("/")[-1]
                 version = tuple(int(element) for element in version.split("."))
-                logging.info(version)
+                logging.debug(f"Found Enemizer version {version}")
                 if version < (6, 2, 0):
                     raise Exception(
                         f"Enemizer found at {enemizercli} is outdated ({info}), please update your Enemizer. "
