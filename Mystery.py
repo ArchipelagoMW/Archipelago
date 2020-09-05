@@ -434,15 +434,16 @@ def roll_settings(weights):
 
     if 'rom' in weights:
         romweights = weights['rom']
-        ret.sprite = get_choice('sprite', romweights)
-        ret.disablemusic = get_choice('disablemusic', romweights)
-        ret.quickswap = get_choice('quickswap', romweights)
-        ret.fastmenu = get_choice('menuspeed', romweights)
-        ret.heartcolor = get_choice('heartcolor', romweights)
-        ret.heartbeep = convert_to_on_off(get_choice('heartbeep', romweights))
-        ret.ow_palettes = get_choice('ow_palettes', romweights)
-        ret.uw_palettes = get_choice('uw_palettes', romweights)
-
+        ret.sprite = get_choice('sprite', romweights, "Link")
+        ret.disablemusic = get_choice('disablemusic', romweights, False)
+        ret.quickswap = get_choice('quickswap', romweights, True)
+        ret.fastmenu = get_choice('menuspeed', romweights, "normal")
+        ret.heartcolor = get_choice('heartcolor', romweights, "red")
+        ret.heartbeep = convert_to_on_off(get_choice('heartbeep', romweights, "normal"))
+        ret.ow_palettes = get_choice('ow_palettes', romweights, "default")
+        ret.uw_palettes = get_choice('uw_palettes', romweights, "default")
+    else:
+        ret.quickswap = True
     return ret
 
 if __name__ == '__main__':
