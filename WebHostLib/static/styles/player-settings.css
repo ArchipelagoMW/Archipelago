@@ -29,6 +29,32 @@
     margin-top: 1.5rem;
 }
 
+#game-settings #settings-wrapper #sprite-picker{
+    margin-bottom: 2rem;
+}
+
+#game-settings #settings-wrapper #sprite-picker #sprite-picker-sprites{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+#game-settings #settings-wrapper #sprite-picker .sprite-img-wrapper{
+    cursor: pointer;
+    margin: 10px;
+}
+
+/* Center tooltip text for sprite images */
+#game-settings #settings-wrapper #sprite-picker .sprite-img-wrapper::after{
+    text-align: center;
+}
+
+#game-settings #settings-wrapper #sprite-picker .sprite-img-wrapper img{
+    width: 32px;
+    height: 48px;
+}
+
 #game-settings table.option-set{
     width: 100%;
     margin-bottom: 1.5rem;
@@ -39,6 +65,10 @@
     font-weight: bold;
     font-size: 1rem;
     line-height: 2rem;
+}
+
+#game-settings table.option-set td.option-name .delete-button{
+    cursor: pointer;
 }
 
 #game-settings table.option-set td.option-value{

@@ -221,7 +221,7 @@ rom:
   sprite: # Enter the name of your preferred sprite and weight it appropriately
     random: 0
     randomonhit: 0
-    link: 50 # To add other sprites: open the gui/Creator, go to adjust, select a sprite and write down the name the gui calls it
+    Link: 50 # To add other sprites: open the gui/Creator, go to adjust, select a sprite and write down the name the gui calls it
   disablemusic: # If "on", all in-game music will be disabled
     on: 50
     off: 0
