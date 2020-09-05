@@ -342,7 +342,7 @@ const addSpriteRow = (tbody, playerSettings, spriteName) => {
   input.setAttribute('min', '0');
   input.setAttribute('max', '100');
   input.setAttribute('data-setting', `rom.sprite.${spriteName}`);
-  input.value = "0";
+  input.value = "50";
   optionValue.appendChild(input);
 
   // Value display
