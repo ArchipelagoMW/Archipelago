@@ -199,6 +199,9 @@ _simple_groups = {("Swords", "Sword"),
 
                   ("Boomerangs", "Boomerang"),
                   ("Rods", "Rod"),
+                  ("Canes", "Cane"),
+
+                  ("Upgrades", "Upgrade"), # Capacity and Magic Upgrades
 
                   ("Small Keys", "Small Key"),
                   ("Big Keys", "Big Key"),
