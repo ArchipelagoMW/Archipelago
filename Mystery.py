@@ -417,6 +417,7 @@ def roll_settings(weights):
     ret.remote_items = get_choice('remote_items', weights, False)
 
     if get_choice("local_keys", weights, "l" in dungeon_items):
+        # () important for ordering of commands, without them the Big Keys section is part of the Small Key else
         ret.local_items = (item_name_groups["Small Keys"] if "s" in dungeon_items else set()) \
                           | item_name_groups["Big Keys"] if "b" in dungeon_items else set()
     else:

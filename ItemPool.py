@@ -58,7 +58,7 @@ difficulties = {
         same_bottle=False,
         progressiveshield=['Progressive Shield'] * 6,
         basicshield=['Blue Shield', 'Red Shield', 'Mirror Shield'] * 2,
-        progressivearmor=['Progressive Armor'] * 4,
+        progressivearmor=['Progressive Mail'] * 4,
         basicarmor=['Blue Mail', 'Red Mail'] * 2,
         swordless=['Rupees (20)'] * 8,
         progressivemagic=['Magic Upgrade (1/2)'] * 2,
@@ -86,7 +86,7 @@ difficulties = {
         same_bottle=False,
         progressiveshield=['Progressive Shield'] * 3,
         basicshield=['Blue Shield', 'Red Shield', 'Mirror Shield'],
-        progressivearmor=['Progressive Armor'] * 2,
+        progressivearmor=['Progressive Mail'] * 2,
         basicarmor=['Blue Mail', 'Red Mail'],
         swordless=['Rupees (20)'] * 4,
         progressivemagic=['Magic Upgrade (1/2)', 'Rupees (300)'],
@@ -108,14 +108,14 @@ difficulties = {
         heart_piece_limit=24,
     ),
     'hard': Difficulty(
-        baseitems = normalbaseitems,
+        baseitems=normalbaseitems,
         bottles=hardbottles,
         bottle_count=4,
         same_bottle=False,
         progressiveshield=['Progressive Shield'] * 3,
         basicshield=['Blue Shield', 'Red Shield', 'Red Shield'],
-        progressivearmor=['Progressive Armor'] * 2,
-        basicarmor=['Progressive Armor'] * 2,  # neither will count
+        progressivearmor=['Progressive Mail'] * 2,
+        basicarmor=['Progressive Mail'] * 2,  # neither will count
         swordless=['Rupees (20)'] * 4,
         progressivemagic=['Magic Upgrade (1/2)', 'Rupees (300)'],
         basicmagic=['Magic Upgrade (1/2)', 'Rupees (300)'],
@@ -136,15 +136,15 @@ difficulties = {
         heart_piece_limit=16,
     ),
     'expert': Difficulty(
-        baseitems = normalbaseitems,
+        baseitems=normalbaseitems,
         bottles=hardbottles,
         bottle_count=4,
         same_bottle=False,
         progressiveshield=['Progressive Shield'] * 3,
         basicshield=['Progressive Shield'] * 3,
         # only the first one will upgrade, making this equivalent to two blue shields
-        progressivearmor=['Progressive Armor'] * 2,  # neither will count
-        basicarmor=['Progressive Armor'] * 2,  # neither will count
+        progressivearmor=['Progressive Mail'] * 2,  # neither will count
+        basicarmor=['Progressive Mail'] * 2,  # neither will count
         swordless=['Rupees (20)'] * 4,
         progressivemagic=['Magic Upgrade (1/2)', 'Rupees (300)'],
         basicmagic=['Magic Upgrade (1/2)', 'Rupees (300)'],
@@ -761,7 +761,7 @@ def make_custom_item_pool(world, player):
     pool.extend(['Progressive Shield'] * customitemarray[40])
     pool.extend(['Blue Mail'] * customitemarray[41])
     pool.extend(['Red Mail'] * customitemarray[42])
-    pool.extend(['Progressive Armor'] * customitemarray[43])
+    pool.extend(['Progressive Mail'] * customitemarray[43])
     pool.extend(['Magic Upgrade (1/2)'] * customitemarray[44])
     pool.extend(['Magic Upgrade (1/4)'] * customitemarray[45])
     pool.extend(['Bomb Upgrade (+5)'] * customitemarray[46])
