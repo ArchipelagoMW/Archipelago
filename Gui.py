@@ -9,6 +9,7 @@ import shutil
 from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, BOTH, Entry, Spinbox, Button, filedialog, messagebox, ttk
 from urllib.parse import urlparse
 from urllib.request import urlopen
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -1476,8 +1477,6 @@ class SpriteSelector(object):
                 current_sprites = [os.path.basename(file) for file in glob(self.alttpr_sprite_dir + '/*')]
                 alttpr_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path)) for sprite in sprites_arr]
                 needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in alttpr_sprites if filename not in current_sprites]
-                bundled_sprites = [os.path.basename(file) for file in glob(self.local_alttpr_sprite_dir + '/*')]
-                # todo: eventually use the above list to avoid downloading any sprites that we already have cached in the bundle.
 
                 alttpr_filenames = [filename for (_, filename) in alttpr_sprites]
                 obsolete_sprites = [sprite for sprite in current_sprites if sprite not in alttpr_filenames]
@@ -1487,27 +1486,50 @@ class SpriteSelector(object):
                 task.queue_event(finished)
                 return
 
-            updated = 0
-            for (sprite_url, filename) in needed_sprites:
-                try:
-                    task.update_status("Downloading needed sprite %g/%g" % (updated + 1, len(needed_sprites)))
-                    target = os.path.join(self.alttpr_sprite_dir, filename)
-                    with urlopen(sprite_url) as response, open(target, 'wb') as out:
-                        shutil.copyfileobj(response, out)
-                except Exception as e:
-                    resultmessage = "Error downloading sprite. Not all sprites updated.\n\n%s: %s" % (type(e).__name__, e)
-                    successful = False
-                updated += 1
 
-            deleted = 0
-            for sprite in obsolete_sprites:
-                try:
-                    task.update_status("Removing obsolete sprite %g/%g" % (deleted + 1, len(obsolete_sprites)))
-                    os.remove(os.path.join(self.alttpr_sprite_dir, sprite))
-                except Exception as e:
-                    resultmessage = "Error removing obsolete sprite. Not all sprites updated.\n\n%s: %s" % (type(e).__name__, e)
-                    successful = False
-                deleted += 1
+            def dl(sprite_url, filename):
+                target = os.path.join(self.alttpr_sprite_dir, filename)
+                with urlopen(sprite_url) as response, open(target, 'wb') as out:
+                    shutil.copyfileobj(response, out)
+
+            def rem(sprite):
+                os.remove(os.path.join(self.alttpr_sprite_dir, sprite))
+
+
+            with ThreadPoolExecutor() as pool:
+                dl_tasks = []
+                rem_tasks = []
+
+                for (sprite_url, filename) in needed_sprites:
+                    dl_tasks.append(pool.submit(dl, sprite_url, filename))
+
+                for sprite in obsolete_sprites:
+                    rem_tasks.append(pool.submit(rem, sprite))
+
+                deleted = 0
+                updated = 0
+
+                for dl_task in as_completed(dl_tasks):
+                    updated += 1
+                    task.update_status("Downloading needed sprite %g/%g" % (updated, len(needed_sprites)))
+                    try:
+                        dl_task.result()
+                    except Exception as e:
+                        logging.exception(e)
+                        resultmessage = "Error downloading sprite. Not all sprites updated.\n\n%s: %s" % (
+                        type(e).__name__, e)
+                        successful = False
+
+                for rem_task in as_completed(rem_tasks):
+                    deleted += 1
+                    task.update_status("Removing obsolete sprite %g/%g" % (deleted, len(obsolete_sprites)))
+                    try:
+                        rem_task.result()
+                    except Exception as e:
+                        logging.exception(e)
+                        resultmessage = "Error removing obsolete sprite. Not all sprites updated.\n\n%s: %s" % (
+                        type(e).__name__, e)
+                        successful = False
 
             if successful:
                 resultmessage = "alttpr sprites updated successfully"
