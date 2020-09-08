@@ -144,6 +144,17 @@ class World(object):
             region.world = self
             self._region_cache[region.player][region.name] = region
 
+    def _recache(self):
+        """Rebuild world cache"""
+        for region in self.regions:
+            player = region.player
+            self._region_cache[player][region.name] = region
+            for exit in region.exits:
+                self._entrance_cache[exit.name, player] = exit
+
+            for r_location in region.locations:
+                self._location_cache[r_location.name, player] = r_location
+
     def get_regions(self, player=None):
         return self.regions if player is None else self._region_cache[player].values()
 
@@ -151,11 +162,8 @@ class World(object):
         try:
             return self._region_cache[player][regionname]
         except KeyError:
-            for region in self.regions:
-                if region.name == regionname and region.player == player:
-                    assert not region.world  # this should only happen before initialization
-                    return region
-            raise RuntimeError('No such region %s for player %d' % (regionname, player))
+            self._recache()
+            return self._region_cache[player][regionname]
 
     def _debug_get_region(self, regionname: str, player: int) -> Region:
         if type(regionname) != str:
@@ -166,19 +174,16 @@ class World(object):
             for region in self.regions:
                 if region.name == regionname and region.player == player:
                     assert not region.world  # this should only happen before initialization
+                    self._region_cache[player][regionname] = region
                     return region
             raise RuntimeError('No such region %s for player %d' % (regionname, player))
 
     def get_entrance(self, entrance: str, player: int) -> Entrance:
         try:
-            return self._entrance_cache[(entrance, player)]
+            return self._entrance_cache[entrance, player]
         except KeyError:
-            for region in self.regions:
-                for exit in region.exits:
-                    if exit.name == entrance and exit.player == player:
-                        self._entrance_cache[(entrance, player)] = exit
-                        return exit
-            raise RuntimeError('No such entrance %s for player %d' % (entrance, player))
+            self._recache()
+            return self._entrance_cache[entrance, player]
 
     def _debug_get_entrance(self, entrance: str, player: int) -> Entrance:
         if type(entrance) != str:
@@ -191,18 +196,15 @@ class World(object):
                     if exit.name == entrance and exit.player == player:
                         self._entrance_cache[(entrance, player)] = exit
                         return exit
+
             raise RuntimeError('No such entrance %s for player %d' % (entrance, player))
 
     def get_location(self, location: str, player: int) -> Location:
         try:
-            return self._location_cache[(location, player)]
+            return self._location_cache[location, player]
         except KeyError:
-            for region in self.regions:
-                for r_location in region.locations:
-                    if r_location.name == location and r_location.player == player:
-                        self._location_cache[(location, player)] = r_location
-                        return r_location
-        raise RuntimeError('No such location %s for player %d' % (location, player))
+            self._recache()
+            return self._location_cache[location, player]
 
     def _debug_get_location(self, location: str, player: int) -> Location:
         if type(location) != str:
@@ -215,6 +217,7 @@ class World(object):
                     if r_location.name == location and r_location.player == player:
                         self._location_cache[(location, player)] = r_location
                         return r_location
+
         raise RuntimeError('No such location %s for player %d' % (location, player))
 
     def get_dungeon(self, dungeonname: str, player: int) -> Dungeon:
