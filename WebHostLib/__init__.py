@@ -32,12 +32,14 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # 4 megabyte limit
 # if you want persistent sessions on your server, make sure you make this a constant in your config.yaml
 app.config["SECRET_KEY"] = os.urandom(32)
+# at what amount of worlds should scheduling be used, instead of rolling in the webthread
+app.config["JOB_THRESHOLD"] = 2
 app.config['SESSION_PERMANENT'] = True
 
 # waitress uses one thread for I/O, these are for processing of views that then get sent
 # berserkermulti.world uses gunicorn + nginx; ignoring this option
 app.config["WAITRESS_THREADS"] = 10
-#a default that just works. berserkermulti.world runs on mariadb
+# a default that just works. berserkermulti.world runs on mariadb
 app.config["PONY"] = {
     'provider': 'sqlite',
     'filename': os.path.abspath('db.db3'),

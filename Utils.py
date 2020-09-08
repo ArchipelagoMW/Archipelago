@@ -6,12 +6,15 @@ def tuplize_version(version: str) -> typing.Tuple[int, ...]:
     return tuple(int(piece, 10) for piece in version.split("."))
 
 
-__version__ = "2.5.3"
+__version__ = "2.5.4"
 _version_tuple = tuplize_version(__version__)
 
 import os
 import subprocess
 import sys
+import pickle
+import io
+import builtins
 
 import functools
 
@@ -294,3 +297,23 @@ def get_unique_identifier():
     uuid = uuid.getnode()
     persistent_store("client", "uuid", uuid)
     return uuid
+
+
+safe_builtins = {
+    'set',
+    'frozenset',
+}
+
+
+class RestrictedUnpickler(pickle.Unpickler):
+    def find_class(self, module, name):
+        if module == "builtins" and name in safe_builtins:
+            return getattr(builtins, name)
+        # Forbid everything else.
+        raise pickle.UnpicklingError("global '%s.%s' is forbidden" %
+                                     (module, name))
+
+
+def restricted_loads(s):
+    """Helper function analogous to pickle.loads()."""
+    return RestrictedUnpickler(io.BytesIO(s)).load()

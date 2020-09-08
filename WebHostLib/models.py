@@ -49,6 +49,6 @@ class Command(db.Entity):
 class Generation(db.Entity):
     id = PrimaryKey(UUID, default=uuid4)
     owner = Required(UUID)
-    options = Required(Json, lazy=True)
-    meta = Required(Json)
+    options = Required(bytes, lazy=True)  # these didn't work as JSON on mariaDB, so they're getting pickled now
+    meta = Required(bytes, lazy=True)
     state = Required(int, default=0, index=True)
