@@ -302,7 +302,9 @@ def roll_settings(weights):
                 'ganon_triforce_hunt': 'ganontriforcehunt',
                 'local_ganon_triforce_hunt': 'localganontriforcehunt'
                 }[goal]
-    ret.openpyramid = goal in ['fast_ganon', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt']
+
+    ret.open_pyramid = goal in ['fast_ganon', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt'] \
+                       and ret.shuffle in {"vanilla", "dungeonssimple", "dungeonsfull"}
 
     ret.crystals_gt = get_choice('tower_open', weights)
 

@@ -62,7 +62,7 @@ def main(args, seed=None):
     world.crystals_needed_for_gt = {
         player: world.random.randint(0, 7) if args.crystals_gt[player] == 'random' else int(args.crystals_gt[player])
         for player in range(1, world.players + 1)}
-    world.open_pyramid = args.openpyramid.copy()
+    world.open_pyramid = args.open_pyramid.copy()
     world.boss_shuffle = args.shufflebosses.copy()
     world.enemy_shuffle = args.enemy_shuffle.copy()
     world.enemy_health = args.enemy_health.copy()
