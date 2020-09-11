@@ -1893,12 +1893,20 @@ def write_strings(rom, world, player, team):
     tt['sign_ganons_tower'] = ('You need %d crystal to enter.' if world.crystals_needed_for_gt[
                                                                       player] == 1 else 'You need %d crystals to enter.') % \
                               world.crystals_needed_for_gt[player]
-    tt['sign_ganon'] = ('You need %d crystal to beat Ganon.' if world.crystals_needed_for_ganon[
-                                                                    player] == 1 else 'You need %d crystals to beat Ganon.') % \
-                       world.crystals_needed_for_ganon[player]
 
-    if world.goal[player] in ['dungeons']:
+    if world.goal[player] == 'dungeons':
         tt['sign_ganon'] = 'You need to complete all the dungeons.'
+    elif world.goal[player]  == "ganon":
+        if world.crystals_needed_for_ganon[player] == 1:
+            tt['sign_ganon'] = 'You need 1 crystal to beat Ganon and have beaten Agahnim atop Ganons Tower.'
+        else:
+            tt['sign_ganon'] = f'You need {world.crystals_needed_for_ganon[player]} crystals to beat Ganon and ' \
+                               f'have beaten Agahnim atop Ganons Tower'
+    else:
+        if world.crystals_needed_for_ganon[player] == 1:
+            tt['sign_ganon'] = 'You need 1 crystal to beat Ganon.'
+        else:
+            tt['sign_ganon'] = f'You need {world.crystals_needed_for_ganon[player]} crystals to beat Ganon.'
 
     tt['uncle_leaving_text'] = Uncle_texts[local_random.randint(0, len(Uncle_texts) - 1)]
     tt['end_triforce'] = "{NOBORDER}\n" + Triforce_texts[local_random.randint(0, len(Triforce_texts) - 1)]
@@ -1915,8 +1923,9 @@ def write_strings(rom, world, player, team):
             tt['sign_ganon'] = 'Go find the Triforce pieces with your friends... Ganon is invincible!'
         else:
             tt['sign_ganon'] = 'Go find the Triforce pieces... Ganon is invincible!'
-        tt[
-            'murahdahla'] = "Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\ninvisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\nhidden in  a hollow tree. If you bring\n%d triforce pieces, I can reassemble it." % \
+        tt['murahdahla'] = "Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\n" \
+                           "invisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\n" \
+                           "hidden in  a hollow tree. If you bring\n%d triforce pieces, I can reassemble it." % \
                             world.treasure_hunt_count[player]
     elif world.goal[player] in ['pedestal']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Your goal is at the pedestal.'
