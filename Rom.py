@@ -1923,10 +1923,16 @@ def write_strings(rom, world, player, team):
             tt['sign_ganon'] = 'Go find the Triforce pieces with your friends... Ganon is invincible!'
         else:
             tt['sign_ganon'] = 'Go find the Triforce pieces... Ganon is invincible!'
-        tt['murahdahla'] = "Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\n" \
-                           "invisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\n" \
-                           "hidden in  a hollow tree. If you bring\n%d triforce pieces, I can reassemble it." % \
-                            world.treasure_hunt_count[player]
+        if world.treasure_hunt_count[player] > 1:
+            tt['murahdahla'] = "Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\n" \
+                               "invisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\n" \
+                               "hidden in  a hollow tree. If you bring\n%d triforce pieces out of %d, I can reassemble it." % \
+                               (world.treasure_hunt_count[player], world.triforce_pieces_available[player])
+        else:
+            tt['murahdahla'] = "Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\n" \
+                               "invisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\n" \
+                               "hidden in  a hollow tree. If you bring\n%d triforce piece out of %d, I can reassemble it." % \
+                               (world.treasure_hunt_count[player], world.triforce_pieces_available[player])
     elif world.goal[player] in ['pedestal']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Your goal is at the pedestal.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
@@ -1935,10 +1941,20 @@ def write_strings(rom, world, player, team):
         tt['ganon_fall_in'] = Ganon1_texts[local_random.randint(0, len(Ganon1_texts) - 1)]
         tt['ganon_fall_in_alt'] = 'You cannot defeat me until you finish your goal!'
         tt['ganon_phase_3_alt'] = 'Got wax in\nyour ears?\nI can not die!'
-        if world.goal[player] == 'ganontriforcehunt' and world.players > 1:
-            tt['sign_ganon'] = 'You need to find %d Triforce pieces with your friends to defeat Ganon.' % world.treasure_hunt_count[player]
-        elif world.goal[player] in ['ganontriforcehunt', 'localganontriforcehunt']:
-            tt['sign_ganon'] = 'You need to find %d Triforce pieces to defeat Ganon.' % world.treasure_hunt_count[player]
+        if world.treasure_hunt_count[player] > 1:
+            if world.goal[player] == 'ganontriforcehunt' and world.players > 1:
+                tt['sign_ganon'] = 'You need to find %d Triforce pieces out of %d with your friends to defeat Ganon.' % \
+                                   (world.treasure_hunt_count[player], world.triforce_pieces_available[player])
+            elif world.goal[player] in ['ganontriforcehunt', 'localganontriforcehunt']:
+                tt['sign_ganon'] = 'You need to find %d Triforce pieces out of %d to defeat Ganon.' % \
+                                   (world.treasure_hunt_count[player], world.triforce_pieces_available[player])
+        else:
+            if world.goal[player] == 'ganontriforcehunt' and world.players > 1:
+                tt['sign_ganon'] = 'You need to find %d Triforce piece out of %d with your friends to defeat Ganon.' % \
+                                   (world.treasure_hunt_count[player], world.triforce_pieces_available[player])
+            elif world.goal[player] in ['ganontriforcehunt', 'localganontriforcehunt']:
+                tt['sign_ganon'] = 'You need to find %d Triforce piece out of %d to defeat Ganon.' % \
+                                   (world.treasure_hunt_count[player], world.triforce_pieces_available[player])
 
     tt['kakariko_tavern_fisherman'] = TavernMan_texts[local_random.randint(0, len(TavernMan_texts) - 1)]
 
