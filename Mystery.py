@@ -252,8 +252,13 @@ def roll_settings(weights):
     if "linked_options" in weights:
         weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
         for option_set in weights["linked_options"]:
-            if random.random() < (option_set["percentage"] / 100):
-                weights.update(option_set["options"])
+            if "name" not in option_set:
+                raise ValueError("One of your linked options does not have a name.")
+            try:
+                if random.random() < (option_set["percentage"] / 100):
+                    weights.update(option_set["options"])
+            except Exception as e:
+                raise ValueError(f"Linked option {option_set['name']} is destroyed. Please fix your linked option.") from e
 
     ret.name = get_choice('name', weights)
     if ret.name:
