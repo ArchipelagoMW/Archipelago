@@ -308,8 +308,10 @@ def roll_settings(weights):
                 'local_ganon_triforce_hunt': 'localganontriforcehunt'
                 }[goal]
 
-    ret.open_pyramid = goal in ['fast_ganon', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt'] \
-                       and ret.shuffle in {"vanilla", "dungeonssimple", "dungeonsfull"}
+
+    #TODO consider moving open_pyramid to an automatic variable in the core roller, set to True when
+    # fast ganon + ganon at hole
+    ret.open_pyramid = goal in {'fast_ganon', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt'}
 
     ret.crystals_gt = get_choice('tower_open', weights)
 
