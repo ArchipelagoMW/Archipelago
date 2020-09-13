@@ -1,7 +1,7 @@
 import _assign from 'lodash-es/assign';
 
 const initialState = {
-  serverVersion: null,
+  clientVersion: null,
   forfeitMode: null,
   remainingMode: null,
   connections: {

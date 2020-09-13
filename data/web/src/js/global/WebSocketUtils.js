@@ -62,7 +62,7 @@ class WebSocketUtils {
 
         case 'gameInfo':
           return updateGameState({
-            serverVersion: data.content.serverVersion,
+            clientVersion: data.content.clientVersion,
             forfeitMode: data.content.forfeitMode,
             remainingMode: data.content.remainingMode,
             hintCost: parseInt(data.content.hintCost, 10),

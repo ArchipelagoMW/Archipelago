@@ -108,7 +108,7 @@ class WebUiClient(Node):
 
     def send_game_info(self, ctx: Context):
         self.broadcast_all(self.build_message('gameInfo', {
-            'serverVersion': Utils.__version__,
+            'clientVersion': Utils.__version__,
             'hintCost': ctx.hint_cost,
             'checkPoints': ctx.check_points,
             'forfeitMode': ctx.forfeit_mode,

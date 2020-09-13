@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import '../../../styles/WidgetArea/containers/WidgetArea.scss';
 
 const mapReduxStateToProps = (reduxState) => ({
-  serverVersion: reduxState.gameState.serverVersion,
+  clientVersion: reduxState.gameState.clientVersion,
   forfeitMode: reduxState.gameState.forfeitMode,
   remainingMode: reduxState.gameState.remainingMode,
   hintCost: reduxState.gameState.hintCost,
@@ -49,8 +49,8 @@ class WidgetArea extends Component {
                 <table>
                   <tbody>
                     <tr>
-                      <th>Server Version:</th>
-                      <td>{this.props.serverVersion}</td>
+                      <th>Client Version:</th>
+                      <td>{this.props.clientVersion}</td>
                     </tr>
                     <tr>
                       <th>Forfeit Mode:</th>
