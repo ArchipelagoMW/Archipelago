@@ -1939,4 +1939,4 @@ class TextTable(object):
         text['ganon_phase_3_silvers'] = CompressedTextMapper.convert("Oh no! Silver! My one true weakness!")
         text['murahdahla'] = CompressedTextMapper.convert("Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\ninvisibility.\n{PAUSE3}\n… … …\nWait! you can see me? I knew I should have\nhidden in  a hollow tree.")
         text['end_pad_data'] = bytearray([0xfb])
-        text['terminator'] =  bytearray([0xFF, 0xFF])
+        text['terminator'] = bytearray([0xFF, 0xFF])

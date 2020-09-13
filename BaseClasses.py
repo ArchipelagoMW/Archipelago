@@ -176,7 +176,7 @@ class World(object):
                     assert not region.world  # this should only happen before initialization
                     self._region_cache[player][regionname] = region
                     return region
-            raise RuntimeError('No such region %s for player %d' % (regionname, player))
+            raise KeyError('No such region %s for player %d' % (regionname, player))
 
     def get_entrance(self, entrance: str, player: int) -> Entrance:
         try:
@@ -197,7 +197,7 @@ class World(object):
                         self._entrance_cache[(entrance, player)] = exit
                         return exit
 
-            raise RuntimeError('No such entrance %s for player %d' % (entrance, player))
+            raise KeyError('No such entrance %s for player %d' % (entrance, player))
 
     def get_location(self, location: str, player: int) -> Location:
         try:
@@ -218,13 +218,13 @@ class World(object):
                         self._location_cache[(location, player)] = r_location
                         return r_location
 
-        raise RuntimeError('No such location %s for player %d' % (location, player))
+        raise KeyError('No such location %s for player %d' % (location, player))
 
     def get_dungeon(self, dungeonname: str, player: int) -> Dungeon:
         for dungeon in self.dungeons:
             if dungeon.name == dungeonname and dungeon.player == player:
                 return dungeon
-        raise RuntimeError('No such dungeon %s for player %d' % (dungeonname, player))
+        raise KeyError('No such dungeon %s for player %d' % (dungeonname, player))
 
     def _debug_get_dungeon(self, dungeonname: str, player: int) -> Dungeon:
         if type(dungeonname) != str:
@@ -232,7 +232,7 @@ class World(object):
         for dungeon in self.dungeons:
             if dungeon.name == dungeonname and dungeon.player == player:
                 return dungeon
-        raise RuntimeError('No such dungeon %s for player %d' % (dungeonname, player))
+        raise KeyError('No such dungeon %s for player %d' % (dungeonname, player))
 
     def get_all_state(self, keys=False) -> CollectionState:
         ret = CollectionState(self)
