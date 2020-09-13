@@ -1018,7 +1018,7 @@
           "defaultValue": 0
         },
         "timed_ohko": {
-          "keyString": "timer.times_ohko",
+          "keyString": "timer.timed_ohko",
           "friendlyName": "Timed OHKO",
           "description": "Starts the clock at ten minutes. Green clocks add five minutes (total 25). As long as the clock as at zero, Link will die in one hit.",
           "defaultValue": 0
