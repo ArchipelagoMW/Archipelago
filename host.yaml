@@ -13,7 +13,7 @@ general_options:
 # Null means nothing, for the server this means to default the value
 # These overwrite command line arguments!
 server_options:
-  host: berserkermulti.world
+  host: null
   port: null
   password: null
   multidata: null
