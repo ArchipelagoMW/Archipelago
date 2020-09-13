@@ -29,7 +29,7 @@ import Patch
 
 try:
     from maseya import z3pr
-    from maseya.z3pr.palette_randomizer import build_offsets_array
+    from maseya.z3pr.palette_randomizer import build_offset_collections
 except:
     z3pr = None
 
@@ -1512,7 +1512,7 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
         }
         if any(options.values()):
             data_dir = local_path("data") if is_bundled() else None
-            offsets_array = build_offsets_array(options, data_dir)
+            offsets_array = build_offset_collections(options, data_dir)
 
             ColorF = z3pr.ColorF
 
@@ -1520,7 +1520,7 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
                 while True:
                     yield ColorF(local_random.random(), local_random.random(), local_random.random())
 
-            z3pr.randomize(rom.buffer, "maseya", offsets_iterator=offsets_array, color_generator=next_color_generator())
+            z3pr.randomize(rom.buffer, "maseya", offset_collections=offsets_array, random_colors=next_color_generator())
     else:
         logging.warning("Could not find z3pr palette shuffle. "
                         "If you want improved palette shuffling please install the maseya-z3pr package.")
