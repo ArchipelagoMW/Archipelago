@@ -14,7 +14,7 @@ general_options:
 # These overwrite command line arguments!
 server_options:
   host: null
-  port: null
+  port: 38281
   password: null
   multidata: null
   savefile: null
@@ -28,7 +28,7 @@ server_options:
   # Points given to a player for each acquired item in their world
   location_check_points: 1
   # Point cost to receive a hint via !hint for players
-  hint_cost: 40 # Set to 0 if you want free hints
+  hint_cost: 1000 # Set to 0 if you want free hints
   # Forfeit modes
   # "disabled" -> clients can't forfeit,
   # "enabled" -> clients can always forfeit
