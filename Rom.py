@@ -542,6 +542,14 @@ class Sprite(object):
     def __hash__(self):
         return hash(self.name)
 
+    def write_to_rom(self, rom : LocalRom):
+        if not self.valid:
+            logging.warning("Tried writing invalid sprite to rom, skipping.")
+            return
+        rom.write_bytes(0x80000, self.sprite)
+        rom.write_bytes(0xDD308, self.palette)
+        rom.write_bytes(0xDEDF5, self.glove_palette)
+
 def patch_rom(world, rom, player, team, enemized):
     local_random = world.rom_seeds[player]
 
@@ -1498,8 +1506,8 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
     rom.write_byte(0x65561, {'red': 0x05, 'blue': 0x0D, 'green': 0x19, 'yellow': 0x09}[color])
 
     # write link sprite if required
-    if sprite is not None:
-        write_sprite(rom, sprite)
+    if sprite:
+        sprite.write_to_rom(rom)
 
     # reset palette if it was adjusted already
     default_ow_palettes(rom)
@@ -1537,13 +1545,6 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
     if isinstance(rom, LocalRom):
         rom.write_crc()
 
-
-def write_sprite(rom, sprite):
-    if not sprite.valid:
-        return
-    rom.write_bytes(0x80000, sprite.sprite)
-    rom.write_bytes(0xDD308, sprite.palette)
-    rom.write_bytes(0xDEDF5, sprite.glove_palette)
 
 def set_color(rom, address, color, shade):
     r = round(min(color[0], 0xFF) * pow(0.8, shade) * 0x1F / 0xFF)
