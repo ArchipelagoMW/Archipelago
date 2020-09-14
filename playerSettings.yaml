@@ -10,7 +10,7 @@
 #   on: 5
 #   off: 15
 #
-# Means you have 5 chances for map shuffle to not occur, and 15 chances for map shuffle to be turned on
+# Means you have 5 chances for map shuffle to occur, and 15 chances for map shuffle to be turned off
 
 # I've never seen a file like this before. What characters am I allowed to use?
 # This is a .yaml file. You are allowed to use most characters.
