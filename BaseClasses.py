@@ -1375,9 +1375,9 @@ class Spoiler(object):
                     'Enemy shuffle:                   %s\n' % bool_to_text(self.metadata['enemy_shuffle'][player]))
                 outfile.write('Enemy health:                    %s\n' % self.metadata['enemy_health'][player])
                 outfile.write('Enemy damage:                    %s\n' % self.metadata['enemy_damage'][player])
-                outfile.write(f'Killable thieves:                {bool_to_text(self.metadata["killable_thieves"])}\n')
-                outfile.write(f'Shuffled tiles:                  {bool_to_text(self.metadata["tile_shuffle"])}\n')
-                outfile.write(f'Shuffled bushes:                 {bool_to_text(self.metadata["bush_shuffle"])}\n')
+                outfile.write(f'Killable thieves:                {bool_to_text(self.metadata["killable_thieves"][player])}\n')
+                outfile.write(f'Shuffled tiles:                  {bool_to_text(self.metadata["tile_shuffle"][player])}\n')
+                outfile.write(f'Shuffled bushes:                 {bool_to_text(self.metadata["bush_shuffle"][player])}\n')
                 outfile.write(
                     'Hints:                           %s\n' % ('Yes' if self.metadata['hints'][player] else 'No'))
                 outfile.write('Beemizer:                        %s\n' % self.metadata['beemizer'][player])
