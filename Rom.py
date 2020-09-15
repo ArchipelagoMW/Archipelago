@@ -12,6 +12,7 @@ import sys
 import subprocess
 import threading
 import concurrent.futures
+from typing import Optional
 
 from BaseClasses import CollectionState, ShopType, Region, Location
 from Dungeons import dungeon_music_addresses
@@ -380,28 +381,26 @@ def get_sprite_from_name(name, local_random=random):
     return _sprite_table.get(name, None)
 
 class Sprite(object):
-    default_palette = [255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
-                       89, 71, 54, 104, 59, 74, 10, 239, 18, 92, 42, 113, 21, 24, 122,
-                       255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
-                       89, 128, 105, 145, 118, 184, 38, 127, 67, 92, 42, 153, 17, 24, 122,
-                       255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
-                       89, 87, 16, 126, 69, 243, 109, 185, 126, 92, 42, 39, 34, 24, 122,
-                       255, 127, 126, 35, 218, 17, 158, 54, 165, 20, 255, 1, 120, 16, 151,
-                       61, 71, 54, 104, 59, 74, 10, 239, 18, 126, 86, 114, 24, 24, 122]
+    palette = (255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
+               89, 71, 54, 104, 59, 74, 10, 239, 18, 92, 42, 113, 21, 24, 122,
+               255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
+               89, 128, 105, 145, 118, 184, 38, 127, 67, 92, 42, 153, 17, 24, 122,
+               255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
+               89, 87, 16, 126, 69, 243, 109, 185, 126, 92, 42, 39, 34, 24, 122,
+               255, 127, 126, 35, 218, 17, 158, 54, 165, 20, 255, 1, 120, 16, 151,
+               61, 71, 54, 104, 59, 74, 10, 239, 18, 126, 86, 114, 24, 24, 122)
 
-    default_glove_palette = [246, 82, 118, 3]
+    glove_palette = (246, 82, 118, 3)
+    author_name:Optional[str] = None
 
     def __init__(self, filename):
         with open(filename, 'rb') as file:
             filedata = bytearray(file.read())
         self.name = os.path.basename(filename)
-        self.author_name = None
         self.valid = True
         if len(filedata) == 0x7000:
             # sprite file with graphics and without palette data
             self.sprite = filedata[:0x7000]
-            self.palette = list(self.default_palette)
-            self.glove_palette = list(self.default_glove_palette)
         elif len(filedata) == 0x7078:
             # sprite file with graphics and palette data
             self.sprite = filedata[:0x7000]
@@ -428,11 +427,9 @@ class Sprite(object):
                 return
             self.sprite = sprite
             if len(palette) == 0:
-                self.palette = list(self.default_palette)
-                self.glove_palette = list(self.default_glove_palette)
+                pass
             elif len(palette) == 0x78:
                 self.palette = palette
-                self.glove_palette = list(self.default_glove_palette)
             elif len(palette) == 0x7C:
                 self.palette = palette[:0x78]
                 self.glove_palette = palette[0x78:]
