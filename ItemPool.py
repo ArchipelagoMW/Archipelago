@@ -48,7 +48,7 @@ Difficulty = namedtuple('Difficulty',
                          'progressive_armor_limit', 'progressive_bottle_limit',
                          'progressive_bow_limit', 'heart_piece_limit', 'boss_heart_container_limit'])
 
-total_items_to_place = 156
+total_items_to_place = 153
 
 difficulties = {
     'easy': Difficulty(
