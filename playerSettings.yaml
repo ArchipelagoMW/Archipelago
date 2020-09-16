@@ -252,6 +252,17 @@ door_shuffle: # Only available if the host uses the doors branch, it is ignored 
   vanilla: 50 # Everything should be like in vanilla
   basic: 0 # Dungeons are shuffled within themselves
   crossed: 0 # Dungeons are shuffled across each other
+intensity: # Only available if the host uses the doors branch, it is ignored otherwise
+  1: 50 # Shuffles normal doors and spiral staircases
+  2: 0 # And shuffles open edges and straight staircases
+  3: 0 # (Coming soon) And shuffles dungeon lobbies
+  random: 0 # Picks one of those at random
+experimental: # Only available if the host uses the doors branch, it is ignored otherwise
+  on: 0 # Enables experimental features. Currently, this is just the dungeon keys in chest counter.
+  off: 50
+debug: # Only available if the host uses the doors branch, it is ignored otherwise
+  on: 0 # Enables debugging features. Currently, these are the Item collection counter. (overwrites total triforce pieces) and Castle Gate closed indicator.
+  off: 50
 rom:
   sprite: # Enter the name of your preferred sprite and weight it appropriately
     random: 0
