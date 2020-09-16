@@ -557,8 +557,8 @@ def guiMain(args=None):
                                    int(rupee20Var.get()), int(rupee50Var.get()), int(rupee100Var.get()),
                                    int(rupee300Var.get()), int(rupoorVar.get()), int(blueclockVar.get()),
                                    int(greenclockVar.get()), int(redclockVar.get()), int(progbowVar.get()),
-                                   int(bomb10Var.get()), int(triforceVar.get()),
-                                   int(rupoorcostVar.get()), int(universalkeyVar.get())]
+                                   int(bomb10Var.get()), int(universalkeyVar.get()),
+                                   int(rupoorcostVar.get()), int(triforceVar.get())]
         guiargs.rom = romVar.get()
         guiargs.create_diff = patchesVar.get()
         guiargs.sprite = sprite

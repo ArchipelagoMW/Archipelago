@@ -712,15 +712,16 @@ def make_custom_item_pool(world, player):
         placed_items[loc] = item
 
     # Correct for insanely oversized item counts and take initial steps to handle undersized pools.
-    for x in range(0, 64):
+    for x in range(0, 67):
         if customitemarray[x] > total_items_to_place:
             customitemarray[x] = total_items_to_place
-    if customitemarray[66] > total_items_to_place:
-        customitemarray[66] = total_items_to_place
+    if customitemarray[68] > total_items_to_place:
+        customitemarray[68] = total_items_to_place
+
+    # count all items, except rupoor cost
     itemtotal = 0
-    for x in range(0, 64):
+    for x in range(0, 67):
         itemtotal = itemtotal + customitemarray[x]
-    itemtotal = itemtotal + customitemarray[66]
     itemtotal = itemtotal + customitemarray[68]
 
     pool.extend(['Bow'] * customitemarray[0])
@@ -784,6 +785,7 @@ def make_custom_item_pool(world, player):
     pool.extend(['Red Clock'] * customitemarray[63])
     pool.extend(['Progressive Bow'] * customitemarray[64])
     pool.extend(['Bombs (10)'] * customitemarray[65])
+    pool.extend(['Triforce'] * customitemarray[68])
 
     diff = difficulties[difficulty]
 
