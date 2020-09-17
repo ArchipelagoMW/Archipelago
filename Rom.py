@@ -1,5 +1,5 @@
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '6aeb504cb11dbb5a0411655279634263'
+RANDOMIZERBASEHASH = '6a1058fd9726f86af07d8fada981aabd'
 
 import io
 import json
@@ -924,6 +924,11 @@ def patch_rom(world, rom, player, team, enemized):
     rom.write_byte(0x180043, 0xFF if world.swords[player] == 'swordless' else 0x00)  # starting sword for link
     rom.write_byte(0x180044, 0x01 if world.swords[player] == 'swordless' else 0x00)  # hammer activates tablets
 
+    if world.difficulty_adjustments[player] == 'easy':
+        rom.write_byte(0x18003F, 0x01)  # hammer can harm ganon
+        rom.write_byte(0x180041, 0x02)  # Allow swordless medallion use EVERYWHERE.
+        rom.write_byte(0x180044, 0x01)  # hammer activates tablets
+
     # set up clocks for timed modes
     if world.shuffle[player] == 'vanilla':
         ERtimeincrease = 0
@@ -950,7 +955,7 @@ def patch_rom(world, rom, player, team, enemized):
         rom.write_int32(0x180200, -100 * 60 * 60 * 60)  # red clock adjustment time (in frames, sint32)
         rom.write_int32(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
         rom.write_int32(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
-        if world.difficulty_adjustments[player] == 'normal':
+        if world.difficulty_adjustments[player] in ['easy', 'normal']:
             rom.write_int32(0x18020C, (10 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
         else:
             rom.write_int32(0x18020C, int((5 + ERtimeincrease / 2) * 60 * 60))  # starting time (in frames, sint32)

@@ -100,9 +100,10 @@ def parse_arguments(argv, no_defaults=False):
                              Expert:          A harder yet setting with minimum equipment and health.
                              ''')
     parser.add_argument('--item_functionality', default=defval('normal'), const='normal', nargs='?',
-                        choices=['normal', 'hard', 'expert'],
+                        choices=['easy', 'normal', 'hard', 'expert'],
                         help='''\
                              Select limits on item functionality to increase difficulty. (default: %(default)s)
+                             Easy:            Easy functionality. (Medallions usable without sword)
                              Normal:          Normal functionality.
                              Hard:            Reduced functionality.
                              Expert:          Greatly reduced functionality.

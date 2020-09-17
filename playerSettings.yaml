@@ -141,6 +141,7 @@ item_pool:
   expert: 0 # Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless)
   crowd_control: 0 # Sets up the item pool for the crowd control extension. Do not use it without crowd control
 item_functionality:
+  easy: 0 # Allow Hammer to damage ganon, Allow Hammer tablet collection, Allow swordless medallion use everywhere.
   normal: 50 # Vanilla item functionality
   hard: 0 # Reduced helpfulness of items (potions less effective, can't catch faeries, cape uses double magic, byrna does not grant invulnerability, boomerangs do not stun, silvers disabled outside ganon)
   expert: 0 # Vastly reduces the helpfulness of items (potions barely effective, can't catch faeries, cape uses double magic, byrna does not grant invulnerability, boomerangs and hookshot do not stun, silvers disabled outside ganon)
