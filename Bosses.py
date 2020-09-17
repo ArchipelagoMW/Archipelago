@@ -84,14 +84,12 @@ def KholdstareDefeatRule(state, player: int):
                     state.has('Fire Rod', player) or
                     (
                             state.has('Bombos', player) and
-                            # FIXME: the following only actually works for the vanilla location for swordless
                             (state.has_sword(player) or state.world.swords[player] == 'swordless')
                     )
             ) and
             (
                     state.has_melee_weapon(player) or
                     (state.has('Fire Rod', player) and state.can_extend_magic(player, 20)) or
-                    # FIXME: this actually only works for the vanilla location for swordless
                     (
                             state.has('Fire Rod', player) and
                             state.has('Bombos', player) and
@@ -135,9 +133,6 @@ boss_table = {
 
 
 def can_place_boss(world, player: int, boss: str, dungeon_name: str, level: Optional[str] = None) -> bool:
-    if world.swords[player] in ['swordless'] and boss == 'Kholdstare' and dungeon_name != 'Ice Palace':
-        return False
-
     if dungeon_name in ['Ganons Tower', 'Inverted Ganons Tower'] and level == 'top':
         if boss in ["Armos Knights", "Arrghus", "Blind", "Trinexx", "Lanmolas"]:
             return False
@@ -204,12 +199,6 @@ def place_bosses(world, player: int):
     anywhere_bosses = [boss for boss in placeable_bosses if all(
         can_place_boss(world, player, boss, loc, level) for loc, level in boss_locations)]
     if world.boss_shuffle[player] in ["basic", "normal"]:
-        # temporary hack for swordless kholdstare:
-        if world.swords[player] == 'swordless':
-            place_boss(world, player, 'Kholdstare', 'Ice Palace', None)
-            boss_locations.remove(['Ice Palace', None])
-            placeable_bosses.remove('Kholdstare')
-
         if world.boss_shuffle[player] == "basic":  # vanilla bosses shuffled
             bosses = placeable_bosses + ['Armos Knights', 'Lanmolas', 'Moldorm']
         else:  # all bosses present, the three duplicates chosen at random
