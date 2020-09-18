@@ -220,8 +220,7 @@ def get_weights(path):
             with open(path, 'rb') as f:
                 yaml = str(f.read(), "utf-8")
     except Exception as e:
-        print('Failed to read weights (%s)' % e)
-        return
+        raise Exception(f"Failed to read weights ({path})") from e
 
     return parse_yaml(yaml)
 
