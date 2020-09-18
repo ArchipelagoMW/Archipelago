@@ -141,6 +141,7 @@ item_pool:
   expert: 0 # Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless)
   crowd_control: 0 # Sets up the item pool for the crowd control extension. Do not use it without crowd control
 item_functionality:
+  easy: 0 # Allow Hammer to damage ganon, Allow Hammer tablet collection, Allow swordless medallion use everywhere.
   normal: 50 # Vanilla item functionality
   hard: 0 # Reduced helpfulness of items (potions less effective, can't catch faeries, cape uses double magic, byrna does not grant invulnerability, boomerangs do not stun, silvers disabled outside ganon)
   expert: 0 # Vastly reduces the helpfulness of items (potions barely effective, can't catch faeries, cape uses double magic, byrna does not grant invulnerability, boomerangs and hookshot do not stun, silvers disabled outside ganon)
@@ -217,6 +218,14 @@ door_shuffle: # Only available if the host uses the doors branch, it is ignored 
   vanilla: 50 # Everything should be like in vanilla
   basic: 0 # Dungeons are shuffled within themselves
   crossed: 0 # Dungeons are shuffled across each other
+intensity: # Only available if the host uses the doors branch, it is ignored otherwise
+  1: 50 # Shuffles normal doors and spiral staircases
+  2: 0 # And shuffles open edges and straight staircases
+  3: 0 # (Coming soon) And shuffles dungeon lobbies
+  random: 0 # Picks one of those at random
+experimental: # Only available if the host uses the doors branch, it is ignored otherwise
+  on: 0 # Enables experimental features. Currently, this is just the dungeon keys in chest counter.
+  off: 50
 rom:
   sprite: # Enter the name of your preferred sprite and weight it appropriately
     random: 0

@@ -681,6 +681,12 @@
       "description": "Alters the usefulness of various items in the game.",
       "inputType": "range",
       "subOptions": {
+        "easy": {
+          "keyString": "item_functionality.easy",
+          "friendlyName": "Easy",
+          "description": "Increases helpfulness of items. Medallions are usable everywhere, even without a sword. Hammer can be used in place of master sword to beat ganon and collect the tablets.",
+          "defaultValue": 0
+        },
         "normal": {
           "keyString": "item_functionality.normal",
           "friendlyName": "Normal",
@@ -1086,6 +1092,58 @@
           "friendlyName": "Crossed",
           "description": "Dungeons are shuffled across each other. Eastern may contain POD, Mire, and Hera.",
           "defaultValue": 0
+        }
+      }
+    },
+    "intensity": {
+      "keyString": "intensity",
+      "friendlyName": "Door Shuffle Intensity Level",
+      "description": "Specifies what types of doors will be shuffled.",
+      "inputType": "range",
+      "subOptions": {
+        "1": {
+          "keyString": "intensity.1",
+          "friendlyName": "Level 1",
+          "description": "Doors and Spiral cases will be shuffled amongst themselves.",
+          "defaultValue": 50
+        },
+        "2": {
+          "keyString": "intensity.2",
+          "friendlyName": "Level 2",
+          "description": "Doors, Open Edges, and Straight stair cases shuffled amongst each other. Spiral cases will be shuffled amongst themselves.",
+          "defaultValue": 0
+        },
+        "3": {
+          "keyString": "intensity.3",
+          "friendlyName": "Level 3",
+          "description": "(Coming soon) Everything in Level 2 plus lobby shuffling, using any non-dead-end super-tiles with a south facing door to become a dungeon entrance. (for example, EP Cannonball chest, TR Pipe Maze, Mire Hub, etc...)",
+          "defaultValue": 0
+        },
+        "random": {
+          "keyString": "intensity.random",
+          "friendlyName": "Random",
+          "description": "Randomly chooses an intensity level from 1-3.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "experimental": {
+      "keyString": "experimental",
+      "friendlyName": "Door Shuffle Experimental Options",
+      "description": "Specifies whether to try out experimental things. What it does is subject to change.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "experimental.on",
+          "friendlyName": "On",
+          "description": "Enable experimental door features.",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "experimental.off",
+          "friendlyName": "Off",
+          "description": "Disable experimental door features.",
+          "defaultValue": 50
         }
       }
     }
