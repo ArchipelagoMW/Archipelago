@@ -297,7 +297,7 @@ def guiMain(args=None):
     itemfunctionFrame = Frame(drowDownFrame)
     itemfunctionVar = StringVar()
     itemfunctionVar.set('normal')
-    itemfunctionOptionMenu = OptionMenu(itemfunctionFrame, itemfunctionVar, 'normal', 'hard', 'expert')
+    itemfunctionOptionMenu = OptionMenu(itemfunctionFrame, itemfunctionVar, 'easy', 'normal', 'hard', 'expert')
     itemfunctionOptionMenu.pack(side=RIGHT)
     itemfunctionLabel = Label(itemfunctionFrame, text='Difficulty: item functionality')
     itemfunctionLabel.pack(side=LEFT)
