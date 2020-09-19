@@ -102,6 +102,8 @@ def mirrorless_path_to_castle_courtyard(world, player):
                 else:
                     queue.append((entrance.connected_region, new_path))
 
+    raise Exception(f"Could not find mirrorless path to castle coutyard for Player {player}")
+
 def set_rule(spot, rule):
     spot.access_rule = rule
 
