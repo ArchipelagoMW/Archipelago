@@ -816,7 +816,7 @@ def make_custom_item_pool(world, player):
         itemtotal = itemtotal + 1
 
     if mode == 'standard':
-        if world.keyshuffle == "universal":
+        if world.keyshuffle[player] == "universal":
             key_location = world.random.choice(
                 ['Secret Passage', 'Hyrule Castle - Boomerang Chest', 'Hyrule Castle - Map Chest',
                  'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross'])
