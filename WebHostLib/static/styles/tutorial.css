@@ -80,3 +80,8 @@
     width: 100%;
     text-align: center;
 }
+
+#tutorial-wrapper #language-selector-wrapper{
+    width: 100%;
+    text-align: right;
+}
