@@ -194,6 +194,11 @@ shop_shuffle:
   ip: 0 # Shuffle inventories and randomize prices
   uip: 0 # Shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool
   # You can add more combos
+shuffle_prizes: # aka drops
+  none: 0 # do not shuffle prize packs
+  g: 50 # shuffle "general" price packs, as in enemy, tree pull, dig etc.
+  b: 0 # shuffle "bonk" price packs
+  bg: 0 # shuffle both
 timer:
   none: 50 # No timer will be displayed.
   timed: 0 # Starts with clock at zero. Green clocks subtract 4 minutes (total 20). Blue clocks subtract 2 minutes (total 10). Red clocks add two minutes (total 10). Winner is the player with the lowest time at the end.

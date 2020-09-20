@@ -411,6 +411,9 @@ def roll_settings(weights):
     ret.dungeon_counters = get_choice('dungeon_counters', weights, 'default')
 
     ret.progressive = convert_to_on_off(get_choice('progressive', weights, 'on'))
+
+    ret.shuffle_prizes = get_choice('shuffle_prizes', weights, "g")
+
     inventoryweights = weights.get('startinventory', {})
     startitems = []
     for item in inventoryweights.keys():
