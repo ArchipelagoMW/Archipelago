@@ -1005,6 +1005,38 @@
         }
       }
     },
+    "shuffle_prizes": {
+      "keyString": "shuffle_prizes",
+      "friendlyName": "Prize Shuffle",
+      "description": "Alters the Prizes from pulling, bonking, enemy kills, digging, and hoarders",
+      "inputType": "range",
+      "subOptions": {
+        "none": {
+          "keyString": "shuffle_prizes.none",
+          "friendlyName": "None",
+          "description": "All prizes from pulling, bonking, enemy kills, digging, hoarders are vanilla.",
+          "defaultValue": 0
+        },
+        "g": {
+          "keyString": "shuffle_prizes.g",
+          "friendlyName": "\"General\" prize shuffle",
+          "description": "Shuffles the prizes from pulling, enemy kills, digging, hoarders",
+          "defaultValue": 50
+        },
+        "b": {
+          "keyString": "shuffle_prizes.b",
+          "friendlyName": "Bonk prize shuffle",
+          "description": "Shuffles the prizes from bonking into trees.",
+          "defaultValue": 0
+        },
+        "bg": {
+          "keyString": "shuffle_prizes.bg",
+          "friendlyName": "Both",
+          "description": "Shuffles both of the options.",
+          "defaultValue": 0
+        }
+      }
+    },
     "timer": {
       "keyString": "timer",
       "friendlyName": "Timed Modes",
