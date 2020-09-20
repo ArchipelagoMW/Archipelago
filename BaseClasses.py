@@ -1384,7 +1384,7 @@ class Spoiler(object):
                 outfile.write('Beemizer:                        %s\n' % self.metadata['beemizer'][player])
                 outfile.write('Pot shuffle                      %s\n'
                               % ('Yes' if self.metadata['shufflepots'][player] else 'No'))
-                outfile.write('Prize shuffle                      %s\n' %
+                outfile.write('Prize shuffle                    %s\n' %
                               self.metadata['shuffle_prizes'][player])
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
