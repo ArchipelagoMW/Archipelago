@@ -269,7 +269,7 @@ def roll_settings(weights):
         ret.name = handle_name(ret.name)
 
     glitches_required = get_choice('glitches_required', weights)
-    if glitches_required not in ['none', 'no_logic', 'overworld_glitches', 'minor_glitches']:
+    if glitches_required not in [None, 'none', 'no_logic', 'overworld_glitches', 'minor_glitches']:
         logging.warning("Only NMG, OWG and No Logic supported")
         glitches_required = 'none'
     ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches',
@@ -300,7 +300,7 @@ def roll_settings(weights):
     entrance_shuffle = get_choice('entrance_shuffle', weights)
     ret.shuffle = entrance_shuffle if entrance_shuffle != 'none' else 'vanilla'
 
-    goal = get_choice('goals', weights)
+    goal = get_choice('goals', weights, 'ganon')
     ret.goal = {'ganon': 'ganon',
                 'fast_ganon': 'crystals',
                 'dungeons': 'dungeons',
@@ -344,13 +344,14 @@ def roll_settings(weights):
                   'assured': 'assured',
                   'vanilla': 'vanilla',
                   'swordless': 'swordless'
-                  }[get_choice('weapons', weights)]
+                  }[get_choice('weapons', weights, 'assured')]
 
     ret.difficulty = get_choice('item_pool', weights)
 
     ret.item_functionality = get_choice('item_functionality', weights)
 
-    ret.shufflebosses = {'none': 'none',
+    ret.shufflebosses = {None: 'none',
+                         'none': 'none',
                          'simple': 'basic',
                          'full': 'normal',
                          'random': 'chaos',
@@ -388,7 +389,8 @@ def roll_settings(weights):
 
     # end of legacy block
 
-    ret.enemy_damage = {'default': 'default',
+    ret.enemy_damage = {None: 'default',
+                        'default': 'default',
                         'shuffled': 'shuffled',
                         'random': 'chaos'
                         }[get_choice('enemy_damage', weights)]
@@ -459,6 +461,7 @@ def roll_settings(weights):
         ret.uw_palettes = get_choice('uw_palettes', romweights, "default")
     else:
         ret.quickswap = True
+        ret.sprite = "Link"
     return ret
 
 
