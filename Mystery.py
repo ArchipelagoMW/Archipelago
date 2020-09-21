@@ -435,8 +435,8 @@ def roll_settings(weights):
 
     if get_choice("local_keys", weights, "l" in dungeon_items):
         # () important for ordering of commands, without them the Big Keys section is part of the Small Key else
-        ret.local_items = (item_name_groups["Small Keys"] if "s" in dungeon_items else set()) \
-                          | item_name_groups["Big Keys"] if "b" in dungeon_items else set()
+        ret.local_items = (item_name_groups["Small Keys"] if ret.keyshuffle else set()) \
+                          | item_name_groups["Big Keys"] if ret.bigkeyshuffle else set()
     else:
         ret.local_items = set()
     for item_name in weights.get('local_items', []):
