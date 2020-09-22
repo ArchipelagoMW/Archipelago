@@ -58,8 +58,8 @@ class Client(Endpoint):
 
 
 class Context(Node):
-    def __init__(self, host: str, port: int, password: str, location_check_points: int, hint_cost: int,
-                 item_cheat: bool, forfeit_mode: str = "disabled", remaining_mode: str = "disabled",
+    def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
+                 hint_cost: int, item_cheat: bool, forfeit_mode: str = "disabled", remaining_mode: str = "disabled",
                  auto_shutdown: typing.SupportsFloat = 0, compatibility: int = 2):
         super(Context, self).__init__()
         self.compatibility: int = compatibility
@@ -74,6 +74,7 @@ class Context(Node):
         self.locations = {}
         self.host = host
         self.port = port
+        self.server_password = server_password
         self.password = password
         self.server = None
         self.countdown_timer = 0
@@ -376,6 +377,8 @@ async def on_client_joined(ctx: Context, client: Client):
 async def on_client_left(ctx: Context, client: Client):
     ctx.notify_all("%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1))
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
+    if ctx.commandprocessor.client == Client:
+        ctx.commandprocessor.client = None
 
 
 async def countdown(ctx: Context, timer):
@@ -571,6 +574,7 @@ def mark_raw(function):
 
 class CommandProcessor(metaclass=CommandMeta):
     commands: typing.Dict[str, typing.Callable]
+    client = None
     marker = "/"
 
     def output(self, text: str):
@@ -646,6 +650,7 @@ class CommonCommandProcessor(CommandProcessor):
 
     simple_options = {"hint_cost": int,
                       "location_check_points": int,
+                      "server_password": str,
                       "password": str,
                       "forfeit_mode": str,
                       "item_cheat": bool,
@@ -665,7 +670,10 @@ class CommonCommandProcessor(CommandProcessor):
         """List all current options. Warning: lists password."""
         self.output("Current options:")
         for option in self.simple_options:
-            self.output(f"Option {option} is set to {getattr(self.ctx, option)}")
+            if option == "server_password" and self.marker == "!":  #Do not display the server password to the client.
+                self.output(f"Option server_password is set to {('*' * random.randint(4,16))}")
+            else:
+                self.output(f"Option {option} is set to {getattr(self.ctx, option)}")
 
 class ClientMessageProcessor(CommonCommandProcessor):
     marker = "!"
@@ -674,11 +682,61 @@ class ClientMessageProcessor(CommonCommandProcessor):
         self.ctx = ctx
         self.client = client
 
+    def __call__(self, raw: str) -> typing.Optional[bool]:
+        if not raw.startswith("!admin"):
+            self.ctx.notify_all(self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + raw)
+        return super(ClientMessageProcessor, self).__call__(raw)
+
     def output(self, text):
         self.ctx.notify_client(self.client, text)
 
     def default(self, raw: str):
         pass  # default is client sending just text
+
+    def is_authenticated(self):
+        return self.ctx.commandprocessor.client == self.client
+
+    @mark_raw
+    def _cmd_admin(self, command: str = ""):
+        """Allow remote administration of the multiworld server"""
+
+        output = f"!admin {command}"
+        if output.lower().startswith("!admin login"):  # disallow others from seeing the supplied password, whether or not it is correct.
+            output = f"!admin login {('*' * random.randint(4, 16))}"
+        elif output.lower().startswith("!admin /option server_password"):  # disallow others from knowing what the new remote administration password is.
+            output = f"!admin /option server_password {('*' * random.randint(4, 16))}"
+        self.ctx.notify_all(self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + output)  # Otherwise notify the others what is happening.
+
+        if not self.ctx.server_password:
+            self.output("Sorry, Remote administration is disabled")
+            return False
+
+        if not command:
+            if self.is_authenticated():
+                self.output("Usage: !admin [Server command].\nUse !admin /help for help.\nUse !admin logout to log out of the current session.")
+            else:
+                self.output("Usage: !admin login [password]")
+            return True
+
+        if command.startswith("login "):
+            if command == f"login {self.ctx.server_password}":
+                self.output("Login successful. You can now issue server side commands.")
+                self.ctx.commandprocessor.client = self.client
+                return True
+            else:
+                self.output("Password incorrect.")
+                return False
+
+        if not self.is_authenticated():
+            self.output("You must first login using !admin login [password]")
+            return False
+
+        if command == "logout":
+            self.output("Logout successful. You can no longer issue server side commands.")
+            self.ctx.commandprocessor.client = None
+            return True
+
+        return self.ctx.commandprocessor(command)
 
     def _cmd_players(self) -> bool:
         """Get information about connected and missing players"""
@@ -997,7 +1055,6 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
                 await ctx.send_msgs(client, [['InvalidArguments', 'Say']])
                 return
 
-            ctx.notify_all(ctx.get_aliased_name(client.team, client.slot) + ': ' + args)
             client.messageprocessor(args)
 
 
@@ -1005,6 +1062,11 @@ class ServerCommandProcessor(CommonCommandProcessor):
     def __init__(self, ctx: Context):
         self.ctx = ctx
         super(ServerCommandProcessor, self).__init__()
+
+    def output(self, text: str):
+        if self.client:
+            self.ctx.notify_client(self.client, text)
+        super(ServerCommandProcessor, self).output(text)
 
     def default(self, raw: str):
         self.ctx.notify_all('[Server]: ' + raw)
@@ -1016,6 +1078,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
             if client.auth and client.name.lower() == player_name.lower() and client.socket and not client.socket.closed:
                 asyncio.create_task(client.socket.close())
                 self.output(f"Kicked {self.ctx.get_aliased_name(client.team, client.slot)}")
+                if self.ctx.commandprocessor.client == client:
+                    self.ctx.commandprocessor.client = None
                 return True
 
         self.output(f"Could not find player {player_name} to kick")
@@ -1162,10 +1226,12 @@ class ServerCommandProcessor(CommonCommandProcessor):
         if attrtype:
             if attrtype == bool:
                 def attrtype(input_text: str):
-                    if input_text.lower() in {"off", "0", "false", "none", "null", "no"}:
-                        return False
-                    else:
-                        return True
+                    return input_text.lower() not in {"off", "0", "false", "none", "null", "no"}
+            elif attrtype == str and option_name.endswith("password"):
+                def attrtype(input_text: str):
+                    if input_text.lower() in {"null", "none", '""', "''"}:
+                        return None
+                    return input_text
             setattr(self.ctx, option_name, attrtype(option))
             self.output(f"Set option {option_name} to {getattr(self.ctx, option_name)}")
             return True
@@ -1192,6 +1258,7 @@ def parse_args() -> argparse.Namespace:
     defaults = Utils.get_options()["server_options"]
     parser.add_argument('--host', default=defaults["host"])
     parser.add_argument('--port', default=defaults["port"], type=int)
+    parser.add_argument('--server_password', default=defaults["server_password"])
     parser.add_argument('--password', default=defaults["password"])
     parser.add_argument('--multidata', default=defaults["multidata"])
     parser.add_argument('--savefile', default=defaults["savefile"])
@@ -1261,9 +1328,9 @@ async def auto_shutdown(ctx, to_cancel=None):
 async def main(args: argparse.Namespace):
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
 
-    ctx = Context(args.host, args.port, args.password, args.location_check_points, args.hint_cost,
-                  not args.disable_item_cheat, args.forfeit_mode, args.remaining_mode, args.auto_shutdown,
-                  args.compatibility)
+    ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
+                  args.hint_cost, not args.disable_item_cheat, args.forfeit_mode, args.remaining_mode,
+                  args.auto_shutdown, args.compatibility)
 
     data_filename = args.multidata
 

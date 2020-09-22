@@ -20,6 +20,8 @@ server_options:
   savefile: null
   disable_save: false
   loglevel: "info"
+  # Allows for clients to log on and manage the server.  If this is null, no remote administration is possible.
+  server_password: null
   # Automatically forward the port that is used, then close that port after 24 hours
   port_forward: false
   # Disallow !getitem. Old /getitem cannot be blocked this way
