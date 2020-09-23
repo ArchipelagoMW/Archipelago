@@ -1,0 +1,183 @@
+# Guide d'installation du MultiWorld de A Link to the Past Randomizer
+
+<div id="tutorial-video-container">
+    <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/mJKEHaiyR_Y" frameborder="0"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+    </iframe>
+</div>
+
+## Logiciels requis
+- [Utilitaires du MultiWorld](https://github.com/Berserker66/MultiWorld-Utilities/releases)
+- [QUsb2Snes](https://github.com/Skarsnik/QUsb2snes/releases) (Inclus dans les utilitaires précédents)
+- Une solution logicielle ou matérielle capable de charger et de jouer des fichiers ROM de SNES
+    - Un émulateur capable d'éxécuter des scripts Lua
+      ([snes9x Multitroid](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
+      [BizHawk](http://tasvideos.org/BizHawk.html))
+    - Un SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), ou une autre solution matérielle compatible
+- Le fichier ROM de la v1.0 japonaise, sûrement nommé `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`
+
+## Procédure d'installation
+
+### Installation sur Windows
+1. Téléchargez et installez les utilitaires du MultiWorld à l'aide du lien au-dessus, faites attention à bien installer la version la plus récente.
+**Le fichier se situe dans la section "assets" en bas des informations de version**. Si vous voulez jouer des parties classiques de multiworld,
+vous voudrez télécharger `Setup.BerserkerMultiWorld.exe`
+    - Si vous voulez jouer à la version alternative avec le mélangeur de portes dans les donjons, vous voudrez télécharger le fichier `Setup.BerserkerMultiWorld.Doors.exe`.
+    - Durant le processus d'installation, il vous sera demandé de localiser votre ROM v1.0 japonaise. Si vous avez déjà installé le logiciel
+	auparavant et qu'il s'agit simplement d'une mise à jour, la localisation de la ROM originale ne sera pas requise.
+    - Il vous sera peut-être également demandé d'installer Microsoft Visual C++. Si vous le possédez déjà (possiblement parce qu'un
+	jeu Steam l'a déjà installé), l'installateur ne reproposera pas de l'installer.
+
+2. Si vous utilisez un émulateur, vous devriez assigner votre émulateur capable d'éxécuter des scripts Lua comme programme
+par défaut pour ouvrir vos ROMs.
+    1. Extrayez votre dossier d'émulateur sur votre Bureau, ou quelque part dont vous vous souviendrez. 
+    2. Faites un clic droit sur un fichier ROM et sélectionnez **Ouvrir avec...**
+    3. Cochez la case à côté de **Toujours utiliser cette application pour ouvrir les fichiers .sfc**
+    4. Descendez jusqu'en bas de la liste et sélectionnez **Rechercher une autre application sur ce PC**
+    5. Naviguez dans les dossiers jusqu'au fichier `.exe` de votre émulateur et choisissez **Ouvrir**. Ce fichier devrait
+	se trouver dans le dossier que vous avez extrait à la première étape.
+
+### Installation sur Mac
+- Des volontaires sont recherchés pour remplir cette section ! Contactez **Farrak Kilhn** sur Discord si vous voulez aider.
+
+## Configurer son fichier YAML
+
+### Qu'est-ce qu'un fichier YAML et pourquoi en ai-je besoin ?
+Votre fichier YAML contient un ensemble d'options de configuration qui fournissent au générateur des informations
+sur comment il devrait générer votre seed. Chaque joueur d'un multiwolrd devra fournir son propre fichier YAML. Cela permet à chaque 
+joueur d'apprécier une expérience customisée selon ses goûts, et les différents joueurs d'un même multiworld peuvent avoir différentes options.
+
+### Où est-ce que j'obtiens un fichier YAML ?
+Un fichier YAML de base est disponible dans le dossier où les utilitaires du MultiWorld sont installés. Il est situé dans le dossier 
+`players` et se nomme `easy.yaml`
+
+### Votre fichier YAML est pondéré
+Tout au long du fichier YAML, vous verrez plusieurs options semblables à celle-ci :
+```yaml
+map_shuffle:
+  on: 5
+  off: 15
+```
+Dans l'exemple précédent, imaginez que le générateur crée un seau étiqueté "map_shuffle", et qu'il place un morceau de papier pour chaque sous-option.
+Ici, il y a vingt papiers dans le seau : cinq pour l'option "on" et quinze "off". Quand le générateur décide s'il doit activer ou non le mélangeur de cartes pour
+votre partie, il tire aléatoirement un papier dans le seau. Dans cet exemple, il y a de plus grandes chances d'avoir le mélange de cartes désactivé.
+S'il y a une option dont vous ne voulez jamais, mettez simplement sa valeur à zéro.
+
+### Configurer son fichier YAML
+Avant d'entamer la configuration de votre fichier YAML, il y a deux choses à faire.
+1. Paramétrer son nom (option `name`). C'est ce qu'il s'affichera lorsque vous enverrez et recevrez des objets.
+2. Renommez le fichier en quelque chose de plus parlant.
+
+Une fois cela fait, vous pouvez modifier librement les poids des options pour qu'ils correspondent le mieux à l'expérience
+de randomiseur que vous recherchez. Il y a des commentaires décrivant les effets de chaque option en jeu.
+
+### Options de la ROM
+En bas de votre fichier YAML, vous trouverez quelques options concernant la ROM. Elles contrôlent divers changements esthétiques
+qui n'affectent pas le gameplay. Ces options sont également pondérées, au cas où vous voudriez être surpris par la couleur de vos coeurs
+ou par la curiosité de votre palette dans l'overworld.
+
+Si vous voulez ajouter un sprite à la liste, il suffit d'inclure son nom et de lui associer un poids comme dans l'exemple suivant :
+```yaml
+rom:
+  sprite: # Enter the name of your preferred sprite and weight it appropriately
+    random: 0
+    randomonhit: 0
+    link: 1
+    vegeta: 3
+    rottytops: 5
+    rocko: 5
+    luigi: 3
+```
+
+### Vérifier son fichier YAML
+Si vous voulez valider votre fichier YAML pour être sûr qu'il fonctionne, vous pouvez le vérifier sur la page du
+[Validateur de YAML](/mysterycheck).
+
+## Générer une partie pour un joueur
+1. Aller sur la [page du générateur](/generate) et téléversez votre fichier YAML.
+2. Il vous sera alors présenté une page d'informations sur la seed, où vous pourrez télécharger votre patch.
+3. Double-cliquez sur le patch et l'émulateur devrait se lancer automatiquement avec la seed. Etant donné que le client
+n'est pas requis pour les parties à un joueur, vous pouvez le fermer ainsi que l'interface Web (WebUI).
+
+## Rejoindre un MultiWorld
+
+### Obtenir son patch et créer sa ROM
+Quand vous rejoignez un multiworld, il vous sera demandé de fournir votre fichier YAML à celui qui héberge la partie
+ou s'occupe de la génération. Une fois cela fait, l'hôte vous fournira soit un lien pour télécharger votre patch, soit un fichier `.zip` contenant
+les patchs de tous les joueurs. Votre patch devrait avoir l'extension `.bmbp`.
+
+Placez votre patch sur votre bureau ou dans un dossier simple d'accès, et double-cliquez dessus. Cela devrait lancer automatiquement
+le client, et devrait créer la ROM dans le même dossier que votre patch.
+
+### Se connecter au client
+
+#### Avec un émulateur
+Quand le client se lance automatiquement, QUsb2Snes devrait se lancer automatiquement également en arrière-plan.
+Si c'est la première fois qu'il démarre, il vous sera peut-être demandé de l'autoriser à communiquer
+à travers le pare-feu Windows.
+
+##### snes9x Multitroid
+1. Chargez votre ROM si ce n'est pas déjà fait.
+2. Cliquez sur le menu "File" et survolez l'option **Lua Scripting**
+3. Cliquez alors sur **New Lua Script Window...**
+4. Dans la nouvelle fenêtre, sélectionnez **Browse...**
+5. Dirigez vous vers le dossier où vous avez extrait snes9x Multitroid, allez dans le dossier `lua`, puis choisissez `multibridge.lua`
+6. Remarquez qu'un nom vous a été assigné, et que l'interface Web affiche "SNES Device: Connected", avec ce même nom dans le coin en haut à gauche.
+
+##### BizHawk
+1. Assurez vous d'avoir le coeur BSNES chargé. Cela est possible en cliquant sur le menu "Tools" de BizHawk et suivant ces options de menu :
+   `Config --> Cores --> SNES --> BSNES`  
+   Une fois le coeur changé, vous devez redémarrer BizHawk.
+2. Chargez votre ROM si ce n'est pas déjà fait.
+3. Cliquez sur le menu "Tools" et cliquez sur **Lua Console**
+4. Cliquez sur le bouton pour ouvrir un nouveau script Lua.
+5. Dirigez vous vers le dossier d'installation des utilitaires du MultiWorld, puis dans les dossiers suivants :  
+   `QUsb2Snes/Qusb2Snes/LuaBridge`
+6. Sélectionnez `luabridge.lua` et cliquez sur "Open".
+7. Remarquez qu'un nom vous a été assigné, et que l'interface Web affiche "SNES Device: Connected", avec ce même nom dans le coin en haut à gauche.
+
+#### Avec une solution matérielle
+Ce guide suppose que vous avez télchargé le bon micro-logiciel pour votre appareil. Si ce n'est pas déjà le cas, faites le maintenant.
+Les utilisateurs de SD2SNES et de FXPak Pro peuvent télécharger le micro-logiciel approprié 
+[ici](https://github.com/RedGuyyyy/sd2snes/releases). Pour les autres solutions, de l'aide peut être trouvée
+[sur cette page](http://usb2snes.com/#supported-platforms).
+
+**Pour vous connecter avec une solution matérielle vous devez utiliser une ancienne version de QUsb2Snes
+([v0.7.16](https://github.com/Skarsnik/QUsb2snes/releases/tag/v0.7.16)).**  
+Les versions postérieures brisent la compatibilité avec le multiworld.
+
+1. Fermez votre émulateur, qui s'est potentiellement lancé automatiquement.
+2. Fermez QUsb2Snes, qui s'est lancé automatiquement avec le client.
+3. Lancez la version appropriée de QUsb2Snes (v0.7.16).
+4. Lancer votre console et chargez la ROM.
+5. Remarquez que l'interface Web affiche "SNES Device: Connected", avec le nom de votre appareil.
+
+### Se connecter au MultiServer
+Le patch qui a lancé le client devrait vous avoir connecté automatiquement au MultiServer.
+Il y a cependant quelques cas où cela peut ne pas se produire, notamment si le multiworld est hébergé sur ce site, mais a été généré ailleurs.
+Si l'interface Web affiche "Server Status: Not Connected", demandez simplement à l'hôte l'adresse du serveur,
+et copiez/collez la dans le champ "Server" puis appuyez sur Entrée.
+
+Le client essaiera de vous reconnecter à la nouvelle adresse du serveur, et devrait mentionner "Server
+Status: Connected". Si le client ne se connecte pas après quelques instants, il faudra peut-être rafraîchir la page de l'interface Web.
+
+### Jouer au jeu
+Une fois que l'interface Web affiche que la SNES et le serveur sont connectés, vous êtes prêt à jouer. Félicitations
+pour avoir rejoint un multiworld !
+
+## Héberger un MultiWorld
+La méthode recommandée pour héberger une partie est d'utiliser le service d'hébergement fourni par 
+[le site](https://berserkermulti.world/generate). Le processus est relativement simple :
+
+1. Récupérez les fichiers YAML des joueurs.
+2. Créez une archive zip contenant ces fichiers YAML.
+3. Téléversez l'archive zip sur le lien au-dessus.
+4. Attendez un moment que les seed soient générées.
+5. Lorsque les seeds sont générées, vous serez redirigé vers une page d'informations.
+6. Cliquez sur "Create New Room". Cela vous amènera à la page du serveur. Fournissez le lien de cette page aux autres joueurs
+   afin qu'ils puissent récupérer leurs patchs.  
+   **Note:** Les patchs fournis sur cette page permettront aux joueurs de se connecteur automatiquement au serveur,
+   tandis que ceux de la page "Seed Info" non.
+7. Remarquez qu'un lien vers le traqueur du MultiWorld est en haut de la page de la salle. Vous devriez également fournir ce lien aux joueurs
+   pour qu'ils puissent la progression de la partie. N'importe quel personne voulant observer devrait avoir accès à ce lien.
+8. Une fois que tous les joueurs ont rejoint, vous pouvez commencer à jouer.

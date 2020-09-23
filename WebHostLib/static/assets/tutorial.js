@@ -1,6 +1,7 @@
 const availableLanguages = {
     en: 'English',
     es: 'Español',
+    fr: 'Français',
 };
 
 window.addEventListener('load', () => {

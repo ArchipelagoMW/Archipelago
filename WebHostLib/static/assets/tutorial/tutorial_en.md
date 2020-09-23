@@ -50,48 +50,21 @@ each player to enjoy an experience customized for their taste, and different pla
 can all have different options.
 
 ### Where do I get a YAML file?
-A basic YAML file is available in the directory where you installed the MultiWorld Utilities. It is within
-the players folder and is called `easy.yaml`
+The [PlayerSettings](/player-settings) page on the website allows you to configure your personal settings
+and download a `yaml` file. You may configure up to three presets on this page.
 
 ### Your YAML file is weighted
-Throughout your YAML file, you will see many options which look similar to this:
-```yaml
-map_shuffle:
-  on: 5
-  off: 15
-```
-In the above example, imagine the generator creates a bucket labelled "map_shuffle", and places a folded
-piece of paper into the bucket for each sub-option. Here, there are twenty pieces of paper in the bucket:
-five for "on" and fifteen for "off". When the generator is deciding whether or not to turn on map shuffle
-for your game, it reaches into this bucket and pulls out a piece of paper at random. In this example,
-you are much more likely to have map shuffle turned off. If you never want an option to be chosen, simply
-set its value to zero.
+The Player Settings page has many options which are primarily represented with sliders. This allows you to
+choose how likely certain options are to occur relative to other options within a category.
 
-### Configuring your YAML file
-Before you begin configuring your YAML file, there are two things you must do.
-1. Set your `name`. This is what will appear as you send and receive items (if you play MultiWorld games).
-2. Rename the file to something meaningful.
+For example, imagine the generator creates a bucket labelled "Map Shuffle", and places folded pieces of paper
+into the bucket for each sub-option. Also imagine your chosen value for "On" is 20 and your value for "Off" is 40.
 
-Once those are complete, feel free to adjust the options within the file to fit your desired randomizer
-experience. The options are commented to explain their effects on the game.
+In this example, sixth pieces of paper are put into the bucket. Twenty for "On" and forty for "Off". When the
+generator is deciding whether or not to turn on map shuffle for your game, it reaches into this bucket and pulls
+out a piece of paper at random. In this example, you are much more likely to have map shuffle turned off.
 
-### ROM Options
-At the bottom of your YAML file, you will find a set of ROM options. These control various aesthetic changes
-which do not affect gameplay. These options are also weighted, in case you want to be surprised by the color
-of your hearts or by the silliness of your overworld palette.
-
-If you would like to add a sprite to the list, simply include its name and give it a weight like so:
-```yaml
-rom:
-  sprite: # Enter the name of your preferred sprite and weight it appropriately
-    random: 0
-    randomonhit: 0
-    link: 1
-    vegeta: 3
-    rottytops: 5
-    rocko: 5
-    luigi: 3
-```
+If you never want an option to be chosen, simply set its value to zero.
 
 ### Verifying your YAML file
 If you would like to validate your YAML file to make sure it works, you may do so on the
