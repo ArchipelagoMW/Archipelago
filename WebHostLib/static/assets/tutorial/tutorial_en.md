@@ -50,17 +50,17 @@ each player to enjoy an experience customized for their taste, and different pla
 can all have different options.
 
 ### Where do I get a YAML file?
-The [PlayerSettings](/player-settings) page on the website allows you to configure your personal settings
+The [Player Settings](/player-settings) page on the website allows you to configure your personal settings
 and download a `yaml` file. You may configure up to three presets on this page.
 
 ### Your YAML file is weighted
 The Player Settings page has many options which are primarily represented with sliders. This allows you to
 choose how likely certain options are to occur relative to other options within a category.
 
-For example, imagine the generator creates a bucket labelled "Map Shuffle", and places folded pieces of paper
+For example, imagine the generator creates a bucket labeled "Map Shuffle", and places folded pieces of paper
 into the bucket for each sub-option. Also imagine your chosen value for "On" is 20 and your value for "Off" is 40.
 
-In this example, sixth pieces of paper are put into the bucket. Twenty for "On" and forty for "Off". When the
+In this example, sixty pieces of paper are put into the bucket. Twenty for "On" and forty for "Off". When the
 generator is deciding whether or not to turn on map shuffle for your game, it reaches into this bucket and pulls
 out a piece of paper at random. In this example, you are much more likely to have map shuffle turned off.
 
