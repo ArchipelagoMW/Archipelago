@@ -346,6 +346,32 @@
         }
       }
     },
+	"triforce_pieces_mode": {
+	  "keyString": "triforce_pieces_mode",
+      "friendlyName": "Triforce Pieces Mode",
+      "description": "Determines how to determine how many extra Triforce pieces will be available",
+      "inputType": "range",
+      "subOptions": {
+        "available": {
+          "keyString": "triforce_pieces_mode.available",
+          "friendlyName": "Available",
+          "description": "Determine the total number of pieces available in \"Triforce pieces available\"",
+          "defaultValue": 50
+        },
+        "extra": {
+          "keyString": "triforce_pieces_mode.extra",
+          "friendlyName": "Extra",
+          "description": "Determine how many extra pieces will be available in \"Extra Triforce pieces quantity\"",
+          "defaultValue": 0
+        },
+        "percentage": {
+          "keyString": "triforce_pieces_mode.percentage",
+          "friendlyName": "Percentage",
+          "description": "Determine the available pieces using a percentage of the required ones using the \"Extra Triforce pieces percentage\"",
+          "defaultValue": 0
+        }
+      }
+	},
     "triforce_pieces_available": {
       "keyString": "triforce_pieces_available",
       "friendlyName": "Triforce Pieces Available",
@@ -375,6 +401,70 @@
           "friendlyName": 50,
           "description": "50 Triforce pieces will be hidden throughout Hyrule",
           "defaultValue": 50
+        }
+      }
+    },
+	"triforce_pieces_extra": {
+      "keyString": "triforce_pieces_extra",
+      "friendlyName": "Extra Triforce Pieces",
+      "description": "Determine how many extra pieces will be available",
+      "inputType": "range",
+      "subOptions": {
+        "0": {
+          "keyString": "triforce_pieces_extra.0",
+          "friendlyName": 0,
+          "description": "No extra Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 0
+        },
+        "5": {
+          "keyString": "triforce_pieces_extra.5",
+          "friendlyName": 5,
+          "description": "5 extra Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 50
+        },
+        "10": {
+          "keyString": "triforce_pieces_extra.10",
+          "friendlyName": 10,
+          "description": "10 extra Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 50
+        },
+        "15": {
+          "keyString": "triforce_pieces_extra.15",
+          "friendlyName": 15,
+          "description": "15 extra Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 0
+        },
+		"20": {
+          "keyString": "triforce_pieces_extra.20",
+          "friendlyName": 20,
+          "description": "20 extra Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 0
+        }
+      }
+    },
+	"triforce_pieces_percentage": {
+      "keyString": "triforce_pieces_percentage",
+      "friendlyName": "Extra Triforce Pieces Percentage",
+      "description": "Determine how many extra pieces will be available, according to a percentage of the required ones",
+      "inputType": "range",
+      "subOptions": {
+        "100": {
+          "keyString": "triforce_pieces_percentage.100",
+          "friendlyName": "100%",
+          "description": "No extra Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 0
+        },
+        "150": {
+          "keyString": "triforce_pieces_percentage.150",
+          "friendlyName": "150%",
+          "description": "Half the required Triforce pieces will be added",
+          "defaultValue": 50
+        },
+        "200": {
+          "keyString": "triforce_pieces_percentage.200",
+          "friendlyName": "200%",
+          "description": "The double of the required Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 0
         }
       }
     },

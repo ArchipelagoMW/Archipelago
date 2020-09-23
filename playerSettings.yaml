@@ -86,6 +86,22 @@ goals:
   local_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
   ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
   local_ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
+triforce_pieces_mode: #Determine how to calculate the extra available triforce pieces.
+  extra: 0 # available = triforce_pieces_extra + triforce_pieces_required
+  percentage: 0 # available = (triforce_pieces_percentage /100) * triforce_pieces_required
+  available: 50 # available = triforce_pieces_available
+triforce_pieces_extra: # Set to how many extra triforces pieces are available to collect in the world. 
+  # Format "pieces: chance"
+  0: 0
+  5: 50
+  10: 50
+  15: 0
+  20: 0
+triforce_pieces_percentage: # Set to how many extra triforces pieces according to a percentage of the required ones, are available to collect in the world. 
+  # Format "pieces: chance"
+  100: 0 #No extra
+  150: 50 #Half the required will be added as extra
+  200: 0 #There are the double of the required ones available.
 triforce_pieces_available: # Set to how many triforces pieces are available to collect in the world. Default is 30. Max is 90, Min is 1
   # Format "pieces: chance"
   25: 0
