@@ -22,7 +22,8 @@
 1. Téléchargez et installez les utilitaires du MultiWorld à l'aide du lien au-dessus, faites attention à bien installer la version la plus récente.
 **Le fichier se situe dans la section "assets" en bas des informations de version**. Si vous voulez jouer des parties classiques de multiworld,
 vous voudrez télécharger `Setup.BerserkerMultiWorld.exe`
-    - Si vous voulez jouer à la version alternative avec le mélangeur de portes dans les donjons, vous voudrez télécharger le fichier `Setup.BerserkerMultiWorld.Doors.exe`.
+    - Si vous voulez jouer à la version alternative avec le mélangeur de portes dans les donjons, vous voudrez télécharger le fichier
+	`Setup.BerserkerMultiWorld.Doors.exe`.
     - Durant le processus d'installation, il vous sera demandé de localiser votre ROM v1.0 japonaise. Si vous avez déjà installé le logiciel
 	auparavant et qu'il s'agit simplement d'une mise à jour, la localisation de la ROM originale ne sera pas requise.
     - Il vous sera peut-être également demandé d'installer Microsoft Visual C++. Si vous le possédez déjà (possiblement parce qu'un
@@ -50,44 +51,21 @@ joueur d'apprécier une expérience customisée selon ses goûts, et les différ
 ### Où est-ce que j'obtiens un fichier YAML ?
 Un fichier YAML de base est disponible dans le dossier où les utilitaires du MultiWorld sont installés. Il est situé dans le dossier 
 `players` et se nomme `easy.yaml`
+La page des [paramètres du joueur](/player-settings) vous permet de configurer vos paramètres personnels et de télécharger un fichier `yaml`.
+Vous pouvez configurez jusqu'à trois pré-paramétrages sur cette page.
 
 ### Votre fichier YAML est pondéré
-Tout au long du fichier YAML, vous verrez plusieurs options semblables à celle-ci :
-```yaml
-map_shuffle:
-  on: 5
-  off: 15
-```
-Dans l'exemple précédent, imaginez que le générateur crée un seau étiqueté "map_shuffle", et qu'il place un morceau de papier pour chaque sous-option.
-Ici, il y a vingt papiers dans le seau : cinq pour l'option "on" et quinze "off". Quand le générateur décide s'il doit activer ou non le mélangeur de cartes pour
-votre partie, il tire aléatoirement un papier dans le seau. Dans cet exemple, il y a de plus grandes chances d'avoir le mélange de cartes désactivé.
+La page de paramétrage a de nombreuses options qui sont essentiellement représentées avec des curseurs glissants. Cela vous permet de choisir quelles
+sont les chances qu'une certaine option apparaisse par rapport aux autres disponibles.
+
+Par exemple, imaginez que le générateur crée un seau étiqueté "Mélange des cartes", et qu'il place un morceau de papier
+pour chaque sous-option. Imaginez également que la valeur pour "On" est 20 et la valeur pour "Off" est 40.
+
+Dans cet exemple, il y a soixante morceaux de papier dans le seau : vingt pour "On" et quarante pour "Off". Quand le générateur
+décide s'il doit oui ou non activer le mélange des cartes pour votre partie, , il tire aléatoirement un papier dans le seau. 
+Dans cet exemple, il y a de plus grandes chances d'avoir le mélange de cartes désactivé.
+
 S'il y a une option dont vous ne voulez jamais, mettez simplement sa valeur à zéro.
-
-### Configurer son fichier YAML
-Avant d'entamer la configuration de votre fichier YAML, il y a deux choses à faire.
-1. Paramétrer son nom (option `name`). C'est ce qu'il s'affichera lorsque vous enverrez et recevrez des objets.
-2. Renommez le fichier en quelque chose de plus parlant.
-
-Une fois cela fait, vous pouvez modifier librement les poids des options pour qu'ils correspondent le mieux à l'expérience
-de randomiseur que vous recherchez. Il y a des commentaires décrivant les effets de chaque option en jeu.
-
-### Options de la ROM
-En bas de votre fichier YAML, vous trouverez quelques options concernant la ROM. Elles contrôlent divers changements esthétiques
-qui n'affectent pas le gameplay. Ces options sont également pondérées, au cas où vous voudriez être surpris par la couleur de vos coeurs
-ou par la curiosité de votre palette dans l'overworld.
-
-Si vous voulez ajouter un sprite à la liste, il suffit d'inclure son nom et de lui associer un poids comme dans l'exemple suivant :
-```yaml
-rom:
-  sprite: # Enter the name of your preferred sprite and weight it appropriately
-    random: 0
-    randomonhit: 0
-    link: 1
-    vegeta: 3
-    rottytops: 5
-    rocko: 5
-    luigi: 3
-```
 
 ### Vérifier son fichier YAML
 Si vous voulez valider votre fichier YAML pour être sûr qu'il fonctionne, vous pouvez le vérifier sur la page du
