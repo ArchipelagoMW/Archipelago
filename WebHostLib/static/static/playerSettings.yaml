@@ -10,7 +10,7 @@
 #   on: 5
 #   off: 15
 #
-# Means you have 5 chances for map shuffle to not occur, and 15 chances for map shuffle to be turned on
+# Means you have 5 chances for map shuffle to occur, and 15 chances for map shuffle to be turned off
 
 # I've never seen a file like this before. What characters am I allowed to use?
 # This is a .yaml file. You are allowed to use most characters.
@@ -90,14 +90,14 @@ triforce_pieces_mode: #Determine how to calculate the extra available triforce p
   extra: 0 # available = triforce_pieces_extra + triforce_pieces_required
   percentage: 0 # available = (triforce_pieces_percentage /100) * triforce_pieces_required
   available: 50 # available = triforce_pieces_available
-triforce_pieces_extra: # Set to how many extra triforces pieces are available to collect in the world. 
+triforce_pieces_extra: # Set to how many extra triforces pieces are available to collect in the world.
   # Format "pieces: chance"
   0: 0
   5: 50
   10: 50
   15: 0
   20: 0
-triforce_pieces_percentage: # Set to how many extra triforces pieces according to a percentage of the required ones, are available to collect in the world. 
+triforce_pieces_percentage: # Set to how many extra triforces pieces according to a percentage of the required ones, are available to collect in the world.
   # Format "pieces: chance"
   100: 0 #No extra
   150: 50 #Half the required will be added as extra
@@ -171,16 +171,16 @@ boss_shuffle:
   full: 0 # 3 bosses can occur twice
   random: 0 # Any boss can appear any amount of times
   singularity: 0 # Picks a boss, tries to put it everywhere that works, if there's spaces remaining it picks a boss to fill those
-enemy_shuffle: # randomize enemy placement
+enemy_shuffle: # Randomize enemy placement
   on: 0
   off: 50
-killable_thieves: # make thieves killable.
-  on: 0 # usually turned on together with enemy_shuffle to make annoying thief placement more manageable
+killable_thieves: # Make thieves killable
+  on: 0 # Usually turned on together with enemy_shuffle to make annoying thief placement more manageable
   off: 50
-tile_shuffle: # randomize the tile layouts in flying tile rooms
+tile_shuffle: # Randomize the tile layouts in flying tile rooms
   on: 0
   off: 50
-bush_shuffle: # randomize the chance that bushes have enemies and the enemies under said bush
+bush_shuffle: # Randomize the chance that bushes have enemies and the enemies under said bush
   on: 0
   off: 50
 enemy_damage:
@@ -204,12 +204,12 @@ beemizer: # Remove items from the global item pool and replace them with single 
   4: 0 # 100% of the non-essential item pool is replaced with bee traps
 shop_shuffle:
   none: 50
-  i: 0 # shuffle the inventories of the shops around
-  p: 0 # randomize the prices of the items in shop inventories
-  u: 0 # shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
-  ip: 0 # shuffle inventories and randomize prices
-  uip: 0 # shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool
-  # you can add more combos
+  i: 0 # Shuffle the inventories of the shops around
+  p: 0 # Randomize the prices of the items in shop inventories
+  u: 0 # Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
+  ip: 0 # Shuffle inventories and randomize prices
+  uip: 0 # Shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool
+  # You can add more combos
 shuffle_prizes: # aka drops
   none: 0 # do not shuffle prize packs
   g: 50 # shuffle "general" price packs, as in enemy, tree pull, dig etc.

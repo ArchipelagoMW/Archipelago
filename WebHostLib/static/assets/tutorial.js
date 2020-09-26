@@ -1,4 +1,5 @@
 const availableLanguages = {
+    de: 'Deutsch',
     en: 'English',
     es: 'Español',
     fr: 'Français',
@@ -25,7 +26,8 @@ window.addEventListener('load', () => {
         ajax.send();
     }).then((results) => {
         // Build the language selector
-        const currentLanguage = window.location.href.split('/').pop();
+        let currentLanguage = window.location.href.split('/').pop();
+        if (Object.keys(availableLanguages).indexOf(currentLanguage) === -1) { currentLanguage = 'en' }
         const languageSelectorWrapper = document.createElement('div');
         languageSelectorWrapper.setAttribute('id', 'language-selector-wrapper')
         const languageSelector = document.createElement('select');

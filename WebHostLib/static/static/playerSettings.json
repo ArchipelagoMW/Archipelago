@@ -205,7 +205,8 @@
         "none": {
           "keyString": "accessibility.none",
           "friendlyName": "Required Only",
-          "description": "Guarantees only that the game is beatable. You may not be able to access all locations or acquire all items."
+          "description": "Guarantees only that the game is beatable. You may not be able to access all locations or acquire all items.",
+          "defaultValue": 0
         }
       }
     },
@@ -342,7 +343,8 @@
         "local_ganon_triforce_hunt": {
           "keyString": "goals.local_ganon_triforce_hunt",
           "friendlyName": "Local Triforce hunt /w Ganon",
-          "description": "Same as Local Triforce Hunt, but you need to defeat Ganon in his lair instead of talking with Murahadala."
+          "description": "Same as Local Triforce Hunt, but you need to defeat Ganon in his lair instead of talking with Murahadala.",
+          "defaultValue": 0
         }
       }
     },
@@ -723,7 +725,8 @@
         "swordless": {
           "keyString": "weapons.swordless",
           "friendlyName": "Swordless",
-          "description": "Your swords are replaced with rupees. Gameplay changes are made to accommodate this change."
+          "description": "Your swords are replaced with rupees. Gameplay changes are made to accommodate this change.",
+          "defaultValue": 0
         }
       }
     },
@@ -1226,19 +1229,19 @@
         "1": {
           "keyString": "intensity.1",
           "friendlyName": "Level 1",
-          "description": "Doors and Spiral cases will be shuffled amongst themselves.",
+          "description": "Doors and spiral staircases will be shuffled amongst themselves.",
           "defaultValue": 50
         },
         "2": {
           "keyString": "intensity.2",
           "friendlyName": "Level 2",
-          "description": "Doors, Open Edges, and Straight stair cases shuffled amongst each other. Spiral cases will be shuffled amongst themselves.",
+          "description": "Doors, open edges, and straight stair cases are shuffled amongst each other. Spiral staircases will be shuffled amongst themselves.",
           "defaultValue": 0
         },
         "3": {
           "keyString": "intensity.3",
           "friendlyName": "Level 3",
-          "description": "(Coming soon) Everything in Level 2 plus lobby shuffling, using any non-dead-end super-tiles with a south facing door to become a dungeon entrance. (for example, EP Cannonball chest, TR Pipe Maze, Mire Hub, etc...)",
+          "description": "Level 2 plus lobby shuffling, which means any non-dead-end supertile with a south-facing door may become a dungeon entrance.",
           "defaultValue": 0
         },
         "random": {

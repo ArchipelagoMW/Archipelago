@@ -137,7 +137,7 @@ const getSettingValue = (settings, keyString) => {
     if(typeof(key) === 'string' && currentVal.hasOwnProperty(key)){
       currentVal = currentVal[key];
     }else{
-      return false;
+      currentVal = false;
     }
   });
   return currentVal;
