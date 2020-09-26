@@ -401,7 +401,7 @@ def shuffle_shops(world, items, player: int):
                 i += slots
 
 
-take_any_locations = [
+take_any_locations = {
     'Snitch Lady (East)', 'Snitch Lady (West)', 'Bush Covered House', 'Light World Bomb Hut',
     'Fortune Teller (Light)', 'Lake Hylia Fortune Teller', 'Lumberjack House', 'Bonk Fairy (Light)',
     'Bonk Fairy (Dark)', 'Lake Hylia Healer Fairy', 'Swamp Healer Fairy', 'Desert Healer Fairy',
@@ -409,15 +409,16 @@ take_any_locations = [
     'Dark Death Mountain Healer Fairy', 'Long Fairy Cave', 'Good Bee Cave', '20 Rupee Cave',
     'Kakariko Gamble Game', '50 Rupee Cave', 'Lost Woods Gamble', 'Hookshot Fairy',
     'Palace of Darkness Hint', 'East Dark World Hint', 'Archery Game', 'Dark Lake Hylia Ledge Hint',
-    'Dark Lake Hylia Ledge Spike Cave', 'Fortune Teller (Dark)', 'Dark Sanctuary Hint', 'Dark Desert Hint']
+    'Dark Lake Hylia Ledge Spike Cave', 'Fortune Teller (Dark)', 'Dark Sanctuary Hint', 'Dark Desert Hint'}
+
 
 def set_up_take_anys(world, player):
-    if world.mode[player] == 'inverted' and 'Dark Sanctuary Hint' in take_any_locations:
-        take_any_locations.remove('Dark Sanctuary Hint')
-    elif world.mode[player] != 'inverted' and 'Dark Sanctuary Hint' not in take_any_locations:
-        take_any_locations.append('Dark Sanctuary Hint')
+    if world.mode[player] == 'inverted':
+        take_any_locs = take_any_locations - {"Dark Sanctuary Hint", "Archery Game"}
+    else:
+        take_any_locs = take_any_locations
 
-    regions = world.random.sample(take_any_locations, 5)
+    regions = world.random.sample(take_any_locs, 5)
 
     old_man_take_any = Region("Old Man Sword Cave", RegionType.Cave, 'the sword cave', player)
     world.regions.append(old_man_take_any)
