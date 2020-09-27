@@ -643,7 +643,7 @@ class CollectionState(object):
         return self.has('Flute', player) and lw.can_reach(self) and self.is_not_bunny(lw, player)
 
     def can_melt_things(self, player: int) -> bool:
-        return self.has('Fire Rod', player) or (self.has('Bombos', player) and self.has_sword(player))
+        return self.has('Fire Rod', player) or (self.has('Bombos', player) and (self.has_sword(player) or self.world.swords[player] == "swordless"))
 
     def can_avoid_lasers(self, player: int) -> bool:
         return self.has('Mirror Shield', player) or self.has('Cane of Byrna', player) or self.has('Cape', player)
