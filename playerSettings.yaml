@@ -288,7 +288,12 @@ debug: # Only available if the host uses the doors branch, it is ignored otherwi
 rom:
   sprite: # Enter the name of your preferred sprite and weight it appropriately
     random: 0
-    randomonhit: 0
+    randomonhit: 0 # Random sprite on hit
+    randomonenter: 0 # Random sprite on entering the underworld.
+    randomonexit: 0 # Random sprite on exiting the underworld.
+    randomonslash: 0 # Random sprite on sword slashes
+    randomonitem: 0  # Random sprite on getting items.  
+                     # You can combine these events like this.  randomonhit-enter-exit  if you want it on hit, enter, exit.
     Link: 50 # To add other sprites: open the gui/Creator, go to adjust, select a sprite and write down the name the gui calls it
   disablemusic: # If "on", all in-game music will be disabled
     on: 0

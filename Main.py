@@ -177,10 +177,9 @@ def main(args, seed=None):
     rom_names = []
 
     def _gen_rom(team: int, player: int):
-        sprite_random_on_hit = type(args.sprite[player]) is str and args.sprite[player].lower() == 'randomonhit'
         use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
                         or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
-                        or world.shufflepots[player] or sprite_random_on_hit or world.bush_shuffle[player]
+                        or world.shufflepots[player] or world.bush_shuffle[player]
                         or world.killable_thieves[player] or world.tile_shuffle[player])
 
         rom = LocalRom(args.rom)
@@ -188,8 +187,7 @@ def main(args, seed=None):
         patch_rom(world, rom, player, team, use_enemizer)
 
         if use_enemizer:
-            patch_enemizer(world, player, rom, args.enemizercli,
-                           sprite_random_on_hit)
+            patch_enemizer(world, player, rom, args.enemizercli)
 
         if args.race:
             patch_race_rom(rom)
@@ -198,7 +196,7 @@ def main(args, seed=None):
 
         apply_rom_settings(rom, args.heartbeep[player], args.heartcolor[player], args.quickswap[player],
                            args.fastmenu[player], args.disablemusic[player], args.sprite[player],
-                           args.ow_palettes[player], args.uw_palettes[player], world, player)
+                           args.ow_palettes[player], args.uw_palettes[player], world, player, True)
 
         mcsb_name = ''
         if all([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player],
