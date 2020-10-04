@@ -37,52 +37,28 @@
 
 ## Configurar tu archivo YAML
 
-### Que es un archivo YAML y porque necesito uno?
+### Que es un archivo YAML y por qué necesito uno?
 Tu archivo YAML contiene un conjunto de opciones de configuración que proveen al generador con información sobre como debe generar tu juego.
-Cada jugador en una partida de multiworld proveera su propio fichero YAML. Este configuración permite
+Cada jugador en una partida de multiworld proveerá su propio fichero YAML. Esta configuración permite
 que cada jugador disfrute de una experiencia personalizada a su gusto, y cada jugador dentro de la misma partida de multiworld puede tener diferentes opciones.
 
 ### Donde puedo obtener un fichero YAML?
-Un fichero YAML básico esta disponible en el directorio donde hayas instalado MultiWorld Utilities. Esta situado en el interior del directorio "Players" y se llama `easy.yaml`.
+La página "[Player Settings](/player-settings)" en el sitio web te permite configurar tu configuración personal y
+descargar un fichero "YAML". Puedes tener hasta 3 configuraciones guardadas en esta página.
 
 ### Tu fichero YAML esta ponderado
-A lo largo de tu fichero YAML, veras muchas opciones que se asemejaran a esto:
-```yaml
-map_shuffle:
-  on: 5
-  off: 15
-```
-En el ejemplo anterior, imagina que el generador crea un cubo llamado "map_shuffle", y pone diversos trozos de papel doblado en él por cada sub-opción.
-Aqui, habrá 20 trozos de papel en el cubo:
-5 para "on" y 15 para "off". Cuando el generado esta decidiendo si activar o no "map shuffle" para tu partida, 
+La página "Player settings" tiene muchas opciones representadas con controles deslizantes. Esto permite
+elegir cuan probable los valores de una categoría pueden ser elegidos sobre otros de la misma.
+
+Por ejemplo, imagina que el generador crea un cubo llamado "map_shuffle", y pone trozos de papel doblado en él por cada sub-opción.
+Ademas imaginemos que tu valor elegido para "on" es 20 y el elegido para "off" es 40.
+
+Por tanto, en este ejemplo, habrán 60 trozos de papel. 20 para "on" y 40 para "off".
+Cuando el generador esta decidiendo si activar o no "map shuffle" para tu partida, 
 meterá la mano en el cubo y sacara un trozo de papel al azar. En este ejemplo,
-es mucho mas probable (75%) que "map shuffle" esté desactivado. Si quieres que una opción no pueda ser escogida, simplemente asigna el valor 0 a dicha opción.
+es mucho mas probable (2 de cada 3 veces (40/60)) que "map shuffle" esté desactivado. 
 
-### Configurar tu archivo YAML
-Antes de empezar, hay dos cosas que debes hacer.
-1. Asigna el valor a `name`. Esto es lo que aparecerá cuando envíes o recibas objetos (cuando juegues a multiworld).
-2. Renombra el fichero a algo significativo.
-
-Una vez eso este hecho, siéntete libre para ajustar las opciones dentro del fichero para que se ajuste a la experiencia en randomizer que desees. 
-Las opciones están comentadas para explicar sus efectos en el juego.
-
-### Opciones ROM
-En la parte final de tu fichero YAML, encontraras un conjunto de opciones ROM. Estas controlan diversos cambios estéticos
-los cuales no afectan a la jugabilidad. Estas opciones también están ponderadas, en el caso que quieras sorprenderte por el color
-de tus corazones o la locura de la paleta de colores de tu mundo.
-
-Si quieres añadir un sprite a la lista, simplemente añade su nombre y su peso a la lista de esta manera
-```yaml
-rom:
-  sprite: # Enter the name of your preferred sprite and weight it appropriately
-    random: 0
-    randomonhit: 0
-    link: 1
-    vegeta: 3
-    rottytops: 5
-    rocko: 5
-    luigi: 3
-```
+Si quieres que una opción no pueda ser escogida, simplemente asigna el valor 0 a dicha opción.
 
 ### Verificando tu archivo YAML
 Si quieres validar que tu fichero YAML para asegurarte que funciona correctamente, puedes hacerlo en la pagina
