@@ -91,32 +91,7 @@ class LocalRom(object):
                     stream.write(buffer)
                 return
 
-        # verify correct checksum of baserom
-        if not self.verify(self.buffer, JAP10HASH):
-            logging.getLogger('').warning(
-                'Supplied Base Rom does not match known MD5 for JAP(1.0) release. Will try to patch anyway.')
-
-        # extend to 2MB
-        self.buffer.extend(bytearray([0x00]) * (0x400000 - len(self.buffer)))
-
-        # load randomizer patches
-        with open(local_path('data', 'base2current.json')) as stream:
-            patches = json.load(stream)
-        for patch in patches:
-            if isinstance(patch, dict):
-                for baseaddress, values in patch.items():
-                    self.write_bytes(int(baseaddress), values)
-
-        # verify md5
-        if self.verify(self.buffer):
-            with open(local_path('basepatch.sfc'), 'wb') as stream:
-                stream.write(self.buffer)
-            Patch.create_patch_file(local_path('basepatch.sfc'),
-                                    destination=local_path('data', 'basepatch.bmbp'))
-            os.remove(local_path('data', 'base2current.json'))
-        else:
-            raise RuntimeError(
-                'Provided Base Rom unsuitable for patching. Please provide a JAP(1.0) "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc" rom to use as a base.')
+        raise RuntimeError('Could not find Base Patch. Unable to continue.')
 
     def write_crc(self):
         crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
