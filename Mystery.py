@@ -468,6 +468,7 @@ def roll_settings(weights):
 
     if 'rom' in weights:
         romweights = weights['rom']
+        ret.sprite_pool = romweights['sprite_pool'] if 'sprite_pool' in romweights else []
         ret.sprite = get_choice('sprite', romweights, "Link")
         ret.disablemusic = get_choice('disablemusic', romweights, False)
         ret.quickswap = get_choice('quickswap', romweights, True)

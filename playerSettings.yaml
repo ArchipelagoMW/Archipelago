@@ -286,6 +286,11 @@ debug: # Only available if the host uses the doors branch, it is ignored otherwi
   on: 0 # Enables debugging features. Currently, these are the Item collection counter. (overwrites total triforce pieces) and Castle Gate closed indicator.
   off: 50
 rom:
+  #sprite_pool: # When specified, limits the pool of sprites used for randomon-event to the specified pool.  Uncomment to use this.
+  #  - link
+  #  - pride link
+  #  - penguin link
+  #  - random  # You can specify random multiple times for however many potentially unique random sprites you want in your pool.
   sprite: # Enter the name of your preferred sprite and weight it appropriately
     random: 0
     randomonhit: 0 # Random sprite on hit

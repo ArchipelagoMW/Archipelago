@@ -81,6 +81,7 @@ def main(args, seed=None):
     world.shop_shuffle = args.shop_shuffle.copy()
     world.progression_balancing = {player: not balance for player, balance in args.skip_progression_balancing.items()}
     world.shuffle_prizes = args.shuffle_prizes.copy()
+    world.sprite_pool = args.sprite_pool.copy()
 
     world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}
 

@@ -125,6 +125,7 @@ class World(object):
             set_player_attr('triforce_pieces_required', 20)
             set_player_attr('shop_shuffle', 'off')
             set_player_attr('shuffle_prizes', "g")
+            set_player_attr('sprite_pool', [])
 
     def secure(self):
         self.random = secrets.SystemRandom()
@@ -1291,7 +1292,8 @@ class Spoiler(object):
                          'triforce_pieces_available': self.world.triforce_pieces_available,
                          'triforce_pieces_required': self.world.triforce_pieces_required,
                          'shop_shuffle': self.world.shop_shuffle,
-                         'shuffle_prizes': self.world.shuffle_prizes
+                         'shuffle_prizes': self.world.shuffle_prizes,
+                         'sprite_pool': self.world.sprite_pool
                          }
 
     def to_json(self):

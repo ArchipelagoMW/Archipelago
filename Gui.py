@@ -550,6 +550,7 @@ def guiMain(args=None):
                                   "bonk": "b",
                                   "general": "g",
                                   "both": "bg"}[prizeVar.get()]
+        guiargs.sprite_pool = []
         guiargs.customitemarray = [int(bowVar.get()), int(silverarrowVar.get()), int(boomerangVar.get()),
                                    int(magicboomerangVar.get()), int(hookshotVar.get()), int(mushroomVar.get()),
                                    int(magicpowderVar.get()), int(firerodVar.get()),

@@ -162,7 +162,7 @@ def check_enemizer(enemizercli):
     check_enemizer.done = True
 
 
-def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_random_on_event):
+def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_random_on_event, sprite_pool):
     onevent = onhit = 0
     sprites = list()
     if not allow_random_on_event:
@@ -192,7 +192,13 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
 
         _populate_sprite_table()
         if onevent:
-            sprites = list(set(_sprite_table.values()))  # convert to list and remove dupes
+            if sprite_pool:
+                if isinstance(sprite_pool, str):
+                    sprite_pool = sprite_pool.split(':')
+                for sprite in sprite_pool:
+                    sprites.append(Sprite(sprite) if os.path.isfile(sprite) else get_sprite_from_name(sprite, local_random))
+            else:
+                sprites = list(set(_sprite_table.values()))  # convert to list and remove dupes
         else:
             sprites.append(sprite)
         if sprites:
@@ -1464,7 +1470,7 @@ def hud_format_text(text):
 
 def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite, ow_palettes, uw_palettes, world=None, player=1, allow_random_on_event=False):
     local_random = random if not world else world.rom_seeds[player]
-    apply_random_sprite_on_event(rom, sprite, local_random, allow_random_on_event)
+    apply_random_sprite_on_event(rom, sprite, local_random, allow_random_on_event, world.sprite_pool[player] if world else [])
 
     # enable instant item menu
     if fastmenu == 'instant':
