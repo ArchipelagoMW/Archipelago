@@ -169,7 +169,10 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
         allow_random_on_event = not rom.read_byte(0x186381)  # Check if explicitly disabled in rom. If so, it stays that way.
     if sprite and not isinstance(sprite, Sprite):
         sprite = sprite.lower()
-        if sprite.startswith('randomon'):
+        if sprite == 'randomonall':
+            onevent = 0xFFFF  # Support all current and future events that can cause random sprite changes.
+            onhit = 0x01
+        elif sprite.startswith('randomon'):
             onevent = onhit = 0x01 if 'hit' in sprite else 0x00
             onevent += 0x02 if 'enter' in sprite else 0x00
             onevent += 0x04 if 'exit' in sprite else 0x00
