@@ -2,6 +2,7 @@ from BaseClasses import Dungeon
 from Bosses import BossFactory
 from Fill import fill_restrictive
 from Items import ItemFactory
+from Regions import lookup_boss_drops
 
 
 def create_dungeons(world, player):
@@ -116,7 +117,14 @@ def fill_dungeons(world):
 def get_dungeon_item_pool(world):
     return [item for dungeon in world.dungeons for item in dungeon.all_items]
 
-def fill_dungeons_restrictive(world, shuffled_locations):
+def fill_dungeons_restrictive(world):
+    """Places dungeon-native items into their dungeons, places nothing if everything is shuffled outside."""
+    restricted_players = {player for player, restricted in world.restrict_dungeon_item_on_boss.items() if restricted}
+
+    locations = [location for location in world.get_unfilled_dungeon_locations()
+                 if not (location.player in restricted_players and location.name in lookup_boss_drops)] # filter boss
+
+    world.random.shuffle(locations)
     all_state_base = world.get_all_state()
 
     # with shuffled dungeon items they are distributed as part of the normal item pool
@@ -131,13 +139,11 @@ def fill_dungeons_restrictive(world, shuffled_locations):
                                                                        or (item.bigkey and not world.bigkeyshuffle[item.player])
                                                                        or (item.map and not world.mapshuffle[item.player])
                                                                        or (item.compass and not world.compassshuffle[item.player]))]
-
-    # sort in the order Big Key, Small Key, Other before placing dungeon items
-    sort_order = {"BigKey": 3, "SmallKey": 2}
-    dungeon_items.sort(key=lambda item: sort_order.get(item.type, 1))
-
-    fill_restrictive(world, all_state_base, shuffled_locations, dungeon_items, True)
-
+    if dungeon_items:
+        # sort in the order Big Key, Small Key, Other before placing dungeon items
+        sort_order = {"BigKey": 3, "SmallKey": 2}
+        dungeon_items.sort(key=lambda item: sort_order.get(item.type, 1))
+        fill_restrictive(world, all_state_base, locations, dungeon_items, True)
 
 
 dungeon_music_addresses = {'Eastern Palace - Prize': [0x1559A],

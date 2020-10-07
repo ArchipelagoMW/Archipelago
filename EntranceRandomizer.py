@@ -317,6 +317,11 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--shuffle_prizes', default=defval('g'), choices=['', 'g', 'b', 'gb'])
     parser.add_argument('--sprite_pool', help='''\
     Specifies a colon separated list of sprites used for random/randomonevent. If not specified, the full sprite pool is used.''')
+    parser.add_argument('--dark_room_logic', default=('Lamp'), choices=["lamp", "torches", "none"], help='''\
+    For unlit dark rooms, require the Lamp to be considered in logic by default. 
+    Torches means additionally easily accessible Torches that can be lit with Fire Rod are considered doable.
+    None means full traversal through dark rooms without tools is considered doable.''')
+    parser.add_argument('--restrict_dungeon_item_on_boss', default=defval(False), action="store_true")
     parser.add_argument('--remote_items', default=defval(False), action='store_true')
     parser.add_argument('--multi', default=defval(1), type=lambda value: min(max(int(value), 1), 255))
     parser.add_argument('--names', default=defval(''))
@@ -362,7 +367,7 @@ def parse_arguments(argv, no_defaults=False):
                          'heartbeep', "skip_progression_balancing", "triforce_pieces_available",
                          "triforce_pieces_required", "shop_shuffle",
                          'remote_items', 'progressive', 'dungeon_counters', 'glitch_boots', 'killable_thieves',
-                         'tile_shuffle', 'bush_shuffle', 'shuffle_prizes', 'sprite_pool']:
+                         'tile_shuffle', 'bush_shuffle', 'shuffle_prizes', 'sprite_pool', 'dark_room_logic', 'restrict_dungeon_item_on_boss']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})

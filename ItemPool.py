@@ -608,13 +608,13 @@ def get_pool_core(world, player: int):
 
     if want_progressives():
         pool.extend(diff.progressivebow)
-    elif swords != 'swordless':
-        pool.extend(diff.basicbow)
-    else:
+    elif swords == 'swordless' or logic == 'noglitches':
         swordless_bows = ['Bow', 'Silver Bow']
         if difficulty == "easy":
             swordless_bows *= 2
         pool.extend(swordless_bows)
+    else:
+        pool.extend(diff.basicbow)
 
     if swords == 'swordless':
         pool.extend(diff.swordless)

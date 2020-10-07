@@ -19,12 +19,21 @@
 
 description: Template Name # Used to describe your yaml. Useful if you have multiple files
 name: YourName # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
+### Logic Section ###
 glitches_required: # Determine the logic required to complete the seed
   none: 50 # No glitches required
   minor_glitches: 0 # Puts fake flipper, waterwalk, super bunny shenanigans, and etc into logic
   overworld_glitches: 0 # Assumes the player has knowledge of both overworld major glitches (boots clips, mirror clips) and minor glitches (fake flipper, super bunny shenanigans, water walk and etc.)
   no_logic: 0 # Your own items are placed with no regard to any logic; such as your Fire Rod can be on your Trinexx.
   # Other players items are placed into your world under OWG logic
+dark_room_logic: # Logic for unlit dark rooms
+  lamp: 50 # require the Lamp for these rooms to be considered accessible.
+  sconces: 0 # in addition to lamp, allow the fire rod and presence of easily accessible sconces for access
+  none: 0 # all dark rooms are always considered doable, meaning this may force completion of rooms in complete darkness
+restrict_dungeon_item_on_boss: # aka ambrosia boss items
+  on: 0 # prevents unshuffled compasses, maps and keys to be boss drops, they can still drop keysanity and other players' items
+  off: 50
+### End of Logic Section ###
 meta_ignore: # Nullify options specified in the meta.yaml file. Adding an option here guarantees it will not occur in your seed, even if the .yaml file specifies it
   mode:
     - inverted # Never play inverted seeds
@@ -305,8 +314,8 @@ rom:
     on: 0
     off: 50
   quickswap: # Enable switching items by pressing the L+R shoulder buttons
-    on: 0
-    off: 50
+    on: 50
+    off: 0
   menuspeed: # Controls how fast the item menu opens and closes
     normal: 50
     instant: 0

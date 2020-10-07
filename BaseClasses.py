@@ -5,7 +5,7 @@ from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict, Counter, deque
-from typing import Union, Optional, List, Set
+from typing import Union, Optional, List, Set, Dict
 import secrets
 import random
 
@@ -20,6 +20,8 @@ class World(object):
     _region_cache: dict
     difficulty_requirements: dict
     required_medallions: dict
+    dark_room_logic: Dict[int, str]
+    restrict_dungeon_item_on_boss: Dict[int, bool]
 
     def __init__(self, players: int, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer,
                  progressive,
@@ -126,6 +128,8 @@ class World(object):
             set_player_attr('shop_shuffle', 'off')
             set_player_attr('shuffle_prizes', "g")
             set_player_attr('sprite_pool', [])
+            set_player_attr('dark_room_logic', "lamp")
+            set_player_attr('restrict_dungeon_item_on_boss', False)
 
     def secure(self):
         self.random = secrets.SystemRandom()
@@ -356,6 +360,9 @@ class World(object):
             return [location for location in self.get_locations() if
                     location.player == player and not location.item]
         return [location for location in self.get_locations() if not location.item]
+
+    def get_unfilled_dungeon_locations(self):
+        return [location for location in self.get_locations() if not location.item and location.parent_region.dungeon]
 
     def get_filled_locations(self, player=None) -> list:
         if player is not None:
@@ -601,7 +608,6 @@ class CollectionState(object):
 
     def can_shoot_arrows(self, player: int) -> bool:
         if self.world.retro[player]:
-            # TODO: Progressive and Non-Progressive silvers work differently (progressive is not usable until the shop arrow is bought)
             return (self.has('Bow', player) or self.has('Silver Bow', player)) and self.can_buy('Single Arrow', player)
         return self.has('Bow', player) or self.has('Silver Bow', player)
 
@@ -614,6 +620,11 @@ class CollectionState(object):
                 cave.can_reach(self) and
                 self.is_not_bunny(cave, player)
         )
+
+    def can_retrieve_tablet(self, player:int) -> bool:
+        return self.has('Book of Mudora', player) and (self.has_beam_sword(player) or
+               ((self.world.swords[player] == "swordless" or self.world.difficulty_adjustments[player] == "easy") and
+                self.has("Hammer", player)))
 
     def has_sword(self, player: int) -> bool:
         return self.has('Fighter Sword', player) \
@@ -644,7 +655,10 @@ class CollectionState(object):
         return self.has('Flute', player) and lw.can_reach(self) and self.is_not_bunny(lw, player)
 
     def can_melt_things(self, player: int) -> bool:
-        return self.has('Fire Rod', player) or (self.has('Bombos', player) and (self.has_sword(player) or self.world.swords[player] == "swordless"))
+        return self.has('Fire Rod', player) or \
+               (self.has('Bombos', player) and
+                (self.world.difficulty_adjustments[player] == "easy" or self.world.swords[player] == "swordless" or
+                 self.has_sword(player)))
 
     def can_avoid_lasers(self, player: int) -> bool:
         return self.has('Mirror Shield', player) or self.has('Cane of Byrna', player) or self.has('Cape', player)
@@ -1260,6 +1274,7 @@ class Spoiler(object):
         from Utils import __version__ as ERVersion
         self.metadata = {'version': ERVersion,
                          'logic': self.world.logic,
+                         'dark_room_logic': self.world.dark_room_logic,
                          'mode': self.world.mode,
                          'retro': self.world.retro,
                          'weapons': self.world.swords,
@@ -1293,7 +1308,8 @@ class Spoiler(object):
                          'triforce_pieces_required': self.world.triforce_pieces_required,
                          'shop_shuffle': self.world.shop_shuffle,
                          'shuffle_prizes': self.world.shuffle_prizes,
-                         'sprite_pool': self.world.sprite_pool
+                         'sprite_pool': self.world.sprite_poolm,
+                         'restrict_dungeon_item_on_boss': self.world.restrict_dungeon_item_on_boss
                          }
 
     def to_json(self):
@@ -1337,6 +1353,9 @@ class Spoiler(object):
                         f"Hash - {self.world.player_names[player][team]} (Team {team + 1}): " if self.world.teams > 1 else 'Hash: ',
                         self.hashes[player, team]))
                 outfile.write('Logic:                           %s\n' % self.metadata['logic'][player])
+                outfile.write('Dark Room Logic:                 %s\n' % self.metadata['dark_room_logic'][player])
+                outfile.write('Restricted Boss Drops:           %s\n' %
+                              bool_to_text(self.metadata['restrict_dungeon_item_on_boss'][player]))
                 if self.world.players > 1:
                     outfile.write('Progression Balanced:            %s\n' % (
                         'Yes' if self.metadata['progression_balancing'][player] else 'No'))

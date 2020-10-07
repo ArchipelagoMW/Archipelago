@@ -746,3 +746,6 @@ lookup_vanilla_location_to_entrance = {1572883: 'Kings Grave Inner Rocks', 19125
                                        60127: 'Ganons Tower', 60118: 'Ganons Tower', 60148: 'Ganons Tower',
                                        60151: 'Ganons Tower', 60145: 'Ganons Tower', 60157: 'Ganons Tower',
                                        60160: 'Ganons Tower', 60163: 'Ganons Tower', 60166: 'Ganons Tower'}
+
+lookup_prizes = {location for location in location_table if location.endswith(" - Prize")}
+lookup_boss_drops = {location for location in location_table if location.endswith(" - Boss")}

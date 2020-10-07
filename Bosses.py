@@ -116,6 +116,27 @@ def AgahnimDefeatRule(state, player: int):
     return state.has_sword(player) or state.has('Hammer', player) or state.has('Bug Catching Net', player)
 
 
+def GanonDefeatRule(state, player: int):
+    if state.world.swords[player] == "swordless":
+        return state.has('Hammer', player) and \
+               state.has_fire_source(player) and \
+               state.has('Silver Bow', player) and \
+               state.can_shoot_arrows(player)
+    easy_hammer = state.world.difficulty_adjustments[player] == "easy" and state.has("Hammer", player) and \
+        state.has('Silver Bow', player) and state.can_shoot_arrows(player)
+    can_hurt = state.has_beam_sword(player) or easy_hammer
+    common = can_hurt and state.has_fire_source(player)
+    # silverless ganon may be needed in minor glitches
+    if state.world.logic[player] in {"owglitches", "minorglitches", "none"}:
+        # need to light torch a sufficient amount of times
+        return common and (state.has('Tempered Sword', player) or state.has('Golden Sword', player) or (
+                state.has('Silver Bow', player) and state.can_shoot_arrows(player)) or
+               state.has('Lamp', player) or state.can_extend_magic(player, 12))
+
+    else:
+        return common and state.has('Silver Bow', player) and state.can_shoot_arrows(player)
+
+
 boss_table = {
     'Armos Knights': ('Armos', ArmosKnightsDefeatRule),
     'Lanmolas': ('Lanmola', LanmolasDefeatRule),

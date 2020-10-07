@@ -802,7 +802,7 @@ def patch_rom(world, rom, player, team, enemized):
     #Work around for json patch ordering issues - write bow limit separately so that it is replaced in the patch
     rom.write_bytes(0x180098, [difficulty.progressive_bow_limit, overflow_replacement])
 
-    if difficulty.progressive_bow_limit < 2 and world.swords[player] == 'swordless':
+    if difficulty.progressive_bow_limit < 2 and (world.swords[player] == 'swordless' or world.logic[player] == 'noglitches'):
         rom.write_bytes(0x180098, [2, overflow_replacement])
         rom.write_byte(0x180181, 0x01) # Make silver arrows work only on ganon
         rom.write_byte(0x180182, 0x00) # Don't auto equip silvers on pickup
@@ -1880,7 +1880,7 @@ def write_strings(rom, world, player, team):
 
     prog_bow_locs = world.find_items('Progressive Bow', player)
     distinguished_prog_bow_loc = next((location for location in prog_bow_locs if location.item.code == 0x65), None)
-    progressive_silvers = world.difficulty_requirements[player].progressive_bow_limit >= 2 or world.swords[player] == 'swordless'
+    progressive_silvers = world.difficulty_requirements[player].progressive_bow_limit >= 2 or (world.swords[player] == 'swordless' or world.logic[player] == 'noglitches')
     if distinguished_prog_bow_loc:
         prog_bow_locs.remove(distinguished_prog_bow_loc)
         silverarrow_hint = (' %s?' % hint_text(distinguished_prog_bow_loc).replace('Ganon\'s', 'my')) if progressive_silvers else '?\nI think not!'
