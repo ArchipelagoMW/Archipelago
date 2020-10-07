@@ -306,7 +306,8 @@ rom:
     randomonenter: 0 # Random sprite on entering the underworld.
     randomonexit: 0 # Random sprite on exiting the underworld.
     randomonslash: 0 # Random sprite on sword slashes
-    randomonitem: 0  # Random sprite on getting items.  
+    randomonitem: 0  # Random sprite on getting items.
+    randomonbonk: 0 # Random sprite on bonk.
                      # You can combine these events like this.  randomonhit-enter-exit  if you want it on hit, enter, exit.
     randomonall: 0 # Random sprite on any and all currently supported events. Refer to above for the supported events.
     Link: 50 # To add other sprites: open the gui/Creator, go to adjust, select a sprite and write down the name the gui calls it
