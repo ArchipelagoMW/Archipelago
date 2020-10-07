@@ -1308,7 +1308,7 @@ class Spoiler(object):
                          'triforce_pieces_required': self.world.triforce_pieces_required,
                          'shop_shuffle': self.world.shop_shuffle,
                          'shuffle_prizes': self.world.shuffle_prizes,
-                         'sprite_pool': self.world.sprite_poolm,
+                         'sprite_pool': self.world.sprite_pool,
                          'restrict_dungeon_item_on_boss': self.world.restrict_dungeon_item_on_boss
                          }
 
