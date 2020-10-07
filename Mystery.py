@@ -189,13 +189,15 @@ def main(args=None, callback=ERmain):
         important = {}
         for option, player_settings in vars(erargs).items():
             if type(player_settings) == dict:
-                if len(set(player_settings.values())) > 1:
-                    important[option] = {player: value for player, value in player_settings.items() if
-                                         player <= args.yaml_output}
-                elif len(set(player_settings.values())) > 0:
-                    important[option] = player_settings[1]
-                else:
-                    logging.debug(f"No player settings defined for option '{option}'")
+                if all(type(value) != list for value in player_settings.values()):
+                    if len(frozenset(player_settings.values())) > 1:
+                        important[option] = {player: value for player, value in player_settings.items() if
+                                             player <= args.yaml_output}
+                    elif len(frozenset(player_settings.values())) > 0:
+                        important[option] = player_settings[1]
+                    else:
+                        logging.debug(f"No player settings defined for option '{option}'")
+
             else:
                 if player_settings != "":  # is not empty name
                     important[option] = player_settings

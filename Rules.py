@@ -127,7 +127,7 @@ def add_rule(spot, rule, combine='and'):
 def add_lamp_requirement(world: World, spot, player: int, has_accessible_torch: bool = False):
     if world.dark_room_logic[player] == "lamp":
         add_rule(spot, lambda state: state.has('Lamp', player))
-    elif world.dark_room_logic[player] == "torch":  # implicitly lamp as well
+    elif world.dark_room_logic[player] == "torches":  # implicitly lamp as well
         if has_accessible_torch:
             add_rule(spot, lambda state: state.has('Lamp', player) or state.has('Fire Rod', player))
         else:
