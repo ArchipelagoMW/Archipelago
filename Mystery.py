@@ -279,7 +279,7 @@ def roll_settings(weights):
         glitches_required]
 
     ret.dark_room_logic = get_choice("dark_room_logic", weights, "lamp")
-    if not ret.dark_room_logic: # None/False
+    if not ret.dark_room_logic:  # None/False
         ret.dark_room_logic = "none"
     if ret.dark_room_logic == "sconces":
         ret.dark_room_logic = "torches"
@@ -340,19 +340,19 @@ def roll_settings(weights):
 
     # sum a percentage to required
     if extra_pieces == 'percentage':
-        percentage = max(100,get_choice('triforce_pieces_percentage',weights,150))/100
+        percentage = max(100, get_choice('triforce_pieces_percentage', weights, 150)) / 100
         ret.triforce_pieces_available = int(ret.triforce_pieces_required * percentage)
     # vanilla mode (specify how many pieces are)
     elif extra_pieces == 'available':
-        ret.triforce_pieces_available = get_choice('triforce_pieces_available',weights,30)
+        ret.triforce_pieces_available = get_choice('triforce_pieces_available', weights, 30)
     # required pieces + fixed extra
     elif extra_pieces == 'extra':
-        extra_pieces = max(0, get_choice('triforce_pieces_extra',weights,10))
+        extra_pieces = max(0, get_choice('triforce_pieces_extra', weights, 10))
         ret.triforce_pieces_available = ret.triforce_pieces_required + extra_pieces
 
     # change minimum to required pieces to avoid problems
-    ret.triforce_pieces_available = min(max(ret.triforce_pieces_required, int(ret.triforce_pieces_available)), 90) 
-    
+    ret.triforce_pieces_available = min(max(ret.triforce_pieces_required, int(ret.triforce_pieces_available)), 90)
+
     ret.triforce_pieces_required = get_choice('triforce_pieces_required', weights, 20)
     ret.triforce_pieces_required = min(max(1, int(ret.triforce_pieces_required)), 90)
 

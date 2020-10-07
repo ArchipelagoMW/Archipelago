@@ -369,7 +369,7 @@ def guiMain(args=None):
     prizeVar.set('general')
     prizeOptionMenu = OptionMenu(prizeFrame, prizeVar, 'none', 'general', 'bonk', 'both')
     prizeOptionMenu.pack(side=RIGHT)
-    prizeLabel = Label(prizeFrame, text='Shuffle Prices/Drops')
+    prizeLabel = Label(prizeFrame, text='Shuffle Prizes/Drops')
     prizeLabel.pack(side=LEFT)
 
 
