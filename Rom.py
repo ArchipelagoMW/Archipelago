@@ -151,7 +151,7 @@ def check_enemizer(enemizercli):
                 version = lib.split("/")[-1]
                 version = tuple(int(element) for element in version.split("."))
                 logging.debug(f"Found Enemizer version {version}")
-                if version < (6, 2, 0):
+                if version < (6, 3, 0):
                     raise Exception(
                         f"Enemizer found at {enemizercli} is outdated ({info}), please update your Enemizer. "
                         f"Such as https://github.com/Ijwu/Enemizer/releases")
@@ -163,7 +163,7 @@ def check_enemizer(enemizercli):
 
 
 def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_random_on_event, sprite_pool):
-    onevent = onhit = 0
+    onevent = 0
     sprites = list()
     if not allow_random_on_event:
         allow_random_on_event = not rom.read_byte(0x186381)  # Check if explicitly disabled in rom. If so, it stays that way.
@@ -171,9 +171,8 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
         sprite = sprite.lower()
         if sprite == 'randomonall':
             onevent = 0xFFFF  # Support all current and future events that can cause random sprite changes.
-            onhit = 0x01
         elif sprite.startswith('randomon'):
-            onevent = onhit = 0x01 if 'hit' in sprite else 0x00
+            onevent = 0x01 if 'hit' in sprite else 0x00
             onevent += 0x02 if 'enter' in sprite else 0x00
             onevent += 0x04 if 'exit' in sprite else 0x00
             onevent += 0x08 if 'slash' in sprite else 0x00
@@ -187,8 +186,6 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
         if allow_random_on_event:
             rom.write_int16(0x18637F, onevent)
             rom.write_byte(0x186381, 0x00)  # Enable usage of Random On Event.
-            if rom.read_byte(0x200000):
-                rom.write_byte(0x200103, onhit)
 
         _populate_sprite_table()
         if onevent:
@@ -347,10 +344,9 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli):
     rom.read_from_file(enemizer_output_path)
     os.remove(enemizer_output_path)
 
-    if world.get_dungeon("Thieves Town", player).boss.enemizer_name == "Blind" \
-            and rom.read_byte(0xEA081) != 0xEA:  # new enemizer required for blind escort mission
+    if world.get_dungeon("Thieves Town", player).boss.enemizer_name == "Blind":
         rom.write_byte(0x04DE81, 6)
-        rom.write_byte(0x200101, 0)  # Do not close boss room door on entry.
+        rom.write_byte(0x1B0101, 0)  # Do not close boss room door on entry.
 
     for used in (randopatch_path, options_path):
         try:
