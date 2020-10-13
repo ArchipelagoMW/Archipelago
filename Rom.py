@@ -163,33 +163,42 @@ def check_enemizer(enemizercli):
 
 
 def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_random_on_event, sprite_pool):
-    onevent = 0
-    sprites = list()
-    if not allow_random_on_event:
-        allow_random_on_event = not rom.read_byte(0x186381)  # Check if explicitly disabled in rom. If so, it stays that way.
+    userandomsprites = False
     if sprite and not isinstance(sprite, Sprite):
         sprite = sprite.lower()
+        userandomsprites = sprite.startswith('randomon')
+
+        racerom = rom.read_byte(0x180213)
+        if allow_random_on_event or not racerom:
+            # Changes to this byte for race rom seeds are only permitted on initial rolling of the seed.
+            # However, if the seed is not a racerom seed, then it is always allowed.
+            rom.write_byte(0x186381, 0x00 if userandomsprites else 0x01)
+
+        onevent = 0
         if sprite == 'randomonall':
             onevent = 0xFFFF  # Support all current and future events that can cause random sprite changes.
-        elif sprite.startswith('randomon'):
+        elif sprite == 'randomonnone':
+            # Allows for opting into random on events on race rom seeds, without actually enabling any of the events initially.
+            onevent = 0x0000
+        elif userandomsprites:
             onevent = 0x01 if 'hit' in sprite else 0x00
             onevent += 0x02 if 'enter' in sprite else 0x00
             onevent += 0x04 if 'exit' in sprite else 0x00
             onevent += 0x08 if 'slash' in sprite else 0x00
             onevent += 0x10 if 'item' in sprite else 0x00
             onevent += 0x20 if 'bonk' in sprite else 0x00
+
+        rom.write_int16(0x18637F, onevent)
+
         sprite = Sprite(sprite) if os.path.isfile(sprite) else get_sprite_from_name(sprite, local_random)
 
     # write link sprite if required
     if sprite:
+        sprites = list()
         sprite.write_to_rom(rom)
 
-        if allow_random_on_event:
-            rom.write_int16(0x18637F, onevent)
-            rom.write_byte(0x186381, 0x00)  # Enable usage of Random On Event.
-
         _populate_sprite_table()
-        if onevent:
+        if userandomsprites:
             if sprite_pool:
                 if isinstance(sprite_pool, str):
                     sprite_pool = sprite_pool.split(':')
@@ -205,7 +214,7 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
             local_random.shuffle(sprites)
 
             for i, sprite in enumerate(sprites[:32]):
-                if not i and not onevent:
+                if not i and not userandomsprites:
                     continue
                 rom.write_bytes(0x300000 + (i * 0x8000), sprite.sprite)
                 rom.write_bytes(0x307000 + (i * 0x8000), sprite.palette)
