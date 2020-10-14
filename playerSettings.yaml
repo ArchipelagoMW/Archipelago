@@ -286,7 +286,7 @@ door_shuffle: # Only available if the host uses the doors branch, it is ignored 
 intensity: # Only available if the host uses the doors branch, it is ignored otherwise
   1: 50 # Shuffles normal doors and spiral staircases
   2: 0 # And shuffles open edges and straight staircases
-  3: 0 # (Coming soon) And shuffles dungeon lobbies
+  3: 0 # And shuffles dungeon lobbies
   random: 0 # Picks one of those at random
 experimental: # Only available if the host uses the doors branch, it is ignored otherwise
   on: 0 # Enables experimental features. Currently, this is just the dungeon keys in chest counter.
@@ -295,6 +295,34 @@ debug: # Only available if the host uses the doors branch, it is ignored otherwi
   on: 0 # Enables debugging features. Currently, these are the Item collection counter. (overwrites total triforce pieces) and Castle Gate closed indicator.
   off: 50
 rom:
+  random_sprite_on_event: # An alternative to specifying randomonhit / randomonexit / etc... in sprite down below.
+    enabled:  # If enabled, sprite down below is ignored completely, (although it may become the sprite pool)
+      on: 0
+      off: 1
+    on_hit:  # Random sprite on hit. Being hit by things that cause 0 damage still counts.
+      on: 1
+      off: 0
+    on_enter:  # Random sprite on underworld entry. Note that entering hobo counts.
+      on: 0
+      off: 1
+    on_exit:  # Random sprite on underworld exit. Exiting hobo does not count.
+      on: 0
+      off: 1
+    on_slash:  # Random sprite on sword slash. Note, it still counts if you attempt to slash while swordless.
+      on: 0
+      off: 1
+    on_item:  # Random sprite on getting an item.  Anything that causes you to hold an item above your head counts.
+      on: 0
+      off: 1
+    on_bonk:  # Random sprite on bonk.
+      on: 0
+      off: 1
+    on_everything:  # Random sprite on ALL currently implemented events, even if not documented at present time.
+      on: 0
+      off: 1
+    use_weighted_sprite_pool:  # Always on if no sprite_pool exists, otherwise it controls whether to use sprite as a weighted sprite pool
+      on: 0
+      off: 1
   #sprite_pool: # When specified, limits the pool of sprites used for randomon-event to the specified pool.  Uncomment to use this.
   #  - link
   #  - pride link

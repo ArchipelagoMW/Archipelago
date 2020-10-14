@@ -481,8 +481,30 @@ def roll_settings(weights):
 
     if 'rom' in weights:
         romweights = weights['rom']
+
         ret.sprite_pool = romweights['sprite_pool'] if 'sprite_pool' in romweights else []
         ret.sprite = get_choice('sprite', romweights, "Link")
+        if 'random_sprite_on_event' in romweights:
+            randomoneventweights = romweights['random_sprite_on_event']
+            if get_choice('enabled', randomoneventweights, False):
+                ret.sprite = 'randomon'
+                ret.sprite += '-hit' if get_choice('on_hit', randomoneventweights, True) else ''
+                ret.sprite += '-enter' if get_choice('on_enter', randomoneventweights, False) else ''
+                ret.sprite += '-exit' if get_choice('on_exit', randomoneventweights, False) else ''
+                ret.sprite += '-slash' if get_choice('on_slash', randomoneventweights, False) else ''
+                ret.sprite += '-item' if get_choice('on_item', randomoneventweights, False) else ''
+                ret.sprite += '-bonk' if get_choice('on_bonk', randomoneventweights, False) else ''
+                ret.sprite = 'randomonall' if get_choice('on_everything', randomoneventweights, False) else ret.sprite
+                ret.sprite = 'randomonnone' if ret.sprite == 'randomon' else ret.sprite
+
+                if (not ret.sprite_pool or get_choice('use_weighted_sprite_pool', randomoneventweights, False)) \
+                        and 'sprite' in romweights:  # Use sprite as a weighted sprite pool, if a sprite pool is not already defined.
+                    for key, value in romweights['sprite']:
+                        if key.startswith('random'):
+                            ret.sprite_pool += ['random'] * int(value)
+                        else:
+                            ret.sprite_pool += [key] * int(value)
+
         ret.disablemusic = get_choice('disablemusic', romweights, False)
         ret.quickswap = get_choice('quickswap', romweights, True)
         ret.fastmenu = get_choice('menuspeed', romweights, "normal")
