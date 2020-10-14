@@ -111,32 +111,6 @@ def close_console():
         except Exception:
             pass
 
-def make_new_base2current(old_rom='Zelda no Densetsu - Kamigami no Triforce (Japan).sfc', new_rom='working.sfc'):
-    from collections import OrderedDict
-    import json
-    import hashlib
-    with open(old_rom, 'rb') as stream:
-        old_rom_data = bytearray(stream.read())
-    with open(new_rom, 'rb') as stream:
-        new_rom_data = bytearray(stream.read())
-    # extend to 2 mb
-    old_rom_data.extend(bytearray([0x00]) * (2097152 - len(old_rom_data)))
-
-    out_data = OrderedDict()
-    for idx, old in enumerate(old_rom_data):
-        new = new_rom_data[idx]
-        if old != new:
-            out_data[idx] = [int(new)]
-    for offset in reversed(list(out_data.keys())):
-        if offset - 1 in out_data:
-            out_data[offset - 1].extend(out_data.pop(offset))
-    with open('data/base2current.json', 'wt') as outfile:
-        json.dump([{key: value} for key, value in out_data.items()], outfile, separators=(",", ":"))
-
-    basemd5 = hashlib.md5()
-    basemd5.update(new_rom_data)
-    return "New Rom Hash: " + basemd5.hexdigest()
-
 
 parse_yaml = safe_load
 unsafe_parse_yaml = functools.partial(load, Loader=Loader)
