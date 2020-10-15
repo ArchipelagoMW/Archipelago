@@ -269,7 +269,7 @@ def guiMain(args=None):
     goalVar = StringVar()
     goalVar.set('ganon')
     goalOptionMenu = OptionMenu(goalFrame, goalVar, 'ganon', 'pedestal', 'dungeons', 'triforcehunt',
-                                'localtriforcehunt', 'ganontriforcehunt', 'localganontriforcehunt', 'crystals')
+                                'localtriforcehunt', 'ganontriforcehunt', 'localganontriforcehunt', 'crystals', 'ganonpedestal')
     goalOptionMenu.pack(side=RIGHT)
     goalLabel = Label(goalFrame, text='Game goal')
     goalLabel.pack(side=LEFT)

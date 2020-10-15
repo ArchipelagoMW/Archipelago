@@ -318,6 +318,7 @@ def roll_settings(weights):
                 'fast_ganon': 'crystals',
                 'dungeons': 'dungeons',
                 'pedestal': 'pedestal',
+                'ganon_pedestal': 'ganonpedestal',
                 'triforce_hunt': 'triforcehunt',
                 'triforce-hunt': 'triforcehunt',  # deprecated, moving all goals to `_`
                 'local_triforce_hunt': 'localtriforcehunt',
@@ -327,7 +328,7 @@ def roll_settings(weights):
 
     # TODO consider moving open_pyramid to an automatic variable in the core roller, set to True when
     # fast ganon + ganon at hole
-    ret.open_pyramid = goal in {'fast_ganon', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt'}
+    ret.open_pyramid = goal in {'fast_ganon', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'}
 
     ret.crystals_gt = get_choice('tower_open', weights)
 

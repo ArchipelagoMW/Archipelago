@@ -423,6 +423,8 @@ def global_rules(world, player):
     set_rule(ganon, lambda state: GanonDefeatRule(state, player))
     if world.goal[player] in ['ganontriforcehunt', 'localganontriforcehunt']:
         add_rule(ganon, lambda state: state.has_triforce_pieces(world.treasure_hunt_count[player], player))
+    elif world.goal[player] == 'ganonpedestal':
+        add_rule(world.get_location('Ganon', player), lambda state: state.can_reach('Master Sword Pedestal', 'Location', player))
     else:
         add_rule(ganon, lambda state: state.has_crystals(world.crystals_needed_for_ganon[player], player))
     set_rule(world.get_entrance('Ganon Drop', player), lambda state: state.has_beam_sword(player))  # need to damage ganon to get tiles to drop
