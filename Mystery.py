@@ -499,7 +499,7 @@ def roll_settings(weights):
 
                 if (not ret.sprite_pool or get_choice('use_weighted_sprite_pool', randomoneventweights, False)) \
                         and 'sprite' in romweights:  # Use sprite as a weighted sprite pool, if a sprite pool is not already defined.
-                    for key, value in romweights['sprite']:
+                    for key, value in romweights['sprite'].items():
                         if key.startswith('random'):
                             ret.sprite_pool += ['random'] * int(value)
                         else:
