@@ -73,6 +73,7 @@ def parse_arguments(argv, no_defaults=False):
                                             defeat Ganon.
                              Crystals:      Collect all crystals then defeat Ganon.
                              Pedestal:      Places the Triforce at the Master Sword Pedestal.
+                             Ganon Pedestal: Pull the Master Sword Pedestal, then defeat Ganon.
                              All Dungeons:  Collect all crystals, pendants, beat both
                                             Agahnim fights and then defeat Ganon.
                              Triforce Hunt: Places 30 Triforce Pieces in the world, collect
