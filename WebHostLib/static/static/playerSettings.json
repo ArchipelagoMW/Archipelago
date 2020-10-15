@@ -322,6 +322,12 @@
           "description": "Acquire all three pendants and pull the Triforce from the Master Sword Pedestal.",
           "defaultValue": 0
         },
+        "ganon_pedestal": {
+          "keyString": "goals.ganon_pedestal",
+          "friendlyName": "Ganon Pedestal",
+          "description": "Accquire all three pendants, pull the Master Sword Pedestal, then defeat Ganon in his lair.",
+          "defaultValue": 0
+        },
         "triforce_hunt": {
           "keyString": "goals.triforce_hunt",
           "friendlyName": "Triforce Hunt",

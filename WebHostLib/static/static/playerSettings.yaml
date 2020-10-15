@@ -82,6 +82,7 @@ goals:
   fast_ganon: 0 # Only killing Ganon is required. The hole is always open. However, items may still be placed in GT
   dungeons: 0 # Defeat the boss of all dungeons, including Agahnim's tower and GT (Aga 2)
   pedestal: 0 # Pull the Triforce from the Master Sword pedestal
+  ganon_pedestal: 0 # Pull the Master Sword pedestal, then kill Ganon
   triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then turn them in to Murahadala in front of Hyrule Castle
   local_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
   ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
