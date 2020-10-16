@@ -241,17 +241,15 @@ def global_rules(world, player):
 
     set_rule(world.get_location('Eastern Palace - Big Chest', player),
              lambda state: state.has('Big Key (Eastern Palace)', player))
-    set_rule(world.get_location('Eastern Palace - Boss', player),
-             lambda state: state.has('Big Key (Eastern Palace)', player) and state.world.get_location(
-                 'Eastern Palace - Boss', player).parent_region.dungeon.boss.can_defeat(state))
-    set_rule(world.get_location('Eastern Palace - Prize', player),
-             lambda state: state.has('Big Key (Eastern Palace)', player) and state.world.get_location(
-                 'Eastern Palace - Prize', player).parent_region.dungeon.boss.can_defeat(state))
+    ep_boss = world.get_location('Eastern Palace - Boss', player)
+    set_rule(ep_boss, lambda state: state.has('Big Key (Eastern Palace)', player) and
+                                    ep_boss.parent_region.dungeon.boss.can_defeat(state))
+    ep_prize = world.get_location('Eastern Palace - Prize', player)
+    set_rule(ep_prize, lambda state: state.has('Big Key (Eastern Palace)', player) and
+                                     ep_prize.parent_region.dungeon.boss.can_defeat(state))
     if not world.enemy_shuffle[player]:
-        add_rule(world.get_location('Eastern Palace - Boss', player),
-                 lambda state: state.can_shoot_arrows(player))
-        add_rule(world.get_location('Eastern Palace - Prize', player),
-                 lambda state: state.can_shoot_arrows(player))
+        add_rule(ep_boss, lambda state: state.can_shoot_arrows(player))
+        add_rule(ep_prize,lambda state: state.can_shoot_arrows(player))
 
     set_rule(world.get_location('Desert Palace - Big Chest', player), lambda state: state.has('Big Key (Desert Palace)', player))
     set_rule(world.get_location('Desert Palace - Torch', player), lambda state: state.has_Boots(player))
