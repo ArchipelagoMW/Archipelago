@@ -202,8 +202,12 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
             if sprite_pool:
                 if isinstance(sprite_pool, str):
                     sprite_pool = sprite_pool.split(':')
-                for sprite in sprite_pool:
-                    sprites.append(Sprite(sprite) if os.path.isfile(sprite) else get_sprite_from_name(sprite, local_random))
+                for spritename in sprite_pool:
+                    sprite = Sprite(spritename) if os.path.isfile(spritename) else get_sprite_from_name(spritename, local_random)
+                    if sprite:
+                        sprites.append(sprite)
+                    else:
+                        logging.info(f"Sprite {spritename} was not found.")
             else:
                 sprites = list(set(_sprite_table.values()))  # convert to list and remove dupes
         else:
