@@ -26,6 +26,7 @@ window.addEventListener('load', () => {
     gameSettings.addEventListener('keyup', handleOptionChange);
 
     document.getElementById('export-button').addEventListener('click', exportSettings);
+    document.getElementById('reset-to-default').addEventListener('click', resetToDefaults);
   }).catch((error) => {
     gameSettings.innerHTML = `
             <h2>Something went wrong while loading your game settings page.</h2>
@@ -150,6 +151,11 @@ const exportSettings = () => {
   download(`${settings.description}.yaml`, yamlText);
 };
 
+const resetToDefaults = () => {
+  [1, 2, 3].forEach((presetNumber) => localStorage.removeItem(`playerSettings${presetNumber}`));
+  location.reload();
+};
+
 /** Create an anchor and trigger a download of a text file. */
 const download = (filename, text) => {
   const downloadLink = document.createElement('a');
@@ -220,8 +226,12 @@ const buildUI = (settings) => {
   const currentPreset = document.getElementById('preset-number').value;
   const playerSettings = JSON.parse(localStorage.getItem(`playerSettings${currentPreset}`));
 
+  // Manually add a row for random sprites
+  addSpriteRow(tbody, playerSettings, 'random');
+
   // Add a row for each sprite currently present in the player's settings
   Object.keys(playerSettings.rom.sprite).forEach((spriteName) => {
+    if(['random'].indexOf(spriteName) > -1) return;
     addSpriteRow(tbody, playerSettings, spriteName)
   });
 
@@ -320,7 +330,7 @@ const addSpriteRow = (tbody, playerSettings, spriteName) => {
   label.innerText = spriteName;
   optionName.appendChild(label);
 
-  if(['random', 'randomonhit'].indexOf(spriteName) === -1) {
+  if(['random', 'random_sprite_on_event'].indexOf(spriteName) === -1) {
     const deleteButton = document.createElement('span');
     deleteButton.setAttribute('data-sprite', spriteName);
     deleteButton.setAttribute('data-row-id', rowId);

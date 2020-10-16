@@ -19,12 +19,21 @@
 
 description: Template Name # Used to describe your yaml. Useful if you have multiple files
 name: YourName # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
+### Logic Section ###
 glitches_required: # Determine the logic required to complete the seed
   none: 50 # No glitches required
   minor_glitches: 0 # Puts fake flipper, waterwalk, super bunny shenanigans, and etc into logic
   overworld_glitches: 0 # Assumes the player has knowledge of both overworld major glitches (boots clips, mirror clips) and minor glitches (fake flipper, super bunny shenanigans, water walk and etc.)
   no_logic: 0 # Your own items are placed with no regard to any logic; such as your Fire Rod can be on your Trinexx.
   # Other players items are placed into your world under OWG logic
+dark_room_logic: # Logic for unlit dark rooms
+  lamp: 50 # require the Lamp for these rooms to be considered accessible.
+  torches: 0 # in addition to lamp, allow the fire rod and presence of easily accessible torches for access
+  none: 0 # all dark rooms are always considered doable, meaning this may force completion of rooms in complete darkness
+restrict_dungeon_item_on_boss: # aka ambrosia boss items
+  on: 0 # prevents unshuffled compasses, maps and keys to be boss drops, they can still drop keysanity and other players' items
+  off: 50
+### End of Logic Section ###
 meta_ignore: # Nullify options specified in the meta.yaml file. Adding an option here guarantees it will not occur in your seed, even if the .yaml file specifies it
   mode:
     - inverted # Never play inverted seeds
@@ -236,6 +245,41 @@ timer:
 glitch_boots:
   on: 50 # Start with Pegasus Boots in any glitched logic mode that makes use of them
   off: 0
+linked_options:
+  - name: crosskeys
+    options: # These overwrite earlier options if the percentage chance triggers
+      entrance_shuffle: crossed
+      bigkey_shuffle: true
+      compass_shuffle: true
+      map_shuffle: true
+      smallkey_shuffle: true
+    percentage: 0 # Set this to the percentage chance you want crosskeys
+  - name: localcrosskeys
+    options: # These overwrite earlier options if the percentage chance triggers
+      entrance_shuffle: crossed
+      bigkey_shuffle: true
+      compass_shuffle: true
+      map_shuffle: true
+      smallkey_shuffle: true
+      local_items: # Forces keys to be local to your own world
+        - "Small Keys"
+        - "Big Keys"
+    percentage: 0 # Set this to the percentage chance you want local crosskeys
+  - name: enemizer
+    options:
+      boss_shuffle: # Subchances can be injected too, which then get rolled
+        simple: 1
+        full: 1
+        random: 1
+        singularity: 1
+      enemy_damage:
+        shuffled: 1
+        random: 1
+      enemy_health:
+        easy: 1
+        hard: 1
+        expert: 1
+    percentage: 0 # Set this to the percentage chance you want enemizer
 door_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
   vanilla: 50 # Everything should be like in vanilla
   basic: 0 # Dungeons are shuffled within themselves
@@ -243,22 +287,51 @@ door_shuffle: # Only available if the host uses the doors branch, it is ignored 
 intensity: # Only available if the host uses the doors branch, it is ignored otherwise
   1: 50 # Shuffles normal doors and spiral staircases
   2: 0 # And shuffles open edges and straight staircases
-  3: 0 # (Coming soon) And shuffles dungeon lobbies
+  3: 0 # And shuffles dungeon lobbies
   random: 0 # Picks one of those at random
 experimental: # Only available if the host uses the doors branch, it is ignored otherwise
   on: 0 # Enables experimental features. Currently, this is just the dungeon keys in chest counter.
   off: 50
+debug: # Only available if the host uses the doors branch, it is ignored otherwise
+  on: 0 # Enables debugging features. Currently, these are the Item collection counter. (overwrites total triforce pieces) and Castle Gate closed indicator.
+  off: 50
 rom:
+  random_sprite_on_event: # An alternative to specifying randomonhit / randomonexit / etc... in sprite down below.
+    enabled: # If enabled, sprite down below is ignored completely, (although it may become the sprite pool)
+      on: 0
+      off: 1
+    on_hit: # Random sprite on hit. Being hit by things that cause 0 damage still counts.
+      on: 0
+      off: 1
+    on_enter: # Random sprite on underworld entry. Note that entering hobo counts.
+      on: 0
+      off: 1
+    on_exit: # Random sprite on underworld exit. Exiting hobo does not count.
+      on: 0
+      off: 1
+    on_slash: # Random sprite on sword slash. Note, it still counts if you attempt to slash while swordless.
+      on: 0
+      off: 1
+    on_item: # Random sprite on getting an item.  Anything that causes you to hold an item above your head counts.
+      on: 0
+      off: 1
+    on_bonk: # Random sprite on bonk.
+      on: 0
+      off: 1
+  #sprite_pool: # When specified, limits the pool of sprites used for randomon-event to the specified pool.  Uncomment to use this.
+  #  - link
+  #  - pride link
+  #  - penguin link
+  #  - random  # You can specify random multiple times for however many potentially unique random sprites you want in your pool.
   sprite: # Enter the name of your preferred sprite and weight it appropriately
-    random: 0
-    randomonhit: 0
+    random: 0 # Choose a sprite at random
     Link: 50 # To add other sprites: open the gui/Creator, go to adjust, select a sprite and write down the name the gui calls it
   disablemusic: # If "on", all in-game music will be disabled
     on: 0
     off: 50
   quickswap: # Enable switching items by pressing the L+R shoulder buttons
-    on: 0
-    off: 50
+    on: 50
+    off: 0
   menuspeed: # Controls how fast the item menu opens and closes
     normal: 50
     instant: 0

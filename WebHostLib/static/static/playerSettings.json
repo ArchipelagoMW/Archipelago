@@ -46,6 +46,32 @@
         }
       }
     },
+    "dark_room_logic": {
+      "keyString": "dark_room_logic",
+      "friendlyName": "Dark Room Logic",
+      "description": "Logic to use for dark rooms.",
+      "inputType": "range",
+      "subOptions": {
+        "lamp": {
+          "keyString": "dark_room_logic.lamp",
+          "friendlyName": "Lamp Required",
+          "description": "The lamp is required for dark rooms to be considered in logic.",
+          "defaultValue": 50
+        },
+        "torches": {
+          "keyString": "dark_room_logic.torches",
+          "friendlyName": "Lamp or Torches",
+          "description": "In addition to the lamp, a fire rod and accessible torches may put dark rooms into logic.",
+          "defaultValue": 0
+        },
+        "none": {
+          "keyString": "dark_room_logic.none",
+          "friendlyName": "Always in Logic",
+          "description": "Dark rooms are always considered in logic, which may require you to navigate rooms in complete darkness.",
+          "defaultValue": 0
+        }
+      }
+    },
     "map_shuffle": {
       "keyString": "map_shuffle",
       "friendlyName": "Map Shuffle",
@@ -354,36 +380,74 @@
         }
       }
     },
+    "triforce_pieces_required": {
+      "keyString": "triforce_pieces_required",
+      "friendlyName": "Triforce Pieces Required",
+      "description": "Determines the total number of Triforce pieces required before speaking with Murahadala",
+      "inputType": "range",
+      "subOptions": {
+        "15": {
+          "keyString": "triforce_pieces_required.15",
+          "friendlyName": 15,
+          "description": "15 Triforce pieces are required before speaking with Murahadala.",
+          "defaultValue": 0
+        },
+        "20": {
+          "keyString": "triforce_pieces_required.20",
+          "friendlyName": 20,
+          "description": "20 Triforce pieces are required before speaking with Murahadala.",
+          "defaultValue": 50
+        },
+        "30": {
+          "keyString": "triforce_pieces_required.30",
+          "friendlyName": 30,
+          "description": "30 Triforce pieces are required before speaking with Murahadala.",
+          "defaultValue": 50
+        },
+        "40": {
+          "keyString": "triforce_pieces_required.40",
+          "friendlyName": 40,
+          "description": "40 Triforce pieces are required before speaking with Murahadala.",
+          "defaultValue": 50
+        },
+        "50": {
+          "keyString": "triforce_pieces_required.50",
+          "friendlyName": 50,
+          "description": "50 Triforce pieces are required before speaking with Murahadala.",
+          "defaultValue": 50
+        }
+      }
+    },
 	"triforce_pieces_mode": {
 	  "keyString": "triforce_pieces_mode",
-      "friendlyName": "Triforce Pieces Mode",
-      "description": "Determines how to determine how many extra Triforce pieces will be available",
+      "friendlyName": "Triforce Piece Availability Mode",
+      "description": "Determines which of the following three options will be used to determine the total available triforce pieces.",
       "inputType": "range",
       "subOptions": {
         "available": {
           "keyString": "triforce_pieces_mode.available",
-          "friendlyName": "Available",
-          "description": "Determine the total number of pieces available in \"Triforce pieces available\"",
+          "friendlyName": "Exact Number",
+          "description": "Explicitly tell the generator how many triforce pieces to place throughout Hyrule.",
           "defaultValue": 50
         },
         "extra": {
           "keyString": "triforce_pieces_mode.extra",
-          "friendlyName": "Extra",
-          "description": "Determine how many extra pieces will be available in \"Extra Triforce pieces quantity\"",
+          "friendlyName": "Required Plus",
+          "description": "Set the number of triforce pieces in Hyrule equal to the number of required pieces plus a number specified by this option.",
           "defaultValue": 0
         },
         "percentage": {
           "keyString": "triforce_pieces_mode.percentage",
           "friendlyName": "Percentage",
-          "description": "Determine the available pieces using a percentage of the required ones using the \"Extra Triforce pieces percentage\"",
+          "description": "Set the number of triforce pieces in Hyrule equal to the number of required pieces plus a percentage specified by this option.",
           "defaultValue": 0
         }
       }
 	},
     "triforce_pieces_available": {
       "keyString": "triforce_pieces_available",
-      "friendlyName": "Triforce Pieces Available",
-      "description": "Determines the total number of Triforce pieces hidden throughout Hyrule",
+      "friendlyName": "Exact Number (Triforce Hunt)",
+      "description": "Only used if enabled in Triforce Piece Availability Mode.",
       "inputType": "range",
       "subOptions": {
         "25": {
@@ -414,8 +478,8 @@
     },
 	"triforce_pieces_extra": {
       "keyString": "triforce_pieces_extra",
-      "friendlyName": "Extra Triforce Pieces",
-      "description": "Determine how many extra pieces will be available",
+      "friendlyName": "Required Plus (Triforce Hunt)",
+      "description": "Only used if enabled in Triforce Piece Availability Mode.",
       "inputType": "range",
       "subOptions": {
         "0": {
@@ -452,65 +516,27 @@
     },
 	"triforce_pieces_percentage": {
       "keyString": "triforce_pieces_percentage",
-      "friendlyName": "Extra Triforce Pieces Percentage",
-      "description": "Determine how many extra pieces will be available, according to a percentage of the required ones",
+      "friendlyName": "Percentage (Triforce Hunt)",
+      "description": "Only used if enabled in Triforce Piece Availability Mode.",
       "inputType": "range",
       "subOptions": {
         "100": {
           "keyString": "triforce_pieces_percentage.100",
-          "friendlyName": "100%",
+          "friendlyName": "0%",
           "description": "No extra Triforce pieces will be hidden throughout Hyrule",
           "defaultValue": 0
         },
         "150": {
           "keyString": "triforce_pieces_percentage.150",
-          "friendlyName": "150%",
-          "description": "Half the required Triforce pieces will be added",
+          "friendlyName": "50%",
+          "description": "50% more triforce pieces than required will be placed throughout Hyrule.",
           "defaultValue": 50
         },
         "200": {
           "keyString": "triforce_pieces_percentage.200",
-          "friendlyName": "200%",
-          "description": "The double of the required Triforce pieces will be hidden throughout Hyrule",
+          "friendlyName": "100%",
+          "description": "50% more triforce pieces than required will be placed throughout Hyrule.",
           "defaultValue": 0
-        }
-      }
-    },
-    "triforce_pieces_required": {
-      "keyString": "triforce_pieces_required",
-      "friendlyName": "Triforce Pieces Required",
-      "description": "Determines the total number of Triforce pieces required before speaking with Murahadala",
-      "inputType": "range",
-      "subOptions": {
-        "15": {
-          "keyString": "triforce_pieces_required.15",
-          "friendlyName": 15,
-          "description": "15 Triforce pieces are required before speaking with Murahadala.",
-          "defaultValue": 0
-        },
-        "20": {
-          "keyString": "triforce_pieces_required.20",
-          "friendlyName": 20,
-          "description": "20 Triforce pieces are required before speaking with Murahadala.",
-          "defaultValue": 50
-        },
-        "30": {
-          "keyString": "triforce_pieces_required.30",
-          "friendlyName": 30,
-          "description": "30 Triforce pieces are required before speaking with Murahadala.",
-          "defaultValue": 50
-        },
-        "40": {
-          "keyString": "triforce_pieces_required.40",
-          "friendlyName": 40,
-          "description": "40 Triforce pieces are required before speaking with Murahadala.",
-          "defaultValue": 50
-        },
-        "50": {
-          "keyString": "triforce_pieces_required.50",
-          "friendlyName": 50,
-          "description": "50 Triforce pieces are required before speaking with Murahadala.",
-          "defaultValue": 50
         }
       }
     },
@@ -1255,26 +1281,6 @@
           "friendlyName": "Random",
           "description": "Randomly chooses an intensity level from 1-3.",
           "defaultValue": 0
-        }
-      }
-    },
-    "experimental": {
-      "keyString": "experimental",
-      "friendlyName": "Door Shuffle Experimental Options",
-      "description": "Specifies whether to try out experimental things. What it does is subject to change.",
-      "inputType": "range",
-      "subOptions": {
-        "on": {
-          "keyString": "experimental.on",
-          "friendlyName": "On",
-          "description": "Enable experimental door features.",
-          "defaultValue": 0
-        },
-        "off": {
-          "keyString": "experimental.off",
-          "friendlyName": "Off",
-          "description": "Disable experimental door features.",
-          "defaultValue": 50
         }
       }
     }
