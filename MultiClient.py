@@ -763,12 +763,10 @@ async def process_server_cmd(ctx: Context, cmd, args):
         ctx.ui_node.log_info('--------------------------------')
         ctx.ui_node.log_info('Room Information:')
         ctx.ui_node.log_info('--------------------------------')
-        version = args.get("version", "unknown Bonta Protocol")
-        if isinstance(version, list):
-            ctx.server_version = tuple(version)
-            version = ".".join(str(item) for item in version)
-        else:
-            ctx.server_version = (0, 0, 0)
+        version = args["version"]
+        ctx.server_version = tuple(version)
+        version = ".".join(str(item) for item in version)
+
         ctx.ui_node.log_info(f'Server protocol version: {version}')
         if "tags" in args:
             ctx.ui_node.log_info("Server protocol tags: " + ", ".join(args["tags"]))

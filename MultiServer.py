@@ -762,9 +762,6 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 self.output(
                     "Sorry, client forfeiting requires you to have beaten the game on this server."
                     " You can ask the server admin for a /forfeit")
-                if self.client.version < [2, 1, 0]:
-                    self.output(
-                        "Your client is too old to send game beaten information. Please update, load you savegame and reconnect.")
                 return False
 
     def _cmd_remaining(self) -> bool:
