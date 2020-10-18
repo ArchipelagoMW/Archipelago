@@ -102,7 +102,7 @@ class Context(Node):
         self.auto_save_interval = 60  # in seconds
         self.auto_saver_thread = None
         self.save_dirty = False
-        self.tags = ['Berserker']
+        self.tags = ['AP']
 
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
         with open(multidatapath, 'rb') as f:
@@ -302,14 +302,10 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[Utils.Hint]):
     texts = [['Print', format_hint(ctx, team, hint)] for hint in hints]
     for _, text in texts:
         logging.info("Notice (Team #%d): %s" % (team + 1, text))
-    texts = json.dumps(texts)
+
     for client in ctx.endpoints:
         if client.auth and client.team == team:
-            if "Berserker" in client.tags and client.version >= [2, 2, 1]:
-                payload = cmd
-            else:
-                payload = texts
-            asyncio.create_task(ctx.send_json_msgs(client, payload))
+            asyncio.create_task(ctx.send_json_msgs(client, cmd))
 
 
 def update_aliases(ctx: Context, team: int, client: typing.Optional[Client] = None):
@@ -979,7 +975,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
                 client.name = ctx.player_names[(team, slot)]
                 client.team = team
                 client.slot = slot
-        if ctx.compatibility == 1 and "Berserker" not in args.get('tags', Client.tags):
+        if "AP" not in args.get('tags', Client.tags):
             errors.add('IncompatibleVersion')
         elif ctx.compatibility == 0 and args.get('version', Client.version) != list(_version_tuple):
             errors.add('IncompatibleVersion')

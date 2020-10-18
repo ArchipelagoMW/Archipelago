@@ -50,7 +50,7 @@ class WebHostContext(Context):
         super(WebHostContext, self).__init__("", 0, "", 1, 40, True, "enabled", "enabled", 0, 2)
         self.main_loop = asyncio.get_running_loop()
         self.video = {}
-        self.tags = ["Berserker", "WebHost"]
+        self.tags = ["AP", "WebHost"]
 
     def listen_to_db_commands(self):
         cmdprocessor = DBCommandProcessor(self)
