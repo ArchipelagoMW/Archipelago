@@ -334,7 +334,7 @@ def roll_settings(weights):
 
     ret.crystals_ganon = get_choice('ganon_open', weights)
 
-    extra_pieces = get_choice('triforce_pieces_mode', weights, 'available');
+    extra_pieces = get_choice('triforce_pieces_mode', weights, 'available')
 
     ret.triforce_pieces_required = get_choice('triforce_pieces_required', weights, 20)
     ret.triforce_pieces_required = min(max(1, int(ret.triforce_pieces_required)), 90)

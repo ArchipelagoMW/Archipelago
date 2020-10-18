@@ -402,19 +402,19 @@
           "keyString": "triforce_pieces_required.30",
           "friendlyName": 30,
           "description": "30 Triforce pieces are required before speaking with Murahadala.",
-          "defaultValue": 50
+          "defaultValue": 0
         },
         "40": {
           "keyString": "triforce_pieces_required.40",
           "friendlyName": 40,
           "description": "40 Triforce pieces are required before speaking with Murahadala.",
-          "defaultValue": 50
+          "defaultValue": 0
         },
         "50": {
           "keyString": "triforce_pieces_required.50",
           "friendlyName": 50,
           "description": "50 Triforce pieces are required before speaking with Murahadala.",
-          "defaultValue": 50
+          "defaultValue": 0
         }
       }
     },
@@ -466,13 +466,13 @@
           "keyString": "triforce_pieces_available.40",
           "friendlyName": 40,
           "description": "40 Triforce pieces will be hidden throughout Hyrule",
-          "defaultValue": 50
+          "defaultValue": 0
         },
         "50": {
           "keyString": "triforce_pieces_available.50",
           "friendlyName": 50,
           "description": "50 Triforce pieces will be hidden throughout Hyrule",
-          "defaultValue": 50
+          "defaultValue": 0
         }
       }
     },
@@ -492,7 +492,7 @@
           "keyString": "triforce_pieces_extra.5",
           "friendlyName": 5,
           "description": "5 extra Triforce pieces will be hidden throughout Hyrule",
-          "defaultValue": 50
+          "defaultValue": 0
         },
         "10": {
           "keyString": "triforce_pieces_extra.10",

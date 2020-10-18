@@ -147,7 +147,7 @@ const getSettingValue = (settings, keyString) => {
 const exportSettings = () => {
   const presetNumber = document.getElementById('preset-number').value;
   const settings = JSON.parse(localStorage.getItem(`playerSettings${presetNumber}`));
-  const yamlText = jsyaml.safeDump(settings);
+  const yamlText = jsyaml.safeDump(settings, { noCompatMode: true }).replaceAll(/'(\d+)':/g, (x, y) => `${y}:`);
   download(`${settings.description}.yaml`, yamlText);
 };
 
