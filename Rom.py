@@ -1925,13 +1925,13 @@ def write_strings(rom, world, player, team):
         tt['sign_ganon'] = 'You need to pull the pedestal to defeat Ganon.'
     elif world.goal[player]  == "ganon":
         if world.crystals_needed_for_ganon[player] == 1:
-            tt['sign_ganon'] = 'You need 1 crystal to beat Ganon and have beaten Agahnim atop Ganons Tower.'
+            tt['sign_ganon'] = 'You need a crystal to beat Ganon and have beaten Agahnim atop Ganons Tower.'
         else:
             tt['sign_ganon'] = f'You need {world.crystals_needed_for_ganon[player]} crystals to beat Ganon and ' \
                                f'have beaten Agahnim atop Ganons Tower'
     else:
         if world.crystals_needed_for_ganon[player] == 1:
-            tt['sign_ganon'] = 'You need 1 crystal to beat Ganon.'
+            tt['sign_ganon'] = 'You need a crystal to beat Ganon.'
         else:
             tt['sign_ganon'] = f'You need {world.crystals_needed_for_ganon[player]} crystals to beat Ganon.'
 
