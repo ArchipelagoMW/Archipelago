@@ -252,6 +252,12 @@ def handle_name(name: str):
     return name.strip().replace(' ', '_')[:16]
 
 
+def prefer_int(input_data: str) -> typing.Union[str, int]:
+    try:
+        return int(input_data)
+    except:
+        return input_data
+
 def roll_settings(weights):
     ret = argparse.Namespace()
     if "linked_options" in weights:
@@ -260,7 +266,7 @@ def roll_settings(weights):
             if "name" not in option_set:
                 raise ValueError("One of your linked options does not have a name.")
             try:
-                if random.random() < (option_set["percentage"] / 100):
+                if random.random() < (float(option_set["percentage"]) / 100):
                     weights.update(option_set["options"])
             except Exception as e:
                 raise ValueError(f"Linked option {option_set['name']} is destroyed. "
@@ -330,32 +336,29 @@ def roll_settings(weights):
     # fast ganon + ganon at hole
     ret.open_pyramid = goal in {'fast_ganon', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'}
 
-    ret.crystals_gt = get_choice('tower_open', weights)
+    ret.crystals_gt = prefer_int(get_choice('tower_open', weights))
 
-    ret.crystals_ganon = get_choice('ganon_open', weights)
+    ret.crystals_ganon = prefer_int(get_choice('ganon_open', weights))
 
     extra_pieces = get_choice('triforce_pieces_mode', weights, 'available')
 
-    ret.triforce_pieces_required = get_choice('triforce_pieces_required', weights, 20)
+    ret.triforce_pieces_required = int(get_choice('triforce_pieces_required', weights, 20))
     ret.triforce_pieces_required = min(max(1, int(ret.triforce_pieces_required)), 90)
 
     # sum a percentage to required
     if extra_pieces == 'percentage':
-        percentage = max(100, get_choice('triforce_pieces_percentage', weights, 150)) / 100
-        ret.triforce_pieces_available = int(ret.triforce_pieces_required * percentage)
+        percentage = max(100, float(get_choice('triforce_pieces_percentage', weights, 150))) / 100
+        ret.triforce_pieces_available = int(round(ret.triforce_pieces_required * percentage, 0))
     # vanilla mode (specify how many pieces are)
     elif extra_pieces == 'available':
-        ret.triforce_pieces_available = get_choice('triforce_pieces_available', weights, 30)
+        ret.triforce_pieces_available = int(get_choice('triforce_pieces_available', weights, 30))
     # required pieces + fixed extra
     elif extra_pieces == 'extra':
-        extra_pieces = max(0, get_choice('triforce_pieces_extra', weights, 10))
+        extra_pieces = max(0, int(get_choice('triforce_pieces_extra', weights, 10)))
         ret.triforce_pieces_available = ret.triforce_pieces_required + extra_pieces
 
     # change minimum to required pieces to avoid problems
     ret.triforce_pieces_available = min(max(ret.triforce_pieces_required, int(ret.triforce_pieces_available)), 90)
-
-    ret.triforce_pieces_required = get_choice('triforce_pieces_required', weights, 20)
-    ret.triforce_pieces_required = min(max(1, int(ret.triforce_pieces_required)), 90)
 
     ret.shop_shuffle = get_choice('shop_shuffle', weights, '')
     if not ret.shop_shuffle:
