@@ -10,7 +10,7 @@
 - [MultiWorld Utilities](https://github.com/Berserker66/MultiWorld-Utilities/releases)
 - [QUsb2Snes](https://github.com/Skarsnik/QUsb2snes/releases) (Included in the above Utilities)
 - Hardware oder Software zum Laden und Abspielen von SNES Rom-Dateien
-    - Einen Emulator, der lua-scripts abspielen kann
+    - Ein Emulator, der lua-scripts abspielen kann
       ([snes9x Multitroid](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
       [BizHawk](http://tasvideos.org/BizHawk.html))
     - Ein SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), oder andere kompatible Hardware
@@ -42,7 +42,7 @@ Für normale Multiworld-Spiele lädst du die `Setup.BerserkerMultiworld.exe` her
 ## Erstellen deiner YAML-Datei
 
 ### Was ist eine YAML-Datei und wofür brauche ich die?
-Deine persönliche YAML-Datei beinhaltet eine Reihe von Einstellungen, die der Zufallsgenerator zum erstellen
+Deine persönliche YAML-Datei beinhaltet eine Reihe von Einstellungen, die der Zufallsgenerator zum Erstellen
 von deinem Spiel benötigt. Jeder Spieler einer Multiworld stellt seine eigene YAML-Datei zur Verfügung. Dadurch kann
 jeder Spieler sein Spiel nach seinem eigenen Geschmack gestalten, während andere Spieler unabhängig davon ihre eigenen
 Einstellungen wählen können!
@@ -55,15 +55,15 @@ deiner eigenen `yaml` Datei. Drei verschiedene Voreinstellungen können dort ges
 Die **Player Settings** Seite hat eine Menge Optionen, die man per Schieber einstellen kann. Das ermöglicht es,
 verschiedene Optionen mit unterschiedlichen Wahrscheinlichkeiten in einer Kategorie ausgewürfelt zu werden 
 
-Als Beispiel kann man sie die Option "Map Shuffle" als einen Eimer mit Zetteln zur Abstimmung Vorstellen.
+Als Beispiel kann man sich die Option "Map Shuffle" als einen Eimer mit Zetteln zur Abstimmung Vorstellen.
 So kann man beispielsweise für die Option "On" 20 Zettel mit dieser Option einwerfen und 40 Zettel mit "Off".
 
 Entsprechend in diesem Beispiel liegen dann 60 Zettel im Eimer. 20 für "On" und 40 für "Off". Um die Option
 festzulegen, "greift" der Generator in den Eimer und holt sich zufällig einen Zettel heraus. Entsprechend ist die
-Wahrscheinlichkeit für "Off" bei einem Map Shuffle höher, als "O"
+Wahrscheinlichkeit für "Off" bei einem Map Shuffle höher, als "On"
 
 Wenn du eine Option nicht gewählt haben möchtest, setze ihren Wert einfach auf Null.
-(Es muss aber mindestens eine Option pro Kategorie einen Wert größer Null besitzen, sonst funktioniert es nicht!)
+(Es muss aber mindestens eine Option pro Kategorie einen Wert größer Null besitzen, sonst funktioniert die yaml nicht!)
 
 ### Überprüfung deiner YAML-Datei
 Wenn man sichergehen will, ob die YAML-Datei funktioniert, kann man dies
@@ -156,5 +156,5 @@ Die Empfohlene Art, ein Spiel zu hosten, ist, den Service auf
    automatisch auf den Server zu verbinden. Die Patch-Dateien von der "Seed Info"-Seite tun dies nicht!
 7. Oben auf der Serverseite ist ein Link zum MultiWorld-Tracker zum aktuellen Spiel zu finden. Gib diesen Link
    ebenfalls deinen Mitspielern, so dass ihr alle den Fortschritt eures Spiels verfolgen könnt! Ihr könnt ihn
-   auch an Zuschauer weitergeben.
+   auch an Zuschauer weitergeben, so dass sie auf dem Laufenden bleiben.
 8. Wenn alle Spieler verbunden sind, könnt ihr mit dem Spiel loslegen! Viel Spaß!
