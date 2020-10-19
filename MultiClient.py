@@ -1,6 +1,5 @@
 import argparse
 import asyncio
-import json
 import logging
 import urllib.parse
 import atexit
@@ -13,6 +12,8 @@ import sys
 import typing
 import os
 import subprocess
+import base64
+from json import loads, dumps
 
 from random import randrange
 
@@ -113,7 +114,7 @@ class Context():
     async def send_msgs(self, msgs):
         if not self.server or not self.server.socket.open or self.server.socket.closed:
             return
-        await self.server.socket.send(json.dumps(msgs))
+        await self.server.socket.send(dumps(msgs))
 
 color_codes = {'reset': 0, 'bold': 1, 'underline': 4, 'black': 30, 'red': 31, 'green': 32, 'yellow': 33, 'blue': 34,
                'magenta': 35, 'cyan': 36, 'white': 37, 'black_bg': 40, 'red_bg': 41, 'green_bg': 42, 'yellow_bg': 43,
@@ -427,17 +428,17 @@ async def get_snes_devices(ctx: Context):
         "Opcode": "DeviceList",
         "Space": "SNES"
     }
-    await socket.send(json.dumps(DeviceList_Request))
+    await socket.send(dumps(DeviceList_Request))
 
-    reply = json.loads(await socket.recv())
+    reply = loads(await socket.recv())
     devices = reply['Results'] if 'Results' in reply and len(reply['Results']) > 0 else None
 
     if not devices:
         ctx.ui_node.log_info('No SNES device found. Ensure QUsb2Snes is running and connect it to the multibridge.')
         while not devices:
             await asyncio.sleep(1)
-            await socket.send(json.dumps(DeviceList_Request))
-            reply = json.loads(await socket.recv())
+            await socket.send(dumps(DeviceList_Request))
+            reply = loads(await socket.recv())
             devices = reply['Results'] if 'Results' in reply and len(reply['Results']) > 0 else None
 
     ctx.ui_node.send_device_list(devices)
@@ -481,7 +482,7 @@ async def snes_connect(ctx: Context, address):
             "Space": "SNES",
             "Operands": [device]
         }
-        await ctx.snes_socket.send(json.dumps(Attach_Request))
+        await ctx.snes_socket.send(dumps(Attach_Request))
         ctx.snes_state = SNES_ATTACHED
         ctx.snes_attached_device = (devices.index(device), device)
         ctx.ui_node.send_connection_status(ctx)
@@ -489,8 +490,8 @@ async def snes_connect(ctx: Context, address):
         if 'sd2snes' in device.lower() or (len(device) == 4 and device[:3] == 'COM'):
             ctx.ui_node.log_info("SD2SNES Detected")
             ctx.is_sd2snes = True
-            await ctx.snes_socket.send(json.dumps({"Opcode" : "Info", "Space" : "SNES"}))
-            reply = json.loads(await ctx.snes_socket.recv())
+            await ctx.snes_socket.send(dumps({"Opcode" : "Info", "Space" : "SNES"}))
+            reply = loads(await ctx.snes_socket.recv())
             if reply and 'Results' in reply:
                 ctx.ui_node.log_info(reply['Results'])
         else:
@@ -501,7 +502,6 @@ async def snes_connect(ctx: Context, address):
         SNES_RECONNECT_DELAY = START_RECONNECT_DELAY
 
     except Exception as e:
-
         if recv_task is not None:
             if not ctx.snes_socket.closed:
                 await ctx.snes_socket.close()
@@ -576,7 +576,7 @@ async def snes_read(ctx : Context, address, size):
             "Operands" : [hex(address)[2:], hex(size)[2:]]
         }
         try:
-            await ctx.snes_socket.send(json.dumps(GetAddress_Request))
+            await ctx.snes_socket.send(dumps(GetAddress_Request))
         except websockets.ConnectionClosed:
             return None
 
@@ -633,7 +633,7 @@ async def snes_write(ctx : Context, write_list):
             PutAddress_Request['Operands'] = ["2C00", hex(len(cmd)-1)[2:], "2C00", "1"]
             try:
                 if ctx.snes_socket is not None:
-                    await ctx.snes_socket.send(json.dumps(PutAddress_Request))
+                    await ctx.snes_socket.send(dumps(PutAddress_Request))
                 if ctx.snes_socket is not None:
                     await ctx.snes_socket.send(cmd)
             except websockets.ConnectionClosed:
@@ -645,7 +645,7 @@ async def snes_write(ctx : Context, write_list):
                 for address, data in write_list:
                     PutAddress_Request['Operands'] = [hex(address)[2:], hex(len(data))[2:]]
                     if ctx.snes_socket is not None:
-                        await ctx.snes_socket.send(json.dumps(PutAddress_Request))
+                        await ctx.snes_socket.send(dumps(PutAddress_Request))
                     if ctx.snes_socket is not None:
                         await ctx.snes_socket.send(data)
             except websockets.ConnectionClosed:
@@ -674,7 +674,7 @@ async def snes_flush_writes(ctx : Context):
 async def send_msgs(websocket, msgs):
     if not websocket or not websocket.open or websocket.closed:
         return
-    await websocket.send(json.dumps(msgs))
+    await websocket.send(dumps(msgs))
 
 
 async def server_loop(ctx: Context, address=None):
@@ -685,16 +685,16 @@ async def server_loop(ctx: Context, address=None):
         ctx.ui_node.log_error('Already connected')
         return
 
-    if address is None:  # set through CLI or BMBP
+    if address is None:  # set through CLI or APBP
         address = ctx.server_address
     if address is None:  # see if this is an old connection
         await asyncio.sleep(0.5)  # wait for snes connection to succeed if possible.
         rom = ctx.rom if ctx.rom else None
-        try:
-            servers = cached_address = Utils.persistent_load()["servers"]
-            address = servers[rom] if rom and rom in servers else servers["default"]
-        except Exception as e:
-            logging.debug(f"Could not find cached server address. {e}")
+
+        servers = Utils.persistent_load()["servers"]
+        if rom in servers:
+            address = servers[rom]
+            cached_address = True
 
     # Wait for the user to provide a multiworld server address
     if not address:
@@ -714,7 +714,7 @@ async def server_loop(ctx: Context, address=None):
         ctx.ui_node.send_connection_status(ctx)
         SERVER_RECONNECT_DELAY = START_RECONNECT_DELAY
         async for data in ctx.server.socket:
-            for msg in json.loads(data):
+            for msg in loads(data):
                 cmd, args = (msg[0], msg[1]) if len(msg) > 1 else (msg, None)
                 await process_server_cmd(ctx, cmd, args)
         ctx.ui_node.log_warning('Disconnected from multiworld server, type /connect to reconnect')
@@ -806,7 +806,6 @@ async def process_server_cmd(ctx: Context, cmd, args):
             raise Exception(
                 'Invalid ROM detected, please verify that you have loaded the correct rom and reconnect your snes (/snes)')
         if 'SlotAlreadyTaken' in args:
-            Utils.persistent_store("servers", "default", ctx.server_address)
             Utils.persistent_store("servers", ctx.rom, ctx.server_address)
             raise Exception('Player slot already in use for that team')
         if 'IncompatibleVersion' in args:
@@ -814,7 +813,6 @@ async def process_server_cmd(ctx: Context, cmd, args):
         raise Exception('Connection refused by the multiworld host')
 
     elif cmd == 'Connected':
-        Utils.persistent_store("servers", "default", ctx.server_address)
         Utils.persistent_store("servers", ctx.rom, ctx.server_address)
         ctx.team, ctx.slot = args[0]
         ctx.player_names = {p: n for p, n in args[1]}
@@ -873,12 +871,6 @@ async def process_server_cmd(ctx: Context, cmd, args):
         logging.info('%s found %s (%s)' % (player_sent, item, color(get_location_name_from_address(found.location),
                                                                     'blue_bg', 'white')))
 
-    elif cmd == 'Missing':
-        if 'locations' in args:
-            locations = json.loads(args['locations'])
-            for location in locations:
-                ctx.ui_node.log_info(f'Missing: {location}')
-            ctx.ui_node.log_info(f'Found {len(locations)} missing location checks')
 
     elif cmd == 'Hint':
         hints = [Utils.Hint(*hint) for hint in args]
@@ -931,7 +923,7 @@ async def server_auth(ctx: Context, password_requested):
         return
     ctx.awaiting_rom = False
     ctx.auth = ctx.rom
-    auth = ctx.rom if ctx.server_version > (2, 4, 0) else list(ctx.rom.encode())
+    auth = base64.b64encode(ctx.rom).decode()
     await ctx.send_msgs([['Connect', {
         'password': ctx.password, 'rom': auth, 'version': Utils._version_tuple, 'tags': get_tags(ctx),
         'uuid': Utils.get_unique_identifier()
@@ -1156,7 +1148,7 @@ async def game_watcher(ctx : Context):
             if rom is None or rom == bytes([0] * ROMNAME_SIZE):
                 continue
 
-            ctx.rom = rom.decode()
+            ctx.rom = rom
             if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
                 ctx.locations_checked = set()
                 ctx.locations_scouted = set()
@@ -1251,45 +1243,43 @@ async def websocket_server(websocket: websockets.WebSocketServerProtocol, path, 
     process_command = ClientCommandProcessor(ctx)
     try:
         async for incoming_data in websocket:
-            try:
-                data = json.loads(incoming_data)
-                logging.debug(f"WebUIData:{data}")
-                if ('type' not in data) or ('content' not in data):
-                    raise Exception('Invalid data received in websocket')
+            data = loads(incoming_data)
+            logging.debug(f"WebUIData:{data}")
+            if ('type' not in data) or ('content' not in data):
+                raise Exception('Invalid data received in websocket')
 
-                elif data['type'] == 'webStatus':
-                    if data['content'] == 'connections':
-                        ctx.ui_node.send_connection_status(ctx)
-                    elif data['content'] == 'devices':
-                        await get_snes_devices(ctx)
-                    elif data['content'] == 'gameInfo':
-                        ctx.ui_node.send_game_info(ctx)
-                    elif data['content'] == 'checkData':
-                        ctx.ui_node.send_location_check(ctx, 'Waiting for check...')
+            elif data['type'] == 'webStatus':
+                if data['content'] == 'connections':
+                    ctx.ui_node.send_connection_status(ctx)
+                elif data['content'] == 'devices':
+                    await get_snes_devices(ctx)
+                elif data['content'] == 'gameInfo':
+                    ctx.ui_node.send_game_info(ctx)
+                elif data['content'] == 'checkData':
+                    ctx.ui_node.send_location_check(ctx, 'Waiting for check...')
 
-                elif data['type'] == 'webConfig':
-                    if 'serverAddress' in data['content']:
-                        ctx.server_address = data['content']['serverAddress']
-                        await connect(ctx, data['content']['serverAddress'])
-                    elif 'deviceId' in data['content']:
-                        # Allow a SNES disconnect via UI sending -1 as new device
-                        if data['content']['deviceId'] == "-1":
-                            ctx.ui_node.manual_snes = None
-                            ctx.snes_reconnect_address = None
-                            await snes_disconnect(ctx)
-                        else:
-                            await snes_disconnect(ctx)
-                            ctx.ui_node.manual_snes = data['content']['deviceId']
-                            await snes_connect(ctx, ctx.snes_address)
+            elif data['type'] == 'webConfig':
+                if 'serverAddress' in data['content']:
+                    ctx.server_address = data['content']['serverAddress']
+                    await connect(ctx, data['content']['serverAddress'])
+                elif 'deviceId' in data['content']:
+                    # Allow a SNES disconnect via UI sending -1 as new device
+                    if data['content']['deviceId'] == "-1":
+                        ctx.ui_node.manual_snes = None
+                        ctx.snes_reconnect_address = None
+                        await snes_disconnect(ctx)
+                    else:
+                        await snes_disconnect(ctx)
+                        ctx.ui_node.manual_snes = data['content']['deviceId']
+                        await snes_connect(ctx, ctx.snes_address)
 
-                elif data['type'] == 'webControl':
-                    if 'disconnect' in data['content']:
-                        await ctx.disconnect()
+            elif data['type'] == 'webControl':
+                if 'disconnect' in data['content']:
+                    await ctx.disconnect()
 
-                elif data['type'] == 'webCommand':
-                    process_command(data['content'])
-            except json.JSONDecodeError:
-                pass
+            elif data['type'] == 'webCommand':
+                process_command(data['content'])
+
     except Exception as e:
         if not isinstance(e, websockets.WebSocketException):
             logging.exception(e)

@@ -3,6 +3,10 @@ import sys
 import subprocess
 import importlib
 
+
+if sys.version_info < (3, 8, 6):
+    raise RuntimeError("Incompatible Python Version. 3.8.7+ is supported.")
+
 update_ran = hasattr(sys, "frozen") and getattr(sys, "frozen")  # don't run update if environment is frozen/compiled
 
 

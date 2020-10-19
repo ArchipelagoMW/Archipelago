@@ -79,12 +79,12 @@ class LocalRom(object):
 
             if self.verify(buffer):
                 self.buffer = buffer
-                if not os.path.exists(local_path('data', 'basepatch.bmbp')):
+                if not os.path.exists(local_path('data', 'basepatch.apbp')):
                     Patch.create_patch_file(local_path('basepatch.sfc'))
                 return
 
-        if os.path.isfile(local_path('data', 'basepatch.bmbp')):
-            _, target, buffer = Patch.create_rom_bytes(local_path('data', 'basepatch.bmbp'))
+        if os.path.isfile(local_path('data', 'basepatch.apbp')):
+            _, target, buffer = Patch.create_rom_bytes(local_path('data', 'basepatch.apbp'))
             if self.verify(buffer):
                 self.buffer = bytearray(buffer)
                 with open(local_path('basepatch.sfc'), 'wb') as stream:
@@ -1398,6 +1398,7 @@ def patch_rom(world, rom, player, team, enemized):
     # set rom name
     # 21 bytes
     from Main import __version__
+    # TODO: Adjust Enemizer to accept AP and AD
     rom.name = bytearray(f'BM{__version__.replace(".", "")[0:3]}_{team + 1}_{player}_{world.seed:09}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)

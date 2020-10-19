@@ -11,7 +11,7 @@ def adjust(args):
     logger = logging.getLogger('Adjuster')
     logger.info('Patching ROM.')
 
-    if os.path.splitext(args.rom)[-1].lower() == '.bmbp':
+    if os.path.splitext(args.rom)[-1].lower() == '.apbp':
         import Patch
         meta, args.rom = Patch.create_rom_file(args.rom)
         

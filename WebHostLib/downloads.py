@@ -20,7 +20,7 @@ def download_patch(room_id, patch_id):
         patch_data = update_patch_data(patch.data, server="berserkermulti.world:" + str(last_port))
         patch_data = io.BytesIO(patch_data)
 
-        fname = f"P{patch.player}_{pname}_{app.jinja_env.filters['suuid'](room_id)}.bmbp"
+        fname = f"P{patch.player}_{pname}_{app.jinja_env.filters['suuid'](room_id)}.apbp"
         return send_file(patch_data, as_attachment=True, attachment_filename=fname)
 
 
@@ -43,5 +43,5 @@ def download_raw_patch(seed_id, player_id):
         patch_data = update_patch_data(patch.data, server="")
         patch_data = io.BytesIO(patch_data)
 
-        fname = f"P{patch.player}_{pname}_{app.jinja_env.filters['suuid'](seed_id)}.bmbp"
+        fname = f"P{patch.player}_{pname}_{app.jinja_env.filters['suuid'](seed_id)}.apbp"
         return send_file(patch_data, as_attachment=True, attachment_filename=fname)

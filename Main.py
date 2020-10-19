@@ -1,7 +1,6 @@
 from collections import OrderedDict
 import copy
 from itertools import zip_longest
-import json
 import logging
 import os
 import random
@@ -170,7 +169,7 @@ def main(args, seed=None):
 
     logger.info('Patching ROM.')
 
-    outfilebase = 'BM_%s' % (args.outputname if args.outputname else world.seed)
+    outfilebase = 'AP_%s' % (args.outputname if args.outputname else world.seed)
 
     rom_names = []
 
@@ -258,7 +257,7 @@ def main(args, seed=None):
         rom.write_to_file(rompath, hide_enemizer=True)
         if args.create_diff:
             Patch.create_patch_file(rompath)
-        return player, team, bytes(rom.name).decode()
+        return player, team, bytes(rom.name)
 
     pool = concurrent.futures.ThreadPoolExecutor()
     multidata_task = None
@@ -293,26 +292,26 @@ def main(args, seed=None):
             precollected_items[item.player - 1].append(item.code)
 
         def write_multidata(roms):
+            import base64
+            import pickle
             for future in roms:
                 rom_name = future.result()
                 rom_names.append(rom_name)
-            multidata = zlib.compress(json.dumps({"names": parsed_names,
-                                                  # backwards compat for < 2.4.1
-                                                  "roms": [(slot, team, list(name.encode()))
-                                                           for (slot, team, name) in rom_names],
-                                                  "rom_strings": rom_names,
-                                                  "remote_items": [player for player in range(1, world.players + 1) if
-                                                                   world.remote_items[player]],
-                                                  "locations": [((location.address, location.player),
-                                                                 (location.item.code, location.item.player))
-                                                                for location in world.get_filled_locations() if
-                                                                type(location.address) is int],
-                                                  "server_options": get_options()["server_options"],
-                                                  "er_hint_data": er_hint_data,
-                                                  "precollected_items": precollected_items,
-                                                  "version": _version_tuple,
-                                                  "tags": ["ER"]
-                                                  }).encode("utf-8"), 9)
+            multidata = zlib.compress(pickle.dumps({"names": parsed_names,
+                                                    "roms": {base64.b64encode(rom_name).decode(): (team, slot) for slot, team, rom_name in rom_names},
+                                                    "remote_items": {player for player in range(1, world.players + 1) if
+                                                                     world.remote_items[player]},
+                                                    "locations": {
+                                                        (location.address, location.player) :
+                                                            (location.item.code, location.item.player)
+                                                        for location in world.get_filled_locations() if
+                                                        type(location.address) is int},
+                                                    "server_options": get_options()["server_options"],
+                                                    "er_hint_data": er_hint_data,
+                                                    "precollected_items": precollected_items,
+                                                    "version": _version_tuple,
+                                                    "tags": ["AP"]
+                                                    }), 9)
 
             with open(output_path('%s.multidata' % outfilebase), 'wb') as f:
                 f.write(multidata)

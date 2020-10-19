@@ -123,7 +123,7 @@ def upload_to_db(folder, owner, sid):
     multidata = None
     for file in os.listdir(folder):
         file = os.path.join(folder, file)
-        if file.endswith(".bmbp"):
+        if file.endswith(".apbp"):
             player = int(file.split("P")[1].split(".")[0].split("_")[0])
             patches.add(Patch(data=open(file, "rb").read(), player=player))
         elif file.endswith(".txt"):

@@ -655,7 +655,7 @@ def guiMain(args=None):
     romEntry2 = Entry(romDialogFrame2, textvariable=romVar2)
 
     def RomSelect2():
-        rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc", ".bmbp")), ("All Files", "*")])
+        rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc", ".apbp")), ("All Files", "*")])
         romVar2.set(rom)
     romSelectButton2 = Button(romDialogFrame2, text='Select Rom', command=RomSelect2)
 

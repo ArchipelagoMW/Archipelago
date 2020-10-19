@@ -8,7 +8,7 @@ from pony.orm import commit, select
 
 from WebHostLib import app, Seed, Room, Patch
 
-accepted_zip_contents = {"patches": ".bmbp",
+accepted_zip_contents = {"patches": ".apbp",
                          "spoiler": ".txt",
                          "multidata": "multidata"}
 
@@ -38,7 +38,7 @@ def uploads():
                         for file in infolist:
                             if file.filename.endswith(banned_zip_contents):
                                 return "Uploaded data contained a rom file, which is likely to contain copyrighted material. Your file was deleted."
-                            elif file.filename.endswith(".bmbp"):
+                            elif file.filename.endswith(".apbp"):
                                 player = int(file.filename.split("P")[1].split(".")[0].split("_")[0])
                                 patches.add(Patch(data=zfile.open(file, "r").read(), player=player))
                             elif file.filename.endswith(".txt"):

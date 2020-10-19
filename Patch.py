@@ -57,7 +57,7 @@ def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str
     bytes = generate_patch(load_bytes(rom_file_to_patch),
                            {
                                "server": server})  # allow immediate connection to server in multiworld. Empty string otherwise
-    target = destination if destination else os.path.splitext(rom_file_to_patch)[0] + ".bmbp"
+    target = destination if destination else os.path.splitext(rom_file_to_patch)[0] + ".apbp"
     write_lzma(bytes, target)
     return target
 
@@ -110,7 +110,7 @@ if __name__ == "__main__":
                     result = pool.submit(create_patch_file, rom, address)
                     result.add_done_callback(lambda task: print(f"Created patch {task.result()}"))
 
-                elif rom.endswith(".bmbp"):
+                elif rom.endswith(".apbp"):
                     print(f"Applying patch {rom}")
                     data, target = create_rom_file(rom)
                     romfile, adjusted = Utils.get_adjuster_settings(target)
@@ -147,7 +147,7 @@ if __name__ == "__main__":
 
                     def _handle_zip_file_entry(zfinfo : zipfile.ZipInfo, server: str):
                         data = zfr.read(zfinfo)
-                        if zfinfo.filename.endswith(".bmbp"):
+                        if zfinfo.filename.endswith(".apbp"):
                             data = update_patch_data(data, server)
                         with ziplock:
                             zfw.writestr(zfinfo, data)

@@ -121,8 +121,8 @@ if __name__ == "__main__":
                 seedname = segment
                 break
 
-        multidataname = f"BM_{seedname}.multidata"
-        spoilername = f"BM_{seedname}_Spoiler.txt"
+        multidataname = f"AP_{seedname}.multidata"
+        spoilername = f"AP_{seedname}_Spoiler.txt"
         romfilename = ""
 
         if player_name:
@@ -158,7 +158,7 @@ if __name__ == "__main__":
                 print(f"Removed {file} which is now present in the zipfile")
 
 
-            zipname = os.path.join(output_path, f"BM_{seedname}.{typical_zip_ending}")
+            zipname = os.path.join(output_path, f"AP_{seedname}.{typical_zip_ending}")
 
             print(f"Creating zipfile {zipname}")
             ipv4 = (host if host else get_public_ipv4()) + ":" + str(port)
@@ -185,7 +185,7 @@ if __name__ == "__main__":
                         if seedname in file:
                             if file.endswith(".sfc"):
                                 futures.append(pool.submit(_handle_sfc_file, file))
-                            elif file.endswith(".bmbp"):
+                            elif file.endswith(".apbp"):
                                 futures.append(pool.submit(_handle_diff_file, file))
 
                     if zip_multidata and os.path.exists(os.path.join(output_path, multidataname)):

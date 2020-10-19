@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import asyncio
 import functools
-import json
 import logging
 import zlib
 import collections
@@ -13,6 +12,8 @@ import weakref
 import datetime
 import threading
 import random
+import pickle
+from json import loads, dumps
 
 import ModuleUpdate
 
@@ -26,7 +27,8 @@ from fuzzywuzzy import process as fuzzy_process
 import Items
 import Regions
 import Utils
-from Utils import get_item_name_from_id, get_location_name_from_address, ReceivedItem, _version_tuple
+from Utils import get_item_name_from_id, get_location_name_from_address, \
+    ReceivedItem, _version_tuple, restricted_loads
 from NetUtils import Node, Endpoint
 
 console_names = frozenset(set(Items.item_table) | set(Regions.location_table) | set(Items.item_name_groups))
@@ -106,28 +108,23 @@ class Context(Node):
 
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
         with open(multidatapath, 'rb') as f:
-            self._load(json.loads(zlib.decompress(f.read()).decode("utf-8-sig")),
+            self._load(restricted_loads(zlib.decompress(f.read())),
                        use_embedded_server_options)
 
         self.data_filename = multidatapath
 
-    def _load(self, jsonobj: dict, use_embedded_server_options: bool):
-        for team, names in enumerate(jsonobj['names']):
+    def _load(self, decoded_obj: dict, use_embedded_server_options: bool):
+        for team, names in enumerate(decoded_obj['names']):
             for player, name in enumerate(names, 1):
                 self.player_names[(team, player)] = name
 
-        if "rom_strings" in jsonobj:
-            self.rom_names = {rom: (team, slot) for slot, team, rom in jsonobj['rom_strings']}
-        else:
-            self.rom_names = {bytes(letter for letter in rom).decode(): (team, slot) for slot, team, rom in
-                              jsonobj['roms']}
-        self.remote_items = set(jsonobj['remote_items'])
-        self.locations = {tuple(k): tuple(v) for k, v in jsonobj['locations']}
-        if "er_hint_data" in jsonobj:
-            self.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
-                                 for player, loc_data in jsonobj["er_hint_data"].items()}
+        self.rom_names = decoded_obj['roms']
+        self.remote_items = decoded_obj['remote_items']
+        self.locations = decoded_obj['locations']
+        self.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
+                             for player, loc_data in decoded_obj["er_hint_data"].items()}
         if use_embedded_server_options:
-            server_options = jsonobj.get("server_options", {})
+            server_options = decoded_obj.get("server_options", {})
             self._set_options(server_options)
 
     def _set_options(self, server_options: dict):
@@ -154,9 +151,9 @@ class Context(Node):
 
     def _save(self, exit_save:bool=False) -> bool:
         try:
-            jsonstr = json.dumps(self.get_save())
+            encoded_save = pickle.dumps(self.get_save())
             with open(self.save_filename, "wb") as f:
-                f.write(zlib.compress(jsonstr.encode("utf-8")))
+                f.write(zlib.compress(encoded_save))
         except Exception as e:
             logging.exception(e)
             return False
@@ -171,8 +168,8 @@ class Context(Node):
                         self.data_filename + '_')) + 'multisave'
             try:
                 with open(self.save_filename, 'rb') as f:
-                    jsonobj = json.loads(zlib.decompress(f.read()).decode("utf-8"))
-                    self.set_save(jsonobj)
+                    save_data = restricted_loads(zlib.decompress(f.read()))
+                    self.set_save(save_data)
             except FileNotFoundError:
                 logging.error('No save data found, starting a new game')
             except Exception as e:
@@ -280,16 +277,21 @@ class Context(Node):
         logging.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
         asyncio.create_task(self.send_msgs(client, [['Print', text]]))
 
+    def notify_client_multiple(self, client: Client, texts: typing.List[str]):
+        if not client.auth:
+            return
+        asyncio.create_task(self.send_msgs(client, [['Print', text] for text in texts]))
+
     def broadcast_team(self, team, msgs):
         for client in self.endpoints:
             if client.auth and client.team == team:
                 asyncio.create_task(self.send_msgs(client, msgs))
 
     def broadcast_all(self, msgs):
-        msgs = json.dumps(msgs)
+        msgs = dumps(msgs)
         for endpoint in self.endpoints:
             if endpoint.auth:
-                asyncio.create_task(self.send_json_msgs(endpoint, msgs))
+                asyncio.create_task(self.send_encoded_msgs(endpoint, msgs))
 
     async def disconnect(self, endpoint):
         await super(Context, self).disconnect(endpoint)
@@ -298,26 +300,25 @@ class Context(Node):
 
 # separated out, due to compatibilty between clients
 def notify_hints(ctx: Context, team: int, hints: typing.List[Utils.Hint]):
-    cmd = json.dumps([["Hint", hints]])  # make sure it is a list, as it can be set internally
+    cmd = dumps([["Hint", hints]])  # make sure it is a list, as it can be set internally
     texts = [['Print', format_hint(ctx, team, hint)] for hint in hints]
     for _, text in texts:
         logging.info("Notice (Team #%d): %s" % (team + 1, text))
-
     for client in ctx.endpoints:
         if client.auth and client.team == team:
-            asyncio.create_task(ctx.send_json_msgs(client, cmd))
+            asyncio.create_task(ctx.send_encoded_msgs(client, cmd))
 
 
 def update_aliases(ctx: Context, team: int, client: typing.Optional[Client] = None):
-    cmd = json.dumps([["AliasUpdate",
+    cmd = dumps([["AliasUpdate",
                        [(key[1], ctx.get_aliased_name(*key)) for key, value in ctx.player_names.items() if
                         key[0] == team]]])
     if client is None:
         for client in ctx.endpoints:
-            if client.team == team and client.auth and client.version > [2, 0, 3]:
-                asyncio.create_task(ctx.send_json_msgs(client, cmd))
+            if client.team == team and client.auth:
+                asyncio.create_task(ctx.send_encoded_msgs(client, cmd))
     else:
-        asyncio.create_task(ctx.send_json_msgs(client, cmd))
+        asyncio.create_task(ctx.send_encoded_msgs(client, cmd))
 
 
 async def server(websocket, path, ctx: Context):
@@ -327,7 +328,7 @@ async def server(websocket, path, ctx: Context):
     try:
         await on_client_connected(ctx, client)
         async for data in websocket:
-            for msg in json.loads(data):
+            for msg in loads(data):
                 if len(msg) == 1:
                     cmd = msg
                     args = None
@@ -392,7 +393,7 @@ async def countdown(ctx: Context, timer):
 
 async def missing(ctx: Context, client: Client, locations: list):
     await ctx.send_msgs(client, [['Missing', {
-        'locations': json.dumps(locations)
+        'locations': dumps(locations)
     }]])
 
 
@@ -762,6 +763,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 self.output(
                     "Sorry, client forfeiting requires you to have beaten the game on this server."
                     " You can ask the server admin for a /forfeit")
+                if self.client.version < [2, 1, 0]:
+                    self.output(
+                        "Your client is too old to send game beaten information. Please update, load you savegame and reconnect.")
                 return False
 
     def _cmd_remaining(self) -> bool:
@@ -805,13 +809,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 locations.append(location_name)
 
         if len(locations) > 0:
-            if self.client.version < [2, 3, 0]:
-                buffer = ""
-                for location in locations:
-                    buffer += f'Missing: {location}\n'
-                self.output(buffer + f"Found {len(locations)} missing location checks")
-            else:
-                asyncio.create_task(missing(self.ctx, self.client, locations))
+            texts = [f'Missing: {location}\n' for location in locations]
+            texts.append(f"Found {len(locations)} missing location checks")
+            self.ctx.notify_client_multiple(self.client, texts)
         else:
             self.output("No missing location checks found.")
         return True
@@ -954,6 +954,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
         if type(args["rom"]) == list:
             args["rom"] = bytes(letter for letter in args["rom"]).decode()
         if args['rom'] not in ctx.rom_names:
+            logging.info((args["rom"], ctx.rom_names))
             errors.add('InvalidRom')
         else:
             team, slot = ctx.rom_names[args['rom']]
@@ -972,7 +973,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
                 client.name = ctx.player_names[(team, slot)]
                 client.team = team
                 client.slot = slot
-        if "AP" not in args.get('tags', Client.tags):
+        if ctx.compatibility == 1 and "AP" not in args.get('tags', Client.tags):
             errors.add('IncompatibleVersion')
         elif ctx.compatibility == 0 and args.get('version', Client.version) != list(_version_tuple):
             errors.add('IncompatibleVersion')

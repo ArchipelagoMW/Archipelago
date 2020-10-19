@@ -1,6 +1,6 @@
 import http.server
 import logging
-import os
+import json
 import socket
 import socketserver
 import threading
@@ -16,6 +16,9 @@ logger = logging.getLogger("WebUIRelay")
 
 
 class WebUiClient(Node):
+    loader = staticmethod(json.loads)
+    dumper = staticmethod(json.dumps)
+
     def __init__(self):
         super().__init__()
         self.manual_snes = None
