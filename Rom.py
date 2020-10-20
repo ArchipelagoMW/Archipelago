@@ -392,7 +392,9 @@ def get_sprite_from_name(name, local_random=random):
     _populate_sprite_table()
     name = name.lower()
     if name.startswith('random'):
-        return local_random.choice(list(_sprite_table.values()))
+        sprites = list(set(_sprite_table.values()))
+        sprites.sort(key=lambda x: x.name)
+        return local_random.choice(sprites)
     return _sprite_table.get(name, None)
 
 class Sprite(object):
