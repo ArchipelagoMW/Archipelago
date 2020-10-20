@@ -11,6 +11,7 @@ import struct
 import sys
 import subprocess
 import threading
+import xxtea
 import concurrent.futures
 from typing import Optional
 
@@ -57,6 +58,31 @@ class LocalRom(object):
 
     def write_bytes(self, startaddress: int, values):
         self.buffer[startaddress:startaddress + len(values)] = values
+
+    def encrypt_range(self, startaddress: int, length: int, key: bytes):
+        for i in range(0, length, 8):
+            data = bytes(self.read_bytes(startaddress + i, 8))
+            data = xxtea.encrypt(data, key, padding=False)
+            self.write_bytes(startaddress + i, bytearray(data))
+
+    def encrypt(self, world, player):
+        local_random = world.rom_seeds[player]
+        key = bytes(local_random.getrandbits(8 * 16).to_bytes(16, 'big'))
+        self.write_bytes(0x1800B0, bytearray(key))
+        self.write_int16(0x180087, 1)
+
+        itemtable = []
+        locationtable = []
+        for i in range(168):
+            itemtable.append(self.read_byte(0xE96E + (i * 3)))
+            locationtable.append(self.read_byte(0xe96C + (i * 3)))
+            locationtable.append(self.read_byte(0xe96D + (i * 3)))
+        self.write_bytes(0xE96C, locationtable)
+        self.write_bytes(0xE96C + 0x150, itemtable)
+        self.encrypt_range(0xE96C + 0x150, 168, key)
+        self.encrypt_range(0x180000, 32, key)
+        self.encrypt_range(0x180140, 32, key)
+
 
     def write_to_file(self, file, hide_enemizer=False):
         with open(file, 'wb') as outfile:
@@ -1422,16 +1448,10 @@ def patch_rom(world, rom, player, team, enemized):
 
     return rom
 
-try:
-    import RaceRom
-except ImportError:
-    RaceRom = None
 
-def patch_race_rom(rom):
+def patch_race_rom(rom, world, player):
     rom.write_bytes(0x180213, [0x01, 0x00]) # Tournament Seed
-
-    if 'RaceRom' in sys.modules:
-        RaceRom.encrypt(rom)
+    rom.encrypt(world, player)
 
 def write_custom_shops(rom, world, player):
     shops = [shop for shop in world.shops if shop.custom and shop.region.player == player]
