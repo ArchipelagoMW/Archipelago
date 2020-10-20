@@ -6,3 +6,4 @@ bsdiff4>=1.2.0
 prompt_toolkit>=3.0.6
 appdirs>=1.4.4
 maseya-z3pr>=1.0.0rc1
+xxtea>=2.0.0

@@ -188,7 +188,7 @@ def main(args, seed=None):
             patch_enemizer(world, player, rom, args.enemizercli)
 
         if args.race:
-            patch_race_rom(rom)
+            patch_race_rom(rom, world, player)
 
         world.spoiler.hashes[(player, team)] = get_hash_string(rom.hash)
 
