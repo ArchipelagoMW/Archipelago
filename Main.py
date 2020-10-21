@@ -296,6 +296,13 @@ def main(args, seed=None):
             for future in roms:
                 rom_name = future.result()
                 rom_names.append(rom_name)
+            multidatatags = ["ER"]
+            if args.race:
+                multidatatags.append("Race")
+            if args.create_spoiler:
+                multidatatags.append("Spoiler")
+                if not args.skip_playthrough:
+                    multidatatags.append("Play through")
             multidata = zlib.compress(json.dumps({"names": parsed_names,
                                                   # backwards compat for < 2.4.1
                                                   "roms": [(slot, team, list(name.encode()))
@@ -311,7 +318,7 @@ def main(args, seed=None):
                                                   "er_hint_data": er_hint_data,
                                                   "precollected_items": precollected_items,
                                                   "version": _version_tuple,
-                                                  "tags": ["ER"]
+                                                  "tags": multidatatags
                                                   }).encode("utf-8"), 9)
 
             with open(output_path('%s.multidata' % outfilebase), 'wb') as f:

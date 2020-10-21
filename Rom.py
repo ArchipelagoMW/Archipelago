@@ -1,5 +1,5 @@
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '31d50ce7f1dd3bc33bdc3b2e90f0104e'
+RANDOMIZERBASEHASH = '1217774de26e67d300fa681775e8c08d'
 
 import io
 import json
@@ -73,13 +73,18 @@ class LocalRom(object):
 
         itemtable = []
         locationtable = []
+        itemplayertable = []
         for i in range(168):
             itemtable.append(self.read_byte(0xE96E + (i * 3)))
+            itemplayertable.append(self.read_byte(0x186142 + (i * 3)))
             locationtable.append(self.read_byte(0xe96C + (i * 3)))
             locationtable.append(self.read_byte(0xe96D + (i * 3)))
         self.write_bytes(0xE96C, locationtable)
         self.write_bytes(0xE96C + 0x150, itemtable)
         self.encrypt_range(0xE96C + 0x150, 168, key)
+        self.write_bytes(0x186140, [0] * 0x150)
+        self.write_bytes(0x186140 + 0x150, itemplayertable)
+        self.encrypt_range(0x186140 + 0x150, 168, key)
         self.encrypt_range(0x180000, 32, key)
         self.encrypt_range(0x180140, 32, key)
 
