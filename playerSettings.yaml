@@ -367,8 +367,8 @@ rom:
     off: 0
   ow_palettes: # Change the colors of the overworld
     default: 50 # No changes
-    random: 0 # Shuffle the colors
-    blackout: 0 # Never use this
+    random: 0 # Shuffle the colors, with harmony in mind
+    blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
     classic: 0
@@ -377,8 +377,8 @@ rom:
     puke: 0
   uw_palettes: # Change the colors of caves and dungeons
     default: 50 # No changes
-    random: 0 # Shuffle the colors
-    blackout: 0 # Never use this
+    random: 0 # Shuffle the colors, with harmony in mind
+    blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
     classic: 0
@@ -387,8 +387,8 @@ rom:
     puke: 0
   hud_palettes: # Change the colors of the hud
     default: 50 # No changes
-    random: 0 # Shuffle the colors
-    blackout: 0 # Never use this
+    random: 0 # Shuffle the colors, with harmony in mind
+    blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
     classic: 0
@@ -397,18 +397,18 @@ rom:
     puke: 0
   sword_palettes: # Change the colors of swords
     default: 50 # No changes
-    random: 0 # Shuffle the colors
-    blackout: 0 # Never use this
+    random: 0 # Shuffle the colors, with harmony in mind
+    blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
     classic: 0
     dizzy: 0
     sick: 0
     puke: 0
-  uw_palettes: # Change the colors of shields
+  shield_palettes: # Change the colors of shields
     default: 50 # No changes
-    random: 0 # Shuffle the colors
-    blackout: 0 # Never use this
+    random: 0 # Shuffle the colors, with harmony in mind
+    blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
     classic: 0
