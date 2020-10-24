@@ -11,7 +11,7 @@ import ModuleUpdate
 ModuleUpdate.update()
 
 from Utils import parse_yaml
-from Rom import get_sprite_from_name
+from Rom import Sprite
 from EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from Main import get_seed, seeddigits
@@ -167,7 +167,7 @@ def main(args=None, callback=ERmain):
         if path:
             try:
                 settings = settings_cache[path] if settings_cache[path] else roll_settings(weights_cache[path])
-                if settings.sprite and not os.path.isfile(settings.sprite) and not get_sprite_from_name(
+                if settings.sprite and not os.path.isfile(settings.sprite) and not Sprite.get_sprite_from_name(
                         settings.sprite):
                     logging.warning(
                         f"Warning: The chosen sprite, \"{settings.sprite}\", for yaml \"{path}\", does not exist.")

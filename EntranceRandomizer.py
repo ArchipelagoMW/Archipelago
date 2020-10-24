@@ -8,7 +8,7 @@ import shlex
 import sys
 
 from Main import main, get_seed
-from Rom import get_sprite_from_name
+from Rom import Sprite
 from Utils import is_bundled, close_console
 
 
@@ -401,7 +401,7 @@ def start():
         input(
             'Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
         sys.exit(1)
-    if any([sprite is not None and not os.path.isfile(sprite) and not get_sprite_from_name(sprite) for sprite in
+    if any([sprite is not None and not os.path.isfile(sprite) and not Sprite.get_sprite_from_name(sprite) for sprite in
             args.sprite.values()]):
         input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
         sys.exit(1)
