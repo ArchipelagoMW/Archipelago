@@ -92,13 +92,19 @@ class Logic(Choice):
     alias_owg = 2
 
 
-class Goal(Choice):
-    option_ganon = 0
-    option_fast_ganon = 1
-    option_all_dungeons = 2
+class Objective(Choice):
+    option_crystals = 0
+    #option_pendants = 1
+    option_triforce_pieces = 2
     option_pedestal = 3
-    option_triforce_hunt = 4
+    option_bingo = 4
 
+local_objective = Toggle # local triforce pieces, local dungeon prizes etc.
+
+class Goal(Choice):
+    option_kill_ganon = 0
+    option_kill_ganon_and_gt_agahnim = 1
+    option_hand_in = 2
 
 class Accessibility(Choice):
     option_locations = 0
