@@ -2,7 +2,7 @@ import argparse
 import json
 from os import listdir
 from os.path import isfile, join
-from Rom import Sprite
+from worlds.alttp.Rom import Sprite
 from Gui import get_image_for_sprite
 
 parser = argparse.ArgumentParser(description='Dump sprite data and .png files to a directory.')

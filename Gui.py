@@ -15,10 +15,10 @@ import ModuleUpdate
 ModuleUpdate.update()
 
 from AdjusterMain import adjust
-from EntranceRandomizer import parse_arguments
+from worlds.alttp.EntranceRandomizer import parse_arguments
 from GuiUtils import ToolTips, set_icon, BackgroundTaskProgress
-from Main import main, get_seed, __version__ as MWVersion
-from Rom import Sprite
+from worlds.alttp.Main import main, get_seed, __version__ as MWVersion
+from worlds.alttp.Rom import Sprite
 from Utils import is_bundled, local_path, output_path, open_file
 
 

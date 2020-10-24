@@ -1,18 +1,18 @@
-from BaseClasses import World
-from Dungeons import create_dungeons, get_dungeon_item_pool
-from EntranceShuffle import link_entrances
-from InvertedRegions import mark_dark_world_regions
-from ItemPool import difficulties, generate_itempool
-from Items import ItemFactory
-from Regions import create_regions, create_shops
-from Rules import set_rules
+from BaseClasses import MultiWorld
+from worlds.alttp.Dungeons import create_dungeons, get_dungeon_item_pool
+from worlds.alttp.EntranceShuffle import link_entrances
+from worlds.alttp.InvertedRegions import mark_dark_world_regions
+from worlds.alttp.ItemPool import difficulties, generate_itempool
+from worlds.alttp.Items import ItemFactory
+from worlds.alttp.Regions import create_regions, create_shops
+from worlds.alttp.Rules import set_rules
 from test.TestBase import TestBase
 
 
 class TestVanilla(TestBase):
     def setUp(self):
-        self.world = World(1, {1:'vanilla'}, {1:'noglitches'}, {1:'open'}, {1:'random'}, {1:'normal'}, {1:'normal'}, {1:False}, {1:'on'}, {1:'ganon'}, 'balanced',  {1:'items'},
-                           True,  {1:False}, False, None,  {1:False})
+        self.world = MultiWorld(1, {1: 'vanilla'}, {1: 'noglitches'}, {1: 'open'}, {1: 'random'}, {1: 'normal'}, {1: 'normal'}, {1:False}, {1: 'on'}, {1: 'ganon'}, 'balanced', {1: 'items'},
+                                True, {1:False}, False, None, {1:False})
         self.world.difficulty_requirements[1] = difficulties['normal']
         create_regions(self.world, 1)
         create_dungeons(self.world, 1)

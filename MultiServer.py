@@ -24,8 +24,7 @@ import prompt_toolkit
 from prompt_toolkit.patch_stdout import patch_stdout
 from fuzzywuzzy import process as fuzzy_process
 
-import Items
-import Regions
+from worlds.alttp import Items, Regions
 import Utils
 from Utils import get_item_name_from_id, get_location_name_from_address, \
     ReceivedItem, _version_tuple, restricted_loads

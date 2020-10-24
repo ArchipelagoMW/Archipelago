@@ -8,16 +8,16 @@ import time
 import zlib
 import concurrent.futures
 
-from BaseClasses import World, CollectionState, Item, Region, Location, Shop
-from Items import ItemFactory
-from Regions import create_regions, create_shops, mark_light_world_regions, lookup_vanilla_location_to_entrance
-from InvertedRegions import create_inverted_regions, mark_dark_world_regions
-from EntranceShuffle import link_entrances, link_inverted_entrances
-from Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, get_hash_string
-from Rules import set_rules
-from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
+from BaseClasses import MultiWorld, CollectionState, Item, Region, Location
+from worlds.alttp.Items import ItemFactory
+from worlds.alttp.Regions import create_regions, create_shops, mark_light_world_regions, lookup_vanilla_location_to_entrance
+from worlds.alttp.InvertedRegions import create_inverted_regions, mark_dark_world_regions
+from worlds.alttp.EntranceShuffle import link_entrances, link_inverted_entrances
+from worlds.alttp.Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, get_hash_string
+from worlds.alttp.Rules import set_rules
+from worlds.alttp.Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression
-from ItemPool import generate_itempool, difficulties, fill_prizes
+from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
 import Patch
 
@@ -39,9 +39,9 @@ def main(args, seed=None):
     start = time.perf_counter()
 
     # initialize the world
-    world = World(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty,
-                  args.item_functionality, args.timer, args.progressive.copy(), args.goal, args.algorithm,
-                  args.accessibility, args.shuffleganon, args.retro, args.custom, args.customitemarray, args.hints)
+    world = MultiWorld(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty,
+                       args.item_functionality, args.timer, args.progressive.copy(), args.goal, args.algorithm,
+                       args.accessibility, args.shuffleganon, args.retro, args.custom, args.customitemarray, args.hints)
 
     logger = logging.getLogger('')
     world.seed = get_seed(seed)
@@ -278,7 +278,7 @@ def main(args, seed=None):
 
         # collect ER hint info
         er_hint_data = {player: {} for player in range(1, world.players + 1) if world.shuffle[player] != "vanilla"}
-        from Regions import RegionType
+        from worlds.alttp.Regions import RegionType
         for region in world.regions:
             if region.player in er_hint_data and region.locations:
                 main_entrance = get_entrance_to_region(region)
@@ -333,7 +333,7 @@ def main(args, seed=None):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.difficulty_adjustments, world.timer, world.progressive, world.goal, world.algorithm, world.accessibility, world.shuffle_ganon, world.retro, world.custom, world.customitemarray, world.hints)
+    ret = MultiWorld(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.difficulty_adjustments, world.timer, world.progressive, world.goal, world.algorithm, world.accessibility, world.shuffle_ganon, world.retro, world.custom, world.customitemarray, world.hints)
     ret.teams = world.teams
     ret.player_names = copy.deepcopy(world.player_names)
     ret.remote_items = world.remote_items.copy()

@@ -1,19 +1,19 @@
 import unittest
 
-from BaseClasses import World
-from Dungeons import create_dungeons
-from EntranceShuffle import connect_entrance, Inverted_LW_Entrances, Inverted_LW_Dungeon_Entrances, Inverted_LW_Single_Cave_Doors, Inverted_Old_Man_Entrances, Inverted_DW_Entrances, Inverted_DW_Dungeon_Entrances, Inverted_DW_Single_Cave_Doors, \
+from BaseClasses import MultiWorld
+from worlds.alttp.Dungeons import create_dungeons
+from worlds.alttp.EntranceShuffle import connect_entrance, Inverted_LW_Entrances, Inverted_LW_Dungeon_Entrances, Inverted_LW_Single_Cave_Doors, Inverted_Old_Man_Entrances, Inverted_DW_Entrances, Inverted_DW_Dungeon_Entrances, Inverted_DW_Single_Cave_Doors, \
     Inverted_LW_Entrances_Must_Exit, Inverted_LW_Dungeon_Entrances_Must_Exit, Inverted_Bomb_Shop_Multi_Cave_Doors, Inverted_Bomb_Shop_Single_Cave_Doors, Blacksmith_Single_Cave_Doors, Inverted_Blacksmith_Multi_Cave_Doors
-from InvertedRegions import create_inverted_regions
-from ItemPool import difficulties
-from Rules import set_inverted_big_bomb_rules
+from worlds.alttp.InvertedRegions import create_inverted_regions
+from worlds.alttp.ItemPool import difficulties
+from worlds.alttp.Rules import set_inverted_big_bomb_rules
 
 
 class TestInvertedBombRules(unittest.TestCase):
 
     def setUp(self):
-        self.world = World(1, {1:'vanilla'}, {1:'noglitches'}, {1:'inverted'}, {1:'random'}, {1:'normal'}, {1:'normal'}, {1:False}, {1:'on'}, {1:'ganon'}, 'balanced',  {1:'items'},
-                           True,  {1:False}, False, None,  {1:False})
+        self.world = MultiWorld(1, {1: 'vanilla'}, {1: 'noglitches'}, {1: 'inverted'}, {1: 'random'}, {1: 'normal'}, {1: 'normal'}, {1:False}, {1: 'on'}, {1: 'ganon'}, 'balanced', {1: 'items'},
+                                True, {1:False}, False, None, {1:False})
         self.world.difficulty_requirements[1] = difficulties['normal']
         create_inverted_regions(self.world, 1)
         create_dungeons(self.world, 1)

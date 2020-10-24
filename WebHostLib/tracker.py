@@ -3,11 +3,9 @@ import collections
 from flask import render_template
 from werkzeug.exceptions import abort
 import datetime
-import logging
 from uuid import UUID
 
-import Items
-import Regions
+from worlds.alttp import Items, Regions
 from WebHostLib import app, cache, Room
 from Utils import Hint
 

@@ -11,11 +11,11 @@ import ModuleUpdate
 ModuleUpdate.update()
 
 from Utils import parse_yaml
-from Rom import get_sprite_from_name
-from EntranceRandomizer import parse_arguments
-from Main import main as ERmain
-from Main import get_seed, seeddigits
-from Items import item_name_groups, item_table
+from worlds.alttp.Rom import get_sprite_from_name
+from worlds.alttp.EntranceRandomizer import parse_arguments
+from worlds.alttp.Main import main as ERmain
+from worlds.alttp.Main import get_seed, seeddigits
+from worlds.alttp.Items import item_name_groups, item_table
 
 
 def mystery_argparse():

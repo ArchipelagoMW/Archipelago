@@ -1,8 +1,8 @@
 from BaseClasses import Dungeon
-from Bosses import BossFactory
+from worlds.alttp.Bosses import BossFactory
 from Fill import fill_restrictive
-from Items import ItemFactory
-from Regions import lookup_boss_drops
+from worlds.alttp.Items import ItemFactory
+from worlds.alttp.Regions import lookup_boss_drops
 
 
 def create_dungeons(world, player):

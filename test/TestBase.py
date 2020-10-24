@@ -1,7 +1,7 @@
 import unittest
 
 from BaseClasses import CollectionState
-from Items import ItemFactory
+from worlds.alttp.Items import ItemFactory
 
 
 class TestBase(unittest.TestCase):

@@ -3,7 +3,7 @@ import time
 import logging
 
 from Utils import output_path
-from Rom import LocalRom, apply_rom_settings
+from worlds.alttp.Rom import LocalRom, apply_rom_settings
 
 
 def adjust(args):

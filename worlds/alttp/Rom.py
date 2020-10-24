@@ -15,17 +15,17 @@ import concurrent.futures
 from typing import Optional
 
 from BaseClasses import CollectionState, ShopType, Region, Location
-from Dungeons import dungeon_music_addresses
-from Regions import location_table
-from Text import MultiByteTextMapper, CompressedTextMapper, text_addresses, Credits, TextTable
-from Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts, junk_texts
+from worlds.alttp.Dungeons import dungeon_music_addresses
+from worlds.alttp.Regions import location_table
+from worlds.alttp.Text import MultiByteTextMapper, text_addresses, Credits, TextTable
+from worlds.alttp.Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, BombShop2_texts, junk_texts
 
-from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, \
+from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, \
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
 from Utils import output_path, local_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_bundled
-from Items import ItemFactory
-from EntranceShuffle import door_addresses
+from worlds.alttp.Items import ItemFactory
+from worlds.alttp.EntranceShuffle import door_addresses
 import Patch
 
 try:
@@ -455,7 +455,7 @@ class Sprite(object):
 
     @staticmethod
     def default_link_sprite():
-        return Sprite(local_path('data', 'default.zspr'))
+        return Sprite(local_path('../../data', 'default.zspr'))
 
     def decode8(self, pos):
         arr = [[0 for _ in range(8)] for _ in range(8)]
@@ -1397,7 +1397,7 @@ def patch_rom(world, rom, player, team, enemized):
 
     # set rom name
     # 21 bytes
-    from Main import __version__
+    from worlds.alttp.Main import __version__
     # TODO: Adjust Enemizer to accept AP and AD
     rom.name = bytearray(f'BM{__version__.replace(".", "")[0:3]}_{team + 1}_{player}_{world.seed:09}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
@@ -1544,7 +1544,7 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
             "randomize_overworld": ow_palettes == 'random'
         }
         if any(options.values()):
-            data_dir = local_path("data") if is_bundled() else None
+            data_dir = local_path("../../data") if is_bundled() else None
             offsets_array = build_offset_collections(options, data_dir)
 
             ColorF = z3pr.ColorF

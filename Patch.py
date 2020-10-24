@@ -10,8 +10,9 @@ import sys
 from typing import Tuple, Optional
 
 import Utils
-from Rom import JAP10HASH
+from worlds.alttp.Rom import JAP10HASH
 
+current_patch_version = 1
 
 def get_base_rom_path(file_name: str = "") -> str:
     options = Utils.get_options()
@@ -23,7 +24,7 @@ def get_base_rom_path(file_name: str = "") -> str:
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:
-    from Rom import read_rom
+    from worlds.alttp.Rom import read_rom
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
         file_name = get_base_rom_path(file_name)
@@ -42,6 +43,8 @@ def generate_yaml(patch: bytes, metadata: Optional[dict] = None) -> bytes:
     patch = yaml.dump({"meta": metadata,
                        "patch": patch,
                        "game": "alttp",
+                       "compatible_version": 1, # minimum version of patch system expected for patching to be successful
+                       "version": current_patch_version,
                        "base_checksum": JAP10HASH})
     return patch.encode(encoding="utf-8-sig")
 
@@ -63,6 +66,8 @@ def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str
 
 def create_rom_bytes(patch_file: str) -> Tuple[dict, str, bytearray]:
     data = Utils.parse_yaml(lzma.decompress(load_bytes(patch_file)).decode("utf-8-sig"))
+    if data["compatible_version"] > current_patch_version:
+        raise RuntimeError("Patch file is incompatible with this patcher, likely an update is required.")
     patched_data = bsdiff4.patch(get_base_rom_bytes(), data["patch"])
     rom_hash = patched_data[int(0x7FC0):int(0x7FD5)]
     data["meta"]["hash"] = "".join(chr(x) for x in rom_hash)

@@ -5,16 +5,20 @@ from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict, Counter, deque
-from typing import Union, Optional, List, Set, Dict
+from typing import Union, Optional, List, Dict
 import secrets
 import random
 
-from EntranceShuffle import door_addresses, indirect_connections
+import worlds.alttp
+from worlds.alttp.EntranceShuffle import door_addresses, indirect_connections
 from Utils import int16_as_bytes
-from Items import item_name_groups
+from worlds.alttp.Items import item_name_groups
 
 
-class World(object):
+class World():
+    pass
+
+class MultiWorld():
     debug_types = False
     player_names: list
     _region_cache: dict
@@ -26,15 +30,7 @@ class World(object):
     def __init__(self, players: int, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer,
                  progressive,
                  goal, algorithm, accessibility, shuffle_ganon, retro, custom, customitemarray, hints):
-        if self.debug_types:
-            import inspect
-            methods = inspect.getmembers(self, predicate=inspect.ismethod)
 
-            for name, method in methods:
-                if name.startswith("_debug_"):
-                    setattr(self, name[7:], method)
-                    logging.debug(f"Set {self}.{name[7:]} to {method}")
-            self.get_location = self._debug_get_location
         self.random = random.Random()  # world-local random state is saved in case of future use a
         # persistently running program with multiple worlds rolling concurrently
         self.players = players
@@ -131,6 +127,10 @@ class World(object):
             set_player_attr('dark_room_logic', "lamp")
             set_player_attr('restrict_dungeon_item_on_boss', False)
 
+        self.worlds = []
+        #for i in range(players):
+        #    self.worlds.append(worlds.alttp.ALTTPWorld({}, i))
+
     def secure(self):
         self.random = secrets.SystemRandom()
 
@@ -170,18 +170,6 @@ class World(object):
             self._recache()
             return self._region_cache[player][regionname]
 
-    def _debug_get_region(self, regionname: str, player: int) -> Region:
-        if type(regionname) != str:
-            raise TypeError(f"expected str, got {type(regionname)} instead")
-        try:
-            return self._region_cache[player][regionname]
-        except KeyError:
-            for region in self.regions:
-                if region.name == regionname and region.player == player:
-                    assert not region.world  # this should only happen before initialization
-                    self._region_cache[player][regionname] = region
-                    return region
-            raise KeyError('No such region %s for player %d' % (regionname, player))
 
     def get_entrance(self, entrance: str, player: int) -> Entrance:
         try:
@@ -190,19 +178,6 @@ class World(object):
             self._recache()
             return self._entrance_cache[entrance, player]
 
-    def _debug_get_entrance(self, entrance: str, player: int) -> Entrance:
-        if type(entrance) != str:
-            raise TypeError(f"expected str, got {type(entrance)} instead")
-        try:
-            return self._entrance_cache[(entrance, player)]
-        except KeyError:
-            for region in self.regions:
-                for exit in region.exits:
-                    if exit.name == entrance and exit.player == player:
-                        self._entrance_cache[(entrance, player)] = exit
-                        return exit
-
-            raise KeyError('No such entrance %s for player %d' % (entrance, player))
 
     def get_location(self, location: str, player: int) -> Location:
         try:
@@ -211,19 +186,6 @@ class World(object):
             self._recache()
             return self._location_cache[location, player]
 
-    def _debug_get_location(self, location: str, player: int) -> Location:
-        if type(location) != str:
-            raise TypeError(f"expected str, got {type(location)} instead")
-        try:
-            return self._location_cache[(location, player)]
-        except KeyError:
-            for region in self.regions:
-                for r_location in region.locations:
-                    if r_location.name == location and r_location.player == player:
-                        self._location_cache[(location, player)] = r_location
-                        return r_location
-
-        raise KeyError('No such location %s for player %d' % (location, player))
 
     def get_dungeon(self, dungeonname: str, player: int) -> Dungeon:
         for dungeon in self.dungeons:
@@ -231,13 +193,6 @@ class World(object):
                 return dungeon
         raise KeyError('No such dungeon %s for player %d' % (dungeonname, player))
 
-    def _debug_get_dungeon(self, dungeonname: str, player: int) -> Dungeon:
-        if type(dungeonname) != str:
-            raise TypeError(f"expected str, got {type(dungeonname)} instead")
-        for dungeon in self.dungeons:
-            if dungeon.name == dungeonname and dungeon.player == player:
-                return dungeon
-        raise KeyError('No such dungeon %s for player %d' % (dungeonname, player))
 
     def get_all_state(self, keys=False) -> CollectionState:
         ret = CollectionState(self)
@@ -291,7 +246,7 @@ class World(object):
 
         if keys:
             for p in range(1, self.players + 1):
-                from Items import ItemFactory
+                from worlds.alttp.Items import ItemFactory
                 for item in ItemFactory(
                         ['Small Key (Hyrule Castle)', 'Big Key (Eastern Palace)', 'Big Key (Desert Palace)',
                          'Small Key (Desert Palace)', 'Big Key (Tower of Hera)', 'Small Key (Tower of Hera)',
@@ -432,7 +387,7 @@ class World(object):
 
 class CollectionState(object):
 
-    def __init__(self, parent: World):
+    def __init__(self, parent: MultiWorld):
         self.prog_items = Counter()
         self.world = parent
         self.reachable_regions = {player: set() for player in range(1, parent.players + 1)}
@@ -1164,7 +1119,7 @@ class UpgradeShop(Shop):
 
 
 class Spoiler(object):
-    world: World
+    world: MultiWorld
 
     def __init__(self, world):
         self.world = world

@@ -7,8 +7,8 @@ import textwrap
 import shlex
 import sys
 
-from Main import main, get_seed
-from Rom import get_sprite_from_name
+from worlds.alttp.Main import main, get_seed
+from worlds.alttp.Rom import get_sprite_from_name
 from Utils import is_bundled, close_console
 
 
@@ -376,44 +376,3 @@ def parse_arguments(argv, no_defaults=False):
                     getattr(ret, name)[player] = value
 
     return ret
-
-def start():
-    args = parse_arguments(None)
-
-    if is_bundled() and len(sys.argv) == 1:
-        # for the bundled builds, if we have no arguments, the user
-        # probably wants the gui. Users of the bundled build who want the command line
-        # interface shouuld specify at least one option, possibly setting a value to a
-        # default if they like all the defaults
-        from Gui import guiMain
-        close_console()
-        guiMain()
-        sys.exit(0)
-
-    # ToDo: Validate files further than mere existance
-    if not os.path.isfile(args.rom):
-        input(
-            'Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
-        sys.exit(1)
-    if any([sprite is not None and not os.path.isfile(sprite) and not get_sprite_from_name(sprite) for sprite in
-            args.sprite.values()]):
-        input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
-        sys.exit(1)
-
-    # set up logger
-    loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[args.loglevel]
-    logging.basicConfig(format='%(message)s', level=loglevel)
-
-    if args.gui:
-        from Gui import guiMain
-        guiMain(args)
-    elif args.count is not None:
-        seed = args.seed
-        for _ in range(args.count):
-            main(seed=seed, args=args)
-            seed = get_seed()
-    else:
-        main(seed=args.seed, args=args)
-
-if __name__ == '__main__':
-    start()

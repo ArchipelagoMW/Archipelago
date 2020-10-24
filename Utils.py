@@ -181,12 +181,12 @@ def get_options() -> dict:
 
 
 def get_item_name_from_id(code):
-    import Items
+    from worlds.alttp import Items
     return Items.lookup_id_to_name.get(code, f'Unknown item (ID:{code})')
 
 
 def get_location_name_from_address(address):
-    import Regions
+    from worlds.alttp import Regions
     return Regions.lookup_id_to_name.get(address, f'Unknown location (ID:{address})')
 
 

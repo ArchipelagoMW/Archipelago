@@ -1,10 +1,10 @@
 import collections
 import logging
-import OverworldGlitchRules
-from BaseClasses import RegionType, World, Entrance
-from Items import ItemFactory, progression_items, item_name_groups
-from OverworldGlitchRules import overworld_glitches_rules, no_logic_rules
-from Bosses import GanonDefeatRule
+from worlds.alttp import OverworldGlitchRules
+from BaseClasses import RegionType, MultiWorld, Entrance
+from worlds.alttp.Items import ItemFactory, progression_items, item_name_groups
+from worlds.alttp.OverworldGlitchRules import overworld_glitches_rules, no_logic_rules
+from worlds.alttp.Bosses import GanonDefeatRule
 
 
 def set_rules(world, player):
@@ -124,7 +124,7 @@ def add_rule(spot, rule, combine='and'):
         spot.access_rule = lambda state: rule(state) and old_rule(state)
 
 
-def add_lamp_requirement(world: World, spot, player: int, has_accessible_torch: bool = False):
+def add_lamp_requirement(world: MultiWorld, spot, player: int, has_accessible_torch: bool = False):
     if world.dark_room_logic[player] == "lamp":
         add_rule(spot, lambda state: state.has('Lamp', player))
     elif world.dark_room_logic[player] == "torches":  # implicitly lamp as well
@@ -1371,7 +1371,7 @@ def set_inverted_big_bomb_rules(world, player):
         raise Exception('No logic found for routing from %s to the pyramid.' % bombshop_entrance.name)
 
 
-def set_bunny_rules(world: World, player: int, inverted: bool):
+def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
 
     # regions for the exits of multi-entrance caves/drops that bunny cannot pass
     # Note spiral cave and two brothers house are passable in superbunny state for glitch logic with extra requirements.
@@ -1453,7 +1453,7 @@ def set_bunny_rules(world: World, player: int, inverted: bool):
                         if region.name in OverworldGlitchRules.get_sword_required_superbunny_mirror_regions():
                             possible_options.append(lambda state: path_to_access_rule(new_path, entrance) and state.has_Mirror(player) and state.has_sword(player))
                         elif (region.name in OverworldGlitchRules.get_boots_required_superbunny_mirror_regions()
-                                or location is not None and location.name in OverworldGlitchRules.get_boots_required_superbunny_mirror_locations()):
+                              or location is not None and location.name in OverworldGlitchRules.get_boots_required_superbunny_mirror_locations()):
                             possible_options.append(lambda state: path_to_access_rule(new_path, entrance) and state.has_Mirror(player) and state.has_Boots(player))
                         elif location is not None and location.name in OverworldGlitchRules.get_superbunny_accessible_locations():
                             if new_region.name == 'Superbunny Cave (Bottom)' or region.name == 'Kakariko Well (top)':

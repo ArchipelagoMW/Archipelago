@@ -33,7 +33,7 @@ from prompt_toolkit.patch_stdout import patch_stdout
 from NetUtils import Endpoint
 import WebUI
 
-import Regions
+from worlds.alttp import Regions
 import Utils
 
 
