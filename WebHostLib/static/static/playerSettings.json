@@ -1469,6 +1469,42 @@
           "friendlyName": "Blackout",
           "description": "Never use this. Makes all overworld palette colors black.",
           "defaultValue": 0
+        },
+		"grayscale": {
+          "keyString": "rom.ow_palettes.grayscale",
+          "friendlyName": "Grayscale",
+          "description": "Removes all saturation of colors.",
+          "defaultValue": 0
+        },
+		"negative": {
+          "keyString": "rom.ow_palettes.negative",
+          "friendlyName": "Negative",
+          "description": "Invert all colors",
+          "defaultValue": 0
+        },
+		"classic": {
+          "keyString": "rom.ow_palettes.classic",
+          "friendlyName": "Classic",
+          "description": "Produces results similar to the website.",
+          "defaultValue": 0
+        },
+		"dizzy": {
+          "keyString": "rom.ow_palettes.dizzy",
+          "friendlyName": "Dizzy",
+          "description": "No logic in colors but saturation and lightness are conserved.",
+          "defaultValue": 0
+        },
+		"sick": {
+          "keyString": "rom.ow_palettes.sick",
+          "friendlyName": "Sick",
+          "description": "No logic in colors but lightness is conserved.",
+          "defaultValue": 0
+        },
+		"puke": {
+          "keyString": "rom.ow_palettes.Puke",
+          "friendlyName": "Puke",
+          "description": "No logic at all.",
+          "defaultValue": 0
         }
       }
     },
@@ -1494,6 +1530,228 @@
           "keyString": "rom.uw_palettes.blackout",
           "friendlyName": "Blackout",
           "description": "Never use this. Makes all underworld palette colors black.",
+          "defaultValue": 0
+        },
+		"grayscale": {
+          "keyString": "rom.uw_palettes.grayscale",
+          "friendlyName": "Grayscale",
+          "description": "Removes all saturation of colors.",
+          "defaultValue": 0
+        },
+		"negative": {
+          "keyString": "rom.uw_palettes.negative",
+          "friendlyName": "Negative",
+          "description": "Invert all colors",
+          "defaultValue": 0
+        },
+		"classic": {
+          "keyString": "rom.uw_palettes.classic",
+          "friendlyName": "Classic",
+          "description": "Produces results similar to the website.",
+          "defaultValue": 0
+        },
+		"dizzy": {
+          "keyString": "rom.uw_palettes.dizzy",
+          "friendlyName": "Dizzy",
+          "description": "No logic in colors but saturation and lightness are conserved.",
+          "defaultValue": 0
+        },
+		"sick": {
+          "keyString": "rom.uw_palettes.sick",
+          "friendlyName": "Sick",
+          "description": "No logic in colors but lightness is conserved.",
+          "defaultValue": 0
+        },
+		"puke": {
+          "keyString": "rom.uw_palettes.Puke",
+          "friendlyName": "Puke",
+          "description": "No logic at all.",
+          "defaultValue": 0
+        }
+      }
+    },
+	"hud_palettes": {
+      "keyString": "rom.hud_palettes",
+      "friendlyName": "Underworld Palettes",
+      "description": "Randomize the colors of the underworld (caves, dungeons, etc.), within reason.",
+      "inputType": "range",
+      "subOptions": {
+        "default": {
+          "keyString": "rom.hud_palettes.default",
+          "friendlyName": "Vanilla",
+          "description": "Overworld colors will remain unchanged.",
+          "defaultValue": 50
+        },
+        "random": {
+          "keyString": "rom.hud_palettes.random",
+          "friendlyName": "Random",
+          "description": "Shuffles the colors of the overworld palette.",
+          "defaultValue": 0
+        },
+        "blackout": {
+          "keyString": "rom.hud_palettes.blackout",
+          "friendlyName": "Blackout",
+          "description": "Never use this. Makes all overworld palette colors black.",
+          "defaultValue": 0
+        },
+		"grayscale": {
+          "keyString": "rom.hud_palettes.grayscale",
+          "friendlyName": "Grayscale",
+          "description": "Removes all saturation of colors.",
+          "defaultValue": 0
+        },
+		"negative": {
+          "keyString": "rom.hud_palettes.negative",
+          "friendlyName": "Negative",
+          "description": "Invert all colors",
+          "defaultValue": 0
+        },
+		"classic": {
+          "keyString": "rom.hud_palettes.classic",
+          "friendlyName": "Classic",
+          "description": "Produces results similar to the website.",
+          "defaultValue": 0
+        },
+		"dizzy": {
+          "keyString": "rom.hud_palettes.dizzy",
+          "friendlyName": "Dizzy",
+          "description": "No logic in colors but saturation and lightness are conserved.",
+          "defaultValue": 0
+        },
+		"sick": {
+          "keyString": "rom.hud_palettes.sick",
+          "friendlyName": "Sick",
+          "description": "No logic in colors but lightness is conserved.",
+          "defaultValue": 0
+        },
+		"puke": {
+          "keyString": "rom.hud_palettes.Puke",
+          "friendlyName": "Puke",
+          "description": "No logic at all.",
+          "defaultValue": 0
+        }
+      }
+    },
+	"shield_palettes": {
+      "keyString": "rom.shield_palettes",
+      "friendlyName": "Underworld Palettes",
+      "description": "Randomize the colors of the underworld (caves, dungeons, etc.), within reason.",
+      "inputType": "range",
+      "subOptions": {
+        "default": {
+          "keyString": "rom.shield_palettes.default",
+          "friendlyName": "Vanilla",
+          "description": "Overworld colors will remain unchanged.",
+          "defaultValue": 50
+        },
+        "random": {
+          "keyString": "rom.shield_palettes.random",
+          "friendlyName": "Random",
+          "description": "Shuffles the colors of the overworld palette.",
+          "defaultValue": 0
+        },
+        "blackout": {
+          "keyString": "rom.shield_palettes.blackout",
+          "friendlyName": "Blackout",
+          "description": "Never use this. Makes all overworld palette colors black.",
+          "defaultValue": 0
+        },
+		"grayscale": {
+          "keyString": "rom.shield_palettes.grayscale",
+          "friendlyName": "Grayscale",
+          "description": "Removes all saturation of colors.",
+          "defaultValue": 0
+        },
+		"negative": {
+          "keyString": "rom.shield_palettes.negative",
+          "friendlyName": "Negative",
+          "description": "Invert all colors",
+          "defaultValue": 0
+        },
+		"classic": {
+          "keyString": "rom.shield_palettes.classic",
+          "friendlyName": "Classic",
+          "description": "Produces results similar to the website.",
+          "defaultValue": 0
+        },
+		"dizzy": {
+          "keyString": "rom.shield_palettes.dizzy",
+          "friendlyName": "Dizzy",
+          "description": "No logic in colors but saturation and lightness are conserved.",
+          "defaultValue": 0
+        },
+		"sick": {
+          "keyString": "rom.shield_palettes.sick",
+          "friendlyName": "Sick",
+          "description": "No logic in colors but lightness is conserved.",
+          "defaultValue": 0
+        },
+		"puke": {
+          "keyString": "rom.shield_palettes.Puke",
+          "friendlyName": "Puke",
+          "description": "No logic at all.",
+          "defaultValue": 0
+        }
+      }
+    },
+	"sword_palettes": {
+      "keyString": "rom.sword_palettes",
+      "friendlyName": "Underworld Palettes",
+      "description": "Randomize the colors of the underworld (caves, dungeons, etc.), within reason.",
+      "inputType": "range",
+      "subOptions": {
+        "default": {
+          "keyString": "rom.sword_palettes.default",
+          "friendlyName": "Vanilla",
+          "description": "Overworld colors will remain unchanged.",
+          "defaultValue": 50
+        },
+        "random": {
+          "keyString": "rom.sword_palettes.random",
+          "friendlyName": "Random",
+          "description": "Shuffles the colors of the overworld palette.",
+          "defaultValue": 0
+        },
+        "blackout": {
+          "keyString": "rom.sword_palettes.blackout",
+          "friendlyName": "Blackout",
+          "description": "Never use this. Makes all overworld palette colors black.",
+          "defaultValue": 0
+        },
+		"grayscale": {
+          "keyString": "rom.sword_palettes.grayscale",
+          "friendlyName": "Grayscale",
+          "description": "Removes all saturation of colors.",
+          "defaultValue": 0
+        },
+		"negative": {
+          "keyString": "rom.sword_palettes.negative",
+          "friendlyName": "Negative",
+          "description": "Invert all colors",
+          "defaultValue": 0
+        },
+		"classic": {
+          "keyString": "rom.sword_palettes.classic",
+          "friendlyName": "Classic",
+          "description": "Produces results similar to the website.",
+          "defaultValue": 0
+        },
+		"dizzy": {
+          "keyString": "rom.sword_palettes.dizzy",
+          "friendlyName": "Dizzy",
+          "description": "No logic in colors but saturation and lightness are conserved.",
+          "defaultValue": 0
+        },
+		"sick": {
+          "keyString": "rom.sword_palettes.sick",
+          "friendlyName": "Sick",
+          "description": "No logic in colors but lightness is conserved.",
+          "defaultValue": 0
+        },
+		"puke": {
+          "keyString": "rom.sword_palettes.Puke",
+          "friendlyName": "Puke",
+          "description": "No logic at all.",
           "defaultValue": 0
         }
       }

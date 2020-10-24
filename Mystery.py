@@ -516,6 +516,11 @@ def roll_settings(weights):
         ret.heartbeep = convert_to_on_off(get_choice('heartbeep', romweights, "normal"))
         ret.ow_palettes = get_choice('ow_palettes', romweights, "default")
         ret.uw_palettes = get_choice('uw_palettes', romweights, "default")
+        ret.hud_palettes = get_choice('hud_palettes', romweights, "default")
+        ret.sword_palettes = get_choice('sword_palettes', romweights, "default")
+        ret.shield_palettes = get_choice('shield_palettes', romweights, "default")
+        ret.link_palettes = get_choice('link_palettes', romweights, "default")
+        
     else:
         ret.quickswap = True
         ret.sprite = "Link"

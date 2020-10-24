@@ -34,8 +34,12 @@ def main():
                              ''')
     parser.add_argument('--heartcolor', default='red', const='red', nargs='?', choices=['red', 'blue', 'green', 'yellow', 'random'],
                         help='Select the color of Link\'s heart meter. (default: %(default)s)')
-    parser.add_argument('--ow_palettes', default='default', choices=['default', 'random', 'blackout'])
-    parser.add_argument('--uw_palettes', default='default', choices=['default', 'random', 'blackout'])
+    parser.add_argument('--ow_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+    parser.add_argument('--link_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+    parser.add_argument('--shield_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+    parser.add_argument('--sword_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+    parser.add_argument('--hud_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+    parser.add_argument('--uw_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
     parser.add_argument('--sprite', help='''\
                              Path to a sprite sheet to use for Link. Needs to be in
                              binary format and have a length of 0x7000 (28672) bytes,

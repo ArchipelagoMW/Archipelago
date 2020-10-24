@@ -36,7 +36,7 @@ def main(args, seed=None):
     if args.outputpath:
         os.makedirs(args.outputpath, exist_ok=True)
         output_path.cached_path = args.outputpath
-
+    
     start = time.perf_counter()
 
     # initialize the world
@@ -192,9 +192,18 @@ def main(args, seed=None):
 
         world.spoiler.hashes[(player, team)] = get_hash_string(rom.hash)
 
+        palettes_options={}
+        palettes_options['dungeon']=args.uw_palettes[player]
+        palettes_options['overworld']=args.ow_palettes[player]
+        palettes_options['hud']=args.hud_palettes[player]
+        palettes_options['sword']=args.sword_palettes[player]
+        palettes_options['shield']=args.shield_palettes[player]
+        palettes_options['link']=args.link_palettes[player]
+        
         apply_rom_settings(rom, args.heartbeep[player], args.heartcolor[player], args.quickswap[player],
                            args.fastmenu[player], args.disablemusic[player], args.sprite[player],
-                           args.ow_palettes[player], args.uw_palettes[player], world, player, True)
+                           palettes_options, world, player, True)
+
 
         mcsb_name = ''
         if all([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player],

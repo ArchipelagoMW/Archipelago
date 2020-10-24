@@ -37,15 +37,19 @@ except:
 
 class LocalRom(object):
 
-    def __init__(self, file, patch=True, name=None, hash=None):
+    def __init__(self, file, patch=True, vanillaRom=None, name=None, hash=None):
         self.name = name
         self.hash = hash
         self.orig_buffer = None
+        
         with open(file, 'rb') as stream:
             self.buffer = read_rom(stream)
         if patch:
             self.patch_base_rom()
             self.orig_buffer = self.buffer.copy()
+        if vanillaRom:
+            with open(vanillaRom, 'rb') as vanillaStream:
+                self.orig_buffer = read_rom(vanillaStream)
 
     def read_byte(self, address: int) -> int:
         return self.buffer[address]
@@ -1045,7 +1049,7 @@ def patch_rom(world, rom, player, team, enemized):
     rom.write_byte(0x180211, gametype) # Game type
 
     # assorted fixes
-    rom.write_byte(0x1800A2, 0x01 if world.fix_fake_world[player] else 0x00)  # Toggle whether to be in real/fake dark world when dying in a DW dungeon before killing aga1 
+    rom.write_byte(0x1800A2, 0x01 if world.fix_fake_world[player] else 0x00)  # Toggle whether to be in real/fake dark world when dying in a DW dungeon before killing aga1
     rom.write_byte(0x180169, 0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
     if world.mode[player] == 'inverted':
         rom.write_byte(0x180169, 0x02)  # lock aga/ganon tower door with crystals in inverted
@@ -1507,7 +1511,9 @@ def hud_format_text(text):
     return output[:32]
 
 
-def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite, ow_palettes, uw_palettes, world=None, player=1, allow_random_on_event=False):
+
+def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite, palettes_options, world=None, player=1, allow_random_on_event=False):
+
     local_random = random if not world else world.rom_seeds[player]
     apply_random_sprite_on_event(rom, sprite, local_random, allow_random_on_event, world.sprite_pool[player] if world else [])
 
@@ -1560,27 +1566,51 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
     rom.write_byte(0x6FA30, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
     rom.write_byte(0x65561, {'red': 0x05, 'blue': 0x0D, 'green': 0x19, 'yellow': 0x09}[color])
 
-    # reset palette if it was adjusted already
-    default_ow_palettes(rom)
-    default_uw_palettes(rom)
+
+    # write link sprite if required
+    if sprite:
+        sprite.write_to_rom(rom)
+
+
+
 
     if z3pr:
-        options = {
-            "randomize_dungeon": uw_palettes == 'random',
-            "randomize_overworld": ow_palettes == 'random'
-        }
-        if any(options.values()):
+        def buildAndRandomize(option_name,mode):
+            options = {
+                option_name : True
+            }
+
             data_dir = local_path("data") if is_bundled() else None
             offsets_array = build_offset_collections(options, data_dir)
-
+            restore_maseya_colors(rom,offsets_array)
+            if mode == 'default':
+                return
             ColorF = z3pr.ColorF
-
             def next_color_generator():
                 while True:
                     yield ColorF(local_random.random(), local_random.random(), local_random.random())
+            if mode == 'random':
+                mode = 'maseya'
+            z3pr.randomize(rom.buffer, mode, offset_collections=offsets_array, random_colors=next_color_generator())
+            
+        uw_palettes=palettes_options['dungeon']
+        ow_palettes=palettes_options['overworld']
+        hud_palettes=palettes_options['hud']
+        sword_palettes=palettes_options['sword']
+        shield_palettes=palettes_options['shield']
+        link_palettes=palettes_options['link']
+        buildAndRandomize("randomize_dungeon", uw_palettes)
+        buildAndRandomize("randomize_overworld", ow_palettes)
+        buildAndRandomize("randomize_hud", hud_palettes)
+        buildAndRandomize("randomize_sword", sword_palettes)
+        buildAndRandomize("randomize_shield", shield_palettes)
+        #link palette shuffle does not work very well and it's incompatible with random sprite on event
+        #buildAndRandomize("randomize_link_sprite", link_palettes)
 
-            z3pr.randomize(rom.buffer, "maseya", offset_collections=offsets_array, random_colors=next_color_generator())
     else:
+	# reset palette if it was adjusted already
+        default_ow_palettes(rom)
+        default_uw_palettes(rom)
         logging.warning("Could not find z3pr palette shuffle. "
                         "If you want improved palette shuffling please install the maseya-z3pr package.")
         if ow_palettes == 'random':
@@ -1588,14 +1618,20 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
         if uw_palettes == 'random':
             randomize_uw_palettes(rom, local_random)
 
-    if ow_palettes == 'blackout':
-        blackout_ow_palettes(rom)
-    if uw_palettes == 'blackout':
-        blackout_uw_palettes(rom)
+        if ow_palettes == 'blackout':
+            blackout_ow_palettes(rom)
+        if uw_palettes == 'blackout':
+            blackout_uw_palettes(rom)
 
     if isinstance(rom, LocalRom):
         rom.write_crc()
 
+def restore_maseya_colors(rom,offsets_array):
+    if not rom.orig_buffer:
+        return
+    for offsetC in offsets_array:
+        for address in offsetC:
+            rom.write_bytes(address, rom.orig_buffer[address:address+2])
 
 def set_color(rom, address, color, shade):
     r = round(min(color[0], 0xFF) * pow(0.8, shade) * 0x1F / 0xFF)
