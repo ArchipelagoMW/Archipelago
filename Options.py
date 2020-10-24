@@ -1,86 +1,142 @@
 from __future__ import annotations
-from enum import IntEnum, auto, Enum
+import typing
 
 
-class Toggle(IntEnum):
-    off = 0
-    on = 1
+class AssembleOptions(type):
+    def __new__(cls, name, bases, attrs):
+        options = attrs["options"] = {}
+        name_lookup = attrs["name_lookup"] = {}
+        for base in bases:
+            options.update(base.options)
+            name_lookup.update(name_lookup)
+        new_options = {name[7:].lower(): option_id for name, option_id in attrs.items() if
+                        name.startswith("option_")}
+        attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
+        options.update(new_options)
+
+        #apply aliases, without name_lookup
+        options.update({name[6:].lower(): option_id for name, option_id in attrs.items() if
+                        name.startswith("alias_")})
+        return super(AssembleOptions, cls).__new__(cls, name, bases, attrs)
+
+
+class Option(metaclass=AssembleOptions):
+    value: int
+    name_lookup: typing.Dict[int, str]
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.get_option_name()})"
+
+    def __hash__(self):
+        return hash(self.value)
+
+    def get_option_name(self):
+        return self.name_lookup[self.value]
+
+    def __int__(self):
+        return self.value
+
+    def __bool__(self):
+        return bool(self.value)
+
+
+class Toggle(Option):
+    option_false = 0
+    option_true = 1
+
+    def __init__(self, value: int):
+        self.value = value
 
     @classmethod
     def from_text(cls, text: str) -> Toggle:
         if text.lower() in {"off", "0", "false", "none", "null", "no"}:
-            return Toggle.off
+            return cls(0)
         else:
-            return Toggle.on
+            return cls(1)
 
+    def __eq__(self, other):
+        if isinstance(other, Toggle):
+            return self.value == other.value
+        else:
+            return self.value == other
 
-class Choice(IntEnum):
+    def __gt__(self, other):
+        if isinstance(other, Toggle):
+            return self.value > other.value
+        else:
+            return self.value > other
+
+    def get_option_name(self):
+        return bool(self.value)
+
+class Choice(Option):
+    def __init__(self, value: int):
+        self.value: int = value
+
     @classmethod
     def from_text(cls, text: str) -> Choice:
-        for option in cls:
-            if option.name == text.lower():
-                return option
+
+        for optionname, value in cls.options.items():
+            if optionname == text.lower():
+                return cls(value)
         raise KeyError(
-            f'Could not find option "{text}" for "{cls.__name__}", known options are {", ".join(f"{option.name}" for option in cls)}')
+            f'Could not find option "{text}" for "{cls.__name__}", '
+            f'known options are {", ".join(f"{option}" for option in cls.name_lookup.values())}')
 
 
 class Logic(Choice):
-    no_glitches = auto()
-    no_logic = auto()
+    option_no_glitches = 0
+    option_minor_glitches = 1
+    option_overworld_glitches = 2
+    option_no_logic = 4
+    alias_owg = 2
 
 
 class Goal(Choice):
-    ganon = auto()
-    fast_ganon = auto()
-    all_dungeons = auto()
-    pedestal = auto()
-    triforce_hunt = auto()
+    option_ganon = 0
+    option_fast_ganon = 1
+    option_all_dungeons = 2
+    option_pedestal = 3
+    option_triforce_hunt = 4
 
 
 class Accessibility(Choice):
-    locations = auto()
-    items = auto()
-    beatable = auto()
+    option_locations = 0
+    option_items = 1
+    option_beatable = 2
 
 
-class Crystals(Enum):
+class Crystals(Choice):
     # can't use IntEnum since there's also random
-    C0 = 0
-    C1 = 1
-    C2 = 2
-    C3 = 3
-    C4 = 4
-    C5 = 5
-    C6 = 6
-    C7 = 7
-    Random = -1
-
-    @staticmethod
-    def from_text(text: str) -> Crystals:
-        for option in Crystals:
-            if str(option.value) == text.lower():
-                return option
-        return Crystals.Random
+    option_0 = 0
+    option_1 = 1
+    option_2 = 2
+    option_3 = 3
+    option_4 = 4
+    option_5 = 5
+    option_6 = 6
+    option_7 = 7
+    option_random = -1
 
 
 class WorldState(Choice):
-    standard = auto()
-    open = auto()
-    retro = auto()
-    inverted = auto()
+    option_standard = 1
+    option_open = 0
+    option_inverted = 2
 
 
 class Bosses(Choice):
-    vanilla = auto()
-    simple = auto()
-    full = auto()
-    chaos = auto()
+    option_vanilla = 0
+    option_simple = 1
+    option_full = 2
+    option_chaos = 3
+    option_singularity = 4
 
 
 class Enemies(Choice):
-    vanilla = auto()
-    shuffled = auto()
-    chaos = auto()
+    option_vanilla = 0
+    option_shuffled = 1
+    option_chaos = 2
 
 
 mapshuffle = Toggle
@@ -95,10 +151,16 @@ if __name__ == "__main__":
     test = argparse.Namespace()
     test.logic = Logic.from_text("no_logic")
     test.mapshuffle = mapshuffle.from_text("ON")
+    test.hints = hints.from_text('OFF')
     try:
-        test.logic = Logic.from_text("owg")
+        test.logic = Logic.from_text("overworld_glitches_typo")
+    except KeyError as e:
+        print(e)
+    try:
+        test.logic_owg = Logic.from_text("owg")
     except KeyError as e:
         print(e)
     if test.mapshuffle:
         print("Mapshuffle is on")
+    print(f"Hints are {bool(test.hints)}")
     print(test)
