@@ -114,7 +114,7 @@ def wait_seed(seed: UUID):
         return "Generation not found."
     elif generation.state == STATE_ERROR:
         return "Generation failed, please retry."
-    return render_template("wait_seed.html", seed_id=seed_id)
+    return render_template("waitSeed.html", seed_id=seed_id)
 
 
 def upload_to_db(folder, owner, sid):

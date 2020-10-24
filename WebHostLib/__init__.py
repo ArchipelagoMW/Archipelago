@@ -84,7 +84,7 @@ def tutorial(lang='en'):
 
 @app.route('/player-settings')
 def player_settings():
-    return render_template("player-settings.html")
+    return render_template("playerSettings.html")
 
 
 @app.route('/seed/<suuid:seed>')
@@ -92,7 +92,7 @@ def view_seed(seed: UUID):
     seed = Seed.get(id=seed)
     if not seed:
         abort(404)
-    return render_template("view_seed.html", seed=seed,
+    return render_template("viewSeed.html", seed=seed,
                            rooms=[room for room in seed.rooms if room.owner == session["_id"]])
 
 
