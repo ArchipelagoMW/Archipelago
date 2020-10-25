@@ -1,0 +1,14 @@
+#island-footer{
+    background: url('../static/backgrounds/footer/footer-0003.svg') repeat-x bottom;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 100%;
+    height: 62px;
+    margin-top: 2rem;
+    padding-left: 0.5rem;
+    line-height: 30px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}

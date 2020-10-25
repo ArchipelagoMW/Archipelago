@@ -5,6 +5,10 @@
     flex-wrap: wrap;
 }
 
+#uploads{
+    text-align: center;
+}
+
 #uploads-form-wrapper{
     width: 100%;
     text-align: center;

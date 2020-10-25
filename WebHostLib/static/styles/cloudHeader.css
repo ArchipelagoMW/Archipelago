@@ -1,0 +1,34 @@
+#cloud-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    background: url('../static/backgrounds/header/cloud-header.svg') repeat-x;
+    background-size: auto 90px;
+    width: 100%;
+    height: 90px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-family: HyliaSerif, sans-serif;
+    padding: 10px;
+    line-height: 2rem;
+}
+
+#cloud-header #site-title img{
+    width: 40px;
+    height: 40px;
+}
+
+#cloud-header a{
+    color: #67bbab;
+    text-decoration: none;
+    cursor: pointer;
+    margin-right: 1.2rem;
+    font-size: 1.2rem;
+}
+
+@media (width: 800px) {
+    #cloud-header{
+        font-size: 4rem;
+    }
+}

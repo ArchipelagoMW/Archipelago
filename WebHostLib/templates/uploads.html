@@ -8,8 +8,10 @@
 {% endblock %}
 
 {% block body %}
+    {% include 'cloudHeader.html' %}
+
     <div id="uploads-wrapper">
-        <div id="uploads" class="main-content">
+        <div id="uploads" class="grass-island">
             <h3>Upload Multidata</h3>
             <p>To host a game, you need to upload a .multidata file or a .zip file created by the
                 multiworld generator.</p>
@@ -52,4 +54,6 @@
             {% endif %}
         </div>
     </div>
+
+    {% include 'grassFooter.html' %}
 {% endblock %}
