@@ -48,6 +48,8 @@ app.config["PONY"] = {
 app.config["MAX_ROLL"] = 20
 app.config["CACHE_TYPE"] = "simple"
 app.autoversion = True
+app.config["HOSTNAME"] = "berserkermulti.world"
+
 av = Autoversion(app)
 cache = Cache(app)
 Compress(app)

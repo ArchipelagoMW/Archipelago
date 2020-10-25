@@ -1,8 +1,6 @@
 import os
 import tempfile
 import random
-import zlib
-import json
 
 from flask import request, flash, redirect, url_for, session, render_template
 
@@ -124,21 +122,23 @@ def upload_to_db(folder, owner, sid):
     for file in os.listdir(folder):
         file = os.path.join(folder, file)
         if file.endswith(".apbp"):
-            player = int(file.split("P")[1].split(".")[0].split("_")[0])
-            patches.add(Patch(data=open(file, "rb").read(), player=player))
+            player_text = file.split("_P", 1)[1]
+            player_name = player_text.split("_", 1)[1].split(".", 1)[0]
+            player_id = int(player_text.split(".", 1)[0].split("_", 1)[0])
+            patches.add(Patch(data=open(file, "rb").read(),
+                              player_id=player_id, player_name = player_name))
         elif file.endswith(".txt"):
-            spoiler = open(file, "rt").read()
-        elif file.endswith("multidata"):
-            try:
-                multidata = json.loads(zlib.decompress(open(file, "rb").read()))
-            except Exception as e:
-                flash(e)
+            spoiler = open(file, "rt", encoding="utf-8-sig").read()
+        elif file.endswith(".multidata"):
+            multidata = open(file, "rb").read()
     if multidata:
         with db_session:
             if sid:
-                seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner, id=sid)
+                seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner,
+                            id=sid, meta={"tags": ["generated"]})
             else:
-                seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner)
+                seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner,
+                            meta={"tags": ["generated"]})
             for patch in patches:
                 patch.seed = seed
             if sid:
@@ -146,3 +146,5 @@ def upload_to_db(folder, owner, sid):
                 if gen is not None:
                     gen.delete()
         return seed.id
+    else:
+        raise Exception("Multidata required, but not found.")

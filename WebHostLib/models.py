@@ -11,8 +11,9 @@ STATE_ERROR = -1
 
 class Patch(db.Entity):
     id = PrimaryKey(int, auto=True)
-    player = Required(int)
-    data = Required(buffer, lazy=True)
+    player_id = Required(int)
+    player_name = Required(str, 16)
+    data = Required(bytes, lazy=True)
     seed = Optional('Seed')
 
 
@@ -23,7 +24,7 @@ class Room(db.Entity):
     owner = Required(UUID, index=True)
     commands = Set('Command')
     seed = Required('Seed', index=True)
-    multisave = Optional(Json, lazy=True)
+    multisave = Optional(buffer, lazy=True)
     show_spoiler = Required(int, default=0)  # 0 -> never, 1 -> after completion, -> 2 always
     timeout = Required(int, default=lambda: 6 * 60 * 60)  # seconds since last activity to shutdown
     tracker = Optional(UUID, index=True)
@@ -33,11 +34,12 @@ class Room(db.Entity):
 class Seed(db.Entity):
     id = PrimaryKey(UUID, default=uuid4)
     rooms = Set(Room)
-    multidata = Optional(Json, lazy=True)
+    multidata = Required(bytes, lazy=True)
     owner = Required(UUID, index=True)
     creation_time = Required(datetime, default=lambda: datetime.utcnow())
     patches = Set(Patch)
     spoiler = Optional(LongStr, lazy=True)
+    meta = Required(Json, lazy=True, default=lambda: {})  # additional meta information/tags
 
 
 class Command(db.Entity):

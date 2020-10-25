@@ -15,12 +15,11 @@ def download_patch(room_id, patch_id):
 
         room = Room.get(id=room_id)
         last_port = room.last_port
-        pname = room.seed.multidata["names"][0][patch.player - 1]
 
-        patch_data = update_patch_data(patch.data, server="berserkermulti.world:" + str(last_port))
+        patch_data = update_patch_data(patch.data, server=f"{app.config['HOSTNAME']}:{last_port}")
         patch_data = io.BytesIO(patch_data)
 
-        fname = f"P{patch.player}_{pname}_{app.jinja_env.filters['suuid'](room_id)}.apbp"
+        fname = f"P{patch.player_id}_{patch.player_name}_{app.jinja_env.filters['suuid'](room_id)}.apbp"
         return send_file(patch_data, as_attachment=True, attachment_filename=fname)
 
 
@@ -31,17 +30,15 @@ def download_spoiler(seed_id):
 
 @app.route("/dl_raw_patch/<suuid:seed_id>/<int:player_id>")
 def download_raw_patch(seed_id, player_id):
-    patch = select(patch for patch in Patch if patch.player == player_id and patch.seed.id == seed_id).first()
+    patch = select(patch for patch in Patch if patch.player_id == player_id and patch.seed.id == seed_id).first()
 
     if not patch:
         return "Patch not found"
     else:
         import io
 
-        pname = patch.seed.multidata["names"][0][patch.player - 1]
-
         patch_data = update_patch_data(patch.data, server="")
         patch_data = io.BytesIO(patch_data)
 
-        fname = f"P{patch.player}_{pname}_{app.jinja_env.filters['suuid'](seed_id)}.apbp"
+        fname = f"P{patch.player_id}_{patch.player_name}_{app.jinja_env.filters['suuid'](seed_id)}.apbp"
         return send_file(patch_data, as_attachment=True, attachment_filename=fname)
