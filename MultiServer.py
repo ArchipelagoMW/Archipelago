@@ -809,10 +809,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def _cmd_missing(self) -> bool:
         """List all missing location checks from the server's perspective"""
 
-        locations = []
-        for location_id, location_name in Regions.lookup_id_to_name.items():  # cheat console is -1, keep in mind
-            if location_id != -1 and location_id not in self.ctx.location_checks[self.client.team, self.client.slot]:
-                locations.append(location_name)
+        locations = get_missing_checks(self.ctx, self.client)
 
         if len(locations) > 0:
             if self.client.version < [2, 3, 0]:
@@ -941,6 +938,12 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 self.output(response)
                 return False
 
+def get_missing_checks(ctx: Context, client: Client) -> list:
+    locations = []
+    for location_id, location_name in Regions.lookup_id_to_name.items():  # cheat console is -1, keep in mind
+        if location_id != -1 and location_id not in ctx.location_checks[client.team, client.slot]:
+            locations.append(location_name)
+    return locations
 
 def get_client_points(ctx: Context, client: Client) -> int:
     return (ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) -
@@ -996,7 +999,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             client.tags = args.get('tags', Client.tags)
             reply = [['Connected', [(client.team, client.slot),
                                     [(p, ctx.get_aliased_name(t, p)) for (t, p), n in ctx.player_names.items() if
-                                     t == client.team]]]]
+                                     t == client.team], get_missing_checks(ctx, client)]]]
             items = get_received_items(ctx, client.team, client.slot)
             if items:
                 reply.append(['ReceivedItems', (0, tuplize_received_items(items))])
