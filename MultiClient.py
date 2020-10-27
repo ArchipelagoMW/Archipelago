@@ -87,6 +87,7 @@ class Context():
         self.locations_checked = set()
         self.locations_scouted = set()
         self.items_received = []
+        self.items_missing = []
         self.locations_info = {}
         self.awaiting_rom = False
         self.rom = None
@@ -862,6 +863,11 @@ async def process_server_cmd(ctx: Context, cmd, args):
             await ctx.send_msgs(msgs)
         if ctx.finished_game:
             await send_finished_game(ctx)
+        ctx.items_missing = []  # Get the server side view of missing as of time of connecting.
+        # This list is used to only send to the server what is reported as ACTUALLY Missing.
+        # This also serves to allow an easy visual of what locations were already checked previously
+        # when /missing is used for the client side view of what is missing.
+        asyncio.create_task(ctx.send_msgs([['Say', '!missing']]))
 
     elif cmd == 'ReceivedItems':
         start_index, items = args
@@ -911,9 +917,11 @@ async def process_server_cmd(ctx: Context, cmd, args):
     elif cmd == 'Missing':
         if 'locations' in args:
             locations = json.loads(args['locations'])
-            for location in locations:
-                ctx.ui_node.log_info(f'Missing: {location}')
-            ctx.ui_node.log_info(f'Found {len(locations)} missing location checks')
+            if ctx.items_missing:
+                for location in locations:
+                    ctx.ui_node.log_info(f'Missing: {location}')
+                ctx.ui_node.log_info(f'Found {len(locations)} missing location checks')
+            ctx.items_missing = [location for location in locations]
 
     elif cmd == 'Hint':
         hints = [Utils.Hint(*hint) for hint in args]
@@ -1042,18 +1050,34 @@ class ClientCommandProcessor(CommandProcessor):
     def _cmd_missing(self) -> bool:
         """List all missing location checks, from your local game state"""
         count = 0
+        checked_count = 0
         for location in [k for k, v in Regions.location_table.items() if type(v[0]) is int]:
             if location not in self.ctx.locations_checked:
-                self.output('Missing: ' + location)
+                if location not in self.ctx.items_missing:
+                    self.output('Checked: ' + location)
+                    checked_count += 1
+                else:
+                    self.output('Missing: ' + location)
                 count += 1
 
+        key_drop_count = 0
         for location in [k for k, v in Regions.key_drop_data.items()]:
-            if location not in self.ctx.locations_checked:
-                self.output('Missing: ' + location)
-                count += 1
+            if location not in self.ctx.items_missing:
+                key_drop_count += 1
+
+        # No point on reporting on missing key drop locations if the server doesn't declare ANY of them missing.
+        if key_drop_count != len(Regions.key_drop_data.items()):
+            for location in [k for k, v in Regions.key_drop_data.items()]:
+                if location not in self.ctx.locations_checked:
+                    if location not in self.ctx.items_missing:
+                        self.output('Checked: ' + location)
+                        key_drop_count += 1
+                    else:
+                        self.output('Missing: ' + location)
+                    count += 1
 
         if count:
-            self.output(f"Found {count} missing location checks")
+            self.output(f"Found {count} missing location checks{f'. {checked_count} locations checks previously visited.' if checked_count else ''}")
         else:
             self.output("No missing location checks found.")
         return True
@@ -1115,7 +1139,8 @@ async def track_locations(ctx : Context, roomid, roomdata):
         ctx.locations_checked.add(location)
         ctx.ui_node.log_info("New check: %s (%d/216)" % (location, len(ctx.locations_checked)))
         ctx.ui_node.send_location_check(ctx, location)
-        new_locations.append(Regions.lookup_name_to_id[location])
+        if location in ctx.items_missing:
+            new_locations.append(Regions.lookup_name_to_id[location])
 
     for location, (loc_roomid, loc_mask) in location_table_uw.items():
         try:
