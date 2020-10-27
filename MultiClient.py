@@ -95,6 +95,7 @@ class Context():
         self.prev_rom = None
         self.auth = None
         self.found_items = found_items
+        self.send_unsafe = False
         self.finished_game = False
         self.slow_mode = False
 
@@ -851,6 +852,9 @@ async def process_server_cmd(ctx: Context, cmd, args):
         raise Exception('Connection refused by the multiworld host')
 
     elif cmd == 'Connected':
+        if ctx.send_unsafe:
+            ctx.send_unsafe = False
+            ctx.ui_node.log_info(f'Turning off sending of ALL location checks not declared as missing.  If you want it on, please use /send_unsafe true')
         Utils.persistent_store("servers", "default", ctx.server_address)
         Utils.persistent_store("servers", ctx.rom, ctx.server_address)
         ctx.team, ctx.slot = args[0]
@@ -1109,6 +1113,15 @@ class ClientCommandProcessor(CommandProcessor):
         else:
             self.output("Web UI was never started.")
 
+    def _cmd_send_unsafe(self, toggle: str = ""):
+        """Force sending of locations the server did not specify was actually missing. WARNING: This may brick online trackers. Turned off on reconnect."""
+        if toggle:
+            self.ctx.send_unsafe = toggle.lower() in {"1", "true", "on"}
+            self.ctx.ui_node.log_info(f'Turning {("on" if self.ctx.send_unsafe else "off")} the option to send ALL location checks to the multiserver.')
+        else:
+            self.ctx.ui_node.log_info("You must specify /send_unsafe true explicitly.")
+            self.ctx.send_unsafe = False
+
     def default(self, raw: str):
         asyncio.create_task(self.ctx.send_msgs([['Say', raw]]))
 
@@ -1198,7 +1211,7 @@ async def track_locations(ctx : Context, roomid, roomdata):
                     new_check(location)
 
     for location in ctx.unsafe_locations_checked:
-        if location in ctx.items_missing and location not in ctx.locations_checked:
+        if (location in ctx.items_missing and location not in ctx.locations_checked) or ctx.send_unsafe:
             ctx.locations_checked.add(location)
             new_locations.append(Regions.lookup_name_to_id[location])
 
@@ -1232,6 +1245,7 @@ async def game_watcher(ctx : Context):
             ctx.rom = rom.decode()
             if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
                 ctx.locations_checked = set()
+                ctx.unsafe_locations_checked = set()
                 ctx.locations_scouted = set()
             ctx.prev_rom = ctx.rom
 
