@@ -342,7 +342,40 @@ location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      'Ganons Tower - Mini Helmasaur Room - Left': (0x3d, 0x10),
                      'Ganons Tower - Mini Helmasaur Room - Right': (0x3d, 0x20),
                      'Ganons Tower - Pre-Moldorm Chest': (0x3d, 0x40),
-                     'Ganons Tower - Validation Chest': (0x4d, 0x10)}
+                     'Ganons Tower - Validation Chest': (0x4d, 0x10),
+                     'Hyrule Castle - Map Guard Key Drop': (0x72, 0x400),
+                     'Hyrule Castle - Boomerang Guard Key Drop': (0x71, 0x400),
+                     'Hyrule Castle - Key Rat Key Drop': (0x21, 0x400),
+                     'Hyrule Castle - Big Key Drop': (0x80, 0x400),
+                     'Eastern Palace - Dark Square Pot Key': (0xba, 0x400),
+                     'Eastern Palace - Dark Eyegore Key Drop': (0x99, 0x400),
+                     'Desert Palace - Desert Tiles 1 Pot Key': (0x63, 0x400),
+                     'Desert Palace - Beamos Hall Pot Key': (0x53, 0x400),
+                     'Desert Palace - Desert Tiles 2 Pot Key': (0x43, 0x400),
+                     'Castle Tower - Dark Archer Key Drop': (0xc0, 0x400),
+                     'Castle Tower - Circle of Pots Key Drop': (0xb0, 0x400),
+                     'Swamp Palace - Pot Row Pot Key': (0x38, 0x400),
+                     'Swamp Palace - Trench 1 Pot Key': (0x37, 0x400),
+                     'Swamp Palace - Hookshot Pot Key': (0x36, 0x400),
+                     'Swamp Palace - Trench 2 Pot Key': (0x35, 0x400),
+                     'Swamp Palace - Waterway Pot Key': (0x16, 0x400),
+                     'Skull Woods - West Lobby Pot Key': (0x56, 0x400),
+                     'Skull Woods - Spike Corner Key Drop': (0x39, 0x400),
+                     'Thieves\' Town - Hallway Pot Key': (0xbc, 0x400),
+                     'Thieves\' Town - Spike Switch Pot Key': (0xab, 0x400),
+                     'Ice Palace - Jelly Key Drop': (0x0e, 0x400),
+                     'Ice Palace - Conveyor Key Drop': (0x3e, 0x400),
+                     'Ice Palace - Hammer Block Key Drop': (0x3f, 0x400),
+                     'Ice Palace - Many Pots Pot Key': (0x9f, 0x400),
+                     'Misery Mire - Spikes Pot Key': (0xb3, 0x400),
+                     'Misery Mire - Fishbone Pot Key': (0xa1, 0x400),
+                     'Misery Mire - Conveyor Crystal Key Drop': (0xc1, 0x400),
+                     'Turtle Rock - Pokey 1 Key Drop': (0xb6, 0x400),
+                     'Turtle Rock - Pokey 2 Key Drop': (0x13, 0x400),
+                     'Ganons Tower - Conveyor Cross Pot Key': (0x8b, 0x400),
+                     'Ganons Tower - Double Switch Pot Key': (0x9b, 0x400),
+                     'Ganons Tower - Conveyor Star Pits Pot Key': (0x7b, 0x400),
+                     'Ganons Tower - Mini Helmasaur Key Drop': (0x3d, 0x400)}
 location_table_npc = {'Mushroom': 0x1000,
                       'King Zora': 0x2,
                       'Sahasrahla': 0x10,
@@ -822,7 +855,7 @@ async def process_server_cmd(ctx: Context, cmd, args):
         ctx.player_names = {p: n for p, n in args[1]}
         msgs = []
         if ctx.locations_checked:
-            msgs.append(['LocationChecks', [Regions.location_table[loc][0] for loc in ctx.locations_checked]])
+            msgs.append(['LocationChecks', [Regions.lookup_name_to_id[loc] for loc in ctx.locations_checked]])
         if ctx.locations_scouted:
             msgs.append(['LocationScouts', list(ctx.locations_scouted)])
         if msgs:
@@ -837,7 +870,7 @@ async def process_server_cmd(ctx: Context, cmd, args):
         elif start_index != len(ctx.items_received):
             sync_msg = [['Sync']]
             if ctx.locations_checked:
-                sync_msg.append(['LocationChecks', [Regions.location_table[loc][0] for loc in ctx.locations_checked]])
+                sync_msg.append(['LocationChecks', [Regions.lookup_name_to_id[loc] for loc in ctx.locations_checked]])
             await ctx.send_msgs(sync_msg)
         if start_index == len(ctx.items_received):
             for item in items:
@@ -1014,6 +1047,11 @@ class ClientCommandProcessor(CommandProcessor):
                 self.output('Missing: ' + location)
                 count += 1
 
+        for location in [k for k, v in Regions.key_drop_data.items()]:
+            if location not in self.ctx.locations_checked:
+                self.output('Missing: ' + location)
+                count += 1
+
         if count:
             self.output(f"Found {count} missing location checks")
         else:
@@ -1077,11 +1115,14 @@ async def track_locations(ctx : Context, roomid, roomdata):
         ctx.locations_checked.add(location)
         ctx.ui_node.log_info("New check: %s (%d/216)" % (location, len(ctx.locations_checked)))
         ctx.ui_node.send_location_check(ctx, location)
-        new_locations.append(Regions.location_table[location][0])
+        new_locations.append(Regions.lookup_name_to_id[location])
 
     for location, (loc_roomid, loc_mask) in location_table_uw.items():
-        if location not in ctx.locations_checked and loc_roomid == roomid and (roomdata << 4) & loc_mask != 0:
-            new_check(location)
+        try:
+            if location not in ctx.locations_checked and loc_roomid == roomid and (roomdata << 4) & loc_mask != 0:
+                new_check(location)
+        except Exception as e:
+            ctx.ui_node.log_info(f"Exception: {e}")
 
     uw_begin = 0x129
     uw_end = 0

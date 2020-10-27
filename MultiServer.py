@@ -29,7 +29,7 @@ import Utils
 from Utils import get_item_name_from_id, get_location_name_from_address, ReceivedItem, _version_tuple
 from NetUtils import Node, Endpoint
 
-console_names = frozenset(set(Items.item_table) | set(Regions.location_table) | set(Items.item_name_groups))
+console_names = frozenset(set(Items.item_table) | set(Regions.location_table) | set(Items.item_name_groups) | set(Regions.key_drop_data))
 
 CLIENT_PLAYING = 0
 CLIENT_GOAL = 1
@@ -439,6 +439,7 @@ def send_new_items(ctx: Context):
 
 def forfeit_player(ctx: Context, team: int, slot: int):
     all_locations = {values[0] for values in Regions.location_table.values() if type(values[0]) is int}
+    all_locations.update({values[1] for values in Regions.key_drop_data.values()})
     ctx.notify_all("%s (Team #%d) has forfeited" % (ctx.player_names[(team, slot)], team + 1))
     register_location_checks(ctx, team, slot, all_locations)
 
@@ -514,7 +515,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
 
 def collect_hints_location(ctx: Context, team: int, slot: int, location: str) -> typing.List[Utils.Hint]:
     hints = []
-    seeked_location = Regions.location_table[location][0]
+    seeked_location = Regions.lookup_name_to_id[location]
     for check, result in ctx.locations.items():
         location_id, finding_player = check
         if finding_player == slot and location_id == seeked_location:

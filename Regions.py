@@ -397,6 +397,42 @@ shop_table = {
     'Capacity Upgrade': (0x0115, ShopType.UpgradeShop, 0x04, True, True, [('Bomb Upgrade (+5)', 100, 7), ('Arrow Upgrade (+5)', 100, 7)])
 }
 
+key_drop_data = {
+    'Hyrule Castle - Map Guard Key Drop': [0x140036, 0x140037],
+    'Hyrule Castle - Boomerang Guard Key Drop': [0x140033, 0x140034],
+    'Hyrule Castle - Key Rat Key Drop': [0x14000c, 0x14000d],
+    'Hyrule Castle - Big Key Drop': [0x14003c, 0x14003d],
+    'Eastern Palace - Dark Square Pot Key': [0x14005a, 0x14005b],
+    'Eastern Palace - Dark Eyegore Key Drop': [0x140048, 0x140049],
+    'Desert Palace - Desert Tiles 1 Pot Key': [0x140030, 0x140031],
+    'Desert Palace - Beamos Hall Pot Key': [0x14002a, 0x14002b],
+    'Desert Palace - Desert Tiles 2 Pot Key': [0x140027, 0x140028],
+    'Castle Tower - Dark Archer Key Drop': [0x140060, 0x140061],
+    'Castle Tower - Circle of Pots Key Drop': [0x140051, 0x140052],
+    'Swamp Palace - Pot Row Pot Key': [0x140018, 0x140019],
+    'Swamp Palace - Trench 1 Pot Key': [0x140015, 0x140016],
+    'Swamp Palace - Hookshot Pot Key': [0x140012, 0x140013],
+    'Swamp Palace - Trench 2 Pot Key': [0x14000f, 0x140010],
+    'Swamp Palace - Waterway Pot Key': [0x140009, 0x14000a],
+    'Skull Woods - West Lobby Pot Key': [0x14002d, 0x14002e],
+    'Skull Woods - Spike Corner Key Drop': [0x14001b, 0x14001c],
+    'Thieves\' Town - Hallway Pot Key': [0x14005d, 0x14005e],
+    'Thieves\' Town - Spike Switch Pot Key': [0x14004e, 0x14004f],
+    'Ice Palace - Jelly Key Drop': [0x140003, 0x140004],
+    'Ice Palace - Conveyor Key Drop': [0x140021, 0x140022],
+    'Ice Palace - Hammer Block Key Drop': [0x140024, 0x140025],
+    'Ice Palace - Many Pots Pot Key': [0x140045, 0x140046],
+    'Misery Mire - Spikes Pot Key': [0x140054, 0x140055],
+    'Misery Mire - Fishbone Pot Key': [0x14004b, 0x14004c],
+    'Misery Mire - Conveyor Crystal Key Drop': [0x140063, 0x140064],
+    'Turtle Rock - Pokey 1 Key Drop': [0x140057, 0x140058],
+    'Turtle Rock - Pokey 2 Key Drop': [0x140006, 0x140007],
+    'Ganons Tower - Conveyor Cross Pot Key': [0x14003f, 0x140040],
+    'Ganons Tower - Double Switch Pot Key': [0x140042, 0x140043],
+    'Ganons Tower - Conveyor Star Pits Pot Key': [0x140039, 0x14003a],
+    'Ganons Tower - Mini Helmasaur Key Drop': [0x14001e, 0x14001f]
+}
+
 location_table = {'Mushroom': (0x180013, 0x186338, False, 'in the woods'),
                   'Bottle Merchant': (0x2eb18, 0x186339, False, 'with a merchant'),
                   'Flute Spot': (0x18014a, 0x18633d, False, 'underground'),
@@ -640,7 +676,9 @@ location_table = {'Mushroom': (0x180013, 0x186338, False, 'in the woods'),
                       [0x120A7, 0x53F24, 0x53F25, 0x18005C, 0x180079, 0xC708], None, True, 'Turtle Rock')}
 
 lookup_id_to_name = {data[0]: name for name, data in location_table.items() if type(data[0]) == int}
-lookup_id_to_name[-1] = "cheat console"
+lookup_id_to_name = {**lookup_id_to_name, **{data[1]: name for name, data in key_drop_data.items()}, -1: "cheat console"}
+lookup_name_to_id = {name: data[0] for name, data in location_table.items() if type(data[0]) == int}
+lookup_name_to_id = {**lookup_name_to_id, **{name: data[1] for name, data in key_drop_data.items()}, "cheat console": -1}
 
 lookup_vanilla_location_to_entrance = {1572883: 'Kings Grave Inner Rocks', 191256: 'Kings Grave Inner Rocks',
                                        1573194: 'Kings Grave Inner Rocks', 1573189: 'Kings Grave Inner Rocks',
@@ -745,7 +783,28 @@ lookup_vanilla_location_to_entrance = {1572883: 'Kings Grave Inner Rocks', 19125
                                        60103: 'Ganons Tower', 60106: 'Ganons Tower', 60109: 'Ganons Tower',
                                        60127: 'Ganons Tower', 60118: 'Ganons Tower', 60148: 'Ganons Tower',
                                        60151: 'Ganons Tower', 60145: 'Ganons Tower', 60157: 'Ganons Tower',
-                                       60160: 'Ganons Tower', 60163: 'Ganons Tower', 60166: 'Ganons Tower'}
+                                       60160: 'Ganons Tower', 60163: 'Ganons Tower', 60166: 'Ganons Tower',
+                                       0x140037: 'Hyrule Castle Entrance (South)',
+                                       0x140034: 'Hyrule Castle Entrance (South)',
+                                       0x14000d: 'Hyrule Castle Entrance (South)',
+                                       0x14003d: 'Hyrule Castle Entrance (South)',
+                                       0x14005b: 'Eastern Palace', 0x140049: 'Eastern Palace',
+                                       0x140031: 'Desert Palace Entrance (North)',
+                                       0x14002b: 'Desert Palace Entrance (North)',
+                                       0x140028: 'Desert Palace Entrance (North)',
+                                       0x140061: 'Agahnims Tower', 0x140052: 'Agahnims Tower',
+                                       0x140019: 'Swamp Palace', 0x140016: 'Swamp Palace', 0x140013: 'Swamp Palace',
+                                       0x140010: 'Swamp Palace', 0x14000a: 'Swamp Palace',
+                                       0x14002e: 'Skull Woods Second Section Door (East)',
+                                       0x14001c: 'Skull Woods Final Section',
+                                       0x14005e: 'Thieves Town', 0x14004f: 'Thieves Town',
+                                       0x140004: 'Ice Palace', 0x140022: 'Ice Palace',
+                                       0x140025: 'Ice Palace', 0x140046: 'Ice Palace',
+                                       0x140055: 'Misery Mire', 0x14004c: 'Misery Mire',
+                                       0x140064: 'Misery Mire',
+                                       0x140058: 'Turtle Rock', 0x140007: 'Dark Death Mountain Ledge (West)',
+                                       0x140040: 'Ganons Tower', 0x140043: 'Ganons Tower',
+                                       0x14003a: 'Ganons Tower', 0x14001f: 'Ganons Tower'}
 
 lookup_prizes = {location for location in location_table if location.endswith(" - Prize")}
 lookup_boss_drops = {location for location in location_table if location.endswith(" - Boss")}
