@@ -455,10 +455,12 @@ def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
 def register_location_checks(ctx: Context, team: int, slot: int, locations):
     found_items = False
     new_locations = set(locations) - ctx.location_checks[team, slot]
+    known_locations = set()
     if new_locations:
         ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
         for location in new_locations:
             if (location, slot) in ctx.locations:
+                known_locations.add(location)
                 target_item, target_player = ctx.locations[(location, slot)]
                 if target_player != slot or slot in ctx.remote_items:
                     found = False
@@ -483,7 +485,7 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations):
                                 if client.team == team and client.wants_item_notification:
                                     asyncio.create_task(
                                         ctx.send_msgs(client, [['ItemFound', (target_item, location, slot)]]))
-        ctx.location_checks[team, slot] |= new_locations
+        ctx.location_checks[team, slot] |= known_locations
         send_new_items(ctx)
 
         if found_items:
