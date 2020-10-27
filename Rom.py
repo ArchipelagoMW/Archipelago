@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '0fc63d72970ab96ffb18699f4d12a594'
+RANDOMIZERBASEHASH = '8021a943f940a0bb5800c013138c02e8'
 
 import io
 import json
@@ -19,7 +19,7 @@ from typing import Optional
 
 from BaseClasses import CollectionState, ShopType, Region, Location
 from Dungeons import dungeon_music_addresses
-from Regions import location_table
+from Regions import location_table, old_location_address_to_new_location_address
 from Text import MultiByteTextMapper, CompressedTextMapper, text_addresses, Credits, TextTable
 from Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, \
     BombShop2_texts, junk_texts
@@ -93,8 +93,10 @@ class LocalRom(object):
         self.write_bytes(0x186140, [0] * 0x150)
         self.write_bytes(0x186140 + 0x150, itemplayertable)
         self.encrypt_range(0x186140 + 0x150, 168, key)
+        self.encrypt_range(0x186338, 56, key)
         self.encrypt_range(0x180000, 32, key)
         self.encrypt_range(0x180140, 32, key)
+        self.encrypt_range(0xEDA1, 8, key)
 
     def write_to_file(self, file, hide_enemizer=False):
         with open(file, 'wb') as outfile:
@@ -661,7 +663,8 @@ def patch_rom(world, rom, player, team, enemized):
                         rom.write_byte(location.player_address, location.item.player)
                     else:
                         itemid = 0x5A
-            rom.write_byte(location.address, itemid)
+            location_address = old_location_address_to_new_location_address.get(location.address, location.address)
+            rom.write_byte(location_address, itemid)
         else:
             # crystals
             for address, value in zip(location.address, itemid):
@@ -1476,7 +1479,7 @@ def patch_rom(world, rom, player, team, enemized):
 
     write_strings(rom, world, player, team)
 
-    rom.write_byte(0x18636C, 1 if world.remote_items[player] else 0)
+    rom.write_byte(0x18637C, 1 if world.remote_items[player] else 0)
 
     # set rom name
     # 21 bytes
