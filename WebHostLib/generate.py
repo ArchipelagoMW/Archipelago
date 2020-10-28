@@ -59,6 +59,10 @@ def generate_api():
         if json_data:
             # example: options = {"player1weights" : {<weightsdata>}}
             options = json_data["weights"]
+            if len(options) > app.config["MAX_ROLL"]:
+                return {"text": "Max size of multiworld exceeded",
+                        "detail": app.config["MAX_ROLL"]}, 409
+
             race = bool(json_data["race"])
             results, gen_options = roll_yamls(options)
             if any(type(result) == str for result in results.values()):
