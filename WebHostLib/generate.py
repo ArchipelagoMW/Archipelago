@@ -73,7 +73,8 @@ def generate_api():
                     owner=session["_id"])
                 commit()
                 return {"text" : f"Generation of seed {gen.id} started succesfully.",
-                        "detail": gen.id}, 201
+                        "detail": gen.id,
+                        "encoded": app.url_map.converters["suuid"].to_url(gen.id)}, 201
         else:
             return {"text": "POST data empty or incorrectly headered."}, 400
     except Exception as e:
