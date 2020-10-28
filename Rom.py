@@ -597,9 +597,7 @@ class Sprite(object):
         def expand_color(i):
             return ((i & 0x1F) * 8, (i >> 5 & 0x1F) * 8, (i >> 10 & 0x1F) * 8)
 
-        raw_palette = self.palette
-        if raw_palette is None:
-            raw_palette = Sprite.default_palette
+        raw_palette = Sprite.palette[:] # copy
         # turn palette data into a list of RGB tuples with 8 bit values
         palette_as_colors = [expand_color(make_int16(chnk)) for chnk in array_chunk(raw_palette, 2)]
 
