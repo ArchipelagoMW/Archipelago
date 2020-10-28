@@ -76,9 +76,11 @@ def generate_api():
                     meta=pickle.dumps({"race": race}), state=STATE_QUEUED,
                     owner=session["_id"])
                 commit()
-                return {"text" : f"Generation of seed {gen.id} started succesfully.",
+                return {"text" : f"Generation of seed {gen.id} started successfully.",
                         "detail": gen.id,
-                        "encoded": app.url_map.converters["suuid"].to_url(gen.id)}, 201
+                        "encoded": app.url_map.converters["suuid"].to_url(gen.id),
+                        "wait_api_url": url_for(wait_seed_api, seed=gen.id),
+                        "url": url_for(wait_seed, seed=gen.id)}, 201
         else:
             return {"text": "POST data empty or incorrectly headered."}, 400
     except Exception as e:
