@@ -120,6 +120,56 @@ def guiMain(args=None):
     balancingCheckbutton.pack(expand=True, anchor=W)
     patchesCheckbutton.pack(expand=True, anchor=W)
 
+
+
+    timerOptionsFrame = LabelFrame(rightHalfFrame, text="Timer options")
+    for i in range(3):
+        timerOptionsFrame.columnconfigure(i, weight=1)
+        timerOptionsFrame.rowconfigure(i, weight=1)
+
+    timerModeFrame = Frame(timerOptionsFrame)
+    timerModeFrame.grid(row=0, column=0, columnspan=3, sticky=E, padx=3)
+    timerVar = StringVar()
+    timerVar.set('none')
+    timerModeMenu = OptionMenu(timerModeFrame, timerVar, 'none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown')
+    timerLabel = Label(timerModeFrame, text='Timer setting')
+    timerLabel.pack(side=LEFT)
+    timerModeMenu.pack(side=LEFT)
+
+    timerCountdownFrame = Frame(timerOptionsFrame)
+    timerCountdownFrame.grid(row=1, column=0, columnspan=3, sticky=E, padx=3)
+    timerCountdownLabel = Label(timerCountdownFrame, text='Countdown starting time')
+    timerCountdownLabel.pack(side=LEFT)
+    timerCountdownVar = IntVar(value=10)
+    timerCountdownSpinbox = Spinbox(timerCountdownFrame, from_=0, to=480, width=3, textvariable=timerCountdownVar)
+    timerCountdownSpinbox.pack(side=LEFT)
+
+    timerRedFrame = Frame(timerOptionsFrame)
+    timerRedFrame.grid(row=2, column=0, sticky=E, padx=3)
+    timerRedLabel = Label(timerRedFrame, text='Clock adjustments: Red')
+    timerRedLabel.pack(side=LEFT)
+    timerRedVar = IntVar(value=-2)
+    timerRedSpinbox = Spinbox(timerRedFrame, from_=-60, to=60, width=3, textvariable=timerRedVar)
+    timerRedSpinbox.pack(side=LEFT)
+
+    timerBlueFrame = Frame(timerOptionsFrame)
+    timerBlueFrame.grid(row=2, column=1, sticky=E, padx=3)
+    timerBlueLabel = Label(timerBlueFrame, text='Blue')
+    timerBlueLabel.pack(side=LEFT)
+    timerBlueVar = IntVar(value=2)
+    timerBlueSpinbox = Spinbox(timerBlueFrame, from_=-60, to=60, width=3, textvariable=timerBlueVar)
+    timerBlueSpinbox.pack(side=LEFT)
+
+    timerGreenFrame = Frame(timerOptionsFrame)
+    timerGreenFrame.grid(row=2, column=2, sticky=E, padx=3)
+    timerGreenLabel = Label(timerGreenFrame, text='Green')
+    timerGreenLabel.pack(side=LEFT)
+    timerGreenVar = IntVar(value=4)
+    timerGreenSpinbox = Spinbox(timerGreenFrame, from_=-60, to=60, width=3, textvariable=timerGreenVar)
+    timerGreenSpinbox.pack(side=LEFT)
+
+
+
     romOptionsFrame = LabelFrame(rightHalfFrame, text="Rom options")
     romOptionsFrame.columnconfigure(0, weight=1)
     romOptionsFrame.columnconfigure(1, weight=1)
@@ -266,6 +316,7 @@ def guiMain(args=None):
     romSelectButton.pack(side=LEFT)
 
     checkBoxFrame.pack(side=TOP, anchor=W, padx=5, pady=10)
+    timerOptionsFrame.pack(expand=True, fill=BOTH, padx=3)
     romOptionsFrame.pack(expand=True, fill=BOTH, padx=3)
 
     drowDownFrame = Frame(topFrame)
@@ -344,14 +395,6 @@ def guiMain(args=None):
     itemfunctionLabel = Label(itemfunctionFrame, text='Difficulty: item functionality')
     itemfunctionLabel.pack(side=LEFT)
 
-    timerFrame = Frame(drowDownFrame)
-    timerVar = StringVar()
-    timerVar.set('none')
-    timerOptionMenu = OptionMenu(timerFrame, timerVar, 'none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown')
-    timerOptionMenu.pack(side=RIGHT)
-    timerLabel = Label(timerFrame, text='Timer setting')
-    timerLabel.pack(side=LEFT)
-
     dungeonCounterFrame = Frame(drowDownFrame)
     dungeonCounterVar = StringVar()
     dungeonCounterVar.set('auto')
@@ -412,7 +455,6 @@ def guiMain(args=None):
     swordFrame.pack(expand=True, anchor=E)
     difficultyFrame.pack(expand=True, anchor=E)
     itemfunctionFrame.pack(expand=True, anchor=E)
-    timerFrame.pack(expand=True, anchor=E)
     dungeonCounterFrame.pack(expand=True, anchor=E)
     progressiveFrame.pack(expand=True, anchor=E)
     accessibilityFrame.pack(expand=True, anchor=E)
@@ -538,6 +580,10 @@ def guiMain(args=None):
         guiargs.difficulty = difficultyVar.get()
         guiargs.item_functionality = itemfunctionVar.get()
         guiargs.timer = timerVar.get()
+        guiargs.countdown_start_time = timerCountdownVar.get()
+        guiargs.red_clock_time = timerRedVar.get()
+        guiargs.blue_clock_time = timerBlueVar.get()
+        guiargs.green_clock_time = timerGreenVar.get()
         guiargs.skip_progression_balancing = not balancingVar.get()
         if guiargs.timer == "none":
             guiargs.timer = False
@@ -1424,6 +1470,10 @@ def guiMain(args=None):
         difficultyVar.set(args.difficulty)
         itemfunctionVar.set(args.item_functionality)
         timerVar.set(args.timer)
+        timerCountdownVar.set(args.countdown_start_time)
+        timerRedVar.set(args.red_clock_time)
+        timerBlueVar.set(args.blue_clock_time)
+        timerGreenVar.set(args.green_clock_time)
         progressiveVar.set(args.progressive)
         accessibilityVar.set(args.accessibility)
         goalVar.set(args.goal)
