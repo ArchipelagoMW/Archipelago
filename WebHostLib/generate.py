@@ -52,6 +52,34 @@ def generate(race=False):
     return render_template("generate.html", race=race)
 
 
+@app.route('/api/generate', methods=['POST'])
+def generate_api():
+    try:
+        json_data = request.get_json()
+        if json_data:
+            # example: options = {"player1weights" : {<weightsdata>}}
+            options = json_data["weights"]
+            race = bool(json_data["race"])
+            results, gen_options = roll_yamls(options)
+            if any(type(result) == str for result in results.values()):
+                return {"text": str(results),
+                        "detail": results}, 400
+
+            else:
+                gen = Generation(
+                    options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
+                    # convert to json compatible
+                    meta=pickle.dumps({"race": race}), state=STATE_QUEUED,
+                    owner=session["_id"])
+                commit()
+                return {"text" : f"Generation of seed {gen.id} started succesfully.",
+                        "detail": gen.id}, 201
+        else:
+            return {"text": "POST data empty or incorrectly headered."}, 400
+    except Exception as e:
+        return {"text": "Uncaught Exception:" + str(e)}, 500
+
+
 def gen_game(gen_options, race=False, owner=None, sid=None):
     try:
         target = tempfile.TemporaryDirectory()
@@ -116,6 +144,19 @@ def wait_seed(seed: UUID):
         return "Generation failed, please retry."
     return render_template("wait_seed.html", seed_id=seed_id)
 
+@app.route('/api/status/<suuid:seed>')
+def wait_seed_api(seed: UUID):
+    seed_id = seed
+    seed = Seed.get(id=seed_id)
+    if seed:
+        return {"text" : "Generation done"}, 201
+    generation = Generation.get(id=seed_id)
+
+    if not generation:
+        return {"text": "Generation not found"}, 404
+    elif generation.state == STATE_ERROR:
+        return {"text": "Generation failed"}, 500
+    return {"text": "Generation running"}, 202
 
 def upload_to_db(folder, owner, sid):
     patches = set()
