@@ -597,9 +597,8 @@ class Sprite(object):
         def expand_color(i):
             return ((i & 0x1F) * 8, (i >> 5 & 0x1F) * 8, (i >> 10 & 0x1F) * 8)
 
-        raw_palette = Sprite.palette[:] # copy
         # turn palette data into a list of RGB tuples with 8 bit values
-        palette_as_colors = [expand_color(make_int16(chnk)) for chnk in array_chunk(raw_palette, 2)]
+        palette_as_colors = [expand_color(make_int16(chnk)) for chnk in array_chunk(self.palette, 2)]
 
         # split into palettes of 15 colors
         return array_chunk(palette_as_colors, 15)
