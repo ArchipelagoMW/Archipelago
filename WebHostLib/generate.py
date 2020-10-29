@@ -56,14 +56,17 @@ def generate(race=False):
 def generate_api():
     try:
         options = {}
+        race = False
+
         if 'file' in request.files:
             file = request.files['file']
             options = get_yaml_data(file)
             if type(options) == str:
                 return {"text": options}, 400
+            if "race" in request.form:
+                race = bool(request.form["race"])
 
         json_data = request.get_json()
-        race = False
         if json_data:
             if 'weights' in json_data:
                 # example: options = {"player1weights" : {<weightsdata>}}
