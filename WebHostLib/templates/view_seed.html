@@ -11,6 +11,11 @@
     <div id="view-seed-wrapper">
         <div class="main-content">
             <h3>Seed Info</h3>
+            {% if not seed.multidata and not seed.spoiler %}
+            <h4>
+                Single Player Race Rom: No spoiler or multidata exists, parts of the rom are encrypted and rooms cannot be created.
+            </h4>
+            {% endif %}
             <table>
                 <tbody>
                 <tr>
@@ -27,6 +32,7 @@
                         <td><a href="{{ url_for("download_spoiler", seed_id=seed.id) }}">Download</a></td>
                     </tr>
                 {% endif %}
+                {% if seed.multidata %}
                 <tr>
                     <td>Players:&nbsp;</td>
                     <td>
@@ -55,6 +61,23 @@
                             {% endcall %}
                         </td>
                     </tr>
+                {% else  %}
+                <tr>
+                    <td>Patches:&nbsp;</td>
+                    <td>
+                        <ul>
+                            {% for patch in seed.patches %}
+
+                            <li>
+                                <a href="{{ url_for("download_raw_patch", seed_id=seed.id, player_id=patch.player) }}">Player {{ patch.player }}</a>
+                            </li>
+
+
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                {% endif %}
                 </tbody>
             </table>
         </div>

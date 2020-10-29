@@ -141,7 +141,7 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
         del (erargs.progression_balancing)
         ERmain(erargs, seed)
 
-        return upload_to_db(target.name, owner, sid)
+        return upload_to_db(target.name, owner, sid, race)
     except BaseException:
         if sid:
             with db_session:
@@ -181,9 +181,10 @@ def wait_seed_api(seed: UUID):
     return {"text": "Generation running"}, 202
 
 
-def upload_to_db(folder, owner, sid):
+def upload_to_db(folder, owner, sid, race:bool):
     patches = set()
     spoiler = ""
+
     multidata = None
     for file in os.listdir(folder):
         file = os.path.join(folder, file)
@@ -193,20 +194,26 @@ def upload_to_db(folder, owner, sid):
         elif file.endswith(".txt"):
             spoiler = open(file, "rt").read()
         elif file.endswith("multidata"):
-            try:
-                multidata = json.loads(zlib.decompress(open(file, "rb").read()))
-            except Exception as e:
-                flash(e)
-    if multidata:
-        with db_session:
-            if sid:
-                seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner, id=sid)
-            else:
-                seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner)
-            for patch in patches:
-                patch.seed = seed
-            if sid:
-                gen = Generation.get(id=sid)
-                if gen is not None:
-                    gen.delete()
-        return seed.id
+            multidata = file
+
+    if not race or len(patches) > 1:
+        try:
+            multidata = json.loads(zlib.decompress(open(multidata, "rb").read()))
+        except Exception as e:
+            flash(e)
+            raise e
+    else:
+        multidata = {}
+
+    with db_session:
+        if sid:
+            seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner, id=sid)
+        else:
+            seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner)
+        for patch in patches:
+            patch.seed = seed
+        if sid:
+            gen = Generation.get(id=sid)
+            if gen is not None:
+                gen.delete()
+    return seed.id
