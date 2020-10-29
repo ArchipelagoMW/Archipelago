@@ -317,13 +317,6 @@ def main(args, seed=None):
                 checks_in_area[location.player]["Dark World"].append(location.address)
             checks_in_area[location.player]["Total"] += 1
 
-        for player in range(1, world.players + 1):
-            for area in ordered_areas:
-                if area != "Total":
-                    logging.info(f'{player}: {area} :: {len(checks_in_area[player][area])}')
-                else:
-                    logging.info(f'{player}: {area} :: {checks_in_area[player][area]}')
-
 
         precollected_items = [[] for player in range(world.players)]
         for item in world.precollected_items:
