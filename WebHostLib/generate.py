@@ -13,7 +13,7 @@ import pickle
 
 from .models import *
 from WebHostLib import app
-from .check import get_yaml_data, roll_yamls
+from .check import get_yaml_data, roll_options
 
 
 @app.route('/generate', methods=['GET', 'POST'])
@@ -29,7 +29,7 @@ def generate(race=False):
             if type(options) == str:
                 flash(options)
             else:
-                results, gen_options = roll_yamls(options)
+                results, gen_options = roll_options(options)
                 if any(type(result) == str for result in results.values()):
                     return render_template("checkresult.html", results=results)
                 elif len(gen_options) > app.config["MAX_ROLL"]:
@@ -55,34 +55,40 @@ def generate(race=False):
 @app.route('/api/generate', methods=['POST'])
 def generate_api():
     try:
+        options = {}
+        if 'file' in request.files:
+            file = request.files['file']
+            options = get_yaml_data(file)
+
         json_data = request.get_json()
-        if json_data:
+        if 'weights' in json_data:
             # example: options = {"player1weights" : {<weightsdata>}}
             options = json_data["weights"]
-            if len(options) > app.config["MAX_ROLL"]:
-                return {"text": "Max size of multiworld exceeded",
-                        "detail": app.config["MAX_ROLL"]}, 409
+        if not options:
+            return {"text": "No options found. Expected file attachment or json weights."
+                    }, 400
 
-            race = bool(json_data["race"])
-            results, gen_options = roll_yamls(options)
-            if any(type(result) == str for result in results.values()):
-                return {"text": str(results),
-                        "detail": results}, 400
+        if len(options) > app.config["MAX_ROLL"]:
+            return {"text": "Max size of multiworld exceeded",
+                    "detail": app.config["MAX_ROLL"]}, 409
 
-            else:
-                gen = Generation(
-                    options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
-                    # convert to json compatible
-                    meta=pickle.dumps({"race": race}), state=STATE_QUEUED,
-                    owner=session["_id"])
-                commit()
-                return {"text" : f"Generation of seed {gen.id} started successfully.",
-                        "detail": gen.id,
-                        "encoded": app.url_map.converters["suuid"].to_url(gen.id),
-                        "wait_api_url": url_for(wait_seed_api, seed=gen.id),
-                        "url": url_for(wait_seed, seed=gen.id)}, 201
+        race = bool(json_data["race"])
+        results, gen_options = roll_options(options)
+        if any(type(result) == str for result in results.values()):
+            return {"text": str(results),
+                    "detail": results}, 400
         else:
-            return {"text": "POST data empty or incorrectly headered."}, 400
+            gen = Generation(
+                options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
+                # convert to json compatible
+                meta=pickle.dumps({"race": race}), state=STATE_QUEUED,
+                owner=session["_id"])
+            commit()
+            return {"text": f"Generation of seed {gen.id} started successfully.",
+                    "detail": gen.id,
+                    "encoded": app.url_map.converters["suuid"].to_url(gen.id),
+                    "wait_api_url": url_for(wait_seed_api, seed=gen.id),
+                    "url": url_for(wait_seed, seed=gen.id)}, 201
     except Exception as e:
         return {"text": "Uncaught Exception:" + str(e)}, 500
 
@@ -151,12 +157,13 @@ def wait_seed(seed: UUID):
         return "Generation failed, please retry."
     return render_template("wait_seed.html", seed_id=seed_id)
 
+
 @app.route('/api/status/<suuid:seed>')
 def wait_seed_api(seed: UUID):
     seed_id = seed
     seed = Seed.get(id=seed_id)
     if seed:
-        return {"text" : "Generation done"}, 201
+        return {"text": "Generation done"}, 201
     generation = Generation.get(id=seed_id)
 
     if not generation:
@@ -164,6 +171,7 @@ def wait_seed_api(seed: UUID):
     elif generation.state == STATE_ERROR:
         return {"text": "Generation failed"}, 500
     return {"text": "Generation running"}, 202
+
 
 def upload_to_db(folder, owner, sid):
     patches = set()
