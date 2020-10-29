@@ -59,6 +59,8 @@ def generate_api():
         if 'file' in request.files:
             file = request.files['file']
             options = get_yaml_data(file)
+            if type(options) == str:
+                return {"text": options}, 400
 
         json_data = request.get_json()
         race = False
