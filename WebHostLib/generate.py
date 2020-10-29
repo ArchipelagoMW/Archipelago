@@ -61,9 +61,13 @@ def generate_api():
             options = get_yaml_data(file)
 
         json_data = request.get_json()
-        if 'weights' in json_data:
-            # example: options = {"player1weights" : {<weightsdata>}}
-            options = json_data["weights"]
+        race = False
+        if json_data:
+            if 'weights' in json_data:
+                # example: options = {"player1weights" : {<weightsdata>}}
+                options = json_data["weights"]
+            if "race" in json_data:
+                race = bool(json_data["race"])
         if not options:
             return {"text": "No options found. Expected file attachment or json weights."
                     }, 400
@@ -72,7 +76,6 @@ def generate_api():
             return {"text": "Max size of multiworld exceeded",
                     "detail": app.config["MAX_ROLL"]}, 409
 
-        race = bool(json_data["race"])
         results, gen_options = roll_options(options)
         if any(type(result) == str for result in results.values()):
             return {"text": str(results),
