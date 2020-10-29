@@ -308,7 +308,7 @@ def main(args, seed=None):
             checks_in_area[player]["Total"] = 0
 
         for location in [loc for loc in world.get_filled_locations() if type(loc.address) is int]:
-            main_entrance = get_entrance_to_region(location.parent_region, [])
+            main_entrance = get_entrance_to_region(location.parent_region)
             if location.parent_region.dungeon:
                 checks_in_area[location.player][location.parent_region.dungeon.name].append(location.address)
             elif main_entrance.parent_region.type == RegionType.LightWorld:
