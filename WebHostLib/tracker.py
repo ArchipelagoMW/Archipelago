@@ -258,6 +258,14 @@ def render_timedelta(delta: datetime.timedelta):
 
 _multidata_cache = {}
 
+def get_location_table(checks_table: dict) -> dict:
+    loc_to_area = {}
+    for area, locations in checks_table.items():
+        if area == "Total":
+            continue
+        for location in locations:
+            loc_to_area[location] = area
+    return loc_to_area
 
 def get_static_room_data(room: Room):
     result = _multidata_cache.get(room.seed.id, None)
@@ -276,7 +284,21 @@ def get_static_room_data(room: Room):
         for area, checks in key_only_locations.items():
             seed_checks_in_area[area] += len(checks)
         seed_checks_in_area["Total"] = 249
-    result = locations, names, use_door_tracker, seed_checks_in_area
+    if "checks_in_area" not in multidata:
+        player_checks_in_area = {playernumber: (seed_checks_in_area if use_door_tracker and
+                                                (0x140031, playernumber) in locations else checks_in_area)
+                                 for playernumber in range(1, len(names[0]) + 1)}
+        player_location_to_area = {playernumber: location_to_area
+                                   for playernumber in range(1, len(names[0]) + 1)}
+
+    else:
+        player_checks_in_area = {playernumber: {areaname: len(multidata["checks_in_area"][f'{playernumber}'][areaname])
+                                                if areaname != "Total" else multidata["checks_in_area"][f'{playernumber}']["Total"]
+                                                for areaname in ordered_areas}
+                                 for playernumber in range(1, len(names[0]) + 1)}
+        player_location_to_area = {playernumber: get_location_table(multidata["checks_in_area"][f'{playernumber}'])
+                                   for playernumber in range(1, len(names[0]) + 1)}
+    result = locations, names, use_door_tracker, player_checks_in_area, player_location_to_area
     _multidata_cache[room.seed.id] = result
     return result
 
@@ -287,7 +309,7 @@ def get_tracker(tracker: UUID):
     room = Room.get(tracker=tracker)
     if not room:
         abort(404)
-    locations, names, use_door_tracker, seed_checks_in_area = get_static_room_data(room)
+    locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area = get_static_room_data(room)
 
     inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1)}
                  for teamnumber, team in enumerate(names)}
@@ -308,12 +330,12 @@ def get_tracker(tracker: UUID):
             for item_id in precollected:
                 attribute_item(inventory, team, player, item_id)
         for location in locations_checked:
-            if (location, player) not in locations or location not in location_to_area:
+            if (location, player) not in locations or location not in player_location_to_area[player]:
                 continue
 
             item, recipient = locations[location, player]
             attribute_item(inventory, team, recipient, item)
-            checks_done[team][player][location_to_area[location]] += 1
+            checks_done[team][player][player_location_to_area[player][location]] += 1
             checks_done[team][player]["Total"] += 1
 
     for (team, player), game_state in room.multisave.get("client_game_state", []):

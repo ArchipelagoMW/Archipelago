@@ -122,7 +122,7 @@
                                     <td>{{ player_names[(team, loop.index)]|e }}</td>
                                     {%- for area in ordered_areas -%}
                                         {%- set checks_done = checks[area] -%}
-                                        {%- set checks_total = checks_in_area[area] -%}
+                                        {%- set checks_total = checks_in_area[player][area] -%}
                                         {%- if checks_done == checks_total -%}
                                             <td class="item-acquired center-column">
                                                 {{ checks_done }}/{{ checks_total }}</td>
