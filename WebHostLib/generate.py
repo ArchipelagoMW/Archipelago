@@ -64,7 +64,7 @@ def generate_api():
             if type(options) == str:
                 return {"text": options}, 400
             if "race" in request.form:
-                race = bool(request.form["race"])
+                race = bool(0 if request.form["race"] in {"false"} else int(request.form["race"]))
 
         json_data = request.get_json()
         if json_data:
@@ -72,7 +72,7 @@ def generate_api():
                 # example: options = {"player1weights" : {<weightsdata>}}
                 options = json_data["weights"]
             if "race" in json_data:
-                race = bool(json_data["race"])
+                race = bool(0 if json_data["race"] in {"false"} else int(json_data["race"]))
         if not options:
             return {"text": "No options found. Expected file attachment or json weights."
                     }, 400
