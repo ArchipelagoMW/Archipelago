@@ -232,6 +232,22 @@ timer:
   ohko: 0 # Timer always at zero. Permanent OHKO.
   timed_countdown: 0 # Starts the clock with forty minutes. Same clocks as timed mode, but if the clock hits zero you lose. You can still keep playing, though.
   display: 0 # Displays a timer, but otherwise does not affect gameplay or the item pool.
+countdown_start_time: # For timed_ohko and timed_countdown timer modes, the amount of time in minutes to start with
+  0: 0 # For timed_ohko, starts in OHKO mode when starting the game
+  10: 50
+  20: 0
+  30: 0
+  60: 0
+red_clock_time: # For all timer modes, the amount of time in minutes to gain or lose when picking up a red clock
+  -2: 50
+  1: 0
+blue_clock_time: # For all timer modes, the amount of time in minutes to gain or lose when picking up a blue clock
+  1: 0
+  2: 50
+green_clock_time: # For all timer modes, the amount of time in minutes to gain or lose when picking up a green clock
+  4: 50
+  10: 0
+  15: 0
 # Can be uncommented to use it
 # local_items: # Force certain items to appear in your world only, not across the multiworld. Recognizes some group names, like "Swords"
 #  - "Moon Pearl"

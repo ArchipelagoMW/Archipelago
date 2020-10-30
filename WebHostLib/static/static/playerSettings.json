@@ -1206,6 +1206,110 @@
         }
       }
     },
+    "countdown_start_time": {
+      "keyString": "countdown_start_time",
+      "friendlyName": "Countdown Starting Time",
+      "description": "The amount of time, in minutes, to start with in Timed Countdown and Timed OHKO modes.",
+      "inputType": "range",
+      "subOptions": {
+        "0": {
+          "keyString": "countdown_start_time.0",
+          "friendlyName": 0,
+          "description": "Start with no time on the timer. In Timed OHKO mode, start in OHKO mode.",
+          "defaultValue": 0
+        },
+        "10": {
+          "keyString": "countdown_start_time.10",
+          "friendlyName": 10,
+          "description": "Start with 10 minutes on the timer.",
+          "defaultValue": 50
+        },
+        "20": {
+          "keyString": "countdown_start_time.20",
+          "friendlyName": 20,
+          "description": "Start with 20 minutes on the timer.",
+          "defaultValue": 0
+        },
+        "30": {
+          "keyString": "countdown_start_time.30",
+          "friendlyName": 30,
+          "description": "Start with 30 minutes on the timer.",
+          "defaultValue": 0
+        },
+        "60": {
+          "keyString": "countdown_start_time.60",
+          "friendlyName": 60,
+          "description": "Start with an hour on the timer.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "red_clock_time": {
+      "keyString": "red_clock_time",
+      "friendlyName": "Red Clock Time",
+      "description": "The amount of time, in minutes, to add to or subtract from the timer upon picking up a red clock.",
+      "inputType": "range",
+      "subOptions": {
+        "-2": {
+          "keyString": "red_clock_time.-2",
+          "friendlyName": -2,
+          "description": "Subtract 2 minutes from the timer upon picking up a red clock.",
+          "defaultValue": 0
+        },
+        "1": {
+          "keyString": "red_clock_time.1",
+          "friendlyName": 1,
+          "description": "Add a minute to the timer upon picking up a red clock.",
+          "defaultValue": 50
+        }
+      }
+    },
+    "blue_clock_time": {
+      "keyString": "blue_clock_time",
+      "friendlyName": "Blue Clock Time",
+      "description": "The amount of time, in minutes, to add to or subtract from the timer upon picking up a blue clock.",
+      "inputType": "range",
+      "subOptions": {
+        "1": {
+          "keyString": "blue_clock_time.1",
+          "friendlyName": 1,
+          "description": "Add a minute to the timer upon picking up a blue clock.",
+          "defaultValue": 0
+        },
+        "2": {
+          "keyString": "blue_clock_time.2",
+          "friendlyName": 2,
+          "description": "Add 2 minutes to the timer upon picking up a blue clock.",
+          "defaultValue": 50
+        }
+      }
+    },
+    "green_clock_time": {
+      "keyString": "green_clock_time",
+      "friendlyName": "Green Clock Time",
+      "description": "The amount of time, in minutes, to add to or subtract from the timer upon picking up a green clock.",
+      "inputType": "range",
+      "subOptions": {
+        "4": {
+          "keyString": "green_clock_time.4",
+          "friendlyName": 4,
+          "description": "Add 4 minutes to the timer upon picking up a green clock.",
+          "defaultValue": 50
+        },
+        "10": {
+          "keyString": "green_clock_time.10",
+          "friendlyName": 10,
+          "description": "Add 10 minutes to the timer upon picking up a green clock.",
+          "defaultValue": 0
+        },
+        "15": {
+          "keyString": "green_clock_time.15",
+          "friendlyName": 15,
+          "description": "Add 15 minutes to the timer upon picking up a green clock.",
+          "defaultValue": 0
+        }
+      }
+    },
     "glitch_boots": {
       "keyString": "glitch_boots",
       "friendlyName": "Glitch Boots",

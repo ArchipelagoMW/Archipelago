@@ -129,6 +129,14 @@ def parse_arguments(argv, no_defaults=False):
                                               Timed mode. If time runs out, you lose (but can
                                               still keep playing).
                              ''')
+    parser.add_argument('--countdown_start_time', default=defval(10), type=int,
+                        help='''Set amount of time, in minutes, to start with in Timed Countdown and Timed OHKO modes''')
+    parser.add_argument('--red_clock_time', default=defval(-2), type=int,
+                        help='''Set amount of time, in minutes, to add from picking up red clocks; negative removes time instead''')
+    parser.add_argument('--blue_clock_time', default=defval(2), type=int,
+                        help='''Set amount of time, in minutes, to add from picking up blue clocks; negative removes time instead''')
+    parser.add_argument('--green_clock_time', default=defval(4), type=int,
+                        help='''Set amount of time, in minutes, to add from picking up green clocks; negative removes time instead''')
     parser.add_argument('--dungeon_counters', default=defval('default'), const='default', nargs='?', choices=['default', 'on', 'pickup', 'off'],
                         help='''\
                              Select dungeon counter display settings. (default: %(default)s)
@@ -366,6 +374,7 @@ def parse_arguments(argv, no_defaults=False):
 
             for name in ['logic', 'mode', 'swords', 'goal', 'difficulty', 'item_functionality',
                          'shuffle', 'crystals_ganon', 'crystals_gt', 'open_pyramid', 'timer',
+                         'countdown_start_time', 'red_clock_time', 'blue_clock_time', 'green_clock_time',
                          'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle', 'startinventory',
                          'local_items', 'retro', 'accessibility', 'hints', 'beemizer',
                          'shufflebosses', 'enemy_shuffle', 'enemy_health', 'enemy_damage', 'shufflepots',

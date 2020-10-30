@@ -444,6 +444,11 @@ def roll_settings(weights):
                  'timed_countdown': 'timed-countdown',
                  'display': 'display'}[get_choice('timer', weights, False)]
 
+    ret.countdown_start_time = int(get_choice('countdown_start_time', weights, 10))
+    ret.red_clock_time = int(get_choice('red_clock_time', weights, -2))
+    ret.blue_clock_time = int(get_choice('blue_clock_time', weights, 2))
+    ret.green_clock_time = int(get_choice('green_clock_time', weights, 4))
+
     ret.dungeon_counters = get_choice('dungeon_counters', weights, 'default')
 
     ret.progressive = convert_to_on_off(get_choice('progressive', weights, 'on'))
