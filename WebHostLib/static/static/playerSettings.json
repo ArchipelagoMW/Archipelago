@@ -1572,26 +1572,26 @@
     },
 	"hud_palettes": {
       "keyString": "rom.hud_palettes",
-      "friendlyName": "Underworld Palettes",
-      "description": "Randomize the colors of the underworld (caves, dungeons, etc.), within reason.",
+      "friendlyName": "HUD Palettes",
+      "description": "Randomize the colors of the HUD (user interface), within reason.",
       "inputType": "range",
       "subOptions": {
         "default": {
           "keyString": "rom.hud_palettes.default",
           "friendlyName": "Vanilla",
-          "description": "Overworld colors will remain unchanged.",
+          "description": "HUD colors will remain unchanged.",
           "defaultValue": 50
         },
         "random": {
           "keyString": "rom.hud_palettes.random",
           "friendlyName": "Random",
-          "description": "Shuffles the colors of the overworld palette.",
+          "description": "Shuffles the colors of the HUD palette.",
           "defaultValue": 0
         },
         "blackout": {
           "keyString": "rom.hud_palettes.blackout",
           "friendlyName": "Blackout",
-          "description": "Never use this. Makes all overworld palette colors black.",
+          "description": "Never use this. Makes all HUD palette colors black.",
           "defaultValue": 0
         },
 		"grayscale": {
@@ -1634,26 +1634,26 @@
     },
 	"shield_palettes": {
       "keyString": "rom.shield_palettes",
-      "friendlyName": "Underworld Palettes",
-      "description": "Randomize the colors of the underworld (caves, dungeons, etc.), within reason.",
+      "friendlyName": "Shield Palettes",
+      "description": "Randomize the colors of the shield, within reason.",
       "inputType": "range",
       "subOptions": {
         "default": {
           "keyString": "rom.shield_palettes.default",
           "friendlyName": "Vanilla",
-          "description": "Overworld colors will remain unchanged.",
+          "description": "Shield colors will remain unchanged.",
           "defaultValue": 50
         },
         "random": {
           "keyString": "rom.shield_palettes.random",
           "friendlyName": "Random",
-          "description": "Shuffles the colors of the overworld palette.",
+          "description": "Shuffles the colors of the shield palette.",
           "defaultValue": 0
         },
         "blackout": {
           "keyString": "rom.shield_palettes.blackout",
           "friendlyName": "Blackout",
-          "description": "Never use this. Makes all overworld palette colors black.",
+          "description": "Never use this. Makes all shield palette colors black.",
           "defaultValue": 0
         },
 		"grayscale": {
@@ -1696,26 +1696,26 @@
     },
 	"sword_palettes": {
       "keyString": "rom.sword_palettes",
-      "friendlyName": "Underworld Palettes",
-      "description": "Randomize the colors of the underworld (caves, dungeons, etc.), within reason.",
+      "friendlyName": "Sword Palettes",
+      "description": "Randomize the colors of the sword, within reason.",
       "inputType": "range",
       "subOptions": {
         "default": {
           "keyString": "rom.sword_palettes.default",
           "friendlyName": "Vanilla",
-          "description": "Overworld colors will remain unchanged.",
+          "description": "Sword colors will remain unchanged.",
           "defaultValue": 50
         },
         "random": {
           "keyString": "rom.sword_palettes.random",
           "friendlyName": "Random",
-          "description": "Shuffles the colors of the overworld palette.",
+          "description": "Shuffles the colors of the sword palette.",
           "defaultValue": 0
         },
         "blackout": {
           "keyString": "rom.sword_palettes.blackout",
           "friendlyName": "Blackout",
-          "description": "Never use this. Makes all overworld palette colors black.",
+          "description": "Never use this. Makes all sword palette colors black.",
           "defaultValue": 0
         },
 		"grayscale": {

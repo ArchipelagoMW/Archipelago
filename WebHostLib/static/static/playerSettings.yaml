@@ -391,13 +391,3 @@ rom:
     dizzy: 0
     sick: 0
     puke: 0
-  uw_palettes: # Change the colors of shields
-    default: 50 # No changes
-    random: 0 # Shuffle the colors
-    blackout: 0 # Never use this
-    grayscale: 0
-    negative: 0
-    classic: 0
-    dizzy: 0
-    sick: 0
-    puke: 0
