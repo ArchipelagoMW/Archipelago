@@ -314,7 +314,10 @@ def main(args, seed=None):
         for location in [loc for loc in world.get_filled_locations() if type(loc.address) is int]:
             main_entrance = get_entrance_to_region(location.parent_region)
             if location.parent_region.dungeon:
-                checks_in_area[location.player][location.parent_region.dungeon.name].append(location.address)
+                dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
+                               'Inverted Ganons Tower': 'Ganons Tower'}\
+                    .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
+                checks_in_area[location.player][dungeonname].append(location.address)
             elif main_entrance.parent_region.type == RegionType.LightWorld:
                 checks_in_area[location.player]["Light World"].append(location.address)
             elif main_entrance.parent_region.type == RegionType.DarkWorld:
