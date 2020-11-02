@@ -65,7 +65,7 @@ def main():
     logging.basicConfig(format='%(message)s', level=loglevel)
     args, path = adjust(args=args)
     from Utils import persistent_store
-    persistent_store("adjuster", "last_settings", args)
+    persistent_store("adjuster", "last_settings_2", args)
 
 if __name__ == '__main__':
     main()

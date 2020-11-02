@@ -6,7 +6,7 @@ def tuplize_version(version: str) -> typing.Tuple[int, ...]:
     return tuple(int(piece, 10) for piece in version.split("."))
 
 
-__version__ = "3.3.0"
+__version__ = "3.3.1"
 _version_tuple = tuplize_version(__version__)
 
 import os
@@ -222,7 +222,7 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
     if hasattr(get_adjuster_settings, "adjuster_settings"):
         adjuster_settings = getattr(get_adjuster_settings, "adjuster_settings")
     else:
-        adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings", {})
+        adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_2", {})
     if adjuster_settings:
         import pprint
         import Patch
