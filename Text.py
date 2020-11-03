@@ -267,7 +267,7 @@ junk_texts = [
     "{C:GREEN}\n>Secret power\nis said to be\nin the arrow.",
     "{C:GREEN}\nAim at the\neyes of Gohma.\n            >",
     "{C:GREEN}\nGrumble,\ngrumble…\n            >",
-    "{C:GREEN}\n10th enemy\nhas the bomb.\n            >",
+    # "{C:GREEN}\n10th enemy\nhas the bomb.\n            >", removed as people may assume it applies to this game
     "{C:GREEN}\nGo to the\nnext room.\n            >",
     "{C:GREEN}\n>Thanks, @\nYou’re the\nhero of Hyrule",
     "{C:GREEN}\nThere’s always\nmoney in the\nBanana Stand>",
