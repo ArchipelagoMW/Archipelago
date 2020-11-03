@@ -47,6 +47,8 @@ app.config["PONY"] = {
 }
 app.config["MAX_ROLL"] = 20
 app.config["CACHE_TYPE"] = "simple"
+app.config["JSON_AS_ASCII"] = False
+
 app.autoversion = True
 av = Autoversion(app)
 cache = Cache(app)
