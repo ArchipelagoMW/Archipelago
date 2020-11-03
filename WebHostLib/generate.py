@@ -95,8 +95,8 @@ def generate_api():
             return {"text": f"Generation of seed {gen.id} started successfully.",
                     "detail": gen.id,
                     "encoded": app.url_map.converters["suuid"].to_url(None, gen.id),
-                    "wait_api_url": url_for("wait_seed_api", seed=gen.id),
-                    "url": url_for("wait_seed", seed=gen.id)}, 201
+                    "wait_api_url": url_for("wait_seed_api", seed=gen.id, _external=True),
+                    "url": url_for("wait_seed", seed=gen.id, _external=True)}, 201
     except Exception as e:
         return {"text": "Uncaught Exception:" + str(e)}, 500
 
