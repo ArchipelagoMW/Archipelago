@@ -791,12 +791,6 @@
           "friendlyName": "Expert",
           "description": "Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless).",
           "defaultValue": 0
-        },
-        "crowd_control": {
-          "keyString": "item_pool.crowd_control",
-          "friendlyName": "Crowd Control",
-          "description": "Configures the item pool for the crowd control extension. Do not use this unless you are using crowd control.",
-          "defaultValue": 0
         }
       }
     },

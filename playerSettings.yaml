@@ -165,7 +165,6 @@ item_pool:
   normal: 50 # Item availability remains unchanged from vanilla game
   hard: 0 # Reduced upgrade availability (max: 14 hearts, blue mail, tempered sword, fire shield, no silvers unless swordless)
   expert: 0 # Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless)
-  crowd_control: 0 # Sets up the item pool for the crowd control extension. Do not use it without crowd control
 item_functionality:
   easy: 0 # Allow Hammer to damage ganon, Allow Hammer tablet collection, Allow swordless medallion use everywhere.
   normal: 50 # Vanilla item functionality
