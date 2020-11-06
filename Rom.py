@@ -1629,7 +1629,7 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
         hud_palettes = palettes_options['hud']
         sword_palettes = palettes_options['sword']
         shield_palettes = palettes_options['shield']
-        link_palettes = palettes_options['link']
+        # link_palettes = palettes_options['link']
         buildAndRandomize("randomize_dungeon", uw_palettes)
         buildAndRandomize("randomize_overworld", ow_palettes)
         buildAndRandomize("randomize_hud", hud_palettes)
