@@ -238,6 +238,8 @@ def convert_to_on_off(value):
 def get_choice(option, root, value=None) -> typing.Any:
     if option not in root:
         return value
+    if type(root[option]) is list:
+        return interpret_on_off(random.choices(root[option])[0])
     if type(root[option]) is not dict:
         return interpret_on_off(root[option])
     if not root[option]:
