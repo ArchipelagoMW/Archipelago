@@ -1407,20 +1407,19 @@ def patch_rom(world, rom, player, team, enemized):
     rom.write_bytes(0x180185, [0, 0, 0])  # Uncle respawn refills (magic, bombs, arrows)
     rom.write_bytes(0x180188, [0, 0, 0])  # Zelda respawn refills (magic, bombs, arrows)
     rom.write_bytes(0x18018B, [0, 0, 0])  # Mantle respawn refills (magic, bombs, arrows)
-    if world.mode[player] == 'standard':
-        if uncle_location.item is not None and uncle_location.item.name in ['Bow', 'Progressive Bow']:
+    if world.mode[player] == 'standard' and uncle_location.item and uncle_location.item.player == player:
+        if uncle_location.item.name in {'Bow', 'Progressive Bow'}:
             rom.write_byte(0x18004E, 1)  # Escape Fill (arrows)
             rom.write_int16(0x180183, 300)  # Escape fill rupee bow
             rom.write_bytes(0x180185, [0, 0, 70])  # Uncle respawn refills (magic, bombs, arrows)
             rom.write_bytes(0x180188, [0, 0, 10])  # Zelda respawn refills (magic, bombs, arrows)
             rom.write_bytes(0x18018B, [0, 0, 10])  # Mantle respawn refills (magic, bombs, arrows)
-        elif uncle_location.item is not None and uncle_location.item.name in ['Bombs (10)']:
+        elif uncle_location.item.name in {'Bombs (10)'}:
             rom.write_byte(0x18004E, 2)  # Escape Fill (bombs)
             rom.write_bytes(0x180185, [0, 50, 0])  # Uncle respawn refills (magic, bombs, arrows)
             rom.write_bytes(0x180188, [0, 3, 0])  # Zelda respawn refills (magic, bombs, arrows)
             rom.write_bytes(0x18018B, [0, 3, 0])  # Mantle respawn refills (magic, bombs, arrows)
-        elif uncle_location.item is not None and uncle_location.item.name in ['Cane of Somaria', 'Cane of Byrna',
-                                                                              'Fire Rod']:
+        elif uncle_location.item.name in {'Cane of Somaria', 'Cane of Byrna', 'Fire Rod'}:
             rom.write_byte(0x18004E, 4)  # Escape Fill (magic)
             rom.write_bytes(0x180185, [0x80, 0, 0])  # Uncle respawn refills (magic, bombs, arrows)
             rom.write_bytes(0x180188, [0x20, 0, 0])  # Zelda respawn refills (magic, bombs, arrows)
