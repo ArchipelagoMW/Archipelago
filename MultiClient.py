@@ -635,13 +635,8 @@ async def snes_write(ctx : Context, write_list):
         if ctx.snes_state != SNES_ATTACHED or ctx.snes_socket is None or not ctx.snes_socket.open or ctx.snes_socket.closed:
             return False
 
-        PutAddress_Request = {
-            "Opcode" : "PutAddress",
-            "Operands" : []
-        }
+        PutAddress_Request = {"Opcode": "PutAddress", "Operands": [], 'Space': 'SNES'}
 
-
-        PutAddress_Request['Space'] = 'SNES'
         try:
             #will pack those requests as soon as qusb2snes actually supports that for real
             for address, data in write_list:
@@ -1356,7 +1351,7 @@ async def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a Berserker Multiworld Binary Patch file')
-    parser.add_argument('--snes', default='localhost:8080', help='Address of the QUsb2snes server.')
+    parser.add_argument('--snes', default='localhost:23070', help='Address of the QUsb2snes server.')
     parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
     parser.add_argument('--password', default=None, help='Password of the multiworld host.')
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
