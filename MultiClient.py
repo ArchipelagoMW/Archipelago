@@ -1351,7 +1351,7 @@ async def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a Berserker Multiworld Binary Patch file')
-    parser.add_argument('--snes', default='localhost:23070', help='Address of the QUsb2snes server.')
+    parser.add_argument('--snes', default='localhost:8080', help='Address of the QUsb2snes server.')
     parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
     parser.add_argument('--password', default=None, help='Password of the multiworld host.')
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
