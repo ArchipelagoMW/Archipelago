@@ -844,7 +844,10 @@ def guiMain(args=None):
         else:
             messagebox.showinfo(title="Success", message="Rom patched successfully")
             from Utils import persistent_store
-            persistent_store("adjuster", "last_settings_2", guiargs)
+            from Rom import Sprite
+            if isinstance(guiargs.sprite, Sprite):
+                guiargs.sprite = guiargs.sprite.name
+            persistent_store("adjuster", "last_settings_3", guiargs)
 
     adjustButton = Button(bottomFrame2, text='Adjust Rom', command=adjustRom)
 

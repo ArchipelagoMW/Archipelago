@@ -222,28 +222,32 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
     if hasattr(get_adjuster_settings, "adjuster_settings"):
         adjuster_settings = getattr(get_adjuster_settings, "adjuster_settings")
     else:
-        adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_2", {})
+        adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_3", {})
+
     if adjuster_settings:
         import pprint
         import Patch
         adjuster_settings.rom = romfile
         adjuster_settings.baserom = Patch.get_base_rom_path()
         whitelist = {"disablemusic", "fastmenu", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
-                     "uw_palettes"}
+                     "uw_palettes", "sprite"}
         printed_options = {name: value for name, value in vars(adjuster_settings).items() if name in whitelist}
-        sprite = getattr(adjuster_settings, "sprite", None)
-        if sprite:
-            printed_options["sprite"] = adjuster_settings.sprite.name
+
         if hasattr(get_adjuster_settings, "adjust_wanted"):
             adjust_wanted = getattr(get_adjuster_settings, "adjust_wanted")
+        elif persistent_load().get("adjuster", {}).get("never_adjust", False): # never adjust, per user request
+            return romfile, False
         else:
             adjust_wanted = input(f"Last used adjuster settings were found. Would you like to apply these? \n"
                                   f"{pprint.pformat(printed_options)}\n"
-                                  f"Enter yes or no: ")
+                                  f"Enter yes, no or never: ")
         if adjust_wanted and adjust_wanted.startswith("y"):
             adjusted = True
             import AdjusterMain
             _, romfile = AdjusterMain.adjust(adjuster_settings)
+        elif adjust_wanted and "never" in adjust_wanted:
+            persistent_store("adjuster", "never_adjust", True)
+            return romfile, False
         else:
             adjusted = False
             import logging
