@@ -34,7 +34,7 @@ def guiMain(args=None):
     customWindow = ttk.Frame(notebook)
     notebook.add(randomizerWindow, text='Randomize')
     notebook.add(adjustWindow, text='Adjust')
-    notebook.add(customWindow, text='Custom')
+    notebook.add(customWindow, text='Custom Items')
     notebook.pack()
 
     # Shared Controls
@@ -96,8 +96,7 @@ def guiMain(args=None):
     hintsVar = IntVar()
     hintsVar.set(1)  # set default
     hintsCheckbutton = Checkbutton(checkBoxFrame, text="Include Helpful Hints", variable=hintsVar)
-    customVar = IntVar()
-    customCheckbutton = Checkbutton(checkBoxFrame, text="Use custom item pool", variable=customVar)
+
     balancingVar = IntVar()
     balancingVar.set(1)  # set default
     balancingCheckbutton = Checkbutton(checkBoxFrame, text="Multiworld Progression Balancing", variable=balancingVar)
@@ -116,58 +115,9 @@ def guiMain(args=None):
     retroCheckbutton.pack(expand=True, anchor=W)
     shuffleGanonCheckbutton.pack(expand=True, anchor=W)
     hintsCheckbutton.pack(expand=True, anchor=W)
-    customCheckbutton.pack(expand=True, anchor=W)
+
     balancingCheckbutton.pack(expand=True, anchor=W)
     patchesCheckbutton.pack(expand=True, anchor=W)
-
-
-
-    timerOptionsFrame = LabelFrame(rightHalfFrame, text="Timer options")
-    for i in range(3):
-        timerOptionsFrame.columnconfigure(i, weight=1)
-        timerOptionsFrame.rowconfigure(i, weight=1)
-
-    timerModeFrame = Frame(timerOptionsFrame)
-    timerModeFrame.grid(row=0, column=0, columnspan=3, sticky=E, padx=3)
-    timerVar = StringVar()
-    timerVar.set('none')
-    timerModeMenu = OptionMenu(timerModeFrame, timerVar, 'none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown')
-    timerLabel = Label(timerModeFrame, text='Timer setting')
-    timerLabel.pack(side=LEFT)
-    timerModeMenu.pack(side=LEFT)
-
-    timerCountdownFrame = Frame(timerOptionsFrame)
-    timerCountdownFrame.grid(row=1, column=0, columnspan=3, sticky=E, padx=3)
-    timerCountdownLabel = Label(timerCountdownFrame, text='Countdown starting time')
-    timerCountdownLabel.pack(side=LEFT)
-    timerCountdownVar = IntVar(value=10)
-    timerCountdownSpinbox = Spinbox(timerCountdownFrame, from_=0, to=480, width=3, textvariable=timerCountdownVar)
-    timerCountdownSpinbox.pack(side=LEFT)
-
-    timerRedFrame = Frame(timerOptionsFrame)
-    timerRedFrame.grid(row=2, column=0, sticky=E, padx=3)
-    timerRedLabel = Label(timerRedFrame, text='Clock adjustments: Red')
-    timerRedLabel.pack(side=LEFT)
-    timerRedVar = IntVar(value=-2)
-    timerRedSpinbox = Spinbox(timerRedFrame, from_=-60, to=60, width=3, textvariable=timerRedVar)
-    timerRedSpinbox.pack(side=LEFT)
-
-    timerBlueFrame = Frame(timerOptionsFrame)
-    timerBlueFrame.grid(row=2, column=1, sticky=E, padx=3)
-    timerBlueLabel = Label(timerBlueFrame, text='Blue')
-    timerBlueLabel.pack(side=LEFT)
-    timerBlueVar = IntVar(value=2)
-    timerBlueSpinbox = Spinbox(timerBlueFrame, from_=-60, to=60, width=3, textvariable=timerBlueVar)
-    timerBlueSpinbox.pack(side=LEFT)
-
-    timerGreenFrame = Frame(timerOptionsFrame)
-    timerGreenFrame.grid(row=2, column=2, sticky=E, padx=3)
-    timerGreenLabel = Label(timerGreenFrame, text='Green')
-    timerGreenLabel.pack(side=LEFT)
-    timerGreenVar = IntVar(value=4)
-    timerGreenSpinbox = Spinbox(timerGreenFrame, from_=-60, to=60, width=3, textvariable=timerGreenVar)
-    timerGreenSpinbox.pack(side=LEFT)
-
 
 
     romOptionsFrame = LabelFrame(rightHalfFrame, text="Rom options")
@@ -316,7 +266,7 @@ def guiMain(args=None):
     romSelectButton.pack(side=LEFT)
 
     checkBoxFrame.pack(side=TOP, anchor=W, padx=5, pady=10)
-    timerOptionsFrame.pack(expand=True, fill=BOTH, padx=3)
+
     romOptionsFrame.pack(expand=True, fill=BOTH, padx=3)
 
     drowDownFrame = Frame(topFrame)
@@ -869,11 +819,64 @@ def guiMain(args=None):
             return False
     vcmd=(topFrame3.register(validation), '%P')
 
+    timerOptionsFrame = LabelFrame(topFrame3, text="Timer options")
+    for i in range(3):
+        timerOptionsFrame.columnconfigure(i, weight=1)
+        timerOptionsFrame.rowconfigure(i, weight=1)
+
+    timerModeFrame = Frame(timerOptionsFrame)
+    timerModeFrame.grid(row=0, column=0, columnspan=3, sticky=E, padx=3)
+    timerVar = StringVar()
+    timerVar.set('none')
+    timerModeMenu = OptionMenu(timerModeFrame, timerVar, 'none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown')
+    timerLabel = Label(timerModeFrame, text='Timer setting')
+    timerLabel.pack(side=LEFT)
+    timerModeMenu.pack(side=LEFT)
+
+    timerCountdownFrame = Frame(timerOptionsFrame)
+    timerCountdownFrame.grid(row=1, column=0, columnspan=3, sticky=E, padx=3)
+    timerCountdownLabel = Label(timerCountdownFrame, text='Countdown starting time')
+    timerCountdownLabel.pack(side=LEFT)
+    timerCountdownVar = IntVar(value=10)
+    timerCountdownSpinbox = Spinbox(timerCountdownFrame, from_=0, to=480, width=3, textvariable=timerCountdownVar)
+    timerCountdownSpinbox.pack(side=LEFT)
+
+    timerRedFrame = Frame(timerOptionsFrame)
+    timerRedFrame.grid(row=2, column=0, sticky=E, padx=3)
+    timerRedLabel = Label(timerRedFrame, text='Clock adjustments: Red')
+    timerRedLabel.pack(side=LEFT)
+    timerRedVar = IntVar(value=-2)
+    timerRedSpinbox = Spinbox(timerRedFrame, from_=-60, to=60, width=3, textvariable=timerRedVar)
+    timerRedSpinbox.pack(side=LEFT)
+
+    timerBlueFrame = Frame(timerOptionsFrame)
+    timerBlueFrame.grid(row=2, column=1, sticky=E, padx=3)
+    timerBlueLabel = Label(timerBlueFrame, text='Blue')
+    timerBlueLabel.pack(side=LEFT)
+    timerBlueVar = IntVar(value=2)
+    timerBlueSpinbox = Spinbox(timerBlueFrame, from_=-60, to=60, width=3, textvariable=timerBlueVar)
+    timerBlueSpinbox.pack(side=LEFT)
+
+    timerGreenFrame = Frame(timerOptionsFrame)
+    timerGreenFrame.grid(row=2, column=2, sticky=E, padx=3)
+    timerGreenLabel = Label(timerGreenFrame, text='Green')
+    timerGreenLabel.pack(side=LEFT)
+    timerGreenVar = IntVar(value=4)
+    timerGreenSpinbox = Spinbox(timerGreenFrame, from_=-60, to=60, width=3, textvariable=timerGreenVar)
+    timerGreenSpinbox.pack(side=LEFT)
+
+    timerOptionsFrame.pack(expand=True, fill=BOTH, padx=3)
+
+
     itemList1 = Frame(topFrame3)
     itemList2 = Frame(topFrame3)
     itemList3 = Frame(topFrame3)
     itemList4 = Frame(topFrame3)
     itemList5 = Frame(topFrame3)
+
+    customVar = IntVar()
+    customCheckbutton = Checkbutton(topFrame3, text="Use custom item pool", variable=customVar)
+    customCheckbutton.pack(expand=True, anchor=W)
 
     bowFrame = Frame(itemList1)
     bowLabel = Label(bowFrame, text='Bow')
