@@ -1495,7 +1495,8 @@ def guiMain(args=None):
 
     mainWindow.mainloop()
 
-class SpriteSelector(object):
+
+class SpriteSelector():
     def __init__(self, parent, callback, adjuster=False):
         if is_bundled():
             self.deploy_icons()
@@ -1618,93 +1619,15 @@ class SpriteSelector(object):
         self.window.destroy()
         self.parent.update()
 
-        def work(task):
-            resultmessage = ""
-            successful = True
-
-            def finished():
-                task.close_window()
-                if successful:
-                    messagebox.showinfo("Sprite Updater", resultmessage)
-                else:
-                    messagebox.showerror("Sprite Updater", resultmessage)
-                SpriteSelector(self.parent, self.callback, self.adjuster)
-
-            try:
-                task.update_status("Downloading alttpr sprites list")
-                with urlopen('https://alttpr.com/sprites') as response:
-                    sprites_arr = json.loads(response.read().decode("utf-8"))
-            except Exception as e:
-                resultmessage = "Error getting list of alttpr sprites. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
-                successful = False
-                task.queue_event(finished)
-                return
-
-            try:
-                task.update_status("Determining needed sprites")
-                current_sprites = [os.path.basename(file) for file in glob(self.alttpr_sprite_dir + '/*')]
-                alttpr_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path)) for sprite in sprites_arr]
-                needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in alttpr_sprites if filename not in current_sprites]
-
-                alttpr_filenames = [filename for (_, filename) in alttpr_sprites]
-                obsolete_sprites = [sprite for sprite in current_sprites if sprite not in alttpr_filenames]
-            except Exception as e:
-                resultmessage = "Error Determining which sprites to update. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
-                successful = False
-                task.queue_event(finished)
-                return
-
-
-            def dl(sprite_url, filename):
-                target = os.path.join(self.alttpr_sprite_dir, filename)
-                with urlopen(sprite_url) as response, open(target, 'wb') as out:
-                    shutil.copyfileobj(response, out)
-
-            def rem(sprite):
-                os.remove(os.path.join(self.alttpr_sprite_dir, sprite))
-
-
-            with ThreadPoolExecutor() as pool:
-                dl_tasks = []
-                rem_tasks = []
-
-                for (sprite_url, filename) in needed_sprites:
-                    dl_tasks.append(pool.submit(dl, sprite_url, filename))
-
-                for sprite in obsolete_sprites:
-                    rem_tasks.append(pool.submit(rem, sprite))
-
-                deleted = 0
-                updated = 0
-
-                for dl_task in as_completed(dl_tasks):
-                    updated += 1
-                    task.update_status("Downloading needed sprite %g/%g" % (updated, len(needed_sprites)))
-                    try:
-                        dl_task.result()
-                    except Exception as e:
-                        logging.exception(e)
-                        resultmessage = "Error downloading sprite. Not all sprites updated.\n\n%s: %s" % (
-                        type(e).__name__, e)
-                        successful = False
-
-                for rem_task in as_completed(rem_tasks):
-                    deleted += 1
-                    task.update_status("Removing obsolete sprite %g/%g" % (deleted, len(obsolete_sprites)))
-                    try:
-                        rem_task.result()
-                    except Exception as e:
-                        logging.exception(e)
-                        resultmessage = "Error removing obsolete sprite. Not all sprites updated.\n\n%s: %s" % (
-                        type(e).__name__, e)
-                        successful = False
-
+        def on_finish(successful, resultmessage):
             if successful:
-                resultmessage = "alttpr sprites updated successfully"
+                messagebox.showinfo("Sprite Updater", resultmessage)
+            else:
+                logging.error(resultmessage)
+                messagebox.showerror("Sprite Updater", resultmessage)
+            SpriteSelector(self.parent, self.callback, self.adjuster)
 
-            task.queue_event(finished)
-
-        BackgroundTaskProgress(self.parent, work, "Updating Sprites")
+        BackgroundTaskProgress(self.parent, update_sprites, "Updating Sprites", on_finish)
 
 
     def browse_for_sprite(self):
@@ -1748,33 +1671,102 @@ class SpriteSelector(object):
         self.callback(spritename)
         self.window.destroy()
 
-
     def deploy_icons(self):
         if not os.path.exists(self.custom_sprite_dir):
             os.makedirs(self.custom_sprite_dir)
-        if not os.path.exists(self.alttpr_sprite_dir):
-            shutil.copytree(self.local_alttpr_sprite_dir, self.alttpr_sprite_dir)
 
     @property
     def alttpr_sprite_dir(self):
-        if is_bundled():
-            return output_path("sprites", "alttpr")
-        return self.local_alttpr_sprite_dir
-
-    @property
-    def local_alttpr_sprite_dir(self):
         return local_path("data", "sprites", "alttpr")
 
     @property
     def custom_sprite_dir(self):
-        if is_bundled():
-            return output_path("sprites", "custom")
-        return self.local_custom_sprite_dir
-
-    @property
-    def local_custom_sprite_dir(self):
         return local_path("data", "sprites", "custom")
 
+
+def update_sprites(task, on_finish=None):
+    resultmessage = ""
+    successful = True
+    sprite_dir = local_path("data", "sprites", "alttpr")
+
+    def finished():
+        task.close_window()
+        if on_finish:
+            on_finish(successful, resultmessage)
+
+    try:
+        task.update_status("Downloading alttpr sprites list")
+        with urlopen('https://alttpr.com/sprites') as response:
+            sprites_arr = json.loads(response.read().decode("utf-8"))
+    except Exception as e:
+        resultmessage = "Error getting list of alttpr sprites. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
+        successful = False
+        task.queue_event(finished)
+        return
+
+    try:
+        task.update_status("Determining needed sprites")
+        current_sprites = [os.path.basename(file) for file in glob(sprite_dir + '/*')]
+        alttpr_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path)) for sprite in sprites_arr]
+        needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in alttpr_sprites if filename not in current_sprites]
+
+        alttpr_filenames = [filename for (_, filename) in alttpr_sprites]
+        obsolete_sprites = [sprite for sprite in current_sprites if sprite not in alttpr_filenames]
+    except Exception as e:
+        resultmessage = "Error Determining which sprites to update. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
+        successful = False
+        task.queue_event(finished)
+        return
+
+
+    def dl(sprite_url, filename):
+        target = os.path.join(sprite_dir, filename)
+        with urlopen(sprite_url) as response, open(target, 'wb') as out:
+            shutil.copyfileobj(response, out)
+
+    def rem(sprite):
+        os.remove(os.path.join(sprite_dir, sprite))
+
+
+    with ThreadPoolExecutor() as pool:
+        dl_tasks = []
+        rem_tasks = []
+
+        for (sprite_url, filename) in needed_sprites:
+            dl_tasks.append(pool.submit(dl, sprite_url, filename))
+
+        for sprite in obsolete_sprites:
+            rem_tasks.append(pool.submit(rem, sprite))
+
+        deleted = 0
+        updated = 0
+
+        for dl_task in as_completed(dl_tasks):
+            updated += 1
+            task.update_status("Downloading needed sprite %g/%g" % (updated, len(needed_sprites)))
+            try:
+                dl_task.result()
+            except Exception as e:
+                logging.exception(e)
+                resultmessage = "Error downloading sprite. Not all sprites updated.\n\n%s: %s" % (
+                type(e).__name__, e)
+                successful = False
+
+        for rem_task in as_completed(rem_tasks):
+            deleted += 1
+            task.update_status("Removing obsolete sprite %g/%g" % (deleted, len(obsolete_sprites)))
+            try:
+                rem_task.result()
+            except Exception as e:
+                logging.exception(e)
+                resultmessage = "Error removing obsolete sprite. Not all sprites updated.\n\n%s: %s" % (
+                type(e).__name__, e)
+                successful = False
+
+    if successful:
+        resultmessage = "alttpr sprites updated successfully"
+
+    task.queue_event(finished)
 
 def get_image_for_sprite(sprite, gif_only: bool = False):
     if not sprite.valid:
@@ -1880,5 +1872,16 @@ def get_image_for_sprite(sprite, gif_only: bool = False):
     return image.zoom(2)
 
 if __name__ == '__main__':
-    logging.basicConfig(format='%(message)s', level=logging.INFO)
-    guiMain()
+    import sys
+    if "update_sprites" in sys.argv:
+        import threading
+        done = threading.Event()
+        top = Tk()
+        top.withdraw()
+        BackgroundTaskProgress(top, update_sprites, "Updating Sprites", lambda succesful, resultmessage: done.set())
+        while not done.isSet():
+            top.update()
+        print("Done updating sprites")
+    else:
+        logging.basicConfig(format='%(message)s', level=logging.INFO)
+        guiMain()
