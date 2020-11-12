@@ -142,12 +142,13 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
         ERmain(erargs, seed)
 
         return upload_to_db(target.name, owner, sid, race)
-    except BaseException:
+    except BaseException as e:
         if sid:
             with db_session:
                 gen = Generation.get(id=sid)
                 if gen is not None:
                     gen.state = STATE_ERROR
+                    gen.meta = (e.__class__.__name__ + ": "+ str(e)).encode()
         raise
 
 
@@ -162,7 +163,8 @@ def wait_seed(seed: UUID):
     if not generation:
         return "Generation not found."
     elif generation.state == STATE_ERROR:
-        return "Generation failed, please retry."
+        import html
+        return f"Generation failed, please retry. <br> {html.escape(generation.meta.decode())}"
     return render_template("wait_seed.html", seed_id=seed_id)
 
 
