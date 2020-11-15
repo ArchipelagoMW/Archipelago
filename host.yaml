@@ -57,7 +57,7 @@ multi_mystery_options:
   # Teams
   # Note that there is currently no way to supply names for teams 2+ through MultiMystery
   teams: 1
-  # Location of your Enemizer CLI, available here: https://github.com/Bonta0/Enemizer/releases
+  # Location of your Enemizer CLI, available here: https://github.com/Ijwu/Enemizer/releases
   enemizer_path: "EnemizerCLI/EnemizerCLI.Core.exe"
   # Folder from which the player yaml files are pulled from
   player_files_path: "Players"
