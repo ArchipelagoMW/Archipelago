@@ -1381,6 +1381,26 @@
           "defaultValue": 0
         }
       }
+    },
+    "key_drop_shuffle": {
+      "keyString": "key_drop_shuffle",
+      "friendlyName": "Key Drop Shuffle",
+      "description": "Allows the small/big keys dropped by enemies/pots to be shuffled into the item pool. This extends the number of checks from 216 to 249",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "key_drop_shuffle.on",
+          "friendlyName": "Enabled",
+          "description": "Enables key drop shuffle",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "key_drop_shuffle.off",
+          "friendlyName": "Disabled",
+          "description": "Disables key drop shuffle",
+          "defaultValue": 50
+        }
+      }
     }
   },
   "romOptions": {

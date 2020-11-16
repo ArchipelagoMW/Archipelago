@@ -304,8 +304,11 @@ intensity: # Only available if the host uses the doors branch, it is ignored oth
   2: 0 # And shuffles open edges and straight staircases
   3: 0 # And shuffles dungeon lobbies
   random: 0 # Picks one of those at random
+key_drop_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
+  on: 0 # Enables the small keys dropped by enemies or under pots, and the big key dropped by the Ball & Chain guard to be shuffled into the pool. This extends the number of checks to 249.
+  off: 50
 experimental: # Only available if the host uses the doors branch, it is ignored otherwise
-  on: 0 # Enables experimental features. Currently, this is just the dungeon keys in chest counter.
+  on: 0 # Enables experimental features.
   off: 50
 debug: # Only available if the host uses the doors branch, it is ignored otherwise
   on: 0 # Enables debugging features. Currently, these are the Item collection counter. (overwrites total triforce pieces) and Castle Gate closed indicator.
