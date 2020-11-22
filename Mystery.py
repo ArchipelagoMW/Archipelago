@@ -497,7 +497,7 @@ def roll_settings(weights):
             if item in item_table:
                 ret.non_local_items.add(item)
             else:
-                raise Exception(f"Could not force item {item} to be world-local, as it was not recognized.")
+                raise Exception(f"Could not force item {item} to be world-non-local, as it was not recognized.")
 
     ret.non_local_items = ",".join(ret.non_local_items)
 

@@ -113,7 +113,7 @@ def main(args, seed=None):
         # item in item_table gets checked in mystery, but not CLI - so we double-check here
         world.local_items[player] = {item.strip() for item in args.local_items[player].split(',') if
                                      item.strip() in item_table}
-        world.non_local_items[player] = {item.strip() for item in args.local_items[player].split(',') if
+        world.non_local_items[player] = {item.strip() for item in args.non_local_items[player].split(',') if
                                          item.strip() in item_table}
         # items can't be both local and non-local, prefer local
         world.non_local_items[player] -= world.local_items[player]
