@@ -253,6 +253,11 @@ green_clock_time: # For all timer modes, the amount of time in minutes to gain o
 #  - "Small Keys"
 #  - "Big Keys"
 # Can be uncommented to use it
+# non_local_items: # Force certain items to appear outside your world only, always across the multiworld. Recognizes some group names, like "Swords"
+#  - "Moon Pearl"
+#  - "Small Keys"
+#  - "Big Keys"
+# Can be uncommented to use it
 # startinventory: # Begin the file with the listed items/upgrades
   # Pegasus Boots: on
   # Bomb Upgrade (+10): 4

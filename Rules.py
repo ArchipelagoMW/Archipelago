@@ -179,6 +179,10 @@ def locality_rules(world, player):
         for location in world.get_locations():
             if location.player != player:
                 forbid_items_for_player(location, world.local_items[player], player)
+    if world.non_local_items[player]:
+        for location in world.get_locations():
+            if location.player == player:
+                forbid_items_for_player(location, world.non_local_items[player], player)
 
 
 non_crossover_items = (item_name_groups["Small Keys"] | item_name_groups["Big Keys"] | progression_items) - {
