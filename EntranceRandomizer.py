@@ -267,7 +267,7 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--local_items', default=defval(''),
                         help='Specifies a list of items that will not spread across the multiworld (separated by commas)')
     parser.add_argument('--non_local_items', default=defval(''),
-                        help='Specifies a list of items that will not spread across the multiworld (separated by commas)')
+                        help='Specifies a list of items that will spread across the multiworld (separated by commas)')
     parser.add_argument('--custom', default=defval(False), help='Not supported.')
     parser.add_argument('--customitemarray', default=defval(False), help='Not supported.')
     parser.add_argument('--accessibility', default=defval('items'), const='items', nargs='?', choices=['items', 'locations', 'none'], help='''\
