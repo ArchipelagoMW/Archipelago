@@ -30,21 +30,21 @@ h1, h2, h3{
 
 .grass-island{
     background:
-        url('../static/backgrounds/cliffs/cliff-top-left-corner.svg') top left no-repeat,
-        url('../static/backgrounds/cliffs/cliff-top-right-corner.svg') top right no-repeat,
-        url('../static/backgrounds/cliffs/cliff-bottom-left-corner.svg') bottom left no-repeat,
-        url('../static/backgrounds/cliffs/cliff-bottom-right-corner.svg') bottom right no-repeat,
-        url('../static/backgrounds/cliffs/cliff-top.svg') top repeat-x,
-        url('../static/backgrounds/cliffs/cliff-bottom.svg') bottom repeat-x,
-        url('../static/backgrounds/cliffs/cliff-left.svg') left repeat-y,
-        url('../static/backgrounds/cliffs/cliff-right.svg') right repeat-y,
+        url('../static/backgrounds/cliffs/grass/cliff-top-left-corner.svg') top left no-repeat,
+        url('../static/backgrounds/cliffs/grass/cliff-top-right-corner.svg') top right no-repeat,
+        url('../static/backgrounds/cliffs/grass/cliff-bottom-left-corner.svg') bottom left no-repeat,
+        url('../static/backgrounds/cliffs/grass/cliff-bottom-right-corner.svg') bottom right no-repeat,
+        url('../static/backgrounds/cliffs/grass/cliff-top.svg') top repeat-x,
+        url('../static/backgrounds/cliffs/grass/cliff-bottom.svg') bottom repeat-x,
+        url('../static/backgrounds/cliffs/grass/cliff-left.svg') left repeat-y,
+        url('../static/backgrounds/cliffs/grass/cliff-right.svg') right repeat-y,
         url('../static/backgrounds/grass/grass-0003.svg') repeat;
 
     background-size:
-        200px 200px, /* top-left */
-        200px 200px, /* top-right */
-        200px 200px, /* bottom-left */
-        200px 200px, /* bottom-right */
+        140px 140px, /* top-left */
+        140px 140px, /* top-right */
+        140px 140px, /* bottom-left */
+        140px 140px, /* bottom-right */
         auto 96px, /* top */
         auto 114px, /* bottom */
         84px auto, /* left */
