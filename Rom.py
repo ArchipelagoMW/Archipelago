@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '0fc63d72970ab96ffb18699f4d12a594'
+RANDOMIZERBASEHASH = 'e3714804e3fae1c6ac6100b94d1aee62'
 
 import io
 import json
@@ -19,7 +19,7 @@ from typing import Optional
 
 from BaseClasses import CollectionState, ShopType, Region, Location
 from Dungeons import dungeon_music_addresses
-from Regions import location_table
+from Regions import location_table, old_location_address_to_new_location_address
 from Text import MultiByteTextMapper, CompressedTextMapper, text_addresses, Credits, TextTable
 from Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, \
     BombShop2_texts, junk_texts
@@ -93,8 +93,10 @@ class LocalRom(object):
         self.write_bytes(0x186140, [0] * 0x150)
         self.write_bytes(0x186140 + 0x150, itemplayertable)
         self.encrypt_range(0x186140 + 0x150, 168, key)
+        self.encrypt_range(0x186338, 56, key)
         self.encrypt_range(0x180000, 32, key)
         self.encrypt_range(0x180140, 32, key)
+        self.encrypt_range(0xEDA1, 8, key)
 
     def write_to_file(self, file, hide_enemizer=False):
         with open(file, 'wb') as outfile:
@@ -595,11 +597,8 @@ class Sprite(object):
         def expand_color(i):
             return ((i & 0x1F) * 8, (i >> 5 & 0x1F) * 8, (i >> 10 & 0x1F) * 8)
 
-        raw_palette = self.palette
-        if raw_palette is None:
-            raw_palette = Sprite.default_palette
         # turn palette data into a list of RGB tuples with 8 bit values
-        palette_as_colors = [expand_color(make_int16(chnk)) for chnk in array_chunk(raw_palette, 2)]
+        palette_as_colors = [expand_color(make_int16(chnk)) for chnk in array_chunk(self.palette, 2)]
 
         # split into palettes of 15 colors
         return array_chunk(palette_as_colors, 15)
@@ -661,7 +660,8 @@ def patch_rom(world, rom, player, team, enemized):
                         rom.write_byte(location.player_address, location.item.player)
                     else:
                         itemid = 0x5A
-            rom.write_byte(location.address, itemid)
+            location_address = old_location_address_to_new_location_address.get(location.address, location.address)
+            rom.write_byte(location_address, itemid)
         else:
             # crystals
             for address, value in zip(location.address, itemid):
@@ -1021,47 +1021,30 @@ def patch_rom(world, rom, player, team, enemized):
         rom.write_byte(0x180044, 0x01)  # hammer activates tablets
 
     # set up clocks for timed modes
-    if world.shuffle[player] == 'vanilla':
-        ERtimeincrease = 0
-    elif world.shuffle[player] in ['dungeonssimple', 'dungeonsfull']:
-        ERtimeincrease = 10
-    else:
-        ERtimeincrease = 20
-    if world.keyshuffle[player] or world.bigkeyshuffle[player] or world.mapshuffle[player]:
-        ERtimeincrease = ERtimeincrease + 15
-    if world.clock_mode[player] == False:
-        rom.write_bytes(0x180190, [0x00, 0x00, 0x00])  # turn off clock mode
-        rom.write_int32(0x180200, 0)  # red clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180204, 0)  # blue clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180208, 0)  # green clock adjustment time (in frames, sint32)
-        rom.write_int32(0x18020C, 0)  # starting time (in frames, sint32)
-    elif world.clock_mode[player] == 'ohko':
+    if world.clock_mode[player] in ['ohko', 'countdown-ohko']:
         rom.write_bytes(0x180190, [0x01, 0x02, 0x01])  # ohko timer with resetable timer functionality
-        rom.write_int32(0x180200, 0)  # red clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180204, 0)  # blue clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180208, 0)  # green clock adjustment time (in frames, sint32)
-        rom.write_int32(0x18020C, 0)  # starting time (in frames, sint32)
-    elif world.clock_mode[player] == 'countdown-ohko':
-        rom.write_bytes(0x180190, [0x01, 0x02, 0x01])  # ohko timer with resetable timer functionality
-        rom.write_int32(0x180200, -100 * 60 * 60 * 60)  # red clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
-        if world.difficulty_adjustments[player] in ['easy', 'normal']:
-            rom.write_int32(0x18020C, (10 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
-        else:
-            rom.write_int32(0x18020C, int((5 + ERtimeincrease / 2) * 60 * 60))  # starting time (in frames, sint32)
-    if world.clock_mode[player] == 'stopwatch':
+    elif world.clock_mode[player] == 'stopwatch':
         rom.write_bytes(0x180190, [0x02, 0x01, 0x00])  # set stopwatch mode
-        rom.write_int32(0x180200, -2 * 60 * 60)  # red clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
-        rom.write_int32(0x18020C, 0)  # starting time (in frames, sint32)
-    if world.clock_mode[player] == 'countdown':
+    elif world.clock_mode[player] == 'countdown':
         rom.write_bytes(0x180190, [0x01, 0x01, 0x00])  # set countdown, with no reset available
-        rom.write_int32(0x180200, -2 * 60 * 60)  # red clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180204, 2 * 60 * 60)  # blue clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180208, 4 * 60 * 60)  # green clock adjustment time (in frames, sint32)
-        rom.write_int32(0x18020C, (40 + ERtimeincrease) * 60 * 60)  # starting time (in frames, sint32)
+    else:
+        rom.write_bytes(0x180190, [0x00, 0x00, 0x00])  # turn off clock mode
+
+    # Set up requested clock settings
+    if world.clock_mode[player] in ['countdown-ohko', 'stopwatch', 'countdown']:
+        rom.write_int32(0x180200, world.red_clock_time[player] * 60 * 60)  # red clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180204, world.blue_clock_time[player] * 60 * 60)  # blue clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180208, world.green_clock_time[player] * 60 * 60)  # green clock adjustment time (in frames, sint32)
+    else:
+        rom.write_int32(0x180200, 0)  # red clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180204, 0)  # blue clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180208, 0)  # green clock adjustment time (in frames, sint32)
+
+    # Set up requested start time for countdown modes
+    if world.clock_mode[player] in ['countdown-ohko', 'countdown']:
+        rom.write_int32(0x18020C, world.countdown_start_time[player] * 60 * 60)  # starting time (in frames, sint32)
+    else:
+        rom.write_int32(0x18020C, 0)  # starting time (in frames, sint32)
 
     # set up goals for treasure hunt
     rom.write_bytes(0x180165, [0x0E, 0x28] if world.treasure_hunt_icon[player] == 'Triforce Piece' else [0x0D, 0x28])
@@ -1476,7 +1459,7 @@ def patch_rom(world, rom, player, team, enemized):
 
     write_strings(rom, world, player, team)
 
-    rom.write_byte(0x18636C, 1 if world.remote_items[player] else 0)
+    rom.write_byte(0x18637C, 1 if world.remote_items[player] else 0)
 
     # set rom name
     # 21 bytes
@@ -1619,11 +1602,6 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
     rom.write_byte(0x6FA2E, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
     rom.write_byte(0x6FA30, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
     rom.write_byte(0x65561, {'red': 0x05, 'blue': 0x0D, 'green': 0x19, 'yellow': 0x09}[color])
-
-    # write link sprite if required
-    if sprite:
-        sprite = Sprite(sprite) if os.path.isfile(sprite) else Sprite.get_sprite_from_name(sprite, local_random)
-        sprite.write_to_rom(rom)
 
     if z3pr:
         def buildAndRandomize(option_name, mode):

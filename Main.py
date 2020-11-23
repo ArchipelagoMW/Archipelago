@@ -72,6 +72,10 @@ def main(args, seed=None):
     world.tile_shuffle = args.tile_shuffle.copy()
     world.beemizer = args.beemizer.copy()
     world.timer = args.timer.copy()
+    world.countdown_start_time = args.countdown_start_time.copy()
+    world.red_clock_time = args.red_clock_time.copy()
+    world.blue_clock_time = args.blue_clock_time.copy()
+    world.green_clock_time = args.green_clock_time.copy()
     world.shufflepots = args.shufflepots.copy()
     world.progressive = args.progressive.copy()
     world.dungeon_counters = args.dungeon_counters.copy()
@@ -297,6 +301,30 @@ def main(args, seed=None):
                         if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
                             er_hint_data[region.player][location.address] = main_entrance.name
 
+        ordered_areas = ('Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
+                         'Tower of Hera', 'Palace of Darkness', 'Swamp Palace', 'Skull Woods', 'Thieves Town', 'Ice Palace',
+                         'Misery Mire', 'Turtle Rock', 'Ganons Tower', "Total")
+
+        checks_in_area = {player: {area: list() for area in ordered_areas}
+                          for player in range(1, world.players + 1)}
+
+        for player in range(1, world.players + 1):
+            checks_in_area[player]["Total"] = 0
+
+        for location in [loc for loc in world.get_filled_locations() if type(loc.address) is int]:
+            main_entrance = get_entrance_to_region(location.parent_region)
+            if location.parent_region.dungeon:
+                dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
+                               'Inverted Ganons Tower': 'Ganons Tower'}\
+                    .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
+                checks_in_area[location.player][dungeonname].append(location.address)
+            elif main_entrance.parent_region.type == RegionType.LightWorld:
+                checks_in_area[location.player]["Light World"].append(location.address)
+            elif main_entrance.parent_region.type == RegionType.DarkWorld:
+                checks_in_area[location.player]["Dark World"].append(location.address)
+            checks_in_area[location.player]["Total"] += 1
+
+
         precollected_items = [[] for player in range(world.players)]
         for item in world.precollected_items:
             precollected_items[item.player - 1].append(item.code)
@@ -323,6 +351,7 @@ def main(args, seed=None):
                                                                  (location.item.code, location.item.player))
                                                                 for location in world.get_filled_locations() if
                                                                 type(location.address) is int],
+                                                  "checks_in_area": checks_in_area,
                                                   "server_options": get_options()["server_options"],
                                                   "er_hint_data": er_hint_data,
                                                   "precollected_items": precollected_items,

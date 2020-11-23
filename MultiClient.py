@@ -85,14 +85,17 @@ class Context():
         self.slot = None
         self.player_names: typing.Dict[int: str] = {}
         self.locations_checked = set()
+        self.unsafe_locations_checked = set()
         self.locations_scouted = set()
         self.items_received = []
+        self.items_missing = []
         self.locations_info = {}
         self.awaiting_rom = False
         self.rom = None
         self.prev_rom = None
         self.auth = None
         self.found_items = found_items
+        self.send_unsafe = False
         self.finished_game = False
         self.slow_mode = False
 
@@ -195,23 +198,34 @@ location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      'Desert Palace - Map Chest': (0x74, 0x10),
                      'Desert Palace - Compass Chest': (0x85, 0x10),
                      'Desert Palace - Big Key Chest': (0x75, 0x10),
+                     'Desert Palace - Desert Tiles 1 Pot Key': (0x63, 0x400),
+                     'Desert Palace - Beamos Hall Pot Key': (0x53, 0x400),
+                     'Desert Palace - Desert Tiles 2 Pot Key': (0x43, 0x400),
                      'Desert Palace - Boss': (0x33, 0x800),
                      'Eastern Palace - Compass Chest': (0xa8, 0x10),
                      'Eastern Palace - Big Chest': (0xa9, 0x10),
+                     'Eastern Palace - Dark Square Pot Key': (0xba, 0x400),
+                     'Eastern Palace - Dark Eyegore Key Drop': (0x99, 0x400),
                      'Eastern Palace - Cannonball Chest': (0xb9, 0x10),
                      'Eastern Palace - Big Key Chest': (0xb8, 0x10),
                      'Eastern Palace - Map Chest': (0xaa, 0x10),
                      'Eastern Palace - Boss': (0xc8, 0x800),
                      'Hyrule Castle - Boomerang Chest': (0x71, 0x10),
+                     'Hyrule Castle - Boomerang Guard Key Drop': (0x71, 0x400),
                      'Hyrule Castle - Map Chest': (0x72, 0x10),
+                     'Hyrule Castle - Map Guard Key Drop': (0x72, 0x400),
                      "Hyrule Castle - Zelda's Chest": (0x80, 0x10),
+                     'Hyrule Castle - Big Key Drop': (0x80, 0x400),
                      'Sewers - Dark Cross': (0x32, 0x10),
+                     'Hyrule Castle - Key Rat Key Drop': (0x21, 0x400),
                      'Sewers - Secret Room - Left': (0x11, 0x10),
                      'Sewers - Secret Room - Middle': (0x11, 0x20),
                      'Sewers - Secret Room - Right': (0x11, 0x40),
                      'Sanctuary': (0x12, 0x10),
                      'Castle Tower - Room 03': (0xe0, 0x10),
                      'Castle Tower - Dark Maze': (0xd0, 0x10),
+                     'Castle Tower - Dark Archer Key Drop': (0xc0, 0x400),
+                     'Castle Tower - Circle of Pots Key Drop': (0xb0, 0x400),
                      'Spectacle Rock Cave': (0xea, 0x400),
                      'Paradox Cave Lower - Far Left': (0xef, 0x10),
                      'Paradox Cave Lower - Left': (0xef, 0x20),
@@ -250,18 +264,25 @@ location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      'Mimic Cave': (0x10c, 0x10),
                      'Swamp Palace - Entrance': (0x28, 0x10),
                      'Swamp Palace - Map Chest': (0x37, 0x10),
+                     'Swamp Palace - Pot Row Pot Key': (0x38, 0x400),
+                     'Swamp Palace - Trench 1 Pot Key': (0x37, 0x400),
+                     'Swamp Palace - Hookshot Pot Key': (0x36, 0x400),
                      'Swamp Palace - Big Chest': (0x36, 0x10),
                      'Swamp Palace - Compass Chest': (0x46, 0x10),
+                     'Swamp Palace - Trench 2 Pot Key': (0x35, 0x400),
                      'Swamp Palace - Big Key Chest': (0x35, 0x10),
                      'Swamp Palace - West Chest': (0x34, 0x10),
                      'Swamp Palace - Flooded Room - Left': (0x76, 0x10),
                      'Swamp Palace - Flooded Room - Right': (0x76, 0x20),
                      'Swamp Palace - Waterfall Room': (0x66, 0x10),
+                     'Swamp Palace - Waterway Pot Key': (0x16, 0x400),
                      'Swamp Palace - Boss': (0x6, 0x800),
                      "Thieves' Town - Big Key Chest": (0xdb, 0x20),
                      "Thieves' Town - Map Chest": (0xdb, 0x10),
                      "Thieves' Town - Compass Chest": (0xdc, 0x10),
                      "Thieves' Town - Ambush Chest": (0xcb, 0x10),
+                     "Thieves' Town - Hallway Pot Key": (0xbc, 0x400),
+                     "Thieves' Town - Spike Switch Pot Key": (0xab, 0x400),
                      "Thieves' Town - Attic": (0x65, 0x10),
                      "Thieves' Town - Big Chest": (0x44, 0x10),
                      "Thieves' Town - Blind's Cell": (0x45, 0x10),
@@ -272,28 +293,39 @@ location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      'Skull Woods - Pot Prison': (0x57, 0x20),
                      'Skull Woods - Pinball Room': (0x68, 0x10),
                      'Skull Woods - Big Key Chest': (0x57, 0x10),
+                     'Skull Woods - West Lobby Pot Key': (0x56, 0x400),
                      'Skull Woods - Bridge Room': (0x59, 0x10),
+                     'Skull Woods - Spike Corner Key Drop': (0x39, 0x400),
                      'Skull Woods - Boss': (0x29, 0x800),
+                     'Ice Palace - Jelly Key Drop': (0x0e, 0x400),
                      'Ice Palace - Compass Chest': (0x2e, 0x10),
+                     'Ice Palace - Conveyor Key Drop': (0x3e, 0x400),
                      'Ice Palace - Freezor Chest': (0x7e, 0x10),
                      'Ice Palace - Big Chest': (0x9e, 0x10),
                      'Ice Palace - Iced T Room': (0xae, 0x10),
+                     'Ice Palace - Many Pots Pot Key': (0x9f, 0x400),
                      'Ice Palace - Spike Room': (0x5f, 0x10),
                      'Ice Palace - Big Key Chest': (0x1f, 0x10),
+                     'Ice Palace - Hammer Block Key Drop': (0x3f, 0x400),
                      'Ice Palace - Map Chest': (0x3f, 0x10),
                      'Ice Palace - Boss': (0xde, 0x800),
                      'Misery Mire - Big Chest': (0xc3, 0x10),
                      'Misery Mire - Map Chest': (0xc3, 0x20),
                      'Misery Mire - Main Lobby': (0xc2, 0x10),
                      'Misery Mire - Bridge Chest': (0xa2, 0x10),
+                     'Misery Mire - Spikes Pot Key': (0xb3, 0x400),
                      'Misery Mire - Spike Chest': (0xb3, 0x10),
+                     'Misery Mire - Fishbone Pot Key': (0xa1, 0x400),
+                     'Misery Mire - Conveyor Crystal Key Drop': (0xc1, 0x400),
                      'Misery Mire - Compass Chest': (0xc1, 0x10),
                      'Misery Mire - Big Key Chest': (0xd1, 0x10),
                      'Misery Mire - Boss': (0x90, 0x800),
                      'Turtle Rock - Compass Chest': (0xd6, 0x10),
                      'Turtle Rock - Roller Room - Left': (0xb7, 0x10),
                      'Turtle Rock - Roller Room - Right': (0xb7, 0x20),
+                     'Turtle Rock - Pokey 1 Key Drop': (0xb6, 0x400),
                      'Turtle Rock - Chain Chomps': (0xb6, 0x10),
+                     'Turtle Rock - Pokey 2 Key Drop': (0x13, 0x400),
                      'Turtle Rock - Big Key Chest': (0x14, 0x10),
                      'Turtle Rock - Big Chest': (0x24, 0x10),
                      'Turtle Rock - Crystaroller Room': (0x4, 0x10),
@@ -316,6 +348,7 @@ location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      'Palace of Darkness - Big Chest': (0x1a, 0x10),
                      'Palace of Darkness - Harmless Hellway': (0x1a, 0x40),
                      'Palace of Darkness - Boss': (0x5a, 0x800),
+                     'Ganons Tower - Conveyor Cross Pot Key': (0x8b, 0x400),
                      "Ganons Tower - Bob's Torch": (0x8c, 0x400),
                      'Ganons Tower - Hope Room - Left': (0x8c, 0x20),
                      'Ganons Tower - Hope Room - Right': (0x8c, 0x40),
@@ -324,11 +357,13 @@ location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      'Ganons Tower - Compass Room - Top Right': (0x9d, 0x20),
                      'Ganons Tower - Compass Room - Bottom Left': (0x9d, 0x40),
                      'Ganons Tower - Compass Room - Bottom Right': (0x9d, 0x80),
+                     'Ganons Tower - Conveyor Star Pits Pot Key': (0x7b, 0x400),
                      'Ganons Tower - DMs Room - Top Left': (0x7b, 0x10),
                      'Ganons Tower - DMs Room - Top Right': (0x7b, 0x20),
                      'Ganons Tower - DMs Room - Bottom Left': (0x7b, 0x40),
                      'Ganons Tower - DMs Room - Bottom Right': (0x7b, 0x80),
                      'Ganons Tower - Map Chest': (0x8b, 0x10),
+                     'Ganons Tower - Double Switch Pot Key': (0x9b, 0x400),
                      'Ganons Tower - Firesnake Room': (0x7d, 0x10),
                      'Ganons Tower - Randomizer Room - Top Left': (0x7c, 0x10),
                      'Ganons Tower - Randomizer Room - Top Right': (0x7c, 0x20),
@@ -341,6 +376,7 @@ location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      'Ganons Tower - Big Key Chest': (0x1c, 0x10),
                      'Ganons Tower - Mini Helmasaur Room - Left': (0x3d, 0x10),
                      'Ganons Tower - Mini Helmasaur Room - Right': (0x3d, 0x20),
+                     'Ganons Tower - Mini Helmasaur Key Drop': (0x3d, 0x400),
                      'Ganons Tower - Pre-Moldorm Chest': (0x3d, 0x40),
                      'Ganons Tower - Validation Chest': (0x4d, 0x10)}
 location_table_npc = {'Mushroom': 0x1000,
@@ -816,19 +852,28 @@ async def process_server_cmd(ctx: Context, cmd, args):
         raise Exception('Connection refused by the multiworld host')
 
     elif cmd == 'Connected':
+        if ctx.send_unsafe:
+            ctx.send_unsafe = False
+            ctx.ui_node.log_info(f'Turning off sending of ALL location checks not declared as missing.  If you want it on, please use /send_unsafe true')
         Utils.persistent_store("servers", "default", ctx.server_address)
         Utils.persistent_store("servers", ctx.rom, ctx.server_address)
         ctx.team, ctx.slot = args[0]
         ctx.player_names = {p: n for p, n in args[1]}
         msgs = []
         if ctx.locations_checked:
-            msgs.append(['LocationChecks', [Regions.location_table[loc][0] for loc in ctx.locations_checked]])
+            msgs.append(['LocationChecks', [Regions.lookup_name_to_id[loc] for loc in ctx.locations_checked]])
         if ctx.locations_scouted:
             msgs.append(['LocationScouts', list(ctx.locations_scouted)])
         if msgs:
             await ctx.send_msgs(msgs)
         if ctx.finished_game:
             await send_finished_game(ctx)
+        ctx.items_missing = args[2] if len(args) >= 3 else []  # Get the server side view of missing as of time of connecting.
+        # This list is used to only send to the server what is reported as ACTUALLY Missing.
+        # This also serves to allow an easy visual of what locations were already checked previously
+        # when /missing is used for the client side view of what is missing.
+        if not ctx.items_missing:
+            asyncio.create_task(ctx.send_msgs([['Say', '!missing']]))
 
     elif cmd == 'ReceivedItems':
         start_index, items = args
@@ -837,7 +882,7 @@ async def process_server_cmd(ctx: Context, cmd, args):
         elif start_index != len(ctx.items_received):
             sync_msg = [['Sync']]
             if ctx.locations_checked:
-                sync_msg.append(['LocationChecks', [Regions.location_table[loc][0] for loc in ctx.locations_checked]])
+                sync_msg.append(['LocationChecks', [Regions.lookup_name_to_id[loc] for loc in ctx.locations_checked]])
             await ctx.send_msgs(sync_msg)
         if start_index == len(ctx.items_received):
             for item in items:
@@ -878,9 +923,11 @@ async def process_server_cmd(ctx: Context, cmd, args):
     elif cmd == 'Missing':
         if 'locations' in args:
             locations = json.loads(args['locations'])
-            for location in locations:
-                ctx.ui_node.log_info(f'Missing: {location}')
-            ctx.ui_node.log_info(f'Found {len(locations)} missing location checks')
+            if ctx.items_missing:
+                for location in locations:
+                    ctx.ui_node.log_info(f'Missing: {location}')
+                ctx.ui_node.log_info(f'Found {len(locations)} missing location checks')
+            ctx.items_missing = [location for location in locations]
 
     elif cmd == 'Hint':
         hints = [Utils.Hint(*hint) for hint in args]
@@ -1009,13 +1056,34 @@ class ClientCommandProcessor(CommandProcessor):
     def _cmd_missing(self) -> bool:
         """List all missing location checks, from your local game state"""
         count = 0
+        checked_count = 0
         for location in [k for k, v in Regions.location_table.items() if type(v[0]) is int]:
             if location not in self.ctx.locations_checked:
-                self.output('Missing: ' + location)
+                if location not in self.ctx.items_missing:
+                    self.output('Checked: ' + location)
+                    checked_count += 1
+                else:
+                    self.output('Missing: ' + location)
                 count += 1
 
+        key_drop_count = 0
+        for location in [k for k, v in Regions.key_drop_data.items()]:
+            if location not in self.ctx.items_missing:
+                key_drop_count += 1
+
+        # No point on reporting on missing key drop locations if the server doesn't declare ANY of them missing.
+        if key_drop_count != len(Regions.key_drop_data.items()):
+            for location in [k for k, v in Regions.key_drop_data.items()]:
+                if location not in self.ctx.locations_checked:
+                    if location not in self.ctx.items_missing:
+                        self.output('Checked: ' + location)
+                        key_drop_count += 1
+                    else:
+                        self.output('Missing: ' + location)
+                    count += 1
+
         if count:
-            self.output(f"Found {count} missing location checks")
+            self.output(f"Found {count} missing location checks{f'. {checked_count} locations checks previously visited.' if checked_count else ''}")
         else:
             self.output("No missing location checks found.")
         return True
@@ -1044,6 +1112,15 @@ class ClientCommandProcessor(CommandProcessor):
             webbrowser.open(f'http://localhost:5050?port={self.ctx.webui_socket_port}')
         else:
             self.output("Web UI was never started.")
+
+    def _cmd_send_unsafe(self, toggle: str = ""):
+        """Force sending of locations the server did not specify was actually missing. WARNING: This may brick online trackers. Turned off on reconnect."""
+        if toggle:
+            self.ctx.send_unsafe = toggle.lower() in {"1", "true", "on"}
+            self.ctx.ui_node.log_info(f'Turning {("on" if self.ctx.send_unsafe else "off")} the option to send ALL location checks to the multiserver.')
+        else:
+            self.ctx.ui_node.log_info("You must specify /send_unsafe true explicitly.")
+            self.ctx.send_unsafe = False
 
     def default(self, raw: str):
         asyncio.create_task(self.ctx.send_msgs([['Say', raw]]))
@@ -1074,20 +1151,22 @@ async def track_locations(ctx : Context, roomid, roomdata):
     new_locations = []
 
     def new_check(location):
-        ctx.locations_checked.add(location)
-        ctx.ui_node.log_info("New check: %s (%d/216)" % (location, len(ctx.locations_checked)))
+        ctx.unsafe_locations_checked.add(location)
+        ctx.ui_node.log_info("New check: %s (%d/216)" % (location, len(ctx.unsafe_locations_checked)))
         ctx.ui_node.send_location_check(ctx, location)
-        new_locations.append(Regions.location_table[location][0])
 
     for location, (loc_roomid, loc_mask) in location_table_uw.items():
-        if location not in ctx.locations_checked and loc_roomid == roomid and (roomdata << 4) & loc_mask != 0:
-            new_check(location)
+        try:
+            if location not in ctx.unsafe_locations_checked and loc_roomid == roomid and (roomdata << 4) & loc_mask != 0:
+                new_check(location)
+        except Exception as e:
+            ctx.ui_node.log_info(f"Exception: {e}")
 
     uw_begin = 0x129
     uw_end = 0
     uw_unchecked = {}
     for location, (roomid, mask) in location_table_uw.items():
-        if location not in ctx.locations_checked:
+        if location not in ctx.unsafe_locations_checked:
             uw_unchecked[location] = (roomid, mask)
             uw_begin = min(uw_begin, roomid)
             uw_end = max(uw_end, roomid + 1)
@@ -1104,7 +1183,7 @@ async def track_locations(ctx : Context, roomid, roomdata):
     ow_end = 0
     ow_unchecked = {}
     for location, screenid in location_table_ow.items():
-        if location not in ctx.locations_checked:
+        if location not in ctx.unsafe_locations_checked:
             ow_unchecked[location] = screenid
             ow_begin = min(ow_begin, screenid)
             ow_end = max(ow_end, screenid + 1)
@@ -1115,21 +1194,26 @@ async def track_locations(ctx : Context, roomid, roomdata):
                 if ow_data[screenid - ow_begin] & 0x40 != 0:
                     new_check(location)
 
-    if not all([location in ctx.locations_checked for location in location_table_npc.keys()]):
+    if not all([location in ctx.unsafe_locations_checked for location in location_table_npc.keys()]):
         npc_data = await snes_read(ctx, SAVEDATA_START + 0x410, 2)
         if npc_data is not None:
             npc_value = npc_data[0] | (npc_data[1] << 8)
             for location, mask in location_table_npc.items():
-                if npc_value & mask != 0 and location not in ctx.locations_checked:
+                if npc_value & mask != 0 and location not in ctx.unsafe_locations_checked:
                     new_check(location)
 
-    if not all([location in ctx.locations_checked for location in location_table_misc.keys()]):
+    if not all([location in ctx.unsafe_locations_checked for location in location_table_misc.keys()]):
         misc_data = await snes_read(ctx, SAVEDATA_START + 0x3c6, 4)
         if misc_data is not None:
             for location, (offset, mask) in location_table_misc.items():
                 assert(0x3c6 <= offset <= 0x3c9)
-                if misc_data[offset - 0x3c6] & mask != 0 and location not in ctx.locations_checked:
+                if misc_data[offset - 0x3c6] & mask != 0 and location not in ctx.unsafe_locations_checked:
                     new_check(location)
+
+    for location in ctx.unsafe_locations_checked:
+        if (location in ctx.items_missing and location not in ctx.locations_checked) or ctx.send_unsafe:
+            ctx.locations_checked.add(location)
+            new_locations.append(Regions.lookup_name_to_id[location])
 
     await ctx.send_msgs([['LocationChecks', new_locations]])
 
@@ -1161,6 +1245,7 @@ async def game_watcher(ctx : Context):
             ctx.rom = rom.decode()
             if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
                 ctx.locations_checked = set()
+                ctx.unsafe_locations_checked = set()
                 ctx.locations_scouted = set()
             ctx.prev_rom = ctx.rom
 

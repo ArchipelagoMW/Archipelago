@@ -11,6 +11,7 @@ AppName={#MyAppName}
 AppVerName={#MyAppName}
 DefaultDirName={commonappdata}\{#MyAppName}
 DisableProgramGroupPage=yes
+DefaultGroupName=Berserker's Multiworld
 OutputDir=setups
 OutputBaseFilename=Setup {#MyAppName}
 Compression=lzma2

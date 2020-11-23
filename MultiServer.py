@@ -29,7 +29,7 @@ import Utils
 from Utils import get_item_name_from_id, get_location_name_from_address, ReceivedItem, _version_tuple
 from NetUtils import Node, Endpoint
 
-console_names = frozenset(set(Items.item_table) | set(Regions.location_table) | set(Items.item_name_groups))
+console_names = frozenset(set(Items.item_table) | set(Regions.location_table) | set(Items.item_name_groups) | set(Regions.key_drop_data))
 
 CLIENT_PLAYING = 0
 CLIENT_GOAL = 1
@@ -439,6 +439,7 @@ def send_new_items(ctx: Context):
 
 def forfeit_player(ctx: Context, team: int, slot: int):
     all_locations = {values[0] for values in Regions.location_table.values() if type(values[0]) is int}
+    all_locations.update({values[1] for values in Regions.key_drop_data.values()})
     ctx.notify_all("%s (Team #%d) has forfeited" % (ctx.player_names[(team, slot)], team + 1))
     register_location_checks(ctx, team, slot, all_locations)
 
@@ -454,10 +455,12 @@ def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
 def register_location_checks(ctx: Context, team: int, slot: int, locations):
     found_items = False
     new_locations = set(locations) - ctx.location_checks[team, slot]
+    known_locations = set()
     if new_locations:
         ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
         for location in new_locations:
             if (location, slot) in ctx.locations:
+                known_locations.add(location)
                 target_item, target_player = ctx.locations[(location, slot)]
                 if target_player != slot or slot in ctx.remote_items:
                     found = False
@@ -482,7 +485,7 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations):
                                 if client.team == team and client.wants_item_notification:
                                     asyncio.create_task(
                                         ctx.send_msgs(client, [['ItemFound', (target_item, location, slot)]]))
-        ctx.location_checks[team, slot] |= new_locations
+        ctx.location_checks[team, slot] |= known_locations
         send_new_items(ctx)
 
         if found_items:
@@ -514,7 +517,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
 
 def collect_hints_location(ctx: Context, team: int, slot: int, location: str) -> typing.List[Utils.Hint]:
     hints = []
-    seeked_location = Regions.location_table[location][0]
+    seeked_location = Regions.lookup_name_to_id[location]
     for check, result in ctx.locations.items():
         location_id, finding_player = check
         if finding_player == slot and location_id == seeked_location:
@@ -806,10 +809,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def _cmd_missing(self) -> bool:
         """List all missing location checks from the server's perspective"""
 
-        locations = []
-        for location_id, location_name in Regions.lookup_id_to_name.items():  # cheat console is -1, keep in mind
-            if location_id != -1 and location_id not in self.ctx.location_checks[self.client.team, self.client.slot]:
-                locations.append(location_name)
+        locations = get_missing_checks(self.ctx, self.client)
 
         if len(locations) > 0:
             if self.client.version < [2, 3, 0]:
@@ -938,6 +938,15 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 self.output(response)
                 return False
 
+def get_missing_checks(ctx: Context, client: Client) -> list:
+    locations = []
+    #for location_id in [k[0] for k, v in ctx.locations if k[1] == client.slot]:
+    #    if location_id not in ctx.location_checks[client.team, client.slot]:
+    #        locations.append(Regions.lookup_id_to_name.get(location_id, f'Unknown Location ID: {location_id}'))
+    for location_id, location_name in Regions.lookup_id_to_name.items():  # cheat console is -1, keep in mind
+        if location_id != -1 and location_id not in ctx.location_checks[client.team, client.slot] and (location_id, client.slot) in ctx.locations:
+            locations.append(location_name)
+    return locations
 
 def get_client_points(ctx: Context, client: Client) -> int:
     return (ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) -
@@ -993,7 +1002,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             client.tags = args.get('tags', Client.tags)
             reply = [['Connected', [(client.team, client.slot),
                                     [(p, ctx.get_aliased_name(t, p)) for (t, p), n in ctx.player_names.items() if
-                                     t == client.team]]]]
+                                     t == client.team], get_missing_checks(ctx, client)]]]
             items = get_received_items(ctx, client.team, client.slot)
             if items:
                 reply.append(['ReceivedItems', (0, tuplize_received_items(items))])

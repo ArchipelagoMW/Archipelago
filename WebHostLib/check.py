@@ -28,7 +28,7 @@ def mysterycheck():
             if type(options) == str:
                 flash(options)
             else:
-                results, _ = roll_yamls(options)
+                results, _ = roll_options(options)
                 return render_template("checkresult.html", results=results)
 
     return render_template("check.html")
@@ -60,12 +60,15 @@ def get_yaml_data(file) -> Union[Dict[str, str], str]:
     return options
 
 
-def roll_yamls(options: Dict[str, Union[str, str]]) -> Tuple[Dict[str, Union[str, bool]], Dict[str, dict]]:
+def roll_options(options: Dict[str, Union[dict, str]]) -> Tuple[Dict[str, Union[str, bool]], Dict[str, dict]]:
     results = {}
     rolled_results = {}
     for filename, text in options.items():
         try:
-            yaml_data = parse_yaml(text)
+            if type(text) is dict:
+                yaml_data = text
+            else:
+                yaml_data = parse_yaml(text)
         except Exception as e:
             results[filename] = f"Failed to parse YAML data in {filename}: {e}"
         else:

@@ -13,7 +13,7 @@ import pickle
 
 from .models import *
 from WebHostLib import app
-from .check import get_yaml_data, roll_yamls
+from .check import get_yaml_data, roll_options
 
 
 @app.route('/generate', methods=['GET', 'POST'])
@@ -29,7 +29,7 @@ def generate(race=False):
             if type(options) == str:
                 flash(options)
             else:
-                results, gen_options = roll_yamls(options)
+                results, gen_options = roll_options(options)
                 if any(type(result) == str for result in results.values()):
                     return render_template("checkresult.html", results=results)
                 elif len(gen_options) > app.config["MAX_ROLL"]:
@@ -50,6 +50,55 @@ def generate(race=False):
                     return redirect(url_for("view_seed", seed=seed_id))
 
     return render_template("generate.html", race=race)
+
+
+@app.route('/api/generate', methods=['POST'])
+def generate_api():
+    try:
+        options = {}
+        race = False
+
+        if 'file' in request.files:
+            file = request.files['file']
+            options = get_yaml_data(file)
+            if type(options) == str:
+                return {"text": options}, 400
+            if "race" in request.form:
+                race = bool(0 if request.form["race"] in {"false"} else int(request.form["race"]))
+
+        json_data = request.get_json()
+        if json_data:
+            if 'weights' in json_data:
+                # example: options = {"player1weights" : {<weightsdata>}}
+                options = json_data["weights"]
+            if "race" in json_data:
+                race = bool(0 if json_data["race"] in {"false"} else int(json_data["race"]))
+        if not options:
+            return {"text": "No options found. Expected file attachment or json weights."
+                    }, 400
+
+        if len(options) > app.config["MAX_ROLL"]:
+            return {"text": "Max size of multiworld exceeded",
+                    "detail": app.config["MAX_ROLL"]}, 409
+
+        results, gen_options = roll_options(options)
+        if any(type(result) == str for result in results.values()):
+            return {"text": str(results),
+                    "detail": results}, 400
+        else:
+            gen = Generation(
+                options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
+                # convert to json compatible
+                meta=pickle.dumps({"race": race}), state=STATE_QUEUED,
+                owner=session["_id"])
+            commit()
+            return {"text": f"Generation of seed {gen.id} started successfully.",
+                    "detail": gen.id,
+                    "encoded": app.url_map.converters["suuid"].to_url(None, gen.id),
+                    "wait_api_url": url_for("wait_seed_api", seed=gen.id),
+                    "url": url_for("wait_seed", seed=gen.id)}, 201
+    except Exception as e:
+        return {"text": "Uncaught Exception:" + str(e)}, 500
 
 
 def gen_game(gen_options, race=False, owner=None, sid=None):
@@ -92,7 +141,7 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
         del (erargs.progression_balancing)
         ERmain(erargs, seed)
 
-        return upload_to_db(target.name, owner, sid)
+        return upload_to_db(target.name, owner, sid, race)
     except BaseException:
         if sid:
             with db_session:
@@ -117,9 +166,25 @@ def wait_seed(seed: UUID):
     return render_template("waitSeed.html", seed_id=seed_id)
 
 
-def upload_to_db(folder, owner, sid):
+@app.route('/api/status/<suuid:seed>')
+def wait_seed_api(seed: UUID):
+    seed_id = seed
+    seed = Seed.get(id=seed_id)
+    if seed:
+        return {"text": "Generation done"}, 201
+    generation = Generation.get(id=seed_id)
+
+    if not generation:
+        return {"text": "Generation not found"}, 404
+    elif generation.state == STATE_ERROR:
+        return {"text": "Generation failed"}, 500
+    return {"text": "Generation running"}, 202
+
+
+def upload_to_db(folder, owner, sid, race:bool):
     patches = set()
     spoiler = ""
+
     multidata = None
     for file in os.listdir(folder):
         file = os.path.join(folder, file)
@@ -129,20 +194,26 @@ def upload_to_db(folder, owner, sid):
         elif file.endswith(".txt"):
             spoiler = open(file, "rt").read()
         elif file.endswith("multidata"):
-            try:
-                multidata = json.loads(zlib.decompress(open(file, "rb").read()))
-            except Exception as e:
-                flash(e)
-    if multidata:
-        with db_session:
-            if sid:
-                seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner, id=sid)
-            else:
-                seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner)
-            for patch in patches:
-                patch.seed = seed
-            if sid:
-                gen = Generation.get(id=sid)
-                if gen is not None:
-                    gen.delete()
-        return seed.id
+            multidata = file
+
+    if not race or len(patches) > 1:
+        try:
+            multidata = json.loads(zlib.decompress(open(multidata, "rb").read()))
+        except Exception as e:
+            flash(e)
+            raise e
+    else:
+        multidata = {}
+
+    with db_session:
+        if sid:
+            seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner, id=sid)
+        else:
+            seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner)
+        for patch in patches:
+            patch.seed = seed
+        if sid:
+            gen = Generation.get(id=sid)
+            if gen is not None:
+                gen.delete()
+    return seed.id

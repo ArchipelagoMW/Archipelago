@@ -19,10 +19,10 @@
                 You can also upload a .zip with multiple YAMLs.
                 A proper menu is in the works.
                 {% if race -%}
-                    Race Mode means the spoiler log will be unavailable.
+                    Race Mode means the spoiler log will be unavailable, roms will be encrypted and single-player has no multidata.
                 {%- else -%}
                     You can go to <a href="{{ url_for("generate", race=True) }}">Race Mode</a> to create a game without
-                    spoiler log.
+                    spoiler log and with encryption.
                 {%- endif -%}
             </p>
             <p>
