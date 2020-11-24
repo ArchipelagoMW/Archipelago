@@ -211,9 +211,15 @@ beemizer: # Remove items from the global item pool and replace them with single 
   2: 0 # 60% of the non-essential item pool is replaced with bee traps, of which 20% could be single bees
   3: 0 # 100% of the non-essential item pool is replaced with bee traps, of which 50% could be single bees
   4: 0 # 100% of the non-essential item pool is replaced with bee traps
+### Item Shuffle (shop)
+shop_shuffle_slots: 
+  0: 50
+  5: 0
+  15: 0
+  999: 0
 shop_shuffle:
   none: 50
-  i: 0 # Shuffle the inventories of the shops around
+  i: 0 # Shuffle default inventories of the shops around
   p: 0 # Randomize the prices of the items in shop inventories
   u: 0 # Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
   ip: 0 # Shuffle inventories and randomize prices
@@ -249,11 +255,6 @@ green_clock_time: # For all timer modes, the amount of time in minutes to gain o
   15: 0
 # Can be uncommented to use it
 # local_items: # Force certain items to appear in your world only, not across the multiworld. Recognizes some group names, like "Swords"
-#  - "Moon Pearl"
-#  - "Small Keys"
-#  - "Big Keys"
-# Can be uncommented to use it
-# non_local_items: # Force certain items to appear outside your world only, always across the multiworld. Recognizes some group names, like "Swords"
 #  - "Moon Pearl"
 #  - "Small Keys"
 #  - "Big Keys"

@@ -1124,6 +1124,44 @@
         }
       }
     },
+    "shop_shuffle_slots": {
+      "keyString": "shop_shuffle_slots",
+      "friendlyName": "Shop Shuffle Slots",
+      "description": "How Many Slots in Shops are dedicated to items from the item pool",
+      "inputType": "range",
+      "subOptions": {
+        "0": {
+          "keyString": "shop_shuffle_slots.0",
+          "friendlyName": 0,
+          "description": "0 slots",
+          "defaultValue": 50
+        },
+        "15": {
+          "keyString": "shop_shuffle_slots.3",
+          "friendlyName": 3,
+          "description": "3 slots",
+          "defaultValue": 0
+        },
+        "20": {
+          "keyString": "shop_shuffle_slots.6",
+          "friendlyName": 6,
+          "description": "6 slots",
+          "defaultValue": 0
+        },
+        "30": {
+          "keyString": "shop_shuffle_slots.12",
+          "friendlyName": 12,
+          "description": "12 slots",
+          "defaultValue": 0
+        },
+        "40": {
+          "keyString": "shop_shuffle_slots.96",
+          "friendlyName": 96,
+          "description": "96 slots",
+          "defaultValue": 0
+        }
+      }
+    },
     "shuffle_prizes": {
       "keyString": "shuffle_prizes",
       "friendlyName": "Prize Shuffle",
