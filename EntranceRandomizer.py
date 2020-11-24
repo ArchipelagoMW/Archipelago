@@ -330,6 +330,11 @@ def parse_arguments(argv, no_defaults=False):
     p: randomize the prices of the items in shop inventories
     u: shuffle capacity upgrades into the item pool
     ''')
+    parser.add_argument('--shop_shuffle_slots', default=defval(0),
+                        type=lambda value: min(max(int(value), 1), 96),
+                        help='''
+        Maximum amount of shop slots able to be filled by items from the item pool.
+    ''')
     parser.add_argument('--shuffle_prizes', default=defval('g'), choices=['', 'g', 'b', 'gb'])
     parser.add_argument('--sprite_pool', help='''\
     Specifies a colon separated list of sprites used for random/randomonevent. If not specified, the full sprite pool is used.''')
@@ -382,7 +387,7 @@ def parse_arguments(argv, no_defaults=False):
                          'shufflebosses', 'enemy_shuffle', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
                          'heartbeep', "skip_progression_balancing", "triforce_pieces_available",
-                         "triforce_pieces_required", "shop_shuffle",
+                         "triforce_pieces_required", "shop_shuffle", "shop_shuffle_slots",
                          'remote_items', 'progressive', 'dungeon_counters', 'glitch_boots', 'killable_thieves',
                          'tile_shuffle', 'bush_shuffle', 'shuffle_prizes', 'sprite_pool', 'dark_room_logic', 'restrict_dungeon_item_on_boss',
                          'hud_palettes', 'sword_palettes', 'shield_palettes', 'link_palettes']:
