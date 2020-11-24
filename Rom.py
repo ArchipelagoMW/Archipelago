@@ -2061,7 +2061,7 @@ def write_strings(rom, world, player, team):
     greenpendant = world.find_items('Green Pendant', player)[0]
     tt['sahasrahla_bring_courage'] = 'I lost my family heirloom in %s' % greenpendant.hint_text
 
-    tt['sign_ganons_tower'] = ('You need %d crystal to enter.' if world.crystals_needed_for_gt[
+    tt['sign_ganons_tower'] = ('You need a crystal to enter.' if world.crystals_needed_for_gt[
                                                                       player] == 1 else 'You need %d crystals to enter.') % \
                               world.crystals_needed_for_gt[player]
 
