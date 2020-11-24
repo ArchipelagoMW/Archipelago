@@ -1092,10 +1092,22 @@
           "description": "Shop contents are left unchanged.",
           "defaultValue": 50
         },
+        "g": {
+          "keyString": "shop_shuffle.g",
+          "friendlyName": "Inventory Generate",
+          "description": "Generates new default base inventories of overworld and underworld shops.",
+          "defaultValue": 0
+        },
+        "f": {
+          "keyString": "shop_shuffle.f",
+          "friendlyName": "Full Inventory Generate",
+          "description": "Generates new base inventories of each individual shop.",
+          "defaultValue": 0
+        },
         "i": {
           "keyString": "shop_shuffle.i",
           "friendlyName": "Inventory Shuffle",
-          "description": "Randomizes the inventories of shops.",
+          "description": "Shuffles the inventories of shops between each other.",
           "defaultValue": 0
         },
         "p": {

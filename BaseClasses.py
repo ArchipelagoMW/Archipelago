@@ -1239,6 +1239,7 @@ class Spoiler(object):
                 if item is None:
                     continue
                 shopdata['item_{}'.format(index)] = "{} — {}".format(item['item'], item['price']) if item['price'] else item['item']
+
                 if item['max'] == 0:
                     continue
                 shopdata['item_{}'.format(index)] += " x {}".format(item['max'])

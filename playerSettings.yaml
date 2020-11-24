@@ -211,12 +211,16 @@ beemizer: # Remove items from the global item pool and replace them with single 
   2: 0 # 60% of the non-essential item pool is replaced with bee traps, of which 20% could be single bees
   3: 0 # 100% of the non-essential item pool is replaced with bee traps, of which 50% could be single bees
   4: 0 # 100% of the non-essential item pool is replaced with bee traps
+### Item Shuffle (shop)
 shop_shuffle:
   none: 50
-  i: 0 # Shuffle the inventories of the shops around
+  g: 0 # Generate new default inventories for overworld/underworld shops, and unique shops
+  f: 0 # Generate new default inventories for every shop independently
+  i: 0 # Shuffle default inventories of the shops around
   p: 0 # Randomize the prices of the items in shop inventories
   u: 0 # Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
   ip: 0 # Shuffle inventories and randomize prices
+  fpu: 0 # Generate new inventories, randomize prices and shuffle capacity upgrades into item pool
   uip: 0 # Shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool
   # You can add more combos
 shuffle_prizes: # aka drops
