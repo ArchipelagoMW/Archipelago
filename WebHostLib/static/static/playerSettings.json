@@ -1095,7 +1095,7 @@
         "i": {
           "keyString": "shop_shuffle.i",
           "friendlyName": "Inventory Shuffle",
-          "description": "Randomizes the inventories of shops.",
+          "description": "Shuffles the inventories of shops between each other.",
           "defaultValue": 0
         },
         "p": {
@@ -1120,6 +1120,26 @@
           "keyString": "shop_shuffle.uip",
           "friendlyName": "Full Shuffle",
           "description": "Shuffles the inventory and randomizes the prices of items in shops. Also distributes capacity upgrades throughout the world.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "potion_shop_shuffle": {
+      "keyString": "potion_shop_shuffle",
+      "friendlyName": "Potion Shop Shuffle Rules",
+      "description": "Influence on potion shop by shop shuffle options",
+      "inputType": "range",
+      "subOptions": {
+        "none": {
+          "keyString": "potion_shop_shuffle.none",
+          "friendlyName": "Vanilla Shops",
+          "description": "Shop contents are left unchanged, only prices.",
+          "defaultValue": 50
+        },
+        "a": {
+          "keyString": "potion_shop_shuffle.a",
+          "friendlyName": "Any Items can be shuffled in and out of the shop",
+          "description": "",
           "defaultValue": 0
         }
       }

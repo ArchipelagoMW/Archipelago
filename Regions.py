@@ -368,7 +368,9 @@ def create_shops(world, player: int):
     cls_mapping = {ShopType.UpgradeShop: UpgradeShop,
                    ShopType.Shop: Shop,
                    ShopType.TakeAny: TakeAny}
-    for region_name, (room_id, type, shopkeeper, custom, locked, inventory) in shop_table.items():
+    my_shop_table = dict(shop_table)
+    
+    for region_name, (room_id, type, shopkeeper, custom, locked, inventory) in my_shop_table.items():
         if world.mode[player] == 'inverted' and region_name == 'Dark Lake Hylia Shop':
             locked = True
             inventory = [('Blue Potion', 160), ('Blue Shield', 50), ('Bombs (10)', 50)]
@@ -393,7 +395,7 @@ shop_table = {
     'Light World Death Mountain Shop': (0x00FF, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
     'Kakariko Shop': (0x011F, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
     'Cave Shop (Lake Hylia)': (0x0112, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
-    'Potion Shop': (0x0109, ShopType.Shop, 0xFF, False, True, [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)]),
+    'Potion Shop': (0x0109, ShopType.Shop, 0xA0, True, False, [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)]),
     'Capacity Upgrade': (0x0115, ShopType.UpgradeShop, 0x04, True, True, [('Bomb Upgrade (+5)', 100, 7), ('Arrow Upgrade (+5)', 100, 7)])
 }
 
