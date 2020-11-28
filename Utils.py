@@ -212,6 +212,12 @@ def get_default_options() -> dict:
         multimysteryoptions["zip_multidata"] = 1
         multimysteryoptions["zip_format"] = 1
         multimysteryoptions["race"] = 0
+        multimysteryoptions["cpu_threads"] = 0
+        multimysteryoptions["max_attempts"] = 0
+        multimysteryoptions["take_first_working"] = False
+        multimysteryoptions["keep_all_seeds"] = False
+        multimysteryoptions["log_output_path"] = "Output Logs"
+        multimysteryoptions["log_level"] = None
         options["multi_mystery_options"] = multimysteryoptions
         get_default_options.options = options
     return get_default_options.options
