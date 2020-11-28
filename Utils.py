@@ -222,6 +222,23 @@ def get_default_options() -> dict:
         get_default_options.options = options
     return get_default_options.options
 
+def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
+    import logging
+    for key, value in src.items():
+        new_keys = keys.copy()
+        new_keys.append(key)
+        if key not in dest:
+            dest[key] = value
+            if filename.endswith("options.yaml"):
+                logging.info(f"Warning: {filename} is missing {'.'.join(new_keys)}")
+        elif isinstance(value, dict):
+            if not isinstance(dest.get(key, None), dict):
+                if filename.endswith("options.yaml"):
+                    logging.info(f"Warning: {filename} has {'.'.join(new_keys)}, but it is not a dictionary. overwriting.")
+                dest[key] = value
+            else:
+                dest[key] = update_options(value, dest[key], filename, new_keys)
+    return dest
 
 def get_options() -> dict:
     if not hasattr(get_options, "options"):
@@ -233,14 +250,7 @@ def get_options() -> dict:
                 with open(location) as f:
                     options = parse_yaml(f.read())
 
-                default_options = get_default_options()
-                for key, value in options.items():
-                    if isinstance(value, dict):
-                        for key2, value2 in value.items():
-                            default_options[key][key2] = value2
-                    else:
-                        default_options[key] = value
-                get_options.options = default_options
+                get_options.options = update_options(get_default_options(), options, location, list())
                 break
         else:
             raise FileNotFoundError(f"Could not find {locations[1]} to load options.")
