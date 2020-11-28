@@ -165,6 +165,58 @@ def get_public_ipv6() -> str:
         pass  # we could be offline, in a local game, or ipv6 may not be available
     return ip
 
+
+def get_default_options() -> dict:
+    if not hasattr(get_default_options, "options"):
+        options = dict()
+
+        # Refer to host.yaml for comments as to what all these options mean.
+        generaloptions = dict()
+        generaloptions["rom_file"] = "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
+        generaloptions["qusb2snes"] = "QUsb2Snes\\QUsb2Snes.exe"
+        generaloptions["rom_start"] = True
+        generaloptions["output_path"] = "output"
+        options["general_options"] = generaloptions
+
+        serveroptions = dict()
+        serveroptions["host"] = None
+        serveroptions["port"] = 38281
+        serveroptions["password"] = None
+        serveroptions["multidata"] = None
+        serveroptions["savefile"] = None
+        serveroptions["disable_save"] = False
+        serveroptions["loglevel"] = "info"
+        serveroptions["server_password"] = None
+        serveroptions["port_forward"] = False
+        serveroptions["disable_item_cheat"] = False
+        serveroptions["location_check_points"] = 1
+        serveroptions["hint_cost"] = 1000
+        serveroptions["forfeit_mode"] = "goal"
+        serveroptions["remaining_mode"] = "goal"
+        serveroptions["auto_shutdown"] = 0
+        serveroptions["compatibility"] = 2
+        options["server_options"] = serveroptions
+
+        multimysteryoptions = dict()
+        multimysteryoptions["teams"] = 1
+        multimysteryoptions["enemizer_path"] = "EnemizerCLI/EnemizerCLI.Core.exe"
+        multimysteryoptions["player_files_path"] = "Players"
+        multimysteryoptions["players"] = 0
+        multimysteryoptions["weights_file_path"] = "weights.yaml"
+        multimysteryoptions["meta_file_path"] = "meta.yaml"
+        multimysteryoptions["player_name"] = ""
+        multimysteryoptions["create_spoiler"] = 1
+        multimysteryoptions["zip_roms"] = 0
+        multimysteryoptions["zip_diffs"] = 2
+        multimysteryoptions["zip_spoiler"] = 0
+        multimysteryoptions["zip_multidata"] = 1
+        multimysteryoptions["zip_format"] = 1
+        multimysteryoptions["race"] = 0
+        options["multi_mystery_options"] = multimysteryoptions
+        get_default_options.options = options
+    return get_default_options.options
+
+
 def get_options() -> dict:
     if not hasattr(get_options, "options"):
         locations = ("options.yaml", "host.yaml",
@@ -173,7 +225,16 @@ def get_options() -> dict:
         for location in locations:
             if os.path.exists(location):
                 with open(location) as f:
-                    get_options.options = parse_yaml(f.read())
+                    options = parse_yaml(f.read())
+
+                default_options = get_default_options()
+                for key, value in options.items():
+                    if isinstance(value, dict):
+                        for key2, value2 in value.items():
+                            default_options[key][key2] = value2
+                    else:
+                        default_options[key] = value
+                get_options.options = default_options
                 break
         else:
             raise FileNotFoundError(f"Could not find {locations[1]} to load options.")
