@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    background: url('../static/backgrounds/header/cloud-header.svg') repeat-x;
+    background: url('../static/backgrounds/header/cloud-header.png') repeat-x;
     background-size: auto 90px;
     width: 100%;
     height: 90px;

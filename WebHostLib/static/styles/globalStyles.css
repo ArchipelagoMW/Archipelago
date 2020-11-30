@@ -4,7 +4,7 @@
 }
 
 html{
-    background-image: url('../static/backgrounds/oceans/oceans-0002.svg');
+    background-image: url('../static/backgrounds/oceans/oceans-0002.png');
     background-repeat: repeat;
     background-size: 250px 250px;
     margin-top: 110px;
@@ -30,31 +30,34 @@ h1, h2, h3{
 
 .grass-island{
     background:
-        url('../static/backgrounds/cliffs/grass/cliff-top-left-corner.svg') top left no-repeat,
-        url('../static/backgrounds/cliffs/grass/cliff-top-right-corner.svg') top right no-repeat,
-        url('../static/backgrounds/cliffs/grass/cliff-bottom-left-corner.svg') bottom left no-repeat,
-        url('../static/backgrounds/cliffs/grass/cliff-bottom-right-corner.svg') bottom right no-repeat,
-        url('../static/backgrounds/cliffs/grass/cliff-top.svg') top repeat-x,
-        url('../static/backgrounds/cliffs/grass/cliff-bottom.svg') bottom repeat-x,
-        url('../static/backgrounds/cliffs/grass/cliff-left.svg') left repeat-y,
-        url('../static/backgrounds/cliffs/grass/cliff-right.svg') right repeat-y,
-        url('../static/backgrounds/grass/grass-0003.svg') repeat;
+        url('../static/backgrounds/cliffs/grass/cliff-top-left-corner.png') top left no-repeat,
+        url('../static/backgrounds/cliffs/grass/cliff-top-right-corner.png') top right no-repeat,
+        url('../static/backgrounds/cliffs/grass/cliff-bottom-left-corner.png') bottom left no-repeat,
+        url('../static/backgrounds/cliffs/grass/cliff-bottom-right-corner.png') bottom right no-repeat,
+        url('../static/backgrounds/cliffs/grass/cliff-top.png') top repeat-x,
+        url('../static/backgrounds/cliffs/grass/cliff-bottom.png') bottom repeat-x,
+        url('../static/backgrounds/cliffs/grass/cliff-left.png') left repeat-y,
+        url('../static/backgrounds/cliffs/grass/cliff-right.png') right repeat-y,
+        url('../static/backgrounds/grass/grass-0004.png') repeat;
 
     background-size:
-        140px 140px, /* top-left */
-        140px 140px, /* top-right */
+        140px 120px, /* top-left */
+        140px 120px, /* top-right */
         140px 140px, /* bottom-left */
         140px 140px, /* bottom-right */
-        auto 96px, /* top */
-        auto 114px, /* bottom */
-        84px auto, /* left */
-        84px auto, /* right */
-        150px 150px; /* center */
+        20px 120px, /* top */
+        20px 140px, /* bottom */
+        140px 20px, /* left */
+        140px 20px, /* right */
+        100px auto; /* center */
 
-    min-width: 240px;
-    min-height: 70px;
+    min-width: 280px;
+    min-height: 280px;
 
-    padding: 160px 80px 170px;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-top: 76px;
+    padding-bottom: 106px;
 }
 
 .dirt-island{
