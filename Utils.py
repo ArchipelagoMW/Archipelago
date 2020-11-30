@@ -187,7 +187,6 @@ def get_default_options() -> dict:
         serveroptions["disable_save"] = False
         serveroptions["loglevel"] = "info"
         serveroptions["server_password"] = None
-        serveroptions["port_forward"] = False
         serveroptions["disable_item_cheat"] = False
         serveroptions["location_check_points"] = 1
         serveroptions["hint_cost"] = 1000
