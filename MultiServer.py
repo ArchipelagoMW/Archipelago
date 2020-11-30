@@ -63,6 +63,7 @@ class Context(Node):
                       "server_password": str,
                       "password": str,
                       "forfeit_mode": str,
+                      "remaining_mode": str,
                       "item_cheat": bool,
                       "compatibility": int}
 

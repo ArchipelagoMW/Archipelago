@@ -773,8 +773,8 @@ async def process_server_cmd(ctx: Context, cmd, args):
         if args['password']:
             ctx.ui_node.log_info('Password required')
         if "forfeit_mode" in args: # could also be version > 2.2.1, but going with implicit content here
-            logging.info("Forfeit setting: "+args["forfeit_mode"])
-            logging.info("Remaining setting: "+args["remaining_mode"])
+            logging.info(f"Forfeit setting: {args['forfeit_mode']}")
+            logging.info(f"Remaining setting: {args['remaining_mode']}")
             logging.info(f"A !hint costs {args['hint_cost']} points and you get {args['location_check_points']}"
                          f" for each location checked.")
             ctx.hint_cost = int(args['hint_cost'])
