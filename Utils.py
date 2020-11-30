@@ -6,7 +6,7 @@ def tuplize_version(version: str) -> typing.Tuple[int, ...]:
     return tuple(int(piece, 10) for piece in version.split("."))
 
 
-__version__ = "3.3.3"
+__version__ = "3.4.0"
 _version_tuple = tuplize_version(__version__)
 
 import os
