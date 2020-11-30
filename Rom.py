@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '2e014eec91e08d0977d083fd4a6ae41d'
+RANDOMIZERBASEHASH = 'e386e83126c15ecd836404a84a9663e9'
 
 import io
 import json
@@ -1513,7 +1513,7 @@ def write_custom_shops(rom, world, player):
         else:
             sram_offset += shop.item_count
         shop_data.extend(bytes)
-        # [id][item][price-low][price-high][max][repl_id][repl_price-low][repl_price-high]
+        # [id][item][price-low][price-high][max][repl_id][repl_price-low][repl_price-high][player]
         for item in shop.inventory:
             if item is None:
                 break
