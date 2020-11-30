@@ -1691,6 +1691,7 @@ def update_sprites(task, on_finish=None):
     resultmessage = ""
     successful = True
     sprite_dir = local_path("data", "sprites", "alttpr")
+    os.makedirs(sprite_dir, exist_ok=True)
 
     def finished():
         task.close_window()
