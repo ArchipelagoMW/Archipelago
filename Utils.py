@@ -221,19 +221,29 @@ def get_default_options() -> dict:
         get_default_options.options = options
     return get_default_options.options
 
+
+blacklisted_options = {"multi_mystery_options.cpu_threads",
+                       "multi_mystery_options.max_attempts",
+                       "multi_mystery_options.take_first_working",
+                       "multi_mystery_options.keep_all_seeds",
+                       "multi_mystery_options.log_output_path",
+                       "multi_mystery_options.log_level"}
+
+
 def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
     import logging
     for key, value in src.items():
         new_keys = keys.copy()
         new_keys.append(key)
+        option_name = '.'.join(new_keys)
         if key not in dest:
             dest[key] = value
-            if filename.endswith("options.yaml"):
-                logging.info(f"Warning: {filename} is missing {'.'.join(new_keys)}")
+            if filename.endswith("options.yaml") and option_name not in blacklisted_options:
+                logging.info(f"Warning: {filename} is missing {option_name}")
         elif isinstance(value, dict):
             if not isinstance(dest.get(key, None), dict):
-                if filename.endswith("options.yaml"):
-                    logging.info(f"Warning: {filename} has {'.'.join(new_keys)}, but it is not a dictionary. overwriting.")
+                if filename.endswith("options.yaml") and option_name not in blacklisted_options:
+                    logging.info(f"Warning: {filename} has {option_name}, but it is not a dictionary. overwriting.")
                 dest[key] = value
             else:
                 dest[key] = update_options(value, dest[key], filename, new_keys)
