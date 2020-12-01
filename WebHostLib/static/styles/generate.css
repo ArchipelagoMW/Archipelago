@@ -1,0 +1,21 @@
+#generate-game-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#generate-game{
+    width: 660px;
+    text-align: center;
+}
+
+#generate-game-form-wrapper{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+#generate-game-form{
+    display: none;
+}

@@ -3,21 +3,26 @@
 {% block head %}
     {{ super() }}
     <title>Mystery Check Result</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/uploads.css") }}" />
-    <script type="application/ecmascript" src="{{ static_autoversion("assets/uploads.js") }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/check.css") }}" />
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/check.js") }}"></script>
 {% endblock %}
 
 {% block body %}
-    <div id="uploads-wrapper">
-        <div id="uploads" class="main-content">
+    {% include 'cloudHeader.html' %}
+    <div id="check-wrapper">
+        <div id="check" class="grass-island">
             <h3>Upload Yaml</h3>
-            <p>This page checks a .yaml file for you, to be used as options for a mystery multiworld. You can also upload a .zip with multiple YAMLs.</p>
-            <div id="uploads-form-wrapper">
-                <form id="upload-form" method="post" enctype="multipart/form-data">
+            <p>
+                This page checks a .yaml file for you, to be used as options for a mystery multiworld.
+                You can also upload a .zip with multiple YAMLs.
+            </p>
+            <div id="check-form-wrapper">
+                <form id="check-form" method="post" enctype="multipart/form-data">
                     <input id="file-input" type="file" name="file">
                 </form>
-                <button id="upload-button">Upload</button>
+                <button id="check-button">Upload</button>
             </div>
         </div>
     </div>
+    {% include 'islandFooter.html' %}
 {% endblock %}

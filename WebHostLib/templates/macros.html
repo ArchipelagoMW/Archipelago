@@ -1,7 +1,7 @@
 {% macro list_rooms(rooms) -%}
     <ul>
         {% for room in rooms %}
-            <li><a href="{{ url_for("host_room", room=room.id) }}">Room #{{ room.id|suuid }}</a></li>
+            <li><a href="{{ url_for("hostRoom", room=room.id) }}">Room #{{ room.id|suuid }}</a></li>
         {% endfor %}
         {{ caller() }}
     </ul>

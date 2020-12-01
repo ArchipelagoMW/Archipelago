@@ -1,0 +1,26 @@
+html{
+    background-image: url('../static/backgrounds/dirt/dirt-0005-large.png');
+    background-repeat: repeat;
+    background-size: 900px 900px;
+}
+
+#host-room{
+    width: calc(100% - 5rem);
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 1rem;
+    color: #ffe993;
+}
+
+#host-room a{
+    color: #ffffff;
+}
+
+#host-room input[type=text]{
+    width: 500px;
+    min-width: 370px;
+    padding: 0.125rem;
+    height: 1.5rem;
+}

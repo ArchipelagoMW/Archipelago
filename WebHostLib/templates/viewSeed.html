@@ -3,13 +3,14 @@
 
 {% block head %}
     <title>Multiworld Seed {{ seed.id|suuid }}</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/view_seed.css") }}"/>
-    <script type="application/ecmascript" src="{{ static_autoversion("assets/view_seed.js") }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/viewSeed.css") }}"/>
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/viewSeed.js") }}"></script>
 {% endblock %}
 
 {% block body %}
+    {% include 'cloudHeader.html' %}
     <div id="view-seed-wrapper">
-        <div class="main-content">
+        <div id="view-seed" class="grass-island">
             <h3>Seed Info</h3>
             {% if not seed.multidata and not seed.spoiler %}
             <h4>
@@ -82,4 +83,5 @@
             </table>
         </div>
     </div>
+    {% include 'islandFooter.html' %}
 {% endblock %}

@@ -1,7 +1,7 @@
 let spriteData = null;
 
 window.addEventListener('load', () => {
-  const gameSettings = document.getElementById('game-settings');
+  const gameSettings = document.getElementById('player-settings');
   Promise.all([fetchPlayerSettingsYaml(), fetchPlayerSettingsJson(), fetchSpriteData()]).then((results) => {
     // Load YAML into object
     const sourceData = jsyaml.safeLoad(results[0], { json: true });
@@ -175,7 +175,7 @@ const buildUI = (settings) => {
   }
 
   Object.keys(settingTypes).forEach((settingTypeKey) => {
-    const sectionHeader = document.createElement('h1');
+    const sectionHeader = document.createElement('h2');
     sectionHeader.innerText = settingTypes[settingTypeKey];
     settingsWrapper.appendChild(sectionHeader);
 
@@ -200,7 +200,7 @@ const buildUI = (settings) => {
   });
 
   // Build sprite options
-  const spriteOptionsHeader = document.createElement('h1');
+  const spriteOptionsHeader = document.createElement('h2');
   spriteOptionsHeader.innerText = 'Sprite Options';
   settingsWrapper.appendChild(spriteOptionsHeader);
 

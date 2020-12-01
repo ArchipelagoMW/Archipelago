@@ -1,22 +1,25 @@
-#uploads-wrapper{
+#host-game-wrapper{
     display: flex;
     flex-direction: row;
     justify-content: center;
     flex-wrap: wrap;
 }
 
-#uploads{
+#host-game{
     width: 620px;
-    height: 280px;
     text-align: center;
 }
 
-#uploads-form-wrapper{
+#host-game.wider{
+    width: 980px;
+}
+
+#host-game-form-wrapper{
     width: 100%;
     text-align: center;
     margin-bottom: 1rem;
 }
 
-#upload-form{
+#host-game-form{
     display: none;
 }

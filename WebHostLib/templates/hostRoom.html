@@ -2,17 +2,18 @@
 {% import "macros.html" as macros %}
 {% block head %}
     <title>Multiworld {{ room.id|suuid }}</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/host_room.css") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/hostRoom.css") }}"/>
 {% endblock %}
 
 {% block body %}
+    {% include 'cloudHeader.html' %}
     <div id="host-room">
         {% if room.owner == session["_id"] %}
-            Room created from <a href="{{ url_for("view_seed", seed=room.seed.id) }}">Seed #{{ room.seed.id|suuid }}</a>
+            Room created from <a href="{{ url_for("viewSeed", seed=room.seed.id) }}">Seed #{{ room.seed.id|suuid }}</a>
             <br>
         {% endif %}
         {% if room.tracker %}
-            This room has a <a href="{{ url_for("get_tracker", tracker=room.tracker) }}">Multiworld Tracker</a> enabled.
+            This room has a <a href="{{ url_for("getTracker", tracker=room.tracker) }}">Multiworld Tracker</a> enabled.
             <br>
         {% endif %}
         This room will be closed after {{ room.timeout//60//60 }} hours of inactivity. Should you wish to continue

@@ -31,7 +31,7 @@ def generate(race=False):
             else:
                 results, gen_options = roll_options(options)
                 if any(type(result) == str for result in results.values()):
-                    return render_template("checkresult.html", results=results)
+                    return render_template("checkResult.html", results=results)
                 elif len(gen_options) > app.config["MAX_ROLL"]:
                     flash(f"Sorry, generating of multiworlds is limited to {app.config['MAX_ROLL']} players for now. "
                           f"If you have a larger group, please generate it yourself and upload it.")
@@ -47,7 +47,7 @@ def generate(race=False):
                 else:
                     seed_id = gen_game({name: vars(options) for name, options in gen_options.items()},
                                        race=race, owner=session["_id"].int)
-                    return redirect(url_for("view_seed", seed=seed_id))
+                    return redirect(url_for("viewSeed", seed=seed_id))
 
     return render_template("generate.html", race=race)
 
@@ -156,7 +156,7 @@ def wait_seed(seed: UUID):
     seed_id = seed
     seed = Seed.get(id=seed_id)
     if seed:
-        return redirect(url_for("view_seed", seed=seed_id))
+        return redirect(url_for("viewSeed", seed=seed_id))
     generation = Generation.get(id=seed_id)
 
     if not generation:

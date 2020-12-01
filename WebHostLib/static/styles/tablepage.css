@@ -19,7 +19,7 @@ table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTa
 }
 
 table.dataTable thead{
-    background-color: #b0a77d;
+    /* background-color: #b0a77d; */
 }
 
 table.dataTable thead tr th{
@@ -32,5 +32,5 @@ table.dataTable tbody tr{
 }
 
 table.dataTable tbody tr:hover{
-    background-color: #e2eabb;
+    /* background-color: #e2eabb; */
 }

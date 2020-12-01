@@ -8,8 +8,9 @@
 {% endblock %}
 
 {% block body %}
-    <div id="game-settings" class="main-content">
-        <h3>Player Settings</h3>
+    {% include 'cloudHeader.html' %}
+    <div id="player-settings">
+        <h1>Player Settings</h1>
         <div id="instructions">
             This page is used to configure your player settings. You have three presets you can control, which
             you can access using the dropdown menu below. These settings will be usable when generating a
@@ -61,7 +62,7 @@
                 </tbody>
             </table>
         </div>
-        <div id="game-settings-button-row">
+        <div id="player-settings-button-row">
             <button id="reset-to-default">Reset to Defaults</button>
             <button id="export-button">Export Settings</button>
         </div>

@@ -1,6 +1,21 @@
+html{
+    background-image: url('../static/backgrounds/dirt/dirt-0005-large.png');
+    background-repeat: repeat;
+    background-size: 900px 900px;
+}
+
 #tutorial-wrapper{
+    width: 70rem;
     margin-left: auto;
     margin-right: auto;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 1rem;
+    color: #ffe993;
+}
+
+#tutorial-wrapper a{
+    color: #ffffff;
 }
 
 #tutorial-wrapper h1{
@@ -9,6 +24,7 @@
     border-bottom: 1px solid #9f916a;
     cursor: pointer;
     width: 100%;
+    margin-bottom: 0.5rem;
 }
 
 #tutorial-wrapper h2{
@@ -17,6 +33,7 @@
     border-bottom: 1px solid #9f916a;
     cursor: pointer;
     width: 100%;
+    margin-bottom: 0.5rem;
 }
 
 #tutorial-wrapper h3{
@@ -25,12 +42,14 @@
     text-align: left;
     cursor: pointer;
     width: 100%;
+    margin-bottom: 0.5rem;
 }
 
 #tutorial-wrapper h4{
     font-size: 1.5rem;
     font-weight: normal;
     cursor: pointer;
+    margin-bottom: 0.5rem;
 }
 
 #tutorial-wrapper h5{
@@ -64,16 +83,18 @@
 
 #tutorial-wrapper pre{
     padding: 0.5rem 0.25rem;
-    background-color: #dce2bd;
+    background-color: #d9cd8e;
     border: 1px solid #9f916a;
     border-radius: 6px;
+    color: #000000;
 }
 
 #tutorial-wrapper code{
-    background-color: #dce2bd;
+    background-color: #d9cd8e;
     border-radius: 4px;
     padding-left: 0.25rem;
     padding-right: 0.25rem;
+    color: #000000;
 }
 
 #tutorial-wrapper #tutorial-video-container{

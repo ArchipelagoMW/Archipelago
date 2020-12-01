@@ -12,7 +12,6 @@ html{
 
 body{
     margin: 0;
-    padding-bottom: 62px;
 }
 
 button{
@@ -21,11 +20,22 @@ button{
     border-radius: 4px;
 }
 
-h1, h2, h3{
+h1, h2, h3, h4, h5, h6{
     font-family: HyliaSerif, sans-serif;
-    font-size: 3rem;
     font-weight: normal;
     margin: 0;
+}
+
+h1{ font-size: 3rem; }
+h2{ font-size: 2rem; }
+h3{ font-size: 1.75rem; }
+h4{
+    font-size: 1.5rem;
+    margin-bottom:0.5rem;
+}
+h5, h6{
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
 }
 
 .grass-island{
@@ -49,7 +59,7 @@ h1, h2, h3{
         20px 140px, /* bottom */
         140px 20px, /* left */
         140px 20px, /* right */
-        100px auto; /* center */
+        140px 140px; /* center */
 
     min-width: 280px;
     min-height: 280px;

@@ -88,7 +88,7 @@ def player_settings():
 
 
 @app.route('/seed/<suuid:seed>')
-def view_seed(seed: UUID):
+def viewSeed(seed: UUID):
     seed = Seed.get(id=seed)
     if not seed:
         abort(404)
@@ -103,7 +103,7 @@ def new_room(seed: UUID):
         abort(404)
     room = Room(seed=seed, owner=session["_id"], tracker=uuid4())
     commit()
-    return redirect(url_for("host_room", room=room.id))
+    return redirect(url_for("hostRoom", room=room.id))
 
 
 def _read_log(path: str):
@@ -122,7 +122,7 @@ def display_log(room: UUID):
 
 
 @app.route('/hosted/<suuid:room>', methods=['GET', 'POST'])
-def host_room(room: UUID):
+def hostRoom(room: UUID):
     room = Room.get(id=room)
     if room is None:
         return abort(404)
@@ -135,7 +135,7 @@ def host_room(room: UUID):
     with db_session:
         room.last_activity = datetime.utcnow()  # will trigger a spinup, if it's not already running
 
-    return render_template("host_room.html", room=room)
+    return render_template("hostRoom.html", room=room)
 
 
 @app.route('/favicon.ico')

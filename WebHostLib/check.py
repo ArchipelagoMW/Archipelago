@@ -29,7 +29,7 @@ def mysterycheck():
                 flash(options)
             else:
                 results, _ = roll_options(options)
-                return render_template("checkresult.html", results=results)
+                return render_template("checkResult.html", results=results)
 
     return render_template("check.html")
 

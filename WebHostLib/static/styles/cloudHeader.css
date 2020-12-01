@@ -12,6 +12,7 @@
     font-family: HyliaSerif, sans-serif;
     padding: 10px;
     line-height: 2rem;
+    z-index: 9999;
 }
 
 #cloud-header #site-title img{

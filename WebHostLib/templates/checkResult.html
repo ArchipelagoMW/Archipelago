@@ -1,0 +1,19 @@
+{% extends 'pageWrapper.html' %}
+
+{% block head %}
+    {{ super() }}
+    <title>Upload Mystery YAML</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/checkResult.css") }}" />
+{% endblock %}
+
+{% block body %}
+    {% include 'cloudHeader.html' %}
+    <div id="check-result-wrapper">
+        <div id="check-result" class="grass-island">
+            {% for filename, resulttext in results.items() %}
+                <span>{{ filename }}: {{ "Looks ok" if resulttext == True else resulttext }}</span><br>
+            {% endfor %}
+        </div>
+    </div>
+    {% include 'islandFooter.html' %}
+{% endblock %}

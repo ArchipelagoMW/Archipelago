@@ -3,44 +3,44 @@
 {% block head %}
     {{ super() }}
     <title>Upload Multidata</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/uploads.css") }}" />
-    <script type="application/ecmascript" src="{{ static_autoversion("assets/uploads.js") }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/hostGame.css") }}" />
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/hostGame.js") }}"></script>
 {% endblock %}
 
 {% block body %}
     {% include 'cloudHeader.html' %}
 
-    <div id="uploads-wrapper">
-        <div id="uploads" class="grass-island">
-            <h3>Upload Multidata</h3>
+    <div id="host-game-wrapper">
+        <div id="host-game" class="grass-island {% if rooms %}wider{% endif %}">
+            <h1>Host Game</h1>
             <p>To host a game, you need to upload a .multidata file or a .zip file created by the
                 multiworld generator.</p>
-            <div id="uploads-form-wrapper">
-                <form id="upload-form" method="post" enctype="multipart/form-data">
+            <div id="host-game-form-wrapper">
+                <form id="host-game-form" method="post" enctype="multipart/form-data">
                     <input id="file-input" type="file" name="file">
                 </form>
-                <button id="upload-button">Upload</button>
+                <button id="host-game-button">Upload</button>
             </div>
 
             {% if rooms %}
-                <p>Your Rooms:</p>
-                <table id="uploads-table" class="table">
+                <h4>Your Rooms:</h4>
+                <table id="host-game-table" class="table">
                     <thead>
                         <tr>
                             <th>Seed</th>
                             <th>Room</th>
                             <th>Players</th>
-                            <th>Created</th>
-                            <th>Last Activity</th>
+                            <th>Created (UTC)</th>
+                            <th>Last Activity (UTC)</th>
 
                         </tr>
                     </thead>
                     <tbody>
                     {% for room in rooms %}
                         <tr>
-                            <td><a href="{{ url_for("view_seed", seed=room.seed.id) }}">{{ room.seed.id|suuid }}</a>
+                            <td><a href="{{ url_for("viewSeed", seed=room.seed.id) }}">{{ room.seed.id|suuid }}</a>
                             </td>
-                            <td><a href="{{ url_for("host_room", room=room.id) }}">{{ room.id|suuid }}</a></td>
+                            <td><a href="{{ url_for("hostRoom", room=room.id) }}">{{ room.id|suuid }}</a></td>
                             <td>{{ room.seed.multidata.names[0]|length }} Total:
                                 {{ room.seed.multidata.names[0]|join(", ")|truncate(256, False, " ...") }}</td>
                             <td>{{ room.creation_time.strftime("%Y-%m-%d %H:%M") }}</td>
@@ -49,11 +49,9 @@
                     {% endfor %}
                     </tbody>
                 </table>
-            {% else %}
-                <p>No rooms owned by you were found. Upload a file to get started.</p>
             {% endif %}
         </div>
     </div>
 
-    {% include 'grassFooter.html' %}
+    {% include 'islandFooter.html' %}
 {% endblock %}
