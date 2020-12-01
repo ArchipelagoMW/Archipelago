@@ -638,13 +638,13 @@ async def snes_write(ctx : Context, write_list):
         PutAddress_Request = {"Opcode": "PutAddress", "Operands": [], 'Space': 'SNES'}
 
         try:
-            #will pack those requests as soon as qusb2snes actually supports that for real
             for address, data in write_list:
                 PutAddress_Request['Operands'] = [hex(address)[2:], hex(len(data))[2:]]
                 if ctx.snes_socket is not None:
                     await ctx.snes_socket.send(json.dumps(PutAddress_Request))
-                if ctx.snes_socket is not None:
                     await ctx.snes_socket.send(data)
+                else:
+                    logging.warning(f"Could not send data to SNES: {data}")
         except websockets.ConnectionClosed:
             logging.warning("Could not write data to SNES")
             return False
@@ -655,7 +655,8 @@ async def snes_write(ctx : Context, write_list):
 
 
 def snes_buffered_write(ctx : Context, address, data):
-    if len(ctx.snes_write_buffer) > 0 and (ctx.snes_write_buffer[-1][0] + len(ctx.snes_write_buffer[-1][1])) == address:
+    if ctx.snes_write_buffer and (ctx.snes_write_buffer[-1][0] + len(ctx.snes_write_buffer[-1][1])) == address:
+        # append to existing write command, bundling them
         ctx.snes_write_buffer[-1] = (ctx.snes_write_buffer[-1][0], ctx.snes_write_buffer[-1][1] + data)
     else:
         ctx.snes_write_buffer.append((address, data))
@@ -665,8 +666,9 @@ async def snes_flush_writes(ctx : Context):
     if not ctx.snes_write_buffer:
         return
 
-    await snes_write(ctx, ctx.snes_write_buffer)
-    ctx.snes_write_buffer = []
+    # swap buffers
+    ctx.snes_write_buffer, writes = [], ctx.snes_write_buffer
+    await snes_write(ctx, writes)
 
 
 async def send_msgs(websocket, msgs):
