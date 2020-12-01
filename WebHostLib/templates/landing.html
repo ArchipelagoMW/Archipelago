@@ -6,10 +6,12 @@
 {% endblock %}
 
 {% block body %}
+    {% include 'cloudHeader.html' %}
     <div id="landing-wrapper">
-        <div id="landing" class="main-content">
+        <div id="landing" class="grass-island">
             <div id="landing-header">
-                <h3>Berserker's Multiworld</h3>
+                <h4>The Legend of Zelda: A Link to the Past</h4>
+                <h1>MultiWorld Randomizer</h1>
                 <p id="landing-header-links">
                     <a href="https://github.com/Berserker66/MultiWorld-Utilities">Source Code</a>
                     -
@@ -17,23 +19,6 @@
                     -
                     <a href="https://github.com/Berserker66/MultiWorld-Utilities/graphs/contributors">Contributors</a>
                 </p>
-            </div>
-            <div id="landing-buttons">
-                <a href="{{ url_for("generate") }}">
-                    <button>Start a New Game</button>
-                </a>
-                <a href="{{ url_for("uploads") }}">
-                    <button>Host Existing Game</button>
-                </a>
-                <a href="{{ url_for('tutorial') }}">
-                    <button>Setup Guide</button>
-                </a>
-                <a href="{{ url_for('player_settings') }}">
-                    <button>Player Settings</button>
-                </a>
-                <a href="{{ url_for("mysterycheck") }}">
-                    <button>Test YAML Config</button>
-                </a>
             </div>
             <div id="landing-body">
                 <p>This is a <span data-tooltip="Allegedly.">randomizer</span> for The Legend of Zelda: A
@@ -56,4 +41,5 @@
         <iframe src="https://discordapp.com/widget?id=731205301247803413&theme=light"
                 width="300" height="500" allowtransparency="true"></iframe>
     </div>
+    {% include 'islandFooter.html' %}
 {% endblock %}

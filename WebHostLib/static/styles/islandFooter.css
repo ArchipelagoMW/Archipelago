@@ -7,7 +7,7 @@
     height: 66px;
     padding-left: 0.5rem;
     line-height: 30px;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
 }

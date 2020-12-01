@@ -6,13 +6,13 @@
 }
 
 #landing{
-    margin-right: 0.5em;
-    margin-bottom: 0.5em;
+    width: 820px;
+    min-height: 440px;
 }
 
-#landing-header-links{
-    width: 100%;
+#landing-header{
     text-align: center;
+    width: 100%;
     margin: 0;
 }
 
@@ -31,5 +31,12 @@
 }
 
 iframe{
+    margin-left: 0.5rem;
     border: none;
+}
+
+@media only screen and (max-width: 1300px) {
+    iframe{
+        display: none;
+    }
 }
