@@ -1,3 +1,9 @@
+html{
+    background-image: url('../static/backgrounds/dirt/dirt-0005-large.png');
+    background-repeat: repeat;
+    background-size: 900px 900px;
+}
+
 #tracker-wrapper {
     display: flex;
     flex-direction: column;
@@ -31,6 +37,14 @@
 
 div.dataTables_wrapper.no-footer .dataTables_scrollBody{
     border: none;
+}
+
+table.dataTable tbody{
+    background-color: #dce2bd;
+}
+
+table.dataTable tbody tr:hover{
+    background-color: #e2eabb;
 }
 
 table.dataTable tbody td{
