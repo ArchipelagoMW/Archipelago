@@ -73,6 +73,7 @@ class Context():
         self.snes_reconnect_address = None
         self.snes_recv_queue = asyncio.Queue()
         self.snes_request_lock = asyncio.Lock()
+        self.is_sd2snes = False
         self.snes_write_buffer = []
 
         self.server_task = None
@@ -521,6 +522,15 @@ async def snes_connect(ctx: Context, address):
         ctx.snes_attached_device = (devices.index(device), device)
         ctx.ui_node.send_connection_status(ctx)
 
+        if 'sd2snes' in device.lower() or 'COM' in device:
+            ctx.ui_node.log_info("SD2SNES/FXPAK Detected")
+            ctx.is_sd2snes = True
+            await ctx.snes_socket.send(json.dumps({"Opcode" : "Info", "Space" : "SNES"}))
+            reply = json.loads(await ctx.snes_socket.recv())
+            if reply and 'Results' in reply:
+                ctx.ui_node.log_info(reply['Results'])
+        else:
+            ctx.is_sd2snes = False
 
         ctx.snes_reconnect_address = address
         recv_task = asyncio.create_task(snes_recv_loop(ctx))
@@ -637,17 +647,44 @@ async def snes_write(ctx : Context, write_list):
 
         PutAddress_Request = {"Opcode": "PutAddress", "Operands": [], 'Space': 'SNES'}
 
-        try:
+        if ctx.is_sd2snes:
+            cmd = b'\x00\xE2\x20\x48\xEB\x48'
+
             for address, data in write_list:
-                PutAddress_Request['Operands'] = [hex(address)[2:], hex(len(data))[2:]]
+                if (address < WRAM_START) or ((address + len(data)) > (WRAM_START + WRAM_SIZE)):
+                    ctx.ui_node.log_error("SD2SNES: Write out of range %s (%d)" % (hex(address), len(data)))
+                    return False
+                for ptr, byte in enumerate(data, address + 0x7E0000 - WRAM_START):
+                    cmd += b'\xA9' # LDA
+                    cmd += bytes([byte])
+                    cmd += b'\x8F' # STA.l
+                    cmd += bytes([ptr & 0xFF, (ptr >> 8) & 0xFF, (ptr >> 16) & 0xFF])
+
+            cmd += b'\xA9\x00\x8F\x00\x2C\x00\x68\xEB\x68\x28\x6C\xEA\xFF\x08'
+
+            PutAddress_Request['Space'] = 'CMD'
+            PutAddress_Request['Operands'] = ["2C00", hex(len(cmd)-1)[2:], "2C00", "1"]
+            try:
                 if ctx.snes_socket is not None:
                     await ctx.snes_socket.send(json.dumps(PutAddress_Request))
-                    await ctx.snes_socket.send(data)
+                    await ctx.snes_socket.send(cmd)
                 else:
-                    logging.warning(f"Could not send data to SNES: {data}")
-        except websockets.ConnectionClosed:
-            logging.warning("Could not write data to SNES")
-            return False
+                    logging.warning(f"Could not send data to SNES: {cmd}")
+            except websockets.ConnectionClosed:
+                return False
+        else:
+            PutAddress_Request['Space'] = 'SNES'
+            try:
+                #will pack those requests as soon as qusb2snes actually supports that for real
+                for address, data in write_list:
+                    PutAddress_Request['Operands'] = [hex(address)[2:], hex(len(data))[2:]]
+                    if ctx.snes_socket is not None:
+                        await ctx.snes_socket.send(json.dumps(PutAddress_Request))
+                        await ctx.snes_socket.send(data)
+                    else:
+                        logging.warning(f"Could not send data to SNES: {data}")
+            except websockets.ConnectionClosed:
+                return False
 
         return True
     finally:
