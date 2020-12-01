@@ -100,3 +100,7 @@ html{
     justify-content: space-between;
     width: 100%;
 }
+
+#player-settings a{
+    color: #ffffff;
+}

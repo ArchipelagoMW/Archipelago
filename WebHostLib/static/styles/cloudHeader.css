@@ -15,21 +15,23 @@
     z-index: 9999;
 }
 
+#cloud-header #site-title{
+    margin-right: 7px;
+}
+
+#cloud-header #cloud-header-spacer{
+    flex-grow: 1
+}
+
 #cloud-header #site-title img{
     width: 40px;
     height: 40px;
 }
 
 #cloud-header a{
-    color: #67bbab;
+    color: #2f6b83;
     text-decoration: none;
     cursor: pointer;
     margin-right: 1.2rem;
     font-size: 1.2rem;
-}
-
-@media (width: 800px) {
-    #cloud-header{
-        font-size: 4rem;
-    }
 }

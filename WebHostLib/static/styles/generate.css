@@ -6,8 +6,13 @@
 }
 
 #generate-game{
-    width: 660px;
+    width: 700px;
+    min-height: 360px;
     text-align: center;
+}
+
+#generate-game p{
+    text-align: left;
 }
 
 #generate-game-form-wrapper{

@@ -6,19 +6,38 @@
 }
 
 #landing{
-    width: 820px;
-    min-height: 440px;
+    width: 860px;
+    min-height: 320px;
 }
 
 #landing-header{
     text-align: center;
     width: 100%;
-    margin: 0;
+    margin-bottom: 50px;
+}
+
+#landing-header h1{
+    color: #ffffff;
+    font-size: 3.5rem;
+    text-shadow: 1px 1px 7px #000000;
+    -webkit-text-stroke: 1px #00582e;
+}
+
+#landing-header h4{
+    color: #ffffff;
+    font-size: 1.75rem;
+    margin-bottom: 0;
+    text-shadow: 1px 1px 7px #000000;
+    font-kerning: none;
+}
+
+#landing-header-links{
+    padding-bottom: 10px;
 }
 
 #landing-header-links a{
+    margin-bottom: 10px;
     margin-left: 1em;
-    margin-right: 1em;
 }
 
 #landing-buttons{
@@ -28,15 +47,4 @@
     flex-wrap: wrap;
     margin-top: 1rem;
     margin-bottom: 1rem;
-}
-
-iframe{
-    margin-left: 0.5rem;
-    border: none;
-}
-
-@media only screen and (max-width: 1300px) {
-    iframe{
-        display: none;
-    }
 }

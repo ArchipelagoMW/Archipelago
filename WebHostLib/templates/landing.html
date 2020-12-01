@@ -8,38 +8,25 @@
 {% block body %}
     {% include 'cloudHeader.html' %}
     <div id="landing-wrapper">
+        <div id="landing-header">
+            <h4>the legend of zelda: a link to the past</h4>
+            <h1>MULTIWORLD RANDOMIZER</h1>
+        </div>
         <div id="landing" class="grass-island">
-            <div id="landing-header">
-                <h4>The Legend of Zelda: A Link to the Past</h4>
-                <h1>MultiWorld Randomizer</h1>
-                <p id="landing-header-links">
-                    <a href="https://github.com/Berserker66/MultiWorld-Utilities">Source Code</a>
-                    -
-                    <a href="https://github.com/Berserker66/MultiWorld-Utilities/wiki">Wiki</a>
-                    -
-                    <a href="https://github.com/Berserker66/MultiWorld-Utilities/graphs/contributors">Contributors</a>
-                </p>
-            </div>
             <div id="landing-body">
                 <p>This is a <span data-tooltip="Allegedly.">randomizer</span> for The Legend of Zelda: A
                     Link to the Past.</p>
-                <p>This is also a multiworld, meaning your items may be placed into other players' worlds, and
-                    other players's items may be placed into your world. When a player picks up an item which does
-                    not belong to them, it is sent back to the player it belongs to over the internet.</p>
-                <p>This website allows you to host a multiworld game, and provides item and location trackers for all
-                    games hosted here.</p>
-                <p>Currently, a locally installed client is required to play. This client should handle patching
-                    your ROM files and connecting to the multiworld server. More information on how to set up a local
-                    client may be found on the
-                    <a href="{{ url_for("tutorial") }}">Setup Guide</a>.</p>
-                <p>This website is under active development. As such, your hosted rooms may occasionally disappear,
-                    and there may be bugs. If you do happen to find a bug, please report it
-                    <a href="https://github.com/Berserker66/MultiWorld-Utilities/issues">here</a>.</p>
+                <p>This is also a multiworld, meaning it is multiplayer. Your items may be placed into other
+                    players' worlds, and their items may be placed into yours. When a player picks up an item which
+                    does not belong to them, it is sent back to the player it belongs to over the internet.</p>
+                <p>This website allows you to generate and host a multiworld game, and provides item and location
+                    trackers for all games hosted here. To learn how to get started playing,
+                    <a href="/tutorial">click here.</a></p>
+                <p>This website is under active development. If you find a bug, please report it
+                    <a href="https://github.com/Berserker66/MultiWorld-Utilities/issues">here.</a></p>
                 <p>{{ seeds }} games were created and {{ rooms }} hosted in the last 7 days.</p>
             </div>
         </div>
-        <iframe src="https://discordapp.com/widget?id=731205301247803413&theme=light"
-                width="300" height="500" allowtransparency="true"></iframe>
     </div>
     {% include 'islandFooter.html' %}
 {% endblock %}

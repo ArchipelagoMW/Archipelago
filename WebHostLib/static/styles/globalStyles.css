@@ -8,22 +8,37 @@ html{
     background-repeat: repeat;
     background-size: 250px 250px;
     margin-top: 110px;
+    font-family: 'Jost', sans-serif;
+    font-size: 1.1rem;
+    color: #000000;
 }
 
 body{
     margin: 0;
 }
 
+a{
+    color: #ffef00;
+}
+
 button{
-    padding: 0.25rem;
-    margin: 0.25rem;
+    padding: 8px 12px;
     border-radius: 4px;
+}
+
+button.button-grass{
+    border: 1px solid black;
+}
+
+button.button-dirt{
+    border: 1px solid black;
 }
 
 h1, h2, h3, h4, h5, h6{
     font-family: HyliaSerif, sans-serif;
     font-weight: normal;
     margin: 0;
+    color: #032605;
 }
 
 h1{ font-size: 3rem; }
@@ -48,26 +63,26 @@ h5, h6{
         url('../static/backgrounds/cliffs/grass/cliff-bottom.png') bottom repeat-x,
         url('../static/backgrounds/cliffs/grass/cliff-left.png') left repeat-y,
         url('../static/backgrounds/cliffs/grass/cliff-right.png') right repeat-y,
-        url('../static/backgrounds/grass/grass-0004.png') repeat;
+        url('../static/backgrounds/grass/grass-0007-large.png') repeat;
 
     background-size:
         140px 120px, /* top-left */
         140px 120px, /* top-right */
         140px 140px, /* bottom-left */
         140px 140px, /* bottom-right */
-        20px 120px, /* top */
-        20px 140px, /* bottom */
-        140px 20px, /* left */
-        140px 20px, /* right */
-        140px 140px; /* center */
+        20px 71px, /* top */
+        20px 100px, /* bottom */
+        71px 20px, /* left */
+        71px 20px, /* right */
+        525px 525px; /* center */
 
     min-width: 280px;
     min-height: 280px;
 
-    padding-left: 80px;
-    padding-right: 80px;
-    padding-top: 76px;
-    padding-bottom: 106px;
+    padding-left: 120px;
+    padding-right: 120px;
+    padding-top: 100px;
+    padding-bottom: 120px;
 }
 
 .dirt-island{

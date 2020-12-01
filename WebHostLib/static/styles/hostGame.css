@@ -6,7 +6,8 @@
 }
 
 #host-game{
-    width: 620px;
+    width: 700px;
+    min-height: 360px;
     text-align: center;
 }
 
