@@ -165,7 +165,6 @@ item_pool:
   normal: 50 # Item availability remains unchanged from vanilla game
   hard: 0 # Reduced upgrade availability (max: 14 hearts, blue mail, tempered sword, fire shield, no silvers unless swordless)
   expert: 0 # Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless)
-  crowd_control: 0 # Sets up the item pool for the crowd control extension. Do not use it without crowd control
 item_functionality:
   easy: 0 # Allow Hammer to damage ganon, Allow Hammer tablet collection, Allow swordless medallion use everywhere.
   normal: 50 # Vanilla item functionality
@@ -305,6 +304,9 @@ intensity: # Only available if the host uses the doors branch, it is ignored oth
   2: 0 # And shuffles open edges and straight staircases
   3: 0 # And shuffles dungeon lobbies
   random: 0 # Picks one of those at random
+key_drop_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
+  on: 0 # Enables the small keys dropped by enemies or under pots, and the big key dropped by the Ball & Chain guard to be shuffled into the pool. This extends the number of checks to 249.
+  off: 50
 experimental: # Only available if the host uses the doors branch, it is ignored otherwise
   on: 0 # Enables experimental features. Currently, this is just the dungeon keys in chest counter.
   off: 50

@@ -10,7 +10,7 @@ import zlib
 import concurrent.futures
 
 from BaseClasses import World, CollectionState, Item, Region, Location, Shop
-from Items import ItemFactory
+from Items import ItemFactory, item_table
 from Regions import create_regions, create_shops, mark_light_world_regions, lookup_vanilla_location_to_entrance
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from EntranceShuffle import link_entrances, link_inverted_entrances
@@ -110,7 +110,13 @@ def main(args, seed=None):
             item = ItemFactory(tok.strip(), player)
             if item:
                 world.push_precollected(item)
-        world.local_items[player] = {item.strip() for item in args.local_items[player].split(',')}
+        # item in item_table gets checked in mystery, but not CLI - so we double-check here
+        world.local_items[player] = {item.strip() for item in args.local_items[player].split(',') if
+                                     item.strip() in item_table}
+        world.non_local_items[player] = {item.strip() for item in args.non_local_items[player].split(',') if
+                                         item.strip() in item_table}
+        # items can't be both local and non-local, prefer local
+        world.non_local_items[player] -= world.local_items[player]
 
         world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player], world.triforce_pieces_required[player])
 

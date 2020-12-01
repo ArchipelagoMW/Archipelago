@@ -181,7 +181,7 @@ def parse_arguments(argv, no_defaults=False):
                                           slightly biased to placing progression items with
                                           less restrictions.
                              ''')
-    parser.add_argument('--shuffle', default=defval('full'), const='full', nargs='?', choices=['vanilla', 'simple', 'restricted', 'full', 'crossed', 'insanity', 'restricted_legacy', 'full_legacy', 'madness_legacy', 'insanity_legacy', 'dungeonsfull', 'dungeonssimple'],
+    parser.add_argument('--shuffle', default=defval('vanilla'), const='vanilla', nargs='?', choices=['vanilla', 'simple', 'restricted', 'full', 'crossed', 'insanity', 'restricted_legacy', 'full_legacy', 'madness_legacy', 'insanity_legacy', 'dungeonsfull', 'dungeonssimple'],
                         help='''\
                              Select Entrance Shuffling Algorithm. (default: %(default)s)
                              Full:       Mix cave and dungeon entrances freely while limiting
@@ -266,6 +266,8 @@ def parse_arguments(argv, no_defaults=False):
                         help='Specifies a list of items that will be in your starting inventory (separated by commas)')
     parser.add_argument('--local_items', default=defval(''),
                         help='Specifies a list of items that will not spread across the multiworld (separated by commas)')
+    parser.add_argument('--non_local_items', default=defval(''),
+                        help='Specifies a list of items that will spread across the multiworld (separated by commas)')
     parser.add_argument('--custom', default=defval(False), help='Not supported.')
     parser.add_argument('--customitemarray', default=defval(False), help='Not supported.')
     parser.add_argument('--accessibility', default=defval('items'), const='items', nargs='?', choices=['items', 'locations', 'none'], help='''\
@@ -376,7 +378,7 @@ def parse_arguments(argv, no_defaults=False):
                          'shuffle', 'crystals_ganon', 'crystals_gt', 'open_pyramid', 'timer',
                          'countdown_start_time', 'red_clock_time', 'blue_clock_time', 'green_clock_time',
                          'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle', 'startinventory',
-                         'local_items', 'retro', 'accessibility', 'hints', 'beemizer',
+                         'local_items', 'non_local_items', 'retro', 'accessibility', 'hints', 'beemizer',
                          'shufflebosses', 'enemy_shuffle', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
                          'heartbeep', "skip_progression_balancing", "triforce_pieces_available",

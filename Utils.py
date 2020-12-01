@@ -6,7 +6,7 @@ def tuplize_version(version: str) -> typing.Tuple[int, ...]:
     return tuple(int(piece, 10) for piece in version.split("."))
 
 
-__version__ = "3.3.0"
+__version__ = "3.4.1"
 _version_tuple = tuplize_version(__version__)
 
 import os
@@ -165,6 +165,90 @@ def get_public_ipv6() -> str:
         pass  # we could be offline, in a local game, or ipv6 may not be available
     return ip
 
+
+def get_default_options() -> dict:
+    if not hasattr(get_default_options, "options"):
+        options = dict()
+
+        # Refer to host.yaml for comments as to what all these options mean.
+        generaloptions = dict()
+        generaloptions["rom_file"] = "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
+        generaloptions["qusb2snes"] = "QUsb2Snes\\QUsb2Snes.exe"
+        generaloptions["rom_start"] = True
+        generaloptions["output_path"] = "output"
+        options["general_options"] = generaloptions
+
+        serveroptions = dict()
+        serveroptions["host"] = None
+        serveroptions["port"] = 38281
+        serveroptions["password"] = None
+        serveroptions["multidata"] = None
+        serveroptions["savefile"] = None
+        serveroptions["disable_save"] = False
+        serveroptions["loglevel"] = "info"
+        serveroptions["server_password"] = None
+        serveroptions["disable_item_cheat"] = False
+        serveroptions["location_check_points"] = 1
+        serveroptions["hint_cost"] = 1000
+        serveroptions["forfeit_mode"] = "goal"
+        serveroptions["remaining_mode"] = "goal"
+        serveroptions["auto_shutdown"] = 0
+        serveroptions["compatibility"] = 2
+        options["server_options"] = serveroptions
+
+        multimysteryoptions = dict()
+        multimysteryoptions["teams"] = 1
+        multimysteryoptions["enemizer_path"] = "EnemizerCLI/EnemizerCLI.Core.exe"
+        multimysteryoptions["player_files_path"] = "Players"
+        multimysteryoptions["players"] = 0
+        multimysteryoptions["weights_file_path"] = "weights.yaml"
+        multimysteryoptions["meta_file_path"] = "meta.yaml"
+        multimysteryoptions["player_name"] = ""
+        multimysteryoptions["create_spoiler"] = 1
+        multimysteryoptions["zip_roms"] = 0
+        multimysteryoptions["zip_diffs"] = 2
+        multimysteryoptions["zip_spoiler"] = 0
+        multimysteryoptions["zip_multidata"] = 1
+        multimysteryoptions["zip_format"] = 1
+        multimysteryoptions["race"] = 0
+        multimysteryoptions["cpu_threads"] = 0
+        multimysteryoptions["max_attempts"] = 0
+        multimysteryoptions["take_first_working"] = False
+        multimysteryoptions["keep_all_seeds"] = False
+        multimysteryoptions["log_output_path"] = "Output Logs"
+        multimysteryoptions["log_level"] = None
+        options["multi_mystery_options"] = multimysteryoptions
+        get_default_options.options = options
+    return get_default_options.options
+
+
+blacklisted_options = {"multi_mystery_options.cpu_threads",
+                       "multi_mystery_options.max_attempts",
+                       "multi_mystery_options.take_first_working",
+                       "multi_mystery_options.keep_all_seeds",
+                       "multi_mystery_options.log_output_path",
+                       "multi_mystery_options.log_level"}
+
+
+def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
+    import logging
+    for key, value in src.items():
+        new_keys = keys.copy()
+        new_keys.append(key)
+        option_name = '.'.join(new_keys)
+        if key not in dest:
+            dest[key] = value
+            if filename.endswith("options.yaml") and option_name not in blacklisted_options:
+                logging.info(f"Warning: {filename} is missing {option_name}")
+        elif isinstance(value, dict):
+            if not isinstance(dest.get(key, None), dict):
+                if filename.endswith("options.yaml") and option_name not in blacklisted_options:
+                    logging.info(f"Warning: {filename} has {option_name}, but it is not a dictionary. overwriting.")
+                dest[key] = value
+            else:
+                dest[key] = update_options(value, dest[key], filename, new_keys)
+    return dest
+
 def get_options() -> dict:
     if not hasattr(get_options, "options"):
         locations = ("options.yaml", "host.yaml",
@@ -173,7 +257,9 @@ def get_options() -> dict:
         for location in locations:
             if os.path.exists(location):
                 with open(location) as f:
-                    get_options.options = parse_yaml(f.read())
+                    options = parse_yaml(f.read())
+
+                get_options.options = update_options(get_default_options(), options, location, list())
                 break
         else:
             raise FileNotFoundError(f"Could not find {locations[1]} to load options.")
@@ -222,28 +308,32 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
     if hasattr(get_adjuster_settings, "adjuster_settings"):
         adjuster_settings = getattr(get_adjuster_settings, "adjuster_settings")
     else:
-        adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings", {})
+        adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_3", {})
+
     if adjuster_settings:
         import pprint
         import Patch
         adjuster_settings.rom = romfile
         adjuster_settings.baserom = Patch.get_base_rom_path()
         whitelist = {"disablemusic", "fastmenu", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
-                     "uw_palettes"}
+                     "uw_palettes", "sprite"}
         printed_options = {name: value for name, value in vars(adjuster_settings).items() if name in whitelist}
-        sprite = getattr(adjuster_settings, "sprite", None)
-        if sprite:
-            printed_options["sprite"] = adjuster_settings.sprite.name
+
         if hasattr(get_adjuster_settings, "adjust_wanted"):
             adjust_wanted = getattr(get_adjuster_settings, "adjust_wanted")
+        elif persistent_load().get("adjuster", {}).get("never_adjust", False): # never adjust, per user request
+            return romfile, False
         else:
             adjust_wanted = input(f"Last used adjuster settings were found. Would you like to apply these? \n"
                                   f"{pprint.pformat(printed_options)}\n"
-                                  f"Enter yes or no: ")
+                                  f"Enter yes, no or never: ")
         if adjust_wanted and adjust_wanted.startswith("y"):
             adjusted = True
             import AdjusterMain
             _, romfile = AdjusterMain.adjust(adjuster_settings)
+        elif adjust_wanted and "never" in adjust_wanted:
+            persistent_store("adjuster", "never_adjust", True)
+            return romfile, False
         else:
             adjusted = False
             import logging

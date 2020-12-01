@@ -52,55 +52,6 @@ def generate(race=False):
     return render_template("generate.html", race=race)
 
 
-@app.route('/api/generate', methods=['POST'])
-def generate_api():
-    try:
-        options = {}
-        race = False
-
-        if 'file' in request.files:
-            file = request.files['file']
-            options = get_yaml_data(file)
-            if type(options) == str:
-                return {"text": options}, 400
-            if "race" in request.form:
-                race = bool(0 if request.form["race"] in {"false"} else int(request.form["race"]))
-
-        json_data = request.get_json()
-        if json_data:
-            if 'weights' in json_data:
-                # example: options = {"player1weights" : {<weightsdata>}}
-                options = json_data["weights"]
-            if "race" in json_data:
-                race = bool(0 if json_data["race"] in {"false"} else int(json_data["race"]))
-        if not options:
-            return {"text": "No options found. Expected file attachment or json weights."
-                    }, 400
-
-        if len(options) > app.config["MAX_ROLL"]:
-            return {"text": "Max size of multiworld exceeded",
-                    "detail": app.config["MAX_ROLL"]}, 409
-
-        results, gen_options = roll_options(options)
-        if any(type(result) == str for result in results.values()):
-            return {"text": str(results),
-                    "detail": results}, 400
-        else:
-            gen = Generation(
-                options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
-                # convert to json compatible
-                meta=pickle.dumps({"race": race}), state=STATE_QUEUED,
-                owner=session["_id"])
-            commit()
-            return {"text": f"Generation of seed {gen.id} started successfully.",
-                    "detail": gen.id,
-                    "encoded": app.url_map.converters["suuid"].to_url(None, gen.id),
-                    "wait_api_url": url_for("wait_seed_api", seed=gen.id),
-                    "url": url_for("wait_seed", seed=gen.id)}, 201
-    except Exception as e:
-        return {"text": "Uncaught Exception:" + str(e)}, 500
-
-
 def gen_game(gen_options, race=False, owner=None, sid=None):
     try:
         target = tempfile.TemporaryDirectory()
@@ -142,12 +93,13 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
         ERmain(erargs, seed)
 
         return upload_to_db(target.name, owner, sid, race)
-    except BaseException:
+    except BaseException as e:
         if sid:
             with db_session:
                 gen = Generation.get(id=sid)
                 if gen is not None:
                     gen.state = STATE_ERROR
+                    gen.meta = (e.__class__.__name__ + ": "+ str(e)).encode()
         raise
 
 
@@ -162,23 +114,9 @@ def wait_seed(seed: UUID):
     if not generation:
         return "Generation not found."
     elif generation.state == STATE_ERROR:
-        return "Generation failed, please retry."
+        import html
+        return f"Generation failed, please retry. <br> {html.escape(generation.meta.decode())}"
     return render_template("waitSeed.html", seed_id=seed_id)
-
-
-@app.route('/api/status/<suuid:seed>')
-def wait_seed_api(seed: UUID):
-    seed_id = seed
-    seed = Seed.get(id=seed_id)
-    if seed:
-        return {"text": "Generation done"}, 201
-    generation = Generation.get(id=seed_id)
-
-    if not generation:
-        return {"text": "Generation not found"}, 404
-    elif generation.state == STATE_ERROR:
-        return {"text": "Generation failed"}, 500
-    return {"text": "Generation running"}, 202
 
 
 def upload_to_db(folder, owner, sid, race:bool):

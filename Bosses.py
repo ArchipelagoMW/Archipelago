@@ -123,7 +123,7 @@ def GanonDefeatRule(state, player: int):
                state.has('Silver Bow', player) and \
                state.can_shoot_arrows(player)
     easy_hammer = state.world.difficulty_adjustments[player] == "easy" and state.has("Hammer", player) and \
-        state.has('Silver Bow', player) and state.can_shoot_arrows(player)
+                  state.has('Silver Bow', player) and state.can_shoot_arrows(player)
     can_hurt = state.has_beam_sword(player) or easy_hammer
     common = can_hurt and state.has_fire_source(player)
     # silverless ganon may be needed in minor glitches
@@ -131,7 +131,7 @@ def GanonDefeatRule(state, player: int):
         # need to light torch a sufficient amount of times
         return common and (state.has('Tempered Sword', player) or state.has('Golden Sword', player) or (
                 state.has('Silver Bow', player) and state.can_shoot_arrows(player)) or
-               state.has('Lamp', player) or state.can_extend_magic(player, 12))
+                           state.has('Lamp', player) or state.can_extend_magic(player, 12))
 
     else:
         return common and state.has('Silver Bow', player) and state.can_shoot_arrows(player)
@@ -153,27 +153,33 @@ boss_table = {
 }
 
 
-def can_place_boss(world, player: int, boss: str, dungeon_name: str, level: Optional[str] = None) -> bool:
-    if dungeon_name in ['Ganons Tower', 'Inverted Ganons Tower'] and level == 'top':
-        if boss in ["Armos Knights", "Arrghus", "Blind", "Trinexx", "Lanmolas"]:
+def can_place_boss(boss: str, dungeon_name: str, level: Optional[str] = None) -> bool:
+    #blacklist approach
+    if boss in {"Agahnim", "Agahnim2", "Ganon"}:
+        return False
+
+    if dungeon_name == 'Ganons Tower':
+        if level == 'top':
+            if boss in {"Armos Knights", "Arrghus", "Blind", "Trinexx", "Lanmolas"}:
+                return False
+        elif level == 'middle':
+            if boss == "Blind":
+                return False
+
+    elif dungeon_name == 'Tower of Hera':
+        if boss in {"Armos Knights", "Arrghus", "Blind", "Trinexx", "Lanmolas"}:
             return False
 
-    if dungeon_name in ['Ganons Tower', 'Inverted Ganons Tower'] and level == 'middle':
-        if boss in ["Blind"]:
+    elif dungeon_name == 'Skull Woods' :
+        if boss  == "Trinexx":
             return False
 
-    if dungeon_name == 'Tower of Hera' and boss in ["Armos Knights", "Arrghus", "Blind", "Trinexx", "Lanmolas"]:
-        return False
-
-    if dungeon_name == 'Skull Woods' and boss in ["Trinexx"]:
-        return False
-
-    if boss in ["Agahnim", "Agahnim2", "Ganon"]:
-        return False
     return True
 
 
 def place_boss(world, player: int, boss: str, location: str, level: Optional[str]):
+    if location == 'Ganons Tower' and world.mode[player] == 'inverted':
+        location = 'Inverted Ganons Tower'
     logging.debug('Placing boss %s at %s', boss, location + (' (' + level + ')' if level else ''))
     world.get_dungeon(location, player).bosses[level] = BossFactory(boss, player)
 
@@ -182,43 +188,25 @@ def place_bosses(world, player: int):
     if world.boss_shuffle[player] == 'none':
         return
     # Most to least restrictive order
-    if world.mode[player] != 'inverted':
-        boss_locations = [
-            ['Ganons Tower', 'top'],
-            ['Tower of Hera', None],
-            ['Skull Woods', None],
-            ['Ganons Tower', 'middle'],
-            ['Eastern Palace', None],
-            ['Desert Palace', None],
-            ['Palace of Darkness', None],
-            ['Swamp Palace', None],
-            ['Thieves Town', None],
-            ['Ice Palace', None],
-            ['Misery Mire', None],
-            ['Turtle Rock', None],
-            ['Ganons Tower', 'bottom'],
-        ]
-    else:
-        boss_locations = [
-            ['Inverted Ganons Tower', 'top'],
-            ['Tower of Hera', None],
-            ['Skull Woods', None],
-            ['Inverted Ganons Tower', 'middle'],
-            ['Eastern Palace', None],
-            ['Desert Palace', None],
-            ['Palace of Darkness', None],
-            ['Swamp Palace', None],
-            ['Thieves Town', None],
-            ['Ice Palace', None],
-            ['Misery Mire', None],
-            ['Turtle Rock', None],
-            ['Inverted Ganons Tower', 'bottom'],
-        ]
+    boss_locations = [
+        ['Ganons Tower', 'top'],
+        ['Tower of Hera', None],
+        ['Skull Woods', None],
+        ['Ganons Tower', 'middle'],
+        ['Eastern Palace', None],
+        ['Desert Palace', None],
+        ['Palace of Darkness', None],
+        ['Swamp Palace', None],
+        ['Thieves Town', None],
+        ['Ice Palace', None],
+        ['Misery Mire', None],
+        ['Turtle Rock', None],
+        ['Ganons Tower', 'bottom'],
+    ]
 
     all_bosses = sorted(boss_table.keys())  # sorted to be deterministic on older pythons
     placeable_bosses = [boss for boss in all_bosses if boss not in ['Agahnim', 'Agahnim2', 'Ganon']]
-    anywhere_bosses = [boss for boss in placeable_bosses if all(
-        can_place_boss(world, player, boss, loc, level) for loc, level in boss_locations)]
+
     if world.boss_shuffle[player] in ["basic", "normal"]:
         if world.boss_shuffle[player] == "basic":  # vanilla bosses shuffled
             bosses = placeable_bosses + ['Armos Knights', 'Lanmolas', 'Moldorm']
@@ -228,8 +216,8 @@ def place_bosses(world, player: int):
         logging.debug('Bosses chosen %s', bosses)
 
         world.random.shuffle(bosses)
-        for [loc, level] in boss_locations:
-            boss = next((b for b in bosses if can_place_boss(world, player, b, loc, level)), None)
+        for loc, level in boss_locations:
+            boss = next((b for b in bosses if can_place_boss(b, loc, level)), None)
             if not boss:
                 loc_text = loc + (' (' + level + ')' if level else '')
                 raise FillError('Could not place boss for location %s' % loc_text)
@@ -237,10 +225,10 @@ def place_bosses(world, player: int):
             place_boss(world, player, boss, loc, level)
 
     elif world.boss_shuffle[player] == "chaos":  # all bosses chosen at random
-        for [loc, level] in boss_locations:
+        for loc, level in boss_locations:
             try:
                 boss = world.random.choice(
-                    [b for b in placeable_bosses if can_place_boss(world, player, b, loc, level)])
+                    [b for b in placeable_bosses if can_place_boss(b, loc, level)])
             except IndexError:
                 loc_text = loc + (' (' + level + ')' if level else '')
                 raise FillError('Could not place boss for location %s' % loc_text)
@@ -252,14 +240,14 @@ def place_bosses(world, player: int):
         remaining_boss_locations = []
         for loc, level in boss_locations:
             # place that boss where it can go
-            if can_place_boss(world, player, primary_boss, loc, level):
+            if can_place_boss(primary_boss, loc, level):
                 place_boss(world, player, primary_boss, loc, level)
             else:
                 remaining_boss_locations.append((loc, level))
         if remaining_boss_locations:
             # pick a boss to go into the remaining locations
             remaining_boss = world.random.choice([boss for boss in placeable_bosses if all(
-                can_place_boss(world, player, boss, loc, level) for loc, level in remaining_boss_locations)])
+                can_place_boss(boss, loc, level) for loc, level in remaining_boss_locations)])
             for loc, level in remaining_boss_locations:
                 place_boss(world, player, remaining_boss, loc, level)
     else:

@@ -238,6 +238,8 @@ def convert_to_on_off(value):
 def get_choice(option, root, value=None) -> typing.Any:
     if option not in root:
         return value
+    if type(root[option]) is list:
+        return interpret_on_off(random.choices(root[option])[0])
     if type(root[option]) is not dict:
         return interpret_on_off(root[option])
     if not root[option]:
@@ -487,6 +489,17 @@ def roll_settings(weights):
                 raise Exception(f"Could not force item {item} to be world-local, as it was not recognized.")
 
     ret.local_items = ",".join(ret.local_items)
+
+    ret.non_local_items = set()
+    for item_name in weights.get('non_local_items', []):
+        items = item_name_groups.get(item_name, {item_name})
+        for item in items:
+            if item in item_table:
+                ret.non_local_items.add(item)
+            else:
+                raise Exception(f"Could not force item {item} to be world-non-local, as it was not recognized.")
+
+    ret.non_local_items = ",".join(ret.non_local_items)
 
     if 'rom' in weights:
         romweights = weights['rom']

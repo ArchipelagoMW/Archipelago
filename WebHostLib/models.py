@@ -50,5 +50,5 @@ class Generation(db.Entity):
     id = PrimaryKey(UUID, default=uuid4)
     owner = Required(UUID)
     options = Required(bytes, lazy=True)  # these didn't work as JSON on mariaDB, so they're getting pickled now
-    meta = Required(bytes, lazy=True)
+    meta = Required(bytes, lazy=True) # if state is -1 (error) this will contain an utf-8 encoded error message
     state = Required(int, default=0, index=True)

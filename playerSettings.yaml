@@ -107,7 +107,7 @@ triforce_pieces_extra: # Set to how many extra triforces pieces are available to
   10: 50
   15: 0
   20: 0
-triforce_pieces_percentage: # Set to how many extra triforces pieces according to a percentage of the required ones, are available to collect in the world. 
+triforce_pieces_percentage: # Set to how many triforce pieces according to a percentage of the required ones, are available to collect in the world.
   # Format "pieces: chance"
   100: 0 #No extra
   150: 50 #Half the required will be added as extra
@@ -165,7 +165,6 @@ item_pool:
   normal: 50 # Item availability remains unchanged from vanilla game
   hard: 0 # Reduced upgrade availability (max: 14 hearts, blue mail, tempered sword, fire shield, no silvers unless swordless)
   expert: 0 # Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless)
-  crowd_control: 0 # Sets up the item pool for the crowd control extension. Do not use it without crowd control
 item_functionality:
   easy: 0 # Allow Hammer to damage ganon, Allow Hammer tablet collection, Allow swordless medallion use everywhere.
   normal: 50 # Vanilla item functionality
@@ -254,6 +253,11 @@ green_clock_time: # For all timer modes, the amount of time in minutes to gain o
 #  - "Small Keys"
 #  - "Big Keys"
 # Can be uncommented to use it
+# non_local_items: # Force certain items to appear outside your world only, always across the multiworld. Recognizes some group names, like "Swords"
+#  - "Moon Pearl"
+#  - "Small Keys"
+#  - "Big Keys"
+# Can be uncommented to use it
 # startinventory: # Begin the file with the listed items/upgrades
   # Pegasus Boots: on
   # Bomb Upgrade (+10): 4
@@ -305,8 +309,11 @@ intensity: # Only available if the host uses the doors branch, it is ignored oth
   2: 0 # And shuffles open edges and straight staircases
   3: 0 # And shuffles dungeon lobbies
   random: 0 # Picks one of those at random
+key_drop_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
+  on: 0 # Enables the small keys dropped by enemies or under pots, and the big key dropped by the Ball & Chain guard to be shuffled into the pool. This extends the number of checks to 249.
+  off: 50
 experimental: # Only available if the host uses the doors branch, it is ignored otherwise
-  on: 0 # Enables experimental features. Currently, this is just the dungeon keys in chest counter.
+  on: 0 # Enables experimental features.
   off: 50
 debug: # Only available if the host uses the doors branch, it is ignored otherwise
   on: 0 # Enables debugging features. Currently, these are the Item collection counter. (overwrites total triforce pieces) and Castle Gate closed indicator.

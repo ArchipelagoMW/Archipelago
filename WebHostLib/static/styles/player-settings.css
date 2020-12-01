@@ -55,6 +55,7 @@ html{
 #player-settings #settings-wrapper #sprite-picker .sprite-img-wrapper{
     cursor: pointer;
     margin: 10px;
+    image-rendering: pixelated;
 }
 
 /* Center tooltip text for sprite images */
