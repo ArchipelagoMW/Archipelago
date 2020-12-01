@@ -17,6 +17,7 @@
     font-size: 3.5rem;
     text-shadow: 1px 1px 7px #000000;
     -webkit-text-stroke: 1px #00582e;
+    z-index: 10;
 }
 
 #landing-header h4{
@@ -25,6 +26,7 @@
     margin-bottom: 0;
     text-shadow: 1px 1px 7px #000000;
     font-kerning: none;
+    z-index: 10;
 }
 
 #landing-buttons{
@@ -33,10 +35,128 @@
     height: 50px;
 }
 
+#landing-clouds{
+    z-index: 5;
+}
+
+#landing-clouds #cloud1{
+    position: absolute;
+    left: 10px;
+    top: 65px;
+    width: 400px;
+    height: 350px
+}
+
+#landing-clouds #cloud2{
+    position: absolute;
+    right: 82px;
+    top: 167px;
+    width: 300px;
+    height: 300px;
+}
+
+#landing-clouds #cloud3{
+    position: absolute;
+    right: 24px;
+    top: 500px;
+    width: 200px;
+    height: 325px;
+}
+
 #landing{
-    width: 860px;
-    min-height: 320px;
+    width: 660px;
+    min-height: 360px;
     margin-left: auto;
     margin-right: auto;
 }
 
+@media all and (max-width: 1550px){
+    #cloud1{
+        animation-name: c1-glide-out;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+        left: -400px;
+    }
+
+    #cloud2{
+        animation-name: c2-glide-out;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+        right: -300px;
+    }
+
+    #cloud3{
+        animation-name: c3-glide-out;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+        right: -200px;
+    }
+
+    @keyframes c1-glide-out{
+        from{ left: 10px; }
+        to{
+            left: -400px;
+            display: none;
+        }
+    }
+
+    @keyframes c2-glide-out{
+        from{ right: 82px; }
+        to{
+            right: -300px;
+            display: none;
+        }
+    }
+
+    @keyframes c3-glide-out{
+        from{ right: 24px; }
+        to{
+            right: -200px;
+            display: none;
+        }
+    }
+}
+
+@media all and (min-width: 1550px){
+    #cloud1{
+        animation-name: c1-glide-in;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+    }
+
+    #cloud2{
+        animation-name: c2-glide-in;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+    }
+
+    #cloud3{
+        animation-name: c3-glide-in;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes c1-glide-in{
+        from{ left: -400px; }
+        to{
+            left: 10px;
+            display: none;
+        }
+    }
+
+    @keyframes c2-glide-in{
+        from{ right: -300px; }
+        to{
+            right: 82px;
+            display: none;
+        }
+    }
+
+    @keyframes c3-glide-in{
+        from{ right: -200px; }
+        to{
+            right: 24px;
+            display: none;
+        }
+    }
+}
