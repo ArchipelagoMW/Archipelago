@@ -8,7 +8,9 @@ html{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    width: calc(100% - 1rem);
 }
 
 .table-wrapper{
