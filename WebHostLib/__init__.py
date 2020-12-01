@@ -147,4 +147,5 @@ def favicon():
 
 
 from WebHostLib.customserver import run_server_process
-from . import tracker, upload, landing, check, generate, downloads  # to trigger app routing picking up on it
+from . import tracker, upload, landing, check, generate, downloads, api  # to trigger app routing picking up on it
+app.register_blueprint(api.api_endpoints)
