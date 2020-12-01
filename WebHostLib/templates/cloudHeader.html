@@ -1,3 +1,7 @@
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/cloudHeader.css") }}" />
+{% endblock %}
+
 {% block header %}
     <header id="cloud-header">
         <a href="/" id="site-title">
@@ -9,6 +13,6 @@
         <a href="/uploads">host game</a>
         <a href="/tutorial">setup guide</a>
         <a href="/player-settings">player settings</a>
-        <a href="https://discord.com/8Z65BR2">discord</a>
+        <a href="https://discord.gg/8Z65BR2">discord</a>
     </header>
 {% endblock %}

@@ -1,13 +1,9 @@
 #landing-wrapper{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     flex-wrap: wrap;
-}
-
-#landing{
-    width: 860px;
-    min-height: 320px;
+    margin-top: 50px;
 }
 
 #landing-header{
@@ -31,20 +27,16 @@
     font-kerning: none;
 }
 
-#landing-header-links{
-    padding-bottom: 10px;
-}
-
-#landing-header-links a{
-    margin-bottom: 10px;
-    margin-left: 1em;
-}
-
 #landing-buttons{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    height: 50px;
 }
+
+#landing{
+    width: 860px;
+    min-height: 320px;
+    margin-left: auto;
+    margin-right: auto;
+}
+

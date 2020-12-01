@@ -7,9 +7,6 @@
     width: calc(100% - 0.5rem);
     padding-left: 0.5rem;
     padding-top: 50px;
-    position: fixed;
-    bottom: 0;
-    left: 0;
     color: #dfedc6
 }
 

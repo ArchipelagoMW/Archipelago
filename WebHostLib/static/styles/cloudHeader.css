@@ -1,10 +1,14 @@
+html{
+    padding-top: 110px;
+}
+
 #cloud-header{
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     background: url('../static/backgrounds/header/cloud-header.png') repeat-x;
     background-size: auto 90px;
-    width: 100%;
+    width: calc(100% - 20px);
     height: 90px;
     position: fixed;
     top: 0;
