@@ -82,7 +82,7 @@ begin
   begin
     // Is the installed version at least the packaged one ?
     Log('VC Redist x64 Version : found ' + strVersion);
-    Result := (CompareStr(strVersion, 'v14.26.28720') < 0);
+    Result := (CompareStr(strVersion, 'v14.28.29325') < 0);
   end
   else
   begin
