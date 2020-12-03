@@ -1,15 +1,20 @@
+html{
+    overflow-x: hidden;
+}
+
 #landing-wrapper{
     display: flex;
     flex-direction: column;
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 50px;
+    margin-top: 60px;
 }
 
 #landing-header{
-    text-align: center;
-    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
     margin-bottom: 50px;
+    text-align: center;
 }
 
 #landing-header h1{
@@ -29,10 +34,74 @@
     z-index: 10;
 }
 
-#landing-buttons{
+#landing-links{
     margin-left: auto;
     margin-right: auto;
-    height: 50px;
+    height: 400px;
+}
+
+#landing-links a{
+    position: absolute;
+    display: block;
+    text-align: center;
+    background-repeat: no-repeat;
+    font-family: HyliaSerif, sans-serif;
+    font-kerning: none;
+    text-decoration: none;
+    text-shadow: 1px 1px 7px #000000;
+    color: #ffffff;
+    font-size: 1.4rem;
+}
+
+#uploads-button{
+    top: 65px;
+    left: calc(50% - 416px - 200px - 75px);
+    background-image: url("/static/static/button-images/button-a.png");
+    background-size: 200px auto;
+    width: 200px;
+    height: calc(156px - 40px);
+    padding-top: 40px;
+}
+
+#setup-guide-button{
+    top: 270px;
+    left: calc(50% - 416px - 200px + 140px);
+    background-image: url("/static/static/button-images/button-b.png");
+    background-size: 260px auto;
+    width: 260px;
+    height: calc(130px - 35px);
+    padding-top: 35px;
+}
+
+#generate-button{
+    top: 350px;
+    left: calc(50% - 100px);
+    background-image: url("/static/static/button-images/button-a.png");
+    background-size: 200px auto;
+    width: 200px;
+    height: calc(156px - 38px);
+    padding-top: 38px;
+}
+
+#discord-button{
+    top: 250px;
+    left: calc(50% + 416px - 166px);
+    background-image: url("/static/static/button-images/button-c.png");
+    background-size: 250px auto;
+    width: calc(250px - 20px);
+    height: calc(180px - 90px);
+    padding-top: 90px;
+    padding-left: 20px;
+}
+
+#player-settings-button{
+    top: 75px;
+    left: calc(50% + 416px + 75px);
+    background-image: url("/static/static/button-images/button-b.png");
+    background-size: 260px auto;
+    width: 260px;
+    height: calc(130px - 35px);
+    padding-top: 35px;
 }
 
 #landing-clouds{
@@ -42,25 +111,106 @@
 #landing-clouds #cloud1{
     position: absolute;
     left: 10px;
-    top: 65px;
+    top: 265px;
     width: 400px;
-    height: 350px
+    height: 350px;
+
+    animation-name: c1-float;
+    animation-duration: 20s;
+    animation-iteration-count: infinite;
 }
 
 #landing-clouds #cloud2{
     position: absolute;
     right: 82px;
-    top: 167px;
+    top: 320px;
     width: 300px;
     height: 300px;
+
+    animation-name: c2-float;
+    animation-duration: 20s;
+    animation-iteration-count: infinite;
 }
 
 #landing-clouds #cloud3{
     position: absolute;
     right: 24px;
-    top: 500px;
+    top: 570px;
     width: 200px;
     height: 325px;
+
+    animation-name: c3-float;
+    animation-duration: 20s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes c1-float{
+    from{
+        left: 10px;
+        top: 265px;
+    }
+    25%{
+        left: 14px;
+        top: 267px;
+    }
+    50%{
+        left: 17px;
+        top: 265px;
+    }
+    75%{
+        left: 14px;
+        top: 262px;
+    }
+    to{
+        left: 10px;
+        top: 265px;
+    }
+}
+
+@keyframes c2-float {
+    from{
+        right: 82px;
+        top: 320px;
+    }
+    25%{
+        right: 85px;
+        top: 323px;
+    }
+    50%{
+        right: 81px;
+        top: 326px;
+    }
+    75%{
+        right: 79px;
+        top: 326px;
+    }
+    to{
+        right: 82px;
+        top: 320px;
+    }
+}
+
+@keyframes c3-float {
+    from{
+        right: 24px;
+        top: 570px;
+    }
+    25%{
+        right: 26px;
+        top: 567px;
+    }
+    50%{
+        right: 25px;
+        top: 570px;
+    }
+    75%{
+        right: 22px;
+        top: 572px;
+    }
+    to{
+        right: 24px;
+        top: 570px;
+    }
 }
 
 #landing{
@@ -70,25 +220,70 @@
     margin-right: auto;
 }
 
-@media all and (max-width: 1550px){
-    #cloud1{
+.landing-deco{
+    position: absolute;
+}
+
+.landing-deco.deco-island{
+    width: 110px;
+}
+
+.landing-deco.deco-rock{
+    width: 30px;
+}
+
+#landing-deco-1{
+    top: 430px;
+    left: calc(50% - 276px);
+}
+
+#landing-deco-2{
+    top: 200px;
+    left: calc(50% + 150px);
+}
+
+#landing-deco-3{
+    top: 300px;
+    left: calc(50% - 150px);
+}
+
+#landing-deco-4{
+    top: 240px;
+    left: calc(50% - 580px);
+}
+
+#landing-deco-5{
+    top: 40px;
+    left: calc(50% + 450px);
+}
+
+#landing-deco-6{
+    top: 412px;
+    left: calc(50% + 196px);
+}
+
+@media all and (max-width: 1520px){
+    #landing-clouds #cloud1{
         animation-name: c1-glide-out;
         animation-duration: 1s;
         animation-fill-mode: forwards;
+        animation-iteration-count: 1;
         left: -400px;
     }
 
-    #cloud2{
+    #landing-clouds #cloud2{
         animation-name: c2-glide-out;
         animation-duration: 1s;
         animation-fill-mode: forwards;
+        animation-iteration-count: 1;
         right: -300px;
     }
 
-    #cloud3{
+    #landing-clouds #cloud3{
         animation-name: c3-glide-out;
         animation-duration: 1s;
         animation-fill-mode: forwards;
+        animation-iteration-count: 1;
         right: -200px;
     }
 
@@ -115,48 +310,22 @@
             display: none;
         }
     }
-}
 
-@media all and (min-width: 1550px){
-    #cloud1{
-        animation-name: c1-glide-in;
-        animation-duration: 1s;
-        animation-fill-mode: forwards;
+    #landing-links{
+        height: auto;
+        flex-direction: column;
     }
 
-    #cloud2{
-        animation-name: c2-glide-in;
-        animation-duration: 1s;
-        animation-fill-mode: forwards;
+    #landing-links a{
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 1rem;
+        top: auto;
+        left: auto;
     }
 
-    #cloud3{
-        animation-name: c3-glide-in;
-        animation-duration: 1s;
-        animation-fill-mode: forwards;
-    }
-
-    @keyframes c1-glide-in{
-        from{ left: -400px; }
-        to{
-            left: 10px;
-            display: none;
-        }
-    }
-
-    @keyframes c2-glide-in{
-        from{ right: -300px; }
-        to{
-            right: 82px;
-            display: none;
-        }
-    }
-
-    @keyframes c3-glide-in{
-        from{ right: -200px; }
-        to{
-            right: 24px;
-            display: none;
-        }
+    .landing-deco{
+        display: none;
     }
 }
