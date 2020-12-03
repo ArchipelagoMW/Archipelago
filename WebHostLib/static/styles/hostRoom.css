@@ -1,7 +1,7 @@
 html{
-    background-image: url('../static/backgrounds/dirt/dirt-0005-large.png');
+    background-image: url('../static/backgrounds/grass/grass-0007-large.png');
     background-repeat: repeat;
-    background-size: 900px 900px;
+    background-size: 650px 650px;
 }
 
 #host-room{
@@ -11,16 +11,16 @@ html{
     background-color: rgba(0, 0, 0, 0.15);
     border-radius: 8px;
     padding: 1rem;
-    color: #ffe993;
+    color: #eeffeb;
 }
 
 #host-room a{
-    color: #ffffff;
+    color: #ffef00;
 }
 
 #host-room input[type=text]{
+    border: 1px solid #000000;
+    padding: 3px;
+    border-radius: 3px;
     width: 500px;
-    min-width: 370px;
-    padding: 0.125rem;
-    height: 1.5rem;
 }

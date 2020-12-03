@@ -11,25 +11,25 @@
     {% include 'cloudHeader.html' %}
     <div id="generate-game-wrapper">
         <div id="generate-game" class="grass-island">
-            <h1>Generate Game{% if race %} (Race Mode){% endif %}</h1>
+            <h1>Start Game{% if race %} (Race Mode){% endif %}</h1>
             <p>
                 This page accepts a yaml file containing generator options.
-                You can find a documented example at
-                <a href="https://raw.githubusercontent.com/Berserker66/MultiWorld-Utilities/master/playerSettings.yaml">playerSettings.yaml</a>.
+                You can find a documented example
+                <a href="https://raw.githubusercontent.com/Berserker66/MultiWorld-Utilities/master/playerSettings.yaml">here</a>.
                 This file can be saved as .yaml, edited to your liking and then supplied to the generator.
                 You can also upload a .zip with multiple YAMLs.
                 A proper menu is in the works.
                 {% if race -%}
                     Race Mode means the spoiler log will be unavailable, roms will be encrypted and single-player has no multidata.
                 {%- else -%}
-                    You can go to <a href="{{ url_for("generate", race=True) }}">Race Mode</a> to create a game without
+                    You can go to <a href="{{ url_for("generate", race=True) }}">race mode</a> to create a game without
                     spoiler log and with encryption.
                 {%- endif -%}
             </p>
             <p>
                 After generation is complete, you will have the option to download a patch file.
                 This patch file can be opened with the <a
-                    href="https://github.com/Berserker66/MultiWorld-Utilities/releases">Client</a> to create a rom file.
+                    href="https://github.com/Berserker66/MultiWorld-Utilities/releases">client</a> to create a rom file.
                 In-Browser patching will come.
             </p>
             <div id="generate-game-form-wrapper">
