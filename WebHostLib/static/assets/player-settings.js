@@ -27,6 +27,7 @@ window.addEventListener('load', () => {
 
     document.getElementById('export-button').addEventListener('click', exportSettings);
     document.getElementById('reset-to-default').addEventListener('click', resetToDefaults);
+    adjustHeaderWidth();
   }).catch((error) => {
     gameSettings.innerHTML = `
             <h2>Something went wrong while loading your game settings page.</h2>

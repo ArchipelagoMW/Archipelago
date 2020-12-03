@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block body %}
-    {% include 'cloudHeader.html' %}
+    {% include 'header/dirtHeader.html' %}
     <div id="tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
         <div id="tracker-header-bar">
             <input placeholder="Search" id="search"/>
@@ -20,7 +20,7 @@
                     Multistream
                 </a>
             </span>
-            <span>This tracker will automatically update itself periodically.</span>
+            <span class="info">This tracker will automatically update itself periodically.</span>
         </div>
         <div id="tables-container">
             {% for team, players in inventory.items() %}

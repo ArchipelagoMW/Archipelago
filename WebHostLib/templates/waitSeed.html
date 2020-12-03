@@ -8,9 +8,11 @@
 {% endblock %}
 
 {% block body %}
-    <div id="wait-seed-wrapper">
+    {% include 'header/oceanHeader.html' %}
+    <div id="wait-seed-wrapper" class="grass-island">
         <div class="main-content">
             Waiting for game to generate, this page auto-refreshes to check.
         </div>
     </div>
+    {% include 'islandFooter.html' %}
 {% endblock %}

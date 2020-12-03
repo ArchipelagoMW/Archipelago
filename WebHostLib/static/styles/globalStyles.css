@@ -101,3 +101,16 @@ h5, h6{
     padding-bottom: 120px;
 }
 
+.user-message{
+    width: 50%;
+    min-width: 500px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    color: #000000;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    background-color: #ffff00;
+}

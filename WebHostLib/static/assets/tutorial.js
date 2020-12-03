@@ -44,6 +44,7 @@ window.addEventListener('load', () => {
 
         // Populate page with HTML generated from markdown
         tutorialWrapper.innerHTML += (new showdown.Converter()).makeHtml(results);
+        adjustHeaderWidth();
 
         // Reset the id of all header divs to something nicer
         const headers = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6'));

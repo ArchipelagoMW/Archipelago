@@ -1,0 +1,21 @@
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/header/baseHeader.css") }}" />
+{% endblock %}
+
+{% block header %}
+    <header id="base-header">
+        <div id="base-header-left">
+            <a href="/" id="site-title">
+                <img src="/favicon.ico" alt="Favicon" />
+            </a>
+            <a href="/">multiworld randomizer</a>
+        </div>
+        <div id="base-header-right">
+            <a href="/generate">start game</a>
+            <a href="/uploads">host game</a>
+            <a href="/tutorial">setup guide</a>
+            <a href="/player-settings">player settings</a>
+            <a href="https://discord.gg/8Z65BR2">discord</a>
+        </div>
+    </header>
+{% endblock %}

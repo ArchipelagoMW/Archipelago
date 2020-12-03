@@ -2,11 +2,10 @@ html{
     padding-top: 110px;
 }
 
-#cloud-header{
+#base-header{
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
-    background: url('../static/backgrounds/header/cloud-header.png') repeat-x;
+    justify-content: space-between;
     background-size: auto 90px;
     width: calc(100% - 20px);
     height: 90px;
@@ -19,20 +18,26 @@ html{
     z-index: 9999;
 }
 
-#cloud-header #site-title{
+#base-header #base-header-left{
+    display: flex;
+    flex-direction: row;
+}
+
+#base-header #base-header-left a{
+    margin-right: 0;
+    padding-right: 7px;
+}
+
+#base-header #site-title{
     margin-right: 7px;
 }
 
-#cloud-header #cloud-header-spacer{
-    flex-grow: 1
-}
-
-#cloud-header #site-title img{
+#base-header #site-title img{
     width: 40px;
     height: 40px;
 }
 
-#cloud-header a{
+#base-header a{
     color: #2f6b83;
     text-decoration: none;
     cursor: pointer;
