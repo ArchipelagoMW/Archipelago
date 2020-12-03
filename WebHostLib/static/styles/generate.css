@@ -15,6 +15,10 @@
     text-align: left;
 }
 
+#generate-game button{
+    margin-top: 5px;
+}
+
 #generate-game-form-wrapper{
     width: 100%;
     text-align: center;

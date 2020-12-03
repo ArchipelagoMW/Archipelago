@@ -1,7 +1,7 @@
 html{
-    background-image: url('../static/backgrounds/dirt/dirt-0005-large.png');
+    background-image: url('../static/backgrounds/grass/grass-0007-large.png');
     background-repeat: repeat;
-    background-size: 900px 900px;
+    background-size: 650px 650px;
 }
 
 #player-settings{
@@ -11,7 +11,7 @@ html{
     background-color: rgba(0, 0, 0, 0.15);
     border-radius: 8px;
     padding: 1rem;
-    color: #ffe993;
+    color: #eeffeb;
 }
 
 #player-settings code{
@@ -20,6 +20,32 @@ html{
     padding-left: 0.25rem;
     padding-right: 0.25rem;
     color: #000000;
+}
+
+#player-settings h1{
+    font-size: 2.5rem;
+    font-weight: normal;
+    border-bottom: 1px solid #ffffff;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    text-shadow: 1px 1px 4px #000000;
+}
+
+#player-settings h2{
+    font-size: 2rem;
+    font-weight: normal;
+    border-bottom: 1px solid #ffffff;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    color: #ffe993;
+    text-transform: lowercase;
+    text-shadow: 1px 1px 2px #000000;
+}
+
+#player-settings h3, #player-settings h4, #player-settings h5, #player-settings h6{
+    color: #ffffff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 #player-settings .instructions{
@@ -34,7 +60,8 @@ html{
 }
 
 #player-settings #settings-wrapper .setting-wrapper .title-span{
-    font-weight: bold;
+    font-weight: 600;
+    font-size: 1.25rem;
 }
 
 #player-settings #settings-wrapper{
@@ -75,7 +102,7 @@ html{
 
 #player-settings table.option-set td.option-name{
     width: 150px;
-    font-weight: bold;
+    font-weight: 400;
     font-size: 1rem;
     line-height: 2rem;
 }
@@ -102,5 +129,19 @@ html{
 }
 
 #player-settings a{
-    color: #ffffff;
+    color: #ffef00;
+}
+
+#player-settings input:not([type]){
+    border: 1px solid #000000;
+    padding: 3px;
+    border-radius: 3px;
+    min-width: 150px;
+}
+
+#player-settings select{
+    border: 1px solid #000000;
+    padding: 3px;
+    border-radius: 3px;
+    min-width: 150px;
 }

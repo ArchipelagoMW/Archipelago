@@ -7,7 +7,7 @@
 
 #host-game{
     width: 700px;
-    min-height: 360px;
+    min-height: 240px;
     text-align: center;
 }
 
@@ -23,4 +23,8 @@
 
 #host-game-form{
     display: none;
+}
+
+#host-game button{
+    margin-top: 5px;
 }
