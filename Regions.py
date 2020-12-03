@@ -369,6 +369,7 @@ def create_shops(world, player: int):
                    ShopType.Shop: Shop,
                    ShopType.TakeAny: TakeAny}
     option = world.shop_shuffle[player]
+    potion_option = world.potion_shop_shuffle[player]
     my_shop_table = dict(shop_table)
     
     num_slots = int(world.shop_shuffle_slots[player])
@@ -392,7 +393,10 @@ def create_shops(world, player: int):
             if name == 'Capacity Upgrade':
                 continue
             if name == 'Potion Shop':
-                continue
+                if 'b' in potion_option:
+                    new_items = world.random.sample(shop_generation_types['potion_discount'] + shop_generation_types['bottle'], k=3)
+                elif 'a' not in potion_option:
+                    new_items = items
             keeper = world.random.choice([0xA0, 0xC1, 0xFF])
             my_shop_table[name] = (typ, shop_id, keeper, custom, locked, new_items)
     
@@ -406,7 +410,7 @@ def create_shops(world, player: int):
         world.shops.append(shop)
         for index, item in enumerate(inventory):
             shop.add_inventory(index, *item)
-            if region_name == 'Potion Shop':
+            if region_name == 'Potion Shop' and 'a' not in potion_option:
                 pass
             elif region_name == 'Capacity Upgrade':
                 pass
