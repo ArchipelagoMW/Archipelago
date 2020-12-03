@@ -326,7 +326,9 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--beemizer', default=defval(0), type=lambda value: min(max(int(value), 0), 4))
     parser.add_argument('--shop_shuffle', default='', help='''\
     combine letters for options:
-    i: shuffle the inventories of the shops around
+    g: generate default inventories for light and dark world shops, and unique shops
+    f: generate default inventories for each shop individually
+    i: shuffle the default inventories of the shops around
     p: randomize the prices of the items in shop inventories
     u: shuffle capacity upgrades into the item pool
     ''')

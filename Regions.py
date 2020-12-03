@@ -378,6 +378,24 @@ def create_shops(world, player: int):
     world.random.shuffle(my_shop_slots)
 
     from Items import ItemFactory
+    if 'g' in option or 'f' in option:
+        new_basic_shop = world.random.sample(shop_generation_types['default'], k=3)
+        new_dark_shop = world.random.sample(shop_generation_types['default'], k=3)
+        for name, shop in my_shop_table.items():
+            typ, shop_id, keeper, custom, locked, items = shop
+            new_items = world.random.sample(shop_generation_types['default'], k=3)
+            if 'f' not in option:
+                if items == _basic_shop_defaults:
+                    new_items = new_basic_shop
+                elif items == _dark_world_shop_defaults:
+                    new_items = new_dark_shop
+            if name == 'Capacity Upgrade':
+                continue
+            if name == 'Potion Shop':
+                continue
+            keeper = world.random.choice([0xA0, 0xC1, 0xFF])
+            my_shop_table[name] = (typ, shop_id, keeper, custom, locked, new_items)
+    
     for region_name, (room_id, type, shopkeeper, custom, locked, inventory) in my_shop_table.items():
         if world.mode[player] == 'inverted' and region_name == 'Dark Lake Hylia Shop':
             locked = True
@@ -402,6 +420,7 @@ def create_shops(world, player: int):
 
                     world.clear_location_cache()
 
+
 # (type, room_id, shopkeeper, custom, locked, [items])
 # item = (item, price, max=0, replacement=None, replacement_price=0)
 _basic_shop_defaults = [('Red Potion', 150), ('Small Heart', 10), ('Bombs (10)', 50)]
@@ -418,6 +437,14 @@ shop_table = {
     'Cave Shop (Lake Hylia)': (0x0112, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
     'Potion Shop': (0x0109, ShopType.Shop, 0xA0, True, False, [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)]),
     'Capacity Upgrade': (0x0115, ShopType.UpgradeShop, 0x04, True, True, [('Bomb Upgrade (+5)', 100, 7), ('Arrow Upgrade (+5)', 100, 7)])
+}
+
+shop_generation_types = {
+    'default': _basic_shop_defaults + [('Bombs (3)', 20), ('Green Potion', 90), ('Blue Potion', 190), ('Bee', 10), ('Single Arrow', 5)] + [('Red Shield', 500), ('Blue Shield', 50)],
+    'potion': [('Red Potion', 150), ('Green Potion', 90), ('Blue Potion', 190)],
+    'discount_potion': [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)],
+    'bottle': [('Bee', 10)],
+    'time': [('Red Clock', 100), ('Blue Clock', 200), ('Green Clock', 300)],
 }
 
 old_location_address_to_new_location_address = {
