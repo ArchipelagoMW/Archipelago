@@ -37,7 +37,7 @@ html{
 #landing-links{
     margin-left: auto;
     margin-right: auto;
-    height: 400px;
+    height: 350px;
 }
 
 #landing-links a{
@@ -214,10 +214,18 @@ html{
 }
 
 #landing{
-    width: 660px;
-    min-height: 360px;
+    width: 700px;
+    min-height: 280px;
     margin-left: auto;
     margin-right: auto;
+}
+
+#landing #first-line{
+    font-weight: 500;
+}
+
+#landing .variable{
+    color: #ffff00;
 }
 
 .landing-deco{

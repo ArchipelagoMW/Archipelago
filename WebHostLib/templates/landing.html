@@ -1,7 +1,7 @@
 {% extends 'pageWrapper.html' %}
 
 {% block head %}
-    <title>Berserker's Multiworld</title>
+    <title>MultiWorld</title>
     <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/landing.css") }}" />
 {% endblock %}
 
@@ -33,16 +33,20 @@
         </div>
         <div id="landing" class="grass-island">
             <div id="landing-body">
+                <p id="first-line">Welcome to the Multiworld Randomizer!</p>
                 <p>This is a <span data-tooltip="Allegedly.">randomizer</span> for The Legend of Zelda: A
                     Link to the Past.</p>
-                <p>This is also a multiworld, meaning it is multiplayer. Your items may be placed into other
-                    players' worlds, and their items may be placed into yours. When a player picks up an item which
-                    does not belong to them, it is sent back to the player it belongs to over the internet.</p>
-                <p>This website allows you to generate and host a multiworld game, and provides item and location
-                    trackers for all games hosted here. To get started playing, <a href="/tutorial">click here.</a></p>
-                <p>This website is under active development. If you find a bug, please report it
-                    <a href="https://github.com/Berserker66/MultiWorld-Utilities/issues">here.</a></p>
-                <p>{{ seeds }} games were created and {{ rooms }} hosted in the last 7 days.</p>
+                <p>This is also a multi-world, meaning Link's items may have been placed into other players' games.
+                    When a player picks up an item which does not belong to them, it is sent back to the player
+                    it belongs to.</p>
+                <p>This website allows you to generate and host multiworld games, and provides item and location
+                    trackers for games hosted here.</p>
+                <p>
+                    <span class="variable">{{ seeds }}</span>
+                    games were created and
+                    <span class="variable">{{ rooms }}</span>
+                    hosted in the last 7 days.
+                </p>
             </div>
         </div>
     </div>
