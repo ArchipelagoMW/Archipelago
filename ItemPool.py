@@ -368,13 +368,17 @@ def shuffle_shops(world, items, player: int):
         shops = []
         upgrade_shops = []
         total_inventory = []
+        potion_option = world.potion_shop_shuffle[player]
         for shop in world.shops:
             if shop.region.player == player:
                 if shop.type == ShopType.UpgradeShop:
                     upgrade_shops.append(shop)
-                elif shop.type == ShopType.Shop and shop.region.name != 'Potion Shop':
-                    shops.append(shop)
-                    total_inventory.extend(shop.inventory)
+                elif shop.type == ShopType.Shop:
+                    if shop.region.name == 'Potion Shop' and potion_option in [None, '', 'none']:
+                        upgrade_shops.append(shop) # just put it with the upgrade shops/caves so we don't shuffle the items, just prices
+                    else:
+                        shops.append(shop)
+                        total_inventory.extend(shop.inventory)
 
         if 'p' in option:
             def price_adjust(price: int) -> int:
@@ -470,7 +474,7 @@ def create_dynamic_shop_locations(world, player):
 
                     world.clear_location_cache()
 
-                    world.push_item(loc, ItemFactory(item['item'], player), False)
+                    world.push_item(loc, ItemFactory(item['item'], player), False) 
                     loc.event = True
                     loc.locked = True
 

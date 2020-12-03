@@ -132,6 +132,7 @@ class World(object):
             set_player_attr('triforce_pieces_required', 20)
             set_player_attr('shop_shuffle', 'off')
             set_player_attr('shop_shuffle_slots', 0)
+            set_player_attr('potion_shop_shuffle', 'none')
             set_player_attr('shuffle_prizes', "g")
             set_player_attr('sprite_pool', [])
             set_player_attr('dark_room_logic', "lamp")
@@ -1341,6 +1342,7 @@ class Spoiler(object):
                          'triforce_pieces_required': self.world.triforce_pieces_required,
                          'shop_shuffle': self.world.shop_shuffle,
                          'shop_shuffle_slots': self.world.shop_shuffle_slots,
+                         'potion_shop_shuffle': self.world.potion_shop_shuffle,
                          'shuffle_prizes': self.world.shuffle_prizes,
                          'sprite_pool': self.world.sprite_pool,
                          'restrict_dungeon_item_on_boss': self.world.restrict_dungeon_item_on_boss

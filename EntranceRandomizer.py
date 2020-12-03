@@ -335,6 +335,10 @@ def parse_arguments(argv, no_defaults=False):
                         help='''
         Maximum amount of shop slots able to be filled by items from the item pool.
     ''')
+    parser.add_argument('--potion_shop_shuffle', default=defval('none'), choices=['none', 'a'], help='''\
+        Determine if potion shop shuffle items should be affected by the rules of shop shuffle.  
+        Value `none` will only allow prices to be shuffled, `a` will allow any items to be shuffled.
+    ''')
     parser.add_argument('--shuffle_prizes', default=defval('g'), choices=['', 'g', 'b', 'gb'])
     parser.add_argument('--sprite_pool', help='''\
     Specifies a colon separated list of sprites used for random/randomonevent. If not specified, the full sprite pool is used.''')
@@ -387,7 +391,7 @@ def parse_arguments(argv, no_defaults=False):
                          'shufflebosses', 'enemy_shuffle', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
                          'heartbeep', "skip_progression_balancing", "triforce_pieces_available",
-                         "triforce_pieces_required", "shop_shuffle", "shop_shuffle_slots",
+                         "triforce_pieces_required", "shop_shuffle", "shop_shuffle_slots", "potion_shop_shuffle",
                          'remote_items', 'progressive', 'dungeon_counters', 'glitch_boots', 'killable_thieves',
                          'tile_shuffle', 'bush_shuffle', 'shuffle_prizes', 'sprite_pool', 'dark_room_logic', 'restrict_dungeon_item_on_boss',
                          'hud_palettes', 'sword_palettes', 'shield_palettes', 'link_palettes']:
