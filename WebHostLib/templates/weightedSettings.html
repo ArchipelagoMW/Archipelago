@@ -1,0 +1,72 @@
+{% extends 'pageWrapper.html' %}
+
+{% block head %}
+    <title>Player Settings</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/weightedSettings.css") }}" />
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/js-yaml.min.js") }}"></script>
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/weightedSettings.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+    {% include 'header/grassHeader.html' %}
+    <div id="weighted-settings">
+        <h1>Weighted Settings</h1>
+        <div id="instructions">
+            This page is used to configure your weighted settings. You have three presets you can control, which
+            you can access using the dropdown menu below. These settings will be usable when generating a
+            single player game, or you can export them to a <code>.yaml</code> file and use them in a multiworld.
+            If you already have a settings file you would like to validate, you may do so on the
+            <a href="/mysterycheck">verification page</a>.
+        </div>
+
+        <div id="settings-wrapper">
+            <div class="setting-wrapper">
+                Choose a preset and optionally assign it a nickname, which will be used as the file's description if
+                you download it.
+                <table class="option-set">
+                    <tbody>
+                        <tr>
+                            <td class="option-name">
+                                <label for="preset-number">Preset Number:</label>
+                            </td>
+                            <td class="option-value">
+                                <select id="preset-number">
+                                    <option value="1">Preset 1</option>
+                                    <option value="2">Preset 2</option>
+                                    <option value="3">Preset 3</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="option-name">
+                                <label for="description">Preset Name:</label>
+                            </td>
+                            <td class="option-value">
+                                <input id="description" class="setting" data-setting="description" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            Choose a name you want to represent you in-game. This will appear when you send items
+            to other people in multiworld games.
+            <table class="option-set">
+                <tbody>
+                    <tr>
+                        <td class="option-name">
+                            <label for="name">Player Name:</label>
+                        </td>
+                        <td class="option-value">
+                            <input id="name" maxlength="16" class="setting" data-setting="name" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="weighted-settings-button-row">
+            <button id="reset-to-default">Reset to Defaults</button>
+            <button id="export-button">Export Settings</button>
+        </div>
+    </div>
+{%  endblock %}

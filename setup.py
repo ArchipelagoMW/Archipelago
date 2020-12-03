@@ -113,7 +113,7 @@ for data in extra_data:
     installfile(Path(data))
 
 os.makedirs(buildfolder / "Players", exist_ok=True)
-shutil.copyfile("playerSettings.yaml", buildfolder / "Players" / "playerSettings.yaml")
+shutil.copyfile("playerSettings.yaml", buildfolder / "Players" / "weightedSettings.yaml")
 
 try:
     from maseya import z3pr

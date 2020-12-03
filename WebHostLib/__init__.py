@@ -85,8 +85,13 @@ def tutorial(lang='en'):
 
 
 @app.route('/player-settings')
-def player_settings():
+def player_settings_simple():
     return render_template("playerSettings.html")
+
+
+@app.route('/weighted-settings')
+def player_settings():
+    return render_template("weightedSettings.html")
 
 
 @app.route('/seed/<suuid:seed>')

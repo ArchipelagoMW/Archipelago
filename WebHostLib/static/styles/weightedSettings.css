@@ -4,7 +4,7 @@ html{
     background-size: 650px 650px;
 }
 
-#player-settings{
+#weighted-settings{
     width: 60rem;
     margin-left: auto;
     margin-right: auto;
@@ -14,7 +14,7 @@ html{
     color: #eeffeb;
 }
 
-#player-settings code{
+#weighted-settings code{
     background-color: #d9cd8e;
     border-radius: 4px;
     padding-left: 0.25rem;
@@ -22,7 +22,7 @@ html{
     color: #000000;
 }
 
-#player-settings h1{
+#weighted-settings h1{
     font-size: 2.5rem;
     font-weight: normal;
     border-bottom: 1px solid #ffffff;
@@ -32,7 +32,7 @@ html{
     text-shadow: 1px 1px 4px #000000;
 }
 
-#player-settings h2{
+#weighted-settings h2{
     font-size: 2rem;
     font-weight: normal;
     border-bottom: 1px solid #ffffff;
@@ -43,103 +43,103 @@ html{
     text-shadow: 1px 1px 2px #000000;
 }
 
-#player-settings h3, #player-settings h4, #player-settings h5, #player-settings h6{
+#weighted-settings h3, #weighted-settings h4, #weighted-settings h5, #weighted-settings h6{
     color: #ffffff;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
-#player-settings .instructions{
+#weighted-settings .instructions{
     text-align: left;
 }
 
-#player-settings #settings-wrapper .setting-wrapper{
+#weighted-settings #settings-wrapper .setting-wrapper{
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     width: 100%;
 }
 
-#player-settings #settings-wrapper .setting-wrapper .title-span{
+#weighted-settings #settings-wrapper .setting-wrapper .title-span{
     font-weight: 600;
     font-size: 1.25rem;
 }
 
-#player-settings #settings-wrapper{
+#weighted-settings #settings-wrapper{
     margin-top: 1.5rem;
 }
 
-#player-settings #settings-wrapper #sprite-picker{
+#weighted-settings #settings-wrapper #sprite-picker{
     margin-bottom: 2rem;
 }
 
-#player-settings #settings-wrapper #sprite-picker #sprite-picker-sprites{
+#weighted-settings #settings-wrapper #sprite-picker #sprite-picker-sprites{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
 }
 
-#player-settings #settings-wrapper #sprite-picker .sprite-img-wrapper{
+#weighted-settings #settings-wrapper #sprite-picker .sprite-img-wrapper{
     cursor: pointer;
     margin: 10px;
     image-rendering: pixelated;
 }
 
 /* Center tooltip text for sprite images */
-#player-settings #settings-wrapper #sprite-picker .sprite-img-wrapper::after{
+#weighted-settings #settings-wrapper #sprite-picker .sprite-img-wrapper::after{
     text-align: center;
 }
 
-#player-settings #settings-wrapper #sprite-picker .sprite-img-wrapper img{
+#weighted-settings #settings-wrapper #sprite-picker .sprite-img-wrapper img{
     width: 32px;
     height: 48px;
 }
 
-#player-settings table.option-set{
+#weighted-settings table.option-set{
     width: 100%;
     margin-bottom: 1.5rem;
 }
 
-#player-settings table.option-set td.option-name{
+#weighted-settings table.option-set td.option-name{
     width: 150px;
     font-weight: 400;
     font-size: 1rem;
     line-height: 2rem;
 }
 
-#player-settings table.option-set td.option-name .delete-button{
+#weighted-settings table.option-set td.option-name .delete-button{
     cursor: pointer;
 }
 
-#player-settings table.option-set td.option-value{
+#weighted-settings table.option-set td.option-value{
     line-height: 2rem;
 }
 
-#player-settings table.option-set td.option-value input[type=range]{
+#weighted-settings table.option-set td.option-value input[type=range]{
     width: 90%;
     min-width: 300px;
     vertical-align: middle;
 }
 
-#player-settings #player-settings-button-row{
+#weighted-settings #weighted-settings-button-row{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
 }
 
-#player-settings a{
+#weighted-settings a{
     color: #ffef00;
 }
 
-#player-settings input:not([type]){
+#weighted-settings input:not([type]){
     border: 1px solid #000000;
     padding: 3px;
     border-radius: 3px;
     min-width: 150px;
 }
 
-#player-settings select{
+#weighted-settings select{
     border: 1px solid #000000;
     padding: 3px;
     border-radius: 3px;

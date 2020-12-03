@@ -1,16 +1,16 @@
 let spriteData = null;
 
 window.addEventListener('load', () => {
-  const gameSettings = document.getElementById('player-settings');
+  const gameSettings = document.getElementById('weighted-settings');
   Promise.all([fetchPlayerSettingsYaml(), fetchPlayerSettingsJson(), fetchSpriteData()]).then((results) => {
     // Load YAML into object
     const sourceData = jsyaml.safeLoad(results[0], { json: true });
 
     // Update localStorage with three settings objects. Preserve original objects if present.
     for (let i=1; i<=3; i++) {
-      const localSettings = JSON.parse(localStorage.getItem(`playerSettings${i}`));
+      const localSettings = JSON.parse(localStorage.getItem(`weightedSettings${i}`));
       const updatedObj = localSettings ? Object.assign(sourceData, localSettings) : sourceData;
-      localStorage.setItem(`playerSettings${i}`, JSON.stringify(updatedObj));
+      localStorage.setItem(`weightedSettings${i}`, JSON.stringify(updatedObj));
     }
 
     // Parse spriteData into useful sets
@@ -47,7 +47,7 @@ const fetchPlayerSettingsYaml = () => new Promise((resolve, reject) => {
     }
     resolve(ajax.responseText);
   };
-  ajax.open('GET', `${window.location.origin}/static/static/playerSettings.yaml` ,true);
+  ajax.open('GET', `${window.location.origin}/static/static/weightedSettings.yaml` ,true);
   ajax.send();
 });
 
@@ -61,7 +61,7 @@ const fetchPlayerSettingsJson = () => new Promise((resolve, reject) => {
     }
     resolve(ajax.responseText);
   };
-  ajax.open('GET', `${window.location.origin}/static/static/playerSettings.json`, true);
+  ajax.open('GET', `${window.location.origin}/static/static/weightedSettings.json`, true);
   ajax.send();
 });
 
@@ -82,7 +82,7 @@ const fetchSpriteData = () => new Promise((resolve, reject) => {
 const handleOptionChange = (event) => {
   if(!event.target.matches('.setting')) { return; }
   const presetNumber = document.getElementById('preset-number').value;
-  const settings = JSON.parse(localStorage.getItem(`playerSettings${presetNumber}`))
+  const settings = JSON.parse(localStorage.getItem(`weightedSettings${presetNumber}`))
   const settingString = event.target.getAttribute('data-setting');
   document.getElementById(settingString).innerText = event.target.value;
   if(getSettingValue(settings, settingString) !== false){
@@ -106,7 +106,7 @@ const handleOptionChange = (event) => {
     }
 
     // Save the updated settings object bask to localStorage
-    localStorage.setItem(`playerSettings${presetNumber}`, JSON.stringify(settings));
+    localStorage.setItem(`weightedSettings${presetNumber}`, JSON.stringify(settings));
   }else{
     console.warn(`Unknown setting string received: ${settingString}`)
   }
@@ -114,7 +114,7 @@ const handleOptionChange = (event) => {
 
 const populateSettings = () => {
   const presetNumber = document.getElementById('preset-number').value;
-  const settings = JSON.parse(localStorage.getItem(`playerSettings${presetNumber}`))
+  const settings = JSON.parse(localStorage.getItem(`weightedSettings${presetNumber}`))
   const settingsInputs = Array.from(document.querySelectorAll('.setting'));
   settingsInputs.forEach((input) => {
     const settingString = input.getAttribute('data-setting');
@@ -147,13 +147,13 @@ const getSettingValue = (settings, keyString) => {
 
 const exportSettings = () => {
   const presetNumber = document.getElementById('preset-number').value;
-  const settings = JSON.parse(localStorage.getItem(`playerSettings${presetNumber}`));
+  const settings = JSON.parse(localStorage.getItem(`weightedSettings${presetNumber}`));
   const yamlText = jsyaml.safeDump(settings, { noCompatMode: true }).replaceAll(/'(\d+)':/g, (x, y) => `${y}:`);
   download(`${settings.description}.yaml`, yamlText);
 };
 
 const resetToDefaults = () => {
-  [1, 2, 3].forEach((presetNumber) => localStorage.removeItem(`playerSettings${presetNumber}`));
+  [1, 2, 3].forEach((presetNumber) => localStorage.removeItem(`weightedSettings${presetNumber}`));
   location.reload();
 };
 
@@ -225,7 +225,7 @@ const buildUI = (settings) => {
   tbody.setAttribute('id', 'sprites-tbody');
 
   const currentPreset = document.getElementById('preset-number').value;
-  const playerSettings = JSON.parse(localStorage.getItem(`playerSettings${currentPreset}`));
+  const playerSettings = JSON.parse(localStorage.getItem(`weightedSettings${currentPreset}`));
 
   // Manually add a row for random sprites
   addSpriteRow(tbody, playerSettings, 'random');
@@ -369,7 +369,7 @@ const addSpriteRow = (tbody, playerSettings, spriteName) => {
 
 const addSpriteOption = (event) => {
   const presetNumber = document.getElementById('preset-number').value;
-  const playerSettings = JSON.parse(localStorage.getItem(`playerSettings${presetNumber}`));
+  const playerSettings = JSON.parse(localStorage.getItem(`weightedSettings${presetNumber}`));
   const spriteName = event.target.getAttribute('data-sprite');
   console.log(event.target);
   console.log(spriteName);
@@ -381,7 +381,7 @@ const addSpriteOption = (event) => {
 
   // Add option to playerSettings object
   playerSettings.rom.sprite[event.target.getAttribute('data-sprite')] = 50;
-  localStorage.setItem(`playerSettings${presetNumber}`, JSON.stringify(playerSettings));
+  localStorage.setItem(`weightedSettings${presetNumber}`, JSON.stringify(playerSettings));
 
   // Add <tr> to #sprite-options-table
   const tbody = document.getElementById('sprites-tbody');
@@ -390,12 +390,12 @@ const addSpriteOption = (event) => {
 
 const removeSpriteOption = (event) => {
   const presetNumber = document.getElementById('preset-number').value;
-  const playerSettings = JSON.parse(localStorage.getItem(`playerSettings${presetNumber}`));
+  const playerSettings = JSON.parse(localStorage.getItem(`weightedSettings${presetNumber}`));
   const spriteName = event.target.getAttribute('data-sprite');
 
   // Remove option from playerSettings object
   delete playerSettings.rom.sprite[spriteName];
-  localStorage.setItem(`playerSettings${presetNumber}`, JSON.stringify(playerSettings));
+  localStorage.setItem(`weightedSettings${presetNumber}`, JSON.stringify(playerSettings));
 
   // Remove <tr> from #sprite-options-table
   const tr = document.getElementById(event.target.getAttribute('data-row-id'));

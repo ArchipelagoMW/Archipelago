@@ -1,0 +1,100 @@
+html{
+    background-image: url('../static/backgrounds/grass/grass-0007-large.png');
+    background-repeat: repeat;
+    background-size: 650px 650px;
+}
+
+#player-settings{
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 1rem;
+    color: #eeffeb;
+}
+
+#player-settings code{
+    background-color: #d9cd8e;
+    border-radius: 4px;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    color: #000000;
+}
+
+#player-settings h1{
+    font-size: 2.5rem;
+    font-weight: normal;
+    border-bottom: 1px solid #ffffff;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    text-shadow: 1px 1px 4px #000000;
+}
+
+#player-settings h2{
+    font-size: 2rem;
+    font-weight: normal;
+    border-bottom: 1px solid #ffffff;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    color: #ffe993;
+    text-transform: lowercase;
+    text-shadow: 1px 1px 2px #000000;
+}
+
+#player-settings h3, #player-settings h4, #player-settings h5, #player-settings h6{
+    color: #ffffff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+#player-settings a{
+    color: #ffef00;
+}
+
+#player-settings input:not([type]){
+    border: 1px solid #000000;
+    padding: 3px;
+    border-radius: 3px;
+    min-width: 150px;
+}
+
+#player-settings select{
+    border: 1px solid #000000;
+    padding: 3px;
+    border-radius: 3px;
+    min-width: 150px;
+}
+
+#player-settings #game-options, #player-settings #rom-options{
+    display: flex;
+    flex-direction: row;
+}
+
+#player-settings .left, #game-options .right{
+    flex-grow: 1;
+}
+
+#player-settings table select{
+    width: 250px;
+}
+
+#player-settings table label{
+    margin-right: 4px;
+}
+
+@media all and (max-width: 1000px){
+    #player-settings #game-options, #player-settings #rom-options{
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    #player-settings .left, #player-settings .right{
+        flex-grow: unset;
+    }
+
+    #game-options table label, #rom-options table label{
+        display: block;
+        min-width: 200px;
+    }
+}
