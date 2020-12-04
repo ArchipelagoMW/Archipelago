@@ -368,17 +368,7 @@ def create_shops(world, player: int):
     cls_mapping = {ShopType.UpgradeShop: UpgradeShop,
                    ShopType.Shop: Shop,
                    ShopType.TakeAny: TakeAny}
-    option = world.shop_shuffle[player]
-    my_shop_table = dict(shop_table)
-    
-    num_slots = int(world.shop_shuffle_slots[player])
-    
-    my_shop_slots = ([True] * num_slots + [False] * (len(shop_table) * 3))[:len(shop_table)*3 - 2] 
-
-    world.random.shuffle(my_shop_slots)
-
-    from Items import ItemFactory
-    for region_name, (room_id, type, shopkeeper, custom, locked, inventory) in my_shop_table.items():
+    for region_name, (room_id, type, shopkeeper, custom, locked, inventory) in shop_table.items():
         if world.mode[player] == 'inverted' and region_name == 'Dark Lake Hylia Shop':
             locked = True
             inventory = [('Blue Potion', 160), ('Blue Shield', 50), ('Bombs (10)', 50)]
@@ -388,19 +378,6 @@ def create_shops(world, player: int):
         world.shops.append(shop)
         for index, item in enumerate(inventory):
             shop.add_inventory(index, *item)
-            if region_name == 'Potion Shop':
-                pass
-            elif region_name == 'Capacity Upgrade':
-                pass
-            else:
-                if my_shop_slots.pop():
-                    additional_item = world.random.choice(['Rupees (20)', 'Rupees (50)', 'Rupees (100)'])
-                    world.itempool.append(ItemFactory(additional_item, player))
-                    loc = Location(player, "{} Slot Item {}".format(shop.region.name, index+1), parent=shop.region)
-                    shop.region.locations.append(loc)
-                    world.dynamic_locations.append(loc)
-
-                    world.clear_location_cache()
 
 # (type, room_id, shopkeeper, custom, locked, [items])
 # item = (item, price, max=0, replacement=None, replacement_price=0)
