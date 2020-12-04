@@ -107,7 +107,7 @@ triforce_pieces_extra: # Set to how many extra triforces pieces are available to
   10: 50
   15: 0
   20: 0
-triforce_pieces_percentage: # Set to how many triforce pieces according to a percentage of the required ones, are available to collect in the world.
+triforce_pieces_percentage: # Set to how many extra triforces pieces according to a percentage of the required ones, are available to collect in the world. 
   # Format "pieces: chance"
   100: 0 #No extra
   150: 50 #Half the required will be added as extra
@@ -165,6 +165,7 @@ item_pool:
   normal: 50 # Item availability remains unchanged from vanilla game
   hard: 0 # Reduced upgrade availability (max: 14 hearts, blue mail, tempered sword, fire shield, no silvers unless swordless)
   expert: 0 # Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless)
+  crowd_control: 0 # Sets up the item pool for the crowd control extension. Do not use it without crowd control
 item_functionality:
   easy: 0 # Allow Hammer to damage ganon, Allow Hammer tablet collection, Allow swordless medallion use everywhere.
   normal: 50 # Vanilla item functionality
@@ -211,15 +212,9 @@ beemizer: # Remove items from the global item pool and replace them with single 
   2: 0 # 60% of the non-essential item pool is replaced with bee traps, of which 20% could be single bees
   3: 0 # 100% of the non-essential item pool is replaced with bee traps, of which 50% could be single bees
   4: 0 # 100% of the non-essential item pool is replaced with bee traps
-### Item Shuffle (shop)
-shop_shuffle_slots: # Maximum amount of allowed shop slots to place item pool items
-  0: 50
-  5: 0
-  15: 0
-  999: 0
 shop_shuffle:
   none: 50
-  i: 0 # Shuffle default inventories of the shops around
+  i: 0 # Shuffle the inventories of the shops around
   p: 0 # Randomize the prices of the items in shop inventories
   u: 0 # Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
   ip: 0 # Shuffle inventories and randomize prices
@@ -237,22 +232,6 @@ timer:
   ohko: 0 # Timer always at zero. Permanent OHKO.
   timed_countdown: 0 # Starts the clock with forty minutes. Same clocks as timed mode, but if the clock hits zero you lose. You can still keep playing, though.
   display: 0 # Displays a timer, but otherwise does not affect gameplay or the item pool.
-countdown_start_time: # For timed_ohko and timed_countdown timer modes, the amount of time in minutes to start with
-  0: 0 # For timed_ohko, starts in OHKO mode when starting the game
-  10: 50
-  20: 0
-  30: 0
-  60: 0
-red_clock_time: # For all timer modes, the amount of time in minutes to gain or lose when picking up a red clock
-  -2: 50
-  1: 0
-blue_clock_time: # For all timer modes, the amount of time in minutes to gain or lose when picking up a blue clock
-  1: 0
-  2: 50
-green_clock_time: # For all timer modes, the amount of time in minutes to gain or lose when picking up a green clock
-  4: 50
-  10: 0
-  15: 0
 # Can be uncommented to use it
 # local_items: # Force certain items to appear in your world only, not across the multiworld. Recognizes some group names, like "Swords"
 #  - "Moon Pearl"
@@ -310,11 +289,8 @@ intensity: # Only available if the host uses the doors branch, it is ignored oth
   2: 0 # And shuffles open edges and straight staircases
   3: 0 # And shuffles dungeon lobbies
   random: 0 # Picks one of those at random
-key_drop_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
-  on: 0 # Enables the small keys dropped by enemies or under pots, and the big key dropped by the Ball & Chain guard to be shuffled into the pool. This extends the number of checks to 249.
-  off: 50
 experimental: # Only available if the host uses the doors branch, it is ignored otherwise
-  on: 0 # Enables experimental features.
+  on: 0 # Enables experimental features. Currently, this is just the dungeon keys in chest counter.
   off: 50
 debug: # Only available if the host uses the doors branch, it is ignored otherwise
   on: 0 # Enables debugging features. Currently, these are the Item collection counter. (overwrites total triforce pieces) and Castle Gate closed indicator.
@@ -391,8 +367,8 @@ rom:
     off: 0
   ow_palettes: # Change the colors of the overworld
     default: 50 # No changes
-    random: 0 # Shuffle the colors, with harmony in mind
-    blackout: 0 # everything black / blind mode
+    random: 0 # Shuffle the colors
+    blackout: 0 # Never use this
     grayscale: 0
     negative: 0
     classic: 0
@@ -401,8 +377,8 @@ rom:
     puke: 0
   uw_palettes: # Change the colors of caves and dungeons
     default: 50 # No changes
-    random: 0 # Shuffle the colors, with harmony in mind
-    blackout: 0 # everything black / blind mode
+    random: 0 # Shuffle the colors
+    blackout: 0 # Never use this
     grayscale: 0
     negative: 0
     classic: 0
@@ -411,8 +387,8 @@ rom:
     puke: 0
   hud_palettes: # Change the colors of the hud
     default: 50 # No changes
-    random: 0 # Shuffle the colors, with harmony in mind
-    blackout: 0 # everything black / blind mode
+    random: 0 # Shuffle the colors
+    blackout: 0 # Never use this
     grayscale: 0
     negative: 0
     classic: 0
@@ -421,18 +397,18 @@ rom:
     puke: 0
   sword_palettes: # Change the colors of swords
     default: 50 # No changes
-    random: 0 # Shuffle the colors, with harmony in mind
-    blackout: 0 # everything black / blind mode
+    random: 0 # Shuffle the colors
+    blackout: 0 # Never use this
     grayscale: 0
     negative: 0
     classic: 0
     dizzy: 0
     sick: 0
     puke: 0
-  shield_palettes: # Change the colors of shields
+  uw_palettes: # Change the colors of shields
     default: 50 # No changes
-    random: 0 # Shuffle the colors, with harmony in mind
-    blackout: 0 # everything black / blind mode
+    random: 0 # Shuffle the colors
+    blackout: 0 # Never use this
     grayscale: 0
     negative: 0
     classic: 0

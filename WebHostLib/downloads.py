@@ -37,10 +37,9 @@ def download_raw_patch(seed_id, player_id):
         return "Patch not found"
     else:
         import io
-        if patch.seed.multidata:
-            pname = patch.seed.multidata["names"][0][patch.player - 1]
-        else:
-            pname = "unknown"
+
+        pname = patch.seed.multidata["names"][0][patch.player - 1]
+
         patch_data = update_patch_data(patch.data, server="")
         patch_data = io.BytesIO(patch_data)
 

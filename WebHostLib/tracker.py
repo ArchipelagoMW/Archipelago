@@ -180,25 +180,6 @@ default_locations = {
                      60121, 60124, 60127, 1573217, 60130, 60133, 60136, 60139, 60142, 60145, 60148, 60151, 60157},
     'Total': set()}
 
-key_only_locations = {
-    'Light World': set(),
-    'Dark World': set(),
-    'Desert Palace': {0x140031, 0x14002b, 0x140061, 0x140028},
-    'Eastern Palace': {0x14005b, 0x140049},
-    'Hyrule Castle': {0x140037, 0x140034, 0x14000d, 0x14003d},
-    'Agahnims Tower': {0x140061, 0x140052},
-    'Tower of Hera': set(),
-    'Swamp Palace': {0x140019, 0x140016, 0x140013, 0x140010, 0x14000a},
-    'Thieves Town': {0x14005e, 0x14004f},
-    'Skull Woods': {0x14002e, 0x14001c},
-    'Ice Palace': {0x140004, 0x140022, 0x140025, 0x140046},
-    'Misery Mire': {0x140055, 0x14004c, 0x140064},
-    'Turtle Rock': {0x140058, 0x140007},
-    'Palace of Darkness': set(),
-    'Ganons Tower': {0x140040, 0x140043, 0x14003a, 0x14001f},
-    'Total': set()
-}
-
 key_locations = {"Desert Palace", "Eastern Palace", "Hyrule Castle", "Agahnims Tower", "Tower of Hera", "Swamp Palace",
                  "Thieves Town", "Skull Woods", "Ice Palace", "Misery Mire", "Turtle Rock", "Palace of Darkness",
                  "Ganons Tower"}
@@ -207,10 +188,6 @@ big_key_locations = {"Desert Palace", "Eastern Palace", "Tower of Hera", "Swamp 
                      "Ice Palace", "Misery Mire", "Turtle Rock", "Palace of Darkness", "Ganons Tower"}
 location_to_area = {}
 for area, locations in default_locations.items():
-    for location in locations:
-        location_to_area[location] = area
-
-for area, locations in key_only_locations.items():
     for location in locations:
         location_to_area[location] = area
 
@@ -258,14 +235,6 @@ def render_timedelta(delta: datetime.timedelta):
 
 _multidata_cache = {}
 
-def get_location_table(checks_table: dict) -> dict:
-    loc_to_area = {}
-    for area, locations in checks_table.items():
-        if area == "Total":
-            continue
-        for location in locations:
-            loc_to_area[location] = area
-    return loc_to_area
 
 def get_static_room_data(room: Room):
     result = _multidata_cache.get(room.seed.id, None)
@@ -275,30 +244,11 @@ def get_static_room_data(room: Room):
     # in > 100 players this can take a bit of time and is the main reason for the cache
     locations = {tuple(k): tuple(v) for k, v in multidata['locations']}
     names = multidata["names"]
-    seed_checks_in_area = checks_in_area.copy()
 
     use_door_tracker = False
     if "tags" in multidata:
         use_door_tracker = "DR" in multidata["tags"]
-    if use_door_tracker:
-        for area, checks in key_only_locations.items():
-            seed_checks_in_area[area] += len(checks)
-        seed_checks_in_area["Total"] = 249
-    if "checks_in_area" not in multidata:
-        player_checks_in_area = {playernumber: (seed_checks_in_area if use_door_tracker and
-                                                (0x140031, playernumber) in locations else checks_in_area)
-                                 for playernumber in range(1, len(names[0]) + 1)}
-        player_location_to_area = {playernumber: location_to_area
-                                   for playernumber in range(1, len(names[0]) + 1)}
-
-    else:
-        player_checks_in_area = {playernumber: {areaname: len(multidata["checks_in_area"][f'{playernumber}'][areaname])
-                                                if areaname != "Total" else multidata["checks_in_area"][f'{playernumber}']["Total"]
-                                                for areaname in ordered_areas}
-                                 for playernumber in range(1, len(names[0]) + 1)}
-        player_location_to_area = {playernumber: get_location_table(multidata["checks_in_area"][f'{playernumber}'])
-                                   for playernumber in range(1, len(names[0]) + 1)}
-    result = locations, names, use_door_tracker, player_checks_in_area, player_location_to_area
+    result = locations, names, use_door_tracker
     _multidata_cache[room.seed.id] = result
     return result
 
@@ -309,7 +259,7 @@ def getTracker(tracker: UUID):
     room = Room.get(tracker=tracker)
     if not room:
         abort(404)
-    locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area = get_static_room_data(room)
+    locations, names, use_door_tracker = get_static_room_data(room)
 
     inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1)}
                  for teamnumber, team in enumerate(names)}
@@ -330,12 +280,9 @@ def getTracker(tracker: UUID):
             for item_id in precollected:
                 attribute_item(inventory, team, player, item_id)
         for location in locations_checked:
-            if (location, player) not in locations or location not in player_location_to_area[player]:
-                continue
-
             item, recipient = locations[location, player]
             attribute_item(inventory, team, recipient, item)
-            checks_done[team][player][player_location_to_area[player][location]] += 1
+            checks_done[team][player][location_to_area[location]] += 1
             checks_done[team][player]["Total"] += 1
 
     for (team, player), game_state in room.multisave.get("client_game_state", []):
@@ -364,7 +311,7 @@ def getTracker(tracker: UUID):
                            lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
                            tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=icons,
                            multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
-                           checks_in_area=seed_checks_in_area, activity_timers=activity_timers,
+                           checks_in_area=checks_in_area, activity_timers=activity_timers,
                            key_locations=key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids,
                            video=video, big_key_locations=key_locations if use_door_tracker else big_key_locations,
                            hints=hints, long_player_names = long_player_names)

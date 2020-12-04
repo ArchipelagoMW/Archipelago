@@ -266,7 +266,7 @@ junk_texts = [
     "{C:GREEN}\n>Secret power\nis said to be\nin the arrow.",
     "{C:GREEN}\nAim at the\neyes of Gohma.\n            >",
     "{C:GREEN}\nGrumble,\ngrumble…\n            >",
-    # "{C:GREEN}\n10th enemy\nhas the bomb.\n            >", removed as people may assume it applies to this game
+    "{C:GREEN}\n10th enemy\nhas the bomb.\n            >",
     "{C:GREEN}\nGo to the\nnext room.\n            >",
     "{C:GREEN}\n>Thanks, @\nYou’re the\nhero of Hyrule",
     "{C:GREEN}\nThere’s always\nmoney in the\nBanana Stand>",
@@ -1228,8 +1228,7 @@ class GoldCreditMapper(CharTextMapper):
 
 class GreenCreditMapper(CharTextMapper):
     char_map = {' ': 0x9F,
-                '·': 0x52,
-                '.': 0x52}
+                '·': 0x52}
     alpha_offset = -0x29
 
 class RedCreditMapper(CharTextMapper):

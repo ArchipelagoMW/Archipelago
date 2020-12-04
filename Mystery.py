@@ -11,7 +11,7 @@ import ModuleUpdate
 ModuleUpdate.update()
 
 from Utils import parse_yaml
-from Rom import Sprite
+from Rom import get_sprite_from_name
 from EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from Main import get_seed, seeddigits
@@ -167,7 +167,7 @@ def main(args=None, callback=ERmain):
         if path:
             try:
                 settings = settings_cache[path] if settings_cache[path] else roll_settings(weights_cache[path])
-                if settings.sprite and not os.path.isfile(settings.sprite) and not Sprite.get_sprite_from_name(
+                if settings.sprite and not os.path.isfile(settings.sprite) and not get_sprite_from_name(
                         settings.sprite):
                     logging.warning(
                         f"Warning: The chosen sprite, \"{settings.sprite}\", for yaml \"{path}\", does not exist.")
@@ -238,8 +238,6 @@ def convert_to_on_off(value):
 def get_choice(option, root, value=None) -> typing.Any:
     if option not in root:
         return value
-    if type(root[option]) is list:
-        return interpret_on_off(random.choices(root[option])[0])
     if type(root[option]) is not dict:
         return interpret_on_off(root[option])
     if not root[option]:
@@ -362,8 +360,6 @@ def roll_settings(weights):
     # change minimum to required pieces to avoid problems
     ret.triforce_pieces_available = min(max(ret.triforce_pieces_required, int(ret.triforce_pieces_available)), 90)
 
-    ret.shop_shuffle_slots = int(get_choice('shop_shuffle_slots', weights, '0'))
-
     ret.shop_shuffle = get_choice('shop_shuffle', weights, '')
     if not ret.shop_shuffle:
         ret.shop_shuffle = ''
@@ -452,11 +448,6 @@ def roll_settings(weights):
                  'timed_countdown': 'timed-countdown',
                  'display': 'display'}[get_choice('timer', weights, False)]
 
-    ret.countdown_start_time = int(get_choice('countdown_start_time', weights, 10))
-    ret.red_clock_time = int(get_choice('red_clock_time', weights, -2))
-    ret.blue_clock_time = int(get_choice('blue_clock_time', weights, 2))
-    ret.green_clock_time = int(get_choice('green_clock_time', weights, 4))
-
     ret.dungeon_counters = get_choice('dungeon_counters', weights, 'default')
 
     ret.progressive = convert_to_on_off(get_choice('progressive', weights, 'on'))
@@ -495,17 +486,6 @@ def roll_settings(weights):
                 raise Exception(f"Could not force item {item} to be world-local, as it was not recognized.")
 
     ret.local_items = ",".join(ret.local_items)
-
-    ret.non_local_items = set()
-    for item_name in weights.get('non_local_items', []):
-        items = item_name_groups.get(item_name, {item_name})
-        for item in items:
-            if item in item_table:
-                ret.non_local_items.add(item)
-            else:
-                raise Exception(f"Could not force item {item} to be world-non-local, as it was not recognized.")
-
-    ret.non_local_items = ",".join(ret.non_local_items)
 
     if 'rom' in weights:
         romweights = weights['rom']
