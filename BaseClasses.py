@@ -345,9 +345,9 @@ class World(object):
             if location.parent_region.shop is not None and location.name != 'Potion Shop': # includes potion shop slots but not potion shop powder
                 slot_num = int(location.name[-1]) - 1
                 my_item = location.parent_region.shop.inventory[slot_num]
-                if (my_item is not None and my_item['item'] == item.name) or 'Rupee' in item.name or ('Bee' in item.name and 'Trap' not in item.name):
-                    # this will filter items that match the item in the shop or Rupees, or single bees
-                    # really not a way for the player to know a renewable item from a player pool item
+                if (my_item is not None and my_item['item'] == item.name) or 'Rupee' in item.name:
+                    # this will filter items that match the item in the shop or Rupees
+                    # really not a way for the player to know a renewable item from a world item
                     # bombs can be sitting on top of arrows or a potion refill, but dunno if that's a big deal
                     logging.debug('skipping item shop {}'.format(item.name))
                 else:
