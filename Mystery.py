@@ -368,10 +368,6 @@ def roll_settings(weights):
     if not ret.shop_shuffle:
         ret.shop_shuffle = ''
 
-    ret.potion_shop_shuffle = get_choice('potion_shop_shuffle', weights, '')
-    if not ret.potion_shop_shuffle:
-        ret.potion_shop_shuffle = ''
-
     ret.mode = get_choice('world_state', weights, None)  # legacy support
     if ret.mode == 'retro':
         ret.mode = 'open'

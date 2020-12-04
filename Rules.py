@@ -85,7 +85,7 @@ def set_rules(world, player):
         add_rule(world.get_entrance('Ganons Tower', player), lambda state: state.world.get_entrance('Ganons Tower Ascent', player).can_reach(state), 'or')
 
     set_bunny_rules(world, player, world.mode[player] == 'inverted')
-    
+
 
 def mirrorless_path_to_castle_courtyard(world, player):
     # If Agahnim is defeated then the courtyard needs to be accessible without using the mirror for the mirror offset glitch.
