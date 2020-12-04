@@ -43,11 +43,12 @@ Cada jugador en una partida de multiworld proveerá su propio fichero YAML. Esta
 que cada jugador disfrute de una experiencia personalizada a su gusto, y cada jugador dentro de la misma partida de multiworld puede tener diferentes opciones.
 
 ### Donde puedo obtener un fichero YAML?
-La página "[Player Settings](/player-settings)" en el sitio web te permite configurar tu configuración personal y
-descargar un fichero "YAML". Puedes tener hasta 3 configuraciones guardadas en esta página.
+La página "[Generate Game](/player-settings)" en el sitio web te permite configurar tu configuración personal y
+descargar un fichero "YAML". 
 
-### Tu fichero YAML esta ponderado
-La página "Player settings" tiene muchas opciones representadas con controles deslizantes. Esto permite
+### Configuración YAML avanzada
+Una version mas avanzada del fichero Yaml puede ser creada usando la pagina ["Weighted settings"](/weighted-settings),
+la cual te permite tener almacenadas hasta 3 preajustes. La pagina "Weighted Settings" tiene muchas opciones representadas con controles deslizantes. Esto permite
 elegir cuan probable los valores de una categoría pueden ser elegidos sobre otros de la misma.
 
 Por ejemplo, imagina que el generador crea un cubo llamado "map_shuffle", y pone trozos de papel doblado en él por cada sub-opción.
@@ -58,16 +59,17 @@ Cuando el generador esta decidiendo si activar o no "map shuffle" para tu partid
 meterá la mano en el cubo y sacara un trozo de papel al azar. En este ejemplo,
 es mucho mas probable (2 de cada 3 veces (40/60)) que "map shuffle" esté desactivado. 
 
-Si quieres que una opción no pueda ser escogida, simplemente asigna el valor 0 a dicha opción.
+Si quieres que una opción no pueda ser escogida, simplemente asigna el valor 0 a dicha opción. Recuerda que cada opción debe tener
+ al menos un valor mayor que cero, si no la generación fallará.
 
 ### Verificando tu archivo YAML
 Si quieres validar que tu fichero YAML para asegurarte que funciona correctamente, puedes hacerlo en la pagina
 [YAML Validator](/mysterycheck).
 
 ## Generar una partida para un jugador
-1. Navega a [la pagina Generator](/generate) y carga tu fichero YAML.
+1. Navega a [la pagina Generate game](/player-settings), configura tus opciones, haz click en el boton "Generate game".
 2. Se te redigirá a una pagina "Seed Info", donde puedes descargar tu archivo de parche.
-3. Haz doble click en tu fichero de parche y el emulador debería ejecutar tu juego automáticamente. Como el
+3. Haz doble click en tu fichero de parche, y el emulador debería ejecutar tu juego automáticamente. Como el
    Cliente no es necesario para partidas de un jugador, puedes cerrarlo junto a la pagina web (que tiene como titulo "Multiworld WebUI") que se ha abierto automáticamente.
 
 ## Unirse a una partida MultiWorld
@@ -113,11 +115,6 @@ Esta guía asume que ya has descargado el firmware correcto para tu dispositivo.
 Los usuarios de SD2SNES y FXPak Pro pueden descargar el firmware apropiado 
 [aqui](https://github.com/RedGuyyyy/sd2snes/releases). Los usuarios de otros dispositivos pueden encontrar información
 [en esta página](http://usb2snes.com/#supported-platforms).
-
-**Para conectar con hardware debe usarse una version antigua de QUsb2Snes
-([v0.7.16](https://github.com/Skarsnik/QUsb2snes/releases/tag/v0.7.16)).**  
-Las versiones mas actuales que esta son incompatibles con hardware para multiworld
-
 1. Cierra tu emulador, el cual debe haberse autoejecutado.
 2. Cierra QUsb2Snes, el cual fue ejecutado junto al cliente.
 3. Ejecuta la version correcta de QUsb2Snes (v0.7.16).
@@ -153,3 +150,21 @@ La manera recomendad para hospedar una partida es usar el servicio proveído en
 7. Hay un enlace a un MultiWorld Tracker en la parte superior de la pagina de la sala. Deberías pasar también este enlace
    a los jugadores para que puedan ver el progreso de la partida. A los observadores también se les puede pasar este enlace.
 8. Una vez todos los jugadores se han unido, podeis empezar a jugar.
+
+## Auto-Tracking
+Si deseas usar auto-tracking para tu partida, varios programas ofrecen esta funcionalidad.  
+El programa recomentdado actualmente es:
+[OpenTracker](https://github.com/trippsc2/OpenTracker/releases).
+
+### Instalación
+1. Descarga el fichero de instalacion apropiado para tu ordenador (Usuarios de windows quieren el fichero ".msi").
+2. Durante el proceso de insatalación, puede que se te pida instalar Microsoft Visual Studio Build Tools. Un enlace
+   este programa se muestra durante la proceso, y debe ser ejecutado manualmente.
+
+### Activar auto-tracking
+1. Con OpenTracker ejecutado, haz click en el menu Tracking en la parte superior de la ventana, y elige **AutoTracker...**
+2. Click the **Get Devices** button
+3. Selecciona tu "SNES device" de la lista
+4. Si quieres que las llaves y los objetos de mazmorra tambien sean marcados, activa la caja con nombre **Race Illegal Tracking**
+5. Haz click en el boton **Start Autotracking**
+6. Cierra la ventana AutoTracker, ya que deja de ser necesaria
