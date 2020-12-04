@@ -128,6 +128,9 @@ else:
 qusb2sneslog = buildfolder / "QUsb2Snes" / "log.txt"
 if os.path.exists(qusb2sneslog):
     os.remove(qusb2sneslog)
+qusb2snesconfig = buildfolder / "QUsb2Snes" / "config.ini"
+if os.path.exists(qusb2snesconfig):
+    os.remove(qusb2snesconfig)
 
 if signtool:
     for exe in exes:

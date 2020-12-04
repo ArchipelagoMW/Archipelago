@@ -104,7 +104,7 @@ def mirrorless_path_to_castle_courtyard(world, player):
                 else:
                     queue.append((entrance.connected_region, new_path))
 
-    raise Exception(f"Could not find mirrorless path to castle courtyard for Player {player}")
+    raise Exception(f"Could not find mirrorless path to castle courtyard for Player {player} ({world.get_player_names(player)})")
 
 def set_rule(spot, rule):
     spot.access_rule = rule
@@ -179,6 +179,10 @@ def locality_rules(world, player):
         for location in world.get_locations():
             if location.player != player:
                 forbid_items_for_player(location, world.local_items[player], player)
+    if world.non_local_items[player]:
+        for location in world.get_locations():
+            if location.player == player:
+                forbid_items_for_player(location, world.non_local_items[player], player)
 
 
 non_crossover_items = (item_name_groups["Small Keys"] | item_name_groups["Big Keys"] | progression_items) - {

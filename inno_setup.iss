@@ -11,6 +11,7 @@ AppName={#MyAppName}
 AppVerName={#MyAppName}
 DefaultDirName={commonappdata}\{#MyAppName}
 DisableProgramGroupPage=yes
+DefaultGroupName=Berserker's Multiworld
 OutputDir=setups
 OutputBaseFilename=Setup {#MyAppName}
 Compression=lzma2
@@ -39,7 +40,7 @@ NAME: "{app}"; Flags: setntfscompression; Permissions: everyone-modify users-mod
 
 [Files]
 Source: "{code:GetROMPath}"; DestDir: "{app}"; DestName: "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"; Flags: external
-Source: "{#sourcepath}*"; Excludes: "*.key, *.log, *.hpkey"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#sourcepath}*"; Excludes: "*.sfc, *.log, data\sprites\alttpr"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
@@ -51,6 +52,7 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 
 [Run]
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: IsVCRedist64BitNeeded; StatusMsg: "Installing VC++ redistributable..."
+Filename: "{app}\BerserkerMultiCreator"; Parameters: "update_sprites"; StatusMsg: "Updating Sprite Library..."
 
 [UninstallDelete]
 Type: dirifempty; Name: "{app}"

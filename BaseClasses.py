@@ -119,13 +119,19 @@ class World(object):
             set_player_attr('treasure_hunt_icon', 'Triforce Piece')
             set_player_attr('treasure_hunt_count', 0)
             set_player_attr('clock_mode', False)
+            set_player_attr('countdown_start_time', 10)
+            set_player_attr('red_clock_time', -2)
+            set_player_attr('blue_clock_time', 2)
+            set_player_attr('green_clock_time', 4)
             set_player_attr('can_take_damage', True)
             set_player_attr('glitch_boots', True)
             set_player_attr('progression_balancing', True)
             set_player_attr('local_items', set())
+            set_player_attr('non_local_items', set())
             set_player_attr('triforce_pieces_available', 30)
             set_player_attr('triforce_pieces_required', 20)
             set_player_attr('shop_shuffle', 'off')
+            set_player_attr('shop_shuffle_slots', 0)
             set_player_attr('shuffle_prizes', "g")
             set_player_attr('sprite_pool', [])
             set_player_attr('dark_room_logic', "lamp")
@@ -334,6 +340,27 @@ class World(object):
             item.world = self
             if collect:
                 self.state.collect(item, location.event, location)
+
+            # TODO: Prevents fast_filling certain items.  Move this to a proper filter.
+            if location.parent_region.shop is not None and location.name != 'Potion Shop': # includes potion shop slots but not potion shop powder
+                slot_num = int(location.name[-1]) - 1
+                my_item = location.parent_region.shop.inventory[slot_num]
+                if (my_item is not None and my_item['item'] == item.name) or 'Rupee' in item.name or ('Bee' in item.name and 'Trap' not in item.name):
+                    # this will filter items that match the item in the shop or Rupees, or single bees
+                    # really not a way for the player to know a renewable item from a player pool item
+                    # bombs can be sitting on top of arrows or a potion refill, but dunno if that's a big deal
+                    logging.debug('skipping item shop {}'.format(item.name))
+                else:
+                    if my_item is None:
+                        location.parent_region.shop.add_inventory(slot_num, 'None', 0)
+                        my_item = location.parent_region.shop.inventory[slot_num]
+                    else:
+                        my_item['replacement'] = my_item['item']
+                        my_item['replacement_price'] = my_item['price']
+                    my_item['item'] = item.name
+                    my_item['price'] = self.random.randrange(1, 61) * 5  # can probably replace this with a price chart
+                    my_item['max'] = 1
+                    my_item['player'] = item.player if item.player != location.player else 0
 
             logging.debug('Placed %s at %s', item, location)
         else:
@@ -1135,7 +1162,8 @@ class Shop():
             'max': max,
             'replacement': replacement,
             'replacement_price': replacement_price,
-            'create_location': create_location
+            'create_location': create_location,
+            'player': 0
         }
 
     def push_inventory(self, slot: int, item: str, price: int, max: int = 1):
@@ -1148,7 +1176,8 @@ class Shop():
             'max': max,
             'replacement': self.inventory[slot]["item"],
             'replacement_price': self.inventory[slot]["price"],
-            'create_location': self.inventory[slot]["create_location"]
+            'create_location': self.inventory[slot]["create_location"],
+            'player': self.inventory[slot]["player"]
         }
 
 
@@ -1234,6 +1263,10 @@ class Spoiler(object):
                 if item is None:
                     continue
                 shopdata['item_{}'.format(index)] = "{} — {}".format(item['item'], item['price']) if item['price'] else item['item']
+
+                if item['player'] > 0:
+                    shopdata['item_{}'.format(index)] = shopdata['item_{}'.format(index)].replace('—', '(Player {}) — '.format(item['player']))
+
                 if item['max'] == 0:
                     continue
                 shopdata['item_{}'.format(index)] += " x {}".format(item['max'])
@@ -1307,6 +1340,7 @@ class Spoiler(object):
                          'triforce_pieces_available': self.world.triforce_pieces_available,
                          'triforce_pieces_required': self.world.triforce_pieces_required,
                          'shop_shuffle': self.world.shop_shuffle,
+                         'shop_shuffle_slots': self.world.shop_shuffle_slots,
                          'shuffle_prizes': self.world.shuffle_prizes,
                          'sprite_pool': self.world.sprite_pool,
                          'restrict_dungeon_item_on_boss': self.world.restrict_dungeon_item_on_boss

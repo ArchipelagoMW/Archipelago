@@ -8,7 +8,7 @@ import shlex
 import sys
 
 from Main import main, get_seed
-from Rom import get_sprite_from_name
+from Rom import Sprite
 from Utils import is_bundled, close_console
 
 
@@ -129,6 +129,14 @@ def parse_arguments(argv, no_defaults=False):
                                               Timed mode. If time runs out, you lose (but can
                                               still keep playing).
                              ''')
+    parser.add_argument('--countdown_start_time', default=defval(10), type=int,
+                        help='''Set amount of time, in minutes, to start with in Timed Countdown and Timed OHKO modes''')
+    parser.add_argument('--red_clock_time', default=defval(-2), type=int,
+                        help='''Set amount of time, in minutes, to add from picking up red clocks; negative removes time instead''')
+    parser.add_argument('--blue_clock_time', default=defval(2), type=int,
+                        help='''Set amount of time, in minutes, to add from picking up blue clocks; negative removes time instead''')
+    parser.add_argument('--green_clock_time', default=defval(4), type=int,
+                        help='''Set amount of time, in minutes, to add from picking up green clocks; negative removes time instead''')
     parser.add_argument('--dungeon_counters', default=defval('default'), const='default', nargs='?', choices=['default', 'on', 'pickup', 'off'],
                         help='''\
                              Select dungeon counter display settings. (default: %(default)s)
@@ -173,7 +181,7 @@ def parse_arguments(argv, no_defaults=False):
                                           slightly biased to placing progression items with
                                           less restrictions.
                              ''')
-    parser.add_argument('--shuffle', default=defval('full'), const='full', nargs='?', choices=['vanilla', 'simple', 'restricted', 'full', 'crossed', 'insanity', 'restricted_legacy', 'full_legacy', 'madness_legacy', 'insanity_legacy', 'dungeonsfull', 'dungeonssimple'],
+    parser.add_argument('--shuffle', default=defval('vanilla'), const='vanilla', nargs='?', choices=['vanilla', 'simple', 'restricted', 'full', 'crossed', 'insanity', 'restricted_legacy', 'full_legacy', 'madness_legacy', 'insanity_legacy', 'dungeonsfull', 'dungeonssimple'],
                         help='''\
                              Select Entrance Shuffling Algorithm. (default: %(default)s)
                              Full:       Mix cave and dungeon entrances freely while limiting
@@ -258,6 +266,8 @@ def parse_arguments(argv, no_defaults=False):
                         help='Specifies a list of items that will be in your starting inventory (separated by commas)')
     parser.add_argument('--local_items', default=defval(''),
                         help='Specifies a list of items that will not spread across the multiworld (separated by commas)')
+    parser.add_argument('--non_local_items', default=defval(''),
+                        help='Specifies a list of items that will spread across the multiworld (separated by commas)')
     parser.add_argument('--custom', default=defval(False), help='Not supported.')
     parser.add_argument('--customitemarray', default=defval(False), help='Not supported.')
     parser.add_argument('--accessibility', default=defval('items'), const='items', nargs='?', choices=['items', 'locations', 'none'], help='''\
@@ -320,6 +330,11 @@ def parse_arguments(argv, no_defaults=False):
     p: randomize the prices of the items in shop inventories
     u: shuffle capacity upgrades into the item pool
     ''')
+    parser.add_argument('--shop_shuffle_slots', default=defval(0),
+                        type=lambda value: min(max(int(value), 1), 96),
+                        help='''
+        Maximum amount of shop slots able to be filled by items from the item pool.
+    ''')
     parser.add_argument('--shuffle_prizes', default=defval('g'), choices=['', 'g', 'b', 'gb'])
     parser.add_argument('--sprite_pool', help='''\
     Specifies a colon separated list of sprites used for random/randomonevent. If not specified, the full sprite pool is used.''')
@@ -366,14 +381,16 @@ def parse_arguments(argv, no_defaults=False):
 
             for name in ['logic', 'mode', 'swords', 'goal', 'difficulty', 'item_functionality',
                          'shuffle', 'crystals_ganon', 'crystals_gt', 'open_pyramid', 'timer',
+                         'countdown_start_time', 'red_clock_time', 'blue_clock_time', 'green_clock_time',
                          'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle', 'startinventory',
-                         'local_items', 'retro', 'accessibility', 'hints', 'beemizer',
+                         'local_items', 'non_local_items', 'retro', 'accessibility', 'hints', 'beemizer',
                          'shufflebosses', 'enemy_shuffle', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
                          'heartbeep', "skip_progression_balancing", "triforce_pieces_available",
-                         "triforce_pieces_required", "shop_shuffle",
+                         "triforce_pieces_required", "shop_shuffle", "shop_shuffle_slots",
                          'remote_items', 'progressive', 'dungeon_counters', 'glitch_boots', 'killable_thieves',
-                         'tile_shuffle', 'bush_shuffle', 'shuffle_prizes', 'sprite_pool', 'dark_room_logic', 'restrict_dungeon_item_on_boss']:
+                         'tile_shuffle', 'bush_shuffle', 'shuffle_prizes', 'sprite_pool', 'dark_room_logic', 'restrict_dungeon_item_on_boss',
+                         'hud_palettes', 'sword_palettes', 'shield_palettes', 'link_palettes']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})
@@ -400,7 +417,7 @@ def start():
         input(
             'Could not find valid base rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
         sys.exit(1)
-    if any([sprite is not None and not os.path.isfile(sprite) and not get_sprite_from_name(sprite) for sprite in
+    if any([sprite is not None and not os.path.isfile(sprite) and not Sprite.get_sprite_from_name(sprite) for sprite in
             args.sprite.values()]):
         input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
         sys.exit(1)

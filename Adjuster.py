@@ -6,7 +6,7 @@ import textwrap
 import sys
 
 from AdjusterMain import adjust
-from Rom import get_sprite_from_name
+from Rom import Sprite
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
 
@@ -55,7 +55,7 @@ def main():
         input(
             'Could not find valid rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
         sys.exit(1)
-    if args.sprite is not None and not os.path.isfile(args.sprite) and not get_sprite_from_name(args.sprite):
+    if args.sprite is not None and not os.path.isfile(args.sprite) and not Sprite.get_sprite_from_name(args.sprite):
         input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
         sys.exit(1)
 
@@ -65,7 +65,10 @@ def main():
     logging.basicConfig(format='%(message)s', level=loglevel)
     args, path = adjust(args=args)
     from Utils import persistent_store
-    persistent_store("adjuster", "last_settings", args)
+    from Rom import Sprite
+    if isinstance(args.sprite, Sprite):
+        args.sprite = args.sprite.name
+    persistent_store("adjuster", "last_settings_3", args)
 
 if __name__ == '__main__':
     main()

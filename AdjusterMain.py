@@ -27,7 +27,7 @@ def adjust(args):
     palettes_options['hud']=args.hud_palettes
     palettes_options['sword']=args.sword_palettes
     palettes_options['shield']=args.shield_palettes
-    palettes_options['link']=args.link_palettes
+    # palettes_options['link']=args.link_palettesvera
     
     apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.fastmenu, args.disablemusic,
                        args.sprite, palettes_options)
