@@ -53,6 +53,32 @@
                     </tbody>
                 </table>
             {% endif %}
+            {% if seeds %}
+                <h4>Your Games:</h4>
+                <table id="seed-table" class="table">
+                    <thead>
+                        <tr>
+                            <th>Seed</th>
+                            <th class="center">Players</th>
+                            <th>Created (UTC)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for seed in seeds %}
+                        <tr>
+                            <td><a href="{{ url_for("viewSeed", seed=seed.id) }}">{{ seed.id|suuid }}</a></td>
+                            <td class="center"
+                                {% if seed.multidata %}
+                                data-tooltip="{{ seed.multidata.names[0]|join(", ")|truncate(256, False, " ...") }}"
+                                {% endif %}
+                            >{% if seed.multidata %}{{ seed.multidata.names[0]|length }}{% else %}1{% endif %}
+                            </td>
+                            <td>{{ seed.creation_time.strftime("%Y-%m-%d %H:%M") }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
         </div>
     </div>
 

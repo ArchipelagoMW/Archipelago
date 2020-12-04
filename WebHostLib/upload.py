@@ -70,7 +70,8 @@ def uploads():
             else:
                 flash("Not recognized file format. Awaiting a .multidata file.")
     rooms = select(room for room in Room if room.owner == session["_id"])
-    return render_template("hostGame.html", rooms=rooms)
+    seeds = select(seed for seed in Seed if seed.owner == session["_id"])
+    return render_template("hostGame.html", rooms=rooms, seeds=seeds)
 
 
 def allowed_file(filename):
