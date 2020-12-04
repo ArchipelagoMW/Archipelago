@@ -14,4 +14,5 @@ window.addEventListener('load', () => {
         "info": false,
         "dom": "t",
     });
+    adjustFooterHeight();
 });
