@@ -111,7 +111,6 @@ Triforce_texts = [
     "\n  We did it!",
     "\n   O  M  G",
     " Hello.  Will\n  you be my\n   friend?",
-    " Berserker\n     was\n    here!",
     "The Wind Fish\nwill wake\nsoon.    Hoot!",
     "Meow meow meow\nMeow meow meow\n  Oh my god!",
     "Ahhhhhhhhh\nYa ya yaaaah\nYa ya yaaah",
@@ -293,7 +292,6 @@ junk_texts = [
     "{C:GREEN}\n>  READ\nor the owl\nwill eat you.",
     "{C:GREEN}\n> Bunnies\nare cute.",
     "{C:GREEN}\nPugs are the\nsuperior dog\nbreed.  >",
-    "{C:GREEN}\nThis is\nBerserker's\nMultiworld.>",
     "{C:GREEN}\nOther randos\nexist too!\nTry some!  >",
 ]
 
