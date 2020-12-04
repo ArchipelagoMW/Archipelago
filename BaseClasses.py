@@ -628,7 +628,7 @@ class CollectionState(object):
 
     def can_retrieve_tablet(self, player:int) -> bool:
         return self.has('Book of Mudora', player) and (self.has_beam_sword(player) or
-               ((self.world.swords[player] == "swordless" or self.world.difficulty_adjustments[player] == "easy") and
+               (self.world.swords[player] == "swordless" and
                 self.has("Hammer", player)))
 
     def has_sword(self, player: int) -> bool:
@@ -662,7 +662,7 @@ class CollectionState(object):
     def can_melt_things(self, player: int) -> bool:
         return self.has('Fire Rod', player) or \
                (self.has('Bombos', player) and
-                (self.world.difficulty_adjustments[player] == "easy" or self.world.swords[player] == "swordless" or
+                (self.world.swords[player] == "swordless" or
                  self.has_sword(player)))
 
     def can_avoid_lasers(self, player: int) -> bool:
