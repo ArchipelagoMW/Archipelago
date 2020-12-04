@@ -24,7 +24,7 @@ button{
     font-family: Jost, sans-serif;
     font-weight: 500;
     font-size: 0.9rem;
-    padding: 10px 17px 11px 16px;
+    padding: 10px 17px 11px 16px; /* top right bottom left */
     border-radius: 4px;
     border-top: 1px solid rgba(0, 0, 0, 0.5);
     border-left: 1px solid rgba(0, 0, 0, 0.5);
@@ -38,6 +38,7 @@ button:active{
     border-right: 1px solid rgba(0, 0, 0, 0.5);
     border-bottom: 1px solid rgba(0, 0, 0, 0.5);
     padding-right: 16px;
+    margin-right: 2px;
     padding-bottom: 10px;
     margin-bottom: 2px;
 }

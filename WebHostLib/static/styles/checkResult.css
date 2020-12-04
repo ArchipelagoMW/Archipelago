@@ -7,5 +7,12 @@
 
 #check-result{
     width: 540px;
-    text-align: center;
+}
+
+#check-result table{
+    text-align: left;
+}
+
+#check-result table th, #check-result table td{
+    padding-right: 20px;
 }

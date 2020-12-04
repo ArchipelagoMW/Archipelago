@@ -66,6 +66,10 @@ html{
     min-width: 150px;
 }
 
+#player-settings input:not([type]):focus{
+    border: 1px solid #ffffff;
+}
+
 #player-settings select{
     border: 1px solid #000000;
     padding: 3px;

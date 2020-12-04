@@ -1,16 +1,35 @@
 window.addEventListener('load', () => {
-  fetchSettingData().then((settingData) => {
-    createDefaultSettings(settingData);
-    buildUI(settingData);
+  Promise.all([fetchSettingData(), fetchSpriteData()]).then((results) => {
+    // Page setup
+    createDefaultSettings(results[0]);
+    buildUI(results[0]);
+    adjustHeaderWidth();
+
+    // Event listeners
     document.getElementById('export-settings').addEventListener('click', () => exportSettings());
     document.getElementById('generate-race').addEventListener('click', () => generateGame(true))
     document.getElementById('generate-game').addEventListener('click', () => generateGame());
 
+    // Name input field
     const playerSettings = JSON.parse(localStorage.getItem('playerSettings'));
     const nameInput = document.getElementById('player-name');
     nameInput.addEventListener('keyup', (event) => updateSetting(event));
     nameInput.value = playerSettings.name;
-  });
+
+    // Sprite options
+    const spriteData = JSON.parse(results[1]);
+    const spriteSelect = document.getElementById('sprite');
+    Object.keys(spriteData).forEach((sprite) => {
+      if (sprite.trim().length === 0) { return; }
+      const option = document.createElement('option');
+      option.setAttribute('value', spriteData[sprite]);
+      if (playerSettings.rom.sprite === sprite) { option.selected = true; }
+      option.innerText = sprite;
+      spriteSelect.appendChild(option);
+    });
+  }).catch((error) => {
+    console.error(error);
+  })
 });
 
 const fetchSettingData = () => new Promise((resolve, reject) => {
@@ -40,8 +59,9 @@ const createDefaultSettings = (settingData) => {
     for (let gameOption of Object.keys(settingData.gameOptions)){
       newSettings[gameOption] = settingData.gameOptions[gameOption].defaultValue;
     }
+    newSettings.rom = {};
     for (let romOption of Object.keys(settingData.romOptions)){
-      newSettings[romOption] = settingData.romOptions[romOption].defaultValue;
+      newSettings.rom[romOption] = settingData.romOptions[romOption].defaultValue;
     }
     localStorage.setItem('playerSettings', JSON.stringify(newSettings));
   }
@@ -65,11 +85,11 @@ const buildUI = (settingData) => {
     if (index < Object.keys(settingData.romOptions).length / 2) { leftRomOpts[key] = settingData.romOptions[key]; }
     else { rightRomOpts[key] = settingData.romOptions[key]; }
   });
-  document.getElementById('rom-options-left').appendChild(buildOptionsTable(leftRomOpts));
-  document.getElementById('rom-options-right').appendChild(buildOptionsTable(rightRomOpts));
+  document.getElementById('rom-options-left').appendChild(buildOptionsTable(leftRomOpts, true));
+  document.getElementById('rom-options-right').appendChild(buildOptionsTable(rightRomOpts, true));
 };
 
-const buildOptionsTable = (settings) => {
+const buildOptionsTable = (settings, romOpts = false) => {
   const currentSettings = JSON.parse(localStorage.getItem('playerSettings'));
   const table = document.createElement('table');
   const tbody = document.createElement('tbody');
@@ -89,7 +109,9 @@ const buildOptionsTable = (settings) => {
     // td Right
     const tdr = document.createElement('td');
     const select = document.createElement('select');
+    select.setAttribute('id', setting);
     select.setAttribute('data-key', setting);
+    if (romOpts) { select.setAttribute('data-romOpt', '1'); }
     settings[setting].options.forEach((opt) => {
       const option = document.createElement('option');
       option.setAttribute('value', opt.value);
@@ -112,8 +134,13 @@ const buildOptionsTable = (settings) => {
 
 const updateSetting = (event) => {
   const options = JSON.parse(localStorage.getItem('playerSettings'));
-  options[event.target.getAttribute('data-key')] = isNaN(event.target.value) ?
-    event.target.value : parseInt(event.target.value, 10);
+  if (event.target.getAttribute('data-romOpt')) {
+    options.rom[event.target.getAttribute('data-key')] = isNaN(event.target.value) ?
+      event.target.value : parseInt(event.target.value, 10);
+  } else {
+    options[event.target.getAttribute('data-key')] = isNaN(event.target.value) ?
+      event.target.value : parseInt(event.target.value, 10);
+  }
   localStorage.setItem('playerSettings', JSON.stringify(options));
 };
 
@@ -145,3 +172,17 @@ const generateGame = (raceMode = false) => {
     window.location.href = response.data.url;
   });
 };
+
+const fetchSpriteData = () => new Promise((resolve, reject) => {
+  const ajax = new XMLHttpRequest();
+  ajax.onreadystatechange = () => {
+    if (ajax.readyState !== 4) { return; }
+    if (ajax.status !== 200) {
+      reject('Unable to fetch sprite data.');
+      return;
+    }
+    resolve(ajax.responseText);
+  };
+  ajax.open('GET', `${window.location.origin}/static/static/spriteData.json`, true);
+  ajax.send();
+});

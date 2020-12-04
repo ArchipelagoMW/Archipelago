@@ -139,9 +139,14 @@ html{
     min-width: 150px;
 }
 
+#weighted-settings input:not([type]):focus{
+    border: 1px solid #ffffff;
+}
+
 #weighted-settings select{
     border: 1px solid #000000;
     padding: 3px;
     border-radius: 3px;
     min-width: 150px;
 }
+

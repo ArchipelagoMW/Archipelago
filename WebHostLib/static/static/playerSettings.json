@@ -648,6 +648,34 @@
           "value": "random"
         }
       ]
+    },
+    "sword_palettes": {
+      "type": "select",
+      "friendlyName": "Sword Palette",
+      "description": "Change the colors of the swords, within reason",
+      "defaultValue": "default",
+      "options": [
+        {
+          "name": "Vanilla",
+          "value": "default"
+        },
+        {
+          "name": "Shuffled",
+          "value": "random"
+        }
+      ]
+    },
+    "sprite": {
+      "type": "select",
+      "friendlyName": "Sprite",
+      "description": "Choose a sprite to play as!",
+      "defaultValue": "link",
+      "options": [
+        {
+          "name": "Random",
+          "value": "random"
+        }
+      ]
     }
   }
 }

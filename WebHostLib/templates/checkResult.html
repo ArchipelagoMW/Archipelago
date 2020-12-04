@@ -10,9 +10,24 @@
     {% include 'header/oceanHeader.html' %}
     <div id="check-result-wrapper">
         <div id="check-result" class="grass-island">
-            {% for filename, resulttext in results.items() %}
-                <span>{{ filename }}: {{ "Looks ok" if resulttext == True else resulttext }}</span><br>
-            {% endfor %}
+            <h1>Verification Results</h1>
+            <p>The results of your requested file check are below.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>File</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for filename, resulttext in results.items() %}
+                        <tr>
+                            <td>{{ filename }}</td>
+                            <td>{{ "Valid" if resulttext == True else resulttext }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
     {% include 'islandFooter.html' %}
