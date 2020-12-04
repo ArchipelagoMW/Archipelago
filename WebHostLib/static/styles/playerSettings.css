@@ -14,6 +14,13 @@ html{
     color: #eeffeb;
 }
 
+#player-settings #player-settings-button-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
 #player-settings code{
     background-color: #d9cd8e;
     border-radius: 4px;
@@ -71,7 +78,7 @@ html{
     flex-direction: row;
 }
 
-#player-settings .left, #game-options .right{
+#player-settings .left, #player-settings .right{
     flex-grow: 1;
 }
 
@@ -80,7 +87,10 @@ html{
 }
 
 #player-settings table label{
+    display: block;
+    min-width: 200px;
     margin-right: 4px;
+    cursor: default;
 }
 
 @media all and (max-width: 1000px){

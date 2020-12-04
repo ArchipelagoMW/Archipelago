@@ -3,6 +3,8 @@
 {% block head %}
     <title>Player Settings</title>
     <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/playerSettings.css") }}" />
+    <script type="application/ecmascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/js-yaml.min.js") }}"></script>
     <script type="application/ecmascript" src="{{ static_autoversion("assets/playerSettings.js") }}"></script>
 {% endblock %}
 
@@ -17,7 +19,7 @@
 
         <p><label for="player-name">Please enter your player name. This will appear in-game as you send and receive
             items, if you are playing in a MultiWorld.</label><br />
-            <input id="player-name" placeholder="Player Name" />
+            <input id="player-name" placeholder="Player Name" data-key="name" maxlength="16" />
         </p>
 
         <h2>Game Options</h2>
@@ -30,6 +32,12 @@
         <div id="rom-options">
             <div id="rom-options-left" class="left"></div>
             <div id="rom-options-right" class="right"></div>
+        </div>
+
+        <div id="player-settings-button-row">
+            <button id="export-settings">Export Settings</button>
+            <button id="generate-game">Generate Game</button>
+            <button id="generate-race">Generate Race</button>
         </div>
     </div>
 {% endblock %}

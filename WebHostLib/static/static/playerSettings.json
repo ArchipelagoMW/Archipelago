@@ -12,78 +12,54 @@
     "debug": "off"
   },
   "generalOptions": {
-    "name": "Player"
+    "name": "PlayerName"
   },
   "gameOptions": {
-    "glitches_required":{
-    "type": "select",
-    "friendlyName": "Glitches Required",
-    "description": "Choose which glitches will be considered in-logic",
-    "defaultValue": "none",
-    "options": [
-      {
-        "name": "None",
-        "value": "none"
-      },
-      {
-        "name": "Minor Glitches",
-        "value": "minor_glitches"
-      },
-      {
-        "name": "Overworld Glitches",
-        "value": "overworld_glitches"
-      },
-      {
-        "name": "No Logic",
-        "value": "no_logic"
-      }
-    ]
-  },
-    "dark_room_logic": {
+    "goals": {
       "type": "select",
-      "friendlyName": "Dark Room Logic",
-      "description": "Choose your logical access to dark rooms",
-      "defaultValue": "lamp",
+      "friendlyName": "Goal",
+      "description": "Choose the condition for winning the game",
+      "defaultValue": "ganon",
       "options": [
         {
-          "name": "Lamp Required",
-          "value": "lamp"
+          "name": "Kill Ganon",
+          "value": "ganon"
         },
         {
-          "name": "Torches Lightable",
-          "value": "torches"
+          "name": "Fast Ganon (Pyramid Always Open)",
+          "value": "fast_ganon"
         },
         {
-          "name": "Always In-Logic",
-          "value": "none"
+          "name": "All Dungeons",
+          "value": "dungeons"
+        },
+        {
+          "name": "Master Sword Pedestal",
+          "value": "pedestal"
+        },
+        {
+          "name": "Triforce Hunt",
+          "value": "triforce_hunt"
         }
       ]
     },
-    "dungeon_items": {
+    "mode": {
       "type": "select",
-      "friendlyName": "Dungeon Item Shuffle",
-      "description": "Choose which dungeon items you want shuffled",
-      "defaultValue": "none",
+      "friendlyName": "World State",
+      "description": "Choose the state of the game world",
+      "defaultValue": "standard",
       "options": [
         {
-          "name": "None",
-          "value": "none"
+          "name": "Standard",
+          "value": "standard"
         },
         {
-          "name": "Map & Compass",
-          "value": "mc"
+          "name": "Open",
+          "value": "open"
         },
         {
-          "name": "Small Keys Only",
-          "value": "s"
-        },
-        {
-          "name": "Big Keys Only",
-          "value": "b"
-        },
-        {
-          "name": "Full Keysanity",
-          "value": "mscb"
+          "name": "Inverted",
+          "value": "inverted"
         }
       ]
     },
@@ -124,74 +100,6 @@
         {
           "name": "Randomize Each",
           "value": "random"
-        }
-      ]
-    },
-    "entrance_shuffle": {
-      "type": "select",
-      "friendlyName": "Entrance Shuffle",
-      "description": "Shuffles the game map. Not recommended for beginners",
-      "defaultValue": "none",
-      "options": [
-        {
-          "name": "None",
-          "value": "none"
-        },
-        {
-          "name": "Dungeon Entrances",
-          "value": "dungeonssimple"
-        },
-        {
-          "name": "Dungeon Interiors",
-          "value": "dungeonsfull"
-        },
-        {
-          "name": "Simple Entrances",
-          "value": "simple"
-        },
-        {
-          "name": "Restricted",
-          "value": "restricted"
-        },
-        {
-          "name": "Full Shuffle",
-          "value": "full"
-        },
-        {
-          "name": "Crossed Shuffle",
-          "value": "crossed"
-        },
-        {
-          "name": "Insanity Shuffle",
-          "value": "insanity"
-        }
-      ]
-    },
-    "goals": {
-      "type": "select",
-      "friendlyName": "Goal",
-      "description": "Choose the condition for winning the game",
-      "defaultValue": "ganon",
-      "options": [
-        {
-          "name": "Kill Ganon",
-          "value": "ganon"
-        },
-        {
-          "name": "Fast Ganon (Pyramid Always Open)",
-          "value": "fast_ganon"
-        },
-        {
-          "name": "All Dungeons",
-          "value": "dungeons"
-        },
-        {
-          "name": "Master Sword Pedestal",
-          "value": "pedestal"
-        },
-        {
-          "name": "Triforce Hunt",
-          "value": "triforce_hunt"
         }
       ]
     },
@@ -283,26 +191,6 @@
         }
       ]
     },
-    "mode": {
-      "type": "select",
-      "friendlyName": "World State",
-      "description": "Choose the state of the game world",
-      "defaultValue": "standard",
-      "options": [
-        {
-          "name": "Standard",
-          "value": "standard"
-        },
-        {
-          "name": "Open",
-          "value": "open"
-        },
-        {
-          "name": "Inverted",
-          "value": "inverted"
-        }
-      ]
-    },
     "retro": {
       "type": "select",
       "friendlyName": "Retro Mode",
@@ -316,14 +204,6 @@
         {
           "name": "Enabled",
           "value": "on"
-        },
-        {
-          "name": "Classic (Universal Small Keys)",
-          "value": null,
-          "overrides": {
-            "retro": "on",
-            "dungeon_items": "+u"
-          }
         }
       ]
     },
@@ -364,6 +244,122 @@
         {
           "name": "Randomized",
           "value": "randomized"
+        }
+      ]
+    },
+    "glitches_required":{
+    "type": "select",
+    "friendlyName": "Glitches Required",
+    "description": "Choose which glitches will be considered in-logic",
+    "defaultValue": "none",
+    "options": [
+      {
+        "name": "None",
+        "value": "none"
+      },
+      {
+        "name": "Minor Glitches",
+        "value": "minor_glitches"
+      },
+      {
+        "name": "Overworld Glitches",
+        "value": "overworld_glitches"
+      },
+      {
+        "name": "No Logic",
+        "value": "no_logic"
+      }
+    ]
+  },
+    "dark_room_logic": {
+      "type": "select",
+      "friendlyName": "Dark Room Logic",
+      "description": "Choose your logical access to dark rooms",
+      "defaultValue": "lamp",
+      "options": [
+        {
+          "name": "Lamp Required",
+          "value": "lamp"
+        },
+        {
+          "name": "Torches Lightable",
+          "value": "torches"
+        },
+        {
+          "name": "Always In-Logic",
+          "value": "none"
+        }
+      ]
+    },
+    "dungeon_items": {
+      "type": "select",
+      "friendlyName": "Dungeon Item Shuffle",
+      "description": "Choose which dungeon items you want shuffled",
+      "defaultValue": "none",
+      "options": [
+        {
+          "name": "None",
+          "value": "none"
+        },
+        {
+          "name": "Map & Compass",
+          "value": "mc"
+        },
+        {
+          "name": "Small Keys Only",
+          "value": "s"
+        },
+        {
+          "name": "Big Keys Only",
+          "value": "b"
+        },
+        {
+          "name": "Full Keysanity",
+          "value": "mscb"
+        },
+        {
+          "name": "Universal Small Keys",
+          "value": "u"
+        }
+      ]
+    },
+    "entrance_shuffle": {
+      "type": "select",
+      "friendlyName": "Entrance Shuffle",
+      "description": "Shuffles the game map. Not recommended for beginners",
+      "defaultValue": "none",
+      "options": [
+        {
+          "name": "None",
+          "value": "none"
+        },
+        {
+          "name": "Dungeon Entrances",
+          "value": "dungeonssimple"
+        },
+        {
+          "name": "Dungeon Interiors",
+          "value": "dungeonsfull"
+        },
+        {
+          "name": "Simple Entrances",
+          "value": "simple"
+        },
+        {
+          "name": "Restricted",
+          "value": "restricted"
+        },
+        {
+          "name": "Full Shuffle",
+          "value": "full"
+        },
+        {
+          "name": "Crossed Shuffle",
+          "value": "crossed"
+        },
+        {
+          "name": "Insanity Shuffle",
+          "value": "insanity"
         }
       ]
     },
@@ -549,34 +545,6 @@
         }
       ]
     },
-    "heartcolor": {
-      "type": "select",
-      "friendlyName": "Heart Color",
-      "description": "Change the color of your hearts in-game",
-      "defaultValue": "red",
-      "options": [
-        {
-          "name": "Red",
-          "value": "red"
-        },
-        {
-          "name": "Blue",
-          "value": "blue"
-        },
-        {
-          "name": "Green",
-          "value": "green"
-        },
-        {
-          "name": "Yellow",
-          "value": "yellow"
-        },
-        {
-          "name": "Random",
-          "value": "random"
-        }
-      ]
-    },
     "heartbeep": {
       "type": "select",
       "friendlyName": "Heart-Beep Speed",
@@ -602,6 +570,34 @@
         {
           "name": "Disabled",
           "value": "off"
+        }
+      ]
+    },
+    "heartcolor": {
+      "type": "select",
+      "friendlyName": "Heart Color",
+      "description": "Change the color of your hearts in-game",
+      "defaultValue": "red",
+      "options": [
+        {
+          "name": "Red",
+          "value": "red"
+        },
+        {
+          "name": "Blue",
+          "value": "blue"
+        },
+        {
+          "name": "Green",
+          "value": "green"
+        },
+        {
+          "name": "Yellow",
+          "value": "yellow"
+        },
+        {
+          "name": "Random",
+          "value": "random"
         }
       ]
     },
