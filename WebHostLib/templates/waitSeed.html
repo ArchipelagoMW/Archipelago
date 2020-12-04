@@ -2,15 +2,16 @@
 {% import "macros.html" as macros %}
 
 {% block head %}
-    <title>Multiworld Seed {{ seed_id|suuid }} (generating...)</title>
+    <title>Generation in Progress</title>
     <meta http-equiv="refresh" content="1">
-    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/viewSeed.css") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/waitSeed.css") }}"/>
 {% endblock %}
 
 {% block body %}
     {% include 'header/oceanHeader.html' %}
     <div id="wait-seed-wrapper" class="grass-island">
-        <div class="main-content">
+        <div id="wait-seed">
+            <h1>Generation in Progress</h1>
             Waiting for game to generate, this page auto-refreshes to check.
         </div>
     </div>

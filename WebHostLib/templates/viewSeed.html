@@ -2,7 +2,7 @@
 {% import "macros.html" as macros %}
 
 {% block head %}
-    <title>Multiworld Seed {{ seed.id|suuid }}</title>
+    <title>View Seed {{ seed.id|suuid }}</title>
     <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/viewSeed.css") }}"/>
     <script type="application/ecmascript" src="{{ static_autoversion("assets/viewSeed.js") }}"></script>
 {% endblock %}
@@ -11,11 +11,10 @@
     {% include 'header/oceanHeader.html' %}
     <div id="view-seed-wrapper">
         <div id="view-seed" class="grass-island">
-            <h3>Seed Info</h3>
+            <h1>Seed Info</h1>
             {% if not seed.multidata and not seed.spoiler %}
-            <h4>
-                Single Player Race Rom: No spoiler or multidata exists, parts of the rom are encrypted and rooms cannot be created.
-            </h4>
+                <p>Single Player Race Rom: No spoiler or multidata exists, parts of the rom are encrypted and rooms
+                    cannot be created.</p>
             {% endif %}
             <table>
                 <tbody>

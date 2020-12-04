@@ -5,14 +5,14 @@
     flex-wrap: wrap;
 }
 
-#view-seed-wrapper table td{
-    vertical-align: top;
-}
-
 #view-seed{
     width: 620px;
     min-height: 360px;
     text-align: center;
+}
+
+#view-seed table td{
+    vertical-align: top;
 }
 
 #view-seed h3{
