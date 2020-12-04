@@ -2306,7 +2306,7 @@ def set_inverted_mode(world, player, rom):
     rom.write_byte(0x1607C + 0x06, 0xF2)
     rom.write_int16(0x160CB + 2 * 0x06, 0x0000)
     rom.write_int16(0x16169 + 2 * 0x06, 0x0000)
-    rom.write_int16(snes_to_pc(0x02E87B), 0x00AE)  # move flute splot 9
+    rom.write_int16(snes_to_pc(0x02E87B), 0x00AE)  # move flute spot 9
     rom.write_int16(snes_to_pc(0x02E89D), 0x0610)
     rom.write_int16(snes_to_pc(0x02E8BF), 0x077E)
     rom.write_int16(snes_to_pc(0x02E8E1), 0x0672)
