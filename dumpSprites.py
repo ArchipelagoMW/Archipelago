@@ -1,39 +1,35 @@
-import argparse
-import json
-from os import listdir
-from os.path import isfile, join
-from Rom import Sprite
-from Gui import get_image_for_sprite
-
-parser = argparse.ArgumentParser(description='Dump sprite data and .png files to a directory.')
-parser.add_argument('-i')
-parser.add_argument('-o')
-args = parser.parse_args()
-
-if not args.i or not args.o:
-    print('Invalid arguments provided. -i and -o are required.')
-    exit()
+from Gui import *
+import threading
 
 # Target directories
-input_dir = args.i
-output_dir = args.o
+input_dir = local_path("data", "sprites", "alttpr")
+output_dir = local_path("WebHostLib", "static", "static")
 
-# Get a list of all files in the input directory
-targetFiles = [file for file in listdir(input_dir) if isfile(join(input_dir, file))]
+#update sprites through gui.py's functions
+done = threading.Event()
+top = Tk()
+top.withdraw()
+BackgroundTaskProgress(top, update_sprites, "Updating Sprites", lambda succesful, resultmessage: done.set())
+while not done.isSet():
+    top.update()
+
+print("Done updating sprites")
 
 spriteData = {}
 
-for file in targetFiles:
-    if file[-5:] != '.zspr':
-        continue
+for file in os.listdir(input_dir):
+    sprite = Sprite(os.path.join(input_dir, file))
 
-    sprite = Sprite(join(input_dir, file))
-    spriteData[sprite.name] = file
+    if not sprite.name:
+        print("Warning:",file,"has no name.")
+        sprite.name = file.split(".", 1)[0]
 
-    image = open(f'{output_dir}/{sprite.name}.gif', 'wb')
-    image.write(get_image_for_sprite(sprite, True))
-    image.close()
+    if sprite.valid:
+        with open(os.path.join(output_dir, "sprites", f"{sprite.name}.gif"), 'wb') as image:
+            image.write(get_image_for_sprite(sprite, True))
+        spriteData[sprite.name] = file
+    else:
+        print(file, "dropped, as it has no valid sprite data.")
 
-jsonFile = open(f'{output_dir}/spriteData.json', 'w')
-jsonFile.write(json.dumps(spriteData))
-jsonFile.close()
+with open(f'{output_dir}/spriteData.json', 'w') as file:
+    json.dump(spriteData, file)
