@@ -212,7 +212,7 @@ beemizer: # Remove items from the global item pool and replace them with single 
   3: 0 # 100% of the non-essential item pool is replaced with bee traps, of which 50% could be single bees
   4: 0 # 100% of the non-essential item pool is replaced with bee traps
 ### Item Shuffle (shop)
-shop_shuffle_slots: # Maximum amount of allowed shop slots to place item pool items
+shop_shuffle_slots: 
   0: 50
   5: 0
   15: 0
