@@ -23,62 +23,6 @@
                 </form>
                 <button id="host-game-button">Upload</button>
             </div>
-
-            {% if rooms %}
-                <h4>Your Games:</h4>
-                <table id="host-game-table" class="table">
-                    <thead>
-                        <tr>
-                            <th>Seed</th>
-                            <th>Room</th>
-                            <th class="center">Players</th>
-                            <th>Created (UTC)</th>
-                            <th>Last Activity (UTC)</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for room in rooms %}
-                        <tr>
-                            <td><a href="{{ url_for("viewSeed", seed=room.seed.id) }}">{{ room.seed.id|suuid }}</a></td>
-                            <td><a href="{{ url_for("hostRoom", room=room.id) }}">{{ room.id|suuid }}</a></td>
-                            <td
-                                class="center"
-                                data-tooltip="{{ room.seed.multidata.names[0]|join(", ")|truncate(256, False, " ...") }}"
-                            >{{ room.seed.multidata.names[0]|length }}</td>
-                            <td>{{ room.creation_time.strftime("%Y-%m-%d %H:%M") }}</td>
-                            <td>{{ room.last_activity.strftime("%Y-%m-%d %H:%M") }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %}
-            {% if seeds %}
-                <h4>Your Games:</h4>
-                <table id="seed-table" class="table">
-                    <thead>
-                        <tr>
-                            <th>Seed</th>
-                            <th class="center">Players</th>
-                            <th>Created (UTC)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for seed in seeds %}
-                        <tr>
-                            <td><a href="{{ url_for("viewSeed", seed=seed.id) }}">{{ seed.id|suuid }}</a></td>
-                            <td class="center"
-                                {% if seed.multidata %}
-                                data-tooltip="{{ seed.multidata.names[0]|join(", ")|truncate(256, False, " ...") }}"
-                                {% endif %}
-                            >{% if seed.multidata %}{{ seed.multidata.names[0]|length }}{% else %}1{% endif %}
-                            </td>
-                            <td>{{ seed.creation_time.strftime("%Y-%m-%d %H:%M") }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %}
         </div>
     </div>
 

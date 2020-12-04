@@ -1,0 +1,78 @@
+{% extends 'pageWrapper.html' %}
+
+{% block head %}
+    {{ super() }}
+    <title>Generate Game</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/userContent.css") }}" />
+{% endblock %}
+
+{% block body %}
+    {% include 'header/oceanHeader.html' %}
+    <div id="user-content-wrapper">
+        <div id="user-content" class="grass-island">
+            <h1>User Content</h1>
+            Below is a list of all the content you have generated on this site. Rooms and seeds are listed separately.
+
+            <h2>Your Rooms</h2>
+            {% if rooms %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Seed</th>
+                            <th>Room</th>
+                            <th class="center">Players</th>
+                            <th>Created (UTC)</th>
+                            <th>Last Activity (UTC)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for room in rooms %}
+                            <tr>
+                                <td><a href="{{ url_for("viewSeed", seed=room.seed.id) }}">{{ room.seed.id|suuid }}</a></td>
+                                <td><a href="{{ url_for("hostRoom", room=room.id) }}">{{ room.id|suuid }}</a></td>
+                                <td
+                                    class="center"
+                                    data-tooltip="{{ room.seed.multidata.names[0]|join(", ")|truncate(256, False, " ...") }}"
+                                >{{ room.seed.multidata.names[0]|length }}</td>
+                                <td>{{ room.creation_time.strftime("%Y-%m-%d %H:%M") }}</td>
+                                <td>{{ room.last_activity.strftime("%Y-%m-%d %H:%M") }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                You have not created any rooms yet!
+            {% endif %}
+
+            <h2>Your Seeds</h2>
+            {% if seeds %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Seed</th>
+                            <th class="center">Players</th>
+                            <th>Created (UTC)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for seed in seeds %}
+                            <tr>
+                                <td><a href="{{ url_for("viewSeed", seed=seed.id) }}">{{ seed.id|suuid }}</a></td>
+                                <td class="center"
+                                    {% if seed.multidata %}
+                                    data-tooltip="{{ seed.multidata.names[0]|join(", ")|truncate(256, False, " ...") }}"
+                                    {% endif %}
+                                >{% if seed.multidata %}{{ seed.multidata.names[0]|length }}{% else %}1{% endif %}
+                                </td>
+                                <td>{{ seed.creation_time.strftime("%Y-%m-%d %H:%M") }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                You have no generated any seeds yet!
+            {% endif %}
+        </div>
+    </div>
+    {%  include 'islandFooter.html' %}
+{% endblock %}
