@@ -28,3 +28,17 @@
 #host-game button{
     margin-top: 5px;
 }
+
+#host-game-table{
+    margin-right: auto;
+    text-align: center
+}
+
+#host-game-table td{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#host-game-table.dataTable{
+    width: unset;
+}

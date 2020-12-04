@@ -26,15 +26,11 @@
 
             {% if rooms %}
                 <h4>Your Rooms:</h4>
-                <table id="host-game-table" class="table">
+                <table id="host-game-table">
                     <thead>
                         <tr>
                             <th>Seed</th>
                             <th>Room</th>
-                            <th>Players</th>
-                            <th>Created (UTC)</th>
-                            <th>Last Activity (UTC)</th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -43,10 +39,6 @@
                             <td><a href="{{ url_for("viewSeed", seed=room.seed.id) }}">{{ room.seed.id|suuid }}</a>
                             </td>
                             <td><a href="{{ url_for("hostRoom", room=room.id) }}">{{ room.id|suuid }}</a></td>
-                            <td>{{ room.seed.multidata.names[0]|length }} Total:
-                                {{ room.seed.multidata.names[0]|join(", ")|truncate(256, False, " ...") }}</td>
-                            <td>{{ room.creation_time.strftime("%Y-%m-%d %H:%M") }}</td>
-                            <td>{{ room.last_activity.strftime("%Y-%m-%d %H:%M") }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
