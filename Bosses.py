@@ -122,9 +122,8 @@ def GanonDefeatRule(state, player: int):
                state.has_fire_source(player) and \
                state.has('Silver Bow', player) and \
                state.can_shoot_arrows(player)
-    easy_hammer = state.world.difficulty_adjustments[player] == "easy" and state.has("Hammer", player) and \
-                  state.has('Silver Bow', player) and state.can_shoot_arrows(player)
-    can_hurt = state.has_beam_sword(player) or easy_hammer
+
+    can_hurt = state.has_beam_sword(player)
     common = can_hurt and state.has_fire_source(player)
     # silverless ganon may be needed in minor glitches
     if state.world.logic[player] in {"owglitches", "minorglitches", "none"}:
