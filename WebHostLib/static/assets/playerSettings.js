@@ -111,7 +111,6 @@ const buildOptionsTable = (settings) => {
 };
 
 const updateSetting = (event) => {
-  console.log(event.target.value);
   const options = JSON.parse(localStorage.getItem('playerSettings'));
   options[event.target.getAttribute('data-key')] = isNaN(event.target.value) ?
     event.target.value : parseInt(event.target.value, 10);
@@ -142,5 +141,7 @@ const generateGame = (raceMode = false) => {
     presetData: { player: localStorage.getItem('playerSettings') },
     playerCount: 1,
     race: raceMode ? '1' : '0',
+  }).then((response) => {
+    window.location.href = response.data.url;
   });
 };
