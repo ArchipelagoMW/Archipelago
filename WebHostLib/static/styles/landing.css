@@ -73,7 +73,7 @@ html{
     padding-top: 35px;
 }
 
-#generate-button{
+#player-settings-button{
     top: 350px;
     left: calc(50% - 100px);
     background-image: url("/static/static/button-images/button-a.png");
@@ -94,7 +94,7 @@ html{
     padding-left: 20px;
 }
 
-#player-settings-button{
+#generate-button{
     top: 75px;
     left: calc(50% + 416px + 75px);
     background-image: url("/static/static/button-images/button-b.png");

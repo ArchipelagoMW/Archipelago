@@ -3,6 +3,7 @@
 {% block head %}
     <title>Player Settings</title>
     <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/weightedSettings.css") }}" />
+    <script type="application/ecmascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="application/ecmascript" src="{{ static_autoversion("assets/js-yaml.min.js") }}"></script>
     <script type="application/ecmascript" src="{{ static_autoversion("assets/weightedSettings.js") }}"></script>
 {% endblock %}
@@ -67,6 +68,8 @@
         <div id="weighted-settings-button-row">
             <button id="reset-to-default">Reset to Defaults</button>
             <button id="export-button">Export Settings</button>
+            <button id="generate-game">Generate Game</button>
+            <button id="generate-race">Generate Race</button>
         </div>
     </div>
 {%  endblock %}

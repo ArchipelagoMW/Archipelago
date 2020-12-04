@@ -35,6 +35,8 @@ window.addEventListener('load', () => {
             <h2><a href="${window.location.origin}">Click here to return to safety!</a></h2>
             `
   });
+  document.getElementById('generate-game').addEventListener('click', () => generateGame());
+  document.getElementById('generate-race').addEventListener('click', () => generateGame(true));
 });
 
 const fetchPlayerSettingsYaml = () => new Promise((resolve, reject) => {
@@ -431,4 +433,16 @@ const buildSpritePicker = () => {
 
   spritePicker.appendChild(sprites);
   return spritePicker;
+};
+
+const generateGame = (raceMode = false) => {
+  const presetNumber = document.getElementById('preset-number').value;
+  axios.post('/api/generate', {
+    weights: { player: localStorage.getItem(`weightedSettings${presetNumber}`) },
+    presetData: { player: localStorage.getItem(`weightedSettings${presetNumber}`) },
+    playerCount: 1,
+    race: raceMode ? '1' : '0',
+  }).then((response) => {
+    window.location.href = response.data.url;
+  });
 };

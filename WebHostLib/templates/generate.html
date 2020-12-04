@@ -11,26 +11,28 @@
     {% include 'header/oceanHeader.html' %}
     <div id="generate-game-wrapper">
         <div id="generate-game" class="grass-island">
-            <h1>Start Game{% if race %} (Race Mode){% endif %}</h1>
+            <h1>Upload Config{% if race %} (Race Mode){% endif %}</h1>
             <p>
-                This page accepts a yaml file containing generator options.
-                You can find a documented example
-                <a href="https://raw.githubusercontent.com/Berserker66/MultiWorld-Utilities/master/playerSettings.yaml">here</a>.
-                This file can be saved as .yaml, edited to your liking and then supplied to the generator.
-                You can also upload a .zip with multiple YAMLs.
-                A proper menu is in the works.
+                This page allows you to generate a game by uploading a yaml file or a zip file containing yaml files.
+                If you do not have a config (yaml) file yet, you may create one on the
+                <a href="/player-settings">Player Settings</a> page. If you would like more advanced options,
+                the <a href="/weighted-settings">Weighted Settings</a> page might be what you're looking for.
+            </p>
+            <p>
                 {% if race -%}
-                    Race Mode means the spoiler log will be unavailable, roms will be encrypted and single-player has no multidata.
+                    This game will be generated in race mode, meaning the spoiler log will be unavailable,
+                    roms will be encrypted, and single-player games will have no multidata files.
                 {%- else -%}
-                    You can go to <a href="{{ url_for("generate", race=True) }}">race mode</a> to create a game without
-                    spoiler log and with encryption.
+                    If you would like to generate a race game,
+                    <a href="{{ url_for("generate", race=True) }}">click here.</a> Race games are generated without
+                    a spoiler log, the ROMs are encrypted, and single-player games will not include a multidata file.
                 {%- endif -%}
             </p>
             <p>
                 After generation is complete, you will have the option to download a patch file.
-                This patch file can be opened with the <a
-                    href="https://github.com/Berserker66/MultiWorld-Utilities/releases">client</a> to create a rom file.
-                In-Browser patching will come.
+                This patch file can be opened with the
+                <a href="https://github.com/Berserker66/MultiWorld-Utilities/releases">client</a>, which can be
+                used to to create a rom file. In-browser patching is planned for the future.
             </p>
             <div id="generate-game-form-wrapper">
                 <form id="generate-game-form" method="post" enctype="multipart/form-data">
