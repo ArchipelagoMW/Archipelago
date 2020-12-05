@@ -1,9 +1,10 @@
-{% extends 'pageWrapper.html' %}
+{% extends 'tablepage.html' %}
 
 {% block head %}
     {{ super() }}
     <title>Generate Game</title>
     <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/userContent.css") }}" />
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/userContent.js") }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -15,7 +16,7 @@
 
             <h2>Your Rooms</h2>
             {% if rooms %}
-                <table>
+                <table id="rooms-table" class="table">
                     <thead>
                         <tr>
                             <th>Seed</th>
@@ -46,7 +47,7 @@
 
             <h2>Your Seeds</h2>
             {% if seeds %}
-                <table>
+                <table id="seeds-table" class="table">
                     <thead>
                         <tr>
                             <th>Seed</th>
