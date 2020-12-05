@@ -48,13 +48,8 @@ class TestDungeons(TestInvertedOWG):
             ["Castle Tower - Room 03", True, ['Pegasus Boots', 'Progressive Sword']],
             ["Castle Tower - Room 03", True, ['Pegasus Boots', 'Progressive Bow']],
 
-            #todo: Qirn Jump
-            #["Palace of Darkness - Shooter Room", True, []],
-            ["Palace of Darkness - Shooter Room", True, ['Pegasus Boots']],
-            ["Palace of Darkness - Shooter Room", True, ['Hammer']],
-            ["Palace of Darkness - Shooter Room", True, ['Flippers']],
-            ["Palace of Darkness - Shooter Room", True, ['Pegasus Boots', 'Progressive Glove']],
-            ["Palace of Darkness - Shooter Room", True, ['Pegasus Boots', 'Magic Mirror']],
+            # Qirn Jump
+            ["Palace of Darkness - Shooter Room", True, []],
 
             ["Swamp Palace - Entrance", False, []],
             ["Swamp Palace - Entrance", False, [], ['Magic Mirror']],
@@ -78,11 +73,9 @@ class TestDungeons(TestInvertedOWG):
 
             ["Ice Palace - Compass Chest", False, []],
             ["Ice Palace - Compass Chest", False, [], ['Fire Rod', 'Bombos', 'Progressive Sword']],
-            #todo: Qirn Jump
-            #["Ice Palace - Compass Chest", True, ['Fire Rod']],
-            #["Ice Palace - Compass Chest", True, ['Bombos', 'Progressive Sword']],
-            ["Ice Palace - Compass Chest", True, ['Pegasus Boots', 'Fire Rod']],
-            ["Ice Palace - Compass Chest", True, ['Pegasus Boots', 'Bombos', 'Progressive Sword']],
+            # Qirn Jump
+            ["Ice Palace - Compass Chest", True, ['Fire Rod']],
+            ["Ice Palace - Compass Chest", True, ['Bombos', 'Progressive Sword']],
 
             ["Misery Mire - Bridge Chest", False, []],
             ["Misery Mire - Bridge Chest", False, [], ['Ether']],
