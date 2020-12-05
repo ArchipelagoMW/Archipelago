@@ -55,7 +55,7 @@ class TestInvertedDarkWorld(TestInverted):
             ["Pyramid", False, []],
             ["Pyramid", True, ['Beat Agahnim 1', 'Magic Mirror']],
             ["Pyramid", True, ['Hammer']],
-            ["Pyramid", True, ['Flippers', 'Progressive Glove']],
+            ["Pyramid", True, ['Flippers']],
             ["Pyramid", True, ['Progressive Glove', 'Progressive Glove', 'Magic Mirror', 'Moon Pearl']],
 
             ["Pyramid Fairy - Left", False, []],
