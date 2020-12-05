@@ -1525,8 +1525,8 @@ class SpriteSelector():
         title_link.pack(side=LEFT)
         title_link.bind("<Button-1>", open_custom_sprite_dir)
 
-        self.icon_section(alttpr_frametitle, self.alttpr_sprite_dir + '/*', 'ALTTPR sprites not found. Click "Update alttpr sprites" to download them.')
-        self.icon_section(custom_frametitle, self.custom_sprite_dir + '/*', 'Put sprites in the custom sprites folder (see open link above) to have them appear here.')
+        self.icon_section(alttpr_frametitle, self.alttpr_sprite_dir, 'ALTTPR sprites not found. Click "Update alttpr sprites" to download them.')
+        self.icon_section(custom_frametitle, self.custom_sprite_dir, 'Put sprites in the custom sprites folder (see open link above) to have them appear here.')
 
         frame = Frame(self.window)
         frame.pack(side=BOTTOM, fill=X, pady=5)
@@ -1585,19 +1585,21 @@ class SpriteSelector():
 
         sprites = []
 
-        for file in glob(output_path(path)):
-            sprites.append(Sprite(file))
+        for file in os.listdir(path):
+            sprites.append((file, Sprite(os.path.join(path, file))))
 
-        sprites.sort(key=lambda s: str.lower(s.name or "").strip())
+        sprites.sort(key=lambda s: str.lower(s[1].name or "").strip())
 
         frame.buttons = []
-        for sprite in sprites:
+        for file, sprite in sprites:
             image = get_image_for_sprite(sprite)
             if image is None:
                 continue
             self.all_sprites.append(sprite)
             button = Button(frame, image=image, command=lambda spr=sprite: self.select_sprite(spr))
-            ToolTips.register(button, sprite.name + ("\nBy: %s" % sprite.author_name if sprite.author_name else ""))
+            ToolTips.register(button, sprite.name +
+                              ("\nBy: %s" % sprite.author_name if sprite.author_name else "") +
+                              f"\nFrom: {file}")
             button.image = image
             frame.buttons.append(button)
 
