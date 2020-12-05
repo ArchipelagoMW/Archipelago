@@ -75,6 +75,7 @@ html{
     padding: 3px;
     border-radius: 3px;
     min-width: 150px;
+    background-color: #ffffff;
 }
 
 #player-settings #game-options, #player-settings #rom-options{
@@ -97,7 +98,7 @@ html{
     cursor: default;
 }
 
-@media all and (max-width: 1000px){
+@media all and (max-width: 1000px), all and (orientation: portrait){
     #player-settings #game-options, #player-settings #rom-options{
         justify-content: flex-start;
         flex-wrap: wrap;
