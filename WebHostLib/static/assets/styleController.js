@@ -40,8 +40,8 @@ const adjustHeaderWidth = () => {
 };
 
 window.addEventListener('load', () => {
-  adjustFooterHeight();
-  adjustHeaderWidth();
   window.addEventListener('resize', adjustFooterHeight);
   window.addEventListener('resize', adjustHeaderWidth);
+  adjustFooterHeight();
+  adjustHeaderWidth();
 });

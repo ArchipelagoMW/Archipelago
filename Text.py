@@ -37,7 +37,6 @@ Uncle_texts = [
     "Chasing tail.\nFly ladies.\nDo not follow.",
     "I feel like\nI've done this\nbefore…",
     "Magic Cape can\npass through\nthe barrier!",
-    "If this is a\nKanzeon seed,\nI'm quitting.",
     "I am not your\nreal uncle.",
     "You're going\nto have a very\nbad time.",
     "Today you\nwill have\nbad luck.",
