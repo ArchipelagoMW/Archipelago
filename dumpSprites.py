@@ -15,7 +15,7 @@ while not done.isSet():
 
 print("Done updating sprites")
 
-spriteData = {}
+spriteData = []
 
 for file in os.listdir(input_dir):
     sprite = Sprite(os.path.join(input_dir, file))
@@ -27,9 +27,9 @@ for file in os.listdir(input_dir):
     if sprite.valid:
         with open(os.path.join(output_dir, "sprites", f"{sprite.name}.gif"), 'wb') as image:
             image.write(get_image_for_sprite(sprite, True))
-        spriteData[sprite.name] = file
+        spriteData.append({"file": file, "author": sprite.author_name, "name": sprite.name})
     else:
         print(file, "dropped, as it has no valid sprite data.")
-
+spriteData.sort(key=lambda entry: entry["name"])
 with open(f'{output_dir}/spriteData.json', 'w') as file:
-    json.dump(spriteData, file)
+    json.dump({"sprites": spriteData}, file)
