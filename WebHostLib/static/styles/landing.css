@@ -275,6 +275,12 @@ html{
         display: none;
     }
 
+    #landing-header{ order: 1; }
+    #landing-links{ order: 3; }
+    #landing-clouds{ order: 4; }
+    #decorations{ order: 5; }
+    #landing{ order: 2; }
+
     #landing-links{
         height: auto;
         flex-direction: column;
