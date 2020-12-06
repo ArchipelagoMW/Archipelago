@@ -38,8 +38,16 @@
           "value": "pedestal"
         },
         {
+          "name": "Master Sword Pedestal + Ganon",
+          "value": "ganon_pedestal"
+        },
+        {
           "name": "Triforce Hunt",
           "value": "triforce_hunt"
+        },
+        {
+          "name": "Triforce Hunt + Ganon",
+          "value": "ganon_triforce_hunt"
         }
       ]
     },
@@ -314,6 +322,10 @@
           "value": "b"
         },
         {
+          "name": "Small and Big Keys",
+          "value": "sb"
+        },
+        {
           "name": "Full Keysanity",
           "value": "mscb"
         },
@@ -334,11 +346,11 @@
           "value": "none"
         },
         {
-          "name": "Dungeon Entrances",
+          "name": "Simple Dungeon Entrance Shuffle",
           "value": "dungeonssimple"
         },
         {
-          "name": "Dungeon Interiors",
+          "name": "Full Dungeon Entrance Shuffle",
           "value": "dungeonsfull"
         },
         {
