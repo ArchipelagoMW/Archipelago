@@ -166,6 +166,11 @@
    "name": "BotW Link"
   },
   {
+   "file": "botw-zelda.1.zspr",
+   "author": "Roo",
+   "name": "BotW Zelda"
+  },
+  {
    "file": "bottle_o_goo.1.zspr",
    "author": "Fish_waffle64",
    "name": "Bottle o' Goo"
@@ -1584,11 +1589,6 @@
    "file": "boco.1.zspr",
    "author": "",
    "name": "boco"
-  },
-  {
-   "file": "botw-zelda.1.zspr",
-   "author": "",
-   "name": "botw-zelda"
   },
   {
    "file": "hollow-knight.1.zspr",
