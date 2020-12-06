@@ -624,7 +624,7 @@
           "value": "default"
         },
         {
-          "name": "Shuffled",
+          "name": "Randomized",
           "value": "random"
         }
       ]
@@ -640,7 +640,7 @@
           "value": "default"
         },
         {
-          "name": "Shuffled",
+          "name": "Randomized",
           "value": "random"
         }
       ]
@@ -656,7 +656,7 @@
           "value": "default"
         },
         {
-          "name": "Shuffled",
+          "name": "Randomized",
           "value": "random"
         }
       ]
@@ -672,7 +672,7 @@
           "value": "default"
         },
         {
-          "name": "Shuffled",
+          "name": "Randomized",
           "value": "random"
         }
       ]
