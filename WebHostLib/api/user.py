@@ -28,6 +28,6 @@ def get_seeds():
         response.append({
             "seed_id": seed.id,
             "creation_time": seed.creation_time,
-            "players": seed.multidata.names if seed.multidata else [["Singleplayer"]],
+            "players": seed.multidata["names"] if seed.multidata else [["Singleplayer"]],
         })
     return jsonify(response)
