@@ -13,9 +13,9 @@ buildfolder = Path("build", folder)
 sbuildfolder = str(buildfolder)
 libfolder = Path(buildfolder, "lib")
 library = Path(libfolder, "library.zip")
-print("Outputting to: " + str(buildfolder))
-compress = False
-icon="icon.ico"
+print("Outputting to: " + sbuildfolder)
+
+icon = "icon.ico"
 
 if os.path.exists("X:/pw.txt"):
     print("Using signtool")
@@ -28,12 +28,15 @@ else:
 from hashlib import sha3_512
 import base64
 
+
 def _threaded_hash(filepath):
     hasher = sha3_512()
     hasher.update(open(filepath, "rb").read())
     return base64.b85encode(hasher.digest()).decode()
 
+
 os.makedirs(buildfolder, exist_ok=True)
+
 
 def manifest_creation():
     hashes = {}
@@ -51,11 +54,11 @@ def manifest_creation():
     print("Created Manifest")
 
 
-scripts = {"MultiClient.py" : "BerserkerMultiClient",
-           "MultiMystery.py" : "BerserkerMultiMystery",
-           "MultiServer.py" : "BerserkerMultiServer",
-           "gui.py" : "BerserkerMultiCreator",
-           "Mystery.py" : "BerserkerMystery"}
+scripts = {"MultiClient.py": "BerserkerMultiClient",
+           "MultiMystery.py": "BerserkerMultiMystery",
+           "MultiServer.py": "BerserkerMultiServer",
+           "gui.py": "BerserkerMultiCreator",
+           "Mystery.py": "BerserkerMystery"}
 
 exes = []
 
@@ -65,7 +68,6 @@ for script, scriptname in scripts.items():
         targetName=scriptname + ("" if sys.platform == "linux" else ".exe"),
         icon=icon,
     ))
-
 
 import datetime
 
@@ -136,6 +138,5 @@ if signtool:
     for exe in exes:
         print(f"Signing {exe.targetName}")
         os.system(signtool + exe.targetName)
-
 
 manifest_creation()
