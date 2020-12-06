@@ -217,7 +217,7 @@
     },
     "hints": {
       "type": "select",
-      "friendlyName": "Tile Hints",
+      "friendlyName": "Hints",
       "description": "Choose to enable or disable tile hints",
       "defaultValue": "on",
       "options": [
