@@ -478,16 +478,24 @@
           "value": "none"
         },
         {
-          "name": "Shuffle Inventory",
+          "name": "Inventory",
           "value": "i"
         },
         {
-          "name": "Shuffle Prices",
+          "name": "Prices",
           "value": "p"
         },
         {
-          "name": "Shuffle Both",
+          "name": "Capacity Upgrades",
+          "value": "u"
+        },
+        {
+          "name": "Inventory and Prices",
           "value": "ip"
+        },
+        {
+          "name": "Inventory, Prices, and Upgrades",
+          "value": "ipu"
         }
       ]
     }
