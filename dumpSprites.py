@@ -32,4 +32,4 @@ for file in os.listdir(input_dir):
         print(file, "dropped, as it has no valid sprite data.")
 spriteData.sort(key=lambda entry: entry["name"])
 with open(f'{output_dir}/spriteData.json', 'w') as file:
-    json.dump({"sprites": spriteData}, file)
+    json.dump({"sprites": spriteData}, file, indent=1)
