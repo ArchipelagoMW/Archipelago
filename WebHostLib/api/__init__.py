@@ -7,7 +7,8 @@ from ..models import Room
 
 api_endpoints = Blueprint('api', __name__, url_prefix="/api")
 
-from . import generate
+from . import generate, user  # trigger registration
+
 
 # unsorted/misc endpoints
 
