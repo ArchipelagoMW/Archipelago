@@ -346,15 +346,15 @@
           "value": "none"
         },
         {
-          "name": "Simple Dungeon Entrance Shuffle",
+          "name": "Only Dungeons, Simple",
           "value": "dungeonssimple"
         },
         {
-          "name": "Full Dungeon Entrance Shuffle",
+          "name": "Only Dungeons, Full",
           "value": "dungeonsfull"
         },
         {
-          "name": "Simple Entrances",
+          "name": "Simple",
           "value": "simple"
         },
         {
@@ -362,15 +362,15 @@
           "value": "restricted"
         },
         {
-          "name": "Full Shuffle",
+          "name": "Full",
           "value": "full"
         },
         {
-          "name": "Crossed Shuffle",
+          "name": "Crossed",
           "value": "crossed"
         },
         {
-          "name": "Insanity Shuffle",
+          "name": "Insanity",
           "value": "insanity"
         }
       ]
