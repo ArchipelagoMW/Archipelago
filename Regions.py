@@ -457,7 +457,7 @@ key_drop_data = {
 # can this location drop a crystal
 # hint tile/npc text for this location
 location_table: typing.Dict[str,
-                            typing.Tuple[typing.Optional[typing.Union[int, typing.List[int, ...]]],
+                            typing.Tuple[typing.Optional[typing.Union[int, typing.List[int]]],
                                          typing.Optional[int],
                                          bool,
                                          typing.Optional[str]]] = \
