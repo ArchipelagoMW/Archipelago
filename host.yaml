@@ -13,13 +13,13 @@ general_options:
 # Null means nothing, for the server this means to default the value
 # These overwrite command line arguments!
 server_options:
-  host: null
+  host: 0.0.0.0
   port: 38281
   password: null
   multidata: null
   savefile: null
   disable_save: false
-  loglevel: "info"
+  loglevel: "debug"
   # Allows for clients to log on and manage the server.  If this is null, no remote administration is possible.
   server_password: null
   # Automatically forward the port that is used, then close that port after 24 hours
@@ -28,9 +28,9 @@ server_options:
   disable_item_cheat: false
   # Client hint system
   # Points given to a player for each acquired item in their world
-  location_check_points: 1
+  location_check_points: 50
   # Point cost to receive a hint via !hint for players
-  hint_cost: 1000 # Set to 0 if you want free hints
+  hint_cost: 0 # Set to 0 if you want free hints
   # Forfeit modes
   # "disabled" -> clients can't forfeit,
   # "enabled" -> clients can always forfeit

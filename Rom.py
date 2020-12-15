@@ -638,6 +638,28 @@ def patch_rom(world, rom, player, team, enemized):
         if location.address is None:
             continue
 
+        if 'Shop Slot' in location.name and location.parent_region.shop is not None:
+            slot_num = int(location.name[-1]) - 1
+            my_item = location.parent_region.shop.inventory[slot_num]
+            item = location.item
+            if (my_item is not None and my_item['item'] == item.name) or 'Rupee' in item.name or (item.name in ['Bee']):
+                # this will filter items that match the item in the shop or Rupees, or single bees
+                # really not a way for the player to know a renewable item from a player pool item
+                # bombs can be sitting on top of arrows or a potion refill, but dunno if that's a big deal
+                logging.debug('skipping item shop {}'.format(item.name))
+            else:
+                if my_item is None:
+                    location.parent_region.shop.add_inventory(slot_num, 'None', 0)
+                    my_item = location.parent_region.shop.inventory[slot_num]
+                else:
+                    my_item['replacement'] = my_item['item']
+                    my_item['replacement_price'] = my_item['price']
+                my_item['item'] = item.name
+                my_item['price'] = world.random.randrange(1, 61) * 5  # can probably replace this with a price chart
+                my_item['max'] = 1
+                my_item['player'] = item.player if item.player != location.player else 0
+            continue
+
         if not location.crystal:
             if location.item is not None:
                 # Keys in their native dungeon should use the orignal item code for keys

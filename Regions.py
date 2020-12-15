@@ -396,7 +396,8 @@ def create_shops(world, player: int):
                 if my_shop_slots.pop():
                     additional_item = world.random.choice(['Rupees (20)', 'Rupees (50)', 'Rupees (100)'])
                     world.itempool.append(ItemFactory(additional_item, player))
-                    loc = Location(player, "{} Slot Item {}".format(shop.region.name, index+1), parent=shop.region)
+                    slot_name = "{} Shop Slot {}".format(shop.region.name, index+1)
+                    loc = Location(player, slot_name, address=shop_table_by_location[slot_name], parent=shop.region)
                     shop.region.locations.append(loc)
                     world.dynamic_locations.append(loc)
 
@@ -418,6 +419,17 @@ shop_table = {
     'Cave Shop (Lake Hylia)': (0x0112, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
     'Potion Shop': (0x0109, ShopType.Shop, 0xA0, True, False, [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)]),
     'Capacity Upgrade': (0x0115, ShopType.UpgradeShop, 0x04, True, True, [('Bomb Upgrade (+5)', 100, 7), ('Arrow Upgrade (+5)', 100, 7)])
+}
+
+shop_table_by_location_id = {0x400000 + cnt: s for cnt, s in enumerate( [item for sublist in [ ["{} Shop Slot {}".format(name, num + 1) for num in range(3)] for name in shop_table ] for item in sublist])}
+shop_table_by_location = {y:x for x,y in shop_table_by_location_id.items()}
+
+shop_generation_types = {
+    'default': _basic_shop_defaults + [('Bombs (3)', 20), ('Green Potion', 90), ('Blue Potion', 190), ('Bee', 10), ('Single Arrow', 5)] + [('Red Shield', 500), ('Blue Shield', 50)],
+    'potion': [('Red Potion', 150), ('Green Potion', 90), ('Blue Potion', 190)],
+    'discount_potion': [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)],
+    'bottle': [('Bee', 10)],
+    'time': [('Red Clock', 100), ('Blue Clock', 200), ('Green Clock', 300)],
 }
 
 old_location_address_to_new_location_address = {
@@ -717,8 +729,10 @@ location_table = {'Mushroom': (0x180013, 0x186338, False, 'in the woods'),
 
 lookup_id_to_name = {data[0]: name for name, data in location_table.items() if type(data[0]) == int}
 lookup_id_to_name = {**lookup_id_to_name, **{data[1]: name for name, data in key_drop_data.items()}, -1: "cheat console"}
+lookup_id_to_name.update(shop_table_by_location_id)
 lookup_name_to_id = {name: data[0] for name, data in location_table.items() if type(data[0]) == int}
 lookup_name_to_id = {**lookup_name_to_id, **{name: data[1] for name, data in key_drop_data.items()}, "cheat console": -1}
+lookup_name_to_id.update(shop_table_by_location)
 
 lookup_vanilla_location_to_entrance = {1572883: 'Kings Grave Inner Rocks', 191256: 'Kings Grave Inner Rocks',
                                        1573194: 'Kings Grave Inner Rocks', 1573189: 'Kings Grave Inner Rocks',
