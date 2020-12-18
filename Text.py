@@ -258,6 +258,16 @@ TavernMan_texts = [
 ]
 
 junk_texts = [
+    "{C:GREEN}\nAgitha's good\nin Hyrule\nWarriors.   >",
+    "{C:GREEN}\nConsult Fi if\nthe batteries\nare low.    >",
+    "{C:GREEN}\nThere is no\n3rd quest in\nthis game.  >",
+    "{C:GREEN}\nI am Error.\n \n            >",
+    "{C:GREEN}\nThe Wind Fish\nknows all in\nhere. Hoot! >",
+    "{C:GREEN}\nThere are no\nwallets in\nthis game.  >",
+    "{C:GREEN}\nCrossbow\nTraining is\na fun game. >",
+    "{C:GREEN}\nThe shrine\ncontains\nMagnesis.   >",
+    "{C:GREEN}\nThe loftwing\nlet the duck\ntake over.  >",
+    "{C:GREEN}\nStasis would\nbe very\noverpowered.>",
     "{C:GREEN}\nIt’s a secret\nto everybody.\n            >",
     "{C:GREEN}\nDodongo\ndislikes\nsmoke.      >",
     "{C:GREEN}\n> Digdogger\nhates certain\nkind of sound.",
