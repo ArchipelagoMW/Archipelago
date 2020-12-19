@@ -1,0 +1,19 @@
+{% extends 'pageWrapper.html' %}
+{% import "macros.html" as macros %}
+
+{% block head %}
+    <title>Generation failed, please retry.</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/waitSeed.css") }}"/>
+{% endblock %}
+
+{% block body %}
+    {% include 'header/oceanHeader.html' %}
+    <div id="wait-seed-wrapper" class="grass-island">
+        <div id="wait-seed">
+            <h1>Generation failed</h1>
+			<h2>please retry</h2>
+            {{ seed_error }}
+        </div>
+    </div>
+    {% include 'islandFooter.html' %}
+{% endblock %}

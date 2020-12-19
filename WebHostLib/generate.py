@@ -45,8 +45,14 @@ def generate(race=False):
 
                     return redirect(url_for("wait_seed", seed=gen.id))
                 else:
-                    seed_id = gen_game({name: vars(options) for name, options in gen_options.items()},
-                                       race=race, owner=session["_id"].int)
+                    try:
+                        seed_id = gen_game({name: vars(options) for name, options in gen_options.items()},
+                                           race=race, owner=session["_id"].int)
+                    except BaseException as e:
+                        from .autolauncher import handle_generation_failure
+                        handle_generation_failure(e)
+                        return render_template("seedError.html", seed_error=(e.__class__.__name__ + ": "+ str(e)))
+
                     return redirect(url_for("viewSeed", seed=seed_id))
 
     return render_template("generate.html", race=race)
@@ -114,8 +120,7 @@ def wait_seed(seed: UUID):
     if not generation:
         return "Generation not found."
     elif generation.state == STATE_ERROR:
-        import html
-        return f"Generation failed, please retry. <br> {html.escape(generation.meta.decode())}"
+        return render_template("seedError.html", seed_error=generation.meta.decode())
     return render_template("waitSeed.html", seed_id=seed_id)
 
 

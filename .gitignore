@@ -32,3 +32,5 @@ mystery_result_*.yaml
 /db.db3
 *-errors.txt
 success.txt
+output/
+Output Logs/

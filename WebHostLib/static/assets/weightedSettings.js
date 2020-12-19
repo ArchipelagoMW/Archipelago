@@ -13,11 +13,8 @@ window.addEventListener('load', () => {
       localStorage.setItem(`weightedSettings${i}`, JSON.stringify(updatedObj));
     }
 
-    // Parse spriteData into useful sets
-    spriteData = JSON.parse(results[2]);
-
     // Build the entire UI
-    buildUI(JSON.parse(results[1]));
+    buildUI(JSON.parse(results[1]), JSON.parse(results[2]));
 
     // Populate the UI and add event listeners
     populateSettings();
@@ -29,6 +26,7 @@ window.addEventListener('load', () => {
     document.getElementById('reset-to-default').addEventListener('click', resetToDefaults);
     adjustHeaderWidth();
   }).catch((error) => {
+    console.error(error);
     gameSettings.innerHTML = `
             <h2>Something went wrong while loading your game settings page.</h2>
             <h2>${error}</h2>
@@ -170,7 +168,7 @@ const download = (filename, text) => {
   document.body.removeChild(downloadLink);
 };
 
-const buildUI = (settings) => {
+const buildUI = (settings, spriteData) => {
   const settingsWrapper = document.getElementById('settings-wrapper');
   const settingTypes = {
     gameOptions: 'Game Options',
@@ -244,7 +242,7 @@ const buildUI = (settings) => {
   settingsWrapper.appendChild(spriteOptionsWrapper);
 
   // Append sprite picker
-  settingsWrapper.appendChild(buildSpritePicker());
+  settingsWrapper.appendChild(buildSpritePicker(spriteData));
 };
 
 const buildRangeSettings = (parentElement, settings) => {
@@ -404,7 +402,7 @@ const removeSpriteOption = (event) => {
   tr.parentNode.removeChild(tr);
 };
 
-const buildSpritePicker = () => {
+const buildSpritePicker = (spriteData) => {
   const spritePicker = document.createElement('div');
   spritePicker.setAttribute('id', 'sprite-picker');
 
@@ -415,18 +413,18 @@ const buildSpritePicker = () => {
 
   const sprites = document.createElement('div');
   sprites.setAttribute('id', 'sprite-picker-sprites');
-  Object.keys(spriteData).forEach((spriteName) => {
+  spriteData.sprites.forEach((sprite) => {
     const spriteImg = document.createElement('img');
-    spriteImg.setAttribute('src', `static/static/sprites/${spriteName}.gif`);
-    spriteImg.setAttribute('data-sprite', spriteName);
-    spriteImg.setAttribute('alt', spriteName);
+    spriteImg.setAttribute('src', `static/static/sprites/${sprite.name}.gif`);
+    spriteImg.setAttribute('data-sprite', sprite.name);
+    spriteImg.setAttribute('alt', sprite.name);
 
     // Wrap the image in a span to allow for tooltip presence
     const imgWrapper = document.createElement('span');
     imgWrapper.className = 'sprite-img-wrapper';
-    imgWrapper.setAttribute('data-tooltip', spriteName);
+    imgWrapper.setAttribute('data-tooltip', `${sprite.name}${sprite.author ? `, by ${sprite.author}` : ''}`);
     imgWrapper.appendChild(spriteImg);
-    imgWrapper.setAttribute('data-sprite', spriteName);
+    imgWrapper.setAttribute('data-sprite', sprite.name);
     sprites.appendChild(imgWrapper);
     imgWrapper.addEventListener('click', addSpriteOption);
   });

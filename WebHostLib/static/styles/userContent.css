@@ -31,3 +31,24 @@
 #user-content .center{
     text-align: center;
 }
+
+#user-content-table{
+    margin-right: auto;
+    text-align: left;
+}
+
+#user-content .table td.center{
+    text-align: center;
+}
+
+#user-content table.dataTable{
+    width: unset;
+}
+
+table.dataTable thead th{
+    padding: 0 20px 0 0;
+}
+
+table.dataTable tbody td{
+    padding: 6px 20px 0 0;
+}

@@ -19,12 +19,12 @@ window.addEventListener('load', () => {
     // Sprite options
     const spriteData = JSON.parse(results[1]);
     const spriteSelect = document.getElementById('sprite');
-    Object.keys(spriteData).forEach((sprite) => {
-      if (sprite.trim().length === 0) { return; }
+    spriteData.sprites.forEach((sprite) => {
+      if (sprite.name.trim().length === 0) { return; }
       const option = document.createElement('option');
-      option.setAttribute('value', spriteData[sprite]);
-      if (playerSettings.rom.sprite === sprite) { option.selected = true; }
-      option.innerText = sprite;
+      option.setAttribute('value', sprite.name.trim());
+      if (playerSettings.rom.sprite === sprite.name.trim()) { option.selected = true; }
+      option.innerText = sprite.name;
       spriteSelect.appendChild(option);
     });
   }).catch((error) => {

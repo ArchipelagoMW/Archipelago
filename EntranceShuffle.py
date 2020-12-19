@@ -139,7 +139,7 @@ def link_entrances(world, player):
         dw_must_exits = list(DW_Entrances_Must_Exit)
         old_man_entrances = list(Old_Man_Entrances)
         caves = list(Cave_Exits + Cave_Three_Exits)
-        single_doors = list(Single_Cave_Doors)
+
         bomb_shop_doors = list(Bomb_Shop_Single_Cave_Doors + Bomb_Shop_Multi_Cave_Doors)
         blacksmith_doors = list(Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
         door_targets = list(Single_Cave_Targets)

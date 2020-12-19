@@ -9,3 +9,8 @@
     text-align: center;
     cursor: pointer;
 }
+
+#cookie-notice #close-button{
+    float: right;
+    padding-right: 10px;
+}

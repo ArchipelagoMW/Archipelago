@@ -38,8 +38,16 @@
           "value": "pedestal"
         },
         {
+          "name": "Master Sword Pedestal + Ganon",
+          "value": "ganon_pedestal"
+        },
+        {
           "name": "Triforce Hunt",
           "value": "triforce_hunt"
+        },
+        {
+          "name": "Triforce Hunt + Ganon",
+          "value": "ganon_triforce_hunt"
         }
       ]
     },
@@ -209,7 +217,7 @@
     },
     "hints": {
       "type": "select",
-      "friendlyName": "Tile Hints",
+      "friendlyName": "Hints",
       "description": "Choose to enable or disable tile hints",
       "defaultValue": "on",
       "options": [
@@ -314,6 +322,10 @@
           "value": "b"
         },
         {
+          "name": "Small and Big Keys",
+          "value": "sb"
+        },
+        {
           "name": "Full Keysanity",
           "value": "mscb"
         },
@@ -334,15 +346,15 @@
           "value": "none"
         },
         {
-          "name": "Dungeon Entrances",
+          "name": "Only Dungeons, Simple",
           "value": "dungeonssimple"
         },
         {
-          "name": "Dungeon Interiors",
+          "name": "Only Dungeons, Full",
           "value": "dungeonsfull"
         },
         {
-          "name": "Simple Entrances",
+          "name": "Simple",
           "value": "simple"
         },
         {
@@ -350,15 +362,15 @@
           "value": "restricted"
         },
         {
-          "name": "Full Shuffle",
+          "name": "Full",
           "value": "full"
         },
         {
-          "name": "Crossed Shuffle",
+          "name": "Crossed",
           "value": "crossed"
         },
         {
-          "name": "Insanity Shuffle",
+          "name": "Insanity",
           "value": "insanity"
         }
       ]
@@ -466,16 +478,24 @@
           "value": "none"
         },
         {
-          "name": "Shuffle Inventory",
+          "name": "Inventory",
           "value": "i"
         },
         {
-          "name": "Shuffle Prices",
+          "name": "Prices",
           "value": "p"
         },
         {
-          "name": "Shuffle Both",
+          "name": "Capacity Upgrades",
+          "value": "u"
+        },
+        {
+          "name": "Inventory and Prices",
           "value": "ip"
+        },
+        {
+          "name": "Inventory, Prices, and Upgrades",
+          "value": "ipu"
         }
       ]
     }
@@ -612,7 +632,7 @@
           "value": "default"
         },
         {
-          "name": "Shuffled",
+          "name": "Randomized",
           "value": "random"
         }
       ]
@@ -628,7 +648,7 @@
           "value": "default"
         },
         {
-          "name": "Shuffled",
+          "name": "Randomized",
           "value": "random"
         }
       ]
@@ -644,7 +664,7 @@
           "value": "default"
         },
         {
-          "name": "Shuffled",
+          "name": "Randomized",
           "value": "random"
         }
       ]
@@ -660,7 +680,7 @@
           "value": "default"
         },
         {
-          "name": "Shuffled",
+          "name": "Randomized",
           "value": "random"
         }
       ]
