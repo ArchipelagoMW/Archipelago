@@ -66,7 +66,8 @@ class TestEntrances(TestInverted):
             ["Palace of Darkness", True, ["Progressive Glove", "Progressive Glove", "Moon Pearl", "Flute"]],
             ["Palace of Darkness", True, ["Progressive Glove", "Progressive Glove", "Moon Pearl", "Magic Mirror"]],
             ["Palace of Darkness", True, ["Beat Agahnim 1", "Moon Pearl", "Flute"]],
-            ["Palace of Darkness", True, ["Beat Agahnim 1", "Moon Pearl", "Magic Mirror"]],
+            # Moon Pearl not needed, you can mirror as Bunny
+            ["Palace of Darkness", True, ["Beat Agahnim 1", "Magic Mirror"]],
 
             ["Swamp Palace", True, []],
 
