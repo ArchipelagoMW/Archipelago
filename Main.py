@@ -10,7 +10,7 @@ import zlib
 import concurrent.futures
 
 from BaseClasses import World, CollectionState, Item, Region, Location, Shop
-from Items import ItemFactory, item_table
+from Items import ItemFactory, item_table, item_name_groups
 from Regions import create_regions, create_shops, mark_light_world_regions, lookup_vanilla_location_to_entrance
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from EntranceShuffle import link_entrances, link_inverted_entrances
@@ -117,6 +117,19 @@ def main(args, seed=None):
                                          item.strip() in item_table}
         # items can't be both local and non-local, prefer local
         world.non_local_items[player] -= world.local_items[player]
+
+        # dungeon items can't be in non-local if the appropriate dungeon item shuffle setting is not set.
+        if not world.mapshuffle[player]:
+            world.non_local_items[player] -= item_name_groups['Maps']
+
+        if not world.compassshuffle[player]:
+            world.non_local_items[player] -= item_name_groups['Compasses']
+
+        if not world.keyshuffle[player]:
+            world.non_local_items[player] -= item_name_groups['Small Keys']
+
+        if not world.bigkeyshuffle[player]:
+            world.non_local_items[player] -= item_name_groups['Big Keys']
 
         world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player], world.triforce_pieces_required[player])
 
