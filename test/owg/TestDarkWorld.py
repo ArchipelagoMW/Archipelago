@@ -77,7 +77,7 @@ class TestDarkWorld(TestVanillaOWG):
             ["Catfish", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Catfish", True, ['Moon Pearl', 'Beat Agahnim 1', 'Progressive Glove']],
             ["Catfish", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Catfish", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Flippers']],
+            ["Catfish", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
 
             ["Pyramid", False, []],
             ["Pyramid", False, [], ['Beat Agahnim 1', 'Moon Pearl', 'Magic Mirror']],
@@ -86,7 +86,7 @@ class TestDarkWorld(TestVanillaOWG):
             ["Pyramid", True, ['Magic Mirror', 'Pegasus Boots']],
             ["Pyramid", True, ['Beat Agahnim 1']],
             ["Pyramid", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Pyramid", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Flippers']],
+            ["Pyramid", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
 
             ["Pyramid Fairy - Left", False, []],
             ["Pyramid Fairy - Left", False, [], ['Pegasus Boots', 'Moon Pearl', 'Beat Agahnim 1']],
