@@ -23,7 +23,7 @@ class TestLightWorld(TestInvertedOWG):
             ["King's Tomb", False, []],
             ["King's Tomb", False, [], ['Pegasus Boots']],
             ["King's Tomb", False, [], ['Moon Pearl']],
-            ["King's Tomb", True, [], ['Magic Mirror']],
+            ["King's Tomb", False, ['Magic Mirror']],
             ["King's Tomb", True, ['Pegasus Boots', 'Moon Pearl']],
 
             ["Floodgate Chest", False, []],

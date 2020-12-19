@@ -105,15 +105,14 @@ class TestDungeons(TestVanillaOWG):
             #todo: does clip require sword?
             #["Turtle Rock - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
             ["Turtle Rock - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Progressive Sword']],
-            ["Turtle Rock - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Progressive Sword', 'Quake', 'Hammer']],
-            ["Turtle Rock - Compass Chest", True, ['Pegasus Boots', 'Magic Mirror', 'Hammer', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
+            ["Turtle Rock - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Progressive Sword', 'Quake']],
+            ["Turtle Rock - Compass Chest", True, ['Pegasus Boots', 'Magic Mirror', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
 
             ["Turtle Rock - Chain Chomps", False, []],
             #todo: does clip require sword?
             #["Turtle Rock - Chain Chomps", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Turtle Rock - Chain Chomps", True, ['Moon Pearl', 'Pegasus Boots', 'Progressive Sword']],
-            ["Turtle Rock - Chain Chomps", True, ['Pegasus Boots', 'Magic Mirror', 'Hammer']],
-            ["Turtle Rock - Chain Chomps", True, ['Pegasus Boots', 'Magic Mirror', 'Progressive Glove', 'Progressive Glove']],
+            ["Turtle Rock - Chain Chomps", True, ['Pegasus Boots', 'Magic Mirror']],
 
             ["Turtle Rock - Crystaroller Room", False, []],
             ["Turtle Rock - Crystaroller Room", False, [], ['Big Key (Turtle Rock)']],
@@ -121,7 +120,7 @@ class TestDungeons(TestVanillaOWG):
             #["Turtle Rock - Crystaroller Room", True, ['Moon Pearl', 'Pegasus Boots', 'Big Key (Turtle Rock)']],
             ["Turtle Rock - Crystaroller Room", True, ['Moon Pearl', 'Pegasus Boots', 'Big Key (Turtle Rock)', 'Progressive Sword']],
             ["Turtle Rock - Crystaroller Room", True, ['Moon Pearl', 'Pegasus Boots', 'Big Key (Turtle Rock)', 'Hookshot']],
-            ["Turtle Rock - Crystaroller Room", True, ['Pegasus Boots', 'Magic Mirror', 'Hammer', 'Big Key (Turtle Rock)']],
+            ["Turtle Rock - Crystaroller Room", True, ['Pegasus Boots', 'Magic Mirror', 'Big Key (Turtle Rock)']],
 
             ["Ganons Tower - Hope Room - Left", False, []],
             ["Ganons Tower - Hope Room - Left", False, ['Moon Pearl', 'Crystal 1']],
