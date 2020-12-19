@@ -300,6 +300,7 @@ linked_options:
         hard: 1
         expert: 1
     percentage: 0 # Set this to the percentage chance you want enemizer
+### door rando only options ###
 door_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
   vanilla: 50 # Everything should be like in vanilla
   basic: 0 # Dungeons are shuffled within themselves
@@ -318,6 +319,7 @@ experimental: # Only available if the host uses the doors branch, it is ignored 
 debug: # Only available if the host uses the doors branch, it is ignored otherwise
   on: 0 # Enables debugging features. Currently, these are the Item collection counter. (overwrites total triforce pieces) and Castle Gate closed indicator.
   off: 50
+### end of door rando only options ###
 rom:
   random_sprite_on_event: # An alternative to specifying randomonhit / randomonexit / etc... in sprite down below.
     enabled:  # If enabled, sprite down below is ignored completely, (although it may become the sprite pool)
