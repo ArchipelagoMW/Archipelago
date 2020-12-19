@@ -73,14 +73,19 @@ class TestDeathMountain(TestInvertedOWG):
             ["Spike Cave", False, [], ['Progressive Glove']],
             ["Spike Cave", False, [], ['Hammer']],
             ["Spike Cave", False, [], ['Cape', 'Cane of Byrna']],
-            # ER doesn't put in an extra potion
-            #["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Pegasus Boots', 'Cape']],
-            ["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Pegasus Boots', 'Cape', 'Moon Pearl']],
-            ["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Pegasus Boots', 'Cane of Byrna']],
-            ["Spike Cave", True, ['Magic Upgrade (1/2)', 'Hammer', 'Progressive Glove', 'Pegasus Boots', 'Cape']],
-            ["Spike Cave", True, ['Magic Upgrade (1/2)', 'Hammer', 'Progressive Glove', 'Pegasus Boots', 'Cane of Byrna']],
-            ["Spike Cave", True, ['Magic Upgrade (1/4)', 'Hammer', 'Progressive Glove', 'Pegasus Boots', 'Cape']],
-            ["Spike Cave", True, ['Magic Upgrade (1/4)', 'Hammer', 'Progressive Glove', 'Pegasus Boots', 'Cane of Byrna']],
+            ["Spike Cave", False, [], ['Cane of Byrna', 'AnyBottle', 'Magic Upgrade (1/2)']],
+            ["Spike Cave", False, [], ['AnyBottle', 'Magic Upgrade (1/2)', 'Pegasus Boots', 'Boss Heart Container', 'Piece of Heart', 'Sanctuary Heart Container']],
+            ["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Lamp', 'Cape']],
+            # Change from base ER - this fork places a blue potion in dark world
+            ["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Lamp', 'Cane of Byrna']],
+            ["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Flute', 'Moon Pearl', 'Cane of Byrna']],
+            ["Spike Cave", True, ['Magic Upgrade (1/2)', 'Hammer', 'Progressive Glove', 'Lamp', 'Cape']],
+            ["Spike Cave", True, ['Magic Upgrade (1/2)', 'Hammer', 'Progressive Glove', 'Flute', 'Moon Pearl', 'Cape']],
+            ["Spike Cave", True, ['Magic Upgrade (1/2)', 'Hammer', 'Progressive Glove', 'Lamp', 'Cane of Byrna']],
+            ["Spike Cave", True, ['Magic Upgrade (1/2)', 'Hammer', 'Progressive Glove', 'Flute', 'Moon Pearl', 'Cane of Byrna']],
+            ["Spike Cave", True, ['Pegasus Boots', 'Hammer', 'Progressive Glove', 'Cane of Byrna']],
+            ["Spike Cave", True, ['Boss Heart Container', 'Hammer', 'Progressive Glove', 'Lamp', 'Cane of Byrna']],
+            ["Spike Cave", True, ['Boss Heart Container', 'Hammer', 'Progressive Glove', 'Flute', 'Moon Pearl', 'Cane of Byrna']],
         ])
 
     def testEastDarkWorldDeathMountain(self):
