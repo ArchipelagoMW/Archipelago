@@ -37,7 +37,7 @@ class TestDungeons(TestInvertedOWG):
             ["Desert Palace - Boss", False, [], ['Big Key (Desert Palace)']],
             ["Desert Palace - Boss", False, [], ['Lamp', 'Fire Rod']],
             ["Desert Palace - Boss", True, ['Progressive Sword', 'Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Moon Pearl', 'Pegasus Boots', 'Lamp']],
-            ["Desert Palace - Boss", True, ['Progressive Sword', 'Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Moon Pearl', 'Pegasus Boots', 'Fire Rod']],
+            ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Moon Pearl', 'Pegasus Boots', 'Fire Rod']],
 
             ["Tower of Hera - Basement Cage", False, []],
             ["Tower of Hera - Basement Cage", False, [], ['Moon Pearl']],
@@ -53,8 +53,6 @@ class TestDungeons(TestInvertedOWG):
             ["Palace of Darkness - Shooter Room", True, ['Pegasus Boots']],
             ["Palace of Darkness - Shooter Room", True, ['Hammer']],
             ["Palace of Darkness - Shooter Room", True, ['Flippers']],
-            ["Palace of Darkness - Shooter Room", True, ['Pegasus Boots', 'Progressive Glove']],
-            ["Palace of Darkness - Shooter Room", True, ['Pegasus Boots', 'Magic Mirror']],
 
             ["Swamp Palace - Entrance", False, []],
             ["Swamp Palace - Entrance", False, [], ['Magic Mirror']],
@@ -109,7 +107,7 @@ class TestDungeons(TestInvertedOWG):
             ["Ganons Tower - Hope Room - Left", False, [], ['Crystal 5']],
             ["Ganons Tower - Hope Room - Left", False, [], ['Crystal 6']],
             ["Ganons Tower - Hope Room - Left", False, [], ['Crystal 7']],
-            ["Ganons Tower - Hope Room - Left", True, ['Beat Agahnim 1', 'Hookshot', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7']],
-            ["Ganons Tower - Hope Room - Left", True, ['Pegasus Boots', 'Magic Mirror', 'Hookshot', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7']],
-            ["Ganons Tower - Hope Room - Left", True, ['Pegasus Boots', 'Moon Pearl', 'Hookshot', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7']],
+            ["Ganons Tower - Hope Room - Left", True, ['Beat Agahnim 1', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7']],
+            ["Ganons Tower - Hope Room - Left", True, ['Pegasus Boots', 'Magic Mirror', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7']],
+            ["Ganons Tower - Hope Room - Left", True, ['Pegasus Boots', 'Moon Pearl', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7']],
         ])

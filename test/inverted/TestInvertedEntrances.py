@@ -66,7 +66,8 @@ class TestEntrances(TestInverted):
             ["Palace of Darkness", True, ["Progressive Glove", "Progressive Glove", "Moon Pearl", "Flute"]],
             ["Palace of Darkness", True, ["Progressive Glove", "Progressive Glove", "Moon Pearl", "Magic Mirror"]],
             ["Palace of Darkness", True, ["Beat Agahnim 1", "Moon Pearl", "Flute"]],
-            ["Palace of Darkness", True, ["Beat Agahnim 1", "Moon Pearl", "Magic Mirror"]],
+            # Moon Pearl not needed, you can mirror as Bunny
+            ["Palace of Darkness", True, ["Beat Agahnim 1", "Magic Mirror"]],
 
             ["Swamp Palace", True, []],
 
@@ -114,5 +115,4 @@ class TestEntrances(TestInverted):
             ["Inverted Ganons Tower", False, [], ["Crystal 7"]],
             ["Inverted Ganons Tower", True, ["Beat Agahnim 1", "Crystal 1", "Crystal 2", "Crystal 3", "Crystal 4", "Crystal 5", "Crystal 6", "Crystal 7"]],
             ["Inverted Ganons Tower", True, ["Moon Pearl", "Progressive Glove", "Progressive Glove", "Crystal 1", "Crystal 2", "Crystal 3", "Crystal 4", "Crystal 5", "Crystal 6", "Crystal 7"]],
-            ["Inverted Ganons Tower", True, ["Moon Pearl", "Hammer", "Progressive Glove", "Progressive Glove", "Crystal 1", "Crystal 2", "Crystal 3", "Crystal 4", "Crystal 5", "Crystal 6", "Crystal 7"]],
         ])

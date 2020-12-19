@@ -195,7 +195,7 @@ class TestInvertedLightWorld(TestInverted):
             ["Bombos Tablet", True, ['Beat Agahnim 1', 'Book of Mudora', 'Progressive Sword', 'Progressive Sword']],
             ["Bombos Tablet", True, ['Moon Pearl', 'Book of Mudora', 'Progressive Glove', 'Progressive Glove', 'Progressive Sword', 'Progressive Sword']],
             ["Bombos Tablet", True, ['Moon Pearl', 'Book of Mudora', 'Progressive Glove', 'Hammer', 'Progressive Sword', 'Progressive Sword']],
-            ["Bombos Tablet", True, ['Moon Pearl', 'Book of Mudora', 'Beat Agahnim 1', 'Progressive Sword', 'Progressive Sword']],
+            ["Bombos Tablet", True, ['Book of Mudora', 'Beat Agahnim 1', 'Progressive Sword', 'Progressive Sword']],
 
             ["Floodgate Chest", False, []],
             ["Floodgate Chest", False, [], ['Moon Pearl']],
