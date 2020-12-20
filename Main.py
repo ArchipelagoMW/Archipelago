@@ -131,6 +131,10 @@ def main(args, seed=None):
         if not world.bigkeyshuffle[player]:
             world.non_local_items[player] -= item_name_groups['Big Keys']
 
+        # Not possible to place pendants/crystals out side of boss prizes yet.
+        world.non_local_items[player] -= item_name_groups['Pendants']
+        world.non_local_items[player] -= item_name_groups['Crystals']
+
         world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player], world.triforce_pieces_required[player])
 
         if world.mode[player] != 'inverted':
