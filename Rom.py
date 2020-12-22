@@ -325,7 +325,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli):
         'SwordGraphics': "sword_gfx/normal.gfx",
         'BeeMizer': False,
         'BeesLevel': 0,
-        'RandomizeTileTrapPattern': world.tile_shuffle[player],
+        'RandomizeTileTrapPattern': False,
         'RandomizeTileTrapFloorTile': False,
         'AllowKillableThief': world.killable_thieves[player],
         'RandomizeSpriteOnHit': False,
@@ -415,6 +415,54 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli):
             os.remove(used)
         except OSError:
             pass
+
+tile_list_lock = threading.Lock()
+_tile_collection_table = []
+def _populate_tile_sets():
+    with tile_list_lock:
+        if not _tile_collection_table:
+            def load_tileset_from_file(file):
+                tileset = TileSet(file)
+                _tile_collection_table.append(tileset)
+
+            with concurrent.futures.ThreadPoolExecutor() as pool:
+                for dir in [local_path('data', 'tiles')]:
+                    for file in os.listdir(dir):
+                        pool.submit(load_tileset_from_file, os.path.join(dir, file))
+
+class TileSet:
+    def __init__(self, filename):
+        with open(filename, 'rt', encoding='utf-8-sig') as file:
+            jsondata = json.load(file)
+        self.speed = jsondata['Speed']
+        self.tiles = jsondata['Items']
+        self.name = os.path.basename(os.path.splitext(filename)[0])
+
+    def __hash__(self):
+        return hash(self.name)
+
+    def get_bytes(self):
+        data = []
+        for tile in self.tiles:
+            data.append((tile['x'] + 3) * 16)
+        while len(data) < 22:
+            data.append(0)
+        for tile in self.tiles:
+            data.append((tile['y'] + 4) * 16)
+        return data
+
+    def get_speed(self):
+        return self.speed
+
+    def get_len(self):
+        return len(self.tiles)
+
+    @staticmethod
+    def get_random_tile_set(localrandom=random):
+        _populate_tile_sets()
+        tile_sets = list(set(_tile_collection_table))
+        tile_sets.sort(key=lambda x: x.name)
+        return localrandom.choice(tile_sets)
 
 
 sprite_list_lock = threading.Lock()
@@ -1455,6 +1503,13 @@ def patch_rom(world, rom, player, team, enemized):
     else:
         rom.write_byte(0xFED31, 0x2A)  # preopen bombable exit
         rom.write_byte(0xFEE41, 0x2A)  # preopen bombable exit
+
+    if world.tile_shuffle[player]:
+        tile_set = TileSet.get_random_tile_set(world.rom_seeds[player])
+        rom.write_byte(0x4BA21, tile_set.get_speed())
+        rom.write_byte(0x4BA1D, tile_set.get_len())
+        rom.write_bytes(0x4BA2A, tile_set.get_bytes())
+
 
     write_strings(rom, world, player, team)
 
