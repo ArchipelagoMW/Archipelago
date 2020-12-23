@@ -629,7 +629,6 @@ def patch_rom(world, rom, player, team, enemized):
         distinguished_prog_bow_loc.item.code = 0x65
 
     # patch items
-    shop_items = []
 
     for location in world.get_locations():
         if location.player != player:
@@ -641,35 +640,6 @@ def patch_rom(world, rom, player, team, enemized):
             continue
 
         if 'Shop Slot' in location.name and location.parent_region.shop is not None:
-            slot_num = int(location.name[-1]) - 1
-            my_item = location.parent_region.shop.inventory[slot_num]
-            item = location.item
-            if (my_item is not None and my_item['item'] == item.name) or 'Rupee' in item.name or (item.name in ['Bee']):
-                # this will filter items that match the item in the shop or Rupees, or single bees
-                # really not a way for the player to know a renewable item from a player pool item
-                # bombs can be sitting on top of arrows or a potion refill, but dunno if that's a big deal
-                logging.debug('skipping item shop {}'.format(item.name))
-            else:
-                if my_item is None:
-                    location.parent_region.shop.add_inventory(slot_num, 'None', 0)
-                    my_item = location.parent_region.shop.inventory[slot_num]
-                else:
-                    my_item['replacement'] = my_item['item']
-                    my_item['replacement_price'] = my_item['price']
-                my_item['item'] = item.name
-                if any([x in my_item['item'] for x in ['Single Bomb', 'Single Arrow']]):
-                    my_item['price'] = world.random.randrange(5,35)
-                elif any([x in my_item['item'] for x in ['Arrows', 'Bombs', 'Clock']]):
-                    my_item['price'] = world.random.randrange(20,120)
-                elif any([x in my_item['item'] for x in ['Universal Key', 'Compass', 'Map', 'Small Key', 'Piece of Heart']]):
-                    my_item['price'] = world.random.randrange(50,150)
-                else:
-                    my_item['price'] = world.random.randrange(50,300)
-
-                
-                my_item['max'] = 1
-                my_item['player'] = item.player if item.player != location.player else 0
-                shop_items.append(my_item)
             continue
 
         if not location.crystal:
@@ -709,13 +679,6 @@ def patch_rom(world, rom, player, team, enemized):
                 music = 0x11 if 'Pendant' in location.item.name else 0x16
             for music_address in music_addresses:
                 rom.write_byte(music_address, music)
-
-    my_prices = [my_item['price'] for my_item in shop_items]
-    price_scale = (80*max(8, len(my_prices)+2))/sum(my_prices)
-    for i in shop_items:
-        i['price'] *= price_scale
-        if i['price'] < 5: i['price'] = 5
-        else: i['price'] = int((i['price']//5)*5)
 
 
     if world.mapshuffle[player]:
