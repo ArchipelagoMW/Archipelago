@@ -177,6 +177,38 @@ def main(args, seed=None):
     elif args.algorithm == 'balanced':
         distribute_items_restrictive(world, True)
 
+    for x in range(1, world.players + 1):
+        shop_slot_bad = []
+        candidates = []
+        for location in world.get_locations():
+            if 'Shop Slot' in location.name and location.parent_region.shop is not None:
+                slot_num = int(location.name[-1]) - 1
+                shop_item = location.parent_region.shop.inventory[slot_num]
+                item = location.item
+                print(item.name, shop_item['item'])
+                if (shop_item is not None and shop_item['item'] == item.name) or 'Rupee' in item.name or (item.name in ['Bee']):
+                    shop_slot_bad.append(location)
+            elif location.item.name in ['Progressive Shield', 'Bombs (3)', 'Bombs (10)', 'Bee Trap',
+                 'Arrows (10)', 'Single Bomb', 'Single Arrow', 'Arrow Upgrade (+5)', 'Bomb Upgrade (+5)',
+                 'Shovel', 'Progressive Mail', 'Bug Catching Net', 'Cane of Byrna', 'Triforce Piece'
+                 'Piece of Heart', 'Boss Heart Container', 'Sanctuary Heart Container']:
+                 candidates.append(location)
+            elif any([x in location.item.name for x in ['Key', 'Map', 'Compass', 'Clock']]):
+                 candidates.append(location)
+
+    world.random.shuffle(candidates)
+    for slot in shop_slot_bad: # shop slot locations with redundant items
+        for c in candidates: # chosen item locations
+            if 'Rupee' in c.item.name or 'Shop Slot' in c.name: continue
+            if c.item_rule(slot.item):
+                print('Swapping {} with {}:: {} ||| {}'.format(c, slot, c.item, slot.item))
+                c.item, slot.item = slot.item, c.item
+                if not world.can_beat_game(): 
+                    print('NOT GOOD')
+                    c.item, slot.item = slot.item, c.item
+                else: break
+        
+
     if world.players > 1:
         balance_multiworld_progression(world)
 
