@@ -228,6 +228,7 @@ def flood_items(world):
                 itempool.remove(item_to_place)
                 break
 
+
 def balance_multiworld_progression(world):
     balanceable_players = {player for player in range(1, world.players + 1) if world.progression_balancing[player]}
     if not balanceable_players:
