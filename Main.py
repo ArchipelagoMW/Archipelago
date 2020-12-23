@@ -175,41 +175,53 @@ def main(args, seed=None):
         distribute_items_restrictive(world, True, shuffled_locations)
     elif args.algorithm == 'balanced':
         distribute_items_restrictive(world, True)
-
-    for x in range(1, world.players + 1):
-        shop_slot_bad = []
-        candidates = []
-        for location in world.get_locations():
-            if 'Shop Slot' in location.name and location.parent_region.shop is not None:
-                slot_num = int(location.name[-1]) - 1
-                shop_item = location.parent_region.shop.inventory[slot_num]
-                item = location.item
-                print(item.name, shop_item['item'])
-                if (shop_item is not None and shop_item['item'] == item.name) or 'Rupee' in item.name or (item.name in ['Bee']):
-                    shop_slot_bad.append(location)
-            elif location.item.name in ['Progressive Shield', 'Bombs (3)', 'Bombs (10)', 'Bee Trap',
-                 'Arrows (10)', 'Single Bomb', 'Single Arrow', 'Arrow Upgrade (+5)', 'Bomb Upgrade (+5)',
-                 'Shovel', 'Progressive Mail', 'Bug Catching Net', 'Cane of Byrna', 'Triforce Piece'
-                 'Piece of Heart', 'Boss Heart Container', 'Sanctuary Heart Container']:
-                 candidates.append(location)
-            elif any([x in location.item.name for x in ['Key', 'Map', 'Compass', 'Clock']]):
-                 candidates.append(location)
-
-    world.random.shuffle(candidates)
-    for slot in shop_slot_bad: # shop slot locations with redundant items
-        for c in candidates: # chosen item locations
-            if 'Rupee' in c.item.name or 'Shop Slot' in c.name: continue
-            if c.item_rule(slot.item):
-                print('Swapping {} with {}:: {} ||| {}'.format(c, slot, c.item, slot.item))
-                c.item, slot.item = slot.item, c.item
-                if not world.can_beat_game(): 
-                    print('NOT GOOD')
-                    c.item, slot.item = slot.item, c.item
-                else: break
         
-
     if world.players > 1:
         balance_multiworld_progression(world)
+
+    # for shop_location in [item for sublist in [shop.region.locations for shop in world.shops] for item in sublist if item.name != 'Potion Shop']: # we can just index shops directly
+    #     # if shop, get slot
+    #     slot_num = int(shop_location.name[-1]) - 1
+    #     default_slot = shop_location.parent_region.shop.inventory[slot_num]
+    #     my_item = shop_location.item
+    #     # if item is a rupee or single bee, or identical, label it
+    #     if (default_slot is not None and default_slot['item'] == my_item.name) or 'Rupee' in my_item.name or (my_item.name in ['Bee']):
+    #         for c in candidates:
+    #             if c.item.name in ['Bee Trap', 'Shovel', 'Bug Catching Net', 'Cane of Byrna', 'Triforce Piece'] or\
+    #                 any([x in c.item.name for x in ['Key', 'Map', 'Compass', 'Clock', 'Heart', 'Sword', 'Shield', 'Bomb', 'Arrow', 'Mail']]):
+    #                 if c.item_rule(my_item): # if rule is good...
+    #                     print('Swapping {} with {}:: {} ||| {}'.format(c, shop_location, c.item, my_item))
+    #                     c.item, my_item = my_item, c.item
+    #                     if not world.can_beat_game(): 
+    #                         c.item, my_item = my_item, c.item
+    #                     else: break
+
+    candidates = [l for l in world.get_locations() if l.item.name in ['Bee Trap', 'Shovel', 'Bug Catching Net', 'Cane of Byrna', 'Triforce Piece'] or
+        any([x in l.item.name for x in ['Key', 'Map', 'Compass', 'Clock', 'Heart', 'Sword', 'Shield', 'Bomb', 'Arrow', 'Mail']])]
+    world.random.shuffle(candidates)
+    shop_slots = [item for sublist in [shop.region.locations for shop in world.shops] for item in sublist if item.name != 'Potion Shop']
+    shop_slots_adjusted = []
+    
+    for location in shop_slots: # we can just index shops directly
+        slot_num = int(location.name[-1]) - 1
+        shop_item = location.parent_region.shop.inventory[slot_num]
+        item = location.item
+        # if item is a rupee or single bee, or identical, swap it it
+        if (shop_item is not None and shop_item['item'] == item.name) or 'Rupee' in item.name or (item.name in ['Bee']):
+            for c in candidates: # chosen item locations
+                if 'Rupee' in c.item.name or c.item.name in 'Bee': continue
+                if (shop_item is not None and shop_item['item'] == c.item.name): continue
+                if c.item_rule(location.item): # if rule is good...
+                    logging.debug('Swapping {} with {}:: {} ||| {}'.format(c, location, c.item, location.item))
+                    c.item, location.item = location.item, c.item
+                    if not world.can_beat_game(): 
+                        c.item, location.item = location.item, c.item
+                    else: 
+                        shop_slots_adjusted.append(location)
+                        break
+    
+    logging.debug('Adjusting {} of {} shop slots'.format(len(shop_slots_adjusted), len(shop_slots)))
+    logging.debug('Adjusted {} into shops'.format([x.item.name for x in shop_slots_adjusted]))
 
     logger.info('Patching ROM.')
 
