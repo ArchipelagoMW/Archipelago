@@ -233,12 +233,13 @@ def main(args, seed=None):
             shop_item['player'] = item.player if item.player != location.player else 0
             shop_items.append(shop_item)
 
-    my_prices = [my_item['price'] for my_item in shop_items]
-    price_scale = (80*max(8, len(my_prices)+2))/sum(my_prices)
-    for i in shop_items:
-        i['price'] *= price_scale
-        if i['price'] < 5: i['price'] = 5
-        else: i['price'] = int((i['price']//5)*5)
+    if len(shop_items) > 0:
+        my_prices = [my_item['price'] for my_item in shop_items]
+        price_scale = (80*max(8, len(my_prices)+2))/sum(my_prices)
+        for i in shop_items:
+            i['price'] *= price_scale
+            if i['price'] < 5: i['price'] = 5
+            else: i['price'] = int((i['price']//5)*5)
     
     logging.debug('Adjusting {} of {} shop slots'.format(len(shop_slots_adjusted), len(shop_slots)))
     logging.debug('Adjusted {} into shops'.format([x.item.name for x in shop_slots_adjusted]))
