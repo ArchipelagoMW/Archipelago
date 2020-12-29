@@ -97,12 +97,9 @@ def guiMain(args=None):
     hintsVar.set(1)  # set default
     hintsCheckbutton = Checkbutton(checkBoxFrame, text="Include Helpful Hints", variable=hintsVar)
 
-    balancingVar = IntVar()
-    balancingVar.set(1)  # set default
-    balancingCheckbutton = Checkbutton(checkBoxFrame, text="Multiworld Progression Balancing", variable=balancingVar)
-    patchesVar = IntVar()
-    patchesVar.set(1)  # set default
-    patchesCheckbutton = Checkbutton(checkBoxFrame, text="Create Delta Patches", variable=patchesVar)
+    tileShuffleVar = IntVar()
+    tileShuffleButton = Checkbutton(checkBoxFrame, text="Tile shuffle", variable=tileShuffleVar)
+
     createSpoilerCheckbutton.pack(expand=True, anchor=W)
     suppressRomCheckbutton.pack(expand=True, anchor=W)
     openpyramidCheckbutton.pack(expand=True, anchor=W)
@@ -115,9 +112,7 @@ def guiMain(args=None):
     retroCheckbutton.pack(expand=True, anchor=W)
     shuffleGanonCheckbutton.pack(expand=True, anchor=W)
     hintsCheckbutton.pack(expand=True, anchor=W)
-
-    balancingCheckbutton.pack(expand=True, anchor=W)
-    patchesCheckbutton.pack(expand=True, anchor=W)
+    tileShuffleButton.pack(expand=True, anchor=W)
 
 
     romOptionsFrame = LabelFrame(rightHalfFrame, text="Rom options")
@@ -471,17 +466,13 @@ def guiMain(args=None):
     potShuffleButton = Checkbutton(enemizerFrame, text="Pot shuffle", variable=potShuffleVar)
     potShuffleButton.grid(row=2, column=0, sticky=W)
 
-    tileShuffleVar = IntVar()
-    tileShuffleButton = Checkbutton(enemizerFrame, text="Tile shuffle", variable=tileShuffleVar)
-    tileShuffleButton.grid(row=2, column=1, sticky=W)
-
     bushShuffleVar = IntVar()
     bushShuffleButton = Checkbutton(enemizerFrame, text="Bush shuffle", variable=bushShuffleVar)
-    bushShuffleButton.grid(row=2, column=2, sticky=W)
+    bushShuffleButton.grid(row=2, column=1, sticky=W)
 
     killableThievesVar = IntVar()
     killable_thievesShuffleButton = Checkbutton(enemizerFrame, text="Killable Thieves", variable=killableThievesVar)
-    killable_thievesShuffleButton.grid(row=2, column=3, sticky=W)
+    killable_thievesShuffleButton.grid(row=2, column=2, sticky=W)
 
     shopframe = LabelFrame(randomizerWindow, text="Shops", padx=5, pady=2)
 
@@ -499,7 +490,7 @@ def guiMain(args=None):
 
     multiworldframe = LabelFrame(randomizerWindow, text="Multiworld", padx=5, pady=2)
 
-    worldLabel = Label(multiworldframe, text='Worlds')
+    worldLabel = Label(multiworldframe, text='Players per Team')
     worldVar = StringVar()
     worldSpinbox = Spinbox(multiworldframe, from_=1, to=255, width=5, textvariable=worldVar)
     namesLabel = Label(multiworldframe, text='Player names')
@@ -508,9 +499,16 @@ def guiMain(args=None):
     seedLabel = Label(multiworldframe, text='Seed #')
     seedVar = StringVar()
     seedEntry = Entry(multiworldframe, width=20, textvariable=seedVar)
-    countLabel = Label(multiworldframe, text='Count')
+    countLabel = Label(multiworldframe, text='Amount of Multiworlds')
     countVar = StringVar()
     countSpinbox = Spinbox(multiworldframe, from_=1, to=100, width=5, textvariable=countVar)
+
+    balancingVar = IntVar()
+    balancingVar.set(1)  # set default
+    balancingCheckbutton = Checkbutton(multiworldframe, text="Progression Balancing", variable=balancingVar)
+    patchesVar = IntVar()
+    patchesVar.set(1)  # set default
+    patchesCheckbutton = Checkbutton(multiworldframe, text="Create Delta Patches", variable=patchesVar)
 
     def generateRom():
         guiargs = Namespace()
@@ -643,16 +641,20 @@ def guiMain(args=None):
         else:
             messagebox.showinfo(title="Success", message="Multiworld created successfully")
 
-    generateButton = Button(farBottomFrame, text='Generate Patched Rom', command=generateRom)
+    generateButton = Button(farBottomFrame, text='Generate Multiworld', command=generateRom)
 
-    worldLabel.pack(side=LEFT)
-    worldSpinbox.pack(side=LEFT)
-    namesLabel.pack(side=LEFT)
-    namesEntry.pack(side=LEFT, expand=True, fill=X)
-    seedLabel.pack(side=LEFT,  padx=(5, 0))
-    seedEntry.pack(side=LEFT)
-    countLabel.pack(side=LEFT, padx=(5, 0))
-    countSpinbox.pack(side=LEFT)
+    worldLabel.grid(row=0, column=0, sticky=W)
+    worldSpinbox.grid(row=0, column=1, sticky=W)
+    namesLabel.grid(row=0, column=2, sticky=W)
+    namesEntry.grid(row=0, column=3, sticky=W + E)
+    multiworldframe.grid_columnconfigure(3, weight=1)  # stretch name field
+    seedLabel.grid(row=0, column=4, sticky=W)
+    seedEntry.grid(row=0, column=5, sticky=W)
+    countLabel.grid(row=1, column=0, sticky=W)
+    countSpinbox.grid(row=1, column=1, sticky=W)
+    balancingCheckbutton.grid(row=1, column=2, sticky=W, columnspan=2)
+    patchesCheckbutton.grid(row=1, column=4, sticky=W, columnspan=2)
+
     generateButton.pack(side=RIGHT, padx=(5, 0))
 
     openOutputButton.pack(side=LEFT)
