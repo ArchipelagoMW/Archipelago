@@ -363,6 +363,7 @@ def main(args, seed=None):
                 multidatatags.append("Spoiler")
                 if not args.skip_playthrough:
                     multidatatags.append("Play through")
+            minimum_versions = {"server": (1,0,0)}
             multidata = zlib.compress(json.dumps({"names": parsed_names,
                                                   # backwards compat for < 2.4.1
                                                   "roms": [(slot, team, list(name.encode()))
@@ -379,7 +380,8 @@ def main(args, seed=None):
                                                   "er_hint_data": er_hint_data,
                                                   "precollected_items": precollected_items,
                                                   "version": _version_tuple,
-                                                  "tags": multidatatags
+                                                  "tags": multidatatags,
+                                                  "minimum_versions" : minimum_versions
                                                   }).encode("utf-8"), 9)
 
             with open(output_path('%s.multidata' % outfilebase), 'wb') as f:

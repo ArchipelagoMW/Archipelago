@@ -112,6 +112,7 @@ class Context(Node):
         self.auto_saver_thread = None
         self.save_dirty = False
         self.tags = ['Berserker']
+        self.minimum_client_versions: typing.Dict[typing.Tuple[int, int], Utils.Version] = {}
 
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
         with open(multidatapath, 'rb') as f:
@@ -121,6 +122,16 @@ class Context(Node):
         self.data_filename = multidatapath
 
     def _load(self, jsonobj: dict, use_embedded_server_options: bool):
+        if "minimum_versions" in jsonobj:
+            mdata_ver = tuple(jsonobj["minimum_versions"]["server"])
+            if mdata_ver > Utils._version_tuple:
+                raise RuntimeError(f"Supplied Multidata requires a server of at least version {mdata_ver},"
+                                   f"however this server is of version {Utils._version_tuple}")
+            clients_ver = jsonobj["minimum_versions"].get("clients", [])
+            self.minimum_client_versions = {}
+            for team, player, version in clients_ver:
+                self.minimum_client_versions[team, player] = Utils.Version(*version)
+
         for team, names in enumerate(jsonobj['names']):
             for player, name in enumerate(names, 1):
                 self.player_names[(team, player)] = name
@@ -996,9 +1007,14 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
                 client.name = ctx.player_names[(team, slot)]
                 client.team = team
                 client.slot = slot
+                minver = Utils.Version(*(ctx.minimum_client_versions.get((team, slot), (0,0,0))))
+                if minver > tuple(args.get('version', Client.version)):
+                    errors.add('IncompatibleVersion')
+
         if ctx.compatibility == 1 and "Berserker" not in args.get('tags', Client.tags):
             errors.add('IncompatibleVersion')
-        elif ctx.compatibility == 0 and args.get('version', Client.version) != list(_version_tuple):
+        #only exact version match allowed
+        elif ctx.compatibility == 0 and tuple(args.get('version', Client.version)) != _version_tuple:
             errors.add('IncompatibleVersion')
         if errors:
             logging.info(f"A client connection was refused due to: {errors}")

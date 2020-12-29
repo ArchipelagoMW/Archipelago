@@ -3,7 +3,12 @@ import typing
 
 
 def tuplize_version(version: str) -> typing.Tuple[int, ...]:
-    return tuple(int(piece, 10) for piece in version.split("."))
+    return Version(*(int(piece, 10) for piece in version.split(".")))
+
+class Version(typing.NamedTuple):
+    major: int
+    minor: int
+    micro: int
 
 
 __version__ = "3.4.2"
