@@ -191,7 +191,7 @@ def check_enemizer(enemizercli):
                 version = lib.split("/")[-1]
                 version = tuple(int(element) for element in version.split("."))
                 logging.debug(f"Found Enemizer version {version}")
-                if version < (6, 3, 0):
+                if version < (6, 4, 0):
                     raise Exception(
                         f"Enemizer found at {enemizercli} is outdated ({info}), please update your Enemizer. "
                         f"Such as https://github.com/Ijwu/Enemizer/releases")
