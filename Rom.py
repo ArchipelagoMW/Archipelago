@@ -1601,8 +1601,6 @@ def hud_format_text(text):
 def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite: str, palettes_options,
                        world=None, player=1, allow_random_on_event=False):
     local_random = random if not world else world.rom_seeds[player]
-    apply_random_sprite_on_event(rom, sprite, local_random, allow_random_on_event,
-                                 world.sprite_pool[player] if world else [])
 
     # enable instant item menu
     if fastmenu == 'instant':
@@ -1707,6 +1705,9 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
             blackout_uw_palettes(rom)
         elif palettes_options['dungeon'] == 'random':
             randomize_uw_palettes(rom, local_random)
+
+    apply_random_sprite_on_event(rom, sprite, local_random, allow_random_on_event,
+                                 world.sprite_pool[player] if world else [])
     if isinstance(rom, LocalRom):
         rom.write_crc()
 
