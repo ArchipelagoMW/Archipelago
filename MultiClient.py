@@ -835,22 +835,25 @@ async def process_server_cmd(ctx: Context, cmd, args):
         await server_auth(ctx, args['password'])
 
     elif cmd == 'ConnectionRefused':
-        if 'InvalidPassword' in args:
-            ctx.ui_node.log_error('Invalid password')
-            ctx.password = None
-            await server_auth(ctx, True)
         if 'InvalidRom' in args:
             if ctx.snes_socket is not None and not ctx.snes_socket.closed:
                 asyncio.create_task(ctx.snes_socket.close())
-            raise Exception(
-                'Invalid ROM detected, please verify that you have loaded the correct rom and reconnect your snes (/snes)')
-        if 'SlotAlreadyTaken' in args:
+            raise Exception('Invalid ROM detected, '
+                            'please verify that you have loaded the correct rom and reconnect your snes (/snes)')
+        elif 'SlotAlreadyTaken' in args:
             Utils.persistent_store("servers", "default", ctx.server_address)
             Utils.persistent_store("servers", ctx.rom, ctx.server_address)
             raise Exception('Player slot already in use for that team')
-        if 'IncompatibleVersion' in args:
+        elif 'IncompatibleVersion' in args:
             raise Exception('Server reported your client version as incompatible')
-        raise Exception('Connection refused by the multiworld host')
+        #last to check, recoverable problem
+        elif 'InvalidPassword' in args:
+            ctx.ui_node.log_error('Invalid password')
+            ctx.password = None
+            await server_auth(ctx, True)
+        else:
+            raise Exception("Unknown connection errors: "+str(args))
+        raise Exception('Connection refused by the multiworld host, no reason provided')
 
     elif cmd == 'Connected':
         if ctx.send_unsafe:
