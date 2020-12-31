@@ -175,7 +175,7 @@ def can_place_boss(boss: str, dungeon_name: str, level: Optional[str] = None) ->
 def place_boss(world, player: int, boss: str, location: str, level: Optional[str]):
     if location == 'Ganons Tower' and world.mode[player] == 'inverted':
         location = 'Inverted Ganons Tower'
-    logging.info('Placing boss %s at %s', boss, location + (' (' + level + ')' if level else ''))
+    logging.debug('Placing boss %s at %s', boss, location + (' (' + level + ')' if level else ''))
     world.get_dungeon(location, player).bosses[level] = BossFactory(boss, player)
 
 
