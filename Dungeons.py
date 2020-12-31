@@ -9,7 +9,7 @@ def create_dungeons(world, player):
     def make_dungeon(name, default_boss, dungeon_regions, big_key, small_keys, dungeon_items):
         dungeon = Dungeon(name, dungeon_regions, big_key, [] if world.keyshuffle[player] == "universal" else small_keys,
                           dungeon_items, player)
-        dungeon.boss = BossFactory(default_boss, player)
+        dungeon.boss = BossFactory(default_boss, player) if default_boss else None
         for region in dungeon.regions:
             world.get_region(region, player).dungeon = dungeon
             dungeon.world = world

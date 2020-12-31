@@ -10,6 +10,7 @@ import ModuleUpdate
 
 ModuleUpdate.update()
 
+import Bosses
 from Utils import parse_yaml
 from Rom import Sprite
 from EntranceRandomizer import parse_arguments
@@ -247,7 +248,7 @@ def get_choice(option, root, value=None) -> typing.Any:
     if any(root[option].values()):
         return interpret_on_off(
             random.choices(list(root[option].keys()), weights=list(map(int, root[option].values())))[0])
-    raise RuntimeError(f"All options specified in {option} are weighted as zero.")
+    raise RuntimeError(f"All options specified in \"{option}\" are weighted as zero.")
 
 
 def handle_name(name: str):
@@ -259,6 +260,20 @@ def prefer_int(input_data: str) -> typing.Union[str, int]:
         return int(input_data)
     except:
         return input_data
+
+
+available_boss_names: typing.Set[str] = {boss.lower() for boss in Bosses.boss_table if boss not in
+                                         {'Agahnim', 'Agahnim2', 'Ganon'}}
+
+boss_shuffle_options = {None: 'none',
+                        'none': 'none',
+                        'simple': 'basic',
+                        'full': 'normal',
+                        'random': 'chaos',
+                        'singularity': 'singularity',
+                        'duality': 'singularity'
+                        }
+
 
 def roll_settings(weights):
     ret = argparse.Namespace()
@@ -386,14 +401,22 @@ def roll_settings(weights):
 
     ret.item_functionality = get_choice('item_functionality', weights)
 
-    ret.shufflebosses = {None: 'none',
-                         'none': 'none',
-                         'simple': 'basic',
-                         'full': 'normal',
-                         'random': 'chaos',
-                         'singularity': 'singularity',
-                         'duality': 'singularity'
-                         }[get_choice('boss_shuffle', weights)]
+    boss_shuffle = get_choice('boss_shuffle', weights)
+
+    if boss_shuffle in boss_shuffle_options:
+        ret.shufflebosses = boss_shuffle_options[boss_shuffle]
+    else:
+        options = boss_shuffle.lower().split(";")
+        remainder_shuffle = "none"  # vanilla
+        bosses = []
+        for boss in options:
+            if boss in boss_shuffle_options:
+                remainder_shuffle = boss
+            elif boss not in available_boss_names and not "-" in boss:
+                raise ValueError(f"Unknown Boss name or Boss shuffle option {boss}.")
+            else:
+                bosses.append(boss)
+        ret.shufflebosses = ";".join(bosses + [remainder_shuffle])
 
     ret.enemy_shuffle = {'none': False,
                          'shuffled': 'shuffled',
