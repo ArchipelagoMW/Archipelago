@@ -504,6 +504,11 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
 
     ret.shuffle_prizes = get_choice('shuffle_prizes', weights, "g")
 
+    ret.required_medallions = (get_choice("misery_mire_medallion", weights, "random"),
+                               get_choice("turtle_rock_medallion", weights, "random"))
+    for medallion in ret.required_medallions:
+        if medallion not in {"random", "Ether", "Bombos", "Quake"}:
+            raise Exception(f"unknown Medallion {medallion}")
     inventoryweights = weights.get('startinventory', {})
     startitems = []
     for item in inventoryweights.keys():
