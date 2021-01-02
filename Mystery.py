@@ -7,6 +7,7 @@ import typing
 import os
 
 import ModuleUpdate
+from BaseClasses import PlandoItem
 
 ModuleUpdate.update()
 
@@ -44,10 +45,13 @@ def mystery_argparse():
     parser.add_argument('--create_diff', action="store_true")
     parser.add_argument('--yaml_output', default=0, type=lambda value: min(max(int(value), 0), 255),
                         help='Output rolled mystery results to yaml up to specified number (made for async multiworld)')
+    parser.add_argument('--plando', default="bosses",
+                        help='List of options that can be set manually. Can be combined, for example "bosses, items"')
 
     for player in range(1, multiargs.multi + 1):
         parser.add_argument(f'--p{player}', help=argparse.SUPPRESS)
     args = parser.parse_args()
+    args.plando: typing.Set[str] = {arg.strip().lower() for arg in args.plando.split(",")}
     return args
 
 
@@ -144,7 +148,8 @@ def main(args=None, callback=ERmain):
     if args.enemizercli:
         erargs.enemizercli = args.enemizercli
 
-    settings_cache = {k: (roll_settings(v) if args.samesettings else None) for k, v in weights_cache.items()}
+    settings_cache = {k: (roll_settings(v, args.plando) if args.samesettings else None)
+                      for k, v in weights_cache.items()}
     player_path_cache = {}
     for player in range(1, args.multi + 1):
         player_path_cache[player] = getattr(args, f'p{player}') if getattr(args, f'p{player}') else args.weights
@@ -167,7 +172,8 @@ def main(args=None, callback=ERmain):
         path = player_path_cache[player]
         if path:
             try:
-                settings = settings_cache[path] if settings_cache[path] else roll_settings(weights_cache[path])
+                settings = settings_cache[path] if settings_cache[path] else \
+                    roll_settings(weights_cache[path], args.plando)
                 if settings.sprite and not os.path.isfile(settings.sprite) and not Sprite.get_sprite_from_name(
                         settings.sprite):
                     logging.warning(
@@ -275,7 +281,13 @@ boss_shuffle_options = {None: 'none',
                         }
 
 
-def roll_settings(weights):
+def roll_percentage(percentage: typing.Union[int, float]) -> bool:
+    """Roll a percentage chance.
+    percentage is expected to be in range [0, 100]"""
+    return random.random() < (float(percentage) / 100)
+
+
+def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"))):
     ret = argparse.Namespace()
     if "linked_options" in weights:
         weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
@@ -283,7 +295,7 @@ def roll_settings(weights):
             if "name" not in option_set:
                 raise ValueError("One of your linked options does not have a name.")
             try:
-                if random.random() < (float(option_set["percentage"]) / 100):
+                if roll_percentage(option_set["percentage"]):
                     logging.debug(f"Linked option {option_set['name']} triggered.")
                     logging.debug(f'Applying {option_set["options"]}')
                     new_options = set(option_set["options"]) - set(weights)
@@ -415,7 +427,7 @@ def roll_settings(weights):
 
     if boss_shuffle in boss_shuffle_options:
         ret.shufflebosses = boss_shuffle_options[boss_shuffle]
-    else:
+    elif "bosses" in plando_options:
         options = boss_shuffle.lower().split(";")
         remainder_shuffle = "none"  # vanilla
         bosses = []
@@ -427,6 +439,8 @@ def roll_settings(weights):
             else:
                 bosses.append(boss)
         ret.shufflebosses = ";".join(bosses + [remainder_shuffle])
+    else:
+        raise Exception(f"Boss Shuffle {boss_shuffle} is unknown and boss plando is turned off.")
 
     ret.enemy_shuffle = {'none': False,
                          'shuffled': 'shuffled',
@@ -534,6 +548,17 @@ def roll_settings(weights):
 
     ret.non_local_items = ",".join(ret.non_local_items)
 
+    ret.plando_items = []
+    if "items" in plando_options:
+        options = weights.get("plando_items", [])
+        for placement in options:
+            if roll_percentage(get_choice("percentage", placement, 100)):
+                item = get_choice("item", placement)
+                location = get_choice("location", placement)
+                from_pool = get_choice("from_pool", placement, True)
+                location_world = get_choice("world", placement, False)
+                ret.plando_items.append(PlandoItem(item, location, location_world, from_pool))
+
     if 'rom' in weights:
         romweights = weights['rom']
 
@@ -571,7 +596,7 @@ def roll_settings(weights):
         ret.sword_palettes = get_choice('sword_palettes', romweights, "default")
         ret.shield_palettes = get_choice('shield_palettes', romweights, "default")
         ret.link_palettes = get_choice('link_palettes', romweights, "default")
-        
+
     else:
         ret.quickswap = True
         ret.sprite = "Link"

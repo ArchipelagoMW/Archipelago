@@ -99,3 +99,6 @@ multi_mystery_options:
   zip_format: 1
   # Create encrypted race roms
   race: 0
+  # List of options that can be plando'd. Can be combined, for example "bosses, items"
+  # Available options: bosses
+  plando_options: "bosses"

@@ -1,9 +1,11 @@
 from __future__ import annotations
+
 import typing
 
 
 def tuplize_version(version: str) -> typing.Tuple[int, ...]:
     return Version(*(int(piece, 10) for piece in version.split(".")))
+
 
 class Version(typing.NamedTuple):
     major: int
@@ -42,11 +44,11 @@ def int32_as_bytes(value):
 
 
 def pc_to_snes(value):
-    return ((value<<1) & 0x7F0000)|(value & 0x7FFF)|0x8000
+    return ((value << 1) & 0x7F0000) | (value & 0x7FFF) | 0x8000
 
 
 def snes_to_pc(value):
-    return ((value & 0x7F0000)>>1)|(value & 0x7FFF)
+    return ((value & 0x7F0000) >> 1) | (value & 0x7FFF)
 
 
 def parse_player_names(names, players, teams):
@@ -87,6 +89,7 @@ def local_path(*path):
 
     return os.path.join(local_path.cached_path, *path)
 
+
 local_path.cached_path = None
 
 
@@ -98,7 +101,9 @@ def output_path(*path):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     return path
 
+
 output_path.cached_path = None
+
 
 def open_file(filename):
     if sys.platform == 'win32':
@@ -107,9 +112,10 @@ def open_file(filename):
         open_command = 'open' if sys.platform == 'darwin' else 'xdg-open'
         subprocess.call([open_command, filename])
 
+
 def close_console():
     if sys.platform == 'win32':
-        #windows
+        # windows
         import ctypes.wintypes
         try:
             ctypes.windll.kernel32.FreeConsole()
@@ -143,6 +149,7 @@ class Hint(typing.NamedTuple):
     def __hash__(self):
         return hash((self.receiving_player, self.finding_player, self.location, self.item, self.entrance))
 
+
 def get_public_ipv4() -> str:
     import socket
     import urllib.request
@@ -157,6 +164,7 @@ def get_public_ipv4() -> str:
             logging.exception(e)
             pass  # we could be offline, in a local game, so no point in erroring out
     return ip
+
 
 def get_public_ipv6() -> str:
     import socket
@@ -173,56 +181,56 @@ def get_public_ipv6() -> str:
 
 def get_default_options() -> dict:
     if not hasattr(get_default_options, "options"):
-        options = dict()
-
         # Refer to host.yaml for comments as to what all these options mean.
-        generaloptions = dict()
-        generaloptions["rom_file"] = "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
-        generaloptions["qusb2snes"] = "QUsb2Snes\\QUsb2Snes.exe"
-        generaloptions["rom_start"] = True
-        generaloptions["output_path"] = "output"
-        options["general_options"] = generaloptions
+        options = {
+            "general_options": {
+                "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
+                "qusb2snes": "QUsb2Snes\\QUsb2Snes.exe",
+                "rom_start": True,
+                "output_path": "output",
+            },
+            "server_options": {
+                "host": None,
+                "port": 38281,
+                "password": None,
+                "multidata": None,
+                "savefile": None,
+                "disable_save": False,
+                "loglevel": "info",
+                "server_password": None,
+                "disable_item_cheat": False,
+                "location_check_points": 1,
+                "hint_cost": 1000,
+                "forfeit_mode": "goal",
+                "remaining_mode": "goal",
+                "auto_shutdown": 0,
+                "compatibility": 2,
+            },
+            "multi_mystery_options": {
+                "teams": 1,
+                "enemizer_path": "EnemizerCLI/EnemizerCLI.Core.exe",
+                "player_files_path": "Players",
+                "players": 0,
+                "weights_file_path": "weights.yaml",
+                "meta_file_path": "meta.yaml",
+                "player_name": "",
+                "create_spoiler": 1,
+                "zip_roms": 0,
+                "zip_diffs": 2,
+                "zip_spoiler": 0,
+                "zip_multidata": 1,
+                "zip_format": 1,
+                "race": 0,
+                "cpu_threads": 0,
+                "max_attempts": 0,
+                "take_first_working": False,
+                "keep_all_seeds": False,
+                "log_output_path": "Output Logs",
+                "log_level": None,
+                "plando_options": "bosses",
+            }
+        }
 
-        serveroptions = dict()
-        serveroptions["host"] = None
-        serveroptions["port"] = 38281
-        serveroptions["password"] = None
-        serveroptions["multidata"] = None
-        serveroptions["savefile"] = None
-        serveroptions["disable_save"] = False
-        serveroptions["loglevel"] = "info"
-        serveroptions["server_password"] = None
-        serveroptions["disable_item_cheat"] = False
-        serveroptions["location_check_points"] = 1
-        serveroptions["hint_cost"] = 1000
-        serveroptions["forfeit_mode"] = "goal"
-        serveroptions["remaining_mode"] = "goal"
-        serveroptions["auto_shutdown"] = 0
-        serveroptions["compatibility"] = 2
-        options["server_options"] = serveroptions
-
-        multimysteryoptions = dict()
-        multimysteryoptions["teams"] = 1
-        multimysteryoptions["enemizer_path"] = "EnemizerCLI/EnemizerCLI.Core.exe"
-        multimysteryoptions["player_files_path"] = "Players"
-        multimysteryoptions["players"] = 0
-        multimysteryoptions["weights_file_path"] = "weights.yaml"
-        multimysteryoptions["meta_file_path"] = "meta.yaml"
-        multimysteryoptions["player_name"] = ""
-        multimysteryoptions["create_spoiler"] = 1
-        multimysteryoptions["zip_roms"] = 0
-        multimysteryoptions["zip_diffs"] = 2
-        multimysteryoptions["zip_spoiler"] = 0
-        multimysteryoptions["zip_multidata"] = 1
-        multimysteryoptions["zip_format"] = 1
-        multimysteryoptions["race"] = 0
-        multimysteryoptions["cpu_threads"] = 0
-        multimysteryoptions["max_attempts"] = 0
-        multimysteryoptions["take_first_working"] = False
-        multimysteryoptions["keep_all_seeds"] = False
-        multimysteryoptions["log_output_path"] = "Output Logs"
-        multimysteryoptions["log_level"] = None
-        options["multi_mystery_options"] = multimysteryoptions
         get_default_options.options = options
     return get_default_options.options
 
@@ -253,6 +261,7 @@ def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
             else:
                 dest[key] = update_options(value, dest[key], filename, new_keys)
     return dest
+
 
 def get_options() -> dict:
     if not hasattr(get_options, "options"):
@@ -326,7 +335,7 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
 
         if hasattr(get_adjuster_settings, "adjust_wanted"):
             adjust_wanted = getattr(get_adjuster_settings, "adjust_wanted")
-        elif persistent_load().get("adjuster", {}).get("never_adjust", False): # never adjust, per user request
+        elif persistent_load().get("adjuster", {}).get("never_adjust", False):  # never adjust, per user request
             return romfile, False
         else:
             adjust_wanted = input(f"Last used adjuster settings were found. Would you like to apply these? \n"
@@ -348,7 +357,6 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
         get_adjuster_settings.adjust_wanted = adjust_wanted
         return romfile, adjusted
     return romfile, False
-
 
 
 class ReceivedItem(typing.NamedTuple):

@@ -54,7 +54,8 @@ def fill_restrictive(world, base_state: CollectionState, locations, itempool, si
                         for location in region.locations:
                             if location.item and not location.event:
                                 placements.append(location)
-
+                    # fill in name of world for item
+                    item_to_place.world = world
                     raise FillError(f'No more spots to place {item_to_place}, locations {locations} are invalid. '
                                     f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
 
@@ -128,9 +129,12 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
     world.random.shuffle(fill_locations)
 
     # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
-    progitempool.sort(
-        key=lambda item: 1 if item.name == 'Small Key (Hyrule Castle)' and world.mode[item.player] == 'standard' and
-                              world.keyshuffle[item.player] else 0)
+    standard_keyshuffle_players = {player for player, mode in world.mode.items() if mode == 'standard' and
+                                   world.keyshuffle[player] is True}
+    if standard_keyshuffle_players:
+        progitempool.sort(
+            key=lambda item: 1 if item.name == 'Small Key (Hyrule Castle)' and
+                                  item.player in standard_keyshuffle_players else 0)
 
     fill_restrictive(world, world.state, fill_locations, progitempool)
 

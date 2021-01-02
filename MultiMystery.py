@@ -50,6 +50,7 @@ if __name__ == "__main__":
         player_files_path = multi_mystery_options["player_files_path"]
         target_player_count = multi_mystery_options["players"]
         race = multi_mystery_options["race"]
+        plando_options = multi_mystery_options["plando_options"]
         create_spoiler = multi_mystery_options["create_spoiler"]
         zip_roms = multi_mystery_options["zip_roms"]
         zip_diffs = multi_mystery_options["zip_diffs"]
@@ -104,7 +105,7 @@ if __name__ == "__main__":
 
         command = f"{basemysterycommand} --multi {target_player_count} {player_string} " \
                   f"--rom \"{rom_file}\" --enemizercli \"{enemizer_path}\" " \
-                  f"--outputpath \"{output_path}\" --teams {teams}"
+                  f"--outputpath \"{output_path}\" --teams {teams} --plando \"{plando_options}\""
 
         if create_spoiler:
             command += " --create_spoiler"

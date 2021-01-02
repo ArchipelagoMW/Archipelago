@@ -73,7 +73,7 @@ def roll_options(options: Dict[str, Union[dict, str]]) -> Tuple[Dict[str, Union[
             results[filename] = f"Failed to parse YAML data in {filename}: {e}"
         else:
             try:
-                rolled_results[filename] = roll_settings(yaml_data)
+                rolled_results[filename] = roll_settings(yaml_data, plando_options={"bosses"})
             except Exception as e:
                 results[filename] = f"Failed to generate mystery in {filename}: {e}"
             else:
