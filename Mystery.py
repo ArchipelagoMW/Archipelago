@@ -7,7 +7,7 @@ import typing
 import os
 
 import ModuleUpdate
-from BaseClasses import PlandoItem
+from BaseClasses import PlandoItem, PlandoConnection
 
 ModuleUpdate.update()
 
@@ -565,6 +565,17 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
         for placement in options:
             if roll_percentage(get_choice("percentage", placement, 100)):
                 ret.plando_texts[str(get_choice("at", placement))] = str(get_choice("text", placement))
+
+    ret.plando_connections = []
+    if "connections" in plando_options:
+        options = weights.get("plando_connections", [])
+        for placement in options:
+            if roll_percentage(get_choice("percentage", placement, 100)):
+                ret.plando_connections.append(PlandoConnection(
+                    get_choice("entrance", placement),
+                    get_choice("exit", placement),
+                    get_choice("direction", placement, "both")
+                ))
 
     if 'rom' in weights:
         romweights = weights['rom']

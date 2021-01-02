@@ -22,6 +22,9 @@ class World(object):
     required_medallions: dict
     dark_room_logic: Dict[int, str]
     restrict_dungeon_item_on_boss: Dict[int, bool]
+    plando_texts: List[Dict[str, str]]
+    plando_items: List[PlandoItem]
+    plando_connections: List[PlandoConnection]
 
     def __init__(self, players: int, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer,
                  progressive,
@@ -137,6 +140,7 @@ class World(object):
             set_player_attr('restrict_dungeon_item_on_boss', False)
             set_player_attr('plando_items', [])
             set_player_attr('plando_texts', {})
+            set_player_attr('plando_connections', [])
 
     def secure(self):
         self.random = secrets.SystemRandom()
@@ -1467,3 +1471,9 @@ class PlandoItem(NamedTuple):
     location: str
     world: Union[bool, str] = False  # False -> own world, True -> not own world
     from_pool: bool = True  # if item should be removed from item pool
+
+
+class PlandoConnection(NamedTuple):
+    entrance: str
+    exit: str
+    direction: str  # entrance, exit or both

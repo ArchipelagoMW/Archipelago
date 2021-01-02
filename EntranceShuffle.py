@@ -2240,6 +2240,20 @@ def unbias_some_entrances(world, Dungeon_Exits, Cave_Exits, Old_Man_House, Cave_
     tuplize_lists_in_list(Cave_Three_Exits)
 
 
+lookup = {
+    "both": connect_two_way,
+    "entrance": connect_entrance,
+    "exit": lambda x, y, z, w: connect_exit(x, z, y, w)
+}
+
+
+def plando_connect(world, player: int):
+    if world.plando_connections[player]:
+        for connection in world.plando_connections[player]:
+            func = lookup[connection.direction]
+            func(world, connection.entrance, connection.exit, player)
+
+
 LW_Dungeon_Entrances = ['Desert Palace Entrance (South)',
                         'Desert Palace Entrance (West)',
                         'Desert Palace Entrance (North)',
@@ -2305,10 +2319,10 @@ Cave_Exits_Base = [['Elder House Exit (East)', 'Elder House Exit (West)'],
 Cave_Exits_Base += [('Superbunny Cave Exit (Bottom)', 'Superbunny Cave Exit (Top)'),
               ('Spiral Cave Exit (Top)', 'Spiral Cave Exit')]
 
-
-Cave_Three_Exits_Base = [('Spectacle Rock Cave Exit (Peak)', 'Spectacle Rock Cave Exit (Top)',
- 'Spectacle Rock Cave Exit'),
-                    ['Paradox Cave Exit (Top)', 'Paradox Cave Exit (Middle)','Paradox Cave Exit (Bottom)']]
+Cave_Three_Exits_Base = [
+    ('Spectacle Rock Cave Exit (Peak)', 'Spectacle Rock Cave Exit (Top)', 'Spectacle Rock Cave Exit'),
+    ('Paradox Cave Exit (Top)', 'Paradox Cave Exit (Middle)', 'Paradox Cave Exit (Bottom)')
+]
 
 
 LW_Entrances = ['Elder House (East)',

@@ -100,5 +100,5 @@ multi_mystery_options:
   # Create encrypted race roms
   race: 0
   # List of options that can be plando'd. Can be combined, for example "bosses, items"
-  # Available options: bosses
+  # Available options: bosses, items, texts, connections
   plando_options: "bosses"

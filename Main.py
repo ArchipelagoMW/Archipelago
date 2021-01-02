@@ -13,7 +13,7 @@ from BaseClasses import World, CollectionState, Item, Region, Location, PlandoIt
 from Items import ItemFactory, item_table, item_name_groups
 from Regions import create_regions, create_shops, mark_light_world_regions, lookup_vanilla_location_to_entrance
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
-from EntranceShuffle import link_entrances, link_inverted_entrances
+from EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 from Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, get_hash_string
 from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
@@ -89,6 +89,7 @@ def main(args, seed=None):
     world.dark_room_logic = args.dark_room_logic.copy()
     world.plando_items = args.plando_items.copy()
     world.plando_texts = args.plando_texts.copy()
+    world.plando_connections = args.plando_connections.copy()
     world.restrict_dungeon_item_on_boss = args.restrict_dungeon_item_on_boss.copy()
 
     world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}
@@ -159,6 +160,7 @@ def main(args, seed=None):
         else:
             link_inverted_entrances(world, player)
             mark_dark_world_regions(world, player)
+        plando_connect(world, player)
 
     logger.info('Generating Item Pool.')
 
