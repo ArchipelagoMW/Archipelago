@@ -284,7 +284,17 @@ def roll_settings(weights):
                 raise ValueError("One of your linked options does not have a name.")
             try:
                 if random.random() < (float(option_set["percentage"]) / 100):
+                    logging.debug(f"Linked option {option_set['name']} triggered.")
+                    logging.debug(f'Applying {option_set["options"]}')
+                    new_options = set(option_set["options"]) - set(weights)
                     weights.update(option_set["options"])
+                    if new_options:
+                        for new_option in new_options:
+                            logging.warning(f'Linked Suboption "{new_option}" of "{option_set["name"]}" did not '
+                                            f'overwrite a root option. '
+                                            f"This is probably in error.")
+                else:
+                    logging.debug(f"linked option {option_set['name']} skipped.")
             except Exception as e:
                 raise ValueError(f"Linked option {option_set['name']} is destroyed. "
                                  f"Please fix your linked option.") from e
