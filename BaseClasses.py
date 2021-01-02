@@ -1041,6 +1041,9 @@ class Item(object):
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player
 
+    def __hash__(self):
+        return hash((self.name, self.player))
+
     @property
     def crystal(self) -> bool:
         return self.type == 'Crystal'
