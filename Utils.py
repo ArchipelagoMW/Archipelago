@@ -13,7 +13,7 @@ class Version(typing.NamedTuple):
     micro: int
 
 
-__version__ = "3.5.0"
+__version__ = "3.6.0"
 _version_tuple = tuplize_version(__version__)
 
 import os
