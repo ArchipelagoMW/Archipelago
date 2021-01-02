@@ -559,6 +559,13 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
                 location_world = get_choice("world", placement, False)
                 ret.plando_items.append(PlandoItem(item, location, location_world, from_pool))
 
+    ret.plando_texts = {}
+    if "texts" in plando_options:
+        options = weights.get("plando_texts", [])
+        for placement in options:
+            if roll_percentage(get_choice("percentage", placement, 100)):
+                ret.plando_texts[str(get_choice("at", placement))] = str(get_choice("text", placement))
+
     if 'rom' in weights:
         romweights = weights['rom']
 

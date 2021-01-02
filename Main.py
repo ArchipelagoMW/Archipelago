@@ -88,6 +88,7 @@ def main(args, seed=None):
     world.sprite_pool = args.sprite_pool.copy()
     world.dark_room_logic = args.dark_room_logic.copy()
     world.plando_items = args.plando_items.copy()
+    world.plando_texts = args.plando_texts.copy()
     world.restrict_dungeon_item_on_boss = args.restrict_dungeon_item_on_boss.copy()
 
     world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}

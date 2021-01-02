@@ -136,6 +136,7 @@ class World(object):
             set_player_attr('dark_room_logic', "lamp")
             set_player_attr('restrict_dungeon_item_on_boss', False)
             set_player_attr('plando_items', [])
+            set_player_attr('plando_texts', {})
 
     def secure(self):
         self.random = secrets.SystemRandom()

@@ -1286,12 +1286,16 @@ class LargeCreditBottomMapper(CharTextMapper):
 
 class TextTable(object):
     SIZE = 0x7355
+
     def __init__(self):
         self._text = OrderedDict()
         self.setDefaultText()
 
     def __getitem__(self, key):
         return self._text[key]
+
+    def __contains__(self, key):
+        return key in self._text
 
     def __setitem__(self, key, value):
         if not key in self._text:

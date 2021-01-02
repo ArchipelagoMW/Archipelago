@@ -2208,6 +2208,13 @@ def write_strings(rom, world, player, team):
         tt['menu_start_2'] = "{MENU}\n{SPEED0}\n≥@'s house\n Dark Chapel\n{CHOICE3}"
         tt['menu_start_3'] = "{MENU}\n{SPEED0}\n≥@'s house\n Dark Chapel\n Mountain Cave\n{CHOICE2}"
 
+    for at, text in world.plando_texts[player].items():
+
+        if at not in tt:
+            raise Exception(f"No text target \"{at}\" found.")
+        else:
+            tt[at] = text
+
     rom.write_bytes(0xE0000, tt.getBytes())
 
     credits = Credits()
