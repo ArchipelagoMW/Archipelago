@@ -18,6 +18,8 @@ from EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from Main import get_seed, seeddigits
 from Items import item_name_groups, item_table
+from Regions import location_table
+from Text import TextTable
 
 
 def mystery_argparse():
@@ -559,17 +561,26 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
         for placement in options:
             if roll_percentage(get_choice("percentage", placement, 100)):
                 item = get_choice("item", placement)
+                if item not in item_table:
+                    raise Exception(f"Could not plando item {item} as the item was not recognized")
                 location = get_choice("location", placement)
+                if location not in location_table:
+                    raise Exception(f"Could not plando item {item} at location {location} as the location was not recognized")
                 from_pool = get_choice("from_pool", placement, True)
                 location_world = get_choice("world", placement, False)
                 ret.plando_items.append(PlandoItem(item, location, location_world, from_pool))
 
     ret.plando_texts = {}
     if "texts" in plando_options:
+        tt = TextTable()
+        tt.removeUnwantedText()
         options = weights.get("plando_texts", [])
         for placement in options:
             if roll_percentage(get_choice("percentage", placement, 100)):
-                ret.plando_texts[str(get_choice("at", placement))] = str(get_choice("text", placement))
+                at = str(get_choice("at", placement))
+                if at not in tt:
+                    raise Exception(f"No text target \"{at}\" found.")
+                ret.plando_texts[at] = str(get_choice("text", placement))
 
     ret.plando_connections = []
     if "connections" in plando_options:
