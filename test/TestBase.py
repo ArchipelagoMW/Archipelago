@@ -1,11 +1,12 @@
 import unittest
 
-from BaseClasses import CollectionState, World
+from BaseClasses import CollectionState
+from BaseClasses import MultiWorld
 from worlds.alttp.Items import ItemFactory
 
 
 class TestBase(unittest.TestCase):
-    world: World
+    world: MultiWorld
     _state_cache = {}
 
     def get_state(self, items):

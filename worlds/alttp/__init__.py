@@ -1,7 +1,8 @@
-from BaseClasses import World
+from worlds.generic import World
 
 
 class ALTTPWorld(World):
+    """WIP"""
     def __init__(self, options, slot: int):
         self._region_cache = {}
         self.slot = slot

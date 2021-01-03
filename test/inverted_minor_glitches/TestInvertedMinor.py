@@ -1,18 +1,19 @@
-from BaseClasses import World
-from Dungeons import create_dungeons, get_dungeon_item_pool
-from EntranceShuffle import link_inverted_entrances
-from InvertedRegions import create_inverted_regions
-from ItemPool import generate_itempool, difficulties
-from Items import ItemFactory
-from Regions import mark_light_world_regions, create_shops
-from Rules import set_rules
+from BaseClasses import MultiWorld
+from worlds.alttp.Dungeons import create_dungeons, get_dungeon_item_pool
+from worlds.alttp.EntranceShuffle import link_inverted_entrances
+from worlds.alttp.InvertedRegions import create_inverted_regions
+from worlds.alttp.ItemPool import generate_itempool, difficulties
+from worlds.alttp.Items import ItemFactory
+from worlds.alttp.Regions import mark_light_world_regions, create_shops
+from worlds.alttp.Rules import set_rules
 from test.TestBase import TestBase
 
 
 class TestInvertedMinor(TestBase):
     def setUp(self):
-        self.world = World(1, {1:'vanilla'}, {1:'minorglitches'}, {1:'inverted'}, {1:'random'}, {1:'normal'}, {1:'normal'}, {1:False}, {1:'on'}, {1:'ganon'}, 'balanced',  {1:'items'},
-                           True,  {1:False}, False, None,  {1:False})
+        self.world = MultiWorld(1, {1: 'vanilla'}, {1: 'minorglitches'}, {1: 'inverted'}, {1: 'random'}, {1: 'normal'},
+                                {1: 'normal'}, {1: False}, {1: 'on'}, {1: 'ganon'}, 'balanced', {1: 'items'},
+                                True, {1: False}, False, None, {1: False})
         self.world.difficulty_requirements[1] = difficulties['normal']
         create_inverted_regions(self.world, 1)
         create_dungeons(self.world, 1)

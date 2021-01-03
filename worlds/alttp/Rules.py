@@ -26,6 +26,7 @@ def set_rules(world, player):
             world.progression_balancing[player] = False
 
     global_rules(world, player)
+    dungeon_boss_rules(world, player)
 
     if world.mode[player] != 'inverted':
         default_rules(world, player)
@@ -189,6 +190,29 @@ non_crossover_items = (item_name_groups["Small Keys"] | item_name_groups["Big Ke
     "Small Key (Universal)"}
 
 
+def dungeon_boss_rules(world, player):
+    boss_locations = {
+        'Agahnim 1',
+        'Tower of Hera - Boss',
+        'Tower of Hera - Prize',
+        'Swamp Palace - Boss',
+        'Swamp Palace - Prize',
+        'Thieves\' Town - Boss',
+        'Thieves\' Town - Prize',
+        'Skull Woods - Boss',
+        'Skull Woods - Prize',
+        'Ice Palace - Boss',
+        'Ice Palace - Prize',
+        'Misery Mire - Boss',
+        'Misery Mire - Prize',
+        'Turtle Rock - Boss',
+        'Turtle Rock - Prize',
+        'Palace of Darkness - Boss',
+        'Palace of Darkness - Prize',
+    }
+    for location in boss_locations:
+        set_defeat_dungeon_boss_rule(world.get_location(location, player))
+
 def global_rules(world, player):
     # ganon can only carry triforce
     add_item_rule(world.get_location('Ganon', player), lambda item: item.name == 'Triforce' and item.player == player)
@@ -237,7 +261,7 @@ def global_rules(world, player):
              lambda state: state.has_key('Small Key (Hyrule Castle)', player))
     set_rule(world.get_entrance('Agahnim 1', player),
              lambda state: state.has_sword(player) and state.has_key('Small Key (Agahnims Tower)', player, 2))
-    set_defeat_dungeon_boss_rule(world.get_location('Agahnim 1', player))
+
     set_rule(world.get_location('Castle Tower - Room 03', player), lambda state: state.can_kill_most_things(player, 8))
     set_rule(world.get_location('Castle Tower - Dark Maze', player),
              lambda state: state.can_kill_most_things(player, 8) and state.has_key('Small Key (Agahnims Tower)',
@@ -271,8 +295,6 @@ def global_rules(world, player):
     set_rule(world.get_location('Tower of Hera - Big Key Chest', player), lambda state: state.has_fire_source(player))
     if world.accessibility[player] != 'locations':
         set_always_allow(world.get_location('Tower of Hera - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Tower of Hera)' and item.player == player)
-    set_defeat_dungeon_boss_rule(world.get_location('Tower of Hera - Boss', player))
-    set_defeat_dungeon_boss_rule(world.get_location('Tower of Hera - Prize', player))
 
     set_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Flippers', player) and state.has('Open Floodgate', player))
     set_rule(world.get_entrance('Swamp Palace Small Key Door', player), lambda state: state.has_key('Small Key (Swamp Palace)', player))
@@ -281,15 +303,11 @@ def global_rules(world, player):
     if world.accessibility[player] != 'locations':
         set_always_allow(world.get_location('Swamp Palace - Big Chest', player), lambda state, item: item.name == 'Big Key (Swamp Palace)' and item.player == player)
     set_rule(world.get_entrance('Swamp Palace (North)', player), lambda state: state.has('Hookshot', player))
-    set_defeat_dungeon_boss_rule(world.get_location('Swamp Palace - Boss', player))
-    set_defeat_dungeon_boss_rule(world.get_location('Swamp Palace - Prize', player))
     if not world.keyshuffle[player] and world.logic[player] != 'nologic':
         forbid_item(world.get_location('Swamp Palace - Entrance', player), 'Big Key (Swamp Palace)', player)
 
     set_rule(world.get_entrance('Thieves Town Big Key Door', player), lambda state: state.has('Big Key (Thieves Town)', player))
     set_rule(world.get_entrance('Blind Fight', player), lambda state: state.has_key('Small Key (Thieves Town)', player))
-    set_defeat_dungeon_boss_rule(world.get_location('Thieves\' Town - Boss', player))
-    set_defeat_dungeon_boss_rule(world.get_location('Thieves\' Town - Prize', player))
     set_rule(world.get_location('Thieves\' Town - Big Chest', player), lambda state: (state.has_key('Small Key (Thieves Town)', player) or item_name(state, 'Thieves\' Town - Big Chest', player) == ('Small Key (Thieves Town)', player)) and state.has('Hammer', player))
     if world.accessibility[player] != 'locations':
         set_always_allow(world.get_location('Thieves\' Town - Big Chest', player), lambda state, item: item.name == 'Small Key (Thieves Town)' and item.player == player and state.has('Hammer', player))
@@ -303,8 +321,6 @@ def global_rules(world, player):
     if world.accessibility[player] != 'locations':
         set_always_allow(world.get_location('Skull Woods - Big Chest', player), lambda state, item: item.name == 'Big Key (Skull Woods)' and item.player == player)
     set_rule(world.get_entrance('Skull Woods Torch Room', player), lambda state: state.has_key('Small Key (Skull Woods)', player, 3) and state.has('Fire Rod', player) and state.has_sword(player))  # sword required for curtain
-    set_defeat_dungeon_boss_rule(world.get_location('Skull Woods - Boss', player))
-    set_defeat_dungeon_boss_rule(world.get_location('Skull Woods - Prize', player))
 
     set_rule(world.get_entrance('Ice Palace Entrance Room', player), lambda state: state.can_melt_things(player))
     set_rule(world.get_location('Ice Palace - Big Chest', player), lambda state: state.has('Big Key (Ice Palace)', player))
@@ -312,8 +328,6 @@ def global_rules(world, player):
     # TODO: investigate change from VT. Changed to hookshot or 2 keys (no checking for big key in specific chests)
     set_rule(world.get_entrance('Ice Palace (East)', player), lambda state: (state.has('Hookshot', player) or (item_in_locations(state, 'Big Key (Ice Palace)', player, [('Ice Palace - Spike Room', player), ('Ice Palace - Big Key Chest', player), ('Ice Palace - Map Chest', player)]) and state.has_key('Small Key (Ice Palace)', player))) and (state.world.can_take_damage[player] or state.has('Hookshot', player) or state.has('Cape', player) or state.has('Cane of Byrna', player)))
     set_rule(world.get_entrance('Ice Palace (East Top)', player), lambda state: state.can_lift_rocks(player) and state.has('Hammer', player))
-    set_defeat_dungeon_boss_rule(world.get_location('Ice Palace - Boss', player))
-    set_defeat_dungeon_boss_rule(world.get_location('Ice Palace - Prize', player))
 
     set_rule(world.get_entrance('Misery Mire Entrance Gap', player), lambda state: (state.has_Boots(player) or state.has('Hookshot', player)) and (state.has_sword(player) or state.has('Fire Rod', player) or state.has('Ice Rod', player) or state.has('Hammer', player) or state.has('Cane of Somaria', player) or state.can_shoot_arrows(player)))  # need to defeat wizzrobes, bombs don't work ...
     set_rule(world.get_location('Misery Mire - Big Chest', player), lambda state: state.has('Big Key (Misery Mire)', player))
@@ -329,8 +343,6 @@ def global_rules(world, player):
     set_rule(world.get_location('Misery Mire - Compass Chest', player), lambda state: state.has_fire_source(player))
     set_rule(world.get_location('Misery Mire - Big Key Chest', player), lambda state: state.has_fire_source(player))
     set_rule(world.get_entrance('Misery Mire (Vitreous)', player), lambda state: state.has('Cane of Somaria', player))
-    set_defeat_dungeon_boss_rule(world.get_location('Misery Mire - Boss', player))
-    set_defeat_dungeon_boss_rule(world.get_location('Misery Mire - Prize', player))
 
     set_rule(world.get_entrance('Turtle Rock Entrance Gap', player), lambda state: state.has('Cane of Somaria', player))
     set_rule(world.get_entrance('Turtle Rock Entrance Gap Reverse', player), lambda state: state.has('Cane of Somaria', player))
@@ -347,8 +359,6 @@ def global_rules(world, player):
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Top Left', player), lambda state: state.has('Cane of Byrna', player) or state.has('Cape', player) or state.has('Mirror Shield', player))
     set_rule(world.get_location('Turtle Rock - Eye Bridge - Top Right', player), lambda state: state.has('Cane of Byrna', player) or state.has('Cape', player) or state.has('Mirror Shield', player))
     set_rule(world.get_entrance('Turtle Rock (Trinexx)', player), lambda state: state.has_key('Small Key (Turtle Rock)', player, 4) and state.has('Big Key (Turtle Rock)', player) and state.has('Cane of Somaria', player))
-    set_defeat_dungeon_boss_rule(world.get_location('Turtle Rock - Boss', player))
-    set_defeat_dungeon_boss_rule(world.get_location('Turtle Rock - Prize', player))
 
     if not world.enemy_shuffle[player]:
         set_rule(world.get_entrance('Palace of Darkness Bonk Wall', player), lambda state: state.can_shoot_arrows(player))
@@ -367,8 +377,6 @@ def global_rules(world, player):
         set_always_allow(world.get_location('Palace of Darkness - Harmless Hellway', player), lambda state, item: item.name == 'Small Key (Palace of Darkness)' and item.player == player and state.has_key('Small Key (Palace of Darkness)', player, 5))
 
     set_rule(world.get_entrance('Palace of Darkness Maze Door', player), lambda state: state.has_key('Small Key (Palace of Darkness)', player, 6))
-    set_defeat_dungeon_boss_rule(world.get_location('Palace of Darkness - Boss', player))
-    set_defeat_dungeon_boss_rule(world.get_location('Palace of Darkness - Prize', player))
 
     # these key rules are conservative, you might be able to get away with more lenient rules
     randomizer_room_chests = ['Ganons Tower - Randomizer Room - Top Left', 'Ganons Tower - Randomizer Room - Top Right', 'Ganons Tower - Randomizer Room - Bottom Left', 'Ganons Tower - Randomizer Room - Bottom Right']

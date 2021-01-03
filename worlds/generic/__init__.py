@@ -12,3 +12,7 @@ class PlandoConnection(NamedTuple):
     entrance: str
     exit: str
     direction: str  # entrance, exit or both
+
+
+class World():
+    pass

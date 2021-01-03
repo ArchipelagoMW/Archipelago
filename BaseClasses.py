@@ -15,9 +15,6 @@ from worlds.alttp.Items import item_name_groups
 from worlds.generic import PlandoItem, PlandoConnection
 
 
-class World():
-    pass
-
 class MultiWorld():
     debug_types = False
     player_names: Dict[int, List[str]]
