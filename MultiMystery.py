@@ -1,17 +1,3 @@
-__author__ = "Berserker55"  # you can find me on discord.gg/8Z65BR2
-
-"""
-This script launches a Multiplayer "Multiworld" Mystery Game
-
-.yaml files for all participating players should be placed in a /Players folder.
-For every player a mystery game is rolled and a ROM created.
-After generation the server is automatically launched.
-It is still up to the host to forward the correct port (38281 by default) and distribute the roms to the players.
-Regular Mystery has to work for this first, such as a ALTTP Base ROM and Enemizer Setup.
-A guide can be found here: https://docs.google.com/document/d/19FoqUkuyStMqhOq8uGiocskMo1KMjOW4nEeG81xrKoI/edit
-Configuration can be found in host.yaml
-"""
-
 import os
 import subprocess
 import sys
@@ -29,7 +15,6 @@ def feedback(text: str):
 if __name__ == "__main__":
     logging.basicConfig(format='%(message)s', level=logging.INFO)
     try:
-        logging.info(f"{__author__}'s MultiMystery Launcher")
         import ModuleUpdate
 
         ModuleUpdate.update()
@@ -85,10 +70,10 @@ if __name__ == "__main__":
         for i, file in enumerate(player_files, 1):
             player_string += f"--p{i} \"{os.path.join(player_files_path, file)}\" "
 
-        if os.path.exists("BerserkerMultiServer.exe"):
-            basemysterycommand = "BerserkerMystery.exe"  # compiled windows
-        elif os.path.exists("BerserkerMultiServer"):
-            basemysterycommand = "BerserkerMystery"  # compiled linux
+        if os.path.exists("ArchipelagoMystery.exe"):
+            basemysterycommand = "ArchipelagoMystery.exe"  # compiled windows
+        elif os.path.exists("ArchipelagoMystery"):
+            basemysterycommand = "ArchipelagoMystery"  # compiled linux
         else:
             basemysterycommand = f"py -{py_version} Mystery.py"  # source
 
@@ -133,7 +118,7 @@ if __name__ == "__main__":
                 seedname = segment
                 break
 
-        multidataname = f"AP_{seedname}.multidata"
+        multidataname = f"AP_{seedname}.archipelago"
         spoilername = f"AP_{seedname}_Spoiler.txt"
         romfilename = ""
 
@@ -216,10 +201,10 @@ if __name__ == "__main__":
 
         if not args.disable_autohost:
             if os.path.exists(os.path.join(output_path, multidataname)):
-                if os.path.exists("BerserkerMultiServer.exe"):
-                    baseservercommand = "BerserkerMultiServer.exe"  # compiled windows
-                elif os.path.exists("BerserkerMultiServer"):
-                    baseservercommand = "BerserkerMultiServer"  # compiled linux
+                if os.path.exists("ArchipelagoServer.exe"):
+                    baseservercommand = "ArchipelagoServer.exe"  # compiled windows
+                elif os.path.exists("ArchipelagoServer"):
+                    baseservercommand = "ArchipelagoServer"  # compiled linux
                 else:
                     baseservercommand = f"py -{py_version} MultiServer.py"  # source
                 # don't have a mac to test that. If you try to run compiled on mac, good luck.

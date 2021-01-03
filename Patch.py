@@ -130,9 +130,10 @@ if __name__ == "__main__":
                         Utils.persistent_store("servers", data['hash'], data['server'])
                         print(f"Host is {data['server']}")
 
-                elif rom.endswith("multidata"):
+                elif rom.endswith(".archipelago"):
                     import json
                     import zlib
+
                     with open(rom, 'rb') as fr:
 
                         multidata = zlib.decompress(fr.read()).decode("utf-8")
@@ -144,7 +145,7 @@ if __name__ == "__main__":
                         from Utils import get_options
                         multidata["server_options"] = get_options()["server_options"]
                         multidata = zlib.compress(json.dumps(multidata).encode("utf-8"), 9)
-                        with open(rom+"_updated.multidata", 'wb') as f:
+                        with open(rom + "_updated.archipelago", 'wb') as f:
                             f.write(multidata)
 
                 elif rom.endswith(".zip"):

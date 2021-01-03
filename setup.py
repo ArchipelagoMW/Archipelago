@@ -54,11 +54,11 @@ def manifest_creation():
     print("Created Manifest")
 
 
-scripts = {"MultiClient.py": "BerserkerMultiClient",
-           "MultiMystery.py": "BerserkerMultiMystery",
-           "MultiServer.py": "BerserkerMultiServer",
-           "gui.py": "BerserkerMultiCreator",
-           "Mystery.py": "BerserkerMystery"}
+scripts = {"MultiClient.py": "ArchipelagoClient",
+           "MultiMystery.py": "ArchipelagoMultiMystery",
+           "MultiServer.py": "ArchipelagoServer",
+           "gui.py": "ArchipelagoCreator",
+           "Mystery.py": "ArchipelagoMystery"}
 
 exes = []
 
@@ -74,9 +74,9 @@ import datetime
 buildtime = datetime.datetime.utcnow()
 
 cx_Freeze.setup(
-    name="BerserkerMultiWorld",
+    name="Archipelago",
     version=f"{buildtime.year}.{buildtime.month}.{buildtime.day}.{buildtime.hour}",
-    description="BerserkerMultiWorld",
+    description="Archipelago",
     executables=exes,
     options={
         "build_exe": {

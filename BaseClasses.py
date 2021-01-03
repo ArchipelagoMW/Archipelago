@@ -5,14 +5,14 @@ from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict, Counter, deque
-from typing import Union, Optional, List, Dict, NamedTuple
+from typing import Union, Optional, List, Dict
 import secrets
 import random
 
-import worlds.alttp
 from worlds.alttp.EntranceShuffle import door_addresses, indirect_connections
 from Utils import int16_as_bytes
 from worlds.alttp.Items import item_name_groups
+from worlds.generic import PlandoItem, PlandoConnection
 
 
 class World():
@@ -1312,7 +1312,7 @@ class Spoiler(object):
 
         with open(filename, 'w', encoding="utf-8-sig") as outfile:
             outfile.write(
-                'ALttP Berserker\'s Multiworld Version %s  -  Seed: %s\n\n' % (
+                'Archipelago Version %s  -  Seed: %s\n\n' % (
                     self.metadata['version'], self.world.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.world.algorithm)
             outfile.write('Players:                         %d\n' % self.world.players)
@@ -1421,14 +1421,3 @@ class Spoiler(object):
             outfile.write('\n'.join(path_listings))
 
 
-class PlandoItem(NamedTuple):
-    item: str
-    location: str
-    world: Union[bool, str] = False  # False -> own world, True -> not own world
-    from_pool: bool = True  # if item should be removed from item pool
-
-
-class PlandoConnection(NamedTuple):
-    entrance: str
-    exit: str
-    direction: str  # entrance, exit or both

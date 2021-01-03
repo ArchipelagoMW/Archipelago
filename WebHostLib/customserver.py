@@ -15,7 +15,7 @@ import zlib
 from .models import *
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor
-from Utils import get_public_ipv4, get_public_ipv6, restricted_loads
+from Utils import get_public_ipv4, get_public_ipv6, parse_yaml
 
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
@@ -75,7 +75,7 @@ class WebHostContext(Context):
         else:
             self.port = get_random_port()
 
-        return self._load(restricted_loads(zlib.decompress(room.seed.multidata)), True)
+        return self._load(self._decompress(room.seed.multidata), True)
 
     @db_session
     def init_save(self, enabled: bool = True):

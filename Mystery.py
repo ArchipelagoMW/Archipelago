@@ -7,17 +7,17 @@ import typing
 import os
 
 import ModuleUpdate
-from BaseClasses import PlandoItem, PlandoConnection
+from worlds.generic import PlandoItem, PlandoConnection
 
 ModuleUpdate.update()
 
-import Bosses
 from Utils import parse_yaml
 from worlds.alttp.Rom import Sprite
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from worlds.alttp.Main import main as ERmain
 from worlds.alttp.Main import get_seed, seeddigits
 from worlds.alttp.Items import item_name_groups, item_table
+from worlds.alttp import Bosses
 
 
 def mystery_argparse():

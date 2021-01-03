@@ -34,14 +34,12 @@ server_options:
   # "enabled" -> clients can always forfeit
   # "auto" -> automatic forfeit on goal completion, "goal" -> clients can forfeit after achieving their goal
   # "auto-enabled" -> automatic forfeit on goal completion and manual forfeit is also enabled
-  # Warning: Only Berserker's Multiworld clients of version 2.1+ send game beaten information
   forfeit_mode: "goal"
   # Remaining modes
   # !remaining handling, that tells a client which items remain in their pool
   # "enabled" -> Client can always ask for remaining items
   # "disabled" -> Client can never ask for remaining items
   # "goal" -> Client can ask for remaining items after goal completion
-  # Warning: Only Berserker's Multiworld clients of version 2.1+ send game beaten information
   remaining_mode: "goal"
   # Automatically shut down the server after this many seconds without new location checks, 0 to keep running
   auto_shutdown: 0

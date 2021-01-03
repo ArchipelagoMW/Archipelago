@@ -14,7 +14,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import ModuleUpdate
 ModuleUpdate.update()
 
-from AdjusterMain import adjust
+from worlds.alttp.AdjusterMain import adjust
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from GuiUtils import ToolTips, set_icon, BackgroundTaskProgress
 from worlds.alttp.Main import main, get_seed, __version__ as MWVersion
@@ -24,7 +24,7 @@ from Utils import is_bundled, local_path, output_path, open_file
 
 def guiMain(args=None):
     mainWindow = Tk()
-    mainWindow.wm_title("Berserker's Multiworld %s" % MWVersion)
+    mainWindow.wm_title("Archipelago %s" % MWVersion)
 
     set_icon(mainWindow)
 

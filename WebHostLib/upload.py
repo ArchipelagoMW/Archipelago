@@ -10,7 +10,7 @@ from WebHostLib import app, Seed, Room, Patch
 
 accepted_zip_contents = {"patches": ".apbp",
                          "spoiler": ".txt",
-                         "multidata": "multidata"}
+                         "multidata": ".archipelago"}
 
 banned_zip_contents = (".sfc",)
 
@@ -43,7 +43,7 @@ def uploads():
                                 patches.add(Patch(data=zfile.open(file, "r").read(), player=player))
                             elif file.filename.endswith(".txt"):
                                 spoiler = zfile.open(file, "r").read().decode("utf-8-sig")
-                            elif file.filename.endswith("multidata"):
+                            elif file.filename.endswith(".archipelago"):
                                 try:
                                     multidata = json.loads(zlib.decompress(zfile.open(file).read()).decode("utf-8-sig"))
                                 except:
@@ -80,4 +80,4 @@ def user_content():
 
 
 def allowed_file(filename):
-    return filename.endswith(('multidata', ".zip"))
+    return filename.endswith(('.archipelago', ".zip"))

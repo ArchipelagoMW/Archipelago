@@ -155,4 +155,4 @@ def upload_to_db(folder, owner, sid, race:bool):
                     gen.delete()
         return seed.id
     else:
-        raise Exception("Multidata required, but not found.")
+        raise Exception("Multidata required (.archipelago), but not found.")

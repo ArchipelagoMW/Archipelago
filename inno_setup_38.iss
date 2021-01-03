@@ -1,6 +1,6 @@
 #define sourcepath "build\exe.win-amd64-3.8\"
-#define MyAppName "BerserkerMultiWorld"
-#define MyAppExeName "BerserkerMultiClient.exe"
+#define MyAppName "Archipelago"
+#define MyAppExeName "ArchipelagoClient.exe"
 #define MyAppIcon "icon.ico"
 
 [Setup]
@@ -11,7 +11,7 @@ AppName={#MyAppName}
 AppVerName={#MyAppName}
 DefaultDirName={commonappdata}\{#MyAppName}
 DisableProgramGroupPage=yes
-DefaultGroupName=Berserker's Multiworld
+DefaultGroupName=Archipelago
 OutputDir=setups
 OutputBaseFilename=Setup {#MyAppName}
 Compression=lzma2
@@ -52,7 +52,7 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 
 [Run]
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: IsVCRedist64BitNeeded; StatusMsg: "Installing VC++ redistributable..."
-Filename: "{app}\BerserkerMultiCreator"; Parameters: "update_sprites"; StatusMsg: "Updating Sprite Library..."
+Filename: "{app}\ArchipelagoCreator"; Parameters: "update_sprites"; StatusMsg: "Updating Sprite Library..."
 
 [UninstallDelete]
 Type: dirifempty; Name: "{app}"
@@ -60,14 +60,14 @@ Type: dirifempty; Name: "{app}"
 [Registry]
 
 Root: HKCR; Subkey: ".apbp";                                 ValueData: "{#MyAppName}patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""
-Root: HKCR; Subkey: "{#MyAppName}patch";                     ValueData: "Berserker's Multiworld Binary Patch";       Flags: uninsdeletekey;   ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: "{#MyAppName}patch";                     ValueData: "Archipelago Binary Patch";       Flags: uninsdeletekey;   ValueType: string;  ValueName: ""
 Root: HKCR; Subkey: "{#MyAppName}patch\DefaultIcon";         ValueData: "{app}\{#MyAppExeName},0";                           ValueType: string;  ValueName: ""
 Root: HKCR; Subkey: "{#MyAppName}patch\shell\open\command";  ValueData: """{app}\{#MyAppExeName}"" ""%1""";                  ValueType: string;  ValueName: ""
 
-Root: HKCR; Subkey: ".multidata";                                ValueData: "{#MyAppName}multidata";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""
-Root: HKCR; Subkey: "{#MyAppName}multidata";                     ValueData: "Berserker's Multiworld Server Data";       Flags: uninsdeletekey;   ValueType: string;  ValueName: ""
-Root: HKCR; Subkey: "{#MyAppName}multidata\DefaultIcon";         ValueData: "{app}\BerserkerMultiServer.exe,0";                           ValueType: string;  ValueName: ""
-Root: HKCR; Subkey: "{#MyAppName}multidata\shell\open\command";  ValueData: """{app}\BerserkerMultiServer.exe"" --multidata ""%1""";                  ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: ".archipelago";                                ValueData: "{#MyAppName}multidata";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: "{#MyAppName}multidata";                     ValueData: "Archipelago Server Data";       Flags: uninsdeletekey;   ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: "{#MyAppName}multidata\DefaultIcon";         ValueData: "{app}\ArchipelagoServer.exe,0";                           ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: "{#MyAppName}multidata\shell\open\command";  ValueData: """{app}\ArchipelagoServer.exe"" --multidata ""%1""";                  ValueType: string;  ValueName: ""
 
 
 

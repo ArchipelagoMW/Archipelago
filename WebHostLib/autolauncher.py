@@ -8,7 +8,6 @@ import time
 
 from pony.orm import db_session, select, commit
 
-from Utils import restricted_loads
 
 class CommonLocker():
     """Uses a file lock to signal that something is already running"""
@@ -78,10 +77,10 @@ def handle_generation_failure(result: BaseException):
 
 
 def launch_generator(pool: multiprocessing.pool.Pool, generation: Generation):
-    options = restricted_loads(generation.options)
+    options = generation.options
     logging.info(f"Generating {generation.id} for {len(options)} players")
 
-    meta = restricted_loads(generation.meta)
+    meta = generation.meta
     pool.apply_async(gen_game, (options,),
                      {"race": meta["race"], "sid": generation.id, "owner": generation.owner},
                      handle_generation_success, handle_generation_failure)

@@ -117,21 +117,26 @@ class Context(Node):
 
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
         with open(multidatapath, 'rb') as f:
-            self._load(restricted_loads(zlib.decompress(f.read())),
-                       use_embedded_server_options)
+            data = f.read()
 
+            self._load(self._decompress(data), use_embedded_server_options)
         self.data_filename = multidatapath
 
+    def _decompress(self, data: bytes) -> dict:
+        format_version = data[0]
+        if format_version != 1:
+            raise Exception("Incompatible multidata.")
+        return restricted_loads(zlib.decompress(data[1:]))
+
     def _load(self, decoded_obj: dict, use_embedded_server_options: bool):
-        if "minimum_versions" in jsonobj:
-            mdata_ver = tuple(jsonobj["minimum_versions"]["server"])
-            if mdata_ver > Utils._version_tuple:
-                raise RuntimeError(f"Supplied Multidata requires a server of at least version {mdata_ver},"
-                                   f"however this server is of version {Utils._version_tuple}")
-            clients_ver = jsonobj["minimum_versions"].get("clients", [])
-            self.minimum_client_versions = {}
-            for team, player, version in clients_ver:
-                self.minimum_client_versions[team, player] = Utils.Version(*version)
+        mdata_ver = decoded_obj["minimum_versions"]["server"]
+        if mdata_ver > Utils._version_tuple:
+            raise RuntimeError(f"Supplied Multidata requires a server of at least version {mdata_ver},"
+                               f"however this server is of version {Utils._version_tuple}")
+        clients_ver = decoded_obj["minimum_versions"].get("clients", [])
+        self.minimum_client_versions = {}
+        for team, player, version in clients_ver:
+            self.minimum_client_versions[team, player] = Utils.Version(*version)
 
         for team, names in enumerate(decoded_obj['names']):
             for player, name in enumerate(names, 1):
@@ -191,8 +196,8 @@ class Context(Node):
         self.saving = enabled
         if self.saving:
             if not self.save_filename:
-                self.save_filename = (self.data_filename[:-9] if self.data_filename[-9:] == 'multidata' else (
-                        self.data_filename + '_')) + 'multisave'
+                self.save_filename = (self.data_filename[:-9] if self.data_filename.endswith('.archipelago') else (
+                        self.data_filename + '_')) + 'save'
             try:
                 with open(self.save_filename, 'rb') as f:
                     save_data = restricted_loads(zlib.decompress(f.read()))
@@ -210,7 +215,7 @@ class Context(Node):
                 while self.running:
                     time.sleep(self.auto_save_interval)
                     if self.save_dirty:
-                        logging.debug("Saving multisave via thread.")
+                        logging.debug("Saving via thread.")
                         self.save_dirty = False
                         self._save()
 
@@ -1319,7 +1324,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--compatibility', default=defaults["compatibility"], type=int,
                         help="""
     #2 -> recommended for casual/cooperative play, attempt to be compatible with everything across all versions
-    #1 -> recommended for friendly racing, only allow Berserker's Multiworld, to disallow old /getitem for example
+    #1 -> recommended for friendly racing, tries to block third party clients
     #0 -> recommended for tournaments to force a level playing field, only allow an exact version match
     """)
     args = parser.parse_args()
@@ -1366,7 +1371,7 @@ async def main(args: argparse.Namespace):
             import tkinter.filedialog
             root = tkinter.Tk()
             root.withdraw()
-            data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.multidata"),))
+            data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.archipelago"),))
 
         ctx.load(data_filename, args.use_embedded_options)
 

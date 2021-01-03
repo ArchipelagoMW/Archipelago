@@ -1,6 +1,3 @@
-"""Friendly reminder that if you want to host this somewhere on the internet, that it's licensed under MIT Berserker66
-So unless you're Berserker you need to include license information."""
-
 import os
 import uuid
 import base64
@@ -38,9 +35,9 @@ app.config["JOB_THRESHOLD"] = 2
 app.config['SESSION_PERMANENT'] = True
 
 # waitress uses one thread for I/O, these are for processing of views that then get sent
-# berserkermulti.world uses gunicorn + nginx; ignoring this option
+# archipelago.gg uses gunicorn + nginx; ignoring this option
 app.config["WAITRESS_THREADS"] = 10
-# a default that just works. berserkermulti.world runs on mariadb
+# a default that just works. archipelago.gg runs on mariadb
 app.config["PONY"] = {
     'provider': 'sqlite',
     'filename': os.path.abspath('db.db3'),
@@ -51,7 +48,6 @@ app.config["CACHE_TYPE"] = "simple"
 app.config["JSON_AS_ASCII"] = False
 
 app.autoversion = True
-app.config["HOSTNAME"] = "berserkermulti.world"
 
 av = Autoversion(app)
 cache = Cache(app)

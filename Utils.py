@@ -19,10 +19,8 @@ import os
 import subprocess
 import sys
 import pickle
-import io
-import builtins
-
 import functools
+import io
 
 from yaml import load, dump, safe_load
 
@@ -374,6 +372,11 @@ def get_unique_identifier():
     persistent_store("client", "uuid", uuid)
     return uuid
 
+
+safe_builtins = {
+    'set',
+    'frozenset',
+}
 
 safe_builtins = {
     'set',

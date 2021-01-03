@@ -7,12 +7,14 @@ import random
 import time
 import zlib
 import concurrent.futures
+import pickle
 
 from BaseClasses import MultiWorld, CollectionState, Item, Region, Location
-from worlds.alttp.Items import ItemFactory
-from worlds.alttp.Regions import create_regions, create_shops, mark_light_world_regions, lookup_vanilla_location_to_entrance
+from worlds.alttp.Items import ItemFactory, item_table, item_name_groups
+from worlds.alttp.Regions import create_regions, create_shops, mark_light_world_regions, \
+    lookup_vanilla_location_to_entrance
 from worlds.alttp.InvertedRegions import create_inverted_regions, mark_dark_world_regions
-from worlds.alttp.EntranceShuffle import link_entrances, link_inverted_entrances
+from worlds.alttp.EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 from worlds.alttp.Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, get_hash_string
 from worlds.alttp.Rules import set_rules
 from worlds.alttp.Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
@@ -94,7 +96,7 @@ def main(args, seed=None):
 
     world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}
 
-    logger.info('ALttP Berserker\'s Multiworld Version %s  -  Seed: %s\n', __version__, world.seed)
+    logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, world.seed)
 
     parsed_names = parse_player_names(args.names, world.players, args.teams)
     world.teams = len(parsed_names)
@@ -397,17 +399,17 @@ def main(args, seed=None):
 
         def write_multidata(roms):
             import base64
-            import pickle
             for future in roms:
                 rom_name = future.result()
                 rom_names.append(rom_name)
-            minimum_versions = {"server": (1, 0, 0)}
+            minimum_versions = {"server": (0, 1, 0)}
             multidata = zlib.compress(pickle.dumps({"names": parsed_names,
-                                                    "roms": {base64.b64encode(rom_name).decode(): (team, slot) for slot, team, rom_name in rom_names},
+                                                    "roms": {base64.b64encode(rom_name).decode(): (team, slot) for
+                                                             slot, team, rom_name in rom_names},
                                                     "remote_items": {player for player in range(1, world.players + 1) if
                                                                      world.remote_items[player]},
                                                     "locations": {
-                                                        (location.address, location.player) :
+                                                        (location.address, location.player):
                                                             (location.item.code, location.item.player)
                                                         for location in world.get_filled_locations() if
                                                         type(location.address) is int},
@@ -415,12 +417,13 @@ def main(args, seed=None):
                                                     "server_options": get_options()["server_options"],
                                                     "er_hint_data": er_hint_data,
                                                     "precollected_items": precollected_items,
-                                                    "version": _version_tuple,
+                                                    "version": tuple(_version_tuple),
                                                     "tags": ["AP"],
                                                     "minimum_versions": minimum_versions,
                                                     }), 9)
 
-            with open(output_path('%s.multidata' % outfilebase), 'wb') as f:
+            with open(output_path('%s.archipelago' % outfilebase), 'wb') as f:
+                f.write(bytes([1]))  # version of format
                 f.write(multidata)
 
         multidata_task = pool.submit(write_multidata, rom_futures)
