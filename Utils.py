@@ -15,6 +15,7 @@ class Version(typing.NamedTuple):
 __version__ = "0.1.0"
 _version_tuple = tuplize_version(__version__)
 
+import builtins
 import os
 import subprocess
 import sys
@@ -372,11 +373,6 @@ def get_unique_identifier():
     persistent_store("client", "uuid", uuid)
     return uuid
 
-
-safe_builtins = {
-    'set',
-    'frozenset',
-}
 
 safe_builtins = {
     'set',
