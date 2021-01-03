@@ -22,7 +22,7 @@
         {% if room.last_port %}
             You can connect to this room by using '/connect archipelago.gg:{{ room.last_port }}'
             in the <a href="https://github.com/Berserker66/MultiWorld-Utilities/releases">client</a>.<br>{% endif %}
-        {{ macros.list_patches_room(room.seed.patches, room) }}
+        {{ macros.list_patches_room(room) }}
         {% if room.owner == session["_id"] %}
             <form method=post>
                 <div class="form-group">

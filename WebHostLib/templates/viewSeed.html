@@ -33,26 +33,27 @@
                     </tr>
                 {% endif %}
                 {% if seed.multidata %}
-                <tr>
-                    <td>Players:&nbsp;</td>
-                    <td>
-                        <ul>
-                            {% for team in seed.multidata["names"] %}
-                                <li>Team #{{ loop.index }} - {{ team | length }}
-                                    <ul>
-                                        {% for player in team %}
-                                            <li>
-                                                <a href="{{ url_for("download_raw_patch", seed_id=seed.id, player_id=loop.index) }}">{{ player }}</a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Rooms:&nbsp;</td>
+                    <tr>
+                        <td>Players:&nbsp;</td>
+                        <td>
+                            <ul>
+                                {% for team in seed.multidata["names"] %}
+                                    {% set outer_loop = loop %}
+                                    <li>Team #{{ loop.index }} - {{ team | length }}
+                                        <ul>
+                                            {% for player in team %}
+                                                <li>
+                                                    <a href="{{ url_for("download_raw_patch", seed_id=seed.id, player_id=loop.index, team_id=outer_loop.index0) }}">{{ player }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Rooms:&nbsp;</td>
                     <td>
                             {% call macros.list_rooms(rooms) %}
                                 <li>

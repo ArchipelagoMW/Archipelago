@@ -12,6 +12,7 @@ STATE_ERROR = -1
 class Patch(db.Entity):
     id = PrimaryKey(int, auto=True)
     player = Required(int)
+    team = Required(int, default=0)
     data = Required(buffer, lazy=True)
     seed = Optional('Seed')
 
