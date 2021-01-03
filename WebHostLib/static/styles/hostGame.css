@@ -1,0 +1,30 @@
+#host-game-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#host-game{
+    width: 700px;
+    min-height: 240px;
+    text-align: center;
+}
+
+#host-game.wider{
+    width: 980px;
+}
+
+#host-game-form-wrapper{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+#host-game-form{
+    display: none;
+}
+
+#host-game button{
+    margin-top: 5px;
+}

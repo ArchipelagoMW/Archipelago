@@ -1,0 +1,30 @@
+{% extends 'pageWrapper.html' %}
+
+{% block head %}
+    {{ super() }}
+    <title>Upload Multidata</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/hostGame.css") }}" />
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/hostGame.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+    {% include 'header/oceanHeader.html' %}
+
+    <div id="host-game-wrapper">
+        <div id="host-game" class="grass-island {% if rooms %}wider{% endif %}">
+            <h1>Host Game</h1>
+            <p>
+                To host a game, you need to upload a .multidata file or a .zip file<br />
+                created by the multiworld generator.
+            </p>
+            <div id="host-game-form-wrapper">
+                <form id="host-game-form" method="post" enctype="multipart/form-data">
+                    <input id="file-input" type="file" name="file">
+                </form>
+                <button id="host-game-button">Upload</button>
+            </div>
+        </div>
+    </div>
+
+    {% include 'islandFooter.html' %}
+{% endblock %}

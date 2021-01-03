@@ -34,7 +34,7 @@ def guiMain(args=None):
     customWindow = ttk.Frame(notebook)
     notebook.add(randomizerWindow, text='Randomize')
     notebook.add(adjustWindow, text='Adjust')
-    notebook.add(customWindow, text='Custom')
+    notebook.add(customWindow, text='Custom Items')
     notebook.pack()
 
     # Shared Controls
@@ -96,14 +96,10 @@ def guiMain(args=None):
     hintsVar = IntVar()
     hintsVar.set(1)  # set default
     hintsCheckbutton = Checkbutton(checkBoxFrame, text="Include Helpful Hints", variable=hintsVar)
-    customVar = IntVar()
-    customCheckbutton = Checkbutton(checkBoxFrame, text="Use custom item pool", variable=customVar)
-    balancingVar = IntVar()
-    balancingVar.set(1)  # set default
-    balancingCheckbutton = Checkbutton(checkBoxFrame, text="Multiworld Progression Balancing", variable=balancingVar)
-    patchesVar = IntVar()
-    patchesVar.set(1)  # set default
-    patchesCheckbutton = Checkbutton(checkBoxFrame, text="Create Delta Patches", variable=patchesVar)
+
+    tileShuffleVar = IntVar()
+    tileShuffleButton = Checkbutton(checkBoxFrame, text="Tile shuffle", variable=tileShuffleVar)
+
     createSpoilerCheckbutton.pack(expand=True, anchor=W)
     suppressRomCheckbutton.pack(expand=True, anchor=W)
     openpyramidCheckbutton.pack(expand=True, anchor=W)
@@ -116,9 +112,8 @@ def guiMain(args=None):
     retroCheckbutton.pack(expand=True, anchor=W)
     shuffleGanonCheckbutton.pack(expand=True, anchor=W)
     hintsCheckbutton.pack(expand=True, anchor=W)
-    customCheckbutton.pack(expand=True, anchor=W)
-    balancingCheckbutton.pack(expand=True, anchor=W)
-    patchesCheckbutton.pack(expand=True, anchor=W)
+    tileShuffleButton.pack(expand=True, anchor=W)
+
 
     romOptionsFrame = LabelFrame(rightHalfFrame, text="Rom options")
     romOptionsFrame.columnconfigure(0, weight=1)
@@ -198,7 +193,7 @@ def guiMain(args=None):
     owPalettesLabel.pack(side=LEFT)
     owPalettesVar = StringVar()
     owPalettesVar.set('default')
-    owPalettesOptionMenu = OptionMenu(owPalettesFrame, owPalettesVar, 'default', 'random', 'blackout')
+    owPalettesOptionMenu = OptionMenu(owPalettesFrame, owPalettesVar, 'default', 'random', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     owPalettesOptionMenu.pack(side=LEFT)
 
     uwPalettesFrame = Frame(romOptionsFrame)
@@ -207,11 +202,41 @@ def guiMain(args=None):
     uwPalettesLabel.pack(side=LEFT)
     uwPalettesVar = StringVar()
     uwPalettesVar.set('default')
-    uwPalettesOptionMenu = OptionMenu(uwPalettesFrame, uwPalettesVar, 'default', 'random', 'blackout')
+    uwPalettesOptionMenu = OptionMenu(uwPalettesFrame, uwPalettesVar, 'default', 'random', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     uwPalettesOptionMenu.pack(side=LEFT)
 
+    hudPalettesFrame = Frame(romOptionsFrame)
+    hudPalettesFrame.grid(row=4, column=0, sticky=E)
+    hudPalettesLabel = Label(hudPalettesFrame, text='HUD palettes')
+    hudPalettesLabel.pack(side=LEFT)
+    hudPalettesVar = StringVar()
+    hudPalettesVar.set('default')
+    hudPalettesOptionMenu = OptionMenu(hudPalettesFrame, hudPalettesVar, 'default', 'random', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    hudPalettesOptionMenu.pack(side=LEFT)
+
+    swordPalettesFrame = Frame(romOptionsFrame)
+    swordPalettesFrame.grid(row=4, column=1, sticky=E)
+    swordPalettesLabel = Label(swordPalettesFrame, text='Sword palettes')
+    swordPalettesLabel.pack(side=LEFT)
+    swordPalettesVar = StringVar()
+    swordPalettesVar.set('default')
+    swordPalettesOptionMenu = OptionMenu(swordPalettesFrame, swordPalettesVar, 'default', 'random', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    swordPalettesOptionMenu.pack(side=LEFT)
+
+    shieldPalettesFrame = Frame(romOptionsFrame)
+    shieldPalettesFrame.grid(row=5, column=0, sticky=E)
+    shieldPalettesLabel = Label(shieldPalettesFrame, text='Shield palettes')
+    shieldPalettesLabel.pack(side=LEFT)
+    shieldPalettesVar = StringVar()
+    shieldPalettesVar.set('default')
+    shieldPalettesOptionMenu = OptionMenu(shieldPalettesFrame, shieldPalettesVar, 'default', 'random', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    shieldPalettesOptionMenu.pack(side=LEFT)
+
+
+
+
     romDialogFrame = Frame(romOptionsFrame)
-    romDialogFrame.grid(row=4, column=0, columnspan=2, sticky=W+E)
+    romDialogFrame.grid(row=6, column=0, columnspan=2, sticky=W+E)
 
     baseRomLabel = Label(romDialogFrame, text='Base Rom: ')
     romVar = StringVar(value="Zelda no Densetsu - Kamigami no Triforce (Japan).sfc")
@@ -236,6 +261,7 @@ def guiMain(args=None):
     romSelectButton.pack(side=LEFT)
 
     checkBoxFrame.pack(side=TOP, anchor=W, padx=5, pady=10)
+
     romOptionsFrame.pack(expand=True, fill=BOTH, padx=3)
 
     drowDownFrame = Frame(topFrame)
@@ -314,14 +340,6 @@ def guiMain(args=None):
     itemfunctionLabel = Label(itemfunctionFrame, text='Difficulty: item functionality')
     itemfunctionLabel.pack(side=LEFT)
 
-    timerFrame = Frame(drowDownFrame)
-    timerVar = StringVar()
-    timerVar.set('none')
-    timerOptionMenu = OptionMenu(timerFrame, timerVar, 'none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown')
-    timerOptionMenu.pack(side=RIGHT)
-    timerLabel = Label(timerFrame, text='Timer setting')
-    timerLabel.pack(side=LEFT)
-
     dungeonCounterFrame = Frame(drowDownFrame)
     dungeonCounterVar = StringVar()
     dungeonCounterVar.set('auto')
@@ -382,7 +400,6 @@ def guiMain(args=None):
     swordFrame.pack(expand=True, anchor=E)
     difficultyFrame.pack(expand=True, anchor=E)
     itemfunctionFrame.pack(expand=True, anchor=E)
-    timerFrame.pack(expand=True, anchor=E)
     dungeonCounterFrame.pack(expand=True, anchor=E)
     progressiveFrame.pack(expand=True, anchor=E)
     accessibilityFrame.pack(expand=True, anchor=E)
@@ -449,17 +466,13 @@ def guiMain(args=None):
     potShuffleButton = Checkbutton(enemizerFrame, text="Pot shuffle", variable=potShuffleVar)
     potShuffleButton.grid(row=2, column=0, sticky=W)
 
-    tileShuffleVar = IntVar()
-    tileShuffleButton = Checkbutton(enemizerFrame, text="Tile shuffle", variable=tileShuffleVar)
-    tileShuffleButton.grid(row=2, column=1, sticky=W)
-
     bushShuffleVar = IntVar()
     bushShuffleButton = Checkbutton(enemizerFrame, text="Bush shuffle", variable=bushShuffleVar)
-    bushShuffleButton.grid(row=2, column=2, sticky=W)
+    bushShuffleButton.grid(row=2, column=1, sticky=W)
 
     killableThievesVar = IntVar()
     killable_thievesShuffleButton = Checkbutton(enemizerFrame, text="Killable Thieves", variable=killableThievesVar)
-    killable_thievesShuffleButton.grid(row=2, column=3, sticky=W)
+    killable_thievesShuffleButton.grid(row=2, column=2, sticky=W)
 
     shopframe = LabelFrame(randomizerWindow, text="Shops", padx=5, pady=2)
 
@@ -477,7 +490,7 @@ def guiMain(args=None):
 
     multiworldframe = LabelFrame(randomizerWindow, text="Multiworld", padx=5, pady=2)
 
-    worldLabel = Label(multiworldframe, text='Worlds')
+    worldLabel = Label(multiworldframe, text='Players per Team')
     worldVar = StringVar()
     worldSpinbox = Spinbox(multiworldframe, from_=1, to=255, width=5, textvariable=worldVar)
     namesLabel = Label(multiworldframe, text='Player names')
@@ -486,9 +499,16 @@ def guiMain(args=None):
     seedLabel = Label(multiworldframe, text='Seed #')
     seedVar = StringVar()
     seedEntry = Entry(multiworldframe, width=20, textvariable=seedVar)
-    countLabel = Label(multiworldframe, text='Count')
+    countLabel = Label(multiworldframe, text='Amount of Multiworlds')
     countVar = StringVar()
     countSpinbox = Spinbox(multiworldframe, from_=1, to=100, width=5, textvariable=countVar)
+
+    balancingVar = IntVar()
+    balancingVar.set(1)  # set default
+    balancingCheckbutton = Checkbutton(multiworldframe, text="Progression Balancing", variable=balancingVar)
+    patchesVar = IntVar()
+    patchesVar.set(1)  # set default
+    patchesCheckbutton = Checkbutton(multiworldframe, text="Create Delta Patches", variable=patchesVar)
 
     def generateRom():
         guiargs = Namespace()
@@ -508,6 +528,10 @@ def guiMain(args=None):
         guiargs.difficulty = difficultyVar.get()
         guiargs.item_functionality = itemfunctionVar.get()
         guiargs.timer = timerVar.get()
+        guiargs.countdown_start_time = timerCountdownVar.get()
+        guiargs.red_clock_time = timerRedVar.get()
+        guiargs.blue_clock_time = timerBlueVar.get()
+        guiargs.green_clock_time = timerGreenVar.get()
         guiargs.skip_progression_balancing = not balancingVar.get()
         if guiargs.timer == "none":
             guiargs.timer = False
@@ -538,6 +562,9 @@ def guiMain(args=None):
         guiargs.disablemusic = bool(disableMusicVar.get())
         guiargs.ow_palettes = owPalettesVar.get()
         guiargs.uw_palettes = uwPalettesVar.get()
+        guiargs.hud_palettes = hudPalettesVar.get()
+        guiargs.sword_palettes = swordPalettesVar.get()
+        guiargs.shield_palettes = shieldPalettesVar.get()
         guiargs.shuffleganon = bool(shuffleGanonVar.get())
         guiargs.hints = bool(hintsVar.get())
         guiargs.enemizercli = enemizerCLIpathVar.get()
@@ -614,16 +641,20 @@ def guiMain(args=None):
         else:
             messagebox.showinfo(title="Success", message="Multiworld created successfully")
 
-    generateButton = Button(farBottomFrame, text='Generate Patched Rom', command=generateRom)
+    generateButton = Button(farBottomFrame, text='Generate Multiworld', command=generateRom)
 
-    worldLabel.pack(side=LEFT)
-    worldSpinbox.pack(side=LEFT)
-    namesLabel.pack(side=LEFT)
-    namesEntry.pack(side=LEFT, expand=True, fill=X)
-    seedLabel.pack(side=LEFT,  padx=(5, 0))
-    seedEntry.pack(side=LEFT)
-    countLabel.pack(side=LEFT, padx=(5, 0))
-    countSpinbox.pack(side=LEFT)
+    worldLabel.grid(row=0, column=0, sticky=W)
+    worldSpinbox.grid(row=0, column=1, sticky=W)
+    namesLabel.grid(row=0, column=2, sticky=W)
+    namesEntry.grid(row=0, column=3, sticky=W + E)
+    multiworldframe.grid_columnconfigure(3, weight=1)  # stretch name field
+    seedLabel.grid(row=0, column=4, sticky=W)
+    seedEntry.grid(row=0, column=5, sticky=W)
+    countLabel.grid(row=1, column=0, sticky=W)
+    countSpinbox.grid(row=1, column=1, sticky=W)
+    balancingCheckbutton.grid(row=1, column=2, sticky=W, columnspan=2)
+    patchesCheckbutton.grid(row=1, column=4, sticky=W, columnspan=2)
+
     generateButton.pack(side=RIGHT, padx=(5, 0))
 
     openOutputButton.pack(side=LEFT)
@@ -702,22 +733,43 @@ def guiMain(args=None):
     fastMenuLabel2.pack(side=LEFT)
 
     owPalettesFrame2 = Frame(drowDownFrame2)
-    owPalettesOptionMenu2 = OptionMenu(owPalettesFrame2, owPalettesVar, 'default', 'random', 'blackout')
+    owPalettesOptionMenu2 = OptionMenu(owPalettesFrame2, owPalettesVar, 'default', 'random', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     owPalettesOptionMenu2.pack(side=RIGHT)
     owPalettesLabel2 = Label(owPalettesFrame2, text='Overworld palettes')
     owPalettesLabel2.pack(side=LEFT)
 
     uwPalettesFrame2 = Frame(drowDownFrame2)
-    uwPalettesOptionMenu2 = OptionMenu(uwPalettesFrame2, uwPalettesVar, 'default', 'random', 'blackout')
+    uwPalettesOptionMenu2 = OptionMenu(uwPalettesFrame2, uwPalettesVar, 'default', 'random', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     uwPalettesOptionMenu2.pack(side=RIGHT)
     uwPalettesLabel2 = Label(uwPalettesFrame2, text='Dungeon palettes')
     uwPalettesLabel2.pack(side=LEFT)
+
+    hudPalettesFrame2 = Frame(drowDownFrame2)
+    hudPalettesOptionMenu2 = OptionMenu(hudPalettesFrame2, hudPalettesVar, 'default', 'random', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    hudPalettesOptionMenu2.pack(side=RIGHT)
+    hudPalettesLabel2 = Label(hudPalettesFrame2, text='HUD palettes')
+    hudPalettesLabel2.pack(side=LEFT)
+
+    swordPalettesFrame2 = Frame(drowDownFrame2)
+    swordPalettesOptionMenu2 = OptionMenu(swordPalettesFrame2, swordPalettesVar, 'default', 'random', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    swordPalettesOptionMenu2.pack(side=RIGHT)
+    swordPalettesLabel2 = Label(swordPalettesFrame2, text='Sword palettes')
+    swordPalettesLabel2.pack(side=LEFT)
+
+    shieldPalettesFrame2 = Frame(drowDownFrame2)
+    shieldPalettesOptionMenu2 = OptionMenu(shieldPalettesFrame2, shieldPalettesVar, 'default', 'random', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
+    shieldPalettesOptionMenu2.pack(side=RIGHT)
+    shieldPalettesLabel2 = Label(shieldPalettesFrame2, text='Shield palettes')
+    shieldPalettesLabel2.pack(side=LEFT)
 
     heartbeepFrame2.pack(expand=True, anchor=E)
     heartcolorFrame2.pack(expand=True, anchor=E)
     fastMenuFrame2.pack(expand=True, anchor=E)
     owPalettesFrame2.pack(expand=True, anchor=E)
     uwPalettesFrame2.pack(expand=True, anchor=E)
+    hudPalettesFrame2.pack(expand=True, anchor=E)
+    swordPalettesFrame2.pack(expand=True, anchor=E)
+    shieldPalettesFrame2.pack(expand=True, anchor=E)
 
     bottomFrame2 = Frame(topFrame2)
 
@@ -728,6 +780,9 @@ def guiMain(args=None):
         guiargs.fastmenu = fastMenuVar.get()
         guiargs.ow_palettes = owPalettesVar.get()
         guiargs.uw_palettes = uwPalettesVar.get()
+        guiargs.hud_palettes = hudPalettesVar.get()
+        guiargs.sword_palettes = swordPalettesVar.get()
+        guiargs.shield_palettes = shieldPalettesVar.get()
         guiargs.quickswap = bool(quickSwapVar.get())
         guiargs.disablemusic = bool(disableMusicVar.get())
         guiargs.rom = romVar2.get()
@@ -741,7 +796,10 @@ def guiMain(args=None):
         else:
             messagebox.showinfo(title="Success", message="Rom patched successfully")
             from Utils import persistent_store
-            persistent_store("adjuster", "last_settings", guiargs)
+            from Rom import Sprite
+            if isinstance(guiargs.sprite, Sprite):
+                guiargs.sprite = guiargs.sprite.name
+            persistent_store("adjuster", "last_settings_3", guiargs)
 
     adjustButton = Button(bottomFrame2, text='Adjust Rom', command=adjustRom)
 
@@ -763,11 +821,64 @@ def guiMain(args=None):
             return False
     vcmd=(topFrame3.register(validation), '%P')
 
+    timerOptionsFrame = LabelFrame(topFrame3, text="Timer options")
+    for i in range(3):
+        timerOptionsFrame.columnconfigure(i, weight=1)
+        timerOptionsFrame.rowconfigure(i, weight=1)
+
+    timerModeFrame = Frame(timerOptionsFrame)
+    timerModeFrame.grid(row=0, column=0, columnspan=3, sticky=E, padx=3)
+    timerVar = StringVar()
+    timerVar.set('none')
+    timerModeMenu = OptionMenu(timerModeFrame, timerVar, 'none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown')
+    timerLabel = Label(timerModeFrame, text='Timer setting')
+    timerLabel.pack(side=LEFT)
+    timerModeMenu.pack(side=LEFT)
+
+    timerCountdownFrame = Frame(timerOptionsFrame)
+    timerCountdownFrame.grid(row=1, column=0, columnspan=3, sticky=E, padx=3)
+    timerCountdownLabel = Label(timerCountdownFrame, text='Countdown starting time')
+    timerCountdownLabel.pack(side=LEFT)
+    timerCountdownVar = IntVar(value=10)
+    timerCountdownSpinbox = Spinbox(timerCountdownFrame, from_=0, to=480, width=3, textvariable=timerCountdownVar)
+    timerCountdownSpinbox.pack(side=LEFT)
+
+    timerRedFrame = Frame(timerOptionsFrame)
+    timerRedFrame.grid(row=2, column=0, sticky=E, padx=3)
+    timerRedLabel = Label(timerRedFrame, text='Clock adjustments: Red')
+    timerRedLabel.pack(side=LEFT)
+    timerRedVar = IntVar(value=-2)
+    timerRedSpinbox = Spinbox(timerRedFrame, from_=-60, to=60, width=3, textvariable=timerRedVar)
+    timerRedSpinbox.pack(side=LEFT)
+
+    timerBlueFrame = Frame(timerOptionsFrame)
+    timerBlueFrame.grid(row=2, column=1, sticky=E, padx=3)
+    timerBlueLabel = Label(timerBlueFrame, text='Blue')
+    timerBlueLabel.pack(side=LEFT)
+    timerBlueVar = IntVar(value=2)
+    timerBlueSpinbox = Spinbox(timerBlueFrame, from_=-60, to=60, width=3, textvariable=timerBlueVar)
+    timerBlueSpinbox.pack(side=LEFT)
+
+    timerGreenFrame = Frame(timerOptionsFrame)
+    timerGreenFrame.grid(row=2, column=2, sticky=E, padx=3)
+    timerGreenLabel = Label(timerGreenFrame, text='Green')
+    timerGreenLabel.pack(side=LEFT)
+    timerGreenVar = IntVar(value=4)
+    timerGreenSpinbox = Spinbox(timerGreenFrame, from_=-60, to=60, width=3, textvariable=timerGreenVar)
+    timerGreenSpinbox.pack(side=LEFT)
+
+    timerOptionsFrame.pack(expand=True, fill=BOTH, padx=3)
+
+
     itemList1 = Frame(topFrame3)
     itemList2 = Frame(topFrame3)
     itemList3 = Frame(topFrame3)
     itemList4 = Frame(topFrame3)
     itemList5 = Frame(topFrame3)
+
+    customVar = IntVar()
+    customCheckbutton = Checkbutton(topFrame3, text="Use custom item pool", variable=customVar)
+    customCheckbutton.pack(expand=True, anchor=W)
 
     bowFrame = Frame(itemList1)
     bowLabel = Label(bowFrame, text='Bow')
@@ -1367,6 +1478,10 @@ def guiMain(args=None):
         difficultyVar.set(args.difficulty)
         itemfunctionVar.set(args.item_functionality)
         timerVar.set(args.timer)
+        timerCountdownVar.set(args.countdown_start_time)
+        timerRedVar.set(args.red_clock_time)
+        timerBlueVar.set(args.blue_clock_time)
+        timerGreenVar.set(args.green_clock_time)
         progressiveVar.set(args.progressive)
         accessibilityVar.set(args.accessibility)
         goalVar.set(args.goal)
@@ -1385,7 +1500,8 @@ def guiMain(args=None):
 
     mainWindow.mainloop()
 
-class SpriteSelector(object):
+
+class SpriteSelector():
     def __init__(self, parent, callback, adjuster=False):
         if is_bundled():
             self.deploy_icons()
@@ -1411,8 +1527,8 @@ class SpriteSelector(object):
         title_link.pack(side=LEFT)
         title_link.bind("<Button-1>", open_custom_sprite_dir)
 
-        self.icon_section(alttpr_frametitle, self.alttpr_sprite_dir + '/*', 'ALTTPR sprites not found. Click "Update alttpr sprites" to download them.')
-        self.icon_section(custom_frametitle, self.custom_sprite_dir + '/*', 'Put sprites in the custom sprites folder (see open link above) to have them appear here.')
+        self.icon_section(alttpr_frametitle, self.alttpr_sprite_dir, 'ALTTPR sprites not found. Click "Update alttpr sprites" to download them.')
+        self.icon_section(custom_frametitle, self.custom_sprite_dir, 'Put sprites in the custom sprites folder (see open link above) to have them appear here.')
 
         frame = Frame(self.window)
         frame.pack(side=BOTTOM, fill=X, pady=5)
@@ -1471,19 +1587,21 @@ class SpriteSelector(object):
 
         sprites = []
 
-        for file in glob(output_path(path)):
-            sprites.append(Sprite(file))
+        for file in os.listdir(path):
+            sprites.append((file, Sprite(os.path.join(path, file))))
 
-        sprites.sort(key=lambda s: str.lower(s.name or "").strip())
+        sprites.sort(key=lambda s: str.lower(s[1].name or "").strip())
 
         frame.buttons = []
-        for sprite in sprites:
+        for file, sprite in sprites:
             image = get_image_for_sprite(sprite)
             if image is None:
                 continue
             self.all_sprites.append(sprite)
             button = Button(frame, image=image, command=lambda spr=sprite: self.select_sprite(spr))
-            ToolTips.register(button, sprite.name + ("\nBy: %s" % sprite.author_name if sprite.author_name else ""))
+            ToolTips.register(button, sprite.name +
+                              ("\nBy: %s" % sprite.author_name if sprite.author_name else "") +
+                              f"\nFrom: {file}")
             button.image = image
             frame.buttons.append(button)
 
@@ -1508,93 +1626,15 @@ class SpriteSelector(object):
         self.window.destroy()
         self.parent.update()
 
-        def work(task):
-            resultmessage = ""
-            successful = True
-
-            def finished():
-                task.close_window()
-                if successful:
-                    messagebox.showinfo("Sprite Updater", resultmessage)
-                else:
-                    messagebox.showerror("Sprite Updater", resultmessage)
-                SpriteSelector(self.parent, self.callback, self.adjuster)
-
-            try:
-                task.update_status("Downloading alttpr sprites list")
-                with urlopen('https://alttpr.com/sprites') as response:
-                    sprites_arr = json.loads(response.read().decode("utf-8"))
-            except Exception as e:
-                resultmessage = "Error getting list of alttpr sprites. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
-                successful = False
-                task.queue_event(finished)
-                return
-
-            try:
-                task.update_status("Determining needed sprites")
-                current_sprites = [os.path.basename(file) for file in glob(self.alttpr_sprite_dir + '/*')]
-                alttpr_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path)) for sprite in sprites_arr]
-                needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in alttpr_sprites if filename not in current_sprites]
-
-                alttpr_filenames = [filename for (_, filename) in alttpr_sprites]
-                obsolete_sprites = [sprite for sprite in current_sprites if sprite not in alttpr_filenames]
-            except Exception as e:
-                resultmessage = "Error Determining which sprites to update. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
-                successful = False
-                task.queue_event(finished)
-                return
-
-
-            def dl(sprite_url, filename):
-                target = os.path.join(self.alttpr_sprite_dir, filename)
-                with urlopen(sprite_url) as response, open(target, 'wb') as out:
-                    shutil.copyfileobj(response, out)
-
-            def rem(sprite):
-                os.remove(os.path.join(self.alttpr_sprite_dir, sprite))
-
-
-            with ThreadPoolExecutor() as pool:
-                dl_tasks = []
-                rem_tasks = []
-
-                for (sprite_url, filename) in needed_sprites:
-                    dl_tasks.append(pool.submit(dl, sprite_url, filename))
-
-                for sprite in obsolete_sprites:
-                    rem_tasks.append(pool.submit(rem, sprite))
-
-                deleted = 0
-                updated = 0
-
-                for dl_task in as_completed(dl_tasks):
-                    updated += 1
-                    task.update_status("Downloading needed sprite %g/%g" % (updated, len(needed_sprites)))
-                    try:
-                        dl_task.result()
-                    except Exception as e:
-                        logging.exception(e)
-                        resultmessage = "Error downloading sprite. Not all sprites updated.\n\n%s: %s" % (
-                        type(e).__name__, e)
-                        successful = False
-
-                for rem_task in as_completed(rem_tasks):
-                    deleted += 1
-                    task.update_status("Removing obsolete sprite %g/%g" % (deleted, len(obsolete_sprites)))
-                    try:
-                        rem_task.result()
-                    except Exception as e:
-                        logging.exception(e)
-                        resultmessage = "Error removing obsolete sprite. Not all sprites updated.\n\n%s: %s" % (
-                        type(e).__name__, e)
-                        successful = False
-
+        def on_finish(successful, resultmessage):
             if successful:
-                resultmessage = "alttpr sprites updated successfully"
+                messagebox.showinfo("Sprite Updater", resultmessage)
+            else:
+                logging.error(resultmessage)
+                messagebox.showerror("Sprite Updater", resultmessage)
+            SpriteSelector(self.parent, self.callback, self.adjuster)
 
-            task.queue_event(finished)
-
-        BackgroundTaskProgress(self.parent, work, "Updating Sprites")
+        BackgroundTaskProgress(self.parent, update_sprites, "Updating Sprites", on_finish)
 
 
     def browse_for_sprite(self):
@@ -1638,33 +1678,103 @@ class SpriteSelector(object):
         self.callback(spritename)
         self.window.destroy()
 
-
     def deploy_icons(self):
         if not os.path.exists(self.custom_sprite_dir):
             os.makedirs(self.custom_sprite_dir)
-        if not os.path.exists(self.alttpr_sprite_dir):
-            shutil.copytree(self.local_alttpr_sprite_dir, self.alttpr_sprite_dir)
 
     @property
     def alttpr_sprite_dir(self):
-        if is_bundled():
-            return output_path("sprites", "alttpr")
-        return self.local_alttpr_sprite_dir
-
-    @property
-    def local_alttpr_sprite_dir(self):
         return local_path("data", "sprites", "alttpr")
 
     @property
     def custom_sprite_dir(self):
-        if is_bundled():
-            return output_path("sprites", "custom")
-        return self.local_custom_sprite_dir
-
-    @property
-    def local_custom_sprite_dir(self):
         return local_path("data", "sprites", "custom")
 
+
+def update_sprites(task, on_finish=None):
+    resultmessage = ""
+    successful = True
+    sprite_dir = local_path("data", "sprites", "alttpr")
+    os.makedirs(sprite_dir, exist_ok=True)
+
+    def finished():
+        task.close_window()
+        if on_finish:
+            on_finish(successful, resultmessage)
+
+    try:
+        task.update_status("Downloading alttpr sprites list")
+        with urlopen('https://alttpr.com/sprites') as response:
+            sprites_arr = json.loads(response.read().decode("utf-8"))
+    except Exception as e:
+        resultmessage = "Error getting list of alttpr sprites. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
+        successful = False
+        task.queue_event(finished)
+        return
+
+    try:
+        task.update_status("Determining needed sprites")
+        current_sprites = [os.path.basename(file) for file in glob(sprite_dir + '/*')]
+        alttpr_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path)) for sprite in sprites_arr]
+        needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in alttpr_sprites if filename not in current_sprites]
+
+        alttpr_filenames = [filename for (_, filename) in alttpr_sprites]
+        obsolete_sprites = [sprite for sprite in current_sprites if sprite not in alttpr_filenames]
+    except Exception as e:
+        resultmessage = "Error Determining which sprites to update. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
+        successful = False
+        task.queue_event(finished)
+        return
+
+
+    def dl(sprite_url, filename):
+        target = os.path.join(sprite_dir, filename)
+        with urlopen(sprite_url) as response, open(target, 'wb') as out:
+            shutil.copyfileobj(response, out)
+
+    def rem(sprite):
+        os.remove(os.path.join(sprite_dir, sprite))
+
+
+    with ThreadPoolExecutor() as pool:
+        dl_tasks = []
+        rem_tasks = []
+
+        for (sprite_url, filename) in needed_sprites:
+            dl_tasks.append(pool.submit(dl, sprite_url, filename))
+
+        for sprite in obsolete_sprites:
+            rem_tasks.append(pool.submit(rem, sprite))
+
+        deleted = 0
+        updated = 0
+
+        for dl_task in as_completed(dl_tasks):
+            updated += 1
+            task.update_status("Downloading needed sprite %g/%g" % (updated, len(needed_sprites)))
+            try:
+                dl_task.result()
+            except Exception as e:
+                logging.exception(e)
+                resultmessage = "Error downloading sprite. Not all sprites updated.\n\n%s: %s" % (
+                type(e).__name__, e)
+                successful = False
+
+        for rem_task in as_completed(rem_tasks):
+            deleted += 1
+            task.update_status("Removing obsolete sprite %g/%g" % (deleted, len(obsolete_sprites)))
+            try:
+                rem_task.result()
+            except Exception as e:
+                logging.exception(e)
+                resultmessage = "Error removing obsolete sprite. Not all sprites updated.\n\n%s: %s" % (
+                type(e).__name__, e)
+                successful = False
+
+    if successful:
+        resultmessage = "alttpr sprites updated successfully"
+
+    task.queue_event(finished)
 
 def get_image_for_sprite(sprite, gif_only: bool = False):
     if not sprite.valid:
@@ -1770,5 +1880,16 @@ def get_image_for_sprite(sprite, gif_only: bool = False):
     return image.zoom(2)
 
 if __name__ == '__main__':
-    logging.basicConfig(format='%(message)s', level=logging.INFO)
-    guiMain()
+    import sys
+    if "update_sprites" in sys.argv:
+        import threading
+        done = threading.Event()
+        top = Tk()
+        top.withdraw()
+        BackgroundTaskProgress(top, update_sprites, "Updating Sprites", lambda succesful, resultmessage: done.set())
+        while not done.isSet():
+            top.update()
+        print("Done updating sprites")
+    else:
+        logging.basicConfig(format='%(message)s', level=logging.INFO)
+        guiMain()

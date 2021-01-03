@@ -11,7 +11,7 @@ import pickle
 
 from .models import *
 from WebHostLib import app
-from .check import get_yaml_data, roll_yamls
+from .check import get_yaml_data, roll_options
 
 
 @app.route('/generate', methods=['GET', 'POST'])
@@ -27,9 +27,9 @@ def generate(race=False):
             if type(options) == str:
                 flash(options)
             else:
-                results, gen_options = roll_yamls(options)
+                results, gen_options = roll_options(options)
                 if any(type(result) == str for result in results.values()):
-                    return render_template("checkresult.html", results=results)
+                    return render_template("checkResult.html", results=results)
                 elif len(gen_options) > app.config["MAX_ROLL"]:
                     flash(f"Sorry, generating of multiworlds is limited to {app.config['MAX_ROLL']} players for now. "
                           f"If you have a larger group, please generate it yourself and upload it.")
@@ -43,9 +43,15 @@ def generate(race=False):
 
                     return redirect(url_for("wait_seed", seed=gen.id))
                 else:
-                    seed_id = gen_game({name: vars(options) for name, options in gen_options.items()},
-                                       race=race, owner=session["_id"].int)
-                    return redirect(url_for("view_seed", seed=seed_id))
+                    try:
+                        seed_id = gen_game({name: vars(options) for name, options in gen_options.items()},
+                                           race=race, owner=session["_id"].int)
+                    except BaseException as e:
+                        from .autolauncher import handle_generation_failure
+                        handle_generation_failure(e)
+                        return render_template("seedError.html", seed_error=(e.__class__.__name__ + ": "+ str(e)))
+
+                    return redirect(url_for("viewSeed", seed=seed_id))
 
     return render_template("generate.html", race=race)
 
@@ -90,13 +96,14 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
         del (erargs.progression_balancing)
         ERmain(erargs, seed)
 
-        return upload_to_db(target.name, owner, sid)
-    except BaseException:
+        return upload_to_db(target.name, owner, sid, race)
+    except BaseException as e:
         if sid:
             with db_session:
                 gen = Generation.get(id=sid)
                 if gen is not None:
                     gen.state = STATE_ERROR
+                    gen.meta = (e.__class__.__name__ + ": "+ str(e)).encode()
         raise
 
 
@@ -105,19 +112,20 @@ def wait_seed(seed: UUID):
     seed_id = seed
     seed = Seed.get(id=seed_id)
     if seed:
-        return redirect(url_for("view_seed", seed=seed_id))
+        return redirect(url_for("viewSeed", seed=seed_id))
     generation = Generation.get(id=seed_id)
 
     if not generation:
         return "Generation not found."
     elif generation.state == STATE_ERROR:
-        return "Generation failed, please retry."
-    return render_template("wait_seed.html", seed_id=seed_id)
+        return render_template("seedError.html", seed_error=generation.meta.decode())
+    return render_template("waitSeed.html", seed_id=seed_id)
 
 
-def upload_to_db(folder, owner, sid):
+def upload_to_db(folder, owner, sid, race:bool):
     patches = set()
     spoiler = ""
+
     multidata = None
     for file in os.listdir(folder):
         file = os.path.join(folder, file)
@@ -129,7 +137,7 @@ def upload_to_db(folder, owner, sid):
                               player_id=player_id, player_name = player_name))
         elif file.endswith(".txt"):
             spoiler = open(file, "rt", encoding="utf-8-sig").read()
-        elif file.endswith(".multidata"):
+        elif file.endswith(".archipelago"):
             multidata = open(file, "rb").read()
     if multidata:
         with db_session:

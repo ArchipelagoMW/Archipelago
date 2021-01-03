@@ -67,6 +67,12 @@ give it one of the following classes: tooltip-left, tooltip-right, tooltip-top, 
 	line-height: 1.2;
 }
 
+[data-tooltip]:before, [data-tooltip]:after{
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
 [data-tooltip]:before, [data-tooltip]:after, .tooltip:before, .tooltip:after,
 .tooltip-top:before, .tooltip-top:after {
 	bottom: 100%;

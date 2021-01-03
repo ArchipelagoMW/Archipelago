@@ -1,0 +1,17 @@
+#island-footer{
+    background: url('../static/backgrounds/footer/footer-0001.png') repeat-x bottom;
+    background-size: auto 90px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: calc(100% - 0.5rem);
+    padding-left: 0.5rem;
+    padding-top: 80px;
+    color: #dfedc6
+}
+
+#island-footer #links a{
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+    color: #dfedc6;
+}

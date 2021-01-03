@@ -5,7 +5,7 @@ from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict, Counter, deque
-from typing import Union, Optional, List, Dict
+from typing import Union, Optional, List, Dict, NamedTuple
 import secrets
 import random
 
@@ -20,12 +20,15 @@ class World():
 
 class MultiWorld():
     debug_types = False
-    player_names: list
+    player_names: Dict[int, List[str]]
     _region_cache: dict
     difficulty_requirements: dict
     required_medallions: dict
     dark_room_logic: Dict[int, str]
     restrict_dungeon_item_on_boss: Dict[int, bool]
+    plando_texts: List[Dict[str, str]]
+    plando_items: List[PlandoItem]
+    plando_connections: List[PlandoConnection]
 
     def __init__(self, players: int, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer,
                  progressive,
@@ -115,10 +118,15 @@ class MultiWorld():
             set_player_attr('treasure_hunt_icon', 'Triforce Piece')
             set_player_attr('treasure_hunt_count', 0)
             set_player_attr('clock_mode', False)
+            set_player_attr('countdown_start_time', 10)
+            set_player_attr('red_clock_time', -2)
+            set_player_attr('blue_clock_time', 2)
+            set_player_attr('green_clock_time', 4)
             set_player_attr('can_take_damage', True)
             set_player_attr('glitch_boots', True)
             set_player_attr('progression_balancing', True)
             set_player_attr('local_items', set())
+            set_player_attr('non_local_items', set())
             set_player_attr('triforce_pieces_available', 30)
             set_player_attr('triforce_pieces_required', 20)
             set_player_attr('shop_shuffle', 'off')
@@ -126,6 +134,9 @@ class MultiWorld():
             set_player_attr('sprite_pool', [])
             set_player_attr('dark_room_logic', "lamp")
             set_player_attr('restrict_dungeon_item_on_boss', False)
+            set_player_attr('plando_items', [])
+            set_player_attr('plando_texts', {})
+            set_player_attr('plando_connections', [])
 
         self.worlds = []
         #for i in range(players):
@@ -578,7 +589,7 @@ class CollectionState(object):
 
     def can_retrieve_tablet(self, player:int) -> bool:
         return self.has('Book of Mudora', player) and (self.has_beam_sword(player) or
-               ((self.world.swords[player] == "swordless" or self.world.difficulty_adjustments[player] == "easy") and
+               (self.world.swords[player] == "swordless" and
                 self.has("Hammer", player)))
 
     def has_sword(self, player: int) -> bool:
@@ -612,7 +623,7 @@ class CollectionState(object):
     def can_melt_things(self, player: int) -> bool:
         return self.has('Fire Rod', player) or \
                (self.has('Bombos', player) and
-                (self.world.difficulty_adjustments[player] == "easy" or self.world.swords[player] == "swordless" or
+                (self.world.swords[player] == "swordless" or
                  self.has_sword(player)))
 
     def can_avoid_lasers(self, player: int) -> bool:
@@ -986,6 +997,12 @@ class Item(object):
         self.location = None
         self.world = None
         self.player = player
+
+    def __eq__(self, other):
+        return self.name == other.name and self.player == other.player
+
+    def __hash__(self):
+        return hash((self.name, self.player))
 
     @property
     def crystal(self) -> bool:
@@ -1402,3 +1419,16 @@ class Spoiler(object):
                 path_listings.append("{}\n        {}".format(location, "\n   =>   ".join(path_lines)))
 
             outfile.write('\n'.join(path_listings))
+
+
+class PlandoItem(NamedTuple):
+    item: str
+    location: str
+    world: Union[bool, str] = False  # False -> own world, True -> not own world
+    from_pool: bool = True  # if item should be removed from item pool
+
+
+class PlandoConnection(NamedTuple):
+    entrance: str
+    exit: str
+    direction: str  # entrance, exit or both

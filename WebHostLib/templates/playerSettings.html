@@ -1,0 +1,45 @@
+{% extends 'pageWrapper.html' %}
+
+{% block head %}
+    <title>Player Settings</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/playerSettings.css") }}" />
+    <script type="application/ecmascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/js-yaml.min.js") }}"></script>
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/playerSettings.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+    {% include 'header/grassHeader.html' %}
+    <div id="player-settings">
+        <h1>Start Game</h1>
+        <p>Choose the options you would like to play with! You may generate a single-player game from this page,
+            or download a settings file you can use to participate in a MultiWorld. If you would like to make
+            your settings extra random, check out the advanced <a href="/weighted-settings">weighted settings</a>
+            page. There, you will find examples of all available sprites as well.</p>
+
+        <p>A list of all games you have generated can be found <a href="/user-content">here</a>.</p>
+
+        <p><label for="player-name">Please enter your player name. This will appear in-game as you send and receive
+            items, if you are playing in a MultiWorld.</label><br />
+            <input id="player-name" placeholder="Player Name" data-key="name" maxlength="16" />
+        </p>
+
+        <h2>Game Options</h2>
+        <div id="game-options">
+            <div id="game-options-left" class="left"></div>
+            <div id="game-options-right" class="right"></div>
+        </div>
+
+        <h2>ROM Options</h2>
+        <div id="rom-options">
+            <div id="rom-options-left" class="left"></div>
+            <div id="rom-options-right" class="right"></div>
+        </div>
+
+        <div id="player-settings-button-row">
+            <button id="export-settings">Export Settings</button>
+            <button id="generate-game">Generate Game</button>
+            <button id="generate-race">Generate Race</button>
+        </div>
+    </div>
+{% endblock %}

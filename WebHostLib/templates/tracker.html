@@ -6,7 +6,9 @@
     <script type="application/ecmascript" src="{{ static_autoversion("assets/jquery.scrollsync.js") }}"></script>
     <script type="application/ecmascript" src="{{ static_autoversion("assets/tracker.js") }}"></script>
 {% endblock %}
+
 {% block body %}
+    {% include 'header/dirtHeader.html' %}
     <div id="tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
         <div id="tracker-header-bar">
             <input placeholder="Search" id="search"/>
@@ -18,7 +20,7 @@
                     Multistream
                 </a>
             </span>
-            <span>This tracker will automatically update itself periodically.</span>
+            <span class="info">This tracker will automatically update itself periodically.</span>
         </div>
         <div id="tables-container">
             {% for team, players in inventory.items() %}
@@ -122,7 +124,7 @@
                                     <td>{{ player_names[(team, loop.index)]|e }}</td>
                                     {%- for area in ordered_areas -%}
                                         {%- set checks_done = checks[area] -%}
-                                        {%- set checks_total = checks_in_area[area] -%}
+                                        {%- set checks_total = checks_in_area[player][area] -%}
                                         {%- if checks_done == checks_total -%}
                                             <td class="item-acquired center-column">
                                                 {{ checks_done }}/{{ checks_total }}</td>

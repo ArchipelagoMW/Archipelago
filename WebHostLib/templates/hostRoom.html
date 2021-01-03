@@ -1,0 +1,57 @@
+{% extends 'pageWrapper.html' %}
+{% import "macros.html" as macros %}
+{% block head %}
+    <title>Multiworld {{ room.id|suuid }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/hostRoom.css") }}"/>
+{% endblock %}
+
+{% block body %}
+    {% include 'header/grassHeader.html' %}
+    <div id="host-room">
+        {% if room.owner == session["_id"] %}
+            Room created from <a href="{{ url_for("viewSeed", seed=room.seed.id) }}">Seed #{{ room.seed.id|suuid }}</a>
+            <br>
+        {% endif %}
+        {% if room.tracker %}
+            This room has a <a href="{{ url_for("getTracker", tracker=room.tracker) }}">Multiworld Tracker</a> enabled.
+            <br>
+        {% endif %}
+        This room will be closed after {{ room.timeout//60//60 }} hours of inactivity. Should you wish to continue
+        later,
+        you can simply refresh this page and the server will be started again.<br>
+        {% if room.last_port %}
+            You can connect to this room by using '/connect berserkermulti.world:{{ room.last_port }}'
+            in the <a href="https://github.com/Berserker66/MultiWorld-Utilities/releases">client</a>.<br>{% endif %}
+        {{ macros.list_patches_room(room.seed.patches, room) }}
+        {% if room.owner == session["_id"] %}
+            <form method=post>
+                <div class="form-group">
+                    <label for="cmd"></label>
+                    <input class="form-control" type="text" id="cmd" name="cmd"
+                           placeholder="Server Command. /help to list them, list gets appended to log.">
+                </div>
+            </form>
+
+            Log:
+        <div id="logger"></div>
+        <script>
+            let xmlhttp = new XMLHttpRequest();
+            let url = '{{ url_for('display_log', room = room.id) }}';
+
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    document.getElementById("logger").innerText = this.responseText;
+                }
+            };
+
+            function request_new() {
+                xmlhttp.open("GET", url, true);
+                xmlhttp.send();
+            }
+
+            window.setTimeout(request_new, 1000);
+            window.setInterval(request_new, 10000);
+        </script>
+        {% endif %}
+    </div>
+{% endblock %}

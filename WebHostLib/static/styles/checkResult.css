@@ -1,0 +1,18 @@
+#check-result-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#check-result{
+    width: 540px;
+}
+
+#check-result table{
+    text-align: left;
+}
+
+#check-result table th, #check-result table td{
+    padding-right: 20px;
+}

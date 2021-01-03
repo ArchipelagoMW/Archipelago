@@ -1,0 +1,86 @@
+{% extends 'pageWrapper.html' %}
+{% import "macros.html" as macros %}
+
+{% block head %}
+    <title>View Seed {{ seed.id|suuid }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/viewSeed.css") }}"/>
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/viewSeed.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+    {% include 'header/oceanHeader.html' %}
+    <div id="view-seed-wrapper">
+        <div id="view-seed" class="grass-island">
+            <h1>Seed Info</h1>
+            {% if not seed.multidata and not seed.spoiler %}
+                <p>Single Player Race Rom: No spoiler or multidata exists, parts of the rom are encrypted and rooms
+                    cannot be created.</p>
+            {% endif %}
+            <table>
+                <tbody>
+                <tr>
+                    <td>Seed:&nbsp;</td>
+                    <td>{{ seed.id|suuid }}</td>
+                </tr>
+                <tr>
+                    <td>Created:&nbsp;</td>
+                    <td id="creation-time" data-creation-time="{{ seed.creation_time }}"></td>
+                </tr>
+                {% if seed.spoiler %}
+                    <tr>
+                        <td>Spoiler:&nbsp;</td>
+                        <td><a href="{{ url_for("download_spoiler", seed_id=seed.id) }}">Download</a></td>
+                    </tr>
+                {% endif %}
+                {% if seed.multidata %}
+                <tr>
+                    <td>Players:&nbsp;</td>
+                    <td>
+                        <ul>
+                            {% for team in seed.multidata["names"] %}
+                                <li>Team #{{ loop.index }} - {{ team | length }}
+                                    <ul>
+                                        {% for player in team %}
+                                            <li>
+                                                <a href="{{ url_for("download_raw_patch", seed_id=seed.id, player_id=loop.index) }}">{{ player }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Rooms:&nbsp;</td>
+                    <td>
+                            {% call macros.list_rooms(rooms) %}
+                                <li>
+                                    <a href="{{ url_for("new_room", seed=seed.id) }}">Create New Room</a>
+                                </li>
+                            {% endcall %}
+                        </td>
+                    </tr>
+                {% else  %}
+                <tr>
+                    <td>Patches:&nbsp;</td>
+                    <td>
+                        <ul>
+                            {% for patch in seed.patches %}
+
+                            <li>
+                                <a href="{{ url_for("download_raw_patch", seed_id=seed.id, player_id=patch.player) }}">Player {{ patch.player }}</a>
+                            </li>
+
+
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% include 'islandFooter.html' %}
+{% endblock %}

@@ -1,12 +1,18 @@
 from __future__ import annotations
+
 import typing
 
 
 def tuplize_version(version: str) -> typing.Tuple[int, ...]:
-    return tuple(int(piece, 10) for piece in version.split("."))
+    return Version(*(int(piece, 10) for piece in version.split(".")))
 
 
-__version__ = "1.0.0"
+class Version(typing.NamedTuple):
+    major: int
+    minor: int
+    micro: int
+
+__version__ = "0.1.0"
 _version_tuple = tuplize_version(__version__)
 
 import os
@@ -37,11 +43,11 @@ def int32_as_bytes(value):
 
 
 def pc_to_snes(value):
-    return ((value<<1) & 0x7F0000)|(value & 0x7FFF)|0x8000
+    return ((value << 1) & 0x7F0000) | (value & 0x7FFF) | 0x8000
 
 
 def snes_to_pc(value):
-    return ((value & 0x7F0000)>>1)|(value & 0x7FFF)
+    return ((value & 0x7F0000) >> 1) | (value & 0x7FFF)
 
 
 def parse_player_names(names, players, teams):
@@ -82,6 +88,7 @@ def local_path(*path):
 
     return os.path.join(local_path.cached_path, *path)
 
+
 local_path.cached_path = None
 
 
@@ -93,7 +100,9 @@ def output_path(*path):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     return path
 
+
 output_path.cached_path = None
+
 
 def open_file(filename):
     if sys.platform == 'win32':
@@ -102,9 +111,10 @@ def open_file(filename):
         open_command = 'open' if sys.platform == 'darwin' else 'xdg-open'
         subprocess.call([open_command, filename])
 
+
 def close_console():
     if sys.platform == 'win32':
-        #windows
+        # windows
         import ctypes.wintypes
         try:
             ctypes.windll.kernel32.FreeConsole()
@@ -138,6 +148,7 @@ class Hint(typing.NamedTuple):
     def __hash__(self):
         return hash((self.receiving_player, self.finding_player, self.location, self.item, self.entrance))
 
+
 def get_public_ipv4() -> str:
     import socket
     import urllib.request
@@ -153,6 +164,7 @@ def get_public_ipv4() -> str:
             pass  # we could be offline, in a local game, so no point in erroring out
     return ip
 
+
 def get_public_ipv6() -> str:
     import socket
     import urllib.request
@@ -165,6 +177,91 @@ def get_public_ipv6() -> str:
         pass  # we could be offline, in a local game, or ipv6 may not be available
     return ip
 
+
+def get_default_options() -> dict:
+    if not hasattr(get_default_options, "options"):
+        # Refer to host.yaml for comments as to what all these options mean.
+        options = {
+            "general_options": {
+                "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
+                "qusb2snes": "QUsb2Snes\\QUsb2Snes.exe",
+                "rom_start": True,
+                "output_path": "output",
+            },
+            "server_options": {
+                "host": None,
+                "port": 38281,
+                "password": None,
+                "multidata": None,
+                "savefile": None,
+                "disable_save": False,
+                "loglevel": "info",
+                "server_password": None,
+                "disable_item_cheat": False,
+                "location_check_points": 1,
+                "hint_cost": 1000,
+                "forfeit_mode": "goal",
+                "remaining_mode": "goal",
+                "auto_shutdown": 0,
+                "compatibility": 2,
+            },
+            "multi_mystery_options": {
+                "teams": 1,
+                "enemizer_path": "EnemizerCLI/EnemizerCLI.Core.exe",
+                "player_files_path": "Players",
+                "players": 0,
+                "weights_file_path": "weights.yaml",
+                "meta_file_path": "meta.yaml",
+                "player_name": "",
+                "create_spoiler": 1,
+                "zip_roms": 0,
+                "zip_diffs": 2,
+                "zip_spoiler": 0,
+                "zip_multidata": 1,
+                "zip_format": 1,
+                "race": 0,
+                "cpu_threads": 0,
+                "max_attempts": 0,
+                "take_first_working": False,
+                "keep_all_seeds": False,
+                "log_output_path": "Output Logs",
+                "log_level": None,
+                "plando_options": "bosses",
+            }
+        }
+
+        get_default_options.options = options
+    return get_default_options.options
+
+
+blacklisted_options = {"multi_mystery_options.cpu_threads",
+                       "multi_mystery_options.max_attempts",
+                       "multi_mystery_options.take_first_working",
+                       "multi_mystery_options.keep_all_seeds",
+                       "multi_mystery_options.log_output_path",
+                       "multi_mystery_options.log_level"}
+
+
+def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
+    import logging
+    for key, value in src.items():
+        new_keys = keys.copy()
+        new_keys.append(key)
+        option_name = '.'.join(new_keys)
+        if key not in dest:
+            dest[key] = value
+            if filename.endswith("options.yaml") and option_name not in blacklisted_options:
+                logging.info(f"Warning: {filename} is missing {option_name}")
+        elif isinstance(value, dict):
+            if not isinstance(dest.get(key, None), dict):
+                if filename.endswith("options.yaml") and option_name not in blacklisted_options:
+                    logging.info(f"Warning: {filename} has {option_name}, but it is not a dictionary. overwriting.")
+                dest[key] = value
+            else:
+                dest[key] = update_options(value, dest[key], filename, new_keys)
+    return dest
+
+
 def get_options() -> dict:
     if not hasattr(get_options, "options"):
         locations = ("options.yaml", "host.yaml",
@@ -173,7 +270,9 @@ def get_options() -> dict:
         for location in locations:
             if os.path.exists(location):
                 with open(location) as f:
-                    get_options.options = parse_yaml(f.read())
+                    options = parse_yaml(f.read())
+
+                get_options.options = update_options(get_default_options(), options, location, list())
                 break
         else:
             raise FileNotFoundError(f"Could not find {locations[1]} to load options.")
@@ -222,28 +321,32 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
     if hasattr(get_adjuster_settings, "adjuster_settings"):
         adjuster_settings = getattr(get_adjuster_settings, "adjuster_settings")
     else:
-        adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings", {})
+        adjuster_settings = persistent_load().get("adjuster", {}).get("last_settings_3", {})
+
     if adjuster_settings:
         import pprint
         import Patch
         adjuster_settings.rom = romfile
         adjuster_settings.baserom = Patch.get_base_rom_path()
         whitelist = {"disablemusic", "fastmenu", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
-                     "uw_palettes"}
+                     "uw_palettes", "sprite"}
         printed_options = {name: value for name, value in vars(adjuster_settings).items() if name in whitelist}
-        sprite = getattr(adjuster_settings, "sprite", None)
-        if sprite:
-            printed_options["sprite"] = adjuster_settings.sprite.name
+
         if hasattr(get_adjuster_settings, "adjust_wanted"):
             adjust_wanted = getattr(get_adjuster_settings, "adjust_wanted")
+        elif persistent_load().get("adjuster", {}).get("never_adjust", False):  # never adjust, per user request
+            return romfile, False
         else:
             adjust_wanted = input(f"Last used adjuster settings were found. Would you like to apply these? \n"
                                   f"{pprint.pformat(printed_options)}\n"
-                                  f"Enter yes or no: ")
+                                  f"Enter yes, no or never: ")
         if adjust_wanted and adjust_wanted.startswith("y"):
             adjusted = True
             import AdjusterMain
             _, romfile = AdjusterMain.adjust(adjuster_settings)
+        elif adjust_wanted and "never" in adjust_wanted:
+            persistent_store("adjuster", "never_adjust", True)
+            return romfile, False
         else:
             adjusted = False
             import logging
@@ -253,7 +356,6 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
         get_adjuster_settings.adjust_wanted = adjust_wanted
         return romfile, adjusted
     return romfile, False
-
 
 
 class ReceivedItem(typing.NamedTuple):

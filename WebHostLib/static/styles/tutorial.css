@@ -1,36 +1,62 @@
+html{
+    background-image: url('../static/backgrounds/grass/grass-0007-large.png');
+    background-repeat: repeat;
+    background-size: 650px 650px;
+}
+
 #tutorial-wrapper{
+    display: flex;
+    flex-direction: column;
+    max-width: 70rem;
     margin-left: auto;
     margin-right: auto;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 1rem 1rem 3rem;
+    color: #eeffeb;
+}
+
+#tutorial-wrapper a{
+    color: #ffef00;
 }
 
 #tutorial-wrapper h1{
     font-size: 2.5rem;
     font-weight: normal;
-    border-bottom: 1px solid #9f916a;
+    border-bottom: 1px solid #ffffff;
     cursor: pointer;
     width: 100%;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    text-shadow: 1px 1px 4px #000000;
 }
 
 #tutorial-wrapper h2{
     font-size: 2rem;
     font-weight: normal;
-    border-bottom: 1px solid #9f916a;
+    border-bottom: 1px solid #ffffff;
     cursor: pointer;
     width: 100%;
+    margin-bottom: 0.5rem;
+    color: #ffe993;
+    text-transform: lowercase;
+    text-shadow: 1px 1px 2px #000000;
 }
 
 #tutorial-wrapper h3{
-    font-size: 1.75rem;
+    font-size: 1.70rem;
     font-weight: normal;
     text-align: left;
     cursor: pointer;
     width: 100%;
+    margin-bottom: 0.5rem;
 }
 
 #tutorial-wrapper h4{
     font-size: 1.5rem;
     font-weight: normal;
     cursor: pointer;
+    margin-bottom: 0.5rem;
 }
 
 #tutorial-wrapper h5{
@@ -46,6 +72,11 @@
     color: #434343;
 }
 
+#tutorial-wrapper h3, #tutorial-wrapper h4, #tutorial-wrapper h5,#tutorial-wrapper h6{
+    color: #ffffff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
 #tutorial-wrapper ul{
 
 }
@@ -58,22 +89,20 @@
 
 }
 
-#tutorial-wrapper a{
-
-}
-
 #tutorial-wrapper pre{
     padding: 0.5rem 0.25rem;
-    background-color: #dce2bd;
+    background-color: #ffeeab;
     border: 1px solid #9f916a;
     border-radius: 6px;
+    color: #000000;
 }
 
 #tutorial-wrapper code{
-    background-color: #dce2bd;
+    background-color: #ffeeab;
     border-radius: 4px;
     padding-left: 0.25rem;
     padding-right: 0.25rem;
+    color: #000000;
 }
 
 #tutorial-wrapper #tutorial-video-container{

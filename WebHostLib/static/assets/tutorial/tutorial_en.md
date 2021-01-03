@@ -50,30 +50,33 @@ each player to enjoy an experience customized for their taste, and different pla
 can all have different options.
 
 ### Where do I get a YAML file?
-The [Player Settings](/player-settings) page on the website allows you to configure your personal settings
-and download a `yaml` file. You may configure up to three presets on this page.
+The [Generate Game](/player-settings) page on the website allows you to configure your personal settings and
+export a YAML file from them.
 
-### Your YAML file is weighted
-The Player Settings page has many options which are primarily represented with sliders. This allows you to
-choose how likely certain options are to occur relative to other options within a category.
+### Advanced YAML configuration
+A more advanced version of the YAML file can be created using the [Weighted Settings](/weighted-settings) page,
+which allows you to configure up to three presets. The Weighted Settings page has many options which are
+primarily represented with sliders. This allows you to choose how likely certain options are to occur relative
+to other options within a category.
 
 For example, imagine the generator creates a bucket labeled "Map Shuffle", and places folded pieces of paper
-into the bucket for each sub-option. Also imagine your chosen value for "On" is 20 and your value for "Off" is 40.
+into the bucket for each sub-option. Also imagine your chosen value for "On" is 20, and your value for "Off" is 40.
 
 In this example, sixty pieces of paper are put into the bucket. Twenty for "On" and forty for "Off". When the
 generator is deciding whether or not to turn on map shuffle for your game, it reaches into this bucket and pulls
 out a piece of paper at random. In this example, you are much more likely to have map shuffle turned off.
 
-If you never want an option to be chosen, simply set its value to zero.
+If you never want an option to be chosen, simply set its value to zero. Remember that each setting must have at
+lease one option set to a number greater than zero.
 
 ### Verifying your YAML file
 If you would like to validate your YAML file to make sure it works, you may do so on the
 [YAML Validator](/mysterycheck) page.
 
 ## Generating a Single-Player Game
-1. Navigate to [the Generator Page](/generate) and upload your YAML file.
+1. Navigate to the [Generate Game](/player-settings), configure your options, and click the "Generate Game" button.
 2. You will be presented with a "Seed Info" page, where you can download your patch file.
-3. Double-click on your patch file and the emulator should launch with your game automatically. As the
+3. Double-click on your patch file, and the emulator should launch with your game automatically. As the
    Client is unnecessary for single player games, you may close it and the WebUI.
 
 ## Joining a MultiWorld Game
@@ -122,10 +125,6 @@ done so already, please do this now. SD2SNES and FXPak Pro users may download th
 [here](https://github.com/RedGuyyyy/sd2snes/releases). Other hardware may find helpful information
 [on this page](http://usb2snes.com/#supported-platforms).
 
-**To connect with hardware you must use an old version of QUsb2Snes
-([v0.7.16](https://github.com/Skarsnik/QUsb2snes/releases/tag/v0.7.16)).**  
-Versions of QUsb2Snes later than this break compatibility with hardware for multiworld.
-
 1. Close your emulator, which may have auto-launched.
 2. Close QUsb2Snes, which launched automatically with the client.
 3. Launch the appropriate version of QUsb2Snes (v0.7.16).
@@ -154,11 +153,30 @@ The recommended way to host a game is to use the hosting service provided on
 3. Upload that zip file to the website linked above.
 4. Wait a moment while the seed is generated.
 5. When the seed is generated, you will be redirected to a "Seed Info" page.
-6. Click "Create New Room". This will take you to the server page. Provide the link to this page to your players
-   so they may download their patch files from here.  
+6. Click "Create New Room". This will take you to the server page. Provide the link to this page to your players,
+   so they may download their patch files from there.  
    **Note:** The patch files provided on this page will allow players to automatically connect to the server,
    while the patch files on the "Seed Info" page will not.
 7. Note that a link to a MultiWorld Tracker is at the top of the room page. You should also provide this link
-   to your players so they can watch the progress of the game. Any observers may also be given the link to
+   to your players, so they can watch the progress of the game. Any observers may also be given the link to
    this page.
 8. Once all players have joined, you may begin playing.
+
+## Auto-Tracking
+If you would like to use auto-tracking for your game, several pieces of software provide this functionality.  
+The recommended software for auto-tracking is currently
+[OpenTracker](https://github.com/trippsc2/OpenTracker/releases).
+
+### Installation
+1. Download the appropriate installation file for your computer (Windows users want the `.msi` file).
+2. During the installation process, you may be asked to install the Microsoft Visual Studio Build Tools. A link
+   to this software is provided during the installation procedure, and it must be installed manually.
+   
+### Enable auto-tracking
+1. With OpenTracker launched, click the Tracking menu at the top of the window, then choose **AutoTracker...**
+2. Click the **Get Devices** button
+3. Select your SNES device from the drop-down list
+4. If you would like to track small keys and dungeon items, check the box labeled **Race Illegal Tracking**
+5. Click the **Start Autotracking** button
+6. Close the AutoTracker window, as it is no longer necessary
+

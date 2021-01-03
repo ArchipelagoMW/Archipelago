@@ -4,6 +4,7 @@ So unless you're Berserker you need to include license information."""
 import os
 import uuid
 import base64
+import socket
 
 from pony.flask import Pony
 from flask import Flask, request, redirect, url_for, render_template, Response, session, abort, send_from_directory
@@ -30,8 +31,8 @@ app.config["DEBUG"] = False
 app.config["PORT"] = 80
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024  # 4 megabyte limit
-# if you want persistent sessions on your server, make sure you make this a constant in your config.yaml
-app.config["SECRET_KEY"] = os.urandom(32)
+# if you want to deploy, make sure you have a non-guessable secret key
+app.config["SECRET_KEY"] = bytes(socket.gethostname(), encoding="utf-8")
 # at what amount of worlds should scheduling be used, instead of rolling in the webthread
 app.config["JOB_THRESHOLD"] = 2
 app.config['SESSION_PERMANENT'] = True
@@ -47,6 +48,8 @@ app.config["PONY"] = {
 }
 app.config["MAX_ROLL"] = 20
 app.config["CACHE_TYPE"] = "simple"
+app.config["JSON_AS_ASCII"] = False
+
 app.autoversion = True
 app.config["HOSTNAME"] = "berserkermulti.world"
 
@@ -85,16 +88,21 @@ def tutorial(lang='en'):
 
 
 @app.route('/player-settings')
+def player_settings_simple():
+    return render_template("playerSettings.html")
+
+
+@app.route('/weighted-settings')
 def player_settings():
-    return render_template("player-settings.html")
+    return render_template("weightedSettings.html")
 
 
 @app.route('/seed/<suuid:seed>')
-def view_seed(seed: UUID):
+def viewSeed(seed: UUID):
     seed = Seed.get(id=seed)
     if not seed:
         abort(404)
-    return render_template("view_seed.html", seed=seed,
+    return render_template("viewSeed.html", seed=seed,
                            rooms=[room for room in seed.rooms if room.owner == session["_id"]])
 
 
@@ -105,7 +113,7 @@ def new_room(seed: UUID):
         abort(404)
     room = Room(seed=seed, owner=session["_id"], tracker=uuid4())
     commit()
-    return redirect(url_for("host_room", room=room.id))
+    return redirect(url_for("hostRoom", room=room.id))
 
 
 def _read_log(path: str):
@@ -124,7 +132,7 @@ def display_log(room: UUID):
 
 
 @app.route('/hosted/<suuid:room>', methods=['GET', 'POST'])
-def host_room(room: UUID):
+def hostRoom(room: UUID):
     room = Room.get(id=room)
     if room is None:
         return abort(404)
@@ -137,7 +145,7 @@ def host_room(room: UUID):
     with db_session:
         room.last_activity = datetime.utcnow()  # will trigger a spinup, if it's not already running
 
-    return render_template("host_room.html", room=room)
+    return render_template("hostRoom.html", room=room)
 
 
 @app.route('/favicon.ico')
@@ -147,4 +155,5 @@ def favicon():
 
 
 from WebHostLib.customserver import run_server_process
-from . import tracker, upload, landing, check, generate, downloads  # to trigger app routing picking up on it
+from . import tracker, upload, landing, check, generate, downloads, api  # to trigger app routing picking up on it
+app.register_blueprint(api.api_endpoints)

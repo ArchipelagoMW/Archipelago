@@ -6,7 +6,7 @@ import textwrap
 import sys
 
 from AdjusterMain import adjust
-from worlds.alttp.Rom import get_sprite_from_name
+from worlds.alttp.Rom import Sprite
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
 
@@ -34,8 +34,12 @@ def main():
                              ''')
     parser.add_argument('--heartcolor', default='red', const='red', nargs='?', choices=['red', 'blue', 'green', 'yellow', 'random'],
                         help='Select the color of Link\'s heart meter. (default: %(default)s)')
-    parser.add_argument('--ow_palettes', default='default', choices=['default', 'random', 'blackout'])
-    parser.add_argument('--uw_palettes', default='default', choices=['default', 'random', 'blackout'])
+    parser.add_argument('--ow_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+    parser.add_argument('--link_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+    parser.add_argument('--shield_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+    parser.add_argument('--sword_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+    parser.add_argument('--hud_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+    parser.add_argument('--uw_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
     parser.add_argument('--sprite', help='''\
                              Path to a sprite sheet to use for Link. Needs to be in
                              binary format and have a length of 0x7000 (28672) bytes,
@@ -51,7 +55,7 @@ def main():
         input(
             'Could not find valid rom for patching at expected path %s. Please run with -h to see help for further information. \nPress Enter to exit.' % args.rom)
         sys.exit(1)
-    if args.sprite is not None and not os.path.isfile(args.sprite) and not get_sprite_from_name(args.sprite):
+    if args.sprite is not None and not os.path.isfile(args.sprite) and not Sprite.get_sprite_from_name(args.sprite):
         input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
         sys.exit(1)
 
@@ -61,7 +65,10 @@ def main():
     logging.basicConfig(format='%(message)s', level=loglevel)
     args, path = adjust(args=args)
     from Utils import persistent_store
-    persistent_store("adjuster", "last_settings", args)
+    from Rom import Sprite
+    if isinstance(args.sprite, Sprite):
+        args.sprite = args.sprite.name
+    persistent_store("adjuster", "last_settings_3", args)
 
 if __name__ == '__main__':
     main()

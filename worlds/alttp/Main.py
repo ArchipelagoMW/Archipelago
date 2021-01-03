@@ -71,6 +71,10 @@ def main(args, seed=None):
     world.tile_shuffle = args.tile_shuffle.copy()
     world.beemizer = args.beemizer.copy()
     world.timer = args.timer.copy()
+    world.countdown_start_time = args.countdown_start_time.copy()
+    world.red_clock_time = args.red_clock_time.copy()
+    world.blue_clock_time = args.blue_clock_time.copy()
+    world.green_clock_time = args.green_clock_time.copy()
     world.shufflepots = args.shufflepots.copy()
     world.progressive = args.progressive.copy()
     world.dungeon_counters = args.dungeon_counters.copy()
@@ -82,7 +86,11 @@ def main(args, seed=None):
     world.shuffle_prizes = args.shuffle_prizes.copy()
     world.sprite_pool = args.sprite_pool.copy()
     world.dark_room_logic = args.dark_room_logic.copy()
+    world.plando_items = args.plando_items.copy()
+    world.plando_texts = args.plando_texts.copy()
+    world.plando_connections = args.plando_connections.copy()
     world.restrict_dungeon_item_on_boss = args.restrict_dungeon_item_on_boss.copy()
+    world.required_medallions = args.required_medallions.copy()
 
     world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}
 
@@ -105,7 +113,30 @@ def main(args, seed=None):
             item = ItemFactory(tok.strip(), player)
             if item:
                 world.push_precollected(item)
-        world.local_items[player] = {item.strip() for item in args.local_items[player].split(',')}
+        # item in item_table gets checked in mystery, but not CLI - so we double-check here
+        world.local_items[player] = {item.strip() for item in args.local_items[player].split(',') if
+                                     item.strip() in item_table}
+        world.non_local_items[player] = {item.strip() for item in args.non_local_items[player].split(',') if
+                                         item.strip() in item_table}
+        # items can't be both local and non-local, prefer local
+        world.non_local_items[player] -= world.local_items[player]
+
+        # dungeon items can't be in non-local if the appropriate dungeon item shuffle setting is not set.
+        if not world.mapshuffle[player]:
+            world.non_local_items[player] -= item_name_groups['Maps']
+
+        if not world.compassshuffle[player]:
+            world.non_local_items[player] -= item_name_groups['Compasses']
+
+        if not world.keyshuffle[player]:
+            world.non_local_items[player] -= item_name_groups['Small Keys']
+
+        if not world.bigkeyshuffle[player]:
+            world.non_local_items[player] -= item_name_groups['Big Keys']
+
+        # Not possible to place pendants/crystals out side of boss prizes yet.
+        world.non_local_items[player] -= item_name_groups['Pendants']
+        world.non_local_items[player] -= item_name_groups['Crystals']
 
         world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player], world.triforce_pieces_required[player])
 
@@ -129,6 +160,7 @@ def main(args, seed=None):
         else:
             link_inverted_entrances(world, player)
             mark_dark_world_regions(world, player)
+        plando_connect(world, player)
 
     logger.info('Generating Item Pool.')
 
@@ -144,11 +176,50 @@ def main(args, seed=None):
 
     fill_prizes(world)
 
+    logger.info("Running Item Plando")
+
+    world_name_lookup = {world.player_names[player_id][0]: player_id for player_id in world.player_ids}
+
+    for player in world.player_ids:
+        placement: PlandoItem
+        for placement in world.plando_items[player]:
+            target_world: int = placement.world
+            if target_world is False or world.players == 1:
+                target_world = player  # in own world
+            elif target_world is True:  # in any other world
+                target_world = player
+                while target_world == player:
+                    target_world = world.random.randint(1, world.players + 1)
+            elif target_world is None:  # any random world
+                target_world = world.random.randint(1, world.players + 1)
+            elif type(target_world) == int:  # target world by player id
+                pass
+            else:  # find world by name
+                target_world = world_name_lookup[target_world]
+
+            location = world.get_location(placement.location, target_world)
+            if location.item:
+                raise Exception(f"Cannot place item into already filled location {location}.")
+            item = ItemFactory(placement.item, player)
+            if placement.from_pool:
+                try:
+                    world.itempool.remove(item)
+                except ValueError:
+                    logger.warning(f"Could not remove {item} from pool as it's already missing from it.")
+
+            if location.can_fill(world.state, item, False):
+                world.push_item(location, item, collect=False)
+                location.event = True  # flag location to be checked during fill
+                location.locked = True
+                logger.debug(f"Plando placed {item} at {location}")
+            else:
+                raise Exception(f"Can't place {item} at {location} due to fill condition not met.")
+
     logger.info('Placing Dungeon Items.')
 
-    shuffled_locations = None
-    if args.algorithm in ['balanced', 'vt26'] or any(list(args.mapshuffle.values()) + list(args.compassshuffle.values()) +
-                                                     list(args.keyshuffle.values()) + list(args.bigkeyshuffle.values())):
+    if args.algorithm in ['balanced', 'vt26'] or any(
+            list(args.mapshuffle.values()) + list(args.compassshuffle.values()) +
+            list(args.keyshuffle.values()) + list(args.bigkeyshuffle.values())):
         fill_dungeons_restrictive(world)
     else:
         fill_dungeons(world)
@@ -160,7 +231,7 @@ def main(args, seed=None):
     elif args.algorithm == 'vt25':
         distribute_items_restrictive(world, False)
     elif args.algorithm == 'vt26':
-        distribute_items_restrictive(world, True, shuffled_locations)
+        distribute_items_restrictive(world, True)
     elif args.algorithm == 'balanced':
         distribute_items_restrictive(world, True)
 
@@ -177,7 +248,7 @@ def main(args, seed=None):
         use_enemizer = (world.boss_shuffle[player] != 'none' or world.enemy_shuffle[player]
                         or world.enemy_health[player] != 'default' or world.enemy_damage[player] != 'default'
                         or world.shufflepots[player] or world.bush_shuffle[player]
-                        or world.killable_thieves[player] or world.tile_shuffle[player])
+                        or world.killable_thieves[player])
 
         rom = LocalRom(args.rom)
 
@@ -187,13 +258,22 @@ def main(args, seed=None):
             patch_enemizer(world, player, rom, args.enemizercli)
 
         if args.race:
-            patch_race_rom(rom)
+            patch_race_rom(rom, world, player)
 
         world.spoiler.hashes[(player, team)] = get_hash_string(rom.hash)
 
+        palettes_options={}
+        palettes_options['dungeon']=args.uw_palettes[player]
+        palettes_options['overworld']=args.ow_palettes[player]
+        palettes_options['hud']=args.hud_palettes[player]
+        palettes_options['sword']=args.sword_palettes[player]
+        palettes_options['shield']=args.shield_palettes[player]
+        palettes_options['link']=args.link_palettes[player]
+
         apply_rom_settings(rom, args.heartbeep[player], args.heartcolor[player], args.quickswap[player],
                            args.fastmenu[player], args.disablemusic[player], args.sprite[player],
-                           args.ow_palettes[player], args.uw_palettes[player], world, player, True)
+                           palettes_options, world, player, True)
+
 
         mcsb_name = ''
         if all([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player],
@@ -287,6 +367,30 @@ def main(args, seed=None):
                         if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
                             er_hint_data[region.player][location.address] = main_entrance.name
 
+        ordered_areas = ('Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
+                         'Tower of Hera', 'Palace of Darkness', 'Swamp Palace', 'Skull Woods', 'Thieves Town', 'Ice Palace',
+                         'Misery Mire', 'Turtle Rock', 'Ganons Tower', "Total")
+
+        checks_in_area = {player: {area: list() for area in ordered_areas}
+                          for player in range(1, world.players + 1)}
+
+        for player in range(1, world.players + 1):
+            checks_in_area[player]["Total"] = 0
+
+        for location in [loc for loc in world.get_filled_locations() if type(loc.address) is int]:
+            main_entrance = get_entrance_to_region(location.parent_region)
+            if location.parent_region.dungeon:
+                dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
+                               'Inverted Ganons Tower': 'Ganons Tower'}\
+                    .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
+                checks_in_area[location.player][dungeonname].append(location.address)
+            elif main_entrance.parent_region.type == RegionType.LightWorld:
+                checks_in_area[location.player]["Light World"].append(location.address)
+            elif main_entrance.parent_region.type == RegionType.DarkWorld:
+                checks_in_area[location.player]["Dark World"].append(location.address)
+            checks_in_area[location.player]["Total"] += 1
+
+
         precollected_items = [[] for player in range(world.players)]
         for item in world.precollected_items:
             precollected_items[item.player - 1].append(item.code)
@@ -297,6 +401,7 @@ def main(args, seed=None):
             for future in roms:
                 rom_name = future.result()
                 rom_names.append(rom_name)
+            minimum_versions = {"server": (1, 0, 0)}
             multidata = zlib.compress(pickle.dumps({"names": parsed_names,
                                                     "roms": {base64.b64encode(rom_name).decode(): (team, slot) for slot, team, rom_name in rom_names},
                                                     "remote_items": {player for player in range(1, world.players + 1) if
@@ -306,11 +411,13 @@ def main(args, seed=None):
                                                             (location.item.code, location.item.player)
                                                         for location in world.get_filled_locations() if
                                                         type(location.address) is int},
+                                                    "checks_in_area": checks_in_area,
                                                     "server_options": get_options()["server_options"],
                                                     "er_hint_data": er_hint_data,
                                                     "precollected_items": precollected_items,
                                                     "version": _version_tuple,
-                                                    "tags": ["AP"]
+                                                    "tags": ["AP"],
+                                                    "minimum_versions": minimum_versions,
                                                     }), 9)
 
             with open(output_path('%s.multidata' % outfilebase), 'wb') as f:

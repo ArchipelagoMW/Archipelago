@@ -8,7 +8,7 @@ import shlex
 import sys
 
 from worlds.alttp.Main import main, get_seed
-from worlds.alttp.Rom import get_sprite_from_name
+from worlds.alttp.Rom import Sprite
 from Utils import is_bundled, close_console
 
 
@@ -129,6 +129,14 @@ def parse_arguments(argv, no_defaults=False):
                                               Timed mode. If time runs out, you lose (but can
                                               still keep playing).
                              ''')
+    parser.add_argument('--countdown_start_time', default=defval(10), type=int,
+                        help='''Set amount of time, in minutes, to start with in Timed Countdown and Timed OHKO modes''')
+    parser.add_argument('--red_clock_time', default=defval(-2), type=int,
+                        help='''Set amount of time, in minutes, to add from picking up red clocks; negative removes time instead''')
+    parser.add_argument('--blue_clock_time', default=defval(2), type=int,
+                        help='''Set amount of time, in minutes, to add from picking up blue clocks; negative removes time instead''')
+    parser.add_argument('--green_clock_time', default=defval(4), type=int,
+                        help='''Set amount of time, in minutes, to add from picking up green clocks; negative removes time instead''')
     parser.add_argument('--dungeon_counters', default=defval('default'), const='default', nargs='?', choices=['default', 'on', 'pickup', 'off'],
                         help='''\
                              Select dungeon counter display settings. (default: %(default)s)
@@ -173,7 +181,7 @@ def parse_arguments(argv, no_defaults=False):
                                           slightly biased to placing progression items with
                                           less restrictions.
                              ''')
-    parser.add_argument('--shuffle', default=defval('full'), const='full', nargs='?', choices=['vanilla', 'simple', 'restricted', 'full', 'crossed', 'insanity', 'restricted_legacy', 'full_legacy', 'madness_legacy', 'insanity_legacy', 'dungeonsfull', 'dungeonssimple'],
+    parser.add_argument('--shuffle', default=defval('vanilla'), const='vanilla', nargs='?', choices=['vanilla', 'simple', 'restricted', 'full', 'crossed', 'insanity', 'restricted_legacy', 'full_legacy', 'madness_legacy', 'insanity_legacy', 'dungeonsfull', 'dungeonssimple'],
                         help='''\
                              Select Entrance Shuffling Algorithm. (default: %(default)s)
                              Full:       Mix cave and dungeon entrances freely while limiting
@@ -258,6 +266,8 @@ def parse_arguments(argv, no_defaults=False):
                         help='Specifies a list of items that will be in your starting inventory (separated by commas)')
     parser.add_argument('--local_items', default=defval(''),
                         help='Specifies a list of items that will not spread across the multiworld (separated by commas)')
+    parser.add_argument('--non_local_items', default=defval(''),
+                        help='Specifies a list of items that will spread across the multiworld (separated by commas)')
     parser.add_argument('--custom', default=defval(False), help='Not supported.')
     parser.add_argument('--customitemarray', default=defval(False), help='Not supported.')
     parser.add_argument('--accessibility', default=defval('items'), const='items', nargs='?', choices=['items', 'locations', 'none'], help='''\
@@ -283,8 +293,13 @@ def parse_arguments(argv, no_defaults=False):
                              ''')
     parser.add_argument('--heartcolor', default=defval('red'), const='red', nargs='?', choices=['red', 'blue', 'green', 'yellow', 'random'],
                         help='Select the color of Link\'s heart meter. (default: %(default)s)')
-    parser.add_argument('--ow_palettes', default=defval('default'), choices=['default', 'random', 'blackout'])
-    parser.add_argument('--uw_palettes', default=defval('default'), choices=['default', 'random', 'blackout'])
+    parser.add_argument('--ow_palettes', default=defval('default'), choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+    parser.add_argument('--uw_palettes', default=defval('default'), choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+    parser.add_argument('--hud_palettes', default=defval('default'), choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+    parser.add_argument('--shield_palettes', default=defval('default'), choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+    parser.add_argument('--sword_palettes', default=defval('default'), choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+    parser.add_argument('--link_palettes', default=defval('default'), choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+
     parser.add_argument('--sprite', help='''\
                              Path to a sprite sheet to use for Link. Needs to be in
                              binary format and have a length of 0x7000 (28672) bytes,
@@ -334,12 +349,20 @@ def parse_arguments(argv, no_defaults=False):
     create a binary patch file from which the randomized rom can be recreated using MultiClient.''')
     parser.add_argument('--disable_glitch_boots', default=defval(False), action='store_true', help='''\
     turns off starting with Pegasus Boots in glitched modes.''')
-
     if multiargs.multi:
         for player in range(1, multiargs.multi + 1):
             parser.add_argument(f'--p{player}', default=defval(''), help=argparse.SUPPRESS)
 
     ret = parser.parse_args(argv)
+
+    # shuffle medallions
+
+    ret.required_medallions = ("random", "random")
+    # cannot be set through CLI currently
+    ret.plando_items = []
+    ret.plando_texts = {}
+    ret.plando_connections = []
+
     ret.glitch_boots = not ret.disable_glitch_boots
     if ret.timer == "none":
         ret.timer = False
@@ -361,14 +384,18 @@ def parse_arguments(argv, no_defaults=False):
 
             for name in ['logic', 'mode', 'swords', 'goal', 'difficulty', 'item_functionality',
                          'shuffle', 'crystals_ganon', 'crystals_gt', 'open_pyramid', 'timer',
+                         'countdown_start_time', 'red_clock_time', 'blue_clock_time', 'green_clock_time',
                          'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle', 'startinventory',
-                         'local_items', 'retro', 'accessibility', 'hints', 'beemizer',
+                         'local_items', 'non_local_items', 'retro', 'accessibility', 'hints', 'beemizer',
                          'shufflebosses', 'enemy_shuffle', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
                          'heartbeep', "skip_progression_balancing", "triforce_pieces_available",
-                         "triforce_pieces_required", "shop_shuffle",
+                         "triforce_pieces_required", "shop_shuffle", "required_medallions",
+                         "plando_items", "plando_texts", "plando_connections",
                          'remote_items', 'progressive', 'dungeon_counters', 'glitch_boots', 'killable_thieves',
-                         'tile_shuffle', 'bush_shuffle', 'shuffle_prizes', 'sprite_pool', 'dark_room_logic', 'restrict_dungeon_item_on_boss']:
+                         'tile_shuffle', 'bush_shuffle', 'shuffle_prizes', 'sprite_pool', 'dark_room_logic',
+                         'restrict_dungeon_item_on_boss',
+                         'hud_palettes', 'sword_palettes', 'shield_palettes', 'link_palettes']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})

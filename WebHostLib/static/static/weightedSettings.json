@@ -1,0 +1,1878 @@
+{
+  "gameOptions": {
+    "description": {
+    "keyString": "description",
+    "friendlyName": "Description",
+    "inputType": "text",
+    "description": "A short description of this preset. Useful if you have multiple files",
+    "defaultValue": "Preset Name"
+  },
+    "name": {
+      "keyString": "name",
+      "friendlyName": "Player Name",
+      "inputType": "text",
+      "description": "Displayed in-game. Spaces will be replaced with underscores.",
+      "defaultValue": "Your Name"
+    },
+    "glitches_required": {
+      "keyString": "glitches_required",
+      "friendlyName": "Glitches Required",
+      "description": "Determine the logic required to complete the seed.",
+      "inputType": "range",
+      "subOptions": {
+        "none": {
+          "keyString": "glitches_required.none",
+          "friendlyName": "None",
+          "description": "No glitches required.",
+          "defaultValue": 50
+        },
+        "minor_glitches": {
+          "keyString": "glitches_required.minor_glitches",
+          "friendlyName": "Minor Glitches",
+          "description": "Puts fake flipper, water-walk, super bunny, etc into logic",
+          "defaultValue": 0
+        },
+        "overworld_glitches": {
+          "keyString": "glitches_required.overworld_glitches",
+          "friendlyName": "Overworld Glitches",
+          "description": "Assumes the player has knowledge of both overworld major glitches (boots clips, mirror clips) and minor glitches (fake flipper, super bunny shenanigans, water walk and etc.)",
+          "defaultValue": 0
+        },
+        "no_logic": {
+          "keyString": "glitches_required.no_logic",
+          "friendlyName": "No Logic",
+          "description": "Your items are placed with no regard to any logic. Your Fire Rod could be on your Trinexx.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "dark_room_logic": {
+      "keyString": "dark_room_logic",
+      "friendlyName": "Dark Room Logic",
+      "description": "Logic to use for dark rooms.",
+      "inputType": "range",
+      "subOptions": {
+        "lamp": {
+          "keyString": "dark_room_logic.lamp",
+          "friendlyName": "Lamp Required",
+          "description": "The lamp is required for dark rooms to be considered in logic.",
+          "defaultValue": 50
+        },
+        "torches": {
+          "keyString": "dark_room_logic.torches",
+          "friendlyName": "Lamp or Torches",
+          "description": "In addition to the lamp, a fire rod and accessible torches may put dark rooms into logic.",
+          "defaultValue": 0
+        },
+        "none": {
+          "keyString": "dark_room_logic.none",
+          "friendlyName": "Always in Logic",
+          "description": "Dark rooms are always considered in logic, which may require you to navigate rooms in complete darkness.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "map_shuffle": {
+      "keyString": "map_shuffle",
+      "friendlyName": "Map Shuffle",
+      "description": "Shuffle dungeon maps into the world and other dungeons, including other players' worlds.",
+      "inputType": "range",
+      "subOptions": {
+        "off": {
+          "keyString": "map_shuffle.off",
+          "friendlyName": "Off",
+          "description": "Disable map shuffle.",
+          "defaultValue": 50
+        },
+        "on": {
+          "keyString": "map_shuffle.on",
+          "friendlyName": "On",
+          "description": "Enable map shuffle.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "compass_shuffle": {
+      "keyString": "compass_shuffle",
+      "friendlyName": "Compass Shuffle",
+      "description": "Shuffle compasses into the world and other dungeons, including other players' worlds",
+      "inputType": "range",
+      "subOptions": {
+        "off": {
+          "keyString": "compass_shuffle.off",
+          "friendlyName": "Off",
+          "description": "Disable compass shuffle.",
+          "defaultValue": 50
+        },
+        "on": {
+          "keyString": "compass_shuffle.on",
+          "friendlyName": "On",
+          "description": "Enable compass shuffle.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "smallkey_shuffle": {
+      "keyString": "smallkey_shuffle",
+      "friendlyName": "Small Key Shuffle",
+      "description": "Shuffle small keys into the world and other dungeons, including other players' worlds.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "smallkey_shuffle.on",
+          "friendlyName": "On",
+          "description": "Enable small key shuffle.",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "smallkey_shuffle.off",
+          "friendlyName": "Off",
+          "description": "Disable small key shuffle.",
+          "defaultValue": 50
+        },
+        "universal": {
+          "keyString": "smallkey_shuffle.universal",
+          "friendlyName": "Universal",
+          "description": "Allows small keys to be used in any dungeon and adds keys to shops so you can buy more.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "bigkey_shuffle": {
+      "keyString": "bigkey_shuffle",
+      "friendlyName": "Big Key Shuffle",
+      "description": "Shuffle big keys into the world and other dungeons, including other players' worlds.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "bigkey_shuffle.on",
+          "friendlyName": "On",
+          "description": "Enable big key shuffle.",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "bigkey_shuffle.off",
+          "friendlyName": "Off",
+          "description": "Disable big key shuffle.",
+          "defaultValue": 50
+        }
+      }
+    },
+    "local_keys": {
+      "keyString": "local_keys",
+      "friendlyName": "Local Keys",
+      "description": "Keep small keys and big keys local to your world.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "local_keys.on",
+          "friendlyName": "On",
+          "description": "Enable local keys.",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "local_keys.off",
+          "friendlyName": "Off",
+          "description": "Disable local keys.",
+          "defaultValue": 50
+        }
+      }
+    },
+    "dungeon_counters": {
+      "keyString": "dungeon_counters",
+      "friendlyName": "Dungeon Counters",
+      "description": "Determines when to show an on-screen counter for dungeon items.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "dungeon_counters.on",
+          "friendlyName": "Always On",
+          "description": "Always display amount of items checked in a dungeon.",
+          "defaultValue": 0
+        },
+        "pickup": {
+          "keyString": "dungeon_counters.pickup",
+          "friendlyName": "With Compass",
+          "description": "Show when compass is picked up.",
+          "defaultValue": 0
+        },
+        "default": {
+          "keyString": "dungeon_counters.default",
+          "friendlyName": "With Compass if Shuffled",
+          "description": "Show when the compass is picked up, if the compass was shuffled.",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "dungeon_counters.off",
+          "friendlyName": "Always Off",
+          "description": "Never show dungeon counters.",
+          "defaultValue": 50
+        }
+      }
+    },
+    "accessibility": {
+      "keyString": "accessibility",
+      "friendlyName": "Location Access",
+      "description": "Determines how much of the game is guaranteed to be reachable.",
+      "inputType": "range",
+      "subOptions": {
+        "items": {
+          "keyString": "accessibility.items",
+          "friendlyName": "All Items",
+          "description": "Guarantees you will be able to acquire all items, but you may not be able to access all locations.",
+          "defaultValue": 0
+        },
+        "locations": {
+          "keyString": "accessibility.locations",
+          "friendlyName": "All Locations",
+          "description": "Guarantees you will be able to access all locations, and therefore all items.",
+          "defaultValue": 50
+        },
+        "none": {
+          "keyString": "accessibility.none",
+          "friendlyName": "Required Only",
+          "description": "Guarantees only that the game is beatable. You may not be able to access all locations or acquire all items.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "progressive": {
+      "keyString": "progressive",
+      "friendlyName": "Progressive Items",
+      "description": "Enable or disable the progressive acquisition of certain items (swords, shields, bow).",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "progressive.on",
+          "friendlyName": "On",
+          "description": "All relevant items are acquired progressively.",
+          "defaultValue": 50
+        },
+        "off": {
+          "keyString": "progressive.off",
+          "friendlyName": "Off",
+          "description": "All relevant items are acquired non-progressively (tempered sword may be in Link's House).",
+          "defaultValue": 0
+        },
+        "random": {
+          "keyString": "progressive.random",
+          "friendlyName": "Random",
+          "description": "The progressive nature of items is determined per-item pool. Gloves may be progressive, but swords may not be.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "entrance_shuffle": {
+      "keyString": "entrance_shuffle",
+      "friendlyName": "Entrance Shuffle",
+      "description": "Determines how often and by what rules entrances are shuffled.",
+      "inputType": "range",
+      "subOptions": {
+        "none": {
+          "keyString": "entrance_shuffle.none",
+          "friendlyName": "Vanilla Entrances",
+          "description": "Vanilla game map. All entrances and exits lead to their original locations.",
+          "defaultValue": 50
+        },
+        "dungeonssimple": {
+          "keyString": "entrance_shuffle.dungeonssimple",
+          "friendlyName": "Dungeons Simple",
+          "description": "Shuffle whole dungeons amongst each other. Hyrule Castle would always be one dungeon.",
+          "defaultValue": 0
+        },
+        "dungeonsfull": {
+          "keyString": "entrance_shuffle.dungeonsfull",
+          "friendlyName": "Dungeons Full",
+          "description": "Shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle could be four different dungeons.",
+          "defaultValue": 0
+        },
+        "simple": {
+          "keyString": "entrance_shuffle.simple",
+          "friendlyName": "Simple Shuffle",
+          "description": "Entrances are grouped together before being randomized. This option uses the most strict grouping rules.",
+          "defaultValue": 0
+        },
+        "restricted": {
+          "keyString": "entrance_shuffle.restricted",
+          "friendlyName": "Restricted Shuffle",
+          "description": "Entrances are grouped together before being randomized. Grouping rules are less strict than Simple Shuffle.",
+          "defaultValue": 0
+        },
+        "full": {
+          "keyString": "entrance_shuffle.full",
+          "friendlyName": "Full Shuffle",
+          "description": "Entrances are grouped before being randomized. Grouping rules are less strict than Restricted Shuffle.",
+          "defaultValue": 0
+        },
+        "crossed": {
+          "keyString": "entrance_shuffle.crossed",
+          "friendlyName": "Crossed Shuffle",
+          "description": "Entrances are grouped before being randomized. Grouping rules are less strict than Full Shuffle.",
+          "defaultValue": 0
+        },
+        "insanity": {
+          "keyString": "entrance_shuffle.insanity",
+          "friendlyName": "Insanity Shuffle",
+          "description": "Very few entrance grouping rules are applied. Good luck.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "goals": {
+      "keyString": "goals",
+      "friendlyName": "Goals",
+      "description": "Determines how much work you need to put in to save Hyrule.",
+      "inputType": "range",
+      "subOptions": {
+        "ganon": {
+          "keyString": "goals.ganon",
+          "friendlyName": "Defeat Ganon",
+          "description": "Climb Ganon's Tower, defeat Agahnim, then defeat Ganon in his lair.",
+          "defaultValue": 50
+        },
+        "fast_ganon": {
+          "keyString": "goals.fast_ganon",
+          "friendlyName": "Fast Ganon",
+          "description": "Kill Ganon in his lair. The hole is always open, but you may still require some crystals to damage him.",
+          "defaultValue": 0
+        },
+        "dungeons": {
+          "keyString": "goals.dungeons",
+          "friendlyName": "All Dungeons",
+          "description": "Defeat the boss of all dungeons, defeat Agahnim in both Castle Tower and Ganon's Tower, then defeat Ganon in his lair.",
+          "defaultValue": 0
+        },
+        "pedestal": {
+          "keyString": "goals.pedestal",
+          "friendlyName": "Pedestal",
+          "description": "Acquire all three pendants and pull the Triforce from the Master Sword Pedestal.",
+          "defaultValue": 0
+        },
+        "ganon_pedestal": {
+          "keyString": "goals.ganon_pedestal",
+          "friendlyName": "Ganon Pedestal",
+          "description": "Accquire all three pendants, pull the Master Sword Pedestal, then defeat Ganon in his lair.",
+          "defaultValue": 0
+        },
+        "triforce_hunt": {
+          "keyString": "goals.triforce_hunt",
+          "friendlyName": "Triforce Hunt",
+          "description": "Collect enough pieces of the Triforce of Courage, which has been spread around the world, then turn them in to Murahadala, who is standing outside Hyrule Castle.",
+          "defaultValue": 0
+        },
+        "local_triforce_hunt": {
+          "keyString": "goals.local_triforce_hunt",
+          "friendlyName": "Local Triforce Hunt",
+          "description": "Same as Triforce Hunt, but the Triforce pieces are guaranteed to be in your world.",
+          "defaultValue": 0
+        },
+        "ganon_triforce_hunt": {
+          "keyString": "goals.ganon_triforce_hunt",
+          "friendlyName": "Triforce Hunt /w Ganon",
+          "description": "Same as Triforce Hunt, but you need to defeat Ganon in his lair instead of talking with Murahadala.",
+          "defaultValue": 0
+        },
+        "local_ganon_triforce_hunt": {
+          "keyString": "goals.local_ganon_triforce_hunt",
+          "friendlyName": "Local Triforce hunt /w Ganon",
+          "description": "Same as Local Triforce Hunt, but you need to defeat Ganon in his lair instead of talking with Murahadala.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "triforce_pieces_required": {
+      "keyString": "triforce_pieces_required",
+      "friendlyName": "Triforce Pieces Required",
+      "description": "Determines the total number of Triforce pieces required before speaking with Murahadala",
+      "inputType": "range",
+      "subOptions": {
+        "15": {
+          "keyString": "triforce_pieces_required.15",
+          "friendlyName": 15,
+          "description": "15 Triforce pieces are required before speaking with Murahadala.",
+          "defaultValue": 0
+        },
+        "20": {
+          "keyString": "triforce_pieces_required.20",
+          "friendlyName": 20,
+          "description": "20 Triforce pieces are required before speaking with Murahadala.",
+          "defaultValue": 50
+        },
+        "30": {
+          "keyString": "triforce_pieces_required.30",
+          "friendlyName": 30,
+          "description": "30 Triforce pieces are required before speaking with Murahadala.",
+          "defaultValue": 0
+        },
+        "40": {
+          "keyString": "triforce_pieces_required.40",
+          "friendlyName": 40,
+          "description": "40 Triforce pieces are required before speaking with Murahadala.",
+          "defaultValue": 0
+        },
+        "50": {
+          "keyString": "triforce_pieces_required.50",
+          "friendlyName": 50,
+          "description": "50 Triforce pieces are required before speaking with Murahadala.",
+          "defaultValue": 0
+        }
+      }
+    },
+	"triforce_pieces_mode": {
+	  "keyString": "triforce_pieces_mode",
+      "friendlyName": "Triforce Piece Availability Mode",
+      "description": "Determines which of the following three options will be used to determine the total available triforce pieces.",
+      "inputType": "range",
+      "subOptions": {
+        "available": {
+          "keyString": "triforce_pieces_mode.available",
+          "friendlyName": "Exact Number",
+          "description": "Explicitly tell the generator how many triforce pieces to place throughout Hyrule.",
+          "defaultValue": 50
+        },
+        "extra": {
+          "keyString": "triforce_pieces_mode.extra",
+          "friendlyName": "Required Plus",
+          "description": "Set the number of triforce pieces in Hyrule equal to the number of required pieces plus a number specified by this option.",
+          "defaultValue": 0
+        },
+        "percentage": {
+          "keyString": "triforce_pieces_mode.percentage",
+          "friendlyName": "Percentage",
+          "description": "Set the number of triforce pieces in Hyrule equal to the number of required pieces plus a percentage specified by this option.",
+          "defaultValue": 0
+        }
+      }
+	},
+    "triforce_pieces_available": {
+      "keyString": "triforce_pieces_available",
+      "friendlyName": "Exact Number (Triforce Hunt)",
+      "description": "Only used if enabled in Triforce Piece Availability Mode.",
+      "inputType": "range",
+      "subOptions": {
+        "25": {
+          "keyString": "triforce_pieces_available.25",
+          "friendlyName": 25,
+          "description": "25 Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 0
+        },
+        "30": {
+          "keyString": "triforce_pieces_available.30",
+          "friendlyName": 30,
+          "description": "30 Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 50
+        },
+        "40": {
+          "keyString": "triforce_pieces_available.40",
+          "friendlyName": 40,
+          "description": "40 Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 0
+        },
+        "50": {
+          "keyString": "triforce_pieces_available.50",
+          "friendlyName": 50,
+          "description": "50 Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 0
+        }
+      }
+    },
+	"triforce_pieces_extra": {
+      "keyString": "triforce_pieces_extra",
+      "friendlyName": "Required Plus (Triforce Hunt)",
+      "description": "Only used if enabled in Triforce Piece Availability Mode.",
+      "inputType": "range",
+      "subOptions": {
+        "0": {
+          "keyString": "triforce_pieces_extra.0",
+          "friendlyName": 0,
+          "description": "No extra Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 0
+        },
+        "5": {
+          "keyString": "triforce_pieces_extra.5",
+          "friendlyName": 5,
+          "description": "5 extra Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 0
+        },
+        "10": {
+          "keyString": "triforce_pieces_extra.10",
+          "friendlyName": 10,
+          "description": "10 extra Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 50
+        },
+        "15": {
+          "keyString": "triforce_pieces_extra.15",
+          "friendlyName": 15,
+          "description": "15 extra Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 0
+        },
+		"20": {
+          "keyString": "triforce_pieces_extra.20",
+          "friendlyName": 20,
+          "description": "20 extra Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 0
+        }
+      }
+    },
+	"triforce_pieces_percentage": {
+      "keyString": "triforce_pieces_percentage",
+      "friendlyName": "Percentage (Triforce Hunt)",
+      "description": "Only used if enabled in Triforce Piece Availability Mode.",
+      "inputType": "range",
+      "subOptions": {
+        "100": {
+          "keyString": "triforce_pieces_percentage.100",
+          "friendlyName": "0%",
+          "description": "No extra Triforce pieces will be hidden throughout Hyrule",
+          "defaultValue": 0
+        },
+        "150": {
+          "keyString": "triforce_pieces_percentage.150",
+          "friendlyName": "50%",
+          "description": "50% more triforce pieces than required will be placed throughout Hyrule.",
+          "defaultValue": 50
+        },
+        "200": {
+          "keyString": "triforce_pieces_percentage.200",
+          "friendlyName": "100%",
+          "description": "50% more triforce pieces than required will be placed throughout Hyrule.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "tower_open": {
+      "keyString": "tower_open",
+      "friendlyName": "GT Crystals",
+      "description": "Determines the number of crystals required to open Ganon's Tower.",
+      "inputType": "range",
+      "subOptions": {
+        "0": {
+          "keyString": "tower_open.0",
+          "friendlyName": 0,
+          "description": "0 Crystals are required to open Ganon's Tower.",
+          "defaultValue": 80
+        },
+        "1": {
+          "keyString": "tower_open.1",
+          "friendlyName": 1,
+          "description": "1 Crystal is required to open Ganon's Tower.",
+          "defaultValue": 70
+        },
+        "2": {
+          "keyString": "tower_open.2",
+          "friendlyName": 2,
+          "description": "2 Crystals are required to open Ganon's Tower.",
+          "defaultValue": 60
+        },
+        "3": {
+          "keyString": "tower_open.3",
+          "friendlyName": 3,
+          "description": "3 Crystals are required to open Ganon's Tower.",
+          "defaultValue": 50
+        },
+        "4": {
+          "keyString": "tower_open.4",
+          "friendlyName": 4,
+          "description": "4 Crystals are required to open Ganon's Tower.",
+          "defaultValue": 40
+        },
+        "5": {
+          "keyString": "tower_open.5",
+          "friendlyName": 5,
+          "description": "5 Crystals are required to open Ganon's Tower.",
+          "defaultValue": 30
+        },
+        "6": {
+          "keyString": "tower_open.6",
+          "friendlyName": 6,
+          "description": "6 Crystals are required to open Ganon's Tower.",
+          "defaultValue": 20
+        },
+        "7": {
+          "keyString": "tower_open.7",
+          "friendlyName": 7,
+          "description": "7 Crystals are required to open Ganon's Tower.",
+          "defaultValue": 10
+        },
+        "random": {
+          "keyString": "tower_open.random",
+          "friendlyName": "Random",
+          "description": "Randomly determine the number of crystals necessary to open Ganon's Tower.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "ganon_open": {
+      "keyString": "ganon_open",
+      "friendlyName": "Ganon Crystals",
+      "description": "Determines the number of crystals required before you are able to damage Ganon.",
+      "inputType": "range",
+      "subOptions": {
+        "0": {
+          "keyString": "ganon_open.0",
+          "friendlyName": 0,
+          "description": "0 Crystals are required to damage Ganon.",
+          "defaultValue": 80
+        },
+        "1": {
+          "keyString": "ganon_open.1",
+          "friendlyName": 1,
+          "description": "1 Crystal is required to damage Ganon.",
+          "defaultValue": 70
+        },
+        "2": {
+          "keyString": "ganon_open.2",
+          "friendlyName": 2,
+          "description": "2 Crystals are required to damage Ganon.",
+          "defaultValue": 60
+        },
+        "3": {
+          "keyString": "ganon_open.3",
+          "friendlyName": 3,
+          "description": "3 Crystals are required to damage Ganon.",
+          "defaultValue": 50
+        },
+        "4": {
+          "keyString": "ganon_open.4",
+          "friendlyName": 4,
+          "description": "4 Crystals are required to damage Ganon.",
+          "defaultValue": 40
+        },
+        "5": {
+          "keyString": "ganon_open.5",
+          "friendlyName": 5,
+          "description": "5 Crystals are required to damage Ganon.",
+          "defaultValue": 30
+        },
+        "6": {
+          "keyString": "ganon_open.6",
+          "friendlyName": 6,
+          "description": "6 Crystals are required to damage Ganon.",
+          "defaultValue": 20
+        },
+        "7": {
+          "keyString": "ganon_open.7",
+          "friendlyName": 7,
+          "description": "7 Crystals are required to damage Ganon.",
+          "defaultValue": 10
+        },
+        "random": {
+          "keyString": "ganon_open.random",
+          "friendlyName": "Random",
+          "description": "Randomly determine the number of crystals necessary to damage Ganon.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "mode": {
+      "keyString": "mode",
+      "friendlyName": "Game Mode",
+      "description": "Determines the mode, or world state, for your game.",
+      "inputType": "range",
+      "subOptions": {
+        "standard": {
+          "keyString": "mode.standard",
+          "friendlyName": "Standard Mode",
+          "description": "Begin the game by rescuing Zelda from her cell and escorting her to the Sanctuary.",
+          "defaultValue": 50
+        },
+        "open": {
+          "keyString": "mode.open",
+          "friendlyName": "Open Mode",
+          "description": "Begin the game from your choice of Link's House or the Sanctuary.",
+          "defaultValue": 50
+        },
+        "inverted": {
+          "keyString": "mode.inverted",
+          "friendlyName": "Inverted Mode",
+          "description": "Begin in the Dark World. The Moon Pearl is required to avoid bunny-state in Light World, and the Light World game map is altered.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "retro": {
+      "keyString": "retro",
+      "friendlyName": "Retro Mode",
+      "description": "Makes the game similar to the first Legend of Zelda. You must buy a quiver to use the bow, take-any caves and an old-man cave are added to the world, and you may need to find your sword from the old man's cave.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "retro.on",
+          "friendlyName": "On",
+          "description": "Enable retro mode.",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "retro.off",
+          "friendlyName": "Off",
+          "description": "Disable retro mode.",
+          "defaultValue": 50
+        }
+      }
+    },
+    "hints": {
+      "keyString": "hints",
+      "friendlyName": "Hint Type",
+      "description": "Determines the behavior of hint tiles in dungeons",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "hints.on",
+          "friendlyName": "Item Locations",
+          "description": "Hint tiles sometimes give item location hints.",
+          "defaultValue": 50
+        },
+        "off": {
+          "keyString": "hints.off",
+          "friendlyName": "Gameplay Tips",
+          "description": "Hint tiles provide gameplay tips.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "weapons": {
+      "keyString": "weapons",
+      "friendlyName": "Sword Placement",
+      "description": "Determines how swords are placed throughout the world.",
+      "inputType": "range",
+      "subOptions": {
+        "randomized": {
+          "keyString": "weapons.randomized",
+          "friendlyName": "Randomized",
+          "description": "Swords are placed randomly throughout the world.",
+          "defaultValue": 0
+        },
+        "assured": {
+          "keyString": "weapons.assured",
+          "friendlyName": "Assured",
+          "description": "Begin the game with a sword. Other swords are placed randomly throughout the game world.",
+          "defaultValue": 50
+        },
+        "vanilla": {
+          "keyString": "weapons.vanilla",
+          "friendlyName": "Vanilla Locations",
+          "description": "Swords are placed in vanilla locations in your own game (uncle, pedestal, smiths, pyramid fairy).",
+          "defaultValue": 0
+        },
+        "swordless": {
+          "keyString": "weapons.swordless",
+          "friendlyName": "Swordless",
+          "description": "Your swords are replaced with rupees. Gameplay changes are made to accommodate this change.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "item_pool": {
+      "keyString": "item_pool",
+      "friendlyName": "Item Pool",
+      "description": "Determines the availability of upgrades, progressive items, and convenience items.",
+      "inputType": "range",
+      "subOptions": {
+        "easy": {
+          "keyString": "item_pool.easy",
+          "friendlyName": "Easy",
+          "description": "Double the number of available upgrades and progressive items.",
+          "defaultValue": 0
+        },
+        "normal": {
+          "keyString": "item_pool.normal",
+          "friendlyName": "Normal",
+          "description": "Item availability remains unchanged from the vanilla game.",
+          "defaultValue": 50
+        },
+        "hard": {
+          "keyString": "item_pool.hard",
+          "friendlyName": "Hard",
+          "description": "Reduced upgrade availability (max: 14 hearts, blue mail, tempered sword, fire shield, no silvers unless swordless).",
+          "defaultValue": 0
+        },
+        "expert": {
+          "keyString": "item_pool.expert",
+          "friendlyName": "Expert",
+          "description": "Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless).",
+          "defaultValue": 0
+        }
+      }
+    },
+    "item_functionality": {
+      "keyString": "item_functionality",
+      "friendlyName": "Item Functionality",
+      "description": "Alters the usefulness of various items in the game.",
+      "inputType": "range",
+      "subOptions": {
+        "easy": {
+          "keyString": "item_functionality.easy",
+          "friendlyName": "Easy",
+          "description": "Increases helpfulness of items. Medallions are usable everywhere, even without a sword. Hammer can be used in place of master sword to beat ganon and collect the tablets.",
+          "defaultValue": 0
+        },
+        "normal": {
+          "keyString": "item_functionality.normal",
+          "friendlyName": "Normal",
+          "description": "Item functionality remains unchanged from the vanilla game.",
+          "defaultValue": 50
+        },
+        "hard": {
+          "keyString": "item_functionality.hard",
+          "friendlyName": "Hard",
+          "description": "Reduced helpfulness of items. Potions are less effective, you can't catch faeries, the Magic Cape uses double magic, the Cane of Byrna does not grant invulnerability, boomerangs do not stun, and silver arrows are disabled outside ganon.",
+          "defaultValue": 0
+        },
+        "expert": {
+          "keyString": "item_functionality.expert",
+          "friendlyName": "Expert",
+          "description": "Vastly reduces the helpfulness of items. Potions are barely effective, you can't catch faeries, the Magic Cape uses double magic, the Cane of Byrna does not grant invulnerability, boomerangs and hookshot do not stun, and the silver arrows are disabled outside ganon.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "progression_balancing": {
+      "keyString": "progression_balancing",
+      "friendlyName": "Progression Balancing",
+      "description": "A system to reduce time spent in BK mode. It moves your items into an earlier access sphere to make it more likely you have access to progression items.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "progression_balancing.on",
+          "friendlyName": "On",
+          "description": "Enable progression balancing.",
+          "defaultValue": 50
+        },
+        "off": {
+          "keyString": "progression_balancing.off",
+          "friendlyName": "Off",
+          "description": "Disable progression balancing.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "boss_shuffle": {
+      "keyString": "boss_shuffle",
+      "friendlyName": "Boss Shuffle",
+      "description": "Determines which boss appears in which dungeon.",
+      "inputType": "range",
+      "subOptions": {
+        "none": {
+          "keyString": "boss_shuffle.none",
+          "friendlyName": "None",
+          "description": "Bosses appear in vanilla locations.",
+          "defaultValue": 50
+        },
+        "simple": {
+          "keyString": "boss_shuffle.simple",
+          "friendlyName": "Simple",
+          "description": "Existing bosses except Ganon and Agahnim are shuffled throughout dungeons.",
+          "defaultValue": 0
+        },
+        "full": {
+          "keyString": "boss_shuffle.full",
+          "friendlyName": "Full",
+          "description": "Bosses are shuffled, and three of them may occur twice.",
+          "defaultValue": 0
+        },
+        "random": {
+          "keyString": "boss_shuffle.random",
+          "friendlyName": "Random",
+          "description": "Any boss may appear any number of times.",
+          "defaultValue": 0
+        },
+        "singularity": {
+          "keyString": "boss_shuffle.singularity",
+          "friendlyName": "Singularity",
+          "description": "Picks a boss at random and puts it in every dungeon it can appear in. Remaining dungeons bosses are chosen at random.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "enemy_shuffle": {
+      "keyString": "enemy_shuffle",
+      "friendlyName": "Enemy Shuffle",
+      "description": "Randomizes which enemies appear throughout the game.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "enemy_shuffle.on",
+          "friendlyName": "On",
+          "description": "Enable enemy shuffle.",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "enemy_shuffle.off",
+          "friendlyName": "Off",
+          "description": "Disable enemy shuffle.",
+          "defaultValue": 50
+        }
+      }
+    },
+    "killable_thieves": {
+      "keyString": "killable_thieves",
+      "friendlyName": "Killable Thieves",
+      "description": "Determines whether thieves may be killed or not.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "killable_thieves.on",
+          "friendlyName": "On",
+          "description": "Thieves are mortal.",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "killable_thieves.off",
+          "friendlyName": "Off",
+          "description": "Thieves are invulnerable.",
+          "defaultValue": 50
+        }
+      }
+    },
+    "tile_shuffle": {
+      "keyString": "tile_shuffle",
+      "friendlyName": "Tile Shuffle",
+      "description": "Randomizes tile layouts in rooms where floor tiles attack you.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "tile_shuffle.on",
+          "friendlyName": "On",
+          "description": "Enable tile shuffle.",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "tile_shuffle.off",
+          "friendlyName": "Off",
+          "description": "Disable tile shuffle.",
+          "defaultValue": 50
+        }
+      }
+    },
+    "bush_shuffle": {
+      "keyString": "bush_shuffle",
+      "friendlyName": "Bush Shuffle",
+      "description": "Randomize the chance that bushes around Hyrule have enemies hiding under them.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "bush_shuffle.on",
+          "friendlyName": "On",
+          "description": "Enable bush shuffle.",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "bush_shuffle.off",
+          "friendlyName": "Off",
+          "description": "Disable bush shuffle.",
+          "defaultValue": 50
+        }
+      }
+    },
+    "enemy_damage": {
+      "keyString": "enemy_damage",
+      "friendlyName": "Enemy Damage",
+      "description": "Randomizes how much damage enemies can deal to you.",
+      "inputType": "range",
+      "subOptions": {
+        "default": {
+          "keyString": "enemy_damage.default",
+          "friendlyName": "Vanilla Damage",
+          "description": "Enemies deal the same damage as in the vanilla game.",
+          "defaultValue": 50
+        },
+        "shuffled": {
+          "keyString": "enemy_damage.shuffled",
+          "friendlyName": "Shuffled",
+          "description": "Enemies deal zero to four hearts of damage, and armor reduces this damage.",
+          "defaultValue": 0
+        },
+        "random": {
+          "keyString": "enemy_damage.random",
+          "friendlyName": "Random",
+          "description": "Enemies may deal zero through eight hearts of damage, and armor re-shuffles how much damage you take from each enemy.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "enemy_health": {
+      "keyString": "enemy_health",
+      "friendlyName": "Enemy Health",
+      "description": "Randomizes the amount of health enemies have. Does not affect bosses.",
+      "inputType": "range",
+      "subOptions": {
+        "default": {
+          "keyString": "enemy_health.default",
+          "friendlyName": "Vanilla",
+          "description": "Enemies have the same amount of health as in the vanilla game.",
+          "defaultValue": 50
+        },
+        "easy": {
+          "keyString": "enemy_health.easy",
+          "friendlyName": "Reduced",
+          "description": "Enemies have generally reduced health.",
+          "defaultValue": 0
+        },
+        "hard": {
+          "keyString": "enemy_health.hard",
+          "friendlyName": "Increased",
+          "description": "Enemies have generally increased health.",
+          "defaultValue": 0
+        },
+        "expert": {
+          "keyString": "enemy_health.expert",
+          "friendlyName": "Armor-Plated",
+          "description": "Enemies will be very heard to defeat.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "pot_shuffle": {
+      "keyString": "pot_shuffle",
+      "friendlyName": "Pot Shuffle",
+      "description": "Keys, items, and buttons hidden under pots in dungeons may be shuffled with other pots in their super-tile.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "pot_shuffle.on",
+          "friendlyName": "On",
+          "description": "Enable pot shuffle.",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "pot_shuffle.off",
+          "friendlyName": "Off",
+          "description": "Disable pot shuffle.",
+          "defaultValue": 50
+        }
+      }
+    },
+    "beemizer": {
+      "keyString": "beemizer",
+      "friendlyName": "Beemizer",
+      "description": "Remove items from the global item pool and replace them with single bees and bee traps.",
+      "inputType": "range",
+      "subOptions": {
+        "0": {
+          "keyString": "beemizer.0",
+          "friendlyName": "Level 0",
+          "description": "No bee traps are placed.",
+          "defaultValue": 50
+        },
+        "1": {
+          "keyString": "beemizer.1",
+          "friendlyName": "Level 1",
+          "description": "25% of the non-essential item pool is replaced with bee traps.",
+          "defaultValue": 1
+        },
+        "2": {
+          "keyString": "beemizer.2",
+          "friendlyName": "Level 2",
+          "description": "60% of the non-essential item pool is replaced with bee traps, of which 20% could be single bees.",
+          "defaultValue": 2
+        },
+        "3": {
+          "keyString": "beemizer.3",
+          "friendlyName": "Level 3",
+          "description": "100% of the non-essential item pool is replaced with bee traps, of which 50% could be single bees.",
+          "defaultValue": 3
+        },
+        "4": {
+          "keyString": "beemizer.4",
+          "friendlyName": "Level 4",
+          "description": "100% of the non-essential item pool is replaced with bee traps.",
+          "defaultValue": 4
+        }
+      }
+    },
+    "shop_shuffle": {
+      "keyString": "shop_shuffle",
+      "friendlyName": "Shop Shuffle",
+      "description": "Alters the inventory and prices of shops.",
+      "inputType": "range",
+      "subOptions": {
+        "none": {
+          "keyString": "shop_shuffle.none",
+          "friendlyName": "Vanilla Shops",
+          "description": "Shop contents are left unchanged.",
+          "defaultValue": 50
+        },
+        "i": {
+          "keyString": "shop_shuffle.i",
+          "friendlyName": "Inventory Shuffle",
+          "description": "Randomizes the inventories of shops.",
+          "defaultValue": 0
+        },
+        "p": {
+          "keyString": "shop_shuffle.p",
+          "friendlyName": "Price Shuffle",
+          "description": "Randomizes the price of items sold in shops.",
+          "defaultValue": 0
+        },
+        "u": {
+          "keyString": "shop_shuffle.u",
+          "friendlyName": "Capacity Upgrades",
+          "description": "Shuffles capacity upgrades throughout the game world.",
+          "defaultValue": 0
+        },
+        "ip": {
+          "keyString": "shop_shuffle.ip",
+          "friendlyName": "Inventory & Prices",
+          "description": "Shuffles the inventory and randomizes the prices of items in shops.",
+          "defaultValue": 0
+        },
+        "uip": {
+          "keyString": "shop_shuffle.uip",
+          "friendlyName": "Full Shuffle",
+          "description": "Shuffles the inventory and randomizes the prices of items in shops. Also distributes capacity upgrades throughout the world.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "shuffle_prizes": {
+      "keyString": "shuffle_prizes",
+      "friendlyName": "Prize Shuffle",
+      "description": "Alters the Prizes from pulling, bonking, enemy kills, digging, and hoarders",
+      "inputType": "range",
+      "subOptions": {
+        "none": {
+          "keyString": "shuffle_prizes.none",
+          "friendlyName": "None",
+          "description": "All prizes from pulling, bonking, enemy kills, digging, hoarders are vanilla.",
+          "defaultValue": 0
+        },
+        "g": {
+          "keyString": "shuffle_prizes.g",
+          "friendlyName": "\"General\" prize shuffle",
+          "description": "Shuffles the prizes from pulling, enemy kills, digging, hoarders",
+          "defaultValue": 50
+        },
+        "b": {
+          "keyString": "shuffle_prizes.b",
+          "friendlyName": "Bonk prize shuffle",
+          "description": "Shuffles the prizes from bonking into trees.",
+          "defaultValue": 0
+        },
+        "bg": {
+          "keyString": "shuffle_prizes.bg",
+          "friendlyName": "Both",
+          "description": "Shuffles both of the options.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "timer": {
+      "keyString": "timer",
+      "friendlyName": "Timed Modes",
+      "description": "Add a timer to the game UI, and cause it to have various effects.",
+      "inputType": "range",
+      "subOptions": {
+        "none": {
+          "keyString": "timer.none",
+          "friendlyName": "Disabled",
+          "description": "No timed mode is applied to the game.",
+          "defaultValue": 50
+        },
+        "timed": {
+          "keyString": "timer.timed",
+          "friendlyName": "Timed Mode",
+          "description": "Starts with clock at zero. Green clocks subtract 4 minutes (total 20). Blue clocks subtract 2 minutes (total 10). Red clocks add two minutes (total 10). Winner is the player with the lowest time at the end.",
+          "defaultValue": 0
+        },
+        "timed_ohko": {
+          "keyString": "timer.timed_ohko",
+          "friendlyName": "Timed OHKO",
+          "description": "Starts the clock at ten minutes. Green clocks add five minutes (total 25). As long as the clock as at zero, Link will die in one hit.",
+          "defaultValue": 0
+        },
+        "ohko": {
+          "keyString": "timer.ohko",
+          "friendlyName": "One-Hit KO",
+          "description": "Timer always at zero. Permanent OHKO.",
+          "defaultValue": 0
+        },
+        "timed_countdown": {
+          "keyString": "timer.timed_countdown",
+          "friendlyName": "Timed Countdown",
+          "description": "Starts the clock with forty minutes. Same clocks as timed mode, but if the clock hits zero you lose. You can still keep playing, though.",
+          "defaultValue": 0
+        },
+        "display": {
+          "keyString": "timer.display",
+          "friendlyName": "Timer Only",
+          "description": "Displays a timer, but otherwise does not affect gameplay or the item pool.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "countdown_start_time": {
+      "keyString": "countdown_start_time",
+      "friendlyName": "Countdown Starting Time",
+      "description": "The amount of time, in minutes, to start with in Timed Countdown and Timed OHKO modes.",
+      "inputType": "range",
+      "subOptions": {
+        "0": {
+          "keyString": "countdown_start_time.0",
+          "friendlyName": 0,
+          "description": "Start with no time on the timer. In Timed OHKO mode, start in OHKO mode.",
+          "defaultValue": 0
+        },
+        "10": {
+          "keyString": "countdown_start_time.10",
+          "friendlyName": 10,
+          "description": "Start with 10 minutes on the timer.",
+          "defaultValue": 50
+        },
+        "20": {
+          "keyString": "countdown_start_time.20",
+          "friendlyName": 20,
+          "description": "Start with 20 minutes on the timer.",
+          "defaultValue": 0
+        },
+        "30": {
+          "keyString": "countdown_start_time.30",
+          "friendlyName": 30,
+          "description": "Start with 30 minutes on the timer.",
+          "defaultValue": 0
+        },
+        "60": {
+          "keyString": "countdown_start_time.60",
+          "friendlyName": 60,
+          "description": "Start with an hour on the timer.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "red_clock_time": {
+      "keyString": "red_clock_time",
+      "friendlyName": "Red Clock Time",
+      "description": "The amount of time, in minutes, to add to or subtract from the timer upon picking up a red clock.",
+      "inputType": "range",
+      "subOptions": {
+        "-2": {
+          "keyString": "red_clock_time.-2",
+          "friendlyName": -2,
+          "description": "Subtract 2 minutes from the timer upon picking up a red clock.",
+          "defaultValue": 0
+        },
+        "1": {
+          "keyString": "red_clock_time.1",
+          "friendlyName": 1,
+          "description": "Add a minute to the timer upon picking up a red clock.",
+          "defaultValue": 50
+        }
+      }
+    },
+    "blue_clock_time": {
+      "keyString": "blue_clock_time",
+      "friendlyName": "Blue Clock Time",
+      "description": "The amount of time, in minutes, to add to or subtract from the timer upon picking up a blue clock.",
+      "inputType": "range",
+      "subOptions": {
+        "1": {
+          "keyString": "blue_clock_time.1",
+          "friendlyName": 1,
+          "description": "Add a minute to the timer upon picking up a blue clock.",
+          "defaultValue": 0
+        },
+        "2": {
+          "keyString": "blue_clock_time.2",
+          "friendlyName": 2,
+          "description": "Add 2 minutes to the timer upon picking up a blue clock.",
+          "defaultValue": 50
+        }
+      }
+    },
+    "green_clock_time": {
+      "keyString": "green_clock_time",
+      "friendlyName": "Green Clock Time",
+      "description": "The amount of time, in minutes, to add to or subtract from the timer upon picking up a green clock.",
+      "inputType": "range",
+      "subOptions": {
+        "4": {
+          "keyString": "green_clock_time.4",
+          "friendlyName": 4,
+          "description": "Add 4 minutes to the timer upon picking up a green clock.",
+          "defaultValue": 50
+        },
+        "10": {
+          "keyString": "green_clock_time.10",
+          "friendlyName": 10,
+          "description": "Add 10 minutes to the timer upon picking up a green clock.",
+          "defaultValue": 0
+        },
+        "15": {
+          "keyString": "green_clock_time.15",
+          "friendlyName": 15,
+          "description": "Add 15 minutes to the timer upon picking up a green clock.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "glitch_boots": {
+      "keyString": "glitch_boots",
+      "friendlyName": "Glitch Boots",
+      "description": "Start with Pegasus Boots in any glitched logic mode that makes use of them.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "glitch_boots.on",
+          "friendlyName": "On",
+          "description": "Enable glitch boots.",
+          "defaultValue": 50
+        },
+        "off": {
+          "keyString": "glitch_boots.off",
+          "friendlyName": "Off",
+          "description": "Disable glitch boots.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "door_shuffle": {
+      "keyString": "door_shuffle",
+      "friendlyName": "Door Shuffle",
+      "description": "Shuffles the interior layout of dungeons. Only available if the host rolls the game using the doors version of the generator.",
+      "inputType": "range",
+      "subOptions": {
+        "vanilla": {
+          "keyString": "door_shuffle.vanilla",
+          "friendlyName": "Vanilla",
+          "description": "Doors within dungeons remain unchanged from the vanilla game.",
+          "defaultValue": 50
+        },
+        "basic": {
+          "keyString": "door_shuffle.basic",
+          "friendlyName": "Basic",
+          "description": "Dungeons are shuffled within themselves.",
+          "defaultValue": 0
+        },
+        "crossed": {
+          "keyString": "door_shuffle.crossed",
+          "friendlyName": "Crossed",
+          "description": "Dungeons are shuffled across each other. Eastern may contain POD, Mire, and Hera.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "intensity": {
+      "keyString": "intensity",
+      "friendlyName": "Door Shuffle Intensity Level",
+      "description": "Specifies what types of doors will be shuffled.",
+      "inputType": "range",
+      "subOptions": {
+        "1": {
+          "keyString": "intensity.1",
+          "friendlyName": "Level 1",
+          "description": "Doors and spiral staircases will be shuffled amongst themselves.",
+          "defaultValue": 50
+        },
+        "2": {
+          "keyString": "intensity.2",
+          "friendlyName": "Level 2",
+          "description": "Doors, open edges, and straight stair cases are shuffled amongst each other. Spiral staircases will be shuffled amongst themselves.",
+          "defaultValue": 0
+        },
+        "3": {
+          "keyString": "intensity.3",
+          "friendlyName": "Level 3",
+          "description": "Level 2 plus lobby shuffling, which means any non-dead-end supertile with a south-facing door may become a dungeon entrance.",
+          "defaultValue": 0
+        },
+        "random": {
+          "keyString": "intensity.random",
+          "friendlyName": "Random",
+          "description": "Randomly chooses an intensity level from 1-3.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "key_drop_shuffle": {
+      "keyString": "key_drop_shuffle",
+      "friendlyName": "Key Drop Shuffle",
+      "description": "Allows the small/big keys dropped by enemies/pots to be shuffled into the item pool. This extends the number of checks from 216 to 249",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "key_drop_shuffle.on",
+          "friendlyName": "Enabled",
+          "description": "Enables key drop shuffle",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "key_drop_shuffle.off",
+          "friendlyName": "Disabled",
+          "description": "Disables key drop shuffle",
+          "defaultValue": 50
+        }
+      }
+    }
+  },
+  "romOptions": {
+    "disablemusic": {
+      "keyString": "rom.disablemusic",
+      "friendlyName": "Game Music",
+      "description": "Enable or disable all in-game music. Sound-effects are unaffected.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "rom.disablemusic.on",
+          "friendlyName": "Disabled",
+          "description": "Disables in-game music.",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "rom.disablemusic.off",
+          "friendlyName": "Enabled",
+          "description": "Enables in-game music.",
+          "defaultValue": 50
+        }
+      }
+    },
+    "quickswap": {
+      "keyString": "rom.quickswap",
+      "friendlyName": "Item Quick-Swap",
+      "description": "Quickly change items by pressing the L+R shoulder buttons. Pressing L+R at the same time toggles the in-slot item (arrows and silver arrows, for example).",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "rom.quickswap.on",
+          "friendlyName": "Enabled",
+          "description": "Enable quick-swap.",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "rom.quickswap.off",
+          "friendlyName": "Disabled",
+          "description": "Disable quick-swap.",
+          "defaultValue": 50
+        }
+      }
+    },
+    "menuspeed": {
+      "keyString": "menuspeed",
+      "friendlyName": "Menu Speed",
+      "description": "Choose how fast the in-game menu opens and closes.",
+      "inputType": "range",
+      "subOptions": {
+        "normal": {
+          "keyString": "rom.menuspeed.normal",
+          "friendlyName": "Vanilla",
+          "description": "Menu speed is unchanged from the vanilla game.",
+          "defaultValue": 50
+        },
+        "instant": {
+          "keyString": "rom.menuspeed.instant",
+          "friendlyName": "Instant",
+          "description": "The in-game menu appears and disappears instantly.",
+          "defaultValue": 0
+        },
+        "double": {
+          "keyString": "rom.menuspeed.double",
+          "friendlyName": "Double Speed",
+          "description": "The in-game menu animation moves at double speed.",
+          "defaultValue": 0
+        },
+        "triple": {
+          "keyString": "rom.menuspeed.triple",
+          "friendlyName": "Triple Speed",
+          "description": "The in-game menu animation moves at triple speed.",
+          "defaultValue": 0
+        },
+        "quadruple": {
+          "keyString": "rom.menuspeed.quadruple",
+          "friendlyName": "Quadruple Speed",
+          "description": "The in-game menu animation moves at quadruple speed.",
+          "defaultValue": 0
+        },
+        "half": {
+          "keyString": "rom.menuspeed.half",
+          "friendlyName": "Half Speed",
+          "description": "The in-game menu animation moves at half speed.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "heartcolor": {
+      "keyString": "rom.heartcolor",
+      "friendlyName": "Heart Color",
+      "description": "Changes the color of your in-game health hearts.",
+      "inputType": "range",
+      "subOptions": {
+        "red": {
+          "keyString": "rom.heartcolor.red",
+          "friendlyName": "Red",
+          "description": "Health hearts are red.",
+          "defaultValue": 50
+        },
+        "blue": {
+          "keyString": "rom.heartcolor.blue",
+          "friendlyName": "Blue",
+          "description": "Health hearts are blue.",
+          "defaultValue": 0
+        },
+        "green": {
+          "keyString": "rom.heartcolor.green",
+          "friendlyName": "Green",
+          "description": "Health hearts are green.",
+          "defaultValue": 0
+        },
+        "yellow": {
+          "keyString": "rom.heartcolor.yellow",
+          "friendlyName": "Yellow",
+          "description": "Health hearts are yellow.",
+          "defaultValue": 0
+        },
+        "random": {
+          "keyString": "rom.heartcolor.random",
+          "friendlyName": "Random",
+          "description": "Health heart color is chosen randomly from red, green, blue, and yellow.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "heartbeep": {
+      "keyString": "rom.heartbeep",
+      "friendlyName": "Heart Beep Speed",
+      "description": "Controls the frequency of the low-health beeping.",
+      "inputType": "range",
+      "subOptions": {
+        "double": {
+          "keyString": "rom.heartbeep.double",
+          "friendlyName": "Double",
+          "description": "Doubles the frequency of the low-health beep.",
+          "defaultValue": 0
+        },
+        "normal": {
+          "keyString": "rom.heartbeep.normal",
+          "friendlyName": "Vanilla",
+          "description": "Heart beep frequency is unchanged from the vanilla game.",
+          "defaultValue": 50
+        },
+        "half": {
+          "keyString": "rom.heartbeep.half",
+          "friendlyName": "Half Speed",
+          "description": "Heart beep plays at half-speed.",
+          "defaultValue": 0
+        },
+        "quarter": {
+          "keyString": "rom.heartbeep.quarter",
+          "friendlyName": "Quarter Speed",
+          "description": "Heart beep plays at one quarter-speed.",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "rom.heartbeep.off",
+          "friendlyName": "Disabled",
+          "description": "Disables the low-health heart beep.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "ow_palettes": {
+      "keyString": "rom.ow_palettes",
+      "friendlyName": "Overworld Palette",
+      "description": "Randomize the colors of the overworld, within reason.",
+      "inputType": "range",
+      "subOptions": {
+        "default": {
+          "keyString": "rom.ow_palettes.default",
+          "friendlyName": "Vanilla",
+          "description": "Overworld colors will remain unchanged.",
+          "defaultValue": 50
+        },
+        "random": {
+          "keyString": "rom.ow_palettes.random",
+          "friendlyName": "Random",
+          "description": "Shuffles the colors of the overworld palette.",
+          "defaultValue": 0
+        },
+        "blackout": {
+          "keyString": "rom.ow_palettes.blackout",
+          "friendlyName": "Blackout",
+          "description": "Never use this. Makes all overworld palette colors black.",
+          "defaultValue": 0
+        },
+		"grayscale": {
+          "keyString": "rom.ow_palettes.grayscale",
+          "friendlyName": "Grayscale",
+          "description": "Removes all saturation of colors.",
+          "defaultValue": 0
+        },
+		"negative": {
+          "keyString": "rom.ow_palettes.negative",
+          "friendlyName": "Negative",
+          "description": "Invert all colors",
+          "defaultValue": 0
+        },
+		"classic": {
+          "keyString": "rom.ow_palettes.classic",
+          "friendlyName": "Classic",
+          "description": "Produces results similar to the website.",
+          "defaultValue": 0
+        },
+		"dizzy": {
+          "keyString": "rom.ow_palettes.dizzy",
+          "friendlyName": "Dizzy",
+          "description": "No logic in colors but saturation and lightness are conserved.",
+          "defaultValue": 0
+        },
+		"sick": {
+          "keyString": "rom.ow_palettes.sick",
+          "friendlyName": "Sick",
+          "description": "No logic in colors but lightness is conserved.",
+          "defaultValue": 0
+        },
+		"puke": {
+          "keyString": "rom.ow_palettes.Puke",
+          "friendlyName": "Puke",
+          "description": "No logic at all.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "uw_palettes": {
+      "keyString": "rom.uw_palettes",
+      "friendlyName": "Underworld Palettes",
+      "description": "Randomize the colors of the underworld (caves, dungeons, etc.), within reason.",
+      "inputType": "range",
+      "subOptions": {
+        "default": {
+          "keyString": "rom.uw_palettes.default",
+          "friendlyName": "Vanilla",
+          "description": "Underworld colors will remain unchanged.",
+          "defaultValue": 50
+        },
+        "random": {
+          "keyString": "rom.uw_palettes.random",
+          "friendlyName": "Random",
+          "description": "Shuffles the colors of the underworld palette.",
+          "defaultValue": 0
+        },
+        "blackout": {
+          "keyString": "rom.uw_palettes.blackout",
+          "friendlyName": "Blackout",
+          "description": "Never use this. Makes all underworld palette colors black.",
+          "defaultValue": 0
+        },
+		"grayscale": {
+          "keyString": "rom.uw_palettes.grayscale",
+          "friendlyName": "Grayscale",
+          "description": "Removes all saturation of colors.",
+          "defaultValue": 0
+        },
+		"negative": {
+          "keyString": "rom.uw_palettes.negative",
+          "friendlyName": "Negative",
+          "description": "Invert all colors",
+          "defaultValue": 0
+        },
+		"classic": {
+          "keyString": "rom.uw_palettes.classic",
+          "friendlyName": "Classic",
+          "description": "Produces results similar to the website.",
+          "defaultValue": 0
+        },
+		"dizzy": {
+          "keyString": "rom.uw_palettes.dizzy",
+          "friendlyName": "Dizzy",
+          "description": "No logic in colors but saturation and lightness are conserved.",
+          "defaultValue": 0
+        },
+		"sick": {
+          "keyString": "rom.uw_palettes.sick",
+          "friendlyName": "Sick",
+          "description": "No logic in colors but lightness is conserved.",
+          "defaultValue": 0
+        },
+		"puke": {
+          "keyString": "rom.uw_palettes.Puke",
+          "friendlyName": "Puke",
+          "description": "No logic at all.",
+          "defaultValue": 0
+        }
+      }
+    },
+	"hud_palettes": {
+      "keyString": "rom.hud_palettes",
+      "friendlyName": "HUD Palettes",
+      "description": "Randomize the colors of the HUD (user interface), within reason.",
+      "inputType": "range",
+      "subOptions": {
+        "default": {
+          "keyString": "rom.hud_palettes.default",
+          "friendlyName": "Vanilla",
+          "description": "HUD colors will remain unchanged.",
+          "defaultValue": 50
+        },
+        "random": {
+          "keyString": "rom.hud_palettes.random",
+          "friendlyName": "Random",
+          "description": "Shuffles the colors of the HUD palette.",
+          "defaultValue": 0
+        },
+        "blackout": {
+          "keyString": "rom.hud_palettes.blackout",
+          "friendlyName": "Blackout",
+          "description": "Never use this. Makes all HUD palette colors black.",
+          "defaultValue": 0
+        },
+		"grayscale": {
+          "keyString": "rom.hud_palettes.grayscale",
+          "friendlyName": "Grayscale",
+          "description": "Removes all saturation of colors.",
+          "defaultValue": 0
+        },
+		"negative": {
+          "keyString": "rom.hud_palettes.negative",
+          "friendlyName": "Negative",
+          "description": "Invert all colors",
+          "defaultValue": 0
+        },
+		"classic": {
+          "keyString": "rom.hud_palettes.classic",
+          "friendlyName": "Classic",
+          "description": "Produces results similar to the website.",
+          "defaultValue": 0
+        },
+		"dizzy": {
+          "keyString": "rom.hud_palettes.dizzy",
+          "friendlyName": "Dizzy",
+          "description": "No logic in colors but saturation and lightness are conserved.",
+          "defaultValue": 0
+        },
+		"sick": {
+          "keyString": "rom.hud_palettes.sick",
+          "friendlyName": "Sick",
+          "description": "No logic in colors but lightness is conserved.",
+          "defaultValue": 0
+        },
+		"puke": {
+          "keyString": "rom.hud_palettes.Puke",
+          "friendlyName": "Puke",
+          "description": "No logic at all.",
+          "defaultValue": 0
+        }
+      }
+    },
+	"shield_palettes": {
+      "keyString": "rom.shield_palettes",
+      "friendlyName": "Shield Palettes",
+      "description": "Randomize the colors of the shield, within reason.",
+      "inputType": "range",
+      "subOptions": {
+        "default": {
+          "keyString": "rom.shield_palettes.default",
+          "friendlyName": "Vanilla",
+          "description": "Shield colors will remain unchanged.",
+          "defaultValue": 50
+        },
+        "random": {
+          "keyString": "rom.shield_palettes.random",
+          "friendlyName": "Random",
+          "description": "Shuffles the colors of the shield palette.",
+          "defaultValue": 0
+        },
+        "blackout": {
+          "keyString": "rom.shield_palettes.blackout",
+          "friendlyName": "Blackout",
+          "description": "Never use this. Makes all shield palette colors black.",
+          "defaultValue": 0
+        },
+		"grayscale": {
+          "keyString": "rom.shield_palettes.grayscale",
+          "friendlyName": "Grayscale",
+          "description": "Removes all saturation of colors.",
+          "defaultValue": 0
+        },
+		"negative": {
+          "keyString": "rom.shield_palettes.negative",
+          "friendlyName": "Negative",
+          "description": "Invert all colors",
+          "defaultValue": 0
+        },
+		"classic": {
+          "keyString": "rom.shield_palettes.classic",
+          "friendlyName": "Classic",
+          "description": "Produces results similar to the website.",
+          "defaultValue": 0
+        },
+		"dizzy": {
+          "keyString": "rom.shield_palettes.dizzy",
+          "friendlyName": "Dizzy",
+          "description": "No logic in colors but saturation and lightness are conserved.",
+          "defaultValue": 0
+        },
+		"sick": {
+          "keyString": "rom.shield_palettes.sick",
+          "friendlyName": "Sick",
+          "description": "No logic in colors but lightness is conserved.",
+          "defaultValue": 0
+        },
+		"puke": {
+          "keyString": "rom.shield_palettes.Puke",
+          "friendlyName": "Puke",
+          "description": "No logic at all.",
+          "defaultValue": 0
+        }
+      }
+    },
+	"sword_palettes": {
+      "keyString": "rom.sword_palettes",
+      "friendlyName": "Sword Palettes",
+      "description": "Randomize the colors of the sword, within reason.",
+      "inputType": "range",
+      "subOptions": {
+        "default": {
+          "keyString": "rom.sword_palettes.default",
+          "friendlyName": "Vanilla",
+          "description": "Sword colors will remain unchanged.",
+          "defaultValue": 50
+        },
+        "random": {
+          "keyString": "rom.sword_palettes.random",
+          "friendlyName": "Random",
+          "description": "Shuffles the colors of the sword palette.",
+          "defaultValue": 0
+        },
+        "blackout": {
+          "keyString": "rom.sword_palettes.blackout",
+          "friendlyName": "Blackout",
+          "description": "Never use this. Makes all sword palette colors black.",
+          "defaultValue": 0
+        },
+		"grayscale": {
+          "keyString": "rom.sword_palettes.grayscale",
+          "friendlyName": "Grayscale",
+          "description": "Removes all saturation of colors.",
+          "defaultValue": 0
+        },
+		"negative": {
+          "keyString": "rom.sword_palettes.negative",
+          "friendlyName": "Negative",
+          "description": "Invert all colors",
+          "defaultValue": 0
+        },
+		"classic": {
+          "keyString": "rom.sword_palettes.classic",
+          "friendlyName": "Classic",
+          "description": "Produces results similar to the website.",
+          "defaultValue": 0
+        },
+		"dizzy": {
+          "keyString": "rom.sword_palettes.dizzy",
+          "friendlyName": "Dizzy",
+          "description": "No logic in colors but saturation and lightness are conserved.",
+          "defaultValue": 0
+        },
+		"sick": {
+          "keyString": "rom.sword_palettes.sick",
+          "friendlyName": "Sick",
+          "description": "No logic in colors but lightness is conserved.",
+          "defaultValue": 0
+        },
+		"puke": {
+          "keyString": "rom.sword_palettes.Puke",
+          "friendlyName": "Puke",
+          "description": "No logic at all.",
+          "defaultValue": 0
+        }
+      }
+    }
+  }
+}

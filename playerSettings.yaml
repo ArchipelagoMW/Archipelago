@@ -107,7 +107,7 @@ triforce_pieces_extra: # Set to how many extra triforces pieces are available to
   10: 50
   15: 0
   20: 0
-triforce_pieces_percentage: # Set to how many extra triforces pieces according to a percentage of the required ones, are available to collect in the world. 
+triforce_pieces_percentage: # Set to how many triforce pieces according to a percentage of the required ones, are available to collect in the world.
   # Format "pieces: chance"
   100: 0 #No extra
   150: 50 #Half the required will be added as extra
@@ -165,7 +165,6 @@ item_pool:
   normal: 50 # Item availability remains unchanged from vanilla game
   hard: 0 # Reduced upgrade availability (max: 14 hearts, blue mail, tempered sword, fire shield, no silvers unless swordless)
   expert: 0 # Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless)
-  crowd_control: 0 # Sets up the item pool for the crowd control extension. Do not use it without crowd control
 item_functionality:
   easy: 0 # Allow Hammer to damage ganon, Allow Hammer tablet collection, Allow swordless medallion use everywhere.
   normal: 50 # Vanilla item functionality
@@ -174,6 +173,9 @@ item_functionality:
 progression_balancing:
   on: 50 # A system to reduce BK, as in times during which you can't do anything by moving your items into an earlier access sphere to make it likely you have stuff to do
   off: 0 # Turn this off if you don't mind a longer multiworld, or can glitch around missing items.
+tile_shuffle: # Randomize the tile layouts in flying tile rooms
+  on: 0
+  off: 50
 ### Enemizer Section ###
 boss_shuffle:
   none: 50 # Vanilla bosses
@@ -186,9 +188,6 @@ enemy_shuffle: # Randomize enemy placement
   off: 50
 killable_thieves: # Make thieves killable
   on: 0 # Usually turned on together with enemy_shuffle to make annoying thief placement more manageable
-  off: 50
-tile_shuffle: # Randomize the tile layouts in flying tile rooms
-  on: 0
   off: 50
 bush_shuffle: # Randomize the chance that bushes have enemies and the enemies under said bush
   on: 0
@@ -232,8 +231,29 @@ timer:
   ohko: 0 # Timer always at zero. Permanent OHKO.
   timed_countdown: 0 # Starts the clock with forty minutes. Same clocks as timed mode, but if the clock hits zero you lose. You can still keep playing, though.
   display: 0 # Displays a timer, but otherwise does not affect gameplay or the item pool.
+countdown_start_time: # For timed_ohko and timed_countdown timer modes, the amount of time in minutes to start with
+  0: 0 # For timed_ohko, starts in OHKO mode when starting the game
+  10: 50
+  20: 0
+  30: 0
+  60: 0
+red_clock_time: # For all timer modes, the amount of time in minutes to gain or lose when picking up a red clock
+  -2: 50
+  1: 0
+blue_clock_time: # For all timer modes, the amount of time in minutes to gain or lose when picking up a blue clock
+  1: 0
+  2: 50
+green_clock_time: # For all timer modes, the amount of time in minutes to gain or lose when picking up a green clock
+  4: 50
+  10: 0
+  15: 0
 # Can be uncommented to use it
 # local_items: # Force certain items to appear in your world only, not across the multiworld. Recognizes some group names, like "Swords"
+#  - "Moon Pearl"
+#  - "Small Keys"
+#  - "Big Keys"
+# Can be uncommented to use it
+# non_local_items: # Force certain items to appear outside your world only, always across the multiworld. Recognizes some group names, like "Swords"
 #  - "Moon Pearl"
 #  - "Small Keys"
 #  - "Big Keys"
@@ -280,6 +300,7 @@ linked_options:
         hard: 1
         expert: 1
     percentage: 0 # Set this to the percentage chance you want enemizer
+### door rando only options ###
 door_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
   vanilla: 50 # Everything should be like in vanilla
   basic: 0 # Dungeons are shuffled within themselves
@@ -289,12 +310,16 @@ intensity: # Only available if the host uses the doors branch, it is ignored oth
   2: 0 # And shuffles open edges and straight staircases
   3: 0 # And shuffles dungeon lobbies
   random: 0 # Picks one of those at random
+key_drop_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
+  on: 0 # Enables the small keys dropped by enemies or under pots, and the big key dropped by the Ball & Chain guard to be shuffled into the pool. This extends the number of checks to 249.
+  off: 50
 experimental: # Only available if the host uses the doors branch, it is ignored otherwise
-  on: 0 # Enables experimental features. Currently, this is just the dungeon keys in chest counter.
+  on: 0 # Enables experimental features.
   off: 50
 debug: # Only available if the host uses the doors branch, it is ignored otherwise
   on: 0 # Enables debugging features. Currently, these are the Item collection counter. (overwrites total triforce pieces) and Castle Gate closed indicator.
   off: 50
+### end of door rando only options ###
 rom:
   random_sprite_on_event: # An alternative to specifying randomonhit / randomonexit / etc... in sprite down below.
     enabled:  # If enabled, sprite down below is ignored completely, (although it may become the sprite pool)
@@ -367,9 +392,51 @@ rom:
     off: 0
   ow_palettes: # Change the colors of the overworld
     default: 50 # No changes
-    random: 0 # Shuffle the colors
-    blackout: 0 # Never use this
+    random: 0 # Shuffle the colors, with harmony in mind
+    blackout: 0 # everything black / blind mode
+    grayscale: 0
+    negative: 0
+    classic: 0
+    dizzy: 0
+    sick: 0
+    puke: 0
   uw_palettes: # Change the colors of caves and dungeons
     default: 50 # No changes
-    random: 0 # Shuffle the colors
-    blackout: 0 # Never use this
+    random: 0 # Shuffle the colors, with harmony in mind
+    blackout: 0 # everything black / blind mode
+    grayscale: 0
+    negative: 0
+    classic: 0
+    dizzy: 0
+    sick: 0
+    puke: 0
+  hud_palettes: # Change the colors of the hud
+    default: 50 # No changes
+    random: 0 # Shuffle the colors, with harmony in mind
+    blackout: 0 # everything black / blind mode
+    grayscale: 0
+    negative: 0
+    classic: 0
+    dizzy: 0
+    sick: 0
+    puke: 0
+  sword_palettes: # Change the colors of swords
+    default: 50 # No changes
+    random: 0 # Shuffle the colors, with harmony in mind
+    blackout: 0 # everything black / blind mode
+    grayscale: 0
+    negative: 0
+    classic: 0
+    dizzy: 0
+    sick: 0
+    puke: 0
+  shield_palettes: # Change the colors of shields
+    default: 50 # No changes
+    random: 0 # Shuffle the colors, with harmony in mind
+    blackout: 0 # everything black / blind mode
+    grayscale: 0
+    negative: 0
+    classic: 0
+    dizzy: 0
+    sick: 0
+    puke: 0

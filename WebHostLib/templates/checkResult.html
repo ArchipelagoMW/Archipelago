@@ -1,0 +1,34 @@
+{% extends 'autotablepage.html' %}
+
+{% block head %}
+    {{ super() }}
+    <title>Mystery YAML Test Roll Results</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/checkResult.css") }}" />
+{% endblock %}
+
+{% block body %}
+    {% include 'header/oceanHeader.html' %}
+    <div id="check-result-wrapper">
+        <div id="check-result" class="grass-island">
+            <h1>Verification Results</h1>
+            <p>The results of your requested file check are below.</p>
+            <table class="table autodatatable">
+                <thead>
+                    <tr>
+                        <th>File</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for filename, resulttext in results.items() %}
+                        <tr>
+                            <td>{{ filename }}</td>
+                            <td>{{ "Valid" if resulttext == True else resulttext }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% include 'islandFooter.html' %}
+{% endblock %}

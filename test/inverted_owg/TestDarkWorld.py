@@ -37,11 +37,11 @@ class TestDarkWorld(TestInvertedOWG):
 
             ["Blacksmith", False, []],
             ["Blacksmith", True, ['Magic Mirror', 'Pegasus Boots']],
-            ["Blacksmith", True, ['Progressive Glove', 'Progressive Glove', 'Pegasus Boots', 'Moon Pearl']],
+            ["Blacksmith", True, ['Progressive Glove', 'Progressive Glove', 'Moon Pearl']],
 
             ["Purple Chest", False, []],
             ["Purple Chest", True, ['Magic Mirror', 'Pegasus Boots']],
-            ["Purple Chest", True, ['Progressive Glove', 'Progressive Glove', 'Pegasus Boots', 'Moon Pearl']],
+            ["Purple Chest", True, ['Progressive Glove', 'Progressive Glove', 'Moon Pearl']],
         ])
 
     def testEastDarkWorld(self):
@@ -49,11 +49,7 @@ class TestDarkWorld(TestInvertedOWG):
             ["Catfish", False, []],
             ["Catfish", True, ['Pegasus Boots']],
 
-            #todo: Qirn Jump
-            #["Pyramid", True, []],
-            ["Pyramid", False, []],
-            ["Pyramid", True, ['Pegasus Boots']],
-            ["Pyramid", True, ['Flippers']],
+            ["Pyramid", True, []],
 
             ["Pyramid Fairy - Left", False, []],
             ["Pyramid Fairy - Left", False, [], ['Magic Mirror']],

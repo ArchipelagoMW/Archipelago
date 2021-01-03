@@ -55,7 +55,7 @@ def uploads():
                             for patch in patches:
                                 patch.seed = seed
 
-                            return redirect(url_for("view_seed", seed=seed.id))
+                            return redirect(url_for("viewSeed", seed=seed.id))
                         else:
                             flash("No multidata was found in the zip file, which is required.")
                 else:
@@ -66,11 +66,17 @@ def uploads():
                     else:
                         seed = Seed(multidata=multidata, owner=session["_id"])
                         commit()  # place into DB and generate ids
-                        return redirect(url_for("view_seed", seed=seed.id))
+                        return redirect(url_for("viewSeed", seed=seed.id))
             else:
                 flash("Not recognized file format. Awaiting a .multidata file.")
+    return render_template("hostGame.html")
+
+
+@app.route('/user-content', methods=['GET'])
+def user_content():
     rooms = select(room for room in Room if room.owner == session["_id"])
-    return render_template("uploads.html", rooms=rooms)
+    seeds = select(seed for seed in Seed if seed.owner == session["_id"])
+    return render_template("userContent.html", rooms=rooms, seeds=seeds)
 
 
 def allowed_file(filename):

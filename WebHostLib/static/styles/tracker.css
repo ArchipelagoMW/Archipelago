@@ -1,8 +1,16 @@
+html{
+    background-image: url('../static/backgrounds/dirt/dirt-0005-large.png');
+    background-repeat: repeat;
+    background-size: 900px 900px;
+}
+
 #tracker-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    width: calc(100% - 1rem);
 }
 
 .table-wrapper{
@@ -18,9 +26,15 @@
     line-height: 20px;
 }
 
+#tracker-header-bar .info{
+    color: #ffffff;
+}
+
 #search{
+    border: 1px solid #000000;
+    border-radius: 3px;
+    padding: 3px;
     width: 200px;
-    height: 20px;
     margin-bottom: 0.5rem;
     margin-right: 1rem;
 }
@@ -31,6 +45,14 @@
 
 div.dataTables_wrapper.no-footer .dataTables_scrollBody{
     border: none;
+}
+
+table.dataTable tbody{
+    background-color: #dce2bd;
+}
+
+table.dataTable tbody tr:hover{
+    background-color: #e2eabb;
 }
 
 table.dataTable tbody td{

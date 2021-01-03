@@ -1,0 +1,22 @@
+#check-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#check{
+    width: 620px;
+    height: 280px;
+    text-align: center;
+}
+
+#check-form-wrapper{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+#check-form{
+    display: none;
+}

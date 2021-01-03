@@ -1,59 +1,61 @@
-{% extends 'layout.html' %}
+{% extends 'pageWrapper.html' %}
 
 {% block head %}
-    <title>Berserker's Multiworld</title>
+    <title>MultiWorld</title>
     <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/landing.css") }}" />
 {% endblock %}
 
 {% block body %}
     <div id="landing-wrapper">
-        <div id="landing" class="main-content">
-            <div id="landing-header">
-                <h3>Berserker's Multiworld</h3>
-                <p id="landing-header-links">
-                    <a href="https://github.com/Berserker66/MultiWorld-Utilities">Source Code</a>
-                    -
-                    <a href="https://github.com/Berserker66/MultiWorld-Utilities/wiki">Wiki</a>
-                    -
-                    <a href="https://github.com/Berserker66/MultiWorld-Utilities/graphs/contributors">Contributors</a>
-                </p>
-            </div>
-            <div id="landing-buttons">
-                <a href="{{ url_for("generate") }}">
-                    <button>Start a New Game</button>
-                </a>
-                <a href="{{ url_for("uploads") }}">
-                    <button>Host Existing Game</button>
-                </a>
-                <a href="{{ url_for('tutorial') }}">
-                    <button>Setup Guide</button>
-                </a>
-                <a href="{{ url_for('player_settings') }}">
-                    <button>Player Settings</button>
-                </a>
-                <a href="{{ url_for("mysterycheck") }}">
-                    <button>Test YAML Config</button>
-                </a>
-            </div>
+        <div id="landing-header">
+            <h4>the legend of zelda: a link to the past</h4>
+            <h1>MULTIWORLD RANDOMIZER</h1>
+        </div>
+        <div id="landing-links">
+            <a href="/player-settings" id="player-settings-button">start<br />playing</a>
+            <a href="/uploads" id="uploads-button">host<br />game</a>
+            <a href="/tutorial" id="setup-guide-button">setup guide</a>
+            <a href="/generate" id="generate-button">upload config</a>
+            <a href="https://discord.gg/8Z65BR2" id="discord-button">discord</a>
+        </div>
+        <div id="landing-clouds">
+            <img id="cloud1" src="/static/static/backgrounds/clouds/cloud-0001.png"/>
+            <img id="cloud2" src="/static/static/backgrounds/clouds/cloud-0002.png"/>
+            <img id="cloud3" src="/static/static/backgrounds/clouds/cloud-0003.png"/>
+        </div>
+        <div id="landing-decorations">
+            <img id="landing-deco-1" class="landing-deco deco-island" src="/static/static/decorations/island-b.png" />
+            <img id="landing-deco-2" class="landing-deco deco-island" src="/static/static/decorations/island-c.png" />
+            <img id="landing-deco-3" class="landing-deco deco-rock" src="/static/static/decorations/rock-a.png" />
+            <img id="landing-deco-4" class="landing-deco deco-rock" src="/static/static/decorations/rock-a.png" />
+            <img id="landing-deco-5" class="landing-deco deco-rock" src="/static/static/decorations/rock-a.png" />
+            <img id="landing-deco-6" class="landing-deco deco-rock" src="/static/static/decorations/rock-a.png" />
+        </div>
+        <div id="landing" class="grass-island">
             <div id="landing-body">
+                <p id="first-line">Welcome to the Archipelago Multiworld Randomizer!</p>
                 <p>This is a <span data-tooltip="Allegedly.">randomizer</span> for The Legend of Zelda: A
                     Link to the Past.</p>
-                <p>This is also a multiworld, meaning your items may be placed into other players' worlds, and
-                    other players's items may be placed into your world. When a player picks up an item which does
-                    not belong to them, it is sent back to the player it belongs to over the internet.</p>
-                <p>This website allows you to host a multiworld game, and provides item and location trackers for all
-                    games hosted here.</p>
-                <p>Currently, a locally installed client is required to play. This client should handle patching
-                    your ROM files and connecting to the multiworld server. More information on how to set up a local
-                    client may be found on the
-                    <a href="{{ url_for("tutorial") }}">Setup Guide</a>.</p>
-                <p>This website is under active development. As such, your hosted rooms may occasionally disappear,
-                    and there may be bugs. If you do happen to find a bug, please report it
-                    <a href="https://github.com/Berserker66/MultiWorld-Utilities/issues">here</a>.</p>
-                <p>{{ seeds }} games were created and {{ rooms }} hosted in the last 7 days.</p>
+                <p>It is also a multi-world, meaning Link's items may have been placed into other players' games.
+                    When a player picks up an item which does not belong to them, it is sent back to the player
+                    it belongs to.</p>
+                <p>On this website you are able to generate and host multiworld games, and item and location
+                    trackers are provided for games hosted here.</p>
+                <p>
+                    This project is the cumulative effort of many
+                    <a href="https://github.com/Berserker66/MultiWorld-Utilities/graphs/contributors">talented people.</a>
+                    Together, they have spent countless hours creating a huge repository of
+                    <a href="https://github.com/Berserker66/MultiWorld-Utilities">source code</a> which has turned
+                    our crazy idea into a reality.
+                </p>
+                <p>
+                    <span class="variable">{{ seeds }}</span>
+                    games were created and
+                    <span class="variable">{{ rooms }}</span>
+                    were hosted in the last 7 days.
+                </p>
             </div>
         </div>
-        <iframe src="https://discordapp.com/widget?id=731205301247803413&theme=light"
-                width="300" height="500" allowtransparency="true"></iframe>
     </div>
+    {% include 'islandFooter.html' %}
 {% endblock %}
