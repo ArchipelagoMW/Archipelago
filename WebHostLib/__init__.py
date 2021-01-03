@@ -79,10 +79,14 @@ def register_session():
         session["_id"] = uuid4()  # uniquely identify each session without needing a login
 
 
+@app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
+def tutorial(game, file, lang):
+    return render_template("tutorial.html", game=game, file=file, lang=lang)
+
+
 @app.route('/tutorial')
-@app.route('/tutorial/<string:lang>')
-def tutorial(lang='en'):
-    return render_template(f"tutorial.html", lang=lang)
+def tutorial_landing():
+    return render_template("tutorialLanding.html")
 
 
 @app.route('/player-settings')

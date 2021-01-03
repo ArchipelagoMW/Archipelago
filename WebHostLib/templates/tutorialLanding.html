@@ -1,0 +1,15 @@
+{% extends 'pageWrapper.html' %}
+
+{% block head %}
+    {% include 'header/grassHeader.html' %}
+    <title>Archipelago Guides</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/tutorialLanding.css") }}" />
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/tutorialLanding.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div id="tutorial-landing" data-game="{{ game }}" data-file="{{ file }}" data-lang="{{ lang }}">
+        <h1 id="page-title">Archipelago Guides</h1>
+        <p id="loading">Loading...</p>
+    </div>
+{%  endblock %}

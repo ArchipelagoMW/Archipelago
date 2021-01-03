@@ -4,7 +4,7 @@ html{
     background-size: 650px 650px;
 }
 
-#tutorial-wrapper{
+#tutorial-landing{
     display: flex;
     flex-direction: column;
     max-width: 70rem;
@@ -16,30 +16,29 @@ html{
     color: #eeffeb;
 }
 
-#tutorial-wrapper p{
-    margin-top: 0;
+#tutorial-landing p{
+    margin: 0;
 }
 
-#tutorial-wrapper a{
+#tutorial-landing a{
     color: #ffef00;
+    text-decoration: none;
 }
 
-#tutorial-wrapper h1{
+#tutorial-landing h1{
     font-size: 2.5rem;
     font-weight: normal;
     border-bottom: 1px solid #ffffff;
-    cursor: pointer;
     width: 100%;
     margin-bottom: 0.5rem;
     color: #ffffff;
     text-shadow: 1px 1px 4px #000000;
 }
 
-#tutorial-wrapper h2{
+#tutorial-landing h2{
     font-size: 2rem;
     font-weight: normal;
     border-bottom: 1px solid #ffffff;
-    cursor: pointer;
     width: 100%;
     margin-bottom: 0.5rem;
     color: #ffe993;
@@ -47,53 +46,49 @@ html{
     text-shadow: 1px 1px 2px #000000;
 }
 
-#tutorial-wrapper h3{
+#tutorial-landing h3{
     font-size: 1.70rem;
     font-weight: normal;
     text-align: left;
-    cursor: pointer;
     width: 100%;
     margin-bottom: 0.5rem;
 }
 
-#tutorial-wrapper h4{
+#tutorial-landing h4{
     font-size: 1.5rem;
     font-weight: normal;
-    cursor: pointer;
     margin-bottom: 0.5rem;
 }
 
-#tutorial-wrapper h5{
+#tutorial-landing h5{
     font-size: 1.25rem;
     font-weight: normal;
-    cursor: pointer;
 }
 
-#tutorial-wrapper h6{
+#tutorial-landing h6{
     font-size: 1.25rem;
     font-weight: normal;
-    cursor: pointer;
     color: #434343;
 }
 
-#tutorial-wrapper h3, #tutorial-wrapper h4, #tutorial-wrapper h5,#tutorial-wrapper h6{
+#tutorial-landing h3, #tutorial-landing h4, #tutorial-landing h5,#tutorial-landing h6{
     color: #ffffff;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
-#tutorial-wrapper ul{
+#tutorial-landing ul{
 
 }
 
-#tutorial-wrapper ol{
+#tutorial-landing ol{
 
 }
 
-#tutorial-wrapper li{
+#tutorial-landing li{
 
 }
 
-#tutorial-wrapper pre{
+#tutorial-landing pre{
     margin-top: 0;
     padding: 0.5rem 0.25rem;
     background-color: #ffeeab;
@@ -102,20 +97,10 @@ html{
     color: #000000;
 }
 
-#tutorial-wrapper code{
+#tutorial-landing code{
     background-color: #ffeeab;
     border-radius: 4px;
     padding-left: 0.25rem;
     padding-right: 0.25rem;
     color: #000000;
-}
-
-#tutorial-wrapper #tutorial-video-container{
-    width: 100%;
-    text-align: center;
-}
-
-#tutorial-wrapper #language-selector-wrapper{
-    width: 100%;
-    text-align: right;
 }

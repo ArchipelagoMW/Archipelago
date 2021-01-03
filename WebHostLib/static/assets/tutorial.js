@@ -1,10 +1,3 @@
-const availableLanguages = {
-    de: 'Deutsch',
-    en: 'English',
-    es: 'Español',
-    fr: 'Français',
-};
-
 window.addEventListener('load', () => {
     const tutorialWrapper = document.getElementById('tutorial-wrapper');
     new Promise((resolve, reject) => {
@@ -21,27 +14,11 @@ window.addEventListener('load', () => {
             }
             resolve(ajax.responseText);
         };
-        ajax.open('GET', `${window.location.origin}/static/assets/tutorial/tutorial_` +
-            `${tutorialWrapper.getAttribute('data-language')}.md`, true);
+        ajax.open('GET', `${window.location.origin}/static/assets/tutorial/` +
+            `${tutorialWrapper.getAttribute('data-game')}/${tutorialWrapper.getAttribute('data-file')}_` +
+            `${tutorialWrapper.getAttribute('data-lang')}.md`, true);
         ajax.send();
     }).then((results) => {
-        // Build the language selector
-        let currentLanguage = window.location.href.split('/').pop();
-        if (Object.keys(availableLanguages).indexOf(currentLanguage) === -1) { currentLanguage = 'en' }
-        const languageSelectorWrapper = document.createElement('div');
-        languageSelectorWrapper.setAttribute('id', 'language-selector-wrapper')
-        const languageSelector = document.createElement('select');
-        languageSelector.setAttribute('id', 'language-selector');
-        for (const lang of Object.keys(availableLanguages)) {
-            const option = document.createElement('option');
-            option.value = lang;
-            option.innerText = availableLanguages[lang];
-            if (lang === currentLanguage) { option.setAttribute('selected', '1'); }
-            languageSelector.appendChild(option);
-        }
-        languageSelectorWrapper.appendChild(languageSelector);
-        tutorialWrapper.appendChild(languageSelectorWrapper);
-
         // Populate page with HTML generated from markdown
         tutorialWrapper.innerHTML += (new showdown.Converter()).makeHtml(results);
         adjustHeaderWidth();
@@ -65,14 +42,10 @@ window.addEventListener('load', () => {
                 console.error(error);
             }
         }
-
-        document.getElementById('language-selector').addEventListener('change', (event) => {
-            console.info(window.location.hostname);
-            window.location.href = `http://${window.location.hostname}/tutorial/${event.target.value}`;
-        });
     }).catch((error) => {
+        console.error(error);
         tutorialWrapper.innerHTML =
-            `<h2>${error}</h2>
+            `<h2>This page is out of logic!</h2>
             <h3>Click <a href="${window.location.origin}/tutorial">here</a> to return to safety.</h3>`;
     });
 });
