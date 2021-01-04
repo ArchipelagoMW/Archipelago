@@ -342,6 +342,7 @@ def main(args, seed=None):
 
     pool = concurrent.futures.ThreadPoolExecutor()
     multidata_task = None
+    check_beatability_task = pool.submit(world.can_beat_game)
     if not args.suppress_rom:
 
         rom_futures = []
@@ -425,14 +426,15 @@ def main(args, seed=None):
                                                   "precollected_items": precollected_items,
                                                   "version": _version_tuple,
                                                   "tags": multidatatags,
-                                                  "minimum_versions" : minimum_versions
+                                                  "minimum_versions": minimum_versions
                                                   }).encode("utf-8"), 9)
 
             with open(output_path('%s.multidata' % outfilebase), 'wb') as f:
                 f.write(multidata)
 
         multidata_task = pool.submit(write_multidata, rom_futures)
-
+    if not check_beatability_task.result():
+        raise Exception("Game appears unbeatable. Aborting.")
     if not args.skip_playthrough:
         logger.info('Calculating playthrough.')
         create_playthrough(world)
@@ -577,10 +579,6 @@ def create_playthrough(world):
     # create a copy as we will modify it
     old_world = world
     world = copy_world(world)
-
-    # if we only check for beatable, we can do this sanity check first before writing down spheres
-    if not world.can_beat_game():
-        raise RuntimeError('Cannot beat game. Something went terribly wrong here!')
 
     # get locations containing progress items
     prog_locations = [location for location in world.get_filled_locations() if location.item.advancement]
