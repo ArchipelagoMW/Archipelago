@@ -17,7 +17,7 @@ from EntranceShuffle import link_entrances, link_inverted_entrances, plando_conn
 from Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, get_hash_string
 from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
-from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression
+from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
 import Patch
@@ -179,42 +179,7 @@ def main(args, seed=None):
 
     logger.info("Running Item Plando")
 
-    world_name_lookup = {world.player_names[player_id][0]: player_id for player_id in world.player_ids}
-
-    for player in world.player_ids:
-        placement: PlandoItem
-        for placement in world.plando_items[player]:
-            target_world: int = placement.world
-            if target_world is False or world.players == 1:
-                target_world = player  # in own world
-            elif target_world is True:  # in any other world
-                target_world = player
-                while target_world == player:
-                    target_world = world.random.randint(1, world.players + 1)
-            elif target_world is None:  # any random world
-                target_world = world.random.randint(1, world.players + 1)
-            elif type(target_world) == int:  # target world by player id
-                pass
-            else:  # find world by name
-                target_world = world_name_lookup[target_world]
-
-            location = world.get_location(placement.location, target_world)
-            if location.item:
-                raise Exception(f"Cannot place item into already filled location {location}.")
-            item = ItemFactory(placement.item, player)
-            if placement.from_pool:
-                try:
-                    world.itempool.remove(item)
-                except ValueError:
-                    logger.warning(f"Could not remove {item} from pool as it's already missing from it.")
-
-            if location.can_fill(world.state, item, False):
-                world.push_item(location, item, collect=False)
-                location.event = True  # flag location to be checked during fill
-                location.locked = True
-                logger.debug(f"Plando placed {item} at {location}")
-            else:
-                raise Exception(f"Can't place {item} at {location} due to fill condition not met.")
+    distribute_planned(world)
 
     logger.info('Placing Dungeon Items.')
 

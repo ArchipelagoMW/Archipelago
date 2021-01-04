@@ -5,7 +5,7 @@ from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict, Counter, deque
-from typing import Union, Optional, List, Set, Dict, NamedTuple
+from typing import Union, Optional, List, Set, Dict, NamedTuple, Iterable
 import secrets
 import random
 
@@ -392,6 +392,12 @@ class World(object):
             state = self.state
         return [location for location in self.get_locations() if
                 (player is None or location.player == player) and location.item is None and location.can_reach(state)]
+
+    def get_unfilled_locations_for_players(self, location_name: str, players: Iterable[int]):
+        for player in players:
+            location = self.get_location(location_name, player)
+            if location.item is None:
+                yield location
 
     def unlocks_new_location(self, item) -> bool:
         temp_state = self.state.copy()

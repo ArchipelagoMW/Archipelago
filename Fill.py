@@ -1,11 +1,13 @@
 import logging
 import typing
 
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, PlandoItem
+from Items import ItemFactory
 
 
 class FillError(RuntimeError):
     pass
+
 
 def fill_restrictive(world, base_state: CollectionState, locations, itempool, single_player_placement=False):
     def sweep_from_pool():
@@ -339,3 +341,57 @@ def balance_multiworld_progression(world):
                 break
             elif not sphere_locations:
                 raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
+
+
+def distribute_planned(world):
+    world_name_lookup = {world.player_names[player_id][0]: player_id for player_id in world.player_ids}
+
+    for player in world.player_ids:
+        placement: PlandoItem
+        for placement in world.plando_items[player]:
+            item = ItemFactory(placement.item, player)
+            target_world: int = placement.world
+            if target_world is False or world.players == 1:
+                target_world = player  # in own world
+            elif target_world is True:  # in any other world
+                unfilled = list(location for location in world.get_unfilled_locations_for_players(
+                    placement.location,
+                    set(world.player_ids) - {player}) if location.item_rule(item)
+                                )
+                if not unfilled:
+                    raise FillError(f"Could not find a world with an unfilled location {placement.location}")
+
+                target_world = world.random.choice(unfilled).player
+
+            elif target_world is None:  # any random world
+                unfilled = list(location for location in world.get_unfilled_locations_for_players(
+                    placement.location,
+                    set(world.player_ids)) if location.item_rule(item)
+                                )
+                if not unfilled:
+                    raise FillError(f"Could not find a world with an unfilled location {placement.location}")
+
+                target_world = world.random.choice(unfilled).player
+
+            elif type(target_world) == int:  # target world by player id
+                pass
+            else:  # find world by name
+                target_world = world_name_lookup[target_world]
+
+            location = world.get_location(placement.location, target_world)
+            if location.item:
+                raise Exception(f"Cannot place item into already filled location {location}.")
+
+            if placement.from_pool:
+                try:
+                    world.itempool.remove(item)
+                except ValueError:
+                    logging.warning(f"Could not remove {item} from pool as it's already missing from it.")
+
+            if location.can_fill(world.state, item, False):
+                world.push_item(location, item, collect=False)
+                location.event = True  # flag location to be checked during fill
+                location.locked = True
+                logging.debug(f"Plando placed {item} at {location}")
+            else:
+                raise Exception(f"Can't place {item} at {location} due to fill condition not met.")
