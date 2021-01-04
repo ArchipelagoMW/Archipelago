@@ -568,7 +568,8 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
                     raise Exception(f"Could not plando item {item} at location {location} as the location was not recognized")
                 from_pool = get_choice("from_pool", placement, True)
                 location_world = get_choice("world", placement, False)
-                ret.plando_items.append(PlandoItem(item, location, location_world, from_pool))
+                force = get_choice("force", placement, False)
+                ret.plando_items.append(PlandoItem(item, location, location_world, from_pool, force))
 
     ret.plando_texts = {}
     if "texts" in plando_options:
