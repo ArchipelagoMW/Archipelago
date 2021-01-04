@@ -400,6 +400,13 @@ async def on_client_joined(ctx: Context, client: Client):
     ctx.notify_all(
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has joined the game. "
         f"Client({version_str}), {client.tags}).")
+    if client.version < [2, 1, 0] and "auto" in ctx.forfeit_mode:
+        ctx.notify_client(
+            client,
+            "Your client is too old to send game beaten information. "
+            "The automatic forfeit feature will not work."
+        )
+
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 async def on_client_left(ctx: Context, client: Client):
