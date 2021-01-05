@@ -119,6 +119,11 @@ def main(args, seed=None):
                                      item.strip() in item_table}
         world.non_local_items[player] = {item.strip() for item in args.non_local_items[player].split(',') if
                                          item.strip() in item_table}
+
+        # enforce pre-defined local items.
+        if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
+            world.local_items[player].add('Triforce Piece')
+
         # items can't be both local and non-local, prefer local
         world.non_local_items[player] -= world.local_items[player]
 
