@@ -359,11 +359,8 @@ def distribute_planned(world):
                     set(world.player_ids) - {player}) if location.item_rule(item)
                                 )
                 if not unfilled:
-                    if placement.force:
-                        raise FillError(f"Could not find a world with an unfilled location {placement.location}")
-                    else:
-                        logging.warning(f"Could not find a world with an unfilled location {placement.location}, skipping.")
-                        continue
+                    placement.failed(f"Could not find a world with an unfilled location {placement.location}", FillError)
+                    continue
 
                 target_world = world.random.choice(unfilled).player
 
@@ -373,32 +370,25 @@ def distribute_planned(world):
                     set(world.player_ids)) if location.item_rule(item)
                                 )
                 if not unfilled:
-                    if placement.force:
-                        raise FillError(f"Could not find a world with an unfilled location {placement.location}")
-                    else:
-                        logging.warning(f"Could not find a world with an unfilled location {placement.location}, skipping.")
-                        continue
+                    placement.failed(f"Could not find a world with an unfilled location {placement.location}", FillError)
+                    continue
 
                 target_world = world.random.choice(unfilled).player
 
             elif type(target_world) == int:  # target world by player id
-                pass
+                if target_world not in range(1, world.players + 1):
+                    placement.failed(f"Cannot place item in world {target_world} as it is not in range of (1, {world.players})", ValueError)
+                    continue
             else:  # find world by name
                 if target_world not in world_name_lookup:
-                    if placement.force:
-                        raise Exception(f"Cannot place item to {target_world}'s world as that world does not exist.")
-                    else:
-                        logging.warning(f"Cannot place item to {target_world}'s world as that world does not exist. Skipping.")
-                        continue
+                    placement.failed(f"Cannot place item to {target_world}'s world as that world does not exist.", ValueError)
+                    continue
                 target_world = world_name_lookup[target_world]
 
             location = world.get_location(placement.location, target_world)
             if location.item:
-                if placement.force:
-                    raise Exception(f"Cannot place item into already filled location {location}.")
-                else:
-                    logging.warning(f"Cannot place item into already filled location {location}. Skipping.")
-                    continue
+                placement.failed(f"Cannot place item into already filled location {location}.")
+                continue
 
             if location.can_fill(world.state, item, False):
                 world.push_item(location, item, collect=False)
@@ -406,14 +396,11 @@ def distribute_planned(world):
                 location.locked = True
                 logging.debug(f"Plando placed {item} at {location}")
             else:
-                if placement.force:
-                    raise Exception(f"Can't place {item} at {location} due to fill condition not met.")
-                else:
-                    logging.warning(f"Can't place {item} at {location} due to fill condition not met. Skipping.")
-                    continue
+                placement.failed(f"Can't place {item} at {location} due to fill condition not met.")
+                continue
 
             if placement.from_pool:  # Should happen AFTER the item is placed, in case it was allowed to skip failed placement.
                 try:
                     world.itempool.remove(item)
                 except ValueError:
-                    logging.warning(f"Could not remove {item} from pool as it's already missing from it.")
+                    placement.warn(f"Could not remove {item} from pool as it's already missing from it.")
