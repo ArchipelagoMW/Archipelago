@@ -144,6 +144,8 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
            localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
         for player, items in localprioitempool.items():  # items already shuffled
             local_locations = [location for location in fill_locations if location.player == player]
+            if not local_locations:
+                continue
             world.random.shuffle(local_locations)
             for item_to_place in items:
                 spot_to_fill = local_locations.pop()
@@ -151,6 +153,8 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
                 fill_locations.remove(spot_to_fill)
         for player, items in localrestitempool.items():  # items already shuffled
             local_locations = [location for location in fill_locations if location.player == player]
+            if not local_locations:
+                continue
             world.random.shuffle(local_locations)
             for item_to_place in items:
                 spot_to_fill = local_locations.pop()
