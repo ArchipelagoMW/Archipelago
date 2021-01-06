@@ -276,8 +276,11 @@ available_boss_names: typing.Set[str] = {boss.lower() for boss in Bosses.boss_ta
 boss_shuffle_options = {None: 'none',
                         'none': 'none',
                         'simple': 'basic',
+                        'basic': 'basic',
                         'full': 'normal',
+                        'normal': 'normal',
                         'random': 'chaos',
+                        'chaos': 'chaos',
                         'singularity': 'singularity',
                         'duality': 'singularity'
                         }
@@ -435,7 +438,7 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
         bosses = []
         for boss in options:
             if boss in boss_shuffle_options:
-                remainder_shuffle = boss
+                remainder_shuffle = boss_shuffle_options[boss]
             elif boss not in available_boss_names and not "-" in boss:
                 raise ValueError(f"Unknown Boss name or Boss shuffle option {boss}.")
             else:
