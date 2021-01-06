@@ -51,6 +51,22 @@
             "authors": [
               "Farrak Kilhn"
             ]
+          },
+          {
+            "language": "Español",
+            "filename": "zelda3/msu1_es.md",
+            "link": "zelda3/msu1/es",
+            "authors": [
+              "Edos"
+            ]
+          },
+          {
+            "language": "Français",
+            "filename": "msu1_fr.md",
+            "link": "zelda3/msu1/fr",
+            "authors": [
+              "Coxla"
+            ]
           }
         ]
       }
