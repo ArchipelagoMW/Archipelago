@@ -557,19 +557,39 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
 
     ret.plando_items = []
     if "items" in plando_options:
+        def add_plando_item(item: str, location: str):
+            if item not in item_table:
+                raise Exception(f"Could not plando item {item} as the item was not recognized")
+            if location not in location_table:
+                raise Exception(f"Could not plando item {item} at location {location} as the location was not recognized")
+            ret.plando_items.append(PlandoItem(item, location, location_world, from_pool, force))
+
         options = weights.get("plando_items", [])
         for placement in options:
             if roll_percentage(get_choice("percentage", placement, 100)):
-                item = get_choice("item", placement)
-                if item not in item_table:
-                    raise Exception(f"Could not plando item {item} as the item was not recognized")
-                location = get_choice("location", placement)
-                if location not in location_table:
-                    raise Exception(f"Could not plando item {item} at location {location} as the location was not recognized")
                 from_pool = get_choice("from_pool", placement, True)
                 location_world = get_choice("world", placement, False)
                 force = get_choice("force", placement, False)
-                ret.plando_items.append(PlandoItem(item, location, location_world, from_pool, force))
+                if "items" in placement and "locations" in placement:
+                    items = placement["items"]
+                    locations = placement["locations"]
+                    if isinstance(items, dict):
+                        item_list = []
+                        for key, value in items.items():
+                            item_list += [key] * value
+                        items = item_list
+                    if not items or not locations:
+                        raise Exception("You must specify at least one item and one location to place items.")
+                    random.shuffle(items)
+                    random.shuffle(locations)
+                    while items and locations:
+                        item = items.pop()
+                        location = locations.pop()
+                        add_plando_item(item, location)
+                else:
+                    item = get_choice("item", placement, get_choice("items", placement))
+                    location = get_choice("location", placement)
+                    add_plando_item(item, location)
 
     ret.plando_texts = {}
     if "texts" in plando_options:
