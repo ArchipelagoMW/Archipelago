@@ -142,22 +142,30 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
 
     if any(localprioitempool.values() or
            localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
+        local_locations = {player: [] for player in world.player_ids}
+        for location in fill_locations:
+            local_locations[location.player].append(location)
+        for locations in local_locations.values():
+            world.random.shuffle(locations)
+
         for player, items in localprioitempool.items():  # items already shuffled
-            local_locations = [location for location in fill_locations if location.player == player]
-            if not local_locations:
-                continue
-            world.random.shuffle(local_locations)
+            player_local_locations = local_locations[player]
             for item_to_place in items:
-                spot_to_fill = local_locations.pop()
+                if not player_local_locations:
+                    logging.warning(f"Ran out of local locations for player {player}, "
+                                    f"cannot place {item_to_place}.")
+                    break
+                spot_to_fill = player_local_locations.pop()
                 world.push_item(spot_to_fill, item_to_place, False)
                 fill_locations.remove(spot_to_fill)
         for player, items in localrestitempool.items():  # items already shuffled
-            local_locations = [location for location in fill_locations if location.player == player]
-            if not local_locations:
-                continue
-            world.random.shuffle(local_locations)
+            player_local_locations = local_locations[player]
             for item_to_place in items:
-                spot_to_fill = local_locations.pop()
+                if not player_local_locations:
+                    logging.warning(f"Ran out of local locations for player {player}, "
+                                    f"cannot place {item_to_place}.")
+                    break
+                spot_to_fill = player_local_locations.pop()
                 world.push_item(spot_to_fill, item_to_place, False)
                 fill_locations.remove(spot_to_fill)
 
