@@ -373,7 +373,8 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
                 'triforce-hunt': 'triforcehunt',  # deprecated, moving all goals to `_`
                 'local_triforce_hunt': 'localtriforcehunt',
                 'ganon_triforce_hunt': 'ganontriforcehunt',
-                'local_ganon_triforce_hunt': 'localganontriforcehunt'
+                'local_ganon_triforce_hunt': 'localganontriforcehunt',
+                'ice_rod_hunt': 'icerodhunt'
                 }[goal]
 
     # TODO consider moving open_pyramid to an automatic variable in the core roller, set to True when
