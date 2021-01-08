@@ -18,7 +18,7 @@ from EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from Main import get_seed, seeddigits
 from Items import item_name_groups, item_table
-from Regions import location_table
+from Regions import location_table, key_drop_data
 from Text import TextTable
 
 
@@ -565,7 +565,7 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
         def add_plando_item(item: str, location: str):
             if item not in item_table:
                 raise Exception(f"Could not plando item {item} as the item was not recognized")
-            if location not in location_table:
+            if location not in location_table and location not in key_drop_data:
                 raise Exception(f"Could not plando item {item} at location {location} as the location was not recognized")
             ret.plando_items.append(PlandoItem(item, location, location_world, from_pool, force))
 

@@ -3,6 +3,7 @@ import typing
 
 from BaseClasses import CollectionState, PlandoItem
 from Items import ItemFactory
+from Regions import key_drop_data
 
 
 class FillError(RuntimeError):
@@ -361,6 +362,9 @@ def distribute_planned(world):
     for player in world.player_ids:
         placement: PlandoItem
         for placement in world.plando_items[player]:
+            if placement.location in key_drop_data:
+                placement.warn(f"Can't place '{placement.item}' at '{placement.location}', as key drop shuffle locations are not supported yet.")
+                continue
             item = ItemFactory(placement.item, player)
             target_world: int = placement.world
             if target_world is False or world.players == 1:
