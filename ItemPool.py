@@ -271,7 +271,9 @@ def generate_itempool(world, player: int):
         itempool.extend(itemdiff.alwaysitems)
         itempool.remove('Ice Rod')
 
-        itempool.extend(itemdiff.baseitems)
+        itempool.extend(['Single Arrow', 'Sanctuary Heart Container'])
+        itempool.extend(['Boss Heart Container'] * itemdiff.boss_heart_container_limit)
+        itempool.extend(['Piece of Heart'] * itemdiff.heart_piece_limit)
         itempool.extend(itemdiff.bottles)
         itempool.extend(itemdiff.basicbow)
         itempool.extend(itemdiff.basicarmor)
@@ -285,7 +287,9 @@ def generate_itempool(world, player: int):
         itempool.extend(['Bombs (10)'] * 5)
         itempool.extend(['Arrows (10)'] * 7)
         if world.keyshuffle[player] == 'universal':
-            itempool.extend(['Small Key (Universal)'] * 29)
+            itempool.extend(itemdiff.universal_keys)
+            itempool.append('Small Key (Universal)')
+
         for item in itempool:
             world.push_precollected(ItemFactory(item, player))
 
@@ -446,6 +450,7 @@ def shuffle_shops(world, items, player: int):
     if 'u' in option:
         progressive = world.progressive[player]
         progressive = world.random.choice([True, False]) if progressive == 'random' else progressive == 'on'
+        progressive &= world.goal == 'icerodhunt'
         new_items = ["Bomb Upgrade (+5)"] * 6
         new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
 
