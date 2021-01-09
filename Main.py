@@ -84,7 +84,6 @@ def main(args, seed=None):
     world.triforce_pieces_required = args.triforce_pieces_required.copy()
     world.shop_shuffle = args.shop_shuffle.copy()
     world.shop_shuffle_slots = args.shop_shuffle_slots.copy()
-    world.potion_shop_shuffle = args.potion_shop_shuffle.copy()
     world.progression_balancing = {player: not balance for player, balance in args.skip_progression_balancing.items()}
     world.shuffle_prizes = args.shuffle_prizes.copy()
     world.sprite_pool = args.sprite_pool.copy()

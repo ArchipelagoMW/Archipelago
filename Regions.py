@@ -370,7 +370,6 @@ def create_shops(world, player: int):
                    ShopType.Shop: Shop,
                    ShopType.TakeAny: TakeAny}
     option = world.shop_shuffle[player]
-    potion_option = world.potion_shop_shuffle[player]
     my_shop_table = dict(shop_table)
     
     num_slots = int(world.shop_shuffle_slots[player])
@@ -385,21 +384,19 @@ def create_shops(world, player: int):
         new_dark_shop = world.random.sample(shop_generation_types['default'], k=3)
         for name, shop in my_shop_table.items():
             typ, shop_id, keeper, custom, locked, items = shop
-            new_items = world.random.sample(shop_generation_types['default'], k=3)
-            if 'f' not in option:
-                if items == _basic_shop_defaults:
-                    new_items = new_basic_shop
-                elif items == _dark_world_shop_defaults:
-                    new_items = new_dark_shop
             if name == 'Capacity Upgrade':
-                continue
-            if name == 'Potion Shop':
-                if 'b' in potion_option:
-                    new_items = world.random.sample(shop_generation_types['potion_discount'] + shop_generation_types['bottle'], k=3)
-                elif 'a' not in potion_option:
-                    new_items = items
-            keeper = world.random.choice([0xA0, 0xC1, 0xFF])
-            my_shop_table[name] = (typ, shop_id, keeper, custom, locked, new_items)
+                pass
+            elif name == 'Potion Shop' and not "w" in option:
+                pass
+            else:
+                new_items = world.random.sample(shop_generation_types['default'], k=3)
+                if 'f' not in option:
+                    if items == _basic_shop_defaults:
+                        new_items = new_basic_shop
+                    elif items == _dark_world_shop_defaults:
+                        new_items = new_dark_shop
+                keeper = world.random.choice([0xA0, 0xC1, 0xFF])
+                my_shop_table[name] = (typ, shop_id, keeper, custom, locked, new_items)
     
     for region_name, (room_id, type, shopkeeper, custom, locked, inventory) in my_shop_table.items():
         if world.mode[player] == 'inverted' and region_name == 'Dark Lake Hylia Shop':
@@ -411,7 +408,7 @@ def create_shops(world, player: int):
         world.shops.append(shop)
         for index, item in enumerate(inventory):
             shop.add_inventory(index, *item)
-            if region_name == 'Potion Shop' and 'a' not in potion_option:
+            if region_name == 'Potion Shop' and 'w' not in option:
                 pass
             elif region_name == 'Capacity Upgrade':
                 pass

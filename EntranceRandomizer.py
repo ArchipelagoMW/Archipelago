@@ -337,10 +337,6 @@ def parse_arguments(argv, no_defaults=False):
                         help='''
         Maximum amount of shop slots able to be filled by items from the item pool.
     ''')
-    parser.add_argument('--potion_shop_shuffle', default=defval(''), choices=['', 'a'], help='''\
-        Determine if potion shop shuffle items should be affected by the rules of shop shuffle.  
-        Value `none` will only allow prices to be shuffled, `a` will allow any items to be shuffled.
-    ''')
     parser.add_argument('--shuffle_prizes', default=defval('g'), choices=['', 'g', 'b', 'gb'])
     parser.add_argument('--sprite_pool', help='''\
     Specifies a colon separated list of sprites used for random/randomonevent. If not specified, the full sprite pool is used.''')
@@ -401,7 +397,7 @@ def parse_arguments(argv, no_defaults=False):
                          'shufflebosses', 'enemy_shuffle', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
                          'heartbeep', "skip_progression_balancing", "triforce_pieces_available",
-                         "triforce_pieces_required", "shop_shuffle", "shop_shuffle_slots", "potion_shop_shuffle",
+                         "triforce_pieces_required", "shop_shuffle", "shop_shuffle_slots",
                          "required_medallions",
                          "plando_items", "plando_texts", "plando_connections",
                          'remote_items', 'progressive', 'dungeon_counters', 'glitch_boots', 'killable_thieves',

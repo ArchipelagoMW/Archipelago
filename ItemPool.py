@@ -481,15 +481,14 @@ def shuffle_shops(world, items, player: int):
         shops = []
         upgrade_shops = []
         total_inventory = []
-        potion_option = world.potion_shop_shuffle[player]
         for shop in world.shops:
             if shop.region.player == player:
                 if shop.type == ShopType.UpgradeShop:
                     upgrade_shops.append(shop)
                 elif shop.type == ShopType.Shop:
-                    if shop.region.name == 'Potion Shop' and not potion_option:
-                        upgrade_shops.append(
-                            shop)  # just put it with the upgrade shops/caves so we don't shuffle the items, just prices
+                    if shop.region.name == 'Potion Shop' and not 'w' in option:
+                        # don't modify potion shop
+                        pass
                     else:
                         shops.append(shop)
                         total_inventory.extend(shop.inventory)

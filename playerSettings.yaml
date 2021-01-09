@@ -227,6 +227,7 @@ shop_shuffle:
   i: 0 # Shuffle default inventories of the shops around
   p: 0 # Randomize the prices of the items in shop inventories
   u: 0 # Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
+  w: 0 # Consider witch's hut like any other shop and shuffle/randomize it too
   ip: 0 # Shuffle inventories and randomize prices
   fpu: 0 # Generate new inventories, randomize prices and shuffle capacity upgrades into item pool
   uip: 0 # Shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool
