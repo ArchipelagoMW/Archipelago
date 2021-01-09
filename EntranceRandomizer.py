@@ -331,6 +331,7 @@ def parse_arguments(argv, no_defaults=False):
     i: shuffle the default inventories of the shops around
     p: randomize the prices of the items in shop inventories
     u: shuffle capacity upgrades into the item pool
+    w: consider witch's hut like any other shop and shuffle/randomize it too
     ''')
     parser.add_argument('--shop_shuffle_slots', default=defval(0),
                         type=lambda value: min(max(int(value), 1), 96),
