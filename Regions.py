@@ -416,7 +416,7 @@ def create_shops(world, player: int):
                 if my_shop_slots.pop():
                     additional_item = world.random.choice(['Rupees (50)', 'Rupees (100)', 'Rupees (300)'])
                     world.itempool.append(ItemFactory(additional_item, player))
-                    slot_name = "{} Shop Slot {}".format(shop.region.name, index+1)
+                    slot_name = "{} Slot {}".format(shop.region.name, index + 1)
                     loc = Location(player, slot_name, address=shop_table_by_location[slot_name], parent=shop.region)
                     shop.region.locations.append(loc)
                     world.dynamic_locations.append(loc)
@@ -442,8 +442,10 @@ shop_table = {
     'Capacity Upgrade': (0x0115, ShopType.UpgradeShop, 0x04, True, True, [('Bomb Upgrade (+5)', 100, 7), ('Arrow Upgrade (+5)', 100, 7)])
 }
 
-shop_table_by_location_id = {0x400000 + cnt: s for cnt, s in enumerate( [item for sublist in [ ["{} Shop Slot {}".format(name, num + 1) for num in range(3)] for name in shop_table ] for item in sublist])}
-shop_table_by_location = {y:x for x,y in shop_table_by_location_id.items()}
+shop_table_by_location_id = {0x400000 + cnt: s for cnt, s in enumerate(
+    [item for sublist in [["{} Slot {}".format(name, num + 1) for num in range(3)] for name in shop_table] for item in
+     sublist])}
+shop_table_by_location = {y: x for x, y in shop_table_by_location_id.items()}
 
 shop_generation_types = {
     'default': _basic_shop_defaults + [('Bombs (3)', 20), ('Green Potion', 90), ('Blue Potion', 190), ('Bee', 10), ('Single Arrow', 5), ('Single Bomb', 10)] + [('Red Shield', 500), ('Blue Shield', 50)],

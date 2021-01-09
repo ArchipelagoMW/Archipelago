@@ -211,8 +211,8 @@ beemizer: # Remove items from the global item pool and replace them with single 
   2: 0 # 60% of the non-essential item pool is replaced with bee traps, of which 20% could be single bees
   3: 0 # 100% of the non-essential item pool is replaced with bee traps, of which 50% could be single bees
   4: 0 # 100% of the non-essential item pool is replaced with bee traps
-### Item Shuffle (shop)
-shop_shuffle_slots: # Maximum amount of allowed shop slots to place item pool items
+### Shop Settings ###
+shop_shuffle_slots: # Maximum amount of shop slots to be filled with regular item pool items (such as Moon Pearl)
   0: 50
   5: 0
   15: 0
@@ -229,6 +229,7 @@ shop_shuffle:
   fpu: 0 # Generate new inventories, randomize prices and shuffle capacity upgrades into item pool
   uip: 0 # Shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool
   # You can add more combos
+### End of Shop Section ###
 shuffle_prizes: # aka drops
   none: 0 # do not shuffle prize packs
   g: 50 # shuffle "general" price packs, as in enemy, tree pull, dig etc.

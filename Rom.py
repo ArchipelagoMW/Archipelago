@@ -691,7 +691,7 @@ def patch_rom(world, rom, player, team, enemized):
         if location.address is None:
             continue
 
-        if 'Shop Slot' in location.name and location.parent_region.shop is not None:
+        if location.parent_region.shop and 'Slot' in location.name:
             continue
 
         if not location.crystal:

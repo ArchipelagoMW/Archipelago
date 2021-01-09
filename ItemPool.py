@@ -583,7 +583,7 @@ def create_dynamic_shop_locations(world, player):
                 if item is None:
                     continue
                 if item['create_location']:
-                    loc = Location(player, "{} Shop Slot {}".format(shop.region.name, i+1), parent=shop.region)
+                    loc = Location(player, "{} Slot {}".format(shop.region.name, i + 1), parent=shop.region)
                     shop.region.locations.append(loc)
                     world.dynamic_locations.append(loc)
 
