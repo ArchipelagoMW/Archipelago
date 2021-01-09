@@ -217,16 +217,16 @@ def main(args, seed=None):
     shop_slots_adjusted = []
     shop_items = []
     
-    for location in shop_slots: 
+    for location in shop_slots:
         slot_num = int(location.name[-1]) - 1
         shop_item = location.parent_region.shop.inventory[slot_num]
         item = location.item
         # if item is a rupee or single bee, or identical, swap it out
         if (shop_item is not None and shop_item['item'] == item.name) or 'Rupee' in item.name or (item.name in ['Bee']):
-            for c in candidates: # chosen item locations
+            for c in candidates:  # chosen item locations
                 if 'Rupee' in c.item.name or c.item.name in 'Bee': continue
                 if (shop_item is not None and shop_item['item'] == c.item.name): continue
-                if c.item_rule(location.item): # if rule is good...
+                if c.item_rule(location.item):  # if rule is good...
                     logging.debug('Swapping {} with {}:: {} ||| {}'.format(c, location, c.item, location.item))
                     c.item, location.item = location.item, c.item
                     if not world.can_beat_game(): 
@@ -444,7 +444,11 @@ def main(args, seed=None):
                 multidatatags.append("Spoiler")
                 if not args.skip_playthrough:
                     multidatatags.append("Play through")
-            minimum_versions = {"server": (1,0,0)}
+            minimum_versions = {"server": (1, 0, 0)}
+            minimum_versions["clients"] = client_versions = []
+            for (slot, team, name) in rom_names:
+                if world.shop_shuffle_slots[slot]:
+                    client_versions.append([team, slot, [3, 6, 1]])
             multidata = zlib.compress(json.dumps({"names": parsed_names,
                                                   # backwards compat for < 2.4.1
                                                   "roms": [(slot, team, list(name.encode()))
