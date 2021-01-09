@@ -134,6 +134,8 @@ class World(object):
             set_player_attr('triforce_pieces_available', 30)
             set_player_attr('triforce_pieces_required', 20)
             set_player_attr('shop_shuffle', 'off')
+            set_player_attr('shop_shuffle_slots', 0)
+            set_player_attr('potion_shop_shuffle', 'none')
             set_player_attr('shuffle_prizes', "g")
             set_player_attr('sprite_pool', [])
             set_player_attr('dark_room_logic', "lamp")
@@ -1158,7 +1160,8 @@ class Shop():
             'max': max,
             'replacement': replacement,
             'replacement_price': replacement_price,
-            'create_location': create_location
+            'create_location': create_location,
+            'player': 0
         }
 
     def push_inventory(self, slot: int, item: str, price: int, max: int = 1):
@@ -1171,7 +1174,8 @@ class Shop():
             'max': max,
             'replacement': self.inventory[slot]["item"],
             'replacement_price': self.inventory[slot]["price"],
-            'create_location': self.inventory[slot]["create_location"]
+            'create_location': self.inventory[slot]["create_location"],
+            'player': self.inventory[slot]["player"]
         }
 
 
@@ -1257,6 +1261,10 @@ class Spoiler(object):
                 if item is None:
                     continue
                 shopdata['item_{}'.format(index)] = "{} — {}".format(item['item'], item['price']) if item['price'] else item['item']
+
+                if item['player'] > 0:
+                    shopdata['item_{}'.format(index)] = shopdata['item_{}'.format(index)].replace('—', '(Player {}) — '.format(item['player']))
+
                 if item['max'] == 0:
                     continue
                 shopdata['item_{}'.format(index)] += " x {}".format(item['max'])
@@ -1330,6 +1338,8 @@ class Spoiler(object):
                          'triforce_pieces_available': self.world.triforce_pieces_available,
                          'triforce_pieces_required': self.world.triforce_pieces_required,
                          'shop_shuffle': self.world.shop_shuffle,
+                         'shop_shuffle_slots': self.world.shop_shuffle_slots,
+                         'potion_shop_shuffle': self.world.potion_shop_shuffle,
                          'shuffle_prizes': self.world.shuffle_prizes,
                          'sprite_pool': self.world.sprite_pool,
                          'restrict_dungeon_item_on_boss': self.world.restrict_dungeon_item_on_boss

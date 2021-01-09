@@ -481,18 +481,23 @@ def shuffle_shops(world, items, player: int):
         shops = []
         upgrade_shops = []
         total_inventory = []
+        potion_option = world.potion_shop_shuffle[player]
         for shop in world.shops:
             if shop.region.player == player:
                 if shop.type == ShopType.UpgradeShop:
                     upgrade_shops.append(shop)
-                elif shop.type == ShopType.Shop and shop.region.name != 'Potion Shop':
-                    shops.append(shop)
-                    total_inventory.extend(shop.inventory)
+                elif shop.type == ShopType.Shop:
+                    if shop.region.name == 'Potion Shop' and potion_option in [None, '', 'none']:
+                        upgrade_shops.append(shop) # just put it with the upgrade shops/caves so we don't shuffle the items, just prices
+                    else:
+                        shops.append(shop)
+                        total_inventory.extend(shop.inventory)
 
         if 'p' in option:
             def price_adjust(price: int) -> int:
                 # it is important that a base price of 0 always returns 0 as new price!
-                return int(price * (0.5 + world.random.random() * 1.5))
+                adjust = 2 if price < 100 else 5
+                return int((price / adjust) * (0.5 + world.random.random() * 1.5)) * adjust
 
             def adjust_item(item):
                 if item:
@@ -507,6 +512,7 @@ def shuffle_shops(world, items, player: int):
 
         if 'i' in option:
             world.random.shuffle(total_inventory)
+            
             i = 0
             for shop in shops:
                 slots = shop.slots
@@ -577,13 +583,13 @@ def create_dynamic_shop_locations(world, player):
                 if item is None:
                     continue
                 if item['create_location']:
-                    loc = Location(player, "{} Item {}".format(shop.region.name, i+1), parent=shop.region)
+                    loc = Location(player, "{} Shop Slot {}".format(shop.region.name, i+1), parent=shop.region)
                     shop.region.locations.append(loc)
                     world.dynamic_locations.append(loc)
 
                     world.clear_location_cache()
 
-                    world.push_item(loc, ItemFactory(item['item'], player), False)
+                    world.push_item(loc, ItemFactory(item['item'], player), False) 
                     loc.event = True
                     loc.locked = True
 

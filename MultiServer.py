@@ -969,7 +969,7 @@ def get_missing_checks(ctx: Context, client: Client) -> list:
     #for location_id in [k[0] for k, v in ctx.locations if k[1] == client.slot]:
     #    if location_id not in ctx.location_checks[client.team, client.slot]:
     #        locations.append(Regions.lookup_id_to_name.get(location_id, f'Unknown Location ID: {location_id}'))
-    for location_id, location_name in Regions.lookup_id_to_name.items():  # cheat console is -1, keep in mind
+    for location_id, location_name in {**Regions.lookup_id_to_name, **Regions.shop_table_by_location_id}.items():  # cheat console is -1, keep in mind
         if location_id != -1 and location_id not in ctx.location_checks[client.team, client.slot] and (location_id, client.slot) in ctx.locations:
             locations.append(location_name)
     return locations

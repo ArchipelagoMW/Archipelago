@@ -158,6 +158,11 @@ SCOUT_LOCATION_ADDR = SAVEDATA_START + 0x4D7        # 1 byte
 SCOUTREPLY_LOCATION_ADDR = SAVEDATA_START + 0x4D8   # 1 byte
 SCOUTREPLY_ITEM_ADDR = SAVEDATA_START + 0x4D9       # 1 byte
 SCOUTREPLY_PLAYER_ADDR = SAVEDATA_START + 0x4DA     # 1 byte
+SHOP_ADDR = SAVEDATA_START + 0x302                  # 2 bytes
+
+
+location_shop_order = [ name for name, info in Regions.shop_table.items() ] # probably don't leave this here.  This relies on python 3.6+ dictionary keys having defined order
+location_shop_ids = set([info[0] for name, info in Regions.shop_table.items()])
 
 location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      "Blind's Hideout - Left": (0x11d, 0x20),
@@ -1158,6 +1163,18 @@ async def track_locations(ctx : Context, roomid, roomdata):
         ctx.unsafe_locations_checked.add(location)
         ctx.ui_node.log_info("New check: %s (%d/216)" % (location, len(ctx.unsafe_locations_checked)))
         ctx.ui_node.send_location_check(ctx, location)
+    
+    try: 
+        if roomid in location_shop_ids:
+            misc_data = await snes_read(ctx, SHOP_ADDR, len(location_shop_order)*3)
+            for cnt, b in enumerate(misc_data):
+                my_check = Regions.shop_table_by_location_id[0x400000 + cnt]
+                if int(b) > 0 and my_check not in ctx.unsafe_locations_checked:
+                    new_check(my_check)
+    except Exception as e:
+        print(e)
+        ctx.ui_node.log_info(f"Exception: {e}")
+                
 
     for location, (loc_roomid, loc_mask) in location_table_uw.items():
         try:
@@ -1217,7 +1234,13 @@ async def track_locations(ctx : Context, roomid, roomdata):
     for location in ctx.unsafe_locations_checked:
         if (location in ctx.items_missing and location not in ctx.locations_checked) or ctx.send_unsafe:
             ctx.locations_checked.add(location)
-            new_locations.append(Regions.lookup_name_to_id[location])
+            try:
+                my_id = Regions.lookup_name_to_id.get(location, Regions.shop_table_by_location.get(location, -1))
+                new_locations.append(my_id)
+            except Exception as e:
+                print(e)
+                ctx.ui_node.log_info(f"Exception: {e}")
+
 
     await ctx.send_msgs([['LocationChecks', new_locations]])
 

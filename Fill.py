@@ -171,6 +171,7 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
                 fill_locations.remove(spot_to_fill)
 
     world.random.shuffle(fill_locations)
+
     prioitempool, fill_locations = fast_fill(world, prioitempool, fill_locations)
 
     restitempool, fill_locations = fast_fill(world, restitempool, fill_locations)
@@ -246,6 +247,7 @@ def flood_items(world):
                 world.push_item(location, item_to_place, True)
                 itempool.remove(item_to_place)
                 break
+
 
 def balance_multiworld_progression(world):
     balanceable_players = {player for player in range(1, world.players + 1) if world.progression_balancing[player]}
