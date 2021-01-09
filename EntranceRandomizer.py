@@ -337,7 +337,7 @@ def parse_arguments(argv, no_defaults=False):
                         help='''
         Maximum amount of shop slots able to be filled by items from the item pool.
     ''')
-    parser.add_argument('--potion_shop_shuffle', default=defval('none'), choices=['none', 'a'], help='''\
+    parser.add_argument('--potion_shop_shuffle', default=defval(''), choices=['', 'a'], help='''\
         Determine if potion shop shuffle items should be affected by the rules of shop shuffle.  
         Value `none` will only allow prices to be shuffled, `a` will allow any items to be shuffled.
     ''')

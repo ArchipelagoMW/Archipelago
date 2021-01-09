@@ -135,7 +135,7 @@ class World(object):
             set_player_attr('triforce_pieces_required', 20)
             set_player_attr('shop_shuffle', 'off')
             set_player_attr('shop_shuffle_slots', 0)
-            set_player_attr('potion_shop_shuffle', 'none')
+            set_player_attr('potion_shop_shuffle', '')
             set_player_attr('shuffle_prizes', "g")
             set_player_attr('sprite_pool', [])
             set_player_attr('dark_room_logic', "lamp")
