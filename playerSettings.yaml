@@ -216,7 +216,7 @@ shop_shuffle_slots: # Maximum amount of allowed shop slots to place item pool it
   0: 50
   5: 0
   15: 0
-  999: 0
+  30: 0
 shop_shuffle:
   none: 50
   g: 0 # Generate new default inventories for overworld/underworld shops, and unique shops
