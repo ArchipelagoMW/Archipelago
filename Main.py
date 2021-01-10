@@ -11,7 +11,7 @@ import concurrent.futures
 
 from BaseClasses import World, CollectionState, Item, Region, Location, PlandoItem
 from Items import ItemFactory, item_table, item_name_groups
-from Regions import create_regions, create_shops, mark_light_world_regions, lookup_vanilla_location_to_entrance
+from Regions import create_regions, create_shops, mark_light_world_regions, lookup_vanilla_location_to_entrance, SHOP_ID_START
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 from Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, get_hash_string
@@ -210,8 +210,15 @@ def main(args, seed=None):
     if world.players > 1:
         balance_multiworld_progression(world)
 
-    candidates = [l for l in world.get_locations() if l.item.name in ['Bee Trap', 'Shovel', 'Bug Catching Net', 'Cane of Byrna', 'Triforce Piece'] or
-        any([x in l.item.name for x in ['Key', 'Map', 'Compass', 'Clock', 'Heart', 'Sword', 'Shield', 'Bomb', 'Arrow', 'Mail']])]
+
+    candidates = []
+    for location in [l for l in world.get_locations() if l.item.name in ['Bee Trap', 'Shovel', 'Bug Catching Net', 'Cane of Byrna', 'Triforce Piece'] or
+        any([x in l.item.name for x in ['Key', 'Map', 'Compass', 'Clock', 'Heart', 'Sword', 'Shield', 'Bomb', 'Arrow', 'Mail']])]:
+                if ( world.keyshuffle[location.item.player] or not location.item.smallkey) and \
+                        (world.bigkeyshuffle[location.item.player] or not location.item.bigkey) and \
+                        (world.mapshuffle[location.item.player] or not location.item.map) and \
+                        (world.compassshuffle[location.item.player] or not location.item.compass):
+                    candidates.append(location)
     world.random.shuffle(candidates)
     shop_slots = [item for sublist in [shop.region.locations for shop in world.shops] for item in sublist if item.name != 'Potion Shop']
     shop_slots_adjusted = []
@@ -224,6 +231,7 @@ def main(args, seed=None):
         # if item is a rupee or single bee, or identical, swap it out
         if (shop_item is not None and shop_item['item'] == item.name) or 'Rupee' in item.name or (item.name in ['Bee']):
             for c in candidates:  # chosen item locations
+                if c.parent_region.shop or c is location: continue
                 if 'Rupee' in c.item.name or c.item.name in 'Bee': continue
                 if (shop_item is not None and shop_item['item'] == c.item.name): continue
                 if c.item_rule(location.item):  # if rule is good...
@@ -401,7 +409,7 @@ def main(args, seed=None):
                 main_entrance = get_entrance_to_region(region)
                 for location in region.locations:
                     if type(location.address) == int:  # skips events and crystals
-                        if location.address >= 0x400000:  continue
+                        if location.address >= SHOP_ID_START:  continue
                         if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
                             er_hint_data[region.player][location.address] = main_entrance.name
 
