@@ -222,7 +222,7 @@ TavernMan_texts = [
     "Helmasaur is\nthrowing a\nparty.\nI hope it's\na masquerade!",
     "I'd like to\nknow Arrghus\nbetter.\nBut he won't\ncome out of\nhis shell!",
     "Mothula didn't\nhave much fun\nat the party.\nHe's immune to\nspiked punch!",
-    "Don't set me\nup with that\nchick from\nSteve's Town.\n\n\nI'm not\ninterested in\na Blind date!",
+    "Don't set me\nup with that\nlady from\nSteve's Town.\n\n\nI'm not\ninterested in\na Blind date!",
     "Kholdstare is\nafraid to go\nto the circus.\nHungry kids\nthought he was\ncotton candy!",
     "I asked who\nVitreous' best\nfriends are.\nHe said,\n'Me, Myself,\nand Eye!'",
     "Trinexx can be\na hothead or\nhe can be an\nice guy. In\nthe end, he's\na solid\nindividual!",
