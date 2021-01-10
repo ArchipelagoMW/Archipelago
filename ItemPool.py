@@ -1,7 +1,7 @@
 from collections import namedtuple
 import logging
 
-from BaseClasses import Region, RegionType, ShopType, Location, TakeAny
+from BaseClasses import Region, RegionType, ShopType, Shop, Location, TakeAny
 from Bosses import place_bosses
 from Dungeons import get_dungeon_item_pool
 from EntranceShuffle import connect_entrance
@@ -460,10 +460,12 @@ def shuffle_shops(world, items, player: int):
 
         world.random.shuffle(new_items)  # Decide what gets tossed randomly if it can't insert everything.
 
+        capacityshop: Shop = None
         for shop in world.shops:
             if shop.type == ShopType.UpgradeShop and shop.region.player == player and \
                     shop.region.name == "Capacity Upgrade":
                 shop.clear_inventory()
+                capacityshop = shop
 
         if world.goal[player] != 'icerodhunt':
             for i, item in enumerate(items):
@@ -472,7 +474,13 @@ def shuffle_shops(world, items, player: int):
                     if not new_items:
                         break
             else:
-                logging.warning(f"Not all upgrades put into Player{player}' item pool. Still missing: {new_items}")
+                logging.warning(f"Not all upgrades put into Player{player}' item pool. Putting remaining items in Capacity Upgrade shop instead.")
+                bombupgrades = sum(1 for item in new_items if 'Bomb Upgrade' in item)
+                arrowupgrades = sum(1 for item in new_items if 'Arrow Upgrade' in item)
+                if bombupgrades:
+                    capacityshop.add_inventory(1, 'Bomb Upgrade (+5)', 100, bombupgrades)
+                if arrowupgrades:
+                    capacityshop.add_inventory(1, 'Arrow Upgrade (+5)', 100, arrowupgrades)
         else:
             for item in new_items:
                 world.push_precollected(ItemFactory(item, player))
