@@ -475,6 +475,8 @@ def send_new_items(ctx: Context):
 def forfeit_player(ctx: Context, team: int, slot: int):
     all_locations = {values[0] for values in Regions.location_table.values() if type(values[0]) is int}
     all_locations.update({values[1] for values in Regions.key_drop_data.values()})
+    # register any unknown locations, such as from future versions to be forfeited too
+    all_locations.update(location for location, location_slot in ctx.locations if location_slot == slot)
     ctx.notify_all("%s (Team #%d) has forfeited" % (ctx.player_names[(team, slot)], team + 1))
     register_location_checks(ctx, team, slot, all_locations)
 
