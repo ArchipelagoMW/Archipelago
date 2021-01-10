@@ -218,7 +218,7 @@ def main(args, seed=None):
                   not location.locked and not location.item.name in blacklist_words]
     world.random.shuffle(candidates)
     shop_slots = [item for sublist in [shop.region.locations for shop in world.shops] for item in sublist if
-                  item.name != 'Potion Shop']
+                  item.name != 'Potion Shop']  # TODO: "w" in shop_shuffle options?
     shop_slots_adjusted = []
     shop_items = []
     
