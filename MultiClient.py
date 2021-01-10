@@ -1217,6 +1217,15 @@ async def track_locations(ctx : Context, roomid, roomdata):
                 if misc_data[offset - 0x3c6] & mask != 0 and location not in ctx.locations_checked:
                     new_check(location)
 
+    for location in ctx.locations_checked:
+        try:
+            my_id = Regions.lookup_name_to_id.get(location, Regions.shop_table_by_location.get(location, -1))
+            new_locations.append(my_id)
+        except Exception as e:
+            print(e)
+            ctx.ui_node.log_info(f"Exception: {e}")
+
+
     await ctx.send_msgs([['LocationChecks', new_locations]])
 
 
