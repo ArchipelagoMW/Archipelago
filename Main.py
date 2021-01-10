@@ -241,7 +241,7 @@ def main(args, seed=None):
                         break
         # update table to location data
         item = location.item
-        if (shop_item is not None and shop_item['item'] == item.name) or 'Rupee' in item.name or (item.name in ['Bee']):
+        if (shop_item and shop_item['item'] == item.name) or 'Rupee' in item.name or item.name == 'Bee':
             # this will filter items that match the item in the shop or Rupees, or single bees
             # really not a way for the player to know a renewable item from a player pool item
             # bombs can be sitting on top of arrows or a potion refill, but dunno if that's a big deal
@@ -255,12 +255,12 @@ def main(args, seed=None):
                 shop_item['replacement'] = shop_item['item']
                 shop_item['replacement_price'] = shop_item['price']
             shop_item['item'] = item.name
-            if any([x in shop_item['item'] for x in ['Single Bomb', 'Single Arrow']]):
-                shop_item['price'] = world.random.randrange(5,35)
-            elif any([x in shop_item['item'] for x in ['Arrows', 'Bombs', 'Clock']]):
-                shop_item['price'] = world.random.randrange(20,120)
-            elif any([x in shop_item['item'] for x in ['Universal Key', 'Compass', 'Map', 'Small Key', 'Piece of Heart']]):
-                shop_item['price'] = world.random.randrange(50,150)
+            if any(x in shop_item['item'] for x in ['Single Bomb', 'Single Arrow']):
+                shop_item['price'] = world.random.randrange(5, 35)
+            elif any(x in shop_item['item'] for x in ['Arrows', 'Bombs', 'Clock']):
+                shop_item['price'] = world.random.randrange(20, 120)
+            elif any(x in shop_item['item'] for x in ['Compass', 'Map', 'Small Key', 'Piece of Heart']):
+                shop_item['price'] = world.random.randrange(50, 150)
             else:
                 shop_item['price'] = world.random.randrange(50,300)
 
