@@ -11,7 +11,7 @@ import concurrent.futures
 
 from BaseClasses import World, CollectionState, Item, Region, Location, PlandoItem
 from Items import ItemFactory, item_table, item_name_groups
-from Regions import create_regions, create_shops, mark_light_world_regions, lookup_vanilla_location_to_entrance
+from Regions import create_regions, create_shops, mark_light_world_regions, lookup_vanilla_location_to_entrance, SHOP_ID_START
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 from Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, get_hash_string
@@ -409,7 +409,7 @@ def main(args, seed=None):
                 main_entrance = get_entrance_to_region(region)
                 for location in region.locations:
                     if type(location.address) == int:  # skips events and crystals
-                        if location.address >= 0x400000:  continue
+                        if location.address >= SHOP_ID_START:  continue
                         if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
                             er_hint_data[region.player][location.address] = main_entrance.name
 

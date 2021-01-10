@@ -442,7 +442,8 @@ shop_table = {
     'Capacity Upgrade': (0x0115, ShopType.UpgradeShop, 0x04, True, True, [('Bomb Upgrade (+5)', 100, 7), ('Arrow Upgrade (+5)', 100, 7)])
 }
 
-shop_table_by_location_id = {0x400000 + cnt: s for cnt, s in enumerate(
+SHOP_ID_START = 0x400000
+shop_table_by_location_id = {SHOP_ID_START + cnt: s for cnt, s in enumerate(
     [item for sublist in [["{} Slot {}".format(name, num + 1) for num in range(3)] for name in shop_table] for item in
      sublist])}
 shop_table_by_location = {y: x for x, y in shop_table_by_location_id.items()}
