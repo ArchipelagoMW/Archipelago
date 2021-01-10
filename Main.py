@@ -206,21 +206,19 @@ def main(args, seed=None):
         distribute_items_restrictive(world, True)
     elif args.algorithm == 'balanced':
         distribute_items_restrictive(world, True)
-        
+
     if world.players > 1:
         balance_multiworld_progression(world)
 
-
-    candidates = []
-    for location in [l for l in world.get_locations() if l.item.name in ['Bee Trap', 'Shovel', 'Bug Catching Net', 'Cane of Byrna', 'Triforce Piece'] or
-        any([x in l.item.name for x in ['Key', 'Map', 'Compass', 'Clock', 'Heart', 'Sword', 'Shield', 'Bomb', 'Arrow', 'Mail']])]:
-                if ( world.keyshuffle[location.item.player] or not location.item.smallkey) and \
-                        (world.bigkeyshuffle[location.item.player] or not location.item.bigkey) and \
-                        (world.mapshuffle[location.item.player] or not location.item.map) and \
-                        (world.compassshuffle[location.item.player] or not location.item.compass):
-                    candidates.append(location)
+    blacklist_words = {"Rupee", "Pendant", "Crystal"}
+    blacklist_words = {item_name for item_name in item_table if any(
+        blacklist_word in item_name for blacklist_word in blacklist_words)}
+    blacklist_words.add("Bee")
+    candidates = [location for location in world.get_locations() if
+                  not location.locked and not location.item.name in blacklist_words]
     world.random.shuffle(candidates)
-    shop_slots = [item for sublist in [shop.region.locations for shop in world.shops] for item in sublist if item.name != 'Potion Shop']
+    shop_slots = [item for sublist in [shop.region.locations for shop in world.shops] for item in sublist if
+                  item.name != 'Potion Shop']
     shop_slots_adjusted = []
     shop_items = []
     
@@ -232,7 +230,6 @@ def main(args, seed=None):
         if (shop_item is not None and shop_item['item'] == item.name) or 'Rupee' in item.name or (item.name in ['Bee']):
             for c in candidates:  # chosen item locations
                 if c.parent_region.shop or c is location: continue
-                if 'Rupee' in c.item.name or c.item.name in 'Bee': continue
                 if (shop_item is not None and shop_item['item'] == c.item.name): continue
                 if c.item_rule(location.item):  # if rule is good...
                     logging.debug('Swapping {} with {}:: {} ||| {}'.format(c, location, c.item, location.item))

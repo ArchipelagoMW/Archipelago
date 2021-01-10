@@ -10,7 +10,8 @@ class FillError(RuntimeError):
     pass
 
 
-def fill_restrictive(world, base_state: CollectionState, locations, itempool, single_player_placement=False):
+def fill_restrictive(world, base_state: CollectionState, locations, itempool, single_player_placement=False,
+                     lock=False):
     def sweep_from_pool():
         new_state = base_state.copy()
         for item in itempool:
@@ -63,6 +64,8 @@ def fill_restrictive(world, base_state: CollectionState, locations, itempool, si
                                     f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
 
                 world.push_item(spot_to_fill, item_to_place, False)
+                if lock:
+                    spot_to_fill.locked = True
                 locations.remove(spot_to_fill)
                 spot_to_fill.event = True
 
