@@ -415,9 +415,11 @@ def create_shops(world, player: int):
             else:
                 if my_shop_slots.pop():
                     additional_item = world.random.choice(['Rupees (50)', 'Rupees (100)', 'Rupees (300)'])
-                    world.itempool.append(ItemFactory(additional_item, player))
                     slot_name = "{} Slot {}".format(shop.region.name, index + 1)
                     loc = Location(player, slot_name, address=shop_table_by_location[slot_name], parent=shop.region)
+                    loc.shop_slot = True
+                    loc.locked = True
+                    loc.item = ItemFactory(additional_item, player)
                     shop.region.locations.append(loc)
                     world.dynamic_locations.append(loc)
 

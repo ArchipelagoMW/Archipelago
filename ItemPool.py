@@ -589,7 +589,8 @@ def create_dynamic_shop_locations(world, player):
 
                     world.clear_location_cache()
 
-                    world.push_item(loc, ItemFactory(item['item'], player), False) 
+                    world.push_item(loc, ItemFactory(item['item'], player), False)
+                    loc.shop_slot = True
                     loc.event = True
                     loc.locked = True
 

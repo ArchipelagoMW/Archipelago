@@ -9,7 +9,7 @@ import time
 import zlib
 import concurrent.futures
 
-from BaseClasses import World, CollectionState, Item, Region, Location, PlandoItem
+from BaseClasses import World, CollectionState, Item, Region, Location, Shop
 from Items import ItemFactory, item_table, item_name_groups
 from Regions import create_regions, create_shops, mark_light_world_regions, lookup_vanilla_location_to_entrance, SHOP_ID_START
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
@@ -215,69 +215,47 @@ def main(args, seed=None):
         blacklist_word in item_name for blacklist_word in blacklist_words)}
     blacklist_words.add("Bee")
     candidates = [location for location in world.get_locations() if
-                  not location.locked and not location.item.name in blacklist_words]
+                  not location.locked and
+                  not location.shop_slot and
+                  not location.item.name in blacklist_words]
+
     world.random.shuffle(candidates)
-    shop_slots = [item for sublist in [shop.region.locations for shop in world.shops] for item in sublist if
-                  item.name != 'Potion Shop']  # TODO: "w" in shop_shuffle options?
-    shop_slots_adjusted = []
-    shop_items = []
-    
+    shop_slots = [item for sublist in (shop.region.locations for shop in world.shops) for item in sublist if
+                  item.shop_slot]
+
     for location in shop_slots:
         slot_num = int(location.name[-1]) - 1
-        shop_item = location.parent_region.shop.inventory[slot_num]
-        item = location.item
-        # if item is a rupee or single bee, or identical, swap it out
-        if (shop_item is not None and shop_item['item'] == item.name) or 'Rupee' in item.name or (item.name in ['Bee']):
+        shop: Shop = location.parent_region.shop
+        if shop.can_push_inventory(slot_num):
             for c in candidates:  # chosen item locations
-                if c.parent_region.shop or c is location: continue
-                if (shop_item is not None and shop_item['item'] == c.item.name): continue
                 if c.item_rule(location.item):  # if rule is good...
                     logging.debug('Swapping {} with {}:: {} ||| {}'.format(c, location, c.item, location.item))
                     c.item, location.item = location.item, c.item
-                    if not world.can_beat_game(): 
+                    if not world.can_beat_game():
                         c.item, location.item = location.item, c.item
-                    else: 
-                        shop_slots_adjusted.append(location)
+                    else:
+                        # we use this candidate
+                        candidates.remove(c)
                         break
-        # update table to location data
-        item = location.item
-        if (shop_item and shop_item['item'] == item.name) or 'Rupee' in item.name or item.name == 'Bee':
-            # this will filter items that match the item in the shop or Rupees, or single bees
-            # really not a way for the player to know a renewable item from a player pool item
-            # bombs can be sitting on top of arrows or a potion refill, but dunno if that's a big deal
-            # this should rarely happen with the above code in place, and could be an option in config if necessary
-            logging.debug('skipping item shop {}'.format(item.name))
-        else:
-            if shop_item is None:
-                location.parent_region.shop.add_inventory(slot_num, 'None', 0)
-                shop_item = location.parent_region.shop.inventory[slot_num]
             else:
-                shop_item['replacement'] = shop_item['item']
-                shop_item['replacement_price'] = shop_item['price']
-            shop_item['item'] = item.name
-            if any(x in shop_item['item'] for x in ['Single Bomb', 'Single Arrow']):
-                shop_item['price'] = world.random.randrange(5, 35)
-            elif any(x in shop_item['item'] for x in ['Arrows', 'Bombs', 'Clock']):
-                shop_item['price'] = world.random.randrange(20, 120)
-            elif any(x in shop_item['item'] for x in ['Compass', 'Map', 'Small Key', 'Piece of Heart']):
-                shop_item['price'] = world.random.randrange(50, 150)
+                logging.warning("Ran out of ShopShuffle Item candidate locations.")
+                break  # we ran out of candidates
+
+            # update table to location data
+            item_name = location.item.name
+            if any(x in item_name for x in ['Single Bomb', 'Single Arrow']):
+                price = world.random.randrange(1, 7)
+            elif any(x in item_name for x in ['Arrows', 'Bombs', 'Clock']):
+                price = world.random.randrange(4, 24)
+            elif any(x in item_name for x in ['Compass', 'Map', 'Small Key', 'Piece of Heart']):
+                price = world.random.randrange(10, 30)
             else:
-                shop_item['price'] = world.random.randrange(50,300)
+                price = world.random.randrange(10, 60)
 
-            shop_item['max'] = 1
-            shop_item['player'] = item.player if item.player != location.player else 0
-            shop_items.append(shop_item)
+            price *= 5
 
-    if len(shop_items) > 0:
-        my_prices = [my_item['price'] for my_item in shop_items]
-        price_scale = (80*max(8, len(my_prices)+2))/sum(my_prices)
-        for i in shop_items:
-            i['price'] *= price_scale
-            if i['price'] < 5: i['price'] = 5
-            else: i['price'] = int((i['price']//5)*5)
-    
-    logging.debug('Adjusting {} of {} shop slots'.format(len(shop_slots_adjusted), len(shop_slots)))
-    logging.debug('Adjusted {} into shops'.format([x.item.name for x in shop_slots_adjusted]))
+            shop.push_inventory(slot_num, item_name, price, 1,
+                                location.item.player if location.item.player != location.player else 0)
 
     logger.info('Patching ROM.')
 

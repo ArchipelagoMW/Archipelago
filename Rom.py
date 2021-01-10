@@ -683,16 +683,10 @@ def patch_rom(world, rom, player, team, enemized):
     # patch items
 
     for location in world.get_locations():
-        if location.player != player:
+        if location.player != player or location.address is None or location.shop_slot:
             continue
 
         itemid = location.item.code if location.item is not None else 0x5A
-
-        if location.address is None:
-            continue
-
-        if location.parent_region.shop and 'Slot' in location.name:
-            continue
 
         if not location.crystal:
             if location.item is not None:
