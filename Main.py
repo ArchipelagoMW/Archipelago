@@ -210,8 +210,15 @@ def main(args, seed=None):
     if world.players > 1:
         balance_multiworld_progression(world)
 
-    candidates = [l for l in world.get_locations() if l.item.name in ['Bee Trap', 'Shovel', 'Bug Catching Net', 'Cane of Byrna', 'Triforce Piece'] or
-        any([x in l.item.name for x in ['Key', 'Map', 'Compass', 'Clock', 'Heart', 'Sword', 'Shield', 'Bomb', 'Arrow', 'Mail']])]
+
+    candidates = []
+    for location in [l for l in world.get_locations() if l.item.name in ['Bee Trap', 'Shovel', 'Bug Catching Net', 'Cane of Byrna', 'Triforce Piece'] or
+        any([x in l.item.name for x in ['Key', 'Map', 'Compass', 'Clock', 'Heart', 'Sword', 'Shield', 'Bomb', 'Arrow', 'Mail']])]:
+                if ( world.keyshuffle[location.item.player] or not location.item.smallkey) and \
+                        (world.bigkeyshuffle[location.item.player] or not location.item.bigkey) and \
+                        (world.mapshuffle[location.item.player] or not location.item.map) and \
+                        (world.compassshuffle[location.item.player] or not location.item.compass):
+                    candidates.append(location)
     world.random.shuffle(candidates)
     shop_slots = [item for sublist in [shop.region.locations for shop in world.shops] for item in sublist if item.name != 'Potion Shop']
     shop_slots_adjusted = []
@@ -224,6 +231,7 @@ def main(args, seed=None):
         # if item is a rupee or single bee, or identical, swap it out
         if (shop_item is not None and shop_item['item'] == item.name) or 'Rupee' in item.name or (item.name in ['Bee']):
             for c in candidates:  # chosen item locations
+                if c.parent_region.shop or c is location: continue
                 if 'Rupee' in c.item.name or c.item.name in 'Bee': continue
                 if (shop_item is not None and shop_item['item'] == c.item.name): continue
                 if c.item_rule(location.item):  # if rule is good...
