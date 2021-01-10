@@ -85,7 +85,6 @@ class Context():
         self.slot = None
         self.player_names: typing.Dict[int: str] = {}
         self.locations_checked = set()
-        self.unsafe_locations_checked = set()
         self.locations_scouted = set()
         self.items_received = []
         self.items_missing = []
@@ -95,7 +94,6 @@ class Context():
         self.prev_rom = None
         self.auth = None
         self.found_items = found_items
-        self.send_unsafe = False
         self.finished_game = False
         self.slow_mode = False
 
@@ -861,9 +859,6 @@ async def process_server_cmd(ctx: Context, cmd, args):
         raise Exception('Connection refused by the multiworld host, no reason provided')
 
     elif cmd == 'Connected':
-        if ctx.send_unsafe:
-            ctx.send_unsafe = False
-            ctx.ui_node.log_info(f'Turning off sending of ALL location checks not declared as missing.  If you want it on, please use /send_unsafe true')
         Utils.persistent_store("servers", "default", ctx.server_address)
         Utils.persistent_store("servers", ctx.rom, ctx.server_address)
         ctx.team, ctx.slot = args[0]
@@ -1122,15 +1117,6 @@ class ClientCommandProcessor(CommandProcessor):
         else:
             self.output("Web UI was never started.")
 
-    def _cmd_send_unsafe(self, toggle: str = ""):
-        """Force sending of locations the server did not specify was actually missing. WARNING: This may brick online trackers. Turned off on reconnect."""
-        if toggle:
-            self.ctx.send_unsafe = toggle.lower() in {"1", "true", "on"}
-            self.ctx.ui_node.log_info(f'Turning {("on" if self.ctx.send_unsafe else "off")} the option to send ALL location checks to the multiserver.')
-        else:
-            self.ctx.ui_node.log_info("You must specify /send_unsafe true explicitly.")
-            self.ctx.send_unsafe = False
-
     def default(self, raw: str):
         asyncio.create_task(self.ctx.send_msgs([['Say', raw]]))
 
@@ -1160,8 +1146,8 @@ async def track_locations(ctx : Context, roomid, roomdata):
     new_locations = []
 
     def new_check(location):
-        ctx.unsafe_locations_checked.add(location)
-        ctx.ui_node.log_info("New check: %s (%d/216)" % (location, len(ctx.unsafe_locations_checked)))
+        ctx.locations_checked.add(location)
+        ctx.ui_node.log_info("New check: %s (%d/216)" % (location, len(ctx.locations_checked)))
         ctx.ui_node.send_location_check(ctx, location)
     
     try: 
@@ -1169,7 +1155,7 @@ async def track_locations(ctx : Context, roomid, roomdata):
             misc_data = await snes_read(ctx, SHOP_ADDR, len(location_shop_order)*3)
             for cnt, b in enumerate(misc_data):
                 my_check = Regions.shop_table_by_location_id[0x400000 + cnt]
-                if int(b) > 0 and my_check not in ctx.unsafe_locations_checked:
+                if int(b) > 0 and my_check not in ctx.locations_checked:
                     new_check(my_check)
     except Exception as e:
         print(e)
@@ -1178,7 +1164,7 @@ async def track_locations(ctx : Context, roomid, roomdata):
 
     for location, (loc_roomid, loc_mask) in location_table_uw.items():
         try:
-            if location not in ctx.unsafe_locations_checked and loc_roomid == roomid and (roomdata << 4) & loc_mask != 0:
+            if location not in ctx.locations_checked and loc_roomid == roomid and (roomdata << 4) & loc_mask != 0:
                 new_check(location)
         except Exception as e:
             ctx.ui_node.log_info(f"Exception: {e}")
@@ -1187,7 +1173,7 @@ async def track_locations(ctx : Context, roomid, roomdata):
     uw_end = 0
     uw_unchecked = {}
     for location, (roomid, mask) in location_table_uw.items():
-        if location not in ctx.unsafe_locations_checked:
+        if location not in ctx.locations_checked:
             uw_unchecked[location] = (roomid, mask)
             uw_begin = min(uw_begin, roomid)
             uw_end = max(uw_end, roomid + 1)
@@ -1204,7 +1190,7 @@ async def track_locations(ctx : Context, roomid, roomdata):
     ow_end = 0
     ow_unchecked = {}
     for location, screenid in location_table_ow.items():
-        if location not in ctx.unsafe_locations_checked:
+        if location not in ctx.locations_checked:
             ow_unchecked[location] = screenid
             ow_begin = min(ow_begin, screenid)
             ow_end = max(ow_end, screenid + 1)
@@ -1215,32 +1201,21 @@ async def track_locations(ctx : Context, roomid, roomdata):
                 if ow_data[screenid - ow_begin] & 0x40 != 0:
                     new_check(location)
 
-    if not all([location in ctx.unsafe_locations_checked for location in location_table_npc.keys()]):
+    if not all([location in ctx.locations_checked for location in location_table_npc.keys()]):
         npc_data = await snes_read(ctx, SAVEDATA_START + 0x410, 2)
         if npc_data is not None:
             npc_value = npc_data[0] | (npc_data[1] << 8)
             for location, mask in location_table_npc.items():
-                if npc_value & mask != 0 and location not in ctx.unsafe_locations_checked:
+                if npc_value & mask != 0 and location not in ctx.locations_checked:
                     new_check(location)
 
-    if not all([location in ctx.unsafe_locations_checked for location in location_table_misc.keys()]):
+    if not all([location in ctx.locations_checked for location in location_table_misc.keys()]):
         misc_data = await snes_read(ctx, SAVEDATA_START + 0x3c6, 4)
         if misc_data is not None:
             for location, (offset, mask) in location_table_misc.items():
                 assert(0x3c6 <= offset <= 0x3c9)
-                if misc_data[offset - 0x3c6] & mask != 0 and location not in ctx.unsafe_locations_checked:
+                if misc_data[offset - 0x3c6] & mask != 0 and location not in ctx.locations_checked:
                     new_check(location)
-
-    for location in ctx.unsafe_locations_checked:
-        if (location in ctx.items_missing and location not in ctx.locations_checked) or ctx.send_unsafe:
-            ctx.locations_checked.add(location)
-            try:
-                my_id = Regions.lookup_name_to_id.get(location, Regions.shop_table_by_location.get(location, -1))
-                new_locations.append(my_id)
-            except Exception as e:
-                print(e)
-                ctx.ui_node.log_info(f"Exception: {e}")
-
 
     await ctx.send_msgs([['LocationChecks', new_locations]])
 
@@ -1272,7 +1247,6 @@ async def game_watcher(ctx : Context):
             ctx.rom = rom.decode()
             if not ctx.prev_rom or ctx.prev_rom != ctx.rom:
                 ctx.locations_checked = set()
-                ctx.unsafe_locations_checked = set()
                 ctx.locations_scouted = set()
             ctx.prev_rom = ctx.rom
 
