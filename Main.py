@@ -8,16 +8,19 @@ import random
 import time
 import zlib
 import concurrent.futures
+import typing
 
 from BaseClasses import World, CollectionState, Item, Region, Location, Shop
 from Items import ItemFactory, item_table, item_name_groups
-from Regions import create_regions, create_shops, mark_light_world_regions, lookup_vanilla_location_to_entrance, SHOP_ID_START
+from Regions import create_regions, create_shops, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
+    SHOP_ID_START
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 from Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, get_hash_string
 from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
-from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
+from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned, \
+    swap_location_item
 from ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
 import Patch
@@ -210,56 +213,66 @@ def main(args, seed=None):
     if world.players > 1:
         balance_multiworld_progression(world)
 
-    blacklist_words = {"Rupee", "Pendant", "Crystal"}
-    blacklist_words = {item_name for item_name in item_table if any(
-        blacklist_word in item_name for blacklist_word in blacklist_words)}
-    blacklist_words.add("Bee")
-    candidates = [location for location in world.get_locations() if
-                  not location.locked and
-                  not location.shop_slot and
-                  not location.item.name in blacklist_words]
+    shop_slots: typing.List[Location] = [location for shop_locations in (shop.region.locations for shop in world.shops)
+                                         for location in shop_locations if location.shop_slot]
 
-    world.random.shuffle(candidates)
-    shop_slots = [item for sublist in (shop.region.locations for shop in world.shops) for item in sublist if
-                  item.shop_slot]
+    if shop_slots:
+        # TODO: allow each game to register a blacklist to be used here?
+        blacklist_words = {"Rupee", "Pendant", "Crystal"}
+        blacklist_words = {item_name for item_name in item_table if any(
+            blacklist_word in item_name for blacklist_word in blacklist_words)}
+        blacklist_words.add("Bee")
+        candidates: typing.List[Location] = [location for location in world.get_locations() if
+                                             not location.locked and
+                                             not location.shop_slot and
+                                             not location.item.name in blacklist_words]
 
-    for location in shop_slots:
-        slot_num = int(location.name[-1]) - 1
-        shop: Shop = location.parent_region.shop
-        if shop.can_push_inventory(slot_num):
-            for c in candidates:  # chosen item locations
-                if c.item_rule(location.item):  # if rule is good...
-                    logging.debug('Swapping {} with {}:: {} ||| {}'.format(c, location, c.item, location.item))
-                    c.item, location.item = location.item, c.item
-                    if not world.can_beat_game():
-                        c.item, location.item = location.item, c.item
-                    else:
-                        # we use this candidate
-                        candidates.remove(c)
-                        break
+        world.random.shuffle(candidates)
+
+        # currently special care needs to be taken so that Shop.region.locations.item is identical to Shop.inventory
+        # Potentially create Locations as needed and make inventory the only source, to prevent divergence
+
+        for location in shop_slots:
+            slot_num = int(location.name[-1]) - 1
+            shop: Shop = location.parent_region.shop
+            if shop.can_push_inventory(slot_num):
+                for c in candidates:  # chosen item locations
+                    if c.item_rule(location.item):  # if rule is good...
+                        logging.debug('Swapping {} with {}:: {} ||| {}'.format(c, location, c.item, location.item))
+                        swap_location_item(c, location, check_locked=False)
+                        # TODO: should likely be (all_state-c.item).can_reach(shop.region)
+                        # can still be can_beat_game when beatable-only for the item-owning player
+                        # appears to be the main source of "progression items unreachable Exception"
+                        # in door-rando + multishop
+                        if not world.can_beat_game():
+                            # swap back
+                            swap_location_item(c, location, check_locked=False)
+                        else:
+                            # we use this candidate
+                            candidates.remove(c)
+                            break
+                else:
+                    # This *should* never happen. But let's fail safely just in case.
+                    logging.warning("Ran out of ShopShuffle Item candidate locations.")
+                    shop.region.locations.remove(location)
+                    continue
+
+                item_name = location.item.name
+                if any(x in item_name for x in ['Single Bomb', 'Single Arrow']):
+                    price = world.random.randrange(1, 7)
+                elif any(x in item_name for x in ['Arrows', 'Bombs', 'Clock']):
+                    price = world.random.randrange(4, 24)
+                elif any(x in item_name for x in ['Compass', 'Map', 'Small Key', 'Piece of Heart']):
+                    price = world.random.randrange(10, 30)
+                else:
+                    price = world.random.randrange(10, 60)
+
+                price *= 5
+
+                shop.push_inventory(slot_num, item_name, price, 1,
+                                    location.item.player if location.item.player != location.player else 0)
             else:
-                # This *should* never happen. But let's fail safely just in case.
-                logging.warning("Ran out of ShopShuffle Item candidate locations.")
                 shop.region.locations.remove(location)
-                continue
-
-            # update table to location data
-            item_name = location.item.name
-            if any(x in item_name for x in ['Single Bomb', 'Single Arrow']):
-                price = world.random.randrange(1, 7)
-            elif any(x in item_name for x in ['Arrows', 'Bombs', 'Clock']):
-                price = world.random.randrange(4, 24)
-            elif any(x in item_name for x in ['Compass', 'Map', 'Small Key', 'Piece of Heart']):
-                price = world.random.randrange(10, 30)
-            else:
-                price = world.random.randrange(10, 60)
-
-            price *= 5
-
-            shop.push_inventory(slot_num, item_name, price, 1,
-                                location.item.player if location.item.player != location.player else 0)
-        else:
-            shop.region.locations.remove(location)
 
     logger.info('Patching ROM.')
 
@@ -301,7 +314,6 @@ def main(args, seed=None):
         apply_rom_settings(rom, args.heartbeep[player], args.heartcolor[player], args.quickswap[player],
                            args.fastmenu[player], args.disablemusic[player], args.sprite[player],
                            palettes_options, world, player, True)
-
 
         mcsb_name = ''
         if all([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player],
