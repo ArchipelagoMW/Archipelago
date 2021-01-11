@@ -414,7 +414,7 @@ def create_shops(world, player: int):
                 pass
             else:
                 if my_shop_slots.pop():
-                    additional_item = world.random.choice(['Rupees (50)', 'Rupees (100)', 'Rupees (300)'])
+                    additional_item = 'Rupees (50)' # world.random.choice(['Rupees (50)', 'Rupees (100)', 'Rupees (300)'])
                     slot_name = "{} Slot {}".format(shop.region.name, index + 1)
                     loc = Location(player, slot_name, address=shop_table_by_location[slot_name], parent=shop.region)
                     loc.shop_slot = True

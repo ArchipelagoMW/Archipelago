@@ -448,6 +448,65 @@ class World(object):
 
         return False
 
+    def fulfills_accessibility(self):
+        state = CollectionState(self)
+        locations = {location for location in self.get_locations() if location.item}
+        beatable_players = set()
+        items_players = set()
+        locations_players = set()
+        for player in self.player_ids:
+            access = self.accessibility[player]
+            if access == "none":
+                beatable_players.add(player)
+            elif access == "items":
+                items_players.add(player)
+            elif access == "locations":
+                locations_players.add(player)
+            else:
+                raise Exception(f"unknown access rule {access} for player {player}")
+
+        beatable_fulfilled = False
+
+        def location_conditition(location : Location):
+            """Determine if this location has to be accessible"""
+            if location.player in locations_players:
+                return True
+            elif location.player in items_players:
+                return location.item.advancement or location.event
+
+            return False
+
+        def all_done():
+            """Check if all access rules are fulfilled"""
+            if beatable_fulfilled:
+                for location in locations:
+                    if location_conditition(location):
+                        return False
+                return True
+
+        while locations:
+            sphere = set()
+            for location in locations:
+                if location.can_reach(state):
+                    sphere.add(location)
+
+            if not sphere:
+                # ran out of places and did not finish yet, quit
+                logging.debug(f"Could not access required locations.")
+                return False
+
+            for location in sphere:
+                locations.remove(location)
+                state.collect(location.item, True, location)
+
+            if self.has_beaten_game(state):
+                beatable_fulfilled = True
+
+            if all_done():
+                return True
+
+        return False
+
 class CollectionState(object):
 
     def __init__(self, parent: World):

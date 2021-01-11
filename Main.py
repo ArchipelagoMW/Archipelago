@@ -238,22 +238,17 @@ def main(args, seed=None):
             if shop.can_push_inventory(slot_num):
                 for c in candidates:  # chosen item locations
                     if c.item_rule(location.item):  # if rule is good...
-                        logging.debug('Swapping {} with {}:: {} ||| {}'.format(c, location, c.item, location.item))
+                        logger.debug(f'Swapping {c} into {location}:: {c.item}')
                         swap_location_item(c, location, check_locked=False)
-                        # TODO: should likely be (all_state-c.item).can_reach(shop.region)
-                        # can still be can_beat_game when beatable-only for the item-owning player
-                        # appears to be the main source of "progression items unreachable Exception"
-                        # in door-rando + multishop
-                        if not world.can_beat_game():
-                            # swap back
+                        candidates.remove(c)
+                        if not world.fulfills_accessibility():
                             swap_location_item(c, location, check_locked=False)
-                        else:
-                            # we use this candidate
-                            candidates.remove(c)
-                            break
+                            continue
+                        break
+
                 else:
                     # This *should* never happen. But let's fail safely just in case.
-                    logging.warning("Ran out of ShopShuffle Item candidate locations.")
+                    logger.warning("Ran out of ShopShuffle Item candidate locations.")
                     shop.region.locations.remove(location)
                     continue
 
@@ -381,7 +376,7 @@ def main(args, seed=None):
 
     pool = concurrent.futures.ThreadPoolExecutor()
     multidata_task = None
-    check_beatability_task = pool.submit(world.can_beat_game)
+    check_accessibility_task = pool.submit(world.fulfills_accessibility)
     if not args.suppress_rom:
 
         rom_futures = []
@@ -477,8 +472,11 @@ def main(args, seed=None):
                 f.write(multidata)
 
         multidata_task = pool.submit(write_multidata, rom_futures)
-    if not check_beatability_task.result():
-        raise Exception("Game appears unbeatable. Aborting.")
+    if not check_accessibility_task.result():
+        if not world.can_beat_game():
+            raise Exception("Game appears is unbeatable. Aborting.")
+        else:
+            logger.warning("Location Accessibility requirements not fulfilled.")
     if not args.skip_playthrough:
         logger.info('Calculating playthrough.')
         create_playthrough(world)
