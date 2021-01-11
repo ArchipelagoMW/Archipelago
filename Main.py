@@ -238,8 +238,10 @@ def main(args, seed=None):
                         candidates.remove(c)
                         break
             else:
+                # This *should* never happen. But let's fail safely just in case.
                 logging.warning("Ran out of ShopShuffle Item candidate locations.")
-                break  # we ran out of candidates
+                shop.region.locations.remove(location)
+                continue
 
             # update table to location data
             item_name = location.item.name
