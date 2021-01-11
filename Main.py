@@ -256,6 +256,8 @@ def main(args, seed=None):
 
             shop.push_inventory(slot_num, item_name, price, 1,
                                 location.item.player if location.item.player != location.player else 0)
+        else:
+            shop.region.locations.remove(location)
 
     logger.info('Patching ROM.')
 
