@@ -263,6 +263,11 @@ def main(args, seed=None):
 
     logger.info('Patching ROM.')
 
+    # remove locations that may no longer exist from caches, by flushing them entirely
+    if shop_slots:
+        world.clear_location_cache()
+        world._location_cache = {}
+
     outfilebase = 'BM_%s' % (args.outputname if args.outputname else world.seed)
 
     rom_names = []
@@ -333,7 +338,7 @@ def main(args, seed=None):
           "progressive": world.progressive,                                # A
           "hints": 'True' if world.hints[player] else 'False'              # B
         }
-        #                  0  1  2  3  4 5  6  7 8 9 A B 
+        #                  0  1  2  3  4 5  6  7 8 9 A B
         outfilesuffix = ('_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (
           #  0          1      2      3    4     5    6      7     8        9         A     B           C
           # _noglitches_normal-normal-open-ganon-ohko_simple-balanced-keysanity-retro-prog_random-nohints
