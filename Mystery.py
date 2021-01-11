@@ -379,7 +379,7 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
 
     # TODO consider moving open_pyramid to an automatic variable in the core roller, set to True when
     # fast ganon + ganon at hole
-    ret.open_pyramid = goal in {'fast_ganon', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'}
+    ret.open_pyramid = ret.goal in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
 
     ret.crystals_gt = prefer_int(get_choice('tower_open', weights))
 
