@@ -1152,7 +1152,7 @@ async def track_locations(ctx : Context, roomid, roomdata):
     
     try: 
         if roomid in location_shop_ids:
-            misc_data = await snes_read(ctx, SHOP_ADDR, len(location_shop_order)*3)
+            misc_data = await snes_read(ctx, SHOP_ADDR, (len(location_shop_order)*3)+5)
             for cnt, b in enumerate(misc_data):
                 my_check = Regions.shop_table_by_location_id[Regions.SHOP_ID_START + cnt]
                 if int(b) > 0 and my_check not in ctx.locations_checked:

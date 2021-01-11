@@ -1565,7 +1565,7 @@ def write_custom_shops(rom, world, player):
         if shop.type == ShopType.TakeAny:
             sram_offset += 1
         else:
-            sram_offset += shop.item_count
+            sram_offset += 3
         shop_data.extend(bytes)
         # [id][item][price-low][price-high][max][repl_id][repl_price-low][repl_price-high][player]
         for item in shop.inventory:
