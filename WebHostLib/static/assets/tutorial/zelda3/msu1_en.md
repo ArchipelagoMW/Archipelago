@@ -69,7 +69,7 @@ music which has not been licensed to you, or licensed for use in a stream in gen
 In the worst case, you may receive a DMCA take-down notice. Please be careful to only stream music for which
 you have the rights to do so.
 
-#### Stream-safe MSU packs
+##### Stream-safe MSU packs
 Below is a list of MSU packs which, so far as we know, are safe to stream. More will be added to this list as
 we learn of them. If you know of any we missed, please let us know!
 - Vanilla Game Music
