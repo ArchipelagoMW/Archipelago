@@ -65,3 +65,10 @@ alttp_msu-34.pcm
 Muchos packs MSU usan música con derechos de autor la cual no esta permitido su uso en plataformas como Twitch o YouTube.
 Si elijes hacer stream de dicha música, tu VOD puede ser silenciado. En el peor caso, puedes recibir una orden de eliminación DMCA.
 Por favor, tened cuidado y solo streamear música para la cual tengas los derechos para hacerlo.
+
+##### Packs MSU seguros para Stream
+A continuación enumeramos los packs MSU que,  packs which, por lo que sabemos, son seguros para vuestras retransmisiones. Se iran añadiendo mas conforme
+vayamos enterandonos. Si sabes alguno que podamos haber olvidado, por favor haznoslo saber!
+- Musica del juego original
+- [Smooth McGroove](https://drive.google.com/open?id=1JDa1jCKg5hG0Km6xNpmIgf4kDMOxVp3n)
+
