@@ -237,7 +237,7 @@ def main(args, seed=None):
             shop: Shop = location.parent_region.shop
             if shop.can_push_inventory(slot_num):
                 for c in candidates:  # chosen item locations
-                    if c.item_rule(location.item):  # if rule is good...
+                    if c.item_rule(location.item) and location.item_rule(c.item):  # if rule is good...
                         logger.debug(f'Swapping {c} into {location}:: {c.item}')
                         swap_location_item(c, location, check_locked=False)
                         candidates.remove(c)
