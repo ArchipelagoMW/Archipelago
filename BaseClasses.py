@@ -416,7 +416,7 @@ class World(object):
         else:
             return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
 
-    def can_beat_game(self, starting_state=None):
+    def can_beat_game(self, starting_state : Optional[CollectionState]=None):
         if starting_state:
             if self.has_beaten_game(starting_state):
                 return True
@@ -448,41 +448,37 @@ class World(object):
 
         return False
 
-    def fulfills_accessibility(self):
-        state = CollectionState(self)
-        locations = {location for location in self.get_locations() if location.item}
-        beatable_players = set()
-        items_players = set()
-        locations_players = set()
-        for player in self.player_ids:
-            access = self.accessibility[player]
-            if access == "none":
-                beatable_players.add(player)
-            elif access == "items":
-                items_players.add(player)
-            elif access == "locations":
-                locations_players.add(player)
-            else:
-                raise Exception(f"unknown access rule {access} for player {player}")
+    def fulfills_accessibility(self, state: Optional[CollectionState] = None):
+        """Check if accessibility rules are fulfilled with current or supplied state."""
+        if not state:
+            state = CollectionState(self)
+        players = {}
+        for player, access in self.accessibility.items():
+            players.setdefault(access, set()).add(player)
 
         beatable_fulfilled = False
 
         def location_conditition(location : Location):
-            """Determine if this location has to be accessible"""
-            if location.player in locations_players:
-                return True
-            elif location.player in items_players:
-                return location.item.advancement or location.event
+            """Determine if this location has to be accessible, location is already filtered by location_relevant"""
+            if location.player in players["none"]:
+                return False
+            return True
 
+        def location_relevant(location : Location):
+            """Determine if this location is relevant to sweep."""
+            if location.player in players["locations"] or location.event or \
+                    (location.item and location.item.advancement):
+                return True
             return False
 
         def all_done():
             """Check if all access rules are fulfilled"""
             if beatable_fulfilled:
-                for location in locations:
-                    if location_conditition(location):
-                        return False
+                if any(location_conditition(location) for location in locations):
+                    return False  # still locations required to be collected
                 return True
+
+        locations = {location for location in self.get_locations() if location_relevant(location)}
 
         while locations:
             sphere = set()
@@ -506,6 +502,7 @@ class World(object):
                 return True
 
         return False
+
 
 class CollectionState(object):
 
