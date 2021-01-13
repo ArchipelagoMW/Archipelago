@@ -218,7 +218,7 @@ def main(args, seed=None):
 
     if shop_slots:
         # TODO: allow each game to register a blacklist to be used here?
-        blacklist_words = {"Rupee", "Pendant", "Crystal"}
+        blacklist_words = {"Rupee"}
         blacklist_words = {item_name for item_name in item_table if any(
             blacklist_word in item_name for blacklist_word in blacklist_words)}
         blacklist_words.add("Bee")
@@ -238,12 +238,14 @@ def main(args, seed=None):
             if shop.can_push_inventory(slot_num):
                 for c in candidates:  # chosen item locations
                     if c.item_rule(location.item) and location.item_rule(c.item):  # if rule is good...
-                        logger.debug(f'Swapping {c} into {location}:: {c.item}')
+
                         swap_location_item(c, location, check_locked=False)
                         candidates.remove(c)
                         if not world.fulfills_accessibility():
                             swap_location_item(c, location, check_locked=False)
                             continue
+
+                        logger.debug(f'Swapping {c} into {location}:: {location.item}')
                         break
 
                 else:

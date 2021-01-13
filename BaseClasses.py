@@ -452,9 +452,11 @@ class World(object):
         """Check if accessibility rules are fulfilled with current or supplied state."""
         if not state:
             state = CollectionState(self)
-        players = {}
+        players = {"none" : set(),
+                   "items": set(),
+                   "locations": set()}
         for player, access in self.accessibility.items():
-            players.setdefault(access, set()).add(player)
+            players[access].add(player)
 
         beatable_fulfilled = False
 
