@@ -19,6 +19,7 @@ def fill_restrictive(world, base_state: CollectionState, locations, itempool, si
         return new_state
 
     unplaced_items = []
+    placements = []
 
     no_access_checks = {}
     reachable_items = {}
@@ -52,11 +53,6 @@ def fill_restrictive(world, base_state: CollectionState, locations, itempool, si
                         logging.warning(
                             f'Not all items placed. Game beatable anyway. (Could not place {item_to_place})')
                         continue
-                    placements = []
-                    for region in world.regions:
-                        for location in region.locations:
-                            if location.item and not location.event:
-                                placements.append(location)
                     # fill in name of world for item
                     item_to_place.world = world
                     raise FillError(f'No more spots to place {item_to_place}, locations {locations} are invalid. '
@@ -64,6 +60,7 @@ def fill_restrictive(world, base_state: CollectionState, locations, itempool, si
 
                 world.push_item(spot_to_fill, item_to_place, False)
                 locations.remove(spot_to_fill)
+                placements.append(spot_to_fill)
                 spot_to_fill.event = True
 
     itempool.extend(unplaced_items)
