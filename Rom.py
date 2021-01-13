@@ -2072,10 +2072,6 @@ def write_strings(rom, world, player, team):
             this_item = items_to_hint.pop(0)
             this_location = world.find_items(this_item, player)
             local_random.shuffle(this_location)
-            # This looks dumb but prevents hints for Skull Woods Pinball Room's key safely with any item pool.
-            if this_location:
-                if this_location[0].name == 'Skull Woods - Pinball Room':
-                    this_location.pop(0)
             if this_location:
                 this_hint = this_location[0].item.hint_text + ' can be found ' + hint_text(this_location[0]) + '.'
                 tt[hint_locations.pop(0)] = this_hint

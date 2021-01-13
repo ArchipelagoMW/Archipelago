@@ -64,5 +64,13 @@ alttp_msu-34.pcm
 
 ## A word of caution to streamers
 Many MSU packs use copyrighted music which is not permitted for use on platforms like Twitch and YouTube.
-If you choose to stream copyrighted music, your VOD may be muted. In the worst scenario, you may receive a DMCA
-take-down notice. Please be careful to only stream music for which you have the rights to do so.
+If you choose to stream music from an MSU pack, please ensure you have permission to do so. If you stream
+music which has not been licensed to you, or licensed for use in a stream in general, your VOD may be muted. 
+In the worst case, you may receive a DMCA take-down notice. Please be careful to only stream music for which
+you have the rights to do so.
+
+##### Stream-safe MSU packs
+Below is a list of MSU packs which, so far as we know, are safe to stream. More will be added to this list as
+we learn of them. If you know of any we missed, please let us know!
+- Vanilla Game Music
+- [Smooth McGroove](https://drive.google.com/open?id=1JDa1jCKg5hG0Km6xNpmIgf4kDMOxVp3n)
