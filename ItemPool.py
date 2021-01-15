@@ -538,13 +538,19 @@ take_any_locations = {
     'Palace of Darkness Hint', 'East Dark World Hint', 'Archery Game', 'Dark Lake Hylia Ledge Hint',
     'Dark Lake Hylia Ledge Spike Cave', 'Fortune Teller (Dark)', 'Dark Sanctuary Hint', 'Dark Desert Hint'}
 
+take_any_locations_inverted = list(take_any_locations - {"Dark Sanctuary Hint", "Archery Game"})
+take_any_locations = list(take_any_locations)
+# sets are sorted by the element's hash, python's hash is seeded at startup, resulting in different sorting each run
+take_any_locations_inverted.sort()
+take_any_locations.sort()
+
 
 def set_up_take_anys(world, player):
-    take_any_locs = take_any_locations
+    # these are references, do not modify these lists in-place
     if world.mode[player] == 'inverted':
-        take_any_locs -= {"Dark Sanctuary Hint", "Archery Game"}
-    take_any_locs = list(take_any_locs)
-    take_any_locs.sort()
+        take_any_locs = take_any_locations_inverted
+    else:
+        take_any_locs = take_any_locations
 
     regions = world.random.sample(take_any_locs, 5)
 
