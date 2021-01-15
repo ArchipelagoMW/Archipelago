@@ -964,19 +964,18 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 self.output(response)
                 return False
 
+
 def get_missing_checks(ctx: Context, client: Client) -> list:
-    locations = []
-    #for location_id in [k[0] for k, v in ctx.locations if k[1] == client.slot]:
-    #    if location_id not in ctx.location_checks[client.team, client.slot]:
-    #        locations.append(Regions.lookup_id_to_name.get(location_id, f'Unknown Location ID: {location_id}'))
-    for location_id, location_name in Regions.lookup_id_to_name.items():  # cheat console is -1, keep in mind
-        if location_id != -1 and location_id not in ctx.location_checks[client.team, client.slot] and (location_id, client.slot) in ctx.locations:
-            locations.append(location_name)
-    return locations
+    return [Regions.lookup_id_to_name.get(location_id, f'Unknown Location ID: {location_id}') for
+            location_id, slot in ctx.locations if
+            slot == client.slot and
+            location_id not in ctx.location_checks[client.team, client.slot]]
+
 
 def get_client_points(ctx: Context, client: Client) -> int:
     return (ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) -
             ctx.hint_cost * ctx.hints_used[client.team, client.slot])
+
 
 async def process_client_cmd(ctx: Context, client: Client, cmd, args):
     if type(cmd) is not str:
