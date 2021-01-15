@@ -540,10 +540,11 @@ take_any_locations = {
 
 
 def set_up_take_anys(world, player):
+    take_any_locs = take_any_locations
     if world.mode[player] == 'inverted':
-        take_any_locs = take_any_locations - {"Dark Sanctuary Hint", "Archery Game"}
-    else:
-        take_any_locs = take_any_locations
+        take_any_locs -= {"Dark Sanctuary Hint", "Archery Game"}
+    take_any_locs = list(take_any_locs)
+    take_any_locs.sort()
 
     regions = world.random.sample(take_any_locs, 5)
 
