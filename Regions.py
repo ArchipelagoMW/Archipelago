@@ -900,7 +900,18 @@ lookup_vanilla_location_to_entrance = {1572883: 'Kings Grave Inner Rocks', 19125
                                        0x140064: 'Misery Mire',
                                        0x140058: 'Turtle Rock', 0x140007: 'Dark Death Mountain Ledge (West)',
                                        0x140040: 'Ganons Tower', 0x140043: 'Ganons Tower',
-                                       0x14003a: 'Ganons Tower', 0x14001f: 'Ganons Tower'}
+                                       0x14003a: 'Ganons Tower', 0x14001f: 'Ganons Tower',
+                                       0x400000: 'Cave Shop (Dark Death Mountain)', 0x400001: 'Cave Shop (Dark Death Mountain)', 0x400002: 'Cave Shop (Dark Death Mountain)',
+                                       0x400003: 'Red Shield Shop', 0x400004: 'Red Shield Shop', 0x400005: 'Red Shield Shop',
+                                       0x400006: 'Dark Lake Hylia Shop', 0x400007: 'Dark Lake Hylia Shop', 0x400008: 'Dark Lake Hylia Shop',
+                                       0x400009: 'Dark World Lumberjack Shop', 0x40000a: 'Dark World Lumberjack Shop', 0x40000b: 'Dark World Lumberjack Shop',
+                                       0x40000c: 'Village of Outcasts Shop', 0x40000d: 'Village of Outcasts Shop', 0x40000e: 'Village of Outcasts Shop',
+                                       0x40000f: 'Dark World Potion Shop', 0x400010: 'Dark World Potion Shop', 0x400011: 'Dark World Potion Shop',
+                                       0x400012: 'Light World Death Mountain Shop', 0x400013: 'Light World Death Mountain Shop', 0x400014: 'Light World Death Mountain Shop',
+                                       0x400015: 'Kakariko Shop', 0x400016: 'Kakariko Shop', 0x400017: 'Kakariko Shop',
+                                       0x400018: 'Cave Shop (Lake Hylia)', 0x400019: 'Cave Shop (Lake Hylia)', 0x40001a: 'Cave Shop (Lake Hylia)',
+                                       0x40001b: 'Potion Shop', 0x40001c: 'Potion Shop', 0x40001d: 'Potion Shop',
+                                       0x40001e: 'Capacity Upgrade', 0x40001f: 'Capacity Upgrade', 0x400020: 'Capacity Upgrade'}
 
 lookup_prizes = {location for location in location_table if location.endswith(" - Prize")}
 lookup_boss_drops = {location for location in location_table if location.endswith(" - Boss")}
