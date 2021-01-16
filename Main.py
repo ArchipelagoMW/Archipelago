@@ -448,7 +448,7 @@ def main(args, seed=None):
                 checks_in_area[player]["Dark World"].append(location_id)
             checks_in_area[player]["Total"] += 1
 
-            er_hint_data[player][location_id] = get_entrance_to_region(region, []).name
+            er_hint_data[player][location_id] = get_entrance_to_region(region).name
             oldmancaves.append(((location_id, player), (item.code, player)))
 
         precollected_items = [[] for player in range(world.players)]
