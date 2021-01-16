@@ -5,12 +5,11 @@ from enum import Enum, unique
 import logging
 import json
 from collections import OrderedDict, Counter, deque
-from typing import Union, Optional, List, Set, Dict, NamedTuple, Iterable
+from typing import Union, Optional, List, Dict, NamedTuple, Iterable
 import secrets
 import random
 
-from EntranceShuffle import door_addresses, indirect_connections
-from Utils import int16_as_bytes
+from EntranceShuffle import indirect_connections
 from Items import item_name_groups
 
 
@@ -1148,110 +1147,6 @@ class Item(object):
 class Crystal(Item):
     pass
 
-@unique
-class ShopType(Enum):
-    Shop = 0
-    TakeAny = 1
-    UpgradeShop = 2
-
-class Shop():
-    slots = 3  # slot count is not dynamic in asm, however inventory can have None as empty slots
-    blacklist = set()  # items that don't work, todo: actually check against this
-    type = ShopType.Shop
-
-    def __init__(self, region: Region, room_id: int, shopkeeper_config: int, custom: bool, locked: bool):
-        self.region = region
-        self.room_id = room_id
-        self.inventory: List[Union[None, dict]] = [None] * self.slots
-        self.shopkeeper_config = shopkeeper_config
-        self.custom = custom
-        self.locked = locked
-
-    @property
-    def item_count(self) -> int:
-        for x in range(self.slots - 1, -1, -1):  # last x is 0
-            if self.inventory[x]:
-                return x + 1
-        return 0
-
-    def get_bytes(self) -> List[int]:
-        # [id][roomID-low][roomID-high][doorID][zero][shop_config][shopkeeper_config][sram_index]
-        entrances = self.region.entrances
-        config = self.item_count
-        if len(entrances) == 1 and entrances[0].name in door_addresses:
-            door_id = door_addresses[entrances[0].name][0] + 1
-        else:
-            door_id = 0
-            config |= 0x40  # ignore door id
-        if self.type == ShopType.TakeAny:
-            config |= 0x80
-        elif self.type == ShopType.UpgradeShop:
-            config |= 0x10  # Alt. VRAM
-        return [0x00]+int16_as_bytes(self.room_id)+[door_id, 0x00, config, self.shopkeeper_config, 0x00]
-
-    def has_unlimited(self, item: str) -> bool:
-        for inv in self.inventory:
-            if inv is None:
-                continue
-            if inv['item'] == item:
-                return True
-            if inv['max'] != 0 and inv['replacement'] is not None and inv['replacement'] == item:
-                return True
-        return False
-
-    def has(self, item: str) -> bool:
-        for inv in self.inventory:
-            if inv is None:
-                continue
-            if inv['item'] == item:
-                return True
-            if inv['max'] != 0 and inv['replacement'] == item:
-                return True
-        return False
-
-    def clear_inventory(self):
-        self.inventory = [None] * self.slots
-
-    def add_inventory(self, slot: int, item: str, price: int, max: int = 0,
-                      replacement: Optional[str] = None, replacement_price: int = 0, create_location: bool = False,
-                      player: int = 0):
-        self.inventory[slot] = {
-            'item': item,
-            'price': price,
-            'max': max,
-            'replacement': replacement,
-            'replacement_price': replacement_price,
-            'create_location': create_location,
-            'player': player
-        }
-
-    def push_inventory(self, slot: int, item: str, price: int, max: int = 1, player: int = 0):
-        if not self.inventory[slot]:
-            raise ValueError("Inventory can't be pushed back if it doesn't exist")
-
-        self.inventory[slot] = {
-            'item': item,
-            'price': price,
-            'max': max,
-            'replacement': self.inventory[slot]["item"],
-            'replacement_price': self.inventory[slot]["price"],
-            'create_location': self.inventory[slot]["create_location"],
-            'player': player
-        }
-
-    def can_push_inventory(self, slot: int):
-        return self.inventory[slot] and not self.inventory[slot]["replacement"]
-
-class TakeAny(Shop):
-    type = ShopType.TakeAny
-
-
-class UpgradeShop(Shop):
-    type = ShopType.UpgradeShop
-    # Potions break due to VRAM flags set in UpgradeShop.
-    # Didn't check for more things breaking as not much else can be shuffled here currently
-    blacklist = item_name_groups["Potions"]
-
 
 class Spoiler(object):
     world: World
@@ -1314,6 +1209,7 @@ class Spoiler(object):
             listed_locations.update(other_locations)
 
         self.shops = []
+        from Shops import ShopType
         for shop in self.world.shops:
             if not shop.custom:
                 continue

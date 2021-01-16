@@ -16,6 +16,7 @@ import subprocess
 
 from random import randrange
 
+import Shops
 from Utils import get_item_name_from_id, get_location_name_from_address, ReceivedItem
 
 exit_func = atexit.register(input, "Press enter to close.")
@@ -159,8 +160,8 @@ SCOUTREPLY_PLAYER_ADDR = SAVEDATA_START + 0x4DA     # 1 byte
 SHOP_ADDR = SAVEDATA_START + 0x302                  # 2 bytes
 
 
-location_shop_order = [ name for name, info in Regions.shop_table.items() ] # probably don't leave this here.  This relies on python 3.6+ dictionary keys having defined order
-location_shop_ids = set([info[0] for name, info in Regions.shop_table.items()])
+location_shop_order = [name for name, info in Shops.shop_table.items()] # probably don't leave this here.  This relies on python 3.6+ dictionary keys having defined order
+location_shop_ids = set([info[0] for name, info in Shops.shop_table.items()])
 
 location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      "Blind's Hideout - Left": (0x11d, 0x20),
@@ -1154,7 +1155,7 @@ async def track_locations(ctx : Context, roomid, roomdata):
         if roomid in location_shop_ids:
             misc_data = await snes_read(ctx, SHOP_ADDR, (len(location_shop_order)*3)+5)
             for cnt, b in enumerate(misc_data):
-                my_check = Regions.shop_table_by_location_id[Regions.SHOP_ID_START + cnt]
+                my_check = Shops.shop_table_by_location_id[Shops.SHOP_ID_START + cnt]
                 if int(b) > 0 and my_check not in ctx.locations_checked:
                     new_check(my_check)
     except Exception as e:
@@ -1219,7 +1220,7 @@ async def track_locations(ctx : Context, roomid, roomdata):
 
     for location in ctx.locations_checked:
         try:
-            my_id = Regions.lookup_name_to_id.get(location, Regions.shop_table_by_location.get(location, -1))
+            my_id = Regions.lookup_name_to_id.get(location, Shops.shop_table_by_location.get(location, -1))
             new_locations.append(my_id)
         except Exception as e:
             print(e)

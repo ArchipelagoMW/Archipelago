@@ -4,7 +4,8 @@ from EntranceShuffle import link_inverted_entrances
 from InvertedRegions import create_inverted_regions
 from ItemPool import generate_itempool, difficulties
 from Items import ItemFactory
-from Regions import mark_light_world_regions, create_shops
+from Regions import mark_light_world_regions
+from Shops import create_shops
 from Rules import set_rules
 from test.TestBase import TestBase
 

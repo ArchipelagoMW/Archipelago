@@ -1,7 +1,8 @@
 from collections import namedtuple
 import logging
 
-from BaseClasses import Region, RegionType, ShopType, Shop, Location, TakeAny
+from BaseClasses import Region, RegionType, Location
+from Shops import ShopType, Shop, TakeAny
 from Bosses import place_bosses
 from Dungeons import get_dungeon_item_pool
 from EntranceShuffle import connect_entrance

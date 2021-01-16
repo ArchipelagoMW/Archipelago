@@ -17,7 +17,8 @@ import xxtea
 import concurrent.futures
 from typing import Optional
 
-from BaseClasses import CollectionState, ShopType, Region, Location
+from BaseClasses import CollectionState, Region, Location
+from Shops import ShopType
 from Dungeons import dungeon_music_addresses
 from Regions import location_table, old_location_address_to_new_location_address
 from Text import MultiByteTextMapper, CompressedTextMapper, text_addresses, Credits, TextTable

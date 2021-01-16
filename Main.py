@@ -8,19 +8,17 @@ import random
 import time
 import zlib
 import concurrent.futures
-import typing
 
-from BaseClasses import World, CollectionState, Item, Region, Location, Shop
+from BaseClasses import World, CollectionState, Item, Region, Location
+from Shops import ShopSlotFill, create_shops, SHOP_ID_START
 from Items import ItemFactory, item_table, item_name_groups
-from Regions import create_regions, create_shops, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
-    SHOP_ID_START
+from Regions import create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 from Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, get_hash_string
 from Rules import set_rules
 from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
-from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned, \
-    swap_location_item
+from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
 import Patch
@@ -213,77 +211,13 @@ def main(args, seed=None):
     if world.players > 1:
         balance_multiworld_progression(world)
 
-    shop_slots: typing.List[Location] = [location for shop_locations in (shop.region.locations for shop in world.shops)
-                                         for location in shop_locations if location.shop_slot]
+    logger.info("Filling Shop Slots")
 
-    if shop_slots:
-        # TODO: allow each game to register a blacklist to be used here?
-        blacklist_words = {"Rupee"}
-        blacklist_words = {item_name for item_name in item_table if any(
-            blacklist_word in item_name for blacklist_word in blacklist_words)}
-        blacklist_words.add("Bee")
-        candidates: typing.List[Location] = [location for location in world.get_locations() if
-                                             not location.locked and
-                                             not location.shop_slot and
-                                             not location.item.name in blacklist_words]
-
-        world.random.shuffle(candidates)
-
-        if not world.fulfills_accessibility():
-            logger.warning("World does not fulfill accessibility rules as is, "
-                           "only using \"beatable only\" for shop logic.")
-            shuffle_condition = world.can_beat_game
-        else:
-            shuffle_condition = world.fulfills_accessibility
-
-        # currently special care needs to be taken so that Shop.region.locations.item is identical to Shop.inventory
-        # Potentially create Locations as needed and make inventory the only source, to prevent divergence
-
-        for location in shop_slots:
-            slot_num = int(location.name[-1]) - 1
-            shop: Shop = location.parent_region.shop
-            if shop.can_push_inventory(slot_num):
-                for c in candidates:  # chosen item locations
-                    if c.item_rule(location.item) and location.item_rule(c.item):  # if rule is good...
-
-                        swap_location_item(c, location, check_locked=False)
-                        candidates.remove(c)
-                        if not shuffle_condition():
-                            swap_location_item(c, location, check_locked=False)
-                            continue
-
-                        logger.debug(f'Swapping {c} into {location}:: {location.item}')
-                        break
-
-                else:
-                    # This *should* never happen. But let's fail safely just in case.
-                    logger.warning("Ran out of ShopShuffle Item candidate locations.")
-                    shop.region.locations.remove(location)
-                    continue
-
-                item_name = location.item.name
-                if any(x in item_name for x in ['Single Bomb', 'Single Arrow']):
-                    price = world.random.randrange(1, 7)
-                elif any(x in item_name for x in ['Arrows', 'Bombs', 'Clock']):
-                    price = world.random.randrange(4, 24)
-                elif any(x in item_name for x in ['Compass', 'Map', 'Small Key', 'Piece of Heart']):
-                    price = world.random.randrange(10, 30)
-                else:
-                    price = world.random.randrange(10, 60)
-
-                price *= 5
-
-                shop.push_inventory(slot_num, item_name, price, 1,
-                                    location.item.player if location.item.player != location.player else 0)
-            else:
-                shop.region.locations.remove(location)
+    ShopSlotFill(world)
 
     logger.info('Patching ROM.')
 
-    # remove locations that may no longer exist from caches, by flushing them entirely
-    if shop_slots:
-        world.clear_location_cache()
-        world._location_cache = {}
+
 
     outfilebase = 'BM_%s' % (args.outputname if args.outputname else world.seed)
 

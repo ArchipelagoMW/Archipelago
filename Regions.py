@@ -1,7 +1,8 @@
 import collections
 import typing
 
-from BaseClasses import Region, Location, Entrance, RegionType, Shop, TakeAny, UpgradeShop, ShopType
+from BaseClasses import Region, Location, Entrance, RegionType
+
 
 
 def create_regions(world, player):
@@ -365,104 +366,6 @@ def mark_light_world_regions(world, player: int):
                 queue.append(exit.connected_region)
 
 
-def create_shops(world, player: int):
-    cls_mapping = {ShopType.UpgradeShop: UpgradeShop,
-                   ShopType.Shop: Shop,
-                   ShopType.TakeAny: TakeAny}
-    option = world.shop_shuffle[player]
-    my_shop_table = dict(shop_table)
-    
-    num_slots = int(world.shop_shuffle_slots[player])
-    
-    my_shop_slots = ([True] * num_slots + [False] * (len(shop_table) * 3))[:len(shop_table)*3 - 2] 
-
-    world.random.shuffle(my_shop_slots)
-
-    from Items import ItemFactory
-    if 'g' in option or 'f' in option:
-        new_basic_shop = world.random.sample(shop_generation_types['default'], k=3)
-        new_dark_shop = world.random.sample(shop_generation_types['default'], k=3)
-        for name, shop in my_shop_table.items():
-            typ, shop_id, keeper, custom, locked, items = shop
-            if name == 'Capacity Upgrade':
-                pass
-            elif name == 'Potion Shop' and not "w" in option:
-                pass
-            else:
-                new_items = world.random.sample(shop_generation_types['default'], k=3)
-                if 'f' not in option:
-                    if items == _basic_shop_defaults:
-                        new_items = new_basic_shop
-                    elif items == _dark_world_shop_defaults:
-                        new_items = new_dark_shop
-                keeper = world.random.choice([0xA0, 0xC1, 0xFF])
-                my_shop_table[name] = (typ, shop_id, keeper, custom, locked, new_items)
-    
-    for region_name, (room_id, type, shopkeeper, custom, locked, inventory) in my_shop_table.items():
-        if world.mode[player] == 'inverted' and region_name == 'Dark Lake Hylia Shop':
-            locked = True
-            inventory = [('Blue Potion', 160), ('Blue Shield', 50), ('Bombs (10)', 50)]
-        region = world.get_region(region_name, player)
-        shop = cls_mapping[type](region, room_id, shopkeeper, custom, locked)
-        region.shop = shop
-        world.shops.append(shop)
-        for index, item in enumerate(inventory):
-            shop.add_inventory(index, *item)
-            if region_name == 'Potion Shop' and 'w' not in option:
-                pass
-            elif region_name == 'Capacity Upgrade':
-                pass
-            else:
-                if my_shop_slots.pop():
-                    additional_item = 'Rupees (50)' # world.random.choice(['Rupees (50)', 'Rupees (100)', 'Rupees (300)'])
-                    slot_name = "{} Slot {}".format(shop.region.name, index + 1)
-                    loc = Location(player, slot_name, address=shop_table_by_location[slot_name],
-                                   parent=shop.region, hint_text="for sale")
-                    loc.shop_slot = True
-                    loc.locked = True
-                    loc.item = ItemFactory(additional_item, player)
-                    shop.region.locations.append(loc)
-                    world.dynamic_locations.append(loc)
-
-                    world.clear_location_cache()
-
-
-# (type, room_id, shopkeeper, custom, locked, [items])
-# item = (item, price, max=0, replacement=None, replacement_price=0)
-_basic_shop_defaults = [('Red Potion', 150), ('Small Heart', 10), ('Bombs (10)', 50)]
-_dark_world_shop_defaults = [('Red Potion', 150), ('Blue Shield', 50), ('Bombs (10)', 50)]
-shop_table = {
-    'Cave Shop (Dark Death Mountain)': (0x0112, ShopType.Shop, 0xC1, True, False, _basic_shop_defaults),
-    'Red Shield Shop': (0x0110, ShopType.Shop, 0xC1, True, False, [('Red Shield', 500), ('Bee', 10), ('Arrows (10)', 30)]),
-    'Dark Lake Hylia Shop': (0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
-    'Dark World Lumberjack Shop': (0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
-    'Village of Outcasts Shop': (0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
-    'Dark World Potion Shop': (0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
-    'Light World Death Mountain Shop': (0x00FF, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
-    'Kakariko Shop': (0x011F, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
-    'Cave Shop (Lake Hylia)': (0x0112, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
-    'Potion Shop': (0x0109, ShopType.Shop, 0xA0, True, False, [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)]),
-    'Capacity Upgrade': (0x0115, ShopType.UpgradeShop, 0x04, True, True, [('Bomb Upgrade (+5)', 100, 7), ('Arrow Upgrade (+5)', 100, 7)])
-}
-
-SHOP_ID_START = 0x400000
-shop_table_by_location_id = {SHOP_ID_START + cnt: s for cnt, s in enumerate(
-    [item for sublist in [["{} Slot {}".format(name, num + 1) for num in range(3)] for name in shop_table] for item in
-     sublist])}
-shop_table_by_location_id[(SHOP_ID_START + len(shop_table)*3)] = "Old Man Sword Cave"
-shop_table_by_location_id[(SHOP_ID_START + len(shop_table)*3 + 1)] = "Take-Any #1"
-shop_table_by_location_id[(SHOP_ID_START + len(shop_table)*3 + 2)] = "Take-Any #2"
-shop_table_by_location_id[(SHOP_ID_START + len(shop_table)*3 + 3)] = "Take-Any #3"
-shop_table_by_location_id[(SHOP_ID_START + len(shop_table)*3 + 4)] = "Take-Any #4"
-shop_table_by_location = {y: x for x, y in shop_table_by_location_id.items()}
-
-shop_generation_types = {
-    'default': _basic_shop_defaults + [('Bombs (3)', 20), ('Green Potion', 90), ('Blue Potion', 190), ('Bee', 10), ('Single Arrow', 5), ('Single Bomb', 10)] + [('Red Shield', 500), ('Blue Shield', 50)],
-    'potion': [('Red Potion', 150), ('Green Potion', 90), ('Blue Potion', 190)],
-    'discount_potion': [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)],
-    'bottle': [('Bee', 10)],
-    'time': [('Red Clock', 100), ('Blue Clock', 200), ('Green Clock', 300)],
-}
 
 old_location_address_to_new_location_address = {
     0x2eb18: 0x18001b,   # Bottle Merchant
@@ -769,6 +672,7 @@ location_table: typing.Dict[str,
      'Turtle Rock - Prize': (
          [0x120A7, 0x53F24, 0x53F25, 0x18005C, 0x180079, 0xC708], None, True, 'Turtle Rock')}
 
+from Shops import shop_table_by_location_id, shop_table_by_location
 lookup_id_to_name = {data[0]: name for name, data in location_table.items() if type(data[0]) == int}
 lookup_id_to_name = {**lookup_id_to_name, **{data[1]: name for name, data in key_drop_data.items()}, -1: "cheat console"}
 lookup_id_to_name.update(shop_table_by_location_id)
