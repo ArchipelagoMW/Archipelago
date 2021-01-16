@@ -336,14 +336,14 @@ def main(args, seed=None):
                 return get_entrance_to_region(entrance.parent_region)
 
         # collect ER hint info
-        er_hint_data = {player: {} for player in range(1, world.players + 1) if world.shuffle[player] != "vanilla"}
+        er_hint_data = {player: {} for player in range(1, world.players + 1) if world.shuffle[player] != "vanilla" or world.retro[player]}
         from Regions import RegionType
         for region in world.regions:
             if region.player in er_hint_data and region.locations:
                 main_entrance = get_entrance_to_region(region)
                 for location in region.locations:
                     if type(location.address) == int:  # skips events and crystals
-                        if location.address >= SHOP_ID_START:  continue
+                        if location.address >= SHOP_ID_START + 33:  continue
                         if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
                             er_hint_data[region.player][location.address] = main_entrance.name
 
@@ -370,6 +370,20 @@ def main(args, seed=None):
                 checks_in_area[location.player]["Dark World"].append(location.address)
             checks_in_area[location.player]["Total"] += 1
 
+        oldmancaves = []
+        for region in [world.get_region("Old Man Sword Cave", player) for player in range(1, world.players + 1) if world.retro[player]]:
+            item = ItemFactory(region.shop.inventory[0]['item'], region.player)
+            player = region.player
+            location_id = SHOP_ID_START + 33
+
+            if region.type == RegionType.LightWorld:
+                checks_in_area[player]["Light World"].append(location_id)
+            else:
+                checks_in_area[player]["Dark World"].append(location_id)
+            checks_in_area[player]["Total"] += 1
+
+            er_hint_data[player][location_id] = get_entrance_to_region(region).name
+            oldmancaves.append(((location_id, player), (item.code, player)))
 
         precollected_items = [[] for player in range(world.players)]
         for item in world.precollected_items:
@@ -401,7 +415,7 @@ def main(args, seed=None):
                                                   "locations": [((location.address, location.player),
                                                                  (location.item.code, location.item.player))
                                                                 for location in world.get_filled_locations() if
-                                                                type(location.address) is int],
+                                                                type(location.address) is int] + oldmancaves,
                                                   "checks_in_area": checks_in_area,
                                                   "server_options": get_options()["server_options"],
                                                   "er_hint_data": er_hint_data,
