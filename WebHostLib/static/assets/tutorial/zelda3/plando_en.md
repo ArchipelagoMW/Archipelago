@@ -60,7 +60,7 @@ boss_shuffle:
     - can be a number, to target that slot in the multiworld
     - can be a name, to target that player's world
     - can be true, to target any other player's world
-    - can be false, to target own world
+    - can be false, to target own world and is the default
     - can be null, to target a random world
 - Single Placement
     - place a single item at a single location
