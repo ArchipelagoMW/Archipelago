@@ -2251,7 +2251,10 @@ def plando_connect(world, player: int):
     if world.plando_connections[player]:
         for connection in world.plando_connections[player]:
             func = lookup[connection.direction]
-            func(world, connection.entrance, connection.exit, player)
+            try:
+                func(world, connection.entrance, connection.exit, player)
+            except Exception as e:
+                raise Exception(f"Could not connect using {connection}") from e
 
 
 LW_Dungeon_Entrances = ['Desert Palace Entrance (South)',
