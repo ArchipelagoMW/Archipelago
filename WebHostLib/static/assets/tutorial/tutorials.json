@@ -69,6 +69,20 @@
             ]
           }
         ]
+      },
+      {
+        "name": "Plando Tutorial",
+        "description": "A guide to creating Multiworld Plandos",
+        "files": [
+          {
+            "language": "English",
+            "filename": "zelda3/plando_en.md",
+            "link": "zelda3/plando/en",
+            "authors": [
+              "Berserker"
+            ]
+          }
+        ]
       }
     ]
   }

@@ -18,7 +18,7 @@
   it defaults to vanilla
 - Instructions are separated by a semicolon
 - Available Instructions:
-  -  Direct Placement: 
+  -  Direct Placement:
      - Example: "Eastern Palace-Trinexx"
      - Takes a particular Arena and particular boss, then places that boss into that arena
      - Ganons Tower has 3 placements, "Ganons Tower Top", "Ganons Tower Middle" and "Ganons Tower Bottom"
@@ -47,20 +47,79 @@ boss_shuffle:
 4. A Trinexx -> Kholdstare Singularity that prevents ice Trinexx in GT
 
 
+### Items
+- This module is disabled by default.
+- Has the options from_pool, world, percentage and either item and location or items and locations
+- All of these options support subweights
+- percentage is the percentage chance for this block to trigger
+  - is a number in the range [0, 100], can be omitted entirely for 100%
+- from_pool denotes if the item should be taken from the item pool, or be an additional item entirely.
+  - can be true or false, defaults to true when omitted
+- world is the target world to place the item
+  - ignored if only one world is generated
+  - can be a number, to target that slot in the multiworld
+  - can be a name, to target that player's world
+  - can be true, to target any other player's world
+  - can be false, to target own world
+  - can be null, to target a random world
+- Single Placement
+  - place a single item at a single location
+  - item denotes the Item to place
+  - location denotes the Location to place it into
+- Multi Placement
+  - place multiple items into multiple locations, until either list is exhausted.
+  - items denotes the items to use, can be given a number to have multiple of that item
+  - locations lists the possible locations those items can be placed in
+  - placements are picked randomly, not sorted in any way
+- [Available Items](https://github.com/Berserker66/MultiWorld-Utilities/blob/3b5ba161dea223b96e9b1fc890e03469d9c6eb59/Items.py#L26)
+- [Available Locations](https://github.com/Berserker66/MultiWorld-Utilities/blob/3b5ba161dea223b96e9b1fc890e03469d9c6eb59/Regions.py#L418)
 
-### Text
+#### Examples
+```yaml
+plando_items:
+  - item:
+      Lamp: 1
+      Fire Rod: 1
+    location: Link's House
+    from_pool: true
+    world: true
+    percentage: 50
+  - items:
+      Progressive Sword: 4
+      Progressive Bow: 1
+      Progressive Bow (Alt): 1
+    locations:
+      - Desert Palace - Big Chest
+      - Eastern Palace - Big Chest
+      - Tower of Hera - Big Chest
+      - Swamp Palace - Big Chest
+      - Thieves' Town - Big Chest
+      - Skull Woods - Big Chest
+      - Ice Palace - Big Chest
+      - Misery Mire - Big Chest
+      - Turtle Rock - Big Chest
+      - Palace of Darkness - Big Chest
+    world: false
+```
+
+The first example has a 50% chance to occur, which if it does places either the Lamp or Fire Rod in one's own 
+Link's House and removes the picked item from the item pool.
+
+The second example always triggers and places the Swords and Bows into one's own Big Chests
+
+### Texts
 - This module is disabled by default.
 - Has the options "text", "at" and "percentage"
 - percentage is the percentage chance for this text to be placed, can be omitted entirely for 100%
-- text is the text to be placed. 
-  - can be weighted.
-  - \n is a newline. 
-  - @ is the entered player's name.
-  - Warning: Text Mapper does not support full unicode.
-  - [Alphabet](https://github.com/Berserker66/MultiWorld-Utilities/blob/65fa39df95c90c9b66141aee8b16b7e560d00819/Text.py#L756)
+- text is the text to be placed.
+   - can be weighted.
+   - \n is a newline. 
+   - @ is the entered player's name.
+   - Warning: Text Mapper does not support full unicode.
+   - [Alphabet](https://github.com/Berserker66/MultiWorld-Utilities/blob/65fa39df95c90c9b66141aee8b16b7e560d00819/Text.py#L756)
 - at is the location within the game to attach the text to.
-  - can be weighted.
-  - [List of targets](https://github.com/Berserker66/MultiWorld-Utilities/blob/65fa39df95c90c9b66141aee8b16b7e560d00819/Text.py#L1498)
+   - can be weighted.
+   - [List of targets](https://github.com/Berserker66/MultiWorld-Utilities/blob/65fa39df95c90c9b66141aee8b16b7e560d00819/Text.py#L1498)
    
 #### Example
 ```yaml
