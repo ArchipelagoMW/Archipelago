@@ -135,10 +135,11 @@ def fill_dungeons_restrictive(world):
         elif (item.map and world.mapshuffle[item.player]) or (item.compass and world.compassshuffle[item.player]):
             item.priority = True
 
-    dungeon_items = [item for item in get_dungeon_item_pool(world) if ((item.smallkey and not world.keyshuffle[item.player])
+    dungeon_items = [item for item in get_dungeon_item_pool(world) if (((item.smallkey and not world.keyshuffle[item.player])
                                                                        or (item.bigkey and not world.bigkeyshuffle[item.player])
                                                                        or (item.map and not world.mapshuffle[item.player])
-                                                                       or (item.compass and not world.compassshuffle[item.player]))]
+                                                                       or (item.compass and not world.compassshuffle[item.player])
+                                                                        ) and world.goal[item.player] != 'icerodhunt')]  #
     if dungeon_items:
         # sort in the order Big Key, Small Key, Other before placing dungeon items
         sort_order = {"BigKey": 3, "SmallKey": 2}

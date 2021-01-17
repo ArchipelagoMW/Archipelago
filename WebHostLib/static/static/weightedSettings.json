@@ -1017,7 +1017,7 @@
         "expert": {
           "keyString": "enemy_health.expert",
           "friendlyName": "Armor-Plated",
-          "description": "Enemies will be very heard to defeat.",
+          "description": "Enemies will be very hard to defeat.",
           "defaultValue": 0
         }
       }

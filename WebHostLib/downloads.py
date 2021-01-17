@@ -29,8 +29,9 @@ def download_spoiler(seed_id):
 
 
 @app.route("/dl_raw_patch/<suuid:seed_id>/<int:player_id>")
-def download_raw_patch(seed_id, player_id):
-    patch = select(patch for patch in Patch if patch.player_id == player_id and patch.seed.id == seed_id).first()
+def download_raw_patch(seed_id, player_id: int):
+    patch = select(patch for patch in Patch if
+                   patch.player_id == player_id and patch.seed.id == seed_id).first()
 
     if not patch:
         return "Patch not found"

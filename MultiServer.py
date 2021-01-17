@@ -401,6 +401,13 @@ async def on_client_joined(ctx: Context, client: Client):
     ctx.notify_all(
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has joined the game. "
         f"Client({version_str}), {client.tags}).")
+    if client.version < [2, 1, 0] and "auto" in ctx.forfeit_mode:
+        ctx.notify_client(
+            client,
+            "Your client is too old to send game beaten information. "
+            "The automatic forfeit feature will not work."
+        )
+
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 async def on_client_left(ctx: Context, client: Client):
@@ -467,8 +474,8 @@ def send_new_items(ctx: Context):
 
 
 def forfeit_player(ctx: Context, team: int, slot: int):
-    all_locations = {values[0] for values in Regions.location_table.values() if type(values[0]) is int}
-    all_locations.update({values[1] for values in Regions.key_drop_data.values()})
+    # register any locations that are in the multidata
+    all_locations = {location_id for location_id, location_slot in ctx.locations if location_slot == slot}
     ctx.notify_all("%s (Team #%d) has forfeited" % (ctx.player_names[(team, slot)], team + 1))
     register_location_checks(ctx, team, slot, all_locations)
 
@@ -954,19 +961,18 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 self.output(response)
                 return False
 
+
 def get_missing_checks(ctx: Context, client: Client) -> list:
-    locations = []
-    #for location_id in [k[0] for k, v in ctx.locations if k[1] == client.slot]:
-    #    if location_id not in ctx.location_checks[client.team, client.slot]:
-    #        locations.append(Regions.lookup_id_to_name.get(location_id, f'Unknown Location ID: {location_id}'))
-    for location_id, location_name in Regions.lookup_id_to_name.items():  # cheat console is -1, keep in mind
-        if location_id != -1 and location_id not in ctx.location_checks[client.team, client.slot] and (location_id, client.slot) in ctx.locations:
-            locations.append(location_name)
-    return locations
+    return [Regions.lookup_id_to_name.get(location_id, f'Unknown Location ID: {location_id}') for
+            location_id, slot in ctx.locations if
+            slot == client.slot and
+            location_id not in ctx.location_checks[client.team, client.slot]]
+
 
 def get_client_points(ctx: Context, client: Client) -> int:
     return (ctx.location_check_points * len(ctx.location_checks[client.team, client.slot]) -
             ctx.hint_cost * ctx.hints_used[client.team, client.slot])
+
 
 async def process_client_cmd(ctx: Context, client: Client, cmd, args):
     if type(cmd) is not str:

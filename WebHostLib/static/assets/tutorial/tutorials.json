@@ -1,0 +1,75 @@
+[
+  {
+    "gameTitle": "The Legend of Zelda: A Link to the Past",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Tutorial",
+        "description": "A guide to setting up the Archipelago ALttP software on your computer. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "zelda3/multiworld_en.md",
+            "link": "zelda3/multiworld/en",
+            "authors": [
+              "Farrak Kilhn"
+            ]
+          },
+          {
+            "language": "Deutsch",
+            "filename": "zelda3/multiworld_de.md",
+            "link": "zelda3/multiworld/de",
+            "authors": [
+              "Fischfilet"
+            ]
+          },
+          {
+            "language": "Español",
+            "filename": "zelda3/multiworld_es.md",
+            "link": "zelda3/multiworld/es",
+            "authors": [
+              "Edos"
+            ]
+          },
+          {
+            "language": "Français",
+            "filename": "zelda3/multiworld_fr.md",
+            "link": "zelda3/multiworld/fr",
+            "authors": [
+              "Coxla"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "MSU-1 Setup Tutorial",
+        "description": "A guide to setting up MSU-1, which allows for custom in-game music.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "zelda3/msu1_en.md",
+            "link": "zelda3/msu1/en",
+            "authors": [
+              "Farrak Kilhn"
+            ]
+          },
+          {
+            "language": "Español",
+            "filename": "zelda3/msu1_es.md",
+            "link": "zelda3/msu1/es",
+            "authors": [
+              "Edos"
+            ]
+          },
+          {
+            "language": "Français",
+            "filename": "msu1_fr.md",
+            "link": "zelda3/msu1/fr",
+            "authors": [
+              "Coxla"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

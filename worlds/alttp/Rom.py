@@ -1337,7 +1337,7 @@ def patch_rom(world, rom, player, team, enemized):
                               (0x02 if 'bombs' in world.escape_assist[player] else 0x00) |
                               (0x04 if 'magic' in world.escape_assist[player] else 0x00)))  # Escape assist
 
-    if world.goal[player] in ['pedestal', 'triforcehunt', 'localtriforcehunt']:
+    if world.goal[player] in ['pedestal', 'triforcehunt', 'localtriforcehunt', 'icerodhunt']:
         rom.write_byte(0x18003E, 0x01)  # make ganon invincible
     elif world.goal[player] in ['ganontriforcehunt', 'localganontriforcehunt']:
         rom.write_byte(0x18003E, 0x05)  # make ganon invincible until enough triforce pieces are collected
@@ -2067,14 +2067,10 @@ def write_strings(rom, world, player, team):
             items_to_hint.extend(BigKeys)
         local_random.shuffle(items_to_hint)
         hint_count = 5 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 8
-        while hint_count > 0:
+        while hint_count > 0 and items_to_hint:
             this_item = items_to_hint.pop(0)
             this_location = world.find_items(this_item, player)
             local_random.shuffle(this_location)
-            # This looks dumb but prevents hints for Skull Woods Pinball Room's key safely with any item pool.
-            if this_location:
-                if this_location[0].name == 'Skull Woods - Pinball Room':
-                    this_location.pop(0)
             if this_location:
                 this_hint = this_location[0].item.hint_text + ' can be found ' + hint_text(this_location[0]) + '.'
                 tt[hint_locations.pop(0)] = this_hint
@@ -2133,6 +2129,10 @@ def write_strings(rom, world, player, team):
         else:
             tt['sign_ganon'] = f'You need {world.crystals_needed_for_ganon[player]} crystals to beat Ganon and ' \
                                f'have beaten Agahnim atop Ganons Tower'
+    elif world.goal[player] == "icerodhunt":
+        tt['sign_ganon'] = 'Go find the Ice Rod and Kill Trinexx... Ganon is invincible!'
+        tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Go kill Trinexx instead.'
+        tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
     else:
         if world.crystals_needed_for_ganon[player] == 1:
             tt['sign_ganon'] = 'You need a crystal to beat Ganon.'

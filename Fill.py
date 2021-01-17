@@ -1,11 +1,14 @@
 import logging
 import typing
 
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, PlandoItem
+from Items import ItemFactory
+from Regions import key_drop_data
 
 
 class FillError(RuntimeError):
     pass
+
 
 def fill_restrictive(world, base_state: CollectionState, locations, itempool, single_player_placement=False):
     def sweep_from_pool():
@@ -16,6 +19,7 @@ def fill_restrictive(world, base_state: CollectionState, locations, itempool, si
         return new_state
 
     unplaced_items = []
+    placements = []
 
     no_access_checks = {}
     reachable_items = {}
@@ -49,11 +53,6 @@ def fill_restrictive(world, base_state: CollectionState, locations, itempool, si
                         logging.warning(
                             f'Not all items placed. Game beatable anyway. (Could not place {item_to_place})')
                         continue
-                    placements = []
-                    for region in world.regions:
-                        for location in region.locations:
-                            if location.item and not location.event:
-                                placements.append(location)
                     # fill in name of world for item
                     item_to_place.world = world
                     raise FillError(f'No more spots to place {item_to_place}, locations {locations} are invalid. '
@@ -61,6 +60,7 @@ def fill_restrictive(world, base_state: CollectionState, locations, itempool, si
 
                 world.push_item(spot_to_fill, item_to_place, False)
                 locations.remove(spot_to_fill)
+                placements.append(spot_to_fill)
                 spot_to_fill.event = True
 
     itempool.extend(unplaced_items)
@@ -140,18 +140,30 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
 
     if any(localprioitempool.values() or
            localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
+        local_locations = {player: [] for player in world.player_ids}
+        for location in fill_locations:
+            local_locations[location.player].append(location)
+        for locations in local_locations.values():
+            world.random.shuffle(locations)
+
         for player, items in localprioitempool.items():  # items already shuffled
-            local_locations = [location for location in fill_locations if location.player == player]
-            world.random.shuffle(local_locations)
+            player_local_locations = local_locations[player]
             for item_to_place in items:
-                spot_to_fill = local_locations.pop()
+                if not player_local_locations:
+                    logging.warning(f"Ran out of local locations for player {player}, "
+                                    f"cannot place {item_to_place}.")
+                    break
+                spot_to_fill = player_local_locations.pop()
                 world.push_item(spot_to_fill, item_to_place, False)
                 fill_locations.remove(spot_to_fill)
         for player, items in localrestitempool.items():  # items already shuffled
-            local_locations = [location for location in fill_locations if location.player == player]
-            world.random.shuffle(local_locations)
+            player_local_locations = local_locations[player]
             for item_to_place in items:
-                spot_to_fill = local_locations.pop()
+                if not player_local_locations:
+                    logging.warning(f"Ran out of local locations for player {player}, "
+                                    f"cannot place {item_to_place}.")
+                    break
+                spot_to_fill = player_local_locations.pop()
                 world.push_item(spot_to_fill, item_to_place, False)
                 fill_locations.remove(spot_to_fill)
 
@@ -339,3 +351,69 @@ def balance_multiworld_progression(world):
                 break
             elif not sphere_locations:
                 raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
+
+
+def distribute_planned(world):
+    world_name_lookup = {world.player_names[player_id][0]: player_id for player_id in world.player_ids}
+
+    for player in world.player_ids:
+        placement: PlandoItem
+        for placement in world.plando_items[player]:
+            if placement.location in key_drop_data:
+                placement.warn(f"Can't place '{placement.item}' at '{placement.location}', as key drop shuffle locations are not supported yet.")
+                continue
+            item = ItemFactory(placement.item, player)
+            target_world: int = placement.world
+            if target_world is False or world.players == 1:
+                target_world = player  # in own world
+            elif target_world is True:  # in any other world
+                unfilled = list(location for location in world.get_unfilled_locations_for_players(
+                    placement.location,
+                    set(world.player_ids) - {player}) if location.item_rule(item)
+                                )
+                if not unfilled:
+                    placement.failed(f"Could not find a world with an unfilled location {placement.location}", FillError)
+                    continue
+
+                target_world = world.random.choice(unfilled).player
+
+            elif target_world is None:  # any random world
+                unfilled = list(location for location in world.get_unfilled_locations_for_players(
+                    placement.location,
+                    set(world.player_ids)) if location.item_rule(item)
+                                )
+                if not unfilled:
+                    placement.failed(f"Could not find a world with an unfilled location {placement.location}", FillError)
+                    continue
+
+                target_world = world.random.choice(unfilled).player
+
+            elif type(target_world) == int:  # target world by player id
+                if target_world not in range(1, world.players + 1):
+                    placement.failed(f"Cannot place item in world {target_world} as it is not in range of (1, {world.players})", ValueError)
+                    continue
+            else:  # find world by name
+                if target_world not in world_name_lookup:
+                    placement.failed(f"Cannot place item to {target_world}'s world as that world does not exist.", ValueError)
+                    continue
+                target_world = world_name_lookup[target_world]
+
+            location = world.get_location(placement.location, target_world)
+            if location.item:
+                placement.failed(f"Cannot place item into already filled location {location}.")
+                continue
+
+            if location.can_fill(world.state, item, False):
+                world.push_item(location, item, collect=False)
+                location.event = True  # flag location to be checked during fill
+                location.locked = True
+                logging.debug(f"Plando placed {item} at {location}")
+            else:
+                placement.failed(f"Can't place {item} at {location} due to fill condition not met.")
+                continue
+
+            if placement.from_pool:  # Should happen AFTER the item is placed, in case it was allowed to skip failed placement.
+                try:
+                    world.itempool.remove(item)
+                except ValueError:
+                    placement.warn(f"Could not remove {item} from pool as it's already missing from it.")
