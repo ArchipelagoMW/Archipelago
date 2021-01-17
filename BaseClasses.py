@@ -447,6 +447,29 @@ class World(object):
 
         return False
 
+    def get_spheres(self):
+        state = CollectionState(self)
+
+        locations = {location for location in self.get_locations()}
+
+        while locations:
+            sphere = set()
+
+            for location in locations:
+                if location.can_reach(state):
+                    sphere.add(location)
+            yield sphere
+            if not sphere:
+                if locations:
+                    yield locations  # unreachable locations
+                break
+
+            for location in sphere:
+                state.collect(location.item, True, location)
+            locations -= sphere
+
+
+
     def fulfills_accessibility(self, state: Optional[CollectionState] = None):
         """Check if accessibility rules are fulfilled with current or supplied state."""
         if not state:
@@ -1089,6 +1112,9 @@ class Location():
 
     def __hash__(self):
         return hash((self.name, self.player))
+
+    def __lt__(self, other):
+        return (self.player, self.name) < (other.player, other.name)
 
 
 class Item(object):

@@ -1,6 +1,6 @@
 from __future__ import annotations
 from enum import unique, Enum
-from typing import List, Union, Optional
+from typing import List, Union, Optional, Set
 import logging
 
 from BaseClasses import Location
@@ -117,8 +117,21 @@ class UpgradeShop(Shop):
     blacklist = item_name_groups["Potions"]
 
 def ShopSlotFill(world):
-    shop_slots: List[Location] = [location for shop_locations in (shop.region.locations for shop in world.shops)
-                                         for location in shop_locations if location.shop_slot]
+    shop_slots: Set[Location] = {location for shop_locations in (shop.region.locations for shop in world.shops)
+                                 for location in shop_locations if location.shop_slot}
+    removed = set()
+    for location in shop_slots:
+        slot_num = int(location.name[-1]) - 1
+        shop: Shop = location.parent_region.shop
+        if not shop.can_push_inventory(slot_num):
+            removed.add(location)
+            shop.region.locations.remove(location)
+
+    if removed:
+        shop_slots -= removed
+        # remove locations that may no longer exist from caches, by flushing them entirely
+        world.clear_location_cache()
+        world._location_cache = {}
 
     if shop_slots:
         from Fill import swap_location_item
@@ -127,67 +140,54 @@ def ShopSlotFill(world):
         blacklist_words = {item_name for item_name in item_table if any(
             blacklist_word in item_name for blacklist_word in blacklist_words)}
         blacklist_words.add("Bee")
-        candidates: List[Location] = [location for location in world.get_locations() if
-                                             not location.locked and
-                                             not location.shop_slot and
-                                             not location.item.name in blacklist_words]
+        candidates_per_sphere = list(world.get_spheres())
 
-        world.random.shuffle(candidates)
-
-        if not world.fulfills_accessibility():
-            logger.warning("World does not fulfill accessibility rules as is, "
-                           "only using \"beatable only\" for shop logic.")
-            shuffle_condition = world.can_beat_game
-        else:
-            shuffle_condition = world.fulfills_accessibility
+        candidate_condition = lambda location: not location.locked and \
+                                               not location.shop_slot and \
+                                               not location.item.name in blacklist_words
 
         # currently special care needs to be taken so that Shop.region.locations.item is identical to Shop.inventory
         # Potentially create Locations as needed and make inventory the only source, to prevent divergence
 
-        for location in shop_slots:
-            slot_num = int(location.name[-1]) - 1
-            shop: Shop = location.parent_region.shop
-            if shop.can_push_inventory(slot_num):
-                for c in candidates:  # chosen item locations
-                    if c.item_rule(location.item) and location.item_rule(c.item):  # if rule is good...
-
-                        swap_location_item(c, location, check_locked=False)
-                        candidates.remove(c)
-                        if not shuffle_condition():
+        for sphere in candidates_per_sphere:
+            current_shop_slots = sphere.intersection(shop_slots)
+            if current_shop_slots:
+                # randomize order in a deterministic fashion
+                sphere = sorted(sphere - current_shop_slots)
+                world.random.shuffle(sphere)
+                for location in sorted(current_shop_slots):
+                    slot_num = int(location.name[-1]) - 1
+                    shop: Shop = location.parent_region.shop
+                    never = set()  # candidates that will never work
+                    for c in sphere:  # chosen item locations
+                        if c in never:
+                            pass
+                        elif not candidate_condition(c): # candidate will never work
+                            never.add(c)
+                        elif c.item_rule(location.item) and location.item_rule(c.item):  # if rule is good...
                             swap_location_item(c, location, check_locked=False)
-                            continue
+                            never.add(c)
+                            logger.info(f'Swapping {c} into {location}:: {location.item}')
+                            break
 
-                        logger.debug(f'Swapping {c} into {location}:: {location.item}')
-                        break
+                    else:
+                        # This *should* never happen. But let's fail safely just in case.
+                        logger.warning("Ran out of ShopShuffle Item candidate locations.")
+                        shop.region.locations.remove(location)
+                        continue
+                    item_name = location.item.name
+                    if any(x in item_name for x in ['Single Bomb', 'Single Arrow']):
+                        price = world.random.randrange(1, 7)
+                    elif any(x in item_name for x in ['Arrows', 'Bombs', 'Clock']):
+                        price = world.random.randrange(4, 24)
+                    elif any(x in item_name for x in ['Compass', 'Map', 'Small Key', 'Piece of Heart']):
+                        price = world.random.randrange(10, 30)
+                    else:
+                        price = world.random.randrange(10, 60)
 
-                else:
-                    # This *should* never happen. But let's fail safely just in case.
-                    logger.warning("Ran out of ShopShuffle Item candidate locations.")
-                    shop.region.locations.remove(location)
-                    continue
-
-                item_name = location.item.name
-                if any(x in item_name for x in ['Single Bomb', 'Single Arrow']):
-                    price = world.random.randrange(1, 7)
-                elif any(x in item_name for x in ['Arrows', 'Bombs', 'Clock']):
-                    price = world.random.randrange(4, 24)
-                elif any(x in item_name for x in ['Compass', 'Map', 'Small Key', 'Piece of Heart']):
-                    price = world.random.randrange(10, 30)
-                else:
-                    price = world.random.randrange(10, 60)
-
-                price *= 5
-
-                shop.push_inventory(slot_num, item_name, price, 1,
-                                    location.item.player if location.item.player != location.player else 0)
-            else:
-                shop.region.locations.remove(location)
-
-        # remove locations that may no longer exist from caches, by flushing them entirely
-        if shop_slots:
-            world.clear_location_cache()
-            world._location_cache = {}
-
+                    price *= 5
+                    shop.push_inventory(slot_num, item_name, price, 1,
+                                        location.item.player if location.item.player != location.player else 0)
 
 def create_shops(world, player: int):
     cls_mapping = {ShopType.UpgradeShop: UpgradeShop,
