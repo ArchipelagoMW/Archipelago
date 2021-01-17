@@ -18,6 +18,7 @@ from worlds.alttp.Main import main as ERmain
 from worlds.alttp.Main import get_seed, seeddigits
 from worlds.alttp.Items import item_name_groups, item_table
 from worlds.alttp import Bosses
+from worlds.alttp.Text import TextTable
 
 
 def mystery_argparse():

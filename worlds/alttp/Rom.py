@@ -124,7 +124,7 @@ class LocalRom(object):
                 return
 
         if os.path.isfile(local_path('data', 'basepatch.apbp')):
-            _, target, buffer = Patch.create_rom_bytes(local_path('data', 'basepatch.apbp'))
+            _, target, buffer = Patch.create_rom_bytes(local_path('data', 'basepatch.apbp'), ignore_version=True)
             if self.verify(buffer):
                 self.buffer = bytearray(buffer)
                 with open(local_path('basepatch.sfc'), 'wb') as stream:

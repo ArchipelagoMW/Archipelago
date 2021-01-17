@@ -14,6 +14,7 @@ from worlds.alttp.Rom import JAP10HASH
 
 current_patch_version = 1
 
+
 def get_base_rom_path(file_name: str = "") -> str:
     options = Utils.get_options()
     if not file_name:
@@ -43,7 +44,8 @@ def generate_yaml(patch: bytes, metadata: Optional[dict] = None) -> bytes:
     patch = yaml.dump({"meta": metadata,
                        "patch": patch,
                        "game": "alttp",
-                       "compatible_version": 1, # minimum version of patch system expected for patching to be successful
+                       "compatible_version": 1,
+                       # minimum version of patch system expected for patching to be successful
                        "version": current_patch_version,
                        "base_checksum": JAP10HASH})
     return patch.encode(encoding="utf-8-sig")
@@ -64,15 +66,17 @@ def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str
     write_lzma(bytes, target)
     return target
 
-def create_rom_bytes(patch_file: str) -> Tuple[dict, str, bytearray]:
+
+def create_rom_bytes(patch_file: str, ignore_version: bool = False) -> Tuple[dict, str, bytearray]:
     data = Utils.parse_yaml(lzma.decompress(load_bytes(patch_file)).decode("utf-8-sig"))
-    if data["compatible_version"] > current_patch_version:
+    if not ignore_version and data["compatible_version"] > current_patch_version:
         raise RuntimeError("Patch file is incompatible with this patcher, likely an update is required.")
     patched_data = bsdiff4.patch(get_base_rom_bytes(), data["patch"])
     rom_hash = patched_data[int(0x7FC0):int(0x7FD5)]
     data["meta"]["hash"] = "".join(chr(x) for x in rom_hash)
     target = os.path.splitext(patch_file)[0] + ".sfc"
     return data["meta"], target, patched_data
+
 
 def create_rom_file(patch_file: str) -> Tuple[dict, str]:
     data, target, patched_data = create_rom_bytes(patch_file)
@@ -143,6 +147,7 @@ if __name__ == "__main__":
                         for romname in multidata['roms']:
                             Utils.persistent_store("servers", "".join(chr(byte) for byte in romname[2]), address)
                         from Utils import get_options
+
                         multidata["server_options"] = get_options()["server_options"]
                         multidata = zlib.compress(json.dumps(multidata).encode("utf-8"), 9)
                         with open(rom + "_updated.archipelago", 'wb') as f:
@@ -151,7 +156,8 @@ if __name__ == "__main__":
                 elif rom.endswith(".zip"):
                     print(f"Updating host in patch files contained in {rom}")
 
-                    def _handle_zip_file_entry(zfinfo : zipfile.ZipInfo, server: str):
+
+                    def _handle_zip_file_entry(zfinfo: zipfile.ZipInfo, server: str):
                         data = zfr.read(zfinfo)
                         if zfinfo.filename.endswith(".apbp"):
                             data = update_patch_data(data, server)
@@ -163,7 +169,8 @@ if __name__ == "__main__":
                     futures = []
                     with zipfile.ZipFile(rom, "r") as zfr:
                         updated_zip = os.path.splitext(rom)[0] + "_updated.zip"
-                        with zipfile.ZipFile(updated_zip, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as zfw:
+                        with zipfile.ZipFile(updated_zip, "w", compression=zipfile.ZIP_DEFLATED,
+                                             compresslevel=9) as zfw:
                             for zfname in zfr.namelist():
                                 futures.append(pool.submit(_handle_zip_file_entry, zfr.getinfo(zfname), address))
                             for future in futures:
@@ -171,6 +178,6 @@ if __name__ == "__main__":
 
             except:
                 import traceback
+
                 traceback.print_exc()
                 input("Press enter to close.")
-

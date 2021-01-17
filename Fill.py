@@ -2,8 +2,8 @@ import logging
 import typing
 
 from BaseClasses import CollectionState, PlandoItem
-from Items import ItemFactory
-from Regions import key_drop_data
+from worlds.alttp.Items import ItemFactory
+from worlds.alttp.Regions import key_drop_data
 
 
 class FillError(RuntimeError):
