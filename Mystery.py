@@ -563,7 +563,7 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
 
     ret.plando_items = []
     if "items" in plando_options:
-        default_placement = PlandoItem(item="", location="")
+
         def add_plando_item(item: str, location: str):
             if item not in item_table:
                 raise Exception(f"Could not plando item {item} as the item was not recognized")
@@ -574,9 +574,9 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
         options = weights.get("plando_items", [])
         for placement in options:
             if roll_percentage(get_choice("percentage", placement, 100)):
-                from_pool = get_choice("from_pool", placement, default_placement.from_pool)
-                location_world = get_choice("world", placement, default_placement.world)
-                force = get_choice("force", placement, default_placement.force)
+                from_pool = get_choice("from_pool", placement, PlandoItem.from_pool)
+                location_world = get_choice("world", placement, PlandoItem.world)
+                force = get_choice("force", placement, PlandoItem.force)
                 if "items" in placement and "locations" in placement:
                     items = placement["items"]
                     locations = placement["locations"]
@@ -589,9 +589,7 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
                         raise Exception("You must specify at least one item and one location to place items.")
                     random.shuffle(items)
                     random.shuffle(locations)
-                    while items and locations:
-                        item = items.pop()
-                        location = locations.pop()
+                    for item, location in zip(items, locations):
                         add_plando_item(item, location)
                 else:
                     item = get_choice("item", placement, get_choice("items", placement))
