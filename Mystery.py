@@ -587,9 +587,7 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
                         raise Exception("You must specify at least one item and one location to place items.")
                     random.shuffle(items)
                     random.shuffle(locations)
-                    while items and locations:
-                        item = items.pop()
-                        location = locations.pop()
+                    for item, location in zip(items, locations):
                         add_plando_item(item, location)
                 else:
                     item = get_choice("item", placement, get_choice("items", placement))
