@@ -10,6 +10,7 @@ from Utils import int16_as_bytes
 
 logger = logging.getLogger("Shops")
 
+
 @unique
 class ShopType(Enum):
     Shop = 0
@@ -50,7 +51,7 @@ class Shop():
             config |= 0x80
         elif self.type == ShopType.UpgradeShop:
             config |= 0x10  # Alt. VRAM
-        return [0x00]+int16_as_bytes(self.room_id)+[door_id, 0x00, config, self.shopkeeper_config, 0x00]
+        return [0x00] + int16_as_bytes(self.room_id) + [door_id, 0x00, config, self.shopkeeper_config, 0x00]
 
     def has_unlimited(self, item: str) -> bool:
         for inv in self.inventory:
@@ -116,6 +117,7 @@ class UpgradeShop(Shop):
     # Didn't check for more things breaking as not much else can be shuffled here currently
     blacklist = item_name_groups["Potions"]
 
+
 def ShopSlotFill(world):
     shop_slots: Set[Location] = {location for shop_locations in (shop.region.locations for shop in world.shops)
                                  for location in shop_locations if location.shop_slot}
@@ -140,7 +142,7 @@ def ShopSlotFill(world):
         blacklist_words = {item_name for item_name in item_table if any(
             blacklist_word in item_name for blacklist_word in blacklist_words)}
         blacklist_words.add("Bee")
-        candidates_per_sphere = list(world.get_spheres())
+        candidates_per_sphere = list(list(sphere) for sphere in world.get_spheres())
 
         candidate_condition = lambda location: not location.locked and \
                                                not location.shop_slot and \
@@ -148,26 +150,27 @@ def ShopSlotFill(world):
 
         # currently special care needs to be taken so that Shop.region.locations.item is identical to Shop.inventory
         # Potentially create Locations as needed and make inventory the only source, to prevent divergence
+        cumu_weights = []
 
         for sphere in candidates_per_sphere:
-            current_shop_slots = sphere.intersection(shop_slots)
+            if cumu_weights:
+                x = cumu_weights[-1]
+            else:
+                x = 0
+            cumu_weights.append(len(sphere) + x)
+            world.random.shuffle(sphere)
+
+        for i, sphere in enumerate(candidates_per_sphere):
+            current_shop_slots = [location for location in sphere if location.shop_slot]
             if current_shop_slots:
-                # randomize order in a deterministic fashion
-                sphere = sorted(sphere - current_shop_slots)
-                world.random.shuffle(sphere)
-                for location in sorted(current_shop_slots):
-                    slot_num = int(location.name[-1]) - 1
+
+                for location in current_shop_slots:
                     shop: Shop = location.parent_region.shop
-                    never = set()  # candidates that will never work
-                    for c in sphere:  # chosen item locations
-                        if c in never:
-                            pass
-                        elif not candidate_condition(c): # candidate will never work
-                            never.add(c)
-                        elif c.item_rule(location.item) and location.item_rule(c.item):  # if rule is good...
+                    swapping_sphere = world.random.choices(candidates_per_sphere[i:], cum_weights=cumu_weights[i:])[0]
+                    for c in swapping_sphere:  # chosen item locations
+                        if candidate_condition(c) and c.item_rule(location.item) and location.item_rule(c.item):
                             swap_location_item(c, location, check_locked=False)
-                            never.add(c)
-                            logger.info(f'Swapping {c} into {location}:: {location.item}')
+                            logger.debug(f'Swapping {c} into {location}:: {location.item}')
                             break
 
                     else:
@@ -186,8 +189,9 @@ def ShopSlotFill(world):
                         price = world.random.randrange(10, 60)
 
                     price *= 5
-                    shop.push_inventory(slot_num, item_name, price, 1,
+                    shop.push_inventory(int(location.name[-1]) - 1, item_name, price, 1,
                                         location.item.player if location.item.player != location.player else 0)
+
 
 def create_shops(world, player: int):
     cls_mapping = {ShopType.UpgradeShop: UpgradeShop,
@@ -198,7 +202,7 @@ def create_shops(world, player: int):
 
     num_slots = int(world.shop_shuffle_slots[player])
 
-    my_shop_slots = ([True] * num_slots + [False] * (len(shop_table) * 3))[:len(shop_table)*3 - 2]
+    my_shop_slots = ([True] * num_slots + [False] * (len(shop_table) * 3))[:len(shop_table) * 3 - 2]
 
     world.random.shuffle(my_shop_slots)
 
@@ -238,7 +242,7 @@ def create_shops(world, player: int):
                 pass
             else:
                 if my_shop_slots.pop():
-                    additional_item = 'Rupees (50)' # world.random.choice(['Rupees (50)', 'Rupees (100)', 'Rupees (300)'])
+                    additional_item = 'Rupees (50)'  # world.random.choice(['Rupees (50)', 'Rupees (100)', 'Rupees (300)'])
                     slot_name = "{} Slot {}".format(shop.region.name, index + 1)
                     loc = Location(player, slot_name, address=shop_table_by_location[slot_name],
                                    parent=shop.region, hint_text="for sale")
@@ -249,6 +253,7 @@ def create_shops(world, player: int):
                     world.dynamic_locations.append(loc)
 
                     world.clear_location_cache()
+
 
 # (type, room_id, shopkeeper, custom, locked, [items])
 # item = (item, price, max=0, replacement=None, replacement_price=0)
@@ -272,18 +277,19 @@ SHOP_ID_START = 0x400000
 shop_table_by_location_id = {SHOP_ID_START + cnt: s for cnt, s in enumerate(
     [item for sublist in [["{} Slot {}".format(name, num + 1) for num in range(3)] for name in shop_table] for item in
      sublist])}
-shop_table_by_location_id[(SHOP_ID_START + len(shop_table)*3)] = "Old Man Sword Cave"
-shop_table_by_location_id[(SHOP_ID_START + len(shop_table)*3 + 1)] = "Take-Any #1"
-shop_table_by_location_id[(SHOP_ID_START + len(shop_table)*3 + 2)] = "Take-Any #2"
-shop_table_by_location_id[(SHOP_ID_START + len(shop_table)*3 + 3)] = "Take-Any #3"
-shop_table_by_location_id[(SHOP_ID_START + len(shop_table)*3 + 4)] = "Take-Any #4"
+shop_table_by_location_id[(SHOP_ID_START + len(shop_table) * 3)] = "Old Man Sword Cave"
+shop_table_by_location_id[(SHOP_ID_START + len(shop_table) * 3 + 1)] = "Take-Any #1"
+shop_table_by_location_id[(SHOP_ID_START + len(shop_table) * 3 + 2)] = "Take-Any #2"
+shop_table_by_location_id[(SHOP_ID_START + len(shop_table) * 3 + 3)] = "Take-Any #3"
+shop_table_by_location_id[(SHOP_ID_START + len(shop_table) * 3 + 4)] = "Take-Any #4"
 shop_table_by_location = {y: x for x, y in shop_table_by_location_id.items()}
 
 shop_generation_types = {
-    'default': _basic_shop_defaults + [('Bombs (3)', 20), ('Green Potion', 90), ('Blue Potion', 190), ('Bee', 10), ('Single Arrow', 5), ('Single Bomb', 10)] + [('Red Shield', 500), ('Blue Shield', 50)],
+    'default': _basic_shop_defaults + [('Bombs (3)', 20), ('Green Potion', 90), ('Blue Potion', 190), ('Bee', 10),
+                                       ('Single Arrow', 5), ('Single Bomb', 10)] + [('Red Shield', 500),
+                                                                                    ('Blue Shield', 50)],
     'potion': [('Red Potion', 150), ('Green Potion', 90), ('Blue Potion', 190)],
     'discount_potion': [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)],
     'bottle': [('Bee', 10)],
     'time': [('Red Clock', 100), ('Blue Clock', 200), ('Green Clock', 300)],
 }
-
