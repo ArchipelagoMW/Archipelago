@@ -49,7 +49,7 @@ boss_shuffle:
 
 ### Items
 - This module is disabled by default.
-- Has the options from_pool, world, percentage and either item and location or items and locations
+- Has the options from_pool, world, percentage, force and either item and location or items and locations
 - All of these options support subweights
 - percentage is the percentage chance for this block to trigger
     - is a number in the range [0, 100], can be omitted entirely for 100%
@@ -62,6 +62,10 @@ boss_shuffle:
     - can be true, to target any other player's world
     - can be false, to target own world and is the default
     - can be null, to target a random world
+- force is either "silent", "true" or "false".
+    - "true" means the item has to be placed, or the generator aborts with an exception.
+    - "false" means the generator logs a warning if the placement can't be done.
+    - "silent" means that this entry is entirely ignored if the placement fails and is the default.
 - Single Placement
     - place a single item at a single location
     - item denotes the Item to place
