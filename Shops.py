@@ -233,7 +233,7 @@ def create_shops(world, player: int):
             player_shop_table["Dark Lake Hylia Shop"]._replace(locked=True, items=_inverted_hylia_shop_defaults)
     for region_name, (room_id, type, shopkeeper, custom, locked, inventory) in player_shop_table.items():
         region = world.get_region(region_name, player)
-        shop = shop_class_mapping[type](region, room_id, shopkeeper, custom, locked)
+        shop: Shop = shop_class_mapping[type](region, room_id, shopkeeper, custom, locked)
         region.shop = shop
         world.shops.append(shop)
         for index, item in enumerate(inventory):
