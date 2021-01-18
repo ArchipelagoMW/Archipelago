@@ -1,11 +1,11 @@
 from __future__ import annotations
 from enum import unique, Enum
-from typing import List, Union, Optional, Set
+from typing import List, Union, Optional, Set, NamedTuple, Dict
 import logging
 
 from BaseClasses import Location
 from EntranceShuffle import door_addresses
-from Items import item_name_groups, item_table
+from Items import item_name_groups, item_table, ItemFactory
 from Utils import int16_as_bytes
 
 logger = logging.getLogger("Shops")
@@ -19,14 +19,14 @@ class ShopType(Enum):
 
 
 class Shop():
-    slots = 3  # slot count is not dynamic in asm, however inventory can have None as empty slots
-    blacklist = set()  # items that don't work, todo: actually check against this
+    slots: int = 3  # slot count is not dynamic in asm, however inventory can have None as empty slots
+    blacklist: Set[str] = set()  # items that don't work, todo: actually check against this
     type = ShopType.Shop
 
     def __init__(self, region, room_id: int, shopkeeper_config: int, custom: bool, locked: bool):
         self.region = region
         self.room_id = room_id
-        self.inventory: List[Union[None, dict]] = [None] * self.slots
+        self.inventory: List[Optional[dict]] = [None] * self.slots
         self.shopkeeper_config = shopkeeper_config
         self.custom = custom
         self.locked = locked
@@ -57,10 +57,12 @@ class Shop():
         for inv in self.inventory:
             if inv is None:
                 continue
-            if inv['item'] == item:
+            if inv['max']:
+                if inv['replacement'] == item:
+                    return True
+            elif inv['item'] == item:
                 return True
-            if inv['max'] != 0 and inv['replacement'] is not None and inv['replacement'] == item:
-                return True
+
         return False
 
     def has(self, item: str) -> bool:
@@ -69,7 +71,7 @@ class Shop():
                 continue
             if inv['item'] == item:
                 return True
-            if inv['max'] != 0 and inv['replacement'] == item:
+            if inv['replacement'] == item:
                 return True
         return False
 
@@ -116,6 +118,11 @@ class UpgradeShop(Shop):
     # Potions break due to VRAM flags set in UpgradeShop.
     # Didn't check for more things breaking as not much else can be shuffled here currently
     blacklist = item_name_groups["Potions"]
+
+
+shop_class_mapping = {ShopType.UpgradeShop: UpgradeShop,
+                      ShopType.Shop: Shop,
+                      ShopType.TakeAny: TakeAny}
 
 
 def ShopSlotFill(world):
@@ -194,29 +201,25 @@ def ShopSlotFill(world):
 
 
 def create_shops(world, player: int):
-    cls_mapping = {ShopType.UpgradeShop: UpgradeShop,
-                   ShopType.Shop: Shop,
-                   ShopType.TakeAny: TakeAny}
     option = world.shop_shuffle[player]
-    my_shop_table = dict(shop_table)
 
-    num_slots = int(world.shop_shuffle_slots[player])
+    player_shop_table = shop_table.copy()
+    if "w" in option:
+        player_shop_table["Potion Shop"] = player_shop_table["Potion Shop"]._replace(locked=False)
+        dynamic_shop_slots = total_dynamic_shop_slots + 3
+    else:
+        dynamic_shop_slots = total_dynamic_shop_slots
 
-    my_shop_slots = ([True] * num_slots + [False] * (len(shop_table) * 3))[:len(shop_table) * 3 - 2]
+    num_slots = min(dynamic_shop_slots, max(0, int(world.shop_shuffle_slots[player])))  # 0 to 30
+    single_purchase_slots: List[bool] = [True] * num_slots + [False] * (dynamic_shop_slots - num_slots)
+    world.random.shuffle(single_purchase_slots)
 
-    world.random.shuffle(my_shop_slots)
-
-    from Items import ItemFactory
     if 'g' in option or 'f' in option:
         new_basic_shop = world.random.sample(shop_generation_types['default'], k=3)
         new_dark_shop = world.random.sample(shop_generation_types['default'], k=3)
-        for name, shop in my_shop_table.items():
+        for name, shop in player_shop_table.items():
             typ, shop_id, keeper, custom, locked, items = shop
-            if name == 'Capacity Upgrade':
-                pass
-            elif name == 'Potion Shop' and not "w" in option:
-                pass
-            else:
+            if not locked:
                 new_items = world.random.sample(shop_generation_types['default'], k=3)
                 if 'f' not in option:
                     if items == _basic_shop_defaults:
@@ -224,54 +227,63 @@ def create_shops(world, player: int):
                     elif items == _dark_world_shop_defaults:
                         new_items = new_dark_shop
                 keeper = world.random.choice([0xA0, 0xC1, 0xFF])
-                my_shop_table[name] = (typ, shop_id, keeper, custom, locked, new_items)
-
-    for region_name, (room_id, type, shopkeeper, custom, locked, inventory) in my_shop_table.items():
-        if world.mode[player] == 'inverted' and region_name == 'Dark Lake Hylia Shop':
-            locked = True
-            inventory = [('Blue Potion', 160), ('Blue Shield', 50), ('Bombs (10)', 50)]
+                player_shop_table[name] = ShopData(typ, shop_id, keeper, custom, locked, new_items)
+    if world.mode[player] == "inverted":
+        player_shop_table["Dark Lake Hylia Shop"] = \
+            player_shop_table["Dark Lake Hylia Shop"]._replace(locked=True, items=_inverted_hylia_shop_defaults)
+    for region_name, (room_id, type, shopkeeper, custom, locked, inventory) in player_shop_table.items():
         region = world.get_region(region_name, player)
-        shop = cls_mapping[type](region, room_id, shopkeeper, custom, locked)
+        shop = shop_class_mapping[type](region, room_id, shopkeeper, custom, locked)
         region.shop = shop
         world.shops.append(shop)
         for index, item in enumerate(inventory):
             shop.add_inventory(index, *item)
-            if region_name == 'Potion Shop' and 'w' not in option:
-                pass
-            elif region_name == 'Capacity Upgrade':
-                pass
-            else:
-                if my_shop_slots.pop():
-                    additional_item = 'Rupees (50)'  # world.random.choice(['Rupees (50)', 'Rupees (100)', 'Rupees (300)'])
-                    slot_name = "{} Slot {}".format(shop.region.name, index + 1)
-                    loc = Location(player, slot_name, address=shop_table_by_location[slot_name],
-                                   parent=shop.region, hint_text="for sale")
-                    loc.shop_slot = True
-                    loc.locked = True
-                    loc.item = ItemFactory(additional_item, player)
-                    shop.region.locations.append(loc)
-                    world.dynamic_locations.append(loc)
+            if not locked and single_purchase_slots.pop():
+                additional_item = 'Rupees (50)'  # world.random.choice(['Rupees (50)', 'Rupees (100)', 'Rupees (300)'])
+                slot_name = "{} Slot {}".format(region.name, index + 1)
+                loc = Location(player, slot_name, address=shop_table_by_location[slot_name],
+                               parent=region, hint_text="for sale")
+                loc.shop_slot = True
+                loc.locked = True
+                loc.item = ItemFactory(additional_item, player)
+                shop.region.locations.append(loc)
+                world.dynamic_locations.append(loc)
+                world.clear_location_cache()
 
-                    world.clear_location_cache()
+
+class ShopData(NamedTuple):
+    room: int
+    type: ShopType
+    shopkeeper: int
+    custom: bool
+    locked: bool
+    items: List
 
 
 # (type, room_id, shopkeeper, custom, locked, [items])
 # item = (item, price, max=0, replacement=None, replacement_price=0)
 _basic_shop_defaults = [('Red Potion', 150), ('Small Heart', 10), ('Bombs (10)', 50)]
 _dark_world_shop_defaults = [('Red Potion', 150), ('Blue Shield', 50), ('Bombs (10)', 50)]
-shop_table = {
-    'Cave Shop (Dark Death Mountain)': (0x0112, ShopType.Shop, 0xC1, True, False, _basic_shop_defaults),
-    'Red Shield Shop': (0x0110, ShopType.Shop, 0xC1, True, False, [('Red Shield', 500), ('Bee', 10), ('Arrows (10)', 30)]),
-    'Dark Lake Hylia Shop': (0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
-    'Dark World Lumberjack Shop': (0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
-    'Village of Outcasts Shop': (0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
-    'Dark World Potion Shop': (0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
-    'Light World Death Mountain Shop': (0x00FF, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
-    'Kakariko Shop': (0x011F, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
-    'Cave Shop (Lake Hylia)': (0x0112, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
-    'Potion Shop': (0x0109, ShopType.Shop, 0xA0, True, False, [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)]),
-    'Capacity Upgrade': (0x0115, ShopType.UpgradeShop, 0x04, True, True, [('Bomb Upgrade (+5)', 100, 7), ('Arrow Upgrade (+5)', 100, 7)])
+_inverted_hylia_shop_defaults = [('Blue Potion', 160), ('Blue Shield', 50), ('Bombs (10)', 50)]
+shop_table: Dict[str, ShopData] = {
+    'Cave Shop (Dark Death Mountain)': ShopData(0x0112, ShopType.Shop, 0xC1, True, False, _basic_shop_defaults),
+    'Red Shield Shop': ShopData(0x0110, ShopType.Shop, 0xC1, True, False,
+                                [('Red Shield', 500), ('Bee', 10), ('Arrows (10)', 30)]),
+    'Dark Lake Hylia Shop': ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
+    'Dark World Lumberjack Shop': ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
+    'Village of Outcasts Shop': ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
+    'Dark World Potion Shop': ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
+    'Light World Death Mountain Shop': ShopData(0x00FF, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
+    'Kakariko Shop': ShopData(0x011F, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
+    'Cave Shop (Lake Hylia)': ShopData(0x0112, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
+    'Potion Shop': ShopData(0x0109, ShopType.Shop, 0xA0, True, True,
+                            [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)]),
+    'Capacity Upgrade': ShopData(0x0115, ShopType.UpgradeShop, 0x04, True, True,
+                                 [('Bomb Upgrade (+5)', 100, 7), ('Arrow Upgrade (+5)', 100, 7)])
 }
+
+total_shop_slots = len(shop_table) * 3
+total_dynamic_shop_slots = sum(3 for shopname, data in shop_table.items() if not data[4])  # data[4] -> locked
 
 SHOP_ID_START = 0x400000
 shop_table_by_location_id = {SHOP_ID_START + cnt: s for cnt, s in enumerate(
