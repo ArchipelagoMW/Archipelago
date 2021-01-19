@@ -486,6 +486,7 @@ def copy_world(world):
     ret.timer = world.timer.copy()
     ret.shufflepots = world.shufflepots.copy()
     ret.shuffle_prizes = world.shuffle_prizes.copy()
+    ret.shop_shuffle =  world.shop_shuffle.copy()
     ret.dark_room_logic = world.dark_room_logic.copy()
     ret.restrict_dungeon_item_on_boss = world.restrict_dungeon_item_on_boss.copy()
 
