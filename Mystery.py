@@ -572,9 +572,9 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
         options = weights.get("plando_items", [])
         for placement in options:
             if roll_percentage(get_choice("percentage", placement, 100)):
-                from_pool = get_choice("from_pool", placement, PlandoItem.from_pool)
-                location_world = get_choice("world", placement, PlandoItem.world)
-                force = str(get_choice("force", placement, PlandoItem.force)).lower()
+                from_pool = get_choice("from_pool", placement, PlandoItem._field_defaults["from_pool"])
+                location_world = get_choice("world", placement, PlandoItem._field_defaults["world"])
+                force = str(get_choice("force", placement, PlandoItem._field_defaults["force"])).lower()
                 if "items" in placement and "locations" in placement:
                     items = placement["items"]
                     locations = placement["locations"]
