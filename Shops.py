@@ -286,14 +286,14 @@ total_shop_slots = len(shop_table) * 3
 total_dynamic_shop_slots = sum(3 for shopname, data in shop_table.items() if not data[4])  # data[4] -> locked
 
 SHOP_ID_START = 0x400000
-shop_table_by_location_id = {SHOP_ID_START + cnt: s for cnt, s in enumerate(
-    [item for sublist in [["{} Slot {}".format(name, num + 1) for num in range(3)] for name in shop_table] for item in
-     sublist])}
-shop_table_by_location_id[(SHOP_ID_START + len(shop_table) * 3)] = "Old Man Sword Cave"
-shop_table_by_location_id[(SHOP_ID_START + len(shop_table) * 3 + 1)] = "Take-Any #1"
-shop_table_by_location_id[(SHOP_ID_START + len(shop_table) * 3 + 2)] = "Take-Any #2"
-shop_table_by_location_id[(SHOP_ID_START + len(shop_table) * 3 + 3)] = "Take-Any #3"
-shop_table_by_location_id[(SHOP_ID_START + len(shop_table) * 3 + 4)] = "Take-Any #4"
+shop_table_by_location_id = {cnt: s for cnt, s in enumerate(
+    (item for sublist in (f"{name} Slot {num}" for num in range(1, 4) for name in shop_table)
+     for item in sublist), start=SHOP_ID_START)}
+shop_table_by_location_id[(SHOP_ID_START + total_shop_slots)] = "Old Man Sword Cave"
+shop_table_by_location_id[(SHOP_ID_START + total_shop_slots + 1)] = "Take-Any #1"
+shop_table_by_location_id[(SHOP_ID_START + total_shop_slots + 2)] = "Take-Any #2"
+shop_table_by_location_id[(SHOP_ID_START + total_shop_slots + 3)] = "Take-Any #3"
+shop_table_by_location_id[(SHOP_ID_START + total_shop_slots + 4)] = "Take-Any #4"
 shop_table_by_location = {y: x for x, y in shop_table_by_location_id.items()}
 
 shop_generation_types = {
