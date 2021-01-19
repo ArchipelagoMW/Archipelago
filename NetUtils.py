@@ -12,6 +12,7 @@ class Node:
 
     def __init__(self):
         self.endpoints = []
+        super(Node, self).__init__()
 
     def broadcast_all(self, msgs):
         msgs = json.dumps(msgs)
