@@ -215,12 +215,13 @@ def create_shops(world, player: int):
     world.random.shuffle(single_purchase_slots)
 
     if 'g' in option or 'f' in option:
-        new_basic_shop = world.random.sample(shop_generation_types['default'], k=3)
-        new_dark_shop = world.random.sample(shop_generation_types['default'], k=3)
+        default_shop_table = [i for l in [shop_generation_types[x] for x in ['arrows', 'bombs', 'potions', 'shields', 'bottle'] if not world.retro[player] or x is not 'arrows'] for i in l]
+        new_basic_shop = world.random.sample(default_shop_table, k=3)
+        new_dark_shop = world.random.sample(default_shop_table, k=3)
         for name, shop in player_shop_table.items():
             typ, shop_id, keeper, custom, locked, items = shop
             if not locked:
-                new_items = world.random.sample(shop_generation_types['default'], k=3)
+                new_items = world.random.sample(default_shop_table, k=3)
                 if 'f' not in option:
                     if items == _basic_shop_defaults:
                         new_items = new_basic_shop
@@ -296,11 +297,11 @@ shop_table_by_location_id[(SHOP_ID_START + total_shop_slots + 4)] = "Take-Any #4
 shop_table_by_location = {y: x for x, y in shop_table_by_location_id.items()}
 
 shop_generation_types = {
-    'default': _basic_shop_defaults + [('Bombs (3)', 20), ('Green Potion', 90), ('Blue Potion', 190), ('Bee', 10),
-                                       ('Single Arrow', 5), ('Single Bomb', 10)] + [('Red Shield', 500),
-                                                                                    ('Blue Shield', 50)],
-    'potion': [('Red Potion', 150), ('Green Potion', 90), ('Blue Potion', 190)],
-    'discount_potion': [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)],
-    'bottle': [('Bee', 10)],
+    'arrows': [('Single Arrow', 5), ('Arrows (10)', 50)],
+    'bombs': [('Single Bomb', 10), ('Bombs (3)', 30), ('Bombs (10)', 50)],
+    'shields': [('Red Shield', 500), ('Blue Shield', 50)],
+    'potions': [('Red Potion', 150), ('Green Potion', 90), ('Blue Potion', 190)],
+    'discount_potions': [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)],
+    'bottle': [('Small Heart', 10), ('Apple', 50), ('Bee', 10), ('Good Bee', 100), ('Faerie', 100), ('Magic Jar', 100)],
     'time': [('Red Clock', 100), ('Blue Clock', 200), ('Green Clock', 300)],
 }
