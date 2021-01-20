@@ -1,6 +1,6 @@
 import http.server
 import logging
-import os
+import typing
 import socket
 import socketserver
 import threading
@@ -12,33 +12,18 @@ from NetUtils import Node
 from MultiClient import Context
 import Utils
 
-logger = logging.getLogger("WebUIRelay")
 
-
-class WebUiClient(Node):
+class WebUiClient(Node, logging.Handler):
     def __init__(self):
-        super().__init__()
+        super(WebUiClient, self).__init__()
         self.manual_snes = None
 
     @staticmethod
-    def build_message(msg_type: str, content: dict) -> dict:
+    def build_message(msg_type: str, content: typing.Union[str, dict]) -> dict:
         return {'type': msg_type, 'content': content}
 
-    def log_info(self, message, *args, **kwargs):
-        self.broadcast_all(self.build_message('info', message))
-        logger.info(message, *args, **kwargs)
-
-    def log_warning(self, message, *args, **kwargs):
-        self.broadcast_all(self.build_message('warning', message))
-        logger.warning(message, *args, **kwargs)
-
-    def log_error(self, message, *args, **kwargs):
-        self.broadcast_all(self.build_message('error', message))
-        logger.error(message, *args, **kwargs)
-
-    def log_critical(self, message, *args, **kwargs):
-        self.broadcast_all(self.build_message('critical', message))
-        logger.critical(message, *args, **kwargs)
+    def emit(self, record: logging.LogRecord) -> None:
+        self.broadcast_all({"type": record.levelname.lower(), "content": str(record.msg)})
 
     def send_chat_message(self, message):
         self.broadcast_all(self.build_message('chat', message))
