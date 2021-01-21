@@ -13,6 +13,7 @@ import sys
 import typing
 import os
 import subprocess
+import re
 
 from random import randrange
 
@@ -92,6 +93,7 @@ class Context():
         self.locations_scouted = set()
         self.items_received = []
         self.items_missing = []
+        self.items_checked = None
         self.locations_info = {}
         self.awaiting_rom = False
         self.rom = None
@@ -803,6 +805,18 @@ async def server_autoreconnect(ctx: Context):
         ctx.server_task = asyncio.create_task(server_loop(ctx))
 
 
+missing_unknown = re.compile("Unknown Location ID: (?P<ID>\d+)")
+def convert_unknown_missing(missing_items: list) -> list:
+    missing = []
+    for location in missing_items:
+        match = missing_unknown.match(location)
+        if match:
+            missing.append(Regions.lookup_id_to_name.get(int(match['ID']), location))
+        else:
+            missing.append(location)
+    return missing
+
+
 async def process_server_cmd(ctx: Context, cmd, args):
     if cmd == 'RoomInfo':
         logger.info('--------------------------------')
@@ -877,11 +891,12 @@ async def process_server_cmd(ctx: Context, cmd, args):
             await ctx.send_msgs(msgs)
         if ctx.finished_game:
             await send_finished_game(ctx)
-        ctx.items_missing = args[2] if len(args) >= 3 else []  # Get the server side view of missing as of time of connecting.
+        ctx.items_missing = convert_unknown_missing(args[2] if len(args) >= 3 else [])  # Get the server side view of missing as of time of connecting.
+        ctx.items_checked = convert_unknown_missing(args[3] if len(args) >= 4 else None)
         # This list is used to only send to the server what is reported as ACTUALLY Missing.
         # This also serves to allow an easy visual of what locations were already checked previously
         # when /missing is used for the client side view of what is missing.
-        if not ctx.items_missing:
+        if not ctx.items_missing and not ctx.items_checked:
             asyncio.create_task(ctx.send_msgs([['Say', '!missing']]))
 
     elif cmd == 'ReceivedItems':
@@ -931,12 +946,16 @@ async def process_server_cmd(ctx: Context, cmd, args):
 
     elif cmd == 'Missing':
         if 'locations' in args:
-            locations = json.loads(args['locations'])
+            locations = convert_unknown_missing(json.loads(args['locations']))
             if ctx.items_missing:
                 for location in locations:
                     logger.info(f'Missing: {location}')
+            ctx.items_missing = locations
+            if 'locations_checked' in args:
+                ctx.items_checked = convert_unknown_missing(json.loads(args['locations_checked']))
+                logger.info(f'Missing {len(locations)}/{len(locations)+len(ctx.items_checked)} location checks')
+            else:
                 logger.info(f'Found {len(locations)} missing location checks')
-            ctx.items_missing = [location for location in locations]
 
     elif cmd == 'Hint':
         hints = [Utils.Hint(*hint) for hint in args]
@@ -1066,30 +1085,15 @@ class ClientCommandProcessor(CommandProcessor):
         """List all missing location checks, from your local game state"""
         count = 0
         checked_count = 0
-        for location in [k for k, v in Regions.location_table.items() if type(v[0]) is int]:
+        for location in Regions.lookup_name_to_id.keys():
             if location not in self.ctx.locations_checked:
-                if location not in self.ctx.items_missing:
-                    self.output('Checked: ' + location)
-                    checked_count += 1
-                else:
+                if location in self.ctx.items_missing:
                     self.output('Missing: ' + location)
-                count += 1
-
-        key_drop_count = 0
-        for location in [k for k, v in Regions.key_drop_data.items()]:
-            if location not in self.ctx.items_missing:
-                key_drop_count += 1
-
-        # No point on reporting on missing key drop locations if the server doesn't declare ANY of them missing.
-        if key_drop_count != len(Regions.key_drop_data.items()):
-            for location in [k for k, v in Regions.key_drop_data.items()]:
-                if location not in self.ctx.locations_checked:
-                    if location not in self.ctx.items_missing:
-                        self.output('Checked: ' + location)
-                        key_drop_count += 1
-                    else:
-                        self.output('Missing: ' + location)
                     count += 1
+                elif self.ctx.items_checked is None or location in self.ctx.items_checked:
+                    self.output('Checked: ' + location)
+                    count += 1
+                    checked_count += 1
 
         if count:
             self.output(f"Found {count} missing location checks{f'. {checked_count} locations checks previously visited.' if checked_count else ''}")
@@ -1152,7 +1156,17 @@ async def track_locations(ctx : Context, roomid, roomdata):
 
     def new_check(location):
         ctx.locations_checked.add(location)
-        logger.info("New check: %s (%d/216)" % (location, len(ctx.locations_checked)))
+
+        check = None
+        if ctx.items_checked is None:
+            check = f'New Check: {location} ({len(ctx.locations_checked)}/{len(Regions.lookup_name_to_id)})'
+        else:
+            items_total = len(ctx.items_missing) + len(ctx.items_checked)
+            if location in ctx.items_missing or location in ctx.items_checked:
+                check = f'New Check: {location} ({len(ctx.locations_checked)}/{items_total})'
+
+        if check:
+            logger.info(check)
         ctx.ui_node.send_location_check(ctx, location)
 
     try:
