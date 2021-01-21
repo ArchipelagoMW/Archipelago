@@ -384,6 +384,8 @@ class RestrictedUnpickler(pickle.Unpickler):
     def find_class(self, module, name):
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
+        if module == "Utils" and name in {"ReceivedItem"}:
+            return globals()[name]
         # Forbid everything else.
         raise pickle.UnpicklingError("global '%s.%s' is forbidden" %
                                      (module, name))
