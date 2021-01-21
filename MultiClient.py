@@ -35,6 +35,8 @@ import WebUI
 import Regions
 import Utils
 
+# logging note:
+# logging.* gets send to only the text console, logger.* gets send to the WebUI as well, if it's initialized.
 logger = logging.getLogger("Client")
 
 
@@ -1160,7 +1162,7 @@ async def track_locations(ctx : Context, roomid, roomdata):
 
     def new_check(location):
         ctx.unsafe_locations_checked.add(location)
-        logger.info("New check: %s (%d/216)" % (location, len(ctx.unsafe_locations_checked)))
+        logging.info("New check: %s (%d/216)" % (location, len(ctx.unsafe_locations_checked)))
         ctx.ui_node.send_location_check(ctx, location)
 
     for location, (loc_roomid, loc_mask) in location_table_uw.items():
@@ -1168,7 +1170,7 @@ async def track_locations(ctx : Context, roomid, roomdata):
             if location not in ctx.unsafe_locations_checked and loc_roomid == roomid and (roomdata << 4) & loc_mask != 0:
                 new_check(location)
         except Exception as e:
-            logger.info(f"Exception: {e}")
+            logger.exception(f"Exception: {e}")
 
     uw_begin = 0x129
     uw_end = 0
