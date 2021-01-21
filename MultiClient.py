@@ -894,7 +894,7 @@ async def process_server_cmd(ctx: Context, cmd, args):
         if ctx.finished_game:
             await send_finished_game(ctx)
         ctx.items_missing = convert_unknown_missing(args[2] if len(args) >= 3 else [])  # Get the server side view of missing as of time of connecting.
-        ctx.items_checked = convert_unknown_missing(args[3] if len(args) >= 4 else None)
+        ctx.items_checked = convert_unknown_missing(args[3]) if len(args) >= 4 else None
         # This list is used to only send to the server what is reported as ACTUALLY Missing.
         # This also serves to allow an easy visual of what locations were already checked previously
         # when /missing is used for the client side view of what is missing.
