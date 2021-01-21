@@ -215,7 +215,7 @@ def create_shops(world, player: int):
     world.random.shuffle(single_purchase_slots)
 
     if 'g' in option or 'f' in option:
-        default_shop_table = [i for l in [shop_generation_types[x] for x in ['arrows', 'bombs', 'potions', 'shields', 'bottle'] if not world.retro[player] or x is not 'arrows'] for i in l]
+        default_shop_table = [i for l in [shop_generation_types[x] for x in ['arrows', 'bombs', 'potions', 'shields', 'bottle'] if not world.retro[player] or x != 'arrows'] for i in l]
         new_basic_shop = world.random.sample(default_shop_table, k=3)
         new_dark_shop = world.random.sample(default_shop_table, k=3)
         for name, shop in player_shop_table.items():
