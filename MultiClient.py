@@ -14,6 +14,7 @@ import typing
 import os
 import subprocess
 import re
+import shutil
 
 from random import randrange
 
@@ -37,6 +38,8 @@ import WebUI
 import Regions
 import Utils
 
+# logging note:
+# logging.* gets send to only the text console, logger.* gets send to the WebUI as well, if it's initialized.
 logger = logging.getLogger("Client")
 
 
@@ -1085,7 +1088,9 @@ class ClientCommandProcessor(CommandProcessor):
         """List all missing location checks, from your local game state"""
         count = 0
         checked_count = 0
-        for location in Regions.lookup_name_to_id.keys():
+        for location, location_id in Regions.lookup_name_to_id.items():
+            if location_id < 0:
+                continue
             if location not in self.ctx.locations_checked:
                 if location in self.ctx.items_missing:
                     self.output('Missing: ' + location)
@@ -1186,7 +1191,7 @@ async def track_locations(ctx : Context, roomid, roomdata):
             if location not in ctx.locations_checked and loc_roomid == roomid and (roomdata << 4) & loc_mask != 0:
                 new_check(location)
         except Exception as e:
-            logger.info(f"Exception: {e}")
+            logger.exception(f"Exception: {e}")
 
     uw_begin = 0x129
     uw_end = 0
@@ -1437,7 +1442,7 @@ async def main():
         adjustedromfile, adjusted = Utils.get_adjuster_settings(romfile)
         if adjusted:
             try:
-                os.replace(adjustedromfile, romfile)
+                shutil.move(adjustedromfile, romfile)
                 adjustedromfile = romfile
             except Exception as e:
                 logging.exception(e)

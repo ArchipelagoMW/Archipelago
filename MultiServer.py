@@ -114,6 +114,7 @@ class Context(Node):
         self.tags = ['Berserker']
         self.minimum_client_versions: typing.Dict[typing.Tuple[int, int], Utils.Version] = {}
         self.lookup_items_id_to_name = Items.lookup_id_to_name
+        self.lookup_items_name_to_id = {value: key for key, value in Items.lookup_id_to_name.items()}
         self.lookup_region_id_to_name = Regions.lookup_id_to_name
         self.lookup_region_name_to_id = Regions.lookup_name_to_id
         self.console_names = console_names
@@ -160,6 +161,7 @@ class Context(Node):
         if "lookup_items_id_to_name" in jsonobj:
             lookups["lookup_items_id_to_name"] = True
             self.lookup_items_id_to_name = jsonobj["lookup_items_id_to_name"]
+            self.lookup_items_name_to_id = {value: key for key, value in self.lookup_items_id_to_name.items()}
             new_console_names |= set(self.lookup_items_id_to_name.values())
 
         if "lookup_region_id_to_name" in jsonobj:
@@ -540,8 +542,8 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations):
                         if slot != target_player:
                             ctx.broadcast_team(team, [['ItemSent', (slot, location, target_player, target_item)]])
                     logging.info('(Team #%d) %s sent %s to %s (%s)' % (
-                    team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(target_item),
-                    ctx.player_names[(team, target_player)], get_location_name_from_address(location)))
+                    team + 1, ctx.player_names[(team, slot)], ctx.lookup_items_id_to_name(target_item, f"Unknown item (ID: {target_item})"),
+                    ctx.player_names[(team, target_player)], ctx.lookup_region_id_to_name.get(location, f"Unknown location (ID: {location})")))
                     found_items = True
                 elif target_player == slot:  # local pickup, notify clients of the pickup
                     if location not in ctx.location_checks[team, slot]:
@@ -595,8 +597,8 @@ def collect_hints_location(ctx: Context, team: int, slot: int, location: str) ->
 
 def format_hint(ctx: Context, team: int, hint: Utils.Hint) -> str:
     text = f"[Hint]: {ctx.player_names[team, hint.receiving_player]}'s " \
-           f"{ctx.lookup_items_id_to_name[hint.item]} is " \
-           f"at {get_location_name_from_address(hint.location)} " \
+           f"{ctx.lookup_items_id_to_name.get(hint.item, f'Unknown item (ID:{hint.item})')} is " \
+           f"at {ctx.lookup_region_id_to_name.get(hint.location, f'Unknown location (ID:{hint.location})')} " \
            f"in {ctx.player_names[team, hint.finding_player]}'s World"
 
     if hint.entrance:
@@ -900,7 +902,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if self.ctx.item_cheat:
             item_name, usable, response = get_intended_text(item_name, self.ctx.lookup_items_id_to_name.values())
             if usable:
-                new_item = ReceivedItem(Items.item_table[item_name][3], -1, self.client.slot)
+                new_item = ReceivedItem(self.ctx.lookup_items_name_to_id[item_name], -1, self.client.slot)
                 get_received_items(self.ctx, self.client.team, self.client.slot).append(new_item)
                 self.ctx.notify_all('Cheat console: sending "' + item_name + '" to ' + self.ctx.get_aliased_name(self.client.team, self.client.slot))
                 send_new_items(self.ctx)
