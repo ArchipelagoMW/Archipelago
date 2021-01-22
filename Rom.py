@@ -1551,7 +1551,8 @@ def patch_race_rom(rom, world, player):
 
 
 def write_custom_shops(rom, world, player):
-    shops = [shop for shop in world.shops if shop.custom and shop.region.player == player]
+    shops = sorted([shop for shop in world.shops if shop.custom and shop.region.player == player],
+                   key=lambda shop: shop.region.name)
 
     shop_data = bytearray()
     items_data = bytearray()
