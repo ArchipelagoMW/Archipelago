@@ -125,6 +125,17 @@ shop_class_mapping = {ShopType.UpgradeShop: UpgradeShop,
                       ShopType.TakeAny: TakeAny}
 
 
+def FillDisabledShopSlots(world):
+    shop_slots: Set[Location] = {location for shop_locations in (shop.region.locations for shop in world.shops)
+                                 for location in shop_locations if location.shop_slot and location.shop_slot_disabled}
+    for location in shop_slots:
+        location.shop_slot_disabled = True
+        slot_num = int(location.name[-1]) - 1
+        shop: Shop = location.parent_region.shop
+        location.item = ItemFactory(shop.inventory[slot_num]['item'], location.player)
+        location.item_rule = lambda item: item.name == location.item.name and item.player == location.player
+
+
 def ShopSlotFill(world):
     shop_slots: Set[Location] = {location for shop_locations in (shop.region.locations for shop in world.shops)
                                  for location in shop_locations if location.shop_slot}
@@ -132,15 +143,11 @@ def ShopSlotFill(world):
     for location in shop_slots:
         slot_num = int(location.name[-1]) - 1
         shop: Shop = location.parent_region.shop
-        if not shop.can_push_inventory(slot_num):
+        if not shop.can_push_inventory(slot_num) or location.shop_slot_disabled:
             removed.add(location)
-            shop.region.locations.remove(location)
 
     if removed:
         shop_slots -= removed
-        # remove locations that may no longer exist from caches, by flushing them entirely
-        world.clear_location_cache()
-        world._location_cache = {}
 
     if shop_slots:
         from Fill import swap_location_item
@@ -168,7 +175,7 @@ def ShopSlotFill(world):
             world.random.shuffle(sphere)
 
         for i, sphere in enumerate(candidates_per_sphere):
-            current_shop_slots = [location for location in sphere if location.shop_slot]
+            current_shop_slots = [location for location in sphere if location.shop_slot and not location.shop_slot_disabled]
             if current_shop_slots:
 
                 for location in current_shop_slots:
@@ -183,7 +190,7 @@ def ShopSlotFill(world):
                     else:
                         # This *should* never happen. But let's fail safely just in case.
                         logger.warning("Ran out of ShopShuffle Item candidate locations.")
-                        shop.region.locations.remove(location)
+                        location.shop_slot_disabled = True
                         continue
                     item_name = location.item.name
                     if any(x in item_name for x in ['Single Bomb', 'Single Arrow']):
@@ -239,14 +246,18 @@ def create_shops(world, player: int):
         world.shops.append(shop)
         for index, item in enumerate(inventory):
             shop.add_inventory(index, *item)
-            if not locked and single_purchase_slots.pop():
-                additional_item = 'Rupees (50)'  # world.random.choice(['Rupees (50)', 'Rupees (100)', 'Rupees (300)'])
+            if not locked and num_slots:
                 slot_name = "{} Slot {}".format(region.name, index + 1)
                 loc = Location(player, slot_name, address=shop_table_by_location[slot_name],
                                parent=region, hint_text="for sale")
                 loc.shop_slot = True
                 loc.locked = True
-                loc.item = ItemFactory(additional_item, player)
+                if single_purchase_slots.pop():
+                    additional_item = 'Rupees (50)'  # world.random.choice(['Rupees (50)', 'Rupees (100)', 'Rupees (300)'])
+                    loc.item = ItemFactory(additional_item, player)
+                else:
+                    loc.item = ItemFactory('Nothing', player)
+                    loc.shop_slot_disabled = True
                 shop.region.locations.append(loc)
                 world.dynamic_locations.append(loc)
                 world.clear_location_cache()

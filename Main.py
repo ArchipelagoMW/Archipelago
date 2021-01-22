@@ -10,7 +10,7 @@ import zlib
 import concurrent.futures
 
 from BaseClasses import World, CollectionState, Item, Region, Location
-from Shops import ShopSlotFill, create_shops, SHOP_ID_START
+from Shops import ShopSlotFill, create_shops, SHOP_ID_START, FillDisabledShopSlots
 from Items import ItemFactory, item_table, item_name_groups
 from Regions import create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
@@ -388,6 +388,8 @@ def main(args, seed=None):
         precollected_items = [[] for player in range(world.players)]
         for item in world.precollected_items:
             precollected_items[item.player - 1].append(item.code)
+
+        FillDisabledShopSlots(world)
 
         def write_multidata(roms):
             for future in roms:

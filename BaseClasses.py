@@ -1074,6 +1074,7 @@ class Boss():
 
 class Location():
     shop_slot: bool = False
+    shop_slot_disabled: bool = False
     event: bool = False
     locked: bool = False
 
