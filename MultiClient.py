@@ -91,6 +91,7 @@ class Context():
         self.team = None
         self.slot = None
         self.player_names: typing.Dict[int: str] = {}
+        self.locations_recognized = set()
         self.locations_checked = set()
         self.unsafe_locations_checked = set()
         self.locations_scouted = set()
@@ -1176,7 +1177,8 @@ async def track_locations(ctx : Context, roomid, roomdata):
         else:
             items_total = len(ctx.items_missing) + len(ctx.items_checked)
             if location in ctx.items_missing or location in ctx.items_checked:
-                check = f'New Check: {location} ({len(ctx.unsafe_locations_checked)}/{items_total})'
+                ctx.locations_recognized.add(location)
+                check = f'New Check: {location} ({len(ctx.locations_recognized)}/{items_total})'
 
         if check:
             logger.info(check)
