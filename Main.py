@@ -11,8 +11,8 @@ import concurrent.futures
 
 from BaseClasses import World, CollectionState, Item, Region, Location
 from Shops import ShopSlotFill, create_shops, SHOP_ID_START
-from Items import ItemFactory, item_table, item_name_groups, lookup_id_to_name as lookup_items_id_to_name
-from Regions import create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, lookup_name_to_id as lookup_region_name_to_id, lookup_id_to_name as lookup_region_id_to_name
+from Items import ItemFactory, item_table, item_name_groups
+from Regions import create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 from Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, get_hash_string
@@ -422,10 +422,7 @@ def main(args, seed=None):
                                                   "precollected_items": precollected_items,
                                                   "version": _version_tuple,
                                                   "tags": multidatatags,
-                                                  "minimum_versions": minimum_versions,
-                                                  "lookup_region_id_to_name": lookup_region_id_to_name,
-                                                  "lookup_items_id_to_name": {key: value for key, value in lookup_items_id_to_name.items() if isinstance(key, int)},
-                                                  "item_name_groups": {key: list(value) for key, value in item_name_groups.items()}
+                                                  "minimum_versions": minimum_versions
                                                   }).encode("utf-8"), 9)
 
             with open(output_path('%s.multidata' % outfilebase), 'wb') as f:
