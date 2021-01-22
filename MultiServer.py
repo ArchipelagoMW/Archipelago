@@ -429,9 +429,10 @@ async def countdown(ctx: Context, timer):
         ctx.notify_all(f'[Server]: GO')
         ctx.countdown_timer = 0
 
-async def missing(ctx: Context, client: Client, locations: list):
+async def missing(ctx: Context, client: Client, locations: list, checked_locations: list):
     await ctx.send_msgs(client, [['Missing', {
-        'locations': json.dumps(locations)
+        'locations': json.dumps(locations),
+        'checked_locations': json.dumps(checked_locations)
     }]])
 
 
@@ -836,6 +837,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         """List all missing location checks from the server's perspective"""
 
         locations = get_missing_checks(self.ctx, self.client)
+        checked_locations = get_checked_checks(self.ctx, self.client)
 
         if len(locations) > 0:
             if self.client.version < [2, 3, 0]:
@@ -844,7 +846,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     buffer += f'Missing: {location}\n'
                 self.output(buffer + f"Found {len(locations)} missing location checks")
             else:
-                asyncio.create_task(missing(self.ctx, self.client, locations))
+                asyncio.create_task(missing(self.ctx, self.client, locations, checked_locations))
         else:
             self.output("No missing location checks found.")
         return True
@@ -965,6 +967,13 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 return False
 
 
+def get_checked_checks(ctx: Context, client: Client) -> list:
+    return [Regions.lookup_id_to_name.get(location_id, f'Unknown Location ID: {location_id}') for
+            location_id, slot in ctx.locations if
+            slot == client.slot and
+            location_id in ctx.location_checks[client.team, client.slot]]
+
+
 def get_missing_checks(ctx: Context, client: Client) -> list:
     return [Regions.lookup_id_to_name.get(location_id, f'Unknown Location ID: {location_id}') for
             location_id, slot in ctx.locations if
@@ -1032,7 +1041,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             client.tags = args.get('tags', Client.tags)
             reply = [['Connected', [(client.team, client.slot),
                                     [(p, ctx.get_aliased_name(t, p)) for (t, p), n in ctx.player_names.items() if
-                                     t == client.team], get_missing_checks(ctx, client)]]]
+                                     t == client.team], get_missing_checks(ctx, client), get_checked_checks(ctx, client)]]]
             items = get_received_items(ctx, client.team, client.slot)
             if items:
                 reply.append(['ReceivedItems', (0, tuplize_received_items(items))])
