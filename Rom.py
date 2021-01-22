@@ -1552,22 +1552,17 @@ def patch_race_rom(rom, world, player):
 
 def write_custom_shops(rom, world, player):
     shops = sorted([shop for shop in world.shops if shop.custom and shop.region.player == player],
-                   key=lambda shop: shop.region.name)
+                   key=lambda shop: shop.sram_offset)
 
     shop_data = bytearray()
     items_data = bytearray()
-    sram_offset = 0
 
     for shop_id, shop in enumerate(shops):
         if shop_id == len(shops) - 1:
             shop_id = 0xFF
         bytes = shop.get_bytes()
         bytes[0] = shop_id
-        bytes[-1] = sram_offset
-        if shop.type == ShopType.TakeAny:
-            sram_offset += 1
-        else:
-            sram_offset += 3
+        bytes[-1] = shop.sram_offset
         shop_data.extend(bytes)
         # [id][item][price-low][price-high][max][repl_id][repl_price-low][repl_price-high][player]
         for item in shop.inventory:

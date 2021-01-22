@@ -23,13 +23,14 @@ class Shop():
     blacklist: Set[str] = set()  # items that don't work, todo: actually check against this
     type = ShopType.Shop
 
-    def __init__(self, region, room_id: int, shopkeeper_config: int, custom: bool, locked: bool):
+    def __init__(self, region, room_id: int, shopkeeper_config: int, custom: bool, locked: bool, sram_offset: int):
         self.region = region
         self.room_id = room_id
         self.inventory: List[Optional[dict]] = [None] * self.slots
         self.shopkeeper_config = shopkeeper_config
         self.custom = custom
         self.locked = locked
+        self.sram_offset = sram_offset
 
     @property
     def item_count(self) -> int:
@@ -226,7 +227,7 @@ def create_shops(world, player: int):
         new_basic_shop = world.random.sample(default_shop_table, k=3)
         new_dark_shop = world.random.sample(default_shop_table, k=3)
         for name, shop in player_shop_table.items():
-            typ, shop_id, keeper, custom, locked, items = shop
+            typ, shop_id, keeper, custom, locked, items, sram_offset = shop
             if not locked:
                 new_items = world.random.sample(default_shop_table, k=3)
                 if 'f' not in option:
@@ -235,13 +236,13 @@ def create_shops(world, player: int):
                     elif items == _dark_world_shop_defaults:
                         new_items = new_dark_shop
                 keeper = world.random.choice([0xA0, 0xC1, 0xFF])
-                player_shop_table[name] = ShopData(typ, shop_id, keeper, custom, locked, new_items)
+                player_shop_table[name] = ShopData(typ, shop_id, keeper, custom, locked, new_items, sram_offset)
     if world.mode[player] == "inverted":
         player_shop_table["Dark Lake Hylia Shop"] = \
             player_shop_table["Dark Lake Hylia Shop"]._replace(locked=True, items=_inverted_hylia_shop_defaults)
-    for region_name, (room_id, type, shopkeeper, custom, locked, inventory) in player_shop_table.items():
+    for region_name, (room_id, type, shopkeeper, custom, locked, inventory, sram_offset) in player_shop_table.items():
         region = world.get_region(region_name, player)
-        shop: Shop = shop_class_mapping[type](region, room_id, shopkeeper, custom, locked)
+        shop: Shop = shop_class_mapping[type](region, room_id, shopkeeper, custom, locked, sram_offset)
         region.shop = shop
         world.shops.append(shop)
         for index, item in enumerate(inventory):
@@ -270,28 +271,29 @@ class ShopData(NamedTuple):
     custom: bool
     locked: bool
     items: List
+    sram_offset: int
 
 
-# (type, room_id, shopkeeper, custom, locked, [items])
+# (type, room_id, shopkeeper, custom, locked, [items], sram_offset)
 # item = (item, price, max=0, replacement=None, replacement_price=0)
 _basic_shop_defaults = [('Red Potion', 150), ('Small Heart', 10), ('Bombs (10)', 50)]
 _dark_world_shop_defaults = [('Red Potion', 150), ('Blue Shield', 50), ('Bombs (10)', 50)]
 _inverted_hylia_shop_defaults = [('Blue Potion', 160), ('Blue Shield', 50), ('Bombs (10)', 50)]
 shop_table: Dict[str, ShopData] = {
-    'Cave Shop (Dark Death Mountain)': ShopData(0x0112, ShopType.Shop, 0xC1, True, False, _basic_shop_defaults),
+    'Cave Shop (Dark Death Mountain)': ShopData(0x0112, ShopType.Shop, 0xC1, True, False, _basic_shop_defaults, 0),
     'Red Shield Shop': ShopData(0x0110, ShopType.Shop, 0xC1, True, False,
-                                [('Red Shield', 500), ('Bee', 10), ('Arrows (10)', 30)]),
-    'Dark Lake Hylia Shop': ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
-    'Dark World Lumberjack Shop': ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
-    'Village of Outcasts Shop': ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
-    'Dark World Potion Shop': ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
-    'Light World Death Mountain Shop': ShopData(0x00FF, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
-    'Kakariko Shop': ShopData(0x011F, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
-    'Cave Shop (Lake Hylia)': ShopData(0x0112, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
+                                [('Red Shield', 500), ('Bee', 10), ('Arrows (10)', 30)], 3),
+    'Dark Lake Hylia Shop': ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults, 6),
+    'Dark World Lumberjack Shop': ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults, 9),
+    'Village of Outcasts Shop': ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults, 12),
+    'Dark World Potion Shop': ShopData(0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults, 15),
+    'Light World Death Mountain Shop': ShopData(0x00FF, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults, 18),
+    'Kakariko Shop': ShopData(0x011F, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults, 21),
+    'Cave Shop (Lake Hylia)': ShopData(0x0112, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults, 24),
     'Potion Shop': ShopData(0x0109, ShopType.Shop, 0xA0, True, True,
-                            [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)]),
+                            [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)], 27),
     'Capacity Upgrade': ShopData(0x0115, ShopType.UpgradeShop, 0x04, True, True,
-                                 [('Bomb Upgrade (+5)', 100, 7), ('Arrow Upgrade (+5)', 100, 7)])
+                                 [('Bomb Upgrade (+5)', 100, 7), ('Arrow Upgrade (+5)', 100, 7)], 30)
 }
 
 total_shop_slots = len(shop_table) * 3
@@ -299,7 +301,8 @@ total_dynamic_shop_slots = sum(3 for shopname, data in shop_table.items() if not
 
 SHOP_ID_START = 0x400000
 shop_table_by_location_id = {cnt: s for cnt, s in enumerate(
-    (f"{name} Slot {num}" for name in sorted(shop_table) for num in range(1, 4)), start=SHOP_ID_START)}
+    (f"{name} Slot {num}" for name in [key for key, value in sorted(shop_table.items(), key=lambda item: item[1].sram_offset)]
+     for num in range(1, 4)), start=SHOP_ID_START)}
 shop_table_by_location_id[(SHOP_ID_START + total_shop_slots)] = "Old Man Sword Cave"
 shop_table_by_location_id[(SHOP_ID_START + total_shop_slots + 1)] = "Take-Any #1"
 shop_table_by_location_id[(SHOP_ID_START + total_shop_slots + 2)] = "Take-Any #2"

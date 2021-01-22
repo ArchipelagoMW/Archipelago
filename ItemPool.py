@@ -2,7 +2,7 @@ from collections import namedtuple
 import logging
 
 from BaseClasses import Region, RegionType, Location
-from Shops import ShopType, Shop, TakeAny
+from Shops import ShopType, Shop, TakeAny, total_shop_slots
 from Bosses import place_bosses
 from Dungeons import get_dungeon_item_pool
 from EntranceShuffle import connect_entrance
@@ -563,7 +563,7 @@ def set_up_take_anys(world, player):
     entrance = world.get_region(reg, player).entrances[0]
     connect_entrance(world, entrance.name, old_man_take_any.name, player)
     entrance.target = 0x58
-    old_man_take_any.shop = TakeAny(old_man_take_any, 0x0112, 0xE2, True, True)
+    old_man_take_any.shop = TakeAny(old_man_take_any, 0x0112, 0xE2, True, True, total_shop_slots)
     world.shops.append(old_man_take_any.shop)
 
     swords = [item for item in world.itempool if item.type == 'Sword' and item.player == player]
@@ -585,7 +585,7 @@ def set_up_take_anys(world, player):
         entrance = world.get_region(reg, player).entrances[0]
         connect_entrance(world, entrance.name, take_any.name, player)
         entrance.target = target
-        take_any.shop = TakeAny(take_any, room_id, 0xE3, True, True)
+        take_any.shop = TakeAny(take_any, room_id, 0xE3, True, True, total_shop_slots + num + 1)
         world.shops.append(take_any.shop)
         take_any.shop.add_inventory(0, 'Blue Potion', 0, 0)
         take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0)

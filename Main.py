@@ -562,7 +562,7 @@ def copy_dynamic_regions_and_locations(world, ret):
 
         if region.shop:
             new_reg.shop = region.shop.__class__(new_reg, region.shop.room_id, region.shop.shopkeeper_config,
-                                                 region.shop.custom, region.shop.locked)
+                                                 region.shop.custom, region.shop.locked, region.shop.sram_offset)
             ret.shops.append(new_reg.shop)
 
     for location in world.dynamic_locations:
