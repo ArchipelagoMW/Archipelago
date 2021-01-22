@@ -29,7 +29,7 @@ import Utils
 from Utils import get_item_name_from_id, get_location_name_from_address, ReceivedItem, _version_tuple
 from NetUtils import Node, Endpoint
 
-console_names = frozenset(set(Items.item_table) | set(Regions.location_table) | set(Items.item_name_groups) | set(Regions.key_drop_data))
+console_names = frozenset(set(Items.item_table) | set(Items.item_name_groups) | set(Regions.lookup_name_to_id))
 
 CLIENT_PLAYING = 0
 CLIENT_GOAL = 1
