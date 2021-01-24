@@ -602,9 +602,9 @@ def fill_prizes(world, attempts=15):
         crystal_locations = [world.get_location('Turtle Rock - Prize', player), world.get_location('Eastern Palace - Prize', player), world.get_location('Desert Palace - Prize', player), world.get_location('Tower of Hera - Prize', player), world.get_location('Palace of Darkness - Prize', player),
                              world.get_location('Thieves\' Town - Prize', player), world.get_location('Skull Woods - Prize', player), world.get_location('Swamp Palace - Prize', player), world.get_location('Ice Palace - Prize', player),
                              world.get_location('Misery Mire - Prize', player)]
-        placed_prizes = [loc.item.name for loc in crystal_locations if loc.item is not None]
+        placed_prizes = {loc.item.name for loc in crystal_locations if loc.item}
         unplaced_prizes = [crystal for crystal in crystals if crystal.name not in placed_prizes]
-        empty_crystal_locations = [loc for loc in crystal_locations if loc.item is None]
+        empty_crystal_locations = [loc for loc in crystal_locations if not loc.item]
         for attempt in range(attempts):
             try:
                 prizepool = list(unplaced_prizes)

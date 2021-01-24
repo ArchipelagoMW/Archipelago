@@ -178,13 +178,13 @@ def main(args, seed=None):
     for player in range(1, world.players + 1):
         set_rules(world, player)
 
-    logger.info('Placing Dungeon Prizes.')
-
-    fill_prizes(world)
-
     logger.info("Running Item Plando")
 
     distribute_planned(world)
+
+    logger.info('Placing Dungeon Prizes.')
+
+    fill_prizes(world)
 
     logger.info('Placing Dungeon Items.')
 

@@ -75,20 +75,22 @@ boss_shuffle:
     - items denotes the items to use, can be given a number to have multiple of that item
     - locations lists the possible locations those items can be placed in
     - placements are picked randomly, not sorted in any way
+- Warning: Placing non-Dungeon Prizes on Prize locations and 
+  Prizes on non-Prize locations will break the game in various ways.
 - [Available Items](https://github.com/Berserker66/MultiWorld-Utilities/blob/3b5ba161dea223b96e9b1fc890e03469d9c6eb59/Items.py#L26)
 - [Available Locations](https://github.com/Berserker66/MultiWorld-Utilities/blob/3b5ba161dea223b96e9b1fc890e03469d9c6eb59/Regions.py#L418)
 
 #### Examples
 ```yaml
 plando_items:
-  - item:
+  - item: # 1
       Lamp: 1
       Fire Rod: 1
     location: Link's House
     from_pool: true
     world: true
     percentage: 50
-  - items:
+  - items: # 2
       Progressive Sword: 4
       Progressive Bow: 1
       Progressive Bow (Alt): 1
@@ -104,12 +106,21 @@ plando_items:
       - Turtle Rock - Big Chest
       - Palace of Darkness - Big Chest
     world: false
+  - items: # 3
+      Red Pendant: 1
+      Green Pendant: 1
+      Blue Pendant: 1
+    locations:
+      - Desert Palace - Prize
+      - Eastern Palace - Prize
+      - Tower of Hera - Prize
+    from_pool: true
 ```
 
-The first example has a 50% chance to occur, which if it does places either the Lamp or Fire Rod in one's own 
+1. has a 50% chance to occur, which if it does places either the Lamp or Fire Rod in one's own 
 Link's House and removes the picked item from the item pool.
-
-The second example always triggers and places the Swords and Bows into one's own Big Chests
+2. Always triggers and places the Swords and Bows into one's own Big Chests
+3. Locks Pendants to The Light World and therefore Crystals to dark world
 
 ### Texts
 - This module is disabled by default.
