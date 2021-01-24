@@ -1124,6 +1124,38 @@
         }
       }
     },
+    "shop_shuffle_slots": {
+      "keyString": "shop_shuffle_slots",
+      "friendlyName": "Shop Itempool Slots",
+      "description": "Move items from the general Itempool into shops for purchase.",
+      "inputType": "range",
+      "subOptions": {
+        "0": {
+          "keyString": "shop_shuffle_slots.0",
+          "friendlyName": "Off",
+          "description": "No items are moved",
+          "defaultValue": 50
+        },
+        "1": {
+          "keyString": "shop_shuffle_slots.10",
+          "friendlyName": "Level 1",
+          "description": "10 Items are moved into shops.",
+          "defaultValue": 0
+        },
+        "2": {
+          "keyString": "shop_shuffle_slots.20",
+          "friendlyName": "Level 2",
+          "description": "20 Items are moved into shops.",
+          "defaultValue": 0
+        },
+        "3": {
+          "keyString": "shop_shuffle_slots.30",
+          "friendlyName": "Level 3",
+          "description": "30 Items are moved into shops.",
+          "defaultValue": 0
+        }
+      }
+    },
     "shuffle_prizes": {
       "keyString": "shuffle_prizes",
       "friendlyName": "Prize Shuffle",

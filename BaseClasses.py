@@ -1410,6 +1410,13 @@ class Spoiler(object):
                               bool_to_text("p" in self.metadata["shop_shuffle"][player]))
                 outfile.write('Shop upgrade shuffle:            %s\n' %
                               bool_to_text("u" in self.metadata["shop_shuffle"][player]))
+                outfile.write('New Shop inventory:              %s\n' %
+                              bool_to_text("g" in self.metadata["shop_shuffle"][player] or
+                                           "f" in self.metadata["shop_shuffle"][player]))
+                outfile.write('Custom Potion Shop:              %s\n' %
+                              bool_to_text("w" in self.metadata["shop_shuffle"][player]))
+                outfile.write('Shop Slots:                      %s\n' %
+                              self.metadata["shop_shuffle_slots"][player])
                 outfile.write('Boss shuffle:                    %s\n' % self.metadata['boss_shuffle'][player])
                 outfile.write(
                     'Enemy shuffle:                   %s\n' % bool_to_text(self.metadata['enemy_shuffle'][player]))

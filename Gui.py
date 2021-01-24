@@ -488,6 +488,18 @@ def guiMain(args=None):
     shopUpgradeShuffleButton = Checkbutton(shopframe, text="Lootable Upgrades", variable=shopUpgradeShuffleVar)
     shopUpgradeShuffleButton.grid(row=0, column=2, sticky=W)
 
+    shopInventoryShuffleVar = IntVar()
+    shopInventoryShuffleButton = Checkbutton(shopframe, text="New Inventories", variable=shopInventoryShuffleVar)
+    shopInventoryShuffleButton.grid(row=1, column=0, sticky=W)
+
+    shopPoolShuffleVar = IntVar()
+    shopPoolShuffleButton = Checkbutton(shopframe, text="Itempool in Shops", variable=shopPoolShuffleVar)
+    shopPoolShuffleButton.grid(row=1, column=1, sticky=W)
+
+    shopWitchShuffleVar = IntVar()
+    shopWitchShuffleButton = Checkbutton(shopframe, text="Custom Potion Shop", variable=shopWitchShuffleVar)
+    shopWitchShuffleButton.grid(row=1, column=2, sticky=W)
+
     multiworldframe = LabelFrame(randomizerWindow, text="Multiworld", padx=5, pady=2)
 
     worldLabel = Label(multiworldframe, text='Players per Team')
@@ -586,6 +598,12 @@ def guiMain(args=None):
             guiargs.shop_shuffle += "p"
         if shopUpgradeShuffleVar.get():
             guiargs.shop_shuffle += "u"
+        if shopInventoryShuffleVar.get():
+            guiargs.shop_shuffle += "f"
+        if shopWitchShuffleVar.get():
+            guiargs.shop_shuffle += "w"
+        if shopPoolShuffleVar.get():
+            guiargs.shop_shuffle_slots = 30
         guiargs.shuffle_prizes = {"none": "",
                                   "bonk": "b",
                                   "general": "g",
