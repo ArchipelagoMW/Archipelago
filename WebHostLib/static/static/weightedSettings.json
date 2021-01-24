@@ -377,6 +377,12 @@
           "friendlyName": "Local Triforce hunt /w Ganon",
           "description": "Same as Local Triforce Hunt, but you need to defeat Ganon in his lair instead of talking with Murahadala.",
           "defaultValue": 0
+        },
+        "ice_rod_hunt": {
+          "keyString": "goals.ice_rod_hunt",
+          "friendlyName": "Ice Rod Hunt",
+          "description": "Look for the Ice Rod within your 215 available checks, then go kill Trinexx at Turtle rock.",
+          "defaultValue": 0
         }
       }
     },

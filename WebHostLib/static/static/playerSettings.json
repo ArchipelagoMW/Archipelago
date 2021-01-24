@@ -48,6 +48,10 @@
         {
           "name": "Triforce Hunt + Ganon",
           "value": "ganon_triforce_hunt"
+        },
+        {
+          "name": "Ice Rod Hunt",
+          "value": "ice_rod_hunt"
         }
       ]
     },
