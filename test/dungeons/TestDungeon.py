@@ -5,7 +5,8 @@ from Dungeons import create_dungeons, get_dungeon_item_pool
 from EntranceShuffle import mandatory_connections, connect_simple
 from ItemPool import difficulties, generate_itempool
 from Items import ItemFactory
-from Regions import create_regions, create_shops
+from Regions import create_regions
+from Shops import create_shops
 from Rules import set_rules
 
 

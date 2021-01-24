@@ -326,9 +326,17 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--beemizer', default=defval(0), type=lambda value: min(max(int(value), 0), 4))
     parser.add_argument('--shop_shuffle', default='', help='''\
     combine letters for options:
-    i: shuffle the inventories of the shops around
+    g: generate default inventories for light and dark world shops, and unique shops
+    f: generate default inventories for each shop individually
+    i: shuffle the default inventories of the shops around
     p: randomize the prices of the items in shop inventories
     u: shuffle capacity upgrades into the item pool
+    w: consider witch's hut like any other shop and shuffle/randomize it too
+    ''')
+    parser.add_argument('--shop_shuffle_slots', default=defval(0),
+                        type=lambda value: min(max(int(value), 1), 96),
+                        help='''
+        Maximum amount of shop slots able to be filled by items from the item pool.
     ''')
     parser.add_argument('--shuffle_prizes', default=defval('g'), choices=['', 'g', 'b', 'gb'])
     parser.add_argument('--sprite_pool', help='''\
@@ -390,7 +398,8 @@ def parse_arguments(argv, no_defaults=False):
                          'shufflebosses', 'enemy_shuffle', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
                          'heartbeep', "skip_progression_balancing", "triforce_pieces_available",
-                         "triforce_pieces_required", "shop_shuffle", "required_medallions",
+                         "triforce_pieces_required", "shop_shuffle", "shop_shuffle_slots",
+                         "required_medallions",
                          "plando_items", "plando_texts", "plando_connections",
                          'remote_items', 'progressive', 'dungeon_counters', 'glitch_boots', 'killable_thieves',
                          'tile_shuffle', 'bush_shuffle', 'shuffle_prizes', 'sprite_pool', 'dark_room_logic',

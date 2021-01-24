@@ -405,6 +405,8 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
     # change minimum to required pieces to avoid problems
     ret.triforce_pieces_available = min(max(ret.triforce_pieces_required, int(ret.triforce_pieces_available)), 90)
 
+    ret.shop_shuffle_slots = int(get_choice('shop_shuffle_slots', weights, '0'))
+
     ret.shop_shuffle = get_choice('shop_shuffle', weights, '')
     if not ret.shop_shuffle:
         ret.shop_shuffle = ''

@@ -144,7 +144,7 @@ def fill_dungeons_restrictive(world):
         # sort in the order Big Key, Small Key, Other before placing dungeon items
         sort_order = {"BigKey": 3, "SmallKey": 2}
         dungeon_items.sort(key=lambda item: sort_order.get(item.type, 1))
-        fill_restrictive(world, all_state_base, locations, dungeon_items, True)
+        fill_restrictive(world, all_state_base, locations, dungeon_items, True, True)
 
 
 dungeon_music_addresses = {'Eastern Palace - Prize': [0x1559A],
