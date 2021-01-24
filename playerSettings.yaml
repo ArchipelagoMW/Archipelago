@@ -176,6 +176,16 @@ progression_balancing:
 tile_shuffle: # Randomize the tile layouts in flying tile rooms
   on: 0
   off: 50
+misery_mire_medallion: # required medallion to open Misery Mire front entrance
+  random: 50
+  Ether: 0
+  Bombos: 0
+  Quake: 0
+turtle_rock_medallion: # required medallion to open Turtle Rock front entrance
+  random: 50
+  Ether: 0
+  Bombos: 0
+  Quake: 0
 ### Enemizer Section ###
 boss_shuffle:
   none: 50 # Vanilla bosses
