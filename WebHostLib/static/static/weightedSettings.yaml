@@ -177,6 +177,16 @@ progression_balancing:
 tile_shuffle: # Randomize the tile layouts in flying tile rooms
   on: 0
   off: 50
+misery_mire_medallion: # required medallion to open Misery Mire front entrance
+  random: 50
+  ether: 0
+  bombos: 0
+  quake: 0
+turtle_rock_medallion: # required medallion to open Turtle Rock front entrance
+  random: 50
+  ether: 0
+  bombos: 0
+  quake: 0
 ### Enemizer Section ###
 boss_shuffle:
   none: 50 # Vanilla bosses
@@ -222,13 +232,14 @@ shop_shuffle:
   none: 50
   g: 0 # Generate new default inventories for overworld/underworld shops, and unique shops
   f: 0 # Generate new default inventories for every shop independently
-  i: 0 # Shuffle default inventories of the shops around
   p: 0 # Randomize the prices of the items in shop inventories
   u: 0 # Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
   w: 0 # Consider witch's hut like any other shop and shuffle/randomize it too
-  ip: 0 # Shuffle inventories and randomize prices
-  fpu: 0 # Generate new inventories, randomize prices and shuffle capacity upgrades into item pool
-  uip: 0 # Shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool
+  gp: 0 # Shuffle inventories and randomize prices
+  fp: 0 # Randomize items in every shop and their prices
+  ufp: 0 # Randomize items and prices in every shop, and include capacity upgrades in item pool
+  wfp: 0 # Randomize items and prices in every shop, and include potion shop inventory in shuffle
+  ufpw: 0 # Randomize items and prices in every shop, shuffle potion shop inventory, and include capacity upgrades
   # You can add more combos
 ### End of Shop Section ###
 shuffle_prizes: # aka drops
