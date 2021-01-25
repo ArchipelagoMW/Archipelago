@@ -16,6 +16,11 @@ html{
     color: #eeffeb;
 }
 
+#tutorial-wrapper img{
+    max-width: 100%;
+    border-radius: 6px;
+}
+
 #tutorial-wrapper p{
     margin-top: 0;
 }
