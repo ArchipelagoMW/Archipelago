@@ -861,7 +861,7 @@ def standard_rules(world, player):
 def toss_junk_item(world, player):
     items = ['Rupees (20)', 'Bombs (3)', 'Arrows (10)', 'Rupees (5)', 'Rupee (1)', 'Bombs (10)',
              'Single Arrow', 'Rupees (50)', 'Rupees (100)', 'Single Bomb', 'Bee', 'Bee Trap',
-             'Rupees (300)']
+             'Rupees (300)', 'Nothing']
     for item in items:
         big20 = next((i for i in world.itempool if i.name == item and i.player == player), None)
         if big20:
@@ -940,7 +940,7 @@ def set_trock_key_rules(world, player):
             if not can_reach_big_chest:
                 # Must not go in the Chain Chomps chest - only 2 other chests available and 3+ keys required for all other chests
                 forbid_item(world.get_location('Turtle Rock - Chain Chomps', player), 'Big Key (Turtle Rock)', player)
-            if world.accessibility[player] == 'locations':
+            if world.accessibility[player] == 'locations' and world.goal[player] != 'icerodhunt':
                 if world.bigkeyshuffle[player] and can_reach_big_chest:
                     # Must not go in the dungeon - all 3 available chests (Chomps, Big Chest, Crystaroller) must be keys to access laser bridge, and the big key is required first
                     for location in ['Turtle Rock - Chain Chomps', 'Turtle Rock - Compass Chest',

@@ -178,6 +178,9 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
     unplaced = [item for item in progitempool + prioitempool + restitempool]
     unfilled = [location.name for location in fill_locations]
 
+    for location in fill_locations:
+        world.push_item(location, ItemFactory('Nothing', location.player), False)
+
     if unplaced or unfilled:
         logging.warning('Unplaced items: %s - Unfilled Locations: %s', unplaced, unfilled)
 
