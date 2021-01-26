@@ -141,8 +141,8 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
 
     fill_restrictive(world, world.state, fill_locations, progitempool)
 
-    if any(localprioitempool.values() or
-           localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
+    if any(localprioitempool.values()) or \
+            any(localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
         local_locations = {player: [] for player in world.player_ids}
         for location in fill_locations:
             local_locations[location.player].append(location)
@@ -177,6 +177,9 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
     restitempool, fill_locations = fast_fill(world, restitempool, fill_locations)
     unplaced = [item for item in progitempool + prioitempool + restitempool]
     unfilled = [location.name for location in fill_locations]
+
+    for location in fill_locations:
+        world.push_item(location, ItemFactory('Nothing', location.player), False)
 
     if unplaced or unfilled:
         logging.warning('Unplaced items: %s - Unfilled Locations: %s', unplaced, unfilled)

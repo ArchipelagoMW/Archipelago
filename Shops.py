@@ -254,7 +254,10 @@ def create_shops(world, player: int):
                 loc.shop_slot = True
                 loc.locked = True
                 if single_purchase_slots.pop():
-                    additional_item = 'Rupees (50)'  # world.random.choice(['Rupees (50)', 'Rupees (100)', 'Rupees (300)'])
+                    if world.goal[player] != 'icerodhunt':
+                        additional_item = 'Rupees (50)'  # world.random.choice(['Rupees (50)', 'Rupees (100)', 'Rupees (300)'])
+                    else:
+                        additional_item = 'Nothing'
                     loc.item = ItemFactory(additional_item, player)
                 else:
                     loc.item = ItemFactory('Nothing', player)
