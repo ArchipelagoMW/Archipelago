@@ -225,8 +225,8 @@ beemizer: # Remove items from the global item pool and replace them with single 
 ### Shop Settings ###
 shop_shuffle_slots: # Maximum amount of shop slots to be filled with regular item pool items (such as Moon Pearl)
   0: 50
-  5: 0
-  15: 0
+  10: 0
+  20: 0
   30: 0
 shop_shuffle:
   none: 50
@@ -339,34 +339,6 @@ debug: # Only available if the host uses the doors branch, it is ignored otherwi
   off: 50
 ### end of door rando only options ###
 rom:
-  random_sprite_on_event: # An alternative to specifying randomonhit / randomonexit / etc... in sprite down below.
-    enabled:  # If enabled, sprite down below is ignored completely, (although it may become the sprite pool)
-      on: 0
-      off: 1
-    on_hit:  # Random sprite on hit. Being hit by things that cause 0 damage still counts.
-      on: 1
-      off: 0
-    on_enter:  # Random sprite on underworld entry. Note that entering hobo counts.
-      on: 0
-      off: 1
-    on_exit:  # Random sprite on underworld exit. Exiting hobo does not count.
-      on: 0
-      off: 1
-    on_slash:  # Random sprite on sword slash. Note, it still counts if you attempt to slash while swordless.
-      on: 0
-      off: 1
-    on_item:  # Random sprite on getting an item.  Anything that causes you to hold an item above your head counts.
-      on: 0
-      off: 1
-    on_bonk:  # Random sprite on bonk.
-      on: 0
-      off: 1
-    on_everything:  # Random sprite on ALL currently implemented events, even if not documented at present time.
-      on: 0
-      off: 1
-    use_weighted_sprite_pool:  # Always on if no sprite_pool exists, otherwise it controls whether to use sprite as a weighted sprite pool
-      on: 0
-      off: 1
   #sprite_pool: # When specified, limits the pool of sprites used for randomon-event to the specified pool.  Uncomment to use this.
   #  - link
   #  - pride link
@@ -374,14 +346,6 @@ rom:
   #  - random  # You can specify random multiple times for however many potentially unique random sprites you want in your pool.
   sprite: # Enter the name of your preferred sprite and weight it appropriately
     random: 0
-    randomonhit: 0 # Random sprite on hit
-    randomonenter: 0 # Random sprite on entering the underworld.
-    randomonexit: 0 # Random sprite on exiting the underworld.
-    randomonslash: 0 # Random sprite on sword slashes
-    randomonitem: 0  # Random sprite on getting items.
-    randomonbonk: 0 # Random sprite on bonk.
-                     # You can combine these events like this.  randomonhit-enter-exit  if you want it on hit, enter, exit.
-    randomonall: 0 # Random sprite on any and all currently supported events. Refer to above for the supported events.
     Link: 50 # To add other sprites: open the gui/Creator, go to adjust, select a sprite and write down the name the gui calls it
   disablemusic: # If "on", all in-game music will be disabled
     on: 0

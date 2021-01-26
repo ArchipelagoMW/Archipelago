@@ -72,6 +72,26 @@
         }
       }
     },
+    "restrict_dungeon_item_on_boss": {
+      "keyString": "restrict_dungeon_item_on_boss",
+      "friendlyName": "Dungeon Item on Boss",
+      "description": "Defeating a dungeon bosses always awards a dungeon item.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "restrict_dungeon_item_on_boss.on",
+          "friendlyName": "On",
+          "description": "Dungeon bosses will always drop a dungeon item.",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "restrict_dungeon_item_on_boss.off",
+          "friendlyName": "Off",
+          "description": "Dungeon bosses may not drop a dungeon item.",
+          "defaultValue": 0
+        }
+      }
+    },
     "map_shuffle": {
       "keyString": "map_shuffle",
       "friendlyName": "Map Shuffle",
