@@ -234,7 +234,7 @@ def main(args, seed=None):
         patch_rom(world, rom, player, team, use_enemizer)
 
         if use_enemizer:
-            patch_enemizer(world, player, rom, args.enemizercli)
+            patch_enemizer(world, team, player, rom, args.enemizercli)
 
         if args.race:
             patch_race_rom(rom, world, player)
