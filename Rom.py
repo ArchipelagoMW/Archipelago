@@ -39,6 +39,7 @@ try:
 except:
     z3pr = None
 
+enemizer_logger = logging.getLogger("Enemizer")
 
 class LocalRom(object):
 
@@ -195,7 +196,7 @@ def check_enemizer(enemizercli):
             if lib.startswith("EnemizerLibrary/"):
                 version = lib.split("/")[-1]
                 version = tuple(int(element) for element in version.split("."))
-                logging.debug(f"Found Enemizer version {version}")
+                enemizer_logger.debug(f"Found Enemizer version {version}")
                 if version < (6, 4, 0):
                     raise Exception(
                         f"Enemizer found at {enemizercli} is outdated ({info}), please update your Enemizer. "
@@ -390,10 +391,13 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli):
                                   stderr=subprocess.STDOUT,
                                   universal_newlines=True)
 
-        logging.debug(
+        enemizer_logger.debug(
             f"Enemizer attempt {i + 1} of {max_enemizer_tries} for player {player} using enemizer seed {enemizer_seed}")
         for stdout_line in iter(p_open.stdout.readline, ""):
-            logging.debug(stdout_line.rstrip())
+            if i == max_enemizer_tries - 1:
+                enemizer_logger.warning(stdout_line.rstrip())
+            else:
+                enemizer_logger.debug(stdout_line.rstrip())
         p_open.stdout.close()
 
         return_code = p_open.wait()
