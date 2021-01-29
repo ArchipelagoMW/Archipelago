@@ -10,7 +10,7 @@ import zlib
 import concurrent.futures
 
 from BaseClasses import World, CollectionState, Item, Region, Location
-from Shops import ShopSlotFill, create_shops, SHOP_ID_START, FillDisabledShopSlots
+from Shops import ShopSlotFill, create_shops, SHOP_ID_START, FillDisabledShopSlots, total_shop_slots
 from Items import ItemFactory, item_table, item_name_groups
 from Regions import create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance
 from InvertedRegions import create_inverted_regions, mark_dark_world_regions
@@ -380,19 +380,22 @@ def main(args, seed=None):
             checks_in_area[location.player]["Total"] += 1
 
         oldmancaves = []
-        for region in [world.get_region("Old Man Sword Cave", player) for player in range(1, world.players + 1) if world.retro[player]]:
-            item = ItemFactory(region.shop.inventory[0]['item'], region.player)
-            player = region.player
-            location_id = SHOP_ID_START + 33
+        takeanyregions = ["Old Man Sword Cave", "Take-Any #1", "Take-Any #2", "Take-Any #3", "Take-Any #4"]
+        for index, take_any in enumerate(takeanyregions):
+            for region in [world.get_region(take_any, player) for player in range(1, world.players + 1) if world.retro[player]]:
+                item = ItemFactory(region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'], region.player)
+                player = region.player
+                location_id = SHOP_ID_START + total_shop_slots + index
 
-            if region.type == RegionType.LightWorld:
-                checks_in_area[player]["Light World"].append(location_id)
-            else:
-                checks_in_area[player]["Dark World"].append(location_id)
-            checks_in_area[player]["Total"] += 1
+                main_entrance = get_entrance_to_region(region)
+                if main_entrance.parent_region.type == RegionType.LightWorld:
+                    checks_in_area[player]["Light World"].append(location_id)
+                else:
+                    checks_in_area[player]["Dark World"].append(location_id)
+                checks_in_area[player]["Total"] += 1
 
-            er_hint_data[player][location_id] = get_entrance_to_region(region).name
-            oldmancaves.append(((location_id, player), (item.code, player)))
+                er_hint_data[player][location_id] = main_entrance.name
+                oldmancaves.append(((location_id, player), (item.code, player)))
 
         precollected_items = [[] for player in range(world.players)]
         for item in world.precollected_items:

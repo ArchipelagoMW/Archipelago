@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '5d109c62f73966de1fe65751fc876778'
+RANDOMIZERBASEHASH = '7d9778b7c0a90d71fa5f32a3b56cdd87'
 
 import io
 import json
@@ -18,7 +18,7 @@ import concurrent.futures
 from typing import Optional
 
 from BaseClasses import CollectionState, Region, Location
-from Shops import ShopType
+from Shops import ShopType, total_shop_slots
 from Dungeons import dungeon_music_addresses
 from Regions import location_table, old_location_address_to_new_location_address
 from Text import MultiByteTextMapper, CompressedTextMapper, text_addresses, Credits, TextTable
@@ -1598,7 +1598,7 @@ def write_custom_shops(rom, world, player):
             slot = 0 if shop.type == ShopType.TakeAny else index
             if item is None:
                 break
-            if world.shop_shuffle_slots[player]:
+            if world.shop_shuffle_slots[player] or shop.type == ShopType.TakeAny:
                 count_shop = (shop.region.name != 'Potion Shop' or 'w' in world.shop_shuffle[player]) and \
                              shop.region.name != 'Capacity Upgrade'
                 rom.write_byte(0x186560 + shop.sram_offset + slot, 1 if count_shop else 0)
