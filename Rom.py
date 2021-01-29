@@ -791,6 +791,29 @@ def patch_rom(world, rom, player, team, enemized):
 
     write_custom_shops(rom, world, player)
 
+    def credits_digit(num):
+        # top: $54 is 1, 55 2, etc , so 57=4, 5C=9
+        # bot: $7A is 1, 7B is 2, etc so 7D=4, 82=9 (zero unknown...)
+        return 0x53 + int(num), 0x79 + int(num)
+
+    credits_total = 216
+    if world.goal[player] == 'icerodhunt':  # Impossible to get 216/216 with Ice rod hunt. Most possible is 215/216.
+        credits_total -= 1
+    if world.retro[player]:  # Old man cave and Take any caves will count towards collection rate.
+        credits_total += 5
+    if world.shop_shuffle_slots[player]:  # Potion shop only counts towards collection rate if included in the shuffle.
+        credits_total += 30 if 'w' in world.shop_shuffle[player] else 27
+
+    rom.write_byte(0x187010, credits_total)  # dynamic credits
+    # collection rate address: 238C37
+    first_top, first_bot = credits_digit((credits_total / 100) % 10)
+    mid_top, mid_bot = credits_digit((credits_total / 10) % 10)
+    last_top, last_bot = credits_digit(credits_total % 10)
+    # top half
+    rom.write_bytes(0x118C46, [first_top, mid_top, last_top])
+    # bottom half
+    rom.write_bytes(0x118C64, [first_bot, mid_bot, last_bot])
+
     # patch medallion requirements
     if world.required_medallions[player][0] == 'Bombos':
         rom.write_byte(0x180022, 0x00)  # requirement
