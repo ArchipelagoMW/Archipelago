@@ -96,6 +96,9 @@ class Shop():
         if not self.inventory[slot]:
             raise ValueError("Inventory can't be pushed back if it doesn't exist")
 
+        if not self.can_push_inventory(slot):
+            logging.warning(f'Warning, there is already an item pushed into this slot.')
+
         self.inventory[slot] = {
             'item': item,
             'price': price,
@@ -145,6 +148,7 @@ def ShopSlotFill(world):
         slot_num = int(location.name[-1]) - 1
         shop: Shop = location.parent_region.shop
         if not shop.can_push_inventory(slot_num) or location.shop_slot_disabled:
+            location.shop_slot_disabled = True
             removed.add(location)
 
     if removed:
