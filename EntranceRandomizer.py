@@ -222,9 +222,16 @@ def parse_arguments(argv, no_defaults=False):
                              Random: Picks a random value between 0 and 7 (inclusive).
                              0-7:    Number of crystals needed
                              ''')
-    parser.add_argument('--open_pyramid', default=defval(False), help='''\
-                            Pre-opens the pyramid hole, this removes the Agahnim 2 requirement for it
-                             ''', action='store_true')
+    parser.add_argument('--open_pyramid', default=defval('auto'), help='''\
+                            Pre-opens the pyramid hole, this removes the Agahnim 2 requirement for it.
+                            Depending on goal, you might still need to beat Agahnim 2 in order to beat ganon.
+                            fast ganon goals are crystals, ganontriforcehunt, localganontriforcehunt, pedestalganon
+                            auto - Only opens pyramid hole if the goal specifies a fast ganon, and entrance shuffle
+                                   is vanilla, dungeonssimple or dungeonsfull.
+                            goal - Opens pyramid hole if the goal specifies a fast ganon.
+                            yes - Always opens the pyramid hole.
+                            no - Never opens the pyramid hole.
+                             ''', choices=['auto', 'goal', 'yes', 'no'])
     parser.add_argument('--rom', default=defval('Zelda no Densetsu - Kamigami no Triforce (Japan).sfc'),
                         help='Path to an ALttP JAP(1.0) rom to use as a base.')
     parser.add_argument('--loglevel', default=defval('info'), const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')

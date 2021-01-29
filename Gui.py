@@ -64,8 +64,13 @@ def guiMain(args=None):
     createSpoilerCheckbutton = Checkbutton(checkBoxFrame, text="Create Spoiler Log", variable=createSpoilerVar)
     suppressRomVar = IntVar()
     suppressRomCheckbutton = Checkbutton(checkBoxFrame, text="Do not create patched Rom", variable=suppressRomVar)
-    openpyramidVar = IntVar()
-    openpyramidCheckbutton = Checkbutton(checkBoxFrame, text="Pre-open Pyramid Hole", variable=openpyramidVar)
+    openpyramidFrame = Frame(checkBoxFrame)
+    openpyramidVar = StringVar()
+    openpyramidVar.set('auto')
+    openpyramidOptionMenu = OptionMenu(openpyramidFrame, openpyramidVar, 'auto', 'goal', 'yes', 'no')
+    openpyramidLabel = Label(openpyramidFrame, text='Pre-open Pyramid Hole')
+    openpyramidLabel.pack(side=LEFT)
+    openpyramidOptionMenu.pack(side=LEFT)
     mcsbshuffleFrame = Frame(checkBoxFrame)
     mcsbLabel = Label(mcsbshuffleFrame, text="Shuffle: ")
 
@@ -102,7 +107,7 @@ def guiMain(args=None):
 
     createSpoilerCheckbutton.pack(expand=True, anchor=W)
     suppressRomCheckbutton.pack(expand=True, anchor=W)
-    openpyramidCheckbutton.pack(expand=True, anchor=W)
+    openpyramidFrame.pack(expand=True, anchor=W)
     mcsbshuffleFrame.pack(expand=True, anchor=W)
     mcsbLabel.grid(row=0, column=0)
     mapshuffleCheckbutton.grid(row=0, column=1)
@@ -564,7 +569,7 @@ def guiMain(args=None):
         guiargs.create_spoiler = bool(createSpoilerVar.get())
         guiargs.skip_playthrough = not bool(createSpoilerVar.get())
         guiargs.suppress_rom = bool(suppressRomVar.get())
-        guiargs.open_pyramid = bool(openpyramidVar.get())
+        guiargs.open_pyramid = openpyramidVar.get()
         guiargs.mapshuffle = bool(mapshuffleVar.get())
         guiargs.compassshuffle = bool(compassshuffleVar.get())
         guiargs.keyshuffle = {"on": True, "universal": "universal", "off": False}[keyshuffleVar.get()]
