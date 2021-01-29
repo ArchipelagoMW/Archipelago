@@ -458,7 +458,10 @@ class World(object):
             for location in locations:
                 if location.can_reach(state):
                     sphere.add(location)
-            yield sphere
+            sphere_list = list(sphere)
+            sphere_list.sort(key=lambda location: location.name)
+            self.random.shuffle(sphere_list)
+            yield sphere_list
             if not sphere:
                 if locations:
                     yield locations  # unreachable locations
