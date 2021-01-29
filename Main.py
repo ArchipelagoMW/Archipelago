@@ -108,7 +108,6 @@ def main(args, seed=None):
             world.player_names[player].append(name)
 
     logger.info('')
-    initialize_world(world)
 
     for player in range(1, world.players + 1):
         world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
@@ -156,6 +155,14 @@ def main(args, seed=None):
         world.non_local_items[player] -= item_name_groups['Crystals']
 
         world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player], world.triforce_pieces_required[player])
+
+        for player in range(1, world.players + 1):
+            if world.mode[player] != 'inverted':
+                create_regions(world, player)
+            else:
+                create_inverted_regions(world, player)
+            create_shops(world, player)
+            create_dungeons(world, player)
 
     logger.info('Shuffling the World about.')
 
@@ -451,15 +458,6 @@ def main(args, seed=None):
     return world
 
 
-def initialize_world(world):
-    for player in range(1, world.players + 1):
-        if world.mode[player] != 'inverted':
-            create_regions(world, player)
-        else:
-            create_inverted_regions(world, player)
-        create_shops(world, player)
-        create_dungeons(world, player)
-
 
 def copy_world(world):
     # ToDo: Not good yet
@@ -505,7 +503,13 @@ def copy_world(world):
     ret.dark_room_logic = world.dark_room_logic.copy()
     ret.restrict_dungeon_item_on_boss = world.restrict_dungeon_item_on_boss.copy()
 
-    initialize_world(ret)
+    for player in range(1, world.players + 1):
+        if world.mode[player] != 'inverted':
+            create_regions(ret, player)
+        else:
+            create_inverted_regions(ret, player)
+        create_shops(ret, player)
+        create_dungeons(ret, player)
 
     copy_dynamic_regions_and_locations(world, ret)
 
