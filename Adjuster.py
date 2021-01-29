@@ -27,6 +27,12 @@ def main():
                              ''')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
+    parser.add_argument('--triforcehud', default='normal', const='normal', nargs='?', choices=['normal', 'hide_goal', 'hide_total', 'hide_both'],
+                    help='''\
+                            Hide the triforce hud in certain circumstances.
+                            hide_goal will hide the hud until finding a triforce piece, hide_total will hide the total amount needed to win
+                            (default: %(default)s)
+                            ''')
     parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['double', 'normal', 'half', 'quarter', 'off'],
                         help='''\
                              Select the rate at which the heart beep sound is played at

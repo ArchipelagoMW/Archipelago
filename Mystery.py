@@ -650,6 +650,7 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
                             ret.sprite_pool += [key] * int(value)
 
         ret.disablemusic = get_choice('disablemusic', romweights, False)
+        ret.triforcehud = get_choice('triforcehud', romweights, 'normal')
         ret.quickswap = get_choice('quickswap', romweights, True)
         ret.fastmenu = get_choice('menuspeed', romweights, "normal")
         ret.heartcolor = get_choice('heartcolor', romweights, "red")
