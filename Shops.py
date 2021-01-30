@@ -181,6 +181,8 @@ def ShopSlotFill(world):
 
                 for location in current_shop_slots:
                     shop: Shop = location.parent_region.shop
+                    # TODO: might need to implement trying randomly across spheres until canditates are exhausted.
+                    # As spheres may be as small as one item.
                     swapping_sphere = world.random.choices(candidates_per_sphere[i:], cum_weights=cumu_weights[i:])[0]
                     for c in swapping_sphere:  # chosen item locations
                         if candidate_condition(c) and c.item_rule(location.item) and location.item_rule(c.item):
@@ -194,11 +196,11 @@ def ShopSlotFill(world):
                         location.shop_slot_disabled = True
                         continue
                     item_name = location.item.name
-                    if any(x in item_name for x in ['Single Bomb', 'Single Arrow']):
+                    if any(x in item_name for x in ['Single Bomb', 'Single Arrow', 'Piece of Heart']):
                         price = world.random.randrange(1, 7)
-                    elif any(x in item_name for x in ['Arrows', 'Bombs', 'Clock']):
+                    elif any(x in item_name for x in ['Arrows', 'Bombs', 'Clock', 'Heart']):
                         price = world.random.randrange(4, 24)
-                    elif any(x in item_name for x in ['Compass', 'Map', 'Small Key', 'Piece of Heart']):
+                    elif any(x in item_name for x in ['Compass', 'Map', 'Small Key']):
                         price = world.random.randrange(10, 30)
                     else:
                         price = world.random.randrange(10, 60)
