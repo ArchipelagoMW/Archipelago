@@ -5,7 +5,7 @@ import logging
 
 from BaseClasses import Location
 from EntranceShuffle import door_addresses
-from Items import item_name_groups, item_table, ItemFactory
+from Items import item_name_groups, item_table, ItemFactory, trap_replaceable
 from Utils import int16_as_bytes
 
 logger = logging.getLogger("Shops")
@@ -328,3 +328,113 @@ shop_generation_types = {
     'bottle': [('Small Heart', 10), ('Apple', 50), ('Bee', 10), ('Good Bee', 100), ('Faerie', 100), ('Magic Jar', 100)],
     'time': [('Red Clock', 100), ('Blue Clock', 200), ('Green Clock', 300)],
 }
+
+
+def set_up_shops(world, player: int):
+    # TODO: move hard+ mode changes for shields here, utilizing the new shops
+
+    if world.retro[player]:
+        rss = world.get_region('Red Shield Shop', player).shop
+        replacement_items = [['Red Potion', 150], ['Green Potion', 75], ['Blue Potion', 200], ['Bombs (10)', 50],
+                             ['Blue Shield', 50], ['Small Heart', 10]]  # Can't just replace the single arrow with 10 arrows as retro doesn't need them.
+        if world.keyshuffle[player] == "universal":
+            replacement_items.append(['Small Key (Universal)', 100])
+        replacement_item = world.random.choice(replacement_items)
+        rss.add_inventory(2, 'Single Arrow', 80, 1, replacement_item[0], replacement_item[1])
+        rss.locked = True
+
+    if world.keyshuffle[player] == "universal" or world.retro[player]:
+        for shop in world.random.sample([s for s in world.shops if
+                                         s.custom and not s.locked and s.type == ShopType.Shop and s.region.player == player],
+                                        5):
+            shop.locked = True
+            slots = [0, 1, 2]
+            world.random.shuffle(slots)
+            slots = iter(slots)
+            if world.keyshuffle[player] == "universal":
+                shop.add_inventory(next(slots), 'Small Key (Universal)', 100)
+            if world.retro[player]:
+                shop.push_inventory(next(slots), 'Single Arrow', 80)
+
+
+def shuffle_shops(world, items, player: int):
+    option = world.shop_shuffle[player]
+    if 'u' in option:
+        progressive = world.progressive[player]
+        progressive = world.random.choice([True, False]) if progressive == 'random' else progressive == 'on'
+        progressive &= world.goal == 'icerodhunt'
+        new_items = ["Bomb Upgrade (+5)"] * 6
+        new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
+
+        if not world.retro[player]:
+            new_items += ["Arrow Upgrade (+5)"] * 6
+            new_items.append("Arrow Upgrade (+5)" if progressive else "Arrow Upgrade (+10)")
+
+        world.random.shuffle(new_items)  # Decide what gets tossed randomly if it can't insert everything.
+
+        capacityshop: Optional[Shop] = None
+        for shop in world.shops:
+            if shop.type == ShopType.UpgradeShop and shop.region.player == player and \
+                    shop.region.name == "Capacity Upgrade":
+                shop.clear_inventory()
+                capacityshop = shop
+
+        if world.goal[player] != 'icerodhunt':
+            for i, item in enumerate(items):
+                if item.name in trap_replaceable:
+                    items[i] = ItemFactory(new_items.pop(), player)
+                    if not new_items:
+                        break
+            else:
+                logging.warning(f"Not all upgrades put into Player{player}' item pool. Putting remaining items in Capacity Upgrade shop instead.")
+                bombupgrades = sum(1 for item in new_items if 'Bomb Upgrade' in item)
+                arrowupgrades = sum(1 for item in new_items if 'Arrow Upgrade' in item)
+                if bombupgrades:
+                    capacityshop.add_inventory(1, 'Bomb Upgrade (+5)', 100, bombupgrades)
+                if arrowupgrades:
+                    capacityshop.add_inventory(1, 'Arrow Upgrade (+5)', 100, arrowupgrades)
+        else:
+            for item in new_items:
+                world.push_precollected(ItemFactory(item, player))
+
+    if 'p' in option or 'i' in option:
+        shops = []
+        upgrade_shops = []
+        total_inventory = []
+        for shop in world.shops:
+            if shop.region.player == player:
+                if shop.type == ShopType.UpgradeShop:
+                    upgrade_shops.append(shop)
+                elif shop.type == ShopType.Shop:
+                    if shop.region.name == 'Potion Shop' and not 'w' in option:
+                        # don't modify potion shop
+                        pass
+                    else:
+                        shops.append(shop)
+                        total_inventory.extend(shop.inventory)
+
+        if 'p' in option:
+            def price_adjust(price: int) -> int:
+                # it is important that a base price of 0 always returns 0 as new price!
+                adjust = 2 if price < 100 else 5
+                return int((price / adjust) * (0.5 + world.random.random() * 1.5)) * adjust
+
+            def adjust_item(item):
+                if item:
+                    item["price"] = price_adjust(item["price"])
+                    item['replacement_price'] = price_adjust(item["price"])
+
+            for item in total_inventory:
+                adjust_item(item)
+            for shop in upgrade_shops:
+                for item in shop.inventory:
+                    adjust_item(item)
+
+        if 'i' in option:
+            world.random.shuffle(total_inventory)
+
+            i = 0
+            for shop in shops:
+                slots = shop.slots
+                shop.inventory = total_inventory[i:i + slots]
+                i += slots

@@ -221,12 +221,12 @@ pot_shuffle:
   'on': 0 # Keys, items, and buttons hidden under pots in dungeons are shuffled with other pots in their supertile
   'off': 50 # Default pot item locations
 ### End of Enemizer Section ###
-beemizer: # Remove items from the global item pool and replace them with single bees and bee traps
+beemizer: # Remove items from the global item pool and replace them with single bees (fill bottles) and bee traps
   0: 50 # No bee traps are placed
-  1: 0 # 25% of the non-essential item pool is replaced with bee traps
-  2: 0 # 60% of the non-essential item pool is replaced with bee traps, of which 20% could be single bees
-  3: 0 # 100% of the non-essential item pool is replaced with bee traps, of which 50% could be single bees
-  4: 0 # 100% of the non-essential item pool is replaced with bee traps
+  1: 0 # 25% of rupees, bombs and arrows are replaced with bees, of which 60% are traps and 40% single bees
+  2: 0 # 50% of rupees, bombs and arrows are replaced with bees, of which 70% are traps and 30% single bees
+  3: 0 # 75% of rupees, bombs and arrows are replaced with bees, of which 80% are traps and 20% single bees
+  4: 0 # 100% of rupees, bombs and arrows are replaced with bees, of which 90% are traps and 10% single bees
 ### Shop Settings ###
 shop_shuffle_slots: # Maximum amount of shop slots to be filled with regular item pool items (such as Moon Pearl)
   0: 50
