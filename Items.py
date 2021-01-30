@@ -235,4 +235,4 @@ item_name_groups['Everything'] = {name for name, data in item_table.items() if t
 item_name_groups['Progression Items'] = progression_items
 item_name_groups['Non Progression Items'] = item_name_groups['Everything'] - progression_items
 
-trap_replaceable = item_name_groups['Rupees'] | {'Arrows (10)', 'Single Bomb', 'Bombs (3)', 'Bombs (10)'}
+trap_replaceable = item_name_groups['Rupees'] | {'Arrows (10)', 'Single Bomb', 'Bombs (3)', 'Bombs (10)', 'Nothing'}
