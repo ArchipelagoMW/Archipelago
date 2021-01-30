@@ -88,7 +88,7 @@ entrance_shuffle: # Documentation: https://alttpr.com/en/options#entrance_shuffl
   insanity: 0 # Very few grouping rules. Good luck
 goals:
   ganon: 50 # Climb GT, defeat Agahnim 2, and then kill Ganon
-  fast_ganon: 0 # Only killing Ganon is required. The hole is always open. However, items may still be placed in GT
+  fast_ganon: 0 # Only killing Ganon is required. However, items may still be placed in GT
   dungeons: 0 # Defeat the boss of all dungeons, including Agahnim's tower and GT (Aga 2)
   pedestal: 0 # Pull the Triforce from the Master Sword pedestal
   ganon_pedestal: 0 # Pull the Master Sword pedestal, then kill Ganon
