@@ -530,7 +530,7 @@ def notify_team(ctx: Context, team: int, text: str):
 
 def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[Utils.Hint]:
     hints = []
-    seeked_item_id = Items.item_table[item][3]
+    seeked_item_id = Items.item_table[item][2]
     for check, result in ctx.locations.items():
         item_id, receiving_player = result
         if receiving_player == slot and item_id == seeked_item_id:
@@ -862,7 +862,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if self.ctx.item_cheat:
             item_name, usable, response = get_intended_text(item_name, Items.item_table.keys())
             if usable:
-                new_item = ReceivedItem(Items.item_table[item_name][3], -1, self.client.slot)
+                new_item = ReceivedItem(Items.item_table[item_name][2], -1, self.client.slot)
                 get_received_items(self.ctx, self.client.team, self.client.slot).append(new_item)
                 self.ctx.notify_all('Cheat console: sending "' + item_name + '" to ' + self.ctx.get_aliased_name(self.client.team, self.client.slot))
                 send_new_items(self.ctx)
@@ -1062,7 +1062,7 @@ async def process_client_cmd(ctx: Context, client: Client, cmd: str, args: typin
                 target_item, target_player = ctx.locations[(Regions.location_table[loc_name][0], client.slot)]
 
                 replacements = {'SmallKey': 0xA2, 'BigKey': 0x9D, 'Compass': 0x8D, 'Map': 0x7D}
-                item_type = [i[2] for i in Items.item_table.values() if type(i[3]) is int and i[3] == target_item]
+                item_type = [i[1] for i in Items.item_table.values() if type(i[2]) is int and i[2] == target_item]
                 if item_type:
                     target_item = replacements.get(item_type[0], target_item)
 
@@ -1218,7 +1218,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
             if usable:
                 for client in self.ctx.endpoints:
                     if client.name == seeked_player:
-                        new_item = ReceivedItem(Items.item_table[item][3], -1, client.slot)
+                        new_item = ReceivedItem(Items.item_table[item][2], -1, client.slot)
                         get_received_items(self.ctx, client.team, client.slot).append(new_item)
                         self.ctx.notify_all('Cheat console: sending "' + item + '" to ' + self.ctx.get_aliased_name(client.team, client.slot))
                         send_new_items(self.ctx)
