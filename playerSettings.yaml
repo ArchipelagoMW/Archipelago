@@ -97,6 +97,11 @@ goals:
   ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
   local_ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
   ice_rod_hunt: 0 # You start with everything needed to 216 the seed. Find the Ice rod, then kill Trinexx at Turtle rock.
+pyramid_open:
+  goal: 50 # Opens pyrymid if goal is fast_ganon, ganon_pedestal, ganon_triforce_hunt, or local_ganon_triforce_hunt
+  auto: 0 # Opens pyramid same as goal, except when an entrance shuffle other than vanilla, dungeonssimple or dungeonsfull is in effect.
+  yes: 0 # pyramid is opened unconditionally. You still have to beat agahnim 2 for ganon and dungeons.
+  no: 0 # access to pyramid requires beating agahnim 2.
 triforce_pieces_mode: #Determine how to calculate the extra available triforce pieces.
   extra: 0 # available = triforce_pieces_extra + triforce_pieces_required
   percentage: 0 # available = (triforce_pieces_percentage /100) * triforce_pieces_required

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '93538d51eb018955a90181600e3384ba'
+RANDOMIZERBASEHASH = '7d9778b7c0a90d71fa5f32a3b56cdd87'
 
 import io
 import json
@@ -18,7 +18,7 @@ import concurrent.futures
 from typing import Optional
 
 from BaseClasses import CollectionState, Region, Location
-from Shops import ShopType
+from Shops import ShopType, total_shop_slots
 from Dungeons import dungeon_music_addresses
 from Regions import location_table, old_location_address_to_new_location_address
 from Text import MultiByteTextMapper, CompressedTextMapper, text_addresses, Credits, TextTable
@@ -791,6 +791,29 @@ def patch_rom(world, rom, player, team, enemized):
 
     write_custom_shops(rom, world, player)
 
+    def credits_digit(num):
+        # top: $54 is 1, 55 2, etc , so 57=4, 5C=9
+        # bot: $7A is 1, 7B is 2, etc so 7D=4, 82=9 (zero unknown...)
+        return 0x53 + int(num), 0x79 + int(num)
+
+    credits_total = 216
+    if world.goal[player] == 'icerodhunt':  # Impossible to get 216/216 with Ice rod hunt. Most possible is 215/216.
+        credits_total -= 1
+    if world.retro[player]:  # Old man cave and Take any caves will count towards collection rate.
+        credits_total += 5
+    if world.shop_shuffle_slots[player]:  # Potion shop only counts towards collection rate if included in the shuffle.
+        credits_total += 30 if 'w' in world.shop_shuffle[player] else 27
+
+    rom.write_byte(0x187010, credits_total)  # dynamic credits
+    # collection rate address: 238C37
+    first_top, first_bot = credits_digit((credits_total / 100) % 10)
+    mid_top, mid_bot = credits_digit((credits_total / 10) % 10)
+    last_top, last_bot = credits_digit(credits_total % 10)
+    # top half
+    rom.write_bytes(0x118C46, [first_top, mid_top, last_top])
+    # bottom half
+    rom.write_bytes(0x118C64, [first_bot, mid_bot, last_bot])
+
     # patch medallion requirements
     if world.required_medallions[player][0] == 'Bombos':
         rom.write_byte(0x180022, 0x00)  # requirement
@@ -1560,6 +1583,7 @@ def write_custom_shops(rom, world, player):
 
     shop_data = bytearray()
     items_data = bytearray()
+    retro_shop_slots = bytearray()
 
     for shop_id, shop in enumerate(shops):
         if shop_id == len(shops) - 1:
@@ -1568,10 +1592,27 @@ def write_custom_shops(rom, world, player):
         bytes[0] = shop_id
         bytes[-1] = shop.sram_offset
         shop_data.extend(bytes)
-        # [id][item][price-low][price-high][max][repl_id][repl_price-low][repl_price-high][player]
-        for item in shop.inventory:
+
+        arrow_mask = 0x00
+        for index, item in enumerate(shop.inventory):
+            slot = 0 if shop.type == ShopType.TakeAny else index
             if item is None:
                 break
+            if world.shop_shuffle_slots[player] or shop.type == ShopType.TakeAny:
+                count_shop = (shop.region.name != 'Potion Shop' or 'w' in world.shop_shuffle[player]) and \
+                             shop.region.name != 'Capacity Upgrade'
+                rom.write_byte(0x186560 + shop.sram_offset + slot, 1 if count_shop else 0)
+            if item['item'] == 'Single Arrow' and item['player'] == 0:
+                arrow_mask |= 1 << index
+                retro_shop_slots.append(shop.sram_offset + slot)
+
+        # [id][item][price-low][price-high][max][repl_id][repl_price-low][repl_price-high][player]
+        for index, item in enumerate(shop.inventory):
+            slot = 0 if shop.type == ShopType.TakeAny else index
+            if item is None:
+                break
+            if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro[player]:
+                rom.write_byte(0x186500 + shop.sram_offset + slot, arrow_mask)
             item_data = [shop_id, ItemFactory(item['item'], player).code] + int16_as_bytes(item['price']) + \
                         [item['max'], ItemFactory(item['replacement'], player).code if item['replacement'] else 0xFF] + \
                         int16_as_bytes(item['replacement_price']) + [0 if item['player'] == player else item['player']]
@@ -1581,6 +1622,10 @@ def write_custom_shops(rom, world, player):
 
     items_data.extend([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])
     rom.write_bytes(0x184900, items_data)
+
+    if world.retro[player]:
+        retro_shop_slots.append(0xFF)
+        rom.write_bytes(0x186540, retro_shop_slots)
 
 
 def hud_format_text(text):
