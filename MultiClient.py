@@ -1,6 +1,4 @@
 import argparse
-import asyncio
-import logging
 import urllib.parse
 import atexit
 import time
@@ -16,7 +14,6 @@ import shutil
 
 from random import randrange
 
-import Shops
 from Utils import get_item_name_from_id, get_location_name_from_address, ReceivedItem
 
 exit_func = atexit.register(input, "Press enter to close.")
@@ -32,7 +29,7 @@ from prompt_toolkit.patch_stdout import patch_stdout
 from NetUtils import *
 import WebUI
 
-from worlds.alttp import Regions
+from worlds.alttp import Regions, Shops
 import Utils
 
 # logging note:

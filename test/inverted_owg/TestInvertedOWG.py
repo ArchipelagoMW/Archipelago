@@ -5,7 +5,7 @@ from worlds.alttp.InvertedRegions import create_inverted_regions
 from worlds.alttp.ItemPool import generate_itempool, difficulties
 from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import mark_light_world_regions
-from Shops import create_shops
+from worlds.alttp.Shops import create_shops
 from worlds.alttp.Rules import set_rules
 from test.TestBase import TestBase
 

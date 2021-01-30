@@ -10,7 +10,6 @@ import logging
 import os
 import random
 import struct
-import sys
 import subprocess
 import threading
 import xxtea
@@ -18,7 +17,7 @@ import concurrent.futures
 from typing import Optional
 
 from BaseClasses import CollectionState, Region, Location
-from Shops import ShopType, total_shop_slots
+from worlds.alttp.Shops import ShopType
 from worlds.alttp.Dungeons import dungeon_music_addresses
 from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address
 from worlds.alttp.Text import MultiByteTextMapper, text_addresses, Credits, TextTable

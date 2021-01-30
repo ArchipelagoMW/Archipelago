@@ -1190,7 +1190,7 @@ class Spoiler(object):
             listed_locations.update(other_locations)
 
         self.shops = []
-        from Shops import ShopType
+        from worlds.alttp.Shops import ShopType
         for shop in self.world.shops:
             if not shop.custom:
                 continue

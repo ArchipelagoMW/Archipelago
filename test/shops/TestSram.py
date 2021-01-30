@@ -1,4 +1,4 @@
-from Shops import shop_table
+from worlds.alttp.Shops import shop_table
 from test.TestBase import TestBase
 
 
