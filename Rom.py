@@ -1105,7 +1105,11 @@ def patch_rom(world, rom, player, team, enemized):
 
     # set up goals for treasure hunt
     rom.write_bytes(0x180163, [0x0E, 0x28] if world.treasure_hunt_icon[player] == 'Triforce Piece' else [0x0D, 0x28])
-    rom.write_byte(0x180166, world.treasure_hunt_count[player] % 999)
+    rom.write_int16(0x180166, world.treasure_hunt_count[player])
+    if 'local' in world.goal[player]:
+        total_treasures = sum([world.treasure_hunt_count[x] for x in range(1, world.players + 1)])
+        rom.write_byte(0x180165, rom.read_byte(0x180165) | 0x80)
+        rom.write_int16(0x180166, total_treasures)
     rom.write_byte(0x180194, 1)  # Must turn in triforced pieces (instant win not enabled)
 
     rom.write_bytes(0x180213, [0x00, 0x01])  # Not a Tournament Seed
@@ -1660,7 +1664,8 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, tri
     rom.write_byte(0x65561, {'red': 0x05, 'blue': 0x0D, 'green': 0x19, 'yellow': 0x09}[color])
 
     # set triforcehud
-    rom.write_byte(0x180165, {'normal': 0x00, 'hide_goal': 0x01, 'hide_total': 0x02, 'hide_both': 0x03}[triforcehud])
+    triforce_flag = (rom.read_byte(0x180165) & 0x80) | {'normal': 0x00, 'hide_goal': 0x01, 'hide_total': 0x02, 'hide_both': 0x03}[triforcehud]
+    rom.write_byte(0x180165, triforce_flag)
 
     if z3pr:
         def buildAndRandomize(option_name, mode):
