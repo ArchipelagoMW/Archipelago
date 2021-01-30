@@ -862,7 +862,7 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
         raise Exception('Connection refused by the multiworld host, no reason provided')
 
     elif cmd == 'Connected':
-         Utils.persistent_store("servers", ctx.rom, ctx.server_address)
+        Utils.persistent_store("servers", ctx.rom, ctx.server_address)
         ctx.team = args["team"]
         ctx.slot = args["slot"]
         ctx.player_names = {p: n for p, n in args["playernames"]}

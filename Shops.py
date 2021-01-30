@@ -4,8 +4,8 @@ from typing import List, Union, Optional, Set, NamedTuple, Dict
 import logging
 
 from BaseClasses import Location
-from EntranceShuffle import door_addresses
-from Items import item_name_groups, item_table, ItemFactory, trap_replaceable
+from worlds.alttp.EntranceShuffle import door_addresses
+from worlds.alttp.Items import item_name_groups, item_table, ItemFactory, trap_replaceable
 from Utils import int16_as_bytes
 
 logger = logging.getLogger("Shops")

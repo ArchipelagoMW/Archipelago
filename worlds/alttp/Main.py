@@ -19,6 +19,7 @@ from worlds.alttp.Rom import patch_rom, patch_race_rom, patch_enemizer, apply_ro
 from worlds.alttp.Rules import set_rules
 from worlds.alttp.Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
+from Shops import create_shops, ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
 import Patch
@@ -351,7 +352,6 @@ def main(args, seed=None):
                 main_entrance = get_entrance_to_region(region)
                 for location in region.locations:
                     if type(location.address) == int:  # skips events and crystals
-                        if location.address >= SHOP_ID_START + 33:  continue
                         if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
                             er_hint_data[region.player][location.address] = main_entrance.name
 
