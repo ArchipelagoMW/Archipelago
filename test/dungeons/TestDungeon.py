@@ -5,7 +5,8 @@ from worlds.alttp.Dungeons import create_dungeons, get_dungeon_item_pool
 from worlds.alttp.EntranceShuffle import mandatory_connections, connect_simple
 from worlds.alttp.ItemPool import difficulties, generate_itempool
 from worlds.alttp.Items import ItemFactory
-from worlds.alttp.Regions import create_regions, create_shops
+from worlds.alttp.Regions import create_regions
+from Shops import create_shops
 from worlds.alttp.Rules import set_rules
 
 

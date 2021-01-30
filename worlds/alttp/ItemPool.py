@@ -1,12 +1,13 @@
 from collections import namedtuple
 import logging
 
-from BaseClasses import Region, RegionType, ShopType, Location, TakeAny
+from BaseClasses import Region, RegionType, Location
+from Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops
 from worlds.alttp.Bosses import place_bosses
 from worlds.alttp.Dungeons import get_dungeon_item_pool
 from worlds.alttp.EntranceShuffle import connect_entrance
 from Fill import FillError, fill_restrictive
-from worlds.alttp.Items import ItemFactory
+from worlds.alttp.Items import ItemFactory, trap_replaceable
 from worlds.alttp.Rules import forbid_items_for_player
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
@@ -389,27 +390,22 @@ def generate_itempool(world, player: int):
         for i in range(4):
             next(adv_heart_pieces).advancement = True
 
-    beeweights = {0: {None: 100},
-                  1: {None: 75, 'trap': 25},
-                  2: {None: 40, 'trap': 40, 'bee': 20},
-                  3: {'trap': 50, 'bee': 50},
-                  4: {'trap': 100}}
-
-    def beemizer(item):
-        if world.beemizer[item.player] and not item.advancement and not item.priority and not item.type:
-            choice = world.random.choices(list(beeweights[world.beemizer[item.player]].keys()),
-                                          weights=list(beeweights[world.beemizer[item.player]].values()))[0]
-            return item if not choice else ItemFactory("Bee Trap", player) if choice == 'trap' else ItemFactory("Bee",
-                                                                                                                player)
-        return item
 
     progressionitems = []
     nonprogressionitems = []
     for item in items:
-        if item.advancement or item.priority or item.type:
+        if item.advancement or item.type:
             progressionitems.append(item)
+        elif world.beemizer[player] and item.name in trap_replaceable:
+            if world.random.random() < world.beemizer[item.player] * 0.25:
+                if world.random.random() < (0.5 + world.beemizer[item.player] * 0.1):
+                    nonprogressionitems.append(ItemFactory("Bee Trap", player))
+                else:
+                    nonprogressionitems.append(ItemFactory("Bee", player))
+            else:
+                nonprogressionitems.append(item)
         else:
-            nonprogressionitems.append(beemizer(item))
+            nonprogressionitems.append(item)
     world.random.shuffle(nonprogressionitems)
 
     if additional_triforce_pieces:
@@ -443,75 +439,6 @@ def generate_itempool(world, player: int):
 
     if world.retro[player]:
         set_up_take_anys(world, player)  # depends on world.itempool to be set
-
-
-def shuffle_shops(world, items, player: int):
-    option = world.shop_shuffle[player]
-    if 'u' in option:
-        progressive = world.progressive[player]
-        progressive = world.random.choice([True, False]) if progressive == 'random' else progressive == 'on'
-        progressive &= world.goal == 'icerodhunt'
-        new_items = ["Bomb Upgrade (+5)"] * 6
-        new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
-
-        if not world.retro[player]:
-            new_items += ["Arrow Upgrade (+5)"] * 6
-            new_items.append("Arrow Upgrade (+5)" if progressive else "Arrow Upgrade (+10)")
-
-        world.random.shuffle(new_items)  # Decide what gets tossed randomly if it can't insert everything.
-
-        for shop in world.shops:
-            if shop.type == ShopType.UpgradeShop and shop.region.player == player and \
-                    shop.region.name == "Capacity Upgrade":
-                shop.clear_inventory()
-
-        if world.goal[player] != 'icerodhunt':
-            for i, item in enumerate(items):
-                if "Heart" not in item.name:
-                    items[i] = ItemFactory(new_items.pop(), player)
-                    if not new_items:
-                        break
-            else:
-                logging.warning(f"Not all upgrades put into Player{player}' item pool. Still missing: {new_items}")
-        else:
-            for item in new_items:
-                world.push_precollected(ItemFactory(item, player))
-
-    if 'p' in option or 'i' in option:
-        shops = []
-        upgrade_shops = []
-        total_inventory = []
-        for shop in world.shops:
-            if shop.region.player == player:
-                if shop.type == ShopType.UpgradeShop:
-                    upgrade_shops.append(shop)
-                elif shop.type == ShopType.Shop and shop.region.name != 'Potion Shop':
-                    shops.append(shop)
-                    total_inventory.extend(shop.inventory)
-
-        if 'p' in option:
-            def price_adjust(price: int) -> int:
-                # it is important that a base price of 0 always returns 0 as new price!
-                return int(price * (0.5 + world.random.random() * 1.5))
-
-            def adjust_item(item):
-                if item:
-                    item["price"] = price_adjust(item["price"])
-                    item['replacement_price'] = price_adjust(item["price"])
-
-            for item in total_inventory:
-                adjust_item(item)
-            for shop in upgrade_shops:
-                for item in shop.inventory:
-                    adjust_item(item)
-
-        if 'i' in option:
-            world.random.shuffle(total_inventory)
-            i = 0
-            for shop in shops:
-                slots = shop.slots
-                shop.inventory = total_inventory[i:i + slots]
-                i += slots
 
 
 take_any_locations = {
@@ -548,7 +475,7 @@ def set_up_take_anys(world, player):
     entrance = world.get_region(reg, player).entrances[0]
     connect_entrance(world, entrance.name, old_man_take_any.name, player)
     entrance.target = 0x58
-    old_man_take_any.shop = TakeAny(old_man_take_any, 0x0112, 0xE2, True, True)
+    old_man_take_any.shop = TakeAny(old_man_take_any, 0x0112, 0xE2, True, True, total_shop_slots)
     world.shops.append(old_man_take_any.shop)
 
     swords = [item for item in world.itempool if item.type == 'Sword' and item.player == player]
@@ -570,7 +497,7 @@ def set_up_take_anys(world, player):
         entrance = world.get_region(reg, player).entrances[0]
         connect_entrance(world, entrance.name, take_any.name, player)
         entrance.target = target
-        take_any.shop = TakeAny(take_any, room_id, 0xE3, True, True)
+        take_any.shop = TakeAny(take_any, room_id, 0xE3, True, True, total_shop_slots + num + 1)
         world.shops.append(take_any.shop)
         take_any.shop.add_inventory(0, 'Blue Potion', 0, 0)
         take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0)
@@ -584,13 +511,14 @@ def create_dynamic_shop_locations(world, player):
                 if item is None:
                     continue
                 if item['create_location']:
-                    loc = Location(player, "{} Item {}".format(shop.region.name, i+1), parent=shop.region)
+                    loc = Location(player, "{} Slot {}".format(shop.region.name, i + 1), parent=shop.region)
                     shop.region.locations.append(loc)
                     world.dynamic_locations.append(loc)
 
                     world.clear_location_cache()
 
                     world.push_item(loc, ItemFactory(item['item'], player), False)
+                    loc.shop_slot = True
                     loc.event = True
                     loc.locked = True
 
@@ -602,16 +530,16 @@ def fill_prizes(world, attempts=15):
         crystal_locations = [world.get_location('Turtle Rock - Prize', player), world.get_location('Eastern Palace - Prize', player), world.get_location('Desert Palace - Prize', player), world.get_location('Tower of Hera - Prize', player), world.get_location('Palace of Darkness - Prize', player),
                              world.get_location('Thieves\' Town - Prize', player), world.get_location('Skull Woods - Prize', player), world.get_location('Swamp Palace - Prize', player), world.get_location('Ice Palace - Prize', player),
                              world.get_location('Misery Mire - Prize', player)]
-        placed_prizes = [loc.item.name for loc in crystal_locations if loc.item is not None]
+        placed_prizes = {loc.item.name for loc in crystal_locations if loc.item}
         unplaced_prizes = [crystal for crystal in crystals if crystal.name not in placed_prizes]
-        empty_crystal_locations = [loc for loc in crystal_locations if loc.item is None]
+        empty_crystal_locations = [loc for loc in crystal_locations if not loc.item]
         for attempt in range(attempts):
             try:
                 prizepool = list(unplaced_prizes)
                 prize_locs = list(empty_crystal_locations)
                 world.random.shuffle(prizepool)
                 world.random.shuffle(prize_locs)
-                fill_restrictive(world, all_state, prize_locs, prizepool, True)
+                fill_restrictive(world, all_state, prize_locs, prizepool, True, lock=True)
             except FillError as e:
                 logging.getLogger('').exception("Failed to place dungeon prizes (%s). Will retry %s more times", e,
                                                 attempts - attempt)
@@ -622,32 +550,6 @@ def fill_prizes(world, attempts=15):
         else:
             raise FillError('Unable to place dungeon prizes')
 
-
-def set_up_shops(world, player: int):
-    # TODO: move hard+ mode changes for shields here, utilizing the new shops
-
-    if world.retro[player]:
-        rss = world.get_region('Red Shield Shop', player).shop
-        replacement_items = [['Red Potion', 150], ['Green Potion', 75], ['Blue Potion', 200], ['Bombs (10)', 50],
-                             ['Blue Shield', 50], ['Small Heart', 10]]  # Can't just replace the single arrow with 10 arrows as retro doesn't need them.
-        if world.keyshuffle[player] == "universal":
-            replacement_items.append(['Small Key (Universal)', 100])
-        replacement_item = world.random.choice(replacement_items)
-        rss.add_inventory(2, 'Single Arrow', 80, 1, replacement_item[0], replacement_item[1])
-        rss.locked = True
-
-    if world.keyshuffle[player] == "universal" or world.retro[player]:
-        for shop in world.random.sample([s for s in world.shops if
-                                         s.custom and not s.locked and s.type == ShopType.Shop and s.region.player == player],
-                                        5):
-            shop.locked = True
-            slots = [0, 0, 1, 1, 2, 2]
-            world.random.shuffle(slots)
-            slots = iter(slots)
-            if world.keyshuffle[player] == "universal":
-                shop.add_inventory(next(slots), 'Small Key (Universal)', 100)
-            if world.retro[player]:
-                shop.push_inventory(next(slots), 'Single Arrow', 80)
 
 def get_pool_core(world, player: int):
     progressive = world.progressive[player]

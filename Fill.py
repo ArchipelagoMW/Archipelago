@@ -1,7 +1,7 @@
 import logging
 import typing
 
-from BaseClasses import CollectionState, PlandoItem
+from BaseClasses import CollectionState, PlandoItem, Location
 from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import key_drop_data
 
@@ -10,7 +10,8 @@ class FillError(RuntimeError):
     pass
 
 
-def fill_restrictive(world, base_state: CollectionState, locations, itempool, single_player_placement=False):
+def fill_restrictive(world, base_state: CollectionState, locations, itempool, single_player_placement=False,
+                     lock=False):
     def sweep_from_pool():
         new_state = base_state.copy()
         for item in itempool:
@@ -59,6 +60,8 @@ def fill_restrictive(world, base_state: CollectionState, locations, itempool, si
                                     f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
 
                 world.push_item(spot_to_fill, item_to_place, False)
+                if lock:
+                    spot_to_fill.locked = True
                 locations.remove(spot_to_fill)
                 placements.append(spot_to_fill)
                 spot_to_fill.event = True
@@ -74,21 +77,14 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
     # get items to distribute
     world.random.shuffle(world.itempool)
     progitempool = []
-    localprioitempool = {player: [] for player in range(1, world.players + 1)}
     localrestitempool = {player: [] for player in range(1, world.players + 1)}
-    prioitempool = []
     restitempool = []
 
     for item in world.itempool:
         if item.advancement:
             progitempool.append(item)
         elif item.name in world.local_items[item.player]:
-            if item.priority:
-                localprioitempool[item.player].append(item)
-            else:
-                localrestitempool[item.player].append(item)
-        elif item.priority:
-            prioitempool.append(item)
+            localrestitempool[item.player].append(item)
         else:
             restitempool.append(item)
 
@@ -138,24 +134,13 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
 
     fill_restrictive(world, world.state, fill_locations, progitempool)
 
-    if any(localprioitempool.values() or
-           localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
+    if any(localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
         local_locations = {player: [] for player in world.player_ids}
         for location in fill_locations:
             local_locations[location.player].append(location)
         for locations in local_locations.values():
             world.random.shuffle(locations)
 
-        for player, items in localprioitempool.items():  # items already shuffled
-            player_local_locations = local_locations[player]
-            for item_to_place in items:
-                if not player_local_locations:
-                    logging.warning(f"Ran out of local locations for player {player}, "
-                                    f"cannot place {item_to_place}.")
-                    break
-                spot_to_fill = player_local_locations.pop()
-                world.push_item(spot_to_fill, item_to_place, False)
-                fill_locations.remove(spot_to_fill)
         for player, items in localrestitempool.items():  # items already shuffled
             player_local_locations = local_locations[player]
             for item_to_place in items:
@@ -168,11 +153,13 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
                 fill_locations.remove(spot_to_fill)
 
     world.random.shuffle(fill_locations)
-    prioitempool, fill_locations = fast_fill(world, prioitempool, fill_locations)
 
     restitempool, fill_locations = fast_fill(world, restitempool, fill_locations)
-    unplaced = [item for item in progitempool + prioitempool + restitempool]
+    unplaced = [item for item in progitempool + restitempool]
     unfilled = [location.name for location in fill_locations]
+
+    for location in fill_locations:
+        world.push_item(location, ItemFactory('Nothing', location.player), False)
 
     if unplaced or unfilled:
         logging.warning('Unplaced items: %s - Unfilled Locations: %s', unplaced, unfilled)
@@ -235,7 +222,7 @@ def flood_items(world):
         location_list = world.get_reachable_locations()
         world.random.shuffle(location_list)
         for location in location_list:
-            if location.item is not None and not location.item.advancement and not location.item.priority and not location.item.smallkey and not location.item.bigkey:
+            if location.item is not None and not location.item.advancement and not location.item.smallkey and not location.item.bigkey:
                 # safe to replace
                 replace_item = location.item
                 replace_item.location = None
@@ -243,6 +230,7 @@ def flood_items(world):
                 world.push_item(location, item_to_place, True)
                 itempool.remove(item_to_place)
                 break
+
 
 def balance_multiworld_progression(world):
     balanceable_players = {player for player in range(1, world.players + 1) if world.progression_balancing[player]}
@@ -331,7 +319,8 @@ def balance_multiworld_progression(world):
                             replacement_locations.insert(0, new_location)
                             new_location = replacement_locations.pop()
 
-                        new_location.item, old_location.item = old_location.item, new_location.item
+                        swap_location_item(old_location, new_location)
+
                         new_location.event, old_location.event = True, False
                         logging.debug(f"Progression balancing moved {new_location.item} to {new_location}, "
                                       f"displacing {old_location.item} in {old_location}")
@@ -355,6 +344,18 @@ def balance_multiworld_progression(world):
                 raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
 
 
+def swap_location_item(location_1: Location, location_2: Location, check_locked=True):
+    """Swaps Items of locations. Does NOT swap flags like event, shop_slot or locked"""
+    if check_locked:
+        if location_1.locked:
+            logging.warning(f"Swapping {location_1}, which is marked as locked.")
+        if location_2.locked:
+            logging.warning(f"Swapping {location_2}, which is marked as locked.")
+    location_2.item, location_1.item = location_1.item, location_2.item
+    location_1.item.location = location_1
+    location_2.item.location = location_2
+
+
 def distribute_planned(world):
     world_name_lookup = {world.player_names[player_id][0]: player_id for player_id in world.player_ids}
 
@@ -362,7 +363,8 @@ def distribute_planned(world):
         placement: PlandoItem
         for placement in world.plando_items[player]:
             if placement.location in key_drop_data:
-                placement.warn(f"Can't place '{placement.item}' at '{placement.location}', as key drop shuffle locations are not supported yet.")
+                placement.warn(
+                    f"Can't place '{placement.item}' at '{placement.location}', as key drop shuffle locations are not supported yet.")
                 continue
             item = ItemFactory(placement.item, player)
             target_world: int = placement.world

@@ -215,7 +215,9 @@ const buildUI = (settings, spriteData) => {
 
   const spriteOptionsDescription = document.createElement('span');
   spriteOptionsDescription.className = 'description-span';
-  spriteOptionsDescription.innerText = "Choose an alternate sprite to play the game with.";
+  spriteOptionsDescription.innerHTML = 'Choose an alternate sprite to play the game with. Additional randomization ' +
+    'options are documented in the ' +
+    '<a href="https://github.com/Berserker66/MultiWorld-Utilities/blob/main/playerSettings.yaml#L374">settings file</a>.';
   spriteOptionsWrapper.appendChild(spriteOptionsDescription);
 
   const spriteOptionsTable = document.createElement('table');

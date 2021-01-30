@@ -88,7 +88,7 @@ entrance_shuffle: # Documentation: https://alttpr.com/en/options#entrance_shuffl
   insanity: 0 # Very few grouping rules. Good luck
 goals:
   ganon: 50 # Climb GT, defeat Agahnim 2, and then kill Ganon
-  fast_ganon: 0 # Only killing Ganon is required. The hole is always open. However, items may still be placed in GT
+  fast_ganon: 0 # Only killing Ganon is required. However, items may still be placed in GT
   dungeons: 0 # Defeat the boss of all dungeons, including Agahnim's tower and GT (Aga 2)
   pedestal: 0 # Pull the Triforce from the Master Sword pedestal
   ganon_pedestal: 0 # Pull the Master Sword pedestal, then kill Ganon
@@ -96,6 +96,12 @@ goals:
   local_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
   ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
   local_ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
+  ice_rod_hunt: 0 # You start with everything needed to 216 the seed. Find the Ice rod, then kill Trinexx at Turtle rock.
+pyramid_open:
+  goal: 50 # Opens pyrymid if goal is fast_ganon, ganon_pedestal, ganon_triforce_hunt, or local_ganon_triforce_hunt
+  auto: 0 # Opens pyramid same as goal, except when an entrance shuffle other than vanilla, dungeonssimple or dungeonsfull is in effect.
+  yes: 0 # pyramid is opened unconditionally. You still have to beat agahnim 2 for ganon and dungeons.
+  no: 0 # access to pyramid requires beating agahnim 2.
 triforce_pieces_mode: #Determine how to calculate the extra available triforce pieces.
   extra: 0 # available = triforce_pieces_extra + triforce_pieces_required
   percentage: 0 # available = (triforce_pieces_percentage /100) * triforce_pieces_required
@@ -176,6 +182,16 @@ progression_balancing:
 tile_shuffle: # Randomize the tile layouts in flying tile rooms
   on: 0
   off: 50
+misery_mire_medallion: # required medallion to open Misery Mire front entrance
+  random: 50
+  Ether: 0
+  Bombos: 0
+  Quake: 0
+turtle_rock_medallion: # required medallion to open Turtle Rock front entrance
+  random: 50
+  Ether: 0
+  Bombos: 0
+  Quake: 0
 ### Enemizer Section ###
 boss_shuffle:
   none: 50 # Vanilla bosses
@@ -205,20 +221,31 @@ pot_shuffle:
   'on': 0 # Keys, items, and buttons hidden under pots in dungeons are shuffled with other pots in their supertile
   'off': 50 # Default pot item locations
 ### End of Enemizer Section ###
-beemizer: # Remove items from the global item pool and replace them with single bees and bee traps
+beemizer: # Remove items from the global item pool and replace them with single bees (fill bottles) and bee traps
   0: 50 # No bee traps are placed
-  1: 0 # 25% of the non-essential item pool is replaced with bee traps
-  2: 0 # 60% of the non-essential item pool is replaced with bee traps, of which 20% could be single bees
-  3: 0 # 100% of the non-essential item pool is replaced with bee traps, of which 50% could be single bees
-  4: 0 # 100% of the non-essential item pool is replaced with bee traps
+  1: 0 # 25% of rupees, bombs and arrows are replaced with bees, of which 60% are traps and 40% single bees
+  2: 0 # 50% of rupees, bombs and arrows are replaced with bees, of which 70% are traps and 30% single bees
+  3: 0 # 75% of rupees, bombs and arrows are replaced with bees, of which 80% are traps and 20% single bees
+  4: 0 # 100% of rupees, bombs and arrows are replaced with bees, of which 90% are traps and 10% single bees
+### Shop Settings ###
+shop_shuffle_slots: # Maximum amount of shop slots to be filled with regular item pool items (such as Moon Pearl)
+  0: 50
+  5: 0
+  15: 0
+  30: 0
 shop_shuffle:
   none: 50
-  i: 0 # Shuffle the inventories of the shops around
+  g: 0 # Generate new default inventories for overworld/underworld shops, and unique shops
+  f: 0 # Generate new default inventories for every shop independently
+  i: 0 # Shuffle default inventories of the shops around
   p: 0 # Randomize the prices of the items in shop inventories
   u: 0 # Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
+  w: 0 # Consider witch's hut like any other shop and shuffle/randomize it too
   ip: 0 # Shuffle inventories and randomize prices
+  fpu: 0 # Generate new inventories, randomize prices and shuffle capacity upgrades into item pool
   uip: 0 # Shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool
   # You can add more combos
+### End of Shop Section ###
 shuffle_prizes: # aka drops
   none: 0 # do not shuffle prize packs
   g: 50 # shuffle "general" price packs, as in enemy, tree pull, dig etc.
@@ -249,11 +276,6 @@ green_clock_time: # For all timer modes, the amount of time in minutes to gain o
   15: 0
 # Can be uncommented to use it
 # local_items: # Force certain items to appear in your world only, not across the multiworld. Recognizes some group names, like "Swords"
-#  - "Moon Pearl"
-#  - "Small Keys"
-#  - "Big Keys"
-# Can be uncommented to use it
-# non_local_items: # Force certain items to appear outside your world only, always across the multiworld. Recognizes some group names, like "Swords"
 #  - "Moon Pearl"
 #  - "Small Keys"
 #  - "Big Keys"

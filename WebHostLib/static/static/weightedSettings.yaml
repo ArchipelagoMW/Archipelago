@@ -96,6 +96,7 @@ goals:
   local_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
   ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
   local_ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
+  ice_rod_hunt: 0 # You start with everything needed to 216 the seed. Find the Ice rod, then kill Trinexx at Turtle rock.
 triforce_pieces_mode: #Determine how to calculate the extra available triforce pieces.
   extra: 0 # available = triforce_pieces_extra + triforce_pieces_required
   percentage: 0 # available = (triforce_pieces_percentage /100) * triforce_pieces_required
@@ -107,7 +108,7 @@ triforce_pieces_extra: # Set to how many extra triforces pieces are available to
   10: 50
   15: 0
   20: 0
-triforce_pieces_percentage: # Set to how many extra triforces pieces according to a percentage of the required ones, are available to collect in the world.
+triforce_pieces_percentage: # Set to how many triforce pieces according to a percentage of the required ones, are available to collect in the world.
   # Format "pieces: chance"
   100: 0 #No extra
   150: 50 #Half the required will be added as extra
@@ -173,6 +174,19 @@ item_functionality:
 progression_balancing:
   on: 50 # A system to reduce BK, as in times during which you can't do anything by moving your items into an earlier access sphere to make it likely you have stuff to do
   off: 0 # Turn this off if you don't mind a longer multiworld, or can glitch around missing items.
+tile_shuffle: # Randomize the tile layouts in flying tile rooms
+  on: 0
+  off: 50
+misery_mire_medallion: # required medallion to open Misery Mire front entrance
+  random: 50
+  ether: 0
+  bombos: 0
+  quake: 0
+turtle_rock_medallion: # required medallion to open Turtle Rock front entrance
+  random: 50
+  ether: 0
+  bombos: 0
+  quake: 0
 ### Enemizer Section ###
 boss_shuffle:
   none: 50 # Vanilla bosses
@@ -185,9 +199,6 @@ enemy_shuffle: # Randomize enemy placement
   off: 50
 killable_thieves: # Make thieves killable
   on: 0 # Usually turned on together with enemy_shuffle to make annoying thief placement more manageable
-  off: 50
-tile_shuffle: # Randomize the tile layouts in flying tile rooms
-  on: 0
   off: 50
 bush_shuffle: # Randomize the chance that bushes have enemies and the enemies under said bush
   on: 0
@@ -211,14 +222,26 @@ beemizer: # Remove items from the global item pool and replace them with single 
   2: 0 # 60% of the non-essential item pool is replaced with bee traps, of which 20% could be single bees
   3: 0 # 100% of the non-essential item pool is replaced with bee traps, of which 50% could be single bees
   4: 0 # 100% of the non-essential item pool is replaced with bee traps
+### Shop Settings ###
+shop_shuffle_slots: # Maximum amount of shop slots to be filled with regular item pool items (such as Moon Pearl)
+  0: 50
+  10: 0
+  20: 0
+  30: 0
 shop_shuffle:
   none: 50
-  i: 0 # Shuffle the inventories of the shops around
+  g: 0 # Generate new default inventories for overworld/underworld shops, and unique shops
+  f: 0 # Generate new default inventories for every shop independently
   p: 0 # Randomize the prices of the items in shop inventories
   u: 0 # Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
-  ip: 0 # Shuffle inventories and randomize prices
-  uip: 0 # Shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool
+  w: 0 # Consider witch's hut like any other shop and shuffle/randomize it too
+  gp: 0 # Shuffle inventories and randomize prices
+  fp: 0 # Randomize items in every shop and their prices
+  ufp: 0 # Randomize items and prices in every shop, and include capacity upgrades in item pool
+  wfp: 0 # Randomize items and prices in every shop, and include potion shop inventory in shuffle
+  ufpw: 0 # Randomize items and prices in every shop, shuffle potion shop inventory, and include capacity upgrades
   # You can add more combos
+### End of Shop Section ###
 shuffle_prizes: # aka drops
   none: 0 # do not shuffle prize packs
   g: 50 # shuffle "general" price packs, as in enemy, tree pull, dig etc.
@@ -295,6 +318,7 @@ linked_options:
         hard: 1
         expert: 1
     percentage: 0 # Set this to the percentage chance you want enemizer
+### door rando only options ###
 door_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
   vanilla: 50 # Everything should be like in vanilla
   basic: 0 # Dungeons are shuffled within themselves
@@ -308,41 +332,20 @@ key_drop_shuffle: # Only available if the host uses the doors branch, it is igno
   on: 0 # Enables the small keys dropped by enemies or under pots, and the big key dropped by the Ball & Chain guard to be shuffled into the pool. This extends the number of checks to 249.
   off: 50
 experimental: # Only available if the host uses the doors branch, it is ignored otherwise
-  on: 0 # Enables experimental features. Currently, this is just the dungeon keys in chest counter.
+  on: 0 # Enables experimental features.
   off: 50
 debug: # Only available if the host uses the doors branch, it is ignored otherwise
   on: 0 # Enables debugging features. Currently, these are the Item collection counter. (overwrites total triforce pieces) and Castle Gate closed indicator.
   off: 50
+### end of door rando only options ###
 rom:
-  random_sprite_on_event: # An alternative to specifying randomonhit / randomonexit / etc... in sprite down below.
-    enabled: # If enabled, sprite down below is ignored completely, (although it may become the sprite pool)
-      on: 0
-      off: 1
-    on_hit: # Random sprite on hit. Being hit by things that cause 0 damage still counts.
-      on: 0
-      off: 1
-    on_enter: # Random sprite on underworld entry. Note that entering hobo counts.
-      on: 0
-      off: 1
-    on_exit: # Random sprite on underworld exit. Exiting hobo does not count.
-      on: 0
-      off: 1
-    on_slash: # Random sprite on sword slash. Note, it still counts if you attempt to slash while swordless.
-      on: 0
-      off: 1
-    on_item: # Random sprite on getting an item.  Anything that causes you to hold an item above your head counts.
-      on: 0
-      off: 1
-    on_bonk: # Random sprite on bonk.
-      on: 0
-      off: 1
   #sprite_pool: # When specified, limits the pool of sprites used for randomon-event to the specified pool.  Uncomment to use this.
   #  - link
   #  - pride link
   #  - penguin link
   #  - random  # You can specify random multiple times for however many potentially unique random sprites you want in your pool.
   sprite: # Enter the name of your preferred sprite and weight it appropriately
-    random: 0 # Choose a sprite at random
+    random: 0
     Link: 50 # To add other sprites: open the gui/Creator, go to adjust, select a sprite and write down the name the gui calls it
   disablemusic: # If "on", all in-game music will be disabled
     on: 0
@@ -371,8 +374,8 @@ rom:
     off: 0
   ow_palettes: # Change the colors of the overworld
     default: 50 # No changes
-    random: 0 # Shuffle the colors
-    blackout: 0 # Never use this
+    random: 0 # Shuffle the colors, with harmony in mind
+    blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
     classic: 0
@@ -381,8 +384,8 @@ rom:
     puke: 0
   uw_palettes: # Change the colors of caves and dungeons
     default: 50 # No changes
-    random: 0 # Shuffle the colors
-    blackout: 0 # Never use this
+    random: 0 # Shuffle the colors, with harmony in mind
+    blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
     classic: 0
@@ -391,8 +394,8 @@ rom:
     puke: 0
   hud_palettes: # Change the colors of the hud
     default: 50 # No changes
-    random: 0 # Shuffle the colors
-    blackout: 0 # Never use this
+    random: 0 # Shuffle the colors, with harmony in mind
+    blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
     classic: 0
@@ -401,8 +404,18 @@ rom:
     puke: 0
   sword_palettes: # Change the colors of swords
     default: 50 # No changes
-    random: 0 # Shuffle the colors
-    blackout: 0 # Never use this
+    random: 0 # Shuffle the colors, with harmony in mind
+    blackout: 0 # everything black / blind mode
+    grayscale: 0
+    negative: 0
+    classic: 0
+    dizzy: 0
+    sick: 0
+    puke: 0
+  shield_palettes: # Change the colors of shields
+    default: 50 # No changes
+    random: 0 # Shuffle the colors, with harmony in mind
+    blackout: 0 # everything black / blind mode
     grayscale: 0
     negative: 0
     classic: 0

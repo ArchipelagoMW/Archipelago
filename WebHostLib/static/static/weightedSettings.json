@@ -72,6 +72,26 @@
         }
       }
     },
+    "restrict_dungeon_item_on_boss": {
+      "keyString": "restrict_dungeon_item_on_boss",
+      "friendlyName": "Dungeon Item on Boss",
+      "description": "Defeating a dungeon bosses always awards a dungeon item.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "restrict_dungeon_item_on_boss.on",
+          "friendlyName": "On",
+          "description": "Dungeon bosses will always drop a dungeon item.",
+          "defaultValue": 0
+        },
+        "off": {
+          "keyString": "restrict_dungeon_item_on_boss.off",
+          "friendlyName": "Off",
+          "description": "Dungeon bosses may not drop a dungeon item.",
+          "defaultValue": 0
+        }
+      }
+    },
     "map_shuffle": {
       "keyString": "map_shuffle",
       "friendlyName": "Map Shuffle",
@@ -376,6 +396,12 @@
           "keyString": "goals.local_ganon_triforce_hunt",
           "friendlyName": "Local Triforce hunt /w Ganon",
           "description": "Same as Local Triforce Hunt, but you need to defeat Ganon in his lair instead of talking with Murahadala.",
+          "defaultValue": 0
+        },
+        "ice_rod_hunt": {
+          "keyString": "goals.ice_rod_hunt",
+          "friendlyName": "Ice Rod Hunt",
+          "description": "Look for the Ice Rod within your 215 available checks, then go kill Trinexx at Turtle rock.",
           "defaultValue": 0
         }
       }
@@ -944,6 +970,70 @@
         }
       }
     },
+    "misery_mire_medallion": {
+      "keyString": "misery_mire_medallion",
+      "friendlyName": "Misery Mire Medallion",
+      "description": "Determines the medallion required to access Misery Mire",
+      "inputType": "range",
+      "subOptions": {
+        "random": {
+          "keyString": "misery_mire_medallion.random",
+          "friendlyName": "Random",
+          "description": "Choose the medallion randomly.",
+          "defaultValue": 50
+        },
+        "quake": {
+          "keyString": "misery_mire_medallion.quake",
+          "friendlyName": "Quake",
+          "description": "Quake will be required ot enter Misery Mire.",
+          "defaultValue": 0
+        },
+        "bombos": {
+          "keyString": "misery_mire_medallion.bombos",
+          "friendlyName": "Bombos",
+          "description": "Bombos will be required ot enter Misery Mire.",
+          "defaultValue": 0
+        },
+        "ether": {
+          "keyString": "misery_mire_medallion.ether",
+          "friendlyName": "Ether",
+          "description": "Ether will be required ot enter Misery Mire.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "turtle_rock_medallion": {
+      "keyString": "turtle_rock_medallion",
+      "friendlyName": "Turtle Rock Medallion",
+      "description": "Determines the medallion required to access Turtle Rock",
+      "inputType": "range",
+      "subOptions": {
+        "random": {
+          "keyString": "turtle_rock_medallion.random",
+          "friendlyName": "Random",
+          "description": "Choose the medallion randomly.",
+          "defaultValue": 50
+        },
+        "quake": {
+          "keyString": "turtle_rock_medallion.quake",
+          "friendlyName": "Quake",
+          "description": "Quake will be required ot enter Turtle Rock.",
+          "defaultValue": 0
+        },
+        "bombos": {
+          "keyString": "turtle_rock_medallion.bombos",
+          "friendlyName": "Bombos",
+          "description": "Bombos will be required ot enter Turtle Rock.",
+          "defaultValue": 0
+        },
+        "ether": {
+          "keyString": "turtle_rock_medallion.ether",
+          "friendlyName": "Ether",
+          "description": "Ether will be required ot enter Turtle Rock.",
+          "defaultValue": 0
+        }
+      }
+    },
     "bush_shuffle": {
       "keyString": "bush_shuffle",
       "friendlyName": "Bush Shuffle",
@@ -1092,10 +1182,16 @@
           "description": "Shop contents are left unchanged.",
           "defaultValue": 50
         },
-        "i": {
-          "keyString": "shop_shuffle.i",
-          "friendlyName": "Inventory Shuffle",
-          "description": "Randomizes the inventories of shops.",
+        "g": {
+          "keyString": "shop_shuffle.g",
+          "friendlyName": "Pool Shuffle",
+          "description": "Shuffles the inventory of shops.",
+          "defaultValue": 0
+        },
+        "f": {
+          "keyString": "shop_shuffle.f",
+          "friendlyName": "Random Shuffle",
+          "description": "Randomly generate an inventory for each shop from a pool of non-progression items.",
           "defaultValue": 0
         },
         "p": {
@@ -1110,16 +1206,66 @@
           "description": "Shuffles capacity upgrades throughout the game world.",
           "defaultValue": 0
         },
-        "ip": {
-          "keyString": "shop_shuffle.ip",
-          "friendlyName": "Inventory & Prices",
+        "gp": {
+          "keyString": "shop_shuffle.gp",
+          "friendlyName": "Pool & Prices",
           "description": "Shuffles the inventory and randomizes the prices of items in shops.",
           "defaultValue": 0
         },
-        "uip": {
-          "keyString": "shop_shuffle.uip",
+        "fp": {
+          "keyString": "shop_shuffle.fp",
           "friendlyName": "Full Shuffle",
-          "description": "Shuffles the inventory and randomizes the prices of items in shops. Also distributes capacity upgrades throughout the world.",
+          "description": "Randomizes the inventory and prices of shops.",
+          "defaultValue": 0
+        },
+        "ufp": {
+          "keyString": "shop_shuffle.ufp",
+          "friendlyName": "Full Shuffle & Capacity",
+          "description": "Randomizes the inventory and prices in shops, and distributes capacity upgrades throughout the world.",
+          "defaultValue": 0
+        },
+        "wfp": {
+          "keyString": "shop_shuffle.wfp",
+          "friendlyName": "Full Shuffle & Potion Shop",
+          "description": "Randomizes the inventory prices of shops, and shuffles items in the potion shop.",
+          "defaultValue": 0
+        },
+        "ufpw": {
+          "keyString": "shop_shuffle.ufpw",
+          "friendlyName": "Randomize Everything",
+          "description": "Randomizes the inventory and prices in shops, distributes capacity upgrades throughout the world, and shuffles items in the potion shop.",
+          "defaultValue": 0
+        }
+      }
+    },
+    "shop_shuffle_slots": {
+      "keyString": "shop_shuffle_slots",
+      "friendlyName": "Pay (Rupees) to Win",
+      "description": "Move items from the general item pool into shops for purchase.",
+      "inputType": "range",
+      "subOptions": {
+        "0": {
+          "keyString": "shop_shuffle_slots.0",
+          "friendlyName": "Off",
+          "description": "No items are moved",
+          "defaultValue": 50
+        },
+        "1": {
+          "keyString": "shop_shuffle_slots.10",
+          "friendlyName": "Level 1",
+          "description": "10 Items are moved into shops.",
+          "defaultValue": 0
+        },
+        "2": {
+          "keyString": "shop_shuffle_slots.20",
+          "friendlyName": "Level 2",
+          "description": "20 Items are moved into shops.",
+          "defaultValue": 0
+        },
+        "3": {
+          "keyString": "shop_shuffle_slots.30",
+          "friendlyName": "Level 3",
+          "description": "30 Items are moved into shops.",
           "defaultValue": 0
         }
       }

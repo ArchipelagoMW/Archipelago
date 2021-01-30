@@ -1,7 +1,8 @@
 import collections
 import typing
 
-from BaseClasses import Region, Location, Entrance, RegionType, Shop, TakeAny, UpgradeShop, ShopType
+from BaseClasses import Region, Location, Entrance, RegionType
+
 
 
 def create_regions(world, player):
@@ -365,38 +366,6 @@ def mark_light_world_regions(world, player: int):
                 queue.append(exit.connected_region)
 
 
-def create_shops(world, player: int):
-    cls_mapping = {ShopType.UpgradeShop: UpgradeShop,
-                   ShopType.Shop: Shop,
-                   ShopType.TakeAny: TakeAny}
-    for region_name, (room_id, type, shopkeeper, custom, locked, inventory) in shop_table.items():
-        if world.mode[player] == 'inverted' and region_name == 'Dark Lake Hylia Shop':
-            locked = True
-            inventory = [('Blue Potion', 160), ('Blue Shield', 50), ('Bombs (10)', 50)]
-        region = world.get_region(region_name, player)
-        shop = cls_mapping[type](region, room_id, shopkeeper, custom, locked)
-        region.shop = shop
-        world.shops.append(shop)
-        for index, item in enumerate(inventory):
-            shop.add_inventory(index, *item)
-
-# (type, room_id, shopkeeper, custom, locked, [items])
-# item = (item, price, max=0, replacement=None, replacement_price=0)
-_basic_shop_defaults = [('Red Potion', 150), ('Small Heart', 10), ('Bombs (10)', 50)]
-_dark_world_shop_defaults = [('Red Potion', 150), ('Blue Shield', 50), ('Bombs (10)', 50)]
-shop_table = {
-    'Cave Shop (Dark Death Mountain)': (0x0112, ShopType.Shop, 0xC1, True, False, _basic_shop_defaults),
-    'Red Shield Shop': (0x0110, ShopType.Shop, 0xC1, True, False, [('Red Shield', 500), ('Bee', 10), ('Arrows (10)', 30)]),
-    'Dark Lake Hylia Shop': (0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
-    'Dark World Lumberjack Shop': (0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
-    'Village of Outcasts Shop': (0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
-    'Dark World Potion Shop': (0x010F, ShopType.Shop, 0xC1, True, False, _dark_world_shop_defaults),
-    'Light World Death Mountain Shop': (0x00FF, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
-    'Kakariko Shop': (0x011F, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
-    'Cave Shop (Lake Hylia)': (0x0112, ShopType.Shop, 0xA0, True, False, _basic_shop_defaults),
-    'Potion Shop': (0x0109, ShopType.Shop, 0xFF, False, True, [('Red Potion', 120), ('Green Potion', 60), ('Blue Potion', 160)]),
-    'Capacity Upgrade': (0x0115, ShopType.UpgradeShop, 0x04, True, True, [('Bomb Upgrade (+5)', 100, 7), ('Arrow Upgrade (+5)', 100, 7)])
-}
 
 old_location_address_to_new_location_address = {
     0x2eb18: 0x18001b,   # Bottle Merchant
@@ -703,10 +672,13 @@ location_table: typing.Dict[str,
      'Turtle Rock - Prize': (
          [0x120A7, 0x53F24, 0x53F25, 0x18005C, 0x180079, 0xC708], None, True, 'Turtle Rock')}
 
+from Shops import shop_table_by_location_id, shop_table_by_location
 lookup_id_to_name = {data[0]: name for name, data in location_table.items() if type(data[0]) == int}
 lookup_id_to_name = {**lookup_id_to_name, **{data[1]: name for name, data in key_drop_data.items()}, -1: "cheat console"}
+lookup_id_to_name.update(shop_table_by_location_id)
 lookup_name_to_id = {name: data[0] for name, data in location_table.items() if type(data[0]) == int}
 lookup_name_to_id = {**lookup_name_to_id, **{name: data[1] for name, data in key_drop_data.items()}, "cheat console": -1}
+lookup_name_to_id.update(shop_table_by_location)
 
 lookup_vanilla_location_to_entrance = {1572883: 'Kings Grave Inner Rocks', 191256: 'Kings Grave Inner Rocks',
                                        1573194: 'Kings Grave Inner Rocks', 1573189: 'Kings Grave Inner Rocks',
@@ -832,7 +804,18 @@ lookup_vanilla_location_to_entrance = {1572883: 'Kings Grave Inner Rocks', 19125
                                        0x140064: 'Misery Mire',
                                        0x140058: 'Turtle Rock', 0x140007: 'Dark Death Mountain Ledge (West)',
                                        0x140040: 'Ganons Tower', 0x140043: 'Ganons Tower',
-                                       0x14003a: 'Ganons Tower', 0x14001f: 'Ganons Tower'}
+                                       0x14003a: 'Ganons Tower', 0x14001f: 'Ganons Tower',
+                                       0x400000: 'Cave Shop (Dark Death Mountain)', 0x400001: 'Cave Shop (Dark Death Mountain)', 0x400002: 'Cave Shop (Dark Death Mountain)',
+                                       0x400003: 'Red Shield Shop', 0x400004: 'Red Shield Shop', 0x400005: 'Red Shield Shop',
+                                       0x400006: 'Dark Lake Hylia Shop', 0x400007: 'Dark Lake Hylia Shop', 0x400008: 'Dark Lake Hylia Shop',
+                                       0x400009: 'Dark World Lumberjack Shop', 0x40000a: 'Dark World Lumberjack Shop', 0x40000b: 'Dark World Lumberjack Shop',
+                                       0x40000c: 'Village of Outcasts Shop', 0x40000d: 'Village of Outcasts Shop', 0x40000e: 'Village of Outcasts Shop',
+                                       0x40000f: 'Dark World Potion Shop', 0x400010: 'Dark World Potion Shop', 0x400011: 'Dark World Potion Shop',
+                                       0x400012: 'Light World Death Mountain Shop', 0x400013: 'Light World Death Mountain Shop', 0x400014: 'Light World Death Mountain Shop',
+                                       0x400015: 'Kakariko Shop', 0x400016: 'Kakariko Shop', 0x400017: 'Kakariko Shop',
+                                       0x400018: 'Cave Shop (Lake Hylia)', 0x400019: 'Cave Shop (Lake Hylia)', 0x40001a: 'Cave Shop (Lake Hylia)',
+                                       0x40001b: 'Potion Shop', 0x40001c: 'Potion Shop', 0x40001d: 'Potion Shop',
+                                       0x40001e: 'Capacity Upgrade', 0x40001f: 'Capacity Upgrade', 0x400020: 'Capacity Upgrade'}
 
 lookup_prizes = {location for location in location_table if location.endswith(" - Prize")}
 lookup_boss_drops = {location for location in location_table if location.endswith(" - Boss")}

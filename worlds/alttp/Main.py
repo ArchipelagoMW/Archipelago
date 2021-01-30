@@ -11,7 +11,7 @@ import pickle
 
 from BaseClasses import MultiWorld, CollectionState, Item, Region, Location
 from worlds.alttp.Items import ItemFactory, item_table, item_name_groups
-from worlds.alttp.Regions import create_regions, create_shops, mark_light_world_regions, \
+from worlds.alttp.Regions import create_regions, mark_light_world_regions, \
     lookup_vanilla_location_to_entrance
 from worlds.alttp.InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from worlds.alttp.EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
@@ -84,6 +84,7 @@ def main(args, seed=None):
     world.triforce_pieces_available = args.triforce_pieces_available.copy()
     world.triforce_pieces_required = args.triforce_pieces_required.copy()
     world.shop_shuffle = args.shop_shuffle.copy()
+    world.shop_shuffle_slots = args.shop_shuffle_slots.copy()
     world.progression_balancing = {player: not balance for player, balance in args.skip_progression_balancing.items()}
     world.shuffle_prizes = args.shuffle_prizes.copy()
     world.sprite_pool = args.sprite_pool.copy()
@@ -110,6 +111,14 @@ def main(args, seed=None):
 
     for player in range(1, world.players + 1):
         world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
+
+        if world.open_pyramid[player] == 'goal':
+            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
+        elif world.open_pyramid[player] == 'auto':
+            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'} and \
+                                         (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull'} or not world.shuffle_ganon)
+        else:
+            world.open_pyramid[player] = {'on': True, 'off': False, 'yes': True, 'no': False}.get(world.open_pyramid[player], world.open_pyramid[player])
 
         for tok in filter(None, args.startinventory[player].split(',')):
             item = ItemFactory(tok.strip(), player)
@@ -179,13 +188,13 @@ def main(args, seed=None):
     for player in range(1, world.players + 1):
         set_rules(world, player)
 
-    logger.info('Placing Dungeon Prizes.')
-
-    fill_prizes(world)
-
     logger.info("Running Item Plando")
 
     distribute_planned(world)
+
+    logger.info('Placing Dungeon Prizes.')
+
+    fill_prizes(world)
 
     logger.info('Placing Dungeon Items.')
 
@@ -210,7 +219,13 @@ def main(args, seed=None):
     if world.players > 1:
         balance_multiworld_progression(world)
 
+    logger.info("Filling Shop Slots")
+
+    ShopSlotFill(world)
+
     logger.info('Patching ROM.')
+
+
 
     outfilebase = 'AP_%s' % (args.outputname if args.outputname else world.seed)
 
@@ -227,7 +242,7 @@ def main(args, seed=None):
         patch_rom(world, rom, player, team, use_enemizer)
 
         if use_enemizer:
-            patch_enemizer(world, player, rom, args.enemizercli)
+            patch_enemizer(world, team, player, rom, args.enemizercli)
 
         if args.race:
             patch_race_rom(rom, world, player)
@@ -245,7 +260,6 @@ def main(args, seed=None):
         apply_rom_settings(rom, args.heartbeep[player], args.heartcolor[player], args.quickswap[player],
                            args.fastmenu[player], args.disablemusic[player], args.sprite[player],
                            palettes_options, world, player, True)
-
 
         mcsb_name = ''
         if all([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player],
@@ -282,7 +296,7 @@ def main(args, seed=None):
           "progressive": world.progressive,                                # A
           "hints": 'True' if world.hints[player] else 'False'              # B
         }
-        #                  0  1  2  3  4 5  6  7 8 9 A B 
+        #                  0  1  2  3  4 5  6  7 8 9 A B
         outfilesuffix = ('_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (
           #  0          1      2      3    4     5    6      7     8        9         A     B           C
           # _noglitches_normal-normal-open-ganon-ohko_simple-balanced-keysanity-retro-prog_random-nohints
@@ -313,7 +327,7 @@ def main(args, seed=None):
 
     pool = concurrent.futures.ThreadPoolExecutor()
     multidata_task = None
-    check_beatability_task = pool.submit(world.can_beat_game)
+    check_accessibility_task = pool.submit(world.fulfills_accessibility)
     if not args.suppress_rom:
 
         rom_futures = []
@@ -330,13 +344,14 @@ def main(args, seed=None):
                 return get_entrance_to_region(entrance.parent_region)
 
         # collect ER hint info
-        er_hint_data = {player: {} for player in range(1, world.players + 1) if world.shuffle[player] != "vanilla"}
+        er_hint_data = {player: {} for player in range(1, world.players + 1) if world.shuffle[player] != "vanilla" or world.retro[player]}
         from worlds.alttp.Regions import RegionType
         for region in world.regions:
             if region.player in er_hint_data and region.locations:
                 main_entrance = get_entrance_to_region(region)
                 for location in region.locations:
                     if type(location.address) == int:  # skips events and crystals
+                        if location.address >= SHOP_ID_START + 33:  continue
                         if lookup_vanilla_location_to_entrance[location.address] != main_entrance.name:
                             er_hint_data[region.player][location.address] = main_entrance.name
 
@@ -363,10 +378,29 @@ def main(args, seed=None):
                 checks_in_area[location.player]["Dark World"].append(location.address)
             checks_in_area[location.player]["Total"] += 1
 
+        oldmancaves = []
+        takeanyregions = ["Old Man Sword Cave", "Take-Any #1", "Take-Any #2", "Take-Any #3", "Take-Any #4"]
+        for index, take_any in enumerate(takeanyregions):
+            for region in [world.get_region(take_any, player) for player in range(1, world.players + 1) if world.retro[player]]:
+                item = ItemFactory(region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'], region.player)
+                player = region.player
+                location_id = SHOP_ID_START + total_shop_slots + index
+
+                main_entrance = get_entrance_to_region(region)
+                if main_entrance.parent_region.type == RegionType.LightWorld:
+                    checks_in_area[player]["Light World"].append(location_id)
+                else:
+                    checks_in_area[player]["Dark World"].append(location_id)
+                checks_in_area[player]["Total"] += 1
+
+                er_hint_data[player][location_id] = main_entrance.name
+                oldmancaves.append(((location_id, player), (item.code, player)))
 
         precollected_items = [[] for player in range(world.players)]
         for item in world.precollected_items:
             precollected_items[item.player - 1].append(item.code)
+
+        FillDisabledShopSlots(world)
 
         def write_multidata(roms):
             import base64
@@ -398,8 +432,11 @@ def main(args, seed=None):
                 f.write(multidata)
 
         multidata_task = pool.submit(write_multidata, rom_futures)
-    if not check_beatability_task.result():
-        raise Exception("Game appears unbeatable. Aborting.")
+    if not check_accessibility_task.result():
+        if not world.can_beat_game():
+            raise Exception("Game appears is unbeatable. Aborting.")
+        else:
+            logger.warning("Location Accessibility requirements not fulfilled.")
     if not args.skip_playthrough:
         logger.info('Calculating playthrough.')
         create_playthrough(world)
@@ -411,6 +448,7 @@ def main(args, seed=None):
 
     logger.info('Done. Enjoy. Total Time: %s', time.perf_counter() - start)
     return world
+
 
 
 def copy_world(world):
@@ -453,6 +491,7 @@ def copy_world(world):
     ret.shufflepots = world.shufflepots.copy()
     ret.shuffle_prizes = world.shuffle_prizes.copy()
     ret.shop_shuffle =  world.shop_shuffle.copy()
+    ret.shop_shuffle_slots = world.shop_shuffle_slots.copy()
     ret.dark_room_logic = world.dark_room_logic.copy()
     ret.restrict_dungeon_item_on_boss = world.restrict_dungeon_item_on_boss.copy()
 
@@ -487,7 +526,7 @@ def copy_world(world):
     # fill locations
     for location in world.get_locations():
         if location.item is not None:
-            item = Item(location.item.name, location.item.advancement, location.item.priority, location.item.type, player = location.item.player)
+            item = Item(location.item.name, location.item.advancement, location.item.type, player = location.item.player)
             ret.get_location(location.name, location.player).item = item
             item.location = ret.get_location(location.name, location.player)
             item.world = ret
@@ -498,7 +537,7 @@ def copy_world(world):
 
     # copy remaining itempool. No item in itempool should have an assigned location
     for item in world.itempool:
-        ret.itempool.append(Item(item.name, item.advancement, item.priority, item.type, player = item.player))
+        ret.itempool.append(Item(item.name, item.advancement, item.type, player = item.player))
 
     for item in world.precollected_items:
         ret.push_precollected(ItemFactory(item.name, item.player))
@@ -525,7 +564,7 @@ def copy_dynamic_regions_and_locations(world, ret):
 
         if region.shop:
             new_reg.shop = region.shop.__class__(new_reg, region.shop.room_id, region.shop.shopkeeper_config,
-                                                 region.shop.custom, region.shop.locked)
+                                                 region.shop.custom, region.shop.locked, region.shop.sram_offset)
             ret.shops.append(new_reg.shop)
 
     for location in world.dynamic_locations:

@@ -9,8 +9,7 @@ from typing import *
 import secrets
 import random
 
-from worlds.alttp.EntranceShuffle import door_addresses, indirect_connections
-from Utils import int16_as_bytes
+from worlds.alttp.EntranceShuffle import indirect_connections
 from worlds.alttp.Items import item_name_groups
 from worlds.generic import PlandoItem, PlandoConnection
 
@@ -127,6 +126,7 @@ class MultiWorld():
             set_player_attr('triforce_pieces_available', 30)
             set_player_attr('triforce_pieces_required', 20)
             set_player_attr('shop_shuffle', 'off')
+            set_player_attr('shop_shuffle_slots', 0)
             set_player_attr('shuffle_prizes', "g")
             set_player_attr('sprite_pool', [])
             set_player_attr('dark_room_logic', "lamp")
@@ -367,7 +367,7 @@ class MultiWorld():
         else:
             return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
 
-    def can_beat_game(self, starting_state=None):
+    def can_beat_game(self, starting_state : Optional[CollectionState]=None):
         if starting_state:
             if self.has_beaten_game(starting_state):
                 return True
@@ -398,6 +398,90 @@ class MultiWorld():
                 return True
 
         return False
+
+    def get_spheres(self):
+        state = CollectionState(self)
+
+        locations = {location for location in self.get_locations()}
+
+        while locations:
+            sphere = set()
+
+            for location in locations:
+                if location.can_reach(state):
+                    sphere.add(location)
+            sphere_list = list(sphere)
+            sphere_list.sort(key=lambda location: location.name)
+            self.random.shuffle(sphere_list)
+            yield sphere_list
+            if not sphere:
+                if locations:
+                    yield locations  # unreachable locations
+                break
+
+            for location in sphere:
+                state.collect(location.item, True, location)
+            locations -= sphere
+
+
+
+    def fulfills_accessibility(self, state: Optional[CollectionState] = None):
+        """Check if accessibility rules are fulfilled with current or supplied state."""
+        if not state:
+            state = CollectionState(self)
+        players = {"none" : set(),
+                   "items": set(),
+                   "locations": set()}
+        for player, access in self.accessibility.items():
+            players[access].add(player)
+
+        beatable_fulfilled = False
+
+        def location_conditition(location : Location):
+            """Determine if this location has to be accessible, location is already filtered by location_relevant"""
+            if location.player in players["none"]:
+                return False
+            return True
+
+        def location_relevant(location : Location):
+            """Determine if this location is relevant to sweep."""
+            if location.player in players["locations"] or location.event or \
+                    (location.item and location.item.advancement):
+                return True
+            return False
+
+        def all_done():
+            """Check if all access rules are fulfilled"""
+            if beatable_fulfilled:
+                if any(location_conditition(location) for location in locations):
+                    return False  # still locations required to be collected
+                return True
+
+        locations = {location for location in self.get_locations() if location_relevant(location)}
+
+        while locations:
+            sphere = set()
+            for location in locations:
+                if location.can_reach(state):
+                    sphere.add(location)
+
+            if not sphere:
+                # ran out of places and did not finish yet, quit
+                logging.debug(f"Could not access required locations.")
+                return False
+
+            for location in sphere:
+                locations.remove(location)
+                state.collect(location.item, True, location)
+
+            if self.has_beaten_game(state):
+                beatable_fulfilled = True
+
+            if all_done():
+                return True
+
+        return False
+
 
 class CollectionState(object):
 
@@ -932,7 +1016,7 @@ class Dungeon(object):
     def __str__(self):
         return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
 
-class Boss(object):
+class Boss():
     def __init__(self, name, enemizer_name, defeat_rule, player: int):
         self.name = name
         self.enemizer_name = enemizer_name
@@ -942,7 +1026,13 @@ class Boss(object):
     def can_defeat(self, state) -> bool:
         return self.defeat_rule(state, self.player)
 
-class Location(object):
+
+class Location():
+    shop_slot: bool = False
+    shop_slot_disabled: bool = False
+    event: bool = False
+    locked: bool = False
+
     def __init__(self, player: int, name: str = '', address=None, crystal: bool = False,
                  hint_text: Optional[str] = None, parent=None,
                  player_address=None):
@@ -955,8 +1045,6 @@ class Location(object):
         self.spot_type = 'Location'
         self.hint_text: str = hint_text if hint_text else name
         self.recursion_count = 0
-        self.event = False
-        self.locked = False
         self.always_allow = lambda item, state: False
         self.access_rule = lambda state: True
         self.item_rule = lambda item: True
@@ -981,13 +1069,17 @@ class Location(object):
     def __hash__(self):
         return hash((self.name, self.player))
 
+    def __lt__(self, other):
+        return (self.player, self.name) < (other.player, other.name)
+
 
 class Item(object):
+    location: Optional[Location] = None
+    world: Optional[World] = None
 
-    def __init__(self, name='', advancement=False, priority=False, type=None, code=None, pedestal_hint=None, pedestal_credit=None, sickkid_credit=None, zora_credit=None, witch_credit=None, fluteboy_credit=None, hint_text=None, player=None):
+    def __init__(self, name='', advancement=False, type=None, code=None, pedestal_hint=None, pedestal_credit=None, sickkid_credit=None, zora_credit=None, witch_credit=None, fluteboy_credit=None, hint_text=None, player=None):
         self.name = name
         self.advancement = advancement
-        self.priority = priority
         self.type = type
         self.pedestal_hint_text = pedestal_hint
         self.pedestal_credit_text = pedestal_credit
@@ -997,8 +1089,6 @@ class Item(object):
         self.fluteboy_credit_text = fluteboy_credit
         self.hint_text = hint_text
         self.code = code
-        self.location = None
-        self.world = None
         self.player = player
 
     def __eq__(self, other):
@@ -1037,105 +1127,6 @@ class Item(object):
 # have 6 address that need to be filled
 class Crystal(Item):
     pass
-
-@unique
-class ShopType(Enum):
-    Shop = 0
-    TakeAny = 1
-    UpgradeShop = 2
-
-class Shop():
-    slots = 3  # slot count is not dynamic in asm, however inventory can have None as empty slots
-    blacklist = set()  # items that don't work, todo: actually check against this
-    type = ShopType.Shop
-
-    def __init__(self, region: Region, room_id: int, shopkeeper_config: int, custom: bool, locked: bool):
-        self.region = region
-        self.room_id = room_id
-        self.inventory: List[Union[None, dict]] = [None] * self.slots
-        self.shopkeeper_config = shopkeeper_config
-        self.custom = custom
-        self.locked = locked
-
-    @property
-    def item_count(self) -> int:
-        for x in range(self.slots - 1, -1, -1):  # last x is 0
-            if self.inventory[x]:
-                return x + 1
-        return 0
-
-    def get_bytes(self) -> List[int]:
-        # [id][roomID-low][roomID-high][doorID][zero][shop_config][shopkeeper_config][sram_index]
-        entrances = self.region.entrances
-        config = self.item_count
-        if len(entrances) == 1 and entrances[0].name in door_addresses:
-            door_id = door_addresses[entrances[0].name][0] + 1
-        else:
-            door_id = 0
-            config |= 0x40  # ignore door id
-        if self.type == ShopType.TakeAny:
-            config |= 0x80
-        elif self.type == ShopType.UpgradeShop:
-            config |= 0x10  # Alt. VRAM
-        return [0x00]+int16_as_bytes(self.room_id)+[door_id, 0x00, config, self.shopkeeper_config, 0x00]
-
-    def has_unlimited(self, item: str) -> bool:
-        for inv in self.inventory:
-            if inv is None:
-                continue
-            if inv['item'] == item:
-                return True
-            if inv['max'] != 0 and inv['replacement'] is not None and inv['replacement'] == item:
-                return True
-        return False
-
-    def has(self, item: str) -> bool:
-        for inv in self.inventory:
-            if inv is None:
-                continue
-            if inv['item'] == item:
-                return True
-            if inv['max'] != 0 and inv['replacement'] == item:
-                return True
-        return False
-
-    def clear_inventory(self):
-        self.inventory = [None] * self.slots
-
-    def add_inventory(self, slot: int, item: str, price: int, max: int = 0,
-                      replacement: Optional[str] = None, replacement_price: int = 0, create_location: bool = False):
-        self.inventory[slot] = {
-            'item': item,
-            'price': price,
-            'max': max,
-            'replacement': replacement,
-            'replacement_price': replacement_price,
-            'create_location': create_location
-        }
-
-    def push_inventory(self, slot: int, item: str, price: int, max: int = 1):
-        if not self.inventory[slot]:
-            raise ValueError("Inventory can't be pushed back if it doesn't exist")
-
-        self.inventory[slot] = {
-            'item': item,
-            'price': price,
-            'max': max,
-            'replacement': self.inventory[slot]["item"],
-            'replacement_price': self.inventory[slot]["price"],
-            'create_location': self.inventory[slot]["create_location"]
-        }
-
-
-class TakeAny(Shop):
-    type = ShopType.TakeAny
-
-
-class UpgradeShop(Shop):
-    type = ShopType.UpgradeShop
-    # Potions break due to VRAM flags set in UpgradeShop.
-    # Didn't check for more things breaking as not much else can be shuffled here currently
-    blacklist = item_name_groups["Potions"]
 
 
 class Spoiler(object):
@@ -1199,6 +1190,7 @@ class Spoiler(object):
             listed_locations.update(other_locations)
 
         self.shops = []
+        from Shops import ShopType
         for shop in self.world.shops:
             if not shop.custom:
                 continue
@@ -1209,6 +1201,10 @@ class Spoiler(object):
                 if item is None:
                     continue
                 shopdata['item_{}'.format(index)] = "{} — {}".format(item['item'], item['price']) if item['price'] else item['item']
+
+                if item['player'] > 0:
+                    shopdata['item_{}'.format(index)] = shopdata['item_{}'.format(index)].replace('—', '(Player {}) — '.format(item['player']))
+
                 if item['max'] == 0:
                     continue
                 shopdata['item_{}'.format(index)] += " x {}".format(item['max'])
@@ -1282,6 +1278,7 @@ class Spoiler(object):
                          'triforce_pieces_available': self.world.triforce_pieces_available,
                          'triforce_pieces_required': self.world.triforce_pieces_required,
                          'shop_shuffle': self.world.shop_shuffle,
+                         'shop_shuffle_slots': self.world.shop_shuffle_slots,
                          'shuffle_prizes': self.world.shuffle_prizes,
                          'sprite_pool': self.world.sprite_pool,
                          'restrict_dungeon_item_on_boss': self.world.restrict_dungeon_item_on_boss
@@ -1367,6 +1364,13 @@ class Spoiler(object):
                               bool_to_text("p" in self.metadata["shop_shuffle"][player]))
                 outfile.write('Shop upgrade shuffle:            %s\n' %
                               bool_to_text("u" in self.metadata["shop_shuffle"][player]))
+                outfile.write('New Shop inventory:              %s\n' %
+                              bool_to_text("g" in self.metadata["shop_shuffle"][player] or
+                                           "f" in self.metadata["shop_shuffle"][player]))
+                outfile.write('Custom Potion Shop:              %s\n' %
+                              bool_to_text("w" in self.metadata["shop_shuffle"][player]))
+                outfile.write('Shop Slots:                      %s\n' %
+                              self.metadata["shop_shuffle_slots"][player])
                 outfile.write('Boss shuffle:                    %s\n' % self.metadata['boss_shuffle'][player])
                 outfile.write(
                     'Enemy shuffle:                   %s\n' % bool_to_text(self.metadata['enemy_shuffle'][player]))
