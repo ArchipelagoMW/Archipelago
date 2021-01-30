@@ -1122,11 +1122,12 @@ class Location():
 
 
 class Item(object):
+    location: Optional[Location] = None
+    world: Optional[World] = None
 
-    def __init__(self, name='', advancement=False, priority=False, type=None, code=None, pedestal_hint=None, pedestal_credit=None, sickkid_credit=None, zora_credit=None, witch_credit=None, fluteboy_credit=None, hint_text=None, player=None):
+    def __init__(self, name='', advancement=False, type=None, code=None, pedestal_hint=None, pedestal_credit=None, sickkid_credit=None, zora_credit=None, witch_credit=None, fluteboy_credit=None, hint_text=None, player=None):
         self.name = name
         self.advancement = advancement
-        self.priority = priority
         self.type = type
         self.pedestal_hint_text = pedestal_hint
         self.pedestal_credit_text = pedestal_credit
@@ -1136,8 +1137,6 @@ class Item(object):
         self.fluteboy_credit_text = fluteboy_credit
         self.hint_text = hint_text
         self.code = code
-        self.location = None
-        self.world = None
         self.player = player
 
     def __eq__(self, other):

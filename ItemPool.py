@@ -394,7 +394,7 @@ def generate_itempool(world, player: int):
     progressionitems = []
     nonprogressionitems = []
     for item in items:
-        if item.advancement or item.priority or item.type:
+        if item.advancement or item.type:
             progressionitems.append(item)
         elif world.beemizer[player] and item.name in trap_replaceable:
             if world.random.random() < world.beemizer[item.player] * 0.25:

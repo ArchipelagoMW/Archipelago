@@ -77,21 +77,14 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
     # get items to distribute
     world.random.shuffle(world.itempool)
     progitempool = []
-    localprioitempool = {player: [] for player in range(1, world.players + 1)}
     localrestitempool = {player: [] for player in range(1, world.players + 1)}
-    prioitempool = []
     restitempool = []
 
     for item in world.itempool:
         if item.advancement:
             progitempool.append(item)
         elif item.name in world.local_items[item.player]:
-            if item.priority:
-                localprioitempool[item.player].append(item)
-            else:
-                localrestitempool[item.player].append(item)
-        elif item.priority:
-            prioitempool.append(item)
+            localrestitempool[item.player].append(item)
         else:
             restitempool.append(item)
 
@@ -141,24 +134,13 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
 
     fill_restrictive(world, world.state, fill_locations, progitempool)
 
-    if any(localprioitempool.values()) or \
-            any(localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
+    if any(localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
         local_locations = {player: [] for player in world.player_ids}
         for location in fill_locations:
             local_locations[location.player].append(location)
         for locations in local_locations.values():
             world.random.shuffle(locations)
 
-        for player, items in localprioitempool.items():  # items already shuffled
-            player_local_locations = local_locations[player]
-            for item_to_place in items:
-                if not player_local_locations:
-                    logging.warning(f"Ran out of local locations for player {player}, "
-                                    f"cannot place {item_to_place}.")
-                    break
-                spot_to_fill = player_local_locations.pop()
-                world.push_item(spot_to_fill, item_to_place, False)
-                fill_locations.remove(spot_to_fill)
         for player, items in localrestitempool.items():  # items already shuffled
             player_local_locations = local_locations[player]
             for item_to_place in items:
@@ -172,10 +154,8 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
 
     world.random.shuffle(fill_locations)
 
-    prioitempool, fill_locations = fast_fill(world, prioitempool, fill_locations)
-
     restitempool, fill_locations = fast_fill(world, restitempool, fill_locations)
-    unplaced = [item for item in progitempool + prioitempool + restitempool]
+    unplaced = [item for item in progitempool + restitempool]
     unfilled = [location.name for location in fill_locations]
 
     for location in fill_locations:
@@ -242,7 +222,7 @@ def flood_items(world):
         location_list = world.get_reachable_locations()
         world.random.shuffle(location_list)
         for location in location_list:
-            if location.item is not None and not location.item.advancement and not location.item.priority and not location.item.smallkey and not location.item.bigkey:
+            if location.item is not None and not location.item.advancement and not location.item.smallkey and not location.item.bigkey:
                 # safe to replace
                 replace_item = location.item
                 replace_item.location = None
