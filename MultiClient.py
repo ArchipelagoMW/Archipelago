@@ -996,7 +996,7 @@ async def process_server_cmd(ctx: Context, cmd, args):
         if ctx.requires_treasure_count is None:
             ctx.requires_treasure_count = (await snes_read(ctx, 0x180165, size=1))[0] >= 0x80
         if ctx.requires_treasure_count and ctx.treasure_count < args[0]:
-            logging.info('Team Triforce count is now '.format(args[0]))
+            logging.info('Team Triforce count is now {}'.format(args[0]))
             ctx.treasure_count = args[0]
             snes_buffered_write(ctx, WRAM_START + 0xF418, bytes(int16_as_bytes(ctx.treasure_count)))
             await snes_flush_writes(ctx)
