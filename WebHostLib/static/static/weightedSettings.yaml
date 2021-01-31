@@ -97,6 +97,11 @@ goals:
   ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
   local_ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
   ice_rod_hunt: 0 # You start with everything needed to 216 the seed. Find the Ice rod, then kill Trinexx at Turtle rock.
+pyramid_open:
+  goal: 50 # Opens the pyramid if the goal requires you to kill Ganon, unless the goal is Slow Ganon or All Dungeons
+  auto: 0 # Same as Goal, but also opens when any non-dungeon entrance shuffle is used
+  yes: 0 # Pyramid hole is always open. Ganon's vulnerable condition is still required before he can he hurt
+  no: 0 # Pyramid hole is always closed until you defeat Agahnim atop Ganon's Tower
 triforce_pieces_mode: #Determine how to calculate the extra available triforce pieces.
   extra: 0 # available = triforce_pieces_extra + triforce_pieces_required
   percentage: 0 # available = (triforce_pieces_percentage /100) * triforce_pieces_required
@@ -218,10 +223,10 @@ pot_shuffle:
 ### End of Enemizer Section ###
 beemizer: # Remove items from the global item pool and replace them with single bees and bee traps
   0: 50 # No bee traps are placed
-  1: 0 # 25% of the non-essential item pool is replaced with bee traps
-  2: 0 # 60% of the non-essential item pool is replaced with bee traps, of which 20% could be single bees
-  3: 0 # 100% of the non-essential item pool is replaced with bee traps, of which 50% could be single bees
-  4: 0 # 100% of the non-essential item pool is replaced with bee traps
+    1: 0 # 25% of rupees, bombs and arrows are replaced with bees, of which 60% are traps and 40% single bees
+    2: 0 # 50% of rupees, bombs and arrows are replaced with bees, of which 70% are traps and 30% single bees
+    3: 0 # 75% of rupees, bombs and arrows are replaced with bees, of which 80% are traps and 20% single bees
+    4: 0 # 100% of rupees, bombs and arrows are replaced with bees, of which 90% are traps and 10% single bees
 ### Shop Settings ###
 shop_shuffle_slots: # Maximum amount of shop slots to be filled with regular item pool items (such as Moon Pearl)
   0: 50
