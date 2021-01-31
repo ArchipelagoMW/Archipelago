@@ -592,8 +592,8 @@ class CommandMeta(type):
         commands = attrs["commands"] = {}
         for base in bases:
             commands.update(base.commands)
-        commands.update({name[5:].lower(): method for name, method in attrs.items() if
-                         name.startswith("_cmd_")})
+        commands.update({command_name[5:]: method for command_name, method in attrs.items() if
+                         command_name.startswith("_cmd_")})
         return super(CommandMeta, cls).__new__(cls, name, bases, attrs)
 
 

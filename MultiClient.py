@@ -43,7 +43,6 @@ def create_named_task(coro, *args, name=None):
     return asyncio.create_task(coro, *args, name=name)
 
 
-coloramaparser = HTMLtoColoramaParser()
 
 
 class Context():
@@ -100,6 +99,8 @@ class Context():
         self.found_items = found_items
         self.finished_game = False
         self.slow_mode = False
+
+        self.jsontotextparser = JSONtoTextParser(self)
 
     @property
     def endpoints(self):
@@ -957,8 +958,8 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
     elif cmd == 'Print':
         logger.info(args["text"])
 
-    elif cmd == 'PrintHTML':
-        logger.info(coloramaparser.get_colorama_text(args["text"]))
+    elif cmd == 'PrintJSON':
+        logger.info(ctx.jsontotextparser(args["data"]))
 
     elif cmd == 'HintPointUpdate':
         ctx.hint_points = args['points']
@@ -1411,7 +1412,6 @@ async def main():
                         help="Turn off emitting a webserver for the webbrowser based user interface.")
     args = parser.parse_args()
     logging.basicConfig(format='%(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
-
     if args.diff_file:
         import Patch
         logging.info("Patch file was supplied. Creating sfc rom..")
