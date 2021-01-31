@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '417f926edfb0f83cdaf74019a26c53e8'
+RANDOMIZERBASEHASH = '5fef983a09ae2fe83ea633a37dea224c'
 
 import io
 import json
@@ -797,8 +797,6 @@ def patch_rom(world, rom, player, team, enemized):
         return 0x53 + int(num), 0x79 + int(num)
 
     credits_total = 216
-    if world.goal[player] == 'icerodhunt':  # Impossible to get 216/216 with Ice rod hunt. Most possible is 215/216.
-        credits_total -= 1
     if world.retro[player]:  # Old man cave and Take any caves will count towards collection rate.
         credits_total += 5
     if world.shop_shuffle_slots[player]:  # Potion shop only counts towards collection rate if included in the shuffle.
