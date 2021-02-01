@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '5fef983a09ae2fe83ea633a37dea224c'
+RANDOMIZERBASEHASH = '1d23f2fd409c9b71bc741dadc0f87344'
 
 import io
 import json
@@ -110,7 +110,6 @@ class LocalRom(object):
 
     @staticmethod
     def verify(buffer, expected: str = RANDOMIZERBASEHASH) -> bool:
-        return True
         buffermd5 = hashlib.md5()
         buffermd5.update(buffer)
         return expected == buffermd5.hexdigest()
@@ -840,8 +839,7 @@ def patch_rom(world, rom, player, team, enemized):
         rom.write_byte(0x180032, 0x01)  # open mode
     if world.mode[player] == 'inverted':
         set_inverted_mode(world, player, rom)
-        rom.write_byte(0x18004A, 0x01)  # inverted mode
-        rom.write_byte(0xDC21D, 0x6B)  # inverted mode
+        rom.write_byte(0xDC21D, 0x6B)  # inverted mode (skip weathervane overlay)
         rom.write_bytes(0x48DB3, [0xF8, 0x01])  # inverted mode (bird X)
         rom.write_byte(0x48D5E, 0x01)  # inverted mode (rock X)
         rom.write_bytes(0x48CC1+36, bytes([0xF8]*12))
@@ -1955,6 +1953,9 @@ def write_strings(rom, world, player, team):
     if world.shuffle[player] in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
         tt['kakariko_flophouse_man_no_flippers'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
         tt['kakariko_flophouse_man'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
+
+    if world.mode[player] == 'inverted':
+        tt['sign_village_of_outcasts'] = 'attention\nferal ducks sighted\nhiding in statues\n\nflute players beware\n'
 
     def hint_text(dest, ped_hint=False):
         if not dest:

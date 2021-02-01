@@ -101,4 +101,4 @@ multi_mystery_options:
   race: 0
   # List of options that can be plando'd. Can be combined, for example "bosses, items"
   # Available options: bosses, items, texts, connections
-  plando_options: "bosses, items"
+  plando_options: "bosses"
