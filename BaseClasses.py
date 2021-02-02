@@ -751,10 +751,6 @@ class CollectionState(object):
     def has_fire_source(self, player: int) -> bool:
         return self.has('Fire Rod', player) or self.has('Lamp', player)
 
-    def can_flute(self, player: int) -> bool:
-        lw = self.world.get_region('Light World', player)
-        return self.has('Flute', player) and lw.can_reach(self) and self.is_not_bunny(lw, player)
-
     def can_melt_things(self, player: int) -> bool:
         return self.has('Fire Rod', player) or \
                (self.has('Bombos', player) and

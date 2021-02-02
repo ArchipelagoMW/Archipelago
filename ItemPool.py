@@ -297,24 +297,22 @@ def generate_itempool(world, player: int):
 
     world.get_location('Ganon', player).event = True
     world.get_location('Ganon', player).locked = True
-    world.push_item(world.get_location('Agahnim 1', player), ItemFactory('Beat Agahnim 1', player), False)
-    world.get_location('Agahnim 1', player).event = True
-    world.get_location('Agahnim 1', player).locked = True
-    world.push_item(world.get_location('Agahnim 2', player), ItemFactory('Beat Agahnim 2', player), False)
-    world.get_location('Agahnim 2', player).event = True
-    world.get_location('Agahnim 2', player).locked = True
-    world.push_item(world.get_location('Dark Blacksmith Ruins', player), ItemFactory('Pick Up Purple Chest', player), False)
-    world.get_location('Dark Blacksmith Ruins', player).event = True
-    world.get_location('Dark Blacksmith Ruins', player).locked = True
-    world.push_item(world.get_location('Frog', player), ItemFactory('Get Frog', player), False)
-    world.get_location('Frog', player).event = True
-    world.get_location('Frog', player).locked = True
-    world.push_item(world.get_location('Missing Smith', player), ItemFactory('Return Smith', player), False)
-    world.get_location('Missing Smith', player).event = True
-    world.get_location('Missing Smith', player).locked = True
-    world.push_item(world.get_location('Floodgate', player), ItemFactory('Open Floodgate', player), False)
-    world.get_location('Floodgate', player).event = True
-    world.get_location('Floodgate', player).locked = True
+    event_pairs = [
+        ('Agahnim 1', 'Beat Agahnim 1'),
+        ('Agahnim 2', 'Beat Agahnim 2'),
+        ('Dark Blacksmith Ruins', 'Pick Up Purple Chest'),
+        ('Frog', 'Get Frog'),
+        ('Missing Smith', 'Return Smith'),
+        ('Floodgate', 'Open Floodgate'),
+        ('Agahnim 1', 'Beat Agahnim 1'),
+        ('Flute Activation Spot', 'Activated Flute')
+    ]
+    for location_name, event_name in event_pairs:
+        location = world.get_location(location_name, player)
+        event = ItemFactory(event_name, player)
+        world.push_item(location, event, False)
+        location.event = location.locked = True
+
 
     # set up item pool
     additional_triforce_pieces = 0

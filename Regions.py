@@ -9,7 +9,8 @@ def create_regions(world, player):
 
     world.regions += [
         create_lw_region(player, 'Menu', None, ['Links House S&Q', 'Sanctuary S&Q', 'Old Man S&Q']),
-        create_lw_region(player, 'Light World', ['Mushroom', 'Bottle Merchant', 'Flute Spot', 'Sunken Treasure', 'Purple Chest'],
+        create_lw_region(player, 'Light World', ['Mushroom', 'Bottle Merchant', 'Flute Spot', 'Sunken Treasure',
+                                                 'Purple Chest', 'Flute Activation Spot'],
                          ["Blinds Hideout", "Hyrule Castle Secret Entrance Drop", 'Zoras River', 'Kings Grave Outer Rocks', 'Dam',
                           'Links House', 'Tavern North', 'Chicken House', 'Aginahs Cave', 'Sahasrahlas Hut', 'Kakariko Well Drop', 'Kakariko Well Cave',
                           'Blacksmiths Hut', 'Bat Cave Drop Ledge', 'Bat Cave Cave', 'Sick Kids House', 'Hobo Bridge', 'Lost Woods Hideout Drop', 'Lost Woods Hideout Stump',
@@ -653,6 +654,7 @@ location_table: typing.Dict[str,
      'Frog': (None, None, False, None),
      'Missing Smith': (None, None, False, None),
      'Dark Blacksmith Ruins': (None, None, False, None),
+     'Flute Activation Spot': (None, None, False, None),
      'Eastern Palace - Prize': ([0x1209D, 0x53EF8, 0x53EF9, 0x180052, 0x18007C, 0xC6FE], None, True, 'Eastern Palace'),
      'Desert Palace - Prize': ([0x1209E, 0x53F1C, 0x53F1D, 0x180053, 0x180078, 0xC6FF], None, True, 'Desert Palace'),
      'Tower of Hera - Prize': (

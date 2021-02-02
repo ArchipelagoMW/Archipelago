@@ -191,7 +191,8 @@ class TestInvertedLightWorld(TestInverted):
             ["Bombos Tablet", False, []],
             ["Bombos Tablet", False, ['Progressive Sword'], ['Progressive Sword']],
             ["Bombos Tablet", False, [], ['Book of Mudora']],
-            ["Bombos Tablet", False, [], ['Moon Pearl', 'Beat Agahnim 1']],
+            # Flute to Mire, take portal
+            ["Bombos Tablet", True, ['Flute', 'Book of Mudora', 'Progressive Glove', 'Progressive Glove', 'Progressive Sword', 'Progressive Sword']],
             ["Bombos Tablet", True, ['Beat Agahnim 1', 'Book of Mudora', 'Progressive Sword', 'Progressive Sword']],
             ["Bombos Tablet", True, ['Moon Pearl', 'Book of Mudora', 'Progressive Glove', 'Progressive Glove', 'Progressive Sword', 'Progressive Sword']],
             ["Bombos Tablet", True, ['Moon Pearl', 'Book of Mudora', 'Progressive Glove', 'Hammer', 'Progressive Sword', 'Progressive Sword']],

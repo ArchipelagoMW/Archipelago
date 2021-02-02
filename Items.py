@@ -184,6 +184,8 @@ item_table = {'Bow': (True, None, 0x0B, 'You have\nchosen the\narcher class.', '
               'Return Smith': (True, 'Event', None, None, None, None, None, None, None, None),
               'Pick Up Purple Chest': (True, 'Event', None, None, None, None, None, None, None, None),
               'Open Floodgate': (True, 'Event', None, None, None, None, None, None, None, None),
+              # should probably be converted to an actual item, for purposes for startinventory and such
+              'Activated Flute': (True, 'Event', None, None, None, None, None, None, None, None)
               }
 
 lookup_id_to_name = {data[2]: name for name, data in item_table.items()}
