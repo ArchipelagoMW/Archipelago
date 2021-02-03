@@ -669,7 +669,7 @@ def create_playthrough(world):
     while required_locations:
         state.sweep_for_events(key_only=True)
 
-        sphere = list(filter(state.can_reach, required_locations))
+        sphere = set(filter(state.can_reach, required_locations))
 
         for location in sphere:
             required_locations.remove(location)
@@ -705,6 +705,7 @@ def create_playthrough(world):
                     old_world.spoiler.paths[str(world.get_region('Inverted Big Bomb Shop', player))] = get_path(state, world.get_region('Inverted Big Bomb Shop', player))
 
     # we can finally output our playthrough
-    old_world.spoiler.playthrough = {"0": {str(item) for item in world.precollected_items if item.advancement}}
+    old_world.spoiler.playthrough = {"0": sorted([str(item) for item in world.precollected_items if item.advancement])}
+
     for i, sphere in enumerate(collection_spheres):
-        old_world.spoiler.playthrough[str(i + 1)] = {str(location): str(location.item) for location in sphere}
+        old_world.spoiler.playthrough[str(i + 1)] = {str(location): str(location.item) for location in sorted(sphere)}
