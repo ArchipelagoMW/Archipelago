@@ -25,9 +25,16 @@
       }
     }
 
-    .item-span{ color: #67e9ff; }
+    .item-span{
+      color: #67e9ff;
+
+      &.unique{
+        color: #ff884e;
+        text-shadow: #000000 2px 2px;
+      }
+    }
     .location-span{ color: #f5e63c; }
-    .entrance-span{ color: #73ae38 }
+    .entrance-span{ color: #73ae38; }
     .finder-span{ color: #f96cb8; }
     .recipient-span{ color: #9b8aff; }
     .mine{ color: #ffa500; }
