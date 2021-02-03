@@ -44,15 +44,16 @@ class WebSocketUtils {
         case 'itemSent':
           return appendMessage(MonitorTools.sentItem(data.content.finder, data.content.recipient,
             data.content.item, data.content.location, parseInt(data.content.iAmFinder, 10) === 1,
-            parseInt(data.content.iAmRecipient, 10) === 1));
+            parseInt(data.content.iAmRecipient, 10) === 1, parseInt(data.content.itemIsUnique, 10) === 1));
 
         case 'itemReceived':
           return appendMessage(MonitorTools.receivedItem(data.content.finder, data.content.item,
-            data.content.location, data.content.itemIndex, data.content.queueLength));
+            data.content.location, data.content.itemIndex, data.content.queueLength,
+            parseInt(data.content.itemIsUnique, 10) === 1));
 
         case 'itemFound':
           return appendMessage(MonitorTools.foundItem(data.content.finder, data.content.item, data.content.location,
-            parseInt(data.content.iAmFinder, 10) === 1));
+            parseInt(data.content.iAmFinder, 10) === 1, parseInt(data.content.itemIsUnique, 10) === 1));
 
         case 'hint':
           return appendMessage(MonitorTools.hintMessage(data.content.finder, data.content.recipient,
