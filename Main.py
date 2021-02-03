@@ -633,7 +633,7 @@ def create_playthrough(world):
                 break
 
     # in the second phase, we cull each sphere such that the game is still beatable, reducing each range of influence to the bare minimum required inside it
-    for num, sphere in reversed(list(enumerate(collection_spheres))):
+    for num, sphere in reversed(tuple(enumerate(collection_spheres))):
         to_delete = set()
         for location in sphere:
             # we remove the item at location and check if game is still beatable
@@ -650,7 +650,7 @@ def create_playthrough(world):
         sphere -= to_delete
 
     # second phase, sphere 0
-    for item in [i for i in world.precollected_items if i.advancement]:
+    for item in (i for i in world.precollected_items if i.advancement):
         logging.getLogger('').debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
         world.precollected_items.remove(item)
         world.state.remove(item)
