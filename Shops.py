@@ -155,41 +155,59 @@ def ShopSlotFill(world):
         shop_slots -= removed
 
     if shop_slots:
+        del shop_slots
+
         from Fill import swap_location_item
         # TODO: allow each game to register a blacklist to be used here?
         blacklist_words = {"Rupee"}
         blacklist_words = {item_name for item_name in item_table if any(
             blacklist_word in item_name for blacklist_word in blacklist_words)}
         blacklist_words.add("Bee")
-        candidates_per_sphere = list(list(sphere) for sphere in world.get_spheres())
 
-        candidate_condition = lambda location: not location.locked and \
-                                               not location.shop_slot and \
-                                               not location.item.name in blacklist_words
+        locations_per_sphere = list(list(sphere) for sphere in world.get_spheres())
+
+
 
         # currently special care needs to be taken so that Shop.region.locations.item is identical to Shop.inventory
         # Potentially create Locations as needed and make inventory the only source, to prevent divergence
         cumu_weights = []
+        shops_per_sphere = []
+        candidates_per_sphere = []
 
-        for sphere in candidates_per_sphere:
+        # sort spheres into piles of valid candidates and shops
+        for sphere in locations_per_sphere:
+            current_shops_slots = []
+            current_candidates = []
+            shops_per_sphere.append(current_shops_slots)
+            candidates_per_sphere.append(current_candidates)
+            for location in sphere:
+                if location.shop_slot:
+                    if not location.shop_slot_disabled:
+                        current_shops_slots.append(location)
+                elif not location.locked and not location.item.name in blacklist_words:
+                    current_candidates.append(location)
             if cumu_weights:
                 x = cumu_weights[-1]
             else:
                 x = 0
-            cumu_weights.append(len(sphere) + x)
-            world.random.shuffle(sphere)
+            cumu_weights.append(len(current_candidates) + x)
 
-        for i, sphere in enumerate(candidates_per_sphere):
-            current_shop_slots = [location for location in sphere if location.shop_slot and not location.shop_slot_disabled]
+            world.random.shuffle(current_candidates)
+
+        del(locations_per_sphere)
+
+        total_spheres = len(candidates_per_sphere)
+
+        for i, current_shop_slots in enumerate(shops_per_sphere):
             if current_shop_slots:
-
+                candidate_sphere_ids = list(range(i, total_spheres))
                 for location in current_shop_slots:
                     shop: Shop = location.parent_region.shop
-                    # TODO: might need to implement trying randomly across spheres until canditates are exhausted.
-                    # As spheres may be as small as one item.
-                    swapping_sphere = world.random.choices(candidates_per_sphere[i:], cum_weights=cumu_weights[i:])[0]
+                    swapping_sphere_id = world.random.choices(candidate_sphere_ids,
+                                                              cum_weights=cumu_weights[i:])[0]
+                    swapping_sphere: list = candidates_per_sphere[swapping_sphere_id]
                     for c in swapping_sphere:  # chosen item locations
-                        if candidate_condition(c) and c.item_rule(location.item) and location.item_rule(c.item):
+                        if c.item_rule(location.item) and location.item_rule(c.item):
                             swap_location_item(c, location, check_locked=False)
                             logger.debug(f'Swapping {c} into {location}:: {location.item}')
                             break
@@ -199,6 +217,11 @@ def ShopSlotFill(world):
                         logger.warning("Ran out of ShopShuffle Item candidate locations.")
                         location.shop_slot_disabled = True
                         continue
+
+                    # remove candidate
+                    swapping_sphere.remove(c)
+                    cumu_weights[swapping_sphere_id] -= 1
+
                     item_name = location.item.name
                     if any(x in item_name for x in ['Single Bomb', 'Single Arrow', 'Piece of Heart']):
                         price = world.random.randrange(1, 7)
@@ -244,11 +267,15 @@ def create_shops(world, player: int):
                 keeper = world.random.choice([0xA0, 0xC1, 0xFF])
                 player_shop_table[name] = ShopData(typ, shop_id, keeper, custom, locked, new_items, sram_offset)
     if world.mode[player] == "inverted":
+        # make sure that blue potion is available in inverted, special case locked = None; lock when done.
         player_shop_table["Dark Lake Hylia Shop"] = \
-            player_shop_table["Dark Lake Hylia Shop"]._replace(locked=True, items=_inverted_hylia_shop_defaults)
+            player_shop_table["Dark Lake Hylia Shop"]._replace(items=_inverted_hylia_shop_defaults, locked=None)
     for region_name, (room_id, type, shopkeeper, custom, locked, inventory, sram_offset) in player_shop_table.items():
         region = world.get_region(region_name, player)
         shop: Shop = shop_class_mapping[type](region, room_id, shopkeeper, custom, locked, sram_offset)
+        # special case: allow shop slots, but do not allow overwriting of base inventory behind them
+        if locked is None:
+            shop.locked = True
         region.shop = shop
         world.shops.append(shop)
         for index, item in enumerate(inventory):
@@ -261,7 +288,7 @@ def create_shops(world, player: int):
                 loc.locked = True
                 if single_purchase_slots.pop():
                     if world.goal[player] != 'icerodhunt':
-                        additional_item = 'Rupees (50)'  # world.random.choice(['Rupees (50)', 'Rupees (100)', 'Rupees (300)'])
+                        additional_item = 'Rupees (50)'
                     else:
                         additional_item = 'Nothing'
                     loc.item = ItemFactory(additional_item, player)
@@ -278,7 +305,7 @@ class ShopData(NamedTuple):
     type: ShopType
     shopkeeper: int
     custom: bool
-    locked: bool
+    locked: Optional[bool]
     items: List
     sram_offset: int
 
@@ -405,13 +432,9 @@ def shuffle_shops(world, items, player: int):
             if shop.region.player == player:
                 if shop.type == ShopType.UpgradeShop:
                     upgrade_shops.append(shop)
-                elif shop.type == ShopType.Shop:
-                    if shop.region.name == 'Potion Shop' and not 'w' in option:
-                        # don't modify potion shop
-                        pass
-                    else:
-                        shops.append(shop)
-                        total_inventory.extend(shop.inventory)
+                elif shop.type == ShopType.Shop and not shop.locked:
+                    shops.append(shop)
+                    total_inventory.extend(shop.inventory)
 
         if 'p' in option:
             def price_adjust(price: int) -> int:

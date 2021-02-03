@@ -450,7 +450,7 @@ class World(object):
     def get_spheres(self):
         state = CollectionState(self)
 
-        locations = {location for location in self.get_locations()}
+        locations = set(self.get_locations())
 
         while locations:
             sphere = set()
@@ -1137,6 +1137,11 @@ class Item(object):
 
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player
+
+    def __lt__(self, other):
+        if other.player != self.player:
+            return other.player < self.player
+        return self.name < other.name
 
     def __hash__(self):
         return hash((self.name, self.player))
