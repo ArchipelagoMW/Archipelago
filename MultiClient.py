@@ -37,6 +37,7 @@ import WebUI
 
 import Regions
 import Utils
+import Items
 
 # logging note:
 # logging.* gets send to only the text console, logger.* gets send to the WebUI as well, if it's initialized.
@@ -139,6 +140,13 @@ def color_code(*args):
 def color(text, *args):
     return color_code(*args) + text + color_code('reset')
 
+
+def color_item(item_id: int, green: bool = False) -> str:
+    item_name = get_item_name_from_id(item_id)
+    item_colors = ['green' if green else 'cyan']
+    if item_name in Items.progression_items:
+        item_colors.append("white_bg")
+    return color(item_name, *item_colors)
 
 START_RECONNECT_DELAY = 5
 SNES_RECONNECT_DELAY = 5
@@ -932,7 +940,7 @@ async def process_server_cmd(ctx: Context, cmd, args):
         ctx.ui_node.notify_item_sent(ctx.player_names[player_sent], ctx.player_names[player_recvd],
                                      get_item_name_from_id(item), get_location_name_from_address(location),
                                      player_sent == ctx.slot, player_recvd == ctx.slot)
-        item = color(get_item_name_from_id(item), 'cyan' if player_sent != ctx.slot else 'green')
+        item = color_item(item, player_sent == ctx.slot)
         player_sent = color(ctx.player_names[player_sent], 'yellow' if player_sent != ctx.slot else 'magenta')
         player_recvd = color(ctx.player_names[player_recvd], 'yellow' if player_recvd != ctx.slot else 'magenta')
         logging.info(
@@ -943,7 +951,7 @@ async def process_server_cmd(ctx: Context, cmd, args):
         found = ReceivedItem(*args)
         ctx.ui_node.notify_item_found(ctx.player_names[found.player], get_item_name_from_id(found.item),
                                       get_location_name_from_address(found.location), found.player == ctx.slot)
-        item = color(get_item_name_from_id(found.item), 'cyan' if found.player != ctx.slot else 'green')
+        item = color_item(found.item, found.player == ctx.slot)
         player_sent = color(ctx.player_names[found.player], 'yellow' if found.player != ctx.slot else 'magenta')
         logging.info('%s found %s (%s)' % (player_sent, item, color(get_location_name_from_address(found.location),
                                                                     'blue_bg', 'white')))
@@ -968,7 +976,7 @@ async def process_server_cmd(ctx: Context, cmd, args):
                                   get_item_name_from_id(hint.item), get_location_name_from_address(hint.location),
                                   hint.found, hint.finding_player == ctx.slot, hint.receiving_player == ctx.slot,
                                   hint.entrance if hint.entrance else None)
-            item = color(get_item_name_from_id(hint.item), 'green' if hint.found else 'cyan')
+            item = color_item(hint.item, hint.found)
             player_find = color(ctx.player_names[hint.finding_player],
                                 'yellow' if hint.finding_player != ctx.slot else 'magenta')
             player_recvd = color(ctx.player_names[hint.receiving_player],
