@@ -113,6 +113,7 @@ const handleOptionChange = (event) => {
 };
 
 const populateSettings = () => {
+  buildSpriteOptions();
   const presetNumber = document.getElementById('preset-number').value;
   const settings = JSON.parse(localStorage.getItem(`weightedSettings${presetNumber}`))
   const settingsInputs = Array.from(document.querySelectorAll('.setting'));
@@ -206,7 +207,21 @@ const buildUI = (settings, spriteData) => {
   settingsWrapper.appendChild(spriteOptionsHeader);
 
   const spriteOptionsWrapper = document.createElement('div');
+  spriteOptionsWrapper.setAttribute('id', 'sprite-options-wrapper');
   spriteOptionsWrapper.className = 'setting-wrapper';
+  settingsWrapper.appendChild(spriteOptionsWrapper);
+
+  // Append sprite picker
+  settingsWrapper.appendChild(buildSpritePicker(spriteData));
+};
+
+const buildSpriteOptions = () => {
+  const spriteOptionsWrapper = document.getElementById('sprite-options-wrapper');
+
+  // Clear the contents of the wrapper div
+  while(spriteOptionsWrapper.firstChild){
+    spriteOptionsWrapper.removeChild(spriteOptionsWrapper.lastChild);
+  }
 
   const spriteOptionsTitle = document.createElement('span');
   spriteOptionsTitle.className = 'title-span';
@@ -240,11 +255,6 @@ const buildUI = (settings, spriteData) => {
 
   spriteOptionsTable.appendChild(tbody);
   spriteOptionsWrapper.appendChild(spriteOptionsTable);
-
-  settingsWrapper.appendChild(spriteOptionsWrapper);
-
-  // Append sprite picker
-  settingsWrapper.appendChild(buildSpritePicker(spriteData));
 };
 
 const buildRangeSettings = (parentElement, settings) => {
