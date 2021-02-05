@@ -216,12 +216,12 @@ def main(args, seed=None):
     elif args.algorithm == 'balanced':
         distribute_items_restrictive(world, True)
 
-    if world.players > 1:
-        balance_multiworld_progression(world)
-
     logger.info("Filling Shop Slots")
 
     ShopSlotFill(world)
+
+    if world.players > 1:
+        balance_multiworld_progression(world)
 
     logger.info('Patching ROM.')
 
