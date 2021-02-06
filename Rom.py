@@ -1660,7 +1660,6 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, tri
 
     # set triforcehud
     triforce_flag = (rom.read_byte(0x180165) & 0x80) | {'normal': 0x00, 'hide_goal': 0x01, 'hide_required': 0x02, 'hide_both': 0x03}[triforcehud]
-    print(triforcehud, triforce_flag)
     rom.write_byte(0x180165, triforce_flag)
 
     if z3pr:
