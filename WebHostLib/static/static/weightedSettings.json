@@ -1282,19 +1282,19 @@
           "description": "No items are moved",
           "defaultValue": 50
         },
-        "1": {
+        "10": {
           "keyString": "shop_shuffle_slots.10",
           "friendlyName": "Level 1",
           "description": "10 Items are moved into shops.",
           "defaultValue": 0
         },
-        "2": {
+        "20": {
           "keyString": "shop_shuffle_slots.20",
           "friendlyName": "Level 2",
           "description": "20 Items are moved into shops.",
           "defaultValue": 0
         },
-        "3": {
+        "30": {
           "keyString": "shop_shuffle_slots.30",
           "friendlyName": "Level 3",
           "description": "30 Items are moved into shops.",
