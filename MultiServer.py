@@ -93,7 +93,6 @@ class Context(Node):
         self.hint_cost = hint_cost
         self.location_check_points = location_check_points
         self.hints_used = collections.defaultdict(int)
-        self.treasure_count = collections.defaultdict(int)
         self.hints: typing.Dict[typing.Tuple[int, int], typing.Set[Utils.Hint]] = collections.defaultdict(set)
         self.forfeit_mode: str = forfeit_mode
         self.remaining_mode: str = remaining_mode
@@ -229,7 +228,6 @@ class Context(Node):
         d = {
             "rom_names": list(self.rom_names.items()),
             "received_items": tuple((k, v) for k, v in self.received_items.items()),
-            "treasure_count": tuple(v for k, v in self.treasure_count.items()),
             "hints_used": tuple((key, value) for key, value in self.hints_used.items()),
             "hints": tuple(
                 (key, list(hint.re_check(self, key[0]) for hint in value)) for key, value in self.hints.items()),
@@ -258,7 +256,6 @@ class Context(Node):
                 return
 
         received_items = {tuple(k): [ReceivedItem(*i) for i in v] for k, v in savedata["received_items"]}
-        self.treasure_count = {k: v for k, v in enumerate(savedata["treasure_count"])}
 
         self.received_items = received_items
         self.hints_used.update({tuple(key): value for key, value in savedata["hints_used"]})
@@ -294,8 +291,6 @@ class Context(Node):
 
         logging.info(f'Loaded save file with {sum([len(p) for p in received_items.values()])} received items '
                      f'for {len(received_items)} players')
-        if len(self.treasure_count):
-            logging.info(f'Triforce pieces collected {self.treasure_count}')
 
     def get_aliased_name(self, team: int, slot: int):
         if (team, slot) in self.name_aliases:
@@ -510,6 +505,7 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations):
                         if recvd_item.location == location and recvd_item.player == slot:
                             found = True
                             break
+
                     if not found:
                         new_item = ReceivedItem(target_item, location, slot)
                         recvd_items.append(new_item)
@@ -525,9 +521,6 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations):
                                 if client.team == team and client.wants_item_notification:
                                     asyncio.create_task(
                                         ctx.send_msgs(client, [['ItemFound', (target_item, location, slot)]]))
-                        if 'Triforce Piece' in get_item_name_from_id(target_item):
-                            ctx.treasure_count[team] = ctx.treasure_count.get(team, 0) + 1
-                            ctx.broadcast_team(team, [['TreasureCount', (ctx.treasure_count[team],)]])
         ctx.location_checks[team, slot] |= known_locations
         send_new_items(ctx)
 
@@ -1053,8 +1046,6 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             if items:
                 reply.append(['ReceivedItems', (0, tuplize_received_items(items))])
                 client.send_index = len(items)
-            if ctx.treasure_count.get(client.team):
-                ctx.broadcast_team(team, [['TreasureCount', (ctx.treasure_count[client.team],)]])
             await ctx.send_msgs(client, reply)
             await on_client_joined(ctx, client)
 
@@ -1064,8 +1055,6 @@ async def process_client_cmd(ctx: Context, client: Client, cmd, args):
             if items:
                 client.send_index = len(items)
                 await ctx.send_msgs(client, [['ReceivedItems', (0, tuplize_received_items(items))]])
-            if ctx.treasure_count.get((team)):
-                ctx.broadcast_team(team, [['TreasureCount', (ctx.treasure_count[team],)]])
 
         elif cmd == 'LocationChecks':
             if type(args) is not list:

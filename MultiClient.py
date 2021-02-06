@@ -19,7 +19,7 @@ import shutil
 from random import randrange
 
 import Shops
-from Utils import get_item_name_from_id, get_location_name_from_address, ReceivedItem, int16_as_bytes
+from Utils import get_item_name_from_id, get_location_name_from_address, ReceivedItem
 
 exit_func = atexit.register(input, "Press enter to close.")
 
@@ -67,8 +67,6 @@ class Context():
         self.forfeit_mode = ''
         self.remaining_mode = ''
         self.hint_points = 0
-        self.treasure_count = 0
-        self.requires_treasure_count = None
         # End WebUI Stuff
 
         self.exit_event = asyncio.Event()
@@ -991,15 +989,6 @@ async def process_server_cmd(ctx: Context, cmd, args):
 
     elif cmd == 'HintPointUpdate':
         ctx.hint_points = args[0]
-
-    elif cmd == 'TreasureCount':
-        if ctx.requires_treasure_count is None:
-            ctx.requires_treasure_count = (await snes_read(ctx, 0x180165, size=1))[0] >= 0x80
-        if ctx.requires_treasure_count and ctx.treasure_count < args[0]:
-            logging.info('Team Triforce count is now {}'.format(args[0]))
-            ctx.treasure_count = args[0]
-            snes_buffered_write(ctx, WRAM_START + 0xF418, bytes(int16_as_bytes(ctx.treasure_count)))
-            await snes_flush_writes(ctx)
 
     else:
         logger.debug(f"unknown command {args}")

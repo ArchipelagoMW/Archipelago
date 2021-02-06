@@ -244,10 +244,11 @@ def parse_arguments(argv, no_defaults=False):
                              ''')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
-    parser.add_argument('--triforcehud', default='normal', const='normal', nargs='?', choices=['normal', 'hide_goal', 'hide_total', 'hide_both'],
+    parser.add_argument('--triforcehud', default='hide_goal', const='hide_goal', nargs='?', choices=['normal', 'hide_goal', 'hide_required', 'hide_both'],
                     help='''\
                             Hide the triforce hud in certain circumstances.
-                            hide_goal will hide the hud until finding a triforce piece, hide_total will hide the total amount needed to win
+                            hide_goal will hide the hud until finding a triforce piece, hide_required will hide the total amount needed to win
+                            (Both can be revealed when speaking to Murahalda)
                             (default: %(default)s)
                             ''')
     parser.add_argument('--mapshuffle', default=defval(False),
