@@ -1443,7 +1443,7 @@ class TextTable(object):
             'zora_meeting',
             'zora_tells_cost',
             'zora_get_flippers',
-            #'zora_no_cash',
+            'zora_no_cash',
             'zora_no_buy_item',
             'agahnim_zelda_teleport',
             'agahnim_magic_running_away',

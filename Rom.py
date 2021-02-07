@@ -1971,6 +1971,15 @@ def write_strings(rom, world, player, team):
 
     # For hints, first we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
     if world.hints[player]:
+        # Zora hint
+        zora_location = world.get_location("King Zora", player)
+        if zora_location.player != zora_location.item.player:
+            player_text = f" for {world.player_names[zora_location.item.player][team]}"
+        else:
+            player_text = ""
+        tt['zora_tells_cost'] = f"You got 500 rupees to buy {zora_location.item.name}{player_text}" \
+                                f"\n  ≥ Duh\n    Oh carp\n{{CHOICE}}"
+
         tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles can have hints!'
         hint_locations = HintLocations.copy()
         local_random.shuffle(hint_locations)
