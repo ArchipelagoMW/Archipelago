@@ -223,17 +223,16 @@ def ShopSlotFill(world):
                     cumu_weights[swapping_sphere_id] -= 1
 
                     item_name = location.item.name
-                    if any(x in item_name for x in ['Single Bomb', 'Single Arrow', 'Piece of Heart']):
+                    if any(x in item_name for x in ['Compass', 'Map', 'Single Bomb', 'Single Arrow', 'Piece of Heart']):
                         price = world.random.randrange(1, 7)
                     elif any(x in item_name for x in ['Arrow', 'Bomb', 'Clock']):
                         price = world.random.randrange(2, 14)
-                    elif any(x in item_name for x in ['Compass', 'Map', 'Small Key', 'Clock', 'Heart']):
+                    elif any(x in item_name for x in ['Small Key', 'Heart']):
                         price = world.random.randrange(4, 28)
                     else:
                         price = world.random.randrange(8, 56)
 
-                    price *= 5
-                    shop.push_inventory(int(location.name[-1]) - 1, item_name, price, 1,
+                    shop.push_inventory(int(location.name[-1]) - 1, item_name, price * 5, 1,
                                         location.item.player if location.item.player != location.player else 0)
 
 
