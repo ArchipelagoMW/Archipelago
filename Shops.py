@@ -194,7 +194,7 @@ def ShopSlotFill(world):
 
             world.random.shuffle(current_candidates)
 
-        del(locations_per_sphere)
+        del locations_per_sphere
 
         total_spheres = len(candidates_per_sphere)
 
@@ -270,6 +270,7 @@ def create_shops(world, player: int):
         # make sure that blue potion is available in inverted, special case locked = None; lock when done.
         player_shop_table["Dark Lake Hylia Shop"] = \
             player_shop_table["Dark Lake Hylia Shop"]._replace(items=_inverted_hylia_shop_defaults, locked=None)
+    chance_100 = int(world.retro[player])*0.25+int(world.keyshuffle[player] == "universal") * 0.5
     for region_name, (room_id, type, shopkeeper, custom, locked, inventory, sram_offset) in player_shop_table.items():
         region = world.get_region(region_name, player)
         shop: Shop = shop_class_mapping[type](region, room_id, shopkeeper, custom, locked, sram_offset)
@@ -288,7 +289,10 @@ def create_shops(world, player: int):
                 loc.locked = True
                 if single_purchase_slots.pop():
                     if world.goal[player] != 'icerodhunt':
-                        additional_item = 'Rupees (50)'
+                        if world.random.random() < chance_100:
+                            additional_item = 'Rupees (100)'
+                        else:
+                            additional_item = 'Rupees (50)'
                     else:
                         additional_item = 'Nothing'
                     loc.item = ItemFactory(additional_item, player)
