@@ -5,7 +5,7 @@ import logging
 
 from BaseClasses import Location
 from EntranceShuffle import door_addresses
-from Items import item_name_groups, item_table, ItemFactory, trap_replaceable
+from Items import item_name_groups, item_table, ItemFactory, trap_replaceable, GetBeemizerItem
 from Utils import int16_as_bytes
 
 logger = logging.getLogger("Shops")
@@ -293,10 +293,10 @@ def create_shops(world, player: int):
                         else:
                             additional_item = 'Rupees (50)'
                     else:
-                        additional_item = 'Nothing'
+                        additional_item = GetBeemizerItem(world, player, 'Nothing')
                     loc.item = ItemFactory(additional_item, player)
                 else:
-                    loc.item = ItemFactory('Nothing', player)
+                    loc.item = ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player)
                     loc.shop_slot_disabled = True
                 shop.region.locations.append(loc)
                 world.dynamic_locations.append(loc)

@@ -1,6 +1,19 @@
 import logging
 
 
+def GetBeemizerItem(world, player, item):
+    item_name = item if isinstance(item, str) else item.name
+    if world.beemizer[player] and item_name in trap_replaceable:
+        if world.random.random() < world.beemizer[player] * 0.25:
+            if world.random.random() < (0.5 + world.beemizer[player] * 0.1):
+                return "Bee Trap" if isinstance(item, str) else ItemFactory("Bee Trap", player)
+            else:
+                return "Bee" if isinstance(item, str) else ItemFactory("Bee", player)
+        else:
+            return item
+    else:
+        return item
+
 
 def ItemFactory(items, player):
     from BaseClasses import Item

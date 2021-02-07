@@ -7,7 +7,7 @@ from Bosses import place_bosses
 from Dungeons import get_dungeon_item_pool
 from EntranceShuffle import connect_entrance
 from Fill import FillError, fill_restrictive
-from Items import ItemFactory, trap_replaceable
+from Items import ItemFactory, GetBeemizerItem
 from Rules import forbid_items_for_player
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
@@ -373,7 +373,7 @@ def generate_itempool(world, player: int):
 
     if world.goal[player] == 'icerodhunt':
         for item in dungeon_items:
-            world.itempool.append(ItemFactory('Nothing', player))
+            world.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player))
             world.push_precollected(item)
     else:
         world.itempool.extend([item for item in dungeon_items])
@@ -394,16 +394,8 @@ def generate_itempool(world, player: int):
     for item in items:
         if item.advancement or item.type:
             progressionitems.append(item)
-        elif world.beemizer[player] and item.name in trap_replaceable:
-            if world.random.random() < world.beemizer[item.player] * 0.25:
-                if world.random.random() < (0.5 + world.beemizer[item.player] * 0.1):
-                    nonprogressionitems.append(ItemFactory("Bee Trap", player))
-                else:
-                    nonprogressionitems.append(ItemFactory("Bee", player))
-            else:
-                nonprogressionitems.append(item)
         else:
-            nonprogressionitems.append(item)
+            nonprogressionitems.append(GetBeemizerItem(world, item.player, item))
     world.random.shuffle(nonprogressionitems)
 
     if additional_triforce_pieces:
