@@ -17,6 +17,11 @@
 # To test if your yaml is valid or not, you can use this website:
 # http://www.yamllint.com/
 
+# For use with the weighted-settings page on the website. Changing this value will cause all users to be prompted
+# to update their settings. The version number should match the current released version number, and the revision
+# should be updated manually by whoever edits this file.
+ws_version: 4.0.1 rev0
+
 description: Template Name # Used to describe your yaml. Useful if you have multiple files
 name: YourName # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
 ### Logic Section ###
