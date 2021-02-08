@@ -1973,18 +1973,10 @@ def write_strings(rom, world, player, team):
     if world.hints[player]:
         # Zora hint
         zora_location = world.get_location("King Zora", player)
-        if zora_location.player != zora_location.item.player:
-            player_text = f" for {world.player_names[zora_location.item.player][team]}"
-        else:
-            player_text = ""
         tt['zora_tells_cost'] = f"You got 500 rupees to buy {hint_text(zora_location.item)}" \
                                 f"\n  ≥ Duh\n    Oh carp\n{{CHOICE}}"
         # Bottle Vendor hint
         vendor_location = world.get_location("Bottle Merchant", player)
-        if vendor_location.player != vendor_location.item.player:
-            player_text = f" for {world.player_names[vendor_location.item.player][team]}"
-        else:
-            player_text = ""
         tt['bottle_vendor_choice'] = f"I gots {hint_text(vendor_location.item)}\nYous gots 100 rupees?"\
                                      f"\n  ≥ I want\n    no way!\n{{CHOICE}}"
 
