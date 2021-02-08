@@ -1977,8 +1977,16 @@ def write_strings(rom, world, player, team):
             player_text = f" for {world.player_names[zora_location.item.player][team]}"
         else:
             player_text = ""
-        tt['zora_tells_cost'] = f"You got 500 rupees to buy {zora_location.item.name}{player_text}" \
+        tt['zora_tells_cost'] = f"You got 500 rupees to buy {hint_text(zora_location.item)}" \
                                 f"\n  ≥ Duh\n    Oh carp\n{{CHOICE}}"
+        # Bottle Vendor hint
+        vendor_location = world.get_location("Bottle Merchant", player)
+        if vendor_location.player != vendor_location.item.player:
+            player_text = f" for {world.player_names[vendor_location.item.player][team]}"
+        else:
+            player_text = ""
+        tt['bottle_vendor_choice'] = f"I gots {hint_text(vendor_location.item)}\nYous gots 100 rupees?"\
+                                     f"\n  ≥ I want\n    no way!\n{{CHOICE}}"
 
         tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles can have hints!'
         hint_locations = HintLocations.copy()
@@ -2067,7 +2075,7 @@ def write_strings(rom, world, player, team):
         del locations_to_hint[hint_count:]
         for location in locations_to_hint:
             if location == 'Swamp Left':
-                if local_random.randint(0, 1) == 0:
+                if local_random.randint(0, 1):
                     first_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
                     second_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
                 else:
@@ -2076,7 +2084,7 @@ def write_strings(rom, world, player, team):
                 this_hint = ('The westmost chests in Swamp Palace contain ' + first_item + ' and ' + second_item + '.')
                 tt[hint_locations.pop(0)] = this_hint
             elif location == 'Mire Left':
-                if local_random.randint(0, 1) == 0:
+                if local_random.randint(0, 1):
                     first_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
                     second_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
                 else:
