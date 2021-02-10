@@ -25,7 +25,7 @@ class World(object):
     plando_items: List[PlandoItem]
     plando_connections: List[PlandoConnection]
 
-    def __init__(self, players: int, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer,
+    def __init__(self, players: int, shuffle, logic, mode, swords, difficulty, item_functionality, timer,
                  progressive,
                  goal, algorithm, accessibility, shuffle_ganon, retro, custom, customitemarray, hints):
         if self.debug_types:
@@ -46,7 +46,7 @@ class World(object):
         self.mode = mode.copy()
         self.swords = swords.copy()
         self.difficulty = difficulty.copy()
-        self.difficulty_adjustments = difficulty_adjustments.copy()
+        self.item_functionality = item_functionality.copy()
         self.timer = timer.copy()
         self.progressive = progressive
         self.goal = goal.copy()
@@ -691,9 +691,9 @@ class CollectionState(object):
         elif self.has('Magic Upgrade (1/2)', player):
             basemagic = 16
         if self.can_buy_unlimited('Green Potion', player) or self.can_buy_unlimited('Blue Potion', player):
-            if self.world.difficulty_adjustments[player] == 'hard' and not fullrefill:
+            if self.world.item_functionality[player] == 'hard' and not fullrefill:
                 basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count(player))
-            elif self.world.difficulty_adjustments[player] == 'expert' and not fullrefill:
+            elif self.world.item_functionality[player] == 'expert' and not fullrefill:
                 basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count(player))
             else:
                 basemagic = basemagic + basemagic * self.bottle_count(player)
@@ -1301,7 +1301,7 @@ class Spoiler(object):
                          'goal': self.world.goal,
                          'shuffle': self.world.shuffle,
                          'item_pool': self.world.difficulty,
-                         'item_functionality': self.world.difficulty_adjustments,
+                         'item_functionality': self.world.item_functionality,
                          'gt_crystals': self.world.crystals_needed_for_gt,
                          'ganon_crystals': self.world.crystals_needed_for_ganon,
                          'open_pyramid': self.world.open_pyramid,

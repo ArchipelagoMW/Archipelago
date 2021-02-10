@@ -674,6 +674,14 @@ class Sprite(object):
         rom.write_bytes(0x307000, self.palette)
         rom.write_bytes(0x307078, self.glove_palette)
 
+bonk_addresses = [0x4CF6C, 0x4CFBA, 0x4CFE0, 0x4CFFB, 0x4D018, 0x4D01B, 0x4D028, 0x4D03C, 0x4D059, 0x4D07A,
+                  0x4D09E, 0x4D0A8, 0x4D0AB, 0x4D0AE, 0x4D0BE, 0x4D0DD,
+                  0x4D16A, 0x4D1E5, 0x4D1EE, 0x4D20B, 0x4CBBF, 0x4CBBF, 0x4CC17, 0x4CC1A, 0x4CC4A, 0x4CC4D,
+                  0x4CC53, 0x4CC69, 0x4CC6F, 0x4CC7C, 0x4CCEF, 0x4CD51,
+                  0x4CDC0, 0x4CDC3, 0x4CDC6, 0x4CE37, 0x4D2DE, 0x4D32F, 0x4D355, 0x4D367, 0x4D384, 0x4D387,
+                  0x4D397, 0x4D39E, 0x4D3AB, 0x4D3AE, 0x4D3D1, 0x4D3D7,
+                  0x4D3F8, 0x4D416, 0x4D420, 0x4D423, 0x4D42D, 0x4D449, 0x4D48C, 0x4D4D9, 0x4D4DC, 0x4D4E3,
+                  0x4D504, 0x4D507, 0x4D55E, 0x4D56A]
 
 def patch_rom(world, rom, player, team, enemized):
     local_random = world.rom_seeds[player]
@@ -868,8 +876,8 @@ def patch_rom(world, rom, player, team, enemized):
 
     rom.write_byte(0x18004F, 0x01)  # Byrna Invulnerability: on
 
-    # handle difficulty_adjustments
-    if world.difficulty_adjustments[player] == 'hard':
+    # handle item_functionality
+    if world.item_functionality[player] == 'hard':
         rom.write_byte(0x180181, 0x01)  # Make silver arrows work only on ganon
         rom.write_byte(0x180182, 0x00)  # Don't auto equip silvers on pickup
         # Powdered Fairies Prize
@@ -889,7 +897,7 @@ def patch_rom(world, rom, player, team, enemized):
         rom.write_int16(0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x02)  # Hookshot only
-    elif world.difficulty_adjustments[player] == 'expert':
+    elif world.item_functionality[player] == 'expert':
         rom.write_byte(0x180181, 0x01)  # Make silver arrows work only on ganon
         rom.write_byte(0x180182, 0x00)  # Don't auto equip silvers on pickup
         # Powdered Fairies Prize
@@ -958,6 +966,15 @@ def patch_rom(world, rom, player, team, enemized):
 
     # set up game internal RNG seed
     rom.write_bytes(0x178000, local_random.getrandbits(8 * 1024).to_bytes(1024, 'big'))
+    prize_replacements = {}
+    if world.item_functionality[player] in ['hard', 'expert']:
+        prize_replacements[0xE0] = 0xDF  # Fairy -> heart
+        prize_replacements[0xE3] = 0xD8  # Big magic -> small magic
+
+    if world.retro[player]:
+        prize_replacements[0xE1] = 0xDA  # 5 Arrows -> Blue Rupee
+        prize_replacements[0xE2] = 0xDB  # 10 Arrows -> Red Rupee
+
     if "g" in world.shuffle_prizes[player]:
         # shuffle prize packs
         prizes = [0xD8, 0xD8, 0xD8, 0xD8, 0xD9, 0xD8, 0xD8, 0xD9, 0xDA, 0xD9, 0xDA, 0xDB, 0xDA, 0xD9, 0xDA, 0xDA, 0xE0,
@@ -983,18 +1000,10 @@ def patch_rom(world, rom, player, team, enemized):
         packs = chunk(prizes[:56], 8)
         local_random.shuffle(packs)
         prizes[:56] = [drop for pack in packs for drop in pack]
-
-        if world.difficulty_adjustments[player] in ['hard', 'expert']:
-            prize_replacements = {0xE0: 0xDF,  # Fairy -> heart
-                                  0xE3: 0xD8}  # Big magic -> small magic
+        if prize_replacements:
             prizes = [prize_replacements.get(prize, prize) for prize in prizes]
             dig_prizes = [prize_replacements.get(prize, prize) for prize in dig_prizes]
 
-        if world.retro[player]:
-            prize_replacements = {0xE1: 0xDA,  # 5 Arrows -> Blue Rupee
-                                  0xE2: 0xDB}  # 10 Arrows -> Red Rupee
-            prizes = [prize_replacements.get(prize, prize) for prize in prizes]
-            dig_prizes = [prize_replacements.get(prize, prize) for prize in dig_prizes]
         rom.write_bytes(0x180100, dig_prizes)
 
         # write tree pull prizes
@@ -1015,6 +1024,19 @@ def patch_rom(world, rom, player, team, enemized):
         # fill enemy prize packs
         rom.write_bytes(0x37A78, prizes)
 
+    elif prize_replacements:
+        dig_prizes = list(rom.read_bytes(0x180100, 64))
+        dig_prizes = [prize_replacements.get(byte, byte) for byte in dig_prizes]
+        rom.write_bytes(0x180100, dig_prizes)
+
+        prizes = list(rom.read_bytes(0x37A78, 56))
+        prizes = [prize_replacements.get(byte, byte) for byte in prizes]
+        rom.write_bytes(0x37A78, prizes)
+
+        for address in (0xEFBD4, 0xEFBD5, 0xEFBD6, 0x329C8, 0x329C4, 0x37993, 0xE82CC):
+            byte = int(rom.read_byte(address))
+            rom.write_byte(address, prize_replacements.get(byte, byte))
+
     if "b" in world.shuffle_prizes[player]:
         # set bonk prizes
         bonk_prizes = [0x79, 0xE3, 0x79, 0xAC, 0xAC, 0xE0, 0xDC, 0xAC, 0xE3, 0xE3, 0xDA, 0xE3, 0xDA, 0xD8, 0xAC,
@@ -1022,17 +1044,20 @@ def patch_rom(world, rom, player, team, enemized):
                        0xE3, 0xE3,
                        0xDA, 0x79, 0xAC, 0xAC, 0x79, 0xE3, 0x79, 0xAC, 0xAC, 0xE0, 0xDC, 0xE3, 0x79, 0xDE, 0xE3,
                        0xAC, 0xDB, 0x79, 0xE3, 0xD8, 0xAC, 0x79, 0xE3, 0xDB, 0xDB, 0xE3, 0xE3, 0x79, 0xD8, 0xDD]
-        bonk_addresses = [0x4CF6C, 0x4CFBA, 0x4CFE0, 0x4CFFB, 0x4D018, 0x4D01B, 0x4D028, 0x4D03C, 0x4D059, 0x4D07A,
-                          0x4D09E, 0x4D0A8, 0x4D0AB, 0x4D0AE, 0x4D0BE, 0x4D0DD,
-                          0x4D16A, 0x4D1E5, 0x4D1EE, 0x4D20B, 0x4CBBF, 0x4CBBF, 0x4CC17, 0x4CC1A, 0x4CC4A, 0x4CC4D,
-                          0x4CC53, 0x4CC69, 0x4CC6F, 0x4CC7C, 0x4CCEF, 0x4CD51,
-                          0x4CDC0, 0x4CDC3, 0x4CDC6, 0x4CE37, 0x4D2DE, 0x4D32F, 0x4D355, 0x4D367, 0x4D384, 0x4D387,
-                          0x4D397, 0x4D39E, 0x4D3AB, 0x4D3AE, 0x4D3D1, 0x4D3D7,
-                          0x4D3F8, 0x4D416, 0x4D420, 0x4D423, 0x4D42D, 0x4D449, 0x4D48C, 0x4D4D9, 0x4D4DC, 0x4D4E3,
-                          0x4D504, 0x4D507, 0x4D55E, 0x4D56A]
+
         local_random.shuffle(bonk_prizes)
+
+        if prize_replacements:
+            bonk_prizes = [prize_replacements.get(prize, prize) for prize in bonk_prizes]
+
         for prize, address in zip(bonk_prizes, bonk_addresses):
             rom.write_byte(address, prize)
+
+    elif prize_replacements:
+        for address in bonk_addresses:
+            byte = int(rom.read_byte(address))
+            rom.write_byte(address, prize_replacements.get(byte, byte))
+
 
     # Fill in item substitutions table
     rom.write_bytes(0x184000, [
@@ -1092,7 +1117,7 @@ def patch_rom(world, rom, player, team, enemized):
     rom.write_byte(0x180043, 0xFF if world.swords[player] == 'swordless' else 0x00)  # starting sword for link
     rom.write_byte(0x180044, 0x01 if world.swords[player] == 'swordless' else 0x00)  # hammer activates tablets
 
-    if world.difficulty_adjustments[player] == 'easy':
+    if world.item_functionality[player] == 'easy':
         rom.write_byte(0x18003F, 0x01)  # hammer can harm ganon
         rom.write_byte(0x180041, 0x02)  # Allow swordless medallion use EVERYWHERE.
         rom.write_byte(0x180044, 0x01)  # hammer activates tablets

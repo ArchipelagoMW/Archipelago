@@ -285,7 +285,7 @@ def main(args, seed=None):
         outfilestuffs = {
           "logic": world.logic[player],                                    # 0
           "difficulty": world.difficulty[player],                          # 1
-          "difficulty_adjustments": world.difficulty_adjustments[player],  # 2
+          "item_functionality": world.item_functionality[player],          # 2
           "mode": world.mode[player],                                      # 3
           "goal": world.goal[player],                                      # 4
           "timer": str(world.timer[player]),                               # 5
@@ -306,7 +306,7 @@ def main(args, seed=None):
           outfilestuffs["logic"], # 0
 
           outfilestuffs["difficulty"],              # 1
-          outfilestuffs["difficulty_adjustments"],  # 2
+          outfilestuffs["item_functionality"],      # 2
           outfilestuffs["mode"],                    # 3
           outfilestuffs["goal"],                    # 4
           "" if outfilestuffs["timer"] in ['False', 'none', 'display'] else "-" + outfilestuffs["timer"], # 5
@@ -463,7 +463,7 @@ def main(args, seed=None):
 
 def copy_world(world):
     # ToDo: Not good yet
-    ret = World(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.difficulty_adjustments, world.timer, world.progressive, world.goal, world.algorithm, world.accessibility, world.shuffle_ganon, world.retro, world.custom, world.customitemarray, world.hints)
+    ret = World(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.item_functionality, world.timer, world.progressive, world.goal, world.algorithm, world.accessibility, world.shuffle_ganon, world.retro, world.custom, world.customitemarray, world.hints)
     ret.teams = world.teams
     ret.player_names = copy.deepcopy(world.player_names)
     ret.remote_items = world.remote_items.copy()
