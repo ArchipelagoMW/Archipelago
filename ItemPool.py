@@ -412,10 +412,10 @@ def generate_itempool(world, player: int):
         mm_medallion = world.random.choice(['Ether', 'Quake', 'Bombos'])
     else:
         mm_medallion = world.required_medallions[player][0]
-    if world.required_medallions[player][0] == "random":
+    if world.required_medallions[player][1] == "random":
         tr_medallion = world.random.choice(['Ether', 'Quake', 'Bombos'])
     else:
-        tr_medallion = world.required_medallions[player][0]
+        tr_medallion = world.required_medallions[player][1]
     world.required_medallions[player] = (mm_medallion, tr_medallion)
 
     place_bosses(world, player)
