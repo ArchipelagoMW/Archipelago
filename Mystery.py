@@ -291,31 +291,52 @@ def roll_percentage(percentage: typing.Union[int, float]) -> bool:
     percentage is expected to be in range [0, 100]"""
     return random.random() < (float(percentage) / 100)
 
+def roll_linked_options(weights: dict) -> dict:
+    weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
+    for option_set in weights["linked_options"]:
+        if "name" not in option_set:
+            raise ValueError("One of your linked options does not have a name.")
+        try:
+            if roll_percentage(option_set["percentage"]):
+                logging.debug(f"Linked option {option_set['name']} triggered.")
+                logging.debug(f'Applying {option_set["options"]}')
+                new_options = set(option_set["options"]) - set(weights)
+                weights.update(option_set["options"])
+                if new_options:
+                    for new_option in new_options:
+                        logging.warning(f'Linked Suboption "{new_option}" of "{option_set["name"]}" did not '
+                                        f'overwrite a root option. '
+                                        f"This is probably in error.")
+            else:
+                logging.debug(f"linked option {option_set['name']} skipped.")
+        except Exception as e:
+            raise ValueError(f"Linked option {option_set['name']} is destroyed. "
+                             f"Please fix your linked option.") from e
+    return weights
 
-def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"))):
-    ret = argparse.Namespace()
+def roll_triggers(weights: dict) -> dict:
+    weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
+    for option_set in weights["triggers"]:
+        try:
+            key = get_choice("option_name", option_set)
+            trigger_result = get_choice("option_result", option_set)
+            result = get_choice(key, weights)
+            if result == trigger_result and roll_percentage(get_choice("percentage", option_set, 100)):
+                weights.update(option_set["options"])
+            weights[key] = result
+        except Exception as e:
+            raise ValueError(f"A trigger is destroyed. "
+                             f"Please fix your triggers.") from e
+    return weights
+
+def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses"))):
     if "linked_options" in weights:
-        weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
-        for option_set in weights["linked_options"]:
-            if "name" not in option_set:
-                raise ValueError("One of your linked options does not have a name.")
-            try:
-                if roll_percentage(option_set["percentage"]):
-                    logging.debug(f"Linked option {option_set['name']} triggered.")
-                    logging.debug(f'Applying {option_set["options"]}')
-                    new_options = set(option_set["options"]) - set(weights)
-                    weights.update(option_set["options"])
-                    if new_options:
-                        for new_option in new_options:
-                            logging.warning(f'Linked Suboption "{new_option}" of "{option_set["name"]}" did not '
-                                            f'overwrite a root option. '
-                                            f"This is probably in error.")
-                else:
-                    logging.debug(f"linked option {option_set['name']} skipped.")
-            except Exception as e:
-                raise ValueError(f"Linked option {option_set['name']} is destroyed. "
-                                 f"Please fix your linked option.") from e
+        weights = roll_linked_options(weights)
 
+    if "triggers" in weights:
+        weights = roll_triggers(weights)
+
+    ret = argparse.Namespace()
     ret.name = get_choice('name', weights)
     if ret.name:
         ret.name = handle_name(ret.name)
