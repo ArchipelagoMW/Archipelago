@@ -328,6 +328,10 @@ def roll_triggers(weights: dict) -> dict:
     for option_set in weights["triggers"]:
         try:
             key = get_choice("option_name", option_set)
+            if key not in weights:
+                logging.warning(f'Specified option name {option_set["option_name"]} did not '
+                                f'match with a root option. '
+                                f'This is probably in error.')
             trigger_result = get_choice("option_result", option_set)
             result = get_choice(key, weights)
             if result == trigger_result and roll_percentage(get_choice("percentage", option_set, 100)):
