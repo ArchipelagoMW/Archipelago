@@ -248,8 +248,8 @@ shop_shuffle:
 ### End of Shop Section ###
 shuffle_prizes: # aka drops
   none: 0 # do not shuffle prize packs
-  g: 50 # shuffle "general" price packs, as in enemy, tree pull, dig etc.
-  b: 0 # shuffle "bonk" price packs
+  g: 50 # shuffle "general" prize packs, as in enemy, tree pull, dig etc.
+  b: 0 # shuffle "bonk" prize packs
   bg: 0 # shuffle both
 timer:
   none: 50 # No timer will be displayed.
