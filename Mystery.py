@@ -291,6 +291,17 @@ def roll_percentage(percentage: typing.Union[int, float]) -> bool:
     percentage is expected to be in range [0, 100]"""
     return random.random() < (float(percentage) / 100)
 
+def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> dict:
+    logging.debug(f'Applying {new_weights}')
+    new_options = set(new_weights) - set(weights)
+    weights.update(new_weights)
+    if new_options:
+        for new_option in new_options:
+            logging.warning(f'{type} Suboption "{new_option}" of "{name}" did not '
+                            f'overwrite a root option. '
+                            f'This is probably in error.')
+    return weights
+
 def roll_linked_options(weights: dict) -> dict:
     weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
     for option_set in weights["linked_options"]:
@@ -299,14 +310,12 @@ def roll_linked_options(weights: dict) -> dict:
         try:
             if roll_percentage(option_set["percentage"]):
                 logging.debug(f"Linked option {option_set['name']} triggered.")
-                logging.debug(f'Applying {option_set["options"]}')
-                new_options = set(option_set["options"]) - set(weights)
-                weights.update(option_set["options"])
-                if new_options:
-                    for new_option in new_options:
-                        logging.warning(f'Linked Suboption "{new_option}" of "{option_set["name"]}" did not '
-                                        f'overwrite a root option. '
-                                        f"This is probably in error.")
+                if "options" in option_set:
+                    weights = update_weights(weights, option_set["options"], "Linked", option_set["name"])
+                if "rom_options" in option_set:
+                    rom_weights = weights.get("rom", dict())
+                    rom_weights = update_weights(rom_weights, option_set["rom_options"], "Linked Rom", option_set["name"])
+                    weights["rom"] = rom_weights
             else:
                 logging.debug(f"linked option {option_set['name']} skipped.")
         except Exception as e:
@@ -322,7 +331,12 @@ def roll_triggers(weights: dict) -> dict:
             trigger_result = get_choice("option_result", option_set)
             result = get_choice(key, weights)
             if result == trigger_result and roll_percentage(get_choice("percentage", option_set, 100)):
-                weights.update(option_set["options"])
+                if "options" in option_set:
+                    weights = update_weights(weights, option_set["options"], "Triggered", option_set["option_name"])
+                if "rom_options" in option_set:
+                    rom_weights = weights.get("rom", dict())
+                    rom_weights = update_weights(rom_weights, option_set["rom_options"], "Triggered Rom", option_set["option_name"])
+                    weights["rom"] = rom_weights
             weights[key] = result
         except Exception as e:
             raise ValueError(f"A trigger is destroyed. "
