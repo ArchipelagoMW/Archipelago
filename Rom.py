@@ -2037,7 +2037,7 @@ def write_strings(rom, world, player, team):
             hint_count = 4
         for entrance in all_entrances:
             if entrance.name in entrances_to_hint:
-                if hint_count > 0:
+                if hint_count:
                     this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(
                         entrance.connected_region) + '.'
                     tt[hint_locations.pop(0)] = this_hint
@@ -2074,7 +2074,7 @@ def write_strings(rom, world, player, team):
         hint_count = 4 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 0
         for entrance in all_entrances:
             if entrance.name in entrances_to_hint:
-                if hint_count > 0:
+                if hint_count:
                     this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(
                         entrance.connected_region) + '.'
                     tt[hint_locations.pop(0)] = this_hint
@@ -2089,8 +2089,7 @@ def write_strings(rom, world, player, team):
             locations_to_hint.extend(InconvenientVanillaLocations)
         local_random.shuffle(locations_to_hint)
         hint_count = 3 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 5
-        del locations_to_hint[hint_count:]
-        for location in locations_to_hint:
+        for location in locations_to_hint[:hint_count]:
             if location == 'Swamp Left':
                 if local_random.randint(0, 1):
                     first_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
@@ -2161,8 +2160,8 @@ def write_strings(rom, world, player, team):
         # All remaining hint slots are filled with junk hints. It is done this way to ensure the same junk hint isn't selected twice.
         junk_hints = junk_texts.copy()
         local_random.shuffle(junk_hints)
-        for location in hint_locations:
-            tt[location] = junk_hints.pop(0)
+        for location, text in zip(hint_locations, junk_hints):
+            tt[location] = text
 
     # We still need the older hints of course. Those are done here.
 
