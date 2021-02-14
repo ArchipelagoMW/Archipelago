@@ -604,8 +604,10 @@ class CollectionState(object):
         if locations is None:
             locations = self.world.get_filled_locations()
         new_locations = True
+        # since the loop has a good chance to run more than once, only filter the events once
+        locations = {location for location in locations if location.event}
         while new_locations:
-            reachable_events = {location for location in locations if location.event and
+            reachable_events = {location for location in locations if
                                 (not key_only or
                                  (not self.world.keyshuffle[location.item.player] and location.item.smallkey)
                                  or (not self.world.bigkeyshuffle[location.item.player] and location.item.bigkey))
@@ -807,7 +809,7 @@ class CollectionState(object):
             rules.append(self.has_Pearl(player))
         return all(rules)
 
-    def collect(self, item: Item, event=False, location=None):
+    def collect(self, item: Item, event=False, location=None) -> bool:
         if location:
             self.locations_checked.add(location)
         changed = False
@@ -868,9 +870,10 @@ class CollectionState(object):
 
         self.stale[item.player] = True
 
-        if changed:
-            if not event:
-                self.sweep_for_events()
+        if changed and not event:
+            self.sweep_for_events()
+
+        return changed
 
     def remove(self, item):
         if item.advancement:
@@ -1076,6 +1079,7 @@ class Location():
     shop_slot_disabled: bool = False
     event: bool = False
     locked: bool = False
+    spot_type = 'Location'
 
     def __init__(self, player: int, name: str = '', address=None, crystal: bool = False,
                  hint_text: Optional[str] = None, parent=None,
@@ -1086,7 +1090,6 @@ class Location():
         self.crystal = crystal
         self.address = address
         self.player_address = player_address
-        self.spot_type = 'Location'
         self.hint_text: str = hint_text if hint_text else name
         self.recursion_count = 0
         self.always_allow = lambda item, state: False
