@@ -1296,7 +1296,9 @@ def patch_rom(world, rom, player, team, enemized):
                     'Big Key (Ganons Tower)': (0x366, 0x04), 'Compass (Ganons Tower)': (0x364, 0x04),
                     'Map (Ganons Tower)': (0x368, 0x04)}
         set_or_table = {'Flippers': (0x356, 1, 0x379, 0x02), 'Pegasus Boots': (0x355, 1, 0x379, 0x04),
-                        'Shovel': (0x34C, 1, 0x38C, 0x04), 'Flute': (0x34C, 3, 0x38C, 0x01),
+                        'Shovel': (0x34C, 1, 0x38C, 0x04),
+                        'Flute': (0x34C, 2, 0x38C, 0x01),
+                        'Activated Flute': (0x34C, 3, 0x38C, 0x01),
                         'Mushroom': (0x344, 1, 0x38C, 0x20 | 0x08), 'Magic Powder': (0x344, 2, 0x38C, 0x10),
                         'Blue Boomerang': (0x341, 1, 0x38C, 0x80), 'Red Boomerang': (0x341, 2, 0x38C, 0x40)}
         keys = {'Small Key (Eastern Palace)': [0x37E], 'Small Key (Desert Palace)': [0x37F],

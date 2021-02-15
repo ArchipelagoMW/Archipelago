@@ -845,7 +845,7 @@ class CollectionState(object):
                 elif self.has('Red Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 3:
                     self.prog_items['Mirror Shield', item.player] += 1
                     changed = True
-                elif self.has('Blue Shield', item.player)  and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
+                elif self.has('Blue Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
                     self.prog_items['Red Shield', item.player] += 1
                     changed = True
                 elif self.world.difficulty_requirements[item.player].progressive_shield_limit >= 1:

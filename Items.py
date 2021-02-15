@@ -191,6 +191,7 @@ item_table = {'Bow': (True, None, 0x0B, 'You have\nchosen the\narcher class.', '
               'Blue Potion': (False, None, 0x30, 'Delicious blue goop!', 'and the blue goo', 'the liquid kid', 'potion for sale', 'free samples', 'bottle boy has blue goo again', 'a blue potion'),
               'Bee': (False, None, 0x0E, 'I will sting your foes a few times', 'and the sting buddy', 'the beekeeper kid', 'insect for sale', 'shroom pollenation', 'bottle boy has mad bee again', 'a bee'),
               'Small Heart': (False, None, 0x42, 'Just a little\npiece of love!', 'and the heart', 'the life-giving kid', 'little love for sale', 'fungus for life', 'life boy feels some love again', 'a heart'),
+              'Activated Flute': (True, None, 0x4A, 'Save the duck\nand fly to\nfreedom!', 'and the duck call', 'the duck-call kid', 'duck call for sale', 'duck-calls for trade', 'flute boy plays again', 'the Flute'),
               'Beat Agahnim 1': (True, 'Event', None, None, None, None, None, None, None, None),
               'Beat Agahnim 2': (True, 'Event', None, None, None, None, None, None, None, None),
               'Get Frog': (True, 'Event', None, None, None, None, None, None, None, None),
@@ -198,7 +199,6 @@ item_table = {'Bow': (True, None, 0x0B, 'You have\nchosen the\narcher class.', '
               'Pick Up Purple Chest': (True, 'Event', None, None, None, None, None, None, None, None),
               'Open Floodgate': (True, 'Event', None, None, None, None, None, None, None, None),
               # should probably be converted to an actual item, for purposes for startinventory and such
-              'Activated Flute': (True, 'Event', None, None, None, None, None, None, None, None)
               }
 
 lookup_id_to_name = {data[2]: name for name, data in item_table.items()}
