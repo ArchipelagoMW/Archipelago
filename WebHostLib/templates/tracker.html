@@ -1,7 +1,7 @@
 {% extends 'tablepage.html' %}
 {% block head %}
     {{ super() }}
-    <title>Multiworld Tracker for Room {{ room.id }}</title>
+    <title>Multiworld Tracker</title>
     <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/tracker.css") }}"/>
     <script type="application/ecmascript" src="{{ static_autoversion("assets/jquery.scrollsync.js") }}"></script>
     <script type="application/ecmascript" src="{{ static_autoversion("assets/tracker.js") }}"></script>
@@ -151,7 +151,7 @@
             {% endfor %}
             {% for team, hints in hints.items() %}
                 <div class="table-wrapper">
-                    <table class="table non-unique-item-table">
+                    <table class="table non-unique-item-table" data-order='[[5, "desc"], [0, "asc"]]'>
                         <thead>
                         <tr>
                             <th>Finder</th>
