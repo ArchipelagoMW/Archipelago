@@ -28,9 +28,10 @@ def adjust(args):
     palettes_options['sword']=args.sword_palettes
     palettes_options['shield']=args.shield_palettes
     # palettes_options['link']=args.link_palettesvera
+    racerom = rom.read_byte(0x180213) > 0
     
     apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.fastmenu, args.disablemusic,
-                       args.sprite, palettes_options)
+                       args.sprite, palettes_options, reduceflashing=args.reduceflashing if not racerom else True)
     path = output_path(f'{os.path.basename(args.rom)[:-4]}_adjusted.sfc')
     rom.write_to_file(path)
 
