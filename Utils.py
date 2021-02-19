@@ -343,8 +343,8 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
                                   f"Enter yes, no or never: ")
         if adjust_wanted and adjust_wanted.startswith("y"):
             adjusted = True
-            import AdjusterMain
-            _, romfile = AdjusterMain.adjust(adjuster_settings)
+            import Adjuster
+            _, romfile = Adjuster.adjust(adjuster_settings)
         elif adjust_wanted and "never" in adjust_wanted:
             persistent_store("adjuster", "never_adjust", True)
             return romfile, False
