@@ -58,9 +58,9 @@ class WebUiClient(Node, logging.Handler):
             'recipient': recipient,
             'item': item,
             'location': location,
-            'iAmFinder': 1 if i_am_finder else 0,
-            'iAmRecipient': 1 if i_am_recipient else 0,
-            'itemIsUnique': 1 if item_is_unique else 0,
+            'iAmFinder': int(i_am_finder),
+            'iAmRecipient': int(i_am_recipient),
+            'itemIsUnique': int(item_is_unique),
         }))
 
     def notify_item_found(self, finder: str, item: str, location: str, i_am_finder: bool, item_is_unique: bool = False):
@@ -68,8 +68,8 @@ class WebUiClient(Node, logging.Handler):
             'finder': finder,
             'item': item,
             'location': location,
-            'iAmFinder': 1 if i_am_finder else 0,
-            'itemIsUnique': 1 if item_is_unique else 0,
+            'iAmFinder': int(i_am_finder),
+            'itemIsUnique': int(item_is_unique),
         }))
 
     def notify_item_received(self, finder: str, item: str, location: str, item_index: int, queue_length: int,
@@ -80,7 +80,7 @@ class WebUiClient(Node, logging.Handler):
             'location': location,
             'itemIndex': item_index,
             'queueLength': queue_length,
-            'itemIsUnique': 1 if item_is_unique else 0,
+            'itemIsUnique': int(item_is_unique),
         }))
 
     def send_hint(self, finder, recipient, item, location, found, i_am_finder: bool, i_am_recipient: bool,
