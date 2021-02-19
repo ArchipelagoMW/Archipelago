@@ -7,7 +7,7 @@ from worlds.alttp.Bosses import place_bosses
 from worlds.alttp.Dungeons import get_dungeon_item_pool
 from worlds.alttp.EntranceShuffle import connect_entrance
 from Fill import FillError, fill_restrictive
-from worlds.alttp.Items import ItemFactory, trap_replaceable
+from worlds.alttp.Items import ItemFactory, GetBeemizerItem
 from worlds.alttp.Rules import forbid_items_for_player
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
@@ -297,24 +297,22 @@ def generate_itempool(world, player: int):
 
     world.get_location('Ganon', player).event = True
     world.get_location('Ganon', player).locked = True
-    world.push_item(world.get_location('Agahnim 1', player), ItemFactory('Beat Agahnim 1', player), False)
-    world.get_location('Agahnim 1', player).event = True
-    world.get_location('Agahnim 1', player).locked = True
-    world.push_item(world.get_location('Agahnim 2', player), ItemFactory('Beat Agahnim 2', player), False)
-    world.get_location('Agahnim 2', player).event = True
-    world.get_location('Agahnim 2', player).locked = True
-    world.push_item(world.get_location('Dark Blacksmith Ruins', player), ItemFactory('Pick Up Purple Chest', player), False)
-    world.get_location('Dark Blacksmith Ruins', player).event = True
-    world.get_location('Dark Blacksmith Ruins', player).locked = True
-    world.push_item(world.get_location('Frog', player), ItemFactory('Get Frog', player), False)
-    world.get_location('Frog', player).event = True
-    world.get_location('Frog', player).locked = True
-    world.push_item(world.get_location('Missing Smith', player), ItemFactory('Return Smith', player), False)
-    world.get_location('Missing Smith', player).event = True
-    world.get_location('Missing Smith', player).locked = True
-    world.push_item(world.get_location('Floodgate', player), ItemFactory('Open Floodgate', player), False)
-    world.get_location('Floodgate', player).event = True
-    world.get_location('Floodgate', player).locked = True
+    event_pairs = [
+        ('Agahnim 1', 'Beat Agahnim 1'),
+        ('Agahnim 2', 'Beat Agahnim 2'),
+        ('Dark Blacksmith Ruins', 'Pick Up Purple Chest'),
+        ('Frog', 'Get Frog'),
+        ('Missing Smith', 'Return Smith'),
+        ('Floodgate', 'Open Floodgate'),
+        ('Agahnim 1', 'Beat Agahnim 1'),
+        ('Flute Activation Spot', 'Activated Flute')
+    ]
+    for location_name, event_name in event_pairs:
+        location = world.get_location(location_name, player)
+        event = ItemFactory(event_name, player)
+        world.push_item(location, event, False)
+        location.event = location.locked = True
+
 
     # set up item pool
     additional_triforce_pieces = 0
@@ -375,7 +373,7 @@ def generate_itempool(world, player: int):
 
     if world.goal[player] == 'icerodhunt':
         for item in dungeon_items:
-            world.itempool.append(ItemFactory('Nothing', player))
+            world.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player))
             world.push_precollected(item)
     else:
         world.itempool.extend([item for item in dungeon_items])
@@ -396,16 +394,8 @@ def generate_itempool(world, player: int):
     for item in items:
         if item.advancement or item.type:
             progressionitems.append(item)
-        elif world.beemizer[player] and item.name in trap_replaceable:
-            if world.random.random() < world.beemizer[item.player] * 0.25:
-                if world.random.random() < (0.5 + world.beemizer[item.player] * 0.1):
-                    nonprogressionitems.append(ItemFactory("Bee Trap", player))
-                else:
-                    nonprogressionitems.append(ItemFactory("Bee", player))
-            else:
-                nonprogressionitems.append(item)
         else:
-            nonprogressionitems.append(item)
+            nonprogressionitems.append(GetBeemizerItem(world, item.player, item))
     world.random.shuffle(nonprogressionitems)
 
     if additional_triforce_pieces:
@@ -422,10 +412,10 @@ def generate_itempool(world, player: int):
         mm_medallion = world.random.choice(['Ether', 'Quake', 'Bombos'])
     else:
         mm_medallion = world.required_medallions[player][0]
-    if world.required_medallions[player][0] == "random":
+    if world.required_medallions[player][1] == "random":
         tr_medallion = world.random.choice(['Ether', 'Quake', 'Bombos'])
     else:
-        tr_medallion = world.required_medallions[player][0]
+        tr_medallion = world.required_medallions[player][1]
     world.required_medallions[player] = (mm_medallion, tr_medallion)
 
     place_bosses(world, player)

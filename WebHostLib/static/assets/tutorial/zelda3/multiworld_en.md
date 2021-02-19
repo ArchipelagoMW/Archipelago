@@ -126,10 +126,8 @@ done so already, please do this now. SD2SNES and FXPak Pro users may download th
 [on this page](http://usb2snes.com/#supported-platforms).
 
 1. Close your emulator, which may have auto-launched.
-2. Close QUsb2Snes, which launched automatically with the client.
-3. Launch the appropriate version of QUsb2Snes (v0.7.16).
-4. Power on your device and load the ROM.
-5. Observe the client window now shows "SNES Device: Connected", and lists the name of your device.
+2. Power on your device and load the ROM.
+3. Observe the client window now shows "SNES Device: Connected", and lists the name of your device.
 
 ### Connect to the MultiServer
 The patch file which launched your client should have automatically connected you to the MultiServer.

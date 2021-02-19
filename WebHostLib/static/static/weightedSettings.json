@@ -406,6 +406,38 @@
         }
       }
     },
+    "pyramid_open": {
+      "keyString": "pyramid_open",
+      "friendlyName": "Pyramid Open",
+      "description": "",
+      "inputType": "range",
+      "subOptions": {
+        "goal": {
+          "keyString": "pyramid_open.goal",
+          "friendlyName": "Goal",
+          "description": "Opens the pyramid if the goal requires you to kill Ganon, unless the goal is Slow Ganon or All Dungeons.",
+          "defaultValue": 50
+        },
+        "auto": {
+          "keyString": "pyramid_open.auto",
+          "friendlyName": "Auto",
+          "description": "Same as Goal, but also opens when any non-dungeon entrance shuffle is used.",
+          "defaultValue": 0
+        },
+        "yes": {
+          "keyString": "pyramid_open.yes",
+          "friendlyName": "Always Open",
+          "description": "Pyramid hole is always open. Ganon's vulnerable condition is still required before he can he hurt.",
+          "defaultValue": 0
+        },
+        "no": {
+          "keyString": "pyramid_open.no",
+          "friendlyName": "Always Closed",
+          "description": "Pyramid hole is always closed until you defeat Agahnim atop Ganon's Tower.",
+          "defaultValue": 0
+        }
+      }
+    },
     "triforce_pieces_required": {
       "keyString": "triforce_pieces_required",
       "friendlyName": "Triforce Pieces Required",
@@ -1135,7 +1167,7 @@
     "beemizer": {
       "keyString": "beemizer",
       "friendlyName": "Beemizer",
-      "description": "Remove items from the global item pool and replace them with single bees and bee traps.",
+      "description": "Remove non-health items from the global item pool and replace them with single bees and bee traps.",
       "inputType": "range",
       "subOptions": {
         "0": {
@@ -1147,25 +1179,25 @@
         "1": {
           "keyString": "beemizer.1",
           "friendlyName": "Level 1",
-          "description": "25% of the non-essential item pool is replaced with bee traps.",
+          "description": "25% of rupees, bombs and arrows are replaced with bees, of which 60% are traps and 40% single bees",
           "defaultValue": 1
         },
         "2": {
           "keyString": "beemizer.2",
           "friendlyName": "Level 2",
-          "description": "60% of the non-essential item pool is replaced with bee traps, of which 20% could be single bees.",
+          "description": "50% of rupees, bombs and arrows are replaced with bees, of which 70% are traps and 30% single bees",
           "defaultValue": 2
         },
         "3": {
           "keyString": "beemizer.3",
           "friendlyName": "Level 3",
-          "description": "100% of the non-essential item pool is replaced with bee traps, of which 50% could be single bees.",
+          "description": "75% of rupees, bombs and arrows are replaced with bees, of which 80% are traps and 20% single bees",
           "defaultValue": 3
         },
         "4": {
           "keyString": "beemizer.4",
           "friendlyName": "Level 4",
-          "description": "100% of the non-essential item pool is replaced with bee traps.",
+          "description": "100% of rupees, bombs and arrows are replaced with bees, of which 90% are traps and 10% single bees",
           "defaultValue": 4
         }
       }
@@ -1250,19 +1282,19 @@
           "description": "No items are moved",
           "defaultValue": 50
         },
-        "1": {
+        "10": {
           "keyString": "shop_shuffle_slots.10",
           "friendlyName": "Level 1",
           "description": "10 Items are moved into shops.",
           "defaultValue": 0
         },
-        "2": {
+        "20": {
           "keyString": "shop_shuffle_slots.20",
           "friendlyName": "Level 2",
           "description": "20 Items are moved into shops.",
           "defaultValue": 0
         },
-        "3": {
+        "30": {
           "keyString": "shop_shuffle_slots.30",
           "friendlyName": "Level 3",
           "description": "30 Items are moved into shops.",

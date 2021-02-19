@@ -54,7 +54,8 @@ class WebUiClient(Node, logging.Handler):
     def poll_for_server_ip(self):
         self.broadcast_all(self.build_message('serverAddress', {}))
 
-    def notify_item_sent(self, finder, recipient, item, location, i_am_finder: bool, i_am_recipient: bool):
+    def notify_item_sent(self, finder, recipient, item, location, i_am_finder: bool, i_am_recipient: bool,
+                         item_is_unique: bool = False):
         self.broadcast_all(self.build_message('itemSent', {
             'finder': finder,
             'recipient': recipient,
@@ -62,23 +63,27 @@ class WebUiClient(Node, logging.Handler):
             'location': location,
             'iAmFinder': 1 if i_am_finder else 0,
             'iAmRecipient': 1 if i_am_recipient else 0,
+            'itemIsUnique': 1 if item_is_unique else 0,
         }))
 
-    def notify_item_found(self, finder: str, item: str, location: str, i_am_finder: bool):
+    def notify_item_found(self, finder: str, item: str, location: str, i_am_finder: bool, item_is_unique: bool = False):
         self.broadcast_all(self.build_message('itemFound', {
             'finder': finder,
             'item': item,
             'location': location,
             'iAmFinder': 1 if i_am_finder else 0,
+            'itemIsUnique': 1 if item_is_unique else 0,
         }))
 
-    def notify_item_received(self, finder: str, item: str, location: str, item_index: int, queue_length: int):
+    def notify_item_received(self, finder: str, item: str, location: str, item_index: int, queue_length: int,
+                             item_is_unique: bool = False):
         self.broadcast_all(self.build_message('itemReceived', {
             'finder': finder,
             'item': item,
             'location': location,
             'itemIndex': item_index,
             'queueLength': queue_length,
+            'itemIsUnique': 1 if item_is_unique else 0,
         }))
 
     def send_hint(self, finder, recipient, item, location, found, i_am_finder: bool, i_am_recipient: bool,

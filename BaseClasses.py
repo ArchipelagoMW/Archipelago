@@ -26,7 +26,7 @@ class MultiWorld():
     plando_items: List[PlandoItem]
     plando_connections: List[PlandoConnection]
 
-    def __init__(self, players: int, shuffle, logic, mode, swords, difficulty, difficulty_adjustments, timer,
+    def __init__(self, players: int, shuffle, logic, mode, swords, difficulty, item_functionality, timer,
                  progressive,
                  goal, algorithm, accessibility, shuffle_ganon, retro, custom, customitemarray, hints):
 
@@ -39,7 +39,7 @@ class MultiWorld():
         self.mode = mode.copy()
         self.swords = swords.copy()
         self.difficulty = difficulty.copy()
-        self.difficulty_adjustments = difficulty_adjustments.copy()
+        self.item_functionality = item_functionality.copy()
         self.timer = timer.copy()
         self.progressive = progressive
         self.goal = goal.copy()
@@ -402,7 +402,7 @@ class MultiWorld():
     def get_spheres(self):
         state = CollectionState(self)
 
-        locations = {location for location in self.get_locations()}
+        locations = set(self.get_locations())
 
         while locations:
             sphere = set()
@@ -556,11 +556,13 @@ class CollectionState(object):
         if locations is None:
             locations = self.world.get_filled_locations()
         new_locations = True
+        # since the loop has a good chance to run more than once, only filter the events once
+        locations = {location for location in locations if location.event}
         while new_locations:
-            reachable_events = {location for location in locations if location.event and
-                                (not key_only or (not self.world.keyshuffle[
-                                    location.item.player] and location.item.smallkey) or (not self.world.bigkeyshuffle[
-                                    location.item.player] and location.item.bigkey))
+            reachable_events = {location for location in locations if
+                                (not key_only or
+                                 (not self.world.keyshuffle[location.item.player] and location.item.smallkey)
+                                 or (not self.world.bigkeyshuffle[location.item.player] and location.item.bigkey))
                                 and location.can_reach(self)}
             new_locations = reachable_events - self.events
             for event in new_locations:
@@ -643,9 +645,9 @@ class CollectionState(object):
         elif self.has('Magic Upgrade (1/2)', player):
             basemagic = 16
         if self.can_buy_unlimited('Green Potion', player) or self.can_buy_unlimited('Blue Potion', player):
-            if self.world.difficulty_adjustments[player] == 'hard' and not fullrefill:
+            if self.world.item_functionality[player] == 'hard' and not fullrefill:
                 basemagic = basemagic + int(basemagic * 0.5 * self.bottle_count(player))
-            elif self.world.difficulty_adjustments[player] == 'expert' and not fullrefill:
+            elif self.world.item_functionality[player] == 'expert' and not fullrefill:
                 basemagic = basemagic + int(basemagic * 0.25 * self.bottle_count(player))
             else:
                 basemagic = basemagic + basemagic * self.bottle_count(player)
@@ -703,10 +705,6 @@ class CollectionState(object):
     def has_fire_source(self, player: int) -> bool:
         return self.has('Fire Rod', player) or self.has('Lamp', player)
 
-    def can_flute(self, player: int) -> bool:
-        lw = self.world.get_region('Light World', player)
-        return self.has('Flute', player) and lw.can_reach(self) and self.is_not_bunny(lw, player)
-
     def can_melt_things(self, player: int) -> bool:
         return self.has('Fire Rod', player) or \
                (self.has('Bombos', player) and
@@ -763,7 +761,7 @@ class CollectionState(object):
             rules.append(self.has_Pearl(player))
         return all(rules)
 
-    def collect(self, item: Item, event=False, location=None):
+    def collect(self, item: Item, event=False, location=None) -> bool:
         if location:
             self.locations_checked.add(location)
         changed = False
@@ -799,7 +797,7 @@ class CollectionState(object):
                 elif self.has('Red Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 3:
                     self.prog_items['Mirror Shield', item.player] += 1
                     changed = True
-                elif self.has('Blue Shield', item.player)  and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
+                elif self.has('Blue Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
                     self.prog_items['Red Shield', item.player] += 1
                     changed = True
                 elif self.world.difficulty_requirements[item.player].progressive_shield_limit >= 1:
@@ -824,9 +822,10 @@ class CollectionState(object):
 
         self.stale[item.player] = True
 
-        if changed:
-            if not event:
-                self.sweep_for_events()
+        if changed and not event:
+            self.sweep_for_events()
+
+        return changed
 
     def remove(self, item):
         if item.advancement:
@@ -1032,6 +1031,7 @@ class Location():
     shop_slot_disabled: bool = False
     event: bool = False
     locked: bool = False
+    spot_type = 'Location'
 
     def __init__(self, player: int, name: str = '', address=None, crystal: bool = False,
                  hint_text: Optional[str] = None, parent=None,
@@ -1042,7 +1042,6 @@ class Location():
         self.crystal = crystal
         self.address = address
         self.player_address = player_address
-        self.spot_type = 'Location'
         self.hint_text: str = hint_text if hint_text else name
         self.recursion_count = 0
         self.always_allow = lambda item, state: False
@@ -1093,6 +1092,11 @@ class Item(object):
 
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player
+
+    def __lt__(self, other):
+        if other.player != self.player:
+            return other.player < self.player
+        return self.name < other.name
 
     def __hash__(self):
         return hash((self.name, self.player))
@@ -1252,7 +1256,7 @@ class Spoiler(object):
                          'goal': self.world.goal,
                          'shuffle': self.world.shuffle,
                          'item_pool': self.world.difficulty,
-                         'item_functionality': self.world.difficulty_adjustments,
+                         'item_functionality': self.world.item_functionality,
                          'gt_crystals': self.world.crystals_needed_for_gt,
                          'ganon_crystals': self.world.crystals_needed_for_ganon,
                          'open_pyramid': self.world.open_pyramid,

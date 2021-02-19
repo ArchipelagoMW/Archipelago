@@ -97,16 +97,11 @@ class TestInvertedDarkWorld(TestInverted):
     def testMireArea(self):
         self.run_location_tests([
             ["Mire Shed - Left", False, []],
-            ["Mire Shed - Left", False, [], ['Flute', 'Magic Mirror']],
-            ["Mire Shed - Left", True, ['Moon Pearl', 'Flute', 'Progressive Glove', 'Progressive Glove']],
-            ["Mire Shed - Left", True, ['Moon Pearl', 'Flute', 'Progressive Glove', 'Hammer']],
-            ["Mire Shed - Left", True, ['Moon Pearl', 'Flute', 'Beat Agahnim 1']],
+            ["Mire Shed - Left", True, ['Flute']],
             ["Mire Shed - Left", True, ['Magic Mirror', 'Beat Agahnim 1']],
 
             ["Mire Shed - Right", False, []],
-            ["Mire Shed - Right", False, [], ['Flute', 'Magic Mirror']],
-            ["Mire Shed - Right", True, ['Moon Pearl', 'Flute', 'Progressive Glove', 'Progressive Glove']],
-            ["Mire Shed - Right", True, ['Moon Pearl', 'Flute', 'Progressive Glove', 'Hammer']],
-            ["Mire Shed - Right", True, ['Moon Pearl', 'Flute', 'Beat Agahnim 1']],
+            ["Mire Shed - Right", True, ['Flute']],
             ["Mire Shed - Right", True, ['Magic Mirror', 'Beat Agahnim 1']],
+
         ])

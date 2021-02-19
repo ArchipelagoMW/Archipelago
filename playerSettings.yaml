@@ -20,10 +20,11 @@
 description: Template Name # Used to describe your yaml. Useful if you have multiple files
 name: YourName # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
 ### Logic Section ###
+# Warning: overworld_glitches is not available and minor_glitches is only partially implemented on the door-rando version
 glitches_required: # Determine the logic required to complete the seed
   none: 50 # No glitches required
   minor_glitches: 0 # Puts fake flipper, waterwalk, super bunny shenanigans, and etc into logic
-  overworld_glitches: 0 # Assumes the player has knowledge of both overworld major glitches (boots clips, mirror clips) and minor glitches (fake flipper, super bunny shenanigans, water walk and etc.)
+  overworld_glitches: 0 # Assumes the player has knowledge of both overworld major glitches (boots clips, mirror clips) and minor glitches
   no_logic: 0 # Your own items are placed with no regard to any logic; such as your Fire Rod can be on your Trinexx.
   # Other players items are placed into your world under OWG logic
 dark_room_logic: # Logic for unlit dark rooms
@@ -97,16 +98,16 @@ goals:
   ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
   local_ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
   ice_rod_hunt: 0 # You start with everything needed to 216 the seed. Find the Ice rod, then kill Trinexx at Turtle rock.
-pyramid_open:
-  goal: 50 # Opens pyrymid if goal is fast_ganon, ganon_pedestal, ganon_triforce_hunt, or local_ganon_triforce_hunt
-  auto: 0 # Opens pyramid same as goal, except when an entrance shuffle other than vanilla, dungeonssimple or dungeonsfull is in effect.
-  yes: 0 # pyramid is opened unconditionally. You still have to beat agahnim 2 for ganon and dungeons.
-  no: 0 # access to pyramid requires beating agahnim 2.
+open_pyramid:
+  goal: 50 # Opens the pyramid if the goal requires you to kill Ganon, unless the goal is Slow Ganon or All Dungeons
+  auto: 0 # Same as Goal, but also is closed if holes are shuffled and ganon is part of the shuffle pool
+  yes: 0 # Pyramid hole is always open. Ganon's vulnerable condition is still required before he can he hurt
+  no: 0 # Pyramid hole is always closed until you defeat Agahnim atop Ganon's Tower
 triforce_pieces_mode: #Determine how to calculate the extra available triforce pieces.
   extra: 0 # available = triforce_pieces_extra + triforce_pieces_required
   percentage: 0 # available = (triforce_pieces_percentage /100) * triforce_pieces_required
   available: 50 # available = triforce_pieces_available
-triforce_pieces_extra: # Set to how many extra triforces pieces are available to collect in the world. 
+triforce_pieces_extra: # Set to how many extra triforces pieces are available to collect in the world.
   # Format "pieces: chance"
   0: 0
   5: 50
@@ -248,8 +249,8 @@ shop_shuffle:
 ### End of Shop Section ###
 shuffle_prizes: # aka drops
   none: 0 # do not shuffle prize packs
-  g: 50 # shuffle "general" price packs, as in enemy, tree pull, dig etc.
-  b: 0 # shuffle "bonk" price packs
+  g: 50 # shuffle "general" prize packs, as in enemy, tree pull, dig etc.
+  b: 0 # shuffle "bonk" prize packs
   bg: 0 # shuffle both
 timer:
   none: 50 # No timer will be displayed.
@@ -322,6 +323,13 @@ linked_options:
         hard: 1
         expert: 1
     percentage: 0 # Set this to the percentage chance you want enemizer
+# triggers that replace options upon rolling certain options
+triggers:
+  - option_name: enemy_damage # targets enemy_damage
+    option_result: shuffled # if it rolls shuffled
+    percentage: 0 # AND has a 0 percent chance (meaning this is default disabled, just to show how it works)
+    options: # then inserts these options
+      swords: assured
 ### door rando only options ###
 door_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
   vanilla: 50 # Everything should be like in vanilla

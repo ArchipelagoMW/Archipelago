@@ -78,14 +78,14 @@ class TestDeathMountain(TestInvertedOWG):
             ["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Lamp', 'Cape']],
             # Change from base ER - this fork places a blue potion in dark world
             ["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Lamp', 'Cane of Byrna']],
-            ["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Flute', 'Moon Pearl', 'Cane of Byrna']],
+            ["Spike Cave", True, ['Bottle', 'Hammer', 'Progressive Glove', 'Flute', 'Cane of Byrna']],
             ["Spike Cave", True, ['Magic Upgrade (1/2)', 'Hammer', 'Progressive Glove', 'Lamp', 'Cape']],
-            ["Spike Cave", True, ['Magic Upgrade (1/2)', 'Hammer', 'Progressive Glove', 'Flute', 'Moon Pearl', 'Cape']],
+            ["Spike Cave", True, ['Magic Upgrade (1/2)', 'Hammer', 'Progressive Glove', 'Flute', 'Cape']],
             ["Spike Cave", True, ['Magic Upgrade (1/2)', 'Hammer', 'Progressive Glove', 'Lamp', 'Cane of Byrna']],
-            ["Spike Cave", True, ['Magic Upgrade (1/2)', 'Hammer', 'Progressive Glove', 'Flute', 'Moon Pearl', 'Cane of Byrna']],
+            ["Spike Cave", True, ['Magic Upgrade (1/2)', 'Hammer', 'Progressive Glove', 'Flute', 'Cane of Byrna']],
             ["Spike Cave", True, ['Pegasus Boots', 'Hammer', 'Progressive Glove', 'Cane of Byrna']],
             ["Spike Cave", True, ['Boss Heart Container', 'Hammer', 'Progressive Glove', 'Lamp', 'Cane of Byrna']],
-            ["Spike Cave", True, ['Boss Heart Container', 'Hammer', 'Progressive Glove', 'Flute', 'Moon Pearl', 'Cane of Byrna']],
+            ["Spike Cave", True, ['Boss Heart Container', 'Hammer', 'Progressive Glove', 'Flute', 'Cane of Byrna']],
         ])
 
     def testEastDarkWorldDeathMountain(self):

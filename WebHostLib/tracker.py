@@ -11,7 +11,7 @@ from Utils import Hint
 
 
 def get_id(item_name):
-    return Items.item_table[item_name][3]
+    return Items.item_table[item_name][2]
 
 
 app.jinja_env.filters["location_name"] = lambda location: Regions.lookup_id_to_name.get(location, location)
@@ -231,9 +231,9 @@ for item_name, data in Items.item_table.items():
     if "Key" in item_name:
         area = item_name.split("(")[1][:-1]
         if "Small" in item_name:
-            small_key_ids[area] = data[3]
+            small_key_ids[area] = data[2]
         else:
-            big_key_ids[area] = data[3]
+            big_key_ids[area] = data[2]
 
 from MultiServer import get_item_name_from_id
 

@@ -1443,7 +1443,7 @@ class TextTable(object):
             'zora_meeting',
             'zora_tells_cost',
             'zora_get_flippers',
-            #'zora_no_cash',
+            'zora_no_cash',
             'zora_no_buy_item',
             'agahnim_zelda_teleport',
             'agahnim_magic_running_away',
@@ -1725,7 +1725,7 @@ class TextTable(object):
         text['game_race_boy_already_won'] = CompressedTextMapper.convert("You already have your prize, dingus!")
         # D0
         text['game_race_boy_sneaky'] = CompressedTextMapper.convert("Thought you could sneak in, eh?")
-        text['bottle_vendor_choice'] = CompressedTextMapper.convert("I gots bottles.\nYous gots 100 rupees?\n  ≥ I want\n    no way!")
+        text['bottle_vendor_choice'] = CompressedTextMapper.convert("I gots bottles.\nYous gots 100 rupees?\n  ≥ I want\n    no way!\n{CHOICE}")
         text['bottle_vendor_get'] = CompressedTextMapper.convert("Nice! Hold it up son! Show the world what you got!")
         text['bottle_vendor_no'] = CompressedTextMapper.convert("Fine! I didn't want your money anyway.")
         text['bottle_vendor_already_collected'] = CompressedTextMapper.convert("Dude! You already have it.")

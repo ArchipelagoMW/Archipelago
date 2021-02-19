@@ -9,7 +9,7 @@ module.exports = {
       {
         test: /\.(js|jsx|es6)$/,
         loader: 'babel-loader',
-        query: {
+        options: {
           compact: false,
           minified: false,
         },
@@ -42,5 +42,4 @@ module.exports = {
     publicPath: '/',
     filename: '[name].bundle.js',
   },
-  devtool: 'source-map',
 };

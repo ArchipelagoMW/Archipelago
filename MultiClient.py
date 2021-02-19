@@ -31,6 +31,7 @@ import WebUI
 
 from worlds.alttp import Regions, Shops
 import Utils
+import Items
 
 # logging note:
 # logging.* gets send to only the text console, logger.* gets send to the WebUI as well, if it's initialized.
@@ -121,6 +122,13 @@ class Context():
             return
         await self.server.socket.send(dumps(msgs))
 
+
+def color_item(item_id: int, green: bool = False) -> str:
+    item_name = get_item_name_from_id(item_id)
+    item_colors = ['green' if green else 'cyan']
+    if item_name in Items.progression_items:
+        item_colors.append("white_bg")
+    return color(item_name, *item_colors)
 
 START_RECONNECT_DELAY = 5
 SNES_RECONNECT_DELAY = 5
@@ -914,7 +922,8 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
         receiving_player = args["receiver"]
         ctx.ui_node.notify_item_sent(ctx.player_names[found.player], ctx.player_names[receiving_player],
                                      get_item_name_from_id(found.item), get_location_name_from_address(found.location),
-                                     found.player == ctx.slot, receiving_player == ctx.slot)
+                                     found.player == ctx.slot, receiving_player == ctx.slot,
+                                     get_item_name_from_id(item) in Items.progression_items)
         item = color(get_item_name_from_id(found.item), 'cyan' if found.player != ctx.slot else 'green')
         found_player = color(ctx.player_names[found.player], 'yellow' if found.player != ctx.slot else 'magenta')
         receiving_player = color(ctx.player_names[receiving_player], 'yellow' if receiving_player != ctx.slot else 'magenta')
@@ -925,8 +934,9 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
     elif cmd == 'ItemFound':
         found = ReceivedItem(*args["item"])
         ctx.ui_node.notify_item_found(ctx.player_names[found.player], get_item_name_from_id(found.item),
-                                      get_location_name_from_address(found.location), found.player == ctx.slot)
-        item = color(get_item_name_from_id(found.item), 'cyan' if found.player != ctx.slot else 'green')
+                                      get_location_name_from_address(found.location), found.player == ctx.slot,
+                                      True if get_item_name_from_id(found.item) in Items.progression_items else False)
+        item = color_item(found.item, found.player == ctx.slot)
         player_sent = color(ctx.player_names[found.player], 'yellow' if found.player != ctx.slot else 'magenta')
         logging.info('%s found %s (%s)' % (player_sent, item, color(get_location_name_from_address(found.location),
                                                                     'blue_bg', 'white')))
@@ -938,7 +948,7 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
                                   get_item_name_from_id(hint.item), get_location_name_from_address(hint.location),
                                   hint.found, hint.finding_player == ctx.slot, hint.receiving_player == ctx.slot,
                                   hint.entrance if hint.entrance else None)
-            item = color(get_item_name_from_id(hint.item), 'green' if hint.found else 'cyan')
+            item = color_item(hint.item, hint.found)
             player_find = color(ctx.player_names[hint.finding_player],
                                 'yellow' if hint.finding_player != ctx.slot else 'magenta')
             player_recvd = color(ctx.player_names[hint.receiving_player],
@@ -1055,7 +1065,8 @@ class ClientCommandProcessor(CommandProcessor):
         for index, item in enumerate(self.ctx.items_received, 1):
             self.ctx.ui_node.notify_item_received(self.ctx.player_names[item.player], get_item_name_from_id(item.item),
                                                   get_location_name_from_address(item.location), index,
-                                                  len(self.ctx.items_received))
+                                                  len(self.ctx.items_received),
+                                                  True if get_item_name_from_id(item.item) in Items.progression_items else False)
             logging.info('%s from %s (%s) (%d/%d in list)' % (
                 color(get_item_name_from_id(item.item), 'red', 'bold'),
                 color(self.ctx.player_names[item.player], 'yellow'),
@@ -1315,7 +1326,8 @@ async def game_watcher(ctx: Context):
             item = ctx.items_received[recv_index]
             ctx.ui_node.notify_item_received(ctx.player_names[item.player], get_item_name_from_id(item.item),
                                              get_location_name_from_address(item.location), recv_index + 1,
-                                             len(ctx.items_received))
+                                             len(ctx.items_received),
+                                             True if get_item_name_from_id(item.item) in Items.progression_items else False)
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
                 color(get_item_name_from_id(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
                 get_location_name_from_address(item.location), recv_index + 1, len(ctx.items_received)))

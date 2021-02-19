@@ -2,9 +2,17 @@ let spriteData = null;
 
 window.addEventListener('load', () => {
   const gameSettings = document.getElementById('weighted-settings');
-  Promise.all([fetchPlayerSettingsYaml(), fetchPlayerSettingsJson(), fetchSpriteData()]).then((results) => {
+  Promise.all([fetchWeightedSettingsYaml(), fetchWeightedSettingsJson(), fetchSpriteData()]).then((results) => {
     // Load YAML into object
     const sourceData = jsyaml.safeLoad(results[0], { json: true });
+    const wsVersion = sourceData.ws_version;
+    delete sourceData.ws_version; // Do not include the settings version number in the export
+
+    // Check if settings exist in localStorage. If no settings are present, this is a first load (or reset to default)
+    // and the version number should be silently updated
+    if (!localStorage.getItem('weightedSettings1')) {
+      localStorage.setItem('wsVersion', wsVersion);
+    }
 
     // Update localStorage with three settings objects. Preserve original objects if present.
     for (let i=1; i<=3; i++) {
@@ -25,6 +33,16 @@ window.addEventListener('load', () => {
     document.getElementById('export-button').addEventListener('click', exportSettings);
     document.getElementById('reset-to-default').addEventListener('click', resetToDefaults);
     adjustHeaderWidth();
+
+    if (localStorage.getItem('wsVersion') !== wsVersion) {
+      const userWarning = document.getElementById('user-warning');
+      const messageSpan = document.createElement('span');
+      messageSpan.innerHTML = "A new version of the weighted settings file is available. Click here to update!" +
+        "<br />Be aware this will also reset your presets, so you should export them now if you want to save them.";
+      userWarning.appendChild(messageSpan);
+      userWarning.style.display = 'block';
+      userWarning.addEventListener('click', resetToDefaults);
+    }
   }).catch((error) => {
     console.error(error);
     gameSettings.innerHTML = `
@@ -37,7 +55,7 @@ window.addEventListener('load', () => {
   document.getElementById('generate-race').addEventListener('click', () => generateGame(true));
 });
 
-const fetchPlayerSettingsYaml = () => new Promise((resolve, reject) => {
+const fetchWeightedSettingsYaml = () => new Promise((resolve, reject) => {
   const ajax = new XMLHttpRequest();
   ajax.onreadystatechange = () => {
     if (ajax.readyState !== 4) { return; }
@@ -51,7 +69,7 @@ const fetchPlayerSettingsYaml = () => new Promise((resolve, reject) => {
   ajax.send();
 });
 
-const fetchPlayerSettingsJson = () => new Promise((resolve, reject) => {
+const fetchWeightedSettingsJson = () => new Promise((resolve, reject) => {
   const ajax = new XMLHttpRequest();
   ajax.onreadystatechange = () => {
     if (ajax.readyState !== 4) { return; }
@@ -113,6 +131,7 @@ const handleOptionChange = (event) => {
 };
 
 const populateSettings = () => {
+  buildSpriteOptions();
   const presetNumber = document.getElementById('preset-number').value;
   const settings = JSON.parse(localStorage.getItem(`weightedSettings${presetNumber}`))
   const settingsInputs = Array.from(document.querySelectorAll('.setting'));
@@ -206,7 +225,21 @@ const buildUI = (settings, spriteData) => {
   settingsWrapper.appendChild(spriteOptionsHeader);
 
   const spriteOptionsWrapper = document.createElement('div');
+  spriteOptionsWrapper.setAttribute('id', 'sprite-options-wrapper');
   spriteOptionsWrapper.className = 'setting-wrapper';
+  settingsWrapper.appendChild(spriteOptionsWrapper);
+
+  // Append sprite picker
+  settingsWrapper.appendChild(buildSpritePicker(spriteData));
+};
+
+const buildSpriteOptions = () => {
+  const spriteOptionsWrapper = document.getElementById('sprite-options-wrapper');
+
+  // Clear the contents of the wrapper div
+  while(spriteOptionsWrapper.firstChild){
+    spriteOptionsWrapper.removeChild(spriteOptionsWrapper.lastChild);
+  }
 
   const spriteOptionsTitle = document.createElement('span');
   spriteOptionsTitle.className = 'title-span';
@@ -240,11 +273,6 @@ const buildUI = (settings, spriteData) => {
 
   spriteOptionsTable.appendChild(tbody);
   spriteOptionsWrapper.appendChild(spriteOptionsTable);
-
-  settingsWrapper.appendChild(spriteOptionsWrapper);
-
-  // Append sprite picker
-  settingsWrapper.appendChild(buildSpritePicker(spriteData));
 };
 
 const buildRangeSettings = (parentElement, settings) => {
