@@ -407,7 +407,7 @@ def main(args, seed=None):
             for future in roms:
                 rom_name = future.result()
                 rom_names.append(rom_name)
-            minimum_versions = {"server": (0, 1, 0)}
+            minimum_versions = {"server": (0, 0, 1)}
             multidata = zlib.compress(pickle.dumps({"names": parsed_names,
                                                     "roms": {base64.b64encode(rom_name).decode(): (team, slot) for
                                                              slot, team, rom_name in rom_names},
