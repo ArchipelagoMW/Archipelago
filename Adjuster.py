@@ -159,7 +159,7 @@ def adjustGUI():
             logging.exception(e)
             messagebox.showerror(title="Error while adjusting Rom", message=str(e))
         else:
-            messagebox.showinfo(title="Success", message="Rom patched successfully")
+            messagebox.showinfo(title="Success", message=f"Rom patched successfully to {path}")
             from Utils import persistent_store
             from Rom import Sprite
             if isinstance(guiargs.sprite, Sprite):
