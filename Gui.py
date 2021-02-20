@@ -236,7 +236,8 @@ def guiMain(args=None):
     shuffleVar.set('vanilla')
     shuffleOptionMenu = OptionMenu(shuffleFrame, shuffleVar, 'vanilla', 'simple', 'restricted', 'full', 'crossed',
                                    'insanity', 'restricted_legacy', 'full_legacy', 'madness_legacy', 'insanity_legacy',
-                                   'dungeonsfull', 'dungeonssimple')
+                                   'dungeonsfull', 'dungeonssimple', "same simple", "same restricted", "same full",
+                                   "same crossed", "same insanity", "same dungeonsfull", "same dungeonssimple")
     shuffleOptionMenu.pack(side=RIGHT)
     shuffleLabel = Label(shuffleFrame, text='Entrance shuffle')
     shuffleLabel.pack(side=LEFT)
@@ -417,6 +418,9 @@ def guiMain(args=None):
         guiargs.accessibility = accessibilityVar.get()
         guiargs.algorithm = algorithmVar.get()
         guiargs.shuffle = shuffleVar.get()
+        if "same " in guiargs.shuffle:
+            guiargs.shuffle = guiargs.shuffle[5:] + "-" + str(seedVar.get() if seedVar.get() else
+                                                              random.randint(0, 2**64))
         guiargs.heartbeep = rom_vars.heartbeepVar.get()
         guiargs.heartcolor = rom_vars.heartcolorVar.get()
         guiargs.fastmenu = rom_vars.fastMenuVar.get()

@@ -359,7 +359,7 @@ def swap_location_item(location_1: Location, location_2: Location, check_locked=
 
 
 def distribute_planned(world):
-    world_name_lookup = {world.player_names[player_id][0]: player_id for player_id in world.player_ids}
+    world_name_lookup = world.world_name_lookup
 
     for player in world.player_ids:
         placement: PlandoItem

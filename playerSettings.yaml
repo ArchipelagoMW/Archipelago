@@ -87,6 +87,9 @@ entrance_shuffle: # Documentation: https://alttpr.com/en/options#entrance_shuffl
   full: 0 # Less strict than restricted
   crossed: 0 # Less strict than full
   insanity: 0 # Very few grouping rules. Good luck
+  # you can also define entrance shuffle seed, like so:
+  crossed-1000: 0 # using this method, you can have the same layout as another player and share entrance information
+  # however, many other settings like logic, world state, retro etc. may affect the shuffle result as well.
 goals:
   ganon: 50 # Climb GT, defeat Agahnim 2, and then kill Ganon
   fast_ganon: 0 # Only killing Ganon is required. However, items may still be placed in GT

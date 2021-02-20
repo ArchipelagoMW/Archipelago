@@ -4,6 +4,7 @@ import copy
 from enum import Enum, unique
 import logging
 import json
+import functools
 from collections import OrderedDict, Counter, deque
 from typing import Union, Optional, List, Dict, NamedTuple, Iterable
 import secrets
@@ -159,6 +160,10 @@ class World(object):
         for region in regions if regions else self.regions:
             region.world = self
             self._region_cache[region.player][region.name] = region
+
+    @functools.cached_property
+    def world_name_lookup(self):
+        return {self.player_names[player_id][0]: player_id for player_id in self.player_ids}
 
     def _recache(self):
         """Rebuild world cache"""
