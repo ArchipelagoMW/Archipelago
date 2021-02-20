@@ -325,6 +325,7 @@ def roll_linked_options(weights: dict) -> dict:
 
 def roll_triggers(weights: dict) -> dict:
     weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
+    weights["_Generator_Version"] = "Main"  # Some means for triggers to know if the seed is on main or doors.
     for option_set in weights["triggers"]:
         try:
             key = get_choice("option_name", option_set)
