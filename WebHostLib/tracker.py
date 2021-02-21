@@ -303,6 +303,30 @@ def get_static_room_data(room: Room):
     return result
 
 
+@app.route('/tracker/<suuid:tracker>/<int:team>/<int:player>')
+@cache.memoize(timeout=15)
+def getPlayerTracker(tracker: UUID, team: int, player: int):
+    room = Room.get(tracker=tracker)
+    if not room:
+        abort(404)
+
+    locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area = get_static_room_data(room)
+    inventory = collections.Counter()
+    checks_done = {loc_name: 0 for loc_name in default_locations}
+    precollected_items = room.seed.multidata.get("precollected_items", None)
+
+    print(f'locations: {locations}')
+    print(f'names: {names}')
+    print(f'use_door_tracker: {use_door_tracker}')
+    print(f'seed_checks_in_area: {seed_checks_in_area}')
+    print(f'player_location_to_area: {player_location_to_area}')
+    print(f'inventory: {inventory}')
+    print(f'checks_done: {checks_done}')
+    print(f'precollected_items: {precollected_items}')
+
+    return render_template("playerTracker.html")
+
+
 @app.route('/tracker/<suuid:tracker>')
 @cache.memoize(timeout=30)  # update every 30 seconds
 def getTracker(tracker: UUID):
