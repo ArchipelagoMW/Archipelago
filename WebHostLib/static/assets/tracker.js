@@ -55,7 +55,7 @@ window.addEventListener('load', () => {
 
     window.addEventListener('resize', () => {
         adjustTableHeight();
-        tables.draw()
+        tables.draw();
     });
 
     $(".table-wrapper").scrollsync({

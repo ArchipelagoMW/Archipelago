@@ -935,7 +935,7 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
         found = ReceivedItem(*args["item"])
         ctx.ui_node.notify_item_found(ctx.player_names[found.player], get_item_name_from_id(found.item),
                                       get_location_name_from_address(found.location), found.player == ctx.slot,
-                                      True if get_item_name_from_id(found.item) in Items.progression_items else False)
+                                      get_item_name_from_id(found.item) in Items.progression_items)
         item = color_item(found.item, found.player == ctx.slot)
         player_sent = color(ctx.player_names[found.player], 'yellow' if found.player != ctx.slot else 'magenta')
         logging.info('%s found %s (%s)' % (player_sent, item, color(get_location_name_from_address(found.location),
@@ -1066,7 +1066,7 @@ class ClientCommandProcessor(CommandProcessor):
             self.ctx.ui_node.notify_item_received(self.ctx.player_names[item.player], get_item_name_from_id(item.item),
                                                   get_location_name_from_address(item.location), index,
                                                   len(self.ctx.items_received),
-                                                  True if get_item_name_from_id(item.item) in Items.progression_items else False)
+                                                  get_item_name_from_id(item.item) in Items.progression_items)
             logging.info('%s from %s (%s) (%d/%d in list)' % (
                 color(get_item_name_from_id(item.item), 'red', 'bold'),
                 color(self.ctx.player_names[item.player], 'yellow'),
@@ -1327,7 +1327,7 @@ async def game_watcher(ctx: Context):
             ctx.ui_node.notify_item_received(ctx.player_names[item.player], get_item_name_from_id(item.item),
                                              get_location_name_from_address(item.location), recv_index + 1,
                                              len(ctx.items_received),
-                                             True if get_item_name_from_id(item.item) in Items.progression_items else False)
+                                             get_item_name_from_id(item.item) in Items.progression_items)
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
                 color(get_item_name_from_id(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
                 get_location_name_from_address(item.location), recv_index + 1, len(ctx.items_received)))

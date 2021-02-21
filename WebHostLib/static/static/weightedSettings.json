@@ -1602,6 +1602,26 @@
         }
       }
     },
+    "reduceflashing": {
+      "keyString": "rom.reduceflashing",
+      "friendlyName": "Full-Screen Flashing Effects",
+      "description": "Enable or disable full-screen flashing effects in game.",
+      "inputType": "range",
+      "subOptions": {
+        "on": {
+          "keyString": "rom.reduceflashing.on",
+          "friendlyName": "Disabled",
+          "description": "Disables flashing.",
+          "defaultValue": 50
+        },
+        "off": {
+          "keyString": "rom.reduceflashing.off",
+          "friendlyName": "Enabled",
+          "description": "Enables flashing.",
+          "defaultValue": 0
+        }
+      }
+    },
     "quickswap": {
       "keyString": "rom.quickswap",
       "friendlyName": "Item Quick-Swap",
@@ -1797,7 +1817,7 @@
           "defaultValue": 0
         },
 		"puke": {
-          "keyString": "rom.ow_palettes.Puke",
+          "keyString": "rom.ow_palettes.puke",
           "friendlyName": "Puke",
           "description": "No logic at all.",
           "defaultValue": 0
@@ -1859,7 +1879,7 @@
           "defaultValue": 0
         },
 		"puke": {
-          "keyString": "rom.uw_palettes.Puke",
+          "keyString": "rom.uw_palettes.puke",
           "friendlyName": "Puke",
           "description": "No logic at all.",
           "defaultValue": 0
@@ -1921,7 +1941,7 @@
           "defaultValue": 0
         },
 		"puke": {
-          "keyString": "rom.hud_palettes.Puke",
+          "keyString": "rom.hud_palettes.puke",
           "friendlyName": "Puke",
           "description": "No logic at all.",
           "defaultValue": 0
@@ -1983,7 +2003,7 @@
           "defaultValue": 0
         },
 		"puke": {
-          "keyString": "rom.shield_palettes.Puke",
+          "keyString": "rom.shield_palettes.puke",
           "friendlyName": "Puke",
           "description": "No logic at all.",
           "defaultValue": 0
@@ -2045,7 +2065,7 @@
           "defaultValue": 0
         },
 		"puke": {
-          "keyString": "rom.sword_palettes.Puke",
+          "keyString": "rom.sword_palettes.puke",
           "friendlyName": "Puke",
           "description": "No logic at all.",
           "defaultValue": 0

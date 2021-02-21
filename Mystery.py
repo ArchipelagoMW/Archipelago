@@ -325,6 +325,7 @@ def roll_linked_options(weights: dict) -> dict:
 
 def roll_triggers(weights: dict) -> dict:
     weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
+    weights["_Generator_Version"] = "Main"  # Some means for triggers to know if the seed is on main or doors.
     for option_set in weights["triggers"]:
         try:
             key = get_choice("option_name", option_set)
@@ -691,6 +692,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         ret.disablemusic = get_choice('disablemusic', romweights, False)
         ret.quickswap = get_choice('quickswap', romweights, True)
         ret.fastmenu = get_choice('menuspeed', romweights, "normal")
+        ret.reduceflashing = get_choice('reduceflashing', romweights, False)
         ret.heartcolor = get_choice('heartcolor', romweights, "red")
         ret.heartbeep = convert_to_on_off(get_choice('heartbeep', romweights, "normal"))
         ret.ow_palettes = get_choice('ow_palettes', romweights, "default")

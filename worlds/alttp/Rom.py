@@ -1672,7 +1672,7 @@ def hud_format_text(text):
 
 
 def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite: str, palettes_options,
-                       world=None, player=1, allow_random_on_event=False):
+                       world=None, player=1, allow_random_on_event=False, reduceflashing=False):
     local_random = random if not world else world.rom_seeds[player]
 
     # enable instant item menu
@@ -1696,6 +1696,23 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
         rom.write_byte(0x180048, 0x04)
     else:
         rom.write_byte(0x180048, 0x08)
+
+
+    # Reduce flashing by nopping out instructions
+    if reduceflashing:
+        rom.write_bytes(0x17E07, [0x06]) # reduce amount of colors changed, add this branch if we need to reduce more  ""+ [0x80] + [(0x81-0x08)]""
+        rom.write_bytes(0x17EAB, [0xD0, 0x03, 0xA9, 0x40, 0x29, 0x60]) # nullifies aga lightning, cutscene, vitreous, bat, ether
+        # ONLY write to black values with this low pale blue to indicate flashing, that's IT.  ""BNE + : LDA #$2940 : + : RTS""
+        rom.write_bytes(0x123FE, [0x72]) # set lightning flash in misery mire (and standard) to brightness 0x72
+        rom.write_bytes(0x3FA7B, [0x80, 0xac-0x7b]) # branch from palette writing lightning on death mountain
+        rom.write_byte(0x10817F, 0x01) # internal rom option
+    else:
+        rom.write_bytes(0x17E07, [0x00]) 
+        rom.write_bytes(0x17EAB, [0x85, 0x00, 0x29, 0x1F, 0x00, 0x18])
+        rom.write_bytes(0x123FE, [0x32]) # original weather flash value
+        rom.write_bytes(0x3FA7B, [0xc2, 0x20]) # rep #$20
+        rom.write_byte(0x10817F, 0x00) # internal rom option
+
 
     rom.write_byte(0x18004B, 0x01 if quickswap else 0x00)
 

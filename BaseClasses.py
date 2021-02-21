@@ -4,6 +4,7 @@ import copy
 from enum import Enum, unique
 import logging
 import json
+import functools
 from collections import OrderedDict, Counter, deque
 from typing import *
 import secrets
@@ -25,6 +26,7 @@ class MultiWorld():
     plando_texts: List[Dict[str, str]]
     plando_items: List[PlandoItem]
     plando_connections: List[PlandoConnection]
+    er_seeds: Dict[int, str]
 
     def __init__(self, players: int, shuffle, logic, mode, swords, difficulty, item_functionality, timer,
                  progressive,
@@ -156,6 +158,10 @@ class MultiWorld():
         for region in regions if regions else self.regions:
             region.world = self
             self._region_cache[region.player][region.name] = region
+
+    @functools.cached_property
+    def world_name_lookup(self):
+        return {self.player_names[player_id][0]: player_id for player_id in self.player_ids}
 
     def _recache(self):
         """Rebuild world cache"""
@@ -1285,7 +1291,8 @@ class Spoiler(object):
                          'shop_shuffle_slots': self.world.shop_shuffle_slots,
                          'shuffle_prizes': self.world.shuffle_prizes,
                          'sprite_pool': self.world.sprite_pool,
-                         'restrict_dungeon_item_on_boss': self.world.restrict_dungeon_item_on_boss
+                         'restrict_dungeon_item_on_boss': self.world.restrict_dungeon_item_on_boss,
+                         'er_seeds': self.world.er_seeds
                          }
 
     def to_json(self):
@@ -1349,6 +1356,8 @@ class Spoiler(object):
                 outfile.write('Item Functionality:              %s\n' % self.metadata['item_functionality'][player])
                 outfile.write('Item Progression:                %s\n' % self.metadata['progressive'][player])
                 outfile.write('Entrance Shuffle:                %s\n' % self.metadata['shuffle'][player])
+                if self.metadata['shuffle'][player] != "vanilla":
+                    outfile.write('Entrance Shuffle Seed            %s\n' % self.metadata['er_seeds'][player])
                 outfile.write('Crystals required for GT:        %s\n' % self.metadata['gt_crystals'][player])
                 outfile.write('Crystals required for Ganon:     %s\n' % self.metadata['ganon_crystals'][player])
                 outfile.write('Pyramid hole pre-opened:         %s\n' % (

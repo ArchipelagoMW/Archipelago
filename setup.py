@@ -48,8 +48,8 @@ def manifest_creation():
             path = os.path.join(dirpath, filename)
             hashes[os.path.relpath(path, start=buildfolder)] = pool.submit(_threaded_hash, path)
     import json
-    manifest = {"buildtime": buildtime.isoformat(sep=" ", timespec="seconds")}
-    manifest["hashes"] = {path: hash.result() for path, hash in hashes.items()}
+    manifest = {"buildtime": buildtime.isoformat(sep=" ", timespec="seconds"),
+                "hashes": {path: hash.result() for path, hash in hashes.items()}}
     json.dump(manifest, open(manifestpath, "wt"), indent=4)
     print("Created Manifest")
 
@@ -58,7 +58,8 @@ scripts = {"MultiClient.py": "ArchipelagoClient",
            "MultiMystery.py": "ArchipelagoMultiMystery",
            "MultiServer.py": "ArchipelagoServer",
            "gui.py": "ArchipelagoCreator",
-           "Mystery.py": "ArchipelagoMystery"}
+           "Mystery.py": "ArchipelagoMystery",
+           "Adjuster.py": "ArchipelagoLttPAdjuster"}
 
 exes = []
 

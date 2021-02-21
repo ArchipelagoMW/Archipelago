@@ -251,6 +251,7 @@ def parse_arguments(argv, no_defaults=False):
                              ''')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
+    parser.add_argument('--enableflashing', help='Reenable flashing animations (unfriendly to epilepsy, always disabled in race roms)', action='store_false', dest="reduceflashing")
     parser.add_argument('--mapshuffle', default=defval(False),
                         help='Maps are no longer restricted to their dungeons, but can be anywhere',
                         action='store_true')
@@ -377,6 +378,7 @@ def parse_arguments(argv, no_defaults=False):
     ret.plando_items = []
     ret.plando_texts = {}
     ret.plando_connections = []
+    ret.er_seeds = {}
 
     ret.glitch_boots = not ret.disable_glitch_boots
     if ret.timer == "none":
@@ -407,10 +409,10 @@ def parse_arguments(argv, no_defaults=False):
                          'heartbeep', "skip_progression_balancing", "triforce_pieces_available",
                          "triforce_pieces_required", "shop_shuffle", "shop_shuffle_slots",
                          "required_medallions",
-                         "plando_items", "plando_texts", "plando_connections",
+                         "plando_items", "plando_texts", "plando_connections", "er_seeds",
                          'remote_items', 'progressive', 'dungeon_counters', 'glitch_boots', 'killable_thieves',
                          'tile_shuffle', 'bush_shuffle', 'shuffle_prizes', 'sprite_pool', 'dark_room_logic',
-                         'restrict_dungeon_item_on_boss',
+                         'restrict_dungeon_item_on_boss', 'reduceflashing',
                          'hud_palettes', 'sword_palettes', 'shield_palettes', 'link_palettes']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:

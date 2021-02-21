@@ -25,7 +25,7 @@ class BackgroundTask(object):
     def stop(self):
         self.running = False
 
-    #safe to call from worker
+    # safe to call from worker
     def queue_event(self, event):
         self.queue.put(event)
 
