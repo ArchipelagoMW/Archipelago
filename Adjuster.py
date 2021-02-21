@@ -6,7 +6,6 @@ import textwrap
 import sys
 import time
 
-from AdjusterMain import adjust
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings
 from Utils import output_path
 
@@ -161,7 +160,7 @@ def adjustGUI():
         else:
             messagebox.showinfo(title="Success", message=f"Rom patched successfully to {path}")
             from Utils import persistent_store
-            from Rom import Sprite
+            from worlds.alttp.Rom import Sprite
             if isinstance(guiargs.sprite, Sprite):
                 guiargs.sprite = guiargs.sprite.name
             persistent_store("adjuster", "last_settings_3", guiargs)

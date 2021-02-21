@@ -10,10 +10,6 @@ from typing import *
 import secrets
 import random
 
-from worlds.alttp.EntranceShuffle import indirect_connections
-from worlds.alttp.Items import item_name_groups
-from worlds.generic import PlandoItem, PlandoConnection
-
 
 class MultiWorld():
     debug_types = False
@@ -513,6 +509,7 @@ class CollectionState(object):
             self.collect(item, True)
 
     def update_reachable_regions(self, player: int):
+        from worlds.alttp.EntranceShuffle import indirect_connections
         self.stale[player] = False
         rrp = self.reachable_regions[player]
         bc = self.blocked_connections[player]
@@ -1467,28 +1464,5 @@ class Spoiler(object):
 
             outfile.write('\n'.join(path_listings))
 
-
-class PlandoItem(NamedTuple):
-    item: str
-    location: str
-    world: Union[bool, str] = False  # False -> own world, True -> not own world
-    from_pool: bool = True  # if item should be removed from item pool
-    force: str = 'silent'  # false -> warns if item not successfully placed. true -> errors out on failure to place item.
-
-    def warn(self, warning: str):
-        if self.force in ['true', 'fail', 'failure', 'none', 'false', 'warn', 'warning']:
-            logging.warning(f'{warning}')
-        else:
-            logging.debug(f'{warning}')
-
-    def failed(self, warning: str, exception=Exception):
-        if self.force in ['true', 'fail', 'failure']:
-            raise exception(warning)
-        else:
-            self.warn(warning)
-
-
-class PlandoConnection(NamedTuple):
-    entrance: str
-    exit: str
-    direction: str  # entrance, exit or both
+from worlds.alttp.Items import item_name_groups
+from worlds.generic import PlandoItem, PlandoConnection

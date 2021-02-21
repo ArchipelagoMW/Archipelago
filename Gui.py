@@ -14,7 +14,6 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import ModuleUpdate
 ModuleUpdate.update()
 
-from worlds.alttp.AdjusterMain import adjust
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from GuiUtils import ToolTips, set_icon, BackgroundTaskProgress
 from Main import main, get_seed, __version__ as MWVersion

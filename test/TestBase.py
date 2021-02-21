@@ -1,7 +1,6 @@
 import unittest
 
-from BaseClasses import CollectionState
-from BaseClasses import MultiWorld
+from BaseClasses import MultiWorld, CollectionState
 from worlds.alttp.Items import ItemFactory
 
 

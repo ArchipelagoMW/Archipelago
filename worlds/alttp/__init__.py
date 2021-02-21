@@ -1,7 +1,6 @@
 from typing import Optional
 
 from BaseClasses import Location, Item
-from worlds.generic import World
 
 
 #class ALTTPWorld(World):
