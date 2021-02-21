@@ -11,6 +11,7 @@ import subprocess
 import base64
 import re
 import shutil
+from json import loads, dumps
 
 from random import randrange
 
@@ -808,7 +809,11 @@ def convert_unknown_missing(missing_items: list) -> list:
 
 
 async def process_server_cmd(ctx: Context, args: dict):
-    cmd = args["cmd"]
+    try:
+        cmd = args["cmd"]
+    except:
+        logger.exception(f"Could not get command from {args}")
+        raise
     if cmd == 'RoomInfo':
         logger.info('--------------------------------')
         logger.info('Room Information:')

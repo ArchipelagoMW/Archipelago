@@ -498,8 +498,9 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
                         recvd_items.append(new_item)
                         if slot != target_player:
                             ctx.broadcast_team(team,
-                                               [['ItemSent', {"item": new_item,
-                                                              "receiver" : target_player}]])
+                                               [{"cmd": "ItemSent",
+                                                 "item": new_item,
+                                                 "receiver" : target_player}])
                     logging.info('(Team #%d) %s sent %s to %s (%s)' % (
                     team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(target_item),
                     ctx.player_names[(team, target_player)], get_location_name_from_address(location)))
@@ -969,7 +970,11 @@ def get_client_points(ctx: Context, client: Client) -> int:
 
 
 async def process_client_cmd(ctx: Context, client: Client, args: dict):
-    cmd: str = args["cmd"]
+    try:
+        cmd:str = args["cmd"]
+    except:
+        logging.exception(f"Could not get command from {args}")
+        raise
 
     if type(cmd) is not str:
         await ctx.send_msgs(client, [{"cmd": "InvalidCmd", "text": f"Command should be str, got {type(cmd)}"}])
