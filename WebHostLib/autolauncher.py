@@ -2,6 +2,7 @@ from __future__ import annotations
 import logging
 import multiprocessing
 from datetime import timedelta, datetime
+import concurrent.futures
 import sys
 import typing
 import time
@@ -136,6 +137,7 @@ def autohost(config: dict):
 
 multiworlds = {}
 
+guardians = concurrent.futures.ThreadPoolExecutor(2, thread_name_prefix="Guardian")
 
 class MultiworldInstance():
     def __init__(self, room: Room, config: dict):
@@ -153,11 +155,17 @@ class MultiworldInstance():
                                                args=(self.room_id, self.ponyconfig),
                                                name="MultiHost")
         self.process.start()
+        self.guardian = guardians.submit(self._collect)
 
     def stop(self):
         if self.process:
             self.process.terminate()
             self.process = None
+
+    def _collect(self):
+        self.process.join() # wait for process to finish
+        self.process = None
+        self.guardian = None
 
 
 from .models import Room, Generation, STATE_QUEUED, STATE_STARTED, STATE_ERROR, db, Seed
