@@ -79,7 +79,7 @@ class Context():
         self.server_task = None
         self.server: typing.Optional[Endpoint] = None
         self.password = password
-        self.server_version = (0, 0, 0)
+        self.server_version = Version(0, 0, 0)
 
         self.team = None
         self.slot = None
@@ -118,9 +118,9 @@ class Context():
     async def send_msgs(self, msgs):
         if not self.server or not self.server.socket.open or self.server.socket.closed:
             return
-        await self.server.socket.send(dumps(msgs))
+        await self.server.socket.send(encode(msgs))
 
-    def consume_players_package(self, package:typing.List[tuple]):
+    def consume_players_package(self, package: typing.List[tuple]):
         self.player_names = {slot: name for team, slot, name, orig_name in package if self.team == team}
 
 
@@ -130,6 +130,7 @@ def color_item(item_id: int, green: bool = False) -> str:
     if item_name in Items.progression_items:
         item_colors.append("white_bg")
     return color(item_name, *item_colors)
+
 
 START_RECONNECT_DELAY = 5
 SNES_RECONNECT_DELAY = 5
@@ -160,8 +161,8 @@ SCOUTREPLY_ITEM_ADDR = SAVEDATA_START + 0x4D9       # 1 byte
 SCOUTREPLY_PLAYER_ADDR = SAVEDATA_START + 0x4DA     # 1 byte
 SHOP_ADDR = SAVEDATA_START + 0x302                  # 2 bytes
 
-
-location_shop_order = [name for name, info in Shops.shop_table.items()] # probably don't leave this here.  This relies on python 3.6+ dictionary keys having defined order
+location_shop_order = [name for name, info in
+                       Shops.shop_table.items()]  # probably don't leave this here.  This relies on python 3.6+ dictionary keys having defined order
 location_shop_ids = set([info[0] for name, info in Shops.shop_table.items()])
 
 location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
@@ -711,12 +712,6 @@ async def snes_flush_writes(ctx: Context):
     await snes_write(ctx, writes)
 
 
-async def send_msgs(websocket, msgs):
-    if not websocket or not websocket.open or websocket.closed:
-        return
-    await websocket.send(dumps(msgs))
-
-
 async def server_loop(ctx: Context, address=None):
     global SERVER_RECONNECT_DELAY
     ctx.ui_node.send_connection_status(ctx)
@@ -754,8 +749,8 @@ async def server_loop(ctx: Context, address=None):
         ctx.ui_node.send_connection_status(ctx)
         SERVER_RECONNECT_DELAY = START_RECONNECT_DELAY
         async for data in ctx.server.socket:
-            for msg in loads(data):
-                await process_server_cmd(ctx, msg[0], msg[1])
+            for msg in decode(data):
+                await process_server_cmd(ctx, msg)
         logger.warning('Disconnected from multiworld server, type /connect to reconnect')
     except WebUI.WaitingForUiException:
         pass
@@ -776,7 +771,7 @@ async def server_loop(ctx: Context, address=None):
         ctx.auth = None
         ctx.items_received = []
         ctx.locations_info = {}
-        ctx.server_version = (0, 0, 0)
+        ctx.server_version = Version(0, 0, 0)
         if ctx.server and ctx.server.socket is not None:
             await ctx.server.socket.close()
         ctx.server = None
@@ -799,6 +794,8 @@ async def server_autoreconnect(ctx: Context):
 
 
 missing_unknown = re.compile("Unknown Location ID: (?P<ID>\d+)")
+
+
 def convert_unknown_missing(missing_items: list) -> list:
     missing = []
     for location in missing_items:
@@ -810,7 +807,8 @@ def convert_unknown_missing(missing_items: list) -> list:
     return missing
 
 
-async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]):
+async def process_server_cmd(ctx: Context, args: dict):
+    cmd = args["cmd"]
     if cmd == 'RoomInfo':
         logger.info('--------------------------------')
         logger.info('Room Information:')
@@ -873,10 +871,11 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
         ctx.consume_players_package(args["players"])
         msgs = []
         if ctx.locations_checked:
-            msgs.append(['LocationChecks',
-                         {"locations":  [Regions.lookup_name_to_id[loc] for loc in ctx.locations_checked]}])
+            msgs.append({"cmd": "LocationChecks",
+                         "locations": [Regions.lookup_name_to_id[loc] for loc in ctx.locations_checked]})
         if ctx.locations_scouted:
-            msgs.append(['LocationScouts', {"locations": list(ctx.locations_scouted)}])
+            msgs.append({"cmd": "LocationScouts",
+                         "locations": list(ctx.locations_scouted)})
         if msgs:
             await ctx.send_msgs(msgs)
         if ctx.finished_game:
@@ -895,13 +894,12 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
         if start_index == 0:
             ctx.items_received = []
         elif start_index != len(ctx.items_received):
-            sync_msg = [['Sync', None]]
+            sync_msg = [{'cmd': 'Sync'}]
             if ctx.locations_checked:
-                sync_msg.append(['LocationChecks',
-                                 {"locations": [Regions.lookup_name_to_id[loc] for loc in ctx.locations_checked]}])
+                sync_msg.append({"cmd": "LocationChecks",
+                                 "locations": [Regions.lookup_name_to_id[loc] for loc in ctx.locations_checked]})
             await ctx.send_msgs(sync_msg)
         if start_index == len(ctx.items_received):
-
             for item in args['items']:
                 ctx.items_received.append(NetworkItem(*item))
         ctx.watcher_event.set()
@@ -916,7 +914,7 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
                 ctx.locations_info[location] = (item, player)
         ctx.watcher_event.set()
 
-    elif cmd == 'ItemSent': # going away
+    elif cmd == 'ItemSent':  # going away
         found = NetworkItem(*args["item"])
         receiving_player = args["receiver"]
         ctx.ui_node.notify_item_sent(ctx.player_names[found.player], ctx.player_names[receiving_player],
@@ -925,12 +923,13 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
                                      get_item_name_from_id(found.item) in Items.progression_items)
         item = color(get_item_name_from_id(found.item), 'cyan' if found.player != ctx.slot else 'green')
         found_player = color(ctx.player_names[found.player], 'yellow' if found.player != ctx.slot else 'magenta')
-        receiving_player = color(ctx.player_names[receiving_player], 'yellow' if receiving_player != ctx.slot else 'magenta')
+        receiving_player = color(ctx.player_names[receiving_player],
+                                 'yellow' if receiving_player != ctx.slot else 'magenta')
         logging.info(
             '%s sent %s to %s (%s)' % (found_player, item, receiving_player,
                                        color(get_location_name_from_address(found.location), 'blue_bg', 'white')))
 
-    elif cmd == 'ItemFound': # going away
+    elif cmd == 'ItemFound':  # going away
         found = NetworkItem(*args["item"])
         ctx.ui_node.notify_item_found(ctx.player_names[found.player], get_item_name_from_id(found.item),
                                       get_location_name_from_address(found.location), found.player == ctx.slot,
@@ -940,7 +939,7 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
         logging.info('%s found %s (%s)' % (player_sent, item, color(get_location_name_from_address(found.location),
                                                                     'blue_bg', 'white')))
 
-    elif cmd == 'Hint': # going away
+    elif cmd == 'Hint':  # going away
         hints = [Utils.Hint(*hint) for hint in args["hints"]]
         for hint in hints:
             ctx.ui_node.send_hint(ctx.player_names[hint.finding_player], ctx.player_names[hint.receiving_player],
@@ -998,10 +997,11 @@ async def server_auth(ctx: Context, password_requested):
     ctx.awaiting_rom = False
     ctx.auth = ctx.rom
     auth = base64.b64encode(ctx.rom).decode()
-    await ctx.send_msgs([['Connect', {
-        'password': ctx.password, 'name': auth, 'version': Utils._version_tuple, 'tags': get_tags(ctx),
-        'uuid': Utils.get_unique_identifier(), 'game': "A Link to the Past"
-    }]])
+    await ctx.send_msgs([{"cmd": 'Connect',
+                          'password': ctx.password, 'name': auth, 'version': Utils._version_tuple,
+                          'tags': get_tags(ctx),
+                          'uuid': Utils.get_unique_identifier(), 'game': "A Link to the Past"
+                          }])
 
 
 async def console_input(ctx: Context):
@@ -1094,16 +1094,6 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No missing location checks found.")
         return True
 
-    def _cmd_show_items(self, toggle: str = "") -> bool:
-        """Toggle showing of items received across the team"""
-        if toggle:
-            self.ctx.found_items = toggle.lower() in {"1", "true", "on"}
-        else:
-            self.ctx.found_items = not self.ctx.found_items
-        logger.info(f"Set showing team items to {self.ctx.found_items}")
-        asyncio.create_task(self.ctx.send_msgs([['UpdateTags', get_tags(self.ctx)]]))
-        return True
-
     def _cmd_slow_mode(self, toggle: str = ""):
         """Toggle slow mode, which limits how fast you send / receive items."""
         if toggle:
@@ -1120,7 +1110,7 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("Web UI was never started.")
 
     def default(self, raw: str):
-        asyncio.create_task(self.ctx.send_msgs([['Say', {"text": raw}]]))
+        asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]))
 
 
 async def console_loop(ctx: Context):
@@ -1165,7 +1155,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
 
     try:
         if roomid in location_shop_ids:
-            misc_data = await snes_read(ctx, SHOP_ADDR, (len(location_shop_order)*3)+5)
+            misc_data = await snes_read(ctx, SHOP_ADDR, (len(location_shop_order) * 3) + 5)
             for cnt, b in enumerate(misc_data):
                 my_check = Shops.shop_table_by_location_id[Shops.SHOP_ID_START + cnt]
                 if int(b) > 0 and my_check not in ctx.locations_checked:
@@ -1173,7 +1163,6 @@ async def track_locations(ctx: Context, roomid, roomdata):
     except Exception as e:
         print(e)
         logger.info(f"Exception: {e}")
-
 
     for location, (loc_roomid, loc_mask) in location_table_uw.items():
         try:
@@ -1238,14 +1227,13 @@ async def track_locations(ctx: Context, roomid, roomdata):
             print(e)
             logger.info(f"Exception: {e}")
 
-
     if new_locations:
-        await ctx.send_msgs([['LocationChecks', {"locations": new_locations}]])
+        await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": new_locations}])
 
 
 async def send_finished_game(ctx: Context):
     try:
-        await ctx.send_msgs([['StatusUpdate', {"status": CLientStatus.CLIENT_GOAL}]])
+        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": CLientStatus.CLIENT_GOAL}])
         ctx.finished_game = True
     except Exception as ex:
         logger.exception(ex)
@@ -1343,7 +1331,7 @@ async def game_watcher(ctx: Context):
         if scout_location > 0 and scout_location not in ctx.locations_scouted:
             ctx.locations_scouted.add(scout_location)
             logger.info(f'Scouting item at {list(Regions.location_table.keys())[scout_location - 1]}')
-            await ctx.send_msgs([['LocationScouts', {"locations": [scout_location]}]])
+            await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [scout_location]}])
         await track_locations(ctx, roomid, roomdata)
 
 

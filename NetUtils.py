@@ -3,19 +3,58 @@ import asyncio
 import logging
 import typing
 import enum
-from json import loads, dumps
+from json import JSONEncoder, JSONDecoder
 
 import websockets
+
 
 class JSONMessagePart(typing.TypedDict):
     type: typing.Optional[str]
     color: typing.Optional[str]
     text: typing.Optional[str]
 
+
+def _scan_for_TypedTuples(obj: typing.Any) -> typing.Any:
+    if isinstance(obj, tuple) and hasattr(obj, "_fields"):  # NamedTuple is not actually a parent class
+        data = obj._asdict()
+        data["class"] = obj.__class__.__name__
+        return data
+    if isinstance(obj, (tuple, list)):
+        return tuple(_scan_for_TypedTuples(o) for o in obj)
+    if isinstance(obj, dict):
+        return {key: _scan_for_TypedTuples(value) for key, value in obj.items()}
+    return obj
+
+
+_encode = JSONEncoder(
+    ensure_ascii=False,
+    check_circular=False,
+).encode
+
+
+def encode(obj):
+    return _encode(_scan_for_TypedTuples(obj))
+
+from Utils import Version # for object hook
+whitelist = {"NetworkPlayer", "NetworkItem", "Version"}
+
+def _object_hook(o: typing.Any) -> typing.Any:
+    if isinstance(o, dict):
+        cls = o.get("class", None)
+        if cls in whitelist:
+            del (o["class"])
+            return globals()[cls](**o)
+
+    return o
+
+
+decode = JSONDecoder(object_hook=_object_hook).decode
+
+
 class Node:
     endpoints: typing.List
-    dumper = staticmethod(dumps)
-    loader = staticmethod(loads)
+    dumper = staticmethod(encode)
+    loader = staticmethod(decode)
 
     def __init__(self):
         self.endpoints = []
@@ -26,13 +65,14 @@ class Node:
         for endpoint in self.endpoints:
             asyncio.create_task(self.send_encoded_msgs(endpoint, msgs))
 
-    async def send_msgs(self, endpoint: Endpoint, msgs: typing.Iterable[typing.Sequence[str, typing.Optional[dict]]]):
+    async def send_msgs(self, endpoint: Endpoint, msgs: typing.Iterable[dict]):
         if not endpoint.socket or not endpoint.socket.open or endpoint.socket.closed:
             return
+        msg = self.dumper(msgs)
         try:
-            await endpoint.socket.send(self.dumper(msgs))
+            await endpoint.socket.send(msg)
         except websockets.ConnectionClosed:
-            logging.exception("Exception during send_msgs")
+            logging.exception(f"Exception during send_msgs, could not send {msg}")
             await self.disconnect(endpoint)
 
     async def send_encoded_msgs(self, endpoint: Endpoint, msg: str):
@@ -104,7 +144,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return node.get("text", "")
 
     def _handle_player_id(self, node: JSONMessagePart):
-        player = node["player"]
+        player = node["text"]
         node["color"] = 'yellow' if player != self.ctx.slot else 'magenta'
         node["text"] = self.ctx.player_names[player]
         return self._handle_color(node)
@@ -113,7 +153,6 @@ class JSONtoTextParser(metaclass=HandlerMeta):
     def _handle_player_name(self, node: JSONMessagePart):
         node["color"] = 'yellow'
         return self._handle_color(node)
-
 
 
 color_codes = {'reset': 0, 'bold': 1, 'underline': 4, 'black': 30, 'red': 31, 'green': 32, 'yellow': 33, 'blue': 34,
@@ -135,6 +174,7 @@ class CLientStatus(enum.IntEnum):
     CLIENT_READY = 10
     CLIENT_PLAYING = 20
     CLIENT_GOAL = 30
+
 
 class NetworkPlayer(typing.NamedTuple):
     team: int

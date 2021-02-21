@@ -10,7 +10,7 @@ def tuplize_version(version: str) -> typing.Tuple[int, ...]:
 class Version(typing.NamedTuple):
     major: int
     minor: int
-    micro: int
+    build: int
 
 __version__ = "0.0.1"
 _version_tuple = tuplize_version(__version__)
