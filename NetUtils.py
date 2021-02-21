@@ -2,10 +2,15 @@ from __future__ import annotations
 import asyncio
 import logging
 import typing
+import enum
 from json import loads, dumps
 
 import websockets
 
+class JSONMessagePart(typing.TypedDict):
+    type: typing.Optional[str]
+    color: typing.Optional[str]
+    text: typing.Optional[str]
 
 class Node:
     endpoints: typing.List
@@ -80,32 +85,32 @@ class JSONtoTextParser(metaclass=HandlerMeta):
     def __init__(self, ctx: "MultiClient.Context"):
         self.ctx = ctx
 
-    def __call__(self, input_object: typing.List[dict]) -> str:
+    def __call__(self, input_object: typing.List[JSONMessagePart]) -> str:
         return "".join(self.handle_node(section) for section in input_object)
 
-    def handle_node(self, node: dict):
+    def handle_node(self, node: JSONMessagePart):
         type = node.get("type", None)
         handler = self.handlers.get(type, self.handlers["text"])
         return handler(node)
 
-    def _handle_color(self, node: dict):
+    def _handle_color(self, node: JSONMessagePart):
         if node["color"] in color_codes:
             return color_code(node["color"]) + self._handle_text(node) + color_code("reset")
         else:
             logging.warning(f"Unknown color in node {node}")
             return self._handle_text(node)
 
-    def _handle_text(self, node: dict):
+    def _handle_text(self, node: JSONMessagePart):
         return node.get("text", "")
 
-    def _handle_player_id(self, node: dict):
+    def _handle_player_id(self, node: JSONMessagePart):
         player = node["player"]
         node["color"] = 'yellow' if player != self.ctx.slot else 'magenta'
         node["text"] = self.ctx.player_names[player]
         return self._handle_color(node)
 
     # for other teams, spectators etc.? Only useful if player isn't in the clientside mapping
-    def _handle_player_name(self, node: dict):
+    def _handle_player_name(self, node: JSONMessagePart):
         node["color"] = 'yellow'
         return self._handle_color(node)
 
@@ -124,7 +129,21 @@ def color(text, *args):
     return color_code(*args) + text + color_code('reset')
 
 
-CLIENT_UNKNOWN = 0
-CLIENT_READY = 10
-CLIENT_PLAYING = 20
-CLIENT_GOAL = 30
+class CLientStatus(enum.IntEnum):
+    CLIENT_UNKNOWN = 0
+    # CLIENT_CONNECTED = 5 maybe?
+    CLIENT_READY = 10
+    CLIENT_PLAYING = 20
+    CLIENT_GOAL = 30
+
+class NetworkPlayer(typing.NamedTuple):
+    team: int
+    slot: int
+    alias: str
+    name: str
+
+
+class NetworkItem(typing.NamedTuple):
+    item: int
+    location: int
+    player: int

@@ -16,7 +16,7 @@ def GetBeemizerItem(world, player, item):
 
 
 def ItemFactory(items, player):
-    from BaseClasses import Item
+    from worlds.alttp import ALttPItem
     ret = []
     singleton = False
     if isinstance(items, str):
@@ -24,7 +24,7 @@ def ItemFactory(items, player):
         singleton = True
     for item in items:
         if item in item_table:
-            ret.append(Item(item, *item_table[item], player))
+            ret.append(ALttPItem(item, *item_table[item], player))
         else:
             raise Exception(f"Unknown item {item}")
 
@@ -200,7 +200,7 @@ item_table = {'Bow': (True, None, 0x0B, 'You have\nchosen the\narcher class.', '
               'Open Floodgate': (True, 'Event', None, None, None, None, None, None, None, None),
               }
 
-lookup_id_to_name = {data[2]: name for name, data in item_table.items()}
+lookup_id_to_name = {data[2]: name for name, data in item_table.items() if data[2]}
 
 hint_blacklist = {"Triforce"}
 

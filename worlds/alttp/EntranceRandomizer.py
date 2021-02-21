@@ -1,15 +1,8 @@
 #!/usr/bin/env python3
 import argparse
 import copy
-import os
-import logging
 import textwrap
 import shlex
-import sys
-
-from worlds.alttp.Main import main, get_seed
-from worlds.alttp.Rom import Sprite
-from Utils import is_bundled, close_console
 
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
@@ -359,6 +352,7 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--names', default=defval(''))
     parser.add_argument('--teams', default=defval(1), type=lambda value: max(int(value), 1))
     parser.add_argument('--outputpath')
+    parser.add_argument('--game', default="A Link to the Past")
     parser.add_argument('--race', default=defval(False), action='store_true')
     parser.add_argument('--outputname')
     parser.add_argument('--create_diff', default=defval(False), action='store_true', help='''\
@@ -412,7 +406,7 @@ def parse_arguments(argv, no_defaults=False):
                          "plando_items", "plando_texts", "plando_connections", "er_seeds",
                          'remote_items', 'progressive', 'dungeon_counters', 'glitch_boots', 'killable_thieves',
                          'tile_shuffle', 'bush_shuffle', 'shuffle_prizes', 'sprite_pool', 'dark_room_logic',
-                         'restrict_dungeon_item_on_boss', 'reduceflashing',
+                         'restrict_dungeon_item_on_boss', 'reduceflashing', 'game',
                          'hud_palettes', 'sword_palettes', 'shield_palettes', 'link_palettes']:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:

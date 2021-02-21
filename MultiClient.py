@@ -14,7 +14,7 @@ import shutil
 
 from random import randrange
 
-from Utils import get_item_name_from_id, get_location_name_from_address, ReceivedItem
+from Utils import get_item_name_from_id, get_location_name_from_address
 
 exit_func = atexit.register(input, "Press enter to close.")
 
@@ -30,8 +30,8 @@ from NetUtils import *
 import WebUI
 
 from worlds.alttp import Regions, Shops
+from worlds.alttp import Items
 import Utils
-import Items
 
 # logging note:
 # logging.* gets send to only the text console, logger.* gets send to the WebUI as well, if it's initialized.
@@ -42,8 +42,6 @@ def create_named_task(coro, *args, name=None):
     if not name:
         name = coro.__name__
     return asyncio.create_task(coro, *args, name=name)
-
-
 
 
 class Context():
@@ -121,6 +119,9 @@ class Context():
         if not self.server or not self.server.socket.open or self.server.socket.closed:
             return
         await self.server.socket.send(dumps(msgs))
+
+    def consume_players_package(self, package:typing.List[tuple]):
+        self.player_names = {slot: name for team, slot, name, orig_name in package if self.team == team}
 
 
 def color_item(item_id: int, green: bool = False) -> str:
@@ -819,26 +820,24 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
         version = ".".join(str(item) for item in version)
 
         logger.info(f'Server protocol version: {version}')
-        if "tags" in args:
-            logger.info("Server protocol tags: " + ", ".join(args["tags"]))
+        logger.info("Server protocol tags: " + ", ".join(args["tags"]))
         if args['password']:
             logger.info('Password required')
-        if "forfeit_mode" in args:  # could also be version > 2.2.1, but going with implicit content here
-            logging.info(f"Forfeit setting: {args['forfeit_mode']}")
-            logging.info(f"Remaining setting: {args['remaining_mode']}")
-            logging.info(f"A !hint costs {args['hint_cost']} points and you get {args['location_check_points']}"
-                         f" for each location checked.")
-            ctx.hint_cost = int(args['hint_cost'])
-            ctx.check_points = int(args['location_check_points'])
-            ctx.forfeit_mode = args['forfeit_mode']
-            ctx.remaining_mode = args['remaining_mode']
-            ctx.ui_node.send_game_info(ctx)
+        logging.info(f"Forfeit setting: {args['forfeit_mode']}")
+        logging.info(f"Remaining setting: {args['remaining_mode']}")
+        logging.info(f"A !hint costs {args['hint_cost']} points and you get {args['location_check_points']}"
+                     f" for each location checked.")
+        ctx.hint_cost = int(args['hint_cost'])
+        ctx.check_points = int(args['location_check_points'])
+        ctx.forfeit_mode = args['forfeit_mode']
+        ctx.remaining_mode = args['remaining_mode']
+        ctx.ui_node.send_game_info(ctx)
         if len(args['players']) < 1:
             logger.info('No player connected')
         else:
             args['players'].sort()
             current_team = -1
-            logger.info('Connected players:')
+            logger.info('Players:')
             for team, slot, name in args['players']:
                 if team != current_team:
                     logger.info(f'  Team #{team + 1}')
@@ -848,7 +847,7 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
 
     elif cmd == 'ConnectionRefused':
         errors = args["errors"]
-        if 'InvalidRom' in errors:
+        if 'InvalidSlot' in errors:
             if ctx.snes_socket is not None and not ctx.snes_socket.closed:
                 asyncio.create_task(ctx.snes_socket.close())
             raise Exception('Invalid ROM detected, '
@@ -871,7 +870,7 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
         Utils.persistent_store("servers", ctx.rom, ctx.server_address)
         ctx.team = args["team"]
         ctx.slot = args["slot"]
-        ctx.player_names = {p: n for p, n in args["playernames"]}
+        ctx.consume_players_package(args["players"])
         msgs = []
         if ctx.locations_checked:
             msgs.append(['LocationChecks',
@@ -904,7 +903,7 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
         if start_index == len(ctx.items_received):
 
             for item in args['items']:
-                ctx.items_received.append(ReceivedItem(*item))
+                ctx.items_received.append(NetworkItem(*item))
         ctx.watcher_event.set()
 
     elif cmd == 'LocationInfo':
@@ -917,13 +916,13 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
                 ctx.locations_info[location] = (item, player)
         ctx.watcher_event.set()
 
-    elif cmd == 'ItemSent':
-        found = ReceivedItem(*args["item"])
+    elif cmd == 'ItemSent': # going away
+        found = NetworkItem(*args["item"])
         receiving_player = args["receiver"]
         ctx.ui_node.notify_item_sent(ctx.player_names[found.player], ctx.player_names[receiving_player],
                                      get_item_name_from_id(found.item), get_location_name_from_address(found.location),
                                      found.player == ctx.slot, receiving_player == ctx.slot,
-                                     get_item_name_from_id(item) in Items.progression_items)
+                                     get_item_name_from_id(found.item) in Items.progression_items)
         item = color(get_item_name_from_id(found.item), 'cyan' if found.player != ctx.slot else 'green')
         found_player = color(ctx.player_names[found.player], 'yellow' if found.player != ctx.slot else 'magenta')
         receiving_player = color(ctx.player_names[receiving_player], 'yellow' if receiving_player != ctx.slot else 'magenta')
@@ -931,8 +930,8 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
             '%s sent %s to %s (%s)' % (found_player, item, receiving_player,
                                        color(get_location_name_from_address(found.location), 'blue_bg', 'white')))
 
-    elif cmd == 'ItemFound':
-        found = ReceivedItem(*args["item"])
+    elif cmd == 'ItemFound': # going away
+        found = NetworkItem(*args["item"])
         ctx.ui_node.notify_item_found(ctx.player_names[found.player], get_item_name_from_id(found.item),
                                       get_location_name_from_address(found.location), found.player == ctx.slot,
                                       get_item_name_from_id(found.item) in Items.progression_items)
@@ -941,7 +940,7 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
         logging.info('%s found %s (%s)' % (player_sent, item, color(get_location_name_from_address(found.location),
                                                                     'blue_bg', 'white')))
 
-    elif cmd == 'Hint':
+    elif cmd == 'Hint': # going away
         hints = [Utils.Hint(*hint) for hint in args["hints"]]
         for hint in hints:
             ctx.ui_node.send_hint(ctx.player_names[hint.finding_player], ctx.player_names[hint.receiving_player],
@@ -962,17 +961,16 @@ async def process_server_cmd(ctx: Context, cmd: str, args: typing.Optional[dict]
             logging.info(text + (f". {color('(found)', 'green_bg', 'black')} " if hint.found else "."))
 
     elif cmd == "RoomUpdate":
-        if "playernames" in args:
-            ctx.player_names = {p: n for p, n in args["playernames"]}
+        if "players" in args:
+            ctx.consume_players_package(args["players"])
+        if "hint_points" in args:
+            ctx.hint_points = args['hint_points']
 
     elif cmd == 'Print':
         logger.info(args["text"])
 
     elif cmd == 'PrintJSON':
         logger.info(ctx.jsontotextparser(args["data"]))
-
-    elif cmd == 'HintPointUpdate':
-        ctx.hint_points = args['points']
 
     elif cmd == 'InvalidArguments':
         logger.warning(f"Invalid Arguments: {args['text']}")
@@ -1001,8 +999,8 @@ async def server_auth(ctx: Context, password_requested):
     ctx.auth = ctx.rom
     auth = base64.b64encode(ctx.rom).decode()
     await ctx.send_msgs([['Connect', {
-        'password': ctx.password, 'rom': auth, 'version': Utils._version_tuple, 'tags': get_tags(ctx),
-        'uuid': Utils.get_unique_identifier(), 'game': "ALTTP"
+        'password': ctx.password, 'name': auth, 'version': Utils._version_tuple, 'tags': get_tags(ctx),
+        'uuid': Utils.get_unique_identifier(), 'game': "A Link to the Past"
     }]])
 
 
@@ -1247,7 +1245,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
 
 async def send_finished_game(ctx: Context):
     try:
-        await ctx.send_msgs([['StatusUpdate', {"status": CLIENT_GOAL}]])
+        await ctx.send_msgs([['StatusUpdate', {"status": CLientStatus.CLIENT_GOAL}]])
         ctx.finished_game = True
     except Exception as ex:
         logger.exception(ex)

@@ -1,7 +1,8 @@
 from collections import namedtuple
 import logging
 
-from BaseClasses import Region, RegionType, Location
+from BaseClasses import Region, RegionType
+from worlds.alttp import ALttPLocation
 from worlds.alttp.Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops
 from worlds.alttp.Bosses import place_bosses
 from worlds.alttp.Dungeons import get_dungeon_item_pool
@@ -243,7 +244,7 @@ def generate_itempool(world, player: int):
     if world.goal[player] in ['triforcehunt', 'localtriforcehunt']:
         region = world.get_region('Light World', player)
 
-        loc = Location(player, "Murahdahla", parent=region)
+        loc = ALttPLocation(player, "Murahdahla", parent=region)
         loc.access_rule = lambda state: state.has_triforce_pieces(state.world.treasure_hunt_count[player], player)
 
         region.locations.append(loc)
@@ -501,7 +502,7 @@ def create_dynamic_shop_locations(world, player):
                 if item is None:
                     continue
                 if item['create_location']:
-                    loc = Location(player, "{} Slot {}".format(shop.region.name, i + 1), parent=shop.region)
+                    loc = ALttPLocation(player, "{} Slot {}".format(shop.region.name, i + 1), parent=shop.region)
                     shop.region.locations.append(loc)
                     world.dynamic_locations.append(loc)
 
@@ -515,7 +516,7 @@ def create_dynamic_shop_locations(world, player):
 
 def fill_prizes(world, attempts=15):
     all_state = world.get_all_state(keys=True)
-    for player in range(1, world.players + 1):
+    for player in world.alttp_player_ids:
         crystals = ItemFactory(['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6'], player)
         crystal_locations = [world.get_location('Turtle Rock - Prize', player), world.get_location('Eastern Palace - Prize', player), world.get_location('Desert Palace - Prize', player), world.get_location('Tower of Hera - Prize', player), world.get_location('Palace of Darkness - Prize', player),
                              world.get_location('Thieves\' Town - Prize', player), world.get_location('Skull Woods - Prize', player), world.get_location('Swamp Palace - Prize', player), world.get_location('Ice Palace - Prize', player),

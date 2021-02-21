@@ -9,7 +9,8 @@ import zlib
 import concurrent.futures
 import pickle
 
-from BaseClasses import MultiWorld, CollectionState, Item, Region, Location
+from BaseClasses import MultiWorld, CollectionState, Region
+from worlds.alttp import ALttPLocation, ALttPItem
 from worlds.alttp.Items import ItemFactory, item_table, item_name_groups
 from worlds.alttp.Regions import create_regions, mark_light_world_regions, \
     lookup_vanilla_location_to_entrance
@@ -22,6 +23,7 @@ from Fill import distribute_items_restrictive, flood_items, balance_multiworld_p
 from worlds.alttp.Shops import create_shops, ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
+from worlds.hk import *
 import Patch
 
 seeddigits = 20
@@ -96,6 +98,7 @@ def main(args, seed=None):
     world.er_seeds = args.er_seeds.copy()
     world.restrict_dungeon_item_on_boss = args.restrict_dungeon_item_on_boss.copy()
     world.required_medallions = args.required_medallions.copy()
+    world.game = args.game.copy()
 
     world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}
 
@@ -119,17 +122,7 @@ def main(args, seed=None):
 
     logger.info('')
 
-    for player in range(1, world.players + 1):
-        world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
-
-        if world.open_pyramid[player] == 'goal':
-            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
-        elif world.open_pyramid[player] == 'auto':
-            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'} and \
-                                         (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull'} or not world.shuffle_ganon)
-        else:
-            world.open_pyramid[player] = {'on': True, 'off': False, 'yes': True, 'no': False}.get(world.open_pyramid[player], world.open_pyramid[player])
-
+    for player in world.player_ids:
         for tok in filter(None, args.startinventory[player].split(',')):
             item = ItemFactory(tok.strip(), player)
             if item:
@@ -164,6 +157,19 @@ def main(args, seed=None):
         world.non_local_items[player] -= item_name_groups['Pendants']
         world.non_local_items[player] -= item_name_groups['Crystals']
 
+
+    for player in world.alttp_player_ids:
+        world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
+
+        if world.open_pyramid[player] == 'goal':
+            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
+        elif world.open_pyramid[player] == 'auto':
+            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'} and \
+                                         (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull'} or not world.shuffle_ganon)
+        else:
+            world.open_pyramid[player] = {'on': True, 'off': False, 'yes': True, 'no': False}.get(world.open_pyramid[player], world.open_pyramid[player])
+
+
         world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player], world.triforce_pieces_required[player])
 
         if world.mode[player] != 'inverted':
@@ -175,7 +181,7 @@ def main(args, seed=None):
 
     logger.info('Shuffling the World about.')
 
-    for player in range(1, world.players + 1):
+    for player in world.alttp_player_ids:
         if world.logic[player] not in ["noglitches", "minorglitches"] and world.shuffle[player] in \
                 {"vanilla", "dungeonssimple", "dungeonsfull", "simple", "restricted", "full"}:
             world.fix_fake_world[player] = False
@@ -196,13 +202,18 @@ def main(args, seed=None):
 
     logger.info('Generating Item Pool.')
 
-    for player in range(1, world.players + 1):
+    for player in world.alttp_player_ids:
         generate_itempool(world, player)
 
     logger.info('Calculating Access Rules.')
 
-    for player in range(1, world.players + 1):
+    for player in world.alttp_player_ids:
         set_rules(world, player)
+
+    logger.info("Doing Hollow Knight things")
+
+    for player in world.hk_player_ids:
+        gen_hollow(world, player)
 
     logger.info("Running Item Plando")
 
@@ -239,9 +250,7 @@ def main(args, seed=None):
     if world.players > 1:
         balance_multiworld_progression(world)
 
-    logger.info('Patching ROM.')
-
-
+    logger.info('Generating output files.')
 
     outfilebase = 'AP_%s' % (args.outputname if args.outputname else world.seed)
 
@@ -349,7 +358,7 @@ def main(args, seed=None):
         rom_futures = []
 
         for team in range(world.teams):
-            for player in range(1, world.players + 1):
+            for player in world.alttp_player_ids:
                 rom_futures.append(pool.submit(_gen_rom, team, player))
 
         def get_entrance_to_region(region: Region):
@@ -382,7 +391,9 @@ def main(args, seed=None):
 
         for location in [loc for loc in world.get_filled_locations() if type(loc.address) is int]:
             main_entrance = get_entrance_to_region(location.parent_region)
-            if location.parent_region.dungeon:
+            if location.game == "Hollow Knight":
+                checks_in_area[location.player]["Light World"].append(location.address)
+            elif location.parent_region.dungeon:
                 dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
                                'Inverted Ganons Tower': 'Ganons Tower'}\
                     .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
@@ -423,9 +434,15 @@ def main(args, seed=None):
                 rom_name = future.result()
                 rom_names.append(rom_name)
             minimum_versions = {"server": (0, 0, 1)}
+            connect_names = {base64.b64encode(rom_name).decode(): (team, slot) for
+                              slot, team, rom_name in rom_names}
+
+            for i, team in enumerate(parsed_names):
+                for player, name in enumerate(team, 1):
+                    if player in world.hk_player_ids:
+                        connect_names[name] = (i, player)
             multidata = zlib.compress(pickle.dumps({"names": parsed_names,
-                                                    "roms": {base64.b64encode(rom_name).decode(): (team, slot) for
-                                                             slot, team, rom_name in rom_names},
+                                                    "connect_names": connect_names,
                                                     "remote_items": {player for player in range(1, world.players + 1) if
                                                                      world.remote_items[player]},
                                                     "locations": {
@@ -509,14 +526,18 @@ def copy_world(world):
     ret.shop_shuffle_slots = world.shop_shuffle_slots.copy()
     ret.dark_room_logic = world.dark_room_logic.copy()
     ret.restrict_dungeon_item_on_boss = world.restrict_dungeon_item_on_boss.copy()
+    ret.game = world.game.copy()
 
-    for player in range(1, world.players + 1):
+    for player in world.alttp_player_ids:
         if world.mode[player] != 'inverted':
             create_regions(ret, player)
         else:
             create_inverted_regions(ret, player)
         create_shops(ret, player)
         create_dungeons(ret, player)
+
+    for player in world.hk_player_ids:
+        gen_regions(ret, player)
 
     copy_dynamic_regions_and_locations(world, ret)
 
@@ -541,7 +562,7 @@ def copy_world(world):
     # fill locations
     for location in world.get_locations():
         if location.item is not None:
-            item = Item(location.item.name, location.item.advancement, location.item.type, player = location.item.player)
+            item = ALttPItem(location.item.name, location.item.advancement, location.item.type, player = location.item.player)
             ret.get_location(location.name, location.player).item = item
             item.location = ret.get_location(location.name, location.player)
             item.world = ret
@@ -552,7 +573,7 @@ def copy_world(world):
 
     # copy remaining itempool. No item in itempool should have an assigned location
     for item in world.itempool:
-        ret.itempool.append(Item(item.name, item.advancement, item.type, player = item.player))
+        ret.itempool.append(ALttPItem(item.name, item.advancement, item.type, player = item.player))
 
     for item in world.precollected_items:
         ret.push_precollected(ItemFactory(item.name, item.player))
@@ -561,7 +582,7 @@ def copy_world(world):
     ret.state.prog_items = world.state.prog_items.copy()
     ret.state.stale = {player: True for player in range(1, world.players + 1)}
 
-    for player in range(1, world.players + 1):
+    for player in world.alttp_player_ids:
         set_rules(ret, player)
 
 
@@ -584,7 +605,7 @@ def copy_dynamic_regions_and_locations(world, ret):
 
     for location in world.dynamic_locations:
         new_reg = ret.get_region(location.parent_region.name, location.parent_region.player)
-        new_loc = Location(location.player, location.name, location.address, location.crystal, location.hint_text, new_reg)
+        new_loc = ALttPLocation(location.player, location.name, location.address, location.crystal, location.hint_text, new_reg)
         # todo: this is potentially dangerous. later refactor so we
         # can apply dynamic region rules on top of copied world like other rules
         new_loc.access_rule = location.access_rule
@@ -702,12 +723,13 @@ def create_playthrough(world):
     old_world.spoiler.paths = dict()
     for player in range(1, world.players + 1):
         old_world.spoiler.paths.update({ str(location) : get_path(state, location.parent_region) for sphere in collection_spheres for location in sphere if location.player == player})
-        for path in dict(old_world.spoiler.paths).values():
-            if any(exit == 'Pyramid Fairy' for (_, exit) in path):
-                if world.mode[player] != 'inverted':
-                    old_world.spoiler.paths[str(world.get_region('Big Bomb Shop', player))] = get_path(state, world.get_region('Big Bomb Shop', player))
-                else:
-                    old_world.spoiler.paths[str(world.get_region('Inverted Big Bomb Shop', player))] = get_path(state, world.get_region('Inverted Big Bomb Shop', player))
+        if player in world.alttp_player_ids:
+            for path in dict(old_world.spoiler.paths).values():
+                if any(exit == 'Pyramid Fairy' for (_, exit) in path):
+                    if world.mode[player] != 'inverted':
+                        old_world.spoiler.paths[str(world.get_region('Big Bomb Shop', player))] = get_path(state, world.get_region('Big Bomb Shop', player))
+                    else:
+                        old_world.spoiler.paths[str(world.get_region('Inverted Big Bomb Shop', player))] = get_path(state, world.get_region('Inverted Big Bomb Shop', player))
 
     # we can finally output our playthrough
     old_world.spoiler.playthrough = {"0": sorted([str(item) for item in world.precollected_items if item.advancement])}

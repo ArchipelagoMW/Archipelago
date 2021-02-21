@@ -3,7 +3,7 @@ from enum import unique, Enum
 from typing import List, Union, Optional, Set, NamedTuple, Dict
 import logging
 
-from BaseClasses import Location
+from worlds.alttp import ALttPLocation
 from worlds.alttp.EntranceShuffle import door_addresses
 from worlds.alttp.Items import item_name_groups, item_table, ItemFactory, trap_replaceable, GetBeemizerItem
 from Utils import int16_as_bytes
@@ -130,8 +130,8 @@ shop_class_mapping = {ShopType.UpgradeShop: UpgradeShop,
 
 
 def FillDisabledShopSlots(world):
-    shop_slots: Set[Location] = {location for shop_locations in (shop.region.locations for shop in world.shops)
-                                 for location in shop_locations if location.shop_slot and location.shop_slot_disabled}
+    shop_slots: Set[ALttPLocation] = {location for shop_locations in (shop.region.locations for shop in world.shops)
+                                      for location in shop_locations if location.shop_slot and location.shop_slot_disabled}
     for location in shop_slots:
         location.shop_slot_disabled = True
         slot_num = int(location.name[-1]) - 1
@@ -141,8 +141,8 @@ def FillDisabledShopSlots(world):
 
 
 def ShopSlotFill(world):
-    shop_slots: Set[Location] = {location for shop_locations in (shop.region.locations for shop in world.shops)
-                                 for location in shop_locations if location.shop_slot}
+    shop_slots: Set[ALttPLocation] = {location for shop_locations in (shop.region.locations for shop in world.shops)
+                                      for location in shop_locations if location.shop_slot}
     removed = set()
     for location in shop_slots:
         slot_num = int(location.name[-1]) - 1
@@ -282,8 +282,8 @@ def create_shops(world, player: int):
             shop.add_inventory(index, *item)
             if not locked and num_slots:
                 slot_name = "{} Slot {}".format(region.name, index + 1)
-                loc = Location(player, slot_name, address=shop_table_by_location[slot_name],
-                               parent=region, hint_text="for sale")
+                loc = ALttPLocation(player, slot_name, address=shop_table_by_location[slot_name],
+                                    parent=region, hint_text="for sale")
                 loc.shop_slot = True
                 loc.locked = True
                 if single_purchase_slots.pop():

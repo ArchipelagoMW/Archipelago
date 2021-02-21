@@ -14,8 +14,8 @@ ModuleUpdate.update()
 from Utils import parse_yaml
 from worlds.alttp.Rom import Sprite
 from worlds.alttp.EntranceRandomizer import parse_arguments
-from worlds.alttp.Main import main as ERmain
-from worlds.alttp.Main import get_seed, seeddigits
+from Main import main as ERmain
+from Main import get_seed, seeddigits
 from worlds.alttp.Items import item_name_groups, item_table
 from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
@@ -359,6 +359,8 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     ret.name = get_choice('name', weights)
     if ret.name:
         ret.name = handle_name(ret.name)
+
+    ret.game = get_choice("game", weights, "A Link to the Past")
 
     glitches_required = get_choice('glitches_required', weights)
     if glitches_required not in [None, 'none', 'no_logic', 'overworld_glitches', 'minor_glitches']:

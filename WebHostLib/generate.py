@@ -5,8 +5,8 @@ import random
 from flask import request, flash, redirect, url_for, session, render_template
 
 from worlds.alttp.EntranceRandomizer import parse_arguments
-from worlds.alttp.Main import main as ERmain
-from worlds.alttp.Main import get_seed, seeddigits
+from Main import main as ERmain
+from Main import get_seed, seeddigits
 import pickle
 
 from .models import *

@@ -279,13 +279,13 @@ def get_options() -> dict:
 
 
 def get_item_name_from_id(code):
-    from worlds.alttp import Items
-    return Items.lookup_id_to_name.get(code, f'Unknown item (ID:{code})')
+    from worlds import lookup_any_item_id_to_name
+    return lookup_any_item_id_to_name.get(code, f'Unknown item (ID:{code})')
 
 
 def get_location_name_from_address(address):
-    from worlds.alttp import Regions
-    return Regions.lookup_id_to_name.get(address, f'Unknown location (ID:{address})')
+    from worlds import lookup_any_location_id_to_name
+    return lookup_any_location_id_to_name.get(address, f'Unknown location (ID:{address})')
 
 
 def persistent_store(category, key, value):
@@ -357,12 +357,6 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
     return romfile, False
 
 
-class ReceivedItem(typing.NamedTuple):
-    item: int
-    location: int
-    player: int
-
-
 def get_unique_identifier():
     uuid = persistent_load().get("client", {}).get("uuid", None)
     if uuid:
@@ -384,8 +378,9 @@ class RestrictedUnpickler(pickle.Unpickler):
     def find_class(self, module, name):
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
-        if module == "Utils" and name in {"ReceivedItem"}:
-            return globals()[name]
+        if module == "NetUtils" and name in {"NetworkItem"}:
+            import NetUtils
+            return getattr(NetUtils, name)
         # Forbid everything else.
         raise pickle.UnpicklingError("global '%s.%s' is forbidden" %
                                      (module, name))

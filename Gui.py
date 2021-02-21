@@ -17,7 +17,7 @@ ModuleUpdate.update()
 from worlds.alttp.AdjusterMain import adjust
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from GuiUtils import ToolTips, set_icon, BackgroundTaskProgress
-from worlds.alttp.Main import main, get_seed, __version__ as MWVersion
+from Main import main, get_seed, __version__ as MWVersion
 from worlds.alttp.Rom import Sprite
 from Utils import local_path, output_path, open_file
 

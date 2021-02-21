@@ -28,8 +28,8 @@ from fuzzywuzzy import process as fuzzy_process
 from worlds.alttp import Items, Regions
 import Utils
 from Utils import get_item_name_from_id, get_location_name_from_address, \
-    ReceivedItem, _version_tuple, restricted_loads
-from NetUtils import Node, Endpoint, CLIENT_GOAL
+    _version_tuple, restricted_loads
+from NetUtils import Node, Endpoint, CLientStatus, NetworkItem
 
 colorama.init()
 console_names = frozenset(set(Items.item_table) | set(Items.item_name_groups) | set(Regions.lookup_name_to_id))
@@ -76,7 +76,7 @@ class Context(Node):
         self.save_filename = None
         self.saving = False
         self.player_names = {}
-        self.rom_names = {}
+        self.connect_names = {} # names of slots clients can connect to
         self.allow_forfeits = {}
         self.remote_items = set()
         self.locations = {}
@@ -140,7 +140,7 @@ class Context(Node):
             for player, name in enumerate(names, 1):
                 self.player_names[(team, player)] = name
 
-        self.rom_names = decoded_obj['roms']
+        self.connect_names = decoded_obj['connect_names']
         self.remote_items = decoded_obj['remote_items']
         self.locations = decoded_obj['locations']
         self.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
@@ -148,6 +148,9 @@ class Context(Node):
         if use_embedded_server_options:
             server_options = decoded_obj.get("server_options", {})
             self._set_options(server_options)
+
+    def get_players_package(self):
+        return [(t, p, self.get_aliased_name(t, p), n) for (t, p), n in self.player_names.items()]
 
     def _set_options(self, server_options: dict):
         for key, value in server_options.items():
@@ -225,7 +228,7 @@ class Context(Node):
 
     def get_save(self) -> dict:
         d = {
-            "rom_names": list(self.rom_names.items()),
+            "rom_names": list(self.connect_names.items()),
             "received_items": tuple((k, v) for k, v in self.received_items.items()),
             "hints_used": tuple((key, value) for key, value in self.hints_used.items()),
             "hints": tuple(
@@ -246,15 +249,15 @@ class Context(Node):
             adjusted = {rom: (team, slot) for rom, (team, slot) in rom_names}
         except TypeError:
             adjusted = {tuple(rom): (team, slot) for (rom, (team, slot)) in rom_names}  # old format, ponyorm friendly
-            if self.rom_names != adjusted:
+            if self.connect_names != adjusted:
                 logging.warning('Save file mismatch, will start a new game')
                 return
         else:
-            if adjusted != self.rom_names:
+            if adjusted != self.connect_names:
                 logging.warning('Save file mismatch, will start a new game')
                 return
 
-        received_items = {tuple(k): [ReceivedItem(*i) for i in v] for k, v in savedata["received_items"]}
+        received_items = {tuple(k): [NetworkItem(*i) for i in v] for k, v in savedata["received_items"]}
 
         self.received_items = received_items
         self.hints_used.update({tuple(key): value for key, value in savedata["hints_used"]})
@@ -330,7 +333,7 @@ class Context(Node):
 
 # separated out, due to compatibilty between clients
 def notify_hints(ctx: Context, team: int, hints: typing.List[Utils.Hint]):
-    cmd = dumps([["Hint", {"hints", hints}]])
+    cmd = dumps([["Hint", {"hints" : hints}]])
     texts = [['PrintHTML', format_hint(ctx, team, hint)] for hint in hints]
     for _, text in texts:
         logging.info("Notice (Team #%d): %s" % (team + 1, text))
@@ -341,8 +344,7 @@ def notify_hints(ctx: Context, team: int, hints: typing.List[Utils.Hint]):
 
 def update_aliases(ctx: Context, team: int, client: typing.Optional[Client] = None):
     cmd = dumps([["RoomUpdate",
-                  {"playernames": [(key[1], ctx.get_aliased_name(*key)) for key, value in ctx.player_names.items() if
-                        key[0] == team]}]])
+                  {"players": ctx.get_players_package()}]])
     if client is None:
         for client in ctx.endpoints:
             if client.team == team and client.auth:
@@ -365,6 +367,8 @@ async def server(websocket, path, ctx: Context):
             logging.exception(e)
     finally:
         await ctx.disconnect(client)
+
+
 
 
 async def on_client_connected(ctx: Context, client: Client):
@@ -419,7 +423,7 @@ async def countdown(ctx: Context, timer):
 async def missing(ctx: Context, client: Client, locations: list, checked_locations: list):
     await ctx.send_msgs(client, [['Missing', {
         'locations': dumps(locations),
-        'checked_locations': json.dumps(checked_locations)
+        'checked_locations': dumps(checked_locations)
     }]])
 
 
@@ -441,7 +445,7 @@ def get_players_string(ctx: Context):
     return f'{len(auth_clients)} players of {len(ctx.player_names)} connected ' + text[:-1]
 
 
-def get_received_items(ctx: Context, team: int, player: int) -> typing.List[ReceivedItem]:
+def get_received_items(ctx: Context, team: int, player: int) -> typing.List[NetworkItem]:
     return ctx.received_items.setdefault((team, player), [])
 
 
@@ -495,7 +499,7 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
                             break
 
                     if not found:
-                        new_item = ReceivedItem(target_item, location, slot)
+                        new_item = NetworkItem(target_item, location, slot)
                         recvd_items.append(new_item)
                         if slot != target_player:
                             ctx.broadcast_team(team,
@@ -511,14 +515,14 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
                                 if client.team == team and client.wants_item_notification:
                                     asyncio.create_task(
                                         ctx.send_msgs(client, [['ItemFound',
-                                                                {"item": ReceivedItem(target_item, location, slot)}]]))
+                                                                {"item": NetworkItem(target_item, location, slot)}]]))
         ctx.location_checks[team, slot] |= known_locations
         send_new_items(ctx)
 
         if found_items:
             for client in ctx.endpoints:
                 if client.team == team and client.slot == slot:
-                    asyncio.create_task(ctx.send_msgs(client, [["HintPointUpdate", {"points": get_client_points(ctx, client)}]]))
+                    asyncio.create_task(ctx.send_msgs(client, [["RoomUpdate", {"hint_points": get_client_points(ctx, client)}]]))
         ctx.save()
 
 
@@ -672,7 +676,8 @@ class CommandProcessor(metaclass=CommandMeta):
         self.output(f"Could not find command {raw}. Known commands: {', '.join(self.commands)}")
 
     def _error_parsing_command(self, exception: Exception):
-        self.output(str(exception))
+        import traceback
+        self.output(traceback.format_exc())
 
 
 class CommonCommandProcessor(CommandProcessor):
@@ -780,7 +785,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 "Sorry, client forfeiting has been disabled on this server. You can ask the server admin for a /forfeit")
             return False
         else:  # is auto or goal
-            if self.ctx.client_game_state[self.client.team, self.client.slot] == CLIENT_GOAL:
+            if self.ctx.client_game_state[self.client.team, self.client.slot] == CLientStatus.CLIENT_GOAL:
                 forfeit_player(self.ctx, self.client.team, self.client.slot)
                 return True
             else:
@@ -807,7 +812,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 "Sorry, !remaining has been disabled on this server.")
             return False
         else:  # is goal
-            if self.ctx.client_game_state[self.client.team, self.client.slot] == CLIENT_GOAL:
+            if self.ctx.client_game_state[self.client.team, self.client.slot] == CLientStatus.CLIENT_GOAL:
                 remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
                 if remaining_item_ids:
                     self.output("Remaining items: " + ", ".join(Items.lookup_id_to_name.get(item_id, "unknown item")
@@ -862,7 +867,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if self.ctx.item_cheat:
             item_name, usable, response = get_intended_text(item_name, Items.item_table.keys())
             if usable:
-                new_item = ReceivedItem(Items.item_table[item_name][2], -1, self.client.slot)
+                new_item = NetworkItem(Items.item_table[item_name][2], -1, self.client.slot)
                 get_received_items(self.ctx, self.client.team, self.client.slot).append(new_item)
                 self.ctx.notify_all('Cheat console: sending "' + item_name + '" to ' + self.ctx.get_aliased_name(self.client.team, self.client.slot))
                 send_new_items(self.ctx)
@@ -993,11 +998,11 @@ async def process_client_cmd(ctx: Context, client: Client, cmd: str, args: typin
         if ctx.password and args['password'] != ctx.password:
             errors.add('InvalidPassword')
 
-        if args['rom'] not in ctx.rom_names:
-            logging.info((args["rom"], ctx.rom_names))
-            errors.add('InvalidRom')
+        if args['name'] not in ctx.connect_names:
+            logging.info((args["name"], ctx.connect_names))
+            errors.add('InvalidSlot')
         else:
-            team, slot = ctx.rom_names[args['rom']]
+            team, slot = ctx.connect_names[args['name']]
             # this can only ever be 0 or 1 elements
             clients = [c for c in ctx.endpoints if c.auth and c.slot == slot and c.team == team]
             if clients:
@@ -1031,14 +1036,14 @@ async def process_client_cmd(ctx: Context, client: Client, cmd: str, args: typin
             client.version = args['version']
             client.tags = args['tags']
             reply = [['Connected', {"team": client.team, "slot": client.slot,
-                                    "playernames": [(p, ctx.get_aliased_name(t, p)) for (t, p), n in
-                                                  ctx.player_names.items() if t == client.team],
+                                    "players": ctx.get_players_package(),
                                     "missing_checks": get_missing_checks(ctx, client),
                                     "items_checked": get_checked_checks(ctx, client)}]]
             items = get_received_items(ctx, client.team, client.slot)
             if items:
                 reply.append(['ReceivedItems', {"index": 0, "items": tuplize_received_items(items)}])
                 client.send_index = len(items)
+
             await ctx.send_msgs(client, reply)
             await on_client_joined(ctx, client)
 
@@ -1079,8 +1084,8 @@ async def process_client_cmd(ctx: Context, client: Client, cmd: str, args: typin
 
         elif cmd == 'StatusUpdate':
             current = ctx.client_game_state[client.team, client.slot]
-            if current != CLIENT_GOAL: # can't undo goal completion
-                if args["status"] == CLIENT_GOAL:
+            if current != CLientStatus.CLIENT_GOAL: # can't undo goal completion
+                if args["status"] == CLientStatus.CLIENT_GOAL:
                     finished_msg = f'{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has completed their goal.'
                     ctx.notify_all(finished_msg)
                     if "auto" in ctx.forfeit_mode:
@@ -1218,7 +1223,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
             if usable:
                 for client in self.ctx.endpoints:
                     if client.name == seeked_player:
-                        new_item = ReceivedItem(Items.item_table[item][2], -1, client.slot)
+                        new_item = NetworkItem(Items.item_table[item][2], -1, client.slot)
                         get_received_items(self.ctx, client.team, client.slot).append(new_item)
                         self.ctx.notify_all('Cheat console: sending "' + item + '" to ' + self.ctx.get_aliased_name(client.team, client.slot))
                         send_new_items(self.ctx)

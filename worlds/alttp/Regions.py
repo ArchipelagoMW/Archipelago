@@ -1,8 +1,8 @@
 import collections
 import typing
 
-from BaseClasses import Region, Location, Entrance, RegionType
-
+from BaseClasses import Region, Entrance, RegionType
+from worlds.alttp import ALttPLocation
 
 
 def create_regions(world, player):
@@ -333,7 +333,7 @@ def _create_region(player: int, name: str, type: RegionType, hint: str, location
         ret.exits.append(Entrance(player, exit, ret))
     for location in locations:
         address, player_address, crystal, hint_text = location_table[location]
-        ret.locations.append(Location(player, location, address, crystal, hint_text, ret, player_address))
+        ret.locations.append(ALttPLocation(player, location, address, crystal, hint_text, ret, player_address))
     return ret
 
 

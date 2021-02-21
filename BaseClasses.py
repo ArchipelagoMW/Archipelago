@@ -136,6 +136,7 @@ class MultiWorld():
             set_player_attr('plando_items', [])
             set_player_attr('plando_texts', {})
             set_player_attr('plando_connections', [])
+            set_player_attr('game', "A Link to the Past")
 
         self.worlds = []
         #for i in range(players):
@@ -147,6 +148,14 @@ class MultiWorld():
     @property
     def player_ids(self):
         yield from range(1, self.players + 1)
+
+    @property
+    def alttp_player_ids(self):
+        yield from (player for player in range(1, self.players + 1) if self.game[player] == "A Link to the Past")
+
+    @property
+    def hk_player_ids(self):
+        yield from (player for player in range(1, self.players + 1) if self.game[player] == "Hollow Knight")
 
     def get_name_string_for_object(self, obj) -> str:
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_names(obj.player)})'
@@ -1012,7 +1021,9 @@ class Dungeon(object):
     def is_dungeon_item(self, item: Item) -> bool:
         return item.player == self.player and item.name in [dungeon_item.name for dungeon_item in self.all_items]
 
-    def __eq__(self, other: Item) -> bool:
+    def __eq__(self, other: Dungeon) -> bool:
+        if not other:
+            return False
         return self.name == other.name and self.player == other.player
 
     def __repr__(self):
@@ -1031,29 +1042,25 @@ class Boss():
     def can_defeat(self, state) -> bool:
         return self.defeat_rule(state, self.player)
 
-
 class Location():
     shop_slot: bool = False
     shop_slot_disabled: bool = False
     event: bool = False
     locked: bool = False
     spot_type = 'Location'
+    game: str = "Generic"
+    crystal: bool = False
 
-    def __init__(self, player: int, name: str = '', address=None, crystal: bool = False,
-                 hint_text: Optional[str] = None, parent=None,
-                 player_address=None):
+    def __init__(self, player: int, name: str = '', address:int = None, parent=None):
         self.name = name
-        self.parent_region = parent
-        self.item = None
-        self.crystal = crystal
         self.address = address
-        self.player_address = player_address
-        self.hint_text: str = hint_text if hint_text else name
+        self.parent_region = parent
         self.recursion_count = 0
+        self.player = player
+        self.item = None
         self.always_allow = lambda item, state: False
         self.access_rule = lambda state: True
         self.item_rule = lambda item: True
-        self.player = player
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
         return self.always_allow(state, item) or (self.parent_region.can_fill(item) and self.item_rule(item) and (not check_access or self.can_reach(state)))
@@ -1077,24 +1084,42 @@ class Location():
     def __lt__(self, other):
         return (self.player, self.name) < (other.player, other.name)
 
+    @property
+    def hint_text(self):
+        hint_text = getattr(self, "_hint_text", None)
+        if not hint_text:
+            return self.name
 
-class Item(object):
+class Item():
     location: Optional[Location] = None
     world: Optional[World] = None
+    game: str = "Generic"
+    type: str = None
+    pedestal_credit_text = "and the Unknown Item"
+    sickkid_credit_text = None
+    magicshop_credit_text = None
+    zora_credit_text = None
+    fluteboy_credit_text = None
 
-    def __init__(self, name='', advancement=False, type=None, code=None, pedestal_hint=None, pedestal_credit=None, sickkid_credit=None, zora_credit=None, witch_credit=None, fluteboy_credit=None, hint_text=None, player=None):
+    def __init__(self, name: str, advancement:bool, code:int, player:int):
         self.name = name
         self.advancement = advancement
-        self.type = type
-        self.pedestal_hint_text = pedestal_hint
-        self.pedestal_credit_text = pedestal_credit
-        self.sickkid_credit_text = sickkid_credit
-        self.zora_credit_text = zora_credit
-        self.magicshop_credit_text = witch_credit
-        self.fluteboy_credit_text = fluteboy_credit
-        self.hint_text = hint_text
-        self.code = code
         self.player = player
+        self.code = code
+
+    @property
+    def hint_text(self):
+        hint_text = getattr(self, "_hint_text", None)
+        if not hint_text:
+            return self.name
+        return hint_text
+
+    @property
+    def pedestal_hint_text(self):
+        pedestal_hint_text = getattr(self, "_pedestal_hint_text", None)
+        if not pedestal_hint_text:
+            return self.name
+        return pedestal_hint_text
 
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player
@@ -1132,11 +1157,6 @@ class Item(object):
 
     def __str__(self):
         return self.world.get_name_string_for_object(self) if self.world else f'{self.name} (Player {self.player})'
-
-
-# have 6 address that need to be filled
-class Crystal(Item):
-    pass
 
 
 class Spoiler(object):
@@ -1224,7 +1244,7 @@ class Spoiler(object):
                 shopdata['item_{}'.format(index)] += ", {} - {}".format(item['replacement'], item['replacement_price']) if item['replacement_price'] else item['replacement']
             self.shops.append(shopdata)
 
-        for player in range(1, self.world.players + 1):
+        for player in self.world.alttp_player_ids:
             self.bosses[str(player)] = OrderedDict()
             self.bosses[str(player)]["Eastern Palace"] = self.world.get_dungeon("Eastern Palace", player).boss.name
             self.bosses[str(player)]["Desert Palace"] = self.world.get_dungeon("Desert Palace", player).boss.name
@@ -1252,8 +1272,8 @@ class Spoiler(object):
         if self.world.players == 1:
             self.bosses = self.bosses["1"]
 
-        from Utils import __version__ as ERVersion
-        self.metadata = {'version': ERVersion,
+        from Utils import __version__ as APVersion
+        self.metadata = {'version': APVersion,
                          'logic': self.world.logic,
                          'dark_room_logic': self.world.dark_room_logic,
                          'mode': self.world.mode,
@@ -1292,6 +1312,7 @@ class Spoiler(object):
                          'shuffle_prizes': self.world.shuffle_prizes,
                          'sprite_pool': self.world.sprite_pool,
                          'restrict_dungeon_item_on_boss': self.world.restrict_dungeon_item_on_boss,
+                         'game': self.world.game,
                          'er_seeds': self.world.er_seeds
                          }
 
@@ -1331,74 +1352,80 @@ class Spoiler(object):
             for player in range(1, self.world.players + 1):
                 if self.world.players > 1:
                     outfile.write('\nPlayer %d: %s\n' % (player, self.world.get_player_names(player)))
-                for team in range(self.world.teams):
-                    outfile.write('%s%s\n' % (
-                        f"Hash - {self.world.player_names[player][team]} (Team {team + 1}): " if self.world.teams > 1 else 'Hash: ',
-                        self.hashes[player, team]))
-                outfile.write('Logic:                           %s\n' % self.metadata['logic'][player])
-                outfile.write('Dark Room Logic:                 %s\n' % self.metadata['dark_room_logic'][player])
-                outfile.write('Restricted Boss Drops:           %s\n' %
-                              bool_to_text(self.metadata['restrict_dungeon_item_on_boss'][player]))
+                outfile.write('Game:                            %s\n' % self.metadata['game'][player])
                 if self.world.players > 1:
                     outfile.write('Progression Balanced:            %s\n' % (
                         'Yes' if self.metadata['progression_balancing'][player] else 'No'))
-                outfile.write('Mode:                            %s\n' % self.metadata['mode'][player])
-                outfile.write('Retro:                           %s\n' %
-                              ('Yes' if self.metadata['retro'][player] else 'No'))
-                outfile.write('Swords:                          %s\n' % self.metadata['weapons'][player])
-                outfile.write('Goal:                            %s\n' % self.metadata['goal'][player])
-                if "triforce" in self.metadata["goal"][player]:  # triforce hunt
-                    outfile.write("Pieces available for Triforce:   %s\n" %
-                                  self.metadata['triforce_pieces_available'][player])
-                    outfile.write("Pieces required for Triforce:    %s\n" %
-                                  self.metadata["triforce_pieces_required"][player])
-                outfile.write('Difficulty:                      %s\n' % self.metadata['item_pool'][player])
-                outfile.write('Item Functionality:              %s\n' % self.metadata['item_functionality'][player])
-                outfile.write('Item Progression:                %s\n' % self.metadata['progressive'][player])
-                outfile.write('Entrance Shuffle:                %s\n' % self.metadata['shuffle'][player])
-                if self.metadata['shuffle'][player] != "vanilla":
-                    outfile.write('Entrance Shuffle Seed            %s\n' % self.metadata['er_seeds'][player])
-                outfile.write('Crystals required for GT:        %s\n' % self.metadata['gt_crystals'][player])
-                outfile.write('Crystals required for Ganon:     %s\n' % self.metadata['ganon_crystals'][player])
-                outfile.write('Pyramid hole pre-opened:         %s\n' % (
-                    'Yes' if self.metadata['open_pyramid'][player] else 'No'))
                 outfile.write('Accessibility:                   %s\n' % self.metadata['accessibility'][player])
-                outfile.write('Map shuffle:                     %s\n' %
-                              ('Yes' if self.metadata['mapshuffle'][player] else 'No'))
-                outfile.write('Compass shuffle:                 %s\n' %
-                              ('Yes' if self.metadata['compassshuffle'][player] else 'No'))
-                outfile.write(
-                    'Small Key shuffle:               %s\n' % (bool_to_text(self.metadata['keyshuffle'][player])))
-                outfile.write('Big Key shuffle:                 %s\n' % (
-                    'Yes' if self.metadata['bigkeyshuffle'][player] else 'No'))
-                outfile.write('Shop inventory shuffle:          %s\n' %
-                              bool_to_text("i" in self.metadata["shop_shuffle"][player]))
-                outfile.write('Shop price shuffle:              %s\n' %
-                              bool_to_text("p" in self.metadata["shop_shuffle"][player]))
-                outfile.write('Shop upgrade shuffle:            %s\n' %
-                              bool_to_text("u" in self.metadata["shop_shuffle"][player]))
-                outfile.write('New Shop inventory:              %s\n' %
-                              bool_to_text("g" in self.metadata["shop_shuffle"][player] or
-                                           "f" in self.metadata["shop_shuffle"][player]))
-                outfile.write('Custom Potion Shop:              %s\n' %
-                              bool_to_text("w" in self.metadata["shop_shuffle"][player]))
-                outfile.write('Shop Slots:                      %s\n' %
-                              self.metadata["shop_shuffle_slots"][player])
-                outfile.write('Boss shuffle:                    %s\n' % self.metadata['boss_shuffle'][player])
-                outfile.write(
-                    'Enemy shuffle:                   %s\n' % bool_to_text(self.metadata['enemy_shuffle'][player]))
-                outfile.write('Enemy health:                    %s\n' % self.metadata['enemy_health'][player])
-                outfile.write('Enemy damage:                    %s\n' % self.metadata['enemy_damage'][player])
-                outfile.write(f'Killable thieves:                {bool_to_text(self.metadata["killable_thieves"][player])}\n')
-                outfile.write(f'Shuffled tiles:                  {bool_to_text(self.metadata["tile_shuffle"][player])}\n')
-                outfile.write(f'Shuffled bushes:                 {bool_to_text(self.metadata["bush_shuffle"][player])}\n')
-                outfile.write(
-                    'Hints:                           %s\n' % ('Yes' if self.metadata['hints'][player] else 'No'))
-                outfile.write('Beemizer:                        %s\n' % self.metadata['beemizer'][player])
-                outfile.write('Pot shuffle                      %s\n'
-                              % ('Yes' if self.metadata['shufflepots'][player] else 'No'))
-                outfile.write('Prize shuffle                    %s\n' %
-                              self.metadata['shuffle_prizes'][player])
+                if player in self.world.alttp_player_ids:
+                    for team in range(self.world.teams):
+                        outfile.write('%s%s\n' % (
+                            f"Hash - {self.world.player_names[player][team]} (Team {team + 1}): " if
+                            (player in self.world.alttp_player_ids and self.world.teams > 1) else 'Hash: ',
+                            self.hashes[player, team]))
+
+                    outfile.write('Logic:                           %s\n' % self.metadata['logic'][player])
+                    outfile.write('Dark Room Logic:                 %s\n' % self.metadata['dark_room_logic'][player])
+                    outfile.write('Restricted Boss Drops:           %s\n' %
+                                  bool_to_text(self.metadata['restrict_dungeon_item_on_boss'][player]))
+
+                    outfile.write('Mode:                            %s\n' % self.metadata['mode'][player])
+                    outfile.write('Retro:                           %s\n' %
+                                  ('Yes' if self.metadata['retro'][player] else 'No'))
+                    outfile.write('Swords:                          %s\n' % self.metadata['weapons'][player])
+                    outfile.write('Goal:                            %s\n' % self.metadata['goal'][player])
+                    if "triforce" in self.metadata["goal"][player]:  # triforce hunt
+                        outfile.write("Pieces available for Triforce:   %s\n" %
+                                      self.metadata['triforce_pieces_available'][player])
+                        outfile.write("Pieces required for Triforce:    %s\n" %
+                                      self.metadata["triforce_pieces_required"][player])
+                    outfile.write('Difficulty:                      %s\n' % self.metadata['item_pool'][player])
+                    outfile.write('Item Functionality:              %s\n' % self.metadata['item_functionality'][player])
+                    outfile.write('Item Progression:                %s\n' % self.metadata['progressive'][player])
+                    outfile.write('Entrance Shuffle:                %s\n' % self.metadata['shuffle'][player])
+                    if self.metadata['shuffle'][player] != "vanilla":
+                        outfile.write('Entrance Shuffle Seed            %s\n' % self.metadata['er_seeds'][player])
+                    outfile.write('Crystals required for GT:        %s\n' % self.metadata['gt_crystals'][player])
+                    outfile.write('Crystals required for Ganon:     %s\n' % self.metadata['ganon_crystals'][player])
+                    outfile.write('Pyramid hole pre-opened:         %s\n' % (
+                        'Yes' if self.metadata['open_pyramid'][player] else 'No'))
+
+                    outfile.write('Map shuffle:                     %s\n' %
+                                  ('Yes' if self.metadata['mapshuffle'][player] else 'No'))
+                    outfile.write('Compass shuffle:                 %s\n' %
+                                  ('Yes' if self.metadata['compassshuffle'][player] else 'No'))
+                    outfile.write(
+                        'Small Key shuffle:               %s\n' % (bool_to_text(self.metadata['keyshuffle'][player])))
+                    outfile.write('Big Key shuffle:                 %s\n' % (
+                        'Yes' if self.metadata['bigkeyshuffle'][player] else 'No'))
+                    outfile.write('Shop inventory shuffle:          %s\n' %
+                                  bool_to_text("i" in self.metadata["shop_shuffle"][player]))
+                    outfile.write('Shop price shuffle:              %s\n' %
+                                  bool_to_text("p" in self.metadata["shop_shuffle"][player]))
+                    outfile.write('Shop upgrade shuffle:            %s\n' %
+                                  bool_to_text("u" in self.metadata["shop_shuffle"][player]))
+                    outfile.write('New Shop inventory:              %s\n' %
+                                  bool_to_text("g" in self.metadata["shop_shuffle"][player] or
+                                               "f" in self.metadata["shop_shuffle"][player]))
+                    outfile.write('Custom Potion Shop:              %s\n' %
+                                  bool_to_text("w" in self.metadata["shop_shuffle"][player]))
+                    outfile.write('Shop Slots:                      %s\n' %
+                                  self.metadata["shop_shuffle_slots"][player])
+                    outfile.write('Boss shuffle:                    %s\n' % self.metadata['boss_shuffle'][player])
+                    outfile.write(
+                        'Enemy shuffle:                   %s\n' % bool_to_text(self.metadata['enemy_shuffle'][player]))
+                    outfile.write('Enemy health:                    %s\n' % self.metadata['enemy_health'][player])
+                    outfile.write('Enemy damage:                    %s\n' % self.metadata['enemy_damage'][player])
+                    outfile.write(f'Killable thieves:                {bool_to_text(self.metadata["killable_thieves"][player])}\n')
+                    outfile.write(f'Shuffled tiles:                  {bool_to_text(self.metadata["tile_shuffle"][player])}\n')
+                    outfile.write(f'Shuffled bushes:                 {bool_to_text(self.metadata["bush_shuffle"][player])}\n')
+                    outfile.write(
+                        'Hints:                           %s\n' % ('Yes' if self.metadata['hints'][player] else 'No'))
+                    outfile.write('Beemizer:                        %s\n' % self.metadata['beemizer'][player])
+                    outfile.write('Pot shuffle                      %s\n'
+                                  % ('Yes' if self.metadata['shufflepots'][player] else 'No'))
+                    outfile.write('Prize shuffle                    %s\n' %
+                                  self.metadata['shuffle_prizes'][player])
             if self.entrances:
                 outfile.write('\n\nEntrances:\n\n')
                 outfile.write('\n'.join(['%s%s %s %s' % (f'{self.world.get_player_names(entry["player"])}: '

@@ -16,7 +16,8 @@ import xxtea
 import concurrent.futures
 from typing import Optional
 
-from BaseClasses import CollectionState, Region, Location
+from BaseClasses import CollectionState, Region
+from worlds.alttp import ALttPLocation
 from worlds.alttp.Shops import ShopType
 from worlds.alttp.Dungeons import dungeon_music_addresses
 from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address
@@ -700,18 +701,24 @@ def patch_rom(world, rom, player, team, enemized):
 
         itemid = location.item.code if location.item is not None else 0x5A
 
+        if location.item.game != "A Link to the Past":
+            itemid = itemid
+
         if not location.crystal:
+
             if location.item is not None:
+                if location.item.game != "A Link to the Past":
+                    itemid = 0x21
                 # Keys in their native dungeon should use the orignal item code for keys
-                if location.parent_region.dungeon:
+                elif location.parent_region.dungeon:
                     if location.parent_region.dungeon.is_dungeon_item(location.item):
                         if location.item.bigkey:
                             itemid = 0x32
-                        if location.item.smallkey:
+                        elif location.item.smallkey:
                             itemid = 0x24
-                        if location.item.map:
+                        elif location.item.map:
                             itemid = 0x33
-                        if location.item.compass:
+                        elif location.item.compass:
                             itemid = 0x25
                 if world.remote_items[player]:
                     itemid = list(location_table.keys()).index(location.name) + 1
@@ -1572,7 +1579,7 @@ def patch_rom(world, rom, player, team, enemized):
 
     # set rom name
     # 21 bytes
-    from worlds.alttp.Main import __version__
+    from Main import __version__
     # TODO: Adjust Enemizer to accept AP and AD
     rom.name = bytearray(f'BM{__version__.replace(".", "")[0:3]}_{team + 1}_{player}_{world.seed:09}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
@@ -2007,7 +2014,7 @@ def write_strings(rom, world, player, team):
         if dest.player != player:
             if ped_hint:
                 hint += f" for {world.player_names[dest.player][team]}!"
-            elif type(dest) in [Region, Location]:
+            elif type(dest) in [Region, ALttPLocation]:
                 hint += f" in {world.player_names[dest.player][team]}'s world"
             else:
                 hint += f" for {world.player_names[dest.player][team]}"
