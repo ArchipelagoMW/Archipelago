@@ -21,6 +21,7 @@ from Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
+from typing import Dict
 import Patch
 
 seeddigits = 20
@@ -31,6 +32,14 @@ def get_seed(seed=None):
         random.seed(None)
         return random.randint(0, pow(10, seeddigits) - 1)
     return seed
+
+
+seeds: Dict[tuple, str] = dict()
+def get_same_seed(world: World, seed_def: tuple) -> str:
+    if seed_def in seeds:
+        return seeds[seed_def]
+    seeds[seed_def] = str(world.random.randint(0, 2 ** 64))
+    return seeds[seed_def]
 
 
 def main(args, seed=None):
@@ -102,9 +111,12 @@ def main(args, seed=None):
         world.er_seeds[player] = str(world.random.randint(0, 2 ** 64))
 
         if "-" in world.shuffle[player]:
-            shuffle, seed = world.shuffle[player].split("-")
+            shuffle, seed = world.shuffle[player].split("-", 1)
             world.shuffle[player] = shuffle
-            world.er_seeds[player] = seed
+            if seed.startswith("team-"):
+                world.er_seeds[player] = get_same_seed(world, (shuffle, seed, world.retro, world.mode, world.logic))
+            else:
+                world.er_seeds[player] = seed
 
     logger.info('ALttP Berserker\'s Multiworld Version %s  -  Seed: %s\n', __version__, world.seed)
 
