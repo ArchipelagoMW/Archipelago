@@ -13,6 +13,7 @@ def set_rules(world, player):
     if world.logic[player] == 'nologic':
         logging.info(
             'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
+
         if world.players == 1:
             world.get_region('Menu', player).can_reach_private = lambda state: True
             no_logic_rules(world, player)
@@ -24,6 +25,9 @@ def set_rules(world, player):
             # Set accessibility to none, and shuffle assuming the no logic players can always win
             world.accessibility[player] = 'none'
             world.progression_balancing[player] = False
+
+    else:
+        world.completion_condition[player] = lambda state: state.has('Triforce', player)
 
     global_rules(world, player)
     dungeon_boss_rules(world, player)

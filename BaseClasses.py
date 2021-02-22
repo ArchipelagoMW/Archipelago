@@ -133,6 +133,7 @@ class MultiWorld():
             set_player_attr('plando_texts', {})
             set_player_attr('plando_connections', [])
             set_player_attr('game', "A Link to the Past")
+            set_player_attr('completion_condition', lambda state: True)
 
         self.worlds = []
         #for i in range(players):
@@ -374,7 +375,7 @@ class MultiWorld():
 
     def has_beaten_game(self, state, player: Optional[int] = None):
         if player:
-            return state.has('Triforce', player) or state.world.logic[player] == 'nologic'
+            return self.completion_condition[player](state)
         else:
             return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
 

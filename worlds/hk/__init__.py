@@ -15,6 +15,8 @@ class HKLocation(Location):
         super(HKLocation, self).__init__(player, name, address, parent)
 
 class HKItem(Item):
+    game = "Hollow Knight"
+
     def __init__(self, name, advancement, code, player: int = None):
         super(HKItem, self).__init__(name, advancement, code, player)
 
@@ -23,9 +25,15 @@ def gen_hollow(world: MultiWorld, player: int):
     gen_regions(world, player)
     link_regions(world, player)
     gen_items(world, player)
+    set_rules(world, player)
     world.clear_location_cache()
     world.clear_entrance_cache()
 
+def set_rules(world: MultiWorld, player: int):
+    if world.logic[player] != 'nologic':
+        world.completion_condition[player] = lambda state: state.has('Lurien', player) and \
+                                                           state.has('Monomon', player) and \
+                                                           state.has('Herrah', player)
 
 def gen_regions(world: MultiWorld, player: int):
     world.regions += [
@@ -43,7 +51,6 @@ def gen_items(world: MultiWorld, player: int):
     for item_id, item_data in items.items():
         name = item_data["name"]
         item = HKItem(name, item_data["advancement"], item_id, player=player)
-        item.game = "Hollow Knight"
         pool.append(item)
     world.itempool += pool
 

@@ -1,4 +1,3 @@
-from collections import OrderedDict
 import copy
 from itertools import zip_longest
 import logging
@@ -23,7 +22,7 @@ from Fill import distribute_items_restrictive, flood_items, balance_multiworld_p
 from worlds.alttp.Shops import create_shops, ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
-from worlds.hk import *
+from worlds.hk import gen_hollow, gen_regions, set_rules as set_hk_rules
 import Patch
 
 seeddigits = 20
@@ -466,7 +465,7 @@ def main(args, seed=None):
         multidata_task = pool.submit(write_multidata, rom_futures)
     if not check_accessibility_task.result():
         if not world.can_beat_game():
-            raise Exception("Game appears is unbeatable. Aborting.")
+            raise Exception("Game appears as unbeatable. Aborting.")
         else:
             logger.warning("Location Accessibility requirements not fulfilled.")
     if not args.skip_playthrough:
@@ -584,6 +583,9 @@ def copy_world(world):
 
     for player in world.alttp_player_ids:
         set_rules(ret, player)
+
+    for player in world.hk_player_ids:
+        set_hk_rules(ret, player)
 
 
     return ret
