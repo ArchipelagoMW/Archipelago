@@ -114,7 +114,7 @@ def main(args, seed=None):
             shuffle, seed = world.shuffle[player].split("-", 1)
             world.shuffle[player] = shuffle
             if seed.startswith("team-"):
-                world.er_seeds[player] = get_same_seed(world, (shuffle, seed, world.retro, world.mode, world.logic))
+                world.er_seeds[player] = get_same_seed(world, (shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
             else:
                 world.er_seeds[player] = seed
 
