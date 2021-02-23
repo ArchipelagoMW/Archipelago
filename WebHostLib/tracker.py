@@ -248,6 +248,14 @@ def attribute_item(inventory, team, recipient, item):
         inventory[team][recipient][target_item] += 1
 
 
+def attribute_item_solo(inventory, item):
+    target_item = links.get(item, item)
+    if item in levels:  # non-progressive
+        inventory[target_item] = max(inventory[target_item], levels[item])
+    else:
+        inventory[target_item] += 1
+
+
 @app.template_filter()
 def render_timedelta(delta: datetime.timedelta):
     hours, minutes = divmod(delta.total_seconds() / 60, 60)
@@ -306,25 +314,60 @@ def get_static_room_data(room: Room):
 @app.route('/tracker/<suuid:tracker>/<int:team>/<int:player>')
 @cache.memoize(timeout=15)
 def getPlayerTracker(tracker: UUID, team: int, player: int):
+    # Team and player must be positive and greater than zero
+    if team < 1 or player < 1:
+        abort(404)
+
     room = Room.get(tracker=tracker)
     if not room:
         abort(404)
 
+    # Collect seed information and pare it down to a single player
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area = get_static_room_data(room)
+    player_name = names[team - 1][player - 1]
+    seed_checks_in_area = seed_checks_in_area[player]
+    player_location_to_area = player_location_to_area[player]
     inventory = collections.Counter()
     checks_done = {loc_name: 0 for loc_name in default_locations}
-    precollected_items = room.seed.multidata.get("precollected_items", None)
 
-    print(f'locations: {locations}')
-    print(f'names: {names}')
-    print(f'use_door_tracker: {use_door_tracker}')
-    print(f'seed_checks_in_area: {seed_checks_in_area}')
-    print(f'player_location_to_area: {player_location_to_area}')
-    print(f'inventory: {inventory}')
-    print(f'checks_done: {checks_done}')
-    print(f'precollected_items: {precollected_items}')
+    # Add starting items to inventory
+    starting_items = room.seed.multidata.get("precollected_items", None)[player - 1]
+    if starting_items:
+        for item_id in starting_items:
+            attribute_item_solo(inventory, item_id)
 
-    return render_template("playerTracker.html")
+    # Add items to player inventory
+    for (ms_team, ms_player), locations_checked in room.multisave.get("location_checks", {}):
+        # Skip teams and players not matching the request
+        if ms_team != (team - 1) or ms_player != player:
+            continue
+
+        # If the player does not have the item, do nothing
+        for location in locations_checked:
+            if (location, ms_player) not in locations or location not in player_location_to_area:
+                continue
+
+            item, recipient = locations[location, ms_player]
+            attribute_item_solo(inventory, item)
+            checks_done[player_location_to_area[location]] += 1
+            checks_done["Total"] += 1
+
+    # Not the presence of the triforce item
+    for (ms_team, ms_player), game_state in room.multisave.get("client_game_state", []):
+        # Skip teams and players not matching the request
+        if ms_team != (team - 1) or ms_player != player:
+            continue
+
+        if game_state:
+            inventory[106] = 1  # Triforce
+
+    return render_template("playerTracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
+                           lookup_id_to_name=Items.lookup_id_to_name, player_name=player_name,
+                           tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=icons,
+                           multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
+                           checks_in_area=seed_checks_in_area, key_locations=key_locations, small_key_ids=small_key_ids,
+                           big_key_ids=big_key_ids,
+                           big_key_locations=key_locations if use_door_tracker else big_key_locations)
 
 
 @app.route('/tracker/<suuid:tracker>')

@@ -1,15 +1,14 @@
-{% extends 'tablepage.html' %}
-{% block head %}
-    {{ super() }}
-    <title>Multiworld Tracker</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/tracker.css") }}"/>
-    <script type="application/ecmascript" src="{{ static_autoversion("assets/jquery.scrollsync.js") }}"></script>
-    <script type="application/ecmascript" src="{{ static_autoversion("assets/tracker.js") }}"></script>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ player_name }}&apos;s Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/player-tracker.css") }}"/>
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/player-tracker.js") }}"></script>
+</head>
 
-{% block body %}
-    {% include 'header/dirtHeader.html' %}
-    <div id="player-tracker-wrapper" data-tracker="{{ room.tracker|suuid }} data-player={{ player }}">
-
+<body>
+    <div id="player-tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
+        This will eventually be the player tracker for {{ player_name }}.
     </div>
-{% endblock %}
+</body>
+</html>
