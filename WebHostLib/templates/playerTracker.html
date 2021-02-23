@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ player_name }}&apos;s Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/player-tracker.css") }}"/>
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/player-tracker.js") }}"></script>
+</head>
+
+<body>
+    <div id="player-tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
+        This will eventually be the player tracker for {{ player_name }}.
+    </div>
+</body>
+</html>
