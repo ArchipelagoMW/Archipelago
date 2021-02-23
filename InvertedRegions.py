@@ -181,7 +181,7 @@ def create_inverted_regions(world, player):
         create_cave_region(player, 'Dark Lake Hylia Ledge Spike Cave', 'a spiky hint'),
         create_cave_region(player, 'Hype Cave', 'a bounty of five items', ['Hype Cave - Top', 'Hype Cave - Middle Right', 'Hype Cave - Middle Left',
                                                                    'Hype Cave - Bottom', 'Hype Cave - Generous Guy']),
-        create_dw_region(player, 'West Dark World', ['Frog'], ['Village of Outcasts Drop', 'East Dark World River Pier', 'Brewery', 'C-Shaped House', 'Chest Game', 'Thieves Town', 'Bumper Cave Entrance Rock',
+        create_dw_region(player, 'West Dark World', ['Frog', 'Flute Activation Spot'], ['Village of Outcasts Drop', 'East Dark World River Pier', 'Brewery', 'C-Shaped House', 'Chest Game', 'Thieves Town', 'Bumper Cave Entrance Rock',
                                                        'Skull Woods Forest', 'Village of Outcasts Pegs', 'Village of Outcasts Eastern Rocks', 'Red Shield Shop', 'Inverted Dark Sanctuary', 'Fortune Teller (Dark)', 'Dark World Lumberjack Shop',
                                                        'West Dark World Teleporter', 'WDW Flute']),
         create_dw_region(player, 'Dark Grassy Lawn', None, ['Grassy Lawn Pegs', 'Dark World Shop', 'Dark Grassy Lawn Flute']),

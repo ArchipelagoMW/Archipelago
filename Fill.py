@@ -1,5 +1,7 @@
 import logging
 import typing
+import collections
+import itertools
 
 from BaseClasses import CollectionState, PlandoItem, Location
 from Items import ItemFactory
@@ -77,21 +79,14 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
     # get items to distribute
     world.random.shuffle(world.itempool)
     progitempool = []
-    localprioitempool = {player: [] for player in range(1, world.players + 1)}
     localrestitempool = {player: [] for player in range(1, world.players + 1)}
-    prioitempool = []
     restitempool = []
 
     for item in world.itempool:
         if item.advancement:
             progitempool.append(item)
         elif item.name in world.local_items[item.player]:
-            if item.priority:
-                localprioitempool[item.player].append(item)
-            else:
-                localrestitempool[item.player].append(item)
-        elif item.priority:
-            prioitempool.append(item)
+            localrestitempool[item.player].append(item)
         else:
             restitempool.append(item)
 
@@ -141,24 +136,13 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
 
     fill_restrictive(world, world.state, fill_locations, progitempool)
 
-    if any(localprioitempool.values()) or \
-            any(localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
+    if any(localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
         local_locations = {player: [] for player in world.player_ids}
         for location in fill_locations:
             local_locations[location.player].append(location)
         for locations in local_locations.values():
             world.random.shuffle(locations)
 
-        for player, items in localprioitempool.items():  # items already shuffled
-            player_local_locations = local_locations[player]
-            for item_to_place in items:
-                if not player_local_locations:
-                    logging.warning(f"Ran out of local locations for player {player}, "
-                                    f"cannot place {item_to_place}.")
-                    break
-                spot_to_fill = player_local_locations.pop()
-                world.push_item(spot_to_fill, item_to_place, False)
-                fill_locations.remove(spot_to_fill)
         for player, items in localrestitempool.items():  # items already shuffled
             player_local_locations = local_locations[player]
             for item_to_place in items:
@@ -172,10 +156,8 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
 
     world.random.shuffle(fill_locations)
 
-    prioitempool, fill_locations = fast_fill(world, prioitempool, fill_locations)
-
     restitempool, fill_locations = fast_fill(world, restitempool, fill_locations)
-    unplaced = [item for item in progitempool + prioitempool + restitempool]
+    unplaced = [item for item in progitempool + restitempool]
     unfilled = [location.name for location in fill_locations]
 
     for location in fill_locations:
@@ -242,7 +224,7 @@ def flood_items(world):
         location_list = world.get_reachable_locations()
         world.random.shuffle(location_list)
         for location in location_list:
-            if location.item is not None and not location.item.advancement and not location.item.priority and not location.item.smallkey and not location.item.bigkey:
+            if location.item is not None and not location.item.advancement and not location.item.smallkey and not location.item.bigkey:
                 # safe to replace
                 replace_item = location.item
                 replace_item.location = None
@@ -263,12 +245,7 @@ def balance_multiworld_progression(world):
         unchecked_locations = world.get_locations().copy()
         world.random.shuffle(unchecked_locations)
 
-        reachable_locations_count = {player: 0 for player in range(1, world.players + 1)}
-
-        def event_key(location):
-            return location.event and (
-                    world.keyshuffle[location.item.player] or not location.item.smallkey) and (
-                    world.bigkeyshuffle[location.item.player] or not location.item.bigkey)
+        reachable_locations_count = {player: 0 for player in world.player_ids}
 
         def get_sphere_locations(sphere_state, locations):
             sphere_state.sweep_for_events(key_only=True, locations=locations)
@@ -289,33 +266,38 @@ def balance_multiworld_progression(world):
                     balancing_unchecked_locations = unchecked_locations.copy()
                     balancing_reachables = reachable_locations_count.copy()
                     balancing_sphere = sphere_locations.copy()
-                    candidate_items = []
+                    candidate_items = collections.defaultdict(list)
                     while True:
                         for location in balancing_sphere:
-                            if event_key(location):
+                            if location.event:
                                 balancing_state.collect(location.item, True, location)
-                                if location.item.player in balancing_players and not location.locked:
-                                    candidate_items.append(location)
+                                player = location.item.player
+                                # only replace items that end up in another player's world
+                                if not location.locked and player in balancing_players and location.player != player:
+                                    candidate_items[player].append(location)
                         balancing_sphere = get_sphere_locations(balancing_state, balancing_unchecked_locations)
                         for location in balancing_sphere:
                             balancing_unchecked_locations.remove(location)
                             balancing_reachables[location.player] += 1
                         if world.has_beaten_game(balancing_state) or all(
-                                [reachables >= threshold for reachables in balancing_reachables.values()]):
+                                reachables >= threshold for reachables in balancing_reachables.values()):
                             break
                         elif not balancing_sphere:
                             raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
-
-                    unlocked_locations = [l for l in unchecked_locations if l not in balancing_unchecked_locations]
+                    unlocked_locations = collections.defaultdict(list)
+                    for l in unchecked_locations:
+                        if l not in balancing_unchecked_locations:
+                            unlocked_locations[l.player].append(l)
                     items_to_replace = []
                     for player in balancing_players:
-                        locations_to_test = [l for l in unlocked_locations if l.player == player]
-                        # only replace items that end up in another player's world
-                        items_to_test = [l for l in candidate_items if l.item.player == player and l.player != player]
+                        locations_to_test = unlocked_locations[player]
+                        items_to_test = candidate_items[player]
                         while items_to_test:
                             testing = items_to_test.pop()
                             reducing_state = state.copy()
-                            for location in [*[l for l in items_to_replace if l.item.player == player], *items_to_test]:
+                            for location in itertools.chain((l for l in items_to_replace if l.item.player == player),
+                                                            items_to_test):
+
                                 reducing_state.collect(location.item, True, location)
 
                             reducing_state.sweep_for_events(locations=locations_to_test)
@@ -340,21 +322,20 @@ def balance_multiworld_progression(world):
                             new_location = replacement_locations.pop()
 
                         swap_location_item(old_location, new_location)
-
-                        new_location.event, old_location.event = True, False
                         logging.debug(f"Progression balancing moved {new_location.item} to {new_location}, "
-                                      f"displacing {old_location.item} in {old_location}")
+                                      f"displacing {old_location.item} into {old_location}")
                         state.collect(new_location.item, True, new_location)
                         replaced_items = True
+
                     if replaced_items:
-                        for location in get_sphere_locations(state, [l for l in unlocked_locations if
-                                                                     l.player in balancing_players]):
+                        unlocked = [fresh for player in balancing_players for fresh in unlocked_locations[player]]
+                        for location in get_sphere_locations(state, unlocked):
                             unchecked_locations.remove(location)
                             reachable_locations_count[location.player] += 1
                             sphere_locations.append(location)
 
             for location in sphere_locations:
-                if event_key(location):
+                if location.event:
                     state.collect(location.item, True, location)
             checked_locations.extend(sphere_locations)
 
@@ -365,7 +346,7 @@ def balance_multiworld_progression(world):
 
 
 def swap_location_item(location_1: Location, location_2: Location, check_locked=True):
-    """Swaps Items of locations. Does NOT swap flags like event, shop_slot or locked"""
+    """Swaps Items of locations. Does NOT swap flags like shop_slot or locked, but does swap event"""
     if check_locked:
         if location_1.locked:
             logging.warning(f"Swapping {location_1}, which is marked as locked.")
@@ -374,10 +355,11 @@ def swap_location_item(location_1: Location, location_2: Location, check_locked=
     location_2.item, location_1.item = location_1.item, location_2.item
     location_1.item.location = location_1
     location_2.item.location = location_2
+    location_1.event, location_2.event = location_2.event, location_1.event
 
 
 def distribute_planned(world):
-    world_name_lookup = {world.player_names[player_id][0]: player_id for player_id in world.player_ids}
+    world_name_lookup = world.world_name_lookup
 
     for player in world.player_ids:
         placement: PlandoItem

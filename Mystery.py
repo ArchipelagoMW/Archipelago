@@ -199,10 +199,10 @@ def main(args=None, callback=ERmain):
         for option, player_settings in vars(erargs).items():
             if type(player_settings) == dict:
                 if all(type(value) != list for value in player_settings.values()):
-                    if len(frozenset(player_settings.values())) > 1:
+                    if len(player_settings.values()) > 1:
                         important[option] = {player: value for player, value in player_settings.items() if
                                              player <= args.yaml_output}
-                    elif len(frozenset(player_settings.values())) > 0:
+                    elif len(player_settings.values()) > 0:
                         important[option] = player_settings[1]
                     else:
                         logging.debug(f"No player settings defined for option '{option}'")
@@ -291,31 +291,71 @@ def roll_percentage(percentage: typing.Union[int, float]) -> bool:
     percentage is expected to be in range [0, 100]"""
     return random.random() < (float(percentage) / 100)
 
+def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> dict:
+    logging.debug(f'Applying {new_weights}')
+    new_options = set(new_weights) - set(weights)
+    weights.update(new_weights)
+    if new_options:
+        for new_option in new_options:
+            logging.warning(f'{type} Suboption "{new_option}" of "{name}" did not '
+                            f'overwrite a root option. '
+                            f'This is probably in error.')
+    return weights
 
-def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"))):
-    ret = argparse.Namespace()
+def roll_linked_options(weights: dict) -> dict:
+    weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
+    for option_set in weights["linked_options"]:
+        if "name" not in option_set:
+            raise ValueError("One of your linked options does not have a name.")
+        try:
+            if roll_percentage(option_set["percentage"]):
+                logging.debug(f"Linked option {option_set['name']} triggered.")
+                if "options" in option_set:
+                    weights = update_weights(weights, option_set["options"], "Linked", option_set["name"])
+                if "rom_options" in option_set:
+                    rom_weights = weights.get("rom", dict())
+                    rom_weights = update_weights(rom_weights, option_set["rom_options"], "Linked Rom", option_set["name"])
+                    weights["rom"] = rom_weights
+            else:
+                logging.debug(f"linked option {option_set['name']} skipped.")
+        except Exception as e:
+            raise ValueError(f"Linked option {option_set['name']} is destroyed. "
+                             f"Please fix your linked option.") from e
+    return weights
+
+def roll_triggers(weights: dict) -> dict:
+    weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
+    weights["_Generator_Version"] = "Main"  # Some means for triggers to know if the seed is on main or doors.
+    for option_set in weights["triggers"]:
+        try:
+            key = get_choice("option_name", option_set)
+            if key not in weights:
+                logging.warning(f'Specified option name {option_set["option_name"]} did not '
+                                f'match with a root option. '
+                                f'This is probably in error.')
+            trigger_result = get_choice("option_result", option_set)
+            result = get_choice(key, weights)
+            if result == trigger_result and roll_percentage(get_choice("percentage", option_set, 100)):
+                if "options" in option_set:
+                    weights = update_weights(weights, option_set["options"], "Triggered", option_set["option_name"])
+                if "rom_options" in option_set:
+                    rom_weights = weights.get("rom", dict())
+                    rom_weights = update_weights(rom_weights, option_set["rom_options"], "Triggered Rom", option_set["option_name"])
+                    weights["rom"] = rom_weights
+            weights[key] = result
+        except Exception as e:
+            raise ValueError(f"A trigger is destroyed. "
+                             f"Please fix your triggers.") from e
+    return weights
+
+def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses"))):
     if "linked_options" in weights:
-        weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
-        for option_set in weights["linked_options"]:
-            if "name" not in option_set:
-                raise ValueError("One of your linked options does not have a name.")
-            try:
-                if roll_percentage(option_set["percentage"]):
-                    logging.debug(f"Linked option {option_set['name']} triggered.")
-                    logging.debug(f'Applying {option_set["options"]}')
-                    new_options = set(option_set["options"]) - set(weights)
-                    weights.update(option_set["options"])
-                    if new_options:
-                        for new_option in new_options:
-                            logging.warning(f'Linked Suboption "{new_option}" of "{option_set["name"]}" did not '
-                                            f'overwrite a root option. '
-                                            f"This is probably in error.")
-                else:
-                    logging.debug(f"linked option {option_set['name']} skipped.")
-            except Exception as e:
-                raise ValueError(f"Linked option {option_set['name']} is destroyed. "
-                                 f"Please fix your linked option.") from e
+        weights = roll_linked_options(weights)
 
+    if "triggers" in weights:
+        weights = roll_triggers(weights)
+
+    ret = argparse.Namespace()
     ret.name = get_choice('name', weights)
     if ret.name:
         ret.name = handle_name(ret.name)
@@ -379,7 +419,7 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
 
     # TODO consider moving open_pyramid to an automatic variable in the core roller, set to True when
     # fast ganon + ganon at hole
-    ret.open_pyramid = ret.goal in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
+    ret.open_pyramid = get_choice('open_pyramid', weights, 'goal')
 
     ret.crystals_gt = prefer_int(get_choice('tower_open', weights))
 
@@ -653,6 +693,7 @@ def roll_settings(weights, plando_options: typing.Set[str] = frozenset(("bosses"
         ret.triforcehud = get_choice('triforcehud', romweights, 'hide_goal')
         ret.quickswap = get_choice('quickswap', romweights, True)
         ret.fastmenu = get_choice('menuspeed', romweights, "normal")
+        ret.reduceflashing = get_choice('reduceflashing', romweights, False)
         ret.heartcolor = get_choice('heartcolor', romweights, "red")
         ret.heartbeep = convert_to_on_off(get_choice('heartbeep', romweights, "normal"))
         ret.ow_palettes = get_choice('ow_palettes', romweights, "default")

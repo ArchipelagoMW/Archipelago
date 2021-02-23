@@ -20,10 +20,11 @@
 description: Template Name # Used to describe your yaml. Useful if you have multiple files
 name: YourName # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
 ### Logic Section ###
+# Warning: overworld_glitches is not available and minor_glitches is only partially implemented on the door-rando version
 glitches_required: # Determine the logic required to complete the seed
   none: 50 # No glitches required
   minor_glitches: 0 # Puts fake flipper, waterwalk, super bunny shenanigans, and etc into logic
-  overworld_glitches: 0 # Assumes the player has knowledge of both overworld major glitches (boots clips, mirror clips) and minor glitches (fake flipper, super bunny shenanigans, water walk and etc.)
+  overworld_glitches: 0 # Assumes the player has knowledge of both overworld major glitches (boots clips, mirror clips) and minor glitches
   no_logic: 0 # Your own items are placed with no regard to any logic; such as your Fire Rod can be on your Trinexx.
   # Other players items are placed into your world under OWG logic
 dark_room_logic: # Logic for unlit dark rooms
@@ -86,9 +87,12 @@ entrance_shuffle: # Documentation: https://alttpr.com/en/options#entrance_shuffl
   full: 0 # Less strict than restricted
   crossed: 0 # Less strict than full
   insanity: 0 # Very few grouping rules. Good luck
+  # you can also define entrance shuffle seed, like so:
+  crossed-1000: 0 # using this method, you can have the same layout as another player and share entrance information
+  # however, many other settings like logic, world state, retro etc. may affect the shuffle result as well.
 goals:
   ganon: 50 # Climb GT, defeat Agahnim 2, and then kill Ganon
-  fast_ganon: 0 # Only killing Ganon is required. The hole is always open. However, items may still be placed in GT
+  fast_ganon: 0 # Only killing Ganon is required. However, items may still be placed in GT
   dungeons: 0 # Defeat the boss of all dungeons, including Agahnim's tower and GT (Aga 2)
   pedestal: 0 # Pull the Triforce from the Master Sword pedestal
   ganon_pedestal: 0 # Pull the Master Sword pedestal, then kill Ganon
@@ -97,11 +101,16 @@ goals:
   ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
   local_ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
   ice_rod_hunt: 0 # You start with everything needed to 216 the seed. Find the Ice rod, then kill Trinexx at Turtle rock.
+open_pyramid:
+  goal: 50 # Opens the pyramid if the goal requires you to kill Ganon, unless the goal is Slow Ganon or All Dungeons
+  auto: 0 # Same as Goal, but also is closed if holes are shuffled and ganon is part of the shuffle pool
+  yes: 0 # Pyramid hole is always open. Ganon's vulnerable condition is still required before he can he hurt
+  no: 0 # Pyramid hole is always closed until you defeat Agahnim atop Ganon's Tower
 triforce_pieces_mode: #Determine how to calculate the extra available triforce pieces.
   extra: 0 # available = triforce_pieces_extra + triforce_pieces_required
   percentage: 0 # available = (triforce_pieces_percentage /100) * triforce_pieces_required
   available: 50 # available = triforce_pieces_available
-triforce_pieces_extra: # Set to how many extra triforces pieces are available to collect in the world. 
+triforce_pieces_extra: # Set to how many extra triforces pieces are available to collect in the world.
   # Format "pieces: chance"
   0: 0
   5: 50
@@ -216,12 +225,12 @@ pot_shuffle:
   'on': 0 # Keys, items, and buttons hidden under pots in dungeons are shuffled with other pots in their supertile
   'off': 50 # Default pot item locations
 ### End of Enemizer Section ###
-beemizer: # Remove items from the global item pool and replace them with single bees and bee traps
+beemizer: # Remove items from the global item pool and replace them with single bees (fill bottles) and bee traps
   0: 50 # No bee traps are placed
-  1: 0 # 25% of the non-essential item pool is replaced with bee traps
-  2: 0 # 60% of the non-essential item pool is replaced with bee traps, of which 20% could be single bees
-  3: 0 # 100% of the non-essential item pool is replaced with bee traps, of which 50% could be single bees
-  4: 0 # 100% of the non-essential item pool is replaced with bee traps
+  1: 0 # 25% of rupees, bombs and arrows are replaced with bees, of which 60% are traps and 40% single bees
+  2: 0 # 50% of rupees, bombs and arrows are replaced with bees, of which 70% are traps and 30% single bees
+  3: 0 # 75% of rupees, bombs and arrows are replaced with bees, of which 80% are traps and 20% single bees
+  4: 0 # 100% of rupees, bombs and arrows are replaced with bees, of which 90% are traps and 10% single bees
 ### Shop Settings ###
 shop_shuffle_slots: # Maximum amount of shop slots to be filled with regular item pool items (such as Moon Pearl)
   0: 50
@@ -243,8 +252,8 @@ shop_shuffle:
 ### End of Shop Section ###
 shuffle_prizes: # aka drops
   none: 0 # do not shuffle prize packs
-  g: 50 # shuffle "general" price packs, as in enemy, tree pull, dig etc.
-  b: 0 # shuffle "bonk" price packs
+  g: 50 # shuffle "general" prize packs, as in enemy, tree pull, dig etc.
+  b: 0 # shuffle "bonk" prize packs
   bg: 0 # shuffle both
 timer:
   none: 50 # No timer will be displayed.
@@ -317,6 +326,13 @@ linked_options:
         hard: 1
         expert: 1
     percentage: 0 # Set this to the percentage chance you want enemizer
+# triggers that replace options upon rolling certain options
+triggers:
+  - option_name: enemy_damage # targets enemy_damage
+    option_result: shuffled # if it rolls shuffled
+    percentage: 0 # AND has a 0 percent chance (meaning this is default disabled, just to show how it works)
+    options: # then inserts these options
+      swords: assured
 ### door rando only options ###
 door_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
   vanilla: 50 # Everything should be like in vanilla
@@ -393,6 +409,9 @@ rom:
     hide_goal: 50 # hide counter until a piece is collected or speaking to Murahalda
     hide_required: 0 # Always visible, but required amount is invisible until determined by Murahalda
     hide_both: 0 # Hide both under above circumstances
+  reduceflashing: # Reduces instances of flashing such as lightning attacks, weather, ether and more.
+    on: 50
+    off: 0
   menuspeed: # Controls how fast the item menu opens and closes
     normal: 50
     instant: 0

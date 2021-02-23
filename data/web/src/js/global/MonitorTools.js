@@ -7,7 +7,7 @@ const finderSpan = (finder, possessive = false, ownItem = false) => (
 const recipientSpan = (recipient, possessive = false, ownItem = false) => (
   <span className={ `recipient-span ${ownItem ? 'mine' : null}` }>{recipient}{possessive ? "'s" : null}</span>
 );
-const itemSpan = (item) => <span className="item-span">{item}</span>;
+const itemSpan = (item, unique) => <span className={ `item-span ${unique ? 'unique' : ''}` }>{item}</span>;
 const locationSpan = (location) => <span className="location-span">{location}</span>;
 const entranceSpan = (entrance) => <span className="entrance-span">{entrance}</span>;
 
@@ -20,34 +20,34 @@ class MonitorTools {
   );
 
   /** Sent an item to another player */
-  static sentItem = (finder, recipient, item, location, iAmFinder = false, iAmRecipient = false) => (
+  static sentItem = (finder, recipient, item, location, iAmFinder = false, iAmRecipient = false, unique = false) => (
     <div
       key={ `${md5(finder + recipient + item + location)}${Math.floor((Math.random() * 1000000))}` }
       className={ (iAmFinder || iAmRecipient) ? 'relevant' : null }
     >
       {finderSpan(finder, false, iAmFinder)} found {recipientSpan(recipient, true, iAmRecipient)}&nbsp;
-      {itemSpan(item)} at {locationSpan(location)}
+      {itemSpan(item, unique)} at {locationSpan(location)}
     </div>
   )
 
   /** Received item from another player */
-  static receivedItem = (finder, item, location, itemIndex, queueLength) => (
+  static receivedItem = (finder, item, location, itemIndex, queueLength, unique = false) => (
     <div
       key={ `${md5(finder + item + location)}${Math.floor((Math.random() * 1000000))}` }
       className="relevant"
     >
       ({itemIndex}/{queueLength}) {finderSpan(finder, false)} found your&nbsp;
-      {itemSpan(item)} at {locationSpan(location)}
+      {itemSpan(item, unique)} at {locationSpan(location)}
     </div>
   )
 
   /** Player found their own item (local or remote player) */
-  static foundItem = (finder, item, location, iAmFinder = false) => (
+  static foundItem = (finder, item, location, iAmFinder = false, unique = false) => (
     <div
       key={ `${md5(finder + item + location)}${Math.floor((Math.random() * 1000000))}` }
       className={ iAmFinder ? 'relevant' : null }
     >
-      {finderSpan(finder, false, iAmFinder)} found their own {itemSpan(item)} at {locationSpan(location)}
+      {finderSpan(finder, false, iAmFinder)} found their own {itemSpan(item, unique)} at {locationSpan(location)}
     </div>
   )
 
