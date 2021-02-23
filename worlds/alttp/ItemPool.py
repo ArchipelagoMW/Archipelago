@@ -9,7 +9,7 @@ from worlds.alttp.Dungeons import get_dungeon_item_pool
 from worlds.alttp.EntranceShuffle import connect_entrance
 from Fill import FillError, fill_restrictive
 from worlds.alttp.Items import ItemFactory, GetBeemizerItem
-from worlds.alttp.Rules import forbid_items_for_player
+from worlds.generic.Rules import forbid_items_for_player
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 # Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.

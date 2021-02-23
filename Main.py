@@ -23,6 +23,7 @@ from worlds.alttp.Shops import create_shops, ShopSlotFill, SHOP_ID_START, total_
 from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
 from worlds.hk import gen_hollow, gen_regions, set_rules as set_hk_rules
+from worlds.generic.Rules import locality_rules
 import Patch
 
 seeddigits = 20
@@ -205,7 +206,9 @@ def main(args, seed=None):
         generate_itempool(world, player)
 
     logger.info('Calculating Access Rules.')
-
+    if world.players > 1:
+        for player in world.player_ids:
+            locality_rules(world, player)
     for player in world.alttp_player_ids:
         set_rules(world, player)
 

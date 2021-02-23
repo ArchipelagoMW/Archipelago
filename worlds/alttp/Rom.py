@@ -29,7 +29,7 @@ from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
 from Utils import output_path, local_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_bundled
-from worlds.alttp.Items import ItemFactory
+from worlds.alttp.Items import ItemFactory, item_table
 from worlds.alttp.EntranceShuffle import door_addresses
 import Patch
 
@@ -1643,9 +1643,14 @@ def write_custom_shops(rom, world, player):
             slot = 0 if shop.type == ShopType.TakeAny else index
             if item is None:
                 break
-            if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro[player]:
-                rom.write_byte(0x186500 + shop.sram_offset + slot, arrow_mask)
-            item_data = [shop_id, ItemFactory(item['item'], player).code] + int16_as_bytes(item['price']) + \
+            if not item['item'] in item_table: # item not native to ALTTP
+                item_code = 0x21
+            else:
+                item_code = ItemFactory(item['item'], player).code
+                if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro[player]:
+                    rom.write_byte(0x186500 + shop.sram_offset + slot, arrow_mask)
+
+            item_data = [shop_id, item_code] + int16_as_bytes(item['price']) + \
                         [item['max'], ItemFactory(item['replacement'], player).code if item['replacement'] else 0xFF] + \
                         int16_as_bytes(item['replacement_price']) + [0 if item['player'] == player else item['player']]
             items_data.extend(item_data)
