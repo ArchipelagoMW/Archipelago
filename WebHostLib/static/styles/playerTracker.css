@@ -40,7 +40,7 @@
 
 #location-table th{
     vertical-align: middle;
-    text-align: center;
+    text-align: right;
 }
 
 #location-table td{
@@ -48,9 +48,14 @@
     padding-bottom: 2px;
 }
 
-#location-table th.counter, #location-table td.counter{
+#location-table th.counter{
     padding-right: 10px;
     text-align: center;
+}
+
+#location-table td.counter{
+    padding-right: 10px;
+    text-align: right;
 }
 
 #location-table img{
