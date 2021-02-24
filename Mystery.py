@@ -401,7 +401,10 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     ret.accessibility = get_choice('accessibility', weights)
 
     entrance_shuffle = get_choice('entrance_shuffle', weights)
-    ret.shuffle = entrance_shuffle if entrance_shuffle != 'none' else 'vanilla'
+    if entrance_shuffle.startswith('none-'):
+        ret.shuffle = 'vanilla'
+    else:
+        ret.shuffle = entrance_shuffle if entrance_shuffle != 'none' else 'vanilla'
 
     goal = get_choice('goals', weights, 'ganon')
     ret.goal = {'ganon': 'ganon',
