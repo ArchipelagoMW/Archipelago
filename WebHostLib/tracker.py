@@ -24,9 +24,8 @@ icons = {
     "Master Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/6/65/SMasterSword.png?width=1920",
     "Tempered Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/9/92/STemperedSword.png?width=1920",
     "Golden Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/2/28/SGoldenSword.png?width=1920",
-    "Bow": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/bc/ALttP_Bow_%26_Arrows_Sprite.png?version=cfb7648b3714cccc80e2b17b2adf00ed",
-    "Bow and Arrows": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/bc/ALttP_Bow_%26_Arrows_Sprite.png?version=5f85a70e6366bf473544ef93b274f74c",
-    "Bow and Silver Arrows": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/6/65/Bow.png?width=1920",
+    "Bow": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/bc/ALttP_Bow_%26_Arrows_Sprite.png?version=5f85a70e6366bf473544ef93b274f74c",
+    "Silver Bow": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/6/65/Bow.png?width=1920",
     "Green Mail": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/c/c9/SGreenTunic.png?width=1920",
     "Blue Mail": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/9/98/SBlueTunic.png?width=1920",
     "Red Mail": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/7/74/SRedTunic.png?width=1920",
@@ -364,7 +363,7 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
             checks_done[player_location_to_area[location]] += 1
             checks_done["Total"] += 1
 
-    # Not the presence of the triforce item
+    # Note the presence of the triforce item
     for (ms_team, ms_player), game_state in room.multisave.get("client_game_state", []):
         # Skip teams and players not matching the request
         if ms_team != (team - 1) or ms_player != player:
@@ -373,13 +372,66 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
         if game_state:
             inventory[106] = 1  # Triforce
 
+    acquired_items = []
+    for itm in inventory:
+        acquired_items.append(get_item_name_from_id(itm))
+
+    # Progressive items need special handling for icons and class
+    progressive_items = {
+        "Progressive Sword": 94,
+        "Progressive Glove": 97,
+        "Progressive Bow": 100,
+    }
+
+    # Determine which icon to use for the sword
+    sword_url = icons["Fighter Sword"]
+    sword_acquired = False
+    sword_names = ['Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword']
+    if "Progressive Sword" in acquired_items:
+        sword_url = icons[sword_names[inventory[progressive_items["Progressive Sword"]] - 1]]
+        sword_acquired = True
+    else:
+        for sword in reversed(sword_names):
+            if sword in acquired_items:
+                sword_url = icons[sword]
+                sword_acquired = True
+                break
+
+    gloves_url = icons["Power Glove"]
+    gloves_acquired = False
+    glove_names = ["Power Glove", "Titan Mitts"]
+    if "Progressive Glove" in acquired_items:
+        gloves_url = icons[glove_names[inventory[progressive_items["Progressive Glove"]] - 1]]
+        gloves_acquired = True
+    else:
+        for glove in reversed(glove_names):
+            if glove in acquired_items:
+                gloves_url = icons[glove]
+                gloves_acquired = True
+                break
+
+    bow_url = icons["Bow"]
+    bow_acquired = False
+    bow_names = ["Bow", "Silver Bow"]
+    if "Progressive Bow" in acquired_items:
+        bow_url = icons[bow_names[inventory[progressive_items["Progressive Bow"]] - 1]]
+        bow_acquired = True
+    else:
+        for bow in reversed(bow_names):
+            if bow in acquired_items:
+                bow_url = icons[bow]
+                bow_acquired = True
+                break
+
     return render_template("playerTracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
                            lookup_id_to_name=Items.lookup_id_to_name, player_name=player_name,
                            tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=icons,
                            multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
                            checks_in_area=seed_checks_in_area, key_locations=key_locations, small_key_ids=small_key_ids,
-                           big_key_ids=big_key_ids,
-                           big_key_locations=key_locations if use_door_tracker else big_key_locations)
+                           big_key_ids=big_key_ids, acquired_items=acquired_items,
+                           big_key_locations=key_locations if use_door_tracker else big_key_locations,
+                           sword_url=sword_url, sword_acquired=sword_acquired, gloves_url=gloves_url,
+                           gloves_acquired=gloves_acquired, bow_url=bow_url, bow_acquired=bow_acquired)
 
 
 @app.route('/tracker/<suuid:tracker>')

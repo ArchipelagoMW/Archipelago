@@ -10,38 +10,43 @@
     <div id="player-tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
         <table id="inventory-table">
             <tr>
-                <td><img src="{{ icons["Bow"] }}" class="" /></td>
-                <td><img src="{{ icons["Blue Boomerang"] }}" class="" /></td>
-                <td><img src="{{ icons["Hookshot"] }}" class="" /></td>
-                <td><img src="{{ icons["Magic Powder"] }}" class="powder-fix" /></td>
-                <td><img src="{{ icons["Fighter Sword"] }}" class="" /></td>
+                <td><img src="{{ bow_url }}" class="{{ 'acquired' if bow_acquired }}" /></td>
+                <td>
+                    <img
+                            src="{{ icons["Red Boomerang"] if "Red Boomerang" in acquired_items else icons["Blue Boomerang"] }}"
+                            class="{{ 'acquired' if "Red Boomerang" in acquired_items or "Blue Boomerang" in acquired_items }}"
+                    />
+                </td>
+                <td><img src="{{ icons["Hookshot"] }}" class="{{ 'acquired' if 'Hookshot' in acquired_items }}" /></td>
+                <td><img src="{{ icons["Magic Powder"] }}" class="powder-fix {{ 'acquired' if 'Magic Powder' in acquired_items }}" /></td>
+                <td><img src="{{ sword_url }}" class="{{ 'acquired' if sword_acquired }}" /></td>
             </tr>
             <tr>
-                <td><img src="{{ icons["Fire Rod"] }}" class="" /></td>
-                <td><img src="{{ icons["Ice Rod"] }}" class="" /></td>
-                <td><img src="{{ icons["Bombos"] }}" class="" /></td>
-                <td><img src="{{ icons["Ether"] }}" class="" /></td>
-                <td><img src="{{ icons["Quake"] }}" class="" /></td>
+                <td><img src="{{ icons["Fire Rod"] }}" class="{{ 'acquired' if "Fire Rod" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Ice Rod"] }}" class="{{ 'acquired' if "Ice Rod" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Bombos"] }}" class="{{ 'acquired' if "Bombos" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Ether"] }}" class="{{ 'acquired' if "Ether" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Quake"] }}" class="{{ 'acquired' if "Quake" in acquired_items }}" /></td>
             </tr>
             <tr>
-                <td><img src="{{ icons["Lamp"] }}" class="" /></td>
-                <td><img src="{{ icons["Hammer"] }}" class="" /></td>
-                <td><img src="{{ icons["Flute"] }}" class="" /></td>
-                <td><img src="{{ icons["Bug Catching Net"] }}" class="" /></td>
-                <td><img src="{{ icons["Book of Mudora"] }}" class="" /></td>
+                <td><img src="{{ icons["Lamp"] }}" class="{{ 'acquired' if "Lamp" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Hammer"] }}" class="{{ 'acquired' if "Hammer" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Flute"] }}" class="{{ 'acquired' if "Flute" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Bug Catching Net"] }}" class="{{ 'acquired' if "Bug Catching Net" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Book of Mudora"] }}" class="{{ 'acquired' if "Book of Mudora" in acquired_items }}" /></td>
             </tr>
             <tr>
-                <td><img src="{{ icons["Bottle"] }}" class="" /></td>
-                <td><img src="{{ icons["Cane of Somaria"] }}" class="" /></td>
-                <td><img src="{{ icons["Cane of Byrna"] }}" class="" /></td>
-                <td><img src="{{ icons["Cape"] }}" class="" /></td>
-                <td><img src="{{ icons["Magic Mirror"] }}" class="" /></td>
+                <td><img src="{{ icons["Bottle"] }}" class="{{ 'acquired' if "Bottle" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Cane of Somaria"] }}" class="{{ 'acquired' if "Cane of Somaria" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Cane of Byrna"] }}" class="{{ 'acquired' if "Cane of Byrna" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Cape"] }}" class="{{ 'acquired' if "Cape" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Magic Mirror"] }}" class="{{ 'acquired' if "Magic Mirror" in acquired_items }}" /></td>
             </tr>
             <tr>
-                <td><img src="{{ icons["Pegasus Boots"] }}" class="" /></td>
-                <td><img src="{{ icons["Power Glove"] }}" class="" /></td>
-                <td><img src="{{ icons["Flippers"] }}" class="" /></td>
-                <td><img src="{{ icons["Moon Pearl"] }}" class="" /></td>
+                <td><img src="{{ icons["Pegasus Boots"] }}" class="{{ 'acquired' if "Pegasus Boots" in acquired_items }}" /></td>
+                <td><img src="{{ gloves_url }}" class="{{ 'acquired' if gloves_acquired }}" /></td>
+                <td><img src="{{ icons["Flippers"] }}" class="{{ 'acquired' if "Flippers" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Moon Pearl"] }}" class="{{ 'acquired' if "Moon Pearl" in acquired_items }}" /></td>
                 <td><img src="{{ icons["Green Mail"] }}" class="acquired" /></td>
             </tr>
         </table>
