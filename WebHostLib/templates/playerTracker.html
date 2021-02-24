@@ -2,13 +2,134 @@
 <html lang="en">
 <head>
     <title>{{ player_name }}&apos;s Tracker</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/player-tracker.css") }}"/>
-    <script type="application/ecmascript" src="{{ static_autoversion("assets/player-tracker.js") }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/playerTracker.css") }}"/>
+    <script type="application/ecmascript" src="{{ static_autoversion("assets/playerTracker.js") }}"></script>
 </head>
 
 <body>
     <div id="player-tracker-wrapper" data-tracker="{{ room.tracker|suuid }}">
-        This will eventually be the player tracker for {{ player_name }}.
+        <table id="inventory-table">
+            <tr>
+                <td><img src="{{ icons["Bow"] }}" class="" /></td>
+                <td><img src="{{ icons["Blue Boomerang"] }}" class="" /></td>
+                <td><img src="{{ icons["Hookshot"] }}" class="" /></td>
+                <td><img src="{{ icons["Magic Powder"] }}" class="powder-fix" /></td>
+                <td><img src="{{ icons["Fighter Sword"] }}" class="" /></td>
+            </tr>
+            <tr>
+                <td><img src="{{ icons["Fire Rod"] }}" class="" /></td>
+                <td><img src="{{ icons["Ice Rod"] }}" class="" /></td>
+                <td><img src="{{ icons["Bombos"] }}" class="" /></td>
+                <td><img src="{{ icons["Ether"] }}" class="" /></td>
+                <td><img src="{{ icons["Quake"] }}" class="" /></td>
+            </tr>
+            <tr>
+                <td><img src="{{ icons["Lamp"] }}" class="" /></td>
+                <td><img src="{{ icons["Hammer"] }}" class="" /></td>
+                <td><img src="{{ icons["Flute"] }}" class="" /></td>
+                <td><img src="{{ icons["Bug Catching Net"] }}" class="" /></td>
+                <td><img src="{{ icons["Book of Mudora"] }}" class="" /></td>
+            </tr>
+            <tr>
+                <td><img src="{{ icons["Bottle"] }}" class="" /></td>
+                <td><img src="{{ icons["Cane of Somaria"] }}" class="" /></td>
+                <td><img src="{{ icons["Cane of Byrna"] }}" class="" /></td>
+                <td><img src="{{ icons["Cape"] }}" class="" /></td>
+                <td><img src="{{ icons["Magic Mirror"] }}" class="" /></td>
+            </tr>
+            <tr>
+                <td><img src="{{ icons["Pegasus Boots"] }}" class="" /></td>
+                <td><img src="{{ icons["Power Glove"] }}" class="" /></td>
+                <td><img src="{{ icons["Flippers"] }}" class="" /></td>
+                <td><img src="{{ icons["Moon Pearl"] }}" class="" /></td>
+                <td><img src="{{ icons["Green Mail"] }}" class="acquired" /></td>
+            </tr>
+        </table>
+        <table id="location-table">
+            <tr>
+                <th></th>
+                <th class="counter"><img src="{{ icons["Chest"] }}" /></th>
+                <th class="counter"><img src="{{ icons["Small Key"] }}" /></th>
+                <th><img src="{{ icons["Big Key"] }}" /></th>
+            </tr>
+            <tr>
+                <td>Hyrule Castle</td>
+                <td class="counter">0 / 0</td>
+                <td class="counter">0 / 0</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Eastern Palace</td>
+                <td class="counter">0 / 0</td>
+                <td class="counter">0 / 0</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Desert Palace</td>
+                <td class="counter">0 / 0</td>
+                <td class="counter">0 / 0</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Tower of Hera</td>
+                <td class="counter">0 / 0</td>
+                <td class="counter">0 / 0</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Agahnim&apos;s Tower</td>
+                <td class="counter">0 / 0</td>
+                <td class="counter">0 / 0</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Palace of Darkness</td>
+                <td class="counter">0 / 0</td>
+                <td class="counter">0 / 0</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Swamp Palace</td>
+                <td class="counter">0 / 0</td>
+                <td class="counter">0 / 0</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Skull Woods</td>
+                <td class="counter">0 / 0</td>
+                <td class="counter">0 / 0</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Thieves&apos; Town</td>
+                <td class="counter">0 / 0</td>
+                <td class="counter">0 / 0</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Ice Palace</td>
+                <td class="counter">0 / 0</td>
+                <td class="counter">0 / 0</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Misery Mire</td>
+                <td class="counter">0 / 0</td>
+                <td class="counter">0 / 0</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Turtle Rock</td>
+                <td class="counter">0 / 0</td>
+                <td class="counter">0 / 0</td>
+                <td></td>
+            </tr><tr>
+                <td>Ganon&apos;s Tower</td>
+                <td class="counter">0 / 0</td>
+                <td class="counter">0 / 0</td>
+                <td></td>
+            </tr>
+        </table>
     </div>
 </body>
 </html>

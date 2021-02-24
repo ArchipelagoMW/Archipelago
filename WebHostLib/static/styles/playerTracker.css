@@ -1,0 +1,60 @@
+#player-tracker-wrapper{
+
+}
+
+#inventory-table{
+    border: 2px solid black;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    width: 250px;
+}
+
+#inventory-table td{
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#inventory-table img{
+    height: 100%;
+    max-width: 40px;
+    max-height: 40px;
+    filter: grayscale(100%);
+}
+
+#inventory-table img.acquired{
+    filter: none;
+}
+
+#inventory-table img.powder-fix{
+    width: 35px;
+    height: 35px;
+}
+
+#location-table{
+    width: 250px;
+    border: 2px solid black;
+    border-radius: 4px;
+}
+
+#location-table th{
+    vertical-align: middle;
+    text-align: center;
+}
+
+#location-table td{
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+#location-table th.counter, #location-table td.counter{
+    padding-right: 10px;
+    text-align: center;
+}
+
+#location-table img{
+    height: 100%;
+    max-width: 30px;
+    max-height: 30px;
+}
