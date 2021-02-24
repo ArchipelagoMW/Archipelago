@@ -424,12 +424,8 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
                 break
 
     return render_template("playerTracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
-                           lookup_id_to_name=Items.lookup_id_to_name, player_name=player_name,
-                           tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=icons,
-                           multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
-                           checks_in_area=seed_checks_in_area, key_locations=key_locations, small_key_ids=small_key_ids,
-                           big_key_ids=big_key_ids, acquired_items=acquired_items,
-                           big_key_locations=key_locations if use_door_tracker else big_key_locations,
+                           player_name=player_name, room=room, icons=icons, checks_done=checks_done,
+                           checks_in_area=seed_checks_in_area, acquired_items=acquired_items,
                            sword_url=sword_url, sword_acquired=sword_acquired, gloves_url=gloves_url,
                            gloves_acquired=gloves_acquired, bow_url=bow_url, bow_acquired=bow_acquired)
 
