@@ -164,7 +164,7 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
         world.push_item(location, ItemFactory('Nothing', location.player), False)
 
     if unplaced or unfilled:
-        logging.warning('Unplaced items: %s - Unfilled Locations: %s', unplaced, unfilled)
+        logging.warning(f'Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}')
 
 
 def fast_fill(world, item_pool: typing.List, fill_locations: typing.List) -> typing.Tuple[typing.List, typing.List]:

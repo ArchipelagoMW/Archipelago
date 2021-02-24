@@ -8,7 +8,7 @@ import zlib
 import concurrent.futures
 import pickle
 
-from BaseClasses import MultiWorld, CollectionState, Region
+from BaseClasses import MultiWorld, CollectionState, Region, Item
 from worlds.alttp import ALttPLocation, ALttPItem
 from worlds.alttp.Items import ItemFactory, item_table, item_name_groups
 from worlds.alttp.Regions import create_regions, mark_light_world_regions, \
@@ -22,7 +22,8 @@ from Fill import distribute_items_restrictive, flood_items, balance_multiworld_p
 from worlds.alttp.Shops import create_shops, ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
-from worlds.hk import gen_hollow, gen_regions, set_rules as set_hk_rules
+from worlds.hk import gen_hollow, set_rules as set_hk_rules
+from worlds.hk import create_regions as hk_create_regions
 from worlds.generic.Rules import locality_rules
 import Patch
 
@@ -157,6 +158,8 @@ def main(args, seed=None):
         world.non_local_items[player] -= item_name_groups['Pendants']
         world.non_local_items[player] -= item_name_groups['Crystals']
 
+    for player in world.hk_player_ids:
+        hk_create_regions(world, player)
 
     for player in world.alttp_player_ids:
         world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
@@ -529,6 +532,7 @@ def copy_world(world):
     ret.dark_room_logic = world.dark_room_logic.copy()
     ret.restrict_dungeon_item_on_boss = world.restrict_dungeon_item_on_boss.copy()
     ret.game = world.game.copy()
+    ret.completion_condition = world.completion_condition.copy()
 
     for player in world.alttp_player_ids:
         if world.mode[player] != 'inverted':
@@ -539,7 +543,7 @@ def copy_world(world):
         create_dungeons(ret, player)
 
     for player in world.hk_player_ids:
-        gen_regions(ret, player)
+        hk_create_regions(ret, player)
 
     copy_dynamic_regions_and_locations(world, ret)
 
@@ -564,21 +568,28 @@ def copy_world(world):
     # fill locations
     for location in world.get_locations():
         if location.item is not None:
-            item = ALttPItem(location.item.name, location.item.advancement, location.item.type, player = location.item.player)
+            item = Item(location.item.name, location.item.advancement, location.item.code, player = location.item.player)
             ret.get_location(location.name, location.player).item = item
             item.location = ret.get_location(location.name, location.player)
             item.world = ret
+            item.type = location.item.type
+
         if location.event:
             ret.get_location(location.name, location.player).event = True
         if location.locked:
             ret.get_location(location.name, location.player).locked = True
 
-    # copy remaining itempool. No item in itempool should have an assigned location
-    for item in world.itempool:
-        ret.itempool.append(ALttPItem(item.name, item.advancement, item.type, player = item.player))
 
-    for item in world.precollected_items:
-        ret.push_precollected(ItemFactory(item.name, item.player))
+    # copy remaining itempool. No item in itempool should have an assigned location
+    for old_item in world.itempool:
+        item = Item(old_item.name, old_item.advancement, old_item.code, player = old_item.player)
+        item.type = old_item.type
+        ret.itempool.append(item)
+
+    for old_item in world.precollected_items:
+        item = Item(old_item.name, old_item.advancement, old_item.code, player = old_item.player)
+        item.type = old_item.type
+        ret.push_precollected(item)
 
     # copy progress items in state
     ret.state.prog_items = world.state.prog_items.copy()

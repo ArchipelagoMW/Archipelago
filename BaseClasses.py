@@ -135,6 +135,11 @@ class MultiWorld():
             set_player_attr('game', "A Link to the Past")
             set_player_attr('completion_condition', lambda state: True)
 
+            for hk_logic in {"MILDSKIPS", "SPICYSKIPS", "FIREBALLSKIPS", "ACIDSKIPS", "SPIKETUNNELS",
+                "DARKROOMS", "CURSED", "SHADESKIPS"}:
+                set_player_attr(hk_logic, False)
+            set_player_attr("NOTCURSED", True)
+
         self.worlds = []
         #for i in range(players):
         #    self.worlds.append(worlds.alttp.ALTTPWorld({}, i))
@@ -584,6 +589,19 @@ class CollectionState(object):
 
     def has(self, item, player: int, count: int = 1):
         return self.prog_items[item, player] >= count
+
+    def has_essence(self, count:int, player: int):
+        # TODO: implement
+        return True
+
+    def has_grubs(self, count:int, player: int):
+        found: int = 0
+        for (item, item_player), count in self.prog_items.items():
+            if item_player == player and "Grub" in item:
+                found += count
+                if found > count:
+                    return True
+        return False
 
     def has_key(self, item, player, count: int = 1):
         if self.world.logic[player] == 'nologic':

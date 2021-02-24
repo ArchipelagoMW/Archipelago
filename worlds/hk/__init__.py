@@ -2,11 +2,27 @@ import logging
 
 logger = logging.getLogger("Hollow Knight")
 
-from .Locations import locations, lookup_name_to_id
-from .Items import items
+from .Locations import lookup_name_to_id
+from .Items import item_table
+from .Regions import create_regions
+from .Rules import set_rules
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
 
+
+def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
+    ret = Region(name, None, name, player)
+    ret.world = world
+    if locations:
+        for location in locations:
+            loc_id = lookup_name_to_id.get(location, 0)
+            location = HKLocation(player, location, loc_id, ret)
+            ret.locations.append(location)
+    if exits:
+        for exit in exits:
+            ret.exits.append(Entrance(player, exit, ret))
+
+    return ret
 
 class HKLocation(Location):
     game: str = "Hollow Knight"
@@ -20,26 +36,13 @@ class HKItem(Item):
     def __init__(self, name, advancement, code, player: int = None):
         super(HKItem, self).__init__(name, advancement, code, player)
 
+
 def gen_hollow(world: MultiWorld, player: int):
-    logger.info("Doing buggy things.")
-    gen_regions(world, player)
     link_regions(world, player)
     gen_items(world, player)
     set_rules(world, player)
-    world.clear_location_cache()
-    world.clear_entrance_cache()
 
-def set_rules(world: MultiWorld, player: int):
-    if world.logic[player] != 'nologic':
-        world.completion_condition[player] = lambda state: state.has('Lurien', player) and \
-                                                           state.has('Monomon', player) and \
-                                                           state.has('Herrah', player)
 
-def gen_regions(world: MultiWorld, player: int):
-    world.regions += [
-        create_region(world, player, 'Menu', None, ['Hollow Nest S&Q']),
-        create_region(world, player, 'Hollow Nest', [location["name"] for location in locations.values()])
-    ]
 
 
 def link_regions(world: MultiWorld, player: int):
@@ -48,23 +51,22 @@ def link_regions(world: MultiWorld, player: int):
 
 def gen_items(world: MultiWorld, player: int):
     pool = []
-    for item_id, item_data in items.items():
-        name = item_data["name"]
-        item = HKItem(name, item_data["advancement"], item_id, player=player)
-        pool.append(item)
+    for item_name, item_data in item_table.items():
+
+        item = HKItem(item_name, item_data.advancement, item_data.id, player=player)
+
+        if item_data.type == "Event":
+            event_location = world.get_location(item_name, player)
+            world.push_item(event_location, item)
+            event_location.event = True
+            event_location.locked = True
+            if item.name == "King's_Pass":
+                world.push_precollected(item)
+
+        else:
+            pool.append(item)
+
     world.itempool += pool
 
 
-def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, None, name, player)
-    ret.world = world
-    if locations:
-        for location in locations:
-            loc_id = lookup_name_to_id[location]
-            location = HKLocation(player, location, loc_id, ret)
-            ret.locations.append(location)
-    if exits:
-        for exit in exits:
-            ret.exits.append(Entrance(player, exit, ret))
 
-    return ret
