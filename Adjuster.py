@@ -113,7 +113,7 @@ def adjustGUI():
     from argparse import Namespace
     from Main import __version__ as MWVersion
     adjustWindow = Tk()
-    adjustWindow.wm_title("Berserker's Multiworld %s LttP Adjuster" % MWVersion)
+    adjustWindow.wm_title("Archipelago %s LttP Adjuster" % MWVersion)
     set_icon(adjustWindow)
 
     rom_options_frame, rom_vars, set_sprite = get_rom_options_frame(adjustWindow)
