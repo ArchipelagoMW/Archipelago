@@ -200,7 +200,7 @@ item_table = {'Bow': (True, None, 0x0B, 'You have\nchosen the\narcher class.', '
               'Open Floodgate': (True, 'Event', None, None, None, None, None, None, None, None),
               }
 
-lookup_id_to_name = {data[2]: name for name, data in item_table.items() if data[2]}
+lookup_id_to_name = {data[2]: name for name, data in item_table.items() if type(data[2]) == int}
 
 hint_blacklist = {"Triforce"}
 

@@ -6,7 +6,6 @@ lookup_id_to_name = \
     17825794: 'Monomon',
     17825795: 'Herrah',
     17825796: 'World_Sense',
-    17825797: 'Dreamer',
     17825798: 'Mothwing_Cloak',
     17825799: 'Mantis_Claw',
     17825800: 'Crystal_Heart',
@@ -124,7 +123,6 @@ lookup_id_to_name = \
     17825912: '150_Geo-Resting_Grounds_Chest',
     17825913: '80_Geo-Crystal_Peak_Chest',
     17825914: '160_Geo-Weavers_Den_Chest',
-    17825915: '1_Geo',
     17825916: 'Rancid_Egg-Sly',
     17825917: 'Rancid_Egg-Grubs',
     17825918: 'Rancid_Egg-Sheo',
@@ -293,11 +291,7 @@ lookup_id_to_name = \
     17826081: 'Lifeblood_Cocoon-Mantis_Village',
     17826082: 'Lifeblood_Cocoon-Failed_Tramway',
     17826083: 'Lifeblood_Cocoon-Galien',
-    17826084: "Lifeblood_Cocoon-Kingdom's_Edge",
-    17826085: 'Grubfather',
-    17826086: 'Seer',
-    17826087: 'Equipped',
-    17826088: 'Placeholder'}
+    17826084: "Lifeblood_Cocoon-Kingdom's_Edge"}
 
 
 

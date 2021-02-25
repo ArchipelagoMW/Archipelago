@@ -288,7 +288,7 @@ def get_location_name_from_address(address):
     return lookup_any_location_id_to_name.get(address, f'Unknown location (ID:{address})')
 
 
-def persistent_store(category, key, value):
+def persistent_store(category: str, key: typing.Any, value: typing.Any):
     path = local_path("_persistent_storage.yaml")
     storage: dict = persistent_load()
     category = storage.setdefault(category, {})

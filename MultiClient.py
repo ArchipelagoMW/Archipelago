@@ -32,6 +32,7 @@ import WebUI
 
 from worlds.alttp import Regions, Shops
 from worlds.alttp import Items
+from worlds import network_data_package
 import Utils
 
 # logging note:
@@ -86,8 +87,9 @@ class Context():
         self.slot = None
         self.player_names: typing.Dict[int: str] = {}
         self.locations_recognized = set()
-        self.locations_checked = set()
-        self.locations_scouted = set()
+        # these should probably track IDs where possible
+        self.locations_checked:typing.Set[str] = set()
+        self.locations_scouted:typing.Set[str] = set()
         self.items_received = []
         self.items_missing = []
         self.items_checked = None
@@ -99,8 +101,28 @@ class Context():
         self.found_items = found_items
         self.finished_game = False
         self.slow_mode = False
-
         self.jsontotextparser = JSONtoTextParser(self)
+        self.set_getters(network_data_package)
+
+    def set_getters(self, data_package: dict, network=False):
+        if not network:
+            local_package = Utils.persistent_load().get("datapackage", {}).get("latest", {})
+            if local_package and local_package["version"] > network_data_package["version"]:
+                data_package: dict = local_package
+        elif network and data_package["version"] > network_data_package["version"]:
+            Utils.persistent_store("datapackage", "latest", network_data_package)
+
+        item_lookup: dict = data_package["lookup_any_item_id_to_name"]
+        locations_lookup: dict = data_package["lookup_any_location_id_to_name"]
+
+        def get_item_name_from_id(code: int):
+            return item_lookup.get(code, f'Unknown item (ID:{code})')
+        self.item_name_getter = get_item_name_from_id
+
+        def get_location_name_from_address(address: int):
+            return locations_lookup.get(address, f'Unknown location (ID:{address})')
+        self.location_name_getter = get_location_name_from_address
+
 
     @property
     def endpoints(self):
@@ -794,19 +816,6 @@ async def server_autoreconnect(ctx: Context):
         ctx.server_task = asyncio.create_task(server_loop(ctx))
 
 
-missing_unknown = re.compile("Unknown Location ID: (?P<ID>\d+)")
-
-
-def convert_unknown_missing(missing_items: list) -> list:
-    missing = []
-    for location in missing_items:
-        match = missing_unknown.match(location)
-        if match:
-            missing.append(Regions.lookup_id_to_name.get(int(match['ID']), location))
-        else:
-            missing.append(location)
-    return missing
-
 
 async def process_server_cmd(ctx: Context, args: dict):
     try:
@@ -846,7 +855,12 @@ async def process_server_cmd(ctx: Context, args: dict):
                     logger.info(f'  Team #{team + 1}')
                     current_team = team
                 logger.info('    %s (Player %d)' % (name, slot))
+        if args["datapackage_version"] > network_data_package["version"]:
+            await ctx.send_msgs([{"cmd": "GetDataPackage"}])
         await server_auth(ctx, args['password'])
+
+    elif cmd == 'DataPackage':
+        ctx.set_getters(args['data'], network=True)
 
     elif cmd == 'ConnectionRefused':
         errors = args["errors"]
@@ -913,7 +927,7 @@ async def process_server_cmd(ctx: Context, args: dict):
         for item, location, player in args['locations']:
             if location not in ctx.locations_info:
                 replacements = {0xA2: 'Small Key', 0x9D: 'Big Key', 0x8D: 'Compass', 0x7D: 'Map'}
-                item_name = replacements.get(item, get_item_name_from_id(item))
+                item_name = replacements.get(item, ctx.item_name_getter(item))
                 logger.info(
                     f"Saw {color(item_name, 'red', 'bold')} at {list(Regions.location_table.keys())[location - 1]}")
                 ctx.locations_info[location] = (item, player)
@@ -923,32 +937,32 @@ async def process_server_cmd(ctx: Context, args: dict):
         found = NetworkItem(*args["item"])
         receiving_player = args["receiver"]
         ctx.ui_node.notify_item_sent(ctx.player_names[found.player], ctx.player_names[receiving_player],
-                                     get_item_name_from_id(found.item), get_location_name_from_address(found.location),
+                                     ctx.item_name_getter(found.item), ctx.location_name_getter(found.location),
                                      found.player == ctx.slot, receiving_player == ctx.slot,
-                                     get_item_name_from_id(found.item) in Items.progression_items)
-        item = color(get_item_name_from_id(found.item), 'cyan' if found.player != ctx.slot else 'green')
+                                     ctx.item_name_getter(found.item) in Items.progression_items)
+        item = color(ctx.item_name_getter(found.item), 'cyan' if found.player != ctx.slot else 'green')
         found_player = color(ctx.player_names[found.player], 'yellow' if found.player != ctx.slot else 'magenta')
         receiving_player = color(ctx.player_names[receiving_player],
                                  'yellow' if receiving_player != ctx.slot else 'magenta')
         logging.info(
             '%s sent %s to %s (%s)' % (found_player, item, receiving_player,
-                                       color(get_location_name_from_address(found.location), 'blue_bg', 'white')))
+                                       color(ctx.location_name_getter(found.location), 'blue_bg', 'white')))
 
     elif cmd == 'ItemFound':  # going away
         found = NetworkItem(*args["item"])
-        ctx.ui_node.notify_item_found(ctx.player_names[found.player], get_item_name_from_id(found.item),
-                                      get_location_name_from_address(found.location), found.player == ctx.slot,
-                                      get_item_name_from_id(found.item) in Items.progression_items)
+        ctx.ui_node.notify_item_found(ctx.player_names[found.player], ctx.item_name_getter(found.item),
+                                      ctx.location_name_getter(found.location), found.player == ctx.slot,
+                                      ctx.item_name_getter(found.item) in Items.progression_items)
         item = color_item(found.item, found.player == ctx.slot)
         player_sent = color(ctx.player_names[found.player], 'yellow' if found.player != ctx.slot else 'magenta')
-        logging.info('%s found %s (%s)' % (player_sent, item, color(get_location_name_from_address(found.location),
+        logging.info('%s found %s (%s)' % (player_sent, item, color(ctx.location_name_getter(found.location),
                                                                     'blue_bg', 'white')))
 
     elif cmd == 'Hint':  # going away
         hints = [Utils.Hint(*hint) for hint in args["hints"]]
         for hint in hints:
             ctx.ui_node.send_hint(ctx.player_names[hint.finding_player], ctx.player_names[hint.receiving_player],
-                                  get_item_name_from_id(hint.item), get_location_name_from_address(hint.location),
+                                  ctx.item_name_getter(hint.item), ctx.location_name_getter(hint.location),
                                   hint.found, hint.finding_player == ctx.slot, hint.receiving_player == ctx.slot,
                                   hint.entrance if hint.entrance else None)
             item = color_item(hint.item, hint.found)
@@ -958,7 +972,7 @@ async def process_server_cmd(ctx: Context, args: dict):
                                  'yellow' if hint.receiving_player != ctx.slot else 'magenta')
 
             text = f"[Hint]: {player_recvd}'s {item} is " \
-                   f"at {color(get_location_name_from_address(hint.location), 'blue_bg', 'white')} " \
+                   f"at {color(ctx.location_name_getter(hint.location), 'blue_bg', 'white')} " \
                    f"in {player_find}'s World"
             if hint.entrance:
                 text += " at " + color(hint.entrance, 'white_bg', 'black')
@@ -1066,14 +1080,14 @@ class ClientCommandProcessor(CommandProcessor):
         """List all received items"""
         logger.info('Received items:')
         for index, item in enumerate(self.ctx.items_received, 1):
-            self.ctx.ui_node.notify_item_received(self.ctx.player_names[item.player], get_item_name_from_id(item.item),
-                                                  get_location_name_from_address(item.location), index,
+            self.ctx.ui_node.notify_item_received(self.ctx.player_names[item.player], self.ctx.item_name_getter(item.item),
+                                                  self.ctx.location_name_getter(item.location), index,
                                                   len(self.ctx.items_received),
-                                                  get_item_name_from_id(item.item) in Items.progression_items)
+                                                  self.ctx.item_name_getter(item.item) in Items.progression_items)
             logging.info('%s from %s (%s) (%d/%d in list)' % (
-                color(get_item_name_from_id(item.item), 'red', 'bold'),
+                color(self.ctx.item_name_getter(item.item), 'red', 'bold'),
                 color(self.ctx.player_names[item.player], 'yellow'),
-                get_location_name_from_address(item.location), index, len(self.ctx.items_received)))
+                self.ctx.location_name_getter(item.location), index, len(self.ctx.items_received)))
         return True
 
     def _cmd_missing(self) -> bool:
@@ -1166,7 +1180,6 @@ async def track_locations(ctx: Context, roomid, roomdata):
                 if int(b) > 0 and my_check not in ctx.locations_checked:
                     new_check(my_check)
     except Exception as e:
-        print(e)
         logger.info(f"Exception: {e}")
 
     for location, (loc_roomid, loc_mask) in location_table_uw.items():
@@ -1315,13 +1328,13 @@ async def game_watcher(ctx: Context):
 
         if recv_index < len(ctx.items_received) and recv_item == 0:
             item = ctx.items_received[recv_index]
-            ctx.ui_node.notify_item_received(ctx.player_names[item.player], get_item_name_from_id(item.item),
-                                             get_location_name_from_address(item.location), recv_index + 1,
+            ctx.ui_node.notify_item_received(ctx.player_names[item.player], ctx.item_name_getter(item.item),
+                                             ctx.location_name_getter(item.location), recv_index + 1,
                                              len(ctx.items_received),
-                                             get_item_name_from_id(item.item) in Items.progression_items)
+                                             ctx.item_name_getter(item.item) in Items.progression_items)
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                color(get_item_name_from_id(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
-                get_location_name_from_address(item.location), recv_index + 1, len(ctx.items_received)))
+                color(ctx.item_name_getter(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
+                ctx.location_name_getter(item.location), recv_index + 1, len(ctx.items_received)))
             recv_index += 1
             snes_buffered_write(ctx, RECV_PROGRESS_ADDR, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
             snes_buffered_write(ctx, RECV_ITEM_ADDR, bytes([item.item]))

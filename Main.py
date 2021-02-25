@@ -719,9 +719,9 @@ def create_playthrough(world):
 
         collection_spheres.append(sphere)
 
-        logging.getLogger('').debug('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres), len(sphere), len(required_locations))
+        logging.debug('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres), len(sphere), len(required_locations))
         if not sphere:
-            raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
+            raise RuntimeError(f'Not all required items reachable. Unreachable locations: {required_locations}')
 
     def flist_to_iter(node):
         while node:

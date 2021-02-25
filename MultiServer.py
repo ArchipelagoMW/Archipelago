@@ -26,6 +26,7 @@ from prompt_toolkit.patch_stdout import patch_stdout
 from fuzzywuzzy import process as fuzzy_process
 
 from worlds.alttp import Items, Regions
+from worlds import network_data_package
 import Utils
 from Utils import get_item_name_from_id, get_location_name_from_address, \
     _version_tuple, restricted_loads, Version
@@ -383,7 +384,8 @@ async def on_client_connected(ctx: Context, client: Client):
         'forfeit_mode': ctx.forfeit_mode,
         'remaining_mode': ctx.remaining_mode,
         'hint_cost': ctx.hint_cost,
-        'location_check_points': ctx.location_check_points
+        'location_check_points': ctx.location_check_points,
+        'datapackage_version': network_data_package["version"]
     }])
 
 
@@ -1046,7 +1048,10 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, reply)
             await on_client_joined(ctx, client)
 
-    if client.auth:
+    elif cmd == "GetDataPackage":
+        await ctx.send_msgs(client, [{"cmd": "DataPackage",
+                                      "data": network_data_package}])
+    elif client.auth:
         if cmd == 'Sync':
             items = get_received_items(ctx, client.team, client.slot)
             if items:
