@@ -11,15 +11,10 @@
         <table id="inventory-table">
             <tr>
                 <td><img src="{{ bow_url }}" class="{{ 'acquired' if bow_acquired }}" /></td>
-                <td>
-                    <img
-                            src="{{ icons["Red Boomerang"] if "Red Boomerang" in acquired_items else icons["Blue Boomerang"] }}"
-                            class="{{ 'acquired' if "Red Boomerang" in acquired_items or "Blue Boomerang" in acquired_items }}"
-                    />
-                </td>
+                <td><img src="{{ icons["Blue Boomerang"] }}" class="{{ 'acquired' if 'Blue Boomerang' in acquired_items }}" /></td>
+                <td><img src="{{ icons["Red Boomerang"] }}" class="{{ 'acquired' if 'Red Boomerang' in acquired_items }}" /></td>
                 <td><img src="{{ icons["Hookshot"] }}" class="{{ 'acquired' if 'Hookshot' in acquired_items }}" /></td>
                 <td><img src="{{ icons["Magic Powder"] }}" class="powder-fix {{ 'acquired' if 'Magic Powder' in acquired_items }}" /></td>
-                <td><img src="{{ sword_url }}" class="{{ 'acquired' if sword_acquired }}" /></td>
             </tr>
             <tr>
                 <td><img src="{{ icons["Fire Rod"] }}" class="{{ 'acquired' if "Fire Rod" in acquired_items }}" /></td>
@@ -47,7 +42,14 @@
                 <td><img src="{{ gloves_url }}" class="{{ 'acquired' if gloves_acquired }}" /></td>
                 <td><img src="{{ icons["Flippers"] }}" class="{{ 'acquired' if "Flippers" in acquired_items }}" /></td>
                 <td><img src="{{ icons["Moon Pearl"] }}" class="{{ 'acquired' if "Moon Pearl" in acquired_items }}" /></td>
-                <td><img src="{{ icons["Green Mail"] }}" class="acquired" /></td>
+                <td><img src="{{ icons["Mushroom"] }}" class="{{ 'acquired' if "Mushroom" in acquired_items }}" /></td>
+            </tr>
+            <tr>
+                <td><img src="{{ sword_url }}" class="{{ 'acquired' if sword_acquired }}" /></td>
+                <td><img src="{{ shield_url }}" class="{{ 'acquired' if shield_acquired }}" /></td>
+                <td><img src="{{ mail_url }}" class="acquired" /></td>
+                <td><img src="{{ icons["Shovel"] }}" class="{{ 'acquired' if "Shovel" in acquired_items }}" /></td>
+                <td><img src="{{ icons["Triforce"] }}" class="{{ 'acquired' if "Triforce" in acquired_items }}" /></td>
             </tr>
         </table>
         <table id="location-table">
@@ -57,83 +59,18 @@
                 <th class="counter"><img src="{{ icons["Small Key"] }}" /></th>
                 <th><img src="{{ icons["Big Key"] }}" /></th>
             </tr>
-            <tr>
-                <td>Hyrule Castle</td>
-                <td class="counter">{{ checks_done["Hyrule Castle"] }} / {{ checks_in_area["Hyrule Castle"] }}</td>
-                <td class="counter">N/A</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Eastern Palace</td>
-                <td class="counter">{{ checks_done["Eastern Palace"] }} / {{ checks_in_area["Eastern Palace"] }}</td>
-                <td class="counter">0 / 0</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Desert Palace</td>
-                <td class="counter">{{ checks_done["Desert Palace"] }} / {{ checks_in_area["Desert Palace"] }}</td>
-                <td class="counter">0 / 0</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Tower of Hera</td>
-                <td class="counter">{{ checks_done["Tower of Hera"] }} / {{ checks_in_area["Tower of Hera"] }}</td>
-                <td class="counter">0 / 0</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Agahnim&apos;s Tower</td>
-                <td class="counter">{{ checks_done["Agahnims Tower"] }} / {{ checks_in_area["Agahnims Tower"] }}</td>
-                <td class="counter">N/A</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Palace of Darkness</td>
-                <td class="counter">{{ checks_done["Palace of Darkness"] }} / {{ checks_in_area["Palace of Darkness"] }}</td>
-                <td class="counter">0 / 0</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Swamp Palace</td>
-                <td class="counter">{{ checks_done["Swamp Palace"] }} / {{ checks_in_area["Swamp Palace"] }}</td>
-                <td class="counter">0 / 0</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Skull Woods</td>
-                <td class="counter">{{ checks_done["Skull Woods"] }} / {{ checks_in_area["Skull Woods"] }}</td>
-                <td class="counter">0 / 0</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Thieves&apos; Town</td>
-                <td class="counter">{{ checks_done["Thieves Town"] }} / {{ checks_in_area["Thieves Town"] }}</td>
-                <td class="counter">0 / 0</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Ice Palace</td>
-                <td class="counter">{{ checks_done["Ice Palace"] }} / {{ checks_in_area["Ice Palace"] }}</td>
-                <td class="counter">0 / 0</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Misery Mire</td>
-                <td class="counter">{{ checks_done["Misery Mire"] }} / {{ checks_in_area["Misery Mire"] }}</td>
-                <td class="counter">0 / 0</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Turtle Rock</td>
-                <td class="counter">{{ checks_done["Turtle Rock"] }} / {{ checks_in_area["Turtle Rock"] }}</td>
-                <td class="counter">0 / 0</td>
-                <td></td>
-            </tr><tr>
-                <td>Ganon&apos;s Tower</td>
-                <td class="counter">{{ checks_done["Ganons Tower"] }} / {{ checks_in_area["Ganons Tower"] }}</td>
-                <td class="counter">0 / 0</td>
-                <td></td>
-            </tr>
+            {% for area in sp_areas %}
+                <tr>
+                    <td>{{ area }}</td>
+                    <td class="counter">{{ checks_done[area] }} / {{ checks_in_area[area] }}</td>
+                    <td class="counter">
+                        {{ inventory[small_key_ids[area]] if area in key_locations else 'N/A' }}
+                    </td>
+                    <td>
+                        {{ '✔' if area in big_key_locations and inventory[big_key_ids[area]] else ('N/A' if area not in big_key_locations else '') }}
+                    </td>
+                </tr>
+            {% endfor %}
         </table>
     </div>
 </body>

@@ -20,6 +20,9 @@ app.jinja_env.filters["location_name"] = lambda location: Regions.lookup_id_to_n
 app.jinja_env.filters['item_name'] = lambda id: Items.lookup_id_to_name.get(id, id)
 
 icons = {
+    "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
+    "Red Shield": r"https://www.zeldadungeon.net/wiki/images/5/55/Fire-Shield.png",
+    "Mirror Shield": r"https://www.zeldadungeon.net/wiki/images/8/84/Mirror-Shield.png",
     "Fighter Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/4/40/SFighterSword.png?width=1920",
     "Master Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/6/65/SMasterSword.png?width=1920",
     "Tempered Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/9/92/STemperedSword.png?width=1920",
@@ -381,6 +384,8 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
         "Progressive Sword": 94,
         "Progressive Glove": 97,
         "Progressive Bow": 100,
+        "Progressive Mail": 96,
+        "Progressive Shield": 95,
     }
 
     # Determine which icon to use for the sword
@@ -423,11 +428,40 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
                 bow_acquired = True
                 break
 
+    mail_url = icons["Green Mail"]
+    mail_names = ["Blue Mail", "Red Mail"]
+    if "Progressive Mail" in acquired_items:
+        mail_url = icons[mail_names[inventory[progressive_items["Progressive Mail"]] - 1]]
+    else:
+        for mail in reversed(mail_names):
+            if mail in acquired_items:
+                mail_url = icons[mail]
+                break
+
+    shield_url = icons["Blue Shield"]
+    shield_acquired = False
+    shield_names = ["Blue Shield", "Red Shield", "Mirror Shield"]
+    if "Progressive Shield" in acquired_items:
+        shield_url = icons[shield_names[inventory[progressive_items["Progressive Shield"]] - 1]]
+        shield_acquired = True
+    else:
+        for shield in reversed(shield_names):
+            if shield in acquired_items:
+                shield_url = icons[shield]
+                shield_acquired = True
+                break
+
+    # The single player tracker doesn't care about overworld, underworld, and total checks. Maybe it should?
+    sp_areas = ordered_areas[2:15]
+
     return render_template("playerTracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
                            player_name=player_name, room=room, icons=icons, checks_done=checks_done,
                            checks_in_area=seed_checks_in_area, acquired_items=acquired_items,
                            sword_url=sword_url, sword_acquired=sword_acquired, gloves_url=gloves_url,
-                           gloves_acquired=gloves_acquired, bow_url=bow_url, bow_acquired=bow_acquired)
+                           gloves_acquired=gloves_acquired, bow_url=bow_url, bow_acquired=bow_acquired,
+                           small_key_ids=small_key_ids, big_key_ids=big_key_ids, sp_areas=sp_areas,
+                           key_locations=key_locations, big_key_locations=big_key_locations, mail_url=mail_url,
+                           shield_url=shield_url, shield_acquired=shield_acquired)
 
 
 @app.route('/tracker/<suuid:tracker>')
