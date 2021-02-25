@@ -105,12 +105,18 @@ class Context():
         self.set_getters(network_data_package)
 
     def set_getters(self, data_package: dict, network=False):
-        if not network:
+        if not network:  # local data; check if newer data was already downloaded
             local_package = Utils.persistent_load().get("datapackage", {}).get("latest", {})
             if local_package and local_package["version"] > network_data_package["version"]:
                 data_package: dict = local_package
-        elif network and data_package["version"] > network_data_package["version"]:
-            Utils.persistent_store("datapackage", "latest", network_data_package)
+        elif network:  # check if data from server is newer
+            for key, value in data_package.items():
+                if type(value) == dict:  # convert to int keys
+                    data_package[key] = \
+                        {int(subkey) if subkey.isdigit() else subkey: subvalue for subkey, subvalue in value.items()}
+
+            if data_package["version"] > network_data_package["version"]:
+                Utils.persistent_store("datapackage", "latest", network_data_package)
 
         item_lookup: dict = data_package["lookup_any_item_id_to_name"]
         locations_lookup: dict = data_package["lookup_any_location_id_to_name"]
