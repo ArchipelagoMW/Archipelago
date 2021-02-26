@@ -9,7 +9,7 @@ import concurrent.futures
 import pickle
 
 from BaseClasses import MultiWorld, CollectionState, Region, Item
-from worlds.alttp import ALttPLocation, ALttPItem
+from worlds.alttp import ALttPLocation
 from worlds.alttp.Items import ItemFactory, item_table, item_name_groups
 from worlds.alttp.Regions import create_regions, mark_light_world_regions, \
     lookup_vanilla_location_to_entrance
@@ -25,6 +25,7 @@ from Utils import output_path, parse_player_names, get_options, __version__, _ve
 from worlds.hk import gen_hollow, set_rules as set_hk_rules
 from worlds.hk import create_regions as hk_create_regions
 from worlds.generic.Rules import locality_rules
+from worlds import Games
 import Patch
 
 seeddigits = 20
@@ -396,7 +397,7 @@ def main(args, seed=None):
 
         for location in [loc for loc in world.get_filled_locations() if type(loc.address) is int]:
             main_entrance = get_entrance_to_region(location.parent_region)
-            if location.game == "Hollow Knight":
+            if location.game == Games.HK:
                 checks_in_area[location.player]["Light World"].append(location.address)
             elif location.parent_region.dungeon:
                 dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
@@ -573,6 +574,7 @@ def copy_world(world):
             item.location = ret.get_location(location.name, location.player)
             item.world = ret
             item.type = location.item.type
+            item.game = location.item.game
 
         if location.event:
             ret.get_location(location.name, location.player).event = True

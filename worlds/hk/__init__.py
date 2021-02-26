@@ -62,7 +62,8 @@ def gen_items(world: MultiWorld, player: int):
             event_location.locked = True
             if item.name == "King's_Pass":
                 world.push_precollected(item)
-
+        elif item_data.type == "Fake":
+            pass
         else:
             pool.append(item)
 

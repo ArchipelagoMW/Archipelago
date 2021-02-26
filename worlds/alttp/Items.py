@@ -200,6 +200,21 @@ item_table = {'Bow': (True, None, 0x0B, 'You have\nchosen the\narcher class.', '
               'Open Floodgate': (True, 'Event', None, None, None, None, None, None, None, None),
               }
 
+progression_mapping = {
+    "Golden Sword": ("Progressive Sword", 4),
+    "Tempered Sword": ("Progressive Sword", 3),
+    "Master Sword": ("Progressive Sword", 2),
+    "Fighter Sword": ("Progressive Sword", 1),
+    "Titans Mitts": ("Progressive Glove", 2),
+    "Power Glove": ("Progressive Glove", 1),
+    "Blue Shield": ("Progressive Shield", 1),
+    "Red Shield": ("Progressive Shield", 2),
+    "Mirror Shield": ("Progressive Shield", 3),
+    "Silver Bow": ("Progressive Bow", 2),
+    "Bow": ("Progressive Bow", 1)
+
+}
+
 lookup_id_to_name = {data[2]: name for name, data in item_table.items() if type(data[2]) == int}
 
 hint_blacklist = {"Triforce"}

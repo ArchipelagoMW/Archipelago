@@ -260,9 +260,6 @@ class MultiWorld():
                         ret.prog_items['Silver Bow', item.player] += 1
                     elif self.difficulty_requirements[item.player].progressive_bow_limit >= 1:
                         ret.prog_items['Bow', item.player] += 1
-            elif item.name.startswith('Bottle'):
-                if ret.bottle_count(item.player) < self.difficulty_requirements[item.player].progressive_bottle_limit:
-                    ret.prog_items[item.name, item.player] += 1
             elif item.advancement or item.smallkey or item.bigkey:
                 ret.prog_items[item.name, item.player] += 1
 
@@ -484,7 +481,8 @@ class MultiWorld():
 
             if not sphere:
                 # ran out of places and did not finish yet, quit
-                logging.debug(f"Could not access required locations.")
+                logging.warning(f"Could not access required locations for accessibility check."
+                                f" Missing: {locations}")
                 return False
 
             for location in sphere:
@@ -590,17 +588,19 @@ class CollectionState(object):
     def has(self, item, player: int, count: int = 1):
         return self.prog_items[item, player] >= count
 
-    def has_essence(self, count:int, player: int):
-        # TODO: implement
-        return True
+    def has_essence(self, player: int, count: int):
+        return self.prog_items["Dream_Nail", player]
+        # return self.prog_items["Essence", player] >= count
 
-    def has_grubs(self, count:int, player: int):
-        found: int = 0
-        for (item, item_player), count in self.prog_items.items():
-            if item_player == player and "Grub" in item:
-                found += count
-                if found > count:
-                    return True
+    def has_grubs(self, player: int, count: int):
+        from worlds.hk import Items as HKItems
+        found = 0
+
+        for item_name in HKItems.lookup_type_to_names["Grub"]:
+            found += self.prog_items[item_name, player]
+            if found >= count:
+                return True
+
         return False
 
     def has_key(self, item, player, count: int = 1):
@@ -642,10 +642,12 @@ class CollectionState(object):
         found: int = 0
         for bottlename in item_name_groups["Bottles"]:
             found += self.prog_items[bottlename, player]
-        return found
+        return min(self.world.difficulty_requirements[player].progressive_bottle_limit, found)
 
     def has_bottles(self, bottles: int, player: int) -> bool:
         """Version of bottle_count that allows fast abort"""
+        if bottles > self.world.difficulty_requirements[player].progressive_bottle_limit:
+            return False
         found: int = 0
         for bottlename in item_name_groups["Bottles"]:
             found += self.prog_items[bottlename, player]
@@ -796,58 +798,59 @@ class CollectionState(object):
         if location:
             self.locations_checked.add(location)
         changed = False
-        if item.name.startswith('Progressive '):
-            if 'Sword' in item.name:
-                if self.has('Golden Sword', item.player):
-                    pass
-                elif self.has('Tempered Sword', item.player) and self.world.difficulty_requirements[
-                    item.player].progressive_sword_limit >= 4:
-                    self.prog_items['Golden Sword', item.player] += 1
-                    changed = True
-                elif self.has('Master Sword', item.player) and self.world.difficulty_requirements[item.player].progressive_sword_limit >= 3:
-                    self.prog_items['Tempered Sword', item.player] += 1
-                    changed = True
-                elif self.has('Fighter Sword', item.player) and self.world.difficulty_requirements[item.player].progressive_sword_limit >= 2:
-                    self.prog_items['Master Sword', item.player] += 1
-                    changed = True
-                elif self.world.difficulty_requirements[item.player].progressive_sword_limit >= 1:
-                    self.prog_items['Fighter Sword', item.player] += 1
-                    changed = True
-            elif 'Glove' in item.name:
-                if self.has('Titans Mitts', item.player):
-                    pass
-                elif self.has('Power Glove', item.player):
-                    self.prog_items['Titans Mitts', item.player] += 1
-                    changed = True
-                else:
-                    self.prog_items['Power Glove', item.player] += 1
-                    changed = True
-            elif 'Shield' in item.name:
-                if self.has('Mirror Shield', item.player):
-                    pass
-                elif self.has('Red Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 3:
-                    self.prog_items['Mirror Shield', item.player] += 1
-                    changed = True
-                elif self.has('Blue Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
-                    self.prog_items['Red Shield', item.player] += 1
-                    changed = True
-                elif self.world.difficulty_requirements[item.player].progressive_shield_limit >= 1:
-                    self.prog_items['Blue Shield', item.player] += 1
-                    changed = True
-            elif 'Bow' in item.name:
-                if self.has('Silver Bow', item.player):
-                    pass
-                elif self.has('Bow', item.player):
-                    self.prog_items['Silver Bow', item.player] += 1
-                    changed = True
-                else:
-                    self.prog_items['Bow', item.player] += 1
-                    changed = True
-        elif item.name.startswith('Bottle'):
-            if self.bottle_count(item.player) < self.world.difficulty_requirements[item.player].progressive_bottle_limit:
-                self.prog_items[item.name, item.player] += 1
-                changed = True
-        elif event or item.advancement:
+
+        # TODO: create a mapping for progressive items in each game and use that
+        if item.game == "A Link to the Past":
+            if item.name.startswith('Progressive '):
+                if 'Sword' in item.name:
+                    if self.has('Golden Sword', item.player):
+                        pass
+                    elif self.has('Tempered Sword', item.player) and self.world.difficulty_requirements[
+                        item.player].progressive_sword_limit >= 4:
+                        self.prog_items['Golden Sword', item.player] += 1
+                        changed = True
+                    elif self.has('Master Sword', item.player) and self.world.difficulty_requirements[item.player].progressive_sword_limit >= 3:
+                        self.prog_items['Tempered Sword', item.player] += 1
+                        changed = True
+                    elif self.has('Fighter Sword', item.player) and self.world.difficulty_requirements[item.player].progressive_sword_limit >= 2:
+                        self.prog_items['Master Sword', item.player] += 1
+                        changed = True
+                    elif self.world.difficulty_requirements[item.player].progressive_sword_limit >= 1:
+                        self.prog_items['Fighter Sword', item.player] += 1
+                        changed = True
+                elif 'Glove' in item.name:
+                    if self.has('Titans Mitts', item.player):
+                        pass
+                    elif self.has('Power Glove', item.player):
+                        self.prog_items['Titans Mitts', item.player] += 1
+                        changed = True
+                    else:
+                        self.prog_items['Power Glove', item.player] += 1
+                        changed = True
+                elif 'Shield' in item.name:
+                    if self.has('Mirror Shield', item.player):
+                        pass
+                    elif self.has('Red Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 3:
+                        self.prog_items['Mirror Shield', item.player] += 1
+                        changed = True
+                    elif self.has('Blue Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
+                        self.prog_items['Red Shield', item.player] += 1
+                        changed = True
+                    elif self.world.difficulty_requirements[item.player].progressive_shield_limit >= 1:
+                        self.prog_items['Blue Shield', item.player] += 1
+                        changed = True
+                elif 'Bow' in item.name:
+                    if self.has('Silver Bow', item.player):
+                        pass
+                    elif self.has('Bow', item.player):
+                        self.prog_items['Silver Bow', item.player] += 1
+                        changed = True
+                    else:
+                        self.prog_items['Bow', item.player] += 1
+                        changed = True
+
+
+        if not changed and (event or item.advancement):
             self.prog_items[item.name, item.player] += 1
             changed = True
 
@@ -1108,7 +1111,7 @@ class Location():
 
 class Item():
     location: Optional[Location] = None
-    world: Optional[World] = None
+    world: Optional[MultiWorld] = None
     game: str = "Generic"
     type: str = None
     pedestal_credit_text = "and the Unknown Item"
