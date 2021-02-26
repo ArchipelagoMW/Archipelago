@@ -122,7 +122,7 @@ class HandlerMeta(type):
 
 
 class JSONtoTextParser(metaclass=HandlerMeta):
-    def __init__(self, ctx: "MultiClient.Context"):
+    def __init__(self, ctx):
         self.ctx = ctx
 
     def __call__(self, input_object: typing.List[JSONMessagePart]) -> str:
