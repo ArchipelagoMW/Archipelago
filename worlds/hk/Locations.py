@@ -291,7 +291,17 @@ lookup_id_to_name = \
     17826081: 'Lifeblood_Cocoon-Mantis_Village',
     17826082: 'Lifeblood_Cocoon-Failed_Tramway',
     17826083: 'Lifeblood_Cocoon-Galien',
-    17826084: "Lifeblood_Cocoon-Kingdom's_Edge"}
+    17826084: "Lifeblood_Cocoon-Kingdom's_Edge",
+    17826085: 'Grimmkin_Flame-City_Storerooms',
+    17826086: 'Grimmkin_Flame-Greenpath',
+    17826087: 'Grimmkin_Flame-Crystal_Peak',
+    17826088: "Grimmkin_Flame-King's_Pass",
+    17826089: 'Grimmkin_Flame-Resting_Grounds',
+    17826090: "Grimmkin_Flame-Kingdom's_Edge",
+    17826091: 'Grimmkin_Flame-Fungal_Core',
+    17826092: 'Grimmkin_Flame-Ancient_Basin',
+    17826093: 'Grimmkin_Flame-Hive',
+    17826094: 'Grimmkin_Flame-Brumm'}
 
 
 

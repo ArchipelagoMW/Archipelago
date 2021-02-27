@@ -603,6 +603,17 @@ class CollectionState(object):
 
         return False
 
+    def has_flames(self, player: int, count: int):
+        from worlds.hk import Items as HKItems
+        found = 0
+
+        for item_name in HKItems.lookup_type_to_names["Flame"]:
+            found += self.prog_items[item_name, player]
+            if found >= count:
+                return True
+
+        return False
+
     def has_key(self, item, player, count: int = 1):
         if self.world.logic[player] == 'nologic':
             return True

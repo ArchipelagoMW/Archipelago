@@ -90,8 +90,10 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
         else:
             restitempool.append(item)
 
+    standard_keyshuffle_players = set()
+
     # fill in gtower locations with trash first
-    for player in range(1, world.players + 1):
+    for player in world.alttp_player_ids:
         if not gftower_trash or not world.ganonstower_vanilla[player] or \
                 world.logic[player] in {'owglitches', "nologic"}:
             gtower_trash_count = 0
@@ -123,17 +125,17 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
                 world.push_item(spot_to_fill, item_to_place, False)
                 fill_locations.remove(spot_to_fill)
                 trashcnt += 1
+        if world.mode[player] == 'standard' and world.keyshuffle[player] is True:
+            standard_keyshuffle_players.add(player)
 
-    world.random.shuffle(fill_locations)
 
     # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
-    standard_keyshuffle_players = {player for player, mode in world.mode.items() if mode == 'standard' and
-                                   world.keyshuffle[player] is True}
     if standard_keyshuffle_players:
         progitempool.sort(
             key=lambda item: 1 if item.name == 'Small Key (Hyrule Castle)' and
                                   item.player in standard_keyshuffle_players else 0)
 
+    world.random.shuffle(fill_locations)
     fill_restrictive(world, world.state, fill_locations, progitempool)
 
     if any(localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
