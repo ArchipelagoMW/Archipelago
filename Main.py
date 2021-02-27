@@ -640,27 +640,24 @@ def create_playthrough(world):
     world = copy_world(world)
 
     # get locations containing progress items
-    prog_locations = [location for location in world.get_filled_locations() if location.item.advancement]
+    prog_locations = {location for location in world.get_filled_locations() if location.item.advancement}
     state_cache = [None]
     collection_spheres = []
     state = CollectionState(world)
-    sphere_candidates = list(prog_locations)
+    sphere_candidates = set(prog_locations)
     logging.debug('Building up collection spheres.')
     while sphere_candidates:
         state.sweep_for_events(key_only=True)
 
-        sphere = set()
         # build up spheres of collection radius. Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
-        for location in sphere_candidates:
-            if state.can_reach(location):
-                sphere.add(location)
+
+        sphere = {location for location in sphere_candidates if state.can_reach(location)}
 
         for location in sphere:
-            sphere_candidates.remove(location)
             state.collect(location.item, True, location)
 
+        sphere_candidates -= sphere
         collection_spheres.append(sphere)
-
         state_cache.append(state.copy())
 
         logging.debug('Calculated sphere %i, containing %i of %i progress items.', len(collection_spheres), len(sphere),
@@ -681,7 +678,7 @@ def create_playthrough(world):
         to_delete = set()
         for location in sphere:
             # we remove the item at location and check if game is still beatable
-            logging.getLogger('').debug('Checking if %s (Player %d) is required to beat the game.', location.item.name, location.item.player)
+            logging.debug('Checking if %s (Player %d) is required to beat the game.', location.item.name, location.item.player)
             old_item = location.item
             location.item = None
             if world.can_beat_game(state_cache[num]):
@@ -695,7 +692,7 @@ def create_playthrough(world):
 
     # second phase, sphere 0
     for item in (i for i in world.precollected_items if i.advancement):
-        logging.getLogger('').debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
+        logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
         world.precollected_items.remove(item)
         world.state.remove(item)
         if not world.can_beat_game():
@@ -716,8 +713,9 @@ def create_playthrough(world):
         sphere = set(filter(state.can_reach, required_locations))
 
         for location in sphere:
-            required_locations.remove(location)
             state.collect(location.item, True, location)
+
+        required_locations -= sphere
 
         collection_spheres.append(sphere)
 

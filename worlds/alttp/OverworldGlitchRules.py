@@ -203,7 +203,7 @@ def get_mirror_offset_spots_lw(player):
     Mirror shenanigans placing a mirror portal with a broken camera
     """
     yield ('Death Mountain Offset Mirror', 'Death Mountain', 'Light World')
-    yield ('Death Mountain Offset Mirror (Houlihan Exit)', 'Death Mountain', 'Hyrule Castle Ledge', lambda state: state.has_Mirror(player) and state.can_boots_clip_dw(player) and state.has_Pearl(player))
+    yield ('Death Mountain Offset Mirror (Houlihan Exit)', 'Death Mountain', 'Hyrule Castle Ledge', lambda state: state.has('Magic Mirror', player) and state.can_boots_clip_dw(player) and state.has('Moon Pearl', player))
 
 
 
@@ -245,28 +245,28 @@ def overworld_glitches_rules(world, player):
     create_owg_connections(player, world, get_glitched_speed_drops_dw(world.mode[player] == 'inverted'), lambda state: state.can_get_glitched_speed_dw(player))
     # Dark Death Mountain Ledge Clip Spot also accessible with mirror.
     if world.mode[player] != 'inverted':
-        add_alternate_rule(world.get_entrance('Dark Death Mountain Ledge Clip Spot', player), lambda state: state.has_Mirror(player))
+        add_alternate_rule(world.get_entrance('Dark Death Mountain Ledge Clip Spot', player), lambda state: state.has('Magic Mirror', player))
 
     # Mirror clip spots.
     if world.mode[player] != 'inverted':
-        create_owg_connections(player, world, get_mirror_clip_spots_dw(), lambda state: state.has_Mirror(player))
-        create_owg_connections(player, world, get_mirror_offset_spots_dw(), lambda state: state.has_Mirror(player) and state.can_boots_clip_lw(player))
+        create_owg_connections(player, world, get_mirror_clip_spots_dw(), lambda state: state.has('Magic Mirror', player))
+        create_owg_connections(player, world, get_mirror_offset_spots_dw(), lambda state: state.has('Magic Mirror', player) and state.can_boots_clip_lw(player))
     else:
-        create_owg_connections(player, world, get_mirror_offset_spots_lw(player), lambda state: state.has_Mirror(player) and state.can_boots_clip_dw(player))
+        create_owg_connections(player, world, get_mirror_offset_spots_lw(player), lambda state: state.has('Magic Mirror', player) and state.can_boots_clip_dw(player))
 
     # Regions that require the boots and some other stuff.
     if world.mode[player] != 'inverted':
         world.get_entrance('Turtle Rock Teleporter', player).access_rule = lambda state: (state.can_boots_clip_lw(player) or state.can_lift_heavy_rocks(player)) and state.has('Hammer', player)
-        add_alternate_rule(world.get_entrance('Waterfall of Wishing', player), lambda state: state.has('Moon Pearl', player) or state.has_Boots(player))
+        add_alternate_rule(world.get_entrance('Waterfall of Wishing', player), lambda state: state.has('Moon Pearl', player) or state.has('Pegasus Boots', player))
     else:
         add_alternate_rule(world.get_entrance('Waterfall of Wishing Cave', player), lambda state: state.has('Moon Pearl', player))
 
-    world.get_entrance('Dark Desert Teleporter', player).access_rule = lambda state: (state.has('Flute', player) or state.has_Boots(player)) and state.can_lift_heavy_rocks(player)
+    world.get_entrance('Dark Desert Teleporter', player).access_rule = lambda state: (state.has('Flute', player) or state.has('Pegasus Boots', player)) and state.can_lift_heavy_rocks(player)
     add_alternate_rule(world.get_entrance('Catfish Exit Rock', player), lambda state: state.can_boots_clip_dw(player))
     add_alternate_rule(world.get_entrance('East Dark World Broken Bridge Pass', player), lambda state: state.can_boots_clip_dw(player))
 
     # Zora's Ledge via waterwalk setup.
-    add_alternate_rule(world.get_location('Zora\'s Ledge', player), lambda state: state.has_Boots(player))
+    add_alternate_rule(world.get_location('Zora\'s Ledge', player), lambda state: state.has('Pegasus Boots', player))
 
 
 def add_alternate_rule(entrance, rule):

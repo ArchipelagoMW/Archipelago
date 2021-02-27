@@ -715,7 +715,7 @@ class CollectionState(object):
         return (
                 self.has_bottle(player) and
                 self.has('Bug Catching Net', player) and
-                (self.has_Boots(player) or (self.has_sword(player) and self.has('Quake', player))) and
+                (self.has('Pegasus Boots', player) or (self.has_sword(player) and self.has('Quake', player))) and
                 cave.can_reach(self) and
                 self.is_not_bunny(cave, player)
         )
@@ -737,15 +737,6 @@ class CollectionState(object):
     def has_melee_weapon(self, player: int) -> bool:
         return self.has_sword(player) or self.has('Hammer', player)
 
-    def has_Mirror(self, player: int) -> bool:
-        return self.has('Magic Mirror', player)
-
-    def has_Boots(self, player: int) -> bool:
-        return self.has('Pegasus Boots', player)
-
-    def has_Pearl(self, player: int) -> bool:
-        return self.has('Moon Pearl', player)
-
     def has_fire_source(self, player: int) -> bool:
         return self.has('Fire Rod', player) or self.has('Lamp', player)
 
@@ -759,7 +750,7 @@ class CollectionState(object):
         return self.has('Mirror Shield', player) or self.has('Cane of Byrna', player) or self.has('Cape', player)
 
     def is_not_bunny(self, region: Region, player: int) -> bool:
-        if self.has_Pearl(player):
+        if self.has('Moon Pearl', player):
             return True
 
         return region.is_light_world if self.world.mode[player] != 'inverted' else region.is_dark_world
@@ -782,30 +773,30 @@ class CollectionState(object):
 
     def can_boots_clip_lw(self, player):
         if self.world.mode[player] == 'inverted':
-            return self.has_Boots(player) and self.has_Pearl(player)
-        return self.has_Boots(player)
+            return self.has('Pegasus Boots', player) and self.has('Moon Pearl', player)
+        return self.has('Pegasus Boots', player)
 
     def can_boots_clip_dw(self, player):
         if self.world.mode[player] != 'inverted':
-            return self.has_Boots(player) and self.has_Pearl(player)
-        return self.has_Boots(player)
+            return self.has('Pegasus Boots', player) and self.has('Moon Pearl', player)
+        return self.has('Pegasus Boots', player)
 
     def can_get_glitched_speed_lw(self, player):
-        rules = [self.has_Boots(player), any([self.has('Hookshot', player), self.has_sword(player)])]
+        rules = [self.has('Pegasus Boots', player), any([self.has('Hookshot', player), self.has_sword(player)])]
         if self.world.mode[player] == 'inverted':
-            rules.append(self.has_Pearl(player))
+            rules.append(self.has('Moon Pearl', player))
         return all(rules)
 
     def can_superbunny_mirror_with_sword(self, player):
-        return self.has_Mirror(player) and self.has_sword(player)
+        return self.has('Magic Mirror', player) and self.has_sword(player)
 
-    def can_get_glitched_speed_dw(self, player):
-        rules = [self.has_Boots(player), any([self.has('Hookshot', player), self.has_sword(player)])]
+    def can_get_glitched_speed_dw(self, player: int):
+        rules = [self.has('Pegasus Boots', player), any([self.has('Hookshot', player), self.has_sword(player)])]
         if self.world.mode[player] != 'inverted':
-            rules.append(self.has_Pearl(player))
+            rules.append(self.has('Moon Pearl', player))
         return all(rules)
 
-    def collect(self, item: Item, event=False, location=None) -> bool:
+    def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:
         if location:
             self.locations_checked.add(location)
         changed = False
@@ -1131,7 +1122,7 @@ class Item():
     zora_credit_text = None
     fluteboy_credit_text = None
 
-    def __init__(self, name: str, advancement:bool, code:int, player:int):
+    def __init__(self, name: str, advancement: bool, code: int, player: int):
         self.name = name
         self.advancement = advancement
         self.player = player
