@@ -164,7 +164,7 @@ def ShopSlotFill(world):
             blacklist_word in item_name for blacklist_word in blacklist_words)}
         blacklist_words.add("Bee")
 
-        locations_per_sphere = list(list(sphere) for sphere in world.get_spheres())
+        locations_per_sphere = list(list(sphere).sort(key=lambda location: location.name) for sphere in world.get_spheres())
 
 
 

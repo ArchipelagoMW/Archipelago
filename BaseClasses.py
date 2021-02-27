@@ -415,8 +415,7 @@ class MultiWorld():
 
     def get_spheres(self):
         state = CollectionState(self)
-
-        locations = set(self.get_locations())
+        locations = set(self.get_filled_locations())
 
         while locations:
             sphere = set()
@@ -424,10 +423,7 @@ class MultiWorld():
             for location in locations:
                 if location.can_reach(state):
                     sphere.add(location)
-            sphere_list = list(sphere)
-            sphere_list.sort(key=lambda location: location.name)
-            self.random.shuffle(sphere_list)
-            yield sphere_list
+            yield sphere
             if not sphere:
                 if locations:
                     yield locations  # unreachable locations
