@@ -404,6 +404,11 @@ rom:
   quickswap: # Enable switching items by pressing the L+R shoulder buttons
     on: 50
     off: 0
+  triforcehud: # Disable visibility of the triforce hud unless collecting a piece or speaking to Murahalda
+    normal: 0 # original behavior (always visible)
+    hide_goal: 50 # hide counter until a piece is collected or speaking to Murahalda
+    hide_required: 0 # Always visible, but required amount is invisible until determined by Murahalda
+    hide_both: 0 # Hide both under above circumstances
   reduceflashing: # Reduces instances of flashing such as lightning attacks, weather, ether and more.
     on: 50
     off: 0

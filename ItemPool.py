@@ -360,7 +360,7 @@ def generate_itempool(world, player: int):
         world.clock_mode[player] = clock_mode
 
     if treasure_hunt_count is not None:
-        world.treasure_hunt_count[player] = treasure_hunt_count
+        world.treasure_hunt_count[player] = treasure_hunt_count % 999
     if treasure_hunt_icon is not None:
         world.treasure_hunt_icon[player] = treasure_hunt_icon
 
