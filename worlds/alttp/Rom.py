@@ -701,9 +701,6 @@ def patch_rom(world, rom, player, team, enemized):
 
         itemid = location.item.code if location.item is not None else 0x5A
 
-        if location.item.game != "A Link to the Past":
-            itemid = itemid
-
         if not location.crystal:
 
             if location.item is not None:

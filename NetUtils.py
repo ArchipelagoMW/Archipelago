@@ -7,6 +7,7 @@ from json import JSONEncoder, JSONDecoder
 
 import websockets
 
+from Utils import Version
 
 class JSONMessagePart(typing.TypedDict):
     type: typing.Optional[str]
@@ -55,7 +56,6 @@ _encode = JSONEncoder(
 def encode(obj):
     return _encode(_scan_for_TypedTuples(obj))
 
-from Utils import Version # for object hook
 whitelist = {"NetworkPlayer": NetworkPlayer,
              "NetworkItem": NetworkItem,
              "Version": Version}
