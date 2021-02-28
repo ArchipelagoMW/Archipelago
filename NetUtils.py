@@ -13,6 +13,26 @@ class JSONMessagePart(typing.TypedDict):
     color: typing.Optional[str]
     text: typing.Optional[str]
 
+class CLientStatus(enum.IntEnum):
+    CLIENT_UNKNOWN = 0
+    # CLIENT_CONNECTED = 5 maybe?
+    CLIENT_READY = 10
+    CLIENT_PLAYING = 20
+    CLIENT_GOAL = 30
+
+
+class NetworkPlayer(typing.NamedTuple):
+    team: int
+    slot: int
+    alias: str
+    name: str
+
+
+class NetworkItem(typing.NamedTuple):
+    item: int
+    location: int
+    player: int
+
 
 def _scan_for_TypedTuples(obj: typing.Any) -> typing.Any:
     if isinstance(obj, tuple) and hasattr(obj, "_fields"):  # NamedTuple is not actually a parent class
@@ -36,14 +56,18 @@ def encode(obj):
     return _encode(_scan_for_TypedTuples(obj))
 
 from Utils import Version # for object hook
-whitelist = {"NetworkPlayer", "NetworkItem", "Version"}
+whitelist = {"NetworkPlayer": NetworkPlayer,
+             "NetworkItem": NetworkItem,
+             "Version": Version}
 
 def _object_hook(o: typing.Any) -> typing.Any:
     if isinstance(o, dict):
-        cls = o.get("class", None)
-        if cls in whitelist:
-            del (o["class"])
-            return globals()[cls](**o)
+        cls = whitelist.get(o.get("class", None), None)
+        if cls:
+            for key in tuple(o):
+                if key not in cls._fields:
+                    del(o[key])
+            return cls(**o)
 
     return o
 
@@ -166,24 +190,3 @@ def color_code(*args):
 
 def color(text, *args):
     return color_code(*args) + text + color_code('reset')
-
-
-class CLientStatus(enum.IntEnum):
-    CLIENT_UNKNOWN = 0
-    # CLIENT_CONNECTED = 5 maybe?
-    CLIENT_READY = 10
-    CLIENT_PLAYING = 20
-    CLIENT_GOAL = 30
-
-
-class NetworkPlayer(typing.NamedTuple):
-    team: int
-    slot: int
-    alias: str
-    name: str
-
-
-class NetworkItem(typing.NamedTuple):
-    item: int
-    location: int
-    player: int

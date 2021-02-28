@@ -331,7 +331,7 @@ class Context(Node):
         await on_client_disconnected(self, endpoint)
 
 
-# separated out, due to compatibilty between clients
+# separated out, due to compatibility between clients
 def notify_hints(ctx: Context, team: int, hints: typing.List[Utils.Hint]):
     cmd = ctx.dumper([{"cmd": "Hint", "hints" : hints}])
     texts = ([format_hint(ctx, team, hint)] for hint in hints)
@@ -367,8 +367,6 @@ async def server(websocket, path, ctx: Context):
             logging.exception(e)
     finally:
         await ctx.disconnect(client)
-
-
 
 
 async def on_client_connected(ctx: Context, client: Client):
