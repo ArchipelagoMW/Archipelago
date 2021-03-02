@@ -125,29 +125,6 @@ parse_yaml = safe_load
 unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 
 
-class Hint(typing.NamedTuple):
-    receiving_player: int
-    finding_player: int
-    location: int
-    item: int
-    found: bool
-    entrance: str = ""
-
-    def re_check(self, ctx, team) -> Hint:
-        if self.found:
-            return self
-        found = self.location in ctx.location_checks[team, self.finding_player]
-        if found:
-            return Hint(self.receiving_player, self.finding_player, self.location, self.item, found, self.entrance)
-        return self
-
-    def as_legacy(self) -> tuple:
-        return self.receiving_player, self.finding_player, self.location, self.item, self.found
-
-    def __hash__(self):
-        return hash((self.receiving_player, self.finding_player, self.location, self.item, self.entrance))
-
-
 def get_public_ipv4() -> str:
     import socket
     import urllib.request

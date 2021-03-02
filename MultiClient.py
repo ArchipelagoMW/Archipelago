@@ -932,57 +932,8 @@ async def process_server_cmd(ctx: Context, args: dict):
     elif cmd == 'LocationInfo':
         for item, location, player in args['locations']:
             if location not in ctx.locations_info:
-                replacements = {0xA2: 'Small Key', 0x9D: 'Big Key', 0x8D: 'Compass', 0x7D: 'Map'}
-                item_name = replacements.get(item, ctx.item_name_getter(item))
-                logger.info(
-                    f"Saw {color(item_name, 'red', 'bold')} at {list(Regions.location_table.keys())[location - 1]}")
                 ctx.locations_info[location] = (item, player)
         ctx.watcher_event.set()
-
-    elif cmd == 'ItemSent':  # going away
-        found = NetworkItem(*args["item"])
-        receiving_player = args["receiver"]
-        ctx.ui_node.notify_item_sent(ctx.player_names[found.player], ctx.player_names[receiving_player],
-                                     ctx.item_name_getter(found.item), ctx.location_name_getter(found.location),
-                                     found.player == ctx.slot, receiving_player == ctx.slot,
-                                     ctx.item_name_getter(found.item) in Items.progression_items)
-        item = color(ctx.item_name_getter(found.item), 'cyan' if found.player != ctx.slot else 'green')
-        found_player = color(ctx.player_names[found.player], 'yellow' if found.player != ctx.slot else 'magenta')
-        receiving_player = color(ctx.player_names[receiving_player],
-                                 'yellow' if receiving_player != ctx.slot else 'magenta')
-        logging.info(
-            '%s sent %s to %s (%s)' % (found_player, item, receiving_player,
-                                       color(ctx.location_name_getter(found.location), 'blue_bg', 'white')))
-
-    elif cmd == 'ItemFound':  # going away
-        found = NetworkItem(*args["item"])
-        ctx.ui_node.notify_item_found(ctx.player_names[found.player], ctx.item_name_getter(found.item),
-                                      ctx.location_name_getter(found.location), found.player == ctx.slot,
-                                      ctx.item_name_getter(found.item) in Items.progression_items)
-        item = color_item(found.item, found.player == ctx.slot)
-        player_sent = color(ctx.player_names[found.player], 'yellow' if found.player != ctx.slot else 'magenta')
-        logging.info('%s found %s (%s)' % (player_sent, item, color(ctx.location_name_getter(found.location),
-                                                                    'blue_bg', 'white')))
-
-    elif cmd == 'Hint':  # going away
-        hints = [Utils.Hint(*hint) for hint in args["hints"]]
-        for hint in hints:
-            ctx.ui_node.send_hint(ctx.player_names[hint.finding_player], ctx.player_names[hint.receiving_player],
-                                  ctx.item_name_getter(hint.item), ctx.location_name_getter(hint.location),
-                                  hint.found, hint.finding_player == ctx.slot, hint.receiving_player == ctx.slot,
-                                  hint.entrance if hint.entrance else None)
-            item = color_item(hint.item, hint.found)
-            player_find = color(ctx.player_names[hint.finding_player],
-                                'yellow' if hint.finding_player != ctx.slot else 'magenta')
-            player_recvd = color(ctx.player_names[hint.receiving_player],
-                                 'yellow' if hint.receiving_player != ctx.slot else 'magenta')
-
-            text = f"[Hint]: {player_recvd}'s {item} is " \
-                   f"at {color(ctx.location_name_getter(hint.location), 'blue_bg', 'white')} " \
-                   f"in {player_find}'s World"
-            if hint.entrance:
-                text += " at " + color(hint.entrance, 'white_bg', 'black')
-            logging.info(text + (f". {color('(found)', 'green_bg', 'black')} " if hint.found else "."))
 
     elif cmd == "RoomUpdate":
         if "players" in args:
@@ -994,7 +945,7 @@ async def process_server_cmd(ctx: Context, args: dict):
         logger.info(args["text"])
 
     elif cmd == 'PrintJSON':
-        logger.info(ctx.jsontotextparser(args["data"]))
+        logger.info(ctx.jsontotextparser(args["text"]))
 
     elif cmd == 'InvalidArguments':
         logger.warning(f"Invalid Arguments: {args['text']}")
@@ -1163,6 +1114,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
     new_locations = []
 
     def new_check(location):
+        new_locations.append(Regions.lookup_name_to_id.get(location, Shops.shop_table_by_location.get(location, -1)))
         ctx.locations_checked.add(location)
 
         check = None
@@ -1227,7 +1179,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
                 if ow_data[screenid - ow_begin] & 0x40 != 0:
                     new_check(location)
 
-    if not all([location in ctx.locations_checked for location in location_table_npc.keys()]):
+    if not all(location in ctx.locations_checked for location in location_table_npc.keys()):
         npc_data = await snes_read(ctx, SAVEDATA_START + 0x410, 2)
         if npc_data is not None:
             npc_value = npc_data[0] | (npc_data[1] << 8)
@@ -1235,7 +1187,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
                 if npc_value & mask != 0 and location not in ctx.locations_checked:
                     new_check(location)
 
-    if not all([location in ctx.locations_checked for location in location_table_misc.keys()]):
+    if not all(location in ctx.locations_checked for location in location_table_misc.keys()):
         misc_data = await snes_read(ctx, SAVEDATA_START + 0x3c6, 4)
         if misc_data is not None:
             for location, (offset, mask) in location_table_misc.items():
@@ -1243,13 +1195,6 @@ async def track_locations(ctx: Context, roomid, roomdata):
                 if misc_data[offset - 0x3c6] & mask != 0 and location not in ctx.locations_checked:
                     new_check(location)
 
-    for location in ctx.locations_checked:
-        try:
-            my_id = Regions.lookup_name_to_id.get(location, Shops.shop_table_by_location.get(location, -1))
-            new_locations.append(my_id)
-        except Exception as e:
-            print(e)
-            logger.info(f"Exception: {e}")
 
     if new_locations:
         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": new_locations}])

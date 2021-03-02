@@ -9,10 +9,15 @@ import websockets
 
 from Utils import Version
 
-class JSONMessagePart(typing.TypedDict):
-    type: typing.Optional[str]
-    color: typing.Optional[str]
-    text: typing.Optional[str]
+class JSONMessagePart(typing.TypedDict, total=False):
+    text: str
+    # optional
+    type: str
+    color: str
+    # mainly for items, optional
+    found: bool
+
+
 
 class CLientStatus(enum.IntEnum):
     CLIENT_UNKNOWN = 0
@@ -144,6 +149,16 @@ class HandlerMeta(type):
         attrs['__init__'] = __init__
         return super(HandlerMeta, mcs).__new__(mcs, name, bases, attrs)
 
+class JSONTypes(str, enum.Enum):
+    color = "color"
+    text = "text"
+    player_id = "player_id"
+    player_name = "player_name"
+    item_name = "item_name"
+    item_id = "item_id"
+    location_name = "location_name"
+    location_id = "location_id"
+    entrance_name = "entrance_name"
 
 class JSONtoTextParser(metaclass=HandlerMeta):
     def __init__(self, ctx):
@@ -158,24 +173,48 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return handler(node)
 
     def _handle_color(self, node: JSONMessagePart):
-        if node["color"] in color_codes:
-            return color_code(node["color"]) + self._handle_text(node) + color_code("reset")
-        else:
-            logging.warning(f"Unknown color in node {node}")
-            return self._handle_text(node)
+        codes = node["color"].split(";")
+        buffer = "".join(color_code(code) for code in codes)
+        return buffer + self._handle_text(node) + color_code("reset")
 
     def _handle_text(self, node: JSONMessagePart):
         return node.get("text", "")
 
     def _handle_player_id(self, node: JSONMessagePart):
-        player = node["text"]
-        node["color"] = 'yellow' if player != self.ctx.slot else 'magenta'
+        player = int(node["text"])
+        node["color"] = 'magenta' if player == self.ctx.slot else 'yellow'
         node["text"] = self.ctx.player_names[player]
         return self._handle_color(node)
 
     # for other teams, spectators etc.? Only useful if player isn't in the clientside mapping
     def _handle_player_name(self, node: JSONMessagePart):
         node["color"] = 'yellow'
+        return self._handle_color(node)
+
+    def _handle_item_name(self, node: JSONMessagePart):
+        # todo: use a better info source
+        from worlds.alttp.Items import progression_items
+        node["color"] = 'green' if node.get("found", False) else 'cyan'
+        if node["text"] in progression_items:
+            node["color"] += ";white_bg"
+        return self._handle_color(node)
+
+    def _handle_item_id(self, node: JSONMessagePart):
+        item_id = int(node["text"])
+        node["text"] = self.ctx.item_name_getter(item_id)
+        return self._handle_item_name(node)
+
+    def _handle_location_name(self, node: JSONMessagePart):
+        node["color"] = 'blue_bg;white'
+        return self._handle_color(node)
+
+    def _handle_location_id(self, node: JSONMessagePart):
+        item_id = int(node["text"])
+        node["text"] = self.ctx.location_name_getter(item_id)
+        return self._handle_item_name(node)
+
+    def _handle_entrance_name(self, node: JSONMessagePart):
+        node["color"] = 'white_bg;black'
         return self._handle_color(node)
 
 
@@ -190,3 +229,49 @@ def color_code(*args):
 
 def color(text, *args):
     return color_code(*args) + text + color_code('reset')
+
+
+def add_json_text(parts: list, text: typing.Any, **kwargs) -> None:
+    parts.append({"text": str(text), **kwargs})
+
+
+class Hint(typing.NamedTuple):
+    receiving_player: int
+    finding_player: int
+    location: int
+    item: int
+    found: bool
+    entrance: str = ""
+
+    def re_check(self, ctx, team) -> Hint:
+        if self.found:
+            return self
+        found = self.location in ctx.location_checks[team, self.finding_player]
+        if found:
+            return Hint(self.receiving_player, self.finding_player, self.location, self.item, found, self.entrance)
+        return self
+
+    def __hash__(self):
+        return hash((self.receiving_player, self.finding_player, self.location, self.item, self.entrance))
+
+    def as_network_message(self) -> dict:
+        parts = []
+        add_json_text(parts, "[Hint]: ")
+        add_json_text(parts, self.receiving_player, type="player_id")
+        add_json_text(parts, "'s ")
+        add_json_text(parts, self.item, type="item_id", found=self.found)
+        add_json_text(parts, " is at ")
+        add_json_text(parts, self.location, type="location_id")
+        add_json_text(parts, " in ")
+        add_json_text(parts, self.finding_player, type ="player_id")
+        if self.entrance:
+            add_json_text(parts, "'s World at ")
+            add_json_text(parts, self.entrance, type="entrance_name")
+        else:
+            add_json_text(parts, "'s World")
+        if self.found:
+            add_json_text(parts, ". (found)")
+        else:
+            add_json_text(parts, ".")
+
+        return {"cmd": "PrintJSON", "text": parts, "type": "hint"}

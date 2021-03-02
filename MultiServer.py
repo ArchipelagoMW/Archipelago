@@ -13,9 +13,9 @@ import datetime
 import threading
 import random
 import pickle
-from json import loads, dumps
 
 import ModuleUpdate
+import NetUtils
 
 ModuleUpdate.update()
 
@@ -92,7 +92,7 @@ class Context(Node):
         self.hint_cost = hint_cost
         self.location_check_points = location_check_points
         self.hints_used = collections.defaultdict(int)
-        self.hints: typing.Dict[typing.Tuple[int, int], typing.Set[Utils.Hint]] = collections.defaultdict(set)
+        self.hints: typing.Dict[typing.Tuple[int, int], typing.Set[NetUtils.Hint]] = collections.defaultdict(set)
         self.forfeit_mode: str = forfeit_mode
         self.remaining_mode: str = remaining_mode
         self.item_cheat = item_cheat
@@ -245,50 +245,21 @@ class Context(Node):
 
     def set_save(self, savedata: dict):
         rom_names = savedata["rom_names"]  # convert from TrackerList to List in case of ponyorm
-        try:
-            adjusted = {rom: (team, slot) for rom, (team, slot) in rom_names}
-        except TypeError:
-            adjusted = {tuple(rom): (team, slot) for (rom, (team, slot)) in rom_names}  # old format, ponyorm friendly
-            if self.connect_names != adjusted:
-                logging.warning('Save file mismatch, will start a new game')
-                return
-        else:
-            if adjusted != self.connect_names:
-                logging.warning('Save file mismatch, will start a new game')
-                return
-
         received_items = {tuple(k): [NetworkItem(*i) for i in v] for k, v in savedata["received_items"]}
 
         self.received_items = received_items
         self.hints_used.update({tuple(key): value for key, value in savedata["hints_used"]})
-        if "hints" in savedata:
-            self.hints.update(
-                {tuple(key): set(Utils.Hint(*hint) for hint in value) for key, value in savedata["hints"]})
-        else:  # backwards compatiblity for <= 2.0.2
-            old_hints = {tuple(key): set(value) for key, value in savedata["hints_sent"]}
-            for team_slot, item_or_location_s in old_hints.items():
-                team, slot = team_slot
-                for item_or_location in item_or_location_s:
-                    if item_or_location in Items.item_table:
-                        hints = collect_hints(self, team, slot, item_or_location)
-                    else:
-                        hints = collect_hints_location(self, team, slot, item_or_location)
-                    for hint in hints:
-                        self.hints[team, hint.receiving_player].add(hint)
-                        # even if it is the same hint, it won't be duped due to set
-                        self.hints[team, hint.finding_player].add(hint)
-        if "name_aliases" in savedata:
-            self.name_aliases.update({tuple(key): value for key, value in savedata["name_aliases"]})
-            if "client_game_state" in savedata:
-                self.client_game_state.update({tuple(key): value for key, value in savedata["client_game_state"]})
-                if "client_activity_timers" in savedata:
-                    self.client_connection_timers.update(
-                        {tuple(key): datetime.datetime.fromtimestamp(value, datetime.timezone.utc) for key, value
-                         in savedata["client_connection_timers"]})
-                    self.client_activity_timers.update(
-                        {tuple(key): datetime.datetime.fromtimestamp(value, datetime.timezone.utc) for key, value
-                         in savedata["client_activity_timers"]})
+        self.hints.update(
+            {tuple(key): set(NetUtils.Hint(*hint) for hint in value) for key, value in savedata["hints"]})
 
+        self.name_aliases.update({tuple(key): value for key, value in savedata["name_aliases"]})
+        self.client_game_state.update({tuple(key): value for key, value in savedata["client_game_state"]})
+        self.client_connection_timers.update(
+            {tuple(key): datetime.datetime.fromtimestamp(value, datetime.timezone.utc) for key, value
+             in savedata["client_connection_timers"]})
+        self.client_activity_timers.update(
+            {tuple(key): datetime.datetime.fromtimestamp(value, datetime.timezone.utc) for key, value
+             in savedata["client_activity_timers"]})
         self.location_checks.update({tuple(key): set(value) for key, value in savedata["location_checks"]})
 
         logging.info(f'Loaded save file with {sum([len(p) for p in received_items.values()])} received items '
@@ -316,9 +287,10 @@ class Context(Node):
         asyncio.create_task(self.send_msgs(client, [{"cmd": "Print", "text": text} for text in texts]))
 
     def broadcast_team(self, team, msgs):
+        msgs = self.dumper(msgs)
         for client in self.endpoints:
             if client.auth and client.team == team:
-                asyncio.create_task(self.send_msgs(client, msgs))
+                asyncio.create_task(self.send_encoded_msgs(client, msgs))
 
     def broadcast_all(self, msgs):
         msgs = self.dumper(msgs)
@@ -331,15 +303,17 @@ class Context(Node):
         await on_client_disconnected(self, endpoint)
 
 
-# separated out, due to compatibility between clients
-def notify_hints(ctx: Context, team: int, hints: typing.List[Utils.Hint]):
+def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint]):
     cmd = ctx.dumper([{"cmd": "Hint", "hints" : hints}])
-    texts = ([format_hint(ctx, team, hint)] for hint in hints)
-    for text in texts:
+    commands = ctx.dumper([hint.as_network_message() for hint in hints])
+
+    for text in (format_hint(ctx, team, hint) for hint in hints):
         logging.info("Notice (Team #%d): %s" % (team + 1, text))
+
     for client in ctx.endpoints:
         if client.auth and client.team == team:
             asyncio.create_task(ctx.send_encoded_msgs(client, cmd))
+            asyncio.create_task(ctx.send_encoded_msgs(client, commands))
 
 
 def update_aliases(ctx: Context, team: int, client: typing.Optional[Client] = None):
@@ -449,15 +423,14 @@ def tuplize_received_items(items):
 
 def send_new_items(ctx: Context):
     for client in ctx.endpoints:
-        if not client.auth:
-            continue
-        items = get_received_items(ctx, client.team, client.slot)
-        if len(items) > client.send_index:
-            asyncio.create_task(ctx.send_msgs(client, [{
-                "cmd": "ReceivedItems",
-                "index": client.send_index,
-                "items": tuplize_received_items(items)[client.send_index:]}]))
-            client.send_index = len(items)
+        if client.auth: # can't send to disconnected client
+            items = get_received_items(ctx, client.team, client.slot)
+            if len(items) > client.send_index:
+                asyncio.create_task(ctx.send_msgs(client, [{
+                    "cmd": "ReceivedItems",
+                    "index": client.send_index,
+                    "items": tuplize_received_items(items)[client.send_index:]}]))
+                client.send_index = len(items)
 
 
 def forfeit_player(ctx: Context, team: int, slot: int):
@@ -476,50 +449,29 @@ def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
 
 
 def register_location_checks(ctx: Context, team: int, slot: int, locations: typing.Iterable[int]):
-    found_items = False
     new_locations = set(locations) - ctx.location_checks[team, slot]
-    known_locations = set()
     if new_locations:
         ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
         for location in new_locations:
             if (location, slot) in ctx.locations:
-                known_locations.add(location)
-                target_item, target_player = ctx.locations[(location, slot)]
+                item_id, target_player = ctx.locations[(location, slot)]
+                new_item = NetworkItem(item_id, location, slot)
                 if target_player != slot or slot in ctx.remote_items:
-                    found: bool = False
-                    recvd_items = get_received_items(ctx, team, target_player)
-                    for recvd_item in recvd_items:
-                        if recvd_item.location == location and recvd_item.player == slot:
-                            found = True
-                            break
+                    get_received_items(ctx, team, target_player).append(new_item)
 
-                    if not found:
-                        new_item = NetworkItem(target_item, location, slot)
-                        recvd_items.append(new_item)
-                        if slot != target_player:
-                            ctx.broadcast_team(team,
-                                               [{"cmd": "ItemSent",
-                                                 "item": new_item,
-                                                 "receiver" : target_player}])
-                    logging.info('(Team #%d) %s sent %s to %s (%s)' % (
-                    team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(target_item),
-                    ctx.player_names[(team, target_player)], get_location_name_from_address(location)))
-                    found_items = True
-                elif target_player == slot:  # local pickup, notify clients of the pickup
-                    if location not in ctx.location_checks[team, slot]:
-                        for client in ctx.endpoints:
-                                if client.team == team and client.wants_item_notification:
-                                    asyncio.create_task(
-                                        ctx.send_msgs(client, [{"cmd": "ItemFound",
-                                                                "item": NetworkItem(target_item, location, slot)}]))
-        ctx.location_checks[team, slot] |= known_locations
+                logging.info('(Team #%d) %s sent %s to %s (%s)' % (
+                team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(item_id),
+                ctx.player_names[(team, target_player)], get_location_name_from_address(location)))
+                info_text = json_format_send_event(new_item, target_player)
+                ctx.broadcast_team(team, [info_text])
+
+        ctx.location_checks[team, slot] |= new_locations
         send_new_items(ctx)
+        for client in ctx.endpoints:
+            if client.team == team and client.slot == slot:
+                asyncio.create_task(ctx.send_msgs(client, [{"cmd": "RoomUpdate",
+                                                            "hint_points": get_client_points(ctx, client)}]))
 
-        if found_items:
-            for client in ctx.endpoints:
-                if client.team == team and client.slot == slot:
-                    asyncio.create_task(ctx.send_msgs(client, [{"cmd": "RoomUpdate",
-                                                                "hint_points": get_client_points(ctx, client)}]))
         ctx.save()
 
 
@@ -529,7 +481,7 @@ def notify_team(ctx: Context, team: int, text: str):
 
 
 
-def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[Utils.Hint]:
+def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[NetUtils.Hint]:
     hints = []
     seeked_item_id = Items.item_table[item][2]
     for check, result in ctx.locations.items():
@@ -538,12 +490,12 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
             location_id, finding_player = check
             found = location_id in ctx.location_checks[team, finding_player]
             entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
-            hints.append(Utils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance))
+            hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance))
 
     return hints
 
 
-def collect_hints_location(ctx: Context, team: int, slot: int, location: str) -> typing.List[Utils.Hint]:
+def collect_hints_location(ctx: Context, team: int, slot: int, location: str) -> typing.List[NetUtils.Hint]:
     hints = []
     seeked_location = Regions.lookup_name_to_id[location]
     for check, result in ctx.locations.items():
@@ -552,12 +504,12 @@ def collect_hints_location(ctx: Context, team: int, slot: int, location: str) ->
             item_id, receiving_player = result
             found = location_id in ctx.location_checks[team, finding_player]
             entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
-            hints.append(Utils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance))
+            hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance))
             break  # each location has 1 item
     return hints
 
 
-def format_hint(ctx: Context, team: int, hint: Utils.Hint) -> str:
+def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
     text = f"[Hint]: {ctx.player_names[team, hint.receiving_player]}'s " \
            f"{Items.lookup_id_to_name[hint.item]} is " \
            f"at {get_location_name_from_address(hint.location)} " \
@@ -567,6 +519,19 @@ def format_hint(ctx: Context, team: int, hint: Utils.Hint) -> str:
         text += f" at {hint.entrance}"
     return text + (". (found)" if hint.found else ".")
 
+def json_format_send_event(net_item: NetworkItem, receiving_player: int):
+    parts = []
+    NetUtils.add_json_text(parts, net_item.player, type=NetUtils.JSONTypes.player_id)
+    NetUtils.add_json_text(parts, " sent ")
+    NetUtils.add_json_text(parts, net_item.item, type=NetUtils.JSONTypes.item_id)
+    NetUtils.add_json_text(parts, " to ")
+    NetUtils.add_json_text(parts, receiving_player, type=NetUtils.JSONTypes.player_id)
+    NetUtils.add_json_text(parts, " (")
+    NetUtils.add_json_text(parts, net_item.location, type=NetUtils.JSONTypes.location_id)
+    NetUtils.add_json_text(parts, ")")
+
+    return {"cmd": "PrintJSON", "text": parts, "type": "ItemSend",
+            "receiving": receiving_player, "sending": net_item.player}
 
 def get_intended_text(input_text: str, possible_answers: typing.Iterable[str]= console_names) -> typing.Tuple[str, bool, str]:
     picks = fuzzy_process.extract(input_text, possible_answers, limit=2)
@@ -824,9 +789,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
         """List all missing location checks from the server's perspective"""
 
         locations = get_missing_checks(self.ctx, self.client)
-        checked_locations = get_checked_checks(self.ctx, self.client)
 
-        if len(locations) > 0:
+        if locations:
             texts = [f'Missing: {location}\n' for location in locations]
             texts.append(f"Found {len(locations)} missing location checks")
             self.ctx.notify_client_multiple(self.client, texts)

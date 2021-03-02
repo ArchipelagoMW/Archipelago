@@ -7,7 +7,7 @@ from uuid import UUID
 
 from worlds.alttp import Items, Regions
 from WebHostLib import app, cache, Room
-from Utils import Hint
+from NetUtils import Hint
 
 
 def get_id(item_name):

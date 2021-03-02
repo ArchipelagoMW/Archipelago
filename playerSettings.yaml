@@ -78,7 +78,7 @@ progressive: # Enable or disable progressive items (swords, shields, bow)
   on: 50 # All items are progressive
   off: 0 # No items are progressive
   random: 0 # Randomly decides for all items. Swords could be progressive, shields might not be
-entrance_shuffle: # Documentation: https://alttpr.com/en/options#entrance_shuffle
+entrance_shuffle:
   none: 50 # Vanilla game map. All entrances and exits lead to their original locations. You probably want this option
   dungeonssimple: 0 # Shuffle just dungeons amongst each other, swapping dungeons entirely, so Hyrule Castle is always 1 dungeon
   dungeonsfull: 0 # Shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle can be 4 different dungeons
