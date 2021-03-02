@@ -945,7 +945,7 @@ async def process_server_cmd(ctx: Context, args: dict):
         logger.info(args["text"])
 
     elif cmd == 'PrintJSON':
-        logger.info(ctx.jsontotextparser(args["text"]))
+        logger.info(ctx.jsontotextparser(args["data"]))
 
     elif cmd == 'InvalidArguments':
         logger.warning(f"Invalid Arguments: {args['text']}")

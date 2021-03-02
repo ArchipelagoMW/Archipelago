@@ -332,14 +332,18 @@ async def server(websocket, path, ctx: Context):
     ctx.endpoints.append(client)
 
     try:
+        logging.info("Incoming")
         await on_client_connected(ctx, client)
+        logging.info("Sent Room Info")
         async for data in websocket:
+            logging.info(data)
             for msg in decode(data):
                 await process_client_cmd(ctx, client, msg)
     except Exception as e:
         if not isinstance(e, websockets.WebSocketException):
             logging.exception(e)
     finally:
+        logging.info("Disconnected")
         await ctx.disconnect(client)
 
 
@@ -530,7 +534,7 @@ def json_format_send_event(net_item: NetworkItem, receiving_player: int):
     NetUtils.add_json_text(parts, net_item.location, type=NetUtils.JSONTypes.location_id)
     NetUtils.add_json_text(parts, ")")
 
-    return {"cmd": "PrintJSON", "text": parts, "type": "ItemSend",
+    return {"cmd": "PrintJSON", "data": parts, "type": "ItemSend",
             "receiving": receiving_player, "sending": net_item.player}
 
 def get_intended_text(input_text: str, possible_answers: typing.Iterable[str]= console_names) -> typing.Tuple[str, bool, str]:

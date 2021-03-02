@@ -274,4 +274,4 @@ class Hint(typing.NamedTuple):
         else:
             add_json_text(parts, ".")
 
-        return {"cmd": "PrintJSON", "text": parts, "type": "hint"}
+        return {"cmd": "PrintJSON", "data": parts, "type": "hint"}
