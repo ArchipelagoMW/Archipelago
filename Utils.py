@@ -213,6 +213,8 @@ def get_default_options() -> dict:
                 "players": 0,
                 "weights_file_path": "weights.yaml",
                 "meta_file_path": "meta.yaml",
+                "pre_roll": False,
+                "use_pre_rolled": False,
                 "player_name": "",
                 "create_spoiler": 1,
                 "zip_roms": 0,

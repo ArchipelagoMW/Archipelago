@@ -12,7 +12,7 @@ from BaseClasses import PlandoItem, PlandoConnection
 ModuleUpdate.update()
 
 import Bosses
-from Utils import parse_yaml
+from Utils import parse_yaml, unsafe_parse_yaml
 from Rom import Sprite
 from EntranceRandomizer import parse_arguments
 from Main import main as ERmain
@@ -37,6 +37,8 @@ def mystery_argparse():
     parser.add_argument('--teams', default=1, type=lambda value: max(int(value), 1))
     parser.add_argument('--create_spoiler', action='store_true')
     parser.add_argument('--skip_playthrough', action='store_true')
+    parser.add_argument('--pre_roll', action='store_true')
+    parser.add_argument('--use_pre_rolled', action='store_true')
     parser.add_argument('--rom')
     parser.add_argument('--enemizercli')
     parser.add_argument('--outputpath')
@@ -93,7 +95,7 @@ def main(args=None, callback=ERmain):
         if path:
             try:
                 if path not in weights_cache:
-                    weights_cache[path] = get_weights(path)
+                    weights_cache[path] = get_weights(path, args.use_pre_rolled)
                 print(f"P{player} Weights: {path} >> "
                       f"{get_choice('description', weights_cache[path], 'No description specified')}")
 
@@ -180,6 +182,23 @@ def main(args=None, callback=ERmain):
                         settings.sprite):
                     logging.warning(
                         f"Warning: The chosen sprite, \"{settings.sprite}\", for yaml \"{path}\", does not exist.")
+                if args.pre_roll:
+                    import yaml
+                    if path == args.weights:
+                        settings.name = f"Player{player}"
+                    elif not settings.name:
+                        settings.name = os.path.split(path)[-1].split(".")[0]
+
+                    if "-" not in settings.shuffle and settings.shuffle != "vanilla":
+                        settings.shuffle += f"-{random.randint(0, 2 ** 64)}"
+
+                    if "-" not in settings.door_shuffle and settings.door_shuffle != "vanilla":
+                        settings.door_shuffle += f"-{random.randint(0, 2 ** 64)}"
+
+                    pre_rolled = dict()
+                    pre_rolled["pre_rolled"] = settings
+                    with open(os.path.join(args.outputpath if args.outputpath else ".", f"{os.path.split(path)[-1].split('.')[0]}_pre_rolled_{seedname}.yaml"), "wt") as f:
+                        yaml.dump(pre_rolled, f)
                 for k, v in vars(settings).items():
                     if v is not None:
                         getattr(erargs, k)[player] = v
@@ -223,7 +242,7 @@ def main(args=None, callback=ERmain):
     callback(erargs, seed)
 
 
-def get_weights(path):
+def get_weights(path, use_pre_rolled=False):
     try:
         if urllib.parse.urlparse(path).scheme:
             yaml = str(urllib.request.urlopen(path).read(), "utf-8")
@@ -233,7 +252,7 @@ def get_weights(path):
     except Exception as e:
         raise Exception(f"Failed to read weights ({path})") from e
 
-    return parse_yaml(yaml)
+    return unsafe_parse_yaml(yaml) if use_pre_rolled else parse_yaml(yaml)
 
 
 def interpret_on_off(value):
@@ -349,6 +368,9 @@ def roll_triggers(weights: dict) -> dict:
     return weights
 
 def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses"))):
+    if "pre_rolled" in weights:
+        return weights["pre_rolled"]
+
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
