@@ -192,9 +192,6 @@ def main(args=None, callback=ERmain):
                     if "-" not in settings.shuffle and settings.shuffle != "vanilla":
                         settings.shuffle += f"-{random.randint(0, 2 ** 64)}"
 
-                    if "-" not in settings.door_shuffle and settings.door_shuffle != "vanilla":
-                        settings.door_shuffle += f"-{random.randint(0, 2 ** 64)}"
-
                     pre_rolled = dict()
                     pre_rolled["pre_rolled"] = settings
                     with open(os.path.join(args.outputpath if args.outputpath else ".", f"{os.path.split(path)[-1].split('.')[0]}_pre_rolled_{seedname}.yaml"), "wt") as f:
