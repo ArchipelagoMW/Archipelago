@@ -289,8 +289,10 @@ def main(args, seed=None):
         palettes_options['link']=args.link_palettes[player]
         
         apply_rom_settings(rom, args.heartbeep[player], args.heartcolor[player], args.quickswap[player],
-                           args.fastmenu[player], args.disablemusic[player], args.triforcehud[player], args.sprite[player],
-                           palettes_options, world, player, True, reduceflashing=args.reduceflashing[player] if not args.race else True)
+                           args.fastmenu[player], args.disablemusic[player], args.sprite[player],
+                           palettes_options, world, player, True,
+                           reduceflashing=args.reduceflashing[player] if not args.race else True,
+                           triforcehud=args.triforcehud[player])
 
         mcsb_name = ''
         if all([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player],
