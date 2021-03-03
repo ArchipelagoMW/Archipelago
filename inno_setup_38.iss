@@ -1,6 +1,6 @@
 #define sourcepath "build\exe.win-amd64-3.8\"
 #define MyAppName "Archipelago"
-#define MyAppExeName "ArchipelagoClient.exe"
+#define MyAppExeName "ArchipelagoLttPClient.exe"
 #define MyAppIcon "icon.ico"
 
 [Setup]
@@ -52,7 +52,7 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 
 [Run]
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: IsVCRedist64BitNeeded; StatusMsg: "Installing VC++ redistributable..."
-Filename: "{app}\ArchipelagoCreator"; Parameters: "update_sprites"; StatusMsg: "Updating Sprite Library..."
+Filename: "{app}\ArchipelagoLttPCreator"; Parameters: "update_sprites"; StatusMsg: "Updating Sprite Library..."
 
 [UninstallDelete]
 Type: dirifempty; Name: "{app}"
