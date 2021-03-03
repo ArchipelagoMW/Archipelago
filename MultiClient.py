@@ -945,6 +945,8 @@ async def process_server_cmd(ctx: Context, args: dict):
         logger.info(args["text"])
 
     elif cmd == 'PrintJSON':
+        if not ctx.found_items and args.get("type", None) == "ItemSend" and args["receiving"] == args["sending"]:
+            pass  # don't want info on other player's local pickups.
         logger.info(ctx.jsontotextparser(args["data"]))
 
     elif cmd == 'InvalidArguments':
@@ -954,10 +956,9 @@ async def process_server_cmd(ctx: Context, args: dict):
         logger.debug(f"unknown command {cmd}")
 
 
+# kept as function for easier wrapping by plugins
 def get_tags(ctx: Context):
     tags = ['AP']
-    if ctx.found_items:
-        tags.append('FoundItems')
     return tags
 
 
@@ -1201,12 +1202,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
 
 
 async def send_finished_game(ctx: Context):
-    try:
-        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": CLientStatus.CLIENT_GOAL}])
-        ctx.finished_game = True
-    except Exception as ex:
-        logger.exception(ex)
-
+    await ctx.send_msgs([{"cmd": "StatusUpdate", "status": CLientStatus.CLIENT_GOAL}])
 
 async def game_watcher(ctx: Context):
     prev_game_timer = 0
@@ -1247,7 +1243,8 @@ async def game_watcher(ctx: Context):
         delay = 7 if ctx.slow_mode else 2
         if gameend[0]:
             if not ctx.finished_game:
-                await(send_finished_game(ctx))
+                await send_finished_game(ctx)
+                ctx.finished_game = True
 
             if time.perf_counter() - perf_counter < delay:
                 continue
@@ -1268,13 +1265,9 @@ async def game_watcher(ctx: Context):
             continue
 
         recv_index = data[0] | (data[1] << 8)
-        assert RECV_ITEM_ADDR == RECV_PROGRESS_ADDR + 2
         recv_item = data[2]
-        assert ROOMID_ADDR == RECV_PROGRESS_ADDR + 4
         roomid = data[4] | (data[5] << 8)
-        assert ROOMDATA_ADDR == RECV_PROGRESS_ADDR + 6
         roomdata = data[6]
-        assert SCOUT_LOCATION_ADDR == RECV_PROGRESS_ADDR + 7
         scout_location = data[7]
 
         if recv_index < len(ctx.items_received) and recv_item == 0:

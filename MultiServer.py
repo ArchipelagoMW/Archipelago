@@ -33,7 +33,7 @@ from Utils import get_item_name_from_id, get_location_name_from_address, \
 from NetUtils import Node, Endpoint, CLientStatus, NetworkItem, decode
 
 colorama.init()
-console_names = frozenset(set(Items.item_table) | set(Items.item_name_groups) | set(Regions.lookup_name_to_id))
+lttp_console_names = frozenset(set(Items.item_table) | set(Items.item_name_groups) | set(Regions.lookup_name_to_id))
 
 
 class Client(Endpoint):
@@ -50,10 +50,6 @@ class Client(Endpoint):
         self.tags = []
         self.messageprocessor = client_message_processor(ctx, self)
         self.ctx = weakref.ref(ctx)
-
-    @property
-    def wants_item_notification(self):
-        return self.auth and "FoundItems" in self.tags
 
 
 class Context(Node):
@@ -537,7 +533,7 @@ def json_format_send_event(net_item: NetworkItem, receiving_player: int):
     return {"cmd": "PrintJSON", "data": parts, "type": "ItemSend",
             "receiving": receiving_player, "sending": net_item.player}
 
-def get_intended_text(input_text: str, possible_answers: typing.Iterable[str]= console_names) -> typing.Tuple[str, bool, str]:
+def get_intended_text(input_text: str, possible_answers: typing.Iterable[str]= lttp_console_names) -> typing.Tuple[str, bool, str]:
     picks = fuzzy_process.extract(input_text, possible_answers, limit=2)
     if len(picks) > 1:
         dif = picks[0][1] - picks[1][1]
@@ -1046,12 +1042,6 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
             # logging.info(f"{client.name} in team {client.team+1} scouted {', '.join([l[0] for l in locs])}")
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
-
-        elif cmd == 'UpdateTags':
-            if not args or type(args) is not list:
-                await ctx.send_msgs(client, [{"cmd": "InvalidArguments", "text": 'UpdateTags'}])
-                return
-            client.tags = args
 
         elif cmd == 'StatusUpdate':
             current = ctx.client_game_state[client.team, client.slot]
