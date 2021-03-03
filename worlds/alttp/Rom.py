@@ -1681,8 +1681,8 @@ def hud_format_text(text):
     return output[:32]
 
 
-def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, triforcehud, sprite: str, palettes_options,
-                       world=None, player=1, allow_random_on_event=False, reduceflashing=False):
+def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite: str, palettes_options,
+                       world=None, player=1, allow_random_on_event=False, reduceflashing=False, triforcehud:str = None):
     local_random = random if not world else world.rom_seeds[player]
 
     # enable instant item menu
@@ -1755,9 +1755,10 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, tri
     rom.write_byte(0x6FA30, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
     rom.write_byte(0x65561, {'red': 0x05, 'blue': 0x0D, 'green': 0x19, 'yellow': 0x09}[color])
 
-    # set triforcehud
-    triforce_flag = (rom.read_byte(0x180167) & 0x80) | {'normal': 0x00, 'hide_goal': 0x01, 'hide_required': 0x02, 'hide_both': 0x03}[triforcehud]
-    rom.write_byte(0x180167, triforce_flag)
+    if triforcehud:
+        # set triforcehud
+        triforce_flag = (rom.read_byte(0x180167) & 0x80) | {'normal': 0x00, 'hide_goal': 0x01, 'hide_required': 0x02, 'hide_both': 0x03}[triforcehud]
+        rom.write_byte(0x180167, triforce_flag)
 
     if z3pr:
         def buildAndRandomize(option_name, mode):
