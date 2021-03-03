@@ -18,14 +18,28 @@ app.jinja_env.filters["location_name"] = lambda location: Regions.lookup_id_to_n
 app.jinja_env.filters['item_name'] = lambda id: Items.lookup_id_to_name.get(id, id)
 
 icons = {
+    "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
+    "Red Shield": r"https://www.zeldadungeon.net/wiki/images/5/55/Fire-Shield.png",
+    "Mirror Shield": r"https://www.zeldadungeon.net/wiki/images/8/84/Mirror-Shield.png",
+    "Fighter Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/4/40/SFighterSword.png?width=1920",
+    "Master Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/6/65/SMasterSword.png?width=1920",
+    "Tempered Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/9/92/STemperedSword.png?width=1920",
+    "Golden Sword": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/2/28/SGoldenSword.png?width=1920",
+    "Bow": r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/bc/ALttP_Bow_%26_Arrows_Sprite.png?version=5f85a70e6366bf473544ef93b274f74c",
+    "Silver Bow": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/6/65/Bow.png?width=1920",
+    "Green Mail": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/c/c9/SGreenTunic.png?width=1920",
+    "Blue Mail": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/9/98/SBlueTunic.png?width=1920",
+    "Red Mail": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/7/74/SRedTunic.png?width=1920",
+    "Power Glove": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/f/f5/SPowerGlove.png?width=1920",
+    "Titan Mitts": r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/c/c1/STitanMitt.png?width=1920",
     "Progressive Sword":
         r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/c/cc/ALttP_Master_Sword_Sprite.png?version=55869db2a20e157cd3b5c8f556097725",
     "Pegasus Boots":
         r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/e/ed/ALttP_Pegasus_Shoes_Sprite.png?version=405f42f97240c9dcd2b71ffc4bebc7f9",
     "Progressive Glove":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/5/53/ALttP_Titan's_Mitt_Sprite.png?version=6ac54c3016a23b94413784881fcd3c75",
+        r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/c/c1/STitanMitt.png?width=1920",
     "Flippers":
-        r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/8/88/ALttP_Zora's_Flippers_Sprite.png?version=b9d7521bb3a5a4d986879f70a70bc3da",
+        r"https://oyster.ignimgs.com/mediawiki/apis.ign.com/the-legend-of-zelda-a-link-to-the-past/4/4c/ZoraFlippers.png?width=1920",
     "Moon Pearl":
         r"https://gamepedia.cursecdn.com/zelda_gamepedia_en/6/63/ALttP_Moon_Pearl_Sprite.png?version=d601542d5abcc3e006ee163254bea77e",
     "Progressive Bow":
@@ -246,6 +260,14 @@ def attribute_item(inventory, team, recipient, item):
         inventory[team][recipient][target_item] += 1
 
 
+def attribute_item_solo(inventory, item):
+    target_item = links.get(item, item)
+    if item in levels:  # non-progressive
+        inventory[target_item] = max(inventory[target_item], levels[item])
+    else:
+        inventory[target_item] += 1
+
+
 @app.template_filter()
 def render_timedelta(delta: datetime.timedelta):
     hours, minutes = divmod(delta.total_seconds() / 60, 60)
@@ -299,6 +321,145 @@ def get_static_room_data(room: Room):
     result = locations, names, use_door_tracker, player_checks_in_area, player_location_to_area
     _multidata_cache[room.seed.id] = result
     return result
+
+
+@app.route('/tracker/<suuid:tracker>/<int:team>/<int:player>')
+@cache.memoize(timeout=15)
+def getPlayerTracker(tracker: UUID, team: int, player: int):
+    # Team and player must be positive and greater than zero
+    if team < 1 or player < 1:
+        abort(404)
+
+    room = Room.get(tracker=tracker)
+    if not room:
+        abort(404)
+
+    # Collect seed information and pare it down to a single player
+    locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area = get_static_room_data(room)
+    player_name = names[team - 1][player - 1]
+    seed_checks_in_area = seed_checks_in_area[player]
+    player_location_to_area = player_location_to_area[player]
+    inventory = collections.Counter()
+    checks_done = {loc_name: 0 for loc_name in default_locations}
+
+    # Add starting items to inventory
+    starting_items = room.seed.multidata.get("precollected_items", None)[player - 1]
+    if starting_items:
+        for item_id in starting_items:
+            attribute_item_solo(inventory, item_id)
+
+    # Add items to player inventory
+    for (ms_team, ms_player), locations_checked in room.multisave.get("location_checks", {}):
+        # Skip teams and players not matching the request
+        if ms_team != (team - 1) or ms_player != player:
+            continue
+
+        # If the player does not have the item, do nothing
+        for location in locations_checked:
+            if (location, ms_player) not in locations or location not in player_location_to_area:
+                continue
+
+            item, recipient = locations[location, ms_player]
+            attribute_item_solo(inventory, item)
+            checks_done[player_location_to_area[location]] += 1
+            checks_done["Total"] += 1
+
+    # Note the presence of the triforce item
+    for (ms_team, ms_player), game_state in room.multisave.get("client_game_state", []):
+        # Skip teams and players not matching the request
+        if ms_team != (team - 1) or ms_player != player:
+            continue
+
+        if game_state:
+            inventory[106] = 1  # Triforce
+
+    acquired_items = []
+    for itm in inventory:
+        acquired_items.append(get_item_name_from_id(itm))
+
+    # Progressive items need special handling for icons and class
+    progressive_items = {
+        "Progressive Sword": 94,
+        "Progressive Glove": 97,
+        "Progressive Bow": 100,
+        "Progressive Mail": 96,
+        "Progressive Shield": 95,
+    }
+
+    # Determine which icon to use for the sword
+    sword_url = icons["Fighter Sword"]
+    sword_acquired = False
+    sword_names = ['Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword']
+    if "Progressive Sword" in acquired_items:
+        sword_url = icons[sword_names[inventory[progressive_items["Progressive Sword"]] - 1]]
+        sword_acquired = True
+    else:
+        for sword in reversed(sword_names):
+            if sword in acquired_items:
+                sword_url = icons[sword]
+                sword_acquired = True
+                break
+
+    gloves_url = icons["Power Glove"]
+    gloves_acquired = False
+    glove_names = ["Power Glove", "Titan Mitts"]
+    if "Progressive Glove" in acquired_items:
+        gloves_url = icons[glove_names[inventory[progressive_items["Progressive Glove"]] - 1]]
+        gloves_acquired = True
+    else:
+        for glove in reversed(glove_names):
+            if glove in acquired_items:
+                gloves_url = icons[glove]
+                gloves_acquired = True
+                break
+
+    bow_url = icons["Bow"]
+    bow_acquired = False
+    bow_names = ["Bow", "Silver Bow"]
+    if "Progressive Bow" in acquired_items:
+        bow_url = icons[bow_names[inventory[progressive_items["Progressive Bow"]] - 1]]
+        bow_acquired = True
+    else:
+        for bow in reversed(bow_names):
+            if bow in acquired_items:
+                bow_url = icons[bow]
+                bow_acquired = True
+                break
+
+    mail_url = icons["Green Mail"]
+    mail_names = ["Blue Mail", "Red Mail"]
+    if "Progressive Mail" in acquired_items:
+        mail_url = icons[mail_names[inventory[progressive_items["Progressive Mail"]] - 1]]
+    else:
+        for mail in reversed(mail_names):
+            if mail in acquired_items:
+                mail_url = icons[mail]
+                break
+
+    shield_url = icons["Blue Shield"]
+    shield_acquired = False
+    shield_names = ["Blue Shield", "Red Shield", "Mirror Shield"]
+    if "Progressive Shield" in acquired_items:
+        shield_url = icons[shield_names[inventory[progressive_items["Progressive Shield"]] - 1]]
+        shield_acquired = True
+    else:
+        for shield in reversed(shield_names):
+            if shield in acquired_items:
+                shield_url = icons[shield]
+                shield_acquired = True
+                break
+
+    # The single player tracker doesn't care about overworld, underworld, and total checks. Maybe it should?
+    sp_areas = ordered_areas[2:15]
+
+    return render_template("playerTracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
+                           player_name=player_name, room=room, icons=icons, checks_done=checks_done,
+                           checks_in_area=seed_checks_in_area, acquired_items=acquired_items,
+                           sword_url=sword_url, sword_acquired=sword_acquired, gloves_url=gloves_url,
+                           gloves_acquired=gloves_acquired, bow_url=bow_url, bow_acquired=bow_acquired,
+                           small_key_ids=small_key_ids, big_key_ids=big_key_ids, sp_areas=sp_areas,
+                           key_locations=key_locations, big_key_locations=big_key_locations, mail_url=mail_url,
+                           shield_url=shield_url, shield_acquired=shield_acquired)
 
 
 @app.route('/tracker/<suuid:tracker>')

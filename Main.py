@@ -7,6 +7,7 @@ import time
 import zlib
 import concurrent.futures
 import pickle
+from typing import Dict
 
 from BaseClasses import MultiWorld, CollectionState, Region, Item
 from worlds.alttp import ALttPLocation
@@ -36,6 +37,14 @@ def get_seed(seed=None):
         random.seed(None)
         return random.randint(0, pow(10, seeddigits) - 1)
     return seed
+
+
+seeds: Dict[tuple, str] = dict()
+def get_same_seed(world: MultiWorld, seed_def: tuple) -> str:
+    if seed_def in seeds:
+        return seeds[seed_def]
+    seeds[seed_def] = str(world.random.randint(0, 2 ** 64))
+    return seeds[seed_def]
 
 
 def main(args, seed=None):
@@ -108,9 +117,16 @@ def main(args, seed=None):
         world.er_seeds[player] = str(world.random.randint(0, 2 ** 64))
 
         if "-" in world.shuffle[player]:
-            shuffle, seed = world.shuffle[player].split("-")
+            shuffle, seed = world.shuffle[player].split("-", 1)
             world.shuffle[player] = shuffle
-            world.er_seeds[player] = seed
+            if shuffle == "vanilla":
+                world.er_seeds[player] = "vanilla"
+            elif seed.startswith("team-"):
+                world.er_seeds[player] = get_same_seed(world, (shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
+            else:
+                world.er_seeds[player] = seed
+        elif world.shuffle[player] == "vanilla":
+            world.er_seeds[player] = "vanilla"
 
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, world.seed)
 
@@ -289,7 +305,7 @@ def main(args, seed=None):
         palettes_options['link']=args.link_palettes[player]
 
         apply_rom_settings(rom, args.heartbeep[player], args.heartcolor[player], args.quickswap[player],
-                           args.fastmenu[player], args.disablemusic[player], args.sprite[player],
+                           args.fastmenu[player], args.disablemusic[player], args.triforcehud[player], args.sprite[player],
                            palettes_options, world, player, True, reduceflashing=args.reduceflashing[player] if not args.race else True)
 
         mcsb_name = ''

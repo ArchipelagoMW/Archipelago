@@ -75,19 +75,19 @@
     "restrict_dungeon_item_on_boss": {
       "keyString": "restrict_dungeon_item_on_boss",
       "friendlyName": "Dungeon Item on Boss",
-      "description": "Defeating a dungeon bosses always awards a dungeon item.",
+      "description": "Prevent dungeon bosses from dropping maps, compasses, and keys.",
       "inputType": "range",
       "subOptions": {
         "on": {
           "keyString": "restrict_dungeon_item_on_boss.on",
           "friendlyName": "On",
-          "description": "Dungeon bosses will always drop a dungeon item.",
+          "description": "Dungeon bosses will never drop maps, compasses, or keys.",
           "defaultValue": 0
         },
         "off": {
           "keyString": "restrict_dungeon_item_on_boss.off",
           "friendlyName": "Off",
-          "description": "Dungeon bosses may not drop a dungeon item.",
+          "description": "Dungeon bosses may drop any item.",
           "defaultValue": 0
         }
       }
@@ -1601,6 +1601,37 @@
           "defaultValue": 50
         }
       }
+    },
+    "triforcehud": {
+      "keyString": "rom.triforcehud",
+      "friendlyName": "Triforce Hud Options",
+      "description": "Hide the triforce hud in certain circumstances.",
+      "inputType": "range",
+      "subOptions": {
+        "normal": {
+          "keyString": "rom.triforcehud.normal",
+          "friendlyName": "Normal",
+          "description": "Always displays HUD as usual.",
+          "defaultValue": 0
+        },
+        "hide_goal": {
+          "keyString": "rom.triforcehud.hide_goal",
+          "friendlyName": "Hide Goal",
+          "description": "Hide Triforce Hud elements until a single triforce piece is acquired or spoken to Murahadala",
+          "defaultValue": 50
+        },
+        "hide_total": {
+          "keyString": "rom.triforcehud.hide_required",
+          "friendlyName": "Hide Required Total",
+          "description": "Hide total amount needed to win the game (unless spoken to Murahadala)",
+          "defaultValue": 0
+        },
+        "hide_both": {
+          "keyString": "rom.triforcehud.hide_both",
+          "friendlyName": "Hide Both",
+          "description": "Hide both of the above options",
+          "defaultValue": 0
+        }
     },
     "reduceflashing": {
       "keyString": "rom.reduceflashing",
