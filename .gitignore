@@ -3,6 +3,7 @@
 
 *_Spoiler.txt
 *.bmbp
+*.apbp
 *.pyc
 *.pyd
 *.sfc

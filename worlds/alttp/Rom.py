@@ -125,7 +125,7 @@ class LocalRom(object):
                     Patch.create_patch_file(local_path('basepatch.sfc'))
                 return
 
-            if not os.path.isfile(local_path('data', 'basepatch.bmbp')):
+            if not os.path.isfile(local_path('data', 'basepatch.apbp')):
                 raise RuntimeError('Base patch unverified.  Unable to continue.')
 
         if os.path.isfile(local_path('data', 'basepatch.apbp')):

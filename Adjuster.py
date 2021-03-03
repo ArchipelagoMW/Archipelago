@@ -83,7 +83,7 @@ def adjust(args):
     logger = logging.getLogger('Adjuster')
     logger.info('Patching ROM.')
     vanillaRom = args.baserom
-    if os.path.splitext(args.rom)[-1].lower() == '.bmbp':
+    if os.path.splitext(args.rom)[-1].lower() == '.apbp':
         import Patch
         meta, args.rom = Patch.create_rom_file(args.rom)
 
@@ -135,7 +135,7 @@ def adjustGUI():
     romEntry2 = Entry(romDialogFrame, textvariable=romVar2)
 
     def RomSelect2():
-        rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc", ".bmbp")), ("All Files", "*")])
+        rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc", ".apbp")), ("All Files", "*")])
         romVar2.set(rom)
     romSelectButton2 = Button(romDialogFrame, text='Select Rom', command=RomSelect2)
     romDialogFrame.pack(side=TOP, expand=True, fill=X)
