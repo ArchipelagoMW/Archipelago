@@ -1602,37 +1602,6 @@
         }
       }
     },
-    "triforcehud": {
-      "keyString": "rom.triforcehud",
-      "friendlyName": "Triforce Hud Options",
-      "description": "Hide the triforce hud in certain circumstances.",
-      "inputType": "range",
-      "subOptions": {
-        "normal": {
-          "keyString": "rom.triforcehud.normal",
-          "friendlyName": "Normal",
-          "description": "Always displays HUD as usual.",
-          "defaultValue": 0
-        },
-        "hide_goal": {
-          "keyString": "rom.triforcehud.hide_goal",
-          "friendlyName": "Hide Goal",
-          "description": "Hide Triforce Hud elements until a single triforce piece is acquired or spoken to Murahadala",
-          "defaultValue": 50
-        },
-        "hide_total": {
-          "keyString": "rom.triforcehud.hide_required",
-          "friendlyName": "Hide Required Total",
-          "description": "Hide total amount needed to win the game (unless spoken to Murahadala)",
-          "defaultValue": 0
-        },
-        "hide_both": {
-          "keyString": "rom.triforcehud.hide_both",
-          "friendlyName": "Hide Both",
-          "description": "Hide both of the above options",
-          "defaultValue": 0
-        }
-    },
     "reduceflashing": {
       "keyString": "rom.reduceflashing",
       "friendlyName": "Full-Screen Flashing Effects",
@@ -1670,6 +1639,38 @@
           "friendlyName": "Disabled",
           "description": "Disable quick-swap.",
           "defaultValue": 50
+        }
+      }
+    },
+    "triforcehud": {
+      "keyString": "rom.triforcehud",
+      "friendlyName": "Triforce Hunt HUD Options",
+      "description": "Hide the triforce hud in certain circumstances.",
+      "inputType": "range",
+      "subOptions": {
+        "normal": {
+          "keyString": "rom.triforcehud.normal",
+          "friendlyName": "Always Show",
+          "description": "Always display HUD",
+          "defaultValue": 50
+        },
+        "hide_goal": {
+          "keyString": "rom.triforcehud.hide_goal",
+          "friendlyName": "Hide HUD",
+          "description": "Hide Triforce HUD elements until a single triforce piece is acquired or you speak to Murahadala",
+          "defaultValue": 0
+        },
+        "hide_total": {
+          "keyString": "rom.triforcehud.hide_required",
+          "friendlyName": "Hide Total",
+          "description": "Hide total triforce pieces needed to win the game until you speak with Murahadala",
+          "defaultValue": 0
+        },
+        "hide_both": {
+          "keyString": "rom.triforcehud.hide_both",
+          "friendlyName": "Hide HUD Total",
+          "description": "Combination of Hide HUD and Hide Total",
+          "defaultValue": 0
         }
       }
     },
