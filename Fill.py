@@ -42,9 +42,10 @@ def fill_restrictive(world, base_state: CollectionState, locations, itempool, si
             for item_to_place in items_to_place:
                 perform_access_check = True
                 if world.accessibility[item_to_place.player] == 'none':
-                    perform_access_check = not world.has_beaten_game(maximum_exploration_state, item_to_place.player) if single_player_placement else not has_beaten_game
+                    perform_access_check = not world.has_beaten_game(maximum_exploration_state,
+                                                                     item_to_place.player) if single_player_placement else not has_beaten_game
                 for location in locations:
-                    if (not single_player_placement or location.player == item_to_place.player)\
+                    if (not single_player_placement or location.player == item_to_place.player) \
                             and location.can_fill(maximum_exploration_state, item_to_place, perform_access_check):
                         spot_to_fill = location
                         break
@@ -69,6 +70,7 @@ def fill_restrictive(world, base_state: CollectionState, locations, itempool, si
                 spot_to_fill.event = True
 
     itempool.extend(unplaced_items)
+
 
 def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None):
     # If not passed in, then get a shuffled list of locations to fill in
@@ -241,15 +243,14 @@ def balance_multiworld_progression(world):
     else:
         logging.info(f'Balancing multiworld progression for {len(balanceable_players)} Players.')
         state = CollectionState(world)
-        checked_locations = []
-        unchecked_locations = world.get_locations().copy()
-        world.random.shuffle(unchecked_locations)
+        checked_locations = set()
+        unchecked_locations = set(world.get_locations())
 
         reachable_locations_count = {player: 0 for player in world.player_ids}
 
         def get_sphere_locations(sphere_state, locations):
             sphere_state.sweep_for_events(key_only=True, locations=locations)
-            return [loc for loc in locations if sphere_state.can_reach(loc)]
+            return {loc for loc in locations if sphere_state.can_reach(loc)}
 
         while True:
             sphere_locations = get_sphere_locations(state, unchecked_locations)
@@ -259,14 +260,14 @@ def balance_multiworld_progression(world):
 
             if checked_locations:
                 threshold = max(reachable_locations_count.values()) - 20
-                balancing_players = [player for player, reachables in reachable_locations_count.items() if
-                                     reachables < threshold and player in balanceable_players]
+                balancing_players = {player for player, reachables in reachable_locations_count.items() if
+                                     reachables < threshold and player in balanceable_players}
                 if balancing_players:
                     balancing_state = state.copy()
                     balancing_unchecked_locations = unchecked_locations.copy()
                     balancing_reachables = reachable_locations_count.copy()
                     balancing_sphere = sphere_locations.copy()
-                    candidate_items = collections.defaultdict(list)
+                    candidate_items = collections.defaultdict(set)
                     while True:
                         for location in balancing_sphere:
                             if location.event:
@@ -274,7 +275,7 @@ def balance_multiworld_progression(world):
                                 player = location.item.player
                                 # only replace items that end up in another player's world
                                 if not location.locked and player in balancing_players and location.player != player:
-                                    candidate_items[player].append(location)
+                                    candidate_items[player].add(location)
                         balancing_sphere = get_sphere_locations(balancing_state, balancing_unchecked_locations)
                         for location in balancing_sphere:
                             balancing_unchecked_locations.remove(location)
@@ -284,10 +285,10 @@ def balance_multiworld_progression(world):
                             break
                         elif not balancing_sphere:
                             raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
-                    unlocked_locations = collections.defaultdict(list)
+                    unlocked_locations = collections.defaultdict(set)
                     for l in unchecked_locations:
                         if l not in balancing_unchecked_locations:
-                            unlocked_locations[l.player].append(l)
+                            unlocked_locations[l.player].add(l)
                     items_to_replace = []
                     for player in balancing_players:
                         locations_to_test = unlocked_locations[player]
@@ -297,7 +298,6 @@ def balance_multiworld_progression(world):
                             reducing_state = state.copy()
                             for location in itertools.chain((l for l in items_to_replace if l.item.player == player),
                                                             items_to_test):
-
                                 reducing_state.collect(location.item, True, location)
 
                             reducing_state.sweep_for_events(locations=locations_to_test)
@@ -311,33 +311,40 @@ def balance_multiworld_progression(world):
                                     items_to_replace.append(testing)
 
                     replaced_items = False
-                    replacement_locations = [l for l in checked_locations if not l.event and not l.locked]
+
+                    # sort then shuffle to maintain deterministic behaviour,
+                    # while allowing use of set for better algorithm growth behaviour elsewhere
+                    replacement_locations = sorted(l for l in checked_locations if not l.event and not l.locked)
+                    world.random.shuffle(replacement_locations)
+                    items_to_replace.sort()
+                    world.random.shuffle(items_to_replace)
+
                     while replacement_locations and items_to_replace:
-                        new_location = replacement_locations.pop()
                         old_location = items_to_replace.pop()
-
-                        while not new_location.can_fill(state, old_location.item, False) or (
-                                new_location.item and not old_location.can_fill(state, new_location.item, False)):
-                            replacement_locations.insert(0, new_location)
-                            new_location = replacement_locations.pop()
-
-                        swap_location_item(old_location, new_location)
-                        logging.debug(f"Progression balancing moved {new_location.item} to {new_location}, "
-                                      f"displacing {old_location.item} into {old_location}")
-                        state.collect(new_location.item, True, new_location)
-                        replaced_items = True
+                        for new_location in replacement_locations:
+                            if new_location.can_fill(state, old_location.item, False) and \
+                                    old_location.can_fill(state, new_location.item, False):
+                                replacement_locations.remove(new_location)
+                                swap_location_item(old_location, new_location)
+                                logging.debug(f"Progression balancing moved {new_location.item} to {new_location}, "
+                                              f"displacing {old_location.item} into {old_location}")
+                                state.collect(new_location.item, True, new_location)
+                                replaced_items = True
+                                break
+                        else:
+                            logging.warning(f"Could not Progression Balance {old_location.item}")
 
                     if replaced_items:
-                        unlocked = [fresh for player in balancing_players for fresh in unlocked_locations[player]]
+                        unlocked = {fresh for player in balancing_players for fresh in unlocked_locations[player]}
                         for location in get_sphere_locations(state, unlocked):
                             unchecked_locations.remove(location)
                             reachable_locations_count[location.player] += 1
-                            sphere_locations.append(location)
+                            sphere_locations.add(location)
 
             for location in sphere_locations:
                 if location.event:
                     state.collect(location.item, True, location)
-            checked_locations.extend(sphere_locations)
+            checked_locations |= sphere_locations
 
             if world.has_beaten_game(state):
                 break
@@ -378,7 +385,8 @@ def distribute_planned(world):
                     set(world.player_ids) - {player}) if location.item_rule(item)
                                 )
                 if not unfilled:
-                    placement.failed(f"Could not find a world with an unfilled location {placement.location}", FillError)
+                    placement.failed(f"Could not find a world with an unfilled location {placement.location}",
+                                     FillError)
                     continue
 
                 target_world = world.random.choice(unfilled).player
@@ -389,18 +397,22 @@ def distribute_planned(world):
                     set(world.player_ids)) if location.item_rule(item)
                                 )
                 if not unfilled:
-                    placement.failed(f"Could not find a world with an unfilled location {placement.location}", FillError)
+                    placement.failed(f"Could not find a world with an unfilled location {placement.location}",
+                                     FillError)
                     continue
 
                 target_world = world.random.choice(unfilled).player
 
             elif type(target_world) == int:  # target world by player id
                 if target_world not in range(1, world.players + 1):
-                    placement.failed(f"Cannot place item in world {target_world} as it is not in range of (1, {world.players})", ValueError)
+                    placement.failed(
+                        f"Cannot place item in world {target_world} as it is not in range of (1, {world.players})",
+                        ValueError)
                     continue
             else:  # find world by name
                 if target_world not in world_name_lookup:
-                    placement.failed(f"Cannot place item to {target_world}'s world as that world does not exist.", ValueError)
+                    placement.failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
+                                     ValueError)
                     continue
                 target_world = world_name_lookup[target_world]
 
