@@ -352,8 +352,9 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
 
     # Add items to player inventory
     for (ms_team, ms_player), locations_checked in room.multisave.get("location_checks", {}):
+        # logging.info(f"{ms_team}, {ms_player}, {locations_checked}")
         # Skip teams and players not matching the request
-        if ms_team != (team - 1) or ms_player != player:
+        if ms_team != (team - 1):
             continue
 
         # If the player does not have the item, do nothing
@@ -362,7 +363,10 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
                 continue
 
             item, recipient = locations[location, ms_player]
-            attribute_item_solo(inventory, item)
+            if recipient == player:
+                attribute_item_solo(inventory, item)
+            if ms_player != player:
+                continue
             checks_done[player_location_to_area[location]] += 1
             checks_done["Total"] += 1
 
