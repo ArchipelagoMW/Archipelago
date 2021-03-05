@@ -193,7 +193,13 @@ def main(args=None, callback=ERmain):
                         settings.shuffle += f"-{random.randint(0, 2 ** 64)}"
 
                     pre_rolled = dict()
-                    pre_rolled["pre_rolled"] = settings
+                    pre_rolled["pre_rolled"] = vars(settings).copy()
+                    if "plando_items" in pre_rolled["pre_rolled"]:
+                        pre_rolled["pre_rolled"]["plando_items"] = [item.to_dict() for item in pre_rolled["pre_rolled"]["plando_items"]]
+                    if "plando_connections" in pre_rolled["pre_rolled"]:
+                        pre_rolled["pre_rolled"]["plando_connections"] = [connection.to_dict() for connection in pre_rolled["pre_rolled"]["plando_connections"]]
+
+
                     with open(os.path.join(args.outputpath if args.outputpath else ".", f"{os.path.split(path)[-1].split('.')[0]}_pre_rolled_{seedname}.yaml"), "wt") as f:
                         yaml.dump(pre_rolled, f)
                 for k, v in vars(settings).items():
@@ -366,7 +372,21 @@ def roll_triggers(weights: dict) -> dict:
 
 def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses"))):
     if "pre_rolled" in weights:
-        return weights["pre_rolled"]
+        pre_rolled = weights["pre_rolled"]
+        if isinstance(pre_rolled, argparse.Namespace):
+            return pre_rolled  # Still accept old format pre-rolled, but only with unsafe loading.
+
+        if "plando_items" in pre_rolled:
+            pre_rolled["plando_items"] = [PlandoItem(item["item"],
+                                                     item["location"],
+                                                     item["world"],
+                                                     item["from_pool"],
+                                                     item["force"]) for item in pre_rolled["plando_items"]]
+        if "plando_connections" in pre_rolled:
+            pre_rolled["plando_connections"] = [PlandoConnection(connection["entrance"],
+                                                                 connection["exit"],
+                                                                 connection["direction"]) for connection in pre_rolled["plando_connections"]]
+        return argparse.Namespace(**pre_rolled)
 
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
