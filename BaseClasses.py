@@ -1509,11 +1509,7 @@ class PlandoItem(NamedTuple):
             self.warn(warning)
 
     def to_dict(self):
-        return {"item": self.item,
-                "location": self.location,
-                "world": self.world,
-                "from_pool": self.from_pool,
-                "force": self.force}
+        return self._asdict()
 
 
 class PlandoConnection(NamedTuple):
@@ -1522,6 +1518,4 @@ class PlandoConnection(NamedTuple):
     direction: str  # entrance, exit or both
 
     def to_dict(self):
-        return {"entrance": self.entrance,
-                "exit": self.exit,
-                "direction": self.direction}
+        return self._asdict()
