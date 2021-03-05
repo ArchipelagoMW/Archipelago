@@ -397,7 +397,7 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
     sword_acquired = False
     sword_names = ['Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword']
     if "Progressive Sword" in acquired_items:
-        sword_url = icons[sword_names[inventory[progressive_items["Progressive Sword"]] - 1]]
+        sword_url = icons[sword_names[max(inventory[progressive_items["Progressive Sword"]], 4) - 1]]
         sword_acquired = True
     else:
         for sword in reversed(sword_names):
@@ -410,7 +410,7 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
     gloves_acquired = False
     glove_names = ["Power Glove", "Titan Mitts"]
     if "Progressive Glove" in acquired_items:
-        gloves_url = icons[glove_names[inventory[progressive_items["Progressive Glove"]] - 1]]
+        gloves_url = icons[glove_names[max(inventory[progressive_items["Progressive Glove"]], 2) - 1]]
         gloves_acquired = True
     else:
         for glove in reversed(glove_names):
@@ -423,7 +423,7 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
     bow_acquired = False
     bow_names = ["Bow", "Silver Bow"]
     if "Progressive Bow" in acquired_items:
-        bow_url = icons[bow_names[inventory[progressive_items["Progressive Bow"]] - 1]]
+        bow_url = icons[bow_names[max(inventory[progressive_items["Progressive Bow"]], 2) - 1]]
         bow_acquired = True
     else:
         for bow in reversed(bow_names):
@@ -435,7 +435,7 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
     mail_url = icons["Green Mail"]
     mail_names = ["Blue Mail", "Red Mail"]
     if "Progressive Mail" in acquired_items:
-        mail_url = icons[mail_names[inventory[progressive_items["Progressive Mail"]] - 1]]
+        mail_url = icons[mail_names[max(inventory[progressive_items["Progressive Mail"]], 2) - 1]]
     else:
         for mail in reversed(mail_names):
             if mail in acquired_items:
@@ -446,7 +446,7 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
     shield_acquired = False
     shield_names = ["Blue Shield", "Red Shield", "Mirror Shield"]
     if "Progressive Shield" in acquired_items:
-        shield_url = icons[shield_names[inventory[progressive_items["Progressive Shield"]] - 1]]
+        shield_url = icons[shield_names[max(inventory[progressive_items["Progressive Shield"]], 3) - 1]]
         shield_acquired = True
     else:
         for shield in reversed(shield_names):
