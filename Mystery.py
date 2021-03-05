@@ -373,8 +373,6 @@ def roll_triggers(weights: dict) -> dict:
 def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses"))):
     if "pre_rolled" in weights:
         pre_rolled = weights["pre_rolled"]
-        if isinstance(pre_rolled, argparse.Namespace):
-            return pre_rolled  # Still accept old format pre-rolled, but only with unsafe loading.
 
         if "plando_items" in pre_rolled:
             pre_rolled["plando_items"] = [PlandoItem(item["item"],
