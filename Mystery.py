@@ -12,7 +12,7 @@ from BaseClasses import PlandoItem, PlandoConnection
 ModuleUpdate.update()
 
 import Bosses
-from Utils import parse_yaml, unsafe_parse_yaml
+from Utils import parse_yaml
 from Rom import Sprite
 from EntranceRandomizer import parse_arguments
 from Main import main as ERmain
@@ -38,7 +38,6 @@ def mystery_argparse():
     parser.add_argument('--create_spoiler', action='store_true')
     parser.add_argument('--skip_playthrough', action='store_true')
     parser.add_argument('--pre_roll', action='store_true')
-    parser.add_argument('--use_pre_rolled', action='store_true')
     parser.add_argument('--rom')
     parser.add_argument('--enemizercli')
     parser.add_argument('--outputpath')
@@ -95,7 +94,7 @@ def main(args=None, callback=ERmain):
         if path:
             try:
                 if path not in weights_cache:
-                    weights_cache[path] = get_weights(path, args.use_pre_rolled)
+                    weights_cache[path] = get_weights(path)
                 print(f"P{player} Weights: {path} >> "
                       f"{get_choice('description', weights_cache[path], 'No description specified')}")
 
@@ -193,14 +192,15 @@ def main(args=None, callback=ERmain):
                         settings.shuffle += f"-{random.randint(0, 2 ** 64)}"
 
                     pre_rolled = dict()
+                    pre_rolled["original_seed_number"] = seed
+                    pre_rolled["original_seed_name"] = seedname
                     pre_rolled["pre_rolled"] = vars(settings).copy()
                     if "plando_items" in pre_rolled["pre_rolled"]:
                         pre_rolled["pre_rolled"]["plando_items"] = [item.to_dict() for item in pre_rolled["pre_rolled"]["plando_items"]]
                     if "plando_connections" in pre_rolled["pre_rolled"]:
                         pre_rolled["pre_rolled"]["plando_connections"] = [connection.to_dict() for connection in pre_rolled["pre_rolled"]["plando_connections"]]
 
-
-                    with open(os.path.join(args.outputpath if args.outputpath else ".", f"{os.path.split(path)[-1].split('.')[0]}_pre_rolled_{seedname}.yaml"), "wt") as f:
+                    with open(os.path.join(args.outputpath if args.outputpath else ".", f"{os.path.split(path)[-1].split('.')[0]}_pre_rolled.yaml"), "wt") as f:
                         yaml.dump(pre_rolled, f)
                 for k, v in vars(settings).items():
                     if v is not None:
@@ -245,7 +245,7 @@ def main(args=None, callback=ERmain):
     callback(erargs, seed)
 
 
-def get_weights(path, use_pre_rolled=False):
+def get_weights(path):
     try:
         if urllib.parse.urlparse(path).scheme:
             yaml = str(urllib.request.urlopen(path).read(), "utf-8")
@@ -255,7 +255,7 @@ def get_weights(path, use_pre_rolled=False):
     except Exception as e:
         raise Exception(f"Failed to read weights ({path})") from e
 
-    return unsafe_parse_yaml(yaml) if use_pre_rolled else parse_yaml(yaml)
+    return parse_yaml(yaml)
 
 
 def interpret_on_off(value):
