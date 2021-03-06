@@ -13,6 +13,12 @@ html{
     width: calc(100% - 1rem);
 }
 
+#tracker-wrapper a{
+    color: #234ae4;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .table-wrapper{
     overflow-y: auto;
     overflow-x: auto;
