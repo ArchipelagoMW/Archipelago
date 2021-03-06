@@ -350,8 +350,9 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
 
     # Add items to player inventory
     for (ms_team, ms_player), locations_checked in room.multisave.get("location_checks", {}):
+        # logging.info(f"{ms_team}, {ms_player}, {locations_checked}")
         # Skip teams and players not matching the request
-        if ms_team != (team - 1) or ms_player != player:
+        if ms_team != (team - 1):
             continue
 
         # If the player does not have the item, do nothing
@@ -360,7 +361,10 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
                 continue
 
             item, recipient = locations[location, ms_player]
-            attribute_item_solo(inventory, item)
+            if recipient == player:
+                attribute_item_solo(inventory, item)
+            if ms_player != player:
+                continue
             checks_done[player_location_to_area[location]] += 1
             checks_done["Total"] += 1
 
@@ -391,7 +395,7 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
     sword_acquired = False
     sword_names = ['Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword']
     if "Progressive Sword" in acquired_items:
-        sword_url = icons[sword_names[inventory[progressive_items["Progressive Sword"]] - 1]]
+        sword_url = icons[sword_names[min(inventory[progressive_items["Progressive Sword"]], 4) - 1]]
         sword_acquired = True
     else:
         for sword in reversed(sword_names):
@@ -404,7 +408,7 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
     gloves_acquired = False
     glove_names = ["Power Glove", "Titan Mitts"]
     if "Progressive Glove" in acquired_items:
-        gloves_url = icons[glove_names[inventory[progressive_items["Progressive Glove"]] - 1]]
+        gloves_url = icons[glove_names[min(inventory[progressive_items["Progressive Glove"]], 2) - 1]]
         gloves_acquired = True
     else:
         for glove in reversed(glove_names):
@@ -417,7 +421,7 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
     bow_acquired = False
     bow_names = ["Bow", "Silver Bow"]
     if "Progressive Bow" in acquired_items:
-        bow_url = icons[bow_names[inventory[progressive_items["Progressive Bow"]] - 1]]
+        bow_url = icons[bow_names[min(inventory[progressive_items["Progressive Bow"]], 2) - 1]]
         bow_acquired = True
     else:
         for bow in reversed(bow_names):
@@ -429,7 +433,7 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
     mail_url = icons["Green Mail"]
     mail_names = ["Blue Mail", "Red Mail"]
     if "Progressive Mail" in acquired_items:
-        mail_url = icons[mail_names[inventory[progressive_items["Progressive Mail"]] - 1]]
+        mail_url = icons[mail_names[min(inventory[progressive_items["Progressive Mail"]], 2) - 1]]
     else:
         for mail in reversed(mail_names):
             if mail in acquired_items:
@@ -440,7 +444,7 @@ def getPlayerTracker(tracker: UUID, team: int, player: int):
     shield_acquired = False
     shield_names = ["Blue Shield", "Red Shield", "Mirror Shield"]
     if "Progressive Shield" in acquired_items:
-        shield_url = icons[shield_names[inventory[progressive_items["Progressive Shield"]] - 1]]
+        shield_url = icons[shield_names[min(inventory[progressive_items["Progressive Shield"]], 3) - 1]]
         shield_acquired = True
     else:
         for shield in reversed(shield_names):

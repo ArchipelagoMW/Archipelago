@@ -37,6 +37,7 @@ def mystery_argparse():
     parser.add_argument('--teams', default=1, type=lambda value: max(int(value), 1))
     parser.add_argument('--create_spoiler', action='store_true')
     parser.add_argument('--skip_playthrough', action='store_true')
+    parser.add_argument('--pre_roll', action='store_true')
     parser.add_argument('--rom')
     parser.add_argument('--enemizercli')
     parser.add_argument('--outputpath')
@@ -180,6 +181,27 @@ def main(args=None, callback=ERmain):
                         settings.sprite):
                     logging.warning(
                         f"Warning: The chosen sprite, \"{settings.sprite}\", for yaml \"{path}\", does not exist.")
+                if args.pre_roll:
+                    import yaml
+                    if path == args.weights:
+                        settings.name = f"Player{player}"
+                    elif not settings.name:
+                        settings.name = os.path.split(path)[-1].split(".")[0]
+
+                    if "-" not in settings.shuffle and settings.shuffle != "vanilla":
+                        settings.shuffle += f"-{random.randint(0, 2 ** 64)}"
+
+                    pre_rolled = dict()
+                    pre_rolled["original_seed_number"] = seed
+                    pre_rolled["original_seed_name"] = seedname
+                    pre_rolled["pre_rolled"] = vars(settings).copy()
+                    if "plando_items" in pre_rolled["pre_rolled"]:
+                        pre_rolled["pre_rolled"]["plando_items"] = [item.to_dict() for item in pre_rolled["pre_rolled"]["plando_items"]]
+                    if "plando_connections" in pre_rolled["pre_rolled"]:
+                        pre_rolled["pre_rolled"]["plando_connections"] = [connection.to_dict() for connection in pre_rolled["pre_rolled"]["plando_connections"]]
+
+                    with open(os.path.join(args.outputpath if args.outputpath else ".", f"{os.path.split(path)[-1].split('.')[0]}_pre_rolled.yaml"), "wt") as f:
+                        yaml.dump(pre_rolled, f)
                 for k, v in vars(settings).items():
                     if v is not None:
                         getattr(erargs, k)[player] = v
@@ -349,6 +371,21 @@ def roll_triggers(weights: dict) -> dict:
     return weights
 
 def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses"))):
+    if "pre_rolled" in weights:
+        pre_rolled = weights["pre_rolled"]
+
+        if "plando_items" in pre_rolled:
+            pre_rolled["plando_items"] = [PlandoItem(item["item"],
+                                                     item["location"],
+                                                     item["world"],
+                                                     item["from_pool"],
+                                                     item["force"]) for item in pre_rolled["plando_items"]]
+        if "plando_connections" in pre_rolled:
+            pre_rolled["plando_connections"] = [PlandoConnection(connection["entrance"],
+                                                                 connection["exit"],
+                                                                 connection["direction"]) for connection in pre_rolled["plando_connections"]]
+        return argparse.Namespace(**pre_rolled)
+
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
