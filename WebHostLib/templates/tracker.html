@@ -44,7 +44,8 @@
                         <tbody>
                             {%- for player, items in players.items() -%}
                                 <tr>
-                                    <td><a href="{{ room.tracker|suuid }}/{{ team + 1 }}/{{ player }}">{{ loop.index }}</a></td>
+                                    <td><a href="{{ url_for("getPlayerTracker", tracker=room.tracker,
+                                    tracked_team=team, tracked_player=player)}}">{{ loop.index }}</a></td>
                                     {%- if (team, loop.index) in video -%}
                                         {%- if video[(team, loop.index)][0] == "Twitch" -%}
                                         <td>
@@ -120,7 +121,8 @@
                         <tbody>
                             {%- for player, checks in players.items() -%}
                                 <tr>
-                                    <td><a href="{{ room.tracker|suuid }}/{{ team }}/{{ player }}">{{ loop.index }}</a></td>
+                                    <td><a href="{{ url_for("getPlayerTracker", tracker=room.tracker,
+                                    tracked_team=team, tracked_player=player)}}">{{ loop.index }}</a></td>
                                     <td>{{ player_names[(team, loop.index)]|e }}</td>
                                     {%- for area in ordered_areas -%}
                                         {%- set checks_done = checks[area] -%}
