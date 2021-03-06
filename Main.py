@@ -35,6 +35,8 @@ def get_seed(seed=None):
 
 
 seeds: Dict[tuple, str] = dict()
+
+
 def get_same_seed(world: World, seed_def: tuple) -> str:
     if seed_def in seeds:
         return seeds[seed_def]
