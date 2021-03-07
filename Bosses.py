@@ -217,13 +217,13 @@ def place_bosses(world, player: int):
                     loc = loc.split(" ")
                     level = loc[-1]
                     loc = " ".join(loc[:-1])
-                loc = loc.title()
+                loc = loc.title().replace("Of", "of")
                 if can_place_boss(boss, loc, level) and [loc, level] in boss_locations:
                     place_boss(world, player, boss, loc, level)
                     already_placed_bosses.append(boss)
                     boss_locations.remove([loc, level])
                 else:
-                    Exception("Cannot place", boss, "at", loc, level, "for player", player)
+                    raise Exception("Cannot place", boss, "at", loc, level, "for player", player)
             else:
                 boss = boss.title()
                 boss_locations, already_placed_bosses = place_where_possible(world, player, boss, boss_locations)
