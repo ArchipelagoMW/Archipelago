@@ -519,6 +519,12 @@ def getTracker(tracker: UUID):
         if game_state:
             inventory[team][player][106] = 1  # Triforce
 
+    group_big_key_locations = set()
+    group_key_locations = set()
+    for player in range(1, len(names[0]) + 1):
+        group_key_locations |= player_small_key_locations[player]
+        group_big_key_locations |= player_big_key_locations[player]
+
     activity_timers = {}
     now = datetime.datetime.utcnow()
     for (team, player), timestamp in room.multisave.get("client_activity_timers", []):
@@ -542,6 +548,6 @@ def getTracker(tracker: UUID):
                            tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=icons,
                            multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
                            checks_in_area=seed_checks_in_area, activity_timers=activity_timers,
-                           key_locations=key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids,
-                           video=video, big_key_locations=key_locations if use_door_tracker else big_key_locations,
+                           key_locations=group_key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids,
+                           video=video, big_key_locations=group_big_key_locations,
                            hints=hints, long_player_names = long_player_names)
