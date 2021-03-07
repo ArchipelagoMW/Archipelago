@@ -294,6 +294,8 @@ def prefer_int(input_data: str) -> typing.Union[str, int]:
 
 available_boss_names: typing.Set[str] = {boss.lower() for boss in Bosses.boss_table if boss not in
                                          {'Agahnim', 'Agahnim2', 'Ganon'}}
+available_boss_locations: typing.Set[str] = {f"{loc.lower()}{f' {level}' if level else ''}" for loc, level in
+                                             Bosses.boss_location_table}
 
 boss_shuffle_options = {None: 'none',
                         'none': 'none',
@@ -381,7 +383,23 @@ def get_plando_bosses(boss_shuffle: str, plando_options: typing.Set[str]) -> str
         for boss in options:
             if boss in boss_shuffle_options:
                 remainder_shuffle = boss_shuffle_options[boss]
-            elif boss not in available_boss_names and not "-" in boss:
+            elif "-" in boss:
+                loc, boss_name = boss.split("-")
+                if boss_name not in available_boss_names:
+                    raise ValueError(f"Unknown Boss name {boss_name}")
+                if loc not in available_boss_locations:
+                    raise ValueError(f"Unknown Boss Location {loc}")
+                level = ''
+                if loc.split(" ")[-1] in {"top", "middle", "bottom"}:
+                    # split off level
+                    loc = loc.split(" ")
+                    level = f" {loc[-1]}"
+                    loc = " ".join(loc[:-1])
+                loc = loc.title().replace("Of", "of")
+                if not Bosses.can_place_boss(boss_name.title(), loc, level):
+                    raise ValueError(f"Cannot place {boss_name} at {loc}{level}")
+                bosses.append(boss)
+            elif boss not in available_boss_names:
                 raise ValueError(f"Unknown Boss name or Boss shuffle option {boss}.")
             else:
                 bosses.append(boss)
