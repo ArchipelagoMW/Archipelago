@@ -9,7 +9,7 @@
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     padding: 3px 3px 10px;
-    width: 260px;
+    width: 284px;
     background-color: #42b149;
 }
 
@@ -37,7 +37,7 @@
 }
 
 #location-table{
-    width: 260px;
+    width: 284px;
     border-left: 2px solid #000000;
     border-right: 2px solid #000000;
     border-bottom: 2px solid #000000;
@@ -61,7 +61,7 @@
 }
 
 #location-table td.counter{
-    padding-right: 10px;
+    padding-right: 8px;
     text-align: right;
 }
 

@@ -39,11 +39,12 @@ def get_seed(seed=None):
     return seed
 
 
-seeds: Dict[tuple, str] = dict()
 def get_same_seed(world: MultiWorld, seed_def: tuple) -> str:
+    seeds: Dict[tuple, str] = getattr(world, "__named_seeds", {})
     if seed_def in seeds:
         return seeds[seed_def]
     seeds[seed_def] = str(world.random.randint(0, 2 ** 64))
+    world.__named_seeds = seeds
     return seeds[seed_def]
 
 
@@ -121,9 +122,15 @@ def main(args, seed=None):
             world.shuffle[player] = shuffle
             if shuffle == "vanilla":
                 world.er_seeds[player] = "vanilla"
-            elif seed.startswith("team-"):
+            elif seed.startswith("group-"):  # renamed from team to group to not confuse with existing team name use
                 world.er_seeds[player] = get_same_seed(world, (shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
-            else:
+            elif seed.startswith("team-"):  # TODO: remove on breaking_changes
+                world.er_seeds[player] = get_same_seed(world, (shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
+            elif not args.race:
+                world.er_seeds[player] = seed
+            elif seed:  # race but with a set seed, ignore set seed and use group logic instead
+                world.er_seeds[player] = get_same_seed(world, (shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
+            else:  # race but without a set seed
                 world.er_seeds[player] = seed
         elif world.shuffle[player] == "vanilla":
             world.er_seeds[player] = "vanilla"
@@ -307,7 +314,7 @@ def main(args, seed=None):
         apply_rom_settings(rom, args.heartbeep[player], args.heartcolor[player], args.quickswap[player],
                            args.fastmenu[player], args.disablemusic[player], args.sprite[player],
                            palettes_options, world, player, True,
-                           reduceflashing=args.reduceflashing[player] if not args.race else True,
+                           reduceflashing=args.reduceflashing[player] or args.race,
                            triforcehud=args.triforcehud[player])
 
         mcsb_name = ''

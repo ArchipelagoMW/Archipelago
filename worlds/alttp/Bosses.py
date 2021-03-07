@@ -147,6 +147,22 @@ boss_table = {
     'Agahnim2': ('Agahnim2', AgahnimDefeatRule)
 }
 
+boss_location_table = [
+        ['Ganons Tower', 'top'],
+        ['Tower of Hera', None],
+        ['Skull Woods', None],
+        ['Ganons Tower', 'middle'],
+        ['Eastern Palace', None],
+        ['Desert Palace', None],
+        ['Palace of Darkness', None],
+        ['Swamp Palace', None],
+        ['Thieves Town', None],
+        ['Ice Palace', None],
+        ['Misery Mire', None],
+        ['Turtle Rock', None],
+        ['Ganons Tower', 'bottom'],
+    ]
+
 
 def can_place_boss(boss: str, dungeon_name: str, level: Optional[str] = None) -> bool:
     # blacklist approach
@@ -183,21 +199,7 @@ def place_bosses(world, player: int):
     if world.boss_shuffle[player] == 'none':
         return
     # Most to least restrictive order
-    boss_locations = [
-        ['Ganons Tower', 'top'],
-        ['Tower of Hera', None],
-        ['Skull Woods', None],
-        ['Ganons Tower', 'middle'],
-        ['Eastern Palace', None],
-        ['Desert Palace', None],
-        ['Palace of Darkness', None],
-        ['Swamp Palace', None],
-        ['Thieves Town', None],
-        ['Ice Palace', None],
-        ['Misery Mire', None],
-        ['Turtle Rock', None],
-        ['Ganons Tower', 'bottom'],
-    ]
+    boss_locations = boss_location_table.copy()
 
     all_bosses = sorted(boss_table.keys())  # sorted to be deterministic on older pythons
     placeable_bosses = [boss for boss in all_bosses if boss not in ['Agahnim', 'Agahnim2', 'Ganon']]
@@ -217,13 +219,13 @@ def place_bosses(world, player: int):
                     loc = loc.split(" ")
                     level = loc[-1]
                     loc = " ".join(loc[:-1])
-                loc = loc.title()
+                loc = loc.title().replace("Of", "of")
                 if can_place_boss(boss, loc, level) and [loc, level] in boss_locations:
                     place_boss(world, player, boss, loc, level)
                     already_placed_bosses.append(boss)
                     boss_locations.remove([loc, level])
                 else:
-                    Exception("Cannot place", boss, "at", loc, level, "for player", player)
+                    raise Exception("Cannot place", boss, "at", loc, level, "for player", player)
             else:
                 boss = boss.title()
                 boss_locations, already_placed_bosses = place_where_possible(world, player, boss, boss_locations)

@@ -294,6 +294,8 @@ def prefer_int(input_data: str) -> typing.Union[str, int]:
 
 available_boss_names: typing.Set[str] = {boss.lower() for boss in Bosses.boss_table if boss not in
                                          {'Agahnim', 'Agahnim2', 'Ganon'}}
+available_boss_locations: typing.Set[str] = {f"{loc.lower()}{f' {level}' if level else ''}" for loc, level in
+                                             Bosses.boss_location_table}
 
 boss_shuffle_options = {None: 'none',
                         'none': 'none',
@@ -370,6 +372,42 @@ def roll_triggers(weights: dict) -> dict:
                              f"Please fix your triggers.") from e
     return weights
 
+
+def get_plando_bosses(boss_shuffle: str, plando_options: typing.Set[str]) -> str:
+    if boss_shuffle in boss_shuffle_options:
+        return boss_shuffle_options[boss_shuffle]
+    elif "bosses" in plando_options:
+        options = boss_shuffle.lower().split(";")
+        remainder_shuffle = "none"  # vanilla
+        bosses = []
+        for boss in options:
+            if boss in boss_shuffle_options:
+                remainder_shuffle = boss_shuffle_options[boss]
+            elif "-" in boss:
+                loc, boss_name = boss.split("-")
+                if boss_name not in available_boss_names:
+                    raise ValueError(f"Unknown Boss name {boss_name}")
+                if loc not in available_boss_locations:
+                    raise ValueError(f"Unknown Boss Location {loc}")
+                level = ''
+                if loc.split(" ")[-1] in {"top", "middle", "bottom"}:
+                    # split off level
+                    loc = loc.split(" ")
+                    level = f" {loc[-1]}"
+                    loc = " ".join(loc[:-1])
+                loc = loc.title().replace("Of", "of")
+                if not Bosses.can_place_boss(boss_name.title(), loc, level):
+                    raise ValueError(f"Cannot place {boss_name} at {loc}{level}")
+                bosses.append(boss)
+            elif boss not in available_boss_names:
+                raise ValueError(f"Unknown Boss name or Boss shuffle option {boss}.")
+            else:
+                bosses.append(boss)
+        return ";".join(bosses + [remainder_shuffle])
+    else:
+        raise Exception(f"Boss Shuffle {boss_shuffle} is unknown and boss plando is turned off.")
+
+
 def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses"))):
     if "pre_rolled" in weights:
         pre_rolled = weights["pre_rolled"]
@@ -380,10 +418,25 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
                                                      item["world"],
                                                      item["from_pool"],
                                                      item["force"]) for item in pre_rolled["plando_items"]]
+            if "items" not in plando_options and pre_rolled["plando_items"]:
+                raise Exception("Item Plando is turned off. Reusing this pre-rolled setting not permitted.")
+
         if "plando_connections" in pre_rolled:
             pre_rolled["plando_connections"] = [PlandoConnection(connection["entrance"],
                                                                  connection["exit"],
                                                                  connection["direction"]) for connection in pre_rolled["plando_connections"]]
+            if "connections" not in plando_options and pre_rolled["plando_connections"]:
+                raise Exception("Connection Plando is turned off. Reusing this pre-rolled setting not permitted.")
+
+        if "bosses" not in plando_options:
+            try:
+                pre_rolled["shufflebosses"] = get_plando_bosses(pre_rolled["shufflebosses"], plando_options)
+            except Exception as ex:
+                raise Exception("Boss Plando is turned off. Reusing this pre-rolled setting not permitted.") from ex
+
+        if pre_rolled.get("plando_texts") and "texts" not in plando_options:
+            raise Exception("Text Plando is turned off. Reusing this pre-rolled setting not permitted.")
+
         return argparse.Namespace(**pre_rolled)
 
     if "linked_options" in weights:
@@ -514,23 +567,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     ret.item_functionality = get_choice('item_functionality', weights)
 
     boss_shuffle = get_choice('boss_shuffle', weights)
-
-    if boss_shuffle in boss_shuffle_options:
-        ret.shufflebosses = boss_shuffle_options[boss_shuffle]
-    elif "bosses" in plando_options:
-        options = boss_shuffle.lower().split(";")
-        remainder_shuffle = "none"  # vanilla
-        bosses = []
-        for boss in options:
-            if boss in boss_shuffle_options:
-                remainder_shuffle = boss_shuffle_options[boss]
-            elif boss not in available_boss_names and not "-" in boss:
-                raise ValueError(f"Unknown Boss name or Boss shuffle option {boss}.")
-            else:
-                bosses.append(boss)
-        ret.shufflebosses = ";".join(bosses + [remainder_shuffle])
-    else:
-        raise Exception(f"Boss Shuffle {boss_shuffle} is unknown and boss plando is turned off.")
+    ret.shufflebosses = get_plando_bosses(boss_shuffle, plando_options)
 
     ret.enemy_shuffle = {'none': False,
                          'shuffled': 'shuffled',
@@ -601,7 +638,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         ret.required_medallions[index] = {"ether": "Ether", "quake": "Quake", "bombos": "Bombos", "random": "random"}\
             .get(medallion.lower(), None)
         if not ret.required_medallions[index]:
-            raise Exception(f"unknown Medallion {medallion}")
+            raise Exception(f"unknown Medallion {medallion} for {'misery mire' if index == 0 else 'turtle rock'}")
 
     inventoryweights = weights.get('startinventory', {})
     startitems = []
