@@ -339,6 +339,10 @@ door_shuffle: # Only available if the host uses the doors branch, it is ignored 
   vanilla: 50 # Everything should be like in vanilla
   basic: 0 # Dungeons are shuffled within themselves
   crossed: 0 # Dungeons are shuffled across each other
+  # you can also define door shuffle seed, like so:
+  crossed-1000: 0 # using this method, you can have the same dungeon layout as another player and share dungeon layout information.
+  # however, other settings like intensity, universal keys, etc. may affect the shuffle result as well.
+  crossed-group-myfriends: 0 # using this method, everyone with "group-myfriends" will share the same seed
 intensity: # Only available if the host uses the doors branch, it is ignored otherwise
   1: 50 # Shuffles normal doors and spiral staircases
   2: 0 # And shuffles open edges and straight staircases
