@@ -599,7 +599,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         ret.required_medallions[index] = {"ether": "Ether", "quake": "Quake", "bombos": "Bombos", "random": "random"}\
             .get(medallion.lower(), None)
         if not ret.required_medallions[index]:
-            raise Exception(f"unknown Medallion {medallion}")
+            raise Exception(f"unknown Medallion {medallion} for {'misery mire' if index == 0 else 'turtle rock'}")
 
     inventoryweights = weights.get('startinventory', {})
     startitems = []
