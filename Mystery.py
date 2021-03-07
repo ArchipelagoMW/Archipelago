@@ -370,6 +370,26 @@ def roll_triggers(weights: dict) -> dict:
                              f"Please fix your triggers.") from e
     return weights
 
+
+def get_plando_bosses(boss_shuffle: str, plando_options: typing.Set[str]) -> str:
+    if boss_shuffle in boss_shuffle_options:
+        return boss_shuffle_options[boss_shuffle]
+    elif "bosses" in plando_options:
+        options = boss_shuffle.lower().split(";")
+        remainder_shuffle = "none"  # vanilla
+        bosses = []
+        for boss in options:
+            if boss in boss_shuffle_options:
+                remainder_shuffle = boss_shuffle_options[boss]
+            elif boss not in available_boss_names and not "-" in boss:
+                raise ValueError(f"Unknown Boss name or Boss shuffle option {boss}.")
+            else:
+                bosses.append(boss)
+        return ";".join(bosses + [remainder_shuffle])
+    else:
+        raise Exception(f"Boss Shuffle {boss_shuffle} is unknown and boss plando is turned off.")
+
+
 def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses"))):
     if "pre_rolled" in weights:
         pre_rolled = weights["pre_rolled"]
@@ -380,10 +400,25 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
                                                      item["world"],
                                                      item["from_pool"],
                                                      item["force"]) for item in pre_rolled["plando_items"]]
+            if "items" not in plando_options and pre_rolled["plando_items"]:
+                raise Exception("Item Plando is turned off. Reusing this pre-rolled setting not permitted.")
+
         if "plando_connections" in pre_rolled:
             pre_rolled["plando_connections"] = [PlandoConnection(connection["entrance"],
                                                                  connection["exit"],
                                                                  connection["direction"]) for connection in pre_rolled["plando_connections"]]
+            if "connections" not in plando_options and pre_rolled["plando_connections"]:
+                raise Exception("Connection Plando is turned off. Reusing this pre-rolled setting not permitted.")
+
+        if "bosses" not in plando_options:
+            try:
+                pre_rolled["shufflebosses"] = get_plando_bosses(pre_rolled["shufflebosses"], plando_options)
+            except Exception as ex:
+                raise Exception("Boss Plando is turned off. Reusing this pre-rolled setting not permitted.") from ex
+
+        if pre_rolled.get("plando_texts") and "texts" not in plando_options:
+            raise Exception("Text Plando is turned off. Reusing this pre-rolled setting not permitted.")
+
         return argparse.Namespace(**pre_rolled)
 
     if "linked_options" in weights:
@@ -512,23 +547,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     ret.item_functionality = get_choice('item_functionality', weights)
 
     boss_shuffle = get_choice('boss_shuffle', weights)
-
-    if boss_shuffle in boss_shuffle_options:
-        ret.shufflebosses = boss_shuffle_options[boss_shuffle]
-    elif "bosses" in plando_options:
-        options = boss_shuffle.lower().split(";")
-        remainder_shuffle = "none"  # vanilla
-        bosses = []
-        for boss in options:
-            if boss in boss_shuffle_options:
-                remainder_shuffle = boss_shuffle_options[boss]
-            elif boss not in available_boss_names and not "-" in boss:
-                raise ValueError(f"Unknown Boss name or Boss shuffle option {boss}.")
-            else:
-                bosses.append(boss)
-        ret.shufflebosses = ";".join(bosses + [remainder_shuffle])
-    else:
-        raise Exception(f"Boss Shuffle {boss_shuffle} is unknown and boss plando is turned off.")
+    ret.shufflebosses = get_plando_bosses(boss_shuffle, plando_options)
 
     ret.enemy_shuffle = {'none': False,
                          'shuffled': 'shuffled',
