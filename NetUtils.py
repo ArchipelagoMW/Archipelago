@@ -21,7 +21,7 @@ class JSONMessagePart(typing.TypedDict, total=False):
 
 class CLientStatus(enum.IntEnum):
     CLIENT_UNKNOWN = 0
-    # CLIENT_CONNECTED = 5 maybe?
+    CLIENT_CONNECTED = 5
     CLIENT_READY = 10
     CLIENT_PLAYING = 20
     CLIENT_GOAL = 30

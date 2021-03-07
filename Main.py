@@ -147,6 +147,9 @@ def main(args, seed=None):
 
     logger.info('')
 
+    for player in world.alttp_player_ids:
+        world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
+
     for player in world.player_ids:
         for tok in filter(None, args.startinventory[player].split(',')):
             item = ItemFactory(tok.strip(), player)
@@ -186,8 +189,6 @@ def main(args, seed=None):
         hk_create_regions(world, player)
 
     for player in world.alttp_player_ids:
-        world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
-
         if world.open_pyramid[player] == 'goal':
             world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
         elif world.open_pyramid[player] == 'auto':

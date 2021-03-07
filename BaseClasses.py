@@ -395,7 +395,8 @@ class MultiWorld():
 
         while prog_locations:
             sphere = []
-            # build up spheres of collection radius. Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
+            # build up spheres of collection radius.
+            # Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
             for location in prog_locations:
                 if location.can_reach(state):
                     sphere.append(location)
@@ -432,8 +433,6 @@ class MultiWorld():
             for location in sphere:
                 state.collect(location.item, True, location)
             locations -= sphere
-
-
 
     def fulfills_accessibility(self, state: Optional[CollectionState] = None):
         """Check if accessibility rules are fulfilled with current or supplied state."""

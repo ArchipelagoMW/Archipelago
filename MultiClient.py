@@ -9,13 +9,12 @@ import socket
 import os
 import subprocess
 import base64
-import re
 import shutil
 from json import loads, dumps
 
 from random import randrange
 
-from Utils import get_item_name_from_id, get_location_name_from_address
+from Utils import get_item_name_from_id
 
 exit_func = atexit.register(input, "Press enter to close.")
 
@@ -54,6 +53,7 @@ class Context():
         # WebUI Stuff
         self.ui_node = WebUI.WebUiClient()
         logger.addHandler(self.ui_node)
+        self.ready = False
         self.custom_address = None
         self.webui_socket_port: typing.Optional[int] = port
         self.hint_cost = 0
@@ -70,7 +70,7 @@ class Context():
         self.input_requests = 0
 
         self.snes_socket = None
-        self.snes_state = SNES_DISCONNECTED
+        self.snes_state = SNESState.SNES_DISCONNECTED
         self.snes_attached_device = None
         self.snes_reconnect_address = None
         self.snes_recv_queue = asyncio.Queue()
@@ -87,12 +87,12 @@ class Context():
         self.slot = None
         self.player_names: typing.Dict[int: str] = {}
         self.locations_recognized = set()
-        # these should probably track IDs where possible
-        self.locations_checked:typing.Set[str] = set()
-        self.locations_scouted:typing.Set[str] = set()
+
+        self.locations_checked:typing.Set[int] = set()
+        self.locations_scouted:typing.Set[int] = set()
         self.items_received = []
-        self.items_missing = []
-        self.items_checked = None
+        self.missing_locations: typing.List[int] = []
+        self.checked_locations: typing.List[int] = []
         self.locations_info = {}
         self.awaiting_rom = False
         self.rom = None
@@ -414,6 +414,9 @@ location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      'Ganons Tower - Mini Helmasaur Key Drop': (0x3d, 0x400),
                      'Ganons Tower - Pre-Moldorm Chest': (0x3d, 0x40),
                      'Ganons Tower - Validation Chest': (0x4d, 0x10)}
+
+location_table_uw_id = {Regions.lookup_name_to_id[name] : data for name, data in location_table_uw.items()}
+
 location_table_npc = {'Mushroom': 0x1000,
                       'King Zora': 0x2,
                       'Sahasrahla': 0x10,
@@ -427,6 +430,9 @@ location_table_npc = {'Mushroom': 0x1000,
                       'Catfish': 0x20,
                       'Stumpy': 0x8,
                       'Bombos Tablet': 0x200}
+
+location_table_npc_id = {Regions.lookup_name_to_id[name] : data for name, data in location_table_npc.items()}
+
 location_table_ow = {'Flute Spot': 0x2a,
                      'Sunken Treasure': 0x3b,
                      "Zora's Ledge": 0x81,
@@ -439,15 +445,21 @@ location_table_ow = {'Flute Spot': 0x2a,
                      'Digging Game': 0x68,
                      'Bumper Cave Ledge': 0x4a,
                      'Floating Island': 0x5}
+
+location_table_ow_id = {Regions.lookup_name_to_id[name] : data for name, data in location_table_ow.items()}
+
 location_table_misc = {'Bottle Merchant': (0x3c9, 0x2),
                        'Purple Chest': (0x3c9, 0x10),
                        "Link's Uncle": (0x3c6, 0x1),
                        'Hobo': (0x3c9, 0x1)}
 
-SNES_DISCONNECTED = 0
-SNES_CONNECTING = 1
-SNES_CONNECTED = 2
-SNES_ATTACHED = 3
+location_table_misc_id = {Regions.lookup_name_to_id[name] : data for name, data in location_table_misc.items()}
+
+class SNESState(enum.IntEnum):
+    SNES_DISCONNECTED = 0
+    SNES_CONNECTING = 1
+    SNES_CONNECTED = 2
+    SNES_ATTACHED = 3
 
 
 def launch_qusb2snes(ctx: Context):
@@ -518,15 +530,15 @@ async def get_snes_devices(ctx: Context):
 
 async def snes_connect(ctx: Context, address):
     global SNES_RECONNECT_DELAY
-    if ctx.snes_socket is not None and ctx.snes_state == SNES_CONNECTED:
+    if ctx.snes_socket is not None and ctx.snes_state == SNESState.SNES_CONNECTED:
         logger.error('Already connected to snes')
         return
 
     recv_task = None
-    ctx.snes_state = SNES_CONNECTING
+    ctx.snes_state = SNESState.SNES_CONNECTING
     socket = await _snes_connect(ctx, address)
     ctx.snes_socket = socket
-    ctx.snes_state = SNES_CONNECTED
+    ctx.snes_state = SNESState.SNES_CONNECTED
 
     try:
         devices = await get_snes_devices(ctx)
@@ -552,7 +564,7 @@ async def snes_connect(ctx: Context, address):
             "Operands": [device]
         }
         await ctx.snes_socket.send(dumps(Attach_Request))
-        ctx.snes_state = SNES_ATTACHED
+        ctx.snes_state = SNESState.SNES_ATTACHED
         ctx.snes_attached_device = (devices.index(device), device)
         ctx.ui_node.send_connection_status(ctx)
 
@@ -579,7 +591,7 @@ async def snes_connect(ctx: Context, address):
                 if not ctx.snes_socket.closed:
                     await ctx.snes_socket.close()
                 ctx.snes_socket = None
-            ctx.snes_state = SNES_DISCONNECTED
+            ctx.snes_state = SNESState.SNES_DISCONNECTED
         if not ctx.snes_reconnect_address:
             logger.error("Error connecting to snes (%s)" % e)
         else:
@@ -620,7 +632,7 @@ async def snes_recv_loop(ctx: Context):
         if socket is not None and not socket.closed:
             await socket.close()
 
-        ctx.snes_state = SNES_DISCONNECTED
+        ctx.snes_state = SNESState.SNES_DISCONNECTED
         ctx.snes_recv_queue = asyncio.Queue()
         ctx.hud_message_queue = []
         ctx.ui_node.send_connection_status(ctx)
@@ -636,7 +648,7 @@ async def snes_read(ctx: Context, address, size):
     try:
         await ctx.snes_request_lock.acquire()
 
-        if ctx.snes_state != SNES_ATTACHED or ctx.snes_socket is None or not ctx.snes_socket.open or ctx.snes_socket.closed:
+        if ctx.snes_state != SNESState.SNES_ATTACHED or ctx.snes_socket is None or not ctx.snes_socket.open or ctx.snes_socket.closed:
             return None
 
         GetAddress_Request = {
@@ -675,7 +687,8 @@ async def snes_write(ctx: Context, write_list):
     try:
         await ctx.snes_request_lock.acquire()
 
-        if ctx.snes_state != SNES_ATTACHED or ctx.snes_socket is None or not ctx.snes_socket.open or ctx.snes_socket.closed:
+        if ctx.snes_state != SNESState.SNES_ATTACHED or ctx.snes_socket is None or \
+                not ctx.snes_socket.open or ctx.snes_socket.closed:
             return False
 
         PutAddress_Request = {"Opcode": "PutAddress", "Operands": [], 'Space': 'SNES'}
@@ -897,7 +910,7 @@ async def process_server_cmd(ctx: Context, args: dict):
         msgs = []
         if ctx.locations_checked:
             msgs.append({"cmd": "LocationChecks",
-                         "locations": [Regions.lookup_name_to_id[loc] for loc in ctx.locations_checked]})
+                         "locations": list(ctx.locations_checked)})
         if ctx.locations_scouted:
             msgs.append({"cmd": "LocationScouts",
                          "locations": list(ctx.locations_scouted)})
@@ -910,8 +923,8 @@ async def process_server_cmd(ctx: Context, args: dict):
         # This list is used to only send to the server what is reported as ACTUALLY Missing.
         # This also serves to allow an easy visual of what locations were already checked previously
         # when /missing is used for the client side view of what is missing.
-        ctx.items_missing = args["missing_checks"]
-        ctx.items_checked = args["items_checked"]
+        ctx.missing_locations = args["missing_locations"]
+        ctx.checked_locations = args["checked_locations"]
 
     elif cmd == 'ReceivedItems':
         start_index = args["index"]
@@ -922,7 +935,7 @@ async def process_server_cmd(ctx: Context, args: dict):
             sync_msg = [{'cmd': 'Sync'}]
             if ctx.locations_checked:
                 sync_msg.append({"cmd": "LocationChecks",
-                                 "locations": [Regions.lookup_name_to_id[loc] for loc in ctx.locations_checked]})
+                                 "locations": list(ctx.locations_checked)})
             await ctx.send_msgs(sync_msg)
         if start_index == len(ctx.items_received):
             for item in args['items']:
@@ -1055,11 +1068,11 @@ class ClientCommandProcessor(CommandProcessor):
         for location, location_id in Regions.lookup_name_to_id.items():
             if location_id < 0:
                 continue
-            if location not in self.ctx.locations_checked:
-                if location in self.ctx.items_missing:
+            if location_id not in self.ctx.locations_checked:
+                if location_id in self.ctx.missing_locations:
                     self.output('Missing: ' + location)
                     count += 1
-                elif self.ctx.items_checked is None or location in self.ctx.items_checked:
+                elif location_id in self.ctx.checked_locations:
                     self.output('Checked: ' + location)
                     count += 1
                     checked_count += 1
@@ -1078,13 +1091,23 @@ class ClientCommandProcessor(CommandProcessor):
         else:
             self.ctx.slow_mode = not self.ctx.slow_mode
 
-        logger.info(f"Setting slow mode to {self.ctx.slow_mode}")
+        self.output(f"Setting slow mode to {self.ctx.slow_mode}")
 
     def _cmd_web(self):
         if self.ctx.webui_socket_port:
             webbrowser.open(f'http://localhost:5050?port={self.ctx.webui_socket_port}')
         else:
             self.output("Web UI was never started.")
+
+    def _cmd_ready(self):
+        self.ctx.ready = not self.ctx.ready
+        if self.ctx.ready:
+            state = CLientStatus.CLIENT_READY
+            self.output("Readied up.")
+        else:
+            state = CLientStatus.CLIENT_CONNECTED
+            self.output("Unreadied.")
+        asyncio.create_task(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]))
 
     def default(self, raw: str):
         asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]))
@@ -1114,38 +1137,29 @@ async def console_loop(ctx: Context):
 async def track_locations(ctx: Context, roomid, roomdata):
     new_locations = []
 
-    def new_check(location):
-        new_locations.append(Regions.lookup_name_to_id.get(location, Shops.shop_table_by_location.get(location, -1)))
-        ctx.locations_checked.add(location)
-
-        check = None
-        if ctx.items_checked is None:
-            check = f'New Check: {location} ({len(ctx.locations_checked)}/{len(Regions.lookup_name_to_id)})'
-        else:
-            items_total = len(ctx.items_missing) + len(ctx.items_checked)
-            if location in ctx.items_missing or location in ctx.items_checked:
-                ctx.locations_recognized.add(location)
-                check = f'New Check: {location} ({len(ctx.locations_recognized)}/{items_total})'
-
-        if check:
-            logger.info(check)
+    def new_check(location_id):
+        new_locations.append(location_id)
+        ctx.locations_checked.add(location_id)
+        location = ctx.location_name_getter(location_id)
+        logger.info(f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
         ctx.ui_node.send_location_check(ctx, location)
+
 
     try:
         if roomid in location_shop_ids:
             misc_data = await snes_read(ctx, SHOP_ADDR, (len(location_shop_order) * 3) + 5)
             for cnt, b in enumerate(misc_data):
-                my_check = Shops.shop_table_by_location_id[Shops.SHOP_ID_START + cnt]
-                if int(b) > 0 and my_check not in ctx.locations_checked:
-                    new_check(my_check)
+                if int(b) and (Shops.SHOP_ID_START + cnt) not in ctx.locations_checked:
+                    new_check(Shops.SHOP_ID_START + cnt)
     except Exception as e:
         logger.info(f"Exception: {e}")
 
-    for location, (loc_roomid, loc_mask) in location_table_uw.items():
+    for location_id, (loc_roomid, loc_mask) in location_table_uw_id.items():
         try:
-            if location not in ctx.locations_checked and loc_roomid == roomid and (
+
+            if location_id not in ctx.locations_checked and loc_roomid == roomid and (
                     roomdata << 4) & loc_mask != 0:
-                new_check(location)
+                new_check(location_id)
         except Exception as e:
             logger.exception(f"Exception: {e}")
 
@@ -1153,48 +1167,51 @@ async def track_locations(ctx: Context, roomid, roomdata):
     ow_end = uw_end = 0
     uw_unchecked = {}
     for location, (roomid, mask) in location_table_uw.items():
-        if location not in ctx.locations_checked:
-            uw_unchecked[location] = (roomid, mask)
+        location_id = Regions.lookup_name_to_id[location]
+        if location_id not in ctx.locations_checked:
+            uw_unchecked[location_id] = (roomid, mask)
             uw_begin = min(uw_begin, roomid)
             uw_end = max(uw_end, roomid + 1)
+
     if uw_begin < uw_end:
         uw_data = await snes_read(ctx, SAVEDATA_START + (uw_begin * 2), (uw_end - uw_begin) * 2)
         if uw_data is not None:
-            for location, (roomid, mask) in uw_unchecked.items():
+            for location_id, (roomid, mask) in uw_unchecked.items():
                 offset = (roomid - uw_begin) * 2
                 roomdata = uw_data[offset] | (uw_data[offset + 1] << 8)
                 if roomdata & mask != 0:
-                    new_check(location)
+                    new_check(location_id)
 
     ow_begin = 0x82
     ow_unchecked = {}
-    for location, screenid in location_table_ow.items():
-        if location not in ctx.locations_checked:
-            ow_unchecked[location] = screenid
+    for location_id, screenid in location_table_ow_id.items():
+        if location_id not in ctx.locations_checked:
+            ow_unchecked[location_id] = screenid
             ow_begin = min(ow_begin, screenid)
             ow_end = max(ow_end, screenid + 1)
+
     if ow_begin < ow_end:
         ow_data = await snes_read(ctx, SAVEDATA_START + 0x280 + ow_begin, ow_end - ow_begin)
         if ow_data is not None:
-            for location, screenid in ow_unchecked.items():
+            for location_id, screenid in ow_unchecked.items():
                 if ow_data[screenid - ow_begin] & 0x40 != 0:
-                    new_check(location)
+                    new_check(location_id)
 
-    if not all(location in ctx.locations_checked for location in location_table_npc.keys()):
+    if not ctx.locations_checked.issuperset(location_table_npc_id):
         npc_data = await snes_read(ctx, SAVEDATA_START + 0x410, 2)
         if npc_data is not None:
             npc_value = npc_data[0] | (npc_data[1] << 8)
-            for location, mask in location_table_npc.items():
-                if npc_value & mask != 0 and location not in ctx.locations_checked:
-                    new_check(location)
+            for location_id, mask in location_table_npc_id.items():
+                if npc_value & mask != 0 and location_id not in ctx.locations_checked:
+                    new_check(location_id)
 
-    if not all(location in ctx.locations_checked for location in location_table_misc.keys()):
+    if not ctx.locations_checked.issuperset(location_table_misc_id):
         misc_data = await snes_read(ctx, SAVEDATA_START + 0x3c6, 4)
         if misc_data is not None:
-            for location, (offset, mask) in location_table_misc.items():
+            for location_id, (offset, mask) in location_table_misc_id.items():
                 assert (0x3c6 <= offset <= 0x3c9)
-                if misc_data[offset - 0x3c6] & mask != 0 and location not in ctx.locations_checked:
-                    new_check(location)
+                if misc_data[offset - 0x3c6] & mask != 0 and location_id not in ctx.locations_checked:
+                    new_check(location_id)
 
 
     if new_locations:
@@ -1292,7 +1309,6 @@ async def game_watcher(ctx: Context):
 
         if scout_location > 0 and scout_location not in ctx.locations_scouted:
             ctx.locations_scouted.add(scout_location)
-            logger.info(f'Scouting item at {list(Regions.location_table.keys())[scout_location - 1]}')
             await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [scout_location]}])
         await track_locations(ctx, roomid, roomdata)
 

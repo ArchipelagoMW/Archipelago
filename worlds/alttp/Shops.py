@@ -164,9 +164,7 @@ def ShopSlotFill(world):
             blacklist_word in item_name for blacklist_word in blacklist_words)}
         blacklist_words.add("Bee")
 
-        locations_per_sphere = list(list(sphere).sort(key=lambda location: location.name) for sphere in world.get_spheres())
-
-
+        locations_per_sphere = list(sorted(sphere, key=lambda location: location.name) for sphere in world.get_spheres())
 
         # currently special care needs to be taken so that Shop.region.locations.item is identical to Shop.inventory
         # Potentially create Locations as needed and make inventory the only source, to prevent divergence

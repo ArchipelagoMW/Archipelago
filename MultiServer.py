@@ -240,7 +240,7 @@ class Context(Node):
         return d
 
     def set_save(self, savedata: dict):
-        rom_names = savedata["rom_names"]  # convert from TrackerList to List in case of ponyorm
+
         received_items = {tuple(k): [NetworkItem(*i) for i in v] for k, v in savedata["received_items"]}
 
         self.received_items = received_items
@@ -367,6 +367,7 @@ async def on_client_disconnected(ctx: Context, client: Client):
 
 
 async def on_client_joined(ctx: Context, client: Client):
+    update_client_status(ctx, client, CLientStatus.CLIENT_CONNECTED)
     version_str = '.'.join(str(x) for x in client.version)
     ctx.notify_all(
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has joined the game. "
@@ -375,10 +376,9 @@ async def on_client_joined(ctx: Context, client: Client):
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 async def on_client_left(ctx: Context, client: Client):
+    update_client_status(ctx, client, CLientStatus.CLIENT_UNKNOWN)
     ctx.notify_all("%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1))
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
-    if ctx.commandprocessor.client == Client:
-        ctx.commandprocessor.client = None
 
 
 async def countdown(ctx: Context, timer):
@@ -418,7 +418,7 @@ def get_received_items(ctx: Context, team: int, player: int) -> typing.List[Netw
 
 
 def tuplize_received_items(items):
-    return [(item.item, item.location, item.player) for item in items]
+    return [NetworkItem(item.item, item.location, item.player) for item in items]
 
 
 def send_new_items(ctx: Context):
@@ -791,7 +791,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         locations = get_missing_checks(self.ctx, self.client)
 
         if locations:
-            texts = [f'Missing: {location}\n' for location in locations]
+            texts = [f'Missing: {get_item_name_from_id(location)}\n' for location in locations]
             texts.append(f"Found {len(locations)} missing location checks")
             self.ctx.notify_client_multiple(self.client, texts)
         else:
@@ -914,15 +914,15 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 return False
 
 
-def get_checked_checks(ctx: Context, client: Client) -> list:
-    return [Regions.lookup_id_to_name.get(location_id, f'Unknown Location ID: {location_id}') for
+def get_checked_checks(ctx: Context, client: Client) -> typing.List[int]:
+    return [location_id for
             location_id, slot in ctx.locations if
             slot == client.slot and
             location_id in ctx.location_checks[client.team, client.slot]]
 
 
-def get_missing_checks(ctx: Context, client: Client) -> list:
-    return [Regions.lookup_id_to_name.get(location_id, f'Unknown Location ID: {location_id}') for
+def get_missing_checks(ctx: Context, client: Client) -> typing.List[int]:
+    return [location_id for
             location_id, slot in ctx.locations if
             slot == client.slot and
             location_id not in ctx.location_checks[client.team, client.slot]]
@@ -1000,8 +1000,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 "cmd": "Connected",
                 "team": client.team, "slot": client.slot,
                 "players": ctx.get_players_package(),
-                "missing_checks": get_missing_checks(ctx, client),
-                "items_checked": get_checked_checks(ctx, client)}]
+                "missing_locations": get_missing_checks(ctx, client),
+                "checked_locations": get_checked_checks(ctx, client)}]
             items = get_received_items(ctx, client.team, client.slot)
             if items:
                 reply.append({"cmd": 'ReceivedItems', "index": 0, "items": tuplize_received_items(items)})
@@ -1044,15 +1044,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
 
         elif cmd == 'StatusUpdate':
-            current = ctx.client_game_state[client.team, client.slot]
-            if current != CLientStatus.CLIENT_GOAL: # can't undo goal completion
-                if args["status"] == CLientStatus.CLIENT_GOAL:
-                    finished_msg = f'{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has completed their goal.'
-                    ctx.notify_all(finished_msg)
-                    if "auto" in ctx.forfeit_mode:
-                        forfeit_player(ctx, client.team, client.slot)
-
-                ctx.client_game_state[client.team, client.slot] = args["status"]
+            update_client_status(ctx, client, args["status"])
 
         if cmd == 'Say':
             if "text" not in args or type(args["text"]) is not str or not args["text"].isprintable():
@@ -1061,6 +1053,16 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
             client.messageprocessor(args["text"])
 
+def update_client_status(ctx: Context, client: Client, new_status: CLientStatus):
+    current = ctx.client_game_state[client.team, client.slot]
+    if current != CLientStatus.CLIENT_GOAL:  # can't undo goal completion
+        if new_status == CLientStatus.CLIENT_GOAL:
+            finished_msg = f'{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has completed their goal.'
+            ctx.notify_all(finished_msg)
+            if "auto" in ctx.forfeit_mode:
+                forfeit_player(ctx, client.team, client.slot)
+
+        ctx.client_game_state[client.team, client.slot] = new_status
 
 class ServerCommandProcessor(CommonCommandProcessor):
     def __init__(self, ctx: Context):
