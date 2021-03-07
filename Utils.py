@@ -13,7 +13,7 @@ class Version(typing.NamedTuple):
     micro: int
 
 
-__version__ = "4.1.0"
+__version__ = "4.1.1"
 _version_tuple = tuplize_version(__version__)
 
 import os
@@ -54,7 +54,10 @@ def snes_to_pc(value):
 def parse_player_names(names, players, teams):
     names = tuple(n for n in (n.strip() for n in names.split(",")) if n)
     if len(names) != len(set(names)):
-        raise ValueError("Duplicate Player names is not supported.")
+        import collections
+        name_counter = collections.Counter(names)
+        raise ValueError(f"Duplicate Player names is not supported, "
+                         f'found multiple "{name_counter.most_common(1)[0][0]}".')
     ret = []
     while names or len(ret) < teams:
         team = [n[:16] for n in names[:players]]

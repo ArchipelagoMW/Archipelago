@@ -90,6 +90,7 @@ entrance_shuffle: # Documentation: https://alttpr.com/en/options#entrance_shuffl
   # you can also define entrance shuffle seed, like so:
   crossed-1000: 0 # using this method, you can have the same layout as another player and share entrance information
   # however, many other settings like logic, world state, retro etc. may affect the shuffle result as well.
+  crossed-group-myfriends: 0 # using this method, everyone with "group-myfriends" will share the same seed
 goals:
   ganon: 50 # Climb GT, defeat Agahnim 2, and then kill Ganon
   fast_ganon: 0 # Only killing Ganon is required. However, items may still be placed in GT
