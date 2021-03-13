@@ -18,7 +18,10 @@
 # http://www.yamllint.com/
 
 description: Template Name # Used to describe your yaml. Useful if you have multiple files
-name: YourName # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
+name: YourName%number% # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
+#%player% will be replaced with actual player number.
+#%number% will be replaced with the counter value of the name.
+#%% will become % after all of the above processing is complete on the name.
 ### Logic Section ###
 # Warning: overworld_glitches is not available and minor_glitches is only partially implemented on the door-rando version
 glitches_required: # Determine the logic required to complete the seed
