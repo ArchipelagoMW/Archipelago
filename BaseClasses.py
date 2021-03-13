@@ -289,9 +289,14 @@ class MultiWorld():
     def get_items(self) -> list:
         return [loc.item for loc in self.get_filled_locations()] + self.itempool
 
-    def find_items(self, item, player: int) -> list:
+    def find_items(self, item, player: int) -> List[Location]:
         return [location for location in self.get_locations() if
                 location.item is not None and location.item.name == item and location.item.player == player]
+
+    def find_item(self, item, player: int) -> Location:
+        return next(location for location in self.get_locations() if
+                    location.item and location.item.name == item and location.item.player == player)
+
 
     def push_precollected(self, item: Item):
         item.world = self
@@ -1102,9 +1107,7 @@ class Location():
 
     @property
     def hint_text(self):
-        hint_text = getattr(self, "_hint_text", None)
-        if not hint_text:
-            return self.name
+        return getattr(self, "_hint_text", self.name)
 
 class Item():
     location: Optional[Location] = None
@@ -1125,17 +1128,11 @@ class Item():
 
     @property
     def hint_text(self):
-        hint_text = getattr(self, "_hint_text", None)
-        if not hint_text:
-            return self.name
-        return hint_text
+        return getattr(self, "_hint_text", self.name)
 
     @property
     def pedestal_hint_text(self):
-        pedestal_hint_text = getattr(self, "_pedestal_hint_text", None)
-        if not pedestal_hint_text:
-            return self.name
-        return pedestal_hint_text
+        return getattr(self, "_pedestal_hint_text", self.name)
 
     def __eq__(self, other):
         return self.name == other.name and self.player == other.player

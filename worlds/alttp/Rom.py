@@ -2185,8 +2185,8 @@ def write_strings(rom, world, player, team):
         while hint_count > 0 and items_to_hint:
             this_item = items_to_hint.pop(0)
             this_location = world.find_items(this_item, player)
-            local_random.shuffle(this_location)
             if this_location:
+                local_random.shuffle(this_location)
                 this_hint = this_location[0].item.hint_text + ' can be found ' + hint_text(this_location[0]) + '.'
                 tt[hint_locations.pop(0)] = this_hint
                 hint_count -= 1
@@ -2221,12 +2221,12 @@ def write_strings(rom, world, player, team):
                                                                                            'my')) if progressive_silvers else '?\nI think not!'
         tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
 
-    crystal5 = world.find_items('Crystal 5', player)[0]
-    crystal6 = world.find_items('Crystal 6', player)[0]
+    crystal5 = world.find_item('Crystal 5', player)
+    crystal6 = world.find_item('Crystal 6', player)
     tt['bomb_shop'] = 'Big Bomb?\nMy supply is blocked until you clear %s and %s.' % (
         crystal5.hint_text, crystal6.hint_text)
 
-    greenpendant = world.find_items('Green Pendant', player)[0]
+    greenpendant = world.find_item('Green Pendant', player)
     tt['sahasrahla_bring_courage'] = 'I lost my family heirloom in %s' % greenpendant.hint_text
 
     if world.crystals_needed_for_gt[player] == 1:
