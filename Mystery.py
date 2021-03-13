@@ -548,7 +548,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     # change minimum to required pieces to avoid problems
     ret.triforce_pieces_available = min(max(ret.triforce_pieces_required, int(ret.triforce_pieces_available)), 90)
     shuffle_slots = get_choice('shop_shuffle_slots', weights, '0')
-    if shuffle_slots.lower() == "random":
+    if str(shuffle_slots).lower() == "random":
         ret.shop_shuffle_slots = random.randint(0, 30)
     else:
         ret.shop_shuffle_slots = int(shuffle_slots)
