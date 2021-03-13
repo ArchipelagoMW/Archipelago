@@ -40,7 +40,7 @@ app.config["WAITRESS_THREADS"] = 10
 # a default that just works. archipelago.gg runs on mariadb
 app.config["PONY"] = {
     'provider': 'sqlite',
-    'filename': os.path.abspath('db.db3'),
+    'filename': os.path.abspath('ap.db3'),
     'create_db': True
 }
 app.config["MAX_ROLL"] = 20
