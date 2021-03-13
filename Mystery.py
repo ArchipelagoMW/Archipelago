@@ -188,7 +188,7 @@ def main(args=None, callback=ERmain):
                     if path == args.weights:
                         settings.name = f"Player{player}"
                     elif not settings.name:
-                        settings.name = ".".join(os.path.split(path)[-1].split(".")[0:-1])
+                        settings.name = os.path.splitext(os.path.split(path)[-1])[0]
 
                     if "-" not in settings.shuffle and settings.shuffle != "vanilla":
                         settings.shuffle += f"-{random.randint(0, 2 ** 64)}"
@@ -214,7 +214,7 @@ def main(args=None, callback=ERmain):
         if path == args.weights:  # if name came from the weights file, just use base player name
             erargs.name[player] = f"Player{player}"
         elif not erargs.name[player]:  # if name was not specified, generate it from filename
-            erargs.name[player] = ".".join(os.path.split(path)[-1].split(".")[0:-1])
+            erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
         new_name = []
         name_counter[erargs.name[player]] += 1
         for name in erargs.name[player].split("%%"):
