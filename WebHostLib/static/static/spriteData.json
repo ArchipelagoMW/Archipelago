@@ -1,11 +1,6 @@
 {
  "sprites": [
   {
-   "file": "neslink.1.zspr",
-   "author": "MikeTrethewey/Fatmanspanda",
-   "name": " NES Link"
-  },
-  {
    "file": "abigail.1.zspr",
    "author": "Fish_waffle64",
    "name": "Abigail"
@@ -41,13 +36,13 @@
    "name": "Ark (Cape)"
   },
   {
-   "file": "ark-dorana.1.zspr",
-   "author": "Matt Dorana",
+   "file": "ark-dorana.2.zspr",
+   "author": "Dorana",
    "name": "Ark (No Cape)"
   },
   {
-   "file": "arrghus.2.zspr",
-   "author": "fatmanspanda",
+   "file": "arrghus.3.zspr",
+   "author": "kan",
    "name": "Arrghus"
   },
   {
@@ -56,7 +51,7 @@
    "name": "Astronaut"
   },
   {
-   "file": "asuna.1.zspr",
+   "file": "asuna.2.zspr",
    "author": "Natsuru Kiyohoshi",
    "name": "Asuna"
   },
@@ -106,13 +101,13 @@
    "name": "Bewp"
   },
   {
-   "file": "bigkey.1.zspr",
-   "author": "Fouton",
+   "file": "bigkey.2.zspr",
+   "author": "kan",
    "name": "Big Key"
   },
   {
-   "file": "birb.1.zspr",
-   "author": "Andrew Copple",
+   "file": "birb.2.zspr",
+   "author": "Dr. Deadrewski",
    "name": "Birb"
   },
   {
@@ -141,14 +136,19 @@
    "name": "Blossom"
   },
   {
-   "file": "bob.1.zspr",
-   "author": "fatmanspanda",
+   "file": "bob.2.zspr",
+   "author": "kan",
    "name": "Bob"
   },
   {
    "file": "bobross.1.zspr",
    "author": "CaptainApathy",
    "name": "Bob Ross"
+  },
+  {
+   "file": "boco.2.zspr",
+   "author": "TarThoron",
+   "name": "Boco the Chocobo"
   },
   {
    "file": "boo.2.zspr",
@@ -201,13 +201,13 @@
    "name": "Brian"
   },
   {
-   "file": "broccoli.1.zspr",
-   "author": "fatmanspanda",
+   "file": "broccoli.2.zspr",
+   "author": "kan",
    "name": "Broccoli"
   },
   {
-   "file": "bronzor.1.zspr",
-   "author": "fatmanspanda",
+   "file": "bronzor.2.zspr",
+   "author": "kan",
    "name": "Bronzor"
   },
   {
@@ -286,6 +286,11 @@
    "name": "Chrizzz"
   },
   {
+   "file": "cinna.1.zspr",
+   "author": "norskmatty",
+   "name": "Cinna"
+  },
+  {
    "file": "cirno.1.zspr",
    "author": "Achy",
    "name": "Cirno"
@@ -311,8 +316,18 @@
    "name": "Cornelius"
   },
   {
-   "file": "cucco.1.zspr",
-   "author": "MikeTrethewey",
+   "file": "corona.2.zspr",
+   "author": "Herowho",
+   "name": "Corona"
+  },
+  {
+   "file": "crewmate.2.zspr",
+   "author": "Fish_waffle64",
+   "name": "Crewmate"
+  },
+  {
+   "file": "cucco.2.zspr",
+   "author": "Mike Trethewey",
    "name": "Cucco"
   },
   {
@@ -401,19 +416,29 @@
    "name": "Demon Link"
   },
   {
+   "file": "dipper.1.zspr",
+   "author": "Sharpefern",
+   "name": "Dipper"
+  },
+  {
    "file": "dragonite.2.zspr",
    "author": "Fish_waffle64",
    "name": "Dragonite"
   },
   {
-   "file": "drake.1.zspr",
-   "author": "No Body The Dragon",
+   "file": "drake.2.zspr",
+   "author": "NO Body The Dragon",
    "name": "Drake The Dragon"
   },
   {
    "file": "eggplant.1.zspr",
    "author": "PlaguedOne",
    "name": "Eggplant"
+  },
+  {
+   "file": "ema-skye.1.zspr",
+   "author": "Linlinlin",
+   "name": "Ema Skye"
   },
   {
    "file": "emosaru.1.zspr",
@@ -426,8 +451,8 @@
    "name": "Ezlo"
   },
   {
-   "file": "fierce-deity-link.2.zspr",
-   "author": "jeffreygriggs2",
+   "file": "fierce-deity-link.3.zspr",
+   "author": "Jeffreygriggs2",
    "name": "Fierce Deity Link"
   },
   {
@@ -471,8 +496,8 @@
    "name": "Freya Crescent"
   },
   {
-   "file": "frisk.1.zspr",
-   "author": "Original by Toby Fox, sprite edit by MisterKerr",
+   "file": "frisk.2.zspr",
+   "author": "Toby Fox/MisterKerr",
    "name": "Frisk"
   },
   {
@@ -496,12 +521,12 @@
    "name": "GBC Link"
   },
   {
-   "file": "gamer.1.zspr",
-   "author": "Unknown",
+   "file": "gamer.2.zspr",
+   "author": "InTheBeef",
    "name": "Gamer"
   },
   {
-   "file": "ganondorf.1.zspr",
+   "file": "ganondorf.2.zspr",
    "author": "Fish_waffle64",
    "name": "Ganondorf"
   },
@@ -521,7 +546,7 @@
    "name": "Garo Master"
   },
   {
-   "file": "geno.1.zspr",
+   "file": "geno.2.zspr",
    "author": "FedoraFriday",
    "name": "Geno"
   },
@@ -534,6 +559,11 @@
    "file": "gobli.1.zspr",
    "author": "Lantis",
    "name": "Gobli"
+  },
+  {
+   "file": "gooey.1.zspr",
+   "author": "Lougaroc",
+   "name": "Gooey"
   },
   {
    "file": "goomba.1.zspr",
@@ -561,9 +591,9 @@
    "name": "Gruncle Stan"
   },
   {
-   "file": "guiz.1.zspr",
+   "file": "guiz.2.zspr",
    "author": "GuizDP",
-   "name": "GuizDP"
+   "name": "Guiz"
   },
   {
    "file": "hanna.1.zspr",
@@ -586,14 +616,24 @@
    "name": "Hat Kid"
   },
   {
-   "file": "headlesslink.1.zspr",
-   "author": "fatmanspanda",
+   "file": "headlesslink.2.zspr",
+   "author": "kan",
    "name": "Headless Link"
   },
   {
    "file": "hello_kitty.1.zspr",
    "author": "qeeen",
    "name": "Hello Kitty"
+  },
+  {
+   "file": "hero-of-hyrule.1.zspr",
+   "author": "Vonyee",
+   "name": "Hero Of Hyrule "
+  },
+  {
+   "file": "hero-of-awakening.1.zspr",
+   "author": "Vonyee",
+   "name": "Hero of Awakening"
   },
   {
    "file": "hidari.1.zspr",
@@ -604,11 +644,6 @@
    "file": "hint_tile.1.zspr",
    "author": "PlaguedOne",
    "name": "Hint Tile"
-  },
-  {
-   "file": "luffy.1.zspr",
-   "author": "BOtheMighty",
-   "name": "Hitsuyan1337"
   },
   {
    "file": "hoarder-bush.1.zspr",
@@ -624,6 +659,16 @@
    "file": "hoarder-rock.1.zspr",
    "author": "Restomak",
    "name": "Hoarder (Rock)"
+  },
+  {
+   "file": "hollow-knight.2.zspr",
+   "author": "Chew_Terr",
+   "name": "Hollow Knight"
+  },
+  {
+   "file": "hollow-knight-winter.1.zspr",
+   "author": "Malmo and Atth3h3art0fwinter",
+   "name": "Hollow Knight (Malmo/Winter)"
   },
   {
    "file": "homer.1.zspr",
@@ -646,14 +691,9 @@
    "name": "Hyrule Soldier"
   },
   {
-   "file": "ignignokt.2.zspr",
-   "author": "fatmanspanda",
+   "file": "ignignokt.3.zspr",
+   "author": "kan",
    "name": "Ignignokt"
-  },
-  {
-   "file": "crewmate.1.zspr",
-   "author": "Fish_waffle64",
-   "name": "Imposter"
   },
   {
    "file": "informant_woman.1.zspr",
@@ -691,7 +731,12 @@
    "name": "Jogurt"
   },
   {
-   "file": "katsura.1.zspr",
+   "file": "kain.1.zspr",
+   "author": "Chew Terr",
+   "name": "Kain"
+  },
+  {
+   "file": "katsura.2.zspr",
    "author": "atth3h3art0fwinter",
    "name": "Katsura"
   },
@@ -699,6 +744,11 @@
    "file": "kecleon.1.zspr",
    "author": "Gylergin",
    "name": "Kecleon"
+  },
+  {
+   "file": "kefka.1.zspr",
+   "author": "ChewTerr",
+   "name": "Kefka"
   },
   {
    "file": "kenny_mccormick.1.zspr",
@@ -711,8 +761,8 @@
    "name": "Ketchup"
   },
   {
-   "file": "kholdstare.1.zspr",
-   "author": "fatmanspanda",
+   "file": "kholdstare.2.zspr",
+   "author": "kan",
    "name": "Kholdstare"
   },
   {
@@ -721,14 +771,24 @@
    "name": "King Gothalion"
   },
   {
-   "file": "king_graham.1.zspr",
+   "file": "king_graham.2.zspr",
    "author": "MisterKerr",
-   "name": "King Graham v1.1"
+   "name": "King Graham"
+  },
+  {
+   "file": "kinu.1.zspr",
+   "author": "UberNooga",
+   "name": "Kinu"
   },
   {
    "file": "kirby-meta.1.zspr",
    "author": "KHRoxas",
    "name": "Kirby"
+  },
+  {
+   "file": "kirby-d3.1.zspr",
+   "author": "Lougaroc",
+   "name": "Kirby (Dreamland 3)"
   },
   {
    "file": "kore8.1.zspr",
@@ -739,6 +799,11 @@
    "file": "korok.1.zspr",
    "author": "atth3h3art0fwinter",
    "name": "Korok"
+  },
+  {
+   "file": "kriv.1.zspr",
+   "author": "UltChimi",
+   "name": "Kriv"
   },
   {
    "file": "lakitu.1.zspr",
@@ -791,6 +856,11 @@
    "name": "Lucario"
   },
   {
+   "file": "luffy.2.zspr",
+   "author": "BOtheMighty",
+   "name": "Luffy"
+  },
+  {
    "file": "luigi.1.zspr",
    "author": "Achy",
    "name": "Luigi"
@@ -799,6 +869,11 @@
    "file": "luna-maindo.1.zspr",
    "author": "IkkyLights",
    "name": "Luna Maindo"
+  },
+  {
+   "file": "lynel-botw.1.zspr",
+   "author": "Lougaroc",
+   "name": "Lynel (BotW)"
   },
   {
    "file": "madeline.1.zspr",
@@ -821,8 +896,8 @@
    "name": "Mallow (Cat)"
   },
   {
-   "file": "mangalink.1.zspr",
-   "author": "fatmanspanda",
+   "file": "mangalink.2.zspr",
+   "author": "kan",
    "name": "Manga Link"
   },
   {
@@ -861,8 +936,8 @@
    "name": "Matthias"
   },
   {
-   "file": "meatwad.1.zspr",
-   "author": "fatmanspanda",
+   "file": "meatwad.2.zspr",
+   "author": "kan",
    "name": "Meatwad"
   },
   {
@@ -891,12 +966,12 @@
    "name": "Mike Jones"
   },
   {
-   "file": "ganon.1.zspr",
+   "file": "ganon.2.zspr",
    "author": "atth3h3art0fwinter",
    "name": "Mini Ganon"
   },
   {
-   "file": "minishcaplink.2.zspr",
+   "file": "minishcaplink.3.zspr",
    "author": "InTheBeef",
    "name": "Minish Cap Link"
   },
@@ -906,9 +981,9 @@
    "name": "Minish Link"
   },
   {
-   "file": "moblin.1.zspr",
+   "file": "moblin.2.zspr",
    "author": "Noctai_",
-   "name": "MoblinSprite"
+   "name": "Moblin"
   },
   {
    "file": "modernlink.1.zspr",
@@ -941,6 +1016,11 @@
    "name": "Ms. Paint Dog"
   },
   {
+   "file": "neslink.2.zspr",
+   "author": "Mike Trethewey/kan",
+   "name": "NES Link"
+  },
+  {
    "file": "naturelink.1.zspr",
    "author": "iBazly",
    "name": "Nature Link"
@@ -951,7 +1031,7 @@
    "name": "Navi"
   },
   {
-   "file": "navirou.2.zspr",
+   "file": "navirou.3.zspr",
    "author": "Lori",
    "name": "Navirou"
   },
@@ -966,14 +1046,14 @@
    "name": "Negative Link"
   },
   {
-   "file": "neosad.1.zspr",
-   "author": "Andrew Copple",
+   "file": "neosad.2.zspr",
+   "author": "Dr. Deadrewski",
    "name": "Neosad"
   },
   {
-   "file": "ness.1.zspr",
+   "file": "ness.2.zspr",
    "author": "Lantis",
-   "name": "Ness (Earthbound)"
+   "name": "Ness"
   },
   {
    "file": "nia.1.zspr",
@@ -1016,14 +1096,14 @@
    "name": "Paula"
   },
   {
-   "file": "penguinlink.1.zspr",
+   "file": "penguinlink.2.zspr",
    "author": "Fish_waffle64",
    "name": "Penguin Link"
   },
   {
-   "file": "pete.1.zspr",
+   "file": "pete.2.zspr",
    "author": "Lantis",
-   "name": "Pete (Harvest Moon)"
+   "name": "Pete"
   },
   {
    "file": "phoenix-wright.1.zspr",
@@ -1031,13 +1111,13 @@
    "name": "Phoenix Wright"
   },
   {
-   "file": "pikachu.1.zspr",
-   "author": "toucansham",
+   "file": "pikachu.2.zspr",
+   "author": "t0uchan",
    "name": "Pikachu"
   },
   {
-   "file": "pinkribbonlink.2.zspr",
-   "author": "fatmanspanda",
+   "file": "pinkribbonlink.3.zspr",
+   "author": "kan",
    "name": "Pink Ribbon Link"
   },
   {
@@ -1051,8 +1131,8 @@
    "name": "Plague Knight"
   },
   {
-   "file": "pokey.1.zspr",
-   "author": "fatmanspanda",
+   "file": "pokey.2.zspr",
+   "author": "kan",
    "name": "Pokey"
   },
   {
@@ -1074,6 +1154,11 @@
    "file": "porg_knight.1.zspr",
    "author": "PorgCollector",
    "name": "Porg Knight"
+  },
+  {
+   "file": "power-ranger.1.zspr",
+   "author": "Zeta Xero",
+   "name": "Power Ranger"
   },
   {
    "file": "mushy.1.zspr",
@@ -1121,8 +1206,13 @@
    "name": "Pyro"
   },
   {
-   "file": "rainbowlink.1.zspr",
-   "author": "fatmanspanda",
+   "file": "quadbanger.1.zspr",
+   "author": "Kai Gomez",
+   "name": "QuadBanger"
+  },
+  {
+   "file": "rainbowlink.2.zspr",
+   "author": "kan",
    "name": "Rainbow Link"
   },
   {
@@ -1141,18 +1231,23 @@
    "name": "Remeer"
   },
   {
-   "file": "rick.1.zspr",
-   "author": "Eric the Terrible/Devan 2002",
-   "name": "Rick (Redacted)"
+   "file": "remus-ruldufus-black.1.zspr",
+   "author": "The3rdX",
+   "name": "Remus R Black"
   },
   {
-   "file": "robotlink.1.zspr",
-   "author": "fatmanspanda",
+   "file": "rick.2.zspr",
+   "author": "Eric the Terrible/Devan 2002",
+   "name": "Rick"
+  },
+  {
+   "file": "robotlink.2.zspr",
+   "author": "kan",
    "name": "Robo-Link 9000"
   },
   {
-   "file": "rocko.1.zspr",
-   "author": "toucansham",
+   "file": "rocko.2.zspr",
+   "author": "t0uchan",
    "name": "Rocko"
   },
   {
@@ -1186,8 +1281,8 @@
    "name": "Ryu"
   },
   {
-   "file": "snes-controller.1.zspr",
-   "author": "Cbass601",
+   "file": "snes-controller.2.zspr",
+   "author": "cbass601",
    "name": "SNES Controller"
   },
   {
@@ -1196,7 +1291,7 @@
    "name": "Sailor Moon"
   },
   {
-   "file": "saitama.1.zspr",
+   "file": "saitama.2.zspr",
    "author": "Dabeanjelly/Ath3h3art0fwinter",
    "name": "Saitama"
   },
@@ -1216,6 +1311,11 @@
    "name": "Samus (Super Metroid)"
   },
   {
+   "file": "santahat-link.1.zspr",
+   "author": "Lexitik",
+   "name": "Santa Hat Link"
+  },
+  {
    "file": "santalink.2.zspr",
    "author": "HOHOHO",
    "name": "Santa Link"
@@ -1226,7 +1326,7 @@
    "name": "Scholar"
   },
   {
-   "file": "selan.1.zspr",
+   "file": "selan.2.zspr",
    "author": "atth3h3art0fwinter",
    "name": "Selan"
   },
@@ -1251,8 +1351,8 @@
    "name": "Shantae"
   },
   {
-   "file": "shuppet.1.zspr",
-   "author": "fatmanspanda",
+   "file": "shuppet.2.zspr",
+   "author": "kan",
    "name": "Shuppet"
   },
   {
@@ -1271,8 +1371,13 @@
    "name": "SighnWaive"
   },
   {
-   "file": "slowpoke.1.zspr",
-   "author": "Joey Rat",
+   "file": "skunk.1.zspr",
+   "author": "Hiveul",
+   "name": "Skunk"
+  },
+  {
+   "file": "slowpoke.2.zspr",
+   "author": "Joey_Rat",
    "name": "Slowpoke"
   },
   {
@@ -1326,13 +1431,13 @@
    "name": "Stalfos"
   },
   {
-   "file": "stan.1.zspr",
-   "author": "Kan",
+   "file": "stan.2.zspr",
+   "author": "kan",
    "name": "Stan"
   },
   {
-   "file": "staticlink.1.zspr",
-   "author": "fatmanspanda",
+   "file": "staticlink.2.zspr",
+   "author": "kan",
    "name": "Static Link"
   },
   {
@@ -1391,7 +1496,7 @@
    "name": "TP Zelda"
   },
   {
-   "file": "mario_tanooki.1.zspr",
+   "file": "mario_tanooki.2.zspr",
    "author": "Nocturnesthesia",
    "name": "Tanooki Mario"
   },
@@ -1406,9 +1511,19 @@
    "name": "Terra (Esper)"
   },
   {
+   "file": "terry.1.zspr",
+   "author": "CD-Mestay",
+   "name": "Terry"
+  },
+  {
    "file": "tetra.1.zspr",
    "author": "Ferelheart",
    "name": "Tetra Sheet"
+  },
+  {
+   "file": "professor.1.zspr",
+   "author": "PlaguedOne",
+   "name": "The Professor"
   },
   {
    "file": "pug.1.zspr",
@@ -1421,13 +1536,18 @@
    "name": "Thief"
   },
   {
+   "file": "thinkdorm.1.zspr",
+   "author": "PlaguedOne",
+   "name": "ThinkDorm"
+  },
+  {
    "file": "thomcrow.1.zspr",
    "author": "Thom",
    "name": "Thomcrow"
   },
   {
-   "file": "tile.2.zspr",
-   "author": "fatmanspanda",
+   "file": "tile.3.zspr",
+   "author": "kan",
    "name": "Tile"
   },
   {
@@ -1451,8 +1571,8 @@
    "name": "TotemLinks"
   },
   {
-   "file": "trogdor.1.zspr",
-   "author": "MikeTrethewey/Spanda",
+   "file": "trogdor.2.zspr",
+   "author": "Mike Trethewey/kan",
    "name": "Trogdor the Burninator"
   },
   {
@@ -1461,7 +1581,7 @@
    "name": "Tunic Color Link"
   },
   {
-   "file": "two_faced.1.zspr",
+   "file": "two_faced.2.zspr",
    "author": "Devan2002",
    "name": "TwoFaced"
   },
@@ -1474,11 +1594,6 @@
    "file": "ultros.1.zspr",
    "author": "PlaguedOne",
    "name": "Ultros"
-  },
-  {
-   "file": "corona.1.zspr",
-   "author": "Unknown",
-   "name": "Untitled"
   },
   {
    "file": "valeera.1.zspr",
@@ -1526,6 +1641,11 @@
    "name": "Wario"
   },
   {
+   "file": "whitemage.1.zspr",
+   "author": "TheRedMage",
+   "name": "White Mage"
+  },
+  {
    "file": "will.1.zspr",
    "author": "Xenobond",
    "name": "Will"
@@ -1551,12 +1671,12 @@
    "name": "Yoshi"
   },
   {
-   "file": "yunica.1.zspr",
+   "file": "yunica.2.zspr",
    "author": "Fish_waffle64",
    "name": "Yunica Tovah"
   },
   {
-   "file": "zandra.1.zspr",
+   "file": "zandra.2.zspr",
    "author": "ZandraVandra",
    "name": "Zandra"
   },
@@ -1566,7 +1686,7 @@
    "name": "Zebra Unicorn"
   },
   {
-   "file": "zeck.1.zspr",
+   "file": "zeck.2.zspr",
    "author": "aitchFactor",
    "name": "Zeckemyro"
   },
@@ -1586,23 +1706,13 @@
    "name": "Zora"
   },
   {
-   "file": "boco.1.zspr",
-   "author": "",
-   "name": "boco"
-  },
-  {
-   "file": "hollow-knight.1.zspr",
-   "author": "Chew_Terr",
-   "name": "hollow_test"
-  },
-  {
    "file": "ibazly.1.zspr",
    "author": "Achy",
    "name": "iBazly"
   },
   {
-   "file": "missingno.1.zspr",
-   "author": "",
+   "file": "missingno.2.zspr",
+   "author": "AAhbxsujd",
    "name": "missingno"
   }
  ]

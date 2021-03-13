@@ -56,19 +56,27 @@
             <tr>
                 <th></th>
                 <th class="counter"><img src="{{ icons["Chest"] }}" /></th>
-                <th class="counter"><img src="{{ icons["Small Key"] }}" /></th>
-                <th><img src="{{ icons["Big Key"] }}" /></th>
+                {% if key_locations and "Universal" not in key_locations %}
+                    <th class="counter"><img src="{{ icons["Small Key"] }}" /></th>
+                {% endif %}
+                {% if big_key_locations %}
+                    <th><img src="{{ icons["Big Key"] }}" /></th>
+                {% endif %}
             </tr>
             {% for area in sp_areas %}
                 <tr>
                     <td>{{ area }}</td>
                     <td class="counter">{{ checks_done[area] }} / {{ checks_in_area[area] }}</td>
-                    <td class="counter">
-                        {{ inventory[small_key_ids[area]] if area in key_locations else 'N/A' }}
-                    </td>
-                    <td>
-                        {{ '✔' if area in big_key_locations and inventory[big_key_ids[area]] else ('N/A' if area not in big_key_locations else '') }}
-                    </td>
+                    {% if key_locations and "Universal" not in key_locations %}
+                        <td class="counter">
+                            {{ inventory[small_key_ids[area]] if area in key_locations else 'N/A' }}
+                        </td>
+                    {% endif %}
+                    {% if big_key_locations %}
+                        <td>
+                            {{ '✔' if area in big_key_locations and inventory[big_key_ids[area]] else ('N/A' if area not in big_key_locations else '') }}
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </table>

@@ -18,7 +18,10 @@
 # http://www.yamllint.com/
 
 description: Template Name # Used to describe your yaml. Useful if you have multiple files
-name: YourName # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
+name: YourName%number% # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
+#%player% will be replaced with actual player number.
+#%number% will be replaced with the counter value of the name.
+#%% will become % after all of the above processing is complete on the name.
 ### Logic Section ###
 # Warning: overworld_glitches is not available and minor_glitches is only partially implemented on the door-rando version
 glitches_required: # Determine the logic required to complete the seed
@@ -339,6 +342,10 @@ door_shuffle: # Only available if the host uses the doors branch, it is ignored 
   vanilla: 50 # Everything should be like in vanilla
   basic: 0 # Dungeons are shuffled within themselves
   crossed: 0 # Dungeons are shuffled across each other
+  # you can also define door shuffle seed, like so:
+  crossed-1000: 0 # using this method, you can have the same dungeon layout as another player and share dungeon layout information.
+  # however, other settings like intensity, universal keys, etc. may affect the shuffle result as well.
+  crossed-group-myfriends: 0 # using this method, everyone with "group-myfriends" will share the same seed
 intensity: # Only available if the host uses the doors branch, it is ignored otherwise
   1: 50 # Shuffles normal doors and spiral staircases
   2: 0 # And shuffles open edges and straight staircases

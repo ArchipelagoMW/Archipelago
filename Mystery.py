@@ -5,6 +5,7 @@ import urllib.request
 import urllib.parse
 import typing
 import os
+from collections import Counter
 
 import ModuleUpdate
 from worlds.generic import PlandoItem, PlandoConnection
@@ -171,6 +172,7 @@ def main(args=None, callback=ERmain):
                     elif type(players_meta) == dict and players_meta[key] and option not in players_meta[key]:
                         weights_cache[path][key] = option
 
+    name_counter = Counter()
     for player in range(1, args.multi + 1):
         path = player_path_cache[player]
         if path:
@@ -213,6 +215,16 @@ def main(args=None, callback=ERmain):
             erargs.name[player] = f"Player{player}"
         elif not erargs.name[player]:  # if name was not specified, generate it from filename
             erargs.name[player] = os.path.split(path)[-1].split(".")[0]
+        new_name = []
+        name_counter[erargs.name[player]] += 1
+        for name in erargs.name[player].split("%%"):
+            if "%number%" in name:
+                name = name.replace("%number%", str(name_counter[erargs.name[player]]))
+            if "%player%" in name:
+                name = name.replace("%player%", str(player))
+            new_name.append(name)
+        erargs.name[player] = handle_name("%".join(new_name))
+        logging.info(erargs.name[player])
     erargs.names = ",".join(erargs.name[i] for i in range(1, args.multi + 1))
     del (erargs.name)
     if args.yaml_output:
@@ -447,8 +459,6 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
 
     ret = argparse.Namespace()
     ret.name = get_choice('name', weights)
-    if ret.name:
-        ret.name = handle_name(ret.name)
 
     ret.game = get_choice("game", weights, "A Link to the Past")
 
@@ -539,8 +549,11 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
 
     # change minimum to required pieces to avoid problems
     ret.triforce_pieces_available = min(max(ret.triforce_pieces_required, int(ret.triforce_pieces_available)), 90)
-
-    ret.shop_shuffle_slots = int(get_choice('shop_shuffle_slots', weights, '0'))
+    shuffle_slots = get_choice('shop_shuffle_slots', weights, '0')
+    if str(shuffle_slots).lower() == "random":
+        ret.shop_shuffle_slots = random.randint(0, 30)
+    else:
+        ret.shop_shuffle_slots = int(shuffle_slots)
 
     ret.shop_shuffle = get_choice('shop_shuffle', weights, '')
     if not ret.shop_shuffle:
