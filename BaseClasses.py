@@ -24,24 +24,13 @@ class MultiWorld():
     plando_connections: List[PlandoConnection]
     er_seeds: Dict[int, str]
 
-    def __init__(self, players: int, shuffle, logic, mode, swords, difficulty, item_functionality, timer,
-                 progressive,
-                 goal, algorithm, accessibility, shuffle_ganon, retro, custom, customitemarray, hints):
+    def __init__(self, players: int):
 
         self.random = random.Random()  # world-local random state is saved in case of future use a
         # persistently running program with multiple worlds rolling concurrently
         self.players = players
         self.teams = 1
-        self.shuffle = shuffle.copy()
-        self.logic = logic.copy()
-        self.mode = mode.copy()
-        self.swords = swords.copy()
-        self.difficulty = difficulty.copy()
-        self.item_functionality = item_functionality.copy()
-        self.timer = timer.copy()
-        self.progressive = progressive
-        self.goal = goal.copy()
-        self.algorithm = algorithm
+        self.algorithm = 'balanced'
         self.dungeons = []
         self.regions = []
         self.shops = []
@@ -60,13 +49,9 @@ class MultiWorld():
         self.aga_randomness = True
         self.lock_aga_door_in_escape = False
         self.save_and_quit_from_boss = True
-        self.accessibility = accessibility.copy()
-        self.shuffle_ganon = shuffle_ganon
-        self.fix_gtower_exit = self.shuffle_ganon
-        self.retro = retro.copy()
-        self.custom = custom
-        self.customitemarray: List[int] = customitemarray
-        self.hints = hints.copy()
+        self.custom = False
+        self.customitemarray = []
+        self.shuffle_ganon = True
         self.dynamic_regions = []
         self.dynamic_locations = []
         self.spoiler = Spoiler(self)
@@ -75,6 +60,18 @@ class MultiWorld():
             def set_player_attr(attr, val):
                 self.__dict__.setdefault(attr, {})[player] = val
             set_player_attr('_region_cache', {})
+            set_player_attr('shuffle', "vanilla")
+            set_player_attr('logic', "noglitches")
+            set_player_attr('mode', 'open')
+            set_player_attr('swords', 'random')
+            set_player_attr('difficulty', 'normal')
+            set_player_attr('item_functionality', 'normal')
+            set_player_attr('timer', False)
+            set_player_attr('goal', 'ganon')
+            set_player_attr('progressive', 'on')
+            set_player_attr('accessibility', 'items')
+            set_player_attr('retro', False)
+            set_player_attr('hints', True)
             set_player_attr('player_names', [])
             set_player_attr('remote_items', False)
             set_player_attr('required_medallions', ['Ether', 'Quake'])
@@ -143,6 +140,10 @@ class MultiWorld():
         self.worlds = []
         #for i in range(players):
         #    self.worlds.append(worlds.alttp.ALTTPWorld({}, i))
+
+    def copy(self) -> MultiWorld:
+        import copy
+        return copy.deepcopy(self)
 
     def secure(self):
         self.random = secrets.SystemRandom()

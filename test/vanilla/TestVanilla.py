@@ -12,8 +12,8 @@ from test.TestBase import TestBase
 
 class TestVanilla(TestBase):
     def setUp(self):
-        self.world = MultiWorld(1, {1: 'vanilla'}, {1: 'noglitches'}, {1: 'open'}, {1: 'random'}, {1: 'normal'}, {1: 'normal'}, {1:False}, {1: 'on'}, {1: 'ganon'}, 'balanced', {1: 'items'},
-                                True, {1:False}, False, None, {1:False})
+        self.world = MultiWorld(1)
+        self.world.logic[1] = "noglitches"
         self.world.difficulty_requirements[1] = difficulties['normal']
         create_regions(self.world, 1)
         create_dungeons(self.world, 1)

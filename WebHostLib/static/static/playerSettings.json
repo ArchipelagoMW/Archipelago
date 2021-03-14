@@ -27,11 +27,11 @@
         },
         {
           "name": "Fast Ganon (Pyramid Always Open)",
-          "value": "fast_ganon"
+          "value": "crystals"
         },
         {
-          "name": "All Dungeons",
-          "value": "dungeons"
+          "name": "All Bosses",
+          "value": "bosses"
         },
         {
           "name": "Master Sword Pedestal",

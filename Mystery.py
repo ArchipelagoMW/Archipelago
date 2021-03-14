@@ -13,10 +13,11 @@ from worlds.generic import PlandoItem, PlandoConnection
 ModuleUpdate.update()
 
 from Utils import parse_yaml
-from worlds.alttp.Rom import Sprite
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from Main import get_seed, seeddigits
+import Options
+from worlds import lookup_any_item_name_to_id
 from worlds.alttp.Items import item_name_groups, item_table
 from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
@@ -173,16 +174,13 @@ def main(args=None, callback=ERmain):
                         weights_cache[path][key] = option
 
     name_counter = Counter()
+    erargs.player_settings = {}
     for player in range(1, args.multi + 1):
         path = player_path_cache[player]
         if path:
             try:
                 settings = settings_cache[path] if settings_cache[path] else \
                     roll_settings(weights_cache[path], args.plando)
-                if settings.sprite and not os.path.isfile(settings.sprite) and not Sprite.get_sprite_from_name(
-                        settings.sprite):
-                    logging.warning(
-                        f"Warning: The chosen sprite, \"{settings.sprite}\", for yaml \"{path}\", does not exist.")
                 if args.pre_roll:
                     import yaml
                     if path == args.weights:
@@ -206,7 +204,10 @@ def main(args=None, callback=ERmain):
                         yaml.dump(pre_rolled, f)
                 for k, v in vars(settings).items():
                     if v is not None:
-                        getattr(erargs, k)[player] = v
+                        try:
+                            getattr(erargs, k)[player] = v
+                        except AttributeError:
+                            setattr(erargs, k, {player: v})
             except Exception as e:
                 raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
         else:
@@ -251,9 +252,6 @@ def main(args=None, callback=ERmain):
         with open(os.path.join(args.outputpath if args.outputpath else ".", f"mystery_result_{seed}.yaml"), "wt") as f:
             yaml.dump(important, f)
 
-    erargs.skip_progression_balancing = {player: not balanced for player, balanced in
-                                         erargs.progression_balancing.items()}
-    del (erargs.progression_balancing)
     callback(erargs, seed)
 
 
@@ -311,14 +309,10 @@ available_boss_locations: typing.Set[str] = {f"{loc.lower()}{f' {level}' if leve
 
 boss_shuffle_options = {None: 'none',
                         'none': 'none',
-                        'simple': 'basic',
                         'basic': 'basic',
-                        'full': 'normal',
                         'normal': 'normal',
-                        'random': 'chaos',
                         'chaos': 'chaos',
-                        'singularity': 'singularity',
-                        'duality': 'singularity'
+                        'singularity': 'singularity'
                         }
 
 
@@ -420,7 +414,7 @@ def get_plando_bosses(boss_shuffle: str, plando_options: typing.Set[str]) -> str
         raise Exception(f"Boss Shuffle {boss_shuffle} is unknown and boss plando is turned off.")
 
 
-def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses"))):
+def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses", ))):
     if "pre_rolled" in weights:
         pre_rolled = weights["pre_rolled"]
 
@@ -459,9 +453,37 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
 
     ret = argparse.Namespace()
     ret.name = get_choice('name', weights)
-
+    ret.accessibility = get_choice('accessibility', weights)
     ret.game = get_choice("game", weights, "A Link to the Past")
 
+    ret.local_items = set()
+    for item_name in weights.get('local_items', []):
+        items = item_name_groups.get(item_name, {item_name})
+        for item in items:
+            if item in lookup_any_item_name_to_id:
+                ret.local_items.add(item)
+            else:
+                raise Exception(f"Could not force item {item} to be world-local, as it was not recognized.")
+
+    ret.non_local_items = set()
+    for item_name in weights.get('non_local_items', []):
+        items = item_name_groups.get(item_name, {item_name})
+        for item in items:
+            if item in lookup_any_item_name_to_id:
+                ret.non_local_items.add(item)
+            else:
+                raise Exception(f"Could not force item {item} to be world-non-local, as it was not recognized.")
+
+    if ret.game == "A Link to the Past":
+        roll_alttp_settings(ret, weights, plando_options)
+    elif ret.game == "Hollow Knight":
+        for option_name, option in Options.hollow_knight_options.items():
+            setattr(ret, option_name, option.from_any(get_choice(option_name, weights, True)))
+    else:
+        raise Exception(f"Unsupported game {ret.game}")
+    return ret
+
+def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     glitches_required = get_choice('glitches_required', weights)
     if glitches_required not in [None, 'none', 'no_logic', 'overworld_glitches', 'minor_glitches']:
         logging.warning("Only NMG, OWG and No Logic supported")
@@ -500,8 +522,6 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
                                 'universal' if 'u' in dungeon_items else 's' in dungeon_items)
     ret.bigkeyshuffle = get_choice('bigkey_shuffle', weights, 'b' in dungeon_items)
 
-    ret.accessibility = get_choice('accessibility', weights)
-
     entrance_shuffle = get_choice('entrance_shuffle', weights, 'vanilla')
     if entrance_shuffle.startswith('none-'):
         ret.shuffle = 'vanilla'
@@ -510,12 +530,11 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
 
     goal = get_choice('goals', weights, 'ganon')
     ret.goal = {'ganon': 'ganon',
-                'fast_ganon': 'crystals',
-                'dungeons': 'dungeons',
+                'crystals': 'crystals',
+                'bosses': 'bosses',
                 'pedestal': 'pedestal',
                 'ganon_pedestal': 'ganonpedestal',
                 'triforce_hunt': 'triforcehunt',
-                'triforce-hunt': 'triforcehunt',  # deprecated, moving all goals to `_`
                 'local_triforce_hunt': 'localtriforcehunt',
                 'ganon_triforce_hunt': 'ganontriforcehunt',
                 'local_ganon_triforce_hunt': 'localganontriforcehunt',
@@ -582,35 +601,11 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     boss_shuffle = get_choice('boss_shuffle', weights)
     ret.shufflebosses = get_plando_bosses(boss_shuffle, plando_options)
 
-    ret.enemy_shuffle = {'none': False,
-                         'shuffled': 'shuffled',
-                         'random': 'chaos',
-                         'chaosthieves': 'chaosthieves',
-                         'chaos': 'chaos',
-                         True: True,
-                         False: False,
-                         None: False
-                         }[get_choice('enemy_shuffle', weights, False)]
+    ret.enemy_shuffle = bool(get_choice('enemy_shuffle', weights, False))
 
     ret.killable_thieves = get_choice('killable_thieves', weights, False)
     ret.tile_shuffle = get_choice('tile_shuffle', weights, False)
     ret.bush_shuffle = get_choice('bush_shuffle', weights, False)
-
-    # legacy support for enemy shuffle
-    if type(ret.enemy_shuffle) == str:
-        if ret.enemy_shuffle == 'shuffled':
-            ret.killable_thieves = True
-        elif ret.enemy_shuffle == 'chaos':
-            ret.killable_thieves = True
-            ret.bush_shuffle = True
-            ret.tile_shuffle = True
-        elif ret.enemy_shuffle == "chaosthieves":
-            ret.killable_thieves = bool(random.randint(0, 1))
-            ret.bush_shuffle = True
-            ret.tile_shuffle = True
-        ret.enemy_shuffle = True
-
-    # end of legacy block
 
     ret.enemy_damage = {None: 'default',
                         'default': 'default',
@@ -648,7 +643,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
                                get_choice("turtle_rock_medallion", weights, "random")]
 
     for index, medallion in enumerate(ret.required_medallions):
-        ret.required_medallions[index] = {"ether": "Ether", "quake": "Quake", "bombos": "Bombos", "random": "random"}\
+        ret.required_medallions[index] = {"ether": "Ether", "quake": "Quake", "bombos": "Bombos", "random": "random"} \
             .get(medallion.lower(), None)
         if not ret.required_medallions[index]:
             raise Exception(f"unknown Medallion {medallion} for {'misery mire' if index == 0 else 'turtle rock'}")
@@ -672,30 +667,8 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
 
     if get_choice("local_keys", weights, "l" in dungeon_items):
         # () important for ordering of commands, without them the Big Keys section is part of the Small Key else
-        ret.local_items = (item_name_groups["Small Keys"] if ret.keyshuffle else set()) \
-                          | item_name_groups["Big Keys"] if ret.bigkeyshuffle else set()
-    else:
-        ret.local_items = set()
-    for item_name in weights.get('local_items', []):
-        items = item_name_groups.get(item_name, {item_name})
-        for item in items:
-            if item in item_table:
-                ret.local_items.add(item)
-            else:
-                raise Exception(f"Could not force item {item} to be world-local, as it was not recognized.")
-
-    ret.local_items = ",".join(ret.local_items)
-
-    ret.non_local_items = set()
-    for item_name in weights.get('non_local_items', []):
-        items = item_name_groups.get(item_name, {item_name})
-        for item in items:
-            if item in item_table:
-                ret.non_local_items.add(item)
-            else:
-                raise Exception(f"Could not force item {item} to be world-non-local, as it was not recognized.")
-
-    ret.non_local_items = ",".join(ret.non_local_items)
+        ret.local_items |= item_name_groups["Small Keys"] if ret.keyshuffle else set()
+        ret.local_items |= item_name_groups["Big Keys"] if ret.bigkeyshuffle else set()
 
     ret.plando_items = []
     if "items" in plando_options:
@@ -704,7 +677,8 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
             if item not in item_table:
                 raise Exception(f"Could not plando item {item} as the item was not recognized")
             if location not in location_table and location not in key_drop_data:
-                raise Exception(f"Could not plando item {item} at location {location} as the location was not recognized")
+                raise Exception(
+                    f"Could not plando item {item} at location {location} as the location was not recognized")
             ret.plando_items.append(PlandoItem(item, location, location_world, from_pool, force))
 
         options = weights.get("plando_items", [])
@@ -798,8 +772,6 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     else:
         ret.quickswap = True
         ret.sprite = "Link"
-    return ret
-
 
 if __name__ == '__main__':
     main()

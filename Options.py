@@ -39,6 +39,10 @@ class Option(metaclass=AssembleOptions):
     def __bool__(self):
         return bool(self.value)
 
+    @classmethod
+    def from_any(cls, data: typing.Any):
+        raise NotImplementedError
+
 
 class Toggle(Option):
     option_false = 0
@@ -53,6 +57,13 @@ class Toggle(Option):
             return cls(0)
         else:
             return cls(1)
+
+    @classmethod
+    def from_any(cls, data: typing.Any):
+        if type(data) == str:
+            return cls.from_text(data)
+        else:
+            return cls(data)
 
     def __eq__(self, other):
         if isinstance(other, Toggle):
@@ -75,13 +86,16 @@ class Choice(Option):
 
     @classmethod
     def from_text(cls, text: str) -> Choice:
-
         for optionname, value in cls.options.items():
             if optionname == text.lower():
                 return cls(value)
         raise KeyError(
             f'Could not find option "{text}" for "{cls.__name__}", '
             f'known options are {", ".join(f"{option}" for option in cls.name_lookup.values())}')
+
+    @classmethod
+    def from_any(cls, data: typing.Any):
+        return cls.from_text(data)
 
 
 class Logic(Choice):
@@ -150,6 +164,52 @@ compassshuffle = Toggle
 keyshuffle = Toggle
 bigkeyshuffle = Toggle
 hints = Toggle
+
+RandomizeDreamers = Toggle
+RandomizeSkills = Toggle
+RandomizeCharms = Toggle
+RandomizeKeys = Toggle
+RandomizeGeoChests = Toggle
+RandomizeMaskShards = Toggle
+RandomizeVesselFragments = Toggle
+RandomizeCharmNotches = Toggle
+RandomizePaleOre = Toggle
+RandomizeRancidEggs = Toggle
+RandomizeRelics = Toggle
+RandomizeMaps = Toggle
+RandomizeStags = Toggle
+RandomizeGrubs = Toggle
+RandomizeWhisperingRoots = Toggle
+RandomizeRocks = Toggle
+RandomizeSoulTotems = Toggle
+RandomizePalaceTotems = Toggle
+RandomizeLoreTablets = Toggle
+RandomizeLifebloodCocoons = Toggle
+
+hollow_knight_randomize_options: typing.Dict[str, Option] = {
+    "RandomizeDreamers" : RandomizeDreamers,
+    "RandomizeSkills" : RandomizeSkills,
+    "RandomizeCharms" : RandomizeCharms,
+    "RandomizeKeys" : RandomizeKeys,
+    "RandomizeGeoChests" : RandomizeGeoChests,
+    "RandomizeMaskShards" : RandomizeMaskShards,
+    "RandomizeVesselFragments" : RandomizeVesselFragments,
+    "RandomizeCharmNotches" : RandomizeCharmNotches,
+    "RandomizePaleOre" : RandomizePaleOre,
+    "RandomizeRancidEggs" : RandomizeRancidEggs,
+    "RandomizeRelics" : RandomizeRelics,
+    "RandomizeMaps" : RandomizeMaps,
+    "RandomizeStags" : RandomizeStags,
+    "RandomizeGrubs" : RandomizeGrubs,
+    "RandomizeWhisperingRoots" : RandomizeWhisperingRoots,
+    "RandomizeRocks" : RandomizeRocks,
+    "RandomizeSoulTotems" : RandomizeSoulTotems,
+    "RandomizePalaceTotems" : RandomizePalaceTotems,
+    "RandomizeLoreTablets" : RandomizeLoreTablets,
+    "RandomizeLifebloodCocoons" : RandomizeLifebloodCocoons,
+}
+
+hollow_knight_options: typing.Dict[str, Option] = {**hollow_knight_randomize_options}
 
 if __name__ == "__main__":
     import argparse

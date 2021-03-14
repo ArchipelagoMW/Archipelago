@@ -59,8 +59,8 @@ def set_rules(world, player):
     else:
         raise NotImplementedError(f'Not implemented yet: Logic - {world.logic[player]}')
 
-    if world.goal[player] == 'dungeons':
-        # require all dungeons to beat ganon
+    if world.goal[player] == 'bosses':
+        # require all bosses to beat ganon
         add_rule(world.get_location('Ganon', player), lambda state: state.can_reach('Master Sword Pedestal', 'Location', player) and state.has('Beat Agahnim 1', player) and state.has('Beat Agahnim 2', player) and state.has_crystals(7, player))
     elif world.goal[player] == 'ganon':
         # require aga2 to beat ganon

@@ -356,9 +356,9 @@
           "description": "Kill Ganon in his lair. The hole is always open, but you may still require some crystals to damage him.",
           "defaultValue": 0
         },
-        "dungeons": {
-          "keyString": "goals.dungeons",
-          "friendlyName": "All Dungeons",
+        "bosses": {
+          "keyString": "goals.bosses",
+          "friendlyName": "All Bosses",
           "description": "Defeat the boss of all dungeons, defeat Agahnim in both Castle Tower and Ganon's Tower, then defeat Ganon in his lair.",
           "defaultValue": 0
         },

@@ -8,6 +8,7 @@ __all__ = {"lookup_any_item_id_to_name",
 from .alttp.Items import lookup_id_to_name as alttp
 from .hk.Items import lookup_id_to_name as hk
 lookup_any_item_id_to_name = {**alttp, **hk}
+lookup_any_item_name_to_id = {name: id for id, name in lookup_any_item_id_to_name.items()}
 
 
 from .alttp import Regions

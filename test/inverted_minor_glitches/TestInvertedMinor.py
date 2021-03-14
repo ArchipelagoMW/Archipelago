@@ -12,9 +12,9 @@ from test.TestBase import TestBase
 
 class TestInvertedMinor(TestBase):
     def setUp(self):
-        self.world = MultiWorld(1, {1: 'vanilla'}, {1: 'minorglitches'}, {1: 'inverted'}, {1: 'random'}, {1: 'normal'},
-                                {1: 'normal'}, {1: False}, {1: 'on'}, {1: 'ganon'}, 'balanced', {1: 'items'},
-                                True, {1: False}, False, None, {1: False})
+        self.world = MultiWorld(1)
+        self.world.mode[1] = "inverted"
+        self.world.logic[1] = "minorglitches"
         self.world.difficulty_requirements[1] = difficulties['normal']
         create_inverted_regions(self.world, 1)
         create_dungeons(self.world, 1)

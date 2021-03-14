@@ -226,7 +226,7 @@ for diff in {'easy', 'normal', 'hard', 'expert'}:
 def generate_itempool(world, player: int):
     if world.difficulty[player] not in difficulties:
         raise NotImplementedError(f"Diffulty {world.difficulty[player]}")
-    if world.goal[player] not in {'ganon', 'pedestal', 'dungeons', 'triforcehunt', 'localtriforcehunt', 'icerodhunt',
+    if world.goal[player] not in {'ganon', 'pedestal', 'bosses', 'triforcehunt', 'localtriforcehunt', 'icerodhunt',
                                   'ganontriforcehunt', 'localganontriforcehunt', 'crystals', 'ganonpedestal'}:
         raise NotImplementedError(f"Goal {world.goal[player]}")
     if world.mode[player] not in {'open', 'standard', 'inverted'}:

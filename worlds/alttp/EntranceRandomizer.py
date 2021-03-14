@@ -59,7 +59,7 @@ def parse_arguments(argv, no_defaults=False):
                              Vanilla:   Swords are in vanilla locations.
                              ''')
     parser.add_argument('--goal', default=defval('ganon'), const='ganon', nargs='?',
-                        choices=['ganon', 'pedestal', 'dungeons', 'triforcehunt', 'localtriforcehunt', 'ganontriforcehunt', 'localganontriforcehunt', 'crystals', 'ganonpedestal'],
+                        choices=['ganon', 'pedestal', 'bosses', 'triforcehunt', 'localtriforcehunt', 'ganontriforcehunt', 'localganontriforcehunt', 'crystals', 'ganonpedestal'],
                         help='''\
                              Select completion goal. (default: %(default)s)
                              Ganon:         Collect all crystals, beat Agahnim 2 then
@@ -317,8 +317,8 @@ def parse_arguments(argv, no_defaults=False):
                              ''')
     parser.add_argument('--suppress_rom', help='Do not create an output rom file.', action='store_true')
     parser.add_argument('--gui', help='Launch the GUI', action='store_true')
-    parser.add_argument('--skip_progression_balancing', action='store_true', default=defval(False),
-                        help="Skip Multiworld Progression balancing.")
+    parser.add_argument('--progression_balancing', action='store_true', default=defval(False),
+                        help="Enable Multiworld Progression balancing.")
     parser.add_argument('--skip_playthrough', action='store_true', default=defval(False))
     parser.add_argument('--enemizercli', default=defval('EnemizerCLI/EnemizerCLI.Core'))
     parser.add_argument('--shufflebosses', default=defval('none'), choices=['none', 'basic', 'normal', 'chaos',
@@ -407,7 +407,7 @@ def parse_arguments(argv, no_defaults=False):
                          'local_items', 'non_local_items', 'retro', 'accessibility', 'hints', 'beemizer',
                          'shufflebosses', 'enemy_shuffle', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
-                         'heartbeep', "skip_progression_balancing", "triforce_pieces_available",
+                         'heartbeep', "progression_balancing", "triforce_pieces_available",
                          "triforce_pieces_required", "shop_shuffle", "shop_shuffle_slots",
                          "required_medallions",
                          "plando_items", "plando_texts", "plando_connections", "er_seeds",

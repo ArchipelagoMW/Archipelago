@@ -779,7 +779,7 @@ def patch_rom(world, rom, player, team, enemized):
                         rom.write_int16(0x15DB5 + 2 * offset, 0x0640)
                     elif room_id == 0x00d6 and world.fix_trock_exit[player]:
                         rom.write_int16(0x15DB5 + 2 * offset, 0x0134)
-                    elif room_id == 0x000c and world.fix_gtower_exit:  # fix ganons tower exit point
+                    elif room_id == 0x000c and world.shuffle_ganon:  # fix ganons tower exit point
                         rom.write_int16(0x15DB5 + 2 * offset, 0x00A4)
                     else:
                         rom.write_int16(0x15DB5 + 2 * offset, link_y)
@@ -1403,8 +1403,8 @@ def patch_rom(world, rom, player, team, enemized):
         rom.write_byte(0x18003E, 0x05)  # make ganon invincible until enough triforce pieces are collected
     elif world.goal[player] in ['ganonpedestal']:
         rom.write_byte(0x18003E, 0x06)
-    elif world.goal[player] in ['dungeons']:
-        rom.write_byte(0x18003E, 0x02)  # make ganon invincible until all dungeons are beat
+    elif world.goal[player] in ['bosses']:
+        rom.write_byte(0x18003E, 0x02)  # make ganon invincible until all bosses are beat
     elif world.goal[player] in ['crystals']:
         rom.write_byte(0x18003E, 0x04)  # make ganon invincible until all crystals
     else:
@@ -2234,8 +2234,8 @@ def write_strings(rom, world, player, team):
     else:
         tt['sign_ganons_tower'] = f'You need {world.crystals_needed_for_gt[player]} crystals to enter.'
 
-    if world.goal[player] == 'dungeons':
-        tt['sign_ganon'] = 'You need to complete all the dungeons.'
+    if world.goal[player] == 'bosses':
+        tt['sign_ganon'] = 'You need to kill all bosses, Ganon last.'
     elif world.goal[player] == 'ganonpedestal':
         tt['sign_ganon'] = 'You need to pull the pedestal to defeat Ganon.'
     elif world.goal[player] == "ganon":

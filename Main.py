@@ -56,9 +56,7 @@ def main(args, seed=None):
     start = time.perf_counter()
 
     # initialize the world
-    world = MultiWorld(args.multi, args.shuffle, args.logic, args.mode, args.swords, args.difficulty,
-                       args.item_functionality, args.timer, args.progressive.copy(), args.goal, args.algorithm,
-                       args.accessibility, args.shuffleganon, args.retro, args.custom, args.customitemarray, args.hints)
+    world = MultiWorld(args.multi)
 
     logger = logging.getLogger('')
     world.seed = get_seed(seed)
@@ -66,6 +64,26 @@ def main(args, seed=None):
         world.secure()
     else:
         world.random.seed(world.seed)
+
+    world.shuffle = args.shuffle.copy()
+    world.logic = args.logic.copy()
+    world.mode = args.mode.copy()
+    world.swords = args.swords.copy()
+    world.difficulty = args.difficulty.copy()
+    world.item_functionality = args.item_functionality.copy()
+    world.timer = args.timer.copy()
+    world.progressive = args.progressive.copy()
+    world.goal = args.goal.copy()
+    if hasattr(args, "algorithm"): # current GUI options
+        world.algorithm = args.algorithm
+        world.shuffleganon = args.shuffleganon
+        world.custom = args.custom
+        world.customitemarray = args.customitemarray
+
+    world.accessibility = args.accessibility.copy()
+    world.retro = args.retro.copy()
+
+    world.hints = args.hints.copy()
 
     world.remote_items = args.remote_items.copy()
     world.mapshuffle = args.mapshuffle.copy()
@@ -100,14 +118,14 @@ def main(args, seed=None):
     world.triforce_pieces_required = args.triforce_pieces_required.copy()
     world.shop_shuffle = args.shop_shuffle.copy()
     world.shop_shuffle_slots = args.shop_shuffle_slots.copy()
-    world.progression_balancing = {player: not balance for player, balance in args.skip_progression_balancing.items()}
+    world.progression_balancing = args.progression_balancing.copy
     world.shuffle_prizes = args.shuffle_prizes.copy()
     world.sprite_pool = args.sprite_pool.copy()
     world.dark_room_logic = args.dark_room_logic.copy()
     world.plando_items = args.plando_items.copy()
     world.plando_texts = args.plando_texts.copy()
     world.plando_connections = args.plando_connections.copy()
-    world.er_seeds = args.er_seeds.copy()
+    world.er_seeds = getattr(args, "er_seeds", {})
     world.restrict_dungeon_item_on_boss = args.restrict_dungeon_item_on_boss.copy()
     world.required_medallions = args.required_medallions.copy()
     world.game = args.game.copy()
@@ -123,8 +141,6 @@ def main(args, seed=None):
             if shuffle == "vanilla":
                 world.er_seeds[player] = "vanilla"
             elif seed.startswith("group-"):  # renamed from team to group to not confuse with existing team name use
-                world.er_seeds[player] = get_same_seed(world, (shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
-            elif seed.startswith("team-"):  # TODO: remove on breaking_changes
                 world.er_seeds[player] = get_same_seed(world, (shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
             elif not args.race:
                 world.er_seeds[player] = seed
@@ -155,11 +171,6 @@ def main(args, seed=None):
             item = ItemFactory(tok.strip(), player)
             if item:
                 world.push_precollected(item)
-        # item in item_table gets checked in mystery, but not CLI - so we double-check here
-        world.local_items[player] = {item.strip() for item in args.local_items[player].split(',') if
-                                     item.strip() in item_table}
-        world.non_local_items[player] = {item.strip() for item in args.non_local_items[player].split(',') if
-                                         item.strip() in item_table}
 
         # enforce pre-defined local items.
         if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
@@ -255,7 +266,7 @@ def main(args, seed=None):
 
     logger.info('Placing Dungeon Items.')
 
-    if args.algorithm in ['balanced', 'vt26'] or any(
+    if world.algorithm in ['balanced', 'vt26'] or any(
             list(args.mapshuffle.values()) + list(args.compassshuffle.values()) +
             list(args.keyshuffle.values()) + list(args.bigkeyshuffle.values())):
         fill_dungeons_restrictive(world)
@@ -264,13 +275,13 @@ def main(args, seed=None):
 
     logger.info('Fill the world.')
 
-    if args.algorithm == 'flood':
+    if world.algorithm == 'flood':
         flood_items(world)  # different algo, biased towards early game progress items
-    elif args.algorithm == 'vt25':
+    elif world.algorithm == 'vt25':
         distribute_items_restrictive(world, False)
-    elif args.algorithm == 'vt26':
+    elif world.algorithm == 'vt26':
         distribute_items_restrictive(world, True)
-    elif args.algorithm == 'balanced':
+    elif world.algorithm == 'balanced':
         distribute_items_restrictive(world, True)
 
     logger.info("Filling Shop Slots")
@@ -517,6 +528,7 @@ def main(args, seed=None):
 
 def copy_world(world):
     # ToDo: Not good yet
+    # delete now?
     ret = MultiWorld(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.item_functionality, world.timer, world.progressive, world.goal, world.algorithm, world.accessibility, world.shuffle_ganon, world.retro, world.custom, world.customitemarray, world.hints)
     ret.teams = world.teams
     ret.player_names = copy.deepcopy(world.player_names)
@@ -663,7 +675,7 @@ def copy_dynamic_regions_and_locations(world, ret):
 def create_playthrough(world):
     # create a copy as we will modify it
     old_world = world
-    world = copy_world(world)
+    world = world.copy()
 
     # get locations containing progress items
     prog_locations = {location for location in world.get_filled_locations() if location.item.advancement}
