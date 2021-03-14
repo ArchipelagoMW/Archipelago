@@ -25,9 +25,9 @@ class MultiWorld():
     er_seeds: Dict[int, str]
 
     def __init__(self, players: int):
+        # TODO: move per-player settings into new classes per game-type instead of clumping it all together here
 
-        self.random = random.Random()  # world-local random state is saved in case of future use a
-        # persistently running program with multiple worlds rolling concurrently
+        self.random = random.Random()  # world-local random state is saved for multiple generations running concurrently
         self.players = players
         self.teams = 1
         self.algorithm = 'balanced'
