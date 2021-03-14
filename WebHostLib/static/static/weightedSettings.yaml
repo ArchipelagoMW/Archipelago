@@ -20,7 +20,7 @@
 # For use with the weighted-settings page on the website. Changing this value will cause all users to be prompted
 # to update their settings. The version number should match the current released version number, and the revision
 # should be updated manually by whoever edits this file.
-ws_version: 4.1.0 rev0
+ws_version: 4.1.1 rev0
 
 description: Template Name # Used to describe your yaml. Useful if you have multiple files
 name: YourName # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
@@ -356,7 +356,7 @@ rom:
   #  - random  # You can specify random multiple times for however many potentially unique random sprites you want in your pool.
   sprite: # Enter the name of your preferred sprite and weight it appropriately
     random: 0
-    Link: 50 # To add other sprites: open the gui/Creator, go to adjust, select a sprite and write down the name the gui calls it
+    link: 50 # To add other sprites: open the gui/Creator, go to adjust, select a sprite and write down the name the gui calls it
   disablemusic: # If "on", all in-game music will be disabled
     on: 0
     off: 50

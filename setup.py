@@ -134,6 +134,10 @@ if os.path.exists(qusb2sneslog):
 qusb2snesconfig = buildfolder / "QUsb2Snes" / "config.ini"
 if os.path.exists(qusb2snesconfig):
     os.remove(qusb2snesconfig)
+alttpr_sprites_folder = buildfolder / "data" / "sprites" / "alttpr"
+for file in os.listdir(alttpr_sprites_folder):
+    if file != ".gitignore":
+        os.remove(alttpr_sprites_folder / file)
 
 if signtool:
     for exe in exes:

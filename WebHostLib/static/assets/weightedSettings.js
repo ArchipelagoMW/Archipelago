@@ -401,8 +401,6 @@ const addSpriteOption = (event) => {
   const presetNumber = document.getElementById('preset-number').value;
   const playerSettings = JSON.parse(localStorage.getItem(`weightedSettings${presetNumber}`));
   const spriteName = event.target.getAttribute('data-sprite');
-  console.log(event.target);
-  console.log(spriteName);
 
   if (Object.keys(playerSettings.rom.sprite).indexOf(spriteName) !== -1) {
     // Do not add the same sprite twice
@@ -445,8 +443,11 @@ const buildSpritePicker = (spriteData) => {
   sprites.setAttribute('id', 'sprite-picker-sprites');
   spriteData.sprites.forEach((sprite) => {
     const spriteImg = document.createElement('img');
-    spriteImg.setAttribute('src', `static/static/sprites/${sprite.name}.gif`);
-    spriteImg.setAttribute('data-sprite', sprite.name);
+    let spriteGifFile = sprite.file.split('.');
+    spriteGifFile.pop();
+    spriteGifFile = spriteGifFile.join('.') + '.gif';
+    spriteImg.setAttribute('src', `static/static/sprites/${spriteGifFile}`);
+    spriteImg.setAttribute('data-sprite', sprite.file.split('.')[0]);
     spriteImg.setAttribute('alt', sprite.name);
 
     // Wrap the image in a span to allow for tooltip presence
