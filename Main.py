@@ -512,12 +512,12 @@ def main(args, seed=None):
             raise Exception("Game appears as unbeatable. Aborting.")
         else:
             logger.warning("Location Accessibility requirements not fulfilled.")
-    if not args.skip_playthrough:
-        logger.info('Calculating playthrough.')
-        create_playthrough(world)
     if multidata_task:
         multidata_task.result()  # retrieve exception if one exists
     pool.shutdown()  # wait for all queued tasks to complete
+    if not args.skip_playthrough:
+        logger.info('Calculating playthrough.')
+    create_playthrough(world)
     if args.create_spoiler:  # needs spoiler.hashes to be filled, that depend on rom_futures being done
         world.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))
 
@@ -673,10 +673,7 @@ def copy_dynamic_regions_and_locations(world, ret):
 
 
 def create_playthrough(world):
-    # create a copy as we will modify it
-    old_world = world
-    world = world.copy()
-
+    """Destructive to the world it is run on."""
     # get locations containing progress items
     prog_locations = {location for location in world.get_filled_locations() if location.item.advancement}
     state_cache = [None]
@@ -708,9 +705,9 @@ def create_playthrough(world):
                 raise RuntimeError(f'Not all progression items reachable ({sphere_candidates}). '
                                    f'Something went terribly wrong here.')
             else:
-                old_world.spoiler.unreachables = sphere_candidates.copy()
+                world.spoiler.unreachables = sphere_candidates
                 break
-
+    restore_later = {}
     # in the second phase, we cull each sphere such that the game is still beatable, reducing each range of influence to the bare minimum required inside it
     for num, sphere in reversed(tuple(enumerate(collection_spheres))):
         to_delete = set()
@@ -721,6 +718,7 @@ def create_playthrough(world):
             location.item = None
             if world.can_beat_game(state_cache[num]):
                 to_delete.add(location)
+                restore_later[location] = old_item
             else:
                 # still required, got to keep it around
                 location.item = old_item
@@ -774,19 +772,23 @@ def create_playthrough(world):
         pathpairs = zip_longest(pathsiter, pathsiter)
         return list(pathpairs)
 
-    old_world.spoiler.paths = dict()
+    world.spoiler.paths = dict()
     for player in range(1, world.players + 1):
-        old_world.spoiler.paths.update({ str(location) : get_path(state, location.parent_region) for sphere in collection_spheres for location in sphere if location.player == player})
+        world.spoiler.paths.update({ str(location) : get_path(state, location.parent_region) for sphere in collection_spheres for location in sphere if location.player == player})
         if player in world.alttp_player_ids:
-            for path in dict(old_world.spoiler.paths).values():
+            for path in dict(world.spoiler.paths).values():
                 if any(exit == 'Pyramid Fairy' for (_, exit) in path):
                     if world.mode[player] != 'inverted':
-                        old_world.spoiler.paths[str(world.get_region('Big Bomb Shop', player))] = get_path(state, world.get_region('Big Bomb Shop', player))
+                        world.spoiler.paths[str(world.get_region('Big Bomb Shop', player))] = get_path(state, world.get_region('Big Bomb Shop', player))
                     else:
-                        old_world.spoiler.paths[str(world.get_region('Inverted Big Bomb Shop', player))] = get_path(state, world.get_region('Inverted Big Bomb Shop', player))
+                        world.spoiler.paths[str(world.get_region('Inverted Big Bomb Shop', player))] = get_path(state, world.get_region('Inverted Big Bomb Shop', player))
 
     # we can finally output our playthrough
-    old_world.spoiler.playthrough = {"0": sorted([str(item) for item in world.precollected_items if item.advancement])}
+    world.spoiler.playthrough = {"0": sorted([str(item) for item in world.precollected_items if item.advancement])}
 
     for i, sphere in enumerate(collection_spheres):
-        old_world.spoiler.playthrough[str(i + 1)] = {str(location): str(location.item) for location in sorted(sphere)}
+        world.spoiler.playthrough[str(i + 1)] = {str(location): str(location.item) for location in sorted(sphere)}
+
+    # repair the world again
+    for location, item in restore_later.items():
+        location.item = item

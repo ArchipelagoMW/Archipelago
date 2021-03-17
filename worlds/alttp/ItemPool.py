@@ -228,11 +228,11 @@ def generate_itempool(world, player: int):
         raise NotImplementedError(f"Diffulty {world.difficulty[player]}")
     if world.goal[player] not in {'ganon', 'pedestal', 'bosses', 'triforcehunt', 'localtriforcehunt', 'icerodhunt',
                                   'ganontriforcehunt', 'localganontriforcehunt', 'crystals', 'ganonpedestal'}:
-        raise NotImplementedError(f"Goal {world.goal[player]}")
+        raise NotImplementedError(f"Goal {world.goal[player]} for player {player}")
     if world.mode[player] not in {'open', 'standard', 'inverted'}:
-        raise NotImplementedError(f"Mode {world.mode[player]}")
+        raise NotImplementedError(f"Mode {world.mode[player]} for player {player}")
     if world.timer[player] not in {False, 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'}:
-        raise NotImplementedError(f"Timer {world.mode[player]}")
+        raise NotImplementedError(f"Timer {world.mode[player]} for player {player}")
 
     if world.timer[player] in ['ohko', 'timed-ohko']:
         world.can_take_damage[player] = False

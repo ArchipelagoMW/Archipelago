@@ -141,10 +141,6 @@ class MultiWorld():
         #for i in range(players):
         #    self.worlds.append(worlds.alttp.ALTTPWorld({}, i))
 
-    def copy(self) -> MultiWorld:
-        import copy
-        return copy.deepcopy(self)
-
     def secure(self):
         self.random = secrets.SystemRandom()
 
