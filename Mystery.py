@@ -112,7 +112,6 @@ def main(args=None, callback=ERmain):
     erargs.outputname = seedname
     erargs.outputpath = args.outputpath
     erargs.teams = args.teams
-    erargs.progression_balancing = {}
 
     # set up logger
     if args.loglevel:
