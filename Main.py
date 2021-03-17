@@ -707,8 +707,10 @@ def create_playthrough(world):
             else:
                 world.spoiler.unreachables = sphere_candidates
                 break
+
+    # in the second phase, we cull each sphere such that the game is still beatable,
+    # reducing each range of influence to the bare minimum required inside it
     restore_later = {}
-    # in the second phase, we cull each sphere such that the game is still beatable, reducing each range of influence to the bare minimum required inside it
     for num, sphere in reversed(tuple(enumerate(collection_spheres))):
         to_delete = set()
         for location in sphere:
@@ -727,12 +729,15 @@ def create_playthrough(world):
         sphere -= to_delete
 
     # second phase, sphere 0
+    removed_precollected = []
     for item in (i for i in world.precollected_items if i.advancement):
         logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
         world.precollected_items.remove(item)
         world.state.remove(item)
         if not world.can_beat_game():
             world.push_precollected(item)
+        else:
+            removed_precollected.append(item)
 
     # we are now down to just the required progress items in collection_spheres. Unfortunately
     # the previous pruning stage could potentially have made certain items dependant on others
@@ -792,3 +797,6 @@ def create_playthrough(world):
     # repair the world again
     for location, item in restore_later.items():
         location.item = item
+
+    for item in removed_precollected:
+        world.push_precollected(item)
