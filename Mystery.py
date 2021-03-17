@@ -216,16 +216,10 @@ def main(args=None, callback=ERmain):
             erargs.name[player] = f"Player{player}"
         elif not erargs.name[player]:  # if name was not specified, generate it from filename
             erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
-        new_name = []
         name_counter[erargs.name[player]] += 1
-        for name in erargs.name[player].split("%%"):
-            if "%number%" in name:
-                name = name.replace("%number%", str(name_counter[erargs.name[player]]))
-            if "%player%" in name:
-                name = name.replace("%player%", str(player))
-            new_name.append(name)
-        erargs.name[player] = handle_name("%".join(new_name))
-        logging.info(erargs.name[player])
+        erargs.name[player]= handle_name(erargs.name[player].format(number=name_counter[erargs.name[player]],
+                                                                    player=player))
+
     erargs.names = ",".join(erargs.name[i] for i in range(1, args.multi + 1))
     del (erargs.name)
     if args.yaml_output:
