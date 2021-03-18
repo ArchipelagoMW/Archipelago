@@ -404,7 +404,7 @@ def guiMain(args=None):
         guiargs.red_clock_time = timerRedVar.get()
         guiargs.blue_clock_time = timerBlueVar.get()
         guiargs.green_clock_time = timerGreenVar.get()
-        guiargs.skip_progression_balancing = not balancingVar.get()
+        guiargs.progression_balancing = balancingVar.get()
         if guiargs.timer == "none":
             guiargs.timer = False
         guiargs.dungeon_counters = dungeonCounterVar.get()

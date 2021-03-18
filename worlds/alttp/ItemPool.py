@@ -526,9 +526,8 @@ def fill_prizes(world, attempts=15):
         empty_crystal_locations = [loc for loc in crystal_locations if not loc.item]
         for attempt in range(attempts):
             try:
-                prizepool = list(unplaced_prizes)
-                prize_locs = list(empty_crystal_locations)
-                world.random.shuffle(prizepool)
+                prizepool = unplaced_prizes.copy()
+                prize_locs = empty_crystal_locations.copy()
                 world.random.shuffle(prize_locs)
                 fill_restrictive(world, all_state, prize_locs, prizepool, True, lock=True)
             except FillError as e:
