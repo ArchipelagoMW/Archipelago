@@ -27,7 +27,7 @@ from fuzzywuzzy import process as fuzzy_process
 
 from worlds.alttp import Items, Regions
 from worlds import network_data_package, lookup_any_item_id_to_name, lookup_any_item_name_to_id, \
-    lookup_any_location_id_to_name
+    lookup_any_location_id_to_name, lookup_any_location_name_to_id
 import Utils
 from Utils import get_item_name_from_id, get_location_name_from_address, \
     _version_tuple, restricted_loads, Version
@@ -35,8 +35,8 @@ from NetUtils import Node, Endpoint, CLientStatus, NetworkItem, decode
 
 colorama.init()
 lttp_console_names = frozenset(set(Items.item_table) | set(Items.item_name_groups) | set(Regions.lookup_name_to_id))
-all_items = frozenset(lookup_any_item_id_to_name)
-all_locations = frozenset(lookup_any_location_id_to_name)
+all_items = frozenset(lookup_any_item_name_to_id)
+all_locations = frozenset(lookup_any_location_name_to_id)
 all_console_names = frozenset(all_items | all_locations)
 
 class Client(Endpoint):
