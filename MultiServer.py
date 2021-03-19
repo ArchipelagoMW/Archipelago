@@ -34,7 +34,8 @@ from NetUtils import Node, Endpoint, CLientStatus, NetworkItem, decode
 
 colorama.init()
 lttp_console_names = frozenset(set(Items.item_table) | set(Items.item_name_groups) | set(Regions.lookup_name_to_id))
-
+all_console_names = frozenset(set(network_data_package["lookup_any_location_id_to_name"].values()) |
+                              set(network_data_package["lookup_any_item_id_to_name"].values()))
 
 class Client(Endpoint):
     version = Version(0, 0, 0)
@@ -533,7 +534,7 @@ def json_format_send_event(net_item: NetworkItem, receiving_player: int):
     return {"cmd": "PrintJSON", "data": parts, "type": "ItemSend",
             "receiving": receiving_player, "sending": net_item.player}
 
-def get_intended_text(input_text: str, possible_answers: typing.Iterable[str]= lttp_console_names) -> typing.Tuple[str, bool, str]:
+def get_intended_text(input_text: str, possible_answers: typing.Iterable[str]= all_console_names) -> typing.Tuple[str, bool, str]:
     picks = fuzzy_process.extract(input_text, possible_answers, limit=2)
     if len(picks) > 1:
         dif = picks[0][1] - picks[1][1]
