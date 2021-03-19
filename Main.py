@@ -487,7 +487,8 @@ def main(args, seed=None):
             multidata = zlib.compress(pickle.dumps({"names": parsed_names,
                                                     "connect_names": connect_names,
                                                     "remote_items": {player for player in range(1, world.players + 1) if
-                                                                     world.remote_items[player]},
+                                                                     world.remote_items[player] or
+                                                                     world.game[player] == "Hollow Knight"},
                                                     "locations": {
                                                         (location.address, location.player):
                                                             (location.item.code, location.item.player)

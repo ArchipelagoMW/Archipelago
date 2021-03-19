@@ -26,7 +26,8 @@ from prompt_toolkit.patch_stdout import patch_stdout
 from fuzzywuzzy import process as fuzzy_process
 
 from worlds.alttp import Items, Regions
-from worlds import network_data_package
+from worlds import network_data_package, lookup_any_item_id_to_name, lookup_any_item_name_to_id, \
+    lookup_any_location_id_to_name
 import Utils
 from Utils import get_item_name_from_id, get_location_name_from_address, \
     _version_tuple, restricted_loads, Version
@@ -34,8 +35,8 @@ from NetUtils import Node, Endpoint, CLientStatus, NetworkItem, decode
 
 colorama.init()
 lttp_console_names = frozenset(set(Items.item_table) | set(Items.item_name_groups) | set(Regions.lookup_name_to_id))
-all_items = frozenset(network_data_package["lookup_any_item_id_to_name"].values())
-all_locations = frozenset(network_data_package["lookup_any_location_id_to_name"].values())
+all_items = frozenset(lookup_any_item_id_to_name)
+all_locations = frozenset(lookup_any_location_id_to_name)
 all_console_names = frozenset(all_items | all_locations)
 
 class Client(Endpoint):
@@ -1188,9 +1189,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
             if usable:
                 for client in self.ctx.endpoints:
                     if client.name == seeked_player:
-                        new_item = NetworkItem(Items.item_table[item][2], -1, client.slot)
+                        new_item = NetworkItem(lookup_any_item_name_to_id[item], -1, client.slot)
                         get_received_items(self.ctx, client.team, client.slot).append(new_item)
-                        self.ctx.notify_all('Cheat console: sending "' + item + '" to ' + self.ctx.get_aliased_name(client.team, client.slot))
+                        self.ctx.notify_all('Cheat console: sending "' + item + '" to ' +
+                                            self.ctx.get_aliased_name(client.team, client.slot))
                         send_new_items(self.ctx)
                         return True
             else:
@@ -1213,7 +1215,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                             hints = []
                             for item in Items.item_name_groups[item]:
                                 hints.extend(collect_hints(self.ctx, team, slot, item))
-                        elif item in Items.item_table:  # item name
+                        elif item in all_items:  # item name
                             hints = collect_hints(self.ctx, team, slot, item)
                         else:  # location name
                             hints = collect_hints_location(self.ctx, team, slot, item)
