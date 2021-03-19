@@ -34,8 +34,9 @@ from NetUtils import Node, Endpoint, CLientStatus, NetworkItem, decode
 
 colorama.init()
 lttp_console_names = frozenset(set(Items.item_table) | set(Items.item_name_groups) | set(Regions.lookup_name_to_id))
-all_console_names = frozenset(set(network_data_package["lookup_any_location_id_to_name"].values()) |
-                              set(network_data_package["lookup_any_item_id_to_name"].values()))
+all_items = frozenset(network_data_package["lookup_any_item_id_to_name"].values())
+all_locations = frozenset(network_data_package["lookup_any_location_id_to_name"].values())
+all_console_names = frozenset(all_items | all_locations)
 
 class Client(Endpoint):
     version = Version(0, 0, 0)
@@ -1183,7 +1184,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
             item = " ".join(item_name)
-            item, usable, response = get_intended_text(item, Items.item_table.keys())
+            item, usable, response = get_intended_text(item, all_items)
             if usable:
                 for client in self.ctx.endpoints:
                     if client.name == seeked_player:
