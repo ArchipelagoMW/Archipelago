@@ -359,7 +359,7 @@ class RestrictedUnpickler(pickle.Unpickler):
     def find_class(self, module, name):
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
-        if module == "NetUtils" and name in {"NetworkItem"}:
+        if module == "NetUtils" and name in {"NetworkItem", "ClientStatus"}:
             import NetUtils
             return getattr(NetUtils, name)
         # Forbid everything else.
