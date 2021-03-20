@@ -129,6 +129,9 @@ def main(args, seed=None):
     world.restrict_dungeon_item_on_boss = args.restrict_dungeon_item_on_boss.copy()
     world.required_medallions = args.required_medallions.copy()
     world.game = args.game.copy()
+    import Options
+    for hk_option in Options.hollow_knight_options:
+        setattr(world, hk_option, getattr(args, hk_option))
 
     world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}
 
@@ -257,6 +260,9 @@ def main(args, seed=None):
         gen_hollow(world, player)
 
     logger.info("Running Item Plando")
+
+    for item in world.itempool:
+        item.world = world
 
     distribute_planned(world)
 

@@ -447,6 +447,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     ret = argparse.Namespace()
     ret.name = get_choice('name', weights)
     ret.accessibility = get_choice('accessibility', weights)
+    ret.progression_balancing = get_choice('progression_balancing', weights, True)
     ret.game = get_choice("game", weights, "A Link to the Past")
 
     ret.local_items = set()
@@ -494,10 +495,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
         raise ValueError(f"Unknown Dark Room Logic: \"{ret.dark_room_logic}\"")
 
     ret.restrict_dungeon_item_on_boss = get_choice('restrict_dungeon_item_on_boss', weights, False)
-
-    ret.progression_balancing = get_choice('progression_balancing', weights, True)
-    # item_placement = get_choice('item_placement')
-    # not supported in ER
 
     dungeon_items = get_choice('dungeon_items', weights)
     if dungeon_items == 'full' or dungeon_items == True:

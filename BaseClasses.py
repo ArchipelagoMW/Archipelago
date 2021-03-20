@@ -131,15 +131,17 @@ class MultiWorld():
             set_player_attr('plando_connections', [])
             set_player_attr('game', "A Link to the Past")
             set_player_attr('completion_condition', lambda state: True)
-
-            for hk_logic in {"MILDSKIPS", "SPICYSKIPS", "FIREBALLSKIPS", "ACIDSKIPS", "SPIKETUNNELS",
-                "DARKROOMS", "CURSED", "SHADESKIPS"}:
-                set_player_attr(hk_logic, False)
-            set_player_attr("NOTCURSED", True)
+            import Options
+            for hk_option in Options.hollow_knight_options:
+                set_player_attr(hk_option, False)
 
         self.worlds = []
         #for i in range(players):
         #    self.worlds.append(worlds.alttp.ALTTPWorld({}, i))
+
+    @property
+    def NOTCURSED(self):  # not here to stay
+        return {player: not cursed for player, cursed in self.CURSED.items()}
 
     def secure(self):
         self.random = secrets.SystemRandom()
@@ -264,7 +266,7 @@ class MultiWorld():
             soft_collect(item)
 
         if keys:
-            for p in range(1, self.players + 1):
+            for p in self.alttp_player_ids:
                 from worlds.alttp.Items import ItemFactory
                 for item in ItemFactory(
                         ['Small Key (Hyrule Castle)', 'Big Key (Eastern Palace)', 'Big Key (Desert Palace)',
@@ -310,7 +312,7 @@ class MultiWorld():
         if location.can_fill(self.state, item, False):
             location.item = item
             item.location = location
-            item.world = self
+            item.world = self # try to not have this here anymore
             if collect:
                 self.state.collect(item, location.event, location)
 
@@ -954,10 +956,7 @@ class Region(object):
         return False
 
     def can_fill(self, item: Item):
-        inside_dungeon_item = ((item.smallkey and not self.world.keyshuffle[item.player])
-                               or (item.bigkey and not self.world.bigkeyshuffle[item.player])
-                               or (item.map and not self.world.mapshuffle[item.player])
-                               or (item.compass and not self.world.compassshuffle[item.player]))
+        inside_dungeon_item = item.locked_dungeon_item
         sewer_hack = self.world.mode[item.player] == 'standard' and item.name == 'Small Key (Hyrule Castle)'
         if sewer_hack or inside_dungeon_item:
             return self.dungeon and self.dungeon.is_dungeon_item(item) and item.player == self.player
@@ -1037,7 +1036,7 @@ class Dungeon(object):
         return self.dungeon_items + self.keys
 
     def is_dungeon_item(self, item: Item) -> bool:
-        return item.player == self.player and item.name in [dungeon_item.name for dungeon_item in self.all_items]
+        return item.player == self.player and item.name in (dungeon_item.name for dungeon_item in self.all_items)
 
     def __eq__(self, other: Dungeon) -> bool:
         if not other:
@@ -1072,7 +1071,7 @@ class Location():
     def __init__(self, player: int, name: str = '', address:int = None, parent=None):
         self.name = name
         self.address = address
-        self.parent_region = parent
+        self.parent_region: Region = parent
         self.recursion_count = 0
         self.player = player
         self.item = None
@@ -1161,6 +1160,31 @@ class Item():
     @property
     def compass(self) -> bool:
         return self.type == 'Compass'
+
+    @property
+    def dungeon_item(self) -> Optional[str]:
+        if self.game == "A Link to the Past" and self.type in {"SmallKey", "BigKey", "Map", "Compass"}:
+            return self.type
+
+    @property
+    def shuffled_dungeon_item(self) -> bool:
+        dungeon_item_type = self.dungeon_item
+        if dungeon_item_type:
+            return {"SmallKey" : self.world.keyshuffle,
+                    "BigKey": self.world.bigkeyshuffle,
+                    "Map": self.world.mapshuffle,
+                    "Compass": self.world.compassshuffle}[dungeon_item_type][self.player]
+        return False
+
+    @property
+    def locked_dungeon_item(self) -> bool:
+        dungeon_item_type = self.dungeon_item
+        if dungeon_item_type:
+            return not {"SmallKey" : self.world.keyshuffle,
+                        "BigKey": self.world.bigkeyshuffle,
+                        "Map": self.world.mapshuffle,
+                        "Compass": self.world.compassshuffle}[dungeon_item_type][self.player]
+        return False
 
     def __repr__(self):
         return self.__str__()
@@ -1367,6 +1391,11 @@ class Spoiler(object):
                     outfile.write('Progression Balanced:            %s\n' % (
                         'Yes' if self.metadata['progression_balancing'][player] else 'No'))
                 outfile.write('Accessibility:                   %s\n' % self.metadata['accessibility'][player])
+                if player in self.world.hk_player_ids:
+                    import Options
+                    for hk_option in Options.hollow_knight_options:
+                        res = getattr(self.world, hk_option)[player]
+                        outfile.write(f'{hk_option+":":33}{res}\n')
                 if player in self.world.alttp_player_ids:
                     for team in range(self.world.teams):
                         outfile.write('%s%s\n' % (

@@ -115,7 +115,10 @@ def fill_dungeons(world):
 
 
 def get_dungeon_item_pool(world):
-    return [item for dungeon in world.dungeons for item in dungeon.all_items]
+    items = [item for dungeon in world.dungeons for item in dungeon.all_items]
+    for item in items:
+        item.world = world
+    return items
 
 def fill_dungeons_restrictive(world):
     """Places dungeon-native items into their dungeons, places nothing if everything is shuffled outside."""

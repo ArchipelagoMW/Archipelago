@@ -10,11 +10,11 @@ class AssembleOptions(type):
             options.update(base.options)
             name_lookup.update(name_lookup)
         new_options = {name[7:].lower(): option_id for name, option_id in attrs.items() if
-                        name.startswith("option_")}
+                       name.startswith("option_")}
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
         options.update(new_options)
 
-        #apply aliases, without name_lookup
+        # apply aliases, without name_lookup
         options.update({name[6:].lower(): option_id for name, option_id in attrs.items() if
                         name.startswith("alias_")})
         return super(AssembleOptions, cls).__new__(cls, name, bases, attrs)
@@ -77,6 +77,12 @@ class Toggle(Option):
         else:
             return self.value > other
 
+    def __bool__(self):
+        return bool(self.value)
+
+    def __int__(self):
+        return int(self.value)
+
     def get_option_name(self):
         return bool(self.value)
 
@@ -108,17 +114,20 @@ class Logic(Choice):
 
 class Objective(Choice):
     option_crystals = 0
-    #option_pendants = 1
+    # option_pendants = 1
     option_triforce_pieces = 2
     option_pedestal = 3
     option_bingo = 4
 
-local_objective = Toggle # local triforce pieces, local dungeon prizes etc.
+
+local_objective = Toggle  # local triforce pieces, local dungeon prizes etc.
+
 
 class Goal(Choice):
     option_kill_ganon = 0
     option_kill_ganon_and_gt_agahnim = 1
     option_hand_in = 2
+
 
 class Accessibility(Choice):
     option_locations = 0
@@ -185,31 +194,44 @@ RandomizeSoulTotems = Toggle
 RandomizePalaceTotems = Toggle
 RandomizeLoreTablets = Toggle
 RandomizeLifebloodCocoons = Toggle
+RandomizeFlames = Toggle
 
 hollow_knight_randomize_options: typing.Dict[str, Option] = {
-    "RandomizeDreamers" : RandomizeDreamers,
-    "RandomizeSkills" : RandomizeSkills,
-    "RandomizeCharms" : RandomizeCharms,
-    "RandomizeKeys" : RandomizeKeys,
-    "RandomizeGeoChests" : RandomizeGeoChests,
-    "RandomizeMaskShards" : RandomizeMaskShards,
-    "RandomizeVesselFragments" : RandomizeVesselFragments,
-    "RandomizeCharmNotches" : RandomizeCharmNotches,
-    "RandomizePaleOre" : RandomizePaleOre,
-    "RandomizeRancidEggs" : RandomizeRancidEggs,
-    "RandomizeRelics" : RandomizeRelics,
-    "RandomizeMaps" : RandomizeMaps,
-    "RandomizeStags" : RandomizeStags,
-    "RandomizeGrubs" : RandomizeGrubs,
-    "RandomizeWhisperingRoots" : RandomizeWhisperingRoots,
-    "RandomizeRocks" : RandomizeRocks,
-    "RandomizeSoulTotems" : RandomizeSoulTotems,
-    "RandomizePalaceTotems" : RandomizePalaceTotems,
-    "RandomizeLoreTablets" : RandomizeLoreTablets,
-    "RandomizeLifebloodCocoons" : RandomizeLifebloodCocoons,
+    "RandomizeDreamers": RandomizeDreamers,
+    "RandomizeSkills": RandomizeSkills,
+    "RandomizeCharms": RandomizeCharms,
+    "RandomizeKeys": RandomizeKeys,
+    "RandomizeGeoChests": RandomizeGeoChests,
+    "RandomizeMaskShards": RandomizeMaskShards,
+    "RandomizeVesselFragments": RandomizeVesselFragments,
+    "RandomizeCharmNotches": RandomizeCharmNotches,
+    "RandomizePaleOre": RandomizePaleOre,
+    "RandomizeRancidEggs": RandomizeRancidEggs,
+    "RandomizeRelics": RandomizeRelics,
+    "RandomizeMaps": RandomizeMaps,
+    "RandomizeStags": RandomizeStags,
+    "RandomizeGrubs": RandomizeGrubs,
+    "RandomizeWhisperingRoots": RandomizeWhisperingRoots,
+    "RandomizeRocks": RandomizeRocks,
+    "RandomizeSoulTotems": RandomizeSoulTotems,
+    "RandomizePalaceTotems": RandomizePalaceTotems,
+    "RandomizeLoreTablets": RandomizeLoreTablets,
+    "RandomizeLifebloodCocoons": RandomizeLifebloodCocoons,
+    "RandomizeFlames": RandomizeFlames
 }
 
-hollow_knight_options: typing.Dict[str, Option] = {**hollow_knight_randomize_options}
+hollow_knight_skip_options: typing.Dict[str, type(Option)] = {
+    "MILDSKIPS": Toggle,
+    "SPICYSKIPS": Toggle,
+    "FIREBALLSKIPS": Toggle,
+    "ACIDSKIPS": Toggle,
+    "SPIKETUNNELS": Toggle,
+    "DARKROOMS": Toggle,
+    "CURSED": Toggle,
+    "SHADESKIPS": Toggle,
+}
+
+hollow_knight_options: typing.Dict[str, Option] = {**hollow_knight_randomize_options, **hollow_knight_skip_options}
 
 if __name__ == "__main__":
     import argparse

@@ -50,8 +50,6 @@ def fill_restrictive(world, base_state: CollectionState, locations, itempool, si
                     break
 
             else:
-                # fill in name of world for item
-                item_to_place.world = world
                 # we filled all reachable spots. Maybe the game can be beaten anyway?
                 unplaced_items.append(item_to_place)
                 if world.accessibility[item_to_place.player] != 'none' and world.can_beat_game():
