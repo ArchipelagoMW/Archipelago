@@ -1,6 +1,13 @@
 const path = require('path');
 
 module.exports = {
+  mode: 'development',
+  watch: true,
+  resolve: {
+    fallback: {
+      crypto: require.resolve('crypto-browserify'),
+    },
+  },
   entry: {
     index: './src/js/index.js',
   },
