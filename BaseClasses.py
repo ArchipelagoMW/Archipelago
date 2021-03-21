@@ -1218,13 +1218,9 @@ class Spoiler(object):
 
     def parse_data(self):
         self.medallions = OrderedDict()
-        if self.world.players == 1:
-            self.medallions['Misery Mire'] = self.world.required_medallions[1][0]
-            self.medallions['Turtle Rock'] = self.world.required_medallions[1][1]
-        else:
-            for player in range(1, self.world.players + 1):
-                self.medallions[f'Misery Mire ({self.world.get_player_names(player)})'] = self.world.required_medallions[player][0]
-                self.medallions[f'Turtle Rock ({self.world.get_player_names(player)})'] = self.world.required_medallions[player][1]
+        for player in self.world.alttp_player_ids:
+            self.medallions[f'Misery Mire ({self.world.get_player_names(player)})'] = self.world.required_medallions[player][0]
+            self.medallions[f'Turtle Rock ({self.world.get_player_names(player)})'] = self.world.required_medallions[player][1]
 
         self.startinventory = list(map(str, self.world.precollected_items))
 
