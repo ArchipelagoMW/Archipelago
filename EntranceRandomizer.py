@@ -38,6 +38,7 @@ def parse_arguments(argv, no_defaults=False):
                              No Logic: Distribute items without regard for
                                              item requirements.
                              ''')
+    parser.add_argument('--glitch_triforce', help='Allow glitching to Triforce from Ganon\'s room', action='store_true')
     parser.add_argument('--mode', default=defval('open'), const='open', nargs='?', choices=['standard', 'open', 'inverted'],
                         help='''\
                              Select game mode. (default: %(default)s)

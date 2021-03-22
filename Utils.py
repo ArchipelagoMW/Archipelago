@@ -224,6 +224,7 @@ def get_default_options() -> dict:
                 "zip_spoiler": 0,
                 "zip_multidata": 1,
                 "zip_format": 1,
+                "glitch_triforce_room": 1,
                 "race": 0,
                 "cpu_threads": 0,
                 "max_attempts": 0,

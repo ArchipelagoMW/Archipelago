@@ -105,6 +105,7 @@ def main(args, seed=None):
     world.er_seeds = args.er_seeds.copy()
     world.restrict_dungeon_item_on_boss = args.restrict_dungeon_item_on_boss.copy()
     world.required_medallions = args.required_medallions.copy()
+    world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
     world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}
 

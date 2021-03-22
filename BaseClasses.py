@@ -43,6 +43,7 @@ class World(object):
         # persistently running program with multiple worlds rolling concurrently
         self.players = players
         self.teams = 1
+        self.glitch_triforce = False
         self.shuffle = shuffle.copy()
         self.logic = logic.copy()
         self.mode = mode.copy()

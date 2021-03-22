@@ -1495,7 +1495,7 @@ def patch_rom(world, rom, player, team, enemized):
     rom.write_byte(0xEFD95, digging_game_rng)
     rom.write_byte(0x1800A3, 0x01)  # enable correct world setting behaviour after agahnim kills
     rom.write_byte(0x1800A4, 0x01 if world.logic[player] != 'nologic' else 0x00)  # enable POD EG fix
-    rom.write_byte(0x186383, 0x00 if world.logic[player] != 'nologic' else 0x01)  # disable glitching to Triforce from Ganons Room
+    rom.write_byte(0x186383, 0x01 if world.glitch_triforce or world.logic[player] == 'nologic' else 0x00)  # disable glitching to Triforce from Ganons Room
     rom.write_byte(0x180042, 0x01 if world.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
 
     # remove shield from uncle
