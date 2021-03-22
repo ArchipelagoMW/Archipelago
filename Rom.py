@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '4f63251fb1f769e1a6b017346b2e51dc'
+RANDOMIZERBASEHASH = '13a75c5dd28055fbcf8f69bd8161871d'
 
 import io
 import json
@@ -1495,6 +1495,7 @@ def patch_rom(world, rom, player, team, enemized):
     rom.write_byte(0xEFD95, digging_game_rng)
     rom.write_byte(0x1800A3, 0x01)  # enable correct world setting behaviour after agahnim kills
     rom.write_byte(0x1800A4, 0x01 if world.logic[player] != 'nologic' else 0x00)  # enable POD EG fix
+    rom.write_byte(0x186383, 0x00 if world.logic[player] != 'nologic' else 0x01)  # disable glitching to Triforce from Ganons Room
     rom.write_byte(0x180042, 0x01 if world.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
 
     # remove shield from uncle
