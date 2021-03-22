@@ -273,7 +273,6 @@ def global_rules(world, player):
     set_rule(world.get_entrance('Ice Palace Entrance Room', player), lambda state: state.can_melt_things(player))
     set_rule(world.get_location('Ice Palace - Big Chest', player), lambda state: state.has('Big Key (Ice Palace)', player))
     set_rule(world.get_entrance('Ice Palace (Kholdstare)', player), lambda state: state.can_lift_rocks(player) and state.has('Hammer', player) and state.has('Big Key (Ice Palace)', player) and (state.has_key('Small Key (Ice Palace)', player, 2) or (state.has('Cane of Somaria', player) and state.has_key('Small Key (Ice Palace)', player, 1))))
-    # TODO: investigate change from VT. Changed to hookshot or 2 keys (no checking for big key in specific chests)
     set_rule(world.get_entrance('Ice Palace (East)', player), lambda state: (state.has('Hookshot', player) or (
                 item_in_locations(state, 'Big Key (Ice Palace)', player, [('Ice Palace - Spike Room', player), ('Ice Palace - Big Key Chest', player), ('Ice Palace - Map Chest', player)]) and state.has_key('Small Key (Ice Palace)', player))) and (state.world.can_take_damage[player] or state.has('Hookshot', player) or state.has('Cape', player) or state.has('Cane of Byrna', player)))
     set_rule(world.get_entrance('Ice Palace (East Top)', player), lambda state: state.can_lift_rocks(player) and state.has('Hammer', player))
