@@ -131,7 +131,7 @@ def main(args, seed=None):
     world.game = args.game.copy()
     import Options
     for hk_option in Options.hollow_knight_options:
-        setattr(world, hk_option, getattr(args, hk_option))
+        setattr(world, hk_option, getattr(args, hk_option, {}))
 
     world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}
 
