@@ -86,9 +86,9 @@ def gen_items(world: MultiWorld, player: int):
                 world.push_precollected(item)
         elif item_data.type == "Cursed":
             if world.CURSED[player]:
-                raise Exception("Cursed is not implemented yet.")
-                # implement toss_junk for HK first
+                pool.append(item)
             else:
+                # fill Focus Location with Focus and add it to start inventory as well.
                 event_location = world.get_location(item_name, player)
                 world.push_item(event_location, item)
                 event_location.event = True
