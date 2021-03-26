@@ -1059,6 +1059,9 @@ class Boss():
     def can_defeat(self, state) -> bool:
         return self.defeat_rule(state, self.player)
 
+    def __repr__(self):
+        return f"Boss({self.name})"
+
 class Location():
     shop_slot: bool = False
     shop_slot_disabled: bool = False

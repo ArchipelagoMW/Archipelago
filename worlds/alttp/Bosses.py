@@ -148,19 +148,19 @@ boss_table = {
 }
 
 boss_location_table = [
-        ['Ganons Tower', 'top'],
-        ['Tower of Hera', None],
-        ['Skull Woods', None],
-        ['Ganons Tower', 'middle'],
-        ['Eastern Palace', None],
-        ['Desert Palace', None],
-        ['Palace of Darkness', None],
-        ['Swamp Palace', None],
-        ['Thieves Town', None],
-        ['Ice Palace', None],
-        ['Misery Mire', None],
-        ['Turtle Rock', None],
-        ['Ganons Tower', 'bottom'],
+        ('Ganons Tower', 'top'),
+        ('Tower of Hera', None),
+        ('Skull Woods', None),
+        ('Ganons Tower', 'middle'),
+        ('Eastern Palace', None),
+        ('Desert Palace', None),
+        ('Palace of Darkness', None),
+        ('Swamp Palace', None),
+        ('Thieves Town', None),
+        ('Ice Palace', None),
+        ('Misery Mire', None),
+        ('Turtle Rock', None),
+        ('Ganons Tower', 'bottom'),
     ]
 
 
@@ -187,6 +187,10 @@ def can_place_boss(boss: str, dungeon_name: str, level: Optional[str] = None) ->
 
     return True
 
+restrictive_boss_locations = {}
+for location in boss_location_table:
+    restrictive_boss_locations[location] = not all(can_place_boss(boss, *location)
+                                               for boss in boss_table if not boss.startswith("Agahnim"))
 
 def place_boss(world, player: int, boss: str, location: str, level: Optional[str]):
     if location == 'Ganons Tower' and world.mode[player] == 'inverted':
@@ -194,12 +198,16 @@ def place_boss(world, player: int, boss: str, location: str, level: Optional[str
     logging.debug('Placing boss %s at %s', boss, location + (' (' + level + ')' if level else ''))
     world.get_dungeon(location, player).bosses[level] = BossFactory(boss, player)
 
+def format_boss_location(location, level):
+    return location + (' (' + level + ')' if level else '')
 
 def place_bosses(world, player: int):
     if world.boss_shuffle[player] == 'none':
         return
     # Most to least restrictive order
     boss_locations = boss_location_table.copy()
+    world.random.shuffle(boss_locations)
+    boss_locations.sort(key= lambda location: -int(restrictive_boss_locations[location]))
 
     all_bosses = sorted(boss_table.keys())  # sorted to be deterministic on older pythons
     placeable_bosses = [boss for boss in all_bosses if boss not in ['Agahnim', 'Agahnim2', 'Ganon']]
@@ -225,7 +233,7 @@ def place_bosses(world, player: int):
                     already_placed_bosses.append(boss)
                     boss_locations.remove([loc, level])
                 else:
-                    raise Exception("Cannot place", boss, "at", loc, level, "for player", player)
+                    raise Exception(f"Cannot place {boss} at {format_boss_location(loc, level)} for player {player}.")
             else:
                 boss = boss.title()
                 boss_locations, already_placed_bosses = place_where_possible(world, player, boss, boss_locations)
@@ -237,7 +245,7 @@ def place_bosses(world, player: int):
         if world.boss_shuffle[player] == "basic":  # vanilla bosses shuffled
             bosses = placeable_bosses + ['Armos Knights', 'Lanmolas', 'Moldorm']
         else:  # all bosses present, the three duplicates chosen at random
-            bosses = all_bosses + [world.random.choice(placeable_bosses) for _ in range(3)]
+            bosses = placeable_bosses + world.random.sample(placeable_bosses, 3)
 
         # there is probably a better way to do this
         while already_placed_bosses:
@@ -251,11 +259,17 @@ def place_bosses(world, player: int):
 
         world.random.shuffle(bosses)
         for loc, level in boss_locations:
-            boss = next((b for b in bosses if can_place_boss(b, loc, level)), None)
-            if not boss:
-                loc_text = loc + (' (' + level + ')' if level else '')
-                raise FillError('Could not place boss for location %s' % loc_text)
-            bosses.remove(boss)
+            for _ in range(len(bosses)):
+                boss = bosses.pop()
+                if can_place_boss(boss, loc, level):
+                    break
+                # put the boss back in queue
+                bosses.insert(0, boss)  # this would be faster with deque,
+                # but the deque size is small enough that it should not matter
+
+            else:
+                raise FillError(f'Could not place boss for location {format_boss_location(loc, level)}')
+
             place_boss(world, player, boss, loc, level)
 
     elif shuffle_mode == "chaos":  # all bosses chosen at random
@@ -264,8 +278,7 @@ def place_bosses(world, player: int):
                 boss = world.random.choice(
                     [b for b in placeable_bosses if can_place_boss(b, loc, level)])
             except IndexError:
-                loc_text = loc + (' (' + level + ')' if level else '')
-                raise FillError('Could not place boss for location %s' % loc_text)
+                raise FillError(f'Could not place boss for location {format_boss_location(loc, level)}')
             else:
                 place_boss(world, player, boss, loc, level)
 
