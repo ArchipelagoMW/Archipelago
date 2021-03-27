@@ -226,6 +226,9 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
         elif sprite == 'randomonnone':
             # Allows for opting into random on events on race rom seeds, without actually enabling any of the events initially.
             onevent = 0x0000
+        elif sprite == 'randomonrandom':
+            # Allows random to take the wheel on which events apply. (at least one event will be applied.)
+            onevent = local_random.randint(0x0001, 0x003F)
         elif userandomsprites:
             onevent = 0x01 if 'hit' in sprite else 0x00
             onevent += 0x02 if 'enter' in sprite else 0x00
@@ -536,6 +539,8 @@ class Sprite(object):
                 self.valid = False
                 return
             (sprite, palette, self.name, self.author_name) = result
+            if self.name == "":
+                self.name = os.path.split(filename)[1].split(".")[0]
             if len(sprite) != 0x7000:
                 self.valid = False
                 return

@@ -501,6 +501,9 @@ def guiMain(args=None):
         guiargs.rom = romVar.get()
         guiargs.create_diff = patchesVar.get()
         guiargs.sprite = rom_vars.sprite
+        if rom_vars.sprite_pool:
+            guiargs.sprite_pool = rom_vars.sprite_pool
+            messagebox.showinfo(title="Sprite Pool", message=", ".join(guiargs.sprite_pool))
         # get default values for missing parameters
         for k,v in vars(parse_arguments(['--multi', str(guiargs.multi)])).items():
             if k not in vars(guiargs):
@@ -1308,7 +1311,8 @@ def get_rom_options_frame(parent=None):
     spriteEntry = Label(spriteDialogFrame, textvariable=vars.spriteNameVar)
 
     def SpriteSelect():
-        SpriteSelector(parent, set_sprite)
+        nonlocal vars
+        SpriteSelector(parent, set_sprite, spritePool=vars.sprite_pool)
 
     spriteSelectButton = Button(spriteDialogFrame, text='...', command=SpriteSelect)
 
@@ -1392,21 +1396,57 @@ def get_rom_options_frame(parent=None):
     shieldPalettesOptionMenu = OptionMenu(shieldPalettesFrame, vars.shieldPalettesVar, 'default', 'random', 'blackout', 'grayscale', 'negative', 'classic', 'dizzy', 'sick', 'puke')
     shieldPalettesOptionMenu.pack(side=LEFT)
 
+    spritePoolFrame = Frame(romOptionsFrame)
+    spritePoolFrame.grid(row=5, column=1)
+    baseSpritePoolLabel = Label(spritePoolFrame, text='Sprite Pool:')
+
+    vars.spritePoolCountVar = StringVar()
+    vars.sprite_pool = []
+    def set_sprite_pool(sprite_param):
+        nonlocal vars
+        if isinstance(sprite_param, str):
+            vars.sprite_pool.append(sprite_param)
+        elif sprite_param and sprite_param.valid:
+            vars.sprite_pool.append(sprite_param.name)
+        vars.spritePoolCountVar.set(str(len(vars.sprite_pool)))
+
+    set_sprite_pool(None)
+    vars.spritePoolCountVar.set('0')
+    spritePoolEntry = Label(spritePoolFrame, textvariable=vars.spritePoolCountVar)
+
+    def SpritePoolSelect():
+        SpriteSelector(parent, set_sprite_pool, randomOnEvent=False)
+
+    def SpritePoolClear():
+        nonlocal vars
+        vars.sprite_pool.clear()
+        vars.spritePoolCountVar.set('0')
+
+    spritePoolSelectButton = Button(spritePoolFrame, text='...', command=SpritePoolSelect)
+    spritePoolClearButton = Button(spritePoolFrame, text='Clear', command=SpritePoolClear)
+
+    baseSpritePoolLabel.pack(side=LEFT)
+    spritePoolEntry.pack(side=LEFT)
+    spritePoolSelectButton.pack(side=LEFT)
+    spritePoolClearButton.pack(side=LEFT)
+
     return romOptionsFrame, vars, set_sprite
 
 
 class SpriteSelector():
-    def __init__(self, parent, callback, adjuster=False):
+    def __init__(self, parent, callback, adjuster=False, randomOnEvent=True, spritePool=None):
         self.deploy_icons()
         self.parent = parent
         self.window = Toplevel(parent)
         self.callback = callback
         self.adjuster = adjuster
+        self.randomOnEvent = randomOnEvent
 
         self.window.wm_title("TAKE ANY ONE YOU WANT")
         self.window['padx'] = 5
         self.window['pady'] = 5
         self.all_sprites = []
+        self.sprite_pool = spritePool
 
         def open_custom_sprite_dir(_evt):
             open_file(self.custom_sprite_dir)
@@ -1447,24 +1487,29 @@ class SpriteSelector():
         self.randomOnSlashVar = IntVar()
         self.randomOnItemVar = IntVar()
         self.randomOnBonkVar = IntVar()
+        self.randomOnRandomVar = IntVar()
 
-        button = Checkbutton(frame, text="Hit", command=self.update_random_button, variable=self.randomOnHitVar)
-        button.pack(side=LEFT, padx=(0, 5))
+        if self.randomOnEvent:
+            button = Checkbutton(frame, text="Hit", command=self.update_random_button, variable=self.randomOnHitVar)
+            button.pack(side=LEFT, padx=(0, 5))
 
-        button = Checkbutton(frame, text="Enter", command=self.update_random_button, variable=self.randomOnEnterVar)
-        button.pack(side=LEFT, padx=(0, 5))
+            button = Checkbutton(frame, text="Enter", command=self.update_random_button, variable=self.randomOnEnterVar)
+            button.pack(side=LEFT, padx=(0, 5))
 
-        button = Checkbutton(frame, text="Exit", command=self.update_random_button, variable=self.randomOnExitVar)
-        button.pack(side=LEFT, padx=(0, 5))
+            button = Checkbutton(frame, text="Exit", command=self.update_random_button, variable=self.randomOnExitVar)
+            button.pack(side=LEFT, padx=(0, 5))
 
-        button = Checkbutton(frame, text="Slash", command=self.update_random_button, variable=self.randomOnSlashVar)
-        button.pack(side=LEFT, padx=(0, 5))
+            button = Checkbutton(frame, text="Slash", command=self.update_random_button, variable=self.randomOnSlashVar)
+            button.pack(side=LEFT, padx=(0, 5))
 
-        button = Checkbutton(frame, text="Item", command=self.update_random_button, variable=self.randomOnItemVar)
-        button.pack(side=LEFT, padx=(0, 5))
+            button = Checkbutton(frame, text="Item", command=self.update_random_button, variable=self.randomOnItemVar)
+            button.pack(side=LEFT, padx=(0, 5))
 
-        button = Checkbutton(frame, text="Bonk", command=self.update_random_button, variable=self.randomOnBonkVar)
-        button.pack(side=LEFT, padx=(0, 5))
+            button = Checkbutton(frame, text="Bonk", command=self.update_random_button, variable=self.randomOnBonkVar)
+            button.pack(side=LEFT, padx=(0, 5))
+
+            button = Checkbutton(frame, text="Random", command=self.update_random_button, variable=self.randomOnRandomVar)
+            button.pack(side=LEFT, padx=(0, 5))
 
         if adjuster:
             button = Button(frame, text="Current sprite from rom", command=self.use_default_sprite)
@@ -1553,18 +1598,30 @@ class SpriteSelector():
         self.window.destroy()
 
     def update_random_button(self):
-        randomon = "-hit" if self.randomOnHitVar.get() else ""
-        randomon += "-enter" if self.randomOnEnterVar.get() else ""
-        randomon += "-exit" if self.randomOnExitVar.get() else ""
-        randomon += "-slash" if self.randomOnSlashVar.get() else ""
-        randomon += "-item" if self.randomOnItemVar.get() else ""
-        randomon += "-bonk" if self.randomOnBonkVar.get() else ""
+        if self.randomOnRandomVar.get():
+            randomon = "random"
+        else:
+            randomon = "-hit" if self.randomOnHitVar.get() else ""
+            randomon += "-enter" if self.randomOnEnterVar.get() else ""
+            randomon += "-exit" if self.randomOnExitVar.get() else ""
+            randomon += "-slash" if self.randomOnSlashVar.get() else ""
+            randomon += "-item" if self.randomOnItemVar.get() else ""
+            randomon += "-bonk" if self.randomOnBonkVar.get() else ""
+
         self.randomOnEventText.set(f"randomon{randomon}" if randomon else None)
         self.randomButtonText.set("Random On Event" if randomon else "Random")
 
     def use_random_sprite(self):
-        randomon = self.randomOnEventText.get()
-        self.callback(randomon if randomon else (random.choice(self.all_sprites) if self.all_sprites else None))
+        if not self.randomOnEvent:
+            self.callback("random")
+        elif self.randomOnEventText.get():
+            self.callback(self.randomOnEventText.get())
+        elif self.sprite_pool:
+            self.callback(random.choice(self.sprite_pool))
+        elif self.all_sprites:
+            self.callback(random.choice(self.all_sprites))
+        else:
+            self.callback(None)
         self.window.destroy()
 
     def select_sprite(self, spritename):
