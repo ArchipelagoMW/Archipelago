@@ -3,12 +3,14 @@ import tempfile
 import random
 import zlib
 import json
+from collections import Counter
 
 from flask import request, flash, redirect, url_for, session, render_template
 
 from EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from Main import get_seed, seeddigits
+from Mystery import handle_name
 import pickle
 
 from .models import *
@@ -82,13 +84,15 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
         erargs.progression_balancing = {}
         erargs.create_diff = True
 
+        name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):
             for k, v in settings.items():
                 if v is not None:
                     getattr(erargs, k)[player] = v
 
             if not erargs.name[player]:
-                erargs.name[player] = os.path.split(playerfile)[-1].split(".")[0]
+                erargs.name[player] = os.path.splitext(os.path.split(playerfile)[-1])[0]
+            erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
 
         erargs.names = ",".join(erargs.name[i] for i in range(1, playercount + 1))
         del (erargs.name)

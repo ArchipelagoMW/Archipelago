@@ -6,6 +6,7 @@ import urllib.parse
 import typing
 import os
 from collections import Counter
+import string
 
 import ModuleUpdate
 from BaseClasses import PlandoItem, PlandoConnection
@@ -217,15 +218,7 @@ def main(args=None, callback=ERmain):
             erargs.name[player] = f"Player{player}"
         elif not erargs.name[player]:  # if name was not specified, generate it from filename
             erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
-        new_name = []
-        name_counter[erargs.name[player]] += 1
-        for name in erargs.name[player].split("%%"):
-            if "%number%" in name:
-                name = name.replace("%number%", str(name_counter[erargs.name[player]]))
-            if "%player%" in name:
-                name = name.replace("%player%", str(player))
-            new_name.append(name)
-        erargs.name[player] = handle_name("%".join(new_name))
+        erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
         logging.info(erargs.name[player])
     erargs.names = ",".join(erargs.name[i] for i in range(1, args.multi + 1))
     del (erargs.name)
@@ -295,8 +288,19 @@ def get_choice(option, root, value=None) -> typing.Any:
     raise RuntimeError(f"All options specified in \"{option}\" are weighted as zero.")
 
 
-def handle_name(name: str):
-    return name.strip().replace(' ', '_')[:16]
+class SafeDict(dict):
+    def __missing__(self, key):
+        return '{' + key + '}'
+
+
+def handle_name(name: str, player: int, name_counter: Counter):
+    name_counter[name] += 1
+    new_name = "%".join([x.replace("%number%", "{number}").replace("%player%", "{player}") for x in name.split("%%")])
+    new_name = string.Formatter().vformat(new_name, (), SafeDict(number=name_counter[name],
+                                                                 NUMBER=(name_counter[name] if name_counter[name] > 1 else ''),
+                                                                 player=player,
+                                                                 PLAYER=(player if player > 1 else '')))
+    return new_name.strip().replace(' ', '_')[:16]
 
 
 def prefer_int(input_data: str) -> typing.Union[str, int]:
