@@ -7,6 +7,7 @@ import random
 import os
 import shutil
 from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, StringVar, IntVar, Frame, Label, W, E, X, BOTH, Entry, Spinbox, Button, filedialog, messagebox, ttk
+import tkinter.font as font
 from urllib.parse import urlparse
 from urllib.request import urlopen
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -1404,10 +1405,18 @@ def get_rom_options_frame(parent=None):
     vars.sprite_pool = []
     def set_sprite_pool(sprite_param):
         nonlocal vars
+        operation = "add"
+        if isinstance(sprite_param, tuple):
+            operation, sprite_param = sprite_param
+        if isinstance(sprite_param, Sprite) and sprite_param.valid:
+            sprite_param = sprite_param.name
         if isinstance(sprite_param, str):
-            vars.sprite_pool.append(sprite_param)
-        elif sprite_param and sprite_param.valid:
-            vars.sprite_pool.append(sprite_param.name)
+            if operation == "add":
+                vars.sprite_pool.append(sprite_param)
+            elif operation == "remove":
+                vars.sprite_pool.remove(sprite_param)
+            elif operation == "clear":
+                vars.sprite_pool.clear()
         vars.spritePoolCountVar.set(str(len(vars.sprite_pool)))
 
     set_sprite_pool(None)
@@ -1415,7 +1424,8 @@ def get_rom_options_frame(parent=None):
     spritePoolEntry = Label(spritePoolFrame, textvariable=vars.spritePoolCountVar)
 
     def SpritePoolSelect():
-        SpriteSelector(parent, set_sprite_pool, randomOnEvent=False)
+        nonlocal vars
+        SpriteSelector(parent, set_sprite_pool, randomOnEvent=False, spritePool=vars.sprite_pool)
 
     def SpritePoolClear():
         nonlocal vars
@@ -1441,10 +1451,12 @@ class SpriteSelector():
         self.callback = callback
         self.adjuster = adjuster
         self.randomOnEvent = randomOnEvent
+        self.spritePoolButtons = None
 
         self.window.wm_title("TAKE ANY ONE YOU WANT")
         self.window['padx'] = 5
         self.window['pady'] = 5
+        self.spritesPerRow = 32
         self.all_sprites = []
         self.sprite_pool = spritePool
 
@@ -1462,12 +1474,15 @@ class SpriteSelector():
 
         self.icon_section(alttpr_frametitle, self.alttpr_sprite_dir, 'ALTTPR sprites not found. Click "Update alttpr sprites" to download them.')
         self.icon_section(custom_frametitle, self.custom_sprite_dir, 'Put sprites in the custom sprites folder (see open link above) to have them appear here.')
+        if not randomOnEvent:
+            self.sprite_pool_section(spritePool)
 
         frame = Frame(self.window)
         frame.pack(side=BOTTOM, fill=X, pady=5)
 
-        button = Button(frame, text="Browse for file...", command=self.browse_for_sprite)
-        button.pack(side=RIGHT, padx=(5, 0))
+        if self.randomOnEvent:
+            button = Button(frame, text="Browse for file...", command=self.browse_for_sprite)
+            button.pack(side=RIGHT, padx=(5, 0))
 
         button = Button(frame, text="Update alttpr sprites", command=self.update_alttpr_sprites)
         button.pack(side=RIGHT, padx=(5, 0))
@@ -1518,6 +1533,62 @@ class SpriteSelector():
         set_icon(self.window)
         self.window.focus()
 
+    def remove_from_sprite_pool(self, button, spritename):
+        self.callback(("remove", spritename))
+        self.spritePoolButtons.buttons.remove(button)
+        button.destroy()
+
+    def add_to_sprite_pool(self, spritename):
+        if isinstance(spritename, str):
+            if spritename == "random":
+                button = Button(self.spritePoolButtons, text="?")
+                button['font'] = font.Font(size=19)
+                button.configure(command=lambda spr="random": self.remove_from_sprite_pool(button, spr))
+                ToolTips.register(button, "Random")
+                self.spritePoolButtons.buttons.append(button)
+            else:
+                spritename = Sprite.get_sprite_from_name(spritename)
+        if isinstance(spritename, Sprite) and spritename.valid:
+            image = get_image_for_sprite(spritename)
+            if image is None:
+                return
+            button = Button(self.spritePoolButtons, image=image)
+            button.configure(command=lambda spr=spritename: self.remove_from_sprite_pool(button, spr.name))
+            ToolTips.register(button, spritename.name +
+                              f"\nBy: {spritename.author_name if spritename.author_name else ''}")
+            button.image = image
+
+            self.spritePoolButtons.buttons.append(button)
+        self.grid_fill_sprites(self.spritePoolButtons)
+
+    def sprite_pool_section(self, spritePool):
+        def clear_sprite_pool(_evt):
+            self.callback(("clear", "Clear"))
+            for button in self.spritePoolButtons.buttons:
+                button.destroy()
+            self.spritePoolButtons.buttons.clear()
+
+        frametitle = Frame(self.window)
+        title_text = Label(frametitle, text="Sprite Pool")
+        title_link = Label(frametitle, text="(clear)", fg="blue", cursor="hand2")
+        title_text.pack(side=LEFT)
+        title_link.pack(side=LEFT)
+        title_link.bind("<Button-1>", clear_sprite_pool)
+
+        self.spritePoolButtons = LabelFrame(self.window, labelwidget=frametitle, padx=5, pady=5)
+        self.spritePoolButtons.pack(side=TOP, fill=X)
+        self.spritePoolButtons.buttons = []
+
+        def update_sprites(event):
+            self.spritesPerRow = (event.width - 10) // 38
+            self.grid_fill_sprites(self.spritePoolButtons)
+
+        self.grid_fill_sprites(self.spritePoolButtons)
+        self.spritePoolButtons.bind("<Configure>", update_sprites)
+
+        if spritePool:
+            for sprite in spritePool:
+                self.add_to_sprite_pool(sprite)
 
     def icon_section(self, frame_label, path, no_results_label):
         frame = LabelFrame(self.window, labelwidget=frame_label, padx=5, pady=5)
@@ -1548,16 +1619,16 @@ class SpriteSelector():
             label.pack()
 
         def update_sprites(event):
-            sprites_per_row = (event.width - 10) // 38
-            self.grid_fill_sprites(frame, sprites_per_row)
+            self.spritesPerRow = (event.width - 10) // 38
+            self.grid_fill_sprites(frame)
 
-        self.grid_fill_sprites(frame, 32)
+        self.grid_fill_sprites(frame)
 
         frame.bind("<Configure>", update_sprites)
 
-    def grid_fill_sprites(self, frame, sprites_per_row):
+    def grid_fill_sprites(self, frame):
         for i, button in enumerate(frame.buttons):
-            button.grid(row=i // sprites_per_row, column=i % sprites_per_row)
+            button.grid(row=i // self.spritesPerRow, column=i % self.spritesPerRow)
 
     def update_alttpr_sprites(self):
         # need to wrap in try catch. We don't want errors getting the json or downloading the files to break us.
@@ -1594,8 +1665,12 @@ class SpriteSelector():
         self.window.destroy()
 
     def use_default_link_sprite(self):
-        self.callback(Sprite.default_link_sprite())
-        self.window.destroy()
+        if self.randomOnEvent:
+            self.callback(Sprite.default_link_sprite())
+            self.window.destroy()
+        else:
+            self.callback("link")
+            self.add_to_sprite_pool("link")
 
     def update_random_button(self):
         if self.randomOnRandomVar.get():
@@ -1614,6 +1689,8 @@ class SpriteSelector():
     def use_random_sprite(self):
         if not self.randomOnEvent:
             self.callback("random")
+            self.add_to_sprite_pool("random")
+            return
         elif self.randomOnEventText.get():
             self.callback(self.randomOnEventText.get())
         elif self.sprite_pool:
@@ -1626,7 +1703,10 @@ class SpriteSelector():
 
     def select_sprite(self, spritename):
         self.callback(spritename)
-        self.window.destroy()
+        if self.randomOnEvent:
+            self.window.destroy()
+        else:
+            self.add_to_sprite_pool(spritename)
 
     def deploy_icons(self):
         if not os.path.exists(self.custom_sprite_dir):
