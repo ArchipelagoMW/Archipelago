@@ -336,8 +336,18 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
         adjuster_settings.baserom = Patch.get_base_rom_path()
         adjuster_settings.world = None
         whitelist = {"disablemusic", "fastmenu", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
-                     "uw_palettes", "sprite", "sprite_pool"}
+                     "uw_palettes", "sprite"}
         printed_options = {name: value for name, value in vars(adjuster_settings).items() if name in whitelist}
+        if hasattr(adjuster_settings, "sprite_pool"):
+            sprite_pool = {}
+            for sprite in getattr(adjuster_settings, "sprite_pool"):
+                if sprite in sprite_pool:
+                    sprite_pool[sprite] += 1
+                else:
+                    sprite_pool[sprite] = 1
+            if sprite_pool:
+                printed_options["sprite_pool"] = sprite_pool
+
 
         if hasattr(get_adjuster_settings, "adjust_wanted"):
             adjust_wanted = getattr(get_adjuster_settings, "adjust_wanted")
