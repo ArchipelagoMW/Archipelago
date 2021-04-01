@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '4f63251fb1f769e1a6b017346b2e51dc'
+RANDOMIZERBASEHASH = '13a75c5dd28055fbcf8f69bd8161871d'
 
 import io
 import json
@@ -226,6 +226,9 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
         elif sprite == 'randomonnone':
             # Allows for opting into random on events on race rom seeds, without actually enabling any of the events initially.
             onevent = 0x0000
+        elif sprite == 'randomonrandom':
+            # Allows random to take the wheel on which events apply. (at least one event will be applied.)
+            onevent = local_random.randint(0x0001, 0x003F)
         elif userandomsprites:
             onevent = 0x01 if 'hit' in sprite else 0x00
             onevent += 0x02 if 'enter' in sprite else 0x00
@@ -536,6 +539,8 @@ class Sprite(object):
                 self.valid = False
                 return
             (sprite, palette, self.name, self.author_name) = result
+            if self.name == "":
+                self.name = os.path.split(filename)[1].split(".")[0]
             if len(sprite) != 0x7000:
                 self.valid = False
                 return
@@ -1499,6 +1504,7 @@ def patch_rom(world, rom, player, team, enemized):
     rom.write_byte(0xEFD95, digging_game_rng)
     rom.write_byte(0x1800A3, 0x01)  # enable correct world setting behaviour after agahnim kills
     rom.write_byte(0x1800A4, 0x01 if world.logic[player] != 'nologic' else 0x00)  # enable POD EG fix
+    rom.write_byte(0x186383, 0x01 if world.glitch_triforce or world.logic[player] == 'nologic' else 0x00)  # disable glitching to Triforce from Ganons Room
     rom.write_byte(0x180042, 0x01 if world.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
 
     # remove shield from uncle

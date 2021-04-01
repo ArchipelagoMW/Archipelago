@@ -91,6 +91,12 @@ multi_mystery_options:
   # 2 -> 7z is recommended for roms. All of them get the job done.
   # 3 -> bz2
   zip_format: 1
+  # Glitch to Triforce room from Ganon
+  # When disabled, you have to have a weapon that can hurt ganon (master sword or swordless/easy item functionality + hammer)
+  # and have completed the goal required for killing ganon to be able to access the triforce room.
+  # 1 -> Enabled.
+  # 0 -> Disabled (except in no-logic)
+  glitch_triforce_room: 1
   # Create encrypted race roms
   race: 0
   # List of options that can be plando'd. Can be combined, for example "bosses, items"

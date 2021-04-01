@@ -135,6 +135,7 @@ def main(args, seed=None):
     import Options
     for hk_option in Options.hollow_knight_options:
         setattr(world, hk_option, getattr(args, hk_option, {}))
+    world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
     world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}
 
@@ -146,13 +147,10 @@ def main(args, seed=None):
             world.shuffle[player] = shuffle
             if shuffle == "vanilla":
                 world.er_seeds[player] = "vanilla"
-            elif seed.startswith("group-"):  # renamed from team to group to not confuse with existing team name use
+            elif seed.startswith("group-") or args.race:
+                # renamed from team to group to not confuse with existing team name use
                 world.er_seeds[player] = get_same_seed(world, (shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
-            elif not args.race:
-                world.er_seeds[player] = seed
-            elif seed:  # race but with a set seed, ignore set seed and use group logic instead
-                world.er_seeds[player] = get_same_seed(world, (shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
-            else:  # race but without a set seed
+            else:  # not a race or group seed, use set seed as is.
                 world.er_seeds[player] = seed
         elif world.shuffle[player] == "vanilla":
             world.er_seeds[player] = "vanilla"

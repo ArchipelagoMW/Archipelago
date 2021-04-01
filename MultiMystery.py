@@ -34,6 +34,7 @@ if __name__ == "__main__":
         enemizer_path = multi_mystery_options["enemizer_path"]
         player_files_path = multi_mystery_options["player_files_path"]
         target_player_count = multi_mystery_options["players"]
+        glitch_triforce = multi_mystery_options["glitch_triforce_room"]
         race = multi_mystery_options["race"]
         plando_options = multi_mystery_options["plando_options"]
         create_spoiler = multi_mystery_options["create_spoiler"]
@@ -99,6 +100,8 @@ if __name__ == "__main__":
                 command += " --skip_playthrough"
         if zip_diffs:
             command += " --create_diff"
+        if glitch_triforce:
+            command += " --glitch_triforce"
         if race:
             command += " --race"
         if os.path.exists(os.path.join(player_files_path, meta_file_path)):

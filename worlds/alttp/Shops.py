@@ -194,20 +194,21 @@ def ShopSlotFill(world):
 
         del locations_per_sphere
 
-        total_spheres = len(candidates_per_sphere)
-
         for i, current_shop_slots in enumerate(shops_per_sphere):
             if current_shop_slots:
-                candidate_sphere_ids = list(range(i, total_spheres))
+                # getting all candidates and shuffling them feels cpu expensive, there may be a better method
+                candidates = [(location, i) for i, candidates in enumerate(candidates_per_sphere[i:], start=i)
+                              for location in candidates]
+                world.random.shuffle(candidates)
                 for location in current_shop_slots:
                     shop: Shop = location.parent_region.shop
-                    swapping_sphere_id = world.random.choices(candidate_sphere_ids,
-                                                              cum_weights=cumu_weights[i:])[0]
-                    swapping_sphere: list = candidates_per_sphere[swapping_sphere_id]
-                    for c in swapping_sphere:  # chosen item locations
+                    for index, (c, swapping_sphere_id) in enumerate(candidates):  # chosen item locations
                         if c.item_rule(location.item) and location.item_rule(c.item):
                             swap_location_item(c, location, check_locked=False)
                             logger.debug(f'Swapping {c} into {location}:: {location.item}')
+                            # remove candidate
+                            candidates_per_sphere[swapping_sphere_id].remove(c)
+                            candidates.pop(index)
                             break
 
                     else:
@@ -215,10 +216,6 @@ def ShopSlotFill(world):
                         logger.warning("Ran out of ShopShuffle Item candidate locations.")
                         location.shop_slot_disabled = True
                         continue
-
-                    # remove candidate
-                    swapping_sphere.remove(c)
-                    cumu_weights[swapping_sphere_id] -= 1
 
                     item_name = location.item.name
                     if any(x in item_name for x in ['Compass', 'Map', 'Single Bomb', 'Single Arrow', 'Piece of Heart']):

@@ -206,6 +206,7 @@ def get_default_options() -> dict:
                 "zip_spoiler": 0,
                 "zip_multidata": 1,
                 "zip_format": 1,
+                "glitch_triforce_room": 1,
                 "race": 0,
                 "cpu_threads": 0,
                 "max_attempts": 0,
@@ -315,9 +316,20 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
         import Patch
         adjuster_settings.rom = romfile
         adjuster_settings.baserom = Patch.get_base_rom_path()
+        adjuster_settings.world = None
         whitelist = {"disablemusic", "fastmenu", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
                      "uw_palettes", "sprite"}
         printed_options = {name: value for name, value in vars(adjuster_settings).items() if name in whitelist}
+        if hasattr(adjuster_settings, "sprite_pool"):
+            sprite_pool = {}
+            for sprite in getattr(adjuster_settings, "sprite_pool"):
+                if sprite in sprite_pool:
+                    sprite_pool[sprite] += 1
+                else:
+                    sprite_pool[sprite] = 1
+            if sprite_pool:
+                printed_options["sprite_pool"] = sprite_pool
+
 
         if hasattr(get_adjuster_settings, "adjust_wanted"):
             adjust_wanted = getattr(get_adjuster_settings, "adjust_wanted")
@@ -328,9 +340,16 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
                                   f"{pprint.pformat(printed_options)}\n"
                                   f"Enter yes, no or never: ")
         if adjust_wanted and adjust_wanted.startswith("y"):
+            if hasattr(adjuster_settings, "sprite_pool"):
+                from Adjuster import AdjusterWorld
+                adjuster_settings.world = AdjusterWorld(getattr(adjuster_settings, "sprite_pool"))
+
             adjusted = True
             import Adjuster
             _, romfile = Adjuster.adjust(adjuster_settings)
+
+            if hasattr(adjuster_settings, "world"):
+                delattr(adjuster_settings, "world")
         elif adjust_wanted and "never" in adjust_wanted:
             persistent_store("adjuster", "never_adjust", True)
             return romfile, False

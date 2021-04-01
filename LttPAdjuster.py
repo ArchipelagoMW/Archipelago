@@ -9,6 +9,13 @@ import time
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings
 from Utils import output_path
 
+
+class AdjusterWorld(object):
+    def __init__(self, sprite_pool):
+        import random
+        self.sprite_pool = {1: sprite_pool}
+        self.rom_seeds = {1: random}
+
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
 
     def _get_help_string(self, action):
@@ -100,10 +107,14 @@ def adjust(args):
     palettes_options['sword']=args.sword_palettes
     palettes_options['shield']=args.shield_palettes
     # palettes_options['link']=args.link_palettesvera
+
     racerom = rom.read_byte(0x180213) > 0
+    world = None
+    if hasattr(args, "world"):
+        world = getattr(args, "world")
 
     apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.fastmenu, args.disablemusic,
-                       args.sprite, palettes_options, reduceflashing=args.reduceflashing or racerom)
+                       args.sprite, palettes_options, reduceflashing=args.reduceflashing or racerom, world=world)
     path = output_path(f'{os.path.basename(args.rom)[:-4]}_adjusted.sfc')
     rom.write_to_file(path)
 
@@ -159,8 +170,14 @@ def adjustGUI():
         guiargs.rom = romVar2.get()
         guiargs.baserom = romVar.get()
         guiargs.sprite = rom_vars.sprite
+        if rom_vars.sprite_pool:
+            guiargs.world = AdjusterWorld(rom_vars.sprite_pool)
+
         try:
             guiargs, path = adjust(args=guiargs)
+            if rom_vars.sprite_pool:
+                guiargs.sprite_pool = rom_vars.sprite_pool
+                delattr(guiargs, "world")
         except Exception as e:
             logging.exception(e)
             messagebox.showerror(title="Error while adjusting Rom", message=str(e))

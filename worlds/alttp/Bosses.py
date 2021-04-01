@@ -228,10 +228,10 @@ def place_bosses(world, player: int):
                     level = loc[-1]
                     loc = " ".join(loc[:-1])
                 loc = loc.title().replace("Of", "of")
-                if can_place_boss(boss, loc, level) and [loc, level] in boss_locations:
+                if can_place_boss(boss, loc, level) and (loc, level) in boss_locations:
                     place_boss(world, player, boss, loc, level)
                     already_placed_bosses.append(boss)
-                    boss_locations.remove([loc, level])
+                    boss_locations.remove((loc, level))
                 else:
                     raise Exception(f"Cannot place {boss} at {format_boss_location(loc, level)} for player {player}.")
             else:

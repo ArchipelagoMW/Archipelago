@@ -30,6 +30,7 @@ class MultiWorld():
         self.random = random.Random()  # world-local random state is saved for multiple generations running concurrently
         self.players = players
         self.teams = 1
+        self.glitch_triforce = False
         self.algorithm = 'balanced'
         self.dungeons = []
         self.regions = []

@@ -6,6 +6,7 @@ import urllib.parse
 import typing
 import os
 from collections import Counter
+import string
 
 import ModuleUpdate
 from worlds.generic import PlandoItem, PlandoConnection
@@ -43,6 +44,7 @@ def mystery_argparse():
     parser.add_argument('--rom')
     parser.add_argument('--enemizercli')
     parser.add_argument('--outputpath')
+    parser.add_argument('--glitch_triforce', action='store_true')
     parser.add_argument('--race', action='store_true')
     parser.add_argument('--meta', default=None)
     parser.add_argument('--log_output_path', help='Path to store output log')
@@ -107,6 +109,7 @@ def main(args=None, callback=ERmain):
     erargs.name = {x: "" for x in range(1, args.multi + 1)}  # only so it can be overwrittin in mystery
     erargs.create_spoiler = args.create_spoiler
     erargs.create_diff = args.create_diff
+    erargs.glitch_triforce = args.glitch_triforce
     erargs.race = args.race
     erargs.skip_playthrough = args.skip_playthrough
     erargs.outputname = seedname
@@ -215,9 +218,7 @@ def main(args=None, callback=ERmain):
             erargs.name[player] = f"Player{player}"
         elif not erargs.name[player]:  # if name was not specified, generate it from filename
             erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
-        name_counter[erargs.name[player]] += 1
-        erargs.name[player]= handle_name(erargs.name[player].format(number=name_counter[erargs.name[player]],
-                                                                    player=player))
+        erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
 
     erargs.names = ",".join(erargs.name[i] for i in range(1, args.multi + 1))
     del (erargs.name)
@@ -284,8 +285,19 @@ def get_choice(option, root, value=None) -> typing.Any:
     raise RuntimeError(f"All options specified in \"{option}\" are weighted as zero.")
 
 
-def handle_name(name: str):
-    return name.strip().replace(' ', '_')[:16]
+class SafeDict(dict):
+    def __missing__(self, key):
+        return '{' + key + '}'
+
+
+def handle_name(name: str, player: int, name_counter: Counter):
+    name_counter[name] += 1
+    new_name = "%".join([x.replace("%number%", "{number}").replace("%player%", "{player}") for x in name.split("%%")])
+    new_name = string.Formatter().vformat(new_name, (), SafeDict(number=name_counter[name],
+                                                                 NUMBER=(name_counter[name] if name_counter[name] > 1 else ''),
+                                                                 player=player,
+                                                                 PLAYER=(player if player > 1 else '')))
+    return new_name.strip().replace(' ', '_')[:16]
 
 
 def prefer_int(input_data: str) -> typing.Union[str, int]:
