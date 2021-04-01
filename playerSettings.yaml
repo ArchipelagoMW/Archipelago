@@ -204,7 +204,7 @@ turtle_rock_medallion: # required medallion to open Turtle Rock front entrance
 boss_shuffle:
   none: 50 # Vanilla bosses
   basic: 0 # Existing bosses except Ganon and Agahnim are shuffled throughout dungeons
-  random: 0 # 3 bosses can occur twice
+  normal: 0 # 3 bosses can occur twice
   chaos: 0 # Any boss can appear any amount of times
   singularity: 0 # Picks a boss, tries to put it everywhere that works, if there's spaces remaining it picks a boss to fill those
 enemy_shuffle: # Randomize enemy placement

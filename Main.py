@@ -490,7 +490,7 @@ def main(args, seed=None):
             for future in roms:
                 rom_name = future.result()
                 rom_names.append(rom_name)
-            minimum_versions = {"server": (0, 0, 1)}
+            minimum_versions = {"server": (0, 0, 2)}
             connect_names = {base64.b64encode(rom_name).decode(): (team, slot) for
                               slot, team, rom_name in rom_names}
 
@@ -502,7 +502,7 @@ def main(args, seed=None):
                                                     "connect_names": connect_names,
                                                     "remote_items": {player for player in range(1, world.players + 1) if
                                                                      world.remote_items[player] or
-                                                                     world.game[player] != "Hollow Knight"},
+                                                                     world.game[player] != "A Link to the Past"},
                                                     "locations": {
                                                         (location.address, location.player):
                                                             (location.item.code, location.item.player)

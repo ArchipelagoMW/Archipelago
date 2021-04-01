@@ -59,7 +59,8 @@ scripts = {"LttPClient.py": "ArchipelagoLttPClient",
            "MultiServer.py": "ArchipelagoServer",
            "gui.py": "ArchipelagoLttPCreator",
            "Mystery.py": "ArchipelagoMystery",
-           "LttPAdjuster.py": "ArchipelagoLttPAdjuster"}
+           "LttPAdjuster.py": "ArchipelagoLttPAdjuster",
+           "FactorioClient.py": "ArchipelagoFactorioClient"}
 
 exes = []
 

@@ -711,7 +711,10 @@ def patch_rom(world, rom, player, team, enemized):
 
             if location.item is not None:
                 if location.item.game != "A Link to the Past":
-                    itemid = 0x21
+                    if location.item.game == "Factorio":
+                        itemid = 0x09  # Hammer Sprite
+                    else:
+                        itemid = 0x21  # Bug Catching Net
                 # Keys in their native dungeon should use the orignal item code for keys
                 elif location.parent_region.dungeon:
                     if location.parent_region.dungeon.is_dungeon_item(location.item):

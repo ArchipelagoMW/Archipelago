@@ -152,8 +152,9 @@ async def factorio_server_watcher(ctx: FactorioContext):
 
 async def main():
     ctx = FactorioContext(None, None, True)
-    ctx.server_address = "localhost"
-    ctx.auth = "Berserker"
+    # testing shortcuts
+    # ctx.server_address = "localhost"
+    # ctx.auth = "Nauvis"
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
     await asyncio.sleep(3)

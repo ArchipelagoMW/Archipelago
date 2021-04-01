@@ -582,13 +582,8 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     if not ret.shop_shuffle:
         ret.shop_shuffle = ''
 
-    ret.mode = get_choice('world_state', weights, None)  # legacy support
-    if ret.mode == 'retro':
-        ret.mode = 'open'
-        ret.retro = True
-    elif ret.mode is None:
-        ret.mode = get_choice("mode", weights)
-        ret.retro = get_choice("retro", weights)
+    ret.mode = get_choice("mode", weights)
+    ret.retro = get_choice("retro", weights)
 
     ret.hints = get_choice('hints', weights)
 
