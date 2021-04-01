@@ -158,6 +158,10 @@ class MultiWorld():
     def hk_player_ids(self):
         yield from (player for player in range(1, self.players + 1) if self.game[player] == "Hollow Knight")
 
+    @property
+    def factorio_player_ids(self):
+        yield from (player for player in range(1, self.players + 1) if self.game[player] == "Factorio")
+
     def get_name_string_for_object(self, obj) -> str:
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_names(obj.player)})'
 
@@ -1301,9 +1305,6 @@ class Spoiler(object):
 
             self.bosses[str(player)]["Ganons Tower"] = "Agahnim 2"
             self.bosses[str(player)]["Ganon"] = "Ganon"
-
-        if self.world.players == 1:
-            self.bosses = self.bosses["1"]
 
         from Utils import __version__ as APVersion
         self.metadata = {'version': APVersion,

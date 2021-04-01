@@ -12,7 +12,7 @@ class Version(typing.NamedTuple):
     minor: int
     build: int
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 _version_tuple = tuplize_version(__version__)
 
 import builtins
@@ -162,10 +162,17 @@ def get_default_options() -> dict:
         # Refer to host.yaml for comments as to what all these options mean.
         options = {
             "general_options": {
+                "output_path": "output",
+            },
+            "factorio_options": {
+                "executable": "factorio\\bin\\x64\\factorio",
+                "script-output": "factorio\\script-output",
+            },
+            "lttp_options": {
                 "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
                 "qusb2snes": "QUsb2Snes\\QUsb2Snes.exe",
                 "rom_start": True,
-                "output_path": "output",
+
             },
             "server_options": {
                 "host": None,

@@ -1,0 +1,9 @@
+{
+    "name": "archipelago-client",
+    "version": "0.0.1",
+    "title": "Archipelago",
+    "author": "Berserker",
+    "homepage": "https://archipelago.gg",
+    "description": "Integration client for the Archipelago Randomizer",
+    "factorio_version": "1.1"
+}

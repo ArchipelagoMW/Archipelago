@@ -54,12 +54,12 @@ def manifest_creation():
     print("Created Manifest")
 
 
-scripts = {"MultiClient.py": "ArchipelagoLttPClient",
+scripts = {"LttPClient.py": "ArchipelagoLttPClient",
            "MultiMystery.py": "ArchipelagoMultiMystery",
            "MultiServer.py": "ArchipelagoServer",
            "gui.py": "ArchipelagoLttPCreator",
            "Mystery.py": "ArchipelagoMystery",
-           "Adjuster.py": "ArchipelagoLttPAdjuster"}
+           "LttPAdjuster.py": "ArchipelagoLttPAdjuster"}
 
 exes = []
 

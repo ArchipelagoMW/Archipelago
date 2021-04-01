@@ -473,6 +473,8 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     elif ret.game == "Hollow Knight":
         for option_name, option in Options.hollow_knight_options.items():
             setattr(ret, option_name, option.from_any(get_choice(option_name, weights, True)))
+    elif ret.game == "Factorio":
+        pass
     else:
         raise Exception(f"Unsupported game {ret.game}")
     return ret

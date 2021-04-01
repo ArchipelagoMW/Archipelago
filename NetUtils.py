@@ -19,7 +19,7 @@ class JSONMessagePart(typing.TypedDict, total=False):
 
 
 
-class CLientStatus(enum.IntEnum):
+class ClientStatus(enum.IntEnum):
     CLIENT_UNKNOWN = 0
     CLIENT_CONNECTED = 5
     CLIENT_READY = 10

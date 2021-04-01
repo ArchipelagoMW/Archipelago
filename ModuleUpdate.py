@@ -15,7 +15,8 @@ def update_command():
 
 
 naming_specialties = {"PyYAML": "yaml",  # PyYAML is imported as the name yaml
-                      "maseya-z3pr": "maseya"}
+                      "maseya-z3pr": "maseya",
+                      "factorio-rcon-py": "factorio_rcon"}
 
 
 def update():

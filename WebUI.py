@@ -10,7 +10,7 @@ import asyncio
 from functools import partial
 
 from NetUtils import Node
-from MultiClient import Context
+from LttPClient import Context
 import Utils
 
 
@@ -114,10 +114,6 @@ class WebUiClient(Node, logging.Handler):
             'hintPoints': ctx.hint_points,
             'lastCheck': last_check,
         }))
-
-
-class WaitingForUiException(Exception):
-    pass
 
 
 web_thread = None

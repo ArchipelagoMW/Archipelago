@@ -48,7 +48,7 @@ if __name__ == "__main__":
         weights_file_path = multi_mystery_options["weights_file_path"]
         pre_roll = multi_mystery_options["pre_roll"]
         teams = multi_mystery_options["teams"]
-        rom_file = options["general_options"]["rom_file"]
+        rom_file = options["lttp_options"]["rom_file"]
         host = options["server_options"]["host"]
         port = options["server_options"]["port"]
 

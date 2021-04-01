@@ -25,6 +25,8 @@ from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
 from worlds.hk import gen_hollow, set_rules as set_hk_rules
 from worlds.hk import create_regions as hk_create_regions
+from worlds.factorio import gen_factorio, factorio_create_regions
+from worlds.factorio.Mod import generate_mod
 from worlds.generic.Rules import locality_rules
 from worlds import Games
 import Patch
@@ -74,6 +76,7 @@ def main(args, seed=None):
     world.timer = args.timer.copy()
     world.progressive = args.progressive.copy()
     world.goal = args.goal.copy()
+    world.local_items = args.local_items.copy()
     if hasattr(args, "algorithm"): # current GUI options
         world.algorithm = args.algorithm
         world.shuffleganon = args.shuffleganon
@@ -202,6 +205,9 @@ def main(args, seed=None):
     for player in world.hk_player_ids:
         hk_create_regions(world, player)
 
+    for player in world.factorio_player_ids:
+        factorio_create_regions(world, player)
+
     for player in world.alttp_player_ids:
         if world.open_pyramid[player] == 'goal':
             world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
@@ -251,13 +257,15 @@ def main(args, seed=None):
     if world.players > 1:
         for player in world.player_ids:
             locality_rules(world, player)
+
     for player in world.alttp_player_ids:
         set_rules(world, player)
 
-    logger.info("Doing Hollow Knight things")
-
     for player in world.hk_player_ids:
         gen_hollow(world, player)
+
+    for player in world.factorio_player_ids:
+        gen_factorio(world, player)
 
     logger.info("Running Item Plando")
 
@@ -405,10 +413,12 @@ def main(args, seed=None):
     if not args.suppress_rom:
 
         rom_futures = []
-
+        mod_futures = []
         for team in range(world.teams):
             for player in world.alttp_player_ids:
                 rom_futures.append(pool.submit(_gen_rom, team, player))
+        for player in world.factorio_player_ids:
+            mod_futures.append(pool.submit(generate_mod, world, player))
 
         def get_entrance_to_region(region: Region):
             for entrance in region.entrances:
@@ -440,7 +450,7 @@ def main(args, seed=None):
 
         for location in [loc for loc in world.get_filled_locations() if type(loc.address) is int]:
             main_entrance = get_entrance_to_region(location.parent_region)
-            if location.game == Games.HK:
+            if location.game != Games.LTTP:
                 checks_in_area[location.player]["Light World"].append(location.address)
             elif location.parent_region.dungeon:
                 dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
@@ -477,7 +487,7 @@ def main(args, seed=None):
 
         FillDisabledShopSlots(world)
 
-        def write_multidata(roms):
+        def write_multidata(roms, mods):
             import base64
             for future in roms:
                 rom_name = future.result()
@@ -488,13 +498,13 @@ def main(args, seed=None):
 
             for i, team in enumerate(parsed_names):
                 for player, name in enumerate(team, 1):
-                    if player in world.hk_player_ids:
+                    if player not in world.alttp_player_ids:
                         connect_names[name] = (i, player)
             multidata = zlib.compress(pickle.dumps({"names": parsed_names,
                                                     "connect_names": connect_names,
                                                     "remote_items": {player for player in range(1, world.players + 1) if
                                                                      world.remote_items[player] or
-                                                                     world.game[player] == "Hollow Knight"},
+                                                                     world.game[player] != "Hollow Knight"},
                                                     "locations": {
                                                         (location.address, location.player):
                                                             (location.item.code, location.item.player)
@@ -512,8 +522,10 @@ def main(args, seed=None):
             with open(output_path('%s.archipelago' % outfilebase), 'wb') as f:
                 f.write(bytes([1]))  # version of format
                 f.write(multidata)
+            for future in mods:
+                future.result() # collect errors if they occured
 
-        multidata_task = pool.submit(write_multidata, rom_futures)
+        multidata_task = pool.submit(write_multidata, rom_futures, mod_futures)
     if not check_accessibility_task.result():
         if not world.can_beat_game():
             raise Exception("Game appears as unbeatable. Aborting.")

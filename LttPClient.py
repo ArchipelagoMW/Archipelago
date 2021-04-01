@@ -1,5 +1,4 @@
 import argparse
-import urllib.parse
 import atexit
 import time
 import functools
@@ -23,52 +22,70 @@ import ModuleUpdate
 ModuleUpdate.update()
 
 import colorama
-import prompt_toolkit
 
-from prompt_toolkit.patch_stdout import patch_stdout
 from NetUtils import *
 import WebUI
 
 from worlds.alttp import Regions, Shops
 from worlds.alttp import Items
-from worlds import network_data_package
 import Utils
-
-# logging note:
-# logging.* gets send to only the text console, logger.* gets send to the WebUI as well, if it's initialized.
-logger = logging.getLogger("Client")
+from CommonClient import CommonContext, server_loop, logger, console_loop, ClientCommandProcessor
 
 
-def create_named_task(coro, *args, name=None):
-    if not name:
-        name = coro.__name__
-    return asyncio.create_task(coro, *args, name=name)
+from MultiServer import mark_raw
 
 
-class Context():
+class LttPCommandProcessor(ClientCommandProcessor):
+    def _cmd_slow_mode(self, toggle: str = ""):
+        """Toggle slow mode, which limits how fast you send / receive items."""
+        if toggle:
+            self.ctx.slow_mode = toggle.lower() in {"1", "true", "on"}
+        else:
+            self.ctx.slow_mode = not self.ctx.slow_mode
+
+        self.output(f"Setting slow mode to {self.ctx.slow_mode}")
+
+    def _cmd_web(self):
+        if self.ctx.webui_socket_port:
+            webbrowser.open(f'http://localhost:5050?port={self.ctx.webui_socket_port}')
+        else:
+            self.output("Web UI was never started.")
+
+    @mark_raw
+    def _cmd_snes(self, snes_address: str = "") -> bool:
+        """Connect to a snes. Optionally include network address of a snes to connect to, otherwise show available devices"""
+        self.ctx.snes_reconnect_address = None
+        asyncio.create_task(snes_connect(self.ctx, snes_address if snes_address else self.ctx.snes_address))
+        return True
+
+    def _cmd_snes_close(self) -> bool:
+        """Close connection to a currently connected snes"""
+        self.ctx.snes_reconnect_address = None
+        if self.ctx.snes_socket is not None and not self.ctx.snes_socket.closed:
+            asyncio.create_task(self.ctx.snes_socket.close())
+            return True
+        else:
+            return False
+
+class Context(CommonContext):
+    command_processor = LttPCommandProcessor
     def __init__(self, snes_address, server_address, password, found_items, port: int):
-        self.snes_address = snes_address
-        self.server_address = server_address
+        super(Context, self).__init__(server_address, password, found_items)
 
         # WebUI Stuff
         self.ui_node = WebUI.WebUiClient()
         logger.addHandler(self.ui_node)
-        self.ready = False
-        self.custom_address = None
+
         self.webui_socket_port: typing.Optional[int] = port
         self.hint_cost = 0
         self.check_points = 0
         self.forfeit_mode = ''
         self.remaining_mode = ''
         self.hint_points = 0
-        # End WebUI Stuff
+        # End of WebUI Stuff
 
-        self.exit_event = asyncio.Event()
-        self.watcher_event = asyncio.Event()
-
-        self.input_queue = asyncio.Queue()
-        self.input_requests = 0
-
+        # snes stuff
+        self.snes_address = snes_address
         self.snes_socket = None
         self.snes_state = SNESState.SNES_DISCONNECTED
         self.snes_attached_device = None
@@ -78,79 +95,36 @@ class Context():
         self.is_sd2snes = False
         self.snes_write_buffer = []
 
-        self.server_task = None
-        self.server: typing.Optional[Endpoint] = None
-        self.password = password
-        self.server_version = Version(0, 0, 0)
-
-        self.team = None
-        self.slot = None
-        self.player_names: typing.Dict[int: str] = {}
-        self.locations_recognized = set()
-
-        self.locations_checked:typing.Set[int] = set()
-        self.locations_scouted:typing.Set[int] = set()
-        self.items_received = []
-        self.missing_locations: typing.List[int] = []
-        self.checked_locations: typing.List[int] = []
-        self.locations_info = {}
         self.awaiting_rom = False
         self.rom = None
         self.prev_rom = None
-        self.auth = None
-        self.found_items = found_items
-        self.finished_game = False
-        self.slow_mode = False
-        self.jsontotextparser = JSONtoTextParser(self)
-        self.set_getters(network_data_package)
 
-    def set_getters(self, data_package: dict, network=False):
-        if not network:  # local data; check if newer data was already downloaded
-            local_package = Utils.persistent_load().get("datapackage", {}).get("latest", {})
-            if local_package and local_package["version"] > network_data_package["version"]:
-                data_package: dict = local_package
-        elif network:  # check if data from server is newer
-            for key, value in data_package.items():
-                if type(value) == dict:  # convert to int keys
-                    data_package[key] = \
-                        {int(subkey) if subkey.isdigit() else subkey: subvalue for subkey, subvalue in value.items()}
+    async def connection_closed(self):
+        await super(Context, self).connection_closed()
+        self.awaiting_rom = False
 
-            if data_package["version"] > network_data_package["version"]:
-                Utils.persistent_store("datapackage", "latest", network_data_package)
+    def event_invalid_slot(self):
+        if self.snes_socket is not None and not self.snes_socket.closed:
+            asyncio.create_task(self.snes_socket.close())
+        raise Exception('Invalid ROM detected, '
+                        'please verify that you have loaded the correct rom and reconnect your snes (/snes)')
 
-        item_lookup: dict = data_package["lookup_any_item_id_to_name"]
-        locations_lookup: dict = data_package["lookup_any_location_id_to_name"]
-
-        def get_item_name_from_id(code: int):
-            return item_lookup.get(code, f'Unknown item (ID:{code})')
-        self.item_name_getter = get_item_name_from_id
-
-        def get_location_name_from_address(address: int):
-            return locations_lookup.get(address, f'Unknown location (ID:{address})')
-        self.location_name_getter = get_location_name_from_address
-
-
-    @property
-    def endpoints(self):
-        if self.server:
-            return [self.server]
-        else:
-            return []
-
-    async def disconnect(self):
-        if self.server and not self.server.socket.closed:
-            await self.server.socket.close()
-            self.ui_node.send_connection_status(self)
-        if self.server_task is not None:
-            await self.server_task
-
-    async def send_msgs(self, msgs):
-        if not self.server or not self.server.socket.open or self.server.socket.closed:
+    async def server_auth(self, password_requested):
+        if password_requested and not self.password:
+            await super(Context, self).server_auth(password_requested)
+        if self.rom is None:
+            self.awaiting_rom = True
+            logger.info(
+                'No ROM detected, awaiting snes connection to authenticate to the multiworld server (/snes)')
             return
-        await self.server.socket.send(encode(msgs))
-
-    def consume_players_package(self, package: typing.List[tuple]):
-        self.player_names = {slot: name for team, slot, name, orig_name in package if self.team == team}
+        self.awaiting_rom = False
+        self.auth = self.rom
+        auth = base64.b64encode(self.rom).decode()
+        await self.send_msgs([{"cmd": 'Connect',
+                              'password': self.password, 'name': auth, 'version': Utils._version_tuple,
+                              'tags': get_tags(self),
+                              'uuid': Utils.get_unique_identifier(), 'game': "A Link to the Past"
+                              }])
 
 
 def color_item(item_id: int, green: bool = False) -> str:
@@ -161,9 +135,7 @@ def color_item(item_id: int, green: bool = False) -> str:
     return color(item_name, *item_colors)
 
 
-START_RECONNECT_DELAY = 5
 SNES_RECONNECT_DELAY = 5
-SERVER_RECONNECT_DELAY = 5
 
 ROM_START = 0x000000
 WRAM_START = 0xF50000
@@ -463,7 +435,7 @@ class SNESState(enum.IntEnum):
 
 
 def launch_qusb2snes(ctx: Context):
-    qusb2snes_path = Utils.get_options()["general_options"]["qusb2snes"]
+    qusb2snes_path = Utils.get_options()["lttp_options"]["qusb2snes"]
 
     if not os.path.isfile(qusb2snes_path):
         qusb2snes_path = Utils.local_path(qusb2snes_path)
@@ -580,7 +552,7 @@ async def snes_connect(ctx: Context, address):
 
         ctx.snes_reconnect_address = address
         recv_task = asyncio.create_task(snes_recv_loop(ctx))
-        SNES_RECONNECT_DELAY = START_RECONNECT_DELAY
+        SNES_RECONNECT_DELAY = ctx.starting_reconnect_delay
 
     except Exception as e:
         if recv_task is not None:
@@ -754,384 +726,13 @@ async def snes_flush_writes(ctx: Context):
     await snes_write(ctx, writes)
 
 
-async def server_loop(ctx: Context, address=None):
-    global SERVER_RECONNECT_DELAY
-    ctx.ui_node.send_connection_status(ctx)
-    cached_address = None
-    if ctx.server and ctx.server.socket:
-        logger.error('Already connected')
-        return
-
-    if address is None:  # set through CLI or APBP
-        address = ctx.server_address
-    if address is None:  # see if this is an old connection
-        await asyncio.sleep(0.5)  # wait for snes connection to succeed if possible.
-        rom = ctx.rom if ctx.rom else None
-        if rom:
-            servers = Utils.persistent_load()["servers"]
-            if rom in servers:
-                address = servers[rom]
-                cached_address = True
-
-    # Wait for the user to provide a multiworld server address
-    if not address:
-        logger.info('Please connect to a multiworld server.')
-        ctx.ui_node.poll_for_server_ip()
-        return
-
-    address = f"ws://{address}" if "://" not in address else address
-    port = urllib.parse.urlparse(address).port or 38281
-
-    logger.info('Connecting to multiworld server at %s' % address)
-    try:
-        socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None)
-        ctx.server = Endpoint(socket)
-        logger.info('Connected')
-        ctx.server_address = address
-        ctx.ui_node.send_connection_status(ctx)
-        SERVER_RECONNECT_DELAY = START_RECONNECT_DELAY
-        async for data in ctx.server.socket:
-            for msg in decode(data):
-                await process_server_cmd(ctx, msg)
-        logger.warning('Disconnected from multiworld server, type /connect to reconnect')
-    except WebUI.WaitingForUiException:
-        pass
-    except ConnectionRefusedError:
-        if cached_address:
-            logger.error('Unable to connect to multiworld server at cached address. '
-                         'Please use the connect button above.')
-        else:
-            logger.error('Connection refused by the multiworld server')
-    except (OSError, websockets.InvalidURI):
-        logger.error('Failed to connect to the multiworld server')
-    except Exception as e:
-        logger.error('Lost connection to the multiworld server, type /connect to reconnect')
-        if not isinstance(e, websockets.WebSocketException):
-            logger.exception(e)
-    finally:
-        ctx.awaiting_rom = False
-        ctx.auth = None
-        ctx.items_received = []
-        ctx.locations_info = {}
-        ctx.server_version = Version(0, 0, 0)
-        if ctx.server and ctx.server.socket is not None:
-            await ctx.server.socket.close()
-        ctx.server = None
-        ctx.server_task = None
-        if ctx.server_address:
-            logger.info(f"... reconnecting in {SERVER_RECONNECT_DELAY}s")
-            ctx.ui_node.send_connection_status(ctx)
-            asyncio.create_task(server_autoreconnect(ctx))
-        SERVER_RECONNECT_DELAY *= 2
-
-
-async def server_autoreconnect(ctx: Context):
-    # unfortunately currently broken. See: https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1033
-    # with prompt_toolkit.shortcuts.ProgressBar() as pb:
-    #    for _ in pb(range(100)):
-    #        await asyncio.sleep(RECONNECT_DELAY/100)
-    await asyncio.sleep(SERVER_RECONNECT_DELAY)
-    if ctx.server_address and ctx.server_task is None:
-        ctx.server_task = asyncio.create_task(server_loop(ctx))
-
-
-
-async def process_server_cmd(ctx: Context, args: dict):
-    try:
-        cmd = args["cmd"]
-    except:
-        logger.exception(f"Could not get command from {args}")
-        raise
-    if cmd == 'RoomInfo':
-        logger.info('--------------------------------')
-        logger.info('Room Information:')
-        logger.info('--------------------------------')
-        version = args["version"]
-        ctx.server_version = tuple(version)
-        version = ".".join(str(item) for item in version)
-
-        logger.info(f'Server protocol version: {version}')
-        logger.info("Server protocol tags: " + ", ".join(args["tags"]))
-        if args['password']:
-            logger.info('Password required')
-        logging.info(f"Forfeit setting: {args['forfeit_mode']}")
-        logging.info(f"Remaining setting: {args['remaining_mode']}")
-        logging.info(f"A !hint costs {args['hint_cost']} points and you get {args['location_check_points']}"
-                     f" for each location checked.")
-        ctx.hint_cost = int(args['hint_cost'])
-        ctx.check_points = int(args['location_check_points'])
-        ctx.forfeit_mode = args['forfeit_mode']
-        ctx.remaining_mode = args['remaining_mode']
-        ctx.ui_node.send_game_info(ctx)
-        if len(args['players']) < 1:
-            logger.info('No player connected')
-        else:
-            args['players'].sort()
-            current_team = -1
-            logger.info('Players:')
-            for team, slot, name in args['players']:
-                if team != current_team:
-                    logger.info(f'  Team #{team + 1}')
-                    current_team = team
-                logger.info('    %s (Player %d)' % (name, slot))
-        if args["datapackage_version"] > network_data_package["version"]:
-            await ctx.send_msgs([{"cmd": "GetDataPackage"}])
-        await server_auth(ctx, args['password'])
-
-    elif cmd == 'DataPackage':
-        ctx.set_getters(args['data'], network=True)
-
-    elif cmd == 'ConnectionRefused':
-        errors = args["errors"]
-        if 'InvalidSlot' in errors:
-            if ctx.snes_socket is not None and not ctx.snes_socket.closed:
-                asyncio.create_task(ctx.snes_socket.close())
-            raise Exception('Invalid ROM detected, '
-                            'please verify that you have loaded the correct rom and reconnect your snes (/snes)')
-        elif 'SlotAlreadyTaken' in errors:
-            Utils.persistent_store("servers", ctx.rom, ctx.server_address)
-            raise Exception('Player slot already in use for that team')
-        elif 'IncompatibleVersion' in errors:
-            raise Exception('Server reported your client version as incompatible')
-        # last to check, recoverable problem
-        elif 'InvalidPassword' in errors:
-            logger.error('Invalid password')
-            ctx.password = None
-            await server_auth(ctx, True)
-        else:
-            raise Exception("Unknown connection errors: " + str(errors))
-        raise Exception('Connection refused by the multiworld host, no reason provided')
-
-    elif cmd == 'Connected':
-        Utils.persistent_store("servers", ctx.rom, ctx.server_address)
-        ctx.team = args["team"]
-        ctx.slot = args["slot"]
-        ctx.consume_players_package(args["players"])
-        msgs = []
-        if ctx.locations_checked:
-            msgs.append({"cmd": "LocationChecks",
-                         "locations": list(ctx.locations_checked)})
-        if ctx.locations_scouted:
-            msgs.append({"cmd": "LocationScouts",
-                         "locations": list(ctx.locations_scouted)})
-        if msgs:
-            await ctx.send_msgs(msgs)
-        if ctx.finished_game:
-            await send_finished_game(ctx)
-
-        # Get the server side view of missing as of time of connecting.
-        # This list is used to only send to the server what is reported as ACTUALLY Missing.
-        # This also serves to allow an easy visual of what locations were already checked previously
-        # when /missing is used for the client side view of what is missing.
-        ctx.missing_locations = args["missing_locations"]
-        ctx.checked_locations = args["checked_locations"]
-
-    elif cmd == 'ReceivedItems':
-        start_index = args["index"]
-
-        if start_index == 0:
-            ctx.items_received = []
-        elif start_index != len(ctx.items_received):
-            sync_msg = [{'cmd': 'Sync'}]
-            if ctx.locations_checked:
-                sync_msg.append({"cmd": "LocationChecks",
-                                 "locations": list(ctx.locations_checked)})
-            await ctx.send_msgs(sync_msg)
-        if start_index == len(ctx.items_received):
-            for item in args['items']:
-                ctx.items_received.append(NetworkItem(*item))
-        ctx.watcher_event.set()
-
-    elif cmd == 'LocationInfo':
-        for item, location, player in args['locations']:
-            if location not in ctx.locations_info:
-                ctx.locations_info[location] = (item, player)
-        ctx.watcher_event.set()
-
-    elif cmd == "RoomUpdate":
-        if "players" in args:
-            ctx.consume_players_package(args["players"])
-        if "hint_points" in args:
-            ctx.hint_points = args['hint_points']
-
-    elif cmd == 'Print':
-        logger.info(args["text"])
-
-    elif cmd == 'PrintJSON':
-        if not ctx.found_items and args.get("type", None) == "ItemSend" and args["receiving"] == args["sending"]:
-            pass  # don't want info on other player's local pickups.
-        logger.info(ctx.jsontotextparser(args["data"]))
-
-    elif cmd == 'InvalidArguments':
-        logger.warning(f"Invalid Arguments: {args['text']}")
-
-    else:
-        logger.debug(f"unknown command {cmd}")
-
-
 # kept as function for easier wrapping by plugins
 def get_tags(ctx: Context):
     tags = ['AP']
     return tags
 
 
-async def server_auth(ctx: Context, password_requested):
-    if password_requested and not ctx.password:
-        logger.info('Enter the password required to join this game:')
-        ctx.password = await console_input(ctx)
-    if ctx.rom is None:
-        ctx.awaiting_rom = True
-        logger.info(
-            'No ROM detected, awaiting snes connection to authenticate to the multiworld server (/snes)')
-        return
-    ctx.awaiting_rom = False
-    ctx.auth = ctx.rom
-    auth = base64.b64encode(ctx.rom).decode()
-    await ctx.send_msgs([{"cmd": 'Connect',
-                          'password': ctx.password, 'name': auth, 'version': Utils._version_tuple,
-                          'tags': get_tags(ctx),
-                          'uuid': Utils.get_unique_identifier(), 'game': "A Link to the Past"
-                          }])
 
-
-async def console_input(ctx: Context):
-    ctx.input_requests += 1
-    return await ctx.input_queue.get()
-
-
-async def connect(ctx: Context, address=None):
-    await ctx.disconnect()
-    ctx.server_task = asyncio.create_task(server_loop(ctx, address))
-
-
-from MultiServer import CommandProcessor, mark_raw
-
-
-class ClientCommandProcessor(CommandProcessor):
-    def __init__(self, ctx: Context):
-        self.ctx = ctx
-
-    def output(self, text: str):
-        logger.info(text)
-
-    def _cmd_exit(self) -> bool:
-        """Close connections and client"""
-        self.ctx.exit_event.set()
-        return True
-
-    @mark_raw
-    def _cmd_snes(self, snes_address: str = "") -> bool:
-        """Connect to a snes. Optionally include network address of a snes to connect to, otherwise show available devices"""
-        self.ctx.snes_reconnect_address = None
-        asyncio.create_task(snes_connect(self.ctx, snes_address if snes_address else self.ctx.snes_address))
-        return True
-
-    def _cmd_snes_close(self) -> bool:
-        """Close connection to a currently connected snes"""
-        self.ctx.snes_reconnect_address = None
-        if self.ctx.snes_socket is not None and not self.ctx.snes_socket.closed:
-            asyncio.create_task(self.ctx.snes_socket.close())
-            return True
-        else:
-            return False
-
-    def _cmd_connect(self, address: str = "") -> bool:
-        """Connect to a MultiWorld Server"""
-        self.ctx.server_address = None
-        asyncio.create_task(connect(self.ctx, address if address else None))
-        return True
-
-    def _cmd_disconnect(self) -> bool:
-        """Disconnect from a MultiWorld Server"""
-        self.ctx.server_address = None
-        asyncio.create_task(self.ctx.disconnect())
-        return True
-
-    def _cmd_received(self) -> bool:
-        """List all received items"""
-        logger.info('Received items:')
-        for index, item in enumerate(self.ctx.items_received, 1):
-            self.ctx.ui_node.notify_item_received(self.ctx.player_names[item.player], self.ctx.item_name_getter(item.item),
-                                                  self.ctx.location_name_getter(item.location), index,
-                                                  len(self.ctx.items_received),
-                                                  self.ctx.item_name_getter(item.item) in Items.progression_items)
-            logging.info('%s from %s (%s) (%d/%d in list)' % (
-                color(self.ctx.item_name_getter(item.item), 'red', 'bold'),
-                color(self.ctx.player_names[item.player], 'yellow'),
-                self.ctx.location_name_getter(item.location), index, len(self.ctx.items_received)))
-        return True
-
-    def _cmd_missing(self) -> bool:
-        """List all missing location checks, from your local game state"""
-        count = 0
-        checked_count = 0
-        for location, location_id in Regions.lookup_name_to_id.items():
-            if location_id < 0:
-                continue
-            if location_id not in self.ctx.locations_checked:
-                if location_id in self.ctx.missing_locations:
-                    self.output('Missing: ' + location)
-                    count += 1
-                elif location_id in self.ctx.checked_locations:
-                    self.output('Checked: ' + location)
-                    count += 1
-                    checked_count += 1
-
-        if count:
-            self.output(
-                f"Found {count} missing location checks{f'. {checked_count} locations checks previously visited.' if checked_count else ''}")
-        else:
-            self.output("No missing location checks found.")
-        return True
-
-    def _cmd_slow_mode(self, toggle: str = ""):
-        """Toggle slow mode, which limits how fast you send / receive items."""
-        if toggle:
-            self.ctx.slow_mode = toggle.lower() in {"1", "true", "on"}
-        else:
-            self.ctx.slow_mode = not self.ctx.slow_mode
-
-        self.output(f"Setting slow mode to {self.ctx.slow_mode}")
-
-    def _cmd_web(self):
-        if self.ctx.webui_socket_port:
-            webbrowser.open(f'http://localhost:5050?port={self.ctx.webui_socket_port}')
-        else:
-            self.output("Web UI was never started.")
-
-    def _cmd_ready(self):
-        self.ctx.ready = not self.ctx.ready
-        if self.ctx.ready:
-            state = CLientStatus.CLIENT_READY
-            self.output("Readied up.")
-        else:
-            state = CLientStatus.CLIENT_CONNECTED
-            self.output("Unreadied.")
-        asyncio.create_task(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]))
-
-    def default(self, raw: str):
-        asyncio.create_task(self.ctx.send_msgs([{"cmd": "Say", "text": raw}]))
-
-
-async def console_loop(ctx: Context):
-    session = prompt_toolkit.PromptSession()
-    commandprocessor = ClientCommandProcessor(ctx)
-    while not ctx.exit_event.is_set():
-        try:
-            with patch_stdout():
-                input_text = await session.prompt_async()
-
-            if ctx.input_requests > 0:
-                ctx.input_requests -= 1
-                ctx.input_queue.put_nowait(input_text)
-                continue
-
-            if not input_text:
-                continue
-            commandprocessor(input_text)
-        except Exception as e:
-            logging.exception(e)
-        await snes_flush_writes(ctx)
 
 
 async def track_locations(ctx: Context, roomid, roomdata):
@@ -1218,9 +819,6 @@ async def track_locations(ctx: Context, roomid, roomdata):
         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": new_locations}])
 
 
-async def send_finished_game(ctx: Context):
-    await ctx.send_msgs([{"cmd": "StatusUpdate", "status": CLientStatus.CLIENT_GOAL}])
-
 async def game_watcher(ctx: Context):
     prev_game_timer = 0
     perf_counter = time.perf_counter()
@@ -1244,7 +842,7 @@ async def game_watcher(ctx: Context):
             ctx.prev_rom = ctx.rom
 
             if ctx.awaiting_rom:
-                await server_auth(ctx, False)
+                await ctx.server_auth(False)
 
         if ctx.auth and ctx.auth != ctx.rom:
             logger.warning("ROM change detected, please reconnect to the multiworld server")
@@ -1260,7 +858,7 @@ async def game_watcher(ctx: Context):
         delay = 7 if ctx.slow_mode else 2
         if gameend[0]:
             if not ctx.finished_game:
-                await send_finished_game(ctx)
+                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                 ctx.finished_game = True
 
             if time.perf_counter() - perf_counter < delay:
@@ -1314,7 +912,7 @@ async def game_watcher(ctx: Context):
 
 
 async def run_game(romfile):
-    auto_start = Utils.get_options()["general_options"].get("rom_start", True)
+    auto_start = Utils.get_options()["lttp_options"].get("rom_start", True)
     if auto_start is True:
         import webbrowser
         webbrowser.open(romfile)
@@ -1326,7 +924,7 @@ async def run_game(romfile):
 async def websocket_server(websocket: websockets.WebSocketServerProtocol, path, ctx: Context):
     endpoint = Endpoint(websocket)
     ctx.ui_node.endpoints.append(endpoint)
-    process_command = ClientCommandProcessor(ctx)
+    process_command = LttPCommandProcessor(ctx)
     try:
         async for incoming_data in websocket:
             data = loads(incoming_data)
@@ -1347,7 +945,7 @@ async def websocket_server(websocket: websockets.WebSocketServerProtocol, path, 
             elif data['type'] == 'webConfig':
                 if 'serverAddress' in data['content']:
                     ctx.server_address = data['content']['serverAddress']
-                    await connect(ctx, data['content']['serverAddress'])
+                    await ctx.connect(data['content']['serverAddress'])
                 elif 'deviceId' in data['content']:
                     # Allow a SNES disconnect via UI sending -1 as new device
                     if data['content']['deviceId'] == "-1":
@@ -1416,16 +1014,16 @@ async def main():
             port, on_start=threading.Timer(1, webbrowser.open, (f'http://localhost:5050?port={port}',)).start)
 
     ctx = Context(args.snes, args.connect, args.password, args.founditems, port)
-    input_task = create_named_task(console_loop(ctx), name="Input")
+    input_task = asyncio.create_task(console_loop(ctx), name="Input")
     if not args.disable_web_ui:
         ui_socket = websockets.serve(functools.partial(websocket_server, ctx=ctx),
                                      'localhost', port, ping_timeout=None, ping_interval=None)
         await ui_socket
 
     if ctx.server_task is None:
-        ctx.server_task = create_named_task(server_loop(ctx), name="ServerLoop")
+        ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
-    watcher_task = create_named_task(game_watcher(ctx), name="GameWatcher")
+    watcher_task = asyncio.create_task(game_watcher(ctx), name="GameWatcher")
 
     await ctx.exit_event.wait()
     ctx.server_address = None

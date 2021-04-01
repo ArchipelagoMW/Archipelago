@@ -31,7 +31,7 @@ from worlds import network_data_package, lookup_any_item_id_to_name, lookup_any_
 import Utils
 from Utils import get_item_name_from_id, get_location_name_from_address, \
     _version_tuple, restricted_loads, Version
-from NetUtils import Node, Endpoint, CLientStatus, NetworkItem, decode
+from NetUtils import Node, Endpoint, ClientStatus, NetworkItem, decode
 
 colorama.init()
 lttp_console_names = frozenset(set(Items.item_table) | set(Items.item_name_groups) | set(Regions.lookup_name_to_id))
@@ -370,7 +370,7 @@ async def on_client_disconnected(ctx: Context, client: Client):
 
 
 async def on_client_joined(ctx: Context, client: Client):
-    update_client_status(ctx, client, CLientStatus.CLIENT_CONNECTED)
+    update_client_status(ctx, client, ClientStatus.CLIENT_CONNECTED)
     version_str = '.'.join(str(x) for x in client.version)
     ctx.notify_all(
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has joined the game. "
@@ -379,7 +379,7 @@ async def on_client_joined(ctx: Context, client: Client):
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 async def on_client_left(ctx: Context, client: Client):
-    update_client_status(ctx, client, CLientStatus.CLIENT_UNKNOWN)
+    update_client_status(ctx, client, ClientStatus.CLIENT_UNKNOWN)
     ctx.notify_all("%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1))
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
@@ -486,7 +486,7 @@ def notify_team(ctx: Context, team: int, text: str):
 
 def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[NetUtils.Hint]:
     hints = []
-    seeked_item_id = Items.item_table[item][2]
+    seeked_item_id = lookup_any_item_name_to_id[item]
     for check, result in ctx.locations.items():
         item_id, receiving_player = result
         if receiving_player == slot and item_id == seeked_item_id:
@@ -514,7 +514,7 @@ def collect_hints_location(ctx: Context, team: int, slot: int, location: str) ->
 
 def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
     text = f"[Hint]: {ctx.player_names[team, hint.receiving_player]}'s " \
-           f"{Items.lookup_id_to_name[hint.item]} is " \
+           f"{lookup_any_item_id_to_name[hint.item]} is " \
            f"at {get_location_name_from_address(hint.location)} " \
            f"in {ctx.player_names[team, hint.finding_player]}'s World"
 
@@ -750,7 +750,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 "Sorry, client forfeiting has been disabled on this server. You can ask the server admin for a /forfeit")
             return False
         else:  # is auto or goal
-            if self.ctx.client_game_state[self.client.team, self.client.slot] == CLientStatus.CLIENT_GOAL:
+            if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
                 forfeit_player(self.ctx, self.client.team, self.client.slot)
                 return True
             else:
@@ -774,7 +774,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 "Sorry, !remaining has been disabled on this server.")
             return False
         else:  # is goal
-            if self.ctx.client_game_state[self.client.team, self.client.slot] == CLientStatus.CLIENT_GOAL:
+            if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
                 remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
                 if remaining_item_ids:
                     self.output("Remaining items: " + ", ".join(Items.lookup_id_to_name.get(item_id, "unknown item")
@@ -859,7 +859,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     hints = []
                     for item in Items.item_name_groups[item_name]:
                         hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item))
-                elif item_name in Items.item_table:  # item name
+                elif item_name in lookup_any_item_name_to_id:  # item name
                     hints = collect_hints(self.ctx, self.client.team, self.client.slot, item_name)
                 else:  # location name
                     hints = collect_hints_location(self.ctx, self.client.team, self.client.slot, item_name)
@@ -1056,10 +1056,10 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
             client.messageprocessor(args["text"])
 
-def update_client_status(ctx: Context, client: Client, new_status: CLientStatus):
+def update_client_status(ctx: Context, client: Client, new_status: ClientStatus):
     current = ctx.client_game_state[client.team, client.slot]
-    if current != CLientStatus.CLIENT_GOAL:  # can't undo goal completion
-        if new_status == CLientStatus.CLIENT_GOAL:
+    if current != ClientStatus.CLIENT_GOAL:  # can't undo goal completion
+        if new_status == ClientStatus.CLIENT_GOAL:
             finished_msg = f'{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has completed their goal.'
             ctx.notify_all(finished_msg)
             if "auto" in ctx.forfeit_mode:
@@ -1219,7 +1219,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
                             hints = collect_hints(self.ctx, team, slot, item)
                         else:  # location name
                             hints = collect_hints_location(self.ctx, team, slot, item)
-                        notify_hints(self.ctx, team, hints)
+                        if hints:
+                            notify_hints(self.ctx, team, hints)
+                        else:
+                            self.output("No hints found.")
                         return True
                     else:
                         self.output(response)
@@ -1336,7 +1339,8 @@ async def auto_shutdown(ctx, to_cancel=None):
 
 
 async def main(args: argparse.Namespace):
-    logging.basicConfig(format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
+    logging.basicConfig(force = True,
+                        format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
 
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
                   args.hint_cost, not args.disable_item_cheat, args.forfeit_mode, args.remaining_mode,

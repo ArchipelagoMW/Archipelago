@@ -21,6 +21,19 @@ description: Template Name # Used to describe your yaml. Useful if you have mult
 name: YourName{number} # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
 #{player} will be replaced with the player's slot number.
 #{number} will be replaced with the counter value of the name.
+game:
+  A Link to the Past: 1
+  Hollow Knight: 1
+  Factorio: 1
+# Shared Options supported by all games:
+accessibility:
+  items: 0 # Guarantees you will be able to acquire all items, but you may not be able to access all locations
+  locations: 50 # Guarantees you will be able to access all locations, and therefore all items
+  none: 0 # Guarantees only that the game is beatable. You may not be able to access all locations or acquire all items
+progression_balancing:
+  on: 50 # A system to reduce BK, as in times during which you can't do anything by moving your items into an earlier access sphere to make it likely you have stuff to do
+  off: 0 # Turn this off if you don't mind a longer multiworld, or can glitch/sequence break around missing items.
+# A Link to  the Past options:
 ### Logic Section ###
 # Warning: overworld_glitches is not available and minor_glitches is only partially implemented on the door-rando version
 glitches_required: # Determine the logic required to complete the seed
@@ -37,13 +50,6 @@ restrict_dungeon_item_on_boss: # aka ambrosia boss items
   on: 0 # prevents unshuffled compasses, maps and keys to be boss drops, they can still drop keysanity and other players' items
   off: 50
 ### End of Logic Section ###
-meta_ignore: # Nullify options specified in the meta.yaml file. Adding an option here guarantees it will not occur in your seed, even if the .yaml file specifies it
-  mode:
-    - inverted # Never play inverted seeds
-  retro:
-    - on # Never play retro seeds
-  weapons:
-    - swordless # Never play a swordless seed
 map_shuffle: # Shuffle dungeon maps into the world and other dungeons, including other players' worlds
   on: 0
   off: 50
@@ -72,10 +78,6 @@ dungeon_counters:
   pickup: 50 # Show when compass is picked up
   default: 0 # Show when compass is picked up if the compass itself is shuffled
   off: 0 # Never show item count in dungeons
-accessibility:
-  items: 0 # Guarantees you will be able to acquire all items, but you may not be able to access all locations
-  locations: 50 # Guarantees you will be able to access all locations, and therefore all items
-  none: 0 # Guarantees only that the game is beatable. You may not be able to access all locations or acquire all items
 progressive: # Enable or disable progressive items (swords, shields, bow)
   on: 50 # All items are progressive
   off: 0 # No items are progressive
@@ -95,8 +97,8 @@ entrance_shuffle:
   crossed-group-myfriends: 0 # using this method, everyone with "group-myfriends" will share the same seed
 goals:
   ganon: 50 # Climb GT, defeat Agahnim 2, and then kill Ganon
-  fast_ganon: 0 # Only killing Ganon is required. However, items may still be placed in GT
-  dungeons: 0 # Defeat the boss of all dungeons, including Agahnim's tower and GT (Aga 2)
+  crystals: 0 # Only killing Ganon is required. However, items may still be placed in GT
+  bosses: 0 # Defeat the boss of all dungeons, including Agahnim's tower and GT (Aga 2)
   pedestal: 0 # Pull the Triforce from the Master Sword pedestal
   ganon_pedestal: 0 # Pull the Master Sword pedestal, then kill Ganon
   triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then turn them in to Murahadala in front of Hyrule Castle
@@ -183,9 +185,6 @@ item_functionality:
   normal: 50 # Vanilla item functionality
   hard: 0 # Reduced helpfulness of items (potions less effective, can't catch faeries, cape uses double magic, byrna does not grant invulnerability, boomerangs do not stun, silvers disabled outside ganon)
   expert: 0 # Vastly reduces the helpfulness of items (potions barely effective, can't catch faeries, cape uses double magic, byrna does not grant invulnerability, boomerangs and hookshot do not stun, silvers disabled outside ganon)
-progression_balancing:
-  on: 50 # A system to reduce BK, as in times during which you can't do anything by moving your items into an earlier access sphere to make it likely you have stuff to do
-  off: 0 # Turn this off if you don't mind a longer multiworld, or can glitch around missing items.
 tile_shuffle: # Randomize the tile layouts in flying tile rooms
   on: 0
   off: 50
@@ -202,9 +201,9 @@ turtle_rock_medallion: # required medallion to open Turtle Rock front entrance
 ### Enemizer Section ###
 boss_shuffle:
   none: 50 # Vanilla bosses
-  simple: 0 # Existing bosses except Ganon and Agahnim are shuffled throughout dungeons
-  full: 0 # 3 bosses can occur twice
-  random: 0 # Any boss can appear any amount of times
+  basic: 0 # Existing bosses except Ganon and Agahnim are shuffled throughout dungeons
+  random: 0 # 3 bosses can occur twice
+  chaos: 0 # Any boss can appear any amount of times
   singularity: 0 # Picks a boss, tries to put it everywhere that works, if there's spaces remaining it picks a boss to fill those
 enemy_shuffle: # Randomize enemy placement
   on: 0
@@ -294,6 +293,14 @@ green_clock_time: # For all timer modes, the amount of time in minutes to gain o
 glitch_boots:
   on: 50 # Start with Pegasus Boots in any glitched logic mode that makes use of them
   off: 0
+# meta_ignore, linked_options and triggers work for any game
+meta_ignore: # Nullify options specified in the meta.yaml file. Adding an option here guarantees it will not occur in your seed, even if the .yaml file specifies it
+  mode:
+    - inverted # Never play inverted seeds
+  retro:
+    - on # Never play retro seeds
+  weapons:
+    - swordless # Never play a swordless seed
 linked_options:
   - name: crosskeys
     options: # These overwrite earlier options if the percentage chance triggers
@@ -336,7 +343,7 @@ triggers:
     percentage: 0 # AND has a 0 percent chance (meaning this is default disabled, just to show how it works)
     options: # then inserts these options
       swords: assured
-### door rando only options ###
+### door rando only options (not supported at all yet on this branch) ###
 door_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
   vanilla: 50 # Everything should be like in vanilla
   basic: 0 # Dungeons are shuffled within themselves

@@ -24,11 +24,13 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
 
     return ret
 
+
 class HKLocation(Location):
     game: str = "Hollow Knight"
 
     def __init__(self, player: int, name: str, address=None, parent=None):
         super(HKLocation, self).__init__(player, name, address, parent)
+
 
 class HKItem(Item):
     game = "Hollow Knight"
@@ -44,10 +46,9 @@ def gen_hollow(world: MultiWorld, player: int):
     set_rules(world, player)
 
 
-
-
 def link_regions(world: MultiWorld, player: int):
     world.get_entrance('Hollow Nest S&Q', player).connect(world.get_region('Hollow Nest', player))
+
 
 not_shufflable_types = {"Essence_Boss"}
 
