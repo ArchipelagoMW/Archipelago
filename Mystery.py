@@ -343,12 +343,14 @@ legacy_boss_shuffle_options = {
     # legacy, will go away:
     'simple': 'basic',
     'random': 'full',
+    'normal': 'full'
 }
 
 legacy_goals = {
     'dungeons': 'bosses',
     'fast_ganon': 'crystals',
 }
+
 
 def roll_percentage(percentage: typing.Union[int, float]) -> bool:
     """Roll a percentage chance.

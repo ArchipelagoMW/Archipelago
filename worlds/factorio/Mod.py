@@ -1,6 +1,7 @@
 """Outputs a Factorio Mod to facilitate integration with Archipelago"""
 
 import os
+import zipfile
 from typing import Optional
 import threading
 import json
@@ -51,7 +52,7 @@ def generate_mod(world: MultiWorld, player: int):
 
     mod_code = template.render(**template_data)
 
-    mod_dir = Utils.output_path(mod_name)
+    mod_dir = Utils.output_path(mod_name)+"_"+Utils.__version__
     en_locale_dir = os.path.join(mod_dir, "locale", "en")
     os.makedirs(en_locale_dir, exist_ok=True)
     shutil.copytree(Utils.local_path("data", "factorio", "mod"), mod_dir, dirs_exist_ok=True)
@@ -64,3 +65,14 @@ def generate_mod(world: MultiWorld, player: int):
     info["name"] = mod_name
     with open(os.path.join(mod_dir, "info.json"), "wt") as f:
         json.dump(info, f, indent=4)
+
+    # zip the result
+    zf_path = os.path.join(mod_dir+".zip")
+    with zipfile.ZipFile(zf_path, compression=zipfile.ZIP_DEFLATED, mode='w') as zf:
+        for root, dirs, files in os.walk(mod_dir):
+            for file in files:
+                zf.write(os.path.join(root, file),
+                           os.path.relpath(os.path.join(root, file),
+                                           os.path.join(mod_dir, '..')))
+    shutil.rmtree(mod_dir)
+
