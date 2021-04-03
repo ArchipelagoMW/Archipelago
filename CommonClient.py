@@ -356,7 +356,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         if msgs:
             await ctx.send_msgs(msgs)
         if ctx.finished_game:
-            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": CLientStatus.CLIENT_GOAL}])
+            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
 
         # Get the server side view of missing as of time of connecting.
         # This list is used to only send to the server what is reported as ACTUALLY Missing.

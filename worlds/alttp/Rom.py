@@ -1651,7 +1651,7 @@ def write_custom_shops(rom, world, player):
             if item is None:
                 break
             if not item['item'] in item_table: # item not native to ALTTP
-                item_code = 0x09 # Hammer
+                item_code = 0x09  # Hammer
             else:
                 item_code = ItemFactory(item['item'], player).code
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro[player]:

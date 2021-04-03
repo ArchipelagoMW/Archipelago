@@ -525,10 +525,15 @@ def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
 def json_format_send_event(net_item: NetworkItem, receiving_player: int):
     parts = []
     NetUtils.add_json_text(parts, net_item.player, type=NetUtils.JSONTypes.player_id)
-    NetUtils.add_json_text(parts, " sent ")
-    NetUtils.add_json_text(parts, net_item.item, type=NetUtils.JSONTypes.item_id)
-    NetUtils.add_json_text(parts, " to ")
-    NetUtils.add_json_text(parts, receiving_player, type=NetUtils.JSONTypes.player_id)
+    if net_item.player == receiving_player:
+        NetUtils.add_json_text(parts, " found their ")
+        NetUtils.add_json_text(parts, net_item.item, type=NetUtils.JSONTypes.item_id)
+    else:
+        NetUtils.add_json_text(parts, " sent ")
+        NetUtils.add_json_text(parts, net_item.item, type=NetUtils.JSONTypes.item_id)
+        NetUtils.add_json_text(parts, " to ")
+        NetUtils.add_json_text(parts, receiving_player, type=NetUtils.JSONTypes.player_id)
+
     NetUtils.add_json_text(parts, " (")
     NetUtils.add_json_text(parts, net_item.location, type=NetUtils.JSONTypes.location_id)
     NetUtils.add_json_text(parts, ")")
