@@ -23,6 +23,7 @@ class AssembleOptions(type):
 class Option(metaclass=AssembleOptions):
     value: int
     name_lookup: typing.Dict[int, str]
+    default = 0
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.get_option_name()})"
@@ -47,6 +48,7 @@ class Option(metaclass=AssembleOptions):
 class Toggle(Option):
     option_false = 0
     option_true = 1
+    default = 0
 
     def __init__(self, value: int):
         self.value = value
@@ -85,6 +87,7 @@ class Toggle(Option):
 
     def get_option_name(self):
         return bool(self.value)
+
 
 class Choice(Option):
     def __init__(self, value: int):
@@ -232,6 +235,42 @@ hollow_knight_skip_options: typing.Dict[str, type(Option)] = {
 }
 
 hollow_knight_options: typing.Dict[str, Option] = {**hollow_knight_randomize_options, **hollow_knight_skip_options}
+
+
+class MaxSciencePack(Choice):
+    option_automation_science_pack = 0
+    option_logistic_science_pack = 1
+    option_military_science_pack = 2
+    option_chemical_science_pack = 3
+    option_production_science_pack = 4
+    option_utility_science_pack = 5
+    option_space_science_pack = 6
+    default = 6
+
+    def get_allowed_packs(self):
+        return {option.replace("_", "-") for option, value in self.options.items()
+                if value <= self.value}
+
+
+class TechCost(Choice):
+    option_very_easy = 0
+    option_easy = 1
+    option_kind = 2
+    option_normal = 3
+    option_hard = 4
+    option_very_hard = 5
+    option_insane = 6
+    default = 3
+
+
+class TechTreeLayout(Choice):
+    option_single = 0
+    default = 0
+
+
+factorio_options: typing.Dict[str, type(Option)] = {"max_science_pack": MaxSciencePack,
+                                                    "tech_tree_layout": TechTreeLayout,
+                                                    "tech_cost": TechCost}
 
 if __name__ == "__main__":
     import argparse

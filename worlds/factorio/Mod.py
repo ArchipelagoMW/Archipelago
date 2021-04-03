@@ -35,11 +35,19 @@ def generate_mod(world: MultiWorld, player: int):
     player_names = {x: world.player_names[x][0] for x in world.player_ids}
     locations = []
     for location in world.get_filled_locations(player):
-        if not location.name.startswith("recipe-"):  # introduce this a new location property?
+        if not location.name.startswith("recipe-"):  # introduce this as a new location property?
             locations.append((location.name, location.item.name, location.item.player))
     mod_name = f"archipelago-client-{world.seed}-{player}"
+    tech_cost = {0: 0.1,
+                 1: 0.25,
+                 2: 0.5,
+                 3: 1,
+                 4: 2,
+                 5: 5,
+                 6: 10}[world.tech_cost[player].value]
     template_data = {"locations": locations, "player_names" : player_names, "tech_table": tech_table,
-                     "mod_name": mod_name}
+                     "mod_name": mod_name, "allowed_science_packs": world.max_science_pack[player].get_allowed_packs(),
+                     "tech_cost": tech_cost}
 
     mod_code = template.render(**template_data)
 

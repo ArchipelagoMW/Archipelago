@@ -2,7 +2,7 @@ import logging
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
 
-from .Technologies import tech_table, requirements, ingredients, all_ingredients, recipe_sources
+from .Technologies import tech_table, requirements, ingredients, all_ingredients, recipe_sources, all_ingredients_recipe
 
 static_nodes = {"automation", "logistics"}
 
@@ -30,7 +30,7 @@ def factorio_create_regions(world: MultiWorld, player: int):
         tech = Location(player, tech_name, tech_id, nauvis)
         nauvis.locations.append(tech)
         tech.game = "Factorio"
-    for ingredient in all_ingredients:  # register science packs as events
+    for ingredient in all_ingredients_recipe:  # register science packs as events
         ingredient_location = Location(player, ingredient, 0, nauvis)
         ingredient_location.item = Item(ingredient, True, 0, player)
         ingredient_location.event = ingredient_location.locked = True
@@ -56,4 +56,4 @@ def set_rules(world: MultiWorld, player: int):
 
 
         world.completion_condition[player] = lambda state: all(state.has(ingredient, player)
-                                                               for ingredient in all_ingredients)
+                                                               for ingredient in all_ingredients_recipe)

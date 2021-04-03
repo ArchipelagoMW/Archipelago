@@ -198,11 +198,15 @@ def main(args=None, callback=ERmain):
                     pre_rolled["original_seed_name"] = seedname
                     pre_rolled["pre_rolled"] = vars(settings).copy()
                     if "plando_items" in pre_rolled["pre_rolled"]:
-                        pre_rolled["pre_rolled"]["plando_items"] = [item.to_dict() for item in pre_rolled["pre_rolled"]["plando_items"]]
+                        pre_rolled["pre_rolled"]["plando_items"] = [item.to_dict() for item in
+                                                                    pre_rolled["pre_rolled"]["plando_items"]]
                     if "plando_connections" in pre_rolled["pre_rolled"]:
-                        pre_rolled["pre_rolled"]["plando_connections"] = [connection.to_dict() for connection in pre_rolled["pre_rolled"]["plando_connections"]]
+                        pre_rolled["pre_rolled"]["plando_connections"] = [connection.to_dict() for connection in
+                                                                          pre_rolled["pre_rolled"][
+                                                                              "plando_connections"]]
 
-                    with open(os.path.join(args.outputpath if args.outputpath else ".", f"{os.path.split(path)[-1].split('.')[0]}_pre_rolled.yaml"), "wt") as f:
+                    with open(os.path.join(args.outputpath if args.outputpath else ".",
+                                           f"{os.path.split(path)[-1].split('.')[0]}_pre_rolled.yaml"), "wt") as f:
                         yaml.dump(pre_rolled, f)
                 for k, v in vars(settings).items():
                     if v is not None:
@@ -294,7 +298,8 @@ def handle_name(name: str, player: int, name_counter: Counter):
     name_counter[name] += 1
     new_name = "%".join([x.replace("%number%", "{number}").replace("%player%", "{player}") for x in name.split("%%")])
     new_name = string.Formatter().vformat(new_name, (), SafeDict(number=name_counter[name],
-                                                                 NUMBER=(name_counter[name] if name_counter[name] > 1 else ''),
+                                                                 NUMBER=(name_counter[name] if name_counter[
+                                                                                                   name] > 1 else ''),
                                                                  player=player,
                                                                  PLAYER=(player if player > 1 else '')))
     return new_name.strip().replace(' ', '_')[:16]
@@ -315,16 +320,41 @@ available_boss_locations: typing.Set[str] = {f"{loc.lower()}{f' {level}' if leve
 boss_shuffle_options = {None: 'none',
                         'none': 'none',
                         'basic': 'basic',
-                        'normal': 'normal',
+                        'full': 'full',
                         'chaos': 'chaos',
                         'singularity': 'singularity'
                         }
 
+goals = {
+    'ganon': 'ganon',
+    'crystals': 'crystals',
+    'bosses': 'bosses',
+    'pedestal': 'pedestal',
+    'ganon_pedestal': 'ganonpedestal',
+    'triforce_hunt': 'triforcehunt',
+    'local_triforce_hunt': 'localtriforcehunt',
+    'ganon_triforce_hunt': 'ganontriforcehunt',
+    'local_ganon_triforce_hunt': 'localganontriforcehunt',
+    'ice_rod_hunt': 'icerodhunt',
+}
+
+# remove sometime before 1.0.0, warn before
+legacy_boss_shuffle_options = {
+    # legacy, will go away:
+    'simple': 'basic',
+    'random': 'full',
+}
+
+legacy_goals = {
+    'dungeons': 'bosses',
+    'fast_ganon': 'crystals',
+}
 
 def roll_percentage(percentage: typing.Union[int, float]) -> bool:
     """Roll a percentage chance.
     percentage is expected to be in range [0, 100]"""
     return random.random() < (float(percentage) / 100)
+
 
 def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> dict:
     logging.debug(f'Applying {new_weights}')
@@ -336,6 +366,7 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
                             f'overwrite a root option. '
                             f'This is probably in error.')
     return weights
+
 
 def roll_linked_options(weights: dict) -> dict:
     weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
@@ -349,7 +380,8 @@ def roll_linked_options(weights: dict) -> dict:
                     weights = update_weights(weights, option_set["options"], "Linked", option_set["name"])
                 if "rom_options" in option_set:
                     rom_weights = weights.get("rom", dict())
-                    rom_weights = update_weights(rom_weights, option_set["rom_options"], "Linked Rom", option_set["name"])
+                    rom_weights = update_weights(rom_weights, option_set["rom_options"], "Linked Rom",
+                                                 option_set["name"])
                     weights["rom"] = rom_weights
             else:
                 logging.debug(f"linked option {option_set['name']} skipped.")
@@ -357,6 +389,7 @@ def roll_linked_options(weights: dict) -> dict:
             raise ValueError(f"Linked option {option_set['name']} is destroyed. "
                              f"Please fix your linked option.") from e
     return weights
+
 
 def roll_triggers(weights: dict) -> dict:
     weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
@@ -375,7 +408,8 @@ def roll_triggers(weights: dict) -> dict:
                     weights = update_weights(weights, option_set["options"], "Triggered", option_set["option_name"])
                 if "rom_options" in option_set:
                     rom_weights = weights.get("rom", dict())
-                    rom_weights = update_weights(rom_weights, option_set["rom_options"], "Triggered Rom", option_set["option_name"])
+                    rom_weights = update_weights(rom_weights, option_set["rom_options"], "Triggered Rom",
+                                                 option_set["option_name"])
                     weights["rom"] = rom_weights
             weights[key] = result
         except Exception as e:
@@ -385,6 +419,11 @@ def roll_triggers(weights: dict) -> dict:
 
 
 def get_plando_bosses(boss_shuffle: str, plando_options: typing.Set[str]) -> str:
+    if boss_shuffle in legacy_boss_shuffle_options:
+        new_boss_shuffle = legacy_boss_shuffle_options[boss_shuffle]
+        logging.warning(f"Boss shuffle {boss_shuffle} is deprecated, "
+                        f"please use {new_boss_shuffle} instead")
+        return new_boss_shuffle
     if boss_shuffle in boss_shuffle_options:
         return boss_shuffle_options[boss_shuffle]
     elif "bosses" in plando_options:
@@ -392,6 +431,10 @@ def get_plando_bosses(boss_shuffle: str, plando_options: typing.Set[str]) -> str
         remainder_shuffle = "none"  # vanilla
         bosses = []
         for boss in options:
+            if boss in legacy_boss_shuffle_options:
+                remainder_shuffle = legacy_boss_shuffle_options[boss_shuffle]
+                logging.warning(f"Boss shuffle {boss} is deprecated, "
+                                f"please use {remainder_shuffle} instead")
             if boss in boss_shuffle_options:
                 remainder_shuffle = boss_shuffle_options[boss]
             elif "-" in boss:
@@ -419,7 +462,7 @@ def get_plando_bosses(boss_shuffle: str, plando_options: typing.Set[str]) -> str
         raise Exception(f"Boss Shuffle {boss_shuffle} is unknown and boss plando is turned off.")
 
 
-def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses", ))):
+def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses",))):
     if "pre_rolled" in weights:
         pre_rolled = weights["pre_rolled"]
 
@@ -435,7 +478,8 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         if "plando_connections" in pre_rolled:
             pre_rolled["plando_connections"] = [PlandoConnection(connection["entrance"],
                                                                  connection["exit"],
-                                                                 connection["direction"]) for connection in pre_rolled["plando_connections"]]
+                                                                 connection["direction"]) for connection in
+                                                pre_rolled["plando_connections"]]
             if "connections" not in plando_options and pre_rolled["plando_connections"]:
                 raise Exception("Connection Plando is turned off. Reusing this pre-rolled setting not permitted.")
 
@@ -486,10 +530,15 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         for option_name, option in Options.hollow_knight_options.items():
             setattr(ret, option_name, option.from_any(get_choice(option_name, weights, True)))
     elif ret.game == "Factorio":
-        pass
+        for option_name, option in Options.factorio_options.items():
+            if option_name in weights:
+                setattr(ret, option_name, option.from_any(get_choice(option_name, weights)))
+            else:
+                setattr(ret, option_name, option.default)
     else:
         raise Exception(f"Unsupported game {ret.game}")
     return ret
+
 
 def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     glitches_required = get_choice('glitches_required', weights)
@@ -533,17 +582,11 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
         ret.shuffle = entrance_shuffle if entrance_shuffle != 'none' else 'vanilla'
 
     goal = get_choice('goals', weights, 'ganon')
-    ret.goal = {'ganon': 'ganon',
-                'crystals': 'crystals',
-                'bosses': 'bosses',
-                'pedestal': 'pedestal',
-                'ganon_pedestal': 'ganonpedestal',
-                'triforce_hunt': 'triforcehunt',
-                'local_triforce_hunt': 'localtriforcehunt',
-                'ganon_triforce_hunt': 'ganontriforcehunt',
-                'local_ganon_triforce_hunt': 'localganontriforcehunt',
-                'ice_rod_hunt': 'icerodhunt'
-                }[goal]
+
+    if goal in legacy_goals:
+        logging.warning(f"Goal {goal} is depcrecated, please use {legacy_goals[goal]} instead.")
+        goal = legacy_goals[goal]
+    ret.goal = goals[goal]
 
     # TODO consider moving open_pyramid to an automatic variable in the core roller, set to True when
     # fast ganon + ganon at hole
@@ -601,6 +644,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     ret.shufflebosses = get_plando_bosses(boss_shuffle, plando_options)
 
     ret.enemy_shuffle = bool(get_choice('enemy_shuffle', weights, False))
+
 
     ret.killable_thieves = get_choice('killable_thieves', weights, False)
     ret.tile_shuffle = get_choice('tile_shuffle', weights, False)
@@ -771,6 +815,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     else:
         ret.quickswap = True
         ret.sprite = "Link"
+
 
 if __name__ == '__main__':
     main()

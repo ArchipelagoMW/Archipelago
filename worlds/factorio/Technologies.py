@@ -29,10 +29,8 @@ for technology in sorted(raw):
         requirements[technology] = set(data["requires"])
     current_ingredients = set(data["ingredients"])-starting_ingredient_recipes
     if current_ingredients:
-
         all_ingredients |= current_ingredients
-        current_ingredients = {"recipe-"+ingredient for ingredient in current_ingredients}
-        ingredients[technology] = current_ingredients
+        ingredients[technology] = {"recipe-"+ingredient for ingredient in current_ingredients}
 
 recipe_sources = {}
 
@@ -41,6 +39,6 @@ for technology, data in raw.items():
     for recipe in recipe_source:
         recipe_sources["recipe-"+recipe] = technology
 
-all_ingredients = {"recipe-"+ingredient for ingredient in all_ingredients}
+all_ingredients_recipe = {"recipe-"+ingredient for ingredient in all_ingredients}
 del(raw)
 lookup_id_to_name: Dict[int, str] = {item_id: item_name for item_name, item_id in tech_table.items()}

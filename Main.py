@@ -135,6 +135,8 @@ def main(args, seed=None):
     import Options
     for hk_option in Options.hollow_knight_options:
         setattr(world, hk_option, getattr(args, hk_option, {}))
+    for factorio_option in Options.factorio_options:
+        setattr(world, factorio_option, getattr(args, factorio_option, {}))
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
     world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}

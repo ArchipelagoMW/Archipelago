@@ -982,8 +982,8 @@ async def main():
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
     parser.add_argument('--founditems', default=False, action='store_true',
                         help='Show items found by other players for themselves.')
-    parser.add_argument('--disable_web_ui', default=False, action='store_true',
-                        help="Turn off emitting a webserver for the webbrowser based user interface.")
+    parser.add_argument('--web_ui', default=False, action='store_true',
+                        help="Emit a webserver for the webbrowser based user interface.")
     args = parser.parse_args()
     logging.basicConfig(format='%(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
     if args.diff_file:
@@ -1002,7 +1002,7 @@ async def main():
         asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
 
     port = None
-    if not args.disable_web_ui:
+    if args.web_ui:
         # Find an available port on the host system to use for hosting the websocket server
         while True:
             port = randrange(49152, 65535)
@@ -1015,7 +1015,7 @@ async def main():
 
     ctx = Context(args.snes, args.connect, args.password, args.founditems, port)
     input_task = asyncio.create_task(console_loop(ctx), name="Input")
-    if not args.disable_web_ui:
+    if args.web_ui:
         ui_socket = websockets.serve(functools.partial(websocket_server, ctx=ctx),
                                      'localhost', port, ping_timeout=None, ping_interval=None)
         await ui_socket

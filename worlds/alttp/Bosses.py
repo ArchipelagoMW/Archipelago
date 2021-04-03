@@ -241,7 +241,7 @@ def place_bosses(world, player: int):
     if shuffle_mode == "none":
         return  # vanilla bosses come pre-placed
 
-    if shuffle_mode in ["basic", "normal"]:
+    if shuffle_mode in ["basic", "full"]:
         if world.boss_shuffle[player] == "basic":  # vanilla bosses shuffled
             bosses = placeable_bosses + ['Armos Knights', 'Lanmolas', 'Moldorm']
         else:  # all bosses present, the three duplicates chosen at random

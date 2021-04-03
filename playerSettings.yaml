@@ -35,6 +35,25 @@ accessibility:
 progression_balancing:
   on: 50 # A system to reduce BK, as in times during which you can't do anything by moving your items into an earlier access sphere to make it likely you have stuff to do
   off: 0 # Turn this off if you don't mind a longer multiworld, or can glitch/sequence break around missing items.
+# Factorio options:
+tech_tree_layout:
+  single: 1
+max_science_pack:
+  automation_science_pack: 0
+  logistic_science_pack: 0
+  military_science_pack: 0
+  chemical_science_pack: 0
+  production_science_pack: 0
+  utility_science_pack: 0
+  space_science_pack: 1
+tech_cost:
+  very_easy : 0
+  easy : 0
+  kind : 0
+  normal : 1
+  hard : 0
+  very_hard : 0
+  insane : 0
 # A Link to  the Past options:
 ### Logic Section ###
 # Warning: overworld_glitches is not available and minor_glitches is only partially implemented on the door-rando version
