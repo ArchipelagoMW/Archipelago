@@ -76,7 +76,8 @@ async def game_watcher(ctx: FactorioContext):
     researches_done_file = os.path.join(script_folder, "research_done.json")
     if os.path.exists(researches_done_file):
         os.remove(researches_done_file)
-    from worlds.factorio.Technologies import lookup_id_to_name, tech_table
+    from worlds.factorio.Technologies import lookup_id_to_name
+    bridge_counter = 0
     try:
         while 1:
             if os.path.exists(researches_done_file):
@@ -92,8 +93,11 @@ async def game_watcher(ctx: FactorioContext):
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
                     await asyncio.sleep(1)
             else:
-                research_logger.info("Did not find Factorio Bridge file.")
-                await asyncio.sleep(5)
+                bridge_counter += 1
+                if bridge_counter >= 60:
+                    research_logger.info("Did not find Factorio Bridge file, waiting for mod to run.")
+                    bridge_counter = 1
+                await asyncio.sleep(1)
     except Exception as e:
         logging.exception(e)
         logging.error("Aborted Factorio Server Bridge")
