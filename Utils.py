@@ -84,9 +84,13 @@ def local_path(*path):
             # cx_Freeze
             local_path.cached_path = os.path.dirname(os.path.abspath(sys.argv[0]))
     else:
-        # we are running in a normal Python environment
         import __main__
-        local_path.cached_path = os.path.dirname(os.path.abspath(__main__.__file__))
+        if hasattr(__main__, "__file__"):
+            # we are running in a normal Python environment
+            local_path.cached_path = os.path.dirname(os.path.abspath(__main__.__file__))
+        else:
+            # pray
+            local_path.cached_path = os.path.abspath(".")
 
     return os.path.join(local_path.cached_path, *path)
 

@@ -9,13 +9,13 @@ import socket
 import threading
 import time
 import random
-import zlib
+import pickle
 
 
 from .models import *
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor
-from Utils import get_public_ipv4, get_public_ipv6, parse_yaml
+from Utils import get_public_ipv4, get_public_ipv6, restricted_loads
 
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
@@ -81,7 +81,7 @@ class WebHostContext(Context):
     def init_save(self, enabled: bool = True):
         self.saving = enabled
         if self.saving:
-            existing_savegame = Room.get(id=self.room_id).multisave
+            existing_savegame = restricted_loads(Room.get(id=self.room_id).multisave)
             if existing_savegame:
                 self.set_save(existing_savegame)
             self._start_async_saving()
@@ -90,7 +90,7 @@ class WebHostContext(Context):
     @db_session
     def _save(self, exit_save:bool = False) -> bool:
         room = Room.get(id=self.room_id)
-        room.multisave = self.get_save()
+        room.multisave = pickle.dumps(self.get_save())
         # saving only occurs on activity, so we can "abuse" this information to mark this as last_activity
         if not exit_save: # we don't want to count a shutdown as activity, which would restart the server again
             room.last_activity = datetime.utcnow()

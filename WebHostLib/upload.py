@@ -2,6 +2,7 @@ import json
 import zlib
 import zipfile
 import logging
+import MultiServer
 
 from flask import request, flash, redirect, url_for, session, render_template
 from pony.orm import commit, select
@@ -46,9 +47,12 @@ def uploads():
                                 spoiler = zfile.open(file, "r").read().decode("utf-8-sig")
                             elif file.filename.endswith(".archipelago"):
                                 try:
-                                    multidata = json.loads(zlib.decompress(zfile.open(file).read()).decode("utf-8-sig"))
+                                    multidata = zfile.open(file).read()
+                                    MultiServer.Context._decompress(multidata)
                                 except:
                                     flash("Could not load multidata. File may be corrupted or incompatible.")
+                                else:
+                                    multidata = zfile.open(file).read()
                         if multidata:
                             commit()  # commit patches
                             seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=session["_id"])
@@ -61,10 +65,13 @@ def uploads():
                             flash("No multidata was found in the zip file, which is required.")
                 else:
                     try:
-                        multidata = json.loads(zlib.decompress(file.read()).decode("utf-8-sig"))
+                        multidata = file.read()
+                        MultiServer.Context._decompress(multidata)
                     except:
                         flash("Could not load multidata. File may be corrupted or incompatible.")
+                        raise
                     else:
+                        logging.info(multidata)
                         seed = Seed(multidata=multidata, owner=session["_id"])
                         commit()  # place into DB and generate ids
                         return redirect(url_for("viewSeed", seed=seed.id))

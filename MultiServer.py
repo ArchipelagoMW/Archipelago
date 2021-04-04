@@ -119,7 +119,8 @@ class Context(Node):
             self._load(self._decompress(data), use_embedded_server_options)
         self.data_filename = multidatapath
 
-    def _decompress(self, data: bytes) -> dict:
+    @staticmethod
+    def _decompress(data: bytes) -> dict:
         format_version = data[0]
         if format_version != 1:
             raise Exception("Incompatible multidata.")
