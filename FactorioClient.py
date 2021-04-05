@@ -142,7 +142,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 while ctx.send_index < len(ctx.items_received):
                     item_id = ctx.items_received[ctx.send_index].item
                     if item_id not in lookup_id_to_name:
-                        logging.error(f"Unknown item ID: {item_id}")
+                        logging.error(f"Cannot send unknown item ID: {item_id}")
                     else:
                         item_name = lookup_id_to_name[item_id]
                         factorio_server_logger.info(f"Sending {item_name} to Nauvis.")
