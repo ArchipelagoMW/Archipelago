@@ -30,8 +30,10 @@ def generate_mod(world: MultiWorld, player: int):
     global template, locale_template
     with template_load_lock:
         if not template:
-            template = jinja2.Template(open(Utils.local_path("data", "factorio", "mod_template", "data-final-fixes.lua")).read())
-            locale_template = jinja2.Template(open(Utils.local_path("data", "factorio", "mod_template", "locale", "en", "locale.cfg")).read())
+            mod_template_folder = Utils.local_path("data", "factorio", "mod_template")
+            template = jinja2.Template(open(os.path.join(mod_template_folder, "data-final-fixes.lua")).read())
+            locale_template = jinja2.Template(open(os.path.join(mod_template_folder, "locale", "en", "locale.cfg")).read())
+            control_template = jinja2.Template(open(os.path.join(mod_template_folder, "control.lua")).read())
     # get data for templates
     player_names = {x: world.player_names[x][0] for x in world.player_ids}
     locations = []
@@ -49,15 +51,17 @@ def generate_mod(world: MultiWorld, player: int):
     template_data = {"locations": locations, "player_names" : player_names, "tech_table": tech_table,
                      "mod_name": mod_name, "allowed_science_packs": world.max_science_pack[player].get_allowed_packs(),
                      "tech_cost": tech_cost, "free_samples": world.free_samples[player].value}
-
-    mod_code = template.render(**template_data)
+    control_code = control_template.render(**template_data)
+    data_final_fixes_code = template.render(**template_data)
 
     mod_dir = Utils.output_path(mod_name)+"_"+Utils.__version__
     en_locale_dir = os.path.join(mod_dir, "locale", "en")
     os.makedirs(en_locale_dir, exist_ok=True)
     shutil.copytree(Utils.local_path("data", "factorio", "mod"), mod_dir, dirs_exist_ok=True)
     with open(os.path.join(mod_dir, "data-final-fixes.lua"), "wt") as f:
-        f.write(mod_code)
+        f.write(data_final_fixes_code)
+        with open(os.path.join(mod_dir, "control.lua"), "wt") as f:
+            f.write(control_code)
     locale_content = locale_template.render(**template_data)
     with open(os.path.join(en_locale_dir, "locale.cfg"), "wt") as f:
         f.write(locale_content)

@@ -1,18 +1,43 @@
+require "lib"
 -- for testing
 -- script.on_event(defines.events.on_tick, function(event)
 --     if event.tick%600 == 0 then
---         dumpTech()
+--         dumpTech(game.forces["player"])
 --     end
 -- end)
 
 -- hook into researches done
 script.on_event(defines.events.on_research_finished, function(event)
-    dumpTech()
+    local technology = event.research
+    dumpTech(technology.force)
+    {% if free_samples %}
+    local players = technology.force.players
+    if technology.effects then
+        for _, effect in pairs(technology.effects) do
+            if effect.type == "unlock-recipe" then
+                local recipe = game.recipe_prototypes[effect.recipe]
+                for _, result in pairs(recipe.products) do
+                    if result.type == "item" and result.amount then
+                        {% if free_samples == 1 %}
+                        local new = {count=result.amount, name=result.name}
+                        {% elif free_samples == 2 %}
+                        local new = {count=get_any_stack_size(result.name) * 0.5, name=result.name}
+                        {% else %}
+                        local new = {count=get_any_stack_size(result.name), name=result.name}
+                        {% endif %}
+                        for _, player in pairs(players) do
+                            player.insert(new)
+                        end
+                    end
+                end
+            end
+        end
+    end
+    {% endif %}
+
 end)
 
-function dumpTech()
-
-    local force = game.forces["player"]
+function dumpTech(force)
     local data_collection = {}
     for tech_name, tech in pairs(force.technologies) do
         if tech.researched and string.find(tech_name, "ap-") == 1 then

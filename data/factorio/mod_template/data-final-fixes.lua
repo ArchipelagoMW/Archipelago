@@ -1,4 +1,6 @@
 -- this file gets written automatically by the Archipelago Randomizer and is in its raw form a Jinja2 Template
+require('lib')
+
 local technologies = data.raw["technology"]
 local original_tech
 local new_tree_copy
@@ -13,75 +15,10 @@ template_tech.upgrade = false
 template_tech.effects = {}
 template_tech.prerequisites = {}
 
-function filter_ingredients(ingredients)
-    local new_ingredient_list = {}
-    for _, ingredient_table in pairs(ingredients) do
-        if allowed_ingredients[ingredient_table[1]] then -- name of ingredient_table
-            table.insert(new_ingredient_list, ingredient_table)
-        end
-    end
-
-    return new_ingredient_list
-end
-
-function get_any_stack_size(name)
-    local item = data.raw["item"][name]
-    if item ~= nil then
-        return item.stack_size
-    end
-    {#- need to search #}
-    for _, group  in pairs(data.raw) do
-        for _, testitem in pairs(group) do
-            if testitem.name == name then
-                return testitem.stack_size
-            end
-        end
-    end
-    {#- failsafe #}
-    return 1
-end
-
 function prep_copy(new_copy, old_tech)
     old_tech.enabled = false
     new_copy.unit = table.deepcopy(old_tech.unit)
     new_copy.unit.ingredients = filter_ingredients(new_copy.unit.ingredients)
-    {% if free_samples %}
-    local new_effects = {}
-    if old_tech.effects then
-        for _, effect in pairs(old_tech.effects) do
-            if effect.type == "unlock-recipe" then
-                local recipe = data.raw["recipe"][effect.recipe]
-                local results
-                if recipe.normal then
-                    if recipe.normal.result then
-                        results = { {type = "item", amount= recipe.normal.result_count, name=recipe.normal.result} }
-                    else
-                        results = recipe.normal.results
-                    end
-                elseif recipe.result then
-                    results = { {type = "item", amount= recipe.result_count, name=recipe.result} }
-                else
-                    results = recipe.results
-                end
-                for _, result in pairs(results) do
-                    if result.type == "item" then
-                        {% if free_samples == 1 %}
-                        local new = {type="give-item", count=result.amount, item=result.name}
-                        {% elif free_samples == 2 %}
-                        local new = {type="give-item", count=get_any_stack_size(result.name) * 0.5, item=result.name}
-                        {% else %}
-                        local new = {type="give-item", count=get_any_stack_size(result.name), item=result.name}
-                        {% endif %}
-                        table.insert(new_effects, new)
-                    end
-                end
-            end
-        end
-    end
-    for _, effect in pairs(new_effects) do
-        table.insert(old_tech.effects, effect)
-    end
-    {% endif %}
 end
 
 
