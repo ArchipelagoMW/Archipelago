@@ -262,6 +262,12 @@ class TechCost(Choice):
     option_insane = 6
     default = 3
 
+class FreeSamples(Choice):
+    option_none = 0
+    option_single_craft = 1
+    option_half_stack = 2
+    option_stack = 3
+    default = 3
 
 class TechTreeLayout(Choice):
     option_single = 0
@@ -270,7 +276,8 @@ class TechTreeLayout(Choice):
 
 factorio_options: typing.Dict[str, type(Option)] = {"max_science_pack": MaxSciencePack,
                                                     "tech_tree_layout": TechTreeLayout,
-                                                    "tech_cost": TechCost}
+                                                    "tech_cost": TechCost,
+                                                    "free_samples": FreeSamples}
 
 if __name__ == "__main__":
     import argparse

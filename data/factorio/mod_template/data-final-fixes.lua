@@ -24,12 +24,29 @@ function filter_ingredients(ingredients)
     return new_ingredient_list
 end
 
+function get_any_stack_size(name)
+    local item = data.raw["item"][name]
+    if item ~= nil then
+        return item.stack_size
+    end
+    {#- need to search #}
+    for _, group  in pairs(data.raw) do
+        for _, testitem in pairs(group) do
+            if testitem.name == name then
+                return testitem.stack_size
+            end
+        end
+    end
+    {#- failsafe #}
+    return 1
+end
+
 function prep_copy(new_copy, old_tech)
     old_tech.enabled = false
     new_copy.unit = table.deepcopy(old_tech.unit)
     new_copy.unit.ingredients = filter_ingredients(new_copy.unit.ingredients)
+    {% if free_samples %}
     local new_effects = {}
-    log(serpent.block(old_tech.effects))
     if old_tech.effects then
         for _, effect in pairs(old_tech.effects) do
             if effect.type == "unlock-recipe" then
@@ -48,7 +65,13 @@ function prep_copy(new_copy, old_tech)
                 end
                 for _, result in pairs(results) do
                     if result.type == "item" then
+                        {% if free_samples == 1 %}
                         local new = {type="give-item", count=result.amount, item=result.name}
+                        {% elif free_samples == 2 %}
+                        local new = {type="give-item", count=get_any_stack_size(result.name) * 0.5, item=result.name}
+                        {% else %}
+                        local new = {type="give-item", count=get_any_stack_size(result.name), item=result.name}
+                        {% endif %}
                         table.insert(new_effects, new)
                     end
                 end
@@ -58,6 +81,7 @@ function prep_copy(new_copy, old_tech)
     for _, effect in pairs(new_effects) do
         table.insert(old_tech.effects, effect)
     end
+    {% endif %}
 end
 
 

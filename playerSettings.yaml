@@ -54,6 +54,11 @@ tech_cost:
   hard : 0
   very_hard : 0
   insane : 0
+free_samples:
+  none: 1
+  single_craft: 0
+  half_stack: 0
+  stack: 0
 # A Link to  the Past options:
 ### Logic Section ###
 # Warning: overworld_glitches is not available and minor_glitches is only partially implemented on the door-rando version

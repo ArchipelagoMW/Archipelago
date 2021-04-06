@@ -48,7 +48,7 @@ def generate_mod(world: MultiWorld, player: int):
                  6: 10}[world.tech_cost[player].value]
     template_data = {"locations": locations, "player_names" : player_names, "tech_table": tech_table,
                      "mod_name": mod_name, "allowed_science_packs": world.max_science_pack[player].get_allowed_packs(),
-                     "tech_cost": tech_cost}
+                     "tech_cost": tech_cost, "free_samples": world.free_samples[player].value}
 
     mod_code = template.render(**template_data)
 
