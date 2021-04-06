@@ -24,17 +24,50 @@ function filter_ingredients(ingredients)
     return new_ingredient_list
 end
 
+function prep_copy(new_copy, old_tech)
+    old_tech.enabled = false
+    new_copy.unit = table.deepcopy(old_tech.unit)
+    new_copy.unit.ingredients = filter_ingredients(new_copy.unit.ingredients)
+    local new_effects = {}
+    log(serpent.block(old_tech.effects))
+    if old_tech.effects then
+        for _, effect in pairs(old_tech.effects) do
+            if effect.type == "unlock-recipe" then
+                local recipe = data.raw["recipe"][effect.recipe]
+                local results
+                if recipe.normal then
+                    if recipe.normal.result then
+                        results = { {type = "item", amount= recipe.normal.result_count, name=recipe.normal.result} }
+                    else
+                        results = recipe.normal.results
+                    end
+                elseif recipe.result then
+                    results = { {type = "item", amount= recipe.result_count, name=recipe.result} }
+                else
+                    results = recipe.results
+                end
+                for _, result in pairs(results) do
+                    if result.type == "item" then
+                        local new = {type="give-item", count=result.amount, item=result.name}
+                        table.insert(new_effects, new)
+                    end
+                end
+            end
+        end
+    end
+    for _, effect in pairs(new_effects) do
+        table.insert(old_tech.effects, effect)
+    end
+end
+
+
 {# each randomized tech gets set to be invisible, with new nodes added that trigger those #}
 {%- for original_tech_name, item_name, receiving_player in locations %}
 original_tech = technologies["{{original_tech_name}}"]
 {#- the tech researched by the local player #}
 new_tree_copy = table.deepcopy(template_tech)
 new_tree_copy.name = "ap-{{ tech_table[original_tech_name] }}-"{# use AP ID #}
-{#- hide and disable original tech; which will be shown, unlocked and enabled by AP Client #}
-original_tech.enabled = false
-{#- copy original tech costs #}
-new_tree_copy.unit = table.deepcopy(original_tech.unit)
-new_tree_copy.unit.ingredients = filter_ingredients(new_tree_copy.unit.ingredients)
+prep_copy(new_tree_copy, original_tech)
 {% if tech_cost != 1 %}
 if new_tree_copy.unit.count then
     new_tree_copy.unit.count = math.max(1, math.floor(new_tree_copy.unit.count * {{ tech_cost }}))

@@ -1,13 +1,12 @@
 -- for testing
-script.on_event(defines.events.on_tick, function(event)
-    if event.tick%600 == 0 then
-        dumpTech()
-    end
-end)
+-- script.on_event(defines.events.on_tick, function(event)
+--     if event.tick%600 == 0 then
+--         dumpTech()
+--     end
+-- end)
 
 -- hook into researches done
 script.on_event(defines.events.on_research_finished, function(event)
-    game.print("Research done")
     dumpTech()
 end)
 
