@@ -332,11 +332,14 @@ async def server(websocket, path, ctx: Context):
     ctx.endpoints.append(client)
 
     try:
-        logging.info("Incoming")
+        if ctx.log_network:
+            logging.info("Incoming connection")
         await on_client_connected(ctx, client)
-        logging.info("Sent Room Info")
+        if ctx.log_network:
+            logging.info("Sent Room Info")
         async for data in websocket:
-            logging.info(data)
+            if ctx.log_network:
+                logging.info(f"Incoming message: {data}")
             for msg in decode(data):
                 await process_client_cmd(ctx, client, msg)
     except Exception as e:
@@ -351,7 +354,7 @@ async def on_client_connected(ctx: Context, client: Client):
     await ctx.send_msgs(client, [{
         'cmd': 'RoomInfo',
         'password': ctx.password is not None,
-        'players': [NetworkPlayer(client.team, client.slot, ctx.name_aliases.get((client.team, client.slot), client.name)) for client
+        'players': [NetworkPlayer(client.team, client.slot, ctx.name_aliases.get((client.team, client.slot), client.name), client.name) for client
                     in ctx.endpoints if client.auth],
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
@@ -1315,6 +1318,7 @@ def parse_args() -> argparse.Namespace:
     #1 -> recommended for friendly racing, tries to block third party clients
     #0 -> recommended for tournaments to force a level playing field, only allow an exact version match
     """)
+    parser.add_argument('--log_network', default=defaults["log_network"], action="store_true")
     args = parser.parse_args()
     return args
 
@@ -1351,7 +1355,7 @@ async def main(args: argparse.Namespace):
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
                   args.hint_cost, not args.disable_item_cheat, args.forfeit_mode, args.remaining_mode,
                   args.auto_shutdown, args.compatibility)
-
+    ctx.log_network = args.log_network
     data_filename = args.multidata
 
     try:

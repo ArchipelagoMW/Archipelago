@@ -194,6 +194,7 @@ def get_default_options() -> dict:
                 "remaining_mode": "goal",
                 "auto_shutdown": 0,
                 "compatibility": 2,
+                "log_network": 0
             },
             "multi_mystery_options": {
                 "teams": 1,

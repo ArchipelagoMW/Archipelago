@@ -311,11 +311,11 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             args['players'].sort()
             current_team = -1
             logger.info('Players:')
-            for team, slot, name in args['players']:
-                if team != current_team:
-                    logger.info(f'  Team #{team + 1}')
-                    current_team = team
-                logger.info('    %s (Player %d)' % (name, slot))
+            for network_player in args['players']:
+                if network_player.team != current_team:
+                    logger.info(f'  Team #{network_player.team + 1}')
+                    current_team = network_player.team
+                logger.info('    %s (Player %d)' % (network_player.alias, network_player.slot))
         if args["datapackage_version"] > network_data_package["version"]:
             await ctx.send_msgs([{"cmd": "GetDataPackage"}])
         await ctx.server_auth(args['password'])

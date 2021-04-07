@@ -99,6 +99,7 @@ class Node:
     def __init__(self):
         self.endpoints = []
         super(Node, self).__init__()
+        self.log_network = 0
 
     def broadcast_all(self, msgs):
         msgs = self.dumper(msgs)
@@ -114,6 +115,9 @@ class Node:
         except websockets.ConnectionClosed:
             logging.exception(f"Exception during send_msgs, could not send {msg}")
             await self.disconnect(endpoint)
+        else:
+            if self.log_network:
+                logging.info(f"Outgoing message: {msg}")
 
     async def send_encoded_msgs(self, endpoint: Endpoint, msg: str):
         if not endpoint.socket or not endpoint.socket.open or endpoint.socket.closed:
@@ -123,6 +127,9 @@ class Node:
         except websockets.ConnectionClosed:
             logging.exception("Exception during send_msgs")
             await self.disconnect(endpoint)
+        else:
+            if self.log_network:
+                logging.info(f"Outgoing message: {msg}")
 
     async def disconnect(self, endpoint):
         if endpoint in self.endpoints:

@@ -40,6 +40,8 @@ server_options:
   # 1 -> Recommended for friendly racing, only allow Berserker's Multiworld, to disallow old /getitem for example
   # 0 -> Recommended for tournaments to force a level playing field, only allow an exact version match
   compatibility: 2
+  # log all server traffic, mostly for dev use
+  log_network: 0
 # Options for MultiMystery.py
 multi_mystery_options:
   # Teams
