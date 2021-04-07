@@ -150,7 +150,7 @@ class Context(Node):
             self._set_options(server_options)
 
     def get_players_package(self):
-        return [(t, p, self.get_aliased_name(t, p), n) for (t, p), n in self.player_names.items()]
+        return [NetworkPlayer(t, p, self.get_aliased_name(t, p), n) for (t, p), n in self.player_names.items()]
 
     def _set_options(self, server_options: dict):
         for key, value in server_options.items():
