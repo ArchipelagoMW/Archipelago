@@ -31,7 +31,7 @@ from worlds import network_data_package, lookup_any_item_id_to_name, lookup_any_
 import Utils
 from Utils import get_item_name_from_id, get_location_name_from_address, \
     _version_tuple, restricted_loads, Version
-from NetUtils import Node, Endpoint, ClientStatus, NetworkItem, decode
+from NetUtils import Node, Endpoint, ClientStatus, NetworkItem, decode, NetworkPlayer
 
 colorama.init()
 lttp_console_names = frozenset(set(Items.item_table) | set(Items.item_name_groups) | set(Regions.lookup_name_to_id))
@@ -351,7 +351,7 @@ async def on_client_connected(ctx: Context, client: Client):
     await ctx.send_msgs(client, [{
         'cmd': 'RoomInfo',
         'password': ctx.password is not None,
-        'players': [(client.team, client.slot, ctx.name_aliases.get((client.team, client.slot), client.name)) for client
+        'players': [NetworkPlayer(client.team, client.slot, ctx.name_aliases.get((client.team, client.slot), client.name)) for client
                     in ctx.endpoints if client.auth],
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
