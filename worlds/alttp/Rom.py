@@ -1775,7 +1775,7 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
                 option_name: True
             }
 
-            data_dir = local_path("../../data") if is_bundled() else None
+            data_dir = local_path("data") if is_bundled() else None
             offsets_array = build_offset_collections(options, data_dir)
             restore_maseya_colors(rom, offsets_array)
             if mode == 'default':

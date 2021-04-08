@@ -2,7 +2,7 @@ import logging
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
 
-from .Technologies import tech_table, requirements, recipe_sources, technology_table
+from .Technologies import tech_table, recipe_sources, technology_table
 
 static_nodes = {"automation", "logistics"}
 

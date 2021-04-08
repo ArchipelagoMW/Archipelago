@@ -1,10 +1,10 @@
 require "lib"
 -- for testing
--- script.on_event(defines.events.on_tick, function(event)
---     if event.tick%600 == 0 then
---         dumpTech(game.forces["player"])
---     end
--- end)
+script.on_event(defines.events.on_tick, function(event)
+    if event.tick%600 == 0 then
+        dumpTech(game.forces["player"])
+    end
+end)
 
 -- hook into researches done
 script.on_event(defines.events.on_research_finished, function(event)
@@ -54,7 +54,7 @@ function dumpGameInfo()
     local data_collection = {}
     local force = game.forces["player"]
     for tech_name, tech in pairs(force.technologies) do
-        if tech.enabled then
+        if tech.enabled and tech.research_unit_count_formula == nil then
             local tech_data = {}
             local unlocks = {}
             tech_data["unlocks"] = unlocks

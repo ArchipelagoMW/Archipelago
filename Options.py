@@ -104,7 +104,9 @@ class Choice(Option):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        return cls.from_text(data)
+        if type(data) == int and data in cls.options.values():
+            return cls(data)
+        return cls.from_text(str(data))
 
 
 class Logic(Choice):
@@ -273,11 +275,16 @@ class TechTreeLayout(Choice):
     option_single = 0
     default = 0
 
+class Visibility(Choice):
+    option_none = 0
+    option_sending = 1
+    default = 0
 
 factorio_options: typing.Dict[str, type(Option)] = {"max_science_pack": MaxSciencePack,
                                                     "tech_tree_layout": TechTreeLayout,
                                                     "tech_cost": TechCost,
-                                                    "free_samples": FreeSamples}
+                                                    "free_samples": FreeSamples,
+                                                    "visibility": Visibility}
 
 if __name__ == "__main__":
     import argparse

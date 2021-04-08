@@ -31,10 +31,10 @@ new_tree_copy.name = "ap-{{ tech_table[original_tech_name] }}-"{# use AP ID #}
 prep_copy(new_tree_copy, original_tech)
 {% if tech_cost != 1 %}
 if new_tree_copy.unit.count then
-    new_tree_copy.unit.count = math.max(1, math.floor(new_tree_copy.unit.count * {{ tech_cost }}))
+    new_tree_copy.unit.count = math.max(1, math.floor(new_tree_copy.unit.count * {{ tech_cost_scale }}))
 end
 {% endif %}
-{% if item_name in tech_table %}
+{% if item_name in tech_table and visibility %}
 {#- copy Factorio Technology Icon #}
 new_tree_copy.icon = table.deepcopy(technologies["{{ item_name }}"].icon)
 new_tree_copy.icons = table.deepcopy(technologies["{{ item_name }}"].icons)
@@ -44,6 +44,7 @@ new_tree_copy.icon_size = table.deepcopy(technologies["{{ item_name }}"].icon_si
 new_tree_copy.icon = "__{{ mod_name }}__/graphics/icons/ap.png"
 new_tree_copy.icons = nil
 new_tree_copy.icon_size = 512
+
 {% endif %}
 {#- add new technology to game #}
 data:extend{new_tree_copy}

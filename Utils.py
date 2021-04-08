@@ -12,7 +12,7 @@ class Version(typing.NamedTuple):
     minor: int
     build: int
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 _version_tuple = tuplize_version(__version__)
 
 import builtins

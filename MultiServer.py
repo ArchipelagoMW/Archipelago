@@ -110,7 +110,7 @@ class Context(Node):
         self.auto_saver_thread = None
         self.save_dirty = False
         self.tags = ['AP']
-        self.minimum_client_versions: typing.Dict[typing.Tuple[int, int], Utils.Version] = {}
+        self.minimum_client_versions: typing.Dict[int, Utils.Version] = {}
 
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
         with open(multidatapath, 'rb') as f:
@@ -131,10 +131,10 @@ class Context(Node):
         if mdata_ver > Utils._version_tuple:
             raise RuntimeError(f"Supplied Multidata requires a server of at least version {mdata_ver},"
                                f"however this server is of version {Utils._version_tuple}")
-        clients_ver = decoded_obj["minimum_versions"].get("clients", [])
+        clients_ver = decoded_obj["minimum_versions"].get("clients", {})
         self.minimum_client_versions = {}
-        for team, player, version in clients_ver:
-            self.minimum_client_versions[team, player] = Utils.Version(*version)
+        for player, version in clients_ver.items():
+            self.minimum_client_versions[player] = Utils.Version(*version)
 
         for team, names in enumerate(decoded_obj['names']):
             for player, name in enumerate(names, 1):
@@ -991,13 +991,13 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 client.name = ctx.player_names[(team, slot)]
                 client.team = team
                 client.slot = slot
-                minver = Utils.Version(*(ctx.minimum_client_versions.get((team, slot), (0,0,0))))
+                minver = ctx.minimum_client_versions[slot]
                 if minver > args['version']:
                     errors.add('IncompatibleVersion')
 
         if ctx.compatibility == 1 and "AP" not in args['tags']:
             errors.add('IncompatibleVersion')
-        #only exact version match allowed
+        # only exact version match allowed
         elif ctx.compatibility == 0 and args['version'] != _version_tuple:
             errors.add('IncompatibleVersion')
         if errors:
@@ -1013,7 +1013,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 "team": client.team, "slot": client.slot,
                 "players": ctx.get_players_package(),
                 "missing_locations": get_missing_checks(ctx, client),
-                "checked_locations": get_checked_checks(ctx, client)}]
+                "checked_locations": get_checked_checks(ctx, client),
+            }]
             items = get_received_items(ctx, client.team, client.slot)
             if items:
                 reply.append({"cmd": 'ReceivedItems', "index": 0, "items": tuplize_received_items(items)})

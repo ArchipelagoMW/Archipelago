@@ -10,8 +10,7 @@ import pickle
 from typing import Dict
 
 from BaseClasses import MultiWorld, CollectionState, Region, Item
-from worlds.alttp import ALttPLocation
-from worlds.alttp.Items import ItemFactory, item_table, item_name_groups
+from worlds.alttp.Items import ItemFactory, item_name_groups
 from worlds.alttp.Regions import create_regions, mark_light_world_regions, \
     lookup_vanilla_location_to_entrance
 from worlds.alttp.InvertedRegions import create_inverted_regions, mark_dark_world_regions
@@ -23,7 +22,7 @@ from Fill import distribute_items_restrictive, flood_items, balance_multiworld_p
 from worlds.alttp.Shops import create_shops, ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
-from worlds.hk import gen_hollow, set_rules as set_hk_rules
+from worlds.hk import gen_hollow
 from worlds.hk import create_regions as hk_create_regions
 from worlds.factorio import gen_factorio, factorio_create_regions
 from worlds.factorio.Mod import generate_mod
@@ -492,7 +491,10 @@ def main(args, seed=None):
             for future in roms:
                 rom_name = future.result()
                 rom_names.append(rom_name)
-            minimum_versions = {"server": (0, 0, 2)}
+            client_versions = {}
+            minimum_versions = {"server": (0, 0, 3), "clients": client_versions}
+            for slot in world.player_ids:
+                client_versions[slot] = (0, 0, 3)
             connect_names = {base64.b64encode(rom_name).decode(): (team, slot) for
                               slot, team, rom_name in rom_names}
 
@@ -500,6 +502,7 @@ def main(args, seed=None):
                 for player, name in enumerate(team, 1):
                     if player not in world.alttp_player_ids:
                         connect_names[name] = (i, player)
+
             multidata = zlib.compress(pickle.dumps({"names": parsed_names,
                                                     "connect_names": connect_names,
                                                     "remote_items": {player for player in range(1, world.players + 1) if
@@ -544,155 +547,8 @@ def main(args, seed=None):
     return world
 
 
-
-def copy_world(world):
-    # ToDo: Not good yet
-    # delete now?
-    ret = MultiWorld(world.players, world.shuffle, world.logic, world.mode, world.swords, world.difficulty, world.item_functionality, world.timer, world.progressive, world.goal, world.algorithm, world.accessibility, world.shuffle_ganon, world.retro, world.custom, world.customitemarray, world.hints)
-    ret.teams = world.teams
-    ret.player_names = copy.deepcopy(world.player_names)
-    ret.remote_items = world.remote_items.copy()
-    ret.required_medallions = world.required_medallions.copy()
-    ret.swamp_patch_required = world.swamp_patch_required.copy()
-    ret.ganon_at_pyramid = world.ganon_at_pyramid.copy()
-    ret.powder_patch_required = world.powder_patch_required.copy()
-    ret.ganonstower_vanilla = world.ganonstower_vanilla.copy()
-    ret.treasure_hunt_count = world.treasure_hunt_count.copy()
-    ret.treasure_hunt_icon = world.treasure_hunt_icon.copy()
-    ret.sewer_light_cone = world.sewer_light_cone.copy()
-    ret.light_world_light_cone = world.light_world_light_cone
-    ret.dark_world_light_cone = world.dark_world_light_cone
-    ret.seed = world.seed
-    ret.can_access_trock_eyebridge = world.can_access_trock_eyebridge.copy()
-    ret.can_access_trock_front = world.can_access_trock_front.copy()
-    ret.can_access_trock_big_chest = world.can_access_trock_big_chest.copy()
-    ret.can_access_trock_middle = world.can_access_trock_middle.copy()
-    ret.can_take_damage = world.can_take_damage
-    ret.difficulty_requirements = world.difficulty_requirements.copy()
-    ret.fix_fake_world = world.fix_fake_world.copy()
-    ret.mapshuffle = world.mapshuffle.copy()
-    ret.compassshuffle = world.compassshuffle.copy()
-    ret.keyshuffle = world.keyshuffle.copy()
-    ret.bigkeyshuffle = world.bigkeyshuffle.copy()
-    ret.crystals_needed_for_ganon = world.crystals_needed_for_ganon.copy()
-    ret.crystals_needed_for_gt = world.crystals_needed_for_gt.copy()
-    ret.open_pyramid = world.open_pyramid.copy()
-    ret.boss_shuffle = world.boss_shuffle.copy()
-    ret.enemy_shuffle = world.enemy_shuffle.copy()
-    ret.enemy_health = world.enemy_health.copy()
-    ret.enemy_damage = world.enemy_damage.copy()
-    ret.beemizer = world.beemizer.copy()
-    ret.timer = world.timer.copy()
-    ret.shufflepots = world.shufflepots.copy()
-    ret.shuffle_prizes = world.shuffle_prizes.copy()
-    ret.shop_shuffle =  world.shop_shuffle.copy()
-    ret.shop_shuffle_slots = world.shop_shuffle_slots.copy()
-    ret.dark_room_logic = world.dark_room_logic.copy()
-    ret.restrict_dungeon_item_on_boss = world.restrict_dungeon_item_on_boss.copy()
-    ret.game = world.game.copy()
-    ret.completion_condition = world.completion_condition.copy()
-
-    for player in world.alttp_player_ids:
-        if world.mode[player] != 'inverted':
-            create_regions(ret, player)
-        else:
-            create_inverted_regions(ret, player)
-        create_shops(ret, player)
-        create_dungeons(ret, player)
-
-    for player in world.hk_player_ids:
-        hk_create_regions(ret, player)
-
-    copy_dynamic_regions_and_locations(world, ret)
-
-    # copy bosses
-    for dungeon in world.dungeons:
-        for level, boss in dungeon.bosses.items():
-            ret.get_dungeon(dungeon.name, dungeon.player).bosses[level] = boss
-
-    for shop in world.shops:
-        copied_shop = ret.get_region(shop.region.name, shop.region.player).shop
-        copied_shop.inventory = copy.copy(shop.inventory)
-
-    # connect copied world
-    for region in world.regions:
-        copied_region = ret.get_region(region.name, region.player)
-        copied_region.is_light_world = region.is_light_world
-        copied_region.is_dark_world = region.is_dark_world
-        for exit in copied_region.exits:
-            old_connection = world.get_entrance(exit.name, exit.player).connected_region
-            exit.connect(ret.get_region(old_connection.name, old_connection.player))
-
-    # fill locations
-    for location in world.get_locations():
-        if location.item is not None:
-            item = Item(location.item.name, location.item.advancement, location.item.code, player = location.item.player)
-            ret.get_location(location.name, location.player).item = item
-            item.location = ret.get_location(location.name, location.player)
-            item.world = ret
-            item.type = location.item.type
-            item.game = location.item.game
-
-        if location.event:
-            ret.get_location(location.name, location.player).event = True
-        if location.locked:
-            ret.get_location(location.name, location.player).locked = True
-
-
-    # copy remaining itempool. No item in itempool should have an assigned location
-    for old_item in world.itempool:
-        item = Item(old_item.name, old_item.advancement, old_item.code, player = old_item.player)
-        item.type = old_item.type
-        ret.itempool.append(item)
-
-    for old_item in world.precollected_items:
-        item = Item(old_item.name, old_item.advancement, old_item.code, player = old_item.player)
-        item.type = old_item.type
-        ret.push_precollected(item)
-
-    # copy progress items in state
-    ret.state.prog_items = world.state.prog_items.copy()
-    ret.state.stale = {player: True for player in range(1, world.players + 1)}
-
-    for player in world.alttp_player_ids:
-        set_rules(ret, player)
-
-    for player in world.hk_player_ids:
-        set_hk_rules(ret, player)
-
-
-    return ret
-
-
-def copy_dynamic_regions_and_locations(world, ret):
-    for region in world.dynamic_regions:
-        new_reg = Region(region.name, region.type, region.hint_text, region.player)
-        ret.regions.append(new_reg)
-        ret.initialize_regions([new_reg])
-        ret.dynamic_regions.append(new_reg)
-
-        # Note: ideally exits should be copied here, but the current use case (Take anys) do not require this
-
-        if region.shop:
-            new_reg.shop = region.shop.__class__(new_reg, region.shop.room_id, region.shop.shopkeeper_config,
-                                                 region.shop.custom, region.shop.locked, region.shop.sram_offset)
-            ret.shops.append(new_reg.shop)
-
-    for location in world.dynamic_locations:
-        new_reg = ret.get_region(location.parent_region.name, location.parent_region.player)
-        new_loc = ALttPLocation(location.player, location.name, location.address, location.crystal, location.hint_text, new_reg)
-        # todo: this is potentially dangerous. later refactor so we
-        # can apply dynamic region rules on top of copied world like other rules
-        new_loc.access_rule = location.access_rule
-        new_loc.always_allow = location.always_allow
-        new_loc.item_rule = location.item_rule
-        new_reg.locations.append(new_loc)
-
-    ret.clear_location_cache()
-
-
 def create_playthrough(world):
-    """Destructive to the world it is run on."""
+    """Destructive to the world while it is run, damage gets repaired afterwards."""
     # get locations containing progress items
     prog_locations = {location for location in world.get_filled_locations() if location.item.advancement}
     state_cache = [None]

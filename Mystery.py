@@ -536,7 +536,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
             if option_name in weights:
                 setattr(ret, option_name, option.from_any(get_choice(option_name, weights)))
             else:
-                setattr(ret, option_name, option.default)
+                setattr(ret, option_name, option.from_any(option.default))
     else:
         raise Exception(f"Unsupported game {ret.game}")
     return ret
