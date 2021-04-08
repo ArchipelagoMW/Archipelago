@@ -113,7 +113,8 @@ commands.add_command("ap-get-info-dump", "Dump Game Info, used by Archipelago.",
 end)
 
 commands.add_command("ap-sync", "Run manual Research Sync with Archipelago.", function(call)
-    dumpTech()
+    dumpTech(game.players[call.player_index].force)
+    game.print("Wrote bridge file.")
 end)
 
 commands.add_command("ap-get-technology", "Grant a technology, used by the Archipelago Client.", function(call)
