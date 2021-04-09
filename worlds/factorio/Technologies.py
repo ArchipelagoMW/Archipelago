@@ -5,7 +5,6 @@ import Utils
 import logging
 
 factorio_id = 2 ** 17
-
 source_file = Utils.local_path("data", "factorio", "techs.json")
 recipe_source_file = Utils.local_path("data", "factorio", "recipes.json")
 with open(source_file) as f:

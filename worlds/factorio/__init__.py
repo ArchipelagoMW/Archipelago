@@ -9,8 +9,7 @@ static_nodes = {"automation", "logistics"}
 
 def gen_factorio(world: MultiWorld, player: int):
     for tech_name, tech_id in tech_table.items():
-        # TODO: some techs don't need the advancement marker
-        tech_item = Item(tech_name, True, tech_id, player)
+        tech_item = Item(tech_name, tech_name in advancement_technologies, tech_id, player)
         tech_item.game = "Factorio"
         if tech_name in static_nodes:
             loc = world.get_location(tech_name, player)
