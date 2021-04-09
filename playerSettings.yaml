@@ -196,11 +196,9 @@ retro:
 hints:
   'on': 50 # Hint tiles sometimes give item location hints
   'off': 0 # Hint tiles provide gameplay tips
-weapons: # Specifically, swords
-  randomized: 0 # Swords are placed randomly throughout the world
-  assured: 50 # Begin with a sword, the rest are placed randomly throughout the world
-  vanilla: 0 # Swords are placed in vanilla locations in your own game (Uncle, Pyramid Fairy, Smiths, Pedestal)
-  swordless: 0 # Your swords are replaced by rupees. Gameplay changes have been made to accommodate this change
+swordless:
+  on: 0 # Your swords are replaced by rupees. Gameplay changes have been made to accommodate this change
+  off: 1
 item_pool:
   easy: 0 # Doubled upgrades, progressives, and etc
   normal: 50 # Item availability remains unchanged from vanilla game
@@ -259,12 +257,14 @@ beemizer: # Remove items from the global item pool and replace them with single 
   2: 0 # 50% of rupees, bombs and arrows are replaced with bees, of which 70% are traps and 30% single bees
   3: 0 # 75% of rupees, bombs and arrows are replaced with bees, of which 80% are traps and 20% single bees
   4: 0 # 100% of rupees, bombs and arrows are replaced with bees, of which 90% are traps and 10% single bees
+  5: 0 # 100% of rupees, bombs and arrows are replaced with bees, of which 100% are traps and 0% single bees
 ### Shop Settings ###
 shop_shuffle_slots: # Maximum amount of shop slots to be filled with regular item pool items (such as Moon Pearl)
   0: 50
   5: 0
   15: 0
   30: 0
+  random: 0 # 0 to 30 evenly distributed
 shop_shuffle:
   none: 50
   g: 0 # Generate new default inventories for overworld/underworld shops, and unique shops
@@ -325,8 +325,8 @@ meta_ignore: # Nullify options specified in the meta.yaml file. Adding an option
     - inverted # Never play inverted seeds
   retro:
     - on # Never play retro seeds
-  weapons:
-    - swordless # Never play a swordless seed
+  swordless:
+    - on # Never play a swordless seed
 linked_options:
   - name: crosskeys
     options: # These overwrite earlier options if the percentage chance triggers

@@ -2,19 +2,21 @@ import logging
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
 
-from .Technologies import tech_table, recipe_sources, technology_table
+from .Technologies import tech_table, recipe_sources, technology_table, advancement_technologies, required_technologies
 
 static_nodes = {"automation", "logistics"}
 
 
 def gen_factorio(world: MultiWorld, player: int):
     for tech_name, tech_id in tech_table.items():
+        # TODO: some techs don't need the advancement marker
         tech_item = Item(tech_name, True, tech_id, player)
         tech_item.game = "Factorio"
         if tech_name in static_nodes:
             loc = world.get_location(tech_name, player)
             loc.item = tech_item
-            loc.locked = loc.event = True
+            loc.locked = True
+            loc.event = tech_item.advancement
         else:
             world.itempool.append(tech_item)
     set_rules(world, player)
@@ -39,11 +41,9 @@ def set_rules(world: MultiWorld, player: int):
         from worlds.generic import Rules
         for tech_name, technology in technology_table.items():
             # loose nodes
-            rules = technology.get_required_technologies()
-            if rules:
-                location = world.get_location(tech_name, player)
-                Rules.set_rule(location, lambda state, rules=rules: all(state.has(rule, player) for rule in rules))
+            location = world.get_location(tech_name, player)
+            Rules.set_rule(location, technology.build_rule(player))
 
         # get all technologies
         world.completion_condition[player] = lambda state: all(state.has(technology, player)
-                                                               for technology in tech_table)
+                                                               for technology in advancement_technologies)
