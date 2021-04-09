@@ -39,10 +39,11 @@ def factorio_create_regions(world: MultiWorld, player: int):
 def set_rules(world: MultiWorld, player: int):
     if world.logic[player] != 'nologic':
         from worlds.generic import Rules
+        allowed_packs = world.max_science_pack[player].get_allowed_packs()
         for tech_name, technology in technology_table.items():
             # loose nodes
             location = world.get_location(tech_name, player)
-            Rules.set_rule(location, technology.build_rule(player))
+            Rules.set_rule(location, technology.build_rule(allowed_packs, player))
 
         # get all technologies
         world.completion_condition[player] = lambda state: all(state.has(technology, player)

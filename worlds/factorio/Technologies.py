@@ -24,12 +24,12 @@ class Technology():  # maybe make subclass of Location?
         factorio_id += 1
         self.ingredients = ingredients
 
-    def build_rule(self, player: int):
+    def build_rule(self, allowed_packs, player: int):
         logging.debug(f"Building rules for {self.name}")
         ingredient_rules = []
         for ingredient in self.ingredients:
-            logging.debug(f"Building rules for ingredient {ingredient}")
-            if ingredient in required_technologies:
+            if ingredient in allowed_packs:
+                logging.debug(f"Building rules for ingredient {ingredient}")
                 technologies = required_technologies[ingredient]  # technologies that unlock the recipes
                 if technologies:
                     logging.debug(f"Required Technologies: {technologies}")
