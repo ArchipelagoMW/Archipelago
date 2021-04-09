@@ -15,6 +15,7 @@ with open(recipe_source_file) as f:
 tech_table = {}
 technology_table = {}
 
+always = lambda state: True
 
 class Technology():  # maybe make subclass of Location?
     def __init__(self, name, ingredients):
@@ -36,8 +37,11 @@ class Technology():  # maybe make subclass of Location?
                     ingredient_rules.append(
                         lambda state, technologies=technologies: all(state.has(technology.name, player)
                                                                      for technology in technologies))
-        ingredient_rules = frozenset(ingredient_rules)
-        return lambda state: all(rule(state) for rule in ingredient_rules)
+        if ingredient_rules:
+            ingredient_rules = frozenset(ingredient_rules)
+            return lambda state: all(rule(state) for rule in ingredient_rules)
+
+        return always
 
     def __hash__(self):
         return self.factorio_id
