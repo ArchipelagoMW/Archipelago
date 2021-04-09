@@ -632,11 +632,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     ret.hints = get_choice('hints', weights)
 
-    ret.swords = {'randomized': 'random',
-                  'assured': 'assured',
-                  'vanilla': 'vanilla',
-                  'swordless': 'swordless'
-                  }[get_choice('weapons', weights, 'assured')]
+    ret.swordless = get_choice('swordless', weights, False)
 
     ret.difficulty = get_choice('item_pool', weights)
 

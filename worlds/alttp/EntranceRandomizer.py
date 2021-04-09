@@ -45,11 +45,9 @@ def parse_arguments(argv, no_defaults=False):
                                         Requires the moon pearl to be Link in the Light World
                                         instead of a bunny.
                              ''')
-    parser.add_argument('--swords', default=defval('random'), const='random', nargs='?', choices= ['random', 'assured', 'swordless', 'vanilla'],
+    parser.add_argument('--swordless', action='store_true',
                         help='''\
-                             Select sword placement. (default: %(default)s)
-                             Random:    All swords placed randomly.
-                             Assured:   Start game with a sword already.
+                             Toggles Swordless Mode
                              Swordless: No swords. Curtains in Skull Woods and Agahnim\'s 
                                         Tower are removed, Agahnim\'s Tower barrier can be
                                         destroyed with hammer. Misery Mire and Turtle Rock
@@ -57,7 +55,6 @@ def parse_arguments(argv, no_defaults=False):
                                         Ether and Bombos Tablet can be activated with Hammer
                                         (and Book). Bombos pads have been added in Ice
                                         Palace, to allow for an alternative to firerod.
-                             Vanilla:   Swords are in vanilla locations.
                              ''')
     parser.add_argument('--goal', default=defval('ganon'), const='ganon', nargs='?',
                         choices=['ganon', 'pedestal', 'bosses', 'triforcehunt', 'localtriforcehunt', 'ganontriforcehunt', 'localganontriforcehunt', 'crystals', 'ganonpedestal'],
@@ -401,7 +398,7 @@ def parse_arguments(argv, no_defaults=False):
         for player in range(1, multiargs.multi + 1):
             playerargs = parse_arguments(shlex.split(getattr(ret, f"p{player}")), True)
 
-            for name in ['logic', 'mode', 'swords', 'goal', 'difficulty', 'item_functionality',
+            for name in ['logic', 'mode', 'swordless', 'goal', 'difficulty', 'item_functionality',
                          'shuffle', 'crystals_ganon', 'crystals_gt', 'open_pyramid', 'timer',
                          'countdown_start_time', 'red_clock_time', 'blue_clock_time', 'green_clock_time',
                          'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle', 'startinventory',

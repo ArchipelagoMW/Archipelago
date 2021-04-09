@@ -505,7 +505,7 @@ def default_rules(world, player):
 
     set_rule(world.get_entrance('Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.open_pyramid[player])
 
-    if world.swords[player] == 'swordless':
+    if world.swordless[player]:
         swordless_rules(world, player)
 
 
@@ -657,7 +657,7 @@ def inverted_rules(world, player):
 
     set_rule(world.get_entrance('Inverted Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.open_pyramid[player])
 
-    if world.swords[player] == 'swordless':
+    if world.swordless[player]:
         swordless_rules(world, player)
 
 def no_glitches_rules(world, player):

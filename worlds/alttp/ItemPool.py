@@ -279,7 +279,7 @@ def generate_itempool(world, player: int):
         itempool.extend(itemdiff.bottles)
         itempool.extend(itemdiff.basicbow)
         itempool.extend(itemdiff.basicarmor)
-        if world.swords[player] != 'swordless':
+        if not world.swordless[player]:
             itempool.extend(itemdiff.basicsword)
         itempool.extend(itemdiff.basicmagic)
         itempool.extend(itemdiff.basicglove)
@@ -335,7 +335,7 @@ def generate_itempool(world, player: int):
             possible_weapons = []
             for item in pool:
                 if item in ['Progressive Sword', 'Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword']:
-                    if not found_sword and world.swords[player] != 'swordless':
+                    if not found_sword:
                         found_sword = True
                         possible_weapons.append(item)
                 if item in ['Progressive Bow', 'Bow'] and not found_bow:
@@ -548,7 +548,7 @@ def get_pool_core(world, player: int):
     timer = world.timer[player]
     goal = world.goal[player]
     mode = world.mode[player]
-    swords = world.swords[player]
+    swordless = world.swordless[player]
     retro = world.retro[player]
     logic = world.logic[player]
 
@@ -619,7 +619,7 @@ def get_pool_core(world, player: int):
 
     if want_progressives():
         pool.extend(diff.progressivebow)
-    elif (swords == 'swordless' or logic == 'noglitches') and goal != 'icerodhunt':
+    elif (swordless or logic == 'noglitches') and goal != 'icerodhunt':
         swordless_bows = ['Bow', 'Silver Bow']
         if difficulty == "easy":
             swordless_bows *= 2
@@ -627,33 +627,11 @@ def get_pool_core(world, player: int):
     else:
         pool.extend(diff.basicbow)
 
-    if swords == 'swordless':
+    if swordless:
         pool.extend(diff.swordless)
-    elif swords == 'vanilla':
-        swords_to_use = diff.progressivesword.copy() if want_progressives() else diff.basicsword.copy()
-        world.random.shuffle(swords_to_use)
-
-        place_item('Link\'s Uncle', swords_to_use.pop())
-        place_item('Blacksmith', swords_to_use.pop())
-        place_item('Pyramid Fairy - Left', swords_to_use.pop())
-        if goal != 'pedestal':
-            place_item('Master Sword Pedestal', swords_to_use.pop())
-        else:
-            swords_to_use.pop()
-            place_item('Master Sword Pedestal', 'Triforce')
-        if swords_to_use:
-            pool.extend(swords_to_use)
     else:
         progressive_swords = want_progressives()
         pool.extend(diff.progressivesword if progressive_swords else diff.basicsword)
-        if swords == 'assured' and goal != 'icerodhunt':
-            if progressive_swords:
-                precollected_items.append('Progressive Sword')
-                pool.remove('Progressive Sword')
-            else:
-                precollected_items.append('Fighter Sword')
-                pool.remove('Fighter Sword')
-            pool.extend(['Rupees (50)'])
 
     extraitems = total_items_to_place - len(pool) - len(placed_items)
 
@@ -684,7 +662,7 @@ def get_pool_core(world, player: int):
         else:
             break
 
-    if goal == 'pedestal' and swords != 'vanilla':
+    if goal == 'pedestal':
         place_item('Master Sword Pedestal', 'Triforce')
         pool.remove("Rupees (20)")
 

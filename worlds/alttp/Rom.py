@@ -961,7 +961,7 @@ def patch_rom(world, rom, player, team, enemized):
 
     # Set overflow items for progressive equipment
     rom.write_bytes(0x180090,
-                    [difficulty.progressive_sword_limit if world.swords[player] != 'swordless' else 0,
+                    [difficulty.progressive_sword_limit if not world.swordless[player] else 0,
                      overflow_replacement,
                      difficulty.progressive_shield_limit, overflow_replacement,
                      difficulty.progressive_armor_limit, overflow_replacement,
@@ -971,7 +971,7 @@ def patch_rom(world, rom, player, team, enemized):
     rom.write_bytes(0x180098, [difficulty.progressive_bow_limit, overflow_replacement])
 
     if difficulty.progressive_bow_limit < 2 and (
-            world.swords[player] == 'swordless' or world.logic[player] == 'noglitches'):
+            world.swordless[player] or world.logic[player] == 'noglitches'):
         rom.write_bytes(0x180098, [2, overflow_replacement])
         rom.write_byte(0x180181, 0x01)  # Make silver arrows work only on ganon
         rom.write_byte(0x180182, 0x00)  # Don't auto equip silvers on pickup
@@ -1123,11 +1123,11 @@ def patch_rom(world, rom, player, team, enemized):
     rom.write_byte(0x180029, 0x01)  # Smithy quick item give
 
     # set swordless mode settings
-    rom.write_byte(0x18003F, 0x01 if world.swords[player] == 'swordless' else 0x00)  # hammer can harm ganon
-    rom.write_byte(0x180040, 0x01 if world.swords[player] == 'swordless' else 0x00)  # open curtains
-    rom.write_byte(0x180041, 0x01 if world.swords[player] == 'swordless' else 0x00)  # swordless medallions
-    rom.write_byte(0x180043, 0xFF if world.swords[player] == 'swordless' else 0x00)  # starting sword for link
-    rom.write_byte(0x180044, 0x01 if world.swords[player] == 'swordless' else 0x00)  # hammer activates tablets
+    rom.write_byte(0x18003F, 0x01 if world.swordless[player] else 0x00)  # hammer can harm ganon
+    rom.write_byte(0x180040, 0x01 if world.swordless[player] else 0x00)  # open curtains
+    rom.write_byte(0x180041, 0x01 if world.swordless[player] else 0x00)  # swordless medallions
+    rom.write_byte(0x180043, 0xFF if world.swordless[player] else 0x00)  # starting sword for link
+    rom.write_byte(0x180044, 0x01 if world.swordless[player] else 0x00)  # hammer activates tablets
 
     if world.item_functionality[player] == 'easy':
         rom.write_byte(0x18003F, 0x01)  # hammer can harm ganon
@@ -2218,7 +2218,7 @@ def write_strings(rom, world, player, team):
     prog_bow_locs = world.find_items('Progressive Bow', player)
     distinguished_prog_bow_loc = next((location for location in prog_bow_locs if location.item.code == 0x65), None)
     progressive_silvers = world.difficulty_requirements[player].progressive_bow_limit >= 2 or (
-            world.swords[player] == 'swordless' or world.logic[player] == 'noglitches')
+            world.swordless[player] or world.logic[player] == 'noglitches')
     if distinguished_prog_bow_loc:
         prog_bow_locs.remove(distinguished_prog_bow_loc)
         silverarrow_hint = (' %s?' % hint_text(distinguished_prog_bow_loc).replace('Ganon\'s',

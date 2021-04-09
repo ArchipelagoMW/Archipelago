@@ -80,7 +80,7 @@ def KholdstareDefeatRule(state, player: int):
                     state.has('Fire Rod', player) or
                     (
                             state.has('Bombos', player) and
-                            (state.has_sword(player) or state.world.swords[player] == 'swordless')
+                            (state.has_sword(player) or state.world.swordless[player])
                     )
             ) and
             (
@@ -89,7 +89,7 @@ def KholdstareDefeatRule(state, player: int):
                     (
                             state.has('Fire Rod', player) and
                             state.has('Bombos', player) and
-                            state.world.swords[player] == 'swordless' and
+                            state.world.swordless[player] and
                             state.can_extend_magic(player, 16)
                     )
             )
@@ -113,7 +113,7 @@ def AgahnimDefeatRule(state, player: int):
 
 
 def GanonDefeatRule(state, player: int):
-    if state.world.swords[player] == "swordless":
+    if state.world.swordless[player]:
         return state.has('Hammer', player) and \
                state.has_fire_source(player) and \
                state.has('Silver Bow', player) and \

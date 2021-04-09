@@ -64,7 +64,7 @@ class MultiWorld():
             set_player_attr('shuffle', "vanilla")
             set_player_attr('logic', "noglitches")
             set_player_attr('mode', 'open')
-            set_player_attr('swords', 'random')
+            set_player_attr('swordless', False)
             set_player_attr('difficulty', 'normal')
             set_player_attr('item_functionality', 'normal')
             set_player_attr('timer', False)
@@ -726,7 +726,7 @@ class CollectionState(object):
 
     def can_retrieve_tablet(self, player:int) -> bool:
         return self.has('Book of Mudora', player) and (self.has_beam_sword(player) or
-               (self.world.swords[player] == "swordless" and
+               (self.world.swordless[player] and
                 self.has("Hammer", player)))
 
     def has_sword(self, player: int) -> bool:
@@ -747,7 +747,7 @@ class CollectionState(object):
     def can_melt_things(self, player: int) -> bool:
         return self.has('Fire Rod', player) or \
                (self.has('Bombos', player) and
-                (self.world.swords[player] == "swordless" or
+                (self.world.swordless[player] or
                  self.has_sword(player)))
 
     def can_avoid_lasers(self, player: int) -> bool:
@@ -1313,7 +1313,7 @@ class Spoiler(object):
                          'dark_room_logic': self.world.dark_room_logic,
                          'mode': self.world.mode,
                          'retro': self.world.retro,
-                         'weapons': self.world.swords,
+                         'swordless': self.world.swordless,
                          'goal': self.world.goal,
                          'shuffle': self.world.shuffle,
                          'item_pool': self.world.difficulty,
@@ -1412,7 +1412,7 @@ class Spoiler(object):
                     outfile.write('Mode:                            %s\n' % self.metadata['mode'][player])
                     outfile.write('Retro:                           %s\n' %
                                   ('Yes' if self.metadata['retro'][player] else 'No'))
-                    outfile.write('Swords:                          %s\n' % self.metadata['weapons'][player])
+                    outfile.write('Swordless:                          %s\n' % ('Yes' if self.metadata['swordless'][player] else 'No'))
                     outfile.write('Goal:                            %s\n' % self.metadata['goal'][player])
                     if "triforce" in self.metadata["goal"][player]:  # triforce hunt
                         outfile.write("Pieces available for Triforce:   %s\n" %
