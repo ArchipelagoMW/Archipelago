@@ -113,7 +113,7 @@ def recursively_get_unlocking_technologies(ingredient_name, _done=None) -> Set[T
         else:
             _done.add(ingredient_name)
     else:
-        _done = set(ingredient_name)
+        _done = {ingredient_name}
     recipe = all_product_sources.get(ingredient_name)
     if not recipe:
         return set()
