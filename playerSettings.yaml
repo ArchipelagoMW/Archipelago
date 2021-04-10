@@ -197,6 +197,10 @@ retro:
 hints:
   'on': 50 # Hint tiles sometimes give item location hints
   'off': 0 # Hint tiles provide gameplay tips
+swords:
+  randomized: 50 # Swords are placed randomly throughout the world
+  assured: 0 # Begin with a sword, the rest are placed randomly throughout the world
+  vanilla: 0 # Swords are placed in vanilla locations in your own game (Uncle, Pyramid Fairy, Smiths, Pedestal)
 swordless:
   on: 0 # Your swords are replaced by rupees. Gameplay changes have been made to accommodate this change
   off: 1
