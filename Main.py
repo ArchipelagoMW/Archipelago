@@ -493,8 +493,10 @@ def main(args, seed=None):
                 rom_names.append(rom_name)
             client_versions = {}
             minimum_versions = {"server": (0, 0, 3), "clients": client_versions}
+            games = {}
             for slot in world.player_ids:
                 client_versions[slot] = (0, 0, 3)
+                games[slot] = world.game[slot]
             connect_names = {base64.b64encode(rom_name).decode(): (team, slot) for
                               slot, team, rom_name in rom_names}
 
@@ -503,24 +505,26 @@ def main(args, seed=None):
                     if player not in world.alttp_player_ids:
                         connect_names[name] = (i, player)
 
-            multidata = zlib.compress(pickle.dumps({"names": parsed_names,
-                                                    "connect_names": connect_names,
-                                                    "remote_items": {player for player in range(1, world.players + 1) if
-                                                                     world.remote_items[player] or
-                                                                     world.game[player] != "A Link to the Past"},
-                                                    "locations": {
-                                                        (location.address, location.player):
-                                                            (location.item.code, location.item.player)
-                                                        for location in world.get_filled_locations() if
-                                                        type(location.address) is int},
-                                                    "checks_in_area": checks_in_area,
-                                                    "server_options": get_options()["server_options"],
-                                                    "er_hint_data": er_hint_data,
-                                                    "precollected_items": precollected_items,
-                                                    "version": tuple(_version_tuple),
-                                                    "tags": ["AP"],
-                                                    "minimum_versions": minimum_versions,
-                                                    }), 9)
+            multidata = zlib.compress(pickle.dumps({
+                "games": games,
+                "names": parsed_names,
+                "connect_names": connect_names,
+                "remote_items": {player for player in range(1, world.players + 1) if
+                                 world.remote_items[player] or
+                                 world.game[player] != "A Link to the Past"},
+                "locations": {
+                    (location.address, location.player):
+                        (location.item.code, location.item.player)
+                    for location in world.get_filled_locations() if
+                    type(location.address) is int},
+                "checks_in_area": checks_in_area,
+                "server_options": get_options()["server_options"],
+                "er_hint_data": er_hint_data,
+                "precollected_items": precollected_items,
+                "version": tuple(_version_tuple),
+                "tags": ["AP"],
+                "minimum_versions": minimum_versions,
+            }), 9)
 
             with open(output_path('%s.archipelago' % outfilebase), 'wb') as f:
                 f.write(bytes([1]))  # version of format

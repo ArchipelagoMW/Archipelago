@@ -110,6 +110,7 @@ class Context(Node):
         self.auto_saver_thread = None
         self.save_dirty = False
         self.tags = ['AP']
+        self.games = {}
         self.minimum_client_versions: typing.Dict[int, Utils.Version] = {}
 
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
@@ -127,6 +128,7 @@ class Context(Node):
         return restricted_loads(zlib.decompress(data[1:]))
 
     def _load(self, decoded_obj: dict, use_embedded_server_options: bool):
+
         mdata_ver = decoded_obj["minimum_versions"]["server"]
         if mdata_ver > Utils._version_tuple:
             raise RuntimeError(f"Supplied Multidata requires a server of at least version {mdata_ver},"
@@ -145,6 +147,7 @@ class Context(Node):
         self.locations = decoded_obj['locations']
         self.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
                              for player, loc_data in decoded_obj["er_hint_data"].items()}
+        self.games = decoded_obj["games"]
         if use_embedded_server_options:
             server_options = decoded_obj.get("server_options", {})
             self._set_options(server_options)
@@ -976,6 +979,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             errors.add('InvalidSlot')
         else:
             team, slot = ctx.connect_names[args['name']]
+            game = ctx.games[slot]
+            if args['game'] != game:
+                errors.add('InvalidSlot')
             # this can only ever be 0 or 1 elements
             clients = [c for c in ctx.endpoints if c.auth and c.slot == slot and c.team == team]
             if clients:
