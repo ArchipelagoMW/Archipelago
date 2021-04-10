@@ -13,7 +13,7 @@ with open(source_file) as f:
 with open(recipe_source_file) as f:
     raw_recipes = json.load(f)
 tech_table = {}
-technology_table = {}
+technology_table:Dict[str, Technology] = {}
 
 always = lambda state: True
 

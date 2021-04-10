@@ -43,8 +43,11 @@ def get_shapes(world: MultiWorld, player: int) -> Dict[str, List[str]]:
         tech_names.sort()
         world.random.shuffle(tech_names)
         while len(tech_names) > 4:
-            diamond_0, diamond_1, diamond_2, diamond_3 = tech_names[:4]
+            slice = tech_names[:4]
             tech_names = tech_names[4:]
+            slice.sort(key=lambda tech_name: len(technology_table[tech_name].ingredients))
+            diamond_0, diamond_1, diamond_2, diamond_3 = slice
+
             #   0    |
             # 1   2  |
             #   3    V

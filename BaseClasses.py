@@ -27,6 +27,7 @@ class MultiWorld():
     class AttributeProxy():
         def __init__(self, rule):
             self.rule = rule
+
         def __getitem__(self, player) -> bool:
             return self.rule(player)
 
