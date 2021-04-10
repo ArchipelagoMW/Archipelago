@@ -781,7 +781,7 @@ def add_conditional_lamps(world, player):
     add_conditional_lamp('Eastern Palace - Boss', 'Eastern Palace', 'Location', True)
     add_conditional_lamp('Eastern Palace - Prize', 'Eastern Palace', 'Location', True)
 
-    if not world.sewer_light_cone[player]:
+    if not world.mode[player] == "standard":
         add_lamp_requirement(world, world.get_location('Sewers - Dark Cross', player), player)
         add_lamp_requirement(world, world.get_entrance('Sewers Back Door', player), player)
         add_lamp_requirement(world, world.get_entrance('Throne Room', player), player)

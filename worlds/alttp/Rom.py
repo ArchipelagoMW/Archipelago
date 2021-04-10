@@ -879,7 +879,7 @@ def patch_rom(world, rom, player, team, enemized):
         rom.write_bytes(0x6D323, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
 
     # set light cones
-    rom.write_byte(0x180038, 0x01 if world.sewer_light_cone[player] else 0x00)
+    rom.write_byte(0x180038, 0x01 if world.mode[player] == "standard" else 0x00)
     rom.write_byte(0x180039, 0x01 if world.light_world_light_cone else 0x00)
     rom.write_byte(0x18003A, 0x01 if world.dark_world_light_cone else 0x00)
 

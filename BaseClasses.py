@@ -24,6 +24,12 @@ class MultiWorld():
     plando_connections: List[PlandoConnection]
     er_seeds: Dict[int, str]
 
+    class AttributeProxy():
+        def __init__(self, rule):
+            self.rule = rule
+        def __getitem__(self, player) -> bool:
+            return self.rule(player)
+
     def __init__(self, players: int):
         # TODO: move per-player settings into new classes per game-type instead of clumping it all together here
 
@@ -56,6 +62,11 @@ class MultiWorld():
         self.dynamic_regions = []
         self.dynamic_locations = []
         self.spoiler = Spoiler(self)
+        self.fix_trock_doors = self.AttributeProxy(lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
+        self.fix_skullwoods_exit = self.AttributeProxy(lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
+        self.fix_palaceofdarkness_exit = self.AttributeProxy(lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
+        self.fix_trock_exit = self.AttributeProxy(lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
+        self.NOTCURSED = self.AttributeProxy(lambda player: not self.CURSED[player])
 
         for player in range(1, players + 1):
             def set_player_attr(attr, val):
@@ -81,11 +92,6 @@ class MultiWorld():
             set_player_attr('powder_patch_required', False)
             set_player_attr('ganon_at_pyramid', True)
             set_player_attr('ganonstower_vanilla', True)
-            set_player_attr('sewer_light_cone', self.mode[player] == 'standard')
-            set_player_attr('fix_trock_doors', self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
-            set_player_attr('fix_skullwoods_exit', self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
-            set_player_attr('fix_palaceofdarkness_exit', self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
-            set_player_attr('fix_trock_exit', self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
             set_player_attr('can_access_trock_eyebridge', None)
             set_player_attr('can_access_trock_front', None)
             set_player_attr('can_access_trock_big_chest', None)
@@ -137,13 +143,9 @@ class MultiWorld():
             for hk_option in Options.hollow_knight_options:
                 set_player_attr(hk_option, False)
 
-        self.worlds = []
-        #for i in range(players):
-        #    self.worlds.append(worlds.alttp.ALTTPWorld({}, i))
-
-    @property
-    def NOTCURSED(self):  # not here to stay
-        return {player: not cursed for player, cursed in self.CURSED.items()}
+        # self.worlds = []
+        # for i in range(players):
+        #     self.worlds.append(worlds.alttp.ALTTPWorld({}, i))
 
     def secure(self):
         self.random = secrets.SystemRandom()
