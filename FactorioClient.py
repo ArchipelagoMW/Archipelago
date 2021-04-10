@@ -48,6 +48,11 @@ class FactorioCommandProcessor(ClientCommandProcessor):
             return True
         return False
 
+    def _cmd_connect(self, address: str = "", name="") -> bool:
+        """Connect to a MultiWorld Server"""
+        self.ctx.auth = name
+        return super(FactorioCommandProcessor, self)._cmd_connect(address)
+
 
 class FactorioContext(CommonContext):
     command_processor = FactorioCommandProcessor
