@@ -44,9 +44,14 @@ new_tree_copy.icon_size = table.deepcopy(technologies["{{ item_name }}"].icon_si
 new_tree_copy.icon = "__{{ mod_name }}__/graphics/icons/ap.png"
 new_tree_copy.icons = nil
 new_tree_copy.icon_size = 512
-
 {% endif %}
-{#- add new technology to game #}
+{#- connect Technology  #}
+{%- if original_tech_name in tech_tree_layout_prerequisites %}
+{%- for prerequesite in tech_tree_layout_prerequisites[original_tech_name] %}
+table.insert(new_tree_copy.prerequisites, "ap-{{ tech_table[prerequesite] }}-")
+{% endfor %}
+{% endif -%}
+{#- add new Technology to game #}
 data:extend{new_tree_copy}
 
 {% endfor %}

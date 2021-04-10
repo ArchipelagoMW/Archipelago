@@ -1,3 +1,4 @@
+from __future__ import annotations
 # Factorio technologies are imported from a .json document in /data
 from typing import Dict, Set, FrozenSet
 import json
@@ -15,6 +16,7 @@ tech_table = {}
 technology_table = {}
 
 always = lambda state: True
+
 
 class Technology():  # maybe make subclass of Location?
     def __init__(self, name, ingredients):
@@ -42,6 +44,14 @@ class Technology():  # maybe make subclass of Location?
 
         return always
 
+    def get_prior_technologies(self, allowed_packs) -> Set[Technology]:
+        """Get Technologies that have to precede this one to resolve tree connections."""
+        technologies = set()
+        for ingredient in self.ingredients:
+            if ingredient in allowed_packs:
+                technologies |= required_technologies[ingredient]  # technologies that unlock the recipes
+        return technologies
+
     def __hash__(self):
         return self.factorio_id
 
@@ -68,11 +78,7 @@ class Recipe():
 # recipes and technologies can share names in Factorio
 for technology_name in sorted(raw):
     data = raw[technology_name]
-
     factorio_id += 1
-    # not used yet
-    # if data["requires"]:
-    #     requirements[technology] = set(data["requires"])
     current_ingredients = set(data["ingredients"])
     technology = Technology(technology_name, current_ingredients)
     tech_table[technology_name] = technology.factorio_id
@@ -87,7 +93,6 @@ for technology, data in raw.items():
 del (raw)
 lookup_id_to_name: Dict[int, str] = {item_id: item_name for item_name, item_id in tech_table.items()}
 
-all_recipes: Dict[str, Recipe] = {}
 all_product_sources: Dict[str, Recipe] = {}
 for recipe_name, recipe_data in raw_recipes.items():
     # example:
@@ -95,7 +100,6 @@ for recipe_name, recipe_data in raw_recipes.items():
 
     recipe = Recipe(recipe_name, recipe_data["category"], set(recipe_data["ingredients"]), set(recipe_data["products"]))
     if recipe.products != recipe.ingredients:  # prevents loop recipes like uranium centrifuging
-        all_recipes[recipe_name] = recipe
         for product_name in recipe.products:
             all_product_sources[product_name] = recipe
 

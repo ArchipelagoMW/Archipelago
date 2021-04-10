@@ -273,6 +273,7 @@ class FreeSamples(Choice):
 
 class TechTreeLayout(Choice):
     option_single = 0
+    option_small_diamonds = 1
     default = 0
 
 class Visibility(Choice):

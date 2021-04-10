@@ -38,6 +38,7 @@ progression_balancing:
 # Factorio options:
 tech_tree_layout:
   single: 1
+  small_diamonds: 1
 max_science_pack:
   automation_science_pack: 0
   logistic_science_pack: 0
