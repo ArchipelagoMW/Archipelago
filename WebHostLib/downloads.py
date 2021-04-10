@@ -16,7 +16,7 @@ def download_patch(room_id, patch_id):
         room = Room.get(id=room_id)
         last_port = room.last_port
 
-        patch_data = update_patch_data(patch.data, server=f"{app.config['HOSTNAME']}:{last_port}")
+        patch_data = update_patch_data(patch.data, server=f"{app.config['PATCH_TARGET']}:{last_port}")
         patch_data = io.BytesIO(patch_data)
 
         fname = f"P{patch.player_id}_{patch.player_name}_{app.jinja_env.filters['suuid'](room_id)}.apbp"

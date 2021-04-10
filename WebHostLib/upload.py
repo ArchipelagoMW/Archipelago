@@ -41,8 +41,8 @@ def uploads():
                                 return "Uploaded data contained a rom file, which is likely to contain copyrighted material. Your file was deleted."
                             elif file.filename.endswith(".apbp"):
                                 splitted = file.filename.split("/")[-1][3:].split("P", 1)
-                                player = int(splitted[1].split(".")[0].split("_")[0])
-                                patches.add(Patch(data=zfile.open(file, "r").read(), player=player))
+                                player_id, player_name = splitted[1].split(".")[0].split("_")
+                                patches.add(Patch(data=zfile.open(file, "r").read(), player_name=player_name, player_id=player_id))
                             elif file.filename.endswith(".txt"):
                                 spoiler = zfile.open(file, "r").read().decode("utf-8-sig")
                             elif file.filename.endswith(".archipelago"):
@@ -71,7 +71,6 @@ def uploads():
                         flash("Could not load multidata. File may be corrupted or incompatible.")
                         raise
                     else:
-                        logging.info(multidata)
                         seed = Seed(multidata=multidata, owner=session["_id"])
                         commit()  # place into DB and generate ids
                         return redirect(url_for("viewSeed", seed=seed.id))

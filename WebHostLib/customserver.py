@@ -81,9 +81,9 @@ class WebHostContext(Context):
     def init_save(self, enabled: bool = True):
         self.saving = enabled
         if self.saving:
-            existing_savegame = restricted_loads(Room.get(id=self.room_id).multisave)
-            if existing_savegame:
-                self.set_save(existing_savegame)
+            savegame_data = Room.get(id=self.room_id).multisave
+            if savegame_data:
+                self.set_save(restricted_loads(Room.get(id=self.room_id).multisave))
             self._start_async_saving()
         threading.Thread(target=self.listen_to_db_commands, daemon=True).start()
 

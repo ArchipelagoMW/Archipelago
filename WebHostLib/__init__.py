@@ -46,6 +46,7 @@ app.config["PONY"] = {
 app.config["MAX_ROLL"] = 20
 app.config["CACHE_TYPE"] = "simple"
 app.config["JSON_AS_ASCII"] = False
+app.config["PATCH_TARGET"] = "archipelago.gg"
 
 app.autoversion = True
 
