@@ -60,6 +60,7 @@ def get_shapes(world: MultiWorld, player: int) -> Dict[str, List[str]]:
         previous_slice = []
         while len(tech_names) > slice_size:
             slice = tech_names[:slice_size]
+            world.random.shuffle(slice)
             tech_names = tech_names[slice_size:]
             for i, tech_name in enumerate(previous_slice):
                 prerequisites.setdefault(slice[i], set()).add(tech_name)
@@ -84,6 +85,7 @@ def get_shapes(world: MultiWorld, player: int) -> Dict[str, List[str]]:
         previous_slice = []
         while slice_size:
             slice = tech_names[:slice_size]
+            world.random.shuffle(slice)
             tech_names = tech_names[slice_size:]
             if previous_slice:
                 for i, tech_name in enumerate(slice):
