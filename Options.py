@@ -236,7 +236,7 @@ hollow_knight_skip_options: typing.Dict[str, type(Option)] = {
     "SHADESKIPS": Toggle,
 }
 
-hollow_knight_options: typing.Dict[str, Option] = {**hollow_knight_randomize_options, **hollow_knight_skip_options}
+hollow_knight_options: typing.Dict[str, type(Option)] = {**hollow_knight_randomize_options, **hollow_knight_skip_options}
 
 
 class MaxSciencePack(Choice):
@@ -276,6 +276,7 @@ class TechTreeLayout(Choice):
     option_small_diamonds = 1
     option_medium_diamonds = 2
     option_pyramid = 3
+    option_funnel = 4
     default = 0
 
 class Visibility(Choice):
@@ -288,6 +289,8 @@ factorio_options: typing.Dict[str, type(Option)] = {"max_science_pack": MaxScien
                                                     "tech_cost": TechCost,
                                                     "free_samples": FreeSamples,
                                                     "visibility": Visibility}
+
+minecraft_options: typing.Dict[str, type(Option)] = {}
 
 if __name__ == "__main__":
     import argparse

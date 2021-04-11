@@ -27,6 +27,7 @@ game:
   A Link to the Past: 1
   Hollow Knight: 1
   Factorio: 1
+  Minecraft: 1
 # Shared Options supported by all games:
 accessibility:
   items: 0 # Guarantees you will be able to acquire all items, but you may not be able to access all locations
@@ -41,6 +42,7 @@ tech_tree_layout:
   small_diamonds: 1
   medium_diamonds: 1
   pyramid: 1
+  funnel: 1
 max_science_pack:
   automation_science_pack: 0
   logistic_science_pack: 0

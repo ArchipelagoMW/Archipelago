@@ -32,3 +32,4 @@ class Games(str, enum.Enum):
     HK = "Hollow Knight"
     LTTP = "A Link to the Past"
     Factorio = "Factorio"
+    Minecraft = "Minecraft"
