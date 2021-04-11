@@ -57,7 +57,6 @@ def manifest_creation():
 scripts = {"LttPClient.py": "ArchipelagoLttPClient",
            "MultiMystery.py": "ArchipelagoMultiMystery",
            "MultiServer.py": "ArchipelagoServer",
-           "gui.py": "ArchipelagoLttPCreator",
            "Mystery.py": "ArchipelagoMystery",
            "LttPAdjuster.py": "ArchipelagoLttPAdjuster",
            "FactorioClient.py": "ArchipelagoFactorioClient"}

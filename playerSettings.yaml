@@ -39,6 +39,8 @@ progression_balancing:
 tech_tree_layout:
   single: 1
   small_diamonds: 1
+  medium_diamonds: 1
+  pyramid: 1
 max_science_pack:
   automation_science_pack: 0
   logistic_science_pack: 0
@@ -197,10 +199,6 @@ retro:
 hints:
   'on': 50 # Hint tiles sometimes give item location hints
   'off': 0 # Hint tiles provide gameplay tips
-swords:
-  randomized: 50 # Swords are placed randomly throughout the world
-  assured: 0 # Begin with a sword, the rest are placed randomly throughout the world
-  vanilla: 0 # Swords are placed in vanilla locations in your own game (Uncle, Pyramid Fairy, Smiths, Pedestal)
 swordless:
   on: 0 # Your swords are replaced by rupees. Gameplay changes have been made to accommodate this change
   off: 1
@@ -355,9 +353,9 @@ linked_options:
   - name: enemizer
     options:
       boss_shuffle: # Subchances can be injected too, which then get rolled
-        simple: 1
+        basic: 1
         full: 1
-        random: 1
+        chaos: 1
         singularity: 1
       enemy_damage:
         shuffled: 1
@@ -368,12 +366,46 @@ linked_options:
         expert: 1
     percentage: 0 # Set this to the percentage chance you want enemizer
 # triggers that replace options upon rolling certain options
+legacy_weapons: # this is not an actual option, just a set of weights to trigger from
+  trigger_disabled: 50
+  randomized: 0 # Swords are placed randomly throughout the world
+  assured: 0 # Begin with a sword, the rest are placed randomly throughout the world
+  vanilla: 0 # Swords are placed in vanilla locations in your own game (Uncle, Pyramid Fairy, Smiths, Pedestal)
+  swordless: 0 # swordless mode
 triggers:
+  # trigger block for legacy weapons mode, to enable these add weights to legacy_weapons
+  - option_name: legacy_weapons
+    option_result: randomized
+    options:
+      swordless: off
+  - option_name: legacy_weapons
+    option_result: assured
+    options:
+      swordless: off
+      startinventory:
+        Progressive Sword: 1
+  - option_name: legacy_weapons
+    option_result: vanilla
+    options:
+      swordless: off
+      plando_items:
+        - items:
+            Progressive Sword: 4
+          locations:
+            - Master Sword Pedestal
+            - Pyramid Fairy - Left
+            - Blacksmith
+            - Link's Uncle
+  - option_name: legacy_weapons
+    option_result: swordless
+    options:
+      swordless: on
+  # end of legacy weapons block
   - option_name: enemy_damage # targets enemy_damage
     option_result: shuffled # if it rolls shuffled
     percentage: 0 # AND has a 0 percent chance (meaning this is default disabled, just to show how it works)
     options: # then inserts these options
-      swords: assured
+      swordless: off
 ### door rando only options (not supported at all yet on this branch) ###
 door_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
   vanilla: 50 # Everything should be like in vanilla

@@ -396,7 +396,7 @@ def roll_linked_options(weights: dict) -> dict:
 def roll_triggers(weights: dict) -> dict:
     weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = "Archipelago"  # Some means for triggers to know if the seed is on main or doors.
-    for option_set in weights["triggers"]:
+    for i, option_set in enumerate(weights["triggers"]):
         try:
             key = get_choice("option_name", option_set)
             if key not in weights:
@@ -408,6 +408,7 @@ def roll_triggers(weights: dict) -> dict:
             if result == trigger_result and roll_percentage(get_choice("percentage", option_set, 100)):
                 if "options" in option_set:
                     weights = update_weights(weights, option_set["options"], "Triggered", option_set["option_name"])
+
                 if "rom_options" in option_set:
                     rom_weights = weights.get("rom", dict())
                     rom_weights = update_weights(rom_weights, option_set["rom_options"], "Triggered Rom",
@@ -415,7 +416,7 @@ def roll_triggers(weights: dict) -> dict:
                     weights["rom"] = rom_weights
             weights[key] = result
         except Exception as e:
-            raise ValueError(f"A trigger is destroyed. "
+            raise ValueError(f"Your trigger number {i+1} is destroyed. "
                              f"Please fix your triggers.") from e
     return weights
 
