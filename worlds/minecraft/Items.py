@@ -1,5 +1,5 @@
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
-from typing import Dict
+from typing
 
 class ItemData(typing.NamedTuple):
     code: int
@@ -57,4 +57,4 @@ item_frequencies = {
     "50 XP": 15
 }
 
-lookup_id_to_name: Dict[int, str] = {data.code: item_name for item_name, data in item_table.items()}
+lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items()}
