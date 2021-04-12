@@ -27,7 +27,7 @@ base_info = {
     "factorio_version": "1.1"
 }
 
-def generate_mod(world: MultiWorld, player: int):
+def generate_mod(world: MultiWorld, player: int, seedname: str):
     global template, locale_template
     with template_load_lock:
         if not template:
@@ -41,7 +41,7 @@ def generate_mod(world: MultiWorld, player: int):
     for location in world.get_filled_locations(player):
         if not location.name.startswith("recipe-"):  # introduce this as a new location property?
             locations.append((location.name, location.item.name, location.item.player))
-    mod_name = f"archipelago-client-{world.seed}-{player}"
+    mod_name = f"archipelago-client-{seedname}-{player}"
     tech_cost = {0: 0.1,
                  1: 0.25,
                  2: 0.5,

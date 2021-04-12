@@ -76,9 +76,6 @@ def get_shapes(world: MultiWorld, player: int) -> Dict[str, List[str]]:
         # https://www.wolframalpha.com/input/?i=x+=+1/2+(n++++1)+(2++++n)+solve+for+n
         import math
         slice_size = int(0.5*(math.sqrt(8*len(tech_names)+1)-3))
-
-        import logging
-        logging.info(slice_size)
         tech_names.sort()
         world.random.shuffle(tech_names)
         tech_names.sort(key=lambda tech_name: len(technology_table[tech_name].ingredients))

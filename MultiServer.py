@@ -112,6 +112,7 @@ class Context(Node):
         self.tags = ['AP']
         self.games = {}
         self.minimum_client_versions: typing.Dict[int, Utils.Version] = {}
+        self.seed_name = ""
 
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
         with open(multidatapath, 'rb') as f:
@@ -141,7 +142,7 @@ class Context(Node):
         for team, names in enumerate(decoded_obj['names']):
             for player, name in enumerate(names, 1):
                 self.player_names[(team, player)] = name
-
+        self.seed_name = decoded_obj["seed_name"]
         self.connect_names = decoded_obj['connect_names']
         self.remote_items = decoded_obj['remote_items']
         self.locations = decoded_obj['locations']
@@ -151,6 +152,7 @@ class Context(Node):
         if use_embedded_server_options:
             server_options = decoded_obj.get("server_options", {})
             self._set_options(server_options)
+
 
     def get_players_package(self):
         return [NetworkPlayer(t, p, self.get_aliased_name(t, p), n) for (t, p), n in self.player_names.items()]
@@ -367,7 +369,8 @@ async def on_client_connected(ctx: Context, client: Client):
         'remaining_mode': ctx.remaining_mode,
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
-        'datapackage_version': network_data_package["version"]
+        'datapackage_version': network_data_package["version"],
+        'seed_name': ctx.seed_name
     }])
 
 

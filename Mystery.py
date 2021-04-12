@@ -69,8 +69,8 @@ def main(args=None, callback=ERmain):
     seed = get_seed(args.seed)
     random.seed(seed)
 
-    seedname = "M" + (f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits))
-    print(f"Generating mystery for {args.multi} player{'s' if args.multi > 1 else ''}, {seedname} Seed {seed}")
+    seedname = f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
+    print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seedname} Seed {seed}")
 
     if args.race:
         random.seed()  # reset to time-based random source

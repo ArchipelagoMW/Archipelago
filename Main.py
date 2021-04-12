@@ -417,7 +417,8 @@ def main(args, seed=None):
             for player in world.alttp_player_ids:
                 rom_futures.append(pool.submit(_gen_rom, team, player))
         for player in world.factorio_player_ids:
-            mod_futures.append(pool.submit(generate_mod, world, player))
+            mod_futures.append(pool.submit(generate_mod, world, player,
+                                           str(args.outputname if args.outputname else world.seed)))
 
         def get_entrance_to_region(region: Region):
             for entrance in region.entrances:
@@ -524,6 +525,7 @@ def main(args, seed=None):
                 "version": tuple(_version_tuple),
                 "tags": ["AP"],
                 "minimum_versions": minimum_versions,
+                "seed_name": str(args.outputname if args.outputname else world.seed)
             }), 9)
 
             with open(output_path('%s.archipelago' % outfilebase), 'wb') as f:
