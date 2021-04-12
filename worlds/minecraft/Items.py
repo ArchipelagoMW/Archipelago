@@ -1,5 +1,5 @@
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
-from typing
+import typing
 
 class ItemData(typing.NamedTuple):
     code: int
