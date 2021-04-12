@@ -116,3 +116,5 @@ postgame_advancement_vanilla = {
     "You Need a Mint": "50 XP"
 }
 '''
+
+lookup_id_to_name: typing.Dict[int, str] = {loc_data.address: loc_name for loc_name, loc_data in advancement_table.items()}
