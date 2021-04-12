@@ -290,7 +290,10 @@ factorio_options: typing.Dict[str, type(Option)] = {"max_science_pack": MaxScien
                                                     "free_samples": FreeSamples,
                                                     "visibility": Visibility}
 
-minecraft_options: typing.Dict[str, type(Option)] = {}
+minecraft_options: typing.Dict[str, type(Option)] = {
+    "hard_advancements": Toggle,
+    "postgame_advancements": Toggle
+}
 
 if __name__ == "__main__":
     import argparse

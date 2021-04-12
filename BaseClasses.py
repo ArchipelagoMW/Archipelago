@@ -167,6 +167,11 @@ class MultiWorld():
     def factorio_player_ids(self):
         yield from (player for player in range(1, self.players + 1) if self.game[player] == "Factorio")
 
+    @property
+    def minecraft_player_ids(self):
+        yield from (player for player in range(1, self.players + 1) if self.game[player] == "Minecraft")
+    
+
     def get_name_string_for_object(self, obj) -> str:
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_names(obj.player)})'
 

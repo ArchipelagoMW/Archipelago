@@ -26,6 +26,7 @@ from worlds.hk import gen_hollow
 from worlds.hk import create_regions as hk_create_regions
 from worlds.factorio import gen_factorio, factorio_create_regions
 from worlds.factorio.Mod import generate_mod
+from worlds.minecraft import gen_minecraft, minecraft_create_regions
 from worlds.generic.Rules import locality_rules
 from worlds import Games
 import Patch
@@ -136,6 +137,8 @@ def main(args, seed=None):
         setattr(world, hk_option, getattr(args, hk_option, {}))
     for factorio_option in Options.factorio_options:
         setattr(world, factorio_option, getattr(args, factorio_option, {}))
+    for minecraft_option in Options.minecraft_options: 
+        setattr(world, minecraft_option, getattr(args, minecraft_option, {}))
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
     world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}
@@ -207,6 +210,9 @@ def main(args, seed=None):
     for player in world.factorio_player_ids:
         factorio_create_regions(world, player)
 
+    for player in world.minecraft_player_ids: 
+        minecraft_create_regions(world, player)
+
     for player in world.alttp_player_ids:
         if world.open_pyramid[player] == 'goal':
             world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
@@ -265,6 +271,9 @@ def main(args, seed=None):
 
     for player in world.factorio_player_ids:
         gen_factorio(world, player)
+
+    for player in world.minecraft_player_ids:
+        gen_minecraft(world, player)
 
     logger.info("Running Item Plando")
 
