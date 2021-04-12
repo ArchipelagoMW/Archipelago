@@ -321,7 +321,7 @@ class MultiWorld():
         if location.can_fill(self.state, item, False):
             location.item = item
             item.location = location
-            item.world = self # try to not have this here anymore
+            item.world = self  # try to not have this here anymore
             if collect:
                 self.state.collect(item, location.event, location)
 

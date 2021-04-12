@@ -54,13 +54,15 @@ def mystery_argparse():
                         help='Output rolled mystery results to yaml up to specified number (made for async multiworld)')
     parser.add_argument('--plando', default="bosses",
                         help='List of options that can be set manually. Can be combined, for example "bosses, items"')
-
+    parser.add_argument('--seed_name')
     for player in range(1, multiargs.multi + 1):
         parser.add_argument(f'--p{player}', help=argparse.SUPPRESS)
     args = parser.parse_args()
     args.plando: typing.Set[str] = {arg.strip().lower() for arg in args.plando.split(",")}
     return args
 
+def get_seed_name(random):
+    return f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
 
 def main(args=None, callback=ERmain):
     if not args:
@@ -68,9 +70,8 @@ def main(args=None, callback=ERmain):
 
     seed = get_seed(args.seed)
     random.seed(seed)
-
-    seedname = f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
-    print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seedname} Seed {seed}")
+    seed_name = args.seed_name if args.seed_name else get_seed_name(random)
+    print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed}")
 
     if args.race:
         random.seed()  # reset to time-based random source
@@ -112,7 +113,7 @@ def main(args=None, callback=ERmain):
     erargs.glitch_triforce = args.glitch_triforce
     erargs.race = args.race
     erargs.skip_playthrough = args.skip_playthrough
-    erargs.outputname = seedname
+    erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
     erargs.teams = args.teams
 
@@ -195,7 +196,7 @@ def main(args=None, callback=ERmain):
 
                     pre_rolled = dict()
                     pre_rolled["original_seed_number"] = seed
-                    pre_rolled["original_seed_name"] = seedname
+                    pre_rolled["original_seed_name"] = seed_name
                     pre_rolled["pre_rolled"] = vars(settings).copy()
                     if "plando_items" in pre_rolled["pre_rolled"]:
                         pre_rolled["pre_rolled"]["plando_items"] = [item.to_dict() for item in

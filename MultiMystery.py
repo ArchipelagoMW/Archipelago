@@ -5,6 +5,7 @@ import threading
 import concurrent.futures
 import argparse
 import logging
+import random
 
 
 def feedback(text: str):
@@ -24,7 +25,7 @@ if __name__ == "__main__":
         args = parser.parse_args()
 
         from Utils import get_public_ipv4, get_options
-
+        from Mystery import get_seed_name
         from Patch import create_patch_file
 
         options = get_options()
@@ -89,10 +90,11 @@ if __name__ == "__main__":
             feedback(f"No player files found. Please put them in a {player_files_path} folder.")
         else:
             logging.info(f"{target_player_count} Players found.")
-
+        seed_name = get_seed_name(random)
         command = f"{basemysterycommand} --multi {target_player_count} {player_string} " \
                   f"--rom \"{rom_file}\" --enemizercli \"{enemizer_path}\" " \
-                  f"--outputpath \"{output_path}\" --teams {teams} --plando \"{plando_options}\""
+                  f"--outputpath \"{output_path}\" --teams {teams} --plando \"{plando_options}\" " \
+                  f"--seed_name {seed_name}"
 
         if create_spoiler:
             command += " --create_spoiler"
@@ -117,15 +119,9 @@ if __name__ == "__main__":
         start = time.perf_counter()
         text = subprocess.check_output(command, shell=True).decode()
         logging.info(f"Took {time.perf_counter() - start:.3f} seconds to generate multiworld.")
-        seedname = ""
 
-        for segment in text.split():
-            if segment.startswith("M"):
-                seedname = segment
-                break
-
-        multidataname = f"AP_{seedname}.archipelago"
-        spoilername = f"AP_{seedname}_Spoiler.txt"
+        multidataname = f"AP_{seed_name}.archipelago"
+        spoilername = f"AP_{seed_name}_Spoiler.txt"
         romfilename = ""
 
         if player_name:
@@ -162,7 +158,7 @@ if __name__ == "__main__":
                 logging.info(f"Removed {file} which is now present in the zipfile")
 
 
-            zipname = os.path.join(output_path, f"AP_{seedname}.{typical_zip_ending}")
+            zipname = os.path.join(output_path, f"AP_{seed_name}.{typical_zip_ending}")
 
             logging.info(f"Creating zipfile {zipname}")
             ipv4 = (host if host else get_public_ipv4()) + ":" + str(port)
@@ -186,7 +182,7 @@ if __name__ == "__main__":
                 futures = []
                 with zipfile.ZipFile(zipname, "w", compression=compression, compresslevel=9) as zf:
                     for file in os.listdir(output_path):
-                        if seedname in file:
+                        if seed_name in file:
                             if file.endswith(".sfc"):
                                 futures.append(pool.submit(_handle_sfc_file, file))
                             elif file.endswith(".apbp"):
