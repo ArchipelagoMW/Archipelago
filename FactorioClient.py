@@ -146,12 +146,13 @@ async def factorio_server_watcher(ctx: FactorioContext):
             if ctx.rcon_client:
                 while ctx.send_index < len(ctx.items_received):
                     item_id = ctx.items_received[ctx.send_index].item
+                    player_name = ctx.player_names[ctx.send_index].player
                     if item_id not in lookup_id_to_name:
                         logging.error(f"Cannot send unknown item ID: {item_id}")
                     else:
                         item_name = lookup_id_to_name[item_id]
-                        factorio_server_logger.info(f"Sending {item_name} to Nauvis.")
-                        ctx.rcon_client.send_command(f'/ap-get-technology {item_name}')
+                        factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.")
+                        ctx.rcon_client.send_command(f'/ap-get-technology {item_name} {player_name}')
                     ctx.send_index += 1
 
             await asyncio.sleep(1)

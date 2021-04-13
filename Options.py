@@ -236,7 +236,8 @@ hollow_knight_skip_options: typing.Dict[str, type(Option)] = {
     "SHADESKIPS": Toggle,
 }
 
-hollow_knight_options: typing.Dict[str, type(Option)] = {**hollow_knight_randomize_options, **hollow_knight_skip_options}
+hollow_knight_options: typing.Dict[str, type(Option)] = {**hollow_knight_randomize_options,
+                                                         **hollow_knight_skip_options}
 
 
 class MaxSciencePack(Choice):
@@ -264,12 +265,14 @@ class TechCost(Choice):
     option_insane = 6
     default = 3
 
+
 class FreeSamples(Choice):
     option_none = 0
     option_single_craft = 1
     option_half_stack = 2
     option_stack = 3
     default = 3
+
 
 class TechTreeLayout(Choice):
     option_single = 0
@@ -279,10 +282,12 @@ class TechTreeLayout(Choice):
     option_funnel = 4
     default = 0
 
+
 class Visibility(Choice):
     option_none = 0
     option_sending = 1
     default = 0
+
 
 factorio_options: typing.Dict[str, type(Option)] = {"max_science_pack": MaxSciencePack,
                                                     "tech_tree_layout": TechTreeLayout,

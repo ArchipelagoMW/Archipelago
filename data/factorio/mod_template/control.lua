@@ -1,4 +1,8 @@
 require "lib"
+script.on_event(defines.events.on_player_created, function(event)
+    game.players[event.player_index].force.research_queue_enabled = true
+end)
+
 -- for testing
 script.on_event(defines.events.on_tick, function(event)
     if event.tick%600 == 0 then
@@ -119,12 +123,17 @@ end)
 
 commands.add_command("ap-get-technology", "Grant a technology, used by the Archipelago Client.", function(call)
     local force = game.forces["player"]
-    local tech_name = call.parameter
+    chunks = {}
+    for substring in call.parameter:gmatch("%S+") do -- split on " "
+        table.insert(chunks, substring)
+    end
+    local tech_name = chunks[1]
+    local source = chunks[2] or "Archipelago"
     local tech = force.technologies[tech_name]
     if tech ~= nil then
         if tech.researched ~= true then
             tech.researched = true
-            game.print({"", "Received ", tech.localised_name, " from Archipelago"})
+            game.print({"", "Received ", tech.localised_name, " from ", source})
             game.play_sound({path="utility/research_completed"})
         end
     else
