@@ -290,9 +290,16 @@ factorio_options: typing.Dict[str, type(Option)] = {"max_science_pack": MaxScien
                                                     "free_samples": FreeSamples,
                                                     "visibility": Visibility}
 
+class AdvancementGoal(Choice):
+    option_few = 0
+    option_normal = 1
+    option_many = 2
+    default = 1
+
 minecraft_options: typing.Dict[str, type(Option)] = {
-    "hard_advancements": Toggle,
-    "postgame_advancements": Toggle
+    "exclude_hard_advancements": Toggle,
+    "exclude_postgame_advancements": Toggle,
+    "advancement_goal": AdvancementGoal
 }
 
 if __name__ == "__main__":
