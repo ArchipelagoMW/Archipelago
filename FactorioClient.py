@@ -81,7 +81,8 @@ class FactorioContext(CommonContext):
     def on_print(self, args: dict):
         logger.info(args["text"])
         if self.rcon_client:
-            self.rcon_client.send_command(f"Archipelago: {args['text']}")
+            cleaned_text = args['text'].replace('"', '')
+            self.rcon_client.send_command(f"/sc game.print(\"Archipelago: {cleaned_text}\")")
 
     def on_print_json(self, args: dict):
         if not self.found_items and args.get("type", None) == "ItemSend" and args["receiving"] == args["sending"]:
@@ -89,7 +90,8 @@ class FactorioContext(CommonContext):
         copy_data = copy.deepcopy(args["data"]) # jsontotextparser is destructive currently
         logger.info(self.jsontotextparser(args["data"]))
         if self.rcon_client:
-            self.rcon_client.send_command(f"Archipelago: {self.raw_json_text_parser(copy_data)}")
+            cleaned_text = self.raw_json_text_parser(copy_data).replace('"', '')
+            self.rcon_client.send_command(f"/sc game.print(\"Archipelago: {cleaned_text}\")")
 
 async def game_watcher(ctx: FactorioContext):
     bridge_logger = logging.getLogger("FactorioWatcher")
