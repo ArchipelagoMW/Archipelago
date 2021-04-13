@@ -1,13 +1,13 @@
 from ..generic.Rules import set_rule
-from .Locations import postgame_adv_vanilla
+from .Locations import exclusion_table
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
 from Options import AdvancementGoal
 
 def set_rules(world: MultiWorld, player: int):
 
     def reachable_locations(state):
-        postgame_advancements = set(postgame_adv_vanilla.keys())
-        postgame_advancements.add("Free the End")
+        postgame_advancements = set(exclusion_table['postgame'].keys())
+        postgame_advancements.add('Free the End')
         return [location for location in world.get_locations() if 
                 (player is None or location.player == player) and 
                 (location.name not in postgame_advancements) and

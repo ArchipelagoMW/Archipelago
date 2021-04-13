@@ -1,5 +1,5 @@
 import logging
-from .Locations import MinecraftAdvancement, advancement_table, hard_adv_vanilla, postgame_adv_vanilla
+from .Locations import MinecraftAdvancement, advancement_table, exclusion_table
 from .Items import MinecraftItem, item_table, item_frequencies
 from .Rules import set_rules
 
@@ -28,25 +28,20 @@ def minecraft_gen_item_pool(world: MultiWorld, player: int):
         for count in range(item_frequencies.get(item_name, 1)):
             pool.append(MinecraftItem(item_name, item_data.progression, item_data.code, player))
 
-    if getattr(world, "exclude_hard_advancements")[player]: 
-        for loc_name, item_name in hard_adv_vanilla.items(): 
-            item_data = item_table[item_name]
-            location = world.get_location(loc_name, player)
-            item = MinecraftItem(item_name, item_data.progression, item_data.code, player)
-            world.push_item(location, item)
-            pool.remove(item)
-            location.event = item_data.progression
-            location.locked = True
+    to_exclude = {}
+    exclusion_pools = ['hard', 'insane', 'postgame']
+    for key in exclusion_pools: 
+        if getattr(world, f"exclude_{key}_advancements")[player]: 
+            to_exclude.update(exclusion_table[key])
 
-    if getattr(world, "exclude_postgame_advancements")[player]:
-        for loc_name, item_name in postgame_adv_vanilla.items(): 
-            item_data = item_table[item_name]
-            location = world.get_location(loc_name, player)
-            item = MinecraftItem(item_name, item_data.progression, item_data.code, player)
-            world.push_item(location, item)
-            pool.remove(item)
-            location.event = item_data.progression
-            location.locked = True
+    for loc_name, item_name in to_exclude.items():
+        item_data = item_table[item_name]
+        location = world.get_location(loc_name, player)
+        item = MinecraftItem(item_name, item_data.progression, item_data.code, player)
+        world.push_item(location, item)
+        pool.remove(item)
+        location.event = item_data.progression
+        location.locked = True
 
     world.itempool += pool
 
