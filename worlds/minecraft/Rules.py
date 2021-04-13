@@ -105,7 +105,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Sticky Situation", player), lambda state: state.has("Bottles", player) and state.has("Ingot Crafting", player))
     set_rule(world.get_location("Ol' Betsy", player), lambda state: state.craft_crossbow(player))
     set_rule(world.get_location("Cover Me in Debris", player), lambda state: state.has("Progressive Armor", player, 2) and 
-                                                                             state.has("8 Ancient Debris", player, 2) and state.has("Ingot Crafting", player) and
+                                                                             state.has("8 Netherite Scrap", player, 2) and state.has("Ingot Crafting", player) and
                                                                              state.can_reach("Diamonds!", "Location", player) and state.can_reach("Hidden in the Depths", "Location", player))
     set_rule(world.get_location("The End?", player), lambda state: state.enter_end(player))
     set_rule(world.get_location("The Parrots and the Bats", player), lambda state: True)
