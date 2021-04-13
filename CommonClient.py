@@ -129,7 +129,7 @@ class CommonContext():
         self.input_requests = 0
 
         # game state
-        self.player_names: typing.Dict[int: str] = {}
+        self.player_names: typing.Dict[int: str] = {0: "Server"}
         self.exit_event = asyncio.Event()
         self.watcher_event = asyncio.Event()
 
@@ -195,6 +195,7 @@ class CommonContext():
 
     def consume_players_package(self, package: typing.List[tuple]):
         self.player_names = {slot: name for team, slot, name, orig_name in package if self.team == team}
+        self.player_names[0] = "Server"
 
     def event_invalid_slot(self):
         raise Exception('Invalid Slot; please verify that you have connected to the correct world.')
@@ -212,6 +213,14 @@ class CommonContext():
     async def connect(self, address= None):
         await self.disconnect()
         self.server_task = asyncio.create_task(server_loop(self, address))
+
+    def on_print(self, args: dict):
+        logger.info(args["text"])
+
+    def on_print_json(self, args: dict):
+        if not self.found_items and args.get("type", None) == "ItemSend" and args["receiving"] == args["sending"]:
+            pass  # don't want info on other player's local pickups.
+        logger.info(self.jsontotextparser(args["data"]))
 
 
 async def server_loop(ctx: CommonContext, address=None):
@@ -394,12 +403,10 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             ctx.hint_points = args['hint_points']
 
     elif cmd == 'Print':
-        logger.info(args["text"])
+        ctx.on_print(args)
 
     elif cmd == 'PrintJSON':
-        if not ctx.found_items and args.get("type", None) == "ItemSend" and args["receiving"] == args["sending"]:
-            pass  # don't want info on other player's local pickups.
-        logger.info(ctx.jsontotextparser(args["data"]))
+        ctx.on_print_json(args)
 
     elif cmd == 'InvalidArguments':
         logger.warning(f"Invalid Arguments: {args['text']}")

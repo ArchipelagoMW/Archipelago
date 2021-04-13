@@ -2,16 +2,18 @@ import os
 import logging
 import json
 import string
+import copy
 from concurrent.futures import ThreadPoolExecutor
 
 import colorama
 import asyncio
 from queue import Queue, Empty
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor
+from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger
 from MultiServer import mark_raw
 
 import Utils
 import random
+from NetUtils import RawJSONtoTextParser, NetworkItem
 
 from worlds.factorio.Technologies import lookup_id_to_name
 
@@ -61,6 +63,7 @@ class FactorioContext(CommonContext):
         super(FactorioContext, self).__init__(*args, **kwargs)
         self.send_index = 0
         self.rcon_client = None
+        self.raw_json_text_parser = RawJSONtoTextParser(self)
 
     async def server_auth(self, password_requested):
         if password_requested and not self.password:
@@ -75,6 +78,18 @@ class FactorioContext(CommonContext):
                                'uuid': Utils.get_unique_identifier(), 'game': "Factorio"
                                }])
 
+    def on_print(self, args: dict):
+        logger.info(args["text"])
+        if self.rcon_client:
+            self.rcon_client.send_command(f"Archipelago: {args['text']}")
+
+    def on_print_json(self, args: dict):
+        if not self.found_items and args.get("type", None) == "ItemSend" and args["receiving"] == args["sending"]:
+            pass  # don't want info on other player's local pickups.
+        copy_data = copy.deepcopy(args["data"]) # jsontotextparser is destructive currently
+        logger.info(self.jsontotextparser(args["data"]))
+        if self.rcon_client:
+            self.rcon_client.send_command(f"Archipelago: {self.raw_json_text_parser(copy_data)}")
 
 async def game_watcher(ctx: FactorioContext):
     bridge_logger = logging.getLogger("FactorioWatcher")
@@ -146,8 +161,9 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
             if ctx.rcon_client:
                 while ctx.send_index < len(ctx.items_received):
-                    item_id = ctx.items_received[ctx.send_index].item
-                    player_name = ctx.player_names[ctx.send_index].player
+                    transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
+                    item_id = transfer_item.item
+                    player_name = ctx.player_names[transfer_item.player]
                     if item_id not in lookup_id_to_name:
                         logging.error(f"Cannot send unknown item ID: {item_id}")
                     else:
