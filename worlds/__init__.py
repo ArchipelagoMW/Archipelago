@@ -27,7 +27,7 @@ lookup_any_location_name_to_id = {name: id for id, name in lookup_any_location_i
 
 network_data_package = {"lookup_any_location_id_to_name": lookup_any_location_id_to_name,
                         "lookup_any_item_id_to_name": lookup_any_item_id_to_name,
-                        "version": 4}
+                        "version": 5}
 
 
 @enum.unique
