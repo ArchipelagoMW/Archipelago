@@ -286,7 +286,7 @@ class TechTreeLayout(Choice):
 class Visibility(Choice):
     option_none = 0
     option_sending = 1
-    default = 0
+    default = 1
 
 
 factorio_options: typing.Dict[str, type(Option)] = {"max_science_pack": MaxSciencePack,
