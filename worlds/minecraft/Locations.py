@@ -95,8 +95,6 @@ hard_adv_vanilla = {
     "Two by Two": "100 XP",
     "Two Birds, One Arrow": "50 XP",
     "Arbalistic": "100 XP",
-    "Monsters Hunted": "100 XP",
-    "Postmortal": "50 XP",
     "Adventuring Time": "500 XP",
     "Beaconator": "50 XP",
     "A Balanced Diet": "100 XP",
@@ -108,7 +106,8 @@ hard_adv_vanilla = {
 postgame_adv_vanilla = {
     "The Next Generation": "50 XP",
     "The End... Again...": "50 XP",
-    "You Need a Mint": "50 XP"
+    "You Need a Mint": "50 XP", 
+    "Monsters Hunted": "100 XP"
 }
 
 

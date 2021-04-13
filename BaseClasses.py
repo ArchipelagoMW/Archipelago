@@ -237,6 +237,7 @@ class MultiWorld():
 
         def soft_collect(item):
             if item.name.startswith('Progressive '):
+                # ALttP items
                 if 'Sword' in item.name:
                     if ret.has('Golden Sword', item.player):
                         pass
@@ -808,6 +809,44 @@ class CollectionState(object):
         if self.world.mode[player] != 'inverted':
             rules.append(self.has('Moon Pearl', player))
         return all(rules)
+
+    # Minecraft logic functions
+    def has_iron_ingots(self, player: int):
+        return self.has('Progressive Tools', player) and self.has('Ingot Crafting', player)
+
+    def has_diamond_pickaxe(self, player: int):
+        return self.has('Progressive Tools', player, 3) and self.has_iron_ingots(player)
+
+    def craft_crossbow(self, player: int): 
+        return self.has('Archery', player) and self.has_iron_ingots(player)
+
+    def can_enchant(self, player: int): 
+        return self.has('Enchanting', player) and self.has_diamond_pickaxe(player) # mine obsidian and lapis
+
+    def can_use_anvil(self, player: int): 
+        return self.has('Enchanting', player) and self.has('Resource Blocks', player) and self.has_iron_ingots(player)
+
+    def enter_nether(self, player: int): 
+        return self.has("Flint & Steel", player) and (self.has("Bucket", player) or self.has("Progressive Tools", player, 3)) and self.has_iron_ingots(player)
+
+    def enter_fortress(self, player: int): 
+        return self.enter_nether(player) and self.has('Progressive Armor', player) and self.has('Progressive Weapons', player)
+
+    def can_brew_potions(self, player: int): 
+        return self.enter_fortress(player) and self.has('Brewing', player) and self.has('Bottles', player)
+
+    def can_piglin_trade(self, player: int): 
+        return self.enter_nether(player) and self.has('Ingot Crafting', player)
+
+    def can_kill_wither(self, player: int):
+        return self.enter_fortress(player) and self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and self.can_brew_potions(player)
+
+    def enter_end(self, player: int): 
+        return self.enter_fortress(player) and self.has('Brewing', player)
+
+    def can_kill_ender_dragon(self, player: int):
+        return self.enter_end(player) and self.has('Progressive Weapons', player, 2) and self.has('Archery', player)
+
 
     def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:
         if location:

@@ -31,7 +31,7 @@ item_table = {
     "4 Emeralds": ItemData(45017, False),
     "Channeling Book": ItemData(45018, True),
     "Silk Touch Book": ItemData(45019, True),
-    "Sharpness III Book": ItemData(45020, True),
+    "Sharpness III Book": ItemData(45020, False),
     "Piercing IV Book": ItemData(45021, True),
     "Looting III Book": ItemData(45022, False),
     "Infinity Book": ItemData(45023, False),
@@ -46,7 +46,7 @@ item_table = {
 item_frequencies = {
     "Progressive Weapons": 3,
     "Progressive Tools": 3, 
-    "Progressive Armor": 3,
+    "Progressive Armor": 2,
     "8 Ancient Debris": 2, 
     "8 Emeralds": 4, 
     "4 Emeralds": 8, 
@@ -54,7 +54,7 @@ item_frequencies = {
     "16 Iron Ore": 4, 
     "500 XP": 6,
     "100 XP": 10,
-    "50 XP": 15
+    "50 XP": 16
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items()}
