@@ -77,22 +77,23 @@ class FactorioContext(CommonContext):
 
 
 async def game_watcher(ctx: FactorioContext):
-    research_logger = logging.getLogger("FactorioWatcher")
-    researches_done_file = os.path.join(script_folder, "research_done.json")
-    if os.path.exists(researches_done_file):
-        os.remove(researches_done_file)
+    bridge_logger = logging.getLogger("FactorioWatcher")
+    bridge_file = os.path.join(script_folder, "ap_bridge.json")
+    if os.path.exists(bridge_file):
+        os.remove(bridge_file)
     from worlds.factorio.Technologies import lookup_id_to_name
     bridge_counter = 0
     try:
         while 1:
-            if os.path.exists(researches_done_file):
-                research_logger.info("Found Factorio Bridge file.")
+            if os.path.exists(bridge_file):
+                bridge_logger.info("Found Factorio Bridge file.")
                 while 1:
-                    with open(researches_done_file) as f:
+                    with open(bridge_file) as f:
                         data = json.load(f)
-                        research_data = {int(tech_name.split("-")[1]) for tech_name in data if tech_name.startswith("ap-")}
+                        research_data = data["research_done"]
+                        research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
                     if ctx.locations_checked != research_data:
-                        research_logger.info(f"New researches done: "
+                        bridge_logger.info(f"New researches done: "
                                              f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
@@ -100,8 +101,8 @@ async def game_watcher(ctx: FactorioContext):
             else:
                 bridge_counter += 1
                 if bridge_counter >= 60:
-                    research_logger.info("Did not find Factorio Bridge file, waiting for mod to run.")
-                    bridge_counter = 1
+                    bridge_logger.info("Did not find Factorio Bridge file, waiting for mod to run, which requires the server to run, which requires a player to be connected.")
+                    bridge_counter = 0
                 await asyncio.sleep(1)
     except Exception as e:
         logging.exception(e)
