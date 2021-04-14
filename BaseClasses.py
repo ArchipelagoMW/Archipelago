@@ -826,6 +826,9 @@ class CollectionState(object):
     def can_use_anvil(self, player: int): 
         return self.has('Enchanting', player) and self.has('Resource Blocks', player) and self.has_iron_ingots(player)
 
+    def can_adventure(self, player: int):
+        return self.has('Progressive Weapons', player) and (self.has('Ingot Crafting', player) or self.has('Campfire', player)) # logic for finding villages and pillager outposts
+
     def enter_nether(self, player: int): 
         return self.has("Flint & Steel", player) and (self.has("Bucket", player) or self.has("Progressive Tools", player, 3)) and self.has_iron_ingots(player)
 
