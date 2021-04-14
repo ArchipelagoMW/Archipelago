@@ -17,7 +17,7 @@ item_table = {
     "Brewing": ItemData(45003, True),
     "Enchanting": ItemData(45004, True),
     "Bucket": ItemData(45005, True),
-    "Flint & Steel": ItemData(45006, True),
+    "Flint and Steel": ItemData(45006, True),
     "Bed": ItemData(45007, True),
     "Bottles": ItemData(45008, True),
     "Shield": ItemData(45009, True),

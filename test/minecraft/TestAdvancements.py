@@ -9,22 +9,22 @@ class TestAdvancements(TestMinecraft):
         self.run_location_tests([
             ["Who is Cutting Onions?", False, []], 
             ["Who is Cutting Onions?", False, [], ['Ingot Crafting']], 
-            ["Who is Cutting Onions?", False, [], ['Flint & Steel']], 
+            ["Who is Cutting Onions?", False, [], ['Flint and Steel']], 
             ["Who is Cutting Onions?", False, [], ['Progressive Tools']], 
             ["Who is Cutting Onions?", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["Who is Cutting Onions?", True, ['Ingot Crafting', 'Progressive Tools', 'Flint & Steel', 'Bucket']], 
-            ["Who is Cutting Onions?", True, ['Ingot Crafting', 'Progressive Tools', 'Flint & Steel', 'Progressive Tools', 'Progressive Tools']],
+            ["Who is Cutting Onions?", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket']], 
+            ["Who is Cutting Onions?", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools']],
             ])
 
     def test_42001(self):
         self.run_location_tests([
             ["Oh Shiny", False, []], 
             ["Oh Shiny", False, [], ['Ingot Crafting']], 
-            ["Oh Shiny", False, [], ['Flint & Steel']], 
+            ["Oh Shiny", False, [], ['Flint and Steel']], 
             ["Oh Shiny", False, [], ['Progressive Tools']], 
             ["Oh Shiny", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["Oh Shiny", True, ['Ingot Crafting', 'Progressive Tools', 'Flint & Steel', 'Bucket']], 
-            ["Oh Shiny", True, ['Ingot Crafting', 'Progressive Tools', 'Flint & Steel', 'Progressive Tools', 'Progressive Tools']],
+            ["Oh Shiny", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket']], 
+            ["Oh Shiny", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools']],
             ])
 
     def test_42002(self):
@@ -131,7 +131,13 @@ class TestAdvancements(TestMinecraft):
 
     def test_42017(self):
         self.run_location_tests([
-            ["Nether", False, []],
+            ["Nether", False, []], 
+            ["Nether", False, [], ['Ingot Crafting']], 
+            ["Nether", False, [], ['Flint and Steel']], 
+            ["Nether", False, [], ['Progressive Tools']], 
+            ["Nether", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["Nether", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket']], 
+            ["Nether", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools']],
             ])
 
     def test_42018(self):
@@ -175,7 +181,13 @@ class TestAdvancements(TestMinecraft):
 
     def test_42025(self):
         self.run_location_tests([
-            ["We Need to Go Deeper", False, []],
+            ["We Need to Go Deeper", False, []], 
+            ["We Need to Go Deeper", False, [], ['Ingot Crafting']], 
+            ["We Need to Go Deeper", False, [], ['Flint and Steel']], 
+            ["We Need to Go Deeper", False, [], ['Progressive Tools']], 
+            ["We Need to Go Deeper", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["We Need to Go Deeper", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket']], 
+            ["We Need to Go Deeper", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools']],
             ])
 
     def test_42026(self):

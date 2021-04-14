@@ -830,7 +830,7 @@ class CollectionState(object):
         return self.has('Progressive Weapons', player) and (self.has('Ingot Crafting', player) or self.has('Campfire', player)) # logic for finding villages and pillager outposts
 
     def enter_nether(self, player: int): 
-        return self.has("Flint & Steel", player) and (self.has("Bucket", player) or self.has("Progressive Tools", player, 3)) and self.has_iron_ingots(player)
+        return self.has("Flint and Steel", player) and (self.has("Bucket", player) or self.has("Progressive Tools", player, 3)) and self.has_iron_ingots(player)
 
     def enter_fortress(self, player: int): 
         return self.enter_nether(player) and self.has('Progressive Armor', player) and self.has('Progressive Weapons', player)
