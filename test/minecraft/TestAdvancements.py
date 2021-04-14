@@ -18,7 +18,13 @@ class TestAdvancements(TestMinecraft):
 
     def test_42001(self):
         self.run_location_tests([
-            ["Oh Shiny", False, []],
+            ["Oh Shiny", False, []], 
+            ["Oh Shiny", False, [], ['Ingot Crafting']], 
+            ["Oh Shiny", False, [], ['Flint & Steel']], 
+            ["Oh Shiny", False, [], ['Progressive Tools']], 
+            ["Oh Shiny", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["Oh Shiny", True, ['Ingot Crafting', 'Progressive Tools', 'Flint & Steel', 'Bucket']], 
+            ["Oh Shiny", True, ['Ingot Crafting', 'Progressive Tools', 'Flint & Steel', 'Progressive Tools', 'Progressive Tools']],
             ])
 
     def test_42002(self):
@@ -33,6 +39,12 @@ class TestAdvancements(TestMinecraft):
     def test_42003(self):
         self.run_location_tests([
             ["Very Very Frightening", False, []],
+            ["Very Very Frightening", False, [], ['Channeling Book']],
+            ["Very Very Frightening", False, [], ['Resource Blocks']],
+            ["Very Very Frightening", False, [], ['Ingot Crafting']],
+            ["Very Very Frightening", False, [], ['Enchanting']],
+            ["Very Very Frightening", False, [], ['Progressive Tools']],
+            ["Very Very Frightening", True, ['Channeling Book', 'Progressive Tools', 'Progressive Tools', 'Progressive Tools', 'Enchanting', 'Ingot Crafting', 'Resource Blocks']],
             ])
 
     def test_42004(self):
@@ -96,6 +108,8 @@ class TestAdvancements(TestMinecraft):
     def test_42013(self):
         self.run_location_tests([
             ["Fishy Business", False, []],
+            ["Fishy Business", False, [], ['Fishing Rod']],
+            ["Fishy Business", True, ['Fishing Rod']],
             ])
 
     def test_42014(self):
@@ -111,6 +125,8 @@ class TestAdvancements(TestMinecraft):
     def test_42016(self): 
         self.run_location_tests([
             ["Sniper Duel", False, []],
+            ["Sniper Duel", False, [], ['Archery']],
+            ["Sniper Duel", True, ['Archery']],
             ])
 
     def test_42017(self):
@@ -131,6 +147,10 @@ class TestAdvancements(TestMinecraft):
     def test_42020(self):
         self.run_location_tests([
             ["Bullseye", False, []],
+            ["Bullseye", False, [], ['Archery']],
+            ["Bullseye", False, [], ['Ingot Crafting']],
+            ["Bullseye", False, [], ['Progressive Tools']],
+            ["Bullseye", True, ['Progressive Tools', 'Progressive Tools', 'Ingot Crafting', 'Archery']],
             ])
 
     def test_42021(self):
@@ -377,7 +397,7 @@ class TestAdvancements(TestMinecraft):
 
     def test_42068(self):
         self.run_location_tests([
-            ["What a Deal!", True, []],
+            ["What a Deal!", False, []],
             ])
 
     def test_42069(self):
@@ -437,6 +457,6 @@ class TestAdvancements(TestMinecraft):
 
     def test_42079(self):
         self.run_location_tests([
-            ["A Complete Catalogue", True, []],
+            ["A Complete Catalogue", False, []],
             ])
 
