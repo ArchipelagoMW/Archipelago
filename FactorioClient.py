@@ -108,7 +108,8 @@ async def game_watcher(ctx: FactorioContext):
                     with open(bridge_file) as f:
                         data = json.load(f)
                         research_data = data["research_done"]
-                        research_data = {int(tech_name.split("-")[1]) for tech_name in research_data if tech_name.startswith("ap-")}
+
+                        research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
                     if ctx.locations_checked != research_data:
                         bridge_logger.info(f"New researches done: "
                                            f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")

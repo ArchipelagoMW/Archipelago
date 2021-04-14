@@ -51,11 +51,11 @@ function dumpTech(force)
     local data_collection = {["research_done"] = research_done}
 
     for tech_name, tech in pairs(force.technologies) do
-        if tech.researched and string.find(tech_name, "ap-") == 1 then
+        if tech.researched and string.find(tech_name, "ap%-") == 1 then
             research_done[tech_name] = tech.researched
         end
     end
-    game.write_file("ap_bridge.json", game.table_to_json(data_collection), false)
+    game.write_file("ap_bridge.json", game.table_to_json(data_collection), false, 0)
     -- game.write_file("research_done.json", game.table_to_json(data_collection), false, 0)
     -- game.print("Sent progress to Archipelago.")
 end

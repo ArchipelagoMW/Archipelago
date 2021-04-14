@@ -3,7 +3,7 @@ import typing
 
 
 class AssembleOptions(type):
-    def __new__(cls, name, bases, attrs):
+    def __new__(mcs, name, bases, attrs):
         options = attrs["options"] = {}
         name_lookup = attrs["name_lookup"] = {}
         for base in bases:
@@ -17,7 +17,7 @@ class AssembleOptions(type):
         # apply aliases, without name_lookup
         options.update({name[6:].lower(): option_id for name, option_id in attrs.items() if
                         name.startswith("alias_")})
-        return super(AssembleOptions, cls).__new__(cls, name, bases, attrs)
+        return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
 
 class Option(metaclass=AssembleOptions):
