@@ -81,7 +81,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     if tech ~= nil then
         if tech.researched ~= true then
             tech.researched = true
-            game.print({"", "Received ", tech.localised_name, " from ", source})
+            game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
             game.play_sound({path="utility/research_completed"})
         end
     else
