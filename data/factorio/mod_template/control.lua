@@ -52,7 +52,7 @@ function dumpTech(force)
 
     for tech_name, tech in pairs(force.technologies) do
         if tech.researched and string.find(tech_name, "ap-") == 1 then
-            data_collection[tech_name] = tech.researched
+            research_done[tech_name] = tech.researched
         end
     end
     game.write_file("ap_bridge.json", game.table_to_json(data_collection), false)
