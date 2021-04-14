@@ -297,9 +297,9 @@ class AdvancementGoal(Choice):
     default = 1
 
 minecraft_options: typing.Dict[str, type(Option)] = {
-    "exclude_hard_advancements": Toggle,
-    "exclude_insane_advancements": Toggle,
-    "exclude_postgame_advancements": Toggle,
+    "include_hard_advancements": Toggle,
+    "include_insane_advancements": Toggle,
+    "include_postgame_advancements": Toggle,
     "advancement_goal": AdvancementGoal
 }
 

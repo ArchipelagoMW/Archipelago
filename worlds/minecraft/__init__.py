@@ -31,7 +31,7 @@ def minecraft_gen_item_pool(world: MultiWorld, player: int):
     to_exclude = {}
     exclusion_pools = ['hard', 'insane', 'postgame']
     for key in exclusion_pools: 
-        if getattr(world, f"exclude_{key}_advancements")[player]: 
+        if not getattr(world, f"include_{key}_advancements")[player]: 
             to_exclude.update(exclusion_table[key])
 
     for loc_name, item_name in to_exclude.items():
