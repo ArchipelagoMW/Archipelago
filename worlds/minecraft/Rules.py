@@ -66,7 +66,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Take Aim", player), lambda state: state.has("Archery", player))
     set_rule(world.get_location("Total Beelocation", player), lambda state: state.has("Silk Touch Book", player) and state.can_use_anvil(player) and state.can_enchant(player))
     set_rule(world.get_location("Arbalistic", player), lambda state: state.craft_crossbow(player) and state.has("Piercing IV Book", player) and state.can_use_anvil(player) and state.can_enchant(player))
-    set_rule(world.get_location("The End... Again...", player), lambda state: True) # unfinished
+    set_rule(world.get_location("The End... Again...", player), lambda state: can_complete(state) and state.has("Ingot Crafting", player))
     set_rule(world.get_location("Acquire Hardware", player), lambda state: state.has_iron_ingots(player))
     set_rule(world.get_location("Not Quite \"Nine\" Lives", player), lambda state: state.can_piglin_trade(player))
     set_rule(world.get_location("Cover Me With Diamonds", player), lambda state: state.has("Progressive Armor", player, 2) and state.can_reach("Diamonds!", "Location", player))
