@@ -2,16 +2,18 @@ import os
 import logging
 import json
 import string
+import copy
 from concurrent.futures import ThreadPoolExecutor
 
 import colorama
 import asyncio
 from queue import Queue, Empty
-from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor
+from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger
 from MultiServer import mark_raw
 
 import Utils
 import random
+from NetUtils import RawJSONtoTextParser, NetworkItem
 
 from worlds.factorio.Technologies import lookup_id_to_name
 
@@ -61,6 +63,7 @@ class FactorioContext(CommonContext):
         super(FactorioContext, self).__init__(*args, **kwargs)
         self.send_index = 0
         self.rcon_client = None
+        self.raw_json_text_parser = RawJSONtoTextParser(self)
 
     async def server_auth(self, password_requested):
         if password_requested and not self.password:
@@ -75,33 +78,49 @@ class FactorioContext(CommonContext):
                                'uuid': Utils.get_unique_identifier(), 'game': "Factorio"
                                }])
 
+    def on_print(self, args: dict):
+        logger.info(args["text"])
+        if self.rcon_client:
+            cleaned_text = args['text'].replace('"', '')
+            self.rcon_client.send_command(f"/sc game.print(\"Archipelago: {cleaned_text}\")")
+
+    def on_print_json(self, args: dict):
+        if not self.found_items and args.get("type", None) == "ItemSend" and args["receiving"] == args["sending"]:
+            pass  # don't want info on other player's local pickups.
+        copy_data = copy.deepcopy(args["data"]) # jsontotextparser is destructive currently
+        logger.info(self.jsontotextparser(args["data"]))
+        if self.rcon_client:
+            cleaned_text = self.raw_json_text_parser(copy_data).replace('"', '')
+            self.rcon_client.send_command(f"/sc game.print(\"Archipelago: {cleaned_text}\")")
 
 async def game_watcher(ctx: FactorioContext):
-    research_logger = logging.getLogger("FactorioWatcher")
-    researches_done_file = os.path.join(script_folder, "research_done.json")
-    if os.path.exists(researches_done_file):
-        os.remove(researches_done_file)
+    bridge_logger = logging.getLogger("FactorioWatcher")
+    bridge_file = os.path.join(script_folder, "ap_bridge.json")
+    if os.path.exists(bridge_file):
+        os.remove(bridge_file)
     from worlds.factorio.Technologies import lookup_id_to_name
     bridge_counter = 0
     try:
         while 1:
-            if os.path.exists(researches_done_file):
-                research_logger.info("Found Factorio Bridge file.")
+            if os.path.exists(bridge_file):
+                bridge_logger.info("Found Factorio Bridge file.")
                 while 1:
-                    with open(researches_done_file) as f:
+                    with open(bridge_file) as f:
                         data = json.load(f)
-                        research_data = {int(tech_name.split("-")[1]) for tech_name in data if tech_name.startswith("ap-")}
+                        research_data = data["research_done"]
+
+                        research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
                     if ctx.locations_checked != research_data:
-                        research_logger.info(f"New researches done: "
-                                             f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
+                        bridge_logger.info(f"New researches done: "
+                                           f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
                     await asyncio.sleep(1)
             else:
                 bridge_counter += 1
                 if bridge_counter >= 60:
-                    research_logger.info("Did not find Factorio Bridge file, waiting for mod to run.")
-                    bridge_counter = 1
+                    bridge_logger.info("Did not find Factorio Bridge file, waiting for mod to run, which requires the server to run, which requires a player to be connected.")
+                    bridge_counter = 0
                 await asyncio.sleep(1)
     except Exception as e:
         logging.exception(e)
@@ -145,13 +164,15 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
             if ctx.rcon_client:
                 while ctx.send_index < len(ctx.items_received):
-                    item_id = ctx.items_received[ctx.send_index].item
+                    transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
+                    item_id = transfer_item.item
+                    player_name = ctx.player_names[transfer_item.player]
                     if item_id not in lookup_id_to_name:
                         logging.error(f"Cannot send unknown item ID: {item_id}")
                     else:
                         item_name = lookup_id_to_name[item_id]
-                        factorio_server_logger.info(f"Sending {item_name} to Nauvis.")
-                        ctx.rcon_client.send_command(f'/ap-get-technology {item_name}')
+                        factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.")
+                        ctx.rcon_client.send_command(f'/ap-get-technology {item_name} {player_name}')
                     ctx.send_index += 1
 
             await asyncio.sleep(1)

@@ -9,6 +9,7 @@ import websockets
 
 from Utils import Version
 
+
 class JSONMessagePart(typing.TypedDict, total=False):
     text: str
     # optional
@@ -16,7 +17,6 @@ class JSONMessagePart(typing.TypedDict, total=False):
     color: str
     # mainly for items, optional
     found: bool
-
 
 
 class ClientStatus(enum.IntEnum):
@@ -61,9 +61,11 @@ _encode = JSONEncoder(
 def encode(obj):
     return _encode(_scan_for_TypedTuples(obj))
 
+
 def get_any_version(data: dict) -> Version:
     data = {key.lower(): value for key, value in data.items()}  # .NET version classes have capitalized keys
     return Version(int(data["major"]), int(data["minor"]), int(data["build"]))
+
 
 whitelist = {"NetworkPlayer": NetworkPlayer,
              "NetworkItem": NetworkItem,
@@ -72,6 +74,7 @@ whitelist = {"NetworkPlayer": NetworkPlayer,
 custom_hooks = {
     "Version": get_any_version
 }
+
 
 def _object_hook(o: typing.Any) -> typing.Any:
     if isinstance(o, dict):
@@ -82,7 +85,7 @@ def _object_hook(o: typing.Any) -> typing.Any:
         if cls:
             for key in tuple(o):
                 if key not in cls._fields:
-                    del(o[key])
+                    del (o[key])
             return cls(**o)
 
     return o
@@ -151,11 +154,16 @@ class HandlerMeta(type):
         handlers = attrs["handlers"] = {}
         trigger: str = "_handle_"
         for base in bases:
-            handlers.update(base.commands)
+            handlers.update(base.handlers)
         handlers.update({handler_name[len(trigger):]: method for handler_name, method in attrs.items() if
                          handler_name.startswith(trigger)})
 
         orig_init = attrs.get('__init__', None)
+        if not orig_init:
+            for base in bases:
+                orig_init = getattr(base, '__init__', None)
+                if orig_init:
+                    break
 
         def __init__(self, *args, **kwargs):
             # turn functions into bound methods
@@ -167,6 +175,7 @@ class HandlerMeta(type):
         attrs['__init__'] = __init__
         return super(HandlerMeta, mcs).__new__(mcs, name, bases, attrs)
 
+
 class JSONTypes(str, enum.Enum):
     color = "color"
     text = "text"
@@ -177,6 +186,7 @@ class JSONTypes(str, enum.Enum):
     location_name = "location_name"
     location_id = "location_id"
     entrance_name = "entrance_name"
+
 
 class JSONtoTextParser(metaclass=HandlerMeta):
     def __init__(self, ctx):
@@ -236,6 +246,11 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return self._handle_color(node)
 
 
+class RawJSONtoTextParser(JSONtoTextParser):
+    def _handle_color(self, node: JSONMessagePart):
+        return self._handle_text(node)
+
+
 color_codes = {'reset': 0, 'bold': 1, 'underline': 4, 'black': 30, 'red': 31, 'green': 32, 'yellow': 33, 'blue': 34,
                'magenta': 35, 'cyan': 36, 'white': 37, 'black_bg': 40, 'red_bg': 41, 'green_bg': 42, 'yellow_bg': 43,
                'blue_bg': 44, 'purple_bg': 45, 'cyan_bg': 46, 'white_bg': 47}
@@ -281,7 +296,7 @@ class Hint(typing.NamedTuple):
         add_json_text(parts, " is at ")
         add_json_text(parts, self.location, type="location_id")
         add_json_text(parts, " in ")
-        add_json_text(parts, self.finding_player, type ="player_id")
+        add_json_text(parts, self.finding_player, type="player_id")
         if self.entrance:
             add_json_text(parts, "'s World at ")
             add_json_text(parts, self.entrance, type="entrance_name")

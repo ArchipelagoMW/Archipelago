@@ -3,7 +3,7 @@ import typing
 
 
 class AssembleOptions(type):
-    def __new__(cls, name, bases, attrs):
+    def __new__(mcs, name, bases, attrs):
         options = attrs["options"] = {}
         name_lookup = attrs["name_lookup"] = {}
         for base in bases:
@@ -17,7 +17,7 @@ class AssembleOptions(type):
         # apply aliases, without name_lookup
         options.update({name[6:].lower(): option_id for name, option_id in attrs.items() if
                         name.startswith("alias_")})
-        return super(AssembleOptions, cls).__new__(cls, name, bases, attrs)
+        return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
 
 class Option(metaclass=AssembleOptions):
@@ -236,7 +236,8 @@ hollow_knight_skip_options: typing.Dict[str, type(Option)] = {
     "SHADESKIPS": Toggle,
 }
 
-hollow_knight_options: typing.Dict[str, type(Option)] = {**hollow_knight_randomize_options, **hollow_knight_skip_options}
+hollow_knight_options: typing.Dict[str, type(Option)] = {**hollow_knight_randomize_options,
+                                                         **hollow_knight_skip_options}
 
 
 class MaxSciencePack(Choice):
@@ -264,12 +265,14 @@ class TechCost(Choice):
     option_insane = 6
     default = 3
 
+
 class FreeSamples(Choice):
     option_none = 0
     option_single_craft = 1
     option_half_stack = 2
     option_stack = 3
     default = 3
+
 
 class TechTreeLayout(Choice):
     option_single = 0
@@ -279,10 +282,12 @@ class TechTreeLayout(Choice):
     option_funnel = 4
     default = 0
 
+
 class Visibility(Choice):
     option_none = 0
     option_sending = 1
-    default = 0
+    default = 1
+
 
 factorio_options: typing.Dict[str, type(Option)] = {"max_science_pack": MaxSciencePack,
                                                     "tech_tree_layout": TechTreeLayout,
