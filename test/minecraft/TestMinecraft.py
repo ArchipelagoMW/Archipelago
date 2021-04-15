@@ -1,9 +1,9 @@
+from test.TestBase import TestBase
 from BaseClasses import MultiWorld
 from worlds.minecraft import minecraft_create_regions, minecraft_gen_item_pool
 from worlds.minecraft.Rules import set_rules
 from worlds.minecraft.Items import MinecraftItem, item_table
 from Options import AdvancementGoal
-from test.TestBase import TestBase
 
 # Converts the name of an item into an item object
 def MCItemFactory(items, player: int):

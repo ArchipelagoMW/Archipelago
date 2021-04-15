@@ -193,6 +193,11 @@ class TestAdvancements(TestMinecraft):
     def test_42026(self):
         self.run_location_tests([
             ["Who's the Pillager Now?", False, []],
+            ["Who's the Pillager Now?", False, [], ['Archery']],
+            ["Who's the Pillager Now?", False, [], ['Ingot Crafting']],
+            ["Who's the Pillager Now?", False, [], ['Progressive Tools']],
+            ["Who's the Pillager Now?", False, [], ['Progressive Weapons']],
+            ["Who's the Pillager Now?", True, ['Archery', 'Progressive Tools', 'Progressive Weapons', 'Ingot Crafting']],
             ])
 
     def test_42027(self):
@@ -204,6 +209,10 @@ class TestAdvancements(TestMinecraft):
     def test_42028(self):
         self.run_location_tests([
             ["Tactical Fishing", False, []],
+            ["Tactical Fishing", False, [], ['Ingot Crafting']],
+            ["Tactical Fishing", False, [], ['Progressive Tools']],
+            ["Tactical Fishing", False, [], ['Bucket']],
+            ["Tactical Fishing", True, ['Ingot Crafting', 'Progressive Tools', 'Bucket']],
             ])
 
     def test_42029(self):
@@ -242,6 +251,8 @@ class TestAdvancements(TestMinecraft):
     def test_42035(self):
         self.run_location_tests([
             ["Take Aim", False, []],
+            ["Take Aim", False, [], ['Archery']],
+            ["Take Aim", True, ['Archery']],
             ])
 
     def test_42036(self):
@@ -275,6 +286,10 @@ class TestAdvancements(TestMinecraft):
     def test_42041(self):
         self.run_location_tests([
             ["Cover Me With Diamonds", False, []],
+            ["Cover Me With Diamonds", False, ['Progressive Armor'], ['Progressive Armor']],
+            ["Cover Me With Diamonds", False, ['Progressive Tools'], ['Progressive Tools', 'Progressive Tools']],
+            ["Cover Me With Diamonds", False, [], ['Ingot Crafting']],
+            ["Cover Me With Diamonds", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Tools', 'Progressive Armor', 'Progressive Armor']],
             ])
 
     def test_42042(self):
@@ -285,16 +300,31 @@ class TestAdvancements(TestMinecraft):
     def test_42043(self):
         self.run_location_tests([
             ["Hired Help", False, []],
+            ["Hired Help", False, [], ['Resource Blocks']],
+            ["Hired Help", False, [], ['Ingot Crafting']],
+            ["Hired Help", False, [], ['Progressive Tools']],
+            ["Hired Help", True, ['Progressive Tools', 'Ingot Crafting', 'Resource Blocks']],
             ])
 
     def test_42044(self):
         self.run_location_tests([
-            ["Return to Sender", False, []],
+            ["Return to Sender", False, []], 
+            ["Return to Sender", False, [], ['Ingot Crafting']], 
+            ["Return to Sender", False, [], ['Flint and Steel']], 
+            ["Return to Sender", False, [], ['Progressive Tools']], 
+            ["Return to Sender", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["Return to Sender", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket']], 
+            ["Return to Sender", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools']],
             ])
 
     def test_42045(self):
         self.run_location_tests([
             ["Sweet Dreams", False, []],
+            ["Sweet Dreams", True, ['Bed']],
+            ["Sweet Dreams", False, [], ['Bed', 'Progressive Weapons']],
+            ["Sweet Dreams", False, [], ['Bed', 'Ingot Crafting', 'Campfire']],
+            ["Sweet Dreams", True, ['Progressive Weapons', 'Ingot Crafting'], ['Bed', 'Campfire']],
+            ["Sweet Dreams", True, ['Progressive Weapons', 'Campfire'], ['Bed', 'Ingot Crafting']],
             ])
 
     def test_42046(self):
@@ -315,6 +345,10 @@ class TestAdvancements(TestMinecraft):
     def test_42049(self):
         self.run_location_tests([
             ["Enchanter", False, []],
+            ["Enchanter", False, [], ['Enchanting']],
+            ["Enchanter", False, ['Progressive Tools', 'Progressive Tools'], ['Progressive Tools']],
+            ["Enchanter", False, [], ['Ingot Crafting']],
+            ["Enchanter", True, ['Progressive Tools', 'Progressive Tools', 'Progressive Tools', 'Enchanting', 'Ingot Crafting']],
             ])
 
     def test_42050(self):
@@ -445,11 +479,18 @@ class TestAdvancements(TestMinecraft):
     def test_42074(self):
         self.run_location_tests([
             ["Sticky Situation", False, []],
+            ["Sticky Situation", False, [], ['Bottles']],
+            ["Sticky Situation", False, [], ['Ingot Crafting']],
+            ["Sticky Situation", True, ['Bottles', 'Ingot Crafting']],
             ])
 
     def test_42075(self):
         self.run_location_tests([
             ["Ol' Betsy", False, []],
+            ["Ol' Betsy", False, [], ['Archery']],
+            ["Ol' Betsy", False, [], ['Ingot Crafting']],
+            ["Ol' Betsy", False, [], ['Progressive Tools']],
+            ["Ol' Betsy", True, ['Archery', 'Ingot Crafting', 'Progressive Tools']],
             ])
 
     def test_42076(self):
@@ -470,5 +511,9 @@ class TestAdvancements(TestMinecraft):
     def test_42079(self):
         self.run_location_tests([
             ["A Complete Catalogue", False, []],
+            ["A Complete Catalogue", False, [], ['Progressive Weapons']],
+            ["A Complete Catalogue", False, [], ['Campfire', 'Ingot Crafting']],
+            ["A Complete Catalogue", True, ['Progressive Weapons', 'Campfire']],
+            ["A Complete Catalogue", True, ['Progressive Weapons', 'Ingot Crafting']],
             ])
 
