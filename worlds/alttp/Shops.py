@@ -218,7 +218,9 @@ def ShopSlotFill(world):
                         continue
 
                     item_name = location.item.name
-                    if any(x in item_name for x in ['Compass', 'Map', 'Single Bomb', 'Single Arrow', 'Piece of Heart']):
+                    if location.item.game != "A Link to the Past":
+                        price = world.random.randrange(1, 28)
+                    elif any(x in item_name for x in ['Compass', 'Map', 'Single Bomb', 'Single Arrow', 'Piece of Heart']):
                         price = world.random.randrange(1, 7)
                     elif any(x in item_name for x in ['Arrow', 'Bomb', 'Clock']):
                         price = world.random.randrange(2, 14)
