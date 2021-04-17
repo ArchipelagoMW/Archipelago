@@ -44,7 +44,8 @@ class TestAdvancements(TestMinecraft):
             ["Very Very Frightening", False, [], ['Ingot Crafting']],
             ["Very Very Frightening", False, [], ['Enchanting']],
             ["Very Very Frightening", False, [], ['Progressive Tools']],
-            ["Very Very Frightening", True, ['Channeling Book', 'Progressive Tools', 'Progressive Tools', 'Progressive Tools', 'Enchanting', 'Ingot Crafting', 'Resource Blocks']],
+            ["Very Very Frightening", False, [], ['Progressive Weapons']],
+            ["Very Very Frightening", True, ['Channeling Book', 'Progressive Tools', 'Progressive Tools', 'Progressive Tools', 'Enchanting', 'Ingot Crafting', 'Resource Blocks', 'Progressive Weapons']],
             ])
 
     def test_42004(self):
@@ -176,7 +177,16 @@ class TestAdvancements(TestMinecraft):
 
     def test_42018(self):
         self.run_location_tests([
-            ["Great View From Up Here", False, []],
+            ["Great View From Up Here", False, []], 
+            ["Great View From Up Here", False, [], ['Ingot Crafting']], 
+            ["Great View From Up Here", False, [], ['Flint and Steel']], 
+            ["Great View From Up Here", False, [], ['Progressive Tools']], 
+            ["Great View From Up Here", False, [], ['Progressive Weapons']], 
+            ["Great View From Up Here", False, [], ['Progressive Armor']], 
+            ["Great View From Up Here", False, [], ['Brewing']], 
+            ["Great View From Up Here", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["Great View From Up Here", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing']], 
+            ["Great View From Up Here", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing']],
             ])
 
     def test_42019(self):
@@ -209,6 +219,13 @@ class TestAdvancements(TestMinecraft):
     def test_42022(self):
         self.run_location_tests([
             ["Two by Two", False, []],
+            ["Two by Two", False, [], ['Ingot Crafting']], 
+            ["Two by Two", False, [], ['Flint and Steel']], 
+            ["Two by Two", False, [], ['Progressive Tools']], 
+            ["Two by Two", False, [], ['Progressive Weapons']],
+            ["Two by Two", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["Two by Two", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons']], 
+            ["Two by Two", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons']],
             ])
 
     def test_42023(self):
@@ -219,6 +236,11 @@ class TestAdvancements(TestMinecraft):
     def test_42024(self):
         self.run_location_tests([
             ["Two Birds, One Arrow", False, []],
+            ["Two Birds, One Arrow", False, [], ['Archery']],
+            ["Two Birds, One Arrow", False, [], ['Ingot Crafting']],
+            ["Two Birds, One Arrow", False, ['Progressive Tools'], ['Progressive Tools', 'Progressive Tools']],
+            ["Two Birds, One Arrow", False, [], ['Enchanting']],
+            ["Two Birds, One Arrow", True, ['Archery', 'Ingot Crafting', 'Progressive Tools', 'Progressive Tools', 'Progressive Tools', 'Enchanting']],
             ])
 
     def test_42025(self):
@@ -259,12 +281,31 @@ class TestAdvancements(TestMinecraft):
 
     def test_42029(self):
         self.run_location_tests([
-            ["Zombie Doctor", False, []],
+            ["Zombie Doctor", False, []], 
+            ["Zombie Doctor", False, [], ['Ingot Crafting']], 
+            ["Zombie Doctor", False, [], ['Flint and Steel']], 
+            ["Zombie Doctor", False, [], ['Progressive Tools']], 
+            ["Zombie Doctor", False, [], ['Progressive Weapons']], 
+            ["Zombie Doctor", False, [], ['Progressive Armor']], 
+            ["Zombie Doctor", False, [], ['Brewing']], 
+            ["Zombie Doctor", False, [], ['Bottles']],
+            ["Zombie Doctor", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["Zombie Doctor", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles']], 
+            ["Zombie Doctor", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles']],
             ])
 
     def test_42030(self):
         self.run_location_tests([
-            ["The City at the End of the Game", False, []],
+            ["The City at the End of the Game", False, []], 
+            ["The City at the End of the Game", False, [], ['Ingot Crafting']], 
+            ["The City at the End of the Game", False, [], ['Flint and Steel']], 
+            ["The City at the End of the Game", False, [], ['Progressive Tools']], 
+            ["The City at the End of the Game", False, [], ['Progressive Weapons']], 
+            ["The City at the End of the Game", False, [], ['Progressive Armor']], 
+            ["The City at the End of the Game", False, [], ['Brewing']], 
+            ["The City at the End of the Game", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["The City at the End of the Game", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing']], 
+            ["The City at the End of the Game", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing']],
             ])
 
     def test_42031(self):
@@ -277,7 +318,16 @@ class TestAdvancements(TestMinecraft):
 
     def test_42032(self):
         self.run_location_tests([
-            ["Remote Getaway", False, []],
+            ["Remote Getaway", False, []], 
+            ["Remote Getaway", False, [], ['Ingot Crafting']], 
+            ["Remote Getaway", False, [], ['Flint and Steel']], 
+            ["Remote Getaway", False, [], ['Progressive Tools']], 
+            ["Remote Getaway", False, [], ['Progressive Weapons']], 
+            ["Remote Getaway", False, [], ['Progressive Armor']], 
+            ["Remote Getaway", False, [], ['Brewing']], 
+            ["Remote Getaway", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["Remote Getaway", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing']], 
+            ["Remote Getaway", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing']],
             ])
 
     def test_42033(self):
@@ -369,7 +419,16 @@ class TestAdvancements(TestMinecraft):
 
     def test_42042(self):
         self.run_location_tests([
-            ["Sky's the Limit", False, []],
+            ["Sky's the Limit", False, []], 
+            ["Sky's the Limit", False, [], ['Ingot Crafting']], 
+            ["Sky's the Limit", False, [], ['Flint and Steel']], 
+            ["Sky's the Limit", False, [], ['Progressive Tools']], 
+            ["Sky's the Limit", False, [], ['Progressive Weapons']], 
+            ["Sky's the Limit", False, [], ['Progressive Armor']], 
+            ["Sky's the Limit", False, [], ['Brewing']], 
+            ["Sky's the Limit", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["Sky's the Limit", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing']], 
+            ["Sky's the Limit", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing']],
             ])
 
     def test_42043(self):
@@ -437,12 +496,30 @@ class TestAdvancements(TestMinecraft):
 
     def test_42051(self):
         self.run_location_tests([
-            ["Eye Spy", False, []],
+            ["Eye Spy", False, []], 
+            ["Eye Spy", False, [], ['Ingot Crafting']], 
+            ["Eye Spy", False, [], ['Flint and Steel']], 
+            ["Eye Spy", False, [], ['Progressive Tools']], 
+            ["Eye Spy", False, [], ['Progressive Weapons']], 
+            ["Eye Spy", False, [], ['Progressive Armor']], 
+            ["Eye Spy", False, [], ['Brewing']], 
+            ["Eye Spy", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["Eye Spy", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing']], 
+            ["Eye Spy", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing']],
             ])
 
     def test_42052(self):
         self.run_location_tests([
-            ["The End", False, []],
+            ["The End", False, []], 
+            ["The End", False, [], ['Ingot Crafting']], 
+            ["The End", False, [], ['Flint and Steel']], 
+            ["The End", False, [], ['Progressive Tools']], 
+            ["The End", False, [], ['Progressive Weapons']], 
+            ["The End", False, [], ['Progressive Armor']], 
+            ["The End", False, [], ['Brewing']], 
+            ["The End", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["The End", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing']], 
+            ["The End", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing']],
             ])
 
     def test_42053(self):
@@ -611,7 +688,16 @@ class TestAdvancements(TestMinecraft):
 
     def test_42077(self):
         self.run_location_tests([
-            ["The End?", False, []],
+            ["The End?", False, []], 
+            ["The End?", False, [], ['Ingot Crafting']], 
+            ["The End?", False, [], ['Flint and Steel']], 
+            ["The End?", False, [], ['Progressive Tools']], 
+            ["The End?", False, [], ['Progressive Weapons']], 
+            ["The End?", False, [], ['Progressive Armor']], 
+            ["The End?", False, [], ['Brewing']], 
+            ["The End?", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["The End?", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing']], 
+            ["The End?", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing']],
             ])
 
     def test_42078(self):

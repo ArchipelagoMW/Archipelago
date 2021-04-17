@@ -28,7 +28,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Who is Cutting Onions?", player), lambda state: state.can_piglin_trade(player))
     set_rule(world.get_location("Oh Shiny", player), lambda state: state.can_piglin_trade(player))
     set_rule(world.get_location("Suit Up", player), lambda state: state.has("Progressive Armor", player) and state.has_iron_ingots(player))
-    set_rule(world.get_location("Very Very Frightening", player), lambda state: state.has("Channeling Book", player) and state.can_use_anvil(player) and state.can_enchant(player))
+    set_rule(world.get_location("Very Very Frightening", player), lambda state: state.has("Channeling Book", player) and state.can_use_anvil(player) and state.can_enchant(player) and state.can_adventure(player))
     set_rule(world.get_location("Hot Stuff", player), lambda state: state.has("Bucket", player) and state.has_iron_ingots(player))
     set_rule(world.get_location("Free the End", player), lambda state: can_complete(state))
     set_rule(world.get_location("A Furious Cocktail", player), lambda state: state.can_brew_potions(player))
@@ -50,9 +50,9 @@ def set_rules(world: MultiWorld, player: int):
                                                                                state.can_reach("Hero of the Village", "Location", player))
     set_rule(world.get_location("Bullseye", player), lambda state: state.has("Archery", player) and state.has("Progressive Tools", player, 2) and state.has_iron_ingots(player))
     set_rule(world.get_location("Spooky Scary Skeleton", player), lambda state: state.enter_fortress(player))
-    set_rule(world.get_location("Two by Two", player), lambda state: state.has_iron_ingots(player) and state.enter_nether(player)) # shears > seagrass > turtles; nether > striders; gold carrots > horses skips ingots
+    set_rule(world.get_location("Two by Two", player), lambda state: state.has_iron_ingots(player) and state.enter_nether(player) and state.can_adventure(player)) # shears > seagrass > turtles; nether > striders; gold carrots > horses skips ingots
     set_rule(world.get_location("Stone Age", player), lambda state: True)
-    set_rule(world.get_location("Two Birds, One Arrow", player), lambda state: state.craft_crossbow(player) and (state.can_enchant(player) or (state.has("Piercing IV Book", player) and state.can_use_anvil(player))))
+    set_rule(world.get_location("Two Birds, One Arrow", player), lambda state: state.craft_crossbow(player) and state.can_enchant(player))
     set_rule(world.get_location("We Need to Go Deeper", player), lambda state: state.enter_nether(player))
     set_rule(world.get_location("Who's the Pillager Now?", player), lambda state: state.craft_crossbow(player) and state.can_adventure(player))
     set_rule(world.get_location("Getting an Upgrade", player), lambda state: state.has("Progressive Tools", player))
