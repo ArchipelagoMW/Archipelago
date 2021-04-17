@@ -146,6 +146,7 @@ class Context(Node):
         self.connect_names = decoded_obj['connect_names']
         self.remote_items = decoded_obj['remote_items']
         self.locations = decoded_obj['locations']
+        self.slot_data = decoded_obj['slot_data']
         self.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
                              for player, loc_data in decoded_obj["er_hint_data"].items()}
         self.games = decoded_obj["games"]
@@ -1023,6 +1024,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 "players": ctx.get_players_package(),
                 "missing_locations": get_missing_checks(ctx, client),
                 "checked_locations": get_checked_checks(ctx, client),
+                "slot_data": ctx.slot_data.get(client.slot, {})
             }]
             items = get_received_items(ctx, client.team, client.slot)
             if items:

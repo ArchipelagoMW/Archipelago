@@ -501,8 +501,9 @@ def main(args, seed=None):
             for future in roms:
                 rom_name = future.result()
                 rom_names.append(rom_name)
+            slot_data = {}
             client_versions = {}
-            minimum_versions = {"server": (0, 0, 3), "clients": client_versions}
+            minimum_versions = {"server": (0, 0, 4), "clients": client_versions}
             games = {}
             for slot in world.player_ids:
                 client_versions[slot] = (0, 0, 3)
@@ -514,8 +515,13 @@ def main(args, seed=None):
                 for player, name in enumerate(team, 1):
                     if player not in world.alttp_player_ids:
                         connect_names[name] = (i, player)
-
+            for slot in world.hk_player_ids:
+                slots_data = slot_data[slot] = {}
+                for option_name in Options.hollow_knight_options:
+                    option = getattr(world, option_name)[slot]
+                    slots_data[option_name] = int(option.value)
             multidata = zlib.compress(pickle.dumps({
+                "slot_data" : slot_data,
                 "games": games,
                 "names": parsed_names,
                 "connect_names": connect_names,
