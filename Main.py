@@ -520,6 +520,12 @@ def main(args, seed=None):
                 for option_name in Options.hollow_knight_options:
                     option = getattr(world, option_name)[slot]
                     slots_data[option_name] = int(option.value)
+            for slot in world.minecraft_player_ids:
+                slots_data = slot_data[slot] = {}
+                for option_name in Options.minecraft_options:
+                    option = getattr(world, option_name)[slot]
+                    slots_data[option_name] = int(option.value)
+                slots_data['minecraft_world_seed'] = world.random.getrandbits(32)
             multidata = zlib.compress(pickle.dumps({
                 "slot_data" : slot_data,
                 "games": games,
