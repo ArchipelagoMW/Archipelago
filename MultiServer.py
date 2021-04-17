@@ -1054,7 +1054,6 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 if type(location) is not int or location not in lookup_any_location_id_to_name:
                     await ctx.send_msgs(client, [{"cmd": "InvalidArguments", "text": 'LocationScouts'}])
                     return
-                loc_name = lookup_any_location_id_to_name[location]
                 target_item, target_player = ctx.locations[location, client.slot]
                 locs.append(NetworkItem(target_item, location, target_player))
 
