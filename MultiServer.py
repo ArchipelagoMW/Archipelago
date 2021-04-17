@@ -1051,20 +1051,13 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         elif cmd == 'LocationScouts':
             locs = []
             for location in args["locations"]:
-                if type(location) is not int or 0 >= location > len(Regions.location_table):
+                if type(location) is not int or location not in lookup_any_location_id_to_name:
                     await ctx.send_msgs(client, [{"cmd": "InvalidArguments", "text": 'LocationScouts'}])
                     return
-                loc_name = list(Regions.location_table.keys())[location - 1]
-                target_item, target_player = ctx.locations[(Regions.location_table[loc_name][0], client.slot)]
+                loc_name = lookup_any_location_id_to_name[location]
+                target_item, target_player = ctx.locations[location, client.slot]
+                locs.append(NetworkItem(target_item, location, target_player))
 
-                replacements = {'SmallKey': 0xA2, 'BigKey': 0x9D, 'Compass': 0x8D, 'Map': 0x7D}
-                item_type = [i[1] for i in Items.item_table.values() if type(i[2]) is int and i[2] == target_item]
-                if item_type:
-                    target_item = replacements.get(item_type[0], target_item)
-
-                locs.append([target_item, location, target_player])
-
-            # logging.info(f"{client.name} in team {client.team+1} scouted {', '.join([l[0] for l in locs])}")
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
 
         elif cmd == 'StatusUpdate':
