@@ -508,10 +508,9 @@ def main(args, seed=None):
                         connect_names[name] = (i, player)
             for slot in world.hk_player_ids:
                 slots_data = slot_data[slot] = {}
-                slots_options = slots_data["options"] = {}
                 for option_name in Options.hollow_knight_options:
                     option = getattr(world, option_name)[slot]
-                    slots_options[option_name] = option.value
+                    slots_data[option_name] = int(option.value)
             multidata = zlib.compress(pickle.dumps({
                 "slot_data" : slot_data,
                 "games": games,
