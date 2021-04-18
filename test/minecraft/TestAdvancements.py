@@ -59,7 +59,18 @@ class TestAdvancements(TestMinecraft):
 
     def test_42005(self):
         self.run_location_tests([
-            ["The End", False, []],
+            ["Free the End", False, []], 
+            ["Free the End", False, [], ['Ingot Crafting']], 
+            ["Free the End", False, [], ['Flint and Steel']], 
+            ["Free the End", False, [], ['Progressive Tools']], 
+            ["Free the End", False, ['Progressive Weapons'], ['Progressive Weapons', 'Progressive Weapons']], 
+            ["Free the End", False, [], ['Progressive Armor']], 
+            ["Free the End", False, [], ['Brewing']], 
+            ["Free the End", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["Free the End", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
+            ["Free the End", False, [], ['Archery']], 
+            ["Free the End", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Weapons', 'Archery', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["Free the End", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Weapons', 'Archery', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
     def test_42006(self): 
@@ -84,7 +95,17 @@ class TestAdvancements(TestMinecraft):
 
     def test_42008(self):
         self.run_location_tests([
-            ["Bring Home the Beacon", False, []],
+            ["Bring Home the Beacon", False, []], 
+            ["Bring Home the Beacon", False, [], ['Ingot Crafting']], 
+            ["Bring Home the Beacon", False, [], ['Flint and Steel']], 
+            ["Bring Home the Beacon", False, ['Progressive Tools', 'Progressive Tools'], ['Progressive Tools']], 
+            ["Bring Home the Beacon", False, ['Progressive Weapons'], ['Progressive Weapons', 'Progressive Weapons']], 
+            ["Bring Home the Beacon", False, ['Progressive Armor'], ['Progressive Armor']], 
+            ["Bring Home the Beacon", False, [], ['Brewing']],
+            ["Bring Home the Beacon", False, [], ['Bottles']], 
+            ["Bring Home the Beacon", False, [], ['Resource Blocks']], 
+            ["Bring Home the Beacon", True, [], ['Bucket']],
+            ["Bring Home the Beacon", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Weapons', 'Progressive Weapons', 'Progressive Armor', 'Progressive Armor', 'Brewing', 'Bottles', 'Resource Blocks']],
             ])
 
     def test_42009(self):
@@ -123,7 +144,18 @@ class TestAdvancements(TestMinecraft):
 
     def test_42012(self):
         self.run_location_tests([
-            ["The Next Generation", False, []],
+            ["The Next Generation", False, []], 
+            ["The Next Generation", False, [], ['Ingot Crafting']], 
+            ["The Next Generation", False, [], ['Flint and Steel']], 
+            ["The Next Generation", False, [], ['Progressive Tools']], 
+            ["The Next Generation", False, ['Progressive Weapons'], ['Progressive Weapons', 'Progressive Weapons']], 
+            ["The Next Generation", False, [], ['Progressive Armor']], 
+            ["The Next Generation", False, [], ['Brewing']], 
+            ["The Next Generation", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["The Next Generation", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
+            ["The Next Generation", False, [], ['Archery']], 
+            ["The Next Generation", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Weapons', 'Archery', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["The Next Generation", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Weapons', 'Archery', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
     def test_42013(self):
@@ -185,13 +217,31 @@ class TestAdvancements(TestMinecraft):
             ["Great View From Up Here", False, [], ['Progressive Armor']], 
             ["Great View From Up Here", False, [], ['Brewing']], 
             ["Great View From Up Here", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["Great View From Up Here", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing']], 
-            ["Great View From Up Here", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing']],
+            ["Great View From Up Here", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
+            ["Great View From Up Here", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["Great View From Up Here", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
     def test_42019(self):
         self.run_location_tests([
-            ["How Did We Get Here?", False, []],
+            ["How Did We Get Here?", False, []], 
+            ["How Did We Get Here?", False, [], ['Ingot Crafting']], 
+            ["How Did We Get Here?", False, [], ['Flint and Steel']], 
+            ["How Did We Get Here?", False, ['Progressive Tools', 'Progressive Tools'], ['Progressive Tools']], 
+            ["How Did We Get Here?", False, ['Progressive Weapons', 'Progressive Weapons'], ['Progressive Weapons']], 
+            ["How Did We Get Here?", False, ['Progressive Armor'], ['Progressive Armor']], 
+            ["How Did We Get Here?", False, [], ['Brewing']], 
+            ["How Did We Get Here?", False, [], ['Bottles']], 
+            ["How Did We Get Here?", False, [], ['Archery']], 
+            ["How Did We Get Here?", False, [], ['Resource Blocks']], 
+            ["How Did We Get Here?", False, [], ['Fishing Rod']], 
+            ["How Did We Get Here?", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
+            ["How Did We Get Here?", True, ['Ingot Crafting', 'Flint and Steel', 
+                                            'Progressive Tools', 'Progressive Tools', 'Progressive Tools', 
+                                            'Progressive Weapons', 'Progressive Weapons', 'Progressive Weapons', 
+                                            'Progressive Armor', 'Progressive Armor', 
+                                            'Brewing', 'Archery', 'Bottles', 'Resource Blocks', 'Fishing Rod', 
+                                            '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
     def test_42020(self):
@@ -304,8 +354,9 @@ class TestAdvancements(TestMinecraft):
             ["The City at the End of the Game", False, [], ['Progressive Armor']], 
             ["The City at the End of the Game", False, [], ['Brewing']], 
             ["The City at the End of the Game", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["The City at the End of the Game", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing']], 
-            ["The City at the End of the Game", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing']],
+            ["The City at the End of the Game", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
+            ["The City at the End of the Game", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["The City at the End of the Game", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
     def test_42031(self):
@@ -326,8 +377,9 @@ class TestAdvancements(TestMinecraft):
             ["Remote Getaway", False, [], ['Progressive Armor']], 
             ["Remote Getaway", False, [], ['Brewing']], 
             ["Remote Getaway", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["Remote Getaway", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing']], 
-            ["Remote Getaway", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing']],
+            ["Remote Getaway", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
+            ["Remote Getaway", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["Remote Getaway", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
     def test_42033(self):
@@ -386,7 +438,18 @@ class TestAdvancements(TestMinecraft):
 
     def test_42038(self): 
         self.run_location_tests([
-            ["The End... Again...", False, []],
+            ["The End... Again...", False, []], 
+            ["The End... Again...", False, [], ['Ingot Crafting']], 
+            ["The End... Again...", False, [], ['Flint and Steel']], 
+            ["The End... Again...", False, [], ['Progressive Tools']], 
+            ["The End... Again...", False, ['Progressive Weapons'], ['Progressive Weapons', 'Progressive Weapons']], 
+            ["The End... Again...", False, [], ['Progressive Armor']], 
+            ["The End... Again...", False, [], ['Brewing']], 
+            ["The End... Again...", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["The End... Again...", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
+            ["The End... Again...", False, [], ['Archery']], 
+            ["The End... Again...", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Weapons', 'Archery', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["The End... Again...", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Weapons', 'Archery', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
     def test_42039(self):
@@ -427,8 +490,9 @@ class TestAdvancements(TestMinecraft):
             ["Sky's the Limit", False, [], ['Progressive Armor']], 
             ["Sky's the Limit", False, [], ['Brewing']], 
             ["Sky's the Limit", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["Sky's the Limit", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing']], 
-            ["Sky's the Limit", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing']],
+            ["Sky's the Limit", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
+            ["Sky's the Limit", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["Sky's the Limit", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
     def test_42043(self):
@@ -463,7 +527,19 @@ class TestAdvancements(TestMinecraft):
 
     def test_42046(self):
         self.run_location_tests([
-            ["You Need a Mint", False, []],
+            ["You Need a Mint", False, []], 
+            ["You Need a Mint", False, [], ['Ingot Crafting']], 
+            ["You Need a Mint", False, [], ['Flint and Steel']], 
+            ["You Need a Mint", False, [], ['Progressive Tools']], 
+            ["You Need a Mint", False, ['Progressive Weapons'], ['Progressive Weapons', 'Progressive Weapons']], 
+            ["You Need a Mint", False, [], ['Progressive Armor']], 
+            ["You Need a Mint", False, [], ['Brewing']], 
+            ["You Need a Mint", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["You Need a Mint", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
+            ["You Need a Mint", False, [], ['Archery']], 
+            ["You Need a Mint", False, [], ['Bottles']],
+            ["You Need a Mint", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Weapons', 'Archery', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', 'Bottles']], 
+            ["You Need a Mint", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Weapons', 'Archery', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', 'Bottles']],
             ])
 
     def test_42047(self):
@@ -473,7 +549,18 @@ class TestAdvancements(TestMinecraft):
 
     def test_42048(self):
         self.run_location_tests([
-            ["Monsters Hunted", False, []],
+            ["Monsters Hunted", False, []], 
+            ["Monsters Hunted", False, [], ['Ingot Crafting']], 
+            ["Monsters Hunted", False, [], ['Flint and Steel']], 
+            ["Monsters Hunted", False, [], ['Progressive Tools']], 
+            ["Monsters Hunted", False, ['Progressive Weapons'], ['Progressive Weapons', 'Progressive Weapons']], 
+            ["Monsters Hunted", False, [], ['Progressive Armor']], 
+            ["Monsters Hunted", False, [], ['Brewing']], 
+            ["Monsters Hunted", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["Monsters Hunted", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
+            ["Monsters Hunted", False, [], ['Archery']], 
+            ["Monsters Hunted", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Weapons', 'Archery', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["Monsters Hunted", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Weapons', 'Archery', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
     def test_42049(self):
@@ -504,8 +591,9 @@ class TestAdvancements(TestMinecraft):
             ["Eye Spy", False, [], ['Progressive Armor']], 
             ["Eye Spy", False, [], ['Brewing']], 
             ["Eye Spy", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["Eye Spy", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing']], 
-            ["Eye Spy", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing']],
+            ["Eye Spy", False, [], ['3 Ender Pearls']],
+            ["Eye Spy", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls']], 
+            ["Eye Spy", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls']],
             ])
 
     def test_42052(self):
@@ -518,18 +606,33 @@ class TestAdvancements(TestMinecraft):
             ["The End", False, [], ['Progressive Armor']], 
             ["The End", False, [], ['Brewing']], 
             ["The End", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["The End", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing']], 
-            ["The End", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing']],
+            ["The End", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
+            ["The End", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["The End", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
     def test_42053(self):
         self.run_location_tests([
-            ["Serious Dedication", False, []],
+            ["Serious Dedication", False, []], 
+            ["Serious Dedication", False, [], ['Ingot Crafting']], 
+            ["Serious Dedication", False, [], ['Flint and Steel']], 
+            ["Serious Dedication", False, ['Progressive Tools', 'Progressive Tools'], ['Progressive Tools']], 
+            ["Serious Dedication", False, [], ['Progressive Weapons']], 
+            ["Serious Dedication", False, [], ['Progressive Armor']], 
+            ["Serious Dedication", False, [], ['Brewing']], 
+            ["Serious Dedication", False, [], ['Bottles']],
+            ["Serious Dedication", False, [], ['Bed']],
+            ["Serious Dedication", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Bed']],
             ])
 
     def test_42054(self):
         self.run_location_tests([
             ["Postmortal", False, []],
+            ["Postmortal", False, ['Progressive Weapons'], ['Progressive Weapons', 'Progressive Weapons']],
+            ["Postmortal", False, [], ['Progressive Armor']],
+            ["Postmortal", False, [], ['Ingot Crafting']],
+            ["Postmortal", False, [], ['Progressive Tools']], 
+            ["Postmortal", True, ['Progressive Weapons', 'Progressive Weapons', 'Progressive Armor', 'Ingot Crafting', 'Progressive Tools']],
             ])
 
     def test_42055(self):
@@ -565,26 +668,72 @@ class TestAdvancements(TestMinecraft):
     def test_42059(self):
         self.run_location_tests([
             ["Hero of the Village", False, []],
+            ["Hero of the Village", False, ['Progressive Weapons'], ['Progressive Weapons', 'Progressive Weapons']],
+            ["Hero of the Village", False, [], ['Progressive Armor']],
+            ["Hero of the Village", False, [], ['Ingot Crafting']],
+            ["Hero of the Village", False, [], ['Progressive Tools']], 
+            ["Hero of the Village", True, ['Progressive Weapons', 'Progressive Weapons', 'Progressive Armor', 'Ingot Crafting', 'Progressive Tools']],
             ])
 
     def test_42060(self):
         self.run_location_tests([
-            ["Hidden in the Depths", False, []],
+            ["Hidden in the Depths", False, []], 
+            ["Hidden in the Depths", False, [], ['Ingot Crafting']], 
+            ["Hidden in the Depths", False, [], ['Flint and Steel']], 
+            ["Hidden in the Depths", False, ['Progressive Tools', 'Progressive Tools'], ['Progressive Tools']], 
+            ["Hidden in the Depths", False, [], ['Progressive Weapons']], 
+            ["Hidden in the Depths", False, [], ['Progressive Armor']], 
+            ["Hidden in the Depths", False, [], ['Brewing']], 
+            ["Hidden in the Depths", False, [], ['Bottles']],
+            ["Hidden in the Depths", False, [], ['Bed']],
+            ["Hidden in the Depths", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Bed']],
             ])
 
     def test_42061(self):
         self.run_location_tests([
-            ["Beaconator", False, []],
+            ["Beaconator", False, []], 
+            ["Beaconator", False, [], ['Ingot Crafting']], 
+            ["Beaconator", False, [], ['Flint and Steel']], 
+            ["Beaconator", False, ['Progressive Tools', 'Progressive Tools'], ['Progressive Tools']], 
+            ["Beaconator", False, ['Progressive Weapons'], ['Progressive Weapons', 'Progressive Weapons']], 
+            ["Beaconator", False, ['Progressive Armor'], ['Progressive Armor']], 
+            ["Beaconator", False, [], ['Brewing']],
+            ["Beaconator", False, [], ['Bottles']], 
+            ["Beaconator", False, [], ['Resource Blocks']], 
+            ["Beaconator", True, [], ['Bucket']],
+            ["Beaconator", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Weapons', 'Progressive Weapons', 'Progressive Armor', 'Progressive Armor', 'Brewing', 'Bottles', 'Resource Blocks']],
             ])
 
     def test_42062(self):
         self.run_location_tests([
-            ["Withering Heights", False, []],
+            ["Withering Heights", False, []], 
+            ["Withering Heights", False, [], ['Ingot Crafting']], 
+            ["Withering Heights", False, [], ['Flint and Steel']], 
+            ["Withering Heights", False, [], ['Progressive Tools']], 
+            ["Withering Heights", False, ['Progressive Weapons'], ['Progressive Weapons', 'Progressive Weapons']], 
+            ["Withering Heights", False, ['Progressive Armor'], ['Progressive Armor']], 
+            ["Withering Heights", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["Withering Heights", False, [], ['Brewing']],
+            ["Withering Heights", False, [], ['Bottles']],  
+            ["Withering Heights", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Weapons', 'Progressive Weapons', 'Progressive Armor', 'Progressive Armor', 'Brewing', 'Bottles']], 
+            ["Withering Heights", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Weapons', 'Progressive Weapons', 'Progressive Armor', 'Progressive Armor', 'Brewing', 'Bottles']],
             ])
 
     def test_42063(self):
         self.run_location_tests([
             ["A Balanced Diet", False, []],
+            ["A Balanced Diet", False, [], ['Bottles']],
+            ["A Balanced Diet", False, [], ['Ingot Crafting']],
+            ["A Balanced Diet", False, [], ['Resource Blocks']],
+            ["A Balanced Diet", False, [], ['Flint and Steel']], 
+            ["A Balanced Diet", False, [], ['Progressive Tools']], 
+            ["A Balanced Diet", False, [], ['Progressive Weapons']], 
+            ["A Balanced Diet", False, [], ['Progressive Armor']], 
+            ["A Balanced Diet", False, [], ['Brewing']], 
+            ["A Balanced Diet", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["A Balanced Diet", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
+            ["A Balanced Diet", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', 'Bottles', 'Resource Blocks']], 
+            ["A Balanced Diet", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', 'Bottles', 'Resource Blocks']],
             ])
 
     def test_42064(self):
@@ -603,7 +752,16 @@ class TestAdvancements(TestMinecraft):
 
     def test_42066(self):
         self.run_location_tests([
-            ["Country Lode, Take Me Home", False, []],
+            ["Country Lode, Take Me Home", False, []], 
+            ["Country Lode, Take Me Home", False, [], ['Ingot Crafting']], 
+            ["Country Lode, Take Me Home", False, [], ['Flint and Steel']], 
+            ["Country Lode, Take Me Home", False, ['Progressive Tools', 'Progressive Tools'], ['Progressive Tools']], 
+            ["Country Lode, Take Me Home", False, [], ['Progressive Weapons']], 
+            ["Country Lode, Take Me Home", False, [], ['Progressive Armor']], 
+            ["Country Lode, Take Me Home", False, [], ['Brewing']], 
+            ["Country Lode, Take Me Home", False, [], ['Bottles']],
+            ["Country Lode, Take Me Home", False, [], ['Bed']],
+            ["Country Lode, Take Me Home", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Bed']],
             ])
 
     def test_42067(self):
@@ -683,7 +841,17 @@ class TestAdvancements(TestMinecraft):
 
     def test_42076(self):
         self.run_location_tests([
-            ["Cover Me in Debris", False, []],
+            ["Cover Me in Debris", False, []], 
+            ["Cover Me in Debris", False, [], ['Ingot Crafting']], 
+            ["Cover Me in Debris", False, [], ['Flint and Steel']], 
+            ["Cover Me in Debris", False, ['Progressive Tools', 'Progressive Tools'], ['Progressive Tools']], 
+            ["Cover Me in Debris", False, [], ['Progressive Weapons']], 
+            ["Cover Me in Debris", False, ['Progressive Armor'], ['Progressive Armor']], 
+            ["Cover Me in Debris", False, [], ['Brewing']], 
+            ["Cover Me in Debris", False, [], ['Bottles']],
+            ["Cover Me in Debris", False, [], ['Bed']],
+            ["Cover Me in Debris", False, ['8 Netherite Scrap'], ['8 Netherite Scrap']],
+            ["Cover Me in Debris", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Progressive Armor', 'Brewing', 'Bottles', 'Bed', '8 Netherite Scrap', '8 Netherite Scrap']],
             ])
 
     def test_42077(self):
@@ -696,8 +864,9 @@ class TestAdvancements(TestMinecraft):
             ["The End?", False, [], ['Progressive Armor']], 
             ["The End?", False, [], ['Brewing']], 
             ["The End?", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["The End?", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing']], 
-            ["The End?", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing']],
+            ["The End?", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
+            ["The End?", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["The End?", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
     def test_42078(self):
