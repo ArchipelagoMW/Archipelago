@@ -28,12 +28,14 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Who is Cutting Onions?", player), lambda state: state.can_piglin_trade(player))
     set_rule(world.get_location("Oh Shiny", player), lambda state: state.can_piglin_trade(player))
     set_rule(world.get_location("Suit Up", player), lambda state: state.has("Progressive Armor", player) and state.has_iron_ingots(player))
-    set_rule(world.get_location("Very Very Frightening", player), lambda state: state.has("Channeling Book", player) and state.can_use_anvil(player) and state.can_enchant(player) and state.can_adventure(player))
+    set_rule(world.get_location("Very Very Frightening", player), lambda state: state.has("Channeling Book", player) and state.can_use_anvil(player) and 
+                                                                                state.can_enchant(player) and state.can_adventure(player))
     set_rule(world.get_location("Hot Stuff", player), lambda state: state.has("Bucket", player) and state.has_iron_ingots(player))
     set_rule(world.get_location("Free the End", player), lambda state: can_complete(state))
     set_rule(world.get_location("A Furious Cocktail", player), lambda state: state.can_brew_potions(player))
     set_rule(world.get_location("Best Friends Forever", player), lambda state: True)
-    set_rule(world.get_location("Bring Home the Beacon", player), lambda state: state.can_kill_wither(player) and state.has_diamond_pickaxe(player) and state.has("Ingot Crafting", player) and state.has("Resource Blocks", player))
+    set_rule(world.get_location("Bring Home the Beacon", player), lambda state: state.can_kill_wither(player) and state.has_diamond_pickaxe(player) and 
+                                                                                state.has("Ingot Crafting", player) and state.has("Resource Blocks", player))
     set_rule(world.get_location("Not Today, Thank You", player), lambda state: state.has("Shield", player) and state.has_iron_ingots(player))
     set_rule(world.get_location("Isn't It Iron Pick", player), lambda state: state.has("Progressive Tools", player, 2) and state.has_iron_ingots(player))
     set_rule(world.get_location("Local Brewery", player), lambda state: state.can_brew_potions(player))
@@ -65,7 +67,8 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("War Pigs", player), lambda state: state.enter_nether(player))
     set_rule(world.get_location("Take Aim", player), lambda state: state.has("Archery", player))
     set_rule(world.get_location("Total Beelocation", player), lambda state: state.has("Silk Touch Book", player) and state.can_use_anvil(player) and state.can_enchant(player))
-    set_rule(world.get_location("Arbalistic", player), lambda state: state.craft_crossbow(player) and state.has("Piercing IV Book", player) and state.can_use_anvil(player) and state.can_enchant(player))
+    set_rule(world.get_location("Arbalistic", player), lambda state: state.craft_crossbow(player) and state.has("Piercing IV Book", player) and 
+                                                                     state.can_use_anvil(player) and state.can_enchant(player))
     set_rule(world.get_location("The End... Again...", player), lambda state: can_complete(state) and state.has("Ingot Crafting", player))
     set_rule(world.get_location("Acquire Hardware", player), lambda state: state.has_iron_ingots(player))
     set_rule(world.get_location("Not Quite \"Nine\" Lives", player), lambda state: state.can_piglin_trade(player))
@@ -82,16 +85,21 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Eye Spy", player), lambda state: state.enter_stronghold(player))
     set_rule(world.get_location("The End", player), lambda state: state.enter_end(player))
     set_rule(world.get_location("Serious Dedication", player), lambda state: state.can_reach("Hidden in the Depths", "Location", player) and state.has("Ingot Crafting", player))
-    set_rule(world.get_location("Postmortal", player), lambda state: state.can_adventure(player) and state.has("Progressive Weapons", player, 2) and state.has("Progressive Armor", player) and state.has_iron_ingots(player))
+    set_rule(world.get_location("Postmortal", player), lambda state: state.can_adventure(player) and state.has("Progressive Weapons", player, 2) and 
+                                                                     state.has("Progressive Armor", player) and state.has_iron_ingots(player))
     set_rule(world.get_location("Monster Hunter", player), lambda state: True)
     set_rule(world.get_location("Adventuring Time", player), lambda state: state.can_adventure(player))
     set_rule(world.get_location("A Seedy Place", player), lambda state: True)
     set_rule(world.get_location("Those Were the Days", player), lambda state: state.enter_nether(player))
-    set_rule(world.get_location("Hero of the Village", player), lambda state: state.can_adventure(player) and state.has("Progressive Weapons", player, 2) and state.has("Progressive Armor", player) and state.has_iron_ingots(player))
-    set_rule(world.get_location("Hidden in the Depths", player), lambda state: state.enter_nether(player) and state.can_brew_potions(player) and state.has("Bed", player) and state.has_diamond_pickaxe(player)) # bed mining :)
-    set_rule(world.get_location("Beaconator", player), lambda state: state.can_kill_wither(player) and state.has_diamond_pickaxe(player) and state.has("Ingot Crafting", player) and state.has("Resource Blocks", player))
+    set_rule(world.get_location("Hero of the Village", player), lambda state: state.can_adventure(player) and state.has_iron_ingots(player) and 
+                                                                       state.has("Progressive Weapons", player, 2) and state.has("Progressive Armor", player))
+    set_rule(world.get_location("Hidden in the Depths", player), lambda state: state.enter_nether(player) and state.can_brew_potions(player) and 
+                                                                               state.has("Bed", player) and state.has_diamond_pickaxe(player)) # bed mining :)
+    set_rule(world.get_location("Beaconator", player), lambda state: state.can_kill_wither(player) and state.has_diamond_pickaxe(player) and 
+                                                                     state.has("Ingot Crafting", player) and state.has("Resource Blocks", player))
     set_rule(world.get_location("Withering Heights", player), lambda state: state.can_kill_wither(player))
-    set_rule(world.get_location("A Balanced Diet", player), lambda state: state.has("Bottles", player) and state.has("Ingot Crafting", player) and state.has("Resource Blocks", player) and state.enter_end(player)) # honey bottle, gapple, chorus fruit
+    set_rule(world.get_location("A Balanced Diet", player), lambda state: state.has("Bottles", player) and state.has("Ingot Crafting", player) and 
+                                                                          state.has("Resource Blocks", player) and state.enter_end(player)) # honey bottle, gapple, chorus fruit
     set_rule(world.get_location("Subspace Bubble", player), lambda state: state.enter_nether(player) and state.has_diamond_pickaxe(player))
     set_rule(world.get_location("Husbandry", player), lambda state: True)
     set_rule(world.get_location("Country Lode, Take Me Home", player), lambda state: state.can_reach("Hidden in the Depths", "Location", player) and state.has("Ingot Crafting", player))
