@@ -79,7 +79,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Sweet Dreams", player), lambda state: state.has("Bed", player) or state.can_adventure(player))
     set_rule(world.get_location("You Need a Mint", player), lambda state: can_complete(state) and state.has("Bottles", player) and state.has("Ingot Crafting", player))
     set_rule(world.get_location("Adventure", player), lambda state: True)
-    set_rule(world.get_location("Monsters Hunted", player), lambda state: can_complete(state) and state.can_brew_potions(player)) # Water Breathing
+    set_rule(world.get_location("Monsters Hunted", player), lambda state: can_complete(state) and state.can_kill_wither(player))
     set_rule(world.get_location("Enchanter", player), lambda state: state.can_enchant(player))
     set_rule(world.get_location("Voluntary Exile", player), lambda state: state.can_adventure(player))
     set_rule(world.get_location("Eye Spy", player), lambda state: state.enter_stronghold(player))
