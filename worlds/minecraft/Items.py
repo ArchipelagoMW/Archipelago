@@ -51,12 +51,13 @@ item_frequencies = {
     "Progressive Tools": 3, 
     "Progressive Armor": 2,
     "8 Netherite Scrap": 2, 
+    "8 Emeralds": 0,
     "4 Emeralds": 8, 
     "4 Diamond Ore": 4, 
     "16 Iron Ore": 4, 
-    "500 XP": 4,
-    "100 XP": 9,
-    "50 XP": 12, 
+    "500 XP": 4, # 2 after exclusions
+    "100 XP": 10, # 4 after exclusions
+    "50 XP": 12, # 5 after exclusions
     "3 Ender Pearls": 4, 
     "4 Lapis Lazuli": 2, 
     "16 Porkchops": 4
