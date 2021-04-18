@@ -39,7 +39,10 @@ item_table = {
     "16 Iron Ore": ItemData(45025, False),
     "500 XP": ItemData(45026, False),
     "100 XP": ItemData(45027, False),
-    "50 XP": ItemData(45028, False)
+    "50 XP": ItemData(45028, False), 
+    "3 Ender Pearls": ItemData(45029, True),
+    "4 Lapis Lazuli": ItemData(45030, False), 
+    "16 Porkchops": ItemData(45031, False)
 }
 
 # If not listed here then has frequency 1
@@ -48,13 +51,15 @@ item_frequencies = {
     "Progressive Tools": 3, 
     "Progressive Armor": 2,
     "8 Netherite Scrap": 2, 
-    "8 Emeralds": 4, 
     "4 Emeralds": 8, 
     "4 Diamond Ore": 4, 
     "16 Iron Ore": 4, 
-    "500 XP": 6,
-    "100 XP": 10,
-    "50 XP": 16
+    "500 XP": 4,
+    "100 XP": 9,
+    "50 XP": 12, 
+    "3 Ender Pearls": 4, 
+    "4 Lapis Lazuli": 2, 
+    "16 Porkchops": 4
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items()}

@@ -844,8 +844,11 @@ class CollectionState(object):
     def can_kill_wither(self, player: int):
         return self.enter_fortress(player) and self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and self.can_brew_potions(player)
 
-    def enter_end(self, player: int): 
-        return self.enter_fortress(player) and self.has('Brewing', player)
+    def enter_stronghold(self, player: int): 
+        return self.enter_fortress(player) and self.has('Brewing', player) and self.has('3 Ender Pearls', player)
+
+    def enter_end(self, player: int):
+        return self.enter_stronghold(player) and self.has('3 Ender Pearls', player, 4)
 
     def can_kill_ender_dragon(self, player: int):
         return self.enter_end(player) and self.has('Progressive Weapons', player, 2) and self.has('Archery', player)

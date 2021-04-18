@@ -79,7 +79,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Monsters Hunted", player), lambda state: can_complete(state) and state.can_brew_potions(player)) # Water Breathing
     set_rule(world.get_location("Enchanter", player), lambda state: state.can_enchant(player))
     set_rule(world.get_location("Voluntary Exile", player), lambda state: state.can_adventure(player))
-    set_rule(world.get_location("Eye Spy", player), lambda state: state.enter_end(player))
+    set_rule(world.get_location("Eye Spy", player), lambda state: state.enter_stronghold(player))
     set_rule(world.get_location("The End", player), lambda state: state.enter_end(player))
     set_rule(world.get_location("Serious Dedication", player), lambda state: state.can_reach("Hidden in the Depths", "Location", player) and state.has("Ingot Crafting", player))
     set_rule(world.get_location("Postmortal", player), lambda state: state.can_adventure(player) and state.has("Progressive Weapons", player, 2) and state.has("Progressive Armor", player) and state.has_iron_ingots(player))
