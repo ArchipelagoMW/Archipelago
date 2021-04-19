@@ -32,7 +32,7 @@ def set_rules(world: MultiWorld, player: int):
                                                                                 state.can_enchant(player) and state.can_adventure(player))
     set_rule(world.get_location("Hot Stuff", player), lambda state: state.has("Bucket", player) and state.has_iron_ingots(player))
     set_rule(world.get_location("Free the End", player), lambda state: can_complete(state))
-    set_rule(world.get_location("A Furious Cocktail", player), lambda state: state.can_brew_potions(player))
+    set_rule(world.get_location("A Furious Cocktail", player), lambda state: state.can_brew_potions(player) and state.has("Fishing Rod", player))
     set_rule(world.get_location("Best Friends Forever", player), lambda state: True)
     set_rule(world.get_location("Bring Home the Beacon", player), lambda state: state.can_kill_wither(player) and state.has_diamond_pickaxe(player) and 
                                                                                 state.has("Ingot Crafting", player) and state.has("Resource Blocks", player))
@@ -79,7 +79,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Sweet Dreams", player), lambda state: state.has("Bed", player) or state.can_adventure(player))
     set_rule(world.get_location("You Need a Mint", player), lambda state: can_complete(state) and state.has("Bottles", player) and state.has("Ingot Crafting", player))
     set_rule(world.get_location("Adventure", player), lambda state: True)
-    set_rule(world.get_location("Monsters Hunted", player), lambda state: can_complete(state) and state.can_kill_wither(player))
+    set_rule(world.get_location("Monsters Hunted", player), lambda state: can_complete(state) and state.can_kill_wither(player) and state.has("Fishing Rod", player)) # pufferfish
     set_rule(world.get_location("Enchanter", player), lambda state: state.can_enchant(player))
     set_rule(world.get_location("Voluntary Exile", player), lambda state: state.can_adventure(player))
     set_rule(world.get_location("Eye Spy", player), lambda state: state.enter_stronghold(player))

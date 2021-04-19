@@ -88,11 +88,12 @@ class TestAdvancements(TestMinecraft):
             ["A Furious Cocktail", False, [], ['Progressive Armor']], 
             ["A Furious Cocktail", False, [], ['Brewing']], 
             ["A Furious Cocktail", False, [], ['Bottles']], 
+            ["A Furious Cocktail", False, [], ['Fishing Rod']], 
             ["A Furious Cocktail", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["A Furious Cocktail", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
-                                          'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles']], 
+                                          'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Fishing Rod']], 
             ["A Furious Cocktail", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
-                                          'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles']],
+                                          'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Fishing Rod']],
             ])
 
     def test_42007(self):
@@ -108,6 +109,7 @@ class TestAdvancements(TestMinecraft):
             ["Bring Home the Beacon", False, ['Progressive Tools', 'Progressive Tools'], ['Progressive Tools']], 
             ["Bring Home the Beacon", False, ['Progressive Weapons'], ['Progressive Weapons', 'Progressive Weapons']], 
             ["Bring Home the Beacon", False, ['Progressive Armor'], ['Progressive Armor']], 
+            ["Bring Home the Beacon", False, [], ['Enchanting']], 
             ["Bring Home the Beacon", False, [], ['Brewing']],
             ["Bring Home the Beacon", False, [], ['Bottles']], 
             ["Bring Home the Beacon", False, [], ['Resource Blocks']], 
@@ -115,7 +117,7 @@ class TestAdvancements(TestMinecraft):
             ["Bring Home the Beacon", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                              'Progressive Weapons', 'Progressive Weapons', 'Progressive Weapons', 
                                              'Progressive Armor', 'Progressive Armor', 
-                                             'Brewing', 'Bottles', 'Resource Blocks']],
+                                             'Enchanting', 'Brewing', 'Bottles', 'Resource Blocks']],
             ])
 
     def test_42009(self):
@@ -250,6 +252,7 @@ class TestAdvancements(TestMinecraft):
             ["How Did We Get Here?", False, ['Progressive Tools', 'Progressive Tools'], ['Progressive Tools']], 
             ["How Did We Get Here?", False, ['Progressive Weapons', 'Progressive Weapons'], ['Progressive Weapons']], 
             ["How Did We Get Here?", False, ['Progressive Armor'], ['Progressive Armor']], 
+            ["How Did We Get Here?", False, [], ['Enchanting']], 
             ["How Did We Get Here?", False, [], ['Brewing']], 
             ["How Did We Get Here?", False, [], ['Bottles']], 
             ["How Did We Get Here?", False, [], ['Archery']], 
@@ -260,7 +263,7 @@ class TestAdvancements(TestMinecraft):
                                             'Progressive Tools', 'Progressive Tools', 'Progressive Tools', 
                                             'Progressive Weapons', 'Progressive Weapons', 'Progressive Weapons', 
                                             'Progressive Armor', 'Progressive Armor', 
-                                            'Brewing', 'Archery', 'Bottles', 'Resource Blocks', 'Fishing Rod', 
+                                            'Enchanting', 'Brewing', 'Archery', 'Bottles', 'Resource Blocks', 'Fishing Rod', 
                                             '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
@@ -601,14 +604,12 @@ class TestAdvancements(TestMinecraft):
             ["Monsters Hunted", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["Monsters Hunted", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
             ["Monsters Hunted", False, [], ['Archery']], 
-            ["Monsters Hunted", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
-                                       'Progressive Weapons', 'Progressive Weapons', 'Progressive Weapons', 'Archery', 
-                                       'Progressive Armor', 'Progressive Armor', 
-                                       'Brewing', 'Bottles', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["Monsters Hunted", False, [], ['Enchanting']], 
+            ["Monsters Hunted", False, [], ['Fishing Rod']], 
             ["Monsters Hunted", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                        'Progressive Weapons', 'Progressive Weapons', 'Progressive Weapons', 'Archery', 
-                                       'Progressive Armor', 'Progressive Armor', 
-                                       'Brewing', 'Bottles', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+                                       'Progressive Armor', 'Progressive Armor', 'Enchanting', 
+                                       'Fishing Rod', 'Brewing', 'Bottles', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
             ])
 
     def test_42049(self):
@@ -756,10 +757,11 @@ class TestAdvancements(TestMinecraft):
             ["Beaconator", False, [], ['Brewing']],
             ["Beaconator", False, [], ['Bottles']], 
             ["Beaconator", False, [], ['Resource Blocks']], 
+            ["Beaconator", False, [], ['Enchanting']], 
             ["Beaconator", True, [], ['Bucket']],
             ["Beaconator", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                   'Progressive Weapons', 'Progressive Weapons', 'Progressive Weapons', 'Progressive Armor', 'Progressive Armor', 
-                                  'Brewing', 'Bottles', 'Resource Blocks']],
+                                  'Brewing', 'Bottles', 'Resource Blocks', 'Enchanting']],
             ])
 
     def test_42062(self):
@@ -772,13 +774,11 @@ class TestAdvancements(TestMinecraft):
             ["Withering Heights", False, ['Progressive Armor'], ['Progressive Armor']], 
             ["Withering Heights", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["Withering Heights", False, [], ['Brewing']],
-            ["Withering Heights", False, [], ['Bottles']],  
-            ["Withering Heights", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
-                                         'Progressive Weapons', 'Progressive Weapons', 'Progressive Weapons', 'Progressive Armor', 'Progressive Armor', 
-                                         'Brewing', 'Bottles']], 
+            ["Withering Heights", False, [], ['Bottles']], 
+            ["Withering Heights", False, [], ['Enchanting']], 
             ["Withering Heights", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                          'Progressive Weapons', 'Progressive Weapons', 'Progressive Weapons', 'Progressive Armor', 'Progressive Armor', 
-                                         'Brewing', 'Bottles']],
+                                         'Brewing', 'Bottles', 'Enchanting']],
             ])
 
     def test_42063(self):

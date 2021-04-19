@@ -842,7 +842,7 @@ class CollectionState(object):
         return self.enter_nether(player) and self.has('Ingot Crafting', player)
 
     def can_kill_wither(self, player: int):
-        return self.enter_fortress(player) and self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and self.can_brew_potions(player)
+        return self.enter_fortress(player) and self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and self.can_brew_potions(player) and self.can_enchant(player)
 
     def enter_stronghold(self, player: int): 
         return self.enter_fortress(player) and self.has('Brewing', player) and self.has('3 Ender Pearls', player)
