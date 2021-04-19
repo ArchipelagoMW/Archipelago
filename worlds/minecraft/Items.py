@@ -42,7 +42,10 @@ item_table = {
     "50 XP": ItemData(45028, False), 
     "3 Ender Pearls": ItemData(45029, True),
     "4 Lapis Lazuli": ItemData(45030, False), 
-    "16 Porkchops": ItemData(45031, False)
+    "16 Porkchops": ItemData(45031, False), 
+    "8 Gold Ore": ItemData(45032, False), 
+    "Rotten Flesh": ItemData(45033, False), 
+    "Single Arrow": ItemData(45034, False)
 }
 
 # If not listed here then has frequency 1
@@ -57,10 +60,13 @@ item_frequencies = {
     "16 Iron Ore": 4, 
     "500 XP": 4, # 2 after exclusions
     "100 XP": 10, # 4 after exclusions
-    "50 XP": 12, # 5 after exclusions
+    "50 XP": 12, # 4 after exclusions
     "3 Ender Pearls": 4, 
     "4 Lapis Lazuli": 2, 
-    "16 Porkchops": 4
+    "16 Porkchops": 8, 
+    "8 Gold Ore": 4, 
+    "Rotten Flesh": 4, 
+    "Single Arrow": 0
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items()}

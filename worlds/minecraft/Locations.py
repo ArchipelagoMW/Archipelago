@@ -86,7 +86,19 @@ advancement_table = {
     "Cover Me in Debris": 42076,
     "The End?": 42077,
     "The Parrots and the Bats": 42078,
-    "A Complete Catalogue": 42079
+    "A Complete Catalogue": 42079, 
+    "Getting Wood": 42080,
+    "Time to Mine!": 42081,
+    "Hot Topic": 42082,
+    "Bake Bread": 42083,
+    "The Lie": 42084,
+    "On A Rail": 42085,
+    "Time to Strike!": 42086,
+    "Cow Tipper": 42087,
+    "When Pigs Fly": 42088,
+    "Overkill": 42089,
+    "Librarian": 42090,
+    "Overpowered": 42091
 }
 
 exclusion_table = {
@@ -99,7 +111,8 @@ exclusion_table = {
         "A Balanced Diet": "100 XP",
         "Uneasy Alliance": "100 XP",
         "Cover Me in Debris": "100 XP",
-        "A Complete Catalogue": "50 XP"
+        "A Complete Catalogue": "50 XP", 
+        "Overpowered": "50 XP"
     }, 
     "insane": {
         "How Did We Get Here?": "500 XP",

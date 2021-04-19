@@ -118,3 +118,16 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("The End?", player), lambda state: state.enter_end(player))
     set_rule(world.get_location("The Parrots and the Bats", player), lambda state: True)
     set_rule(world.get_location("A Complete Catalogue", player), lambda state: state.can_adventure(player)) # kill fish for raw
+    set_rule(world.get_location("Getting Wood", player), lambda state: True)
+    set_rule(world.get_location("Time to Mine!", player), lambda state: True)
+    set_rule(world.get_location("Hot Topic", player), lambda state: state.has("Ingot Crafting", player))
+    set_rule(world.get_location("Bake Bread", player), lambda state: True)
+    set_rule(world.get_location("The Lie", player), lambda state: state.has_iron_ingots(player) and state.has("Bucket", player))
+    set_rule(world.get_location("On A Rail", player), lambda state: state.has_iron_ingots(player))
+    set_rule(world.get_location("Time to Strike!", player), lambda state: True)
+    set_rule(world.get_location("Cow Tipper", player), lambda state: True)
+    set_rule(world.get_location("When Pigs Fly", player), lambda state: state.enter_fortress(player) and state.has("Fishing Rod", player) and state.can_adventure(player)) # saddles in fortress chests
+    set_rule(world.get_location("Overkill", player), lambda state: state.can_brew_potions(player) and state.has("Progressive Weapons", player)) # strength 2, stone axe crit
+    set_rule(world.get_location("Librarian", player), lambda state: state.has("Enchanting", player))
+    set_rule(world.get_location("Overpowered", player), lambda state: state.has_iron_ingots(player) and state.has("Resource Blocks", player) and 
+                                                                      (state.enter_nether(player) or state.has("Progressive Tools", player, 2)))
