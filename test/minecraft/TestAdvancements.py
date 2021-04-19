@@ -956,3 +956,98 @@ class TestAdvancements(TestMinecraft):
             ["A Complete Catalogue", True, ['Progressive Weapons', 'Ingot Crafting']],
             ])
 
+    def test_42080(self):
+        self.run_location_tests([
+            ["Getting Wood", True, []],
+            ])
+
+    def test_42081(self):
+        self.run_location_tests([
+            ["Time to Mine!", True, []],
+            ])
+
+    def test_42082(self):
+        self.run_location_tests([
+            ["Hot Topic", False, []],
+            ["Hot Topic", True, ['Ingot Crafting']],
+            ])
+
+    def test_42083(self):
+        self.run_location_tests([
+            ["Bake Bread", True, []],
+            ])
+
+    def test_42084(self):
+        self.run_location_tests([
+            ["The Lie", False, []],
+            ["The Lie", False, [], ['Ingot Crafting']],
+            ["The Lie", False, [], ['Bucket']],
+            ["The Lie", False, [], ['Progressive Tools']],
+            ["The Lie", True, ['Bucket', 'Ingot Crafting', 'Progressive Tools']],
+            ])
+
+    def test_42085(self):
+        self.run_location_tests([
+            ["On a Rail", False, []],
+            ["On a Rail", False, [], ['Ingot Crafting']],
+            ["On a Rail", False, [], ['Progressive Tools']],
+            ["On a Rail", True, ['Ingot Crafting', 'Progressive Tools']],
+            ])
+
+    def test_42086(self):
+        self.run_location_tests([
+            ["Time to Strike!", True, []],
+            ])
+
+    def test_42087(self):
+        self.run_location_tests([
+            ["Cow Tipper", True, []],
+            ])
+
+    def test_42088(self):
+        self.run_location_tests([
+            ["When Pigs Fly", False, []], 
+            ["When Pigs Fly", False, [], ['Ingot Crafting']], 
+            ["When Pigs Fly", False, [], ['Flint and Steel']], 
+            ["When Pigs Fly", False, [], ['Progressive Tools']], 
+            ["When Pigs Fly", False, [], ['Progressive Weapons']], 
+            ["When Pigs Fly", False, [], ['Progressive Armor']], 
+            ["When Pigs Fly", False, [], ['Fishing Rod']], 
+            ["When Pigs Fly", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["When Pigs Fly", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Fishing Rod']], 
+            ["When Pigs Fly", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Fishing Rod']],
+            ])
+
+    def test_42089(self):
+        self.run_location_tests([
+            ["Overkill", False, []], 
+            ["Overkill", False, [], ['Ingot Crafting']], 
+            ["Overkill", False, [], ['Flint and Steel']], 
+            ["Overkill", False, [], ['Progressive Tools']], 
+            ["Overkill", False, [], ['Progressive Weapons']], 
+            ["Overkill", False, [], ['Progressive Armor']], 
+            ["Overkill", False, [], ['Brewing']], 
+            ["Overkill", False, [], ['Bottles']],
+            ["Overkill", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["Overkill", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
+                                'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles']], 
+            ["Overkill", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+                                'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles']],
+            ])
+
+    def test_42090(self):
+        self.run_location_tests([
+            ["Librarian", False, []],
+            ["Librarian", True, ['Enchanting']],
+            ])
+
+    def test_42091(self):
+        self.run_location_tests([
+            ["Overpowered", False, []],
+            ["Overpowered", False, [], ['Ingot Crafting']],
+            ["Overpowered", False, [], ['Resource Blocks']],
+            ["Overpowered", False, ['Progressive Tools'], ['Flint and Steel', 'Progressive Tools', 'Progressive Tools']],
+            ["Overpowered", True, ['Resource Blocks', 'Ingot Crafting', 'Progressive Tools', 'Progressive Tools']],
+            ["Overpowered", True, ['Resource Blocks', 'Ingot Crafting', 'Progressive Tools', 'Bucket', 'Flint and Steel']],
+            ])
+
