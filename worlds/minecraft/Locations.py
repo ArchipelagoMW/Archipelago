@@ -92,7 +92,7 @@ advancement_table = {
     "Hot Topic": 42082,
     "Bake Bread": 42083,
     "The Lie": 42084,
-    "On A Rail": 42085,
+    "On a Rail": 42085,
     "Time to Strike!": 42086,
     "Cow Tipper": 42087,
     "When Pigs Fly": 42088,
