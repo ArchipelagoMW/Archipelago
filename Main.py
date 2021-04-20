@@ -26,7 +26,7 @@ from worlds.hk import gen_hollow
 from worlds.hk import create_regions as hk_create_regions
 from worlds.factorio import gen_factorio, factorio_create_regions
 from worlds.factorio.Mod import generate_mod
-from worlds.minecraft import gen_minecraft, minecraft_create_regions
+from worlds.minecraft import gen_minecraft, minecraft_create_regions, fill_minecraft_slot_data
 from worlds.generic.Rules import locality_rules
 from worlds import Games
 import Patch
@@ -521,11 +521,7 @@ def main(args, seed=None):
                     option = getattr(world, option_name)[slot]
                     slots_data[option_name] = int(option.value)
             for slot in world.minecraft_player_ids:
-                slots_data = slot_data[slot] = {}
-                for option_name in Options.minecraft_options:
-                    option = getattr(world, option_name)[slot]
-                    slots_data[option_name] = int(option.value)
-                slots_data['minecraft_world_seed'] = world.random.getrandbits(32)
+                slot_data[slot] = fill_minecraft_slot_data(world, slot)
             multidata = zlib.compress(pickle.dumps({
                 "slot_data" : slot_data,
                 "games": games,

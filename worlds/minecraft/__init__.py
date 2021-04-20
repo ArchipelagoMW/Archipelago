@@ -1,11 +1,15 @@
 import logging
+from random import Random
 from .Locations import MinecraftAdvancement, advancement_table, exclusion_table
 from .Items import MinecraftItem, item_table, item_frequencies
 from .Rules import set_rules
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
+from Options import minecraft_options
 
-logger = logging.getLogger("Minecraft") 
+logger = logging.getLogger("Minecraft")
+
+logic_version = (0, 2)
 
 # Creates regions. Only has the menu and the associated world, which contains all the locations. 
 def minecraft_create_regions(world: MultiWorld, player: int):
@@ -19,6 +23,16 @@ def minecraft_create_regions(world: MultiWorld, player: int):
         minecraft.locations.append(adv)
     start.connect(minecraft)
     world.regions += [menu, minecraft]
+
+def fill_minecraft_slot_data(world: MultiWorld, player: int): 
+    slot_data = {}
+    seed = world.rom_seeds[player]
+    for option_name in minecraft_options:
+        option = getattr(world, option_name)[player]
+        slot_data[option_name] = int(option.value)
+    slot_data['minecraft_world_seed'] = Random(seed).getrandbits(32) # consistent and doesn't interfere with other generation
+    slot_data['logic_version'] = logic_version
+    return slot_data
 
 # Generates the item pool given the table and frequencies in Items.py. 
 def minecraft_gen_item_pool(world: MultiWorld, player: int):
