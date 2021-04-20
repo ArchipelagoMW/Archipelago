@@ -1451,6 +1451,11 @@ class Spoiler(object):
                     for hk_option in Options.hollow_knight_options:
                         res = getattr(self.world, hk_option)[player]
                         outfile.write(f'{hk_option+":":33}{res}\n')
+                if player in self.world.minecraft_player_ids:
+                    import Options
+                    for mc_option in Options.minecraft_options:
+                        res = getattr(self.world, mc_option)[player]
+                        outfile.write(f'{mc_option+":":33}{bool_to_text(res) if type(res) == Options.Toggle else res.get_option_name()}\n')
                 if player in self.world.alttp_player_ids:
                     for team in range(self.world.teams):
                         outfile.write('%s%s\n' % (
@@ -1466,7 +1471,7 @@ class Spoiler(object):
                     outfile.write('Mode:                            %s\n' % self.metadata['mode'][player])
                     outfile.write('Retro:                           %s\n' %
                                   ('Yes' if self.metadata['retro'][player] else 'No'))
-                    outfile.write('Swordless:                          %s\n' % ('Yes' if self.metadata['swordless'][player] else 'No'))
+                    outfile.write('Swordless:                       %s\n' % ('Yes' if self.metadata['swordless'][player] else 'No'))
                     outfile.write('Goal:                            %s\n' % self.metadata['goal'][player])
                     if "triforce" in self.metadata["goal"][player]:  # triforce hunt
                         outfile.write("Pieces available for Triforce:   %s\n" %
