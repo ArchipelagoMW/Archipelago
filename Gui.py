@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# module is planned to be removed
 from argparse import Namespace
 from glob import glob
 import json
@@ -1908,6 +1909,7 @@ def get_image_for_sprite(sprite, gif_only: bool = False):
     image = PhotoImage(data=gif_data)
 
     return image.zoom(2)
+
 
 if __name__ == '__main__':
     import sys
