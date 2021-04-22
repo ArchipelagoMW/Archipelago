@@ -810,7 +810,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         locations = get_missing_checks(self.ctx, self.client)
 
         if locations:
-            texts = [f'Missing: {get_item_name_from_id(location)}' for location in locations]
+            texts = [f'Missing: {get_location_name_from_address(location)}' for location in locations]
             texts.append(f"Found {len(locations)} missing location checks")
             self.ctx.notify_client_multiple(self.client, texts)
         else:
