@@ -13,11 +13,11 @@ def set_rules(world: MultiWorld, player: int):
                 (location.name not in postgame_advancements) and
                 location.can_reach(state)]
 
-    # 80 total advancements, 16 are considered "hard" or "postgame". Goal is to complete X advancements and then Free the End. 
+    # 92 total advancements, 16 are typically excluded, 1 is Free the End. Goal is to complete X advancements and then Free the End. 
     goal_map = {
-        0: 25, # few
-        1: 40, # normal
-        2: 60  # many
+        0: 30, # few
+        1: 50, # normal
+        2: 70  # many
     }
     goal = goal_map[getattr(world, 'advancement_goal')[player].value]
     can_complete = lambda state: len(reachable_locations(state)) >= goal and state.can_kill_ender_dragon(player)
