@@ -67,6 +67,9 @@ free_samples:
 visibility:
   none: 0
   sending: 1
+random_tech_ingredients:
+  on: 1
+  off: 0
 # A Link to  the Past options:
 ### Logic Section ###
 # Warning: overworld_glitches is not available and minor_glitches is only partially implemented on the door-rando version

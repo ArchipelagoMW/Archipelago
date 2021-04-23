@@ -51,7 +51,7 @@ def generate_mod(world: MultiWorld, player: int, seedname: str):
                  6: 10}[world.tech_cost[player].value]
     template_data = {"locations": locations, "player_names" : player_names, "tech_table": tech_table,
                      "mod_name": mod_name, "allowed_science_packs": world.max_science_pack[player].get_allowed_packs(),
-                     "tech_cost_scale": tech_cost,
+                     "tech_cost_scale": tech_cost, "custom_data": world.custom_data[player],
                      "tech_tree_layout_prerequisites": world.tech_tree_layout_prerequisites[player]}
     for factorio_option in Options.factorio_options:
         template_data[factorio_option] = getattr(world, factorio_option)[player].value

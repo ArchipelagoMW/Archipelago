@@ -13,31 +13,28 @@ with open(source_file) as f:
 with open(recipe_source_file) as f:
     raw_recipes = json.load(f)
 tech_table = {}
-technology_table:Dict[str, Technology] = {}
+technology_table: Dict[str, Technology] = {}
 
 always = lambda state: True
 
 
 class Technology():  # maybe make subclass of Location?
-    def __init__(self, name, ingredients):
+    def __init__(self, name, ingredients, factorio_id):
         self.name = name
-        global factorio_id
         self.factorio_id = factorio_id
-        factorio_id += 1
         self.ingredients = ingredients
 
-    def build_rule(self, allowed_packs, player: int):
+    def build_rule(self, player: int):
         logging.debug(f"Building rules for {self.name}")
         ingredient_rules = []
         for ingredient in self.ingredients:
-            if ingredient in allowed_packs:
-                logging.debug(f"Building rules for ingredient {ingredient}")
-                technologies = required_technologies[ingredient]  # technologies that unlock the recipes
-                if technologies:
-                    logging.debug(f"Required Technologies: {technologies}")
-                    ingredient_rules.append(
-                        lambda state, technologies=technologies: all(state.has(technology.name, player)
-                                                                     for technology in technologies))
+            logging.debug(f"Building rules for ingredient {ingredient}")
+            technologies = required_technologies[ingredient]  # technologies that unlock the recipes
+            if technologies:
+                logging.debug(f"Required Technologies: {technologies}")
+                ingredient_rules.append(
+                    lambda state, technologies=technologies: all(state.has(technology.name, player)
+                                                                 for technology in technologies))
         if ingredient_rules:
             ingredient_rules = frozenset(ingredient_rules)
             return lambda state: all(rule(state) for rule in ingredient_rules)
@@ -57,6 +54,23 @@ class Technology():  # maybe make subclass of Location?
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.name})"
+
+    def get_custom(self, world, allowed_packs: Set[str], player: int) -> CustomTechnology:
+        return CustomTechnology(self, world, allowed_packs, player)
+
+
+class CustomTechnology(Technology):
+    """A particularly configured Technology for a world."""
+
+    def __init__(self, origin: Technology, world, allowed_packs: Set[str], player: int):
+        ingredients = origin.ingredients & allowed_packs
+        self.player = player
+        if world.random_tech_ingredients[player]:
+            ingredients = list(ingredients)
+            ingredients.sort() # deterministic sample
+            ingredients = world.random.sample(ingredients, world.random.randint(1, len(ingredients)))
+        super(CustomTechnology, self).__init__(origin.name, ingredients, origin.factorio_id)
+
 
 
 class Recipe():
@@ -80,7 +94,8 @@ for technology_name in sorted(raw):
     data = raw[technology_name]
     factorio_id += 1
     current_ingredients = set(data["ingredients"])
-    technology = Technology(technology_name, current_ingredients)
+    technology = Technology(technology_name, current_ingredients, factorio_id)
+    factorio_id += 1
     tech_table[technology_name] = technology.factorio_id
     technology_table[technology_name] = technology
 

@@ -293,7 +293,8 @@ factorio_options: typing.Dict[str, type(Option)] = {"max_science_pack": MaxScien
                                                     "tech_tree_layout": TechTreeLayout,
                                                     "tech_cost": TechCost,
                                                     "free_samples": FreeSamples,
-                                                    "visibility": Visibility}
+                                                    "visibility": Visibility,
+                                                    "random_tech_ingredients": Toggle}
 
 minecraft_options: typing.Dict[str, type(Option)] = {}
 

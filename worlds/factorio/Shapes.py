@@ -7,15 +7,16 @@ from worlds.factorio.Technologies import technology_table
 def get_shapes(world: MultiWorld, player: int) -> Dict[str, List[str]]:
     prerequisites: Dict[str, Set[str]] = {}
     layout = world.tech_tree_layout[player].value
+    custom_technologies = world.custom_data[player]["custom_technologies"]
     if layout == TechTreeLayout.option_small_diamonds:
         slice_size = 4
-        tech_names: List[str] = list(set(technology_table) - world._static_nodes)
+        tech_names: List[str] = list(set(custom_technologies) - world._static_nodes)
         tech_names.sort()
         world.random.shuffle(tech_names)
         while len(tech_names) > slice_size:
             slice = tech_names[:slice_size]
             tech_names = tech_names[slice_size:]
-            slice.sort(key=lambda tech_name: len(technology_table[tech_name].ingredients))
+            slice.sort(key=lambda tech_name: len(custom_technologies[tech_name].ingredients))
             diamond_0, diamond_1, diamond_2, diamond_3 = slice
 
             #   0    |
@@ -25,13 +26,13 @@ def get_shapes(world: MultiWorld, player: int) -> Dict[str, List[str]]:
             prerequisites[diamond_2] = prerequisites[diamond_1] = {diamond_0}
     elif layout == TechTreeLayout.option_medium_diamonds:
         slice_size = 9
-        tech_names: List[str] = list(set(technology_table) - world._static_nodes)
+        tech_names: List[str] = list(set(custom_technologies) - world._static_nodes)
         tech_names.sort()
         world.random.shuffle(tech_names)
         while len(tech_names) > slice_size:
             slice = tech_names[:slice_size]
             tech_names = tech_names[slice_size:]
-            slice.sort(key=lambda tech_name: len(technology_table[tech_name].ingredients))
+            slice.sort(key=lambda tech_name: len(custom_technologies[tech_name].ingredients))
 
             #     0     |
             #   1   2   |
@@ -53,10 +54,10 @@ def get_shapes(world: MultiWorld, player: int) -> Dict[str, List[str]]:
 
     elif layout == TechTreeLayout.option_pyramid:
         slice_size = 1
-        tech_names: List[str] = list(set(technology_table) - world._static_nodes)
+        tech_names: List[str] = list(set(custom_technologies) - world._static_nodes)
         tech_names.sort()
         world.random.shuffle(tech_names)
-        tech_names.sort(key=lambda tech_name: len(technology_table[tech_name].ingredients))
+        tech_names.sort(key=lambda tech_name: len(custom_technologies[tech_name].ingredients))
         previous_slice = []
         while len(tech_names) > slice_size:
             slice = tech_names[:slice_size]
@@ -71,14 +72,14 @@ def get_shapes(world: MultiWorld, player: int) -> Dict[str, List[str]]:
     elif layout == TechTreeLayout.option_funnel:
 
 
-        tech_names: List[str] = list(set(technology_table) - world._static_nodes)
+        tech_names: List[str] = list(set(custom_technologies) - world._static_nodes)
         # find largest inverse pyramid
         # https://www.wolframalpha.com/input/?i=x+=+1/2+(n++++1)+(2++++n)+solve+for+n
         import math
         slice_size = int(0.5*(math.sqrt(8*len(tech_names)+1)-3))
         tech_names.sort()
         world.random.shuffle(tech_names)
-        tech_names.sort(key=lambda tech_name: len(technology_table[tech_name].ingredients))
+        tech_names.sort(key=lambda tech_name: len(custom_technologies[tech_name].ingredients))
         previous_slice = []
         while slice_size:
             slice = tech_names[:slice_size]

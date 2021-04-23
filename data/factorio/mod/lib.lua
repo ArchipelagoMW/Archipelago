@@ -1,7 +1,7 @@
-function filter_ingredients(ingredients)
+function filter_ingredients(ingredients, ingredient_filter)
     local new_ingredient_list = {}
     for _, ingredient_table in pairs(ingredients) do
-        if allowed_ingredients[ingredient_table[1]] then -- name of ingredient_table
+        if ingredient_filter[ingredient_table[1]] then -- name of ingredient_table
             table.insert(new_ingredient_list, ingredient_table)
         end
     end

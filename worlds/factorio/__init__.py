@@ -15,7 +15,8 @@ def gen_factorio(world: MultiWorld, player: int):
             loc.event = tech_item.advancement
         else:
             world.itempool.append(tech_item)
-    set_rules(world, player)
+    world.custom_data[player]["custom_technologies"] = custom_technologies = set_custom_technologies(world, player)
+    set_rules(world, player, custom_technologies)
 
 
 def factorio_create_regions(world: MultiWorld, player: int):
@@ -31,22 +32,30 @@ def factorio_create_regions(world: MultiWorld, player: int):
     crash.connect(nauvis)
     world.regions += [menu, nauvis]
 
+def set_custom_technologies(world: MultiWorld, player: int):
+    custom_technologies = {}
+    world_custom = getattr(world, "_custom_technologies", {})
+    world_custom[player] = custom_technologies
+    world._custom_technologies = world_custom
+    allowed_packs = world.max_science_pack[player].get_allowed_packs()
+    for technology_name, technology in technology_table.items():
+        custom_technologies[technology_name] = technology.get_custom(world, allowed_packs, player)
+    return custom_technologies
 
-def set_rules(world: MultiWorld, player: int):
+def set_rules(world: MultiWorld, player: int, custom_technologies):
     shapes = get_shapes(world, player)
     if world.logic[player] != 'nologic':
         from worlds.generic import Rules
-        allowed_packs = world.max_science_pack[player].get_allowed_packs()
-        for tech_name, technology in technology_table.items():
-            # loose nodes
+
+        for tech_name, technology in custom_technologies.items():
             location = world.get_location(tech_name, player)
-            Rules.set_rule(location, technology.build_rule(allowed_packs, player))
+            Rules.set_rule(location, technology.build_rule(player))
             prequisites = shapes.get(tech_name)
             if prequisites:
                 locations = {world.get_location(requisite, player) for requisite in prequisites}
                 Rules.add_rule(location, lambda state,
                                                 locations=locations: all(state.can_reach(loc) for loc in locations))
 
-        # get all technologies
+        # get all science pack technologies (but not the ability to craft them)
         world.completion_condition[player] = lambda state: all(state.has(technology, player)
                                                                for technology in advancement_technologies)

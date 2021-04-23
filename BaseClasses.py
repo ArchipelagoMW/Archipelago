@@ -143,7 +143,9 @@ class MultiWorld():
             import Options
             for hk_option in Options.hollow_knight_options:
                 set_player_attr(hk_option, False)
-
+        self.custom_data = {}
+        for player in range(1, players+1):
+            self.custom_data[player] = {}
         # self.worlds = []
         # for i in range(players):
         #     self.worlds.append(worlds.alttp.ALTTPWorld({}, i))
