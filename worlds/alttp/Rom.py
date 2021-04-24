@@ -713,8 +713,12 @@ def patch_rom(world, rom, player, team, enemized):
                 if location.item.game != "A Link to the Past":
                     if location.item.game == "Factorio":
                         itemid = 0x09  # Hammer Sprite
-                    else:
+                    elif location.item.game == "Minecraft": 
+                        itemid = 0x13  # Shovel
+                    elif location.item.game == "Hollow Knight":
                         itemid = 0x21  # Bug Catching Net
+                    else: 
+                        itemid = 0x6B  # Power Star
                 # Keys in their native dungeon should use the orignal item code for keys
                 elif location.parent_region.dungeon:
                     if location.parent_region.dungeon.is_dungeon_item(location.item):
