@@ -305,7 +305,8 @@ minecraft_options: typing.Dict[str, type(Option)] = {
     "include_hard_advancements": Toggle,
     "include_insane_advancements": Toggle,
     "include_postgame_advancements": Toggle,
-    "advancement_goal": AdvancementGoal
+    "advancement_goal": AdvancementGoal, 
+    "shuffle_structures": Toggle
 }
 
 if __name__ == "__main__":

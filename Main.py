@@ -26,7 +26,7 @@ from worlds.hk import gen_hollow
 from worlds.hk import create_regions as hk_create_regions
 from worlds.factorio import gen_factorio, factorio_create_regions
 from worlds.factorio.Mod import generate_mod
-from worlds.minecraft import gen_minecraft, minecraft_create_regions, fill_minecraft_slot_data
+from worlds.minecraft import gen_minecraft, minecraft_create_regions, fill_minecraft_slot_data, link_minecraft_structures
 from worlds.generic.Rules import locality_rules
 from worlds import Games
 import Patch
@@ -252,6 +252,14 @@ def main(args, seed=None):
 
         world.random = old_random
         plando_connect(world, player)
+
+    logger.info('Shuffling Minecraft structures.')
+
+    for player in world.minecraft_player_ids:
+        old_random = world.random
+        world.random = random.Random(world.er_seeds[player])
+        link_minecraft_structures(world, player)
+        world.random = old_random
 
     logger.info('Generating Item Pool.')
 
