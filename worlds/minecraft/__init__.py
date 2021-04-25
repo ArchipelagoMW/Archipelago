@@ -60,7 +60,12 @@ def link_minecraft_structures(world: MultiWorld, player: int):
     structs = ["Village", "Pillager Outpost", "Nether Fortress", "Bastion Remnant", "End City"]
 
     if world.shuffle_structures[player]: 
+        # Can't put Nether Fortress in the End
+        end_struct = world.random.choice([s for s in structs if s != 'Nether Fortress'])
+        structs.remove(end_struct)
         world.random.shuffle(structs)
+        structs.append(end_struct)
+
     for exit, struct in zip(exits, structs):
         world.get_entrance(exit, player).connect(world.get_region(struct, player))
 
