@@ -689,6 +689,14 @@ bonk_addresses = [0x4CF6C, 0x4CFBA, 0x4CFE0, 0x4CFFB, 0x4D018, 0x4D01B, 0x4D028,
                   0x4D3F8, 0x4D416, 0x4D420, 0x4D423, 0x4D42D, 0x4D449, 0x4D48C, 0x4D4D9, 0x4D4DC, 0x4D4E3,
                   0x4D504, 0x4D507, 0x4D55E, 0x4D56A]
 
+def get_nonnative_item_sprite(game): 
+    game_to_id = {
+        "Factorio":         0x09, # Hammer
+        "Hollow Knight":    0x21, # Bug Catching Net
+        "Minecraft":        0x13, # Shovel
+    }
+    return game_to_id.get(game, 0x6B) # default to Power Star
+
 def patch_rom(world, rom, player, team, enemized):
     local_random = world.rom_seeds[player]
 
@@ -711,14 +719,7 @@ def patch_rom(world, rom, player, team, enemized):
 
             if location.item is not None:
                 if location.item.game != "A Link to the Past":
-                    if location.item.game == "Factorio":
-                        itemid = 0x09  # Hammer Sprite
-                    elif location.item.game == "Minecraft": 
-                        itemid = 0x13  # Shovel
-                    elif location.item.game == "Hollow Knight":
-                        itemid = 0x21  # Bug Catching Net
-                    else: 
-                        itemid = 0x6B  # Power Star
+                    itemid = get_nonnative_item_sprite(location.item.game)
                 # Keys in their native dungeon should use the orignal item code for keys
                 elif location.parent_region.dungeon:
                     if location.parent_region.dungeon.is_dungeon_item(location.item):
@@ -1655,7 +1656,20 @@ def write_custom_shops(rom, world, player):
             if item is None:
                 break
             if not item['item'] in item_table: # item not native to ALTTP
-                item_code = 0x09  # Hammer
+                # This is a terrible way to do this, please fix later
+                from worlds.hk.Items import lookup_id_to_name as hk_lookup
+                from worlds.factorio.Technologies import lookup_id_to_name as factorio_lookup
+                from worlds.minecraft.Items import lookup_id_to_name as mc_lookup
+                item_name = item['item']
+                if item_name in hk_lookup.values():
+                    item_game = 'Hollow Knight'
+                elif item_name in factorio_lookup.values():
+                    item_game = 'Factorio'
+                elif item_name in mc_lookup.values():
+                    item_game = 'Minecraft'
+                else: 
+                    item_game = 'Generic'
+                item_code = get_nonnative_item_sprite(item_game)
             else:
                 item_code = ItemFactory(item['item'], player).code
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro[player]:
