@@ -141,7 +141,7 @@ for file in os.listdir(alttpr_sprites_folder):
 
 if signtool:
     for exe in exes:
-        print(f"Signing {exe.targetName}")
-        os.system(signtool + exe.targetName)
+        print(f"Signing {exe.target_name}")
+        os.system(signtool + os.path.join(buildfolder, exe.target_name))
 
 manifest_creation()
