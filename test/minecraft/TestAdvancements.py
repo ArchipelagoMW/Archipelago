@@ -503,9 +503,10 @@ class TestAdvancements(TestMinecraft):
             ["Not Quite \"Nine\" Lives", False, [], ['Ingot Crafting']], 
             ["Not Quite \"Nine\" Lives", False, [], ['Flint and Steel']], 
             ["Not Quite \"Nine\" Lives", False, [], ['Progressive Tools']], 
+            ["Not Quite \"Nine\" Lives", False, [], ['Resource Blocks']], 
             ["Not Quite \"Nine\" Lives", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["Not Quite \"Nine\" Lives", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket']], 
-            ["Not Quite \"Nine\" Lives", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools']],
+            ["Not Quite \"Nine\" Lives", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Resource Blocks']], 
+            ["Not Quite \"Nine\" Lives", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Resource Blocks']],
             ])
 
     def test_42041(self):

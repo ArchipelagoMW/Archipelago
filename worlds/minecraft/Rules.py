@@ -71,7 +71,7 @@ def set_rules(world: MultiWorld, player: int):
                                                                      state.can_use_anvil(player) and state.can_enchant(player))
     set_rule(world.get_location("The End... Again...", player), lambda state: can_complete(state) and state.has("Ingot Crafting", player))
     set_rule(world.get_location("Acquire Hardware", player), lambda state: state.has_iron_ingots(player))
-    set_rule(world.get_location("Not Quite \"Nine\" Lives", player), lambda state: state.can_piglin_trade(player))
+    set_rule(world.get_location("Not Quite \"Nine\" Lives", player), lambda state: state.can_piglin_trade(player) and state.has("Resource Blocks", player))
     set_rule(world.get_location("Cover Me With Diamonds", player), lambda state: state.has("Progressive Armor", player, 2) and state.can_reach("Diamonds!", "Location", player))
     set_rule(world.get_location("Sky's the Limit", player), lambda state: state.enter_end(player))
     set_rule(world.get_location("Hired Help", player), lambda state: state.has("Resource Blocks", player) and state.has_iron_ingots(player))
