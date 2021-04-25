@@ -68,6 +68,7 @@ def link_minecraft_structures(world: MultiWorld, player: int):
 
     for exit, struct in zip(exits, structs):
         world.get_entrance(exit, player).connect(world.get_region(struct, player))
+        world.spoiler.set_entrance(exit, struct, 'entrance', player)
 
 def fill_minecraft_slot_data(world: MultiWorld, player: int): 
     slot_data = {}
