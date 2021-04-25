@@ -1,6 +1,6 @@
 import logging
 from random import Random
-from .Locations import MinecraftAdvancement, advancement_table, exclusion_table
+from .Locations import MinecraftAdvancement, advancement_table, exclusion_table, events_table
 from .Items import MinecraftItem, item_table, item_frequencies
 from .Rules import set_rules
 
@@ -87,13 +87,14 @@ def minecraft_gen_item_pool(world: MultiWorld, player: int):
         for count in range(item_frequencies.get(item_name, 1)):
             pool.append(MinecraftItem(item_name, item_data.progression, item_data.code, player))
 
-    to_exclude = {}
+    prefill_pool = {}
+    prefill_pool.update(events_table)
     exclusion_pools = ['hard', 'insane', 'postgame']
     for key in exclusion_pools: 
         if not getattr(world, f"include_{key}_advancements")[player]: 
-            to_exclude.update(exclusion_table[key])
+            prefill_pool.update(exclusion_table[key])
 
-    for loc_name, item_name in to_exclude.items():
+    for loc_name, item_name in prefill_pool.items():
         item_data = item_table[item_name]
         location = world.get_location(loc_name, player)
         item = MinecraftItem(item_name, item_data.progression, item_data.code, player)

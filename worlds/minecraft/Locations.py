@@ -11,8 +11,8 @@ class MinecraftAdvancement(Location):
         super().__init__(player, name, address, parent)
 
 advancement_table = {
-    "Who is Cutting Onions?": AdvData(42000, 'The Nether'), # nether or bastion?
-    "Oh Shiny": AdvData(42001, 'The Nether'), # nether or bastion?
+    "Who is Cutting Onions?": AdvData(42000, 'Overworld'),
+    "Oh Shiny": AdvData(42001, 'Overworld'),
     "Suit Up": AdvData(42002, 'Overworld'),
     "Very Very Frightening": AdvData(42003, 'Village'),
     "Hot Stuff": AdvData(42004, 'Overworld'),
@@ -74,7 +74,7 @@ advancement_table = {
     "Hidden in the Depths": AdvData(42060, 'The Nether'),
     "Beaconator": AdvData(42061, 'Nether Fortress'),
     "Withering Heights": AdvData(42062, 'Nether Fortress'),
-    "A Balanced Diet": AdvData(42063, 'Overworld'),
+    "A Balanced Diet": AdvData(42063, 'Village'),
     "Subspace Bubble": AdvData(42064, 'The Nether'),
     "Husbandry": AdvData(42065, 'Overworld'),
     "Country Lode, Take Me Home": AdvData(42066, 'The Nether'),
@@ -102,7 +102,9 @@ advancement_table = {
     "When Pigs Fly": AdvData(42088, 'Overworld'),
     "Overkill": AdvData(42089, 'Nether Fortress'),
     "Librarian": AdvData(42090, 'Overworld'),
-    "Overpowered": AdvData(42091, 'Overworld')
+    "Overpowered": AdvData(42091, 'Overworld'), 
+
+    "Nether Fortress Entry": AdvData(0, 'Nether Fortress')
 }
 
 exclusion_table = {
@@ -131,4 +133,9 @@ exclusion_table = {
 }
 
 
-lookup_id_to_name: typing.Dict[int, str] = {loc_data.id: loc_name for loc_name, loc_data in advancement_table.items()}
+events_table = {
+    "Nether Fortress Entry": "Nether Fortress Entry"
+}
+
+
+lookup_id_to_name: typing.Dict[int, str] = {loc_data.id: loc_name for loc_name, loc_data in advancement_table.items() if loc_data.id}

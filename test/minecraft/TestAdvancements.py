@@ -74,7 +74,7 @@ class TestAdvancements(TestMinecraft):
                                     'Progressive Weapons', 'Progressive Weapons', 'Archery', 'Progressive Armor', 
                                     'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
             ["Free the End", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
-                                    'Progressive Weapons', 'Progressive Weapons', 'Archery', 'Progressive Armor', 
+                                    'Progressive Weapons', 'Progressive Weapons', 'Archery', 'Progressive Armor',  
                                     'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
@@ -189,10 +189,12 @@ class TestAdvancements(TestMinecraft):
             ["Hot Tourist Destinations", False, [], ['Ingot Crafting']], 
             ["Hot Tourist Destinations", False, [], ['Flint and Steel']], 
             ["Hot Tourist Destinations", False, [], ['Progressive Tools']], 
+            ["Hot Tourist Destinations", False, [], ['Progressive Weapons']], 
+            ["Hot Tourist Destinations", False, [], ['Progressive Armor']], 
             ["Hot Tourist Destinations", False, [], ['Fishing Rod']],
             ["Hot Tourist Destinations", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["Hot Tourist Destinations", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Fishing Rod']], 
-            ["Hot Tourist Destinations", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Fishing Rod']],
+            ["Hot Tourist Destinations", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Flint and Steel', 'Bucket', 'Fishing Rod']], 
+            ["Hot Tourist Destinations", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Fishing Rod']],
             ])
 
     def test_42015(self):
@@ -201,10 +203,12 @@ class TestAdvancements(TestMinecraft):
             ["This Boat Has Legs", False, [], ['Ingot Crafting']], 
             ["This Boat Has Legs", False, [], ['Flint and Steel']], 
             ["This Boat Has Legs", False, [], ['Progressive Tools']], 
+            ["This Boat Has Legs", False, [], ['Progressive Weapons']], 
+            ["This Boat Has Legs", False, [], ['Progressive Armor']], 
             ["This Boat Has Legs", False, [], ['Fishing Rod']],
             ["This Boat Has Legs", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["This Boat Has Legs", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Fishing Rod']], 
-            ["This Boat Has Legs", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Fishing Rod']],
+            ["This Boat Has Legs", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Flint and Steel', 'Bucket', 'Fishing Rod']], 
+            ["This Boat Has Legs", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Fishing Rod']],
             ])
 
     def test_42016(self): 
@@ -434,9 +438,11 @@ class TestAdvancements(TestMinecraft):
             ["War Pigs", False, [], ['Ingot Crafting']], 
             ["War Pigs", False, [], ['Flint and Steel']], 
             ["War Pigs", False, [], ['Progressive Tools']], 
+            ["War Pigs", False, [], ['Progressive Weapons']], 
+            ["War Pigs", False, [], ['Progressive Armor']], 
             ["War Pigs", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["War Pigs", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket']], 
-            ["War Pigs", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools']],
+            ["War Pigs", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor']], 
+            ["War Pigs", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor']],
             ])
 
     def test_42035(self):
@@ -626,9 +632,10 @@ class TestAdvancements(TestMinecraft):
         self.run_location_tests([
             ["Voluntary Exile", False, []],
             ["Voluntary Exile", False, [], ['Progressive Weapons']],
-            ["Voluntary Exile", False, [], ['Campfire', 'Ingot Crafting']],
-            ["Voluntary Exile", True, ['Progressive Weapons', 'Campfire']],
-            ["Voluntary Exile", True, ['Progressive Weapons', 'Ingot Crafting']],
+            ["Voluntary Exile", False, [], ['Progressive Armor']],
+            ["Voluntary Exile", False, [], ['Progressive Tools']],
+            ["Voluntary Exile", False, [], ['Ingot Crafting']],
+            ["Voluntary Exile", True, ['Progressive Tools', 'Progressive Armor', 'Progressive Weapons', 'Ingot Crafting']],
             ])
 
     def test_42051(self):
@@ -717,9 +724,10 @@ class TestAdvancements(TestMinecraft):
             ["Those Were the Days", False, [], ['Ingot Crafting']], 
             ["Those Were the Days", False, [], ['Flint and Steel']], 
             ["Those Were the Days", False, [], ['Progressive Tools']], 
+            ["Those Were the Days", False, [], ['Progressive Weapons']], 
             ["Those Were the Days", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["Those Were the Days", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket']], 
-            ["Those Were the Days", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools']],
+            ["Those Were the Days", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons']], 
+            ["Those Were the Days", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons']],
             ])
 
     def test_42059(self):
@@ -875,9 +883,10 @@ class TestAdvancements(TestMinecraft):
             ["A Terrible Fortress", False, [], ['Ingot Crafting']], 
             ["A Terrible Fortress", False, [], ['Flint and Steel']], 
             ["A Terrible Fortress", False, [], ['Progressive Tools']], 
+            ["A Terrible Fortress", False, [], ['Progressive Weapons']], 
             ["A Terrible Fortress", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["A Terrible Fortress", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket']], 
-            ["A Terrible Fortress", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools']],
+            ["A Terrible Fortress", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons']], 
+            ["A Terrible Fortress", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons']],
             ])
 
     def test_42072(self):

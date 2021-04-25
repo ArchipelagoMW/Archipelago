@@ -814,6 +814,9 @@ class CollectionState(object):
     def has_iron_ingots(self, player: int):
         return self.has('Progressive Tools', player) and self.has('Ingot Crafting', player)
 
+    def has_gold_ingots(self, player: int): 
+        return self.has('Ingot Crafting', player) and (self.has('Progressive Tools', player, 2) or self.can_reach('The Nether', 'Region', player))
+
     def has_diamond_pickaxe(self, player: int):
         return self.has('Progressive Tools', player, 3) and self.has_iron_ingots(player)
 
@@ -826,32 +829,32 @@ class CollectionState(object):
     def can_use_anvil(self, player: int): 
         return self.has('Enchanting', player) and self.has('Resource Blocks', player) and self.has_iron_ingots(player)
 
-    def can_adventure(self, player: int):
-        return self.has('Progressive Weapons', player) and (self.has('Ingot Crafting', player) or self.has('Campfire', player)) # logic for finding villages and pillager outposts
+    def can_adventure(self, player: int): # kill basic enemies, cook food
+        return self.has('Progressive Weapons', player) and (self.has('Ingot Crafting', player) or self.has('Campfire', player))
 
-    def enter_nether(self, player: int): 
-        return self.has("Flint and Steel", player) and (self.has("Bucket", player) or self.has("Progressive Tools", player, 3)) and self.has_iron_ingots(player)
+    def basic_combat(self, player: int): 
+        return self.has('Progressive Weapons', player) and self.has('Progressive Armor', player) and self.has_iron_ingots(player)
 
-    def enter_fortress(self, player: int): 
-        return self.enter_nether(player) and self.has('Progressive Armor', player) and self.has('Progressive Weapons', player)
+    def complete_raid(self, player: int): 
+        return self.can_reach('Village', 'Region', player) and self.can_reach('Pillager Outpost', 'Region', player) and self.basic_combat(player) and self.has('Progressive Weapons', player, 2)
+
+    def fortress_loot(self, player: int): # saddles, blaze rods, wither skulls
+        return self.has('Nether Fortress Entry', player) and self.basic_combat(player) # needs an event because this is part of End Portal access logic
 
     def can_brew_potions(self, player: int): 
-        return self.enter_fortress(player) and self.has('Brewing', player) and self.has('Bottles', player)
+        return self.fortress_loot(player) and self.has('Brewing', player) and self.has('Bottles', player) and self.has('Ingot Crafting', player)
 
     def can_piglin_trade(self, player: int): 
-        return self.enter_nether(player) and self.has('Ingot Crafting', player)
+        return self.has_gold_ingots(player) and (self.can_reach('The Nether', 'Region', player) or self.can_reach('Bastion Remnant', 'Region', player))
 
-    def can_kill_wither(self, player: int):
-        return self.enter_fortress(player) and self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and self.can_brew_potions(player) and self.can_enchant(player)
+    def can_kill_wither(self, player: int): # need skulls and soul sand
+        return self.fortress_loot(player) and (self.can_reach('The Nether', 'Region', player) or self.can_piglin_trade(player)) and self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and self.can_brew_potions(player) and self.can_enchant(player)
 
     def enter_stronghold(self, player: int): 
-        return self.enter_fortress(player) and self.has('Brewing', player) and self.has('3 Ender Pearls', player)
-
-    def enter_end(self, player: int):
-        return self.enter_stronghold(player) and self.has('3 Ender Pearls', player, 4)
+        return self.fortress_loot(player) and self.has('Brewing', player) and self.has('3 Ender Pearls', player)
 
     def can_kill_ender_dragon(self, player: int):
-        return self.enter_end(player) and self.has('Progressive Weapons', player, 2) and self.has('Archery', player)
+        return self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and self.has('Archery', player)
 
 
     def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:

@@ -1,6 +1,6 @@
 from test.TestBase import TestBase
 from BaseClasses import MultiWorld
-from worlds.minecraft import minecraft_create_regions, minecraft_gen_item_pool
+from worlds.minecraft import minecraft_create_regions, minecraft_gen_item_pool, link_minecraft_structures
 from worlds.minecraft.Rules import set_rules
 from worlds.minecraft.Items import MinecraftItem, item_table
 from Options import AdvancementGoal
@@ -31,7 +31,9 @@ class TestMinecraft(TestBase):
         for pool in exclusion_pools:
             setattr(self.world, f"include_{pool}_advancements", [False, False])
         setattr(self.world, "advancement_goal", [0, AdvancementGoal(value=1)])
+        setattr(self.world, "shuffle_structures", [False, False])
         minecraft_create_regions(self.world, 1)
+        link_minecraft_structures(self.world, 1)
         minecraft_gen_item_pool(self.world, 1)
         set_rules(self.world, 1)
 

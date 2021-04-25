@@ -45,7 +45,8 @@ item_table = {
     "16 Porkchops": ItemData(45031, False), 
     "8 Gold Ore": ItemData(45032, False), 
     "Rotten Flesh": ItemData(45033, False), 
-    "Single Arrow": ItemData(45034, False)
+    "Single Arrow": ItemData(45034, False), 
+    "Nether Fortress Entry": ItemData(0, True)
 }
 
 # If not listed here then has frequency 1
@@ -69,4 +70,4 @@ item_frequencies = {
     "Single Arrow": 0
 }
 
-lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items()}
+lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
