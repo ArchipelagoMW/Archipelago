@@ -26,7 +26,8 @@ from worlds.hk import gen_hollow
 from worlds.hk import create_regions as hk_create_regions
 from worlds.factorio import gen_factorio, factorio_create_regions
 from worlds.factorio.Mod import generate_mod
-from worlds.minecraft import gen_minecraft, minecraft_create_regions, fill_minecraft_slot_data, link_minecraft_structures, generate_mc_data
+from worlds.minecraft import gen_minecraft, fill_minecraft_slot_data, generate_mc_data
+from worlds.minecraft.Regions import minecraft_create_regions, link_minecraft_structures
 from worlds.generic.Rules import locality_rules
 from worlds import Games
 import Patch
@@ -319,9 +320,7 @@ def main(args, seed=None):
         balance_multiworld_progression(world)
 
     logger.info('Generating output files.')
-
     outfilebase = 'AP_%s' % (args.outputname if args.outputname else world.seed)
-
     rom_names = []
 
     def _gen_rom(team: int, player: int):
