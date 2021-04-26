@@ -26,7 +26,7 @@ from worlds.hk import gen_hollow
 from worlds.hk import create_regions as hk_create_regions
 from worlds.factorio import gen_factorio, factorio_create_regions
 from worlds.factorio.Mod import generate_mod
-from worlds.minecraft import gen_minecraft, minecraft_create_regions, fill_minecraft_slot_data, link_minecraft_structures
+from worlds.minecraft import gen_minecraft, minecraft_create_regions, fill_minecraft_slot_data, link_minecraft_structures, generate_mc_data
 from worlds.generic.Rules import locality_rules
 from worlds import Games
 import Patch
@@ -436,6 +436,8 @@ def main(args, seed=None):
         for player in world.factorio_player_ids:
             mod_futures.append(pool.submit(generate_mod, world, player,
                                            str(args.outputname if args.outputname else world.seed)))
+        for player in world.minecraft_player_ids:
+            generate_mc_data(world, player)
 
         def get_entrance_to_region(region: Region):
             for entrance in region.entrances:

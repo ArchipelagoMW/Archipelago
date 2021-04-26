@@ -70,13 +70,26 @@ def link_minecraft_structures(world: MultiWorld, player: int):
         world.get_entrance(exit, player).connect(world.get_region(struct, player))
         world.spoiler.set_entrance(exit, struct, 'entrance', player)
 
+def generate_mc_data(world: MultiWorld, player: int): 
+    import base64, json
+    from Utils import output_path
+
+    data = {}
+    seed = world.rom_seeds[player]
+    data['world_seed'] = Random(seed).getrandbits(32) # consistent and doesn't interfere with other generation
+    exits = ["Overworld Structure 1", "Overworld Structure 2", "Nether Structure 1", "Nether Structure 2", "The End Structure"]
+    data['structures'] = {exit: world.get_entrance(exit, player).connected_region.name for exit in exits}
+
+    b = base64.b64encode(bytes(json.dumps(data), 'utf-8'))
+    filename = f"AP_{world.seed}_P{player}_{world.get_player_names(player)}.apmc"
+    with open(output_path(filename), 'wb') as f: 
+        f.write(b)
+
 def fill_minecraft_slot_data(world: MultiWorld, player: int): 
     slot_data = {}
-    seed = world.rom_seeds[player]
     for option_name in minecraft_options:
         option = getattr(world, option_name)[player]
         slot_data[option_name] = int(option.value)
-    slot_data['minecraft_world_seed'] = Random(seed).getrandbits(32) # consistent and doesn't interfere with other generation
     slot_data['logic_version'] = logic_version
     return slot_data
 
