@@ -1,6 +1,7 @@
 from test.TestBase import TestBase
 from BaseClasses import MultiWorld
-from worlds.minecraft import minecraft_create_regions, minecraft_gen_item_pool, link_minecraft_structures
+from worlds.minecraft import minecraft_gen_item_pool
+from worlds.minecraft.Regions import minecraft_create_regions, link_minecraft_structures
 from worlds.minecraft.Rules import set_rules
 from worlds.minecraft.Items import MinecraftItem, item_table
 from Options import AdvancementGoal

@@ -823,6 +823,9 @@ class CollectionState(object):
     def craft_crossbow(self, player: int): 
         return self.has('Archery', player) and self.has_iron_ingots(player)
 
+    def has_bottle_mc(self, player: int): 
+        return self.has('Bottles', player) and self.has('Ingot Crafting', player)
+
     def can_enchant(self, player: int): 
         return self.has('Enchanting', player) and self.has_diamond_pickaxe(player) # mine obsidian and lapis
 
@@ -842,7 +845,7 @@ class CollectionState(object):
         return self.has('Nether Fortress Entry', player) and self.basic_combat(player) # needs an event because this is part of End Portal access logic
 
     def can_brew_potions(self, player: int): 
-        return self.fortress_loot(player) and self.has('Brewing', player) and self.has('Bottles', player) and self.has('Ingot Crafting', player)
+        return self.fortress_loot(player) and self.has('Brewing', player) and self.has_bottle_mc(player)
 
     def can_piglin_trade(self, player: int): 
         return self.has_gold_ingots(player) and (self.can_reach('The Nether', 'Region', player) or self.can_reach('Bastion Remnant', 'Region', player))
