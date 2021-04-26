@@ -256,10 +256,7 @@ def main(args, seed=None):
     logger.info('Shuffling Minecraft structures.')
 
     for player in world.minecraft_player_ids:
-        old_random = world.random
-        world.random = random.Random(world.er_seeds[player])
         link_minecraft_structures(world, player)
-        world.random = old_random
 
     logger.info('Generating Item Pool.')
 
