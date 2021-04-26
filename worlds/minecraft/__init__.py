@@ -8,7 +8,7 @@ from Options import minecraft_options
 
 logic_version = (0, 3)
 
-def generate_mc_data(world: MultiWorld, player: int): 
+def generate_mc_data(world: MultiWorld, player: int, seedname): 
     import base64, json
     from Utils import output_path
 
@@ -19,7 +19,7 @@ def generate_mc_data(world: MultiWorld, player: int):
     data['structures'] = {exit: world.get_entrance(exit, player).connected_region.name for exit in exits}
 
     b = base64.b64encode(bytes(json.dumps(data), 'utf-8'))
-    filename = f"AP_{world.seed}_P{player}_{world.get_player_names(player)}.apmc"
+    filename = f"AP_{seedname}_P{player}_{world.get_player_names(player)}.apmc"
     with open(output_path(filename), 'wb') as f: 
         f.write(b)
 

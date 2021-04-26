@@ -433,7 +433,7 @@ def main(args, seed=None):
             mod_futures.append(pool.submit(generate_mod, world, player,
                                            str(args.outputname if args.outputname else world.seed)))
         for player in world.minecraft_player_ids:
-            generate_mc_data(world, player)
+            generate_mc_data(world, player, str(args.outputname if args.outputname else world.seed))
 
         def get_entrance_to_region(region: Region):
             for entrance in region.entrances:
