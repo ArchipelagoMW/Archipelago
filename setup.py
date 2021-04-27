@@ -66,7 +66,7 @@ exes = []
 for script, scriptname in scripts.items():
     exes.append(cx_Freeze.Executable(
         script=script,
-        targetName=scriptname + ("" if sys.platform == "linux" else ".exe"),
+        target_name=scriptname + ("" if sys.platform == "linux" else ".exe"),
         icon=icon,
     ))
 
