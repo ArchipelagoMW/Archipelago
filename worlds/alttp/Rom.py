@@ -513,7 +513,7 @@ class Sprite():
     author_name: Optional[str] = None
 
     def __init__(self, filename):
-        if not hasattr(Sprite, "palette"):
+        if not hasattr(Sprite, "base_data"):
             self.get_vanilla_sprite_data()
         with open(filename, 'rb') as file:
             filedata = file.read()
