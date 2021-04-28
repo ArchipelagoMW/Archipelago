@@ -29,7 +29,7 @@ from worlds.alttp import Items, Regions
 from worlds import network_data_package, lookup_any_item_id_to_name, lookup_any_item_name_to_id, \
     lookup_any_location_id_to_name, lookup_any_location_name_to_id
 import Utils
-from Utils import get_item_name_from_id, get_location_name_from_address, \
+from Utils import get_item_name_from_id, get_location_name_from_id, \
     _version_tuple, restricted_loads, Version
 from NetUtils import Node, Endpoint, ClientStatus, NetworkItem, decode, NetworkPlayer
 
@@ -474,8 +474,8 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
                     get_received_items(ctx, team, target_player).append(new_item)
 
                 logging.info('(Team #%d) %s sent %s to %s (%s)' % (
-                team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(item_id),
-                ctx.player_names[(team, target_player)], get_location_name_from_address(location)))
+                    team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(item_id),
+                    ctx.player_names[(team, target_player)], get_location_name_from_id(location)))
                 info_text = json_format_send_event(new_item, target_player)
                 ctx.broadcast_team(team, [info_text])
 
@@ -526,7 +526,7 @@ def collect_hints_location(ctx: Context, team: int, slot: int, location: str) ->
 def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
     text = f"[Hint]: {ctx.player_names[team, hint.receiving_player]}'s " \
            f"{lookup_any_item_id_to_name[hint.item]} is " \
-           f"at {get_location_name_from_address(hint.location)} " \
+           f"at {get_location_name_from_id(hint.location)} " \
            f"in {ctx.player_names[team, hint.finding_player]}'s World"
 
     if hint.entrance:
@@ -810,7 +810,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         locations = get_missing_checks(self.ctx, self.client)
 
         if locations:
-            texts = [f'Missing: {get_location_name_from_address(location)}' for location in locations]
+            texts = [f'Missing: {get_location_name_from_id(location)}' for location in locations]
             texts.append(f"Found {len(locations)} missing location checks")
             self.ctx.notify_client_multiple(self.client, texts)
         else:
