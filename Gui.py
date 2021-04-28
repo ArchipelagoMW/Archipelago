@@ -1746,7 +1746,8 @@ def update_sprites(task, on_finish=None):
     try:
         task.update_status("Determining needed sprites")
         current_sprites = [os.path.basename(file) for file in glob(sprite_dir + '/*')]
-        alttpr_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path)) for sprite in sprites_arr]
+        alttpr_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path))
+                          for sprite in sprites_arr if sprite["author"] != "Nintendo"]
         needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in alttpr_sprites if filename not in current_sprites]
 
         alttpr_filenames = [filename for (_, filename) in alttpr_sprites]

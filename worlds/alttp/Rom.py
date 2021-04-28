@@ -548,10 +548,10 @@ class Sprite():
         from Patch import get_base_rom_path
         file_name = get_base_rom_path()
         base_rom_bytes = bytes(read_rom(open(file_name, "rb")))
-        sprite = base_rom_bytes[0x80000:0x87000]
-        palette = base_rom_bytes[0xDD308:0xDD380]
-        glove_palette = base_rom_bytes[0xDEDF5:0xDEDF9]
-        Sprite.base_data = sprite + palette + glove_palette
+        Sprite.sprite = base_rom_bytes[0x80000:0x87000]
+        Sprite.palette = base_rom_bytes[0xDD308:0xDD380]
+        Sprite.glove_palette = base_rom_bytes[0xDEDF5:0xDEDF9]
+        Sprite.base_data = Sprite.sprite + Sprite.palette + Sprite.glove_palette
 
     def from_ap_sprite(self, filedata):
         filedata = filedata.decode("utf-8-sig")
