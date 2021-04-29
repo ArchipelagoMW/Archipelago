@@ -13,7 +13,7 @@ from MultiServer import mark_raw
 
 import Utils
 import random
-from NetUtils import RawJSONtoTextParser, NetworkItem
+from NetUtils import RawJSONtoTextParser, NetworkItem, ClientStatus
 
 from worlds.factorio.Technologies import lookup_id_to_name
 
@@ -108,8 +108,13 @@ async def game_watcher(ctx: FactorioContext):
                     with open(bridge_file) as f:
                         data = json.load(f)
                         research_data = data["research_done"]
-
                         research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
+                        victory = data["victory"]
+
+                    if not ctx.finished_game and victory:
+                        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                        ctx.finished_game = True
+
                     if ctx.locations_checked != research_data:
                         bridge_logger.info(f"New researches done: "
                                            f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")

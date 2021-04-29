@@ -6,6 +6,7 @@ FREE_SAMPLES = {{ free_samples }}
 
 -- Initialize force data, either from it being created or already being part of the game when the mod was added.
 function on_force_created(event)
+    --event.force appears to be LuaForce.name, not LuaForce
     game.forces[event.force].research_queue_enabled = true
     local data = {}
     if FREE_SAMPLES ~= 0 then
@@ -14,13 +15,14 @@ function on_force_created(event)
             ["stone-furnace"] = 19
         }
     end
+    data["victory"] = 0
     global.forcedata[event.force] = data
 end
 script.on_event(defines.events.on_force_created, on_force_created)
 
 -- Destroy force data.  This doesn't appear to be currently possible with the Factorio API, but here for completeness.
 function on_force_destroyed(event)
-    global.forcedata[event.force] = nil
+    global.forcedata[event.force.name] = nil
 end
 
 -- Initialize player data, either from them joining the game or them already being part of the game when the mod was
@@ -42,6 +44,12 @@ function on_player_removed(event)
     global.playerdata[event.player_index] = nil
 end
 script.on_event(defines.events.on_player_removed, on_player_removed)
+
+function on_rocket_launched(event)
+    global.forcedata[event.rocket.force.name]['victory'] = 1
+    dumpInfo(event.rocket.force)
+end
+script.on_event(defines.events.on_rocket_launched, on_rocket_launched)
 
 -- Updates a player, attempting to send them any pending samples (if relevant)
 function update_player(index)
@@ -134,15 +142,15 @@ end)
 
 -- for testing
 script.on_event(defines.events.on_tick, function(event)
-    if event.tick%600 == 0 then
-        dumpTech(game.forces["player"])
+    if event.tick%600 == 300 then
+        dumpInfo(game.forces["player"])
     end
 end)
 
 -- hook into researches done
 script.on_event(defines.events.on_research_finished, function(event)
     local technology = event.research
-    dumpTech(technology.force)
+    dumpInfo(technology.force)
     if FREE_SAMPLES == 0 then
         return  -- Nothing else to do
     end
@@ -171,9 +179,12 @@ script.on_event(defines.events.on_research_finished, function(event)
     end
 end)
 
-function dumpTech(force)
+function dumpInfo(force)
     local research_done = {}
-    local data_collection = {["research_done"] = research_done}
+    local data_collection = {
+        ["research_done"] = research_done,
+        ["victory"] = global.forcedata[force.name]["victory"]
+        }
 
     for tech_name, tech in pairs(force.technologies) do
         if tech.researched and string.find(tech_name, "ap%-") == 1 then
@@ -190,7 +201,7 @@ end
 -- add / commands
 
 commands.add_command("ap-sync", "Run manual Research Sync with Archipelago.", function(call)
-    dumpTech(game.players[call.player_index].force)
+    dumpInfo(game.players[call.player_index].force)
     game.print("Wrote bridge file.")
 end)
 
