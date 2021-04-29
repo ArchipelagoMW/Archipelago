@@ -832,15 +832,6 @@ class CollectionState(object):
     def can_use_anvil(self, player: int): 
         return self.has('Enchanting', player) and self.has('Resource Blocks', player) and self.has_iron_ingots(player)
 
-    def can_adventure(self, player: int): # kill basic enemies, cook food
-        return self.has('Progressive Weapons', player) and (self.has('Ingot Crafting', player) or self.has('Campfire', player))
-
-    def basic_combat(self, player: int): 
-        return self.has('Progressive Weapons', player) and self.has('Progressive Armor', player) and self.has_iron_ingots(player)
-
-    def complete_raid(self, player: int): 
-        return self.can_reach('Village', 'Region', player) and self.can_reach('Pillager Outpost', 'Region', player) and self.basic_combat(player) and self.has('Progressive Weapons', player, 2)
-
     def fortress_loot(self, player: int): # saddles, blaze rods, wither skulls
         return self.has('Nether Fortress Entry', player) and self.basic_combat(player) # needs an event because this is part of End Portal access logic
 
@@ -850,13 +841,57 @@ class CollectionState(object):
     def can_piglin_trade(self, player: int): 
         return self.has_gold_ingots(player) and (self.can_reach('The Nether', 'Region', player) or self.can_reach('Bastion Remnant', 'Region', player))
 
-    def can_kill_wither(self, player: int): # need skulls and soul sand
-        return self.fortress_loot(player) and (self.can_reach('The Nether', 'Region', player) or self.can_piglin_trade(player)) and self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and self.can_brew_potions(player) and self.can_enchant(player)
-
     def enter_stronghold(self, player: int): 
         return self.fortress_loot(player) and self.has('Brewing', player) and self.has('3 Ender Pearls', player)
 
+    # Difficulty-dependent functions
+    def combat_difficulty(self, player: int): 
+        return self.world.combat_difficulty[player].get_option_name()
+
+    def can_adventure(self, player: int):
+        if self.combat_difficulty(player) == 'easy': 
+            return self.has('Progressive Weapons', player, 2) and self.has_iron_ingots(player)
+        elif self.combat_difficulty(player) == 'hard': 
+            return True
+        return self.has('Progressive Weapons', player) and (self.has('Ingot Crafting', player) or self.has('Campfire', player))
+
+    def basic_combat(self, player: int): 
+        if self.combat_difficulty(player) == 'easy': 
+            return self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and \
+                   self.has('Shield', player) and self.has_iron_ingots(player)
+        elif self.combat_difficulty(player) == 'hard': 
+            return True
+        return self.has('Progressive Weapons', player) and (self.has('Progressive Armor', player) or self.has('Shield', player)) and self.has_iron_ingots(player)
+
+    def complete_raid(self, player: int): 
+        reach_regions = self.can_reach('Village', 'Region', player) and self.can_reach('Pillager Outpost', 'Region', player)
+        if self.combat_difficulty(player) == 'easy': 
+            return reach_regions and \
+                   self.has('Progressive Weapons', player, 3) and self.has('Progressive Armor', player, 2) and \
+                   self.has('Shield', player) and self.has('Archery', player) and \
+                   self.has('Progressive Tools', player, 2) and self.has_iron_ingots(player)
+        elif self.combat_difficulty(player) == 'hard': # might be too hard?
+            return reach_regions and self.has('Progressive Weapons', player, 2) and self.has_iron_ingots(player) and \
+                   (self.has('Progressive Armor', player) or self.has('Shield', player))
+        return reach_regions and self.has('Progressive Weapons', player, 2) and self.has_iron_ingots(player) and \
+               self.has('Progressive Armor', player) and self.has('Shield', player)
+
+    def can_kill_wither(self, player: int): 
+        build_wither = self.fortress_loot(player) and (self.can_reach('The Nether', 'Region', player) or self.can_piglin_trade(player))
+        normal_kill = self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and self.can_brew_potions(player) and self.can_enchant(player)
+        if self.combat_difficulty(player) == 'easy': 
+            return build_wither and normal_kill and self.has('Archery', player)
+        elif self.combat_difficulty(player) == 'hard': # cheese kill using bedrock ceilings
+            return build_wither and (normal_kill or self.can_reach('The Nether', 'Region', player) or self.can_reach('The End', 'Region', player))
+        return build_wither and normal_kill
+
     def can_kill_ender_dragon(self, player: int):
+        if self.combat_difficulty(player) == 'easy': 
+            return self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and self.has('Archery', player) and \
+                   self.can_brew_potions(player) and self.can_enchant(player)
+        if self.combat_difficulty(player) == 'hard': 
+            return (self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player)) or \
+                   (self.has('Progressive Weapons', player, 1) and self.has('Bed', player))
         return self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and self.has('Archery', player)
 
 
