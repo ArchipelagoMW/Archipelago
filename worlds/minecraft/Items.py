@@ -46,7 +46,9 @@ item_table = {
     "8 Gold Ore": ItemData(45032, False), 
     "Rotten Flesh": ItemData(45033, False), 
     "Single Arrow": ItemData(45034, False), 
-    "Nether Fortress Entry": ItemData(0, True)
+
+    "Nether Fortress Entry": ItemData(0, True),
+    "Victory": ItemData(0, True)
 }
 
 # If not listed here then has frequency 1

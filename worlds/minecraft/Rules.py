@@ -1,5 +1,5 @@
 from ..generic.Rules import set_rule
-from .Locations import exclusion_table
+from .Locations import exclusion_table, events_table
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
 from Options import AdvancementGoal
 
@@ -8,6 +8,8 @@ def set_rules(world: MultiWorld, player: int):
     def reachable_locations(state):
         postgame_advancements = set(exclusion_table['postgame'].keys())
         postgame_advancements.add('Free the End')
+        for event in events_table.keys():
+            postgame_advancements.add(event)
         return [location for location in world.get_locations() if 
                 (player is None or location.player == player) and 
                 (location.name not in postgame_advancements) and
@@ -15,15 +17,15 @@ def set_rules(world: MultiWorld, player: int):
 
     # 92 total advancements, 16 are typically excluded, 1 is Free the End. Goal is to complete X advancements and then Free the End. 
     goal_map = {
-        0: 30, # few
-        1: 50, # normal
-        2: 70  # many
+        'few': 30,
+        'normal': 50,
+        'many': 70 
     }
-    goal = goal_map[getattr(world, 'advancement_goal')[player].value]
+    goal = goal_map[getattr(world, 'advancement_goal')[player].get_option_name()]
     can_complete = lambda state: len(reachable_locations(state)) >= goal and state.can_reach('The End', 'Region', player) and state.can_kill_ender_dragon(player)
 
     if world.logic[player] != 'nologic': 
-        world.completion_condition[player] = can_complete
+        world.completion_condition[player] = lambda state: state.has('Victory', player)
 
     set_rule(world.get_entrance("Nether Portal", player), lambda state: state.has('Flint and Steel', player) and 
                                                                         (state.has('Bucket', player) or state.has('Progressive Tools', player, 3)) and 
@@ -34,6 +36,8 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_entrance("Nether Structure 1", player), lambda state: state.can_adventure(player))
     set_rule(world.get_entrance("Nether Structure 2", player), lambda state: state.can_adventure(player))
     set_rule(world.get_entrance("The End Structure", player), lambda state: state.can_adventure(player))
+
+    set_rule(world.get_location("Ender Dragon", player), lambda state: can_complete(state))
 
     set_rule(world.get_location("Who is Cutting Onions?", player), lambda state: state.can_piglin_trade(player))
     set_rule(world.get_location("Oh Shiny", player), lambda state: state.can_piglin_trade(player))

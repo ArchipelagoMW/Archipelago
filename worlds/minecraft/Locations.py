@@ -104,7 +104,8 @@ advancement_table = {
     "Librarian": AdvData(42090, 'Overworld'),
     "Overpowered": AdvData(42091, 'Overworld'), 
 
-    "Nether Fortress Entry": AdvData(0, 'Nether Fortress')
+    "Nether Fortress Entry": AdvData(0, 'Nether Fortress'), 
+    "Ender Dragon": AdvData(0, 'The End')
 }
 
 exclusion_table = {
@@ -134,7 +135,8 @@ exclusion_table = {
 
 
 events_table = {
-    "Nether Fortress Entry": "Nether Fortress Entry"
+    "Nether Fortress Entry": "Nether Fortress Entry",
+    "Ender Dragon": "Victory"
 }
 
 
