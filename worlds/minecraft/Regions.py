@@ -69,7 +69,8 @@ def link_minecraft_structures(world: MultiWorld, player: int):
 
     for exit, struct in pairs.items():
         world.get_entrance(exit, player).connect(world.get_region(struct, player))
-        world.spoiler.set_entrance(exit, struct, 'entrance', player)
+        if world.shuffle_structures[player]:
+            world.spoiler.set_entrance(exit, struct, 'entrance', player)
 
 # (Region name, list of exits)
 mc_regions = [
