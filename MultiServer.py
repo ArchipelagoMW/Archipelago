@@ -29,7 +29,7 @@ from worlds.alttp import Items, Regions
 from worlds import network_data_package, lookup_any_item_id_to_name, lookup_any_item_name_to_id, \
     lookup_any_location_id_to_name, lookup_any_location_name_to_id
 import Utils
-from Utils import get_item_name_from_id, get_location_name_from_address, \
+from Utils import get_item_name_from_id, get_location_name_from_id, \
     _version_tuple, restricted_loads, Version
 from NetUtils import Node, Endpoint, ClientStatus, NetworkItem, decode, NetworkPlayer
 
@@ -474,8 +474,8 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
                     get_received_items(ctx, team, target_player).append(new_item)
 
                 logging.info('(Team #%d) %s sent %s to %s (%s)' % (
-                team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(item_id),
-                ctx.player_names[(team, target_player)], get_location_name_from_address(location)))
+                    team + 1, ctx.player_names[(team, slot)], get_item_name_from_id(item_id),
+                    ctx.player_names[(team, target_player)], get_location_name_from_id(location)))
                 info_text = json_format_send_event(new_item, target_player)
                 ctx.broadcast_team(team, [info_text])
 
@@ -526,7 +526,7 @@ def collect_hints_location(ctx: Context, team: int, slot: int, location: str) ->
 def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
     text = f"[Hint]: {ctx.player_names[team, hint.receiving_player]}'s " \
            f"{lookup_any_item_id_to_name[hint.item]} is " \
-           f"at {get_location_name_from_address(hint.location)} " \
+           f"at {get_location_name_from_id(hint.location)} " \
            f"in {ctx.player_names[team, hint.finding_player]}'s World"
 
     if hint.entrance:
@@ -810,7 +810,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         locations = get_missing_checks(self.ctx, self.client)
 
         if locations:
-            texts = [f'Missing: {get_item_name_from_id(location)}' for location in locations]
+            texts = [f'Missing: {get_location_name_from_id(location)}' for location in locations]
             texts.append(f"Found {len(locations)} missing location checks")
             self.ctx.notify_client_multiple(self.client, texts)
         else:
@@ -1051,20 +1051,12 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         elif cmd == 'LocationScouts':
             locs = []
             for location in args["locations"]:
-                if type(location) is not int or 0 >= location > len(Regions.location_table):
+                if type(location) is not int or location not in lookup_any_location_id_to_name:
                     await ctx.send_msgs(client, [{"cmd": "InvalidArguments", "text": 'LocationScouts'}])
                     return
-                loc_name = list(Regions.location_table.keys())[location - 1]
-                target_item, target_player = ctx.locations[(Regions.location_table[loc_name][0], client.slot)]
+                target_item, target_player = ctx.locations[location, client.slot]
+                locs.append(NetworkItem(target_item, location, target_player))
 
-                replacements = {'SmallKey': 0xA2, 'BigKey': 0x9D, 'Compass': 0x8D, 'Map': 0x7D}
-                item_type = [i[1] for i in Items.item_table.values() if type(i[2]) is int and i[2] == target_item]
-                if item_type:
-                    target_item = replacements.get(item_type[0], target_item)
-
-                locs.append([target_item, location, target_player])
-
-            # logging.info(f"{client.name} in team {client.team+1} scouted {', '.join([l[0] for l in locs])}")
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
 
         elif cmd == 'StatusUpdate':

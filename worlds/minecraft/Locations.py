@@ -9,6 +9,7 @@ class MinecraftAdvancement(Location):
     game: str = "Minecraft"
     def __init__(self, player: int, name: str, address: int, parent):
         super().__init__(player, name, address, parent)
+        self.event = True if address == 0 else False
 
 advancement_table = {
     "Who is Cutting Onions?": AdvData(42000, 'Overworld'),

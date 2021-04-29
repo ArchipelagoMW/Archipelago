@@ -66,7 +66,7 @@ exes = []
 for script, scriptname in scripts.items():
     exes.append(cx_Freeze.Executable(
         script=script,
-        targetName=scriptname + ("" if sys.platform == "linux" else ".exe"),
+        target_name=scriptname + ("" if sys.platform == "linux" else ".exe"),
         icon=icon,
     ))
 
@@ -141,7 +141,7 @@ for file in os.listdir(alttpr_sprites_folder):
 
 if signtool:
     for exe in exes:
-        print(f"Signing {exe.targetName}")
-        os.system(signtool + exe.targetName)
+        print(f"Signing {exe.target_name}")
+        os.system(signtool + os.path.join(buildfolder, exe.target_name))
 
 manifest_creation()

@@ -568,7 +568,7 @@ def main(args, seed=None):
         generate_mc_data(world, player, str(args.outputname if args.outputname else world.seed))
     if not args.skip_playthrough:
         logger.info('Calculating playthrough.')
-    create_playthrough(world)
+        create_playthrough(world)
     if args.create_spoiler:  # needs spoiler.hashes to be filled, that depend on rom_futures being done
         world.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))
 

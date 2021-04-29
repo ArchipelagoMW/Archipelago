@@ -143,7 +143,9 @@ class MultiWorld():
             import Options
             for hk_option in Options.hollow_knight_options:
                 set_player_attr(hk_option, False)
-
+        self.custom_data = {}
+        for player in range(1, players+1):
+            self.custom_data[player] = {}
         # self.worlds = []
         # for i in range(players):
         #     self.worlds.append(worlds.alttp.ALTTPWorld({}, i))
@@ -236,7 +238,7 @@ class MultiWorld():
         ret = CollectionState(self)
 
         def soft_collect(item):
-            if item.name.startswith('Progressive '):
+            if item.game == "A Link to the Past" and item.name.startswith('Progressive '):
                 # ALttP items
                 if 'Sword' in item.name:
                     if ret.has('Golden Sword', item.player):
@@ -965,7 +967,7 @@ class CollectionState(object):
     def remove(self, item):
         if item.advancement:
             to_remove = item.name
-            if to_remove.startswith('Progressive '):
+            if item.game == "A Link to the Past" and to_remove.startswith('Progressive '):
                 if 'Sword' in to_remove:
                     if self.has('Golden Sword', item.player):
                         to_remove = 'Golden Sword'
@@ -992,7 +994,7 @@ class CollectionState(object):
                     elif self.has('Blue Shield', item.player):
                         to_remove = 'Blue Shield'
                     else:
-                        to_remove = 'None'
+                        to_remove = None
                 elif 'Bow' in item.name:
                     if self.has('Silver Bow', item.player):
                         to_remove = 'Silver Bow'
@@ -1001,7 +1003,7 @@ class CollectionState(object):
                     else:
                         to_remove = None
 
-            if to_remove is not None:
+            if to_remove:
 
                 self.prog_items[to_remove, item.player] -= 1
                 if self.prog_items[to_remove, item.player] < 1:

@@ -14,6 +14,7 @@ import subprocess
 import threading
 import xxtea
 import concurrent.futures
+import bsdiff4
 from typing import Optional
 
 from BaseClasses import CollectionState, Region
@@ -22,10 +23,12 @@ from worlds.alttp.Shops import ShopType
 from worlds.alttp.Dungeons import dungeon_music_addresses
 from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address
 from worlds.alttp.Text import MultiByteTextMapper, text_addresses, Credits, TextTable
-from worlds.alttp.Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, Blind_texts, \
+from worlds.alttp.Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, \
+    Blind_texts, \
     BombShop2_texts, junk_texts
 
-from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts, \
+from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, \
+    DeathMountain_texts, \
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
 from Utils import output_path, local_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_bundled
@@ -40,6 +43,7 @@ except:
     z3pr = None
 
 enemizer_logger = logging.getLogger("Enemizer")
+
 
 class LocalRom(object):
 
@@ -428,8 +432,11 @@ def patch_enemizer(world, team: int, player: int, rom: LocalRom, enemizercli):
         except OSError:
             pass
 
+
 tile_list_lock = threading.Lock()
 _tile_collection_table = []
+
+
 def _populate_tile_sets():
     with tile_list_lock:
         if not _tile_collection_table:
@@ -441,6 +448,7 @@ def _populate_tile_sets():
                 for dir in [local_path('data', 'tiles')]:
                     for file in os.listdir(dir):
                         pool.submit(load_tileset_from_file, os.path.join(dir, file))
+
 
 class TileSet:
     def __init__(self, filename):
@@ -497,25 +505,23 @@ def _populate_sprite_table():
                     for file in os.listdir(dir):
                         pool.submit(load_sprite_from_file, os.path.join(dir, file))
 
-class Sprite(object):
-    palette = (255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
-               89, 71, 54, 104, 59, 74, 10, 239, 18, 92, 42, 113, 21, 24, 122,
-               255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
-               89, 128, 105, 145, 118, 184, 38, 127, 67, 92, 42, 153, 17, 24, 122,
-               255, 127, 126, 35, 183, 17, 158, 54, 165, 20, 255, 1, 120, 16, 157,
-               89, 87, 16, 126, 69, 243, 109, 185, 126, 92, 42, 39, 34, 24, 122,
-               255, 127, 126, 35, 218, 17, 158, 54, 165, 20, 255, 1, 120, 16, 151,
-               61, 71, 54, 104, 59, 74, 10, 239, 18, 126, 86, 114, 24, 24, 122)
 
-    glove_palette = (246, 82, 118, 3)
+class Sprite():
+    sprite_size = 28672
+    palette_size = 120
+    glove_size = 4
     author_name: Optional[str] = None
 
     def __init__(self, filename):
+        if not hasattr(Sprite, "base_data"):
+            self.get_vanilla_sprite_data()
         with open(filename, 'rb') as file:
-            filedata = bytearray(file.read())
+            filedata = file.read()
         self.name = os.path.basename(filename)
         self.valid = True
-        if len(filedata) == 0x7000:
+        if filename.endswith(".apsprite"):
+            self.from_ap_sprite(filedata)
+        elif len(filedata) == 0x7000:
             # sprite file with graphics and without palette data
             self.sprite = filedata[:0x7000]
         elif len(filedata) == 0x7078:
@@ -534,26 +540,70 @@ class Sprite(object):
             self.palette = filedata[0xDD308:0xDD380]
             self.glove_palette = filedata[0xDEDF5:0xDEDF9]
         elif filedata.startswith(b'ZSPR'):
-            result = self.parse_zspr(filedata, 1)
-            if result is None:
-                self.valid = False
-                return
-            (sprite, palette, self.name, self.author_name) = result
-            if self.name == "":
-                self.name = os.path.split(filename)[1].split(".")[0]
-            if len(sprite) != 0x7000:
-                self.valid = False
-                return
-            self.sprite = sprite
-            if len(palette) == 0:
-                pass
-            elif len(palette) == 0x78:
-                self.palette = palette
-            elif len(palette) == 0x7C:
-                self.palette = palette[:0x78]
-                self.glove_palette = palette[0x78:]
-            else:
-                self.valid = False
+            self.from_zspr(filedata, filename)
+        else:
+            self.valid = False
+
+    def get_vanilla_sprite_data(self):
+        from Patch import get_base_rom_path
+        file_name = get_base_rom_path()
+        base_rom_bytes = bytes(read_rom(open(file_name, "rb")))
+        Sprite.sprite = base_rom_bytes[0x80000:0x87000]
+        Sprite.palette = base_rom_bytes[0xDD308:0xDD380]
+        Sprite.glove_palette = base_rom_bytes[0xDEDF5:0xDEDF9]
+        Sprite.base_data = Sprite.sprite + Sprite.palette + Sprite.glove_palette
+
+    def from_ap_sprite(self, filedata):
+        filedata = filedata.decode("utf-8-sig")
+        import yaml
+        obj = yaml.safe_load(filedata)
+        if obj["min_format_version"] > 1:
+            raise Exception("Sprite file requires an updated reader.")
+        self.author_name = obj["author"]
+        self.name = obj["name"]
+        if obj["data"]:  # skip patching for vanilla content
+            data = bsdiff4.patch(Sprite.base_data, obj["data"])
+            self.sprite = data[:self.sprite_size]
+            self.palette = data[self.sprite_size:self.palette_size]
+            self.glove_palette = data[self.sprite_size + self.palette_size:]
+
+    def to_ap_sprite(self, path):
+        from .. import Games
+        import yaml
+        payload = {"format_version": 1,
+                   "min_format_version": 1,
+                   "sprite_version": 1,
+                   "name": self.name,
+                   "author": self.author_name,
+                   "game": Games.LTTP.value,
+                   "data": self.get_delta()}
+        with open(path, "w") as f:
+            f.write(yaml.safe_dump(payload))
+
+    def get_delta(self):
+        modified_data = self.sprite + self.palette + self.glove_palette
+        return bsdiff4.diff(Sprite.base_data, modified_data)
+
+    def from_zspr(self, filedata, filename):
+        result = self.parse_zspr(filedata, 1)
+        if result is None:
+            self.valid = False
+            return
+        (sprite, palette, self.name, self.author_name) = result
+        if self.name == "":
+            self.name = os.path.split(filename)[1].split(".")[0]
+
+        if len(sprite) != 0x7000:
+            self.valid = False
+            return
+        self.sprite = sprite
+        if len(palette) == 0:
+            pass
+        elif len(palette) == 0x78:
+            self.palette = palette
+        elif len(palette) == 0x7C:
+            self.palette = palette[:0x78]
+            self.glove_palette = palette[0x78:]
         else:
             self.valid = False
 
@@ -569,7 +619,7 @@ class Sprite(object):
 
     @staticmethod
     def default_link_sprite():
-        return Sprite(local_path('../../data', 'default.zspr'))
+        return Sprite(local_path('data', 'default.apsprite'))
 
     def decode8(self, pos):
         arr = [[0 for _ in range(8)] for _ in range(8)]
@@ -603,12 +653,12 @@ class Sprite(object):
         return arr
 
     def parse_zspr(self, filedata, expected_kind):
-        logger = logging.getLogger('')
+        logger = logging.getLogger('ZSPR')
         headerstr = "<4xBHHIHIHH6x"
         headersize = struct.calcsize(headerstr)
         if len(filedata) < headersize:
             return None
-        (version, csum, icsum, sprite_offset, sprite_size, palette_offset, palette_size, kind) = struct.unpack_from(
+        version, csum, icsum, sprite_offset, sprite_size, palette_offset, palette_size, kind = struct.unpack_from(
             headerstr, filedata)
         if version not in [1]:
             logger.error('Error parsing ZSPR file: Version %g not supported', version)
@@ -657,7 +707,7 @@ class Sprite(object):
             return pair[1] << 8 | pair[0]
 
         def expand_color(i):
-            return ((i & 0x1F) * 8, (i >> 5 & 0x1F) * 8, (i >> 10 & 0x1F) * 8)
+            return (i & 0x1F) * 8, (i >> 5 & 0x1F) * 8, (i >> 10 & 0x1F) * 8
 
         # turn palette data into a list of RGB tuples with 8 bit values
         palette_as_colors = [expand_color(make_int16(chnk)) for chnk in array_chunk(self.palette, 2)]
@@ -755,7 +805,6 @@ def patch_rom(world, rom, player, team, enemized):
                 music = 0x11 if 'Pendant' in location.item.name else 0x16
             for music_address in music_addresses:
                 rom.write_byte(music_address, music)
-
 
     if world.mapshuffle[player]:
         rom.write_byte(0x155C9, local_random.choice([0x11, 0x16]))  # Randomize GT music too with map shuffle
@@ -1075,7 +1124,6 @@ def patch_rom(world, rom, player, team, enemized):
             byte = int(rom.read_byte(address))
             rom.write_byte(address, prize_replacements.get(byte, byte))
 
-
     # Fill in item substitutions table
     rom.write_bytes(0x184000, [
         # original_item, limit, replacement_item, filler
@@ -1151,9 +1199,12 @@ def patch_rom(world, rom, player, team, enemized):
 
     # Set up requested clock settings
     if world.clock_mode[player] in ['countdown-ohko', 'stopwatch', 'countdown']:
-        rom.write_int32(0x180200, world.red_clock_time[player] * 60 * 60)  # red clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180204, world.blue_clock_time[player] * 60 * 60)  # blue clock adjustment time (in frames, sint32)
-        rom.write_int32(0x180208, world.green_clock_time[player] * 60 * 60)  # green clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180200,
+                        world.red_clock_time[player] * 60 * 60)  # red clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180204,
+                        world.blue_clock_time[player] * 60 * 60)  # blue clock adjustment time (in frames, sint32)
+        rom.write_int32(0x180208,
+                        world.green_clock_time[player] * 60 * 60)  # green clock adjustment time (in frames, sint32)
     else:
         rom.write_int32(0x180200, 0)  # red clock adjustment time (in frames, sint32)
         rom.write_int32(0x180204, 0)  # blue clock adjustment time (in frames, sint32)
@@ -1512,7 +1563,8 @@ def patch_rom(world, rom, player, team, enemized):
     rom.write_byte(0xEFD95, digging_game_rng)
     rom.write_byte(0x1800A3, 0x01)  # enable correct world setting behaviour after agahnim kills
     rom.write_byte(0x1800A4, 0x01 if world.logic[player] != 'nologic' else 0x00)  # enable POD EG fix
-    rom.write_byte(0x186383, 0x01 if world.glitch_triforce or world.logic[player] == 'nologic' else 0x00)  # disable glitching to Triforce from Ganons Room
+    rom.write_byte(0x186383, 0x01 if world.glitch_triforce or world.logic[
+        player] == 'nologic' else 0x00)  # disable glitching to Triforce from Ganons Room
     rom.write_byte(0x180042, 0x01 if world.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
 
     # remove shield from uncle
@@ -1584,7 +1636,6 @@ def patch_rom(world, rom, player, team, enemized):
         rom.write_byte(0x4BA1D, tile_set.get_len())
         rom.write_bytes(0x4BA2A, tile_set.get_bytes())
 
-
     write_strings(rom, world, player, team)
 
     rom.write_byte(0x18637C, 1 if world.remote_items[player] else 0)
@@ -1655,7 +1706,7 @@ def write_custom_shops(rom, world, player):
             slot = 0 if shop.type == ShopType.TakeAny else index
             if item is None:
                 break
-            if not item['item'] in item_table: # item not native to ALTTP
+            if not item['item'] in item_table:  # item not native to ALTTP
                 # This is a terrible way to do this, please fix later
                 from worlds.hk.Items import lookup_id_to_name as hk_lookup
                 from worlds.factorio.Technologies import lookup_id_to_name as factorio_lookup
@@ -1709,7 +1760,8 @@ def hud_format_text(text):
 
 
 def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite: str, palettes_options,
-                       world=None, player=1, allow_random_on_event=False, reduceflashing=False, triforcehud:str = None):
+                       world=None, player=1, allow_random_on_event=False, reduceflashing=False,
+                       triforcehud: str = None):
     local_random = random if not world else world.rom_seeds[player]
 
     # enable instant item menu
@@ -1734,22 +1786,22 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
     else:
         rom.write_byte(0x180048, 0x08)
 
-
     # Reduce flashing by nopping out instructions
     if reduceflashing:
-        rom.write_bytes(0x17E07, [0x06]) # reduce amount of colors changed, add this branch if we need to reduce more  ""+ [0x80] + [(0x81-0x08)]""
-        rom.write_bytes(0x17EAB, [0xD0, 0x03, 0xA9, 0x40, 0x29, 0x60]) # nullifies aga lightning, cutscene, vitreous, bat, ether
+        rom.write_bytes(0x17E07, [
+            0x06])  # reduce amount of colors changed, add this branch if we need to reduce more  ""+ [0x80] + [(0x81-0x08)]""
+        rom.write_bytes(0x17EAB,
+                        [0xD0, 0x03, 0xA9, 0x40, 0x29, 0x60])  # nullifies aga lightning, cutscene, vitreous, bat, ether
         # ONLY write to black values with this low pale blue to indicate flashing, that's IT.  ""BNE + : LDA #$2940 : + : RTS""
-        rom.write_bytes(0x123FE, [0x72]) # set lightning flash in misery mire (and standard) to brightness 0x72
-        rom.write_bytes(0x3FA7B, [0x80, 0xac-0x7b]) # branch from palette writing lightning on death mountain
-        rom.write_byte(0x10817F, 0x01) # internal rom option
+        rom.write_bytes(0x123FE, [0x72])  # set lightning flash in misery mire (and standard) to brightness 0x72
+        rom.write_bytes(0x3FA7B, [0x80, 0xac - 0x7b])  # branch from palette writing lightning on death mountain
+        rom.write_byte(0x10817F, 0x01)  # internal rom option
     else:
-        rom.write_bytes(0x17E07, [0x00]) 
+        rom.write_bytes(0x17E07, [0x00])
         rom.write_bytes(0x17EAB, [0x85, 0x00, 0x29, 0x1F, 0x00, 0x18])
-        rom.write_bytes(0x123FE, [0x32]) # original weather flash value
-        rom.write_bytes(0x3FA7B, [0xc2, 0x20]) # rep #$20
-        rom.write_byte(0x10817F, 0x00) # internal rom option
-
+        rom.write_bytes(0x123FE, [0x32])  # original weather flash value
+        rom.write_bytes(0x3FA7B, [0xc2, 0x20])  # rep #$20
+        rom.write_byte(0x10817F, 0x00)  # internal rom option
 
     rom.write_byte(0x18004B, 0x01 if quickswap else 0x00)
 
@@ -1784,7 +1836,8 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
 
     if triforcehud:
         # set triforcehud
-        triforce_flag = (rom.read_byte(0x180167) & 0x80) | {'normal': 0x00, 'hide_goal': 0x01, 'hide_required': 0x02, 'hide_both': 0x03}[triforcehud]
+        triforce_flag = (rom.read_byte(0x180167) & 0x80) | \
+                        {'normal': 0x00, 'hide_goal': 0x01, 'hide_required': 0x02, 'hide_both': 0x03}[triforcehud]
         rom.write_byte(0x180167, triforce_flag)
 
     if z3pr:
@@ -2063,7 +2116,7 @@ def write_strings(rom, world, player, team):
                                 f"\n  ≥ Duh\n    Oh carp\n{{CHOICE}}"
         # Bottle Vendor hint
         vendor_location = world.get_location("Bottle Merchant", player)
-        tt['bottle_vendor_choice'] = f"I gots {hint_text(vendor_location.item)}\nYous gots 100 rupees?"\
+        tt['bottle_vendor_choice'] = f"I gots {hint_text(vendor_location.item)}\nYous gots 100 rupees?" \
                                      f"\n  ≥ I want\n    no way!\n{{CHOICE}}"
 
         tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles can have hints!'
@@ -2412,7 +2465,7 @@ def set_inverted_mode(world, player, rom):
     rom.write_byte(0xDC21D, 0x6B)  # inverted mode flute activation (skip weathervane overlay)
     rom.write_bytes(0x48DB3, [0xF8, 0x01])  # inverted mode (bird X)
     rom.write_byte(0x48D5E, 0x01)  # inverted mode (rock X)
-    rom.write_bytes(0x48CC1+36, bytes([0xF8]*12)) # (rock X)
+    rom.write_bytes(0x48CC1 + 36, bytes([0xF8] * 12))  # (rock X)
     rom.write_int16s(snes_to_pc(0x02E849),
                      [0x0043, 0x0056, 0x0058, 0x006C, 0x006F, 0x0070, 0x007B, 0x007F, 0x001B])  # dw flute
     rom.write_int16(snes_to_pc(0x02E8D5), 0x07C8)

@@ -5,6 +5,10 @@ import logging
 import textwrap
 import sys
 import time
+from tkinter import Tk
+
+from Gui import update_sprites
+from GuiUtils import BackgroundTaskProgress
 
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings
 from Utils import output_path
@@ -16,10 +20,12 @@ class AdjusterWorld(object):
         self.sprite_pool = {1: sprite_pool}
         self.rom_seeds = {1: random}
 
+
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
 
     def _get_help_string(self, action):
         return textwrap.dedent(action.help)
+
 
 def main():
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
@@ -27,35 +33,54 @@ def main():
     parser.add_argument('--rom', default='ER_base.sfc', help='Path to an ALttP rom to adjust.')
     parser.add_argument('--baserom', default='Zelda no Densetsu - Kamigami no Triforce (Japan).sfc',
                         help='Path to an ALttP JAP(1.0) rom to use as a base.')
-    parser.add_argument('--loglevel', default='info', const='info', nargs='?', choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
-    parser.add_argument('--fastmenu', default='normal', const='normal', nargs='?', choices=['normal', 'instant', 'double', 'triple', 'quadruple', 'half'],
+    parser.add_argument('--loglevel', default='info', const='info', nargs='?',
+                        choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
+    parser.add_argument('--fastmenu', default='normal', const='normal', nargs='?',
+                        choices=['normal', 'instant', 'double', 'triple', 'quadruple', 'half'],
                         help='''\
                              Select the rate at which the menu opens and closes.
                              (default: %(default)s)
                              ''')
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
-    parser.add_argument('--triforcehud', default='hide_goal', const='hide_goal', nargs='?', choices=['normal', 'hide_goal', 'hide_required', 'hide_both'],
-                    help='''\
+    parser.add_argument('--triforcehud', default='hide_goal', const='hide_goal', nargs='?',
+                        choices=['normal', 'hide_goal', 'hide_required', 'hide_both'],
+                        help='''\
                             Hide the triforce hud in certain circumstances.
                             hide_goal will hide the hud until finding a triforce piece, hide_required will hide the total amount needed to win
                             (Both can be revealed when speaking to Murahalda)
                             (default: %(default)s)
                             ''')
-    parser.add_argument('--enableflashing', help='Reenable flashing animations (unfriendly to epilepsy, always disabled in race roms)', action='store_false', dest="reduceflashing")
-    parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?', choices=['double', 'normal', 'half', 'quarter', 'off'],
+    parser.add_argument('--enableflashing',
+                        help='Reenable flashing animations (unfriendly to epilepsy, always disabled in race roms)',
+                        action='store_false', dest="reduceflashing")
+    parser.add_argument('--heartbeep', default='normal', const='normal', nargs='?',
+                        choices=['double', 'normal', 'half', 'quarter', 'off'],
                         help='''\
                              Select the rate at which the heart beep sound is played at
                              low health. (default: %(default)s)
                              ''')
-    parser.add_argument('--heartcolor', default='red', const='red', nargs='?', choices=['red', 'blue', 'green', 'yellow', 'random'],
+    parser.add_argument('--heartcolor', default='red', const='red', nargs='?',
+                        choices=['red', 'blue', 'green', 'yellow', 'random'],
                         help='Select the color of Link\'s heart meter. (default: %(default)s)')
-    parser.add_argument('--ow_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
-    parser.add_argument('--link_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
-    parser.add_argument('--shield_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
-    parser.add_argument('--sword_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
-    parser.add_argument('--hud_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
-    parser.add_argument('--uw_palettes', default='default', choices=['default', 'random', 'blackout','puke','classic','grayscale','negative','dizzy','sick'])
+    parser.add_argument('--ow_palettes', default='default',
+                        choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
+                                 'sick'])
+    parser.add_argument('--link_palettes', default='default',
+                        choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
+                                 'sick'])
+    parser.add_argument('--shield_palettes', default='default',
+                        choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
+                                 'sick'])
+    parser.add_argument('--sword_palettes', default='default',
+                        choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
+                                 'sick'])
+    parser.add_argument('--hud_palettes', default='default',
+                        choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
+                                 'sick'])
+    parser.add_argument('--uw_palettes', default='default',
+                        choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
+                                 'sick'])
     parser.add_argument('--sprite', help='''\
                              Path to a sprite sheet to use for Link. Needs to be in
                              binary format and have a length of 0x7000 (28672) bytes,
@@ -64,8 +89,11 @@ def main():
                              sprite that will be extracted.
                              ''')
     parser.add_argument('--names', default='', type=str)
+    parser.add_argument('--update_sprites', action='store_true', help='Update Sprite Database, then exit.')
     args = parser.parse_args()
-
+    if args.update_sprites:
+        run_sprite_update()
+        sys.exit()
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[
         args.loglevel]
@@ -99,13 +127,13 @@ def adjust(args):
     else:
         raise RuntimeError(
             'Provided Rom is not a valid Link to the Past Randomizer Rom. Please provide one for adjusting.')
-    palettes_options={}
-    palettes_options['dungeon']=args.uw_palettes
+    palettes_options = {}
+    palettes_options['dungeon'] = args.uw_palettes
 
-    palettes_options['overworld']=args.ow_palettes
-    palettes_options['hud']=args.hud_palettes
-    palettes_options['sword']=args.sword_palettes
-    palettes_options['shield']=args.shield_palettes
+    palettes_options['overworld'] = args.ow_palettes
+    palettes_options['hud'] = args.hud_palettes
+    palettes_options['sword'] = args.sword_palettes
+    palettes_options['shield'] = args.shield_palettes
     # palettes_options['link']=args.link_palettesvera
 
     racerom = rom.read_byte(0x180213) > 0
@@ -122,6 +150,7 @@ def adjust(args):
     logger.debug('Total Time: %s', time.perf_counter() - start)
 
     return args, path
+
 
 def adjustGUI():
     from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, \
@@ -148,6 +177,7 @@ def adjustGUI():
     def RomSelect2():
         rom = filedialog.askopenfilename(filetypes=[("Rom Files", (".sfc", ".smc", ".apbp")), ("All Files", "*")])
         romVar2.set(rom)
+
     romSelectButton2 = Button(romDialogFrame, text='Select Rom', command=RomSelect2)
     romDialogFrame.pack(side=TOP, expand=True, fill=X)
     baseRomLabel2.pack(side=LEFT)
@@ -196,6 +226,17 @@ def adjustGUI():
     bottomFrame2.pack(side=BOTTOM, pady=(5, 5))
 
     adjustWindow.mainloop()
+
+
+def run_sprite_update():
+    import threading
+    done = threading.Event()
+    top = Tk()
+    top.withdraw()
+    BackgroundTaskProgress(top, update_sprites, "Updating Sprites", lambda succesful, resultmessage: done.set())
+    while not done.isSet():
+        top.update()
+    print("Done updating sprites")
 
 
 if __name__ == '__main__':

@@ -5,8 +5,12 @@ local technologies = data.raw["technology"]
 local original_tech
 local new_tree_copy
 allowed_ingredients = {}
-{%- for ingredient in allowed_science_packs %}
-allowed_ingredients["{{ingredient}}"]= 1
+{%- for tech_name, technology in custom_data["custom_technologies"].items() %}
+allowed_ingredients["{{ tech_name }}"] = {
+{%- for ingredient in technology.ingredients %}
+["{{ingredient}}"] = 1,
+{%- endfor %}
+}
 {% endfor %}
 local template_tech = table.deepcopy(technologies["automation"])
 {#-  ensure the copy unlocks nothing #}
@@ -18,7 +22,10 @@ template_tech.prerequisites = {}
 function prep_copy(new_copy, old_tech)
     old_tech.enabled = false
     new_copy.unit = table.deepcopy(old_tech.unit)
-    new_copy.unit.ingredients = filter_ingredients(new_copy.unit.ingredients)
+    local ingredient_filter = allowed_ingredients[old_tech.name]
+    if ingredient_filter ~= nil then
+        new_copy.unit.ingredients = filter_ingredients(new_copy.unit.ingredients, ingredient_filter)
+    end
 end
 
 
