@@ -70,7 +70,7 @@ class TestAdvancements(TestMinecraft):
             ["Free the End", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["Free the End", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
             ["Free the End", False, [], ['Archery']], 
-            ["Free the End", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
+            ["Free the End", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket',
                                     'Progressive Weapons', 'Progressive Weapons', 'Archery', 'Progressive Armor', 
                                     'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
             ["Free the End", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
@@ -85,7 +85,7 @@ class TestAdvancements(TestMinecraft):
             ["A Furious Cocktail", False, [], ['Flint and Steel']], 
             ["A Furious Cocktail", False, [], ['Progressive Tools']], 
             ["A Furious Cocktail", False, [], ['Progressive Weapons']], 
-            ["A Furious Cocktail", False, [], ['Progressive Armor']], 
+            ["A Furious Cocktail", False, [], ['Progressive Armor', 'Shield']], 
             ["A Furious Cocktail", False, [], ['Brewing']], 
             ["A Furious Cocktail", False, [], ['Bottles']], 
             ["A Furious Cocktail", False, [], ['Fishing Rod']], 
@@ -94,6 +94,10 @@ class TestAdvancements(TestMinecraft):
                                           'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Fishing Rod']], 
             ["A Furious Cocktail", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                           'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Fishing Rod']],
+            ["A Furious Cocktail", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
+                                          'Progressive Weapons', 'Shield', 'Brewing', 'Bottles', 'Fishing Rod']], 
+            ["A Furious Cocktail", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+                                          'Progressive Weapons', 'Shield', 'Brewing', 'Bottles', 'Fishing Rod']],
             ])
 
     def test_42007(self):
@@ -146,7 +150,7 @@ class TestAdvancements(TestMinecraft):
             ["Local Brewery", False, [], ['Flint and Steel']], 
             ["Local Brewery", False, [], ['Progressive Tools']], 
             ["Local Brewery", False, [], ['Progressive Weapons']], 
-            ["Local Brewery", False, [], ['Progressive Armor']], 
+            ["Local Brewery", False, [], ['Progressive Armor', 'Shield']], 
             ["Local Brewery", False, [], ['Brewing']], 
             ["Local Brewery", False, [], ['Bottles']],
             ["Local Brewery", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
@@ -154,6 +158,10 @@ class TestAdvancements(TestMinecraft):
                                      'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles']], 
             ["Local Brewery", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                      'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles']],
+            ["Local Brewery", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
+                                     'Progressive Weapons', 'Shield', 'Brewing', 'Bottles']], 
+            ["Local Brewery", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+                                     'Progressive Weapons', 'Shield', 'Brewing', 'Bottles']],
             ])
 
     def test_42012(self):
@@ -190,11 +198,13 @@ class TestAdvancements(TestMinecraft):
             ["Hot Tourist Destinations", False, [], ['Flint and Steel']], 
             ["Hot Tourist Destinations", False, [], ['Progressive Tools']], 
             ["Hot Tourist Destinations", False, [], ['Progressive Weapons']], 
-            ["Hot Tourist Destinations", False, [], ['Progressive Armor']], 
+            ["Hot Tourist Destinations", False, [], ['Progressive Armor', 'Shield']], 
             ["Hot Tourist Destinations", False, [], ['Fishing Rod']],
             ["Hot Tourist Destinations", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["Hot Tourist Destinations", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Flint and Steel', 'Bucket', 'Fishing Rod']], 
             ["Hot Tourist Destinations", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Fishing Rod']],
+            ["Hot Tourist Destinations", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Shield', 'Flint and Steel', 'Bucket', 'Fishing Rod']], 
+            ["Hot Tourist Destinations", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Shield', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Fishing Rod']],
             ])
 
     def test_42015(self):
@@ -204,11 +214,13 @@ class TestAdvancements(TestMinecraft):
             ["This Boat Has Legs", False, [], ['Flint and Steel']], 
             ["This Boat Has Legs", False, [], ['Progressive Tools']], 
             ["This Boat Has Legs", False, [], ['Progressive Weapons']], 
-            ["This Boat Has Legs", False, [], ['Progressive Armor']], 
+            ["This Boat Has Legs", False, [], ['Progressive Armor', 'Shield']], 
             ["This Boat Has Legs", False, [], ['Fishing Rod']],
             ["This Boat Has Legs", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["This Boat Has Legs", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Flint and Steel', 'Bucket', 'Fishing Rod']], 
             ["This Boat Has Legs", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Fishing Rod']],
+            ["This Boat Has Legs", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Shield', 'Flint and Steel', 'Bucket', 'Fishing Rod']], 
+            ["This Boat Has Legs", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Shield', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Fishing Rod']],
             ])
 
     def test_42016(self): 
@@ -236,7 +248,7 @@ class TestAdvancements(TestMinecraft):
             ["Great View From Up Here", False, [], ['Flint and Steel']], 
             ["Great View From Up Here", False, [], ['Progressive Tools']], 
             ["Great View From Up Here", False, [], ['Progressive Weapons']], 
-            ["Great View From Up Here", False, [], ['Progressive Armor']], 
+            ["Great View From Up Here", False, [], ['Progressive Armor', 'Shield']], 
             ["Great View From Up Here", False, [], ['Brewing']], 
             ["Great View From Up Here", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["Great View From Up Here", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
@@ -245,6 +257,12 @@ class TestAdvancements(TestMinecraft):
                                                'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
             ["Great View From Up Here", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                                'Progressive Weapons', 'Progressive Armor', 
+                                               'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
+            ["Great View From Up Here", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
+                                               'Progressive Weapons', 'Shield', 
+                                               'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["Great View From Up Here", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+                                               'Progressive Weapons', 'Shield', 
                                                'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
@@ -256,6 +274,7 @@ class TestAdvancements(TestMinecraft):
             ["How Did We Get Here?", False, ['Progressive Tools', 'Progressive Tools'], ['Progressive Tools']], 
             ["How Did We Get Here?", False, ['Progressive Weapons', 'Progressive Weapons'], ['Progressive Weapons']], 
             ["How Did We Get Here?", False, ['Progressive Armor'], ['Progressive Armor']], 
+            ["How Did We Get Here?", False, [], ['Shield']], 
             ["How Did We Get Here?", False, [], ['Enchanting']], 
             ["How Did We Get Here?", False, [], ['Brewing']], 
             ["How Did We Get Here?", False, [], ['Bottles']], 
@@ -266,7 +285,7 @@ class TestAdvancements(TestMinecraft):
             ["How Did We Get Here?", True, ['Ingot Crafting', 'Flint and Steel', 
                                             'Progressive Tools', 'Progressive Tools', 'Progressive Tools', 
                                             'Progressive Weapons', 'Progressive Weapons', 'Progressive Weapons', 
-                                            'Progressive Armor', 'Progressive Armor', 
+                                            'Progressive Armor', 'Progressive Armor', 'Shield', 
                                             'Enchanting', 'Brewing', 'Archery', 'Bottles', 'Resource Blocks', 'Fishing Rod', 
                                             '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
@@ -287,10 +306,12 @@ class TestAdvancements(TestMinecraft):
             ["Spooky Scary Skeleton", False, [], ['Flint and Steel']], 
             ["Spooky Scary Skeleton", False, [], ['Progressive Tools']], 
             ["Spooky Scary Skeleton", False, [], ['Progressive Weapons']], 
-            ["Spooky Scary Skeleton", False, [], ['Progressive Armor']], 
+            ["Spooky Scary Skeleton", False, [], ['Progressive Armor', 'Shield']], 
             ["Spooky Scary Skeleton", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["Spooky Scary Skeleton", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor']], 
             ["Spooky Scary Skeleton", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor']],
+            ["Spooky Scary Skeleton", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Shield']], 
+            ["Spooky Scary Skeleton", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Shield']],
             ])
 
     def test_42022(self):
@@ -363,7 +384,7 @@ class TestAdvancements(TestMinecraft):
             ["Zombie Doctor", False, [], ['Flint and Steel']], 
             ["Zombie Doctor", False, [], ['Progressive Tools']], 
             ["Zombie Doctor", False, [], ['Progressive Weapons']], 
-            ["Zombie Doctor", False, [], ['Progressive Armor']], 
+            ["Zombie Doctor", False, [], ['Progressive Armor', 'Shield']], 
             ["Zombie Doctor", False, [], ['Brewing']], 
             ["Zombie Doctor", False, [], ['Bottles']],
             ["Zombie Doctor", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
@@ -371,6 +392,10 @@ class TestAdvancements(TestMinecraft):
                                      'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles']], 
             ["Zombie Doctor", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                      'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles']],
+            ["Zombie Doctor", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
+                                     'Progressive Weapons', 'Shield', 'Brewing', 'Bottles']], 
+            ["Zombie Doctor", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+                                     'Progressive Weapons', 'Shield', 'Brewing', 'Bottles']],
             ])
 
     def test_42030(self):
@@ -380,7 +405,7 @@ class TestAdvancements(TestMinecraft):
             ["The City at the End of the Game", False, [], ['Flint and Steel']], 
             ["The City at the End of the Game", False, [], ['Progressive Tools']], 
             ["The City at the End of the Game", False, [], ['Progressive Weapons']], 
-            ["The City at the End of the Game", False, [], ['Progressive Armor']], 
+            ["The City at the End of the Game", False, [], ['Progressive Armor', 'Shield']], 
             ["The City at the End of the Game", False, [], ['Brewing']], 
             ["The City at the End of the Game", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["The City at the End of the Game", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
@@ -389,6 +414,12 @@ class TestAdvancements(TestMinecraft):
                                                        'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
             ["The City at the End of the Game", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                                        'Progressive Weapons', 'Progressive Armor', 
+                                                       'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
+            ["The City at the End of the Game", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
+                                                       'Progressive Weapons', 'Shield', 
+                                                       'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["The City at the End of the Game", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+                                                       'Progressive Weapons', 'Shield', 
                                                        'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
@@ -407,7 +438,7 @@ class TestAdvancements(TestMinecraft):
             ["Remote Getaway", False, [], ['Flint and Steel']], 
             ["Remote Getaway", False, [], ['Progressive Tools']], 
             ["Remote Getaway", False, [], ['Progressive Weapons']], 
-            ["Remote Getaway", False, [], ['Progressive Armor']], 
+            ["Remote Getaway", False, [], ['Progressive Armor', 'Shield']], 
             ["Remote Getaway", False, [], ['Brewing']], 
             ["Remote Getaway", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["Remote Getaway", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
@@ -416,6 +447,12 @@ class TestAdvancements(TestMinecraft):
                                       'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
             ["Remote Getaway", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                       'Progressive Weapons', 'Progressive Armor', 
+                                      'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
+            ["Remote Getaway", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
+                                      'Progressive Weapons', 'Shield', 
+                                      'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["Remote Getaway", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+                                      'Progressive Weapons', 'Shield', 
                                       'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
@@ -426,10 +463,12 @@ class TestAdvancements(TestMinecraft):
             ["Into Fire", False, [], ['Flint and Steel']], 
             ["Into Fire", False, [], ['Progressive Tools']], 
             ["Into Fire", False, [], ['Progressive Weapons']], 
-            ["Into Fire", False, [], ['Progressive Armor']], 
+            ["Into Fire", False, [], ['Progressive Armor', 'Shield']], 
             ["Into Fire", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["Into Fire", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor']], 
             ["Into Fire", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor']],
+            ["Into Fire", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Shield']], 
+            ["Into Fire", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Shield']],
             ])
 
     def test_42034(self):
@@ -439,10 +478,10 @@ class TestAdvancements(TestMinecraft):
             ["War Pigs", False, [], ['Flint and Steel']], 
             ["War Pigs", False, [], ['Progressive Tools']], 
             ["War Pigs", False, [], ['Progressive Weapons']], 
-            ["War Pigs", False, [], ['Progressive Armor']], 
+            ["War Pigs", False, [], ['Progressive Armor', 'Shield']], 
             ["War Pigs", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["War Pigs", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor']], 
-            ["War Pigs", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor']],
+            ["War Pigs", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Shield']], 
+            ["War Pigs", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Shield']],
             ])
 
     def test_42035(self):
@@ -531,7 +570,7 @@ class TestAdvancements(TestMinecraft):
             ["Sky's the Limit", False, [], ['Flint and Steel']], 
             ["Sky's the Limit", False, [], ['Progressive Tools']], 
             ["Sky's the Limit", False, [], ['Progressive Weapons']], 
-            ["Sky's the Limit", False, [], ['Progressive Armor']], 
+            ["Sky's the Limit", False, [], ['Progressive Armor', 'Shield']], 
             ["Sky's the Limit", False, [], ['Brewing']], 
             ["Sky's the Limit", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["Sky's the Limit", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
@@ -540,6 +579,12 @@ class TestAdvancements(TestMinecraft):
                                        'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
             ["Sky's the Limit", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                        'Progressive Weapons', 'Progressive Armor', 
+                                       'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
+            ["Sky's the Limit", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
+                                       'Progressive Weapons', 'Shield', 
+                                       'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["Sky's the Limit", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+                                       'Progressive Weapons', 'Shield', 
                                        'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
@@ -632,10 +677,11 @@ class TestAdvancements(TestMinecraft):
         self.run_location_tests([
             ["Voluntary Exile", False, []],
             ["Voluntary Exile", False, [], ['Progressive Weapons']],
-            ["Voluntary Exile", False, [], ['Progressive Armor']],
+            ["Voluntary Exile", False, [], ['Progressive Armor', 'Shield']],
             ["Voluntary Exile", False, [], ['Progressive Tools']],
             ["Voluntary Exile", False, [], ['Ingot Crafting']],
             ["Voluntary Exile", True, ['Progressive Tools', 'Progressive Armor', 'Progressive Weapons', 'Ingot Crafting']],
+            ["Voluntary Exile", True, ['Progressive Tools', 'Shield', 'Progressive Weapons', 'Ingot Crafting']],
             ])
 
     def test_42051(self):
@@ -645,7 +691,7 @@ class TestAdvancements(TestMinecraft):
             ["Eye Spy", False, [], ['Flint and Steel']], 
             ["Eye Spy", False, [], ['Progressive Tools']], 
             ["Eye Spy", False, [], ['Progressive Weapons']], 
-            ["Eye Spy", False, [], ['Progressive Armor']], 
+            ["Eye Spy", False, [], ['Progressive Armor', 'Shield']], 
             ["Eye Spy", False, [], ['Brewing']], 
             ["Eye Spy", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["Eye Spy", False, [], ['3 Ender Pearls']],
@@ -653,6 +699,10 @@ class TestAdvancements(TestMinecraft):
                                'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls']], 
             ["Eye Spy", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                'Progressive Weapons', 'Progressive Armor', 'Brewing', '3 Ender Pearls']],
+            ["Eye Spy", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
+                               'Progressive Weapons', 'Shield', 'Brewing', '3 Ender Pearls']], 
+            ["Eye Spy", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+                               'Progressive Weapons', 'Shield', 'Brewing', '3 Ender Pearls']],
             ])
 
     def test_42052(self):
@@ -662,7 +712,7 @@ class TestAdvancements(TestMinecraft):
             ["The End", False, [], ['Flint and Steel']], 
             ["The End", False, [], ['Progressive Tools']], 
             ["The End", False, [], ['Progressive Weapons']], 
-            ["The End", False, [], ['Progressive Armor']], 
+            ["The End", False, [], ['Progressive Armor', 'Shield']], 
             ["The End", False, [], ['Brewing']], 
             ["The End", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["The End", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
@@ -671,6 +721,12 @@ class TestAdvancements(TestMinecraft):
                                'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
             ["The End", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                'Progressive Weapons', 'Progressive Armor', 
+                               'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
+            ["The End", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
+                               'Progressive Weapons', 'Shield', 
+                               'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["The End", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+                               'Progressive Weapons', 'Shield', 
                                'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
@@ -681,12 +737,14 @@ class TestAdvancements(TestMinecraft):
             ["Serious Dedication", False, [], ['Flint and Steel']], 
             ["Serious Dedication", False, ['Progressive Tools', 'Progressive Tools'], ['Progressive Tools']], 
             ["Serious Dedication", False, [], ['Progressive Weapons']], 
-            ["Serious Dedication", False, [], ['Progressive Armor']], 
+            ["Serious Dedication", False, [], ['Progressive Armor', 'Shield']], 
             ["Serious Dedication", False, [], ['Brewing']], 
             ["Serious Dedication", False, [], ['Bottles']],
             ["Serious Dedication", False, [], ['Bed']],
             ["Serious Dedication", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                           'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Bed']],
+            ["Serious Dedication", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+                                          'Progressive Weapons', 'Shield', 'Brewing', 'Bottles', 'Bed']],
             ])
 
     def test_42054(self):
@@ -694,9 +752,10 @@ class TestAdvancements(TestMinecraft):
             ["Postmortal", False, []],
             ["Postmortal", False, ['Progressive Weapons'], ['Progressive Weapons', 'Progressive Weapons']],
             ["Postmortal", False, [], ['Progressive Armor']],
+            ["Postmortal", False, [], ['Shield']],
             ["Postmortal", False, [], ['Ingot Crafting']],
             ["Postmortal", False, [], ['Progressive Tools']], 
-            ["Postmortal", True, ['Progressive Weapons', 'Progressive Weapons', 'Progressive Armor', 'Ingot Crafting', 'Progressive Tools']],
+            ["Postmortal", True, ['Progressive Weapons', 'Progressive Weapons', 'Progressive Armor', 'Shield', 'Ingot Crafting', 'Progressive Tools']],
             ])
 
     def test_42055(self):
@@ -735,9 +794,10 @@ class TestAdvancements(TestMinecraft):
             ["Hero of the Village", False, []],
             ["Hero of the Village", False, ['Progressive Weapons'], ['Progressive Weapons', 'Progressive Weapons']],
             ["Hero of the Village", False, [], ['Progressive Armor']],
+            ["Hero of the Village", False, [], ['Shield']],
             ["Hero of the Village", False, [], ['Ingot Crafting']],
             ["Hero of the Village", False, [], ['Progressive Tools']], 
-            ["Hero of the Village", True, ['Progressive Weapons', 'Progressive Weapons', 'Progressive Armor', 'Ingot Crafting', 'Progressive Tools']],
+            ["Hero of the Village", True, ['Progressive Weapons', 'Progressive Weapons', 'Progressive Armor', 'Shield', 'Ingot Crafting', 'Progressive Tools']],
             ])
 
     def test_42060(self):
@@ -747,12 +807,14 @@ class TestAdvancements(TestMinecraft):
             ["Hidden in the Depths", False, [], ['Flint and Steel']], 
             ["Hidden in the Depths", False, ['Progressive Tools', 'Progressive Tools'], ['Progressive Tools']], 
             ["Hidden in the Depths", False, [], ['Progressive Weapons']], 
-            ["Hidden in the Depths", False, [], ['Progressive Armor']], 
+            ["Hidden in the Depths", False, [], ['Progressive Armor', 'Shield']], 
             ["Hidden in the Depths", False, [], ['Brewing']], 
             ["Hidden in the Depths", False, [], ['Bottles']],
             ["Hidden in the Depths", False, [], ['Bed']],
             ["Hidden in the Depths", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                             'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Bed']],
+            ["Hidden in the Depths", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+                                            'Progressive Weapons', 'Shield', 'Brewing', 'Bottles', 'Bed']],
             ])
 
     def test_42061(self):
@@ -799,7 +861,7 @@ class TestAdvancements(TestMinecraft):
             ["A Balanced Diet", False, [], ['Flint and Steel']], 
             ["A Balanced Diet", False, [], ['Progressive Tools']], 
             ["A Balanced Diet", False, [], ['Progressive Weapons']], 
-            ["A Balanced Diet", False, [], ['Progressive Armor']], 
+            ["A Balanced Diet", False, [], ['Progressive Armor', 'Shield']], 
             ["A Balanced Diet", False, [], ['Brewing']], 
             ["A Balanced Diet", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["A Balanced Diet", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
@@ -808,6 +870,12 @@ class TestAdvancements(TestMinecraft):
                                        'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
             ["A Balanced Diet", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                        'Progressive Weapons', 'Progressive Armor', 'Bottles', 'Resource Blocks', 
+                                       'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["A Balanced Diet", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
+                                       'Progressive Weapons', 'Shield', 'Bottles', 'Resource Blocks', 
+                                       'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["A Balanced Diet", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+                                       'Progressive Weapons', 'Shield', 'Bottles', 'Resource Blocks', 
                                        'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
             ])
 
@@ -832,12 +900,14 @@ class TestAdvancements(TestMinecraft):
             ["Country Lode, Take Me Home", False, [], ['Flint and Steel']], 
             ["Country Lode, Take Me Home", False, ['Progressive Tools', 'Progressive Tools'], ['Progressive Tools']], 
             ["Country Lode, Take Me Home", False, [], ['Progressive Weapons']], 
-            ["Country Lode, Take Me Home", False, [], ['Progressive Armor']], 
+            ["Country Lode, Take Me Home", False, [], ['Progressive Armor', 'Shield']], 
             ["Country Lode, Take Me Home", False, [], ['Brewing']], 
             ["Country Lode, Take Me Home", False, [], ['Bottles']],
             ["Country Lode, Take Me Home", False, [], ['Bed']],
             ["Country Lode, Take Me Home", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                                   'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Bed']],
+            ["Country Lode, Take Me Home", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+                                                  'Progressive Weapons', 'Shield', 'Brewing', 'Bottles', 'Bed']],
             ])
 
     def test_42067(self):
@@ -940,7 +1010,7 @@ class TestAdvancements(TestMinecraft):
             ["The End?", False, [], ['Flint and Steel']], 
             ["The End?", False, [], ['Progressive Tools']], 
             ["The End?", False, [], ['Progressive Weapons']], 
-            ["The End?", False, [], ['Progressive Armor']], 
+            ["The End?", False, [], ['Progressive Armor', 'Shield']], 
             ["The End?", False, [], ['Brewing']], 
             ["The End?", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["The End?", False, ['3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls'], ['3 Ender Pearls']],
@@ -949,6 +1019,12 @@ class TestAdvancements(TestMinecraft):
                                 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
             ["The End?", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                 'Progressive Weapons', 'Progressive Armor', 
+                                'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
+            ["The End?", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
+                                'Progressive Weapons', 'Shield', 
+                                'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']], 
+            ["The End?", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+                                'Progressive Weapons', 'Shield', 
                                 'Brewing', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls', '3 Ender Pearls']],
             ])
 
@@ -1021,11 +1097,13 @@ class TestAdvancements(TestMinecraft):
             ["When Pigs Fly", False, [], ['Flint and Steel']], 
             ["When Pigs Fly", False, [], ['Progressive Tools']], 
             ["When Pigs Fly", False, [], ['Progressive Weapons']], 
-            ["When Pigs Fly", False, [], ['Progressive Armor']], 
+            ["When Pigs Fly", False, [], ['Progressive Armor', 'Shield']], 
             ["When Pigs Fly", False, [], ['Fishing Rod']], 
             ["When Pigs Fly", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
             ["When Pigs Fly", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Fishing Rod']], 
             ["When Pigs Fly", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Fishing Rod']],
+            ["When Pigs Fly", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Shield', 'Fishing Rod']], 
+            ["When Pigs Fly", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Shield', 'Fishing Rod']],
             ])
 
     def test_42089(self):
@@ -1035,7 +1113,7 @@ class TestAdvancements(TestMinecraft):
             ["Overkill", False, [], ['Flint and Steel']], 
             ["Overkill", False, [], ['Progressive Tools']], 
             ["Overkill", False, [], ['Progressive Weapons']], 
-            ["Overkill", False, [], ['Progressive Armor']], 
+            ["Overkill", False, [], ['Progressive Armor', 'Shield']], 
             ["Overkill", False, [], ['Brewing']], 
             ["Overkill", False, [], ['Bottles']],
             ["Overkill", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
@@ -1043,6 +1121,10 @@ class TestAdvancements(TestMinecraft):
                                 'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles']], 
             ["Overkill", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
                                 'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles']],
+            ["Overkill", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
+                                'Progressive Weapons', 'Shield', 'Brewing', 'Bottles']], 
+            ["Overkill", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+                                'Progressive Weapons', 'Shield', 'Brewing', 'Bottles']],
             ])
 
     def test_42090(self):
