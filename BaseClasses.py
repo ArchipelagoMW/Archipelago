@@ -233,7 +233,7 @@ class MultiWorld():
         ret = CollectionState(self)
 
         def soft_collect(item):
-            if item.name.startswith('Progressive '):
+            if item.game == "A Link to the Past" and item.name.startswith('Progressive '):
                 if 'Sword' in item.name:
                     if ret.has('Golden Sword', item.player):
                         pass
