@@ -432,8 +432,6 @@ def main(args, seed=None):
         for player in world.factorio_player_ids:
             mod_futures.append(pool.submit(generate_mod, world, player,
                                            str(args.outputname if args.outputname else world.seed)))
-        for player in world.minecraft_player_ids:
-            generate_mc_data(world, player, str(args.outputname if args.outputname else world.seed))
 
         def get_entrance_to_region(region: Region):
             for entrance in region.entrances:
@@ -566,6 +564,8 @@ def main(args, seed=None):
     if multidata_task:
         multidata_task.result()  # retrieve exception if one exists
     pool.shutdown()  # wait for all queued tasks to complete
+    for player in world.minecraft_player_ids: # Doing this after shutdown prevents the .apmc from being generated if there's an error
+        generate_mc_data(world, player, str(args.outputname if args.outputname else world.seed))
     if not args.skip_playthrough:
         logger.info('Calculating playthrough.')
     create_playthrough(world)
