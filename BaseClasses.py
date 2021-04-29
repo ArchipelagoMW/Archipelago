@@ -835,7 +835,7 @@ class CollectionState(object):
         return self.has('Enchanting', player) and self.has('Resource Blocks', player) and self.has_iron_ingots(player)
 
     def fortress_loot(self, player: int): # saddles, blaze rods, wither skulls
-        return self.has('Nether Fortress Entry', player) and self.basic_combat(player) # needs an event because this is part of End Portal access logic
+        return self.can_reach('Nether Fortress', 'Region', player) and self.basic_combat(player)
 
     def can_brew_potions(self, player: int): 
         return self.fortress_loot(player) and self.has('Brewing', player) and self.has_bottle_mc(player)

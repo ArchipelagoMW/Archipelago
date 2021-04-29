@@ -50,7 +50,7 @@ def minecraft_gen_item_pool(world: MultiWorld, player: int):
         item_data = item_table[item_name]
         location = world.get_location(loc_name, player)
         item = MinecraftItem(item_name, item_data.progression, item_data.code, player)
-        world.push_item(location, item)
+        world.push_item(location, item, collect=False)
         pool.remove(item)
         location.event = item_data.progression
         location.locked = True
