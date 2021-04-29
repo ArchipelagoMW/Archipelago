@@ -876,7 +876,7 @@ class CollectionState(object):
     def remove(self, item):
         if item.advancement:
             to_remove = item.name
-            if to_remove.startswith('Progressive '):
+            if item.game == "A Link to the Past" and to_remove.startswith('Progressive '):
                 if 'Sword' in to_remove:
                     if self.has('Golden Sword', item.player):
                         to_remove = 'Golden Sword'
@@ -903,7 +903,7 @@ class CollectionState(object):
                     elif self.has('Blue Shield', item.player):
                         to_remove = 'Blue Shield'
                     else:
-                        to_remove = 'None'
+                        to_remove = None
                 elif 'Bow' in item.name:
                     if self.has('Silver Bow', item.player):
                         to_remove = 'Silver Bow'
@@ -912,7 +912,7 @@ class CollectionState(object):
                     else:
                         to_remove = None
 
-            if to_remove is not None:
+            if to_remove:
 
                 self.prog_items[to_remove, item.player] -= 1
                 if self.prog_items[to_remove, item.player] < 1:
