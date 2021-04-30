@@ -27,7 +27,7 @@ from worlds.hk import create_regions as hk_create_regions
 from worlds.factorio import gen_factorio, factorio_create_regions
 from worlds.factorio.Mod import generate_mod
 from worlds.minecraft import gen_minecraft, fill_minecraft_slot_data, generate_mc_data
-from worlds.minecraft.Regions import minecraft_create_regions, link_minecraft_structures
+from worlds.minecraft.Regions import minecraft_create_regions
 from worlds.generic.Rules import locality_rules
 from worlds import Games
 import Patch
@@ -211,9 +211,6 @@ def main(args, seed=None):
     for player in world.factorio_player_ids:
         factorio_create_regions(world, player)
 
-    for player in world.minecraft_player_ids: 
-        minecraft_create_regions(world, player)
-
     for player in world.alttp_player_ids:
         if world.open_pyramid[player] == 'goal':
             world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
@@ -253,11 +250,6 @@ def main(args, seed=None):
 
         world.random = old_random
         plando_connect(world, player)
-
-    logger.info('Shuffling Minecraft structures.')
-
-    for player in world.minecraft_player_ids:
-        link_minecraft_structures(world, player)
 
     logger.info('Generating Item Pool.')
 

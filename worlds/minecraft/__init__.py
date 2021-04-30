@@ -1,6 +1,7 @@
 from random import Random
 from .Items import MinecraftItem, item_table, item_frequencies
 from .Locations import exclusion_table, events_table
+from .Regions import minecraft_create_regions, link_minecraft_structures
 from .Rules import set_rules
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
@@ -59,6 +60,8 @@ def minecraft_gen_item_pool(world: MultiWorld, player: int):
 
 # Generate Minecraft world. 
 def gen_minecraft(world: MultiWorld, player: int):
+    minecraft_create_regions(world, player)
+    link_minecraft_structures(world, player)
     minecraft_gen_item_pool(world, player)
     set_rules(world, player)
 
