@@ -7,7 +7,7 @@ from .Rules import set_rules
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
 from Options import minecraft_options
 
-logic_version = (0, 3)
+client_version = (0, 3)
 
 def generate_mc_data(world: MultiWorld, player: int, seedname): 
     import base64, json
@@ -29,7 +29,7 @@ def fill_minecraft_slot_data(world: MultiWorld, player: int):
     for option_name in minecraft_options:
         option = getattr(world, option_name)[player]
         slot_data[option_name] = int(option.value)
-    slot_data['logic_version'] = logic_version
+    slot_data['client_version'] = client_version
     return slot_data
 
 # Generates the item pool given the table and frequencies in Items.py. 
