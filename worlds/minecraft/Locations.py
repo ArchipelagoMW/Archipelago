@@ -8,7 +8,7 @@ class AdvData(typing.NamedTuple):
 class MinecraftAdvancement(Location): 
     game: str = "Minecraft"
     def __init__(self, player: int, name: str, address: int, parent):
-        super().__init__(player, name, address, parent)
+        super().__init__(player, name, address if address else None, parent)
         self.event = True if address == 0 else False
 
 advancement_table = {
