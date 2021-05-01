@@ -27,7 +27,7 @@ from worlds.hk import create_regions as hk_create_regions
 from worlds.factorio import gen_factorio, factorio_create_regions
 from worlds.factorio.Mod import generate_mod
 from worlds.minecraft import gen_minecraft, fill_minecraft_slot_data, generate_mc_data
-from worlds.minecraft.Regions import minecraft_create_regions, link_minecraft_structures
+from worlds.minecraft.Regions import minecraft_create_regions
 from worlds.generic.Rules import locality_rules
 from worlds import Games
 import Patch
@@ -253,9 +253,6 @@ def main(args, seed=None):
 
         world.random = old_random
         plando_connect(world, player)
-
-    for player in world.minecraft_player_ids:
-        link_minecraft_structures(world, player)
 
     logger.info('Generating Item Pool.')
 
