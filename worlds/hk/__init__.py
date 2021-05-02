@@ -80,7 +80,7 @@ def gen_items(world: MultiWorld, player: int):
 
         if item_data.type == "Event":
             event_location = world.get_location(item_name, player)
-            world.push_item(event_location, item)
+            world.push_item(event_location, item, collect=False)
             event_location.event = True
             event_location.locked = True
             if item.name == "King's_Pass":
@@ -94,13 +94,12 @@ def gen_items(world: MultiWorld, player: int):
                 world.push_item(event_location, item)
                 event_location.event = True
                 event_location.locked = True
-                world.push_precollected(item)
 
         elif item_data.type == "Fake":
             pass
         elif item_data.type in not_shufflable_types:
             location = world.get_location(item_name, player)
-            world.push_item(location, item)
+            world.push_item(location, item, collect=False)
             location.event = item.advancement
             location.locked = True
         else:
@@ -110,7 +109,7 @@ def gen_items(world: MultiWorld, player: int):
                 pool.append(item)
             else:
                 location = world.get_location(item_name, player)
-                world.push_item(location, item)
+                world.push_item(location, item, collect=False)
                 location.event = item.advancement
                 location.locked = True
                 logger.debug(f"Placed {item_name} to vanilla for player {player}")

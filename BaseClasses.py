@@ -411,24 +411,24 @@ class MultiWorld():
             if self.has_beaten_game(self.state):
                 return True
             state = CollectionState(self)
-        prog_locations = {location for location in self.get_locations() if location.item is not None and (
-                    location.item.advancement or location.event) and location not in state.locations_checked}
+        prog_locations = {location for location in self.get_locations() if location.item
+                          and location.item.advancement and location not in state.locations_checked}
 
         while prog_locations:
-            sphere = []
+            sphere = set()
             # build up spheres of collection radius.
             # Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
             for location in prog_locations:
                 if location.can_reach(state):
-                    sphere.append(location)
+                    sphere.add(location)
 
             if not sphere:
                 # ran out of places and did not finish yet, quit
                 return False
 
             for location in sphere:
-                prog_locations.remove(location)
                 state.collect(location.item, True, location)
+            prog_locations -= sphere
 
             if self.has_beaten_game(state):
                 return True
