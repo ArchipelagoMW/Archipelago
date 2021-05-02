@@ -7,7 +7,7 @@
 - [Minecraft Archipelago Randomizer Mod](https://github.com/KonoTyran/Minecraft_AP_Randomizer/releases)
 
 ### Players
-- [Minecraft](https://www.minecraft.net/en-us/)
+- [Minecraft Java Edition](https://www.minecraft.net/en-us/store/minecraft-java-edition)
 
 ## Installation Procedures
 
