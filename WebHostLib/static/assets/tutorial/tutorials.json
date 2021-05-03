@@ -85,5 +85,24 @@
         ]
       }
     ]
+  },
+  {
+    "gameTitle": "Minecraft",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Tutorial",
+        "description": "A guide to setting up the Archipelago Minecraft software on your computer. This guide covers single-player, multiworld, and related software.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "minecraft/minecraft_en.md",
+            "link": "minecraft/minecraft/en",
+            "authors": [
+              "Kono Tyran"
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]
