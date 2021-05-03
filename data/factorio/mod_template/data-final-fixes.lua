@@ -28,6 +28,7 @@ function prep_copy(new_copy, old_tech)
     end
 end
 
+table.insert(data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories, "crafting-with-fluid")
 
 {# each randomized tech gets set to be invisible, with new nodes added that trigger those #}
 {%- for original_tech_name, item_name, receiving_player in locations %}
