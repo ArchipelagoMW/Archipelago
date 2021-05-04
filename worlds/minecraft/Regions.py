@@ -45,10 +45,6 @@ def link_minecraft_structures(world: MultiWorld, player: int):
     # Plando stuff. Remove any utilized exits/structs from the lists. 
     # Raise error if trying to put Nether Fortress in the End. 
 
-    # Temporary: force structure rando always off
-    from Options import Toggle
-    world.shuffle_structures[player] = Toggle(0)
-
     if world.shuffle_structures[player]: 
         # Can't put Nether Fortress in the End
         if 'The End Structure' in exits and 'Nether Fortress' in structs: 
