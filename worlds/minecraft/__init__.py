@@ -9,20 +9,22 @@ from Options import minecraft_options
 
 client_version = (0, 3)
 
-def generate_mc_data(world: MultiWorld, player: int, seedname): 
+def generate_mc_data(world: MultiWorld, player: int, seedname: str): 
     import base64, json
     from Utils import output_path
 
-    data = {}
-    seed = world.rom_seeds[player]
-    data['world_seed'] = Random(seed).getrandbits(32) # consistent and doesn't interfere with other generation
     exits = ["Overworld Structure 1", "Overworld Structure 2", "Nether Structure 1", "Nether Structure 2", "The End Structure"]
-    data['structures'] = {exit: world.get_entrance(exit, player).connected_region.name for exit in exits}
+    data = {
+        'world_seed': Random(world.rom_seeds[player]).getrandbits(32), # consistent and doesn't interfere with other generation
+        'seed_name': seedname,
+        'player_name': world.get_player_names(player),
+        'client_version': client_version,
+        'structures': {exit: world.get_entrance(exit, player).connected_region.name for exit in exits}
+    }
 
-    b = base64.b64encode(bytes(json.dumps(data), 'utf-8'))
     filename = f"AP_{seedname}_P{player}_{world.get_player_names(player)}.apmc"
     with open(output_path(filename), 'wb') as f: 
-        f.write(b)
+        f.write(base64.b64encode(bytes(json.dumps(data), 'utf-8')))
 
 def fill_minecraft_slot_data(world: MultiWorld, player: int): 
     slot_data = {}
