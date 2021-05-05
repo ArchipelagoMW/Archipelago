@@ -12,7 +12,7 @@ with open(source_file) as f:
     raw = json.load(f)
 with open(recipe_source_file) as f:
     raw_recipes = json.load(f)
-tech_table = {}
+tech_table: Dict[str, int] = {}
 technology_table: Dict[str, Technology] = {}
 
 always = lambda state: True
