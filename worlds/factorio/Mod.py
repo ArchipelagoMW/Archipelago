@@ -39,8 +39,7 @@ def generate_mod(world: MultiWorld, player: int, seedname: str):
     player_names = {x: world.player_names[x][0] for x in world.player_ids}
     locations = []
     for location in world.get_filled_locations(player):
-        if not location.name.startswith("recipe-"):  # introduce this as a new location property?
-            locations.append((location.name, location.item.name, location.item.player))
+        locations.append((location.name, location.item.name, location.item.player))
     mod_name = f"AP-{seedname}-P{player}-{world.player_names[player][0]}"
     tech_cost = {0: 0.1,
                  1: 0.25,
