@@ -662,7 +662,8 @@ class Sprite():
                 arr[y + 8][x + 8] = bottom_right[y][x]
         return arr
 
-    def parse_zspr(self, filedata, expected_kind):
+    @staticmethod
+    def parse_zspr(filedata, expected_kind):
         logger = logging.getLogger('ZSPR')
         headerstr = "<4xBHHIHIHH6x"
         headersize = struct.calcsize(headerstr)
