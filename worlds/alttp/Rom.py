@@ -568,6 +568,15 @@ class Sprite():
             self.palette = data[self.sprite_size:self.palette_size]
             self.glove_palette = data[self.sprite_size + self.palette_size:]
 
+    @property
+    def author_game_display(self) -> str:
+        name = getattr(self, "_author_game_display", "")
+        if not name:
+            name = self.author_name
+
+        # At this point, may need some filtering to displayable characters
+        return name
+
     def to_ap_sprite(self, path):
         from .. import Games
         import yaml
@@ -590,7 +599,7 @@ class Sprite():
         if result is None:
             self.valid = False
             return
-        (sprite, palette, self.name, self.author_name) = result
+        (sprite, palette, self.name, self.author_name, self._author_game_display) = result
         if self.name == "":
             self.name = os.path.split(filename)[1].split(".")[0]
 
@@ -682,6 +691,7 @@ class Sprite():
 
         sprite_name = read_utf16le(stream)
         author_name = read_utf16le(stream)
+        author_credits_name = stream.read().split(b"\x00", 1)[0].decode()
 
         # Ignoring the Author Rom name for the time being.
 
@@ -696,7 +706,7 @@ class Sprite():
             logger.error('Error parsing ZSPR file: Unexpected end of file')
             return None
 
-        return (sprite, palette, sprite_name, author_name)
+        return (sprite, palette, sprite_name, author_name, author_credits_name)
 
     def decode_palette(self):
         "Returns the palettes as an array of arrays of 15 colors"
