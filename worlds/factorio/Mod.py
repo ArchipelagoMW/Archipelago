@@ -42,7 +42,7 @@ rocket_recipes = {
     Options.MaxSciencePack.option_logistic_science_pack:
         '{{"electronic-circuit", 10}, {"stone-brick", 10}, {"coal", 10}}',
     Options.MaxSciencePack.option_automation_science_pack:
-        '{{"copper-cable", 1}, {"iron-plate", 1}, {"wood", 1}}'
+        '{{"copper-cable", 10}, {"iron-plate", 10}, {"wood", 10}}'
 }
 
 def generate_mod(world: MultiWorld, player: int, seedname: str):
