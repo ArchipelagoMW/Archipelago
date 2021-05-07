@@ -27,6 +27,24 @@ base_info = {
     "factorio_version": "1.1"
 }
 
+# TODO: clean this up, probably as a jinja macro; then add logic for the recipes in completion condition
+rocket_recipes = {
+    Options.MaxSciencePack.option_space_science_pack:
+        '{{"rocket-control-unit", 10}, {"low-density-structure", 10}, {"rocket-fuel", 10}}',
+    Options.MaxSciencePack.option_utility_science_pack:
+        '{{"speed-module", 10}, {"steel-plate", 10}, {"solid-fuel", 10}}',
+    Options.MaxSciencePack.option_production_science_pack:
+        '{{"speed-module", 10}, {"steel-plate", 10}, {"solid-fuel", 10}}',
+    Options.MaxSciencePack.option_chemical_science_pack:
+        '{{"advanced-circuit", 10}, {"steel-plate", 10}, {"solid-fuel", 10}}',
+    Options.MaxSciencePack.option_military_science_pack:
+        '{{"defender-capsule", 10}, {"stone-wall", 10}, {"coal", 10}}',
+    Options.MaxSciencePack.option_logistic_science_pack:
+        '{{"electronic-circuit", 10}, {"stone-brick", 10}, {"coal", 10}}',
+    Options.MaxSciencePack.option_automation_science_pack:
+        '{{"copper-cable", 1}, {"iron-plate", 1}, {"wood", 1}}'
+}
+
 def generate_mod(world: MultiWorld, player: int, seedname: str):
     global template, locale_template
     with template_load_lock:
@@ -51,7 +69,8 @@ def generate_mod(world: MultiWorld, player: int, seedname: str):
     template_data = {"locations": locations, "player_names" : player_names, "tech_table": tech_table,
                      "mod_name": mod_name, "allowed_science_packs": world.max_science_pack[player].get_allowed_packs(),
                      "tech_cost_scale": tech_cost, "custom_data": world.custom_data[player],
-                     "tech_tree_layout_prerequisites": world.tech_tree_layout_prerequisites[player]}
+                     "tech_tree_layout_prerequisites": world.tech_tree_layout_prerequisites[player],
+                     "rocket_recipe" : rocket_recipes[world.max_science_pack[player].value]}
     for factorio_option in Options.factorio_options:
         template_data[factorio_option] = getattr(world, factorio_option)[player].value
     control_code = control_template.render(**template_data)
