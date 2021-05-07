@@ -511,6 +511,7 @@ class Sprite():
     palette_size = 120
     glove_size = 4
     author_name: Optional[str] = None
+    base_data: bytes
 
     def __init__(self, filename):
         if not hasattr(Sprite, "base_data"):

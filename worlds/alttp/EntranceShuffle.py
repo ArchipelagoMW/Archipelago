@@ -2027,16 +2027,9 @@ def connect_caves(world, lw_entrances, dw_entrances, caves, player):
     world.random.shuffle(lw_entrances)
     world.random.shuffle(dw_entrances)
     world.random.shuffle(caves)
-    while caves:
-        # connect highest exit count caves first, prevent issue where we have 2 or 3 exits accross worlds left to fill
-        cave_candidate = (None, 0)
-        for i, cave in enumerate(caves):
-            if isinstance(cave, str):
-                cave = (cave,)
-            if len(cave) > cave_candidate[1]:
-                cave_candidate = (i, len(cave))
-        cave = caves.pop(cave_candidate[0])
-
+    # connect highest exit count caves first, prevent issue where we have 2 or 3 exits accross worlds left to fill
+    caves.sort(key=lambda cave: 1 if isinstance(cave, str) else len(cave), reverse=True)
+    for cave in caves:
         target = lw_entrances if world.random.randint(0, 1) == 0 else dw_entrances
         if isinstance(cave, str):
             cave = (cave,)
@@ -2048,6 +2041,7 @@ def connect_caves(world, lw_entrances, dw_entrances, caves, player):
 
         for exit in cave:
             connect_two_way(world, target.pop(), exit, player)
+    caves.clear() # emulating old behaviour of popping caves from the list in-place
 
 
 def connect_doors(world, doors, targets, player):
