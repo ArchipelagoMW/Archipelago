@@ -62,7 +62,7 @@ A basic minecraft yaml will look like this.
 ```yaml
 description: Template Name
 # Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
-name: YourName
+name: YourName 
 game: Minecraft
 accessibility: locations
 progression_balancing: off
@@ -83,12 +83,12 @@ include_insane_advancements:
 include_postgame_advancements:
   on: 0
   off: 1
-shuffle_structures: #CURRENTLY DISABLED
-  on: 0
-  off: 1
+shuffle_structures:
+  on: 1
+  off: 0
 ```
 
-For more detail on what each setting does check the default `playerSettings.yaml` that comes with the Archipelago install.
+For more detail on what each setting does check the default `PlayerSettings.yaml` that comes with the Archipelago install.
 
 ## Joining a MultiWorld Game
 
@@ -106,8 +106,8 @@ previously.
 After having placed your data file in the `APData` folder, start the Forge server and make sure you have OP
 status by typing `/op YourMinecraftUsername` in the forge server console then connecting in your Minecraft client.
 
-Once in game type `/connect <AP-Address> <Name> (<Password>)` where `<AP-Address>` is the address of the
-Archipelago server and `<Name>` is the case-sensitive name that was in your YAML file. `(<Password>)`
+Once in game type `/connect <AP-Address> (<Password>)` where `<AP-Address>` is the address of the
+Archipelago server. `(<Password>)`
 is only required if the Archipleago server you are using has a password set.
 
 ### Play the game
