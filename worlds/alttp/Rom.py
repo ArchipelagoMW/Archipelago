@@ -2080,7 +2080,7 @@ def write_strings(rom, world, player, team):
     tt.removeUnwantedText()
 
     # Let's keep this guy's text accurate to the shuffle setting.
-    if world.shuffle[player] in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
+    if world.shuffle[player] in ['vanilla', 'dungeonsfull', 'dungeonssimple', 'dungeonscrossed']:
         tt['kakariko_flophouse_man_no_flippers'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
         tt['kakariko_flophouse_man'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
 
@@ -2138,7 +2138,7 @@ def write_strings(rom, world, player, team):
                     break
         # Now we write inconvenient locations for most shuffles and finish taking care of the less chaotic ones.
         entrances_to_hint.update(InconvenientOtherEntrances)
-        if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+        if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed']:
             hint_count = 0
         elif world.shuffle[player] in ['simple', 'restricted', 'restricted_legacy']:
             hint_count = 2
@@ -2180,7 +2180,7 @@ def write_strings(rom, world, player, team):
                     entrances_to_hint.update({'Inverted Pyramid Entrance': 'The extra castle passage'})
                 else:
                     entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
-        hint_count = 4 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 0
+        hint_count = 4 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'] else 0
         for entrance in all_entrances:
             if entrance.name in entrances_to_hint:
                 if hint_count:
@@ -2194,10 +2194,10 @@ def write_strings(rom, world, player, team):
 
         # Next we write a few hints for specific inconvenient locations. We don't make many because in entrance this is highly unpredictable.
         locations_to_hint = InconvenientLocations.copy()
-        if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+        if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed']:
             locations_to_hint.extend(InconvenientVanillaLocations)
         local_random.shuffle(locations_to_hint)
-        hint_count = 3 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 5
+        hint_count = 3 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'] else 5
         for location in locations_to_hint[:hint_count]:
             if location == 'Swamp Left':
                 if local_random.randint(0, 1):
@@ -2256,7 +2256,7 @@ def write_strings(rom, world, player, team):
         if world.bigkeyshuffle[player]:
             items_to_hint.extend(BigKeys)
         local_random.shuffle(items_to_hint)
-        hint_count = 5 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull'] else 8
+        hint_count = 5 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'] else 8
         while hint_count > 0 and items_to_hint:
             this_item = items_to_hint.pop(0)
             this_location = world.find_items(this_item, player)
@@ -2473,7 +2473,7 @@ def set_inverted_mode(world, player, rom):
         rom.write_byte(0xDBB73 + 0x36, 0x24)
         rom.write_int16(0x15AEE + 2 * 0x38, 0x00E0)
         rom.write_int16(0x15AEE + 2 * 0x25, 0x000C)
-    if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+    if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed']:
         rom.write_byte(0x15B8C, 0x6C)
         rom.write_byte(0xDBB73 + 0x00, 0x53)  # switch bomb shop and links house
         rom.write_byte(0xDBB73 + 0x52, 0x01)
@@ -2531,7 +2531,7 @@ def set_inverted_mode(world, player, rom):
     rom.write_int16(snes_to_pc(0x02D9A6), 0x005A)
     rom.write_byte(snes_to_pc(0x02D9B3), 0x12)
     # keep the old man spawn point at old man house unless shuffle is vanilla
-    if world.shuffle[player] in ['vanilla', 'dungeonsfull', 'dungeonssimple']:
+    if world.shuffle[player] in ['vanilla', 'dungeonsfull', 'dungeonssimple', 'dungeonscrossed']:
         rom.write_bytes(snes_to_pc(0x308350), [0x00, 0x00, 0x01])
         rom.write_int16(snes_to_pc(0x02D8DE), 0x00F1)
         rom.write_bytes(snes_to_pc(0x02D910), [0x1F, 0x1E, 0x1F, 0x1F, 0x03, 0x02, 0x03, 0x03])
@@ -2594,7 +2594,7 @@ def set_inverted_mode(world, player, rom):
     rom.write_int16s(snes_to_pc(0x1bb836), [0x001B, 0x001B, 0x001B])
     rom.write_int16(snes_to_pc(0x308300), 0x0140)  # new pyramid hole entrance
     rom.write_int16(snes_to_pc(0x308320), 0x001B)
-    if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+    if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed']:
         rom.write_byte(snes_to_pc(0x308340), 0x7B)
     rom.write_int16(snes_to_pc(0x1af504), 0x148B)
     rom.write_int16(snes_to_pc(0x1af50c), 0x149B)
@@ -2631,10 +2631,10 @@ def set_inverted_mode(world, player, rom):
     rom.write_bytes(snes_to_pc(0x1BC85A), [0x50, 0x0F, 0x82])
     rom.write_int16(0xDB96F + 2 * 0x35, 0x001B)  # move pyramid exit door
     rom.write_int16(0xDBA71 + 2 * 0x35, 0x06A4)
-    if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+    if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed']:
         rom.write_byte(0xDBB73 + 0x35, 0x36)
     rom.write_byte(snes_to_pc(0x09D436), 0xF3)  # remove castle gate warp
-    if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull']:
+    if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed']:
         rom.write_int16(0x15AEE + 2 * 0x37, 0x0010)  # pyramid exit to new hc area
         rom.write_byte(0x15B8C + 0x37, 0x1B)
         rom.write_int16(0x15BDB + 2 * 0x37, 0x0418)
