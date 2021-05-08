@@ -122,7 +122,8 @@ progressive: # Enable or disable progressive items (swords, shields, bow)
 entrance_shuffle:
   none: 50 # Vanilla game map. All entrances and exits lead to their original locations. You probably want this option
   dungeonssimple: 0 # Shuffle just dungeons amongst each other, swapping dungeons entirely, so Hyrule Castle is always 1 dungeon
-  dungeonsfull: 0 # Shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle can be 4 different dungeons
+  dungeonsfull: 0 # Shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle can be 4 different dungeons, but keep dungeons to a specific world
+  dungeonscrossed: 1 # like dungeonsfull, but allow cross-world traversal through a dungeon. Warning: May force repeated dungeon traversal
   simple: 0 # Entrances are grouped together before being randomized. Simple uses the most strict grouping rules
   restricted: 0 # Less strict than simple
   full: 0 # Less strict than restricted
