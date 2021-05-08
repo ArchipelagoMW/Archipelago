@@ -169,6 +169,11 @@ class MultiWorld():
     def factorio_player_ids(self):
         yield from (player for player in range(1, self.players + 1) if self.game[player] == "Factorio")
 
+    @property
+    def minecraft_player_ids(self):
+        yield from (player for player in range(1, self.players + 1) if self.game[player] == "Minecraft")
+    
+
     def get_name_string_for_object(self, obj) -> str:
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_names(obj.player)})'
 
@@ -234,6 +239,7 @@ class MultiWorld():
 
         def soft_collect(item):
             if item.game == "A Link to the Past" and item.name.startswith('Progressive '):
+                # ALttP items
                 if 'Sword' in item.name:
                     if ret.has('Golden Sword', item.player):
                         pass
@@ -805,6 +811,91 @@ class CollectionState(object):
         if self.world.mode[player] != 'inverted':
             rules.append(self.has('Moon Pearl', player))
         return all(rules)
+
+    # Minecraft logic functions
+    def has_iron_ingots(self, player: int):
+        return self.has('Progressive Tools', player) and self.has('Ingot Crafting', player)
+
+    def has_gold_ingots(self, player: int): 
+        return self.has('Ingot Crafting', player) and (self.has('Progressive Tools', player, 2) or self.can_reach('The Nether', 'Region', player))
+
+    def has_diamond_pickaxe(self, player: int):
+        return self.has('Progressive Tools', player, 3) and self.has_iron_ingots(player)
+
+    def craft_crossbow(self, player: int): 
+        return self.has('Archery', player) and self.has_iron_ingots(player)
+
+    def has_bottle_mc(self, player: int): 
+        return self.has('Bottles', player) and self.has('Ingot Crafting', player)
+
+    def can_enchant(self, player: int): 
+        return self.has('Enchanting', player) and self.has_diamond_pickaxe(player) # mine obsidian and lapis
+
+    def can_use_anvil(self, player: int): 
+        return self.has('Enchanting', player) and self.has('Resource Blocks', player) and self.has_iron_ingots(player)
+
+    def fortress_loot(self, player: int): # saddles, blaze rods, wither skulls
+        return self.can_reach('Nether Fortress', 'Region', player) and self.basic_combat(player)
+
+    def can_brew_potions(self, player: int): 
+        return self.fortress_loot(player) and self.has('Brewing', player) and self.has_bottle_mc(player)
+
+    def can_piglin_trade(self, player: int): 
+        return self.has_gold_ingots(player) and (self.can_reach('The Nether', 'Region', player) or self.can_reach('Bastion Remnant', 'Region', player))
+
+    def enter_stronghold(self, player: int): 
+        return self.fortress_loot(player) and self.has('Brewing', player) and self.has('3 Ender Pearls', player)
+
+    # Difficulty-dependent functions
+    def combat_difficulty(self, player: int): 
+        return self.world.combat_difficulty[player].get_option_name()
+
+    def can_adventure(self, player: int):
+        if self.combat_difficulty(player) == 'easy': 
+            return self.has('Progressive Weapons', player, 2) and self.has_iron_ingots(player)
+        elif self.combat_difficulty(player) == 'hard': 
+            return True
+        return self.has('Progressive Weapons', player) and (self.has('Ingot Crafting', player) or self.has('Campfire', player))
+
+    def basic_combat(self, player: int): 
+        if self.combat_difficulty(player) == 'easy': 
+            return self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and \
+                   self.has('Shield', player) and self.has_iron_ingots(player)
+        elif self.combat_difficulty(player) == 'hard': 
+            return True
+        return self.has('Progressive Weapons', player) and (self.has('Progressive Armor', player) or self.has('Shield', player)) and self.has_iron_ingots(player)
+
+    def complete_raid(self, player: int): 
+        reach_regions = self.can_reach('Village', 'Region', player) and self.can_reach('Pillager Outpost', 'Region', player)
+        if self.combat_difficulty(player) == 'easy': 
+            return reach_regions and \
+                   self.has('Progressive Weapons', player, 3) and self.has('Progressive Armor', player, 2) and \
+                   self.has('Shield', player) and self.has('Archery', player) and \
+                   self.has('Progressive Tools', player, 2) and self.has_iron_ingots(player)
+        elif self.combat_difficulty(player) == 'hard': # might be too hard?
+            return reach_regions and self.has('Progressive Weapons', player, 2) and self.has_iron_ingots(player) and \
+                   (self.has('Progressive Armor', player) or self.has('Shield', player))
+        return reach_regions and self.has('Progressive Weapons', player, 2) and self.has_iron_ingots(player) and \
+               self.has('Progressive Armor', player) and self.has('Shield', player)
+
+    def can_kill_wither(self, player: int): 
+        build_wither = self.fortress_loot(player) and (self.can_reach('The Nether', 'Region', player) or self.can_piglin_trade(player))
+        normal_kill = self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and self.can_brew_potions(player) and self.can_enchant(player)
+        if self.combat_difficulty(player) == 'easy': 
+            return build_wither and normal_kill and self.has('Archery', player)
+        elif self.combat_difficulty(player) == 'hard': # cheese kill using bedrock ceilings
+            return build_wither and (normal_kill or self.can_reach('The Nether', 'Region', player) or self.can_reach('The End', 'Region', player))
+        return build_wither and normal_kill
+
+    def can_kill_ender_dragon(self, player: int):
+        if self.combat_difficulty(player) == 'easy': 
+            return self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and self.has('Archery', player) and \
+                   self.can_brew_potions(player) and self.can_enchant(player)
+        if self.combat_difficulty(player) == 'hard': 
+            return (self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player)) or \
+                   (self.has('Progressive Weapons', player, 1) and self.has('Bed', player))
+        return self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and self.has('Archery', player)
+
 
     def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:
         if location:
@@ -1403,6 +1494,11 @@ class Spoiler(object):
                     for hk_option in Options.hollow_knight_options:
                         res = getattr(self.world, hk_option)[player]
                         outfile.write(f'{hk_option+":":33}{res}\n')
+                if player in self.world.minecraft_player_ids:
+                    import Options
+                    for mc_option in Options.minecraft_options:
+                        res = getattr(self.world, mc_option)[player]
+                        outfile.write(f'{mc_option+":":33}{bool_to_text(res) if type(res) == Options.Toggle else res.get_option_name()}\n')
                 if player in self.world.alttp_player_ids:
                     for team in range(self.world.teams):
                         outfile.write('%s%s\n' % (
@@ -1418,7 +1514,7 @@ class Spoiler(object):
                     outfile.write('Mode:                            %s\n' % self.metadata['mode'][player])
                     outfile.write('Retro:                           %s\n' %
                                   ('Yes' if self.metadata['retro'][player] else 'No'))
-                    outfile.write('Swordless:                          %s\n' % ('Yes' if self.metadata['swordless'][player] else 'No'))
+                    outfile.write('Swordless:                       %s\n' % ('Yes' if self.metadata['swordless'][player] else 'No'))
                     outfile.write('Goal:                            %s\n' % self.metadata['goal'][player])
                     if "triforce" in self.metadata["goal"][player]:  # triforce hunt
                         outfile.write("Pieces available for Triforce:   %s\n" %

@@ -70,6 +70,27 @@ visibility:
 random_tech_ingredients:
   on: 1
   off: 0
+# Minecraft options: 
+advancement_goal: # Number of advancements required (out of 92 total) to spawn the Ender Dragon and complete the game. 
+  few: 0 # 30 advancements
+  normal: 1 # 50
+  many: 0 # 70
+combat_difficulty: # Modifies the level of items logically required for exploring dangerous areas and fighting bosses. 
+  easy: 0
+  normal: 1
+  hard: 0
+include_hard_advancements: # Junk-fills certain RNG-reliant or tedious advancements with XP rewards. 
+  on: 0
+  off: 1
+include_insane_advancements: # Junk-fills extremely difficult advancements; this is only How Did We Get Here? and Adventuring Time. 
+  on: 0
+  off: 1
+include_postgame_advancements: # Some advancements require defeating the Ender Dragon; this will junk-fill them so you won't have to finish to send some items. 
+  on: 0
+  off: 1
+shuffle_structures: # CURRENTLY DISABLED; enables shuffling of villages, outposts, fortresses, bastions, and end cities. 
+  on: 0
+  off: 1
 # A Link to  the Past options:
 ### Logic Section ###
 # Warning: overworld_glitches is not available and minor_glitches is only partially implemented on the door-rando version

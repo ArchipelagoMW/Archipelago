@@ -26,6 +26,8 @@ from worlds.hk import gen_hollow
 from worlds.hk import create_regions as hk_create_regions
 from worlds.factorio import gen_factorio, factorio_create_regions
 from worlds.factorio.Mod import generate_mod
+from worlds.minecraft import gen_minecraft, fill_minecraft_slot_data, generate_mc_data
+from worlds.minecraft.Regions import minecraft_create_regions
 from worlds.generic.Rules import locality_rules
 from worlds import Games
 import Patch
@@ -136,6 +138,8 @@ def main(args, seed=None):
         setattr(world, hk_option, getattr(args, hk_option, {}))
     for factorio_option in Options.factorio_options:
         setattr(world, factorio_option, getattr(args, factorio_option, {}))
+    for minecraft_option in Options.minecraft_options: 
+        setattr(world, minecraft_option, getattr(args, minecraft_option, {}))
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
     world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}
@@ -207,6 +211,9 @@ def main(args, seed=None):
     for player in world.factorio_player_ids:
         factorio_create_regions(world, player)
 
+    for player in world.minecraft_player_ids:
+        minecraft_create_regions(world, player)
+
     for player in world.alttp_player_ids:
         if world.open_pyramid[player] == 'goal':
             world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
@@ -266,6 +273,9 @@ def main(args, seed=None):
     for player in world.factorio_player_ids:
         gen_factorio(world, player)
 
+    for player in world.minecraft_player_ids:
+        gen_minecraft(world, player)
+
     logger.info("Running Item Plando")
 
     for item in world.itempool:
@@ -305,9 +315,7 @@ def main(args, seed=None):
         balance_multiworld_progression(world)
 
     logger.info('Generating output files.')
-
     outfilebase = 'AP_%s' % (args.outputname if args.outputname else world.seed)
-
     rom_names = []
 
     def _gen_rom(team: int, player: int):
@@ -511,6 +519,8 @@ def main(args, seed=None):
                 for option_name in Options.hollow_knight_options:
                     option = getattr(world, option_name)[slot]
                     slots_data[option_name] = int(option.value)
+            for slot in world.minecraft_player_ids:
+                slot_data[slot] = fill_minecraft_slot_data(world, slot)
             multidata = zlib.compress(pickle.dumps({
                 "slot_data" : slot_data,
                 "games": games,
@@ -549,9 +559,11 @@ def main(args, seed=None):
     if multidata_task:
         multidata_task.result()  # retrieve exception if one exists
     pool.shutdown()  # wait for all queued tasks to complete
+    for player in world.minecraft_player_ids: # Doing this after shutdown prevents the .apmc from being generated if there's an error
+        generate_mc_data(world, player, str(args.outputname if args.outputname else world.seed))
     if not args.skip_playthrough:
         logger.info('Calculating playthrough.')
-    create_playthrough(world)
+        create_playthrough(world)
     if args.create_spoiler:  # needs spoiler.hashes to be filled, that depend on rom_futures being done
         world.spoiler.to_file(output_path('%s_Spoiler.txt' % outfilebase))
 
