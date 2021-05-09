@@ -17,9 +17,7 @@ function on_force_created(event)
     --event.force appears to be LuaForce.name, not LuaForce
     game.forces[event.force].research_queue_enabled = true
     local data = {}
-    if FREE_SAMPLES ~= 0 then
-        data['earned_samples'] = {{ dict_to_lua(starting_items) }}
-    end
+    data['earned_samples'] = {{ dict_to_lua(starting_items) }}
     data["victory"] = 0
     global.forcedata[event.force] = data
 end
