@@ -115,4 +115,3 @@ lttp_options:
   rom_start: true
 factorio_options:
   executable: "factorio\\bin\\x64\\factorio"
-  script-output: "factorio\\script-output"

@@ -170,7 +170,6 @@ def get_default_options() -> dict:
             },
             "factorio_options": {
                 "executable": "factorio\\bin\\x64\\factorio",
-                "script-output": "factorio\\script-output",
             },
             "lttp_options": {
                 "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",

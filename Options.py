@@ -103,10 +103,41 @@ class Choice(Option):
             f'known options are {", ".join(f"{option}" for option in cls.name_lookup.values())}')
 
     @classmethod
-    def from_any(cls, data: typing.Any):
+    def from_any(cls, data: typing.Any) -> Choice:
         if type(data) == int and data in cls.options.values():
             return cls(data)
         return cls.from_text(str(data))
+
+
+class OptionNameSet(Option):
+    default = frozenset()
+
+    def __init__(self, value: typing.Set[str]):
+        self.value: typing.Set[str] = value
+
+    @classmethod
+    def from_text(cls, text: str) -> OptionNameSet:
+        return cls({option.strip() for option in text.split(",")})
+
+    @classmethod
+    def from_any(cls, data: typing.Any) -> OptionNameSet:
+        if type(data) == set:
+            return cls(data)
+        return cls.from_text(str(data))
+
+
+class OptionDict(Option):
+    default = {}
+
+    def __init__(self, value: typing.Dict[str, typing.Any]):
+        self.value: typing.Dict[str, typing.Any] = value
+
+    @classmethod
+    def from_any(cls, data: typing.Dict[str, typing.Any]) -> OptionDict:
+        if type(data) == dict:
+            return cls(data)
+        else:
+            raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
 
 
 class Logic(Choice):
@@ -289,12 +320,18 @@ class Visibility(Choice):
     default = 1
 
 
+class FactorioStartItems(OptionDict):
+    default = {"burner-mining-drill": 19, "stone-furnace": 19}
+
+
 factorio_options: typing.Dict[str, type(Option)] = {"max_science_pack": MaxSciencePack,
                                                     "tech_tree_layout": TechTreeLayout,
                                                     "tech_cost": TechCost,
                                                     "free_samples": FreeSamples,
                                                     "visibility": Visibility,
-                                                    "random_tech_ingredients": Toggle}
+                                                    "random_tech_ingredients": Toggle,
+                                                    "starting_items": FactorioStartItems}
+
 
 class AdvancementGoal(Choice):
     option_few = 0
@@ -302,14 +339,16 @@ class AdvancementGoal(Choice):
     option_many = 2
     default = 1
 
-class CombatDifficulty(Choice): 
+
+class CombatDifficulty(Choice):
     option_easy = 0
     option_normal = 1
     option_hard = 2
     default = 1
 
+
 minecraft_options: typing.Dict[str, type(Option)] = {
-    "advancement_goal": AdvancementGoal, 
+    "advancement_goal": AdvancementGoal,
     "combat_difficulty": CombatDifficulty,
     "include_hard_advancements": Toggle,
     "include_insane_advancements": Toggle,

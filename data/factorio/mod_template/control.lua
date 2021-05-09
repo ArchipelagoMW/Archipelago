@@ -1,7 +1,15 @@
+{% macro dict_to_lua(dict) -%}
+{
+    {% for key, value in dict.items() %}
+    ["{{ key }}"] = {{ value | safe }}{% if not loop.last %},{% endif %}
+    {% endfor %}
+}
+{%- endmacro %}
 require "lib"
 require "util"
 
 FREE_SAMPLES = {{ free_samples }}
+SLOT_NAME = "{{ slot_name }}"
 --SUPPRESS_INVENTORY_EVENTS = false
 
 -- Initialize force data, either from it being created or already being part of the game when the mod was added.
@@ -10,10 +18,7 @@ function on_force_created(event)
     game.forces[event.force].research_queue_enabled = true
     local data = {}
     if FREE_SAMPLES ~= 0 then
-        data['earned_samples'] = {
-            ["burner-mining-drill"] = 19,
-            ["stone-furnace"] = 19
-        }
+        data['earned_samples'] = {{ dict_to_lua(starting_items) }}
     end
     data["victory"] = 0
     global.forcedata[event.force] = data
@@ -183,7 +188,8 @@ function dumpInfo(force)
     local research_done = {}
     local data_collection = {
         ["research_done"] = research_done,
-        ["victory"] = global.forcedata[force.name]["victory"]
+        ["victory"] = chain_lookup(global, "forcedata", force.name, "victory"),
+        ["slot_name"] = SLOT_NAME
         }
 
     for tech_name, tech in pairs(force.technologies) do
@@ -198,10 +204,24 @@ end
 
 
 
+function chain_lookup(table, ...)
+    for _, k in ipairs{...} do
+        table = table[k]
+        if not table then
+            return nil
+        end
+    end
+    return table
+end
+
 -- add / commands
 
 commands.add_command("ap-sync", "Run manual Research Sync with Archipelago.", function(call)
-    dumpInfo(game.players[call.player_index].force)
+    if call.player_index == nil then
+        dumpInfo(game.forces.player)
+    else
+        dumpInfo(game.players[call.player_index].force)
+    end
     game.print("Wrote bridge file.")
 end)
 
