@@ -35,9 +35,7 @@ function on_player_created(event)
     -- FIXME: This (probably) fires before any other mod has a chance to change the player's force
     -- For now, they will (probably) always be on the 'player' force when this event fires.
     local data = {}
-    if FREE_SAMPLES ~= 0 then
-        data['pending_samples'] = table.deepcopy(global.forcedata[player.force.name]['earned_samples'])
-    end
+    data['pending_samples'] = table.deepcopy(global.forcedata[player.force.name]['earned_samples'])
     global.playerdata[player.index] = data
     update_player(player.index)  -- Attempt to send pending free samples, if relevant.
 end
@@ -56,9 +54,6 @@ script.on_event(defines.events.on_rocket_launched, on_rocket_launched)
 
 -- Updates a player, attempting to send them any pending samples (if relevant)
 function update_player(index)
-    if FREE_SAMPLES == 0 then  -- This is effectively a noop
-        return
-    end
     local player = game.players[index]
     if not player or not player.valid then     -- Do nothing if we reference an invalid player somehow
         return
@@ -108,9 +103,7 @@ function update_player_event(event)
     --end
 end
 
-if FREE_SAMPLES then
-    script.on_event(defines.events.on_player_main_inventory_changed, update_player_event)
-end
+script.on_event(defines.events.on_player_main_inventory_changed, update_player_event)
 
 function add_samples(force, name, count)
     local function add_to_table(t)
