@@ -37,6 +37,7 @@ if not os.path.exists(executable):
 
 threadpool = ThreadPoolExecutor(10)
 
+
 class FactorioCommandProcessor(ClientCommandProcessor):
     @mark_raw
     def _cmd_factorio(self, text: str) -> bool:
@@ -48,9 +49,10 @@ class FactorioCommandProcessor(ClientCommandProcessor):
             return True
         return False
 
-    def _cmd_connect(self, address: str = "", name="") -> bool:
+    def _cmd_connect(self, address: str = "") -> bool:
         """Connect to a MultiWorld Server"""
-        self.ctx.auth = name
+        if not self.ctx.auth:
+            self.output("Cannot connect to a server with unknown own identity, bridge to Factorio first.")
         return super(FactorioCommandProcessor, self)._cmd_connect(address)
 
 
@@ -66,9 +68,6 @@ class FactorioContext(CommonContext):
     async def server_auth(self, password_requested):
         if password_requested and not self.password:
             await super(FactorioContext, self).server_auth(password_requested)
-        if self.auth is None:
-            logging.info('Enter the name of your slot to join this game:')
-            self.auth = await self.console_input()
 
         await self.send_msgs([{"cmd": 'Connect',
                                'password': self.password, 'name': self.auth, 'version': Utils._version_tuple,
@@ -85,7 +84,7 @@ class FactorioContext(CommonContext):
     def on_print_json(self, args: dict):
         if not self.found_items and args.get("type", None) == "ItemSend" and args["receiving"] == args["sending"]:
             pass  # don't want info on other player's local pickups.
-        copy_data = copy.deepcopy(args["data"]) # jsontotextparser is destructive currently
+        copy_data = copy.deepcopy(args["data"])  # jsontotextparser is destructive currently
         logger.info(self.jsontotextparser(args["data"]))
         if self.rcon_client:
             cleaned_text = self.raw_json_text_parser(copy_data).replace('"', '')
@@ -105,6 +104,7 @@ async def game_watcher(ctx: FactorioContext, bridge_file: str):
                         research_data = data["research_done"]
                         research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
                         victory = data["victory"]
+                        ctx.auth = data["slot_name"]
 
                     if not ctx.finished_game and victory:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
@@ -119,12 +119,16 @@ async def game_watcher(ctx: FactorioContext, bridge_file: str):
             else:
                 bridge_counter += 1
                 if bridge_counter >= 60:
-                    bridge_logger.info("Did not find Factorio Bridge file, waiting for mod to run, which requires the server to run, which requires a player to be connected.")
+                    bridge_logger.info(
+                        "Did not find Factorio Bridge file, "
+                        "waiting for mod to run, which requires the server to run, "
+                        "which requires a player to be connected.")
                     bridge_counter = 0
                 await asyncio.sleep(1)
     except Exception as e:
         logging.exception(e)
         logging.error("Aborted Factorio Server Bridge")
+
 
 def stream_factorio_output(pipe, queue):
     def queuer():

@@ -2,6 +2,7 @@ require "lib"
 require "util"
 
 FREE_SAMPLES = {{ free_samples }}
+SLOT_NAME = "{{ slot_name }}"
 --SUPPRESS_INVENTORY_EVENTS = false
 
 -- Initialize force data, either from it being created or already being part of the game when the mod was added.
@@ -183,7 +184,8 @@ function dumpInfo(force)
     local research_done = {}
     local data_collection = {
         ["research_done"] = research_done,
-        ["victory"] = chain_lookup(global, "forcedata", force.name, "victory")
+        ["victory"] = chain_lookup(global, "forcedata", force.name, "victory"),
+        ["slot_name"] = SLOT_NAME
         }
 
     for tech_name, tech in pairs(force.technologies) do

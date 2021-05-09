@@ -70,7 +70,8 @@ def generate_mod(world: MultiWorld, player: int, seedname: str):
                      "mod_name": mod_name, "allowed_science_packs": world.max_science_pack[player].get_allowed_packs(),
                      "tech_cost_scale": tech_cost, "custom_data": world.custom_data[player],
                      "tech_tree_layout_prerequisites": world.tech_tree_layout_prerequisites[player],
-                     "rocket_recipe" : rocket_recipes[world.max_science_pack[player].value]}
+                     "rocket_recipe" : rocket_recipes[world.max_science_pack[player].value],
+                     "slot_name": world.player_names[player][0]}
     for factorio_option in Options.factorio_options:
         template_data[factorio_option] = getattr(world, factorio_option)[player].value
     control_code = control_template.render(**template_data)
