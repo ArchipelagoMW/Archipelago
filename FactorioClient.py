@@ -35,8 +35,6 @@ if not os.path.exists(executable):
     else:
         raise FileNotFoundError(executable)
 
-script_folder = options["factorio_options"]["script-output"]
-
 threadpool = ThreadPoolExecutor(10)
 
 class FactorioCommandProcessor(ClientCommandProcessor):
@@ -93,11 +91,8 @@ class FactorioContext(CommonContext):
             cleaned_text = self.raw_json_text_parser(copy_data).replace('"', '')
             self.rcon_client.send_command(f"/sc game.print(\"Archipelago: {cleaned_text}\")")
 
-async def game_watcher(ctx: FactorioContext):
+async def game_watcher(ctx: FactorioContext, bridge_file: str):
     bridge_logger = logging.getLogger("FactorioWatcher")
-    bridge_file = os.path.join(script_folder, "ap_bridge.json")
-    if os.path.exists(bridge_file):
-        os.remove(bridge_file)
     from worlds.factorio.Technologies import lookup_id_to_name
     bridge_counter = 0
     try:
@@ -157,6 +152,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
     factorio_queue = Queue()
     stream_factorio_output(factorio_process.stdout, factorio_queue)
     stream_factorio_output(factorio_process.stderr, factorio_queue)
+    script_folder = None
     try:
         while 1:
             while not factorio_queue.empty():
@@ -167,6 +163,14 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     # trigger lua interface confirmation
                     ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
                     ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
+                    ctx.rcon_client.send_command("/ap-sync")
+                if not script_folder and "Write data path:" in msg:
+                    script_folder = msg.split("Write data path: ", 1)[1].split("[", 1)[0].strip()
+                    bridge_file = os.path.join(script_folder, "script-output", "ap_bridge.json")
+                    if os.path.exists(bridge_file):
+                        os.remove(bridge_file)
+                    logging.info(f"Bridge File Path: {bridge_file}")
+                    asyncio.create_task(game_watcher(ctx, bridge_file), name="FactorioProgressionWatcher")
             if ctx.rcon_client:
                 while ctx.send_index < len(ctx.items_received):
                     transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
@@ -179,8 +183,8 @@ async def factorio_server_watcher(ctx: FactorioContext):
                         factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.")
                         ctx.rcon_client.send_command(f'/ap-get-technology {item_name} {player_name}')
                     ctx.send_index += 1
-
             await asyncio.sleep(1)
+
     except Exception as e:
         logging.exception(e)
         logging.error("Aborted Factorio Server Bridge")
@@ -194,14 +198,13 @@ async def main():
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
     await asyncio.sleep(3)
-    watcher_task = asyncio.create_task(game_watcher(ctx), name="FactorioProgressionWatcher")
     input_task = asyncio.create_task(console_loop(ctx), name="Input")
     factorio_server_task = asyncio.create_task(factorio_server_watcher(ctx), name="FactorioServer")
     await ctx.exit_event.wait()
     ctx.server_address = None
     ctx.snes_reconnect_address = None
 
-    await asyncio.gather(watcher_task, input_task, factorio_server_task)
+    await asyncio.gather(input_task, factorio_server_task)
 
     if ctx.server is not None and not ctx.server.socket.closed:
         await ctx.server.socket.close()

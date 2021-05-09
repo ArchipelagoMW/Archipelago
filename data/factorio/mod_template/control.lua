@@ -183,7 +183,7 @@ function dumpInfo(force)
     local research_done = {}
     local data_collection = {
         ["research_done"] = research_done,
-        ["victory"] = global.forcedata[force.name]["victory"]
+        ["victory"] = chain_lookup(global, "forcedata", force.name, "victory")
         }
 
     for tech_name, tech in pairs(force.technologies) do
@@ -198,10 +198,24 @@ end
 
 
 
+function chain_lookup(table, ...)
+    for _, k in ipairs{...} do
+        table = table[k]
+        if not table then
+            return nil
+        end
+    end
+    return table
+end
+
 -- add / commands
 
 commands.add_command("ap-sync", "Run manual Research Sync with Archipelago.", function(call)
-    dumpInfo(game.players[call.player_index].force)
+    if call.player_index == nil then
+        dumpInfo(game.forces.player)
+    else
+        dumpInfo(game.players[call.player_index].force)
+    end
     game.print("Wrote bridge file.")
 end)
 
