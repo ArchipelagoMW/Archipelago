@@ -536,7 +536,10 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     elif ret.game == "Factorio":
         for option_name, option in Options.factorio_options.items():
             if option_name in weights:
-                setattr(ret, option_name, option.from_any(get_choice(option_name, weights)))
+                if issubclass(option, Options.OptionDict):  # get_choice should probably land in the Option class
+                    setattr(ret, option_name, option.from_any(weights[option_name]))
+                else:
+                    setattr(ret, option_name, option.from_any(get_choice(option_name, weights)))
             else:
                 setattr(ret, option_name, option(option.default))
     elif ret.game == "Minecraft":

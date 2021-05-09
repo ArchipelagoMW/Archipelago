@@ -1,3 +1,10 @@
+{% macro dict_to_lua(dict) -%}
+{
+    {% for key, value in dict.items() %}
+    ["{{ key }}"] = {{ value | safe }}{% if not loop.last %},{% endif %}
+    {% endfor %}
+}
+{%- endmacro %}
 require "lib"
 require "util"
 
@@ -11,10 +18,7 @@ function on_force_created(event)
     game.forces[event.force].research_queue_enabled = true
     local data = {}
     if FREE_SAMPLES ~= 0 then
-        data['earned_samples'] = {
-            ["burner-mining-drill"] = 19,
-            ["stone-furnace"] = 19
-        }
+        data['earned_samples'] = {{ dict_to_lua(starting_items) }}
     end
     data["victory"] = 0
     global.forcedata[event.force] = data
