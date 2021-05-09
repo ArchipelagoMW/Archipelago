@@ -61,28 +61,48 @@ can all have different options.
 A basic minecraft yaml will look like this.
 ```yaml
 description: Template Name
-# Your name in-game. Spaces will be replaced with underscores and there is a 16 character limit
+# Your name in-game. Spaces will be replaced with underscores and
+# there is a 16 character limit
 name: YourName 
 game: Minecraft
+
+# Shared Options supported by all games:
 accessibility: locations
 progression_balancing: off
+# Minecraft Specific Options
+
+# Number of advancements required (out of 92 total) to spawn the
+# Ender Dragon and complete the game. 
 advancement_goal:
-  few: 0
-  normal: 1
-  many: 0
+  few: 0 #30
+  normal: 1 #50
+  many: 0 #70
+  
+# Modifies the level of items logically required for exploring
+# dangerous areas and fighting bosses. 
 combat_difficulty:
   easy: 0
   normal: 1
   hard: 0
+  
+# Junk-fills certain RNG-reliant or tedious advancements with XP rewards. 
 include_hard_advancements:
   on: 0
   off: 1
+  
+# Junk-fills extremely difficult advancements;
+# this is only How Did We Get Here? and Adventuring Time.
 include_insane_advancements:
   on: 0
   off: 1
+  
+# Some advancements require defeating the Ender Dragon;
+# this will junk-fill them so you won't have to finish to send some items. 
 include_postgame_advancements:
   on: 0
   off: 1
+  
+#enables shuffling of villages, outposts, fortresses, bastions, and end cities. 
 shuffle_structures:
   on: 1
   off: 0
