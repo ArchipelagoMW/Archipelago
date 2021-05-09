@@ -68,6 +68,7 @@ class MultiWorld():
         self.fix_palaceofdarkness_exit = self.AttributeProxy(lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
         self.fix_trock_exit = self.AttributeProxy(lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
         self.NOTCURSED = self.AttributeProxy(lambda player: not self.CURSED[player])
+        self.remote_items = self.AttributeProxy(lambda player: self.game[player] != "A Link to the Past")
 
         for player in range(1, players + 1):
             def set_player_attr(attr, val):
@@ -87,7 +88,6 @@ class MultiWorld():
             set_player_attr('retro', False)
             set_player_attr('hints', True)
             set_player_attr('player_names', [])
-            set_player_attr('remote_items', False)
             set_player_attr('required_medallions', ['Ether', 'Quake'])
             set_player_attr('swamp_patch_required', False)
             set_player_attr('powder_patch_required', False)

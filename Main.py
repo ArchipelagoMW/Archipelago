@@ -29,7 +29,7 @@ from worlds.factorio.Mod import generate_mod
 from worlds.minecraft import gen_minecraft, fill_minecraft_slot_data, generate_mc_data
 from worlds.minecraft.Regions import minecraft_create_regions
 from worlds.generic.Rules import locality_rules
-from worlds import Games
+from worlds import Games, lookup_any_item_name_to_id
 import Patch
 
 seeddigits = 20
@@ -89,7 +89,6 @@ def main(args, seed=None):
 
     world.hints = args.hints.copy()
 
-    world.remote_items = args.remote_items.copy()
     world.mapshuffle = args.mapshuffle.copy()
     world.compassshuffle = args.compassshuffle.copy()
     world.keyshuffle = args.keyshuffle.copy()
@@ -171,15 +170,15 @@ def main(args, seed=None):
             world.player_names[player].append(name)
 
     logger.info('')
+    for player in world.player_ids:
+        for item_name in args.startinventory[player]:
+            item = Item(item_name, True, lookup_any_item_name_to_id[item_name], player)
+            world.push_precollected(item)
 
     for player in world.alttp_player_ids:
         world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
 
     for player in world.player_ids:
-        for tok in filter(None, args.startinventory[player].split(',')):
-            item = ItemFactory(tok.strip(), player)
-            if item:
-                world.push_precollected(item)
 
         # enforce pre-defined local items.
         if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
@@ -489,9 +488,9 @@ def main(args, seed=None):
                 er_hint_data[player][location_id] = main_entrance.name
                 oldmancaves.append(((location_id, player), (item.code, player)))
 
-        precollected_items = [[] for player in range(world.players)]
+        precollected_items = {player: [] for player in range(1, world.players+1)}
         for item in world.precollected_items:
-            precollected_items[item.player - 1].append(item.code)
+            precollected_items[item.player].append(item.code)
 
         FillDisabledShopSlots(world)
 
@@ -527,8 +526,7 @@ def main(args, seed=None):
                 "names": parsed_names,
                 "connect_names": connect_names,
                 "remote_items": {player for player in range(1, world.players + 1) if
-                                 world.remote_items[player] or
-                                 world.game[player] != "A Link to the Past"},
+                                 world.remote_items[player]},
                 "locations": {
                     (location.address, location.player):
                         (location.item.code, location.item.player)

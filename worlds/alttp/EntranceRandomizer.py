@@ -352,7 +352,6 @@ def parse_arguments(argv, no_defaults=False):
     Torches means additionally easily accessible Torches that can be lit with Fire Rod are considered doable.
     None means full traversal through dark rooms without tools is considered doable.''')
     parser.add_argument('--restrict_dungeon_item_on_boss', default=defval(False), action="store_true")
-    parser.add_argument('--remote_items', default=defval(False), action='store_true')
     parser.add_argument('--multi', default=defval(1), type=lambda value: min(max(int(value), 1), 255))
     parser.add_argument('--names', default=defval(''))
     parser.add_argument('--teams', default=defval(1), type=lambda value: max(int(value), 1))
@@ -409,7 +408,7 @@ def parse_arguments(argv, no_defaults=False):
                          "triforce_pieces_required", "shop_shuffle", "shop_shuffle_slots",
                          "required_medallions",
                          "plando_items", "plando_texts", "plando_connections", "er_seeds",
-                         'remote_items', 'progressive', 'dungeon_counters', 'glitch_boots', 'killable_thieves',
+                         'progressive', 'dungeon_counters', 'glitch_boots', 'killable_thieves',
                          'tile_shuffle', 'bush_shuffle', 'shuffle_prizes', 'sprite_pool', 'dark_room_logic',
                          'restrict_dungeon_item_on_boss', 'reduceflashing', 'game',
                          'hud_palettes', 'sword_palettes', 'shield_palettes', 'link_palettes', 'triforcehud']:

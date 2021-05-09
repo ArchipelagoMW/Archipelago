@@ -150,6 +150,12 @@ class Context(Node):
         self.er_hint_data = {int(player): {int(address): name for address, name in loc_data.items()}
                              for player, loc_data in decoded_obj["er_hint_data"].items()}
         self.games = decoded_obj["games"]
+        # award remote-items start inventory:
+        for team in range(len(decoded_obj['names'])):
+            for slot, item_codes in decoded_obj["precollected_items"].items():
+                if slot in self.remote_items:
+                    self.received_items[team, slot] = [NetworkItem(item_code, -2, 0) for item_code in item_codes]
+
         if use_embedded_server_options:
             server_options = decoded_obj.get("server_options", {})
             self._set_options(server_options)
