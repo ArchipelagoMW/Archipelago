@@ -1011,10 +1011,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 if minver > args['version']:
                     errors.add('IncompatibleVersion')
 
-        if ctx.compatibility == 1 and "AP" not in args['tags']:
-            errors.add('IncompatibleVersion')
         # only exact version match allowed
-        elif ctx.compatibility == 0 and args['version'] != _version_tuple:
+        if ctx.compatibility == 0 and args['version'] != _version_tuple:
             errors.add('IncompatibleVersion')
         if errors:
             logging.info(f"A client connection was refused due to: {errors}")
