@@ -87,6 +87,25 @@
     ]
   },
   {
+    "gameTitle": "Factorio",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Tutorial",
+        "description": "A guide to setting up the Archipelago Factorio software on your computer.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "factorio/setup_en.md",
+            "link": "factorio/setup/en",
+            "authors": [
+              "Berserker"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "gameTitle": "Minecraft",
     "tutorials": [
       {
