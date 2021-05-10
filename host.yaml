@@ -37,7 +37,7 @@ server_options:
   auto_shutdown: 0
   # Compatibility handling
   # 2 -> Recommended for casual/cooperative play, attempt to be compatible with everything across all versions
-  # 1 -> Recommended for friendly racing, only allow Berserker's Multiworld, to disallow old /getitem for example
+  # 1 -> No longer in use, kept reserved in case of future use
   # 0 -> Recommended for tournaments to force a level playing field, only allow an exact version match
   compatibility: 2
   # log all server traffic, mostly for dev use
