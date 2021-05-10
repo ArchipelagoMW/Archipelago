@@ -22,6 +22,7 @@ if __name__ == "__main__":
 
         parser = argparse.ArgumentParser(add_help=False)
         parser.add_argument('--disable_autohost', action='store_true')
+        parser.add_argument('--create_spoiler', action='store_true')
         args = parser.parse_args()
 
         from Utils import get_public_ipv4, get_options
@@ -38,7 +39,7 @@ if __name__ == "__main__":
         glitch_triforce = multi_mystery_options["glitch_triforce_room"]
         race = multi_mystery_options["race"]
         plando_options = multi_mystery_options["plando_options"]
-        create_spoiler = multi_mystery_options["create_spoiler"]
+        create_spoiler = args.create_spoiler or multi_mystery_options["create_spoiler"]
         zip_roms = multi_mystery_options["zip_roms"]
         zip_diffs = multi_mystery_options["zip_diffs"]
         zip_spoiler = multi_mystery_options["zip_spoiler"]
