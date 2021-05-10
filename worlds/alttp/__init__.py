@@ -91,25 +91,6 @@ from BaseClasses import Location, Item
 #        self.dark_room_logic = "lamp"
 #        self.restrict_dungeon_item_on_boss = False
 #
-#    @property
-#    def sewer_light_cone(self):
-#        return self.mode == "standard"
-#
-#    @property
-#    def fix_trock_doors(self):
-#        return self.shuffle != 'vanilla' or self.mode == 'inverted'
-#
-#    @property
-#    def fix_skullwoods_exit(self):
-#        return self.shuffle not in {'vanilla', 'simple', 'restricted', 'dungeonssimple'}
-#
-#    @property
-#    def fix_palaceofdarkness_exit(self):
-#        return self.shuffle not in {'vanilla', 'simple', 'restricted', 'dungeonssimple'}
-#
-#    @property
-#    def fix_trock_exit(self):
-#        return self.shuffle not in {'vanilla', 'simple', 'restricted', 'dungeonssimple'}
 
 
 class ALttPLocation(Location):

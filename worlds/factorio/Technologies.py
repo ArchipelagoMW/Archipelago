@@ -108,15 +108,16 @@ for technology, data in raw.items():
 del (raw)
 lookup_id_to_name: Dict[int, str] = {item_id: item_name for item_name, item_id in tech_table.items()}
 
-all_product_sources: Dict[str, Recipe] = {}
+all_product_sources: Dict[str, Set[Recipe]] = {}
 for recipe_name, recipe_data in raw_recipes.items():
     # example:
     # "accumulator":{"ingredients":["iron-plate","battery"],"products":["accumulator"],"category":"crafting"}
 
     recipe = Recipe(recipe_name, recipe_data["category"], set(recipe_data["ingredients"]), set(recipe_data["products"]))
-    if recipe.products != recipe.ingredients:  # prevents loop recipes like uranium centrifuging
+    if recipe.products != recipe.ingredients and "empty-barrel" not in recipe.products:  # prevents loop recipes like uranium centrifuging
         for product_name in recipe.products:
-            all_product_sources[product_name] = recipe
+            all_product_sources.setdefault(product_name, set()).add(recipe)
+
 
 # build requirements graph for all technology ingredients
 
@@ -133,12 +134,14 @@ def recursively_get_unlocking_technologies(ingredient_name, _done=None) -> Set[T
             _done.add(ingredient_name)
     else:
         _done = {ingredient_name}
-    recipe = all_product_sources.get(ingredient_name)
-    if not recipe:
+    recipes = all_product_sources.get(ingredient_name)
+    if not recipes:
         return set()
-    current_technologies = recipe.unlocking_technologies.copy()
-    for ingredient_name in recipe.ingredients:
-        current_technologies |= recursively_get_unlocking_technologies(ingredient_name, _done)
+    current_technologies = set()
+    for recipe in recipes:
+        current_technologies |= recipe.unlocking_technologies
+        for ingredient_name in recipe.ingredients:
+            current_technologies |= recursively_get_unlocking_technologies(ingredient_name, _done)
     return current_technologies
 
 

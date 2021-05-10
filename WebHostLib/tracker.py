@@ -351,7 +351,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
     checks_done = {loc_name: 0 for loc_name in default_locations}
 
     # Add starting items to inventory
-    starting_items = precollected_items[tracked_player - 1]
+    starting_items = precollected_items[tracked_player]
     if starting_items:
         for item_id in starting_items:
             attribute_item_solo(inventory, item_id)
@@ -506,7 +506,7 @@ def getTracker(tracker: UUID):
 
     for (team, player), locations_checked in multisave.get("location_checks", {}):
         if precollected_items:
-            precollected = precollected_items[player - 1]
+            precollected = precollected_items[player]
             for item_id in precollected:
                 attribute_item(inventory, team, player, item_id)
         for location in locations_checked:

@@ -87,6 +87,25 @@
     ]
   },
   {
+    "gameTitle": "Factorio",
+    "tutorials": [
+      {
+        "name": "Multiworld Setup Tutorial",
+        "description": "A guide to setting up the Archipelago Factorio software on your computer.",
+        "files": [
+          {
+            "language": "English",
+            "filename": "factorio/setup_en.md",
+            "link": "factorio/setup/en",
+            "authors": [
+              "Berserker"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "gameTitle": "Minecraft",
     "tutorials": [
       {
@@ -99,6 +118,22 @@
             "link": "minecraft/minecraft/en",
             "authors": [
               "Kono Tyran"
+            ]
+          },
+          {
+            "language": "Spanish",
+            "filename": "minecraft/minecraft_es.md",
+            "link": "minecraft/minecraft/es",
+            "authors": [
+              "Edos"
+            ]
+          },
+          {
+            "language": "Swedish",
+            "filename": "minecraft/minecraft_sv.md",
+            "link": "minecraft/minecraft/sv",
+            "authors": [
+              "Albinum"
             ]
           }
         ]

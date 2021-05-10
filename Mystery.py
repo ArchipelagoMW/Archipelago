@@ -528,6 +528,17 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
             else:
                 raise Exception(f"Could not force item {item} to be world-non-local, as it was not recognized.")
 
+    inventoryweights = weights.get('startinventory', {})
+    startitems = []
+    for item in inventoryweights.keys():
+        itemvalue = get_choice(item, inventoryweights)
+        if isinstance(itemvalue, int):
+            for i in range(int(itemvalue)):
+                startitems.append(item)
+        elif itemvalue:
+            startitems.append(item)
+    ret.startinventory = startitems
+
     if ret.game == "A Link to the Past":
         roll_alttp_settings(ret, weights, plando_options)
     elif ret.game == "Hollow Knight":
@@ -536,15 +547,18 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     elif ret.game == "Factorio":
         for option_name, option in Options.factorio_options.items():
             if option_name in weights:
-                setattr(ret, option_name, option.from_any(get_choice(option_name, weights)))
+                if issubclass(option, Options.OptionDict):  # get_choice should probably land in the Option class
+                    setattr(ret, option_name, option.from_any(weights[option_name]))
+                else:
+                    setattr(ret, option_name, option.from_any(get_choice(option_name, weights)))
             else:
-                setattr(ret, option_name, option.from_any(option.default))
+                setattr(ret, option_name, option(option.default))
     elif ret.game == "Minecraft":
         for option_name, option in Options.minecraft_options.items():
             if option_name in weights:
                 setattr(ret, option_name, option.from_any(get_choice(option_name, weights)))
             else:
-                setattr(ret, option_name, option.from_any(option.default))
+                setattr(ret, option_name, option(option.default))
     else:
         raise Exception(f"Unsupported game {ret.game}")
     return ret
@@ -697,22 +711,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
         if not ret.required_medallions[index]:
             raise Exception(f"unknown Medallion {medallion} for {'misery mire' if index == 0 else 'turtle rock'}")
 
-    inventoryweights = weights.get('startinventory', {})
-    startitems = []
-    for item in inventoryweights.keys():
-        itemvalue = get_choice(item, inventoryweights)
-        if item.startswith(('Progressive ', 'Small Key ', 'Rupee', 'Piece of Heart', 'Boss Heart Container',
-                            'Sanctuary Heart Container', 'Arrow', 'Bombs ', 'Bomb ', 'Bottle')) and isinstance(
-            itemvalue, int):
-            for i in range(int(itemvalue)):
-                startitems.append(item)
-        elif itemvalue:
-            startitems.append(item)
-    ret.startinventory = ','.join(startitems)
-
     ret.glitch_boots = get_choice('glitch_boots', weights, True)
-
-    ret.remote_items = get_choice('remote_items', weights, False)
 
     if get_choice("local_keys", weights, "l" in dungeon_items):
         # () important for ordering of commands, without them the Big Keys section is part of the Small Key else

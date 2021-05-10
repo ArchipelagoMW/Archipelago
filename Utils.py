@@ -12,7 +12,7 @@ class Version(typing.NamedTuple):
     minor: int
     build: int
 
-__version__ = "0.0.4"
+__version__ = "0.1.0"
 _version_tuple = tuplize_version(__version__)
 
 import builtins
@@ -170,7 +170,6 @@ def get_default_options() -> dict:
             },
             "factorio_options": {
                 "executable": "factorio\\bin\\x64\\factorio",
-                "script-output": "factorio\\script-output",
             },
             "lttp_options": {
                 "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",

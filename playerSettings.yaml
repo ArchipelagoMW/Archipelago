@@ -36,6 +36,12 @@ accessibility:
 progression_balancing:
   on: 50 # A system to reduce BK, as in times during which you can't do anything by moving your items into an earlier access sphere to make it likely you have stuff to do
   off: 0 # Turn this off if you don't mind a longer multiworld, or can glitch/sequence break around missing items.
+# Can be uncommented to use it
+# startinventory: # Begin the file with the listed items/upgrades
+  # Please only use items for the correct game, use triggers if need to be have seperated lists.
+  # Pegasus Boots: on
+  # Bomb Upgrade (+10): 4
+  # Arrow Upgrade (+10): 4
 # Factorio options:
 tech_tree_layout:
   single: 1
@@ -70,6 +76,9 @@ visibility:
 random_tech_ingredients:
   on: 1
   off: 0
+starting_items:
+  burner-mining-drill: 19
+  stone-furnace: 19
 # Minecraft options: 
 advancement_goal: # Number of advancements required (out of 92 total) to spawn the Ender Dragon and complete the game. 
   few: 0 # 30 advancements
@@ -143,7 +152,8 @@ progressive: # Enable or disable progressive items (swords, shields, bow)
 entrance_shuffle:
   none: 50 # Vanilla game map. All entrances and exits lead to their original locations. You probably want this option
   dungeonssimple: 0 # Shuffle just dungeons amongst each other, swapping dungeons entirely, so Hyrule Castle is always 1 dungeon
-  dungeonsfull: 0 # Shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle can be 4 different dungeons
+  dungeonsfull: 0 # Shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle can be 4 different dungeons, but keep dungeons to a specific world
+  dungeonscrossed: 0 # like dungeonsfull, but allow cross-world traversal through a dungeon. Warning: May force repeated dungeon traversal
   simple: 0 # Entrances are grouped together before being randomized. Simple uses the most strict grouping rules
   restricted: 0 # Less strict than simple
   full: 0 # Less strict than restricted
@@ -343,11 +353,6 @@ green_clock_time: # For all timer modes, the amount of time in minutes to gain o
 #  - "Moon Pearl"
 #  - "Small Keys"
 #  - "Big Keys"
-# Can be uncommented to use it
-# startinventory: # Begin the file with the listed items/upgrades
-  # Pegasus Boots: on
-  # Bomb Upgrade (+10): 4
-  # Arrow Upgrade (+10): 4
 glitch_boots:
   on: 50 # Start with Pegasus Boots in any glitched logic mode that makes use of them
   off: 0

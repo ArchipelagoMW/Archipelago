@@ -184,7 +184,6 @@ class CommonContext():
     async def disconnect(self):
         if self.server and not self.server.socket.closed:
             await self.server.socket.close()
-            self.ui_node.send_connection_status(self)
         if self.server_task is not None:
             await self.server_task
 

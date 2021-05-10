@@ -1,11 +1,5 @@
 # A Link to the Past Randomizer Setup Guide
 
-<div id="tutorial-video-container">
-    <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/icWPmse0Z3E" frameborder="0"
-      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-    </iframe>
-</div>
-
 ## Benötigte Software
 - [MultiWorld Utilities](https://github.com/Berserker66/MultiWorld-Utilities/releases)
 - [QUsb2Snes](https://github.com/Skarsnik/QUsb2snes/releases) (Included in the above Utilities)
