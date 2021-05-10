@@ -1151,8 +1151,7 @@ def link_inverted_entrances(world, player):
             hc_ledge_must_exit = hc_ledge_entrances.pop()
             lw_entrances.remove(hc_ledge_must_exit)
             lw_dungeon_entrances_must_exit.append(hc_ledge_must_exit)
-
-        if aga_door in lw_entrances:
+        elif aga_door in lw_entrances:
             lw_entrances.remove(aga_door)
         else:
             dw_entrances.remove(aga_door)
@@ -1395,10 +1394,9 @@ def link_inverted_entrances(world, player):
             hc_ledge_must_exit = hc_ledge_entrances.pop()
             lw_entrances.remove(hc_ledge_must_exit)
             lw_must_exits.append(hc_ledge_must_exit)
-
-        if aga_door in lw_entrances:
+        elif aga_door in lw_entrances:
             lw_entrances.remove(aga_door)
-        elif aga_door in dw_entrances:
+        else:
             dw_entrances.remove(aga_door)
 
         connect_two_way(world, aga_door, 'Inverted Agahnims Tower Exit', player)
