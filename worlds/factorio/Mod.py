@@ -15,6 +15,7 @@ from .Technologies import tech_table
 
 template: Optional[jinja2.Template] = None
 locale_template: Optional[jinja2.Template] = None
+control_template: Optional[jinja2.Template] = None
 
 template_load_lock = threading.Lock()
 
@@ -46,7 +47,7 @@ rocket_recipes = {
 }
 
 def generate_mod(world: MultiWorld, player: int, seedname: str):
-    global template, locale_template
+    global template, locale_template, control_template
     with template_load_lock:
         if not template:
             mod_template_folder = Utils.local_path("data", "factorio", "mod_template")
