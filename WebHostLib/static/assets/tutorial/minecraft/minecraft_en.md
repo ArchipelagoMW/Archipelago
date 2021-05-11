@@ -126,8 +126,8 @@ previously.
 After having placed your data file in the `APData` folder, start the Forge server and make sure you have OP
 status by typing `/op YourMinecraftUsername` in the forge server console then connecting in your Minecraft client.
 
-Once in game type `/connect <AP-Address> (<Password>)` where `<AP-Address>` is the address of the
-Archipelago server. `(<Password>)`
+Once in game type `/connect <AP-Address> (Port) (Password)` where `<AP-Address>` is the address of the
+Archipelago server. `(Port)` is only required if the ap server is not using the default port of 38281. `(Password)`
 is only required if the Archipleago server you are using has a password set.
 
 ### Play the game
