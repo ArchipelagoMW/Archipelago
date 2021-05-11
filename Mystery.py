@@ -303,7 +303,10 @@ def handle_name(name: str, player: int, name_counter: Counter):
                                                                                                    name] > 1 else ''),
                                                                  player=player,
                                                                  PLAYER=(player if player > 1 else '')))
-    return new_name.strip().replace(' ', '_')[:16]
+    new_name = new_name.strip().replace(' ', '_')[:16]
+    if new_name == "Archipelago":
+        raise Exception(f"You cannot name yourself \"{new_name}\"")
+    return new_name
 
 
 def prefer_int(input_data: str) -> typing.Union[str, int]:

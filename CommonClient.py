@@ -129,7 +129,7 @@ class CommonContext():
         self.input_requests = 0
 
         # game state
-        self.player_names: typing.Dict[int: str] = {0: "Server"}
+        self.player_names: typing.Dict[int: str] = {0: "Archipelago"}
         self.exit_event = asyncio.Event()
         self.watcher_event = asyncio.Event()
 
@@ -194,7 +194,7 @@ class CommonContext():
 
     def consume_players_package(self, package: typing.List[tuple]):
         self.player_names = {slot: name for team, slot, name, orig_name in package if self.team == team}
-        self.player_names[0] = "Server"
+        self.player_names[0] = "Archipelago"
 
     def event_invalid_slot(self):
         raise Exception('Invalid Slot; please verify that you have connected to the correct world.')
@@ -305,8 +305,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             logger.info('Password required')
         logger.info(f"Forfeit setting: {args['forfeit_mode']}")
         logger.info(f"Remaining setting: {args['remaining_mode']}")
-        logger.info(f"A !hint costs {args['hint_cost']} points and you get {args['location_check_points']}"
-                     f" for each location checked.")
+        logger.info(f"A !hint costs {args['hint_cost']}% of checks points and you get {args['location_check_points']}"
+                     f" for each location checked. Use !hint for more information.")
         ctx.hint_cost = int(args['hint_cost'])
         ctx.check_points = int(args['location_check_points'])
         ctx.forfeit_mode = args['forfeit_mode']

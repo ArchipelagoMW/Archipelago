@@ -7,7 +7,7 @@ import time
 import zlib
 import concurrent.futures
 import pickle
-from typing import Dict
+from typing import Dict, Tuple
 
 from BaseClasses import MultiWorld, CollectionState, Region, Item
 from worlds.alttp.Items import ItemFactory, item_name_groups
@@ -501,7 +501,7 @@ def main(args, seed=None):
                 rom_names.append(rom_name)
             slot_data = {}
             client_versions = {}
-            minimum_versions = {"server": (0, 0, 4), "clients": client_versions}
+            minimum_versions = {"server": (0, 1, 1), "clients": client_versions}
             games = {}
             for slot in world.player_ids:
                 client_versions[slot] = (0, 0, 3)
@@ -520,6 +520,11 @@ def main(args, seed=None):
                     slots_data[option_name] = int(option.value)
             for slot in world.minecraft_player_ids:
                 slot_data[slot] = fill_minecraft_slot_data(world, slot)
+
+            locations_data: Dict[int, Dict[int, Tuple[int, int]]] = {player: {} for player in world.player_ids}
+            for location in world.get_filled_locations():
+                if type(location.address) == int:
+                    locations_data[location.player][location.address] = (location.item.code, location.item.player)
             multidata = zlib.compress(pickle.dumps({
                 "slot_data" : slot_data,
                 "games": games,
@@ -527,11 +532,7 @@ def main(args, seed=None):
                 "connect_names": connect_names,
                 "remote_items": {player for player in range(1, world.players + 1) if
                                  world.remote_items[player]},
-                "locations": {
-                    (location.address, location.player):
-                        (location.item.code, location.item.player)
-                    for location in world.get_filled_locations() if
-                    type(location.address) is int},
+                "locations": locations_data,
                 "checks_in_area": checks_in_area,
                 "server_options": get_options()["server_options"],
                 "er_hint_data": er_hint_data,
