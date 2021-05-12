@@ -321,16 +321,20 @@ class Context(Node):
 
 
 def notify_hints(ctx: Context, team: int, hints: typing.List[NetUtils.Hint]):
-    cmd = ctx.dumper([{"cmd": "Hint", "hints" : hints}])
-    commands = ctx.dumper([hint.as_network_message() for hint in hints])
-
+    concerns = collections.defaultdict(list)
+    for hint in hints:
+        net_msg = hint.as_network_message()
+        concerns[hint.receiving_player].append(net_msg)
+        if not hint.local:
+            concerns[hint.finding_player].append(net_msg)
     for text in (format_hint(ctx, team, hint) for hint in hints):
         logging.info("Notice (Team #%d): %s" % (team + 1, text))
 
     for client in ctx.endpoints:
         if client.auth and client.team == team:
-            asyncio.create_task(ctx.send_encoded_msgs(client, cmd))
-            asyncio.create_task(ctx.send_encoded_msgs(client, commands))
+            client_hints = concerns[client.slot]
+            if client_hints:
+                asyncio.create_task(ctx.send_msgs(client, client_hints))
 
 
 def update_aliases(ctx: Context, team: int, client: typing.Optional[Client] = None):
