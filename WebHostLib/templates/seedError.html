@@ -3,7 +3,7 @@
 
 {% block head %}
     <title>Generation failed, please retry.</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/waitSeed.css") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/waitSeed.css") }}"/>
 {% endblock %}
 
 {% block body %}

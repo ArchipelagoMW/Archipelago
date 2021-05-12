@@ -2,10 +2,10 @@
 
 {% block head %}
     <title>Player Settings</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/weightedSettings.css") }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/weightedSettings.css") }}" />
     <script type="application/ecmascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script type="application/ecmascript" src="{{ static_autoversion("assets/js-yaml.min.js") }}"></script>
-    <script type="application/ecmascript" src="{{ static_autoversion("assets/weightedSettings.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/js-yaml.min.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/weightedSettings.js") }}"></script>
 {% endblock %}
 
 {% block body %}

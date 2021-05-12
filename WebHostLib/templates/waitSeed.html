@@ -4,7 +4,7 @@
 {% block head %}
     <title>Generation in Progress</title>
     <meta http-equiv="refresh" content="1">
-    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/waitSeed.css") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/waitSeed.css") }}"/>
 {% endblock %}
 
 {% block body %}

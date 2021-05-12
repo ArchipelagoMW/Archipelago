@@ -3,8 +3,8 @@
 
 {% block head %}
     <title>View Seed {{ seed.id|suuid }}</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/viewSeed.css") }}"/>
-    <script type="application/ecmascript" src="{{ static_autoversion("assets/viewSeed.js") }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/viewSeed.css") }}"/>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/viewSeed.js") }}"></script>
 {% endblock %}
 
 {% block body %}
