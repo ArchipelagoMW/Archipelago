@@ -245,42 +245,40 @@ class Context(Node):
 
     def get_save(self) -> dict:
         d = {
-            "rom_names": list(self.connect_names.items()),
-            "received_items": tuple((k, v) for k, v in self.received_items.items()),
-            "hints_used": tuple((key, value) for key, value in self.hints_used.items()),
-            "hints": tuple(
-                (key, list(hint.re_check(self, key[0]) for hint in value)) for key, value in self.hints.items()),
-            "location_checks": tuple((key, tuple(value)) for key, value in self.location_checks.items()),
-            "name_aliases": tuple((key, value) for key, value in self.name_aliases.items()),
-            "client_game_state": tuple((key, value) for key, value in self.client_game_state.items()),
+            "connect_names": self.connect_names,
+            "received_items": self.received_items,
+            "hints_used": dict(self.hints_used),
+            "hints": dict(self.hints),
+            "location_checks": dict(self.location_checks),
+            "name_aliases": self.name_aliases,
+            "client_game_state": dict(self.client_game_state),
             "client_activity_timers": tuple(
                 (key, value.timestamp()) for key, value in self.client_activity_timers.items()),
             "client_connection_timers": tuple(
                 (key, value.timestamp()) for key, value in self.client_connection_timers.items()),
         }
+
         return d
 
     def set_save(self, savedata: dict):
+        if self.connect_names != savedata["connect_names"]:
+            raise Exception("This savegame does not appear to match the loaded multiworld.")
+        self.received_items = savedata["received_items"]
+        self.hints_used.update(savedata["hints_used"])
+        self.hints.update(savedata["hints"])
 
-        received_items = {tuple(k): [NetworkItem(*i) for i in v] for k, v in savedata["received_items"]}
-
-        self.received_items = received_items
-        self.hints_used.update({tuple(key): value for key, value in savedata["hints_used"]})
-        self.hints.update(
-            {tuple(key): set(NetUtils.Hint(*hint) for hint in value) for key, value in savedata["hints"]})
-
-        self.name_aliases.update({tuple(key): value for key, value in savedata["name_aliases"]})
-        self.client_game_state.update({tuple(key): value for key, value in savedata["client_game_state"]})
+        self.name_aliases.update(savedata["name_aliases"])
+        self.client_game_state.update(savedata["client_game_state"])
         self.client_connection_timers.update(
             {tuple(key): datetime.datetime.fromtimestamp(value, datetime.timezone.utc) for key, value
              in savedata["client_connection_timers"]})
         self.client_activity_timers.update(
             {tuple(key): datetime.datetime.fromtimestamp(value, datetime.timezone.utc) for key, value
              in savedata["client_activity_timers"]})
-        self.location_checks.update({tuple(key): set(value) for key, value in savedata["location_checks"]})
+        self.location_checks.update(savedata["location_checks"])
 
-        logging.info(f'Loaded save file with {sum([len(p) for p in received_items.values()])} received items '
-                     f'for {len(received_items)} players')
+        logging.info(f'Loaded save file with {sum([len(p) for p in self.received_items.values()])} received items '
+                     f'for {len(self.received_items)} players')
 
     def get_aliased_name(self, team: int, slot: int):
         if (team, slot) in self.name_aliases:
