@@ -428,7 +428,6 @@ def guiMain(args=None):
         guiargs.fastmenu = rom_vars.fastMenuVar.get()
         guiargs.create_spoiler = bool(createSpoilerVar.get())
         guiargs.skip_playthrough = not bool(createSpoilerVar.get())
-        guiargs.suppress_rom = bool(suppressRomVar.get())
         guiargs.open_pyramid = openpyramidVar.get()
         guiargs.mapshuffle = bool(mapshuffleVar.get())
         guiargs.compassshuffle = bool(compassshuffleVar.get())
@@ -513,7 +512,7 @@ def guiMain(args=None):
             elif type(v) is dict: # use same settings for every player
                 setattr(guiargs, k, {player: getattr(guiargs, k) for player in range(1, guiargs.multi + 1)})
         try:
-            if not guiargs.suppress_rom and not os.path.exists(guiargs.rom):
+            if not os.path.exists(guiargs.rom):
                 raise FileNotFoundError(f"Could not find specified rom file {guiargs.rom}")
             if guiargs.count is not None:
                 seed = guiargs.seed
@@ -1204,7 +1203,6 @@ def guiMain(args=None):
                 setattr(args, k, v[1]) # only get values for player 1 for now
         # load values from commandline args
         createSpoilerVar.set(int(args.create_spoiler))
-        suppressRomVar.set(int(args.suppress_rom))
         mapshuffleVar.set(args.mapshuffle)
         compassshuffleVar.set(args.compassshuffle)
         keyshuffleVar.set(args.keyshuffle)
