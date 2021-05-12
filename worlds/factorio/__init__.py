@@ -1,7 +1,25 @@
+from ..BaseWorld import World
+
+
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
 from .Technologies import tech_table, recipe_sources, technology_table, advancement_technologies, required_technologies
 from .Shapes import get_shapes
 
+class Factorio(World):
+    def generate_basic(self, world: MultiWorld, player: int):
+        static_nodes = world._static_nodes = {"automation", "logistics"}  # turn dynamic/option?
+        for tech_name, tech_id in tech_table.items():
+            tech_item = Item(tech_name, tech_name in advancement_technologies, tech_id, player)
+            tech_item.game = "Factorio"
+            if tech_name in static_nodes:
+                loc = world.get_location(tech_name, player)
+                loc.item = tech_item
+                loc.locked = True
+                loc.event = tech_item.advancement
+            else:
+                world.itempool.append(tech_item)
+        world.custom_data[player]["custom_technologies"] = custom_technologies = set_custom_technologies(world, player)
+        set_rules(world, player, custom_technologies)
 
 def gen_factorio(world: MultiWorld, player: int):
     static_nodes = world._static_nodes = {"automation", "logistics"}  # turn dynamic/option?

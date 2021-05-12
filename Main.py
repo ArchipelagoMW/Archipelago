@@ -24,8 +24,8 @@ from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
 from worlds.hk import gen_hollow
 from worlds.hk import create_regions as hk_create_regions
-from worlds.factorio import gen_factorio, factorio_create_regions
-from worlds.factorio.Mod import generate_mod
+# from worlds.factorio import gen_factorio, factorio_create_regions
+# from worlds.factorio.Mod import generate_mod
 from worlds.minecraft import gen_minecraft, fill_minecraft_slot_data, generate_mc_data
 from worlds.minecraft.Regions import minecraft_create_regions
 from worlds.generic.Rules import locality_rules
@@ -135,8 +135,8 @@ def main(args, seed=None):
     import Options
     for hk_option in Options.hollow_knight_options:
         setattr(world, hk_option, getattr(args, hk_option, {}))
-    for factorio_option in Options.factorio_options:
-        setattr(world, factorio_option, getattr(args, factorio_option, {}))
+    # for factorio_option in Options.factorio_options:
+    #     setattr(world, factorio_option, getattr(args, factorio_option, {}))
     for minecraft_option in Options.minecraft_options: 
         setattr(world, minecraft_option, getattr(args, minecraft_option, {}))
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
@@ -207,8 +207,8 @@ def main(args, seed=None):
     for player in world.hk_player_ids:
         hk_create_regions(world, player)
 
-    for player in world.factorio_player_ids:
-        factorio_create_regions(world, player)
+    # for player in world.factorio_player_ids:
+    #     factorio_create_regions(world, player)
 
     for player in world.minecraft_player_ids:
         minecraft_create_regions(world, player)
@@ -269,8 +269,8 @@ def main(args, seed=None):
     for player in world.hk_player_ids:
         gen_hollow(world, player)
 
-    for player in world.factorio_player_ids:
-        gen_factorio(world, player)
+    # for player in world.factorio_player_ids:
+    #     gen_factorio(world, player)
 
     for player in world.minecraft_player_ids:
         gen_minecraft(world, player)
@@ -423,9 +423,9 @@ def main(args, seed=None):
         for team in range(world.teams):
             for player in world.alttp_player_ids:
                 rom_futures.append(pool.submit(_gen_rom, team, player))
-        for player in world.factorio_player_ids:
-            mod_futures.append(pool.submit(generate_mod, world, player,
-                                           str(args.outputname if args.outputname else world.seed)))
+        # for player in world.factorio_player_ids:
+        #     mod_futures.append(pool.submit(generate_mod, world, player,
+        #                                    str(args.outputname if args.outputname else world.seed)))
 
         def get_entrance_to_region(region: Region):
             for entrance in region.entrances:
