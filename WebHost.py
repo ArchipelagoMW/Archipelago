@@ -8,16 +8,14 @@ from waitress import serve
 from WebHostLib.models import db
 from WebHostLib.autolauncher import autohost
 
-configpath = "config.yaml"
+configpath = os.path.abspath("config.yaml")
 
 
 def get_app():
     app = raw_app
     if os.path.exists(configpath):
         import yaml
-        with open(configpath) as c:
-            app.config.update(yaml.safe_load(c))
-
+        app.config.from_file(configpath, yaml.safe_load)
         logging.info(f"Updated config from {configpath}")
     db.bind(**app.config["PONY"])
     db.generate_mapping(create_tables=True)

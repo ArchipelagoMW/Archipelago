@@ -6,7 +6,6 @@ import socket
 from pony.flask import Pony
 from flask import Flask, request, redirect, url_for, render_template, Response, session, abort, send_from_directory
 from flask_caching import Cache
-from flaskext.autoversion import Autoversion
 from flask_compress import Compress
 
 from .models import *
@@ -48,9 +47,6 @@ app.config["CACHE_TYPE"] = "simple"
 app.config["JSON_AS_ASCII"] = False
 app.config["PATCH_TARGET"] = "archipelago.gg"
 
-app.autoversion = True
-
-av = Autoversion(app)
 cache = Cache(app)
 Compress(app)
 
