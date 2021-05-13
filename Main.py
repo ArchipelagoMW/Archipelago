@@ -535,6 +535,9 @@ def main(args, seed=None):
                 if location.player in sending_visible_players and location.item.player != location.player:
                     precollected_hints[location.player].append(NetUtils.Hint(location.item.player, location.player, location.address,
                                                                         location.item.code, False))
+                elif location.item.name in args.start_hints[location.item.player]:
+                    precollected_hints[location.player].append(NetUtils.Hint(location.item.player, location.player, location.address,
+                                                                             location.item.code, False))
         multidata = zlib.compress(pickle.dumps({
             "slot_data" : slot_data,
             "games": games,

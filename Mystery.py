@@ -541,6 +541,8 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         elif itemvalue:
             startitems.append(item)
     ret.startinventory = startitems
+    ret.start_hints = set(weights.get('start_hints', []))
+
 
     if ret.game == "A Link to the Past":
         roll_alttp_settings(ret, weights, plando_options)
