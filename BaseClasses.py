@@ -879,13 +879,12 @@ class CollectionState(object):
                self.has('Progressive Armor', player) and self.has('Shield', player)
 
     def can_kill_wither(self, player: int): 
-        build_wither = self.fortress_loot(player) and (self.can_reach('The Nether', 'Region', player) or self.can_piglin_trade(player))
         normal_kill = self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and self.can_brew_potions(player) and self.can_enchant(player)
         if self.combat_difficulty(player) == 'easy': 
-            return build_wither and normal_kill and self.has('Archery', player)
+            return self.fortress_loot(player) and normal_kill and self.has('Archery', player)
         elif self.combat_difficulty(player) == 'hard': # cheese kill using bedrock ceilings
-            return build_wither and (normal_kill or self.can_reach('The Nether', 'Region', player) or self.can_reach('The End', 'Region', player))
-        return build_wither and normal_kill
+            return self.fortress_loot(player) and (normal_kill or self.can_reach('The Nether', 'Region', player) or self.can_reach('The End', 'Region', player))
+        return self.fortress_loot(player) and normal_kill
 
     def can_kill_ender_dragon(self, player: int):
         if self.combat_difficulty(player) == 'easy': 
