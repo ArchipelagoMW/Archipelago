@@ -509,7 +509,7 @@ def main(args, seed=None):
         precollected_items = {player: [] for player in range(1, world.players+1)}
         for item in world.precollected_items:
             precollected_items[item.player].append(item.code)
-        precollected_hints = {player: [] for player in range(1, world.players+1)}
+        precollected_hints = {player: set() for player in range(1, world.players+1)}
         # for now special case Factorio visibility
         sending_visible_players = set()
         for player in world.factorio_player_ids:
@@ -533,11 +533,17 @@ def main(args, seed=None):
             if type(location.address) == int:
                 locations_data[location.player][location.address] = (location.item.code, location.item.player)
                 if location.player in sending_visible_players and location.item.player != location.player:
-                    precollected_hints[location.player].append(NetUtils.Hint(location.item.player, location.player, location.address,
-                                                                        location.item.code, False))
+                    hint = NetUtils.Hint(location.item.player, location.player, location.address,
+                                         location.item.code, False)
+                    precollected_hints[location.player].add(hint)
+                    precollected_hints[location.item.player].add(hint)
                 elif location.item.name in args.start_hints[location.item.player]:
-                    precollected_hints[location.player].append(NetUtils.Hint(location.item.player, location.player, location.address,
-                                                                             location.item.code, False))
+                    hint = NetUtils.Hint(location.item.player, location.player, location.address,
+                                         location.item.code, False,
+                                         er_hint_data.get(location.player, {}).get(location.address, ""))
+                    precollected_hints[location.player].add(hint)
+                    precollected_hints[location.item.player].add(hint)
+
         multidata = zlib.compress(pickle.dumps({
             "slot_data" : slot_data,
             "games": games,

@@ -24,7 +24,6 @@ ModuleUpdate.update()
 import colorama
 
 from NetUtils import *
-import WebUI
 
 from worlds.alttp import Regions, Shops
 from worlds.alttp import Items
@@ -45,12 +44,6 @@ class LttPCommandProcessor(ClientCommandProcessor):
 
         self.output(f"Setting slow mode to {self.ctx.slow_mode}")
 
-    def _cmd_web(self):
-        if self.ctx.webui_socket_port:
-            webbrowser.open(f'http://localhost:5050?port={self.ctx.webui_socket_port}')
-        else:
-            self.output("Web UI was never started.")
-
     @mark_raw
     def _cmd_snes(self, snes_address: str = "") -> bool:
         """Connect to a snes. Optionally include network address of a snes to connect to, otherwise show available devices"""
@@ -69,20 +62,8 @@ class LttPCommandProcessor(ClientCommandProcessor):
 
 class Context(CommonContext):
     command_processor = LttPCommandProcessor
-    def __init__(self, snes_address, server_address, password, found_items, port: int):
+    def __init__(self, snes_address, server_address, password, found_items):
         super(Context, self).__init__(server_address, password, found_items)
-
-        # WebUI Stuff
-        self.ui_node = WebUI.WebUiClient()
-        logger.addHandler(self.ui_node)
-
-        self.webui_socket_port: typing.Optional[int] = port
-        self.hint_cost = 0
-        self.check_points = 0
-        self.forfeit_mode = ''
-        self.remaining_mode = ''
-        self.hint_points = 0
-        # End of WebUI Stuff
 
         # snes stuff
         self.snes_address = snes_address
@@ -495,7 +476,7 @@ async def get_snes_devices(ctx: Context):
             reply = loads(await socket.recv())
             devices = reply['Results'] if 'Results' in reply and len(reply['Results']) > 0 else None
 
-    ctx.ui_node.send_device_list(devices)
+
     await socket.close()
     return devices
 
@@ -517,8 +498,6 @@ async def snes_connect(ctx: Context, address):
 
         if len(devices) == 1:
             device = devices[0]
-        elif ctx.ui_node.manual_snes and ctx.ui_node.manual_snes in devices:
-            device = ctx.ui_node.manual_snes
         elif ctx.snes_reconnect_address:
             if ctx.snes_attached_device[1] in devices:
                 device = ctx.snes_attached_device[1]
@@ -538,7 +517,6 @@ async def snes_connect(ctx: Context, address):
         await ctx.snes_socket.send(dumps(Attach_Request))
         ctx.snes_state = SNESState.SNES_ATTACHED
         ctx.snes_attached_device = (devices.index(device), device)
-        ctx.ui_node.send_connection_status(ctx)
 
         if 'sd2snes' in device.lower() or 'COM' in device:
             logger.info("SD2SNES/FXPAK Detected")
@@ -607,7 +585,6 @@ async def snes_recv_loop(ctx: Context):
         ctx.snes_state = SNESState.SNES_DISCONNECTED
         ctx.snes_recv_queue = asyncio.Queue()
         ctx.hud_message_queue = []
-        ctx.ui_node.send_connection_status(ctx)
 
         ctx.rom = None
 
@@ -743,8 +720,6 @@ async def track_locations(ctx: Context, roomid, roomdata):
         ctx.locations_checked.add(location_id)
         location = ctx.location_name_getter(location_id)
         logger.info(f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
-        ctx.ui_node.send_location_check(ctx, location)
-
 
     try:
         if roomid in location_shop_ids:
@@ -887,10 +862,6 @@ async def game_watcher(ctx: Context):
 
         if recv_index < len(ctx.items_received) and recv_item == 0:
             item = ctx.items_received[recv_index]
-            ctx.ui_node.notify_item_received(ctx.player_names[item.player], ctx.item_name_getter(item.item),
-                                             ctx.location_name_getter(item.location), recv_index + 1,
-                                             len(ctx.items_received),
-                                             ctx.item_name_getter(item.item) in Items.progression_items)
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
                 color(ctx.item_name_getter(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
                 ctx.location_name_getter(item.location), recv_index + 1, len(ctx.items_received)))
@@ -920,57 +891,6 @@ async def run_game(romfile):
         subprocess.Popen([auto_start, romfile],
                          stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-
-async def websocket_server(websocket: websockets.WebSocketServerProtocol, path, ctx: Context):
-    endpoint = Endpoint(websocket)
-    ctx.ui_node.endpoints.append(endpoint)
-    process_command = LttPCommandProcessor(ctx)
-    try:
-        async for incoming_data in websocket:
-            data = loads(incoming_data)
-            logging.debug(f"WebUIData:{data}")
-            if ('type' not in data) or ('content' not in data):
-                raise Exception('Invalid data received in websocket')
-
-            elif data['type'] == 'webStatus':
-                if data['content'] == 'connections':
-                    ctx.ui_node.send_connection_status(ctx)
-                elif data['content'] == 'devices':
-                    await get_snes_devices(ctx)
-                elif data['content'] == 'gameInfo':
-                    ctx.ui_node.send_game_info(ctx)
-                elif data['content'] == 'checkData':
-                    ctx.ui_node.send_location_check(ctx, 'Waiting for check...')
-
-            elif data['type'] == 'webConfig':
-                if 'serverAddress' in data['content']:
-                    ctx.server_address = data['content']['serverAddress']
-                    await ctx.connect(data['content']['serverAddress'])
-                elif 'deviceId' in data['content']:
-                    # Allow a SNES disconnect via UI sending -1 as new device
-                    if data['content']['deviceId'] == "-1":
-                        ctx.ui_node.manual_snes = None
-                        ctx.snes_reconnect_address = None
-                        await snes_disconnect(ctx)
-                    else:
-                        await snes_disconnect(ctx)
-                        ctx.ui_node.manual_snes = data['content']['deviceId']
-                        await snes_connect(ctx, ctx.snes_address)
-
-            elif data['type'] == 'webControl':
-                if 'disconnect' in data['content']:
-                    await ctx.disconnect()
-
-            elif data['type'] == 'webCommand':
-                process_command(data['content'])
-
-    except Exception as e:
-        if not isinstance(e, websockets.WebSocketException):
-            logging.exception(e)
-    finally:
-        await ctx.ui_node.disconnect(endpoint)
-
-
 async def main():
     multiprocessing.freeze_support()
     parser = argparse.ArgumentParser()
@@ -982,8 +902,6 @@ async def main():
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
     parser.add_argument('--founditems', default=False, action='store_true',
                         help='Show items found by other players for themselves.')
-    parser.add_argument('--web_ui', default=False, action='store_true',
-                        help="Emit a webserver for the webbrowser based user interface.")
     args = parser.parse_args()
     logging.basicConfig(format='%(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
     if args.diff_file:
@@ -1002,23 +920,9 @@ async def main():
         asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
 
     port = None
-    if args.web_ui:
-        # Find an available port on the host system to use for hosting the websocket server
-        while True:
-            port = randrange(49152, 65535)
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-                if not sock.connect_ex(('localhost', port)) == 0:
-                    break
-        import threading
-        WebUI.start_server(
-            port, on_start=threading.Timer(1, webbrowser.open, (f'http://localhost:5050?port={port}',)).start)
 
-    ctx = Context(args.snes, args.connect, args.password, args.founditems, port)
+    ctx = Context(args.snes, args.connect, args.password, args.founditems)
     input_task = asyncio.create_task(console_loop(ctx), name="Input")
-    if args.web_ui:
-        ui_socket = websockets.serve(functools.partial(websocket_server, ctx=ctx),
-                                     'localhost', port, ping_timeout=None, ping_interval=None)
-        await ui_socket
 
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")

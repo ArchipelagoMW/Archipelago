@@ -7,16 +7,15 @@ from uuid import UUID
 
 from worlds.alttp import Items, Regions
 from WebHostLib import app, cache, Room
-from NetUtils import Hint
 from Utils import restricted_loads
-
+from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
 
 def get_id(item_name):
     return Items.item_table[item_name][2]
 
 
-app.jinja_env.filters["location_name"] = lambda location: Regions.lookup_id_to_name.get(location, location)
-app.jinja_env.filters['item_name'] = lambda id: Items.lookup_id_to_name.get(id, id)
+app.jinja_env.filters["location_name"] = lambda location: lookup_any_location_id_to_name.get(location, location)
+app.jinja_env.filters['item_name'] = lambda id: lookup_any_item_id_to_name.get(id, id)
 
 icons = {
     "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",

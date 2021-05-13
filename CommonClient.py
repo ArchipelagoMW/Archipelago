@@ -49,10 +49,6 @@ class ClientCommandProcessor(CommandProcessor):
         """List all received items"""
         logger.info('Received items:')
         for index, item in enumerate(self.ctx.items_received, 1):
-            self.ctx.ui_node.notify_item_received(self.ctx.player_names[item.player], self.ctx.item_name_getter(item.item),
-                                                  self.ctx.location_name_getter(item.location), index,
-                                                  len(self.ctx.items_received),
-                                                  self.ctx.item_name_getter(item.item) in Items.progression_items)
             logging.info('%s from %s (%s) (%d/%d in list)' % (
                 color(self.ctx.item_name_getter(item.item), 'red', 'bold'),
                 color(self.ctx.player_names[item.player], 'yellow'),
@@ -116,7 +112,6 @@ class CommonContext():
         self.team = None
         self.slot = None
         self.auth = None
-        self.ui_node = None
 
         self.locations_checked: typing.Set[int] = set()
         self.locations_scouted: typing.Set[int] = set()
@@ -223,9 +218,6 @@ class CommonContext():
 
 
 async def server_loop(ctx: CommonContext, address=None):
-    ui_node = getattr(ctx, "ui_node", None)
-    if ui_node:
-        ui_node.send_connection_status(ctx)
     cached_address = None
     if ctx.server and ctx.server.socket:
         logger.error('Already connected')
@@ -237,8 +229,6 @@ async def server_loop(ctx: CommonContext, address=None):
     # Wait for the user to provide a multiworld server address
     if not address:
         logger.info('Please connect to an Archipelago server.')
-        if ui_node:
-            ui_node.poll_for_server_ip()
         return
 
     address = f"ws://{address}" if "://" not in address else address
@@ -250,8 +240,6 @@ async def server_loop(ctx: CommonContext, address=None):
         ctx.server = Endpoint(socket)
         logger.info('Connected')
         ctx.server_address = address
-        if ui_node:
-            ui_node.send_connection_status(ctx)
         ctx.current_reconnect_delay = ctx.starting_reconnect_delay
         async for data in ctx.server.socket:
             for msg in decode(data):
@@ -273,8 +261,6 @@ async def server_loop(ctx: CommonContext, address=None):
         await ctx.connection_closed()
         if ctx.server_address:
             logger.info(f"... reconnecting in {ctx.current_reconnect_delay}s")
-            if ui_node:
-                ui_node.send_connection_status(ctx)
             asyncio.create_task(server_autoreconnect(ctx))
         ctx.current_reconnect_delay *= 2
 
@@ -311,8 +297,6 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.check_points = int(args['location_check_points'])
         ctx.forfeit_mode = args['forfeit_mode']
         ctx.remaining_mode = args['remaining_mode']
-        if ctx.ui_node:
-            ctx.ui_node.send_game_info(ctx)
         if len(args['players']) < 1:
             logger.info('No player connected')
         else:
