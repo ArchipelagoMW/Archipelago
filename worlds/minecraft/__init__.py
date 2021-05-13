@@ -9,12 +9,9 @@ from Options import minecraft_options
 
 client_version = (0, 3)
 
-def generate_mc_data(world: MultiWorld, player: int, seedname: str): 
-    import base64, json
-    from Utils import output_path
-
+def get_mc_data(world: MultiWorld, player: int, seedname: str):
     exits = ["Overworld Structure 1", "Overworld Structure 2", "Nether Structure 1", "Nether Structure 2", "The End Structure"]
-    data = {
+    return {
         'world_seed': Random(world.rom_seeds[player]).getrandbits(32), # consistent and doesn't interfere with other generation
         'seed_name': seedname,
         'player_name': world.get_player_names(player),
@@ -22,16 +19,20 @@ def generate_mc_data(world: MultiWorld, player: int, seedname: str):
         'structures': {exit: world.get_entrance(exit, player).connected_region.name for exit in exits}
     }
 
+def generate_mc_data(world: MultiWorld, player: int, seedname: str): 
+    import base64, json
+    from Utils import output_path
+
+    data = get_mc_data(world, player, seedname)
     filename = f"AP_{seedname}_P{player}_{world.get_player_names(player)}.apmc"
     with open(output_path(filename), 'wb') as f: 
         f.write(base64.b64encode(bytes(json.dumps(data), 'utf-8')))
 
-def fill_minecraft_slot_data(world: MultiWorld, player: int): 
-    slot_data = {}
+def fill_minecraft_slot_data(world: MultiWorld, player: int, seedname: str): 
+    slot_data = get_mc_data(world, player, seedname)
     for option_name in minecraft_options:
         option = getattr(world, option_name)[player]
         slot_data[option_name] = int(option.value)
-    slot_data['client_version'] = client_version
     return slot_data
 
 # Generates the item pool given the table and frequencies in Items.py. 

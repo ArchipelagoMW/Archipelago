@@ -519,7 +519,7 @@ def main(args, seed=None):
                     option = getattr(world, option_name)[slot]
                     slots_data[option_name] = int(option.value)
             for slot in world.minecraft_player_ids:
-                slot_data[slot] = fill_minecraft_slot_data(world, slot)
+                slot_data[slot] = fill_minecraft_slot_data(world, slot, str(args.outputname if args.outputname else world.seed))
             multidata = zlib.compress(pickle.dumps({
                 "slot_data" : slot_data,
                 "games": games,
