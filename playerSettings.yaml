@@ -42,8 +42,8 @@ progression_balancing:
   # Pegasus Boots: on
   # Bomb Upgrade (+10): 4
   # Arrow Upgrade (+10): 4
-start_hints:
-  - Moon Pearl
+# start_hints:
+#   - Moon Pearl
 # Factorio options:
 tech_tree_layout:
   single: 1
