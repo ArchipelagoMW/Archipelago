@@ -89,15 +89,19 @@ class TestAdvancements(TestMinecraft):
             ["A Furious Cocktail", False, [], ['Brewing']], 
             ["A Furious Cocktail", False, [], ['Bottles']], 
             ["A Furious Cocktail", False, [], ['Fishing Rod']], 
-            ["A Furious Cocktail", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["A Furious Cocktail", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
-                                          'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Fishing Rod']], 
+            ["A Furious Cocktail", False, ['Progressive Tools', 'Progressive Tools'], ['Progressive Tools']], 
             ["A Furious Cocktail", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
-                                          'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Fishing Rod']],
-            ["A Furious Cocktail", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
-                                          'Progressive Weapons', 'Shield', 'Brewing', 'Bottles', 'Fishing Rod']], 
-            ["A Furious Cocktail", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
-                                          'Progressive Weapons', 'Shield', 'Brewing', 'Bottles', 'Fishing Rod']],
+                                             'Progressive Weapons', 'Progressive Weapons', 'Progressive Weapons', 
+                                             'Progressive Armor', 'Progressive Armor', 
+                                             'Enchanting', 'Brewing', 'Bottles', 'Resource Blocks', 'Fishing Rod']],
+            # ["A Furious Cocktail", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
+            #                               'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Fishing Rod']], 
+            # ["A Furious Cocktail", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+            #                               'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Fishing Rod']],
+            # ["A Furious Cocktail", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 
+            #                               'Progressive Weapons', 'Shield', 'Brewing', 'Bottles', 'Fishing Rod']], 
+            # ["A Furious Cocktail", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 
+            #                               'Progressive Weapons', 'Shield', 'Brewing', 'Bottles', 'Fishing Rod']],
             ])
 
     def test_42007(self):
@@ -934,7 +938,8 @@ class TestAdvancements(TestMinecraft):
             ["Uneasy Alliance", False, [], ['Ingot Crafting']], 
             ["Uneasy Alliance", False, [], ['Flint and Steel']], 
             ["Uneasy Alliance", False, [], ['Progressive Tools', 'Progressive Tools'], ['Progressive Tools']], 
-            ["Uneasy Alliance", True, ['Progressive Tools', 'Progressive Tools', 'Progressive Tools', 'Flint and Steel', 'Ingot Crafting']], 
+            ["Uneasy Alliance", False, [], ['Fishing Rod']], 
+            ["Uneasy Alliance", True, ['Progressive Tools', 'Progressive Tools', 'Progressive Tools', 'Flint and Steel', 'Ingot Crafting', 'Fishing Rod']], 
             ])
 
     def test_42070(self):
@@ -1076,8 +1081,8 @@ class TestAdvancements(TestMinecraft):
         self.run_location_tests([
             ["On a Rail", False, []],
             ["On a Rail", False, [], ['Ingot Crafting']],
-            ["On a Rail", False, [], ['Progressive Tools']],
-            ["On a Rail", True, ['Ingot Crafting', 'Progressive Tools']],
+            ["On a Rail", False, ['Progressive Tools'], ['Progressive Tools', 'Progressive Tools']],
+            ["On a Rail", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Tools']],
             ])
 
     def test_42086(self):
