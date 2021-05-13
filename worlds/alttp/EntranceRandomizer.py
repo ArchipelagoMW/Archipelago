@@ -362,6 +362,7 @@ def parse_arguments(argv, no_defaults=False):
     create a binary patch file from which the randomized rom can be recreated using MultiClient.''')
     parser.add_argument('--disable_glitch_boots', default=defval(False), action='store_true', help='''\
     turns off starting with Pegasus Boots in glitched modes.''')
+    parser.add_argument('--start_hints')
     if multiargs.multi:
         for player in range(1, multiargs.multi + 1):
             parser.add_argument(f'--p{player}', default=defval(''), help=argparse.SUPPRESS)
@@ -405,7 +406,7 @@ def parse_arguments(argv, no_defaults=False):
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
                          'heartbeep', "progression_balancing", "triforce_pieces_available",
                          "triforce_pieces_required", "shop_shuffle", "shop_shuffle_slots",
-                         "required_medallions",
+                         "required_medallions", "start_hints",
                          "plando_items", "plando_texts", "plando_connections", "er_seeds",
                          'progressive', 'dungeon_counters', 'glitch_boots', 'killable_thieves',
                          'tile_shuffle', 'bush_shuffle', 'shuffle_prizes', 'sprite_pool', 'dark_room_logic',

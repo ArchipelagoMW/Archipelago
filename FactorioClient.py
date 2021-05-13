@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 import colorama
 import asyncio
-from queue import Queue, Empty
+from queue import Queue
 from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor, logger
 from MultiServer import mark_raw
 

@@ -1,6 +1,7 @@
 import os
 import tempfile
 import random
+import json
 from collections import Counter
 
 from flask import request, flash, redirect, url_for, session, render_template
@@ -94,10 +95,6 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
 
         erargs.names = ",".join(erargs.name[i] for i in range(1, playercount + 1))
         del (erargs.name)
-
-        erargs.skip_progression_balancing = {player: not balanced for player, balanced in
-                                             erargs.progression_balancing.items()}
-        del (erargs.progression_balancing)
         ERmain(erargs, seed)
 
         return upload_to_db(target.name, owner, sid, race)
@@ -107,7 +104,11 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
                 gen = Generation.get(id=sid)
                 if gen is not None:
                     gen.state = STATE_ERROR
-                    gen.meta = (e.__class__.__name__ + ": "+ str(e)).encode()
+                    meta = json.loads(gen.meta)
+                    meta["error"] = (e.__class__.__name__ + ": "+ str(e))
+                    gen.meta = json.dumps(meta)
+
+                    commit()
         raise
 
 
@@ -122,7 +123,7 @@ def wait_seed(seed: UUID):
     if not generation:
         return "Generation not found."
     elif generation.state == STATE_ERROR:
-        return render_template("seedError.html", seed_error=generation.meta.decode())
+        return render_template("seedError.html", seed_error=generation.meta)
     return render_template("waitSeed.html", seed_id=seed_id)
 
 
@@ -147,10 +148,10 @@ def upload_to_db(folder, owner, sid, race:bool):
         with db_session:
             if sid:
                 seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner,
-                            id=sid, meta={"tags": ["generated"]})
+                            id=sid, meta=json.dumps({"tags": ["generated"]}))
             else:
                 seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner,
-                            meta={"tags": ["generated"]})
+                            meta=json.dumps({"tags": ["generated"]}))
             for patch in patches:
                 patch.seed = seed
             if sid:

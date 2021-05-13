@@ -1,4 +1,6 @@
+import json
 import pickle
+
 from uuid import UUID
 
 from . import api_endpoints
@@ -46,7 +48,7 @@ def generate_api():
             gen = Generation(
                 options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
                 # convert to json compatible
-                meta=pickle.dumps({"race": race}), state=STATE_QUEUED,
+                meta=json.dumps({"race": race}), state=STATE_QUEUED,
                 owner=session["_id"])
             commit()
             return {"text": f"Generation of seed {gen.id} started successfully.",
@@ -55,7 +57,8 @@ def generate_api():
                     "wait_api_url": url_for("api.wait_seed_api", seed=gen.id, _external=True),
                     "url": url_for("wait_seed", seed=gen.id, _external=True)}, 201
     except Exception as e:
-        return {"text": "Uncaught Exception:" + str(e)}, 500
+        raise
+
 
 
 @api_endpoints.route('/status/<suuid:seed>')
