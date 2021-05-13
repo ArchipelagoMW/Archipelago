@@ -487,14 +487,13 @@ def main(args, seed=None):
             er_hint_data[player][location_id] = main_entrance.name
             oldmancaves.append(((location_id, player), (item.code, player)))
 
-    precollected_items = {player: [] for player in range(1, world.players+1)}
-    for item in world.precollected_items:
-        precollected_items[item.player].append(item.code)
+
 
     FillDisabledShopSlots(world)
 
     def write_multidata(roms, mods):
         import base64
+        import NetUtils
         for future in roms:
             rom_name = future.result()
             rom_names.append(rom_name)
@@ -507,6 +506,15 @@ def main(args, seed=None):
             games[slot] = world.game[slot]
         connect_names = {base64.b64encode(rom_name).decode(): (team, slot) for
                           slot, team, rom_name in rom_names}
+        precollected_items = {player: [] for player in range(1, world.players+1)}
+        for item in world.precollected_items:
+            precollected_items[item.player].append(item.code)
+        precollected_hints = {player: [] for player in range(1, world.players+1)}
+        # for now special case Factorio visibility
+        sending_visible_players = set()
+        for player in world.factorio_player_ids:
+            if world.visibility[player]:
+                sending_visible_players.add(player)
 
         for i, team in enumerate(parsed_names):
             for player, name in enumerate(team, 1):
@@ -524,6 +532,9 @@ def main(args, seed=None):
         for location in world.get_filled_locations():
             if type(location.address) == int:
                 locations_data[location.player][location.address] = (location.item.code, location.item.player)
+                if location.player in sending_visible_players and location.item.player != location.player:
+                    precollected_hints[location.player].append(NetUtils.Hint(location.item.player, location.player, location.address,
+                                                                        location.item.code, False))
         multidata = zlib.compress(pickle.dumps({
             "slot_data" : slot_data,
             "games": games,
@@ -536,6 +547,7 @@ def main(args, seed=None):
             "server_options": get_options()["server_options"],
             "er_hint_data": er_hint_data,
             "precollected_items": precollected_items,
+            "precollected_hints": precollected_hints,
             "version": tuple(_version_tuple),
             "tags": ["AP"],
             "minimum_versions": minimum_versions,

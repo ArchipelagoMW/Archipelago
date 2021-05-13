@@ -160,7 +160,8 @@ class Context(Node):
             for slot, item_codes in decoded_obj["precollected_items"].items():
                 if slot in self.remote_items:
                     self.received_items[team, slot] = [NetworkItem(item_code, -2, 0) for item_code in item_codes]
-
+            for slot, hints in decoded_obj["precollected_hints"].items():
+                self.hints[team, slot] = hints
         if use_embedded_server_options:
             server_options = decoded_obj.get("server_options", {})
             self._set_options(server_options)
