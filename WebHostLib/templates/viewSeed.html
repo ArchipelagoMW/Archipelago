@@ -37,17 +37,10 @@
                         <td>Players:&nbsp;</td>
                         <td>
                             <ul>
-                                {% for team in seed.multidata["names"] %}
-                                    {% set outer_loop = loop %}
-                                    <li>Team #{{ loop.index }} - {{ team | length }}
-                                        <ul>
-                                            {% for player in team %}
-                                                <li>
-                                                    <a href="{{ url_for("download_raw_patch", seed_id=seed.id, player_id=loop.index, team_id=outer_loop.index0) }}">{{ player }}</a>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    </li>
+                                {% for patch in seed.slots|sort(attribute='player_id') %}
+                                <li>
+                                    <a href="{{ url_for("download_raw_patch", seed_id=seed.id, player_id=patch.player_id) }}">{{ patch.player_name }}</a>
+                                </li>
                                 {% endfor %}
                             </ul>
                         </td>
@@ -64,13 +57,13 @@
                     </tr>
                 {% else  %}
                 <tr>
-                    <td>Patches:&nbsp;</td>
+                    <td>Files:&nbsp;</td>
                     <td>
                         <ul>
-                            {% for patch in seed.patches %}
+                            {% for slot in seed.slots %}
 
                             <li>
-                                <a href="{{ url_for("download_raw_patch", seed_id=seed.id, player_id=patch.player, team_id=0) }}">Player {{ patch.player }}</a>
+                                <a href="{{ url_for("download_raw_patch", seed_id=seed.id, player_id=slot.player_id) }}">Player {{ slot.player_name }}</a>
                             </li>
 
 

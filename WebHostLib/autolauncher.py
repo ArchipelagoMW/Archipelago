@@ -28,6 +28,7 @@ class AlreadyRunningException(Exception):
 if sys.platform == 'win32':
     import os
 
+
     class Locker(CommonLocker):
         def __enter__(self):
             try:
@@ -45,6 +46,7 @@ if sys.platform == 'win32':
                 os.unlink(self.lockfile)
 else:  # unix
     import fcntl
+
 
     class Locker(CommonLocker):
         def __enter__(self):
@@ -148,6 +150,7 @@ multiworlds = {}
 
 guardians = concurrent.futures.ThreadPoolExecutor(2, thread_name_prefix="Guardian")
 
+
 class MultiworldInstance():
     def __init__(self, room: Room, config: dict):
         self.room_id = room.id
@@ -172,7 +175,7 @@ class MultiworldInstance():
             self.process = None
 
     def _collect(self):
-        self.process.join() # wait for process to finish
+        self.process.join()  # wait for process to finish
         self.process = None
         self.guardian = None
 

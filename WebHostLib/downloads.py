@@ -2,12 +2,12 @@ from flask import send_file, Response
 from pony.orm import select
 
 from Patch import update_patch_data
-from WebHostLib import app, Patch, Room, Seed
+from WebHostLib import app, Slot, Room, Seed
 
 
 @app.route("/dl_patch/<suuid:room_id>/<int:patch_id>")
 def download_patch(room_id, patch_id):
-    patch = Patch.get(id=patch_id)
+    patch = Slot.get(id=patch_id)
     if not patch:
         return "Patch not found"
     else:
@@ -30,8 +30,9 @@ def download_spoiler(seed_id):
 
 @app.route("/dl_raw_patch/<suuid:seed_id>/<int:player_id>")
 def download_raw_patch(seed_id, player_id: int):
-    patch = select(patch for patch in Patch if
-                   patch.player_id == player_id and patch.seed.id == seed_id).first()
+    seed = Seed.get(id=seed_id)
+    patch = select(patch for patch in seed.slots if
+                   patch.player_id == player_id).first()
 
     if not patch:
         return "Patch not found"

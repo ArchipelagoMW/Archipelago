@@ -26,7 +26,6 @@ if __name__ == "__main__":
 
         from Utils import get_public_ipv4, get_options
         from Mystery import get_seed_name
-        from Patch import create_patch_file
 
         options = get_options()
 

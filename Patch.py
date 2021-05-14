@@ -12,7 +12,7 @@ from typing import Tuple, Optional
 import Utils
 from worlds.alttp.Rom import JAP10HASH
 
-current_patch_version = 1
+current_patch_version = 2
 
 
 def get_base_rom_path(file_name: str = "") -> str:
@@ -43,9 +43,9 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 def generate_yaml(patch: bytes, metadata: Optional[dict] = None) -> bytes:
     patch = yaml.dump({"meta": metadata,
                        "patch": patch,
-                       "game": "alttp",
-                       "compatible_version": 1,
+                       "game": "A Link to the Past",
                        # minimum version of patch system expected for patching to be successful
+                       "compatible_version": 1,
                        "version": current_patch_version,
                        "base_checksum": JAP10HASH})
     return patch.encode(encoding="utf-8-sig")
@@ -58,10 +58,13 @@ def generate_patch(rom: bytes, metadata: Optional[dict] = None) -> bytes:
     return generate_yaml(patch, metadata)
 
 
-def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str = None) -> str:
+def create_patch_file(rom_file_to_patch: str, server: str = "", destination: str = None,
+                      player: int = 0, player_name: str = "") -> str:
+    meta = {"server": server, # allow immediate connection to server in multiworld. Empty string otherwise
+            "player_id": player,
+            "player_name": player_name}
     bytes = generate_patch(load_bytes(rom_file_to_patch),
-                           {
-                               "server": server})  # allow immediate connection to server in multiworld. Empty string otherwise
+                           meta)
     target = destination if destination else os.path.splitext(rom_file_to_patch)[0] + ".apbp"
     write_lzma(bytes, target)
     return target
