@@ -57,7 +57,7 @@ def generate_api():
                     "wait_api_url": url_for("api.wait_seed_api", seed=gen.id, _external=True),
                     "url": url_for("wait_seed", seed=gen.id, _external=True)}, 201
     except Exception as e:
-        raise
+        return {"text": "Uncaught Exception:" + str(e)}, 500
 
 
 
