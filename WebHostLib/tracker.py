@@ -10,7 +10,7 @@ from WebHostLib import app, cache, Room
 from Utils import restricted_loads
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
 
-def get_id(item_name):
+def get_alttp_id(item_name):
     return Items.item_table[item_name][2]
 
 
@@ -154,9 +154,9 @@ levels = {"Fighter Sword": 1,
           "Bow": 1,
           "Silver Bow": 2}
 
-multi_items = {get_id(name) for name in ("Progressive Sword", "Progressive Bow", "Bottle", "Progressive Glove")}
-links = {get_id(key): get_id(value) for key, value in links.items()}
-levels = {get_id(key): value for key, value in levels.items()}
+multi_items = {get_alttp_id(name) for name in ("Progressive Sword", "Progressive Bow", "Bottle", "Progressive Glove")}
+links = {get_alttp_id(key): get_alttp_id(value) for key, value in links.items()}
+levels = {get_alttp_id(key): value for key, value in levels.items()}
 
 tracking_names = ["Progressive Sword", "Progressive Bow", "Book of Mudora", "Hammer",
                   "Hookshot", "Magic Mirror", "Flute",
@@ -236,7 +236,7 @@ ordered_areas = ('Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower',
 tracking_ids = []
 
 for item in tracking_names:
-    tracking_ids.append(get_id(item))
+    tracking_ids.append(get_alttp_id(item))
 
 small_key_ids = {}
 big_key_ids = {}
