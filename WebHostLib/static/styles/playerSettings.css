@@ -29,6 +29,20 @@ html{
     color: #000000;
 }
 
+#player-settings #user-message{
+    display: none;
+    width: calc(100% - 8px);
+    background-color: #ffe86b;
+    border-radius: 4px;
+    color: #000000;
+    padding: 4px;
+    text-align: center;
+}
+
+#player-settings #user-message.visible{
+    display: block;
+}
+
 #player-settings h1{
     font-size: 2.5rem;
     font-weight: normal;

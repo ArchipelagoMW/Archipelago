@@ -14,7 +14,7 @@ html{
     color: #eeffeb;
 }
 
-#user-warning{
+#user-warning, #weighted-settings #user-message{
     display: none;
     width: calc(100% - 8px);
     background-color: #ffe86b;
@@ -23,6 +23,10 @@ html{
     padding: 4px;
     text-align: center;
     cursor: pointer;
+}
+
+#weighted-settings #user-message.visible{
+    display: block;
 }
 
 #weighted-settings code{
