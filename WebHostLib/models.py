@@ -39,7 +39,7 @@ class Seed(db.Entity):
     creation_time = Required(datetime, default=lambda: datetime.utcnow())
     patches = Set(Patch)
     spoiler = Optional(LongStr, lazy=True)
-    meta = Required(Json, lazy=True, default=lambda: {})  # additional meta information/tags
+    meta = Required(str, default=lambda: "{\"race\": false}")  # additional meta information/tags
 
 
 class Command(db.Entity):
@@ -51,6 +51,6 @@ class Command(db.Entity):
 class Generation(db.Entity):
     id = PrimaryKey(UUID, default=uuid4)
     owner = Required(UUID)
-    options = Required(Json, lazy=True)
-    meta = Required(Json, lazy=True)
+    options = Required(buffer, lazy=True)
+    meta = Required(str, default=lambda: "{\"race\": false}")
     state = Required(int, default=0, index=True)

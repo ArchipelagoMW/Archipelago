@@ -303,7 +303,10 @@ def handle_name(name: str, player: int, name_counter: Counter):
                                                                                                    name] > 1 else ''),
                                                                  player=player,
                                                                  PLAYER=(player if player > 1 else '')))
-    return new_name.strip().replace(' ', '_')[:16]
+    new_name = new_name.strip().replace(' ', '_')[:16]
+    if new_name == "Archipelago":
+        raise Exception(f"You cannot name yourself \"{new_name}\"")
+    return new_name
 
 
 def prefer_int(input_data: str) -> typing.Union[str, int]:
@@ -538,6 +541,8 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         elif itemvalue:
             startitems.append(item)
     ret.startinventory = startitems
+    ret.start_hints = set(weights.get('start_hints', []))
+
 
     if ret.game == "A Link to the Past":
         roll_alttp_settings(ret, weights, plando_options)

@@ -2,7 +2,7 @@
 
 {% block head %}
     <title>MultiWorld</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_autoversion("styles/landing.css") }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/landing.css") }}" />
 {% endblock %}
 
 {% block body %}

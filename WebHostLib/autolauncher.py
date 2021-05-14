@@ -1,5 +1,6 @@
 from __future__ import annotations
 import logging
+import json
 import multiprocessing
 from datetime import timedelta, datetime
 import concurrent.futures
@@ -8,6 +9,8 @@ import typing
 import time
 
 from pony.orm import db_session, select, commit
+
+from Utils import restricted_loads
 
 
 class CommonLocker():
@@ -78,14 +81,21 @@ def handle_generation_failure(result: BaseException):
 
 
 def launch_generator(pool: multiprocessing.pool.Pool, generation: Generation):
-    options = generation.options
-    logging.info(f"Generating {generation.id} for {len(options)} players")
-
-    meta = generation.meta
-    pool.apply_async(gen_game, (options,),
-                     {"race": meta["race"], "sid": generation.id, "owner": generation.owner},
-                     handle_generation_success, handle_generation_failure)
-    generation.state = STATE_STARTED
+    try:
+        meta = json.loads(generation.meta)
+        options = restricted_loads(generation.options)
+        logging.info(f"Generating {generation.id} for {len(options)} players")
+        pool.apply_async(gen_game, (options,),
+                         {"race": meta["race"],
+                          "sid": generation.id,
+                          "owner": generation.owner},
+                         handle_generation_success, handle_generation_failure)
+    except:
+        generation.state = STATE_ERROR
+        commit()
+        raise
+    else:
+        generation.state = STATE_STARTED
 
 
 def init_db(pony_config: dict):

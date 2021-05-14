@@ -7,16 +7,15 @@ from uuid import UUID
 
 from worlds.alttp import Items, Regions
 from WebHostLib import app, cache, Room
-from NetUtils import Hint
 from Utils import restricted_loads
-
+from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
 
 def get_id(item_name):
     return Items.item_table[item_name][2]
 
 
-app.jinja_env.filters["location_name"] = lambda location: Regions.lookup_id_to_name.get(location, location)
-app.jinja_env.filters['item_name'] = lambda id: Items.lookup_id_to_name.get(id, id)
+app.jinja_env.filters["location_name"] = lambda location: lookup_any_location_id_to_name.get(location, location)
+app.jinja_env.filters['item_name'] = lambda id: lookup_any_item_id_to_name.get(id, id)
 
 icons = {
     "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
@@ -266,6 +265,7 @@ def attribute_item(inventory, team, recipient, item):
 
 
 def attribute_item_solo(inventory, item):
+    """Adds item to inventory counter, converts everything to progressive."""
     target_item = links.get(item, item)
     if item in levels:  # non-progressive
         inventory[target_item] = max(inventory[target_item], levels[item])
@@ -319,11 +319,12 @@ def get_static_room_data(room: Room):
 
     player_big_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
     player_small_key_locations = {playernumber: set() for playernumber in range(1, len(names[0]) + 1)}
-    for _, (item_id, item_player) in locations.items():
-        if item_id in ids_big_key:
-            player_big_key_locations[item_player].add(ids_big_key[item_id])
-        if item_id in ids_small_key:
-            player_small_key_locations[item_player].add(ids_small_key[item_id])
+    for loc_data in locations.values():
+        for item_id, item_player in loc_data.values():
+            if item_id in ids_big_key:
+                player_big_key_locations[item_player].add(ids_big_key[item_id])
+            elif item_id in ids_small_key:
+                player_small_key_locations[item_player].add(ids_small_key[item_id])
 
     result = locations, names, use_door_tracker, player_checks_in_area, player_location_to_area, \
              player_big_key_locations, player_small_key_locations, multidata["precollected_items"]
@@ -332,7 +333,7 @@ def get_static_room_data(room: Room):
 
 
 @app.route('/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
-@cache.memoize(timeout=15)
+@cache.memoize(timeout=60)  # multisave is currently created at most every minute
 def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
     # Team and player must be positive and greater than zero
     if tracked_team < 0 or tracked_player < 1:
@@ -362,35 +363,25 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
         multisave = {}
 
     # Add items to player inventory
-    for (ms_team, ms_player), locations_checked in multisave.get("location_checks", {}):
+    for (ms_team, ms_player), locations_checked in multisave.get("location_checks", {}).items():
         # logging.info(f"{ms_team}, {ms_player}, {locations_checked}")
         # Skip teams and players not matching the request
-
+        player_locations = locations[ms_player]
         if ms_team == tracked_team:
             # If the player does not have the item, do nothing
             for location in locations_checked:
-                if (location, ms_player) not in locations:
-                    continue
-
-                item, recipient = locations[location, ms_player]
-                if recipient == tracked_player: # a check done for the tracked player
-                    attribute_item_solo(inventory, item)
-                if ms_player == tracked_player: # a check done by the tracked player
-                    checks_done[location_to_area[location]] += 1
-                    checks_done["Total"] += 1
+                if location in player_locations:
+                    item, recipient = player_locations[location]
+                    if recipient == tracked_player: # a check done for the tracked player
+                        attribute_item_solo(inventory, item)
+                    if ms_player == tracked_player: # a check done by the tracked player
+                        checks_done[location_to_area[location]] += 1
+                        checks_done["Total"] += 1
 
     # Note the presence of the triforce item
-    for (ms_team, ms_player), game_state in multisave.get("client_game_state", []):
-        # Skip teams and players not matching the request
-        if ms_team != tracked_team or ms_player != tracked_player:
-            continue
-
-        if game_state:
-            inventory[106] = 1  # Triforce
-
-    acquired_items = []
-    for itm in inventory:
-        acquired_items.append(get_item_name_from_id(itm))
+    game_state = multisave.get("client_game_state", {}).get((tracked_team, tracked_player), 0)
+    if game_state == 30:
+        inventory[106] = 1  # Triforce
 
     # Progressive items need special handling for icons and class
     progressive_items = {
@@ -400,86 +391,42 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
         "Progressive Mail": 96,
         "Progressive Shield": 95,
     }
+    progressive_names = {
+        "Progressive Sword": [None, 'Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
+        "Progressive Glove": [None, 'Power Glove', 'Titan Mitts'],
+        "Progressive Bow": [None, "Bow", "Silver Bow"],
+        "Progressive Mail": ["Green Mail", "Blue Mail", "Red Mail"],
+        "Progressive Shield": [None, "Blue Shield", "Red Shield", "Mirror Shield"]
+    }
 
-    # Determine which icon to use for the sword
-    sword_url = icons["Fighter Sword"]
-    sword_acquired = False
-    sword_names = ['Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword']
-    if "Progressive Sword" in acquired_items:
-        sword_url = icons[sword_names[min(inventory[progressive_items["Progressive Sword"]], 4) - 1]]
-        sword_acquired = True
-    else:
-        for sword in reversed(sword_names):
-            if sword in acquired_items:
-                sword_url = icons[sword]
-                sword_acquired = True
-                break
+    # Determine which icon to use
+    display_data = {}
+    for item_name, item_id in progressive_items.items():
+        level = min(inventory[item_id], len(progressive_names[item_name]))
+        display_name = progressive_names[item_name][level]
+        acquired = True
+        if not display_name:
+            acquired = False
+            display_name = progressive_names[item_name][level+1]
+        base_name = item_name.split(maxsplit=1)[1].lower()
+        display_data[base_name+"_acquired"] = acquired
+        display_data[base_name+"_url"] = icons[display_name]
 
-    gloves_url = icons["Power Glove"]
-    gloves_acquired = False
-    glove_names = ["Power Glove", "Titan Mitts"]
-    if "Progressive Glove" in acquired_items:
-        gloves_url = icons[glove_names[min(inventory[progressive_items["Progressive Glove"]], 2) - 1]]
-        gloves_acquired = True
-    else:
-        for glove in reversed(glove_names):
-            if glove in acquired_items:
-                gloves_url = icons[glove]
-                gloves_acquired = True
-                break
-
-    bow_url = icons["Bow"]
-    bow_acquired = False
-    bow_names = ["Bow", "Silver Bow"]
-    if "Progressive Bow" in acquired_items:
-        bow_url = icons[bow_names[min(inventory[progressive_items["Progressive Bow"]], 2) - 1]]
-        bow_acquired = True
-    else:
-        for bow in reversed(bow_names):
-            if bow in acquired_items:
-                bow_url = icons[bow]
-                bow_acquired = True
-                break
-
-    mail_url = icons["Green Mail"]
-    mail_names = ["Blue Mail", "Red Mail"]
-    if "Progressive Mail" in acquired_items:
-        mail_url = icons[mail_names[min(inventory[progressive_items["Progressive Mail"]], 2) - 1]]
-    else:
-        for mail in reversed(mail_names):
-            if mail in acquired_items:
-                mail_url = icons[mail]
-                break
-
-    shield_url = icons["Blue Shield"]
-    shield_acquired = False
-    shield_names = ["Blue Shield", "Red Shield", "Mirror Shield"]
-    if "Progressive Shield" in acquired_items:
-        shield_url = icons[shield_names[min(inventory[progressive_items["Progressive Shield"]], 3) - 1]]
-        shield_acquired = True
-    else:
-        for shield in reversed(shield_names):
-            if shield in acquired_items:
-                shield_url = icons[shield]
-                shield_acquired = True
-                break
 
     # The single player tracker doesn't care about overworld, underworld, and total checks. Maybe it should?
     sp_areas = ordered_areas[2:15]
 
     return render_template("playerTracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
                            player_name=player_name, room=room, icons=icons, checks_done=checks_done,
-                           checks_in_area=seed_checks_in_area, acquired_items=acquired_items,
-                           sword_url=sword_url, sword_acquired=sword_acquired, gloves_url=gloves_url,
-                           gloves_acquired=gloves_acquired, bow_url=bow_url, bow_acquired=bow_acquired,
+                           checks_in_area=seed_checks_in_area, acquired_items={Items.lookup_id_to_name[id] for id in inventory},
                            small_key_ids=small_key_ids, big_key_ids=big_key_ids, sp_areas=sp_areas,
                            key_locations=player_small_key_locations[tracked_player],
                            big_key_locations=player_big_key_locations[tracked_player],
-                           mail_url=mail_url, shield_url=shield_url, shield_acquired=shield_acquired)
+                           **display_data)
 
 
 @app.route('/tracker/<suuid:tracker>')
-@cache.memoize(timeout=30)  # update every 30 seconds
+@cache.memoize(timeout=60)  # multisave is currently created at most every minute
 def getTracker(tracker: UUID):
     room = Room.get(tracker=tracker)
     if not room:
@@ -500,26 +447,27 @@ def getTracker(tracker: UUID):
     else:
         multisave = {}
     if "hints" in multisave:
-        for key, hintdata in multisave["hints"]:
-            for hint in hintdata:
-                hints[key[0]].add(Hint(*hint))
 
-    for (team, player), locations_checked in multisave.get("location_checks", {}):
+        for (team, slot), slot_hints in multisave["hints"].items():
+            hints[team] |= set(slot_hints)
+
+    for (team, player), locations_checked in multisave.get("location_checks", {}).items():
+        player_locations = locations[player]
         if precollected_items:
             precollected = precollected_items[player]
             for item_id in precollected:
                 attribute_item(inventory, team, player, item_id)
         for location in locations_checked:
-            if (location, player) not in locations or location not in player_location_to_area[player]:
+            if location not in player_locations or location not in player_location_to_area[player]:
                 continue
 
-            item, recipient = locations[location, player]
+            item, recipient = player_locations[location]
             attribute_item(inventory, team, recipient, item)
             checks_done[team][player][player_location_to_area[player][location]] += 1
             checks_done[team][player]["Total"] += 1
 
-    for (team, player), game_state in multisave.get("client_game_state", []):
-        if game_state:
+    for (team, player), game_state in multisave.get("client_game_state", {}).items():
+        if game_state == 30:
             inventory[team][player][106] = 1  # Triforce
 
     group_big_key_locations = set()

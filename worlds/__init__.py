@@ -13,6 +13,7 @@ from .minecraft.Items import lookup_id_to_name as mc
 lookup_any_item_id_to_name = {**alttp, **hk, **Technologies.lookup_id_to_name, **mc}
 assert len(alttp) + len(hk) + len(Technologies.lookup_id_to_name) + len(mc) == len(lookup_any_item_id_to_name)
 lookup_any_item_name_to_id = {name: id for id, name in lookup_any_item_id_to_name.items()}
+# assert len(lookup_any_item_name_to_id) == len(lookup_any_item_id_to_name) # currently broken: Single Arrow
 
 from .alttp import Regions
 from .hk import Locations
@@ -24,6 +25,7 @@ assert len(Regions.lookup_id_to_name) + len(Locations.lookup_id_to_name) + \
        len(Technologies.lookup_id_to_name) + len(Advancements.lookup_id_to_name) == \
        len(lookup_any_location_id_to_name)
 lookup_any_location_name_to_id = {name: id for id, name in lookup_any_location_id_to_name.items()}
+assert len(lookup_any_location_name_to_id) == len(lookup_any_location_id_to_name)
 
 network_data_package = {"lookup_any_location_id_to_name": lookup_any_location_id_to_name,
                         "lookup_any_item_id_to_name": lookup_any_item_id_to_name,
