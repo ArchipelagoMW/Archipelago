@@ -81,6 +81,11 @@ multi_mystery_options:
   # -1 -> Create them without zipping
   # 2 -> Delete the non-zipped one.
   zip_diffs: 2
+  # Zip apmc files for Minecraft
+  # 0 -> Don't zip
+  # 1 -> Create a zip
+  # 2 -> Create a zip and delete apmc files inside of it
+  zip_apmcs: 1
   # Zip spoiler log
   # 1 -> Include the spoiler log in the zip
   # 2 -> Delete the non-zipped one

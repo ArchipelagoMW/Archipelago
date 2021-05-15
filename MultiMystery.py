@@ -40,6 +40,7 @@ if __name__ == "__main__":
         create_spoiler = multi_mystery_options["create_spoiler"]
         zip_roms = multi_mystery_options["zip_roms"]
         zip_diffs = multi_mystery_options["zip_diffs"]
+        zip_apmcs = multi_mystery_options["zip_apmcs"]
         zip_spoiler = multi_mystery_options["zip_spoiler"]
         zip_multidata = multi_mystery_options["zip_multidata"]
         zip_format = multi_mystery_options["zip_format"]
@@ -132,7 +133,7 @@ if __name__ == "__main__":
                     asyncio.run(MultiClient.run_game(os.path.join(output_path, file)))
                     break
 
-        if any((zip_roms, zip_multidata, zip_spoiler, zip_diffs)):
+        if any((zip_roms, zip_multidata, zip_spoiler, zip_diffs, zip_apmcs)):
             import zipfile
 
             compression = {1: zipfile.ZIP_DEFLATED,
@@ -177,6 +178,13 @@ if __name__ == "__main__":
                         remove_zipped_file(file)
 
 
+            def _handle_apmc_file(file: str): 
+                if zip_apmcs:
+                    pack_file(file)
+                    if zip_apmcs == 2: 
+                        remove_zipped_file(file)
+
+
             with concurrent.futures.ThreadPoolExecutor() as pool:
                 futures = []
                 with zipfile.ZipFile(zipname, "w", compression=compression, compresslevel=9) as zf:
@@ -186,6 +194,8 @@ if __name__ == "__main__":
                                 futures.append(pool.submit(_handle_sfc_file, file))
                             elif file.endswith(".apbp"):
                                 futures.append(pool.submit(_handle_diff_file, file))
+                            elif file.endswith(".apmc"):
+                                futures.append(pool.submit(_handle_apmc_file, file))
 
                     if zip_multidata and os.path.exists(os.path.join(output_path, multidataname)):
                         pack_file(multidataname)

@@ -45,7 +45,11 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Very Very Frightening", player), lambda state: state.has("Channeling Book", player) and state.can_use_anvil(player) and state.can_enchant(player))
     set_rule(world.get_location("Hot Stuff", player), lambda state: state.has("Bucket", player) and state.has_iron_ingots(player))
     set_rule(world.get_location("Free the End", player), lambda state: can_complete(state))
-    set_rule(world.get_location("A Furious Cocktail", player), lambda state: state.can_brew_potions(player) and state.has("Fishing Rod", player) and state.can_reach('The Nether', 'Region', player))
+    set_rule(world.get_location("A Furious Cocktail", player), lambda state: state.can_brew_potions(player) and 
+                                                                             state.has("Fishing Rod", player) and # Water Breathing
+                                                                             state.can_reach('The Nether', 'Region', player) and # Regeneration, Fire Resistance, gold nuggets
+                                                                             state.can_reach('Village', 'Region', player) and # Night Vision, Invisibility
+                                                                             state.can_reach('Bring Home the Beacon', 'Location', player)) # Resistance
     set_rule(world.get_location("Best Friends Forever", player), lambda state: True)
     set_rule(world.get_location("Bring Home the Beacon", player), lambda state: state.can_kill_wither(player) and state.has_diamond_pickaxe(player) and 
                                                                                 state.has("Ingot Crafting", player) and state.has("Resource Blocks", player))
@@ -116,7 +120,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Country Lode, Take Me Home", player), lambda state: state.can_reach("Hidden in the Depths", "Location", player) and state.has_gold_ingots(player))
     set_rule(world.get_location("Bee Our Guest", player), lambda state: state.has("Campfire", player) and state.has_bottle_mc(player))
     set_rule(world.get_location("What a Deal!", player), lambda state: True)
-    set_rule(world.get_location("Uneasy Alliance", player), lambda state: state.has_diamond_pickaxe(player))
+    set_rule(world.get_location("Uneasy Alliance", player), lambda state: state.has_diamond_pickaxe(player) and state.has('Fishing Rod', player))
     set_rule(world.get_location("Diamonds!", player), lambda state: state.has("Progressive Tools", player, 2) and state.has_iron_ingots(player))
     set_rule(world.get_location("A Terrible Fortress", player), lambda state: True) # since you don't have to fight anything
     set_rule(world.get_location("A Throwaway Joke", player), lambda state: True) # kill drowned
@@ -134,10 +138,10 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Hot Topic", player), lambda state: state.has("Ingot Crafting", player))
     set_rule(world.get_location("Bake Bread", player), lambda state: True)
     set_rule(world.get_location("The Lie", player), lambda state: state.has_iron_ingots(player) and state.has("Bucket", player))
-    set_rule(world.get_location("On a Rail", player), lambda state: state.has_iron_ingots(player))
+    set_rule(world.get_location("On a Rail", player), lambda state: state.has_iron_ingots(player) and state.has('Progressive Tools', player, 2)) # powered rails
     set_rule(world.get_location("Time to Strike!", player), lambda state: True)
     set_rule(world.get_location("Cow Tipper", player), lambda state: True)
     set_rule(world.get_location("When Pigs Fly", player), lambda state: state.fortress_loot(player) and state.has("Fishing Rod", player) and state.can_adventure(player)) # saddles in fortress chests
-    set_rule(world.get_location("Overkill", player), lambda state: state.can_brew_potions(player) and state.has("Progressive Weapons", player)) # strength 1, stone axe crit
+    set_rule(world.get_location("Overkill", player), lambda state: state.can_brew_potions(player) and (state.has("Progressive Weapons", player) or state.can_reach('The Nether', 'Region', player))) # strength 1 + stone axe crit OR strength 2 + wood axe crit
     set_rule(world.get_location("Librarian", player), lambda state: state.has("Enchanting", player))
     set_rule(world.get_location("Overpowered", player), lambda state: state.has("Resource Blocks", player) and state.has_gold_ingots(player))
