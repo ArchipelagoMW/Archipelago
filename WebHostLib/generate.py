@@ -128,7 +128,7 @@ def wait_seed(seed: UUID):
 
 
 def upload_to_db(folder, owner, sid, race:bool):
-    patches = set()
+    slots = set()
     spoiler = ""
 
     multidata = None
@@ -138,8 +138,8 @@ def upload_to_db(folder, owner, sid, race:bool):
             player_text = file.split("_P", 1)[1]
             player_name = player_text.split("_", 1)[1].split(".", 1)[0]
             player_id = int(player_text.split(".", 1)[0].split("_", 1)[0])
-            patches.add(Patch(data=open(file, "rb").read(),
-                              player_id=player_id, player_name = player_name))
+            slots.add(Slot(data=open(file, "rb").read(),
+                             player_id=player_id, player_name = player_name, game = "A Link to the Past"))
         elif file.endswith(".txt"):
             spoiler = open(file, "rt", encoding="utf-8-sig").read()
         elif file.endswith(".archipelago"):
@@ -147,12 +147,12 @@ def upload_to_db(folder, owner, sid, race:bool):
     if multidata:
         with db_session:
             if sid:
-                seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner,
+                seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner,
                             id=sid, meta=json.dumps({"tags": ["generated"]}))
             else:
-                seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=owner,
+                seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner,
                             meta=json.dumps({"tags": ["generated"]}))
-            for patch in patches:
+            for patch in slots:
                 patch.seed = seed
             if sid:
                 gen = Generation.get(id=sid)

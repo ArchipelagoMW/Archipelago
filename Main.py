@@ -366,8 +366,7 @@ def main(args, seed=None):
                 'U' if world.keyshuffle[player] == "universal" else 'S' if world.keyshuffle[player] else '',
                 'B' if world.bigkeyshuffle[player] else '')
 
-        outfilepname = f'_T{team + 1}' if world.teams > 1 else ''
-        outfilepname += f'_P{player}'
+        outfilepname = f'_P{player}'
         outfilepname += f"_{world.player_names[player][team].replace(' ', '_')}" \
             if world.player_names[player][team] != 'Player%d' % player else ''
         outfilestuffs = {
@@ -410,7 +409,7 @@ def main(args, seed=None):
         rompath = output_path(f'{outfilebase}{outfilepname}{outfilesuffix}.sfc')
         rom.write_to_file(rompath, hide_enemizer=True)
         if args.create_diff:
-            Patch.create_patch_file(rompath)
+            Patch.create_patch_file(rompath, player=player, player_name = world.player_names[player][team])
         return player, team, bytes(rom.name)
 
     pool = concurrent.futures.ThreadPoolExecutor()

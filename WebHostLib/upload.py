@@ -1,13 +1,12 @@
-import json
-import zlib
 import zipfile
-import logging
+import lzma
 import MultiServer
 
 from flask import request, flash, redirect, url_for, session, render_template
-from pony.orm import commit, select
+from pony.orm import flush, select
 
-from WebHostLib import app, Seed, Room, Patch
+from WebHostLib import app, Seed, Room, Slot
+from Utils import parse_yaml
 
 accepted_zip_contents = {"patches": ".apbp",
                          "spoiler": ".txt",
@@ -30,7 +29,7 @@ def uploads():
                 flash('No selected file')
             elif file and allowed_file(file.filename):
                 if file.filename.endswith(".zip"):
-                    patches = set()
+                    slots = set()
                     spoiler = ""
                     multidata = None
                     with zipfile.ZipFile(file, 'r') as zfile:
@@ -40,9 +39,15 @@ def uploads():
                             if file.filename.endswith(banned_zip_contents):
                                 return "Uploaded data contained a rom file, which is likely to contain copyrighted material. Your file was deleted."
                             elif file.filename.endswith(".apbp"):
-                                splitted = file.filename.split("/")[-1][3:].split("P", 1)
-                                player_id, player_name = splitted[1].split(".")[0].split("_")
-                                patches.add(Patch(data=zfile.open(file, "r").read(), player_name=player_name, player_id=player_id))
+                                data = zfile.open(file, "r").read()
+                                yaml_data = parse_yaml(lzma.decompress(data).decode("utf-8-sig"))
+                                if yaml_data["version"] < 2:
+                                    return "Old format cannot be uploaded (outdated .apbp)", 500
+
+                                metadata = yaml_data["meta"]
+                                slots.add(Slot(data=data, player_name=metadata["player_name"],
+                                               player_id=metadata["player_id"],
+                                               game="A Link to the Past"))
                             elif file.filename.endswith(".txt"):
                                 spoiler = zfile.open(file, "r").read().decode("utf-8-sig")
                             elif file.filename.endswith(".archipelago"):
@@ -54,11 +59,11 @@ def uploads():
                                 else:
                                     multidata = zfile.open(file).read()
                         if multidata:
-                            commit()  # commit patches
-                            seed = Seed(multidata=multidata, spoiler=spoiler, patches=patches, owner=session["_id"])
-                            commit()  # create seed
-                            for patch in patches:
-                                patch.seed = seed
+                            flush()  # commit slots
+                            seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=session["_id"])
+                            flush()  # create seed
+                            for slot in slots:
+                                slot.seed = seed
 
                             return redirect(url_for("viewSeed", seed=seed.id))
                         else:
@@ -72,7 +77,7 @@ def uploads():
                         raise
                     else:
                         seed = Seed(multidata=multidata, owner=session["_id"])
-                        commit()  # place into DB and generate ids
+                        flush()  # place into DB and generate ids
                         return redirect(url_for("viewSeed", seed=seed.id))
             else:
                 flash("Not recognized file format. Awaiting a .multidata file.")

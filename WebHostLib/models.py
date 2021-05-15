@@ -9,12 +9,13 @@ STATE_STARTED = 1
 STATE_ERROR = -1
 
 
-class Patch(db.Entity):
+class Slot(db.Entity):
     id = PrimaryKey(int, auto=True)
     player_id = Required(int)
     player_name = Required(str, 16)
-    data = Required(bytes, lazy=True)
+    data = Optional(bytes, lazy=True)
     seed = Optional('Seed')
+    game = Required(str)
 
 
 class Room(db.Entity):
@@ -37,7 +38,7 @@ class Seed(db.Entity):
     multidata = Required(bytes, lazy=True)
     owner = Required(UUID, index=True)
     creation_time = Required(datetime, default=lambda: datetime.utcnow())
-    patches = Set(Patch)
+    slots = Set(Slot)
     spoiler = Optional(LongStr, lazy=True)
     meta = Required(str, default=lambda: "{\"race\": false}")  # additional meta information/tags
 

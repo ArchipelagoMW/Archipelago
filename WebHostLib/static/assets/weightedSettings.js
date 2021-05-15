@@ -473,5 +473,11 @@ const generateGame = (raceMode = false) => {
     race: raceMode ? '1' : '0',
   }).then((response) => {
     window.location.href = response.data.url;
+  }).catch((error) => {
+    const userMessage = document.getElementById('user-message');
+    userMessage.innerText = 'Something went wrong and your game could not be generated.';
+    userMessage.classList.add('visible');
+    window.scrollTo(0, 0);
+    console.error(error);
   });
 };
