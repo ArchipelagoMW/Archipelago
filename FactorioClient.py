@@ -21,7 +21,6 @@ rcon_port = 24242
 rcon_password = ''.join(random.choice(string.ascii_letters) for x in range(32))
 save_name = "Archipelago"
 
-server_args = (save_name, "--rcon-port", rcon_port, "--rcon-password", rcon_password)
 
 logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO)
 options = Utils.get_options()
@@ -34,6 +33,9 @@ if not os.path.exists(executable):
         executable = executable + ".exe"
     else:
         raise FileNotFoundError(executable)
+
+import sys
+server_args = (save_name, "--rcon-port", rcon_port, "--rcon-password", rcon_password, *sys.argv[1:])
 
 threadpool = ThreadPoolExecutor(10)
 
