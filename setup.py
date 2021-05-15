@@ -83,6 +83,7 @@ cx_Freeze.setup(
     executables=exes,
     options={
         "build_exe": {
+            "packages": ["websockets"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],

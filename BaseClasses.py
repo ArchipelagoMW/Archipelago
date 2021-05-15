@@ -44,6 +44,7 @@ class MultiWorld():
         self.shops = []
         self.itempool = []
         self.seed = None
+        self.seed_name: str = "Unavailable"
         self.precollected_items = []
         self.state = CollectionState(self)
         self._cached_entrances = None

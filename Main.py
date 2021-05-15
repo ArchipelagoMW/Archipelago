@@ -67,6 +67,7 @@ def main(args, seed=None):
         world.secure()
     else:
         world.random.seed(world.seed)
+    world.seed_name = str(args.outputname if args.outputname else world.seed)
 
     world.shuffle = args.shuffle.copy()
     world.logic = args.logic.copy()
@@ -314,7 +315,7 @@ def main(args, seed=None):
         balance_multiworld_progression(world)
 
     logger.info('Generating output files.')
-    outfilebase = 'AP_%s' % (args.outputname if args.outputname else world.seed)
+    outfilebase = 'AP_' + world.seed_name
     rom_names = []
 
     def _gen_rom(team: int, player: int):
@@ -422,8 +423,7 @@ def main(args, seed=None):
         for player in world.alttp_player_ids:
             rom_futures.append(pool.submit(_gen_rom, team, player))
     for player in world.factorio_player_ids:
-        mod_futures.append(pool.submit(generate_mod, world, player,
-                                       str(args.outputname if args.outputname else world.seed)))
+        mod_futures.append(pool.submit(generate_mod, world, player))
 
     def get_entrance_to_region(region: Region):
         for entrance in region.entrances:
@@ -525,7 +525,7 @@ def main(args, seed=None):
                 option = getattr(world, option_name)[slot]
                 slots_data[option_name] = int(option.value)
         for slot in world.minecraft_player_ids:
-            slot_data[slot] = fill_minecraft_slot_data(world, slot, str(args.outputname if args.outputname else world.seed))
+            slot_data[slot] = fill_minecraft_slot_data(world, slot)
 
         locations_data: Dict[int, Dict[int, Tuple[int, int]]] = {player: {} for player in world.player_ids}
         for location in world.get_filled_locations():
@@ -559,7 +559,7 @@ def main(args, seed=None):
             "version": tuple(_version_tuple),
             "tags": ["AP"],
             "minimum_versions": minimum_versions,
-            "seed_name": str(args.outputname if args.outputname else world.seed)
+            "seed_name": world.seed_name
         }), 9)
 
         with open(output_path('%s.archipelago' % outfilebase), 'wb') as f:
@@ -578,7 +578,7 @@ def main(args, seed=None):
         multidata_task.result()  # retrieve exception if one exists
     pool.shutdown()  # wait for all queued tasks to complete
     for player in world.minecraft_player_ids: # Doing this after shutdown prevents the .apmc from being generated if there's an error
-        generate_mc_data(world, player, str(args.outputname if args.outputname else world.seed))
+        generate_mc_data(world, player)
     if not args.skip_playthrough:
         logger.info('Calculating playthrough.')
         create_playthrough(world)

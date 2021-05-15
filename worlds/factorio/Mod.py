@@ -46,7 +46,7 @@ rocket_recipes = {
         '{{"copper-cable", 10}, {"iron-plate", 10}, {"wood", 10}}'
 }
 
-def generate_mod(world: MultiWorld, player: int, seedname: str):
+def generate_mod(world: MultiWorld, player: int):
     global template, locale_template, control_template
     with template_load_lock:
         if not template:
@@ -59,7 +59,7 @@ def generate_mod(world: MultiWorld, player: int, seedname: str):
     locations = []
     for location in world.get_filled_locations(player):
         locations.append((location.name, location.item.name, location.item.player))
-    mod_name = f"AP-{seedname}-P{player}-{world.player_names[player][0]}"
+    mod_name = f"AP-{world.seed_name}-P{player}-{world.player_names[player][0]}"
     tech_cost = {0: 0.1,
                  1: 0.25,
                  2: 0.5,
@@ -72,10 +72,12 @@ def generate_mod(world: MultiWorld, player: int, seedname: str):
                      "tech_cost_scale": tech_cost, "custom_data": world.custom_data[player],
                      "tech_tree_layout_prerequisites": world.tech_tree_layout_prerequisites[player],
                      "rocket_recipe" : rocket_recipes[world.max_science_pack[player].value],
-                     "slot_name": world.player_names[player][0],
+                     "slot_name": world.player_names[player][0], "seed_name": world.seed_name,
                      "starting_items": world.starting_items[player]}
+
     for factorio_option in Options.factorio_options:
         template_data[factorio_option] = getattr(world, factorio_option)[player].value
+
     control_code = control_template.render(**template_data)
     data_final_fixes_code = template.render(**template_data)
 

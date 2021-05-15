@@ -21,7 +21,6 @@ rcon_port = 24242
 rcon_password = ''.join(random.choice(string.ascii_letters) for x in range(32))
 save_name = "Archipelago"
 
-server_args = (save_name, "--rcon-port", rcon_port, "--rcon-password", rcon_password)
 
 logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO)
 options = Utils.get_options()
@@ -34,6 +33,9 @@ if not os.path.exists(executable):
         executable = executable + ".exe"
     else:
         raise FileNotFoundError(executable)
+
+import sys
+server_args = (save_name, "--rcon-port", rcon_port, "--rcon-password", rcon_password, *sys.argv[1:])
 
 threadpool = ThreadPoolExecutor(10)
 
@@ -105,6 +107,7 @@ async def game_watcher(ctx: FactorioContext, bridge_file: str):
                         research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
                         victory = data["victory"]
                         ctx.auth = data["slot_name"]
+                        ctx.seed_name = data["seed_name"]
 
                     if not ctx.finished_game and victory:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
