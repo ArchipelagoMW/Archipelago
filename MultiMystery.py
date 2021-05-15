@@ -178,17 +178,18 @@ if __name__ == "__main__":
                         remove_zipped_file(file)
 
 
-            def _handle_apmc_file(file: str): 
+            def _handle_apmc_file(file: str):
                 if zip_apmcs:
                     pack_file(file)
-                    if zip_apmcs == 2: 
+                    if zip_apmcs == 2:
                         remove_zipped_file(file)
 
 
             with concurrent.futures.ThreadPoolExecutor() as pool:
                 futures = []
+                files = os.listdir(output_path)
                 with zipfile.ZipFile(zipname, "w", compression=compression, compresslevel=9) as zf:
-                    for file in os.listdir(output_path):
+                    for file in files:
                         if seed_name in file:
                             if file.endswith(".sfc"):
                                 futures.append(pool.submit(_handle_sfc_file, file))
@@ -196,6 +197,9 @@ if __name__ == "__main__":
                                 futures.append(pool.submit(_handle_diff_file, file))
                             elif file.endswith(".apmc"):
                                 futures.append(pool.submit(_handle_apmc_file, file))
+                            # just handle like a diff file for now
+                            elif file.endswith(".zip"):
+                                futures.append(pool.submit(_handle_diff_file, file))
 
                     if zip_multidata and os.path.exists(os.path.join(output_path, multidataname)):
                         pack_file(multidataname)

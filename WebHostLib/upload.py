@@ -1,5 +1,7 @@
 import zipfile
 import lzma
+import json
+import base64
 import MultiServer
 
 from flask import request, flash, redirect, url_for, session, render_template
@@ -43,11 +45,18 @@ def uploads():
                                 yaml_data = parse_yaml(lzma.decompress(data).decode("utf-8-sig"))
                                 if yaml_data["version"] < 2:
                                     return "Old format cannot be uploaded (outdated .apbp)", 500
-
                                 metadata = yaml_data["meta"]
                                 slots.add(Slot(data=data, player_name=metadata["player_name"],
                                                player_id=metadata["player_id"],
                                                game="A Link to the Past"))
+
+                            elif file.filename.endswith(".apmc"):
+                                data = zfile.open(file, "r").read()
+                                metadata = json.loads(base64.b64decode(data).decode("utf-8"))
+                                slots.add(Slot(data=data, player_name=metadata["player_name"],
+                                               player_id=metadata["player_id"],
+                                               game="Minecraft"))
+
                             elif file.filename.endswith(".txt"):
                                 spoiler = zfile.open(file, "r").read().decode("utf-8-sig")
                             elif file.filename.endswith(".archipelago"):

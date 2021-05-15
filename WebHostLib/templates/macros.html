@@ -10,8 +10,13 @@
     {% if room.seed.slots %}
         <ul>
             {% for patch in room.seed.slots|list|sort(attribute="player_id") %}
+                {% if patch.game == "Minecraft" %}
+                <li><a href="{{ url_for("download_slot_file", seed_id=room.seed.id, player_id=patch.player_id) }}">
+                    APMC for player {{ patch.player_id }} - {{ patch.player_name }}</a></li>
+                {% else %}
                 <li><a href="{{ url_for("download_patch", patch_id=patch.id, room_id=room.id) }}">
                     Patch for player {{ patch.player_id }} - {{ patch.player_name }}</a></li>
+                {% endif %}
             {% endfor %}
         </ul>
     {% endif %}
