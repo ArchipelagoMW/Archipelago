@@ -43,7 +43,7 @@ class Client(Endpoint):
     version = Version(0, 0, 0)
     tags: typing.List[str] = []
 
-    def __init__(self, socket: websockets.server.WebSocketServerProtocol, ctx: Context):
+    def __init__(self, socket: websockets.WebSocketServerProtocol, ctx: Context):
         super().__init__(socket)
         self.auth = False
         self.name = None

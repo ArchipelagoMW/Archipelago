@@ -112,6 +112,7 @@ class CommonContext():
         self.team = None
         self.slot = None
         self.auth = None
+        self.seed_name = None
 
         self.locations_checked: typing.Set[int] = set()
         self.locations_scouted: typing.Set[int] = set()
@@ -278,39 +279,42 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         logger.exception(f"Could not get command from {args}")
         raise
     if cmd == 'RoomInfo':
-        logger.info('--------------------------------')
-        logger.info('Room Information:')
-        logger.info('--------------------------------')
-        version = args["version"]
-        ctx.server_version = tuple(version)
-        version = ".".join(str(item) for item in version)
-
-        logger.info(f'Server protocol version: {version}')
-        logger.info("Server protocol tags: " + ", ".join(args["tags"]))
-        if args['password']:
-            logger.info('Password required')
-        logger.info(f"Forfeit setting: {args['forfeit_mode']}")
-        logger.info(f"Remaining setting: {args['remaining_mode']}")
-        logger.info(f"A !hint costs {args['hint_cost']}% of checks points and you get {args['location_check_points']}"
-                     f" for each location checked. Use !hint for more information.")
-        ctx.hint_cost = int(args['hint_cost'])
-        ctx.check_points = int(args['location_check_points'])
-        ctx.forfeit_mode = args['forfeit_mode']
-        ctx.remaining_mode = args['remaining_mode']
-        if len(args['players']) < 1:
-            logger.info('No player connected')
+        if ctx.seed_name and ctx.seed_name != args["seed_name"]:
+            logger.info("The server is running a different multiworld than your client is. (invalid seed_name)")
         else:
-            args['players'].sort()
-            current_team = -1
-            logger.info('Players:')
-            for network_player in args['players']:
-                if network_player.team != current_team:
-                    logger.info(f'  Team #{network_player.team + 1}')
-                    current_team = network_player.team
-                logger.info('    %s (Player %d)' % (network_player.alias, network_player.slot))
-        if args["datapackage_version"] > network_data_package["version"] or args["datapackage_version"] == 0:
-            await ctx.send_msgs([{"cmd": "GetDataPackage"}])
-        await ctx.server_auth(args['password'])
+            logger.info('--------------------------------')
+            logger.info('Room Information:')
+            logger.info('--------------------------------')
+            version = args["version"]
+            ctx.server_version = tuple(version)
+            version = ".".join(str(item) for item in version)
+
+            logger.info(f'Server protocol version: {version}')
+            logger.info("Server protocol tags: " + ", ".join(args["tags"]))
+            if args['password']:
+                logger.info('Password required')
+            logger.info(f"Forfeit setting: {args['forfeit_mode']}")
+            logger.info(f"Remaining setting: {args['remaining_mode']}")
+            logger.info(f"A !hint costs {args['hint_cost']}% of checks points and you get {args['location_check_points']}"
+                         f" for each location checked. Use !hint for more information.")
+            ctx.hint_cost = int(args['hint_cost'])
+            ctx.check_points = int(args['location_check_points'])
+            ctx.forfeit_mode = args['forfeit_mode']
+            ctx.remaining_mode = args['remaining_mode']
+            if len(args['players']) < 1:
+                logger.info('No player connected')
+            else:
+                args['players'].sort()
+                current_team = -1
+                logger.info('Players:')
+                for network_player in args['players']:
+                    if network_player.team != current_team:
+                        logger.info(f'  Team #{network_player.team + 1}')
+                        current_team = network_player.team
+                    logger.info('    %s (Player %d)' % (network_player.alias, network_player.slot))
+            if args["datapackage_version"] > network_data_package["version"] or args["datapackage_version"] == 0:
+                await ctx.send_msgs([{"cmd": "GetDataPackage"}])
+            await ctx.server_auth(args['password'])
 
     elif cmd == 'DataPackage':
         logger.info("Got new ID/Name Datapackage")

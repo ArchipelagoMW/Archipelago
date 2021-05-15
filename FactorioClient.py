@@ -107,6 +107,7 @@ async def game_watcher(ctx: FactorioContext, bridge_file: str):
                         research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
                         victory = data["victory"]
                         ctx.auth = data["slot_name"]
+                        ctx.seed_name = data["seed_name"]
 
                     if not ctx.finished_game and victory:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])

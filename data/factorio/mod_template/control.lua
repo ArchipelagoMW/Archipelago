@@ -10,6 +10,7 @@ require "util"
 
 FREE_SAMPLES = {{ free_samples }}
 SLOT_NAME = "{{ slot_name }}"
+SEED_NAME = "{{ seed_name }}"
 --SUPPRESS_INVENTORY_EVENTS = false
 
 -- Initialize force data, either from it being created or already being part of the game when the mod was added.
@@ -180,7 +181,8 @@ function dumpInfo(force)
     local data_collection = {
         ["research_done"] = research_done,
         ["victory"] = chain_lookup(global, "forcedata", force.name, "victory"),
-        ["slot_name"] = SLOT_NAME
+        ["slot_name"] = SLOT_NAME,
+        ["seed_name"] = SEED_NAME
         }
 
     for tech_name, tech in pairs(force.technologies) do
