@@ -68,7 +68,7 @@ game: Minecraft
 
 # Shared Options supported by all games:
 accessibility: locations
-progression_balancing: off
+progression_balancing: on
 # Minecraft Specific Options
 
 # Number of advancements required (out of 92 total) to spawn the
@@ -108,7 +108,6 @@ shuffle_structures:
   off: 0
 ```
 
-For more detail on what each setting does check the default `PlayerSettings.yaml` that comes with the Archipelago install.
 
 ## Joining a MultiWorld Game
 
