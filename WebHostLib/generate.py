@@ -40,7 +40,7 @@ def generate(race=False):
                     gen = Generation(
                         options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
                         # convert to json compatible
-                        meta=pickle.dumps({"race": race}), state=STATE_QUEUED,
+                        meta=json.dumps({"race": race}), state=STATE_QUEUED,
                         owner=session["_id"])
                     commit()
 
@@ -80,7 +80,6 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
         erargs.outputname = seedname
         erargs.outputpath = target.name
         erargs.teams = 1
-        erargs.progression_balancing = {}
         erargs.create_diff = True
 
         name_counter = Counter()
@@ -148,10 +147,10 @@ def upload_to_db(folder, owner, sid, race:bool):
         with db_session:
             if sid:
                 seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner,
-                            id=sid, meta=json.dumps({"tags": ["generated"]}))
+                            id=sid, meta=json.dumps({"race": race, "tags": ["generated"]}))
             else:
                 seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner,
-                            meta=json.dumps({"tags": ["generated"]}))
+                            meta=json.dumps({"race": race, "tags": ["generated"]}))
             for patch in slots:
                 patch.seed = seed
             if sid:

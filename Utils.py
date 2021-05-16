@@ -392,6 +392,11 @@ class RestrictedUnpickler(pickle.Unpickler):
         if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint"}:
             import NetUtils
             return getattr(NetUtils, name)
+        if module == "Options":
+            import Options
+            obj = getattr(Options, name)
+            if issubclass(obj, Options.Option):
+                return obj
         # Forbid everything else.
         raise pickle.UnpicklingError("global '%s.%s' is forbidden" %
                                      (module, name))

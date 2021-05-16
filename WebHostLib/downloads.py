@@ -3,7 +3,7 @@ from pony.orm import select
 
 from Patch import update_patch_data
 from WebHostLib import app, Slot, Room, Seed
-
+import zipfile
 
 @app.route("/dl_patch/<suuid:room_id>/<int:patch_id>")
 def download_patch(room_id, patch_id):
@@ -58,6 +58,11 @@ def download_slot_file(seed_id, player_id: int):
 
         if slot_data.game == "Minecraft":
             fname = f"AP_{app.jinja_env.filters['suuid'](seed_id)}_P{slot_data.player_id}_{slot_data.player_name}.apmc"
+        elif slot_data.game == "Factorio":
+            with zipfile.ZipFile(io.BytesIO(slot_data.data)) as zf:
+                for name in zf.namelist():
+                    if name.endswith("info.json"):
+                        fname = name.rsplit("/", 1)[0]+".zip"
         else:
             return "Game download not supported."
         return send_file(io.BytesIO(slot_data.data), as_attachment=True, attachment_filename=fname)
