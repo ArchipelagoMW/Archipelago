@@ -1,5 +1,5 @@
 colorama>=0.4.4
-websockets>=9.0.1
+websockets>=9.0.2
 PyYAML>=5.4.1
 fuzzywuzzy>=0.18.0
 bsdiff4>=1.2.1
