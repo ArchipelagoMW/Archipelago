@@ -418,7 +418,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
 
     return render_template("playerTracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
                            player_name=player_name, room=room, icons=icons, checks_done=checks_done,
-                           checks_in_area=seed_checks_in_area, acquired_items={Items.lookup_id_to_name[id] for id in inventory},
+                           checks_in_area=seed_checks_in_area, acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
                            small_key_ids=small_key_ids, big_key_ids=big_key_ids, sp_areas=sp_areas,
                            key_locations=player_small_key_locations[tracked_player],
                            big_key_locations=player_big_key_locations[tracked_player],

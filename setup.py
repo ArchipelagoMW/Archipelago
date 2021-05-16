@@ -134,17 +134,31 @@ else:
 qusb2sneslog = buildfolder / "QUsb2Snes" / "log.txt"
 if os.path.exists(qusb2sneslog):
     os.remove(qusb2sneslog)
+
 qusb2snesconfig = buildfolder / "QUsb2Snes" / "config.ini"
-if os.path.exists(qusb2snesconfig):
-    os.remove(qusb2snesconfig)
-alttpr_sprites_folder = buildfolder / "data" / "sprites" / "alttpr"
-for file in os.listdir(alttpr_sprites_folder):
-    if file != ".gitignore":
-        os.remove(alttpr_sprites_folder / file)
+# turns on all bridges, disables auto update
+with open(qusb2snesconfig, "w") as f:
+    f.write("""[General]
+SendToSet=true
+checkUpdateCounter=20
+luabridge=true
+LuaBridgeRNGSeed=79120361805329566567327599
+FirstTime=true
+sd2snessupport=true
+retroarchdevice=true
+snesclassic=true""")
+
 
 if signtool:
     for exe in exes:
         print(f"Signing {exe.target_name}")
         os.system(signtool + os.path.join(buildfolder, exe.target_name))
+    print(f"Signing QUsb2Snes")
+    os.system(signtool + os.path.join(buildfolder, "Qusb2Snes", "QUsb2Snes.exe"))
+
+alttpr_sprites_folder = buildfolder / "data" / "sprites" / "alttpr"
+for file in os.listdir(alttpr_sprites_folder):
+    if file != ".gitignore":
+        os.remove(alttpr_sprites_folder / file)
 
 manifest_creation()
