@@ -165,7 +165,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
             while not factorio_queue.empty():
                 msg = factorio_queue.get()
                 factorio_server_logger.info(msg)
-                if not ctx.rcon_client and "Hosting game at IP ADDR:" in msg:
+                if not ctx.rcon_client and "Starting RCON interface at IP ADDR:" in msg:
                     ctx.rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
                     # trigger lua interface confirmation
                     ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
