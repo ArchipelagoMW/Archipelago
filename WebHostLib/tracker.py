@@ -362,7 +362,6 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
         multisave = restricted_loads(room.multisave)
     else:
         multisave = {}
-    checked_locations = set()
 
     # Add items to player inventory
     for (ms_team, ms_player), locations_checked in multisave.get("location_checks", {}).items():
@@ -370,7 +369,6 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
         # Skip teams and players not matching the request
         player_locations = locations[ms_player]
         if ms_team == tracked_team:
-            checked_locations = locations_checked
             # If the player does not have the item, do nothing
             for location in locations_checked:
                 if location in player_locations:
@@ -427,6 +425,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
                                big_key_locations=player_big_key_locations[tracked_player],
                                **display_data)
     else:
+        checked_locations = multisave.get("location_checks", {}).get((tracked_team, tracked_player), set())
         return render_template("genericTracker.html",
                                inventory=inventory,
                                player=tracked_player, team=tracked_team, room=room, player_name=player_name,
