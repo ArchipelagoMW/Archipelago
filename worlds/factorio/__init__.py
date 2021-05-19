@@ -1,5 +1,5 @@
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
-from .Technologies import tech_table, recipe_sources, technology_table, advancement_technologies, required_technologies
+from .Technologies import tech_table, recipe_sources, technology_table, advancement_technologies
 from .Shapes import get_shapes
 
 
