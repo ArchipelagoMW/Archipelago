@@ -24,9 +24,9 @@
                     </thead>
                     <tbody>
 
-                    {% for name, count in acquired_items.items() %}
+                    {% for name, count in inventory.items() %}
                     <tr>
-                        <td>{{ name }}</td>
+                        <td>{{ name | item_name }}</td>
                         <td>{{ count }}</td>
                     </tr>
                     {%- endfor -%}

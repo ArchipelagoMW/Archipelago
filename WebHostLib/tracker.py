@@ -428,7 +428,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
                                **display_data)
     else:
         return render_template("genericTracker.html",
-                               acquired_items={lookup_any_item_id_to_name[id]: count for id, count in inventory.items()},
+                               inventory=inventory,
                                player=tracked_player, team=tracked_team, room=room, player_name=player_name,
                                checked_locations= checked_locations, not_checked_locations = set(locations[tracked_player])-checked_locations)
 
