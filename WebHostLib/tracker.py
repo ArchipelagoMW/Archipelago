@@ -5,7 +5,7 @@ from werkzeug.exceptions import abort
 import datetime
 from uuid import UUID
 
-from worlds.alttp import Items, Regions
+from worlds.alttp import Items
 from WebHostLib import app, cache, Room
 from Utils import restricted_loads
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
@@ -327,7 +327,8 @@ def get_static_room_data(room: Room):
                 player_small_key_locations[item_player].add(ids_small_key[item_id])
 
     result = locations, names, use_door_tracker, player_checks_in_area, player_location_to_area, \
-             player_big_key_locations, player_small_key_locations, multidata["precollected_items"]
+             player_big_key_locations, player_small_key_locations, multidata["precollected_items"], \
+             multidata["games"]
     _multidata_cache[room.seed.id] = result
     return result
 
@@ -344,9 +345,9 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
         abort(404)
 
     # Collect seed information and pare it down to a single player
-    locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, player_big_key_locations, player_small_key_locations, precollected_items = get_static_room_data(room)
+    locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
+    player_big_key_locations, player_small_key_locations, precollected_items, games = get_static_room_data(room)
     player_name = names[tracked_team][tracked_player - 1]
-    seed_checks_in_area = seed_checks_in_area[tracked_player]
     location_to_area = player_location_to_area[tracked_player]
     inventory = collections.Counter()
     checks_done = {loc_name: 0 for loc_name in default_locations}
@@ -361,6 +362,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
         multisave = restricted_loads(room.multisave)
     else:
         multisave = {}
+    checked_locations = set()
 
     # Add items to player inventory
     for (ms_team, ms_player), locations_checked in multisave.get("location_checks", {}).items():
@@ -368,6 +370,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
         # Skip teams and players not matching the request
         player_locations = locations[ms_player]
         if ms_team == tracked_team:
+            checked_locations = locations_checked
             # If the player does not have the item, do nothing
             for location in locations_checked:
                 if location in player_locations:
@@ -377,52 +380,57 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
                     if ms_player == tracked_player: # a check done by the tracked player
                         checks_done[location_to_area[location]] += 1
                         checks_done["Total"] += 1
+    if games[tracked_player] == "A Link to the Past":
+        # Note the presence of the triforce item
+        game_state = multisave.get("client_game_state", {}).get((tracked_team, tracked_player), 0)
+        if game_state == 30:
+            inventory[106] = 1  # Triforce
 
-    # Note the presence of the triforce item
-    game_state = multisave.get("client_game_state", {}).get((tracked_team, tracked_player), 0)
-    if game_state == 30:
-        inventory[106] = 1  # Triforce
+        # Progressive items need special handling for icons and class
+        progressive_items = {
+            "Progressive Sword": 94,
+            "Progressive Glove": 97,
+            "Progressive Bow": 100,
+            "Progressive Mail": 96,
+            "Progressive Shield": 95,
+        }
+        progressive_names = {
+            "Progressive Sword": [None, 'Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
+            "Progressive Glove": [None, 'Power Glove', 'Titan Mitts'],
+            "Progressive Bow": [None, "Bow", "Silver Bow"],
+            "Progressive Mail": ["Green Mail", "Blue Mail", "Red Mail"],
+            "Progressive Shield": [None, "Blue Shield", "Red Shield", "Mirror Shield"]
+        }
 
-    # Progressive items need special handling for icons and class
-    progressive_items = {
-        "Progressive Sword": 94,
-        "Progressive Glove": 97,
-        "Progressive Bow": 100,
-        "Progressive Mail": 96,
-        "Progressive Shield": 95,
-    }
-    progressive_names = {
-        "Progressive Sword": [None, 'Fighter Sword', 'Master Sword', 'Tempered Sword', 'Golden Sword'],
-        "Progressive Glove": [None, 'Power Glove', 'Titan Mitts'],
-        "Progressive Bow": [None, "Bow", "Silver Bow"],
-        "Progressive Mail": ["Green Mail", "Blue Mail", "Red Mail"],
-        "Progressive Shield": [None, "Blue Shield", "Red Shield", "Mirror Shield"]
-    }
-
-    # Determine which icon to use
-    display_data = {}
-    for item_name, item_id in progressive_items.items():
-        level = min(inventory[item_id], len(progressive_names[item_name]))
-        display_name = progressive_names[item_name][level]
-        acquired = True
-        if not display_name:
-            acquired = False
-            display_name = progressive_names[item_name][level+1]
-        base_name = item_name.split(maxsplit=1)[1].lower()
-        display_data[base_name+"_acquired"] = acquired
-        display_data[base_name+"_url"] = icons[display_name]
+        # Determine which icon to use
+        display_data = {}
+        for item_name, item_id in progressive_items.items():
+            level = min(inventory[item_id], len(progressive_names[item_name]))
+            display_name = progressive_names[item_name][level]
+            acquired = True
+            if not display_name:
+                acquired = False
+                display_name = progressive_names[item_name][level+1]
+            base_name = item_name.split(maxsplit=1)[1].lower()
+            display_data[base_name+"_acquired"] = acquired
+            display_data[base_name+"_url"] = icons[display_name]
 
 
-    # The single player tracker doesn't care about overworld, underworld, and total checks. Maybe it should?
-    sp_areas = ordered_areas[2:15]
+        # The single player tracker doesn't care about overworld, underworld, and total checks. Maybe it should?
+        sp_areas = ordered_areas[2:15]
 
-    return render_template("playerTracker.html", inventory=inventory, get_item_name_from_id=get_item_name_from_id,
-                           player_name=player_name, room=room, icons=icons, checks_done=checks_done,
-                           checks_in_area=seed_checks_in_area, acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
-                           small_key_ids=small_key_ids, big_key_ids=big_key_ids, sp_areas=sp_areas,
-                           key_locations=player_small_key_locations[tracked_player],
-                           big_key_locations=player_big_key_locations[tracked_player],
-                           **display_data)
+        return render_template("lttpTracker.html", inventory=inventory,
+                               player_name=player_name, room=room, icons=icons, checks_done=checks_done,
+                               checks_in_area=seed_checks_in_area[tracked_player], acquired_items={lookup_any_item_id_to_name[id] for id in inventory},
+                               small_key_ids=small_key_ids, big_key_ids=big_key_ids, sp_areas=sp_areas,
+                               key_locations=player_small_key_locations[tracked_player],
+                               big_key_locations=player_big_key_locations[tracked_player],
+                               **display_data)
+    else:
+        return render_template("genericTracker.html",
+                               acquired_items={lookup_any_item_id_to_name[id]: count for id, count in inventory.items()},
+                               player=tracked_player, team=tracked_team, room=room, player_name=player_name,
+                               checked_locations= checked_locations, not_checked_locations = set(locations[tracked_player])-checked_locations)
 
 
 @app.route('/tracker/<suuid:tracker>')
@@ -432,7 +440,7 @@ def getTracker(tracker: UUID):
     if not room:
         abort(404)
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, player_big_key_locations, \
-    player_small_key_locations, precollected_items = get_static_room_data(room)
+    player_small_key_locations, precollected_items, games = get_static_room_data(room)
 
     inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1)}
                  for teamnumber, team in enumerate(names)}
@@ -447,7 +455,6 @@ def getTracker(tracker: UUID):
     else:
         multisave = {}
     if "hints" in multisave:
-
         for (team, slot), slot_hints in multisave["hints"].items():
             hints[team] |= set(slot_hints)
 

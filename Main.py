@@ -414,7 +414,7 @@ def main(args, seed=None):
         return player, team, bytes(rom.name)
 
     pool = concurrent.futures.ThreadPoolExecutor()
-    multidata_task = None
+
     check_accessibility_task = pool.submit(world.fulfills_accessibility)
 
     rom_futures = []

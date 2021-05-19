@@ -1,0 +1,63 @@
+{% extends 'tablepage.html' %}
+{% block head %}
+    {{ super() }}
+    <title>{{ player_name }}&apos;s Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/tracker.css") }}"/>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/jquery.scrollsync.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/tracker.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+    {% include 'header/dirtHeader.html' %}
+    <div id="tracker-wrapper" data-tracker="{{ room.tracker|suuid }}/{{ team }}/{{ player }}">
+        <div id="tracker-header-bar">
+            <input placeholder="Search" id="search"/>
+            <span class="info">This tracker will automatically update itself periodically.</span>
+        </div>
+            <div class="table-wrapper">
+                <table class="table non-unique-item-table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for name, count in acquired_items.items() %}
+                    <tr>
+                        <td>{{ name }}</td>
+                        <td>{{ count }}</td>
+                    </tr>
+                    {%- endfor -%}
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-wrapper">
+                <table class="table non-unique-item-table">
+                    <thead>
+                    <tr>
+                        <th>Location</th>
+                        <th>Checked</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for name in checked_locations %}
+                        <tr>
+                            <td>{{ name | location_name}}</td>
+                            <td>✔</td>
+                        </tr>
+                        {%- endfor -%}
+                        {% for name in not_checked_locations %}
+                        <tr>
+                            <td>{{ name | location_name}}</td>
+                            <td></td>
+                        </tr>
+                        {%- endfor -%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
