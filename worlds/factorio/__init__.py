@@ -29,6 +29,11 @@ def factorio_create_regions(world: MultiWorld, player: int):
         tech = Location(player, tech_name, tech_id, nauvis)
         nauvis.locations.append(tech)
         tech.game = "Factorio"
+    location = Location(player, "Rocket Launch", None, nauvis)
+    nauvis.locations.append(location)
+    event = Item("Victory", True, None, player)
+    world.push_item(location, event, False)
+    location.event = location.locked = True
     crash.connect(nauvis)
     world.regions += [menu, nauvis]
 
@@ -55,7 +60,8 @@ def set_rules(world: MultiWorld, player: int, custom_technologies):
                 locations = {world.get_location(requisite, player) for requisite in prequisites}
                 Rules.add_rule(location, lambda state,
                                                 locations=locations: all(state.can_reach(loc) for loc in locations))
+            # get all science pack technologies (but not the ability to craft them)
+        world.get_location("Rocket Launch", player).access_rule = lambda state: all(state.has(technology, player)
+                                                                            for technology in advancement_technologies)
 
-        # get all science pack technologies (but not the ability to craft them)
-        world.completion_condition[player] = lambda state: all(state.has(technology, player)
-                                                               for technology in advancement_technologies)
+    world.completion_condition[player] = lambda state: state.has('Victory', 1)
