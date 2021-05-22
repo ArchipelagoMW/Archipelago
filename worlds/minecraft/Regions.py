@@ -38,12 +38,25 @@ def link_minecraft_structures(world: MultiWorld, player: int):
         return False
 
     def set_pair(exit, struct): 
+        try: 
+            assert exit in exits
+            assert struct in structs
+        except AssertionError as e: 
+            raise Exception(f"Invalid connection: {exit} => {struct} for player {player}")
         pairs[exit] = struct
         exits.remove(exit)
         structs.remove(struct)
 
     # Plando stuff. Remove any utilized exits/structs from the lists. 
     # Raise error if trying to put Nether Fortress in the End. 
+    if world.plando_connections[player]:
+        for connection in world.plando_connections[player]:
+            try:
+                if connection.entrance == 'The End Structure' and connection.exit == 'Nether Fortress': 
+                    raise Exception(f"Cannot place Nether Fortress in the End for player {player}")
+                set_pair(connection.entrance, connection.exit)
+            except Exception as e:
+                raise Exception(f"Could not connect using {connection}") from e
 
     if world.shuffle_structures[player]: 
         # Can't put Nether Fortress in the End
@@ -51,7 +64,7 @@ def link_minecraft_structures(world: MultiWorld, player: int):
             try: 
                 end_struct = world.random.choice([s for s in structs if s != 'Nether Fortress'])
                 set_pair('The End Structure', end_struct)
-            except IndexError as e: 
+            except IndexError as e: # should only happen if structs is emptied by plando
                 raise Exception(f"Plando forced Nether Fortress in the End for player {player}") from e
         world.random.shuffle(structs)
         for exit, struct in zip(exits[:], structs[:]): 

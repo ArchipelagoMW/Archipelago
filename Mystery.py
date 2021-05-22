@@ -564,6 +564,17 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
                 setattr(ret, option_name, option.from_any(get_choice(option_name, weights)))
             else:
                 setattr(ret, option_name, option(option.default))
+        # bad hardcoded behavior to make this work for now    
+        ret.plando_connections = []
+        if "connections" in plando_options:
+            options = weights.get("plando_connections", [])
+            for placement in options:
+                if roll_percentage(get_choice("percentage", placement, 100)):
+                    ret.plando_connections.append(PlandoConnection(
+                        get_choice("entrance", placement),
+                        get_choice("exit", placement),
+                        get_choice("direction", placement, "both")
+                    ))
     else:
         raise Exception(f"Unsupported game {ret.game}")
     return ret
