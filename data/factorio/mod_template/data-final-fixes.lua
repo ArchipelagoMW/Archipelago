@@ -53,7 +53,7 @@ new_tree_copy.icon_size = table.deepcopy(technologies["{{ item_name }}"].icon_si
 {#- use default AP icon if no Factorio graphics exist #}
 new_tree_copy.icon = "__{{ mod_name }}__/graphics/icons/ap.png"
 new_tree_copy.icons = nil
-new_tree_copy.icon_size = 512
+new_tree_copy.icon_size = 128
 {% endif %}
 {#- connect Technology  #}
 {%- if original_tech_name in tech_tree_layout_prerequisites %}
