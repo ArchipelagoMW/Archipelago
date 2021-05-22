@@ -11,7 +11,9 @@ import Utils
 import shutil
 import Options
 from BaseClasses import MultiWorld
-from .Technologies import tech_table
+from .Technologies import tech_table, rocket_recipes
+
+template_env: Optional[jinja2.Environment] = None
 
 template: Optional[jinja2.Template] = None
 locale_template: Optional[jinja2.Template] = None
@@ -28,32 +30,18 @@ base_info = {
     "factorio_version": "1.1"
 }
 
-# TODO: clean this up, probably as a jinja macro; then add logic for the recipes in completion condition
-rocket_recipes = {
-    Options.MaxSciencePack.option_space_science_pack:
-        '{{"rocket-control-unit", 10}, {"low-density-structure", 10}, {"rocket-fuel", 10}}',
-    Options.MaxSciencePack.option_utility_science_pack:
-        '{{"speed-module", 10}, {"steel-plate", 10}, {"solid-fuel", 10}}',
-    Options.MaxSciencePack.option_production_science_pack:
-        '{{"speed-module", 10}, {"steel-plate", 10}, {"solid-fuel", 10}}',
-    Options.MaxSciencePack.option_chemical_science_pack:
-        '{{"advanced-circuit", 10}, {"steel-plate", 10}, {"solid-fuel", 10}}',
-    Options.MaxSciencePack.option_military_science_pack:
-        '{{"defender-capsule", 10}, {"stone-wall", 10}, {"coal", 10}}',
-    Options.MaxSciencePack.option_logistic_science_pack:
-        '{{"electronic-circuit", 10}, {"stone-brick", 10}, {"coal", 10}}',
-    Options.MaxSciencePack.option_automation_science_pack:
-        '{{"copper-cable", 10}, {"iron-plate", 10}, {"wood", 10}}'
-}
 
 def generate_mod(world: MultiWorld, player: int):
     global template, locale_template, control_template
     with template_load_lock:
         if not template:
             mod_template_folder = Utils.local_path("data", "factorio", "mod_template")
-            template = jinja2.Template(open(os.path.join(mod_template_folder, "data-final-fixes.lua")).read())
-            locale_template = jinja2.Template(open(os.path.join(mod_template_folder, "locale", "en", "locale.cfg")).read())
-            control_template = jinja2.Template(open(os.path.join(mod_template_folder, "control.lua")).read())
+            template_env: Optional[jinja2.Environment] = \
+                jinja2.Environment(loader=jinja2.FileSystemLoader([mod_template_folder]))
+
+            template = template_env.get_template("data-final-fixes.lua")
+            locale_template = template_env.get_template(r"locale/en/locale.cfg")
+            control_template = template_env.get_template("control.lua")
     # get data for templates
     player_names = {x: world.player_names[x][0] for x in world.player_ids}
     locations = []

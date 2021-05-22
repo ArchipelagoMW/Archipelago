@@ -1,10 +1,5 @@
-{% macro dict_to_lua(dict) -%}
-{
-    {% for key, value in dict.items() %}
-    ["{{ key }}"] = {{ value | safe }}{% if not loop.last %},{% endif %}
-    {% endfor %}
-}
-{%- endmacro %}
+{% from "macros.lua" import dict_to_lua %}
+-- this file gets written automatically by the Archipelago Randomizer and is in its raw form a Jinja2 Template
 require "lib"
 require "util"
 

@@ -1,7 +1,8 @@
+{% from "macros.lua" import dict_to_recipe %}
 -- this file gets written automatically by the Archipelago Randomizer and is in its raw form a Jinja2 Template
 require('lib')
 
-data.raw["recipe"]["rocket-part"].ingredients = {{ rocket_recipe | safe }}
+data.raw["recipe"]["rocket-part"].ingredients = {{ dict_to_recipe(rocket_recipe) }}
 
 local technologies = data.raw["technology"]
 local original_tech

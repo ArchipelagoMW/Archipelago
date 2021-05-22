@@ -3,8 +3,11 @@ from __future__ import annotations
 from typing import Dict, Set, FrozenSet
 import os
 import json
+
+import Options
 import Utils
 import logging
+import functools
 
 factorio_id = 2 ** 17
 source_folder = Utils.local_path("data", "factorio")
@@ -39,19 +42,9 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
 
     def build_rule(self, player: int):
         logging.debug(f"Building rules for {self.name}")
-        ingredient_rules = []
-        technologies = self.get_prior_technologies()  # technologies that unlock the recipes
-        if technologies:
-            logging.debug(f"Required Technologies: {technologies}")
-            ingredient_rules.append(
-                lambda state, technologies=technologies: all(state.has(technology.name, player)
-                                                             for technology in technologies))
 
-        if ingredient_rules:
-            ingredient_rules = frozenset(ingredient_rules)
-            return lambda state: all(rule(state) for rule in ingredient_rules)
-
-        return always
+        return lambda state, technologies=technologies: all(state.has(f"Automated {ingredient}", player)
+                                                            for ingredient in self.ingredients)
 
     def get_prior_technologies(self) -> Set[Technology]:
         """Get Technologies that have to precede this one to resolve tree connections."""
@@ -229,3 +222,28 @@ for ingredient_name in all_ingredient_names:
 advancement_technologies: Set[str] = set()
 for technologies in required_technologies.values():
     advancement_technologies |= {technology.name for technology in technologies}
+
+@functools.lru_cache(10)
+def get_rocket_requirements(ingredients: Set[str]) -> Set[str]:
+    techs = set()
+    for ingredient in ingredients:
+        techs |= recursively_get_unlocking_technologies(ingredient)
+    return {tech.name for tech in techs}
+
+
+rocket_recipes = {
+    Options.MaxSciencePack.option_space_science_pack:
+        {"rocket-control-unit": 10, "low-density-structure": 10, "rocket-fuel": 10},
+    Options.MaxSciencePack.option_utility_science_pack:
+        {"speed-module": 10, "steel-plate": 10, "solid-fuel": 10},
+    Options.MaxSciencePack.option_production_science_pack:
+        {"speed-module": 10, "steel-plate": 10, "solid-fuel": 10},
+    Options.MaxSciencePack.option_chemical_science_pack:
+        {"advanced-circuit": 10, "steel-plate": 10, "solid-fuel": 10},
+    Options.MaxSciencePack.option_military_science_pack:
+        {"defender-capsule": 10, "stone-wall": 10, "coal": 10},
+    Options.MaxSciencePack.option_logistic_science_pack:
+        {"electronic-circuit": 10, "stone-brick": 10, "coal": 10},
+    Options.MaxSciencePack.option_automation_science_pack:
+        {"copper-cable": 10, "iron-plate": 10, "wood": 10}
+}
