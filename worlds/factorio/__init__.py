@@ -64,4 +64,4 @@ def set_rules(world: MultiWorld, player: int, custom_technologies):
         world.get_location("Rocket Launch", player).access_rule = lambda state: all(state.has(technology, player)
                                                                             for technology in advancement_technologies)
 
-    world.completion_condition[player] = lambda state: state.has('Victory', 1)
+    world.completion_condition[player] = lambda state: state.has('Victory', player)
