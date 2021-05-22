@@ -1,10 +1,7 @@
 import argparse
 import atexit
 import time
-import functools
-import webbrowser
 import multiprocessing
-import socket
 import os
 import subprocess
 import base64
