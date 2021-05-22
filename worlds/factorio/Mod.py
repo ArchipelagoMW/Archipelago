@@ -47,7 +47,7 @@ def generate_mod(world: MultiWorld, player: int):
     locations = []
     for location in world.get_filled_locations(player):
         if location.address:
-            locations.append((location.name, location.item.name, location.item.player))
+            locations.append((location.name, location.item.name, location.item.player, location.item.advancement))
     mod_name = f"AP-{world.seed_name}-P{player}-{world.player_names[player][0]}"
     tech_cost = {0: 0.1,
                  1: 0.25,

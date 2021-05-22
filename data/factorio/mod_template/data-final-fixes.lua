@@ -37,6 +37,12 @@ function set_ap_icon(tech)
     tech.icon_size = 128
 end
 
+function set_ap_unimportant_icon(tech)
+    tech.icon = "__{{ mod_name }}__/graphics/icons/ap_unimportant.png"
+    tech.icons = nil
+    tech.icon_size = 128
+end
+
 function copy_factorio_icon(tech, tech_source)
     tech.icon = table.deepcopy(technologies[tech_source].icon)
     tech.icons = table.deepcopy(technologies[tech_source].icons)
@@ -46,7 +52,7 @@ end
 table.insert(data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories, "crafting-with-fluid")
 
 {# each randomized tech gets set to be invisible, with new nodes added that trigger those #}
-{%- for original_tech_name, item_name, receiving_player in locations %}
+{%- for original_tech_name, item_name, receiving_player, advancement in locations %}
 original_tech = technologies["{{original_tech_name}}"]
 {#- the tech researched by the local player #}
 new_tree_copy = table.deepcopy(template_tech)
@@ -60,7 +66,7 @@ new_tree_copy.unit.count = math.max(1, math.floor(new_tree_copy.unit.count * {{ 
 copy_factorio_icon(new_tree_copy, "{{ item_name }}")
 {%- else -%}
 {#- use default AP icon if no Factorio graphics exist -#}
-set_ap_icon(new_tree_copy)
+{% if advancement %}set_ap_icon(new_tree_copy){% else %}set_ap_unimportant_icon(new_tree_copy){% endif %}
 {%- endif -%}
 {#- connect Technology  #}
 {%- if original_tech_name in tech_tree_layout_prerequisites %}
