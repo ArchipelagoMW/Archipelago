@@ -30,6 +30,18 @@ function prep_copy(new_copy, old_tech)
     end
 end
 
+function set_ap_icon(tech)
+    tech.icon = "__{{ mod_name }}__/graphics/icons/ap.png"
+    tech.icons = nil
+    tech.icon_size = 128
+end
+
+function copy_factorio_icon(tech, tech_source)
+    tech.icon = table.deepcopy(technologies[tech_source].icon)
+    tech.icons = table.deepcopy(technologies[tech_source].icons)
+    tech.icon_size = table.deepcopy(technologies[tech_source].icon_size)
+end
+
 table.insert(data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories, "crafting-with-fluid")
 
 {# each randomized tech gets set to be invisible, with new nodes added that trigger those #}
@@ -40,21 +52,15 @@ new_tree_copy = table.deepcopy(template_tech)
 new_tree_copy.name = "ap-{{ tech_table[original_tech_name] }}-"{# use AP ID #}
 prep_copy(new_tree_copy, original_tech)
 {% if tech_cost != 1 %}
-if new_tree_copy.unit.count then
-    new_tree_copy.unit.count = math.max(1, math.floor(new_tree_copy.unit.count * {{ tech_cost_scale }}))
-end
+new_tree_copy.unit.count = math.max(1, math.floor(new_tree_copy.unit.count * {{ tech_cost_scale }}))
 {% endif %}
-{% if item_name in tech_table and visibility %}
-{#- copy Factorio Technology Icon #}
-new_tree_copy.icon = table.deepcopy(technologies["{{ item_name }}"].icon)
-new_tree_copy.icons = table.deepcopy(technologies["{{ item_name }}"].icons)
-new_tree_copy.icon_size = table.deepcopy(technologies["{{ item_name }}"].icon_size)
-{% else %}
-{#- use default AP icon if no Factorio graphics exist #}
-new_tree_copy.icon = "__{{ mod_name }}__/graphics/icons/ap.png"
-new_tree_copy.icons = nil
-new_tree_copy.icon_size = 128
-{% endif %}
+{%- if item_name in tech_table and visibility -%}
+{#- copy Factorio Technology Icon -#}
+copy_factorio_icon(new_tree_copy, "{{ item_name }}")
+{%- else -%}
+{#- use default AP icon if no Factorio graphics exist -#}
+set_ap_icon(new_tree_copy)
+{%- endif -%}
 {#- connect Technology  #}
 {%- if original_tech_name in tech_tree_layout_prerequisites %}
 {%- for prerequesite in tech_tree_layout_prerequisites[original_tech_name] %}
