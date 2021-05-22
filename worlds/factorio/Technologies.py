@@ -225,7 +225,7 @@ for technologies in required_technologies.values():
 
 @functools.lru_cache(10)
 def get_rocket_requirements(ingredients: Set[str]) -> Set[str]:
-    techs = set()
+    techs = recursively_get_unlocking_technologies("rocket-silo")
     for ingredient in ingredients:
         techs |= recursively_get_unlocking_technologies(ingredient)
     return {tech.name for tech in techs}
