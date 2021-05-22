@@ -1589,9 +1589,10 @@ class Spoiler(object):
                                                          '<=>' if entry['direction'] == 'both' else
                                                          '<=' if entry['direction'] == 'exit' else '=>',
                                                          entry['exit']) for entry in self.entrances.values()]))
-            outfile.write('\n\nMedallions:\n')
-            for dungeon, medallion in self.medallions.items():
-                outfile.write(f'\n{dungeon}: {medallion}')
+            if list(self.world.alttp_player_ids):
+                outfile.write('\n\nMedallions:\n')
+                for dungeon, medallion in self.medallions.items():
+                    outfile.write(f'\n{dungeon}: {medallion}')
             if self.startinventory:
                 outfile.write('\n\nStarting Inventory:\n\n')
                 outfile.write('\n'.join(self.startinventory))
