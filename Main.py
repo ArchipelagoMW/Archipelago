@@ -171,13 +171,14 @@ def main(args, seed=None):
             world.player_names[player].append(name)
 
     logger.info('')
+    for player in world.alttp_player_ids:
+        world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
+
     for player in world.player_ids:
         for item_name in args.startinventory[player]:
             item = Item(item_name, True, lookup_any_item_name_to_id[item_name], player)
+            item.game = world.game[player]
             world.push_precollected(item)
-
-    for player in world.alttp_player_ids:
-        world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
 
     for player in world.player_ids:
 
