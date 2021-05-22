@@ -201,14 +201,9 @@ class TestAdvancements(TestMinecraft):
             ["Hot Tourist Destinations", False, [], ['Ingot Crafting']], 
             ["Hot Tourist Destinations", False, [], ['Flint and Steel']], 
             ["Hot Tourist Destinations", False, [], ['Progressive Tools']], 
-            ["Hot Tourist Destinations", False, [], ['Progressive Weapons']], 
-            ["Hot Tourist Destinations", False, [], ['Progressive Armor', 'Shield']], 
-            ["Hot Tourist Destinations", False, [], ['Fishing Rod']],
             ["Hot Tourist Destinations", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["Hot Tourist Destinations", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Flint and Steel', 'Bucket', 'Fishing Rod']], 
-            ["Hot Tourist Destinations", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Fishing Rod']],
-            ["Hot Tourist Destinations", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Shield', 'Flint and Steel', 'Bucket', 'Fishing Rod']], 
-            ["Hot Tourist Destinations", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Shield', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Fishing Rod']],
+            ["Hot Tourist Destinations", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket']], 
+            ["Hot Tourist Destinations", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools']],
             ])
 
     def test_42015(self):
@@ -1099,16 +1094,17 @@ class TestAdvancements(TestMinecraft):
         self.run_location_tests([
             ["When Pigs Fly", False, []], 
             ["When Pigs Fly", False, [], ['Ingot Crafting']], 
-            ["When Pigs Fly", False, [], ['Flint and Steel']], 
             ["When Pigs Fly", False, [], ['Progressive Tools']], 
             ["When Pigs Fly", False, [], ['Progressive Weapons']], 
             ["When Pigs Fly", False, [], ['Progressive Armor', 'Shield']], 
             ["When Pigs Fly", False, [], ['Fishing Rod']], 
-            ["When Pigs Fly", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
+            ["When Pigs Fly", False, ['Progressive Weapons'], ['Flint and Steel', 'Progressive Weapons', 'Progressive Weapons']], 
+            ["When Pigs Fly", False, ['Progressive Tools', 'Progressive Tools', 'Progressive Weapons'], ['Bucket', 'Progressive Tools', 'Progressive Weapons', 'Progressive Weapons']], 
             ["When Pigs Fly", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Fishing Rod']], 
             ["When Pigs Fly", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Fishing Rod']],
             ["When Pigs Fly", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Shield', 'Fishing Rod']], 
             ["When Pigs Fly", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Shield', 'Fishing Rod']],
+            ["When Pigs Fly", True, ['Progressive Weapons', 'Progressive Weapons', 'Progressive Armor', 'Shield', 'Ingot Crafting', 'Progressive Tools', 'Fishing Rod']],
             ])
 
     def test_42089(self):

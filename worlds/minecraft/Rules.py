@@ -42,7 +42,8 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Who is Cutting Onions?", player), lambda state: state.can_piglin_trade(player))
     set_rule(world.get_location("Oh Shiny", player), lambda state: state.can_piglin_trade(player))
     set_rule(world.get_location("Suit Up", player), lambda state: state.has("Progressive Armor", player) and state.has_iron_ingots(player))
-    set_rule(world.get_location("Very Very Frightening", player), lambda state: state.has("Channeling Book", player) and state.can_use_anvil(player) and state.can_enchant(player))
+    set_rule(world.get_location("Very Very Frightening", player), lambda state: state.has("Channeling Book", player) and state.can_use_anvil(player) and state.can_enchant(player) and \
+        ((world.get_region('Village', player).entrances[0].parent_region.name != 'The End' and state.can_reach('Village', 'Region', player)) or state.can_reach('Zombie Doctor', 'Location', player))) # need villager into the overworld for lightning strike
     set_rule(world.get_location("Hot Stuff", player), lambda state: state.has("Bucket", player) and state.has_iron_ingots(player))
     set_rule(world.get_location("Free the End", player), lambda state: can_complete(state))
     set_rule(world.get_location("A Furious Cocktail", player), lambda state: state.can_brew_potions(player) and 
@@ -58,8 +59,8 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Local Brewery", player), lambda state: state.can_brew_potions(player))
     set_rule(world.get_location("The Next Generation", player), lambda state: can_complete(state))
     set_rule(world.get_location("Fishy Business", player), lambda state: state.has("Fishing Rod", player))
-    set_rule(world.get_location("Hot Tourist Destinations", player), lambda state: state.fortress_loot(player) and state.has("Fishing Rod", player))
-    set_rule(world.get_location("This Boat Has Legs", player), lambda state: state.fortress_loot(player) and state.has("Fishing Rod", player))
+    set_rule(world.get_location("Hot Tourist Destinations", player), lambda state: True)
+    set_rule(world.get_location("This Boat Has Legs", player), lambda state: (state.fortress_loot(player) or state.complete_raid(player)) and state.has("Fishing Rod", player))
     set_rule(world.get_location("Sniper Duel", player), lambda state: state.has("Archery", player))
     set_rule(world.get_location("Nether", player), lambda state: True)
     set_rule(world.get_location("Great View From Up Here", player), lambda state: state.basic_combat(player))
@@ -141,7 +142,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("On a Rail", player), lambda state: state.has_iron_ingots(player) and state.has('Progressive Tools', player, 2)) # powered rails
     set_rule(world.get_location("Time to Strike!", player), lambda state: True)
     set_rule(world.get_location("Cow Tipper", player), lambda state: True)
-    set_rule(world.get_location("When Pigs Fly", player), lambda state: state.fortress_loot(player) and state.has("Fishing Rod", player) and state.can_adventure(player)) # saddles in fortress chests
+    set_rule(world.get_location("When Pigs Fly", player), lambda state: (state.fortress_loot(player) or state.complete_raid(player)) and state.has("Fishing Rod", player) and state.can_adventure(player))
     set_rule(world.get_location("Overkill", player), lambda state: state.can_brew_potions(player) and (state.has("Progressive Weapons", player) or state.can_reach('The Nether', 'Region', player))) # strength 1 + stone axe crit OR strength 2 + wood axe crit
     set_rule(world.get_location("Librarian", player), lambda state: state.has("Enchanting", player))
     set_rule(world.get_location("Overpowered", player), lambda state: state.has("Resource Blocks", player) and state.has_gold_ingots(player))

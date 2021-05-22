@@ -15,7 +15,7 @@ advancement_table = {
     "Who is Cutting Onions?": AdvData(42000, 'Overworld'),
     "Oh Shiny": AdvData(42001, 'Overworld'),
     "Suit Up": AdvData(42002, 'Overworld'),
-    "Very Very Frightening": AdvData(42003, 'Village'),
+    "Very Very Frightening": AdvData(42003, 'Overworld'),
     "Hot Stuff": AdvData(42004, 'Overworld'),
     "Free the End": AdvData(42005, 'The End'),
     "A Furious Cocktail": AdvData(42006, 'Nether Fortress'),
