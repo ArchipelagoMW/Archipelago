@@ -1,6 +1,8 @@
 import os
 import logging
-logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO, filename="log.txt", filemode="w")
+os.makedirs("logs", exist_ok=True)
+logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO)
+logging.getLogger().addHandler(logging.FileHandler(os.path.join("logs", "FactorioClient.txt"), "w"))
 import json
 import string
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
