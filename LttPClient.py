@@ -8,8 +8,6 @@ import base64
 import shutil
 from json import loads, dumps
 
-from random import randrange
-
 from Utils import get_item_name_from_id
 
 exit_func = atexit.register(input, "Press enter to close.")

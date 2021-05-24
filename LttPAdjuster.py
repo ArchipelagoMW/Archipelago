@@ -153,8 +153,8 @@ def adjust(args):
 
 
 def adjustGUI():
-    from tkinter import Checkbutton, OptionMenu, Toplevel, LabelFrame, PhotoImage, Tk, LEFT, RIGHT, BOTTOM, TOP, \
-        StringVar, IntVar, Frame, Label, W, E, X, BOTH, Entry, Spinbox, Button, filedialog, messagebox, ttk
+    from tkinter import Tk, LEFT, BOTTOM, TOP, \
+        StringVar, Frame, Label, X, Entry, Button, filedialog, messagebox, ttk
     from Gui import get_rom_options_frame, get_rom_frame
     from GuiUtils import set_icon
     from argparse import Namespace
