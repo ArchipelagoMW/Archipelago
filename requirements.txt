@@ -8,4 +8,4 @@ appdirs>=1.4.4
 maseya-z3pr>=1.0.0rc1
 xxtea>=2.0.0.post0
 factorio-rcon-py>=1.2.1
-jinja2>=3.0.0
+jinja2>=3.0.1
