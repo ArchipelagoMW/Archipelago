@@ -65,6 +65,7 @@ class FactorioContext(CommonContext):
         super(FactorioContext, self).__init__(*args, **kwargs)
         self.send_index = 0
         self.rcon_client = None
+        self.awaiting_bridge = False
         self.raw_json_text_parser = RawJSONtoTextParser(self)
 
     async def server_auth(self, password_requested):
@@ -86,10 +87,10 @@ class FactorioContext(CommonContext):
     def on_print_json(self, args: dict):
         if not self.found_items and args.get("type", None) == "ItemSend" and args["receiving"] == args["sending"]:
             pass  # don't want info on other player's local pickups.
-        copy_data = copy.deepcopy(args["data"])  # jsontotextparser is destructive currently
-        logger.info(self.jsontotextparser(args["data"]))
+        text = self.raw_json_text_parser(args["data"])
+        logger.info(text)
         if self.rcon_client:
-            cleaned_text = self.raw_json_text_parser(copy_data).replace('"', '')
+            cleaned_text = text.replace('"', '')
             self.rcon_client.send_command(f"/sc game.print(\"Archipelago: {cleaned_text}\")")
 
 async def game_watcher(ctx: FactorioContext, bridge_file: str):
@@ -97,27 +98,29 @@ async def game_watcher(ctx: FactorioContext, bridge_file: str):
     from worlds.factorio.Technologies import lookup_id_to_name
     bridge_counter = 0
     try:
-        while 1:
+        while not ctx.exit_event.is_set():
             if os.path.exists(bridge_file):
                 bridge_logger.info("Found Factorio Bridge file.")
-                while 1:
-                    with open(bridge_file) as f:
-                        data = json.load(f)
-                        research_data = data["research_done"]
-                        research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
-                        victory = data["victory"]
-                        ctx.auth = data["slot_name"]
-                        ctx.seed_name = data["seed_name"]
+                while not ctx.exit_event.is_set():
+                    if ctx.awaiting_bridge:
+                        ctx.awaiting_bridge = False
+                        with open(bridge_file) as f:
+                            data = json.load(f)
+                            research_data = data["research_done"]
+                            research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
+                            victory = data["victory"]
+                            ctx.auth = data["slot_name"]
+                            ctx.seed_name = data["seed_name"]
 
-                    if not ctx.finished_game and victory:
-                        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                        ctx.finished_game = True
+                        if not ctx.finished_game and victory:
+                            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                            ctx.finished_game = True
 
-                    if ctx.locations_checked != research_data:
-                        bridge_logger.info(f"New researches done: "
-                                           f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
-                        ctx.locations_checked = research_data
-                        await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
+                        if ctx.locations_checked != research_data:
+                            bridge_logger.info(f"New researches done: "
+                                               f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
+                            ctx.locations_checked = research_data
+                            await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
                     await asyncio.sleep(1)
             else:
                 bridge_counter += 1
@@ -160,8 +163,9 @@ async def factorio_server_watcher(ctx: FactorioContext):
     stream_factorio_output(factorio_process.stdout, factorio_queue)
     stream_factorio_output(factorio_process.stderr, factorio_queue)
     script_folder = None
+    progression_watcher = None
     try:
-        while 1:
+        while not ctx.exit_event.is_set():
             while not factorio_queue.empty():
                 msg = factorio_queue.get()
                 factorio_server_logger.info(msg)
@@ -177,7 +181,10 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     if os.path.exists(bridge_file):
                         os.remove(bridge_file)
                     logging.info(f"Bridge File Path: {bridge_file}")
-                    asyncio.create_task(game_watcher(ctx, bridge_file), name="FactorioProgressionWatcher")
+                    progression_watcher= asyncio.create_task(
+                        game_watcher(ctx, bridge_file), name="FactorioProgressionWatcher")
+                if not ctx.awaiting_bridge and "Archipelago Bridge File written for game tick " in msg:
+                    ctx.awaiting_bridge = True
             if ctx.rcon_client:
                 while ctx.send_index < len(ctx.items_received):
                     transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
@@ -192,9 +199,15 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     ctx.send_index += 1
             await asyncio.sleep(1)
 
+
     except Exception as e:
         logging.exception(e)
         logging.error("Aborted Factorio Server Bridge")
+
+    finally:
+        factorio_process.terminate()
+        if progression_watcher:
+            await progression_watcher
 
 
 async def main():
