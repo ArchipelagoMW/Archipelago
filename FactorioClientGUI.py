@@ -196,13 +196,16 @@ async def factorio_server_watcher(ctx: FactorioContext):
                         ctx.rcon_client.send_command(f'/ap-get-technology {item_name} {player_name}')
                     ctx.send_index += 1
             await asyncio.sleep(1)
-        factorio_process.terminate()
-        await progression_watcher
+
 
     except Exception as e:
         logging.exception(e)
         logging.error("Aborted Factorio Server Bridge")
 
+    finally:
+        factorio_process.terminate()
+        if progression_watcher:
+            await progression_watcher
 
 async def main():
     ctx = FactorioContext(None, None, True)
@@ -245,7 +248,7 @@ class FactorioManager(App):
         super(FactorioManager, self).__init__()
         self.ctx = ctx
         self.commandprocessor = ctx.command_processor(ctx)
-
+        self.icon = "data/icon.png"
 
     def build(self):
         self.grid = GridLayout()
