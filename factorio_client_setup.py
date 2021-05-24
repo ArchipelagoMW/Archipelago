@@ -1,0 +1,138 @@
+import os
+import shutil
+import sys
+import sysconfig
+from pathlib import Path
+import cx_Freeze
+
+is_64bits = sys.maxsize > 2 ** 32
+
+folder = "exe.{platform}-{version}".format(platform=sysconfig.get_platform(),
+                                           version=sysconfig.get_python_version())
+buildfolder = Path("build_factorio", folder)
+sbuildfolder = str(buildfolder)
+libfolder = Path(buildfolder, "lib")
+library = Path(libfolder, "library.zip")
+print("Outputting to: " + sbuildfolder)
+
+icon = "icon.ico"
+
+if os.path.exists("X:/pw.txt"):
+    print("Using signtool")
+    with open("X:/pw.txt") as f:
+        pw = f.read()
+    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p ' + pw + r' /fd sha256 /tr http://timestamp.digicert.com/ '
+else:
+    signtool = None
+
+from hashlib import sha3_512
+import base64
+
+
+def _threaded_hash(filepath):
+    hasher = sha3_512()
+    hasher.update(open(filepath, "rb").read())
+    return base64.b85encode(hasher.digest()).decode()
+
+
+os.makedirs(buildfolder, exist_ok=True)
+
+
+def manifest_creation():
+    hashes = {}
+    manifestpath = os.path.join(buildfolder, "manifest.json")
+    from concurrent.futures import ThreadPoolExecutor
+    pool = ThreadPoolExecutor()
+    for dirpath, dirnames, filenames in os.walk(buildfolder):
+        for filename in filenames:
+            path = os.path.join(dirpath, filename)
+            hashes[os.path.relpath(path, start=buildfolder)] = pool.submit(_threaded_hash, path)
+    import json
+    from Utils import _version_tuple
+    manifest = {"buildtime": buildtime.isoformat(sep=" ", timespec="seconds"),
+                "hashes": {path: hash.result() for path, hash in hashes.items()},
+                "version": _version_tuple}
+    json.dump(manifest, open(manifestpath, "wt"), indent=4)
+    print("Created Manifest")
+
+
+scripts = {"FactorioClient.py": "ArchipelagoConsoleFactorioClient"}
+
+exes = []
+
+for script, scriptname in scripts.items():
+    exes.append(cx_Freeze.Executable(
+        script=script,
+        target_name=scriptname + ("" if sys.platform == "linux" else ".exe"),
+        icon=icon,
+    ))
+exes.append(cx_Freeze.Executable(
+    script="FactorioClientGUI.py",
+    target_name="ArchipelagoGraphicalFactorioClient" + ("" if sys.platform == "linux" else ".exe"),
+    icon=icon,
+    base="Win32GUI"
+))
+
+import datetime
+
+buildtime = datetime.datetime.utcnow()
+
+cx_Freeze.setup(
+    name="Archipelago",
+    version=f"{buildtime.year}.{buildtime.month}.{buildtime.day}.{buildtime.hour}",
+    description="Archipelago",
+    executables=exes,
+    options={
+        "build_exe": {
+            "packages": ["websockets", "kivy"],
+            "includes": [],
+            "excludes": ["numpy", "Cython", "PySide2", "PIL",
+                         "pandas"],
+            "zip_include_packages": ["*"],
+            "zip_exclude_packages": ["kivy"],
+            "include_files": [],
+            "include_msvcr": True,
+            "replace_paths": [("*", "")],
+            "optimize": 2,
+            "build_exe": buildfolder
+        },
+    },
+)
+
+
+def installfile(path, keep_content=False):
+    lbuildfolder = buildfolder
+    print('copying', path, '->', lbuildfolder)
+    if path.is_dir():
+        lbuildfolder /= path.name
+        if lbuildfolder.is_dir() and not keep_content:
+            shutil.rmtree(lbuildfolder)
+        shutil.copytree(path, lbuildfolder, dirs_exist_ok=True)
+    elif path.is_file():
+        shutil.copy(path, lbuildfolder)
+    else:
+        print('Warning,', path, 'not found')
+
+
+extra_data = ["LICENSE", "data", "host.yaml", "meta.yaml"]
+from kivy_deps import sdl2, glew
+for folder in sdl2.dep_bins+glew.dep_bins:
+    shutil.copytree(folder, buildfolder, dirs_exist_ok=True)
+for data in extra_data:
+    installfile(Path(data))
+
+
+os.makedirs(buildfolder / "Players", exist_ok=True)
+shutil.copyfile("playerSettings.yaml", buildfolder / "Players" / "weightedSettings.yaml")
+
+if signtool:
+    for exe in exes:
+        print(f"Signing {exe.target_name}")
+        os.system(signtool + os.path.join(buildfolder, exe.target_name))
+
+alttpr_sprites_folder = buildfolder / "data" / "sprites" / "alttpr"
+for file in os.listdir(alttpr_sprites_folder):
+    if file != ".gitignore":
+        os.remove(alttpr_sprites_folder / file)
+
+manifest_creation()
