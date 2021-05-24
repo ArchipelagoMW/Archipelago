@@ -133,11 +133,11 @@ script.on_init(function()
 end)
 
 -- for testing
-script.on_event(defines.events.on_tick, function(event)
-    if event.tick%3600 == 300 then
-        dumpInfo(game.forces["player"])
-    end
-end)
+-- script.on_event(defines.events.on_tick, function(event)
+--     if event.tick%3600 == 300 then
+--         dumpInfo(game.forces["player"])
+--     end
+-- end)
 
 -- hook into researches done
 script.on_event(defines.events.on_research_finished, function(event)
