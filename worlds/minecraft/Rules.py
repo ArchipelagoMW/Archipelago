@@ -126,7 +126,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("A Terrible Fortress", player), lambda state: True) # since you don't have to fight anything
     set_rule(world.get_location("A Throwaway Joke", player), lambda state: True) # kill drowned
     set_rule(world.get_location("Minecraft", player), lambda state: True)
-    set_rule(world.get_location("Sticky Situation", player), lambda state: state.has_bottle_mc(player))
+    set_rule(world.get_location("Sticky Situation", player), lambda state: state.has("Campfire", player) and state.has_bottle_mc(player))
     set_rule(world.get_location("Ol' Betsy", player), lambda state: state.craft_crossbow(player))
     set_rule(world.get_location("Cover Me in Debris", player), lambda state: state.has("Progressive Armor", player, 2) and 
                                                                              state.has("8 Netherite Scrap", player, 2) and state.has("Ingot Crafting", player) and

@@ -974,7 +974,8 @@ class TestAdvancements(TestMinecraft):
             ["Sticky Situation", False, []],
             ["Sticky Situation", False, [], ['Bottles']],
             ["Sticky Situation", False, [], ['Ingot Crafting']],
-            ["Sticky Situation", True, ['Bottles', 'Ingot Crafting']],
+            ["Sticky Situation", False, [], ['Campfire']],
+            ["Sticky Situation", True, ['Bottles', 'Ingot Crafting', 'Campfire']],
             ])
 
     def test_42075(self):
