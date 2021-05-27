@@ -38,15 +38,15 @@ def _threaded_hash(filepath):
 os.makedirs(buildfolder, exist_ok=True)
 
 
-def manifest_creation():
+def manifest_creation(folder):
     hashes = {}
-    manifestpath = os.path.join(buildfolder, "manifest.json")
+    manifestpath = os.path.join(folder, "manifest.json")
     from concurrent.futures import ThreadPoolExecutor
     pool = ThreadPoolExecutor()
-    for dirpath, dirnames, filenames in os.walk(buildfolder):
+    for dirpath, dirnames, filenames in os.walk(folder):
         for filename in filenames:
             path = os.path.join(dirpath, filename)
-            hashes[os.path.relpath(path, start=buildfolder)] = pool.submit(_threaded_hash, path)
+            hashes[os.path.relpath(path, start=folder)] = pool.submit(_threaded_hash, path)
     import json
     from Utils import _version_tuple
     manifest = {"buildtime": buildtime.isoformat(sep=" ", timespec="seconds"),
@@ -161,4 +161,79 @@ for file in os.listdir(alttpr_sprites_folder):
     if file != ".gitignore":
         os.remove(alttpr_sprites_folder / file)
 
-manifest_creation()
+manifest_creation(buildfolder)
+
+buildfolder = Path("build_factorio", folder)
+sbuildfolder = str(buildfolder)
+libfolder = Path(buildfolder, "lib")
+library = Path(libfolder, "library.zip")
+print("Outputting Factorio Client to: " + sbuildfolder)
+
+os.makedirs(buildfolder, exist_ok=True)
+
+scripts = {"FactorioClient.py": "ArchipelagoConsoleFactorioClient"}
+
+exes = []
+
+for script, scriptname in scripts.items():
+    exes.append(cx_Freeze.Executable(
+        script=script,
+        target_name=scriptname + ("" if sys.platform == "linux" else ".exe"),
+        icon=icon,
+    ))
+exes.append(cx_Freeze.Executable(
+    script="FactorioClientGUI.py",
+    target_name="ArchipelagoGraphicalFactorioClient" + ("" if sys.platform == "linux" else ".exe"),
+    icon=icon,
+    base="Win32GUI"
+))
+
+import datetime
+
+buildtime = datetime.datetime.utcnow()
+
+cx_Freeze.setup(
+    name="Archipelago Factorio Client",
+    version=f"{buildtime.year}.{buildtime.month}.{buildtime.day}.{buildtime.hour}",
+    description="Archipelago Factorio Client",
+    executables=exes,
+    options={
+        "build_exe": {
+            "packages": ["websockets", "kivy"],
+            "includes": [],
+            "excludes": ["numpy", "Cython", "PySide2", "PIL",
+                         "pandas"],
+            "zip_include_packages": ["*"],
+            "zip_exclude_packages": ["kivy"],
+            "include_files": [],
+            "include_msvcr": True,
+            "replace_paths": [("*", "")],
+            "optimize": 2,
+            "build_exe": buildfolder
+        },
+    },
+)
+
+
+extra_data = ["LICENSE", "data", "host.yaml", "meta.yaml"]
+from kivy_deps import sdl2, glew
+for folder in sdl2.dep_bins+glew.dep_bins:
+    shutil.copytree(folder, buildfolder, dirs_exist_ok=True)
+for data in extra_data:
+    installfile(Path(data))
+
+
+os.makedirs(buildfolder / "Players", exist_ok=True)
+shutil.copyfile("playerSettings.yaml", buildfolder / "Players" / "weightedSettings.yaml")
+
+if signtool:
+    for exe in exes:
+        print(f"Signing {exe.target_name}")
+        os.system(signtool + os.path.join(buildfolder, exe.target_name))
+
+alttpr_sprites_folder = buildfolder / "data" / "sprites" / "alttpr"
+for file in os.listdir(alttpr_sprites_folder):
+    if file != ".gitignore":
+        os.remove(alttpr_sprites_folder / file)
+
+manifest_creation(buildfolder)
