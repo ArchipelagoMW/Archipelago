@@ -1,12 +1,12 @@
 import os
 import logging
+
 os.makedirs("logs", exist_ok=True)
 logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO)
 logging.getLogger().addHandler(logging.FileHandler(os.path.join("logs", "FactorioClient.txt"), "w"))
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
-
 
 import asyncio
 from CommonClient import server_loop, logger
@@ -21,7 +21,7 @@ async def main():
     ui_app = FactorioManager(ctx)
     ui_task = asyncio.create_task(ui_app.async_run(), name="UI")
 
-    await ctx.exit_event.wait() # wait for signal to exit application
+    await ctx.exit_event.wait()  # wait for signal to exit application
     ui_app.stop()
     ctx.server_address = None
     ctx.snes_reconnect_address = None
@@ -35,7 +35,7 @@ async def main():
     if ctx.server_task is not None:
         await ctx.server_task
 
-    while ctx.input_requests > 0: # clear queue for shutdown
+    while ctx.input_requests > 0:  # clear queue for shutdown
         ctx.input_queue.put_nowait(None)
         ctx.input_requests -= 1
 
@@ -96,6 +96,7 @@ class FactorioManager(App):
         except Exception as e:
             logger.exception(e)
 
+
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
         super(LogtoUI, self).__init__(logging.DEBUG)
@@ -103,6 +104,23 @@ class LogtoUI(logging.Handler):
 
     def handle(self, record: logging.LogRecord) -> None:
         self.on_log(record)
+
+
+class UILog(RecycleView):
+    cols = 1
+
+    def __init__(self, *loggers_to_handle, **kwargs):
+        super(UILog, self).__init__(**kwargs)
+        self.data = []
+        for logger in loggers_to_handle:
+            logger.addHandler(LogtoUI(self.on_log))
+
+    def on_log(self, record: logging.LogRecord) -> None:
+        self.data.append({"text": record.getMessage()})
+
+    def update_text_width(self, *_):
+        self.message.text_size = (self.message.width * 0.9, None)
+
 
 Builder.load_string('''
 <TabbedPanel>
@@ -130,20 +148,6 @@ Builder.load_string('''
         orientation: 'vertical'
         spacing: dp(3)
 ''')
-
-class UILog(RecycleView):
-    cols = 1
-    def __init__(self, *loggers_to_handle, **kwargs):
-        super(UILog, self).__init__(**kwargs)
-        self.data = []
-        for logger in loggers_to_handle:
-            logger.addHandler(LogtoUI(self.on_log))
-
-    def on_log(self, record: logging.LogRecord) -> None:
-        self.data.append({"text": record.getMessage()})
-
-    def update_text_width(self, *_):
-        self.message.text_size = (self.message.width * 0.9, None)
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
