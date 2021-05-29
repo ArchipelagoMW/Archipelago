@@ -503,7 +503,7 @@ def main(args, seed=None):
         games = {}
         for slot in world.player_ids:
             if world.game[slot] == "Factorio":
-                client_versions[slot] = (1, 1, 2)
+                client_versions[slot] = (0, 1, 2)
             else:
                 client_versions[slot] = (0, 0, 3)
             games[slot] = world.game[slot]
