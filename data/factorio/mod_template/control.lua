@@ -142,7 +142,9 @@ end)
 -- hook into researches done
 script.on_event(defines.events.on_research_finished, function(event)
     local technology = event.research
-    dumpInfo(technology.force)
+    if technology.researched and string.find(technology.name, "ap%-") == 1 then
+        dumpInfo(technology.force) --is sendable
+    end
     if FREE_SAMPLES == 0 then
         return  -- Nothing else to do
     end
