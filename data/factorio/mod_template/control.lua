@@ -133,16 +133,18 @@ script.on_init(function()
 end)
 
 -- for testing
-script.on_event(defines.events.on_tick, function(event)
-    if event.tick%600 == 300 then
-        dumpInfo(game.forces["player"])
-    end
-end)
+-- script.on_event(defines.events.on_tick, function(event)
+--     if event.tick%3600 == 300 then
+--         dumpInfo(game.forces["player"])
+--     end
+-- end)
 
 -- hook into researches done
 script.on_event(defines.events.on_research_finished, function(event)
     local technology = event.research
-    dumpInfo(technology.force)
+    if technology.researched and string.find(technology.name, "ap%-") == 1 then
+        dumpInfo(technology.force) --is sendable
+    end
     if FREE_SAMPLES == 0 then
         return  -- Nothing else to do
     end
@@ -186,6 +188,7 @@ function dumpInfo(force)
         end
     end
     game.write_file("ap_bridge.json", game.table_to_json(data_collection), false, 0)
+    log("Archipelago Bridge File written for game tick ".. game.tick .. ".")
     -- game.write_file("research_done.json", game.table_to_json(data_collection), false, 0)
     -- game.print("Sent progress to Archipelago.")
 end

@@ -241,25 +241,13 @@ def generate_itempool(world, player: int):
     else:
         world.push_item(world.get_location('Ganon', player), ItemFactory('Triforce', player), False)
 
-    if world.goal[player] in ['triforcehunt', 'localtriforcehunt']:
-        region = world.get_region('Light World', player)
 
-        loc = ALttPLocation(player, "Murahdahla", parent=region)
-        loc.access_rule = lambda state: state.has_triforce_pieces(state.world.treasure_hunt_count[player], player)
-
-        region.locations.append(loc)
-        world.dynamic_locations.append(loc)
-
-        world.clear_location_cache()
-
-        world.push_item(loc, ItemFactory('Triforce', player), False)
-        loc.event = True
-        loc.locked = True
 
     if world.goal[player] == 'icerodhunt':
         world.progression_balancing[player] = False
         loc = world.get_location('Turtle Rock - Boss', player)
-        world.push_item(loc, ItemFactory('Triforce', player), False)
+        world.push_item(loc, ItemFactory('Triforce Piece', player), False)
+        world.treasure_hunt_count[player] = 1
         if world.boss_shuffle[player] != 'none':
             if 'turtle rock-' not in world.boss_shuffle[player]:
                 world.boss_shuffle[player] = f'Turtle Rock-Trinexx;{world.boss_shuffle[player]}'
@@ -295,6 +283,19 @@ def generate_itempool(world, player: int):
         for item in itempool:
             world.push_precollected(ItemFactory(item, player))
 
+    if world.goal[player] in ['triforcehunt', 'localtriforcehunt', 'icerodhunt']:
+        region = world.get_region('Light World', player)
+
+        loc = ALttPLocation(player, "Murahdahla", parent=region)
+        loc.access_rule = lambda state: state.has_triforce_pieces(state.world.treasure_hunt_count[player], player)
+
+        region.locations.append(loc)
+        world.dynamic_locations.append(loc)
+        world.clear_location_cache()
+
+        world.push_item(loc, ItemFactory('Triforce', player), False)
+        loc.event = True
+        loc.locked = True
 
     world.get_location('Ganon', player).event = True
     world.get_location('Ganon', player).locked = True
