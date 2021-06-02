@@ -403,7 +403,7 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int):
         # Determine which icon to use
         display_data = {}
         for item_name, item_id in progressive_items.items():
-            level = min(inventory[item_id], len(progressive_names[item_name]))
+            level = min(inventory[item_id], len(progressive_names[item_name])-1)
             display_name = progressive_names[item_name][level]
             acquired = True
             if not display_name:
