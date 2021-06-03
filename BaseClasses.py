@@ -1467,6 +1467,7 @@ class Spoiler(object):
         return json.dumps(out)
 
     def to_file(self, filename):
+        import Options
         self.parse_data()
 
         def bool_to_text(variable: Union[bool, str]) -> str:
@@ -1490,16 +1491,23 @@ class Spoiler(object):
                         'Yes' if self.metadata['progression_balancing'][player] else 'No'))
                 outfile.write('Accessibility:                   %s\n' % self.metadata['accessibility'][player])
                 if player in self.world.hk_player_ids:
-                    import Options
                     for hk_option in Options.hollow_knight_options:
                         res = getattr(self.world, hk_option)[player]
                         outfile.write(f'{hk_option+":":33}{res}\n')
-                if player in self.world.minecraft_player_ids:
-                    import Options
+
+                elif player in self.world.factorio_player_ids:
+                    for f_option in Options.factorio_options:
+                        logging.info(f_option)
+                        logging.info(getattr(self.world, f_option))
+                        res = getattr(self.world, f_option)[player]
+                        outfile.write(f'{f_option+":":33}{bool_to_text(res) if type(res) == Options.Toggle else res.get_option_name()}\n')
+
+                elif player in self.world.minecraft_player_ids:
                     for mc_option in Options.minecraft_options:
                         res = getattr(self.world, mc_option)[player]
                         outfile.write(f'{mc_option+":":33}{bool_to_text(res) if type(res) == Options.Toggle else res.get_option_name()}\n')
-                if player in self.world.alttp_player_ids:
+
+                elif player in self.world.alttp_player_ids:
                     for team in range(self.world.teams):
                         outfile.write('%s%s\n' % (
                             f"Hash - {self.world.player_names[player][team]} (Team {team + 1}): " if

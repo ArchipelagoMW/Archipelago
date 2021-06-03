@@ -139,6 +139,8 @@ class OptionDict(Option):
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
 
+    def get_option_name(self):
+        return str(self.value)
 
 class Logic(Choice):
     option_no_glitches = 0
