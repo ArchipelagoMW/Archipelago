@@ -492,7 +492,7 @@ def getTracker(tracker: UUID):
         for player, name in enumerate(names, 1):
             player_names[(team, player)] = name
     long_player_names = player_names.copy()
-    for (team, player), alias in multisave.get("name_aliases", []):
+    for (team, player), alias in multisave.get("name_aliases", {}).items():
         player_names[(team, player)] = alias
         long_player_names[(team, player)] = f"{alias} ({long_player_names[(team, player)]})"
 
