@@ -345,12 +345,12 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
                                   f"Enter yes, no or never: ")
         if adjust_wanted and adjust_wanted.startswith("y"):
             if hasattr(adjuster_settings, "sprite_pool"):
-                from Adjuster import AdjusterWorld
+                from LttPAdjuster import AdjusterWorld
                 adjuster_settings.world = AdjusterWorld(getattr(adjuster_settings, "sprite_pool"))
 
             adjusted = True
-            import Adjuster
-            _, romfile = Adjuster.adjust(adjuster_settings)
+            import LttPAdjuster
+            _, romfile = LttPAdjuster.adjust(adjuster_settings)
 
             if hasattr(adjuster_settings, "world"):
                 delattr(adjuster_settings, "world")
