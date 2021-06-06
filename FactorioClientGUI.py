@@ -46,7 +46,7 @@ async def main():
 
 from kivy.app import App
 from kivy.uix.label import Label
-from kivy.base import ExceptionHandler, ExceptionManager
+from kivy.base import ExceptionHandler, ExceptionManager, Config
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.recycleview import RecycleView
@@ -133,6 +133,7 @@ class E(ExceptionHandler):
 ExceptionManager.add_handler(E())
 
 
+Config.set("input", "mouse", "mouse,disable_multitouch")
 Builder.load_string('''
 <TabbedPanel>
     tab_width: 200
