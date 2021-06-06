@@ -45,7 +45,6 @@ if __name__ == "__main__":
         zip_multidata = multi_mystery_options["zip_multidata"]
         zip_format = multi_mystery_options["zip_format"]
         # zip_password = multi_mystery_options["zip_password"] not at this time
-        player_name = multi_mystery_options["player_name"]
         meta_file_path = multi_mystery_options["meta_file_path"]
         weights_file_path = multi_mystery_options["weights_file_path"]
         pre_roll = multi_mystery_options["pre_roll"]
@@ -124,15 +123,6 @@ if __name__ == "__main__":
         spoilername = f"AP_{seed_name}_Spoiler.txt"
         romfilename = ""
 
-        if player_name:
-            for file in os.listdir(output_path):
-                if player_name in file:
-                    import MultiClient
-                    import asyncio
-
-                    asyncio.run(MultiClient.run_game(os.path.join(output_path, file)))
-                    break
-
         if any((zip_roms, zip_multidata, zip_spoiler, zip_diffs, zip_apmcs)):
             import zipfile
 
@@ -167,7 +157,7 @@ if __name__ == "__main__":
             def _handle_sfc_file(file: str):
                 if zip_roms:
                     pack_file(file)
-                    if zip_roms == 2 and player_name.lower() not in file.lower():
+                    if zip_roms == 2:
                         remove_zipped_file(file)
 
 
