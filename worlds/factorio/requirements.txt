@@ -1,0 +1,2 @@
+kivy>=2.0.0
+factorio-rcon-py>=1.2.1

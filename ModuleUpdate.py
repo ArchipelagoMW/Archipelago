@@ -3,11 +3,19 @@ import sys
 import subprocess
 import pkg_resources
 
-requirements_files = ['requirements.txt']
+requirements_files = {'requirements.txt'}
+
 if sys.version_info < (3, 8, 6):
     raise RuntimeError("Incompatible Python Version. 3.8.7+ is supported.")
 
 update_ran = getattr(sys, "frozen", False)  # don't run update if environment is frozen/compiled
+
+if not update_ran:
+    for entry in os.scandir("worlds"):
+        if entry.is_dir():
+            req_file = os.path.join(entry.path, "requirements.txt")
+            if os.path.exists(req_file):
+                requirements_files.add(req_file)
 
 
 def update_command():

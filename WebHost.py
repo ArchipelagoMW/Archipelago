@@ -3,7 +3,7 @@ import multiprocessing
 import logging
 
 import ModuleUpdate
-ModuleUpdate.requirements_files.append(os.path.join("WebHostLib", "requirements.txt"))
+ModuleUpdate.requirements_files.add(os.path.join("WebHostLib", "requirements.txt"))
 ModuleUpdate.update()
 
 from WebHostLib import app as raw_app
