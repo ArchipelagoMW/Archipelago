@@ -12,10 +12,7 @@ def gen_factorio(world: MultiWorld, player: int):
                          tech_id, player)
         tech_item.game = "Factorio"
         if tech_name in static_nodes:
-            loc = world.get_location(tech_name, player)
-            loc.item = tech_item
-            loc.locked = True
-            loc.event = tech_item.advancement
+            world.get_location(tech_name, player).place_locked_item(tech_item)
         else:
             world.itempool.append(tech_item)
     world.custom_data[player]["custom_technologies"] = custom_technologies = set_custom_technologies(world, player)

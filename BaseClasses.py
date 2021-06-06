@@ -1193,6 +1193,14 @@ class Location():
             return True
         return False
 
+    def place_locked_item(self, item: Item):
+        if self.item:
+            raise Exception(f"Location {self} already filled.")
+        self.item = item
+        self.event = item.advancement
+        self.item.world = self.parent_region.world
+        self.locked = True
+
     def __repr__(self):
         return self.__str__()
 
@@ -1497,8 +1505,6 @@ class Spoiler(object):
 
                 elif player in self.world.factorio_player_ids:
                     for f_option in Options.factorio_options:
-                        logging.info(f_option)
-                        logging.info(getattr(self.world, f_option))
                         res = getattr(self.world, f_option)[player]
                         outfile.write(f'{f_option+":":33}{bool_to_text(res) if type(res) == Options.Toggle else res.get_option_name()}\n')
 
