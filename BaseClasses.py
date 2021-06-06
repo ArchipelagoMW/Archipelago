@@ -1589,18 +1589,24 @@ class Spoiler(object):
                                                          '<=>' if entry['direction'] == 'both' else
                                                          '<=' if entry['direction'] == 'exit' else '=>',
                                                          entry['exit']) for entry in self.entrances.values()]))
-            if list(self.world.alttp_player_ids):
+
+            if self.medallions:
                 outfile.write('\n\nMedallions:\n')
                 for dungeon, medallion in self.medallions.items():
                     outfile.write(f'\n{dungeon}: {medallion}')
+
             if self.startinventory:
                 outfile.write('\n\nStarting Inventory:\n\n')
                 outfile.write('\n'.join(self.startinventory))
+
             outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(['%s: %s' % (location, item) for grouping in self.locations.values() for (location, item) in grouping.items()]))
-            outfile.write('\n\nShops:\n\n')
-            outfile.write('\n'.join("{} [{}]\n    {}".format(shop['location'], shop['type'], "\n    ".join(item for item in [shop.get('item_0', None), shop.get('item_1', None), shop.get('item_2', None)] if item)) for shop in self.shops))
-            for player in range(1, self.world.players + 1):
+
+            if self.shops:
+                outfile.write('\n\nShops:\n\n')
+                outfile.write('\n'.join("{} [{}]\n    {}".format(shop['location'], shop['type'], "\n    ".join(item for item in [shop.get('item_0', None), shop.get('item_1', None), shop.get('item_2', None)] if item)) for shop in self.shops))
+
+            for player in self.world.alttp_player_ids:
                 if self.world.boss_shuffle[player] != 'none':
                     bossmap = self.bosses[str(player)] if self.world.players > 1 else self.bosses
                     outfile.write(f'\n\nBosses{(f" ({self.world.get_player_names(player)})" if self.world.players > 1 else "")}:\n')
@@ -1610,19 +1616,20 @@ class Spoiler(object):
             if self.unreachables:
                 outfile.write('\n\nUnreachable Items:\n\n')
                 outfile.write('\n'.join(['%s: %s' % (unreachable.item, unreachable) for unreachable in self.unreachables]))
-            outfile.write('\n\nPaths:\n\n')
 
-            path_listings = []
-            for location, path in sorted(self.paths.items()):
-                path_lines = []
-                for region, exit in path:
-                    if exit is not None:
-                        path_lines.append("{} -> {}".format(region, exit))
-                    else:
-                        path_lines.append(region)
-                path_listings.append("{}\n        {}".format(location, "\n   =>   ".join(path_lines)))
+            if self.paths:
+                outfile.write('\n\nPaths:\n\n')
+                path_listings = []
+                for location, path in sorted(self.paths.items()):
+                    path_lines = []
+                    for region, exit in path:
+                        if exit is not None:
+                            path_lines.append("{} -> {}".format(region, exit))
+                        else:
+                            path_lines.append(region)
+                    path_listings.append("{}\n        {}".format(location, "\n   =>   ".join(path_lines)))
 
-            outfile.write('\n'.join(path_listings))
+                outfile.write('\n'.join(path_listings))
 
 from worlds.alttp.Items import item_name_groups
 from worlds.generic import PlandoItem, PlandoConnection
