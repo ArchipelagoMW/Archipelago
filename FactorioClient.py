@@ -13,7 +13,7 @@ from MultiServer import mark_raw
 
 import Utils
 import random
-from NetUtils import RawJSONtoTextParser, NetworkItem, ClientStatus
+from NetUtils import RawJSONtoTextParser, NetworkItem, ClientStatus, JSONtoTextParser, JSONMessagePart
 
 from worlds.factorio.Technologies import lookup_id_to_name
 
@@ -67,6 +67,7 @@ class FactorioContext(CommonContext):
         self.rcon_client = None
         self.awaiting_bridge = False
         self.raw_json_text_parser = RawJSONtoTextParser(self)
+        self.factorio_json_text_parser = FactorioJSONtoTextParser(self)
 
     async def server_auth(self, password_requested):
         if password_requested and not self.password:
@@ -82,16 +83,18 @@ class FactorioContext(CommonContext):
         logger.info(args["text"])
         if self.rcon_client:
             cleaned_text = args['text'].replace('"', '')
-            self.rcon_client.send_command(f"/sc game.print(\"Archipelago: {cleaned_text}\")")
+            self.rcon_client.send_command(f"/sc game.print(\"[font=default-large-bold]Archipelago:[/font] {cleaned_text}\")")
 
     def on_print_json(self, args: dict):
         if not self.found_items and args.get("type", None) == "ItemSend" and args["receiving"] == args["sending"]:
             pass  # don't want info on other player's local pickups.
-        text = self.raw_json_text_parser(args["data"])
+        text = self.raw_json_text_parser(copy.deepcopy(args["data"]))
         logger.info(text)
         if self.rcon_client:
+            text = self.factorio_json_text_parser(args["data"])
+            logger.info(text)
             cleaned_text = text.replace('"', '')
-            self.rcon_client.send_command(f"/sc game.print(\"Archipelago: {cleaned_text}\")")
+            self.rcon_client.send_command(f"/sc game.print(\"[font=default-large-bold]Archipelago:[/font] {cleaned_text}\")")
 
 async def game_watcher(ctx: FactorioContext, bridge_file: str):
     bridge_logger = logging.getLogger("FactorioWatcher")
@@ -245,3 +248,17 @@ if __name__ == '__main__':
     loop.run_until_complete(main())
     loop.close()
     colorama.deinit()
+
+
+class FactorioJSONtoTextParser(JSONtoTextParser):
+    def _handle_color(self, node: JSONMessagePart):
+        colors = node["color"].split(";")
+        for color in colors:
+            if color in {"red", "green", "blue", "orange", "yellow", "pink", "purple", "white", "black", "gray",
+                         "brown", "cyan", "acid"}:
+                node["text"] = f"[color={node['color']}]{node['text']}[/color]"
+                return self._handle_text(node)
+            elif color == "magenta":
+                node["text"] = f"[color=pink]{node['text']}[/color]"
+            return self._handle_text(node)
+        return self._handle_text(node)
