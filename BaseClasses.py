@@ -1229,7 +1229,7 @@ class Item():
     zora_credit_text = None
     fluteboy_credit_text = None
 
-    def __init__(self, name: str, advancement: bool, code: int, player: int):
+    def __init__(self, name: str, advancement: bool, code: Optional[int], player: int):
         self.name = name
         self.advancement = advancement
         self.player = player

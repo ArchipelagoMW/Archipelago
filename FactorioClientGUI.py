@@ -120,8 +120,6 @@ class UILog(RecycleView):
     def on_log(self, record: logging.LogRecord) -> None:
         self.data.append({"text": record.getMessage()})
 
-    def update_text_width(self, *_):
-        self.message.text_size = (self.message.width * 0.9, None)
 
 class E(ExceptionHandler):
     def handle_exception(self, inst):
