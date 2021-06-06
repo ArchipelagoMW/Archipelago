@@ -7,7 +7,7 @@
 </div>
 
 ## Software requerido
-- [MultiWorld Utilities](https://github.com/Berserker66/MultiWorld-Utilities/releases)
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
 - [QUsb2Snes](https://github.com/Skarsnik/QUsb2snes/releases) (Incluido en Multiworld Utilities)
 - Hardware o software capaz de cargar y ejecutar archivos de ROM de SNES
     - Un emulador capaz de ejecutar scripts Lua
@@ -20,7 +20,7 @@
 
 ### Instalación en Windows
 1. Descarga e instala MultiWorld Utilities desde el enlace anterior, asegurando que instalamos la versión más reciente.
-**El archivo esta localizado en la sección "assets" en la parte inferior de la información de versión**. Si tu intención es jugar la versión normal de multiworld, necesitarás el archivo `Setup.BerserkerMultiWorld.exe`
+**El archivo esta localizado en la sección "assets" en la parte inferior de la información de versión**. Si tu intención es jugar la versión normal de multiworld, necesitarás el archivo `Setup.Archipelago.exe`
     - Si estas interesado en jugar la variante que aleatoriza las puertas internas de las mazmorras, necesitaras bajar 'Setup.BerserkerMultiWorld.Doors.exe'
     - Durante el proceso de instalación, se te pedirá donde esta situado tu archivo ROM japonés v1.0. Si ya habías instalado este software con anterioridad y simplemente estas actualizando, no se te pedirá la localización del archivo una segunda vez.
     - Puede ser que el programa pida la instalación de Microsoft Visual C++. Si ya lo tienes en tu ordenador (posiblemente por que un juego de Steam ya lo haya instalado), el instalador no te pedirá su instalación.
@@ -136,7 +136,7 @@ por unirte satisfactoriamente a una partida de multiworld!
 
 ## Hospedando una partida de multiworld
 La manera recomendad para hospedar una partida es usar el servicio proveído en
-[el sitio web](https://berserkermulti.world/generate). El proceso es relativamente sencillo:
+[el sitio web](/generate). El proceso es relativamente sencillo:
 
 1. Recolecta los ficheros YAML de todos los jugadores que participen.
 2. Crea un fichero ZIP conteniendo esos ficheros.

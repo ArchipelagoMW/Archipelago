@@ -2,7 +2,7 @@
 
 ## Configuration
 1. Plando features have to be enabled first, before they can be used (opt-in).
-2. To do so, go to your installation directory (Windows default: `C:\ProgramData\BerserkerMultiWorld`), 
+2. To do so, go to your installation directory (Windows default: `C:\ProgramData\Archipelago`), 
    then open the host.yaml file with a text editor.
 3. In it, you're looking for the option key `plando_options`. To enable all plando modules you can set the
    value to  
@@ -13,7 +13,7 @@
 ### Bosses
 
 - This module is enabled by default and available to be used on 
-  [https://archipelago.gg/generate](https://archipelago.gg/generate)
+  [https://archipelago.gg/generate](/generate)
 - Plando versions of boss shuffles can be added like any other boss shuffle option in a yaml and weighted.
 - Boss Plando works as a list of instructions from left to right, if any arenas are empty at the end, 
   it defaults to vanilla

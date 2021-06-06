@@ -7,7 +7,7 @@
 </div>
 
 ## Logiciels requis
-- [Utilitaires du MultiWorld](https://github.com/Berserker66/MultiWorld-Utilities/releases)
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
 - [QUsb2Snes](https://github.com/Skarsnik/QUsb2snes/releases) (Inclus dans les utilitaires précédents)
 - Une solution logicielle ou matérielle capable de charger et de lancer des fichiers ROM de SNES
     - Un émulateur capable d'éxécuter des scripts Lua

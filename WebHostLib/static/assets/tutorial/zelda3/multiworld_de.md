@@ -1,7 +1,7 @@
 # A Link to the Past Randomizer Setup Guide
 
 ## Benötigte Software
-- [MultiWorld Utilities](https://github.com/Berserker66/MultiWorld-Utilities/releases)
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
 - [QUsb2Snes](https://github.com/Skarsnik/QUsb2snes/releases) (Included in the above Utilities)
 - Hardware oder Software zum Laden und Abspielen von SNES Rom-Dateien
     - Ein Emulator, der lua-scripts abspielen kann
@@ -15,7 +15,7 @@
 ### Windows
 1. Lade die Multiworld Utilities herunter und führe die Installation aus. Sei sicher, dass du immer die
 aktuellste Version installiert hast.**Die Datei befindet sich im "assets"-Kasten unter der jeweiligen Versionsinfo!**.
-Für normale Multiworld-Spiele lädst du die `Setup.BerserkerMultiworld.exe` herunter.
+Für normale Multiworld-Spiele lädst du die `Setup.Archipelago.exe` herunter.
     - Für den Doorrandomizer muss die alternative doors-Variante geladen werden. 
     - Während der Installation fragt dich das Programm nach der japanischen 1.0 ROM-Datei. Wenn du die Software	
       bereits installiert hast und einfach nur updaten willst, wirst du nicht nochmal danach gefragt.

@@ -7,7 +7,7 @@
 </div>
 
 ## Required Software
-- [MultiWorld Utilities](https://github.com/Berserker66/MultiWorld-Utilities/releases)
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
 - [QUsb2Snes](https://github.com/Skarsnik/QUsb2snes/releases) (Included in the above Utilities)
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of running Lua scripts
@@ -21,7 +21,7 @@
 ### Windows Setup
 1. Download and install the MultiWorld Utilities from the link above, making sure to install the most recent version.
 **The file is located in the assets section at the bottom of the version information**. If you intend to play normal
-multiworld games, you want `Setup.BerserkerMultiWorld.exe`
+multiworld games, you want `Setup.Archipelago.exe`
     - If you intend to play the doors variant of multiworld, you will want to download the alternate doors file.
     - During the installation process, you will be asked to browse for your Japanese 1.0 ROM file. If you have
       installed this software before and are simply upgrading now, you will not be prompted to locate your
@@ -144,7 +144,7 @@ on successfully joining a multiworld game!
 
 ## Hosting a MultiWorld game
 The recommended way to host a game is to use the hosting service provided on
-[the website](https://berserkermulti.world/generate). The process is relatively simple:
+[the website](/generate). The process is relatively simple:
 
 1. Collect YAML files from your players.
 2. Create a zip file containing your players' YAML files.
