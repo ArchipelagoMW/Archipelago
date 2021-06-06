@@ -55,11 +55,12 @@ tech_tree_layout:
   small_funnels: 1
   medium_funnels: 1
   large_funnels: 1
-recipe_time:
+recipe_time: # randomize the time it takes for any recipe to craft, this includes smelting, chemical lab, hand crafting etc.
   vanilla: 1
   fast: 0 # 25% to 100% of original time
   normal: 0 # 50 % to 200% of original time
   slow: 0 # 100% to 400% of original time
+  chaos: 0 # 25% to 400% of original time
 max_science_pack:
   automation_science_pack: 0
   logistic_science_pack: 0

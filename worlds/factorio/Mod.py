@@ -30,6 +30,14 @@ base_info = {
     "factorio_version": "1.1"
 }
 
+recipe_time_scales = {
+    # using random.triangular
+    Options.RecipeTime.option_fast: (0.25, 1),
+    Options.RecipeTime.option_normal: (0.5, 2, 1),
+    Options.RecipeTime.option_slow: (1, 4),
+    Options.RecipeTime.option_chaos: (0.25, 4, 1),
+    Options.RecipeTime.option_vanilla: None
+}
 
 def generate_mod(world: MultiWorld, player: int):
     global template, locale_template, control_template
@@ -63,7 +71,8 @@ def generate_mod(world: MultiWorld, player: int):
                      "rocket_recipe" : rocket_recipes[world.max_science_pack[player].value],
                      "slot_name": world.player_names[player][0], "seed_name": world.seed_name,
                      "starting_items": world.starting_items[player], "recipes": recipes,
-                     "recipe_time": world.recipe_time[player], "random": world.random}
+                     "random": world.random,
+                     "recipe_time_scale": recipe_time_scales[world.recipe_time[player].value]}
 
     for factorio_option in Options.factorio_options:
         template_data[factorio_option] = getattr(world, factorio_option)[player].value

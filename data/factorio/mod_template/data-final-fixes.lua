@@ -85,8 +85,8 @@ table.insert(new_tree_copy.prerequisites, "ap-{{ tech_table[prerequesite] }}-")
 {#- add new Technology to game #}
 data:extend{new_tree_copy}
 {% endfor %}
-{% if recipe_time %}
+{% if recipe_time_scale %}
 {%- for recipe in recipes %}
-adjust_energy("{{ recipe }}", {{ 0.01 * random.randint(recipe_time*25, recipe_time*100) }})
+adjust_energy("{{ recipe }}", {{ random.triangular(*recipe_time_scale) }})
 {%- endfor -%}
 {% endif %}

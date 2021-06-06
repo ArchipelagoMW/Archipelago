@@ -334,6 +334,7 @@ class RecipeTime(Choice):
     option_fast = 1
     option_normal = 2
     option_slow = 4
+    option_chaos = 5
 
 class FactorioStartItems(OptionDict):
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
