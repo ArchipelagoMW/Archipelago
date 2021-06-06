@@ -95,7 +95,6 @@ class FactorioContext(CommonContext):
         logger.info(text)
         if self.rcon_client:
             text = self.factorio_json_text_parser(args["data"])
-            logger.info(text)
             cleaned_text = text.replace('"', '')
             self.rcon_client.send_command(f"/sc game.print(\"[font=default-large-bold]Archipelago:[/font] "
                                           f"{cleaned_text}\")")
