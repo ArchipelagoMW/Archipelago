@@ -247,14 +247,6 @@ async def main():
     await input_task
 
 
-if __name__ == '__main__':
-    colorama.init()
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
-    loop.close()
-    colorama.deinit()
-
-
 class FactorioJSONtoTextParser(JSONtoTextParser):
     def _handle_color(self, node: JSONMessagePart):
         colors = node["color"].split(";")
@@ -267,3 +259,11 @@ class FactorioJSONtoTextParser(JSONtoTextParser):
                 node["text"] = f"[color=pink]{node['text']}[/color]"
             return self._handle_text(node)
         return self._handle_text(node)
+
+
+if __name__ == '__main__':
+    colorama.init()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
+    loop.close()
+    colorama.deinit()
