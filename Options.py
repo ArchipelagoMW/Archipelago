@@ -329,6 +329,11 @@ class Visibility(Choice):
     option_sending = 1
     default = 1
 
+class RecipeTime(Choice):
+    option_vanilla = 0
+    option_fast = 1
+    option_normal = 2
+    option_slow = 4
 
 class FactorioStartItems(OptionDict):
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
@@ -340,7 +345,8 @@ factorio_options: typing.Dict[str, type(Option)] = {"max_science_pack": MaxScien
                                                     "free_samples": FreeSamples,
                                                     "visibility": Visibility,
                                                     "random_tech_ingredients": Toggle,
-                                                    "starting_items": FactorioStartItems}
+                                                    "starting_items": FactorioStartItems,
+                                                    "recipe_time": RecipeTime}
 
 
 class AdvancementGoal(Choice):

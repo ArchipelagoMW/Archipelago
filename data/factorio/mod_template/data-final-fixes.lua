@@ -49,6 +49,14 @@ function copy_factorio_icon(tech, tech_source)
     tech.icon_size = table.deepcopy(technologies[tech_source].icon_size)
 end
 
+function adjust_energy(recipe_name, factor)
+    local energy = data.raw.recipe[recipe_name].energy_required
+    if (energy == nil) then
+        energy = 1
+    end
+    data.raw.recipe[recipe_name].energy_required = energy * factor
+end
+
 table.insert(data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories, "crafting-with-fluid")
 
 {# each randomized tech gets set to be invisible, with new nodes added that trigger those #}
@@ -76,5 +84,9 @@ table.insert(new_tree_copy.prerequisites, "ap-{{ tech_table[prerequesite] }}-")
 {% endif -%}
 {#- add new Technology to game #}
 data:extend{new_tree_copy}
-
 {% endfor %}
+{% if recipe_time %}
+{%- for recipe in recipes %}
+adjust_energy("{{ recipe }}", {{ 0.01 * random.randint(recipe_time*25, recipe_time*100) }})
+{%- endfor -%}
+{% endif %}

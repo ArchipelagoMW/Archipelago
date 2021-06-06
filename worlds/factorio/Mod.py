@@ -11,7 +11,7 @@ import Utils
 import shutil
 import Options
 from BaseClasses import MultiWorld
-from .Technologies import tech_table, rocket_recipes
+from .Technologies import tech_table, rocket_recipes, recipes
 
 template_env: Optional[jinja2.Environment] = None
 
@@ -62,7 +62,8 @@ def generate_mod(world: MultiWorld, player: int):
                      "tech_tree_layout_prerequisites": world.tech_tree_layout_prerequisites[player],
                      "rocket_recipe" : rocket_recipes[world.max_science_pack[player].value],
                      "slot_name": world.player_names[player][0], "seed_name": world.seed_name,
-                     "starting_items": world.starting_items[player]}
+                     "starting_items": world.starting_items[player], "recipes": recipes,
+                     "recipe_time": world.recipe_time[player], "random": world.random}
 
     for factorio_option in Options.factorio_options:
         template_data[factorio_option] = getattr(world, factorio_option)[player].value

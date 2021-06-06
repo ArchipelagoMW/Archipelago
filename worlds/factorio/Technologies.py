@@ -117,13 +117,14 @@ for technology, data in raw.items():
 
 del (raw)
 lookup_id_to_name: Dict[int, str] = {item_id: item_name for item_name, item_id in tech_table.items()}
-
+recipes = {}
 all_product_sources: Dict[str, Set[Recipe]] = {"character": set()}
 for recipe_name, recipe_data in raw_recipes.items():
     # example:
     # "accumulator":{"ingredients":["iron-plate","battery"],"products":["accumulator"],"category":"crafting"}
 
     recipe = Recipe(recipe_name, recipe_data["category"], set(recipe_data["ingredients"]), set(recipe_data["products"]))
+    recipes[recipe_name] = Recipe
     if recipe.products.isdisjoint(recipe.ingredients) and "empty-barrel" not in recipe.products:  # prevents loop recipes like uranium centrifuging
         for product_name in recipe.products:
             all_product_sources.setdefault(product_name, set()).add(recipe)
