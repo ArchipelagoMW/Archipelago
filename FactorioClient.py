@@ -1,8 +1,10 @@
+from __future__ import annotations
 import os
 import logging
 import json
 import string
 import copy
+import sys
 from concurrent.futures import ThreadPoolExecutor
 
 import colorama
@@ -21,7 +23,6 @@ rcon_port = 24242
 rcon_password = ''.join(random.choice(string.ascii_letters) for x in range(32))
 save_name = "Archipelago"
 
-
 logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO)
 options = Utils.get_options()
 executable = options["factorio_options"]["executable"]
@@ -34,13 +35,14 @@ if not os.path.exists(executable):
     else:
         raise FileNotFoundError(executable)
 
-import sys
 server_args = (save_name, "--rcon-port", rcon_port, "--rcon-password", rcon_password, *sys.argv[1:])
 
-threadpool = ThreadPoolExecutor(10)
+thread_pool = ThreadPoolExecutor(10)
 
 
 class FactorioCommandProcessor(ClientCommandProcessor):
+    ctx: FactorioContext
+
     @mark_raw
     def _cmd_factorio(self, text: str) -> bool:
         """Send the following command to the bound Factorio Server."""
@@ -83,7 +85,8 @@ class FactorioContext(CommonContext):
         logger.info(args["text"])
         if self.rcon_client:
             cleaned_text = args['text'].replace('"', '')
-            self.rcon_client.send_command(f"/sc game.print(\"[font=default-large-bold]Archipelago:[/font] {cleaned_text}\")")
+            self.rcon_client.send_command(f"/sc game.print(\"[font=default-large-bold]Archipelago:[/font] "
+                                          f"{cleaned_text}\")")
 
     def on_print_json(self, args: dict):
         if not self.found_items and args.get("type", None) == "ItemSend" and args["receiving"] == args["sending"]:
@@ -94,7 +97,9 @@ class FactorioContext(CommonContext):
             text = self.factorio_json_text_parser(args["data"])
             logger.info(text)
             cleaned_text = text.replace('"', '')
-            self.rcon_client.send_command(f"/sc game.print(\"[font=default-large-bold]Archipelago:[/font] {cleaned_text}\")")
+            self.rcon_client.send_command(f"/sc game.print(\"[font=default-large-bold]Archipelago:[/font] "
+                                          f"{cleaned_text}\")")
+
 
 async def game_watcher(ctx: FactorioContext, bridge_file: str):
     bridge_logger = logging.getLogger("FactorioWatcher")
@@ -120,8 +125,9 @@ async def game_watcher(ctx: FactorioContext, bridge_file: str):
                             ctx.finished_game = True
 
                         if ctx.locations_checked != research_data:
-                            bridge_logger.info(f"New researches done: "
-                                               f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
+                            bridge_logger.info(
+                                f"New researches done: "
+                                f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
                             ctx.locations_checked = research_data
                             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
                     await asyncio.sleep(1)
@@ -184,7 +190,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     if os.path.exists(bridge_file):
                         os.remove(bridge_file)
                     logging.info(f"Bridge File Path: {bridge_file}")
-                    progression_watcher= asyncio.create_task(
+                    progression_watcher = asyncio.create_task(
                         game_watcher(ctx, bridge_file), name="FactorioProgressionWatcher")
                 if not ctx.awaiting_bridge and "Archipelago Bridge File written for game tick " in msg:
                     ctx.awaiting_bridge = True
@@ -201,7 +207,6 @@ async def factorio_server_watcher(ctx: FactorioContext):
                         ctx.rcon_client.send_command(f'/ap-get-technology {item_name} {player_name}')
                     ctx.send_index += 1
             await asyncio.sleep(1)
-
 
     except Exception as e:
         logging.exception(e)
