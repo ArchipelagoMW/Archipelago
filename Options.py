@@ -311,8 +311,16 @@ class TechTreeLayout(Choice):
     option_single = 0
     option_small_diamonds = 1
     option_medium_diamonds = 2
-    option_pyramid = 3
-    option_funnel = 4
+    option_large_diamonds = 3
+    option_small_pyramids = 4
+    option_medium_pyramids = 5
+    option_large_pyramids = 6
+    option_small_funnels = 7
+    option_medium_funnels = 8
+    option_large_funnels = 9
+    option_funnels = 4
+    alias_pyramid = 6
+    alias_funnel = 9
     default = 0
 
 

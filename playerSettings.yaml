@@ -25,7 +25,6 @@ name: YourName{number} # Your name in-game. Spaces will be replaced with undersc
 #{NUMBER} will be replaced with the counter value of the name if the counter value is greater than 1.
 game:
   A Link to the Past: 1
-  Hollow Knight: 1
   Factorio: 1
   Minecraft: 1
 # Shared Options supported by all games:
@@ -49,8 +48,13 @@ tech_tree_layout:
   single: 1
   small_diamonds: 1
   medium_diamonds: 1
-  pyramid: 1
-  funnel: 1
+  large_diamonds: 1
+  small_pyramids: 1
+  medium_pyramids: 1
+  large_pyramids: 1
+  small_funnels: 1
+  medium_funnels: 1
+  large_funnels: 1
 max_science_pack:
   automation_science_pack: 0
   logistic_science_pack: 0
