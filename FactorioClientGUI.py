@@ -1,9 +1,13 @@
 import os
 import logging
-
+import sys
 os.makedirs("logs", exist_ok=True)
-logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO)
-logging.getLogger().addHandler(logging.FileHandler(os.path.join("logs", "FactorioClient.txt"), "w"))
+if getattr(sys, "frozen", False):
+    logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
+                        filename=os.path.join("logs", "FactorioClient.txt"), filemode="w")
+else:
+    logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO)
+    logging.getLogger().addHandler(logging.FileHandler(os.path.join("logs", "FactorioClient.txt"), "w"))
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
