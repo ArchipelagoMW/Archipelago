@@ -42,10 +42,11 @@ async def main():
 
 from kivy.app import App
 from kivy.uix.label import Label
+from kivy.base import ExceptionHandler, ExceptionManager
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.recycleview import RecycleView
-from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelHeader
+from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
 from kivy.lang import Builder
 
 
@@ -70,9 +71,10 @@ class FactorioManager(App):
         self.tabs.default_tab_content = UILog(*(logging.getLogger(logger_name) for logger_name, name in pairs))
         for logger_name, display_name in pairs:
             bridge_logger = logging.getLogger(logger_name)
-            panel = TabbedPanelHeader(text=display_name)
-            self.tabs.add_widget(panel)
+            panel = TabbedPanelItem(text=display_name)
             panel.content = UILog(bridge_logger)
+            self.tabs.add_widget(panel)
+
         self.grid.add_widget(self.tabs)
         textinput = TextInput(size_hint_y=None, height=30, multiline=False)
         textinput.bind(on_text_validate=self.on_message)
@@ -120,6 +122,13 @@ class UILog(RecycleView):
 
     def update_text_width(self, *_):
         self.message.text_size = (self.message.width * 0.9, None)
+
+class E(ExceptionHandler):
+    def handle_exception(self, inst):
+        logger.exception(inst)
+        return ExceptionManager.RAISE
+
+ExceptionManager.add_handler(E())
 
 
 Builder.load_string('''
