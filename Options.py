@@ -146,8 +146,10 @@ class Logic(Choice):
     option_no_glitches = 0
     option_minor_glitches = 1
     option_overworld_glitches = 2
+    option_hybrid_major_glitches = 3
     option_no_logic = 4
     alias_owg = 2
+    alias_hmg = 3
 
 
 class Objective(Choice):

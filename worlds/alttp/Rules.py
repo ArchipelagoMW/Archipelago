@@ -47,12 +47,17 @@ def set_rules(world, player):
 
     if world.logic[player] == 'noglitches':
         no_glitches_rules(world, player)
-    elif world.logic[player] in ['owglitches', 'nologic']:
+    elif world.logic[player] == 'owglitches':
         # Initially setting no_glitches_rules to set the baseline rules for some
         # entrances. The overworld_glitches_rules set is primarily additive.
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
         overworld_glitches_rules(world, player)
+    elif world.logic[player] in ['hybridglitches', 'nologic']: 
+        no_glitches_rules(world, player)
+        fake_flipper_rules(world, player)
+        overworld_glitches_rules(world, player)
+        underworld_glitches_rules(world, player)
     elif world.logic[player] == 'minorglitches':
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
@@ -75,7 +80,8 @@ def set_rules(world, player):
         set_inverted_big_bomb_rules(world, player)
 
     # if swamp and dam have not been moved we require mirror for swamp palace
-    if not world.swamp_patch_required[player]:
+    # however there is mirrorless swamp in hybrid MG, so we don't necessarily want this. HMG handles this requirement itself. 
+    if not world.swamp_patch_required[player] and world.logic[player] not in ['hybridglitches', 'nologic']:
         add_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Magic Mirror', player))
 
     # GT Entrance may be required for Turtle Rock for OWG and < 7 required

@@ -586,7 +586,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
         logging.warning("Only NMG, OWG and No Logic supported")
         glitches_required = 'none'
     ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches',
-                 'minor_glitches': 'minorglitches'}[
+                 'minor_glitches': 'minorglitches', 'hybrid_major_glitches': 'hybridglitches'}[
         glitches_required]
 
     ret.dark_room_logic = get_choice("dark_room_logic", weights, "lamp")
