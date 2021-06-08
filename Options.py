@@ -386,11 +386,10 @@ factorio_options: typing.Dict[str, type(Option)] = {"max_science_pack": MaxScien
                                                     "recipe_time": RecipeTime}
 
 
-class AdvancementGoal(Choice):
-    option_few = 0
-    option_normal = 1
-    option_many = 2
-    default = 1
+class AdvancementGoal(Range):
+    range_start = 0
+    range_end = 87
+    default = 30
 
 
 class CombatDifficulty(Choice):

@@ -15,13 +15,10 @@ def set_rules(world: MultiWorld, player: int):
                 (location.name not in postgame_advancements) and
                 location.can_reach(state)]
 
-    # 92 total advancements, 16 are typically excluded, 1 is Free the End. Goal is to complete X advancements and then Free the End. 
-    goal_map = {
-        'few': 30,
-        'normal': 50,
-        'many': 70 
-    }
-    goal = goal_map[getattr(world, 'advancement_goal')[player].get_option_name()]
+    # 92 total advancements. Goal is to complete X advancements and then Free the End. 
+    # There are 5 advancements which cannot be included for dragon spawning (4 postgame, Free the End)
+    # Hence the true maximum is (92 - 5) = 87
+    goal = int(world.advancement_goal[player].value)
     can_complete = lambda state: len(reachable_locations(state)) >= goal and state.can_reach('The End', 'Region', player) and state.can_kill_ender_dragon(player)
 
     if world.logic[player] != 'nologic': 

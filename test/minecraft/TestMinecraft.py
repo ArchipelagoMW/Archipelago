@@ -31,7 +31,7 @@ class TestMinecraft(TestBase):
         exclusion_pools = ['hard', 'insane', 'postgame']
         for pool in exclusion_pools:
             setattr(self.world, f"include_{pool}_advancements", [False, False])
-        setattr(self.world, "advancement_goal", [0, Options.AdvancementGoal(value=0)])
+        setattr(self.world, "advancement_goal", [0, Options.AdvancementGoal(value=30)])
         setattr(self.world, "shuffle_structures", [False, False])
         setattr(self.world, "combat_difficulty", [0, Options.CombatDifficulty(value=1)])
         minecraft_create_regions(self.world, 1)
