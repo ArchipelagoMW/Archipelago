@@ -221,25 +221,29 @@ triforce_pieces_required: # Set to how many out of X triforce pieces you need to
   40: 0
   50: 0
 tower_open: # Crystals required to open GT
-  '0': 80
-  '1': 70
-  '2': 60
-  '3': 50
-  '4': 40
-  '5': 30
-  '6': 20
-  '7': 10
+  0: 0
+  1: 0
+  2: 0
+  3: 0
+  4: 0
+  5: 0
+  6: 0
+  7: 0
   random: 0
+  random-low: 50 # any valid number, weighted towards the lower end
+  random-high: 0
 ganon_open: # Crystals required to hurt Ganon
-  '0': 80
-  '1': 70
-  '2': 60
-  '3': 50
-  '4': 40
-  '5': 30
-  '6': 20
-  '7': 10
+  0: 0
+  1: 0
+  2: 0
+  3: 0
+  4: 0
+  5: 0
+  6: 0
+  7: 0
   random: 0
+  random-low: 0
+  random-high: 50 # any valid number, weighted towards the higher end
 mode:
   standard: 50 # Begin the game by rescuing Zelda from her cell and escorting her to the Sanctuary
   open: 50 # Begin the game from your choice of Link's House or the Sanctuary
