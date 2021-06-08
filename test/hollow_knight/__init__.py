@@ -11,6 +11,8 @@ class TestVanilla(TestBase):
         self.world.game[1] = "Hollow Knight"
         import Options
         for hk_option in Options.hollow_knight_randomize_options:
-            getattr(self.world, hk_option)[1] = True
+            setattr(self.world, hk_option, {1: True})
+        for hk_option, option in Options.hollow_knight_skip_options.items():
+            setattr(self.world, hk_option, {1: option.default})
         create_regions(self.world, 1)
         gen_hollow(self.world, 1)

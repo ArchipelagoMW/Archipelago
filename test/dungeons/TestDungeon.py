@@ -8,11 +8,14 @@ from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import create_regions
 from worlds.alttp.Shops import create_shops
 from worlds.alttp.Rules import set_rules
+from Options import alttp_options
 
 
 class TestDungeon(unittest.TestCase):
     def setUp(self):
         self.world = MultiWorld(1)
+        for option_name, option in alttp_options.items():
+            setattr(self.world, option_name, {1: option.default})
         self.starting_regions = []  # Where to start exploring
         self.remove_exits = []      # Block dungeon exits
         self.world.difficulty_requirements[1] = difficulties['normal']

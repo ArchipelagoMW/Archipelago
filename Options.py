@@ -215,7 +215,7 @@ class Crystals(Range):
 
 
 class CrystalsTower(Crystals):
-    pass
+    default = 7
 
 
 class CrystalsGanon(Crystals):
