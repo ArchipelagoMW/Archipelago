@@ -109,11 +109,17 @@ class Choice(Option):
             return cls(data)
         return cls.from_text(str(data))
 
+
 class Range(Option):
     range_start = 0
     range_end = 1
-    def __init__(self, value: typing.Union[str, int]):
-        self.value: typing.Union[str, int] = value
+
+    def __init__(self, value: int):
+        if value < self.range_start:
+            raise Exception(f"{value} is lower than minimum {self.range_start} for option {self.__class__.__name__}")
+        elif value > self.range_end:
+            raise Exception(f"{value} is higher than maximum {self.range_end} for option {self.__class__.__name__}")
+        self.value: int = value
 
     @classmethod
     def from_text(cls, text: str) -> Range:
@@ -125,19 +131,14 @@ class Range(Option):
                 return cls(int(round(random.triangular(cls.range_start, cls.range_end, cls.range_end), 0)))
             else:
                 return cls(random.randint(cls.range_start, cls.range_end))
-        number = int(text)
-        if number < cls.range_start:
-            raise Exception(f"{number} is lower than minimum {cls.range_start} for option {cls.__name__}")
-        elif number > cls.range_end:
-            raise Exception(f"{number} is higher than maximum {cls.range_end} for option {cls.__name__}")
-        else:
-            return cls(number)
+        return cls(int(text))
 
     @classmethod
     def from_any(cls, data: typing.Any) -> Range:
         if type(data) == int:
             return cls(data)
         return cls.from_text(str(data))
+
 
 class OptionNameSet(Option):
     default = frozenset()
@@ -171,6 +172,7 @@ class OptionDict(Option):
 
     def get_option_name(self):
         return str(self.value)
+
 
 class Logic(Choice):
     option_no_glitches = 0
@@ -207,13 +209,16 @@ class Crystals(Range):
     range_start = 0
     range_end = 7
 
+
 class TriforcePieces(Range):
     range_start = 1
     range_end = 90
 
+
 class ShopShuffleSlots(Range):
     range_start = 0
     range_end = 30
+
 
 class WorldState(Choice):
     option_standard = 1
@@ -358,12 +363,14 @@ class Visibility(Choice):
     option_sending = 1
     default = 1
 
+
 class RecipeTime(Choice):
     option_vanilla = 0
     option_fast = 1
     option_normal = 2
     option_slow = 4
     option_chaos = 5
+
 
 class FactorioStartItems(OptionDict):
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
