@@ -5,14 +5,19 @@ from worlds.generic.Rules import set_rule, add_rule
 # We actually need the logic to properly "mark" these regions as Light or Dark world. 
 # Therefore we need to make these connections during the normal link_entrances stage, rather than during set_rules. 
 def underworld_glitch_connections(world, player): 
-    kikiskip = world.get_entrance('Kiki Skip', player)
-    mire_to_hera = world.get_entrance('Mire to Hera Clip', player)
-    mire_to_swamp = world.get_entrance('Hera to Swamp Clip', player)
+    specrock = world.get_region('Spectacle Rock Cave (Bottom)', player)
+    mire = world.get_region('Misery Mire (West)', player)
+
+    kikiskip = Entrance(player, 'Kiki Skip', specrock)
+    mire_to_hera = Entrance(player, 'Mire to Hera Clip', mire)
+    mire_to_swamp = Entrance(player, 'Hera to Swamp Clip', mire)
+    specrock.exits.append(kikiskip)
+    mire.exits.extend([mire_to_hera, mire_to_swamp])
 
     if world.fix_fake_world[player]: 
         kikiskip.connect(world.get_entrance('Palace of Darkness Exit', player).connected_region)
-        mire_to_hera.connect(world.get_entrance('Tower of Hera Exit').connected_region)
-        mire_to_swamp.connect(world.get_entrance('Swamp Palace Exit').connected_region)
+        mire_to_hera.connect(world.get_entrance('Tower of Hera Exit', player).connected_region)
+        mire_to_swamp.connect(world.get_entrance('Swamp Palace Exit', player).connected_region)
     else: 
         kikiskip.connect(world.get_region('Palace of Darkness (Entrance)', player))
         mire_to_hera.connect(world.get_region('Tower of Hera (Bottom)', player))
