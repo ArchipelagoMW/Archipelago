@@ -139,6 +139,8 @@ class Range(Option):
             return cls(data)
         return cls.from_text(str(data))
 
+    def get_option_name(self):
+        return str(self.value)
 
 class OptionNameSet(Option):
     default = frozenset()
