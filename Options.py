@@ -117,8 +117,14 @@ class Range(Option):
 
     @classmethod
     def from_text(cls, text: str) -> Range:
-        if text.lower() == "random":
-            return cls(random.randint(cls.range_start, cls.range_end))
+        text = text.lower()
+        if text.startswith("random"):
+            if text == "random-low":
+                return cls(int(round(random.triangular(cls.range_start, cls.range_end, cls.range_start), 0)))
+            elif text == "random-high":
+                return cls(int(round(random.triangular(cls.range_start, cls.range_end, cls.range_end), 0)))
+            else:
+                return cls(random.randint(cls.range_start, cls.range_end))
         number = int(text)
         if number < cls.range_start:
             raise Exception(f"{number} is lower than minimum {cls.range_start} for option {cls.__name__}")
