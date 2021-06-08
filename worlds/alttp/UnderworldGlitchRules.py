@@ -57,6 +57,8 @@ def underworld_glitches_rules(world, player):
             set_rule(kikiskip, lambda state: False)
         elif pod_entrance.name == 'Misery Mire': 
             add_rule(kikiskip, lambda state: state.has_sword(player) and state.has_misery_mire_medallion(player))
+        elif pod_entrance.name == 'Agahnims Tower': 
+            add_rule(kikiskip, lambda state: state.has('Cape', player) or state.has_beam_sword(player) or state.has('Beat Agahnim 1', player))
 
         # Then we set a restriction on exiting the dungeon, so you can't leave unless you got in normally.
         add_rule(world.get_entrance('Palace of Darkness Exit', player), lambda state: pod_entrance.can_reach(state))
@@ -111,12 +113,16 @@ def underworld_glitches_rules(world, player):
             set_rule(mire_to_hera, lambda state: False)
         elif hera_entrance.name == 'Misery Mire': 
             add_rule(mire_to_hera, lambda state: state.has_sword(player) and state.has_misery_mire_medallion(player))
+        elif hera_entrance.name == 'Agahnims Tower': 
+            add_rule(mire_to_hera, lambda state: state.has('Cape', player) or state.has_beam_sword(player) or state.has('Beat Agahnim 1', player))
         add_rule(world.get_entrance('Tower of Hera Exit', player), lambda state: hera_entrance.can_reach(state))
 
         if swamp_entrance.name == 'Skull Woods Final Section': 
             set_rule(mire_to_swamp, lambda state: False)
         elif swamp_entrance.name == 'Misery Mire': 
             add_rule(mire_to_swamp, lambda state: state.has_sword(player) and state.has_misery_mire_medallion(player))
+        elif swamp_entrance.name == 'Agahnims Tower': 
+            add_rule(mire_to_swamp, lambda state: state.has('Cape', player) or state.has_beam_sword(player) or state.has('Beat Agahnim 1', player))
         add_rule(world.get_entrance('Swamp Palace Exit', player), lambda state: swamp_entrance.can_reach(state))
     elif not fix_fake_worlds: 
         add_rule(mire_to_hera, lambda state: hera_entrance.access_rule(fake_pearl_state(state, player)))
