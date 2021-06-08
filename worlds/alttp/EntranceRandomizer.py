@@ -206,11 +206,10 @@ def parse_arguments(argv, no_defaults=False):
                              0-7:    Number of crystals needed
                              ''')
     parser.add_argument('--crystals_gt', default=defval('7'), const='7', nargs='?',
-                        choices=['random', '0', '1', '2', '3', '4', '5', '6', '7'],
+                        choices=['0', '1', '2', '3', '4', '5', '6', '7'],
                         help='''\
                              How many crystals are needed to open GT. For inverted mode
                              this applies to the castle tower door instead. (default: %(default)s)
-                             Random: Picks a random value between 0 and 7 (inclusive).
                              0-7:    Number of crystals needed
                              ''')
     parser.add_argument('--open_pyramid', default=defval('auto'), help='''\

@@ -632,14 +632,12 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     # fast ganon + ganon at hole
     ret.open_pyramid = get_choice('open_pyramid', weights, 'goal')
 
-    ret.crystals_gt = prefer_int(get_choice('tower_open', weights))
-
-    ret.crystals_ganon = prefer_int(get_choice('ganon_open', weights))
+    ret.crystals_gt = Options.Crystals.from_any(get_choice('tower_open', weights)).value
+    ret.crystals_ganon = Options.Crystals.from_any(get_choice('ganon_open', weights)).value
 
     extra_pieces = get_choice('triforce_pieces_mode', weights, 'available')
 
-    ret.triforce_pieces_required = int(get_choice('triforce_pieces_required', weights, 20))
-    ret.triforce_pieces_required = min(max(1, int(ret.triforce_pieces_required)), 90)
+    ret.triforce_pieces_required = Options.TriforcePieces.from_any(get_choice('triforce_pieces_required', weights)).value
 
     # sum a percentage to required
     if extra_pieces == 'percentage':
@@ -647,7 +645,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
         ret.triforce_pieces_available = int(round(ret.triforce_pieces_required * percentage, 0))
     # vanilla mode (specify how many pieces are)
     elif extra_pieces == 'available':
-        ret.triforce_pieces_available = int(get_choice('triforce_pieces_available', weights, 30))
+        ret.triforce_pieces_available = Options.TriforcePieces.from_any(get_choice('triforce_pieces_available', weights)).value
     # required pieces + fixed extra
     elif extra_pieces == 'extra':
         extra_pieces = max(0, int(get_choice('triforce_pieces_extra', weights, 10)))
@@ -655,11 +653,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     # change minimum to required pieces to avoid problems
     ret.triforce_pieces_available = min(max(ret.triforce_pieces_required, int(ret.triforce_pieces_available)), 90)
-    shuffle_slots = get_choice('shop_shuffle_slots', weights, '0')
-    if str(shuffle_slots).lower() == "random":
-        ret.shop_shuffle_slots = random.randint(0, 30)
-    else:
-        ret.shop_shuffle_slots = int(shuffle_slots)
+    ret.shop_shuffle_slots = Options.TriforcePieces.from_any(get_choice('shop_shuffle_slots', weights)).value
 
     ret.shop_shuffle = get_choice('shop_shuffle', weights, '')
     if not ret.shop_shuffle:

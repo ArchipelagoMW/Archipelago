@@ -1,5 +1,6 @@
 from __future__ import annotations
 import typing
+import random
 
 
 class AssembleOptions(type):
@@ -108,6 +109,29 @@ class Choice(Option):
             return cls(data)
         return cls.from_text(str(data))
 
+class Range(Option):
+    range_start = 0
+    range_end = 1
+    def __init__(self, value: typing.Union[str, int]):
+        self.value: typing.Union[str, int] = value
+
+    @classmethod
+    def from_text(cls, text: str) -> Range:
+        if text.lower() == "random":
+            return cls(random.randint(cls.range_start, cls.range_end))
+        number = int(text)
+        if number < cls.range_start:
+            raise Exception(f"{number} is lower than minimum {cls.range_start} for option {cls.__name__}")
+        elif number > cls.range_end:
+            raise Exception(f"{number} is higher than maximum {cls.range_end} for option {cls.__name__}")
+        else:
+            return cls(number)
+
+    @classmethod
+    def from_any(cls, data: typing.Any) -> Range:
+        if type(data) == int:
+            return cls(data)
+        return cls.from_text(str(data))
 
 class OptionNameSet(Option):
     default = frozenset()
@@ -173,18 +197,17 @@ class Accessibility(Choice):
     option_beatable = 2
 
 
-class Crystals(Choice):
-    # can't use IntEnum since there's also random
-    option_0 = 0
-    option_1 = 1
-    option_2 = 2
-    option_3 = 3
-    option_4 = 4
-    option_5 = 5
-    option_6 = 6
-    option_7 = 7
-    option_random = -1
+class Crystals(Range):
+    range_start = 0
+    range_end = 7
 
+class TriforcePieces(Range):
+    range_start = 1
+    range_end = 90
+
+class ShopShuffleSlots(Range):
+    range_start = 0
+    range_end = 30
 
 class WorldState(Choice):
     option_standard = 1

@@ -94,12 +94,8 @@ def main(args, seed=None):
     world.compassshuffle = args.compassshuffle.copy()
     world.keyshuffle = args.keyshuffle.copy()
     world.bigkeyshuffle = args.bigkeyshuffle.copy()
-    world.crystals_needed_for_ganon = {
-        player: world.random.randint(0, 7) if args.crystals_ganon[player] == 'random' else int(
-            args.crystals_ganon[player]) for player in range(1, world.players + 1)}
-    world.crystals_needed_for_gt = {
-        player: world.random.randint(0, 7) if args.crystals_gt[player] == 'random' else int(args.crystals_gt[player])
-        for player in range(1, world.players + 1)}
+    world.crystals_needed_for_ganon = args.crystals_ganon.copy()
+    world.crystals_needed_for_gt = args.crystals_gt.copy()
     world.open_pyramid = args.open_pyramid.copy()
     world.boss_shuffle = args.shufflebosses.copy()
     world.enemy_shuffle = args.enemy_shuffle.copy()
