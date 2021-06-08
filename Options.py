@@ -8,8 +8,9 @@ class AssembleOptions(type):
         options = attrs["options"] = {}
         name_lookup = attrs["name_lookup"] = {}
         for base in bases:
-            options.update(base.options)
-            name_lookup.update(name_lookup)
+            if hasattr(base, "options"):
+                options.update(base.options)
+                name_lookup.update(name_lookup)
         new_options = {name[7:].lower(): option_id for name, option_id in attrs.items() if
                        name.startswith("option_")}
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
@@ -110,7 +111,7 @@ class Choice(Option):
         return cls.from_text(str(data))
 
 
-class Range(Option):
+class Range(Option, int):
     range_start = 0
     range_end = 1
 
@@ -119,7 +120,7 @@ class Range(Option):
             raise Exception(f"{value} is lower than minimum {self.range_start} for option {self.__class__.__name__}")
         elif value > self.range_end:
             raise Exception(f"{value} is higher than maximum {self.range_end} for option {self.__class__.__name__}")
-        self.value: int = value
+        self.value = value
 
     @classmethod
     def from_text(cls, text: str) -> Range:
@@ -138,6 +139,9 @@ class Range(Option):
         if type(data) == int:
             return cls(data)
         return cls.from_text(str(data))
+
+    def __str__(self):
+        return str(self.value)
 
 
 class OptionNameSet(Option):
@@ -210,12 +214,20 @@ class Crystals(Range):
     range_end = 7
 
 
+class CrystalsTower(Crystals):
+    pass
+
+
+class CrystalsGanon(Crystals):
+    default = 7
+
+
 class TriforcePieces(Range):
     range_start = 1
     range_end = 90
 
 
-class ShopShuffleSlots(Range):
+class ShopItemSlots(Range):
     range_start = 0
     range_end = 30
 
@@ -239,6 +251,12 @@ class Enemies(Choice):
     option_shuffled = 1
     option_chaos = 2
 
+
+alttp_options: typing.Dict[str, type(Option)] = {
+    "crystals_needed_for_gt": CrystalsTower,
+    "crystals_needed_for_ganon": CrystalsGanon,
+    "shop_item_slots": ShopItemSlots,
+}
 
 mapshuffle = Toggle
 compassshuffle = Toggle
@@ -268,7 +286,7 @@ RandomizeLoreTablets = Toggle
 RandomizeLifebloodCocoons = Toggle
 RandomizeFlames = Toggle
 
-hollow_knight_randomize_options: typing.Dict[str, Option] = {
+hollow_knight_randomize_options: typing.Dict[str, type(Option)] = {
     "RandomizeDreamers": RandomizeDreamers,
     "RandomizeSkills": RandomizeSkills,
     "RandomizeCharms": RandomizeCharms,
@@ -408,6 +426,13 @@ minecraft_options: typing.Dict[str, type(Option)] = {
     "include_postgame_advancements": Toggle,
     "shuffle_structures": Toggle
 }
+
+option_sets = (
+    minecraft_options,
+    factorio_options,
+    alttp_options,
+    hollow_knight_options
+)
 
 if __name__ == "__main__":
     import argparse

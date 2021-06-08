@@ -885,7 +885,7 @@ def patch_rom(world, rom, player, team, enemized):
     credits_total = 216
     if world.retro[player]:  # Old man cave and Take any caves will count towards collection rate.
         credits_total += 5
-    if world.shop_shuffle_slots[player]:  # Potion shop only counts towards collection rate if included in the shuffle.
+    if world.shop_item_slots[player]:  # Potion shop only counts towards collection rate if included in the shuffle.
         credits_total += 30 if 'w' in world.shop_shuffle[player] else 27
 
     rom.write_byte(0x187010, credits_total)  # dynamic credits
@@ -1705,7 +1705,7 @@ def write_custom_shops(rom, world, player):
             slot = 0 if shop.type == ShopType.TakeAny else index
             if item is None:
                 break
-            if world.shop_shuffle_slots[player] or shop.type == ShopType.TakeAny:
+            if world.shop_item_slots[player] or shop.type == ShopType.TakeAny:
                 count_shop = (shop.region.name != 'Potion Shop' or 'w' in world.shop_shuffle[player]) and \
                              shop.region.name != 'Capacity Upgrade'
                 rom.write_byte(0x186560 + shop.sram_offset + slot, 1 if count_shop else 0)

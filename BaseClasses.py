@@ -113,8 +113,6 @@ class MultiWorld():
             set_player_attr('bush_shuffle', False)
             set_player_attr('beemizer', 0)
             set_player_attr('escape_assist', [])
-            set_player_attr('crystals_needed_for_ganon', 7)
-            set_player_attr('crystals_needed_for_gt', 7)
             set_player_attr('open_pyramid', False)
             set_player_attr('treasure_hunt_icon', 'Triforce Piece')
             set_player_attr('treasure_hunt_count', 0)
@@ -131,7 +129,6 @@ class MultiWorld():
             set_player_attr('triforce_pieces_available', 30)
             set_player_attr('triforce_pieces_required', 20)
             set_player_attr('shop_shuffle', 'off')
-            set_player_attr('shop_shuffle_slots', 0)
             set_player_attr('shuffle_prizes', "g")
             set_player_attr('sprite_pool', [])
             set_player_attr('dark_room_logic', "lamp")
@@ -141,9 +138,6 @@ class MultiWorld():
             set_player_attr('plando_connections', [])
             set_player_attr('game', "A Link to the Past")
             set_player_attr('completion_condition', lambda state: True)
-            import Options
-            for hk_option in Options.hollow_knight_options:
-                set_player_attr(hk_option, False)
         self.custom_data = {}
         for player in range(1, players+1):
             self.custom_data[player] = {}
@@ -1448,7 +1442,7 @@ class Spoiler(object):
                          'triforce_pieces_available': self.world.triforce_pieces_available,
                          'triforce_pieces_required': self.world.triforce_pieces_required,
                          'shop_shuffle': self.world.shop_shuffle,
-                         'shop_shuffle_slots': self.world.shop_shuffle_slots,
+                         'shop_item_slots': self.world.shop_item_slots,
                          'shuffle_prizes': self.world.shuffle_prizes,
                          'sprite_pool': self.world.sprite_pool,
                          'restrict_dungeon_item_on_boss': self.world.restrict_dungeon_item_on_boss,
@@ -1565,8 +1559,8 @@ class Spoiler(object):
                                                "f" in self.metadata["shop_shuffle"][player]))
                     outfile.write('Custom Potion Shop:              %s\n' %
                                   bool_to_text("w" in self.metadata["shop_shuffle"][player]))
-                    outfile.write('Shop Slots:                      %s\n' %
-                                  self.metadata["shop_shuffle_slots"][player])
+                    outfile.write('Shop Item Slots:                      %s\n' %
+                                  self.metadata["shop_item_slots"][player])
                     outfile.write('Boss shuffle:                    %s\n' % self.metadata['boss_shuffle'][player])
                     outfile.write(
                         'Enemy shuffle:                   %s\n' % bool_to_text(self.metadata['enemy_shuffle'][player]))

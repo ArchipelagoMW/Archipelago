@@ -220,7 +220,7 @@ triforce_pieces_required: # Set to how many out of X triforce pieces you need to
   30: 0
   40: 0
   50: 0
-tower_open: # Crystals required to open GT
+crystals_needed_for_gt: # Crystals required to open GT
   0: 0
   1: 0
   2: 0
@@ -232,7 +232,7 @@ tower_open: # Crystals required to open GT
   random: 0
   random-low: 50 # any valid number, weighted towards the lower end
   random-high: 0
-ganon_open: # Crystals required to hurt Ganon
+crystals_needed_for_ganon: # Crystals required to hurt Ganon
   0: 0
   1: 0
   2: 0
@@ -317,7 +317,7 @@ beemizer: # Remove items from the global item pool and replace them with single 
   4: 0 # 100% of rupees, bombs and arrows are replaced with bees, of which 90% are traps and 10% single bees
   5: 0 # 100% of rupees, bombs and arrows are replaced with bees, of which 100% are traps and 0% single bees
 ### Shop Settings ###
-shop_shuffle_slots: # Maximum amount of shop slots to be filled with regular item pool items (such as Moon Pearl)
+shop_item_slots: # Maximum amount of shop slots to be filled with regular item pool items (such as Moon Pearl)
   0: 50
   5: 0
   15: 0

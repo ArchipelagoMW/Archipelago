@@ -243,7 +243,7 @@ def create_shops(world, player: int):
     else:
         dynamic_shop_slots = total_dynamic_shop_slots
 
-    num_slots = min(dynamic_shop_slots, max(0, int(world.shop_shuffle_slots[player])))  # 0 to 30
+    num_slots = min(dynamic_shop_slots, world.shop_item_slots[player])
     single_purchase_slots: List[bool] = [True] * num_slots + [False] * (dynamic_shop_slots - num_slots)
     world.random.shuffle(single_purchase_slots)
 

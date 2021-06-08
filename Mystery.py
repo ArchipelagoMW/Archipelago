@@ -581,6 +581,12 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
 
 
 def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
+    for option_name, option in Options.alttp_options.items():
+        if option_name in weights:
+            setattr(ret, option_name, option.from_any(get_choice(option_name, weights)))
+        else:
+            setattr(ret, option_name, option(option.default))
+
     glitches_required = get_choice('glitches_required', weights)
     if glitches_required not in [None, 'none', 'no_logic', 'overworld_glitches', 'minor_glitches']:
         logging.warning("Only NMG, OWG and No Logic supported")
@@ -632,12 +638,9 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     # fast ganon + ganon at hole
     ret.open_pyramid = get_choice('open_pyramid', weights, 'goal')
 
-    ret.crystals_gt = Options.Crystals.from_any(get_choice('tower_open', weights)).value
-    ret.crystals_ganon = Options.Crystals.from_any(get_choice('ganon_open', weights)).value
-
     extra_pieces = get_choice('triforce_pieces_mode', weights, 'available')
 
-    ret.triforce_pieces_required = Options.TriforcePieces.from_any(get_choice('triforce_pieces_required', weights)).value
+    ret.triforce_pieces_required = Options.TriforcePieces.from_any(get_choice('triforce_pieces_required', weights))
 
     # sum a percentage to required
     if extra_pieces == 'percentage':
@@ -645,7 +648,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
         ret.triforce_pieces_available = int(round(ret.triforce_pieces_required * percentage, 0))
     # vanilla mode (specify how many pieces are)
     elif extra_pieces == 'available':
-        ret.triforce_pieces_available = Options.TriforcePieces.from_any(get_choice('triforce_pieces_available', weights)).value
+        ret.triforce_pieces_available = Options.TriforcePieces.from_any(get_choice('triforce_pieces_available', weights))
     # required pieces + fixed extra
     elif extra_pieces == 'extra':
         extra_pieces = max(0, int(get_choice('triforce_pieces_extra', weights, 10)))
@@ -653,7 +656,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     # change minimum to required pieces to avoid problems
     ret.triforce_pieces_available = min(max(ret.triforce_pieces_required, int(ret.triforce_pieces_available)), 90)
-    ret.shop_shuffle_slots = Options.TriforcePieces.from_any(get_choice('shop_shuffle_slots', weights)).value
 
     ret.shop_shuffle = get_choice('shop_shuffle', weights, '')
     if not ret.shop_shuffle:

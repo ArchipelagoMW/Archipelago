@@ -94,8 +94,6 @@ def main(args, seed=None):
     world.compassshuffle = args.compassshuffle.copy()
     world.keyshuffle = args.keyshuffle.copy()
     world.bigkeyshuffle = args.bigkeyshuffle.copy()
-    world.crystals_needed_for_ganon = args.crystals_ganon.copy()
-    world.crystals_needed_for_gt = args.crystals_gt.copy()
     world.open_pyramid = args.open_pyramid.copy()
     world.boss_shuffle = args.shufflebosses.copy()
     world.enemy_shuffle = args.enemy_shuffle.copy()
@@ -117,7 +115,6 @@ def main(args, seed=None):
     world.triforce_pieces_available = args.triforce_pieces_available.copy()
     world.triforce_pieces_required = args.triforce_pieces_required.copy()
     world.shop_shuffle = args.shop_shuffle.copy()
-    world.shop_shuffle_slots = args.shop_shuffle_slots.copy()
     world.progression_balancing = args.progression_balancing.copy()
     world.shuffle_prizes = args.shuffle_prizes.copy()
     world.sprite_pool = args.sprite_pool.copy()
@@ -130,12 +127,10 @@ def main(args, seed=None):
     world.required_medallions = args.required_medallions.copy()
     world.game = args.game.copy()
     import Options
-    for hk_option in Options.hollow_knight_options:
-        setattr(world, hk_option, getattr(args, hk_option, {}))
-    for factorio_option in Options.factorio_options:
-        setattr(world, factorio_option, getattr(args, factorio_option, {}))
-    for minecraft_option in Options.minecraft_options: 
-        setattr(world, minecraft_option, getattr(args, minecraft_option, {}))
+    for option_set in Options.option_sets:
+        for option in option_set:
+            setattr(world, option, getattr(args, option, {}))
+
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
     world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}

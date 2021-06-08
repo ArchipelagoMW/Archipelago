@@ -196,22 +196,6 @@ def parse_arguments(argv, no_defaults=False):
                              The dungeon variants only mix up dungeons and keep the rest of
                              the overworld vanilla.
                              ''')
-    parser.add_argument('--crystals_ganon', default=defval('7'), const='7', nargs='?', choices=['random', '0', '1', '2', '3', '4', '5', '6', '7'],
-                        help='''\
-                             How many crystals are needed to defeat ganon. Any other 
-                             requirements for ganon for the selected goal still apply.
-                             This setting does not apply when the all dungeons goal is
-                             selected. (default: %(default)s)
-                             Random: Picks a random value between 0 and 7 (inclusive).
-                             0-7:    Number of crystals needed
-                             ''')
-    parser.add_argument('--crystals_gt', default=defval('7'), const='7', nargs='?',
-                        choices=['0', '1', '2', '3', '4', '5', '6', '7'],
-                        help='''\
-                             How many crystals are needed to open GT. For inverted mode
-                             this applies to the castle tower door instead. (default: %(default)s)
-                             0-7:    Number of crystals needed
-                             ''')
     parser.add_argument('--open_pyramid', default=defval('auto'), help='''\
                             Pre-opens the pyramid hole, this removes the Agahnim 2 requirement for it.
                             Depending on goal, you might still need to beat Agahnim 2 in order to beat ganon.
@@ -337,11 +321,6 @@ def parse_arguments(argv, no_defaults=False):
     u: shuffle capacity upgrades into the item pool
     w: consider witch's hut like any other shop and shuffle/randomize it too
     ''')
-    parser.add_argument('--shop_shuffle_slots', default=defval(0),
-                        type=lambda value: min(max(int(value), 1), 96),
-                        help='''
-        Maximum amount of shop slots able to be filled by items from the item pool.
-    ''')
     parser.add_argument('--shuffle_prizes', default=defval('g'), choices=['', 'g', 'b', 'gb'])
     parser.add_argument('--sprite_pool', help='''\
     Specifies a colon separated list of sprites used for random/randomonevent. If not specified, the full sprite pool is used.''')
@@ -397,14 +376,14 @@ def parse_arguments(argv, no_defaults=False):
             playerargs = parse_arguments(shlex.split(getattr(ret, f"p{player}")), True)
 
             for name in ['logic', 'mode', 'swordless', 'goal', 'difficulty', 'item_functionality',
-                         'shuffle', 'crystals_ganon', 'crystals_gt', 'open_pyramid', 'timer',
+                         'shuffle', 'open_pyramid', 'timer',
                          'countdown_start_time', 'red_clock_time', 'blue_clock_time', 'green_clock_time',
                          'mapshuffle', 'compassshuffle', 'keyshuffle', 'bigkeyshuffle', 'startinventory',
                          'local_items', 'non_local_items', 'retro', 'accessibility', 'hints', 'beemizer',
                          'shufflebosses', 'enemy_shuffle', 'enemy_health', 'enemy_damage', 'shufflepots',
                          'ow_palettes', 'uw_palettes', 'sprite', 'disablemusic', 'quickswap', 'fastmenu', 'heartcolor',
                          'heartbeep', "progression_balancing", "triforce_pieces_available",
-                         "triforce_pieces_required", "shop_shuffle", "shop_shuffle_slots",
+                         "triforce_pieces_required", "shop_shuffle",
                          "required_medallions", "start_hints",
                          "plando_items", "plando_texts", "plando_connections", "er_seeds",
                          'progressive', 'dungeon_counters', 'glitch_boots', 'killable_thieves',
