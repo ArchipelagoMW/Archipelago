@@ -582,8 +582,8 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
 
 def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     glitches_required = get_choice('glitches_required', weights)
-    if glitches_required not in [None, 'none', 'no_logic', 'overworld_glitches', 'minor_glitches']:
-        logging.warning("Only NMG, OWG and No Logic supported")
+    if glitches_required not in [None, 'none', 'no_logic', 'overworld_glitches', 'hybrid_major_glitches', 'minor_glitches']:
+        logging.warning("Only NMG, OWG, HMG and No Logic supported")
         glitches_required = 'none'
     ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches',
                  'minor_glitches': 'minorglitches', 'hybrid_major_glitches': 'hybridglitches'}[
