@@ -17,10 +17,6 @@ def link_entrances(world, player):
     for exitname, regionname in mandatory_connections:
         connect_simple(world, exitname, regionname, player)
 
-    # mandatory hybrid major glitches connections
-    if world.logic[player] in ['hybridglitches', 'nologic']:
-        underworld_glitch_connections(world, player)
-
     # if we do not shuffle, set default connections
     if world.shuffle[player] == 'vanilla':
         for exitname, regionname in default_connections:
@@ -1070,6 +1066,10 @@ def link_entrances(world, player):
         raise NotImplementedError(
             f'{world.shuffle[player]} Shuffling not supported yet. Player {world.get_player_names(player)}')
 
+    # mandatory hybrid major glitches connections
+    if world.logic[player] in ['hybridglitches', 'nologic']:
+        underworld_glitch_connections(world, player)
+
     # check for swamp palace fix
     if world.get_entrance('Dam', player).connected_region.name != 'Dam' or world.get_entrance('Swamp Palace', player).connected_region.name != 'Swamp Palace (Entrance)':
         world.swamp_patch_required[player] = True
@@ -1099,10 +1099,6 @@ def link_inverted_entrances(world, player):
     # setup mandatory connections
     for exitname, regionname in inverted_mandatory_connections:
         connect_simple(world, exitname, regionname, player)
-
-    # mandatory hybrid major glitches connections
-    if world.logic[player] in ['hybridglitches', 'nologic']:
-        underworld_glitch_connections(world, player)
 
     # if we do not shuffle, set default connections
     if world.shuffle[player] == 'vanilla':
@@ -1774,6 +1770,10 @@ def link_inverted_entrances(world, player):
         connect_doors(world, doors, door_targets, player)
     else:
         raise NotImplementedError('Shuffling not supported yet')
+
+    # mandatory hybrid major glitches connections
+    if world.logic[player] in ['hybridglitches', 'nologic']:
+        underworld_glitch_connections(world, player)
 
     # patch swamp drain
     if world.get_entrance('Dam', player).connected_region.name != 'Dam' or world.get_entrance('Swamp Palace', player).connected_region.name != 'Swamp Palace (Entrance)':
