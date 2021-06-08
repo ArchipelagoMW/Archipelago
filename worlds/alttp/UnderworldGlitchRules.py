@@ -38,23 +38,23 @@ def underworld_glitches_rules(world, player):
     # Kiki Skip
     kikiskip = world.get_entrance('Kiki Skip', player)
     set_rule(kikiskip, lambda state: state.can_bomb_clip(kikiskip.parent_region, player))
+    pod_entrance = [r for r in world.get_region('Palace of Darkness (Entrance)', player).entrances if r.name != 'Kiki Skip'][0]
     # Behavior differs based on what type of ER shuffle we're playing. 
     if not fix_dungeon_exits: # vanilla, simple, restricted, dungeonssimple (this should always have no FWF)
         # Dungeons are only shuffled among themselves. We need to check SW and MM because they can't be reentered easily. 
-        pod = world.get_region('Palace of Darkness (Entrance)', player)
-        if pod.entrances[0].name == 'Skull Woods Final Section': 
+        if pod_entrance.name == 'Skull Woods Final Section': 
             set_rule(kikiskip, lambda state: False)
-        elif pod.entrances[0].name == 'Misery Mire': 
+        elif pod_entrance.name == 'Misery Mire': 
             add_rule(kikiskip, lambda state: state.has_sword(player) and state.has_misery_mire_medallion(player))
 
         # Then we set a restriction on exiting the dungeon, so you can't leave unless you got in normally.
-        add_rule(world.get_entrance('Palace of Darkness Exit', player), lambda state: pod.entrances[0].can_reach(state))
+        add_rule(world.get_entrance('Palace of Darkness Exit', player), lambda state: pod_entrance.can_reach(state))
     elif not fix_fake_worlds: # full, dungeonsfull; has fixed exits but no FWF
         # Entry requires the entrance's requirements, but you don't have logical access to the surrounding region. 
         pod = world.get_region('Palace of Darkness (Entrance)', player)
-        add_rule(kikiskip, pod.entrances[0].access_rule)
+        add_rule(kikiskip, pod_entrance.access_rule)
         # exiting restriction
-        add_rule(world.get_entrance('Palace of Darkness Exit', player), lambda state: pod.entrances[0].can_reach(state))
+        add_rule(world.get_entrance('Palace of Darkness Exit', player), lambda state: pod_entrance.can_reach(state))
 
 
 
@@ -94,25 +94,23 @@ def underworld_glitches_rules(world, player):
     mire_to_swamp = world.get_entrance('Hera to Swamp Clip', player)
     set_rule(mire_to_hera, mire_clip)
     set_rule(mire_to_swamp, lambda state: mire_clip(state) and state.has('Flippers', player))
+    hera_entrance = [r for r in world.get_region('Tower of Hera (Bottom)', player).entrances if r.name != 'Mire to Hera Clip'][0]
+    swamp_entrance = [r for r in world.get_region('Swamp Palace (Entrance)', player).entrances if r.name != 'Hera to Swamp Clip'][0]
     if not fix_dungeon_exits: 
-        hera = world.get_region('Tower of Hera (Bottom)', player)
-        if hera.entrances[0].name == 'Skull Woods Final Section': 
+        if hera_entrance.name == 'Skull Woods Final Section': 
             set_rule(mire_to_hera, lambda state: False)
-        elif hera.entrances[0].name == 'Misery Mire': 
+        elif hera_entrance.name == 'Misery Mire': 
             add_rule(mire_to_hera, lambda state: state.has_sword(player) and state.has_misery_mire_medallion(player))
-        add_rule(world.get_entrance('Tower of Hera Exit', player), lambda state: hera.entrances[0].can_reach(state))
+        add_rule(world.get_entrance('Tower of Hera Exit', player), lambda state: hera_entrance.can_reach(state))
 
-        swamp = world.get_region('Swamp Palace (Entrance)', player)
-        if swamp.entrances[0].name == 'Skull Woods Final Section': 
+        if swamp_entrance.name == 'Skull Woods Final Section': 
             set_rule(mire_to_swamp, lambda state: False)
-        elif swamp.entrances[0].name == 'Misery Mire': 
+        elif swamp_entrance.name == 'Misery Mire': 
             add_rule(mire_to_swamp, lambda state: state.has_sword(player) and state.has_misery_mire_medallion(player))
-        add_rule(world.get_entrance('Swamp Palace Exit', player), lambda state: swamp.entrances[0].can_reach(state))
+        add_rule(world.get_entrance('Swamp Palace Exit', player), lambda state: swamp_entrance.can_reach(state))
     elif not fix_fake_worlds: 
-        hera = world.get_region('Tower of Hera (Bottom)', player)
-        add_rule(mire_to_hera, hera.entrances[0].access_rule)
-        add_rule(world.get_entrance('Tower of Hera Exit', player), lambda state: hera.entrances[0].can_reach(state))
+        add_rule(mire_to_hera, hera_entrance.access_rule)
+        add_rule(world.get_entrance('Tower of Hera Exit', player), lambda state: hera_entrance.can_reach(state))
 
-        swamp = world.get_region('Swamp Palace (Entrance)', player)
-        add_rule(mire_to_swamp, swamp.entrances[0].access_rule)
-        add_rule(world.get_entrance('Swamp Palace Exit', player), lambda state: swamp.entrances[0].can_reach(state))
+        add_rule(mire_to_swamp, swamp_entrance.access_rule)
+        add_rule(world.get_entrance('Swamp Palace Exit', player), lambda state: swamp_entrance.can_reach(state))
