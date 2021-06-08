@@ -1,5 +1,6 @@
 
 from BaseClasses import Entrance
+from worlds.alttp.Items import ItemFactory
 from worlds.generic.Rules import set_rule, add_rule
 
 # We actually need the logic to properly "mark" these regions as Light or Dark world. 
@@ -24,6 +25,16 @@ def underworld_glitch_connections(world, player):
         mire_to_swamp.connect(world.get_region('Swamp Palace (Entrance)', player))
 
 
+# For some entrances, we need to fake having pearl, because we're in fake DW/LW. 
+# This creates a copy of the input state that has Moon Pearl. 
+def fake_pearl_state(state, player): 
+    if state.has('Moon Pearl', player):
+        return state
+    fake_state = state.copy()
+    fake_state.prog_items['Moon Pearl', player] += 1
+    return fake_state
+
+
 def underworld_glitches_rules(world, player): 
     fix_dungeon_exits = world.fix_palaceofdarkness_exit[player]
     fix_fake_worlds = world.fix_fake_world[player]
@@ -41,7 +52,7 @@ def underworld_glitches_rules(world, player):
     pod_entrance = [r for r in world.get_region('Palace of Darkness (Entrance)', player).entrances if r.name != 'Kiki Skip'][0]
     # Behavior differs based on what type of ER shuffle we're playing. 
     if not fix_dungeon_exits: # vanilla, simple, restricted, dungeonssimple (this should always have no FWF)
-        # Dungeons are only shuffled among themselves. We need to check SW and MM because they can't be reentered easily. 
+        # Dungeons are only shuffled among themselves. We need to check SW, MM, and AT because they can't be reentered trivially. 
         if pod_entrance.name == 'Skull Woods Final Section': 
             set_rule(kikiskip, lambda state: False)
         elif pod_entrance.name == 'Misery Mire': 
@@ -50,9 +61,8 @@ def underworld_glitches_rules(world, player):
         # Then we set a restriction on exiting the dungeon, so you can't leave unless you got in normally.
         add_rule(world.get_entrance('Palace of Darkness Exit', player), lambda state: pod_entrance.can_reach(state))
     elif not fix_fake_worlds: # full, dungeonsfull; has fixed exits but no FWF
-        # Entry requires the entrance's requirements, but you don't have logical access to the surrounding region. 
-        pod = world.get_region('Palace of Darkness (Entrance)', player)
-        add_rule(kikiskip, pod_entrance.access_rule)
+        # Entry requires the entrance's requirements plus a fake pearl, but you don't gain logical access to the surrounding region. 
+        add_rule(kikiskip, lambda state: pod_entrance.access_rule(fake_pearl_state(state, player)))
         # exiting restriction
         add_rule(world.get_entrance('Palace of Darkness Exit', player), lambda state: pod_entrance.can_reach(state))
 
@@ -109,8 +119,8 @@ def underworld_glitches_rules(world, player):
             add_rule(mire_to_swamp, lambda state: state.has_sword(player) and state.has_misery_mire_medallion(player))
         add_rule(world.get_entrance('Swamp Palace Exit', player), lambda state: swamp_entrance.can_reach(state))
     elif not fix_fake_worlds: 
-        add_rule(mire_to_hera, hera_entrance.access_rule)
+        add_rule(mire_to_hera, lambda state: hera_entrance.access_rule(fake_pearl_state(state, player)))
         add_rule(world.get_entrance('Tower of Hera Exit', player), lambda state: hera_entrance.can_reach(state))
 
-        add_rule(mire_to_swamp, swamp_entrance.access_rule)
+        add_rule(mire_to_swamp, lambda state: swamp_entrance.access_rule(fake_pearl_state(state, player)))
         add_rule(world.get_entrance('Swamp Palace Exit', player), lambda state: swamp_entrance.can_reach(state))
