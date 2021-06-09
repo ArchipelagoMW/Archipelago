@@ -1,6 +1,5 @@
 
 from BaseClasses import Entrance
-from worlds.alttp.Items import ItemFactory
 from worlds.generic.Rules import set_rule, add_rule
 
 # We actually need the logic to properly "mark" these regions as Light or Dark world. 
