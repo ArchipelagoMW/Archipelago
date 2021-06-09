@@ -102,11 +102,9 @@ def underworld_glitches_rules(world, player):
                                       rule_map.get(world.get_entrance('Tower of Hera', player).connected_region.name, lambda state: False)(state)
             gt_rule = lambda state: (state.has('Moon Pearl', player) or inverted) and \
                                     rule_map.get(world.get_entrance(('Ganons Tower' if not inverted else 'Inverted Ganons Tower'), player).connected_region.name, lambda state: False)(state)
-            mirrorless_moat_rules.append(lambda state: hera_rule(state) or gt_rule(state))
+            add_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Magic Mirror', player) or all([rule(state) for rule in mirrorless_moat_rules]))
         else: 
-            mirrorless_moat_rules.append(lambda state: False) # all function returns True on empty list
-
-        add_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Magic Mirror', player) or all([rule(state) for rule in mirrorless_moat_rules]))
+            add_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Magic Mirror', player))
 
     # Using the entrances for various ER types. Hera -> Swamp never matters because you can only logically traverse with the mire keys
     mire_to_hera = world.get_entrance('Mire to Hera Clip', player)
