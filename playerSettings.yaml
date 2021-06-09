@@ -43,6 +43,13 @@ progression_balancing:
   # Arrow Upgrade (+10): 4
 # start_hints: # Begin the game with these items' locations revealed to you at the start of the game. Get the info via !hint in your client.
 #   - Moon Pearl
+# local_items: # Force certain items to appear in your world only, not across the multiworld. Recognizes some group names, like "Swords"
+#  - "Moon Pearl"
+#  - "Small Keys"
+#  - "Big Keys"
+# non_local_items: # Force certain items to appear outside your world only, unless in single-player. Recognizes some group names, like "Swords"
+#  - "Progressive Weapons"
+
 # Factorio options:
 tech_tree_layout:
   single: 1
@@ -364,11 +371,6 @@ green_clock_time: # For all timer modes, the amount of time in minutes to gain o
   4: 50
   10: 0
   15: 0
-# Can be uncommented to use it
-# local_items: # Force certain items to appear in your world only, not across the multiworld. Recognizes some group names, like "Swords"
-#  - "Moon Pearl"
-#  - "Small Keys"
-#  - "Big Keys"
 glitch_boots:
   on: 50 # Start with Pegasus Boots in any glitched logic mode that makes use of them
   off: 0
