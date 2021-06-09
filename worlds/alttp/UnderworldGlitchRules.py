@@ -35,6 +35,32 @@ def fake_pearl_state(state, player):
     return fake_state
 
 
+# Sets the rules on where we can actually go using this clip.
+# Behavior differs based on what type of ER shuffle we're playing. 
+def dungeon_reentry_rules(world, player, clip: Entrance, dungeon_region: str, dungeon_exit: str): 
+    fix_dungeon_exits = world.fix_palaceofdarkness_exit[player]
+    fix_fake_worlds = world.fix_fake_world[player]
+
+    dungeon_entrance = [r for r in world.get_region(dungeon_region, player).entrances if r.name != clip.name][0]
+    if not fix_dungeon_exits: # vanilla, simple, restricted, dungeonssimple; should never have fake worlds fix
+        # Dungeons are only shuffled among themselves. We need to check SW, MM, and AT because they can't be reentered trivially. 
+        if dungeon_entrance.name == 'Skull Woods Final Section': 
+            set_rule(clip, lambda state: False) # entrance doesn't exist until you fire rod it from the other side
+        elif dungeon_entrance.name == 'Misery Mire': 
+            add_rule(clip, lambda state: state.has_sword(player) and state.has_misery_mire_medallion(player)) # open the dungeon
+        elif dungeon_entrance.name == 'Agahnims Tower': 
+            add_rule(clip, lambda state: state.has('Cape', player) or state.has_beam_sword(player) or state.has('Beat Agahnim 1', player)) # kill/bypass barrier
+        # Then we set a restriction on exiting the dungeon, so you can't leave unless you got in normally. 
+        add_rule(world.get_entrance(dungeon_exit, player), lambda state: dungeon_entrance.can_reach(state))
+    elif not fix_fake_worlds: # full, dungeonsfull; fixed dungeon exits, but no fake worlds fix
+        # Entry requires the entrance's requirements plus a fake pearl, but you don't gain logical access to the surrounding region. 
+        add_rule(clip, lambda state: dungeon_entrance.access_rule(fake_pearl_state(state, player)))
+        # exiting restriction
+        add_rule(world.get_entrance(dungeon_exit, player), lambda state: dungeon_entrance.can_reach(state))
+    # Otherwise, the shuffle type is crossed, dungeonscrossed, or insanity; all of these do not need additional rules on where we can go, 
+    # since the clip links directly to the exterior region. 
+
+
 def underworld_glitches_rules(world, player): 
     fix_dungeon_exits = world.fix_palaceofdarkness_exit[player]
     fix_fake_worlds = world.fix_fake_world[player]
@@ -45,29 +71,10 @@ def underworld_glitches_rules(world, player):
     add_rule(world.get_location('Ice Palace - Freezor Chest', player), lambda state: state.can_melt_things(player))
 
 
-
     # Kiki Skip
     kikiskip = world.get_entrance('Kiki Skip', player)
     set_rule(kikiskip, lambda state: state.can_bomb_clip(kikiskip.parent_region, player))
-    pod_entrance = [r for r in world.get_region('Palace of Darkness (Entrance)', player).entrances if r.name != 'Kiki Skip'][0]
-    # Behavior differs based on what type of ER shuffle we're playing. 
-    if not fix_dungeon_exits: # vanilla, simple, restricted, dungeonssimple (this should always have no FWF)
-        # Dungeons are only shuffled among themselves. We need to check SW, MM, and AT because they can't be reentered trivially. 
-        if pod_entrance.name == 'Skull Woods Final Section': 
-            set_rule(kikiskip, lambda state: False)
-        elif pod_entrance.name == 'Misery Mire': 
-            add_rule(kikiskip, lambda state: state.has_sword(player) and state.has_misery_mire_medallion(player))
-        elif pod_entrance.name == 'Agahnims Tower': 
-            add_rule(kikiskip, lambda state: state.has('Cape', player) or state.has_beam_sword(player) or state.has('Beat Agahnim 1', player))
-
-        # Then we set a restriction on exiting the dungeon, so you can't leave unless you got in normally.
-        add_rule(world.get_entrance('Palace of Darkness Exit', player), lambda state: pod_entrance.can_reach(state))
-    elif not fix_fake_worlds: # full, dungeonsfull; has fixed exits but no FWF
-        # Entry requires the entrance's requirements plus a fake pearl, but you don't gain logical access to the surrounding region. 
-        add_rule(kikiskip, lambda state: pod_entrance.access_rule(fake_pearl_state(state, player)))
-        # exiting restriction
-        add_rule(world.get_entrance('Palace of Darkness Exit', player), lambda state: pod_entrance.can_reach(state))
-
+    dungeon_reentry_rules(world, player, kikiskip, 'Palace of Darkness (Entrance)', 'Palace of Darkness Exit')
 
 
     # Mire -> Hera -> Swamp
@@ -106,27 +113,5 @@ def underworld_glitches_rules(world, player):
     mire_to_swamp = world.get_entrance('Hera to Swamp Clip', player)
     set_rule(mire_to_hera, mire_clip)
     set_rule(mire_to_swamp, lambda state: mire_clip(state) and state.has('Flippers', player))
-    hera_entrance = [r for r in world.get_region('Tower of Hera (Bottom)', player).entrances if r.name != 'Mire to Hera Clip'][0]
-    swamp_entrance = [r for r in world.get_region('Swamp Palace (Entrance)', player).entrances if r.name != 'Hera to Swamp Clip'][0]
-    if not fix_dungeon_exits: 
-        if hera_entrance.name == 'Skull Woods Final Section': 
-            set_rule(mire_to_hera, lambda state: False)
-        elif hera_entrance.name == 'Misery Mire': 
-            add_rule(mire_to_hera, lambda state: state.has_sword(player) and state.has_misery_mire_medallion(player))
-        elif hera_entrance.name == 'Agahnims Tower': 
-            add_rule(mire_to_hera, lambda state: state.has('Cape', player) or state.has_beam_sword(player) or state.has('Beat Agahnim 1', player))
-        add_rule(world.get_entrance('Tower of Hera Exit', player), lambda state: hera_entrance.can_reach(state))
-
-        if swamp_entrance.name == 'Skull Woods Final Section': 
-            set_rule(mire_to_swamp, lambda state: False)
-        elif swamp_entrance.name == 'Misery Mire': 
-            add_rule(mire_to_swamp, lambda state: state.has_sword(player) and state.has_misery_mire_medallion(player))
-        elif swamp_entrance.name == 'Agahnims Tower': 
-            add_rule(mire_to_swamp, lambda state: state.has('Cape', player) or state.has_beam_sword(player) or state.has('Beat Agahnim 1', player))
-        add_rule(world.get_entrance('Swamp Palace Exit', player), lambda state: swamp_entrance.can_reach(state))
-    elif not fix_fake_worlds: 
-        add_rule(mire_to_hera, lambda state: hera_entrance.access_rule(fake_pearl_state(state, player)))
-        add_rule(world.get_entrance('Tower of Hera Exit', player), lambda state: hera_entrance.can_reach(state))
-
-        add_rule(mire_to_swamp, lambda state: swamp_entrance.access_rule(fake_pearl_state(state, player)))
-        add_rule(world.get_entrance('Swamp Palace Exit', player), lambda state: swamp_entrance.can_reach(state))
+    dungeon_reentry_rules(world, player, mire_to_hera, 'Tower of Hera (Bottom)', 'Tower of Hera Exit')
+    dungeon_reentry_rules(world, player, mire_to_swamp, 'Swamp Palace (Entrance)', 'Swamp Palace Exit')
