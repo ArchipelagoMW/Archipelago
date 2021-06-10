@@ -89,9 +89,7 @@ def underworld_glitches_rules(world, player):
     # We need to be able to s+q to old man, then go to either Mire or Hera at either Hera or GT. 
     # First we require a certain type of entrance shuffle, then build the rule from its pieces. 
     if not world.swamp_patch_required[player]:
-        mirrorless_moat_rules = []
         if world.shuffle[player] in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed']: 
-            mirrorless_moat_rules.append(lambda state: state.can_reach('Old Man S&Q', 'Entrance', player) and mire_clip(state))
             rule_map = {
                 'Misery Mire (Entrance)': (lambda state: True),
                 'Tower of Hera (Bottom)': (lambda state: state.can_reach('Tower of Hera Big Key Door', 'Entrance', player))
@@ -101,7 +99,8 @@ def underworld_glitches_rules(world, player):
                                       rule_map.get(world.get_entrance('Tower of Hera', player).connected_region.name, lambda state: False)(state)
             gt_rule = lambda state: (state.has('Moon Pearl', player) or inverted) and \
                                     rule_map.get(world.get_entrance(('Ganons Tower' if not inverted else 'Inverted Ganons Tower'), player).connected_region.name, lambda state: False)(state)
-            add_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Magic Mirror', player) or all([rule(state) for rule in mirrorless_moat_rules]))
+            mirrorless_moat_rule = lambda state: state.can_reach('Old Man S&Q', 'Entrance', player) and mire_clip(state) and (hera_rule(state) or gt_rule(state))
+            add_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Magic Mirror', player) or mirrorless_moat_rule(state))
         else: 
             add_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Magic Mirror', player))
 
