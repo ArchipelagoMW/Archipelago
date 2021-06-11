@@ -18,7 +18,7 @@ class AdjusterWorld(object):
     def __init__(self, sprite_pool):
         import random
         self.sprite_pool = {1: sprite_pool}
-        self.rom_seeds = {1: random}
+        self.slot_seeds = {1: random}
 
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):

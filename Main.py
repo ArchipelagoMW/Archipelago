@@ -130,8 +130,8 @@ def main(args, seed=None):
             setattr(world, option, getattr(args, option, {}))
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
-    world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in
-                       range(1, world.players + 1)}
+    world.slot_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in
+                        range(1, world.players + 1)}
 
     for player in range(1, world.players + 1):
         world.er_seeds[player] = str(world.random.randint(0, 2 ** 64))

@@ -20,7 +20,7 @@ def get_mc_data(world: MultiWorld, player: int):
     exits = ["Overworld Structure 1", "Overworld Structure 2", "Nether Structure 1", "Nether Structure 2",
              "The End Structure"]
     return {
-        'world_seed': Random(world.rom_seeds[player]).getrandbits(32),
+        'world_seed': world.slot_seeds[player].getrandbits(32),
         # consistent and doesn't interfere with other generation
         'seed_name': world.seed_name,
         'player_name': world.get_player_names(player),
