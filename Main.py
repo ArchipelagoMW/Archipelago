@@ -219,7 +219,7 @@ def main(args, seed=None):
                                                                     'dungeonscrossed'} or not world.shuffle_ganon)
         else:
             world.open_pyramid[player] = {'on': True, 'off': False, 'yes': True, 'no': False}.get(
-                world.open_pyramid[player], world.open_pyramid[player])
+                world.open_pyramid[player], 'auto')
 
         world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player],
                                                       world.triforce_pieces_required[player])
