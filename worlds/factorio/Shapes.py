@@ -15,7 +15,7 @@ def get_shapes(world: MultiWorld, player: int) -> Dict[str, List[str]]:
     prerequisites: Dict[str, Set[str]] = {}
     layout = world.tech_tree_layout[player].value
     custom_technologies = world.custom_data[player]["custom_technologies"]
-    tech_names: List[str] = list(set(custom_technologies) - world._static_nodes)
+    tech_names: List[str] = list(set(custom_technologies) - world.worlds[player].static_nodes)
     tech_names.sort()
     world.random.shuffle(tech_names)
 

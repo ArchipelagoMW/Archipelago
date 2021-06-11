@@ -8,7 +8,10 @@ from .Regions import create_regions
 from .Rules import set_rules
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
+from ..AutoWorld import World
 
+class HKWorld(World):
+    game: str = "Hollow Knight"
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, None, name, player)

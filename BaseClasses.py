@@ -32,7 +32,7 @@ class MultiWorld():
             return self.rule(player)
 
     def __init__(self, players: int):
-        # TODO: move per-player settings into new classes per game-type instead of clumping it all together here
+        from worlds import AutoWorld
 
         self.random = random.Random()  # world-local random state is saved for multiple generations running concurrently
         self.players = players
@@ -139,11 +139,10 @@ class MultiWorld():
             set_player_attr('game', "A Link to the Past")
             set_player_attr('completion_condition', lambda state: True)
         self.custom_data = {}
+        self.worlds = {}
         for player in range(1, players+1):
             self.custom_data[player] = {}
-        # self.worlds = []
-        # for i in range(players):
-        #     self.worlds.append(worlds.alttp.ALTTPWorld({}, i))
+            self.worlds[player] = AutoWorld.AutoWorldRegister.world_types[self.game[player]](player)
 
     def secure(self):
         self.random = secrets.SystemRandom()

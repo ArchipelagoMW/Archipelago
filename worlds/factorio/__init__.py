@@ -1,66 +1,56 @@
-from ..BaseWorld import World
-
+from ..AutoWorld import World
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
 from .Technologies import tech_table, recipe_sources, technology_table, advancement_technologies, \
     all_ingredient_names, required_technologies, get_rocket_requirements, rocket_recipes
 from .Shapes import get_shapes
+from .Mod import generate_mod
+
 
 class Factorio(World):
+    game: str = "Factorio"
+    static_nodes = {"automation", "logistics"}
+
     def generate_basic(self, world: MultiWorld, player: int):
-        static_nodes = world._static_nodes = {"automation", "logistics"}  # turn dynamic/option?
+        victory_tech_names = get_rocket_requirements(frozenset(rocket_recipes[world.max_science_pack[player].value]))
         for tech_name, tech_id in tech_table.items():
-            tech_item = Item(tech_name, tech_name in advancement_technologies, tech_id, player)
+            tech_item = Item(tech_name, tech_name in advancement_technologies or tech_name in victory_tech_names,
+                             tech_id, player)
             tech_item.game = "Factorio"
-            if tech_name in static_nodes:
-                loc = world.get_location(tech_name, player)
-                loc.item = tech_item
-                loc.locked = True
-                loc.event = tech_item.advancement
+            if tech_name in self.static_nodes:
+                world.get_location(tech_name, player).place_locked_item(tech_item)
             else:
                 world.itempool.append(tech_item)
         world.custom_data[player]["custom_technologies"] = custom_technologies = set_custom_technologies(world, player)
         set_rules(world, player, custom_technologies)
 
-def gen_factorio(world: MultiWorld, player: int):
-    static_nodes = world._static_nodes = {"automation", "logistics"}  # turn dynamic/option?
-    victory_tech_names = get_rocket_requirements(frozenset(rocket_recipes[world.max_science_pack[player].value]))
-    for tech_name, tech_id in tech_table.items():
-        tech_item = Item(tech_name, tech_name in advancement_technologies or tech_name in victory_tech_names,
-                         tech_id, player)
-        tech_item.game = "Factorio"
-        if tech_name in static_nodes:
-            world.get_location(tech_name, player).place_locked_item(tech_item)
-        else:
-            world.itempool.append(tech_item)
-    world.custom_data[player]["custom_technologies"] = custom_technologies = set_custom_technologies(world, player)
-    set_rules(world, player, custom_technologies)
+    def generate_output(self, world: MultiWorld, player: int):
+        generate_mod(world, player)
 
+    def create_regions(self, world: MultiWorld, player: int):
+        menu = Region("Menu", None, "Menu", player)
+        crash = Entrance(player, "Crash Land", menu)
+        menu.exits.append(crash)
+        nauvis = Region("Nauvis", None, "Nauvis", player)
+        nauvis.world = menu.world = world
 
-def factorio_create_regions(world: MultiWorld, player: int):
-    menu = Region("Menu", None, "Menu", player)
-    crash = Entrance(player, "Crash Land", menu)
-    menu.exits.append(crash)
-    nauvis = Region("Nauvis", None, "Nauvis", player)
-    nauvis.world = menu.world = world
-
-    for tech_name, tech_id in tech_table.items():
-        tech = Location(player, tech_name, tech_id, nauvis)
-        nauvis.locations.append(tech)
-        tech.game = "Factorio"
-    location = Location(player, "Rocket Launch", None, nauvis)
-    nauvis.locations.append(location)
-    event = Item("Victory", True, None, player)
-    world.push_item(location, event, False)
-    location.event = location.locked = True
-    for ingredient in all_ingredient_names:
-        location = Location(player, f"Automate {ingredient}", None, nauvis)
+        for tech_name, tech_id in tech_table.items():
+            tech = Location(player, tech_name, tech_id, nauvis)
+            nauvis.locations.append(tech)
+            tech.game = "Factorio"
+        location = Location(player, "Rocket Launch", None, nauvis)
         nauvis.locations.append(location)
-        event = Item(f"Automated {ingredient}", True, None, player)
+        event = Item("Victory", True, None, player)
         world.push_item(location, event, False)
         location.event = location.locked = True
-    crash.connect(nauvis)
-    world.regions += [menu, nauvis]
+        for ingredient in all_ingredient_names:
+            location = Location(player, f"Automate {ingredient}", None, nauvis)
+            nauvis.locations.append(location)
+            event = Item(f"Automated {ingredient}", True, None, player)
+            world.push_item(location, event, False)
+            location.event = location.locked = True
+        crash.connect(nauvis)
+        world.regions += [menu, nauvis]
 
 
 def set_custom_technologies(world: MultiWorld, player: int):

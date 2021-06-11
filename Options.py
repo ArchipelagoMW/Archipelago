@@ -22,6 +22,37 @@ class AssembleOptions(type):
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
 
+class AssembleCategoryPath(type):
+    def __new__(mcs, name, bases, attrs):
+        path = []
+        for base in bases:
+            if hasattr(base, "segment"):
+                path += base.segment
+        path += attrs["segment"]
+        attrs["path"] = path
+        return super(AssembleCategoryPath, mcs).__new__(mcs, name, bases, attrs)
+
+
+class RootCategory(metaclass=AssembleCategoryPath):
+    segment = []
+
+
+class LttPCategory(RootCategory):
+    segment = ["A Link to the Past"]
+
+
+class LttPRomCategory(LttPCategory):
+    segment = ["rom"]
+
+
+class FactorioCategory(RootCategory):
+    segment = ["Factorio"]
+
+
+class MinecraftCategory(RootCategory):
+    segment = ["Minecraft"]
+
+
 class Option(metaclass=AssembleOptions):
     value: int
     name_lookup: typing.Dict[int, str]
