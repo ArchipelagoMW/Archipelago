@@ -11,10 +11,12 @@ funnel_slice_sizes = {TechTreeLayout.option_small_funnels: 6,
                       TechTreeLayout.option_medium_funnels: 10,
                       TechTreeLayout.option_large_funnels: 15}
 
-def get_shapes(world: MultiWorld, player: int) -> Dict[str, List[str]]:
+def get_shapes(factorio_world) -> Dict[str, List[str]]:
+    world = factorio_world.world
+    player = factorio_world.player
     prerequisites: Dict[str, Set[str]] = {}
     layout = world.tech_tree_layout[player].value
-    custom_technologies = world.custom_data[player]["custom_technologies"]
+    custom_technologies = factorio_world.custom_technologies
     tech_names: List[str] = list(set(custom_technologies) - world.worlds[player].static_nodes)
     tech_names.sort()
     world.random.shuffle(tech_names)

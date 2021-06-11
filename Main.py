@@ -124,10 +124,7 @@ def main(args, seed=None):
     world.restrict_dungeon_item_on_boss = args.restrict_dungeon_item_on_boss.copy()
     world.required_medallions = args.required_medallions.copy()
     world.game = args.game.copy()
-    import Options
-    for option_set in Options.option_sets:
-        for option in option_set:
-            setattr(world, option, getattr(args, option, {}))
+    world.set_options(args)
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
     world.slot_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in
@@ -261,6 +258,8 @@ def main(args, seed=None):
     if world.players > 1:
         for player in world.player_ids:
             locality_rules(world, player)
+
+    AutoWorld.call_all(world, "set_rules")
 
     for player in world.alttp_player_ids:
         set_rules(world, player)

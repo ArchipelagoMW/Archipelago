@@ -23,6 +23,7 @@ class MultiWorld():
     plando_items: List[PlandoItem]
     plando_connections: List[PlandoConnection]
     er_seeds: Dict[int, str]
+    worlds: Dict[int, "AutoWorld.World"]
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -32,8 +33,6 @@ class MultiWorld():
             return self.rule(player)
 
     def __init__(self, players: int):
-        from worlds import AutoWorld
-
         self.random = random.Random()  # world-local random state is saved for multiple generations running concurrently
         self.players = players
         self.teams = 1
@@ -140,9 +139,17 @@ class MultiWorld():
             set_player_attr('completion_condition', lambda state: True)
         self.custom_data = {}
         self.worlds = {}
-        for player in range(1, players+1):
+
+
+    def set_options(self, args):
+        import Options
+        from worlds import AutoWorld
+        for option_set in Options.option_sets:
+            for option in option_set:
+                setattr(self, option, getattr(args, option, {}))
+        for player in self.player_ids:
             self.custom_data[player] = {}
-            self.worlds[player] = AutoWorld.AutoWorldRegister.world_types[self.game[player]](player)
+            self.worlds[player] = AutoWorld.AutoWorldRegister.world_types[self.game[player]](self, player)
 
     def secure(self):
         self.random = secrets.SystemRandom()

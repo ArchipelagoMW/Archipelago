@@ -8,7 +8,7 @@ local technologies = data.raw["technology"]
 local original_tech
 local new_tree_copy
 allowed_ingredients = {}
-{%- for tech_name, technology in custom_data["custom_technologies"].items() %}
+{%- for tech_name, technology in custom_technologies.items() %}
 allowed_ingredients["{{ tech_name }}"] = {
 {%- for ingredient in technology.ingredients %}
 ["{{ingredient}}"] = 1,
