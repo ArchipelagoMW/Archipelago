@@ -173,15 +173,14 @@ def get_shapes(factorio_world) -> Dict[str, List[str]]:
 
     elif layout in funnel_layers:
         slice_size = funnel_slice_sizes[layout]
-
         world.random.shuffle(tech_names)
-        tech_names.sort(key=lambda tech_name: len(custom_technologies[tech_name].get_prior_technologies()))
 
         while len(tech_names) > slice_size:
             tech_names = tech_names[slice_size:]
             current_tech_names = tech_names[:slice_size]
             layer_size = funnel_layers[layout]
             previous_slice = []
+            current_tech_names.sort(key=lambda tech_name: len(custom_technologies[tech_name].get_prior_technologies()))
             for layer in range(funnel_layers[layout]):
                 slice = current_tech_names[:layer_size]
                 current_tech_names = current_tech_names[layer_size:]

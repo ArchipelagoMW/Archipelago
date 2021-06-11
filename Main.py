@@ -1,4 +1,3 @@
-import copy
 from itertools import zip_longest
 import logging
 import os
