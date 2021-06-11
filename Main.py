@@ -519,11 +519,13 @@ def main(args, seed=None):
             for player, name in enumerate(team, 1):
                 if player not in world.alttp_player_ids:
                     connect_names[name] = (i, player)
-        for slot in world.hk_player_ids:
-            slots_data = slot_data[slot] = {}
-            for option_name in Options.hollow_knight_options:
-                option = getattr(world, option_name)[slot]
-                slots_data[option_name] = int(option.value)
+        if world.hk_player_ids:
+            import Options
+            for slot in world.hk_player_ids:
+                slots_data = slot_data[slot] = {}
+                for option_name in Options.hollow_knight_options:
+                    option = getattr(world, option_name)[slot]
+                    slots_data[option_name] = int(option.value)
         for slot in world.minecraft_player_ids:
             slot_data[slot] = fill_minecraft_slot_data(world, slot)
 
