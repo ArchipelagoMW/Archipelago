@@ -24,8 +24,8 @@ from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
 from worlds.hk import gen_hollow
 from worlds.hk import create_regions as hk_create_regions
-from worlds.factorio import gen_factorio, factorio_create_regions
-from worlds.factorio.Mod import generate_mod
+# from worlds.factorio import gen_factorio, factorio_create_regions
+# from worlds.factorio.Mod import generate_mod
 from worlds.minecraft import gen_minecraft, fill_minecraft_slot_data, generate_mc_data
 from worlds.minecraft.Regions import minecraft_create_regions
 from worlds.generic.Rules import locality_rules
@@ -128,9 +128,8 @@ def main(args, seed=None):
     world.game = args.game.copy()
     import Options
     for option_set in Options.option_sets:
-        for option in option_set:
-            setattr(world, option, getattr(args, option, {}))
-
+        # for option in option_set:
+        #     setattr(world, option, getattr(args, option, {}))
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
     world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}
@@ -200,8 +199,8 @@ def main(args, seed=None):
     for player in world.hk_player_ids:
         hk_create_regions(world, player)
 
-    for player in world.factorio_player_ids:
-        factorio_create_regions(world, player)
+    # for player in world.factorio_player_ids:
+    #     factorio_create_regions(world, player)
 
     for player in world.minecraft_player_ids:
         minecraft_create_regions(world, player)
@@ -262,8 +261,8 @@ def main(args, seed=None):
     for player in world.hk_player_ids:
         gen_hollow(world, player)
 
-    for player in world.factorio_player_ids:
-        gen_factorio(world, player)
+    # for player in world.factorio_player_ids:
+    #     gen_factorio(world, player)
 
     for player in world.minecraft_player_ids:
         gen_minecraft(world, player)
