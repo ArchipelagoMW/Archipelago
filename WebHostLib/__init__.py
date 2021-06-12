@@ -94,6 +94,11 @@ def player_settings():
     return render_template("weightedSettings.html")
 
 
+@app.route('/games')
+def games():
+    return render_template("games.html")
+
+
 @app.route('/seed/<suuid:seed>')
 def viewSeed(seed: UUID):
     seed = Seed.get(id=seed)
