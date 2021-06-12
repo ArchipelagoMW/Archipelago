@@ -161,6 +161,8 @@ class Range(Option, int):
                 return cls(int(round(random.triangular(cls.range_start, cls.range_end, cls.range_start), 0)))
             elif text == "random-high":
                 return cls(int(round(random.triangular(cls.range_start, cls.range_end, cls.range_end), 0)))
+            elif text == "random-middle":
+                return cls(int(round(random.triangular(cls.range_start, cls.range_end), 0)))
             else:
                 return cls(random.randint(cls.range_start, cls.range_end))
         return cls(int(text))
