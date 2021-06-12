@@ -6,17 +6,18 @@
 {% endblock %}
 
 {% block body %}
+    {% include 'header/oceanHeader.html' %}
     <div id="landing-wrapper">
         <div id="landing-header">
-            <h4>the legend of zelda: a link to the past</h4>
-            <h1>MULTIWORLD RANDOMIZER</h1>
+            <h1>ARCHIPELAGO</h1>
+            <h4>multiworld randomizer ecosystem</h4>
         </div>
         <div id="landing-links">
-            <a href="/player-settings" id="player-settings-button">start<br />playing</a>
-            <a href="/uploads" id="uploads-button">host<br />game</a>
-            <a href="/tutorial" id="setup-guide-button">setup guides</a>
-            <a href="/generate" id="generate-button">upload config</a>
-            <a href="https://discord.gg/8Z65BR2" id="discord-button">discord</a>
+            <a href="/player-settings" id="mid-button">start<br />playing</a>
+            <a id="far-left-button"></a>
+            <a href="/tutorial" id="mid-left-button">setup guide</a>
+            <a id="far-right-button"></a>
+            <a href="https://discord.gg/8Z65BR2" id="mid-right-button">discord</a>
         </div>
         <div id="landing-clouds">
             <img id="cloud1" src="/static/static/backgrounds/clouds/cloud-0001.png"/>
@@ -33,14 +34,13 @@
         </div>
         <div id="landing" class="grass-island">
             <div id="landing-body">
-                <p id="first-line">Welcome to the Archipelago Multiworld Randomizer!</p>
-                <p>This is a <span data-tooltip="Allegedly.">randomizer</span> for The Legend of Zelda: A
-                    Link to the Past.</p>
-                <p>It is also a multi-world, meaning Link's items may have been placed into other players' games.
-                    When a player picks up an item which does not belong to them, it is sent back to the player
-                    it belongs to.</p>
-                <p>On this website you are able to generate and host multiworld games, and item and location
-                    trackers are provided for games hosted here.</p>
+                <p id="first-line">Welcome to Archipelago!</p>
+                <p>
+                    This is a cross-game modification system which randomizes different games, then uses the result to
+                    build a single unified multi-player game. Items from one game may be present in another, and
+                    you will need your fellow players to find items you need in their games to help you complete
+                    your own.
+                </p>
                 <p>
                     This project is the cumulative effort of many
                     <a href="https://github.com/ArchipelagoMW/Archipelago/graphs/contributors">talented people.</a>
