@@ -93,7 +93,7 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
     # fill in gtower locations with trash first
     for player in world.alttp_player_ids:
         if not gftower_trash or not world.ganonstower_vanilla[player] or \
-                world.logic[player] in {'owglitches', "nologic"}:
+                world.logic[player] in {'owglitches', 'hybridmg', "nologic"}:
             gtower_trash_count = 0
         elif 'triforcehunt' in world.goal[player] and ('local' in world.goal[player] or world.players == 1):
             gtower_trash_count = world.random.randint(world.crystals_needed_for_gt[player] * 2,
