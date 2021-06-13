@@ -241,8 +241,6 @@ def generate_itempool(world, player: int):
     else:
         world.push_item(world.get_location('Ganon', player), ItemFactory('Triforce', player), False)
 
-
-
     if world.goal[player] == 'icerodhunt':
         world.progression_balancing[player] = False
         loc = world.get_location('Turtle Rock - Boss', player)
@@ -255,7 +253,6 @@ def generate_itempool(world, player: int):
                 logging.warning(f'Cannot guarantee that Trinexx is the boss of Turtle Rock for player {player}')
         loc.event = True
         loc.locked = True
-        forbid_items_for_player(loc, {'Red Pendant', 'Green Pendant', 'Blue Pendant', 'Crystal 5', 'Crystal 6'}, player)
         itemdiff = difficulties[world.difficulty[player]]
         itempool = []
         itempool.extend(itemdiff.alwaysitems)
