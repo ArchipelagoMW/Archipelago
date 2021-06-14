@@ -409,6 +409,7 @@ def roll_triggers(weights: dict) -> dict:
                                 f'This is probably in error.')
             trigger_result = get_choice("option_result", option_set)
             result = get_choice(key, weights)
+            weights[key] = result
             if result == trigger_result and roll_percentage(get_choice("percentage", option_set, 100)):
                 if "options" in option_set:
                     weights = update_weights(weights, option_set["options"], "Triggered", option_set["option_name"])
@@ -418,7 +419,7 @@ def roll_triggers(weights: dict) -> dict:
                     rom_weights = update_weights(rom_weights, option_set["rom_options"], "Triggered Rom",
                                                  option_set["option_name"])
                     weights["rom"] = rom_weights
-            weights[key] = result
+
         except Exception as e:
             raise ValueError(f"Your trigger number {i+1} is destroyed. "
                              f"Please fix your triggers.") from e
