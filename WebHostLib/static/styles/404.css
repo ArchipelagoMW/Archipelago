@@ -1,0 +1,10 @@
+#page-not-found{
+    width: 40em;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+#page-not-found h1{
+    margin-bottom: 0.5rem;
+}

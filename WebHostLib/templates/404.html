@@ -1,0 +1,17 @@
+{% extends 'pageWrapper.html' %}
+{% import "macros.html" as macros %}
+
+{% block head %}
+    <title>Page Not Found (404)</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/404.css") }}" />
+{% endblock %}
+
+{% block body %}
+    {% include 'header/oceanHeader.html' %}
+    <div id="page-not-found" class="grass-island">
+        <h1>This page is out of logic!</h1>
+        The page you're looking for doesn&apos;t exist.<br />
+        <a href="/">Click here to return to safety.</a>
+    </div>
+    {% include 'islandFooter.html' %}
+{% endblock %}

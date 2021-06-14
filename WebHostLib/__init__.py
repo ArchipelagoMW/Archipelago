@@ -3,8 +3,10 @@ import uuid
 import base64
 import socket
 
+import jinja2.exceptions
 from pony.flask import Pony
 from flask import Flask, request, redirect, url_for, render_template, Response, session, abort, send_from_directory
+from flask import Blueprint
 from flask_caching import Cache
 from flask_compress import Compress
 
@@ -74,6 +76,41 @@ def register_session():
         session["_id"] = uuid4()  # uniquely identify each session without needing a login
 
 
+@app.errorhandler(404)
+@app.errorhandler(jinja2.exceptions.TemplateNotFound)
+def page_not_found(err):
+    return render_template('404.html'), 404
+
+
+base_page = Blueprint('base_page', __name__, template_folder='templates', url_prefix='/')
+zelda_page = Blueprint('zelda_page', __name__, template_folder='templates/zelda3', url_prefix='/zelda3')
+factorio_page = Blueprint('factorio_page', __name__, template_folder='templates/factorio', url_prefix='/factorio')
+minecraft_page = Blueprint('minecraft_page', __name__, template_folder='templates/minecraft', url_prefix='/minecraft')
+
+
+@app.route('/games')
+def games():
+    return render_template("games.html")
+
+
+@zelda_page.route('/', defaults={'page': 'index.html'})
+@zelda_page.route('/<string:page>')
+def zelda_pages(page='index.html'):
+    return render_template(page)
+
+
+@factorio_page.route('/', defaults={'page': 'index.html'})
+@factorio_page.route('/<string:page>')
+def factorio_pages(page='index.html'):
+    return render_template(page)
+
+
+@minecraft_page.route('/', defaults={'page': 'index.html'})
+@minecraft_page.route('/<string:page>')
+def minecraft_pages(page='index.html'):
+    return render_template(page)
+
+
 @app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
 def tutorial(game, file, lang):
     return render_template("tutorial.html", game=game, file=file, lang=lang)
@@ -84,19 +121,9 @@ def tutorial_landing():
     return render_template("tutorialLanding.html")
 
 
-@app.route('/player-settings')
-def player_settings_simple():
-    return render_template("playerSettings.html")
-
-
 @app.route('/weighted-settings')
 def player_settings():
     return render_template("weightedSettings.html")
-
-
-@app.route('/games')
-def games():
-    return render_template("games.html")
 
 
 @app.route('/seed/<suuid:seed>')
@@ -159,3 +186,7 @@ def favicon():
 from WebHostLib.customserver import run_server_process
 from . import tracker, upload, landing, check, generate, downloads, api  # to trigger app routing picking up on it
 app.register_blueprint(api.api_endpoints)
+app.register_blueprint(base_page)
+app.register_blueprint(zelda_page)
+app.register_blueprint(factorio_page)
+app.register_blueprint(minecraft_page)
