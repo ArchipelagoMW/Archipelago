@@ -1237,7 +1237,7 @@ class Item():
 
     @property
     def hint_text(self):
-        return getattr(self, "_hint_text", self.name)
+        return getattr(self, "_hint_text", self.name.replace("_", " ").replace("-", " "))
 
     @property
     def pedestal_hint_text(self):
