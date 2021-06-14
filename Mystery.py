@@ -641,7 +641,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     extra_pieces = get_choice('triforce_pieces_mode', weights, 'available')
 
-    ret.triforce_pieces_required = Options.TriforcePieces.from_any(get_choice('triforce_pieces_required', weights))
+    ret.triforce_pieces_required = Options.TriforcePieces.from_any(get_choice('triforce_pieces_required', weights, 20))
 
     # sum a percentage to required
     if extra_pieces == 'percentage':
@@ -649,7 +649,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
         ret.triforce_pieces_available = int(round(ret.triforce_pieces_required * percentage, 0))
     # vanilla mode (specify how many pieces are)
     elif extra_pieces == 'available':
-        ret.triforce_pieces_available = Options.TriforcePieces.from_any(get_choice('triforce_pieces_available', weights))
+        ret.triforce_pieces_available = Options.TriforcePieces.from_any(get_choice('triforce_pieces_available', weights, 30))
     # required pieces + fixed extra
     elif extra_pieces == 'extra':
         extra_pieces = max(0, int(get_choice('triforce_pieces_extra', weights, 10)))

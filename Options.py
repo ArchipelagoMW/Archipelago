@@ -256,6 +256,7 @@ class CrystalsGanon(Crystals):
 
 
 class TriforcePieces(Range):
+    default = 30
     range_start = 1
     range_end = 90
 
