@@ -92,19 +92,20 @@ minecraft_page = Blueprint('minecraft_page', __name__, template_folder='template
 def games():
     return render_template("games.html")
 
-@zelda_page.route('/', defaults={'page': 'index'})
+
+@zelda_page.route('/', defaults={'page': 'zelda3'})
 @zelda_page.route('/<string:page>')
 def zelda_pages(page):
     return render_template(page+".html")
 
 
-@factorio_page.route('/', defaults={'page': 'index'})
+@factorio_page.route('/', defaults={'page': 'factorio'})
 @factorio_page.route('/<string:page>')
 def factorio_pages(page):
     return render_template(page+".html")
 
 
-@minecraft_page.route('/', defaults={'page': 'index'})
+@minecraft_page.route('/', defaults={'page': 'minecraft'})
 @minecraft_page.route('/<string:page>')
 def minecraft_pages(page):
     return render_template(page+".html")
