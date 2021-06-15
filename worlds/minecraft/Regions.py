@@ -1,5 +1,5 @@
 
-def link_minecraft_structures(world, player: int):
+def link_minecraft_structures(world, player):
 
     # Link mandatory connections first
     for (exit, region) in mandatory_connections:

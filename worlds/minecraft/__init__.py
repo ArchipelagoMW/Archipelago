@@ -73,13 +73,14 @@ class MinecraftWorld(World):
 
 
     def generate_output(self):
-        import base64, json
+        import json
+        from base64 import b64encode
         from Utils import output_path
 
         data = self._get_mc_data()
         filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_names(self.player)}.apmc"
         with open(output_path(filename), 'wb') as f:
-            f.write(base64.b64encode(bytes(json.dumps(data), 'utf-8')))
+            f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
 
 
     def fill_slot_data(self): 

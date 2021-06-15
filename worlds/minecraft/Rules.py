@@ -1,9 +1,8 @@
 from ..generic.Rules import set_rule
 from .Locations import exclusion_table, events_table
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item
 from Options import AdvancementGoal
 
-def set_rules(world: MultiWorld, player: int):
+def set_rules(world, player):
 
     def reachable_locations(state):
         postgame_advancements = set(exclusion_table['postgame'].keys())
