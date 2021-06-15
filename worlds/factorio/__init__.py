@@ -9,11 +9,12 @@ from .Mod import generate_mod
 
 class Factorio(World):
     game: str = "Factorio"
-    static_nodes = {"automation", "logistics"}
+    static_nodes = {"automation", "logistics", "rocket-silo"}
 
     def generate_basic(self):
         victory_tech_names = get_rocket_requirements(
             frozenset(rocket_recipes[self.world.max_science_pack[self.player].value]))
+
         for tech_name, tech_id in tech_table.items():
             tech_item = Item(tech_name, tech_name in advancement_technologies or tech_name in victory_tech_names,
                              tech_id, self.player)
