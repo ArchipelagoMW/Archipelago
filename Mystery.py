@@ -770,49 +770,43 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                     get_choice("direction", placement, "both")
                 ))
 
-    if 'rom' in weights:
-        romweights = weights['rom']
 
-        ret.sprite_pool = romweights['sprite_pool'] if 'sprite_pool' in romweights else []
-        ret.sprite = get_choice('sprite', romweights, "Link")
-        if 'random_sprite_on_event' in romweights:
-            randomoneventweights = romweights['random_sprite_on_event']
-            if get_choice('enabled', randomoneventweights, False):
-                ret.sprite = 'randomon'
-                ret.sprite += '-hit' if get_choice('on_hit', randomoneventweights, True) else ''
-                ret.sprite += '-enter' if get_choice('on_enter', randomoneventweights, False) else ''
-                ret.sprite += '-exit' if get_choice('on_exit', randomoneventweights, False) else ''
-                ret.sprite += '-slash' if get_choice('on_slash', randomoneventweights, False) else ''
-                ret.sprite += '-item' if get_choice('on_item', randomoneventweights, False) else ''
-                ret.sprite += '-bonk' if get_choice('on_bonk', randomoneventweights, False) else ''
-                ret.sprite = 'randomonall' if get_choice('on_everything', randomoneventweights, False) else ret.sprite
-                ret.sprite = 'randomonnone' if ret.sprite == 'randomon' else ret.sprite
+    ret.sprite_pool = weights.get('sprite_pool', [])
+    ret.sprite = get_choice('sprite', weights, "Link")
+    if 'random_sprite_on_event' in weights:
+        randomoneventweights = weights['random_sprite_on_event']
+        if get_choice('enabled', randomoneventweights, False):
+            ret.sprite = 'randomon'
+            ret.sprite += '-hit' if get_choice('on_hit', randomoneventweights, True) else ''
+            ret.sprite += '-enter' if get_choice('on_enter', randomoneventweights, False) else ''
+            ret.sprite += '-exit' if get_choice('on_exit', randomoneventweights, False) else ''
+            ret.sprite += '-slash' if get_choice('on_slash', randomoneventweights, False) else ''
+            ret.sprite += '-item' if get_choice('on_item', randomoneventweights, False) else ''
+            ret.sprite += '-bonk' if get_choice('on_bonk', randomoneventweights, False) else ''
+            ret.sprite = 'randomonall' if get_choice('on_everything', randomoneventweights, False) else ret.sprite
+            ret.sprite = 'randomonnone' if ret.sprite == 'randomon' else ret.sprite
 
-                if (not ret.sprite_pool or get_choice('use_weighted_sprite_pool', randomoneventweights, False)) \
-                        and 'sprite' in romweights:  # Use sprite as a weighted sprite pool, if a sprite pool is not already defined.
-                    for key, value in romweights['sprite'].items():
-                        if key.startswith('random'):
-                            ret.sprite_pool += ['random'] * int(value)
-                        else:
-                            ret.sprite_pool += [key] * int(value)
+            if (not ret.sprite_pool or get_choice('use_weighted_sprite_pool', randomoneventweights, False)) \
+                    and 'sprite' in weights:  # Use sprite as a weighted sprite pool, if a sprite pool is not already defined.
+                for key, value in weights['sprite'].items():
+                    if key.startswith('random'):
+                        ret.sprite_pool += ['random'] * int(value)
+                    else:
+                        ret.sprite_pool += [key] * int(value)
 
-        ret.disablemusic = get_choice('disablemusic', romweights, False)
-        ret.triforcehud = get_choice('triforcehud', romweights, 'hide_goal')
-        ret.quickswap = get_choice('quickswap', romweights, True)
-        ret.fastmenu = get_choice('menuspeed', romweights, "normal")
-        ret.reduceflashing = get_choice('reduceflashing', romweights, False)
-        ret.heartcolor = get_choice('heartcolor', romweights, "red")
-        ret.heartbeep = convert_to_on_off(get_choice('heartbeep', romweights, "normal"))
-        ret.ow_palettes = get_choice('ow_palettes', romweights, "default")
-        ret.uw_palettes = get_choice('uw_palettes', romweights, "default")
-        ret.hud_palettes = get_choice('hud_palettes', romweights, "default")
-        ret.sword_palettes = get_choice('sword_palettes', romweights, "default")
-        ret.shield_palettes = get_choice('shield_palettes', romweights, "default")
-        ret.link_palettes = get_choice('link_palettes', romweights, "default")
-
-    else:
-        ret.quickswap = True
-        ret.sprite = "Link"
+    ret.disablemusic = get_choice('disablemusic', weights, False)
+    ret.triforcehud = get_choice('triforcehud', weights, 'hide_goal')
+    ret.quickswap = get_choice('quickswap', weights, True)
+    ret.fastmenu = get_choice('menuspeed', weights, "normal")
+    ret.reduceflashing = get_choice('reduceflashing', weights, False)
+    ret.heartcolor = get_choice('heartcolor', weights, "red")
+    ret.heartbeep = convert_to_on_off(get_choice('heartbeep', weights, "normal"))
+    ret.ow_palettes = get_choice('ow_palettes', weights, "default")
+    ret.uw_palettes = get_choice('uw_palettes', weights, "default")
+    ret.hud_palettes = get_choice('hud_palettes', weights, "default")
+    ret.sword_palettes = get_choice('sword_palettes', weights, "default")
+    ret.shield_palettes = get_choice('shield_palettes', weights, "default")
+    ret.link_palettes = get_choice('link_palettes', weights, "default")
 
 
 if __name__ == '__main__':
