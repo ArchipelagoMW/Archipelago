@@ -82,33 +82,35 @@ def page_not_found(err):
     return render_template('404.html'), 404
 
 
-base_page = Blueprint('base_page', __name__, template_folder='templates', url_prefix='/')
-zelda_page = Blueprint('zelda_page', __name__, template_folder='templates/zelda3', url_prefix='/zelda3')
-factorio_page = Blueprint('factorio_page', __name__, template_folder='templates/factorio', url_prefix='/factorio')
-minecraft_page = Blueprint('minecraft_page', __name__, template_folder='templates/minecraft', url_prefix='/minecraft')
-
+games_list = {
+    "zelda3": ("The Legend of Zelda: A Link to the Past",
+               """
+               The Legend of Zelda: A Link to the Past is an action/adventure game. Take on the role of Link,
+               a boy who is destined to save the land of Hyrule. Delve through three palaces and nine dungeons on
+               your quest to rescue the descendents of the seven wise men and defeat the evil Ganon!"""),
+    "factorio": ("Factorio",
+                 """
+                 Factorio is a game about automation. You play as an engineer who has crash landed on the planet
+                 Nauvis, an inhospitable world filled with dangerous creatures called biters. Build a factory,
+                 research new technologies, and become more efficient in your quest to build a rocket and return home.
+                 """),
+    "minecraft": ("Minecraft",
+                  """
+                  Minecraft is a game about creativity. In a world made entirely of cubes, you explore, discover, mine,
+                  craft, and try not to explode. Delve deep into the earth and discover abandoned mines, ancient
+                  structures, and materials to create a portal to another world. Defeat the Ender Dragon, and claim
+                  victory!""")
+}
 
 @app.route('/games')
 def games():
-    return render_template("games.html")
+    return render_template("games/games.html", games_list=games_list)
 
 
-@zelda_page.route('/', defaults={'page': 'zelda3'})
-@zelda_page.route('/<string:page>')
-def zelda_pages(page):
-    return render_template(page+".html")
+@app.route('/games/<game>')
+def game_page(game):
+    return render_template(f"/games/{game}"+".html")
 
-
-@factorio_page.route('/', defaults={'page': 'factorio'})
-@factorio_page.route('/<string:page>')
-def factorio_pages(page):
-    return render_template(page+".html")
-
-
-@minecraft_page.route('/', defaults={'page': 'minecraft'})
-@minecraft_page.route('/<string:page>')
-def minecraft_pages(page):
-    return render_template(page+".html")
 
 
 @app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
@@ -186,7 +188,3 @@ def favicon():
 from WebHostLib.customserver import run_server_process
 from . import tracker, upload, landing, check, generate, downloads, api  # to trigger app routing picking up on it
 app.register_blueprint(api.api_endpoints)
-app.register_blueprint(base_page)
-app.register_blueprint(zelda_page)
-app.register_blueprint(factorio_page)
-app.register_blueprint(minecraft_page)
