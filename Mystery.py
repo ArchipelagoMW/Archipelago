@@ -494,10 +494,12 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     ret.name = get_choice('name', weights)
     ret.accessibility = get_choice('accessibility', weights)
     ret.progression_balancing = get_choice('progression_balancing', weights, True)
-    ret.game = get_choice("game", weights, "A Link to the Past")
-
+    ret.game = get_choice("game", weights)
+    if ret.game not in weights:
+        raise Exception(f"No game options for selected game \"{ret.game}\" found.")
+    game_weights = weights[ret.game]
     ret.local_items = set()
-    for item_name in weights.get('local_items', []):
+    for item_name in game_weights.get('local_items', []):
         items = item_name_groups.get(item_name, {item_name})
         for item in items:
             if item in lookup_any_item_name_to_id:
@@ -506,7 +508,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
                 raise Exception(f"Could not force item {item} to be world-local, as it was not recognized.")
 
     ret.non_local_items = set()
-    for item_name in weights.get('non_local_items', []):
+    for item_name in game_weights.get('non_local_items', []):
         items = item_name_groups.get(item_name, {item_name})
         for item in items:
             if item in lookup_any_item_name_to_id:
@@ -514,7 +516,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
             else:
                 raise Exception(f"Could not force item {item} to be world-non-local, as it was not recognized.")
 
-    inventoryweights = weights.get('startinventory', {})
+    inventoryweights = game_weights.get('start_inventory', {})
     startitems = []
     for item in inventoryweights.keys():
         itemvalue = get_choice(item, inventoryweights)
@@ -524,14 +526,11 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         elif itemvalue:
             startitems.append(item)
     ret.startinventory = startitems
-    ret.start_hints = set(weights.get('start_hints', []))
-    if ret.game not in weights:
-        raise Exception(f"No game options for selected game \"{ret.game}\" found.")
-    game_weights = weights[ret.game]
+    ret.start_hints = set(game_weights.get('start_hints', []))
+
     if ret.game == "A Link to the Past":
         roll_alttp_settings(ret, game_weights, plando_options)
     elif ret.game == "Hollow Knight":
-        hk_weights = ret.game
         for option_name, option in Options.hollow_knight_options.items():
             setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights, True)))
     elif ret.game == "Factorio":
