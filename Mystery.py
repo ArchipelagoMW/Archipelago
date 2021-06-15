@@ -23,7 +23,9 @@ from worlds.alttp.Items import item_name_groups, item_table
 from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
 from worlds.alttp.Regions import location_table, key_drop_data
+from worlds.AutoWorld import AutoWorldRegister
 
+categories = set(AutoWorldRegister.world_types)
 
 def mystery_argparse():
     parser = argparse.ArgumentParser(add_help=False)
@@ -61,8 +63,10 @@ def mystery_argparse():
     args.plando: typing.Set[str] = {arg.strip().lower() for arg in args.plando.split(",")}
     return args
 
+
 def get_seed_name(random):
     return f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
+
 
 def main(args=None, callback=ERmain):
     if not args:
@@ -79,14 +83,14 @@ def main(args=None, callback=ERmain):
     weights_cache = {}
     if args.weights:
         try:
-            weights_cache[args.weights] = get_weights(args.weights)
+            weights_cache[args.weights] = read_weights_yaml(args.weights)
         except Exception as e:
             raise ValueError(f"File {args.weights} is destroyed. Please fix your yaml.") from e
         print(f"Weights: {args.weights} >> "
               f"{get_choice('description', weights_cache[args.weights], 'No description specified')}")
     if args.meta:
         try:
-            weights_cache[args.meta] = get_weights(args.meta)
+            weights_cache[args.meta] = read_weights_yaml(args.meta)
         except Exception as e:
             raise ValueError(f"File {args.meta} is destroyed. Please fix your yaml.") from e
         meta_weights = weights_cache[args.meta]
@@ -99,7 +103,7 @@ def main(args=None, callback=ERmain):
         if path:
             try:
                 if path not in weights_cache:
-                    weights_cache[path] = get_weights(path)
+                    weights_cache[path] = read_weights_yaml(path)
                 print(f"P{player} Weights: {path} >> "
                       f"{get_choice('description', weights_cache[path], 'No description specified')}")
 
@@ -254,7 +258,7 @@ def main(args=None, callback=ERmain):
     callback(erargs, seed)
 
 
-def get_weights(path):
+def read_weights_yaml(path):
     try:
         if urllib.parse.urlparse(path).scheme:
             yaml = str(urllib.request.urlopen(path).read(), "utf-8")
@@ -342,19 +346,6 @@ goals = {
     'ice_rod_hunt': 'icerodhunt',
 }
 
-# remove sometime before 1.0.0, warn before
-legacy_boss_shuffle_options = {
-    # legacy, will go away:
-    'simple': 'basic',
-    'random': 'full',
-    'normal': 'full'
-}
-
-legacy_goals = {
-    'dungeons': 'bosses',
-    'fast_ganon': 'crystals',
-}
-
 
 def roll_percentage(percentage: typing.Union[int, float]) -> bool:
     """Roll a percentage chance.
@@ -382,13 +373,12 @@ def roll_linked_options(weights: dict) -> dict:
         try:
             if roll_percentage(option_set["percentage"]):
                 logging.debug(f"Linked option {option_set['name']} triggered.")
-                if "options" in option_set:
-                    weights = update_weights(weights, option_set["options"], "Linked", option_set["name"])
-                if "rom_options" in option_set:
-                    rom_weights = weights.get("rom", dict())
-                    rom_weights = update_weights(rom_weights, option_set["rom_options"], "Linked Rom",
-                                                 option_set["name"])
-                    weights["rom"] = rom_weights
+                new_options = option_set["options"]
+                for category_name, category_options in new_options.items():
+                    currently_targeted_weights = weights
+                    if category_name:
+                        currently_targeted_weights = currently_targeted_weights[category_name]
+                    update_weights(currently_targeted_weights, category_options, "Linked", option_set["name"])
             else:
                 logging.debug(f"linked option {option_set['name']} skipped.")
         except Exception as e:
@@ -402,36 +392,32 @@ def roll_triggers(weights: dict) -> dict:
     weights["_Generator_Version"] = "Archipelago"  # Some means for triggers to know if the seed is on main or doors.
     for i, option_set in enumerate(weights["triggers"]):
         try:
+            currently_targeted_weights = weights
+            category = option_set.get("option_category", None)
+            if category:
+                currently_targeted_weights = currently_targeted_weights[category]
             key = get_choice("option_name", option_set)
-            if key not in weights:
+            if key not in currently_targeted_weights:
                 logging.warning(f'Specified option name {option_set["option_name"]} did not '
                                 f'match with a root option. '
                                 f'This is probably in error.')
             trigger_result = get_choice("option_result", option_set)
-            result = get_choice(key, weights)
-            weights[key] = result
+            result = get_choice(key, currently_targeted_weights)
+            currently_targeted_weights[key] = result
             if result == trigger_result and roll_percentage(get_choice("percentage", option_set, 100)):
-                if "options" in option_set:
-                    weights = update_weights(weights, option_set["options"], "Triggered", option_set["option_name"])
-
-                if "rom_options" in option_set:
-                    rom_weights = weights.get("rom", dict())
-                    rom_weights = update_weights(rom_weights, option_set["rom_options"], "Triggered Rom",
-                                                 option_set["option_name"])
-                    weights["rom"] = rom_weights
+                for category_name, category_options in option_set["options"].items():
+                    currently_targeted_weights = weights
+                    if category_name:
+                        currently_targeted_weights = currently_targeted_weights[category_name]
+                    update_weights(currently_targeted_weights, category_options, "Triggered", option_set["option_name"])
 
         except Exception as e:
-            raise ValueError(f"Your trigger number {i+1} is destroyed. "
+            raise ValueError(f"Your trigger number {i + 1} is destroyed. "
                              f"Please fix your triggers.") from e
     return weights
 
 
 def get_plando_bosses(boss_shuffle: str, plando_options: typing.Set[str]) -> str:
-    if boss_shuffle in legacy_boss_shuffle_options:
-        new_boss_shuffle = legacy_boss_shuffle_options[boss_shuffle]
-        logging.warning(f"Boss shuffle {boss_shuffle} is deprecated, "
-                        f"please use {new_boss_shuffle} instead")
-        return new_boss_shuffle
     if boss_shuffle in boss_shuffle_options:
         return boss_shuffle_options[boss_shuffle]
     elif "bosses" in plando_options:
@@ -439,10 +425,6 @@ def get_plando_bosses(boss_shuffle: str, plando_options: typing.Set[str]) -> str
         remainder_shuffle = "none"  # vanilla
         bosses = []
         for boss in options:
-            if boss in legacy_boss_shuffle_options:
-                remainder_shuffle = legacy_boss_shuffle_options[boss_shuffle]
-                logging.warning(f"Boss shuffle {boss} is deprecated, "
-                                f"please use {remainder_shuffle} instead")
             if boss in boss_shuffle_options:
                 remainder_shuffle = boss_shuffle_options[boss]
             elif "-" in boss:
@@ -543,26 +525,28 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
             startitems.append(item)
     ret.startinventory = startitems
     ret.start_hints = set(weights.get('start_hints', []))
-
-
+    if ret.game not in weights:
+        raise Exception(f"No game options for selected game \"{ret.game}\" found.")
+    game_weights = weights[ret.game]
     if ret.game == "A Link to the Past":
-        roll_alttp_settings(ret, weights, plando_options)
+        roll_alttp_settings(ret, game_weights, plando_options)
     elif ret.game == "Hollow Knight":
+        hk_weights = ret.game
         for option_name, option in Options.hollow_knight_options.items():
-            setattr(ret, option_name, option.from_any(get_choice(option_name, weights, True)))
+            setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights, True)))
     elif ret.game == "Factorio":
         for option_name, option in Options.factorio_options.items():
-            if option_name in weights:
+            if option_name in game_weights:
                 if issubclass(option, Options.OptionDict):  # get_choice should probably land in the Option class
-                    setattr(ret, option_name, option.from_any(weights[option_name]))
+                    setattr(ret, option_name, option.from_any(game_weights[option_name]))
                 else:
-                    setattr(ret, option_name, option.from_any(get_choice(option_name, weights)))
+                    setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights)))
             else:
                 setattr(ret, option_name, option(option.default))
     elif ret.game == "Minecraft":
         for option_name, option in Options.minecraft_options.items():
-            if option_name in weights:
-                setattr(ret, option_name, option.from_any(get_choice(option_name, weights)))
+            if option_name in game_weights:
+                setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights)))
             else:
                 setattr(ret, option_name, option(option.default))
         # bad hardcoded behavior to make this work for now    
@@ -630,9 +614,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     goal = get_choice('goals', weights, 'ganon')
 
-    if goal in legacy_goals:
-        logging.warning(f"Goal {goal} is depcrecated, please use {legacy_goals[goal]} instead.")
-        goal = legacy_goals[goal]
     ret.goal = goals[goal]
 
     # TODO consider moving open_pyramid to an automatic variable in the core roller, set to True when
@@ -649,7 +630,8 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
         ret.triforce_pieces_available = int(round(ret.triforce_pieces_required * percentage, 0))
     # vanilla mode (specify how many pieces are)
     elif extra_pieces == 'available':
-        ret.triforce_pieces_available = Options.TriforcePieces.from_any(get_choice('triforce_pieces_available', weights, 30))
+        ret.triforce_pieces_available = Options.TriforcePieces.from_any(
+            get_choice('triforce_pieces_available', weights, 30))
     # required pieces + fixed extra
     elif extra_pieces == 'extra':
         extra_pieces = max(0, int(get_choice('triforce_pieces_extra', weights, 10)))
@@ -677,7 +659,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
     ret.shufflebosses = get_plando_bosses(boss_shuffle, plando_options)
 
     ret.enemy_shuffle = bool(get_choice('enemy_shuffle', weights, False))
-
 
     ret.killable_thieves = get_choice('killable_thieves', weights, False)
     ret.tile_shuffle = get_choice('tile_shuffle', weights, False)
