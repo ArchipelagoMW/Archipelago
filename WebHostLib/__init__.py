@@ -102,15 +102,41 @@ games_list = {
                   victory!""")
 }
 
+
+# Player settings pages
+@app.route('/games/<game>/player-settings')
+def player_settings(game):
+    return render_template(f"/games/{game}/playerSettings.html")
+
+
+# Zelda3 pages
+@app.route('/games/zelda3/<string:page>')
+def zelda3_pages(page):
+    return render_template(f"/games/zelda3/{page}.html")
+
+
+# Factorio pages
+@app.route('/games/factorio/<string:page>')
+def factorio_pages(page):
+    return render_template(f"/games/factorio/{page}.html")
+
+
+# Minecraft pages
+@app.route('/games/minecraft/<string:page>')
+def minecraft_pages(page):
+    return render_template(f"/games/factorio/{page}.html")
+
+
+# Game landing pages
+@app.route('/games/<game>')
+def game_page(game):
+    return render_template(f"/games/{game}/{game}.html")
+
+
+# List of supported games
 @app.route('/games')
 def games():
     return render_template("games/games.html", games_list=games_list)
-
-
-@app.route('/games/<game>')
-def game_page(game):
-    return render_template(f"/games/{game}"+".html")
-
 
 
 @app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
@@ -124,7 +150,7 @@ def tutorial_landing():
 
 
 @app.route('/weighted-settings')
-def player_settings():
+def weighted_settings():
     return render_template("weightedSettings.html")
 
 
