@@ -551,7 +551,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         # bad hardcoded behavior to make this work for now    
         ret.plando_connections = []
         if "connections" in plando_options:
-            options = weights.get("plando_connections", [])
+            options = game_weights.get("plando_connections", [])
             for placement in options:
                 if roll_percentage(get_choice("percentage", placement, 100)):
                     ret.plando_connections.append(PlandoConnection(
