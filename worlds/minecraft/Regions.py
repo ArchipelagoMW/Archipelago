@@ -1,25 +1,9 @@
-from .Locations import MinecraftAdvancement, advancement_table
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item
+def link_minecraft_structures(world, player: int):
 
-def minecraft_create_regions(world: MultiWorld, player: int):
-
-    def MCRegion(region_name: str, exits=[]):
-        ret = Region(region_name, None, region_name, player)
-        ret.world = world
-        ret.locations = [ MinecraftAdvancement(player, loc_name, loc_data.id, ret) 
-            for loc_name, loc_data in advancement_table.items() 
-            if loc_data.region == region_name ]
-        for exit in exits: 
-            ret.exits.append(Entrance(player, exit, ret))
-        return ret
-
-    world.regions += [MCRegion(*r) for r in mc_regions]
-
+    # Link mandatory connections first
     for (exit, region) in mandatory_connections:
         world.get_entrance(exit, player).connect(world.get_region(region, player))
-
-def link_minecraft_structures(world: MultiWorld, player: int):
 
     # Get all unpaired exits and all regions without entrances (except the Menu)
     # This function is destructive on these lists. 
