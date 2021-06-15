@@ -11,11 +11,13 @@ funnel_slice_sizes = {TechTreeLayout.option_small_funnels: 6,
                       TechTreeLayout.option_medium_funnels: 10,
                       TechTreeLayout.option_large_funnels: 15}
 
-def get_shapes(world: MultiWorld, player: int) -> Dict[str, List[str]]:
+def get_shapes(factorio_world) -> Dict[str, List[str]]:
+    world = factorio_world.world
+    player = factorio_world.player
     prerequisites: Dict[str, Set[str]] = {}
     layout = world.tech_tree_layout[player].value
-    custom_technologies = world.custom_data[player]["custom_technologies"]
-    tech_names: List[str] = list(set(custom_technologies) - world._static_nodes)
+    custom_technologies = factorio_world.custom_technologies
+    tech_names: List[str] = list(set(custom_technologies) - world.worlds[player].static_nodes)
     tech_names.sort()
     world.random.shuffle(tech_names)
 
@@ -171,15 +173,14 @@ def get_shapes(world: MultiWorld, player: int) -> Dict[str, List[str]]:
 
     elif layout in funnel_layers:
         slice_size = funnel_slice_sizes[layout]
-
         world.random.shuffle(tech_names)
-        tech_names.sort(key=lambda tech_name: len(custom_technologies[tech_name].get_prior_technologies()))
 
         while len(tech_names) > slice_size:
             tech_names = tech_names[slice_size:]
             current_tech_names = tech_names[:slice_size]
             layer_size = funnel_layers[layout]
             previous_slice = []
+            current_tech_names.sort(key=lambda tech_name: len(custom_technologies[tech_name].get_prior_technologies()))
             for layer in range(funnel_layers[layout]):
                 slice = current_tech_names[:layer_size]
                 current_tech_names = current_tech_names[layer_size:]

@@ -75,7 +75,7 @@ if __name__ == "__main__":
         if os.path.exists("ArchipelagoMystery.exe"):
             basemysterycommand = "ArchipelagoMystery.exe"  # compiled windows
         elif os.path.exists("ArchipelagoMystery"):
-            basemysterycommand = "ArchipelagoMystery"  # compiled linux
+            basemysterycommand = "./ArchipelagoMystery"  # compiled linux
         else:
             basemysterycommand = f"py -{py_version} Mystery.py"  # source
 
@@ -207,14 +207,13 @@ if __name__ == "__main__":
         if not args.disable_autohost:
             if os.path.exists(os.path.join(output_path, multidataname)):
                 if os.path.exists("ArchipelagoServer.exe"):
-                    baseservercommand = "ArchipelagoServer.exe"  # compiled windows
+                    baseservercommand = ["ArchipelagoServer.exe"]  # compiled windows
                 elif os.path.exists("ArchipelagoServer"):
-                    baseservercommand = "ArchipelagoServer"  # compiled linux
+                    baseservercommand = ["./ArchipelagoServer"]  # compiled linux
                 else:
-                    baseservercommand = f"py -{py_version} MultiServer.py"  # source
+                    baseservercommand = ["py", f"-{py_version}", "MultiServer.py"]  # source
                 # don't have a mac to test that. If you try to run compiled on mac, good luck.
-
-                subprocess.call(f"{baseservercommand} --multidata {os.path.join(output_path, multidataname)}")
+                subprocess.call(baseservercommand + ["--multidata", os.path.join(output_path, multidataname)])
     except:
         import traceback
 

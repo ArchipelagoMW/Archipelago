@@ -1,4 +1,3 @@
-import copy
 from itertools import zip_longest
 import logging
 import os
@@ -24,12 +23,10 @@ from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
 from worlds.hk import gen_hollow
 from worlds.hk import create_regions as hk_create_regions
-from worlds.factorio import gen_factorio, factorio_create_regions
-from worlds.factorio.Mod import generate_mod
 from worlds.minecraft import gen_minecraft, fill_minecraft_slot_data, generate_mc_data
 from worlds.minecraft.Regions import minecraft_create_regions
 from worlds.generic.Rules import locality_rules
-from worlds import Games, lookup_any_item_name_to_id
+from worlds import Games, lookup_any_item_name_to_id, AutoWorld
 import Patch
 
 seeddigits = 20
@@ -79,7 +76,7 @@ def main(args, seed=None):
     world.progressive = args.progressive.copy()
     world.goal = args.goal.copy()
     world.local_items = args.local_items.copy()
-    if hasattr(args, "algorithm"): # current GUI options
+    if hasattr(args, "algorithm"):  # current GUI options
         world.algorithm = args.algorithm
         world.shuffleganon = args.shuffleganon
         world.custom = args.custom
@@ -94,8 +91,6 @@ def main(args, seed=None):
     world.compassshuffle = args.compassshuffle.copy()
     world.keyshuffle = args.keyshuffle.copy()
     world.bigkeyshuffle = args.bigkeyshuffle.copy()
-    world.crystals_needed_for_ganon = args.crystals_ganon.copy()
-    world.crystals_needed_for_gt = args.crystals_gt.copy()
     world.open_pyramid = args.open_pyramid.copy()
     world.boss_shuffle = args.shufflebosses.copy()
     world.enemy_shuffle = args.enemy_shuffle.copy()
@@ -117,7 +112,6 @@ def main(args, seed=None):
     world.triforce_pieces_available = args.triforce_pieces_available.copy()
     world.triforce_pieces_required = args.triforce_pieces_required.copy()
     world.shop_shuffle = args.shop_shuffle.copy()
-    world.shop_shuffle_slots = args.shop_shuffle_slots.copy()
     world.progression_balancing = args.progression_balancing.copy()
     world.shuffle_prizes = args.shuffle_prizes.copy()
     world.sprite_pool = args.sprite_pool.copy()
@@ -129,18 +123,13 @@ def main(args, seed=None):
     world.restrict_dungeon_item_on_boss = args.restrict_dungeon_item_on_boss.copy()
     world.required_medallions = args.required_medallions.copy()
     world.game = args.game.copy()
-    import Options
-    for hk_option in Options.hollow_knight_options:
-        setattr(world, hk_option, getattr(args, hk_option, {}))
-    for factorio_option in Options.factorio_options:
-        setattr(world, factorio_option, getattr(args, factorio_option, {}))
-    for minecraft_option in Options.minecraft_options: 
-        setattr(world, minecraft_option, getattr(args, minecraft_option, {}))
+    world.set_options(args)
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
-    world.rom_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in range(1, world.players + 1)}
+    world.slot_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in
+                        range(1, world.players + 1)}
 
-    for player in range(1, world.players+1):
+    for player in range(1, world.players + 1):
         world.er_seeds[player] = str(world.random.randint(0, 2 ** 64))
 
         if "-" in world.shuffle[player]:
@@ -150,13 +139,18 @@ def main(args, seed=None):
                 world.er_seeds[player] = "vanilla"
             elif seed.startswith("group-") or args.race:
                 # renamed from team to group to not confuse with existing team name use
-                world.er_seeds[player] = get_same_seed(world, (shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
+                world.er_seeds[player] = get_same_seed(world, (
+                shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
             else:  # not a race or group seed, use set seed as is.
                 world.er_seeds[player] = seed
         elif world.shuffle[player] == "vanilla":
             world.er_seeds[player] = "vanilla"
 
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, world.seed)
+
+    logger.info("Found World Types:")
+    for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
+        logger.info(f"  {name:30} {cls}")
 
     parsed_names = parse_player_names(args.names, world.players, args.teams)
     world.teams = len(parsed_names)
@@ -205,23 +199,26 @@ def main(args, seed=None):
     for player in world.hk_player_ids:
         hk_create_regions(world, player)
 
-    for player in world.factorio_player_ids:
-        factorio_create_regions(world, player)
+    AutoWorld.call_all(world, "create_regions")
 
     for player in world.minecraft_player_ids:
         minecraft_create_regions(world, player)
 
     for player in world.alttp_player_ids:
         if world.open_pyramid[player] == 'goal':
-            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
+            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
+                                                                'localganontriforcehunt', 'ganonpedestal'}
         elif world.open_pyramid[player] == 'auto':
-            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'} and \
-                                         (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'} or not world.shuffle_ganon)
+            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
+                                                                'localganontriforcehunt', 'ganonpedestal'} and \
+                                         (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull',
+                                                                    'dungeonscrossed'} or not world.shuffle_ganon)
         else:
-            world.open_pyramid[player] = {'on': True, 'off': False, 'yes': True, 'no': False}.get(world.open_pyramid[player], world.open_pyramid[player])
+            world.open_pyramid[player] = {'on': True, 'off': False, 'yes': True, 'no': False}.get(
+                world.open_pyramid[player], 'auto')
 
-
-        world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player], world.triforce_pieces_required[player])
+        world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player],
+                                                      world.triforce_pieces_required[player])
 
         if world.mode[player] != 'inverted':
             create_regions(world, player)
@@ -261,14 +258,15 @@ def main(args, seed=None):
         for player in world.player_ids:
             locality_rules(world, player)
 
+    AutoWorld.call_all(world, "set_rules")
+
     for player in world.alttp_player_ids:
         set_rules(world, player)
 
     for player in world.hk_player_ids:
         gen_hollow(world, player)
 
-    for player in world.factorio_player_ids:
-        gen_factorio(world, player)
+    AutoWorld.call_all(world, "generate_basic")
 
     for player in world.minecraft_player_ids:
         gen_minecraft(world, player)
@@ -333,13 +331,13 @@ def main(args, seed=None):
 
         world.spoiler.hashes[(player, team)] = get_hash_string(rom.hash)
 
-        palettes_options={}
-        palettes_options['dungeon']=args.uw_palettes[player]
-        palettes_options['overworld']=args.ow_palettes[player]
-        palettes_options['hud']=args.hud_palettes[player]
-        palettes_options['sword']=args.sword_palettes[player]
-        palettes_options['shield']=args.shield_palettes[player]
-        palettes_options['link']=args.link_palettes[player]
+        palettes_options = {}
+        palettes_options['dungeon'] = args.uw_palettes[player]
+        palettes_options['overworld'] = args.ow_palettes[player]
+        palettes_options['hud'] = args.hud_palettes[player]
+        palettes_options['sword'] = args.sword_palettes[player]
+        palettes_options['shield'] = args.shield_palettes[player]
+        palettes_options['link'] = args.link_palettes[player]
 
         apply_rom_settings(rom, args.heartbeep[player], args.heartcolor[player], args.quickswap[player],
                            args.fastmenu[player], args.disablemusic[player], args.sprite[player],
@@ -355,8 +353,8 @@ def main(args, seed=None):
               world.bigkeyshuffle[player]].count(True) == 1:
             mcsb_name = '-mapshuffle' if world.mapshuffle[player] else \
                 '-compassshuffle' if world.compassshuffle[player] else \
-                '-universal_keys' if world.keyshuffle[player] == "universal" else \
-                '-keyshuffle' if world.keyshuffle[player] else '-bigkeyshuffle'
+                    '-universal_keys' if world.keyshuffle[player] == "universal" else \
+                        '-keyshuffle' if world.keyshuffle[player] else '-bigkeyshuffle'
         elif any([world.mapshuffle[player], world.compassshuffle[player], world.keyshuffle[player],
                   world.bigkeyshuffle[player]]):
             mcsb_name = '-%s%s%s%sshuffle' % (
@@ -368,46 +366,46 @@ def main(args, seed=None):
         outfilepname += f"_{world.player_names[player][team].replace(' ', '_')}" \
             if world.player_names[player][team] != 'Player%d' % player else ''
         outfilestuffs = {
-          "logic": world.logic[player],                                    # 0
-          "difficulty": world.difficulty[player],                          # 1
-          "item_functionality": world.item_functionality[player],          # 2
-          "mode": world.mode[player],                                      # 3
-          "goal": world.goal[player],                                      # 4
-          "timer": str(world.timer[player]),                               # 5
-          "shuffle": world.shuffle[player],                                # 6
-          "algorithm": world.algorithm,                                    # 7
-          "mscb": mcsb_name,                                               # 8
-          "retro": world.retro[player],                                    # 9
-          "progressive": world.progressive,                                # A
-          "hints": 'True' if world.hints[player] else 'False'              # B
+            "logic": world.logic[player],  # 0
+            "difficulty": world.difficulty[player],  # 1
+            "item_functionality": world.item_functionality[player],  # 2
+            "mode": world.mode[player],  # 3
+            "goal": world.goal[player],  # 4
+            "timer": str(world.timer[player]),  # 5
+            "shuffle": world.shuffle[player],  # 6
+            "algorithm": world.algorithm,  # 7
+            "mscb": mcsb_name,  # 8
+            "retro": world.retro[player],  # 9
+            "progressive": world.progressive,  # A
+            "hints": 'True' if world.hints[player] else 'False'  # B
         }
         #                  0  1  2  3  4 5  6  7 8 9 A B
         outfilesuffix = ('_%s_%s-%s-%s-%s%s_%s-%s%s%s%s%s' % (
-          #  0          1      2      3    4     5    6      7     8        9         A     B           C
-          # _noglitches_normal-normal-open-ganon-ohko_simple-balanced-keysanity-retro-prog_random-nohints
-          # _noglitches_normal-normal-open-ganon     _simple-balanced-keysanity-retro
-          # _noglitches_normal-normal-open-ganon     _simple-balanced-keysanity      -prog_random
-          # _noglitches_normal-normal-open-ganon     _simple-balanced-keysanity                  -nohints
-          outfilestuffs["logic"], # 0
+            #  0          1      2      3    4     5    6      7     8        9         A     B           C
+            # _noglitches_normal-normal-open-ganon-ohko_simple-balanced-keysanity-retro-prog_random-nohints
+            # _noglitches_normal-normal-open-ganon     _simple-balanced-keysanity-retro
+            # _noglitches_normal-normal-open-ganon     _simple-balanced-keysanity      -prog_random
+            # _noglitches_normal-normal-open-ganon     _simple-balanced-keysanity                  -nohints
+            outfilestuffs["logic"],  # 0
 
-          outfilestuffs["difficulty"],              # 1
-          outfilestuffs["item_functionality"],      # 2
-          outfilestuffs["mode"],                    # 3
-          outfilestuffs["goal"],                    # 4
-          "" if outfilestuffs["timer"] in ['False', 'none', 'display'] else "-" + outfilestuffs["timer"], # 5
+            outfilestuffs["difficulty"],  # 1
+            outfilestuffs["item_functionality"],  # 2
+            outfilestuffs["mode"],  # 3
+            outfilestuffs["goal"],  # 4
+            "" if outfilestuffs["timer"] in ['False', 'none', 'display'] else "-" + outfilestuffs["timer"],  # 5
 
-          outfilestuffs["shuffle"],     # 6
-          outfilestuffs["algorithm"],   # 7
-          outfilestuffs["mscb"],        # 8
+            outfilestuffs["shuffle"],  # 6
+            outfilestuffs["algorithm"],  # 7
+            outfilestuffs["mscb"],  # 8
 
-          "-retro" if outfilestuffs["retro"] == "True" else "",  # 9
-          "-prog_" + outfilestuffs["progressive"] if outfilestuffs["progressive"] in ['off', 'random'] else "",  # A
-          "-nohints" if not outfilestuffs["hints"] == "True" else "")  # B
-        ) if not args.outputname else ''
+            "-retro" if outfilestuffs["retro"] == "True" else "",  # 9
+            "-prog_" + outfilestuffs["progressive"] if outfilestuffs["progressive"] in ['off', 'random'] else "",  # A
+            "-nohints" if not outfilestuffs["hints"] == "True" else "")  # B
+                         ) if not args.outputname else ''
         rompath = output_path(f'{outfilebase}{outfilepname}{outfilesuffix}.sfc')
         rom.write_to_file(rompath, hide_enemizer=True)
         if args.create_diff:
-            Patch.create_patch_file(rompath, player=player, player_name = world.player_names[player][team])
+            Patch.create_patch_file(rompath, player=player, player_name=world.player_names[player][team])
         return player, team, bytes(rom.name)
 
     pool = concurrent.futures.ThreadPoolExecutor()
@@ -415,12 +413,12 @@ def main(args, seed=None):
     check_accessibility_task = pool.submit(world.fulfills_accessibility)
 
     rom_futures = []
-    mod_futures = []
+    output_file_futures = []
     for team in range(world.teams):
         for player in world.alttp_player_ids:
             rom_futures.append(pool.submit(_gen_rom, team, player))
-    for player in world.factorio_player_ids:
-        mod_futures.append(pool.submit(generate_mod, world, player))
+    for player in world.player_ids:
+        output_file_futures.append(pool.submit(AutoWorld.call_single, world, "generate_output", player))
 
     def get_entrance_to_region(region: Region):
         for entrance in region.entrances:
@@ -430,7 +428,8 @@ def main(args, seed=None):
             return get_entrance_to_region(entrance.parent_region)
 
     # collect ER hint info
-    er_hint_data = {player: {} for player in range(1, world.players + 1) if world.shuffle[player] != "vanilla" or world.retro[player]}
+    er_hint_data = {player: {} for player in range(1, world.players + 1) if
+                    world.shuffle[player] != "vanilla" or world.retro[player]}
     from worlds.alttp.Regions import RegionType
     for region in world.regions:
         if region.player in er_hint_data and region.locations:
@@ -456,7 +455,7 @@ def main(args, seed=None):
             checks_in_area[location.player]["Light World"].append(location.address)
         elif location.parent_region.dungeon:
             dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
-                           'Inverted Ganons Tower': 'Ganons Tower'}\
+                           'Inverted Ganons Tower': 'Ganons Tower'} \
                 .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
             checks_in_area[location.player][dungeonname].append(location.address)
         elif main_entrance.parent_region.type == RegionType.LightWorld:
@@ -468,8 +467,10 @@ def main(args, seed=None):
     oldmancaves = []
     takeanyregions = ["Old Man Sword Cave", "Take-Any #1", "Take-Any #2", "Take-Any #3", "Take-Any #4"]
     for index, take_any in enumerate(takeanyregions):
-        for region in [world.get_region(take_any, player) for player in range(1, world.players + 1) if world.retro[player]]:
-            item = ItemFactory(region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'], region.player)
+        for region in [world.get_region(take_any, player) for player in range(1, world.players + 1) if
+                       world.retro[player]]:
+            item = ItemFactory(region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'],
+                               region.player)
             player = region.player
             location_id = SHOP_ID_START + total_shop_slots + index
 
@@ -483,11 +484,9 @@ def main(args, seed=None):
             er_hint_data[player][location_id] = main_entrance.name
             oldmancaves.append(((location_id, player), (item.code, player)))
 
-
-
     FillDisabledShopSlots(world)
 
-    def write_multidata(roms, mods):
+    def write_multidata(roms, outputs):
         import base64
         import NetUtils
         for future in roms:
@@ -504,11 +503,11 @@ def main(args, seed=None):
                 client_versions[slot] = (0, 0, 3)
             games[slot] = world.game[slot]
         connect_names = {base64.b64encode(rom_name).decode(): (team, slot) for
-                          slot, team, rom_name in rom_names}
-        precollected_items = {player: [] for player in range(1, world.players+1)}
+                         slot, team, rom_name in rom_names}
+        precollected_items = {player: [] for player in range(1, world.players + 1)}
         for item in world.precollected_items:
             precollected_items[item.player].append(item.code)
-        precollected_hints = {player: set() for player in range(1, world.players+1)}
+        precollected_hints = {player: set() for player in range(1, world.players + 1)}
         # for now special case Factorio visibility
         sending_visible_players = set()
         for player in world.factorio_player_ids:
@@ -519,11 +518,13 @@ def main(args, seed=None):
             for player, name in enumerate(team, 1):
                 if player not in world.alttp_player_ids:
                     connect_names[name] = (i, player)
-        for slot in world.hk_player_ids:
-            slots_data = slot_data[slot] = {}
-            for option_name in Options.hollow_knight_options:
-                option = getattr(world, option_name)[slot]
-                slots_data[option_name] = int(option.value)
+        if world.hk_player_ids:
+            import Options
+            for slot in world.hk_player_ids:
+                slots_data = slot_data[slot] = {}
+                for option_name in Options.hollow_knight_options:
+                    option = getattr(world, option_name)[slot]
+                    slots_data[option_name] = int(option.value)
         for slot in world.minecraft_player_ids:
             slot_data[slot] = fill_minecraft_slot_data(world, slot)
 
@@ -544,7 +545,7 @@ def main(args, seed=None):
                     precollected_hints[location.item.player].add(hint)
 
         multidata = zlib.compress(pickle.dumps({
-            "slot_data" : slot_data,
+            "slot_data": slot_data,
             "games": games,
             "names": parsed_names,
             "connect_names": connect_names,
@@ -565,10 +566,10 @@ def main(args, seed=None):
         with open(output_path('%s.archipelago' % outfilebase), 'wb') as f:
             f.write(bytes([1]))  # version of format
             f.write(multidata)
-        for future in mods:
-            future.result() # collect errors if they occured
+        for future in outputs:
+            future.result()  # collect errors if they occured
 
-    multidata_task = pool.submit(write_multidata, rom_futures, mod_futures)
+    multidata_task = pool.submit(write_multidata, rom_futures, output_file_futures)
     if not check_accessibility_task.result():
         if not world.can_beat_game():
             raise Exception("Game appears as unbeatable. Aborting.")
@@ -577,7 +578,7 @@ def main(args, seed=None):
     if multidata_task:
         multidata_task.result()  # retrieve exception if one exists
     pool.shutdown()  # wait for all queued tasks to complete
-    for player in world.minecraft_player_ids: # Doing this after shutdown prevents the .apmc from being generated if there's an error
+    for player in world.minecraft_player_ids:  # Doing this after shutdown prevents the .apmc from being generated if there's an error
         generate_mc_data(world, player)
     if not args.skip_playthrough:
         logger.info('Calculating playthrough.')
@@ -632,7 +633,8 @@ def create_playthrough(world):
         to_delete = set()
         for location in sphere:
             # we remove the item at location and check if game is still beatable
-            logging.debug('Checking if %s (Player %d) is required to beat the game.', location.item.name, location.item.player)
+            logging.debug('Checking if %s (Player %d) is required to beat the game.', location.item.name,
+                          location.item.player)
             old_item = location.item
             location.item = None
             if world.can_beat_game(state_cache[num]):
@@ -677,7 +679,8 @@ def create_playthrough(world):
 
         collection_spheres.append(sphere)
 
-        logging.debug('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres), len(sphere), len(required_locations))
+        logging.debug('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres),
+                      len(sphere), len(required_locations))
         if not sphere:
             raise RuntimeError(f'Not all required items reachable. Unreachable locations: {required_locations}')
 
@@ -696,14 +699,22 @@ def create_playthrough(world):
 
     world.spoiler.paths = dict()
     for player in range(1, world.players + 1):
-        world.spoiler.paths.update({ str(location) : get_path(state, location.parent_region) for sphere in collection_spheres for location in sphere if location.player == player})
+        world.spoiler.paths.update(
+            {str(location): get_path(state, location.parent_region) for sphere in collection_spheres for location in
+             sphere if location.player == player})
         if player in world.alttp_player_ids:
             for path in dict(world.spoiler.paths).values():
                 if any(exit == 'Pyramid Fairy' for (_, exit) in path):
                     if world.mode[player] != 'inverted':
-                        world.spoiler.paths[str(world.get_region('Big Bomb Shop', player))] = get_path(state, world.get_region('Big Bomb Shop', player))
+                        world.spoiler.paths[str(world.get_region('Big Bomb Shop', player))] = get_path(state,
+                                                                                                       world.get_region(
+                                                                                                           'Big Bomb Shop',
+                                                                                                           player))
                     else:
-                        world.spoiler.paths[str(world.get_region('Inverted Big Bomb Shop', player))] = get_path(state, world.get_region('Inverted Big Bomb Shop', player))
+                        world.spoiler.paths[str(world.get_region('Inverted Big Bomb Shop', player))] = get_path(state,
+                                                                                                                world.get_region(
+                                                                                                                    'Inverted Big Bomb Shop',
+                                                                                                                    player))
 
     # we can finally output our playthrough
     world.spoiler.playthrough = {"0": sorted([str(item) for item in world.precollected_items if item.advancement])}

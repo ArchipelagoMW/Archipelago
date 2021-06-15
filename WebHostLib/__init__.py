@@ -3,8 +3,10 @@ import uuid
 import base64
 import socket
 
+import jinja2.exceptions
 from pony.flask import Pony
 from flask import Flask, request, redirect, url_for, render_template, Response, session, abort, send_from_directory
+from flask import Blueprint
 from flask_caching import Cache
 from flask_compress import Compress
 
@@ -74,6 +76,69 @@ def register_session():
         session["_id"] = uuid4()  # uniquely identify each session without needing a login
 
 
+@app.errorhandler(404)
+@app.errorhandler(jinja2.exceptions.TemplateNotFound)
+def page_not_found(err):
+    return render_template('404.html'), 404
+
+
+games_list = {
+    "zelda3": ("The Legend of Zelda: A Link to the Past",
+               """
+               The Legend of Zelda: A Link to the Past is an action/adventure game. Take on the role of Link,
+               a boy who is destined to save the land of Hyrule. Delve through three palaces and nine dungeons on
+               your quest to rescue the descendents of the seven wise men and defeat the evil Ganon!"""),
+    "factorio": ("Factorio",
+                 """
+                 Factorio is a game about automation. You play as an engineer who has crash landed on the planet
+                 Nauvis, an inhospitable world filled with dangerous creatures called biters. Build a factory,
+                 research new technologies, and become more efficient in your quest to build a rocket and return home.
+                 """),
+    "minecraft": ("Minecraft",
+                  """
+                  Minecraft is a game about creativity. In a world made entirely of cubes, you explore, discover, mine,
+                  craft, and try not to explode. Delve deep into the earth and discover abandoned mines, ancient
+                  structures, and materials to create a portal to another world. Defeat the Ender Dragon, and claim
+                  victory!""")
+}
+
+
+# Player settings pages
+@app.route('/games/<game>/player-settings')
+def player_settings(game):
+    return render_template(f"/games/{game}/playerSettings.html")
+
+
+# Zelda3 pages
+@app.route('/games/zelda3/<string:page>')
+def zelda3_pages(page):
+    return render_template(f"/games/zelda3/{page}.html")
+
+
+# Factorio pages
+@app.route('/games/factorio/<string:page>')
+def factorio_pages(page):
+    return render_template(f"/games/factorio/{page}.html")
+
+
+# Minecraft pages
+@app.route('/games/minecraft/<string:page>')
+def minecraft_pages(page):
+    return render_template(f"/games/factorio/{page}.html")
+
+
+# Game landing pages
+@app.route('/games/<game>')
+def game_page(game):
+    return render_template(f"/games/{game}/{game}.html")
+
+
+# List of supported games
+@app.route('/games')
+def games():
+    return render_template("games/games.html", games_list=games_list)
+
+
 @app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
 def tutorial(game, file, lang):
     return render_template("tutorial.html", game=game, file=file, lang=lang)
@@ -84,13 +149,8 @@ def tutorial_landing():
     return render_template("tutorialLanding.html")
 
 
-@app.route('/player-settings')
-def player_settings_simple():
-    return render_template("playerSettings.html")
-
-
 @app.route('/weighted-settings')
-def player_settings():
+def weighted_settings():
     return render_template("weightedSettings.html")
 
 

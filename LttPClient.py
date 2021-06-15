@@ -138,8 +138,6 @@ SCOUTREPLY_ITEM_ADDR = SAVEDATA_START + 0x4D9       # 1 byte
 SCOUTREPLY_PLAYER_ADDR = SAVEDATA_START + 0x4DA     # 1 byte
 SHOP_ADDR = SAVEDATA_START + 0x302                  # 2 bytes
 
-location_shop_order = [name for name, info in
-                       Shops.shop_table.items()]  # probably don't leave this here.  This relies on python 3.6+ dictionary keys having defined order
 location_shop_ids = set([info[0] for name, info in Shops.shop_table.items()])
 
 location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
@@ -704,9 +702,6 @@ def get_tags(ctx: Context):
     return tags
 
 
-
-
-
 async def track_locations(ctx: Context, roomid, roomdata):
     new_locations = []
 
@@ -718,7 +713,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
 
     try:
         if roomid in location_shop_ids:
-            misc_data = await snes_read(ctx, SHOP_ADDR, (len(location_shop_order) * 3) + 5)
+            misc_data = await snes_read(ctx, SHOP_ADDR, (len(Shops.shop_table) * 3) + 5)
             for cnt, b in enumerate(misc_data):
                 if int(b) and (Shops.SHOP_ID_START + cnt) not in ctx.locations_checked:
                     new_check(Shops.SHOP_ID_START + cnt)

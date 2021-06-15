@@ -3,7 +3,7 @@ import typing
 import collections
 import itertools
 
-from BaseClasses import CollectionState, PlandoItem, Location
+from BaseClasses import CollectionState, PlandoItem, Location, MultiWorld
 from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import key_drop_data
 
@@ -12,7 +12,7 @@ class FillError(RuntimeError):
     pass
 
 
-def fill_restrictive(world, base_state: CollectionState, locations, itempool, single_player_placement=False,
+def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations, itempool, single_player_placement=False,
                      lock=False):
     def sweep_from_pool():
         new_state = base_state.copy()
@@ -68,7 +68,7 @@ def fill_restrictive(world, base_state: CollectionState, locations, itempool, si
     itempool.extend(unplaced_items)
 
 
-def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None):
+def distribute_items_restrictive(world: MultiWorld, gftower_trash=False, fill_locations=None):
     # If not passed in, then get a shuffled list of locations to fill in
     if not fill_locations:
         fill_locations = world.get_unfilled_locations()
@@ -167,14 +167,14 @@ def distribute_items_restrictive(world, gftower_trash=False, fill_locations=None
         logging.warning(f'Unplaced items({len(unplaced)}): {unplaced} - Unfilled Locations({len(unfilled)}): {unfilled}')
 
 
-def fast_fill(world, item_pool: typing.List, fill_locations: typing.List) -> typing.Tuple[typing.List, typing.List]:
+def fast_fill(world: MultiWorld, item_pool: typing.List, fill_locations: typing.List) -> typing.Tuple[typing.List, typing.List]:
     placing = min(len(item_pool), len(fill_locations))
     for item, location in zip(item_pool, fill_locations):
         world.push_item(location, item, False)
     return item_pool[placing:], fill_locations[placing:]
 
 
-def flood_items(world):
+def flood_items(world: MultiWorld):
     # get items to distribute
     world.random.shuffle(world.itempool)
     itempool = world.itempool
@@ -234,7 +234,7 @@ def flood_items(world):
                 break
 
 
-def balance_multiworld_progression(world):
+def balance_multiworld_progression(world: MultiWorld):
     balanceable_players = {player for player in range(1, world.players + 1) if world.progression_balancing[player]}
     if not balanceable_players:
         logging.info('Skipping multiworld progression balancing.')
@@ -363,73 +363,76 @@ def swap_location_item(location_1: Location, location_2: Location, check_locked=
     location_1.event, location_2.event = location_2.event, location_1.event
 
 
-def distribute_planned(world):
+def distribute_planned(world: MultiWorld):
     world_name_lookup = world.world_name_lookup
 
     for player in world.player_ids:
-        placement: PlandoItem
-        for placement in world.plando_items[player]:
-            if placement.location in key_drop_data:
-                placement.warn(
-                    f"Can't place '{placement.item}' at '{placement.location}', as key drop shuffle locations are not supported yet.")
-                continue
-            item = ItemFactory(placement.item, player)
-            target_world: int = placement.world
-            if target_world is False or world.players == 1:
-                target_world = player  # in own world
-            elif target_world is True:  # in any other world
-                unfilled = list(location for location in world.get_unfilled_locations_for_players(
-                    placement.location,
-                    set(world.player_ids) - {player}) if location.item_rule(item)
-                                )
-                if not unfilled:
-                    placement.failed(f"Could not find a world with an unfilled location {placement.location}",
-                                     FillError)
+        try:
+            placement: PlandoItem
+            for placement in world.plando_items[player]:
+                if placement.location in key_drop_data:
+                    placement.warn(
+                        f"Can't place '{placement.item}' at '{placement.location}', as key drop shuffle locations are not supported yet.")
+                    continue
+                item = ItemFactory(placement.item, player)
+                target_world: int = placement.world
+                if target_world is False or world.players == 1:
+                    target_world = player  # in own world
+                elif target_world is True:  # in any other world
+                    unfilled = list(location for location in world.get_unfilled_locations_for_players(
+                        placement.location,
+                        set(world.player_ids) - {player}) if location.item_rule(item)
+                                    )
+                    if not unfilled:
+                        placement.failed(f"Could not find a world with an unfilled location {placement.location}",
+                                         FillError)
+                        continue
+
+                    target_world = world.random.choice(unfilled).player
+
+                elif target_world is None:  # any random world
+                    unfilled = list(location for location in world.get_unfilled_locations_for_players(
+                        placement.location,
+                        set(world.player_ids)) if location.item_rule(item)
+                                    )
+                    if not unfilled:
+                        placement.failed(f"Could not find a world with an unfilled location {placement.location}",
+                                         FillError)
+                        continue
+
+                    target_world = world.random.choice(unfilled).player
+
+                elif type(target_world) == int:  # target world by player id
+                    if target_world not in range(1, world.players + 1):
+                        placement.failed(
+                            f"Cannot place item in world {target_world} as it is not in range of (1, {world.players})",
+                            ValueError)
+                        continue
+                else:  # find world by name
+                    if target_world not in world_name_lookup:
+                        placement.failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
+                                         ValueError)
+                        continue
+                    target_world = world_name_lookup[target_world]
+
+                location = world.get_location(placement.location, target_world)
+                if location.item:
+                    placement.failed(f"Cannot place item into already filled location {location}.")
                     continue
 
-                target_world = world.random.choice(unfilled).player
-
-            elif target_world is None:  # any random world
-                unfilled = list(location for location in world.get_unfilled_locations_for_players(
-                    placement.location,
-                    set(world.player_ids)) if location.item_rule(item)
-                                )
-                if not unfilled:
-                    placement.failed(f"Could not find a world with an unfilled location {placement.location}",
-                                     FillError)
+                if location.can_fill(world.state, item, False):
+                    world.push_item(location, item, collect=False)
+                    location.event = True  # flag location to be checked during fill
+                    location.locked = True
+                    logging.debug(f"Plando placed {item} at {location}")
+                else:
+                    placement.failed(f"Can't place {item} at {location} due to fill condition not met.")
                     continue
 
-                target_world = world.random.choice(unfilled).player
-
-            elif type(target_world) == int:  # target world by player id
-                if target_world not in range(1, world.players + 1):
-                    placement.failed(
-                        f"Cannot place item in world {target_world} as it is not in range of (1, {world.players})",
-                        ValueError)
-                    continue
-            else:  # find world by name
-                if target_world not in world_name_lookup:
-                    placement.failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
-                                     ValueError)
-                    continue
-                target_world = world_name_lookup[target_world]
-
-            location = world.get_location(placement.location, target_world)
-            if location.item:
-                placement.failed(f"Cannot place item into already filled location {location}.")
-                continue
-
-            if location.can_fill(world.state, item, False):
-                world.push_item(location, item, collect=False)
-                location.event = True  # flag location to be checked during fill
-                location.locked = True
-                logging.debug(f"Plando placed {item} at {location}")
-            else:
-                placement.failed(f"Can't place {item} at {location} due to fill condition not met.")
-                continue
-
-            if placement.from_pool:  # Should happen AFTER the item is placed, in case it was allowed to skip failed placement.
-                try:
-                    world.itempool.remove(item)
-                except ValueError:
-                    placement.warn(f"Could not remove {item} from pool as it's already missing from it.")
+                if placement.from_pool:  # Should happen AFTER the item is placed, in case it was allowed to skip failed placement.
+                    try:
+                        world.itempool.remove(item)
+                    except ValueError:
+                        placement.warn(f"Could not remove {item} from pool as it's already missing from it.")
+        except Exception as e:
+            raise Exception(f"Error running plando for player {player} ({world.player_names[player]})") from e

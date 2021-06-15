@@ -80,7 +80,7 @@ class LocalRom(object):
             self.write_bytes(startaddress + i, bytearray(data))
 
     def encrypt(self, world, player):
-        local_random = world.rom_seeds[player]
+        local_random = world.slot_seeds[player]
         key = bytes(local_random.getrandbits(8 * 16).to_bytes(16, 'big'))
         self.write_bytes(0x1800B0, bytearray(key))
         self.write_int16(0x180087, 1)
@@ -384,7 +384,7 @@ def patch_enemizer(world, team: int, player: int, rom: LocalRom, enemizercli):
 
     max_enemizer_tries = 5
     for i in range(max_enemizer_tries):
-        enemizer_seed = str(world.rom_seeds[player].randint(0, 999999999))
+        enemizer_seed = str(world.slot_seeds[player].randint(0, 999999999))
         enemizer_command = [os.path.abspath(enemizercli),
                             '--rom', randopatch_path,
                             '--seed', enemizer_seed,
@@ -414,7 +414,7 @@ def patch_enemizer(world, team: int, player: int, rom: LocalRom, enemizercli):
             continue
 
         for j in range(i + 1, max_enemizer_tries):
-            world.rom_seeds[player].randint(0, 999999999)
+            world.slot_seeds[player].randint(0, 999999999)
             # Sacrifice all remaining random numbers that would have been used for unused enemizer tries.
             # This allows for future enemizer bug fixes to NOT affect the rest of the seed's randomness
         break
@@ -760,7 +760,7 @@ def get_nonnative_item_sprite(game):
     return game_to_id.get(game, 0x6B) # default to Power Star
 
 def patch_rom(world, rom, player, team, enemized):
-    local_random = world.rom_seeds[player]
+    local_random = world.slot_seeds[player]
 
     # progressive bow silver arrow hint hack
     prog_bow_locs = world.find_items('Progressive Bow', player)
@@ -885,7 +885,7 @@ def patch_rom(world, rom, player, team, enemized):
     credits_total = 216
     if world.retro[player]:  # Old man cave and Take any caves will count towards collection rate.
         credits_total += 5
-    if world.shop_shuffle_slots[player]:  # Potion shop only counts towards collection rate if included in the shuffle.
+    if world.shop_item_slots[player]:  # Potion shop only counts towards collection rate if included in the shuffle.
         credits_total += 30 if 'w' in world.shop_shuffle[player] else 27
 
     rom.write_byte(0x187010, credits_total)  # dynamic credits
@@ -1643,7 +1643,7 @@ def patch_rom(world, rom, player, team, enemized):
         rom.write_byte(0xFEE41, 0x2A)  # preopen bombable exit
 
     if world.tile_shuffle[player]:
-        tile_set = TileSet.get_random_tile_set(world.rom_seeds[player])
+        tile_set = TileSet.get_random_tile_set(world.slot_seeds[player])
         rom.write_byte(0x4BA21, tile_set.get_speed())
         rom.write_byte(0x4BA1D, tile_set.get_len())
         rom.write_bytes(0x4BA2A, tile_set.get_bytes())
@@ -1705,7 +1705,7 @@ def write_custom_shops(rom, world, player):
             slot = 0 if shop.type == ShopType.TakeAny else index
             if item is None:
                 break
-            if world.shop_shuffle_slots[player] or shop.type == ShopType.TakeAny:
+            if world.shop_item_slots[player] or shop.type == ShopType.TakeAny:
                 count_shop = (shop.region.name != 'Potion Shop' or 'w' in world.shop_shuffle[player]) and \
                              shop.region.name != 'Capacity Upgrade'
                 rom.write_byte(0x186560 + shop.sram_offset + slot, 1 if count_shop else 0)
@@ -1774,7 +1774,7 @@ def hud_format_text(text):
 def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, sprite: str, palettes_options,
                        world=None, player=1, allow_random_on_event=False, reduceflashing=False,
                        triforcehud: str = None):
-    local_random = random if not world else world.rom_seeds[player]
+    local_random = random if not world else world.slot_seeds[player]
 
     # enable instant item menu
     if fastmenu == 'instant':
@@ -2091,7 +2091,7 @@ def write_string_to_rom(rom, target, string):
 
 
 def write_strings(rom, world, player, team):
-    local_random = world.rom_seeds[player]
+    local_random = world.slot_seeds[player]
 
     tt = TextTable()
     tt.removeUnwantedText()

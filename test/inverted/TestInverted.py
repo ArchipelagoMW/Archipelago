@@ -8,11 +8,13 @@ from worlds.alttp.Regions import mark_light_world_regions
 from worlds.alttp.Shops import create_shops
 from worlds.alttp.Rules import set_rules
 from test.TestBase import TestBase
-
+from Options import alttp_options
 
 class TestInverted(TestBase):
     def setUp(self):
         self.world = MultiWorld(1)
+        for option_name, option in alttp_options.items():
+            setattr(self.world, option_name, {1: option.default})
         self.world.difficulty_requirements[1] = difficulties['normal']
         self.world.mode[1] = "inverted"
         create_inverted_regions(self.world, 1)

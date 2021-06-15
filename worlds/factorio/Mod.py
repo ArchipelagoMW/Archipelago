@@ -60,21 +60,22 @@ def generate_mod(world: MultiWorld, player: int):
         if location.address:
             locations.append((location.name, location.item.name, location.item.player, location.item.advancement))
     mod_name = f"AP-{world.seed_name}-P{player}-{world.player_names[player][0]}"
-    tech_cost = {0: 0.1,
-                 1: 0.25,
-                 2: 0.5,
-                 3: 1,
-                 4: 2,
-                 5: 5,
-                 6: 10}[world.tech_cost[player].value]
+    tech_cost_scale = {0: 0.1,
+                       1: 0.25,
+                       2: 0.5,
+                       3: 1,
+                       4: 2,
+                       5: 5,
+                       6: 10}[world.tech_cost[player].value]
+
     template_data = {"locations": locations, "player_names": player_names, "tech_table": tech_table,
                      "mod_name": mod_name, "allowed_science_packs": world.max_science_pack[player].get_allowed_packs(),
-                     "tech_cost_scale": tech_cost, "custom_data": world.custom_data[player],
+                     "tech_cost_scale": tech_cost_scale, "custom_technologies": world.worlds[player].custom_technologies,
                      "tech_tree_layout_prerequisites": world.tech_tree_layout_prerequisites[player],
                      "rocket_recipe": rocket_recipes[world.max_science_pack[player].value],
                      "slot_name": world.player_names[player][0], "seed_name": world.seed_name,
                      "starting_items": world.starting_items[player], "recipes": recipes,
-                     "random": world.random,
+                     "random": world.slot_seeds[player],
                      "recipe_time_scale": recipe_time_scales[world.recipe_time[player].value]}
 
     for factorio_option in Options.factorio_options:

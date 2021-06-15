@@ -8,7 +8,7 @@ local technologies = data.raw["technology"]
 local original_tech
 local new_tree_copy
 allowed_ingredients = {}
-{%- for tech_name, technology in custom_data["custom_technologies"].items() %}
+{%- for tech_name, technology in custom_technologies.items() %}
 allowed_ingredients["{{ tech_name }}"] = {
 {%- for ingredient in technology.ingredients %}
 ["{{ingredient}}"] = 1,
@@ -66,7 +66,7 @@ original_tech = technologies["{{original_tech_name}}"]
 new_tree_copy = table.deepcopy(template_tech)
 new_tree_copy.name = "ap-{{ tech_table[original_tech_name] }}-"{# use AP ID #}
 prep_copy(new_tree_copy, original_tech)
-{% if tech_cost != 1 %}
+{% if tech_cost_scale != 1 %}
 new_tree_copy.unit.count = math.max(1, math.floor(new_tree_copy.unit.count * {{ tech_cost_scale }}))
 {% endif %}
 {%- if item_name in tech_table and visibility -%}

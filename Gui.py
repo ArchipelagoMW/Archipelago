@@ -468,7 +468,7 @@ def guiMain(args=None):
         if shopWitchShuffleVar.get():
             guiargs.shop_shuffle += "w"
         if shopPoolShuffleVar.get():
-            guiargs.shop_shuffle_slots = 30
+            guiargs.shop_item_slots = 30
         guiargs.shuffle_prizes = {"none": "",
                                   "bonk": "b",
                                   "general": "g",

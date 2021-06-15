@@ -8,8 +8,9 @@ class AssembleOptions(type):
         options = attrs["options"] = {}
         name_lookup = attrs["name_lookup"] = {}
         for base in bases:
-            options.update(base.options)
-            name_lookup.update(name_lookup)
+            if hasattr(base, "options"):
+                options.update(base.options)
+                name_lookup.update(name_lookup)
         new_options = {name[7:].lower(): option_id for name, option_id in attrs.items() if
                        name.startswith("option_")}
         attrs["name_lookup"].update({option_id: name for name, option_id in new_options.items()})
@@ -19,6 +20,37 @@ class AssembleOptions(type):
         options.update({name[6:].lower(): option_id for name, option_id in attrs.items() if
                         name.startswith("alias_")})
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
+
+
+class AssembleCategoryPath(type):
+    def __new__(mcs, name, bases, attrs):
+        path = []
+        for base in bases:
+            if hasattr(base, "segment"):
+                path += base.segment
+        path += attrs["segment"]
+        attrs["path"] = path
+        return super(AssembleCategoryPath, mcs).__new__(mcs, name, bases, attrs)
+
+
+class RootCategory(metaclass=AssembleCategoryPath):
+    segment = []
+
+
+class LttPCategory(RootCategory):
+    segment = ["A Link to the Past"]
+
+
+class LttPRomCategory(LttPCategory):
+    segment = ["rom"]
+
+
+class FactorioCategory(RootCategory):
+    segment = ["Factorio"]
+
+
+class MinecraftCategory(RootCategory):
+    segment = ["Minecraft"]
 
 
 class Option(metaclass=AssembleOptions):
@@ -110,7 +142,7 @@ class Choice(Option):
         return cls.from_text(str(data))
 
 
-class Range(Option):
+class Range(Option, int):
     range_start = 0
     range_end = 1
 
@@ -119,7 +151,7 @@ class Range(Option):
             raise Exception(f"{value} is lower than minimum {self.range_start} for option {self.__class__.__name__}")
         elif value > self.range_end:
             raise Exception(f"{value} is higher than maximum {self.range_end} for option {self.__class__.__name__}")
-        self.value: int = value
+        self.value = value
 
     @classmethod
     def from_text(cls, text: str) -> Range:
@@ -129,6 +161,8 @@ class Range(Option):
                 return cls(int(round(random.triangular(cls.range_start, cls.range_end, cls.range_start), 0)))
             elif text == "random-high":
                 return cls(int(round(random.triangular(cls.range_start, cls.range_end, cls.range_end), 0)))
+            elif text == "random-middle":
+                return cls(int(round(random.triangular(cls.range_start, cls.range_end), 0)))
             else:
                 return cls(random.randint(cls.range_start, cls.range_end))
         return cls(int(text))
@@ -141,6 +175,10 @@ class Range(Option):
 
     def get_option_name(self):
         return str(self.value)
+
+    def __str__(self):
+        return str(self.value)
+
 
 class OptionNameSet(Option):
     default = frozenset()
@@ -212,12 +250,21 @@ class Crystals(Range):
     range_end = 7
 
 
+class CrystalsTower(Crystals):
+    default = 7
+
+
+class CrystalsGanon(Crystals):
+    default = 7
+
+
 class TriforcePieces(Range):
+    default = 30
     range_start = 1
     range_end = 90
 
 
-class ShopShuffleSlots(Range):
+class ShopItemSlots(Range):
     range_start = 0
     range_end = 30
 
@@ -241,6 +288,12 @@ class Enemies(Choice):
     option_shuffled = 1
     option_chaos = 2
 
+
+alttp_options: typing.Dict[str, type(Option)] = {
+    "crystals_needed_for_gt": CrystalsTower,
+    "crystals_needed_for_ganon": CrystalsGanon,
+    "shop_item_slots": ShopItemSlots,
+}
 
 mapshuffle = Toggle
 compassshuffle = Toggle
@@ -270,7 +323,7 @@ RandomizeLoreTablets = Toggle
 RandomizeLifebloodCocoons = Toggle
 RandomizeFlames = Toggle
 
-hollow_knight_randomize_options: typing.Dict[str, Option] = {
+hollow_knight_randomize_options: typing.Dict[str, type(Option)] = {
     "RandomizeDreamers": RandomizeDreamers,
     "RandomizeSkills": RandomizeSkills,
     "RandomizeCharms": RandomizeCharms,
@@ -409,6 +462,13 @@ minecraft_options: typing.Dict[str, type(Option)] = {
     "include_postgame_advancements": Toggle,
     "shuffle_structures": Toggle
 }
+
+option_sets = (
+    minecraft_options,
+    factorio_options,
+    alttp_options,
+    hollow_knight_options
+)
 
 if __name__ == "__main__":
     import argparse
