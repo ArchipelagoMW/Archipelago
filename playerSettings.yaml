@@ -538,7 +538,6 @@ linked_options:
         compass_shuffle: true
         map_shuffle: true
         smallkey_shuffle: true
-      null:
         local_items: # Forces keys to be local to your own world
           - "Small Keys"
           - "Big Keys"
@@ -573,8 +572,7 @@ triggers:
     options:
       A Link to the Past:
         swordless: off
-      null:
-        startinventory:
+        start_inventory:
           Progressive Sword: 1
   - option_name: legacy_weapons
     option_result: vanilla
@@ -582,7 +580,6 @@ triggers:
     options:
       A Link to the Past:
         swordless: off
-      null:
         plando_items:
           - items:
               Progressive Sword: 4
