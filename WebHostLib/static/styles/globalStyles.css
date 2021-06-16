@@ -4,9 +4,6 @@
 }
 
 html{
-    background-image: url('../static/backgrounds/oceans/oceans-0002.png');
-    background-repeat: repeat;
-    background-size: 250px 250px;
     font-family: 'Jost', sans-serif;
     font-size: 1.1rem;
     color: #000000;

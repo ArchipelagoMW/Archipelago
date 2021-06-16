@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Link to the Past</title>
-</head>
-<body>
-    Link to the Past<br />
-    <a href="/games/zelda3/player-settings">Player Settings</a>
-</body>
-</html>
+{% extends 'pageWrapper.html' %}
+
+{% block head %}
+    <title>A Link to the Past</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/zelda3/zelda3.css") }}" />
+    <script type="application/ecmascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/js-yaml.min.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+    {% include 'header/grassHeader.html' %}
+    <div id="zelda3">
+        Coming Soon™
+    </div>
+{% endblock %}
