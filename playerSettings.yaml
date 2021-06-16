@@ -35,8 +35,8 @@ accessibility:
 progression_balancing:
   on: 50 # A system to reduce BK, as in times during which you can't do anything by moving your items into an earlier access sphere to make it likely you have stuff to do
   off: 0 # Turn this off if you don't mind a longer multiworld, or can glitch/sequence break around missing items.
-# Can be uncommented to use it
-# startinventory: # Begin the file with the listed items/upgrades
+# The following 4 options can be uncommented and moved into a game's section they should affect
+# start_inventory: # Begin the file with the listed items/upgrades
   # Please only use items for the correct game, use triggers if need to be have seperated lists.
   # Pegasus Boots: on
   # Bomb Upgrade (+10): 4
@@ -50,441 +50,332 @@ progression_balancing:
 # non_local_items: # Force certain items to appear outside your world only, unless in single-player. Recognizes some group names, like "Swords"
 #  - "Progressive Weapons"
 
-# Factorio options:
-tech_tree_layout:
-  single: 1
-  small_diamonds: 1
-  medium_diamonds: 1
-  large_diamonds: 1
-  small_pyramids: 1
-  medium_pyramids: 1
-  large_pyramids: 1
-  small_funnels: 1
-  medium_funnels: 1
-  large_funnels: 1
-recipe_time: # randomize the time it takes for any recipe to craft, this includes smelting, chemical lab, hand crafting etc.
-  vanilla: 1
-  fast: 0 # 25% to 100% of original time
-  normal: 0 # 50 % to 200% of original time
-  slow: 0 # 100% to 400% of original time
-  chaos: 0 # 25% to 400% of original time
-max_science_pack:
-  automation_science_pack: 0
-  logistic_science_pack: 0
-  military_science_pack: 0
-  chemical_science_pack: 0
-  production_science_pack: 0
-  utility_science_pack: 0
-  space_science_pack: 1
-tech_cost:
-  very_easy : 0
-  easy : 0
-  kind : 0
-  normal : 1
-  hard : 0
-  very_hard : 0
-  insane : 0
-free_samples:
-  none: 1
-  single_craft: 0
-  half_stack: 0
-  stack: 0
-visibility:
-  none: 0
-  sending: 1
-random_tech_ingredients:
-  on: 1
-  off: 0
-starting_items:
-  burner-mining-drill: 19
-  stone-furnace: 19
-# Minecraft options: 
-advancement_goal: # Number of advancements required (out of 92 total) to spawn the Ender Dragon and complete the game. 
-  few: 0 # 30 advancements
-  normal: 1 # 50
-  many: 0 # 70
-combat_difficulty: # Modifies the level of items logically required for exploring dangerous areas and fighting bosses. 
-  easy: 0
-  normal: 1
-  hard: 0
-include_hard_advancements: # Junk-fills certain RNG-reliant or tedious advancements with XP rewards. 
-  on: 0
-  off: 1
-include_insane_advancements: # Junk-fills extremely difficult advancements; this is only How Did We Get Here? and Adventuring Time. 
-  on: 0
-  off: 1
-include_postgame_advancements: # Some advancements require defeating the Ender Dragon; this will junk-fill them so you won't have to finish to send some items. 
-  on: 0
-  off: 1
-shuffle_structures: # CURRENTLY DISABLED; enables shuffling of villages, outposts, fortresses, bastions, and end cities. 
-  on: 0
-  off: 1
-# A Link to  the Past options:
-### Logic Section ###
-# Warning: overworld_glitches is not available and minor_glitches is only partially implemented on the door-rando version
-glitches_required: # Determine the logic required to complete the seed
-  none: 50 # No glitches required
-  minor_glitches: 0 # Puts fake flipper, waterwalk, super bunny shenanigans, and etc into logic
-  overworld_glitches: 0 # Assumes the player has knowledge of both overworld major glitches (boots clips, mirror clips) and minor glitches
-  no_logic: 0 # Your own items are placed with no regard to any logic; such as your Fire Rod can be on your Trinexx.
-  # Other players items are placed into your world under OWG logic
-dark_room_logic: # Logic for unlit dark rooms
-  lamp: 50 # require the Lamp for these rooms to be considered accessible.
-  torches: 0 # in addition to lamp, allow the fire rod and presence of easily accessible torches for access
-  none: 0 # all dark rooms are always considered doable, meaning this may force completion of rooms in complete darkness
-restrict_dungeon_item_on_boss: # aka ambrosia boss items
-  on: 0 # prevents unshuffled compasses, maps and keys to be boss drops, they can still drop keysanity and other players' items
-  off: 50
-### End of Logic Section ###
-map_shuffle: # Shuffle dungeon maps into the world and other dungeons, including other players' worlds
-  on: 0
-  off: 50
-compass_shuffle: # Shuffle compasses into the world and other dungeons, including other players' worlds
-  on: 0
-  off: 50
-smallkey_shuffle: # Shuffle small keys into the world and other dungeons, including other players' worlds
-  on: 0
-  universal: 0 # allows small keys to be used in any dungeon and adds shops to buy more
-  off: 50
-bigkey_shuffle: # Shuffle big keys into the world and other dungeons, including other players' worlds
-  on: 0
-  off: 50
-local_keys: # Keep small keys and big keys local to your world
-  on: 0
-  off: 50
-dungeon_items: # Alternative to the 4 shuffles and local_keys above this, does nothing until the respective 4 shuffles and local_keys above are deleted
-  mc: 0 # Shuffle maps and compasses
-  none: 50 # Shuffle none of the 4
-  mcsb: 0 # Shuffle all of the 4, any combination of m, c, s and b will shuffle the respective item, or not if it's missing, so you can add more options here
-  lmcsb: 0 # Like mcsb above, but with keys kept local to your world. l is what makes your keys local, or not if it's missing
-  ub: 0 # universal small keys and shuffled big keys
-  # you can add more combos of these letters here
-dungeon_counters:
-  on: 0 # Always display amount of items checked in a dungeon
-  pickup: 50 # Show when compass is picked up
-  default: 0 # Show when compass is picked up if the compass itself is shuffled
-  off: 0 # Never show item count in dungeons
-progressive: # Enable or disable progressive items (swords, shields, bow)
-  on: 50 # All items are progressive
-  off: 0 # No items are progressive
-  random: 0 # Randomly decides for all items. Swords could be progressive, shields might not be
-entrance_shuffle:
-  none: 50 # Vanilla game map. All entrances and exits lead to their original locations. You probably want this option
-  dungeonssimple: 0 # Shuffle just dungeons amongst each other, swapping dungeons entirely, so Hyrule Castle is always 1 dungeon
-  dungeonsfull: 0 # Shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle can be 4 different dungeons, but keep dungeons to a specific world
-  dungeonscrossed: 0 # like dungeonsfull, but allow cross-world traversal through a dungeon. Warning: May force repeated dungeon traversal
-  simple: 0 # Entrances are grouped together before being randomized. Simple uses the most strict grouping rules
-  restricted: 0 # Less strict than simple
-  full: 0 # Less strict than restricted
-  crossed: 0 # Less strict than full
-  insanity: 0 # Very few grouping rules. Good luck
-  # you can also define entrance shuffle seed, like so:
-  crossed-1000: 0 # using this method, you can have the same layout as another player and share entrance information
-  # however, many other settings like logic, world state, retro etc. may affect the shuffle result as well.
-  crossed-group-myfriends: 0 # using this method, everyone with "group-myfriends" will share the same seed
-goals:
-  ganon: 50 # Climb GT, defeat Agahnim 2, and then kill Ganon
-  crystals: 0 # Only killing Ganon is required. However, items may still be placed in GT
-  bosses: 0 # Defeat the boss of all dungeons, including Agahnim's tower and GT (Aga 2)
-  pedestal: 0 # Pull the Triforce from the Master Sword pedestal
-  ganon_pedestal: 0 # Pull the Master Sword pedestal, then kill Ganon
-  triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then turn them in to Murahadala in front of Hyrule Castle
-  local_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
-  ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
-  local_ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
-  ice_rod_hunt: 0 # You start with everything needed to 216 the seed. Find the Ice rod, then kill Trinexx at Turtle rock.
-open_pyramid:
-  goal: 50 # Opens the pyramid if the goal requires you to kill Ganon, unless the goal is Slow Ganon or All Dungeons
-  auto: 0 # Same as Goal, but also is closed if holes are shuffled and ganon is part of the shuffle pool
-  yes: 0 # Pyramid hole is always open. Ganon's vulnerable condition is still required before he can he hurt
-  no: 0 # Pyramid hole is always closed until you defeat Agahnim atop Ganon's Tower
-triforce_pieces_mode: #Determine how to calculate the extra available triforce pieces.
-  extra: 0 # available = triforce_pieces_extra + triforce_pieces_required
-  percentage: 0 # available = (triforce_pieces_percentage /100) * triforce_pieces_required
-  available: 50 # available = triforce_pieces_available
-triforce_pieces_extra: # Set to how many extra triforces pieces are available to collect in the world.
-  # Format "pieces: chance"
-  0: 0
-  5: 50
-  10: 50
-  15: 0
-  20: 0
-triforce_pieces_percentage: # Set to how many triforce pieces according to a percentage of the required ones, are available to collect in the world.
-  # Format "pieces: chance"
-  100: 0 #No extra
-  150: 50 #Half the required will be added as extra
-  200: 0 #There are the double of the required ones available.
-triforce_pieces_available: # Set to how many triforces pieces are available to collect in the world. Default is 30. Max is 90, Min is 1
-  # Format "pieces: chance"
-  25: 0
-  30: 50
-  40: 0
-  50: 0
-triforce_pieces_required: # Set to how many out of X triforce pieces you need to win the game in a triforce hunt. Default is 20. Max is 90, Min is 1
-  # Format "pieces: chance"
-  15: 0
-  20: 50
-  30: 0
-  40: 0
-  50: 0
-crystals_needed_for_gt: # Crystals required to open GT
-  0: 0
-  1: 0
-  2: 0
-  3: 0
-  4: 0
-  5: 0
-  6: 0
-  7: 0
-  random: 0
-  random-low: 50 # any valid number, weighted towards the lower end
-  random-middle: 0 # any valid number, weighted towards the central range
-  random-high: 0 # any valid number, weighted towards the higher end
-crystals_needed_for_ganon: # Crystals required to hurt Ganon
-  0: 0
-  1: 0
-  2: 0
-  3: 0
-  4: 0
-  5: 0
-  6: 0
-  7: 0
-  random: 0
-  random-low: 0
-  random-middle: 0
-  random-high: 50
-mode:
-  standard: 50 # Begin the game by rescuing Zelda from her cell and escorting her to the Sanctuary
-  open: 50 # Begin the game from your choice of Link's House or the Sanctuary
-  inverted: 0 # Begin in the Dark World. The Moon Pearl is required to avoid bunny-state in Light World, and the Light World game map is altered
-retro:
-  on: 0 # you must buy a quiver to use the bow, take-any caves and an old-man cave are added to the world. You may need to find your sword from the old man's cave
-  off: 50
-hints:
-  'on': 50 # Hint tiles sometimes give item location hints
-  'off': 0 # Hint tiles provide gameplay tips
-swordless:
-  on: 0 # Your swords are replaced by rupees. Gameplay changes have been made to accommodate this change
-  off: 1
-item_pool:
-  easy: 0 # Doubled upgrades, progressives, and etc
-  normal: 50 # Item availability remains unchanged from vanilla game
-  hard: 0 # Reduced upgrade availability (max: 14 hearts, blue mail, tempered sword, fire shield, no silvers unless swordless)
-  expert: 0 # Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless)
-item_functionality:
-  easy: 0 # Allow Hammer to damage ganon, Allow Hammer tablet collection, Allow swordless medallion use everywhere.
-  normal: 50 # Vanilla item functionality
-  hard: 0 # Reduced helpfulness of items (potions less effective, can't catch faeries, cape uses double magic, byrna does not grant invulnerability, boomerangs do not stun, silvers disabled outside ganon)
-  expert: 0 # Vastly reduces the helpfulness of items (potions barely effective, can't catch faeries, cape uses double magic, byrna does not grant invulnerability, boomerangs and hookshot do not stun, silvers disabled outside ganon)
-tile_shuffle: # Randomize the tile layouts in flying tile rooms
-  on: 0
-  off: 50
-misery_mire_medallion: # required medallion to open Misery Mire front entrance
-  random: 50
-  Ether: 0
-  Bombos: 0
-  Quake: 0
-turtle_rock_medallion: # required medallion to open Turtle Rock front entrance
-  random: 50
-  Ether: 0
-  Bombos: 0
-  Quake: 0
-### Enemizer Section ###
-boss_shuffle:
-  none: 50 # Vanilla bosses
-  basic: 0 # Existing bosses except Ganon and Agahnim are shuffled throughout dungeons
-  normal: 0 # 3 bosses can occur twice
-  chaos: 0 # Any boss can appear any amount of times
-  singularity: 0 # Picks a boss, tries to put it everywhere that works, if there's spaces remaining it picks a boss to fill those
-enemy_shuffle: # Randomize enemy placement
-  on: 0
-  off: 50
-killable_thieves: # Make thieves killable
-  on: 0 # Usually turned on together with enemy_shuffle to make annoying thief placement more manageable
-  off: 50
-bush_shuffle: # Randomize the chance that bushes have enemies and the enemies under said bush
-  on: 0
-  off: 50
-enemy_damage:
-  default: 50 # Vanilla enemy damage
-  shuffled: 0 # Enemies deal 0 to 4 hearts and armor helps
-  random: 0 # Enemies deal 0 to 8 hearts and armor just reshuffles the damage
-enemy_health:
-  default: 50 # Vanilla enemy HP
-  easy: 0 # Enemies have reduced health
-  hard: 0 # Enemies have increased health
-  expert: 0 # Enemies have greatly increased health
-pot_shuffle:
-  'on': 0 # Keys, items, and buttons hidden under pots in dungeons are shuffled with other pots in their supertile
-  'off': 50 # Default pot item locations
-### End of Enemizer Section ###
-beemizer: # Remove items from the global item pool and replace them with single bees (fill bottles) and bee traps
-  0: 50 # No bee traps are placed
-  1: 0 # 25% of rupees, bombs and arrows are replaced with bees, of which 60% are traps and 40% single bees
-  2: 0 # 50% of rupees, bombs and arrows are replaced with bees, of which 70% are traps and 30% single bees
-  3: 0 # 75% of rupees, bombs and arrows are replaced with bees, of which 80% are traps and 20% single bees
-  4: 0 # 100% of rupees, bombs and arrows are replaced with bees, of which 90% are traps and 10% single bees
-  5: 0 # 100% of rupees, bombs and arrows are replaced with bees, of which 100% are traps and 0% single bees
-### Shop Settings ###
-shop_item_slots: # Maximum amount of shop slots to be filled with regular item pool items (such as Moon Pearl)
-  0: 50
-  5: 0
-  15: 0
-  30: 0
-  random: 0 # 0 to 30 evenly distributed
-shop_shuffle:
-  none: 50
-  g: 0 # Generate new default inventories for overworld/underworld shops, and unique shops
-  f: 0 # Generate new default inventories for every shop independently
-  i: 0 # Shuffle default inventories of the shops around
-  p: 0 # Randomize the prices of the items in shop inventories
-  u: 0 # Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
-  w: 0 # Consider witch's hut like any other shop and shuffle/randomize it too
-  ip: 0 # Shuffle inventories and randomize prices
-  fpu: 0 # Generate new inventories, randomize prices and shuffle capacity upgrades into item pool
-  uip: 0 # Shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool
-  # You can add more combos
-### End of Shop Section ###
-shuffle_prizes: # aka drops
-  none: 0 # do not shuffle prize packs
-  g: 50 # shuffle "general" prize packs, as in enemy, tree pull, dig etc.
-  b: 0 # shuffle "bonk" prize packs
-  bg: 0 # shuffle both
-timer:
-  none: 50 # No timer will be displayed.
-  timed: 0 # Starts with clock at zero. Green clocks subtract 4 minutes (total 20). Blue clocks subtract 2 minutes (total 10). Red clocks add two minutes (total 10). Winner is the player with the lowest time at the end.
-  timed_ohko: 0 # Starts the clock at ten minutes. Green clocks add five minutes (total 25). As long as the clock as at zero, Link will die in one hit.
-  ohko: 0 # Timer always at zero. Permanent OHKO.
-  timed_countdown: 0 # Starts the clock with forty minutes. Same clocks as timed mode, but if the clock hits zero you lose. You can still keep playing, though.
-  display: 0 # Displays a timer, but otherwise does not affect gameplay or the item pool.
-countdown_start_time: # For timed_ohko and timed_countdown timer modes, the amount of time in minutes to start with
-  0: 0 # For timed_ohko, starts in OHKO mode when starting the game
-  10: 50
-  20: 0
-  30: 0
-  60: 0
-red_clock_time: # For all timer modes, the amount of time in minutes to gain or lose when picking up a red clock
-  -2: 50
-  1: 0
-blue_clock_time: # For all timer modes, the amount of time in minutes to gain or lose when picking up a blue clock
-  1: 0
-  2: 50
-green_clock_time: # For all timer modes, the amount of time in minutes to gain or lose when picking up a green clock
-  4: 50
-  10: 0
-  15: 0
-glitch_boots:
-  on: 50 # Start with Pegasus Boots in any glitched logic mode that makes use of them
-  off: 0
-# meta_ignore, linked_options and triggers work for any game
-meta_ignore: # Nullify options specified in the meta.yaml file. Adding an option here guarantees it will not occur in your seed, even if the .yaml file specifies it
+Factorio:
+  tech_tree_layout:
+    single: 1
+    small_diamonds: 1
+    medium_diamonds: 1
+    large_diamonds: 1
+    small_pyramids: 1
+    medium_pyramids: 1
+    large_pyramids: 1
+    small_funnels: 1
+    medium_funnels: 1
+    large_funnels: 1
+  recipe_time: # randomize the time it takes for any recipe to craft, this includes smelting, chemical lab, hand crafting etc.
+    vanilla: 1
+    fast: 0 # 25% to 100% of original time
+    normal: 0 # 50 % to 200% of original time
+    slow: 0 # 100% to 400% of original time
+    chaos: 0 # 25% to 400% of original time
+  max_science_pack:
+    automation_science_pack: 0
+    logistic_science_pack: 0
+    military_science_pack: 0
+    chemical_science_pack: 0
+    production_science_pack: 0
+    utility_science_pack: 0
+    space_science_pack: 1
+  tech_cost:
+    very_easy : 0
+    easy : 0
+    kind : 0
+    normal : 1
+    hard : 0
+    very_hard : 0
+    insane : 0
+  free_samples:
+    none: 1
+    single_craft: 0
+    half_stack: 0
+    stack: 0
+  visibility:
+    none: 0
+    sending: 1
+  random_tech_ingredients:
+    on: 1
+    off: 0
+  starting_items:
+    burner-mining-drill: 19
+    stone-furnace: 19
+Minecraft:
+  advancement_goal: # Number of advancements required (out of 92 total) to spawn the Ender Dragon and complete the game.
+    few: 0 # 30 advancements
+    normal: 1 # 50
+    many: 0 # 70
+  combat_difficulty: # Modifies the level of items logically required for exploring dangerous areas and fighting bosses.
+    easy: 0
+    normal: 1
+    hard: 0
+  include_hard_advancements: # Junk-fills certain RNG-reliant or tedious advancements with XP rewards.
+    on: 0
+    off: 1
+  include_insane_advancements: # Junk-fills extremely difficult advancements; this is only How Did We Get Here? and Adventuring Time.
+    on: 0
+    off: 1
+  include_postgame_advancements: # Some advancements require defeating the Ender Dragon; this will junk-fill them so you won't have to finish to send some items.
+    on: 0
+    off: 1
+  shuffle_structures: # CURRENTLY DISABLED; enables shuffling of villages, outposts, fortresses, bastions, and end cities.
+    on: 0
+    off: 1
+A Link to the Past:
+  ### Logic Section ###
+  glitches_required: # Determine the logic required to complete the seed
+    none: 50 # No glitches required
+    minor_glitches: 0 # Puts fake flipper, waterwalk, super bunny shenanigans, and etc into logic
+    overworld_glitches: 0 # Assumes the player has knowledge of both overworld major glitches (boots clips, mirror clips) and minor glitches
+    no_logic: 0 # Your own items are placed with no regard to any logic; such as your Fire Rod can be on your Trinexx.
+    # Other players items are placed into your world under OWG logic
+  dark_room_logic: # Logic for unlit dark rooms
+    lamp: 50 # require the Lamp for these rooms to be considered accessible.
+    torches: 0 # in addition to lamp, allow the fire rod and presence of easily accessible torches for access
+    none: 0 # all dark rooms are always considered doable, meaning this may force completion of rooms in complete darkness
+  restrict_dungeon_item_on_boss: # aka ambrosia boss items
+    on: 0 # prevents unshuffled compasses, maps and keys to be boss drops, they can still drop keysanity and other players' items
+    off: 50
+  ### End of Logic Section ###
+  map_shuffle: # Shuffle dungeon maps into the world and other dungeons, including other players' worlds
+    on: 0
+    off: 50
+  compass_shuffle: # Shuffle compasses into the world and other dungeons, including other players' worlds
+    on: 0
+    off: 50
+  smallkey_shuffle: # Shuffle small keys into the world and other dungeons, including other players' worlds
+    on: 0
+    universal: 0 # allows small keys to be used in any dungeon and adds shops to buy more
+    off: 50
+  bigkey_shuffle: # Shuffle big keys into the world and other dungeons, including other players' worlds
+    on: 0
+    off: 50
+  local_keys: # Keep small keys and big keys local to your world
+    on: 0
+    off: 50
+  dungeon_items: # Alternative to the 4 shuffles and local_keys above this, does nothing until the respective 4 shuffles and local_keys above are deleted
+    mc: 0 # Shuffle maps and compasses
+    none: 50 # Shuffle none of the 4
+    mcsb: 0 # Shuffle all of the 4, any combination of m, c, s and b will shuffle the respective item, or not if it's missing, so you can add more options here
+    lmcsb: 0 # Like mcsb above, but with keys kept local to your world. l is what makes your keys local, or not if it's missing
+    ub: 0 # universal small keys and shuffled big keys
+    # you can add more combos of these letters here
+  dungeon_counters:
+    on: 0 # Always display amount of items checked in a dungeon
+    pickup: 50 # Show when compass is picked up
+    default: 0 # Show when compass is picked up if the compass itself is shuffled
+    off: 0 # Never show item count in dungeons
+  progressive: # Enable or disable progressive items (swords, shields, bow)
+    on: 50 # All items are progressive
+    off: 0 # No items are progressive
+    random: 0 # Randomly decides for all items. Swords could be progressive, shields might not be
+  entrance_shuffle:
+    none: 50 # Vanilla game map. All entrances and exits lead to their original locations. You probably want this option
+    dungeonssimple: 0 # Shuffle just dungeons amongst each other, swapping dungeons entirely, so Hyrule Castle is always 1 dungeon
+    dungeonsfull: 0 # Shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle can be 4 different dungeons, but keep dungeons to a specific world
+    dungeonscrossed: 0 # like dungeonsfull, but allow cross-world traversal through a dungeon. Warning: May force repeated dungeon traversal
+    simple: 0 # Entrances are grouped together before being randomized. Simple uses the most strict grouping rules
+    restricted: 0 # Less strict than simple
+    full: 0 # Less strict than restricted
+    crossed: 0 # Less strict than full
+    insanity: 0 # Very few grouping rules. Good luck
+    # you can also define entrance shuffle seed, like so:
+    crossed-1000: 0 # using this method, you can have the same layout as another player and share entrance information
+    # however, many other settings like logic, world state, retro etc. may affect the shuffle result as well.
+    crossed-group-myfriends: 0 # using this method, everyone with "group-myfriends" will share the same seed
+  goals:
+    ganon: 50 # Climb GT, defeat Agahnim 2, and then kill Ganon
+    crystals: 0 # Only killing Ganon is required. However, items may still be placed in GT
+    bosses: 0 # Defeat the boss of all dungeons, including Agahnim's tower and GT (Aga 2)
+    pedestal: 0 # Pull the Triforce from the Master Sword pedestal
+    ganon_pedestal: 0 # Pull the Master Sword pedestal, then kill Ganon
+    triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then turn them in to Murahadala in front of Hyrule Castle
+    local_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
+    ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
+    local_ganon_triforce_hunt: 0 # Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
+    ice_rod_hunt: 0 # You start with everything needed to 216 the seed. Find the Ice rod, then kill Trinexx at Turtle rock.
+  open_pyramid:
+    goal: 50 # Opens the pyramid if the goal requires you to kill Ganon, unless the goal is Slow Ganon or All Dungeons
+    auto: 0 # Same as Goal, but also is closed if holes are shuffled and ganon is part of the shuffle pool
+    yes: 0 # Pyramid hole is always open. Ganon's vulnerable condition is still required before he can he hurt
+    no: 0 # Pyramid hole is always closed until you defeat Agahnim atop Ganon's Tower
+  triforce_pieces_mode: #Determine how to calculate the extra available triforce pieces.
+    extra: 0 # available = triforce_pieces_extra + triforce_pieces_required
+    percentage: 0 # available = (triforce_pieces_percentage /100) * triforce_pieces_required
+    available: 50 # available = triforce_pieces_available
+  triforce_pieces_extra: # Set to how many extra triforces pieces are available to collect in the world.
+    # Format "pieces: chance"
+    0: 0
+    5: 50
+    10: 50
+    15: 0
+    20: 0
+  triforce_pieces_percentage: # Set to how many triforce pieces according to a percentage of the required ones, are available to collect in the world.
+    # Format "pieces: chance"
+    100: 0 #No extra
+    150: 50 #Half the required will be added as extra
+    200: 0 #There are the double of the required ones available.
+  triforce_pieces_available: # Set to how many triforces pieces are available to collect in the world. Default is 30. Max is 90, Min is 1
+    # Format "pieces: chance"
+    25: 0
+    30: 50
+    40: 0
+    50: 0
+  triforce_pieces_required: # Set to how many out of X triforce pieces you need to win the game in a triforce hunt. Default is 20. Max is 90, Min is 1
+    # Format "pieces: chance"
+    15: 0
+    20: 50
+    30: 0
+    40: 0
+    50: 0
+  crystals_needed_for_gt: # Crystals required to open GT
+    0: 0
+    1: 0
+    2: 0
+    3: 0
+    4: 0
+    5: 0
+    6: 0
+    7: 0
+    random: 0
+    random-low: 50 # any valid number, weighted towards the lower end
+    random-middle: 0 # any valid number, weighted towards the central range
+    random-high: 0 # any valid number, weighted towards the higher end
+  crystals_needed_for_ganon: # Crystals required to hurt Ganon
+    0: 0
+    1: 0
+    2: 0
+    3: 0
+    4: 0
+    5: 0
+    6: 0
+    7: 0
+    random: 0
+    random-low: 0
+    random-middle: 0
+    random-high: 50
   mode:
-    - inverted # Never play inverted seeds
+    standard: 50 # Begin the game by rescuing Zelda from her cell and escorting her to the Sanctuary
+    open: 50 # Begin the game from your choice of Link's House or the Sanctuary
+    inverted: 0 # Begin in the Dark World. The Moon Pearl is required to avoid bunny-state in Light World, and the Light World game map is altered
   retro:
-    - on # Never play retro seeds
+    on: 0 # you must buy a quiver to use the bow, take-any caves and an old-man cave are added to the world. You may need to find your sword from the old man's cave
+    off: 50
+  hints:
+    'on': 50 # Hint tiles sometimes give item location hints
+    'off': 0 # Hint tiles provide gameplay tips
   swordless:
-    - on # Never play a swordless seed
-linked_options:
-  - name: crosskeys
-    options: # These overwrite earlier options if the percentage chance triggers
-      entrance_shuffle: crossed
-      bigkey_shuffle: true
-      compass_shuffle: true
-      map_shuffle: true
-      smallkey_shuffle: true
-    percentage: 0 # Set this to the percentage chance you want crosskeys
-  - name: localcrosskeys
-    options: # These overwrite earlier options if the percentage chance triggers
-      entrance_shuffle: crossed
-      bigkey_shuffle: true
-      compass_shuffle: true
-      map_shuffle: true
-      smallkey_shuffle: true
-      local_items: # Forces keys to be local to your own world
-        - "Small Keys"
-        - "Big Keys"
-    percentage: 0 # Set this to the percentage chance you want local crosskeys
-  - name: enemizer
-    options:
-      boss_shuffle: # Subchances can be injected too, which then get rolled
-        basic: 1
-        full: 1
-        chaos: 1
-        singularity: 1
-      enemy_damage:
-        shuffled: 1
-        random: 1
-      enemy_health:
-        easy: 1
-        hard: 1
-        expert: 1
-    percentage: 0 # Set this to the percentage chance you want enemizer
-# triggers that replace options upon rolling certain options
-legacy_weapons: # this is not an actual option, just a set of weights to trigger from
-  trigger_disabled: 50
-  randomized: 0 # Swords are placed randomly throughout the world
-  assured: 0 # Begin with a sword, the rest are placed randomly throughout the world
-  vanilla: 0 # Swords are placed in vanilla locations in your own game (Uncle, Pyramid Fairy, Smiths, Pedestal)
-  swordless: 0 # swordless mode
-triggers:
-  # trigger block for legacy weapons mode, to enable these add weights to legacy_weapons
-  - option_name: legacy_weapons
-    option_result: randomized
-    options:
-      swordless: off
-  - option_name: legacy_weapons
-    option_result: assured
-    options:
-      swordless: off
-      startinventory:
-        Progressive Sword: 1
-  - option_name: legacy_weapons
-    option_result: vanilla
-    options:
-      swordless: off
-      plando_items:
-        - items:
-            Progressive Sword: 4
-          locations:
-            - Master Sword Pedestal
-            - Pyramid Fairy - Left
-            - Blacksmith
-            - Link's Uncle
-  - option_name: legacy_weapons
-    option_result: swordless
-    options:
-      swordless: on
-  # end of legacy weapons block
-  - option_name: enemy_damage # targets enemy_damage
-    option_result: shuffled # if it rolls shuffled
-    percentage: 0 # AND has a 0 percent chance (meaning this is default disabled, just to show how it works)
-    options: # then inserts these options
-      swordless: off
-### door rando only options (not supported at all yet on this branch) ###
-door_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
-  vanilla: 50 # Everything should be like in vanilla
-  basic: 0 # Dungeons are shuffled within themselves
-  crossed: 0 # Dungeons are shuffled across each other
-  # you can also define door shuffle seed, like so:
-  crossed-1000: 0 # using this method, you can have the same dungeon layout as another player and share dungeon layout information.
-  # however, other settings like intensity, universal keys, etc. may affect the shuffle result as well.
-  crossed-group-myfriends: 0 # using this method, everyone with "group-myfriends" will share the same seed
-intensity: # Only available if the host uses the doors branch, it is ignored otherwise
-  1: 50 # Shuffles normal doors and spiral staircases
-  2: 0 # And shuffles open edges and straight staircases
-  3: 0 # And shuffles dungeon lobbies
-  random: 0 # Picks one of those at random
-key_drop_shuffle: # Only available if the host uses the doors branch, it is ignored otherwise
-  on: 0 # Enables the small keys dropped by enemies or under pots, and the big key dropped by the Ball & Chain guard to be shuffled into the pool. This extends the number of checks to 249.
-  off: 50
-experimental: # Only available if the host uses the doors branch, it is ignored otherwise
-  on: 0 # Enables experimental features.
-  off: 50
-debug: # Only available if the host uses the doors branch, it is ignored otherwise
-  on: 0 # Enables debugging features. Currently, these are the Item collection counter. (overwrites total triforce pieces) and Castle Gate closed indicator.
-  off: 50
-### end of door rando only options ###
-rom:
+    on: 0 # Your swords are replaced by rupees. Gameplay changes have been made to accommodate this change
+    off: 1
+  item_pool:
+    easy: 0 # Doubled upgrades, progressives, and etc
+    normal: 50 # Item availability remains unchanged from vanilla game
+    hard: 0 # Reduced upgrade availability (max: 14 hearts, blue mail, tempered sword, fire shield, no silvers unless swordless)
+    expert: 0 # Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless)
+  item_functionality:
+    easy: 0 # Allow Hammer to damage ganon, Allow Hammer tablet collection, Allow swordless medallion use everywhere.
+    normal: 50 # Vanilla item functionality
+    hard: 0 # Reduced helpfulness of items (potions less effective, can't catch faeries, cape uses double magic, byrna does not grant invulnerability, boomerangs do not stun, silvers disabled outside ganon)
+    expert: 0 # Vastly reduces the helpfulness of items (potions barely effective, can't catch faeries, cape uses double magic, byrna does not grant invulnerability, boomerangs and hookshot do not stun, silvers disabled outside ganon)
+  tile_shuffle: # Randomize the tile layouts in flying tile rooms
+    on: 0
+    off: 50
+  misery_mire_medallion: # required medallion to open Misery Mire front entrance
+    random: 50
+    Ether: 0
+    Bombos: 0
+    Quake: 0
+  turtle_rock_medallion: # required medallion to open Turtle Rock front entrance
+    random: 50
+    Ether: 0
+    Bombos: 0
+    Quake: 0
+  ### Enemizer Section ###
+  boss_shuffle:
+    none: 50 # Vanilla bosses
+    basic: 0 # Existing bosses except Ganon and Agahnim are shuffled throughout dungeons
+    full: 0 # 3 bosses can occur twice
+    chaos: 0 # Any boss can appear any amount of times
+    singularity: 0 # Picks a boss, tries to put it everywhere that works, if there's spaces remaining it picks a boss to fill those
+  enemy_shuffle: # Randomize enemy placement
+    on: 0
+    off: 50
+  killable_thieves: # Make thieves killable
+    on: 0 # Usually turned on together with enemy_shuffle to make annoying thief placement more manageable
+    off: 50
+  bush_shuffle: # Randomize the chance that bushes have enemies and the enemies under said bush
+    on: 0
+    off: 50
+  enemy_damage:
+    default: 50 # Vanilla enemy damage
+    shuffled: 0 # Enemies deal 0 to 4 hearts and armor helps
+    random: 0 # Enemies deal 0 to 8 hearts and armor just reshuffles the damage
+  enemy_health:
+    default: 50 # Vanilla enemy HP
+    easy: 0 # Enemies have reduced health
+    hard: 0 # Enemies have increased health
+    expert: 0 # Enemies have greatly increased health
+  pot_shuffle:
+    'on': 0 # Keys, items, and buttons hidden under pots in dungeons are shuffled with other pots in their supertile
+    'off': 50 # Default pot item locations
+  ### End of Enemizer Section ###
+  beemizer: # Remove items from the global item pool and replace them with single bees (fill bottles) and bee traps
+    0: 50 # No bee traps are placed
+    1: 0 # 25% of rupees, bombs and arrows are replaced with bees, of which 60% are traps and 40% single bees
+    2: 0 # 50% of rupees, bombs and arrows are replaced with bees, of which 70% are traps and 30% single bees
+    3: 0 # 75% of rupees, bombs and arrows are replaced with bees, of which 80% are traps and 20% single bees
+    4: 0 # 100% of rupees, bombs and arrows are replaced with bees, of which 90% are traps and 10% single bees
+    5: 0 # 100% of rupees, bombs and arrows are replaced with bees, of which 100% are traps and 0% single bees
+  ### Shop Settings ###
+  shop_item_slots: # Maximum amount of shop slots to be filled with regular item pool items (such as Moon Pearl)
+    0: 50
+    5: 0
+    15: 0
+    30: 0
+    random: 0 # 0 to 30 evenly distributed
+  shop_shuffle:
+    none: 50
+    g: 0 # Generate new default inventories for overworld/underworld shops, and unique shops
+    f: 0 # Generate new default inventories for every shop independently
+    i: 0 # Shuffle default inventories of the shops around
+    p: 0 # Randomize the prices of the items in shop inventories
+    u: 0 # Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld)
+    w: 0 # Consider witch's hut like any other shop and shuffle/randomize it too
+    ip: 0 # Shuffle inventories and randomize prices
+    fpu: 0 # Generate new inventories, randomize prices and shuffle capacity upgrades into item pool
+    uip: 0 # Shuffle inventories, randomize prices and shuffle capacity upgrades into the item pool
+    # You can add more combos
+  ### End of Shop Section ###
+  shuffle_prizes: # aka drops
+    none: 0 # do not shuffle prize packs
+    g: 50 # shuffle "general" prize packs, as in enemy, tree pull, dig etc.
+    b: 0 # shuffle "bonk" prize packs
+    bg: 0 # shuffle both
+  timer:
+    none: 50 # No timer will be displayed.
+    timed: 0 # Starts with clock at zero. Green clocks subtract 4 minutes (total 20). Blue clocks subtract 2 minutes (total 10). Red clocks add two minutes (total 10). Winner is the player with the lowest time at the end.
+    timed_ohko: 0 # Starts the clock at ten minutes. Green clocks add five minutes (total 25). As long as the clock as at zero, Link will die in one hit.
+    ohko: 0 # Timer always at zero. Permanent OHKO.
+    timed_countdown: 0 # Starts the clock with forty minutes. Same clocks as timed mode, but if the clock hits zero you lose. You can still keep playing, though.
+    display: 0 # Displays a timer, but otherwise does not affect gameplay or the item pool.
+  countdown_start_time: # For timed_ohko and timed_countdown timer modes, the amount of time in minutes to start with
+    0: 0 # For timed_ohko, starts in OHKO mode when starting the game
+    10: 50
+    20: 0
+    30: 0
+    60: 0
+  red_clock_time: # For all timer modes, the amount of time in minutes to gain or lose when picking up a red clock
+    -2: 50
+    1: 0
+  blue_clock_time: # For all timer modes, the amount of time in minutes to gain or lose when picking up a blue clock
+    1: 0
+    2: 50
+  green_clock_time: # For all timer modes, the amount of time in minutes to gain or lose when picking up a green clock
+    4: 50
+    10: 0
+    15: 0
+  glitch_boots:
+    on: 50 # Start with Pegasus Boots in any glitched logic mode that makes use of them
+    off: 0
+  # rom options section
   random_sprite_on_event: # An alternative to specifying randomonhit / randomonexit / etc... in sprite down below.
     enabled:  # If enabled, sprite down below is ignored completely, (although it may become the sprite pool)
       on: 0
@@ -526,7 +417,7 @@ rom:
     randomonslash: 0 # Random sprite on sword slashes
     randomonitem: 0  # Random sprite on getting items.
     randomonbonk: 0 # Random sprite on bonk.
-                     # You can combine these events like this.  randomonhit-enter-exit  if you want it on hit, enter, exit.
+    # You can combine these events like this.  randomonhit-enter-exit  if you want it on hit, enter, exit.
     randomonall: 0 # Random sprite on any and all currently supported events. Refer to above for the supported events.
     Link: 50 # To add other sprites: open the gui/Creator, go to adjust, select a sprite and write down the name the gui calls it
   disablemusic: # If "on", all in-game music will be disabled
@@ -612,3 +503,102 @@ rom:
     dizzy: 0
     sick: 0
     puke: 0
+
+  # triggers that replace options upon rolling certain options
+  legacy_weapons: # this is not an actual option, just a set of weights to trigger from
+    trigger_disabled: 50
+    randomized: 0 # Swords are placed randomly throughout the world
+    assured: 0 # Begin with a sword, the rest are placed randomly throughout the world
+    vanilla: 0 # Swords are placed in vanilla locations in your own game (Uncle, Pyramid Fairy, Smiths, Pedestal)
+    swordless: 0 # swordless mode
+# meta_ignore, linked_options and triggers work for any game
+meta_ignore: # Nullify options specified in the meta.yaml file. Adding an option here guarantees it will not occur in your seed, even if the .yaml file specifies it
+  mode:
+    - inverted # Never play inverted seeds
+  retro:
+    - on # Never play retro seeds
+  swordless:
+    - on # Never play a swordless seed
+
+linked_options:
+  - name: crosskeys
+    options: # These overwrite earlier options if the percentage chance triggers
+      A Link to the Past:
+        entrance_shuffle: crossed
+        bigkey_shuffle: true
+        compass_shuffle: true
+        map_shuffle: true
+        smallkey_shuffle: true
+    percentage: 0 # Set this to the percentage chance you want crosskeys
+  - name: localcrosskeys
+    options: # These overwrite earlier options if the percentage chance triggers
+      A Link to the Past:
+        entrance_shuffle: crossed
+        bigkey_shuffle: true
+        compass_shuffle: true
+        map_shuffle: true
+        smallkey_shuffle: true
+        local_items: # Forces keys to be local to your own world
+          - "Small Keys"
+          - "Big Keys"
+    percentage: 0 # Set this to the percentage chance you want local crosskeys
+  - name: enemizer
+    options:
+      A Link to the Past:
+        boss_shuffle: # Subchances can be injected too, which then get rolled
+          basic: 1
+          full: 1
+          chaos: 1
+          singularity: 1
+        enemy_damage:
+          shuffled: 1
+          random: 1
+        enemy_health:
+          easy: 1
+          hard: 1
+          expert: 1
+    percentage: 0 # Set this to the percentage chance you want enemizer
+triggers:
+  # trigger block for legacy weapons mode, to enable these add weights to legacy_weapons
+  - option_name: legacy_weapons
+    option_result: randomized
+    option_category: A Link to the Past
+    options:
+      A Link to the Past:
+        swordless: off
+  - option_name: legacy_weapons
+    option_result: assured
+    option_category: A Link to the Past
+    options:
+      A Link to the Past:
+        swordless: off
+        start_inventory:
+          Progressive Sword: 1
+  - option_name: legacy_weapons
+    option_result: vanilla
+    option_category: A Link to the Past
+    options:
+      A Link to the Past:
+        swordless: off
+        plando_items:
+          - items:
+              Progressive Sword: 4
+            locations:
+              - Master Sword Pedestal
+              - Pyramid Fairy - Left
+              - Blacksmith
+              - Link's Uncle
+  - option_name: legacy_weapons
+    option_result: swordless
+    option_category: A Link to the Past
+    options:
+      A Link to the Past:
+        swordless: on
+  # end of legacy weapons block
+  - option_name: enemy_damage # targets enemy_damage
+    option_category: A Link to the Past
+    option_result: shuffled # if it rolls shuffled
+    percentage: 0 # AND has a 0 percent chance (meaning this is default disabled, just to show how it works)
+    options: # then inserts these options
+      A Link to the Past:
+        swordless: off
