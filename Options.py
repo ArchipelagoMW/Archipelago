@@ -433,7 +433,6 @@ factorio_options: typing.Dict[str, type(Option)] = {"max_science_pack": MaxScien
                                                     "tech_cost": TechCost,
                                                     "free_samples": FreeSamples,
                                                     "visibility": Visibility,
-                                                    "random_tech_ingredients": Toggle,
                                                     "starting_items": FactorioStartItems,
                                                     "recipe_time": RecipeTime}
 

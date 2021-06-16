@@ -66,7 +66,7 @@ class CustomTechnology(Technology):
     def __init__(self, origin: Technology, world, allowed_packs: Set[str], player: int):
         ingredients = origin.ingredients & allowed_packs
         self.player = player
-        if world.random_tech_ingredients[player] and origin.name not in world.worlds[player].static_nodes:
+        if origin.name not in world.worlds[player].static_nodes:
             ingredients = list(ingredients)
             ingredients.sort()  # deterministic sample
             ingredients = world.random.sample(ingredients, world.random.randint(1, len(ingredients)))
