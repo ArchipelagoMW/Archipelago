@@ -1,4 +1,4 @@
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item
+from BaseClasses import Item
 import typing
 
 class ItemData(typing.NamedTuple):
