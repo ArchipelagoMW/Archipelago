@@ -497,15 +497,16 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
             raise Exception(f"Settings reports required version of generator is at least {version}, "
                             f"however generator is of version {__version__}")
         required_plando_options = requirements.get("plando", "")
-        required_plando_options = set(option.strip() for option in required_plando_options.split(","))
-        required_plando_options -= plando_options
         if required_plando_options:
-            if len(required_plando_options) == 1:
-                raise Exception(f"Settings reports required plando module {', '.join(required_plando_options)}, "
-                                f"which is not enabled.")
-            else:
-                raise Exception(f"Settings reports required plando modules {', '.join(required_plando_options)}, "
-                                f"which are not enabled.")
+            required_plando_options = set(option.strip() for option in required_plando_options.split(","))
+            required_plando_options -= plando_options
+            if required_plando_options:
+                if len(required_plando_options) == 1:
+                    raise Exception(f"Settings reports required plando module {', '.join(required_plando_options)}, "
+                                    f"which is not enabled.")
+                else:
+                    raise Exception(f"Settings reports required plando modules {', '.join(required_plando_options)}, "
+                                    f"which are not enabled.")
 
     ret = argparse.Namespace()
     ret.name = get_choice('name', weights)
