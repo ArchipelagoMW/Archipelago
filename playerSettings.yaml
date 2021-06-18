@@ -94,7 +94,7 @@ Factorio:
   visibility:
     none: 0
     sending: 1
-  random_tech_ingredients:
+  imported_blueprints: # can be turned off to prevent access to blueprints created outside the current world
     on: 1
     off: 0
   starting_items:

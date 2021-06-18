@@ -121,6 +121,8 @@ class Toggle(Option):
     def get_option_name(self):
         return bool(self.value)
 
+class DefaultOnToggle(Toggle):
+    default = 1
 
 class Choice(Option):
     def __init__(self, value: int):
@@ -292,56 +294,30 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "shop_item_slots": ShopItemSlots,
 }
 
-mapshuffle = Toggle
-compassshuffle = Toggle
-keyshuffle = Toggle
-bigkeyshuffle = Toggle
-hints = Toggle
 
-RandomizeDreamers = Toggle
-RandomizeSkills = Toggle
-RandomizeCharms = Toggle
-RandomizeKeys = Toggle
-RandomizeGeoChests = Toggle
-RandomizeMaskShards = Toggle
-RandomizeVesselFragments = Toggle
-RandomizeCharmNotches = Toggle
-RandomizePaleOre = Toggle
-RandomizeRancidEggs = Toggle
-RandomizeRelics = Toggle
-RandomizeMaps = Toggle
-RandomizeStags = Toggle
-RandomizeGrubs = Toggle
-RandomizeWhisperingRoots = Toggle
-RandomizeRocks = Toggle
-RandomizeSoulTotems = Toggle
-RandomizePalaceTotems = Toggle
-RandomizeLoreTablets = Toggle
-RandomizeLifebloodCocoons = Toggle
-RandomizeFlames = Toggle
 
 hollow_knight_randomize_options: typing.Dict[str, type(Option)] = {
-    "RandomizeDreamers": RandomizeDreamers,
-    "RandomizeSkills": RandomizeSkills,
-    "RandomizeCharms": RandomizeCharms,
-    "RandomizeKeys": RandomizeKeys,
-    "RandomizeGeoChests": RandomizeGeoChests,
-    "RandomizeMaskShards": RandomizeMaskShards,
-    "RandomizeVesselFragments": RandomizeVesselFragments,
-    "RandomizeCharmNotches": RandomizeCharmNotches,
-    "RandomizePaleOre": RandomizePaleOre,
-    "RandomizeRancidEggs": RandomizeRancidEggs,
-    "RandomizeRelics": RandomizeRelics,
-    "RandomizeMaps": RandomizeMaps,
-    "RandomizeStags": RandomizeStags,
-    "RandomizeGrubs": RandomizeGrubs,
-    "RandomizeWhisperingRoots": RandomizeWhisperingRoots,
-    "RandomizeRocks": RandomizeRocks,
-    "RandomizeSoulTotems": RandomizeSoulTotems,
-    "RandomizePalaceTotems": RandomizePalaceTotems,
-    "RandomizeLoreTablets": RandomizeLoreTablets,
-    "RandomizeLifebloodCocoons": RandomizeLifebloodCocoons,
-    "RandomizeFlames": RandomizeFlames
+    "RandomizeDreamers": DefaultOnToggle,
+    "RandomizeSkills": DefaultOnToggle,
+    "RandomizeCharms": DefaultOnToggle,
+    "RandomizeKeys": DefaultOnToggle,
+    "RandomizeGeoChests": Toggle,
+    "RandomizeMaskShards": DefaultOnToggle,
+    "RandomizeVesselFragments": DefaultOnToggle,
+    "RandomizeCharmNotches": Toggle,
+    "RandomizePaleOre": DefaultOnToggle,
+    "RandomizeRancidEggs": Toggle,
+    "RandomizeRelics": DefaultOnToggle,
+    "RandomizeMaps": Toggle,
+    "RandomizeStags": Toggle,
+    "RandomizeGrubs": Toggle,
+    "RandomizeWhisperingRoots": Toggle,
+    "RandomizeRocks": Toggle,
+    "RandomizeSoulTotems": Toggle,
+    "RandomizePalaceTotems": Toggle,
+    "RandomizeLoreTablets": Toggle,
+    "RandomizeLifebloodCocoons": Toggle,
+    "RandomizeFlames": Toggle
 }
 
 hollow_knight_skip_options: typing.Dict[str, type(Option)] = {
@@ -428,13 +404,16 @@ class FactorioStartItems(OptionDict):
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
 
 
-factorio_options: typing.Dict[str, type(Option)] = {"max_science_pack": MaxSciencePack,
-                                                    "tech_tree_layout": TechTreeLayout,
-                                                    "tech_cost": TechCost,
-                                                    "free_samples": FreeSamples,
-                                                    "visibility": Visibility,
-                                                    "starting_items": FactorioStartItems,
-                                                    "recipe_time": RecipeTime}
+factorio_options: typing.Dict[str, type(Option)] = {
+    "max_science_pack": MaxSciencePack,
+    "tech_tree_layout": TechTreeLayout,
+    "tech_cost": TechCost,
+    "free_samples": FreeSamples,
+    "visibility": Visibility,
+    "starting_items": FactorioStartItems,
+    "recipe_time": RecipeTime,
+    "imported_blueprints": DefaultOnToggle,
+}
 
 
 class AdvancementGoal(Choice):
@@ -469,7 +448,11 @@ option_sets = (
 
 if __name__ == "__main__":
     import argparse
-
+    mapshuffle = Toggle
+    compassshuffle = Toggle
+    keyshuffle = Toggle
+    bigkeyshuffle = Toggle
+    hints = Toggle
     test = argparse.Namespace()
     test.logic = Logic.from_text("no_logic")
     test.mapshuffle = mapshuffle.from_text("ON")
