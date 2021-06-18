@@ -30,7 +30,7 @@ from worlds import network_data_package, lookup_any_item_id_to_name, lookup_any_
     lookup_any_location_id_to_name, lookup_any_location_name_to_id
 import Utils
 from Utils import get_item_name_from_id, get_location_name_from_id, \
-    _version_tuple, restricted_loads, Version
+    version_tuple, restricted_loads, Version
 from NetUtils import Node, Endpoint, ClientStatus, NetworkItem, decode, NetworkPlayer
 
 colorama.init()
@@ -136,9 +136,9 @@ class Context(Node):
     def _load(self, decoded_obj: dict, use_embedded_server_options: bool):
 
         mdata_ver = decoded_obj["minimum_versions"]["server"]
-        if mdata_ver > Utils._version_tuple:
+        if mdata_ver > Utils.version_tuple:
             raise RuntimeError(f"Supplied Multidata (.archipelago) requires a server of at least version {mdata_ver},"
-                               f"however this server is of version {Utils._version_tuple}")
+                               f"however this server is of version {Utils.version_tuple}")
         clients_ver = decoded_obj["minimum_versions"].get("clients", {})
         self.minimum_client_versions = {}
         for player, version in clients_ver.items():
@@ -379,7 +379,7 @@ async def on_client_connected(ctx: Context, client: Client):
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ctx.tags,
-        'version': Utils._version_tuple,
+        'version': Utils.version_tuple,
         'forfeit_mode': ctx.forfeit_mode,
         'remaining_mode': ctx.remaining_mode,
         'hint_cost': ctx.hint_cost,
@@ -1011,7 +1011,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     errors.add('IncompatibleVersion')
 
         # only exact version match allowed
-        if ctx.compatibility == 0 and args['version'] != _version_tuple:
+        if ctx.compatibility == 0 and args['version'] != version_tuple:
             errors.add('IncompatibleVersion')
         if errors:
             logging.info(f"A client connection was refused due to: {errors}")

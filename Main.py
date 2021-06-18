@@ -20,7 +20,7 @@ from worlds.alttp.Dungeons import create_dungeons, fill_dungeons, fill_dungeons_
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from worlds.alttp.Shops import create_shops, ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
-from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
+from Utils import output_path, parse_player_names, get_options, __version__, version_tuple
 from worlds.hk import gen_hollow
 from worlds.hk import create_regions as hk_create_regions
 from worlds.minecraft import gen_minecraft, fill_minecraft_slot_data, generate_mc_data
@@ -557,7 +557,7 @@ def main(args, seed=None):
             "er_hint_data": er_hint_data,
             "precollected_items": precollected_items,
             "precollected_hints": precollected_hints,
-            "version": tuple(_version_tuple),
+            "version": tuple(version_tuple),
             "tags": ["AP"],
             "minimum_versions": minimum_versions,
             "seed_name": world.seed_name

@@ -48,10 +48,10 @@ def manifest_creation(folder):
             path = os.path.join(dirpath, filename)
             hashes[os.path.relpath(path, start=folder)] = pool.submit(_threaded_hash, path)
     import json
-    from Utils import _version_tuple
+    from Utils import version_tuple
     manifest = {"buildtime": buildtime.isoformat(sep=" ", timespec="seconds"),
                 "hashes": {path: hash.result() for path, hash in hashes.items()},
-                "version": _version_tuple}
+                "version": version_tuple}
     json.dump(manifest, open(manifestpath, "wt"), indent=4)
     print("Created Manifest")
 

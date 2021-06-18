@@ -97,7 +97,7 @@ class Context(CommonContext):
         self.auth = self.rom
         auth = base64.b64encode(self.rom).decode()
         await self.send_msgs([{"cmd": 'Connect',
-                              'password': self.password, 'name': auth, 'version': Utils._version_tuple,
+                              'password': self.password, 'name': auth, 'version': Utils.version_tuple,
                               'tags': get_tags(self),
                               'uuid': Utils.get_unique_identifier(), 'game': "A Link to the Past"
                               }])

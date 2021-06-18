@@ -27,6 +27,8 @@ game:
   A Link to the Past: 1
   Factorio: 1
   Minecraft: 1
+requires:
+  version: 0.1.3 # Version of Archipelago required for this yaml to work as expected.
 # Shared Options supported by all games:
 accessibility:
   items: 0 # Guarantees you will be able to acquire all items, but you may not be able to access all locations

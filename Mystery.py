@@ -13,7 +13,7 @@ from worlds.generic import PlandoItem, PlandoConnection
 
 ModuleUpdate.update()
 
-from Utils import parse_yaml
+from Utils import parse_yaml, version_tuple, __version__, tuplize_version
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from Main import get_seed, seeddigits
@@ -453,6 +453,22 @@ def get_plando_bosses(boss_shuffle: str, plando_options: typing.Set[str]) -> str
 
 
 def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses",))):
+    requirements = weights.get("requires", {})
+    if requirements:
+        version = requirements.get("version", __version__)
+        if tuplize_version(version) > version_tuple:
+            raise Exception(f"Settings reports required version of generator is at least {version}, "
+                            f"however generator is of version {__version__}")
+        required_plando_options = requirements.get("plando", "")
+        required_plando_options = set(option.strip() for option in required_plando_options.split(","))
+        required_plando_options -= plando_options
+        if required_plando_options:
+            if len(required_plando_options) == 1:
+                raise Exception(f"Settings reports required plando module {', '.join(required_plando_options)}, "
+                                f"which is not enabled.")
+            else:
+                raise Exception(f"Settings reports required plando modules {', '.join(required_plando_options)}, "
+                                f"which are not enabled.")
     if "pre_rolled" in weights:
         pre_rolled = weights["pre_rolled"]
 
