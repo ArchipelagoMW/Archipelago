@@ -39,6 +39,7 @@ all_items = frozenset(lookup_any_item_name_to_id)
 all_locations = frozenset(lookup_any_location_name_to_id)
 all_console_names = frozenset(all_items | all_locations)
 
+
 class Client(Endpoint):
     version = Version(0, 0, 0)
     tags: typing.List[str] = []
@@ -75,10 +76,10 @@ class Context(Node):
         self.save_filename = None
         self.saving = False
         self.player_names = {}
-        self.connect_names = {} # names of slots clients can connect to
+        self.connect_names = {}  # names of slots clients can connect to
         self.allow_forfeits = {}
         self.remote_items = set()
-        self.locations:typing.Dict[int, typing.Dict[int, typing.Tuple[int, int]]] = {}
+        self.locations: typing.Dict[int, typing.Dict[int, typing.Tuple[int, int]]] = {}
         self.host = host
         self.port = port
         self.server_password = server_password
@@ -166,7 +167,6 @@ class Context(Node):
             server_options = decoded_obj.get("server_options", {})
             self._set_options(server_options)
 
-
     def get_players_package(self):
         return [NetworkPlayer(t, p, self.get_aliased_name(t, p), n) for (t, p), n in self.player_names.items()]
 
@@ -174,7 +174,7 @@ class Context(Node):
         for key, value in server_options.items():
             data_type = self.simple_options.get(key, None)
             if data_type is not None:
-                if value not in {False, True, None}: # some can be boolean OR text, such as password
+                if value not in {False, True, None}:  # some can be boolean OR text, such as password
                     try:
                         value = data_type(value)
                     except Exception as e:
@@ -200,7 +200,7 @@ class Context(Node):
 
         return False
 
-    def _save(self, exit_save:bool=False) -> bool:
+    def _save(self, exit_save: bool = False) -> bool:
         try:
             encoded_save = pickle.dumps(self.get_save())
             with open(self.save_filename, "wb") as f:
@@ -366,7 +366,8 @@ async def server(websocket, path, ctx: Context):
         if not isinstance(e, websockets.WebSocketException):
             logging.exception(e)
     finally:
-        logging.info("Disconnected")
+        if ctx.log_network:
+            logging.info("Disconnected")
         await ctx.disconnect(client)
 
 
@@ -374,8 +375,10 @@ async def on_client_connected(ctx: Context, client: Client):
     await ctx.send_msgs(client, [{
         'cmd': 'RoomInfo',
         'password': ctx.password is not None,
-        'players': [NetworkPlayer(client.team, client.slot, ctx.name_aliases.get((client.team, client.slot), client.name), client.name) for client
-                    in ctx.endpoints if client.auth],
+        'players': [
+            NetworkPlayer(client.team, client.slot, ctx.name_aliases.get((client.team, client.slot), client.name),
+                          client.name) for client
+            in ctx.endpoints if client.auth],
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ctx.tags,
@@ -403,9 +406,11 @@ async def on_client_joined(ctx: Context, client: Client):
 
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
+
 async def on_client_left(ctx: Context, client: Client):
     update_client_status(ctx, client, ClientStatus.CLIENT_UNKNOWN)
-    ctx.notify_all("%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1))
+    ctx.notify_all(
+        "%s (Team #%d) has left the game" % (ctx.get_aliased_name(client.team, client.slot), client.team + 1))
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 
@@ -447,7 +452,7 @@ def get_received_items(ctx: Context, team: int, player: int) -> typing.List[Netw
 
 def send_new_items(ctx: Context):
     for client in ctx.endpoints:
-        if client.auth: # can't send to disconnected client
+        if client.auth:  # can't send to disconnected client
             items = get_received_items(ctx, client.team, client.slot)
             if len(items) > client.send_index:
                 asyncio.create_task(ctx.send_msgs(client, [{
@@ -504,7 +509,6 @@ def notify_team(ctx: Context, team: int, text: str):
     ctx.broadcast_team(team, [['Print', {"text": text}]])
 
 
-
 def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[NetUtils.Hint]:
     hints = []
     seeked_item_id = lookup_any_item_name_to_id[item]
@@ -520,7 +524,6 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
 
 
 def collect_hints_location(ctx: Context, team: int, slot: int, location: str) -> typing.List[NetUtils.Hint]:
-
     seeked_location: int = Regions.lookup_name_to_id[location]
     item_id, receiving_player = ctx.locations[slot].get(seeked_location, (None, None))
     if item_id:
@@ -539,6 +542,7 @@ def format_hint(ctx: Context, team: int, hint: NetUtils.Hint) -> str:
     if hint.entrance:
         text += f" at {hint.entrance}"
     return text + (". (found)" if hint.found else ".")
+
 
 def json_format_send_event(net_item: NetworkItem, receiving_player: int):
     parts = []
@@ -559,7 +563,9 @@ def json_format_send_event(net_item: NetworkItem, receiving_player: int):
     return {"cmd": "PrintJSON", "data": parts, "type": "ItemSend",
             "receiving": receiving_player, "sending": net_item.player}
 
-def get_intended_text(input_text: str, possible_answers: typing.Iterable[str]= all_console_names) -> typing.Tuple[str, bool, str]:
+
+def get_intended_text(input_text: str, possible_answers: typing.Iterable[str] = all_console_names) -> typing.Tuple[
+    str, bool, str]:
     picks = fuzzy_process.extract(input_text, possible_answers, limit=2)
     if len(picks) > 1:
         dif = picks[0][1] - picks[1][1]
@@ -684,10 +690,11 @@ class CommonCommandProcessor(CommandProcessor):
         """List all current options. Warning: lists password."""
         self.output("Current options:")
         for option in self.ctx.simple_options:
-            if option == "server_password" and self.marker == "!":  #Do not display the server password to the client.
-                self.output(f"Option server_password is set to {('*' * random.randint(4,16))}")
+            if option == "server_password" and self.marker == "!":  # Do not display the server password to the client.
+                self.output(f"Option server_password is set to {('*' * random.randint(4, 16))}")
             else:
                 self.output(f"Option {option} is set to {getattr(self.ctx, option)}")
+
 
 class ClientMessageProcessor(CommonCommandProcessor):
     marker = "!"
@@ -715,11 +722,14 @@ class ClientMessageProcessor(CommonCommandProcessor):
         """Allow remote administration of the multiworld server"""
 
         output = f"!admin {command}"
-        if output.lower().startswith("!admin login"):  # disallow others from seeing the supplied password, whether or not it is correct.
+        if output.lower().startswith(
+                "!admin login"):  # disallow others from seeing the supplied password, whether or not it is correct.
             output = f"!admin login {('*' * random.randint(4, 16))}"
-        elif output.lower().startswith("!admin /option server_password"):  # disallow others from knowing what the new remote administration password is.
+        elif output.lower().startswith(
+                "!admin /option server_password"):  # disallow others from knowing what the new remote administration password is.
             output = f"!admin /option server_password {('*' * random.randint(4, 16))}"
-        self.ctx.notify_all(self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + output)  # Otherwise notify the others what is happening.
+        self.ctx.notify_all(self.ctx.get_aliased_name(self.client.team,
+                                                      self.client.slot) + ': ' + output)  # Otherwise notify the others what is happening.
 
         if not self.ctx.server_password:
             self.output("Sorry, Remote administration is disabled")
@@ -727,7 +737,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
         if not command:
             if self.is_authenticated():
-                self.output("Usage: !admin [Server command].\nUse !admin /help for help.\nUse !admin logout to log out of the current session.")
+                self.output(
+                    "Usage: !admin [Server command].\nUse !admin /help for help.\nUse !admin logout to log out of the current session.")
             else:
                 self.output("Usage: !admin login [password]")
             return True
@@ -810,7 +821,6 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     "Sorry, !remaining requires you to have beaten the game on this server")
                 return False
 
-
     def _cmd_missing(self) -> bool:
         """List all missing location checks from the server's perspective"""
 
@@ -850,7 +860,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
             if usable:
                 new_item = NetworkItem(Items.item_table[item_name][2], -1, self.client.slot)
                 get_received_items(self.ctx, self.client.team, self.client.slot).append(new_item)
-                self.ctx.notify_all('Cheat console: sending "' + item_name + '" to ' + self.ctx.get_aliased_name(self.client.team, self.client.slot))
+                self.ctx.notify_all(
+                    'Cheat console: sending "' + item_name + '" to ' + self.ctx.get_aliased_name(self.client.team,
+                                                                                                 self.client.slot))
                 send_new_items(self.ctx)
                 return True
             else:
@@ -959,7 +971,7 @@ def get_client_points(ctx: Context, client: Client) -> int:
 
 async def process_client_cmd(ctx: Context, client: Client, args: dict):
     try:
-        cmd:str = args["cmd"]
+        cmd: str = args["cmd"]
     except:
         logging.exception(f"Could not get command from {args}")
         raise
@@ -1045,7 +1057,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             items = get_received_items(ctx, client.team, client.slot)
             if items:
                 client.send_index = len(items)
-                await ctx.send_msgs(client, [{"cmd": "ReceivedItems","index": 0,
+                await ctx.send_msgs(client, [{"cmd": "ReceivedItems", "index": 0,
                                               "items": items}])
 
         elif cmd == 'LocationChecks':
@@ -1067,10 +1079,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
         if cmd == 'Say':
             if "text" not in args or type(args["text"]) is not str or not args["text"].isprintable():
-                await ctx.send_msgs(client, [{"cmd": "InvalidArguments", "text" : 'Say'}])
+                await ctx.send_msgs(client, [{"cmd": "InvalidArguments", "text": 'Say'}])
                 return
 
             client.messageprocessor(args["text"])
+
 
 def update_client_status(ctx: Context, client: Client, new_status: ClientStatus):
     current = ctx.client_game_state[client.team, client.slot]
@@ -1082,6 +1095,7 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
                 forfeit_player(ctx, client.team, client.slot)
 
         ctx.client_game_state[client.team, client.slot] = new_status
+
 
 class ServerCommandProcessor(CommonCommandProcessor):
     def __init__(self, ctx: Context):
@@ -1190,7 +1204,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
         for (team, slot), name in self.ctx.player_names.items():
             if name.lower() == seeked_player:
                 self.ctx.allow_forfeits[(team, slot)] = False
-                self.output(f"Player {player_name} has to follow the server restrictions on use of the !forfeit command.")
+                self.output(
+                    f"Player {player_name} has to follow the server restrictions on use of the !forfeit command.")
                 return True
 
         self.output(f"Could not find player {player_name} to forbid the !forfeit command for.")
@@ -1269,6 +1284,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(f"Unrecognized Option {option_name}, known: "
                         f"{', '.join(known)}")
             return False
+
 
 async def console(ctx: Context):
     session = prompt_toolkit.PromptSession()
@@ -1356,7 +1372,7 @@ async def auto_shutdown(ctx, to_cancel=None):
 
 
 async def main(args: argparse.Namespace):
-    logging.basicConfig(force = True,
+    logging.basicConfig(force=True,
                         format='[%(asctime)s] %(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
 
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
