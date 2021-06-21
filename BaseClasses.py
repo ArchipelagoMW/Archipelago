@@ -813,6 +813,9 @@ class CollectionState(object):
             rules.append(self.has('Moon Pearl', player))
         return all(rules)
 
+    def can_bomb_clip(self, region: Region, player: int) -> bool: 
+        return self.is_not_bunny(region, player) and self.has('Pegasus Boots', player)
+
     # Minecraft logic functions
     def has_iron_ingots(self, player: int):
         return self.has('Progressive Tools', player) and self.has('Ingot Crafting', player)

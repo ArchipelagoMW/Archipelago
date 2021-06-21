@@ -4,6 +4,7 @@ from worlds.alttp import OverworldGlitchRules
 from BaseClasses import RegionType, MultiWorld, Entrance
 from worlds.alttp.Items import ItemFactory, progression_items, item_name_groups
 from worlds.alttp.OverworldGlitchRules import overworld_glitches_rules, no_logic_rules
+from worlds.alttp.UnderworldGlitchRules import underworld_glitches_rules
 from worlds.alttp.Bosses import GanonDefeatRule
 from worlds.generic.Rules import set_rule, add_rule, forbid_item, add_item_rule, item_in_locations, \
     item_name
@@ -47,12 +48,17 @@ def set_rules(world, player):
 
     if world.logic[player] == 'noglitches':
         no_glitches_rules(world, player)
-    elif world.logic[player] in ['owglitches', 'nologic']:
+    elif world.logic[player] == 'owglitches':
         # Initially setting no_glitches_rules to set the baseline rules for some
         # entrances. The overworld_glitches_rules set is primarily additive.
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
         overworld_glitches_rules(world, player)
+    elif world.logic[player] in ['hybridglitches', 'nologic']: 
+        no_glitches_rules(world, player)
+        fake_flipper_rules(world, player)
+        overworld_glitches_rules(world, player)
+        underworld_glitches_rules(world, player)
     elif world.logic[player] == 'minorglitches':
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
@@ -68,25 +74,26 @@ def set_rules(world, player):
 
     if world.mode[player] != 'inverted':
         set_big_bomb_rules(world, player)
-        if world.logic[player] in {'owglitches', 'nologic'} and world.shuffle[player] not in {'insanity', 'insanity_legacy', 'madness'}:
+        if world.logic[player] in {'owglitches', 'hybridglitches', 'nologic'} and world.shuffle[player] not in {'insanity', 'insanity_legacy', 'madness'}:
             path_to_courtyard = mirrorless_path_to_castle_courtyard(world, player)
             add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: state.world.get_entrance('Dark Death Mountain Offset Mirror', player).can_reach(state) and all(rule(state) for rule in path_to_courtyard), 'or')
     else:
         set_inverted_big_bomb_rules(world, player)
 
     # if swamp and dam have not been moved we require mirror for swamp palace
-    if not world.swamp_patch_required[player]:
+    # however there is mirrorless swamp in hybrid MG, so we don't necessarily want this. HMG handles this requirement itself. 
+    if not world.swamp_patch_required[player] and world.logic[player] not in ['hybridglitches', 'nologic']:
         add_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Magic Mirror', player))
 
     # GT Entrance may be required for Turtle Rock for OWG and < 7 required
     ganons_tower = world.get_entrance('Inverted Ganons Tower' if world.mode[player] == 'inverted' else 'Ganons Tower', player)
-    if world.crystals_needed_for_gt[player] == 7 and not (world.logic[player] in ['owglitches', 'nologic'] and world.mode[player] != 'inverted'):
+    if world.crystals_needed_for_gt[player] == 7 and not (world.logic[player] in ['owglitches', 'hybridglitches', 'nologic'] and world.mode[player] != 'inverted'):
         set_rule(ganons_tower, lambda state: False)
 
     set_trock_key_rules(world, player)
 
     set_rule(ganons_tower, lambda state: state.has_crystals(state.world.crystals_needed_for_gt[player], player))
-    if world.mode[player] != 'inverted' and world.logic[player] in ['owglitches', 'nologic']:
+    if world.mode[player] != 'inverted' and world.logic[player] in ['owglitches', 'hybridglitches', 'nologic']:
         add_rule(world.get_entrance('Ganons Tower', player), lambda state: state.world.get_entrance('Ganons Tower Ascent', player).can_reach(state), 'or')
 
     set_bunny_rules(world, player, world.mode[player] == 'inverted')
@@ -1387,7 +1394,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
     def get_rule_to_add(region, location = None, connecting_entrance = None):
         # In OWG, a location can potentially be superbunny-mirror accessible or
         # bunny revival accessible.
-        if world.logic[player] in ['minorglitches', 'owglitches', 'nologic']:
+        if world.logic[player] in ['minorglitches', 'owglitches', 'hybridglitches', 'nologic']:
             if region.name == 'Swamp Palace (Entrance)':  # Need to 0hp revive - not in logic
                 return lambda state: state.has('Moon Pearl', player)
             if region.name == 'Tower of Hera (Bottom)':  # Need to hit the crystal switch
@@ -1427,7 +1434,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
                 seen.add(new_region)
                 if not is_link(new_region):
                     # For glitch rulesets, establish superbunny and revival rules.
-                    if world.logic[player] in ['minorglitches', 'owglitches', 'nologic'] and entrance.name not in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
+                    if world.logic[player] in ['minorglitches', 'owglitches', 'hybridglitches', 'nologic'] and entrance.name not in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
                         if region.name in OverworldGlitchRules.get_sword_required_superbunny_mirror_regions():
                             possible_options.append(lambda state: path_to_access_rule(new_path, entrance) and state.has('Magic Mirror', player) and state.has_sword(player))
                         elif (region.name in OverworldGlitchRules.get_boots_required_superbunny_mirror_regions()
@@ -1465,7 +1472,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
     # Add requirements for all locations that are actually in the dark world, except those available to the bunny, including dungeon revival
     for entrance in world.get_entrances():
         if entrance.player == player and is_bunny(entrance.connected_region):
-            if world.logic[player] in ['minorglitches', 'owglitches', 'nologic'] :
+            if world.logic[player] in ['minorglitches', 'owglitches', 'hybridglitches', 'nologic'] :
                 if entrance.connected_region.type == RegionType.Dungeon:
                     if entrance.parent_region.type != RegionType.Dungeon and entrance.connected_region.name in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
                         add_rule(entrance, get_rule_to_add(entrance.connected_region, None, entrance))
@@ -1473,7 +1480,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
                 if entrance.connected_region.name == 'Turtle Rock (Entrance)':
                     add_rule(world.get_entrance('Turtle Rock Entrance Gap', player), get_rule_to_add(entrance.connected_region, None, entrance))
             for location in entrance.connected_region.locations:
-                if world.logic[player] in ['minorglitches', 'owglitches', 'nologic'] and entrance.name in OverworldGlitchRules.get_invalid_mirror_bunny_entrances():
+                if world.logic[player] in ['minorglitches', 'owglitches', 'hybridglitches', 'nologic'] and entrance.name in OverworldGlitchRules.get_invalid_mirror_bunny_entrances():
                     continue
                 if location.name in bunny_accessible_locations:
                     continue
