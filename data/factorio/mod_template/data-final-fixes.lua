@@ -23,7 +23,7 @@ template_tech.effects = {}
 template_tech.prerequisites = {}
 
 function prep_copy(new_copy, old_tech)
-    old_tech.enabled = false
+    old_tech.hidden = true
     new_copy.unit = table.deepcopy(old_tech.unit)
     local ingredient_filter = allowed_ingredients[old_tech.name]
     if ingredient_filter ~= nil then
@@ -69,12 +69,12 @@ prep_copy(new_tree_copy, original_tech)
 {% if tech_cost_scale != 1 %}
 new_tree_copy.unit.count = math.max(1, math.floor(new_tree_copy.unit.count * {{ tech_cost_scale }}))
 {% endif %}
-{%- if item_name in tech_table and visibility -%}
+{%- if item_name in tech_table and tech_tree_information == 2 -%}
 {#- copy Factorio Technology Icon -#}
 copy_factorio_icon(new_tree_copy, "{{ item_name }}")
 {%- else -%}
 {#- use default AP icon if no Factorio graphics exist -#}
-{% if advancement %}set_ap_icon(new_tree_copy){% else %}set_ap_unimportant_icon(new_tree_copy){% endif %}
+{% if advancement or not tech_tree_information %}set_ap_icon(new_tree_copy){% else %}set_ap_unimportant_icon(new_tree_copy){% endif %}
 {%- endif -%}
 {#- connect Technology  #}
 {%- if original_tech_name in tech_tree_layout_prerequisites %}

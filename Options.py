@@ -348,8 +348,8 @@ class MaxSciencePack(Choice):
     default = 6
 
     def get_allowed_packs(self):
-        return {option.replace("_", "-") for option, value in self.options.items()
-                if value <= self.value}
+        return {option.replace("_", "-") for option, value in self.options.items() if value <= self.value} - \
+               {"space-science-pack"}  # with rocket launch being the goal, post-launch techs don't make sense
 
 
 class TechCost(Choice):
@@ -388,10 +388,11 @@ class TechTreeLayout(Choice):
     default = 0
 
 
-class Visibility(Choice):
+class TechTreeInformation(Choice):
     option_none = 0
-    option_sending = 1
-    default = 1
+    option_advancement = 1
+    option_full = 2
+    default = 2
 
 
 class RecipeTime(Choice):
@@ -411,7 +412,7 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "tech_tree_layout": TechTreeLayout,
     "tech_cost": TechCost,
     "free_samples": FreeSamples,
-    "visibility": Visibility,
+    "tech_tree_information": TechTreeInformation,
     "starting_items": FactorioStartItems,
     "recipe_time": RecipeTime,
     "imported_blueprints": DefaultOnToggle,
