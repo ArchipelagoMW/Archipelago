@@ -11,7 +11,7 @@ import Utils
 import shutil
 import Options
 from BaseClasses import MultiWorld
-from .Technologies import tech_table, rocket_recipes, recipes
+from .Technologies import tech_table, rocket_recipes, recipes, free_sample_blacklist
 
 template_env: Optional[jinja2.Environment] = None
 
@@ -76,7 +76,8 @@ def generate_mod(world: MultiWorld, player: int):
                      "slot_name": world.player_names[player][0], "seed_name": world.seed_name,
                      "starting_items": world.starting_items[player], "recipes": recipes,
                      "random": world.slot_seeds[player], "static_nodes": world.worlds[player].static_nodes,
-                     "recipe_time_scale": recipe_time_scales[world.recipe_time[player].value]}
+                     "recipe_time_scale": recipe_time_scales[world.recipe_time[player].value],
+                     "free_sample_blacklist": {item : 1 for item in free_sample_blacklist}}
 
     for factorio_option in Options.factorio_options:
         template_data[factorio_option] = getattr(world, factorio_option)[player].value

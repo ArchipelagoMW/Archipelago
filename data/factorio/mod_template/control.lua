@@ -6,6 +6,7 @@ require "util"
 FREE_SAMPLES = {{ free_samples }}
 SLOT_NAME = "{{ slot_name }}"
 SEED_NAME = "{{ seed_name }}"
+FREE_SAMPLE_BLACKLIST = {{ dict_to_lua(free_sample_blacklist) }}
 
 {% if not imported_blueprints -%}
 function set_permissions()
@@ -152,29 +153,32 @@ script.on_event(defines.events.on_research_finished, function(event)
     local technology = event.research
     if technology.researched and string.find(technology.name, "ap%-") == 1 then
         dumpInfo(technology.force) --is sendable
-    end
-    if FREE_SAMPLES == 0 then
-        return  -- Nothing else to do
-    end
-    if not technology.effects then
-        return  -- No technology effects, so nothing to do.
-    end
-    for _, effect in pairs(technology.effects) do
-        if effect.type == "unlock-recipe" then
-            local recipe = game.recipe_prototypes[effect.recipe]
-            for _, result in pairs(recipe.products) do
-                if result.type == "item" and result.amount then
-                    local name = result.name
-                    local count
-                    if FREE_SAMPLES == 1 then
-                        count = result.amount
-                    else
-                        count = get_any_stack_size(result.name)
-                        if FREE_SAMPLES == 2 then
-                            count = math.ceil(count / 2)
+    else
+        if FREE_SAMPLES == 0 then
+            return  -- Nothing else to do
+        end
+        if not technology.effects then
+            return  -- No technology effects, so nothing to do.
+        end
+        for _, effect in pairs(technology.effects) do
+            if effect.type == "unlock-recipe" then
+                local recipe = game.recipe_prototypes[effect.recipe]
+                for _, result in pairs(recipe.products) do
+                    if result.type == "item" and result.amount then
+                        local name = result.name
+                        if FREE_SAMPLE_BLACKLIST[name] ~= 1 then
+                            local count
+                            if FREE_SAMPLES == 1 then
+                                count = result.amount
+                            else
+                                count = get_any_stack_size(result.name)
+                                if FREE_SAMPLES == 2 then
+                                    count = math.ceil(count / 2)
+                                end
+                            end
+                            add_samples(technology.force, name, count)
                         end
                     end
-                    add_samples(technology.force, name, count)
                 end
             end
         end

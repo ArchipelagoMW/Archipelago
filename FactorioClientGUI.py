@@ -59,7 +59,7 @@ class FactorioManager(App):
         super(FactorioManager, self).__init__()
         self.ctx = ctx
         self.commandprocessor = ctx.command_processor(ctx)
-        self.icon = "data/icon.png"
+        self.icon = r"data/icon.png"
 
     def build(self):
         self.grid = GridLayout()
