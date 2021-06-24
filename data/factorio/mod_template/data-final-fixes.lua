@@ -69,7 +69,7 @@ prep_copy(new_tree_copy, original_tech)
 {% if tech_cost_scale != 1 %}
 new_tree_copy.unit.count = math.max(1, math.floor(new_tree_copy.unit.count * {{ tech_cost_scale }}))
 {% endif %}
-{%- if item_name in tech_table and tech_tree_information == 2 -%}
+{%- if item_name in tech_table and tech_tree_information == 2 or original_tech_name in static_nodes -%}
 {#- copy Factorio Technology Icon -#}
 copy_factorio_icon(new_tree_copy, "{{ item_name }}")
 {%- else -%}

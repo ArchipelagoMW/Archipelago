@@ -75,7 +75,7 @@ def generate_mod(world: MultiWorld, player: int):
                      "rocket_recipe": rocket_recipes[world.max_science_pack[player].value],
                      "slot_name": world.player_names[player][0], "seed_name": world.seed_name,
                      "starting_items": world.starting_items[player], "recipes": recipes,
-                     "random": world.slot_seeds[player],
+                     "random": world.slot_seeds[player], "static_nodes": world.worlds[player].static_nodes,
                      "recipe_time_scale": recipe_time_scales[world.recipe_time[player].value]}
 
     for factorio_option in Options.factorio_options:
