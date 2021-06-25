@@ -114,6 +114,7 @@ exclusion_table = {
         "Two by Two": "100 XP",
         "Two Birds, One Arrow": "50 XP",
         "Arbalistic": "100 XP",
+        "Monsters Hunted": "100 XP",
         "Beaconator": "50 XP",
         "A Balanced Diet": "100 XP",
         "Uneasy Alliance": "100 XP",
