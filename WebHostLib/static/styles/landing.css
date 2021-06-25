@@ -102,7 +102,6 @@ html{
     width: 260px;
     height: calc(130px - 35px);
     padding-top: 35px;
-    cursor: default;
 }
 
 #landing-clouds{
