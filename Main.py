@@ -519,10 +519,9 @@ def main(args, seed=None):
                 if player not in world.alttp_player_ids:
                     connect_names[name] = (i, player)
         if world.hk_player_ids:
-            import Options
             for slot in world.hk_player_ids:
                 slots_data = slot_data[slot] = {}
-                for option_name in Options.hollow_knight_options:
+                for option_name in world.worlds[slot].options:
                     option = getattr(world, option_name)[slot]
                     slots_data[option_name] = int(option.value)
         for slot in world.minecraft_player_ids:

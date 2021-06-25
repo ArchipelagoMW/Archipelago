@@ -5,7 +5,7 @@ from .Technologies import tech_table, recipe_sources, technology_table, advancem
     all_ingredient_names, required_technologies, get_rocket_requirements, rocket_recipes
 from .Shapes import get_shapes
 from .Mod import generate_mod
-
+from .Options import factorio_options
 
 class Factorio(World):
     game: str = "Factorio"
@@ -79,6 +79,8 @@ class Factorio(World):
                                                                                         victory_tech_names)
 
         world.completion_condition[player] = lambda state: state.has('Victory', player)
+
+    options = factorio_options
 
 def set_custom_technologies(world: MultiWorld, player: int):
     custom_technologies = {}

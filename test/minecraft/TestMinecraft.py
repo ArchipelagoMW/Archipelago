@@ -1,3 +1,4 @@
+import worlds.minecraft.Options
 from test.TestBase import TestBase
 from BaseClasses import MultiWorld
 from worlds.minecraft import minecraft_gen_item_pool
@@ -31,9 +32,9 @@ class TestMinecraft(TestBase):
         exclusion_pools = ['hard', 'insane', 'postgame']
         for pool in exclusion_pools:
             setattr(self.world, f"include_{pool}_advancements", [False, False])
-        setattr(self.world, "advancement_goal", [0, Options.AdvancementGoal(value=0)])
+        setattr(self.world, "advancement_goal", [0, worlds.minecraft.Options.AdvancementGoal(value=0)])
         setattr(self.world, "shuffle_structures", [False, False])
-        setattr(self.world, "combat_difficulty", [0, Options.CombatDifficulty(value=1)])
+        setattr(self.world, "combat_difficulty", [0, worlds.minecraft.Options.CombatDifficulty(value=1)])
         minecraft_create_regions(self.world, 1)
         link_minecraft_structures(self.world, 1)
         minecraft_gen_item_pool(self.world, 1)

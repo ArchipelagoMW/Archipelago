@@ -4,10 +4,11 @@ from typing import Dict, Set, FrozenSet
 import os
 import json
 
-import Options
 import Utils
 import logging
 import functools
+
+from . import Options
 
 factorio_id = 2 ** 17
 source_folder = Utils.local_path("data", "factorio")

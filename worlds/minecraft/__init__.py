@@ -1,16 +1,16 @@
-from random import Random
 from .Items import MinecraftItem, item_table, item_frequencies
 from .Locations import exclusion_table, events_table
 from .Regions import link_minecraft_structures
 from .Rules import set_rules
 
 from BaseClasses import MultiWorld
-from Options import minecraft_options
+from .Options import minecraft_options
 from ..AutoWorld import World
 
 
 class MinecraftWorld(World):
     game: str = "Minecraft"
+    options = minecraft_options
 
 
 client_version = (0, 3)

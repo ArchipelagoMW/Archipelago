@@ -27,6 +27,7 @@ class World(metaclass=AutoWorldRegister):
 
     world: MultiWorld
     player: int
+    options: dict = {}
 
     def __init__(self, world: MultiWorld, player: int):
         self.world = world

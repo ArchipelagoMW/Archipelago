@@ -147,6 +147,9 @@ class MultiWorld():
         for option_set in Options.option_sets:
             for option in option_set:
                 setattr(self, option, getattr(args, option, {}))
+        for world in AutoWorld.AutoWorldRegister.world_types.values():
+            for option in world.options:
+                setattr(self, option, getattr(args, option, {}))
         for player in self.player_ids:
             self.custom_data[player] = {}
             self.worlds[player] = AutoWorld.AutoWorldRegister.world_types[self.game[player]](self, player)
@@ -1501,22 +1504,14 @@ class Spoiler(object):
                     outfile.write('Progression Balanced:            %s\n' % (
                         'Yes' if self.metadata['progression_balancing'][player] else 'No'))
                 outfile.write('Accessibility:                   %s\n' % self.metadata['accessibility'][player])
-                if player in self.world.hk_player_ids:
-                    for hk_option in Options.hollow_knight_options:
-                        res = getattr(self.world, hk_option)[player]
-                        outfile.write(f'{hk_option+":":33}{res}\n')
-
-                elif player in self.world.factorio_player_ids:
-                    for f_option in Options.factorio_options:
+                options = self.world.worlds[player].options
+                if options:
+                    for f_option in options:
                         res = getattr(self.world, f_option)[player]
                         outfile.write(f'{f_option+":":33}{bool_to_text(res) if type(res) == Options.Toggle else res.get_option_name()}\n')
 
-                elif player in self.world.minecraft_player_ids:
-                    for mc_option in Options.minecraft_options:
-                        res = getattr(self.world, mc_option)[player]
-                        outfile.write(f'{mc_option+":":33}{bool_to_text(res) if type(res) == Options.Toggle else res.get_option_name()}\n')
 
-                elif player in self.world.alttp_player_ids:
+                if player in self.world.alttp_player_ids:
                     for team in range(self.world.teams):
                         outfile.write('%s%s\n' % (
                             f"Hash - {self.world.player_names[player][team]} (Team {team + 1}): " if

@@ -1,7 +1,6 @@
 from typing import Dict, List, Set
 
-from BaseClasses import MultiWorld
-from Options import TechTreeLayout
+from worlds.factorio.Options import TechTreeLayout
 
 funnel_layers = {TechTreeLayout.option_small_funnels: 3,
                  TechTreeLayout.option_medium_funnels: 4,

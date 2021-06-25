@@ -9,7 +9,7 @@ import json
 import jinja2
 import Utils
 import shutil
-import Options
+from . import Options
 from BaseClasses import MultiWorld
 from .Technologies import tech_table, rocket_recipes, recipes, free_sample_blacklist
 

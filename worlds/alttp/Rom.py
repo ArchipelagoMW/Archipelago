@@ -751,17 +751,10 @@ bonk_addresses = [0x4CF6C, 0x4CFBA, 0x4CFE0, 0x4CFFB, 0x4D018, 0x4D01B, 0x4D028,
                   0x4D3F8, 0x4D416, 0x4D420, 0x4D423, 0x4D42D, 0x4D449, 0x4D48C, 0x4D4D9, 0x4D4DC, 0x4D4E3,
                   0x4D504, 0x4D507, 0x4D55E, 0x4D56A]
 
-def get_nonnative_item_sprite(game: str) -> int:
+
+def get_nonnative_item_sprite(item: str) -> int:
     return 0x6B # set all non-native sprites to Power Star as per 13 to 2 vote at
     # https://discord.com/channels/731205301247803413/827141303330406408/852102450822905886
-
-# def get_nonnative_item_sprite(game):
-#     game_to_id = {
-#         "Factorio":         0x09, # Hammer
-#         "Hollow Knight":    0x21, # Bug Catching Net
-#         "Minecraft":        0x13, # Shovel
-#     }
-#     return game_to_id.get(game, 0x6B) # default to Power Star
 
 
 def patch_rom(world, rom, player, team, enemized):
@@ -1724,20 +1717,7 @@ def write_custom_shops(rom, world, player):
             if item is None:
                 break
             if not item['item'] in item_table:  # item not native to ALTTP
-                # This is a terrible way to do this, please fix later
-                from worlds.hk.Items import lookup_id_to_name as hk_lookup
-                from worlds.factorio.Technologies import lookup_id_to_name as factorio_lookup
-                from worlds.minecraft.Items import lookup_id_to_name as mc_lookup
-                item_name = item['item']
-                if item_name in hk_lookup.values():
-                    item_game = 'Hollow Knight'
-                elif item_name in factorio_lookup.values():
-                    item_game = 'Factorio'
-                elif item_name in mc_lookup.values():
-                    item_game = 'Minecraft'
-                else:
-                    item_game = 'Generic'
-                item_code = get_nonnative_item_sprite(item_game)
+                item_code = get_nonnative_item_sprite(item['item'])
             else:
                 item_code = ItemFactory(item['item'], player).code
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro[player]:
