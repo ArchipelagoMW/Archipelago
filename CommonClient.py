@@ -331,9 +331,10 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             logger.error('Invalid password')
             ctx.password = None
             await ctx.server_auth(True)
-        else:
+        elif errors:
             raise Exception("Unknown connection errors: " + str(errors))
-        raise Exception('Connection refused by the multiworld host, no reason provided')
+        else:
+            raise Exception('Connection refused by the multiworld host, no reason provided')
 
     elif cmd == 'Connected':
         ctx.team = args["team"]
