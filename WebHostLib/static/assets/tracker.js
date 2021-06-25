@@ -23,18 +23,38 @@ window.addEventListener('load', () => {
                 render: function (data, type, row) {
                     if (type === "sort" || type === 'type') {
                         if (data === "None")
-                            return -1
+                            return -1;
 
                         return parseInt(data);
                     }
                     if (data === "None")
-                        return data
+                        return data;
 
-                    var hours   = Math.floor(data / 3600);
-                    var minutes = Math.floor((data - (hours * 3600)) / 60);
+                    let hours   = Math.floor(data / 3600);
+                    let minutes = Math.floor((data - (hours * 3600)) / 60);
 
                     if (minutes < 10) {minutes = "0"+minutes;}
                     return hours+':'+minutes;
+                }
+            },
+            {
+                targets: 'number',
+                render: function (data, type, row) {
+                    if (type === "sort" || type === 'type') {
+                        return parseFloat(data);
+                    }
+                    return data;
+                }
+            },
+            {
+                targets: 'fraction',
+                render: function (data, type, row) {
+                    let splitted = data.split("/", 1);
+                    let current = splitted[0]
+                    if (type === "sort" || type === 'type') {
+                        return parseInt(current);
+                    }
+                    return data;
                 }
             },
         ],
