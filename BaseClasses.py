@@ -888,13 +888,15 @@ class CollectionState(object):
         return self.fortress_loot(player) and normal_kill
 
     def can_kill_ender_dragon(self, player: int):
+        # Since it is possible to kill the dragon without getting any of the advancements related to it, we need to require that it can be respawned. 
+        respawn_dragon = self.can_reach('The Nether', 'Region', player) and self.has('Ingot Crafting', player)
         if self.combat_difficulty(player) == 'easy': 
-            return self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and self.has('Archery', player) and \
-                   self.can_brew_potions(player) and self.can_enchant(player)
+            return respawn_dragon and self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and \
+                   self.has('Archery', player) and self.can_brew_potions(player) and self.can_enchant(player)
         if self.combat_difficulty(player) == 'hard': 
-            return (self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player)) or \
-                   (self.has('Progressive Weapons', player, 1) and self.has('Bed', player))
-        return self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and self.has('Archery', player)
+            return respawn_dragon and ((self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player)) or \
+                   (self.has('Progressive Weapons', player, 1) and self.has('Bed', player)))
+        return respawn_dragon and self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and self.has('Archery', player)
 
 
     def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:

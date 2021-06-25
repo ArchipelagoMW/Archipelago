@@ -41,7 +41,7 @@ def set_rules(world, player):
     set_rule(world.get_location("Very Very Frightening", player), lambda state: state.has("Channeling Book", player) and state.can_use_anvil(player) and state.can_enchant(player) and \
         ((world.get_region('Village', player).entrances[0].parent_region.name != 'The End' and state.can_reach('Village', 'Region', player)) or state.can_reach('Zombie Doctor', 'Location', player))) # need villager into the overworld for lightning strike
     set_rule(world.get_location("Hot Stuff", player), lambda state: state.has("Bucket", player) and state.has_iron_ingots(player))
-    set_rule(world.get_location("Free the End", player), lambda state: can_complete(state) and state.has('Ingot Crafting', player) and state.can_reach('The Nether', 'Region', player))
+    set_rule(world.get_location("Free the End", player), lambda state: can_complete(state))
     set_rule(world.get_location("A Furious Cocktail", player), lambda state: state.can_brew_potions(player) and 
                                                                              state.has("Fishing Rod", player) and # Water Breathing
                                                                              state.can_reach('The Nether', 'Region', player) and # Regeneration, Fire Resistance, gold nuggets
@@ -84,7 +84,7 @@ def set_rules(world, player):
     set_rule(world.get_location("Total Beelocation", player), lambda state: state.has("Silk Touch Book", player) and state.can_use_anvil(player) and state.can_enchant(player))
     set_rule(world.get_location("Arbalistic", player), lambda state: state.craft_crossbow(player) and state.has("Piercing IV Book", player) and 
                                                                      state.can_use_anvil(player) and state.can_enchant(player))
-    set_rule(world.get_location("The End... Again...", player), lambda state: can_complete(state) and state.has("Ingot Crafting", player) and state.can_reach('The Nether', 'Region', player)) # furnace for glass, nether for ghast tears
+    set_rule(world.get_location("The End... Again...", player), lambda state: can_complete(state))
     set_rule(world.get_location("Acquire Hardware", player), lambda state: state.has_iron_ingots(player))
     set_rule(world.get_location("Not Quite \"Nine\" Lives", player), lambda state: state.can_piglin_trade(player) and state.has("Resource Blocks", player))
     set_rule(world.get_location("Cover Me With Diamonds", player), lambda state: state.has("Progressive Armor", player, 2) and state.can_reach("Diamonds!", "Location", player))
