@@ -244,7 +244,15 @@ class Context(Node):
             import atexit
             atexit.register(self._save, True)  # make sure we save on exit too
 
+    def recheck_hints(self):
+        for team, slot in self.hints:
+            self.hints[team, slot] = {
+                hint.re_check(self, team) for hint in
+                self.hints[team, slot]
+            }
+
     def get_save(self) -> dict:
+        self.recheck_hints()
         d = {
             "connect_names": self.connect_names,
             "received_items": self.received_items,

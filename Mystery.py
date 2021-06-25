@@ -550,7 +550,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
         roll_alttp_settings(ret, game_weights, plando_options)
     elif ret.game == "Hollow Knight":
         for option_name, option in Options.hollow_knight_options.items():
-            setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights, True)))
+            setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights)))
     elif ret.game == "Factorio":
         for option_name, option in Options.factorio_options.items():
             if option_name in game_weights:
