@@ -4,7 +4,7 @@ from BaseClasses import MultiWorld
 from worlds import AutoWorld
 from worlds.minecraft import MinecraftWorld
 from worlds.minecraft.Items import MinecraftItem, item_table
-import Options
+from worlds.minecraft.Options import AdvancementGoal, CombatDifficulty
 
 # Converts the name of an item into an item object
 def MCItemFactory(items, player: int):
@@ -32,9 +32,9 @@ class TestMinecraft(TestBase):
         exclusion_pools = ['hard', 'insane', 'postgame']
         for pool in exclusion_pools:
             setattr(self.world, f"include_{pool}_advancements", [False, False])
-        setattr(self.world, "advancement_goal", {1: Options.AdvancementGoal(30)})
+        setattr(self.world, "advancement_goal", {1: AdvancementGoal(30)})
         setattr(self.world, "shuffle_structures", {1: False})
-        setattr(self.world, "combat_difficulty", {1: Options.CombatDifficulty(1)}) # normal
+        setattr(self.world, "combat_difficulty", {1: CombatDifficulty(1)}) # normal
         AutoWorld.call_single(self.world, "create_regions", 1)
         AutoWorld.call_single(self.world, "generate_basic", 1)
         AutoWorld.call_single(self.world, "set_rules", 1)
