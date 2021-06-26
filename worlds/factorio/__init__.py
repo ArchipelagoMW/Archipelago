@@ -80,6 +80,9 @@ class Factorio(World):
 
         world.completion_condition[player] = lambda state: state.has('Victory', player)
 
+    def get_required_client_version(self) -> tuple:
+        return max((0, 1, 4), super(Factorio, self).get_required_client_version())
+
     options = factorio_options
 
 def set_custom_technologies(world: MultiWorld, player: int):

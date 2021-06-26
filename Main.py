@@ -497,10 +497,7 @@ def main(args, seed=None):
         minimum_versions = {"server": (0, 1, 1), "clients": client_versions}
         games = {}
         for slot in world.player_ids:
-            if world.game[slot] == "Factorio":
-                client_versions[slot] = (0, 1, 2)
-            else:
-                client_versions[slot] = (0, 0, 3)
+            client_versions[slot] = world.worlds[slot].get_required_client_version()
             games[slot] = world.game[slot]
         connect_names = {base64.b64encode(rom_name).decode(): (team, slot) for
                          slot, team, rom_name in rom_names}
