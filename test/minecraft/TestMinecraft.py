@@ -1,3 +1,4 @@
+import worlds.minecraft.Options
 from test.TestBase import TestBase
 from BaseClasses import MultiWorld
 from worlds import AutoWorld

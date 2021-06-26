@@ -20,7 +20,7 @@ from worlds.alttp.Dungeons import create_dungeons, fill_dungeons, fill_dungeons_
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
 from worlds.alttp.Shops import create_shops, ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
-from Utils import output_path, parse_player_names, get_options, __version__, _version_tuple
+from Utils import output_path, parse_player_names, get_options, __version__, version_tuple
 from worlds.hk import gen_hollow
 from worlds.hk import create_regions as hk_create_regions
 from worlds.generic.Rules import locality_rules
@@ -500,10 +500,10 @@ def main(args, seed=None):
         for item in world.precollected_items:
             precollected_items[item.player].append(item.code)
         precollected_hints = {player: set() for player in range(1, world.players + 1)}
-        # for now special case Factorio visibility
+        # for now special case Factorio tech_tree_information
         sending_visible_players = set()
         for player in world.factorio_player_ids:
-            if world.visibility[player]:
+            if world.tech_tree_information[player].value == 2:
                 sending_visible_players.add(player)
 
         for i, team in enumerate(parsed_names):
@@ -511,10 +511,9 @@ def main(args, seed=None):
                 if player not in world.alttp_player_ids:
                     connect_names[name] = (i, player)
         if world.hk_player_ids:
-            import Options
             for slot in world.hk_player_ids:
                 slots_data = slot_data[slot] = {}
-                for option_name in Options.hollow_knight_options:
+                for option_name in world.worlds[slot].options:
                     option = getattr(world, option_name)[slot]
                     slots_data[option_name] = int(option.value)
         for slot in world.minecraft_player_ids:
@@ -549,7 +548,7 @@ def main(args, seed=None):
             "er_hint_data": er_hint_data,
             "precollected_items": precollected_items,
             "precollected_hints": precollected_hints,
-            "version": tuple(_version_tuple),
+            "version": tuple(version_tuple),
             "tags": ["AP"],
             "minimum_versions": minimum_versions,
             "seed_name": world.seed_name

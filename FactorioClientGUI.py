@@ -30,13 +30,16 @@ async def main():
     ctx.server_address = None
     ctx.snes_reconnect_address = None
     # allow tasks to quit
-    await ui_task
-    await factorio_server_task
-    await ctx.server_task
+    if ui_task:
+        await ui_task
+    if factorio_server_task:
+        await factorio_server_task
+    if ctx.server_task:
+        await ctx.server_task
 
-    if ctx.server is not None and not ctx.server.socket.closed:
+    if ctx.server and not ctx.server.socket.closed:
         await ctx.server.socket.close()
-    if ctx.server_task is not None:
+    if ctx.server_task:
         await ctx.server_task
 
     while ctx.input_requests > 0:  # clear queue for shutdown
@@ -59,7 +62,7 @@ class FactorioManager(App):
         super(FactorioManager, self).__init__()
         self.ctx = ctx
         self.commandprocessor = ctx.command_processor(ctx)
-        self.icon = "data/icon.png"
+        self.icon = r"data/icon.png"
 
     def build(self):
         self.grid = GridLayout()

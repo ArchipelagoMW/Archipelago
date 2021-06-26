@@ -1,9 +1,3 @@
-html{
-    background-image: url('../static/backgrounds/grass/grass-0007-large.png');
-    background-repeat: repeat;
-    background-size: 650px 650px;
-}
-
 #tutorial-wrapper{
     display: flex;
     flex-direction: column;

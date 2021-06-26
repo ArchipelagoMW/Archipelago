@@ -17,6 +17,47 @@ window.addEventListener('load', () => {
         paging: false,
         info: false,
         dom: "t",
+        columnDefs: [
+            {
+                targets: 'hours',
+                render: function (data, type, row) {
+                    if (type === "sort" || type === 'type') {
+                        if (data === "None")
+                            return -1;
+
+                        return parseInt(data);
+                    }
+                    if (data === "None")
+                        return data;
+
+                    let hours   = Math.floor(data / 3600);
+                    let minutes = Math.floor((data - (hours * 3600)) / 60);
+
+                    if (minutes < 10) {minutes = "0"+minutes;}
+                    return hours+':'+minutes;
+                }
+            },
+            {
+                targets: 'number',
+                render: function (data, type, row) {
+                    if (type === "sort" || type === 'type') {
+                        return parseFloat(data);
+                    }
+                    return data;
+                }
+            },
+            {
+                targets: 'fraction',
+                render: function (data, type, row) {
+                    let splitted = data.split("/", 1);
+                    let current = splitted[0]
+                    if (type === "sort" || type === 'type') {
+                        return parseInt(current);
+                    }
+                    return data;
+                }
+            },
+        ],
 
         // DO NOT use the scrollX or scrollY options. They cause DataTables to split the thead from
         // the tbody and render two separate tables.

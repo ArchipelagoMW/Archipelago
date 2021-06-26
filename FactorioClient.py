@@ -76,7 +76,7 @@ class FactorioContext(CommonContext):
             await super(FactorioContext, self).server_auth(password_requested)
 
         await self.send_msgs([{"cmd": 'Connect',
-                               'password': self.password, 'name': self.auth, 'version': Utils._version_tuple,
+                               'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
                                'tags': ['AP'],
                                'uuid': Utils.get_unique_identifier(), 'game': "Factorio"
                                }])

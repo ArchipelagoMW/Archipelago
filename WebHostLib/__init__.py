@@ -103,28 +103,10 @@ games_list = {
 }
 
 
-# Player settings pages
-@app.route('/games/<game>/player-settings')
-def player_settings(game):
-    return render_template(f"/games/{game}/playerSettings.html")
-
-
-# Zelda3 pages
-@app.route('/games/zelda3/<string:page>')
-def zelda3_pages(page):
-    return render_template(f"/games/zelda3/{page}.html")
-
-
-# Factorio pages
-@app.route('/games/factorio/<string:page>')
-def factorio_pages(page):
-    return render_template(f"/games/factorio/{page}.html")
-
-
-# Minecraft pages
-@app.route('/games/minecraft/<string:page>')
-def minecraft_pages(page):
-    return render_template(f"/games/factorio/{page}.html")
+# Game sub-pages
+@app.route('/games/<string:game>/<string:page>')
+def game_pages(game, page):
+    return render_template(f"/games/{game}/{page}.html")
 
 
 # Game landing pages

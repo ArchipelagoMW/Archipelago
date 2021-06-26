@@ -1,6 +1,6 @@
 # ToDo: With shuffle_ganon option, prevent gtower from linking to an exit only location through a 2 entrance cave.
 from collections import defaultdict
-
+from worlds.alttp.UnderworldGlitchRules import underworld_glitch_connections
 
 def link_entrances(world, player):
     connect_two_way(world, 'Links House', 'Links House Exit', player) # unshuffled. For now
@@ -1066,6 +1066,10 @@ def link_entrances(world, player):
         raise NotImplementedError(
             f'{world.shuffle[player]} Shuffling not supported yet. Player {world.get_player_names(player)}')
 
+    # mandatory hybrid major glitches connections
+    if world.logic[player] in ['hybridglitches', 'nologic']:
+        underworld_glitch_connections(world, player)
+
     # check for swamp palace fix
     if world.get_entrance('Dam', player).connected_region.name != 'Dam' or world.get_entrance('Swamp Palace', player).connected_region.name != 'Swamp Palace (Entrance)':
         world.swamp_patch_required[player] = True
@@ -1767,6 +1771,10 @@ def link_inverted_entrances(world, player):
     else:
         raise NotImplementedError('Shuffling not supported yet')
 
+    # mandatory hybrid major glitches connections
+    if world.logic[player] in ['hybridglitches', 'nologic']:
+        underworld_glitch_connections(world, player)
+
     # patch swamp drain
     if world.get_entrance('Dam', player).connected_region.name != 'Dam' or world.get_entrance('Swamp Palace', player).connected_region.name != 'Swamp Palace (Entrance)':
         world.swamp_patch_required[player] = True
@@ -1941,7 +1949,7 @@ def connect_mandatory_exits(world, entrances, caves, must_be_exits, player):
         invalid_connections = Must_Exit_Invalid_Connections.copy()
     invalid_cave_connections = defaultdict(set)
 
-    if world.logic[player] in ['owglitches', 'nologic']:
+    if world.logic[player] in ['owglitches', 'hybridglitches', 'nologic']:
         from worlds.alttp import OverworldGlitchRules
         for entrance in OverworldGlitchRules.get_non_mandatory_exits(world.mode[player] == 'inverted'):
             invalid_connections[entrance] = set()

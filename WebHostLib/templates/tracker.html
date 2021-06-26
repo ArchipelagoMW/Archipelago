@@ -98,20 +98,20 @@
                                         <th colspan="{{ colspan }}" class="center-column">{{ area }}</th>
                                     {%- endif -%}
                                 {%- endfor -%}
-                                <th rowspan="2" class="center-column">Last<br>Activity</th>
+                                <th rowspan="2" class="center-column hours">Last<br>Activity</th>
                             </tr>
                             <tr>
                                 {% for area in ordered_areas %}
-                                    <th class="center-column lower-row">
+                                    <th class="center-column lower-row fraction">
                                         <img class="alttp-sprite" src="{{ icons["Chest"] }}" alt="Checks">
                                     </th>
                                     {% if area in key_locations %}
-                                        <th class="center-column lower-row">
+                                        <th class="center-column lower-row number">
                                             <img class="alttp-sprite" src="{{ icons["Small Key"] }}" alt="Small Key">
                                         </th>
                                     {% endif %}
                                     {% if area in big_key_locations %}
-                                        <th class="center-column lower-row">
+                                        <th class="center-column lower-row number">
                                             <img class="alttp-sprite" src="{{ icons["Big Key"] }}" alt="Big Key">
                                         </th>
                                     {%- endif -%}
@@ -141,7 +141,7 @@
                                         {%- endif -%}
                                     {%- endfor -%}
                                     {%- if activity_timers[(team, player)] -%}
-                                        <td class="center-column">{{ activity_timers[(team, player)] | render_timedelta }}</td>
+                                        <td class="center-column">{{ activity_timers[(team, player)].total_seconds() }}</td>
                                     {%- else -%}
                                         <td class="center-column">None</td>
                                     {%- endif -%}

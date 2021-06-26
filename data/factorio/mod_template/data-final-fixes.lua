@@ -23,7 +23,7 @@ template_tech.effects = {}
 template_tech.prerequisites = {}
 
 function prep_copy(new_copy, old_tech)
-    old_tech.enabled = false
+    old_tech.hidden = true
     new_copy.unit = table.deepcopy(old_tech.unit)
     local ingredient_filter = allowed_ingredients[old_tech.name]
     if ingredient_filter ~= nil then
@@ -57,7 +57,10 @@ function adjust_energy(recipe_name, factor)
     data.raw.recipe[recipe_name].energy_required = energy * factor
 end
 
-table.insert(data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories, "crafting-with-fluid")
+data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
+data.raw["assembling-machine"]["assembling-machine-2"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
+data.raw["assembling-machine"]["assembling-machine-1"].fluid_boxes = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes)
+
 
 {# each randomized tech gets set to be invisible, with new nodes added that trigger those #}
 {%- for original_tech_name, item_name, receiving_player, advancement in locations %}
@@ -69,12 +72,12 @@ prep_copy(new_tree_copy, original_tech)
 {% if tech_cost_scale != 1 %}
 new_tree_copy.unit.count = math.max(1, math.floor(new_tree_copy.unit.count * {{ tech_cost_scale }}))
 {% endif %}
-{%- if item_name in tech_table and visibility -%}
+{%- if item_name in tech_table and tech_tree_information == 2 or original_tech_name in static_nodes -%}
 {#- copy Factorio Technology Icon -#}
 copy_factorio_icon(new_tree_copy, "{{ item_name }}")
 {%- else -%}
 {#- use default AP icon if no Factorio graphics exist -#}
-{% if advancement %}set_ap_icon(new_tree_copy){% else %}set_ap_unimportant_icon(new_tree_copy){% endif %}
+{% if advancement or not tech_tree_information %}set_ap_icon(new_tree_copy){% else %}set_ap_unimportant_icon(new_tree_copy){% endif %}
 {%- endif -%}
 {#- connect Technology  #}
 {%- if original_tech_name in tech_tree_layout_prerequisites %}

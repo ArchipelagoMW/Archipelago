@@ -47,12 +47,9 @@ class ClientCommandProcessor(CommandProcessor):
 
     def _cmd_received(self) -> bool:
         """List all received items"""
-        logger.info('Received items:')
+        logger.info(f'{len(self.ctx.items_received)} received items:')
         for index, item in enumerate(self.ctx.items_received, 1):
-            logging.info('%s from %s (%s) (%d/%d in list)' % (
-                color(self.ctx.item_name_getter(item.item), 'red', 'bold'),
-                color(self.ctx.player_names[item.player], 'yellow'),
-                self.ctx.location_name_getter(item.location), index, len(self.ctx.items_received)))
+            self.output(f"{self.ctx.item_name_getter(item.item)} from {self.ctx.player_names[item.player]}")
         return True
 
     def _cmd_missing(self) -> bool:
@@ -334,9 +331,10 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             logger.error('Invalid password')
             ctx.password = None
             await ctx.server_auth(True)
-        else:
+        elif errors:
             raise Exception("Unknown connection errors: " + str(errors))
-        raise Exception('Connection refused by the multiworld host, no reason provided')
+        else:
+            raise Exception('Connection refused by the multiworld host, no reason provided')
 
     elif cmd == 'Connected':
         ctx.team = args["team"]

@@ -97,7 +97,7 @@ class Context(CommonContext):
         self.auth = self.rom
         auth = base64.b64encode(self.rom).decode()
         await self.send_msgs([{"cmd": 'Connect',
-                              'password': self.password, 'name': auth, 'version': Utils._version_tuple,
+                              'password': self.password, 'name': auth, 'version': Utils.version_tuple,
                               'tags': get_tags(self),
                               'uuid': Utils.get_unique_identifier(), 'game': "A Link to the Past"
                               }])
@@ -852,10 +852,11 @@ async def game_watcher(ctx: Context):
 
         if recv_index < len(ctx.items_received) and recv_item == 0:
             item = ctx.items_received[recv_index]
+            recv_index += 1
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
                 color(ctx.item_name_getter(item.item), 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
-                ctx.location_name_getter(item.location), recv_index + 1, len(ctx.items_received)))
-            recv_index += 1
+                ctx.location_name_getter(item.location), recv_index, len(ctx.items_received)))
+
             snes_buffered_write(ctx, RECV_PROGRESS_ADDR, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
             snes_buffered_write(ctx, RECV_ITEM_ADDR, bytes([item.item]))
             snes_buffered_write(ctx, RECV_ITEM_PLAYER_ADDR, bytes([item.player if item.player != ctx.slot else 0]))

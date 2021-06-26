@@ -4,10 +4,11 @@ from typing import Dict, Set, FrozenSet
 import os
 import json
 
-import Options
 import Utils
 import logging
 import functools
+
+from . import Options
 
 factorio_id = 2 ** 17
 source_folder = Utils.local_path("data", "factorio")
@@ -66,7 +67,7 @@ class CustomTechnology(Technology):
     def __init__(self, origin: Technology, world, allowed_packs: Set[str], player: int):
         ingredients = origin.ingredients & allowed_packs
         self.player = player
-        if world.random_tech_ingredients[player] and origin.name not in world.worlds[player].static_nodes:
+        if origin.name not in world.worlds[player].static_nodes:
             ingredients = list(ingredients)
             ingredients.sort()  # deterministic sample
             ingredients = world.random.sample(ingredients, world.random.randint(1, len(ingredients)))
@@ -99,6 +100,7 @@ class Machine(FactorioElement):
         self.name: str = name
         self.categories: set = categories
 
+
 # recipes and technologies can share names in Factorio
 for technology_name in sorted(raw):
     data = raw[technology_name]
@@ -125,7 +127,8 @@ for recipe_name, recipe_data in raw_recipes.items():
 
     recipe = Recipe(recipe_name, recipe_data["category"], set(recipe_data["ingredients"]), set(recipe_data["products"]))
     recipes[recipe_name] = Recipe
-    if recipe.products.isdisjoint(recipe.ingredients) and "empty-barrel" not in recipe.products:  # prevents loop recipes like uranium centrifuging
+    if recipe.products.isdisjoint(
+            recipe.ingredients) and "empty-barrel" not in recipe.products:  # prevents loop recipes like uranium centrifuging
         for product_name in recipe.products:
             all_product_sources.setdefault(product_name, set()).add(recipe)
 
@@ -153,6 +156,7 @@ def unlock_just_tech(recipe: Recipe, _done) -> Set[Technology]:
         current_technologies |= recursively_get_unlocking_technologies(ingredient_name, _done)
     return current_technologies
 
+
 def unlock(recipe: Recipe, _done) -> Set[Technology]:
     current_technologies = set()
     current_technologies |= recipe.unlocking_technologies
@@ -162,7 +166,9 @@ def unlock(recipe: Recipe, _done) -> Set[Technology]:
 
     return current_technologies
 
-def recursively_get_unlocking_technologies(ingredient_name, _done=None, unlock_func=unlock_just_tech) -> Set[Technology]:
+
+def recursively_get_unlocking_technologies(ingredient_name, _done=None, unlock_func=unlock_just_tech) -> Set[
+    Technology]:
     if _done:
         if ingredient_name in _done:
             return set()
@@ -180,7 +186,6 @@ def recursively_get_unlocking_technologies(ingredient_name, _done=None, unlock_f
     return current_technologies
 
 
-
 required_machine_technologies: Dict[str, FrozenSet[Technology]] = {}
 for ingredient_name in machines:
     required_machine_technologies[ingredient_name] = frozenset(recursively_get_unlocking_technologies(ingredient_name))
@@ -192,14 +197,14 @@ for machine in machines.values():
         if machine != pot_source_machine \
                 and machine.categories.issuperset(pot_source_machine.categories) \
                 and required_machine_technologies[machine.name].issuperset(
-                required_machine_technologies[pot_source_machine.name]):
+            required_machine_technologies[pot_source_machine.name]):
             logically_useful = False
             break
 
     if logically_useful:
         logical_machines[machine.name] = machine
 
-del(required_machine_technologies)
+del (required_machine_technologies)
 
 machines_per_category: Dict[str: Set[Machine]] = {}
 for machine in logical_machines.values():
@@ -219,10 +224,10 @@ for ingredient_name in all_ingredient_names:
     required_technologies[ingredient_name] = frozenset(
         recursively_get_unlocking_technologies(ingredient_name, unlock_func=unlock))
 
-
 advancement_technologies: Set[str] = set()
 for technologies in required_technologies.values():
     advancement_technologies |= {technology.name for technology in technologies}
+
 
 @functools.lru_cache(10)
 def get_rocket_requirements(ingredients: Set[str]) -> Set[str]:
@@ -231,6 +236,8 @@ def get_rocket_requirements(ingredients: Set[str]) -> Set[str]:
         techs |= recursively_get_unlocking_technologies(ingredient)
     return {tech.name for tech in techs}
 
+
+free_sample_blacklist = all_ingredient_names | {"rocket-part"}
 
 rocket_recipes = {
     Options.MaxSciencePack.option_space_science_pack:

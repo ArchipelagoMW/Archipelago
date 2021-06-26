@@ -13,7 +13,7 @@ from worlds.generic import PlandoItem, PlandoConnection
 
 ModuleUpdate.update()
 
-from Utils import parse_yaml
+from Utils import parse_yaml, version_tuple, __version__, tuplize_version
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from Main import get_seed, seeddigits
@@ -490,6 +490,24 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     if "triggers" in weights:
         weights = roll_triggers(weights)
 
+    requirements = weights.get("requires", {})
+    if requirements:
+        version = requirements.get("version", __version__)
+        if tuplize_version(version) > version_tuple:
+            raise Exception(f"Settings reports required version of generator is at least {version}, "
+                            f"however generator is of version {__version__}")
+        required_plando_options = requirements.get("plando", "")
+        if required_plando_options:
+            required_plando_options = set(option.strip() for option in required_plando_options.split(","))
+            required_plando_options -= plando_options
+            if required_plando_options:
+                if len(required_plando_options) == 1:
+                    raise Exception(f"Settings reports required plando module {', '.join(required_plando_options)}, "
+                                    f"which is not enabled.")
+                else:
+                    raise Exception(f"Settings reports required plando modules {', '.join(required_plando_options)}, "
+                                    f"which are not enabled.")
+
     ret = argparse.Namespace()
     ret.name = get_choice('name', weights)
     ret.accessibility = get_choice('accessibility', weights)
@@ -530,35 +548,27 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
 
     if ret.game == "A Link to the Past":
         roll_alttp_settings(ret, game_weights, plando_options)
-    elif ret.game == "Hollow Knight":
-        for option_name, option in Options.hollow_knight_options.items():
-            setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights, True)))
-    elif ret.game == "Factorio":
-        for option_name, option in Options.factorio_options.items():
+    elif ret.game in AutoWorldRegister.world_types:
+        for option_name, option in AutoWorldRegister.world_types[ret.game].options.items():
             if option_name in game_weights:
-                if issubclass(option, Options.OptionDict):  # get_choice should probably land in the Option class
+                if issubclass(option, Options.OptionDict):
                     setattr(ret, option_name, option.from_any(game_weights[option_name]))
                 else:
                     setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights)))
             else:
                 setattr(ret, option_name, option(option.default))
-    elif ret.game == "Minecraft":
-        for option_name, option in Options.minecraft_options.items():
-            if option_name in game_weights:
-                setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights)))
-            else:
-                setattr(ret, option_name, option(option.default))
-        # bad hardcoded behavior to make this work for now    
-        ret.plando_connections = []
-        if "connections" in plando_options:
-            options = game_weights.get("plando_connections", [])
-            for placement in options:
-                if roll_percentage(get_choice("percentage", placement, 100)):
-                    ret.plando_connections.append(PlandoConnection(
-                        get_choice("entrance", placement),
-                        get_choice("exit", placement),
-                        get_choice("direction", placement, "both")
-                    ))
+        if ret.game == "Minecraft":
+            # bad hardcoded behavior to make this work for now
+            ret.plando_connections = []
+            if "connections" in plando_options:
+                options = game_weights.get("plando_connections", [])
+                for placement in options:
+                    if roll_percentage(get_choice("percentage", placement, 100)):
+                        ret.plando_connections.append(PlandoConnection(
+                            get_choice("entrance", placement),
+                            get_choice("exit", placement),
+                            get_choice("direction", placement, "both")
+                        ))
     else:
         raise Exception(f"Unsupported game {ret.game}")
     return ret
@@ -572,11 +582,11 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
             setattr(ret, option_name, option(option.default))
 
     glitches_required = get_choice('glitches_required', weights)
-    if glitches_required not in [None, 'none', 'no_logic', 'overworld_glitches', 'minor_glitches']:
-        logging.warning("Only NMG, OWG and No Logic supported")
+    if glitches_required not in [None, 'none', 'no_logic', 'overworld_glitches', 'hybrid_major_glitches', 'minor_glitches']:
+        logging.warning("Only NMG, OWG, HMG and No Logic supported")
         glitches_required = 'none'
     ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches',
-                 'minor_glitches': 'minorglitches'}[
+                 'minor_glitches': 'minorglitches', 'hybrid_major_glitches': 'hybridglitches'}[
         glitches_required]
 
     ret.dark_room_logic = get_choice("dark_room_logic", weights, "lamp")

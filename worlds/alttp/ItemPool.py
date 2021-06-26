@@ -568,7 +568,7 @@ def get_pool_core(world, player: int):
         return world.random.choice([True, False]) if progressive == 'random' else progressive == 'on'
 
     # provide boots to major glitch dependent seeds
-    if logic in {'owglitches', 'nologic'} and world.glitch_boots[player] and goal != 'icerodhunt':
+    if logic in {'owglitches', 'hybridglitches', 'nologic'} and world.glitch_boots[player] and goal != 'icerodhunt':
         precollected_items.append('Pegasus Boots')
         pool.remove('Pegasus Boots')
         pool.append('Rupees (20)')
