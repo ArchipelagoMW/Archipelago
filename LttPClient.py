@@ -910,14 +910,12 @@ async def main():
                 logging.exception(e)
         asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
 
-    port = None
-
     ctx = Context(args.snes, args.connect, args.password, args.founditems)
     input_task = asyncio.create_task(console_loop(ctx), name="Input")
 
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
-
+    asyncio.create_task(snes_connect(ctx, ctx.snes_address))
     watcher_task = asyncio.create_task(game_watcher(ctx), name="GameWatcher")
 
     await ctx.exit_event.wait()
