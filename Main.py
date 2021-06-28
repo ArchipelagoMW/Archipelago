@@ -21,8 +21,6 @@ from Fill import distribute_items_restrictive, flood_items, balance_multiworld_p
 from worlds.alttp.Shops import create_shops, ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, version_tuple
-from worlds.hk import gen_hollow
-from worlds.hk import create_regions as hk_create_regions
 from worlds.generic.Rules import locality_rules
 from worlds import Games, lookup_any_item_name_to_id, AutoWorld
 import Patch
@@ -194,9 +192,6 @@ def main(args, seed=None):
         world.non_local_items[player] -= item_name_groups['Pendants']
         world.non_local_items[player] -= item_name_groups['Crystals']
 
-    for player in world.hk_player_ids:
-        hk_create_regions(world, player)
-
     AutoWorld.call_all(world, "create_regions")
 
     for player in world.alttp_player_ids:
@@ -257,9 +252,6 @@ def main(args, seed=None):
 
     for player in world.alttp_player_ids:
         set_rules(world, player)
-
-    for player in world.hk_player_ids:
-        gen_hollow(world, player)
 
     AutoWorld.call_all(world, "generate_basic")
 
@@ -489,10 +481,7 @@ def main(args, seed=None):
         minimum_versions = {"server": (0, 1, 1), "clients": client_versions}
         games = {}
         for slot in world.player_ids:
-            if world.game[slot] == "Factorio":
-                client_versions[slot] = (0, 1, 2)
-            else:
-                client_versions[slot] = (0, 0, 3)
+            client_versions[slot] = world.worlds[slot].get_required_client_version()
             games[slot] = world.game[slot]
         connect_names = {base64.b64encode(rom_name).decode(): (team, slot) for
                          slot, team, rom_name in rom_names}
@@ -512,10 +501,7 @@ def main(args, seed=None):
                     connect_names[name] = (i, player)
         if world.hk_player_ids:
             for slot in world.hk_player_ids:
-                slots_data = slot_data[slot] = {}
-                for option_name in world.worlds[slot].options:
-                    option = getattr(world, option_name)[slot]
-                    slots_data[option_name] = int(option.value)
+                slot_data[slot] = AutoWorld.call_single(world, "fill_slot_data", slot)
         for slot in world.minecraft_player_ids:
             slot_data[slot] = AutoWorld.call_single(world, "fill_slot_data", slot)
 

@@ -24,7 +24,7 @@
     height: 100%;
     max-width: 40px;
     max-height: 40px;
-    filter: grayscale(100%);
+    filter: grayscale(100%) contrast(75%) brightness(75%);
 }
 
 #inventory-table img.acquired{

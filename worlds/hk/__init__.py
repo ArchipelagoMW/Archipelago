@@ -6,12 +6,83 @@ from .Locations import lookup_name_to_id
 from .Items import item_table
 from .Regions import create_regions
 from .Rules import set_rules
+from .Options import hollow_knight_options
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
 from ..AutoWorld import World
 
 class HKWorld(World):
     game: str = "Hollow Knight"
+    options = hollow_knight_options
+
+    def generate_basic(self):
+        # Link regions
+        self.world.get_entrance('Hollow Nest S&Q', self.player).connect(self.world.get_region('Hollow Nest', self.player))
+
+        # Generate item pool
+        pool = []
+        for item_name, item_data in item_table.items():
+
+            item = HKItem(item_name, item_data.advancement, item_data.id, item_data.type, player=self.player)
+
+            if item_data.type == "Event":
+                event_location = self.world.get_location(item_name, self.player)
+                self.world.push_item(event_location, item, collect=False)
+                event_location.event = True
+                event_location.locked = True
+                if item.name == "King's_Pass":
+                    self.world.push_precollected(item)
+            elif item_data.type == "Cursed":
+                if self.world.CURSED[self.player]:
+                    pool.append(item)
+                else:
+                    # fill Focus Location with Focus and add it to start inventory as well.
+                    event_location = self.world.get_location(item_name, self.player)
+                    self.world.push_item(event_location, item)
+                    event_location.event = True
+                    event_location.locked = True
+
+            elif item_data.type == "Fake":
+                pass
+            elif item_data.type in not_shufflable_types:
+                location = self.world.get_location(item_name, self.player)
+                self.world.push_item(location, item, collect=False)
+                location.event = item.advancement
+                location.locked = True
+            else:
+                target = option_to_type_lookup[item.type]
+                shuffle_it = getattr(self.world, target)
+                if shuffle_it[self.player]:
+                    pool.append(item)
+                else:
+                    location = self.world.get_location(item_name, self.player)
+                    self.world.push_item(location, item, collect=False)
+                    location.event = item.advancement
+                    location.locked = True
+                    logger.debug(f"Placed {item_name} to vanilla for player {self.player}")
+
+        self.world.itempool += pool
+
+
+    def set_rules(self):
+        set_rules(self.world, self.player)
+
+
+    def create_regions(self):
+        create_regions(self.world, self.player)
+
+
+    def generate_output(self):
+        pass  # Hollow Knight needs no output files
+
+
+    def fill_slot_data(self): 
+        slot_data = {}
+        for option_name in self.options:
+            option = getattr(self.world, option_name)[self.player]
+            slot_data[option_name] = int(option.value)
+        return slot_data
+
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, None, name, player)
@@ -43,16 +114,6 @@ class HKItem(Item):
         self.type = type
 
 
-def gen_hollow(world: MultiWorld, player: int):
-    link_regions(world, player)
-    gen_items(world, player)
-    set_rules(world, player)
-
-
-def link_regions(world: MultiWorld, player: int):
-    world.get_entrance('Hollow Nest S&Q', player).connect(world.get_region('Hollow Nest', player))
-
-
 not_shufflable_types = {"Essence_Boss"}
 
 option_to_type_lookup = {
@@ -75,49 +136,6 @@ option_to_type_lookup = {
     "Vessel": "RandomizeVesselFragments",
 }
 
-def gen_items(world: MultiWorld, player: int):
-    pool = []
-    for item_name, item_data in item_table.items():
-
-        item = HKItem(item_name, item_data.advancement, item_data.id, item_data.type, player=player)
-
-        if item_data.type == "Event":
-            event_location = world.get_location(item_name, player)
-            world.push_item(event_location, item, collect=False)
-            event_location.event = True
-            event_location.locked = True
-            if item.name == "King's_Pass":
-                world.push_precollected(item)
-        elif item_data.type == "Cursed":
-            if world.CURSED[player]:
-                pool.append(item)
-            else:
-                # fill Focus Location with Focus and add it to start inventory as well.
-                event_location = world.get_location(item_name, player)
-                world.push_item(event_location, item)
-                event_location.event = True
-                event_location.locked = True
-
-        elif item_data.type == "Fake":
-            pass
-        elif item_data.type in not_shufflable_types:
-            location = world.get_location(item_name, player)
-            world.push_item(location, item, collect=False)
-            location.event = item.advancement
-            location.locked = True
-        else:
-            target = option_to_type_lookup[item.type]
-            shuffle_it = getattr(world, target)
-            if shuffle_it[player]:
-                pool.append(item)
-            else:
-                location = world.get_location(item_name, player)
-                world.push_item(location, item, collect=False)
-                location.event = item.advancement
-                location.locked = True
-                logger.debug(f"Placed {item_name} to vanilla for player {player}")
-
-    world.itempool += pool
 
 
 

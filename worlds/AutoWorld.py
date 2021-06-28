@@ -45,3 +45,6 @@ class World(metaclass=AutoWorldRegister):
 
     def generate_output(self):
         pass
+
+    def get_required_client_version(self) -> tuple:
+        return 0, 0, 3

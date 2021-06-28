@@ -6,6 +6,7 @@ import concurrent.futures
 import argparse
 import logging
 import random
+from shutil import which
 
 
 def feedback(text: str):
@@ -76,8 +77,10 @@ if __name__ == "__main__":
             basemysterycommand = "ArchipelagoMystery.exe"  # compiled windows
         elif os.path.exists("ArchipelagoMystery"):
             basemysterycommand = "./ArchipelagoMystery"  # compiled linux
+        elif which('py'):
+            basemysterycommand = f"py -{py_version} Mystery.py"  # source windows
         else:
-            basemysterycommand = f"py -{py_version} Mystery.py"  # source
+            basemysterycommand = f"python3 Mystery.py"  # source others
 
         weights_file_path = os.path.join(player_files_path, weights_file_path)
         if os.path.exists(weights_file_path):
@@ -210,8 +213,10 @@ if __name__ == "__main__":
                     baseservercommand = ["ArchipelagoServer.exe"]  # compiled windows
                 elif os.path.exists("ArchipelagoServer"):
                     baseservercommand = ["./ArchipelagoServer"]  # compiled linux
+                elif which('py'):
+                    baseservercommand = ["py", f"-{py_version}", "MultiServer.py"]  # source windows
                 else:
-                    baseservercommand = ["py", f"-{py_version}", "MultiServer.py"]  # source
+                    baseservercommand = ["python3", "MultiServer.py"]  # source others
                 # don't have a mac to test that. If you try to run compiled on mac, good luck.
                 subprocess.call(baseservercommand + ["--multidata", os.path.join(output_path, multidataname)])
     except:

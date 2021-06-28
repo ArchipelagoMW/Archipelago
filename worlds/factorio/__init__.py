@@ -44,7 +44,7 @@ class Factorio(World):
         event = Item("Victory", True, None, player)
         self.world.push_item(location, event, False)
         location.event = location.locked = True
-        for ingredient in all_ingredient_names:
+        for ingredient in self.world.max_science_pack[self.player].get_allowed_packs():
             location = Location(player, f"Automate {ingredient}", None, nauvis)
             nauvis.locations.append(location)
             event = Item(f"Automated {ingredient}", True, None, player)
@@ -60,7 +60,7 @@ class Factorio(World):
         shapes = get_shapes(self)
         if world.logic[player] != 'nologic':
             from worlds.generic import Rules
-            for ingredient in all_ingredient_names:
+            for ingredient in self.world.max_science_pack[self.player].get_allowed_packs():
                 location = world.get_location(f"Automate {ingredient}", player)
                 location.access_rule = lambda state, ingredient=ingredient: \
                     all(state.has(technology.name, player) for technology in required_technologies[ingredient])
@@ -79,6 +79,9 @@ class Factorio(World):
                                                                                         victory_tech_names)
 
         world.completion_condition[player] = lambda state: state.has('Victory', player)
+
+    def get_required_client_version(self) -> tuple:
+        return max((0, 1, 2), super(Factorio, self).get_required_client_version())
 
     options = factorio_options
 
