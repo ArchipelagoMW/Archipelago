@@ -88,7 +88,6 @@ default_connections = {
 
 # Structure: illegal locations
 illegal_connections = {
-    'Village': ['Nether Structure 1', 'Nether Structure 2'], # remove this once raid spawning is fixed in the client
     'Nether Fortress': ['The End Structure']
 }
 
