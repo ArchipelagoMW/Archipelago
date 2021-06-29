@@ -48,11 +48,11 @@ class InteriorEntrances(Choice):
     option_all = 2
     default = 0
 
-world_options: typing.Dict[str, type(Option)] = {
-    "shuffle_interior_entrances": InteriorEntrances,
-    "shuffle_overworld_entrances": Toggle,
-    "randomize_overworld_spawns": Toggle
-}
+# world_options: typing.Dict[str, type(Option)] = {
+#     "shuffle_interior_entrances": InteriorEntrances,
+#     "shuffle_overworld_entrances": Toggle,
+#     "randomize_overworld_spawns": Toggle
+# }
 
 class CheckStones(Range): 
     range_start = 0
@@ -114,7 +114,7 @@ oot_options: typing.Dict[str, type(Option)] = {
     "logic_rules": Logic, 
     "logic_no_night_tokens_without_suns_song": Toggle, 
     **open_options, 
-    **world_options, 
+    # **world_options, 
     **lacs_options,
     **bridge_options,
     **shuffle_options,

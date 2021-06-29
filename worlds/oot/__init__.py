@@ -26,7 +26,8 @@ class OOTWorld(World):
         self.parser = Rule_AST_Transformer(self)
         for (option_name, option) in oot_options.items(): 
             setattr(self, option_name, getattr(self.world, option_name, option.default))
-        self.ensure_tod_access = self.shuffle_interior_entrances or self.shuffle_overworld_entrances or self.randomize_overworld_spawns
+        self.ensure_tod_access = False
+        # self.ensure_tod_access = self.shuffle_interior_entrances or self.shuffle_overworld_entrances or self.randomize_overworld_spawns
 
     def load_regions_from_json(self, file_path):
         region_json = read_json(file_path)
