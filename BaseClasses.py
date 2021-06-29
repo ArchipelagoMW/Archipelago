@@ -903,6 +903,25 @@ class CollectionState(object):
         return self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and self.has('Archery', player)
 
 
+    # OOT functions
+    # move these into the oot world plugin later
+    stones = ["Kokiri Emerald", "Goron Ruby", "Zora Sapphire"]
+    medallions = ["Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion", "Shadow Medallion", "Spirit Medallion"]
+
+    def count_of(self, items): 
+        return len(list(filter(self.prog_items.__contains__, items)))
+
+    def has_stones(self, count): 
+        return self.count_of(stones) >= count
+
+    def has_medallions(self, count): 
+        return self.count_of(medallions) >= count
+
+    def has_dungeon_rewards(self, count): 
+        return self.count_of(stones + medallions) >= count
+
+
+
     def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:
         if location:
             self.locations_checked.add(location)
