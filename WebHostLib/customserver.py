@@ -104,6 +104,7 @@ class WebHostContext(Context):
 def get_random_port():
     return random.randint(49152, 65535)
 
+
 def run_server_process(room_id, ponyconfig: dict):
     # establish DB connection for multidata and multisave
     db.bind(**ponyconfig)
@@ -144,7 +145,9 @@ def run_server_process(room_id, ponyconfig: dict):
         await ctx.shutdown_task
         logging.info("Shutting down")
 
-    asyncio.run(main())
+    from .autolauncher import Locker
+    with Locker(room_id):
+        asyncio.run(main())
 
 
 from WebHostLib import LOGS_FOLDER

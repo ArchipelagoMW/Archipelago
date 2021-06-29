@@ -1034,7 +1034,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         if ctx.compatibility == 0 and args['version'] != version_tuple:
             errors.add('IncompatibleVersion')
         if errors:
-            logging.info(f"A client connection was refused due to: {errors}")
+            logging.info(f"A client connection was refused due to: {errors}, the sent connect information was {args}.")
             await ctx.send_msgs(client, [{"cmd": "ConnectionRefused", "errors": list(errors)}])
         else:
             ctx.client_ids[client.team, client.slot] = args["uuid"]

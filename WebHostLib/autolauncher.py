@@ -15,10 +15,13 @@ from Utils import restricted_loads
 
 class CommonLocker():
     """Uses a file lock to signal that something is already running"""
-
-    def __init__(self, lockname: str):
+    lock_folder = "file_locks"
+    def __init__(self, lockname: str, folder=None):
+        if folder:
+            self.lock_folder = folder
+        os.makedirs(self.lock_folder, exist_ok=True)
         self.lockname = lockname
-        self.lockfile = f"./{self.lockname}.lck"
+        self.lockfile = os.path.join(self.lock_folder, f"{self.lockname}.lck")
 
 
 class AlreadyRunningException(Exception):
