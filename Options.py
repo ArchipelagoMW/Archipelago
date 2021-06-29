@@ -178,6 +178,9 @@ class Range(Option, int):
     def __str__(self):
         return str(self.value)
 
+    def get_option_name(self): 
+        return str(self.value)
+
 
 class OptionNameSet(Option):
     default = frozenset()

@@ -395,7 +395,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                         ast.Expression(ast.Lambda(
                             args=ast.arguments(
                                 posonlyargs=[],
-                                args=[ast.arg(arg='state')],
+                                args=[ast.arg(arg='state'), ast.arg(arg='player')],
                                 defaults=[],
                                 kwonlyargs=kwargs,
                                 kw_defaults=kwd),

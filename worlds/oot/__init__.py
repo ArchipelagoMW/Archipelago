@@ -92,7 +92,7 @@ class OOTWorld(World):
         overworld_data_path = data_path('World', 'Overworld.json')
         self.load_regions_from_json(overworld_data_path)
         # self.create_dungeons()
-        # self.create_internal_locations()
+        # self.parser.create_delayed_rules() # replaces self.create_internal_locations(); I don't know what it does though
 
         # if settings.shopsanity != 'off':
         #     world.random_shop_prices()
