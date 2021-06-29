@@ -41,6 +41,7 @@ class Games(str, enum.Enum):
     LTTP = "A Link to the Past"
     Factorio = "Factorio"
     Minecraft = "Minecraft"
+    OOT = "Ocarina of Time"
 
 
 # end of TODO block
