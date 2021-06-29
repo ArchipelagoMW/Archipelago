@@ -9,7 +9,7 @@ class Logic(Choice):
 
 class Forest(Choice): 
     option_open_forest = 0
-    option_open_deku = 1
+    option_closed_deku = 1
     option_closed_forest = 2
     default = 0
 
@@ -31,12 +31,24 @@ class Fortress(Choice):
     option_open = 2
     default = 1
 
+class InteriorEntrances(Choice): 
+    option_off = 0
+    option_simple = 1
+    option_all = 2
+    default = 0
+
 open_options: typing.Dict[str, type(Option)] = {
     "forest_state": Forest,
     "kakariko_gate": Gate,
-    "door_of_time": DefaultOnToggle,
+    "open_door_of_time": DefaultOnToggle,
     "zoras_fountain": Fountain,
     "gerudo_fortress": Fortress
+}
+
+world_options: typing.Dict[str, type(Option)] = {
+    "shuffle_interior_entrances": InteriorEntrances,
+    "shuffle_overworld_entrances": Toggle,
+    "randomize_overworld_spawns": Toggle
 }
 
 shuffle_options: typing.Dict[str, type(Option)] = {
@@ -49,6 +61,8 @@ shuffle_options: typing.Dict[str, type(Option)] = {
 
 oot_options: typing.Dict[str, type(Option)] = {
     "logic_rules": Logic, 
+    "logic_no_night_tokens_without_suns_song": Toggle, 
     **open_options, 
+    **world_options, 
     **shuffle_options
 }

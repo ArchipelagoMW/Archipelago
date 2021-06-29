@@ -1,3 +1,5 @@
+from .LocationList import location_table
+
 from enum import Enum
 from BaseClasses import Location
 
@@ -14,21 +16,36 @@ class OOTLocation(Location):
         self.type = type
         self.scene = scene
         self.internal = internal
-        # is staleness_count equivalent to recursion_count?
-        self.access_rules = []
-        self.locked = False
-        self.price = None
-        self.minor_only = False
-        self.world = None # probably superseded by self.player
-        self.disabled = DisableType.ENABLED
-        self.always = False
-        self.never = False
         if filter_tags is None: 
             self.filter_tags = None
         else: 
             self.filter_tags = list(filter_tags)
+        self.never = False # no idea what this does
 
-    # def copy(self, new_region):
+
+def LocationFactory(locations, player: int):
+    ret = []
+    singleton = False
+    if isinstance(locations, str):
+        locations = [locations]
+        singleton = True
+    for location in locations:
+        if location in location_table:
+            match_location = location
+        else:
+            match_location = next(filter(lambda k: k.lower() == location.lower(), location_table), None)
+        if match_location:
+            type, scene, default, addresses, vanilla_item, filter_tags = location_table[match_location]
+            if addresses is None:
+                addresses = (None, None)
+            address, address2 = addresses
+            ret.append(OOTLocation(player, match_location, address, address2, default, type, scene, filter_tags=filter_tags))
+        else:
+            raise KeyError('Unknown Location: %s', location)
+
+    if singleton:
+        return ret[0]
+    return ret
 
 
 

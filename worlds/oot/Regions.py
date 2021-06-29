@@ -1,22 +1,9 @@
-import io, re, json  # for read_json
 from enum import unique, Enum
 
 from BaseClasses import Region
 # from .Location import LocationFactory
 
 # probably move this out to Utils later
-def read_json(file_path):
-    json_string = ""
-    with io.open(file_path, 'r') as file:
-        for line in file.readlines():
-            json_string += line.split('#')[0].replace('\n', ' ')
-    json_string = re.sub(' +', ' ', json_string)
-    try:
-        return json.loads(json_string)
-    except json.JSONDecodeError as error:
-        raise Exception("JSON parse error around text:\n" + \
-                        json_string[error.pos-35:error.pos+35] + "\n" + \
-                        "                                   ^^\n")
 
 
 # copied from OoT-Randomizer/Region.py
