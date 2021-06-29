@@ -88,7 +88,7 @@ cx_Freeze.setup(
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
             "zip_include_packages": ["*"],
-            "zip_exclude_packages": [],
+            "zip_exclude_packages": ["worlds"],
             "include_files": [],
             "include_msvcr": True,
             "replace_paths": [("*", "")],
