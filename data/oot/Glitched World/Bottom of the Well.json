@@ -1,0 +1,50 @@
+[    
+    {
+        "region_name": "Bottom of the Well",
+        "dungeon": "Bottom of the Well",
+        "exits": {
+            "Bottom of the Well Main Area" : "is_child and (can_child_attack or Nuts)"
+        }
+    },
+    {
+        "region_name": "Bottom of the Well Main Area",
+        "dungeon": "Bottom of the Well",
+        "locations": {
+            "Bottom of the Well Front Left Fake Wall Chest": "True",
+            "Bottom of the Well Front Center Bombable Chest": "has_explosives",
+            "Bottom of the Well Right Bottom Fake Wall Chest": "True",
+            "Bottom of the Well Compass Chest": "True",
+            "Bottom of the Well Center Skulltula Chest": "True",
+            "Bottom of the Well Back Left Bombable Chest": "has_explosives",
+            "Bottom of the Well Freestanding Key": "Sticks or can_use(Dins_Fire) or Boomerang",
+            "Bottom of the Well Lens of Truth Chest": "
+                (can_play(Zeldas_Lullaby) or  (Small_Key_Bottom_of_the_Well,3)) and 
+                (Kokiri_Sword or Sticks)", 
+            "Bottom of the Well Invisible Chest": "(can_play(Zeldas_Lullaby) or  (Small_Key_Bottom_of_the_Well,3))",
+            "Bottom of the Well Underwater Front Chest": "can_play(Zeldas_Lullaby)",
+            "Bottom of the Well Underwater Left Chest": "can_play(Zeldas_Lullaby)",
+            "Bottom of the Well Map Chest": "
+                has_explosives or 
+                (((Small_Key_Bottom_of_the_Well, 3) or 
+                    can_use(Dins_Fire) or Sticks) and 
+                Progressive_Strength_Upgrade)",
+            "Bottom of the Well Fire Keese Chest": "
+                (Small_Key_Bottom_of_the_Well, 3)", 
+            "Bottom of the Well Like Like Chest": "
+                (Small_Key_Bottom_of_the_Well, 3)",
+            "Bottom of the Well GS West Inner Room": "
+                (Boomerang or can_isg) and 
+                (Small_Key_Bottom_of_the_Well, 3)",
+            "Bottom of the Well GS East Inner Room": "
+                (Boomerang or can_isg) and 
+                (Small_Key_Bottom_of_the_Well, 3)",
+            "Bottom of the Well GS Like Like Cage": "
+                (Boomerang or can_isg) and 
+                (Small_Key_Bottom_of_the_Well, 3)",
+            "Stick Pot": "True"
+        },
+        "exits": {
+            "Bottom of the Well" : "True"
+        }
+    }
+]

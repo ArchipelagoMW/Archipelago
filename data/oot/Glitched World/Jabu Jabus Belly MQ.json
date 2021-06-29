@@ -1,0 +1,61 @@
+[
+    {
+        "region_name": "Jabu Jabus Belly Beginning",
+        "dungeon": "Jabu Jabus Belly",
+        "locations": {
+            "Jabu Jabus Belly MQ Map Chest": "has_explosives",
+            "Jabu Jabus Belly MQ First Room Side Chest": "Slingshot"
+        },
+        "exits": {
+            "Zoras Fountain": "True",
+            "Jabu Jabus Belly Main": "Slingshot"
+        }
+    },
+    {
+        "region_name": "Jabu Jabus Belly Main",
+        "dungeon": "Jabu Jabus Belly",
+        "locations": {
+            "Jabu Jabus Belly MQ Second Room Lower Chest": "True",
+            "Jabu Jabus Belly MQ Compass Chest": "True",
+            "Jabu Jabus Belly MQ Basement Near Vines Chest": "True",
+            "Jabu Jabus Belly MQ Basement Near Switches Chest": "True",
+            "Jabu Jabus Belly MQ Boomerang Room Small Chest": "True",
+            "Jabu Jabus Belly MQ Boomerang Chest": "True",
+            "Jabu Jabus Belly MQ GS Boomerang Chest Room": "
+                can_play(Song_of_Time) or (logic_jabu_mq_sot_gs and Boomerang)"
+        },
+        "exits": {
+            "Jabu Jabus Belly Beginning": "True",
+            "Jabu Jabus Belly Depths": "has_explosives and Boomerang"
+        }
+    },
+    {
+        "region_name": "Jabu Jabus Belly Depths",
+        "dungeon": "Jabu Jabus Belly",
+        "locations": {
+            "Jabu Jabus Belly MQ Falling Like Like Room Chest": "True",
+            "Jabu Jabus Belly MQ GS Tailpasaran Room": "Sticks or can_use(Dins_Fire)",
+            "Jabu Jabus Belly MQ GS Invisible Enemies Room": "logic_lens_jabu_mq or can_use(Lens_of_Truth)"
+        },
+        "exits": {
+            "Jabu Jabus Belly Main": "True",
+            "Jabu Jabus Belly Boss Area": "
+                Sticks or (Kokiri_Sword and can_use(Dins_Fire))"
+        }
+    },
+    {
+        "region_name": "Jabu Jabus Belly Boss Area",
+        "dungeon": "Jabu Jabus Belly",
+        "locations": {
+            "Jabu Jabus Belly MQ Cow" : "can_play(Eponas_Song)",
+            "Jabu Jabus Belly MQ Second Room Upper Chest": "True",
+            "Jabu Jabus Belly MQ Near Boss Chest": "True",
+            "Jabu Jabus Belly Barinade Heart": "True",
+            "Barinade": "True",
+            "Jabu Jabus Belly MQ GS Near Boss": "True"
+        },
+        "exits": {
+            "Jabu Jabus Belly Main": "True"
+        }
+    }
+]
