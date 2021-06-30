@@ -569,7 +569,8 @@ def json_format_send_event(net_item: NetworkItem, receiving_player: int):
     NetUtils.add_json_text(parts, ")")
 
     return {"cmd": "PrintJSON", "data": parts, "type": "ItemSend",
-            "receiving": receiving_player, "sending": net_item.player}
+            "receiving": receiving_player,
+            "item": net_item}
 
 
 def get_intended_text(input_text: str, possible_answers: typing.Iterable[str] = all_console_names) -> typing.Tuple[
