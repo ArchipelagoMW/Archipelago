@@ -2,13 +2,31 @@ import typing
 
 from BaseClasses import Item
 
-def oot_to_ap_id(oot_id, event): 
-    if event: 
+def oot_data_to_ap_id(data, event): 
+    if event or data[2] is None: 
         return None
-    return oot_id
+    offset = 0x10000
+    if data[0] in ['Item', 'Song']:
+        return offset + data[2]
+    elif data[0] == 'Shop':  # not unique GID
+        shop_offset = 0xC7
+        return offset + shop_offset + data[2]
+    else: 
+        raise Exception(f'Unexpected OOT item type found: {data[0]}')
 
-def ap_to_oot_id(ap_id): 
-    return ap_id
+def ap_id_to_oot_data(ap_id): 
+    offset = 0x10000
+    shop_offset = 0xC7
+    val = ap_id - offset
+    try: 
+        if val < shop_offset: 
+            return list(filter(lambda d: d[1][0] == 'Item' and d[1][2] == val, item_table.items()))[0]
+        elif val - shop_offset < 0x32: 
+            return list(filter(lambda d: d[1][0] == 'Shop' and d[1][2] == val, item_table.items()))[0]
+        else: 
+            raise Exception(f'Attempted to convert non-OOT item ID: {ap_id}')
+    except IndexError: 
+        raise Exception(f'Could not find desired item ID: {ap_id}')
 
 class OOTItem(Item):
     game: str = "Ocarina of Time"
@@ -24,7 +42,8 @@ def ItemFactory(items, player: int, event=False):
         #     raise KeyError('Unknown Item: %s' % items)
         if not event: 
             data = item_table[items]
-            return OOTItem(items, data[1], oot_to_ap_id(data[2]), data[0], player)
+            adv = True if data[1] else False  # this looks silly but the table uses True, False and None
+            return OOTItem(items, adv, oot_data_to_ap_id(data, event), data[0], player)
         else:
             return OOTItem(items, True, None, 'Event', player)
 
@@ -34,7 +53,8 @@ def ItemFactory(items, player: int, event=False):
         #     raise KeyError('Unknown Item: %s' % item)
         if not event: 
             data = item_table[item]
-            ret.append(OOTItem(item, data[1], oot_to_ap_id(data[2], event), data[0], player))
+            adv = True if data[1] else False
+            ret.append(OOTItem(item, adv, oot_data_to_ap_id(data, event), data[0], player))
         else: 
             ret.append(OOTItem(item, True, None, 'Event', player))
 
