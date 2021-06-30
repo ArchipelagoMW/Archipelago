@@ -11,7 +11,8 @@ from .Regions import TimeOfDay
 from .RuleParser import Rule_AST_Transformer
 from .Options import oot_options
 from .Utils import data_path, read_json
-from .DungeonList import create_dungeons
+from .LocationList import business_scrubs
+from .DungeonList import dungeon_table, create_dungeons
 
 import Utils
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
@@ -27,6 +28,7 @@ class OOTWorld(World):
         self.parser = Rule_AST_Transformer(self, self.player)
         for (option_name, option) in oot_options.items(): 
             setattr(self, option_name, getattr(self.world, option_name, option.default))
+        self.dungeon_mq = {item['name']: False for item in dungeon_table}  # sets all dungeons to non-MQ for now; need this to not break things
         self.ensure_tod_access = False
         # self.ensure_tod_access = self.shuffle_interior_entrances or self.shuffle_overworld_entrances or self.randomize_overworld_spawns
 
@@ -86,7 +88,36 @@ class OOTWorld(World):
                         logging.getLogger('').debug('Dropping unreachable exit: %s', new_exit.name)
                     else:
                         new_region.exits.append(new_exit)
-            self.world.regions.append(new_region)
+            self.world.regions.append(new_region)    
+
+
+    def set_scrub_prices(self):
+        # Get Deku Scrub Locations
+        scrub_locations = [location for location in self.world.get_locations() if 'Deku Scrub' in location.name]
+        scrub_dictionary = {}
+        self.scrub_prices = {}
+        for location in scrub_locations:
+            if location.default not in scrub_dictionary:
+                scrub_dictionary[location.default] = []
+            scrub_dictionary[location.default].append(location)
+
+        # Loop through each type of scrub.
+        for (scrub_item, default_price, text_id, text_replacement) in business_scrubs:
+            price = default_price
+            if self.shuffle_scrubs == 'low':
+                price = 10
+            elif self.shuffle_scrubs == 'random':
+                # this is a random value between 0-99
+                # average value is ~33 rupees
+                price = int(random.betavariate(1, 2) * 99)
+
+            # Set price in the dictionary as well as the location.
+            self.scrub_prices[scrub_item] = price
+            if scrub_item in scrub_dictionary:
+                for location in scrub_dictionary[scrub_item]:
+                    location.price = price
+                    if location.item is not None:
+                        location.item.price = price
 
 
     def create_regions(self):  # build_world_graphs
@@ -98,7 +129,7 @@ class OOTWorld(World):
 
         # if settings.shopsanity != 'off':
         #     world.random_shop_prices()
-        # world.set_scrub_prices()
+        self.set_scrub_prices()
 
         # logger.info('Generating Item Pool.')
         # generate_itempool(world)

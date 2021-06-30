@@ -89,7 +89,15 @@ bridge_options: typing.Dict[str, type(Option)] = {
     "bridge_tokens": CheckTokens
 }
 
+class ScrubShuffle(Choice): 
+    option_off = 0
+    option_low = 1
+    option_regular = 2
+    option_random = 3
+    default = 0
+
 shuffle_options: typing.Dict[str, type(Option)] = {
+    "shuffle_scrubs": ScrubShuffle,
     "shuffle_kokiri_sword": DefaultOnToggle,
     "shuffle_ocarinas": Toggle,
     "shuffle_weird_egg": Toggle,
@@ -102,7 +110,7 @@ class ShuffleDungeonItem(Choice):
     option_startwith = 1
     option_dungeon = 3
     option_keysanity = 6
-    default = 1
+    default = 3
 
 dungeon_items_options: typing.Dict[str, type(Option)] = {
     "shuffle_mapcompass": ShuffleDungeonItem
