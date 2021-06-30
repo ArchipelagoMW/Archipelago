@@ -52,8 +52,9 @@ def isliteral(expr):
 
 class Rule_AST_Transformer(ast.NodeTransformer):
 
-    def __init__(self, world):
+    def __init__(self, world, player):
         self.world = world
+        self.player = player
         self.events = set()
         # map Region -> rule ast string -> item name
         self.replaced_rules = defaultdict(dict)
@@ -361,9 +362,8 @@ class Rule_AST_Transformer(ast.NodeTransformer):
     # Requires the target regions have been defined in the world.
     def create_delayed_rules(self):
         for region_name, node, subrule_name in self.delayed_rules:
-            region = self.world.get_region(region_name)
-            event = Location(subrule_name, type='Event', parent=region, internal=True)
-            event.world = self.world
+            region = self.world.world.get_region(region_name, self.player)
+            event = OOTLocation(self.player, subrule_name, type='Event', parent=region, internal=True)
 
             self.current_spot = event
             # This could, in theory, create further subrules.
@@ -378,7 +378,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 set_rule(event, access_rule)
                 region.locations.append(event)
 
-                MakeEventItem(subrule_name, event)
+                MakeEventItem(self.world.world, self.player, subrule_name, event)
         # Safeguard in case this is called multiple times per world
         self.delayed_rules.clear()
 

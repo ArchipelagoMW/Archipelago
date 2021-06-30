@@ -97,9 +97,16 @@ shuffle_options: typing.Dict[str, type(Option)] = {
     "shuffle_magic_beans": Toggle
 }
 
-# dungeon_items_options: typing.Dict[str, type(Option)] = {
-#     "shuffle_mapcompass": 
-# }
+class ShuffleDungeonItem(Choice): 
+    option_remove = 0
+    option_startwith = 1
+    option_dungeon = 3
+    option_keysanity = 6
+    default = 1
+
+dungeon_items_options: typing.Dict[str, type(Option)] = {
+    "shuffle_mapcompass": ShuffleDungeonItem
+}
 
 class BigPoes(Range): 
     range_start = 1
@@ -117,6 +124,7 @@ oot_options: typing.Dict[str, type(Option)] = {
     # **world_options, 
     **lacs_options,
     **bridge_options,
+    **dungeon_items_options,
     **shuffle_options,
     **timesavers_options
 }

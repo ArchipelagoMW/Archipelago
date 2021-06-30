@@ -6,7 +6,7 @@ def oot_data_to_ap_id(data, event):
     if event or data[2] is None: 
         return None
     offset = 0x10000
-    if data[0] in ['Item', 'Song']:
+    if data[0] in ['Item', 'BossKey', 'Compass', 'Map', 'SmallKey', 'Token', 'GanonBossKey', 'FortressSmallKey', 'Song']:
         return offset + data[2]
     elif data[0] == 'Shop':  # not unique GID
         shop_offset = 0xC7

@@ -11,6 +11,7 @@ from .Regions import TimeOfDay
 from .RuleParser import Rule_AST_Transformer
 from .Options import oot_options
 from .Utils import data_path, read_json
+from .DungeonList import create_dungeons
 
 import Utils
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
@@ -23,7 +24,7 @@ class OOTWorld(World):
 
     def __init__(self, world, player):
         super(OOTWorld, self).__init__(world, player)
-        self.parser = Rule_AST_Transformer(self)
+        self.parser = Rule_AST_Transformer(self, self.player)
         for (option_name, option) in oot_options.items(): 
             setattr(self, option_name, getattr(self.world, option_name, option.default))
         self.ensure_tod_access = False
@@ -92,8 +93,8 @@ class OOTWorld(World):
         logger.info('Generating World.')
         overworld_data_path = data_path('World', 'Overworld.json')
         self.load_regions_from_json(overworld_data_path)
-        # self.create_dungeons()
-        # self.parser.create_delayed_rules() # replaces self.create_internal_locations(); I don't know what it does though
+        create_dungeons(self)
+        self.parser.create_delayed_rules() # replaces self.create_internal_locations(); I don't know exactly what it does though
 
         # if settings.shopsanity != 'off':
         #     world.random_shop_prices()
@@ -113,7 +114,7 @@ class OOTWorld(World):
         # return worlds
 
 
-    def set_rules(self):  # build rules from data files
+    def set_rules(self):  # what does this even have to do?
         logger.info('Calculating Access Rules.')
 
 
