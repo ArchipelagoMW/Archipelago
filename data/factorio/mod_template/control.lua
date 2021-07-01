@@ -190,8 +190,6 @@ function dumpInfo(force)
     local data_collection = {
         ["research_done"] = research_done,
         ["victory"] = chain_lookup(global, "forcedata", force.name, "victory"),
-        ["slot_name"] = SLOT_NAME,
-        ["seed_name"] = SEED_NAME
         }
 
     for tech_name, tech in pairs(force.technologies) do
@@ -246,4 +244,8 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     else
         game.print("Unknown Technology " .. tech_name)
     end
+end)
+
+commands.add_command("ap-rcon-info", "Used by the Archipelago client to get information", function(call)
+    rcon.print(game.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME}))
 end)
