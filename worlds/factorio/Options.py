@@ -73,6 +73,20 @@ class FactorioStartItems(OptionDict):
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
 
 
+class FactorioWorldGen(OptionDict):
+    default = {"terrain_segmentation": 0.5, "water": 1.5,
+               "autoplace_controls": {"coal": {"frequency": 1, "size": 3, "richness": 6},
+                                      "copper-ore": {"frequency": 1, "size": 3, "richness": 6},
+                                      "crude-oil": {"frequency": 1, "size": 3, "richness": 6},
+                                      "enemy-base": {"frequency": 1, "size": 1, "richness": 1},
+                                      "iron-ore": {"frequency": 1, "size": 3, "richness": 6},
+                                      "stone": {"frequency": 1, "size": 3, "richness": 6},
+                                      "trees": {"frequency": 1, "size": 1, "richness": 1},
+                                      "uranium-ore": {"frequency": 1, "size": 3, "richness": 6}},
+               "starting_area": 1, "peaceful_mode": False,
+               "cliff_settings": {"name": "cliff", "cliff_elevation_0": 10, "cliff_elevation_interval": 40,
+                                  "richness": 1}}
+
 factorio_options: typing.Dict[str, type(Option)] = {
     "max_science_pack": MaxSciencePack,
     "tech_tree_layout": TechTreeLayout,
@@ -82,4 +96,5 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "starting_items": FactorioStartItems,
     "recipe_time": RecipeTime,
     "imported_blueprints": DefaultOnToggle,
+    "world_gen": FactorioWorldGen
 }

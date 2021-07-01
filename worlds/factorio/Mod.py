@@ -15,7 +15,8 @@ from .Technologies import tech_table, rocket_recipes, recipes, free_sample_black
 
 template_env: Optional[jinja2.Environment] = None
 
-template: Optional[jinja2.Template] = None
+data_template: Optional[jinja2.Template] = None
+data_final_template: Optional[jinja2.Template] = None
 locale_template: Optional[jinja2.Template] = None
 control_template: Optional[jinja2.Template] = None
 
@@ -43,14 +44,14 @@ recipe_time_scales = {
 
 
 def generate_mod(world: MultiWorld, player: int):
-    global template, locale_template, control_template
+    global data_final_template, locale_template, control_template, data_template
     with template_load_lock:
-        if not template:
+        if not data_final_template:
             mod_template_folder = Utils.local_path("data", "factorio", "mod_template")
             template_env: Optional[jinja2.Environment] = \
                 jinja2.Environment(loader=jinja2.FileSystemLoader([mod_template_folder]))
-
-            template = template_env.get_template("data-final-fixes.lua")
+            data_template = template_env.get_template("data.lua")
+            data_final_template = template_env.get_template("data-final-fixes.lua")
             locale_template = template_env.get_template(r"locale/en/locale.cfg")
             control_template = template_env.get_template("control.lua")
     # get data for templates
@@ -83,16 +84,19 @@ def generate_mod(world: MultiWorld, player: int):
         template_data[factorio_option] = getattr(world, factorio_option)[player].value
 
     control_code = control_template.render(**template_data)
-    data_final_fixes_code = template.render(**template_data)
+    data_template_code = data_template.render(**template_data)
+    data_final_fixes_code = data_final_template.render(**template_data)
 
     mod_dir = Utils.output_path(mod_name) + "_" + Utils.__version__
     en_locale_dir = os.path.join(mod_dir, "locale", "en")
     os.makedirs(en_locale_dir, exist_ok=True)
     shutil.copytree(Utils.local_path("data", "factorio", "mod"), mod_dir, dirs_exist_ok=True)
+    with open(os.path.join(mod_dir, "data.lua"), "wt") as f:
+        f.write(data_template_code)
     with open(os.path.join(mod_dir, "data-final-fixes.lua"), "wt") as f:
         f.write(data_final_fixes_code)
-        with open(os.path.join(mod_dir, "control.lua"), "wt") as f:
-            f.write(control_code)
+    with open(os.path.join(mod_dir, "control.lua"), "wt") as f:
+        f.write(control_code)
     locale_content = locale_template.render(**template_data)
     with open(os.path.join(en_locale_dir, "locale.cfg"), "wt") as f:
         f.write(locale_content)

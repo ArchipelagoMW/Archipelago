@@ -23,6 +23,9 @@ class Factorio(World):
                 self.world.get_location(tech_name, self.player).place_locked_item(tech_item)
             else:
                 self.world.itempool.append(tech_item)
+        world_gen = self.world.world_gen[self.player].value
+        if world_gen.get("seed", None) is None: # allow seed 0
+            world_gen["seed"] = self.world.slot_seeds[self.player].randint(0, 2**32-1) # 32 bit uint
 
     def generate_output(self):
         generate_mod(self.world, self.player)
