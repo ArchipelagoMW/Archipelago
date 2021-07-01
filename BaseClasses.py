@@ -908,6 +908,12 @@ class CollectionState(object):
     stones = ["Kokiri Emerald", "Goron Ruby", "Zora Sapphire"]
     medallions = ["Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion", "Shadow Medallion", "Spirit Medallion"]
 
+    def has_any_of(self, items):
+        return any(map(self.prog_items.__contains__, items))
+
+    def has_all_of(self, items):
+        return all(map(self.prog_items.__contains__, items))
+        
     def count_of(self, items): 
         return len(list(filter(self.prog_items.__contains__, items)))
 

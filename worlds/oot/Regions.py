@@ -40,6 +40,7 @@ class OOTRegion(Region):
         self.time_passes = False
         self.provides_time = TimeOfDay.NONE
         self.scene = None
+        self.dungeon = None
 
     # def copy(self, new_world): # don't know if I need this
 

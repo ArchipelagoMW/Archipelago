@@ -97,6 +97,7 @@ dungeon_table = [
 
 
 def create_dungeons(ootworld):
+    ootworld.dungeons = []
     for dungeon_info in dungeon_table:
         name = dungeon_info['name']
         hint = dungeon_info['hint'] if 'hint' in dungeon_info else name
@@ -128,6 +129,5 @@ def create_dungeons(ootworld):
             for item in dungeon_items:
                 item.priority = True
 
-        # hopefully we don't need this later
-        # ootworld.dungeons.append(Dungeon(ootworld, name, hint, boss_keys, small_keys, dungeon_items))
+        ootworld.dungeons.append(Dungeon(ootworld, name, hint, boss_keys, small_keys, dungeon_items))
 

@@ -1,17 +1,19 @@
 import logging
 import os
+import random
 
 logger = logging.getLogger("Ocarina of Time")
 
 from .Location import OOTLocation, LocationFactory
 from .Entrance import OOTEntrance
-from .Items import item_table, MakeEventItem
+from .Items import item_table, ItemFactory, MakeEventItem
+from .ItemPool import generate_itempool
 from .Regions import TimeOfDay
-# from .Rules import set_rules
+from .Rules import set_rules, set_shop_rules
 from .RuleParser import Rule_AST_Transformer
 from .Options import oot_options
 from .Utils import data_path, read_json
-from .LocationList import business_scrubs
+from .LocationList import business_scrubs, set_drop_location_names
 from .DungeonList import dungeon_table, create_dungeons
 
 import Utils
@@ -27,8 +29,12 @@ class OOTWorld(World):
         super(OOTWorld, self).__init__(world, player)
         self.parser = Rule_AST_Transformer(self, self.player)
         for (option_name, option) in oot_options.items(): 
-            setattr(self, option_name, getattr(self.world, option_name, option.default))
+            setattr(self, option_name, getattr(self.world, option_name)[self.player].get_option_name())
         self.dungeon_mq = {item['name']: False for item in dungeon_table}  # sets all dungeons to non-MQ for now; need this to not break things
+        self.shop_prices = {}
+        self.regions = []  # internal cache of regions for this world, used later
+
+        self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld']
         self.ensure_tod_access = False
         # self.ensure_tod_access = self.shuffle_interior_entrances or self.shuffle_overworld_entrances or self.randomize_overworld_spawns
 
@@ -88,8 +94,9 @@ class OOTWorld(World):
                         logging.getLogger('').debug('Dropping unreachable exit: %s', new_exit.name)
                     else:
                         new_region.exits.append(new_exit)
-            self.world.regions.append(new_region)    
-
+            self.world.regions.append(new_region)
+            self.regions.append(new_region)
+        self.world._recache()
 
     def set_scrub_prices(self):
         # Get Deku Scrub Locations
@@ -120,10 +127,55 @@ class OOTWorld(World):
                         location.item.price = price
 
 
+    def fill_bosses(self, bossCount=9):    
+        rewardlist = (
+            'Kokiri Emerald',
+            'Goron Ruby',
+            'Zora Sapphire',
+            'Forest Medallion',
+            'Fire Medallion',
+            'Water Medallion',
+            'Spirit Medallion',
+            'Shadow Medallion',
+            'Light Medallion'
+        )
+        boss_location_names = (
+            'Queen Gohma',
+            'King Dodongo',
+            'Barinade',
+            'Phantom Ganon',
+            'Volvagia',
+            'Morpha',
+            'Bongo Bongo',
+            'Twinrova',
+            'Links Pocket'
+        )
+        boss_rewards = ItemFactory(rewardlist, self.player)
+        boss_locations = [self.world.get_location(loc, self.player) for loc in boss_location_names]
+
+        placed_prizes = [loc.item.name for loc in boss_locations if loc.item is not None]
+        unplaced_prizes = [item for item in boss_rewards if item.name not in placed_prizes]
+        empty_boss_locations = [loc for loc in boss_locations if loc.item is None]
+        prizepool = list(unplaced_prizes)
+        prize_locs = list(empty_boss_locations)
+
+        while bossCount:
+            bossCount -= 1
+            random.shuffle(prizepool)
+            random.shuffle(prize_locs)
+            item = prizepool.pop()
+            loc = prize_locs.pop()
+            self.world.push_item(loc, item, collect=False)
+
+
     def create_regions(self):  # build_world_graphs
         logger.info('Generating World.')
         overworld_data_path = data_path('World', 'Overworld.json')
+        menu = OOTRegion('Menu', None, None, self.player)
+        start = OOTEntrance(self.player, 'New Game', menu)
+        self.world.regions.append(menu)
         self.load_regions_from_json(overworld_data_path)
+        start.connect(self.world.get_region('Root', self.player))
         create_dungeons(self)
         self.parser.create_delayed_rules() # replaces self.create_internal_locations(); I don't know exactly what it does though
 
@@ -131,37 +183,26 @@ class OOTWorld(World):
         #     world.random_shop_prices()
         self.set_scrub_prices()
 
-        # logger.info('Generating Item Pool.')
-        # generate_itempool(world)
-        # set_shop_rules(world)
-        # set_drop_location_names(world)
-        # world.fill_bosses()
-
-        # if settings.triforce_hunt:
-        #     settings.distribution.configure_triforce_hunt(worlds)
-
-        # logger.info('Setting Entrances.')
-        # set_entrances(worlds)
-        # return worlds
-
 
     def set_rules(self):  # what does this even have to do?
         logger.info('Calculating Access Rules.')
+        # set_rules(self)
 
 
     def generate_basic(self):  # link entrances, generate item pools, place fixed items
         logger.info('Generating Item Pool.')
-        # generate_itempool(world)
-        # set_shop_rules(world)
-        # set_drop_location_names(world)
-        # world.fill_bosses()
-
-        # if settings.triforce_hunt:
-        #     settings.distribution.configure_triforce_hunt(worlds)
+        generate_itempool(self)
+        self.world.itempool += self.itempool
+        # set_shop_rules(self)
+        set_drop_location_names(self.world)
+        self.fill_bosses()
 
         logger.info('Setting Entrances.')
-        # set_entrances(worlds)
-        # return worlds
+        # set_entrances(self)
+        # Enforce vanilla for now
+        for region in self.regions:
+            for exit in region.exits:
+                exit.connect(self.world.get_region(exit.connected_region, self.player))
 
 
     def generate_output(self):  # ROM patching, cosmetics, etc. 

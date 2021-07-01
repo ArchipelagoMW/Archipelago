@@ -64,7 +64,7 @@ def ItemFactory(items, player: int, event=False):
 def MakeEventItem(world, player, name, location, item=None): 
     if item is None:
         item = ItemFactory(name, player, event=True)
-    world.push_item(location, item)
+    world.push_item(location, item, collect=False)
     location.locked = True
     if name not in item_table:
         location.internal = True
