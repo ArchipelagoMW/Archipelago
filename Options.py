@@ -175,6 +175,9 @@ class Range(Option, int):
             return cls(data)
         return cls.from_text(str(data))
 
+    def get_option_name(self):
+        return str(self.value)
+
     def __str__(self):
         return str(self.value)
 

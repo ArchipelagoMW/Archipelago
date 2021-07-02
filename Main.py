@@ -21,8 +21,6 @@ from Fill import distribute_items_restrictive, flood_items, balance_multiworld_p
 from worlds.alttp.Shops import create_shops, ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, version_tuple
-from worlds.minecraft import gen_minecraft, fill_minecraft_slot_data, generate_mc_data
-from worlds.minecraft.Regions import minecraft_create_regions
 from worlds.generic.Rules import locality_rules
 from worlds import Games, lookup_any_item_name_to_id, AutoWorld
 import Patch
@@ -196,9 +194,6 @@ def main(args, seed=None):
 
     AutoWorld.call_all(world, "create_regions")
 
-    for player in world.minecraft_player_ids:
-        minecraft_create_regions(world, player)
-
     for player in world.alttp_player_ids:
         if world.open_pyramid[player] == 'goal':
             world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
@@ -259,9 +254,6 @@ def main(args, seed=None):
         set_rules(world, player)
 
     AutoWorld.call_all(world, "generate_basic")
-
-    for player in world.minecraft_player_ids:
-        gen_minecraft(world, player)
 
     logger.info("Running Item Plando")
 
@@ -511,7 +503,7 @@ def main(args, seed=None):
             for slot in world.hk_player_ids:
                 slot_data[slot] = AutoWorld.call_single(world, "fill_slot_data", slot)
         for slot in world.minecraft_player_ids:
-            slot_data[slot] = fill_minecraft_slot_data(world, slot)
+            slot_data[slot] = AutoWorld.call_single(world, "fill_slot_data", slot)
 
         locations_data: Dict[int, Dict[int, Tuple[int, int]]] = {player: {} for player in world.player_ids}
         for location in world.get_filled_locations():
@@ -563,8 +555,6 @@ def main(args, seed=None):
     if multidata_task:
         multidata_task.result()  # retrieve exception if one exists
     pool.shutdown()  # wait for all queued tasks to complete
-    for player in world.minecraft_player_ids:  # Doing this after shutdown prevents the .apmc from being generated if there's an error
-        generate_mc_data(world, player)
     if not args.skip_playthrough:
         logger.info('Calculating playthrough.')
         create_playthrough(world)
