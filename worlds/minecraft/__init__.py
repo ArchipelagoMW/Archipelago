@@ -7,7 +7,7 @@ from BaseClasses import Region, Entrance
 from .Options import minecraft_options
 from ..AutoWorld import World
 
-client_version = (0, 3)
+client_version = (0, 4)
 
 class MinecraftWorld(World):
     game: str = "Minecraft"
