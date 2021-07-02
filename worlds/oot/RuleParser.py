@@ -23,9 +23,9 @@ event_name = re.compile(r'\w+')
 # or at a certain spot (can be omitted in many cases)
 # or at a specific time of day (often unused)
 kwarg_defaults = {
-    'age': None,
+    # 'age': None,
     'spot': None,
-    'tod': TimeOfDay.NONE,
+    # 'tod': TimeOfDay.NONE,
 }
 
 allowed_globals = {'TimeOfDay': TimeOfDay}
@@ -65,6 +65,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             load_aliases()
         # final rule cache
         self.rule_cache = {}
+        kwarg_defaults['player'] = self.player  # I hope this does what I think
 
 
     def visit_Name(self, node):
@@ -82,7 +83,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                     value=ast.Name(id='state', ctx=ast.Load()),
                     attr='has',
                     ctx=ast.Load()),
-                args=[ast.Str(escaped_items[node.id])],
+                args=[ast.Str(escaped_items[node.id]), ast.Constant(self.player)],
                 keywords=[])
         elif node.id in self.world.__dict__:
             # Settings are constant
@@ -98,7 +99,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                     value=ast.Name(id='state', ctx=ast.Load()),
                     attr='has',
                     ctx=ast.Load()),
-                args=[ast.Str(node.id.replace('_', ' '))],
+                args=[ast.Str(node.id.replace('_', ' ')), ast.Constant(self.player)],
                 keywords=[])
         else:
             raise Exception('Parse Error: invalid node name %s' % node.id, self.current_spot.name, ast.dump(node, False))
@@ -109,7 +110,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 value=ast.Name(id='state', ctx=ast.Load()),
                 attr='has',
                 ctx=ast.Load()),
-            args=[ast.Str(node.s)],
+            args=[ast.Str(node.s), ast.Constant(self.player)],
             keywords=[])
 
     # python 3.8 compatibility: ast walking now uses visit_Constant for Constant subclasses
@@ -148,7 +149,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 value=ast.Name(id='state', ctx=ast.Load()),
                 attr='has',
                 ctx=ast.Load()),
-            args=[ast.Str(iname), count],
+            args=[ast.Str(iname), ast.Constant(self.player), count],
             keywords=[])
 
 
@@ -312,7 +313,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                     value=ast.Name(id='state', ctx=ast.Load()),
                     attr='has_any_of' if early_return else 'has_all_of',
                     ctx=ast.Load()),
-                args=[ast.Tuple(elts=[ast.Str(i) for i in items], ctx=ast.Load())],
+                args=[ast.Tuple(elts=[ast.Str(i) for i in items], ctx=ast.Load()), ast.Constant(self.player)],
                 keywords=[])] + new_values
         else:
             node.values = new_values
@@ -351,7 +352,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 value=ast.Name(id='state', ctx=ast.Load()),
                 attr='has',
                 ctx=ast.Load()),
-            args=[ast.Str(subrule_name)],
+            args=[ast.Str(subrule_name), ast.Constant(self.player)],
             keywords=[])
         # Cache the subrule for any others in this region
         # (and reserve the item name in the process)

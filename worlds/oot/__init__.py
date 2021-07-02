@@ -186,14 +186,14 @@ class OOTWorld(World):
 
     def set_rules(self):  # what does this even have to do?
         logger.info('Calculating Access Rules.')
-        # set_rules(self)
+        set_rules(self)
 
 
     def generate_basic(self):  # link entrances, generate item pools, place fixed items
         logger.info('Generating Item Pool.')
         generate_itempool(self)
         self.world.itempool += self.itempool
-        # set_shop_rules(self)
+        set_shop_rules(self)
         set_drop_location_names(self.world)
         self.fill_bosses()
 
