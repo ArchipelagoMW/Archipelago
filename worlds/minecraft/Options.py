@@ -21,5 +21,6 @@ minecraft_options: typing.Dict[str, type(Option)] = {
     "include_hard_advancements": Toggle,
     "include_insane_advancements": Toggle,
     "include_postgame_advancements": Toggle,
-    "shuffle_structures": Toggle
+    "shuffle_structures": Toggle, 
+    "bee_traps": Toggle
 }
