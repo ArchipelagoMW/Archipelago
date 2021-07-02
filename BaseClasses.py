@@ -907,25 +907,29 @@ class CollectionState(object):
     # move these into the oot world plugin later
     stones = ["Kokiri Emerald", "Goron Ruby", "Zora Sapphire"]
     medallions = ["Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion", "Shadow Medallion", "Spirit Medallion"]
+    oot_bottles = ["Bottle", "Bottle with Milk", "Deliver Letter", "Sell Big Poe", "Bottle with Red Potion", "Bottle with Green Potion", 
+    "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish", "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"]
 
-    def has_any_of(self, items):
-        return any(map(self.prog_items.__contains__, items))
+    def has_any_of(self, items, player):
+        return any([self.has(item, player) for item in items])
 
-    def has_all_of(self, items):
-        return all(map(self.prog_items.__contains__, items))
-        
-    def count_of(self, items): 
-        return len(list(filter(self.prog_items.__contains__, items)))
+    def has_all_of(self, items, player):
+        return all([self.has(item, player) for item in items])
 
-    def has_stones(self, count): 
-        return self.count_of(stones) >= count
+    def count_of(self, items, player): 
+        return len(list(filter(lambda item: self.has(item, player), items)))
 
-    def has_medallions(self, count): 
-        return self.count_of(medallions) >= count
+    def has_stones(self, count, player): 
+        return self.count_of(stones, player) >= count
 
-    def has_dungeon_rewards(self, count): 
-        return self.count_of(stones + medallions) >= count
+    def has_medallions(self, count, player): 
+        return self.count_of(medallions, player) >= count
 
+    def has_dungeon_rewards(self, count, player): 
+        return self.count_of(stones + medallions, player) >= count
+
+    def has_bottle_oot(self, player): 
+        return self.has_any_of(oot_bottles, player)
 
 
     def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:
