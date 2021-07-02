@@ -32,8 +32,11 @@ class MinecraftWorld(World):
         link_minecraft_structures(self.world, self.player)
 
         pool = []
+        pool_counts = item_frequencies.copy()
+        if getattr(self.world, "bee_traps")[self.player]: 
+            pool_counts.update({"Rotten Flesh": 0, "Bee Trap (Minecraft)": 4})
         for item_name, item_data in item_table.items():
-            for count in range(item_frequencies.get(item_name, 1)):
+            for count in range(pool_counts.get(item_name, 1)):
                 pool.append(MinecraftItem(item_name, item_data.progression, item_data.code, self.player))
 
         prefill_pool = {}

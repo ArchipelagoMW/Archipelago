@@ -68,9 +68,9 @@ item_frequencies = {
     "4 Lapis Lazuli": 2, 
     "16 Porkchops": 8, 
     "8 Gold Ore": 4, 
-    "Rotten Flesh": 2, 
+    "Rotten Flesh": 4, 
     "Single Arrow": 0, 
-    "Bee Trap (Minecraft)": 2
+    "Bee Trap (Minecraft)": 0
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
