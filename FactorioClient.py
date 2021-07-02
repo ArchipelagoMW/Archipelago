@@ -72,7 +72,6 @@ class FactorioContext(CommonContext):
         self.awaiting_bridge = False
         self.raw_json_text_parser = RawJSONtoTextParser(self)
         self.factorio_json_text_parser = FactorioJSONtoTextParser(self)
-        self.bridge_file = None
 
     async def server_auth(self, password_requested):
         if password_requested and not self.password:
@@ -110,27 +109,31 @@ class FactorioContext(CommonContext):
 async def game_watcher(ctx: FactorioContext):
     bridge_logger = logging.getLogger("FactorioWatcher")
     from worlds.factorio.Technologies import lookup_id_to_name
-    bridge_file = ctx.bridge_file
     try:
         while not ctx.exit_event.is_set():
-            if ctx.awaiting_bridge and os.path.exists(bridge_file):
+            if ctx.awaiting_bridge and ctx.rcon_client:
                 ctx.awaiting_bridge = False
-                with open(bridge_file) as f:
-                    data = json.load(f)
+                data = json.loads(ctx.rcon_client.send_command("/ap-sync"))
+                if data["slot_name"] != ctx.auth:
+                    logger.warning(f"Connected World is not the expected one {data['slot_name']} != {ctx.auth}")
+                elif data["seed_name"] != ctx.seed_name:
+                    logger.warning(f"Connected Multiworld is not the expected one {data['seed_name']} != {ctx.seed_name}")
+                else:
+                    data = data["info"]
                     research_data = data["research_done"]
                     research_data = {int(tech_name.split("-")[1]) for tech_name in research_data}
                     victory = data["victory"]
 
-                if not ctx.finished_game and victory:
-                    await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                    ctx.finished_game = True
+                    if not ctx.finished_game and victory:
+                        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                        ctx.finished_game = True
 
-                if ctx.locations_checked != research_data:
-                    bridge_logger.info(
-                        f"New researches done: "
-                        f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
-                    ctx.locations_checked = research_data
-                    await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
+                    if ctx.locations_checked != research_data:
+                        bridge_logger.info(
+                            f"New researches done: "
+                            f"{[lookup_id_to_name[rid] for rid in research_data - ctx.locations_checked]}")
+                        ctx.locations_checked = research_data
+                        await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
             await asyncio.sleep(1)
 
     except Exception as e:
@@ -183,8 +186,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     # trigger lua interface confirmation
                     ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
                     ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
-                    ctx.rcon_client.send_command("/ap-sync")
-                if not ctx.awaiting_bridge and "Archipelago Bridge File written for game tick " in msg:
+                if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
             if ctx.rcon_client:
                 while ctx.send_index < len(ctx.items_received):
@@ -233,10 +235,9 @@ async def factorio_spinup_server(ctx: FactorioContext):
     factorio_queue = Queue()
     stream_factorio_output(factorio_process.stdout, factorio_queue, factorio_process)
     stream_factorio_output(factorio_process.stderr, factorio_queue, factorio_process)
-    write_folder = None
     rcon_client = None
     try:
-        while not ctx.auth or not write_folder:
+        while not ctx.auth:
             while not factorio_queue.empty():
                 msg = factorio_queue.get()
                 factorio_server_logger.info(msg)
@@ -244,13 +245,6 @@ async def factorio_spinup_server(ctx: FactorioContext):
                     rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
                     get_info(ctx, rcon_client)
 
-                if not write_folder and "Write data path:" in msg:
-                    write_folder = msg.split("Write data path: ", 1)[1].split("[", 1)[0].strip()
-                    bridge_file = os.path.join(write_folder, "script-output", "ap_bridge.json")
-                    if os.path.exists(bridge_file):
-                        os.remove(bridge_file)
-                    ctx.bridge_file = bridge_file
-                    logging.info(f"Bridge File Path: {bridge_file}")
 
             await asyncio.sleep(0.01)
 

@@ -43,7 +43,7 @@ class FactorioManager(App):
         pairs = [
             ("Client", "Archipelago"),
             ("FactorioServer", "Factorio Server Log"),
-            ("FactorioWatcher", "Bridge File Log"),
+            ("FactorioWatcher", "Bridge Data Log"),
         ]
         self.tabs.default_tab_content = UILog(*(logging.getLogger(logger_name) for logger_name, name in pairs))
         for logger_name, display_name in pairs:

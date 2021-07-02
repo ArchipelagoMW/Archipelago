@@ -141,13 +141,6 @@ script.on_init(function()
     end
 end)
 
--- for testing
--- script.on_event(defines.events.on_tick, function(event)
---     if event.tick%3600 == 300 then
---         dumpInfo(game.forces["player"])
---     end
--- end)
-
 -- hook into researches done
 script.on_event(defines.events.on_research_finished, function(event)
     local technology = event.research
@@ -185,24 +178,10 @@ script.on_event(defines.events.on_research_finished, function(event)
     end
 end)
 
+
 function dumpInfo(force)
-    local research_done = {}
-    local data_collection = {
-        ["research_done"] = research_done,
-        ["victory"] = chain_lookup(global, "forcedata", force.name, "victory"),
-        }
-
-    for tech_name, tech in pairs(force.technologies) do
-        if tech.researched and string.find(tech_name, "ap%-") == 1 then
-            research_done[tech_name] = tech.researched
-        end
-    end
-    game.write_file("ap_bridge.json", game.table_to_json(data_collection), false, 0)
-    log("Archipelago Bridge File written for game tick ".. game.tick .. ".")
-    -- game.write_file("research_done.json", game.table_to_json(data_collection), false, 0)
-    -- game.print("Sent progress to Archipelago.")
+    log("Archipelago Bridge Data available for game tick ".. game.tick .. ".") -- notifies client
 end
-
 
 
 function chain_lookup(table, ...)
@@ -215,16 +194,29 @@ function chain_lookup(table, ...)
     return table
 end
 
--- add / commands
 
-commands.add_command("ap-sync", "Run manual Research Sync with Archipelago.", function(call)
+-- add / commands
+commands.add_command("ap-sync", "Used by the Archipelago client to get progress information", function(call)
+    local force
     if call.player_index == nil then
-        dumpInfo(game.forces.player)
+        force = game.forces.player
     else
-        dumpInfo(game.players[call.player_index].force)
+        force = game.players[call.player_index].force
     end
-    game.print("Wrote bridge file.")
+    local research_done = {}
+    local data_collection = {
+        ["research_done"] = research_done,
+        ["victory"] = chain_lookup(global, "forcedata", force.name, "victory"),
+        }
+
+    for tech_name, tech in pairs(force.technologies) do
+        if tech.researched and string.find(tech_name, "ap%-") == 1 then
+            research_done[tech_name] = tech.researched
+        end
+    end
+    rcon.print(game.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME, ["info"] = data_collection}))
 end)
+
 
 commands.add_command("ap-get-technology", "Grant a technology, used by the Archipelago Client.", function(call)
     local force = game.forces["player"]
@@ -245,6 +237,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
         game.print("Unknown Technology " .. tech_name)
     end
 end)
+
 
 commands.add_command("ap-rcon-info", "Used by the Archipelago client to get information", function(call)
     rcon.print(game.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME}))
