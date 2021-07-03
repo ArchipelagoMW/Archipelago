@@ -33,7 +33,7 @@ class MinecraftWorld(World):
 
         pool = []
         pool_counts = item_frequencies.copy()
-        if getattr(self.world, "bee_traps", {}).get(self.player, False): 
+        if getattr(self.world, "bee_traps")[self.player]: 
             pool_counts.update({"Rotten Flesh": 0, "Bee Trap (Minecraft)": 4})
         for item_name, item_data in item_table.items():
             for count in range(pool_counts.get(item_name, 1)):
@@ -43,7 +43,7 @@ class MinecraftWorld(World):
         prefill_pool.update(events_table)
         exclusion_pools = ['hard', 'insane', 'postgame']
         for key in exclusion_pools:
-            if not getattr(self.world, f"include_{key}_advancements", {}).get(self.player, False):
+            if not getattr(self.world, f"include_{key}_advancements")[self.player]:
                 prefill_pool.update(exclusion_table[key])
 
         for loc_name, item_name in prefill_pool.items():
