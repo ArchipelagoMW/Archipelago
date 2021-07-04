@@ -46,5 +46,12 @@ class World(metaclass=AutoWorldRegister):
     def generate_output(self):
         pass
 
+    def collect(self, state, item) -> bool:
+        """Collect an item into state"""
+        if item.advancement:
+            state.prog_items[item.name, item.player] += 1
+            return True # indicate that a logical state change has occured
+        return False
+
     def get_required_client_version(self) -> tuple:
         return 0, 0, 3

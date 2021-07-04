@@ -241,53 +241,12 @@ class MultiWorld():
     def get_all_state(self, keys=False) -> CollectionState:
         ret = CollectionState(self)
 
-        def soft_collect(item):
-            if item.game == "A Link to the Past" and item.name.startswith('Progressive '):
-                # ALttP items
-                if 'Sword' in item.name:
-                    if ret.has('Golden Sword', item.player):
-                        pass
-                    elif ret.has('Tempered Sword', item.player) and self.difficulty_requirements[
-                        item.player].progressive_sword_limit >= 4:
-                        ret.prog_items['Golden Sword', item.player] += 1
-                    elif ret.has('Master Sword', item.player) and self.difficulty_requirements[
-                        item.player].progressive_sword_limit >= 3:
-                        ret.prog_items['Tempered Sword', item.player] += 1
-                    elif ret.has('Fighter Sword', item.player) and self.difficulty_requirements[item.player].progressive_sword_limit >= 2:
-                        ret.prog_items['Master Sword', item.player] += 1
-                    elif self.difficulty_requirements[item.player].progressive_sword_limit >= 1:
-                        ret.prog_items['Fighter Sword', item.player] += 1
-                elif 'Glove' in item.name:
-                    if ret.has('Titans Mitts', item.player):
-                        pass
-                    elif ret.has('Power Glove', item.player):
-                        ret.prog_items['Titans Mitts', item.player] += 1
-                    else:
-                        ret.prog_items['Power Glove', item.player] += 1
-                elif 'Shield' in item.name:
-                    if ret.has('Mirror Shield', item.player):
-                        pass
-                    elif ret.has('Red Shield', item.player) and self.difficulty_requirements[item.player].progressive_shield_limit >= 3:
-                        ret.prog_items['Mirror Shield', item.player] += 1
-                    elif ret.has('Blue Shield', item.player)  and self.difficulty_requirements[item.player].progressive_shield_limit >= 2:
-                        ret.prog_items['Red Shield', item.player] += 1
-                    elif self.difficulty_requirements[item.player].progressive_shield_limit >= 1:
-                        ret.prog_items['Blue Shield', item.player] += 1
-                elif 'Bow' in item.name:
-                    if ret.has('Silver', item.player):
-                        pass
-                    elif ret.has('Bow', item.player) and self.difficulty_requirements[item.player].progressive_bow_limit >= 2:
-                        ret.prog_items['Silver Bow', item.player] += 1
-                    elif self.difficulty_requirements[item.player].progressive_bow_limit >= 1:
-                        ret.prog_items['Bow', item.player] += 1
-            elif item.advancement or item.smallkey or item.bigkey:
-                ret.prog_items[item.name, item.player] += 1
-
         for item in self.itempool:
-            soft_collect(item)
+            self.worlds[item.player].collect(ret, item)
 
         if keys:
             for p in self.alttp_player_ids:
+                world = self.worlds[p]
                 from worlds.alttp.Items import ItemFactory
                 for item in ItemFactory(
                         ['Small Key (Hyrule Castle)', 'Big Key (Eastern Palace)', 'Big Key (Desert Palace)',
@@ -302,7 +261,7 @@ class MultiWorld():
                             'Small Key (Misery Mire)'] * 3 + ['Small Key (Turtle Rock)'] * 4 + [
                             'Small Key (Ganons Tower)'] * 4,
                         p):
-                    soft_collect(item)
+                    world.collect(ret, item)
         ret.sweep_for_events()
         return ret
 
@@ -908,60 +867,10 @@ class CollectionState(object):
     def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:
         if location:
             self.locations_checked.add(location)
-        changed = False
 
-        # TODO: create a mapping for progressive items in each game and use that
-        if item.game == "A Link to the Past":
-            if item.name.startswith('Progressive '):
-                if 'Sword' in item.name:
-                    if self.has('Golden Sword', item.player):
-                        pass
-                    elif self.has('Tempered Sword', item.player) and self.world.difficulty_requirements[
-                        item.player].progressive_sword_limit >= 4:
-                        self.prog_items['Golden Sword', item.player] += 1
-                        changed = True
-                    elif self.has('Master Sword', item.player) and self.world.difficulty_requirements[item.player].progressive_sword_limit >= 3:
-                        self.prog_items['Tempered Sword', item.player] += 1
-                        changed = True
-                    elif self.has('Fighter Sword', item.player) and self.world.difficulty_requirements[item.player].progressive_sword_limit >= 2:
-                        self.prog_items['Master Sword', item.player] += 1
-                        changed = True
-                    elif self.world.difficulty_requirements[item.player].progressive_sword_limit >= 1:
-                        self.prog_items['Fighter Sword', item.player] += 1
-                        changed = True
-                elif 'Glove' in item.name:
-                    if self.has('Titans Mitts', item.player):
-                        pass
-                    elif self.has('Power Glove', item.player):
-                        self.prog_items['Titans Mitts', item.player] += 1
-                        changed = True
-                    else:
-                        self.prog_items['Power Glove', item.player] += 1
-                        changed = True
-                elif 'Shield' in item.name:
-                    if self.has('Mirror Shield', item.player):
-                        pass
-                    elif self.has('Red Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 3:
-                        self.prog_items['Mirror Shield', item.player] += 1
-                        changed = True
-                    elif self.has('Blue Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
-                        self.prog_items['Red Shield', item.player] += 1
-                        changed = True
-                    elif self.world.difficulty_requirements[item.player].progressive_shield_limit >= 1:
-                        self.prog_items['Blue Shield', item.player] += 1
-                        changed = True
-                elif 'Bow' in item.name:
-                    if self.has('Silver Bow', item.player):
-                        pass
-                    elif self.has('Bow', item.player):
-                        self.prog_items['Silver Bow', item.player] += 1
-                        changed = True
-                    else:
-                        self.prog_items['Bow', item.player] += 1
-                        changed = True
+        changed = self.world.worlds[item.player].collect(self, item)
 
-
-        if not changed and (event or item.advancement):
+        if not changed and event:
             self.prog_items[item.name, item.player] += 1
             changed = True
 
