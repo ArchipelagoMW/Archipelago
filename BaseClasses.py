@@ -153,23 +153,24 @@ class MultiWorld():
     def secure(self):
         self.random = secrets.SystemRandom()
 
-    @property
+    @functools.cached_property
     def player_ids(self):
         yield from range(1, self.players + 1)
 
-    @property
+    # Todo: make these automatic, or something like get_players_for_game(game_name)
+    @functools.cached_property
     def alttp_player_ids(self):
         yield from (player for player in range(1, self.players + 1) if self.game[player] == "A Link to the Past")
 
-    @property
+    @functools.cached_property
     def hk_player_ids(self):
         yield from (player for player in range(1, self.players + 1) if self.game[player] == "Hollow Knight")
 
-    @property
+    @functools.cached_property
     def factorio_player_ids(self):
         yield from (player for player in range(1, self.players + 1) if self.game[player] == "Factorio")
 
-    @property
+    @functools.cached_property
     def minecraft_player_ids(self):
         yield from (player for player in range(1, self.players + 1) if self.game[player] == "Minecraft")
     
