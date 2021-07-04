@@ -1,4 +1,5 @@
 import unittest
+from argparse import Namespace
 
 from BaseClasses import MultiWorld, CollectionState
 from worlds.alttp.Dungeons import create_dungeons, get_dungeon_item_pool
@@ -8,14 +9,16 @@ from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import create_regions
 from worlds.alttp.Shops import create_shops
 from worlds.alttp.Rules import set_rules
-from Options import alttp_options
+from worlds import AutoWorld
 
 
 class TestDungeon(unittest.TestCase):
     def setUp(self):
         self.world = MultiWorld(1)
-        for option_name, option in alttp_options.items():
-            setattr(self.world, option_name, {1: option.default})
+        args = Namespace()
+        for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].options.items():
+            setattr(args, name, {1: option.from_any(option.default)})
+        self.world.set_options(args)
         self.starting_regions = []  # Where to start exploring
         self.remove_exits = []      # Block dungeon exits
         self.world.difficulty_requirements[1] = difficulties['normal']

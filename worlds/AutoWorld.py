@@ -50,7 +50,7 @@ class World(metaclass=AutoWorldRegister):
         """Collect an item into state"""
         if item.advancement:
             state.prog_items[item.name, item.player] += 1
-            return True # indicate that a logical state change has occured
+            return True  # indicate that a logical state change has occured
         return False
 
     def get_required_client_version(self) -> tuple:

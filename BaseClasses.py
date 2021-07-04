@@ -142,17 +142,13 @@ class MultiWorld():
 
 
     def set_options(self, args):
-        import Options
         from worlds import AutoWorld
-        for option_set in Options.option_sets:
-            for option in option_set:
-                setattr(self, option, getattr(args, option, {}))
-        for world in AutoWorld.AutoWorldRegister.world_types.values():
-            for option in world.options:
-                setattr(self, option, getattr(args, option, {}))
         for player in self.player_ids:
             self.custom_data[player] = {}
-            self.worlds[player] = AutoWorld.AutoWorldRegister.world_types[self.game[player]](self, player)
+            world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
+            for option in world_type.options:
+                setattr(self, option, getattr(args, option, {}))
+            self.worlds[player] = world_type(self, player)
 
     def secure(self):
         self.random = secrets.SystemRandom()
