@@ -219,25 +219,41 @@ end)
 
 
 commands.add_command("ap-get-technology", "Grant a technology, used by the Archipelago Client.", function(call)
+    if global.index_sync == nil then
+        global.index_sync = {}
+    end
+    local tech
     local force = game.forces["player"]
     chunks = split(call.parameter, "\t")
     local tech_name = chunks[1]
     local index = chunks[2]
     local source = chunks[3] or "Archipelago"
-    local tech = force.technologies[tech_name]
-
-    if tech ~= nil then
-        if global.index_sync == nil then
-            global.index_sync = {}
+    if progressive_technologies[tech_name] ~= nil then
+        if global.index_sync[index] == nil then -- not yet received prog item
+            global.index_sync[index] = tech_name
+            local tech_stack = progressive_technologies[tech_name]
+            for _, tech_name in ipairs(tech_stack) do
+                tech = force.technologies[tech_name]
+                if tech.researched ~= true then
+                    game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
+                    game.play_sound({path="utility/research_completed"})
+                    tech.researched = true
+                    return
+                end
+            end
         end
-        if global.index_sync[index] ~= nil and global.index_sync[index] ~= tech then
-            game.print("Warning: Desync Detected. Duplicate/Missing items may occur.")
-        end
-        global.index_sync[index] = tech
-        if tech.researched ~= true then
-            game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
-            game.play_sound({path="utility/research_completed"})
-            tech.researched = true
+    elseif force.technologies[tech_name] ~= nil then
+        tech = force.technologies[tech_name]
+        if tech ~= nil then
+            if global.index_sync[index] ~= nil and global.index_sync[index] ~= tech then
+                game.print("Warning: Desync Detected. Duplicate/Missing items may occur.")
+            end
+            global.index_sync[index] = tech
+            if tech.researched ~= true then
+                game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
+                game.play_sound({path="utility/research_completed"})
+                tech.researched = true
+            end
         end
     else
         game.print("Unknown Technology " .. tech_name)
@@ -248,3 +264,6 @@ end)
 commands.add_command("ap-rcon-info", "Used by the Archipelago client to get information", function(call)
     rcon.print(game.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME}))
 end)
+
+-- data
+progressive_technologies = {{ dict_to_lua(progressive_technology_table) }}

@@ -96,5 +96,6 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "starting_items": FactorioStartItems,
     "recipe_time": RecipeTime,
     "imported_blueprints": DefaultOnToggle,
-    "world_gen": FactorioWorldGen
+    "world_gen": FactorioWorldGen,
+    "progressive": DefaultOnToggle
 }

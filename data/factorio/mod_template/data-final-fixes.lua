@@ -72,9 +72,11 @@ prep_copy(new_tree_copy, original_tech)
 {% if tech_cost_scale != 1 %}
 new_tree_copy.unit.count = math.max(1, math.floor(new_tree_copy.unit.count * {{ tech_cost_scale }}))
 {% endif %}
-{%- if item_name in tech_table and tech_tree_information == 2 or original_tech_name in static_nodes -%}
+{%- if (tech_tree_information == 2 or original_tech_name in static_nodes) and item_name in base_tech_table -%}
 {#- copy Factorio Technology Icon -#}
 copy_factorio_icon(new_tree_copy, "{{ item_name }}")
+{%- elif (tech_tree_information == 2 or original_tech_name in static_nodes) and item_name in progressive_technology_table -%}
+copy_factorio_icon(new_tree_copy, "{{ progressive_technology_table[item_name][0] }}")
 {%- else -%}
 {#- use default AP icon if no Factorio graphics exist -#}
 {% if advancement or not tech_tree_information %}set_ap_icon(new_tree_copy){% else %}set_ap_unimportant_icon(new_tree_copy){% endif %}

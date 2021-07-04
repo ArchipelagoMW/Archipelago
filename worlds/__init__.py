@@ -32,7 +32,7 @@ assert len(lookup_any_location_name_to_id) == len(lookup_any_location_id_to_name
 
 network_data_package = {"lookup_any_location_id_to_name": lookup_any_location_id_to_name,
                         "lookup_any_item_id_to_name": lookup_any_item_id_to_name,
-                        "version": 7}
+                        "version": 9}
 
 
 @enum.unique

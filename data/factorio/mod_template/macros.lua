@@ -5,10 +5,18 @@
 {% endfor -%}
 }
 {%- endmacro %}
+{% macro list_to_lua(list) -%}
+{
+{%- for key in list -%}
+    {{ variable_to_lua(key) }}{% if not loop.last %},{% endif %}
+{% endfor -%}
+}
+{%- endmacro %}
 {%- macro variable_to_lua(value) %}
 {%- if value is mapping -%}{{ dict_to_lua(value) }}
 {%- elif value is boolean -%}{{ value | string | lower }}
-{%- elif value is string -%} "{{ value | safe }}"
+{%- elif value is string -%}"{{ value | safe }}"
+{%- elif value is iterable -%}{{ list_to_lua(value) }}
 {%- else -%} {{ value | safe }}
 {%- endif -%}
 {%- endmacro -%}

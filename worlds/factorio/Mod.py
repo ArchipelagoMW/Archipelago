@@ -11,7 +11,8 @@ import Utils
 import shutil
 from . import Options
 from BaseClasses import MultiWorld
-from .Technologies import tech_table, rocket_recipes, recipes, free_sample_blacklist
+from .Technologies import tech_table, rocket_recipes, recipes, free_sample_blacklist, progressive_technology_table, \
+    base_tech_table, tech_to_progressive_lookup, progressive_tech_table
 
 template_env: Optional[jinja2.Environment] = None
 
@@ -70,6 +71,7 @@ def generate_mod(world: MultiWorld, player: int):
                        6: 10}[world.tech_cost[player].value]
 
     template_data = {"locations": locations, "player_names": player_names, "tech_table": tech_table,
+                     "base_tech_table": base_tech_table, "tech_to_progressive_lookup": tech_to_progressive_lookup,
                      "mod_name": mod_name, "allowed_science_packs": world.max_science_pack[player].get_allowed_packs(),
                      "tech_cost_scale": tech_cost_scale, "custom_technologies": world.worlds[player].custom_technologies,
                      "tech_tree_layout_prerequisites": world.tech_tree_layout_prerequisites[player],
@@ -78,7 +80,9 @@ def generate_mod(world: MultiWorld, player: int):
                      "starting_items": world.starting_items[player], "recipes": recipes,
                      "random": world.slot_seeds[player], "static_nodes": world.worlds[player].static_nodes,
                      "recipe_time_scale": recipe_time_scales[world.recipe_time[player].value],
-                     "free_sample_blacklist": {item : 1 for item in free_sample_blacklist}}
+                     "free_sample_blacklist": {item : 1 for item in free_sample_blacklist},
+                     "progressive_technology_table": {tech.name : tech.progressive for tech in
+                                                      progressive_technology_table.values()}}
 
     for factorio_option in Options.factorio_options:
         template_data[factorio_option] = getattr(world, factorio_option)[player].value

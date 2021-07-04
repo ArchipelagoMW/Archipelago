@@ -1,8 +1,9 @@
 from __future__ import annotations
 # Factorio technologies are imported from a .json document in /data
-from typing import Dict, Set, FrozenSet
+from typing import Dict, Set, FrozenSet, Tuple
 import os
 import json
+import string
 
 import Utils
 import logging
@@ -36,10 +37,11 @@ class FactorioElement():
 
 
 class Technology(FactorioElement):  # maybe make subclass of Location?
-    def __init__(self, name, ingredients, factorio_id):
+    def __init__(self, name: str, ingredients: Set[str], factorio_id: int, progressive: Tuple[str] = ()):
         self.name = name
         self.factorio_id = factorio_id
         self.ingredients = ingredients
+        self.progressive = progressive
 
     def build_rule(self, player: int):
         logging.debug(f"Building rules for {self.name}")
@@ -104,7 +106,6 @@ class Machine(FactorioElement):
 # recipes and technologies can share names in Factorio
 for technology_name in sorted(raw):
     data = raw[technology_name]
-    factorio_id += 1
     current_ingredients = set(data["ingredients"])
     technology = Technology(technology_name, current_ingredients, factorio_id)
     factorio_id += 1
@@ -118,7 +119,7 @@ for technology, data in raw.items():
         recipe_sources.setdefault(recipe_name, set()).add(technology)
 
 del (raw)
-lookup_id_to_name: Dict[int, str] = {item_id: item_name for item_name, item_id in tech_table.items()}
+
 recipes = {}
 all_product_sources: Dict[str, Set[Recipe]] = {"character": set()}
 for recipe_name, recipe_data in raw_recipes.items():
@@ -255,3 +256,92 @@ rocket_recipes = {
     Options.MaxSciencePack.option_automation_science_pack:
         {"copper-cable": 10, "iron-plate": 10, "wood": 10}
 }
+
+# progressive technologies
+# auto-progressive
+progressive_rows = {}
+progressive_incs = set()
+for tech_name in tech_table:
+    if tech_name.endswith("-1"):
+        progressive_rows[tech_name] = []
+    elif tech_name[-2] == "-" and tech_name[-1] in string.digits:
+        progressive_incs.add(tech_name)
+
+for root, progressive in progressive_rows.items():
+    seeking = root[:-1]+str(int(root[-1])+1)
+    while seeking in progressive_incs:
+        progressive.append(seeking)
+        progressive_incs.remove(seeking)
+        seeking = seeking[:-1]+str(int(seeking[-1])+1)
+
+# make root entry the progressive name
+for old_name in set(progressive_rows):
+    prog_name = "progressive-" + old_name.rsplit("-", 1)[0]
+    progressive_rows[prog_name] = tuple([old_name] + progressive_rows[old_name])
+    del(progressive_rows[old_name])
+
+# no -1 start
+base_starts = set()
+for remnant in progressive_incs:
+    if remnant[-1] == "2":
+        base_starts.add(remnant[:-2])
+
+for root in base_starts:
+    seeking = root+"-2"
+    progressive = [root]
+    while seeking in progressive_incs:
+        progressive.append(seeking)
+        seeking = seeking[:-1]+str(int(seeking[-1])+1)
+    progressive_rows["progressive-"+root] = tuple(progressive)
+
+# science packs
+progressive_rows["progressive-science-pack"] = tuple(sorted(required_technologies,
+                                                            key=lambda name: len(required_technologies[name]))[1:] +
+                                                     ["space-science-pack"])
+
+
+# manual progressive
+progressive_rows["progressive-processing"] = ("steel-processing",
+                                              "oil-processing", "sulfur-processing", "advanced-oil-processing",
+                                              "uranium-processing", "nuclear-fuel-reprocessing")
+progressive_rows["progressive-rocketry"] = ("rocketry", "explosive-rocketry", "atomic-bomb")
+progressive_rows["progressive-vehicle"] = ("automobilism", "tank", "spidertron")
+progressive_rows["progressive-train-network"] = ("railway", "fluid-wagon", "automated-rail-transportation", "rail-signals")
+progressive_rows["progressive-engine"] = ("engine", "electric-engine")
+progressive_rows["progressive-armor"] = ("heavy-armor", "modular-armor", "power-armor", "power-armor-mk2")
+progressive_rows["progressive-personal-battery"] = ("battery-equipment", "battery-mk2-equipment")
+progressive_rows["progressive-energy-shield"] = ("energy-shield-equipment", "energy-shield-mk2-equipment")
+progressive_rows["progressive-wall"] = ("stone-wall", "gate")
+progressive_rows["progressive-follower"] = ("defender", "distractor", "destroyer")
+progressive_rows["progressive-inserter"] = ("fast-inserter", "stack-inserter")
+
+base_tech_table = tech_table.copy() # without progressive techs
+base_technology_table = technology_table.copy()
+
+progressive_tech_table: Dict[str, int] = {}
+progressive_technology_table: Dict[str, Technology] = {}
+
+for root in sorted(progressive_rows):
+    progressive = progressive_rows[root]
+    assert all(tech in tech_table for tech in progressive)
+    factorio_id += 1
+    progressive_technology = Technology(root, technology_table[progressive_rows[root][0]].ingredients, factorio_id,
+                                        progressive)
+    progressive_tech_table[root] = progressive_technology.factorio_id
+    progressive_technology_table[root] = progressive_technology
+    if any(tech in advancement_technologies for tech in progressive):
+        advancement_technologies.add(root)
+
+tech_to_progressive_lookup: Dict[str, str] = {}
+for technology in progressive_technology_table.values():
+    for progressive in technology.progressive:
+        tech_to_progressive_lookup[progressive] = technology.name
+
+tech_table.update(progressive_tech_table)
+technology_table.update(progressive_technology_table)
+
+# techs that are never progressive
+common_tech_table: Dict[str, int] = {tech_name: tech_id for tech_name, tech_id in base_tech_table.items()
+                                     if tech_name not in progressive_tech_table}
+
+lookup_id_to_name: Dict[int, str] = {item_id: item_name for item_name, item_id in tech_table.items()}

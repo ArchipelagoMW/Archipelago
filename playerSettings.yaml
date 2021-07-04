@@ -91,6 +91,9 @@ Factorio:
     single_craft: 0
     half_stack: 0
     stack: 0
+  progressive:
+    on: 1
+    off: 0
   tech_tree_information:
     none: 0
     advancement: 0 # show which items are a logical advancement

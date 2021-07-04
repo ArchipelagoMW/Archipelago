@@ -155,25 +155,24 @@ class MultiWorld():
 
     @functools.cached_property
     def player_ids(self):
-        yield from range(1, self.players + 1)
+        return tuple(range(1, self.players + 1))
 
     # Todo: make these automatic, or something like get_players_for_game(game_name)
     @functools.cached_property
     def alttp_player_ids(self):
-        yield from (player for player in range(1, self.players + 1) if self.game[player] == "A Link to the Past")
+        return tuple(player for player in range(1, self.players + 1) if self.game[player] == "A Link to the Past")
 
     @functools.cached_property
     def hk_player_ids(self):
-        yield from (player for player in range(1, self.players + 1) if self.game[player] == "Hollow Knight")
+        return tuple(player for player in range(1, self.players + 1) if self.game[player] == "Hollow Knight")
 
     @functools.cached_property
     def factorio_player_ids(self):
-        yield from (player for player in range(1, self.players + 1) if self.game[player] == "Factorio")
+        return tuple(player for player in range(1, self.players + 1) if self.game[player] == "Factorio")
 
     @functools.cached_property
     def minecraft_player_ids(self):
-        yield from (player for player in range(1, self.players + 1) if self.game[player] == "Minecraft")
-    
+        return tuple(player for player in range(1, self.players + 1) if self.game[player] == "Minecraft")
 
     def get_name_string_for_object(self, obj) -> str:
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_names(obj.player)})'
@@ -1337,8 +1336,6 @@ class Spoiler(object):
                          'shuffle': self.world.shuffle,
                          'item_pool': self.world.difficulty,
                          'item_functionality': self.world.item_functionality,
-                         'gt_crystals': self.world.crystals_needed_for_gt,
-                         'ganon_crystals': self.world.crystals_needed_for_ganon,
                          'open_pyramid': self.world.open_pyramid,
                          'accessibility': self.world.accessibility,
                          'hints': self.world.hints,
@@ -1362,7 +1359,6 @@ class Spoiler(object):
                          'triforce_pieces_available': self.world.triforce_pieces_available,
                          'triforce_pieces_required': self.world.triforce_pieces_required,
                          'shop_shuffle': self.world.shop_shuffle,
-                         'shop_item_slots': self.world.shop_item_slots,
                          'shuffle_prizes': self.world.shuffle_prizes,
                          'sprite_pool': self.world.sprite_pool,
                          'restrict_dungeon_item_on_boss': self.world.restrict_dungeon_item_on_boss,
@@ -1418,7 +1414,6 @@ class Spoiler(object):
                         res = getattr(self.world, f_option)[player]
                         outfile.write(f'{f_option+":":33}{bool_to_text(res) if type(res) == Options.Toggle else res.get_option_name()}\n')
 
-
                 if player in self.world.alttp_player_ids:
                     for team in range(self.world.teams):
                         outfile.write('%s%s\n' % (
@@ -1447,8 +1442,6 @@ class Spoiler(object):
                     outfile.write('Entrance Shuffle:                %s\n' % self.metadata['shuffle'][player])
                     if self.metadata['shuffle'][player] != "vanilla":
                         outfile.write('Entrance Shuffle Seed            %s\n' % self.metadata['er_seeds'][player])
-                    outfile.write('Crystals required for GT:        %s\n' % self.metadata['gt_crystals'][player])
-                    outfile.write('Crystals required for Ganon:     %s\n' % self.metadata['ganon_crystals'][player])
                     outfile.write('Pyramid hole pre-opened:         %s\n' % (
                         'Yes' if self.metadata['open_pyramid'][player] else 'No'))
 
@@ -1471,8 +1464,6 @@ class Spoiler(object):
                                                "f" in self.metadata["shop_shuffle"][player]))
                     outfile.write('Custom Potion Shop:              %s\n' %
                                   bool_to_text("w" in self.metadata["shop_shuffle"][player]))
-                    outfile.write('Shop Item Slots:                      %s\n' %
-                                  self.metadata["shop_item_slots"][player])
                     outfile.write('Boss shuffle:                    %s\n' % self.metadata['boss_shuffle'][player])
                     outfile.write(
                         'Enemy shuffle:                   %s\n' % bool_to_text(self.metadata['enemy_shuffle'][player]))

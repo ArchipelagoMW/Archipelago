@@ -1,8 +1,9 @@
 from ..AutoWorld import World
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
-from .Technologies import tech_table, recipe_sources, technology_table, advancement_technologies, \
-    all_ingredient_names, required_technologies, get_rocket_requirements, rocket_recipes
+from .Technologies import base_tech_table, recipe_sources, base_technology_table, advancement_technologies, \
+    all_ingredient_names, required_technologies, get_rocket_requirements, rocket_recipes, \
+    progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table
 from .Shapes import get_shapes
 from .Mod import generate_mod
 from .Options import factorio_options
@@ -15,8 +16,16 @@ class Factorio(World):
         victory_tech_names = get_rocket_requirements(
             frozenset(rocket_recipes[self.world.max_science_pack[self.player].value]))
 
-        for tech_name, tech_id in tech_table.items():
-            tech_item = Item(tech_name, tech_name in advancement_technologies or tech_name in victory_tech_names,
+
+
+        for tech_name, tech_id in base_tech_table.items():
+            if self.world.progressive and tech_name in tech_to_progressive_lookup:
+                item_name = tech_to_progressive_lookup[tech_name]
+                tech_id = progressive_tech_table[item_name]
+            else:
+                item_name = tech_name
+
+            tech_item = Item(item_name, item_name in advancement_technologies or item_name in victory_tech_names,
                              tech_id, self.player)
             tech_item.game = "Factorio"
             if tech_name in self.static_nodes:
@@ -25,7 +34,7 @@ class Factorio(World):
                 self.world.itempool.append(tech_item)
         world_gen = self.world.world_gen[self.player].value
         if world_gen.get("seed", None) is None: # allow seed 0
-            world_gen["seed"] = self.world.slot_seeds[self.player].randint(0, 2**32-1) # 32 bit uint
+            world_gen["seed"] = self.world.slot_seeds[self.player].randint(0, 2**32-1)  # 32 bit uint
 
     def generate_output(self):
         generate_mod(self.world, self.player)
@@ -38,7 +47,7 @@ class Factorio(World):
         nauvis = Region("Nauvis", None, "Nauvis", player)
         nauvis.world = menu.world = self.world
 
-        for tech_name, tech_id in tech_table.items():
+        for tech_name, tech_id in base_tech_table.items():
             tech = Location(player, tech_name, tech_id, nauvis)
             nauvis.locations.append(tech)
             tech.game = "Factorio"
@@ -83,6 +92,15 @@ class Factorio(World):
 
         world.completion_condition[player] = lambda state: state.has('Victory', player)
 
+    def collect(self, state, item) -> bool:
+        if item.advancement and item.name in progressive_technology_table:
+            prog_table = progressive_technology_table[item.name].progressive
+            for item_name in prog_table:
+                if not state.has(item_name, item.player):
+                    state.prog_items[item_name, item.player] += 1
+                    return True
+        return super(Factorio, self).collect(state, item)
+
     def get_required_client_version(self) -> tuple:
         return max((0, 1, 4), super(Factorio, self).get_required_client_version())
 
@@ -91,6 +109,6 @@ class Factorio(World):
 def set_custom_technologies(world: MultiWorld, player: int):
     custom_technologies = {}
     allowed_packs = world.max_science_pack[player].get_allowed_packs()
-    for technology_name, technology in technology_table.items():
+    for technology_name, technology in base_technology_table.items():
         custom_technologies[technology_name] = technology.get_custom(world, allowed_packs, player)
     return custom_technologies
