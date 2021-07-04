@@ -220,14 +220,20 @@ end)
 
 commands.add_command("ap-get-technology", "Grant a technology, used by the Archipelago Client.", function(call)
     local force = game.forces["player"]
-    chunks = {}
-    for substring in call.parameter:gmatch("%S+") do -- split on " "
-        table.insert(chunks, substring)
-    end
+    chunks = split(call.parameter, "\t")
     local tech_name = chunks[1]
-    local source = chunks[2] or "Archipelago"
+    local index = chunks[2]
+    local source = chunks[3] or "Archipelago"
     local tech = force.technologies[tech_name]
+
     if tech ~= nil then
+        if global.index_sync == nil then
+            global.index_sync = {}
+        end
+        if global.index_sync[index] ~= nil and global.index_sync[index] ~= tech then
+            game.print("Warning: Desync Detected. Duplicate/Missing items may occur.")
+        end
+        global.index_sync[index] = tech
         if tech.researched ~= true then
             game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
             game.play_sound({path="utility/research_completed"})

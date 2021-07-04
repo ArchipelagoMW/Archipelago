@@ -198,7 +198,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     else:
                         item_name = lookup_id_to_name[item_id]
                         factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.")
-                        ctx.rcon_client.send_command(f'/ap-get-technology {item_name} {player_name}')
+                        ctx.rcon_client.send_command(f'/ap-get-technology {item_name}\t{ctx.send_index}\t{player_name}')
                     ctx.send_index += 1
             await asyncio.sleep(0.1)
 
