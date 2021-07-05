@@ -531,8 +531,7 @@ class CollectionState(object):
         self.stale = {player: True for player in range(1, parent.players + 1)}
         for item in parent.precollected_items:
             self.collect(item, True)
-        # OoT objects
-        # remove these later
+        # OoT objects, remove these later
         self.child_reachable_regions = {player: set() for player in range(1, parent.players + 1)}
         self.adult_reachable_regions = {player: set() for player in range(1, parent.players + 1)}
         self.age = {player: None for player in range(1, parent.players + 1)}
@@ -579,6 +578,11 @@ class CollectionState(object):
         ret.events = copy.copy(self.events)
         ret.path = copy.copy(self.path)
         ret.locations_checked = copy.copy(self.locations_checked)
+        # OoT objects, remove these later
+        ret.child_reachable_regions = {player: copy.copy(self.child_reachable_regions[player]) for player in
+                                 range(1, self.world.players + 1)}
+        ret.adult_reachable_regions = {player: copy.copy(self.adult_reachable_regions[player]) for player in
+                                 range(1, self.world.players + 1)}
         return ret
 
     def can_reach(self, spot, resolution_hint=None, player=None) -> bool:
@@ -945,10 +949,10 @@ class CollectionState(object):
     def reach_as_age(self, regionname, age, player): 
         if self.age[player] is None: 
             # Check caches first
-            if age == 'child' and regionname in self.child_reachable_regions[player]: 
-                return True
-            elif age == 'adult' and regionname in self.adult_reachable_regions[player]: 
-                return True
+            # if age == 'child' and regionname in self.child_reachable_regions[player]: 
+            #     return True
+            # elif age == 'adult' and regionname in self.adult_reachable_regions[player]: 
+            #     return True
             self.age[player] = age
             can_reach = self.world.get_region(regionname, player).can_reach(self)
             self.age[player] = None
