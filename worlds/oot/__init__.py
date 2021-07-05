@@ -8,8 +8,8 @@ from .Location import OOTLocation, LocationFactory
 from .Entrance import OOTEntrance
 from .Items import item_table, ItemFactory, MakeEventItem
 from .ItemPool import generate_itempool
-from .Regions import TimeOfDay
-from .Rules import set_rules, set_shop_rules
+from .Regions import OOTRegion, TimeOfDay
+from .Rules import set_rules, set_shop_rules, set_age_rules
 from .RuleParser import Rule_AST_Transformer
 from .Options import oot_options
 from .Utils import data_path, read_json
@@ -18,6 +18,7 @@ from .DungeonList import dungeon_table, create_dungeons
 
 import Utils
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
+from Options import Range
 from ..AutoWorld import World
 
 
@@ -29,7 +30,8 @@ class OOTWorld(World):
         super(OOTWorld, self).__init__(world, player)
         self.parser = Rule_AST_Transformer(self, self.player)
         for (option_name, option) in oot_options.items(): 
-            setattr(self, option_name, getattr(self.world, option_name)[self.player].get_option_name())
+            result = getattr(self.world, option_name)[self.player]
+            setattr(self, option_name, int(result) if isinstance(result, Range) else result.get_option_name())
         self.dungeon_mq = {item['name']: False for item in dungeon_table}  # sets all dungeons to non-MQ for now; need this to not break things
         self.shop_prices = {}
         self.regions = []  # internal cache of regions for this world, used later
@@ -58,6 +60,8 @@ class OOTWorld(World):
             if 'locations' in region:
                 for location, rule in region['locations'].items():
                     new_location = LocationFactory(location, self.player)
+                    if new_location.type in ['HintStone', 'Hint']:
+                        continue
                     new_location.parent_region = new_region
                     new_location.rule_string = rule
                     if self.world.logic_rules != 'none':
@@ -72,7 +76,7 @@ class OOTWorld(World):
                 for event, rule in region['events'].items():
                     # Allow duplicate placement of events
                     lname = '%s from %s' % (event, new_region.name)
-                    new_location = OOTLocation(lname, type='Event', parent=new_region)
+                    new_location = OOTLocation(self.player, lname, type='Event', parent=new_region)
                     new_location.rule_string = rule
                     if self.world.logic_rules != 'none':
                         self.parser.parse_spot_rule(new_location)
@@ -94,6 +98,13 @@ class OOTWorld(World):
                         logging.getLogger('').debug('Dropping unreachable exit: %s', new_exit.name)
                     else:
                         new_region.exits.append(new_exit)
+            # Making child and adult access events. Rules for these are set after entrances are bound. 
+            # child_access_location = OOTLocation(self.player, name=f'Child Access: {new_region.name}', type='Event', parent=new_region)
+            # adult_access_location = OOTLocation(self.player, name=f'Adult Access: {new_region.name}', type='Event', parent=new_region)
+            # new_region.locations.extend([child_access_location, adult_access_location])
+            # MakeEventItem(self.world, self.player, f'Child Access: {new_region.name}', child_access_location)
+            # MakeEventItem(self.world, self.player, f'Adult Access: {new_region.name}', adult_access_location)
+
             self.world.regions.append(new_region)
             self.regions.append(new_region)
         self.world._recache()
@@ -173,6 +184,7 @@ class OOTWorld(World):
         overworld_data_path = data_path('World', 'Overworld.json')
         menu = OOTRegion('Menu', None, None, self.player)
         start = OOTEntrance(self.player, 'New Game', menu)
+        menu.exits.append(start)
         self.world.regions.append(menu)
         self.load_regions_from_json(overworld_data_path)
         start.connect(self.world.get_region('Root', self.player))
@@ -184,7 +196,7 @@ class OOTWorld(World):
         self.set_scrub_prices()
 
 
-    def set_rules(self):  # what does this even have to do?
+    def set_rules(self): 
         logger.info('Calculating Access Rules.')
         set_rules(self)
 
@@ -204,15 +216,12 @@ class OOTWorld(World):
             for exit in region.exits:
                 exit.connect(self.world.get_region(exit.connected_region, self.player))
 
+        # Bind rules for the child and adult events. Has to be done after entrances. 
+        # set_age_rules(self)
 
     def generate_output(self):  # ROM patching, cosmetics, etc. 
         logger.info('Patching ROM.') 
 
 
 
-class OOTRegion(Region): 
-    game: str = "Ocarina of Time"
-
-    def __init__(self, name: str, type, hint, player: int):
-        super(OOTRegion, self).__init__(name, type, hint, player)
 

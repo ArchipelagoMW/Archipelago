@@ -1,41 +1,44 @@
 import collections
 import logging
 from .Location import DisableType
-from SaveContext import SaveContext
+from .SaveContext import SaveContext
 # from Search import Search
-from BaseClasses import CollectionState as State
-from worlds.generic.Rules import set_rule, add_item_rule, forbid_item, item_in_locations
+from BaseClasses import CollectionState
+from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_item, item_in_locations
 
 
 def set_rules(ootworld):
+    logger = logging.getLogger('')
+
     world = ootworld.world
     player = ootworld.player
 
-    logger = logging.getLogger('')
+    if ootworld.logic_rules != 'no_logic': 
+        world.completion_condition[player] = lambda state: state.has('Triforce', player)
 
     # ganon can only carry triforce
-    world.get_location('Ganon', player).item_rule = lambda location, item: item.name == 'Triforce'
+    world.get_location('Ganon', player).item_rule = lambda item: item.name == 'Triforce'
 
-    guarantee_hint = ootworld.parser.parse_rule('guarantee_hint')
-    is_child = ootworld.parser.parse_rule('is_child')
+    # is_child = ootworld.parser.parse_rule('is_child')
+    # guarantee_hint = ootworld.parser.parse_rule('guarantee_hint')
 
     for location in world.get_locations():
-        if location.game != 'Ocarina of Time' and location.player != player: 
+        if location.player != player or location.game != 'Ocarina of Time': 
             continue
         if ootworld.shuffle_song_items == 'song':
             if location.type == 'Song':
                 # allow junk items, but songs must still have matching world
-                add_item_rule(location, lambda location, item: 
+                add_item_rule(location, lambda item: 
                     # ((location.world.distribution.song_as_items or world.starting_songs)
                     #     and item.type != 'Song')
                     (ootworld.starting_songs and item.type != 'Song')
-                    or (item.type == 'Song' and item.world.id == location.world.id))
+                    or (item.type == 'Song' and item.player == location.player))
             else:
-                add_item_rule(location, lambda location, item: item.type != 'Song')
+                add_item_rule(location, lambda item: item.type != 'Song')
 
         if location.type == 'Shop':
             if location.name in ootworld.shop_prices:
-                add_item_rule(location, lambda location, item: item.type != 'Shop')
+                add_item_rule(location, lambda item: item.type != 'Shop')
                 location.price = ootworld.shop_prices[location.name]
                 # If price was specified in plando, use it here so access rule is set correctly.
                 # if location.name in world.distribution.locations and world.distribution.locations[location.name].price is not None:
@@ -48,13 +51,13 @@ def set_rules(ootworld):
                 #         price = -32768
                 #     location.price = price
                 #     world.shop_prices[location.name] = price
-                location.add_rule(create_shop_rule(location, ootworld.parser))
+                add_rule(location, create_shop_rule(location, ootworld.parser))
             else:
-                add_item_rule(location, lambda location, item: item.type == 'Shop' and item.world.id == location.world.id)
+                add_item_rule(location, lambda item: item.type == 'Shop' and item.player == location.player)
         elif 'Deku Scrub' in location.name:
-            location.add_rule(create_shop_rule(location, ootworld.parser))
+            add_rule(location, create_shop_rule(location, ootworld.parser))
         else:
-            add_item_rule(location, lambda location, item: item.type != 'Shop')
+            add_item_rule(location, lambda item: item.type != 'Shop')
 
         if ootworld.skip_child_zelda and location.name == 'Song from Impa':
             limit_to_itemset(location, SaveContext.giveable_items)
@@ -63,11 +66,12 @@ def set_rules(ootworld):
             # This location needs to be a small key. Make sure the boss key isn't placed here.
             forbid_item(location, 'Boss Key (Forest Temple)')
 
-        if location.type == 'HintStone' and ootworld.hints == 'mask':
-            location.add_rule(is_child)
+        # TODO: re-add hints once they are working
+        # if location.type == 'HintStone' and ootworld.hints == 'mask':
+        #     location.add_rule(is_child)
 
-        if location.name in ootworld.always_hints:
-            location.add_rule(guarantee_hint)
+        # if location.name in ootworld.always_hints:
+            # location.add_rule(guarantee_hint)
 
     # Handle this properly in the AP fill
     # for location in world.disabled_locations:
@@ -91,7 +95,7 @@ def create_shop_rule(location, parser):
 
 def limit_to_itemset(location, itemset):
     old_rule = location.item_rule
-    location.item_rule = lambda loc, item: item.name in itemset and old_rule(loc, item)
+    location.item_rule = lambda item: item.name in itemset and old_rule(loc, item)
 
 
 # This function should be run once after the shop items are placed in the world.
@@ -104,9 +108,8 @@ def set_shop_rules(ootworld):
     found_bombchus = ootworld.parser.parse_rule('found_bombchus')
     wallet = ootworld.parser.parse_rule('Progressive_Wallet')
     wallet2 = ootworld.parser.parse_rule('(Progressive_Wallet, 2)')
-    is_adult = ootworld.parser.parse_rule('is_adult')
     for location in ootworld.world.get_filled_locations():
-        if location.game == 'Ocarina of Time' and location.item.type == 'Shop':
+        if location.player == ootworld.player and location.game == 'Ocarina of Time' and location.item.type == 'Shop':
             # Add wallet requirements
             if location.item.name in ['Buy Arrows (50)', 'Buy Fish', 'Buy Goron Tunic', 'Buy Bombchu (20)', 'Buy Bombs (30)']:
                 location.add_rule(wallet)
@@ -115,6 +118,8 @@ def set_shop_rules(ootworld):
 
             # Add adult only checks
             if location.item.name in ['Buy Goron Tunic', 'Buy Zora Tunic']:
+                ootworld.parser.current_spot = location
+                is_adult = ootworld.parser.parse_rule('is_adult')
                 location.add_rule(is_adult)
 
             # Add item prerequisite checks
@@ -128,7 +133,7 @@ def set_shop_rules(ootworld):
                                       'Buy Red Potion [40]',
                                       'Buy Red Potion [50]',
                                       'Buy Fairy\'s Spirit']:
-                location.add_rule(State.has_bottle_oot)
+                location.add_rule(CollectionState.has_bottle_oot)
             if location.item.name in ['Buy Bombchu (10)', 'Buy Bombchu (20)', 'Buy Bombchu (5)']:
                 location.add_rule(found_bombchus)
 
@@ -151,3 +156,55 @@ def set_entrances_based_rules(worlds):
                     if not search.can_reach(location.parent_region, age='adult'):
                         forbid_item(location, 'Buy Goron Tunic')
                         forbid_item(location, 'Buy Zora Tunic')
+
+# sets rules for the AP child and adult access events
+# the rule for each region's age-event is to be able to cross an entrance into it without having the wrong age's age-event on the other side
+# probably unused now
+def set_age_rules(ootworld): 
+    world = ootworld.world
+    player = ootworld.player
+
+    for region in ootworld.regions: 
+        if region.name == 'Menu': 
+            continue
+        child_access = world.get_location(f'Child Access: {region.name}', player)
+        set_rule(child_access, lambda state: False)
+        for entrance in region.entrances: 
+            add_rule(child_access, lambda state: cross_as_age(entrance, 'child', world, state, player), combine='or')
+        adult_access = world.get_location(f'Adult Access: {region.name}', player)
+        set_rule(adult_access, lambda state: False)
+        for entrance in region.entrances: 
+            add_rule(adult_access, lambda state: cross_as_age(entrance, 'adult', world, state, player), combine='or')
+
+    # The events at the Root are special. One is given for free and the other is locked by Time Travel. 
+    root_child = world.get_location('Child Access: Root', player)
+    root_adult = world.get_location('Adult Access: Root', player)
+    if ootworld.starting_age == 'child': 
+        set_rule(root_child, lambda state: True)
+        set_rule(root_adult, lambda state: state.has('Time Travel', player))
+    else: 
+        set_rule(root_adult, lambda state: True)
+        set_rule(root_child, lambda state: state.has('Time Travel', player))
+
+
+def cross_as_age(entrance, age: str, world, state: CollectionState, player: int): 
+    if age == 'child' and entrance in world.child_entrance_cache[player]: 
+        return True
+    if age == 'adult' and entrance in world.adult_entrance_cache[player]: 
+        return True
+
+    remove_access_age = 'Adult' if age == 'child' else 'Child'
+    event = (f"{remove_access_age} Access: {entrance.parent_region.name}", player)
+    temp = 0
+    if state.prog_items[event] > 0: # temporarily remove the wrong age's ability to traverse
+        temp = state.prog_items[event]
+        state.prog_items[event] = 0
+    can_cross = entrance.can_reach(state)
+    if temp: # fix the state
+        state.prog_items[event] = temp
+    if can_cross: 
+        if age == 'child': 
+            world.child_entrance_cache[player].add(entrance)
+        else: 
+            world.adult_entrance_cache[player].add(entrance)
+    return can_cross

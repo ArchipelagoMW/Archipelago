@@ -531,6 +531,11 @@ class CollectionState(object):
         self.stale = {player: True for player in range(1, parent.players + 1)}
         for item in parent.precollected_items:
             self.collect(item, True)
+        # OoT objects
+        # remove these later
+        self.child_reachable_regions = {player: set() for player in range(1, parent.players + 1)}
+        self.adult_reachable_regions = {player: set() for player in range(1, parent.players + 1)}
+        self.age = {player: None for player in range(1, parent.players + 1)}
 
     def update_reachable_regions(self, player: int):
         from worlds.alttp.EntranceShuffle import indirect_connections
@@ -905,10 +910,6 @@ class CollectionState(object):
 
     # OOT functions
     # move these into the oot world plugin later
-    stones = ["Kokiri Emerald", "Goron Ruby", "Zora Sapphire"]
-    medallions = ["Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion", "Shadow Medallion", "Spirit Medallion"]
-    oot_bottles = ["Bottle", "Bottle with Milk", "Deliver Letter", "Sell Big Poe", "Bottle with Red Potion", "Bottle with Green Potion", 
-    "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish", "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"]
 
     def has_any_of(self, items, player):
         return any([self.has(item, player) for item in items])
@@ -920,16 +921,44 @@ class CollectionState(object):
         return len(list(filter(lambda item: self.has(item, player), items)))
 
     def has_stones(self, count, player): 
+        stones = ["Kokiri Emerald", "Goron Ruby", "Zora Sapphire"]
         return self.count_of(stones, player) >= count
 
     def has_medallions(self, count, player): 
+        medallions = ["Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion", "Shadow Medallion", "Spirit Medallion"]
         return self.count_of(medallions, player) >= count
 
     def has_dungeon_rewards(self, count, player): 
+        stones = ["Kokiri Emerald", "Goron Ruby", "Zora Sapphire"]
+        medallions = ["Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion", "Shadow Medallion", "Spirit Medallion"]
         return self.count_of(stones + medallions, player) >= count
 
     def has_bottle_oot(self, player): 
+        oot_bottles = ["Bottle", "Bottle with Milk", "Deliver Letter", "Sell Big Poe", "Bottle with Red Potion", "Bottle with Green Potion", \
+            "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish", "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"]
         return self.has_any_of(oot_bottles, player)
+
+    # This function operates by assuming different behavior based on the "level of recursion", handled manually. 
+    # If it's called while self.age[player] is None, then it will set the age variable and then attempt to reach the region. 
+    # If self.age[player] is not None, then it will compare it to the 'age' parameter, and return True iff they are equal. 
+    #   This lets us fake the OOT accessibility check that cares about age. Unfortunately it's still tied to the ground region. 
+    def reach_as_age(self, regionname, age, player): 
+        if self.age[player] is None: 
+            # Check caches first
+            if age == 'child' and regionname in self.child_reachable_regions[player]: 
+                return True
+            elif age == 'adult' and regionname in self.adult_reachable_regions[player]: 
+                return True
+            self.age[player] = age
+            can_reach = self.world.get_region(regionname, player).can_reach(self)
+            self.age[player] = None
+            if can_reach: 
+                if age == 'child': 
+                    self.child_reachable_regions[player].add(regionname)
+                elif age == 'adult': 
+                    self.adult_reachable_regions[player].add(regionname)
+            return can_reach
+        return self.age[player] == age
 
 
     def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:

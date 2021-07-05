@@ -187,6 +187,13 @@ timesavers_options: typing.Dict[str, type(Option)] = {
     "big_poe_count": BigPoes, 
 }
 
+class Hints(Choice): 
+    option_none = 0
+    option_mask = 1
+    option_agony = 2
+    option_always = 3
+    default = 3
+
 class DamageMultiplier(Choice): 
     option_half = 0
     option_normal = 1
@@ -196,6 +203,7 @@ class DamageMultiplier(Choice):
     default = 1
 
 misc_options: typing.Dict[str, type(Option)] = {
+    "hints": Hints,
     "damage_multiplier": DamageMultiplier,
 }
 

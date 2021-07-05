@@ -6,7 +6,7 @@ import re
 
 from .Items import MakeEventItem, item_table
 from .Location import OOTLocation
-from .Regions import TimeOfDay
+from .Regions import TimeOfDay, OOTRegion
 from BaseClasses import CollectionState as State
 from .Utils import data_path, read_json
 
@@ -471,3 +471,14 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             spot.never = True
         elif access_rule is self.rule_cache.get('NameConstant(True)'):
             spot.always = True
+
+    # Hijacking functions
+    # def current_spot_age_access(self, node): 
+    #     r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
+    #     return ast.parse(f"lambda age: state.has('Child Access: {r.name}') if age == 'child' else state.has('Adult Access: {r.name}')", mode='eval').body
+    def current_spot_age_access(self, node): 
+        r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
+        return ast.parse(f"lambda age: state.reach_as_age('{r.name}', age, {self.player})", mode='eval').body
+
+    def has_bottle(self, node): 
+        return ast.parse(f"state.has_bottle_oot({self.player})", mode='eval').body
