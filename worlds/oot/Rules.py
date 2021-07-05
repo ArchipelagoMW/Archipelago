@@ -23,18 +23,18 @@ def set_rules(ootworld):
     # guarantee_hint = ootworld.parser.parse_rule('guarantee_hint')
 
     for location in world.get_locations():
-        if location.player != player or location.game != 'Ocarina of Time': 
+        if location.player != player: 
             continue
-        if ootworld.shuffle_song_items == 'song':
-            if location.type == 'Song':
-                # allow junk items, but songs must still have matching world
-                add_item_rule(location, lambda item: 
-                    # ((location.world.distribution.song_as_items or world.starting_songs)
-                    #     and item.type != 'Song')
-                    (ootworld.starting_songs and item.type != 'Song')
-                    or (item.type == 'Song' and item.player == location.player))
-            else:
-                add_item_rule(location, lambda item: item.type != 'Song')
+        # if ootworld.shuffle_song_items == 'song':
+        #     if location.type == 'Song':
+        #         # allow junk items, but songs must still have matching world
+        #         add_item_rule(location, lambda item: 
+        #             # ((location.world.distribution.song_as_items or world.starting_songs)
+        #             #     and item.type != 'Song')
+        #             (ootworld.starting_songs and item.type != 'Song')
+        #             or (item.type == 'Song' and item.player == location.player))
+        #     else:
+        #         add_item_rule(location, lambda item: item.type != 'Song')
 
         if location.type == 'Shop':
             if location.name in ootworld.shop_prices:
@@ -109,18 +109,17 @@ def set_shop_rules(ootworld):
     wallet = ootworld.parser.parse_rule('Progressive_Wallet')
     wallet2 = ootworld.parser.parse_rule('(Progressive_Wallet, 2)')
     for location in ootworld.world.get_filled_locations():
-        if location.player == ootworld.player and location.game == 'Ocarina of Time' and location.item.type == 'Shop':
+        if location.player == ootworld.player and location.item.type == 'Shop':
             # Add wallet requirements
             if location.item.name in ['Buy Arrows (50)', 'Buy Fish', 'Buy Goron Tunic', 'Buy Bombchu (20)', 'Buy Bombs (30)']:
-                location.add_rule(wallet)
+                add_rule(location, wallet)
             elif location.item.name in ['Buy Zora Tunic', 'Buy Blue Fire']:
-                location.add_rule(wallet2)
+                add_rule(location, wallet2)
 
             # Add adult only checks
             if location.item.name in ['Buy Goron Tunic', 'Buy Zora Tunic']:
-                ootworld.parser.current_spot = location
-                is_adult = ootworld.parser.parse_rule('is_adult')
-                location.add_rule(is_adult)
+                is_adult = ootworld.parser.parse_rule('is_adult', location)
+                add_rule(location, is_adult)
 
             # Add item prerequisite checks
             if location.item.name in ['Buy Blue Fire',
@@ -133,9 +132,9 @@ def set_shop_rules(ootworld):
                                       'Buy Red Potion [40]',
                                       'Buy Red Potion [50]',
                                       'Buy Fairy\'s Spirit']:
-                location.add_rule(CollectionState.has_bottle_oot)
+                add_rule(location, lambda state: CollectionState.has_bottle_oot(state, ootworld.player))
             if location.item.name in ['Buy Bombchu (10)', 'Buy Bombchu (20)', 'Buy Bombchu (5)']:
-                location.add_rule(found_bombchus)
+                add_rule(location, found_bombchus)
 
 
 # This function should be ran once after setting up entrances and before placing items

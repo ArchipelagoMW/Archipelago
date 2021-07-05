@@ -3,6 +3,8 @@ from BaseClasses import Entrance
 from .Regions import TimeOfDay
 
 class OOTEntrance(Entrance): 
+    game: str = 'Ocarina of Time'
+
     def __init__(self, player, name='', parent=None): 
         super(OOTEntrance, self).__init__(player, name, parent)
         self.access_rules = []

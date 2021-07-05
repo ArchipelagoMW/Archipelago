@@ -9,6 +9,8 @@ class DisableType(Enum):
     DISABLED = 2
 
 class OOTLocation(Location): 
+    game: str = 'Ocarina of Time'
+
     def __init__(self, player, name='', address=None, address2=None, default=None, type='Chest', scene=None, parent=None, filter_tags=None, internal=False):
         super(OOTLocation, self).__init__(player, name, address, parent)
         self.address2 = address2
@@ -21,6 +23,9 @@ class OOTLocation(Location):
         else: 
             self.filter_tags = list(filter_tags)
         self.never = False # no idea what this does
+
+        if type == 'Event': 
+            self.event = True
 
 
 def LocationFactory(locations, player: int):

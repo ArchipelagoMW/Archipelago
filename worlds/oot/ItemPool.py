@@ -772,6 +772,7 @@ def generate_itempool(ootworld):
         location = world.get_location(location_name, player)
         world.push_item(location, ItemFactory(item, player), collect=False)
         location.locked = True
+        location.event = True  # make sure it's checked during fill
 
     # world.initialize_items()
     # world.distribution.set_complete_itempool(world.itempool)

@@ -19,6 +19,7 @@ from .DungeonList import dungeon_table, create_dungeons
 import Utils
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
 from Options import Range
+from Fill import fill_restrictive
 from ..AutoWorld import World
 
 
@@ -177,6 +178,8 @@ class OOTWorld(World):
             item = prizepool.pop()
             loc = prize_locs.pop()
             self.world.push_item(loc, item, collect=False)
+            loc.locked = True
+            loc.event = True
 
 
     def create_regions(self):  # build_world_graphs
@@ -202,13 +205,7 @@ class OOTWorld(World):
 
 
     def generate_basic(self):  # link entrances, generate item pools, place fixed items
-        logger.info('Generating Item Pool.')
-        generate_itempool(self)
-        self.world.itempool += self.itempool
-        set_shop_rules(self)
-        set_drop_location_names(self.world)
-        self.fill_bosses()
-
+        # hopefully switching the order of these blocks doesn't matter
         logger.info('Setting Entrances.')
         # set_entrances(self)
         # Enforce vanilla for now
@@ -216,8 +213,65 @@ class OOTWorld(World):
             for exit in region.exits:
                 exit.connect(self.world.get_region(exit.connected_region, self.player))
 
+        logger.info('Generating Item Pool.')
+        generate_itempool(self)
+        self.world.itempool += self.itempool
+        set_shop_rules(self)
+        set_drop_location_names(self.world)
+        self.fill_bosses()
+
         # Bind rules for the child and adult events. Has to be done after entrances. 
         # set_age_rules(self)
+
+        logger.info('Placing Dungeon Items.')
+
+        if self.shuffle_song_items != 'any': 
+            logger.info('Placing Songs.')
+            song_location_names = [
+                'Song from Composers Grave', 'Song from Impa', 'Song from Malon', 'Song from Saria',
+                'Song from Ocarina of Time', 'Song from Windmill', 'Sheik in Forest', 'Sheik at Temple',
+                'Sheik in Crater', 'Sheik in Ice Cavern', 'Sheik in Kakariko', 'Sheik at Colossus']
+            song_locations = list(filter(lambda location: location.type == 'Song', self.world.get_unfilled_locations(player=self.player)))
+            songs = list(filter(lambda item: item.player == self.player and item.type == 'Song', self.world.itempool))
+            random.shuffle(songs)
+            random.shuffle(song_locations)
+            for song in songs: 
+                self.world.itempool.remove(song)
+            base_state = self.world.get_all_state()
+            fill_restrictive(self.world, base_state, song_locations, songs, True, True)
+
+            # We have to also collect medallions/stones, so this is important. 
+            # def gather_items(state): 
+            #     filled_locs = self.world.get_filled_locations(self.player)
+            #     to_collect = list(filter(lambda loc: loc.can_reach(state), filled_locs))
+            #     while to_collect: 
+            #         for loc in to_collect: 
+            #             state.collect(loc.item, loc.event, loc)
+            #             filled_locs.remove(loc)
+            #         to_collect = list(filter(lambda loc: loc.can_reach(state), filled_locs))
+
+            # placements = []
+            # while songs and song_locations: 
+            #     item_to_place = songs.pop()
+            #     random.shuffle(song_locations)
+            #     state = base_state.copy()
+            #     for song in songs: 
+            #         state.collect(song)
+            #     gather_items(state)
+            #     for i, loc in enumerate(song_locations): 
+            #         if loc.can_fill(state, item_to_place):
+            #             spot_to_fill = song_locations.pop(i)
+            #             break
+            #     if not spot_to_fill: 
+            #         raise FillError(f'No more spots to place {item_to_place}, locations {song_locations} are invalid. '
+            #             f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
+            #     self.world.push_item(spot_to_fill, item_to_place, collect=False)
+            #     spot_to_fill.locked = True
+            #     placements.append(spot_to_fill)
+            # for loc in placements: 
+            #     logger.info(f'{loc}: {loc.item}')
+
+            
 
     def generate_output(self):  # ROM patching, cosmetics, etc. 
         logger.info('Patching ROM.') 

@@ -158,7 +158,7 @@ class ShuffleGanonBK(Choice):
     option_dungeon = 3
     option_keysanity = 6
     option_on_lacs = 7
-    default = 3
+    default = 0
 
 dungeon_items_options: typing.Dict[str, type(Option)] = {
     "shuffle_mapcompass": ShuffleMapCompass, 
