@@ -13,8 +13,8 @@
     {
         "region_name": "Root Exits",
         "exits": {
-            "Child Spawn": "is_child",
-            "Adult Spawn": "is_adult",
+            "Child Spawn": "starting_age == 'child' or Time_Travel",
+            "Adult Spawn": "starting_age == 'adult' or Time_Travel",
             "Prelude of Light Warp": "can_play(Prelude_of_Light) and can_leave_forest",
             "Minuet of Forest Warp": "can_play(Minuet_of_Forest)",
             "Bolero of Fire Warp": "can_play(Bolero_of_Fire) and can_leave_forest",
