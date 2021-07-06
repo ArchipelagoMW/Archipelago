@@ -91,7 +91,9 @@ table.insert(new_tree_copy.prerequisites, "ap-{{ tech_table[prerequesite] }}-")
 data:extend{new_tree_copy}
 {% endfor %}
 {% if recipe_time_scale %}
-{%- for recipe in recipes %}
-adjust_energy("{{ recipe }}", {{ random.triangular(*recipe_time_scale) }})
+{%- for recipe_name, recipe in recipes.items() %}
+{%- if recipe.category != "mining" %}
+adjust_energy("{{ recipe_name }}", {{ random.triangular(*recipe_time_scale) }})
+{%- endif %}
 {%- endfor -%}
 {% endif %}
