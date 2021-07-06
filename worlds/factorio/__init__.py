@@ -13,11 +13,6 @@ class Factorio(World):
     static_nodes = {"automation", "logistics", "rocket-silo"}
 
     def generate_basic(self):
-        victory_tech_names = get_rocket_requirements(
-            frozenset(rocket_recipes[self.world.max_science_pack[self.player].value]))
-
-
-
         for tech_name, tech_id in base_tech_table.items():
             if self.world.progressive and tech_name in tech_to_progressive_lookup:
                 item_name = tech_to_progressive_lookup[tech_name]

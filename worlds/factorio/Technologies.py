@@ -77,7 +77,12 @@ class CustomTechnology(Technology):
 
 
 class Recipe(FactorioElement):
-    def __init__(self, name, category, ingredients, products):
+    name: str
+    category: str
+    ingredients: Dict[str, int]
+    products: Dict[str, int]
+
+    def __init__(self, name: str, category: str, ingredients: Dict[str, int], products: Dict[str, int]):
         self.name = name
         self.category = category
         self.ingredients = ingredients
@@ -122,14 +127,17 @@ del (raw)
 
 recipes = {}
 all_product_sources: Dict[str, Set[Recipe]] = {"character": set()}
+# add uranium mining to logic graph. TODO: add to automatic extractor for mod support
+raw_recipes["uranium-ore"] = {"ingredients": {"sulfuric-acid", 1}, "products": {"uranium-ore", 1}, "category": "mining"}
+
 for recipe_name, recipe_data in raw_recipes.items():
     # example:
-    # "accumulator":{"ingredients":["iron-plate","battery"],"products":["accumulator"],"category":"crafting"}
+    # "accumulator":{"ingredients":{"iron-plate":2,"battery":5},"products":{"accumulator":1},"category":"crafting"}
 
-    recipe = Recipe(recipe_name, recipe_data["category"], set(recipe_data["ingredients"]), set(recipe_data["products"]))
+    recipe = Recipe(recipe_name, recipe_data["category"], recipe_data["ingredients"], recipe_data["products"])
     recipes[recipe_name] = Recipe
-    if recipe.products.isdisjoint(
-            recipe.ingredients) and "empty-barrel" not in recipe.products:  # prevents loop recipes like uranium centrifuging
+    if set(recipe.products).isdisjoint(
+            set(recipe.ingredients)) and "empty-barrel" not in recipe.products:  # prevents loop recipes like uranium centrifuging
         for product_name in recipe.products:
             all_product_sources.setdefault(product_name, set()).add(recipe)
 
@@ -141,6 +149,8 @@ for name, categories in raw_machines.items():
     machine = Machine(name, set(categories))
     machines[name] = machine
 
+# add electric mining drill as a crafting machine to resolve uranium-ore
+machines["electric-mining-drill"] = Machine("electric-mining-drill", {"mining"})
 del (raw_machines)
 
 # build requirements graph for all technology ingredients
