@@ -476,9 +476,19 @@ class Rule_AST_Transformer(ast.NodeTransformer):
     # def current_spot_age_access(self, node): 
     #     r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
     #     return ast.parse(f"lambda age: state.has('Child Access: {r.name}') if age == 'child' else state.has('Adult Access: {r.name}')", mode='eval').body
-    def current_spot_age_access(self, node): 
+    # def current_spot_age_access(self, node): 
+    #     r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
+    #     return ast.parse(f"lambda age: state.reach_as_age('{r.name}', age, {self.player})", mode='eval').body
+    def current_spot_child_access(self, node): 
         r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
-        return ast.parse(f"lambda age: state.reach_as_age('{r.name}', age, {self.player})", mode='eval').body
+        return ast.parse(f"state.reach_as_age('{r.name}', 'child', {self.player})", mode='eval').body
+
+    def current_spot_adult_access(self, node): 
+        r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
+        return ast.parse(f"state.reach_as_age('{r.name}', 'adult', {self.player})", mode='eval').body
+
+    def current_spot_starting_age_access(self, node): 
+        return self.current_spot_child_access(node) if self.world.starting_age == 'child' else self.current_spot_adult_access(node)
 
     def has_bottle(self, node): 
         return ast.parse(f"state.has_bottle_oot({self.player})", mode='eval').body

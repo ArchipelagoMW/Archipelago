@@ -220,9 +220,6 @@ class OOTWorld(World):
         set_drop_location_names(self.world)
         self.fill_bosses()
 
-        # Bind rules for the child and adult events. Has to be done after entrances. 
-        # set_age_rules(self)
-
         logger.info('Placing Dungeon Items.')
 
         if self.shuffle_song_items != 'any': 

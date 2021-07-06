@@ -42,8 +42,6 @@ class OOTRegion(Region):
         self.scene = None
         self.dungeon = None
 
-    # def copy(self, new_world): # don't know if I need this
-
     def get_scene(self): 
         if self.scene: 
             return self.scene
@@ -51,4 +49,16 @@ class OOTRegion(Region):
             return self.dungeon.name
         else: 
             return None
+
+    def can_reach(self, state):
+        if state.stale[self.player]:
+            stored_age = state.age[self.player]
+            state.update_age_reachable_regions(self.player)
+            state.age[self.player] = stored_age
+        if state.age[self.player] == 'child': 
+            return self in state.child_reachable_regions[self.player]
+        elif state.age[self.player] == 'adult': 
+            return self in state.adult_reachable_regions[self.player]
+        else: # we don't care about age
+            return self in state.child_reachable_regions[self.player] or self in state.adult_reachable_regions[self.player]
 
