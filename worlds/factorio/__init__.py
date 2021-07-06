@@ -25,7 +25,7 @@ class Factorio(World):
             else:
                 item_name = tech_name
 
-            tech_item = Item(item_name, item_name in advancement_technologies or item_name in victory_tech_names,
+            tech_item = Item(item_name, item_name in advancement_technologies,
                              tech_id, self.player)
             tech_item.game = "Factorio"
             if tech_name in self.static_nodes:

@@ -256,6 +256,9 @@ rocket_recipes = {
     Options.MaxSciencePack.option_automation_science_pack:
         {"copper-cable": 10, "iron-plate": 10, "wood": 10}
 }
+for products in rocket_recipes.values():
+    requirements = get_rocket_requirements(frozenset(products))
+    advancement_technologies |= requirements
 
 # progressive technologies
 # auto-progressive
