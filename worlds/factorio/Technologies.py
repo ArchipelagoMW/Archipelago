@@ -128,14 +128,14 @@ del (raw)
 recipes = {}
 all_product_sources: Dict[str, Set[Recipe]] = {"character": set()}
 # add uranium mining to logic graph. TODO: add to automatic extractor for mod support
-raw_recipes["uranium-ore"] = {"ingredients": {"sulfuric-acid", 1}, "products": {"uranium-ore", 1}, "category": "mining"}
+raw_recipes["uranium-ore"] = {"ingredients": {"sulfuric-acid": 1}, "products": {"uranium-ore": 1}, "category": "mining"}
 
 for recipe_name, recipe_data in raw_recipes.items():
     # example:
     # "accumulator":{"ingredients":{"iron-plate":2,"battery":5},"products":{"accumulator":1},"category":"crafting"}
 
     recipe = Recipe(recipe_name, recipe_data["category"], recipe_data["ingredients"], recipe_data["products"])
-    recipes[recipe_name] = Recipe
+    recipes[recipe_name] = recipe
     if set(recipe.products).isdisjoint(
             set(recipe.ingredients)) and "empty-barrel" not in recipe.products:  # prevents loop recipes like uranium centrifuging
         for product_name in recipe.products:
