@@ -131,10 +131,6 @@ else:
     file = z3pr.__file__
     installfile(Path(os.path.dirname(file)) / "data", keep_content=True)
 
-SNIlog = buildfolder / "SNI" / "log.txt"
-if os.path.exists(SNIlog):
-    os.remove(SNIlog)
-
 if signtool:
     for exe in exes:
         print(f"Signing {exe.target_name}")
