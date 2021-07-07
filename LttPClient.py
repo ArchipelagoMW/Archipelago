@@ -414,7 +414,7 @@ def launch_sni(ctx: Context):
         sni_path = Utils.local_path(sni_path)
     if os.path.isdir(sni_path):
         for file in os.listdir(sni_path):
-            if file.startswith("sni-v"):
+            if file.startswith("sni.") and not file.endswith(".proto"):
                 sni_path = os.path.join(sni_path, file)
 
     if os.path.isfile(sni_path):
