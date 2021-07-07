@@ -84,9 +84,11 @@ class Progressive(Choice):
     def want_progressives(self, random):
         return random.choice([True, False]) if self.value == self.option_random else int(self.value)
 
+
 class RecipeIngredients(Choice):
     option_rocket = 0
     option_science_pack = 1
+
 
 class FactorioStartItems(OptionDict):
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
