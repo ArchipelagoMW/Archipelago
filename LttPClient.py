@@ -68,7 +68,6 @@ class Context(CommonContext):
         self.snes_reconnect_address = None
         self.snes_recv_queue = asyncio.Queue()
         self.snes_request_lock = asyncio.Lock()
-        self.is_sd2snes = False
         self.snes_write_buffer = []
 
         self.awaiting_rom = False
@@ -408,26 +407,30 @@ class SNESState(enum.IntEnum):
     SNES_ATTACHED = 3
 
 
-def launch_qusb2snes(ctx: Context):
-    qusb2snes_path = Utils.get_options()["lttp_options"]["qusb2snes"]
+def launch_sni(ctx: Context):
+    sni_path = Utils.get_options()["lttp_options"]["sni"]
 
-    if not os.path.isfile(qusb2snes_path):
-        qusb2snes_path = Utils.local_path(qusb2snes_path)
+    if not os.path.isdir(sni_path):
+        sni_path = Utils.local_path(sni_path)
+    if os.path.isdir(sni_path):
+        for file in os.listdir(sni_path):
+            if file.startswith("sni-v"):
+                sni_path = os.path.join(sni_path, file)
 
-    if os.path.isfile(qusb2snes_path):
-        logger.info(f"Attempting to start {qusb2snes_path}")
+    if os.path.isfile(sni_path):
+        logger.info(f"Attempting to start {sni_path}")
         import subprocess
-        subprocess.Popen(qusb2snes_path, cwd=os.path.dirname(qusb2snes_path))
+        subprocess.Popen(sni_path, cwd=os.path.dirname(sni_path), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     else:
         logger.info(
-            f"Attempt to start (Q)Usb2Snes was aborted as path {qusb2snes_path} was not found, "
+            f"Attempt to start SNI was aborted as path {sni_path} was not found, "
             f"please start it yourself if it is not running")
 
 
 async def _snes_connect(ctx: Context, address: str):
     address = f"ws://{address}" if "://" not in address else address
 
-    logger.info("Connecting to QUsb2snes at %s ..." % address)
+    logger.info("Connecting to SNI at %s ..." % address)
     seen_problems = set()
     succesful = False
     while not succesful:
@@ -439,11 +442,11 @@ async def _snes_connect(ctx: Context, address: str):
             # only tell the user about new problems, otherwise silently lay in wait for a working connection
             if problem not in seen_problems:
                 seen_problems.add(problem)
-                logger.error(f"Error connecting to QUsb2snes ({problem})")
+                logger.error(f"Error connecting to SNI ({problem})")
 
                 if len(seen_problems) == 1:
-                    # this is the first problem. Let's try launching QUsb2snes if it isn't already running
-                    launch_qusb2snes(ctx)
+                    # this is the first problem. Let's try launching SNI if it isn't already running
+                    launch_sni(ctx)
 
             await asyncio.sleep(1)
         else:
@@ -462,7 +465,7 @@ async def get_snes_devices(ctx: Context):
     devices = reply['Results'] if 'Results' in reply and len(reply['Results']) > 0 else None
 
     if not devices:
-        logger.info('No SNES device found. Ensure QUsb2Snes is running and connect it to the multibridge.')
+        logger.info('No SNES device found. Please connect a SNES device to SNI.')
         while not devices:
             await asyncio.sleep(1)
             await socket.send(dumps(DeviceList_Request))
@@ -510,17 +513,6 @@ async def snes_connect(ctx: Context, address):
         await ctx.snes_socket.send(dumps(Attach_Request))
         ctx.snes_state = SNESState.SNES_ATTACHED
         ctx.snes_attached_device = (devices.index(device), device)
-
-        if 'sd2snes' in device.lower() or 'COM' in device:
-            logger.info("SD2SNES/FXPAK Detected")
-            ctx.is_sd2snes = True
-            await ctx.snes_socket.send(dumps({"Opcode": "Info", "Space": "SNES"}))
-            reply = loads(await ctx.snes_socket.recv())
-            if reply and 'Results' in reply:
-                logger.info(reply['Results'])
-        else:
-            ctx.is_sd2snes = False
-
         ctx.snes_reconnect_address = address
         recv_task = asyncio.create_task(snes_recv_loop(ctx))
         SNES_RECONNECT_DELAY = ctx.starting_reconnect_delay
@@ -614,8 +606,7 @@ async def snes_read(ctx: Context, address, size):
             logger.error('Error reading %s, requested %d bytes, received %d' % (hex(address), size, len(data)))
             if len(data):
                 logger.error(str(data))
-                logger.warning('Unable to connect to SNES Device because QUsb2Snes broke temporarily.'
-                               'Try un-selecting and re-selecting the SNES Device.')
+                logger.warning('Communication Failure with SNI')
             if ctx.snes_socket is not None and not ctx.snes_socket.closed:
                 await ctx.snes_socket.close()
             return None
@@ -634,45 +625,16 @@ async def snes_write(ctx: Context, write_list):
             return False
 
         PutAddress_Request = {"Opcode": "PutAddress", "Operands": [], 'Space': 'SNES'}
-
-        if ctx.is_sd2snes:
-            cmd = b'\x00\xE2\x20\x48\xEB\x48'
-
+        try:
             for address, data in write_list:
-                if (address < WRAM_START) or ((address + len(data)) > (WRAM_START + WRAM_SIZE)):
-                    logger.error("SD2SNES: Write out of range %s (%d)" % (hex(address), len(data)))
-                    return False
-                for ptr, byte in enumerate(data, address + 0x7E0000 - WRAM_START):
-                    cmd += b'\xA9'  # LDA
-                    cmd += bytes([byte])
-                    cmd += b'\x8F'  # STA.l
-                    cmd += bytes([ptr & 0xFF, (ptr >> 8) & 0xFF, (ptr >> 16) & 0xFF])
-
-            cmd += b'\xA9\x00\x8F\x00\x2C\x00\x68\xEB\x68\x28\x6C\xEA\xFF\x08'
-
-            PutAddress_Request['Space'] = 'CMD'
-            PutAddress_Request['Operands'] = ["2C00", hex(len(cmd) - 1)[2:], "2C00", "1"]
-            try:
+                PutAddress_Request['Operands'] = [hex(address)[2:], hex(len(data))[2:]]
                 if ctx.snes_socket is not None:
                     await ctx.snes_socket.send(dumps(PutAddress_Request))
-                    await ctx.snes_socket.send(cmd)
+                    await ctx.snes_socket.send(data)
                 else:
-                    logger.warning(f"Could not send data to SNES: {cmd}")
-            except websockets.ConnectionClosed:
-                return False
-        else:
-            PutAddress_Request['Space'] = 'SNES'
-            try:
-                # will pack those requests as soon as qusb2snes actually supports that for real
-                for address, data in write_list:
-                    PutAddress_Request['Operands'] = [hex(address)[2:], hex(len(data))[2:]]
-                    if ctx.snes_socket is not None:
-                        await ctx.snes_socket.send(dumps(PutAddress_Request))
-                        await ctx.snes_socket.send(data)
-                    else:
-                        logger.warning(f"Could not send data to SNES: {data}")
-            except websockets.ConnectionClosed:
-                return False
+                    logger.warning(f"Could not send data to SNES: {data}")
+        except websockets.ConnectionClosed:
+            return False
 
         return True
     finally:
@@ -887,7 +849,7 @@ async def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a Archipelago Binary Patch file')
-    parser.add_argument('--snes', default='localhost:8080', help='Address of the QUsb2snes server.')
+    parser.add_argument('--snes', default='localhost:8080', help='Address of the SNI server.')
     parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
     parser.add_argument('--password', default=None, help='Password of the multiworld host.')
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])

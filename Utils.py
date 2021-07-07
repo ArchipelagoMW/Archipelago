@@ -174,7 +174,7 @@ def get_default_options() -> dict:
             },
             "lttp_options": {
                 "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
-                "qusb2snes": "QUsb2Snes\\QUsb2Snes.exe",
+                "sni": "SNI",
                 "rom_start": True,
 
             },
