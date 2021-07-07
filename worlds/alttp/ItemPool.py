@@ -9,7 +9,6 @@ from worlds.alttp.Dungeons import get_dungeon_item_pool
 from worlds.alttp.EntranceShuffle import connect_entrance
 from Fill import FillError, fill_restrictive
 from worlds.alttp.Items import ItemFactory, GetBeemizerItem
-from worlds.generic.Rules import forbid_items_for_player
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 # Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
@@ -349,9 +348,7 @@ def generate_itempool(world, player: int):
             world.escape_assist[player].append('bombs')
 
     for (location, item) in placed_items.items():
-        world.push_item(world.get_location(location, player), ItemFactory(item, player), False)
-        world.get_location(location, player).event = True
-        world.get_location(location, player).locked = True
+        world.get_location(location, player).place_locked_item(ItemFactory(item, player))
 
     items = ItemFactory(pool, player)
 

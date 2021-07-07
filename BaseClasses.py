@@ -1492,6 +1492,12 @@ class Spoiler(object):
                 for dungeon, medallion in self.medallions.items():
                     outfile.write(f'\n{dungeon}: {medallion}')
 
+            if self.world.factorio_player_ids:
+                outfile.write('\n\nRecipes:\n')
+                for player in self.world.factorio_player_ids:
+                    for recipe in self.world.worlds[player].custom_recipes.values():
+                        outfile.write(f"{recipe.name}: {recipe.ingredients} -> {recipe.products}\n")
+
             if self.startinventory:
                 outfile.write('\n\nStarting Inventory:\n\n')
                 outfile.write('\n'.join(self.startinventory))

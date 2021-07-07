@@ -70,6 +70,9 @@ Factorio:
     normal: 0 # 50 % to 200% of original time
     slow: 0 # 100% to 400% of original time
     chaos: 0 # 25% to 400% of original time
+  recipe_ingredients:
+    rocket: 1 # only randomize rocket part recipe
+    science_packs: 1 # also randomize science pack ingredients
   max_science_pack:
     automation_science_pack: 0
     logistic_science_pack: 0

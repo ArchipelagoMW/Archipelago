@@ -1,9 +1,10 @@
 from ..AutoWorld import World
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item
+from BaseClasses import Region, Entrance, Location, Item
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, advancement_technologies, \
     all_ingredient_names, required_technologies, get_rocket_requirements, rocket_recipes, \
-    progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table
+    progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
+    science_pack_pools, Recipe, recipes, technology_table
 from .Shapes import get_shapes
 from .Mod import generate_mod
 from .Options import factorio_options
@@ -11,6 +12,8 @@ from .Options import factorio_options
 class Factorio(World):
     game: str = "Factorio"
     static_nodes = {"automation", "logistics", "rocket-silo"}
+    custom_recipes = {}
+    additional_advancement_technologies = set()
 
     def generate_basic(self):
         for tech_name, tech_id in base_tech_table.items():
@@ -20,7 +23,8 @@ class Factorio(World):
             else:
                 item_name = tech_name
 
-            tech_item = Item(item_name, item_name in advancement_technologies,
+            tech_item = Item(item_name, item_name in advancement_technologies or
+                             item_name in self.additional_advancement_technologies,
                              tech_id, self.player)
             tech_item.game = "Factorio"
             if tech_name in self.static_nodes:
@@ -28,11 +32,10 @@ class Factorio(World):
             else:
                 self.world.itempool.append(tech_item)
         world_gen = self.world.world_gen[self.player].value
-        if world_gen.get("seed", None) is None: # allow seed 0
+        if world_gen.get("seed", None) is None:  # allow seed 0
             world_gen["seed"] = self.world.slot_seeds[self.player].randint(0, 2**32-1)  # 32 bit uint
 
-    def generate_output(self):
-        generate_mod(self.world, self.player)
+    generate_output = generate_mod
 
     def create_regions(self):
         player = self.player
@@ -48,11 +51,14 @@ class Factorio(World):
             tech.game = "Factorio"
         location = Location(player, "Rocket Launch", None, nauvis)
         nauvis.locations.append(location)
+        location.game = "Factorio"
         event = Item("Victory", True, None, player)
+        event.game = "Factorio"
         self.world.push_item(location, event, False)
         location.event = location.locked = True
         for ingredient in self.world.max_science_pack[self.player].get_allowed_packs():
             location = Location(player, f"Automate {ingredient}", None, nauvis)
+            location.game = "Factorio"
             nauvis.locations.append(location)
             event = Item(f"Automated {ingredient}", True, None, player)
             self.world.push_item(location, event, False)
@@ -63,14 +69,25 @@ class Factorio(World):
     def set_rules(self):
         world = self.world
         player = self.player
-        self.custom_technologies = set_custom_technologies(self.world, self.player)
+        self.custom_technologies = self.set_custom_technologies()
+        self.set_custom_recipes()
         shapes = get_shapes(self)
         if world.logic[player] != 'nologic':
             from worlds.generic import Rules
             for ingredient in self.world.max_science_pack[self.player].get_allowed_packs():
                 location = world.get_location(f"Automate {ingredient}", player)
-                location.access_rule = lambda state, ingredient=ingredient: \
-                    all(state.has(technology.name, player) for technology in required_technologies[ingredient])
+
+                if self.world.recipe_ingredients[self.player]:
+                    custom_recipe = self.custom_recipes[ingredient]
+
+                    location.access_rule = lambda state, ingredient=ingredient, custom_recipe = custom_recipe: \
+                        (ingredient not in technology_table or state.has(ingredient, player)) and \
+                        all(state.has(technology.name, player) for sub_ingredient in custom_recipe.ingredients
+                            for technology in required_technologies[sub_ingredient])
+                else:
+                    location.access_rule = lambda state, ingredient=ingredient: \
+                        all(state.has(technology.name, player) for technology in required_technologies[ingredient])
+
             for tech_name, technology in self.custom_technologies.items():
                 location = world.get_location(tech_name, player)
                 Rules.set_rule(location, technology.build_rule(player))
@@ -79,8 +96,8 @@ class Factorio(World):
                     locations = {world.get_location(requisite, player) for requisite in prequisites}
                     Rules.add_rule(location, lambda state,
                                                     locations=locations: all(state.can_reach(loc) for loc in locations))
-                # get all science pack technologies (but not the ability to craft them)
-            victory_tech_names = get_rocket_requirements(frozenset(rocket_recipes[world.max_science_pack[player].value]))
+
+            victory_tech_names = get_rocket_requirements(self.custom_recipes["rocket-part"])
             world.get_location("Rocket Launch", player).access_rule = lambda state: all(state.has(technology, player)
                                                                                         for technology in
                                                                                         victory_tech_names)
@@ -101,9 +118,41 @@ class Factorio(World):
 
     options = factorio_options
 
-def set_custom_technologies(world: MultiWorld, player: int):
-    custom_technologies = {}
-    allowed_packs = world.max_science_pack[player].get_allowed_packs()
-    for technology_name, technology in base_technology_table.items():
-        custom_technologies[technology_name] = technology.get_custom(world, allowed_packs, player)
-    return custom_technologies
+    def set_custom_technologies(self):
+        custom_technologies = {}
+        allowed_packs = self.world.max_science_pack[self.player].get_allowed_packs()
+        for technology_name, technology in base_technology_table.items():
+            custom_technologies[technology_name] = technology.get_custom(self.world, allowed_packs, self.player)
+        return custom_technologies
+
+    def set_custom_recipes(self):
+        original_rocket_part = recipes["rocket-part"]
+        valid_pool = sorted(science_pack_pools[self.world.max_science_pack[self.player].get_max_pack()])
+        self.world.random.shuffle(valid_pool)
+        self.custom_recipes = {"rocket-part": Recipe("rocket-part", original_rocket_part.category,
+                                                     {valid_pool[x] : 10 for x in range(3)},
+                                                     original_rocket_part.products)}
+        self.additional_advancement_technologies = {tech.name for tech in
+                                                    self.custom_recipes["rocket-part"].recursive_unlocking_technologies}
+
+        if self.world.recipe_ingredients[self.player]:
+            valid_pool = []
+            for pack in self.world.max_science_pack[self.player].get_ordered_science_packs():
+                valid_pool += sorted(science_pack_pools[pack])
+                self.world.random.shuffle(valid_pool)
+                if pack in recipes: # skips over space science pack
+                    original = recipes[pack]
+                    new_ingredients = {}
+                    for _ in original.ingredients:
+                        new_ingredients[valid_pool.pop()] = 1
+                    new_recipe = Recipe(pack, original.category, new_ingredients, original.products)
+                    self.additional_advancement_technologies |= {tech.name for tech in
+                                                                 new_recipe.recursive_unlocking_technologies}
+                    self.custom_recipes[pack] = new_recipe
+
+        # handle marking progressive techs as advancement
+        prog_add = set()
+        for tech in self.additional_advancement_technologies:
+            if tech in tech_to_progressive_lookup:
+                prog_add.add(tech_to_progressive_lookup[tech])
+        self.additional_advancement_technologies |= prog_add

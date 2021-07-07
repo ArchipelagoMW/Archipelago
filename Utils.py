@@ -23,6 +23,7 @@ import sys
 import pickle
 import functools
 import io
+import collections
 
 from yaml import load, dump, safe_load
 
@@ -53,7 +54,6 @@ def snes_to_pc(value):
 def parse_player_names(names, players, teams):
     names = tuple(n for n in (n.strip() for n in names.split(",")) if n)
     if len(names) != len(set(names)):
-        import collections
         name_counter = collections.Counter(names)
         raise ValueError(f"Duplicate Player names is not supported, "
                          f'found multiple "{name_counter.most_common(1)[0][0]}".')
@@ -406,3 +406,8 @@ class RestrictedUnpickler(pickle.Unpickler):
 def restricted_loads(s):
     """Helper function analogous to pickle.loads()."""
     return RestrictedUnpickler(io.BytesIO(s)).load()
+
+class KeyedDefaultDict(collections.defaultdict):
+    def __missing__(self, key):
+        self[key] = value = self.default_factory(key)
+        return value

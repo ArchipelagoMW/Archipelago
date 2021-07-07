@@ -17,6 +17,12 @@ class MaxSciencePack(Choice):
         return {option.replace("_", "-") for option, value in self.options.items() if value <= self.value} - \
                {"space-science-pack"}  # with rocket launch being the goal, post-launch techs don't make sense
 
+    @classmethod
+    def get_ordered_science_packs(cls):
+        return [option.replace("_", "-") for option, value in sorted(cls.options.items(), key=lambda pair: pair[1])]
+
+    def get_max_pack(self):
+        return self.get_ordered_science_packs()[self.value].replace("_", "-")
 
 class TechCost(Choice):
     option_very_easy = 0
@@ -68,6 +74,19 @@ class RecipeTime(Choice):
     option_slow = 4
     option_chaos = 5
 
+# TODO: implement random
+class Progressive(Choice):
+    option_off = 0
+    option_random = 1
+    option_on = 2
+    default = 2
+
+    def want_progressives(self, random):
+        return random.choice([True, False]) if self.value == self.option_random else int(self.value)
+
+class RecipeIngredients(Choice):
+    option_rocket = 0
+    option_science_pack = 1
 
 class FactorioStartItems(OptionDict):
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
@@ -95,6 +114,7 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "tech_tree_information": TechTreeInformation,
     "starting_items": FactorioStartItems,
     "recipe_time": RecipeTime,
+    "recipe_ingredients": RecipeIngredients,
     "imported_blueprints": DefaultOnToggle,
     "world_gen": FactorioWorldGen,
     "progressive": DefaultOnToggle

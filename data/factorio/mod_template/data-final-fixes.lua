@@ -2,7 +2,9 @@
 -- this file gets written automatically by the Archipelago Randomizer and is in its raw form a Jinja2 Template
 require('lib')
 
-data.raw["recipe"]["rocket-part"].ingredients = {{ dict_to_recipe(rocket_recipe) }}
+{%- for recipe_name, recipe in custom_recipes.items() %}
+data.raw["recipe"]["{{recipe_name}}"].ingredients = {{ dict_to_recipe(recipe.ingredients) }}
+{%- endfor %}
 
 local technologies = data.raw["technology"]
 local original_tech
