@@ -326,9 +326,7 @@ for root in base_starts:
     progressive_rows["progressive-"+root] = tuple(progressive)
 
 # science packs
-progressive_rows["progressive-science-pack"] = tuple(sorted(required_technologies,
-                                                            key=lambda name: len(required_technologies[name]))[1:] +
-                                                     ["space-science-pack"])
+progressive_rows["progressive-science-pack"] = tuple(Options.MaxSciencePack.get_ordered_science_packs())[1:]
 
 
 # manual progressive

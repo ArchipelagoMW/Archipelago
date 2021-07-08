@@ -33,25 +33,30 @@ class World(metaclass=AutoWorldRegister):
         self.world = world
         self.player = player
 
-    # overwritable methods that get called by Main.py
-    def generate_basic(self):
+    # overwritable methods that get called by Main.py, sorted by execution order
+    def create_regions(self):
         pass
 
     def set_rules(self):
         pass
 
-    def create_regions(self):
+    def generate_basic(self):
         pass
 
     def generate_output(self):
+        """This method gets called from a threadpool, do not use world.random here.
+        If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""
         pass
 
+    def get_required_client_version(self) -> tuple:
+        return 0, 0, 3
+
+    # end of Main.py calls
+
     def collect(self, state, item) -> bool:
-        """Collect an item into state"""
+        """Collect an item into state. For speed reasons items that aren't logically useful get skipped."""
         if item.advancement:
             state.prog_items[item.name, item.player] += 1
             return True  # indicate that a logical state change has occured
         return False
 
-    def get_required_client_version(self) -> tuple:
-        return 0, 0, 3

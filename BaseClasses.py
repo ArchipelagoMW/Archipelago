@@ -1495,8 +1495,9 @@ class Spoiler(object):
             if self.world.factorio_player_ids:
                 outfile.write('\n\nRecipes:\n')
                 for player in self.world.factorio_player_ids:
+                    name = self.world.get_player_names(player)
                     for recipe in self.world.worlds[player].custom_recipes.values():
-                        outfile.write(f"{recipe.name}: {recipe.ingredients} -> {recipe.products}\n")
+                        outfile.write(f"\n{recipe.name} ({name}): {recipe.ingredients} -> {recipe.products}")
 
             if self.startinventory:
                 outfile.write('\n\nStarting Inventory:\n\n')
