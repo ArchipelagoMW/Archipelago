@@ -581,9 +581,14 @@ class CollectionState(object):
         ret.path = copy.copy(self.path)
         ret.locations_checked = copy.copy(self.locations_checked)
         # OoT objects, remove these later
+        # TODO: generalize copying using __dict__
         ret.child_reachable_regions = {player: copy.copy(self.child_reachable_regions[player]) for player in
                                  range(1, self.world.players + 1)}
         ret.adult_reachable_regions = {player: copy.copy(self.adult_reachable_regions[player]) for player in
+                                 range(1, self.world.players + 1)}
+        ret.child_blocked_connections = {player: copy.copy(self.child_blocked_connections[player]) for player in
+                                 range(1, self.world.players + 1)}
+        ret.adult_blocked_connections = {player: copy.copy(self.adult_blocked_connections[player]) for player in
                                  range(1, self.world.players + 1)}
         return ret
 
@@ -957,6 +962,7 @@ class CollectionState(object):
         return self.age[player] == age
 
     # Store the age before calling this!
+    # TODO: fix to not need indirect_connections?
     def update_age_reachable_regions(self, player): 
         from worlds.alttp.EntranceShuffle import indirect_connections
         self.stale[player] = False
@@ -987,10 +993,10 @@ class CollectionState(object):
                     self.path[new_region] = (new_region.name, self.path.get(connection, None))
 
                     # Retry connections if the new region can unblock them
-                    if new_region.name in indirect_connections:
-                        new_entrance = self.world.get_entrance(indirect_connections[new_region.name], player)
-                        if new_entrance in bc and new_entrance not in queue:
-                            queue.append(new_entrance)
+                    # if new_region.name in indirect_connections:
+                    #     new_entrance = self.world.get_entrance(indirect_connections[new_region.name], player)
+                    #     if new_entrance in bc and new_entrance not in queue:
+                    #         queue.append(new_entrance)
 
 
     def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:

@@ -24,7 +24,7 @@ event_name = re.compile(r'\w+')
 # or at a specific time of day (often unused)
 kwarg_defaults = {
     # 'age': None,
-    'spot': None,
+    # 'spot': None,
     # 'tod': TimeOfDay.NONE,
 }
 
@@ -182,13 +182,14 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         for child in node.args:
             if isinstance(child, ast.Name):
                 if child.id in self.world.__dict__:
-                    child = ast.Attribute(
-                        value=ast.Attribute(
-                            value=ast.Name(id='state', ctx=ast.Load()),
-                            attr='world',
-                            ctx=ast.Load()),
-                        attr=child.id,
-                        ctx=ast.Load())
+                    # child = ast.Attribute(
+                    #     value=ast.Attribute(
+                    #         value=ast.Name(id='state', ctx=ast.Load()),
+                    #         attr='world',
+                    #         ctx=ast.Load()),
+                    #     attr=child.id,
+                    #     ctx=ast.Load())
+                    child = ast.Constant(getattr(self.world, child.id))
                 elif child.id in rule_aliases:
                     child = self.visit(child)
                 elif child.id in escaped_items:
@@ -207,9 +208,19 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             s = node.slice if isinstance(node.slice, ast.Name) else node.slice.value
             return ast.Subscript(
                 value=ast.Attribute(
-                    value=ast.Attribute(
-                        value=ast.Name(id='state', ctx=ast.Load()),
-                        attr='world',
+                    # value=ast.Attribute(
+                    #     value=ast.Name(id='state', ctx=ast.Load()),
+                    #     attr='world',
+                    #     ctx=ast.Load()),
+                    value=ast.Subscript(
+                        value=ast.Attribute(
+                            value=ast.Attribute(
+                                value=ast.Name(id='state', ctx=ast.Load()),
+                                attr='world',
+                                ctx=ast.Load()),
+                            attr='worlds',
+                            ctx=ast.Load()),
+                        slice=ast.Index(value=ast.Constant(self.player)),
                         ctx=ast.Load()),
                     attr=node.value.id,
                     ctx=ast.Load()),
@@ -328,6 +339,9 @@ class Rule_AST_Transformer(ast.NodeTransformer):
     def make_call(self, node, name, args, keywords):
         if not hasattr(State, name):
             raise Exception('Parse Error: No such function State.%s' % name, self.current_spot.name, ast.dump(node, False))
+
+        for (k, v) in kwarg_defaults.items():
+            keywords.append(ast.keyword(arg=f'{k}', value=ast.Constant(v)))
 
         return ast.Call(
             func=ast.Attribute(

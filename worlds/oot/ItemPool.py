@@ -1,6 +1,5 @@
 from collections import namedtuple
 import logging
-import random
 from itertools import chain
 from .Items import ItemFactory, item_table
 from .LocationList import location_groups
@@ -1134,7 +1133,7 @@ def get_pool_core(world):
         shop_nonitem_count = len(world.shop_prices)
         shop_item_count = shop_slots_count - shop_nonitem_count
 
-        pool.extend(random.sample(remain_shop_items, shop_item_count))
+        pool.extend(world.world.random.sample(remain_shop_items, shop_item_count))
         if shop_nonitem_count:
             pool.extend(get_junk_item(shop_nonitem_count))
         if world.shopsanity == '0':
@@ -1157,7 +1156,7 @@ def get_pool_core(world):
             pool.extend(['Bombs (5)', 'Recovery Heart', 'Rupees (5)'])
         pool.extend(deku_scrubs_items)
         for _ in range(7):
-            pool.append('Arrows (30)' if random.randint(0,3) > 0 else 'Deku Seeds (30)')
+            pool.append('Arrows (30)' if world.world.random.randint(0,3) > 0 else 'Deku Seeds (30)')
 
     else:
         if world.dungeon_mq['Deku Tree']:
@@ -1228,7 +1227,7 @@ def get_pool_core(world):
 
     for i in range(bottle_count):
         if i >= ruto_bottles:
-            bottle = random.choice(normal_bottles)
+            bottle = world.world.random.choice(normal_bottles)
             pool.append(bottle)
         else:
             pool.append('Rutos Letter')
@@ -1237,7 +1236,7 @@ def get_pool_core(world):
     latest_trade = tradeitemoptions.index(world.logic_latest_adult_trade)
     if earliest_trade > latest_trade:
         earliest_trade, latest_trade = latest_trade, earliest_trade
-    tradeitem = random.choice(tradeitems[earliest_trade:latest_trade+1])
+    tradeitem = world.world.random.choice(tradeitems[earliest_trade:latest_trade+1])
     world.selected_adult_trade_item = tradeitem
     pool.append(tradeitem)
 
@@ -1358,7 +1357,7 @@ def get_pool_core(world):
             pending_item = pending_junk_pool.pop()
             if not junk_candidates:
                 raise RuntimeError("Not enough junk exists in item pool for %s to be added." % pending_item)
-            junk_item = random.choice(junk_candidates)
+            junk_item = world.world.random.choice(junk_candidates)
             junk_candidates.remove(junk_item)
             pool.remove(junk_item)
             pool.append(pending_item)

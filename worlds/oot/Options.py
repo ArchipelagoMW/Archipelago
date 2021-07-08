@@ -31,12 +31,28 @@ class Fortress(Choice):
     option_open = 2
     default = 1
 
+class Bridge(Choice): 
+    option_open = 0
+    option_vanilla = 1
+    option_stones = 2
+    option_medallions = 3
+    option_dungeons = 4
+    option_tokens = 5
+    default = 3
+
+class Trials(Range): 
+    range_start = 0
+    range_end = 6
+    default = 0
+
 open_options: typing.Dict[str, type(Option)] = {
     "open_forest": Forest,
     "open_kakariko": Gate,
     "open_door_of_time": DefaultOnToggle,
     "zora_fountain": Fountain,
-    "gerudo_fortress": Fortress
+    "gerudo_fortress": Fortress, 
+    "bridge": Bridge,
+    "trials": Trials,
 }
 
 class StartingAge(Choice): 
@@ -77,8 +93,15 @@ class CheckTokens(Range):
     range_end = 100
     default = 40
 
+class LACSCondition(Choice): 
+    option_vanilla = 0
+    option_stones = 1
+    option_medallions = 2
+    option_dungeons = 3
+    option_tokens = 4
 
 lacs_options: typing.Dict[str, type(Option)] = {
+    "lacs_condition": LACSCondition,
     "lacs_stones": CheckStones, 
     "lacs_medallions": CheckMedallions, 
     "lacs_rewards": CheckRewards, 
@@ -149,7 +172,7 @@ class ShuffleKeys(Choice):
 
 class ShuffleGerudoKeys(Choice): 
     option_vanilla = 0
-    option_overworld = 1
+    # option_overworld = 1
     option_keysanity = 3
 
 class ShuffleGanonBK(Choice):     

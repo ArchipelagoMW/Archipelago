@@ -1,6 +1,5 @@
 import logging
 import os
-import random
 
 logger = logging.getLogger("Ocarina of Time")
 
@@ -40,6 +39,15 @@ class OOTWorld(World):
         self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld']
         self.ensure_tod_access = False
         # self.ensure_tod_access = self.shuffle_interior_entrances or self.shuffle_overworld_entrances or self.randomize_overworld_spawns
+
+        # Determine skipped trials in GT
+        # This needs to be done before the logic rules in GT are parsed
+        self.skipped_trials = {}
+        trial_list = ['Forest', 'Fire', 'Water', 'Spirit', 'Shadow', 'Light']
+        chosen_trials = self.world.random.sample(trial_list, self.trials)  # chooses a list of trials to NOT skip
+        for t in trial_list:
+            self.skipped_trials[t] = False if t in chosen_trials else True
+
 
     def load_regions_from_json(self, file_path):
         region_json = read_json(file_path)
@@ -90,7 +98,7 @@ class OOTWorld(World):
                         MakeEventItem(self.world, self.player, event, new_location)
             if 'exits' in region:
                 for exit, rule in region['exits'].items():
-                    new_exit = OOTEntrance(self.player, '%s -> %s' % (new_region.name, exit), new_region)
+                    new_exit = OOTEntrance(self.player, '%s => %s' % (new_region.name, exit), new_region)
                     new_exit.connected_region = exit
                     new_exit.rule_string = rule
                     if self.world.logic_rules != 'none':
@@ -128,7 +136,7 @@ class OOTWorld(World):
             elif self.shuffle_scrubs == 'random':
                 # this is a random value between 0-99
                 # average value is ~33 rupees
-                price = int(random.betavariate(1, 2) * 99)
+                price = int(self.world.random.betavariate(1, 2) * 99)
 
             # Set price in the dictionary as well as the location.
             self.scrub_prices[scrub_item] = price
@@ -173,8 +181,8 @@ class OOTWorld(World):
 
         while bossCount:
             bossCount -= 1
-            random.shuffle(prizepool)
-            random.shuffle(prize_locs)
+            self.world.random.shuffle(prizepool)
+            self.world.random.shuffle(prize_locs)
             item = prizepool.pop()
             loc = prize_locs.pop()
             self.world.push_item(loc, item, collect=False)
@@ -221,6 +229,35 @@ class OOTWorld(World):
         self.fill_bosses()
 
         logger.info('Placing Dungeon Items.')
+        for dungeon in self.dungeons: 
+            dungeon_itempool = []
+            # Assemble items to go into this dungeon. 
+            # Build in reverse order since we need to fill boss key first and pop() returns the last element
+            # remove and vanilla are handled differently
+            # TODO: make this less bad
+            if self.shuffle_mapcompass == 'dungeon': 
+                dungeon_itempool.extend(dungeon.dungeon_items)
+            elif self.shuffle_mapcompass == 'keysanity': 
+                self.world.itempool.extend(dungeon.dungeon_items)
+
+            if self.shuffle_smallkeys == 'dungeon': 
+                dungeon_itempool.extend(dungeon.small_keys)
+            elif self.shuffle_smallkeys == 'keysanity': 
+                self.world.itempool.extend(dungeon.small_keys)
+
+            shufflebk = self.shuffle_bosskeys if dungeon.name != 'Ganons Castle' else self.shuffle_ganon_bosskey
+            if shufflebk == 'dungeon': 
+                dungeon_itempool.extend(dungeon.boss_key)
+            elif shufflebk == 'keysanity': 
+                self.world.itempool.extend(dungeon.boss_key)
+
+            if dungeon_itempool: # only do this if there's anything to shuffle
+                dungeon_locations = [loc for region in dungeon.regions for loc in region.locations if loc.item is None]
+                self.world.random.shuffle(dungeon_locations)
+                base_state = self.world.get_all_state()
+                base_state.stale[self.player] = True
+                fill_restrictive(self.world, base_state, dungeon_locations, dungeon_itempool, True, True)
+
 
         if self.shuffle_song_items != 'any': 
             logger.info('Placing Songs.')
@@ -230,44 +267,13 @@ class OOTWorld(World):
                 'Sheik in Crater', 'Sheik in Ice Cavern', 'Sheik in Kakariko', 'Sheik at Colossus']
             song_locations = list(filter(lambda location: location.type == 'Song', self.world.get_unfilled_locations(player=self.player)))
             songs = list(filter(lambda item: item.player == self.player and item.type == 'Song', self.world.itempool))
-            random.shuffle(songs)
-            random.shuffle(song_locations)
+            self.world.random.shuffle(songs)
+            self.world.random.shuffle(song_locations) # probably don't need to shuffle both but it can't hurt
             for song in songs: 
                 self.world.itempool.remove(song)
             base_state = self.world.get_all_state()
+            base_state.stale[self.player] = True  # force recalculation of the reachable regions
             fill_restrictive(self.world, base_state, song_locations, songs, True, True)
-
-            # We have to also collect medallions/stones, so this is important. 
-            # def gather_items(state): 
-            #     filled_locs = self.world.get_filled_locations(self.player)
-            #     to_collect = list(filter(lambda loc: loc.can_reach(state), filled_locs))
-            #     while to_collect: 
-            #         for loc in to_collect: 
-            #             state.collect(loc.item, loc.event, loc)
-            #             filled_locs.remove(loc)
-            #         to_collect = list(filter(lambda loc: loc.can_reach(state), filled_locs))
-
-            # placements = []
-            # while songs and song_locations: 
-            #     item_to_place = songs.pop()
-            #     random.shuffle(song_locations)
-            #     state = base_state.copy()
-            #     for song in songs: 
-            #         state.collect(song)
-            #     gather_items(state)
-            #     for i, loc in enumerate(song_locations): 
-            #         if loc.can_fill(state, item_to_place):
-            #             spot_to_fill = song_locations.pop(i)
-            #             break
-            #     if not spot_to_fill: 
-            #         raise FillError(f'No more spots to place {item_to_place}, locations {song_locations} are invalid. '
-            #             f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
-            #     self.world.push_item(spot_to_fill, item_to_place, collect=False)
-            #     spot_to_fill.locked = True
-            #     placements.append(spot_to_fill)
-            # for loc in placements: 
-            #     logger.info(f'{loc}: {loc.item}')
-
             
 
     def generate_output(self):  # ROM patching, cosmetics, etc. 
