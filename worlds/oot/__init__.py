@@ -14,10 +14,11 @@ from .Options import oot_options
 from .Utils import data_path, read_json
 from .LocationList import business_scrubs, set_drop_location_names
 from .DungeonList import dungeon_table, create_dungeons
+from .LogicTricks import known_logic_tricks
 
 import Utils
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
-from Options import Range
+from Options import Range, OptionDict
 from Fill import fill_restrictive
 from ..AutoWorld import World
 
@@ -31,7 +32,13 @@ class OOTWorld(World):
         self.parser = Rule_AST_Transformer(self, self.player)
         for (option_name, option) in oot_options.items(): 
             result = getattr(self.world, option_name)[self.player]
-            setattr(self, option_name, int(result) if isinstance(result, Range) else result.get_option_name())
+            if isinstance(result, Range): 
+                option_value = int(result)
+            elif isinstance(result, OptionDict):
+                option_value = result.value
+            else:
+                option_value = result.get_option_name()
+            setattr(self, option_name, option_value)
         self.dungeon_mq = {item['name']: False for item in dungeon_table}  # sets all dungeons to non-MQ for now; need this to not break things
         self.shop_prices = {}
         self.regions = []  # internal cache of regions for this world, used later
@@ -47,6 +54,13 @@ class OOTWorld(World):
         chosen_trials = self.world.random.sample(trial_list, self.trials)  # chooses a list of trials to NOT skip
         for t in trial_list:
             self.skipped_trials[t] = False if t in chosen_trials else True
+
+        # Determine tricks in logic
+        for trick in self.logic_tricks: 
+            if trick in known_logic_tricks: 
+                setattr(self, known_logic_tricks[trick]['name'], True)
+            else:
+                raise Exception(f'Unknown OOT logic trick for player {self.player}: {trick}')
 
 
     def load_regions_from_json(self, file_path):
@@ -190,8 +204,7 @@ class OOTWorld(World):
             loc.event = True
 
 
-    def create_regions(self):  # build_world_graphs
-        logger.info('Generating World.')
+    def create_regions(self): 
         overworld_data_path = data_path('World', 'Overworld.json')
         menu = OOTRegion('Menu', None, None, self.player)
         start = OOTEntrance(self.player, 'New Game', menu)
@@ -208,27 +221,29 @@ class OOTWorld(World):
 
 
     def set_rules(self): 
-        logger.info('Calculating Access Rules.')
         set_rules(self)
 
 
     def generate_basic(self):  # link entrances, generate item pools, place fixed items
         # hopefully switching the order of these blocks doesn't matter
-        logger.info('Setting Entrances.')
+
+        # logger.info('Setting Entrances.')
         # set_entrances(self)
         # Enforce vanilla for now
         for region in self.regions:
             for exit in region.exits:
                 exit.connect(self.world.get_region(exit.connected_region, self.player))
 
-        logger.info('Generating Item Pool.')
+        # Generate itempool
         generate_itempool(self)
         self.world.itempool += self.itempool
+
+        # Do some other stuff that we need to do
         set_shop_rules(self)
         set_drop_location_names(self.world)
         self.fill_bosses()
 
-        logger.info('Placing Dungeon Items.')
+        # Place dungeon items
         for dungeon in self.dungeons: 
             dungeon_itempool = []
             # Assemble items to go into this dungeon. 
@@ -258,17 +273,17 @@ class OOTWorld(World):
                 base_state.stale[self.player] = True
                 fill_restrictive(self.world, base_state, dungeon_locations, dungeon_itempool, True, True)
 
-
+        # songs
+        # this section can fail generation. probably try to make it not do that
         if self.shuffle_song_items != 'any': 
-            logger.info('Placing Songs.')
             song_location_names = [
                 'Song from Composers Grave', 'Song from Impa', 'Song from Malon', 'Song from Saria',
                 'Song from Ocarina of Time', 'Song from Windmill', 'Sheik in Forest', 'Sheik at Temple',
                 'Sheik in Crater', 'Sheik in Ice Cavern', 'Sheik in Kakariko', 'Sheik at Colossus']
             song_locations = list(filter(lambda location: location.type == 'Song', self.world.get_unfilled_locations(player=self.player)))
             songs = list(filter(lambda item: item.player == self.player and item.type == 'Song', self.world.itempool))
-            self.world.random.shuffle(songs)
-            self.world.random.shuffle(song_locations) # probably don't need to shuffle both but it can't hurt
+            self.world.random.shuffle(songs) # shuffling songs makes it less likely to fail by placing ZL last
+            self.world.random.shuffle(song_locations)
             for song in songs: 
                 self.world.itempool.remove(song)
             base_state = self.world.get_all_state()
@@ -277,7 +292,7 @@ class OOTWorld(World):
             
 
     def generate_output(self):  # ROM patching, cosmetics, etc. 
-        logger.info('Patching ROM.') 
+        pass
 
 
 
