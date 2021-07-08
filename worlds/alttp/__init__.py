@@ -7,6 +7,8 @@ from .Options import alttp_options
 class ALTTPWorld(World):
     game: str = "A Link to the Past"
     options = alttp_options
+    topology_present = True
+
     def collect(self, state: CollectionState, item: Item) -> bool:
         if item.name.startswith('Progressive '):
             if 'Sword' in item.name:

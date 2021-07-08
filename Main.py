@@ -676,7 +676,7 @@ def create_playthrough(world):
     for player in range(1, world.players + 1):
         world.spoiler.paths.update(
             {str(location): get_path(state, location.parent_region) for sphere in collection_spheres for location in
-             sphere if location.player == player})
+             sphere if location.player == player and world.worlds[player].topology_present})
         if player in world.alttp_player_ids:
             for path in dict(world.spoiler.paths).values():
                 if any(exit == 'Pyramid Fairy' for (_, exit) in path):

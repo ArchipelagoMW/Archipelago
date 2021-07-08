@@ -12,7 +12,7 @@ client_version = (0, 4)
 class MinecraftWorld(World):
     game: str = "Minecraft"
     options = minecraft_options
-
+    topology_present = True
 
     def _get_mc_data(self):
         exits = ["Overworld Structure 1", "Overworld Structure 2", "Nether Structure 1", "Nether Structure 2",
