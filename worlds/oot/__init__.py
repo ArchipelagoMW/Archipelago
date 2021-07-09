@@ -213,7 +213,7 @@ class OOTWorld(World):
         self.load_regions_from_json(overworld_data_path)
         start.connect(self.world.get_region('Root', self.player))
         create_dungeons(self)
-        self.parser.create_delayed_rules() # replaces self.create_internal_locations(); I don't know exactly what it does though
+        self.parser.create_delayed_rules()
 
         # if settings.shopsanity != 'off':
         #     world.random_shop_prices()
@@ -269,11 +269,9 @@ class OOTWorld(World):
             if dungeon_itempool: # only do this if there's anything to shuffle
                 dungeon_locations = [loc for region in dungeon.regions for loc in region.locations if loc.item is None]
                 self.world.random.shuffle(dungeon_locations)
-                base_state = self.world.get_all_state()
-                base_state.stale[self.player] = True
-                fill_restrictive(self.world, base_state, dungeon_locations, dungeon_itempool, True, True)
+                fill_restrictive(self.world, self.world.get_all_state(), dungeon_locations, dungeon_itempool, True, True)
 
-        # songs
+        # Place songs
         # this section can fail generation. probably try to make it not do that
         if self.shuffle_song_items != 'any': 
             song_location_names = [
@@ -286,9 +284,17 @@ class OOTWorld(World):
             self.world.random.shuffle(song_locations)
             for song in songs: 
                 self.world.itempool.remove(song)
-            base_state = self.world.get_all_state()
-            base_state.stale[self.player] = True  # force recalculation of the reachable regions
-            fill_restrictive(self.world, base_state, song_locations, songs, True, True)
+            fill_restrictive(self.world, self.world.get_all_state(), song_locations, songs, True, True)
+
+        # Kill unreachable events that can't be gotten even with all items
+        all_state = self.world.get_all_state()
+        all_state.sweep_for_events()
+        all_locations = [loc for loc in self.world.get_locations() if loc.player == self.player]
+        reachable = self.world.get_reachable_locations(all_state, self.player)
+        unreachable = [loc for loc in all_locations if loc.event and loc.locked and loc not in reachable]
+        for loc in unreachable: 
+            loc.parent_region.locations.remove(loc)
+        self.world.clear_location_cache()
             
 
     def generate_output(self):  # ROM patching, cosmetics, etc. 
