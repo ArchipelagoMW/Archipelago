@@ -216,6 +216,26 @@ class OptionDict(Option):
         return str(self.value)
 
 
+class OptionList(Option): 
+    default = []
+
+    def __init__(self, value: typing.List[str]):
+        self.value = value
+
+    @classmethod
+    def from_text(cls, text: str):
+        return cls([option.strip() for option in text.split(",")])
+
+    @classmethod
+    def from_any(cls, data: typing.Any):
+        if type(data) == list:
+            return cls(data)
+        return cls.from_text(str(data))
+
+    def get_option_name(self):
+        return str(self.value)
+
+
 class Logic(Choice):
     option_no_glitches = 0
     option_minor_glitches = 1

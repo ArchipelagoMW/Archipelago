@@ -551,7 +551,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     elif ret.game in AutoWorldRegister.world_types:
         for option_name, option in AutoWorldRegister.world_types[ret.game].options.items():
             if option_name in game_weights:
-                if issubclass(option, Options.OptionDict):
+                if issubclass(option, Options.OptionDict) or issubclass(option, Options.OptionList):
                     setattr(ret, option_name, option.from_any(game_weights[option_name]))
                 else:
                     setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights)))

@@ -1,5 +1,5 @@
 import typing
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict
+from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionList
 
 # oot has way too many options D:
 # if default is not specified, it is option 0
@@ -270,25 +270,6 @@ itempool_options: typing.Dict[str, type(Option)] = {
     "logic_earliest_adult_trade": AdultTradeItem, 
     "logic_latest_adult_trade": AdultTradeItem
 }
-
-class OptionList(OptionDict): # lists are like specialized dictionaries, right?
-    default = []
-
-    def __init__(self, value: typing.List[str]):
-        self.value = value
-
-    @classmethod
-    def from_text(cls, text: str):
-        return cls([option.strip() for option in text.split(",")])
-
-    @classmethod
-    def from_any(cls, data: typing.Any):
-        if type(data) == list:
-            return cls(data)
-        return cls.from_text(str(data))
-
-    def get_option_name(self):
-        return str(self.value)
 
 
 oot_options: typing.Dict[str, type(Option)] = {
