@@ -18,7 +18,7 @@ from .LogicTricks import known_logic_tricks
 
 import Utils
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
-from Options import Range, OptionDict
+from Options import Range, OptionList
 from Fill import fill_restrictive
 from ..AutoWorld import World
 
@@ -34,7 +34,7 @@ class OOTWorld(World):
             result = getattr(self.world, option_name)[self.player]
             if isinstance(result, Range): 
                 option_value = int(result)
-            elif isinstance(result, OptionDict):
+            elif isinstance(result, OptionList):
                 option_value = result.value
             else:
                 option_value = result.get_option_name()

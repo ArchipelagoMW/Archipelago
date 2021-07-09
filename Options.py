@@ -219,7 +219,7 @@ class OptionDict(Option):
 class OptionList(Option): 
     default = []
 
-    def __init__(self, value: typing.List[str]):
+    def __init__(self, value: typing.List[str, typing.Any]):
         self.value = value
 
     @classmethod
