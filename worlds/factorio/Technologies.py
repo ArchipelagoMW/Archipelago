@@ -393,27 +393,27 @@ rel_cost = {
 blacklist = all_ingredient_names | {"rocket-part", "crude-oil", "water", "sulfuric-acid", "petroleum-gas", "light-oil",
                                     "heavy-oil", "lubricant", "steam"}
 
+@Utils.cache_argsless
+def get_science_pack_pools() -> Dict[str, Set[str]]:
+    def get_estimated_difficulty(recipe: Recipe):
+        base_ingredients = recipe.base_cost
+        cost = 0
 
-def get_estimated_difficulty(recipe: Recipe):
-    base_ingredients = recipe.base_cost
-    cost = 0
-
-    for ingredient_name, amount in base_ingredients.items():
-        if ingredient_name not in rel_cost:
-            raise Exception((recipe.name, ingredient_name))
-        cost += rel_cost.get(ingredient_name, 1) * amount
-    return cost
+        for ingredient_name, amount in base_ingredients.items():
+            cost += rel_cost.get(ingredient_name, 1) * amount
+        return cost
 
 
-science_pack_pools = {}
-already_taken = blacklist.copy()
-current_difficulty = 5
-for science_pack in Options.MaxSciencePack.get_ordered_science_packs():
-    current = science_pack_pools[science_pack] = set()
-    for name, recipe in recipes.items():
-        if (science_pack != "automation-science-pack" or not recipe.recursive_unlocking_technologies) \
-                and get_estimated_difficulty(recipe) < current_difficulty:
-            current |= set(recipe.products)
-    current -= already_taken
-    already_taken |= current
-    current_difficulty *= 2
+    science_pack_pools = {}
+    already_taken = blacklist.copy()
+    current_difficulty = 5
+    for science_pack in Options.MaxSciencePack.get_ordered_science_packs():
+        current = science_pack_pools[science_pack] = set()
+        for name, recipe in recipes.items():
+            if (science_pack != "automation-science-pack" or not recipe.recursive_unlocking_technologies) \
+                    and get_estimated_difficulty(recipe) < current_difficulty:
+                current |= set(recipe.products)
+        current -= already_taken
+        already_taken |= current
+        current_difficulty *= 2
+    return science_pack_pools

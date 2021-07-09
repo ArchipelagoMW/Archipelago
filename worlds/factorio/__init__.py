@@ -4,7 +4,7 @@ from BaseClasses import Region, Entrance, Location, Item
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, advancement_technologies, \
     all_ingredient_names, required_technologies, get_rocket_requirements, rocket_recipes, \
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
-    science_pack_pools, Recipe, recipes, technology_table
+    get_science_pack_pools, Recipe, recipes, technology_table
 from .Shapes import get_shapes
 from .Mod import generate_mod
 from .Options import factorio_options
@@ -127,6 +127,7 @@ class Factorio(World):
 
     def set_custom_recipes(self):
         original_rocket_part = recipes["rocket-part"]
+        science_pack_pools = get_science_pack_pools()
         valid_pool = sorted(science_pack_pools[self.world.max_science_pack[self.player].get_max_pack()])
         self.world.random.shuffle(valid_pool)
         self.custom_recipes = {"rocket-part": Recipe("rocket-part", original_rocket_part.category,

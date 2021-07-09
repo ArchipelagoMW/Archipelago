@@ -672,11 +672,12 @@ def create_playthrough(world):
         pathpairs = zip_longest(pathsiter, pathsiter)
         return list(pathpairs)
 
-    world.spoiler.paths = dict()
-    for player in range(1, world.players + 1):
+    world.spoiler.paths = {}
+    topology_worlds = (player for player in world.player_ids if world.worlds[player].topology_present)
+    for player in topology_worlds:
         world.spoiler.paths.update(
             {str(location): get_path(state, location.parent_region) for sphere in collection_spheres for location in
-             sphere if location.player == player and world.worlds[player].topology_present})
+             sphere if location.player == player})
         if player in world.alttp_player_ids:
             for path in dict(world.spoiler.paths).values():
                 if any(exit == 'Pyramid Fairy' for (_, exit) in path):

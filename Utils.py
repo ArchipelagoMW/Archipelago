@@ -69,6 +69,21 @@ def parse_player_names(names, players, teams):
     return ret
 
 
+def cache_argsless(function):
+    if function.__code__.co_argcount:
+        raise Exception("Can only cache 0 argument functions with this cache.")
+
+    result = sentinel = object()
+
+    def _wrap():
+        nonlocal result
+        if result is sentinel:
+            result = function()
+        return result
+
+    return _wrap
+
+
 def is_bundled() -> bool:
     return getattr(sys, 'frozen', False)
 
@@ -132,7 +147,7 @@ def close_console():
 parse_yaml = safe_load
 unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 
-
+@cache_argsless
 def get_public_ipv4() -> str:
     import socket
     import urllib.request
@@ -148,7 +163,7 @@ def get_public_ipv4() -> str:
             pass  # we could be offline, in a local game, so no point in erroring out
     return ip
 
-
+@cache_argsless
 def get_public_ipv6() -> str:
     import socket
     import urllib.request
@@ -161,70 +176,68 @@ def get_public_ipv6() -> str:
         pass  # we could be offline, in a local game, or ipv6 may not be available
     return ip
 
-
+@cache_argsless
 def get_default_options() -> dict:
-    if not hasattr(get_default_options, "options"):
-        # Refer to host.yaml for comments as to what all these options mean.
-        options = {
-            "general_options": {
-                "output_path": "output",
-            },
-            "factorio_options": {
-                "executable": "factorio\\bin\\x64\\factorio",
-            },
-            "lttp_options": {
-                "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
-                "sni": "SNI",
-                "rom_start": True,
+    # Refer to host.yaml for comments as to what all these options mean.
+    options = {
+        "general_options": {
+            "output_path": "output",
+        },
+        "factorio_options": {
+            "executable": "factorio\\bin\\x64\\factorio",
+        },
+        "lttp_options": {
+            "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
+            "sni": "SNI",
+            "rom_start": True,
 
-            },
-            "server_options": {
-                "host": None,
-                "port": 38281,
-                "password": None,
-                "multidata": None,
-                "savefile": None,
-                "disable_save": False,
-                "loglevel": "info",
-                "server_password": None,
-                "disable_item_cheat": False,
-                "location_check_points": 1,
-                "hint_cost": 10,
-                "forfeit_mode": "goal",
-                "remaining_mode": "goal",
-                "auto_shutdown": 0,
-                "compatibility": 2,
-                "log_network": 0
-            },
-            "multi_mystery_options": {
-                "teams": 1,
-                "enemizer_path": "EnemizerCLI/EnemizerCLI.Core.exe",
-                "player_files_path": "Players",
-                "players": 0,
-                "weights_file_path": "weights.yaml",
-                "meta_file_path": "meta.yaml",
-                "pre_roll": False,
-                "create_spoiler": 1,
-                "zip_roms": 0,
-                "zip_diffs": 2,
-                "zip_apmcs": 1,
-                "zip_spoiler": 0,
-                "zip_multidata": 1,
-                "zip_format": 1,
-                "glitch_triforce_room": 1,
-                "race": 0,
-                "cpu_threads": 0,
-                "max_attempts": 0,
-                "take_first_working": False,
-                "keep_all_seeds": False,
-                "log_output_path": "Output Logs",
-                "log_level": None,
-                "plando_options": "bosses",
-            }
+        },
+        "server_options": {
+            "host": None,
+            "port": 38281,
+            "password": None,
+            "multidata": None,
+            "savefile": None,
+            "disable_save": False,
+            "loglevel": "info",
+            "server_password": None,
+            "disable_item_cheat": False,
+            "location_check_points": 1,
+            "hint_cost": 10,
+            "forfeit_mode": "goal",
+            "remaining_mode": "goal",
+            "auto_shutdown": 0,
+            "compatibility": 2,
+            "log_network": 0
+        },
+        "multi_mystery_options": {
+            "teams": 1,
+            "enemizer_path": "EnemizerCLI/EnemizerCLI.Core.exe",
+            "player_files_path": "Players",
+            "players": 0,
+            "weights_file_path": "weights.yaml",
+            "meta_file_path": "meta.yaml",
+            "pre_roll": False,
+            "create_spoiler": 1,
+            "zip_roms": 0,
+            "zip_diffs": 2,
+            "zip_apmcs": 1,
+            "zip_spoiler": 0,
+            "zip_multidata": 1,
+            "zip_format": 1,
+            "glitch_triforce_room": 1,
+            "race": 0,
+            "cpu_threads": 0,
+            "max_attempts": 0,
+            "take_first_working": False,
+            "keep_all_seeds": False,
+            "log_output_path": "Output Logs",
+            "log_level": None,
+            "plando_options": "bosses",
         }
+    }
 
-        get_default_options.options = options
-    return get_default_options.options
+    return options
 
 
 blacklisted_options = {"multi_mystery_options.cpu_threads",
@@ -254,7 +267,7 @@ def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
                 dest[key] = update_options(value, dest[key], filename, new_keys)
     return dest
 
-
+@cache_argsless
 def get_options() -> dict:
     if not hasattr(get_options, "options"):
         locations = ("options.yaml", "host.yaml",
@@ -368,7 +381,7 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
         return romfile, adjusted
     return romfile, False
 
-
+@cache_argsless
 def get_unique_identifier():
     uuid = persistent_load().get("client", {}).get("uuid", None)
     if uuid:
@@ -406,6 +419,7 @@ class RestrictedUnpickler(pickle.Unpickler):
 def restricted_loads(s):
     """Helper function analogous to pickle.loads()."""
     return RestrictedUnpickler(io.BytesIO(s)).load()
+
 
 class KeyedDefaultDict(collections.defaultdict):
     def __missing__(self, key):
