@@ -134,16 +134,6 @@ def open_file(filename):
         subprocess.call([open_command, filename])
 
 
-def close_console():
-    if sys.platform == 'win32':
-        # windows
-        import ctypes.wintypes
-        try:
-            ctypes.windll.kernel32.FreeConsole()
-        except Exception:
-            pass
-
-
 parse_yaml = safe_load
 unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 
