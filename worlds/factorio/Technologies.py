@@ -330,9 +330,10 @@ progressive_rows["progressive-science-pack"] = tuple(Options.MaxSciencePack.get_
 
 
 # manual progressive
-progressive_rows["progressive-processing"] = ("steel-processing",
-                                              "oil-processing", "sulfur-processing", "advanced-oil-processing",
-                                              "uranium-processing", "nuclear-fuel-reprocessing")
+progressive_rows["progressive-processing"] = (
+    "steel-processing",
+    "oil-processing", "sulfur-processing", "advanced-oil-processing", "coal-liquefaction",
+    "uranium-processing", "kovarex-enrichment-process", "nuclear-fuel-reprocessing")
 progressive_rows["progressive-rocketry"] = ("rocketry", "explosive-rocketry", "atomic-bomb")
 progressive_rows["progressive-vehicle"] = ("automobilism", "tank", "spidertron")
 progressive_rows["progressive-train-network"] = ("railway", "fluid-wagon", "automated-rail-transportation", "rail-signals")
