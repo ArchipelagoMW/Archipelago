@@ -4,9 +4,7 @@ import typing
 import asyncio
 import urllib.parse
 
-import prompt_toolkit
 import websockets
-from prompt_toolkit.patch_stdout import patch_stdout
 
 import Utils
 from MultiServer import CommandProcessor
@@ -210,8 +208,6 @@ class CommonContext():
         logger.info(args["text"])
 
     def on_print_json(self, args: dict):
-        if not self.found_items and args.get("type", None) == "ItemSend" and args["receiving"] == args["sending"]:
-            pass  # don't want info on other player's local pickups.
         logger.info(self.jsontotextparser(args["data"]))
 
 

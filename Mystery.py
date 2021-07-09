@@ -550,10 +550,13 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     if ret.game in AutoWorldRegister.world_types:
         for option_name, option in AutoWorldRegister.world_types[ret.game].options.items():
             if option_name in game_weights:
-                if issubclass(option, Options.OptionDict):
-                    setattr(ret, option_name, option.from_any(game_weights[option_name]))
-                else:
-                    setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights)))
+                try:
+                    if issubclass(option, Options.OptionDict):
+                        setattr(ret, option_name, option.from_any(game_weights[option_name]))
+                    else:
+                        setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights)))
+                except Exception as e:
+                    raise Exception(f"Error generating option {option_name} in {ret.game}")
             else:
                 setattr(ret, option_name, option(option.default))
         if ret.game == "Minecraft":
