@@ -12,20 +12,23 @@ from .alttp.Items import lookup_id_to_name as alttp
 from .hk.Items import lookup_id_to_name as hk
 from .factorio import Technologies
 from .minecraft.Items import lookup_id_to_name as mc
+from .oot.Items import lookup_id_to_name as oot
 
-lookup_any_item_id_to_name = {**alttp, **hk, **Technologies.lookup_id_to_name, **mc}
-assert len(alttp) + len(hk) + len(Technologies.lookup_id_to_name) + len(mc) == len(lookup_any_item_id_to_name)
+lookup_any_item_id_to_name = {**alttp, **hk, **Technologies.lookup_id_to_name, **mc, **oot}
+assert len(alttp) + len(hk) + len(Technologies.lookup_id_to_name) + len(mc) + len(oot) == len(lookup_any_item_id_to_name)
 lookup_any_item_name_to_id = {name: id for id, name in lookup_any_item_id_to_name.items()}
 # assert len(lookup_any_item_name_to_id) == len(lookup_any_item_id_to_name) # currently broken: Single Arrow
 
 from .alttp import Regions
 from .hk import Locations
 from .minecraft import Locations as Advancements
+from .oot.Location import lookup_id_to_name as oot_location_lookup
 
 lookup_any_location_id_to_name = {**Regions.lookup_id_to_name, **Locations.lookup_id_to_name,
-                                  **Technologies.lookup_id_to_name, **Advancements.lookup_id_to_name}
+                                  **Technologies.lookup_id_to_name, **Advancements.lookup_id_to_name, **oot_location_lookup}
 assert len(Regions.lookup_id_to_name) + len(Locations.lookup_id_to_name) + \
-       len(Technologies.lookup_id_to_name) + len(Advancements.lookup_id_to_name) == \
+       len(Technologies.lookup_id_to_name) + len(Advancements.lookup_id_to_name) + \
+       len(oot_location_lookup) == \
        len(lookup_any_location_id_to_name)
 lookup_any_location_name_to_id = {name: id for id, name in lookup_any_location_id_to_name.items()}
 assert len(lookup_any_location_name_to_id) == len(lookup_any_location_id_to_name)

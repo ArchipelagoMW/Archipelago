@@ -438,6 +438,8 @@ item_table = {
                                             }),
 }
 
+lookup_id_to_name: typing.Dict[int, str] = {oot_data_to_ap_id(data, False): item_name for item_name, data in item_table.items() if data[2] is not None}
+
 # lookup_id_to_name: typing.Dict[int, str] = {data.id: item_name for item_name, data in item_table.items()}
 
 # lookup_type_to_names: typing.Dict[str, typing.Set[str]] = {}
