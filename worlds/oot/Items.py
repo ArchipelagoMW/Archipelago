@@ -31,9 +31,15 @@ def ap_id_to_oot_data(ap_id):
 class OOTItem(Item):
     game: str = "Ocarina of Time"
 
-    def __init__(self, name, advancement, code, type, player: int = None):
-        super(OOTItem, self).__init__(name, advancement, code, player)
+    def __init__(self, name, player, data, event):
+        (type, advancement, index, special) = data
+        adv = True if advancement else False  # this looks silly but the table uses True, False, and None
+        super(OOTItem, self).__init__(name, adv, oot_data_to_ap_id(data, event), player)
         self.type = type
+        self.index = index
+        self.special = special
+        self.looks_like_item = None
+        self.price = special.get('price', None) if special else None
 
 
 def ItemFactory(items, player: int, event=False):
@@ -41,22 +47,18 @@ def ItemFactory(items, player: int, event=False):
         # if not event and items not in ItemInfo.items:
         #     raise KeyError('Unknown Item: %s' % items)
         if not event: 
-            data = item_table[items]
-            adv = True if data[1] else False  # this looks silly but the table uses True, False and None
-            return OOTItem(items, adv, oot_data_to_ap_id(data, event), data[0], player)
+            return OOTItem(items, player, item_table[items], event)
         else:
-            return OOTItem(items, True, None, 'Event', player)
+            return OOTItem(items, player, ('Event', True, None, None), True)
 
     ret = []
     for item in items:
         # if not event and item not in ItemInfo.items:
         #     raise KeyError('Unknown Item: %s' % item)
         if not event: 
-            data = item_table[item]
-            adv = True if data[1] else False
-            ret.append(OOTItem(item, adv, oot_data_to_ap_id(data, event), data[0], player))
+            ret.append(OOTItem(item, player, item_table[item], event))
         else: 
-            ret.append(OOTItem(item, True, None, 'Event', player))
+            ret.append(OOTItem(item, player, ('Event', True, None, None), True))
 
     return ret
 

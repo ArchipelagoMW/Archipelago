@@ -64,12 +64,15 @@ class InteriorEntrances(Choice):
     option_simple = 1
     option_all = 2
 
+class TriforceGoal(Range): 
+    range_start = 1
+    range_end = 100
+    default = 20
+
 world_options: typing.Dict[str, type(Option)] = {
     "starting_age": StartingAge,
-    # "shuffle_interior_entrances": InteriorEntrances,
-    # "shuffle_overworld_entrances": Toggle,
-    # "randomize_overworld_spawns": Toggle, 
     "triforce_hunt": Toggle, 
+    "triforce_goal": TriforceGoal,
     "bombchus_in_logic": Toggle,
 }
 
@@ -188,8 +191,14 @@ dungeon_items_options: typing.Dict[str, type(Option)] = {
     "shuffle_smallkeys": ShuffleKeys, 
     "shuffle_fortresskeys": ShuffleGerudoKeys, 
     "shuffle_bosskeys": ShuffleKeys,
-    "shuffle_ganon_bosskey": ShuffleGanonBK
+    "shuffle_ganon_bosskey": ShuffleGanonBK,
+    "enhance_map_compass": Toggle,
 }
+
+class Cuccos(Range): 
+    range_start = 1
+    range_end = 7
+    default = 7
 
 class BigPoes(Range): 
     range_start = 1
@@ -197,7 +206,7 @@ class BigPoes(Range):
     default = 1
 
 timesavers_options: typing.Dict[str, type(Option)] = {
-    "skip_child_zelda": Toggle, 
+    # "skip_child_zelda": Toggle, 
     "no_escape_sequence": Toggle, 
     "no_guard_stealth": Toggle, 
     "no_epona_race": Toggle, 
@@ -207,6 +216,7 @@ timesavers_options: typing.Dict[str, type(Option)] = {
     "fast_chests": DefaultOnToggle, 
     "free_scarecrow": Toggle, 
     "fast_bunny_hood": Toggle, 
+    "chicken_count": Cuccos,
     "big_poe_count": BigPoes, 
 }
 
@@ -226,8 +236,11 @@ class DamageMultiplier(Choice):
     default = 1
 
 misc_options: typing.Dict[str, type(Option)] = {
-    "hints": Hints,
+    "clearer_hints": DefaultOnToggle,
+    # "hints": Hints,
     "damage_multiplier": DamageMultiplier,
+    "no_collectible_hearts": Toggle,
+    "start_with_rupees": Toggle,
 }
 
 class ItemPoolValue(Choice): 
@@ -285,4 +298,5 @@ oot_options: typing.Dict[str, type(Option)] = {
     **misc_options, 
     **itempool_options,
     "logic_tricks": OptionList,
+    "compress_rom": DefaultOnToggle
 }

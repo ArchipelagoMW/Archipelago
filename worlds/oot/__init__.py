@@ -15,6 +15,9 @@ from .Utils import data_path, read_json
 from .LocationList import business_scrubs, set_drop_location_names
 from .DungeonList import dungeon_table, create_dungeons
 from .LogicTricks import known_logic_tricks
+from .Rom import Rom
+from .Patches import patch_rom
+from .N64Patch import create_patch_file
 
 import Utils
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
@@ -29,6 +32,8 @@ class OOTWorld(World):
 
     def __init__(self, world, player):
         super(OOTWorld, self).__init__(world, player)
+
+        self.rom = Rom(file='')  # need to provide a decompressed ROM with no args
         self.parser = Rule_AST_Transformer(self, self.player)
         for (option_name, option) in oot_options.items(): 
             result = getattr(self.world, option_name)[self.player]
@@ -39,13 +44,10 @@ class OOTWorld(World):
             else:
                 option_value = result.get_option_name()
             setattr(self, option_name, option_value)
-        self.dungeon_mq = {item['name']: False for item in dungeon_table}  # sets all dungeons to non-MQ for now; need this to not break things
         self.shop_prices = {}
         self.regions = []  # internal cache of regions for this world, used later
 
-        self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld']
-        self.ensure_tod_access = False
-        # self.ensure_tod_access = self.shuffle_interior_entrances or self.shuffle_overworld_entrances or self.randomize_overworld_spawns
+        self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld'] # only 'keysanity' and 'remove' implemented
 
         # Determine skipped trials in GT
         # This needs to be done before the logic rules in GT are parsed
@@ -61,6 +63,32 @@ class OOTWorld(World):
                 setattr(self, known_logic_tricks[trick]['name'], True)
             else:
                 raise Exception(f'Unknown OOT logic trick for player {self.player}: {trick}')
+
+        # Not implemented for now, but needed to placate the generator
+        self.ocarina_songs = False
+        self.skip_child_zelda = False
+        self.mq_dungeons_random = False  # this will be a deprecated option later
+        self.mq_dungeons = 0
+        self.dungeon_mq = {item['name']: False for item in dungeon_table}
+        self.hints = 'none'
+        self.misc_hints = True
+        self.starting_tod = 'default'
+        self.correct_chest_sizes = False
+        self.text_shuffle = 'none'
+
+        self.shuffle_interior_entrances = False  # not actually a toggle
+        self.shuffle_grotto_entrances = False
+        self.shuffle_dungeon_entrances = False
+        self.shuffle_overworld_entrances = False
+        self.owl_drops = False
+        self.warp_songs = False
+        self.spawn_positions = False
+
+        self.ensure_tod_access = self.shuffle_interior_entrances or self.shuffle_overworld_entrances or self.spawn_positions
+        self.entrance_shuffle = self.shuffle_interior_entrances or self.shuffle_grotto_entrances or self.shuffle_dungeon_entrances or \
+                                self.shuffle_overworld_entrances or self.owl_drops or self.warp_songs or self.spawn_positions
+        self.disable_trade_revert = self.shuffle_interior_entrances or self.shuffle_overworld_entrances
+        self.shuffle_special_interior_entrances = self.shuffle_interior_entrances == 'all'
 
 
     def load_regions_from_json(self, file_path):
@@ -113,7 +141,7 @@ class OOTWorld(World):
             if 'exits' in region:
                 for exit, rule in region['exits'].items():
                     new_exit = OOTEntrance(self.player, '%s => %s' % (new_region.name, exit), new_region)
-                    new_exit.connected_region = exit
+                    new_exit.vanilla_connected_region = exit
                     new_exit.rule_string = rule
                     if self.world.logic_rules != 'none':
                         self.parser.parse_spot_rule(new_exit)
@@ -204,7 +232,7 @@ class OOTWorld(World):
             loc.event = True
 
 
-    def create_regions(self): 
+    def create_regions(self):  # create and link regions
         overworld_data_path = data_path('World', 'Overworld.json')
         menu = OOTRegion('Menu', None, None, self.player)
         start = OOTEntrance(self.player, 'New Game', menu)
@@ -219,21 +247,19 @@ class OOTWorld(World):
         #     world.random_shop_prices()
         self.set_scrub_prices()
 
-
-    def set_rules(self): 
-        set_rules(self)
-
-
-    def generate_basic(self):  # link entrances, generate item pools, place fixed items
-        # hopefully switching the order of these blocks doesn't matter
-
         # logger.info('Setting Entrances.')
         # set_entrances(self)
         # Enforce vanilla for now
         for region in self.regions:
             for exit in region.exits:
-                exit.connect(self.world.get_region(exit.connected_region, self.player))
+                exit.connect(self.world.get_region(exit.vanilla_connected_region, self.player))
 
+
+    def set_rules(self): 
+        set_rules(self)
+
+
+    def generate_basic(self):  # generate item pools, place fixed items
         # Generate itempool
         generate_itempool(self)
         self.world.itempool += self.itempool
@@ -297,9 +323,28 @@ class OOTWorld(World):
         self.world.clear_location_cache()
             
 
-    def generate_output(self):  # ROM patching, cosmetics, etc. 
-        pass
+    # For now we will always output a patch file, and patch separately. Hopefully the client will also be able to patch.
+    def generate_output(self): 
+        self.file_hash = [self.world.random.randint(0, 31) for i in range(5)]
+        outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_names(self.player)}"
+        patch_rom(self, self.rom)
+        # patch cosmetics here
+        self.rom.update_header()
+
+        # write to rom. probably remove this later and have patching occur separately
+        self.rom.write_to_file(Utils.output_path(outfile_name+'.z64'))
+
+        # make patch file
+        create_patch_file(self.rom, Utils.output_path(outfile_name+'.zpf'))
+        self.rom.restore()
 
 
+    # Helper functions for patching
+    def get_shuffled_entrances(self):
+        return []
 
+    def get_location(self, location): 
+        return self.world.get_location(location, self.player)
 
+    def get_region(self, region):
+        return self.world.get_region(region, self.player)

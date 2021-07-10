@@ -11,7 +11,7 @@ class Dungeon(object):
 
         self.world = world
         self.name = name
-        self.hint = hint
+        self.hint_text = hint
         self.regions = []
         self.boss_key = to_array(boss_key)
         self.small_keys = to_array(small_keys)

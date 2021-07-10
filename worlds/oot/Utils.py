@@ -1,9 +1,11 @@
 import io, re, json
-from Utils import local_path as ap_local_path
+import os, sys
+import subprocess
+import Utils
 from .version import __version__
 
 def data_path(*args): 
-    return ap_local_path('data', 'oot', *args)
+    return Utils.local_path('data', 'oot', *args)
 
 def read_json(file_path):
     json_string = ""
@@ -59,19 +61,7 @@ def subprocess_args(include_stdout=True):
     return ret
 
 def local_path(path=''):
-    if local_path.cached_path is not None:
-        return os.path.join(local_path.cached_path, path)
-
-    if is_bundled():
-        # we are running in a bundle
-        local_path.cached_path = os.path.dirname(os.path.realpath(sys.executable))
-    else:
-        # we are running in a normal Python environment
-        local_path.cached_path = os.path.dirname(os.path.realpath(__file__))
-
-    return os.path.join(local_path.cached_path, path)
-
-local_path.cached_path = None
+    return Utils.local_path(path)
 
 def get_version_bytes(a):
     version_bytes = [0x00, 0x00, 0x00]
@@ -89,9 +79,4 @@ def get_version_bytes(a):
     return version_bytes
 
 def default_output_path(path):
-    if path == '':
-        path = local_path('output')
-
-    if not os.path.exists(path):
-        os.mkdir(path)
-    return path
+    return Utils.output_path(path)
