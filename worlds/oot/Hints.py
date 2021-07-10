@@ -316,7 +316,7 @@ def get_hint_area(spot):
 
         parent_region = current_spot.parent_region
     
-        if parent_region.dungeon:
+        if parent_region.dungeon and parent_region.game == 'Ocarina of Time':
             return parent_region.dungeon.hint_text
         elif parent_region.hint_text and (spot.parent_region.name == 'Root' or parent_region.name != 'Root'):
             return parent_region.hint_text
