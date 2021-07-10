@@ -63,6 +63,9 @@ class ALTTPWorld(World):
             return True
         return False
 
+    def get_required_client_version(self) -> tuple:
+        return max((0, 1, 4), super(ALTTPWorld, self).get_required_client_version())
+
 
 class ALttPLocation(Location):
     game: str = "A Link to the Past"
