@@ -52,11 +52,19 @@ function copy_factorio_icon(tech, tech_source)
 end
 
 function adjust_energy(recipe_name, factor)
-    local energy = data.raw.recipe[recipe_name].energy_required
-    if (energy == nil) then
-        energy = 1
+    local recipe = data.raw.recipe[recipe_name]
+    local energy = recipe.energy_required
+    if (energy ~= nil) then
+        data.raw.recipe[recipe_name].energy_required = energy * factor
     end
-    data.raw.recipe[recipe_name].energy_required = energy * factor
+    if (recipe.normal ~= nil and recipe.normal.energy_required ~= nil) then
+        energy = recipe.normal.energy_required
+        recipe.normal.energy_required = energy * factor
+    end
+    if (recipe.expensive ~= nil and recipe.expensive.energy_required ~= nil) then
+        energy = recipe.expensive.energy_required
+        recipe.expensive.energy_required = energy * factor
+    end
 end
 
 data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
