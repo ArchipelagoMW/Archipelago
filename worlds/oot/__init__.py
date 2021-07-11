@@ -46,6 +46,7 @@ class OOTWorld(World):
             setattr(self, option_name, option_value)
         self.shop_prices = {}
         self.regions = []  # internal cache of regions for this world, used later
+        self.remove_from_start_inventory = []  # some items will be precollected but not in the inventory
 
         self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld'] # only 'keysanity' and 'remove' implemented
 
