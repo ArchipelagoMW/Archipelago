@@ -55,7 +55,7 @@ def LocationFactory(locations, player: int):
 
 
 
-location_id_offset = 0x11000
+location_id_offset = 67000
 lookup_id_to_name: typing.Dict[int, str] = {(location_id_offset + index): name for (index, name) in enumerate(location_table) 
     if location_table[name][0] not in ['Event', 'Drop', 'HintStone', 'Hint']}
 
