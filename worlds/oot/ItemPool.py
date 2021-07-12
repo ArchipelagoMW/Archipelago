@@ -1013,13 +1013,13 @@ def get_pool_core(world):
             placed_items[location] = 'Gold Skulltula Token'
     elif world.tokensanity == 'dungeons':
         for location in skulltula_locations_final:
-            if world.world.get_location(location, world.player).scene >= 0x0A:
+            if world.get_location(location).scene >= 0x0A:
                 placed_items[location] = 'Gold Skulltula Token'
             else:
                 pool.append('Gold Skulltula Token')
     elif world.tokensanity == 'overworld':
         for location in skulltula_locations_final:
-            if world.world.get_location(location, world.player).scene < 0x0A:
+            if world.get_location(location).scene < 0x0A:
                 placed_items[location] = 'Gold Skulltula Token'
             else:
                 pool.append('Gold Skulltula Token')
@@ -1282,14 +1282,14 @@ def get_pool_core(world):
     if world.shuffle_mapcompass == 'vanilla':
         for location, item in vanillaMC.items():
             try:
-                world.world.get_location(location, world.player)
+                world.get_location(location)
                 placed_items[location] = item
             except KeyError:
                 continue
     if world.shuffle_smallkeys == 'vanilla':
         for location, item in vanillaSK.items():
             try:
-                world.world.get_location(location, world.player)
+                world.get_location(location)
                 placed_items[location] = item
             except KeyError:
                 continue
@@ -1307,7 +1307,7 @@ def get_pool_core(world):
     if world.shuffle_bosskeys == 'vanilla':
         for location, item in vanillaBK.items():
             try:
-                world.world.get_location(location, world.player)
+                world.get_location(location)
                 placed_items[location] = item
             except KeyError:
                 continue
