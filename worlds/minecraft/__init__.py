@@ -54,13 +54,10 @@ class MinecraftWorld(World):
                 prefill_pool.update(exclusion_table[key])
 
         for loc_name, item_name in prefill_pool.items():
-            item_data = item_table[item_name]
             location = self.world.get_location(loc_name, self.player)
             item = self.create_item(item_name)
-            self.world.push_item(location, item, collect=False)
+            location.place_locked_item(item)
             pool.remove(item)
-            location.event = item_data.progression
-            location.locked = True
 
         self.world.itempool += pool
 
