@@ -65,7 +65,7 @@ def set_rules(ootworld):
 
         if location.name == 'Forest Temple MQ First Room Chest' and ootworld.shuffle_bosskeys == 'dungeon' and ootworld.shuffle_smallkeys == 'dungeon' and ootworld.tokensanity == 'off':
             # This location needs to be a small key. Make sure the boss key isn't placed here.
-            forbid_item(location, 'Boss Key (Forest Temple)')
+            forbid_item(location, 'Boss Key (Forest Temple)', ootworld.player)
 
         # TODO: re-add hints once they are working
         # if location.type == 'HintStone' and ootworld.hints == 'mask':
