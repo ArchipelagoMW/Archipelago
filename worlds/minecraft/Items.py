@@ -3,7 +3,7 @@ import typing
 
 
 class ItemData(typing.NamedTuple):
-    code: int
+    code: typing.Optional[int]
     progression: bool
 
 
@@ -49,7 +49,7 @@ item_table = {
     "Single Arrow": ItemData(45034, False), 
     "Bee Trap (Minecraft)": ItemData(45100, False),
 
-    "Victory": ItemData(0, True)
+    "Victory": ItemData(None, True)
 }
 
 # If not listed here then has frequency 1

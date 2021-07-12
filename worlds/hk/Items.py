@@ -391,7 +391,7 @@ item_table = \
     'Whispering_Root-Waterways': HKItemData(advancement=True, id=16777410, type='Root'),
     'World_Sense': HKItemData(advancement=False, id=16777220, type='Dreamer')}
 
-lookup_id_to_name:Dict[int, str] = {data.id: item_name for item_name, data in item_table.items()}
+lookup_id_to_name:Dict[int, str] = {data.id: item_name for item_name, data in item_table.items() if data.type != 'Event'}
 lookup_type_to_names:Dict[str, Set[str]] = {}
 for item, item_data in item_table.items():
     lookup_type_to_names.setdefault(item_data.type, set()).add(item)
