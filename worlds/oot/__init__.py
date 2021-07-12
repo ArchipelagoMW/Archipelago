@@ -150,12 +150,6 @@ class OOTWorld(World):
                         logging.getLogger('').debug('Dropping unreachable exit: %s', new_exit.name)
                     else:
                         new_region.exits.append(new_exit)
-            # Making child and adult access events. Rules for these are set after entrances are bound. 
-            # child_access_location = OOTLocation(self.player, name=f'Child Access: {new_region.name}', type='Event', parent=new_region)
-            # adult_access_location = OOTLocation(self.player, name=f'Adult Access: {new_region.name}', type='Event', parent=new_region)
-            # new_region.locations.extend([child_access_location, adult_access_location])
-            # MakeEventItem(self.world, self.player, f'Child Access: {new_region.name}', child_access_location)
-            # MakeEventItem(self.world, self.player, f'Adult Access: {new_region.name}', adult_access_location)
 
             self.world.regions.append(new_region)
             self.regions.append(new_region)

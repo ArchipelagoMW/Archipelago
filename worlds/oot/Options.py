@@ -163,6 +163,8 @@ class ShuffleMapCompass(Choice):
     option_startwith = 1
     option_vanilla = 2
     option_dungeon = 3
+    # option_overworld = 4
+    # option_any_dungeon = 5
     option_keysanity = 6
     default = 1
 
@@ -170,18 +172,23 @@ class ShuffleKeys(Choice):
     option_remove = 0
     option_vanilla = 2
     option_dungeon = 3
+    # option_overworld = 4
+    # option_any_dungeon = 5
     option_keysanity = 6
     default = 3
 
 class ShuffleGerudoKeys(Choice): 
     option_vanilla = 0
     # option_overworld = 1
+    # option_any_dungeon = 2
     option_keysanity = 3
 
 class ShuffleGanonBK(Choice):     
     option_remove = 0
     option_vanilla = 2
     option_dungeon = 3
+    # option_overworld = 4
+    # option_any_dungeon = 5
     option_keysanity = 6
     option_on_lacs = 7
     default = 0

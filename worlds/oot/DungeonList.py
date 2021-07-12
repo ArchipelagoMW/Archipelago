@@ -102,27 +102,26 @@ def create_dungeons(ootworld):
         name = dungeon_info['name']
         hint = dungeon_info['hint'] if 'hint' in dungeon_info else name
         
-        # if ootworld.logic_rules == 'glitched':
-        #     if not ootworld.dungeon_mq[name]:
-        #         dungeon_json = os.path.join(data_path('Glitched World'), name + '.json')
-        #     else:
-        #         dungeon_json = os.path.join(data_path('Glitched World'), name + ' MQ.json')
-        # else:
-        #     if not ootworld.dungeon_mq[name]:
-        #         dungeon_json = os.path.join(data_path('World'), name + '.json')
-        #     else:
-        #         dungeon_json = os.path.join(data_path('World'), name + ' MQ.json')
-        dungeon_json = os.path.join(data_path('World'), name + '.json')
+        if ootworld.logic_rules == 'glitched':
+            if not ootworld.dungeon_mq[name]:
+                dungeon_json = os.path.join(data_path('Glitched World'), name + '.json')
+            else:
+                dungeon_json = os.path.join(data_path('Glitched World'), name + ' MQ.json')
+        else:
+            if not ootworld.dungeon_mq[name]:
+                dungeon_json = os.path.join(data_path('World'), name + '.json')
+            else:
+                dungeon_json = os.path.join(data_path('World'), name + ' MQ.json')
 
         
         ootworld.load_regions_from_json(dungeon_json)
 
         boss_keys = ItemFactory(['Boss Key (%s)' % name] * dungeon_info['boss_key'], ootworld.player)
-        # if not ootworld.dungeon_mq[dungeon_info['name']]:
-        #     small_keys = ItemFactory(['Small Key (%s)' % name] * dungeon_info['small_key'])
-        # else:
-        #     small_keys = ItemFactory(['Small Key (%s)' % name] * dungeon_info['small_key_mq'])
-        small_keys = ItemFactory(['Small Key (%s)' % name] * dungeon_info['small_key'], ootworld.player)
+        if not ootworld.dungeon_mq[dungeon_info['name']]:
+            small_keys = ItemFactory(['Small Key (%s)' % name] * dungeon_info['small_key'], ootworld.player)
+        else:
+            small_keys = ItemFactory(['Small Key (%s)' % name] * dungeon_info['small_key_mq'], ootworld.player)
+        # small_keys = ItemFactory(['Small Key (%s)' % name] * dungeon_info['small_key'], ootworld.player)
         dungeon_items = ItemFactory(['Map (%s)' % name, 
                                      'Compass (%s)' % name] * dungeon_info['dungeon_item'], ootworld.player)
         if ootworld.shuffle_mapcompass in ['any_dungeon', 'overworld']:
