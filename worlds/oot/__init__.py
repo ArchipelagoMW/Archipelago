@@ -48,8 +48,6 @@ class OOTWorld(World):
         self.regions = []  # internal cache of regions for this world, used later
         self.remove_from_start_inventory = []  # some items will be precollected but not in the inventory
 
-        self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld'] # only 'keysanity' and 'remove' implemented
-        self.misc_hints = True  # this is just always on
 
         # ER and glitched logic don't play nice together, glitched takes precedence
         if self.logic_rules == 'glitched':         
@@ -64,6 +62,9 @@ class OOTWorld(World):
         # Closed forest locks starting age as child
         if self.open_forest == 'closed': 
             self.starting_age = 'child'
+
+        # Fix starting time spelling: "witching_hour" -> "witching-hour"
+        self.starting_tod = self.starting_tod.replace('_', '-')
 
         # Determine skipped trials in GT
         # This needs to be done before the logic rules in GT are parsed
@@ -91,7 +92,6 @@ class OOTWorld(World):
         self.ocarina_songs = False
         self.correct_chest_sizes = False
         self.hints = 'none'
-        self.starting_tod = 'default'
 
         self.shopsanity = 'off'
 
@@ -104,6 +104,8 @@ class OOTWorld(World):
         self.spawn_positions = False
 
         # Keep these later
+        self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld'] # only 'keysanity' and 'remove' implemented
+        self.misc_hints = True  # this is just always on
         self.ensure_tod_access = self.shuffle_interior_entrances or self.shuffle_overworld_entrances or self.spawn_positions
         self.entrance_shuffle = self.shuffle_interior_entrances or self.shuffle_grotto_entrances or self.shuffle_dungeon_entrances or \
                                 self.shuffle_overworld_entrances or self.owl_drops or self.warp_songs or self.spawn_positions

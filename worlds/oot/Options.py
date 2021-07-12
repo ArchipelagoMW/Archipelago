@@ -279,6 +279,17 @@ class DamageMultiplier(Choice):
     option_ohko = 4
     default = 1
 
+class StartingToD(Choice):
+    option_default = 0
+    option_sunrise = 1
+    option_morning = 2
+    option_noon = 3
+    option_afternoon = 4
+    option_sunset = 5
+    option_evening = 6
+    option_midnight = 7
+    option_witching_hour = 8
+
 misc_options: typing.Dict[str, type(Option)] = {
     "default_targeting": Targeting, # move this to cosmetic options later
     "clearer_hints": DefaultOnToggle,
@@ -286,6 +297,7 @@ misc_options: typing.Dict[str, type(Option)] = {
     "text_shuffle": TextShuffle,
     "damage_multiplier": DamageMultiplier,
     "no_collectible_hearts": Toggle,
+    "starting_tod": StartingToD,
     "start_with_rupees": Toggle,
 }
 
