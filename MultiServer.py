@@ -984,15 +984,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         cmd: str = args["cmd"]
     except:
         logging.exception(f"Could not get command from {args}")
+        await ctx.send_msgs(client, [{"cmd": "InvalidCmd", "text": f"Could not get command from {args} at `cmd`"}])
         raise
 
     if type(cmd) is not str:
         await ctx.send_msgs(client, [{"cmd": "InvalidCmd", "text": f"Command should be str, got {type(cmd)}"}])
-        return
-
-    if args is not None and type(args) != dict:
-        await ctx.send_msgs(client, [{"cmd": "InvalidArguments",
-                                      'text': f'Expected Optional[dict], got {type(args)} for {cmd}'}])
         return
 
     if cmd == 'Connect':
