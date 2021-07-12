@@ -19,7 +19,6 @@ from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from Main import get_seed, seeddigits
 import Options
-from worlds import lookup_any_item_name_to_id
 from worlds.alttp.Items import item_name_groups, item_table
 from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
@@ -522,7 +521,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     for item_name in game_weights.get('local_items', []):
         items = world_type.item_name_groups.get(item_name, {item_name})
         for item in items:
-            if item in lookup_any_item_name_to_id:
+            if item in world_type.item_names:
                 ret.local_items.add(item)
             else:
                 raise Exception(f"Could not force item {item} to be world-local, as it was not recognized.")
@@ -531,7 +530,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     for item_name in game_weights.get('non_local_items', []):
         items = world_type.item_name_groups.get(item_name, {item_name})
         for item in items:
-            if item in lookup_any_item_name_to_id:
+            if item in world_type.item_names:
                 ret.non_local_items.add(item)
             else:
                 raise Exception(f"Could not force item {item} to be world-non-local, as it was not recognized.")
