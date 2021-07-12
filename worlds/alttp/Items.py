@@ -232,8 +232,6 @@ progression_mapping = {
 
 lookup_id_to_name = {data[2]: name for name, data in item_table.items() if type(data[2]) == int}
 
-hint_blacklist = {"Triforce"}
-
 item_name_groups = {"Bows":
                         {"Bow", "Silver Arrows", "Silver Bow", "Progressive Bow (Alt)", "Progressive Bow"},
                     "Gloves":

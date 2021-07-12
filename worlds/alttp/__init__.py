@@ -13,6 +13,7 @@ class ALTTPWorld(World):
     item_name_groups = item_name_groups
     item_names = frozenset(item_table)
     location_names = frozenset(lookup_name_to_id)
+    hint_blacklist = {"Triforce"}
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         if item.name.startswith('Progressive '):

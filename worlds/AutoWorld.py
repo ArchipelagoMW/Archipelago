@@ -1,12 +1,14 @@
+from __future__ import annotations
 from typing import Dict, Set, Tuple
 
 from BaseClasses import MultiWorld, Item, CollectionState
 
 
 class AutoWorldRegister(type):
-    world_types = {}
+    world_types:Dict[str, World] = {}
 
     def __new__(cls, name, bases, dct):
+        dct["all_names"] = dct["item_names"] | dct["location_names"] | set(dct.get("item_name_groups", {}))
         new_class = super().__new__(cls, name, bases, dct)
         if "game" in dct:
             AutoWorldRegister.world_types[dct["game"]] = new_class
@@ -35,6 +37,9 @@ class World(metaclass=AutoWorldRegister):
     # maps item group names to sets of items. Example: "Weapons" -> {"Sword", "Bow"}
     item_name_groups: Dict[str, Set[str]] = {}
     location_names: Set[str] = frozenset()  # set of all potential location names
+    all_names: Set[str] = frozenset()  # gets automatically populated with all item, item group and location names
+
+    hint_blacklist: Set[str] = frozenset()  # any names that should not be hintable
 
     def __init__(self, world: MultiWorld, player: int):
         self.world = world

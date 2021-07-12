@@ -27,7 +27,6 @@ from fuzzywuzzy import process as fuzzy_process
 
 from worlds.AutoWorld import AutoWorldRegister
 proxy_worlds = {name: world(None, 0) for name, world in AutoWorldRegister.world_types.items()}
-from worlds.alttp import Items, Regions
 from worlds import network_data_package, lookup_any_item_id_to_name, lookup_any_item_name_to_id, \
     lookup_any_location_id_to_name, lookup_any_location_name_to_id
 import Utils
@@ -36,11 +35,6 @@ from Utils import get_item_name_from_id, get_location_name_from_id, \
 from NetUtils import Node, Endpoint, ClientStatus, NetworkItem, decode, NetworkPlayer
 
 colorama.init()
-lttp_console_names = frozenset(set(Items.item_table) | set(Items.item_name_groups) | set(Regions.lookup_name_to_id))
-all_items = frozenset(lookup_any_item_name_to_id)
-all_locations = frozenset(lookup_any_location_name_to_id)
-all_console_names = frozenset(all_items | all_locations)
-
 
 class Client(Endpoint):
     version = Version(0, 0, 0)
@@ -537,7 +531,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
 
 
 def collect_hints_location(ctx: Context, team: int, slot: int, location: str) -> typing.List[NetUtils.Hint]:
-    seeked_location: int = Regions.lookup_name_to_id[location]
+    seeked_location: int = lookup_any_location_name_to_id[location]
     item_id, receiving_player = ctx.locations[slot].get(seeked_location, (None, None))
     if item_id:
         found = seeked_location in ctx.location_checks[team, slot]
@@ -869,10 +863,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def _cmd_getitem(self, item_name: str) -> bool:
         """Cheat in an item, if it is enabled on this server"""
         if self.ctx.item_cheat:
+            world = proxy_worlds[self.ctx.games[self.client.slot]]
             item_name, usable, response = get_intended_text(item_name,
-                                                            proxy_worlds[self.ctx.games[self.client.slot]].item_names)
+                                                            world.item_names)
             if usable:
-                new_item = NetworkItem(Items.item_table[item_name][2], -1, self.client.slot)
+                new_item = NetworkItem(world.create_item(item_name).code, -1, self.client.slot)
                 get_received_items(self.ctx, self.client.team, self.client.slot).append(new_item)
                 self.ctx.notify_all(
                     'Cheat console: sending "' + item_name + '" to ' + self.ctx.get_aliased_name(self.client.team,
@@ -899,16 +894,17 @@ class ClientMessageProcessor(CommonCommandProcessor):
             notify_hints(self.ctx, self.client.team, list(hints))
             return True
         else:
-            item_name, usable, response = get_intended_text(item_or_location)
+            world = proxy_worlds[self.ctx.games[self.client.slot]]
+            item_name, usable, response = get_intended_text(item_or_location, world.all_names)
             if usable:
-                if item_name in Items.hint_blacklist:
+                if item_name in world.hint_blacklist:
                     self.output(f"Sorry, \"{item_name}\" is marked as non-hintable.")
                     hints = []
-                elif item_name in Items.item_name_groups:
+                elif item_name in world.item_name_groups:
                     hints = []
-                    for item in Items.item_name_groups[item_name]:
+                    for item in world.item_name_groups[item_name]:
                         hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item))
-                elif item_name in lookup_any_item_name_to_id:  # item name
+                elif item_name in world.item_names:  # item name
                     hints = collect_hints(self.ctx, self.client.team, self.client.slot, item_name)
                 else:  # location name
                     hints = collect_hints_location(self.ctx, self.client.team, self.client.slot, item_name)
@@ -1250,27 +1246,27 @@ class ServerCommandProcessor(CommonCommandProcessor):
         """Send out a hint for a player's item or location to their team"""
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
-            for (team, slot), name in self.ctx.player_names.items():
-                if name == seeked_player:
-                    item = " ".join(item_or_location)
-                    item, usable, response = get_intended_text(item, all_console_names)
-                    if usable:
-                        if item in Items.item_name_groups:
-                            hints = []
-                            for item in Items.item_name_groups[item]:
-                                hints.extend(collect_hints(self.ctx, team, slot, item))
-                        elif item in all_items:  # item name
-                            hints = collect_hints(self.ctx, team, slot, item)
-                        else:  # location name
-                            hints = collect_hints_location(self.ctx, team, slot, item)
-                        if hints:
-                            notify_hints(self.ctx, team, hints)
-                        else:
-                            self.output("No hints found.")
-                        return True
-                    else:
-                        self.output(response)
-                        return False
+            team, slot = self.ctx.player_name_lookup[seeked_player]
+            item = " ".join(item_or_location)
+            world = proxy_worlds[self.ctx.games[slot]]
+            item, usable, response = get_intended_text(item, world.all_names)
+            if usable:
+                if item in world.item_name_groups:
+                    hints = []
+                    for item in world.item_name_groups[item]:
+                        hints.extend(collect_hints(self.ctx, team, slot, item))
+                elif item in world.item_names:  # item name
+                    hints = collect_hints(self.ctx, team, slot, item)
+                else:  # location name
+                    hints = collect_hints_location(self.ctx, team, slot, item)
+                if hints:
+                    notify_hints(self.ctx, team, hints)
+                else:
+                    self.output("No hints found.")
+                return True
+            else:
+                self.output(response)
+                return False
 
         else:
             self.output(response)
