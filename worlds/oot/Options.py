@@ -246,6 +246,10 @@ timesavers_options: typing.Dict[str, type(Option)] = {
     "big_poe_count": BigPoes, 
 }
 
+class Targeting(Choice): 
+    option_hold = 0
+    option_switch = 1
+
 class Hints(Choice): 
     option_none = 0
     option_mask = 1
@@ -267,6 +271,7 @@ class DamageMultiplier(Choice):
     default = 1
 
 misc_options: typing.Dict[str, type(Option)] = {
+    "default_targeting": Targeting,
     "clearer_hints": DefaultOnToggle,
     # "hints": Hints,
     "text_shuffle": TextShuffle,

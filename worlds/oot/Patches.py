@@ -75,6 +75,12 @@ def patch_rom(world, rom):
     # Add it to the extended object table
     add_to_extended_object_table(rom, 0x194, dd_obj_file)
 
+    # Set default targeting option to Hold. I got fed up enough with this that I made it a main option
+    if world.default_targeting == 'hold':
+        rom.write_byte(0xB71E6D, 0x01)
+    else:
+        rom.write_byte(0xB71E6D, 0x00)
+
     # Create an option so that recovery hearts no longer drop by changing the code which checks Link's health when an item is spawned.
     if world.no_collectible_hearts:
         rom.write_byte(0xA895B7, 0x2E)
