@@ -271,7 +271,7 @@ class DamageMultiplier(Choice):
     default = 1
 
 misc_options: typing.Dict[str, type(Option)] = {
-    "default_targeting": Targeting,
+    "default_targeting": Targeting, # move this to cosmetic options later
     "clearer_hints": DefaultOnToggle,
     # "hints": Hints,
     "text_shuffle": TextShuffle,
