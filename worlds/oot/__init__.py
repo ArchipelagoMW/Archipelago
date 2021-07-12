@@ -61,6 +61,10 @@ class OOTWorld(World):
             self.warp_songs = False
             self.spawn_positions = False
 
+        # Closed forest locks starting age as child
+        if self.open_forest == 'closed': 
+            self.starting_age = 'child'
+
         # Determine skipped trials in GT
         # This needs to be done before the logic rules in GT are parsed
         self.skipped_trials = {}
@@ -80,13 +84,6 @@ class OOTWorld(World):
                 setattr(self, known_logic_tricks[trick]['name'], True)
             else:
                 raise Exception(f'Unknown OOT logic trick for player {self.player}: {trick}')
-
-        # Workaround fix for options that have 'off' as a choice but aren't toggles
-        # They are listed as having a 'false' option in Options.py for the yaml generator to play nice, since off -> False -> 'false'
-        fix_options = ['shopsanity', 'tokensanity', 'shuffle_scrubs', 'junk_ice_traps']  # also 'shuffle_interior_entrances' but not implemented yet
-        for option in fix_options:
-            if getattr(self, option) == 'false':
-                setattr(self, option, 'off')
 
         # Not implemented for now, but needed to placate the generator. Remove as they are implemented
         self.mq_dungeons_random = False  # this will be a deprecated option later

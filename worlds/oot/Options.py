@@ -145,20 +145,23 @@ class ShopShuffle(Choice):
     option_3 = 3
     option_4 = 4
     option_random = 5
-    option_false = 6
+    option_off = 6
     default = 6
+    alias_false = 6
 
 class TokenShuffle(Choice): 
-    option_false = 0
+    option_off = 0
     option_dungeons = 1
     option_overworld = 2
     option_all = 3
+    alias_false = 0
 
 class ScrubShuffle(Choice): 
-    option_false = 0
+    option_off = 0
     option_low = 1
     option_regular = 2
     option_random = 3
+    alias_false = 0
     alias_affordable = 1
     alias_expensive = 2
     alias_random_prices = 3
@@ -186,6 +189,7 @@ class ShuffleMapCompass(Choice):
     # option_any_dungeon = 5
     option_keysanity = 6
     default = 1
+    alias_anywhere = 6
 
 class ShuffleKeys(Choice): 
     option_remove = 0
@@ -195,12 +199,15 @@ class ShuffleKeys(Choice):
     # option_any_dungeon = 5
     option_keysanity = 6
     default = 3
+    alias_keysy = 0
+    alias_anywhere = 6
 
 class ShuffleGerudoKeys(Choice): 
     option_vanilla = 0
     # option_overworld = 1
     # option_any_dungeon = 2
     option_keysanity = 3
+    alias_anywhere = 3
 
 class ShuffleGanonBK(Choice):     
     option_remove = 0
@@ -211,6 +218,8 @@ class ShuffleGanonBK(Choice):
     option_keysanity = 6
     option_on_lacs = 7
     default = 0
+    alias_keysy = 0
+    alias_anywhere = 6
 
 dungeon_items_options: typing.Dict[str, type(Option)] = {
     "shuffle_mapcompass": ShuffleMapCompass, 
@@ -222,7 +231,7 @@ dungeon_items_options: typing.Dict[str, type(Option)] = {
 }
 
 class Cuccos(Range): 
-    range_start = 1
+    range_start = 0
     range_end = 7
     default = 7
 
@@ -288,12 +297,15 @@ class ItemPoolValue(Choice):
     default = 1
 
 class IceTraps(Choice): 
-    option_false = 0
+    option_off = 0
     option_normal = 1
     option_on = 2
     option_mayhem = 3
     option_onslaught = 4
     default = 1
+    alias_false = 0
+    alias_true = 2
+    alias_extra = 2
 
 class IceTrapVisual(Choice): 
     option_major_only = 0
