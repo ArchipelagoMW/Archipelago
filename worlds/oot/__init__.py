@@ -93,7 +93,7 @@ class OOTWorld(World):
         self.correct_chest_sizes = False
         self.hints = 'none'
 
-        self.shopsanity = 'off'
+        # self.shopsanity = 'off'
 
         self.shuffle_interior_entrances = False  # not actually a toggle
         self.shuffle_grotto_entrances = False
@@ -176,6 +176,7 @@ class OOTWorld(World):
             self.regions.append(new_region)
         self.world._recache()
 
+
     def set_scrub_prices(self):
         # Get Deku Scrub Locations
         scrub_locations = [location for location in self.get_locations() if 'Deku Scrub' in location.name]
@@ -203,6 +204,21 @@ class OOTWorld(World):
                     location.price = price
                     if location.item is not None:
                         location.item.price = price
+
+
+    def random_shop_prices(self):
+        shop_item_indexes = ['7', '5', '8', '6']
+        self.shop_prices = {}
+        for region in self.regions:
+            if self.shopsanity == 'random':
+                shop_item_count = self.world.random.randint(0,4)
+            else:
+                shop_item_count = int(self.shopsanity)
+
+            for location in region.locations:
+                if location.type == 'Shop':
+                    if location.name[-1:] in shop_item_indexes[:shop_item_count]:
+                        self.shop_prices[location.name] = int(self.world.random.betavariate(1.5, 2) * 60) * 5
 
 
     def fill_bosses(self, bossCount=9):    
@@ -259,8 +275,8 @@ class OOTWorld(World):
         create_dungeons(self)
         self.parser.create_delayed_rules()
 
-        # if settings.shopsanity != 'off':
-        #     world.random_shop_prices()
+        if self.shopsanity != 'off':
+            self.random_shop_prices()
         self.set_scrub_prices()
 
         # logger.info('Setting Entrances.')
@@ -327,6 +343,18 @@ class OOTWorld(World):
             for song in songs: 
                 self.world.itempool.remove(song)
             fill_restrictive(self.world, self.world.get_all_state(), song_locations, songs, True, True)
+
+        # Place shop items
+        # fast fill will fail because there is some logic on the shop items. we'll gather them up and place the shop items
+        if self.shopsanity != 'off': 
+            shop_items = list(filter(lambda item: item.player == self.player and item.type == 'Shop', self.world.itempool))
+            shop_locations = list(filter(lambda location: location.type == 'Shop' and location.name not in self.shop_prices, 
+                self.world.get_unfilled_locations(player=self.player)))
+            self.world.random.shuffle(shop_locations)
+            for item in shop_items: 
+                self.world.itempool.remove(item)
+            fill_restrictive(self.world, self.world.get_all_state(), shop_locations, shop_items, True, True)
+
 
         # Kill unreachable events that can't be gotten even with all items
         all_state = self.world.get_all_state()

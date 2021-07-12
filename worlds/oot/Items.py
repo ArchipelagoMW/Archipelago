@@ -37,7 +37,7 @@ class OOTItem(Item):
         super(OOTItem, self).__init__(name, adv, oot_data_to_ap_id(data, event), player)
         self.type = type
         self.index = index
-        self.special = special
+        self.special = special or {}
         self.looks_like_item = None
         self.price = special.get('price', None) if special else None
     
@@ -52,6 +52,10 @@ class OOTItem(Item):
     @property
     def bigkey(self) -> bool: 
         return False
+
+    @property
+    def dungeonitem(self) -> bool:
+        return self.type in ['SmallKey', 'FortressSmallKey', 'BossKey', 'GanonBossKey', 'Map', 'Compass']
 
 
 def ItemFactory(items, player: int, event=False):

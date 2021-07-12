@@ -1358,7 +1358,7 @@ def patch_rom(world, rom):
     # Patch songs and boss rewards
     for location in world.world.get_filled_locations(world.player):
         item = location.item
-        special = item.special if item.game == 'Ocarina of Time' else None  # this shouldn't matter hopefully
+        special = item.special if item.game == 'Ocarina of Time' else {}  # this shouldn't matter hopefully
         locationaddress = location.address
         secondaryaddress = location.address2
 
@@ -2110,7 +2110,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
             shuffle_messages.shop_item_messages.extend(
                 [shop_item.description_message, shop_item.purchase_message])
 
-            if item_display.dungeonitem:
+            if getattr(item_display, 'dungeonitem', False):
                 split_item_name = item_display.name.split('(')
                 split_item_name[1] = '(' + split_item_name[1]
 
