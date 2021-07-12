@@ -1,11 +1,9 @@
-import enum
 import importlib
 import os
 
 __all__ = {"lookup_any_item_id_to_name",
            "lookup_any_location_id_to_name",
-           "network_data_package",
-           "Games"}
+           "network_data_package"}
 
 # all of the below should be moved to AutoWorld functionality
 from .alttp.Items import lookup_id_to_name as alttp
@@ -33,15 +31,6 @@ assert len(lookup_any_location_name_to_id) == len(lookup_any_location_id_to_name
 network_data_package = {"lookup_any_location_id_to_name": lookup_any_location_id_to_name,
                         "lookup_any_item_id_to_name": lookup_any_item_id_to_name,
                         "version": 9}
-
-
-@enum.unique
-class Games(str, enum.Enum):
-    HK = "Hollow Knight"
-    LTTP = "A Link to the Past"
-    Factorio = "Factorio"
-    Minecraft = "Minecraft"
-
 
 # end of TODO block
 

@@ -22,7 +22,7 @@ from worlds.alttp.Shops import create_shops, ShopSlotFill, SHOP_ID_START, total_
 from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, version_tuple
 from worlds.generic.Rules import locality_rules
-from worlds import Games, lookup_any_item_name_to_id, AutoWorld
+from worlds import lookup_any_item_name_to_id, AutoWorld
 import Patch
 
 seeddigits = 20
@@ -435,7 +435,7 @@ def main(args, seed=None):
 
     for location in [loc for loc in world.get_filled_locations() if type(loc.address) is int]:
         main_entrance = get_entrance_to_region(location.parent_region)
-        if location.game != Games.LTTP:
+        if location.game != "A Link to the Past":
             checks_in_area[location.player]["Light World"].append(location.address)
         elif location.parent_region.dungeon:
             dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',

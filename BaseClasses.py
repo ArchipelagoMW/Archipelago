@@ -1129,6 +1129,11 @@ class Location():
         return (self.player, self.name) < (other.player, other.name)
 
     @property
+    def native_item(self) -> bool:
+        """Returns True if the item in this location matches game."""
+        return self.item and self.item.game == self.game
+
+    @property
     def hint_text(self):
         return getattr(self, "_hint_text", self.name.replace("_", " ").replace("-", " "))
 
