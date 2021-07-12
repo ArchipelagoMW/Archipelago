@@ -71,6 +71,11 @@ class TriforceGoal(Range):
     range_end = 100
     default = 20
 
+class MQDungeons(Range):
+    range_start = 0
+    range_end = 12
+    default = 0
+
 world_options: typing.Dict[str, type(Option)] = {
     "starting_age": StartingAge,
     # "shuffle_interior_entrances": InteriorEntrances,
@@ -83,6 +88,7 @@ world_options: typing.Dict[str, type(Option)] = {
     "triforce_hunt": Toggle, 
     "triforce_goal": TriforceGoal,
     "bombchus_in_logic": Toggle,
+    "mq_dungeons": MQDungeons,
 }
 
 class CheckStones(Range): 

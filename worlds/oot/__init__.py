@@ -69,6 +69,11 @@ class OOTWorld(World):
         for t in trial_list:
             self.skipped_trials[t] = False if t in chosen_trials else True
 
+        # Determine which dungeons are MQ
+        # Possible future plan: allow user to pick which dungeons are MQ
+        mq_dungeons = self.world.random.sample(dungeon_table, self.mq_dungeons)
+        self.dungeon_mq = {item['name']: (item in mq_dungeons) for item in dungeon_table}
+
         # Determine tricks in logic
         for trick in self.logic_tricks: 
             if trick in known_logic_tricks: 
@@ -85,8 +90,6 @@ class OOTWorld(World):
 
         # Not implemented for now, but needed to placate the generator. Remove as they are implemented
         self.mq_dungeons_random = False  # this will be a deprecated option later
-        self.mq_dungeons = 0
-        self.dungeon_mq = {item['name']: False for item in dungeon_table}
         self.skip_child_zelda = False
         self.ocarina_songs = False
         self.correct_chest_sizes = False
