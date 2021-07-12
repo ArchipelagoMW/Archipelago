@@ -64,6 +64,7 @@ class FactorioCommandProcessor(ClientCommandProcessor):
 
 class FactorioContext(CommonContext):
     command_processor = FactorioCommandProcessor
+    game = "Factorio"
 
     def __init__(self, *args, **kwargs):
         super(FactorioContext, self).__init__(*args, **kwargs)

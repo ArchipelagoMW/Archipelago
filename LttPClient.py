@@ -57,6 +57,8 @@ class LttPCommandProcessor(ClientCommandProcessor):
 
 class Context(CommonContext):
     command_processor = LttPCommandProcessor
+    game = "A Link to the Past"
+
     def __init__(self, snes_address, server_address, password, found_items):
         super(Context, self).__init__(server_address, password, found_items)
 
