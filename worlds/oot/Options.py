@@ -265,11 +265,13 @@ class Hints(Choice):
     option_agony = 2
     option_always = 3
     default = 3
+    alias_false = 0
 
 class TextShuffle(Choice): 
     option_none = 0
     option_except_hints = 1
     option_complete = 2
+    alias_false = 0
 
 class DamageMultiplier(Choice): 
     option_half = 0
