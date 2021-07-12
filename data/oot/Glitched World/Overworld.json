@@ -13,9 +13,9 @@
     {
         "region_name": "Root Exits",
         "exits": {
-            "KF Links House": "is_child",
+            "KF Links House": "is_child and (starting_age == 'child' or Time_Travel)",
             "Temple of Time": "
-                is_adult or 
+                (is_adult and (starting_age == 'adult' or Time_Travel)) or 
                 (can_play(Prelude_of_Light) and can_leave_forest)",
             "Sacred Forest Meadow": "can_play(Minuet_of_Forest)",
             "DMC Central": "can_play(Bolero_of_Fire) and can_leave_forest",
