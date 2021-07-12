@@ -9,7 +9,7 @@ import pickle
 from typing import Dict, Tuple
 
 from BaseClasses import MultiWorld, CollectionState, Region, Item
-from worlds.alttp.Items import ItemFactory, item_name_groups
+from worlds.alttp.Items import item_name_groups
 from worlds.alttp.Regions import create_regions, mark_light_world_regions, \
     lookup_vanilla_location_to_entrance
 from worlds.alttp.InvertedRegions import create_inverted_regions, mark_dark_world_regions
@@ -453,8 +453,8 @@ def main(args, seed=None):
     for index, take_any in enumerate(takeanyregions):
         for region in [world.get_region(take_any, player) for player in range(1, world.players + 1) if
                        world.retro[player]]:
-            item = ItemFactory(region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'],
-                               region.player)
+            item = world.create_item(region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'],
+                                     region.player)
             player = region.player
             location_id = SHOP_ID_START + total_shop_slots + index
 

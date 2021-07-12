@@ -516,10 +516,11 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     ret.game = get_choice("game", weights)
     if ret.game not in weights:
         raise Exception(f"No game options for selected game \"{ret.game}\" found.")
+    world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
     ret.local_items = set()
     for item_name in game_weights.get('local_items', []):
-        items = item_name_groups.get(item_name, {item_name})
+        items = world_type.item_name_groups.get(item_name, {item_name})
         for item in items:
             if item in lookup_any_item_name_to_id:
                 ret.local_items.add(item)
@@ -528,7 +529,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
 
     ret.non_local_items = set()
     for item_name in game_weights.get('non_local_items', []):
-        items = item_name_groups.get(item_name, {item_name})
+        items = world_type.item_name_groups.get(item_name, {item_name})
         for item in items:
             if item in lookup_any_item_name_to_id:
                 ret.non_local_items.add(item)
@@ -556,7 +557,7 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
                     else:
                         setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights)))
                 except Exception as e:
-                    raise Exception(f"Error generating option {option_name} in {ret.game}")
+                    raise Exception(f"Error generating option {option_name} in {ret.game}") from e
             else:
                 setattr(ret, option_name, option(option.default))
         if ret.game == "Minecraft":
@@ -777,7 +778,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                     get_choice("exit", placement),
                     get_choice("direction", placement, "both")
                 ))
-
 
     ret.sprite_pool = weights.get('sprite_pool', [])
     ret.sprite = get_choice('sprite', weights, "Link")

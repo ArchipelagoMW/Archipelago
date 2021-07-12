@@ -1,14 +1,15 @@
 from BaseClasses import Item
 import typing
 
+
 class ItemData(typing.NamedTuple):
     code: int
     progression: bool
 
+
 class MinecraftItem(Item):
     game: str = "Minecraft"
-    def __init__(self, name: str, progression: bool, code: int, player: int):
-        super().__init__(name, progression, code if code else None, player)
+
 
 item_table = {
     "Archery": ItemData(45000, True),

@@ -1,9 +1,12 @@
+from typing import Dict, Set
+
+
 from .Items import MinecraftItem, item_table, item_frequencies
 from .Locations import MinecraftAdvancement, advancement_table, exclusion_table, events_table
 from .Regions import mc_regions, link_minecraft_structures
 from .Rules import set_rules
 
-from BaseClasses import Region, Entrance
+from BaseClasses import Region, Entrance, Item
 from .Options import minecraft_options
 from ..AutoWorld import World
 
@@ -13,6 +16,7 @@ class MinecraftWorld(World):
     game: str = "Minecraft"
     options = minecraft_options
     topology_present = True
+    item_names = frozenset(item_table)
 
     def _get_mc_data(self):
         exits = ["Overworld Structure 1", "Overworld Structure 2", "Nether Structure 1", "Nether Structure 2",
@@ -27,7 +31,6 @@ class MinecraftWorld(World):
             'structures': {exit: self.world.get_entrance(exit, self.player).connected_region.name for exit in exits}
         }
 
-
     def generate_basic(self):
         link_minecraft_structures(self.world, self.player)
 
@@ -35,9 +38,9 @@ class MinecraftWorld(World):
         pool_counts = item_frequencies.copy()
         if getattr(self.world, "bee_traps")[self.player]: 
             pool_counts.update({"Rotten Flesh": 0, "Bee Trap (Minecraft)": 4})
-        for item_name, item_data in item_table.items():
+        for item_name in item_table:
             for count in range(pool_counts.get(item_name, 1)):
-                pool.append(MinecraftItem(item_name, item_data.progression, item_data.code, self.player))
+                pool.append(self.create_item(item_name))
 
         prefill_pool = {}
         prefill_pool.update(events_table)
@@ -49,7 +52,7 @@ class MinecraftWorld(World):
         for loc_name, item_name in prefill_pool.items():
             item_data = item_table[item_name]
             location = self.world.get_location(loc_name, self.player)
-            item = MinecraftItem(item_name, item_data.progression, item_data.code, self.player)
+            item = self.create_item(item_name)
             self.world.push_item(location, item, collect=False)
             pool.remove(item)
             location.event = item_data.progression
@@ -57,10 +60,8 @@ class MinecraftWorld(World):
 
         self.world.itempool += pool
 
-
     def set_rules(self):
         set_rules(self.world, self.player)
-
 
     def create_regions(self):
         def MCRegion(region_name: str, exits=[]):
@@ -75,7 +76,6 @@ class MinecraftWorld(World):
 
         self.world.regions += [MCRegion(*r) for r in mc_regions]
 
-
     def generate_output(self):
         import json
         from base64 import b64encode
@@ -86,10 +86,13 @@ class MinecraftWorld(World):
         with open(output_path(filename), 'wb') as f:
             f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
 
-
     def fill_slot_data(self): 
         slot_data = self._get_mc_data()
         for option_name in minecraft_options:
             option = getattr(self.world, option_name)[self.player]
             slot_data[option_name] = int(option.value)
         return slot_data
+
+    def create_item(self, name: str) -> Item:
+        item_data = item_table[name]
+        return MinecraftItem(name, item_data.progression, item_data.code, self.player)

@@ -272,6 +272,8 @@ class MultiWorld():
         return next(location for location in self.get_locations() if
                     location.item and location.item.name == item and location.item.player == player)
 
+    def create_item(self, item_name: str, player: int) -> Item:
+        return self.worlds[player].create_item(item_name)
 
     def push_precollected(self, item: Item):
         item.world = self
@@ -858,7 +860,6 @@ class CollectionState(object):
             return respawn_dragon and ((self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player)) or \
                    (self.has('Progressive Weapons', player, 1) and self.has('Bed', player)))
         return respawn_dragon and self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and self.has('Archery', player)
-
 
     def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:
         if location:

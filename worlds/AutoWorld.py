@@ -1,4 +1,6 @@
-from BaseClasses import MultiWorld
+from typing import Dict, Set, Tuple
+
+from BaseClasses import MultiWorld, Item, CollectionState
 
 
 class AutoWorldRegister(type):
@@ -29,6 +31,9 @@ class World(metaclass=AutoWorldRegister):
     player: int
     options: dict = {}
     topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
+    item_names: Set[str] = frozenset()
+    # maps item group names to sets of items. Example: "Weapons" -> {"Sword", "Bow"}
+    item_name_groups: Dict[str, Set[str]] = {}
 
     def __init__(self, world: MultiWorld, player: int):
         self.world = world
@@ -49,15 +54,19 @@ class World(metaclass=AutoWorldRegister):
         If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""
         pass
 
-    def get_required_client_version(self) -> tuple:
+    def get_required_client_version(self) -> Tuple[int, int, int]:
         return 0, 0, 3
 
     # end of Main.py calls
 
-    def collect(self, state, item) -> bool:
+    def collect(self, state: CollectionState, item: Item) -> bool:
         """Collect an item into state. For speed reasons items that aren't logically useful get skipped."""
         if item.advancement:
             state.prog_items[item.name, item.player] += 1
             return True  # indicate that a logical state change has occured
         return False
 
+    def create_item(self, name: str) -> Item:
+        """Create an item for this world type and player.
+        Warning: this may be called with self.world = None, for example by MultiServer"""
+        raise NotImplementedError

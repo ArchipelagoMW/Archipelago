@@ -4,29 +4,30 @@ from BaseClasses import Region, Entrance, Location, Item
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, advancement_technologies, \
     all_ingredient_names, required_technologies, get_rocket_requirements, rocket_recipes, \
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
-    get_science_pack_pools, Recipe, recipes, technology_table
+    get_science_pack_pools, Recipe, recipes, technology_table, tech_table
 from .Shapes import get_shapes
 from .Mod import generate_mod
 from .Options import factorio_options
+
+
+class FactorioItem(Item):
+    game = "Factorio"
+
 
 class Factorio(World):
     game: str = "Factorio"
     static_nodes = {"automation", "logistics", "rocket-silo"}
     custom_recipes = {}
     additional_advancement_technologies = set()
+    item_names = frozenset(tech_table)
 
     def generate_basic(self):
-        for tech_name, tech_id in base_tech_table.items():
-            if self.world.progressive and tech_name in tech_to_progressive_lookup:
-                item_name = tech_to_progressive_lookup[tech_name]
-                tech_id = progressive_tech_table[item_name]
+        for tech_name in base_tech_table:
+            if self.world.progressive:
+                item_name = tech_to_progressive_lookup.get(tech_name, tech_name)
             else:
-                item_name = tech_name
-
-            tech_item = Item(item_name, item_name in advancement_technologies or
-                             item_name in self.additional_advancement_technologies,
-                             tech_id, self.player)
-            tech_item.game = "Factorio"
+                item_name = item_name
+            tech_item = self.create_item(item_name)
             if tech_name in self.static_nodes:
                 self.world.get_location(tech_name, self.player).place_locked_item(tech_item)
             else:
@@ -157,3 +158,9 @@ class Factorio(World):
             if tech in tech_to_progressive_lookup:
                 prog_add.add(tech_to_progressive_lookup[tech])
         self.additional_advancement_technologies |= prog_add
+
+    def create_item(self, name: str) -> Item:
+        assert name in tech_table
+        return FactorioItem(name, name in advancement_technologies or
+                            name in self.additional_advancement_technologies,
+                            tech_table[name], self.player)
