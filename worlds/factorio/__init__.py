@@ -22,6 +22,9 @@ class Factorio(World):
     item_names = frozenset(tech_table)
     location_names = frozenset(base_tech_table)
 
+    item_name_to_id = tech_table
+    location_name_to_id = base_tech_table
+
     def generate_basic(self):
         for tech_name in base_tech_table:
             if self.world.progressive:

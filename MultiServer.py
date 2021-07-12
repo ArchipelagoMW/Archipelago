@@ -27,8 +27,7 @@ from fuzzywuzzy import process as fuzzy_process
 
 from worlds.AutoWorld import AutoWorldRegister
 proxy_worlds = {name: world(None, 0) for name, world in AutoWorldRegister.world_types.items()}
-from worlds import network_data_package, lookup_any_item_id_to_name, lookup_any_item_name_to_id, \
-    lookup_any_location_id_to_name, lookup_any_location_name_to_id
+from worlds import network_data_package, lookup_any_item_id_to_name, lookup_any_location_id_to_name
 import Utils
 from Utils import get_item_name_from_id, get_location_name_from_id, \
     version_tuple, restricted_loads, Version
@@ -518,7 +517,7 @@ def notify_team(ctx: Context, team: int, text: str):
 
 def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[NetUtils.Hint]:
     hints = []
-    seeked_item_id = lookup_any_item_name_to_id[item]
+    seeked_item_id = proxy_worlds[ctx.games[slot]].item_name_to_id[item]
     for finding_player, check_data in ctx.locations.items():
         for location_id, result in check_data.items():
             item_id, receiving_player = result
@@ -531,7 +530,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
 
 
 def collect_hints_location(ctx: Context, team: int, slot: int, location: str) -> typing.List[NetUtils.Hint]:
-    seeked_location: int = lookup_any_location_name_to_id[location]
+    seeked_location: int = proxy_worlds[ctx.games[slot]].location_name_to_id[location]
     item_id, receiving_player = ctx.locations[slot].get(seeked_location, (None, None))
     if item_id:
         found = seeked_location in ctx.location_checks[team, slot]
@@ -1223,9 +1222,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
         if usable:
             team, slot = self.ctx.player_name_lookup[seeked_player]
             item = " ".join(item_name)
-            item, usable, response = get_intended_text(item, proxy_worlds[self.ctx.games[slot]].item_names)
+            world = proxy_worlds[self.ctx.games[slot]]
+            item, usable, response = get_intended_text(item, world.item_names)
             if usable:
-                new_item = NetworkItem(lookup_any_item_name_to_id[item], -1, 0)
+                new_item = NetworkItem(world.item_name_to_id[item], -1, 0)
                 get_received_items(self.ctx, team, slot).append(new_item)
                 self.ctx.notify_all('Cheat console: sending "' + item + '" to ' +
                                     self.ctx.get_aliased_name(team, slot))

@@ -9,6 +9,8 @@ class AutoWorldRegister(type):
 
     def __new__(cls, name, bases, dct):
         dct["all_names"] = dct["item_names"] | dct["location_names"] | set(dct.get("item_name_groups", {}))
+        dct["item_id_to_name"] = {code: name for name, code in dct["item_name_to_id"].items()}
+        dct["location_id_to_name"] = {code: name for name, code in dct["location_name_to_id"].items()}
         new_class = super().__new__(cls, name, bases, dct)
         if "game" in dct:
             AutoWorldRegister.world_types[dct["game"]] = new_class
@@ -38,6 +40,16 @@ class World(metaclass=AutoWorldRegister):
     item_name_groups: Dict[str, Set[str]] = {}
     location_names: Set[str] = frozenset()  # set of all potential location names
     all_names: Set[str] = frozenset()  # gets automatically populated with all item, item group and location names
+
+    # map names to their IDs
+    item_name_to_id: Dict[str, int] = {}
+    location_name_to_id: Dict[str, int] = {}
+
+    # reverse, automatically generated
+    item_id_to_name: Dict[int, str] = {}
+    location_id_to_name: Dict[int, str] = {}
+
+    data_version = 1  # increment this every time something in your world's names/id mappings changes.
 
     hint_blacklist: Set[str] = frozenset()  # any names that should not be hintable
 

@@ -345,7 +345,7 @@ progressive_rows["progressive-wall"] = ("stone-wall", "gate")
 progressive_rows["progressive-follower"] = ("defender", "distractor", "destroyer")
 progressive_rows["progressive-inserter"] = ("fast-inserter", "stack-inserter")
 
-base_tech_table = tech_table.copy() # without progressive techs
+base_tech_table = tech_table.copy()  # without progressive techs
 base_technology_table = technology_table.copy()
 
 progressive_tech_table: Dict[str, int] = {}

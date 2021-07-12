@@ -15,6 +15,9 @@ class ALTTPWorld(World):
     location_names = frozenset(lookup_name_to_id)
     hint_blacklist = {"Triforce"}
 
+    item_name_to_id = {name: data.item_code for name, data in item_table.items() if type(data.item_code) == int}
+    location_name_to_id = lookup_name_to_id
+
     def collect(self, state: CollectionState, item: Item) -> bool:
         if item.name.startswith('Progressive '):
             if 'Sword' in item.name:
