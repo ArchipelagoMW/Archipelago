@@ -13,6 +13,8 @@ class Forest(Choice):
     option_open = 0
     option_closed_deku = 1
     option_closed = 2
+    alias_open_forest = 0
+    alias_closed_forest = 2
 
 class Gate(Choice): 
     option_open = 0
@@ -71,6 +73,13 @@ class TriforceGoal(Range):
 
 world_options: typing.Dict[str, type(Option)] = {
     "starting_age": StartingAge,
+    # "shuffle_interior_entrances": InteriorEntrances,
+    # "shuffle_grotto_entrances": Toggle,
+    # "shuffle_dungeon_entrances": Toggle,
+    # "shuffle_overworld_entrances": Toggle,
+    # "owl_drops": Toggle,
+    # "warp_songs": Toggle,
+    # "spawn_positions": Toggle,
     "triforce_hunt": Toggle, 
     "triforce_goal": TriforceGoal,
     "bombchus_in_logic": Toggle,
@@ -120,29 +129,33 @@ bridge_options: typing.Dict[str, type(Option)] = {
 
 class SongShuffle(Choice): 
     option_song = 0
+    # option_dungeon = 1
     option_any = 2
 
-class ShopShuffle(Choice):  # usually I would put 'off' at 0, but this is numeric so it makes an ugly off-by-one
+class ShopShuffle(Choice): 
     option_0 = 0
     option_1 = 1
     option_2 = 2
     option_3 = 3
     option_4 = 4
     option_random = 5
-    option_off = 6
+    option_false = 6
     default = 6
 
 class TokenShuffle(Choice): 
-    option_off = 0
+    option_false = 0
     option_dungeons = 1
     option_overworld = 2
     option_all = 3
 
 class ScrubShuffle(Choice): 
-    option_off = 0
+    option_false = 0
     option_low = 1
     option_regular = 2
     option_random = 3
+    alias_affordable = 1
+    alias_expensive = 2
+    alias_random_prices = 3
 
 shuffle_options: typing.Dict[str, type(Option)] = {
     "shuffle_song_items": SongShuffle,
@@ -214,10 +227,10 @@ class BigPoes(Range):
 
 timesavers_options: typing.Dict[str, type(Option)] = {
     # "skip_child_zelda": Toggle, 
-    "no_escape_sequence": Toggle, 
-    "no_guard_stealth": Toggle, 
-    "no_epona_race": Toggle, 
-    "skip_some_minigame_phases": Toggle, 
+    "no_escape_sequence": DefaultOnToggle, 
+    "no_guard_stealth": DefaultOnToggle, 
+    "no_epona_race": DefaultOnToggle, 
+    "skip_some_minigame_phases": DefaultOnToggle, 
     "complete_mask_quest": Toggle, 
     "useful_cutscenes": Toggle, 
     "fast_chests": DefaultOnToggle, 
@@ -234,6 +247,11 @@ class Hints(Choice):
     option_always = 3
     default = 3
 
+class TextShuffle(Choice): 
+    option_none = 0
+    option_except_hints = 1
+    option_complete = 2
+
 class DamageMultiplier(Choice): 
     option_half = 0
     option_normal = 1
@@ -245,6 +263,7 @@ class DamageMultiplier(Choice):
 misc_options: typing.Dict[str, type(Option)] = {
     "clearer_hints": DefaultOnToggle,
     # "hints": Hints,
+    "text_shuffle": TextShuffle,
     "damage_multiplier": DamageMultiplier,
     "no_collectible_hearts": Toggle,
     "start_with_rupees": Toggle,
@@ -258,7 +277,7 @@ class ItemPoolValue(Choice):
     default = 1
 
 class IceTraps(Choice): 
-    option_off = 0
+    option_false = 0
     option_normal = 1
     option_on = 2
     option_mayhem = 3

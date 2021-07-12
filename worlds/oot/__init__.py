@@ -49,6 +49,17 @@ class OOTWorld(World):
         self.remove_from_start_inventory = []  # some items will be precollected but not in the inventory
 
         self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld'] # only 'keysanity' and 'remove' implemented
+        self.misc_hints = True  # this is just always on
+
+        # ER and glitched logic don't play nice together, glitched takes precedence
+        if self.logic_rules == 'glitched':         
+            self.shuffle_interior_entrances = False
+            self.shuffle_grotto_entrances = False
+            self.shuffle_dungeon_entrances = False
+            self.shuffle_overworld_entrances = False
+            self.owl_drops = False
+            self.warp_songs = False
+            self.spawn_positions = False
 
         # Determine skipped trials in GT
         # This needs to be done before the logic rules in GT are parsed
@@ -65,17 +76,24 @@ class OOTWorld(World):
             else:
                 raise Exception(f'Unknown OOT logic trick for player {self.player}: {trick}')
 
-        # Not implemented for now, but needed to placate the generator
-        self.ocarina_songs = False
-        self.skip_child_zelda = False
+        # Workaround fix for options that have 'off' as a choice but aren't toggles
+        # They are listed as having a 'false' option in Options.py for the yaml generator to play nice, since off -> False -> 'false'
+        fix_options = ['shopsanity', 'tokensanity', 'shuffle_scrubs', 'junk_ice_traps']  # also 'shuffle_interior_entrances' but not implemented yet
+        for option in fix_options:
+            if getattr(self, option) == 'false':
+                setattr(self, option, 'off')
+
+        # Not implemented for now, but needed to placate the generator. Remove as they are implemented
         self.mq_dungeons_random = False  # this will be a deprecated option later
         self.mq_dungeons = 0
         self.dungeon_mq = {item['name']: False for item in dungeon_table}
-        self.hints = 'none'
-        self.misc_hints = True
-        self.starting_tod = 'default'
+        self.skip_child_zelda = False
+        self.ocarina_songs = False
         self.correct_chest_sizes = False
-        self.text_shuffle = 'none'
+        self.hints = 'none'
+        self.starting_tod = 'default'
+
+        self.shopsanity = 'off'
 
         self.shuffle_interior_entrances = False  # not actually a toggle
         self.shuffle_grotto_entrances = False
@@ -85,6 +103,7 @@ class OOTWorld(World):
         self.warp_songs = False
         self.spawn_positions = False
 
+        # Keep these later
         self.ensure_tod_access = self.shuffle_interior_entrances or self.shuffle_overworld_entrances or self.spawn_positions
         self.entrance_shuffle = self.shuffle_interior_entrances or self.shuffle_grotto_entrances or self.shuffle_dungeon_entrances or \
                                 self.shuffle_overworld_entrances or self.owl_drops or self.warp_songs or self.spawn_positions
@@ -157,7 +176,7 @@ class OOTWorld(World):
 
     def set_scrub_prices(self):
         # Get Deku Scrub Locations
-        scrub_locations = [location for location in self.world.get_locations() if 'Deku Scrub' in location.name]
+        scrub_locations = [location for location in self.get_locations() if 'Deku Scrub' in location.name]
         scrub_dictionary = {}
         self.scrub_prices = {}
         for location in scrub_locations:
@@ -333,8 +352,12 @@ class OOTWorld(World):
         create_patch_file(self.rom, Utils.output_path(outfile_name+'.zpf'))
         self.rom.restore()
 
+        # TODO: compress rom and remove rom file path
+        if self.compress_rom:
+            pass
 
-    # Helper functions for patching
+
+    # Helper functions
     def get_shuffled_entrances(self):
         return []
 
