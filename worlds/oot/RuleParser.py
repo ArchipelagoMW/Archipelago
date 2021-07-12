@@ -65,7 +65,8 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             load_aliases()
         # final rule cache
         self.rule_cache = {}
-        kwarg_defaults['player'] = self.player  # I hope this does what I think
+        self.kwarg_defaults = kwarg_defaults.copy()  # otherwise this gets contaminated between players
+        self.kwarg_defaults['player'] = self.player
 
 
     def visit_Name(self, node):
@@ -90,7 +91,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             return ast.parse('%r' % self.world.__dict__[node.id], mode='eval').body
         elif node.id in State.__dict__:
             return self.make_call(node, node.id, [], [])
-        elif node.id in kwarg_defaults or node.id in allowed_globals:
+        elif node.id in self.kwarg_defaults or node.id in allowed_globals:
             return node
         elif event_name.match(node.id):
             self.events.add(node.id.replace('_', ' '))
@@ -340,7 +341,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         if not hasattr(State, name):
             raise Exception('Parse Error: No such function State.%s' % name, self.current_spot.name, ast.dump(node, False))
 
-        for (k, v) in kwarg_defaults.items():
+        for (k, v) in self.kwarg_defaults.items():
             keywords.append(ast.keyword(arg=f'{k}', value=ast.Constant(v)))
 
         return ast.Call(
@@ -402,8 +403,8 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         rule_str = ast.dump(body, False)
         if rule_str not in self.rule_cache:
             # requires consistent iteration on dicts
-            kwargs = [ast.arg(arg=k) for k in kwarg_defaults.keys()]
-            kwd = list(map(ast.Constant, kwarg_defaults.values()))
+            kwargs = [ast.arg(arg=k) for k in self.kwarg_defaults.keys()]
+            kwd = list(map(ast.Constant, self.kwarg_defaults.values()))
             try:
                 self.rule_cache[rule_str] = eval(compile(
                     ast.fix_missing_locations(

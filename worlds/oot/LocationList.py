@@ -923,7 +923,8 @@ def location_is_viewable(loc_name, correct_chest_sizes):
 
 # Function to run exactly once after after placing items in drop locations for each world
 # Sets all Drop locations to a unique name in order to avoid name issues and to identify locations in the spoiler
-def set_drop_location_names(world):
-    for location in world.get_locations():
-        if location.game == 'Ocarina of Time' and location.type == 'Drop':
-            location.name = location.parent_region.name + " " + location.name
+def set_drop_location_names(ootworld):
+    for region in ootworld.regions:
+        for location in region.locations:
+            if location.type == 'Drop': 
+                location.name = location.parent_region.name + " " + location.name

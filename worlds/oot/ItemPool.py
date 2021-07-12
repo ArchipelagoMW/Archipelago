@@ -758,13 +758,13 @@ def generate_itempool(ootworld):
     elif ootworld.junk_ice_traps in ['mayhem', 'onslaught']:
         junk_pool[:] = [('Ice Trap', 1)]
 
-    fixed_locations = list(filter(lambda loc: loc.name in fixedlocations, world.get_locations()))
+    fixed_locations = list(filter(lambda loc: loc.name in fixedlocations, ootworld.get_locations()))
     for location in fixed_locations:
         item = fixedlocations[location.name]
         world.push_item(location, ItemFactory(item, player), collect=False)
         location.locked = True
 
-    drop_locations = list(filter(lambda loc: loc.type == 'Drop', world.get_locations()))
+    drop_locations = list(filter(lambda loc: loc.type == 'Drop', ootworld.get_locations()))
     for drop_location in drop_locations:
         item = droplocations[drop_location.name]
         world.push_item(drop_location, ItemFactory(item, player), collect=False)

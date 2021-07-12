@@ -8,7 +8,7 @@ from .Entrance import OOTEntrance
 from .Items import item_table, ItemFactory, MakeEventItem
 from .ItemPool import generate_itempool
 from .Regions import OOTRegion, TimeOfDay
-from .Rules import set_rules, set_shop_rules, set_age_rules
+from .Rules import set_rules, set_shop_rules
 from .RuleParser import Rule_AST_Transformer
 from .Options import oot_options
 from .Utils import data_path, read_json
@@ -267,7 +267,7 @@ class OOTWorld(World):
 
         # Do some other stuff that we need to do
         set_shop_rules(self)
-        set_drop_location_names(self.world)
+        set_drop_location_names(self)
         self.fill_bosses()
 
         # Place dungeon items
@@ -343,6 +343,9 @@ class OOTWorld(World):
     # Helper functions for patching
     def get_shuffled_entrances(self):
         return []
+
+    def get_locations(self):
+        return [loc for region in self.regions for loc in region.locations]
 
     def get_location(self, location): 
         return self.world.get_location(location, self.player)
