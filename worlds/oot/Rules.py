@@ -22,9 +22,7 @@ def set_rules(ootworld):
     # is_child = ootworld.parser.parse_rule('is_child')
     # guarantee_hint = ootworld.parser.parse_rule('guarantee_hint')
 
-    for location in world.get_locations():
-        if location.player != player: 
-            continue
+    for location in ootworld.get_locations():
         if ootworld.shuffle_song_items == 'song':
             if location.type == 'Song':
                 # allow junk items, but songs must still have matching world
