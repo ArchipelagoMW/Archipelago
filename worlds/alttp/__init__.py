@@ -1,9 +1,9 @@
-from typing import Optional
-
-from BaseClasses import Location, Item, CollectionState
+from BaseClasses import Item, CollectionState
+from .SubClasses import ALttPItem
 from ..AutoWorld import World
 from .Options import alttp_options
 from .Items import as_dict_item_table, item_name_groups, item_table
+from .Regions import lookup_name_to_id
 
 
 class ALTTPWorld(World):
@@ -12,6 +12,7 @@ class ALTTPWorld(World):
     topology_present = True
     item_name_groups = item_name_groups
     item_names = frozenset(item_table)
+    location_names = frozenset(lookup_name_to_id)
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         if item.name.startswith('Progressive '):
@@ -74,29 +75,3 @@ class ALTTPWorld(World):
         return ALttPItem(name, self.player, **as_dict_item_table[name])
 
 
-class ALttPLocation(Location):
-    game: str = "A Link to the Past"
-
-    def __init__(self, player: int, name: str = '', address=None, crystal: bool = False,
-                 hint_text: Optional[str] = None, parent=None,
-                 player_address=None):
-        super(ALttPLocation, self).__init__(player, name, address, parent)
-        self.crystal = crystal
-        self.player_address = player_address
-        self._hint_text: str = hint_text
-
-
-class ALttPItem(Item):
-    game: str = "A Link to the Past"
-
-    def __init__(self, name, player, advancement=False, type=None, item_code=None, pedestal_hint=None, pedestal_credit=None,
-                 sick_kid_credit=None, zora_credit=None, witch_credit=None, flute_boy_credit=None, hint_text=None):
-        super(ALttPItem, self).__init__(name, advancement, item_code, player)
-        self.type = type
-        self._pedestal_hint_text = pedestal_hint
-        self.pedestal_credit_text = pedestal_credit
-        self.sickkid_credit_text = sick_kid_credit
-        self.zora_credit_text = zora_credit
-        self.magicshop_credit_text = witch_credit
-        self.fluteboy_credit_text = flute_boy_credit
-        self._hint_text = hint_text

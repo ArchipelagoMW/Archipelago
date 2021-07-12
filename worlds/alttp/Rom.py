@@ -18,7 +18,7 @@ import bsdiff4
 from typing import Optional
 
 from BaseClasses import CollectionState, Region
-from worlds.alttp import ALttPLocation
+from worlds.alttp.SubClasses import ALttPLocation
 from worlds.alttp.Shops import ShopType
 from worlds.alttp.Dungeons import dungeon_music_addresses
 from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address

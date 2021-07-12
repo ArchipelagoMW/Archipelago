@@ -2,7 +2,7 @@ from collections import namedtuple
 import logging
 
 from BaseClasses import Region, RegionType
-from worlds.alttp import ALttPLocation
+from worlds.alttp.SubClasses import ALttPLocation
 from worlds.alttp.Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops
 from worlds.alttp.Bosses import place_bosses
 from worlds.alttp.Dungeons import get_dungeon_item_pool

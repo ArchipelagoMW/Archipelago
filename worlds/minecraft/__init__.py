@@ -17,6 +17,7 @@ class MinecraftWorld(World):
     options = minecraft_options
     topology_present = True
     item_names = frozenset(item_table)
+    location_names = frozenset(advancement_table)
 
     def _get_mc_data(self):
         exits = ["Overworld Structure 1", "Overworld Structure 2", "Nether Structure 1", "Nether Structure 2",

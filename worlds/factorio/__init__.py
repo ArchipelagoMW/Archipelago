@@ -20,6 +20,7 @@ class Factorio(World):
     custom_recipes = {}
     additional_advancement_technologies = set()
     item_names = frozenset(tech_table)
+    location_names = frozenset(base_tech_table)
 
     def generate_basic(self):
         for tech_name in base_tech_table:

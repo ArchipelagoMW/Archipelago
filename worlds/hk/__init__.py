@@ -16,6 +16,7 @@ class HKWorld(World):
     game: str = "Hollow Knight"
     options = hollow_knight_options
     item_names: Set[str] = frozenset(item_table)
+    location_names: Set[str] = frozenset(lookup_name_to_id)
 
     def generate_basic(self):
         # Link regions

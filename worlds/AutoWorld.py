@@ -31,9 +31,10 @@ class World(metaclass=AutoWorldRegister):
     player: int
     options: dict = {}
     topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
-    item_names: Set[str] = frozenset()
+    item_names: Set[str] = frozenset()  # set of all potential item names
     # maps item group names to sets of items. Example: "Weapons" -> {"Sword", "Bow"}
     item_name_groups: Dict[str, Set[str]] = {}
+    location_names: Set[str] = frozenset()  # set of all potential location names
 
     def __init__(self, world: MultiWorld, player: int):
         self.world = world

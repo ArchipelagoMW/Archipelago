@@ -125,7 +125,8 @@ def main(args, seed=None):
     world.slot_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in
                         range(1, world.players + 1)}
 
-    for player in range(1, world.players + 1):
+    # system for sharing ER layouts
+    for player in world.alttp_player_ids:
         world.er_seeds[player] = str(world.random.randint(0, 2 ** 64))
 
         if "-" in world.shuffle[player]:
@@ -134,7 +135,6 @@ def main(args, seed=None):
             if shuffle == "vanilla":
                 world.er_seeds[player] = "vanilla"
             elif seed.startswith("group-") or args.race:
-                # renamed from team to group to not confuse with existing team name use
                 world.er_seeds[player] = get_same_seed(world, (
                 shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
             else:  # not a race or group seed, use set seed as is.
@@ -145,8 +145,9 @@ def main(args, seed=None):
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, world.seed)
 
     logger.info("Found World Types:")
+    longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
-        logger.info(f"  {name:30} {cls}")
+        logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} Items | {len(cls.location_names):3} Locations")
 
     parsed_names = parse_player_names(args.names, world.players, args.teams)
     world.teams = len(parsed_names)
@@ -165,30 +166,30 @@ def main(args, seed=None):
             world.push_precollected(world.create_item(item_name, player))
 
     for player in world.player_ids:
+        if player in world.alttp_player_ids:
+            # enforce pre-defined local items.
+            if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
+                world.local_items[player].add('Triforce Piece')
 
-        # enforce pre-defined local items.
-        if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
-            world.local_items[player].add('Triforce Piece')
+            # dungeon items can't be in non-local if the appropriate dungeon item shuffle setting is not set.
+            if not world.mapshuffle[player]:
+                world.non_local_items[player] -= item_name_groups['Maps']
+
+            if not world.compassshuffle[player]:
+                world.non_local_items[player] -= item_name_groups['Compasses']
+
+            if not world.keyshuffle[player]:
+                world.non_local_items[player] -= item_name_groups['Small Keys']
+
+            if not world.bigkeyshuffle[player]:
+                world.non_local_items[player] -= item_name_groups['Big Keys']
+
+            # Not possible to place pendants/crystals out side of boss prizes yet.
+            world.non_local_items[player] -= item_name_groups['Pendants']
+            world.non_local_items[player] -= item_name_groups['Crystals']
 
         # items can't be both local and non-local, prefer local
         world.non_local_items[player] -= world.local_items[player]
-
-        # dungeon items can't be in non-local if the appropriate dungeon item shuffle setting is not set.
-        if not world.mapshuffle[player]:
-            world.non_local_items[player] -= item_name_groups['Maps']
-
-        if not world.compassshuffle[player]:
-            world.non_local_items[player] -= item_name_groups['Compasses']
-
-        if not world.keyshuffle[player]:
-            world.non_local_items[player] -= item_name_groups['Small Keys']
-
-        if not world.bigkeyshuffle[player]:
-            world.non_local_items[player] -= item_name_groups['Big Keys']
-
-        # Not possible to place pendants/crystals out side of boss prizes yet.
-        world.non_local_items[player] -= item_name_groups['Pendants']
-        world.non_local_items[player] -= item_name_groups['Crystals']
 
     AutoWorld.call_all(world, "create_regions")
 
