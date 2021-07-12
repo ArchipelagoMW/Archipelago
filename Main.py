@@ -22,7 +22,7 @@ from worlds.alttp.Shops import create_shops, ShopSlotFill, SHOP_ID_START, total_
 from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, version_tuple
 from worlds.generic.Rules import locality_rules
-from worlds import lookup_any_item_name_to_id, AutoWorld
+from worlds import AutoWorld
 import Patch
 
 seeddigits = 20
@@ -162,9 +162,7 @@ def main(args, seed=None):
 
     for player in world.player_ids:
         for item_name in args.startinventory[player]:
-            item = Item(item_name, True, lookup_any_item_name_to_id[item_name], player)
-            item.game = world.game[player]
-            world.push_precollected(item)
+            world.push_precollected(world.create_item(item_name, player))
 
     for player in world.player_ids:
 
