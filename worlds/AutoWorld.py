@@ -58,6 +58,12 @@ class World(metaclass=AutoWorldRegister):
 
     hint_blacklist: Set[str] = frozenset()  # any names that should not be hintable
 
+    # if a world is set to remote_items, then it just needs to send location checks to the server and the server
+    # sends back the items
+    # if a world is set to remote_items = False, then the server never sends an item where receiver == finder,
+    # the client finds its own items in its own world.
+    remote_items: bool = True
+
     def __init__(self, world: MultiWorld, player: int):
         self.world = world
         self.player = player
