@@ -40,6 +40,7 @@ class OOTItem(Item):
         self.special = special or {}
         self.looks_like_item = None
         self.price = special.get('price', None) if special else None
+        self.internal = False
     
     # The playthrough calculation calls a function that uses "sweep_for_events(key_only=True)"
     # This checks if the item it's looking for is a small key, using the small key property. 
@@ -58,39 +59,6 @@ class OOTItem(Item):
         return self.type in ['SmallKey', 'FortressSmallKey', 'BossKey', 'GanonBossKey', 'Map', 'Compass']
 
 
-def ItemFactory(items, player: int, event=False):
-    if isinstance(items, str):
-        # if not event and items not in ItemInfo.items:
-        #     raise KeyError('Unknown Item: %s' % items)
-        if not event: 
-            return OOTItem(items, player, item_table[items], event)
-        else:
-            return OOTItem(items, player, ('Event', True, None, None), True)
-
-    ret = []
-    for item in items:
-        # if not event and item not in ItemInfo.items:
-        #     raise KeyError('Unknown Item: %s' % item)
-        if not event: 
-            ret.append(OOTItem(item, player, item_table[item], event))
-        else: 
-            ret.append(OOTItem(item, player, ('Event', True, None, None), True))
-
-    return ret
-
-
-def MakeEventItem(world, player, name, location, item=None): 
-    if item is None:
-        item = ItemFactory(name, player, event=True)
-    world.push_item(location, item, collect=False)
-    location.locked = True
-    if name not in item_table:
-        location.internal = True
-    # location.world.event_items.add(name)
-    return item
-
-# We need internal AP item IDs here
-# those can probably be generated uniquely from the GIM value
 
 # Progressive: True  -> Advancement
 #              False -> Priority
@@ -454,10 +422,4 @@ item_table = {
                                             }),
 }
 
-lookup_id_to_name: typing.Dict[int, str] = {oot_data_to_ap_id(data, False): item_name for item_name, data in item_table.items() if data[2] is not None}
-
-# lookup_id_to_name: typing.Dict[int, str] = {data.id: item_name for item_name, data in item_table.items()}
-
-# lookup_type_to_names: typing.Dict[str, typing.Set[str]] = {}
-# for item, item_data in item_table.items():
-#     lookup_type_to_names.setdefault(item_data.type, set()).add(item)
+# lookup_id_to_name: typing.Dict[int, str] = {oot_data_to_ap_id(data, False): item_name for item_name, data in item_table.items() if data[2] is not None}

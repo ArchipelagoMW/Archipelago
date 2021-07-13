@@ -1,7 +1,6 @@
 import os
 
 from .Dungeon import Dungeon
-from .Items import ItemFactory
 from .Utils import data_path
 
 
@@ -116,14 +115,12 @@ def create_dungeons(ootworld):
         
         ootworld.load_regions_from_json(dungeon_json)
 
-        boss_keys = ItemFactory(['Boss Key (%s)' % name] * dungeon_info['boss_key'], ootworld.player)
+        boss_keys = [ootworld.create_item(f'Boss Key ({name})') for i in range(dungeon_info['boss_key'])]
         if not ootworld.dungeon_mq[dungeon_info['name']]:
-            small_keys = ItemFactory(['Small Key (%s)' % name] * dungeon_info['small_key'], ootworld.player)
+            small_keys = [ootworld.create_item(f'Small Key ({name})') for i in range(dungeon_info['small_key'])]
         else:
-            small_keys = ItemFactory(['Small Key (%s)' % name] * dungeon_info['small_key_mq'], ootworld.player)
-        # small_keys = ItemFactory(['Small Key (%s)' % name] * dungeon_info['small_key'], ootworld.player)
-        dungeon_items = ItemFactory(['Map (%s)' % name, 
-                                     'Compass (%s)' % name] * dungeon_info['dungeon_item'], ootworld.player)
+            small_keys = [ootworld.create_item(f'Small Key ({name})') for i in range(dungeon_info['small_key_mq'])]
+        dungeon_items = [ootworld.create_item(f'Map ({name})'), ootworld.create_item(f'Compass({name})')] * dungeon_info['dungeon_item']
         if ootworld.shuffle_mapcompass in ['any_dungeon', 'overworld']:
             for item in dungeon_items:
                 item.priority = True

@@ -1,7 +1,7 @@
 from collections import namedtuple
 import logging
 from itertools import chain
-from .Items import ItemFactory, item_table
+from .Items import item_table
 from .LocationList import location_groups
 from decimal import Decimal, ROUND_HALF_UP
 
@@ -761,62 +761,60 @@ def generate_itempool(ootworld):
     fixed_locations = list(filter(lambda loc: loc.name in fixedlocations, ootworld.get_locations()))
     for location in fixed_locations:
         item = fixedlocations[location.name]
-        world.push_item(location, ItemFactory(item, player), collect=False)
+        world.push_item(location, ootworld.create_item(item), collect=False)
         location.locked = True
 
     drop_locations = list(filter(lambda loc: loc.type == 'Drop', ootworld.get_locations()))
     for drop_location in drop_locations:
         item = droplocations[drop_location.name]
-        world.push_item(drop_location, ItemFactory(item, player), collect=False)
+        world.push_item(drop_location, ootworld.create_item(item), collect=False)
         drop_location.locked = True
 
     # set up item pool
     (pool, placed_items) = get_pool_core(ootworld)
-    ootworld.itempool = ItemFactory(pool, player)
+    ootworld.itempool = [ootworld.create_item(item) for item in pool]
     for (location_name, item) in placed_items.items():
         location = world.get_location(location_name, player)
-        world.push_item(location, ItemFactory(item, player), collect=False)
+        world.push_item(location, ootworld.create_item(item), collect=False)
         location.locked = True
         location.event = True  # make sure it's checked during fill
 
-    # world.initialize_items()
-    # world.distribution.set_complete_itempool(world.itempool)
 
 
-def try_collect_heart_container(world, pool):
-    if 'Heart Container' in pool:
-        pool.remove('Heart Container')
-        pool.extend(get_junk_item())
-        world.state.collect(ItemFactory('Heart Container'))
-        return True
-    return False
+# def try_collect_heart_container(world, pool):
+#     if 'Heart Container' in pool:
+#         pool.remove('Heart Container')
+#         pool.extend(get_junk_item())
+#         world.state.collect(ItemFactory('Heart Container'))
+#         return True
+#     return False
 
 
-def try_collect_pieces_of_heart(world, pool):
-    n = pool.count('Piece of Heart') + pool.count('Piece of Heart (Treasure Chest Game)')
-    if n >= 4:
-        for i in range(4):
-            if 'Piece of Heart' in pool:
-                pool.remove('Piece of Heart')
-                world.state.collect(ItemFactory('Piece of Heart'))
-            else:
-                pool.remove('Piece of Heart (Treasure Chest Game)')
-                world.state.collect(ItemFactory('Piece of Heart (Treasure Chest Game)'))
-            pool.extend(get_junk_item())
-        return True
-    return False
+# def try_collect_pieces_of_heart(world, pool):
+#     n = pool.count('Piece of Heart') + pool.count('Piece of Heart (Treasure Chest Game)')
+#     if n >= 4:
+#         for i in range(4):
+#             if 'Piece of Heart' in pool:
+#                 pool.remove('Piece of Heart')
+#                 world.state.collect(ItemFactory('Piece of Heart'))
+#             else:
+#                 pool.remove('Piece of Heart (Treasure Chest Game)')
+#                 world.state.collect(ItemFactory('Piece of Heart (Treasure Chest Game)'))
+#             pool.extend(get_junk_item())
+#         return True
+#     return False
 
 
-def collect_pieces_of_heart(world, pool):
-    success = try_collect_pieces_of_heart(world, pool)
-    if not success:
-        try_collect_heart_container(world, pool)
+# def collect_pieces_of_heart(world, pool):
+#     success = try_collect_pieces_of_heart(world, pool)
+#     if not success:
+#         try_collect_heart_container(world, pool)
 
 
-def collect_heart_container(world, pool):
-    success = try_collect_heart_container(world, pool)
-    if not success:
-        try_collect_pieces_of_heart(world, pool)
+# def collect_heart_container(world, pool):
+#     success = try_collect_heart_container(world, pool)
+#     if not success:
+#         try_collect_pieces_of_heart(world, pool)
 
 
 def get_pool_core(world):
@@ -1253,10 +1251,10 @@ def get_pool_core(world):
         pending_junk_pool.extend(songlist)
 
     if world.free_scarecrow:
-        world.world.push_precollected(ItemFactory('Scarecrow Song', world.player))
+        world.world.push_precollected(world.create_item('Scarecrow Song'))
     
     if world.no_epona_race:
-        world.world.push_precollected(ItemFactory('Epona', world.player, event=True))
+        world.world.push_precollected(world.create_item('Epona'))
 
     if world.shuffle_mapcompass == 'remove' or world.shuffle_mapcompass == 'startwith':
         for item in [item for dungeon in world.dungeons for item in dungeon.dungeon_items]:
@@ -1299,9 +1297,9 @@ def get_pool_core(world):
         # We can resolve this by starting with some extra keys
         if world.dungeon_mq['Spirit Temple']:
             # Yes somehow you need 3 keys. This dungeon is bonkers
-            world.world.push_precollected(ItemFactory('Small Key (Spirit Temple)', world.player))
-            world.world.push_precollected(ItemFactory('Small Key (Spirit Temple)', world.player))
-            world.world.push_precollected(ItemFactory('Small Key (Spirit Temple)', world.player))
+            world.world.push_precollected(world.create_item('Small Key (Spirit Temple)'))
+            world.world.push_precollected(world.create_item('Small Key (Spirit Temple)'))
+            world.world.push_precollected(world.create_item('Small Key (Spirit Temple)'))
         #if not world.dungeon_mq['Fire Temple']:
         #    world.state.collect(ItemFactory('Small Key (Fire Temple)'))
     if world.shuffle_bosskeys == 'vanilla':
@@ -1314,7 +1312,7 @@ def get_pool_core(world):
 
 
     if not world.keysanity and not world.dungeon_mq['Fire Temple']:
-        item = ItemFactory('Small Key (Fire Temple)', world.player)
+        item = world.create_item('Small Key (Fire Temple)')
         world.world.push_precollected(item)
         world.remove_from_start_inventory.append(item)
 

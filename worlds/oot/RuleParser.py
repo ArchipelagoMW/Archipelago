@@ -4,7 +4,7 @@ from inspect import signature, _ParameterKind
 import logging
 import re
 
-from .Items import MakeEventItem, item_table
+from .Items import item_table
 from .Location import OOTLocation
 from .Regions import TimeOfDay, OOTRegion
 from BaseClasses import CollectionState as State
@@ -394,7 +394,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 set_rule(event, access_rule)
                 region.locations.append(event)
 
-                MakeEventItem(self.world.world, self.player, subrule_name, event)
+                self.world.make_event_item(subrule_name, event)
         # Safeguard in case this is called multiple times per world
         self.delayed_rules.clear()
 

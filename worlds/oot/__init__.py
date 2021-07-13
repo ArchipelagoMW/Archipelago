@@ -5,14 +5,14 @@ logger = logging.getLogger("Ocarina of Time")
 
 from .Location import OOTLocation, LocationFactory
 from .Entrance import OOTEntrance
-from .Items import item_table, ItemFactory, MakeEventItem
+from .Items import OOTItem, item_table, oot_data_to_ap_id
 from .ItemPool import generate_itempool
 from .Regions import OOTRegion, TimeOfDay
 from .Rules import set_rules, set_shop_rules
 from .RuleParser import Rule_AST_Transformer
 from .Options import oot_options
 from .Utils import data_path, read_json
-from .LocationList import business_scrubs, set_drop_location_names
+from .LocationList import location_table, business_scrubs, set_drop_location_names
 from .DungeonList import dungeon_table, create_dungeons
 from .LogicTricks import known_logic_tricks
 from .Rom import Rom
@@ -25,10 +25,18 @@ from Options import Range, OptionList
 from Fill import fill_restrictive
 from ..AutoWorld import World
 
+location_id_offset = 67000
 
 class OOTWorld(World):
     game: str = "Ocarina of Time"
-    options = oot_options
+    options: dict = oot_options
+    topology_present: bool = True
+    item_names = frozenset(item_table)
+    location_names = frozenset(location_table)
+    item_name_to_id = {item_name: oot_data_to_ap_id(data, False) for item_name, data in item_table.items() if data[2] is not None}
+    location_name_to_id = {name: (location_id_offset + index) for (index, name) in enumerate(location_table) 
+        if location_table[name][0] not in ['Event', 'Drop', 'HintStone', 'Hint']}
+    remote_items: bool = False
 
     def __init__(self, world, player):
         super(OOTWorld, self).__init__(world, player)
@@ -122,7 +130,7 @@ class OOTWorld(World):
             if 'scene' in region:
                 new_region.scene = region['scene']
             if 'hint' in region:
-                new_region.hint_text = region['hint']  # changed from new_region.hint
+                new_region.hint_text = region['hint']
             if 'dungeon' in region:
                 new_region.dungeon = region['dungeon']
             if 'time_passes' in region:
@@ -142,7 +150,6 @@ class OOTWorld(World):
                     if new_location.never:
                         # We still need to fill the location even if ALR is off.
                         logging.getLogger('').debug('Unreachable location: %s', new_location.name)
-                    # new_location.world = world
                     new_location.player = self.player
                     new_region.locations.append(new_location)
             if 'events' in region:
@@ -156,10 +163,9 @@ class OOTWorld(World):
                     if new_location.never:
                         logging.getLogger('').debug('Dropping unreachable event: %s', new_location.name)
                     else:
-                        # new_location.world = world
                         new_location.player = self.player
                         new_region.locations.append(new_location)
-                        MakeEventItem(self.world, self.player, event, new_location)
+                        self.make_event_item(event, new_location)
             if 'exits' in region:
                 for exit, rule in region['exits'].items():
                     new_exit = OOTEntrance(self.player, '%s => %s' % (new_region.name, exit), new_region)
@@ -244,7 +250,7 @@ class OOTWorld(World):
             'Twinrova',
             'Links Pocket'
         )
-        boss_rewards = ItemFactory(rewardlist, self.player)
+        boss_rewards = [self.create_item(reward) for reward in rewardlist]
         boss_locations = [self.world.get_location(loc, self.player) for loc in boss_location_names]
 
         placed_prizes = [loc.item.name for loc in boss_locations if loc.item is not None]
@@ -262,6 +268,22 @@ class OOTWorld(World):
             self.world.push_item(loc, item, collect=False)
             loc.locked = True
             loc.event = True
+
+
+    def create_item(self, name: str): 
+        if name in self.item_names: 
+            return OOTItem(name, self.player, item_table[name], False)
+        return OOTItem(name, self.player, ('Event', True, None, None), True)
+
+    def make_event_item(self, name, location, item=None):
+        if item is None:
+            item = self.create_item(name)
+        self.world.push_item(location, item, collect=False)
+        location.locked = True
+        location.event = True
+        if name not in item_table:
+            location.internal = True
+        return item
 
 
     def create_regions(self):  # create and link regions

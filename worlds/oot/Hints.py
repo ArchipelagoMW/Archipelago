@@ -11,7 +11,7 @@ import json
 from enum import Enum
 
 from .HintList import getHint, getHintGroup, Hint, hintExclusions
-from .Items import MakeEventItem
+# from .Items import MakeEventItem
 from .Messages import update_message_by_id
 # from .Search import Search
 from .TextBox import line_wrap
