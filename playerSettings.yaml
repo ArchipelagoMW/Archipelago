@@ -107,6 +107,52 @@ Factorio:
   starting_items:
     burner-mining-drill: 19
     stone-furnace: 19
+  world_gen:
+    # frequency, size, richness, terrain segmentation, starting area and water are all of https://wiki.factorio.com/Types/MapGenSize
+    # inverse of water scale
+    terrain_segmentation: 0.5
+    water: 1.5
+    autoplace_controls:
+      coal:
+        frequency: 1
+        size: 3
+        richness: 6
+      copper-ore:
+        frequency: 1
+        size: 3
+        richness: 6
+      crude-oil:
+        frequency: 1
+        size: 3
+        richness: 6
+      enemy-base:
+        frequency: 1
+        size: 1
+        richness: 1
+      iron-ore:
+        frequency: 1
+        size: 3
+        richness: 6
+      stone:
+        frequency: 1
+        size: 3
+        richness: 6
+      trees:
+        frequency: 1
+        size: 1
+        richness: 1
+      uranium-ore:
+        frequency: 1
+        size: 3
+        richness: 6
+    seed: null # turn into positive number to create specific seed
+    starting_area: 1
+    peaceful_mode: 0
+    cliff_settings:
+      name: cliff
+      cliff_elevation_0: 10
+      cliff_elevation_interval: 40
+      richness: 1
 Minecraft:
   advancement_goal: 50 # Number of advancements required (out of 92 total) to spawn the Ender Dragon and complete the game.
   combat_difficulty: # Modifies the level of items logically required for exploring dangerous areas and fighting bosses.

@@ -161,7 +161,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
         subprocess.run((
-            executable, "--create", savegame_name
+            executable, "--create", savegame_name, "--preset", "archipelago"
         ))
     factorio_process = subprocess.Popen((executable, "--start-server", ctx.savegame_name,
                                          *(str(elem) for elem in server_args)),
@@ -224,7 +224,7 @@ async def factorio_spinup_server(ctx: FactorioContext):
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
         subprocess.run((
-            executable, "--create", savegame_name, "--preset", "archipelago"
+            executable, "--create", savegame_name
         ))
     factorio_process = subprocess.Popen(
         (executable, "--start-server", savegame_name, *(str(elem) for elem in server_args)),
