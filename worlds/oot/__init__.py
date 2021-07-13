@@ -379,7 +379,7 @@ class OOTWorld(World):
         self.rom.write_to_file(Utils.output_path(outfile_name+'.z64'))
 
         # make patch file
-        create_patch_file(self.rom, Utils.output_path(outfile_name+'.zpf'))
+        create_patch_file(self.rom, Utils.output_path(outfile_name+'.apz5'))
         self.rom.restore()
 
         # TODO: compress rom and remove rom file path
