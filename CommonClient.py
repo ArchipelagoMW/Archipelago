@@ -4,9 +4,7 @@ import typing
 import asyncio
 import urllib.parse
 
-import prompt_toolkit
 import websockets
-from prompt_toolkit.patch_stdout import patch_stdout
 
 import Utils
 from MultiServer import CommandProcessor
@@ -16,8 +14,7 @@ from Utils import Version
 
 # logging note:
 # logging.* gets send to only the text console, logger.* gets send to the WebUI as well, if it's initialized.
-from worlds import network_data_package
-from worlds.alttp import Items, Regions
+from worlds import network_data_package, AutoWorldRegister
 
 logger = logging.getLogger("Client")
 
@@ -56,7 +53,7 @@ class ClientCommandProcessor(CommandProcessor):
         """List all missing location checks, from your local game state"""
         count = 0
         checked_count = 0
-        for location, location_id in Regions.lookup_name_to_id.items():
+        for location, location_id in AutoWorldRegister.world_types[self.ctx.game].item_name_to_id.items():
             if location_id < 0:
                 continue
             if location_id not in self.ctx.locations_checked:
@@ -94,6 +91,8 @@ class CommonContext():
     starting_reconnect_delay = 5
     current_reconnect_delay = starting_reconnect_delay
     command_processor = ClientCommandProcessor
+    game: None
+
     def __init__(self, server_address, password, found_items: bool):
         # server state
         self.server_address = server_address
@@ -210,8 +209,6 @@ class CommonContext():
         logger.info(args["text"])
 
     def on_print_json(self, args: dict):
-        if not self.found_items and args.get("type", None) == "ItemSend" and args["receiving"] == args["sending"]:
-            pass  # don't want info on other player's local pickups.
         logger.info(self.jsontotextparser(args["data"]))
 
 

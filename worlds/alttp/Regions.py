@@ -2,7 +2,6 @@ import collections
 import typing
 
 from BaseClasses import Region, Entrance, RegionType
-from worlds.alttp import ALttPLocation
 
 
 def create_regions(world, player):
@@ -323,6 +322,7 @@ def create_dungeon_region(player: int, name: str, hint: str, locations=None, exi
 
 
 def _create_region(player: int, name: str, type: RegionType, hint: str, locations=None, exits=None):
+    from worlds.alttp.SubClasses import ALttPLocation
     ret = Region(name, type, hint, player)
     if locations is None:
         locations = []

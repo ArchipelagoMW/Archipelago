@@ -11,11 +11,13 @@ import Utils
 import shutil
 from . import Options
 from BaseClasses import MultiWorld
-from .Technologies import tech_table, rocket_recipes, recipes, free_sample_blacklist
+from .Technologies import tech_table, rocket_recipes, recipes, free_sample_blacklist, progressive_technology_table, \
+    base_tech_table, tech_to_progressive_lookup, progressive_tech_table
 
 template_env: Optional[jinja2.Environment] = None
 
-template: Optional[jinja2.Template] = None
+data_template: Optional[jinja2.Template] = None
+data_final_template: Optional[jinja2.Template] = None
 locale_template: Optional[jinja2.Template] = None
 control_template: Optional[jinja2.Template] = None
 
@@ -41,58 +43,65 @@ recipe_time_scales = {
     Options.RecipeTime.option_vanilla: None
 }
 
-
-def generate_mod(world: MultiWorld, player: int):
-    global template, locale_template, control_template
+def generate_mod(world):
+    player = world.player
+    multiworld = world.world
+    global data_final_template, locale_template, control_template, data_template
     with template_load_lock:
-        if not template:
+        if not data_final_template:
             mod_template_folder = Utils.local_path("data", "factorio", "mod_template")
             template_env: Optional[jinja2.Environment] = \
                 jinja2.Environment(loader=jinja2.FileSystemLoader([mod_template_folder]))
-
-            template = template_env.get_template("data-final-fixes.lua")
+            data_template = template_env.get_template("data.lua")
+            data_final_template = template_env.get_template("data-final-fixes.lua")
             locale_template = template_env.get_template(r"locale/en/locale.cfg")
             control_template = template_env.get_template("control.lua")
     # get data for templates
-    player_names = {x: world.player_names[x][0] for x in world.player_ids}
+    player_names = {x: multiworld.player_names[x][0] for x in multiworld.player_ids}
     locations = []
-    for location in world.get_filled_locations(player):
+    for location in multiworld.get_filled_locations(player):
         if location.address:
             locations.append((location.name, location.item.name, location.item.player, location.item.advancement))
-    mod_name = f"AP-{world.seed_name}-P{player}-{world.player_names[player][0]}"
+    mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.player_names[player][0]}"
     tech_cost_scale = {0: 0.1,
                        1: 0.25,
                        2: 0.5,
                        3: 1,
                        4: 2,
                        5: 5,
-                       6: 10}[world.tech_cost[player].value]
+                       6: 10}[multiworld.tech_cost[player].value]
 
     template_data = {"locations": locations, "player_names": player_names, "tech_table": tech_table,
-                     "mod_name": mod_name, "allowed_science_packs": world.max_science_pack[player].get_allowed_packs(),
-                     "tech_cost_scale": tech_cost_scale, "custom_technologies": world.worlds[player].custom_technologies,
-                     "tech_tree_layout_prerequisites": world.tech_tree_layout_prerequisites[player],
-                     "rocket_recipe": rocket_recipes[world.max_science_pack[player].value],
-                     "slot_name": world.player_names[player][0], "seed_name": world.seed_name,
-                     "starting_items": world.starting_items[player], "recipes": recipes,
-                     "random": world.slot_seeds[player], "static_nodes": world.worlds[player].static_nodes,
-                     "recipe_time_scale": recipe_time_scales[world.recipe_time[player].value],
-                     "free_sample_blacklist": {item : 1 for item in free_sample_blacklist}}
+                     "base_tech_table": base_tech_table, "tech_to_progressive_lookup": tech_to_progressive_lookup,
+                     "mod_name": mod_name, "allowed_science_packs": multiworld.max_science_pack[player].get_allowed_packs(),
+                     "tech_cost_scale": tech_cost_scale, "custom_technologies": multiworld.worlds[player].custom_technologies,
+                     "tech_tree_layout_prerequisites": multiworld.tech_tree_layout_prerequisites[player],
+                     "slot_name": multiworld.player_names[player][0], "seed_name": multiworld.seed_name,
+                     "starting_items": multiworld.starting_items[player], "recipes": recipes,
+                     "random": multiworld.slot_seeds[player], "static_nodes": multiworld.worlds[player].static_nodes,
+                     "recipe_time_scale": recipe_time_scales[multiworld.recipe_time[player].value],
+                     "free_sample_blacklist": {item : 1 for item in free_sample_blacklist},
+                     "progressive_technology_table": {tech.name : tech.progressive for tech in
+                                                      progressive_technology_table.values()},
+                     "custom_recipes": world.custom_recipes}
 
     for factorio_option in Options.factorio_options:
-        template_data[factorio_option] = getattr(world, factorio_option)[player].value
+        template_data[factorio_option] = getattr(multiworld, factorio_option)[player].value
 
     control_code = control_template.render(**template_data)
-    data_final_fixes_code = template.render(**template_data)
+    data_template_code = data_template.render(**template_data)
+    data_final_fixes_code = data_final_template.render(**template_data)
 
     mod_dir = Utils.output_path(mod_name) + "_" + Utils.__version__
     en_locale_dir = os.path.join(mod_dir, "locale", "en")
     os.makedirs(en_locale_dir, exist_ok=True)
     shutil.copytree(Utils.local_path("data", "factorio", "mod"), mod_dir, dirs_exist_ok=True)
+    with open(os.path.join(mod_dir, "data.lua"), "wt") as f:
+        f.write(data_template_code)
     with open(os.path.join(mod_dir, "data-final-fixes.lua"), "wt") as f:
         f.write(data_final_fixes_code)
-        with open(os.path.join(mod_dir, "control.lua"), "wt") as f:
-            f.write(control_code)
+    with open(os.path.join(mod_dir, "control.lua"), "wt") as f:
+        f.write(control_code)
     locale_content = locale_template.render(**template_data)
     with open(os.path.join(en_locale_dir, "locale.cfg"), "wt") as f:
         f.write(locale_content)

@@ -173,7 +173,10 @@ Blind_texts = [
     "Do I like\ndrills? Just\na bit.",
     "I'd shell out\ngood rupees\nfor a conch.",
     "Current\naffairs are\nshocking!",
-    "Agriculture\nis a growing\nfield."
+    "Agriculture\nis a growing\nfield.",
+    "Did you hear\nabout the guy\nwhose whole\nleft side was\ncut off?\nHe's all right\nnow.",
+    "What do you\ncall a bee\nthat lives in\nAmerica?\nA USB.",
+    "Leather is\ngreat for\nsneaking\naround because\nit's made of\nhide.",
 ]
 Ganon1_texts = [
     "Start your day\nsmiling with a\ndelicious\nwhole grain\nbreakfast\ncreated for\nyour\nincredible\ninsides.",

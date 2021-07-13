@@ -9,6 +9,7 @@ from collections import Counter
 import string
 
 import ModuleUpdate
+from worlds.alttp import Options as LttPOptions
 from worlds.generic import PlandoItem, PlandoConnection
 
 ModuleUpdate.update()
@@ -18,7 +19,6 @@ from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from Main import get_seed, seeddigits
 import Options
-from worlds import lookup_any_item_name_to_id
 from worlds.alttp.Items import item_name_groups, item_table
 from worlds.alttp import Bosses
 from worlds.alttp.Text import TextTable
@@ -515,21 +515,22 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     ret.game = get_choice("game", weights)
     if ret.game not in weights:
         raise Exception(f"No game options for selected game \"{ret.game}\" found.")
+    world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
     ret.local_items = set()
     for item_name in game_weights.get('local_items', []):
-        items = item_name_groups.get(item_name, {item_name})
+        items = world_type.item_name_groups.get(item_name, {item_name})
         for item in items:
-            if item in lookup_any_item_name_to_id:
+            if item in world_type.item_names:
                 ret.local_items.add(item)
             else:
                 raise Exception(f"Could not force item {item} to be world-local, as it was not recognized.")
 
     ret.non_local_items = set()
     for item_name in game_weights.get('non_local_items', []):
-        items = item_name_groups.get(item_name, {item_name})
+        items = world_type.item_name_groups.get(item_name, {item_name})
         for item in items:
-            if item in lookup_any_item_name_to_id:
+            if item in world_type.item_names:
                 ret.non_local_items.add(item)
             else:
                 raise Exception(f"Could not force item {item} to be world-non-local, as it was not recognized.")
@@ -546,15 +547,16 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     ret.startinventory = startitems
     ret.start_hints = set(game_weights.get('start_hints', []))
 
-    if ret.game == "A Link to the Past":
-        roll_alttp_settings(ret, game_weights, plando_options)
-    elif ret.game in AutoWorldRegister.world_types:
+    if ret.game in AutoWorldRegister.world_types:
         for option_name, option in AutoWorldRegister.world_types[ret.game].options.items():
             if option_name in game_weights:
-                if issubclass(option, Options.OptionDict) or issubclass(option, Options.OptionList):
-                    setattr(ret, option_name, option.from_any(game_weights[option_name]))
-                else:
-                    setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights)))
+                try:
+                    if issubclass(option, Options.OptionDict) or issubclass(option, Options.OptionList):
+                        setattr(ret, option_name, option.from_any(game_weights[option_name]))
+                    else:
+                        setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights)))
+                except Exception as e:
+                    raise Exception(f"Error generating option {option_name} in {ret.game}") from e
             else:
                 setattr(ret, option_name, option(option.default))
         if ret.game == "Minecraft":
@@ -569,18 +571,14 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
                             get_choice("exit", placement),
                             get_choice("direction", placement, "both")
                         ))
+        elif ret.game == "A Link to the Past":
+            roll_alttp_settings(ret, game_weights, plando_options)
     else:
         raise Exception(f"Unsupported game {ret.game}")
     return ret
 
 
 def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
-    for option_name, option in Options.alttp_options.items():
-        if option_name in weights:
-            setattr(ret, option_name, option.from_any(get_choice(option_name, weights)))
-        else:
-            setattr(ret, option_name, option(option.default))
-
     glitches_required = get_choice('glitches_required', weights)
     if glitches_required not in [None, 'none', 'no_logic', 'overworld_glitches', 'hybrid_major_glitches', 'minor_glitches']:
         logging.warning("Only NMG, OWG, HMG and No Logic supported")
@@ -631,7 +629,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
     extra_pieces = get_choice('triforce_pieces_mode', weights, 'available')
 
-    ret.triforce_pieces_required = Options.TriforcePieces.from_any(get_choice('triforce_pieces_required', weights, 20))
+    ret.triforce_pieces_required = LttPOptions.TriforcePieces.from_any(get_choice('triforce_pieces_required', weights, 20))
 
     # sum a percentage to required
     if extra_pieces == 'percentage':
@@ -639,7 +637,7 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
         ret.triforce_pieces_available = int(round(ret.triforce_pieces_required * percentage, 0))
     # vanilla mode (specify how many pieces are)
     elif extra_pieces == 'available':
-        ret.triforce_pieces_available = Options.TriforcePieces.from_any(
+        ret.triforce_pieces_available = LttPOptions.TriforcePieces.from_any(
             get_choice('triforce_pieces_available', weights, 30))
     # required pieces + fixed extra
     elif extra_pieces == 'extra':
@@ -779,7 +777,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                     get_choice("exit", placement),
                     get_choice("direction", placement, "both")
                 ))
-
 
     ret.sprite_pool = weights.get('sprite_pool', [])
     ret.sprite = get_choice('sprite', weights, "Link")

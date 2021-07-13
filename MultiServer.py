@@ -25,20 +25,15 @@ import prompt_toolkit
 from prompt_toolkit.patch_stdout import patch_stdout
 from fuzzywuzzy import process as fuzzy_process
 
-from worlds.alttp import Items, Regions
-from worlds import network_data_package, lookup_any_item_id_to_name, lookup_any_item_name_to_id, \
-    lookup_any_location_id_to_name, lookup_any_location_name_to_id
+from worlds.AutoWorld import AutoWorldRegister
+proxy_worlds = {name: world(None, 0) for name, world in AutoWorldRegister.world_types.items()}
+from worlds import network_data_package, lookup_any_item_id_to_name, lookup_any_location_id_to_name
 import Utils
 from Utils import get_item_name_from_id, get_location_name_from_id, \
     version_tuple, restricted_loads, Version
 from NetUtils import Node, Endpoint, ClientStatus, NetworkItem, decode, NetworkPlayer
 
 colorama.init()
-lttp_console_names = frozenset(set(Items.item_table) | set(Items.item_name_groups) | set(Regions.lookup_name_to_id))
-all_items = frozenset(lookup_any_item_name_to_id)
-all_locations = frozenset(lookup_any_location_name_to_id)
-all_console_names = frozenset(all_items | all_locations)
-
 
 class Client(Endpoint):
     version = Version(0, 0, 0)
@@ -55,6 +50,7 @@ class Client(Endpoint):
         self.messageprocessor = client_message_processor(ctx, self)
         self.ctx = weakref.ref(ctx)
 
+team_slot = typing.Tuple[int, int]
 
 class Context(Node):
     simple_options = {"hint_cost": int,
@@ -75,7 +71,8 @@ class Context(Node):
         self.data_filename = None
         self.save_filename = None
         self.saving = False
-        self.player_names = {}
+        self.player_names: typing.Dict[team_slot, str] = {}
+        self.player_name_lookup: typing.Dict[str, team_slot] = {}
         self.connect_names = {}  # names of slots clients can connect to
         self.allow_forfeits = {}
         self.remote_items = set()
@@ -87,21 +84,21 @@ class Context(Node):
         self.server = None
         self.countdown_timer = 0
         self.received_items = {}
-        self.name_aliases: typing.Dict[typing.Tuple[int, int], str] = {}
+        self.name_aliases: typing.Dict[team_slot, str] = {}
         self.location_checks = collections.defaultdict(set)
         self.hint_cost = hint_cost
         self.location_check_points = location_check_points
         self.hints_used = collections.defaultdict(int)
-        self.hints: typing.Dict[typing.Tuple[int, int], typing.Set[NetUtils.Hint]] = collections.defaultdict(set)
+        self.hints: typing.Dict[team_slot, typing.Set[NetUtils.Hint]] = collections.defaultdict(set)
         self.forfeit_mode: str = forfeit_mode
         self.remaining_mode: str = remaining_mode
         self.item_cheat = item_cheat
         self.running = True
         self.client_activity_timers: typing.Dict[
-            typing.Tuple[int, int], datetime.datetime] = {}  # datetime of last new item check
+            team_slot, datetime.datetime] = {}  # datetime of last new item check
         self.client_connection_timers: typing.Dict[
-            typing.Tuple[int, int], datetime.datetime] = {}  # datetime of last connection
-        self.client_game_state: typing.Dict[typing.Tuple[int, int], int] = collections.defaultdict(int)
+            team_slot, datetime.datetime] = {}  # datetime of last connection
+        self.client_game_state: typing.Dict[team_slot, int] = collections.defaultdict(int)
         self.er_hint_data: typing.Dict[int, typing.Dict[int, str]] = {}
         self.auto_shutdown = auto_shutdown
         self.commandprocessor = ServerCommandProcessor(self)
@@ -111,7 +108,7 @@ class Context(Node):
         self.auto_saver_thread = None
         self.save_dirty = False
         self.tags = ['AP']
-        self.games = {}
+        self.games: typing.Dict[int, str] = {}
         self.minimum_client_versions: typing.Dict[int, Utils.Version] = {}
         self.seed_name = ""
 
@@ -147,7 +144,8 @@ class Context(Node):
 
         for team, names in enumerate(decoded_obj['names']):
             for player, name in enumerate(names, 1):
-                self.player_names[(team, player)] = name
+                self.player_names[team, player] = name
+                self.player_name_lookup[name] = team, player
         self.seed_name = decoded_obj["seed_name"]
         self.connect_names = decoded_obj['connect_names']
         self.remote_items = decoded_obj['remote_items']
@@ -519,7 +517,7 @@ def notify_team(ctx: Context, team: int, text: str):
 
 def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[NetUtils.Hint]:
     hints = []
-    seeked_item_id = lookup_any_item_name_to_id[item]
+    seeked_item_id = proxy_worlds[ctx.games[slot]].item_name_to_id[item]
     for finding_player, check_data in ctx.locations.items():
         for location_id, result in check_data.items():
             item_id, receiving_player = result
@@ -532,7 +530,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: str) -> typing.List[
 
 
 def collect_hints_location(ctx: Context, team: int, slot: int, location: str) -> typing.List[NetUtils.Hint]:
-    seeked_location: int = Regions.lookup_name_to_id[location]
+    seeked_location: int = proxy_worlds[ctx.games[slot]].location_name_to_id[location]
     item_id, receiving_player = ctx.locations[slot].get(seeked_location, (None, None))
     if item_id:
         found = seeked_location in ctx.location_checks[team, slot]
@@ -569,11 +567,11 @@ def json_format_send_event(net_item: NetworkItem, receiving_player: int):
     NetUtils.add_json_text(parts, ")")
 
     return {"cmd": "PrintJSON", "data": parts, "type": "ItemSend",
-            "receiving": receiving_player, "sending": net_item.player}
+            "receiving": receiving_player,
+            "item": net_item}
 
 
-def get_intended_text(input_text: str, possible_answers: typing.Iterable[str] = all_console_names) -> typing.Tuple[
-    str, bool, str]:
+def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bool, str]:
     picks = fuzzy_process.extract(input_text, possible_answers, limit=2)
     if len(picks) > 1:
         dif = picks[0][1] - picks[1][1]
@@ -864,9 +862,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def _cmd_getitem(self, item_name: str) -> bool:
         """Cheat in an item, if it is enabled on this server"""
         if self.ctx.item_cheat:
-            item_name, usable, response = get_intended_text(item_name, Items.item_table.keys())
+            world = proxy_worlds[self.ctx.games[self.client.slot]]
+            item_name, usable, response = get_intended_text(item_name,
+                                                            world.item_names)
             if usable:
-                new_item = NetworkItem(Items.item_table[item_name][2], -1, self.client.slot)
+                new_item = NetworkItem(world.create_item(item_name).code, -1, self.client.slot)
                 get_received_items(self.ctx, self.client.team, self.client.slot).append(new_item)
                 self.ctx.notify_all(
                     'Cheat console: sending "' + item_name + '" to ' + self.ctx.get_aliased_name(self.client.team,
@@ -893,16 +893,17 @@ class ClientMessageProcessor(CommonCommandProcessor):
             notify_hints(self.ctx, self.client.team, list(hints))
             return True
         else:
-            item_name, usable, response = get_intended_text(item_or_location)
+            world = proxy_worlds[self.ctx.games[self.client.slot]]
+            item_name, usable, response = get_intended_text(item_or_location, world.all_names)
             if usable:
-                if item_name in Items.hint_blacklist:
+                if item_name in world.hint_blacklist:
                     self.output(f"Sorry, \"{item_name}\" is marked as non-hintable.")
                     hints = []
-                elif item_name in Items.item_name_groups:
+                elif item_name in world.item_name_groups:
                     hints = []
-                    for item in Items.item_name_groups[item_name]:
+                    for item in world.item_name_groups[item_name]:
                         hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item))
-                elif item_name in lookup_any_item_name_to_id:  # item name
+                elif item_name in world.item_names:  # item name
                     hints = collect_hints(self.ctx, self.client.team, self.client.slot, item_name)
                 else:  # location name
                     hints = collect_hints_location(self.ctx, self.client.team, self.client.slot, item_name)
@@ -982,15 +983,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         cmd: str = args["cmd"]
     except:
         logging.exception(f"Could not get command from {args}")
+        await ctx.send_msgs(client, [{"cmd": "InvalidCmd", "text": f"Could not get command from {args} at `cmd`"}])
         raise
 
     if type(cmd) is not str:
         await ctx.send_msgs(client, [{"cmd": "InvalidCmd", "text": f"Command should be str, got {type(cmd)}"}])
-        return
-
-    if args is not None and type(args) != dict:
-        await ctx.send_msgs(client, [{"cmd": "InvalidArguments",
-                                      'text': f'Expected Optional[dict], got {type(args)} for {cmd}'}])
         return
 
     if cmd == 'Connect':
@@ -1223,17 +1220,17 @@ class ServerCommandProcessor(CommonCommandProcessor):
         """Sends an item to the specified player"""
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
+            team, slot = self.ctx.player_name_lookup[seeked_player]
             item = " ".join(item_name)
-            item, usable, response = get_intended_text(item, all_items)
+            world = proxy_worlds[self.ctx.games[slot]]
+            item, usable, response = get_intended_text(item, world.item_names)
             if usable:
-                for client in self.ctx.endpoints:
-                    if client.name == seeked_player:
-                        new_item = NetworkItem(lookup_any_item_name_to_id[item], -1, 0)
-                        get_received_items(self.ctx, client.team, client.slot).append(new_item)
-                        self.ctx.notify_all('Cheat console: sending "' + item + '" to ' +
-                                            self.ctx.get_aliased_name(client.team, client.slot))
-                        send_new_items(self.ctx)
-                        return True
+                new_item = NetworkItem(world.item_name_to_id[item], -1, 0)
+                get_received_items(self.ctx, team, slot).append(new_item)
+                self.ctx.notify_all('Cheat console: sending "' + item + '" to ' +
+                                    self.ctx.get_aliased_name(team, slot))
+                send_new_items(self.ctx)
+                return True
             else:
                 self.output(response)
                 return False
@@ -1245,27 +1242,27 @@ class ServerCommandProcessor(CommonCommandProcessor):
         """Send out a hint for a player's item or location to their team"""
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
-            for (team, slot), name in self.ctx.player_names.items():
-                if name == seeked_player:
-                    item = " ".join(item_or_location)
-                    item, usable, response = get_intended_text(item)
-                    if usable:
-                        if item in Items.item_name_groups:
-                            hints = []
-                            for item in Items.item_name_groups[item]:
-                                hints.extend(collect_hints(self.ctx, team, slot, item))
-                        elif item in all_items:  # item name
-                            hints = collect_hints(self.ctx, team, slot, item)
-                        else:  # location name
-                            hints = collect_hints_location(self.ctx, team, slot, item)
-                        if hints:
-                            notify_hints(self.ctx, team, hints)
-                        else:
-                            self.output("No hints found.")
-                        return True
-                    else:
-                        self.output(response)
-                        return False
+            team, slot = self.ctx.player_name_lookup[seeked_player]
+            item = " ".join(item_or_location)
+            world = proxy_worlds[self.ctx.games[slot]]
+            item, usable, response = get_intended_text(item, world.all_names)
+            if usable:
+                if item in world.item_name_groups:
+                    hints = []
+                    for item in world.item_name_groups[item]:
+                        hints.extend(collect_hints(self.ctx, team, slot, item))
+                elif item in world.item_names:  # item name
+                    hints = collect_hints(self.ctx, team, slot, item)
+                else:  # location name
+                    hints = collect_hints_location(self.ctx, team, slot, item)
+                if hints:
+                    notify_hints(self.ctx, team, hints)
+                else:
+                    self.output("No hints found.")
+                return True
+            else:
+                self.output(response)
+                return False
 
         else:
             self.output(response)

@@ -6,7 +6,6 @@ import socket
 import jinja2.exceptions
 from pony.flask import Pony
 from flask import Flask, request, redirect, url_for, render_template, Response, session, abort, send_from_directory
-from flask import Blueprint
 from flask_caching import Cache
 from flask_compress import Compress
 

@@ -1,9 +1,9 @@
 from __future__ import annotations
 from enum import unique, Enum
-from typing import List, Union, Optional, Set, NamedTuple, Dict
+from typing import List, Optional, Set, NamedTuple, Dict
 import logging
 
-from worlds.alttp import ALttPLocation
+from worlds.alttp.SubClasses import ALttPLocation
 from worlds.alttp.EntranceShuffle import door_addresses
 from worlds.alttp.Items import item_name_groups, item_table, ItemFactory, trap_replaceable, GetBeemizerItem
 from Utils import int16_as_bytes

@@ -1,73 +1,44 @@
-from .Locations import MinecraftAdvancement, advancement_table
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item
+def link_minecraft_structures(world, player):
 
-def minecraft_create_regions(world: MultiWorld, player: int):
-
-    def MCRegion(region_name: str, exits=[]):
-        ret = Region(region_name, None, region_name, player)
-        ret.world = world
-        ret.locations = [ MinecraftAdvancement(player, loc_name, loc_data.id, ret) 
-            for loc_name, loc_data in advancement_table.items() 
-            if loc_data.region == region_name ]
-        for exit in exits: 
-            ret.exits.append(Entrance(player, exit, ret))
-        return ret
-
-    world.regions += [MCRegion(*r) for r in mc_regions]
-
+    # Link mandatory connections first
     for (exit, region) in mandatory_connections:
         world.get_entrance(exit, player).connect(world.get_region(region, player))
-
-def link_minecraft_structures(world: MultiWorld, player: int):
 
     # Get all unpaired exits and all regions without entrances (except the Menu)
     # This function is destructive on these lists. 
     exits = [exit.name for r in world.regions if r.player == player for exit in r.exits if exit.connected_region == None]
     structs = [r.name for r in world.regions if r.player == player and r.entrances == [] and r.name != 'Menu']
+    exits_spoiler = exits[:] # copy the original order for the spoiler log
     try: 
         assert len(exits) == len(structs)
     except AssertionError as e: # this should never happen
-        raise Exception(f"Could not obtain equal numbers of Minecraft exits and structures for player {player}") from e
+        raise Exception(f"Could not obtain equal numbers of Minecraft exits and structures for player {player} ({world.player_names[player]})")
     num_regions = len(exits)
     pairs = {}
 
-    def check_valid_connection(exit, struct): 
-        if (exit in exits) and (struct in structs) and (exit not in pairs): 
-            return True
-        return False
-
     def set_pair(exit, struct): 
-        try: 
-            assert exit in exits
-            assert struct in structs
-        except AssertionError as e: 
-            raise Exception(f"Invalid connection: {exit} => {struct} for player {player}")
-        pairs[exit] = struct
-        exits.remove(exit)
-        structs.remove(struct)
+        if (exit in exits) and (struct in structs) and (exit not in illegal_connections.get(struct, [])):
+            pairs[exit] = struct
+            exits.remove(exit)
+            structs.remove(struct)
+        else: 
+            raise Exception(f"Invalid connection: {exit} => {struct} for player {player} ({world.player_names[player]})")
 
-    # Plando stuff. Remove any utilized exits/structs from the lists. 
-    # Raise error if trying to put Nether Fortress in the End. 
+    # Connect plando structures first
     if world.plando_connections[player]:
-        for connection in world.plando_connections[player]:
-            try:
-                if connection.entrance == 'The End Structure' and connection.exit == 'Nether Fortress': 
-                    raise Exception(f"Cannot place Nether Fortress in the End for player {player}")
-                set_pair(connection.entrance, connection.exit)
-            except Exception as e:
-                raise Exception(f"Could not connect using {connection}") from e
+        for conn in world.plando_connections[player]:
+            set_pair(conn.entrance, conn.exit)
 
+    # The algorithm tries to place the most restrictive structures first. This algorithm always works on the
+    # relatively small set of restrictions here, but does not work on all possible inputs with valid configurations. 
     if world.shuffle_structures[player]: 
-        # Can't put Nether Fortress in the End
-        if 'The End Structure' in exits and 'Nether Fortress' in structs: 
+        structs.sort(reverse=True, key=lambda s: len(illegal_connections.get(s, [])))
+        for struct in structs[:]: 
             try: 
-                end_struct = world.random.choice([s for s in structs if s != 'Nether Fortress'])
-                set_pair('The End Structure', end_struct)
-            except IndexError as e: # should only happen if structs is emptied by plando
-                raise Exception(f"Plando forced Nether Fortress in the End for player {player}") from e
-        world.random.shuffle(structs)
-        for exit, struct in zip(exits[:], structs[:]): 
+                exit = world.random.choice([e for e in exits if e not in illegal_connections.get(struct, [])])
+            except IndexError: 
+                raise Exception(f"No valid structure placements remaining for player {player} ({world.player_names[player]})")
             set_pair(exit, struct)
     else: # write remaining default connections
         for (exit, struct) in default_connections: 
@@ -77,13 +48,15 @@ def link_minecraft_structures(world: MultiWorld, player: int):
     # Make sure we actually paired everything; might fail if plando
     try:
         assert len(exits) == len(structs) == 0
-    except AssertionError as e: 
-        raise Exception(f"Failed to connect all Minecraft structures for player {player}; check plando settings in yaml") from e
+    except AssertionError: 
+        raise Exception(f"Failed to connect all Minecraft structures for player {player} ({world.player_names[player]})")
 
-    for exit, struct in pairs.items():
-        world.get_entrance(exit, player).connect(world.get_region(struct, player))
-        if world.shuffle_structures[player]:
-            world.spoiler.set_entrance(exit, struct, 'entrance', player)
+    for exit in exits_spoiler:
+        world.get_entrance(exit, player).connect(world.get_region(pairs[exit], player))
+        if world.shuffle_structures[player] or world.plando_connections[player]:
+            world.spoiler.set_entrance(exit, pairs[exit], 'entrance', player)
+
+
 
 # (Region name, list of exits)
 mc_regions = [
@@ -112,3 +85,9 @@ default_connections = {
     ('Nether Structure 2', 'Bastion Remnant'),
     ('The End Structure', 'End City')
 }
+
+# Structure: illegal locations
+illegal_connections = {
+    'Nether Fortress': ['The End Structure']
+}
+

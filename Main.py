@@ -9,7 +9,7 @@ import pickle
 from typing import Dict, Tuple
 
 from BaseClasses import MultiWorld, CollectionState, Region, Item
-from worlds.alttp.Items import ItemFactory, item_name_groups
+from worlds.alttp.Items import item_name_groups
 from worlds.alttp.Regions import create_regions, mark_light_world_regions, \
     lookup_vanilla_location_to_entrance
 from worlds.alttp.InvertedRegions import create_inverted_regions, mark_dark_world_regions
@@ -21,10 +21,8 @@ from Fill import distribute_items_restrictive, flood_items, balance_multiworld_p
 from worlds.alttp.Shops import create_shops, ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, version_tuple
-from worlds.minecraft import gen_minecraft, fill_minecraft_slot_data, generate_mc_data
-from worlds.minecraft.Regions import minecraft_create_regions
 from worlds.generic.Rules import locality_rules
-from worlds import Games, lookup_any_item_name_to_id, AutoWorld
+from worlds import AutoWorld
 import Patch
 
 seeddigits = 20
@@ -127,7 +125,8 @@ def main(args, seed=None):
     world.slot_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in
                         range(1, world.players + 1)}
 
-    for player in range(1, world.players + 1):
+    # system for sharing ER layouts
+    for player in world.alttp_player_ids:
         world.er_seeds[player] = str(world.random.randint(0, 2 ** 64))
 
         if "-" in world.shuffle[player]:
@@ -136,7 +135,6 @@ def main(args, seed=None):
             if shuffle == "vanilla":
                 world.er_seeds[player] = "vanilla"
             elif seed.startswith("group-") or args.race:
-                # renamed from team to group to not confuse with existing team name use
                 world.er_seeds[player] = get_same_seed(world, (
                 shuffle, seed, world.retro[player], world.mode[player], world.logic[player]))
             else:  # not a race or group seed, use set seed as is.
@@ -147,8 +145,9 @@ def main(args, seed=None):
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, world.seed)
 
     logger.info("Found World Types:")
+    longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
-        logger.info(f"  {name:30} {cls}")
+        logger.info(f"  {name:{longest_name}}: {len(cls.item_names):3} Items | {len(cls.location_names):3} Locations")
 
     parsed_names = parse_player_names(args.names, world.players, args.teams)
     world.teams = len(parsed_names)
@@ -164,40 +163,35 @@ def main(args, seed=None):
 
     for player in world.player_ids:
         for item_name in args.startinventory[player]:
-            item = Item(item_name, True, lookup_any_item_name_to_id[item_name], player)
-            item.game = world.game[player]
-            world.push_precollected(item)
+            world.push_precollected(world.create_item(item_name, player))
 
     for player in world.player_ids:
+        if player in world.alttp_player_ids:
+            # enforce pre-defined local items.
+            if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
+                world.local_items[player].add('Triforce Piece')
 
-        # enforce pre-defined local items.
-        if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
-            world.local_items[player].add('Triforce Piece')
+            # dungeon items can't be in non-local if the appropriate dungeon item shuffle setting is not set.
+            if not world.mapshuffle[player]:
+                world.non_local_items[player] -= item_name_groups['Maps']
+
+            if not world.compassshuffle[player]:
+                world.non_local_items[player] -= item_name_groups['Compasses']
+
+            if not world.keyshuffle[player]:
+                world.non_local_items[player] -= item_name_groups['Small Keys']
+
+            if not world.bigkeyshuffle[player]:
+                world.non_local_items[player] -= item_name_groups['Big Keys']
+
+            # Not possible to place pendants/crystals out side of boss prizes yet.
+            world.non_local_items[player] -= item_name_groups['Pendants']
+            world.non_local_items[player] -= item_name_groups['Crystals']
 
         # items can't be both local and non-local, prefer local
         world.non_local_items[player] -= world.local_items[player]
 
-        # dungeon items can't be in non-local if the appropriate dungeon item shuffle setting is not set.
-        if not world.mapshuffle[player]:
-            world.non_local_items[player] -= item_name_groups['Maps']
-
-        if not world.compassshuffle[player]:
-            world.non_local_items[player] -= item_name_groups['Compasses']
-
-        if not world.keyshuffle[player]:
-            world.non_local_items[player] -= item_name_groups['Small Keys']
-
-        if not world.bigkeyshuffle[player]:
-            world.non_local_items[player] -= item_name_groups['Big Keys']
-
-        # Not possible to place pendants/crystals out side of boss prizes yet.
-        world.non_local_items[player] -= item_name_groups['Pendants']
-        world.non_local_items[player] -= item_name_groups['Crystals']
-
     AutoWorld.call_all(world, "create_regions")
-
-    for player in world.minecraft_player_ids:
-        minecraft_create_regions(world, player)
 
     for player in world.alttp_player_ids:
         if world.open_pyramid[player] == 'goal':
@@ -259,9 +253,6 @@ def main(args, seed=None):
         set_rules(world, player)
 
     AutoWorld.call_all(world, "generate_basic")
-
-    for player in world.minecraft_player_ids:
-        gen_minecraft(world, player)
 
     logger.info("Running Item Plando")
 
@@ -443,7 +434,7 @@ def main(args, seed=None):
 
     for location in [loc for loc in world.get_filled_locations() if type(loc.address) is int and loc.game == 'A Link to the Past']:
         main_entrance = get_entrance_to_region(location.parent_region)
-        if location.game != Games.LTTP:
+        if location.game != "A Link to the Past":
             checks_in_area[location.player]["Light World"].append(location.address)
         elif location.parent_region.dungeon:
             dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
@@ -461,8 +452,8 @@ def main(args, seed=None):
     for index, take_any in enumerate(takeanyregions):
         for region in [world.get_region(take_any, player) for player in range(1, world.players + 1) if
                        world.retro[player]]:
-            item = ItemFactory(region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'],
-                               region.player)
+            item = world.create_item(region.shop.inventory[(0 if take_any == "Old Man Sword Cave" else 1)]['item'],
+                                     region.player)
             player = region.player
             location_id = SHOP_ID_START + total_shop_slots + index
 
@@ -511,7 +502,7 @@ def main(args, seed=None):
             for slot in world.hk_player_ids:
                 slot_data[slot] = AutoWorld.call_single(world, "fill_slot_data", slot)
         for slot in world.minecraft_player_ids:
-            slot_data[slot] = fill_minecraft_slot_data(world, slot)
+            slot_data[slot] = AutoWorld.call_single(world, "fill_slot_data", slot)
 
         locations_data: Dict[int, Dict[int, Tuple[int, int]]] = {player: {} for player in world.player_ids}
         for location in world.get_filled_locations():
@@ -563,8 +554,6 @@ def main(args, seed=None):
     if multidata_task:
         multidata_task.result()  # retrieve exception if one exists
     pool.shutdown()  # wait for all queued tasks to complete
-    for player in world.minecraft_player_ids:  # Doing this after shutdown prevents the .apmc from being generated if there's an error
-        generate_mc_data(world, player)
     if not args.skip_playthrough:
         logger.info('Calculating playthrough.')
         create_playthrough(world)
@@ -682,8 +671,9 @@ def create_playthrough(world):
         pathpairs = zip_longest(pathsiter, pathsiter)
         return list(pathpairs)
 
-    world.spoiler.paths = dict()
-    for player in range(1, world.players + 1):
+    world.spoiler.paths = {}
+    topology_worlds = (player for player in world.player_ids if world.worlds[player].topology_present)
+    for player in topology_worlds:
         world.spoiler.paths.update(
             {str(location): get_path(state, location.parent_region) for sphere in collection_spheres for location in
              sphere if location.player == player})

@@ -1,14 +1,15 @@
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item
+from BaseClasses import Item
 import typing
 
+
 class ItemData(typing.NamedTuple):
-    code: int
+    code: typing.Optional[int]
     progression: bool
+
 
 class MinecraftItem(Item):
     game: str = "Minecraft"
-    def __init__(self, name: str, progression: bool, code: int, player: int):
-        super().__init__(name, progression, code if code else None, player)
+
 
 item_table = {
     "Archery": ItemData(45000, True),
@@ -46,8 +47,9 @@ item_table = {
     "8 Gold Ore": ItemData(45032, False), 
     "Rotten Flesh": ItemData(45033, False), 
     "Single Arrow": ItemData(45034, False), 
+    "Bee Trap (Minecraft)": ItemData(45100, False),
 
-    "Victory": ItemData(0, True)
+    "Victory": ItemData(None, True)
 }
 
 # If not listed here then has frequency 1
@@ -68,7 +70,8 @@ item_frequencies = {
     "16 Porkchops": 8, 
     "8 Gold Ore": 4, 
     "Rotten Flesh": 4, 
-    "Single Arrow": 0
+    "Single Arrow": 0, 
+    "Bee Trap (Minecraft)": 0
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}

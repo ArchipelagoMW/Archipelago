@@ -113,7 +113,7 @@ def installfile(path, keep_content=False):
         print('Warning,', path, 'not found')
 
 
-extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "QUsb2Snes", "meta.yaml"]
+extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "SNI", "meta.yaml"]
 
 for data in extra_data:
     installfile(Path(data))
@@ -131,30 +131,12 @@ else:
     file = z3pr.__file__
     installfile(Path(os.path.dirname(file)) / "data", keep_content=True)
 
-qusb2sneslog = buildfolder / "QUsb2Snes" / "log.txt"
-if os.path.exists(qusb2sneslog):
-    os.remove(qusb2sneslog)
-
-qusb2snesconfig = buildfolder / "QUsb2Snes" / "config.ini"
-# turns on all bridges, disables auto update
-with open(qusb2snesconfig, "w") as f:
-    f.write("""[General]
-SendToSet=true
-checkUpdateCounter=20
-luabridge=true
-LuaBridgeRNGSeed=79120361805329566567327599
-FirstTime=true
-sd2snessupport=true
-retroarchdevice=true
-snesclassic=true""")
-
-
 if signtool:
     for exe in exes:
         print(f"Signing {exe.target_name}")
         os.system(signtool + os.path.join(buildfolder, exe.target_name))
-    print(f"Signing QUsb2Snes")
-    os.system(signtool + os.path.join(buildfolder, "Qusb2Snes", "QUsb2Snes.exe"))
+    print(f"Signing SNI")
+    os.system(signtool + os.path.join(buildfolder, "SNI", "SNI.exe"))
 
 alttpr_sprites_folder = buildfolder / "data" / "sprites" / "alttpr"
 for file in os.listdir(alttpr_sprites_folder):
@@ -204,7 +186,7 @@ cx_Freeze.setup(
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
             "zip_include_packages": ["*"],
-            "zip_exclude_packages": ["kivy"],
+            "zip_exclude_packages": ["kivy", "worlds"],
             "include_files": [],
             "include_msvcr": True,
             "replace_paths": [("*", "")],

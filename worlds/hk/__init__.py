@@ -1,4 +1,5 @@
 import logging
+from typing import Set
 
 logger = logging.getLogger("Hollow Knight")
 
@@ -14,6 +15,11 @@ from ..AutoWorld import World
 class HKWorld(World):
     game: str = "Hollow Knight"
     options = hollow_knight_options
+    item_names: Set[str] = frozenset(item_table)
+    location_names: Set[str] = frozenset(lookup_name_to_id)
+
+    item_name_to_id = {name: data.id for name, data in item_table.items() if data.type != "Event"}
+    location_name_to_id = lookup_name_to_id
 
     def generate_basic(self):
         # Link regions
@@ -22,8 +28,7 @@ class HKWorld(World):
         # Generate item pool
         pool = []
         for item_name, item_data in item_table.items():
-
-            item = HKItem(item_name, item_data.advancement, item_data.id, item_data.type, player=self.player)
+            item = self.create_item(item_name)
 
             if item_data.type == "Event":
                 event_location = self.world.get_location(item_name, self.player)
@@ -83,6 +88,9 @@ class HKWorld(World):
             slot_data[option_name] = int(option.value)
         return slot_data
 
+    def create_item(self, name: str) -> Item:
+        item_data = item_table[name]
+        return HKItem(name, item_data.advancement, item_data.id, item_data.type, self.player)
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, None, name, player)

@@ -7,6 +7,7 @@ import concurrent.futures
 import sys
 import typing
 import time
+import os
 
 from pony.orm import db_session, select, commit
 
@@ -29,9 +30,6 @@ class AlreadyRunningException(Exception):
 
 
 if sys.platform == 'win32':
-    import os
-
-
     class Locker(CommonLocker):
         def __enter__(self):
             try:

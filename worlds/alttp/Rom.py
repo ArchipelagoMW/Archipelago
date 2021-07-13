@@ -18,7 +18,7 @@ import bsdiff4
 from typing import Optional
 
 from BaseClasses import CollectionState, Region
-from worlds.alttp import ALttPLocation
+from worlds.alttp.SubClasses import ALttPLocation
 from worlds.alttp.Shops import ShopType
 from worlds.alttp.Dungeons import dungeon_music_addresses
 from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address
@@ -578,14 +578,13 @@ class Sprite():
         return name
 
     def to_ap_sprite(self, path):
-        from .. import Games
         import yaml
         payload = {"format_version": 1,
                    "min_format_version": 1,
                    "sprite_version": 1,
                    "name": self.name,
                    "author": self.author_name,
-                   "game": Games.LTTP.value,
+                   "game": "A Link to the Past",
                    "data": self.get_delta()}
         with open(path, "w") as f:
             f.write(yaml.safe_dump(payload))
@@ -778,7 +777,7 @@ def patch_rom(world, rom, player, team, enemized):
         if not location.crystal:
 
             if location.item is not None:
-                if location.item.game != "A Link to the Past":
+                if not location.native_item:
                     itemid = get_nonnative_item_sprite(location.item.game)
                 # Keys in their native dungeon should use the orignal item code for keys
                 elif location.parent_region.dungeon:

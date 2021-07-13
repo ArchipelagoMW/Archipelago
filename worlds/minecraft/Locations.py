@@ -1,15 +1,19 @@
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item
+from BaseClasses import Location
 import typing
 
+
 class AdvData(typing.NamedTuple):
-    id: int
+    id: typing.Optional[int]
     region: str
 
-class MinecraftAdvancement(Location): 
+
+class MinecraftAdvancement(Location):
     game: str = "Minecraft"
-    def __init__(self, player: int, name: str, address: int, parent):
-        super().__init__(player, name, address if address else None, parent)
-        self.event = True if address == 0 else False
+
+    def __init__(self, player: int, name: str, address: typing.Optional[int], parent):
+        super().__init__(player, name, address, parent)
+        self.event = not address
+
 
 advancement_table = {
     "Who is Cutting Onions?": AdvData(42000, 'Overworld'),
@@ -49,7 +53,7 @@ advancement_table = {
     "War Pigs": AdvData(42034, 'Bastion Remnant'),
     "Take Aim": AdvData(42035, 'Overworld'),
     "Total Beelocation": AdvData(42036, 'Overworld'),
-    "Arbalistic": AdvData(42037, 'Overworld'),    
+    "Arbalistic": AdvData(42037, 'Overworld'),
     "The End... Again...": AdvData(42038, 'The End'),
     "Acquire Hardware": AdvData(42039, 'Overworld'),
     "Not Quite \"Nine\" Lives": AdvData(42040, 'The Nether'),
@@ -91,7 +95,7 @@ advancement_table = {
     "Cover Me in Debris": AdvData(42076, 'The Nether'),
     "The End?": AdvData(42077, 'The End'),
     "The Parrots and the Bats": AdvData(42078, 'Overworld'),
-    "A Complete Catalogue": AdvData(42079, 'Village'), 
+    "A Complete Catalogue": AdvData(42079, 'Village'),
     "Getting Wood": AdvData(42080, 'Overworld'),
     "Time to Mine!": AdvData(42081, 'Overworld'),
     "Hot Topic": AdvData(42082, 'Overworld'),
@@ -103,9 +107,9 @@ advancement_table = {
     "When Pigs Fly": AdvData(42088, 'Overworld'),
     "Overkill": AdvData(42089, 'Nether Fortress'),
     "Librarian": AdvData(42090, 'Overworld'),
-    "Overpowered": AdvData(42091, 'Overworld'), 
+    "Overpowered": AdvData(42091, 'Overworld'),
 
-    "Ender Dragon": AdvData(0, 'The End')
+    "Ender Dragon": AdvData(None, 'The End')
 }
 
 exclusion_table = {
@@ -114,13 +118,14 @@ exclusion_table = {
         "Two by Two": "100 XP",
         "Two Birds, One Arrow": "50 XP",
         "Arbalistic": "100 XP",
+        "Monsters Hunted": "100 XP",
         "Beaconator": "50 XP",
         "A Balanced Diet": "100 XP",
         "Uneasy Alliance": "100 XP",
         "Cover Me in Debris": "100 XP",
-        "A Complete Catalogue": "50 XP", 
+        "A Complete Catalogue": "50 XP",
         "Overpowered": "50 XP"
-    }, 
+    },
     "insane": {
         "How Did We Get Here?": "500 XP",
         "Adventuring Time": "500 XP"
@@ -128,15 +133,14 @@ exclusion_table = {
     "postgame": {
         "The Next Generation": "50 XP",
         "The End... Again...": "50 XP",
-        "You Need a Mint": "50 XP", 
+        "You Need a Mint": "50 XP",
         "Monsters Hunted": "100 XP"
     }
 }
-
 
 events_table = {
     "Ender Dragon": "Victory"
 }
 
-
-lookup_id_to_name: typing.Dict[int, str] = {loc_data.id: loc_name for loc_name, loc_data in advancement_table.items() if loc_data.id}
+lookup_id_to_name: typing.Dict[int, str] = {loc_data.id: loc_name for loc_name, loc_data in advancement_table.items() if
+                                            loc_data.id}

@@ -13,38 +13,8 @@ os.environ["KIVY_NO_FILELOG"] = "1"
 os.environ["KIVY_NO_ARGS"] = "1"
 
 import asyncio
-from CommonClient import server_loop, logger
-from FactorioClient import FactorioContext, factorio_server_watcher
-
-
-async def main():
-    ctx = FactorioContext(None, None, True)
-
-    ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
-    factorio_server_task = asyncio.create_task(factorio_server_watcher(ctx), name="FactorioServer")
-    ui_app = FactorioManager(ctx)
-    ui_task = asyncio.create_task(ui_app.async_run(), name="UI")
-
-    await ctx.exit_event.wait()  # wait for signal to exit application
-    ui_app.stop()
-    ctx.server_address = None
-    ctx.snes_reconnect_address = None
-    # allow tasks to quit
-    if ui_task:
-        await ui_task
-    if factorio_server_task:
-        await factorio_server_task
-    if ctx.server_task:
-        await ctx.server_task
-
-    if ctx.server and not ctx.server.socket.closed:
-        await ctx.server.socket.close()
-    if ctx.server_task:
-        await ctx.server_task
-
-    while ctx.input_requests > 0:  # clear queue for shutdown
-        ctx.input_queue.put_nowait(None)
-        ctx.input_requests -= 1
+from CommonClient import logger
+from FactorioClient import main
 
 
 from kivy.app import App
@@ -73,7 +43,7 @@ class FactorioManager(App):
         pairs = [
             ("Client", "Archipelago"),
             ("FactorioServer", "Factorio Server Log"),
-            ("FactorioWatcher", "Bridge File Log"),
+            ("FactorioWatcher", "Bridge Data Log"),
         ]
         self.tabs.default_tab_content = UILog(*(logging.getLogger(logger_name) for logger_name, name in pairs))
         for logger_name, display_name in pairs:
@@ -166,5 +136,6 @@ Builder.load_string('''
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    ui_app = FactorioManager
+    loop.run_until_complete(main(ui_app))
     loop.close()

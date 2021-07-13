@@ -6,17 +6,19 @@ def GetBeemizerItem(world, player, item):
     if world.beemizer[player] and item_name in trap_replaceable:
         if world.random.random() < world.beemizer[player] * 0.25:
             if world.random.random() < (0.5 + world.beemizer[player] * 0.1):
-                return "Bee Trap" if isinstance(item, str) else ItemFactory("Bee Trap", player)
+                return "Bee Trap" if isinstance(item, str) else world.create_item("Bee Trap", player)
             else:
-                return "Bee" if isinstance(item, str) else ItemFactory("Bee", player)
+                return "Bee" if isinstance(item, str) else world.create_item("Bee", player)
         else:
             return item
     else:
         return item
 
 
-def ItemFactory(items, player):
-    from worlds.alttp import ALttPItem
+# should be replaced with direct world.create_item(item) call in the future
+def ItemFactory(items, player: int):
+    from worlds.alttp import ALTTPWorld
+    world = ALTTPWorld(None, player)
     ret = []
     singleton = False
     if isinstance(items, str):
@@ -24,7 +26,7 @@ def ItemFactory(items, player):
         singleton = True
     for item in items:
         if item in item_table:
-            ret.append(ALttPItem(item, *item_table[item], player))
+            ret.append(world.create_item(item))
         else:
             raise Exception(f"Unknown item {item}")
 
@@ -211,6 +213,8 @@ item_table = {'Bow': ItemData(True, None, 0x0B, 'You have\nchosen the\narcher cl
               'Open Floodgate': ItemData(True, 'Event', None, None, None, None, None, None, None, None),
               }
 
+as_dict_item_table = {name: data._asdict() for name, data in item_table.items()}
+
 progression_mapping = {
     "Golden Sword": ("Progressive Sword", 4),
     "Tempered Sword": ("Progressive Sword", 3),
@@ -227,8 +231,6 @@ progression_mapping = {
 }
 
 lookup_id_to_name = {data[2]: name for name, data in item_table.items() if type(data[2]) == int}
-
-hint_blacklist = {"Triforce"}
 
 item_name_groups = {"Bows":
                         {"Bow", "Silver Arrows", "Silver Bow", "Progressive Bow (Alt)", "Progressive Bow"},
@@ -268,8 +270,8 @@ for basename, substring in _simple_groups:
 
 del (_simple_groups)
 
-progression_items = {name for name, data in item_table.items() if type(data[2]) == int and data[0]}
-item_name_groups['Everything'] = {name for name, data in item_table.items() if type(data[2]) == int}
+progression_items = {name for name, data in item_table.items() if type(data.item_code) == int and data.advancement}
+item_name_groups['Everything'] = {name for name, data in item_table.items() if type(data.item_code) == int}
 item_name_groups['Progression Items'] = progression_items
 item_name_groups['Non Progression Items'] = item_name_groups['Everything'] - progression_items
 

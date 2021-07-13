@@ -142,41 +142,37 @@ class MultiWorld():
 
 
     def set_options(self, args):
-        import Options
         from worlds import AutoWorld
-        for option_set in Options.option_sets:
-            for option in option_set:
-                setattr(self, option, getattr(args, option, {}))
-        for world in AutoWorld.AutoWorldRegister.world_types.values():
-            for option in world.options:
-                setattr(self, option, getattr(args, option, {}))
         for player in self.player_ids:
             self.custom_data[player] = {}
-            self.worlds[player] = AutoWorld.AutoWorldRegister.world_types[self.game[player]](self, player)
+            world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
+            for option in world_type.options:
+                setattr(self, option, getattr(args, option, {}))
+            self.worlds[player] = world_type(self, player)
 
     def secure(self):
         self.random = secrets.SystemRandom()
 
-    @property
+    @functools.cached_property
     def player_ids(self):
-        yield from range(1, self.players + 1)
+        return tuple(range(1, self.players + 1))
 
-    @property
+    # Todo: make these automatic, or something like get_players_for_game(game_name)
+    @functools.cached_property
     def alttp_player_ids(self):
-        yield from (player for player in range(1, self.players + 1) if self.game[player] == "A Link to the Past")
+        return tuple(player for player in range(1, self.players + 1) if self.game[player] == "A Link to the Past")
 
-    @property
+    @functools.cached_property
     def hk_player_ids(self):
-        yield from (player for player in range(1, self.players + 1) if self.game[player] == "Hollow Knight")
+        return tuple(player for player in range(1, self.players + 1) if self.game[player] == "Hollow Knight")
 
-    @property
+    @functools.cached_property
     def factorio_player_ids(self):
-        yield from (player for player in range(1, self.players + 1) if self.game[player] == "Factorio")
+        return tuple(player for player in range(1, self.players + 1) if self.game[player] == "Factorio")
 
-    @property
+    @functools.cached_property
     def minecraft_player_ids(self):
-        yield from (player for player in range(1, self.players + 1) if self.game[player] == "Minecraft")
-    
+        return tuple(player for player in range(1, self.players + 1) if self.game[player] == "Minecraft")
 
     def get_name_string_for_object(self, obj) -> str:
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_names(obj.player)})'
@@ -241,53 +237,12 @@ class MultiWorld():
     def get_all_state(self, keys=False) -> CollectionState:
         ret = CollectionState(self)
 
-        def soft_collect(item):
-            if item.game == "A Link to the Past" and item.name.startswith('Progressive '):
-                # ALttP items
-                if 'Sword' in item.name:
-                    if ret.has('Golden Sword', item.player):
-                        pass
-                    elif ret.has('Tempered Sword', item.player) and self.difficulty_requirements[
-                        item.player].progressive_sword_limit >= 4:
-                        ret.prog_items['Golden Sword', item.player] += 1
-                    elif ret.has('Master Sword', item.player) and self.difficulty_requirements[
-                        item.player].progressive_sword_limit >= 3:
-                        ret.prog_items['Tempered Sword', item.player] += 1
-                    elif ret.has('Fighter Sword', item.player) and self.difficulty_requirements[item.player].progressive_sword_limit >= 2:
-                        ret.prog_items['Master Sword', item.player] += 1
-                    elif self.difficulty_requirements[item.player].progressive_sword_limit >= 1:
-                        ret.prog_items['Fighter Sword', item.player] += 1
-                elif 'Glove' in item.name:
-                    if ret.has('Titans Mitts', item.player):
-                        pass
-                    elif ret.has('Power Glove', item.player):
-                        ret.prog_items['Titans Mitts', item.player] += 1
-                    else:
-                        ret.prog_items['Power Glove', item.player] += 1
-                elif 'Shield' in item.name:
-                    if ret.has('Mirror Shield', item.player):
-                        pass
-                    elif ret.has('Red Shield', item.player) and self.difficulty_requirements[item.player].progressive_shield_limit >= 3:
-                        ret.prog_items['Mirror Shield', item.player] += 1
-                    elif ret.has('Blue Shield', item.player)  and self.difficulty_requirements[item.player].progressive_shield_limit >= 2:
-                        ret.prog_items['Red Shield', item.player] += 1
-                    elif self.difficulty_requirements[item.player].progressive_shield_limit >= 1:
-                        ret.prog_items['Blue Shield', item.player] += 1
-                elif 'Bow' in item.name:
-                    if ret.has('Silver', item.player):
-                        pass
-                    elif ret.has('Bow', item.player) and self.difficulty_requirements[item.player].progressive_bow_limit >= 2:
-                        ret.prog_items['Silver Bow', item.player] += 1
-                    elif self.difficulty_requirements[item.player].progressive_bow_limit >= 1:
-                        ret.prog_items['Bow', item.player] += 1
-            elif item.advancement or item.smallkey or item.bigkey:
-                ret.prog_items[item.name, item.player] += 1
-
         for item in self.itempool:
-            soft_collect(item)
+            self.worlds[item.player].collect(ret, item)
 
         if keys:
             for p in self.alttp_player_ids:
+                world = self.worlds[p]
                 from worlds.alttp.Items import ItemFactory
                 for item in ItemFactory(
                         ['Small Key (Hyrule Castle)', 'Big Key (Eastern Palace)', 'Big Key (Desert Palace)',
@@ -302,7 +257,7 @@ class MultiWorld():
                             'Small Key (Misery Mire)'] * 3 + ['Small Key (Turtle Rock)'] * 4 + [
                             'Small Key (Ganons Tower)'] * 4,
                         p):
-                    soft_collect(item)
+                    world.collect(ret, item)
         ret.sweep_for_events()
         return ret
 
@@ -317,6 +272,8 @@ class MultiWorld():
         return next(location for location in self.get_locations() if
                     location.item and location.item.name == item and location.item.player == player)
 
+    def create_item(self, item_name: str, player: int) -> Item:
+        return self.worlds[player].create_item(item_name)
 
     def push_precollected(self, item: Item):
         item.world = self
@@ -910,14 +867,15 @@ class CollectionState(object):
         return self.fortress_loot(player) and normal_kill
 
     def can_kill_ender_dragon(self, player: int):
+        # Since it is possible to kill the dragon without getting any of the advancements related to it, we need to require that it can be respawned. 
+        respawn_dragon = self.can_reach('The Nether', 'Region', player) and self.has('Ingot Crafting', player)
         if self.combat_difficulty(player) == 'easy': 
-            return self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and self.has('Archery', player) and \
-                   self.can_brew_potions(player) and self.can_enchant(player)
+            return respawn_dragon and self.has("Progressive Weapons", player, 3) and self.has("Progressive Armor", player, 2) and \
+                   self.has('Archery', player) and self.can_brew_potions(player) and self.can_enchant(player)
         if self.combat_difficulty(player) == 'hard': 
-            return (self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player)) or \
-                   (self.has('Progressive Weapons', player, 1) and self.has('Bed', player))
-        return self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and self.has('Archery', player)
-
+            return respawn_dragon and ((self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player)) or \
+                   (self.has('Progressive Weapons', player, 1) and self.has('Bed', player)))
+        return respawn_dragon and self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and self.has('Archery', player)
 
     # OOT functions
     # move these into the oot world plugin later
@@ -1002,60 +960,10 @@ class CollectionState(object):
     def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:
         if location:
             self.locations_checked.add(location)
-        changed = False
 
-        # TODO: create a mapping for progressive items in each game and use that
-        if item.game == "A Link to the Past":
-            if item.name.startswith('Progressive '):
-                if 'Sword' in item.name:
-                    if self.has('Golden Sword', item.player):
-                        pass
-                    elif self.has('Tempered Sword', item.player) and self.world.difficulty_requirements[
-                        item.player].progressive_sword_limit >= 4:
-                        self.prog_items['Golden Sword', item.player] += 1
-                        changed = True
-                    elif self.has('Master Sword', item.player) and self.world.difficulty_requirements[item.player].progressive_sword_limit >= 3:
-                        self.prog_items['Tempered Sword', item.player] += 1
-                        changed = True
-                    elif self.has('Fighter Sword', item.player) and self.world.difficulty_requirements[item.player].progressive_sword_limit >= 2:
-                        self.prog_items['Master Sword', item.player] += 1
-                        changed = True
-                    elif self.world.difficulty_requirements[item.player].progressive_sword_limit >= 1:
-                        self.prog_items['Fighter Sword', item.player] += 1
-                        changed = True
-                elif 'Glove' in item.name:
-                    if self.has('Titans Mitts', item.player):
-                        pass
-                    elif self.has('Power Glove', item.player):
-                        self.prog_items['Titans Mitts', item.player] += 1
-                        changed = True
-                    else:
-                        self.prog_items['Power Glove', item.player] += 1
-                        changed = True
-                elif 'Shield' in item.name:
-                    if self.has('Mirror Shield', item.player):
-                        pass
-                    elif self.has('Red Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 3:
-                        self.prog_items['Mirror Shield', item.player] += 1
-                        changed = True
-                    elif self.has('Blue Shield', item.player) and self.world.difficulty_requirements[item.player].progressive_shield_limit >= 2:
-                        self.prog_items['Red Shield', item.player] += 1
-                        changed = True
-                    elif self.world.difficulty_requirements[item.player].progressive_shield_limit >= 1:
-                        self.prog_items['Blue Shield', item.player] += 1
-                        changed = True
-                elif 'Bow' in item.name:
-                    if self.has('Silver Bow', item.player):
-                        pass
-                    elif self.has('Bow', item.player):
-                        self.prog_items['Silver Bow', item.player] += 1
-                        changed = True
-                    else:
-                        self.prog_items['Bow', item.player] += 1
-                        changed = True
+        changed = self.world.worlds[item.player].collect(self, item)
 
-
-        if not changed and (event or item.advancement):
+        if not changed and event:
             self.prog_items[item.name, item.player] += 1
             changed = True
 
@@ -1317,6 +1225,11 @@ class Location():
         return (self.player, self.name) < (other.player, other.name)
 
     @property
+    def native_item(self) -> bool:
+        """Returns True if the item in this location matches game."""
+        return self.item and self.item.game == self.game
+
+    @property
     def hint_text(self):
         return getattr(self, "_hint_text", self.name.replace("_", " ").replace("-", " "))
 
@@ -1525,8 +1438,6 @@ class Spoiler(object):
                          'shuffle': self.world.shuffle,
                          'item_pool': self.world.difficulty,
                          'item_functionality': self.world.item_functionality,
-                         'gt_crystals': self.world.crystals_needed_for_gt,
-                         'ganon_crystals': self.world.crystals_needed_for_ganon,
                          'open_pyramid': self.world.open_pyramid,
                          'accessibility': self.world.accessibility,
                          'hints': self.world.hints,
@@ -1550,7 +1461,6 @@ class Spoiler(object):
                          'triforce_pieces_available': self.world.triforce_pieces_available,
                          'triforce_pieces_required': self.world.triforce_pieces_required,
                          'shop_shuffle': self.world.shop_shuffle,
-                         'shop_item_slots': self.world.shop_item_slots,
                          'shuffle_prizes': self.world.shuffle_prizes,
                          'sprite_pool': self.world.sprite_pool,
                          'restrict_dungeon_item_on_boss': self.world.restrict_dungeon_item_on_boss,
@@ -1606,7 +1516,6 @@ class Spoiler(object):
                         res = getattr(self.world, f_option)[player]
                         outfile.write(f'{f_option+":":33}{bool_to_text(res) if type(res) == Options.Toggle else res.get_option_name()}\n')
 
-
                 if player in self.world.alttp_player_ids:
                     for team in range(self.world.teams):
                         outfile.write('%s%s\n' % (
@@ -1635,8 +1544,6 @@ class Spoiler(object):
                     outfile.write('Entrance Shuffle:                %s\n' % self.metadata['shuffle'][player])
                     if self.metadata['shuffle'][player] != "vanilla":
                         outfile.write('Entrance Shuffle Seed            %s\n' % self.metadata['er_seeds'][player])
-                    outfile.write('Crystals required for GT:        %s\n' % self.metadata['gt_crystals'][player])
-                    outfile.write('Crystals required for Ganon:     %s\n' % self.metadata['ganon_crystals'][player])
                     outfile.write('Pyramid hole pre-opened:         %s\n' % (
                         'Yes' if self.metadata['open_pyramid'][player] else 'No'))
 
@@ -1659,8 +1566,6 @@ class Spoiler(object):
                                                "f" in self.metadata["shop_shuffle"][player]))
                     outfile.write('Custom Potion Shop:              %s\n' %
                                   bool_to_text("w" in self.metadata["shop_shuffle"][player]))
-                    outfile.write('Shop Item Slots:                      %s\n' %
-                                  self.metadata["shop_item_slots"][player])
                     outfile.write('Boss shuffle:                    %s\n' % self.metadata['boss_shuffle'][player])
                     outfile.write(
                         'Enemy shuffle:                   %s\n' % bool_to_text(self.metadata['enemy_shuffle'][player]))
@@ -1688,6 +1593,13 @@ class Spoiler(object):
                 outfile.write('\n\nMedallions:\n')
                 for dungeon, medallion in self.medallions.items():
                     outfile.write(f'\n{dungeon}: {medallion}')
+
+            if self.world.factorio_player_ids:
+                outfile.write('\n\nRecipes:\n')
+                for player in self.world.factorio_player_ids:
+                    name = self.world.get_player_names(player)
+                    for recipe in self.world.worlds[player].custom_recipes.values():
+                        outfile.write(f"\n{recipe.name} ({name}): {recipe.ingredients} -> {recipe.products}")
 
             if self.startinventory:
                 outfile.write('\n\nStarting Inventory:\n\n')

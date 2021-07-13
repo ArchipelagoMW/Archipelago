@@ -307,7 +307,9 @@ class Hint(typing.NamedTuple):
         else:
             add_json_text(parts, ".")
 
-        return {"cmd": "PrintJSON", "data": parts, "type": "hint"}
+        return {"cmd": "PrintJSON", "data": parts, "type": "Hint",
+                "receiving": self.receiving_player,
+                "item": NetworkItem(self.item, self.location, self.finding_player)}
 
     @property
     def local(self):

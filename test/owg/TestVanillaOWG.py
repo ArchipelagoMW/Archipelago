@@ -1,3 +1,5 @@
+from argparse import Namespace
+
 from BaseClasses import MultiWorld
 from worlds.alttp.Dungeons import create_dungeons, get_dungeon_item_pool
 from worlds.alttp.EntranceShuffle import link_entrances
@@ -8,14 +10,17 @@ from worlds.alttp.Regions import create_regions
 from worlds.alttp.Shops import create_shops
 from worlds.alttp.Rules import set_rules
 from test.TestBase import TestBase
-from Options import alttp_options
+
+from worlds import AutoWorld
 
 
 class TestVanillaOWG(TestBase):
     def setUp(self):
         self.world = MultiWorld(1)
-        for option_name, option in alttp_options.items():
-            setattr(self.world, option_name, {1: option.default})
+        args = Namespace()
+        for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].options.items():
+            setattr(args, name, {1: option.from_any(option.default)})
+        self.world.set_options(args)
         self.world.difficulty_requirements[1] = difficulties['normal']
         self.world.logic[1] = "owglitches"
         create_regions(self.world, 1)
