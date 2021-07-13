@@ -70,7 +70,7 @@ end
 data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-2"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-1"].fluid_boxes = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes)
-
+data.raw["ammo"]["artillery-shell"].stack_size = 10
 
 {# each randomized tech gets set to be invisible, with new nodes added that trigger those #}
 {%- for original_tech_name, item_name, receiving_player, advancement in locations %}
