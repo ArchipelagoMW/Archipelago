@@ -367,7 +367,7 @@ class OOTWorld(World):
         self.world.clear_location_cache()
             
 
-    # For now we will always output a patch file, and patch separately. Hopefully the client will also be able to patch.
+    # For now we will always output a patch file.
     def generate_output(self): 
         self.file_hash = [self.world.random.randint(0, 31) for i in range(5)]
         outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_names(self.player)}"
@@ -375,16 +375,14 @@ class OOTWorld(World):
         # patch cosmetics here
         self.rom.update_header()
 
-        # write to rom. probably remove this later and have patching occur separately
-        self.rom.write_to_file(Utils.output_path(outfile_name+'.z64'))
-
         # make patch file
         create_patch_file(self.rom, Utils.output_path(outfile_name+'.apz5'))
-        self.rom.restore()
 
-        # TODO: compress rom and remove rom file path
-        if self.compress_rom:
-            pass
+        # TODO: compress rom and remove uncompressed file path
+        if self.patch_uncompressed_rom:
+            self.rom.write_to_file(Utils.output_path(outfile_name+'.z64'))
+
+        self.rom.restore()
 
 
     # Helper functions
