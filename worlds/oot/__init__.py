@@ -76,11 +76,9 @@ class OOTWorld(World):
 
         # Determine skipped trials in GT
         # This needs to be done before the logic rules in GT are parsed
-        self.skipped_trials = {}
         trial_list = ['Forest', 'Fire', 'Water', 'Spirit', 'Shadow', 'Light']
         chosen_trials = self.world.random.sample(trial_list, self.trials)  # chooses a list of trials to NOT skip
-        for t in trial_list:
-            self.skipped_trials[t] = False if t in chosen_trials else True
+        self.skipped_trials = {trial: (trial not in chosen_trials) for trial in trial_list}
 
         # Determine which dungeons are MQ
         # Possible future plan: allow user to pick which dungeons are MQ
@@ -149,7 +147,7 @@ class OOTWorld(World):
                         self.parser.parse_spot_rule(new_location)
                     if new_location.never:
                         # We still need to fill the location even if ALR is off.
-                        logging.getLogger('').debug('Unreachable location: %s', new_location.name)
+                        logger.debug('Unreachable location: %s', new_location.name)
                     new_location.player = self.player
                     new_region.locations.append(new_location)
             if 'events' in region:
@@ -161,7 +159,7 @@ class OOTWorld(World):
                     if self.world.logic_rules != 'none':
                         self.parser.parse_spot_rule(new_location)
                     if new_location.never:
-                        logging.getLogger('').debug('Dropping unreachable event: %s', new_location.name)
+                        logger.debug('Dropping unreachable event: %s', new_location.name)
                     else:
                         new_location.player = self.player
                         new_region.locations.append(new_location)
@@ -174,7 +172,7 @@ class OOTWorld(World):
                     if self.world.logic_rules != 'none':
                         self.parser.parse_spot_rule(new_exit)
                     if new_exit.never:
-                        logging.getLogger('').debug('Dropping unreachable exit: %s', new_exit.name)
+                        logger.debug('Dropping unreachable exit: %s', new_exit.name)
                     else:
                         new_region.exits.append(new_exit)
 
@@ -387,6 +385,11 @@ class OOTWorld(World):
         unreachable = [loc for loc in all_locations if loc.internal and loc.event and loc.locked and loc not in reachable]
         for loc in unreachable: 
             loc.parent_region.locations.remove(loc)
+        # Exception: Sell Big Poe is an event which is only reachable if Bottle with Big Poe is in the item pool. 
+        # We allow it to be removed only if Bottle with Big Poe is not in the itempool.
+        bigpoe = self.world.get_location('Sell Big Poe from Market Guard House', self.player)
+        if not all_state.has('Bottle with Big Poe', self.player) and bigpoe not in reachable:
+            bigpoe.parent_region.locations.remove(bigpoe)
         self.world.clear_location_cache()
             
 

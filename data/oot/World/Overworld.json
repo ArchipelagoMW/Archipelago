@@ -837,9 +837,9 @@
     {
         "region_name": "Market Guard House",
         "scene": "Market Guard House",
-        # "events": {
-        #     "Sell Big Poe": "is_adult and Bottle_with_Big_Poe"
-        # },
+        "events": {
+            "Sell Big Poe": "is_adult and Bottle_with_Big_Poe"
+        },
         "locations": {
             "Market 10 Big Poes": "
                 is_adult and 
