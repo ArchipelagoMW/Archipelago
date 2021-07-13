@@ -60,9 +60,6 @@ def subprocess_args(include_stdout=True):
                 'env': env })
     return ret
 
-def local_path(path=''):
-    return Utils.local_path(path)
-
 def get_version_bytes(a):
     version_bytes = [0x00, 0x00, 0x00]
     if not a:
@@ -77,6 +74,3 @@ def get_version_bytes(a):
         version_bytes[i] = version_byte
 
     return version_bytes
-
-def default_output_path(path):
-    return Utils.output_path(path)

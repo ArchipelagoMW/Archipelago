@@ -8,7 +8,8 @@ import struct
 import subprocess
 import random
 import copy
-from .Utils import is_bundled, subprocess_args, local_path, data_path, default_output_path, get_version_bytes
+from Utils import local_path
+from .Utils import is_bundled, subprocess_args, data_path, get_version_bytes
 from .ntype import BigStream, uint32
 from .crc import calculate_crc
 from .version import __version__
