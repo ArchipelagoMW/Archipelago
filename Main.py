@@ -525,8 +525,8 @@ def main(args, seed=None):
             "games": games,
             "names": parsed_names,
             "connect_names": connect_names,
-            "remote_items": {player for player in range(1, world.players + 1) if
-                             world.remote_items[player]},
+            "remote_items": {player for player in world.player_ids if
+                             world.worlds[player].remote_items},
             "locations": locations_data,
             "checks_in_area": checks_in_area,
             "server_options": get_options()["server_options"],

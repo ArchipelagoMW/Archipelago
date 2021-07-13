@@ -790,7 +790,7 @@ def patch_rom(world, rom, player, team, enemized):
                             itemid = 0x33
                         elif location.item.compass:
                             itemid = 0x25
-                if world.remote_items[player]:
+                if world.worlds[player].remote_items: # remote items does not currently work
                     itemid = list(location_table.keys()).index(location.name) + 1
                     assert itemid < 0x100
                     rom.write_byte(location.player_address, 0xFF)
@@ -1647,7 +1647,8 @@ def patch_rom(world, rom, player, team, enemized):
 
     write_strings(rom, world, player, team)
 
-    rom.write_byte(0x18637C, 1 if world.remote_items[player] else 0)
+    # remote items flag, does not currently work
+    rom.write_byte(0x18637C, int(world.worlds[player].remote_items))
 
     # set rom name
     # 21 bytes
