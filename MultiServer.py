@@ -1060,9 +1060,16 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
     elif cmd == "GetDataPackage":
         exclusions = set(args.get("exclusions", []))
-        await ctx.send_msgs(client, [{"cmd": "DataPackage",
-                                      "data": {key: name for key, name in
-                                               network_data_package.items() if key not in exclusions}}])
+        if exclusions:
+            games = {name: game_data for name, game_data in network_data_package["games"].items()
+                     if name not in exclusions}
+            package = network_data_package.copy()
+            package["games"] = games
+            await ctx.send_msgs(client, [{"cmd": "DataPackage",
+                                          "data": package}])
+        else:
+            await ctx.send_msgs(client, [{"cmd": "DataPackage",
+                                          "data": network_data_package}])
     elif client.auth:
         if cmd == 'Sync':
             items = get_received_items(ctx, client.team, client.slot)
