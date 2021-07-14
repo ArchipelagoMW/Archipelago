@@ -21,7 +21,7 @@ from Fill import distribute_items_restrictive, flood_items, balance_multiworld_p
 from worlds.alttp.Shops import create_shops, ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
 from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, version_tuple
-from worlds.generic.Rules import locality_rules
+from worlds.generic.Rules import locality_rules, exclusion_rules
 from worlds import AutoWorld
 import Patch
 
@@ -251,6 +251,9 @@ def main(args, seed=None):
 
     for player in world.alttp_player_ids:
         set_rules(world, player)
+
+    for player in world.player_ids:
+        exclusion_rules(world, player, args.excluded_locations[player])
 
     AutoWorld.call_all(world, "generate_basic")
 

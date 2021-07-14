@@ -547,6 +547,13 @@ def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("b
     ret.startinventory = startitems
     ret.start_hints = set(game_weights.get('start_hints', []))
 
+    ret.excluded_locations = set()
+    for location in game_weights.get('exclude_locations', []):
+        if location in world_type.location_names: 
+            ret.excluded_locations.add(location)
+        else:
+            raise Exception(f"Could not exclude location {location}, as it was not recognized.")
+
     if ret.game in AutoWorldRegister.world_types:
         for option_name, option in AutoWorldRegister.world_types[ret.game].options.items():
             if option_name in game_weights:
