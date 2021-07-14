@@ -5,6 +5,7 @@ from .Items import MinecraftItem, item_table, item_frequencies
 from .Locations import MinecraftAdvancement, advancement_table, exclusion_table, events_table
 from .Regions import mc_regions, link_minecraft_structures
 from .Rules import set_rules
+from worlds.generic.Rules import exclusion_rules
 
 from BaseClasses import Region, Entrance, Item
 from .Options import minecraft_options
@@ -22,6 +23,7 @@ class MinecraftWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
+
     def _get_mc_data(self):
         exits = ["Overworld Structure 1", "Overworld Structure 2", "Nether Structure 1", "Nether Structure 2",
                  "The End Structure"]
@@ -35,34 +37,38 @@ class MinecraftWorld(World):
             'structures': {exit: self.world.get_entrance(exit, self.player).connected_region.name for exit in exits}
         }
 
+
     def generate_basic(self):
         link_minecraft_structures(self.world, self.player)
 
-        pool = []
+        # Generate item pool
+        itempool = []
         pool_counts = item_frequencies.copy()
-        if getattr(self.world, "bee_traps")[self.player]: 
+        if getattr(self.world, "bee_traps")[self.player]: # replace Rotten Flesh by bee traps
             pool_counts.update({"Rotten Flesh": 0, "Bee Trap (Minecraft)": 4})
         for item_name in item_table:
             for count in range(pool_counts.get(item_name, 1)):
-                pool.append(self.create_item(item_name))
+                itempool.append(self.create_item(item_name))
 
-        prefill_pool = {}
-        prefill_pool.update(events_table)
-        exclusion_pools = ['hard', 'insane', 'postgame']
-        for key in exclusion_pools:
+        # Choose locations to automatically exclude based on settings
+        exclusion_pool = set()
+        exclusion_types = ['hard', 'insane', 'postgame']
+        for key in exclusion_types:
             if not getattr(self.world, f"include_{key}_advancements")[self.player]:
-                prefill_pool.update(exclusion_table[key])
+                exclusion_pool.update(exclusion_table[key])
+        exclusion_rules(self.world, self.player, exclusion_pool)
 
-        for loc_name, item_name in prefill_pool.items():
-            location = self.world.get_location(loc_name, self.player)
-            item = self.create_item(item_name)
-            location.place_locked_item(item)
-            pool.remove(item)
+        # Prefill the Ender Dragon with the completion condition
+        completion = self.create_item("Victory")
+        self.world.get_location("Ender Dragon", self.player).place_locked_item(completion)
+        itempool.remove(completion)
 
-        self.world.itempool += pool
+        self.world.itempool += itempool
+
 
     def set_rules(self):
         set_rules(self.world, self.player)
+
 
     def create_regions(self):
         def MCRegion(region_name: str, exits=[]):
@@ -77,6 +83,7 @@ class MinecraftWorld(World):
 
         self.world.regions += [MCRegion(*r) for r in mc_regions]
 
+
     def generate_output(self):
         import json
         from base64 import b64encode
@@ -87,12 +94,14 @@ class MinecraftWorld(World):
         with open(output_path(filename), 'wb') as f:
             f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
 
+
     def fill_slot_data(self): 
         slot_data = self._get_mc_data()
         for option_name in minecraft_options:
             option = getattr(self.world, option_name)[self.player]
             slot_data[option_name] = int(option.value)
         return slot_data
+
 
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]
