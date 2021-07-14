@@ -390,8 +390,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     elif cmd == 'PrintJSON':
         ctx.on_print_json(args)
 
-    elif cmd == 'InvalidArguments':
-        logger.warning(f"Invalid Arguments: {args['text']}")
+    elif cmd == 'InvalidPacket':
+        logger.warning(f"Invalid Packet of {args['type']}: {args['text']}")
 
     else:
         logger.debug(f"unknown command {cmd}")

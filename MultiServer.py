@@ -394,6 +394,8 @@ async def on_client_connected(ctx: Context, client: Client):
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
         'datapackage_version': network_data_package["version"],
+        'datapackage_versions': {game: game_data["version"] for game, game_data
+                                 in network_data_package["games"].items()},
         'seed_name': ctx.seed_name
     }])
 
@@ -983,17 +985,19 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         cmd: str = args["cmd"]
     except:
         logging.exception(f"Could not get command from {args}")
-        await ctx.send_msgs(client, [{"cmd": "InvalidCmd", "text": f"Could not get command from {args} at `cmd`"}])
+        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
+                                      "text": f"Could not get command from {args} at `cmd`"}])
         raise
 
     if type(cmd) is not str:
-        await ctx.send_msgs(client, [{"cmd": "InvalidCmd", "text": f"Command should be str, got {type(cmd)}"}])
+        await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
+                                      "text": f"Command should be str, got {type(cmd)}"}])
         return
 
     if cmd == 'Connect':
         if not args or 'password' not in args or type(args['password']) not in [str, type(None)] or \
                 'game' not in args:
-            await ctx.send_msgs(client, [{'cmd': 'InvalidArguments', 'text': 'Connect'}])
+            await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", 'text': 'Connect'}])
             return
 
         errors = set()
@@ -1055,8 +1059,10 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await on_client_joined(ctx, client)
 
     elif cmd == "GetDataPackage":
+        exclusions = set(args.get("exclusions", []))
         await ctx.send_msgs(client, [{"cmd": "DataPackage",
-                                      "data": network_data_package}])
+                                      "data": {key: name for key, name in
+                                               network_data_package.items() if key not in exclusions}}])
     elif client.auth:
         if cmd == 'Sync':
             items = get_received_items(ctx, client.team, client.slot)
@@ -1072,7 +1078,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             locs = []
             for location in args["locations"]:
                 if type(location) is not int or location not in lookup_any_location_id_to_name:
-                    await ctx.send_msgs(client, [{"cmd": "InvalidArguments", "text": 'LocationScouts'}])
+                    await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts'}])
                     return
                 target_item, target_player = ctx.locations[client.slot][location]
                 locs.append(NetworkItem(target_item, location, target_player))
@@ -1084,7 +1090,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
         if cmd == 'Say':
             if "text" not in args or type(args["text"]) is not str or not args["text"].isprintable():
-                await ctx.send_msgs(client, [{"cmd": "InvalidArguments", "text": 'Say'}])
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'Say'}])
                 return
 
             client.messageprocessor(args["text"])
