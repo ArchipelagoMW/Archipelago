@@ -300,6 +300,7 @@ misc_options: typing.Dict[str, type(Option)] = {
     "damage_multiplier": DamageMultiplier,
     "no_collectible_hearts": Toggle,
     "starting_tod": StartingToD,
+    "start_with_consumables": Toggle, 
     "start_with_rupees": Toggle,
 }
 

@@ -1,12 +1,13 @@
 import logging
 import os
+from collections import Counter
 
 logger = logging.getLogger("Ocarina of Time")
 
 from .Location import OOTLocation, LocationFactory
 from .Entrance import OOTEntrance
 from .Items import OOTItem, item_table, oot_data_to_ap_id
-from .ItemPool import generate_itempool
+from .ItemPool import generate_itempool, get_junk_item
 from .Regions import OOTRegion, TimeOfDay
 from .Rules import set_rules, set_shop_rules
 from .RuleParser import Rule_AST_Transformer
@@ -55,6 +56,8 @@ class OOTWorld(World):
         self.shop_prices = {}
         self.regions = []  # internal cache of regions for this world, used later
         self.remove_from_start_inventory = []  # some items will be precollected but not in the inventory
+        self.starting_items = Counter()
+        self.starting_songs = False  # whether starting_items contains a song
 
 
         # ER and glitched logic don't play nice together, glitched takes precedence
@@ -314,6 +317,23 @@ class OOTWorld(World):
     def generate_basic(self):  # generate item pools, place fixed items
         # Generate itempool
         generate_itempool(self)
+        # Determine starting items
+        for item in self.world.precollected_items: 
+            if item.player == self.player and item.name in self.remove_from_start_inventory:
+                self.remove_from_start_inventory.remove(item.name)
+            else:
+                self.starting_items[item.name] += 1
+                if item.type == 'Song': 
+                    self.starting_songs = True
+                # Call the junk fill and get a replacement
+                self.itempool.remove(item)
+                self.itempool.append(self.create_item(*get_junk_item()))
+        if self.start_with_consumables: 
+            self.starting_items['Deku Sticks'] = 30
+            self.starting_items['Deku Nuts'] = 40
+        if self.start_with_rupees: 
+            self.starting_items['Rupees'] = 999
+
         self.world.itempool += self.itempool
 
         # Do some other stuff that we need to do

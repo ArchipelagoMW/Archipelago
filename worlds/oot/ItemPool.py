@@ -1251,30 +1251,34 @@ def get_pool_core(world):
         pending_junk_pool.extend(songlist)
 
     if world.free_scarecrow:
-        world.world.push_precollected(world.create_item('Scarecrow Song'))
+        item = world.create_item('Scarecrow Song')
+        world.world.push_precollected(item)
+        world.remove_from_start_inventory.append(item.name)
     
     if world.no_epona_race:
-        world.world.push_precollected(world.create_item('Epona'))
+        item = world.create_item('Epona')
+        world.world.push_precollected(item)
+        world.remove_from_start_inventory.append(item.name)
 
     if world.shuffle_mapcompass == 'remove' or world.shuffle_mapcompass == 'startwith':
         for item in [item for dungeon in world.dungeons for item in dungeon.dungeon_items]:
             world.world.push_precollected(item)
-            world.remove_from_start_inventory.append(item)
+            world.remove_from_start_inventory.append(item.name)
             pool.extend(get_junk_item())
     if world.shuffle_smallkeys == 'remove':
         for item in [item for dungeon in world.dungeons for item in dungeon.small_keys]:
             world.world.push_precollected(item)
-            world.remove_from_start_inventory.append(item)
+            world.remove_from_start_inventory.append(item.name)
             pool.extend(get_junk_item())
     if world.shuffle_bosskeys == 'remove':
         for item in [item for dungeon in world.dungeons if dungeon.name != 'Ganons Castle' for item in dungeon.boss_key]:
             world.world.push_precollected(item)
-            world.remove_from_start_inventory.append(item)
+            world.remove_from_start_inventory.append(item.name)
             pool.extend(get_junk_item())
     if world.shuffle_ganon_bosskey in ['remove', 'triforce']:
         for item in [item for dungeon in world.dungeons if dungeon.name == 'Ganons Castle' for item in dungeon.boss_key]:
             world.world.push_precollected(item)
-            world.remove_from_start_inventory.append(item)
+            world.remove_from_start_inventory.append(item.name)
             pool.extend(get_junk_item())
 
     if world.shuffle_mapcompass == 'vanilla':
@@ -1314,7 +1318,7 @@ def get_pool_core(world):
     if not world.keysanity and not world.dungeon_mq['Fire Temple']:
         item = world.create_item('Small Key (Fire Temple)')
         world.world.push_precollected(item)
-        world.remove_from_start_inventory.append(item)
+        world.remove_from_start_inventory.append(item.name)
 
     if world.triforce_hunt:
         triforce_count = int((TriforceCounts[world.item_pool_value] * world.triforce_goal_per_world).to_integral_value(rounding=ROUND_HALF_UP))

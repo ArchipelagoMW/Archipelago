@@ -25,13 +25,10 @@ def set_rules(ootworld):
     for location in ootworld.get_locations():
         if ootworld.shuffle_song_items == 'song':
             if location.type == 'Song':
-                # allow junk items, but songs must still have matching world
-                # add_item_rule(location, lambda item: 
-                #     # ((location.world.distribution.song_as_items or world.starting_songs)
-                #     #     and item.type != 'Song')
-                #     (ootworld.starting_songs and item.type != 'Song')
-                #     or (item.type == 'Song' and item.player == location.player))
-                add_item_rule(location, lambda item: item.player == location.player and item.type == 'Song')
+                # must be a song, or there are songs in starting items; then it can be anything
+                add_item_rule(location, lambda item: 
+                    (ootworld.starting_songs and item.type != 'Song')
+                    or (item.type == 'Song' and item.player == location.player))
             else:
                 add_item_rule(location, lambda item: item.type != 'Song')
 

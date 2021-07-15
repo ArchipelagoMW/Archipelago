@@ -168,9 +168,7 @@ def patch_rom(world, rom):
     rom.write_bytes(0x1FC0CF8, Block_code)
 
     # songs as items flag
-    songs_as_items = world.shuffle_song_items != 'song' #or \
-                     # world.distribution.song_as_items or \
-                     # world.starting_songs
+    songs_as_items = (world.shuffle_song_items != 'song') or world.starting_songs
 
     if songs_as_items:
         rom.write_byte(rom.sym('SONGS_AS_ITEMS'), 1)
@@ -1757,7 +1755,11 @@ def patch_rom(world, rom):
         replace_songs(rom)
 
     # actually write the save table to rom
-    # world.distribution.give_items(save_context)
+    for (name, count) in world.starting_items.items():
+        if count == 0:
+            continue
+        save_context.give_item(name, count)
+
     if world.starting_age == 'adult':
         # When starting as adult, the pedestal doesn't handle child default equips when going back child the first time, so we have to equip them ourselves
         save_context.equip_default_items('child')
