@@ -122,8 +122,10 @@ def main(args, seed=None):
     world.set_options(args)
     world.glitch_triforce = args.glitch_triforce  # This is enabled/disabled globally, no per player option.
 
-    world.slot_seeds = {player: random.Random(world.random.randint(0, 999999999)) for player in
+    world.slot_seeds = {player: random.Random(world.random.getrandbits(64)) for player in
                         range(1, world.players + 1)}
+
+    AutoWorld.call_all(world, "generate_early")
 
     # system for sharing ER layouts
     for player in world.alttp_player_ids:

@@ -69,6 +69,9 @@ class World(metaclass=AutoWorldRegister):
         self.player = player
 
     # overwritable methods that get called by Main.py, sorted by execution order
+    def generate_early(self):
+        pass
+
     def create_regions(self):
         pass
 

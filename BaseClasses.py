@@ -139,7 +139,6 @@ class MultiWorld():
         self.custom_data = {}
         self.worlds = {}
 
-
     def set_options(self, args):
         from worlds import AutoWorld
         for player in self.player_ids:
@@ -564,6 +563,12 @@ class CollectionState(object):
     def has(self, item, player: int, count: int = 1):
         return self.prog_items[item, player] >= count
 
+    def has_all(self, items: Set[str], player:int):
+        return all(self.prog_items[item, player] for item in items)
+
+    def has_any(self, items: Set[str], player:int):
+        return any(self.prog_items[item, player] for item in items)
+
     def has_essence(self, player: int, count: int):
         return self.prog_items["Dream_Nail", player]
         # return self.prog_items["Essence", player] >= count
@@ -927,7 +932,8 @@ class CollectionState(object):
                 self.stale[item.player] = True
 
 @unique
-class RegionType(Enum):
+class RegionType(int, Enum):
+    Generic = 0
     LightWorld = 1
     DarkWorld = 2
     Cave = 3 # Also includes Houses
@@ -941,7 +947,7 @@ class RegionType(Enum):
 
 class Region(object):
 
-    def __init__(self, name: str, type, hint, player: int):
+    def __init__(self, name: str, type, hint, player: int, world: Optional[MultiWorld] = None):
         self.name = name
         self.type = type
         self.entrances = []
@@ -949,7 +955,7 @@ class Region(object):
         self.locations = []
         self.dungeon = None
         self.shop = None
-        self.world = None
+        self.world = world
         self.is_light_world = False  # will be set after making connections.
         self.is_dark_world = False
         self.spot_type = 'Region'
@@ -957,7 +963,7 @@ class Region(object):
         self.recursion_count = 0
         self.player = player
 
-    def can_reach(self, state):
+    def can_reach(self, state: CollectionState):
         if state.stale[self.player]:
             state.update_reachable_regions(self.player)
         return self in state.reachable_regions[self.player]
@@ -1085,17 +1091,16 @@ class Location():
     spot_type = 'Location'
     game: str = "Generic"
     crystal: bool = False
+    always_allow = staticmethod(lambda item, state: False)
+    access_rule = staticmethod(lambda state: True)
+    item_rule = staticmethod(lambda item: True)
 
     def __init__(self, player: int, name: str = '', address:int = None, parent=None):
-        self.name = name
-        self.address = address
+        self.name: str = name
+        self.address: Optional[int] = address
         self.parent_region: Region = parent
-        self.recursion_count = 0
-        self.player = player
-        self.item = None
-        self.always_allow = lambda item, state: False
-        self.access_rule = lambda state: True
-        self.item_rule = lambda item: True
+        self.player: int = player
+        self.item: Optional[Item] = None
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
         return self.always_allow(state, item) or (self.parent_region.can_fill(item) and self.item_rule(item) and (not check_access or self.can_reach(state)))
