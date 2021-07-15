@@ -358,7 +358,9 @@ class OOTWorld(World):
         generate_itempool(self)
         # Determine starting items
         for item in self.world.precollected_items: 
-            if item.player == self.player and item.name in self.remove_from_start_inventory:
+            if item.player != self.player:
+                continue
+            if item.name in self.remove_from_start_inventory:
                 self.remove_from_start_inventory.remove(item.name)
             else:
                 self.starting_items[item.name] += 1
