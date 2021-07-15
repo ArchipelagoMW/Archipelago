@@ -898,9 +898,7 @@ class CollectionState(object):
         return self.age[player] == age
 
     # Store the age before calling this!
-    # TODO: fix to not need indirect_connections?
     def update_age_reachable_regions(self, player): 
-        from worlds.alttp.EntranceShuffle import indirect_connections
         self.stale[player] = False
         for age in ['child', 'adult']: 
             self.age[player] = age
@@ -927,12 +925,6 @@ class CollectionState(object):
                     bc.update(new_region.exits)
                     queue.extend(new_region.exits)
                     self.path[new_region] = (new_region.name, self.path.get(connection, None))
-
-                    # Retry connections if the new region can unblock them
-                    # if new_region.name in indirect_connections:
-                    #     new_entrance = self.world.get_entrance(indirect_connections[new_region.name], player)
-                    #     if new_entrance in bc and new_entrance not in queue:
-                    #         queue.append(new_entrance)
 
 
     def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:
