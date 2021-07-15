@@ -1,5 +1,6 @@
 import logging
 import os
+import copy
 from collections import Counter
 
 logger = logging.getLogger("Ocarina of Time")
@@ -21,7 +22,7 @@ from .Patches import patch_rom
 from .N64Patch import create_patch_file
 
 import Utils
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item
+from BaseClasses import MultiWorld, CollectionState
 from Options import Range, OptionList
 from Fill import fill_restrictive, FillError
 from ..AutoWorld import World
@@ -38,6 +39,44 @@ class OOTWorld(World):
     location_name_to_id = {name: (location_id_offset + index) for (index, name) in enumerate(location_table) 
         if location_table[name][0] not in ['Event', 'Drop', 'HintStone', 'Hint']}
     remote_items: bool = False
+
+
+    def __new__(cls, world, player):
+        # Add necessary objects to CollectionState on initialization
+        orig_init = CollectionState.__init__
+        orig_copy = CollectionState.copy
+
+        def oot_init(self, parent: MultiWorld):
+            orig_init(self, parent)
+            self.child_reachable_regions = {player: set() for player in range(1, parent.players + 1)}
+            self.adult_reachable_regions = {player: set() for player in range(1, parent.players + 1)}
+            self.child_blocked_connections = {player: set() for player in range(1, parent.players + 1)}
+            self.adult_blocked_connections = {player: set() for player in range(1, parent.players + 1)}
+            self.age = {player: None for player in range(1, parent.players + 1)}
+
+        def oot_copy(self):
+            ret = orig_copy(self)
+            ret.child_reachable_regions = {player: copy.copy(self.child_reachable_regions[player]) for player in
+                                           range(1, self.world.players + 1)}
+            ret.adult_reachable_regions = {player: copy.copy(self.adult_reachable_regions[player]) for player in
+                                           range(1, self.world.players + 1)}
+            ret.child_blocked_connections = {player: copy.copy(self.child_blocked_connections[player]) for player in
+                                           range(1, self.world.players + 1)}
+            ret.adult_blocked_connections = {player: copy.copy(self.adult_blocked_connections[player]) for player in
+                                           range(1, self.world.players + 1)}
+            return ret
+
+        CollectionState.__init__ = oot_init
+        CollectionState.copy = oot_copy
+        # also need to add the names to the passed MultiWorld's CollectionState, since it was initialized before we could get to it
+        world.state.child_reachable_regions = {player: set() for player in range(1, world.players + 1)}
+        world.state.adult_reachable_regions = {player: set() for player in range(1, world.players + 1)}
+        world.state.child_blocked_connections = {player: set() for player in range(1, world.players + 1)}
+        world.state.adult_blocked_connections = {player: set() for player in range(1, world.players + 1)}
+        world.state.age = {player: None for player in range(1, world.players + 1)}
+
+        return super().__new__(cls)
+
 
     def __init__(self, world, player):
         super(OOTWorld, self).__init__(world, player)

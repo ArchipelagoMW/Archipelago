@@ -486,12 +486,6 @@ class CollectionState(object):
         self.stale = {player: True for player in range(1, parent.players + 1)}
         for item in parent.precollected_items:
             self.collect(item, True)
-        # OoT objects, remove these later
-        self.child_reachable_regions = {player: set() for player in range(1, parent.players + 1)}
-        self.adult_reachable_regions = {player: set() for player in range(1, parent.players + 1)}
-        self.child_blocked_connections = {player: set() for player in range(1, parent.players + 1)}
-        self.adult_blocked_connections = {player: set() for player in range(1, parent.players + 1)}
-        self.age = {player: None for player in range(1, parent.players + 1)}
 
     def update_reachable_regions(self, player: int):
         from worlds.alttp.EntranceShuffle import indirect_connections
@@ -535,16 +529,6 @@ class CollectionState(object):
         ret.events = copy.copy(self.events)
         ret.path = copy.copy(self.path)
         ret.locations_checked = copy.copy(self.locations_checked)
-        # OoT objects, remove these later
-        # TODO: generalize copying using __dict__
-        ret.child_reachable_regions = {player: copy.copy(self.child_reachable_regions[player]) for player in
-                                 range(1, self.world.players + 1)}
-        ret.adult_reachable_regions = {player: copy.copy(self.adult_reachable_regions[player]) for player in
-                                 range(1, self.world.players + 1)}
-        ret.child_blocked_connections = {player: copy.copy(self.child_blocked_connections[player]) for player in
-                                 range(1, self.world.players + 1)}
-        ret.adult_blocked_connections = {player: copy.copy(self.adult_blocked_connections[player]) for player in
-                                 range(1, self.world.players + 1)}
         return ret
 
     def can_reach(self, spot, resolution_hint=None, player=None) -> bool:
@@ -855,9 +839,7 @@ class CollectionState(object):
                    (self.has('Progressive Weapons', player, 1) and self.has('Bed', player)))
         return respawn_dragon and self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and self.has('Archery', player)
 
-    # OOT functions
-    # move these into the oot world plugin later
-
+    # These three functions originally were implemented for OoT, but they might be useful enough to keep around. 
     def has_any_of(self, items, player):
         return any([self.has(item, player) for item in items])
 
@@ -866,65 +848,6 @@ class CollectionState(object):
 
     def count_of(self, items, player): 
         return len(list(filter(lambda item: self.has(item, player), items)))
-
-    def has_stones(self, count, player): 
-        stones = ["Kokiri Emerald", "Goron Ruby", "Zora Sapphire"]
-        return self.count_of(stones, player) >= count
-
-    def has_medallions(self, count, player): 
-        medallions = ["Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion", "Shadow Medallion", "Spirit Medallion"]
-        return self.count_of(medallions, player) >= count
-
-    def has_dungeon_rewards(self, count, player): 
-        stones = ["Kokiri Emerald", "Goron Ruby", "Zora Sapphire"]
-        medallions = ["Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion", "Shadow Medallion", "Spirit Medallion"]
-        return self.count_of(stones + medallions, player) >= count
-
-    def has_bottle_oot(self, player): 
-        oot_bottles = ["Bottle", "Bottle with Milk", "Deliver Letter", "Sell Big Poe", "Bottle with Red Potion", "Bottle with Green Potion", \
-            "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish", "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"]
-        return self.has_any_of(oot_bottles, player)
-
-    # This function operates by assuming different behavior based on the "level of recursion", handled manually. 
-    # If it's called while self.age[player] is None, then it will set the age variable and then attempt to reach the region. 
-    # If self.age[player] is not None, then it will compare it to the 'age' parameter, and return True iff they are equal. 
-    #   This lets us fake the OOT accessibility check that cares about age. Unfortunately it's still tied to the ground region. 
-    def reach_as_age(self, regionname, age, player): 
-        if self.age[player] is None: 
-            self.age[player] = age
-            can_reach = self.world.get_region(regionname, player).can_reach(self)
-            self.age[player] = None
-            return can_reach
-        return self.age[player] == age
-
-    # Store the age before calling this!
-    def update_age_reachable_regions(self, player): 
-        self.stale[player] = False
-        for age in ['child', 'adult']: 
-            self.age[player] = age
-            rrp = getattr(self, f'{age}_reachable_regions')[player]
-            bc = getattr(self, f'{age}_blocked_connections')[player]
-            queue = deque(getattr(self, f'{age}_blocked_connections')[player])
-            start = self.world.get_region('Menu', player)
-
-            # init on first call - this can't be done on construction since the regions don't exist yet
-            if not start in rrp:
-                rrp.add(start)
-                bc.update(start.exits)
-                queue.extend(start.exits)
-
-            # run BFS on all connections, and keep track of those blocked by missing items
-            while queue:
-                connection = queue.popleft()
-                new_region = connection.connected_region
-                if new_region in rrp:
-                    bc.remove(connection)
-                elif connection.can_reach(self):
-                    rrp.add(new_region)
-                    bc.remove(connection)
-                    bc.update(new_region.exits)
-                    queue.extend(new_region.exits)
-                    self.path[new_region] = (new_region.name, self.path.get(connection, None))
 
 
     def collect(self, item: Item, event: bool = False, location: Location = None) -> bool:

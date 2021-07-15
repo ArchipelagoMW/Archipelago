@@ -101,14 +101,14 @@
     "can_build_rainbow_bridge": "(
         (bridge == 'open') or
         (bridge == 'vanilla' and Shadow_Medallion and Spirit_Medallion and Light_Arrows) or
-        (bridge == 'stones' and has_stones(bridge_stones)) or
-        (bridge == 'medallions' and has_medallions(bridge_medallions)) or
-        (bridge == 'dungeons' and has_dungeon_rewards(bridge_rewards)) or
+        (bridge == 'stones' and _oot_has_stones(bridge_stones)) or
+        (bridge == 'medallions' and _oot_has_medallions(bridge_medallions)) or
+        (bridge == 'dungeons' and _oot_has_dungeon_rewards(bridge_rewards)) or
         (bridge == 'tokens' and (Gold_Skulltula_Token, bridge_tokens)))",
     "can_trigger_lacs": "(
         (lacs_condition == 'vanilla' and Shadow_Medallion and Spirit_Medallion) or
-        (lacs_condition == 'stones' and has_stones(lacs_stones)) or
-        (lacs_condition == 'medallions' and has_medallions(lacs_medallions)) or
-        (lacs_condition == 'dungeons' and has_dungeon_rewards(lacs_rewards)) or
+        (lacs_condition == 'stones' and _oot_has_stones(lacs_stones)) or
+        (lacs_condition == 'medallions' and _oot_has_medallions(lacs_medallions)) or
+        (lacs_condition == 'dungeons' and _oot_has_dungeon_rewards(lacs_rewards)) or
         (lacs_condition == 'tokens' and (Gold_Skulltula_Token, lacs_tokens)))"
 }

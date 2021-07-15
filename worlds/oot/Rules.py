@@ -1,10 +1,73 @@
-import collections
+from collections import deque
 import logging
 from .Location import DisableType
 from .SaveContext import SaveContext
 # from Search import Search
 from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_item, item_in_locations
+from ..AutoWorld import LogicMixin
+
+
+class OOTLogic(LogicMixin):
+
+    def _oot_has_stones(self, count, player): 
+        stones = ["Kokiri Emerald", "Goron Ruby", "Zora Sapphire"]
+        return self.count_of(stones, player) >= count
+
+    def _oot_has_medallions(self, count, player): 
+        medallions = ["Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion", "Shadow Medallion", "Spirit Medallion"]
+        return self.count_of(medallions, player) >= count
+
+    def _oot_has_dungeon_rewards(self, count, player): 
+        stones = ["Kokiri Emerald", "Goron Ruby", "Zora Sapphire"]
+        medallions = ["Light Medallion", "Forest Medallion", "Fire Medallion", "Water Medallion", "Shadow Medallion", "Spirit Medallion"]
+        return self.count_of(stones + medallions, player) >= count
+
+    def _oot_has_bottle(self, player): 
+        oot_bottles = ["Bottle", "Bottle with Milk", "Deliver Letter", "Sell Big Poe", "Bottle with Red Potion", "Bottle with Green Potion", \
+            "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish", "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"]
+        return self.has_any_of(oot_bottles, player)
+
+    # This function operates by assuming different behavior based on the "level of recursion", handled manually. 
+    # If it's called while self.age[player] is None, then it will set the age variable and then attempt to reach the region. 
+    # If self.age[player] is not None, then it will compare it to the 'age' parameter, and return True iff they are equal. 
+    #   This lets us fake the OOT accessibility check that cares about age. Unfortunately it's still tied to the ground region. 
+    def reach_as_age(self, regionname, age, player): 
+        if self.age[player] is None: 
+            self.age[player] = age
+            can_reach = self.world.get_region(regionname, player).can_reach(self)
+            self.age[player] = None
+            return can_reach
+        return self.age[player] == age
+
+    # Store the age before calling this!
+    def update_age_reachable_regions(self, player): 
+        self.stale[player] = False
+        for age in ['child', 'adult']: 
+            self.age[player] = age
+            rrp = getattr(self, f'{age}_reachable_regions')[player]
+            bc = getattr(self, f'{age}_blocked_connections')[player]
+            queue = deque(getattr(self, f'{age}_blocked_connections')[player])
+            start = self.world.get_region('Menu', player)
+
+            # init on first call - this can't be done on construction since the regions don't exist yet
+            if not start in rrp:
+                rrp.add(start)
+                bc.update(start.exits)
+                queue.extend(start.exits)
+
+            # run BFS on all connections, and keep track of those blocked by missing items
+            while queue:
+                connection = queue.popleft()
+                new_region = connection.connected_region
+                if new_region in rrp:
+                    bc.remove(connection)
+                elif connection.can_reach(self):
+                    rrp.add(new_region)
+                    bc.remove(connection)
+                    bc.update(new_region.exits)
+                    queue.extend(new_region.exits)
+                    self.path[new_region] = (new_region.name, self.path.get(connection, None))
 
 
 def set_rules(ootworld):
@@ -128,7 +191,7 @@ def set_shop_rules(ootworld):
                                       'Buy Red Potion [40]',
                                       'Buy Red Potion [50]',
                                       'Buy Fairy\'s Spirit']:
-                add_rule(location, lambda state: CollectionState.has_bottle_oot(state, ootworld.player))
+                add_rule(location, lambda state: CollectionState._oot_has_bottle(state, ootworld.player))
             if location.item.name in ['Buy Bombchu (10)', 'Buy Bombchu (20)', 'Buy Bombchu (5)']:
                 add_rule(location, found_bombchus)
 
