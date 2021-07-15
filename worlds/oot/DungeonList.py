@@ -120,7 +120,7 @@ def create_dungeons(ootworld):
             small_keys = [ootworld.create_item(f'Small Key ({name})') for i in range(dungeon_info['small_key'])]
         else:
             small_keys = [ootworld.create_item(f'Small Key ({name})') for i in range(dungeon_info['small_key_mq'])]
-        dungeon_items = [ootworld.create_item(f'Map ({name})'), ootworld.create_item(f'Compass({name})')] * dungeon_info['dungeon_item']
+        dungeon_items = [ootworld.create_item(f'Map ({name})'), ootworld.create_item(f'Compass ({name})')] * dungeon_info['dungeon_item']
         if ootworld.shuffle_mapcompass in ['any_dungeon', 'overworld']:
             for item in dungeon_items:
                 item.priority = True
