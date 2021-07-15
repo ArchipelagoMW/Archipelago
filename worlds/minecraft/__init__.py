@@ -39,7 +39,6 @@ class MinecraftWorld(World):
 
 
     def generate_basic(self):
-        link_minecraft_structures(self.world, self.player)
 
         # Generate item pool
         itempool = []
@@ -82,6 +81,7 @@ class MinecraftWorld(World):
             return ret
 
         self.world.regions += [MCRegion(*r) for r in mc_regions]
+        link_minecraft_structures(self.world, self.player)
 
 
     def generate_output(self):
