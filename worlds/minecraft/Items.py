@@ -47,6 +47,13 @@ item_table = {
     "8 Gold Ore": ItemData(45032, False), 
     "Rotten Flesh": ItemData(45033, False), 
     "Single Arrow": ItemData(45034, False), 
+    "32 Arrows": ItemData(43035, False),
+    "Saddle": ItemData(43036, True),
+    "Structure Compass (Village)": ItemData(43037, True),
+    "Structure Compass (Pillager Outpost)": ItemData(43038, True),
+    "Structure Compass (Nether Fortress)": ItemData(43039, True),
+    "Structure Compass (Bastion Remnant)": ItemData(43040, True),
+    "Structure Compass (End City)": ItemData(43041, True),
     "Bee Trap (Minecraft)": ItemData(45100, False),
 
     "Victory": ItemData(None, True)
@@ -62,16 +69,22 @@ item_frequencies = {
     "4 Emeralds": 8, 
     "4 Diamond Ore": 4, 
     "16 Iron Ore": 4, 
-    "500 XP": 4, # 2 after exclusions
-    "100 XP": 10, # 4 after exclusions
-    "50 XP": 12, # 4 after exclusions
+    "500 XP": 2,
+    "100 XP": 6,
+    "50 XP": 13,
     "3 Ender Pearls": 4, 
     "4 Lapis Lazuli": 2, 
     "16 Porkchops": 8, 
     "8 Gold Ore": 4, 
     "Rotten Flesh": 4, 
     "Single Arrow": 0, 
-    "Bee Trap (Minecraft)": 0
+    "32 Arrows": 4,
+    "Structure Compass (Village)": 0,
+    "Structure Compass (Pillager Outpost)": 0,
+    "Structure Compass (Nether Fortress)": 0,
+    "Structure Compass (Bastion Remnant)": 0,
+    "Structure Compass (End City)": 0,
+    "Bee Trap (Minecraft)": 0,
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}

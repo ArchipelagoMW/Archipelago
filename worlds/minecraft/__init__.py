@@ -36,12 +36,16 @@ class MinecraftWorld(World):
         }
 
     def generate_basic(self):
-        link_minecraft_structures(self.world, self.player)
 
         pool = []
         pool_counts = item_frequencies.copy()
         if getattr(self.world, "bee_traps")[self.player]: 
             pool_counts.update({"Rotten Flesh": 0, "Bee Trap (Minecraft)": 4})
+        # Add needed structure compasses to the pool, replacing 50 XP
+        for entrance_name in ["Overworld Structure 1", "Overworld Structure 2"]:
+            struct_name = self.world.get_entrance(entrance_name, self.player).connected_region.name
+            pool_counts[f"Structure Compass ({struct_name})"] = 1
+            pool_counts["50 XP"] -= 1
         for item_name in item_table:
             for count in range(pool_counts.get(item_name, 1)):
                 pool.append(self.create_item(item_name))
@@ -76,6 +80,7 @@ class MinecraftWorld(World):
             return ret
 
         self.world.regions += [MCRegion(*r) for r in mc_regions]
+        link_minecraft_structures(self.world, self.player)
 
     def generate_output(self):
         import json

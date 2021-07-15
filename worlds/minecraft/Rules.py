@@ -14,6 +14,11 @@ def set_rules(world: MultiWorld, player: int):
                 (location.name not in postgame_advancements) and
                 location.can_reach(state)]
 
+    # Retrieves the appropriate structure compass for the given entrance
+    def get_struct_compass(entrance_name): 
+        struct = world.get_entrance(entrance_name, player).connected_region.name
+        return f"Structure Compass ({struct})"
+
     # 92 total advancements. Goal is to complete X advancements and then Free the End. 
     # There are 5 advancements which cannot be included for dragon spawning (4 postgame, Free the End)
     # Hence the true maximum is (92 - 5) = 87
@@ -27,8 +32,8 @@ def set_rules(world: MultiWorld, player: int):
         (state.has('Bucket', player) or state.has('Progressive Tools', player, 3)) and 
         state.has_iron_ingots(player))
     set_rule(world.get_entrance("End Portal", player), lambda state: state.enter_stronghold(player) and state.has('3 Ender Pearls', player, 4))
-    set_rule(world.get_entrance("Overworld Structure 1", player), lambda state: state.can_adventure(player))
-    set_rule(world.get_entrance("Overworld Structure 2", player), lambda state: state.can_adventure(player))
+    set_rule(world.get_entrance("Overworld Structure 1", player), lambda state: state.can_adventure(player) and state.has(get_struct_compass("Overworld Structure 1"), player))
+    set_rule(world.get_entrance("Overworld Structure 2", player), lambda state: state.can_adventure(player) and state.has(get_struct_compass("Overworld Structure 2"), player))
     set_rule(world.get_entrance("Nether Structure 1", player), lambda state: state.can_adventure(player))
     set_rule(world.get_entrance("Nether Structure 2", player), lambda state: state.can_adventure(player))
     set_rule(world.get_entrance("The End Structure", player), lambda state: state.can_adventure(player))
@@ -56,7 +61,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("The Next Generation", player), lambda state: can_complete(state))
     set_rule(world.get_location("Fishy Business", player), lambda state: state.has("Fishing Rod", player))
     set_rule(world.get_location("Hot Tourist Destinations", player), lambda state: True)
-    set_rule(world.get_location("This Boat Has Legs", player), lambda state: (state.fortress_loot(player) or state.complete_raid(player)) and state.has("Fishing Rod", player))
+    set_rule(world.get_location("This Boat Has Legs", player), lambda state: (state.has("Saddle", player) or state.complete_raid(player)) and state.has("Fishing Rod", player))
     set_rule(world.get_location("Sniper Duel", player), lambda state: state.has("Archery", player))
     set_rule(world.get_location("Nether", player), lambda state: True)
     set_rule(world.get_location("Great View From Up Here", player), lambda state: state.basic_combat(player))
@@ -140,7 +145,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("On a Rail", player), lambda state: state.has_iron_ingots(player) and state.has('Progressive Tools', player, 2))  # powered rails
     set_rule(world.get_location("Time to Strike!", player), lambda state: True)
     set_rule(world.get_location("Cow Tipper", player), lambda state: True)
-    set_rule(world.get_location("When Pigs Fly", player), lambda state: (state.fortress_loot(player) or state.complete_raid(player)) and 
+    set_rule(world.get_location("When Pigs Fly", player), lambda state: (state.has("Saddle", player) or state.complete_raid(player)) and 
         state.has("Fishing Rod", player) and state.can_adventure(player))
     set_rule(world.get_location("Overkill", player), lambda state: state.can_brew_potions(player) and 
         (state.has("Progressive Weapons", player) or state.can_reach('The Nether', 'Region', player)))  # strength 1 + stone axe crit OR strength 2 + wood axe crit
