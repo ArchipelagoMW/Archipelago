@@ -418,20 +418,26 @@ class OOTWorld(World):
             songs = list(filter(lambda item: item.player == self.player and item.type == 'Song', self.world.itempool))
             for song in songs: 
                 self.world.itempool.remove(song)
-            try:
-                self.world.random.shuffle(songs) # shuffling songs makes it less likely to fail by placing ZL last
-                self.world.random.shuffle(song_locations)
-                fill_restrictive(self.world, self.world.get_all_state(), song_locations[:], songs[:], True, True)
-            except FillError as e:
-                tries -= 1
-                logger.debug(f"Failed placing songs for player {self.player}, retrying {tries} more times")
-                # undo what was done
-                for song in songs:
-                    song.location = None
-                for location in song_locations:
-                    location.item = None
-                    location.locked = False
-                    location.event = False
+            while tries:
+                try:
+                    self.world.random.shuffle(songs) # shuffling songs makes it less likely to fail by placing ZL last
+                    self.world.random.shuffle(song_locations)
+                    fill_restrictive(self.world, self.world.get_all_state(), song_locations[:], songs[:], True, True)
+                    logger.debug(f"Successfully placed songs for player {self.player} after {6-tries} attempt(s)")
+                    tries = 0
+                except FillError as e:
+                    tries -= 1
+                    if tries == 0:
+                        raise e
+                    logger.debug(f"Failed placing songs for player {self.player}. Retries left: {tries}")
+                    # undo what was done
+                    for song in songs:
+                        song.location = None
+                        song.world = None
+                    for location in song_locations:
+                        location.item = None
+                        location.locked = False
+                        location.event = False
 
         # Place shop items
         # fast fill will fail because there is some logic on the shop items. we'll gather them up and place the shop items
