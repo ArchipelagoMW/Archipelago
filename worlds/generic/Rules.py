@@ -12,7 +12,7 @@ def locality_rules(world, player):
 def exclusion_rules(world, player: int, excluded_locations: set):
     for loc_name in excluded_locations:
         location = world.get_location(loc_name, player)
-        add_item_rule(location, lambda i: not (i.advancement or i.smallkey or i.bigkey))
+        add_item_rule(location, lambda i: i.can_exclude)
 
 
 def set_rule(spot, rule):

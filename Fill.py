@@ -81,7 +81,7 @@ def distribute_items_restrictive(world: MultiWorld, gftower_trash=False, fill_lo
     restitempool = []
 
     for item in world.itempool:
-        if item.advancement:
+        if item.advancement or not item.can_exclude:
             progitempool.append(item)
         elif item.name in world.local_items[item.player]:
             localrestitempool[item.player].append(item)
