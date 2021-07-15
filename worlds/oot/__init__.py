@@ -326,8 +326,9 @@ class OOTWorld(World):
                 if item.type == 'Song': 
                     self.starting_songs = True
                 # Call the junk fill and get a replacement
-                self.itempool.remove(item)
-                self.itempool.append(self.create_item(*get_junk_item()))
+                if item in self.itempool:
+                    self.itempool.remove(item)
+                    self.itempool.append(self.create_item(*get_junk_item()))
         if self.start_with_consumables: 
             self.starting_items['Deku Sticks'] = 30
             self.starting_items['Deku Nuts'] = 40
