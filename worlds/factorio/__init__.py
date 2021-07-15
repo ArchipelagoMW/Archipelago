@@ -44,11 +44,10 @@ class Factorio(World):
 
     def create_regions(self):
         player = self.player
-        menu = Region("Menu", None, "Menu", player)
+        menu = Region("Menu", None, "Menu", player, self.world)
         crash = Entrance(player, "Crash Land", menu)
         menu.exits.append(crash)
-        nauvis = Region("Nauvis", None, "Nauvis", player)
-        nauvis.world = menu.world = self.world
+        nauvis = Region("Nauvis", None, "Nauvis", player, self.world)
 
         for tech_name, tech_id in base_tech_table.items():
             tech = Location(player, tech_name, tech_id, nauvis)

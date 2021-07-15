@@ -14,7 +14,7 @@ def link_minecraft_structures(world, player):
         assert len(exits) == len(structs)
     except AssertionError as e: # this should never happen
         raise Exception(f"Could not obtain equal numbers of Minecraft exits and structures for player {player} ({world.player_names[player]})")
-    num_regions = len(exits)
+
     pairs = {}
 
     def set_pair(exit, struct): 

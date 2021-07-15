@@ -29,7 +29,7 @@ for world_name, world in AutoWorldRegister.world_types.items():
 network_data_package = {
     "lookup_any_location_id_to_name": lookup_any_location_id_to_name,  # legacy, to be removed
     "lookup_any_item_id_to_name": lookup_any_item_id_to_name,  # legacy, to be removed
-    "version": 10,  # legacy, to be removed
+    "version": sum(world.data_version for world in AutoWorldRegister.world_types.values()),
     "games": games,
 }
 

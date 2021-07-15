@@ -51,6 +51,8 @@ progression_balancing:
 #  - "Big Keys"
 # non_local_items: # Force certain items to appear outside your world only, unless in single-player. Recognizes some group names, like "Swords"
 #  - "Progressive Weapons"
+# exclude_locations: # Force certain locations to never contain progression items, and always be filled with junk. 
+#  - "Master Sword Pedestal"
 
 Factorio:
   tech_tree_layout:

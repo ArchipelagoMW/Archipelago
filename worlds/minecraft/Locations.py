@@ -114,27 +114,27 @@ advancement_table = {
 
 exclusion_table = {
     "hard": {
-        "Very Very Frightening": "50 XP",
-        "Two by Two": "100 XP",
-        "Two Birds, One Arrow": "50 XP",
-        "Arbalistic": "100 XP",
-        "Monsters Hunted": "100 XP",
-        "Beaconator": "50 XP",
-        "A Balanced Diet": "100 XP",
-        "Uneasy Alliance": "100 XP",
-        "Cover Me in Debris": "100 XP",
-        "A Complete Catalogue": "50 XP",
-        "Overpowered": "50 XP"
+        "Very Very Frightening",
+        "Two by Two",
+        "Two Birds, One Arrow",
+        "Arbalistic",
+        "Monsters Hunted",
+        "Beaconator",
+        "A Balanced Diet",
+        "Uneasy Alliance",
+        "Cover Me in Debris",
+        "A Complete Catalogue",
+        "Overpowered",
     },
     "insane": {
-        "How Did We Get Here?": "500 XP",
-        "Adventuring Time": "500 XP"
+        "How Did We Get Here?",
+        "Adventuring Time",
     },
     "postgame": {
-        "The Next Generation": "50 XP",
-        "The End... Again...": "50 XP",
-        "You Need a Mint": "50 XP",
-        "Monsters Hunted": "100 XP"
+        "The Next Generation",
+        "The End... Again...",
+        "You Need a Mint",
+        "Monsters Hunted",
     }
 }
 

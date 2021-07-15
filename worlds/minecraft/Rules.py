@@ -5,13 +5,13 @@ from BaseClasses import MultiWorld
 
 def set_rules(world: MultiWorld, player: int):
     def reachable_locations(state):
-        postgame_advancements = set(exclusion_table['postgame'].keys())
+        postgame_advancements = exclusion_table['postgame'].copy()
         postgame_advancements.add('Free the End')
         for event in events_table.keys():
             postgame_advancements.add(event)
         return [location for location in world.get_locations() if
-                (player is None or location.player == player) and
-                (location.name not in postgame_advancements) and
+                location.player == player and
+                location.name not in postgame_advancements and
                 location.can_reach(state)]
 
     # 92 total advancements. Goal is to complete X advancements and then Free the End. 
