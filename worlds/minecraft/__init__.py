@@ -96,4 +96,7 @@ class MinecraftWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]
-        return MinecraftItem(name, item_data.progression, item_data.code, self.player)
+        item = MinecraftItem(name, item_data.progression, item_data.code, self.player)
+        if "Book" in name:  # prevent enchanted books from being excluded
+            item.can_be_excluded = False
+        return item
