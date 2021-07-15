@@ -338,7 +338,6 @@ class OOTWorld(World):
         self.world.itempool += self.itempool
 
         # Do some other stuff that we need to do
-        set_shop_rules(self)
         set_drop_location_names(self)
         self.fill_bosses()
 
@@ -395,6 +394,7 @@ class OOTWorld(World):
             for item in shop_items: 
                 self.world.itempool.remove(item)
             fill_restrictive(self.world, self.world.get_all_state(), shop_locations, shop_items, True, True)
+        set_shop_rules(self)
 
 
         # Kill unreachable events that can't be gotten even with all items
