@@ -23,7 +23,7 @@ from .N64Patch import create_patch_file
 import Utils
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
 from Options import Range, OptionList
-from Fill import fill_restrictive
+from Fill import fill_restrictive, FillError
 from ..AutoWorld import World
 
 location_id_offset = 67000
@@ -370,19 +370,27 @@ class OOTWorld(World):
                 fill_restrictive(self.world, self.world.get_all_state(), dungeon_locations, dungeon_itempool, True, True)
 
         # Place songs
-        # this section can fail generation. probably try to make it not do that
+        # 5 built-in retries because this section can fail sometimes
         if self.shuffle_song_items != 'any': 
-            song_location_names = [
-                'Song from Composers Grave', 'Song from Impa', 'Song from Malon', 'Song from Saria',
-                'Song from Ocarina of Time', 'Song from Windmill', 'Sheik in Forest', 'Sheik at Temple',
-                'Sheik in Crater', 'Sheik in Ice Cavern', 'Sheik in Kakariko', 'Sheik at Colossus']
+            tries = 5
             song_locations = list(filter(lambda location: location.type == 'Song', self.world.get_unfilled_locations(player=self.player)))
             songs = list(filter(lambda item: item.player == self.player and item.type == 'Song', self.world.itempool))
-            self.world.random.shuffle(songs) # shuffling songs makes it less likely to fail by placing ZL last
-            self.world.random.shuffle(song_locations)
             for song in songs: 
                 self.world.itempool.remove(song)
-            fill_restrictive(self.world, self.world.get_all_state(), song_locations, songs, True, True)
+            try:
+                self.world.random.shuffle(songs) # shuffling songs makes it less likely to fail by placing ZL last
+                self.world.random.shuffle(song_locations)
+                fill_restrictive(self.world, self.world.get_all_state(), song_locations[:], songs[:], True, True)
+            except FillError as e:
+                tries -= 1
+                logger.debug(f"Failed placing songs for player {self.player}, retrying {tries} more times")
+                # undo what was done
+                for song in songs:
+                    song.location = None
+                for location in song_locations:
+                    location.item = None
+                    location.locked = False
+                    location.event = False
 
         # Place shop items
         # fast fill will fail because there is some logic on the shop items. we'll gather them up and place the shop items
