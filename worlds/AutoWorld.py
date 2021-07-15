@@ -21,6 +21,15 @@ class AutoWorldRegister(type):
             AutoWorldRegister.world_types[dct["game"]] = new_class
         return new_class
 
+class AutoLogicRegister(type):
+    def __new__(cls, name, bases, dct):
+        new_class = super().__new__(cls, name, bases, dct)
+        for function_name, function in dct.items():
+            if hasattr(function, "__call__"):  # callable
+                if hasattr(CollectionState, function_name):
+                    raise Exception(f"Name conflict on Logic Mixin {name} trying to overwrite {function_name}")
+                setattr(CollectionState, function_name, function)
+        return new_class
 
 def call_single(world: MultiWorld, method_name: str, player: int):
     method = getattr(world.worlds[player], method_name)
@@ -36,9 +45,8 @@ class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    world: MultiWorld
-    player: int
-    options: dict = {}
+    options: dict = {}  # link your Options mapping
+    game: str # name the game
     topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
     item_names: Set[str] = frozenset()  # set of all potential item names
     # maps item group names to sets of items. Example: "Weapons" -> {"Sword", "Bow"}
@@ -63,6 +71,10 @@ class World(metaclass=AutoWorldRegister):
     # if a world is set to remote_items = False, then the server never sends an item where receiver == finder,
     # the client finds its own items in its own world.
     remote_items: bool = True
+
+    # autoset on creation:
+    world: MultiWorld
+    player: int
 
     def __init__(self, world: MultiWorld, player: int):
         self.world = world
@@ -102,3 +114,8 @@ class World(metaclass=AutoWorldRegister):
         """Create an item for this world type and player.
         Warning: this may be called with self.world = None, for example by MultiServer"""
         raise NotImplementedError
+
+# any methods attached to this can be used as part of CollectionState,
+# please use a prefix as all of them get clobbered together
+class LogicMixin(metaclass=AutoLogicRegister):
+    pass

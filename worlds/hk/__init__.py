@@ -4,13 +4,13 @@ from typing import Set
 logger = logging.getLogger("Hollow Knight")
 
 from .Locations import lookup_name_to_id
-from .Items import item_table
+from .Items import item_table, lookup_type_to_names
 from .Regions import create_regions
 from .Rules import set_rules
 from .Options import hollow_knight_options
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item
-from ..AutoWorld import World
+from ..AutoWorld import World, LogicMixin
 
 class HKWorld(World):
     game: str = "Hollow Knight"
@@ -145,5 +145,26 @@ option_to_type_lookup = {
 }
 
 
+class HKLogic(LogicMixin):
+    # these are all wip
+    def _hk_has_essence(self, player: int, count: int):
+        return self.prog_items["Dream_Nail", player]
+        # return self.prog_items["Essence", player] >= count
 
+    def _hk_has_grubs(self, player: int, count: int):
+        found = 0
+        for item_name in lookup_type_to_names["Grub"]:
+            found += self.prog_items[item_name, player]
+            if found >= count:
+                return True
 
+        return False
+
+    def _hk_has_flames(self, player: int, count: int):
+        found = 0
+        for item_name in lookup_type_to_names["Flame"]:
+            found += self.prog_items[item_name, player]
+            if found >= count:
+                return True
+
+        return False

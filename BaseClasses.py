@@ -569,32 +569,6 @@ class CollectionState(object):
     def has_any(self, items: Set[str], player:int):
         return any(self.prog_items[item, player] for item in items)
 
-    def has_essence(self, player: int, count: int):
-        return self.prog_items["Dream_Nail", player]
-        # return self.prog_items["Essence", player] >= count
-
-    def has_grubs(self, player: int, count: int):
-        from worlds.hk import Items as HKItems
-        found = 0
-
-        for item_name in HKItems.lookup_type_to_names["Grub"]:
-            found += self.prog_items[item_name, player]
-            if found >= count:
-                return True
-
-        return False
-
-    def has_flames(self, player: int, count: int):
-        from worlds.hk import Items as HKItems
-        found = 0
-
-        for item_name in HKItems.lookup_type_to_names["Flame"]:
-            found += self.prog_items[item_name, player]
-            if found >= count:
-                return True
-
-        return False
-
     def has_key(self, item, player, count: int = 1):
         if self.world.logic[player] == 'nologic':
             return True
