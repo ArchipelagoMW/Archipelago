@@ -149,7 +149,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("The Next Generation", player), lambda state: can_complete(state))
     set_rule(world.get_location("Fishy Business", player), lambda state: state.has("Fishing Rod", player))
     set_rule(world.get_location("Hot Tourist Destinations", player), lambda state: True)
-    set_rule(world.get_location("This Boat Has Legs", player), lambda state: (state._mc_fortress_loot() or state._mc_complete_raid(player)) and state.has("Fishing Rod", player))
+    set_rule(world.get_location("This Boat Has Legs", player), lambda state: (state._mc_fortress_loot(player) or state._mc_complete_raid(player)) and state.has("Fishing Rod", player))
     set_rule(world.get_location("Sniper Duel", player), lambda state: state.has("Archery", player))
     set_rule(world.get_location("Nether", player), lambda state: True)
     set_rule(world.get_location("Great View From Up Here", player), lambda state: state._mc_basic_combat(player))
