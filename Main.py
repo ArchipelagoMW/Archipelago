@@ -410,13 +410,13 @@ def main(args, seed=None):
 
     def get_entrance_to_region(region: Region):
         for entrance in region.entrances:
-            if entrance.parent_region.type in (RegionType.DarkWorld, RegionType.LightWorld):
+            if entrance.parent_region.type in (RegionType.DarkWorld, RegionType.LightWorld, RegionType.Generic):
                 return entrance
         for entrance in region.entrances:  # BFS might be better here, trying DFS for now.
             return get_entrance_to_region(entrance.parent_region)
 
     # collect ER hint info
-    er_hint_data = {player: {} for player in range(1, world.players + 1) if
+    er_hint_data = {player: {} for player in world.alttp_player_ids if
                     world.shuffle[player] != "vanilla" or world.retro[player]}
     from worlds.alttp.Regions import RegionType
     for region in world.regions:
