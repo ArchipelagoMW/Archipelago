@@ -1407,7 +1407,7 @@ class Spoiler(object):
                 if options:
                     for f_option in options:
                         res = getattr(self.world, f_option)[player]
-                        outfile.write(f'{f_option+":":33}{bool_to_text(res) if type(res) == Options.Toggle else res.get_option_name()}\n')
+                        outfile.write(f'{f_option+":":33}{bool_to_text(res) if isinstance(res, Options.Toggle) else res.get_option_name()}\n')
 
                 if player in self.world.alttp_player_ids:
                     for team in range(self.world.teams):
