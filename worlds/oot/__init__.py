@@ -17,7 +17,7 @@ from .Utils import data_path, read_json
 from .LocationList import location_table, business_scrubs, set_drop_location_names
 from .DungeonList import dungeon_table, create_dungeons
 from .LogicTricks import known_logic_tricks
-from .Rom import Rom
+from .Rom import Rom, compress_rom_file
 from .Patches import patch_rom
 from .N64Patch import create_patch_file
 
@@ -479,9 +479,15 @@ class OOTWorld(World):
         # make patch file
         create_patch_file(self.rom, Utils.output_path(outfile_name+'.apz5'))
 
-        # TODO: compress rom and remove uncompressed file path
-        if self.patch_uncompressed_rom:
-            self.rom.write_to_file(Utils.output_path(outfile_name+'.z64'))
+        # produce uncompressed file path, compress if desired
+        if self.compress_rom or self.patch_uncompressed_rom:
+            filename_uncompressed = Utils.output_path(outfile_name+'.z64')
+            filename_compressed = Utils.output_path(outfile_name+'-comp.z64')
+            self.rom.write_to_file(filename_uncompressed)
+            if self.compress_rom:
+                logger.info("Compressing OOT rom file. This might take a while...")
+                compress_rom_file(filename_uncompressed, filename_compressed)
+                os.remove(filename_uncompressed)
 
         self.rom.restore()
 

@@ -293,3 +293,42 @@ class Rom(BigStream):
             cur += 0x10
         max_end = ((max_end + 0x0F) >> 4) << 4
         return max_end
+
+def compress_rom_file(input_file, output_file):
+    subcall = []
+
+    if is_bundled():
+        compressor_path = "."
+    else:
+        compressor_path = local_path("Compress")
+
+    if platform.system() == 'Windows':
+        if 8 * struct.calcsize("P") == 64:
+            compressor_path += "\\Compress.exe"
+        else:
+            compressor_path += "\\Compress32.exe"
+    elif platform.system() == 'Linux':
+        if platform.uname()[4] == 'aarch64' or platform.uname()[4] == 'arm64':
+            compressor_path += "/Compress_ARM64"
+        else:
+            compressor_path += "/Compress"
+    elif platform.system() == 'Darwin':
+        compressor_path += "/Compress.out"
+    else:
+        raise RuntimeError('Unsupported operating system for compression.')
+
+    process = subprocess.Popen([compressor_path, input_file, output_file], **subprocess_args(True))
+    # process.wait()
+    while True:
+        line = process.stdout.readline()
+        if line != b'':
+            pass
+            # find_index = line.find(b'files remaining')
+            # if find_index > -1:
+            #     files = int(line[:find_index].strip())
+            #     if filecount == None:
+            #         filecount = files
+            #     window.update_progress(65 + 30*(1 - files/filecount))
+            # logger.info(line.decode('utf-8').strip('\n'))
+        else:
+            break
