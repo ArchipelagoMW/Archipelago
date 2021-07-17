@@ -172,6 +172,10 @@ class MultiWorld():
     def minecraft_player_ids(self):
         return tuple(player for player in range(1, self.players + 1) if self.game[player] == "Minecraft")
 
+    @functools.cached_property
+    def subnautica_player_ids(self):
+        return tuple(player for player in range(1, self.players + 1) if self.game[player] == "Subnautica")
+
     def get_name_string_for_object(self, obj) -> str:
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_names(obj.player)})'
 

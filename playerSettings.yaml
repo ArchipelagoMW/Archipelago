@@ -27,6 +27,7 @@ game:
   A Link to the Past: 1
   Factorio: 1
   Minecraft: 1
+  Subnautica: 1
 requires:
   version: 0.1.3 # Version of Archipelago required for this yaml to work as expected.
 # Shared Options supported by all games:
