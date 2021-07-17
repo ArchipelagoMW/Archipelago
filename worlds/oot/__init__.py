@@ -8,7 +8,7 @@ logger = logging.getLogger("Ocarina of Time")
 from .Location import OOTLocation, LocationFactory
 from .Entrance import OOTEntrance
 from .Items import OOTItem, item_table, oot_data_to_ap_id
-from .ItemPool import generate_itempool, get_junk_item
+from .ItemPool import generate_itempool, get_junk_item, get_junk_pool
 from .Regions import OOTRegion, TimeOfDay
 from .Rules import set_rules, set_shop_rules
 from .RuleParser import Rule_AST_Transformer
@@ -78,8 +78,7 @@ class OOTWorld(World):
         return super().__new__(cls)
 
 
-    def __init__(self, world, player):
-        super(OOTWorld, self).__init__(world, player)
+    def generate_early(self):
 
         self.rom = Rom(file='')  # need to provide a decompressed ROM with no args
         self.parser = Rule_AST_Transformer(self, self.player)
@@ -98,8 +97,8 @@ class OOTWorld(World):
         self.starting_items = Counter()
         self.starting_songs = False  # whether starting_items contains a song
 
-
-        # ER and glitched logic don't play nice together, glitched takes precedence
+        # Incompatible option handling
+        # ER and glitched logic are not compatible; glitched takes priority
         if self.logic_rules == 'glitched':         
             self.shuffle_interior_entrances = False
             self.shuffle_grotto_entrances = False
@@ -109,12 +108,9 @@ class OOTWorld(World):
             self.warp_songs = False
             self.spawn_positions = False
 
-        # Closed forest locks starting age as child
+        # Closed forest and adult start are not compatible; closed forest takes priority
         if self.open_forest == 'closed': 
             self.starting_age = 'child'
-
-        # Fix starting time spelling: "witching_hour" -> "witching-hour"
-        self.starting_tod = self.starting_tod.replace('_', '-')
 
         # Determine skipped trials in GT
         # This needs to be done before the logic rules in GT are parsed
@@ -136,14 +132,13 @@ class OOTWorld(World):
 
         # Not implemented for now, but needed to placate the generator. Remove as they are implemented
         self.mq_dungeons_random = False  # this will be a deprecated option later
+        self.hints = 'none'  # Hints will probably look very different in the future. disabled for now
+        # These three are likely to never be implemented
         self.skip_child_zelda = False
         self.ocarina_songs = False
         self.correct_chest_sizes = False
-        self.hints = 'none'
-
-        # self.shopsanity = 'off'
-
-        self.shuffle_interior_entrances = False  # not actually a toggle
+        # ER options
+        self.shuffle_interior_entrances = 'off'
         self.shuffle_grotto_entrances = False
         self.shuffle_dungeon_entrances = False
         self.shuffle_overworld_entrances = False
@@ -151,14 +146,15 @@ class OOTWorld(World):
         self.warp_songs = False
         self.spawn_positions = False
 
-        # Keep these later
+        # Set internal names used by the OoT generator
         self.keysanity = self.shuffle_smallkeys in ['keysanity', 'remove', 'any_dungeon', 'overworld'] # only 'keysanity' and 'remove' implemented
         self.misc_hints = True  # this is just always on
-        self.ensure_tod_access = self.shuffle_interior_entrances or self.shuffle_overworld_entrances or self.spawn_positions
-        self.entrance_shuffle = self.shuffle_interior_entrances or self.shuffle_grotto_entrances or self.shuffle_dungeon_entrances or \
+        self.ensure_tod_access = (self.shuffle_interior_entrances != 'off') or self.shuffle_overworld_entrances or self.spawn_positions
+        self.entrance_shuffle = (self.shuffle_interior_entrances != 'off') or self.shuffle_grotto_entrances or self.shuffle_dungeon_entrances or \
                                 self.shuffle_overworld_entrances or self.owl_drops or self.warp_songs or self.spawn_positions
-        self.disable_trade_revert = self.shuffle_interior_entrances or self.shuffle_overworld_entrances
+        self.disable_trade_revert = (self.shuffle_interior_entrances != 'off') or self.shuffle_overworld_entrances
         self.shuffle_special_interior_entrances = self.shuffle_interior_entrances == 'all'
+        self.starting_tod = self.starting_tod.replace('_', '-')  # Fixes starting time spelling: "witching_hour" -> "witching-hour"
 
 
     def load_regions_from_json(self, file_path):
@@ -356,6 +352,7 @@ class OOTWorld(World):
     def generate_basic(self):  # generate item pools, place fixed items
         # Generate itempool
         generate_itempool(self)
+        junk_pool = get_junk_pool(self)
         # Determine starting items
         for item in self.world.precollected_items: 
             if item.player != self.player:
@@ -369,7 +366,7 @@ class OOTWorld(World):
                 # Call the junk fill and get a replacement
                 if item in self.itempool:
                     self.itempool.remove(item)
-                    self.itempool.append(self.create_item(*get_junk_item()))
+                    self.itempool.append(self.create_item(*get_junk_item(pool=junk_pool)))
         if self.start_with_consumables: 
             self.starting_items['Deku Sticks'] = 30
             self.starting_items['Deku Nuts'] = 40
@@ -378,8 +375,10 @@ class OOTWorld(World):
 
         self.world.itempool += self.itempool
 
-        # Do some other stuff that we need to do
+        # Uniquely rename drop locations for each region
         set_drop_location_names(self)
+
+        # Fill boss prizes
         self.fill_bosses()
 
         # Place dungeon items

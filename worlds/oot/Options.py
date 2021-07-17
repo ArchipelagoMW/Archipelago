@@ -65,6 +65,7 @@ class InteriorEntrances(Choice):
     option_off = 0
     option_simple = 1
     option_all = 2
+    alias_false = 0
 
 class TriforceGoal(Range): 
     range_start = 1

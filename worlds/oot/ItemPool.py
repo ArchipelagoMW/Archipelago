@@ -711,6 +711,15 @@ item_groups = {
 random = None
 
 
+def get_junk_pool(ootworld):
+    junk_pool[:] = list(junk_pool_base)
+    if ootworld.junk_ice_traps == 'on': 
+        junk_pool.append(('Ice Trap', 10))
+    elif ootworld.junk_ice_traps in ['mayhem', 'onslaught']:
+        junk_pool[:] = [('Ice Trap', 1)]
+    return junk_pool
+
+
 def get_junk_item(count=1, pool=None, plando_pool=None):
     global random
     
@@ -752,11 +761,7 @@ def generate_itempool(ootworld):
     global random
     random = world.random
 
-    junk_pool[:] = list(junk_pool_base)
-    if ootworld.junk_ice_traps == 'on': 
-        junk_pool.append(('Ice Trap', 10))
-    elif ootworld.junk_ice_traps in ['mayhem', 'onslaught']:
-        junk_pool[:] = [('Ice Trap', 1)]
+    junk_pool = get_junk_pool(ootworld)
 
     fixed_locations = list(filter(lambda loc: loc.name in fixedlocations, ootworld.get_locations()))
     for location in fixed_locations:
