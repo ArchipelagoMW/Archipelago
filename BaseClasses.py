@@ -849,7 +849,6 @@ class Region(object):
         self.is_dark_world = False
         self.spot_type = 'Region'
         self.hint_text = hint
-        self.recursion_count = 0
         self.player = player
 
     def can_reach(self, state: CollectionState):
@@ -881,6 +880,7 @@ class Region(object):
 
 
 class Entrance(object):
+    spot_type = 'Entrance'
 
     def __init__(self, player: int, name: str = '', parent=None):
         self.name = name
@@ -888,9 +888,6 @@ class Entrance(object):
         self.connected_region = None
         self.target = None
         self.addresses = None
-        self.spot_type = 'Entrance'
-        self.recursion_count = 0
-        self.vanilla = None
         self.access_rule = lambda state: True
         self.player = player
         self.hide_path = False
@@ -903,11 +900,10 @@ class Entrance(object):
 
         return False
 
-    def connect(self, region, addresses=None, target=None, vanilla=None):
+    def connect(self, region, addresses=None, target=None):
         self.connected_region = region
         self.target = target
         self.addresses = addresses
-        self.vanilla = vanilla
         region.entrances.append(self)
 
     def __repr__(self):

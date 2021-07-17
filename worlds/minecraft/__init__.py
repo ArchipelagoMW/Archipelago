@@ -23,7 +23,6 @@ class MinecraftWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-
     def _get_mc_data(self):
         exits = ["Overworld Structure 1", "Overworld Structure 2", "Nether Structure 1", "Nether Structure 2",
                  "The End Structure"]
@@ -36,7 +35,6 @@ class MinecraftWorld(World):
             'client_version': client_version,
             'structures': {exit: self.world.get_entrance(exit, self.player).connected_region.name for exit in exits}
         }
-
 
     def generate_basic(self):
 
@@ -66,28 +64,23 @@ class MinecraftWorld(World):
         completion = self.create_item("Victory")
         self.world.get_location("Ender Dragon", self.player).place_locked_item(completion)
         itempool.remove(completion)
-
         self.world.itempool += itempool
-
 
     def set_rules(self):
         set_rules(self.world, self.player)
 
-
     def create_regions(self):
         def MCRegion(region_name: str, exits=[]):
-            ret = Region(region_name, None, region_name, self.player)
-            ret.world = self.world
-            ret.locations = [ MinecraftAdvancement(self.player, loc_name, loc_data.id, ret) 
+            ret = Region(region_name, None, region_name, self.player, self.world)
+            ret.locations = [MinecraftAdvancement(self.player, loc_name, loc_data.id, ret)
                 for loc_name, loc_data in advancement_table.items() 
-                if loc_data.region == region_name ]
+                if loc_data.region == region_name]
             for exit in exits: 
                 ret.exits.append(Entrance(self.player, exit, ret))
             return ret
 
         self.world.regions += [MCRegion(*r) for r in mc_regions]
         link_minecraft_structures(self.world, self.player)
-
 
     def generate_output(self):
         import json
@@ -99,14 +92,12 @@ class MinecraftWorld(World):
         with open(output_path(filename), 'wb') as f:
             f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
 
-
     def fill_slot_data(self): 
         slot_data = self._get_mc_data()
         for option_name in minecraft_options:
             option = getattr(self.world, option_name)[self.player]
             slot_data[option_name] = int(option.value)
         return slot_data
-
 
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]

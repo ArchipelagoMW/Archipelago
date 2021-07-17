@@ -24,11 +24,11 @@ class AutoWorldRegister(type):
 class AutoLogicRegister(type):
     def __new__(cls, name, bases, dct):
         new_class = super().__new__(cls, name, bases, dct)
-        for function_name, function in dct.items():
-            if hasattr(function, "__call__"):  # callable
-                if hasattr(CollectionState, function_name):
-                    raise Exception(f"Name conflict on Logic Mixin {name} trying to overwrite {function_name}")
-                setattr(CollectionState, function_name, function)
+        for item_name, function in dct.items():
+            if not item_name.startswith("__"):
+                if hasattr(CollectionState, item_name):
+                    raise Exception(f"Name conflict on Logic Mixin {name} trying to overwrite {item_name}")
+                setattr(CollectionState, item_name, function)
         return new_class
 
 def call_single(world: MultiWorld, method_name: str, player: int):
@@ -114,6 +114,7 @@ class World(metaclass=AutoWorldRegister):
         """Create an item for this world type and player.
         Warning: this may be called with self.world = None, for example by MultiServer"""
         raise NotImplementedError
+
 
 # any methods attached to this can be used as part of CollectionState,
 # please use a prefix as all of them get clobbered together
