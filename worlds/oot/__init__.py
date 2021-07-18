@@ -381,33 +381,56 @@ class OOTWorld(World):
         # Fill boss prizes
         self.fill_bosses()
 
-        # Place dungeon items
+        # Place/set rules for dungeon items
+        itempools = {
+            'dungeon': [],
+            'overworld': [],
+            'any_dungeon': [],
+            'keysanity': [],
+        }
+        any_dungeon_locations = []
         for dungeon in self.dungeons: 
-            dungeon_itempool = []
-            # Assemble items to go into this dungeon. 
+            itempools['dungeon'] = []
+            # Put the dungeon items into their appropriate pools.
             # Build in reverse order since we need to fill boss key first and pop() returns the last element
-            # remove and vanilla are handled differently
-            # TODO: make this less bad
-            if self.shuffle_mapcompass == 'dungeon': 
-                dungeon_itempool.extend(dungeon.dungeon_items)
-            elif self.shuffle_mapcompass == 'keysanity': 
-                self.world.itempool.extend(dungeon.dungeon_items)
-
-            if self.shuffle_smallkeys == 'dungeon': 
-                dungeon_itempool.extend(dungeon.small_keys)
-            elif self.shuffle_smallkeys == 'keysanity': 
-                self.world.itempool.extend(dungeon.small_keys)
-
+            if self.shuffle_mapcompass in itempools:
+                itempools[self.shuffle_mapcompass].extend(dungeon.dungeon_items)
+            if self.shuffle_smallkeys in itempools:
+                itempools[self.shuffle_smallkeys].extend(dungeon.small_keys)
             shufflebk = self.shuffle_bosskeys if dungeon.name != 'Ganons Castle' else self.shuffle_ganon_bosskey
-            if shufflebk == 'dungeon': 
-                dungeon_itempool.extend(dungeon.boss_key)
-            elif shufflebk == 'keysanity': 
-                self.world.itempool.extend(dungeon.boss_key)
+            if shufflebk in itempools:
+                itempools[shufflebk].extend(dungeon.boss_key)
 
-            if dungeon_itempool: # only do this if there's anything to shuffle
-                dungeon_locations = [loc for region in dungeon.regions for loc in region.locations if loc.item is None]
+            dungeon_locations = [loc for region in dungeon.regions for loc in region.locations if loc.item is None]
+            if itempools['dungeon']: # only do this if there's anything to shuffle
                 self.world.random.shuffle(dungeon_locations)
-                fill_restrictive(self.world, self.world.get_all_state(), dungeon_locations, dungeon_itempool, True, True)
+                fill_restrictive(self.world, self.world.get_all_state(), dungeon_locations, itempools['dungeon'], True, True)
+            any_dungeon_locations.extend(dungeon_locations)  # adds only the unfilled locations
+
+        # Now fill items that can go into any dungeon. Retrieve the Gerudo Fortress keys from the pool if necessary
+        if self.shuffle_fortresskeys == 'any_dungeon': 
+            fortresskeys = list(filter(lambda item: item.player == self.player and item.type == 'FortressSmallKey', self.world.itempool))
+            itempools['any_dungeon'].extend(fortresskeys)
+            for key in fortresskeys:
+                self.world.itempool.remove(key)
+        if itempools['any_dungeon']:
+            itempools['any_dungeon'].sort(key=lambda item: {'GanonBossKey': 4, 'BossKey': 3, 'SmallKey': 2, 'FortressSmallKey': 1}.get(item.type, 0))
+            self.world.random.shuffle(any_dungeon_locations)
+            fill_restrictive(self.world, self.world.get_all_state(), any_dungeon_locations, itempools['any_dungeon'], True, True)
+
+        # If anything is overworld-only, enforce them as local and not in the remaining dungeon locations
+        if itempools['overworld'] or self.shuffle_fortresskeys == 'overworld':
+            from worlds.generic.Rules import forbid_items_for_player
+            fortresskeys = set(['Small Key (Gerudo Fortress)']) if self.shuffle_fortresskeys == 'overworld' else set()
+            local_overworld_items = set(map(lambda item: item.name, itempools['overworld'])).union(fortresskeys)
+            for location in self.world.get_locations():
+                if location.player != self.player or location in any_dungeon_locations:
+                    forbid_items_for_player(location, local_overworld_items, self.player)
+
+        # Put all the remaining items into the general itempool
+        self.world.itempool.extend(itempools['overworld'])
+        self.world.itempool.extend(itempools['keysanity'])
+
 
         # Place songs
         # 5 built-in retries because this section can fail sometimes
