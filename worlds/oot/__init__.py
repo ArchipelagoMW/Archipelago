@@ -79,9 +79,9 @@ class OOTWorld(World):
 
 
     def generate_early(self):
-
-        self.rom = Rom(file='')  # need to provide a decompressed ROM with no args
+        self.rom = Rom(file=Utils.get_options()['oot_options']['rom_file'])  # a ROM must be provided, cannot produce patches without it
         self.parser = Rule_AST_Transformer(self, self.player)
+
         for (option_name, option) in oot_options.items(): 
             result = getattr(self.world, option_name)[self.player]
             if isinstance(result, Range): 
