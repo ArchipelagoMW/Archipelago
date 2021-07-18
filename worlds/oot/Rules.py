@@ -77,7 +77,10 @@ def set_rules(ootworld):
     player = ootworld.player
 
     if ootworld.logic_rules != 'no_logic': 
-        world.completion_condition[player] = lambda state: state.has('Triforce', player)
+        if ootworld.triforce_hunt: 
+            world.completion_condition[player] = lambda state: state.has('Triforce Piece', player, ootworld.triforce_goal)
+        else: 
+            world.completion_condition[player] = lambda state: state.has('Triforce', player)
 
     # ganon can only carry triforce
     world.get_location('Ganon', player).item_rule = lambda item: item.name == 'Triforce'
