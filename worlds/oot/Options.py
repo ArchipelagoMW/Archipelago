@@ -4,6 +4,13 @@ from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionList
 # oot has way too many options D:
 # if default is not specified, it is option 0
 
+def make_range(start, end, default_value=0):
+    class NewRange(Range):
+        range_start = start
+        range_end = end
+        default = default_value
+    return NewRange
+
 class Logic(Choice): 
     option_glitchless = 0
     option_glitched = 1
@@ -42,11 +49,6 @@ class Bridge(Choice):
     option_tokens = 5
     default = 3
 
-class Trials(Range): 
-    range_start = 0
-    range_end = 6
-    default = 0
-
 open_options: typing.Dict[str, type(Option)] = {
     "open_forest": Forest,
     "open_kakariko": Gate,
@@ -54,7 +56,7 @@ open_options: typing.Dict[str, type(Option)] = {
     "zora_fountain": Fountain,
     "gerudo_fortress": Fortress, 
     "bridge": Bridge,
-    "trials": Trials,
+    "trials": make_range(0, 6)
 }
 
 class StartingAge(Choice): 
@@ -67,16 +69,6 @@ class InteriorEntrances(Choice):
     option_all = 2
     alias_false = 0
 
-class TriforceGoal(Range): 
-    range_start = 1
-    range_end = 100
-    default = 20
-
-class MQDungeons(Range):
-    range_start = 0
-    range_end = 12
-    default = 0
-
 world_options: typing.Dict[str, type(Option)] = {
     "starting_age": StartingAge,
     # "shuffle_interior_entrances": InteriorEntrances,
@@ -87,30 +79,10 @@ world_options: typing.Dict[str, type(Option)] = {
     # "warp_songs": Toggle,
     # "spawn_positions": Toggle,
     "triforce_hunt": Toggle, 
-    "triforce_goal": TriforceGoal,
+    "triforce_goal": make_range(1, 200, 20),
     "bombchus_in_logic": Toggle,
-    "mq_dungeons": MQDungeons,
+    "mq_dungeons": make_range(0, 12),
 }
-
-class CheckStones(Range): 
-    range_start = 0
-    range_end = 3
-    default = 3
-
-class CheckMedallions(Range): 
-    range_start = 0
-    range_end = 6
-    default = 6
-
-class CheckRewards(Range): 
-    range_start = 0
-    range_end = 9
-    default = 9
-
-class CheckTokens(Range): 
-    range_start = 0
-    range_end = 100
-    default = 40
 
 class LACSCondition(Choice): 
     option_vanilla = 0
@@ -121,17 +93,17 @@ class LACSCondition(Choice):
 
 lacs_options: typing.Dict[str, type(Option)] = {
     "lacs_condition": LACSCondition,
-    "lacs_stones": CheckStones, 
-    "lacs_medallions": CheckMedallions, 
-    "lacs_rewards": CheckRewards, 
-    "lacs_tokens": CheckTokens
+    "lacs_stones": make_range(0, 3, 3), 
+    "lacs_medallions": make_range(0, 6, 6), 
+    "lacs_rewards": make_range(0, 9, 9), 
+    "lacs_tokens": make_range(0, 100, 40),
 }
 
 bridge_options: typing.Dict[str, type(Option)] = {
-    "bridge_stones": CheckStones, 
-    "bridge_medallions": CheckMedallions, 
-    "bridge_rewards": CheckRewards, 
-    "bridge_tokens": CheckTokens
+    "bridge_stones": make_range(0, 3, 3), 
+    "bridge_medallions": make_range(0, 6, 6), 
+    "bridge_rewards": make_range(0, 9, 9), 
+    "bridge_tokens": make_range(0, 100, 40),
 }
 
 class SongShuffle(Choice): 
@@ -231,16 +203,6 @@ dungeon_items_options: typing.Dict[str, type(Option)] = {
     "enhance_map_compass": Toggle,
 }
 
-class Cuccos(Range): 
-    range_start = 0
-    range_end = 7
-    default = 7
-
-class BigPoes(Range): 
-    range_start = 1
-    range_end = 10
-    default = 1
-
 timesavers_options: typing.Dict[str, type(Option)] = {
     # "skip_child_zelda": Toggle, 
     "no_escape_sequence": DefaultOnToggle, 
@@ -252,8 +214,8 @@ timesavers_options: typing.Dict[str, type(Option)] = {
     "fast_chests": DefaultOnToggle, 
     "free_scarecrow": Toggle, 
     "fast_bunny_hood": Toggle, 
-    "chicken_count": Cuccos,
-    "big_poe_count": BigPoes, 
+    "chicken_count": make_range(0, 7, 7),
+    "big_poe_count": make_range(1, 10, 1),
 }
 
 class Targeting(Choice): 
