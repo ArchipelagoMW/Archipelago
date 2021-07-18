@@ -109,6 +109,8 @@ class Rom(BigStream):
             else:
                 raise RuntimeError('Unsupported operating system for decompression. Please supply an already decompressed ROM.')
 
+            if not os.path.exists(subcall[0]):
+                raise RuntimeError(f'Decompressor does not exist! Please place it at {subcall[0]}.')
             subprocess.call(subcall, **subprocess_args())
             self.read_rom(decomp_file)
         else:
@@ -317,4 +319,6 @@ def compress_rom_file(input_file, output_file):
     else:
         raise RuntimeError('Unsupported operating system for compression.')
 
+    if not os.path.exists(compressor_path):
+        raise RuntimeError(f'Compressor does not exist! Please place it at {compressor_path}.')
     process = subprocess.call([compressor_path, input_file, output_file], **subprocess_args(include_stdout=False))
