@@ -32,7 +32,7 @@ class OOTLogic(LogicMixin):
     # If it's called while self.age[player] is None, then it will set the age variable and then attempt to reach the region. 
     # If self.age[player] is not None, then it will compare it to the 'age' parameter, and return True iff they are equal. 
     #   This lets us fake the OOT accessibility check that cares about age. Unfortunately it's still tied to the ground region. 
-    def reach_as_age(self, regionname, age, player): 
+    def _oot_reach_as_age(self, regionname, age, player): 
         if self.age[player] is None: 
             self.age[player] = age
             can_reach = self.world.get_region(regionname, player).can_reach(self)
@@ -41,7 +41,7 @@ class OOTLogic(LogicMixin):
         return self.age[player] == age
 
     # Store the age before calling this!
-    def update_age_reachable_regions(self, player): 
+    def _oot_update_age_reachable_regions(self, player): 
         self.stale[player] = False
         for age in ['child', 'adult']: 
             self.age[player] = age
