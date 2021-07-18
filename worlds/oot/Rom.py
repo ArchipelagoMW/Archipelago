@@ -37,6 +37,10 @@ class Rom(BigStream):
             symbols = json.load(stream)
             self.symbols = { name: int(addr, 16) for name, addr in symbols.items() }
 
+        # If decompressed file already exists, read from it
+        if os.path.exists(decomp_file):
+            file = decomp_file
+
         if file == '':
             # if not specified, try to read from the previously decompressed rom
             file = decomp_file
