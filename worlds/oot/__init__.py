@@ -485,7 +485,7 @@ class OOTWorld(World):
             filename_compressed = Utils.output_path(outfile_name+'-comp.z64')
             self.rom.write_to_file(filename_uncompressed)
             if self.compress_rom:
-                logger.info("Compressing OOT rom file. This might take a while...")
+                logger.info(f"Compressing OOT ROM file for player {self.player}. This might take a while...")
                 compress_rom_file(filename_uncompressed, filename_compressed)
                 os.remove(filename_uncompressed)
 
