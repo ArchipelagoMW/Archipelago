@@ -1326,7 +1326,7 @@ def get_pool_core(world):
         world.remove_from_start_inventory.append(item.name)
 
     if world.triforce_hunt:
-        triforce_count = int((TriforceCounts[world.item_pool_value] * world.triforce_goal_per_world).to_integral_value(rounding=ROUND_HALF_UP))
+        triforce_count = int((TriforceCounts[world.item_pool_value] * world.triforce_goal).to_integral_value(rounding=ROUND_HALF_UP))
         pending_junk_pool.extend(['Triforce Piece'] * triforce_count)
 
     if world.shuffle_ganon_bosskey == 'on_lacs':
