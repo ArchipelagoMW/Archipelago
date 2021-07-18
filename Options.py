@@ -19,6 +19,15 @@ class AssembleOptions(type):
         # apply aliases, without name_lookup
         options.update({name[6:].lower(): option_id for name, option_id in attrs.items() if
                         name.startswith("alias_")})
+
+        # auto-validate schema on __init__
+        if "schema" in attrs.keys():
+            def validate_decorator(func):
+                def validate(self, *args, **kwargs):
+                    func(self, *args, **kwargs)
+                    self.value = self.schema.validate(self.value)
+                return validate
+            attrs["__init__"] = validate_decorator(attrs["__init__"])
         return super(AssembleOptions, mcs).__new__(mcs, name, bases, attrs)
 
 class Option(metaclass=AssembleOptions):
