@@ -202,6 +202,7 @@ class OOTWorld(World):
                         new_location.player = self.player
                         new_region.locations.append(new_location)
                         self.make_event_item(event, new_location)
+                        new_location.show_in_spoiler = False
             if 'exits' in region:
                 for exit, rule in region['exits'].items():
                     new_exit = OOTEntrance(self.player, '%s => %s' % (new_region.name, exit), new_region)
@@ -375,7 +376,7 @@ class OOTWorld(World):
 
         self.world.itempool += self.itempool
 
-        # Uniquely rename drop locations for each region
+        # Uniquely rename drop locations for each region and erase them from the spoiler
         set_drop_location_names(self)
 
         # Fill boss prizes

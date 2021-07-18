@@ -776,13 +776,15 @@ def generate_itempool(ootworld):
         drop_location.locked = True
 
     # set up item pool
-    (pool, placed_items) = get_pool_core(ootworld)
+    (pool, placed_items, skip_in_spoiler_locations) = get_pool_core(ootworld)
     ootworld.itempool = [ootworld.create_item(item) for item in pool]
     for (location_name, item) in placed_items.items():
         location = world.get_location(location_name, player)
         world.push_item(location, ootworld.create_item(item), collect=False)
         location.locked = True
         location.event = True  # make sure it's checked during fill
+        if location_name in skip_in_spoiler_locations:
+            location.show_in_spoiler = False
 
 
 
@@ -829,6 +831,7 @@ def get_pool_core(world):
     placed_items = {
         'HC Zeldas Letter': 'Zeldas Letter',
     }
+    skip_in_spoiler_locations = []
 
     if world.shuffle_kokiri_sword:
         pool.append('Kokiri Sword')
@@ -859,17 +862,13 @@ def get_pool_core(world):
     if world.shuffle_cows:
         pool.extend(get_junk_item(10 if world.dungeon_mq['Jabu Jabus Belly'] else 9))
     else:
-        placed_items['LLR Stables Left Cow'] = 'Milk'
-        placed_items['LLR Stables Right Cow'] = 'Milk'
-        placed_items['LLR Tower Left Cow'] = 'Milk'
-        placed_items['LLR Tower Right Cow'] = 'Milk'
-        placed_items['KF Links House Cow'] = 'Milk'
-        placed_items['Kak Impas House Cow'] = 'Milk'
-        placed_items['GV Cow'] = 'Milk'
-        placed_items['DMT Cow Grotto Cow'] = 'Milk'
-        placed_items['HF Cow Grotto Cow'] = 'Milk'
+        cow_locations = ['LLR Stables Left Cow', 'LLR Stables Right Cow', 'LLR Tower Left Cow', 'LLR Tower Right Cow', 
+            'KF Links House Cow', 'Kak Impas House Cow', 'GV Cow', 'DMT Cow Grotto Cow', 'HF Cow Grotto Cow']
         if world.dungeon_mq['Jabu Jabus Belly']:
-            placed_items['Jabu Jabus Belly MQ Cow'] = 'Milk'
+            cow_locations.append('Jabu Jabus Belly MQ Cow')
+        for loc in cow_locations:
+            placed_items[loc] = 'Milk'
+            skip_in_spoiler_locations.append(loc)
 
     if world.shuffle_beans:
         pool.append('Magic Bean Pack')
@@ -877,11 +876,13 @@ def get_pool_core(world):
             pending_junk_pool.append('Magic Bean Pack')
     else:
         placed_items['ZR Magic Bean Salesman'] = 'Magic Bean'
+        skip_in_spoiler_locations.append('ZR Magic Bean Salesman')
 
     if world.shuffle_medigoron_carpet_salesman:
         pool.append('Giants Knife')
     else:
         placed_items['GC Medigoron'] = 'Giants Knife'
+        skip_in_spoiler_locations.append('GC Medigoron')
 
     if world.dungeon_mq['Deku Tree']:
         skulltula_locations_final = skulltula_locations + [
@@ -1014,16 +1015,19 @@ def get_pool_core(world):
     if world.tokensanity == 'off':
         for location in skulltula_locations_final:
             placed_items[location] = 'Gold Skulltula Token'
+            skip_in_spoiler_locations.append(location)
     elif world.tokensanity == 'dungeons':
         for location in skulltula_locations_final:
             if world.get_location(location).scene >= 0x0A:
                 placed_items[location] = 'Gold Skulltula Token'
+                skip_in_spoiler_locations.append(location)
             else:
                 pool.append('Gold Skulltula Token')
     elif world.tokensanity == 'overworld':
         for location in skulltula_locations_final:
             if world.get_location(location).scene < 0x0A:
                 placed_items[location] = 'Gold Skulltula Token'
+                skip_in_spoiler_locations.append(location)
             else:
                 pool.append('Gold Skulltula Token')
     else:
@@ -1062,6 +1066,7 @@ def get_pool_core(world):
 
     if not world.shuffle_medigoron_carpet_salesman:
         placed_items['Wasteland Bombchu Salesman'] = 'Bombchus (10)'
+        skip_in_spoiler_locations.append('Wasteland Bombchu Salesman')
 
     pool.extend(['Ice Trap'])
     if not world.dungeon_mq['Gerudo Training Grounds']:
@@ -1133,6 +1138,11 @@ def get_pool_core(world):
             placed_items['Market Bazaar Item 4'] = 'Buy Bombchu (5)'
             placed_items['Kak Bazaar Item 4'] = 'Buy Bombchu (5)'
         pool.extend(normal_rupees)
+        skip_in_spoiler_locations.extend(vanilla_shop_items.keys())
+        if world.bombchus_in_logic:
+            skip_in_spoiler_locations.remove('KF Shop Item 8')
+            skip_in_spoiler_locations.remove('Market Bazaar Item 4')
+            skip_in_spoiler_locations.remove('Kak Bazaar Item 4')
 
     else:
         remain_shop_items = list(vanilla_shop_items.values())
@@ -1172,30 +1182,50 @@ def get_pool_core(world):
     else:
         if world.dungeon_mq['Deku Tree']:
             placed_items['Deku Tree MQ Deku Scrub'] = 'Buy Deku Shield'
+            skip_in_spoiler_locations.append('Deku Tree MQ Deku Scrub')
         if world.dungeon_mq['Dodongos Cavern']:
             placed_items['Dodongos Cavern MQ Deku Scrub Lobby Rear'] = 'Buy Deku Stick (1)'
             placed_items['Dodongos Cavern MQ Deku Scrub Lobby Front'] = 'Buy Deku Seeds (30)'
             placed_items['Dodongos Cavern MQ Deku Scrub Staircase'] = 'Buy Deku Shield'
             placed_items['Dodongos Cavern MQ Deku Scrub Side Room Near Lower Lizalfos'] = 'Buy Red Potion [30]'
+            skip_in_spoiler_locations.extend(['Dodongos Cavern MQ Deku Scrub Lobby Rear', 
+                'Dodongos Cavern MQ Deku Scrub Lobby Front', 
+                'Dodongos Cavern MQ Deku Scrub Staircase', 
+                'Dodongos Cavern MQ Deku Scrub Side Room Near Lower Lizalfos'])
         else:
             placed_items['Dodongos Cavern Deku Scrub Near Bomb Bag Left'] = 'Buy Deku Nut (5)'
             placed_items['Dodongos Cavern Deku Scrub Side Room Near Dodongos'] = 'Buy Deku Stick (1)'
             placed_items['Dodongos Cavern Deku Scrub Near Bomb Bag Right'] = 'Buy Deku Seeds (30)'
             placed_items['Dodongos Cavern Deku Scrub Lobby'] = 'Buy Deku Shield'
+            skip_in_spoiler_locations.extend(['Dodongos Cavern Deku Scrub Near Bomb Bag Left',
+                'Dodongos Cavern Deku Scrub Side Room Near Dodongos',
+                'Dodongos Cavern Deku Scrub Near Bomb Bag Right',
+                'Dodongos Cavern Deku Scrub Lobby'])
         if not world.dungeon_mq['Jabu Jabus Belly']:
             placed_items['Jabu Jabus Belly Deku Scrub'] = 'Buy Deku Nut (5)'
+            skip_in_spoiler_locations.append('Jabu Jabus Belly Deku Scrub')
         if world.dungeon_mq['Ganons Castle']:
             placed_items['Ganons Castle MQ Deku Scrub Right'] = 'Buy Deku Nut (5)'
             placed_items['Ganons Castle MQ Deku Scrub Center-Left'] = 'Buy Bombs (5) [35]'
             placed_items['Ganons Castle MQ Deku Scrub Center'] = 'Buy Arrows (30)'
             placed_items['Ganons Castle MQ Deku Scrub Center-Right'] = 'Buy Red Potion [30]'
             placed_items['Ganons Castle MQ Deku Scrub Left'] = 'Buy Green Potion'
+            skip_in_spoiler_locations.extend(['Ganons Castle MQ Deku Scrub Right',
+                'Ganons Castle MQ Deku Scrub Center-Left',
+                'Ganons Castle MQ Deku Scrub Center',
+                'Ganons Castle MQ Deku Scrub Center-Right',
+                'Ganons Castle MQ Deku Scrub Left'])
         else:
             placed_items['Ganons Castle Deku Scrub Center-Left'] = 'Buy Bombs (5) [35]'
             placed_items['Ganons Castle Deku Scrub Center-Right'] = 'Buy Arrows (30)'
             placed_items['Ganons Castle Deku Scrub Right'] = 'Buy Red Potion [30]'
             placed_items['Ganons Castle Deku Scrub Left'] = 'Buy Green Potion'
+            skip_in_spoiler_locations.extend(['Ganons Castle Deku Scrub Right',
+                'Ganons Castle Deku Scrub Center-Left',
+                'Ganons Castle Deku Scrub Center-Right',
+                'Ganons Castle Deku Scrub Left'])
         placed_items.update(vanilla_deku_scrubs)
+        skip_in_spoiler_locations.extend(vanilla_deku_scrubs.keys())
 
     pool.extend(alwaysitems)
     
@@ -1386,4 +1416,4 @@ def get_pool_core(world):
     # world.distribution.configure_starting_items_settings(world)
     # world.distribution.collect_starters(world.state)
 
-    return (pool, placed_items)
+    return (pool, placed_items, skip_in_spoiler_locations)

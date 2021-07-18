@@ -380,6 +380,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         for region_name, node, subrule_name in self.delayed_rules:
             region = self.world.world.get_region(region_name, self.player)
             event = OOTLocation(self.player, subrule_name, type='Event', parent=region, internal=True)
+            event.show_in_spoiler = False
 
             self.current_spot = event
             # This could, in theory, create further subrules.
