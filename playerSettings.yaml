@@ -115,6 +115,7 @@ Factorio:
     terrain_segmentation: 0.5
     water: 1.5
     autoplace_controls:
+      # set size to 0 to disable
       coal:
         frequency: 1
         size: 3
@@ -152,9 +153,16 @@ Factorio:
     peaceful_mode: 0
     cliff_settings:
       name: cliff
-      cliff_elevation_0: 10
-      cliff_elevation_interval: 40
-      richness: 1
+      cliff_elevation_0: 10 # base elevation, can't be changed in GUI
+      cliff_elevation_interval: 40 # = 40/frequency
+      richness: 1 # 0=off, >0 = continuity
+    pollution:
+      enabled: true
+      diffusion_ratio: 0.02
+      ageing: 1
+      enemy_attack_pollution_consumption_modifier: 1
+      min_pollution_to_damage_trees: 60
+      pollution_restored_per_tree_damage: 10
 Minecraft:
   advancement_goal: 50 # Number of advancements required (out of 92 total) to spawn the Ender Dragon and complete the game.
   combat_difficulty: # Modifies the level of items logically required for exploring dangerous areas and fighting bosses.
