@@ -80,6 +80,8 @@ class OOTWorld(World):
 
     def generate_early(self):
         self.rom = Rom(file=Utils.get_options()['oot_options']['rom_file'])  # a ROM must be provided, cannot produce patches without it
+        self.output_type = Utils.get_options()['oot_options']['output_type']
+        assert self.output_type in ['none', 'patch', 'raw', 'compress']
         self.parser = Rule_AST_Transformer(self, self.player)
 
         for (option_name, option) in oot_options.items(): 
@@ -501,14 +503,15 @@ class OOTWorld(World):
         self.rom.update_header()
 
         # make patch file
-        create_patch_file(self.rom, Utils.output_path(outfile_name+'.apz5'))
+        if self.output_type != 'none':
+            create_patch_file(self.rom, Utils.output_path(outfile_name+'.apz5'))
 
         # produce uncompressed file path, compress if desired
-        if self.compress_rom or self.patch_uncompressed_rom:
+        if self.output_type in ['raw', 'compress']:
             filename_uncompressed = Utils.output_path(outfile_name+'.z64')
             filename_compressed = Utils.output_path(outfile_name+'-comp.z64')
             self.rom.write_to_file(filename_uncompressed)
-            if self.compress_rom:
+            if self.output_type == 'compress':
                 logger.info(f"Compressing OOT ROM file for player {self.player}. This might take a while...")
                 compress_rom_file(filename_uncompressed, filename_compressed)
                 os.remove(filename_uncompressed)

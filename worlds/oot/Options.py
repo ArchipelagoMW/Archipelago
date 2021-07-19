@@ -325,6 +325,4 @@ oot_options: typing.Dict[str, type(Option)] = {
     **misc_options, 
     **itempool_options,
     "logic_tricks": OptionList,
-    "compress_rom": Toggle,
-    "patch_uncompressed_rom": Toggle,
 }
