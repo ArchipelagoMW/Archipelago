@@ -20,23 +20,116 @@ from NetUtils import RawJSONtoTextParser, NetworkItem, ClientStatus, JSONtoTextP
 
 from worlds.factorio.Technologies import lookup_id_to_name
 
-rcon_port = 24242
-rcon_password = ''.join(random.choice(string.ascii_letters) for x in range(32))
+os.makedirs("logs", exist_ok=True)
 
-logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO)
-factorio_server_logger = logging.getLogger("FactorioServer")
-options = Utils.get_options()
-executable = options["factorio_options"]["executable"]
-bin_dir = os.path.dirname(executable)
-if not os.path.isdir(bin_dir):
-    raise FileNotFoundError(bin_dir)
-if not os.path.exists(executable):
-    if os.path.exists(executable + ".exe"):
-        executable = executable + ".exe"
-    else:
-        raise FileNotFoundError(executable)
+# Log to file in gui case
+if getattr(sys, "frozen", False) and not "--nogui" in sys.argv:
+    logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
+                        filename=os.path.join("logs", "FactorioClient.txt"), filemode="w")
+else:
+    logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO)
+    logging.getLogger().addHandler(logging.FileHandler(os.path.join("logs", "FactorioClient.txt"), "w"))
 
-server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password, *sys.argv[1:])
+gui_enabled = Utils.is_frozen() or "--nogui" not in sys.argv
+
+if gui_enabled:
+    os.environ["KIVY_NO_CONSOLELOG"] = "1"
+    os.environ["KIVY_NO_FILELOG"] = "1"
+    os.environ["KIVY_NO_ARGS"] = "1"
+    from kivy.app import App
+    from kivy.base import ExceptionHandler, ExceptionManager, Config
+    from kivy.uix.gridlayout import GridLayout
+    from kivy.uix.textinput import TextInput
+    from kivy.uix.recycleview import RecycleView
+    from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
+    from kivy.lang import Builder
+
+
+    class FactorioManager(App):
+        def __init__(self, ctx):
+            super(FactorioManager, self).__init__()
+            self.ctx = ctx
+            self.commandprocessor = ctx.command_processor(ctx)
+            self.icon = r"data/icon.png"
+
+        def build(self):
+            self.grid = GridLayout()
+            self.grid.cols = 1
+
+            self.tabs = TabbedPanel()
+            self.tabs.default_tab_text = "All"
+            self.title = "Archipelago Factorio Client"
+            pairs = [
+                ("Client", "Archipelago"),
+                ("FactorioServer", "Factorio Server Log"),
+                ("FactorioWatcher", "Bridge Data Log"),
+            ]
+            self.tabs.default_tab_content = UILog(*(logging.getLogger(logger_name) for logger_name, name in pairs))
+            for logger_name, display_name in pairs:
+                bridge_logger = logging.getLogger(logger_name)
+                panel = TabbedPanelItem(text=display_name)
+                panel.content = UILog(bridge_logger)
+                self.tabs.add_widget(panel)
+
+            self.grid.add_widget(self.tabs)
+            textinput = TextInput(size_hint_y=None, height=30, multiline=False)
+            textinput.bind(on_text_validate=self.on_message)
+            self.grid.add_widget(textinput)
+            self.commandprocessor("/help")
+            return self.grid
+
+        def on_stop(self):
+            self.ctx.exit_event.set()
+
+        def on_message(self, textinput: TextInput):
+            try:
+                input_text = textinput.text.strip()
+                textinput.text = ""
+
+                if self.ctx.input_requests > 0:
+                    self.ctx.input_requests -= 1
+                    self.ctx.input_queue.put_nowait(input_text)
+                elif input_text:
+                    self.commandprocessor(input_text)
+            except Exception as e:
+                logger.exception(e)
+
+        def on_address(self, text: str):
+            print(text)
+
+
+    class LogtoUI(logging.Handler):
+        def __init__(self, on_log):
+            super(LogtoUI, self).__init__(logging.DEBUG)
+            self.on_log = on_log
+
+        def handle(self, record: logging.LogRecord) -> None:
+            self.on_log(record)
+
+
+    class UILog(RecycleView):
+        cols = 1
+
+        def __init__(self, *loggers_to_handle, **kwargs):
+            super(UILog, self).__init__(**kwargs)
+            self.data = []
+            for logger in loggers_to_handle:
+                logger.addHandler(LogtoUI(self.on_log))
+
+        def on_log(self, record: logging.LogRecord) -> None:
+            self.data.append({"text": record.getMessage()})
+
+
+    class E(ExceptionHandler):
+        def handle_exception(self, inst):
+            logger.exception(inst)
+            return ExceptionManager.RAISE
+
+
+    ExceptionManager.add_handler(E())
+
+    Config.set("input", "mouse", "mouse,disable_multitouch")
+    Builder.load_file(Utils.local_path("data", "client.kv"))
 
 
 class FactorioCommandProcessor(ClientCommandProcessor):
@@ -56,7 +149,7 @@ class FactorioCommandProcessor(ClientCommandProcessor):
         """Connect to a MultiWorld Server"""
         if not self.ctx.auth:
             if self.ctx.rcon_client:
-                get_info(self.ctx, self.ctx.rcon_client) # retrieve current auth code
+                get_info(self.ctx, self.ctx.rcon_client)  # retrieve current auth code
             else:
                 self.output("Cannot connect to a server with unknown own identity, bridge to Factorio first.")
         return super(FactorioCommandProcessor, self)._cmd_connect(address)
@@ -66,8 +159,8 @@ class FactorioContext(CommonContext):
     command_processor = FactorioCommandProcessor
     game = "Factorio"
 
-    def __init__(self, *args, **kwargs):
-        super(FactorioContext, self).__init__(*args, **kwargs)
+    def __init__(self, server_address, password):
+        super(FactorioContext, self).__init__(server_address, password)
         self.send_index = 0
         self.rcon_client = None
         self.awaiting_bridge = False
@@ -92,8 +185,6 @@ class FactorioContext(CommonContext):
                                           f"{cleaned_text}\")")
 
     def on_print_json(self, args: dict):
-        if not self.found_items and args.get("type", None) == "ItemSend" and args["receiving"] == args["sending"]:
-            pass  # don't want info on other player's local pickups.
         text = self.raw_json_text_parser(copy.deepcopy(args["data"]))
         logger.info(text)
         if self.rcon_client:
@@ -118,7 +209,8 @@ async def game_watcher(ctx: FactorioContext):
                 if data["slot_name"] != ctx.auth:
                     logger.warning(f"Connected World is not the expected one {data['slot_name']} != {ctx.auth}")
                 elif data["seed_name"] != ctx.seed_name:
-                    logger.warning(f"Connected Multiworld is not the expected one {data['seed_name']} != {ctx.seed_name}")
+                    logger.warning(
+                        f"Connected Multiworld is not the expected one {data['seed_name']} != {ctx.seed_name}")
                 else:
                     data = data["info"]
                     research_data = data["research_done"]
@@ -246,7 +338,6 @@ async def factorio_spinup_server(ctx: FactorioContext):
                     rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
                     get_info(ctx, rcon_client)
 
-
             await asyncio.sleep(0.01)
 
     except Exception as e:
@@ -261,12 +352,12 @@ async def factorio_spinup_server(ctx: FactorioContext):
         factorio_process.terminate()
 
 
-async def main(ui=None):
-    ctx = FactorioContext(None, None, True)
+async def main(args):
+    ctx = FactorioContext(args.connect, args.password)
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
-    if ui:
+    if gui_enabled:
         input_task = None
-        ui_app = ui(ctx)
+        ui_app = FactorioManager(ctx)
         ui_task = asyncio.create_task(ui_app.async_run(), name="UI")
     else:
         input_task = asyncio.create_task(console_loop(ctx), name="Input")
@@ -314,8 +405,36 @@ class FactorioJSONtoTextParser(JSONtoTextParser):
 
 
 if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--rcon-port', default='24242', type=int, help='Port to use to communicate with Factorio')
+    parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
+    parser.add_argument('--password', default=None, help='Password of the multiworld host.')
+    if not Utils.is_frozen():  # Frozen state has no cmd window in the first place
+        parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
+    parser.add_argument('factorio_server_args', nargs='*', help="All remaining arguments get passed "
+                                                                "into the Factorio server startup.")
+    args = parser.parse_args()
     colorama.init()
+    rcon_port = args.rcon_port
+    rcon_password = ''.join(random.choice(string.ascii_letters) for x in range(32))
+
+    factorio_server_logger = logging.getLogger("FactorioServer")
+    options = Utils.get_options()
+    executable = options["factorio_options"]["executable"]
+    bin_dir = os.path.dirname(executable)
+    if not os.path.isdir(bin_dir):
+        raise FileNotFoundError(bin_dir)
+    if not os.path.exists(executable):
+        if os.path.exists(executable + ".exe"):
+            executable = executable + ".exe"
+        else:
+            raise FileNotFoundError(executable)
+
+    server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password, *args.factorio_server_args)
+
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    loop.run_until_complete(main(args))
     loop.close()
     colorama.deinit()

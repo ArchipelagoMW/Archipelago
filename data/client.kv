@@ -1,0 +1,24 @@
+<TabbedPanel>
+    tab_width: 200
+<Row@Label>:
+    canvas.before:
+        Color:
+            rgba: 0.2, 0.2, 0.2, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    text_size: self.width, None
+    size_hint_y: None
+    height: self.texture_size[1]
+    font_size: dp(20)
+<UILog>:
+    viewclass: 'Row'
+    scroll_y: 0
+    effect_cls: "ScrollEffect"
+    RecycleBoxLayout:
+        default_size: None, dp(20)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+        spacing: dp(3)
