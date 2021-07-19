@@ -442,14 +442,14 @@ class OOTWorld(World):
         # If anything is overworld-only, enforce them as local and not in the remaining dungeon locations
         if itempools['overworld'] or self.shuffle_fortresskeys == 'overworld':
             from worlds.generic.Rules import forbid_items_for_player
-            fortresskeys = set(['Small Key (Gerudo Fortress)']) if self.shuffle_fortresskeys == 'overworld' else set()
+            fortresskeys = {'Small Key (Gerudo Fortress)'} if self.shuffle_fortresskeys == 'overworld' else set()
             local_overworld_items = set(map(lambda item: item.name, itempools['overworld'])).union(fortresskeys)
             for location in self.world.get_locations():
                 if location.player != self.player or location in any_dungeon_locations:
                     forbid_items_for_player(location, local_overworld_items, self.player)
+            self.world.itempool.extend(itempools['overworld'])
 
         # Put all the remaining items into the general itempool
-        self.world.itempool.extend(itempools['overworld'])
         self.world.itempool.extend(itempools['keysanity'])
 
 
