@@ -108,7 +108,7 @@ bridge_options: typing.Dict[str, type(Option)] = {
 
 class SongShuffle(Choice): 
     option_song = 0
-    # option_dungeon = 1
+    option_dungeon = 1
     option_any = 2
 
 class ShopShuffle(Choice): 

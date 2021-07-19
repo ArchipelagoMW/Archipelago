@@ -384,6 +384,22 @@ class OOTWorld(World):
         # Fill boss prizes
         self.fill_bosses()
 
+        # relevant for both dungeon item fill and song fill
+        dungeon_song_locations = [
+            "Deku Tree Queen Gohma Heart",
+            "Dodongos Cavern King Dodongo Heart",
+            "Jabu Jabus Belly Barinade Heart",
+            "Forest Temple Phantom Ganon Heart",
+            "Fire Temple Volvagia Heart",
+            "Water Temple Morpha Heart",
+            "Shadow Temple Bongo Bongo Heart",
+            "Spirit Temple Twinrova Heart",
+            "Song from Impa",
+            "Sheik in Ice Cavern",
+            "Bottom of the Well Lens of Truth Chest", "Bottom of the Well MQ Lens of Truth Chest", # only one exists
+            "Gerudo Training Grounds Maze Path Final Chest", "Gerudo Training Grounds MQ Ice Arrows Chest", # only one exists
+        ]
+
         # Place/set rules for dungeon items
         itempools = {
             'dungeon': [],
@@ -404,7 +420,9 @@ class OOTWorld(World):
             if shufflebk in itempools:
                 itempools[shufflebk].extend(dungeon.boss_key)
 
-            dungeon_locations = [loc for region in dungeon.regions for loc in region.locations if loc.item is None]
+            # We can't put a dungeon item on the end of a dungeon if a song is supposed to go there. Make sure not to include it. 
+            dungeon_locations = [loc for region in dungeon.regions for loc in region.locations 
+                if loc.item is None and (self.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations)]
             if itempools['dungeon']: # only do this if there's anything to shuffle
                 self.world.random.shuffle(dungeon_locations)
                 fill_restrictive(self.world, self.world.get_all_state(), dungeon_locations, itempools['dungeon'], True, True)
@@ -439,7 +457,15 @@ class OOTWorld(World):
         # 5 built-in retries because this section can fail sometimes
         if self.shuffle_song_items != 'any': 
             tries = 5
-            song_locations = list(filter(lambda location: location.type == 'Song', self.world.get_unfilled_locations(player=self.player)))
+            if self.shuffle_song_items == 'song':
+                song_locations = list(filter(lambda location: location.type == 'Song', 
+                    self.world.get_unfilled_locations(player=self.player)))
+            elif self.shuffle_song_items == 'dungeon': 
+                song_locations = list(filter(lambda location: location.name in dungeon_song_locations, 
+                    self.world.get_unfilled_locations(player=self.player)))
+            else:
+                raise Exception(f"Unknown song shuffle type: {self.shuffle_song_items}")
+
             songs = list(filter(lambda item: item.player == self.player and item.type == 'Song', self.world.itempool))
             for song in songs: 
                 self.world.itempool.remove(song)
