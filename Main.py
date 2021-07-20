@@ -58,7 +58,6 @@ def main(args, seed=None):
     world.seed = get_seed(seed)
     if args.race:
         world.secure()
-        world.is_race = True
     else:
         world.random.seed(world.seed)
     world.seed_name = str(args.outputname if args.outputname else world.seed)
