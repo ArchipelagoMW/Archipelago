@@ -54,6 +54,7 @@ item_table = {
     "Structure Compass (Nether Fortress)": ItemData(45039, True),
     "Structure Compass (Bastion Remnant)": ItemData(45040, True),
     "Structure Compass (End City)": ItemData(45041, True),
+    "Shulker Box": ItemData(45042, False),
     "Bee Trap (Minecraft)": ItemData(45100, False),
 
     "Victory": ItemData(None, True)
@@ -84,6 +85,7 @@ item_frequencies = {
     "Structure Compass (Nether Fortress)": 0,
     "Structure Compass (Bastion Remnant)": 0,
     "Structure Compass (End City)": 0,
+    "Shulker Box": 0,
     "Bee Trap (Minecraft)": 0,
 }
 
