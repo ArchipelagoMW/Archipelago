@@ -84,7 +84,7 @@ def cache_argsless(function):
     return _wrap
 
 
-def is_bundled() -> bool:
+def is_frozen() -> bool:
     return getattr(sys, 'frozen', False)
 
 
@@ -92,7 +92,7 @@ def local_path(*path):
     if local_path.cached_path:
         return os.path.join(local_path.cached_path, *path)
 
-    elif is_bundled():
+    elif is_frozen():
         if hasattr(sys, "_MEIPASS"):
             # we are running in a PyInstaller bundle
             local_path.cached_path = sys._MEIPASS  # pylint: disable=protected-access,no-member

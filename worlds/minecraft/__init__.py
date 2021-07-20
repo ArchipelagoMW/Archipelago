@@ -35,7 +35,8 @@ class MinecraftWorld(World):
             'player_name': self.world.get_player_names(self.player),
             'player_id': self.player,
             'client_version': client_version,
-            'structures': {exit: self.world.get_entrance(exit, self.player).connected_region.name for exit in exits}
+            'structures': {exit: self.world.get_entrance(exit, self.player).connected_region.name for exit in exits},
+            'race': self.world.is_race
         }
 
     def generate_basic(self):

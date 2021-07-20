@@ -93,7 +93,7 @@ const fetchSpriteData = () => new Promise((resolve, reject) => {
     }
     resolve(ajax.responseText);
   };
-  ajax.open('GET', `${window.location.origin}/static/static/spriteData.json`, true);
+  ajax.open('GET', `${window.location.origin}/static/generated/spriteData.json`, true);
   ajax.send();
 });
 
@@ -446,7 +446,7 @@ const buildSpritePicker = (spriteData) => {
     let spriteGifFile = sprite.file.split('.');
     spriteGifFile.pop();
     spriteGifFile = spriteGifFile.join('.') + '.gif';
-    spriteImg.setAttribute('src', `static/static/sprites/${spriteGifFile}`);
+    spriteImg.setAttribute('src', `static/generated/sprites/${spriteGifFile}`);
     spriteImg.setAttribute('data-sprite', sprite.file.split('.')[0]);
     spriteImg.setAttribute('alt', sprite.name);
 

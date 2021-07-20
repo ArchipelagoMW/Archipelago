@@ -60,8 +60,7 @@ scripts = {"LttPClient.py": "ArchipelagoLttPClient",
            "MultiMystery.py": "ArchipelagoMultiMystery",
            "MultiServer.py": "ArchipelagoServer",
            "Mystery.py": "ArchipelagoMystery",
-           "LttPAdjuster.py": "ArchipelagoLttPAdjuster",
-           "FactorioClient.py": "ArchipelagoFactorioClient"}
+           "LttPAdjuster.py": "ArchipelagoLttPAdjuster"}
 
 exes = []
 
@@ -153,22 +152,14 @@ print("Outputting Factorio Client to: " + sbuildfolder)
 
 os.makedirs(buildfolder, exist_ok=True)
 
-scripts = {"FactorioClient.py": "ArchipelagoConsoleFactorioClient"}
 
-exes = []
-
-for script, scriptname in scripts.items():
-    exes.append(cx_Freeze.Executable(
-        script=script,
-        target_name=scriptname + ("" if sys.platform == "linux" else ".exe"),
-        icon=icon,
-    ))
-exes.append(cx_Freeze.Executable(
-    script="FactorioClientGUI.py",
-    target_name="ArchipelagoGraphicalFactorioClient" + ("" if sys.platform == "linux" else ".exe"),
+exes = [
+    cx_Freeze.Executable(
+    script="FactorioClient.py",
+    target_name="ArchipelagoFactorioClient" + ("" if sys.platform == "linux" else ".exe"),
     icon=icon,
-    base="Win32GUI"
-))
+    base="Win32GUI" if sys.platform == "win32" else None
+)]
 
 import datetime
 

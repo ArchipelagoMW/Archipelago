@@ -11,6 +11,7 @@ from waitress import serve
 
 from WebHostLib.models import db
 from WebHostLib.autolauncher import autohost
+from WebHostLib.lttpsprites import update_sprites_lttp
 
 configpath = os.path.abspath("config.yaml")
 
@@ -30,6 +31,7 @@ if __name__ == "__main__":
     multiprocessing.freeze_support()
     multiprocessing.set_start_method('spawn')
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
+    update_sprites_lttp()
     app = get_app()
     if app.config["SELFLAUNCH"]:
         autohost(app.config)

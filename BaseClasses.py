@@ -24,6 +24,7 @@ class MultiWorld():
     plando_connections: List[PlandoConnection]
     er_seeds: Dict[int, str]
     worlds: Dict[int, "AutoWorld.World"]
+    is_race: bool = False
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -150,6 +151,7 @@ class MultiWorld():
 
     def secure(self):
         self.random = secrets.SystemRandom()
+        self.is_race = True
 
     @functools.cached_property
     def player_ids(self):
@@ -1026,17 +1028,18 @@ class Location():
     def hint_text(self):
         return getattr(self, "_hint_text", self.name.replace("_", " ").replace("-", " "))
 
+
 class Item():
     location: Optional[Location] = None
     world: Optional[MultiWorld] = None
     game: str = "Generic"
     type: str = None
-    can_be_excluded: bool = True  # change manually if you want some non-advancement item to not be excluded
-    pedestal_credit_text = "and the Unknown Item"
-    sickkid_credit_text = None
-    magicshop_credit_text = None
-    zora_credit_text = None
-    fluteboy_credit_text = None
+    pedestal_credit_text: str = "and the Unknown Item"
+    sickkid_credit_text: Optional[str] = None
+    magicshop_credit_text: Optional[str] = None
+    zora_credit_text: Optional[str] = None
+    fluteboy_credit_text: Optional[str] = None
+    code: Optional[str] = None  # an item with ID None is called an Event, and does not get written to multidata
 
     def __init__(self, name: str, advancement: bool, code: Optional[int], player: int):
         self.name = name

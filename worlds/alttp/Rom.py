@@ -31,7 +31,7 @@ from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts
     DeathMountain_texts, \
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from Utils import output_path, local_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_bundled
+from Utils import output_path, local_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen
 from worlds.alttp.Items import ItemFactory, item_table
 from worlds.alttp.EntranceShuffle import door_addresses
 import Patch
@@ -1843,7 +1843,7 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
                 option_name: True
             }
 
-            data_dir = local_path("data") if is_bundled() else None
+            data_dir = local_path("data") if is_frozen() else None
             offsets_array = build_offset_collections(options, data_dir)
             restore_maseya_colors(rom, offsets_array)
             if mode == 'default':

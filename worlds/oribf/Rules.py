@@ -11,7 +11,8 @@ def set_rules(world):
         apply_or_ruleset(world.world, world.player, logicset)
 
 
-tautology = lambda state: True
+def tautology(state):
+    return True
 
 
 def add_or_rule_check_first(world, location: str, player: int, conditionsets):
