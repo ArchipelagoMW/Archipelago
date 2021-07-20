@@ -11,7 +11,7 @@ from BaseClasses import Region, Entrance, Item
 from .Options import minecraft_options
 from ..AutoWorld import World
 
-client_version = (0, 5)
+client_version = 5
 
 class MinecraftWorld(World):
     game: str = "Minecraft"
