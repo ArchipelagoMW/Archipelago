@@ -24,6 +24,7 @@ class MultiWorld():
     plando_connections: List[PlandoConnection]
     er_seeds: Dict[int, str]
     worlds: Dict[int, "AutoWorld.World"]
+    is_race: bool = False
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -68,7 +69,6 @@ class MultiWorld():
         self.fix_palaceofdarkness_exit = self.AttributeProxy(lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
         self.fix_trock_exit = self.AttributeProxy(lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
         self.NOTCURSED = self.AttributeProxy(lambda player: not self.CURSED[player])
-        self.is_race = False
 
         for player in range(1, players + 1):
             def set_player_attr(attr, val):

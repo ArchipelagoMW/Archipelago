@@ -424,13 +424,15 @@ if __name__ == '__main__':
     options = Utils.get_options()
     executable = options["factorio_options"]["executable"]
     bin_dir = os.path.dirname(executable)
+    if not os.path.exists(bin_dir):
+        raise FileNotFoundError(f"Path {bin_dir} does not exist or could not be accessed.")
     if not os.path.isdir(bin_dir):
-        raise FileNotFoundError(bin_dir)
+        raise FileNotFoundError(f"Path {bin_dir} is not a directory.")
     if not os.path.exists(executable):
         if os.path.exists(executable + ".exe"):
             executable = executable + ".exe"
         else:
-            raise FileNotFoundError(executable)
+            raise FileNotFoundError(f"Path {executable} is not an executable file.")
 
     server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password, *args.factorio_server_args)
 
