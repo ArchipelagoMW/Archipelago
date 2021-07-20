@@ -151,6 +151,7 @@ class MultiWorld():
 
     def secure(self):
         self.random = secrets.SystemRandom()
+        self.is_race = True
 
     @functools.cached_property
     def player_ids(self):
