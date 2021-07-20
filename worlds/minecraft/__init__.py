@@ -11,7 +11,7 @@ from BaseClasses import Region, Entrance, Item
 from .Options import minecraft_options
 from ..AutoWorld import World
 
-client_version = (0, 4)
+client_version = (0, 5)
 
 class MinecraftWorld(World):
     game: str = "Minecraft"
@@ -22,6 +22,8 @@ class MinecraftWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
+
+    data_version = 2
 
     def _get_mc_data(self):
         exits = ["Overworld Structure 1", "Overworld Structure 2", "Nether Structure 1", "Nether Structure 2",
