@@ -189,6 +189,6 @@ const fetchSpriteData = () => new Promise((resolve, reject) => {
     }
     resolve(ajax.responseText);
   };
-  ajax.open('GET', `${window.location.origin}/static/static/spriteData.json`, true);
+  ajax.open('GET', `${window.location.origin}/static/generated/spriteData.json`, true);
   ajax.send();
 });
