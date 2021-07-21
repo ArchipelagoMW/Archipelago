@@ -82,7 +82,7 @@ cx_Freeze.setup(
     executables=exes,
     options={
         "build_exe": {
-            "packages": ["websockets"],
+            "packages": ["websockets", "worlds"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
@@ -172,7 +172,7 @@ cx_Freeze.setup(
     executables=exes,
     options={
         "build_exe": {
-            "packages": ["websockets", "kivy"],
+            "packages": ["websockets", "kivy", "worlds"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],

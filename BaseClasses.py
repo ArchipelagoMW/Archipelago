@@ -571,6 +571,20 @@ class CollectionState(object):
     def has_any(self, items: Set[str], player:int):
         return any(self.prog_items[item, player] for item in items)
 
+    def has_group(self, item_name_group: str, player: int, count: int = 1):
+        found: int = 0
+        for item_name in self.world.worlds[player].item_name_groups[item_name_group]:
+            found += self.prog_items[item_name, player]
+            if found >= count:
+                return True
+        return False
+
+    def count_group(self, item_name_group: str, player: int):
+        found: int = 0
+        for item_name in self.world.worlds[player].item_name_groups[item_name_group]:
+            found += self.prog_items[item_name, player]
+        return found
+
     def has_key(self, item, player, count: int = 1):
         if self.world.logic[player] == 'nologic':
             return True
@@ -603,25 +617,9 @@ class CollectionState(object):
     def can_lift_rocks(self, player: int):
         return self.has('Power Glove', player) or self.has('Titans Mitts', player)
 
-    def has_bottle(self, player: int) -> bool:
-        return self.has_bottles(1, player)
-
     def bottle_count(self, player: int) -> int:
-        found: int = 0
-        for bottlename in item_name_groups["Bottles"]:
-            found += self.prog_items[bottlename, player]
-        return min(self.world.difficulty_requirements[player].progressive_bottle_limit, found)
-
-    def has_bottles(self, bottles: int, player: int) -> bool:
-        """Version of bottle_count that allows fast abort"""
-        if bottles > self.world.difficulty_requirements[player].progressive_bottle_limit:
-            return False
-        found: int = 0
-        for bottlename in item_name_groups["Bottles"]:
-            found += self.prog_items[bottlename, player]
-            if found >= bottles:
-                return True
-        return False
+        return min(self.world.difficulty_requirements[player].progressive_bottle_limit,
+                   self.count_group("Bottles", player))
 
     def has_hearts(self, player: int, count: int) -> int:
         # Warning: This only considers items that are marked as advancement items
@@ -670,7 +668,7 @@ class CollectionState(object):
     def can_get_good_bee(self, player: int) -> bool:
         cave = self.world.get_region('Good Bee Cave', player)
         return (
-                self.has_bottle(player) and
+                self.has_group("Bottles", player) and
                 self.has('Bug Catching Net', player) and
                 (self.has('Pegasus Boots', player) or (self.has_sword(player) and self.has('Quake', player))) and
                 cave.can_reach(self) and
@@ -1519,5 +1517,4 @@ class Spoiler(object):
 
                 outfile.write('\n'.join(path_listings))
 
-from worlds.alttp.Items import item_name_groups
 from worlds.generic import PlandoItem, PlandoConnection
