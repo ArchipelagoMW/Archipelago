@@ -4,13 +4,14 @@ from uuid import UUID
 from flask import Blueprint, abort
 
 from ..models import Room
+from .. import cache
 
 api_endpoints = Blueprint('api', __name__, url_prefix="/api")
 
 from . import generate, user  # trigger registration
 
-
 # unsorted/misc endpoints
+
 
 @api_endpoints.route('/room_status/<suuid:room>')
 def room_info(room: UUID):
@@ -22,3 +23,10 @@ def room_info(room: UUID):
             "last_port": room.last_port,
             "last_activity": room.last_activity,
             "timeout": room.timeout}
+
+
+@api_endpoints.route('/datapackage')
+@cache.cached()
+def get_datapackge():
+    from worlds import network_data_package
+    return network_data_package

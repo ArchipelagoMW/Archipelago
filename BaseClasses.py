@@ -6,7 +6,7 @@ import logging
 import json
 import functools
 from collections import OrderedDict, Counter, deque
-from typing import List, Dict, Optional, Set, Iterable, Union
+from typing import List, Dict, Optional, Set, Iterable, Union, Any
 import secrets
 import random
 
@@ -23,7 +23,7 @@ class MultiWorld():
     plando_items: List
     plando_connections: List
     er_seeds: Dict[int, str]
-    worlds: Dict[int, "AutoWorld.World"]
+    worlds: Dict[int, Any]
     is_race: bool = False
 
     class AttributeProxy():
