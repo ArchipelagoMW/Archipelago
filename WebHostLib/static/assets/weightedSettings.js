@@ -476,6 +476,9 @@ const generateGame = (raceMode = false) => {
   }).catch((error) => {
     const userMessage = document.getElementById('user-message');
     userMessage.innerText = 'Something went wrong and your game could not be generated.';
+    if (error.response.data.text) {
+      userMessage.innerText += ' ' + error.response.data.text;
+    }
     userMessage.classList.add('visible');
     window.scrollTo(0, 0);
     console.error(error);

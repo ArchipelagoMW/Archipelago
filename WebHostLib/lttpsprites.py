@@ -3,6 +3,7 @@ import threading
 import json
 
 from Utils import local_path
+from worlds.alttp.Rom import Sprite
 
 
 def update_sprites_lttp():

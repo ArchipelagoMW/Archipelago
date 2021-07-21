@@ -12,7 +12,7 @@ def allowed_file(filename):
     return filename.endswith(('.txt', ".yaml", ".zip"))
 
 
-from Mystery import roll_settings
+from Generate import roll_settings
 from Utils import parse_yaml
 
 

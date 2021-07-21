@@ -9,7 +9,7 @@ from flask import request, flash, redirect, url_for, session, render_template
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from Main import get_seed, seeddigits
-from Mystery import handle_name
+from Generate import handle_name
 import pickle
 
 from .models import *
@@ -80,7 +80,6 @@ def gen_game(gen_options, race=False, owner=None, sid=None):
         erargs.outputname = seedname
         erargs.outputpath = target.name
         erargs.teams = 1
-        erargs.create_diff = True
 
         name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):
