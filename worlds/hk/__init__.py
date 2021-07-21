@@ -72,14 +72,11 @@ class HKWorld(World):
     def set_rules(self):
         set_rules(self.world, self.player)
 
-
     def create_regions(self):
         create_regions(self.world, self.player)
 
-
     def generate_output(self):
         pass  # Hollow Knight needs no output files
-
 
     def fill_slot_data(self): 
         slot_data = {}
@@ -91,6 +88,7 @@ class HKWorld(World):
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]
         return HKItem(name, item_data.advancement, item_data.id, item_data.type, self.player)
+
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, None, name, player)

@@ -3,10 +3,14 @@ import threading
 import json
 
 from Utils import local_path
+from worlds.alttp.Rom import Sprite
 
 
 def update_sprites_lttp():
-    from Gui import Tk, BackgroundTaskProgress, Sprite, get_image_for_sprite, update_sprites
+    from tkinter import Tk
+    from LttPAdjuster import get_image_for_sprite
+    from LttPAdjuster import BackgroundTaskProgress
+    from LttPAdjuster import update_sprites
 
     # Target directories
     input_dir = local_path("data", "sprites", "alttpr")

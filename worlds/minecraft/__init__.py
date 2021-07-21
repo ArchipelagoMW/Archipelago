@@ -85,7 +85,7 @@ class MinecraftWorld(World):
         self.world.regions += [MCRegion(*r) for r in mc_regions]
         link_minecraft_structures(self.world, self.player)
 
-    def generate_output(self):
+    def generate_output(self, output_directory: str):
         import json
         from base64 import b64encode
         from Utils import output_path

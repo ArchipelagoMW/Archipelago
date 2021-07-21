@@ -3,9 +3,10 @@ import typing
 import collections
 import itertools
 
-from BaseClasses import CollectionState, PlandoItem, Location, MultiWorld
+from BaseClasses import CollectionState, Location, MultiWorld
 from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import key_drop_data
+from worlds.generic import PlandoItem
 
 
 class FillError(RuntimeError):
@@ -94,7 +95,7 @@ def distribute_items_restrictive(world: MultiWorld, gftower_trash=False, fill_lo
     standard_keyshuffle_players = set()
 
     # fill in gtower locations with trash first
-    for player in world.alttp_player_ids:
+    for player in world.get_game_players("A Link to the Past"):
         if not gftower_trash or not world.ganonstower_vanilla[player] or \
                 world.logic[player] in {'owglitches', 'hybridglitches', "nologic"}:
             gtower_trash_count = 0

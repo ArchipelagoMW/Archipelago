@@ -15,7 +15,7 @@ libfolder = Path(buildfolder, "lib")
 library = Path(libfolder, "library.zip")
 print("Outputting to: " + sbuildfolder)
 
-icon = "icon.ico"
+icon = os.path.join("data", "icon.ico")
 
 if os.path.exists("X:/pw.txt"):
     print("Using signtool")
@@ -56,11 +56,12 @@ def manifest_creation(folder):
     print("Created Manifest")
 
 
-scripts = {"LttPClient.py": "ArchipelagoLttPClient",
-           "MultiMystery.py": "ArchipelagoMultiMystery",
-           "MultiServer.py": "ArchipelagoServer",
-           "Mystery.py": "ArchipelagoMystery",
-           "LttPAdjuster.py": "ArchipelagoLttPAdjuster"}
+scripts = {
+    "LttPClient.py": "ArchipelagoLttPClient",
+    "MultiServer.py": "ArchipelagoServer",
+    "Generate.py": "ArchipelagoGenerate",
+    "LttPAdjuster.py": "ArchipelagoLttPAdjuster"
+}
 
 exes = []
 
@@ -82,7 +83,7 @@ cx_Freeze.setup(
     executables=exes,
     options={
         "build_exe": {
-            "packages": ["websockets"],
+            "packages": ["websockets", "worlds"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
@@ -172,7 +173,7 @@ cx_Freeze.setup(
     executables=exes,
     options={
         "build_exe": {
-            "packages": ["websockets", "kivy"],
+            "packages": ["websockets", "kivy", "worlds"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],

@@ -6,7 +6,7 @@ import logging
 import json
 import functools
 from collections import OrderedDict, Counter, deque
-from typing import *
+from typing import List, Dict, Optional, Set, Iterable, Union, Any
 import secrets
 import random
 
@@ -14,16 +14,16 @@ import random
 class MultiWorld():
     debug_types = False
     player_names: Dict[int, List[str]]
-    _region_cache: dict
+    _region_cache: Dict[int, Dict[str, Region]]
     difficulty_requirements: dict
     required_medallions: dict
     dark_room_logic: Dict[int, str]
     restrict_dungeon_item_on_boss: Dict[int, bool]
     plando_texts: List[Dict[str, str]]
-    plando_items: List[PlandoItem]
-    plando_connections: List[PlandoConnection]
+    plando_items: List
+    plando_connections: List
     er_seeds: Dict[int, str]
-    worlds: Dict[int, "AutoWorld.World"]
+    worlds: Dict[int, Any]
     is_race: bool = False
 
     class AttributeProxy():
@@ -157,22 +157,9 @@ class MultiWorld():
     def player_ids(self):
         return tuple(range(1, self.players + 1))
 
-    # Todo: make these automatic, or something like get_players_for_game(game_name)
-    @functools.cached_property
-    def alttp_player_ids(self):
-        return tuple(player for player in range(1, self.players + 1) if self.game[player] == "A Link to the Past")
-
-    @functools.cached_property
-    def hk_player_ids(self):
-        return tuple(player for player in range(1, self.players + 1) if self.game[player] == "Hollow Knight")
-
-    @functools.cached_property
-    def factorio_player_ids(self):
-        return tuple(player for player in range(1, self.players + 1) if self.game[player] == "Factorio")
-
-    @functools.cached_property
-    def minecraft_player_ids(self):
-        return tuple(player for player in range(1, self.players + 1) if self.game[player] == "Minecraft")
+    @functools.lru_cache()
+    def get_game_players(self, game_name: str):
+        return tuple(player for player in self.player_ids if self.game[player] == game_name)
 
     def get_name_string_for_object(self, obj) -> str:
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_names(obj.player)})'
@@ -241,7 +228,7 @@ class MultiWorld():
             self.worlds[item.player].collect(ret, item)
 
         if keys:
-            for p in self.alttp_player_ids:
+            for p in self.get_game_players("A Link to the Past"):
                 world = self.worlds[p]
                 from worlds.alttp.Items import ItemFactory
                 for item in ItemFactory(
@@ -571,6 +558,20 @@ class CollectionState(object):
     def has_any(self, items: Set[str], player:int):
         return any(self.prog_items[item, player] for item in items)
 
+    def has_group(self, item_name_group: str, player: int, count: int = 1):
+        found: int = 0
+        for item_name in self.world.worlds[player].item_name_groups[item_name_group]:
+            found += self.prog_items[item_name, player]
+            if found >= count:
+                return True
+        return False
+
+    def count_group(self, item_name_group: str, player: int):
+        found: int = 0
+        for item_name in self.world.worlds[player].item_name_groups[item_name_group]:
+            found += self.prog_items[item_name, player]
+        return found
+
     def has_key(self, item, player, count: int = 1):
         if self.world.logic[player] == 'nologic':
             return True
@@ -603,25 +604,9 @@ class CollectionState(object):
     def can_lift_rocks(self, player: int):
         return self.has('Power Glove', player) or self.has('Titans Mitts', player)
 
-    def has_bottle(self, player: int) -> bool:
-        return self.has_bottles(1, player)
-
     def bottle_count(self, player: int) -> int:
-        found: int = 0
-        for bottlename in item_name_groups["Bottles"]:
-            found += self.prog_items[bottlename, player]
-        return min(self.world.difficulty_requirements[player].progressive_bottle_limit, found)
-
-    def has_bottles(self, bottles: int, player: int) -> bool:
-        """Version of bottle_count that allows fast abort"""
-        if bottles > self.world.difficulty_requirements[player].progressive_bottle_limit:
-            return False
-        found: int = 0
-        for bottlename in item_name_groups["Bottles"]:
-            found += self.prog_items[bottlename, player]
-            if found >= bottles:
-                return True
-        return False
+        return min(self.world.difficulty_requirements[player].progressive_bottle_limit,
+                   self.count_group("Bottles", player))
 
     def has_hearts(self, player: int, count: int) -> int:
         # Warning: This only considers items that are marked as advancement items
@@ -670,7 +655,7 @@ class CollectionState(object):
     def can_get_good_bee(self, player: int) -> bool:
         cave = self.world.get_region('Good Bee Cave', player)
         return (
-                self.has_bottle(player) and
+                self.has_group("Bottles", player) and
                 self.has('Bug Catching Net', player) and
                 (self.has('Pegasus Boots', player) or (self.has_sword(player) and self.has('Quake', player))) and
                 cave.can_reach(self) and
@@ -1149,7 +1134,7 @@ class Spoiler(object):
 
     def parse_data(self):
         self.medallions = OrderedDict()
-        for player in self.world.alttp_player_ids:
+        for player in self.world.get_game_players("A Link to the Past"):
             self.medallions[f'Misery Mire ({self.world.get_player_names(player)})'] = self.world.required_medallions[player][0]
             self.medallions[f'Turtle Rock ({self.world.get_player_names(player)})'] = self.world.required_medallions[player][1]
 
@@ -1205,7 +1190,7 @@ class Spoiler(object):
                 shopdata['item_{}'.format(index)] += ", {} - {}".format(item['replacement'], item['replacement_price']) if item['replacement_price'] else item['replacement']
             self.shops.append(shopdata)
 
-        for player in self.world.alttp_player_ids:
+        for player in self.world.get_game_players("A Link to the Past"):
             self.bosses[str(player)] = OrderedDict()
             self.bosses[str(player)]["Eastern Palace"] = self.world.get_dungeon("Eastern Palace", player).boss.name
             self.bosses[str(player)]["Desert Palace"] = self.world.get_dungeon("Desert Palace", player).boss.name
@@ -1319,11 +1304,11 @@ class Spoiler(object):
                         res = getattr(self.world, f_option)[player]
                         outfile.write(f'{f_option+":":33}{bool_to_text(res) if type(res) == Options.Toggle else res.get_option_name()}\n')
 
-                if player in self.world.alttp_player_ids:
+                if player in self.world.get_game_players("A Link to the Past"):
                     for team in range(self.world.teams):
                         outfile.write('%s%s\n' % (
                             f"Hash - {self.world.player_names[player][team]} (Team {team + 1}): " if
-                            (player in self.world.alttp_player_ids and self.world.teams > 1) else 'Hash: ',
+                            (player in self.world.get_game_players("A Link to the Past") and self.world.teams > 1) else 'Hash: ',
                             self.hashes[player, team]))
 
                     outfile.write('Logic:                           %s\n' % self.metadata['logic'][player])
@@ -1396,10 +1381,10 @@ class Spoiler(object):
                 outfile.write('\n\nMedallions:\n')
                 for dungeon, medallion in self.medallions.items():
                     outfile.write(f'\n{dungeon}: {medallion}')
-
-            if self.world.factorio_player_ids:
+            factorio_players = self.world.get_game_players("Factorio")
+            if factorio_players:
                 outfile.write('\n\nRecipes:\n')
-                for player in self.world.factorio_player_ids:
+                for player in factorio_players:
                     name = self.world.get_player_names(player)
                     for recipe in self.world.worlds[player].custom_recipes.values():
                         outfile.write(f"\n{recipe.name} ({name}): {recipe.ingredients} -> {recipe.products}")
@@ -1415,7 +1400,7 @@ class Spoiler(object):
                 outfile.write('\n\nShops:\n\n')
                 outfile.write('\n'.join("{} [{}]\n    {}".format(shop['location'], shop['type'], "\n    ".join(item for item in [shop.get('item_0', None), shop.get('item_1', None), shop.get('item_2', None)] if item)) for shop in self.shops))
 
-            for player in self.world.alttp_player_ids:
+            for player in self.world.get_game_players("A Link to the Past"):
                 if self.world.boss_shuffle[player] != 'none':
                     bossmap = self.bosses[str(player)] if self.world.players > 1 else self.bosses
                     outfile.write(f'\n\nBosses{(f" ({self.world.get_player_names(player)})" if self.world.players > 1 else "")}:\n')
@@ -1439,6 +1424,3 @@ class Spoiler(object):
                     path_listings.append("{}\n        {}".format(location, "\n   =>   ".join(path_lines)))
 
                 outfile.write('\n'.join(path_listings))
-
-from worlds.alttp.Items import item_name_groups
-from worlds.generic import PlandoItem, PlandoConnection

@@ -43,7 +43,7 @@ recipe_time_scales = {
     Options.RecipeTime.option_vanilla: None
 }
 
-def generate_mod(world):
+def generate_mod(world, output_directory: str):
     player = world.player
     multiworld = world.world
     global data_final_template, locale_template, control_template, data_template
@@ -92,7 +92,7 @@ def generate_mod(world):
     data_template_code = data_template.render(**template_data)
     data_final_fixes_code = data_final_template.render(**template_data)
 
-    mod_dir = Utils.output_path(mod_name) + "_" + Utils.__version__
+    mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
     en_locale_dir = os.path.join(mod_dir, "locale", "en")
     os.makedirs(en_locale_dir, exist_ok=True)
     shutil.copytree(Utils.local_path("data", "factorio", "mod"), mod_dir, dirs_exist_ok=True)

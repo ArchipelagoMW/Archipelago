@@ -14,7 +14,7 @@ from worlds.generic import PlandoItem, PlandoConnection
 
 ModuleUpdate.update()
 
-from Utils import parse_yaml, version_tuple, __version__, tuplize_version
+from Utils import parse_yaml, version_tuple, __version__, tuplize_version, get_options
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from Main import get_seed, seeddigits
@@ -28,40 +28,38 @@ from worlds.AutoWorld import AutoWorldRegister
 categories = set(AutoWorldRegister.world_types)
 
 def mystery_argparse():
-    parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument('--multi', default=1, type=lambda value: min(max(int(value), 1), 255))
-    multiargs, _ = parser.parse_known_args()
+    options = get_options()
+    defaults = options["generator"]
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--weights',
+    parser = argparse.ArgumentParser(description="CMD Generation Interface, defaults come from host.yaml.")
+    parser.add_argument('--weights_file_path', default = defaults["weights_file_path"],
                         help='Path to the weights file to use for rolling game settings, urls are also valid')
     parser.add_argument('--samesettings', help='Rolls settings per weights file rather than per player',
                         action='store_true')
+    parser.add_argument('--player_files_path', default=defaults["player_files_path"],
+                        help="Input directory for player files.")
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
-    parser.add_argument('--multi', default=1, type=lambda value: min(max(int(value), 1), 255))
+    parser.add_argument('--multi', default=defaults["players"], type=lambda value: min(max(int(value), 1), 255))
     parser.add_argument('--teams', default=1, type=lambda value: max(int(value), 1))
-    parser.add_argument('--create_spoiler', action='store_true')
-    parser.add_argument('--skip_playthrough', action='store_true')
-    parser.add_argument('--pre_roll', action='store_true')
-    parser.add_argument('--rom')
-    parser.add_argument('--enemizercli')
-    parser.add_argument('--outputpath')
-    parser.add_argument('--glitch_triforce', action='store_true')
-    parser.add_argument('--race', action='store_true')
-    parser.add_argument('--meta', default=None)
+    parser.add_argument('--spoiler', type=int, default=defaults["spoiler"])
+    parser.add_argument('--rom', default=options["lttp_options"]["rom_file"], help="Path to the 1.0 JP LttP Baserom.")
+    parser.add_argument('--enemizercli', default=defaults["enemizer_path"])
+    parser.add_argument('--outputpath', default=options["general_options"]["output_path"])
+    parser.add_argument('--race', action='store_true', default=defaults["race"])
+    parser.add_argument('--meta_file_path', default=defaults["meta_file_path"])
     parser.add_argument('--log_output_path', help='Path to store output log')
-    parser.add_argument('--loglevel', default='info', help='Sets log level')
-    parser.add_argument('--create_diff', action="store_true")
+    parser.add_argument('--log_level', default='info', help='Sets log level')
     parser.add_argument('--yaml_output', default=0, type=lambda value: min(max(int(value), 0), 255),
                         help='Output rolled mystery results to yaml up to specified number (made for async multiworld)')
-    parser.add_argument('--plando', default="bosses",
+    parser.add_argument('--plando', default=defaults["plando_options"],
                         help='List of options that can be set manually. Can be combined, for example "bosses, items"')
-    parser.add_argument('--seed_name')
-    for player in range(1, multiargs.multi + 1):
-        parser.add_argument(f'--p{player}', help=argparse.SUPPRESS)
     args = parser.parse_args()
+    if not os.path.isabs(args.weights_file_path):
+        args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
+    if not os.path.isabs(args.meta_file_path):
+        args.meta_file_path = os.path.join(args.player_files_path, args.meta_file_path)
     args.plando: typing.Set[str] = {arg.strip().lower() for arg in args.plando.split(",")}
-    return args
+    return args, options
 
 
 def get_seed_name(random):
@@ -70,106 +68,93 @@ def get_seed_name(random):
 
 def main(args=None, callback=ERmain):
     if not args:
-        args = mystery_argparse()
+        args, options = mystery_argparse()
 
     seed = get_seed(args.seed)
     random.seed(seed)
-    seed_name = args.seed_name if args.seed_name else get_seed_name(random)
-    print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed}")
+    seed_name = get_seed_name(random)
 
     if args.race:
         random.seed()  # reset to time-based random source
 
     weights_cache = {}
-    if args.weights:
+    if args.weights_file_path and os.path.exists(args.weights_file_path):
         try:
-            weights_cache[args.weights] = read_weights_yaml(args.weights)
+            weights_cache[args.weights_file_path] = read_weights_yaml(args.weights_file_path)
         except Exception as e:
-            raise ValueError(f"File {args.weights} is destroyed. Please fix your yaml.") from e
-        print(f"Weights: {args.weights} >> "
-              f"{get_choice('description', weights_cache[args.weights], 'No description specified')}")
-    if args.meta:
+            raise ValueError(f"File {args.weights_file_path} is destroyed. Please fix your yaml.") from e
+        print(f"Weights: {args.weights_file_path} >> "
+              f"{get_choice('description', weights_cache[args.weights_file_path], 'No description specified')}")
+
+    if args.meta_file_path and os.path.exists(args.meta_file_path):
         try:
-            weights_cache[args.meta] = read_weights_yaml(args.meta)
+            weights_cache[args.meta_file_path] = read_weights_yaml(args.meta_file_path)
         except Exception as e:
-            raise ValueError(f"File {args.meta} is destroyed. Please fix your yaml.") from e
-        meta_weights = weights_cache[args.meta]
-        print(f"Meta: {args.meta} >> {get_choice('meta_description', meta_weights, 'No description specified')}")
+            raise ValueError(f"File {args.meta_file_path} is destroyed. Please fix your yaml.") from e
+        meta_weights = weights_cache[args.meta_file_path]
+        print(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights, 'No description specified')}")
         if args.samesettings:
             raise Exception("Cannot mix --samesettings with --meta")
-
-    for player in range(1, args.multi + 1):
-        path = getattr(args, f'p{player}')
-        if path:
+    else:
+        meta_weights = None
+    player_id = 1
+    player_files = {}
+    for file in os.scandir(args.player_files_path):
+        fname = file.name
+        if file.is_file() and fname not in {args.meta_file_path, args.weights_file_path}:
+            path = os.path.join(args.player_files_path, fname)
             try:
-                if path not in weights_cache:
-                    weights_cache[path] = read_weights_yaml(path)
-                print(f"P{player} Weights: {path} >> "
-                      f"{get_choice('description', weights_cache[path], 'No description specified')}")
-
+                weights_cache[fname] = read_weights_yaml(path)
             except Exception as e:
-                raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
+                raise ValueError(f"File {fname} is destroyed. Please fix your yaml.") from e
+            else:
+                print(f"P{player_id} Weights: {fname} >> "
+                      f"{get_choice('description', weights_cache[fname], 'No description specified')}")
+                player_files[player_id] = fname
+                player_id += 1
+
+    args.multi = max(player_id-1, args.multi)
+    print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed}")
+
+    if not weights_cache:
+        raise Exception(f"No weights found. Provide a general weights file ({args.weights_file_path}) or individual player files. "
+                        f"A mix is also permitted.")
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
     erargs.name = {x: "" for x in range(1, args.multi + 1)}  # only so it can be overwrittin in mystery
-    erargs.create_spoiler = args.create_spoiler
-    erargs.create_diff = args.create_diff
-    erargs.glitch_triforce = args.glitch_triforce
+    erargs.create_spoiler = args.spoiler > 0
+    erargs.glitch_triforce = options["generator"]["glitch_triforce_room"]
     erargs.race = args.race
-    erargs.skip_playthrough = args.skip_playthrough
+    erargs.skip_playthrough = args.spoiler == 0
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
     erargs.teams = args.teams
 
     # set up logger
-    if args.loglevel:
-        erargs.loglevel = args.loglevel
+    if args.log_level:
+        erargs.loglevel = args.log_level
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[
         erargs.loglevel]
 
     if args.log_output_path:
-        import sys
-        class LoggerWriter(object):
-            def __init__(self, writer):
-                self._writer = writer
-                self._msg = ''
-
-            def write(self, message):
-                self._msg = self._msg + message
-                while '\n' in self._msg:
-                    pos = self._msg.find('\n')
-                    self._writer(self._msg[:pos])
-                    self._msg = self._msg[pos + 1:]
-
-            def flush(self):
-                if self._msg != '':
-                    self._writer(self._msg)
-                    self._msg = ''
-
-        log = logging.getLogger("stderr")
-        log.addHandler(logging.StreamHandler())
-        sys.stderr = LoggerWriter(log.error)
         os.makedirs(args.log_output_path, exist_ok=True)
-        logging.basicConfig(format='%(message)s', level=loglevel,
+        logging.basicConfig(format='%(message)s', level=loglevel, force=True,
                             filename=os.path.join(args.log_output_path, f"{seed}.log"))
     else:
-        logging.basicConfig(format='%(message)s', level=loglevel)
-    if args.rom:
-        erargs.rom = args.rom
+        logging.basicConfig(format='%(message)s', level=loglevel, force=True)
 
-    if args.enemizercli:
-        erargs.enemizercli = args.enemizercli
+    erargs.rom = args.rom
+    erargs.enemizercli = args.enemizercli
 
     settings_cache = {k: (roll_settings(v, args.plando) if args.samesettings else None)
                       for k, v in weights_cache.items()}
     player_path_cache = {}
     for player in range(1, args.multi + 1):
-        player_path_cache[player] = getattr(args, f'p{player}') if getattr(args, f'p{player}') else args.weights
+        player_path_cache[player] = player_files.get(player, args.weights_file_path)
 
-    if args.meta:
+    if meta_weights:
         for player, path in player_path_cache.items():
             weights_cache[path].setdefault("meta_ignore", [])
-        meta_weights = weights_cache[args.meta]
         for key in meta_weights:
             option = get_choice(key, meta_weights)
             if option is not None:
@@ -188,31 +173,6 @@ def main(args=None, callback=ERmain):
             try:
                 settings = settings_cache[path] if settings_cache[path] else \
                     roll_settings(weights_cache[path], args.plando)
-                if args.pre_roll:
-                    import yaml
-                    if path == args.weights:
-                        settings.name = f"Player{player}"
-                    elif not settings.name:
-                        settings.name = os.path.splitext(os.path.split(path)[-1])[0]
-
-                    if "-" not in settings.shuffle and settings.shuffle != "vanilla":
-                        settings.shuffle += f"-{random.randint(0, 2 ** 64)}"
-
-                    pre_rolled = dict()
-                    pre_rolled["original_seed_number"] = seed
-                    pre_rolled["original_seed_name"] = seed_name
-                    pre_rolled["pre_rolled"] = vars(settings).copy()
-                    if "plando_items" in pre_rolled["pre_rolled"]:
-                        pre_rolled["pre_rolled"]["plando_items"] = [item.to_dict() for item in
-                                                                    pre_rolled["pre_rolled"]["plando_items"]]
-                    if "plando_connections" in pre_rolled["pre_rolled"]:
-                        pre_rolled["pre_rolled"]["plando_connections"] = [connection.to_dict() for connection in
-                                                                          pre_rolled["pre_rolled"][
-                                                                              "plando_connections"]]
-
-                    with open(os.path.join(args.outputpath if args.outputpath else ".",
-                                           f"{os.path.split(path)[-1].split('.')[0]}_pre_rolled.yaml"), "wt") as f:
-                        yaml.dump(pre_rolled, f)
                 for k, v in vars(settings).items():
                     if v is not None:
                         try:
@@ -223,7 +183,7 @@ def main(args=None, callback=ERmain):
                 raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
         else:
             raise RuntimeError(f'No weights specified for player {player}')
-        if path == args.weights:  # if name came from the weights file, just use base player name
+        if path == args.weights_file_path:  # if name came from the weights file, just use base player name
             erargs.name[player] = f"Player{player}"
         elif not erargs.name[player]:  # if name was not specified, generate it from filename
             erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
@@ -453,37 +413,6 @@ def get_plando_bosses(boss_shuffle: str, plando_options: typing.Set[str]) -> str
 
 
 def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses",))):
-    if "pre_rolled" in weights:
-        pre_rolled = weights["pre_rolled"]
-
-        if "plando_items" in pre_rolled:
-            pre_rolled["plando_items"] = [PlandoItem(item["item"],
-                                                     item["location"],
-                                                     item["world"],
-                                                     item["from_pool"],
-                                                     item["force"]) for item in pre_rolled["plando_items"]]
-            if "items" not in plando_options and pre_rolled["plando_items"]:
-                raise Exception("Item Plando is turned off. Reusing this pre-rolled setting not permitted.")
-
-        if "plando_connections" in pre_rolled:
-            pre_rolled["plando_connections"] = [PlandoConnection(connection["entrance"],
-                                                                 connection["exit"],
-                                                                 connection["direction"]) for connection in
-                                                pre_rolled["plando_connections"]]
-            if "connections" not in plando_options and pre_rolled["plando_connections"]:
-                raise Exception("Connection Plando is turned off. Reusing this pre-rolled setting not permitted.")
-
-        if "bosses" not in plando_options:
-            try:
-                pre_rolled["shufflebosses"] = get_plando_bosses(pre_rolled["shufflebosses"], plando_options)
-            except Exception as ex:
-                raise Exception("Boss Plando is turned off. Reusing this pre-rolled setting not permitted.") from ex
-
-        if pre_rolled.get("plando_texts") and "texts" not in plando_options:
-            raise Exception("Text Plando is turned off. Reusing this pre-rolled setting not permitted.")
-
-        return argparse.Namespace(**pre_rolled)
-
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 

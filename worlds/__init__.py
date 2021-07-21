@@ -32,7 +32,3 @@ network_data_package = {
     "version": sum(world.data_version for world in AutoWorldRegister.world_types.values()),
     "games": games,
 }
-
-import json
-with open("datapackagegroups.json", "w") as f:
-    json.dump(network_data_package, f, indent=4)
