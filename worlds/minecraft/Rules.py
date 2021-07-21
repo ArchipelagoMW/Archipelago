@@ -149,7 +149,8 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("The Next Generation", player), lambda state: can_complete(state))
     set_rule(world.get_location("Fishy Business", player), lambda state: state.has("Fishing Rod", player))
     set_rule(world.get_location("Hot Tourist Destinations", player), lambda state: True)
-    set_rule(world.get_location("This Boat Has Legs", player), lambda state: (state._mc_fortress_loot(player) or state._mc_complete_raid(player)) and state.has("Fishing Rod", player))
+    set_rule(world.get_location("This Boat Has Legs", player), lambda state: (state._mc_fortress_loot(player) or state._mc_complete_raid(player)) and 
+        state.has("Saddle", player) and state.has("Fishing Rod", player))
     set_rule(world.get_location("Sniper Duel", player), lambda state: state.has("Archery", player))
     set_rule(world.get_location("Nether", player), lambda state: True)
     set_rule(world.get_location("Great View From Up Here", player), lambda state: state._mc_basic_combat(player))
@@ -234,7 +235,7 @@ def set_rules(world: MultiWorld, player: int):
     set_rule(world.get_location("Time to Strike!", player), lambda state: True)
     set_rule(world.get_location("Cow Tipper", player), lambda state: True)
     set_rule(world.get_location("When Pigs Fly", player), lambda state: (state._mc_fortress_loot(player) or state._mc_complete_raid(player)) and 
-        state.has("Fishing Rod", player) and state._mc_can_adventure(player))
+        state.has("Saddle", player) and state.has("Fishing Rod", player) and state._mc_can_adventure(player))
     set_rule(world.get_location("Overkill", player), lambda state: state._mc_can_brew_potions(player) and 
         (state.has("Progressive Weapons", player) or state.can_reach('The Nether', 'Region', player)))  # strength 1 + stone axe crit OR strength 2 + wood axe crit
     set_rule(world.get_location("Librarian", player), lambda state: state.has("Enchanting", player))

@@ -105,7 +105,7 @@ class MinecraftWorld(World):
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]
         item = MinecraftItem(name, item_data.progression, item_data.code, self.player)
-        nonexcluded_items = ["Sharpness III Book", "Infinity Book", "Looting III Book", "Saddle"]
-        if name in nonexcluded_items:  # prevent these items from going on excluded locations
+        nonexcluded_items = ["Sharpness III Book", "Infinity Book", "Looting III Book"]
+        if name in nonexcluded_items:  # prevent books from going on excluded locations
             item.can_be_excluded = False
         return item

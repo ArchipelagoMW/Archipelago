@@ -48,7 +48,7 @@ item_table = {
     "Rotten Flesh": ItemData(45033, False), 
     "Single Arrow": ItemData(45034, False), 
     "32 Arrows": ItemData(45035, False),
-    "Saddle": ItemData(45036, False),
+    "Saddle": ItemData(45036, True),
     "Structure Compass (Village)": ItemData(45037, True),
     "Structure Compass (Pillager Outpost)": ItemData(45038, True),
     "Structure Compass (Nether Fortress)": ItemData(45039, True),
