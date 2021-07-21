@@ -1,4 +1,3 @@
-import random
 import struct
 import itertools
 import re
@@ -16,7 +15,6 @@ from .Messages import read_messages, update_message_by_id, read_shop_items, \
 # from OcarinaSongs import replace_songs
 from .MQ import patch_files, File, update_dmadata, insert_space, add_relocations
 from .SaveContext import SaveContext
-# import StartingItems
 
 
 # "Spoiler" argument deleted; can probably be replaced with calls to world.world
@@ -2050,24 +2048,6 @@ def get_locked_doors(rom, world):
     return get_actor_list(rom, locked_door)
 
 
-def create_fake_name(name):
-    vowels = 'aeiou'
-    list_name = list(name)
-    vowel_indexes = [i for i,c in enumerate(list_name) if c in vowels]
-    for i in random.sample(vowel_indexes, min(2, len(vowel_indexes))):
-        c = list_name[i]
-        list_name[i] = random.choice([v for v in vowels if v != c])
-
-    # keeping the game E...
-    new_name = ''.join(list_name)
-    censor = ['cum', 'cunt', 'dike', 'penis', 'puss', 'rape', 'shit']
-    new_name_az = re.sub(r'[^a-zA-Z]', '', new_name.lower(), re.UNICODE)
-    for cuss in censor:
-        if cuss in new_name_az:
-            return create_fake_name(name)
-    return new_name
-
-
 def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=False):
     if init_shop_id:
         place_shop_items.shop_id = 0x32
@@ -2116,8 +2096,8 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
                 split_item_name = item_display.name.split('(')
                 split_item_name[1] = '(' + split_item_name[1]
 
-                if location.item.name == 'Ice Trap':
-                    split_item_name[0] = create_fake_name(split_item_name[0])
+                # if location.item.name == 'Ice Trap':
+                #     split_item_name[0] = create_fake_name(split_item_name[0])
 
                 if len(world.world.worlds) > 1: # OOTWorld.MultiWorld.AutoWorld[]
                     description_text = '\x08\x05\x41%s  %d Rupees\x01%s\x01\x05\x42Player %d\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (split_item_name[0], location.price, split_item_name[1], location.item.player)
@@ -2126,8 +2106,8 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
                 purchase_text = '\x08%s  %d Rupees\x09\x01%s\x01\x1B\x05\x42Buy\x01Don\'t buy\x05\x40\x02' % (split_item_name[0], location.price, split_item_name[1])
             else:
                 shop_item_name = getSimpleHintNoPrefix(item_display)
-                if location.item.name == 'Ice Trap':
-                    shop_item_name = create_fake_name(shop_item_name)
+                # if location.item.name == 'Ice Trap':
+                #     shop_item_name = create_fake_name(shop_item_name)
 
                 if len(world.world.worlds) > 1:
                     description_text = '\x08\x05\x41%s  %d Rupees\x01\x05\x42Player %d\x05\x40\x01Special deal! ONE LEFT!\x09\x0A\x02' % (shop_item_name, location.price, location.item.player)
