@@ -1017,6 +1017,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             if clients:
                 # likely same player with a "ghosted" slot. We bust the ghost.
                 if "uuid" in args and ctx.client_ids[team, slot] == args["uuid"]:
+                    await ctx.send_msgs(clients[0], [{"cmd": "Print", "text": "You are getting kicked "
+                                                                              "by yourself reconnecting."}])
                     await clients[0].socket.close()  # we have to await the DC of the ghost, so not to create data pasta
                     client.name = ctx.player_names[(team, slot)]
                     client.team = team
@@ -1048,6 +1050,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 "players": ctx.get_players_package(),
                 "missing_locations": get_missing_checks(ctx, client),
                 "checked_locations": get_checked_checks(ctx, client),
+                # get is needed for old multidata that was sparsely populated
                 "slot_data": ctx.slot_data.get(client.slot, {})
             }]
             items = get_received_items(ctx, client.team, client.slot)

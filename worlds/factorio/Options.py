@@ -1,6 +1,12 @@
+from __future__ import annotations
 import typing
 
 from Options import Choice, OptionDict, Option, DefaultOnToggle
+from schema import Schema, Optional, And, Or
+
+# schema helpers
+FloatRange = lambda low,high: And(Or(int,float), lambda f: low<=f<=high)
+LuaBool = Or(bool, And(int, lambda n: n in (0,1)))
 
 
 class MaxSciencePack(Choice):
@@ -54,9 +60,6 @@ class TechTreeLayout(Choice):
     option_small_funnels = 7
     option_medium_funnels = 8
     option_large_funnels = 9
-    option_funnels = 4
-    alias_pyramid = 6
-    alias_funnel = 9
     default = 0
 
 
@@ -95,7 +98,10 @@ class FactorioStartItems(OptionDict):
 
 
 class FactorioWorldGen(OptionDict):
-    default = {"terrain_segmentation": 0.5, "water": 1.5,
+    # FIXME: do we want default be a rando-optimized default or in-game DS?
+    value: typing.Dict[str, typing.Dict[str, typing.Any]]
+    default = {"terrain_segmentation": 0.5,
+               "water": 1.5,
                "autoplace_controls": {"coal": {"frequency": 1, "size": 3, "richness": 6},
                                       "copper-ore": {"frequency": 1, "size": 3, "richness": 6},
                                       "crude-oil": {"frequency": 1, "size": 3, "richness": 6},
@@ -104,9 +110,57 @@ class FactorioWorldGen(OptionDict):
                                       "stone": {"frequency": 1, "size": 3, "richness": 6},
                                       "trees": {"frequency": 1, "size": 1, "richness": 1},
                                       "uranium-ore": {"frequency": 1, "size": 3, "richness": 6}},
-               "starting_area": 1, "peaceful_mode": False,
+               "seed": None,
+               "starting_area": 1,
+               "peaceful_mode": False,
                "cliff_settings": {"name": "cliff", "cliff_elevation_0": 10, "cliff_elevation_interval": 40,
-                                  "richness": 1}}
+                                  "richness": 1},
+               "pollution": {"enabled": True, "diffusion_ratio": 0.02, "ageing": 1,
+                             "enemy_attack_pollution_consumption_modifier": 1,
+                             "min_pollution_to_damage_trees": 60,
+                             "pollution_restored_per_tree_damage": 10}}
+    schema = Schema({
+        "basic": {
+            Optional("terrain_segmentation"): FloatRange(0.166,6),
+            Optional("water"): FloatRange(0.166,6),
+            Optional("autoplace_controls"): {
+                str: {
+                    "frequency": FloatRange(0,6),
+                    "size": FloatRange(0,6),
+                    "richness": FloatRange(0.166,6)}},
+            Optional("seed"): Or(None,And(int, lambda n: n>=0)),
+            Optional("starting_area"): FloatRange(0.166,6),
+            Optional("peaceful_mode"): LuaBool,
+            Optional("cliff_settings"): {
+                "name": str, "cliff_elevation_0": FloatRange(0,99),
+                "cliff_elevation_interval": FloatRange(0.066,241),  # 40/frequency
+                "richness": FloatRange(0,6)},
+        },
+        "advanced": {
+            Optional("pollution"): {
+                Optional("enabled"): LuaBool,
+                Optional("diffusion_ratio"): FloatRange(0,0.25),
+                Optional("ageing"): FloatRange(0.1,4),
+                Optional("enemy_attack_pollution_consumption_modifier"): FloatRange(0.1,4),
+                Optional("min_pollution_to_damage_trees"): FloatRange(0,9999),
+                Optional("pollution_restored_per_tree_damage"): FloatRange(0,9999)}
+        }
+    })
+
+    def __init__(self, value: typing.Dict[str, typing.Any]):
+        advanced = {"pollution"}
+        self.value = {
+            "basic":    { key: value[key] for key in value.keys() - advanced },
+            "advanced": { key: value[key] for key in value.keys() & advanced }
+        }
+
+    @classmethod
+    def from_any(cls, data: typing.Dict[str, typing.Any]) -> FactorioWorldGen:
+        if type(data) == dict:
+            return cls(data)
+        else:
+            raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
+
 
 factorio_options: typing.Dict[str, type(Option)] = {
     "max_science_pack": MaxSciencePack,

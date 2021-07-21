@@ -1,0 +1,756 @@
+import argparse
+import logging
+import random
+import urllib.request
+import urllib.parse
+import typing
+import os
+from collections import Counter
+import string
+
+import ModuleUpdate
+from worlds.alttp import Options as LttPOptions
+from worlds.generic import PlandoItem, PlandoConnection
+
+ModuleUpdate.update()
+
+from Utils import parse_yaml, version_tuple, __version__, tuplize_version, get_options
+from worlds.alttp.EntranceRandomizer import parse_arguments
+from Main import main as ERmain
+from Main import get_seed, seeddigits
+import Options
+from worlds.alttp.Items import item_name_groups, item_table
+from worlds.alttp import Bosses
+from worlds.alttp.Text import TextTable
+from worlds.alttp.Regions import location_table, key_drop_data
+from worlds.AutoWorld import AutoWorldRegister
+
+categories = set(AutoWorldRegister.world_types)
+
+def mystery_argparse():
+    options = get_options()
+    defaults = options["generator"]
+
+    parser = argparse.ArgumentParser(description="CMD Generation Interface, defaults come from host.yaml.")
+    parser.add_argument('--weights_file_path', default = defaults["weights_file_path"],
+                        help='Path to the weights file to use for rolling game settings, urls are also valid')
+    parser.add_argument('--samesettings', help='Rolls settings per weights file rather than per player',
+                        action='store_true')
+    parser.add_argument('--player_files_path', default=defaults["player_files_path"],
+                        help="Input directory for player files.")
+    parser.add_argument('--seed', help='Define seed number to generate.', type=int)
+    parser.add_argument('--multi', default=defaults["players"], type=lambda value: min(max(int(value), 1), 255))
+    parser.add_argument('--teams', default=1, type=lambda value: max(int(value), 1))
+    parser.add_argument('--spoiler', type=int, default=defaults["spoiler"])
+    parser.add_argument('--rom', default=options["lttp_options"]["rom_file"], help="Path to the 1.0 JP LttP Baserom.")
+    parser.add_argument('--enemizercli', default=defaults["enemizer_path"])
+    parser.add_argument('--outputpath', default=options["general_options"]["output_path"])
+    parser.add_argument('--race', action='store_true', default=defaults["race"])
+    parser.add_argument('--meta_file_path', default=defaults["meta_file_path"])
+    parser.add_argument('--log_output_path', help='Path to store output log')
+    parser.add_argument('--log_level', default='info', help='Sets log level')
+    parser.add_argument('--yaml_output', default=0, type=lambda value: min(max(int(value), 0), 255),
+                        help='Output rolled mystery results to yaml up to specified number (made for async multiworld)')
+    parser.add_argument('--plando', default=defaults["plando_options"],
+                        help='List of options that can be set manually. Can be combined, for example "bosses, items"')
+    args = parser.parse_args()
+    if not os.path.isabs(args.weights_file_path):
+        args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
+    if not os.path.isabs(args.meta_file_path):
+        args.meta_file_path = os.path.join(args.player_files_path, args.meta_file_path)
+    args.plando: typing.Set[str] = {arg.strip().lower() for arg in args.plando.split(",")}
+    return args, options
+
+
+def get_seed_name(random):
+    return f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
+
+
+def main(args=None, callback=ERmain):
+    if not args:
+        args, options = mystery_argparse()
+
+    seed = get_seed(args.seed)
+    random.seed(seed)
+    seed_name = get_seed_name(random)
+
+    if args.race:
+        random.seed()  # reset to time-based random source
+
+    weights_cache = {}
+    if args.weights_file_path and os.path.exists(args.weights_file_path):
+        try:
+            weights_cache[args.weights_file_path] = read_weights_yaml(args.weights_file_path)
+        except Exception as e:
+            raise ValueError(f"File {args.weights_file_path} is destroyed. Please fix your yaml.") from e
+        print(f"Weights: {args.weights_file_path} >> "
+              f"{get_choice('description', weights_cache[args.weights_file_path], 'No description specified')}")
+
+    if args.meta_file_path and os.path.exists(args.meta_file_path):
+        try:
+            weights_cache[args.meta_file_path] = read_weights_yaml(args.meta_file_path)
+        except Exception as e:
+            raise ValueError(f"File {args.meta_file_path} is destroyed. Please fix your yaml.") from e
+        meta_weights = weights_cache[args.meta_file_path]
+        print(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights, 'No description specified')}")
+        if args.samesettings:
+            raise Exception("Cannot mix --samesettings with --meta")
+    else:
+        meta_weights = None
+    player_id = 1
+    player_files = {}
+    for file in os.scandir(args.player_files_path):
+        fname = file.name
+        if file.is_file() and fname not in {args.meta_file_path, args.weights_file_path}:
+            path = os.path.join(args.player_files_path, fname)
+            try:
+                weights_cache[fname] = read_weights_yaml(path)
+            except Exception as e:
+                raise ValueError(f"File {fname} is destroyed. Please fix your yaml.") from e
+            else:
+                print(f"P{player_id} Weights: {fname} >> "
+                      f"{get_choice('description', weights_cache[fname], 'No description specified')}")
+                player_files[player_id] = fname
+                player_id += 1
+
+    args.multi = max(player_id-1, args.multi)
+    print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed}")
+
+    if not weights_cache:
+        raise Exception(f"No weights found. Provide a general weights file ({args.weights_file_path}) or individual player files. "
+                        f"A mix is also permitted.")
+    erargs = parse_arguments(['--multi', str(args.multi)])
+    erargs.seed = seed
+    erargs.name = {x: "" for x in range(1, args.multi + 1)}  # only so it can be overwrittin in mystery
+    erargs.create_spoiler = args.spoiler > 0
+    erargs.glitch_triforce = options["generator"]["glitch_triforce_room"]
+    erargs.race = args.race
+    erargs.skip_playthrough = args.spoiler == 0
+    erargs.outputname = seed_name
+    erargs.outputpath = args.outputpath
+    erargs.teams = args.teams
+
+    # set up logger
+    if args.log_level:
+        erargs.loglevel = args.log_level
+    loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[
+        erargs.loglevel]
+
+    if args.log_output_path:
+        os.makedirs(args.log_output_path, exist_ok=True)
+        logging.basicConfig(format='%(message)s', level=loglevel, force=True,
+                            filename=os.path.join(args.log_output_path, f"{seed}.log"))
+    else:
+        logging.basicConfig(format='%(message)s', level=loglevel, force=True)
+
+    erargs.rom = args.rom
+    erargs.enemizercli = args.enemizercli
+
+    settings_cache = {k: (roll_settings(v, args.plando) if args.samesettings else None)
+                      for k, v in weights_cache.items()}
+    player_path_cache = {}
+    for player in range(1, args.multi + 1):
+        player_path_cache[player] = player_files.get(player, args.weights_file_path)
+
+    if meta_weights:
+        for player, path in player_path_cache.items():
+            weights_cache[path].setdefault("meta_ignore", [])
+        for key in meta_weights:
+            option = get_choice(key, meta_weights)
+            if option is not None:
+                for player, path in player_path_cache.items():
+                    players_meta = weights_cache[path].get("meta_ignore", [])
+                    if key not in players_meta:
+                        weights_cache[path][key] = option
+                    elif type(players_meta) == dict and players_meta[key] and option not in players_meta[key]:
+                        weights_cache[path][key] = option
+
+    name_counter = Counter()
+    erargs.player_settings = {}
+    for player in range(1, args.multi + 1):
+        path = player_path_cache[player]
+        if path:
+            try:
+                settings = settings_cache[path] if settings_cache[path] else \
+                    roll_settings(weights_cache[path], args.plando)
+                for k, v in vars(settings).items():
+                    if v is not None:
+                        try:
+                            getattr(erargs, k)[player] = v
+                        except AttributeError:
+                            setattr(erargs, k, {player: v})
+            except Exception as e:
+                raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
+        else:
+            raise RuntimeError(f'No weights specified for player {player}')
+        if path == args.weights_file_path:  # if name came from the weights file, just use base player name
+            erargs.name[player] = f"Player{player}"
+        elif not erargs.name[player]:  # if name was not specified, generate it from filename
+            erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
+        erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
+
+    erargs.names = ",".join(erargs.name[i] for i in range(1, args.multi + 1))
+    del (erargs.name)
+    if args.yaml_output:
+        import yaml
+        important = {}
+        for option, player_settings in vars(erargs).items():
+            if type(player_settings) == dict:
+                if all(type(value) != list for value in player_settings.values()):
+                    if len(player_settings.values()) > 1:
+                        important[option] = {player: value for player, value in player_settings.items() if
+                                             player <= args.yaml_output}
+                    elif len(player_settings.values()) > 0:
+                        important[option] = player_settings[1]
+                    else:
+                        logging.debug(f"No player settings defined for option '{option}'")
+
+            else:
+                if player_settings != "":  # is not empty name
+                    important[option] = player_settings
+                else:
+                    logging.debug(f"No player settings defined for option '{option}'")
+        if args.outputpath:
+            os.makedirs(args.outputpath, exist_ok=True)
+        with open(os.path.join(args.outputpath if args.outputpath else ".", f"mystery_result_{seed}.yaml"), "wt") as f:
+            yaml.dump(important, f)
+
+    callback(erargs, seed)
+
+
+def read_weights_yaml(path):
+    try:
+        if urllib.parse.urlparse(path).scheme:
+            yaml = str(urllib.request.urlopen(path).read(), "utf-8")
+        else:
+            with open(path, 'rb') as f:
+                yaml = str(f.read(), "utf-8")
+    except Exception as e:
+        raise Exception(f"Failed to read weights ({path})") from e
+
+    return parse_yaml(yaml)
+
+
+def interpret_on_off(value):
+    return {"on": True, "off": False}.get(value, value)
+
+
+def convert_to_on_off(value):
+    return {True: "on", False: "off"}.get(value, value)
+
+
+def get_choice(option, root, value=None) -> typing.Any:
+    if option not in root:
+        return value
+    if type(root[option]) is list:
+        return interpret_on_off(random.choices(root[option])[0])
+    if type(root[option]) is not dict:
+        return interpret_on_off(root[option])
+    if not root[option]:
+        return value
+    if any(root[option].values()):
+        return interpret_on_off(
+            random.choices(list(root[option].keys()), weights=list(map(int, root[option].values())))[0])
+    raise RuntimeError(f"All options specified in \"{option}\" are weighted as zero.")
+
+
+class SafeDict(dict):
+    def __missing__(self, key):
+        return '{' + key + '}'
+
+
+def handle_name(name: str, player: int, name_counter: Counter):
+    name_counter[name] += 1
+    new_name = "%".join([x.replace("%number%", "{number}").replace("%player%", "{player}") for x in name.split("%%")])
+    new_name = string.Formatter().vformat(new_name, (), SafeDict(number=name_counter[name],
+                                                                 NUMBER=(name_counter[name] if name_counter[
+                                                                                                   name] > 1 else ''),
+                                                                 player=player,
+                                                                 PLAYER=(player if player > 1 else '')))
+    new_name = new_name.strip().replace(' ', '_')[:16]
+    if new_name == "Archipelago":
+        raise Exception(f"You cannot name yourself \"{new_name}\"")
+    return new_name
+
+
+def prefer_int(input_data: str) -> typing.Union[str, int]:
+    try:
+        return int(input_data)
+    except:
+        return input_data
+
+
+available_boss_names: typing.Set[str] = {boss.lower() for boss in Bosses.boss_table if boss not in
+                                         {'Agahnim', 'Agahnim2', 'Ganon'}}
+available_boss_locations: typing.Set[str] = {f"{loc.lower()}{f' {level}' if level else ''}" for loc, level in
+                                             Bosses.boss_location_table}
+
+boss_shuffle_options = {None: 'none',
+                        'none': 'none',
+                        'basic': 'basic',
+                        'full': 'full',
+                        'chaos': 'chaos',
+                        'singularity': 'singularity'
+                        }
+
+goals = {
+    'ganon': 'ganon',
+    'crystals': 'crystals',
+    'bosses': 'bosses',
+    'pedestal': 'pedestal',
+    'ganon_pedestal': 'ganonpedestal',
+    'triforce_hunt': 'triforcehunt',
+    'local_triforce_hunt': 'localtriforcehunt',
+    'ganon_triforce_hunt': 'ganontriforcehunt',
+    'local_ganon_triforce_hunt': 'localganontriforcehunt',
+    'ice_rod_hunt': 'icerodhunt',
+}
+
+
+def roll_percentage(percentage: typing.Union[int, float]) -> bool:
+    """Roll a percentage chance.
+    percentage is expected to be in range [0, 100]"""
+    return random.random() < (float(percentage) / 100)
+
+
+def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> dict:
+    logging.debug(f'Applying {new_weights}')
+    new_options = set(new_weights) - set(weights)
+    weights.update(new_weights)
+    if new_options:
+        for new_option in new_options:
+            logging.warning(f'{type} Suboption "{new_option}" of "{name}" did not '
+                            f'overwrite a root option. '
+                            f'This is probably in error.')
+    return weights
+
+
+def roll_linked_options(weights: dict) -> dict:
+    weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
+    for option_set in weights["linked_options"]:
+        if "name" not in option_set:
+            raise ValueError("One of your linked options does not have a name.")
+        try:
+            if roll_percentage(option_set["percentage"]):
+                logging.debug(f"Linked option {option_set['name']} triggered.")
+                new_options = option_set["options"]
+                for category_name, category_options in new_options.items():
+                    currently_targeted_weights = weights
+                    if category_name:
+                        currently_targeted_weights = currently_targeted_weights[category_name]
+                    update_weights(currently_targeted_weights, category_options, "Linked", option_set["name"])
+            else:
+                logging.debug(f"linked option {option_set['name']} skipped.")
+        except Exception as e:
+            raise ValueError(f"Linked option {option_set['name']} is destroyed. "
+                             f"Please fix your linked option.") from e
+    return weights
+
+
+def roll_triggers(weights: dict) -> dict:
+    weights = weights.copy()  # make sure we don't write back to other weights sets in same_settings
+    weights["_Generator_Version"] = "Archipelago"  # Some means for triggers to know if the seed is on main or doors.
+    for i, option_set in enumerate(weights["triggers"]):
+        try:
+            currently_targeted_weights = weights
+            category = option_set.get("option_category", None)
+            if category:
+                currently_targeted_weights = currently_targeted_weights[category]
+            key = get_choice("option_name", option_set)
+            if key not in currently_targeted_weights:
+                logging.warning(f'Specified option name {option_set["option_name"]} did not '
+                                f'match with a root option. '
+                                f'This is probably in error.')
+            trigger_result = get_choice("option_result", option_set)
+            result = get_choice(key, currently_targeted_weights)
+            currently_targeted_weights[key] = result
+            if result == trigger_result and roll_percentage(get_choice("percentage", option_set, 100)):
+                for category_name, category_options in option_set["options"].items():
+                    currently_targeted_weights = weights
+                    if category_name:
+                        currently_targeted_weights = currently_targeted_weights[category_name]
+                    update_weights(currently_targeted_weights, category_options, "Triggered", option_set["option_name"])
+
+        except Exception as e:
+            raise ValueError(f"Your trigger number {i + 1} is destroyed. "
+                             f"Please fix your triggers.") from e
+    return weights
+
+
+def get_plando_bosses(boss_shuffle: str, plando_options: typing.Set[str]) -> str:
+    if boss_shuffle in boss_shuffle_options:
+        return boss_shuffle_options[boss_shuffle]
+    elif "bosses" in plando_options:
+        options = boss_shuffle.lower().split(";")
+        remainder_shuffle = "none"  # vanilla
+        bosses = []
+        for boss in options:
+            if boss in boss_shuffle_options:
+                remainder_shuffle = boss_shuffle_options[boss]
+            elif "-" in boss:
+                loc, boss_name = boss.split("-")
+                if boss_name not in available_boss_names:
+                    raise ValueError(f"Unknown Boss name {boss_name}")
+                if loc not in available_boss_locations:
+                    raise ValueError(f"Unknown Boss Location {loc}")
+                level = ''
+                if loc.split(" ")[-1] in {"top", "middle", "bottom"}:
+                    # split off level
+                    loc = loc.split(" ")
+                    level = f" {loc[-1]}"
+                    loc = " ".join(loc[:-1])
+                loc = loc.title().replace("Of", "of")
+                if not Bosses.can_place_boss(boss_name.title(), loc, level):
+                    raise ValueError(f"Cannot place {boss_name} at {loc}{level}")
+                bosses.append(boss)
+            elif boss not in available_boss_names:
+                raise ValueError(f"Unknown Boss name or Boss shuffle option {boss}.")
+            else:
+                bosses.append(boss)
+        return ";".join(bosses + [remainder_shuffle])
+    else:
+        raise Exception(f"Boss Shuffle {boss_shuffle} is unknown and boss plando is turned off.")
+
+
+def roll_settings(weights: dict, plando_options: typing.Set[str] = frozenset(("bosses",))):
+    if "linked_options" in weights:
+        weights = roll_linked_options(weights)
+
+    if "triggers" in weights:
+        weights = roll_triggers(weights)
+
+    requirements = weights.get("requires", {})
+    if requirements:
+        version = requirements.get("version", __version__)
+        if tuplize_version(version) > version_tuple:
+            raise Exception(f"Settings reports required version of generator is at least {version}, "
+                            f"however generator is of version {__version__}")
+        required_plando_options = requirements.get("plando", "")
+        if required_plando_options:
+            required_plando_options = set(option.strip() for option in required_plando_options.split(","))
+            required_plando_options -= plando_options
+            if required_plando_options:
+                if len(required_plando_options) == 1:
+                    raise Exception(f"Settings reports required plando module {', '.join(required_plando_options)}, "
+                                    f"which is not enabled.")
+                else:
+                    raise Exception(f"Settings reports required plando modules {', '.join(required_plando_options)}, "
+                                    f"which are not enabled.")
+
+    ret = argparse.Namespace()
+    ret.name = get_choice('name', weights)
+    ret.accessibility = get_choice('accessibility', weights)
+    ret.progression_balancing = get_choice('progression_balancing', weights, True)
+    ret.game = get_choice("game", weights)
+    if ret.game not in weights:
+        raise Exception(f"No game options for selected game \"{ret.game}\" found.")
+    world_type = AutoWorldRegister.world_types[ret.game]
+    game_weights = weights[ret.game]
+    ret.local_items = set()
+    for item_name in game_weights.get('local_items', []):
+        items = world_type.item_name_groups.get(item_name, {item_name})
+        for item in items:
+            if item in world_type.item_names:
+                ret.local_items.add(item)
+            else:
+                raise Exception(f"Could not force item {item} to be world-local, as it was not recognized.")
+
+    ret.non_local_items = set()
+    for item_name in game_weights.get('non_local_items', []):
+        items = world_type.item_name_groups.get(item_name, {item_name})
+        for item in items:
+            if item in world_type.item_names:
+                ret.non_local_items.add(item)
+            else:
+                raise Exception(f"Could not force item {item} to be world-non-local, as it was not recognized.")
+
+    inventoryweights = game_weights.get('start_inventory', {})
+    startitems = []
+    for item in inventoryweights.keys():
+        itemvalue = get_choice(item, inventoryweights)
+        if isinstance(itemvalue, int):
+            for i in range(int(itemvalue)):
+                startitems.append(item)
+        elif itemvalue:
+            startitems.append(item)
+    ret.startinventory = startitems
+    ret.start_hints = set(game_weights.get('start_hints', []))
+
+    ret.excluded_locations = set()
+    for location in game_weights.get('exclude_locations', []):
+        if location in world_type.location_names: 
+            ret.excluded_locations.add(location)
+        else:
+            raise Exception(f"Could not exclude location {location}, as it was not recognized.")
+
+    if ret.game in AutoWorldRegister.world_types:
+        for option_name, option in AutoWorldRegister.world_types[ret.game].options.items():
+            if option_name in game_weights:
+                try:
+                    if issubclass(option, Options.OptionDict) or issubclass(option, Options.OptionList):
+                        setattr(ret, option_name, option.from_any(game_weights[option_name]))
+                    else:
+                        setattr(ret, option_name, option.from_any(get_choice(option_name, game_weights)))
+                except Exception as e:
+                    raise Exception(f"Error generating option {option_name} in {ret.game}") from e
+            else:
+                setattr(ret, option_name, option(option.default))
+        if ret.game == "Minecraft":
+            # bad hardcoded behavior to make this work for now
+            ret.plando_connections = []
+            if "connections" in plando_options:
+                options = game_weights.get("plando_connections", [])
+                for placement in options:
+                    if roll_percentage(get_choice("percentage", placement, 100)):
+                        ret.plando_connections.append(PlandoConnection(
+                            get_choice("entrance", placement),
+                            get_choice("exit", placement),
+                            get_choice("direction", placement, "both")
+                        ))
+        elif ret.game == "A Link to the Past":
+            roll_alttp_settings(ret, game_weights, plando_options)
+    else:
+        raise Exception(f"Unsupported game {ret.game}")
+    return ret
+
+
+def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
+    glitches_required = get_choice('glitches_required', weights)
+    if glitches_required not in [None, 'none', 'no_logic', 'overworld_glitches', 'hybrid_major_glitches', 'minor_glitches']:
+        logging.warning("Only NMG, OWG, HMG and No Logic supported")
+        glitches_required = 'none'
+    ret.logic = {None: 'noglitches', 'none': 'noglitches', 'no_logic': 'nologic', 'overworld_glitches': 'owglitches',
+                 'minor_glitches': 'minorglitches', 'hybrid_major_glitches': 'hybridglitches'}[
+        glitches_required]
+
+    ret.dark_room_logic = get_choice("dark_room_logic", weights, "lamp")
+    if not ret.dark_room_logic:  # None/False
+        ret.dark_room_logic = "none"
+    if ret.dark_room_logic == "sconces":
+        ret.dark_room_logic = "torches"
+    if ret.dark_room_logic not in {"lamp", "torches", "none"}:
+        raise ValueError(f"Unknown Dark Room Logic: \"{ret.dark_room_logic}\"")
+
+    ret.restrict_dungeon_item_on_boss = get_choice('restrict_dungeon_item_on_boss', weights, False)
+
+    dungeon_items = get_choice('dungeon_items', weights)
+    if dungeon_items == 'full' or dungeon_items == True:
+        dungeon_items = 'mcsb'
+    elif dungeon_items == 'standard':
+        dungeon_items = ""
+    elif not dungeon_items:
+        dungeon_items = ""
+    if "u" in dungeon_items:
+        dungeon_items.replace("s", "")
+
+    ret.mapshuffle = get_choice('map_shuffle', weights, 'm' in dungeon_items)
+    ret.compassshuffle = get_choice('compass_shuffle', weights, 'c' in dungeon_items)
+    ret.keyshuffle = get_choice('smallkey_shuffle', weights,
+                                'universal' if 'u' in dungeon_items else 's' in dungeon_items)
+    ret.bigkeyshuffle = get_choice('bigkey_shuffle', weights, 'b' in dungeon_items)
+
+    entrance_shuffle = get_choice('entrance_shuffle', weights, 'vanilla')
+    if entrance_shuffle.startswith('none-'):
+        ret.shuffle = 'vanilla'
+    else:
+        ret.shuffle = entrance_shuffle if entrance_shuffle != 'none' else 'vanilla'
+
+    goal = get_choice('goals', weights, 'ganon')
+
+    ret.goal = goals[goal]
+
+    # TODO consider moving open_pyramid to an automatic variable in the core roller, set to True when
+    # fast ganon + ganon at hole
+    ret.open_pyramid = get_choice('open_pyramid', weights, 'goal')
+
+    extra_pieces = get_choice('triforce_pieces_mode', weights, 'available')
+
+    ret.triforce_pieces_required = LttPOptions.TriforcePieces.from_any(get_choice('triforce_pieces_required', weights, 20))
+
+    # sum a percentage to required
+    if extra_pieces == 'percentage':
+        percentage = max(100, float(get_choice('triforce_pieces_percentage', weights, 150))) / 100
+        ret.triforce_pieces_available = int(round(ret.triforce_pieces_required * percentage, 0))
+    # vanilla mode (specify how many pieces are)
+    elif extra_pieces == 'available':
+        ret.triforce_pieces_available = LttPOptions.TriforcePieces.from_any(
+            get_choice('triforce_pieces_available', weights, 30))
+    # required pieces + fixed extra
+    elif extra_pieces == 'extra':
+        extra_pieces = max(0, int(get_choice('triforce_pieces_extra', weights, 10)))
+        ret.triforce_pieces_available = ret.triforce_pieces_required + extra_pieces
+
+    # change minimum to required pieces to avoid problems
+    ret.triforce_pieces_available = min(max(ret.triforce_pieces_required, int(ret.triforce_pieces_available)), 90)
+
+    ret.shop_shuffle = get_choice('shop_shuffle', weights, '')
+    if not ret.shop_shuffle:
+        ret.shop_shuffle = ''
+
+    ret.mode = get_choice("mode", weights)
+    ret.retro = get_choice("retro", weights)
+
+    ret.hints = get_choice('hints', weights)
+
+    ret.swordless = get_choice('swordless', weights, False)
+
+    ret.difficulty = get_choice('item_pool', weights)
+
+    ret.item_functionality = get_choice('item_functionality', weights)
+
+    boss_shuffle = get_choice('boss_shuffle', weights)
+    ret.shufflebosses = get_plando_bosses(boss_shuffle, plando_options)
+
+    ret.enemy_shuffle = bool(get_choice('enemy_shuffle', weights, False))
+
+    ret.killable_thieves = get_choice('killable_thieves', weights, False)
+    ret.tile_shuffle = get_choice('tile_shuffle', weights, False)
+    ret.bush_shuffle = get_choice('bush_shuffle', weights, False)
+
+    ret.enemy_damage = {None: 'default',
+                        'default': 'default',
+                        'shuffled': 'shuffled',
+                        'random': 'chaos'
+                        }[get_choice('enemy_damage', weights)]
+
+    ret.enemy_health = get_choice('enemy_health', weights)
+
+    ret.shufflepots = get_choice('pot_shuffle', weights)
+
+    ret.beemizer = int(get_choice('beemizer', weights, 0))
+
+    ret.timer = {'none': False,
+                 None: False,
+                 False: False,
+                 'timed': 'timed',
+                 'timed_ohko': 'timed-ohko',
+                 'ohko': 'ohko',
+                 'timed_countdown': 'timed-countdown',
+                 'display': 'display'}[get_choice('timer', weights, False)]
+
+    ret.countdown_start_time = int(get_choice('countdown_start_time', weights, 10))
+    ret.red_clock_time = int(get_choice('red_clock_time', weights, -2))
+    ret.blue_clock_time = int(get_choice('blue_clock_time', weights, 2))
+    ret.green_clock_time = int(get_choice('green_clock_time', weights, 4))
+
+    ret.dungeon_counters = get_choice('dungeon_counters', weights, 'default')
+
+    ret.progressive = convert_to_on_off(get_choice('progressive', weights, 'on'))
+
+    ret.shuffle_prizes = get_choice('shuffle_prizes', weights, "g")
+
+    ret.required_medallions = [get_choice("misery_mire_medallion", weights, "random"),
+                               get_choice("turtle_rock_medallion", weights, "random")]
+
+    for index, medallion in enumerate(ret.required_medallions):
+        ret.required_medallions[index] = {"ether": "Ether", "quake": "Quake", "bombos": "Bombos", "random": "random"} \
+            .get(medallion.lower(), None)
+        if not ret.required_medallions[index]:
+            raise Exception(f"unknown Medallion {medallion} for {'misery mire' if index == 0 else 'turtle rock'}")
+
+    ret.glitch_boots = get_choice('glitch_boots', weights, True)
+
+    if get_choice("local_keys", weights, "l" in dungeon_items):
+        # () important for ordering of commands, without them the Big Keys section is part of the Small Key else
+        ret.local_items |= item_name_groups["Small Keys"] if ret.keyshuffle else set()
+        ret.local_items |= item_name_groups["Big Keys"] if ret.bigkeyshuffle else set()
+
+    ret.plando_items = []
+    if "items" in plando_options:
+
+        def add_plando_item(item: str, location: str):
+            if item not in item_table:
+                raise Exception(f"Could not plando item {item} as the item was not recognized")
+            if location not in location_table and location not in key_drop_data:
+                raise Exception(
+                    f"Could not plando item {item} at location {location} as the location was not recognized")
+            ret.plando_items.append(PlandoItem(item, location, location_world, from_pool, force))
+
+        options = weights.get("plando_items", [])
+        for placement in options:
+            if roll_percentage(get_choice("percentage", placement, 100)):
+                from_pool = get_choice("from_pool", placement, PlandoItem._field_defaults["from_pool"])
+                location_world = get_choice("world", placement, PlandoItem._field_defaults["world"])
+                force = str(get_choice("force", placement, PlandoItem._field_defaults["force"])).lower()
+                if "items" in placement and "locations" in placement:
+                    items = placement["items"]
+                    locations = placement["locations"]
+                    if isinstance(items, dict):
+                        item_list = []
+                        for key, value in items.items():
+                            item_list += [key] * value
+                        items = item_list
+                    if not items or not locations:
+                        raise Exception("You must specify at least one item and one location to place items.")
+                    random.shuffle(items)
+                    random.shuffle(locations)
+                    for item, location in zip(items, locations):
+                        add_plando_item(item, location)
+                else:
+                    item = get_choice("item", placement, get_choice("items", placement))
+                    location = get_choice("location", placement)
+                    add_plando_item(item, location)
+
+    ret.plando_texts = {}
+    if "texts" in plando_options:
+        tt = TextTable()
+        tt.removeUnwantedText()
+        options = weights.get("plando_texts", [])
+        for placement in options:
+            if roll_percentage(get_choice("percentage", placement, 100)):
+                at = str(get_choice("at", placement))
+                if at not in tt:
+                    raise Exception(f"No text target \"{at}\" found.")
+                ret.plando_texts[at] = str(get_choice("text", placement))
+
+    ret.plando_connections = []
+    if "connections" in plando_options:
+        options = weights.get("plando_connections", [])
+        for placement in options:
+            if roll_percentage(get_choice("percentage", placement, 100)):
+                ret.plando_connections.append(PlandoConnection(
+                    get_choice("entrance", placement),
+                    get_choice("exit", placement),
+                    get_choice("direction", placement, "both")
+                ))
+
+    ret.sprite_pool = weights.get('sprite_pool', [])
+    ret.sprite = get_choice('sprite', weights, "Link")
+    if 'random_sprite_on_event' in weights:
+        randomoneventweights = weights['random_sprite_on_event']
+        if get_choice('enabled', randomoneventweights, False):
+            ret.sprite = 'randomon'
+            ret.sprite += '-hit' if get_choice('on_hit', randomoneventweights, True) else ''
+            ret.sprite += '-enter' if get_choice('on_enter', randomoneventweights, False) else ''
+            ret.sprite += '-exit' if get_choice('on_exit', randomoneventweights, False) else ''
+            ret.sprite += '-slash' if get_choice('on_slash', randomoneventweights, False) else ''
+            ret.sprite += '-item' if get_choice('on_item', randomoneventweights, False) else ''
+            ret.sprite += '-bonk' if get_choice('on_bonk', randomoneventweights, False) else ''
+            ret.sprite = 'randomonall' if get_choice('on_everything', randomoneventweights, False) else ret.sprite
+            ret.sprite = 'randomonnone' if ret.sprite == 'randomon' else ret.sprite
+
+            if (not ret.sprite_pool or get_choice('use_weighted_sprite_pool', randomoneventweights, False)) \
+                    and 'sprite' in weights:  # Use sprite as a weighted sprite pool, if a sprite pool is not already defined.
+                for key, value in weights['sprite'].items():
+                    if key.startswith('random'):
+                        ret.sprite_pool += ['random'] * int(value)
+                    else:
+                        ret.sprite_pool += [key] * int(value)
+
+    ret.disablemusic = get_choice('disablemusic', weights, False)
+    ret.triforcehud = get_choice('triforcehud', weights, 'hide_goal')
+    ret.quickswap = get_choice('quickswap', weights, True)
+    ret.fastmenu = get_choice('menuspeed', weights, "normal")
+    ret.reduceflashing = get_choice('reduceflashing', weights, False)
+    ret.heartcolor = get_choice('heartcolor', weights, "red")
+    ret.heartbeep = convert_to_on_off(get_choice('heartbeep', weights, "normal"))
+    ret.ow_palettes = get_choice('ow_palettes', weights, "default")
+    ret.uw_palettes = get_choice('uw_palettes', weights, "default")
+    ret.hud_palettes = get_choice('hud_palettes', weights, "default")
+    ret.sword_palettes = get_choice('sword_palettes', weights, "default")
+    ret.shield_palettes = get_choice('shield_palettes', weights, "default")
+    ret.link_palettes = get_choice('link_palettes', weights, "default")
+
+
+if __name__ == '__main__':
+    main()

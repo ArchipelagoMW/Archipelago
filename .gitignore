@@ -38,6 +38,7 @@ success.txt
 output/
 Output Logs/
 /factorio/
+/WebHostLib/static/generated
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

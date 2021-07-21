@@ -21,24 +21,26 @@ class AutoWorldRegister(type):
             AutoWorldRegister.world_types[dct["game"]] = new_class
         return new_class
 
+
 class AutoLogicRegister(type):
     def __new__(cls, name, bases, dct):
         new_class = super().__new__(cls, name, bases, dct)
-        for function_name, function in dct.items():
-            if hasattr(function, "__call__"):  # callable
-                if hasattr(CollectionState, function_name):
-                    raise Exception(f"Name conflict on Logic Mixin {name} trying to overwrite {function_name}")
-                setattr(CollectionState, function_name, function)
+        for item_name, function in dct.items():
+            if not item_name.startswith("__"):
+                if hasattr(CollectionState, item_name):
+                    raise Exception(f"Name conflict on Logic Mixin {name} trying to overwrite {item_name}")
+                setattr(CollectionState, item_name, function)
         return new_class
 
-def call_single(world: MultiWorld, method_name: str, player: int):
+
+def call_single(world: MultiWorld, method_name: str, player: int, *args):
     method = getattr(world.worlds[player], method_name)
-    return method()
+    return method(*args)
 
 
-def call_all(world: MultiWorld, method_name: str):
+def call_all(world: MultiWorld, method_name: str, *args):
     for player in world.player_ids:
-        call_single(world, method_name, player)
+        call_single(world, method_name, player, *args)
 
 
 class World(metaclass=AutoWorldRegister):
@@ -93,10 +95,14 @@ class World(metaclass=AutoWorldRegister):
     def generate_basic(self):
         pass
 
-    def generate_output(self):
+    def generate_output(self, output_directory: str):
         """This method gets called from a threadpool, do not use world.random here.
         If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""
         pass
+
+    def fill_slot_data(self):
+        """Fill in the slot_data field in the Connected network package."""
+        return {}
 
     def get_required_client_version(self) -> Tuple[int, int, int]:
         return 0, 0, 3
@@ -114,6 +120,7 @@ class World(metaclass=AutoWorldRegister):
         """Create an item for this world type and player.
         Warning: this may be called with self.world = None, for example by MultiServer"""
         raise NotImplementedError
+
 
 # any methods attached to this can be used as part of CollectionState,
 # please use a prefix as all of them get clobbered together

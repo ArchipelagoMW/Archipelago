@@ -84,7 +84,7 @@ def cache_argsless(function):
     return _wrap
 
 
-def is_bundled() -> bool:
+def is_frozen() -> bool:
     return getattr(sys, 'frozen', False)
 
 
@@ -92,7 +92,7 @@ def local_path(*path):
     if local_path.cached_path:
         return os.path.join(local_path.cached_path, *path)
 
-    elif is_bundled():
+    elif is_frozen():
         if hasattr(sys, "_MEIPASS"):
             # we are running in a PyInstaller bundle
             local_path.cached_path = sys._MEIPASS  # pylint: disable=protected-access,no-member
@@ -200,27 +200,16 @@ def get_default_options() -> dict:
             "compatibility": 2,
             "log_network": 0
         },
-        "multi_mystery_options": {
+        "generator": {
             "teams": 1,
             "enemizer_path": "EnemizerCLI/EnemizerCLI.Core.exe",
             "player_files_path": "Players",
             "players": 0,
             "weights_file_path": "weights.yaml",
             "meta_file_path": "meta.yaml",
-            "pre_roll": False,
-            "create_spoiler": 1,
-            "zip_roms": 0,
-            "zip_diffs": 2,
-            "zip_apmcs": 1,
-            "zip_spoiler": 0,
-            "zip_multidata": 1,
-            "zip_format": 1,
+            "spoiler": 2,
             "glitch_triforce_room": 1,
             "race": 0,
-            "cpu_threads": 0,
-            "max_attempts": 0,
-            "take_first_working": False,
-            "keep_all_seeds": False,
             "log_output_path": "Output Logs",
             "log_level": None,
             "plando_options": "bosses",

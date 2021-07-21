@@ -1,4 +1,4 @@
-from typing import Dict, Set
+import os
 
 
 from .Items import MinecraftItem, item_table, item_frequencies
@@ -23,7 +23,6 @@ class MinecraftWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-
     def _get_mc_data(self):
         exits = ["Overworld Structure 1", "Overworld Structure 2", "Nether Structure 1", "Nether Structure 2",
                  "The End Structure"]
@@ -34,9 +33,9 @@ class MinecraftWorld(World):
             'player_name': self.world.get_player_names(self.player),
             'player_id': self.player,
             'client_version': client_version,
-            'structures': {exit: self.world.get_entrance(exit, self.player).connected_region.name for exit in exits}
+            'structures': {exit: self.world.get_entrance(exit, self.player).connected_region.name for exit in exits},
+            'race': self.world.is_race
         }
-
 
     def generate_basic(self):
 
@@ -61,21 +60,17 @@ class MinecraftWorld(World):
         completion = self.create_item("Victory")
         self.world.get_location("Ender Dragon", self.player).place_locked_item(completion)
         itempool.remove(completion)
-
         self.world.itempool += itempool
-
 
     def set_rules(self):
         set_rules(self.world, self.player)
 
-
     def create_regions(self):
         def MCRegion(region_name: str, exits=[]):
-            ret = Region(region_name, None, region_name, self.player)
-            ret.world = self.world
-            ret.locations = [ MinecraftAdvancement(self.player, loc_name, loc_data.id, ret) 
+            ret = Region(region_name, None, region_name, self.player, self.world)
+            ret.locations = [MinecraftAdvancement(self.player, loc_name, loc_data.id, ret)
                 for loc_name, loc_data in advancement_table.items() 
-                if loc_data.region == region_name ]
+                if loc_data.region == region_name]
             for exit in exits: 
                 ret.exits.append(Entrance(self.player, exit, ret))
             return ret
@@ -83,17 +78,14 @@ class MinecraftWorld(World):
         self.world.regions += [MCRegion(*r) for r in mc_regions]
         link_minecraft_structures(self.world, self.player)
 
-
-    def generate_output(self):
+    def generate_output(self, output_directory: str):
         import json
         from base64 import b64encode
-        from Utils import output_path
 
         data = self._get_mc_data()
         filename = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_names(self.player)}.apmc"
-        with open(output_path(filename), 'wb') as f:
+        with open(os.path.join(output_directory, filename), 'wb') as f:
             f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
-
 
     def fill_slot_data(self): 
         slot_data = self._get_mc_data()
@@ -101,7 +93,6 @@ class MinecraftWorld(World):
             option = getattr(self.world, option_name)[self.player]
             slot_data[option_name] = int(option.value)
         return slot_data
-
 
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]

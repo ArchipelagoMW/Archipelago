@@ -8,12 +8,8 @@ import websockets
 
 import Utils
 from MultiServer import CommandProcessor
-
 from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, color, ClientStatus
 from Utils import Version
-
-# logging note:
-# logging.* gets send to only the text console, logger.* gets send to the WebUI as well, if it's initialized.
 from worlds import network_data_package, AutoWorldRegister
 
 logger = logging.getLogger("Client")
@@ -93,7 +89,7 @@ class CommonContext():
     command_processor = ClientCommandProcessor
     game: None
 
-    def __init__(self, server_address, password, found_items: bool):
+    def __init__(self, server_address, password):
         # server state
         self.server_address = server_address
         self.password = password
@@ -104,7 +100,6 @@ class CommonContext():
         # own state
         self.finished_game = False
         self.ready = False
-        self.found_items = found_items
         self.team = None
         self.slot = None
         self.auth = None

@@ -15,7 +15,7 @@ libfolder = Path(buildfolder, "lib")
 library = Path(libfolder, "library.zip")
 print("Outputting to: " + sbuildfolder)
 
-icon = "icon.ico"
+icon = os.path.join("data", "icon.ico")
 
 if os.path.exists("X:/pw.txt"):
     print("Using signtool")
@@ -56,12 +56,12 @@ def manifest_creation(folder):
     print("Created Manifest")
 
 
-scripts = {"LttPClient.py": "ArchipelagoLttPClient",
-           "MultiMystery.py": "ArchipelagoMultiMystery",
-           "MultiServer.py": "ArchipelagoServer",
-           "Mystery.py": "ArchipelagoMystery",
-           "LttPAdjuster.py": "ArchipelagoLttPAdjuster",
-           "FactorioClient.py": "ArchipelagoFactorioClient"}
+scripts = {
+    "LttPClient.py": "ArchipelagoLttPClient",
+    "MultiServer.py": "ArchipelagoServer",
+    "Generate.py": "ArchipelagoGenerate",
+    "LttPAdjuster.py": "ArchipelagoLttPAdjuster"
+}
 
 exes = []
 
@@ -83,7 +83,7 @@ cx_Freeze.setup(
     executables=exes,
     options={
         "build_exe": {
-            "packages": ["websockets"],
+            "packages": ["websockets", "worlds"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
@@ -153,22 +153,14 @@ print("Outputting Factorio Client to: " + sbuildfolder)
 
 os.makedirs(buildfolder, exist_ok=True)
 
-scripts = {"FactorioClient.py": "ArchipelagoConsoleFactorioClient"}
 
-exes = []
-
-for script, scriptname in scripts.items():
-    exes.append(cx_Freeze.Executable(
-        script=script,
-        target_name=scriptname + ("" if sys.platform == "linux" else ".exe"),
-        icon=icon,
-    ))
-exes.append(cx_Freeze.Executable(
-    script="FactorioClientGUI.py",
-    target_name="ArchipelagoGraphicalFactorioClient" + ("" if sys.platform == "linux" else ".exe"),
+exes = [
+    cx_Freeze.Executable(
+    script="FactorioClient.py",
+    target_name="ArchipelagoFactorioClient" + ("" if sys.platform == "linux" else ".exe"),
     icon=icon,
-    base="Win32GUI"
-))
+    base="Win32GUI" if sys.platform == "win32" else None
+)]
 
 import datetime
 
@@ -181,7 +173,7 @@ cx_Freeze.setup(
     executables=exes,
     options={
         "build_exe": {
-            "packages": ["websockets", "kivy"],
+            "packages": ["websockets", "kivy", "worlds"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
