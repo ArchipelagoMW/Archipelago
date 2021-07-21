@@ -15,7 +15,7 @@ libfolder = Path(buildfolder, "lib")
 library = Path(libfolder, "library.zip")
 print("Outputting to: " + sbuildfolder)
 
-icon = "icon.ico"
+icon = os.path.join("data", "icon.ico")
 
 if os.path.exists("X:/pw.txt"):
     print("Using signtool")
