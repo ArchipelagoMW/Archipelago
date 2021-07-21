@@ -80,8 +80,6 @@ class OOTWorld(World):
 
     def generate_early(self):
         self.rom = Rom(file=Utils.get_options()['oot_options']['rom_file'])  # a ROM must be provided, cannot produce patches without it
-        self.output_type = Utils.get_options()['oot_options']['output_type']
-        assert self.output_type in ['none', 'patch', 'raw', 'compress']
         self.parser = Rule_AST_Transformer(self, self.player)
 
         for (option_name, option) in oot_options.items(): 
@@ -98,6 +96,7 @@ class OOTWorld(World):
         self.remove_from_start_inventory = []  # some items will be precollected but not in the inventory
         self.starting_items = Counter()
         self.starting_songs = False  # whether starting_items contains a song
+        self.file_hash = [self.world.random.randint(0, 31) for i in range(5)]
 
         # Incompatible option handling
         # ER and glitched logic are not compatible; glitched takes priority
@@ -521,26 +520,23 @@ class OOTWorld(World):
             
 
     # For now we will always output a patch file.
-    def generate_output(self): 
-        self.file_hash = [self.world.random.randint(0, 31) for i in range(5)]
+    def generate_output(self, output_directory: str): 
         outfile_name = f"AP_{self.world.seed_name}_P{self.player}_{self.world.get_player_names(self.player)}"
         patch_rom(self, self.rom)
         # patch cosmetics here
         self.rom.update_header()
 
         # make patch file
-        if self.output_type != 'none':
-            create_patch_file(self.rom, Utils.output_path(outfile_name+'.apz5'))
+        create_patch_file(self.rom, Utils.output_path(output_directory, outfile_name+'.apz5'))
 
         # produce uncompressed file path, compress if desired
-        if self.output_type in ['raw', 'compress']:
-            filename_uncompressed = Utils.output_path(outfile_name+'.z64')
-            filename_compressed = Utils.output_path(outfile_name+'-comp.z64')
-            self.rom.write_to_file(filename_uncompressed)
-            if self.output_type == 'compress':
-                logger.info(f"Compressing OOT ROM file for player {self.player}. This might take a while...")
-                compress_rom_file(filename_uncompressed, filename_compressed)
-                os.remove(filename_uncompressed)
+        # TODO: remove this once client can patch
+        filename_uncompressed = Utils.output_path(outfile_name+'.z64')
+        filename_compressed = Utils.output_path(outfile_name+'-comp.z64')
+        self.rom.write_to_file(filename_uncompressed)
+        logger.info(f"Compressing OOT ROM file for player {self.player}. This might take a while...")
+        compress_rom_file(filename_uncompressed, filename_compressed)
+        os.remove(filename_uncompressed)
 
         self.rom.restore()
 
