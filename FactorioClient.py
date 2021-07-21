@@ -303,6 +303,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
 
     finally:
         factorio_process.terminate()
+        factorio_process.wait(5)
 
 
 def get_info(ctx, rcon_client):
@@ -350,6 +351,7 @@ async def factorio_spinup_server(ctx: FactorioContext):
 
     finally:
         factorio_process.terminate()
+        factorio_process.wait(5)
 
 
 async def main(args):
