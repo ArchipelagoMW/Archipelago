@@ -32,7 +32,7 @@ else:
 
 gui_enabled = Utils.is_frozen() or "--nogui" not in sys.argv
 
-if gui_enabled:
+def get_kivy_app():
     os.environ["KIVY_NO_CONSOLELOG"] = "1"
     os.environ["KIVY_NO_FILELOG"] = "1"
     os.environ["KIVY_NO_ARGS"] = "1"
@@ -130,7 +130,7 @@ if gui_enabled:
 
     Config.set("input", "mouse", "mouse,disable_multitouch")
     Builder.load_file(Utils.local_path("data", "client.kv"))
-
+    return FactorioManager
 
 class FactorioCommandProcessor(ClientCommandProcessor):
     ctx: FactorioContext
@@ -357,7 +357,7 @@ async def main(args):
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
     if gui_enabled:
         input_task = None
-        ui_app = FactorioManager(ctx)
+        ui_app = get_kivy_app()(ctx)
         ui_task = asyncio.create_task(ui_app.async_run(), name="UI")
     else:
         input_task = asyncio.create_task(console_loop(ctx), name="Input")
@@ -407,18 +407,20 @@ class FactorioJSONtoTextParser(JSONtoTextParser):
 if __name__ == '__main__':
     import argparse
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Optional arguments to FactorioClient follow. "
+                                                 "Remaining arguments get passed into bound Factorio instance."
+                                                 "Refer to factorio --help for those.")
     parser.add_argument('--rcon-port', default='24242', type=int, help='Port to use to communicate with Factorio')
+    parser.add_argument('--rcon-password', help='Password to authenticate with RCON.')
     parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
     parser.add_argument('--password', default=None, help='Password of the multiworld host.')
     if not Utils.is_frozen():  # Frozen state has no cmd window in the first place
         parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
-    parser.add_argument('factorio_server_args', nargs='*', help="All remaining arguments get passed "
-                                                                "into the Factorio server startup.")
-    args = parser.parse_args()
+
+    args, rest = parser.parse_known_args()
     colorama.init()
     rcon_port = args.rcon_port
-    rcon_password = ''.join(random.choice(string.ascii_letters) for x in range(32))
+    rcon_password = args.rcon_password if args.rcon_password else ''.join(random.choice(string.ascii_letters) for x in range(32))
 
     factorio_server_logger = logging.getLogger("FactorioServer")
     options = Utils.get_options()
@@ -434,7 +436,7 @@ if __name__ == '__main__':
         else:
             raise FileNotFoundError(f"Path {executable} is not an executable file.")
 
-    server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password, *args.factorio_server_args)
+    server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password, *rest)
 
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main(args))
