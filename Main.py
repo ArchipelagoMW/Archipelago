@@ -566,7 +566,7 @@ def main(args, seed=None):
         if args.create_spoiler:  # needs spoiler.hashes to be filled, that depend on rom_futures being done
             world.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))
         logger.info('Creating final archive.')
-        with zipfile.ZipFile(output_path(f"AP_{world.seed_name}.zip"), mode="w", compression=zipfile.ZIP_LZMA,
+        with zipfile.ZipFile(output_path(f"AP_{world.seed_name}.zip"), mode="w", compression=zipfile.ZIP_DEFLATED,
                              compresslevel=9) as zf:
             for file in os.scandir(temp_dir):
                 zf.write(os.path.join(temp_dir, file), arcname=file.name)
