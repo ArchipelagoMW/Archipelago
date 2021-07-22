@@ -82,11 +82,14 @@ class World(metaclass=AutoWorldRegister):
         self.world = world
         self.player = player
 
-    # overwritable methods that get called by Main.py, sorted by execution order
+    # overridable methods that get called by Main.py, sorted by execution order
     def generate_early(self):
         pass
 
     def create_regions(self):
+        pass
+
+    def create_items(self):
         pass
 
     def set_rules(self):
@@ -100,7 +103,7 @@ class World(metaclass=AutoWorldRegister):
         If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""
         pass
 
-    def fill_slot_data(self):
+    def fill_slot_data(self) -> dict:
         """Fill in the slot_data field in the Connected network package."""
         return {}
 

@@ -25,7 +25,7 @@ class Factorio(World):
     item_name_to_id = tech_table
     location_name_to_id = base_tech_table
 
-    def generate_basic(self):
+    def create_items(self):
         for tech_name in base_tech_table:
             if self.world.progressive:
                 item_name = tech_to_progressive_lookup.get(tech_name, tech_name)
