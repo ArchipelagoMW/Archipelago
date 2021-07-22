@@ -5,11 +5,12 @@ from Options import Choice, OptionDict, Option, DefaultOnToggle
 from schema import Schema, Optional, And, Or
 
 # schema helpers
-FloatRange = lambda low,high: And(Or(int,float), lambda f: low<=f<=high)
-LuaBool = Or(bool, And(int, lambda n: n in (0,1)))
+FloatRange = lambda low, high: And(Or(int, float), lambda f: low <= f <= high)
+LuaBool = Or(bool, And(int, lambda n: n in (0, 1)))
 
 
 class MaxSciencePack(Choice):
+    """Maximum level of science pack required to complete the game."""
     option_automation_science_pack = 0
     option_logistic_science_pack = 1
     option_military_science_pack = 2
@@ -30,7 +31,9 @@ class MaxSciencePack(Choice):
     def get_max_pack(self):
         return self.get_ordered_science_packs()[self.value].replace("_", "-")
 
+
 class TechCost(Choice):
+    """How expensive are the technologies."""
     option_very_easy = 0
     option_easy = 1
     option_kind = 2
@@ -42,6 +45,7 @@ class TechCost(Choice):
 
 
 class FreeSamples(Choice):
+    """Get free items with your technologies."""
     option_none = 0
     option_single_craft = 1
     option_half_stack = 2
@@ -50,6 +54,7 @@ class FreeSamples(Choice):
 
 
 class TechTreeLayout(Choice):
+    """Selects how the tech tree nodes are interwoven."""
     option_single = 0
     option_small_diamonds = 1
     option_medium_diamonds = 2
@@ -64,6 +69,7 @@ class TechTreeLayout(Choice):
 
 
 class TechTreeInformation(Choice):
+    """How much information should be displayed in the tech tree."""
     option_none = 0
     option_advancement = 1
     option_full = 2
@@ -71,11 +77,13 @@ class TechTreeInformation(Choice):
 
 
 class RecipeTime(Choice):
+    """randomize the time it takes for any recipe to craft, this includes smelting, chemical lab, hand crafting etc."""
     option_vanilla = 0
     option_fast = 1
     option_normal = 2
     option_slow = 4
     option_chaos = 5
+
 
 # TODO: implement random
 class Progressive(Choice):
@@ -89,6 +97,7 @@ class Progressive(Choice):
 
 
 class RecipeIngredients(Choice):
+    """Select if rocket, or rocket + science pack ingredients should be random."""
     option_rocket = 0
     option_science_pack = 1
 
@@ -121,37 +130,37 @@ class FactorioWorldGen(OptionDict):
                              "pollution_restored_per_tree_damage": 10}}
     schema = Schema({
         "basic": {
-            Optional("terrain_segmentation"): FloatRange(0.166,6),
-            Optional("water"): FloatRange(0.166,6),
+            Optional("terrain_segmentation"): FloatRange(0.166, 6),
+            Optional("water"): FloatRange(0.166, 6),
             Optional("autoplace_controls"): {
                 str: {
-                    "frequency": FloatRange(0,6),
-                    "size": FloatRange(0,6),
-                    "richness": FloatRange(0.166,6)}},
-            Optional("seed"): Or(None,And(int, lambda n: n>=0)),
-            Optional("starting_area"): FloatRange(0.166,6),
+                    "frequency": FloatRange(0, 6),
+                    "size": FloatRange(0, 6),
+                    "richness": FloatRange(0.166, 6)}},
+            Optional("seed"): Or(None, And(int, lambda n: n >= 0)),
+            Optional("starting_area"): FloatRange(0.166, 6),
             Optional("peaceful_mode"): LuaBool,
             Optional("cliff_settings"): {
-                "name": str, "cliff_elevation_0": FloatRange(0,99),
-                "cliff_elevation_interval": FloatRange(0.066,241),  # 40/frequency
-                "richness": FloatRange(0,6)},
+                "name": str, "cliff_elevation_0": FloatRange(0, 99),
+                "cliff_elevation_interval": FloatRange(0.066, 241),  # 40/frequency
+                "richness": FloatRange(0, 6)},
         },
         "advanced": {
             Optional("pollution"): {
                 Optional("enabled"): LuaBool,
-                Optional("diffusion_ratio"): FloatRange(0,0.25),
-                Optional("ageing"): FloatRange(0.1,4),
-                Optional("enemy_attack_pollution_consumption_modifier"): FloatRange(0.1,4),
-                Optional("min_pollution_to_damage_trees"): FloatRange(0,9999),
-                Optional("pollution_restored_per_tree_damage"): FloatRange(0,9999)}
+                Optional("diffusion_ratio"): FloatRange(0, 0.25),
+                Optional("ageing"): FloatRange(0.1, 4),
+                Optional("enemy_attack_pollution_consumption_modifier"): FloatRange(0.1, 4),
+                Optional("min_pollution_to_damage_trees"): FloatRange(0, 9999),
+                Optional("pollution_restored_per_tree_damage"): FloatRange(0, 9999)}
         }
     })
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
         advanced = {"pollution"}
         self.value = {
-            "basic":    { key: value[key] for key in value.keys() - advanced },
-            "advanced": { key: value[key] for key in value.keys() & advanced }
+            "basic": {key: value[key] for key in value.keys() - advanced},
+            "advanced": {key: value[key] for key in value.keys() & advanced}
         }
 
     @classmethod

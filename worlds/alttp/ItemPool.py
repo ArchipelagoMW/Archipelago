@@ -222,7 +222,9 @@ for diff in {'easy', 'normal', 'hard', 'expert'}:
     )
 
 
-def generate_itempool(world, player: int):
+def generate_itempool(world):
+    player = world.player
+    world = world.world
     if world.difficulty[player] not in difficulties:
         raise NotImplementedError(f"Diffulty {world.difficulty[player]}")
     if world.goal[player] not in {'ganon', 'pedestal', 'bosses', 'triforcehunt', 'localtriforcehunt', 'icerodhunt',

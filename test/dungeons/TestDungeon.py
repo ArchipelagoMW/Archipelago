@@ -30,8 +30,8 @@ class TestDungeon(unittest.TestCase):
         connect_simple(self.world, 'Big Bomb Shop', 'Big Bomb Shop', 1)
         self.world.get_region('Menu', 1).exits = []
         self.world.swamp_patch_required[1] = True
-        set_rules(self.world, 1)
-        generate_itempool(self.world, 1)
+        self.world.worlds[1].set_rules()
+        self.world.worlds[1].create_items()
         self.world.itempool.extend(get_dungeon_item_pool(self.world))
         self.world.itempool.extend(ItemFactory(['Green Pendant', 'Red Pendant', 'Blue Pendant', 'Beat Agahnim 1', 'Beat Agahnim 2', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7'], 1))
 
