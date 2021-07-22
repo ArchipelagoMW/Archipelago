@@ -90,6 +90,11 @@ class MinecraftLogic(LogicMixin):
                    (self.has('Progressive Weapons', player, 1) and self.has('Bed', player)))
         return respawn_dragon and self.has('Progressive Weapons', player, 2) and self.has('Progressive Armor', player) and self.has('Archery', player)
 
+    def _mc_has_structure_compass(self, entrance_name: str, player: int):
+        if not self.world.structure_compasses[player]:
+            return True
+        return self.has(f"Structure Compass ({self.world.get_entrance(entrance_name, player).connected_region.name})", player)
+
 
 def set_rules(world: MultiWorld, player: int):
     def reachable_locations(state):
@@ -120,11 +125,11 @@ def set_rules(world: MultiWorld, player: int):
         (state.has('Bucket', player) or state.has('Progressive Tools', player, 3)) and 
         state._mc_has_iron_ingots(player))
     set_rule(world.get_entrance("End Portal", player), lambda state: state._mc_enter_stronghold(player) and state.has('3 Ender Pearls', player, 4))
-    set_rule(world.get_entrance("Overworld Structure 1", player), lambda state: state._mc_can_adventure(player) and state.has(get_struct_compass("Overworld Structure 1"), player))
-    set_rule(world.get_entrance("Overworld Structure 2", player), lambda state: state._mc_can_adventure(player) and state.has(get_struct_compass("Overworld Structure 2"), player))
-    set_rule(world.get_entrance("Nether Structure 1", player), lambda state: state._mc_can_adventure(player))
-    set_rule(world.get_entrance("Nether Structure 2", player), lambda state: state._mc_can_adventure(player))
-    set_rule(world.get_entrance("The End Structure", player), lambda state: state._mc_can_adventure(player))
+    set_rule(world.get_entrance("Overworld Structure 1", player), lambda state: state._mc_can_adventure(player) and state._mc_has_structure_compass("Overworld Structure 1", player))
+    set_rule(world.get_entrance("Overworld Structure 2", player), lambda state: state._mc_can_adventure(player) and state._mc_has_structure_compass("Overworld Structure 2", player))
+    set_rule(world.get_entrance("Nether Structure 1", player), lambda state: state._mc_can_adventure(player) and state._mc_has_structure_compass("Nether Structure 1", player))
+    set_rule(world.get_entrance("Nether Structure 2", player), lambda state: state._mc_can_adventure(player) and state._mc_has_structure_compass("Nether Structure 2", player))
+    set_rule(world.get_entrance("The End Structure", player), lambda state: state._mc_can_adventure(player) and state._mc_has_structure_compass("The End Structure", player))
 
     set_rule(world.get_location("Ender Dragon", player), lambda state: can_complete(state))
 

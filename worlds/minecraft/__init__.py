@@ -3,7 +3,7 @@ import os
 
 from .Items import MinecraftItem, item_table, item_frequencies
 from .Locations import MinecraftAdvancement, advancement_table, exclusion_table, events_table
-from .Regions import mc_regions, link_minecraft_structures
+from .Regions import mc_regions, link_minecraft_structures, default_connections
 from .Rules import set_rules
 from worlds.generic.Rules import exclusion_rules
 
@@ -26,8 +26,7 @@ class MinecraftWorld(World):
     data_version = 2
 
     def _get_mc_data(self):
-        exits = ["Overworld Structure 1", "Overworld Structure 2", "Nether Structure 1", "Nether Structure 2",
-                 "The End Structure"]
+        exits = [connection[0] for connection in default_connections]
         return {
             'world_seed': self.world.slot_seeds[self.player].getrandbits(32),
             # consistent and doesn't interfere with other generation
@@ -44,13 +43,15 @@ class MinecraftWorld(World):
         # Generate item pool
         itempool = []
         pool_counts = item_frequencies.copy()
-        if getattr(self.world, "bee_traps")[self.player]: # replace Rotten Flesh by bee traps
+        # Replace Rotten Flesh with bee traps
+        if self.world.bee_traps[self.player]:
             pool_counts.update({"Rotten Flesh": 0, "Bee Trap (Minecraft)": 4})
-        # Add needed structure compasses to the pool, replacing 50 XP
-        for entrance_name in ["Overworld Structure 1", "Overworld Structure 2"]:
-            struct_name = self.world.get_entrance(entrance_name, self.player).connected_region.name
-            pool_counts[f"Structure Compass ({struct_name})"] = 1
-            pool_counts["50 XP"] -= 1
+        # Add structure compasses to the pool, replacing 50 XP
+        if self.world.structure_compasses[self.player]:
+            structures = [connection[1] for connection in default_connections]
+            for struct_name in structures:
+                pool_counts[f"Structure Compass ({struct_name})"] = 1
+                pool_counts["50 XP"] -= 1
         for item_name in item_table:
             for count in range(pool_counts.get(item_name, 1)):
                 itempool.append(self.create_item(item_name))
