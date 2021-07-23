@@ -215,11 +215,12 @@ class TestAdvancements(TestMinecraft):
             ["This Boat Has Legs", False, [], ['Progressive Weapons']], 
             ["This Boat Has Legs", False, [], ['Progressive Armor', 'Shield']], 
             ["This Boat Has Legs", False, [], ['Fishing Rod']],
+            ["This Boat Has Legs", False, [], ['Saddle']],
             ["This Boat Has Legs", False, ['Progressive Tools', 'Progressive Tools'], ['Bucket', 'Progressive Tools']], 
-            ["This Boat Has Legs", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Flint and Steel', 'Bucket', 'Fishing Rod']], 
-            ["This Boat Has Legs", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Fishing Rod']],
-            ["This Boat Has Legs", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Shield', 'Flint and Steel', 'Bucket', 'Fishing Rod']], 
-            ["This Boat Has Legs", True, ['Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Shield', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Fishing Rod']],
+            ["This Boat Has Legs", True, ['Saddle', 'Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Flint and Steel', 'Bucket', 'Fishing Rod']], 
+            ["This Boat Has Legs", True, ['Saddle', 'Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Fishing Rod']],
+            ["This Boat Has Legs", True, ['Saddle', 'Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Shield', 'Flint and Steel', 'Bucket', 'Fishing Rod']], 
+            ["This Boat Has Legs", True, ['Saddle', 'Ingot Crafting', 'Progressive Tools', 'Progressive Weapons', 'Shield', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Fishing Rod']],
             ])
 
     def test_42016(self): 
@@ -1099,13 +1100,14 @@ class TestAdvancements(TestMinecraft):
             ["When Pigs Fly", False, [], ['Progressive Weapons']], 
             ["When Pigs Fly", False, [], ['Progressive Armor', 'Shield']], 
             ["When Pigs Fly", False, [], ['Fishing Rod']], 
+            ["When Pigs Fly", False, [], ['Saddle']], 
             ["When Pigs Fly", False, ['Progressive Weapons'], ['Flint and Steel', 'Progressive Weapons', 'Progressive Weapons']], 
             ["When Pigs Fly", False, ['Progressive Tools', 'Progressive Tools', 'Progressive Weapons'], ['Bucket', 'Progressive Tools', 'Progressive Weapons', 'Progressive Weapons']], 
-            ["When Pigs Fly", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Fishing Rod']], 
-            ["When Pigs Fly", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Fishing Rod']],
-            ["When Pigs Fly", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Shield', 'Fishing Rod']], 
-            ["When Pigs Fly", True, ['Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Shield', 'Fishing Rod']],
-            ["When Pigs Fly", True, ['Progressive Weapons', 'Progressive Weapons', 'Progressive Armor', 'Shield', 'Ingot Crafting', 'Progressive Tools', 'Fishing Rod']],
+            ["When Pigs Fly", True, ['Saddle', 'Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Progressive Armor', 'Fishing Rod']], 
+            ["When Pigs Fly", True, ['Saddle', 'Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Progressive Armor', 'Fishing Rod']],
+            ["When Pigs Fly", True, ['Saddle', 'Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Bucket', 'Progressive Weapons', 'Shield', 'Fishing Rod']], 
+            ["When Pigs Fly", True, ['Saddle', 'Ingot Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools', 'Progressive Weapons', 'Shield', 'Fishing Rod']],
+            ["When Pigs Fly", True, ['Saddle', 'Progressive Weapons', 'Progressive Weapons', 'Progressive Armor', 'Shield', 'Ingot Crafting', 'Progressive Tools', 'Fishing Rod']],
             ])
 
     def test_42089(self):
