@@ -94,6 +94,9 @@ Factorio:
     hard : 0
     very_hard : 0
     insane : 0
+  silo:
+    vanilla: 1
+    randomize_recipe: 0
   free_samples:
     none: 1
     single_craft: 0

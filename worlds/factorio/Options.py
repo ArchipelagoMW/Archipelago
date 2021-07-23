@@ -44,6 +44,13 @@ class TechCost(Choice):
     default = 3
 
 
+class Silo(Choice):
+    """Ingredients to craft rocket silo."""
+    option_vanilla = 0
+    option_randomize_recipe = 1
+    default = 0
+
+
 class FreeSamples(Choice):
     """Get free items with your technologies."""
     option_none = 0
@@ -242,6 +249,7 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "max_science_pack": MaxSciencePack,
     "tech_tree_layout": TechTreeLayout,
     "tech_cost": TechCost,
+    "silo": Silo,
     "free_samples": FreeSamples,
     "tech_tree_information": TechTreeInformation,
     "starting_items": FactorioStartItems,
