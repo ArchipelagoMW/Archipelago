@@ -1,0 +1,517 @@
+[
+    { "id": 33000, "game_id": "(-1234.3, -349.7, -396.0)", 
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Blood Kelp Trench Wreck - Outside Databox" },
+
+    { "id": 33001, "game_id": "(-1208.0, -349.6, -383.0)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Blood Kelp Trench Wreck - Inside Databox" },
+
+    { "id": 33002, "game_id": "(-1210.6, -340.7, -393.4)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Blood Kelp Trench Wreck - PDA" },
+
+    { "id": 33003, "game_id": "(903.8, -220.3, 590.9)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Bulb Zone West Wreck - Outside Databox" },
+
+    { "id": 33004, "game_id": "(910.9, -201.8, 623.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Bulb Zone West Wreck - Under Databox" },
+
+    { "id": 33005, "game_id": "(914.9, -202.1, 611.8)",
+      "need_laser_cutter": true, "can_slip_through": false,
+      "name": "Bulb Zone West Wreck - Inside Databox" },
+
+    { "id": 33006, "game_id": "(912.6, -202.0, 609.5)",
+      "need_laser_cutter": true, "can_slip_through": false,
+      "name": "Bulb Zone West Wreck - PDA" },
+
+    { "id": 33007, "game_id": "(1327.1, -234.9, 575.8)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Bulb Zone East Wreck - Databox" },
+
+    { "id": 33008, "game_id": "(-1407.7, -344.2, 721.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Dunes North Wreck - Outside Databox" },
+
+    { "id": 33009, "game_id": "(-1393.9, -329.7, 733.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Dunes North Wreck - Office Databox" },
+
+    { "id": 33010, "game_id": "(-1396.3, -330.8, 730.0)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Dunes Wreck - PDA" },
+
+    { "id": 33011, "game_id": "(-1409.8, -332.4, 706.9)",
+      "need_laser_cutter": true, "can_slip_through": false,
+      "name": "Dunes North Wreck - Cargo Databox" },
+
+    { "id": 33012, "game_id": "(-1626.2, -357.5, 99.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Dunes West Wreck - Databox" },
+
+    { "id": 33013, "game_id": "(-1196.3, -223.0, 12.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Dunes East Wreck - Outside Databox" },
+
+    { "id": 33014, "game_id": "(-1206.4, -225.6, 4.0)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Dunes East Wreck - Inside Databox" },
+
+    { "id": 33015, "game_id": "(-269.7, -262.8, -764.3)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Grand Reef North Wreck - Outside Databox" },
+
+    { "id": 33016, "game_id": "(-285.8, -240.2, -786.5)",
+      "need_laser_cutter": true, "can_slip_through": false,
+      "name": "Grand Reef North Wreck - Elevator Databox" },
+
+    { "id": 33017, "game_id": "(-285.2, -262.4, -788.4)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Grand Reef North Wreck - Bottom Databox" },
+
+    { "id": 33018, "game_id": "(-272.5, -254.7, -788.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Grand Reef North Wreck - Hangar PDA" },
+
+    { "id": 33019, "game_id": "(-850.9, -473.2, -1414.6)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Grand Reef South Wreck - Trench Databox" },
+
+    { "id": 33020, "game_id": "(-889.4, -433.8, -1424.8)",
+      "need_laser_cutter": true, "can_slip_through": false,
+      "name": "Grand Reef South Wreck - Comms Databox" },
+
+    { "id": 33021, "game_id": "(-862.4, -437.5, -1444.1)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Grand Reef South Wreck - Outside Databox" },
+
+    { "id": 33022, "game_id": "(-887.9, -446.0, -1422.7)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Grand Reef South Wreck - PDA" },
+
+    { "id": 33023, "game_id": "(-23.3, -105.8, -604.2)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Grassy Plateaus South Wreck - Databox" },
+
+    { "id": 33024, "game_id": "(-27.3, -106.8, -607.2)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Grassy Plateaus South Wreck - PDA" },
+
+    { "id": 33025, "game_id": "(313.9, -91.8, 432.6)",
+      "need_laser_cutter": true, "can_slip_through": true,
+      "name": "Grassy Plateaus East Wreck - Breach Databox" },
+
+    { "id": 33026, "game_id": "(319.4, -104.3, 441.5)",
+      "need_laser_cutter": true, "can_slip_through": true,
+      "name": "Grassy Plateaus East Wreck - Hangar Databox" },
+
+    { "id": 33027, "game_id": "(-632.3, -75.0, -8.9)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Grassy Plateaus West Wreck - Locker PDA" },
+
+    { "id": 33028, "game_id": "(-664.4, -97.8, -8.0)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Grassy Plateaus West Wreck - Data Terminal" },
+
+    { "id": 33029, "game_id": "(-421.4, -107.8, -266.5)",
+      "need_laser_cutter": true, "can_slip_through": false,
+      "name": "Grassy Plateaus West Wreck - Databox" },
+
+    { "id": 33030, "game_id": "(-44.0, -29.1, -403.6)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Safe Shallows Wreck - PDA" },
+
+    { "id": 33031, "game_id": "(-317.1, -79.0, 248.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Kelp Forest Wreck - Databox" },
+
+    { "id": 33032, "game_id": "(63.2, -38.5, 382.9)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Kelp Forest Wreck - PDA" },
+
+    { "id": 33033, "game_id": "(740.3, -389.2, 1179.8)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Mountains West Wreck - Outside Databox" },
+
+    { "id": 33034, "game_id": "(703.7, -365.9, 1199.3)",
+      "need_laser_cutter": true, "can_slip_through": false,
+      "name": "Mountains West Wreck - Data Terminal" },
+
+    { "id": 33035, "game_id": "(698.2, -350.8, 1186.9)",
+      "need_laser_cutter": true, "can_slip_through": false,
+      "name": "Mountains West Wreck - Hangar Databox" },
+
+    { "id": 33036, "game_id": "(676.3, -343.6, 1204.6)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Mountains West Wreck - Office Databox" },
+
+    { "id": 33037, "game_id": "(1068.5, -283.4, 1345.3)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Mountains East Wreck - Comms Databox" },
+
+    { "id": 33038, "game_id": "(1075.7, -288.9, 1321.8)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Mountains East Wreck - Outside Databox" },
+
+    { "id": 33039, "game_id": "(-655.1, -109.6, 791.0)",
+      "need_laser_cutter": true, "can_slip_through": false,
+      "name": "Northwestern Mushroom Forest Wreck - Cargo Databox" },
+
+    { "id": 33040, "game_id": "(-663.4, -111.9, 777.9)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Northwestern Mushroom Forest Wreck - Office Databox" },
+
+    { "id": 33041, "game_id": "(-662.2, -113.4, 777.7)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Northwestern Mushroom Forest Wreck - PDA" },
+
+    { "id": 33042, "game_id": "(-1161.1, -191.7, -758.3)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Sea Treader's Path Wreck - Outside Databox" },
+
+    { "id": 33043, "game_id": "(-1129.5, -155.2, -729.3)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Sea Treader's Path Wreck - Hangar Databox" },
+
+    { "id": 33044, "game_id": "(-1115.9, -175.3, -724.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Sea Treader's Path Wreck - Lobby Databox" },
+
+    { "id": 33045, "game_id": "(-1136.8, -157.0, -734.6)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Sea Treader's Path Wreck - PDA" },
+
+    { "id": 33046, "game_id": "(-789.8, -216.1, -711.0)",
+      "need_laser_cutter": true, "can_slip_through": false,
+      "name": "Sparse Reef Wreck - Locker Databox" },
+
+    { "id": 33047, "game_id": "(-810.7, -209.3, -685.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Sparse Reef Wreck - Outside Databox" },
+
+    { "id": 33048, "game_id": "(-795.5, -204.1, -774.7)",
+      "need_laser_cutter": true, "can_slip_through": false,
+      "name": "Sparse Reef Wreck - Lab Databox" },
+
+    { "id": 33049, "game_id": "(-170.8, -187.6, 880.7)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Underwater Islands Wreck - Outside Databox" },
+
+    { "id": 33050, "game_id": "(-138.4, -193.6, 888.7)",
+      "need_laser_cutter": true, "can_slip_through": false,
+      "name": "Underwater Islands Wreck - Hangar Databox" },
+
+    { "id": 33051, "game_id": "(-130.7, -193.2, 883.3)",
+      "need_laser_cutter": true, "can_slip_through": false,
+      "name": "Underwater Islands Wreck - Data Terminal" },
+
+    { "id": 33052, "game_id": "(-137.8, -193.4, 879.4)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Underwater Islands Wreck - Cable Databox" },
+
+    { "id": 33053, "game_id": "(-124.4, -200.7, 853.0)",
+      "need_laser_cutter": false, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Underwater Islands Wreck - Pipes Databox 1" },
+
+    { "id": 33054, "game_id": "(-126.8, -201.1, 852.1)",
+      "need_laser_cutter": false, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Underwater Islands Wreck - Pipes Databox 2" },
+
+    { "id": 33055, "game_id": "(-643.8, -509.9, -941.9)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Deep Grand Reef - Bedroom Databox" },
+
+    { "id": 33056, "game_id": "(-635.1, -502.7, -951.4)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Deep Grand Reef - Observatory Databox" },
+
+    { "id": 33057, "game_id": "(-645.8, -508.7, -943.0)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Deep Grand Reef - Bedroom PDA" },
+
+    { "id": 33058, "game_id": "(-630.5, -511.1, -936.1)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Deep Grand Reef - Outside PDA" },
+
+    { "id": 33059, "game_id": "(-647.7, -502.6, -935.8)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Deep Grand Reef - Observatory PDA" },
+
+    { "id": 33060, "game_id": "(-639.6, -505.9, -946.6)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Deep Grand Reef - Lab PDA" },
+
+    { "id": 33061, "game_id": "(-707.2, 0.5, -1096.7)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Floating Island - Lake PDA" },
+
+    { "id": 33062, "game_id": "(-765.7, 17.6, -1116.4)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Floating Island - Databox" },
+
+    { "id": 33063, "game_id": "(-754.9, 14.6, -1108.9)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Floating Island - Room PDA" },
+
+    { "id": 33064, "game_id": "(-765.3, 14.1, -1115.0)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Floating Island - Green Wall PDA" },
+
+    { "id": 33065, "game_id": "(-758.6, 14.1, -1111.3)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Floating Island - Corridor PDA" },
+
+    { "id": 33066, "game_id": "(-805.4, 76.9, -1055.7)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Floating Island - North Observatory PDA" },
+
+    { "id": 33067, "game_id": "(-715.9, 75.4, -1168.8)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Floating Island - South Observatory PDA" },
+
+    { "id": 33068, "game_id": "(-540.5, -250.8, -83.4)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Jellyshroom Cave - PDA" },
+
+    { "id": 33069, "game_id": "(110.6, -264.9, -369.0)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Jellyshroom Cave - Bedroom Databox" },
+
+    { "id": 33070, "game_id": "(80.6, -268.6, -358.3)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Jellyshroom Cave - Detached PDA" },
+
+    { "id": 33071, "game_id": "(78.2, -265.0, -373.4)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Jellyshroom Cave - Office PDA" },
+
+    { "id": 33072, "game_id": "(85.1, -264.1, -372.8)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Jellyshroom Cave - Locker PDA" },
+
+    { "id": 33073, "game_id": "(112.3, -264.9, -369.3)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Jellyshroom Cave - Bedroom PDA" },
+
+    { "id": 33074, "game_id": "(95.5, -258.9, -366.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Degasi Seabase - Jellyshroom Cave - Observatory PDA" },
+
+    { "id": 33075, "game_id": "(-483.6, -504.7, 1326.6)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 2 - Databox" },
+
+    { "id": 33076, "game_id": "(-481.4, -503.6, 1324.1)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 2 - PDA" },
+
+    { "id": 33077, "game_id": "(-34.2, -22.4, 410.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 3 - Databox" },
+
+    { "id": 33078, "game_id": "(-33.8, -22.5, 408.8)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 3 - PDA" },
+
+    { "id": 33079, "game_id": "(712.4, -3.4, 160.8)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 4 - Databox" },
+      
+    { "id": 33080, "game_id": "(712.0, -3.5, 161.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 4 - PDA" },
+
+    { "id": 33081, "game_id": "(358.7, -117.1, 306.8)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 6 - Databox" },
+
+    { "id": 33082, "game_id": "(361.8, -116.2, 309.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 6 - Inside PDA" },
+
+    { "id": 33083, "game_id": "(359.9, -117.0, 312.1)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 6 - Outside PDA" },
+
+    { "id": 33084, "game_id": "(-56.0, -182.0, -1039.0)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 7 - PDA" },
+
+    { "id": 33085, "game_id": "(1119.5, -271.7, 561.7)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 12 - Databox" },
+
+    { "id": 33086, "game_id": "(1116.1, -271.3, 566.9)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 12 - PDA" },
+
+    { "id": 33087, "game_id": "(-926.4, -185.2, 501.8)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 13 - Databox" },
+
+    { "id": 33088, "game_id": "(-926.8, -184.4, 506.6)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 13 - PDA" },
+
+    { "id": 33089, "game_id": "(-514.5, -98.1, -56.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 17 - PDA" },
+
+    { "id": 33090, "game_id": "(-809.8, -302.2, -876.9)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 19 - Databox" },
+
+    { "id": 33091, "game_id": "(-806.1, -294.1, -866.0)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 19 - Outside PDA" },
+
+    { "id": 33092, "game_id": "(-810.5, -299.4, -873.1)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lifepod 19 - Inside PDA" },
+
+    { "id": 33093, "game_id": "(903.5, -0.2, 16.1)",
+      "need_laser_cutter": false, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora Seamoth Bay - Upgrade Console" },
+
+    { "id": 33094, "game_id": "(872.5, 2.7, -0.7)",
+      "need_laser_cutter": false, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora Drive Room - Upgrade Console" },
+
+    { "id": 33095, "game_id": "(991.6, 3.2, -31.0)",
+      "need_laser_cutter": false, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora Prawn Suit Bay - Upgrade Console" },
+
+    { "id": 33096, "game_id": "(952.1, 41.2, 113.9)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Aurora - Office PDA" },
+
+    { "id": 33097, "game_id": "(977.2, 39.1, 83.0)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Aurora - Corridor PDA" },
+
+    { "id": 33098, "game_id": "(954.9, 11.2, 3.4)",
+      "need_laser_cutter": false, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora - Cargo Bay PDA" },
+
+    { "id": 33099, "game_id": "(907.1, -1.5, 15.3)",
+      "need_laser_cutter": false, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora - Seamoth Bay PDA" },
+
+    { "id": 33100, "game_id": "(951.8, -2.3, -34.7)",
+      "need_laser_cutter": true, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora - Medkit Locker PDA" },
+
+    { "id": 33101, "game_id": "(952.0, -3.7, -23.4)",
+      "need_laser_cutter": true, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora - Locker PDA" },
+
+    { "id": 33102, "game_id": "(986.5, 9.6, -48.6)",
+      "need_laser_cutter": true, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora - Canteen PDA" },
+
+    { "id": 33103, "game_id": "(951.3, 11.2, -51.0)",
+      "need_laser_cutter": true, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora - Cabin 4 PDA" },
+
+    { "id": 33104, "game_id": "(967.1, 10.4, -47.4)",
+      "need_laser_cutter": true, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora - Cabin 7 PDA" },
+
+    { "id": 33105, "game_id": "(964.1, 11.1, -61.9)",
+      "need_laser_cutter": true, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora - Cabin 1 PDA" },
+
+    { "id": 33106, "game_id": "(971.2, 10.8, -70.4)",
+      "need_laser_cutter": true, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora - Captain PDA" },
+
+    { "id": 33107, "game_id": "(1033.6, -8.5, 16.2)",
+      "need_laser_cutter": false, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora - Ring PDA" },
+
+    { "id": 33108, "game_id": "(1032.5, -7.8, 32.4)",
+      "need_laser_cutter": false, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora - Lab PDA" },
+
+    { "id": 33109, "game_id": "(945.8, 40.8, 115.1)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Aurora - Office Data Terminal" },
+
+    { "id": 33110, "game_id": "(974.8, 10.0, -77.0)",
+      "need_laser_cutter": true, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora - Captain Data Terminal" },
+
+    { "id": 33111, "game_id": "(1040.8, -11.4, -3.4)",
+      "need_laser_cutter": true, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora - Battery Room Data Terminal" },
+
+    { "id": 33112, "game_id": "(1029.5, -8.7, 35.9)",
+      "need_laser_cutter": false, "can_slip_through": false, "need_propulsion_cannon": true,
+      "name": "Aurora - Lab Data Terminal" },
+
+    { "id": 33113, "game_id": "(432.2, 3.0, 1193.2)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Quarantine Enforcement Platform's - Upper Alien Data Terminal" },
+
+    { "id": 33114, "game_id": "(474.4, -4.5, 1224.4)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Quarantine Enforcement Platform's - Mid Alien Data Terminal" },
+
+    { "id": 33115, "game_id": "(-1224.2, -400.4, 1057.9)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Dunes Sanctuary - Alien Data Terminal" },
+
+    { "id": 33116, "game_id": "(-895.5, -311.6, -838.1)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Deep Sparse Reef Sanctuary - Alien Data Terminal" },
+
+    { "id": 33117, "game_id": "(-642.9, -563.5, 1485.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Northern Blood Kelp Zone Sanctuary - Alien Data Terminal" },
+
+    { "id": 33118, "game_id": "(-1112.3, -687.3, -695.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Lost River Laboratory Cache - Alien Data Terminal" },
+
+    { "id": 33119, "game_id": "(-280.2, -804.3, 305.1)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Disease Research Facility - Upper Alien Data Terminal" },
+
+    { "id": 33120, "game_id": "(-267.9, -806.6, 250.0)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Disease Research Facility - Mid Alien Data Terminal" },
+
+    { "id": 33121, "game_id": "(-286.2, -815.6, 297.8)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Disease Research Facility - Lower Alien Data Terminal" },
+
+    { "id": 33122, "game_id": "(-71.3, -1227.2, 104.8)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Alien Thermal Plant - Entrance Alien Data Terminal" },
+
+    { "id": 33123, "game_id": "(-38.7, -1226.6, 111.8)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Alien Thermal Plant - Green Alien Data Terminal" },
+
+    { "id": 33124, "game_id": "(-30.4, -1220.3, 111.8)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Alien Thermal Plant - Yelow Alien Data Terminal" },
+
+    { "id": 33125, "game_id": "(245.8, -1430.6, -311.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Primary Containment Facility's Antechamber - Alien Data Terminal" },
+
+    { "id": 33126, "game_id": "(165.5, -1442.4, -385.8)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Primary Containment Facility's Egg Laboratory - Alien Data Terminal" },
+
+    { "id": 33127, "game_id": "(348.7, -1443.5, -291.9)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Primary Containment Facility's Pipe Room - Alien Data Terminal" },
+
+    { "id": 33128, "game_id": "(-641.8, -111.3, -19.7)",
+      "need_laser_cutter": true, "can_slip_through": false,
+      "name": "Grassy Plateaus West Wreck - Beam PDA" }
+]
