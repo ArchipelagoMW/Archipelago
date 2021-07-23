@@ -82,12 +82,14 @@ class Recipe(FactorioElement):
     category: str
     ingredients: Dict[str, int]
     products: Dict[str, int]
+    energy: float
 
-    def __init__(self, name: str, category: str, ingredients: Dict[str, int], products: Dict[str, int]):
+    def __init__(self, name: str, category: str, ingredients: Dict[str, int], products: Dict[str, int], energy: float):
         self.name = name
         self.category = category
         self.ingredients = ingredients
         self.products = products
+        self.energy = energy
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.name})"
@@ -125,6 +127,19 @@ class Recipe(FactorioElement):
                 ingredients[ingredient] += cost
         return ingredients
 
+    @property
+    def total_energy(self) -> float:
+        """Total required energy (crafting time) for single craft"""
+        # TODO: multiply mining energy by 2 since drill has 0.5 speed
+        total_energy = self.energy
+        for ingredient, cost in self.ingredients.items():
+            if ingredient in all_product_sources:
+                for ingredient_recipe in all_product_sources[ingredient]: # FIXME: this may select the wrong recipe
+                    craft_count = max((n for name, n in ingredient_recipe.products.items() if name == ingredient))
+                    total_energy += ingredient_recipe.total_energy / craft_count * cost
+                    break
+        return total_energy
+
 class Machine(FactorioElement):
     def __init__(self, name, categories):
         self.name: str = name
@@ -151,13 +166,14 @@ del (raw)
 recipes = {}
 all_product_sources: Dict[str, Set[Recipe]] = {"character": set()}
 # add uranium mining to logic graph. TODO: add to automatic extractor for mod support
-raw_recipes["uranium-ore"] = {"ingredients": {"sulfuric-acid": 1}, "products": {"uranium-ore": 1}, "category": "mining"}
+raw_recipes["uranium-ore"] = {"ingredients": {"sulfuric-acid": 1}, "products": {"uranium-ore": 1}, "category": "mining", "energy": 2}
 
 for recipe_name, recipe_data in raw_recipes.items():
     # example:
     # "accumulator":{"ingredients":{"iron-plate":2,"battery":5},"products":{"accumulator":1},"category":"crafting"}
-
-    recipe = Recipe(recipe_name, recipe_data["category"], recipe_data["ingredients"], recipe_data["products"])
+    # FIXME: add mining?
+    recipe = Recipe(recipe_name, recipe_data["category"], recipe_data["ingredients"],
+                    recipe_data["products"], recipe_data["energy"] if "energy" in recipe_data else 0)
     recipes[recipe_name] = recipe
     if set(recipe.products).isdisjoint(
             # prevents loop recipes like uranium centrifuging
@@ -260,9 +276,11 @@ for ingredient_name in all_ingredient_names:
 
 
 @functools.lru_cache(10)
-def get_rocket_requirements(recipe: Recipe) -> Set[str]:
-    techs = recursively_get_unlocking_technologies("rocket-silo")
-    for ingredient in recipe.ingredients:
+def get_rocket_requirements(silo_recipe: Recipe, part_recipe: Recipe) -> Set[str]:
+    techs = set()
+    for ingredient in silo_recipe.ingredients:
+        techs |= recursively_get_unlocking_technologies(ingredient)
+    for ingredient in part_recipe.ingredients:
         techs |= recursively_get_unlocking_technologies(ingredient)
     return {tech.name for tech in techs}
 
