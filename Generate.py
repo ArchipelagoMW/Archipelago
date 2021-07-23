@@ -212,7 +212,7 @@ def main(args=None, callback=ERmain):
                     logging.debug(f"No player settings defined for option '{option}'")
         if args.outputpath:
             os.makedirs(args.outputpath, exist_ok=True)
-        with open(os.path.join(args.outputpath if args.outputpath else ".", f"mystery_result_{seed}.yaml"), "wt") as f:
+        with open(os.path.join(args.outputpath if args.outputpath else ".", f"generate_{seed_name}.yaml"), "wt") as f:
             yaml.dump(important, f)
 
     callback(erargs, seed)

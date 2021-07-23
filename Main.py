@@ -180,7 +180,9 @@ def main(args, seed=None):
 
             if not world.keyshuffle[player]:
                 world.non_local_items[player] -= item_name_groups['Small Keys']
-
+            # This could probably use a more elegant solution.
+            elif world.keyshuffle[player] == True and world.mode[player] == "Standard":
+                world.local_items[player].add("Small Key (Hyrule Castle)")
             if not world.bigkeyshuffle[player]:
                 world.non_local_items[player] -= item_name_groups['Big Keys']
 

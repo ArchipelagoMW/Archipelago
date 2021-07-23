@@ -355,7 +355,8 @@ def balance_multiworld_progression(world: MultiWorld):
             if world.has_beaten_game(state):
                 break
             elif not sphere_locations:
-                raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
+                logging.warning("Progression Balancing ran out of paths.")
+                break
 
 
 def swap_location_item(location_1: Location, location_2: Location, check_locked=True):
