@@ -107,5 +107,5 @@ class MinecraftWorld(World):
         item = MinecraftItem(name, item_data.progression, item_data.code, self.player)
         nonexcluded_items = ["Sharpness III Book", "Infinity Book", "Looting III Book"]
         if name in nonexcluded_items:  # prevent books from going on excluded locations
-            item.can_be_excluded = False
+            item.never_exclude = True
         return item
