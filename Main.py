@@ -19,6 +19,7 @@ from worlds.alttp.ItemPool import difficulties
 from Utils import output_path, get_options, __version__, version_tuple
 from worlds.generic.Rules import locality_rules, exclusion_rules
 from worlds import AutoWorld
+from variaRandomizer.logic.logic import Logic
 
 seeddigits = 20
 
@@ -45,7 +46,7 @@ def main(args, seed=None):
         output_path.cached_path = args.outputpath
 
     start = time.perf_counter()
-
+    Logic.factory('vanilla')
     # initialize the world
     world = MultiWorld(args.multi)
 
