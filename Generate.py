@@ -9,11 +9,11 @@ from collections import Counter
 import string
 
 import ModuleUpdate
-from worlds.alttp import Options as LttPOptions
-from worlds.generic import PlandoItem, PlandoConnection
 
 ModuleUpdate.update()
 
+from worlds.alttp import Options as LttPOptions
+from worlds.generic import PlandoItem, PlandoConnection
 from Utils import parse_yaml, version_tuple, __version__, tuplize_version, get_options
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
@@ -125,7 +125,7 @@ def main(args=None, callback=ERmain):
     erargs.create_spoiler = args.spoiler > 0
     erargs.glitch_triforce = options["generator"]["glitch_triforce_room"]
     erargs.race = args.race
-    erargs.skip_playthrough = args.spoiler == 0
+    erargs.skip_playthrough = args.spoiler < 2
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
     erargs.teams = args.teams

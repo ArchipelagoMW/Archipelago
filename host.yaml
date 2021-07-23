@@ -14,7 +14,7 @@ server_options:
   loglevel: "info"
   # Allows for clients to log on and manage the server.  If this is null, no remote administration is possible.
   server_password: null
-  # Disallow !getitem. Old /getitem cannot be blocked this way
+  # Disallow !getitem.
   disable_item_cheat: false
   # Client hint system
   # Points given to a player for each acquired item in their world

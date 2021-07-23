@@ -1,7 +1,7 @@
 #define sourcepath "build\exe.win-amd64-3.9\"
 #define MyAppName "Archipelago"
 #define MyAppExeName "ArchipelagoLttPClient.exe"
-#define MyAppIcon "icon.ico"
+#define MyAppIcon "data/icon.ico"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -67,7 +67,7 @@ Root: HKCR; Subkey: "{#MyAppName}patch\shell\open\command";  ValueData: """{app}
 Root: HKCR; Subkey: ".archipelago";                                ValueData: "{#MyAppName}multidata";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""
 Root: HKCR; Subkey: "{#MyAppName}multidata";                     ValueData: "Archipelago Server Data";       Flags: uninsdeletekey;   ValueType: string;  ValueName: ""
 Root: HKCR; Subkey: "{#MyAppName}multidata\DefaultIcon";         ValueData: "{app}\ArchipelagoServer.exe,0";                           ValueType: string;  ValueName: ""
-Root: HKCR; Subkey: "{#MyAppName}multidata\shell\open\command";  ValueData: """{app}\ArchipelagoServer.exe"" --multidata ""%1""";                  ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: "{#MyAppName}multidata\shell\open\command";  ValueData: """{app}\ArchipelagoServer.exe"" ""%1""";                  ValueType: string;  ValueName: ""
 
 
 

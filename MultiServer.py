@@ -1322,11 +1322,11 @@ async def console(ctx: Context):
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     defaults = Utils.get_options()["server_options"]
+    parser.add_argument('multidata', nargs="?", default=defaults["multidata"])
     parser.add_argument('--host', default=defaults["host"])
     parser.add_argument('--port', default=defaults["port"], type=int)
     parser.add_argument('--server_password', default=defaults["server_password"])
     parser.add_argument('--password', default=defaults["password"])
-    parser.add_argument('--multidata', default=defaults["multidata"])
     parser.add_argument('--savefile', default=defaults["savefile"])
     parser.add_argument('--disable_save', default=defaults["disable_save"], action='store_true')
     parser.add_argument('--loglevel', default=defaults["loglevel"],
@@ -1408,7 +1408,20 @@ async def main(args: argparse.Namespace):
             import tkinter.filedialog
             root = tkinter.Tk()
             root.withdraw()
-            data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.archipelago"),))
+            data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.archipelago, *.zip"),))
+
+        if data_filename.endswith(".zip"):
+            import zipfile
+            with zipfile.ZipFile(data_filename) as zf:
+                for file in zf.namelist():
+                    if file.endswith(".archipelago"):
+                        import os
+                        data_filename = os.path.join(os.path.dirname(data_filename), file)
+                        with open(data_filename, "wb") as f:
+                            f.write(zf.read(file))
+                        break
+                else:
+                    raise Exception("No .archipelago found in archive.")
 
         ctx.load(data_filename, args.use_embedded_options)
 
