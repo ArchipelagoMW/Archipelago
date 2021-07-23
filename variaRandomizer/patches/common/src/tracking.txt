@@ -1,0 +1,27 @@
+Stat tracking ID's (32 bit values are stored low word first)
+0-1         RTA Frames
+2           Number of door transitions entered
+3-4         Frames spent in door transitions
+5-6         Frames spent aligning doors
+7-8         Time spent in Ceres
+9-10        Time spent in Crateria/Blue Brinstar
+11-12       Time spent in Green/Pink Brinstar
+13-14	    Time spent in Red Brinstar
+15-16       Time spent in Wrecked Ship
+17-18	    Time spent in Kraid's Lair
+19-20       Time spent in Upper Norfair
+21-22       Time spent in Crocomire
+23-24       Time spent in Lower Norfair
+25-26       Time spent in West Maridia
+27-28       Time spent in East Maridia
+29-30       Time spent in Tourian 
+31          Number of uncharged shots
+32          Number of charged shots
+33          Number of SBAs
+34          Number of missiles used
+35          Number of supers used
+36          Number of PBs used
+37          Number of bombs laid
+38-39	    Time spent in pause
+40          Deaths
+41          Resets

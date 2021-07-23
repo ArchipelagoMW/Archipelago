@@ -10,6 +10,9 @@ from typing import List, Dict, Optional, Set, Iterable, Union, Any
 import secrets
 import random
 
+from variaRandomizer.logic.smboolmanager import SMBoolManager
+from variaRandomizer.logic.logic import Logic
+Logic.factory('vanilla')
 
 class MultiWorld():
     debug_types = False
@@ -158,6 +161,10 @@ class MultiWorld():
     def get_game_players(self, game_name: str):
         return tuple(player for player in self.player_ids if self.game[player] == game_name)
 
+    @functools.cached_property
+    def sm_player_ids(self):
+        return tuple(player for player in range(1, self.players + 1) if self.game[player] == "Super Metroid")
+
     def get_name_string_for_object(self, obj) -> str:
         return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_name(obj.player)})'
 
@@ -294,7 +301,7 @@ class MultiWorld():
 
     def get_locations(self) -> list:
         if self._cached_locations is None:
-            self._cached_locations = [location for region in self.regions for location in region.locations]
+            self._cached_locations = list(set([location for region in self.regions for location in region.locations]))
         return self._cached_locations
 
     def clear_location_cache(self):
@@ -461,9 +468,12 @@ class MultiWorld():
         return False
 
 
-class CollectionState(object):
+class CollectionState(SMBoolManager):
 
     def __init__(self, parent: MultiWorld):
+        super().__init__()
+        Logic.factory('vanilla')
+        self.smbm = {player: SMBoolManager() for player in range(1, parent.players + 1)}
         self.prog_items = Counter()
         self.world = parent
         self.reachable_regions = {player: set() for player in range(1, parent.players + 1)}
@@ -1002,6 +1012,12 @@ class Location():
 
     def __lt__(self, other):
         return (self.player, self.name) < (other.player, other.name)
+
+    def __eq__(self, other):
+        if isinstance(other, Location):
+            return ((self.name == other.name) and (self.player == other.player))
+        else:
+            return False
 
     @property
     def native_item(self) -> bool:

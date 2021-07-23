@@ -137,6 +137,9 @@ def distribute_items_restrictive(world: MultiWorld, gftower_trash=False, fill_lo
             key=lambda item: 1 if item.name == 'Small Key (Hyrule Castle)' and
                                   item.player in standard_keyshuffle_players else 0)
 
+    progitempool.sort(
+        key=lambda item: 1 if (item.name == 'Morph Ball' or item.name == 'Speed Booster') else 0)
+                                
     world.random.shuffle(fill_locations)
     fill_restrictive(world, world.state, fill_locations, progitempool)
 
