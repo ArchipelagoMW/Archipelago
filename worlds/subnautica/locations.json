@@ -513,5 +513,9 @@
 
     { "id": 33128, "game_id": "(-641.8, -111.3, -19.7)",
       "need_laser_cutter": true, "can_slip_through": false,
-      "name": "Grassy Plateaus West Wreck - Beam PDA" }
+      "name": "Grassy Plateaus West Wreck - Beam PDA" },
+
+    { "id": 33129, "game_id": "(-748.9, 14.4, -1179.5)",
+      "need_laser_cutter": false, "can_slip_through": false,
+      "name": "Floating Island - Cave Entrance PDA" }
 ]
