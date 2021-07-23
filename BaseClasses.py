@@ -1104,7 +1104,7 @@ class Item():
     world: Optional[MultiWorld] = None
     game: str = "Generic"
     type: str = None
-    can_be_excluded: bool = True  # change manually if you want some non-advancement item to not be excluded
+    never_exclude = False  # change manually to ensure that a specific nonprogression item never goes on an excluded location
     pedestal_credit_text: str = "and the Unknown Item"
     sickkid_credit_text: Optional[str] = None
     magicshop_credit_text: Optional[str] = None
@@ -1117,8 +1117,6 @@ class Item():
         self.advancement = advancement
         self.player = player
         self.code = code
-
-        self.can_be_excluded = not advancement
 
     @property
     def hint_text(self):
@@ -1138,10 +1136,6 @@ class Item():
 
     def __hash__(self):
         return hash((self.name, self.player))
-
-    @property
-    def can_exclude(self) -> bool: 
-        return not (self.advancement or self.smallkey or self.bigkey) and self.can_be_excluded
 
     @property
     def crystal(self) -> bool:

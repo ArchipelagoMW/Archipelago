@@ -85,7 +85,7 @@ def distribute_items_restrictive(world: MultiWorld, gftower_trash=False, fill_lo
     for item in world.itempool:
         if item.advancement:
             progitempool.append(item)
-        elif not item.can_exclude:  # must place items that can't go into excluded locations with some logic
+        elif item.never_exclude:  # this only gets nonprogression items which should not appear in excluded locations
             nonexcludeditempool.append(item)
         elif item.name in world.local_items[item.player]:
             localrestitempool[item.player].append(item)
@@ -142,7 +142,7 @@ def distribute_items_restrictive(world: MultiWorld, gftower_trash=False, fill_lo
 
     if nonexcludeditempool:
         world.random.shuffle(fill_locations)
-        fill_restrictive(world, world.state, fill_locations, nonexcludeditempool)
+        fill_restrictive(world, world.state, fill_locations, nonexcludeditempool)  # needs logical fill to not conflict with local items
 
     if any(localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
         local_locations = {player: [] for player in world.player_ids}
