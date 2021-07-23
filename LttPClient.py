@@ -874,7 +874,7 @@ async def main():
                 logging.exception(e)
         asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
 
-    ctx = Context(args.snes, args.connect, args.password, args.founditems)
+    ctx = Context(args.snes, args.connect, args.password)
     input_task = asyncio.create_task(console_loop(ctx), name="Input")
 
     if ctx.server_task is None:

@@ -1,6 +1,7 @@
 import json
+import os
 
-with open('worlds/subnautica/items.json', 'r') as file:
+with open(os.path.join(os.path.dirname(__file__), 'items.json'), 'r') as file:
     item_table = json.loads(file.read())
 
 lookup_id_to_name = {}

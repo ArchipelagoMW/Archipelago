@@ -1,7 +1,7 @@
 #define sourcepath "build\exe.win-amd64-3.9\"
 #define MyAppName "Archipelago"
 #define MyAppExeName "ArchipelagoLttPClient.exe"
-#define MyAppIcon "icon.ico"
+#define MyAppIcon "data/icon.ico"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.

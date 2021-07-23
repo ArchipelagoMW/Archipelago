@@ -125,7 +125,7 @@ def main(args=None, callback=ERmain):
     erargs.create_spoiler = args.spoiler > 0
     erargs.glitch_triforce = options["generator"]["glitch_triforce_room"]
     erargs.race = args.race
-    erargs.skip_playthrough = args.spoiler == 0
+    erargs.skip_playthrough = args.spoiler < 2
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
     erargs.teams = args.teams
