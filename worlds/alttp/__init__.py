@@ -34,48 +34,48 @@ class ALTTPWorld(World):
     create_items = generate_itempool
 
     def create_regions(self):
+        player = self.player
         world = self.world
-        for player in world.get_game_players("A Link to the Past"):
-            if world.open_pyramid[player] == 'goal':
-                world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
-                                                                    'localganontriforcehunt', 'ganonpedestal'}
-            elif world.open_pyramid[player] == 'auto':
-                world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
-                                                                    'localganontriforcehunt', 'ganonpedestal'} and \
-                                             (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull',
-                                                                        'dungeonscrossed'} or not world.shuffle_ganon)
-            else:
-                world.open_pyramid[player] = {'on': True, 'off': False, 'yes': True, 'no': False}.get(
-                    world.open_pyramid[player], 'auto')
+        if world.open_pyramid[player] == 'goal':
+            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
+                                                                'localganontriforcehunt', 'ganonpedestal'}
+        elif world.open_pyramid[player] == 'auto':
+            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
+                                                                'localganontriforcehunt', 'ganonpedestal'} and \
+                                         (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull',
+                                                                    'dungeonscrossed'} or not world.shuffle_ganon)
+        else:
+            world.open_pyramid[player] = {'on': True, 'off': False, 'yes': True, 'no': False}.get(
+                world.open_pyramid[player], 'auto')
 
-            world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player],
-                                                          world.triforce_pieces_required[player])
+        world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player],
+                                                      world.triforce_pieces_required[player])
 
-            if world.mode[player] != 'inverted':
-                create_regions(world, player)
-            else:
-                create_inverted_regions(world, player)
-            create_shops(world, player)
-            create_dungeons(world, player)
+        if world.mode[player] != 'inverted':
+            create_regions(world, player)
+        else:
+            create_inverted_regions(world, player)
+        create_shops(world, player)
+        create_dungeons(world, player)
 
-        for player in world.get_game_players("A Link to the Past"):
-            if world.logic[player] not in ["noglitches", "minorglitches"] and world.shuffle[player] in \
-                    {"vanilla", "dungeonssimple", "dungeonsfull", "simple", "restricted", "full"}:
-                world.fix_fake_world[player] = False
 
-            # seeded entrance shuffle
-            old_random = world.random
-            world.random = random.Random(world.er_seeds[player])
+        if world.logic[player] not in ["noglitches", "minorglitches"] and world.shuffle[player] in \
+                {"vanilla", "dungeonssimple", "dungeonsfull", "simple", "restricted", "full"}:
+            world.fix_fake_world[player] = False
 
-            if world.mode[player] != 'inverted':
-                link_entrances(world, player)
-                mark_light_world_regions(world, player)
-            else:
-                link_inverted_entrances(world, player)
-                mark_dark_world_regions(world, player)
+        # seeded entrance shuffle
+        old_random = world.random
+        world.random = random.Random(world.er_seeds[player])
 
-            world.random = old_random
-            plando_connect(world, player)
+        if world.mode[player] != 'inverted':
+            link_entrances(world, player)
+            mark_light_world_regions(world, player)
+        else:
+            link_inverted_entrances(world, player)
+            mark_dark_world_regions(world, player)
+
+        world.random = old_random
+        plando_connect(world, player)
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         if item.name.startswith('Progressive '):
