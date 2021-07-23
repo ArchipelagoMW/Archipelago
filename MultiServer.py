@@ -1415,11 +1415,10 @@ async def main(args: argparse.Namespace):
             with zipfile.ZipFile(data_filename) as zf:
                 for file in zf.namelist():
                     if file.endswith(".archipelago"):
-                        import tempfile
-                        tmp = tempfile.NamedTemporaryFile("w+b", delete=False)
-                        tmp.write(zf.open(file).read())
-                        tmp.close()
-                        data_filename = tmp.name
+                        import os
+                        data_filename = os.path.join(os.path.dirname(data_filename), file)
+                        with open(data_filename, "wb") as f:
+                            f.write(zf.read(file))
                         break
                 else:
                     raise Exception("No .archipelago found in archive.")
