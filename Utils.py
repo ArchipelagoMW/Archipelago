@@ -210,8 +210,6 @@ def get_default_options() -> dict:
             "spoiler": 2,
             "glitch_triforce_room": 1,
             "race": 0,
-            "log_output_path": "Output Logs",
-            "log_level": None,
             "plando_options": "bosses",
         }
     }

@@ -6,6 +6,10 @@ import ModuleUpdate
 ModuleUpdate.requirements_files.add(os.path.join("WebHostLib", "requirements.txt"))
 ModuleUpdate.update()
 
+# in case app gets imported by something like gunicorn
+import Utils
+Utils.local_path.cached_path = os.path.dirname(__file__)
+
 from WebHostLib import app as raw_app
 from waitress import serve
 

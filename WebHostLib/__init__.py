@@ -169,7 +169,7 @@ def display_log(room: UUID):
     return Response(_read_log(os.path.join("logs", str(room) + ".txt")), mimetype="text/plain;charset=UTF-8")
 
 
-@app.route('/hosted/<suuid:room>', methods=['GET', 'POST'])
+@app.route('/room/<suuid:room>', methods=['GET', 'POST'])
 def hostRoom(room: UUID):
     room = Room.get(id=room)
     if room is None:
