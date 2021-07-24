@@ -12,8 +12,13 @@ from .Rules import set_rules
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, RegionType, CollectionState
 from ..AutoWorld import World
 
+from rom.rompatcher import RomPatcher
+from graph.vanilla.graph_locations import locationsDict
+from rando.ItemLocContainer import ItemLocation
 from rando.Items import ItemManager
 from utils.parameters import *
+from Utils import output_path
+from shutil import copy2
 
 class SMWorld(World):
     game: str = "Super Metroid"
@@ -86,6 +91,18 @@ class SMWorld(World):
 
 
     def generate_output(self):
+        copy2("TEST.sfc", output_path("TEST.sfc"))
+        romPatcher = RomPatcher(output_path("TEST.sfc"), None)
+
+        romPatcher.applyIPSPatches()
+        romPatcher.commitIPS()
+
+        itemLocs = [ItemLocation(self.itemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations()]
+        romPatcher.writeItemsLocs(itemLocs)
+        #romPatcher.writeSplitLocs(args.majorsSplit, itemLocs, progItemLocs)
+        #romPatcher.writeItemsNumber()
+        romPatcher.end()
+
         pass
 
 
