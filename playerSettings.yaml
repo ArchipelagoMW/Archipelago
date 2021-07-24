@@ -29,7 +29,7 @@ game:
   Minecraft: 1
   Subnautica: 1
 requires:
-  version: 0.1.3 # Version of Archipelago required for this yaml to work as expected.
+  version: 0.1.5 # Version of Archipelago required for this yaml to work as expected.
 # Shared Options supported by all games:
 accessibility:
   items: 0 # Guarantees you will be able to acquire all items, but you may not be able to access all locations
@@ -54,6 +54,8 @@ progression_balancing:
 #  - "Progressive Weapons"
 # exclude_locations: # Force certain locations to never contain progression items, and always be filled with junk. 
 #  - "Master Sword Pedestal"
+
+Subnautica: {}
 
 Factorio:
   tech_tree_layout:
