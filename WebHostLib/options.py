@@ -48,6 +48,16 @@ def create():
 
                 game_options[option_name] = this_option
 
+            elif hasattr(option, "range_start") and hasattr(option, "range_end"):
+                game_options[option_name] = {
+                    "type": "range",
+                    "friendlyName": option.friendly_name if hasattr(option, "friendly_name") else option_name,
+                    "description": option.__doc__ if option.__doc__ else "Please document me!",
+                    "defaultValue": option.default if hasattr(option, "default") else None,
+                    "min": option.range_start,
+                    "max": option.range_end,
+                }
+
         player_settings["gameOptions"] = game_options
 
         with open(os.path.join(target_folder, game_name + ".json"), "w") as f:
