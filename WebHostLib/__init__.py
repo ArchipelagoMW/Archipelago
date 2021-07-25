@@ -106,7 +106,7 @@ games_list = {
 # Player settings pages
 @app.route('/games/<string:game>/player-settings')
 def player_settings(game):
-    return render_template(f"player-settings.html")
+    return render_template(f"player-settings.html", game=game)
 
 
 # Game sub-pages

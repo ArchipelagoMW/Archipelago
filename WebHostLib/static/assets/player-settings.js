@@ -1,8 +1,7 @@
 let gameName = null;
 
 window.addEventListener('load', () => {
-  const urlMatches = window.location.href.match(/^.*\/(.*)\/player-settings/);
-  gameName = decodeURIComponent(urlMatches[1]);
+  gameName = document.getElementById('player-settings').getAttribute('data-game');
 
   // Update game name on page
   document.getElementById('game-name').innerHTML = gameName;
@@ -25,7 +24,7 @@ window.addEventListener('load', () => {
     nameInput.value = playerSettings.name;
   }).catch((error) => {
     const url = new URL(window.location.href);
-    window.location.replace(`${url.protocol}//${url.hostname}/page-not-found`);
+    // window.location.replace(`${url.protocol}//${url.hostname}/page-not-found`);
   })
 });
 

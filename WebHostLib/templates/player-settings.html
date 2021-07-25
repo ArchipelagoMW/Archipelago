@@ -10,7 +10,7 @@
 
 {% block body %}
     {% include 'header/grassHeader.html' %}
-    <div id="player-settings">
+    <div id="player-settings" data-game="{{ game }}">
         <div id="user-message"></div>
         <h1><span id="game-name">Player</span> Settings</h1>
         <p>Choose the options you would like to play with! You may generate a single-player game from this page,
