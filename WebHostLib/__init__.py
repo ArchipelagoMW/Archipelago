@@ -192,6 +192,9 @@ def hostRoom(room: UUID):
 
     return render_template("hostRoom.html", room=room)
 
+@app.route('/hosted/<suuid:room>', methods=['GET', 'POST'])
+def hostRoomRedirect(room: UUID):
+    return redirect(url_for("hostRoom", room=room))
 
 @app.route('/favicon.ico')
 def favicon():
