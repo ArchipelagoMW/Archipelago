@@ -118,7 +118,7 @@ class Factorio(World):
         return super(Factorio, self).collect(state, item)
 
     def get_required_client_version(self) -> tuple:
-        return max((0, 1, 4), super(Factorio, self).get_required_client_version())
+        return max((0, 1, 5), super(Factorio, self).get_required_client_version())
 
     options = factorio_options
 
