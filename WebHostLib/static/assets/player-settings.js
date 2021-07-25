@@ -24,7 +24,7 @@ window.addEventListener('load', () => {
     nameInput.value = playerSettings.name;
   }).catch((error) => {
     const url = new URL(window.location.href);
-    // window.location.replace(`${url.protocol}//${url.hostname}/page-not-found`);
+    window.location.replace(`${url.protocol}//${url.hostname}/page-not-found`);
   })
 });
 
@@ -97,8 +97,10 @@ const buildOptionsTable = (settings, romOpts = false) => {
       const option = document.createElement('option');
       option.setAttribute('value', opt.value);
       option.innerText = opt.name;
-      if ((isNaN(currentSettings[setting]) && (parseInt(opt.value, 10) === parseInt(currentSettings[setting]))) ||
-        (opt.value === currentSettings[setting])) {
+      if ((isNaN(currentSettings[gameName][setting]) &&
+        (parseInt(opt.value, 10) === parseInt(currentSettings[gameName][setting]))) ||
+        (opt.value === currentSettings[gameName][setting]))
+      {
         option.selected = true;
       }
       select.appendChild(option);
