@@ -278,8 +278,9 @@ for ingredient_name in all_ingredient_names:
 @functools.lru_cache(10)
 def get_rocket_requirements(silo_recipe: Recipe, part_recipe: Recipe) -> Set[str]:
     techs = set()
-    for ingredient in silo_recipe.ingredients:
-        techs |= recursively_get_unlocking_technologies(ingredient)
+    if silo_recipe:
+        for ingredient in silo_recipe.ingredients:
+            techs |= recursively_get_unlocking_technologies(ingredient)
     for ingredient in part_recipe.ingredients:
         techs |= recursively_get_unlocking_technologies(ingredient)
     return {tech.name for tech in techs}

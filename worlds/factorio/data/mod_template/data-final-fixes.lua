@@ -107,3 +107,8 @@ adjust_energy("{{ recipe_name }}", {{ random.triangular(*recipe_time_scale) }})
 {%- endif %}
 {%- endfor -%}
 {% endif %}
+
+{%- if silo==2 %}
+-- disable silo research for pre-placed silo
+technologies["rocket-silo"].hidden = true
+{%- endif %}
