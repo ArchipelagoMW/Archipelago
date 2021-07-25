@@ -89,24 +89,62 @@ const buildOptionsTable = (settings, romOpts = false) => {
 
     // td Right
     const tdr = document.createElement('td');
-    const select = document.createElement('select');
-    select.setAttribute('id', setting);
-    select.setAttribute('data-key', setting);
-    if (romOpts) { select.setAttribute('data-romOpt', '1'); }
-    settings[setting].options.forEach((opt) => {
-      const option = document.createElement('option');
-      option.setAttribute('value', opt.value);
-      option.innerText = opt.name;
-      if ((isNaN(currentSettings[gameName][setting]) &&
-        (parseInt(opt.value, 10) === parseInt(currentSettings[gameName][setting]))) ||
-        (opt.value === currentSettings[gameName][setting]))
-      {
-        option.selected = true;
-      }
-      select.appendChild(option);
-    });
-    select.addEventListener('change', (event) => updateGameSetting(event));
-    tdr.appendChild(select);
+    let element = null;
+
+    switch(settings[setting].type){
+      case 'select':
+        element = document.createElement('div');
+        element.classList.add('select-container');
+        let select = document.createElement('select');
+        select.setAttribute('id', setting);
+        select.setAttribute('data-key', setting);
+        if (romOpts) { select.setAttribute('data-romOpt', '1'); }
+        settings[setting].options.forEach((opt) => {
+          const option = document.createElement('option');
+          option.setAttribute('value', opt.value);
+          option.innerText = opt.name;
+          if ((isNaN(currentSettings[gameName][setting]) &&
+            (parseInt(opt.value, 10) === parseInt(currentSettings[gameName][setting]))) ||
+            (opt.value === currentSettings[gameName][setting]))
+          {
+            option.selected = true;
+          }
+          select.appendChild(option);
+        });
+        select.addEventListener('change', (event) => updateGameSetting(event));
+        element.appendChild(select);
+        break;
+
+      case 'range':
+        element = document.createElement('div');
+        element.classList.add('range-container');
+
+        let range = document.createElement('input');
+        range.setAttribute('type', 'range');
+        range.setAttribute('data-key', setting);
+        range.setAttribute('min', settings[setting].min);
+        range.setAttribute('max', settings[setting].max);
+        range.value = currentSettings[gameName][setting];
+        range.addEventListener('change', (event) => {
+          document.getElementById(`${setting}-value`).innerText = event.target.value;
+          updateGameSetting(event);
+        });
+        element.appendChild(range);
+
+        let rangeVal = document.createElement('span');
+        rangeVal.classList.add('range-value');
+        rangeVal.setAttribute('id', `${setting}-value`);
+        rangeVal.innerText = currentSettings[gameName][setting] ?? settings[setting].defaultValue;
+        element.appendChild(rangeVal);
+        break;
+
+      default:
+        console.error(`Unknown setting type: ${settings[setting].type}`);
+        console.error(setting);
+        return;
+    }
+
+    tdr.appendChild(element);
     tr.appendChild(tdr);
     tbody.appendChild(tr);
   });

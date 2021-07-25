@@ -53,7 +53,7 @@ def create():
                     "type": "range",
                     "friendlyName": option.friendly_name if hasattr(option, "friendly_name") else option_name,
                     "description": option.__doc__ if option.__doc__ else "Please document me!",
-                    "defaultValue": option.default if hasattr(option, "default") else None,
+                    "defaultValue": option.default if hasattr(option, "default") else option.range_start,
                     "min": option.range_start,
                     "max": option.range_end,
                 }
