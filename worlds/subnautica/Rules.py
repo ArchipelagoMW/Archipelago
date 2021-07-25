@@ -198,12 +198,9 @@ def get_max_depth(state, player):
 
 
 def can_access_location(state, player, loc):
-    # Extract location from game id.
-    # Game id is in format: "(x, y, z)"
-    pos_raw = loc.get("game_id")[1:-1].split(', ')
-    pos_x = float(pos_raw[0])
-    pos_y = float(pos_raw[1])
-    pos_z = float(pos_raw[2])
+    pos_x = loc.get("position").get("x")
+    pos_y = loc.get("position").get("y")
+    pos_z = loc.get("position").get("z")
     depth = -pos_y # y-up
     map_center_dist = math.sqrt(pos_x**2 + pos_z**2)
     aurora_dist = math.sqrt((pos_x - 1040)**2 + (pos_z - -160)**2)

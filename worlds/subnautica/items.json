@@ -61,7 +61,7 @@
     { "id": 35059, "count": 1, "progression": false, "tech_type": "StarshipChair3", "name": "Command Chair" },
     { "id": 35060, "count": 2, "progression": false, "tech_type": "LabCounter", "name": "Counter" },
     { "id": 35061, "count": 1, "progression": false, "tech_type": "NarrowBed", "name": "Single Bed" },
-    { "id": 35062, "count": 2, "progression": false, "tech_type": "Bed1", "name": "Basic Double Bed" },
+    { "id": 35062, "count": 1, "progression": false, "tech_type": "Bed1", "name": "Basic Double Bed" },
     { "id": 35063, "count": 1, "progression": false, "tech_type": "Bed2", "name": "Quilted Double Bed" },
     { "id": 35064, "count": 2, "progression": false, "tech_type": "CoffeeVendingMachine", "name": "Coffee Vending Machine" },
     { "id": 35065, "count": 2, "progression": false, "tech_type": "Trashcans", "name": "Trash Can" },
@@ -78,5 +78,6 @@
     { "id": 35076, "count": 1, "progression": true, "tech_type": "RocketBaseLadder", "name": "Neptune Gantry" },
     { "id": 35077, "count": 1, "progression": true, "tech_type": "RocketStage1", "name": "Neptune Boosters" },
     { "id": 35078, "count": 1, "progression": true, "tech_type": "RocketStage2", "name": "Neptune Fuel Reserve" },
-    { "id": 35079, "count": 1, "progression": true, "tech_type": "RocketStage3", "name": "Neptune Cockpit" }
+    { "id": 35079, "count": 1, "progression": true, "tech_type": "RocketStage3", "name": "Neptune Cockpit" },
+    { "id": 35080, "count": 1, "progression": true, "tech_type": "BaseFiltrationMachine", "name": "Water Filtration Machine" }
 ]
