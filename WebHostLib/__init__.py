@@ -82,24 +82,31 @@ def page_not_found(err):
 
 
 games_list = {
-    "zelda3": ("The Legend of Zelda: A Link to the Past",
-               """
-               The Legend of Zelda: A Link to the Past is an action/adventure game. Take on the role of Link,
-               a boy who is destined to save the land of Hyrule. Delve through three palaces and nine dungeons on
-               your quest to rescue the descendents of the seven wise men and defeat the evil Ganon!"""),
-    "factorio": ("Factorio",
+    "A Link to the Past": ("The Legend of Zelda: A Link to the Past",
+                           """
+                           The Legend of Zelda: A Link to the Past is an action/adventure game. Take on the role of
+                           Link, a boy who is destined to save the land of Hyrule. Delve through three palaces and nine
+                           dungeons on your quest to rescue the descendents of the seven wise men and defeat the evil
+                           Ganon!"""),
+    "Factorio": ("Factorio",
                  """
                  Factorio is a game about automation. You play as an engineer who has crash landed on the planet
                  Nauvis, an inhospitable world filled with dangerous creatures called biters. Build a factory,
                  research new technologies, and become more efficient in your quest to build a rocket and return home.
                  """),
-    "minecraft": ("Minecraft",
+    "Minecraft": ("Minecraft",
                   """
                   Minecraft is a game about creativity. In a world made entirely of cubes, you explore, discover, mine,
                   craft, and try not to explode. Delve deep into the earth and discover abandoned mines, ancient
                   structures, and materials to create a portal to another world. Defeat the Ender Dragon, and claim
                   victory!""")
 }
+
+
+# Player settings pages
+@app.route('/games/<string:game>/player-settings')
+def player_settings(game):
+    return render_template(f"player-settings.html")
 
 
 # Game sub-pages
@@ -194,4 +201,5 @@ def favicon():
 
 from WebHostLib.customserver import run_server_process
 from . import tracker, upload, landing, check, generate, downloads, api  # to trigger app routing picking up on it
+
 app.register_blueprint(api.api_endpoints)
