@@ -1408,7 +1408,7 @@ async def main(args: argparse.Namespace):
             import tkinter.filedialog
             root = tkinter.Tk()
             root.withdraw()
-            data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.archipelago, *.zip"),))
+            data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.archipelago *.zip"),))
 
         if data_filename.endswith(".zip"):
             import zipfile
