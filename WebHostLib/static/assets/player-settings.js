@@ -24,7 +24,8 @@ window.addEventListener('load', () => {
     nameInput.addEventListener('keyup', (event) => updateBaseSetting(event));
     nameInput.value = playerSettings.name;
   }).catch((error) => {
-    console.error(error);
+    const url = new URL(window.location.href);
+    window.location.replace(`${url.protocol}//${url.hostname}/page-not-found`);
   })
 });
 
