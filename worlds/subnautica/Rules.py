@@ -203,9 +203,9 @@ def can_access_location(state, player, loc):
     pos_z = loc.get("position").get("z")
     depth = -pos_y # y-up
     map_center_dist = math.sqrt(pos_x**2 + pos_z**2)
-    aurora_dist = math.sqrt((pos_x - 1040)**2 + (pos_z - -160)**2)
+    aurora_dist = math.sqrt((pos_x - 1038.0)**2 + (pos_y - -3.4)**2 + (pos_z - -163.1)**2)
 
-    need_radiation_suit = aurora_dist < 940
+    need_radiation_suit = aurora_dist < 950
     need_laser_cutter = loc.get("need_laser_cutter", False)
     need_propulsion_cannon = loc.get("need_propulsion_cannon", False)
 
