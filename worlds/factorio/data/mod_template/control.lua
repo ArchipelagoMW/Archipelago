@@ -18,19 +18,56 @@ function set_permissions()
 end
 {%- endif %}
 
+
+function check_spawn_silo(force)
+    if force.players and #force.players > 0 and force.get_entity_count("rocket-silo") < 1 then
+        local surface = game.get_surface(1)
+        local spawn_position = force.get_spawn_position(surface)
+        spawn_entity(surface, force, "rocket-silo", spawn_position.x, spawn_position.y, 80, true)
+    end
+end
+
+function check_despawn_silo(force)
+    if not force.players or #force.players < 1 and force.get_entity_count("rocket-silo") > 0 then
+        local surface = game.get_surface(1)
+        local spawn_position = force.get_spawn_position(surface)
+        local x1 = spawn_position.x - 41
+        local x2 = spawn_position.x + 41
+        local y1 = spawn_position.y - 41
+        local y2 = spawn_position.y + 41
+        local silos = surface.find_entities_filtered{area = { {x1, y1}, {x2, y2} },
+                                                     name = "rocket-silo",
+                                                     force = force}
+        for i,silo in ipairs(silos) do
+            silo.destructible = true
+            silo.destroy()
+        end
+    end
+end
+
+
 -- Initialize force data, either from it being created or already being part of the game when the mod was added.
 function on_force_created(event)
-    --event.force appears to be LuaForce.name, not LuaForce
-    game.forces[event.force].research_queue_enabled = true
+    local force = event.force
+    if type(event.force) == "string" then  -- should be of type LuaForce
+        force = game.forces[force]
+    end
+    force.research_queue_enabled = true
     local data = {}
     data['earned_samples'] = {{ dict_to_lua(starting_items) }}
     data["victory"] = 0
     global.forcedata[event.force] = data
+{%- if silo == 2 %}
+    check_spawn_silo(force)
+{%- endif %}
 end
 script.on_event(defines.events.on_force_created, on_force_created)
 
 -- Destroy force data.  This doesn't appear to be currently possible with the Factorio API, but here for completeness.
 function on_force_destroyed(event)
+{%- if silo == 2 %}
+    check_despawn_silo(event.force)
+{%- endif %}
     global.forcedata[event.force.name] = nil
 end
 
@@ -44,8 +81,20 @@ function on_player_created(event)
     data['pending_samples'] = table.deepcopy(global.forcedata[player.force.name]['earned_samples'])
     global.playerdata[player.index] = data
     update_player(player.index)  -- Attempt to send pending free samples, if relevant.
+{%- if silo == 2 %}
+    check_spawn_silo(game.players[event.player_index].force)
+{%- endif %}
 end
 script.on_event(defines.events.on_player_created, on_player_created)
+
+-- Create/destroy silo for force if player switched force
+function on_player_changed_force(event)
+{%- if silo == 2 %}
+    check_despawn_silo(event.force)
+    check_spawn_silo(game.players[event.player_index].force)
+{%- endif %}
+end
+script.on_event(defines.events.on_player_changed_force, on_player_changed_force)
 
 function on_player_removed(event)
     global.playerdata[event.player_index] = nil
@@ -195,6 +244,98 @@ function chain_lookup(table, ...)
 end
 
 
+function spawn_entity(surface, force, name, x, y, radius, randomize)
+    local prototype = game.entity_prototypes[name]
+    local args = {  -- For can_place_entity and place_entity
+        name = prototype.name,
+        position = {x = x, y = y},
+        force = force.name,
+        build_check_type = defines.build_check_type.blueprint_ghost,
+        forced = true
+    }
+
+    local box = prototype.selection_box
+    local dims = {
+        w = box.right_bottom.x - box.left_top.x,
+        h = box.right_bottom.y - box.left_top.y
+    }
+    local entity_radius = math.ceil(math.max(dims.w, dims.h) / math.sqrt(2) / 2)
+    local bounds = {
+        xmin = math.ceil(x - (radius - dims.w/2)),
+        xmax = math.floor(x + (radius - dims.w/2)),
+        ymin = math.ceil(y - (radius - dims.h/2)),
+        ymax = math.floor(y + (radius - dims.h/2))
+    }
+
+    local entity = nil
+    local attempts = 1000
+    for i = 1,attempts do  -- Try multiple times
+        -- Find a position
+        if (randomize and i < attempts-3) or (not randomize and i ~= 1) then
+            args.position.x = math.random(bounds.xmin, bounds.xmax)
+            args.position.y = math.random(bounds.ymin, bounds.ymax)
+        elseif randomize then
+            args.position.x = x + (i + 3 - attempts) * dims.w
+            args.position.y = y + (i + 3 - attempts) * dims.h
+        end
+        -- Generate required chunks
+        local x1 = args.position.x + box.left_top.x
+        local x2 = args.position.x + box.right_bottom.x
+        local y1 = args.position.y + box.left_top.y
+        local y2 = args.position.y + box.right_bottom.y
+        if not surface.is_chunk_generated({x = x1, y = y1}) or
+           not surface.is_chunk_generated({x = x2, y = y1}) or
+           not surface.is_chunk_generated({x = x1, y = y2}) or
+           not surface.is_chunk_generated({x = x2, y = y2}) then
+            --player.print("Generating chunk at " .. serpent.line(args.position) .. ", radius=" .. entity_radius)
+            surface.request_to_generate_chunks(args.position, entity_radius)
+            surface.force_generate_chunk_requests()
+        end
+        -- Try to place entity
+        if surface.can_place_entity(args) then
+            -- Can hypothetically place this entity here.  Destroy everything underneath it.
+            local collision_area = {
+                {
+                    args.position.x + prototype.collision_box.left_top.x,
+                    args.position.y + prototype.collision_box.left_top.x
+                },
+                {
+                    args.position.x + prototype.collision_box.right_bottom.x,
+                    args.position.y + prototype.collision_box.right_bottom.x
+                }
+            }
+            local entities = surface.find_entities_filtered {
+                area = collision_area,
+                collision_mask = prototype.collision_mask
+            }
+            local has_invalid_entities = false
+            for _, entity in pairs(entities) do
+                if entity.force and (entity.force.name ~= 'neutral') then
+                    has_invalid_entities = true
+                end
+            end
+            if not has_invalid_entities then
+                for _, entity in pairs(entities) do
+                    entity.destroy({do_cliff_correction=true, raise_destroy=true})
+                end
+                args.build_check_type = defines.build_check_type.script
+                args.create_build_effect_smoke = false
+                entity = surface.create_entity(args)
+                if entity then
+                    entity.destructible = false
+                    entity.minable = false
+                    entity.rotatable = false
+                    break
+                end
+            end
+        end
+    end
+    if entity == nil then
+        force.print("Failed to place " .. args.name .. " in " .. serpent.line({x = x, y = y, radius = radius}))
+    end
+end
+
+
 -- add / commands
 commands.add_command("ap-sync", "Used by the Archipelago client to get progress information", function(call)
     local force
@@ -267,6 +408,14 @@ end)
 commands.add_command("ap-rcon-info", "Used by the Archipelago client to get information", function(call)
     rcon.print(game.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME}))
 end)
+
+
+{% if allow_cheats -%}
+commands.add_command("ap-spawn-silo", "Attempts to spawn a silo around 0,0", function(call)
+    spawn_entity(game.player.surface, game.player.force, "rocket-silo", 0, 0, 80, true)
+end)
+{% endif -%}
+
 
 -- data
 progressive_technologies = {{ dict_to_lua(progressive_technology_table) }}

@@ -45,9 +45,10 @@ class TechCost(Choice):
 
 
 class Silo(Choice):
-    """Ingredients to craft rocket silo."""
+    """Ingredients to craft rocket silo or auto-place if set to spawn."""
     option_vanilla = 0
     option_randomize_recipe = 1
+    option_spawn = 2
     default = 0
 
 

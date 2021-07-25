@@ -7,7 +7,7 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table
 from .Shapes import get_shapes
 from .Mod import generate_mod
-from .Options import factorio_options
+from .Options import factorio_options, Silo
 
 import logging
 
@@ -26,7 +26,10 @@ class Factorio(World):
     location_name_to_id = base_tech_table
 
     def generate_basic(self):
+        skip_silo = self.world.silo[self.player].value == Silo.option_spawn
         for tech_name in base_tech_table:
+            if skip_silo and tech_name == "rocket-silo":
+                continue
             if self.world.progressive:
                 item_name = tech_to_progressive_lookup.get(tech_name, tech_name)
             else:
@@ -49,7 +52,10 @@ class Factorio(World):
         menu.exits.append(crash)
         nauvis = Region("Nauvis", None, "Nauvis", player, self.world)
 
+        skip_silo = self.world.silo[self.player].value == Silo.option_spawn
         for tech_name, tech_id in base_tech_table.items():
+            if skip_silo and tech_name == "rocket-silo":
+                continue
             tech = Location(player, tech_name, tech_id, nauvis)
             nauvis.locations.append(tech)
             tech.game = "Factorio"
@@ -92,7 +98,10 @@ class Factorio(World):
                     location.access_rule = lambda state, ingredient=ingredient: \
                         all(state.has(technology.name, player) for technology in required_technologies[ingredient])
 
+            skip_silo = self.world.silo[self.player].value == Silo.option_spawn
             for tech_name, technology in self.custom_technologies.items():
+                if skip_silo and tech_name == "rocket-silo":
+                    continue
                 location = world.get_location(tech_name, player)
                 Rules.set_rule(location, technology.build_rule(player))
                 prequisites = shapes.get(tech_name)
@@ -101,7 +110,8 @@ class Factorio(World):
                     Rules.add_rule(location, lambda state,
                                                     locations=locations: all(state.can_reach(loc) for loc in locations))
 
-            silo_recipe = self.custom_recipes["rocket-silo"] \
+            silo_recipe = None if self.world.silo[self.player].value == Silo.option_spawn \
+                          else self.custom_recipes["rocket-silo"] \
                           if "rocket-silo" in self.custom_recipes \
                           else next(iter(all_product_sources.get("rocket-silo")))
             part_recipe = self.custom_recipes["rocket-part"]
@@ -230,7 +240,7 @@ class Factorio(World):
                                                                  new_recipe.recursive_unlocking_technologies}
                     self.custom_recipes[pack] = new_recipe
 
-        if self.world.silo[self.player]:
+        if self.world.silo[self.player].value == Silo.option_randomize_recipe:
             valid_pool = []
             for pack in self.world.max_science_pack[self.player].get_allowed_packs():
                 valid_pool += sorted(science_pack_pools[pack])
