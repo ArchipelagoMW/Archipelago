@@ -99,7 +99,13 @@ games_list = {
                   Minecraft is a game about creativity. In a world made entirely of cubes, you explore, discover, mine,
                   craft, and try not to explode. Delve deep into the earth and discover abandoned mines, ancient
                   structures, and materials to create a portal to another world. Defeat the Ender Dragon, and claim
-                  victory!""")
+                  victory!"""),
+    "Subnautica": ("Subnautica",
+                   """
+                   Subnautica is an undersea exploration game. Stranded on an alien world, you become infected by
+                   an unknown bacteria. The planet's automatic quarantine will shoot you down if you try to leave.
+                   You must find a cure for yourself, build an escape rocket, and leave the planet.
+                   """),
 }
 
 
