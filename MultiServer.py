@@ -118,10 +118,20 @@ class Context(Node):
         return 0
 
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
-        with open(multidatapath, 'rb') as f:
-            data = f.read()
+        if multidatapath.lower().endswith(".zip"):
+            import zipfile
+            with zipfile.ZipFile(multidatapath) as zf:
+                for file in zf.namelist():
+                    if file.endswith(".archipelago"):
+                        data = zf.read(file)
+                        break
+                else:
+                    raise Exception("No .archipelago found in archive.")
+        else:
+            with open(multidatapath, 'rb') as f:
+                data = f.read()
 
-            self._load(self._decompress(data), use_embedded_server_options)
+        self._load(self._decompress(data), use_embedded_server_options)
         self.data_filename = multidatapath
 
     @staticmethod
@@ -213,8 +223,10 @@ class Context(Node):
         self.saving = enabled
         if self.saving:
             if not self.save_filename:
-                self.save_filename = (self.data_filename[:-11] if self.data_filename.endswith('.archipelago') else (
-                        self.data_filename + '_')) + 'apsave'
+                import os
+                name, ext = os.path.splitext(self.data_filename)
+                self.save_filename = name + '.apsave' if ext.lower() in ('.archipelago','.zip') \
+                                     else self.data_filename + '_' + 'apsave'
             try:
                 with open(self.save_filename, 'rb') as f:
                     save_data = restricted_loads(zlib.decompress(f.read()))
@@ -1409,19 +1421,6 @@ async def main(args: argparse.Namespace):
             root = tkinter.Tk()
             root.withdraw()
             data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.archipelago *.zip"),))
-
-        if data_filename.endswith(".zip"):
-            import zipfile
-            with zipfile.ZipFile(data_filename) as zf:
-                for file in zf.namelist():
-                    if file.endswith(".archipelago"):
-                        import os
-                        data_filename = os.path.join(os.path.dirname(data_filename), file)
-                        with open(data_filename, "wb") as f:
-                            f.write(zf.read(file))
-                        break
-                else:
-                    raise Exception("No .archipelago found in archive.")
 
         ctx.load(data_filename, args.use_embedded_options)
 
