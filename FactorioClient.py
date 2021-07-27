@@ -154,6 +154,10 @@ class FactorioCommandProcessor(ClientCommandProcessor):
                 self.output("Cannot connect to a server with unknown own identity, bridge to Factorio first.")
         return super(FactorioCommandProcessor, self)._cmd_connect(address)
 
+    def _cmd_resync(self):
+        """Manually trigger a resync."""
+        self.ctx.awaiting_bridge = True
+
 
 class FactorioContext(CommonContext):
     command_processor = FactorioCommandProcessor
