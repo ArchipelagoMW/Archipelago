@@ -217,6 +217,9 @@ commands.add_command("ap-sync", "Used by the Archipelago client to get progress 
     rcon.print(game.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME, ["info"] = data_collection}))
 end)
 
+commands.add_command("ap-print", "Used by the Archipelago client to print messages", function (call)
+    game.print(call.parameter)
+end)
 
 commands.add_command("ap-get-technology", "Grant a technology, used by the Archipelago Client.", function(call)
     if global.index_sync == nil then

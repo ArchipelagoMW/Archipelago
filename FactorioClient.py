@@ -185,8 +185,8 @@ class FactorioContext(CommonContext):
         logger.info(args["text"])
         if self.rcon_client:
             cleaned_text = args['text'].replace('"', '')
-            self.rcon_client.send_command(f"/sc game.print(\"[font=default-large-bold]Archipelago:[/font] "
-                                          f"{cleaned_text}\")")
+            self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
+                                          f"{cleaned_text}")
 
     def on_print_json(self, args: dict):
         text = self.raw_json_text_parser(copy.deepcopy(args["data"]))
@@ -194,8 +194,8 @@ class FactorioContext(CommonContext):
         if self.rcon_client:
             text = self.factorio_json_text_parser(args["data"])
             cleaned_text = text.replace('"', '')
-            self.rcon_client.send_command(f"/sc game.print(\"[font=default-large-bold]Archipelago:[/font] "
-                                          f"{cleaned_text}\")")
+            self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
+                                          f"{cleaned_text}")
 
     @property
     def savegame_name(self) -> str:
@@ -280,11 +280,9 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 factorio_server_logger.info(msg)
                 if not ctx.rcon_client and "Starting RCON interface at IP ADDR:" in msg:
                     ctx.rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
-                    # trigger lua interface confirmation
-                    ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
-                    ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
                 if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
+
             if ctx.rcon_client:
                 while ctx.send_index < len(ctx.items_received):
                     transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
