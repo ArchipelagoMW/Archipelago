@@ -89,19 +89,42 @@ class SMWorld(World):
         create_locations(self, self.player)
         create_regions(self, self.world, self.player)
 
+    def getWord(self, w):
+        return (w & 0x00FF, (w & 0xFF00) >> 8)
 
     def generate_output(self):
-        copy2("TEST.sfc", output_path("TEST.sfc"))
-        romPatcher = RomPatcher(output_path("TEST.sfc"), None)
+        for player in self.world.sm_player_ids:
+            outfilebase = 'AP_' + self.world.seed_name
+            outfilepname = f'_P{player}'
+            outfilepname += f"_{self.world.player_names[player][0].replace(' ', '_')}" \
 
-        romPatcher.applyIPSPatches()
-        romPatcher.commitIPS()
+            outputFilename = output_path(f'{outfilebase}{outfilepname}.sfc')
 
-        itemLocs = [ItemLocation(self.itemManager.Items[itemLoc.item.type], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations()]
-        romPatcher.writeItemsLocs(itemLocs)
-        #romPatcher.writeSplitLocs(args.majorsSplit, itemLocs, progItemLocs)
-        #romPatcher.writeItemsNumber()
-        romPatcher.end()
+            copy2("TEST.sfc", outputFilename)
+            romPatcher = RomPatcher(outputFilename, None)
+
+            romPatcher.applyIPSPatches()
+
+            multiWorldLocations = {}
+            for itemLoc in self.world.get_locations():
+                if itemLoc.player == player and locationsDict[itemLoc.name].Id != None:
+                    item = self.itemManager.Items[itemLoc.item.type if itemLoc.item.type in self.itemManager.Items else 'ArchipelagoItem']
+                    (w0, w1) = self.getWord(0 if itemLoc.item.player == player else 1)
+                    (w2, w3) = self.getWord(item.Id)
+                    (w4, w5) = self.getWord(itemLoc.item.player - 1)
+                    (w6, w7) = self.getWord(0)
+                    multiWorldLocations[0x1C6000 + locationsDict[itemLoc.name].Id*8] = [w0, w1, w2, w3, w4, w5, w6, w7]
+              
+            patchDict = { 'MultiWorldLocations':  multiWorldLocations }
+            romPatcher.applyIPSPatch('MultiWorldLocations', patchDict)
+
+            romPatcher.commitIPS()
+
+            itemLocs = [ItemLocation(self.itemManager.Items[itemLoc.item.type if itemLoc.item.type in self.itemManager.Items else 'ArchipelagoItem'], locationsDict[itemLoc.name], True) for itemLoc in self.world.get_locations() if itemLoc.player == player]
+            romPatcher.writeItemsLocs(itemLocs)
+            #romPatcher.writeSplitLocs(args.majorsSplit, itemLocs, progItemLocs)
+            #romPatcher.writeItemsNumber()
+            romPatcher.end()
 
         pass
 
