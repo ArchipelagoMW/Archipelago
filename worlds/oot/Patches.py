@@ -1811,7 +1811,7 @@ def get_override_entry(location):
     player_id = location.item.player
     if location.item.game != 'Ocarina of Time': 
         # This is an AP sendable. It's guaranteed to not be None. 
-        item_id = 0xCA  # Triforce Piece
+        item_id = 0x0C  # Ocarina of Time item, otherwise unused
         looks_like_item_id = 0
     else: 
         item_id = location.item.index
