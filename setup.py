@@ -92,7 +92,7 @@ cx_Freeze.setup(
             "include_files": [],
             "include_msvcr": True,
             "replace_paths": [("*", "")],
-            "optimize": 2,
+            "optimize": 1,
             "build_exe": buildfolder
         },
     },
@@ -182,7 +182,7 @@ cx_Freeze.setup(
             "include_files": [],
             "include_msvcr": True,
             "replace_paths": [("*", "")],
-            "optimize": 2,
+            "optimize": 1,
             "build_exe": buildfolder
         },
     },
