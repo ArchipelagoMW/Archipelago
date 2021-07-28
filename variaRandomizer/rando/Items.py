@@ -2,9 +2,9 @@ from utils.utils import randGaussBounds, getRangeDict, chooseFromRange
 import utils.log, logging, copy, random
 
 class Item:
-    __slots__ = ( 'Category', 'Class', 'Name', 'Code', 'Type', 'BeamBits', 'ItemBits' )
+    __slots__ = ( 'Category', 'Class', 'Name', 'Code', 'Type', 'BeamBits', 'ItemBits', 'Id' )
 
-    def __init__(self, Category, Class, Name, Type, Code=None, BeamBits=0, ItemBits=0):
+    def __init__(self, Category, Class, Name, Type, Code=None, BeamBits=0, ItemBits=0, Id=0):
         self.Category = Category
         self.Class = Class
         self.Code = Code
@@ -12,6 +12,7 @@ class Item:
         self.Type = Type
         self.BeamBits = BeamBits
         self.ItemBits = ItemBits
+        self.Id = Id
 
     def withClass(self, Class):
         return Item(self.Category, Class, self.Name, self.Type, self.Code, self.BeamBits, self.ItemBits)
@@ -41,6 +42,7 @@ class ItemManager:
             Code=0xeed7,
             Name="Energy Tank",
             Type='ETank',
+            Id=0
         ),
         'Missile': Item(
             Category='Ammo',
@@ -48,6 +50,7 @@ class ItemManager:
             Code=0xeedb,
             Name="Missile",
             Type='Missile',
+            Id=1
         ),
         'Super': Item(
             Category='Ammo',
@@ -55,6 +58,7 @@ class ItemManager:
             Code=0xeedf,
             Name="Super Missile",
             Type='Super',
+            Id=2
         ),
         'PowerBomb': Item(
             Category='Ammo',
@@ -62,6 +66,7 @@ class ItemManager:
             Code=0xeee3,
             Name="Power Bomb",
             Type='PowerBomb',
+            Id=3
         ),
         'Bomb': Item(
             Category='Progression',
@@ -70,6 +75,7 @@ class ItemManager:
             Name="Bomb",
             Type='Bomb',
             ItemBits=0x1000,
+            Id=4
         ),
         'Charge': Item(
             Category='Beam',
@@ -77,7 +83,8 @@ class ItemManager:
             Code=0xeeeb,
             Name="Charge Beam",
             Type='Charge',
-            BeamBits=0x1000
+            BeamBits=0x1000,
+            Id=5
         ),
         'Ice': Item(
             Category='Progression',
@@ -86,6 +93,7 @@ class ItemManager:
             Name="Ice Beam",
             Type='Ice',
             BeamBits=0x2,
+            Id=6
         ),
         'HiJump': Item(
             Category='Progression',
@@ -94,6 +102,7 @@ class ItemManager:
             Name="Hi-Jump Boots",
             Type='HiJump',
             ItemBits=0x100,
+            Id=7
         ),
         'SpeedBooster': Item(
             Category='Progression',
@@ -102,6 +111,7 @@ class ItemManager:
             Name="Speed Booster",
             Type='SpeedBooster',
             ItemBits=0x2000,
+            Id=8
         ),
         'Wave': Item(
             Category='Beam',
@@ -110,6 +120,7 @@ class ItemManager:
             Name="Wave Beam",
             Type='Wave',
             BeamBits=0x1,
+            Id=9
         ),
         'Spazer': Item(
             Category='Beam',
@@ -118,6 +129,7 @@ class ItemManager:
             Name="Spazer",
             Type='Spazer',
             BeamBits=0x4,
+            Id=10
         ),
         'SpringBall': Item(
             Category='Misc',
@@ -126,6 +138,7 @@ class ItemManager:
             Name="Spring Ball",
             Type='SpringBall',
             ItemBits=0x2,
+            Id=11
         ),
         'Varia': Item(
             Category='Progression',
@@ -134,6 +147,7 @@ class ItemManager:
             Name="Varia Suit",
             Type='Varia',
             ItemBits=0x1,
+            Id=12
         ),
         'Plasma': Item(
             Category='Beam',
@@ -142,6 +156,7 @@ class ItemManager:
             Name="Plasma Beam",
             Type='Plasma',
             BeamBits=0x8,
+            Id=15
         ),
         'Grapple': Item(
             Category='Progression',
@@ -150,6 +165,7 @@ class ItemManager:
             Name="Grappling Beam",
             Type='Grapple',
             ItemBits=0x4000,
+            Id=16
         ),
         'Morph': Item(
             Category='Progression',
@@ -158,6 +174,7 @@ class ItemManager:
             Name="Morph Ball",
             Type='Morph',
             ItemBits=0x4,
+            Id=19
         ),
         'Reserve': Item(
             Category='Energy',
@@ -165,6 +182,7 @@ class ItemManager:
             Code=0xef27,
             Name="Reserve Tank",
             Type='Reserve',
+            Id=20
         ),
         'Gravity': Item(
             Category='Progression',
@@ -173,6 +191,7 @@ class ItemManager:
             Name="Gravity Suit",
             Type='Gravity',
             ItemBits=0x20,
+            Id=13
         ),
         'XRayScope': Item(
             Category='Misc',
@@ -181,6 +200,7 @@ class ItemManager:
             Name="X-Ray Scope",
             Type='XRayScope',
             ItemBits=0x8000,
+            Id=14
         ),
         'SpaceJump': Item(
             Category='Progression',
@@ -189,6 +209,7 @@ class ItemManager:
             Name="Space Jump",
             Type='SpaceJump',
             ItemBits=0x200,
+            Id=17
         ),
         'ScrewAttack': Item(
             Category='Misc',
@@ -197,6 +218,7 @@ class ItemManager:
             Name="Screw Attack",
             Type='ScrewAttack',
             ItemBits= 0x8,
+            Id=18
         ),
         'Nothing': Item(
             Category='Nothing',
@@ -249,6 +271,14 @@ class ItemManager:
             Code=0xffff,
             Name="Hyper Beam",
             Type='Hyper',
+        ),
+        'ArchipelagoItem': Item(
+            Category='ArchipelagoItem',
+            Class='Major',
+            Code=0xefe0,
+            Name="Generic",
+            Type='ArchipelagoItem',
+            Id=21
         )
     }
 
@@ -267,6 +297,13 @@ class ItemManager:
                 modifier = 0
             elif itemVisibility == 'Hidden':
                 modifier = 4
+        elif item.Category == 'ArchipelagoItem':
+            if itemVisibility == 'Visible':
+                modifier = 0
+            elif itemVisibility == 'Chozo':
+                modifier = 4
+            elif itemVisibility == 'Hidden':
+                modifier = 8
         else:
             if itemVisibility == 'Visible':
                 modifier = 0
