@@ -44,7 +44,6 @@ def get_kivy_app():
     from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
     from kivy.lang import Builder
 
-
     class FactorioManager(App):
         def __init__(self, ctx):
             super(FactorioManager, self).__init__()
@@ -94,9 +93,6 @@ def get_kivy_app():
             except Exception as e:
                 logger.exception(e)
 
-        def on_address(self, text: str):
-            print(text)
-
 
     class LogtoUI(logging.Handler):
         def __init__(self, on_log):
@@ -132,6 +128,7 @@ def get_kivy_app():
     Builder.load_file(Utils.local_path("data", "client.kv"))
     return FactorioManager
 
+
 class FactorioCommandProcessor(ClientCommandProcessor):
     ctx: FactorioContext
 
@@ -144,15 +141,6 @@ class FactorioCommandProcessor(ClientCommandProcessor):
                 self.output(result)
             return True
         return False
-
-    def _cmd_connect(self, address: str = "") -> bool:
-        """Connect to a MultiWorld Server"""
-        if not self.ctx.auth:
-            if self.ctx.rcon_client:
-                get_info(self.ctx, self.ctx.rcon_client)  # retrieve current auth code
-            else:
-                self.output("Cannot connect to a server with unknown own identity, bridge to Factorio first.")
-        return super(FactorioCommandProcessor, self)._cmd_connect(address)
 
     def _cmd_resync(self):
         """Manually trigger a resync."""
@@ -174,6 +162,13 @@ class FactorioContext(CommonContext):
     async def server_auth(self, password_requested):
         if password_requested and not self.password:
             await super(FactorioContext, self).server_auth(password_requested)
+
+        if not self.auth:
+            if self.rcon_client:
+                get_info(self, self.rcon_client)  # retrieve current auth code
+            else:
+                raise Exception("Cannot connect to a server with unknown own identity, "
+                                "bridge to Factorio first.")
 
         await self.send_msgs([{"cmd": 'Connect',
                                'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
@@ -340,7 +335,6 @@ async def factorio_spinup_server(ctx: FactorioContext):
                 if not rcon_client and "Starting RCON interface at IP ADDR:" in msg:
                     rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
                     get_info(ctx, rcon_client)
-
             await asyncio.sleep(0.01)
 
     except Exception as e:
