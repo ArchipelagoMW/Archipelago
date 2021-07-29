@@ -19,8 +19,6 @@ class Factorio(World):
     static_nodes = {"automation", "logistics", "rocket-silo"}
     custom_recipes = {}
     additional_advancement_technologies = set()
-    item_names = frozenset(tech_table)
-    location_names = frozenset(base_tech_table)
 
     item_name_to_id = tech_table
     location_name_to_id = base_tech_table

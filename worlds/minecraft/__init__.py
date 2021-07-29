@@ -17,8 +17,6 @@ class MinecraftWorld(World):
     game: str = "Minecraft"
     options = minecraft_options
     topology_present = True
-    item_names = frozenset(item_table)
-    location_names = frozenset(advancement_table)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}

@@ -16,8 +16,6 @@ from ..AutoWorld import World
 
 class SubnauticaWorld(World):
     game: str = "Subnautica"
-    item_names: Set[str] = frozenset(items_lookup_name_to_id)
-    location_names: Set[str] = frozenset(locations_lookup_name_to_id)
 
     item_name_to_id = items_lookup_name_to_id
     location_name_to_id = locations_lookup_name_to_id

@@ -8,13 +8,19 @@ class AutoWorldRegister(type):
     world_types:Dict[str, World] = {}
 
     def __new__(cls, name, bases, dct):
-        dct["all_names"] = dct["item_names"] | dct["location_names"] | set(dct.get("item_name_groups", {}))
         # filter out any events
         dct["item_name_to_id"] = {name: id for name, id in dct["item_name_to_id"].items() if id}
         dct["location_name_to_id"] = {name: id for name, id in dct["location_name_to_id"].items() if id}
         # build reverse lookups
         dct["item_id_to_name"] = {code: name for name, code in dct["item_name_to_id"].items()}
         dct["location_id_to_name"] = {code: name for name, code in dct["location_name_to_id"].items()}
+
+        # build rest
+        dct["item_names"] = frozenset(dct["item_name_to_id"])
+        dct["location_names"] = frozenset(dct["location_name_to_id"])
+        dct["all_names"] = dct["item_names"] | dct["location_names"] | set(dct.get("item_name_groups", {}))
+
+
         # construct class
         new_class = super().__new__(cls, name, bases, dct)
         if "game" in dct:
@@ -50,19 +56,14 @@ class World(metaclass=AutoWorldRegister):
     options: dict = {}  # link your Options mapping
     game: str # name the game
     topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
-    item_names: Set[str] = frozenset()  # set of all potential item names
-    # maps item group names to sets of items. Example: "Weapons" -> {"Sword", "Bow"}
-    item_name_groups: Dict[str, Set[str]] = {}
-    location_names: Set[str] = frozenset()  # set of all potential location names
     all_names: Set[str] = frozenset()  # gets automatically populated with all item, item group and location names
 
     # map names to their IDs
     item_name_to_id: Dict[str, int] = {}
     location_name_to_id: Dict[str, int] = {}
 
-    # reverse, automatically generated
-    item_id_to_name: Dict[int, str] = {}
-    location_id_to_name: Dict[int, str] = {}
+    # maps item group names to sets of items. Example: "Weapons" -> {"Sword", "Bow"}
+    item_name_groups: Dict[str, Set[str]] = {}
 
     data_version = 1  # increment this every time something in your world's names/id mappings changes.
 
@@ -77,6 +78,13 @@ class World(metaclass=AutoWorldRegister):
     # autoset on creation:
     world: MultiWorld
     player: int
+
+    # automatically generated
+    item_id_to_name: Dict[int, str]
+    location_id_to_name: Dict[int, str]
+
+    item_names: Set[str]  # set of all potential item names
+    location_names: Set[str]  # set of all potential location names
 
     def __init__(self, world: MultiWorld, player: int):
         self.world = world
