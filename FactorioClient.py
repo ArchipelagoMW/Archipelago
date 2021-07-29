@@ -151,6 +151,9 @@ class FactorioContext(CommonContext):
     command_processor = FactorioCommandProcessor
     game = "Factorio"
 
+    # updated by spinup server
+    mod_version: Utils.Version = Utils.Version(0, 0, 0)
+
     def __init__(self, server_address, password):
         super(FactorioContext, self).__init__(server_address, password)
         self.send_index = 0
@@ -179,22 +182,28 @@ class FactorioContext(CommonContext):
     def on_print(self, args: dict):
         logger.info(args["text"])
         if self.rcon_client:
-            cleaned_text = args['text'].replace('"', '')
-            self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
-                                          f"{cleaned_text}")
+            self.print_to_game(args['text'])
 
     def on_print_json(self, args: dict):
         text = self.raw_json_text_parser(copy.deepcopy(args["data"]))
         logger.info(text)
         if self.rcon_client:
             text = self.factorio_json_text_parser(args["data"])
-            cleaned_text = text.replace('"', '')
-            self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
-                                          f"{cleaned_text}")
+            self.print_to_game(text)
 
     @property
     def savegame_name(self) -> str:
         return f"AP_{self.seed_name}_{self.auth}.zip"
+
+    def print_to_game(self, text):
+        # TODO: remove around version 0.2
+        if self.mod_version < Utils.Version(0, 1, 6):
+            text = text.replace('"', '')
+            self.rcon_client.send_command(f"/sc game.print(\"[font=default-large-bold]Archipelago:[/font] "
+                                          f"{text}\")")
+        else:
+            self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
+                                          f"{text}")
 
 
 async def game_watcher(ctx: FactorioContext):
@@ -332,10 +341,16 @@ async def factorio_spinup_server(ctx: FactorioContext):
             while not factorio_queue.empty():
                 msg = factorio_queue.get()
                 factorio_server_logger.info(msg)
+                if "Loading mod AP-" and msg.endswith("(data.lua)"):
+                    parts = msg.split()
+                    ctx.mod_version = Utils.Version(*(int(number) for number in parts[-2].split(".")))
                 if not rcon_client and "Starting RCON interface at IP ADDR:" in msg:
                     rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
                     get_info(ctx, rcon_client)
             await asyncio.sleep(0.01)
+
+        if ctx.mod_version == ctx.__class__.mod_version:
+            raise Exception("No Archipelago mod was loaded. Aborting.")
 
     except Exception as e:
         logging.exception(e)
@@ -343,7 +358,7 @@ async def factorio_spinup_server(ctx: FactorioContext):
         ctx.exit_event.set()
 
     else:
-        logger.info(f"Got World Information from AP Mod for seed {ctx.seed_name} in slot {ctx.auth}")
+        logger.info(f"Got World Information from AP Mod {tuple(ctx.mod_version)} for seed {ctx.seed_name} in slot {ctx.auth}")
 
     finally:
         factorio_process.terminate()
