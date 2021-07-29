@@ -421,7 +421,8 @@ async def on_client_joined(ctx: Context, client: Client):
     update_client_status(ctx, client, ClientStatus.CLIENT_CONNECTED)
     version_str = '.'.join(str(x) for x in client.version)
     ctx.notify_all(
-        f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has joined the game. "
+        f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) "
+        f"playing {ctx.games[client.slot]} has joined. "
         f"Client({version_str}), {client.tags}).")
 
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
