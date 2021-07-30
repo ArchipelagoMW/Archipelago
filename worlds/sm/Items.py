@@ -1,5 +1,14 @@
 from rando.Items import ItemManager
 
-start_id = 83000
-lookup_id_to_name = dict((key, value.Name) for key, value in enumerate(ItemManager.Items.values(), start_id))
+items_start_id = 83000
+
+def gen_special_id():
+    special_id_value_start = 32
+    while True:
+        yield special_id_value_start
+        special_id_value_start += 1
+
+gen_run = gen_special_id()
+
+lookup_id_to_name = dict((items_start_id + (value.Id if value.Id != None else next(gen_run)), value.Name) for key, value in ItemManager.Items.items())
 lookup_name_to_id = {location_name: location_id for location_id, location_name in lookup_id_to_name.items()}
