@@ -88,6 +88,7 @@ class CommonContext():
     current_reconnect_delay = starting_reconnect_delay
     command_processor = ClientCommandProcessor
     game: None
+    ui: None
 
     def __init__(self, server_address, password):
         # server state
@@ -204,7 +205,11 @@ class CommonContext():
         logger.info(args["text"])
 
     def on_print_json(self, args: dict):
-        logger.info(self.jsontotextparser(args["data"]))
+        if self.ui:
+            self.ui.print_json(args["data"])
+        else:
+            text = self.jsontotextparser(args["data"])
+            logger.info(text)
 
 
 async def server_loop(ctx: CommonContext, address=None):

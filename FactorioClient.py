@@ -54,7 +54,6 @@ class FactorioCommandProcessor(ClientCommandProcessor):
 class FactorioContext(CommonContext):
     command_processor = FactorioCommandProcessor
     game = "Factorio"
-    ui = None
 
     # updated by spinup server
     mod_version: Utils.Version = Utils.Version(0, 0, 0)
@@ -64,7 +63,6 @@ class FactorioContext(CommonContext):
         self.send_index = 0
         self.rcon_client = None
         self.awaiting_bridge = False
-        self.raw_json_text_parser = RawJSONtoTextParser(self)
         self.factorio_json_text_parser = FactorioJSONtoTextParser(self)
 
     async def server_auth(self, password_requested):
@@ -90,14 +88,10 @@ class FactorioContext(CommonContext):
             self.print_to_game(args['text'])
 
     def on_print_json(self, args: dict):
-        if self.ui:
-            self.ui.print_json(copy.deepcopy(args["data"]))
-        else:
-            text = self.raw_json_text_parser(copy.deepcopy(args["data"]))
-            logger.info(text)
         if self.rcon_client:
-            text = self.factorio_json_text_parser(args["data"])
+            text = self.factorio_json_text_parser(copy.deepcopy(args["data"]))
             self.print_to_game(text)
+        super(FactorioContext, self).on_print_json(args)
 
     @property
     def savegame_name(self) -> str:
@@ -279,9 +273,8 @@ async def main(args):
     if gui_enabled:
         input_task = None
         from kvui import FactorioManager
-        ui_app = FactorioManager(ctx)
-        ctx.ui = ui_app
-        ui_task = asyncio.create_task(ui_app.async_run(), name="UI")
+        ctx.ui = FactorioManager(ctx)
+        ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
     else:
         input_task = asyncio.create_task(console_loop(ctx), name="Input")
         ui_task = None

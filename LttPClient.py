@@ -904,9 +904,8 @@ async def main():
     if Utils.is_frozen() or "--nogui" not in sys.argv:
         input_task = None
         from kvui import LttPManager
-        ui_app = LttPManager(ctx)
-        ctx.ui = ui_app
-        ui_task = asyncio.create_task(ui_app.async_run(), name="UI")
+        ctx.ui = LttPManager(ctx)
+        ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
     else:
         input_task = asyncio.create_task(console_loop(ctx), name="Input")
         ui_task = None
