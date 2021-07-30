@@ -15,8 +15,8 @@ One Server Host exists per Factorio World in an Archipelago Multiworld, any numb
 ## Installation Procedures
 
 ### Dedicated Server Setup
-You need a dedicated isolated Factorio installation that the FactorioClient can take control over, if you intend to both emit a world and play, you need to follow both this setup and the player setup.
-This requires two Factorio installations. The easiest and cheapest way to do so is to either buy or register a Factorio on factorio.com, which allows you to download as many Factorio games as you want.
+You need a dedicated isolated Factorio installation that the FactorioClient can take control over. If you intend to both host a world and play on the same device, you will need two separate Factorio installations; one for the **FactorioClient** to hook into and one for you to play on.
+The easiest and cheapest way to do so is to either buy or register a Factorio key on factorio.com, which allows you to download as many Factorio games as you want. If you own a steam copy already you can link your account on the website.
 1. Download the latest Factorio from https://factorio.com/download for your system, for Windows the recommendation is "win64-manual".
 
 2. Make sure the Factorio you play and the Factorio you use for hosting do not share paths. If you downloaded the "manual" version, this is already the case, otherwise, go into the hosting Factorio's folder and put the following text into its `config-path.cfg`:
