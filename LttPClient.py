@@ -1,5 +1,6 @@
 import argparse
 import atexit
+exit_func = atexit.register(input, "Press enter to close.")
 import threading
 import time
 import sys
@@ -12,7 +13,6 @@ from json import loads, dumps
 
 from Utils import get_item_name_from_id
 
-exit_func = atexit.register(input, "Press enter to close.")
 
 import ModuleUpdate
 
@@ -54,7 +54,8 @@ class LttPCommandProcessor(ClientCommandProcessor):
 
     @mark_raw
     def _cmd_snes(self, snes_address: str = "") -> bool:
-        """Connect to a snes. Optionally include network address of a snes to connect to, otherwise show available devices"""
+        """Connect to a snes.
+        Optionally include network address of a snes to connect to, otherwise show available devices"""
         self.ctx.snes_reconnect_address = None
         asyncio.create_task(snes_connect(self.ctx, snes_address if snes_address else self.ctx.snes_address))
         return True
@@ -436,7 +437,10 @@ def launch_sni(ctx: Context):
     if os.path.isfile(sni_path):
         snes_logger.info(f"Attempting to start {sni_path}")
         import subprocess
-        subprocess.Popen(sni_path, cwd=os.path.dirname(sni_path), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if Utils.is_frozen(): # if it spawns a visible console, may as well populate it
+            subprocess.Popen(sni_path, cwd=os.path.dirname(sni_path))
+        else:
+            subprocess.Popen(sni_path, cwd=os.path.dirname(sni_path), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     else:
         snes_logger.info(
             f"Attempt to start SNI was aborted as path {sni_path} was not found, "
@@ -495,7 +499,10 @@ async def get_snes_devices(ctx: Context):
 async def snes_connect(ctx: Context, address):
     global SNES_RECONNECT_DELAY
     if ctx.snes_socket is not None and ctx.snes_state == SNESState.SNES_CONNECTED:
-        snes_logger.error('Already connected to snes')
+        if ctx.rom:
+            snes_logger.error('Already connected to SNES, with rom loaded.')
+        else:
+            snes_logger.error('Already connected to SNI, likely awaiting a device.')
         return
 
     recv_task = None
@@ -531,6 +538,7 @@ async def snes_connect(ctx: Context, address):
         ctx.snes_reconnect_address = address
         recv_task = asyncio.create_task(snes_recv_loop(ctx))
         SNES_RECONNECT_DELAY = ctx.starting_reconnect_delay
+        snes_logger.info(f"Attached to {device}")
 
     except Exception as e:
         if recv_task is not None:

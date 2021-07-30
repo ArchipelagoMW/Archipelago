@@ -137,6 +137,7 @@ def open_file(filename):
 parse_yaml = safe_load
 unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 
+
 @cache_argsless
 def get_public_ipv4() -> str:
     import socket
@@ -153,6 +154,7 @@ def get_public_ipv4() -> str:
             pass  # we could be offline, in a local game, so no point in erroring out
     return ip
 
+
 @cache_argsless
 def get_public_ipv6() -> str:
     import socket
@@ -165,6 +167,7 @@ def get_public_ipv6() -> str:
         logging.exception(e)
         pass  # we could be offline, in a local game, or ipv6 may not be available
     return ip
+
 
 @cache_argsless
 def get_default_options() -> dict:
@@ -217,14 +220,6 @@ def get_default_options() -> dict:
     return options
 
 
-blacklisted_options = {"multi_mystery_options.cpu_threads",
-                       "multi_mystery_options.max_attempts",
-                       "multi_mystery_options.take_first_working",
-                       "multi_mystery_options.keep_all_seeds",
-                       "multi_mystery_options.log_output_path",
-                       "multi_mystery_options.log_level"}
-
-
 def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
     import logging
     for key, value in src.items():
@@ -233,16 +228,17 @@ def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
         option_name = '.'.join(new_keys)
         if key not in dest:
             dest[key] = value
-            if filename.endswith("options.yaml") and option_name not in blacklisted_options:
+            if filename.endswith("options.yaml"):
                 logging.info(f"Warning: {filename} is missing {option_name}")
         elif isinstance(value, dict):
             if not isinstance(dest.get(key, None), dict):
-                if filename.endswith("options.yaml") and option_name not in blacklisted_options:
+                if filename.endswith("options.yaml"):
                     logging.info(f"Warning: {filename} has {option_name}, but it is not a dictionary. overwriting.")
                 dest[key] = value
             else:
                 dest[key] = update_options(value, dest[key], filename, new_keys)
     return dest
+
 
 @cache_argsless
 def get_options() -> dict:

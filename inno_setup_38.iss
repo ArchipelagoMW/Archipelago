@@ -86,8 +86,8 @@ Type: dirifempty; Name: "{app}"
 
 Root: HKCR; Subkey: ".apbp";                                 ValueData: "{#MyAppName}patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/lttp
 Root: HKCR; Subkey: "{#MyAppName}patch";                     ValueData: "Archipelago Binary Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/lttp
-Root: HKCR; Subkey: "{#MyAppName}patch\DefaultIcon";         ValueData: "{app}\{#MyAppExeName},0";                           ValueType: string;  ValueName: ""; Components: client/lttp
-Root: HKCR; Subkey: "{#MyAppName}patch\shell\open\command";  ValueData: """{app}\{#MyAppExeName}"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/lttp
+Root: HKCR; Subkey: "{#MyAppName}patch\DefaultIcon";         ValueData: "{app}\ArchipelagoLttPClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/lttp
+Root: HKCR; Subkey: "{#MyAppName}patch\shell\open\command";  ValueData: """{app}\ArchipelagoLttPClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/lttp
 
 Root: HKCR; Subkey: ".archipelago";                              ValueData: "{#MyAppName}multidata";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: server
 Root: HKCR; Subkey: "{#MyAppName}multidata";                     ValueData: "Archipelago Server Data";       Flags: uninsdeletekey;  ValueType: string;  ValueName: ""; Components: server
