@@ -4,7 +4,7 @@ import utils.log, logging, copy, random
 class Item:
     __slots__ = ( 'Category', 'Class', 'Name', 'Code', 'Type', 'BeamBits', 'ItemBits', 'Id' )
 
-    def __init__(self, Category, Class, Name, Type, Code=None, BeamBits=0, ItemBits=0, Id=0):
+    def __init__(self, Category, Class, Name, Type, Code=None, BeamBits=0, ItemBits=0, Id=None):
         self.Category = Category
         self.Class = Class
         self.Code = Code

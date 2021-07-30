@@ -162,6 +162,9 @@ def get_default_options() -> dict:
             "executable": "factorio\\bin\\x64\\factorio",
         },
         "sm_options": {
+            "rom_file": "Super Metroid (JU) [!].sfc",
+            "sni": "SNI",
+            "rom_start": True,
         },
         "lttp_options": {
             "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
