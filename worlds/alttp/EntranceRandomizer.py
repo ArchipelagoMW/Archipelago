@@ -337,8 +337,6 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--game', default="A Link to the Past")
     parser.add_argument('--race', default=defval(False), action='store_true')
     parser.add_argument('--outputname')
-    parser.add_argument('--create_diff', default=defval(False), action='store_true', help='''\
-    create a binary patch file from which the randomized rom can be recreated using MultiClient.''')
     parser.add_argument('--disable_glitch_boots', default=defval(False), action='store_true', help='''\
     turns off starting with Pegasus Boots in glitched modes.''')
     parser.add_argument('--start_hints')

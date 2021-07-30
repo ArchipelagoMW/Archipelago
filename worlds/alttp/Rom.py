@@ -18,7 +18,7 @@ import bsdiff4
 from typing import Optional
 
 from BaseClasses import CollectionState, Region
-from worlds.alttp import ALttPLocation
+from worlds.alttp.SubClasses import ALttPLocation
 from worlds.alttp.Shops import ShopType
 from worlds.alttp.Dungeons import dungeon_music_addresses
 from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address
@@ -31,7 +31,7 @@ from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts
     DeathMountain_texts, \
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from Utils import output_path, local_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_bundled
+from Utils import output_path, local_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen
 from worlds.alttp.Items import ItemFactory, item_table
 from worlds.alttp.EntranceShuffle import door_addresses
 import Patch
@@ -279,11 +279,11 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
                 rom.write_bytes(0x307078 + (i * 0x8000), sprite.glove_palette)
 
 
-def patch_enemizer(world, team: int, player: int, rom: LocalRom, enemizercli):
+def patch_enemizer(world, team: int, player: int, rom: LocalRom, enemizercli, output_directory):
     check_enemizer(enemizercli)
-    randopatch_path = os.path.abspath(output_path(f'enemizer_randopatch_{team}_{player}.sfc'))
-    options_path = os.path.abspath(output_path(f'enemizer_options_{team}_{player}.json'))
-    enemizer_output_path = os.path.abspath(output_path(f'enemizer_output_{team}_{player}.sfc'))
+    randopatch_path = os.path.abspath(os.path.join(output_directory, f'enemizer_randopatch_{team}_{player}.sfc'))
+    options_path = os.path.abspath(os.path.join(output_directory, f'enemizer_options_{team}_{player}.json'))
+    enemizer_output_path = os.path.abspath(os.path.join(output_directory, f'enemizer_output_{team}_{player}.sfc'))
 
     # write options file for enemizer
     options = {
@@ -578,14 +578,13 @@ class Sprite():
         return name
 
     def to_ap_sprite(self, path):
-        from .. import Games
         import yaml
         payload = {"format_version": 1,
                    "min_format_version": 1,
                    "sprite_version": 1,
                    "name": self.name,
                    "author": self.author_name,
-                   "game": Games.LTTP.value,
+                   "game": "A Link to the Past",
                    "data": self.get_delta()}
         with open(path, "w") as f:
             f.write(yaml.safe_dump(payload))
@@ -778,7 +777,7 @@ def patch_rom(world, rom, player, team, enemized):
         if not location.crystal:
 
             if location.item is not None:
-                if location.item.game != "A Link to the Past":
+                if not location.native_item:
                     itemid = get_nonnative_item_sprite(location.item.game)
                 # Keys in their native dungeon should use the orignal item code for keys
                 elif location.parent_region.dungeon:
@@ -791,7 +790,7 @@ def patch_rom(world, rom, player, team, enemized):
                             itemid = 0x33
                         elif location.item.compass:
                             itemid = 0x25
-                if world.remote_items[player]:
+                if world.worlds[player].remote_items: # remote items does not currently work
                     itemid = list(location_table.keys()).index(location.name) + 1
                     assert itemid < 0x100
                     rom.write_byte(location.player_address, 0xFF)
@@ -1648,7 +1647,8 @@ def patch_rom(world, rom, player, team, enemized):
 
     write_strings(rom, world, player, team)
 
-    rom.write_byte(0x18637C, 1 if world.remote_items[player] else 0)
+    # remote items flag, does not currently work
+    rom.write_byte(0x18637C, int(world.worlds[player].remote_items))
 
     # set rom name
     # 21 bytes
@@ -1843,7 +1843,7 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
                 option_name: True
             }
 
-            data_dir = local_path("data") if is_bundled() else None
+            data_dir = local_path("data") if is_frozen() else None
             offsets_array = build_offset_collections(options, data_dir)
             restore_maseya_colors(rom, offsets_array)
             if mode == 'default':

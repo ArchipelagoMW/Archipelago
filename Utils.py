@@ -12,7 +12,8 @@ class Version(typing.NamedTuple):
     minor: int
     build: int
 
-__version__ = "0.1.3"
+
+__version__ = "0.1.6"
 version_tuple = tuplize_version(__version__)
 
 import builtins
@@ -22,6 +23,7 @@ import sys
 import pickle
 import functools
 import io
+import collections
 
 from yaml import load, dump, safe_load
 
@@ -52,7 +54,6 @@ def snes_to_pc(value):
 def parse_player_names(names, players, teams):
     names = tuple(n for n in (n.strip() for n in names.split(",")) if n)
     if len(names) != len(set(names)):
-        import collections
         name_counter = collections.Counter(names)
         raise ValueError(f"Duplicate Player names is not supported, "
                          f'found multiple "{name_counter.most_common(1)[0][0]}".')
@@ -68,7 +69,22 @@ def parse_player_names(names, players, teams):
     return ret
 
 
-def is_bundled() -> bool:
+def cache_argsless(function):
+    if function.__code__.co_argcount:
+        raise Exception("Can only cache 0 argument functions with this cache.")
+
+    result = sentinel = object()
+
+    def _wrap():
+        nonlocal result
+        if result is sentinel:
+            result = function()
+        return result
+
+    return _wrap
+
+
+def is_frozen() -> bool:
     return getattr(sys, 'frozen', False)
 
 
@@ -76,7 +92,7 @@ def local_path(*path):
     if local_path.cached_path:
         return os.path.join(local_path.cached_path, *path)
 
-    elif is_bundled():
+    elif is_frozen():
         if hasattr(sys, "_MEIPASS"):
             # we are running in a PyInstaller bundle
             local_path.cached_path = sys._MEIPASS  # pylint: disable=protected-access,no-member
@@ -118,20 +134,10 @@ def open_file(filename):
         subprocess.call([open_command, filename])
 
 
-def close_console():
-    if sys.platform == 'win32':
-        # windows
-        import ctypes.wintypes
-        try:
-            ctypes.windll.kernel32.FreeConsole()
-        except Exception:
-            pass
-
-
 parse_yaml = safe_load
 unsafe_parse_yaml = functools.partial(load, Loader=Loader)
 
-
+@cache_argsless
 def get_public_ipv4() -> str:
     import socket
     import urllib.request
@@ -147,7 +153,7 @@ def get_public_ipv4() -> str:
             pass  # we could be offline, in a local game, so no point in erroring out
     return ip
 
-
+@cache_argsless
 def get_public_ipv6() -> str:
     import socket
     import urllib.request
@@ -160,70 +166,55 @@ def get_public_ipv6() -> str:
         pass  # we could be offline, in a local game, or ipv6 may not be available
     return ip
 
-
+@cache_argsless
 def get_default_options() -> dict:
-    if not hasattr(get_default_options, "options"):
-        # Refer to host.yaml for comments as to what all these options mean.
-        options = {
-            "general_options": {
-                "output_path": "output",
-            },
-            "factorio_options": {
-                "executable": "factorio\\bin\\x64\\factorio",
-            },
-            "lttp_options": {
-                "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
-                "qusb2snes": "QUsb2Snes\\QUsb2Snes.exe",
-                "rom_start": True,
+    # Refer to host.yaml for comments as to what all these options mean.
+    options = {
+        "general_options": {
+            "output_path": "output",
+        },
+        "factorio_options": {
+            "executable": "factorio\\bin\\x64\\factorio",
+        },
+        "lttp_options": {
+            "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
+            "sni": "SNI",
+            "rom_start": True,
 
-            },
-            "server_options": {
-                "host": None,
-                "port": 38281,
-                "password": None,
-                "multidata": None,
-                "savefile": None,
-                "disable_save": False,
-                "loglevel": "info",
-                "server_password": None,
-                "disable_item_cheat": False,
-                "location_check_points": 1,
-                "hint_cost": 10,
-                "forfeit_mode": "goal",
-                "remaining_mode": "goal",
-                "auto_shutdown": 0,
-                "compatibility": 2,
-                "log_network": 0
-            },
-            "multi_mystery_options": {
-                "teams": 1,
-                "enemizer_path": "EnemizerCLI/EnemizerCLI.Core.exe",
-                "player_files_path": "Players",
-                "players": 0,
-                "weights_file_path": "weights.yaml",
-                "meta_file_path": "meta.yaml",
-                "pre_roll": False,
-                "create_spoiler": 1,
-                "zip_roms": 0,
-                "zip_diffs": 2,
-                "zip_apmcs": 1,
-                "zip_spoiler": 0,
-                "zip_multidata": 1,
-                "zip_format": 1,
-                "glitch_triforce_room": 1,
-                "race": 0,
-                "cpu_threads": 0,
-                "max_attempts": 0,
-                "take_first_working": False,
-                "keep_all_seeds": False,
-                "log_output_path": "Output Logs",
-                "log_level": None,
-                "plando_options": "bosses",
-            }
+        },
+        "server_options": {
+            "host": None,
+            "port": 38281,
+            "password": None,
+            "multidata": None,
+            "savefile": None,
+            "disable_save": False,
+            "loglevel": "info",
+            "server_password": None,
+            "disable_item_cheat": False,
+            "location_check_points": 1,
+            "hint_cost": 10,
+            "forfeit_mode": "goal",
+            "remaining_mode": "goal",
+            "auto_shutdown": 0,
+            "compatibility": 2,
+            "log_network": 0
+        },
+        "generator": {
+            "teams": 1,
+            "enemizer_path": "EnemizerCLI/EnemizerCLI.Core.exe",
+            "player_files_path": "Players",
+            "players": 0,
+            "weights_file_path": "weights.yaml",
+            "meta_file_path": "meta.yaml",
+            "spoiler": 2,
+            "glitch_triforce_room": 1,
+            "race": 0,
+            "plando_options": "bosses",
         }
+    }
 
-        get_default_options.options = options
-    return get_default_options.options
+    return options
 
 
 blacklisted_options = {"multi_mystery_options.cpu_threads",
@@ -253,7 +244,7 @@ def update_options(src: dict, dest: dict, filename: str, keys: list) -> dict:
                 dest[key] = update_options(value, dest[key], filename, new_keys)
     return dest
 
-
+@cache_argsless
 def get_options() -> dict:
     if not hasattr(get_options, "options"):
         locations = ("options.yaml", "host.yaml",
@@ -367,7 +358,7 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
         return romfile, adjusted
     return romfile, False
 
-
+@cache_argsless
 def get_unique_identifier():
     uuid = persistent_load().get("client", {}).get("uuid", None)
     if uuid:
@@ -405,3 +396,9 @@ class RestrictedUnpickler(pickle.Unpickler):
 def restricted_loads(s):
     """Helper function analogous to pickle.loads()."""
     return RestrictedUnpickler(io.BytesIO(s)).load()
+
+
+class KeyedDefaultDict(collections.defaultdict):
+    def __missing__(self, key):
+        self[key] = value = self.default_factory(key)
+        return value

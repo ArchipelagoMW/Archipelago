@@ -109,9 +109,9 @@ class Node:
         for endpoint in self.endpoints:
             asyncio.create_task(self.send_encoded_msgs(endpoint, msgs))
 
-    async def send_msgs(self, endpoint: Endpoint, msgs: typing.Iterable[dict]):
-        if not endpoint.socket or not endpoint.socket.open or endpoint.socket.closed:
-            return
+    async def send_msgs(self, endpoint: Endpoint, msgs: typing.Iterable[dict]) -> bool:
+        if not endpoint.socket or not endpoint.socket.open:
+            return False
         msg = self.dumper(msgs)
         try:
             await endpoint.socket.send(msg)
@@ -121,18 +121,20 @@ class Node:
         else:
             if self.log_network:
                 logging.info(f"Outgoing message: {msg}")
+            return True
 
-    async def send_encoded_msgs(self, endpoint: Endpoint, msg: str):
-        if not endpoint.socket or not endpoint.socket.open or endpoint.socket.closed:
-            return
+    async def send_encoded_msgs(self, endpoint: Endpoint, msg: str) -> bool:
+        if not endpoint.socket or not endpoint.socket.open:
+            return False
         try:
             await endpoint.socket.send(msg)
         except websockets.ConnectionClosed:
-            logging.exception("Exception during send_msgs")
+            logging.exception("Exception during send_encoded_msgs")
             await self.disconnect(endpoint)
         else:
             if self.log_network:
                 logging.info(f"Outgoing message: {msg}")
+            return True
 
     async def disconnect(self, endpoint):
         if endpoint in self.endpoints:
@@ -307,7 +309,9 @@ class Hint(typing.NamedTuple):
         else:
             add_json_text(parts, ".")
 
-        return {"cmd": "PrintJSON", "data": parts, "type": "hint"}
+        return {"cmd": "PrintJSON", "data": parts, "type": "Hint",
+                "receiving": self.receiving_player,
+                "item": NetworkItem(self.item, self.location, self.finding_player)}
 
     @property
     def local(self):

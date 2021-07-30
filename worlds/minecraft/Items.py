@@ -1,14 +1,15 @@
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item
+from BaseClasses import Item
 import typing
 
+
 class ItemData(typing.NamedTuple):
-    code: int
+    code: typing.Optional[int]
     progression: bool
+
 
 class MinecraftItem(Item):
     game: str = "Minecraft"
-    def __init__(self, name: str, progression: bool, code: int, player: int):
-        super().__init__(name, progression, code if code else None, player)
+
 
 item_table = {
     "Archery": ItemData(45000, True),
@@ -46,8 +47,17 @@ item_table = {
     "8 Gold Ore": ItemData(45032, False), 
     "Rotten Flesh": ItemData(45033, False), 
     "Single Arrow": ItemData(45034, False), 
+    "32 Arrows": ItemData(45035, False),
+    "Saddle": ItemData(45036, True),
+    "Structure Compass (Village)": ItemData(45037, True),
+    "Structure Compass (Pillager Outpost)": ItemData(45038, True),
+    "Structure Compass (Nether Fortress)": ItemData(45039, True),
+    "Structure Compass (Bastion Remnant)": ItemData(45040, True),
+    "Structure Compass (End City)": ItemData(45041, True),
+    "Shulker Box": ItemData(45042, False),
+    "Bee Trap (Minecraft)": ItemData(45100, False),
 
-    "Victory": ItemData(0, True)
+    "Victory": ItemData(None, True)
 }
 
 # If not listed here then has frequency 1
@@ -60,15 +70,23 @@ item_frequencies = {
     "4 Emeralds": 8, 
     "4 Diamond Ore": 4, 
     "16 Iron Ore": 4, 
-    "500 XP": 4, # 2 after exclusions
-    "100 XP": 10, # 4 after exclusions
-    "50 XP": 12, # 4 after exclusions
+    "500 XP": 0,
+    "100 XP": 0,
+    "50 XP": 21,
     "3 Ender Pearls": 4, 
     "4 Lapis Lazuli": 2, 
     "16 Porkchops": 8, 
     "8 Gold Ore": 4, 
     "Rotten Flesh": 4, 
-    "Single Arrow": 0
+    "Single Arrow": 0, 
+    "32 Arrows": 4,
+    "Structure Compass (Village)": 0,
+    "Structure Compass (Pillager Outpost)": 0,
+    "Structure Compass (Nether Fortress)": 0,
+    "Structure Compass (Bastion Remnant)": 0,
+    "Structure Compass (End City)": 0,
+    "Shulker Box": 0,
+    "Bee Trap (Minecraft)": 0,
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}

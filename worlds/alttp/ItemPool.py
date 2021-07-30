@@ -2,14 +2,13 @@ from collections import namedtuple
 import logging
 
 from BaseClasses import Region, RegionType
-from worlds.alttp import ALttPLocation
+from worlds.alttp.SubClasses import ALttPLocation
 from worlds.alttp.Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops
 from worlds.alttp.Bosses import place_bosses
 from worlds.alttp.Dungeons import get_dungeon_item_pool
 from worlds.alttp.EntranceShuffle import connect_entrance
 from Fill import FillError, fill_restrictive
 from worlds.alttp.Items import ItemFactory, GetBeemizerItem
-from worlds.generic.Rules import forbid_items_for_player
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.
 # Some basic items that various modes require are placed here, including pendants and crystals. Medallion requirements for the two relevant entrances are also decided.
@@ -223,7 +222,9 @@ for diff in {'easy', 'normal', 'hard', 'expert'}:
     )
 
 
-def generate_itempool(world, player: int):
+def generate_itempool(world):
+    player = world.player
+    world = world.world
     if world.difficulty[player] not in difficulties:
         raise NotImplementedError(f"Diffulty {world.difficulty[player]}")
     if world.goal[player] not in {'ganon', 'pedestal', 'bosses', 'triforcehunt', 'localtriforcehunt', 'icerodhunt',
@@ -349,9 +350,7 @@ def generate_itempool(world, player: int):
             world.escape_assist[player].append('bombs')
 
     for (location, item) in placed_items.items():
-        world.push_item(world.get_location(location, player), ItemFactory(item, player), False)
-        world.get_location(location, player).event = True
-        world.get_location(location, player).locked = True
+        world.get_location(location, player).place_locked_item(ItemFactory(item, player))
 
     items = ItemFactory(pool, player)
 
@@ -514,7 +513,7 @@ def create_dynamic_shop_locations(world, player):
 
 def fill_prizes(world, attempts=15):
     all_state = world.get_all_state(keys=True)
-    for player in world.alttp_player_ids:
+    for player in world.get_game_players("A Link to the Past"):
         crystals = ItemFactory(['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6'], player)
         crystal_locations = [world.get_location('Turtle Rock - Prize', player), world.get_location('Eastern Palace - Prize', player), world.get_location('Desert Palace - Prize', player), world.get_location('Tower of Hera - Prize', player), world.get_location('Palace of Darkness - Prize', player),
                              world.get_location('Thieves\' Town - Prize', player), world.get_location('Skull Woods - Prize', player), world.get_location('Swamp Palace - Prize', player), world.get_location('Ice Palace - Prize', player),

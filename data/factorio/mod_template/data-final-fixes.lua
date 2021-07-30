@@ -2,7 +2,9 @@
 -- this file gets written automatically by the Archipelago Randomizer and is in its raw form a Jinja2 Template
 require('lib')
 
-data.raw["recipe"]["rocket-part"].ingredients = {{ dict_to_recipe(rocket_recipe) }}
+{%- for recipe_name, recipe in custom_recipes.items() %}
+data.raw["recipe"]["{{recipe_name}}"].ingredients = {{ dict_to_recipe(recipe.ingredients) }}
+{%- endfor %}
 
 local technologies = data.raw["technology"]
 local original_tech
@@ -50,17 +52,25 @@ function copy_factorio_icon(tech, tech_source)
 end
 
 function adjust_energy(recipe_name, factor)
-    local energy = data.raw.recipe[recipe_name].energy_required
-    if (energy == nil) then
-        energy = 1
+    local recipe = data.raw.recipe[recipe_name]
+    local energy = recipe.energy_required
+    if (energy ~= nil) then
+        data.raw.recipe[recipe_name].energy_required = energy * factor
     end
-    data.raw.recipe[recipe_name].energy_required = energy * factor
+    if (recipe.normal ~= nil and recipe.normal.energy_required ~= nil) then
+        energy = recipe.normal.energy_required
+        recipe.normal.energy_required = energy * factor
+    end
+    if (recipe.expensive ~= nil and recipe.expensive.energy_required ~= nil) then
+        energy = recipe.expensive.energy_required
+        recipe.expensive.energy_required = energy * factor
+    end
 end
 
 data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-2"].crafting_categories = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"].crafting_categories)
 data.raw["assembling-machine"]["assembling-machine-1"].fluid_boxes = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes)
-
+data.raw["ammo"]["artillery-shell"].stack_size = 10
 
 {# each randomized tech gets set to be invisible, with new nodes added that trigger those #}
 {%- for original_tech_name, item_name, receiving_player, advancement in locations %}
@@ -72,9 +82,11 @@ prep_copy(new_tree_copy, original_tech)
 {% if tech_cost_scale != 1 %}
 new_tree_copy.unit.count = math.max(1, math.floor(new_tree_copy.unit.count * {{ tech_cost_scale }}))
 {% endif %}
-{%- if item_name in tech_table and tech_tree_information == 2 or original_tech_name in static_nodes -%}
+{%- if (tech_tree_information == 2 or original_tech_name in static_nodes) and item_name in base_tech_table -%}
 {#- copy Factorio Technology Icon -#}
 copy_factorio_icon(new_tree_copy, "{{ item_name }}")
+{%- elif (tech_tree_information == 2 or original_tech_name in static_nodes) and item_name in progressive_technology_table -%}
+copy_factorio_icon(new_tree_copy, "{{ progressive_technology_table[item_name][0] }}")
 {%- else -%}
 {#- use default AP icon if no Factorio graphics exist -#}
 {% if advancement or not tech_tree_information %}set_ap_icon(new_tree_copy){% else %}set_ap_unimportant_icon(new_tree_copy){% endif %}
@@ -89,7 +101,9 @@ table.insert(new_tree_copy.prerequisites, "ap-{{ tech_table[prerequesite] }}-")
 data:extend{new_tree_copy}
 {% endfor %}
 {% if recipe_time_scale %}
-{%- for recipe in recipes %}
-adjust_energy("{{ recipe }}", {{ random.triangular(*recipe_time_scale) }})
+{%- for recipe_name, recipe in recipes.items() %}
+{%- if recipe.category != "mining" %}
+adjust_energy("{{ recipe_name }}", {{ random.triangular(*recipe_time_scale) }})
+{%- endif %}
 {%- endfor -%}
 {% endif %}

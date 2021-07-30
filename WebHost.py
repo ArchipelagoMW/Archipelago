@@ -6,11 +6,17 @@ import ModuleUpdate
 ModuleUpdate.requirements_files.add(os.path.join("WebHostLib", "requirements.txt"))
 ModuleUpdate.update()
 
+# in case app gets imported by something like gunicorn
+import Utils
+Utils.local_path.cached_path = os.path.dirname(__file__)
+
 from WebHostLib import app as raw_app
 from waitress import serve
 
 from WebHostLib.models import db
 from WebHostLib.autolauncher import autohost
+from WebHostLib.lttpsprites import update_sprites_lttp
+from WebHostLib.options import create as create_options_files
 
 configpath = os.path.abspath("config.yaml")
 
@@ -30,7 +36,9 @@ if __name__ == "__main__":
     multiprocessing.freeze_support()
     multiprocessing.set_start_method('spawn')
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
+    update_sprites_lttp()
     app = get_app()
+    create_options_files()
     if app.config["SELFLAUNCH"]:
         autohost(app.config)
     if app.config["SELFHOST"]:  # using WSGI, you just want to run get_app()

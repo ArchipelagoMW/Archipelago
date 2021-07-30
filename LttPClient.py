@@ -1,6 +1,8 @@
 import argparse
 import atexit
+import threading
 import time
+import sys
 import multiprocessing
 import os
 import subprocess
@@ -23,10 +25,21 @@ from NetUtils import *
 from worlds.alttp import Regions, Shops
 from worlds.alttp import Items
 import Utils
-from CommonClient import CommonContext, server_loop, logger, console_loop, ClientCommandProcessor
+from CommonClient import CommonContext, server_loop, console_loop, ClientCommandProcessor
 
+snes_logger = logging.getLogger("SNES")
 
 from MultiServer import mark_raw
+
+os.makedirs("logs", exist_ok=True)
+
+# Log to file in gui case
+if getattr(sys, "frozen", False) and not "--nogui" in sys.argv:
+    logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
+                        filename=os.path.join("logs", "LttPClient.txt"), filemode="w", force=True)
+else:
+    logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO, force=True)
+    logging.getLogger().addHandler(logging.FileHandler(os.path.join("logs", "LttPClient.txt"), "w"))
 
 
 class LttPCommandProcessor(ClientCommandProcessor):
@@ -57,8 +70,10 @@ class LttPCommandProcessor(ClientCommandProcessor):
 
 class Context(CommonContext):
     command_processor = LttPCommandProcessor
-    def __init__(self, snes_address, server_address, password, found_items):
-        super(Context, self).__init__(server_address, password, found_items)
+    game = "A Link to the Past"
+
+    def __init__(self, snes_address, server_address, password):
+        super(Context, self).__init__(server_address, password)
 
         # snes stuff
         self.snes_address = snes_address
@@ -68,8 +83,8 @@ class Context(CommonContext):
         self.snes_reconnect_address = None
         self.snes_recv_queue = asyncio.Queue()
         self.snes_request_lock = asyncio.Lock()
-        self.is_sd2snes = False
         self.snes_write_buffer = []
+        self.snes_connector_lock = threading.Lock()
 
         self.awaiting_rom = False
         self.rom = None
@@ -90,7 +105,7 @@ class Context(CommonContext):
             await super(Context, self).server_auth(password_requested)
         if self.rom is None:
             self.awaiting_rom = True
-            logger.info(
+            snes_logger.info(
                 'No ROM detected, awaiting snes connection to authenticate to the multiworld server (/snes)')
             return
         self.awaiting_rom = False
@@ -408,26 +423,29 @@ class SNESState(enum.IntEnum):
     SNES_ATTACHED = 3
 
 
-def launch_qusb2snes(ctx: Context):
-    qusb2snes_path = Utils.get_options()["lttp_options"]["qusb2snes"]
+def launch_sni(ctx: Context):
+    sni_path = Utils.get_options()["lttp_options"]["sni"]
 
-    if not os.path.isfile(qusb2snes_path):
-        qusb2snes_path = Utils.local_path(qusb2snes_path)
+    if not os.path.isdir(sni_path):
+        sni_path = Utils.local_path(sni_path)
+    if os.path.isdir(sni_path):
+        for file in os.listdir(sni_path):
+            if file.startswith("sni.") and not file.endswith(".proto"):
+                sni_path = os.path.join(sni_path, file)
 
-    if os.path.isfile(qusb2snes_path):
-        logger.info(f"Attempting to start {qusb2snes_path}")
+    if os.path.isfile(sni_path):
+        snes_logger.info(f"Attempting to start {sni_path}")
         import subprocess
-        subprocess.Popen(qusb2snes_path, cwd=os.path.dirname(qusb2snes_path))
+        subprocess.Popen(sni_path, cwd=os.path.dirname(sni_path), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     else:
-        logger.info(
-            f"Attempt to start (Q)Usb2Snes was aborted as path {qusb2snes_path} was not found, "
+        snes_logger.info(
+            f"Attempt to start SNI was aborted as path {sni_path} was not found, "
             f"please start it yourself if it is not running")
 
 
 async def _snes_connect(ctx: Context, address: str):
     address = f"ws://{address}" if "://" not in address else address
-
-    logger.info("Connecting to QUsb2snes at %s ..." % address)
+    snes_logger.info("Connecting to SNI at %s ..." % address)
     seen_problems = set()
     succesful = False
     while not succesful:
@@ -439,11 +457,11 @@ async def _snes_connect(ctx: Context, address: str):
             # only tell the user about new problems, otherwise silently lay in wait for a working connection
             if problem not in seen_problems:
                 seen_problems.add(problem)
-                logger.error(f"Error connecting to QUsb2snes ({problem})")
+                snes_logger.error(f"Error connecting to SNI ({problem})")
 
                 if len(seen_problems) == 1:
-                    # this is the first problem. Let's try launching QUsb2snes if it isn't already running
-                    launch_qusb2snes(ctx)
+                    # this is the first problem. Let's try launching SNI if it isn't already running
+                    launch_sni(ctx)
 
             await asyncio.sleep(1)
         else:
@@ -462,7 +480,7 @@ async def get_snes_devices(ctx: Context):
     devices = reply['Results'] if 'Results' in reply and len(reply['Results']) > 0 else None
 
     if not devices:
-        logger.info('No SNES device found. Ensure QUsb2Snes is running and connect it to the multibridge.')
+        snes_logger.info('No SNES device found. Please connect a SNES device to SNI.')
         while not devices:
             await asyncio.sleep(1)
             await socket.send(dumps(DeviceList_Request))
@@ -477,7 +495,7 @@ async def get_snes_devices(ctx: Context):
 async def snes_connect(ctx: Context, address):
     global SNES_RECONNECT_DELAY
     if ctx.snes_socket is not None and ctx.snes_state == SNESState.SNES_CONNECTED:
-        logger.error('Already connected to snes')
+        snes_logger.error('Already connected to snes')
         return
 
     recv_task = None
@@ -500,7 +518,7 @@ async def snes_connect(ctx: Context, address):
             await snes_disconnect(ctx)
             return
 
-        logger.info("Attaching to " + device)
+        snes_logger.info("Attaching to " + device)
 
         Attach_Request = {
             "Opcode": "Attach",
@@ -510,17 +528,6 @@ async def snes_connect(ctx: Context, address):
         await ctx.snes_socket.send(dumps(Attach_Request))
         ctx.snes_state = SNESState.SNES_ATTACHED
         ctx.snes_attached_device = (devices.index(device), device)
-
-        if 'sd2snes' in device.lower() or 'COM' in device:
-            logger.info("SD2SNES/FXPAK Detected")
-            ctx.is_sd2snes = True
-            await ctx.snes_socket.send(dumps({"Opcode": "Info", "Space": "SNES"}))
-            reply = loads(await ctx.snes_socket.recv())
-            if reply and 'Results' in reply:
-                logger.info(reply['Results'])
-        else:
-            ctx.is_sd2snes = False
-
         ctx.snes_reconnect_address = address
         recv_task = asyncio.create_task(snes_recv_loop(ctx))
         SNES_RECONNECT_DELAY = ctx.starting_reconnect_delay
@@ -536,9 +543,9 @@ async def snes_connect(ctx: Context, address):
                 ctx.snes_socket = None
             ctx.snes_state = SNESState.SNES_DISCONNECTED
         if not ctx.snes_reconnect_address:
-            logger.error("Error connecting to snes (%s)" % e)
+            snes_logger.error("Error connecting to snes (%s)" % e)
         else:
-            logger.error(f"Error connecting to snes, attempt again in {SNES_RECONNECT_DELAY}s")
+            snes_logger.error(f"Error connecting to snes, attempt again in {SNES_RECONNECT_DELAY}s")
             asyncio.create_task(snes_autoreconnect(ctx))
         SNES_RECONNECT_DELAY *= 2
 
@@ -565,11 +572,11 @@ async def snes_recv_loop(ctx: Context):
     try:
         async for msg in ctx.snes_socket:
             ctx.snes_recv_queue.put_nowait(msg)
-        logger.warning("Snes disconnected")
+        snes_logger.warning("Snes disconnected")
     except Exception as e:
         if not isinstance(e, websockets.WebSocketException):
-            logger.exception(e)
-        logger.error("Lost connection to the snes, type /snes to reconnect")
+            snes_logger.exception(e)
+        snes_logger.error("Lost connection to the snes, type /snes to reconnect")
     finally:
         socket, ctx.snes_socket = ctx.snes_socket, None
         if socket is not None and not socket.closed:
@@ -582,7 +589,7 @@ async def snes_recv_loop(ctx: Context):
         ctx.rom = None
 
         if ctx.snes_reconnect_address:
-            logger.info(f"...reconnecting in {SNES_RECONNECT_DELAY}s")
+            snes_logger.info(f"...reconnecting in {SNES_RECONNECT_DELAY}s")
             asyncio.create_task(snes_autoreconnect(ctx))
 
 
@@ -611,11 +618,10 @@ async def snes_read(ctx: Context, address, size):
                 break
 
         if len(data) != size:
-            logger.error('Error reading %s, requested %d bytes, received %d' % (hex(address), size, len(data)))
+            snes_logger.error('Error reading %s, requested %d bytes, received %d' % (hex(address), size, len(data)))
             if len(data):
-                logger.error(str(data))
-                logger.warning('Unable to connect to SNES Device because QUsb2Snes broke temporarily.'
-                               'Try un-selecting and re-selecting the SNES Device.')
+                snes_logger.error(str(data))
+                snes_logger.warning('Communication Failure with SNI')
             if ctx.snes_socket is not None and not ctx.snes_socket.closed:
                 await ctx.snes_socket.close()
             return None
@@ -634,45 +640,16 @@ async def snes_write(ctx: Context, write_list):
             return False
 
         PutAddress_Request = {"Opcode": "PutAddress", "Operands": [], 'Space': 'SNES'}
-
-        if ctx.is_sd2snes:
-            cmd = b'\x00\xE2\x20\x48\xEB\x48'
-
+        try:
             for address, data in write_list:
-                if (address < WRAM_START) or ((address + len(data)) > (WRAM_START + WRAM_SIZE)):
-                    logger.error("SD2SNES: Write out of range %s (%d)" % (hex(address), len(data)))
-                    return False
-                for ptr, byte in enumerate(data, address + 0x7E0000 - WRAM_START):
-                    cmd += b'\xA9'  # LDA
-                    cmd += bytes([byte])
-                    cmd += b'\x8F'  # STA.l
-                    cmd += bytes([ptr & 0xFF, (ptr >> 8) & 0xFF, (ptr >> 16) & 0xFF])
-
-            cmd += b'\xA9\x00\x8F\x00\x2C\x00\x68\xEB\x68\x28\x6C\xEA\xFF\x08'
-
-            PutAddress_Request['Space'] = 'CMD'
-            PutAddress_Request['Operands'] = ["2C00", hex(len(cmd) - 1)[2:], "2C00", "1"]
-            try:
+                PutAddress_Request['Operands'] = [hex(address)[2:], hex(len(data))[2:]]
                 if ctx.snes_socket is not None:
                     await ctx.snes_socket.send(dumps(PutAddress_Request))
-                    await ctx.snes_socket.send(cmd)
+                    await ctx.snes_socket.send(data)
                 else:
-                    logger.warning(f"Could not send data to SNES: {cmd}")
-            except websockets.ConnectionClosed:
-                return False
-        else:
-            PutAddress_Request['Space'] = 'SNES'
-            try:
-                # will pack those requests as soon as qusb2snes actually supports that for real
-                for address, data in write_list:
-                    PutAddress_Request['Operands'] = [hex(address)[2:], hex(len(data))[2:]]
-                    if ctx.snes_socket is not None:
-                        await ctx.snes_socket.send(dumps(PutAddress_Request))
-                        await ctx.snes_socket.send(data)
-                    else:
-                        logger.warning(f"Could not send data to SNES: {data}")
-            except websockets.ConnectionClosed:
-                return False
+                    snes_logger.warning(f"Could not send data to SNES: {data}")
+        except websockets.ConnectionClosed:
+            return False
 
         return True
     finally:
@@ -709,7 +686,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
         new_locations.append(location_id)
         ctx.locations_checked.add(location_id)
         location = ctx.location_name_getter(location_id)
-        logger.info(f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+        snes_logger.info(f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
 
     try:
         if roomid in location_shop_ids:
@@ -718,7 +695,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
                 if int(b) and (Shops.SHOP_ID_START + cnt) not in ctx.locations_checked:
                     new_check(Shops.SHOP_ID_START + cnt)
     except Exception as e:
-        logger.info(f"Exception: {e}")
+        snes_logger.info(f"Exception: {e}")
 
     for location_id, (loc_roomid, loc_mask) in location_table_uw_id.items():
         try:
@@ -727,7 +704,7 @@ async def track_locations(ctx: Context, roomid, roomdata):
                     roomdata << 4) & loc_mask != 0:
                 new_check(location_id)
         except Exception as e:
-            logger.exception(f"Exception: {e}")
+            snes_logger.exception(f"Exception: {e}")
 
     uw_begin = 0x129
     ow_end = uw_end = 0
@@ -810,7 +787,7 @@ async def game_watcher(ctx: Context):
                 await ctx.server_auth(False)
 
         if ctx.auth and ctx.auth != ctx.rom:
-            logger.warning("ROM change detected, please reconnect to the multiworld server")
+            snes_logger.warning("ROM change detected, please reconnect to the multiworld server")
             await ctx.disconnect()
 
         gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
@@ -887,12 +864,14 @@ async def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a Archipelago Binary Patch file')
-    parser.add_argument('--snes', default='localhost:8080', help='Address of the QUsb2snes server.')
+    parser.add_argument('--snes', default='localhost:8080', help='Address of the SNI server.')
     parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
     parser.add_argument('--password', default=None, help='Password of the multiworld host.')
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
     parser.add_argument('--founditems', default=False, action='store_true',
                         help='Show items found by other players for themselves.')
+    if not Utils.is_frozen():  # Frozen state has no cmd window in the first place
+        parser.add_argument('--nogui', default=False, action='store_true', help="Turns off Client GUI.")
     args = parser.parse_args()
     logging.basicConfig(format='%(message)s', level=getattr(logging, args.loglevel.upper(), logging.INFO))
     if args.diff_file:
@@ -910,23 +889,34 @@ async def main():
                 logging.exception(e)
         asyncio.create_task(run_game(adjustedromfile if adjusted else romfile))
 
-    ctx = Context(args.snes, args.connect, args.password, args.founditems)
-    input_task = asyncio.create_task(console_loop(ctx), name="Input")
-
+    ctx = Context(args.snes, args.connect, args.password)
     if ctx.server_task is None:
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
-    asyncio.create_task(snes_connect(ctx, ctx.snes_address))
+
+    if Utils.is_frozen() or "--nogui" not in sys.argv:
+        input_task = None
+        from kvui import LttPManager
+        ui_app = LttPManager(ctx)
+        ctx.ui = ui_app
+        ui_task = asyncio.create_task(ui_app.async_run(), name="UI")
+    else:
+        input_task = asyncio.create_task(console_loop(ctx), name="Input")
+        ui_task = None
+
+    snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_address))
     watcher_task = asyncio.create_task(game_watcher(ctx), name="GameWatcher")
 
     await ctx.exit_event.wait()
+    if snes_connect_task:
+        snes_connect_task.cancel()
     ctx.server_address = None
     ctx.snes_reconnect_address = None
 
     await watcher_task
 
-    if ctx.server is not None and not ctx.server.socket.closed:
+    if ctx.server and not ctx.server.socket.closed:
         await ctx.server.socket.close()
-    if ctx.server_task is not None:
+    if ctx.server_task:
         await ctx.server_task
 
     if ctx.snes_socket is not None and not ctx.snes_socket.closed:
@@ -936,7 +926,11 @@ async def main():
         ctx.input_queue.put_nowait(None)
         ctx.input_requests -= 1
 
-    await input_task
+    if ui_task:
+        await ui_task
+
+    if input_task:
+        input_task.cancel()
 
 
 if __name__ == '__main__':

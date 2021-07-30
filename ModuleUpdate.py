@@ -23,10 +23,13 @@ def update_command():
         subprocess.call([sys.executable, '-m', 'pip', 'install', '-r', file, '--upgrade'])
 
 
-def update():
+def update(yes = False, force = False):
     global update_ran
     if not update_ran:
         update_ran = True
+        if force:
+            update_command()
+            return
         for req_file in requirements_files:
             path = os.path.join(os.path.dirname(sys.argv[0]), req_file)
             if not os.path.exists(path):
@@ -38,12 +41,19 @@ def update():
                     try:
                         pkg_resources.require(requirement)
                     except pkg_resources.ResolutionError:
-                        import traceback
-                        traceback.print_exc()
-                        input(f'Requirement {requirement} is not satisfied, press enter to install it')
+                        if not yes:
+                            import traceback
+                            traceback.print_exc()
+                            input(f'Requirement {requirement} is not satisfied, press enter to install it')
                         update_command()
                         return
 
 
 if __name__ == "__main__":
-    update()
+    import argparse
+    parser = argparse.ArgumentParser(description='Install archipelago requirements')
+    parser.add_argument('-y', '--yes', dest='yes', action='store_true', help='answer "yes" to all questions')
+    parser.add_argument('-f', '--force', dest='force', action='store_true', help='force update')
+    args = parser.parse_args()
+
+    update(args.yes, args.force)

@@ -1,6 +1,7 @@
 from typing import NamedTuple, Union
 import logging
 
+
 class PlandoItem(NamedTuple):
     item: str
     location: str
@@ -25,7 +26,3 @@ class PlandoConnection(NamedTuple):
     entrance: str
     exit: str
     direction: str  # entrance, exit or both
-
-
-class World():
-    pass

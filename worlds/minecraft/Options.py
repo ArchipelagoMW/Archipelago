@@ -1,13 +1,11 @@
 import typing
+from Options import Choice, Option, Toggle, Range
 
-from Options import Choice, Option, Toggle
 
-
-class AdvancementGoal(Choice):
-    option_few = 0
-    option_normal = 1
-    option_many = 2
-    default = 1
+class AdvancementGoal(Range):
+    range_start = 0
+    range_end = 87
+    default = 50
 
 
 class CombatDifficulty(Choice):
@@ -23,5 +21,7 @@ minecraft_options: typing.Dict[str, type(Option)] = {
     "include_hard_advancements": Toggle,
     "include_insane_advancements": Toggle,
     "include_postgame_advancements": Toggle,
-    "shuffle_structures": Toggle
+    "shuffle_structures": Toggle,
+    "structure_compasses": Toggle,
+    "bee_traps": Toggle
 }

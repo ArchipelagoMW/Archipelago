@@ -9,6 +9,12 @@ def locality_rules(world, player):
                 forbid_items_for_player(location, world.non_local_items[player], player)
 
 
+def exclusion_rules(world, player: int, excluded_locations: set):
+    for loc_name in excluded_locations:
+        location = world.get_location(loc_name, player)
+        add_item_rule(location, lambda i: not (i.advancement or i.smallkey or i.bigkey or i.never_exclude))
+
+
 def set_rule(spot, rule):
     spot.access_rule = rule
 

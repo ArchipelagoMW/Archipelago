@@ -10,7 +10,9 @@ from worlds.generic.Rules import set_rule, add_rule, forbid_item, add_item_rule,
     item_name
 
 
-def set_rules(world, player):
+def set_rules(world):
+    player = world.player
+    world = world.world
     if world.logic[player] == 'nologic':
         logging.info(
             'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
@@ -188,7 +190,7 @@ def global_rules(world, player):
     set_rule(world.get_location('Missing Smith', player), lambda state: state.has('Get Frog', player) and state.can_reach('Blacksmiths Hut', 'Region', player)) # Can't S&Q with smith
     set_rule(world.get_location('Blacksmith', player), lambda state: state.has('Return Smith', player))
     set_rule(world.get_location('Magic Bat', player), lambda state: state.has('Magic Powder', player))
-    set_rule(world.get_location('Sick Kid', player), lambda state: state.has_bottle(player))
+    set_rule(world.get_location('Sick Kid', player), lambda state: state.has_group("Bottles", player))
     set_rule(world.get_location('Library', player), lambda state: state.has('Pegasus Boots', player))
     set_rule(world.get_location('Mimic Cave', player), lambda state: state.has('Hammer', player))
     set_rule(world.get_location('Sahasrahla', player), lambda state: state.has('Green Pendant', player))
@@ -563,7 +565,7 @@ def inverted_rules(world, player):
     set_rule(world.get_location('Missing Smith', player), lambda state: state.has('Get Frog', player) and state.can_reach('Blacksmiths Hut', 'Region', player)) # Can't S&Q with smith
     set_rule(world.get_location('Blacksmith', player), lambda state: state.has('Return Smith', player))
     set_rule(world.get_location('Magic Bat', player), lambda state: state.has('Magic Powder', player) and state.has('Moon Pearl', player))
-    set_rule(world.get_location('Sick Kid', player), lambda state: state.has_bottle(player))
+    set_rule(world.get_location('Sick Kid', player), lambda state: state.has_group("Bottles", player))
     set_rule(world.get_location('Mushroom', player), lambda state: state.has('Moon Pearl', player)) # need pearl to pick up bushes
     set_rule(world.get_entrance('Bush Covered Lawn Mirror Spot', player), lambda state: state.has('Magic Mirror', player))
     set_rule(world.get_entrance('Bush Covered Lawn Inner Bushes', player), lambda state: state.has('Moon Pearl', player))

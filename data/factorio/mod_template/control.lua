@@ -141,13 +141,6 @@ script.on_init(function()
     end
 end)
 
--- for testing
--- script.on_event(defines.events.on_tick, function(event)
---     if event.tick%3600 == 300 then
---         dumpInfo(game.forces["player"])
---     end
--- end)
-
 -- hook into researches done
 script.on_event(defines.events.on_research_finished, function(event)
     local technology = event.research
@@ -185,26 +178,10 @@ script.on_event(defines.events.on_research_finished, function(event)
     end
 end)
 
+
 function dumpInfo(force)
-    local research_done = {}
-    local data_collection = {
-        ["research_done"] = research_done,
-        ["victory"] = chain_lookup(global, "forcedata", force.name, "victory"),
-        ["slot_name"] = SLOT_NAME,
-        ["seed_name"] = SEED_NAME
-        }
-
-    for tech_name, tech in pairs(force.technologies) do
-        if tech.researched and string.find(tech_name, "ap%-") == 1 then
-            research_done[tech_name] = tech.researched
-        end
-    end
-    game.write_file("ap_bridge.json", game.table_to_json(data_collection), false, 0)
-    log("Archipelago Bridge File written for game tick ".. game.tick .. ".")
-    -- game.write_file("research_done.json", game.table_to_json(data_collection), false, 0)
-    -- game.print("Sent progress to Archipelago.")
+    log("Archipelago Bridge Data available for game tick ".. game.tick .. ".") -- notifies client
 end
-
 
 
 function chain_lookup(table, ...)
@@ -217,33 +194,79 @@ function chain_lookup(table, ...)
     return table
 end
 
--- add / commands
 
-commands.add_command("ap-sync", "Run manual Research Sync with Archipelago.", function(call)
+-- add / commands
+commands.add_command("ap-sync", "Used by the Archipelago client to get progress information", function(call)
+    local force
     if call.player_index == nil then
-        dumpInfo(game.forces.player)
+        force = game.forces.player
     else
-        dumpInfo(game.players[call.player_index].force)
+        force = game.players[call.player_index].force
     end
-    game.print("Wrote bridge file.")
+    local research_done = {}
+    local data_collection = {
+        ["research_done"] = research_done,
+        ["victory"] = chain_lookup(global, "forcedata", force.name, "victory"),
+        }
+
+    for tech_name, tech in pairs(force.technologies) do
+        if tech.researched and string.find(tech_name, "ap%-") == 1 then
+            research_done[tech_name] = tech.researched
+        end
+    end
+    rcon.print(game.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME, ["info"] = data_collection}))
+end)
+
+commands.add_command("ap-print", "Used by the Archipelago client to print messages", function (call)
+    game.print(call.parameter)
 end)
 
 commands.add_command("ap-get-technology", "Grant a technology, used by the Archipelago Client.", function(call)
-    local force = game.forces["player"]
-    chunks = {}
-    for substring in call.parameter:gmatch("%S+") do -- split on " "
-        table.insert(chunks, substring)
+    if global.index_sync == nil then
+        global.index_sync = {}
     end
+    local tech
+    local force = game.forces["player"]
+    chunks = split(call.parameter, "\t")
     local tech_name = chunks[1]
-    local source = chunks[2] or "Archipelago"
-    local tech = force.technologies[tech_name]
-    if tech ~= nil then
-        if tech.researched ~= true then
-            game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
-            game.play_sound({path="utility/research_completed"})
-            tech.researched = true
+    local index = chunks[2]
+    local source = chunks[3] or "Archipelago"
+    if progressive_technologies[tech_name] ~= nil then
+        if global.index_sync[index] == nil then -- not yet received prog item
+            global.index_sync[index] = tech_name
+            local tech_stack = progressive_technologies[tech_name]
+            for _, tech_name in ipairs(tech_stack) do
+                tech = force.technologies[tech_name]
+                if tech.researched ~= true then
+                    game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
+                    game.play_sound({path="utility/research_completed"})
+                    tech.researched = true
+                    return
+                end
+            end
+        end
+    elseif force.technologies[tech_name] ~= nil then
+        tech = force.technologies[tech_name]
+        if tech ~= nil then
+            if global.index_sync[index] ~= nil and global.index_sync[index] ~= tech then
+                game.print("Warning: Desync Detected. Duplicate/Missing items may occur.")
+            end
+            global.index_sync[index] = tech
+            if tech.researched ~= true then
+                game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
+                game.play_sound({path="utility/research_completed"})
+                tech.researched = true
+            end
         end
     else
         game.print("Unknown Technology " .. tech_name)
     end
 end)
+
+
+commands.add_command("ap-rcon-info", "Used by the Archipelago client to get information", function(call)
+    rcon.print(game.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME}))
+end)
+
+-- data
+progressive_technologies = {{ dict_to_lua(progressive_technology_table) }}
