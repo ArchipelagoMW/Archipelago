@@ -37,15 +37,16 @@ factorio_options:
     
 ## Joining a MultiWorld Game
 
-1.Install the generated Factorio AP Mod
+1. Install the generated Factorio AP Mod (would be in /Mods after step 2 of Setup)
 
-2. Run FactorioClient, it should launch a Factorio server, which you can control with `/factorio <original factorio commands>`, 
-   
-    * It should say it loaded  the Archipelago mod and is hosting a headless server. If not, the most likely case is that the mod is not correctly installed or activated.
+2. Run FactorioClient, it should launch a Factorio server, which you can control with /factorio <original factorio commands>,
 
-3. In FactorioClient, do `/connect <Archipelago Server Address>` to join that multiworld. You can find further commands with `/help` as well as `!help` once connected.
+	* It should start up, create a world and become ready for Factorio connections.
+3. In FactorioClient, do /connect <Archipelago Server Address> to join that multiworld. You can find further commands with /help as well as !help once connected.
 
-    * / commands are run on your local client, ! commands are requests for the AP server
+	* / commands are run on your local client, ! commands are requests for the AP server
 
-    * Players should be able to connect to your Factorio Server and begin playing.
+	* Players should be able to connect to your Factorio Server and begin playing.
+
+4. You can join yourself by connecting to address localhost, other people will need to connect to your IP and you may need to port forward for the Factorio Server for those connections.
 
