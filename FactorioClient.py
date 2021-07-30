@@ -25,9 +25,9 @@ os.makedirs("logs", exist_ok=True)
 # Log to file in gui case
 if getattr(sys, "frozen", False) and not "--nogui" in sys.argv:
     logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
-                        filename=os.path.join("logs", "FactorioClient.txt"), filemode="w")
+                        filename=os.path.join("logs", "FactorioClient.txt"), filemode="w", force=True)
 else:
-    logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO)
+    logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO, force=True)
     logging.getLogger().addHandler(logging.FileHandler(os.path.join("logs", "FactorioClient.txt"), "w"))
 
 gui_enabled = Utils.is_frozen() or "--nogui" not in sys.argv
@@ -299,7 +299,7 @@ async def main(args):
 
     if ctx.server and not ctx.server.socket.closed:
         await ctx.server.socket.close()
-    if ctx.server_task is not None:
+    if ctx.server_task:
         await ctx.server_task
 
     while ctx.input_requests > 0:
@@ -352,7 +352,7 @@ if __name__ == '__main__':
     if not os.path.exists(bin_dir):
         raise FileNotFoundError(f"Path {bin_dir} does not exist or could not be accessed.")
     if not os.path.isdir(bin_dir):
-        raise FileNotFoundError(f"Path {bin_dir} is not a directory.")
+        raise NotADirectoryError(f"Path {bin_dir} is not a directory.")
     if not os.path.exists(executable):
         if os.path.exists(executable + ".exe"):
             executable = executable + ".exe"

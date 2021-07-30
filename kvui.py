@@ -83,9 +83,12 @@ class FactorioManager(GameManager):
     ]
     title = "Archipelago Factorio Client"
 
-    def __init__(self, ctx):
-        super(FactorioManager, self).__init__(ctx)
-
+class LttPManager(GameManager):
+    logging_pairs = [
+        ("Client", "Archipelago"),
+        ("SNES", "SNES"),
+    ]
+    title = "Archipelago LttP Client"
 
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):

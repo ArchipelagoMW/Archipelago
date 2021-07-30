@@ -4,12 +4,13 @@ import sys
 import sysconfig
 from pathlib import Path
 import cx_Freeze
+from kivy_deps import sdl2, glew
 
 is_64bits = sys.maxsize > 2 ** 32
 
-folder = "exe.{platform}-{version}".format(platform=sysconfig.get_platform(),
+arch_folder = "exe.{platform}-{version}".format(platform=sysconfig.get_platform(),
                                            version=sysconfig.get_python_version())
-buildfolder = Path("build", folder)
+buildfolder = Path("build", arch_folder)
 sbuildfolder = str(buildfolder)
 libfolder = Path(buildfolder, "lib")
 library = Path(libfolder, "library.zip")
@@ -56,20 +57,31 @@ def manifest_creation(folder):
     print("Created Manifest")
 
 
+def remove_sprites_from_folder(folder):
+    for file in os.listdir(folder):
+        if file != ".gitignore":
+            os.remove(folder / file)
+
+
 scripts = {
-    "LttPClient.py": "ArchipelagoLttPClient",
-    "MultiServer.py": "ArchipelagoServer",
-    "Generate.py": "ArchipelagoGenerate",
-    "LttPAdjuster.py": "ArchipelagoLttPAdjuster"
+    # Core
+    "MultiServer.py": ("ArchipelagoServer", False),
+    "Generate.py": ("ArchipelagoGenerate", False),
+    # LttP
+    "LttPClient.py": ("ArchipelagoLttPClient", True),
+    "LttPAdjuster.py": ("ArchipelagoLttPAdjuster", True),
+    # Factorio
+    "FactorioClient.py": ("ArchipelagoFactorioClient", True),
 }
 
 exes = []
 
-for script, scriptname in scripts.items():
+for script, (scriptname, gui) in scripts.items():
     exes.append(cx_Freeze.Executable(
         script=script,
         target_name=scriptname + ("" if sys.platform == "linux" else ".exe"),
         icon=icon,
+        base="Win32GUI" if sys.platform == "win32" and gui else None
     ))
 
 import datetime
@@ -83,14 +95,14 @@ cx_Freeze.setup(
     executables=exes,
     options={
         "build_exe": {
-            "packages": ["websockets", "worlds"],
+            "packages": ["websockets", "worlds", "kivy"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
             "zip_include_packages": ["*"],
-            "zip_exclude_packages": ["worlds"],
+            "zip_exclude_packages": ["worlds", "kivy"],
             "include_files": [],
-            "include_msvcr": True,
+            "include_msvcr": False,
             "replace_paths": [("*", "")],
             "optimize": 1,
             "build_exe": buildfolder
@@ -112,6 +124,9 @@ def installfile(path, keep_content=False):
     else:
         print('Warning,', path, 'not found')
 
+for folder in sdl2.dep_bins+glew.dep_bins:
+    shutil.copytree(folder, libfolder, dirs_exist_ok=True)
+    print('copying', folder, '->', libfolder)
 
 extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "SNI", "meta.yaml"]
 
@@ -138,76 +153,6 @@ if signtool:
     print(f"Signing SNI")
     os.system(signtool + os.path.join(buildfolder, "SNI", "SNI.exe"))
 
-alttpr_sprites_folder = buildfolder / "data" / "sprites" / "alttpr"
-for file in os.listdir(alttpr_sprites_folder):
-    if file != ".gitignore":
-        os.remove(alttpr_sprites_folder / file)
-
-manifest_creation(buildfolder)
-
-buildfolder = Path("build_factorio", folder)
-sbuildfolder = str(buildfolder)
-libfolder = Path(buildfolder, "lib")
-library = Path(libfolder, "library.zip")
-print("Outputting Factorio Client to: " + sbuildfolder)
-
-os.makedirs(buildfolder, exist_ok=True)
-
-
-exes = [
-    cx_Freeze.Executable(
-    script="FactorioClient.py",
-    target_name="ArchipelagoFactorioClient" + ("" if sys.platform == "linux" else ".exe"),
-    icon=icon,
-    base="Win32GUI" if sys.platform == "win32" else None
-)]
-
-import datetime
-
-buildtime = datetime.datetime.utcnow()
-
-cx_Freeze.setup(
-    name="Archipelago Factorio Client",
-    version=f"{buildtime.year}.{buildtime.month}.{buildtime.day}.{buildtime.hour}",
-    description="Archipelago Factorio Client",
-    executables=exes,
-    options={
-        "build_exe": {
-            "packages": ["websockets", "kivy", "worlds"],
-            "includes": [],
-            "excludes": ["numpy", "Cython", "PySide2", "PIL",
-                         "pandas"],
-            "zip_include_packages": ["*"],
-            "zip_exclude_packages": ["kivy", "worlds"],
-            "include_files": [],
-            "include_msvcr": True,
-            "replace_paths": [("*", "")],
-            "optimize": 1,
-            "build_exe": buildfolder
-        },
-    },
-)
-
-
-extra_data = ["LICENSE", "data", "host.yaml", "meta.yaml"]
-from kivy_deps import sdl2, glew
-for folder in sdl2.dep_bins+glew.dep_bins:
-    shutil.copytree(folder, buildfolder, dirs_exist_ok=True)
-for data in extra_data:
-    installfile(Path(data))
-
-
-os.makedirs(buildfolder / "Players", exist_ok=True)
-shutil.copyfile("playerSettings.yaml", buildfolder / "Players" / "weightedSettings.yaml")
-
-if signtool:
-    for exe in exes:
-        print(f"Signing {exe.target_name}")
-        os.system(signtool + os.path.join(buildfolder, exe.target_name))
-
-alttpr_sprites_folder = buildfolder / "data" / "sprites" / "alttpr"
-for file in os.listdir(alttpr_sprites_folder):
-    if file != ".gitignore":
-        os.remove(alttpr_sprites_folder / file)
+remove_sprites_from_folder(buildfolder / "data" / "sprites" / "alttpr")
 
 manifest_creation(buildfolder)
