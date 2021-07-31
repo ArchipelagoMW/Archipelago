@@ -13,7 +13,7 @@ import functools
 from . import Options
 
 factorio_id = 2 ** 17
-source_folder = Utils.local_path("data", "factorio")
+source_folder = os.path.join(os.path.dirname(__file__), "data")
 
 with open(os.path.join(source_folder, "techs.json")) as f:
     raw = json.load(f)

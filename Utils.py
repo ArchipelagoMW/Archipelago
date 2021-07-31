@@ -354,6 +354,7 @@ def get_adjuster_settings(romfile: str) -> typing.Tuple[str, bool]:
         return romfile, adjusted
     return romfile, False
 
+
 @cache_argsless
 def get_unique_identifier():
     uuid = persistent_load().get("client", {}).get("uuid", None)

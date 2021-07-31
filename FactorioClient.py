@@ -325,7 +325,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Optional arguments to FactorioClient follow. "
                                                  "Remaining arguments get passed into bound Factorio instance."
-                                                 "Refer to factorio --help for those.")
+                                                 "Refer to Factorio --help for those.")
     parser.add_argument('--rcon-port', default='24242', type=int, help='Port to use to communicate with Factorio')
     parser.add_argument('--rcon-password', help='Password to authenticate with RCON.')
     parser.add_argument('--connect', default=None, help='Address of the multiworld host.')

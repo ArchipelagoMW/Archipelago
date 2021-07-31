@@ -49,7 +49,7 @@ def generate_mod(world, output_directory: str):
     global data_final_template, locale_template, control_template, data_template
     with template_load_lock:
         if not data_final_template:
-            mod_template_folder = Utils.local_path("data", "factorio", "mod_template")
+            mod_template_folder = os.path.join(os.path.dirname(__file__), "data", "mod_template")
             template_env: Optional[jinja2.Environment] = \
                 jinja2.Environment(loader=jinja2.FileSystemLoader([mod_template_folder]))
             data_template = template_env.get_template("data.lua")
@@ -95,7 +95,7 @@ def generate_mod(world, output_directory: str):
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
     en_locale_dir = os.path.join(mod_dir, "locale", "en")
     os.makedirs(en_locale_dir, exist_ok=True)
-    shutil.copytree(Utils.local_path("data", "factorio", "mod"), mod_dir, dirs_exist_ok=True)
+    shutil.copytree(os.path.join(os.path.dirname(__file__), "data", "mod"), mod_dir, dirs_exist_ok=True)
     with open(os.path.join(mod_dir, "data.lua"), "wt") as f:
         f.write(data_template_code)
     with open(os.path.join(mod_dir, "data-final-fixes.lua"), "wt") as f:
