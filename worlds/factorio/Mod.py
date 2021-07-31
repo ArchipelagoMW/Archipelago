@@ -70,6 +70,17 @@ def generate_mod(world, output_directory: str):
                        4: 2,
                        5: 5,
                        6: 10}[multiworld.tech_cost[player].value]
+    random = multiworld.slot_seeds[player]
+
+    def flop_random(low, high, base=None):
+        """Guarentees 50% bwlo base and 50% above base, uniform distribution in each direction."""
+        if base:
+            distance = random.random()
+            if random.randint(0, 1):
+                return base + (high-base) * distance
+            else:
+                return base - (base-low) * distance
+        return random.uniform(low, high)
 
     template_data = {"locations": locations, "player_names": player_names, "tech_table": tech_table,
                      "base_tech_table": base_tech_table, "tech_to_progressive_lookup": tech_to_progressive_lookup,
@@ -78,7 +89,8 @@ def generate_mod(world, output_directory: str):
                      "tech_tree_layout_prerequisites": multiworld.tech_tree_layout_prerequisites[player],
                      "slot_name": multiworld.player_names[player][0], "seed_name": multiworld.seed_name,
                      "starting_items": multiworld.starting_items[player], "recipes": recipes,
-                     "random": multiworld.slot_seeds[player], "static_nodes": multiworld.worlds[player].static_nodes,
+                     "random": random, "flop_random": flop_random,
+                     "static_nodes": multiworld.worlds[player].static_nodes,
                      "recipe_time_scale": recipe_time_scales[multiworld.recipe_time[player].value],
                      "free_sample_blacklist": {item : 1 for item in free_sample_blacklist},
                      "progressive_technology_table": {tech.name : tech.progressive for tech in

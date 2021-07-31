@@ -120,7 +120,7 @@ data:extend{new_tree_copy}
 {% if recipe_time_scale %}
 {%- for recipe_name, recipe in recipes.items() %}
 {%- if recipe.category != "mining" %}
-adjust_energy("{{ recipe_name }}", {{ random.triangular(*recipe_time_scale) }})
+adjust_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_scale) }})
 {%- endif %}
 {%- endfor -%}
 {% endif %}
