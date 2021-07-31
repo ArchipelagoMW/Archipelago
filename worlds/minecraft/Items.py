@@ -60,6 +60,44 @@ item_table = {
     "Victory": ItemData(None, True)
 }
 
+required_items = {
+    "Archery": 1,
+    "Ingot Crafting": 1,
+    "Resource Blocks": 1,
+    "Brewing": 1,
+    "Enchanting": 1,
+    "Bucket": 1,
+    "Flint and Steel": 1,
+    "Bed": 1,
+    "Bottles": 1,
+    "Shield": 1,
+    "Fishing Rod": 1,
+    "Campfire": 1,
+    "Progressive Weapons": 3,
+    "Progressive Tools": 3,
+    "Progressive Armor": 2,
+    "8 Netherite Scrap": 2,
+    "Channeling Book": 1,
+    "Silk Touch Book": 1,
+    "Sharpness III Book": 1,
+    "Piercing IV Book": 1,
+    "Looting III Book": 1,
+    "Infinity Book": 1,
+    "3 Ender Pearls": 4,
+    "Saddle": 1,
+}
+
+junk_weights = {
+    "4 Emeralds": 2,
+    "4 Diamond Ore": 1,
+    "16 Iron Ore": 1,
+    "50 XP": 4,
+    "16 Porkchops": 2,
+    "8 Gold Ore": 1,
+    "Rotten Flesh": 1,
+    "32 Arrows": 1,
+}
+
 # If not listed here then has frequency 1
 item_frequencies = {
     "Progressive Weapons": 3,

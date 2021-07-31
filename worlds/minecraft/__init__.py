@@ -1,7 +1,7 @@
 import os
 
 
-from .Items import MinecraftItem, item_table, item_frequencies
+from .Items import MinecraftItem, item_table, required_items, junk_weights
 from .Locations import MinecraftAdvancement, advancement_table, exclusion_table, events_table
 from .Regions import mc_regions, link_minecraft_structures, default_connections
 from .Rules import set_rules
@@ -40,19 +40,21 @@ class MinecraftWorld(World):
 
         # Generate item pool
         itempool = []
-        pool_counts = item_frequencies.copy()
-        # Replace Rotten Flesh with bee traps
-        if self.world.bee_traps[self.player]:
-            pool_counts.update({"Rotten Flesh": 0, "Bee Trap (Minecraft)": 4})
-        # Add structure compasses to the pool, replacing 50 XP
+        # Add all required progression items
+        for (name, num) in required_items.items(): 
+            itempool += [name] * num
+        # Add structure compasses if desired
         if self.world.structure_compasses[self.player]:
             structures = [connection[1] for connection in default_connections]
             for struct_name in structures:
-                pool_counts[f"Structure Compass ({struct_name})"] = 1
-                pool_counts["50 XP"] -= 1
-        for item_name in item_table:
-            for count in range(pool_counts.get(item_name, 1)):
-                itempool.append(self.create_item(item_name))
+                itempool.append(f"Structure Compass ({struct_name})")
+        # Add bee traps if desired
+        if self.world.bee_traps[self.player]:
+            itempool += ["Bee Trap (Minecraft)"] * 4
+        # Fill remaining items with randomly generated junk
+        itempool += self.world.random.choices(list(junk_weights.keys()), weights=list(junk_weights.values()), k=len(self.location_names)-len(itempool))
+        # Convert itempool into real items
+        itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
 
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
@@ -65,7 +67,7 @@ class MinecraftWorld(World):
         # Prefill the Ender Dragon with the completion condition
         completion = self.create_item("Victory")
         self.world.get_location("Ender Dragon", self.player).place_locked_item(completion)
-        itempool.remove(completion)
+
         self.world.itempool += itempool
 
     def set_rules(self):
