@@ -67,11 +67,12 @@ class OOTWorld(World):
         CollectionState.__init__ = oot_init
         CollectionState.copy = oot_copy
         # also need to add the names to the passed MultiWorld's CollectionState, since it was initialized before we could get to it
-        world.state.child_reachable_regions = {player: set() for player in range(1, world.players + 1)}
-        world.state.adult_reachable_regions = {player: set() for player in range(1, world.players + 1)}
-        world.state.child_blocked_connections = {player: set() for player in range(1, world.players + 1)}
-        world.state.adult_blocked_connections = {player: set() for player in range(1, world.players + 1)}
-        world.state.age = {player: None for player in range(1, world.players + 1)}
+        if world:
+            world.state.child_reachable_regions = {player: set() for player in range(1, world.players + 1)}
+            world.state.adult_reachable_regions = {player: set() for player in range(1, world.players + 1)}
+            world.state.child_blocked_connections = {player: set() for player in range(1, world.players + 1)}
+            world.state.adult_blocked_connections = {player: set() for player in range(1, world.players + 1)}
+            world.state.age = {player: None for player in range(1, world.players + 1)}
 
         return super().__new__(cls)
 
