@@ -18,7 +18,7 @@ class Dungeon(object):
         self.dungeon_items = to_array(dungeon_items)
 
         for region in world.world.regions:
-            if region.game == 'Ocarina of Time' and region.dungeon == self.name:
+            if region.player == world.player and region.dungeon == self.name:
                 region.dungeon = self
                 self.regions.append(region)                
 
