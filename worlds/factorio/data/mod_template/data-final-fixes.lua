@@ -85,6 +85,11 @@ new_tree_copy.unit.count = math.max(1, math.floor(new_tree_copy.unit.count * {{ 
 {%- if (tech_tree_information == 2 or original_tech_name in static_nodes) and item_name in base_tech_table -%}
 {#- copy Factorio Technology Icon -#}
 copy_factorio_icon(new_tree_copy, "{{ item_name }}")
+{%- if original_tech_name == "rocket-silo" and original_tech_name in static_nodes %}
+{%- for ingredient in custom_recipes["rocket-part"].ingredients %}
+table.insert(new_tree_copy.effects, {type = "nothing", effect_description = "Ingredient {{ loop.index }}: {{ ingredient }}"})
+{% endfor -%}
+{% endif -%}
 {%- elif (tech_tree_information == 2 or original_tech_name in static_nodes) and item_name in progressive_technology_table -%}
 copy_factorio_icon(new_tree_copy, "{{ progressive_technology_table[item_name][0] }}")
 {%- else -%}

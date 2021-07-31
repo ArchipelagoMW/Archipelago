@@ -211,6 +211,10 @@ class CommonContext():
             text = self.jsontotextparser(args["data"])
             logger.info(text)
 
+    def on_package(self, cmd: str, args: dict):
+        """For custom package handling in subclasses."""
+        pass
+
 
 async def server_loop(ctx: CommonContext, address=None):
     cached_address = None
@@ -396,6 +400,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     else:
         logger.debug(f"unknown command {cmd}")
 
+    ctx.on_package(cmd, args)
+
 
 async def console_loop(ctx: CommonContext):
     import sys
@@ -415,4 +421,4 @@ async def console_loop(ctx: CommonContext):
             if input_text:
                 commandprocessor(input_text)
         except Exception as e:
-            logging.exception(e)
+            logger.exception(e)
