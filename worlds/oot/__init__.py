@@ -33,8 +33,6 @@ class OOTWorld(World):
     game: str = "Ocarina of Time"
     options: dict = oot_options
     topology_present: bool = True
-    item_names = frozenset(item_table)
-    location_names = frozenset(location_table)
     item_name_to_id = {item_name: oot_data_to_ap_id(data, False) for item_name, data in item_table.items() if data[2] is not None}
     location_name_to_id = {name: (location_id_offset + index) for (index, name) in enumerate(location_table) 
         if location_table[name][0] not in ['Event', 'Drop', 'HintStone', 'Hint']}
