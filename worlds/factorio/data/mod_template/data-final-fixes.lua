@@ -51,19 +51,31 @@ function copy_factorio_icon(tech, tech_source)
     tech.icon_size = table.deepcopy(technologies[tech_source].icon_size)
 end
 
+{# This got complex, but seems to be required to hit all corner cases #}
 function adjust_energy(recipe_name, factor)
     local recipe = data.raw.recipe[recipe_name]
     local energy = recipe.energy_required
-    if (energy ~= nil) then
-        data.raw.recipe[recipe_name].energy_required = energy * factor
-    end
-    if (recipe.normal ~= nil and recipe.normal.energy_required ~= nil) then
-        energy = recipe.normal.energy_required
+
+    if (recipe.normal ~= nil) then
+        if (recipe.normal.energy_required == nil) then
+            energy = 0.5
+        else
+            energy = recipe.normal.energy_required
+        end
         recipe.normal.energy_required = energy * factor
     end
-    if (recipe.expensive ~= nil and recipe.expensive.energy_required ~= nil) then
-        energy = recipe.expensive.energy_required
+    if (recipe.expensive ~= nil) then
+        if (recipe.expensive.energy_required == nil) then
+            energy = 0.5
+        else
+            energy = recipe.expensive.energy_required
+        end
         recipe.expensive.energy_required = energy * factor
+    end
+    if (energy ~= nil) then
+        data.raw.recipe[recipe_name].energy_required = energy * factor
+    elseif (recipe.expensive == nil and recipe.normal == nil) then
+        data.raw.recipe[recipe_name].energy_required = 0.5 * factor
     end
 end
 
