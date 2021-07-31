@@ -9,11 +9,11 @@ from collections import Counter
 import string
 
 import ModuleUpdate
-from worlds.alttp import Options as LttPOptions
-from worlds.generic import PlandoItem, PlandoConnection
 
 ModuleUpdate.update()
 
+from worlds.alttp import Options as LttPOptions
+from worlds.generic import PlandoItem, PlandoConnection
 from Utils import parse_yaml, version_tuple, __version__, tuplize_version, get_options
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
@@ -101,7 +101,7 @@ def main(args=None, callback=ERmain):
     player_files = {}
     for file in os.scandir(args.player_files_path):
         fname = file.name
-        if file.is_file() and fname not in {args.meta_file_path, args.weights_file_path}:
+        if file.is_file() and os.path.join(args.player_files_path, fname) not in {args.meta_file_path, args.weights_file_path}:
             path = os.path.join(args.player_files_path, fname)
             try:
                 weights_cache[fname] = read_weights_yaml(path)
@@ -125,7 +125,7 @@ def main(args=None, callback=ERmain):
     erargs.create_spoiler = args.spoiler > 0
     erargs.glitch_triforce = options["generator"]["glitch_triforce_room"]
     erargs.race = args.race
-    erargs.skip_playthrough = args.spoiler == 0
+    erargs.skip_playthrough = args.spoiler < 2
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
     erargs.teams = args.teams
@@ -212,7 +212,7 @@ def main(args=None, callback=ERmain):
                     logging.debug(f"No player settings defined for option '{option}'")
         if args.outputpath:
             os.makedirs(args.outputpath, exist_ok=True)
-        with open(os.path.join(args.outputpath if args.outputpath else ".", f"mystery_result_{seed}.yaml"), "wt") as f:
+        with open(os.path.join(args.outputpath if args.outputpath else ".", f"generate_{seed_name}.yaml"), "wt") as f:
             yaml.dump(important, f)
 
     callback(erargs, seed)

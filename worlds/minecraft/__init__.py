@@ -3,7 +3,7 @@ import os
 
 from .Items import MinecraftItem, item_table, item_frequencies
 from .Locations import MinecraftAdvancement, advancement_table, exclusion_table, events_table
-from .Regions import mc_regions, link_minecraft_structures
+from .Regions import mc_regions, link_minecraft_structures, default_connections
 from .Rules import set_rules
 from worlds.generic.Rules import exclusion_rules
 
@@ -11,21 +11,20 @@ from BaseClasses import Region, Entrance, Item
 from .Options import minecraft_options
 from ..AutoWorld import World
 
-client_version = (0, 4)
+client_version = 5
 
 class MinecraftWorld(World):
     game: str = "Minecraft"
     options = minecraft_options
     topology_present = True
-    item_names = frozenset(item_table)
-    location_names = frozenset(advancement_table)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
+    data_version = 2
+
     def _get_mc_data(self):
-        exits = ["Overworld Structure 1", "Overworld Structure 2", "Nether Structure 1", "Nether Structure 2",
-                 "The End Structure"]
+        exits = [connection[0] for connection in default_connections]
         return {
             'world_seed': self.world.slot_seeds[self.player].getrandbits(32),
             # consistent and doesn't interfere with other generation
@@ -42,8 +41,15 @@ class MinecraftWorld(World):
         # Generate item pool
         itempool = []
         pool_counts = item_frequencies.copy()
-        if getattr(self.world, "bee_traps")[self.player]: # replace Rotten Flesh by bee traps
+        # Replace Rotten Flesh with bee traps
+        if self.world.bee_traps[self.player]:
             pool_counts.update({"Rotten Flesh": 0, "Bee Trap (Minecraft)": 4})
+        # Add structure compasses to the pool, replacing 50 XP
+        if self.world.structure_compasses[self.player]:
+            structures = [connection[1] for connection in default_connections]
+            for struct_name in structures:
+                pool_counts[f"Structure Compass ({struct_name})"] = 1
+                pool_counts["50 XP"] -= 1
         for item_name in item_table:
             for count in range(pool_counts.get(item_name, 1)):
                 itempool.append(self.create_item(item_name))
@@ -96,4 +102,8 @@ class MinecraftWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]
-        return MinecraftItem(name, item_data.progression, item_data.code, self.player)
+        item = MinecraftItem(name, item_data.progression, item_data.code, self.player)
+        nonexcluded_items = ["Sharpness III Book", "Infinity Book", "Looting III Book"]
+        if name in nonexcluded_items:  # prevent books from going on excluded locations
+            item.never_exclude = True
+        return item

@@ -25,112 +25,13 @@ os.makedirs("logs", exist_ok=True)
 # Log to file in gui case
 if getattr(sys, "frozen", False) and not "--nogui" in sys.argv:
     logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO,
-                        filename=os.path.join("logs", "FactorioClient.txt"), filemode="w")
+                        filename=os.path.join("logs", "FactorioClient.txt"), filemode="w", force=True)
 else:
-    logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO)
+    logging.basicConfig(format='[%(name)s]: %(message)s', level=logging.INFO, force=True)
     logging.getLogger().addHandler(logging.FileHandler(os.path.join("logs", "FactorioClient.txt"), "w"))
 
 gui_enabled = Utils.is_frozen() or "--nogui" not in sys.argv
 
-def get_kivy_app():
-    os.environ["KIVY_NO_CONSOLELOG"] = "1"
-    os.environ["KIVY_NO_FILELOG"] = "1"
-    os.environ["KIVY_NO_ARGS"] = "1"
-    from kivy.app import App
-    from kivy.base import ExceptionHandler, ExceptionManager, Config
-    from kivy.uix.gridlayout import GridLayout
-    from kivy.uix.textinput import TextInput
-    from kivy.uix.recycleview import RecycleView
-    from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
-    from kivy.lang import Builder
-
-
-    class FactorioManager(App):
-        def __init__(self, ctx):
-            super(FactorioManager, self).__init__()
-            self.ctx = ctx
-            self.commandprocessor = ctx.command_processor(ctx)
-            self.icon = r"data/icon.png"
-
-        def build(self):
-            self.grid = GridLayout()
-            self.grid.cols = 1
-
-            self.tabs = TabbedPanel()
-            self.tabs.default_tab_text = "All"
-            self.title = "Archipelago Factorio Client"
-            pairs = [
-                ("Client", "Archipelago"),
-                ("FactorioServer", "Factorio Server Log"),
-                ("FactorioWatcher", "Bridge Data Log"),
-            ]
-            self.tabs.default_tab_content = UILog(*(logging.getLogger(logger_name) for logger_name, name in pairs))
-            for logger_name, display_name in pairs:
-                bridge_logger = logging.getLogger(logger_name)
-                panel = TabbedPanelItem(text=display_name)
-                panel.content = UILog(bridge_logger)
-                self.tabs.add_widget(panel)
-
-            self.grid.add_widget(self.tabs)
-            textinput = TextInput(size_hint_y=None, height=30, multiline=False)
-            textinput.bind(on_text_validate=self.on_message)
-            self.grid.add_widget(textinput)
-            self.commandprocessor("/help")
-            return self.grid
-
-        def on_stop(self):
-            self.ctx.exit_event.set()
-
-        def on_message(self, textinput: TextInput):
-            try:
-                input_text = textinput.text.strip()
-                textinput.text = ""
-
-                if self.ctx.input_requests > 0:
-                    self.ctx.input_requests -= 1
-                    self.ctx.input_queue.put_nowait(input_text)
-                elif input_text:
-                    self.commandprocessor(input_text)
-            except Exception as e:
-                logger.exception(e)
-
-        def on_address(self, text: str):
-            print(text)
-
-
-    class LogtoUI(logging.Handler):
-        def __init__(self, on_log):
-            super(LogtoUI, self).__init__(logging.DEBUG)
-            self.on_log = on_log
-
-        def handle(self, record: logging.LogRecord) -> None:
-            self.on_log(record)
-
-
-    class UILog(RecycleView):
-        cols = 1
-
-        def __init__(self, *loggers_to_handle, **kwargs):
-            super(UILog, self).__init__(**kwargs)
-            self.data = []
-            for logger in loggers_to_handle:
-                logger.addHandler(LogtoUI(self.on_log))
-
-        def on_log(self, record: logging.LogRecord) -> None:
-            self.data.append({"text": record.getMessage()})
-
-
-    class E(ExceptionHandler):
-        def handle_exception(self, inst):
-            logger.exception(inst)
-            return ExceptionManager.RAISE
-
-
-    ExceptionManager.add_handler(E())
-
-    Config.set("input", "mouse", "mouse,disable_multitouch")
-    Builder.load_file(Utils.local_path("data", "client.kv"))
-    return FactorioManager
 
 class FactorioCommandProcessor(ClientCommandProcessor):
     ctx: FactorioContext
@@ -145,31 +46,35 @@ class FactorioCommandProcessor(ClientCommandProcessor):
             return True
         return False
 
-    def _cmd_connect(self, address: str = "") -> bool:
-        """Connect to a MultiWorld Server"""
-        if not self.ctx.auth:
-            if self.ctx.rcon_client:
-                get_info(self.ctx, self.ctx.rcon_client)  # retrieve current auth code
-            else:
-                self.output("Cannot connect to a server with unknown own identity, bridge to Factorio first.")
-        return super(FactorioCommandProcessor, self)._cmd_connect(address)
+    def _cmd_resync(self):
+        """Manually trigger a resync."""
+        self.ctx.awaiting_bridge = True
 
 
 class FactorioContext(CommonContext):
     command_processor = FactorioCommandProcessor
     game = "Factorio"
 
+    # updated by spinup server
+    mod_version: Utils.Version = Utils.Version(0, 0, 0)
+
     def __init__(self, server_address, password):
         super(FactorioContext, self).__init__(server_address, password)
         self.send_index = 0
         self.rcon_client = None
         self.awaiting_bridge = False
-        self.raw_json_text_parser = RawJSONtoTextParser(self)
         self.factorio_json_text_parser = FactorioJSONtoTextParser(self)
 
     async def server_auth(self, password_requested):
         if password_requested and not self.password:
             await super(FactorioContext, self).server_auth(password_requested)
+
+        if not self.auth:
+            if self.rcon_client:
+                get_info(self, self.rcon_client)  # retrieve current auth code
+            else:
+                raise Exception("Cannot connect to a server with unknown own identity, "
+                                "bridge to Factorio first.")
 
         await self.send_msgs([{"cmd": 'Connect',
                                'password': self.password, 'name': self.auth, 'version': Utils.version_tuple,
@@ -180,22 +85,27 @@ class FactorioContext(CommonContext):
     def on_print(self, args: dict):
         logger.info(args["text"])
         if self.rcon_client:
-            cleaned_text = args['text'].replace('"', '')
-            self.rcon_client.send_command(f"/sc game.print(\"[font=default-large-bold]Archipelago:[/font] "
-                                          f"{cleaned_text}\")")
+            self.print_to_game(args['text'])
 
     def on_print_json(self, args: dict):
-        text = self.raw_json_text_parser(copy.deepcopy(args["data"]))
-        logger.info(text)
         if self.rcon_client:
-            text = self.factorio_json_text_parser(args["data"])
-            cleaned_text = text.replace('"', '')
-            self.rcon_client.send_command(f"/sc game.print(\"[font=default-large-bold]Archipelago:[/font] "
-                                          f"{cleaned_text}\")")
+            text = self.factorio_json_text_parser(copy.deepcopy(args["data"]))
+            self.print_to_game(text)
+        super(FactorioContext, self).on_print_json(args)
 
     @property
     def savegame_name(self) -> str:
         return f"AP_{self.seed_name}_{self.auth}.zip"
+
+    def print_to_game(self, text):
+        # TODO: remove around version 0.2
+        if self.mod_version < Utils.Version(0, 1, 6):
+            text = text.replace('"', '')
+            self.rcon_client.send_command(f"/sc game.print(\"[font=default-large-bold]Archipelago:[/font] "
+                                          f"{text}\")")
+        else:
+            self.rcon_client.send_command(f"/ap-print [font=default-large-bold]Archipelago:[/font] "
+                                          f"{text}")
 
 
 async def game_watcher(ctx: FactorioContext):
@@ -207,9 +117,9 @@ async def game_watcher(ctx: FactorioContext):
                 ctx.awaiting_bridge = False
                 data = json.loads(ctx.rcon_client.send_command("/ap-sync"))
                 if data["slot_name"] != ctx.auth:
-                    logger.warning(f"Connected World is not the expected one {data['slot_name']} != {ctx.auth}")
+                    bridge_logger.warning(f"Connected World is not the expected one {data['slot_name']} != {ctx.auth}")
                 elif data["seed_name"] != ctx.seed_name:
-                    logger.warning(
+                    bridge_logger.warning(
                         f"Connected Multiworld is not the expected one {data['seed_name']} != {ctx.seed_name}")
                 else:
                     data = data["info"]
@@ -276,11 +186,9 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 factorio_server_logger.info(msg)
                 if not ctx.rcon_client and "Starting RCON interface at IP ADDR:" in msg:
                     ctx.rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
-                    # trigger lua interface confirmation
-                    ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
-                    ctx.rcon_client.send_command("/sc game.print('Starting Archipelago Bridge')")
                 if not ctx.awaiting_bridge and "Archipelago Bridge Data available for game tick " in msg:
                     ctx.awaiting_bridge = True
+
             if ctx.rcon_client:
                 while ctx.send_index < len(ctx.items_received):
                     transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
@@ -335,11 +243,16 @@ async def factorio_spinup_server(ctx: FactorioContext):
             while not factorio_queue.empty():
                 msg = factorio_queue.get()
                 factorio_server_logger.info(msg)
+                if "Loading mod AP-" and msg.endswith("(data.lua)"):
+                    parts = msg.split()
+                    ctx.mod_version = Utils.Version(*(int(number) for number in parts[-2].split(".")))
                 if not rcon_client and "Starting RCON interface at IP ADDR:" in msg:
                     rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
                     get_info(ctx, rcon_client)
-
             await asyncio.sleep(0.01)
+
+        if ctx.mod_version == ctx.__class__.mod_version:
+            raise Exception("No Archipelago mod was loaded. Aborting.")
 
     except Exception as e:
         logging.exception(e)
@@ -347,7 +260,7 @@ async def factorio_spinup_server(ctx: FactorioContext):
         ctx.exit_event.set()
 
     else:
-        logger.info(f"Got World Information from AP Mod for seed {ctx.seed_name} in slot {ctx.auth}")
+        logger.info(f"Got World Information from AP Mod {tuple(ctx.mod_version)} for seed {ctx.seed_name} in slot {ctx.auth}")
 
     finally:
         factorio_process.terminate()
@@ -359,8 +272,9 @@ async def main(args):
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
     if gui_enabled:
         input_task = None
-        ui_app = get_kivy_app()(ctx)
-        ui_task = asyncio.create_task(ui_app.async_run(), name="UI")
+        from kvui import FactorioManager
+        ctx.ui = FactorioManager(ctx)
+        ui_task = asyncio.create_task(ctx.ui.async_run(), name="UI")
     else:
         input_task = asyncio.create_task(console_loop(ctx), name="Input")
         ui_task = None
@@ -378,7 +292,7 @@ async def main(args):
 
     if ctx.server and not ctx.server.socket.closed:
         await ctx.server.socket.close()
-    if ctx.server_task is not None:
+    if ctx.server_task:
         await ctx.server_task
 
     while ctx.input_requests > 0:
@@ -431,7 +345,7 @@ if __name__ == '__main__':
     if not os.path.exists(bin_dir):
         raise FileNotFoundError(f"Path {bin_dir} does not exist or could not be accessed.")
     if not os.path.isdir(bin_dir):
-        raise FileNotFoundError(f"Path {bin_dir} is not a directory.")
+        raise NotADirectoryError(f"Path {bin_dir} is not a directory.")
     if not os.path.exists(executable):
         if os.path.exists(executable + ".exe"):
             executable = executable + ".exe"

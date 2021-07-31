@@ -16,7 +16,6 @@
 *.apsave
 
 build
-/build_factorio/
 bundle/components.wxs
 dist
 README.html

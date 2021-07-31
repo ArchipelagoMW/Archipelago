@@ -1,5 +1,5 @@
 html{
-    background-image: url('../../static/backgrounds/grass/grass-0007-large.png');
+    background-image: url('../static/backgrounds/grass/grass-0007-large.png');
     background-repeat: repeat;
     background-size: 650px 650px;
 }
@@ -101,8 +101,28 @@ html{
     flex-grow: 1;
 }
 
-#player-settings table select{
-    width: 250px;
+#player-settings table .select-container{
+    display: flex;
+    flex-direction: row;
+}
+
+#player-settings table .select-container select{
+    min-width: 200px;
+    flex-grow: 1;
+}
+
+#player-settings table .range-container{
+    display: flex;
+    flex-direction: row;
+}
+
+#player-settings table .range-container input[type=range]{
+    flex-grow: 1;
+}
+
+#player-settings table .range-value{
+    min-width: 20px;
+    margin-left: 0.25rem;
 }
 
 #player-settings table label{
@@ -113,7 +133,7 @@ html{
 }
 
 @media all and (max-width: 1000px), all and (orientation: portrait){
-    #player-settings #game-options, #player-settings #rom-options{
+    #player-settings #game-options{
         justify-content: flex-start;
         flex-wrap: wrap;
     }
@@ -122,7 +142,7 @@ html{
         flex-grow: unset;
     }
 
-    #game-options table label, #rom-options table label{
+    #game-options table label{
         display: block;
         min-width: 200px;
     }

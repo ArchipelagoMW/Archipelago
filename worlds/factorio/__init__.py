@@ -19,8 +19,6 @@ class Factorio(World):
     static_nodes = {"automation", "logistics", "rocket-silo"}
     custom_recipes = {}
     additional_advancement_technologies = set()
-    item_names = frozenset(tech_table)
-    location_names = frozenset(base_tech_table)
 
     item_name_to_id = tech_table
     location_name_to_id = base_tech_table
@@ -118,7 +116,7 @@ class Factorio(World):
         return super(Factorio, self).collect(state, item)
 
     def get_required_client_version(self) -> tuple:
-        return max((0, 1, 4), super(Factorio, self).get_required_client_version())
+        return max((0, 1, 6), super(Factorio, self).get_required_client_version())
 
     options = factorio_options
 

@@ -15,8 +15,6 @@ from ..AutoWorld import World, LogicMixin
 class HKWorld(World):
     game: str = "Hollow Knight"
     options = hollow_knight_options
-    item_names: Set[str] = frozenset(item_table)
-    location_names: Set[str] = frozenset(lookup_name_to_id)
 
     item_name_to_id = {name: data.id for name, data in item_table.items() if data.type != "Event"}
     location_name_to_id = lookup_name_to_id

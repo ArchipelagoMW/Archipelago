@@ -14,9 +14,6 @@ class OriBlindForest(World):
 
     topology_present = True
 
-    item_names = frozenset(item_table)
-    location_names = frozenset(lookup_name_to_id)
-
     item_name_to_id = item_table
     location_name_to_id = lookup_name_to_id
 

@@ -12,16 +12,12 @@ from typing import Dict, Tuple
 
 from BaseClasses import MultiWorld, CollectionState, Region, Item
 from worlds.alttp.Items import item_name_groups
-from worlds.alttp.Regions import create_regions, mark_light_world_regions, \
-    lookup_vanilla_location_to_entrance
-from worlds.alttp.InvertedRegions import create_inverted_regions, mark_dark_world_regions
-from worlds.alttp.EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
+from worlds.alttp.Regions import lookup_vanilla_location_to_entrance
 from worlds.alttp.Rom import patch_rom, patch_race_rom, patch_enemizer, apply_rom_settings, LocalRom, get_hash_string
-from worlds.alttp.Rules import set_rules
-from worlds.alttp.Dungeons import create_dungeons, fill_dungeons, fill_dungeons_restrictive
+from worlds.alttp.Dungeons import fill_dungeons, fill_dungeons_restrictive
 from Fill import distribute_items_restrictive, flood_items, balance_multiworld_progression, distribute_planned
-from worlds.alttp.Shops import create_shops, ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
-from worlds.alttp.ItemPool import generate_itempool, difficulties, fill_prizes
+from worlds.alttp.Shops import ShopSlotFill, SHOP_ID_START, total_shop_slots, FillDisabledShopSlots
+from worlds.alttp.ItemPool import difficulties, fill_prizes
 from Utils import output_path, parse_player_names, get_options, __version__, version_tuple
 from worlds.generic.Rules import locality_rules, exclusion_rules
 from worlds import AutoWorld
@@ -184,7 +180,9 @@ def main(args, seed=None):
 
             if not world.keyshuffle[player]:
                 world.non_local_items[player] -= item_name_groups['Small Keys']
-
+            # This could probably use a more elegant solution.
+            elif world.keyshuffle[player] == True and world.mode[player] == "Standard":
+                world.local_items[player].add("Small Key (Hyrule Castle)")
             if not world.bigkeyshuffle[player]:
                 world.non_local_items[player] -= item_name_groups['Big Keys']
 
@@ -195,56 +193,11 @@ def main(args, seed=None):
         # items can't be both local and non-local, prefer local
         world.non_local_items[player] -= world.local_items[player]
 
+    logger.info('Creating World.')
     AutoWorld.call_all(world, "create_regions")
 
-    for player in world.get_game_players("A Link to the Past"):
-        if world.open_pyramid[player] == 'goal':
-            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
-                                                                'localganontriforcehunt', 'ganonpedestal'}
-        elif world.open_pyramid[player] == 'auto':
-            world.open_pyramid[player] = world.goal[player] in {'crystals', 'ganontriforcehunt',
-                                                                'localganontriforcehunt', 'ganonpedestal'} and \
-                                         (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull',
-                                                                    'dungeonscrossed'} or not world.shuffle_ganon)
-        else:
-            world.open_pyramid[player] = {'on': True, 'off': False, 'yes': True, 'no': False}.get(
-                world.open_pyramid[player], 'auto')
-
-        world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player],
-                                                      world.triforce_pieces_required[player])
-
-        if world.mode[player] != 'inverted':
-            create_regions(world, player)
-        else:
-            create_inverted_regions(world, player)
-        create_shops(world, player)
-        create_dungeons(world, player)
-
-    logger.info('Shuffling the World about.')
-
-    for player in world.get_game_players("A Link to the Past"):
-        if world.logic[player] not in ["noglitches", "minorglitches"] and world.shuffle[player] in \
-                {"vanilla", "dungeonssimple", "dungeonsfull", "simple", "restricted", "full"}:
-            world.fix_fake_world[player] = False
-
-        # seeded entrance shuffle
-        old_random = world.random
-        world.random = random.Random(world.er_seeds[player])
-
-        if world.mode[player] != 'inverted':
-            link_entrances(world, player)
-            mark_light_world_regions(world, player)
-        else:
-            link_inverted_entrances(world, player)
-            mark_dark_world_regions(world, player)
-
-        world.random = old_random
-        plando_connect(world, player)
-
-    logger.info('Generating Item Pool.')
-
-    for player in world.get_game_players("A Link to the Past"):
-        generate_itempool(world, player)
+    logger.info('Creating Items.')
+    AutoWorld.call_all(world, "create_items")
 
     logger.info('Calculating Access Rules.')
     if world.players > 1:
@@ -252,9 +205,6 @@ def main(args, seed=None):
             locality_rules(world, player)
 
     AutoWorld.call_all(world, "set_rules")
-
-    for player in world.get_game_players("A Link to the Past"):
-        set_rules(world, player)
 
     for player in world.player_ids:
         exclusion_rules(world, player, args.excluded_locations[player])
@@ -314,7 +264,7 @@ def main(args, seed=None):
         patch_rom(world, rom, player, team, use_enemizer)
 
         if use_enemizer:
-            patch_enemizer(world, team, player, rom, args.enemizercli)
+            patch_enemizer(world, team, player, rom, args.enemizercli, output_directory)
 
         if args.race:
             patch_race_rom(rom, world, player)
@@ -565,8 +515,9 @@ def main(args, seed=None):
             create_playthrough(world)
         if args.create_spoiler:  # needs spoiler.hashes to be filled, that depend on rom_futures being done
             world.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))
-        logger.info('Creating final archive.')
-        with zipfile.ZipFile(output_path(f"AP_{world.seed_name}.zip"), mode="w", compression=zipfile.ZIP_DEFLATED,
+        zipfilename = output_path(f"AP_{world.seed_name}.zip")
+        logger.info(f'Creating final archive at {zipfilename}.')
+        with zipfile.ZipFile(zipfilename, mode="w", compression=zipfile.ZIP_DEFLATED,
                              compresslevel=9) as zf:
             for file in os.scandir(temp_dir):
                 zf.write(os.path.join(temp_dir, file), arcname=file.name)

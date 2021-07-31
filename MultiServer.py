@@ -118,10 +118,20 @@ class Context(Node):
         return 0
 
     def load(self, multidatapath: str, use_embedded_server_options: bool = False):
-        with open(multidatapath, 'rb') as f:
-            data = f.read()
+        if multidatapath.lower().endswith(".zip"):
+            import zipfile
+            with zipfile.ZipFile(multidatapath) as zf:
+                for file in zf.namelist():
+                    if file.endswith(".archipelago"):
+                        data = zf.read(file)
+                        break
+                else:
+                    raise Exception("No .archipelago found in archive.")
+        else:
+            with open(multidatapath, 'rb') as f:
+                data = f.read()
 
-            self._load(self._decompress(data), use_embedded_server_options)
+        self._load(self._decompress(data), use_embedded_server_options)
         self.data_filename = multidatapath
 
     @staticmethod
@@ -213,8 +223,10 @@ class Context(Node):
         self.saving = enabled
         if self.saving:
             if not self.save_filename:
-                self.save_filename = (self.data_filename[:-11] if self.data_filename.endswith('.archipelago') else (
-                        self.data_filename + '_')) + 'apsave'
+                import os
+                name, ext = os.path.splitext(self.data_filename)
+                self.save_filename = name + '.apsave' if ext.lower() in ('.archipelago','.zip') \
+                                     else self.data_filename + '_' + 'apsave'
             try:
                 with open(self.save_filename, 'rb') as f:
                     save_data = restricted_loads(zlib.decompress(f.read()))
@@ -409,7 +421,8 @@ async def on_client_joined(ctx: Context, client: Client):
     update_client_status(ctx, client, ClientStatus.CLIENT_CONNECTED)
     version_str = '.'.join(str(x) for x in client.version)
     ctx.notify_all(
-        f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has joined the game. "
+        f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) "
+        f"playing {ctx.games[client.slot]} has joined. "
         f"Client({version_str}), {client.tags}).")
 
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
@@ -1322,11 +1335,11 @@ async def console(ctx: Context):
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     defaults = Utils.get_options()["server_options"]
+    parser.add_argument('multidata', nargs="?", default=defaults["multidata"])
     parser.add_argument('--host', default=defaults["host"])
     parser.add_argument('--port', default=defaults["port"], type=int)
     parser.add_argument('--server_password', default=defaults["server_password"])
     parser.add_argument('--password', default=defaults["password"])
-    parser.add_argument('--multidata', default=defaults["multidata"])
     parser.add_argument('--savefile', default=defaults["savefile"])
     parser.add_argument('--disable_save', default=defaults["disable_save"], action='store_true')
     parser.add_argument('--loglevel', default=defaults["loglevel"],
@@ -1408,7 +1421,7 @@ async def main(args: argparse.Namespace):
             import tkinter.filedialog
             root = tkinter.Tk()
             root.withdraw()
-            data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.archipelago"),))
+            data_filename = tkinter.filedialog.askopenfilename(filetypes=(("Multiworld data", "*.archipelago *.zip"),))
 
         ctx.load(data_filename, args.use_embedded_options)
 

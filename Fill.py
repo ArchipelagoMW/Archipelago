@@ -78,12 +78,15 @@ def distribute_items_restrictive(world: MultiWorld, gftower_trash=False, fill_lo
     # get items to distribute
     world.random.shuffle(world.itempool)
     progitempool = []
+    nonexcludeditempool = []
     localrestitempool = {player: [] for player in range(1, world.players + 1)}
     restitempool = []
 
     for item in world.itempool:
         if item.advancement:
             progitempool.append(item)
+        elif item.never_exclude:  # this only gets nonprogression items which should not appear in excluded locations
+            nonexcludeditempool.append(item)
         elif item.name in world.local_items[item.player]:
             localrestitempool[item.player].append(item)
         else:
@@ -136,6 +139,10 @@ def distribute_items_restrictive(world: MultiWorld, gftower_trash=False, fill_lo
 
     world.random.shuffle(fill_locations)
     fill_restrictive(world, world.state, fill_locations, progitempool)
+
+    if nonexcludeditempool:
+        world.random.shuffle(fill_locations)
+        fill_restrictive(world, world.state, fill_locations, nonexcludeditempool)  # needs logical fill to not conflict with local items
 
     if any(localrestitempool.values()):  # we need to make sure some fills are limited to certain worlds
         local_locations = {player: [] for player in world.player_ids}
@@ -348,7 +355,8 @@ def balance_multiworld_progression(world: MultiWorld):
             if world.has_beaten_game(state):
                 break
             elif not sphere_locations:
-                raise RuntimeError('Not all required items reachable. Something went terribly wrong here.')
+                logging.warning("Progression Balancing ran out of paths.")
+                break
 
 
 def swap_location_item(location_1: Location, location_2: Location, check_locked=True):

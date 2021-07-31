@@ -10,7 +10,9 @@ from worlds.generic.Rules import set_rule, add_rule, forbid_item, add_item_rule,
     item_name
 
 
-def set_rules(world, player):
+def set_rules(world):
+    player = world.player
+    world = world.world
     if world.logic[player] == 'nologic':
         logging.info(
             'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
