@@ -41,7 +41,8 @@ def mystery_argparse():
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=defaults["players"], type=lambda value: min(max(int(value), 1), 255))
     parser.add_argument('--spoiler', type=int, default=defaults["spoiler"])
-    parser.add_argument('--rom', default=options["lttp_options"]["rom_file"], help="Path to the 1.0 JP LttP Baserom.")
+    parser.add_argument('--lttp_rom', default=options["lttp_options"]["rom_file"], help="Path to the 1.0 JP LttP Baserom.")
+    parser.add_argument('--sm_rom', default=options["sm_options"]["rom_file"], help="Path to the 1.0 JP SM Baserom.")
     parser.add_argument('--enemizercli', default=defaults["enemizer_path"])
     parser.add_argument('--outputpath', default=options["general_options"]["output_path"])
     parser.add_argument('--race', action='store_true', default=defaults["race"])
@@ -141,7 +142,8 @@ def main(args=None, callback=ERmain):
     else:
         logging.basicConfig(format='%(message)s', level=loglevel, force=True)
 
-    erargs.rom = args.rom
+    erargs.lttp_rom = args.lttp_rom
+    erargs.sm_rom = args.sm_rom
     erargs.enemizercli = args.enemizercli
 
     settings_cache = {k: (roll_settings(v, args.plando) if args.samesettings else None)
