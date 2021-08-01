@@ -95,10 +95,10 @@ class Context(CommonContext):
                 'No ROM detected, awaiting snes connection to authenticate to the multiworld server (/snes)')
             return
         self.awaiting_rom = False
-        self.auth = self.rom
-        auth = base64.b64encode(self.rom).decode()
+        test = self.rom.decode("utf-8")
+        auth = test.split("\0")[0]
         await self.send_msgs([{"cmd": 'Connect',
-                              'password': self.password, 'name': 'lordlou1', 'version': Utils.version_tuple,
+                              'password': self.password, 'name': auth, 'version': Utils.version_tuple,
                               'tags': get_tags(self),
                               'uuid': Utils.get_unique_identifier(), 'game': "Super Metroid"
                               }])
@@ -123,7 +123,7 @@ ROMNAME_START = 0x1C4F00
 ROMNAME_SIZE = 0x50
 
 INGAME_MODES = {0x07, 0x09, 0x0b}
-ENDGAME_MODES = {0x19, 0x1a}
+ENDGAME_MODES = {0x26, 0x27}
 
 SAVEDATA_START = WRAM_START + 0xF000
 SAVEDATA_SIZE = 0x500
@@ -777,19 +777,18 @@ async def game_watcher(ctx: Context):
             logger.warning("ROM change detected, please reconnect to the multiworld server")
             await ctx.disconnect()
 
-        #gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
-        #gameend = await snes_read(ctx, SAVEDATA_START + 0x443, 1)
+        gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
+        #gameend = await snes_read(ctx, WRAM_START + 0x0998, 1)
         #game_timer = await snes_read(ctx, SAVEDATA_START + 0x42E, 4)
         #if gamemode is None or gameend is None or game_timer is None or \
         #        (gamemode[0] not in INGAME_MODES and gamemode[0] not in ENDGAME_MODES):
         #    continue
-
         #delay = 7 if ctx.slow_mode else 2
-        #if gameend[0]:
-        #    if not ctx.finished_game:
-        #        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-        #        ctx.finished_game = True
-
+        if gamemode in ENDGAME_MODES:
+            if not ctx.finished_game:
+                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                ctx.finished_game = True
+            continue
         #    if time.perf_counter() - perf_counter < delay:
         #        continue
         #    else:
@@ -833,6 +832,7 @@ async def game_watcher(ctx: Context):
 
 
         data = await snes_read(ctx, RECV_PROGRESS_ADDR + 0x600, 4)
+        recv_itemOutPtr = data[0] | (data[1] << 8)
         itemOutPtr = data[2] | (data[3] << 8)
 
             #snes_buffered_write(ctx, RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes([0 & 0xFF, (0 >> 8) & 0xFF, 19 & 0xFF, (19 >> 8) & 0xFF]))
@@ -842,7 +842,7 @@ async def game_watcher(ctx: Context):
         if itemOutPtr < len(ctx.items_received):
             item = ctx.items_received[itemOutPtr]
             itemId = item.item - items_start_id
-            snes_buffered_write(ctx, RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes([item.player & 0xFF, (item.player >> 8) & 0xFF, itemId & 0xFF, (itemId >> 8) & 0xFF]))
+            snes_buffered_write(ctx, RECV_PROGRESS_ADDR + itemOutPtr * 4, bytes([(item.player-1) & 0xFF, ((item.player-1) >> 8) & 0xFF, itemId & 0xFF, (itemId >> 8) & 0xFF]))
             itemOutPtr += 1
             snes_buffered_write(ctx, RECV_PROGRESS_ADDR + 0x602, bytes([itemOutPtr & 0xFF, (itemOutPtr >> 8) & 0xFF]))
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
@@ -891,7 +891,7 @@ async def main():
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a Archipelago Binary Patch file')
     parser.add_argument('--snes', default='localhost:8080', help='Address of the SNI server.')
-    parser.add_argument('--connect', default=None, help='Address of the multiworld host.')
+    parser.add_argument('--connect', default='localhost', help='Address of the multiworld host.')
     parser.add_argument('--password', default=None, help='Password of the multiworld host.')
     parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
     parser.add_argument('--founditems', default=False, action='store_true',
