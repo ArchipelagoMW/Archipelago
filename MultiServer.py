@@ -900,7 +900,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
     @mark_raw
     def _cmd_hint(self, item_or_location: str = "") -> bool:
-        """Use !hint {item_name/location_name}, for example !hint Lamp or !hint Link's House. """
+        """Use !hint {item_name/location_name},
+        for example !hint Lamp or !hint Link's House to get a spoiler peek for that location or item.
+        If hint costs are on, this will only give you one new result,
+        you can rerun the command to get more in that case."""
         points_available = get_client_points(self.ctx, self.client)
         if not item_or_location:
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
@@ -940,7 +943,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                         if not not_found_hints:  # everything's been found, no need to pay
                             can_pay = 1000
                         elif cost:
-                            can_pay = points_available // cost
+                            can_pay = int((points_available // cost) > 0)  # limit to 1 new hint per call
                         else:
                             can_pay = 1000
 
@@ -962,7 +965,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                         if not_found_hints:
                             if hints:
                                 self.output(
-                                    "Could not pay for everything. Rerun the hint later with more points to get the remaining hints.")
+                                    "There may be more hintables, you can rerun the command to find more.")
                             else:
                                 self.output(f"You can't afford the hint. "
                                             f"You have {points_available} points and need at least "
