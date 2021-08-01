@@ -362,6 +362,7 @@ progressive_rows["progressive-armor"] = ("heavy-armor", "modular-armor", "power-
 progressive_rows["progressive-personal-battery"] = ("battery-equipment", "battery-mk2-equipment")
 progressive_rows["progressive-energy-shield"] = ("energy-shield-equipment", "energy-shield-mk2-equipment")
 progressive_rows["progressive-wall"] = ("stone-wall", "gate")
+progressive_rows["progressive-turret"] = ("gun-turret", "laser-turret")
 progressive_rows["progressive-follower"] = ("defender", "distractor", "destroyer")
 progressive_rows["progressive-inserter"] = ("fast-inserter", "stack-inserter")
 

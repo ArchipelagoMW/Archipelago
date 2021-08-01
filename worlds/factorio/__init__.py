@@ -25,6 +25,8 @@ class Factorio(World):
     item_name_to_id = tech_table
     location_name_to_id = base_tech_table
 
+    data_version = 2
+
     def generate_basic(self):
         skip_silo = self.world.silo[self.player].value == Silo.option_spawn
         for tech_name in base_tech_table:
