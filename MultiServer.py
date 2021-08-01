@@ -1118,12 +1118,25 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         elif cmd == 'StatusUpdate':
             update_client_status(ctx, client, args["status"])
 
-        if cmd == 'Say':
+        elif cmd == 'Say':
             if "text" not in args or type(args["text"]) is not str or not args["text"].isprintable():
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'Say'}])
                 return
 
             client.messageprocessor(args["text"])
+
+        elif cmd == "Bounce":
+            games = set(args.get("games", []))
+            tags = set(args.get("tags", []))
+            slots = set(args.get("slots", []))
+            args["cmd"] = "Bounced"
+            msg = ctx.dumper([args])
+
+            for bounceclient in ctx.endpoints:
+                if client.team == bounceclient.team and (ctx.games[bounceclient.slot] in games or
+                                                         set(bounceclient.tags) & tags or
+                                                         bounceclient.slot in slots):
+                    await ctx.send_encoded_msgs(bounceclient, msg)
 
 
 def update_client_status(ctx: Context, client: Client, new_status: ClientStatus):

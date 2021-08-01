@@ -397,6 +397,9 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     elif cmd == 'InvalidPacket':
         logger.warning(f"Invalid Packet of {args['type']}: {args['text']}")
 
+    elif cmd == "Bounced":
+        pass
+
     else:
         logger.debug(f"unknown command {cmd}")
 
