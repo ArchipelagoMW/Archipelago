@@ -28,6 +28,8 @@ class SMWorld(World):
     item_name_to_id = items_lookup_name_to_id
     location_name_to_id = locations_lookup_name_to_id
 
+    remote_items: bool = False
+
     qty = {'energy': 'vanilla',
            'minors': 100,
            'ammo': { 'Missile': 9,
@@ -114,9 +116,16 @@ class SMWorld(World):
                     (w4, w5) = self.getWord(itemLoc.item.player - 1)
                     (w6, w7) = self.getWord(0)
                     multiWorldLocations[0x1C6000 + locationsDict[itemLoc.name].Id*8] = [w0, w1, w2, w3, w4, w5, w6, w7]
+
               
             patchDict = { 'MultiWorldLocations':  multiWorldLocations }
             romPatcher.applyIPSPatch('MultiWorldLocations', patchDict)
+
+            playerNames = {0x1C4F00 : self.world.player_names[player][0].encode()}
+            for p in range(1, self.world.players + 1):
+                playerNames[0x1C5000 + (p - 1) * 16] = self.world.player_names[p][0][:12].upper().center(12).encode()
+
+            romPatcher.applyIPSPatch('PlayerName', { 'PlayerName':  playerNames })
 
             romPatcher.commitIPS()
 
