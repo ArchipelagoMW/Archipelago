@@ -275,7 +275,6 @@ for ingredient_name in all_ingredient_names:
     advancement_technologies |= {technology.name for technology in technologies}
 
 
-@functools.lru_cache(10)
 def get_rocket_requirements(silo_recipe: Recipe, part_recipe: Recipe) -> Set[str]:
     techs = set()
     if silo_recipe:
@@ -355,7 +354,9 @@ progressive_rows["progressive-processing"] = (
     "uranium-processing", "kovarex-enrichment-process", "nuclear-fuel-reprocessing")
 progressive_rows["progressive-rocketry"] = ("rocketry", "explosive-rocketry", "atomic-bomb")
 progressive_rows["progressive-vehicle"] = ("automobilism", "tank", "spidertron")
-progressive_rows["progressive-train-network"] = ("railway", "fluid-wagon", "automated-rail-transportation", "rail-signals")
+progressive_rows["progressive-train-network"] = ("railway", "fluid-wagon",
+                                                 "automated-rail-transportation", "rail-signals") + progressive_rows["progressive-braking-force"]
+del(progressive_rows["progressive-braking-force"])
 progressive_rows["progressive-engine"] = ("engine", "electric-engine")
 progressive_rows["progressive-armor"] = ("heavy-armor", "modular-armor", "power-armor", "power-armor-mk2")
 progressive_rows["progressive-personal-battery"] = ("battery-equipment", "battery-mk2-equipment")
