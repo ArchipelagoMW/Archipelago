@@ -111,6 +111,7 @@ class Context(Node):
         self.games: typing.Dict[int, str] = {}
         self.minimum_client_versions: typing.Dict[int, Utils.Version] = {}
         self.seed_name = ""
+        self.random = random.Random()
 
     def get_hint_cost(self, slot):
         if self.hint_cost:
@@ -157,6 +158,7 @@ class Context(Node):
                 self.player_names[team, player] = name
                 self.player_name_lookup[name] = team, player
         self.seed_name = decoded_obj["seed_name"]
+        self.random.seed(self.seed_name)
         self.connect_names = decoded_obj['connect_names']
         self.remote_items = decoded_obj['remote_items']
         self.locations = decoded_obj['locations']
@@ -275,6 +277,7 @@ class Context(Node):
                 (key, value.timestamp()) for key, value in self.client_activity_timers.items()),
             "client_connection_timers": tuple(
                 (key, value.timestamp()) for key, value in self.client_connection_timers.items()),
+            "random_state": self.random.getstate()
         }
 
         return d
@@ -295,7 +298,7 @@ class Context(Node):
             {tuple(key): datetime.datetime.fromtimestamp(value, datetime.timezone.utc) for key, value
              in savedata["client_activity_timers"]})
         self.location_checks.update(savedata["location_checks"])
-
+        self.random.setstate(savedata["random_state"])
         logging.info(f'Loaded save file with {sum([len(p) for p in self.received_items.values()])} received items '
                      f'for {len(self.received_items)} players')
 
@@ -941,7 +944,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
                         else:
                             can_pay = 1000
 
-                        random.shuffle(not_found_hints)
+                        self.ctx.random.shuffle(not_found_hints)
 
                         hints = found_hints
                         while can_pay > 0:
