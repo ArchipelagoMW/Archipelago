@@ -298,7 +298,8 @@ class Context(Node):
             {tuple(key): datetime.datetime.fromtimestamp(value, datetime.timezone.utc) for key, value
              in savedata["client_activity_timers"]})
         self.location_checks.update(savedata["location_checks"])
-        self.random.setstate(savedata["random_state"])
+        if "random_state" in savedata:
+            self.random.setstate(savedata["random_state"])
         logging.info(f'Loaded save file with {sum([len(p) for p in self.received_items.values()])} received items '
                      f'for {len(self.received_items)} players')
 
