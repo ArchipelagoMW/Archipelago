@@ -57,6 +57,8 @@ progression_balancing:
 # exclude_locations: # Force certain locations to never contain progression items, and always be filled with junk. 
 #  - "Master Sword Pedestal"
 
+Super Metroid: {}
+
 Subnautica: {}
 
 Factorio:

@@ -96,15 +96,15 @@ class SMWorld(World):
     def getWord(self, w):
         return (w & 0x00FF, (w & 0xFF00) >> 8)
 
-    def generate_output(self):
+    def generate_output(self, output_directory: str):
         for player in self.world.sm_player_ids:
             outfilebase = 'AP_' + self.world.seed_name
             outfilepname = f'_P{player}'
             outfilepname += f"_{self.world.player_names[player][0].replace(' ', '_')}" \
 
-            outputFilename = output_path(f'{outfilebase}{outfilepname}.sfc')
-
-            copy2("TEST.sfc", outputFilename)
+            outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.sfc')
+#self.options["sm_options"]["rom_file"]
+            copy2("Super Metroid (JU).sfc", outputFilename)
             romPatcher = RomPatcher(outputFilename, None)
 
             romPatcher.applyIPSPatches()
