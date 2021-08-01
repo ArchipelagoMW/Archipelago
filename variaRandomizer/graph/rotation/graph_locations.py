@@ -106,7 +106,7 @@ locationsDict["Spazer"].Available = (
 locationsDict["Spazer"].PostAvailable = (
     # either with a bomb jump/springball to exit on top, or with bomb/pb to exit in the middle
     lambda sm: sm.wor(sm.canPassBombPassages(),
-                      sm.wand(RomPatches.has(RomPatches.SpazerShotBlock), sm.canUseSpringBall())
+                      sm.wand(RomPatches.has(RomPatches.SpazerShotBlock), sm.canUseSpringBall()))
 )
 locationsDict["Energy Tank, Kraid"].AccessFrom = {
     'Warehouse Zeela Room Left': lambda sm: sm.haveItem('Morph')
