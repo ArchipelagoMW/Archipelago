@@ -900,12 +900,12 @@ class ClientMessageProcessor(CommonCommandProcessor):
         """Use !hint {item_name/location_name}, for example !hint Lamp or !hint Link's House. """
         points_available = get_client_points(self.ctx, self.client)
         if not item_or_location:
-            self.output(f"A hint costs {self.ctx.get_hint_cost(self.client.slot)} points. "
-                        f"You have {points_available} points.")
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
             self.ctx.hints[self.client.team, self.client.slot] = hints
             notify_hints(self.ctx, self.client.team, list(hints))
+            self.output(f"A hint costs {self.ctx.get_hint_cost(self.client.slot)} points. "
+                        f"You have {points_available} points.")
             return True
         else:
             world = proxy_worlds[self.ctx.games[self.client.slot]]
